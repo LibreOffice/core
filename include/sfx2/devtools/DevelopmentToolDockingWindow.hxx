@@ -30,7 +30,10 @@ class SFX2_DLLPUBLIC DevelopmentToolDockingWindow final : public SfxDockingWindo
 {
 private:
     std::unique_ptr<weld::Label> mpClassNameLabel;
-    std::unique_ptr<weld::TreeView> mpClassListBox;
+    std::unique_ptr<weld::TreeView> mpInterfacesTreeView;
+    std::unique_ptr<weld::TreeView> mpServicesTreeView;
+    std::unique_ptr<weld::TreeView> mpPropertiesTreeView;
+    std::unique_ptr<weld::TreeView> mpMethodsTreeView;
     std::unique_ptr<weld::TreeView> mpDocumentModelTreeView;
     std::unique_ptr<weld::ToggleButton> mpSelectionToggle;
 

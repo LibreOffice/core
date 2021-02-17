@@ -205,7 +205,7 @@ public:
 
     virtual bool shouldShowExpander() { return false; }
 
-    virtual void fillChildren(std::unique_ptr<weld::TreeView>& rTree, weld::TreeIter const& rParent)
+    virtual void fillChildren(std::unique_ptr<weld::TreeView>& rTree, const weld::TreeIter* pParent)
         = 0;
 
     virtual std::vector<std::pair<sal_Int32, OUString>> getColumnValues()
@@ -232,12 +232,12 @@ OUString lclAppendNode(std::unique_ptr<weld::TreeView>& pTree, ObjectInspectorNo
 }
 
 OUString lclAppendNodeToParent(std::unique_ptr<weld::TreeView>& pTree,
-                               weld::TreeIter const& rParent, ObjectInspectorNodeInterface* pEntry)
+                               const weld::TreeIter* pParent, ObjectInspectorNodeInterface* pEntry)
 {
     OUString sName = pEntry->getObjectName();
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
     std::unique_ptr<weld::TreeIter> pCurrent = pTree->make_iterator();
-    pTree->insert(&rParent, -1, &sName, &sId, nullptr, nullptr, pEntry->shouldShowExpander(),
+    pTree->insert(pParent, -1, &sName, &sId, nullptr, nullptr, pEntry->shouldShowExpander(),
                   pCurrent.get());
     pTree->set_text_emphasis(*pCurrent, true, 0);
 
@@ -261,7 +261,7 @@ public:
     }
 
     void fillChildren(std::unique_ptr<weld::TreeView>& /*rTree*/,
-                      weld::TreeIter const& /*rParent*/) override
+                      const weld::TreeIter* /*pParent*/) override
     {
     }
 
@@ -273,11 +273,6 @@ class BasicValueNode : public SimpleStringNode
 protected:
     uno::Any maAny;
     uno::Reference<uno::XComponentContext> mxContext;
-
-    uno::Reference<uno::XInterface> getObjectFromAny()
-    {
-        return uno::Reference<uno::XInterface>(maAny, uno::UNO_QUERY);
-    }
 
     ObjectInspectorNodeInterface* createNodeObjectForAny(OUString const& rName, uno::Any& rAny);
 
@@ -323,38 +318,6 @@ public:
     }
 };
 
-class ServicesNode : public BasicValueNode
-{
-public:
-    ServicesNode(css::uno::Reference<css::uno::XInterface> const& xObject,
-                 uno::Reference<uno::XComponentContext> const& xContext)
-        : BasicValueNode("Services", uno::Any(xObject), xContext)
-    {
-    }
-
-    bool shouldShowExpander() override { return true; }
-
-    void fillChildren(std::unique_ptr<weld::TreeView>& pTree,
-                      weld::TreeIter const& rParent) override
-    {
-        auto xObject = getObjectFromAny();
-        if (xObject.is())
-        {
-            auto xServiceInfo = uno::Reference<lang::XServiceInfo>(xObject, uno::UNO_QUERY);
-            const uno::Sequence<OUString> aServiceNames(xServiceInfo->getSupportedServiceNames());
-            for (auto const& aServiceName : aServiceNames)
-            {
-                lclAppendNodeToParent(pTree, rParent, new SimpleStringNode(aServiceName));
-            }
-        }
-    }
-
-    std::vector<std::pair<sal_Int32, OUString>> getColumnValues() override
-    {
-        return std::vector<std::pair<sal_Int32, OUString>>();
-    }
-};
-
 class GenericPropertiesNode : public BasicValueNode
 {
 public:
@@ -365,93 +328,7 @@ public:
     }
 
     void fillChildren(std::unique_ptr<weld::TreeView>& pTree,
-                      weld::TreeIter const& rParent) override;
-};
-
-class PropertiesNode : public GenericPropertiesNode
-{
-public:
-    PropertiesNode(uno::Reference<uno::XInterface> const& xObject,
-                   uno::Reference<uno::XComponentContext> const& xContext)
-        : GenericPropertiesNode("Properties", uno::Any(xObject), xContext)
-    {
-    }
-
-    bool shouldShowExpander() override { return true; }
-
-    std::vector<std::pair<sal_Int32, OUString>> getColumnValues() override
-    {
-        return ObjectInspectorNodeInterface::getColumnValues();
-    }
-};
-
-class InterfacesNode : public BasicValueNode
-{
-public:
-    InterfacesNode(css::uno::Reference<css::uno::XInterface> const& xObject,
-                   uno::Reference<uno::XComponentContext> const& xContext)
-        : BasicValueNode("Interfaces", uno::Any(xObject), xContext)
-    {
-    }
-
-    bool shouldShowExpander() override { return true; }
-
-    void fillChildren(std::unique_ptr<weld::TreeView>& pTree,
-                      weld::TreeIter const& rParent) override
-    {
-        auto xObject = getObjectFromAny();
-        if (xObject.is())
-        {
-            uno::Reference<lang::XTypeProvider> xTypeProvider(xObject, uno::UNO_QUERY);
-            if (xTypeProvider.is())
-            {
-                const auto xSequenceTypes = xTypeProvider->getTypes();
-                for (auto const& xType : xSequenceTypes)
-                {
-                    OUString aName = xType.getTypeName();
-                    lclAppendNodeToParent(pTree, rParent, new SimpleStringNode(aName));
-                }
-            }
-        }
-    }
-
-    std::vector<std::pair<sal_Int32, OUString>> getColumnValues() override
-    {
-        return std::vector<std::pair<sal_Int32, OUString>>();
-    }
-};
-
-class MethodsNode : public BasicValueNode
-{
-public:
-    MethodsNode(css::uno::Reference<css::uno::XInterface> const& xObject,
-                uno::Reference<uno::XComponentContext> const& xContext)
-        : BasicValueNode("Methods", uno::Any(xObject), xContext)
-    {
-    }
-
-    bool shouldShowExpander() override { return true; }
-
-    void fillChildren(std::unique_ptr<weld::TreeView>& pTree,
-                      weld::TreeIter const& rParent) override
-    {
-        uno::Reference<beans::XIntrospection> xIntrospection
-            = beans::theIntrospection::get(mxContext);
-        auto xIntrospectionAccess = xIntrospection->inspect(maAny);
-
-        const auto xMethods = xIntrospectionAccess->getMethods(beans::MethodConcept::ALL);
-        for (auto const& xMethod : xMethods)
-        {
-            OUString aMethodName = xMethod->getName();
-
-            lclAppendNodeToParent(pTree, rParent, new SimpleStringNode(aMethodName));
-        }
-    }
-
-    std::vector<std::pair<sal_Int32, OUString>> getColumnValues() override
-    {
-        return std::vector<std::pair<sal_Int32, OUString>>();
-    }
+                      const weld::TreeIter* pParent) override;
 };
 
 class StructNode : public BasicValueNode
@@ -466,7 +343,7 @@ public:
     bool shouldShowExpander() override { return true; }
 
     void fillChildren(std::unique_ptr<weld::TreeView>& pTree,
-                      weld::TreeIter const& rParent) override;
+                      const weld::TreeIter* pParent) override;
 };
 
 class SequenceNode : public BasicValueNode
@@ -481,7 +358,7 @@ public:
     bool shouldShowExpander() override { return true; }
 
     void fillChildren(std::unique_ptr<weld::TreeView>& pTree,
-                      weld::TreeIter const& rParent) override
+                      const weld::TreeIter* pParent) override
     {
         auto xReflection = reflection::theCoreReflection::get(mxContext);
         uno::Reference<reflection::XIdlClass> xClass
@@ -497,7 +374,7 @@ public:
 
             auto* pObjectInspectorNode = createNodeObjectForAny(OUString::number(i), aArrayValue);
             if (pObjectInspectorNode)
-                lclAppendNodeToParent(pTree, rParent, pObjectInspectorNode);
+                lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
         }
     }
 
@@ -521,7 +398,7 @@ public:
 };
 
 void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
-                                         weld::TreeIter const& rParent)
+                                         const weld::TreeIter* pParent)
 {
     if (!maAny.hasValue())
         return;
@@ -553,11 +430,11 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
 
         auto* pObjectInspectorNode = createNodeObjectForAny(xProperty.Name, aCurrentAny);
         if (pObjectInspectorNode)
-            lclAppendNodeToParent(pTree, rParent, pObjectInspectorNode);
+            lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
     }
 }
 
-void StructNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree, weld::TreeIter const& rParent)
+void StructNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree, const weld::TreeIter* pParent)
 {
     auto xReflection = reflection::theCoreReflection::get(mxContext);
     uno::Reference<reflection::XIdlClass> xClass
@@ -572,7 +449,9 @@ void StructNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree, weld::Tree
 
         auto* pObjectInspectorNode = createNodeObjectForAny(aFieldName, aFieldValue);
         if (pObjectInspectorNode)
-            lclAppendNodeToParent(pTree, rParent, pObjectInspectorNode);
+        {
+            lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
+        }
     }
 }
 
@@ -603,48 +482,153 @@ ObjectInspectorNodeInterface* BasicValueNode::createNodeObjectForAny(OUString co
 } // end anonymous namespace
 
 ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
-    std::unique_ptr<weld::TreeView>& pObjectInspectorTree,
+    std::unique_ptr<weld::TreeView>& pInterfacesTreeView,
+    std::unique_ptr<weld::TreeView>& pServicesTreeView,
+    std::unique_ptr<weld::TreeView>& pPropertiesTreeView,
+    std::unique_ptr<weld::TreeView>& pMethodsTreeView,
     std::unique_ptr<weld::Label>& pClassNameLabel)
-    : mpObjectInspectorTree(pObjectInspectorTree)
+    : mpInterfacesTreeView(pInterfacesTreeView)
+    , mpServicesTreeView(pServicesTreeView)
+    , mpPropertiesTreeView(pPropertiesTreeView)
+    , mpMethodsTreeView(pMethodsTreeView)
     , mpClassNameLabel(pClassNameLabel)
 {
-    mpObjectInspectorTree->connect_expanding(
-        LINK(this, ObjectInspectorTreeHandler, ExpandingHandler));
+    mpInterfacesTreeView->connect_expanding(
+        LINK(this, ObjectInspectorTreeHandler, ExpandingHandlerInterfaces));
+    mpServicesTreeView->connect_expanding(
+        LINK(this, ObjectInspectorTreeHandler, ExpandingHandlerServices));
+    mpPropertiesTreeView->connect_expanding(
+        LINK(this, ObjectInspectorTreeHandler, ExpandingHandlerProperties));
+    mpMethodsTreeView->connect_expanding(
+        LINK(this, ObjectInspectorTreeHandler, ExpandingHandlerMethods));
 }
 
-IMPL_LINK(ObjectInspectorTreeHandler, ExpandingHandler, weld::TreeIter const&, rParent, bool)
+void ObjectInspectorTreeHandler::handleExpanding(std::unique_ptr<weld::TreeView>& pTreeView,
+                                                 weld::TreeIter const& rParent)
 {
-    OUString sID = mpObjectInspectorTree->get_id(rParent);
+    OUString sID = pTreeView->get_id(rParent);
     if (sID.isEmpty())
-        return true;
+        return;
 
-    clearObjectInspectorChildren(rParent);
+    clearObjectInspectorChildren(pTreeView, rParent);
     auto* pNode = reinterpret_cast<ObjectInspectorNodeInterface*>(sID.toInt64());
-    pNode->fillChildren(mpObjectInspectorTree, rParent);
+    pNode->fillChildren(pTreeView, &rParent);
+}
 
+IMPL_LINK(ObjectInspectorTreeHandler, ExpandingHandlerInterfaces, weld::TreeIter const&, rParent,
+          bool)
+{
+    handleExpanding(mpInterfacesTreeView, rParent);
     return true;
 }
 
-void ObjectInspectorTreeHandler::clearObjectInspectorChildren(weld::TreeIter const& rParent)
+IMPL_LINK(ObjectInspectorTreeHandler, ExpandingHandlerServices, weld::TreeIter const&, rParent,
+          bool)
+{
+    handleExpanding(mpServicesTreeView, rParent);
+    return true;
+}
+
+IMPL_LINK(ObjectInspectorTreeHandler, ExpandingHandlerProperties, weld::TreeIter const&, rParent,
+          bool)
+{
+    handleExpanding(mpPropertiesTreeView, rParent);
+    return true;
+}
+
+IMPL_LINK(ObjectInspectorTreeHandler, ExpandingHandlerMethods, weld::TreeIter const&, rParent, bool)
+{
+    handleExpanding(mpMethodsTreeView, rParent);
+    return true;
+}
+
+void ObjectInspectorTreeHandler::clearObjectInspectorChildren(
+    std::unique_ptr<weld::TreeView>& pTreeView, weld::TreeIter const& rParent)
 {
     bool bChild = false;
     do
     {
-        bChild = mpObjectInspectorTree->iter_has_child(rParent);
+        bChild = pTreeView->iter_has_child(rParent);
         if (bChild)
         {
-            std::unique_ptr<weld::TreeIter> pChild = mpObjectInspectorTree->make_iterator(&rParent);
-            bChild = mpObjectInspectorTree->iter_children(*pChild);
+            std::unique_ptr<weld::TreeIter> pChild = pTreeView->make_iterator(&rParent);
+            bChild = pTreeView->iter_children(*pChild);
             if (bChild)
             {
-                clearObjectInspectorChildren(*pChild);
-                OUString sID = mpObjectInspectorTree->get_id(*pChild);
+                clearObjectInspectorChildren(pTreeView, *pChild);
+                OUString sID = pTreeView->get_id(*pChild);
                 auto* pEntry = reinterpret_cast<ObjectInspectorNodeInterface*>(sID.toInt64());
                 delete pEntry;
-                mpObjectInspectorTree->remove(*pChild);
+                pTreeView->remove(*pChild);
             }
         }
     } while (bChild);
+}
+
+void ObjectInspectorTreeHandler::clearAll(std::unique_ptr<weld::TreeView>& pTreeView)
+{
+    // destroy all ObjectInspectorNodes from the tree
+    pTreeView->all_foreach([&pTreeView](weld::TreeIter& rEntry) {
+        OUString sID = pTreeView->get_id(rEntry);
+        auto* pEntry = reinterpret_cast<ObjectInspectorNodeInterface*>(sID.toInt64());
+        delete pEntry;
+        return false;
+    });
+    pTreeView->clear();
+}
+
+void ObjectInspectorTreeHandler::appendInterfaces(uno::Reference<uno::XInterface> const& xInterface)
+{
+    if (!xInterface.is())
+        return;
+    uno::Reference<lang::XTypeProvider> xTypeProvider(xInterface, uno::UNO_QUERY);
+    if (xTypeProvider.is())
+    {
+        const auto xSequenceTypes = xTypeProvider->getTypes();
+        for (auto const& xType : xSequenceTypes)
+        {
+            OUString aName = xType.getTypeName();
+            lclAppendNode(mpInterfacesTreeView, new SimpleStringNode(aName));
+        }
+    }
+}
+
+void ObjectInspectorTreeHandler::appendServices(uno::Reference<uno::XInterface> const& xInterface)
+{
+    if (!xInterface.is())
+        return;
+
+    auto xServiceInfo = uno::Reference<lang::XServiceInfo>(xInterface, uno::UNO_QUERY);
+    const uno::Sequence<OUString> aServiceNames(xServiceInfo->getSupportedServiceNames());
+    for (auto const& aServiceName : aServiceNames)
+    {
+        lclAppendNode(mpServicesTreeView, new SimpleStringNode(aServiceName));
+    }
+}
+
+void ObjectInspectorTreeHandler::appendProperties(uno::Reference<uno::XInterface> const& xInterface)
+{
+    if (!xInterface.is())
+        return;
+    GenericPropertiesNode aNode("", uno::Any(xInterface), comphelper::getProcessComponentContext());
+    aNode.fillChildren(mpPropertiesTreeView, nullptr);
+}
+
+void ObjectInspectorTreeHandler::appendMethods(uno::Reference<uno::XInterface> const& xInterface)
+{
+    if (!xInterface.is())
+        return;
+
+    uno::Reference<beans::XIntrospection> xIntrospection
+        = beans::theIntrospection::get(comphelper::getProcessComponentContext());
+    auto xIntrospectionAccess = xIntrospection->inspect(uno::Any(xInterface));
+
+    const auto xMethods = xIntrospectionAccess->getMethods(beans::MethodConcept::ALL);
+    for (auto const& xMethod : xMethods)
+    {
+        OUString aMethodName = xMethod->getName();
+        lclAppendNode(mpMethodsTreeView, new SimpleStringNode(aMethodName));
+    }
 }
 
 void ObjectInspectorTreeHandler::introspect(uno::Reference<uno::XInterface> const& xInterface)
@@ -662,26 +646,33 @@ void ObjectInspectorTreeHandler::introspect(uno::Reference<uno::XInterface> cons
     mpClassNameLabel->set_label(aImplementationName);
 
     // fill object inspector
-    mpObjectInspectorTree->freeze();
-    mpObjectInspectorTree->clear();
+    mpInterfacesTreeView->freeze();
+    clearAll(mpInterfacesTreeView);
+    appendInterfaces(xInterface);
+    mpInterfacesTreeView->thaw();
 
-    lclAppendNode(mpObjectInspectorTree, new ServicesNode(xInterface, xContext));
-    lclAppendNode(mpObjectInspectorTree, new InterfacesNode(xInterface, xContext));
-    lclAppendNode(mpObjectInspectorTree, new PropertiesNode(xInterface, xContext));
-    lclAppendNode(mpObjectInspectorTree, new MethodsNode(xInterface, xContext));
+    mpServicesTreeView->freeze();
+    clearAll(mpServicesTreeView);
+    appendServices(xInterface);
+    mpServicesTreeView->thaw();
 
-    mpObjectInspectorTree->thaw();
+    mpPropertiesTreeView->freeze();
+    clearAll(mpPropertiesTreeView);
+    appendProperties(xInterface);
+    mpPropertiesTreeView->thaw();
+
+    mpMethodsTreeView->freeze();
+    clearAll(mpMethodsTreeView);
+    appendMethods(xInterface);
+    mpMethodsTreeView->thaw();
 }
 
 void ObjectInspectorTreeHandler::dispose()
 {
-    // destroy all ObjectInspectorNodes from the tree
-    mpObjectInspectorTree->all_foreach([this](weld::TreeIter& rEntry) {
-        OUString sID = mpObjectInspectorTree->get_id(rEntry);
-        auto* pEntry = reinterpret_cast<ObjectInspectorNodeInterface*>(sID.toInt64());
-        delete pEntry;
-        return false;
-    });
+    clearAll(mpInterfacesTreeView);
+    clearAll(mpServicesTreeView);
+    clearAll(mpPropertiesTreeView);
+    clearAll(mpMethodsTreeView);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
