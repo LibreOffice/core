@@ -96,7 +96,7 @@
                     </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="links-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="conditionpage|extended_tip|links">Here you can see the %PRODUCTNAME predefined contexts, including outline levels 1 to 10, numbering/bullets levels 1 to 10, table header, table contents, section, border, footnote, header and footer.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="conditionpage|extended_tip|links">Here you can see the %PRODUCTNAME predefined contexts, including outline levels 1 to 10, list levels 1 to 10, table header, table contents, section, border, footnote, header and footer.</property>
                       </object>
                     </child>
                   </object>
@@ -240,16 +240,16 @@
                       <item translatable="yes" context="conditionpage|filter"> 8th Outline Level</item>
                       <item translatable="yes" context="conditionpage|filter"> 9th Outline Level</item>
                       <item translatable="yes" context="conditionpage|filter">10th Outline Level</item>
-                      <item translatable="yes" context="conditionpage|filter"> 1st Numbering Level</item>
-                      <item translatable="yes" context="conditionpage|filter"> 2nd Numbering Level</item>
-                      <item translatable="yes" context="conditionpage|filter"> 3rd Numbering Level</item>
-                      <item translatable="yes" context="conditionpage|filter"> 4th Numbering Level</item>
-                      <item translatable="yes" context="conditionpage|filter"> 5th Numbering Level</item>
-                      <item translatable="yes" context="conditionpage|filter"> 6th Numbering Level</item>
-                      <item translatable="yes" context="conditionpage|filter"> 7th Numbering Level</item>
-                      <item translatable="yes" context="conditionpage|filter"> 8th Numbering Level</item>
-                      <item translatable="yes" context="conditionpage|filter"> 9th Numbering Level</item>
-                      <item translatable="yes" context="conditionpage|filter">10th Numbering Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 1st List Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 2nd List Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 3rd List Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 4th List Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 5th List Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 6th List Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 7th List Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 8th List Level</item>
+                      <item translatable="yes" context="conditionpage|filter"> 9th List Level</item>
+                      <item translatable="yes" context="conditionpage|filter">10th List Level</item>
                     </items>
                   </object>
                   <packing>
