@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d76f82d_28cc2939",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 1711,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-17T15:34:16Z",
+      "side": 1,
+      "message": "How about \"List Properties...\"?",
+      "range": {
+        "startLine": 1711,
+        "startChar": 35,
+        "endLine": 1711,
+        "endChar": 39
+      },
+      "revId": "fcc288d56016e4d5f5ec19bc074d748adea27339",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
