@@ -64,12 +64,11 @@ void NodeTest::tearDown()
 
 void NodeTest::testTdf47813()
 {
-    SmParser aParser;
 #define MATRIX "matrix {-2#33##4#-5##6,0#7}"
-    auto pNodeA = aParser.Parse(MATRIX);
-    auto pNodeC = aParser.Parse("alignc " MATRIX);
-    auto pNodeL = aParser.Parse("alignl " MATRIX);
-    auto pNodeR = aParser.Parse("alignr " MATRIX);
+    auto pNodeA = starmathdatabase::GetTestingSmParser()->Parse(MATRIX);
+    auto pNodeC = starmathdatabase::GetTestingSmParser()->Parse("alignc " MATRIX);
+    auto pNodeL = starmathdatabase::GetTestingSmParser()->Parse("alignl " MATRIX);
+    auto pNodeR = starmathdatabase::GetTestingSmParser()->Parse("alignr " MATRIX);
 #undef MATRIX
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
     SmFormat aFmt;

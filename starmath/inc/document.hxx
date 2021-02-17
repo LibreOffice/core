@@ -83,7 +83,7 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
 
     OUString            maText;
     SmFormat            maFormat;
-    SmParser            maParser;
+    AbstractSmParser*   maParser;
     OUString            maAccText;
     SvtLinguOptions     maLinguOptions;
     std::unique_ptr<SmTableNode> mpTree;
@@ -170,10 +170,10 @@ public:
     void        SetFormat(SmFormat const & rFormat);
     const SmFormat&  GetFormat() const { return maFormat; }
 
-    void            Parse();
-    SmParser &      GetParser() { return maParser; }
-    const SmTableNode *GetFormulaTree() const  { return mpTree.get(); }
-    void            SetFormulaTree(SmTableNode *pTree) { mpTree.reset(pTree); }
+    void                    Parse();
+    AbstractSmParser*       GetParser() { return maParser; }
+    const SmTableNode*      GetFormulaTree() const  { return mpTree.get(); }
+    void                    SetFormulaTree(SmTableNode *pTree) { mpTree.reset(pTree); }
 
     const std::set< OUString > &    GetUsedSymbols() const  { return maUsedSymbols; }
 

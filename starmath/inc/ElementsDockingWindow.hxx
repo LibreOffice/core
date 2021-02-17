@@ -25,6 +25,7 @@
 #include <vcl/weld.hxx>
 
 #include "format.hxx"
+#include "parse.hxx"
 #include <memory>
 #include <tuple>
 
@@ -32,7 +33,6 @@
 
 class SmDocShell;
 class SmNode;
-class SmParser;
 
 class SmElement
 {
@@ -97,7 +97,8 @@ class SmElementsControl : public weld::CustomWidgetController
     OString       msCurrentSetId;
     sal_uInt16    m_nCurrentElement;
     sal_uInt16    m_nCurrentRolloverElement;
-    sal_uInt16 m_nCurrentOffset;
+    sal_uInt16    m_nCurrentOffset;
+    std::unique_ptr<AbstractSmParser> mpParser;
     Link<SmElement&,void> maSelectHdlLink;
 
     std::vector< std::unique_ptr<SmElement> > maElementList;
@@ -107,7 +108,7 @@ class SmElementsControl : public weld::CustomWidgetController
     bool m_bFirstPaintAfterLayout;
     rtl::Reference<AccessibleSmElementsControl> m_xAccessible;
 
-    void addElement(SmParser &rParser, const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
+    void addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
     void addElements(const SmElementDescr aElementsArray[], sal_uInt16 size);
     SmElement* current() const;
     void setCurrentElement(sal_uInt16);
