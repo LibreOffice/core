@@ -25,7 +25,7 @@
 #include <scdllapi.h> // SC_DLLPUBLIC is needed for unittest
 
 /** Draw rectangle */
-class FuConstruct : public FuDraw
+class SAL_DLLPUBLIC_RTTI FuConstruct : public FuDraw
 {
 public:
     FuConstruct(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pView,

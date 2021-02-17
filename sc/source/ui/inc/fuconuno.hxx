@@ -27,7 +27,7 @@
 enum class SdrInventor : sal_uInt32;
 
 /** Draw Control */
-class FuConstUnoControl final : public FuConstruct
+class SAL_DLLPUBLIC_RTTI FuConstUnoControl final : public FuConstruct
 {
     SdrInventor nInventor;
     SdrObjKind nIdentifier;

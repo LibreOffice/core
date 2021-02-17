@@ -22,7 +22,7 @@
 
 #include "fuconstr.hxx"
 
-class FuConstCustomShape : public FuConstruct
+class SAL_DLLPUBLIC_RTTI FuConstCustomShape : public FuConstruct
 {
     OUString aCustomShape;
 
