@@ -949,6 +949,9 @@ bool Dialog::ImplStartExecute()
             return false;
         default: // default cannot happen
         case DialogCancelMode::Fatal:
+            if (bKitActive)
+                return false;
+
             std::abort();
         }
 
