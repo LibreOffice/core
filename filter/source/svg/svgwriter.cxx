@@ -1275,7 +1275,7 @@ void SVGTextWriter::startTextShape()
     {
         mbIsTextShapeStarted = true;
         maParentFont = vcl::Font();
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "TextShape" );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "SVGTextShape" );
 
         // if text is rotated, set transform matrix at text element
         const vcl::Font& rFont = mpVDev->GetFont();
