@@ -617,7 +617,7 @@ void PresenterAccessible::UpdateAccessibilityHierarchy (
             mxNotesContentWindow,
             mxNotesBorderWindow,
             rpNotesTextView);
-        mpAccessibleConsole->AddChild(mpAccessibleNotes.get());
+        mpAccessibleConsole->AddChild(mpAccessibleNotes);
     }
 }
 
@@ -809,7 +809,7 @@ Reference<XAccessible> SAL_CALL
     if (nIndex<0 || nIndex>=sal_Int32(maChildren.size()))
         throw lang::IndexOutOfBoundsException("invalid child index", static_cast<uno::XWeak*>(this));
 
-    return Reference<XAccessible>(maChildren[nIndex].get());
+    return maChildren[nIndex];
 }
 
 Reference<XAccessible> SAL_CALL
@@ -1367,7 +1367,7 @@ Reference<XAccessibleRelationSet> SAL_CALL
         }
     }
 
-    return Reference<XAccessibleRelationSet>(pSet.get());
+    return pSet;
 }
 
 //----- XAccessibleText -------------------------------------------------------
@@ -1684,7 +1684,7 @@ rtl::Reference<PresenterAccessible::AccessibleObject> AccessibleNotes::Create (
     pObject->UpdateStateSet();
     pObject->SetWindow(rxContentWindow, rxBorderWindow);
 
-    return rtl::Reference<PresenterAccessible::AccessibleObject>(pObject.get());
+    return pObject;
 }
 
 void AccessibleNotes::SetTextView (

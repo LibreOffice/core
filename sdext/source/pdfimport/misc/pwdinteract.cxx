@@ -161,7 +161,7 @@ bool getPassword( const uno::Reference< task::XInteractionHandler >& xHandler,
         new PDFPasswordRequest( bFirstTry, rDocName ) );
     try
     {
-        xHandler->handle( xReq.get() );
+        xHandler->handle( xReq );
     }
     catch( uno::Exception& )
     {
