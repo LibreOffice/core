@@ -93,6 +93,10 @@ ifeq ($(HAVE_BROKEN_GCC_WMAYBE_UNINITIALIZED),TRUE)
 gb_CXXFLAGS_COMMON += -Wno-maybe-uninitialized
 endif
 
+ifeq ($(HAVE_BROKEN_GCC_WSTRINGOP_OVERFLOW),TRUE)
+gb_CXXFLAGS_COMMON += -Wno-stringop-overflow
+endif
+
 gb_CXXFLAGS_Wundef = -Wno-undef
 
 ifeq ($(strip $(gb_GCOV)),YES)
@@ -158,9 +162,6 @@ endif
 endif
 
 gb_CFLAGS_WERROR = $(if $(ENABLE_WERROR),-Werror)
-ifeq ($(ENABLE_OPTIMIZED)-$(COM_IS_CLANG),TRUE-)
-gb_CFLAGS_WERROR += -Wno-stringop-overflow
-endif
 
 # This is the default in non-C++11 mode
 ifeq ($(COM_IS_CLANG),TRUE)
