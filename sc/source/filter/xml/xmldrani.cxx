@@ -253,6 +253,8 @@ std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUStr
     pData->SetDoSize(bMoveCells);
     pData->SetStripData(bStripData);
 
+    pDoc->PrepareQuery(mpQueryParam->nTab, *mpQueryParam);
+
     pData->SetQueryParam(*mpQueryParam);
 
     if (bFilterConditionSourceRange)
