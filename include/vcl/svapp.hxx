@@ -212,6 +212,7 @@ private:
 enum class DialogCancelMode {
     Off,      ///< do not automatically cancel dialogs
     Silent,   ///< silently cancel any dialogs
+    LOKSilent, ///< silently cancel any dialogs (LOK case)
     Fatal     ///< cancel any dialogs by std::abort
 };
 
