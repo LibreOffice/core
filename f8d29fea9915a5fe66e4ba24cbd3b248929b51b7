@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e55bf06_c62c82c5",
+        "filename": "svx/source/svdraw/svdopath.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2367,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-02-17T16:36:51Z",
+      "side": 1,
+      "message": "Is this correct? I mean, if the shape had no \"snap rectangle\" previously (it was empty) and now we get a new one, then I would assume that new snap rectangle is exactly rRect. OK, the style here is to not set it directly, but go via resize and move, but still, I would expect a fraction here which is rRect.getWidth() / 1 for aX. Same for aY. And for the size, I would expect it only depends on rRect, not aOld, since it\u0027s empty, so calling Left() or Top() on it returns 0 anyway.\n\nOr do I miss something? Thanks.",
+      "revId": "f8d29fea9915a5fe66e4ba24cbd3b248929b51b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
