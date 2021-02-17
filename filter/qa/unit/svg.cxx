@@ -148,14 +148,14 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentText)
 
     xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
 
-    // We expect 2 groups of class "com.sun.star.drawing.TextShape" that
+    // We expect 2 groups of class "TextShape" that
     // have some svg:text node inside.
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2
     // - Actual  : 1
     // i.e. the 2nd shape lots its text.
 
-    assertXPath(pXmlDoc, "//svg:g[@class='com.sun.star.drawing.TextShape']//svg:text", 2);
+    assertXPath(pXmlDoc, "//svg:g[@class='TextShape']//svg:text", 2);
 
     // First shape has semi-transparent text.
     assertXPath(pXmlDoc, "//svg:text[1]/svg:tspan/svg:tspan/svg:tspan[@fill-opacity='0.8']");
