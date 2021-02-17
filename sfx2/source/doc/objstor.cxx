@@ -3262,7 +3262,7 @@ bool SfxObjectShell::SaveCompletedChildren()
     return bResult;
 }
 
-bool SfxObjectShell::SwitchChildrenPersistance( const uno::Reference< embed::XStorage >& xStorage,
+bool SfxObjectShell::SwitchChildrenPersistence( const uno::Reference< embed::XStorage >& xStorage,
                                                     bool bForceNonModified )
 {
     if ( !xStorage.is() )
@@ -3297,7 +3297,7 @@ bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >& xSt
         if ( pImpl->mxObjectContainer )
             GetEmbeddedObjectContainer().SwitchPersistence( xStorage );
 
-        bResult = SwitchChildrenPersistance( xStorage, true );
+        bResult = SwitchChildrenPersistence( xStorage, true );
     }
 
     if ( bResult )
@@ -3321,7 +3321,7 @@ bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >& xSt
             GetEmbeddedObjectContainer().SwitchPersistence( pImpl->m_xDocStorage );
 
         // let already successfully connected objects be switched back
-        SwitchChildrenPersistance( pImpl->m_xDocStorage, true );
+        SwitchChildrenPersistence( pImpl->m_xDocStorage, true );
     }
 
     if ( bSendNotification )
@@ -3433,7 +3433,7 @@ bool SfxObjectShell::SwitchPersistence( const uno::Reference< embed::XStorage >&
     {
         if ( pImpl->mxObjectContainer )
             GetEmbeddedObjectContainer().SwitchPersistence( xStorage );
-        bResult = SwitchChildrenPersistance( xStorage );
+        bResult = SwitchChildrenPersistence( xStorage );
 
         // TODO/LATER: substorages that have unknown mimetypes probably should be copied to the target storage here
         OSL_ENSURE( StoragesOfUnknownMediaTypeAreCopied_Impl( pImpl->m_xDocStorage, xStorage ),
