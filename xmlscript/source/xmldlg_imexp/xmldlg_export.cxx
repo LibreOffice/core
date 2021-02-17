@@ -1360,7 +1360,7 @@ void StyleBag::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOu
     for (auto const & _style : _styles)
     {
         Reference< xml::sax::XAttributeList > xAttr( _style->createElement() );
-        static_cast< ElementDescriptor * >( xAttr.get() )->dump( xOut.get() );
+        static_cast< ElementDescriptor * >( xAttr.get() )->dump( xOut );
     }
     xOut->ignorableWhitespace( OUString() );
     xOut->endElement( aStylesName );
@@ -1396,7 +1396,7 @@ void exportDialogModel(
     xOut->ignorableWhitespace( OUString() );
     xOut->startElement( aWindowName, xWindow );
      // dump out events
-    pWindow->dumpSubElements( xOut.get() );
+    pWindow->dumpSubElements( xOut );
     // dump out stylebag
     all_styles.dump( xOut );
 
@@ -1407,7 +1407,7 @@ void exportDialogModel(
         xOut->ignorableWhitespace( OUString() );
         xOut->startElement( aBBoardName, xElem );
 
-        pElem->dumpSubElements( xOut.get() );
+        pElem->dumpSubElements( xOut );
         // end bulletinboard
         xOut->ignorableWhitespace( OUString() );
         xOut->endElement( aBBoardName );
