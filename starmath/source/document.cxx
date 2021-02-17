@@ -620,6 +620,7 @@ SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
     , mpTmpPrinter(nullptr)
     , mnModifyCount(0)
     , mbFormulaArranged(false)
+    , mnSmSyntaxVersion(SM_MOD()->GetConfig()->GetDefaultSmSyntaxVersion())
 {
     SvtLinguConfig().GetOptions(maLinguOptions);
 

@@ -463,9 +463,13 @@ void SmXMLExport::ExportContent_()
     if (aText.isEmpty())
         return;
 
+    SmModule* pMod = SM_MOD();
+    sal_uInt16 nSmSyntaxVersion = pMod->GetConfig()->GetDefaultSmSyntaxVersion();
+
     // Convert symbol names
     if (pDocShell)
     {
+        nSmSyntaxVersion = pDocShell->GetSmSyntaxVersion();
         SmParser& rParser = pDocShell->GetParser();
         bool bVal = rParser.IsExportSymbolNames();
         rParser.SetExportSymbolNames(true);
@@ -475,7 +479,14 @@ void SmXMLExport::ExportContent_()
         rParser.SetExportSymbolNames(bVal);
     }
 
-    AddAttribute(XML_NAMESPACE_MATH, XML_ENCODING, OUString("StarMath 5.0"));
+    OUStringBuffer sStrBuf(12);
+    sStrBuf.append(u"StarMath ");
+    if (nSmSyntaxVersion == 5)
+        sStrBuf.append(u"5.0");
+    else
+        sStrBuf.append(OUString::number(nSmSyntaxVersion));
+
+    AddAttribute(XML_NAMESPACE_MATH, XML_ENCODING, sStrBuf.makeStringAndClear());
     SvXMLElementExport aAnnotation(*this, XML_NAMESPACE_MATH, XML_ANNOTATION, true, false);
     GetDocHandler()->characters(aText);
 }

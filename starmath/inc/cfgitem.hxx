@@ -178,6 +178,9 @@ public:
     bool IsShowFormulaCursor() const;
     void SetShowFormulaCursor(bool bVal);
 
+    sal_uInt16 GetDefaultSmSyntaxVersion() const;
+    void SetDefaultSmSyntaxVersion(sal_uInt16 nVal);
+
     SmFontPickList& GetFontPickList(sal_uInt16 nIdent) { return vFontPickList[nIdent]; }
 
     void ItemSetToConfig(const SfxItemSet& rSet);

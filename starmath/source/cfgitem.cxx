@@ -124,6 +124,7 @@ struct SmCfgOther
 {
     SmPrintSize     ePrintSize;
     sal_uInt16      nPrintZoomFactor;
+    sal_uInt16      nSmSyntaxVersion;
     bool            bPrintTitle;
     bool            bPrintFormulaText;
     bool            bPrintFrame;
@@ -141,6 +142,8 @@ struct SmCfgOther
 SmCfgOther::SmCfgOther()
     : ePrintSize(PRINT_SIZE_NORMAL)
     , nPrintZoomFactor(100)
+    // Defaulted as 5 so I have time to code the parser 6
+    , nSmSyntaxVersion(5)
     , bPrintTitle(true)
     , bPrintFormulaText(true)
     , bPrintFrame(true)
@@ -748,6 +751,7 @@ void SmMathConfig::LoadOther()
     pOther->nPrintZoomFactor = officecfg::Office::Math::Print::ZoomFactor::get();
     pOther->bIsSaveOnlyUsedSymbols = officecfg::Office::Math::LoadSave::IsSaveOnlyUsedSymbols::get();
     pOther->bIsAutoCloseBrackets = officecfg::Office::Math::Misc::AutoCloseBrackets::get();
+    pOther->nSmSyntaxVersion = officecfg::Office::Math::Misc::DefaultSmSyntaxVersion::get();
     pOther->bIgnoreSpacesRight = officecfg::Office::Math::Misc::IgnoreSpacesRight::get();
     pOther->bToolboxVisible = officecfg::Office::Math::View::ToolboxVisible::get();
     pOther->bAutoRedraw = officecfg::Office::Math::View::AutoRedraw::get();
@@ -770,6 +774,7 @@ void SmMathConfig::SaveOther()
     officecfg::Office::Math::Print::ZoomFactor::set(pOther->nPrintZoomFactor, batch);
     officecfg::Office::Math::LoadSave::IsSaveOnlyUsedSymbols::set(pOther->bIsSaveOnlyUsedSymbols, batch);
     officecfg::Office::Math::Misc::AutoCloseBrackets::set(pOther->bIsAutoCloseBrackets, batch);
+    officecfg::Office::Math::Misc::DefaultSmSyntaxVersion::set(pOther->nSmSyntaxVersion, batch);
     officecfg::Office::Math::Misc::IgnoreSpacesRight::set(pOther->bIgnoreSpacesRight, batch);
     officecfg::Office::Math::View::ToolboxVisible::set(pOther->bToolboxVisible, batch);
     officecfg::Office::Math::View::AutoRedraw::set(pOther->bAutoRedraw, batch);
@@ -1110,6 +1115,13 @@ bool SmMathConfig::IsAutoCloseBrackets() const
     return pOther->bIsAutoCloseBrackets;
 }
 
+sal_uInt16 SmMathConfig::GetDefaultSmSyntaxVersion() const
+{
+    if (!pOther)
+        const_cast<SmMathConfig*>(this)->LoadOther();
+    return pOther->nSmSyntaxVersion;
+}
+
 bool SmMathConfig::IsPrintFrame() const
 {
     if (!pOther)
@@ -1141,6 +1153,16 @@ void SmMathConfig::SetAutoCloseBrackets( bool bVal )
     SetOtherIfNotEqual( pOther->bIsAutoCloseBrackets, bVal );
 }
 
+void SmMathConfig::SetDefaultSmSyntaxVersion( sal_uInt16 nVal )
+{
+    if (!pOther)
+        LoadOther();
+    if (nVal != pOther->nSmSyntaxVersion)
+    {
+        pOther->nSmSyntaxVersion = nVal;
+        SetOtherModified( true );
+    }
+}
 
 bool SmMathConfig::IsIgnoreSpacesRight() const
 {
@@ -1244,6 +1266,12 @@ void SmMathConfig::ItemSetToConfig(const SfxItemSet &rSet)
         SetAutoCloseBrackets( bVal );
     }
 
+    if (rSet.GetItemState(SID_DEFAULT_SM_SYNTAX_VERSION, true, &pItem) == SfxItemState::SET)
+    {
+        nU16 = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
+        SetDefaultSmSyntaxVersion( nU16 );
+    }
+
     SaveOther();
 }
 
@@ -1264,6 +1292,7 @@ void SmMathConfig::ConfigToItemSet(SfxItemSet &rSet) const
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_NO_RIGHT_SPACES), IsIgnoreSpacesRight()));
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_SAVE_ONLY_USED_SYMBOLS), IsSaveOnlyUsedSymbols()));
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_AUTO_CLOSE_BRACKETS), IsAutoCloseBrackets()));
+    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_DEFAULT_SM_SYNTAX_VERSION), GetDefaultSmSyntaxVersion()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
