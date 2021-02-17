@@ -188,8 +188,7 @@ void FindXMPMetadata(const uno::Reference<uno::XComponentContext>& xContext,
     aInputSource.aInputStream = xStream;
     uno::Reference<xml::sax::XParser> xParser = xml::sax::Parser::create(xContext);
     rtl::Reference<XMPParser> xXMP(new XMPParser(rMetaData));
-    uno::Reference<xml::sax::XDocumentHandler> xDocumentHandler(xXMP.get());
-    xParser->setDocumentHandler(xDocumentHandler);
+    xParser->setDocumentHandler(xXMP);
     try
     {
         xParser->parseStream(aInputSource);

@@ -87,8 +87,7 @@ void EPUBPackage::openElement(const char* pName, const librevenge::RVNGPropertyL
         pAttributeList->AddAttribute(OUString::fromUtf8(it.key()),
                                      OUString::fromUtf8(it()->getStr().cstr()));
 
-    mxOutputWriter->startElement(OUString::fromUtf8(pName),
-                                 uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
+    mxOutputWriter->startElement(OUString::fromUtf8(pName), pAttributeList);
 }
 
 void EPUBPackage::closeElement(const char* pName)
