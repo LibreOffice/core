@@ -116,9 +116,12 @@ namespace dbaui
     class InterimDBTreeListBox : public InterimItemWindow
                                , public TreeListBox
     {
+    private:
+        std::unique_ptr<weld::Label> m_xStatusBar;
     public:
         InterimDBTreeListBox(vcl::Window* pParent, bool bSQLType);
         virtual void dispose() override;
+        weld::Label& GetStatusBar() { return *m_xStatusBar; }
         virtual ~InterimDBTreeListBox() override;
         void show_container() { m_xContainer->show(); }
     protected:
