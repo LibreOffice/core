@@ -2239,6 +2239,12 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         const OUString aDeviceFormFactor = extractParameter(aOptions, u"DeviceFormFactor");
         SfxLokHelper::setDeviceFormFactor(aDeviceFormFactor);
 
+        const OUString aBatch = extractParameter(aOptions, u"Batch");
+        if (!aBatch.isEmpty())
+        {
+             Application::SetDialogCancelMode(DialogCancelMode::LOKSilent);
+        }
+
         uno::Sequence<css::beans::PropertyValue> aFilterOptions(3);
         aFilterOptions[0] = css::beans::PropertyValue( "FilterOptions",
                                                        0,
