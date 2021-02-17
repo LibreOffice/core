@@ -15,6 +15,9 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/processfactory.hxx>
+#include <unotools/syslocaleoptions.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #include <boost/preprocessor/stringize.hpp>
 
@@ -66,6 +69,30 @@ static bool isValidTiledBackgroundId(const OUString& sId)
 
 class SdSVGFilterTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
+    class Resetter
+    {
+    private:
+        std::function<void ()> m_Func;
+
+    public:
+        Resetter(std::function<void ()> const& rFunc)
+            : m_Func(rFunc)
+        {
+        }
+        ~Resetter()
+        {
+            try
+            {
+                m_Func();
+            }
+            catch (...) // has to be reliable
+            {
+                fprintf(stderr, "resetter failed with exception\n");
+                abort();
+            }
+        }
+    };
+
     uno::Reference<lang::XComponent> mxComponent;
     utl::TempFile maTempFile;
 
@@ -279,6 +306,38 @@ public:
         CPPUNIT_ASSERT_EQUAL_MESSAGE("The href attribute for <use> does not match the tiled background id attribute: ", sBackgroundId, sRef);
     }
 
+    void testSVGPlaceholderLocale()
+    {
+        static const OUString aLangISO("it-IT");
+        SvtSysLocaleOptions aSysLocaleOptions;
+        aSysLocaleOptions.SetLocaleConfigString(aLangISO);
+        aSysLocaleOptions.SetUILocaleConfigString(aLangISO);
+
+        auto aSavedSettings = Application::GetSettings();
+        std::unique_ptr<Resetter> pResetter(
+                new Resetter([&]() { Application::SetSettings(aSavedSettings); }));
+        AllSettings aSettings(aSavedSettings);
+        aSettings.SetLanguageTag(aLangISO, true);
+        Application::SetSettings(aSettings);
+
+        executeExport("text-fields.odp");
+
+        xmlDocPtr svgDoc = parseXml(maTempFile);
+        CPPUNIT_ASSERT(svgDoc);
+
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_DEFS[9]/SVG_G[2] ), "class", "Master_Slide");
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2] ), "class", "BackgroundObjects");
+
+        // Slide Name Field
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[6] ), "class", "TextShape");
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[6]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "class", "PlaceholderText");
+        assertXPathContent(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[6]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "<slide-name>");
+        // Slide Number Field
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[7] ), "class", "TextShape");
+        assertXPath(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[7]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "class", "PlaceholderText");
+        assertXPathContent(svgDoc, MAKE_PATH_STRING( /SVG_SVG/SVG_DEFS[9]/SVG_G[2]/SVG_G[2]/SVG_G[7]/SVG_G/SVG_TEXT/SVG_TSPAN/SVG_TSPAN/SVG_TSPAN ), "<number>");
+    }
+
     CPPUNIT_TEST_SUITE(SdSVGFilterTest);
     CPPUNIT_TEST(testSVGExportTextDecorations);
     CPPUNIT_TEST(testSVGExportJavascriptURL);
@@ -286,6 +345,7 @@ public:
     CPPUNIT_TEST(testSVGExportTextFieldsInMasterPage);
     CPPUNIT_TEST(testSVGExportSlideBitmapBackground);
     CPPUNIT_TEST(testSVGExportSlideTileBitmapBackground);
+    CPPUNIT_TEST(testSVGPlaceholderLocale);
     CPPUNIT_TEST_SUITE_END();
 };
 
