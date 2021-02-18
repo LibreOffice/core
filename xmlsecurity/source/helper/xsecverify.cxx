@@ -325,6 +325,12 @@ void XSecController::setDate( OUString const & ouDate )
         return;
     }
     InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
+    // there may be multiple timestamps in a signature - check them for consistency
+    if (!isi.signatureInfor.ouDateTime.isEmpty()
+        && isi.signatureInfor.ouDateTime != ouDate)
+    {
+        isi.signatureInfor.hasInconsistentSigningTime = true;
+    }
     (void)utl::ISO8601parseDateTime( ouDate, isi.signatureInfor.stDateTime);
     isi.signatureInfor.ouDateTime = ouDate;
 }
