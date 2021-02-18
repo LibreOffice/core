@@ -2321,11 +2321,13 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
             xReplacementProperties->getPropertyValue("LineWidth") >>= aBorderProps.LineWidth;
             xReplacementProperties->getPropertyValue("LineStyle") >>= aBorderProps.LineStyle;
 
-            xOLEProperties->setPropertyValue("RightBorder", uno::Any(aBorderProps));
-            xOLEProperties->setPropertyValue("TopBorder", uno::Any(aBorderProps));
-            xOLEProperties->setPropertyValue("LeftBorder", uno::Any(aBorderProps));
-            xOLEProperties->setPropertyValue("BottomBorder", uno::Any(aBorderProps));
-
+            if (aBorderProps.LineStyle) // Set line props only if LineStyle is set
+            {
+                xOLEProperties->setPropertyValue("RightBorder", uno::Any(aBorderProps));
+                xOLEProperties->setPropertyValue("TopBorder", uno::Any(aBorderProps));
+                xOLEProperties->setPropertyValue("LeftBorder", uno::Any(aBorderProps));
+                xOLEProperties->setPropertyValue("BottomBorder", uno::Any(aBorderProps));
+            }
             OUString pProperties[] = {
                 "AnchorType",
                 "Surround",
@@ -2339,16 +2341,23 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
                 "LeftMargin",
                 "RightMargin",
                 "TopMargin",
-                "BottomMargin",
-                "FillStyle",
-                "FillColor",
-                "FillColor2",
-                "LineStyle",
+                "BottomMargin"
             };
             for (const OUString& s : pProperties)
             {
                 const uno::Any aVal = xReplacementProperties->getPropertyValue(s);
                 xOLEProperties->setPropertyValue(s, aVal);
+            }
+
+            if (xReplacementProperties->getPropertyValue("FillStyle").get<css::drawing::FillStyle>()
+                != css::drawing::FillStyle::FillStyle_NONE) // Apply fill props if style is set
+            {
+                xOLEProperties->setPropertyValue(
+                    "FillStyle", xReplacementProperties->getPropertyValue("FillStyle"));
+                xOLEProperties->setPropertyValue(
+                    "FillColor", xReplacementProperties->getPropertyValue("FillColor"));
+                xOLEProperties->setPropertyValue(
+                    "FillColor2", xReplacementProperties->getPropertyValue("FillColor2"));
             }
         }
         else
