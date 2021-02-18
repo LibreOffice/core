@@ -729,7 +729,7 @@ sal_Bool SAL_CALL MacabDatabaseMetaData::supportsBatchUpdates(  )
 
 Reference< XConnection > SAL_CALL MacabDatabaseMetaData::getConnection(  )
 {
-    return m_xConnection.get();
+    return m_xConnection;
 }
 
 Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTableTypes(  )
