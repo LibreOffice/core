@@ -64,7 +64,7 @@ public:
     virtual void        importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm );
 
     /** Derived classes return converted UNO API filter settings representing all filter settings. */
-    virtual ApiFilterSettings finalizeImport( sal_Int32 nMaxCount );
+    virtual ApiFilterSettings finalizeImport();
 };
 
 
@@ -82,7 +82,7 @@ public:
     virtual void        importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
 
     /** Returns converted UNO API filter settings representing all filter settings. */
-    virtual ApiFilterSettings finalizeImport( sal_Int32 nMaxCount ) override;
+    virtual ApiFilterSettings finalizeImport() override;
 
 private:
 
@@ -103,7 +103,7 @@ public:
     virtual void        importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
 
     /** Returns converted UNO API filter settings representing all filter settings. */
-    virtual ApiFilterSettings finalizeImport( sal_Int32 nMaxCount ) override;
+    virtual ApiFilterSettings finalizeImport() override;
 
 private:
     double              mfValue;        /// Number of items or percentage.
@@ -141,7 +141,7 @@ public:
     virtual void        importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm ) override;
 
     /** Returns converted UNO API filter settings representing all filter settings. */
-    virtual ApiFilterSettings finalizeImport( sal_Int32 nMaxCount ) override;
+    virtual ApiFilterSettings finalizeImport() override;
 
 private:
     /** Appends the passed filter criterion, if it contains valid settings. */
@@ -174,7 +174,7 @@ public:
 
     /** Returns converted UNO API filter settings representing all filter
         settings of this column. */
-    ApiFilterSettings   finalizeImport( sal_Int32 nMaxCount );
+    ApiFilterSettings   finalizeImport();
 
 private:
     std::shared_ptr< FilterSettingsBase >
