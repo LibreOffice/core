@@ -34,6 +34,24 @@
       "revId": "f09b347298ec4a37a6feedee9183a6345fc9d74a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "266db3f6_1f27f933",
+        "filename": "basic/qa/basic_coverage/test_vartype_method.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-02-18T19:53:43Z",
+      "side": 1,
+      "message": "I would even prefer one liners 😊\nIf V_EMPTY \u003c\u003e 0 Then Exit Function\nIf V_NULL \u003c\u003e 1  Then Exit Function",
+      "parentUuid": "239fca73_1e1ec2da",
+      "revId": "f09b347298ec4a37a6feedee9183a6345fc9d74a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
