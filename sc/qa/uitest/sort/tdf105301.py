@@ -32,6 +32,8 @@ class tdf105301(UITestCase):
         self.assertEqual("Column E", get_state_as_dict(xDialog.getChild("sortlb4"))['DisplayText'])
         self.assertEqual("Column F", get_state_as_dict(xDialog.getChild("sortlb5"))['DisplayText'])
         self.assertEqual("Column G", get_state_as_dict(xDialog.getChild("sortlb6"))['DisplayText'])
+
+        # tdf#51828: Without the fix in place, this test would have failed here
         self.assertEqual("- undefined -", get_state_as_dict(xDialog.getChild("sortlb7"))['DisplayText'])
 
         xOk = xDialog.getChild("ok")
