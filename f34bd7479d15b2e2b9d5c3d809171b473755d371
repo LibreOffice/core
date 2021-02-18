@@ -69,6 +69,24 @@
       "revId": "f34bd7479d15b2e2b9d5c3d809171b473755d371",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3caef1e_f89ca57c",
+        "filename": "starmath/source/mathml/mathmlimport.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1240,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-18T15:56:17Z",
+      "side": 1,
+      "message": "You\u0027re completely right.\nAs proposed added the field in smdocshell and passed to output and got from input.\nIf no input is given the config rules, defaulted as 5.",
+      "parentUuid": "309b0ec8_9dc06ba0",
+      "revId": "f34bd7479d15b2e2b9d5c3d809171b473755d371",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
