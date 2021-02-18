@@ -50,14 +50,14 @@ void XMLFrameOOoTransformerContext::StartElement(
     OSL_ENSURE( pActions, "go no actions" );
 
     Reference< XAttributeList > xAttrList( rAttrList );
-    XMLMutableAttributeList *pMutableAttrList =
+    rtl::Reference<XMLMutableAttributeList> pMutableAttrList =
         GetTransformer().ProcessAttrList( xAttrList, OOO_SHAPE_ACTIONS,
                                           true );
     if( !pMutableAttrList )
         pMutableAttrList = new XMLMutableAttributeList( rAttrList );
     xAttrList = pMutableAttrList;
 
-    XMLMutableAttributeList *pFrameMutableAttrList =
+    rtl::Reference<XMLMutableAttributeList> pFrameMutableAttrList =
         new XMLMutableAttributeList;
     Reference< XAttributeList > xFrameAttrList( pFrameMutableAttrList );
 
