@@ -38,6 +38,7 @@
 #include <ToxTabStopTokenHandler.hxx>
 #include <txatbase.hxx>
 #include <modeltoviewhelper.hxx>
+#include <strings.hrc>
 
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
@@ -192,6 +193,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc,
         for(const auto& aToken : aPattern) // #i21237#
         {
             sal_Int32 nStartCharStyle = rText.getLength();
+            OUString aCharStyleName = aToken.sCharStyleName;
             switch( aToken.eTokenType )
             {
             case TOKEN_ENTRY_NO:
@@ -250,7 +252,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc,
                         ++iter->second;
                         url = "#" + OUString::number(iter->second) + url;
                     }
-                    mLinkProcessor->CloseLink(rText.getLength(), url);
+                    mLinkProcessor->CloseLink(rText.getLength(), url, /*bRelative=*/true);
                 }
                 break;
 
@@ -258,19 +260,29 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc,
                 {
                     ToxAuthorityField eField = static_cast<ToxAuthorityField>(aToken.nAuthorityField);
                     SwIndex aIdx( pTOXNd, rText.getLength() );
+                    if (eField == ToxAuthorityField::AUTH_FIELD_URL)
+                    {
+                        aCharStyleName = SwResId(STR_POOLCHR_INET_NORMAL);
+                        mLinkProcessor->StartNewLink(rText.getLength(), aCharStyleName);
+                    }
                     rBase.FillText( *pTOXNd, aIdx, static_cast<sal_uInt16>(eField), pLayout );
+                    if (eField == ToxAuthorityField::AUTH_FIELD_URL)
+                    {
+                        OUString aURL(rText.subView(nStartCharStyle));
+                        mLinkProcessor->CloseLink(rText.getLength(), aURL, /*bRelative=*/false);
+                    }
                 }
                 break;
             case TOKEN_END: break;
             }
 
-            if ( !aToken.sCharStyleName.isEmpty() )
+            if (!aCharStyleName.isEmpty())
             {
                 SwCharFormat* pCharFormat;
                 if( USHRT_MAX != aToken.nPoolId )
                     pCharFormat = pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( aToken.nPoolId );
                 else
-                    pCharFormat = pDoc->FindCharFormatByName( aToken.sCharStyleName);
+                    pCharFormat = pDoc->FindCharFormatByName(aCharStyleName);
 
                 if (pCharFormat)
                 {

@@ -56,11 +56,11 @@ ToxLinkProcessorTest::NoExceptionIsThrownIfTooManyLinksAreClosed()
 {
     ToxLinkProcessor sut;
     sut.StartNewLink(0, STYLE_NAME_1);
-    sut.CloseLink(1, URL_1);
+    sut.CloseLink(1, URL_1, /*bRelative=*/true);
     // fdo#85872 actually it turns out the UI does something like this
     // so an exception must not be thrown!
     // should not succeed either (for backward compatibility)
-    sut.CloseLink(2, URL_1);
+    sut.CloseLink(2, URL_1, /*bRelative=*/true);
     CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned>(sut.m_ClosedLinks.size()));
     CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned>(sut.m_ClosedLinks.at(0)->mEndTextPos));
     CPPUNIT_ASSERT_MESSAGE("no links are open", !sut.m_pStartedLink);
@@ -72,10 +72,10 @@ ToxLinkProcessorTest::AddingAndClosingTwoOverlappingLinksResultsInOneClosedLink(
     ToxLinkProcessor sut;
     sut.StartNewLink(0, STYLE_NAME_1);
     sut.StartNewLink(0, STYLE_NAME_2);
-    sut.CloseLink(1, URL_1);
+    sut.CloseLink(1, URL_1, /*bRelative=*/true);
     // this should not cause an error, and should not succeed either
     // (for backward compatibility)
-    sut.CloseLink(1, URL_2);
+    sut.CloseLink(1, URL_2, /*bRelative=*/true);
     CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned>(sut.m_ClosedLinks.size()));
     CPPUNIT_ASSERT_MESSAGE("no links are open", !sut.m_pStartedLink);
     // backward compatibility: the last start is closed by the first end
@@ -108,7 +108,7 @@ ToxLinkProcessorTest::LinkIsCreatedCorrectly()
     ToxLinkProcessorWithOverriddenObtainPoolId sut;
 
     sut.StartNewLink(0, STYLE_NAME_1);
-    sut.CloseLink(1, URL_1);
+    sut.CloseLink(1, URL_1, /*bRelative=*/true);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Style is stored correctly in link", OUString(STYLE_NAME_1), sut.m_ClosedLinks.at(0)->mINetFormat.GetVisitedFormat());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Url is stored correctly in link", OUString(URL_1), sut.m_ClosedLinks.at(0)->mINetFormat.GetValue());
@@ -122,9 +122,9 @@ ToxLinkProcessorTest::LinkSequenceIsPreserved()
     ToxLinkProcessorWithOverriddenObtainPoolId sut;
 
     sut.StartNewLink(0, STYLE_NAME_2);
-    sut.CloseLink(1, URL_2);
+    sut.CloseLink(1, URL_2, /*bRelative=*/true);
     sut.StartNewLink(1, STYLE_NAME_1);
-    sut.CloseLink(2, URL_1);
+    sut.CloseLink(2, URL_1, /*bRelative=*/true);
 
     // check first closed element
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Style is stored correctly in link",
