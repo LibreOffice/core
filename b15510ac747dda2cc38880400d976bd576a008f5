@@ -117,6 +117,30 @@
       "revId": "b15510ac747dda2cc38880400d976bd576a008f5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48ce991a_2cc5ef1c",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 3629,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-18T09:29:49Z",
+      "side": 1,
+      "message": "True, after starting with --safe-mode everything is fine.",
+      "parentUuid": "c43aaf23_1664289f",
+      "range": {
+        "startLine": 3629,
+        "startChar": 6,
+        "endLine": 3629,
+        "endChar": 63
+      },
+      "revId": "b15510ac747dda2cc38880400d976bd576a008f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
