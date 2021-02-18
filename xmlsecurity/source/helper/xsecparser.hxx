@@ -97,12 +97,6 @@ private:
     class DsSignatureContext;
     class DsigSignaturesContext;
 
-    /*
-     * the following members are used to reserve the signature information,
-     * including X509IssuerName, X509SerialNumber, and X509Certificate,etc.
-     */
-    OUString m_ouDate;
-
     std::stack<std::unique_ptr<Context>> m_ContextStack;
     std::unique_ptr<SvXMLNamespaceMap> m_pNamespaceMap;
 

@@ -271,8 +271,8 @@ private:
     void setGpgCertificate( OUString const & ouGpgCert );
     void setGpgOwner( OUString const & ouGpgOwner );
 
-    void setDate( OUString const & ouDate );
-    void setDescription(const OUString& rDescription);
+    void setDate(OUString const& rId, OUString const& ouDate);
+    void setDescription(OUString const& rId, OUString const& rDescription);
     void setCertDigest(const OUString& rCertDigest);
     void setValidSignatureImage(const OUString& rValidSigImg);
     void setInvalidSignatureImage(const OUString& rInvalidSigImg);
@@ -283,7 +283,6 @@ public:
 
 private:
     void setId( OUString const & ouId );
-    void setPropertyId( OUString const & ouPropertyId );
 
     css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > prepareSignatureToRead(
         sal_Int32 nSecurityId );

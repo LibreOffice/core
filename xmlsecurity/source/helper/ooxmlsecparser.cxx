@@ -192,12 +192,12 @@ void SAL_CALL OOXMLSecParser::endElement(const OUString& rName)
     }
     else if (rName == "mdssi:Value")
     {
-        m_pXSecController->setDate(m_aMdssiValue);
+        m_pXSecController->setDate("", m_aMdssiValue);
         m_bInMdssiValue = false;
     }
     else if (rName == "SignatureComments")
     {
-        m_pXSecController->setDescription(m_aSignatureComments);
+        m_pXSecController->setDescription("", m_aSignatureComments);
         m_bInSignatureComments = false;
     }
     else if (rName == "X509IssuerName")
