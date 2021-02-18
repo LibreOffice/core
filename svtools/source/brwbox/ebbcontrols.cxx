@@ -31,6 +31,7 @@ namespace svt
         m_xWidget->connect_changed(LINK(this, ComboBoxControl, SelectHdl));
         m_xWidget->connect_key_press(LINK(this, ControlBase, KeyInputHdl));
         m_xWidget->connect_focus_in(LINK(this, ControlBase, FocusInHdl));
+        m_xWidget->connect_focus_out(LINK(this, ControlBase, FocusOutHdl));
     }
 
     void ComboBoxControl::dispose()
@@ -117,6 +118,7 @@ namespace svt
         m_xWidget->connect_changed(LINK(this, ListBoxControl, SelectHdl));
         m_xWidget->connect_key_press(LINK(this, ControlBase, KeyInputHdl));
         m_xWidget->connect_focus_in(LINK(this, ControlBase, FocusInHdl));
+        m_xWidget->connect_focus_out(LINK(this, ControlBase, FocusOutHdl));
     }
 
     void ListBoxControl::dispose()
@@ -186,6 +188,7 @@ namespace svt
         InitControlBase(m_xBox.get());
         m_xBox->connect_key_press(LINK(this, ControlBase, KeyInputHdl));
         m_xBox->connect_focus_in(LINK(this, ControlBase, FocusInHdl));
+        m_xBox->connect_focus_out(LINK(this, ControlBase, FocusOutHdl));
         m_xBox->connect_toggled(LINK(this, CheckBoxControl, OnToggle));
     }
 
@@ -338,6 +341,7 @@ namespace svt
         m_pEntry->set_width_chars(1); // so a smaller than default width can be used
         m_pEntry->connect_key_press(LINK(this, ControlBase, KeyInputHdl));
         m_pEntry->connect_focus_in(LINK(this, ControlBase, FocusInHdl));
+        connect_focus_out(LINK(this, ControlBase, FocusOutHdl));
     }
 
     bool ControlBase::ProcessKey(const KeyEvent& rKEvt)
@@ -353,6 +357,11 @@ namespace svt
     IMPL_LINK_NOARG(ControlBase, FocusInHdl, weld::Widget&, void)
     {
         return static_cast<BrowserDataWin*>(GetParent())->GetParent()->ChildFocusIn();
+    }
+
+    IMPL_LINK_NOARG(ControlBase, FocusOutHdl, weld::Widget&, void)
+    {
+        return static_cast<BrowserDataWin*>(GetParent())->GetParent()->ChildFocusOut();
     }
 
     void EditControlBase::dispose()
@@ -390,6 +399,11 @@ namespace svt
     void FormattedControlBase::connect_changed(const Link<weld::Entry&, void>& rLink)
     {
         get_formatter().connect_changed(rLink);
+    }
+
+    void FormattedControlBase::connect_focus_out(const Link<weld::Widget&, void>& rLink)
+    {
+        get_formatter().connect_focus_out(rLink);
     }
 
     weld::EntryFormatter& FormattedControlBase::get_formatter()
@@ -530,6 +544,11 @@ namespace svt
         m_xEntryFormatter->connect_changed(rLink);
     }
 
+    void PatternControl::connect_focus_out(const Link<weld::Widget&, void>& rLink)
+    {
+        m_xEntryFormatter->connect_focus_out(rLink);
+    }
+
     void PatternControl::dispose()
     {
         m_xEntryFormatter.reset();
@@ -618,6 +637,7 @@ namespace svt
         InitControlBase(m_xWidget.get());
         m_xWidget->connect_key_press(LINK(this, ControlBase, KeyInputHdl));
         m_xWidget->connect_focus_in(LINK(this, ControlBase, FocusInHdl));
+        m_xWidget->connect_focus_out(LINK(this, ControlBase, FocusOutHdl));
         // so any the natural size doesn't have an effect
         m_xWidget->set_size_request(1, 1);
     }
