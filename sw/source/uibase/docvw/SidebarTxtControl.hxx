@@ -69,6 +69,12 @@ class SidebarTextControl : public WeldEditView
 
         OutlinerView* GetTextView() const;
 
+        void SetMapMode(const MapMode& rNewMapMode)
+        {
+            OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
+            rDevice.SetMapMode(rNewMapMode);
+        }
+
         DECL_LINK( OnlineSpellCallback, SpellCallbackInfo&, void );
 
         void DrawForPage(OutputDevice* pDev, const Point& rPos);
