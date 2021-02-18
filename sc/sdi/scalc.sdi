@@ -4453,7 +4453,24 @@ SfxVoidItem SelectUnprotectedCells SID_SELECT_UNPROTECTED_CELLS
     GroupId = SfxGroupId::Edit;
 ]
 
-SfxVoidItem SelectVisibleCells SID_SELECT_VISIBLE_CELLS
+SfxVoidItem SelectVisibleRows SID_SELECT_VISIBLE_ROWS
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Edit;
+]
+
+SfxVoidItem SelectVisibleColumns SID_SELECT_VISIBLE_COLUMNS
 ()
 [
     AutoUpdate = FALSE,
