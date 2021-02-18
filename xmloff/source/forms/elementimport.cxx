@@ -1338,7 +1338,7 @@ namespace xmloff
             }
         }
 
-        return nullptr;
+        return OControlImport::createFastChildContext( nElement, xAttrList );
     }
 
     void OTextLikeImport::startFastElement(sal_Int32 nElement, const Reference< css::xml::sax::XFastAttributeList >& _rxAttrList)
