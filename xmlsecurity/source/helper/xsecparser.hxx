@@ -101,22 +101,8 @@ private:
      * the following members are used to reserve the signature information,
      * including X509IssuerName, X509SerialNumber, and X509Certificate,etc.
      */
-    OUString m_ouX509IssuerName;
-    OUString m_ouX509SerialNumber;
-    OUString m_ouX509Certificate;
-    OUString m_ouGpgCertificate;
-    OUString m_ouGpgKeyID;
-    OUString m_ouGpgOwner;
-    OUString m_ouCertDigest;
-    OUString m_ouEncapsulatedX509Certificate;
     OUString m_ouDigestValue;
-    OUString m_ouSignatureValue;
     OUString m_ouDate;
-    /// Characters of a <dc:description> element, as just read from XML.
-    OUString m_ouDescription;
-    OUString m_ouSignatureLineId;
-    OUString m_ouSignatureLineValidImage;
-    OUString m_ouSignatureLineInvalidImage;
 
     std::stack<std::unique_ptr<Context>> m_ContextStack;
     std::unique_ptr<SvXMLNamespaceMap> m_pNamespaceMap;
