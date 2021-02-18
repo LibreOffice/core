@@ -2754,6 +2754,82 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
+        case SID_SELECT_VISIBLE_ROWS:
+            {
+                ScViewData* rData = GetViewData();
+                ScMarkData& rMark = rData->GetMarkData();
+                ScDocument* rDoc = rData->GetDocument();
+
+                rMark.MarkToMulti();
+
+                ScRange aMultiArea;
+                rMark.GetMultiMarkArea(aMultiArea);
+                SCCOL nStartCol = aMultiArea.aStart.Col();
+                SCROW nStartRow = aMultiArea.aStart.Row();
+                SCCOL nEndCol = aMultiArea.aEnd.Col();
+                SCROW nEndRow = aMultiArea.aEnd.Row();
+
+                bool bChanged = false;
+                for (const SCTAB& nTab : rMark)
+                {
+                    for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
+                    {
+                        SCROW nLastRow = nRow;
+                        if (rDoc->RowHidden(nRow, nTab, nullptr, &nLastRow))
+                        {
+                            rMark.SetMultiMarkArea(
+                                ScRange(nStartCol, nRow, nTab, nEndCol, nLastRow, nTab), false);
+                            bChanged = true;
+                            nRow = nLastRow;
+                        }
+                    }
+                }
+
+                if (bChanged && !rMark.HasAnyMultiMarks())
+                    rMark.ResetMark();
+
+                rMark.MarkToSimple();
+            }
+            break;
+
+        case SID_SELECT_VISIBLE_COLUMNS:
+            {
+                ScViewData* rData = GetViewData();
+                ScMarkData& rMark = rData->GetMarkData();
+                ScDocument* rDoc = rData->GetDocument();
+
+                rMark.MarkToMulti();
+
+                ScRange aMultiArea;
+                rMark.GetMultiMarkArea(aMultiArea);
+                SCCOL nStartCol = aMultiArea.aStart.Col();
+                SCROW nStartRow = aMultiArea.aStart.Row();
+                SCCOL nEndCol = aMultiArea.aEnd.Col();
+                SCROW nEndRow = aMultiArea.aEnd.Row();
+
+                bool bChanged = false;
+                for (const SCTAB& nTab : rMark)
+                {
+                    for (SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol)
+                    {
+                        SCCOL nLastCol = nCol;
+                        if (rDoc->ColHidden(nCol, nTab, nullptr, &nLastCol))
+                        {
+                            rMark.SetMultiMarkArea(
+                                ScRange(nCol, nStartRow, nTab, nLastCol, nEndRow, nTab), false);
+                            bChanged = true;
+                            nCol = nLastCol;
+                        }
+                    }
+                }
+
+                if (bChanged && !rMark.HasAnyMultiMarks())
+                    rMark.ResetMark();
+
+                rMark.MarkToSimple();
+            }
+            break;
+
         default:
             OSL_FAIL("incorrect slot in ExecuteEdit");
             break;
