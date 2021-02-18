@@ -16,6 +16,24 @@
       "revId": "f8d29fea9915a5fe66e4ba24cbd3b248929b51b7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "749ed674_be8f4001",
+        "filename": "svx/source/svdraw/svdopath.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2367,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-02-18T07:55:20Z",
+      "side": 1,
+      "message": "I would tend to agree that what you say makes sense, but....\n\nThis piece of logic lower down:\n    if ( nDivX \u003d\u003d 0 ) { nMulX \u003d 1; nDivX \u003d 1; }\n    if ( nDivY \u003d\u003d 0 ) { nMulY \u003d 1; nDivY \u003d 1; }\nSeems to indicate that the prior intention was to keep the same size if the old rect was empty.\n\nProposal for improvement here:\n   https://gerrit.libreoffice.org/c/core/+/111097",
+      "parentUuid": "2e55bf06_c62c82c5",
+      "revId": "f8d29fea9915a5fe66e4ba24cbd3b248929b51b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
