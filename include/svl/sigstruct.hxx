@@ -101,6 +101,8 @@ struct SignatureInformation
     // XAdES EncapsulatedX509Certificate values
     std::set<OUString> maEncapsulatedX509Certificates;
 
+    // signature may contain multiple time stamps - check they're consistent
+    bool hasInconsistentSigningTime = false;
     //We also keep the date and time as string. This is done when this
     //structure is created as a result of a XML signature being read.
     //When then a signature is added or another removed, then the original
