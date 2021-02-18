@@ -104,7 +104,7 @@ void XMLFormPropOASISTransformerContext::StartElement(
         GetTransformer().GetUserDefinedActions( OASIS_FORM_PROP_ACTIONS );
     OSL_ENSURE( pActions, "go no actions" );
 
-    XMLMutableAttributeList *pMutableAttrList =
+    rtl::Reference<XMLMutableAttributeList> pMutableAttrList =
         new XMLMutableAttributeList( rAttrList );
     Reference< XAttributeList > xAttrList( pMutableAttrList );
 
