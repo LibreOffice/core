@@ -26,7 +26,7 @@
 #define STR_TEMPLATE_NAME10_DEF ""
 #define STR_TEMPLATE_NAME11_DEF "Inspiration"
 #define STR_TEMPLATE_NAME12_DEF "Lights"
-#define STR_TEMPLATE_NAME13_DEF ""
+#define STR_TEMPLATE_NAME13_DEF "Growing Liberty"
 #define STR_TEMPLATE_NAME14_DEF "Metropolis"
 #define STR_TEMPLATE_NAME15_DEF "Midnightblue"
 #define STR_TEMPLATE_NAME16_DEF "Nature Illustration"
