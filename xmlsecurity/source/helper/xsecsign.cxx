@@ -149,8 +149,8 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     if (nStorageFormat != embed::StorageFormats::OFOPXML)
     {
         internalSignatureInfor.signatureInfor.ouSignatureId = createId();
-        internalSignatureInfor.signatureInfor.ouPropertyId = createId();
-        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, internalSignatureInfor.signatureInfor.ouPropertyId, -1, OUString() );
+        internalSignatureInfor.signatureInfor.ouDateTimePropertyId = createId();
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, internalSignatureInfor.signatureInfor.ouDateTimePropertyId, -1, OUString() );
         size++;
 
         if (bXAdESCompliantIfODF)
