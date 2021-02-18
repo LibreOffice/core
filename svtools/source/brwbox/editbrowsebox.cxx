@@ -160,7 +160,6 @@ namespace svt
         nEditCol = 0;
     }
 
-
     VclPtr<BrowserHeader> EditBrowseBox::CreateHeaderBar(BrowseBox* pParent)
     {
         pHeader = imp_CreateHeaderBar(pParent);
@@ -169,19 +168,16 @@ namespace svt
         return pHeader;
     }
 
-
     VclPtr<BrowserHeader> EditBrowseBox::imp_CreateHeaderBar(BrowseBox* pParent)
     {
         return VclPtr<EditBrowserHeader>::Create(pParent);
     }
-
 
     void EditBrowseBox::LoseFocus()
     {
         BrowseBox::LoseFocus();
         DetermineFocus();
     }
-
 
     void EditBrowseBox::GetFocus()
     {
@@ -195,13 +191,11 @@ namespace svt
         DetermineFocus(getRealGetFocusFlags(this));
     }
 
-
     bool EditBrowseBox::SeekRow(sal_Int32 nRow)
     {
         nPaintRow = nRow;
         return true;
     }
-
 
     IMPL_LINK_NOARG(EditBrowseBox, StartEditHdl, void*, void)
     {
@@ -416,6 +410,11 @@ namespace svt
     void EditBrowseBox::ChildFocusIn()
     {
         DetermineFocus(getRealGetFocusFlags(this));
+    }
+
+    void EditBrowseBox::ChildFocusOut()
+    {
+        DetermineFocus();
     }
 
     void EditBrowseBox::MouseButtonDown(const BrowserMouseEvent& rEvt)
