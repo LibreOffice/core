@@ -363,6 +363,7 @@ void TrendlineResources::UpdateControlStates()
         m_xNF_Period->set_max(m_nNbPoints - 1);
     }
     bool bMovingAverage = ( m_eTrendLineType == SvxChartRegress::MovingAverage );
+    bool bPolynomial = ( m_eTrendLineType == SvxChartRegress::Polynomial );
     bool bInterceptAvailable = ( m_eTrendLineType == SvxChartRegress::Linear )
                             || ( m_eTrendLineType == SvxChartRegress::Polynomial )
                             || ( m_eTrendLineType == SvxChartRegress::Exp );
@@ -378,6 +379,8 @@ void TrendlineResources::UpdateControlStates()
     m_xCB_ShowEquation->set_sensitive( !bMovingAverage );
     m_xCB_ShowCorrelationCoeff->set_sensitive( !bMovingAverage );
     m_xCB_RegressionMovingType->set_sensitive(bMovingAverage);
+    m_xNF_Period->set_sensitive(bMovingAverage);
+    m_xNF_Degree->set_sensitive(bPolynomial);
     m_xEE_XName->set_sensitive( !bMovingAverage && m_xCB_ShowEquation->get_active() );
     m_xEE_YName->set_sensitive( !bMovingAverage && m_xCB_ShowEquation->get_active() );
 }
