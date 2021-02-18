@@ -12,9 +12,11 @@
 
 #if HAVE_FEATURE_PDFIUM
 
+#include <vcl/filter/PDFiumLibrary.hxx>
+
 #include <cassert>
 
-#include <vcl/filter/PDFiumLibrary.hxx>
+#include <fpdf_doc.h>
 #include <fpdf_annot.h>
 #include <fpdf_edit.h>
 #include <fpdf_text.h>
@@ -367,6 +369,31 @@ public:
 
     bool hasLinks() override;
 };
+
+class PDFiumDocumentImpl : public PDFiumDocument
+{
+private:
+    FPDF_DOCUMENT mpPdfDocument;
+
+private:
+    PDFiumDocumentImpl(const PDFiumDocumentImpl&) = delete;
+    PDFiumDocumentImpl& operator=(const PDFiumDocumentImpl&) = delete;
+
+public:
+    PDFiumDocumentImpl(FPDF_DOCUMENT pPdfDocument);
+    ~PDFiumDocumentImpl() override;
+
+    // Page size in points
+    basegfx::B2DSize getPageSize(int nIndex) override;
+    int getPageCount() override;
+    int getSignatureCount() override;
+    int getFileVersion() override;
+    bool saveWithVersion(SvMemoryStream& rStream, int nFileVersion) override;
+
+    std::unique_ptr<PDFiumPage> openPage(int nIndex) override;
+    std::unique_ptr<PDFiumSignature> getSignature(int nIndex) override;
+    std::vector<unsigned int> getTrailerEnds() override;
+};
 }
 
 OUString convertPdfDateToISO8601(OUString const& rInput)
@@ -476,7 +503,7 @@ std::unique_ptr<PDFiumDocument> PDFium::openDocument(const void* pData, int nSiz
     }
     else
     {
-        pPDFiumDocument = std::make_unique<PDFiumDocument>(pDocument);
+        pPDFiumDocument = std::make_unique<PDFiumDocumentImpl>(pDocument);
     }
 
     return pPDFiumDocument;
@@ -584,18 +611,18 @@ util::DateTime PDFiumSignatureImpl::getTime()
     return aRet;
 }
 
-PDFiumDocument::PDFiumDocument(FPDF_DOCUMENT pPdfDocument)
+PDFiumDocumentImpl::PDFiumDocumentImpl(FPDF_DOCUMENT pPdfDocument)
     : mpPdfDocument(pPdfDocument)
 {
 }
 
-PDFiumDocument::~PDFiumDocument()
+PDFiumDocumentImpl::~PDFiumDocumentImpl()
 {
     if (mpPdfDocument)
         FPDF_CloseDocument(mpPdfDocument);
 }
 
-std::unique_ptr<PDFiumPage> PDFiumDocument::openPage(int nIndex)
+std::unique_ptr<PDFiumPage> PDFiumDocumentImpl::openPage(int nIndex)
 {
     std::unique_ptr<PDFiumPage> pPDFiumPage;
     FPDF_PAGE pPage = FPDF_LoadPage(mpPdfDocument, nIndex);
@@ -606,7 +633,7 @@ std::unique_ptr<PDFiumPage> PDFiumDocument::openPage(int nIndex)
     return pPDFiumPage;
 }
 
-std::unique_ptr<PDFiumSignature> PDFiumDocument::getSignature(int nIndex)
+std::unique_ptr<PDFiumSignature> PDFiumDocumentImpl::getSignature(int nIndex)
 {
     std::unique_ptr<PDFiumSignature> pPDFiumSignature;
     FPDF_SIGNATURE pSignature = FPDF_GetSignatureObject(mpPdfDocument, nIndex);
@@ -617,7 +644,7 @@ std::unique_ptr<PDFiumSignature> PDFiumDocument::getSignature(int nIndex)
     return pPDFiumSignature;
 }
 
-std::vector<unsigned int> PDFiumDocument::getTrailerEnds()
+std::vector<unsigned int> PDFiumDocumentImpl::getTrailerEnds()
 {
     int nNumTrailers = FPDF_GetTrailerEnds(mpPdfDocument, nullptr, 0);
     std::vector<unsigned int> aTrailerEnds(nNumTrailers);
@@ -625,7 +652,7 @@ std::vector<unsigned int> PDFiumDocument::getTrailerEnds()
     return aTrailerEnds;
 }
 
-basegfx::B2DSize PDFiumDocument::getPageSize(int nIndex)
+basegfx::B2DSize PDFiumDocumentImpl::getPageSize(int nIndex)
 {
     basegfx::B2DSize aSize;
     FS_SIZEF aPDFSize;
@@ -636,18 +663,18 @@ basegfx::B2DSize PDFiumDocument::getPageSize(int nIndex)
     return aSize;
 }
 
-int PDFiumDocument::getPageCount() { return FPDF_GetPageCount(mpPdfDocument); }
+int PDFiumDocumentImpl::getPageCount() { return FPDF_GetPageCount(mpPdfDocument); }
 
-int PDFiumDocument::getSignatureCount() { return FPDF_GetSignatureCount(mpPdfDocument); }
+int PDFiumDocumentImpl::getSignatureCount() { return FPDF_GetSignatureCount(mpPdfDocument); }
 
-int PDFiumDocument::getFileVersion()
+int PDFiumDocumentImpl::getFileVersion()
 {
     int nFileVersion = 0;
     FPDF_GetFileVersion(mpPdfDocument, &nFileVersion);
     return nFileVersion;
 }
 
-bool PDFiumDocument::saveWithVersion(SvMemoryStream& rStream, int nFileVersion)
+bool PDFiumDocumentImpl::saveWithVersion(SvMemoryStream& rStream, int nFileVersion)
 {
     CompatibleWriter aWriter(rStream);
     aWriter.version = 1;
