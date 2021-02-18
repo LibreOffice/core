@@ -16,6 +16,24 @@
       "revId": "f09b347298ec4a37a6feedee9183a6345fc9d74a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "239fca73_1e1ec2da",
+        "filename": "basic/qa/basic_coverage/test_vartype_method.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2021-02-18T12:29:46Z",
+      "side": 1,
+      "message": "oops, typo.\n\nFunction doUnitTest As Integer\n    doUnitTest \u003d 0\n    If V_EMPTY \u003c\u003e 0 Then\n        Ext Function\n    End If\n    If V_NULL \u003c\u003e 1 Then\n        Exit Function\n    End If\n    \n    \u0027And so on...\n    doUnitTest \u003d 1\nEnd Function",
+      "parentUuid": "a20f9f1c_6b25aec7",
+      "revId": "f09b347298ec4a37a6feedee9183a6345fc9d74a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
