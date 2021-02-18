@@ -5,8 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-from functools import wraps
-
 def requires(revision):
     def decorator(f):
         f.requires = revision
