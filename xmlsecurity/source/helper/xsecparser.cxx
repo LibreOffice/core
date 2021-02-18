@@ -948,6 +948,9 @@ class XSecParser::XadesSigningCertificateContext
 class XSecParser::XadesSigningTimeContext
     : public XSecParser::Context
 {
+    private:
+        OUString m_Value;
+
     public:
         XadesSigningTimeContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
@@ -955,20 +958,14 @@ class XSecParser::XadesSigningTimeContext
         {
         }
 
-        virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& /*xAttrs*/) override
-        {
-            m_rParser.m_ouDate.clear();
-        }
-
         virtual void EndElement() override
         {
-            m_rParser.m_pXSecController->setDate( m_rParser.m_ouDate );
+            m_rParser.m_pXSecController->setDate(m_Value);
         }
 
         virtual void Characters(OUString const& rChars) override
         {
-            m_rParser.m_ouDate += rChars;
+            m_Value += rChars;
         }
 };
 
@@ -1074,7 +1071,7 @@ class XSecParser::DcDateContext
     : public XSecParser::Context
 {
     private:
-        bool m_isIgnore = false;
+        OUString m_Value;
 
     public:
         DcDateContext(XSecParser & rParser,
@@ -1083,26 +1080,14 @@ class XSecParser::DcDateContext
         {
         }
 
-        virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& /*xAttrs*/) override
-        {
-            m_isIgnore = !m_rParser.m_ouDate.isEmpty();
-        }
-
         virtual void EndElement() override
         {
-            if (!m_isIgnore)
-            {
-                m_rParser.m_pXSecController->setDate( m_rParser.m_ouDate );
-            }
+            m_rParser.m_pXSecController->setDate(m_Value);
         }
 
         virtual void Characters(OUString const& rChars) override
         {
-            if (!m_isIgnore)
-            {
-                m_rParser.m_ouDate += rChars;
-            }
+            m_Value += rChars;
         }
 };
 
