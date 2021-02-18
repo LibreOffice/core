@@ -820,7 +820,7 @@ void XSecController::exportSignature(
                 pAttributeList = new SvXMLAttributeList();
                 pAttributeList->AddAttribute(
                     "Id",
-                    signatureInfo.ouPropertyId);
+                    signatureInfo.ouDateTimePropertyId);
                 pAttributeList->AddAttribute(
                     "Target",
                     "#" + signatureInfo.ouSignatureId);
