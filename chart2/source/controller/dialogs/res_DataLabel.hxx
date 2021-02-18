@@ -68,10 +68,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCBDataSeries;
     std::unique_ptr<weld::CheckButton> m_xCBWrapText;
 
-    std::unique_ptr<weld::Widget> m_xSeparatorResources;
     std::unique_ptr<weld::ComboBox> m_xLB_Separator;
-
-    std::unique_ptr<weld::Widget> m_xBxLabelPlacement;
     std::unique_ptr<weld::ComboBox> m_xLB_LabelPlacement;
 
     std::unique_ptr<weld::Widget> m_xBxOrientation;
