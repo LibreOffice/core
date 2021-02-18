@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8ec0b928_4c31e4e7",
+        "filename": "cui/uiconfig/ui/acorexceptpage.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-18T09:29:33Z",
+      "side": 1,
+      "message": "Re: label.   Tricky in this negative case.  AutoExclude could be misinterpreted as \"exclude\" from Exceptions list.  Remember that this checkbox is located next to the exceptions list in the dialog box -- so the \"context\" invites an appropriate interpretation of \"AutoInclude\"",
+      "parentUuid": "611907cd_c77d3cf6",
+      "range": {
+        "startLine": 73,
+        "startChar": 138,
+        "endLine": 73,
+        "endChar": 156
+      },
+      "revId": "b9b340b229547c8b8de60d225c526e90d4760b1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d757419c_5502303d",
         "filename": "cui/uiconfig/ui/acorexceptpage.ui",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "b9b340b229547c8b8de60d225c526e90d4760b1b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea8be2e7_4a53d90b",
+        "filename": "cui/uiconfig/ui/acorexceptpage.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-18T09:29:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d757419c_5502303d",
+      "range": {
+        "startLine": 76,
+        "startChar": 260,
+        "endLine": 76,
+        "endChar": 268
+      },
+      "revId": "b9b340b229547c8b8de60d225c526e90d4760b1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
