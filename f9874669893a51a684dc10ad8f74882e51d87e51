@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "f33d8e2a_3d36a9f1",
+        "filename": "ucb/source/sorter/sortresult.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-02-18T10:45:41Z",
+      "side": 1,
+      "message": "imho the code in this class should use sal_Int32 for indexes and sizes consistently because it looks like it\u0027s exposed via UNO, see for example call to\n\n                     pCurSet-\u003eRemove( aAction.Position,\n                                     aAction.Count,\n                                     \u0026maActions );\n\n in sortdynres.cxx which ends up comparing IDL ListAction.Position \"long\" with mnLastSort",
+      "parentUuid": "fd001c19_f7810160",
+      "revId": "f9874669893a51a684dc10ad8f74882e51d87e51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6e2aff0b_5558882f",
         "filename": "ucb/source/sorter/sortresult.hxx",
         "patchSetId": 3
