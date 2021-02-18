@@ -101,7 +101,6 @@ private:
      * the following members are used to reserve the signature information,
      * including X509IssuerName, X509SerialNumber, and X509Certificate,etc.
      */
-    OUString m_ouDigestValue;
     OUString m_ouDate;
 
     std::stack<std::unique_ptr<Context>> m_ContextStack;
@@ -118,19 +117,6 @@ private:
     css::uno::Reference<
         css::xml::sax::XDocumentHandler > m_xNextHandler;
 
-    /*
-     * this string is used to remember the current handled reference's URI,
-     *
-     * because it can be decided whether a stream reference is xml based or binary based
-     * only after the Transforms element is read in, so we have to reserve the reference's
-     * URI when the startElement event is met.
-     */
-    OUString m_currentReferenceURI;
-    bool m_bReferenceUnresolved;
-
-    // Relevant for ODF. The digest algorithm selected by the current DigestMethod element's
-    // Algorithm attribute in the current Reference element. From css::xml::crypto::DigestID.
-    sal_Int32 m_nReferenceDigestID;
     XMLSignatureHelper& m_rXMLSignatureHelper;
 
     OUString HandleIdAttr(css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs);
