@@ -230,7 +230,8 @@ interface CellSelection
     SID_DEC_INDENT                      [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_INC_INDENT                      [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_SELECT_UNPROTECTED_CELLS        [ ExecMethod = ExecuteEdit;]
-    SID_SELECT_VISIBLE_CELLS            [ ExecMethod = ExecuteEdit;]
+    SID_SELECT_VISIBLE_ROWS             [ ExecMethod = ExecuteEdit;]
+    SID_SELECT_VISIBLE_COLUMNS          [ ExecMethod = ExecuteEdit;]
     SID_CURRENT_FORMULA_RANGE           [ ExecMethod = ExecuteEdit;]
 
     SID_THESAURUS   [ ExecMethod = ExecuteEdit; StateMethod = GetCellState; ]
