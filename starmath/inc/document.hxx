@@ -35,6 +35,7 @@
 class SfxPrinter;
 class Printer;
 class SmCursor;
+class SmEditWindow;
 
 namespace oox::formulaimport { class XmlStream; }
 
