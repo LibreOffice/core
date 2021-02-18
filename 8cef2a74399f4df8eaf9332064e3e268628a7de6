@@ -22,6 +22,30 @@
       "revId": "8cef2a74399f4df8eaf9332064e3e268628a7de6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e264d517_cde17505",
+        "filename": "cui/source/dialogs/SpellDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1002967
+      },
+      "writtenOn": "2021-02-18T01:26:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36f9be7b_5fe11ca9",
+      "range": {
+        "startLine": 423,
+        "startChar": 8,
+        "endLine": 423,
+        "endChar": 34
+      },
+      "revId": "8cef2a74399f4df8eaf9332064e3e268628a7de6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
