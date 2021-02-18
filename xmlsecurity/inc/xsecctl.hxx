@@ -311,16 +311,15 @@ private:
     void setGpgCertificate( OUString& ouGpgCert );
     void setGpgOwner( OUString& ouGpgOwner );
 
-    void setDate( OUString& ouDate );
-    void setDescription(const OUString& rDescription);
+    void setDate(OUString const& rId, OUString const& ouDate);
+    void setDescription(OUString const& rId, OUString const& rDescription);
     void setCertDigest(const OUString& rCertDigest);
 
 public:
     void setSignatureBytes(const css::uno::Sequence<sal_Int8>& rBytes);
 
 private:
-    void setId( OUString& ouId );
-    void setPropertyId( OUString& ouPropertyId );
+    void setId( OUString const & ouId );
 
     css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > prepareSignatureToRead(
         sal_Int32 nSecurityId );

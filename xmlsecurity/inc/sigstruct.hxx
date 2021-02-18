@@ -22,6 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -85,6 +86,9 @@ struct SignatureInformation
     // XAdES EncapsulatedX509Certificate values
     std::set<OUString> maEncapsulatedX509Certificates;
 
+    OUString ouSignatureId;
+    // signature may contain multiple time stamps - check they're consistent
+    bool hasInconsistentSigningTime = false;
     //We also keep the date and time as string. This is done when this
     //structure is created as a result of a XML signature being read.
     //When then a signature is added or another removed, then the original
@@ -97,8 +101,8 @@ struct SignatureInformation
     //and the converted time is written back, then the string looks different
     //and the signature is broken.
     OUString ouDateTime;
-    OUString ouSignatureId;
-    OUString ouPropertyId;
+
+    OUString ouDateTimePropertyId;
     /// Characters of the <dc:description> element inside the signature.
     OUString ouDescription;
     /// The Id attribute of the <SignatureProperty> element that contains the <dc:description>.
