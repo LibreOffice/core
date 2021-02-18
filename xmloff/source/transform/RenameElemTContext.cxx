@@ -64,7 +64,7 @@ void XMLRenameElemTransformerContext::StartElement(
     Reference< XAttributeList > xAttrList( rAttrList );
     if( !m_aAttrQName.isEmpty() )
     {
-        XMLMutableAttributeList *pMutableAttrList =
+        rtl::Reference<XMLMutableAttributeList> pMutableAttrList =
             new XMLMutableAttributeList( xAttrList );
         xAttrList = pMutableAttrList;
         pMutableAttrList->AddAttribute( m_aAttrQName, m_aAttrValue );

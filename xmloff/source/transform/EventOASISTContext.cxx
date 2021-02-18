@@ -173,7 +173,7 @@ void XMLEventOASISTransformerContext::StartElement(
     SAL_WARN_IF( pActions == nullptr, "xmloff.transform", "got no actions" );
 
     Reference< XAttributeList > xAttrList( rAttrList );
-    XMLMutableAttributeList *pMutableAttrList = nullptr;
+    rtl::Reference<XMLMutableAttributeList> pMutableAttrList;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {

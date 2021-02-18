@@ -1177,7 +1177,7 @@ void XMLTableTransformerContext_Impl::StartElement(
 {
     Reference< XAttributeList > xAttrList( rAttrList );
 
-    XMLMutableAttributeList *pMutableAttrList = nullptr;
+    rtl::Reference<XMLMutableAttributeList> pMutableAttrList;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -1330,7 +1330,7 @@ void XMLTabStopOASISTContext_Impl::StartElement(
     sal_Unicode cStyleLeaderChar = 0;
     sal_Int16 nLeaderText = -1;
     Reference< XAttributeList > xAttrList( rAttrList );
-    XMLMutableAttributeList *pMutableAttrList = nullptr;
+    rtl::Reference<XMLMutableAttributeList> pMutableAttrList;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -1578,7 +1578,7 @@ void XMLTrackedChangesOASISTContext_Impl::StartElement(
             {
                 OUStringBuffer aBuffer;
                 ::comphelper::Base64::encode( aBuffer, aKey );
-                XMLMutableAttributeList *pMutableAttrList =
+                rtl::Reference<XMLMutableAttributeList> pMutableAttrList =
                     new XMLMutableAttributeList( xAttrList );
                 xAttrList = pMutableAttrList;
                 pMutableAttrList->AddAttribute( m_aAttrQName,

@@ -95,7 +95,7 @@ void XMLAxisOASISContext::StartElement(
     const Reference< xml::sax::XAttributeList >& rAttrList )
 {
     Reference< xml::sax::XAttributeList > xAttrList( rAttrList );
-    XMLMutableAttributeList *pMutableAttrList = nullptr;
+    rtl::Reference<XMLMutableAttributeList> pMutableAttrList;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -157,7 +157,7 @@ void XMLAxisOASISContext::EndElement()
         m_rCategoriesContext.is() )
     {
         OSL_ENSURE( GetAttrList().is(), "Invalid attribute list" );
-        XMLMutableAttributeList * pMutableAttrList =
+        rtl::Reference<XMLMutableAttributeList> pMutableAttrList =
             new XMLMutableAttributeList( GetAttrList());
         OUString aAttrQName( GetTransformer().GetNamespaceMap().GetQNameByKey(
                                  XML_NAMESPACE_CHART, GetXMLToken( XML_CLASS )));

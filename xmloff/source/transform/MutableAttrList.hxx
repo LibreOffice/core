@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 class SvXMLAttributeList;
 
@@ -35,7 +36,7 @@ class XMLMutableAttributeList : public ::cppu::WeakImplHelper<
 {
     css::uno::Reference< css::xml::sax::XAttributeList> m_xAttrList;
 
-    SvXMLAttributeList *m_pMutableAttrList;
+    rtl::Reference<SvXMLAttributeList> m_pMutableAttrList;
 
     SvXMLAttributeList *GetMutableAttrList();
 

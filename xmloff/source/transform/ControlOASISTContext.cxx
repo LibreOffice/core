@@ -51,7 +51,7 @@ void XMLControlOASISTransformerContext::StartElement(
     OSL_ENSURE( pActions, "go no actions" );
 
     Reference< XAttributeList > xAttrList( rAttrList );
-    XMLMutableAttributeList *pMutableAttrList = nullptr;
+    rtl::Reference<XMLMutableAttributeList> pMutableAttrList;
 //      GetTransformer().ProcessAttrList( xAttrList, OOO_SHAPE_ACTIONS,
 //                                        sal_True );
 

@@ -149,7 +149,7 @@ void XMLFormPropOOoTransformerContext::StartElement(
         GetTransformer().GetUserDefinedActions( OOO_FORM_PROP_ACTIONS );
     OSL_ENSURE( pActions, "go no actions" );
 
-    XMLMutableAttributeList *pMutableAttrList =
+    rtl::Reference<XMLMutableAttributeList> pMutableAttrList =
         new XMLMutableAttributeList( rAttrList, true );
     m_xAttrList = pMutableAttrList;
 
