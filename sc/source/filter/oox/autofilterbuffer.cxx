@@ -205,7 +205,7 @@ void FilterSettingsBase::importRecord( sal_Int32 /*nRecId*/, SequenceInputStream
 {
 }
 
-ApiFilterSettings FilterSettingsBase::finalizeImport( sal_Int32 /*nMaxCount*/ )
+ApiFilterSettings FilterSettingsBase::finalizeImport()
 {
     return ApiFilterSettings();
 }
@@ -295,25 +295,23 @@ void DiscreteFilter::importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm 
     }
 }
 
-ApiFilterSettings DiscreteFilter::finalizeImport( sal_Int32 nMaxCount )
+ApiFilterSettings DiscreteFilter::finalizeImport()
 {
     ApiFilterSettings aSettings;
-    if( static_cast< sal_Int32 >( maValues.size() ) <= nMaxCount )
-    {
-        aSettings.maFilterFields.reserve( maValues.size() );
+    aSettings.maFilterFields.reserve( maValues.size() );
 
-        // insert all filter values
-        aSettings.appendField( true, maValues );
+    // insert all filter values
+    aSettings.appendField( true, maValues );
 
-        // extra field for 'show empty'
-        if( mbShowBlank )
-            aSettings.appendField( false, FilterOperator2::EMPTY, OUString() );
+    // extra field for 'show empty'
+    if( mbShowBlank )
+        aSettings.appendField( false, FilterOperator2::EMPTY, OUString() );
 
-        /*  Require disabled regular expressions, filter entries may contain
-            any RE meta characters. */
-        if( !maValues.empty() )
-            aSettings.mobNeedsRegExp = false;
-    }
+    /*  Require disabled regular expressions, filter entries may contain
+        any RE meta characters. */
+    if( !maValues.empty() )
+        aSettings.mobNeedsRegExp = false;
+
     return aSettings;
 }
 
@@ -347,7 +345,7 @@ void Top10Filter::importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm )
     }
 }
 
-ApiFilterSettings Top10Filter::finalizeImport( sal_Int32 /*nMaxCount*/ )
+ApiFilterSettings Top10Filter::finalizeImport()
 {
     sal_Int32 nOperator = mbTop ?
         (mbPercent ? FilterOperator2::TOP_PERCENT : FilterOperator2::TOP_VALUES) :
@@ -455,7 +453,7 @@ void CustomFilter::importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm )
     }
 }
 
-ApiFilterSettings CustomFilter::finalizeImport( sal_Int32 /*nMaxCount*/ )
+ApiFilterSettings CustomFilter::finalizeImport()
 {
     ApiFilterSettings aSettings;
     OSL_ENSURE( maCriteria.size() <= 2, "CustomFilter::finalizeImport - too many filter criteria" );
@@ -552,13 +550,13 @@ void FilterColumn::importFilterColumn( SequenceInputStream& rStrm )
     mbShowButton = getFlag( nFlags, BIFF12_FILTERCOLUMN_SHOWBUTTON );
 }
 
-ApiFilterSettings FilterColumn::finalizeImport( sal_Int32 nMaxCount )
+ApiFilterSettings FilterColumn::finalizeImport()
 {
     ApiFilterSettings aSettings;
     if( (0 <= mnColId) && mxSettings )
     {
         // filter settings object creates a sequence of filter fields
-        aSettings = mxSettings->finalizeImport( nMaxCount );
+        aSettings = mxSettings->finalizeImport();
         // add column index to all filter fields
         for( auto& rFilterField : aSettings.maFilterFields )
             rFilterField.Field = mnColId;
@@ -627,144 +625,114 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
 {
     // convert filter settings using the filter descriptor of the database range
     const Reference<XSheetFilterDescriptor3> xFilterDesc( rxDatabaseRange->getFilterDescriptor(), UNO_QUERY_THROW );
-    if( xFilterDesc.is() )
+    if( !xFilterDesc.is() )
+        return;
+    // set some common properties for the auto filter range
+    PropertySet aDescProps( xFilterDesc );
+    aDescProps.setProperty( PROP_IsCaseSensitive, false );
+    aDescProps.setProperty( PROP_SkipDuplicates, false );
+    aDescProps.setProperty( PROP_Orientation, TableOrientation_ROWS );
+    aDescProps.setProperty( PROP_ContainsHeader, true );
+    aDescProps.setProperty( PROP_CopyOutputData, false );
+    // resulting list of all UNO API filter fields
+    ::std::vector<TableFilterField3> aFilterFields;
+    // track if columns require to enable or disable regular expressions
+    OptValue< bool > obNeedsRegExp;
+    /*  Track whether the filter fields of the first filter column are
+        connected with 'or'. In this case, other filter fields cannot be
+        inserted without altering the result of the entire filter, due to
+        Calc's precedence for the 'and' connection operator. Example:
+        Excel's filter conditions 'A1 and (B1 or B2) and C1' where B1 and
+        B2 belong to filter column B, will be evaluated by Calc as
+        '(A1 and B1) or (B2 and C1)'. */
+    bool bHasOrConnection = false;
+    // process all filter column objects, exit when 'or' connection exists
+    for( const auto& rxFilterColumn : maFilterColumns )
     {
-        // set some common properties for the auto filter range
-        PropertySet aDescProps( xFilterDesc );
-        aDescProps.setProperty( PROP_IsCaseSensitive, false );
-        aDescProps.setProperty( PROP_SkipDuplicates, false );
-        aDescProps.setProperty( PROP_Orientation, TableOrientation_ROWS );
-        aDescProps.setProperty( PROP_ContainsHeader, true );
-        aDescProps.setProperty( PROP_CopyOutputData, false );
-
-        // maximum number of UNO API filter fields
-        sal_Int32 nMaxCount = 0;
-        aDescProps.getProperty( nMaxCount, PROP_MaxFieldCount );
-        OSL_ENSURE( nMaxCount > 0, "AutoFilter::finalizeImport - invalid maximum filter field count" );
-
-        // resulting list of all UNO API filter fields
-        ::std::vector<TableFilterField3> aFilterFields;
-
-        // track if columns require to enable or disable regular expressions
-        OptValue< bool > obNeedsRegExp;
-
-        /*  Track whether the filter fields of the first filter column are
-            connected with 'or'. In this case, other filter fields cannot be
-            inserted without altering the result of the entire filter, due to
-            Calc's precedence for the 'and' connection operator. Example:
-            Excel's filter conditions 'A1 and (B1 or B2) and C1' where B1 and
-            B2 belong to filter column B, will be evaluated by Calc as
-            '(A1 and B1) or (B2 and C1)'. */
-        bool bHasOrConnection = false;
-
-        // process all filter column objects, exit when 'or' connection exists
-        for( const auto& rxFilterColumn : maFilterColumns )
+        // the filter settings object creates a list of filter fields
+        ApiFilterSettings aSettings = rxFilterColumn->finalizeImport();
+        ApiFilterSettings::FilterFieldVector& rColumnFields = aSettings.maFilterFields;
+        /*  Check whether mode for regular expressions is compatible with
+            the global mode in obNeedsRegExp. If either one is still in
+            don't-care state, all is fine. If both are set, they must be
+            equal. */
+        bool bRegExpCompatible = !obNeedsRegExp || !aSettings.mobNeedsRegExp || (obNeedsRegExp.get() == aSettings.mobNeedsRegExp.get());
+        // check whether fields are connected by 'or' (see comments above).
+        if( rColumnFields.size() >= 2 )
+            bHasOrConnection = std::any_of(rColumnFields.begin() + 1, rColumnFields.end(),
+                [](const css::sheet::TableFilterField3& rColumnField) { return rColumnField.Connection == FilterConnection_OR; });
+        /*  Skip the column filter, if no filter fields have been created,
+            and if the mode for regular expressions of the
+            filter column does not fit. */
+        if( !rColumnFields.empty() && bRegExpCompatible )
         {
-            // the filter settings object creates a list of filter fields
-            ApiFilterSettings aSettings = rxFilterColumn->finalizeImport( nMaxCount );
-            ApiFilterSettings::FilterFieldVector& rColumnFields = aSettings.maFilterFields;
-
-            // new total number of filter fields
-            sal_Int32 nNewCount = static_cast< sal_Int32 >( aFilterFields.size() + rColumnFields.size() );
-
-            /*  Check whether mode for regular expressions is compatible with
-                the global mode in obNeedsRegExp. If either one is still in
-                don't-care state, all is fine. If both are set, they must be
-                equal. */
-            bool bRegExpCompatible = !obNeedsRegExp || !aSettings.mobNeedsRegExp || (obNeedsRegExp.get() == aSettings.mobNeedsRegExp.get());
-
-            // check whether fields are connected by 'or' (see comments above).
-            if( rColumnFields.size() >= 2 )
-                bHasOrConnection = std::any_of(rColumnFields.begin() + 1, rColumnFields.end(),
-                    [](const css::sheet::TableFilterField3& rColumnField) { return rColumnField.Connection == FilterConnection_OR; });
-
-            /*  Skip the column filter, if no filter fields have been created,
-                if the number of new filter fields would exceed the total limit
-                of filter fields, or if the mode for regular expressions of the
-                filter column does not fit. */
-            if( !rColumnFields.empty() && (nNewCount <= nMaxCount) && bRegExpCompatible )
-            {
-                /*  Add 'and' connection to the first filter field to connect
-                    it to the existing filter fields of other columns. */
-                rColumnFields[ 0 ].Connection = FilterConnection_AND;
-
-                // insert the new filter fields
-                aFilterFields.insert( aFilterFields.end(), rColumnFields.begin(), rColumnFields.end() );
-
-                // update the regular expressions mode
-                obNeedsRegExp.assignIfUsed( aSettings.mobNeedsRegExp );
-            }
-
-            if( bHasOrConnection )
-                break;
+            /*  Add 'and' connection to the first filter field to connect
+                it to the existing filter fields of other columns. */
+            rColumnFields[ 0 ].Connection = FilterConnection_AND;
+            // insert the new filter fields
+            aFilterFields.insert( aFilterFields.end(), rColumnFields.begin(), rColumnFields.end() );
+            // update the regular expressions mode
+            obNeedsRegExp.assignIfUsed( aSettings.mobNeedsRegExp );
         }
-
-        // insert all filter fields to the filter descriptor
-        if( !aFilterFields.empty() )
-            xFilterDesc->setFilterFields3( ContainerHelper::vectorToSequence( aFilterFields ) );
-
-        // regular expressions
-        bool bUseRegExp = obNeedsRegExp.get( false );
-        aDescProps.setProperty( PROP_UseRegularExpressions, bUseRegExp );
-
-        // sort
-        if (!maSortConditions.empty())
+        if( bHasOrConnection )
+            break;
+    }
+    // insert all filter fields to the filter descriptor
+    if( !aFilterFields.empty() )
+        xFilterDesc->setFilterFields3( ContainerHelper::vectorToSequence( aFilterFields ) );
+    // regular expressions
+    bool bUseRegExp = obNeedsRegExp.get( false );
+    aDescProps.setProperty( PROP_UseRegularExpressions, bUseRegExp );
+    // sort
+    if (!maSortConditions.empty())
+    {
+        const SortConditionVector::value_type& xSortConditionPointer = *maSortConditions.begin();
+        const SortCondition& rSorConditionLoaded = *xSortConditionPointer;
+        ScSortParam aParam;
+        aParam.bUserDef = false;
+        aParam.nUserIndex = 0;
+        aParam.bByRow = false;
+        ScUserList* pUserList = ScGlobal::GetUserList();
+        if (!rSorConditionLoaded.maSortCustomList.isEmpty())
         {
-            const SortConditionVector::value_type& xSortConditionPointer = *maSortConditions.begin();
-            const SortCondition& rSorConditionLoaded = *xSortConditionPointer;
-
-            ScSortParam aParam;
-            aParam.bUserDef = false;
-            aParam.nUserIndex = 0;
-            aParam.bByRow = false;
-
-            ScUserList* pUserList = ScGlobal::GetUserList();
-            if (!rSorConditionLoaded.maSortCustomList.isEmpty())
+            for (size_t i=0; pUserList && i < pUserList->size(); i++)
             {
-                for (size_t i=0; pUserList && i < pUserList->size(); i++)
+                const OUString aEntry((*pUserList)[i].GetString());
+                if (aEntry.equalsIgnoreAsciiCase(rSorConditionLoaded.maSortCustomList))
                 {
-                    const OUString aEntry((*pUserList)[i].GetString());
-                    if (aEntry.equalsIgnoreAsciiCase(rSorConditionLoaded.maSortCustomList))
-                    {
-                        aParam.bUserDef = true;
-                        aParam.nUserIndex = i;
-                        break;
-                    }
+                    aParam.bUserDef = true;
+                    aParam.nUserIndex = i;
+                    break;
                 }
             }
-
-            if (!aParam.bUserDef)
+        }
+        if (!aParam.bUserDef)
+        {
+            pUserList->push_back(new ScUserListData(rSorConditionLoaded.maSortCustomList));
+            aParam.bUserDef = true;
+            aParam.nUserIndex = pUserList->size()-1;
+        }
+        // set sort parameter if we have detected it
+        if (aParam.bUserDef)
+        {
+            SCCOLROW nStartPos = aParam.bByRow ? maRange.aStart.Col() : maRange.aStart.Row();
+            if (rSorConditionLoaded.mbDescending)
             {
-                pUserList->push_back(new ScUserListData(rSorConditionLoaded.maSortCustomList));
-                aParam.bUserDef = true;
-                aParam.nUserIndex = pUserList->size()-1;
+                // descending sort - need to enable 1st SortParam slot
+                assert(aParam.GetSortKeyCount() == DEFSORT);
+                aParam.maKeyState[0].bDoSort = true;
+                aParam.maKeyState[0].bAscending = false;
+                aParam.maKeyState[0].nField += nStartPos;
             }
-
-            // set sort parameter if we have detected it
-            if (aParam.bUserDef)
-            {
-                SCCOLROW nStartPos = aParam.bByRow ? maRange.aStart.Col() : maRange.aStart.Row();
-                if (rSorConditionLoaded.mbDescending)
-                {
-                    // descending sort - need to enable 1st SortParam slot
-                    assert(aParam.GetSortKeyCount() == DEFSORT);
-
-                    aParam.maKeyState[0].bDoSort = true;
-                    aParam.maKeyState[0].bAscending = false;
-                    aParam.maKeyState[0].nField += nStartPos;
-                }
-
-                ScDocument& rDoc = getScDocument();
-                ScDBData* pDBData = rDoc.GetDBAtArea(
-                    nSheet,
-                    maRange.aStart.Col(), maRange.aStart.Row(),
-                    maRange.aEnd.Col(), maRange.aEnd.Row());
-
-                if (pDBData)
-                    pDBData->SetSortParam(aParam);
-                else
-                    OSL_FAIL("AutoFilter::finalizeImport(): cannot find matching DBData");
-            }
+            ScDocument& rDoc = getScDocument();
+            ScDBData* pDBData = rDoc.GetDBAtArea(
+                nSheet,
+                maRange.aStart.Col(), maRange.aStart.Row(),
+                maRange.aEnd.Col(), maRange.aEnd.Row());
+            if (pDBData)
+                pDBData->SetSortParam(aParam);
+            else
+                OSL_FAIL("AutoFilter::finalizeImport(): cannot find matching DBData");
         }
     }
 }
