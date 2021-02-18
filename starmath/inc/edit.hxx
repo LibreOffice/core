@@ -132,6 +132,14 @@ public:
     // for Accessibility
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
+    // for syntax highlight
+private:
+    sal_uInt16 nOldSmZoom;
+    sal_uInt32 ndDefaultSmZoomSize;
+
+public:
+    void LaunchHighlightSyntax();
+
     using Window::GetAccessible;
 };
 
