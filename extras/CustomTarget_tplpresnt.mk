@@ -30,7 +30,7 @@ extras_TEMPLATES_PRESENTATIONS := \
 	Sunset \
 	Vintage \
 	Vivid \
-
+	Yellow_Idea \
 
 extras_PRESENTATIONS_XMLFILES := \
 	Beehive/content.xml \
@@ -174,7 +174,20 @@ extras_PRESENTATIONS_XMLFILES := \
 	Vivid/meta.xml \
 	Vivid/styles.xml \
 	Vivid/Thumbnails/thumbnail.png \
-
+	Yellow_Idea/content.xml \
+	Yellow_Idea/meta.xml \
+	Yellow_Idea/styles.xml \
+	Yellow_Idea/META-INF/manifest.xml \
+	Yellow_Idea/Pictures/1000020100000021000000087A16FD8FB901FE83.png \
+	Yellow_Idea/Pictures/100002010000001A0000001A609D6B9B144132F8.png \
+	Yellow_Idea/Pictures/10000201000000210000000835496FFA25AE5DB6.png \
+	Yellow_Idea/Pictures/100002010000001A0000001A21D7EADBA56038F4.png \
+	Yellow_Idea/Pictures/1000020100000008000000218CFF265B51917950.png \
+	Yellow_Idea/Pictures/100002010000004100000019BACEF928CB2A84CB.png \
+	Yellow_Idea/Pictures/100002010000004E000000192EFFFDEF12FDB2A8.png \
+	Yellow_Idea/Pictures/100002010000004D0000008BE35F31AC2914377D.png \
+	Yellow_Idea/Pictures/100002010000009E000000BD075AA48B79110C47.png \
+	Yellow_Idea/Thumbnails/thumbnail.png \
 
 extras_PRESENTATIONS_MIMETYPEFILES := $(foreach atexts,$(extras_TEMPLATES_PRESENTATIONS),$(atexts)/mimetype)
 
