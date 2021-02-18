@@ -98,6 +98,9 @@ auto XSecParser::Context::CreateChildContext(
 class XSecParser::LoPGPOwnerContext
     : public XSecParser::Context
 {
+    private:
+        OUString m_Value;
+
     public:
         LoPGPOwnerContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
@@ -105,26 +108,23 @@ class XSecParser::LoPGPOwnerContext
         {
         }
 
-        virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& /*xAttrs*/) override
-        {
-            m_rParser.m_ouGpgOwner.clear();
-        }
-
         virtual void EndElement() override
         {
-            m_rParser.m_pXSecController->setGpgOwner( m_rParser.m_ouGpgOwner );
+            m_rParser.m_pXSecController->setGpgOwner(m_Value);
         }
 
         virtual void Characters(OUString const& rChars) override
         {
-            m_rParser.m_ouGpgOwner += rChars;
+            m_Value += rChars;
         }
 };
 
 class XSecParser::DsPGPKeyPacketContext
     : public XSecParser::Context
 {
+    private:
+        OUString m_Value;
+
     public:
         DsPGPKeyPacketContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
@@ -132,26 +132,23 @@ class XSecParser::DsPGPKeyPacketContext
         {
         }
 
-        virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& /*xAttrs*/) override
-        {
-            m_rParser.m_ouGpgCertificate.clear();
-        }
-
         virtual void EndElement() override
         {
-            m_rParser.m_pXSecController->setGpgCertificate( m_rParser.m_ouGpgCertificate );
+            m_rParser.m_pXSecController->setGpgCertificate(m_Value);
         }
 
         virtual void Characters(OUString const& rChars) override
         {
-            m_rParser.m_ouGpgCertificate += rChars;
+            m_Value += rChars;
         }
 };
 
 class XSecParser::DsPGPKeyIDContext
     : public XSecParser::Context
 {
+    private:
+        OUString m_Value;
+
     public:
         DsPGPKeyIDContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
@@ -159,20 +156,14 @@ class XSecParser::DsPGPKeyIDContext
         {
         }
 
-        virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& /*xAttrs*/) override
-        {
-            m_rParser.m_ouGpgKeyID.clear();
-        }
-
         virtual void EndElement() override
         {
-            m_rParser.m_pXSecController->setGpgKeyID( m_rParser.m_ouGpgKeyID );
+            m_rParser.m_pXSecController->setGpgKeyID(m_Value);
         }
 
         virtual void Characters(OUString const& rChars) override
         {
-            m_rParser.m_ouGpgKeyID += rChars;
+            m_Value += rChars;
         }
 };
 
@@ -215,6 +206,9 @@ class XSecParser::DsPGPDataContext
 class XSecParser::DsX509CertificateContext
     : public XSecParser::Context
 {
+    private:
+        OUString m_Value;
+
     public:
         DsX509CertificateContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
@@ -222,26 +216,23 @@ class XSecParser::DsX509CertificateContext
         {
         }
 
-        virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& /*xAttrs*/) override
-        {
-            m_rParser.m_ouX509Certificate.clear();
-        }
-
         virtual void EndElement() override
         {
-            m_rParser.m_pXSecController->setX509Certificate( m_rParser.m_ouX509Certificate );
+            m_rParser.m_pXSecController->setX509Certificate(m_Value);
         }
 
         virtual void Characters(OUString const& rChars) override
         {
-            m_rParser.m_ouX509Certificate += rChars;
+            m_Value += rChars;
         }
 };
 
 class XSecParser::DsX509SerialNumberContext
     : public XSecParser::Context
 {
+    private:
+        OUString m_Value;
+
     public:
         DsX509SerialNumberContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
@@ -249,26 +240,23 @@ class XSecParser::DsX509SerialNumberContext
         {
         }
 
-        virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& /*xAttrs*/) override
-        {
-            m_rParser.m_ouX509SerialNumber.clear();
-        }
-
         virtual void EndElement() override
         {
-            m_rParser.m_pXSecController->setX509SerialNumber( m_rParser.m_ouX509SerialNumber );
+            m_rParser.m_pXSecController->setX509SerialNumber(m_Value);
         }
 
         virtual void Characters(OUString const& rChars) override
         {
-            m_rParser.m_ouX509SerialNumber += rChars;
+            m_Value += rChars;
         }
 };
 
 class XSecParser::DsX509IssuerNameContext
     : public XSecParser::Context
 {
+    private:
+        OUString m_Value;
+
     public:
         DsX509IssuerNameContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
@@ -276,20 +264,14 @@ class XSecParser::DsX509IssuerNameContext
         {
         }
 
-        virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& /*xAttrs*/) override
-        {
-            m_rParser.m_ouX509IssuerName.clear();
-        }
-
         virtual void EndElement() override
         {
-            m_rParser.m_pXSecController->setX509IssuerName( m_rParser.m_ouX509IssuerName );
+            m_rParser.m_pXSecController->setX509IssuerName(m_Value);
         }
 
         virtual void Characters(OUString const& rChars) override
         {
-            m_rParser.m_ouX509IssuerName += rChars;
+            m_Value += rChars;
         }
 };
 
@@ -386,6 +368,9 @@ class XSecParser::DsKeyInfoContext
 class XSecParser::DsSignatureValueContext
     : public XSecParser::Context
 {
+    private:
+        OUString m_Value;
+
     public:
         DsSignatureValueContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
@@ -397,17 +382,16 @@ class XSecParser::DsSignatureValueContext
             css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
             m_rParser.HandleIdAttr(xAttrs);
-            m_rParser.m_ouSignatureValue.clear();
         }
 
         virtual void EndElement() override
         {
-            m_rParser.m_pXSecController->setSignatureValue( m_rParser.m_ouSignatureValue );
+            m_rParser.m_pXSecController->setSignatureValue(m_Value);
         }
 
         virtual void Characters(OUString const& rChars) override
         {
-            m_rParser.m_ouSignatureValue += rChars;
+            m_Value += rChars;
         }
 };
 
@@ -656,6 +640,9 @@ class XSecParser::DsSignedInfoContext
 class XSecParser::XadesEncapsulatedX509CertificateContext
     : public XSecParser::Context
 {
+    private:
+        OUString m_Value;
+
     public:
         XadesEncapsulatedX509CertificateContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
@@ -667,17 +654,16 @@ class XSecParser::XadesEncapsulatedX509CertificateContext
             css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
             m_rParser.HandleIdAttr(xAttrs);
-            m_rParser.m_ouEncapsulatedX509Certificate.clear();
         }
 
         virtual void EndElement() override
         {
-            m_rParser.m_pXSecController->addEncapsulatedX509Certificate( m_rParser.m_ouEncapsulatedX509Certificate );
+            m_rParser.m_pXSecController->addEncapsulatedX509Certificate(m_Value);
         }
 
         virtual void Characters(OUString const& rChars) override
         {
-            m_rParser.m_ouEncapsulatedX509Certificate += rChars;
+            m_Value += rChars;
         }
 };
 
@@ -785,6 +771,9 @@ class XSecParser::XadesUnsignedPropertiesContext
 class XSecParser::LoSignatureLineIdContext
     : public XSecParser::Context
 {
+    private:
+        OUString m_Value;
+
     public:
         LoSignatureLineIdContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
@@ -792,26 +781,23 @@ class XSecParser::LoSignatureLineIdContext
         {
         }
 
-        virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& /*xAttrs*/) override
-        {
-            m_rParser.m_ouSignatureLineId.clear();
-        }
-
         virtual void EndElement() override
         {
-            m_rParser.m_pXSecController->setSignatureLineId( m_rParser.m_ouSignatureLineId );
+            m_rParser.m_pXSecController->setSignatureLineId(m_Value);
         }
 
         virtual void Characters(OUString const& rChars) override
         {
-            m_rParser.m_ouSignatureLineId += rChars;
+            m_Value += rChars;
         }
 };
 
 class XSecParser::LoSignatureLineValidImageContext
     : public XSecParser::Context
 {
+    private:
+        OUString m_Value;
+
     public:
         LoSignatureLineValidImageContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
@@ -819,26 +805,23 @@ class XSecParser::LoSignatureLineValidImageContext
         {
         }
 
-        virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& /*xAttrs*/) override
-        {
-            m_rParser.m_ouSignatureLineValidImage.clear();
-        }
-
         virtual void EndElement() override
         {
-            m_rParser.m_pXSecController->setValidSignatureImage( m_rParser.m_ouSignatureLineValidImage );
+            m_rParser.m_pXSecController->setValidSignatureImage(m_Value);
         }
 
         virtual void Characters(OUString const& rChars) override
         {
-            m_rParser.m_ouSignatureLineValidImage += rChars;
+            m_Value += rChars;
         }
 };
 
 class XSecParser::LoSignatureLineInvalidImageContext
     : public XSecParser::Context
 {
+    private:
+        OUString m_Value;
+
     public:
         LoSignatureLineInvalidImageContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
@@ -846,20 +829,14 @@ class XSecParser::LoSignatureLineInvalidImageContext
         {
         }
 
-        virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& /*xAttrs*/) override
-        {
-            m_rParser.m_ouSignatureLineInvalidImage.clear();
-        }
-
         virtual void EndElement() override
         {
-            m_rParser.m_pXSecController->setInvalidSignatureImage( m_rParser.m_ouSignatureLineInvalidImage );
+            m_rParser.m_pXSecController->setInvalidSignatureImage(m_Value);
         }
 
         virtual void Characters(OUString const& rChars) override
         {
-            m_rParser.m_ouSignatureLineInvalidImage += rChars;
+            m_Value += rChars;
         }
 };
 
@@ -896,6 +873,9 @@ class XSecParser::LoSignatureLineContext
 class XSecParser::XadesCertDigestContext
     : public XSecParser::Context
 {
+    private:
+        OUString m_Value;
+
     public:
         XadesCertDigestContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
@@ -905,7 +885,7 @@ class XSecParser::XadesCertDigestContext
 
         virtual void EndElement() override
         {
-            m_rParser.m_pXSecController->setCertDigest( m_rParser.m_ouCertDigest );
+            m_rParser.m_pXSecController->setCertDigest(m_Value);
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
@@ -918,7 +898,7 @@ class XSecParser::XadesCertDigestContext
             }
             if (nNamespace == XML_NAMESPACE_DS && rName == "DigestValue")
             {
-                return std::make_unique<DsDigestValueContext>(m_rParser, std::move(pOldNamespaceMap), m_rParser.m_ouCertDigest);
+                return std::make_unique<DsDigestValueContext>(m_rParser, std::move(pOldNamespaceMap), m_Value);
             }
             return XSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
         }
@@ -1136,6 +1116,9 @@ class XSecParser::DcDateContext
 class XSecParser::DcDescriptionContext
     : public XSecParser::Context
 {
+    private:
+        OUString m_Value;
+
     public:
         DcDescriptionContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
@@ -1143,20 +1126,14 @@ class XSecParser::DcDescriptionContext
         {
         }
 
-        virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& /*xAttrs*/) override
-        {
-            m_rParser.m_ouDescription.clear();
-        }
-
         virtual void EndElement() override
         {
-            m_rParser.m_pXSecController->setDescription( m_rParser.m_ouDescription );
+            m_rParser.m_pXSecController->setDescription(m_Value);
         }
 
         virtual void Characters(OUString const& rChars) override
         {
-            m_rParser.m_ouDescription += rChars;
+            m_Value += rChars;
         }
 };
 
