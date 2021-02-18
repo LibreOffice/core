@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a18d926_6a6b02d7",
+        "filename": "vcl/jsdialog/executor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-02-18T15:40:54Z",
+      "side": 1,
+      "message": "previously it was intended to deselect old selection and select another entry to avoid multi selection (to test this create few named ranges in calc and open Manage defined ranges dialog, there is a widget where it lists named ranges and multi selection caused bugs). probably multiselection prevention should be handled in online (triggering separate unselect action)\n\ncurrent code unselects and selects the same entry, why? it is just a mistake?",
+      "revId": "0239414e5e1a790a0ed9fca41252f093a62f3f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
