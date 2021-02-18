@@ -2372,26 +2372,17 @@ void SdrPathObj::RecalcSnapRect()
 void SdrPathObj::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
     tools::Rectangle aOld(GetSnapRect());
-    if (aOld.IsEmpty())
-    {
-        Fraction aX(1,1);
-        Fraction aY(1,1);
-        NbcResize(aOld.TopLeft(), aX, aY);
-        NbcMove(Size(rRect.Left() - aOld.Left(), rRect.Top() - aOld.Top()));
+    if (rRect == aOld)
         return;
-    }
 
     // Take empty into account when calculating scale factors
     tools::Long nMulX = rRect.IsWidthEmpty() ? 0 : rRect.Right()  - rRect.Left();
-
-    tools::Long nDivX = aOld.Right()   - aOld.Left();
+    tools::Long nDivX = aOld.IsWidthEmpty() ? 1 : aOld.Right()   - aOld.Left();
 
     // Take empty into account when calculating scale factors
     tools::Long nMulY = rRect.IsHeightEmpty() ? 0 : rRect.Bottom() - rRect.Top();
+    tools::Long nDivY = aOld.IsHeightEmpty() ? 1 : aOld.Bottom()  - aOld.Top();
 
-    tools::Long nDivY = aOld.Bottom()  - aOld.Top();
-    if ( nDivX == 0 ) { nMulX = 1; nDivX = 1; }
-    if ( nDivY == 0 ) { nMulY = 1; nDivY = 1; }
     if ( nDivX == nMulX ) { nMulX = 1; nDivX = 1; }
     if ( nDivY == nMulY ) { nMulY = 1; nDivY = 1; }
     Fraction aX(nMulX,nDivX);
