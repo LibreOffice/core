@@ -35,7 +35,7 @@
 
 #include "format.hxx"
 #include "node.hxx"
-#include "parse.hxx"
+#include "parse5.hxx"
 #include "smdllapi.hxx"
 
 class SfxPrinter;
