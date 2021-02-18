@@ -106,9 +106,7 @@ DataLabelResources::DataLabelResources(weld::Builder* pBuilder, weld::Window* pP
     , m_xCBSymbol(pBuilder->weld_check_button("CB_SYMBOL"))
     , m_xCBDataSeries(pBuilder->weld_check_button("CB_DATA_SERIES_NAME"))
     , m_xCBWrapText(pBuilder->weld_check_button("CB_WRAP_TEXT"))
-    , m_xSeparatorResources(pBuilder->weld_widget("boxSEPARATOR"))
     , m_xLB_Separator(pBuilder->weld_combo_box("LB_TEXT_SEPARATOR"))
-    , m_xBxLabelPlacement(pBuilder->weld_widget("boxPLACEMENT"))
     , m_xLB_LabelPlacement(pBuilder->weld_combo_box("LB_LABEL_PLACEMENT"))
     , m_xBxOrientation(pBuilder->weld_widget("boxORIENTATION"))
     , m_xFT_Dial(pBuilder->weld_label("CT_LABEL_DIAL"))
@@ -249,12 +247,12 @@ void DataLabelResources::EnableControls()
         if (m_xCBDataSeries->get_state() != TRISTATE_FALSE)
             ++nNumberOfCheckedLabelParts;
 
-        m_xSeparatorResources->set_sensitive( nNumberOfCheckedLabelParts > 1 );
+        m_xLB_Separator->set_sensitive( nNumberOfCheckedLabelParts > 1 );
 
         bool bEnableTextDir = nNumberOfCheckedLabelParts > 0;
         m_xBxTextDirection->set_sensitive( bEnableTextDir );
         bool bEnablePlacement = nNumberOfCheckedLabelParts > 0 && m_xLB_LabelPlacement->get_count()>1;
-        m_xBxLabelPlacement->set_sensitive( bEnablePlacement );
+        m_xLB_LabelPlacement->set_sensitive( bEnablePlacement );
     }
 
     m_xPB_NumberFormatForValue->set_sensitive( m_pNumberFormatter && m_xCBNumber->get_active() );
