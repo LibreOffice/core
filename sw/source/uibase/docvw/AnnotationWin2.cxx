@@ -316,7 +316,6 @@ void SwAnnotationWin::InitControls()
     mpOutliner.reset(new Outliner(&aShell->GetPool(),OutlinerMode::TextObject));
     aShell->GetDoc()->SetCalcFieldValueHdl( mpOutliner.get() );
     mpOutliner->SetUpdateMode( true );
-    Rescale();
 
     mpOutlinerView.reset(new OutlinerView(mpOutliner.get(), nullptr));
     mpOutliner->InsertView(mpOutlinerView.get());
@@ -324,10 +323,15 @@ void SwAnnotationWin::InitControls()
     //create Scrollbars
     mxVScrollbar = m_xBuilder->weld_scrolled_window("scrolledwindow", true);
 
+    mxMenuButton = m_xBuilder->weld_menu_button("menubutton");
+    mxMenuButton->set_size_request(METABUTTON_WIDTH, METABUTTON_HEIGHT);
+
     // actual window which holds the user text
     mxSidebarTextControl.reset(new SidebarTextControl(*this, mrView, mrMgr));
     mxSidebarTextControlWin.reset(new weld::CustomWeld(*m_xBuilder, "editview", *mxSidebarTextControl));
     mxSidebarTextControl->SetPointer(PointerStyle::Text);
+
+    Rescale();
 
     mpOutlinerView->SetBackgroundColor(COL_TRANSPARENT);
     mpOutlinerView->SetOutputArea( PixelToLogic( tools::Rectangle(0,0,1,1) ) );
@@ -337,9 +341,6 @@ void SwAnnotationWin::InitControls()
     mxVScrollbar->set_direction(false);
     mxVScrollbar->connect_vadjustment_changed(LINK(this, SwAnnotationWin, ScrollHdl));
     mxVScrollbar->connect_mouse_move(LINK(this, SwAnnotationWin, MouseMoveHdl));
-
-    mxMenuButton = m_xBuilder->weld_menu_button("menubutton");
-    mxMenuButton->set_size_request(METABUTTON_WIDTH, METABUTTON_HEIGHT);
 
     const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
     EEControlBits nCntrl = mpOutliner->GetControlWord();
@@ -446,6 +447,7 @@ void SwAnnotationWin::Rescale()
     aMode.SetOrigin( Point() );
     mpOutliner->SetRefMapMode( aMode );
     SetMapMode( aMode );
+    mxSidebarTextControl->SetMapMode( aMode );
     const Fraction& rFraction = mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY();
 
     vcl::Font aFont = maLabelFont;
