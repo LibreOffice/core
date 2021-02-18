@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "82a1f142_4c460ba6",
+        "filename": "cui/uiconfig/ui/acorexceptpage.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-02-18T09:35:57Z",
+      "side": 1,
+      "message": "Guess both Include and Exclude can be read in the wrong way ;-)",
+      "parentUuid": "8ec0b928_4c31e4e7",
+      "range": {
+        "startLine": 73,
+        "startChar": 138,
+        "endLine": 73,
+        "endChar": 156
+      },
+      "revId": "b9b340b229547c8b8de60d225c526e90d4760b1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d757419c_5502303d",
         "filename": "cui/uiconfig/ui/acorexceptpage.ui",
         "patchSetId": 4
