@@ -110,7 +110,8 @@
           <menu:menuitem menu:id=".uno:SelectColumn"/>
           <menu:menuitem menu:id=".uno:SelectData"/>
           <menu:menuitem menu:id=".uno:SelectUnprotectedCells"/>
-          <menu:menuitem menu:id=".uno:SelectVisibleCells"/>
+          <menu:menuitem menu:id=".uno:SelectVisibleRows"/>
+          <menu:menuitem menu:id=".uno:SelectVisibleColumns"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>

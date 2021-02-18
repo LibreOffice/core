@@ -585,9 +585,17 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:SelectVisibleCells" oor:op="replace">
+      <node oor:name=".uno:SelectVisibleRows" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Select Visible Cells Only</value>
+          <value xml:lang="en-US">Select Visible Rows Only</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SelectVisibleColumns" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Select Visible Columns Only</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
