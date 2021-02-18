@@ -25,8 +25,7 @@ ToxLinkProcessor::StartNewLink(sal_Int32 startPosition, const OUString& characte
                 startPosition, characterStyle);
 }
 
-void
-ToxLinkProcessor::CloseLink(sal_Int32 endPosition, const OUString& url)
+void ToxLinkProcessor::CloseLink(sal_Int32 endPosition, const OUString& url, bool bRelative)
 {
     if (m_pStartedLink == nullptr)
     {
@@ -38,12 +37,20 @@ ToxLinkProcessor::CloseLink(sal_Int32 endPosition, const OUString& url)
         return;
     }
 
-    // url contains '|' which must be encoded; also in some cases contains
-    // arbitrary strings that need to be encoded
-    assert(url[0] == '#'); // all links are internal
-    OUString const uri("#" + rtl::Uri::encode(url.copy(1),
-        rtl_UriCharClassUricNoSlash,
-        rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8));
+    OUString uri;
+    if (bRelative)
+    {
+        // url contains '|' which must be encoded; also in some cases contains
+        // arbitrary strings that need to be encoded
+        assert(url[0] == '#'); // all links are internal
+        uri = "#"
+              + rtl::Uri::encode(url.copy(1), rtl_UriCharClassUricNoSlash,
+                                 rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8);
+    }
+    else
+    {
+        uri = url;
+    }
 
     std::unique_ptr<ClosedLink> pClosedLink(
             new ClosedLink(uri, m_pStartedLink->mStartPosition, endPosition));
