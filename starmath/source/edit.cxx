@@ -27,9 +27,12 @@
 
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/stritem.hxx>
+#include <svl/itemset.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <osl/diagnose.h>
@@ -69,13 +72,37 @@ bool SmEditWindow::IsInlineEditEnabled()
     return SmViewShell::IsInlineEditEnabled();
 }
 
+void SmEditWindow::LaunchHighlightSyntax()
+{
+    SmModule *pMod = SM_MOD();
+    // Adjust zoom
+    if(pMod && (nOldSmZoom != pMod->GetConfig()->GetSmEditWindowZoomFactor()))
+    {
+        nOldSmZoom = pMod->GetConfig()->GetSmEditWindowZoomFactor();
+        sal_Int32 paracount = GetEditEngine()->GetParagraphCount();
+        sal_Int32 lastlen = GetEditEngine()->GetTextLen( paracount-1 );
+        SfxItemSet sfxatts = GetEditEngine()->GetAttribs( 0, 0, 0, GetAttribsFlags::CHARATTRIBS );
+        const SvxFontHeightItem* sfxattsh = sfxatts.GetItem(EE_CHAR_FONTHEIGHT);
+        if(ndDefaultSmZoomSize == 0)
+            ndDefaultSmZoomSize = sfxattsh->GetHeight();
+        nOldSmZoom = ndDefaultSmZoomSize * nOldSmZoom / 100;
+        ESelection aSel(0, 0, paracount, lastlen-1);
+        SfxItemSet aSet(GetEditEngine()->GetEmptyItemSet());
+        aSet.Put(SvxFontHeightItem(nOldSmZoom, 100, EE_CHAR_FONTHEIGHT));
+        GetEditEngine()->QuickSetAttribs(aSet, aSel);
+    }
+    ESelection aSelection = pEditView->GetSelection();
+    pEditView->SetSelection(aSelection);
+}
 
 SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     Window              (&rMyCmdBoxWin, WB_BORDER),
     DropTargetHelper    ( this ),
     rCmdBox             (rMyCmdBoxWin),
     aModifyIdle         ("SmEditWindow ModifyIdle"),
-    aCursorMoveIdle     ("SmEditWindow CursorMoveIdle")
+    aCursorMoveIdle     ("SmEditWindow CursorMoveIdle"),
+    nOldSmZoom(100),
+    ndDefaultSmZoomSize(0)
 {
     set_id("math_edit");
     SetHelpId(HID_SMA_COMMAND_WIN_EDIT);
