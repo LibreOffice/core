@@ -21,6 +21,7 @@
 
 #include <formula/funcutl.hxx>
 #include <formula/IControlReferenceHandler.hxx>
+#include <vcl/svapp.hxx>
 #include "ControlHelper.hxx"
 #include "parawin.hxx"
 #include <strings.hrc>
@@ -265,9 +266,11 @@ RefEdit::RefEdit(std::unique_ptr<weld::Entry> xControl)
     , aIdle("formula RefEdit Idle")
     , pAnyRefDlg(nullptr)
     , pLabelWidget(nullptr)
+    , mpFocusInEvent(nullptr)
+    , mpFocusOutEvent(nullptr)
 {
-    xEntry->connect_focus_in(LINK(this, RefEdit, GetFocus));
-    xEntry->connect_focus_out(LINK(this, RefEdit, LoseFocus));
+    xEntry->connect_focus_in(LINK(this, RefEdit, GetFocusHdl));
+    xEntry->connect_focus_out(LINK(this, RefEdit, LoseFocusHdl));
     xEntry->connect_key_press(LINK(this, RefEdit, KeyInputHdl));
     xEntry->connect_changed(LINK(this, RefEdit, Modify));
     aIdle.SetInvokeHandler( LINK( this, RefEdit, UpdateHdl ) );
@@ -275,6 +278,10 @@ RefEdit::RefEdit(std::unique_ptr<weld::Entry> xControl)
 
 RefEdit::~RefEdit()
 {
+    if (mpFocusInEvent)
+        Application::RemoveUserEvent(mpFocusInEvent);
+    if (mpFocusOutEvent)
+        Application::RemoveUserEvent(mpFocusOutEvent);
     aIdle.ClearInvokeHandler();
     aIdle.Stop();
 }
@@ -355,20 +362,51 @@ void RefEdit::GrabFocus()
     bool bHadFocus = xEntry->has_focus();
     xEntry->grab_focus();
     if (!bHadFocus && xEntry->has_focus())
-        GetFocus(*xEntry);
+        GetFocus();
 }
 
-IMPL_LINK_NOARG(RefEdit, GetFocus, weld::Widget&, void)
+void RefEdit::GetFocus()
 {
     maGetFocusHdl.Call(*this);
     StartUpdateData();
 }
 
-IMPL_LINK_NOARG(RefEdit, LoseFocus, weld::Widget&, void)
+void RefEdit::LoseFocus()
 {
     maLoseFocusHdl.Call(*this);
     if( pAnyRefDlg )
         pAnyRefDlg->HideReference();
+}
+
+IMPL_LINK_NOARG(RefEdit, GetFocusHdl, weld::Widget&, void)
+{
+    // in e.g. function wizard RefEdits we want to select all when we get focus
+    // but in the gtk case there are pending gtk handlers which change selection
+    // after our handler, so post our focus in event to happen after those complete
+    if (mpFocusInEvent)
+        Application::RemoveUserEvent(mpFocusInEvent);
+    mpFocusInEvent = Application::PostUserEvent(LINK(this, RefEdit, AsyncFocusInHdl));
+}
+
+IMPL_LINK_NOARG(RefEdit, LoseFocusHdl, weld::Widget&, void)
+{
+    // tdf#127262 because focus in is async, focus out must not appear out
+    // of sequence to focus in
+    if (mpFocusOutEvent)
+        Application::RemoveUserEvent(mpFocusOutEvent);
+    mpFocusOutEvent = Application::PostUserEvent(LINK(this, RefEdit, AsyncFocusOutHdl));
+}
+
+IMPL_LINK_NOARG(RefEdit, AsyncFocusInHdl, void*, void)
+{
+    mpFocusInEvent = nullptr;
+    GetFocus();
+}
+
+IMPL_LINK_NOARG(RefEdit, AsyncFocusOutHdl, void*, void)
+{
+    mpFocusOutEvent = nullptr;
+    LoseFocus();
 }
 
 IMPL_LINK_NOARG(RefEdit, UpdateHdl, Timer *, void)
