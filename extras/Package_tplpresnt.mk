@@ -10,11 +10,13 @@
 $(eval $(call gb_Package_Package,extras_tplpresnt,$(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)))
 
 $(eval $(call gb_Package_add_files,extras_tplpresnt,$(LIBO_SHARE_FOLDER)/template/common/presnt,\
+	Candy.otp \
 	DNA.otp \
 	Inspiration.otp \
 	Metropolis.otp \
 	Vintage.otp \
 	Focus.otp \
+	Grey_Elegant.otp \
 	Midnightblue.otp \
 	Vivid.otp \
 	Pencil.otp \
@@ -27,6 +29,8 @@ $(eval $(call gb_Package_add_files,extras_tplpresnt,$(LIBO_SHARE_FOLDER)/templat
 	Lights.otp \
 	Nature_Illustration.otp \
 	Piano.otp \
+	Sunset.otp \
+	Yellow_Idea.otp \        
 ))
 
 # vim: set noet sw=4 ts=4:

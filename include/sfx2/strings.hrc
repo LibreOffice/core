@@ -296,12 +296,12 @@
 #define STR_CLOSE_PANE                          NC_("STR_CLOSE_PANE", "Close Pane")
 
 // Translators: default Impress template names
-#define STR_TEMPLATE_NAME1                      NC_("STR_TEMPLATE_NAME1", "")
+#define STR_TEMPLATE_NAME1                      NC_("STR_TEMPLATE_NAME1", "Grey Elegant")
 #define STR_TEMPLATE_NAME2                      NC_("STR_TEMPLATE_NAME2", "Beehive")
 #define STR_TEMPLATE_NAME3                      NC_("STR_TEMPLATE_NAME3", "Blue Curve")
 #define STR_TEMPLATE_NAME4                      NC_("STR_TEMPLATE_NAME4", "Blueprint Plans")
-#define STR_TEMPLATE_NAME5                      NC_("STR_TEMPLATE_NAME5", "")
-#define STR_TEMPLATE_NAME6                      NC_("STR_TEMPLATE_NAME6", "")
+#define STR_TEMPLATE_NAME5                      NC_("STR_TEMPLATE_NAME5", "Candy")
+#define STR_TEMPLATE_NAME6                      NC_("STR_TEMPLATE_NAME6", "Yellow Idea")
 #define STR_TEMPLATE_NAME7                      NC_("STR_TEMPLATE_NAME7", "DNA")
 #define STR_TEMPLATE_NAME8                      NC_("STR_TEMPLATE_NAME8", "Focus")
 #define STR_TEMPLATE_NAME9                      NC_("STR_TEMPLATE_NAME9", "Forestbird")
@@ -316,7 +316,7 @@
 #define STR_TEMPLATE_NAME18                     NC_("STR_TEMPLATE_NAME18", "Piano")
 #define STR_TEMPLATE_NAME19                     NC_("STR_TEMPLATE_NAME19", "Portfolio")
 #define STR_TEMPLATE_NAME20                     NC_("STR_TEMPLATE_NAME20", "Progress")
-#define STR_TEMPLATE_NAME21                     NC_("STR_TEMPLATE_NAME21", "")
+#define STR_TEMPLATE_NAME21                     NC_("STR_TEMPLATE_NAME21", "Sunset")
 #define STR_TEMPLATE_NAME22                     NC_("STR_TEMPLATE_NAME22", "Vintage")
 #define STR_TEMPLATE_NAME23                     NC_("STR_TEMPLATE_NAME23", "Vivid")
 // Translators: default Writer template names
