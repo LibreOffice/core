@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e23fbd6_1d64b7c3",
+        "filename": "oox/source/drawingml/textfieldcontext.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-02-18T12:50:45Z",
+      "side": 1,
+      "message": "We\u0027re in oox/source/drawingml, if you really need to access oox::ppt::* here, I would rather spell that out than hide this weird dependency.\n\nAlso, did you check how other pptx-specific fields are handled? Would it be possible to avoid this layer violation? (pptx-specific code under shared drawingml/)",
+      "revId": "4eb996f2b68b5b2c60a5d9c58df56946bfd65839",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a2ed2a5_277f4f30",
+        "filename": "oox/source/drawingml/textfieldcontext.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-02-18T12:50:45Z",
+      "side": 1,
+      "message": "This will throw an exception when you\u0027re in XLSX or DOCX import. Who will handle that error?",
+      "revId": "4eb996f2b68b5b2c60a5d9c58df56946bfd65839",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37aaff55_c7ffd41e",
+        "filename": "oox/source/drawingml/textfieldcontext.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-02-18T12:50:45Z",
+      "side": 1,
+      "message": "This will go wrong if I insert a slide before the current slide; after the import is finished. Did you check if Impress core indeed lacks the feature we would need here? Did you check if perhaps we can learn from how the PPT import handles this problem?",
+      "revId": "4eb996f2b68b5b2c60a5d9c58df56946bfd65839",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
