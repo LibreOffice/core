@@ -1906,24 +1906,12 @@ protected:
     GtkWidget* m_pMouseEventBox;
     GtkInstanceBuilder* m_pBuilder;
 
-    DECL_LINK(async_signal_focus_in, void*, void);
-    DECL_LINK(async_signal_focus_out, void*, void);
     DECL_LINK(async_drag_cancel, void*, void);
-
-    void launch_signal_focus_in()
-    {
-        // in e.g. function wizard RefEdits we want to select all when we get focus
-        // but there are pending gtk handlers which change selection after our handler
-        // post our focus in event to happen after those finish
-        if (m_pFocusInEvent)
-            Application::RemoveUserEvent(m_pFocusInEvent);
-        m_pFocusInEvent = Application::PostUserEvent(LINK(this, GtkInstanceWidget, async_signal_focus_in));
-    }
 
     static gboolean signalFocusIn(GtkWidget*, GdkEvent*, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
-        pThis->launch_signal_focus_in();
+        pThis->signal_focus_in();
         return false;
     }
 
@@ -1944,20 +1932,11 @@ protected:
         return m_aMnemonicActivateHdl.Call(*this);
     }
 
-    void launch_signal_focus_out()
-    {
-        // tdf#127262 because focus in is async, focus out must not appear out
-        // of sequence to focus in
-        if (m_pFocusOutEvent)
-            Application::RemoveUserEvent(m_pFocusOutEvent);
-        m_pFocusOutEvent = Application::PostUserEvent(LINK(this, GtkInstanceWidget, async_signal_focus_out));
-    }
-
     static gboolean signalFocusOut(GtkWidget*, GdkEvent*, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
         SolarMutexGuard aGuard;
-        pThis->launch_signal_focus_out();
+        pThis->signal_focus_out();
         return false;
     }
 
@@ -2052,8 +2031,6 @@ private:
     int m_nPressedButton;
     int m_nPressStartX;
     int m_nPressStartY;
-    ImplSVEvent* m_pFocusInEvent;
-    ImplSVEvent* m_pFocusOutEvent;
     ImplSVEvent* m_pDragCancelEvent;
     GtkCssProvider* m_pBgCssProvider;
     GdkDragAction m_eDragAction;
@@ -2431,8 +2408,6 @@ public:
         , m_nPressedButton(-1)
         , m_nPressStartX(-1)
         , m_nPressStartY(-1)
-        , m_pFocusInEvent(nullptr)
-        , m_pFocusOutEvent(nullptr)
         , m_pDragCancelEvent(nullptr)
         , m_pBgCssProvider(nullptr)
         , m_eDragAction(GdkDragAction(0))
@@ -3027,10 +3002,6 @@ public:
 
     virtual ~GtkInstanceWidget() override
     {
-        if (m_pFocusInEvent)
-            Application::RemoveUserEvent(m_pFocusInEvent);
-        if (m_pFocusOutEvent)
-            Application::RemoveUserEvent(m_pFocusOutEvent);
         if (m_pDragCancelEvent)
             Application::RemoveUserEvent(m_pDragCancelEvent);
         if (m_nDragMotionSignalId)
@@ -3202,18 +3173,6 @@ public:
     }
 };
 
-}
-
-IMPL_LINK_NOARG(GtkInstanceWidget, async_signal_focus_in, void*, void)
-{
-    m_pFocusInEvent = nullptr;
-    signal_focus_in();
-}
-
-IMPL_LINK_NOARG(GtkInstanceWidget, async_signal_focus_out, void*, void)
-{
-    m_pFocusOutEvent = nullptr;
-    signal_focus_out();
 }
 
 IMPL_LINK(GtkInstanceWidget, async_drag_cancel, void*, arg, void)
@@ -15671,15 +15630,15 @@ public:
     virtual void connect_focus_in(const Link<Widget&, void>& rLink) override
     {
         if (!m_nToggleFocusInSignalId)
-            m_nToggleFocusInSignalId = g_signal_connect(m_pToggleButton, "focus-in-event", G_CALLBACK(signalFocusIn), this);
-        weld::Widget::connect_focus_in(rLink);
+            m_nToggleFocusInSignalId = g_signal_connect_after(m_pToggleButton, "focus-in-event", G_CALLBACK(signalFocusIn), this);
+        GtkInstanceContainer::connect_focus_in(rLink);
     }
 
     virtual void connect_focus_out(const Link<Widget&, void>& rLink) override
     {
         if (!m_nToggleFocusOutSignalId)
-            m_nToggleFocusOutSignalId = g_signal_connect(m_pToggleButton, "focus-out-event", G_CALLBACK(signalFocusOut), this);
-        weld::Widget::connect_focus_out(rLink);
+            m_nToggleFocusOutSignalId = g_signal_connect_after(m_pToggleButton, "focus-out-event", G_CALLBACK(signalFocusOut), this);
+        GtkInstanceContainer::connect_focus_out(rLink);
     }
 
     virtual void grab_focus() override

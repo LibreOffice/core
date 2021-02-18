@@ -27,6 +27,7 @@
 #include <vcl/weld.hxx>
 
 class KeyEvent;
+struct ImplSVEvent;
 
 namespace formula {
 
@@ -41,6 +42,9 @@ private:
     Idle aIdle;
     IControlReferenceHandler* pAnyRefDlg; // parent dialog
     weld::Label* pLabelWidget;
+    ImplSVEvent* mpFocusInEvent;
+    ImplSVEvent* mpFocusOutEvent;
+
     Link<RefEdit&,void> maGetFocusHdl;
     Link<RefEdit&,void> maLoseFocusHdl;
     Link<RefEdit&,void> maModifyHdl;
@@ -50,9 +54,14 @@ private:
 
 protected:
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
-    DECL_LINK(GetFocus, weld::Widget&, void);
-    DECL_LINK(LoseFocus, weld::Widget&, void);
+    DECL_LINK(GetFocusHdl, weld::Widget&, void);
+    DECL_LINK(LoseFocusHdl, weld::Widget&, void);
+    DECL_LINK(AsyncFocusInHdl, void*, void);
+    DECL_LINK(AsyncFocusOutHdl, void*, void);
     DECL_LINK(Modify, weld::Entry&, void);
+
+    void GetFocus();
+    void LoseFocus();
 
     virtual bool KeyInput(const KeyEvent& rKEvt);
 
