@@ -15,6 +15,7 @@
 
 #include <comphelper/servicehelper.hxx>
 #include <vector>
+#include <rtl/ref.hxx>
 
 #ifdef _WIN32
 #include <config_folders.h>
@@ -116,9 +117,8 @@ OUString SecurityEnvironmentGpg::getSecurityEnvironmentInformation()
 
 Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getCertificatesImpl( bool bPrivateOnly )
 {
-    CertificateImpl* xCert;
     std::vector< GpgME::Key > keyList;
-    std::vector< CertificateImpl* > certsList;
+    std::vector< rtl::Reference<CertificateImpl> > certsList;
 
     m_ctx->setKeyListMode(GPGME_KEYLIST_MODE_LOCAL);
     GpgME::Error err = m_ctx->startKeyListing("", bPrivateOnly );
@@ -135,14 +135,14 @@ Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getCertificatesIm
     m_ctx->endKeyListing();
 
     for (auto const& key : keyList) {
-        xCert = new CertificateImpl();
+        rtl::Reference<CertificateImpl> xCert = new CertificateImpl();
         xCert->setCertificate(m_ctx.get(),key);
         certsList.push_back(xCert);
     }
 
     Sequence< Reference< XCertificate > > xCertificateSequence(certsList.size());
     int i = 0;
-    for (auto const& cert : certsList) {
+    for (auto& cert : certsList) {
         xCertificateSequence[i++] = cert;
     }
 
@@ -161,8 +161,6 @@ Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getAllCertificate
 
 Reference< XCertificate > SecurityEnvironmentGpg::getCertificate( const OUString& keyId, const Sequence< sal_Int8 >& /*serialNumber*/ )
 {
-    CertificateImpl* xCert=nullptr;
-
     //xmlChar* pSignatureValue=xmlNodeGetContent(cur);
     OString ostr = OUStringToOString( keyId , RTL_TEXTENCODING_UTF8 );
     const xmlChar* strKeyId = reinterpret_cast<const xmlChar*>(ostr.getStr());
@@ -176,7 +174,7 @@ Reference< XCertificate > SecurityEnvironmentGpg::getCertificate( const OUString
         if (err)
             break;
         if (!k.isInvalid() && strcmp(k.primaryFingerprint(), reinterpret_cast<const char*>(strKeyId)) == 0) {
-            xCert = new CertificateImpl();
+            rtl::Reference<CertificateImpl> xCert = new CertificateImpl();
             xCert->setCertificate(m_ctx.get(), k);
             m_ctx->endKeyListing();
             return xCert;

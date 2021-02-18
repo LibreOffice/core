@@ -184,7 +184,7 @@ uno::Reference<xml::sax::XWriter> XMLSignatureHelper::CreateDocumentHandlerWithH
     /*
      * write the xml context for signatures
      */
-    SvXMLAttributeList *pAttributeList = new SvXMLAttributeList();
+    rtl::Reference<SvXMLAttributeList> pAttributeList = new SvXMLAttributeList();
     OUString sNamespace;
     if (mbODFPre1_2)
         sNamespace = NS_DOCUMENTSIGNATURES;
@@ -198,7 +198,7 @@ uno::Reference<xml::sax::XWriter> XMLSignatureHelper::CreateDocumentHandlerWithH
     xSaxWriter->startDocument();
     xSaxWriter->startElement(
         "document-signatures",
-        uno::Reference< css::xml::sax::XAttributeList > (pAttributeList));
+        pAttributeList);
 
     return xSaxWriter;
 }
