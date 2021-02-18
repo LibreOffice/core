@@ -1691,6 +1691,10 @@ void BrowseBox::ChildFocusIn()
 {
 }
 
+void BrowseBox::ChildFocusOut()
+{
+}
+
 void BrowseBox::Dispatch( sal_uInt16 nId )
 {
 

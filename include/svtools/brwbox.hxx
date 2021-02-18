@@ -588,6 +588,7 @@ public:
     tools::Rectangle       GetControlArea() const;
     virtual bool    ProcessKey(const KeyEvent& rEvt);
     virtual void    ChildFocusIn();
+    virtual void    ChildFocusOut();
     void            Dispatch( sal_uInt16 nId );
     void            SetMode( BrowserMode nMode );
     BrowserMode     GetMode( ) const { return m_nCurrentMode; }

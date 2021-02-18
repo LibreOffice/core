@@ -74,7 +74,7 @@ private:
     DECL_LINK( OnWidgetFocusLost, weld::Widget&, void );
     DECL_LINK( OnWidgetFocusGot, weld::Widget&, void );
 
-    DECL_LINK( OnControlFocusGot, weld::Widget&, void );
+    DECL_LINK( OnControlFocusGot, LinkParamNone*, void );
 
     DECL_LINK( LBChangeHdl, weld::ComboBox&, void );
     DECL_LINK( OnFormatAction, const OString&, void );
