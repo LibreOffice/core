@@ -11,7 +11,6 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import type_text, select_pos
-from uitest.debug import sleep
 
 import unittest
 
