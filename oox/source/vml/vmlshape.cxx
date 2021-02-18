@@ -1457,7 +1457,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
         oox::drawingml::ShapePropertyMap aPropMap(mrDrawing.getFilter().getModelObjectHelper());
         const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
         maTypeModel.maStrokeModel.pushToPropMap(aPropMap, rGraphicHelper);
-        //And, fill-color properties as well...
+        // And, fill-color properties as well...
         maTypeModel.maFillModel.pushToPropMap(aPropMap, rGraphicHelper);
         PropertySet(xShape).setProperties(aPropMap);
 
