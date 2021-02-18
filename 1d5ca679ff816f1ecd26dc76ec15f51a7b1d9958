@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ed3c8a27_9effb05d",
+        "filename": "chart2/source/inc/RegressionCurveCalculator.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-02-18T12:42:08Z",
+      "side": 1,
+      "message": "why sal_Int16 here not 32?",
+      "revId": "1d5ca679ff816f1ecd26dc76ec15f51a7b1d9958",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e96e761_7a509d5c",
+        "filename": "offapi/com/sun/star/chart2/XRegressionCurveCalculator.idl",
+        "patchSetId": 10
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-02-18T12:42:08Z",
+      "side": 1,
+      "message": "that\u0027s an incompatible change, i hope we can assume this isn\u0027t used by extensions?\n\nit needs [API-CHANGE] in the commit message in any case",
+      "revId": "1d5ca679ff816f1ecd26dc76ec15f51a7b1d9958",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d378082c_9b2b6fa4",
+        "filename": "xmloff/source/chart/PropertyMaps.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-02-18T12:42:08Z",
+      "side": 1,
+      "message": "oh, chart developers are abusing handleSpecialItem with TYPE_STRING so they don\u0027t have to write those silly Type converters? that\u0027s ... actually not a bad idea.",
+      "revId": "1d5ca679ff816f1ecd26dc76ec15f51a7b1d9958",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
