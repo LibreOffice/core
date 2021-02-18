@@ -16,6 +16,24 @@
       "revId": "324d4a8dccc25ca61622685fd8a323b985c1247d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81c5e377_fcb507ce",
+        "filename": "chart2/source/view/main/ChartView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2166,
+      "author": {
+        "id": 1002967
+      },
+      "writtenOn": "2021-02-18T01:28:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8724a41e_1950a023",
+      "revId": "324d4a8dccc25ca61622685fd8a323b985c1247d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
