@@ -425,10 +425,15 @@ class XSecParser::DsDigestValueContext
 class XSecParser::DsDigestMethodContext
     : public XSecParser::Context
 {
+    private:
+        sal_Int32 & m_rReferenceDigestID;
+
     public:
         DsDigestMethodContext(XSecParser & rParser,
-                std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
+                std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap,
+                sal_Int32 & rReferenceDigestID)
             : XSecParser::Context(rParser, std::move(pOldNamespaceMap))
+            , m_rReferenceDigestID(rReferenceDigestID)
         {
         }
 
@@ -445,13 +450,13 @@ class XSecParser::DsDigestMethodContext
                              && ouAlgorithm != ALGO_XMLDSIGSHA512,
                              "xmlsecurity.helper", "Algorithm neither SHA1, SHA256 nor SHA512");
                 if (ouAlgorithm == ALGO_XMLDSIGSHA1)
-                    m_rParser.m_nReferenceDigestID = css::xml::crypto::DigestID::SHA1;
+                    m_rReferenceDigestID = css::xml::crypto::DigestID::SHA1;
                 else if (ouAlgorithm == ALGO_XMLDSIGSHA256)
-                    m_rParser.m_nReferenceDigestID = css::xml::crypto::DigestID::SHA256;
+                    m_rReferenceDigestID = css::xml::crypto::DigestID::SHA256;
                 else if (ouAlgorithm == ALGO_XMLDSIGSHA512)
-                    m_rParser.m_nReferenceDigestID = css::xml::crypto::DigestID::SHA512;
+                    m_rReferenceDigestID = css::xml::crypto::DigestID::SHA512;
                 else
-                    m_rParser.m_nReferenceDigestID = 0;
+                    m_rReferenceDigestID = 0;
             }
         }
 };
@@ -459,28 +464,29 @@ class XSecParser::DsDigestMethodContext
 class XSecParser::DsTransformContext
     : public XSecParser::Context
 {
+    private:
+        bool & m_rIsC14N;
+
     public:
         DsTransformContext(XSecParser & rParser,
-                std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
+                std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap,
+                bool & rIsC14N)
             : XSecParser::Context(rParser, std::move(pOldNamespaceMap))
+            , m_rIsC14N(rIsC14N)
         {
         }
 
         virtual void StartElement(
             css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
-            if (m_rParser.m_bReferenceUnresolved)
-            {
-                OUString ouAlgorithm = xAttrs->getValueByName("Algorithm");
+            OUString ouAlgorithm = xAttrs->getValueByName("Algorithm");
 
-                if (ouAlgorithm == ALGO_C14N)
-                    /*
-                     * a xml stream
-                     */
-                {
-                    m_rParser.m_pXSecController->addStreamReference( m_rParser.m_currentReferenceURI, false, m_rParser.m_nReferenceDigestID );
-                    m_rParser.m_bReferenceUnresolved = false;
-                }
+            if (ouAlgorithm == ALGO_C14N)
+                /*
+                 * a xml stream
+                 */
+            {
+                m_rIsC14N = true;
             }
         }
 };
@@ -488,10 +494,15 @@ class XSecParser::DsTransformContext
 class XSecParser::DsTransformsContext
     : public XSecParser::Context
 {
+    private:
+        bool & m_rIsC14N;
+
     public:
         DsTransformsContext(XSecParser & rParser,
-                std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
+                std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap,
+                bool & rIsC14N)
             : XSecParser::Context(rParser, std::move(pOldNamespaceMap))
+            , m_rIsC14N(rIsC14N)
         {
         }
 
@@ -501,7 +512,7 @@ class XSecParser::DsTransformsContext
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "Transform")
             {
-                return std::make_unique<DsTransformContext>(m_rParser, std::move(pOldNamespaceMap));
+                return std::make_unique<DsTransformContext>(m_rParser, std::move(pOldNamespaceMap), m_rIsC14N);
             }
             return XSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
         }
@@ -510,6 +521,15 @@ class XSecParser::DsTransformsContext
 class XSecParser::DsReferenceContext
     : public XSecParser::Context
 {
+    private:
+        OUString m_URI;
+        OUString m_Type;
+        OUString m_DigestValue;
+        bool m_IsC14N = false;
+        // Relevant for ODF. The digest algorithm selected by the DigestMethod
+        // element's Algorithm attribute. @see css::xml::crypto::DigestID.
+        sal_Int32 m_nReferenceDigestID = css::xml::crypto::DigestID::SHA1;
+
     public:
         DsReferenceContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
@@ -522,39 +542,37 @@ class XSecParser::DsReferenceContext
         {
             m_rParser.HandleIdAttr(xAttrs);
 
-            OUString ouUri = xAttrs->getValueByName("URI");
-            SAL_WARN_IF( ouUri.isEmpty(), "xmlsecurity.helper", "URI is empty" );
+            m_URI = xAttrs->getValueByName("URI");
+            SAL_WARN_IF(m_URI.isEmpty(), "xmlsecurity.helper", "URI is empty");
             // Remember the type of this reference.
-            OUString ouType = xAttrs->getValueByName("Type");
-            if (ouUri.startsWith("#"))
-            {
-                /*
-                * remove the first character '#' from the attribute value
-                */
-                m_rParser.m_pXSecController->addReference( ouUri.copy(1), m_rParser.m_nReferenceDigestID, ouType );
-            }
-            else
-            {
-                /*
-                * remember the uri
-                */
-                m_rParser.m_currentReferenceURI = ouUri;
-                m_rParser.m_bReferenceUnresolved = true;
-            }
+            m_Type = xAttrs->getValueByName("Type");
         }
 
         virtual void EndElement() override
         {
-            if (m_rParser.m_bReferenceUnresolved)
+            if (m_URI.startsWith("#"))
+            {
+                /*
+                * remove the first character '#' from the attribute value
+                */
+                m_rParser.m_pXSecController->addReference(m_URI.copy(1), m_nReferenceDigestID, m_Type);
+            }
+            else
+            {
+                if (m_IsC14N) // this is determined by nested ds:Transform
+                {
+                    m_rParser.m_pXSecController->addStreamReference(m_URI, false, m_nReferenceDigestID);
+                }
+                else
             /*
             * it must be an octet stream
             */
-            {
-                m_rParser.m_pXSecController->addStreamReference( m_rParser.m_currentReferenceURI, true, m_rParser.m_nReferenceDigestID );
-                m_rParser.m_bReferenceUnresolved = false;
+                {
+                    m_rParser.m_pXSecController->addStreamReference(m_URI, true, m_nReferenceDigestID);
+                }
             }
 
-            m_rParser.m_pXSecController->setDigestValue( m_rParser.m_nReferenceDigestID, m_rParser.m_ouDigestValue );
+            m_rParser.m_pXSecController->setDigestValue(m_nReferenceDigestID, m_DigestValue);
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
@@ -563,15 +581,15 @@ class XSecParser::DsReferenceContext
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "Transforms")
             {
-                return std::make_unique<DsTransformsContext>(m_rParser, std::move(pOldNamespaceMap));
+                return std::make_unique<DsTransformsContext>(m_rParser, std::move(pOldNamespaceMap), m_IsC14N);
             }
             if (nNamespace == XML_NAMESPACE_DS && rName == "DigestMethod")
             {
-                return std::make_unique<DsDigestMethodContext>(m_rParser, std::move(pOldNamespaceMap));
+                return std::make_unique<DsDigestMethodContext>(m_rParser, std::move(pOldNamespaceMap), m_nReferenceDigestID);
             }
             if (nNamespace == XML_NAMESPACE_DS && rName == "DigestValue")
             {
-                return std::make_unique<DsDigestValueContext>(m_rParser, std::move(pOldNamespaceMap), m_rParser.m_ouDigestValue);
+                return std::make_unique<DsDigestValueContext>(m_rParser, std::move(pOldNamespaceMap), m_DigestValue);
             }
             return XSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
         }
@@ -875,6 +893,7 @@ class XSecParser::XadesCertDigestContext
 {
     private:
         OUString m_Value;
+        sal_Int32 m_nReferenceDigestID = css::xml::crypto::DigestID::SHA1;
 
     public:
         XadesCertDigestContext(XSecParser & rParser,
@@ -885,7 +904,7 @@ class XSecParser::XadesCertDigestContext
 
         virtual void EndElement() override
         {
-            m_rParser.m_pXSecController->setCertDigest(m_Value);
+            m_rParser.m_pXSecController->setCertDigest(m_Value/* FIXME , m_nReferenceDigestID*/);
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
@@ -894,7 +913,7 @@ class XSecParser::XadesCertDigestContext
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "DigestMethod")
             {
-                return std::make_unique<DsDigestMethodContext>(m_rParser, std::move(pOldNamespaceMap));
+                return std::make_unique<DsDigestMethodContext>(m_rParser, std::move(pOldNamespaceMap), m_nReferenceDigestID);
             }
             if (nNamespace == XML_NAMESPACE_DS && rName == "DigestValue")
             {
@@ -1307,8 +1326,6 @@ XSecParser::XSecParser(XMLSignatureHelper& rXMLSignatureHelper,
     XSecController* pXSecController)
     : m_pNamespaceMap(new SvXMLNamespaceMap)
     , m_pXSecController(pXSecController)
-    , m_bReferenceUnresolved(false)
-    , m_nReferenceDigestID(css::xml::crypto::DigestID::SHA1)
     , m_rXMLSignatureHelper(rXMLSignatureHelper)
 {
     using namespace xmloff::token;
