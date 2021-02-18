@@ -339,6 +339,53 @@
         </info>
         <value>true</value>
       </prop>
+<<<<<<< HEAD   (62cbe2 tdf#140274 set an initial minimum size)
+=======
+      <prop oor:name="SmEditWindowZoomFactor" oor:type="xs:short" oor:nillable="false">
+        <!-- OldPath: Math/Misc -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Tools - Options  Formula  Settings - [Section] Miscellaneous options -->
+        <info>
+          <desc>Specifies the zoom factor for SmEditWindow. [UNIT=%]</desc>
+          <label>SmEditWindow zoom factor</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="10">
+            <info>
+              <desc>Specifies the minimum value allowed</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="1000">
+            <info>
+              <desc>Specifies the maximum value allowed.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+        <value>100</value>
+      </prop>
+      <prop oor:name="SmSyntaxVersion" oor:type="xs:short" oor:nillable="false">
+        <!-- OldPath: Math/Misc -->
+        <!-- OldLocation: Soffice.cfg -->
+        <!-- UIHints: Tools - Options  Formula  Settings - [Section] Miscellaneous options -->
+        <info>
+          <desc>Specifies which SmParser to use [UNIT=%]</desc>
+          <label>SmParser version</label>
+        </info>
+        <constraints>
+          <minInclusive oor:value="0">
+            <info>
+              <desc>Specifies the minimum value allowed</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="100">
+            <info>
+              <desc>Specifies the maximum value allowed.</desc>
+            </info>
+          </maxInclusive>
+        </constraints>
+        <value>5</value>
+      </prop>
+>>>>>>> CHANGE (9a8af4 Adjustable smeditwindow zoom)
     </group>
     <group oor:name="View">
       <info>
