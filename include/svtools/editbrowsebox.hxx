@@ -174,6 +174,7 @@ namespace svt
     protected:
         DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
         DECL_LINK(FocusInHdl, weld::Widget&, void);
+        DECL_LINK(FocusOutHdl, weld::Widget&, void);
     };
 
     class SVT_DLLPUBLIC EditControlBase : public ControlBase
@@ -191,6 +192,7 @@ namespace svt
         weld::Entry& get_widget() { return *m_pEntry; }
 
         virtual void connect_changed(const Link<weld::Entry&, void>& rLink) = 0;
+        virtual void connect_focus_out(const Link<weld::Widget&, void>& rLink) = 0;
 
     protected:
         void InitEditControlBase(weld::Entry* pEntry);
@@ -209,6 +211,11 @@ namespace svt
         virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override
         {
             m_xWidget->connect_changed(rLink);
+        }
+
+        virtual void connect_focus_out(const Link<weld::Widget&, void>& rLink) override
+        {
+            m_xWidget->connect_focus_out(rLink);
         }
 
     protected:
@@ -696,6 +703,7 @@ namespace svt
         virtual void dispose() override;
 
         virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override;
+        virtual void connect_focus_out(const Link<weld::Widget&, void>& rLink) override;
 
         weld::EntryFormatter& get_formatter();
 
@@ -762,6 +770,7 @@ namespace svt
         weld::PatternFormatter& get_formatter() { return *m_xEntryFormatter; }
 
         virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override;
+        virtual void connect_focus_out(const Link<weld::Widget&, void>& rLink) override;
 
         virtual void dispose() override;
     private:
@@ -995,6 +1004,7 @@ namespace svt
         virtual bool ProcessKey(const KeyEvent& rEvt) override;
 
         virtual void ChildFocusIn() override;
+        virtual void ChildFocusOut() override;
 
         css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCheckBoxCell(sal_Int32 _nRow, sal_uInt16 _nColumnPos,const TriState& eState);
         bool ControlHasFocus() const;
