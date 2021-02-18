@@ -429,6 +429,54 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf120660)
     pMod->SetInputOptions(aInputOption);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117706)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "A1", "A1");
+    insertStringToCell(*pModelObj, "A3", "A3");
+
+    // Use Adding Selection
+    dispatchCommand(mxComponent, ".uno:StatusSelectionModeExp", {});
+    Scheduler::ProcessEventsToIdle();
+
+    goToCell("A1");
+    dispatchCommand(mxComponent, ".uno:SelectRow", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+    lcl_AssertCurrentCursorPosition(0, 2);
+
+    dispatchCommand(mxComponent, ".uno:SelectRow", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // FIXME: The rows are not copied/pasted if using CopyToClip/PasteToClip
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    mxComponent->dispose();
+
+    // Open a new document
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: A1
+    // - Actual  : A3
+    CPPUNIT_ASSERT_EQUAL(OUString("A1"), pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("A3"), pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 2, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131442)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
