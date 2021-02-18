@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest:manifest xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0" manifest:version="1.3" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0">
+ <manifest:file-entry manifest:full-path="/" manifest:version="1.3" manifest:media-type="application/vnd.oasis.opendocument.presentation-template"/>
+ <manifest:file-entry manifest:full-path="styles.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="Pictures/1000020100000021000000087A16FD8FB901FE83.png" manifest:media-type="image/png"/>
+ <manifest:file-entry manifest:full-path="Pictures/100002010000001A0000001A609D6B9B144132F8.png" manifest:media-type="image/png"/>
+ <manifest:file-entry manifest:full-path="Pictures/10000201000000210000000835496FFA25AE5DB6.png" manifest:media-type="image/png"/>
+ <manifest:file-entry manifest:full-path="Pictures/100002010000001A0000001A21D7EADBA56038F4.png" manifest:media-type="image/png"/>
+ <manifest:file-entry manifest:full-path="Pictures/1000020100000008000000218CFF265B51917950.png" manifest:media-type="image/png"/>
+ <manifest:file-entry manifest:full-path="Pictures/100002010000004100000019BACEF928CB2A84CB.png" manifest:media-type="image/png"/>
+ <manifest:file-entry manifest:full-path="Pictures/100002010000004E000000192EFFFDEF12FDB2A8.png" manifest:media-type="image/png"/>
+ <manifest:file-entry manifest:full-path="Pictures/100002010000004D0000008BE35F31AC2914377D.png" manifest:media-type="image/png"/>
+ <manifest:file-entry manifest:full-path="Pictures/100002010000009E000000BD075AA48B79110C47.png" manifest:media-type="image/png"/>
+ <manifest:file-entry manifest:full-path="content.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="Thumbnails/thumbnail.png" manifest:media-type="image/png"/>
+ <manifest:file-entry manifest:full-path="meta.xml" manifest:media-type="text/xml"/>
+</manifest:manifest>

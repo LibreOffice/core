@@ -301,7 +301,7 @@
 #define STR_TEMPLATE_NAME3                      NC_("STR_TEMPLATE_NAME3", "Blue Curve")
 #define STR_TEMPLATE_NAME4                      NC_("STR_TEMPLATE_NAME4", "Blueprint Plans")
 #define STR_TEMPLATE_NAME5                      NC_("STR_TEMPLATE_NAME5", "Candy")
-#define STR_TEMPLATE_NAME6                      NC_("STR_TEMPLATE_NAME6", "")
+#define STR_TEMPLATE_NAME6                      NC_("STR_TEMPLATE_NAME6", "Yellow Idea")
 #define STR_TEMPLATE_NAME7                      NC_("STR_TEMPLATE_NAME7", "DNA")
 #define STR_TEMPLATE_NAME8                      NC_("STR_TEMPLATE_NAME8", "Focus")
 #define STR_TEMPLATE_NAME9                      NC_("STR_TEMPLATE_NAME9", "Forestbird")
