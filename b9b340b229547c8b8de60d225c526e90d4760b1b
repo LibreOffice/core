@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "8b53c2ba_a349ee78",
+        "filename": "cui/uiconfig/ui/acorexceptpage.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-18T09:55:03Z",
+      "side": 1,
+      "message": "AutoInclude to Exceptions List\nAutoExclude to AutoCorrection",
+      "parentUuid": "82a1f142_4c460ba6",
+      "range": {
+        "startLine": 73,
+        "startChar": 138,
+        "endLine": 73,
+        "endChar": 156
+      },
+      "revId": "b9b340b229547c8b8de60d225c526e90d4760b1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d757419c_5502303d",
         "filename": "cui/uiconfig/ui/acorexceptpage.ui",
         "patchSetId": 4
