@@ -14,10 +14,6 @@
     <columns>
       <!-- column-name text -->
       <column type="gchararray"/>
-      <!-- column-name value -->
-      <column type="gchararray"/>
-      <!-- column-name type -->
-      <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
     </columns>
@@ -26,9 +22,9 @@
     <columns>
       <!-- column-name text -->
       <column type="gchararray"/>
-      <!-- column-name value -->
+      <!-- column-name out -->
       <column type="gchararray"/>
-      <!-- column-name type -->
+      <!-- column-name in -->
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
@@ -49,10 +45,6 @@
   <object class="GtkTreeStore" id="object_inspector_services_liststore">
     <columns>
       <!-- column-name text -->
-      <column type="gchararray"/>
-      <!-- column-name value -->
-      <column type="gchararray"/>
-      <!-- column-name type -->
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
@@ -104,7 +96,7 @@
                     <child>
                       <object class="GtkTreeViewColumn" id="treecolumn">
                         <property name="resizable">True</property>
-                        <property name="title" translatable="yes" context="developmenttool|leftside_objectcolumn">Object</property>
+                        <property name="title" translatable="yes" context="developmenttool|object">Object</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext2"/>
                           <attributes>
@@ -204,6 +196,7 @@
                         <property name="vexpand">True</property>
                         <property name="model">object_inspector_interfaces_liststore</property>
                         <property name="search-column">0</property>
+                        <property name="show-expanders">False</property>
                         <property name="enable-tree-lines">True</property>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
@@ -211,35 +204,11 @@
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn4">
                             <property name="resizable">True</property>
-                            <property name="title" translatable="yes" context="developmenttool|object">Object</property>
+                            <property name="title" translatable="yes" context="developmenttool|name">Name</property>
                             <child>
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext4"/>
                               <attributes>
                                 <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn5">
-                            <property name="resizable">True</property>
-                            <property name="title" translatable="yes" context="developmenttool|value">Value</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="obj_insp_cellrenderertext5"/>
-                              <attributes>
-                                <attribute name="text">1</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn6">
-                            <property name="resizable">True</property>
-                            <property name="title" translatable="yes" context="developmenttool|type">Type</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="obj_insp_cellrenderertext6"/>
-                              <attributes>
-                                <attribute name="text">2</attribute>
                               </attributes>
                             </child>
                           </object>
@@ -281,35 +250,11 @@
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn7">
                             <property name="resizable">True</property>
-                            <property name="title" translatable="yes" context="developmenttool|object">Object</property>
+                            <property name="title" translatable="yes" context="developmenttool|name">Name</property>
                             <child>
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext7"/>
                               <attributes>
                                 <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn8">
-                            <property name="resizable">True</property>
-                            <property name="title" translatable="yes" context="developmenttool|value">Value</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="obj_insp_cellrenderertext8"/>
-                              <attributes>
-                                <attribute name="text">1</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn9">
-                            <property name="resizable">True</property>
-                            <property name="title" translatable="yes" context="developmenttool|type">Type</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="obj_insp_cellrenderertext9"/>
-                              <attributes>
-                                <attribute name="text">2</attribute>
                               </attributes>
                             </child>
                           </object>
@@ -429,7 +374,7 @@
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn10">
                             <property name="resizable">True</property>
-                            <property name="title" translatable="yes" context="developmenttool|object">Object</property>
+                            <property name="title" translatable="yes" context="developmenttool|method">Method</property>
                             <child>
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext10"/>
                               <attributes>
@@ -441,7 +386,7 @@
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn11">
                             <property name="resizable">True</property>
-                            <property name="title" translatable="yes" context="developmenttool|value">Value</property>
+                            <property name="title" translatable="yes" context="developmenttool|returntype">Return Type</property>
                             <child>
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext11"/>
                               <attributes>
@@ -453,7 +398,7 @@
                         <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn12">
                             <property name="resizable">True</property>
-                            <property name="title" translatable="yes" context="developmenttool|type">Type</property>
+                            <property name="title" translatable="yes" context="developmenttool|parameters">Parameters</property>
                             <child>
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext12"/>
                               <attributes>
