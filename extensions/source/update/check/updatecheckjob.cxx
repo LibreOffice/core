@@ -314,7 +314,7 @@ extensions_update_UpdateCheckJob_get_implementation(
     css::uno::Reference<css::frame::XDesktop2> desktop(
         css::frame::Desktop::create(context));
     rtl::Reference<UpdateCheckJob> job(new UpdateCheckJob(context, desktop));
-    desktop->addTerminateListener(job.get());
+    desktop->addTerminateListener(job);
     return cppu::acquire(job.get());
 }
 

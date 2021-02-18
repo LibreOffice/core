@@ -144,7 +144,7 @@ checkForUpdates(
 
             if( aUpdateInfoEnumeration->nextElement() >>= aEntry )
             {
-                uno::Reference< xml::dom::XNode > xNode( aEntry.UpdateDocument.get() );
+                uno::Reference< xml::dom::XNode > xNode( aEntry.UpdateDocument );
                 uno::Reference< xml::dom::XNodeList > xNodeList;
                 try {
                     xNodeList = xXPath->selectNodeList(xNode, aXPathExpression
