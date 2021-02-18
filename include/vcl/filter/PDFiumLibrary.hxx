@@ -10,15 +10,11 @@
 
 #pragma once
 
-#include <config_features.h>
+#include <memory>
 
 #include <com/sun/star/util/DateTime.hpp>
 
-#if HAVE_FEATURE_PDFIUM
-
 #include <vcl/dllapi.h>
-
-#include <memory>
 #include <rtl/instance.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/range/b2drectangle.hxx>
@@ -38,8 +34,6 @@
 #include <vcl/pdf/PDFFillMode.hxx>
 #include <vcl/pdf/PDFFindFlags.hxx>
 #include <vcl/pdf/PDFErrorType.hxx>
-
-#include <fpdf_doc.h>
 
 class SvMemoryStream;
 
@@ -217,30 +211,21 @@ public:
     virtual css::util::DateTime getTime() = 0;
 };
 
-class VCL_DLLPUBLIC PDFiumDocument final
+class VCL_DLLPUBLIC PDFiumDocument
 {
-private:
-    FPDF_DOCUMENT mpPdfDocument;
-
-private:
-    PDFiumDocument(const PDFiumDocument&) = delete;
-    PDFiumDocument& operator=(const PDFiumDocument&) = delete;
-
 public:
-    PDFiumDocument(FPDF_DOCUMENT pPdfDocument);
-    ~PDFiumDocument();
-    FPDF_DOCUMENT getPointer() { return mpPdfDocument; }
+    virtual ~PDFiumDocument() = default;
 
     // Page size in points
-    basegfx::B2DSize getPageSize(int nIndex);
-    int getPageCount();
-    int getSignatureCount();
-    int getFileVersion();
-    bool saveWithVersion(SvMemoryStream& rStream, int nFileVersion);
+    virtual basegfx::B2DSize getPageSize(int nIndex) = 0;
+    virtual int getPageCount() = 0;
+    virtual int getSignatureCount() = 0;
+    virtual int getFileVersion() = 0;
+    virtual bool saveWithVersion(SvMemoryStream& rStream, int nFileVersion) = 0;
 
-    std::unique_ptr<PDFiumPage> openPage(int nIndex);
-    std::unique_ptr<PDFiumSignature> getSignature(int nIndex);
-    std::vector<unsigned int> getTrailerEnds();
+    virtual std::unique_ptr<PDFiumPage> openPage(int nIndex) = 0;
+    virtual std::unique_ptr<PDFiumSignature> getSignature(int nIndex) = 0;
+    virtual std::vector<unsigned int> getTrailerEnds() = 0;
 };
 
 struct PDFiumLibrary final : public rtl::StaticWithInit<std::shared_ptr<PDFium>, PDFiumLibrary>
@@ -253,7 +238,5 @@ struct PDFiumLibrary final : public rtl::StaticWithInit<std::shared_ptr<PDFium>,
 VCL_DLLPUBLIC OUString convertPdfDateToISO8601(OUString const& rInput);
 
 } // namespace vcl::pdf
-
-#endif // HAVE_FEATURE_PDFIUM
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
