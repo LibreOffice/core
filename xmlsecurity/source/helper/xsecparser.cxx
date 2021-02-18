@@ -975,6 +975,9 @@ class XSecParser::XadesSigningCertificateContext
 class XSecParser::XadesSigningTimeContext
     : public XSecParser::Context
 {
+    private:
+        OUString m_Value;
+
     public:
         XadesSigningTimeContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
@@ -982,20 +985,14 @@ class XSecParser::XadesSigningTimeContext
         {
         }
 
-        virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& /*xAttrs*/) override
-        {
-            m_rParser.m_ouDate.clear();
-        }
-
         virtual void EndElement() override
         {
-            m_rParser.m_pXSecController->setDate( m_rParser.m_ouDate );
+            m_rParser.m_pXSecController->setDate("", m_Value);
         }
 
         virtual void Characters(OUString const& rChars) override
         {
-            m_rParser.m_ouDate += rChars;
+            m_Value += rChars;
         }
 };
 
@@ -1101,35 +1098,20 @@ class XSecParser::DcDateContext
     : public XSecParser::Context
 {
     private:
-        bool m_isIgnore = false;
+        OUString & m_rValue;
 
     public:
         DcDateContext(XSecParser & rParser,
-                std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
+                std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap,
+                OUString & rValue)
             : XSecParser::Context(rParser, std::move(pOldNamespaceMap))
+            , m_rValue(rValue)
         {
-        }
-
-        virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& /*xAttrs*/) override
-        {
-            m_isIgnore = !m_rParser.m_ouDate.isEmpty();
-        }
-
-        virtual void EndElement() override
-        {
-            if (!m_isIgnore)
-            {
-                m_rParser.m_pXSecController->setDate( m_rParser.m_ouDate );
-            }
         }
 
         virtual void Characters(OUString const& rChars) override
         {
-            if (!m_isIgnore)
-            {
-                m_rParser.m_ouDate += rChars;
-            }
+            m_rValue += rChars;
         }
 };
 
@@ -1137,29 +1119,32 @@ class XSecParser::DcDescriptionContext
     : public XSecParser::Context
 {
     private:
-        OUString m_Value;
+        OUString & m_rValue;
 
     public:
         DcDescriptionContext(XSecParser & rParser,
-                std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
+                std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap,
+                OUString & rValue)
             : XSecParser::Context(rParser, std::move(pOldNamespaceMap))
+            , m_rValue(rValue)
         {
-        }
-
-        virtual void EndElement() override
-        {
-            m_rParser.m_pXSecController->setDescription(m_Value);
         }
 
         virtual void Characters(OUString const& rChars) override
         {
-            m_Value += rChars;
+            m_rValue += rChars;
         }
 };
 
 class XSecParser::DsSignaturePropertyContext
     : public XSecParser::Context
 {
+    private:
+        enum class SignatureProperty { Unknown, Date, Description };
+        SignatureProperty m_Property = SignatureProperty::Unknown;
+        OUString m_Id;
+        OUString m_Value;
+
     public:
         DsSignaturePropertyContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
@@ -1170,10 +1155,22 @@ class XSecParser::DsSignaturePropertyContext
         virtual void StartElement(
             css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
-            OUString const ouIdAttr(m_rParser.HandleIdAttr(xAttrs));
-            if (!ouIdAttr.isEmpty())
+            m_Id = m_rParser.HandleIdAttr(xAttrs);
+        }
+
+        virtual void EndElement() override
+        {
+            switch (m_Property)
             {
-                m_rParser.m_pXSecController->setPropertyId( ouIdAttr );
+                case SignatureProperty::Unknown:
+                    SAL_INFO("xmlsecurity.helper", "Unknown property in ds:Object ignored");
+                    break;
+                case SignatureProperty::Date:
+                    m_rParser.m_pXSecController->setDate(m_Id, m_Value);
+                    break;
+                case SignatureProperty::Description:
+                    m_rParser.m_pXSecController->setDescription(m_Id, m_Value);
+                    break;
             }
         }
 
@@ -1183,11 +1180,13 @@ class XSecParser::DsSignaturePropertyContext
         {
             if (nNamespace == XML_NAMESPACE_DC && rName == "date")
             {
-                return std::make_unique<DcDateContext>(m_rParser, std::move(pOldNamespaceMap));
+                m_Property = SignatureProperty::Date;
+                return std::make_unique<DcDateContext>(m_rParser, std::move(pOldNamespaceMap), m_Value);
             }
             if (nNamespace == XML_NAMESPACE_DC && rName == "description")
             {
-                return std::make_unique<DcDescriptionContext>(m_rParser, std::move(pOldNamespaceMap));
+                m_Property = SignatureProperty::Description;
+                return std::make_unique<DcDescriptionContext>(m_rParser, std::move(pOldNamespaceMap), m_Value);
             }
             return XSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
         }
