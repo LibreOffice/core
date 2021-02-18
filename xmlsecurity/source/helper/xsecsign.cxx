@@ -128,8 +128,8 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
     if (nStorageFormat != embed::StorageFormats::OFOPXML)
     {
         internalSignatureInfor.signatureInfor.ouSignatureId = createId();
-        internalSignatureInfor.signatureInfor.ouPropertyId = createId();
-        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, internalSignatureInfor.signatureInfor.ouPropertyId, -1 );
+        internalSignatureInfor.signatureInfor.ouDateTimePropertyId = createId();
+        internalSignatureInfor.addReference(SignatureReferenceType::SAMEDOCUMENT, digestID, internalSignatureInfor.signatureInfor.ouDateTimePropertyId, -1 );
         size++;
 
         if (bXAdESCompliantIfODF)
