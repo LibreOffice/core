@@ -389,7 +389,7 @@ tools::Long Font::GetOrCalculateAverageFontWidth() const
         aUnscaledFont.SetAverageFontWidth(0);
         pVirDev->SetFont(aUnscaledFont);
         const double fAverageFontWidth(
-            pVirDev->GetTextWidth(OUString(aArray.data())) / static_cast<double>(nSize));
+            pVirDev->GetTextWidth(OUString(aArray.data(), nSize)) / static_cast<double>(nSize));
         const_cast<Font*>(this)->mpImplFont->SetCalculatedAverageFontWidth(basegfx::fround(fAverageFontWidth));
     }
 
