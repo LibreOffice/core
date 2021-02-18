@@ -29,6 +29,3 @@ extensions/uiconfig/sbibliography/ui/generalpage.ui://GtkLabel[@id='custom4'] or
 extensions/uiconfig/sbibliography/ui/generalpage.ui://GtkLabel[@id='custom2'] orphan-label
 extensions/uiconfig/sbibliography/ui/generalpage.ui://GtkLabel[@id='custom5'] orphan-label
 extensions/uiconfig/sbibliography/ui/generalpage.ui://GtkLabel[@id='custom3'] orphan-label
-extensions/uiconfig/sbibliography/ui/mappingdialog.ui://GtkLabel[@id='label6'] orphan-label
-extensions/uiconfig/sbibliography/ui/mappingdialog.ui://GtkLabel[@id='label15'] orphan-label
-extensions/uiconfig/sbibliography/ui/mappingdialog.ui://GtkLabel[@id='label27'] orphan-label
