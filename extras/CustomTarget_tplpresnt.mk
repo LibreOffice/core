@@ -18,6 +18,7 @@ extras_TEMPLATES_PRESENTATIONS := \
 	Focus \
 	Forestbird \
 	Grey_Elegant \
+	Growing_Liberty \
 	Inspiration \
 	Lights \
 	Metropolis \
@@ -100,6 +101,25 @@ extras_PRESENTATIONS_XMLFILES := \
 	Grey_Elegant/Pictures/10000201000000190000001945D72F17575B71B4.png \
 	Grey_Elegant/Pictures/10000000000001920000019230489F7A89351262.jpg \
 	Grey_Elegant/Pictures/100002CA0000029500000295A190AE1D987B676B.svg \
+	Growing_Liberty/meta.xml \
+	Growing_Liberty/styles.xml \
+	Growing_Liberty/content.xml \
+	Growing_Liberty/META-INF/manifest.xml \
+	Growing_Liberty/Thumbnails/thumbnail.png \
+	Growing_Liberty/Pictures/10000201000001F10000029333ED1BC48076B5C4.png \
+	Growing_Liberty/Pictures/10000000000007800000043801760C0AF0E62E0B.jpg \
+	Growing_Liberty/Pictures/10000000000007800000043827B5F54D1F4F498F.jpg \
+	Growing_Liberty/Pictures/100002010000050000000020D23CB52AADBCAD4A.png \
+	Growing_Liberty/Pictures/10000201000001F3000003548E51808DE171DA02.png \
+	Growing_Liberty/Pictures/10000C8F0000034200004A6ABD021DA9BD39254C.svg \
+	Growing_Liberty/Pictures/10000C1C0000034200004A6A2C92F38BC117DD3C.svg \
+	Growing_Liberty/Pictures/1000020100000020000002D01396E0588E1EBFBA.png \
+	Growing_Liberty/Pictures/10000201000005000000002010F5D1670B946E0C.png \
+	Growing_Liberty/Pictures/10000CA90000844B000003426738F0E80CCFF9F3.svg \
+	Growing_Liberty/Pictures/10000C340000844B000003422549B923A55839CC.svg \
+	Growing_Liberty/Pictures/1000020100000020000002D04D74467F50F635D0.png \
+	Growing_Liberty/Pictures/10000201000001F000000351DA39462E363D7ED3.png \
+	Growing_Liberty/Pictures/100002010000016A0000029374C9F2B8F26392AD.png \
 	Inspiration/content.xml \
 	Inspiration/META-INF/manifest.xml \
 	Inspiration/meta.xml \

@@ -17,6 +17,7 @@ $(eval $(call gb_Package_add_files,extras_tplpresnt,$(LIBO_SHARE_FOLDER)/templat
 	Vintage.otp \
 	Focus.otp \
 	Grey_Elegant.otp \
+	Growing_Liberty.otp \
 	Midnightblue.otp \
 	Vivid.otp \
 	Pencil.otp \
