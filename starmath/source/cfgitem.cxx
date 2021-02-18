@@ -125,6 +125,7 @@ struct SmCfgOther
 {
     SmPrintSize     ePrintSize;
     sal_uInt16      nPrintZoomFactor;
+    sal_uInt16      nSmEditWindowZoomFactor;
     sal_uInt16      nSmSyntaxVersion;
     bool            bPrintTitle;
     bool            bPrintFormulaText;
@@ -144,6 +145,7 @@ constexpr sal_uInt16 nDefaultSmSyntaxVersion(5);
 SmCfgOther::SmCfgOther()
     : ePrintSize(PRINT_SIZE_NORMAL)
     , nPrintZoomFactor(100)
+    , nSmEditWindowZoomFactor(100)
     // Defaulted as 5 so I have time to code the parser 6
     , nSmSyntaxVersion(nDefaultSmSyntaxVersion)
     , bPrintTitle(true)
@@ -751,6 +753,7 @@ void SmMathConfig::LoadOther()
     pOther->bPrintFrame = officecfg::Office::Math::Print::Frame::get();
     pOther->ePrintSize = static_cast<SmPrintSize>(officecfg::Office::Math::Print::Size::get());
     pOther->nPrintZoomFactor = officecfg::Office::Math::Print::ZoomFactor::get();
+    pOther->nSmEditWindowZoomFactor = officecfg::Office::Math::Misc::SmEditWindowZoomFactor::get();
     pOther->bIsSaveOnlyUsedSymbols = officecfg::Office::Math::LoadSave::IsSaveOnlyUsedSymbols::get();
     pOther->bIsAutoCloseBrackets = officecfg::Office::Math::Misc::AutoCloseBrackets::get();
     pOther->nSmSyntaxVersion = officecfg::Office::Math::Misc::DefaultSmSyntaxVersion::get();
@@ -774,6 +777,7 @@ void SmMathConfig::SaveOther()
     officecfg::Office::Math::Print::Frame::set(pOther->bPrintFrame, batch);
     officecfg::Office::Math::Print::Size::set(pOther->ePrintSize, batch);
     officecfg::Office::Math::Print::ZoomFactor::set(pOther->nPrintZoomFactor, batch);
+    officecfg::Office::Math::Misc::SmEditWindowZoomFactor::set(pOther->nSmEditWindowZoomFactor, batch);
     officecfg::Office::Math::LoadSave::IsSaveOnlyUsedSymbols::set(pOther->bIsSaveOnlyUsedSymbols, batch);
     officecfg::Office::Math::Misc::AutoCloseBrackets::set(pOther->bIsAutoCloseBrackets, batch);
     officecfg::Office::Math::Misc::DefaultSmSyntaxVersion::set(pOther->nSmSyntaxVersion, batch);
@@ -1062,6 +1066,31 @@ void SmMathConfig::SetPrintZoomFactor( sal_uInt16 nVal )
 }
 
 
+sal_uInt16 SmMathConfig::GetSmEditWindowZoomFactor() const
+{
+    sal_uInt16 smzoomfactor;
+    if (!pOther)
+        const_cast<SmMathConfig*>(this)->LoadOther();
+    smzoomfactor = pOther->nSmEditWindowZoomFactor;
+    if(smzoomfactor < 10 || smzoomfactor > 1000)
+        return 100;
+    else
+        return smzoomfactor;
+}
+
+
+void SmMathConfig::SetSmEditWindowZoomFactor( sal_uInt16 nVal )
+{
+    if (!pOther)
+        LoadOther();
+    if (nVal != pOther->nSmEditWindowZoomFactor)
+    {
+        pOther->nSmEditWindowZoomFactor = nVal;
+        SetOtherModified( true );
+    }
+}
+
+
 void SmMathConfig::SetOtherIfNotEqual( bool &rbItem, bool bNewVal )
 {
     if (bNewVal != rbItem)
@@ -1235,6 +1264,10 @@ void SmMathConfig::ItemSetToConfig(const SfxItemSet &rSet)
     {   nU16 = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
         SetPrintZoomFactor( nU16 );
     }
+    if (rSet.GetItemState(SID_SMEDITWINDOWZOOM, true, &pItem) == SfxItemState::SET)
+    {   nU16 = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
+        SetSmEditWindowZoomFactor( nU16 );
+    }
     if (rSet.GetItemState(SID_PRINTTITLE, true, &pItem) == SfxItemState::SET)
     {   bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
         SetPrintTitle( bVal );
@@ -1290,6 +1323,8 @@ void SmMathConfig::ConfigToItemSet(SfxItemSet &rSet) const
                            sal::static_int_cast<sal_uInt16>(GetPrintSize())));
     rSet.Put(SfxUInt16Item(pPool->GetWhich(SID_PRINTZOOM),
                            GetPrintZoomFactor()));
+    rSet.Put(SfxUInt16Item(pPool->GetWhich(SID_SMEDITWINDOWZOOM),
+                           GetSmEditWindowZoomFactor()));
 
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTTITLE), IsPrintTitle()));
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTTEXT),  IsPrintFormulaText()));
