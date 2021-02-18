@@ -73,6 +73,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     mtfdemo \
     visualbackendtest \
 	$(if $(and $(ENABLE_GTK3), $(filter LINUX %BSD SOLARIS,$(OS))), gtktiledviewer) \
+    $(if $(filter EMSCRIPTEN,$(OS)),wasm-qt5-mandelbrot) \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
@@ -471,6 +472,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(filter iOS MACOSX,$(OS)), \
 		MacOSXSpell \
 	) \
+	$(if $(filter EMSCRIPTEN,$(OS)),vclplug_qt5) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,postgresqlsdbc, \
@@ -538,6 +540,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	$(if $(filter MSC,$(COM)),cli_cppuhelper) \
 	$(if $(filter $(OS),ANDROID),lo-bootstrap) \
 	$(if $(filter $(OS),MACOSX),OOoSpotlightImporter) \
+    cppunitmain \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
@@ -553,9 +556,13 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
 	) \
 	log_uno_uno \
 	unsafe_uno_uno \
-	$(if $(filter MSC,$(COM)), \
-        $(if $(filter INTEL,$(CPUNAME)),msci, \
-		$(if $(filter ARM64,$(CPUNAME)),msca,mscx)),gcc3)_uno \
+    $(if $(filter EMSCRIPTEN,$(OS)),, \
+        $(if $(filter MSC,$(COM)), \
+            $(if $(filter INTEL,$(CPUNAME)),msci_uno) \
+            $(if $(filter X86_64,$(CPUNAME)),mscx_uno) \
+            $(if $(filter ARM64,$(CPUNAME)),msca_uno) \
+	, gcc3_uno) \
+    ) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PRIVATELIBS_URE,ure, \
@@ -573,12 +580,15 @@ $(eval $(call gb_Helper_register_libraries_for_install,PRIVATELIBS_URE,ure, \
 	proxyfac \
 	reflection \
 	reg \
-	sal_textenc \
 	stocservices \
 	store \
 	unoidl \
 	uuresolver \
 	xmlreader \
+))
+
+$(eval $(call gb_Helper_register_plugins_for_install,PRIVATELIBS_URE,ure, \
+	sal_textenc \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
@@ -916,7 +926,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 		$(if $(ENABLE_SCRIPTING_BEANSHELL),scripting_ScriptsBeanShell) \
 		$(if $(ENABLE_SCRIPTING_JAVASCRIPT),scripting_ScriptsJavaScript) \
 	) \
-	$(if $(DISABLE_SCRIPTING),,scripting_scriptbindinglib) \
+	$(if $(filter SCRIPTING,$(BUILD_TYPE)),scripting_scriptbindinglib) \
 	$(if $(filter $(OS),MACOSX),sysui_osxicons) \
 	wizards_basicshare \
 	wizards_basicsrvaccess2base \
@@ -1128,7 +1138,7 @@ $(eval $(call gb_Helper_register_mos,\
 	vcl \
 	wiz \
 	wpt \
-	$(if $(ENABLE_NSS),xsc) \
+	$(if $(ENABLE_NSS)$(ENABLE_OPENSSL),xsc) \
 ))
 
 # UI configuration
@@ -1175,7 +1185,7 @@ $(eval $(call gb_Helper_register_uiconfigs,\
 	uui \
 	vcl \
 	writerperfect \
-	$(if $(ENABLE_NSS),xmlsec) \
+	$(if $(ENABLE_NSS)$(ENABLE_OPENSSL),xmlsec) \
 ))
 
 ifeq ($(gb_GBUILDSELFTEST),t)

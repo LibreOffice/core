@@ -148,6 +148,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	uui \
 	vbahelper \
 	vcl \
+	wasm \
 	winaccessibility \
 	wizards \
 	writerfilter \

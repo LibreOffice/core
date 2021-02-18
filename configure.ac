@@ -807,6 +807,8 @@ dnl Sequential to keep the logic very simple
 dnl These values may be checked and reset later.
 dnl ===================================================================
 #defaults unless the os test overrides this:
+test_cmis=yes
+test_curl=yes
 test_randr=yes
 test_xrender=yes
 test_cups=yes
@@ -960,6 +962,7 @@ darwin*|macos*) # macOS
 ;;
 
 ios*) # iOS
+    test_cmis=no
     test_randr=no
     test_xrender=no
     test_freetype=no
@@ -1069,7 +1072,6 @@ linux-android*)
     build_gstreamer_1_0=no
     enable_lotuswordpro=no
     enable_mpl_subset=yes
-    enable_coinmp=yes
     enable_lpsolve=no
     enable_mariadb_sdbc=no
     enable_report_builder=no
@@ -1105,6 +1107,29 @@ haiku*)
     enable_postgresql_sdbc=no
     enable_firebird_sdbc=no
     _os=Haiku
+    ;;
+
+emscripten)
+    build_gstreamer_1_0=no
+    enable_lpsolve=no
+    enable_report_builder=no
+    with_theme="breeze"
+    test_cmis=no
+    test_cups=no
+    test_curl=no
+    test_dbus=no
+    test_fontconfig=no
+    test_freetype=no
+    test_gtk=no
+    test_randr=no
+    test_xrender=no
+    enable_postgresql_sdbc=no
+    enable_firebird_sdbc=no
+    enable_mariadb_sdbc=no
+    with_system_zlib=no
+    _os=Emscripten
+
+    BUILD_TYPE="$BUILD_TYPE FONTCONFIG FREETYPE"
     ;;
 
 *)
@@ -1257,10 +1282,24 @@ if test $_os != "WINNT"; then
 fi
 AC_SUBST(DLOPEN_LIBS)
 
-AC_ARG_ENABLE(ios-simulator,
-    AS_HELP_STRING([--enable-ios-simulator],
-        [build for iOS simulator])
-)
+dnl ===================================================================
+dnl Sanity checks for Emscripten SDK setup
+dnl ===================================================================
+
+if test "$_os" = "Emscripten"; then
+    EMSCRIPTEN_ERROR=0
+    if ! which emconfigure >/dev/null 2>&1; then
+        AC_MSG_WARN([emconfigure must be in your \$PATH])
+        EMSCRIPTEN_ERROR=1
+    fi
+    if test -z "$EMMAKEN_JUST_CONFIGURE"; then
+	AC_MSG_WARN(["\$EMMAKEN_JUST_CONFIGURE wasn't set by emconfigure. Prefix configure or use autogen.sh])
+        EMSCRIPTEN_ERROR=1
+    fi
+    if test $EMSCRIPTEN_ERROR -ne 0; then
+        AC_MSG_ERROR(["Please fix your EMSDK setup to build with Emscripten!"])
+    fi
+fi
 
 ###############################################################################
 # Extensions switches --enable/--disable
@@ -1274,6 +1313,11 @@ AC_ARG_ENABLE(ios-simulator,
 # extensions are built anyway, just not integrated in the installer,
 # if you use --disable-extension-integration. Is that really the
 # case?
+
+AC_ARG_ENABLE(ios-simulator,
+    AS_HELP_STRING([--enable-ios-simulator],
+        [build for iOS simulator])
+)
 
 libo_FUZZ_ARG_ENABLE(extension-integration,
     AS_HELP_STRING([--disable-extension-integration],
@@ -1791,6 +1835,13 @@ libo_FUZZ_ARG_ENABLE(cipher-openssl-backend,
     AS_HELP_STRING([--enable-cipher-openssl-backend],
         [Enable using OpenSSL as the actual implementation of the rtl/cipher.h functionality.
          Requires --enable-openssl.]))
+
+AC_ARG_ENABLE(nss,
+    AS_HELP_STRING([--disable-nss],
+        [Disable using NSS. If disabled,
+         components will either use GNUTLS or openssl. Work in progress,
+         use only if you are hacking on it.]),
+,enable_nss=yes)
 
 AC_ARG_ENABLE(library-bin-tar,
     AS_HELP_STRING([--enable-library-bin-tar],
@@ -2592,6 +2643,8 @@ AC_ARG_WITH(onedrive-client-secret,
         authentication on OneDrive. If either this or
         --with-onedrive-client-id is empty, the feature will be disabled]),
 )
+
+
 dnl ===================================================================
 dnl Do we want to use pre-build binary tarball for recompile
 dnl ===================================================================
@@ -2830,7 +2883,7 @@ dnl "desktop" one but a "mobile" one, we are always cross-compiling.
 dnl Note the direction of the implication; there is no assumption that
 dnl cross-compiling would imply a non-desktop OS.
 
-if test $_os != iOS -a $_os != Android -a "$enable_fuzzers" != "yes"; then
+if test $_os != iOS -a $_os != Android -a $_os != Emscripten -a "$enable_fuzzers" != "yes"; then
     BUILD_TYPE="$BUILD_TYPE DESKTOP"
     AC_DEFINE(HAVE_FEATURE_DESKTOP)
     AC_DEFINE(HAVE_FEATURE_MULTIUSER_ENVIRONMENT)
@@ -2881,7 +2934,7 @@ fi
 if test -z "$enable_scripting"; then
     # Disable scripting for iOS unless specifically overridden
     # with --enable-scripting.
-    if test $_os != iOS; then
+    if test $_os != iOS -o $_os = Emscripten; then
         enable_scripting=yes
     fi
 fi
@@ -2895,7 +2948,7 @@ else
     SCPDEFS="$SCPDEFS -DDISABLE_SCRIPTING"
 fi
 
-if test $_os = iOS -o $_os = Android; then
+if test $_os = iOS -o $_os = Android -o $_os = Emscripten; then
     # Disable dynamic_loading always for iOS and Android
     enable_dynamic_loading=no
 elif test -z "$enable_dynamic_loading"; then
@@ -4091,6 +4144,8 @@ if test "$COM_IS_CLANG" = TRUE; then
         [my_apple_clang=yes],[my_apple_clang=])
     if test "$my_apple_clang" = yes; then
         AC_MSG_RESULT([assumed yes (Apple Clang)])
+    elif test "$_os" = Emscripten; then
+        AC_MSG_RESULT([assumed yes (Emscripten Clang)])
     else
         if test "$_os" = WINNT; then
             dnl In which case, assume clang-cl:
@@ -4171,7 +4226,7 @@ fi
 # ===================================================================
 
 HAVE_GCC_GGDB2=
-if test "$GCC" = "yes"; then
+if test "$GCC" = "yes" -a "$_os" != "Emscripten"; then
     AC_MSG_CHECKING([whether $CC_BASE supports -ggdb2])
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -Werror -ggdb2"
@@ -4399,7 +4454,7 @@ fi
 AC_SUBST(USE_LD)
 
 HAVE_LD_BSYMBOLIC_FUNCTIONS=
-if test "$GCC" = "yes"; then
+if test "$GCC" = "yes" -a "$_os" != Emscripten ; then
     AC_MSG_CHECKING([for -Bsymbolic-functions linker support])
     bsymbolic_functions_ldflags_save=$LDFLAGS
     LDFLAGS="$LDFLAGS -Wl,-Bsymbolic-functions"
@@ -5039,6 +5094,25 @@ solaris*)
     SOLARINC="$SOLARINC -I/usr/local/include"
     ;;
 
+emscripten*)
+    COM=GCC
+    USING_X11=
+    OS=EMSCRIPTEN
+    RTL_OS=Emscripten
+    P_SEP=:
+
+    case "$host_cpu" in
+    wasm32|wasm64)
+        ;;
+    *)
+        AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
+        ;;
+    esac
+    CPUNAME=INTEL
+    RTL_ARCH=x86
+    PLATFORMID=linux_x86
+    ;;
+
 *)
     AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice for!])
     ;;
@@ -5163,9 +5237,10 @@ if test "$cross_compiling" = "yes"; then
     (
     unset COM USING_X11 OS CPUNAME
     unset CC CXX SYSBASE CFLAGS
-    unset AR NM OBJDUMP PKG_CONFIG RANLIB READELF STRIP
+    unset AR LD NM OBJDUMP PKG_CONFIG RANLIB READELF STRIP
     unset CPPUNIT_CFLAGS CPPUNIT_LIBS
-    unset LIBXML_CFLAGS LIBXML_LIBS LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC PKG_CONFIG_LIBDIR
+    unset LIBXML_CFLAGS LIBXML_LIBS LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC
+    unset PKG_CONFIG_LIBDIR PKG_CONFIG_PATH
     if test -n "$CC_FOR_BUILD"; then
         export CC="$CC_FOR_BUILD"
         CC_BASE=`first_arg_basename "$CC"`
@@ -5177,6 +5252,7 @@ if test "$cross_compiling" = "yes"; then
     test -n "$PKG_CONFIG_FOR_BUILD" && export PKG_CONFIG="$PKG_CONFIG_FOR_BUILD"
     cd CONF-FOR-BUILD
 
+    # Handle host configuration, which affects the cross-toolset too
     sub_conf_opts=""
     test -n "$enable_ccache" && sub_conf_opts="$sub_conf_opts --enable-ccache=$enable_ccache"
     test -n "$with_ant_home" && sub_conf_opts="$sub_conf_opts --with-ant-home=$with_ant_home"
@@ -5211,6 +5287,7 @@ if test "$cross_compiling" = "yes"; then
         --disable-gstreamer-1-0 \
         --disable-gtk3 \
         --disable-mariadb-sdbc \
+        --disable-nss \
         --disable-online-update \
         --disable-opencl \
         --disable-pdfimport \
@@ -5233,7 +5310,9 @@ if test "$cross_compiling" = "yes"; then
     PERMITTED_BUILD_TARGETS="
         AVMEDIA
         BOOST
+        CAIRO
         CLUCENE
+        CURL
         DBCONNECTIVITY
         DESKTOP
         DYNLOADING
@@ -5449,6 +5528,12 @@ if test "$USING_X11" != TRUE; then
     test_qt5=no
     test_gtk3_kde5=no
     enable_cairo_canvas=no
+fi
+
+if test "$OS" = "EMSCRIPTEN"; then
+    test_qt5=yes
+    enable_cairo_canvas=yes
+    enable_qt5=yes
 fi
 
 if test "$OS" = "HAIKU"; then
@@ -6039,9 +6124,12 @@ if test "$_os" != "WINNT"; then
 fi
 AC_SUBST(AR)
 AC_SUBST(DLLTOOL)
+AC_SUBST(LD)
 AC_SUBST(NM)
 AC_SUBST(OBJDUMP)
 AC_SUBST(PKG_CONFIG)
+AC_SUBST(PKG_CONFIG_PATH)
+AC_SUBST(PKG_CONFIG_LIBDIR)
 AC_SUBST(RANLIB)
 AC_SUBST(READELF)
 AC_SUBST(STRIP)
@@ -7030,7 +7118,7 @@ dnl ===================================================================
 dnl Check for system libcmis
 dnl ===================================================================
 # libcmis requires curl and we can't build curl for iOS
-if test $_os != iOS; then
+if test "$test_cmis" = "yes"; then
     libo_CHECK_SYSTEM_MODULE([libcmis],[LIBCMIS],[libcmis-0.5 >= 0.5.2])
     ENABLE_LIBCMIS=TRUE
 else
@@ -9173,6 +9261,9 @@ if test "$with_system_libxml" = "auto"; then
     WINNT|iOS|Android)
         with_system_libxml="$with_system_libs"
         ;;
+    Emscripten)
+        with_system_libxml=no
+        ;;
     *)
         if test "$enable_fuzzers" != "yes"; then
             with_system_libxml=yes
@@ -10003,7 +10094,7 @@ if test "$with_system_curl" = "auto"; then
     with_system_curl="$with_system_libs"
 fi
 
-if test "$with_system_curl" = "yes"; then
+if test "$test_curl" = "yes" -a "$with_system_curl" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_CURL=TRUE
 
@@ -10035,6 +10126,8 @@ if test "$with_system_curl" = "yes"; then
     fi
 
     ENABLE_CURL=TRUE
+elif test "$test_curl" = "no"; then
+    AC_MSG_RESULT([none])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_CURL=
@@ -10177,7 +10270,7 @@ AC_SUBST(SYSTEM_OPENLDAP)
 dnl ===================================================================
 dnl Check for system NSS
 dnl ===================================================================
-if test "$enable_fuzzers" != "yes"; then
+if test "$enable_fuzzers" != "yes" -a "$enable_nss" = "yes"; then
     libo_CHECK_SYSTEM_MODULE([nss],[NSS],[nss >= 3.9.3 nspr >= 4.8])
     AC_DEFINE(HAVE_FEATURE_NSS)
     ENABLE_NSS="TRUE"
@@ -10656,10 +10749,11 @@ fi
 dnl ===================================================================
 dnl Check for system openssl
 dnl ===================================================================
-DISABLE_OPENSSL=
+ENABLE_OPENSSL=
 AC_MSG_CHECKING([whether to disable OpenSSL usage])
 if test "$enable_openssl" = "yes"; then
     AC_MSG_RESULT([no])
+    ENABLE_OPENSSL=TRUE
     if test "$_os" = Darwin ; then
         # OpenSSL is deprecated when building for 10.7 or later.
         #
@@ -10687,16 +10781,15 @@ if test "$enable_openssl" = "yes"; then
     fi
 else
     AC_MSG_RESULT([yes])
-    DISABLE_OPENSSL=TRUE
 
     # warn that although OpenSSL is disabled, system libraries may depend on it
     AC_MSG_WARN([OpenSSL has been disabled. No code compiled here will make use of it but system libraries may create indirect dependencies])
     add_warning "OpenSSL has been disabled. No code compiled here will make use of it but system libraries may create indirect dependencies"
 fi
 
-AC_SUBST([DISABLE_OPENSSL])
+AC_SUBST([ENABLE_OPENSSL])
 
-if test "$enable_cipher_openssl_backend" = yes && test "$DISABLE_OPENSSL" = TRUE; then
+if test "$enable_cipher_openssl_backend" = yes && test "$ENABLE_OPENSSL" != TRUE; then
     if test "$libo_fuzzed_enable_cipher_openssl_backend" = yes; then
         AC_MSG_NOTICE([Resetting --enable-cipher-openssl-backend=no])
         enable_cipher_openssl_backend=no
@@ -11343,6 +11436,8 @@ if test -z "$build_vcl_plugins"; then
     build_vcl_plugins="none"
 fi
 AC_MSG_NOTICE([VCLplugs to be built: $build_vcl_plugins])
+VCL_PLUGIN_INFO=$R
+AC_SUBST([VCL_PLUGIN_INFO])
 
 dnl ===================================================================
 dnl check for dbus support
@@ -12408,6 +12503,7 @@ MOC5="moc"
 QT5_GOBJECT_CFLAGS=""
 QT5_GOBJECT_LIBS=""
 QT5_HAVE_GOBJECT=""
+QT5_PLATFORMS_SRCDIR=""
 if test \( "$test_kf5" = "yes" -a "$ENABLE_KF5" = "TRUE" \) -o \
         \( "$test_qt5" = "yes" -a "$ENABLE_QT5" = "TRUE" \) -o \
         \( "$test_gtk3_kde5" = "yes" -a "$ENABLE_GTK3_KDE5" = "TRUE" \)
@@ -12420,10 +12516,18 @@ then
     fi
 
     qt5_test_include="QtWidgets/qapplication.h"
-    qt5_test_library="libQt5Widgets.so"
+    if test "$_os" = "Emscripten"; then
+        qt5_test_library="libQt5Widgets.a"
+    else
+        qt5_test_library="libQt5Widgets.so"
+    fi
 
     dnl Check for qmake5
-    AC_PATH_PROGS( QMAKE5, [qmake-qt5 qmake], no, [$QT5DIR/bin:$PATH])
+    if test -n "$QT5DIR"; then
+        AC_PATH_PROG(QMAKE5, [qmake], no, [$QT5DIR/bin])
+    else
+        AC_PATH_PROGS(QMAKE5, [qmake-qt5 qmake], no)
+    fi
     if test "$QMAKE5" = "no"; then
         AC_MSG_ERROR([Qmake not found.  Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
     else
@@ -12442,6 +12546,8 @@ then
 
     qt5_incdirs="`$QMAKE5 -query QT_INSTALL_HEADERS` $qt5_incdirs"
     qt5_libdirs="`$QMAKE5 -query QT_INSTALL_LIBS` $qt5_libdirs"
+    qt5_platformsdir="`$QMAKE5 -query QT_INSTALL_PLUGINS`/platforms"
+    QT5_PLATFORMS_SRCDIR="$qt5_platformsdir"
 
     AC_MSG_CHECKING([for Qt5 headers])
     qt5_incdir="no"
@@ -12477,9 +12583,21 @@ then
         AC_MSG_ERROR([Qt5 libraries not found.  Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
     fi
 
+    if test "$_os" = "Emscripten"; then
+        if test ! -f "$QT5_PLATFORMS_SRCDIR"/wasm_shell.html ; then
+            QT5_PLATFORMS_SRCDIR="${QT5_PLATFORMS_SRCDIR/plugins/src\/plugins}/wasm"
+        fi
+	if test ! -f "${qt5_platformsdir}"/libqwasm.a -o ! -f "$QT5_PLATFORMS_SRCDIR"/wasm_shell.html; then
+            AC_MSG_ERROR([No Qt5 WASM QPA plugin found in ${qt5_platformsdir} or ${QT5_PLATFORMS_SRCDIR}])
+        fi
+    fi
+
     QT5_CFLAGS="-I$qt5_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT -DQT_NO_VERSION_TAGGING"
     QT5_CFLAGS=$(printf '%s' "$QT5_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     QT5_LIBS="-L$qt5_libdir -lQt5Core -lQt5Gui -lQt5Widgets -lQt5Network"
+    if test "$_os" = "Emscripten"; then
+        QT5_LIBS="$QT5_LIBS -lqtpcre2 -lQt5EventDispatcherSupport -lQt5FontDatabaseSupport -L${qt5_platformsdir} -lqwasm"
+    fi
 
     if test "$USING_X11" = TRUE; then
         PKG_CHECK_MODULES(QT5_XCB,[xcb],,[AC_MSG_ERROR([XCB not found, which is needed for correct app grouping in X11.])])
@@ -12519,6 +12637,7 @@ AC_SUBST(MOC5)
 AC_SUBST(QT5_GOBJECT_CFLAGS)
 AC_SUBST(QT5_GOBJECT_LIBS)
 AC_SUBST(QT5_HAVE_GOBJECT)
+AC_SUBST(QT5_PLATFORMS_SRCDIR)
 
 dnl ===================================================================
 dnl KF5 Integration
