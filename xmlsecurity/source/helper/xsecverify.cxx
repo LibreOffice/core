@@ -317,7 +317,7 @@ void XSecController::setGpgOwner( OUString const & ouGpgOwner )
     isi.signatureInfor.ouGpgOwner = ouGpgOwner;
 }
 
-void XSecController::setDate( OUString const & ouDate )
+void XSecController::setDate(OUString const& rId, OUString const& ouDate)
 {
     if (m_vInternalSignatureInformations.empty())
     {
@@ -325,17 +325,31 @@ void XSecController::setDate( OUString const & ouDate )
         return;
     }
     InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
+    // there may be multiple timestamps in a signature - check them for consistency
+    if (!isi.signatureInfor.ouDateTime.isEmpty()
+        && isi.signatureInfor.ouDateTime != ouDate)
+    {
+        isi.signatureInfor.hasInconsistentSigningTime = true;
+    }
     (void)utl::ISO8601parseDateTime( ouDate, isi.signatureInfor.stDateTime);
     isi.signatureInfor.ouDateTime = ouDate;
+    if (!rId.isEmpty())
+    {
+        isi.signatureInfor.ouDateTimePropertyId = rId;
+    }
 }
 
-void XSecController::setDescription(const OUString& rDescription)
+void XSecController::setDescription(OUString const& rId, OUString const& rDescription)
 {
     if (m_vInternalSignatureInformations.empty())
         return;
 
     InternalSignatureInformation& rInformation = m_vInternalSignatureInformations.back();
     rInformation.signatureInfor.ouDescription = rDescription;
+    if (!rId.isEmpty())
+    {
+        rInformation.signatureInfor.ouDescriptionPropertyId = rId;
+    }
 }
 
 void XSecController::setSignatureBytes(const uno::Sequence<sal_Int8>& rBytes)
@@ -427,27 +441,6 @@ void XSecController::setId( OUString const & ouId )
     }
     InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
     isi.signatureInfor.ouSignatureId = ouId;
-}
-
-void XSecController::setPropertyId( OUString const & ouPropertyId )
-{
-    if (m_vInternalSignatureInformations.empty())
-    {
-        SAL_INFO("xmlsecurity.helper","XSecController::setPropertyId: no signature");
-        return;
-    }
-    InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
-
-    if (isi.signatureInfor.ouPropertyId.isEmpty())
-    {
-        // <SignatureProperty> ID attribute is for the date.
-        isi.signatureInfor.ouPropertyId = ouPropertyId;
-    }
-    else
-    {
-        // <SignatureProperty> ID attribute is for the description.
-        isi.signatureInfor.ouDescriptionPropertyId = ouPropertyId;
-    }
 }
 
 /* public: for signature verify */
