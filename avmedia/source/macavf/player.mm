@@ -333,7 +333,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
     if( !pGrabber->create( pMovie ) )
         return {};
 
-    return pGrabber.get();
+    return pGrabber;
 }
 
 

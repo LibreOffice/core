@@ -513,7 +513,7 @@ Reference< XResultSetMetaData > SAL_CALL MacabResultSet::getMetaData()
     if (!m_xMetaData.is())
         m_xMetaData = new MacabResultSetMetaData(m_xStatement->getOwnConnection(), m_sTableName);
 
-    Reference< XResultSetMetaData > xMetaData = m_xMetaData.get();
+    Reference< XResultSetMetaData > xMetaData = m_xMetaData;
     return xMetaData;
 }
 
@@ -668,7 +668,7 @@ Reference< XInterface > SAL_CALL MacabResultSet::getStatement()
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    Reference< XStatement > xStatement = m_xStatement.get();
+    Reference< XStatement > xStatement = m_xStatement;
     return xStatement;
 }
 

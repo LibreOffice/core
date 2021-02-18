@@ -131,7 +131,7 @@ Reference< XResultSetMetaData > SAL_CALL MacabPreparedStatement::getMetaData()
         m_xMetaData = new MacabResultSetMetaData(getOwnConnection(),sTableName);
         setMacabFields();
     }
-    Reference< XResultSetMetaData > xMetaData = m_xMetaData.get();
+    Reference< XResultSetMetaData > xMetaData = m_xMetaData;
     return xMetaData;
 }
 

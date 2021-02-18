@@ -44,7 +44,7 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString&
     if( !xPlayer->create( aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ) )  )
         return {};
 
-    return uno::Reference<media::XPlayer>(xPlayer.get());
+    return uno::Reference<media::XPlayer>(xPlayer);
 }
 
 
