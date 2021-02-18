@@ -205,7 +205,7 @@ void FilterSettingsBase::importRecord( sal_Int32 /*nRecId*/, SequenceInputStream
 {
 }
 
-ApiFilterSettings FilterSettingsBase::finalizeImport( sal_Int32 /*nMaxCount*/ )
+ApiFilterSettings FilterSettingsBase::finalizeImport()
 {
     return ApiFilterSettings();
 }
@@ -295,25 +295,23 @@ void DiscreteFilter::importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm 
     }
 }
 
-ApiFilterSettings DiscreteFilter::finalizeImport( sal_Int32 nMaxCount )
+ApiFilterSettings DiscreteFilter::finalizeImport()
 {
     ApiFilterSettings aSettings;
-    if( static_cast< sal_Int32 >( maValues.size() ) <= nMaxCount )
-    {
-        aSettings.maFilterFields.reserve( maValues.size() );
+    aSettings.maFilterFields.reserve( maValues.size() );
 
-        // insert all filter values
-        aSettings.appendField( true, maValues );
+    // insert all filter values
+    aSettings.appendField( true, maValues );
 
-        // extra field for 'show empty'
-        if( mbShowBlank )
-            aSettings.appendField( false, FilterOperator2::EMPTY, OUString() );
+    // extra field for 'show empty'
+    if( mbShowBlank )
+        aSettings.appendField( false, FilterOperator2::EMPTY, OUString() );
 
-        /*  Require disabled regular expressions, filter entries may contain
-            any RE meta characters. */
-        if( !maValues.empty() )
-            aSettings.mobNeedsRegExp = false;
-    }
+    /*  Require disabled regular expressions, filter entries may contain
+        any RE meta characters. */
+    if( !maValues.empty() )
+        aSettings.mobNeedsRegExp = false;
+
     return aSettings;
 }
 
@@ -347,7 +345,7 @@ void Top10Filter::importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm )
     }
 }
 
-ApiFilterSettings Top10Filter::finalizeImport( sal_Int32 /*nMaxCount*/ )
+ApiFilterSettings Top10Filter::finalizeImport()
 {
     sal_Int32 nOperator = mbTop ?
         (mbPercent ? FilterOperator2::TOP_PERCENT : FilterOperator2::TOP_VALUES) :
@@ -455,7 +453,7 @@ void CustomFilter::importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm )
     }
 }
 
-ApiFilterSettings CustomFilter::finalizeImport( sal_Int32 /*nMaxCount*/ )
+ApiFilterSettings CustomFilter::finalizeImport()
 {
     ApiFilterSettings aSettings;
     OSL_ENSURE( maCriteria.size() <= 2, "CustomFilter::finalizeImport - too many filter criteria" );
@@ -552,13 +550,13 @@ void FilterColumn::importFilterColumn( SequenceInputStream& rStrm )
     mbShowButton = getFlag( nFlags, BIFF12_FILTERCOLUMN_SHOWBUTTON );
 }
 
-ApiFilterSettings FilterColumn::finalizeImport( sal_Int32 nMaxCount )
+ApiFilterSettings FilterColumn::finalizeImport()
 {
     ApiFilterSettings aSettings;
     if( (0 <= mnColId) && mxSettings )
     {
         // filter settings object creates a sequence of filter fields
-        aSettings = mxSettings->finalizeImport( nMaxCount );
+        aSettings = mxSettings->finalizeImport();
         // add column index to all filter fields
         for( auto& rFilterField : aSettings.maFilterFields )
             rFilterField.Field = mnColId;
@@ -638,11 +636,6 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
     aDescProps.setProperty( PROP_ContainsHeader, true );
     aDescProps.setProperty( PROP_CopyOutputData, false );
 
-    // maximum number of UNO API filter fields
-    sal_Int32 nMaxCount = 0;
-    aDescProps.getProperty( nMaxCount, PROP_MaxFieldCount );
-    OSL_ENSURE( nMaxCount > 0, "AutoFilter::finalizeImport - invalid maximum filter field count" );
-
     // resulting list of all UNO API filter fields
     ::std::vector<TableFilterField3> aFilterFields;
 
@@ -662,11 +655,8 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
     for( const auto& rxFilterColumn : maFilterColumns )
     {
         // the filter settings object creates a list of filter fields
-        ApiFilterSettings aSettings = rxFilterColumn->finalizeImport( nMaxCount );
+        ApiFilterSettings aSettings = rxFilterColumn->finalizeImport();
         ApiFilterSettings::FilterFieldVector& rColumnFields = aSettings.maFilterFields;
-
-        // new total number of filter fields
-        sal_Int32 nNewCount = static_cast< sal_Int32 >( aFilterFields.size() + rColumnFields.size() );
 
         /*  Check whether mode for regular expressions is compatible with
             the global mode in obNeedsRegExp. If either one is still in
@@ -680,10 +670,9 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
                 [](const css::sheet::TableFilterField3& rColumnField) { return rColumnField.Connection == FilterConnection_OR; });
 
         /*  Skip the column filter, if no filter fields have been created,
-            if the number of new filter fields would exceed the total limit
-            of filter fields, or if the mode for regular expressions of the
+            and if the mode for regular expressions of the
             filter column does not fit. */
-        if( !rColumnFields.empty() && (nNewCount <= nMaxCount) && bRegExpCompatible )
+        if( !rColumnFields.empty() && bRegExpCompatible )
         {
             /*  Add 'and' connection to the first filter field to connect
                 it to the existing filter fields of other columns. */
