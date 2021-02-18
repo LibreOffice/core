@@ -268,6 +268,84 @@ public:
     OUString getObjectName() override { return msName; }
 };
 
+class MethodNode : public ObjectInspectorNodeInterface
+{
+private:
+    uno::Reference<reflection::XIdlMethod> mxMethod;
+
+public:
+    MethodNode(uno::Reference<reflection::XIdlMethod> const& xMethod)
+        : mxMethod(xMethod)
+    {
+    }
+
+    OUString getObjectName() override { return mxMethod->getName(); }
+
+    static OUString simpleTypeName(uno::Reference<reflection::XIdlClass> const& xClass)
+    {
+        switch (xClass->getTypeClass())
+        {
+            case uno::TypeClass_INTERFACE:
+                return "object";
+            case uno::TypeClass_STRUCT:
+                return "struct";
+            case uno::TypeClass_ENUM:
+                return "enum";
+            case uno::TypeClass_SEQUENCE:
+                return "sequence";
+            default:
+                break;
+        }
+        return xClass->getName();
+    }
+
+    std::vector<std::pair<sal_Int32, OUString>> getColumnValues() override
+    {
+        OUString aInString;
+        OUString aOutString;
+
+        auto xClass = mxMethod->getReturnType();
+        aOutString = simpleTypeName(xClass);
+
+        const auto aParameters = mxMethod->getParameterInfos();
+        bool bFirst = true;
+        for (auto const& rParameterInfo : aParameters)
+        {
+            if (!bFirst)
+                aInString += ", ";
+            else
+                bFirst = false;
+
+            switch (rParameterInfo.aMode)
+            {
+                case reflection::ParamMode_IN:
+                    aInString += "[in] ";
+                    break;
+                case reflection::ParamMode_OUT:
+                    aInString += "[out] ";
+                    break;
+                case reflection::ParamMode_INOUT:
+                    aInString += "[in&out] ";
+                    break;
+                default:
+                    break;
+            }
+
+            aInString += rParameterInfo.aName + " : " + simpleTypeName(rParameterInfo.aType);
+        }
+
+        return {
+            { 1, aOutString },
+            { 2, aInString },
+        };
+    }
+
+    void fillChildren(std::unique_ptr<weld::TreeView>& /*rTree*/,
+                      const weld::TreeIter* /*pParent*/) override
+    {
+    }
+};
+
 class BasicValueNode : public SimpleStringNode
 {
 protected:
@@ -626,8 +704,7 @@ void ObjectInspectorTreeHandler::appendMethods(uno::Reference<uno::XInterface> c
     const auto xMethods = xIntrospectionAccess->getMethods(beans::MethodConcept::ALL);
     for (auto const& xMethod : xMethods)
     {
-        OUString aMethodName = xMethod->getName();
-        lclAppendNode(mpMethodsTreeView, new SimpleStringNode(aMethodName));
+        lclAppendNode(mpMethodsTreeView, new MethodNode(xMethod));
     }
 }
 
