@@ -424,7 +424,7 @@ void DrawView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         if(SdrHintKind::SwitchToPage == eHintKind)
         {
             // We switch page only in the current view, which triggered this event
-            // and keep other views ontouched.
+            // and keep other views untouched.
             SfxViewShell* pViewShell = SfxViewShell::Current();
             if(pViewShell && pViewShell != &mpDrawViewShell->GetViewShellBase())
                 return;
