@@ -210,13 +210,13 @@ css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > 
 
             if (objID == "2.5.29.17")
             {
-                SanExtensionImpl* pExtn = new SanExtensionImpl;
+                rtl::Reference<SanExtensionImpl> pExtn = new SanExtensionImpl;
                 pExtn->setCertExtn(value, vlen, objid, objidlen, crit);
                 xExtns[len] = pExtn ;
             }
             else
             {
-                CertificateExtension_XmlSecImpl* pExtn = new CertificateExtension_XmlSecImpl;
+                rtl::Reference<CertificateExtension_XmlSecImpl> pExtn = new CertificateExtension_XmlSecImpl;
                 pExtn->setCertExtn(value, vlen, objid, objidlen, crit);
                 xExtns[len] = pExtn;
             }

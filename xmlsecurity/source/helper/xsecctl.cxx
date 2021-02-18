@@ -580,7 +580,7 @@ void XSecController::exportSignature(
  ******************************************************************************/
 {
     const SignatureReferenceInformations& vReferenceInfors = signatureInfo.vSignatureReferenceInfors;
-    SvXMLAttributeList *pAttributeList;
+    rtl::Reference<SvXMLAttributeList> pAttributeList;
 
     /*
      * Write Signature element
