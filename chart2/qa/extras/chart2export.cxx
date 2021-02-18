@@ -16,6 +16,7 @@
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/chart2/DataPointCustomLabelFieldType.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/MovingAverageType.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -45,6 +46,7 @@ public:
     void testTrendline();
     void testTrendlineOOXML();
     void testTrendlineXLS();
+    void testMovingAverage();
     void testStockChart();
     void testBarChart();
     void testCrosses();
@@ -194,6 +196,7 @@ public:
     CPPUNIT_TEST(testTrendline);
     CPPUNIT_TEST(testTrendlineOOXML);
     CPPUNIT_TEST(testTrendlineXLS);
+    CPPUNIT_TEST(testMovingAverage);
     CPPUNIT_TEST(testStockChart);
     CPPUNIT_TEST(testBarChart);
     CPPUNIT_TEST(testCrosses);
@@ -659,6 +662,35 @@ void Chart2ExportTest::testTrendlineXLS()
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
     reload("MS Excel 97");
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
+}
+
+void Chart2ExportTest::testMovingAverage()
+{
+    mbSkipValidation = true;
+    load(u"/chart2/qa/extras/data/ods/", "moving-type.ods");
+    reload("calc8");
+
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference< chart2::XDataSeries > xDataSeries = getDataSeriesFromDoc( xChartDoc, 0 );
+    CPPUNIT_ASSERT( xDataSeries.is() );
+
+    Reference< chart2::XRegressionCurveContainer > xRegressionCurveContainer( xDataSeries, UNO_QUERY );
+    CPPUNIT_ASSERT( xRegressionCurveContainer.is() );
+
+    Sequence< Reference< chart2::XRegressionCurve > > xRegressionCurveSequence = xRegressionCurveContainer->getRegressionCurves();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xRegressionCurveSequence.getLength());
+
+    Reference<chart2::XRegressionCurve> xCurve = xRegressionCurveSequence[0];
+    CPPUNIT_ASSERT(xCurve.is());
+
+    Reference<XPropertySet> xProperties( xCurve , uno::UNO_QUERY );
+    CPPUNIT_ASSERT(xProperties.is());
+
+    sal_Int32 nMovingAverageType = 0;
+    xProperties->getPropertyValue("MovingAverageType") >>= nMovingAverageType;
+    CPPUNIT_ASSERT_EQUAL(chart2::MovingAverageType::Central, nMovingAverageType);
 }
 
 void Chart2ExportTest::testStockChart()
