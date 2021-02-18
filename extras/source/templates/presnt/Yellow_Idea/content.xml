@@ -1,0 +1,964 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document-content xmlns:officeooo="http://openoffice.org/2009/office" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" office:version="1.3">
+  <office:scripts/>
+  <office:font-face-decls>
+    <style:font-face style:name="Liberation Sans" svg:font-family="'Liberation Sans'" style:font-family-generic="roman" style:font-pitch="variable"/>
+    <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'" style:font-family-generic="roman" style:font-pitch="variable"/>
+    <style:font-face style:name="Noto Sans1" svg:font-family="'Noto Sans'" style:font-family-generic="roman" style:font-pitch="variable"/>
+    <style:font-face style:name="'Open Sans Condensed'" svg:font-family="''Open Sans Condensed''" style:font-family-generic="swiss" style:font-pitch="variable"/>
+    <style:font-face style:name="DejaVu Sans1" svg:font-family="'DejaVu Sans'" style:font-family-generic="swiss" style:font-pitch="variable"/>
+    <style:font-face style:name="FreeSans1" svg:font-family="FreeSans" style:font-family-generic="swiss" style:font-pitch="variable"/>
+    <style:font-face style:name="Liberation Sans1" svg:font-family="'Liberation Sans'" style:font-family-generic="swiss" style:font-pitch="variable"/>
+    <style:font-face style:name="Nimbus Sans" svg:font-family="'Nimbus Sans'" style:font-adornments="Regular" style:font-family-generic="swiss" style:font-pitch="variable"/>
+    <style:font-face style:name="Noto Sans" svg:font-family="'Noto Sans'" style:font-family-generic="swiss" style:font-pitch="variable"/>
+    <style:font-face style:name="Open Sans Condensed" svg:font-family="'Open Sans Condensed'" style:font-family-generic="swiss" style:font-pitch="variable"/>
+    <style:font-face style:name="DejaVu Sans" svg:font-family="'DejaVu Sans'" style:font-family-generic="system" style:font-pitch="variable"/>
+    <style:font-face style:name="FreeSans" svg:font-family="FreeSans" style:font-family-generic="system" style:font-pitch="variable"/>
+  </office:font-face-decls>
+  <office:automatic-styles>
+    <style:style style:name="dp1" style:family="drawing-page">
+      <style:drawing-page-properties presentation:background-visible="true" presentation:background-objects-visible="true" presentation:display-footer="true" presentation:display-page-number="false" presentation:display-date-time="true"/>
+    </style:style>
+    <style:style style:name="dp2" style:family="drawing-page">
+      <style:drawing-page-properties presentation:display-header="true" presentation:display-footer="true" presentation:display-page-number="false" presentation:display-date-time="true"/>
+    </style:style>
+    <style:style style:name="gr1" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:stroke-dash="Dashed_20__28_var_29__20_4" svg:stroke-width="0cm" svg:stroke-color="#000000" draw:stroke-linejoin="none" svg:stroke-linecap="round" draw:fill="solid" draw:fill-color="#ffffff" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="gr2" style:family="graphic">
+      <style:graphic-properties style:protect="size"/>
+    </style:style>
+    <style:style style:name="gr3" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:stroke-dash="Dashed_20__28_var_29__20_4" svg:stroke-width="0cm" svg:stroke-color="#000000" draw:stroke-linejoin="none" svg:stroke-linecap="round" draw:fill="solid" draw:fill-color="#f2c02c" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="gr4" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="solid" draw:stroke-dash="Dashed_20__28_var_29__20_4" svg:stroke-width="0.146cm" svg:stroke-color="#000000" draw:stroke-linejoin="round" svg:stroke-linecap="round" draw:fill="none" draw:fill-color="#f2c02c" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.198cm" fo:padding-bottom="0.198cm" fo:padding-left="0.323cm" fo:padding-right="0.323cm"/>
+    </style:style>
+    <style:style style:name="gr5" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="solid" draw:stroke-dash="Dashed_20__28_var_29__20_4" svg:stroke-width="0.146cm" svg:stroke-color="#f2c02c" draw:stroke-linejoin="round" svg:stroke-linecap="round" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.198cm" fo:padding-bottom="0.198cm" fo:padding-left="0.323cm" fo:padding-right="0.323cm"/>
+    </style:style>
+    <style:style style:name="gr6" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:stroke-dash="Dashed_20__28_var_29__20_4" svg:stroke-width="0cm" svg:stroke-color="#f2c02c" draw:stroke-linejoin="none" svg:stroke-linecap="round" draw:fill="solid" draw:fill-color="#000000" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="gr7" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:stroke-dash="Dashed_20__28_var_29__20_4" svg:stroke-width="0cm" svg:stroke-color="#18a303" draw:stroke-linejoin="none" svg:stroke-linecap="round" draw:fill="solid" draw:fill-color="#000000" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="gr8" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:stroke-dash="Dashed_20__28_var_29__20_4" svg:stroke-width="0cm" svg:stroke-color="#000000" draw:stroke-linejoin="none" svg:stroke-linecap="round" draw:fill="solid" draw:fill-color="#ffffff" draw:opacity="66%" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="gr9" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:stroke-dash="Dashed_20__28_var_29__20_4" svg:stroke-width="0cm" svg:stroke-color="#000000" draw:stroke-linejoin="none" svg:stroke-linecap="round" draw:fill="solid" draw:fill-color="#ffffff" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="gr10" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:stroke-dash="Dashed_20__28_var_29__20_4" svg:stroke-width="0cm" svg:stroke-color="#000000" draw:stroke-linejoin="none" svg:stroke-linecap="round" draw:fill="solid" draw:fill-color="#ffffff" draw:opacity="42%" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="gr11" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:stroke-dash="Dashed_20__28_var_29__20_4" svg:stroke-width="0cm" svg:stroke-color="#000000" draw:stroke-linejoin="none" svg:stroke-linecap="round" draw:fill="solid" draw:fill-color="#ffffff" draw:opacity="87%" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="gr12" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="solid" draw:stroke-dash="Dashed_20__28_var_29__20_4" svg:stroke-width="0.102cm" svg:stroke-color="#ffffff" draw:stroke-linejoin="round" svg:stroke-linecap="round" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" fo:padding-top="0.176cm" fo:padding-bottom="0.176cm" fo:padding-left="0.301cm" fo:padding-right="0.301cm"/>
+    </style:style>
+    <style:style style:name="gr13" style:family="graphic" style:parent-style-name="standard">
+      <style:graphic-properties draw:stroke="none" draw:stroke-dash="Dashed_20__28_var_29__20_4" svg:stroke-width="0cm" svg:stroke-color="#ffffff" draw:stroke-linejoin="none" svg:stroke-linecap="round" draw:fill="solid" draw:fill-color="#ffffff" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle"/>
+    </style:style>
+    <style:style style:name="gr14" style:family="graphic" style:parent-style-name="Object_20_with_20_no_20_fill_20_and_20_no_20_line">
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#000000" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:shadow="hidden"/>
+    </style:style>
+    <style:style style:name="pr1" style:family="presentation" style:parent-style-name="Cover-title">
+      <style:graphic-properties fo:min-height="2.507cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr2" style:family="presentation" style:parent-style-name="Cover-subtitle">
+      <style:graphic-properties draw:fill-color="#ffffff" fo:min-height="1.347cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr3" style:family="presentation" style:parent-style-name="Cover-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="12.572cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr4" style:family="presentation" style:parent-style-name="Description-subtitle">
+      <style:graphic-properties draw:fill-color="#ffffff" fo:min-height="3.1cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr5" style:family="presentation" style:parent-style-name="Description-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="12.572cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr6" style:family="presentation" style:parent-style-name="Title-title">
+      <style:graphic-properties fo:min-height="1.923cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr7" style:family="presentation" style:parent-style-name="Title-subtitle">
+      <style:graphic-properties draw:fill-color="#ffffff" fo:min-height="1.729cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr8" style:family="presentation" style:parent-style-name="Title-title">
+      <style:graphic-properties fo:min-height="6.245cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr9" style:family="presentation" style:parent-style-name="Title-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="12.572cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr10" style:family="presentation" style:parent-style-name="Contens-title">
+      <style:graphic-properties fo:min-height="0.865cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr11" style:family="presentation" style:parent-style-name="Contens-subtitle">
+      <style:graphic-properties draw:fill-color="#ffffff" fo:min-height="3.1cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr12" style:family="presentation" style:parent-style-name="Contens-subtitle">
+      <style:graphic-properties draw:fill-color="#ffffff" fo:min-height="3.175cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr13" style:family="presentation" style:parent-style-name="Contens-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="12.572cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr14" style:family="presentation" style:parent-style-name="Article1-title">
+      <style:graphic-properties fo:min-height="1.343cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr15" style:family="presentation" style:parent-style-name="Article1-title">
+      <style:graphic-properties fo:min-height="0.865cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr16" style:family="presentation" style:parent-style-name="Article1-subtitle">
+      <style:graphic-properties draw:fill-color="#ffffff" fo:min-height="4.033cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr17" style:family="presentation" style:parent-style-name="Article1-title">
+      <style:graphic-properties fo:min-height="2.685cm" draw:shadow="visible" draw:shadow-offset-x="0.071cm" draw:shadow-offset-y="0.071cm" draw:shadow-color="#e8a202" loext:shadow-blur="0.212cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr18" style:family="presentation" style:parent-style-name="Article1-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="12.572cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr19" style:family="presentation" style:parent-style-name="Article2-title">
+      <style:graphic-properties fo:min-height="0.896cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr20" style:family="presentation" style:parent-style-name="Article2-title">
+      <style:graphic-properties fo:min-height="1.503cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr21" style:family="presentation" style:parent-style-name="Article2-subtitle">
+      <style:graphic-properties draw:fill-color="#ffffff" fo:min-height="5.291cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr22" style:family="presentation" style:parent-style-name="Article2-subtitle">
+      <style:graphic-properties draw:fill-color="#ffffff" fo:min-height="7.936cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr23" style:family="presentation" style:parent-style-name="Article2-title">
+      <style:graphic-properties fo:min-height="1.343cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr24" style:family="presentation" style:parent-style-name="Article2-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="12.572cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr25" style:family="presentation" style:parent-style-name="Infographic1-subtitle">
+      <style:graphic-properties draw:fill-color="#ffffff" fo:min-height="5.001cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr26" style:family="presentation" style:parent-style-name="Infographic1-title">
+      <style:graphic-properties fo:min-height="1.343cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr27" style:family="presentation" style:parent-style-name="Infographic1-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="12.572cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr28" style:family="presentation" style:parent-style-name="Infographic3-subtitle">
+      <style:graphic-properties draw:fill-color="#ffffff" fo:min-height="2.117cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr29" style:family="presentation" style:parent-style-name="Infographic3-title">
+      <style:graphic-properties fo:min-height="1.343cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr30" style:family="presentation" style:parent-style-name="Infographic3-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="12.572cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr31" style:family="presentation" style:parent-style-name="End-title">
+      <style:graphic-properties fo:min-height="1.923cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr32" style:family="presentation" style:parent-style-name="End-title">
+      <style:graphic-properties fo:min-height="1.843cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="pr33" style:family="presentation" style:parent-style-name="End-notes">
+      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="12.572cm"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="P1" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="center"/>
+    </style:style>
+    <style:style style:name="P2" style:family="paragraph">
+      <loext:graphic-properties draw:fill="solid" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans"/>
+    </style:style>
+    <style:style style:name="P3" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="start"/>
+    </style:style>
+    <style:style style:name="P4" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="start" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Noto Sans" fo:font-size="26pt" fo:font-weight="normal"/>
+    </style:style>
+    <style:style style:name="P5" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:text-align="start" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Noto Sans" fo:font-size="14pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+    </style:style>
+    <style:style style:name="P6" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#ffffff"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+    </style:style>
+    <style:style style:name="P7" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="center"/>
+      <style:text-properties fo:color="#000000" loext:opacity="100%"/>
+    </style:style>
+    <style:style style:name="P8" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Noto Sans" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+    </style:style>
+    <style:style style:name="P9" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="start" style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans" fo:font-size="40pt" fo:font-weight="normal" style:font-size-asian="40pt" style:font-size-complex="40pt"/>
+    </style:style>
+    <style:style style:name="P10" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:text-align="start" style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans" fo:font-size="12pt" style:font-size-asian="12pt" style:font-size-complex="12pt"/>
+    </style:style>
+    <style:style style:name="P11" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="start" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#ffffff" loext:opacity="100%" style:font-name="Noto Sans" fo:font-size="130pt" fo:font-weight="normal" style:font-size-asian="150pt" style:font-size-complex="150pt"/>
+    </style:style>
+    <style:style style:name="P12" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="start" style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans" fo:font-size="18pt" fo:font-weight="normal" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+    </style:style>
+    <style:style style:name="P13" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:text-align="start" style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans" fo:font-size="11pt" style:font-size-asian="11pt" style:font-size-complex="11pt"/>
+    </style:style>
+    <style:style style:name="P14" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#ffffff"/>
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+      <style:text-properties fo:font-size="20pt"/>
+    </style:style>
+    <style:style style:name="P15" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="start" style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans" fo:font-size="22pt" style:font-size-asian="22pt" style:font-size-complex="22pt"/>
+    </style:style>
+    <style:style style:name="P16" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:text-align="center" style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans" fo:font-size="12pt" style:font-size-asian="12pt" style:font-size-complex="12pt"/>
+    </style:style>
+    <style:style style:name="P17" style:family="paragraph">
+      <style:paragraph-properties style:writing-mode="lr-tb"/>
+      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Noto Sans" fo:font-size="54pt" fo:text-shadow="none" fo:background-color="transparent" style:font-size-asian="28pt" style:font-size-complex="28pt"/>
+    </style:style>
+    <style:style style:name="P18" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="start" style:writing-mode="lr-tb"/>
+      <style:text-properties fo:color="#666666" loext:opacity="100%" style:font-name="Noto Sans" fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+    </style:style>
+    <style:style style:name="P19" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="start" style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans" fo:font-size="28pt" fo:font-weight="normal" style:font-size-asian="28pt" style:font-size-complex="28pt"/>
+    </style:style>
+    <style:style style:name="P20" style:family="paragraph">
+      <loext:graphic-properties draw:fill="solid" draw:fill-color="#f2c02c"/>
+      <style:paragraph-properties fo:text-align="center"/>
+      <style:text-properties style:font-name="Noto Sans"/>
+    </style:style>
+    <style:style style:name="P21" style:family="paragraph">
+      <loext:graphic-properties draw:fill="none" draw:fill-color="#f2c02c"/>
+      <style:paragraph-properties fo:text-align="center"/>
+      <style:text-properties style:font-name="Noto Sans"/>
+    </style:style>
+    <style:style style:name="P22" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="center"/>
+      <style:text-properties style:font-name="Noto Sans"/>
+    </style:style>
+    <style:style style:name="P23" style:family="paragraph">
+      <loext:graphic-properties draw:fill="solid" draw:fill-color="#000000"/>
+      <style:paragraph-properties fo:text-align="center"/>
+      <style:text-properties style:font-name="Noto Sans"/>
+    </style:style>
+    <style:style style:name="P24" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:text-align="start" style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans" fo:font-size="10.5pt" style:font-size-asian="10.5pt" style:font-size-complex="10.5pt"/>
+    </style:style>
+    <style:style style:name="P25" style:family="paragraph">
+      <loext:graphic-properties draw:fill="solid" draw:fill-color="#ffffff" draw:opacity="66%"/>
+      <style:paragraph-properties fo:text-align="center"/>
+      <style:text-properties style:font-name="Noto Sans"/>
+    </style:style>
+    <style:style style:name="P26" style:family="paragraph">
+      <loext:graphic-properties draw:fill="solid" draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:text-align="center"/>
+      <style:text-properties style:font-name="Noto Sans"/>
+    </style:style>
+    <style:style style:name="P27" style:family="paragraph">
+      <loext:graphic-properties draw:fill="solid" draw:fill-color="#ffffff" draw:opacity="42%"/>
+      <style:paragraph-properties fo:text-align="center"/>
+      <style:text-properties style:font-name="Noto Sans"/>
+    </style:style>
+    <style:style style:name="P28" style:family="paragraph">
+      <loext:graphic-properties draw:fill="solid" draw:fill-color="#ffffff" draw:opacity="87%"/>
+      <style:paragraph-properties fo:text-align="center"/>
+      <style:text-properties style:font-name="Noto Sans"/>
+    </style:style>
+    <style:style style:name="P29" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="end"/>
+    </style:style>
+    <style:style style:name="P30" style:family="paragraph">
+      <loext:graphic-properties draw:fill-color="#ffffff"/>
+      <style:paragraph-properties fo:text-align="end" style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Noto Sans" fo:font-size="11pt" style:font-size-asian="11pt" style:font-size-complex="11pt"/>
+    </style:style>
+    <style:style style:name="P31" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="start" style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Open Sans Condensed" fo:font-size="40pt" fo:font-weight="normal" style:font-size-asian="40pt" style:font-size-complex="40pt"/>
+    </style:style>
+    <style:style style:name="P32" style:family="paragraph">
+      <style:paragraph-properties fo:text-align="start" style:writing-mode="lr-tb"/>
+      <style:text-properties style:font-name="Open Sans Condensed" fo:font-size="15pt" style:font-size-asian="15pt" style:font-size-complex="15pt"/>
+    </style:style>
+    <style:style style:name="T1" style:family="text">
+      <style:text-properties style:font-name="Noto Sans" fo:font-size="14pt" style:font-size-asian="14pt" style:font-size-complex="14pt"/>
+    </style:style>
+    <style:style style:name="T2" style:family="text">
+      <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Noto Sans" fo:font-size="26pt" fo:font-weight="normal"/>
+    </style:style>
+    <style:style style:name="T3" style:family="text">
+      <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Noto Sans" fo:font-size="14pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+    </style:style>
+    <style:style style:name="T4" style:family="text">
+      <style:text-properties style:font-name="Noto Sans" fo:font-size="40pt" fo:font-weight="normal" style:font-size-asian="40pt" style:font-size-complex="40pt"/>
+    </style:style>
+    <style:style style:name="T5" style:family="text">
+      <style:text-properties style:font-name="Noto Sans" fo:font-size="12pt" style:font-size-asian="12pt" style:font-size-complex="12pt"/>
+    </style:style>
+    <style:style style:name="T6" style:family="text">
+      <style:text-properties fo:color="#000000" loext:opacity="100%" style:font-name="Noto Sans" fo:font-size="130pt" fo:font-weight="normal" style:font-size-asian="150pt" style:font-size-complex="150pt"/>
+    </style:style>
+    <style:style style:name="T7" style:family="text">
+      <style:text-properties style:font-name="Noto Sans" fo:font-size="18pt" fo:font-weight="normal" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+    </style:style>
+    <style:style style:name="T8" style:family="text">
+      <style:text-properties style:font-name="Noto Sans" fo:font-size="11pt" style:font-size-asian="11pt" style:font-size-complex="11pt"/>
+    </style:style>
+    <style:style style:name="T9" style:family="text">
+      <style:text-properties style:font-name="Noto Sans" fo:font-size="22pt" style:font-size-asian="22pt" style:font-size-complex="22pt"/>
+    </style:style>
+    <style:style style:name="T10" style:family="text">
+      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Noto Sans" fo:font-size="54pt" fo:text-shadow="none" fo:background-color="transparent" style:font-size-asian="28pt" style:font-size-complex="28pt"/>
+    </style:style>
+    <style:style style:name="T11" style:family="text">
+      <style:text-properties fo:color="#666666" loext:opacity="100%" style:font-name="Noto Sans" fo:font-size="18pt" style:font-size-asian="18pt" style:font-size-complex="18pt"/>
+    </style:style>
+    <style:style style:name="T12" style:family="text">
+      <style:text-properties style:font-name="Noto Sans" fo:font-size="28pt" fo:font-weight="normal" style:font-size-asian="28pt" style:font-size-complex="28pt"/>
+    </style:style>
+    <style:style style:name="T13" style:family="text">
+      <style:text-properties style:font-name="Noto Sans" fo:font-size="10.5pt" style:font-size-asian="10.5pt" style:font-size-complex="10.5pt"/>
+    </style:style>
+    <style:style style:name="T14" style:family="text">
+      <style:text-properties style:font-name="Open Sans Condensed" fo:font-size="40pt" fo:font-weight="normal" style:font-size-asian="40pt" style:font-size-complex="40pt"/>
+    </style:style>
+    <style:style style:name="T15" style:family="text">
+      <style:text-properties style:font-name="Open Sans Condensed" fo:font-size="15pt" style:font-size-asian="15pt" style:font-size-complex="15pt"/>
+    </style:style>
+    <text:list-style style:name="L1">
+      <text:list-level-style-bullet text:level="1" text:bullet-char="●">
+        <style:list-level-properties text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="2" text:bullet-char="●">
+        <style:list-level-properties text:space-before="0.6cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="3" text:bullet-char="●">
+        <style:list-level-properties text:space-before="1.2cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="4" text:bullet-char="●">
+        <style:list-level-properties text:space-before="1.8cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="5" text:bullet-char="●">
+        <style:list-level-properties text:space-before="2.4cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="6" text:bullet-char="●">
+        <style:list-level-properties text:space-before="3cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="7" text:bullet-char="●">
+        <style:list-level-properties text:space-before="3.6cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="8" text:bullet-char="●">
+        <style:list-level-properties text:space-before="4.2cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="9" text:bullet-char="●">
+        <style:list-level-properties text:space-before="4.8cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+      <text:list-level-style-bullet text:level="10" text:bullet-char="●">
+        <style:list-level-properties text:space-before="5.4cm" text:min-label-width="0.6cm"/>
+        <style:text-properties fo:font-family="StarSymbol" style:use-window-font-color="true" fo:font-size="45%"/>
+      </text:list-level-style-bullet>
+    </text:list-style>
+  </office:automatic-styles>
+  <office:body>
+    <office:presentation>
+      <draw:page draw:name="page1" draw:style-name="dp1" draw:master-page-name="Cover" presentation:presentation-page-layout-name="AL1T1">
+        <draw:polygon draw:style-name="gr1" draw:text-style-name="P2" draw:layer="layout" svg:width="3.687cm" svg:height="0.814cm" svg:x="13.812cm" svg:y="9.685cm" svg:viewBox="0 0 3688 815" draw:points="1844,815 3263,815 3307,813 3349,806 3389,796 3429,783 3465,766 3501,745 3533,722 3564,696 3591,666 3615,636 3637,602 3655,566 3669,528 3679,489 3686,449 3688,407 3688,407 3686,365 3679,325 3669,287 3655,248 3637,213 3615,179 3591,149 3564,119 3533,93 3501,70 3465,49 3429,32 3389,19 3349,9 3307,2 3263,0 426,0 383,2 340,9 299,19 260,32 223,49 187,70 155,93 124,119 97,149 73,179 51,213 33,248 19,287 9,325 2,365 0,407 0,407 2,449 9,489 19,528 33,566 51,602 73,636 97,666 124,696 155,722 187,745 223,766 260,783 299,796 340,806 383,813 426,815">
+          <text:p text:style-name="P1">
+            <text:span text:style-name="T1">Lorem Ipsum</text:span>
+          </text:p>
+        </draw:polygon>
+        <draw:frame presentation:style-name="pr1" draw:text-style-name="P4" draw:layer="layout" svg:width="10.792cm" svg:height="2.507cm" svg:x="13.825cm" svg:y="6.851cm" presentation:class="title" presentation:user-transformed="true">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T2">YELLOW IDEA</text:span>
+              <text:span text:style-name="T2">
+                <text:line-break/>
+              </text:span>
+              <text:span text:style-name="T2">TEMPLATE</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr2" draw:text-style-name="P5" draw:layer="layout" svg:width="11.176cm" svg:height="1.347cm" svg:x="1.734cm" svg:y="13.563cm">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T3">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <presentation:notes draw:style-name="dp2">
+          <draw:page-thumbnail draw:style-name="gr2" draw:layer="layout" svg:width="18.624cm" svg:height="10.476cm" svg:x="1.482cm" svg:y="2.123cm" draw:page-number="1" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr3" draw:text-style-name="P6" draw:layer="layout" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <draw:page draw:name="page2" draw:style-name="dp1" draw:master-page-name="Description" presentation:presentation-page-layout-name="AL1T1">
+        <draw:frame presentation:style-name="pr4" draw:text-style-name="P8" draw:layer="layout" svg:width="12.744cm" svg:height="3.1cm" svg:x="8.254cm" svg:y="5.745cm">
+          <draw:text-box>
+            <text:p text:style-name="P7">
+              <text:span text:style-name="T1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mollis dictum volutpat. Donec bibendum magna vel risus consectetur, aliquet ullamcorper.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <presentation:notes draw:style-name="dp2">
+          <draw:page-thumbnail draw:style-name="gr2" draw:layer="layout" svg:width="18.624cm" svg:height="10.476cm" svg:x="1.482cm" svg:y="2.123cm" draw:page-number="2" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr5" draw:text-style-name="P6" draw:layer="layout" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <draw:page draw:name="page3" draw:style-name="dp1" draw:master-page-name="Title" presentation:presentation-page-layout-name="AL1T1">
+        <draw:frame presentation:style-name="pr6" draw:text-style-name="P9" draw:layer="layout" svg:width="12.192cm" svg:height="1.923cm" svg:x="11.663cm" svg:y="5.844cm" presentation:class="title" presentation:user-transformed="true">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T4">Lorem &amp; Ipsum</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr7" draw:text-style-name="P10" draw:layer="layout" svg:width="11.176cm" svg:height="1.729cm" svg:x="11.663cm" svg:y="7.806cm">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mollis dictum volutpat. Donec bibendum magna vel risus consectetur, sit amet aliquet est ullamcorper.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr8" draw:text-style-name="P11" draw:layer="layout" svg:width="5.84cm" svg:height="6.245cm" svg:x="6.873cm" svg:y="4.684cm" presentation:class="title" presentation:user-transformed="true">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T6">01</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <presentation:notes draw:style-name="dp2">
+          <draw:page-thumbnail draw:style-name="gr2" draw:layer="layout" svg:width="18.624cm" svg:height="10.476cm" svg:x="1.482cm" svg:y="2.123cm" draw:page-number="3" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr9" draw:text-style-name="P6" draw:layer="layout" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <draw:page draw:name="page4" draw:style-name="dp1" draw:master-page-name="Contens" presentation:presentation-page-layout-name="AL1T1">
+        <draw:frame presentation:style-name="pr10" draw:text-style-name="P12" draw:layer="layout" svg:width="8.012cm" svg:height="0.865cm" svg:x="6.702cm" svg:y="1.778cm" presentation:class="title" presentation:user-transformed="true">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T7">Lorem</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr11" draw:text-style-name="P13" draw:layer="layout" svg:width="8.266cm" svg:height="3.1cm" svg:x="6.702cm" svg:y="2.488cm">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T8">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mollis dictum volutpat. Donec bibendum magna vel risus consectetur, sit amet aliquet est ullamcorper. Praesent ullamcorper faucibus imperdiet.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr10" draw:text-style-name="P12" draw:layer="layout" svg:width="8.012cm" svg:height="0.865cm" svg:x="6.673cm" svg:y="6.35cm" presentation:class="title" presentation:user-transformed="true">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T7">Ipsum</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr11" draw:text-style-name="P13" draw:layer="layout" svg:width="8.295cm" svg:height="3.1cm" svg:x="6.673cm" svg:y="7.06cm">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T8">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mollis dictum volutpat. Donec bibendum magna vel risus consectetur, sit amet aliquet est ullamcorper. Praesent ullamcorper faucibus imperdiet.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr10" draw:text-style-name="P12" draw:layer="layout" svg:width="8.012cm" svg:height="0.865cm" svg:x="18.524cm" svg:y="6.25cm" presentation:class="title" presentation:user-transformed="true">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T7">Dolor</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr12" draw:text-style-name="P13" draw:layer="layout" svg:width="8.128cm" svg:height="3.175cm" svg:x="18.524cm" svg:y="7.123cm">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T8">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mollis dictum volutpat. Donec bibendum magna vel risus consectetur, sit amet aliquet est ullamcorper. Praesent ullamcorper faucibus imperdiet.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr10" draw:text-style-name="P12" draw:layer="layout" svg:width="8.012cm" svg:height="0.865cm" svg:x="18.524cm" svg:y="10.722cm" presentation:class="title" presentation:user-transformed="true">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T7">Sit</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr12" draw:text-style-name="P13" draw:layer="layout" svg:width="8.128cm" svg:height="3.175cm" svg:x="18.524cm" svg:y="11.695cm">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T8">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mollis dictum volutpat. Donec bibendum magna vel risus consectetur, sit amet aliquet est ullamcorper. Praesent ullamcorper faucibus imperdiet.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <presentation:notes draw:style-name="dp2">
+          <draw:page-thumbnail draw:style-name="gr2" draw:layer="layout" svg:width="18.624cm" svg:height="10.476cm" svg:x="1.482cm" svg:y="2.123cm" draw:page-number="4" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr13" draw:text-style-name="P14" draw:layer="layout" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <draw:page draw:name="page5" draw:style-name="dp1" draw:master-page-name="Article1" presentation:presentation-page-layout-name="AL1T1">
+        <draw:frame presentation:style-name="pr14" draw:text-style-name="P15" draw:layer="layout" svg:width="7.549cm" svg:height="1.343cm" svg:x="2.23cm" svg:y="0.283cm" presentation:class="title" presentation:user-transformed="true">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T9">Dolor Sit</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr15" draw:text-style-name="P12" draw:layer="layout" svg:width="5.334cm" svg:height="0.865cm" svg:x="11.685cm" svg:y="7.268cm" presentation:class="title" presentation:user-transformed="true">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T7">Ipsum</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr16" draw:text-style-name="P16" draw:layer="layout" svg:width="6.604cm" svg:height="4.033cm" svg:x="10.923cm" svg:y="8.209cm">
+          <draw:text-box>
+            <text:p text:style-name="P1">
+              <text:span text:style-name="T5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mollis dictum volutpat. Donec bibendum magna vel risus consectetur, sit amet aliquet est ullamcorper. Praesent ullamcorper faucibus imperdiet.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr15" draw:text-style-name="P12" draw:layer="layout" svg:width="5.334cm" svg:height="0.865cm" svg:x="18.797cm" svg:y="7.198cm" presentation:class="title" presentation:user-transformed="true">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T7">Dolor</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr16" draw:text-style-name="P16" draw:layer="layout" svg:width="6.604cm" svg:height="4.033cm" svg:x="18.035cm" svg:y="8.139cm">
+          <draw:text-box>
+            <text:p text:style-name="P1">
+              <text:span text:style-name="T5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mollis dictum volutpat. Donec bibendum magna vel risus consectetur, sit amet aliquet est ullamcorper. Praesent ullamcorper faucibus imperdiet.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr15" draw:text-style-name="P12" draw:layer="layout" svg:width="5.334cm" svg:height="0.865cm" svg:x="4.319cm" svg:y="7.268cm" presentation:class="title" presentation:user-transformed="true">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T7">Lorem</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr16" draw:text-style-name="P16" draw:layer="layout" svg:width="6.604cm" svg:height="4.033cm" svg:x="3.557cm" svg:y="8.209cm">
+          <draw:text-box>
+            <text:p text:style-name="P1">
+              <text:span text:style-name="T5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mollis dictum volutpat. Donec bibendum magna vel risus consectetur, sit amet aliquet est ullamcorper. Praesent ullamcorper faucibus imperdiet.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr17" draw:text-style-name="P17" draw:layer="layout" svg:width="18.874cm" svg:height="2.685cm" svg:x="4.5cm" svg:y="1.5cm" presentation:class="title" presentation:user-transformed="true">
+          <draw:text-box>
+            <text:p>
+              <text:span text:style-name="T10">Lorem &amp; Ipsum</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <presentation:notes draw:style-name="dp2">
+          <draw:page-thumbnail draw:style-name="gr2" draw:layer="layout" svg:width="18.624cm" svg:height="10.476cm" svg:x="1.482cm" svg:y="2.123cm" draw:page-number="5" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr18" draw:text-style-name="P6" draw:layer="layout" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <draw:page draw:name="page6" draw:style-name="dp1" draw:master-page-name="Article2" presentation:presentation-page-layout-name="AL1T1">
+        <draw:frame presentation:style-name="pr19" draw:text-style-name="P18" draw:layer="layout" svg:width="5.009cm" svg:height="0.896cm" svg:x="2.865cm" svg:y="3.422cm" presentation:class="title" presentation:user-transformed="true">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T11">Consectetur</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr20" draw:text-style-name="P19" draw:layer="layout" svg:width="10.792cm" svg:height="1.503cm" svg:x="2.794cm" svg:y="4.9cm" presentation:class="title" presentation:user-transformed="true">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T12">Lorem &amp; Ipsum</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr21" draw:text-style-name="P13" draw:layer="layout" svg:width="8.266cm" svg:height="5.291cm" svg:x="2.91cm" svg:y="6.669cm">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T8">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mollis dictum volutpat. Donec bibendum magna vel risus consectetur, sit amet aliquet est ullamcorper. Praesent ullamcorper faucibus imperdiet. Donec ex velit, dapibus a euismod rhoncus, pharetra id tellus. Aliquam erat volutpat. In non porta sem, non aliquet enim. Interdum et malesuada fames ac ante ipsum primis in faucibus.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr22" draw:text-style-name="P13" draw:layer="layout" svg:width="8.636cm" svg:height="7.936cm" svg:x="12.446cm" svg:y="6.404cm">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T8">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mollis dictum volutpat. Donec bibendum magna vel risus consectetur, sit amet aliquet est ullamcorper. </text:span>
+            </text:p>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T8"/>
+            </text:p>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T8">Praesent ullamcorper faucibus imperdiet. Donec ex velit, dapibus a euismod rhoncus, pharetra id tellus.</text:span>
+            </text:p>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T8"/>
+            </text:p>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T8">Aliquam erat volutpat. In non porta sem, non aliquet enim. Interdum et malesuada fames ac ante ipsum primis in faucibus. Curabitur efficitur sed arcu eget ornare. Fusce sodales, nisi a porttitor cursus, purus quam pretium velit, non euismod nisi lacus vel purus.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr23" draw:text-style-name="P15" draw:layer="layout" svg:width="7.549cm" svg:height="1.343cm" svg:x="2.231cm" svg:y="0.284cm" presentation:class="title" presentation:user-transformed="true">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T9">Dolor Sit</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <presentation:notes draw:style-name="dp2">
+          <draw:page-thumbnail draw:style-name="gr2" draw:layer="layout" svg:width="18.624cm" svg:height="10.476cm" svg:x="1.482cm" svg:y="2.123cm" draw:page-number="6" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr24" draw:text-style-name="P6" draw:layer="layout" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <draw:page draw:name="page7" draw:style-name="dp1" draw:master-page-name="Infographic1" presentation:presentation-page-layout-name="AL1T1">
+        <draw:polygon draw:style-name="gr3" draw:text-style-name="P20" draw:layer="layout" svg:width="2.916cm" svg:height="2.915cm" svg:x="3.313cm" svg:y="3.855cm" svg:viewBox="0 0 2917 2916" draw:points="729,2187 0,1458 1458,0 2917,1458 1458,2916">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr4" draw:text-style-name="P21" draw:layer="layout" svg:width="2.916cm" svg:height="2.916cm" svg:x="3.313cm" svg:y="3.516cm" svg:viewBox="0 0 2917 2917" draw:points="729,2188 0,1458 1458,0 2917,1458 1458,2917">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr3" draw:text-style-name="P20" draw:layer="layout" svg:width="2.915cm" svg:height="2.915cm" svg:x="7.802cm" svg:y="3.855cm" svg:viewBox="0 0 2916 2916" draw:points="729,2187 0,1458 1458,0 2916,1458 1458,2916">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr4" draw:text-style-name="P21" draw:layer="layout" svg:width="2.915cm" svg:height="2.916cm" svg:x="7.802cm" svg:y="3.516cm" svg:viewBox="0 0 2916 2917" draw:points="729,2188 0,1458 1458,0 2916,1458 1458,2917">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr3" draw:text-style-name="P20" draw:layer="layout" svg:width="2.916cm" svg:height="2.915cm" svg:x="12.541cm" svg:y="3.855cm" svg:viewBox="0 0 2917 2916" draw:points="729,2187 0,1458 1458,0 2917,1458 1458,2916">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr4" draw:text-style-name="P21" draw:layer="layout" svg:width="2.916cm" svg:height="2.916cm" svg:x="12.541cm" svg:y="3.516cm" svg:viewBox="0 0 2917 2917" draw:points="729,2188 0,1458 1458,0 2917,1458 1458,2917">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr3" draw:text-style-name="P20" draw:layer="layout" svg:width="2.916cm" svg:height="2.915cm" svg:x="17.234cm" svg:y="3.855cm" svg:viewBox="0 0 2917 2916" draw:points="729,2187 0,1458 1458,0 2917,1458 1458,2916">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr4" draw:text-style-name="P21" draw:layer="layout" svg:width="2.916cm" svg:height="2.916cm" svg:x="17.234cm" svg:y="3.516cm" svg:viewBox="0 0 2917 2917" draw:points="729,2188 0,1458 1458,0 2917,1458 1458,2917">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr3" draw:text-style-name="P20" draw:layer="layout" svg:width="2.915cm" svg:height="2.915cm" svg:x="22.065cm" svg:y="3.855cm" svg:viewBox="0 0 2916 2916" draw:points="729,2187 0,1458 1458,0 2916,1458 1458,2916">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr4" draw:text-style-name="P21" draw:layer="layout" svg:width="2.915cm" svg:height="2.916cm" svg:x="22.065cm" svg:y="3.516cm" svg:viewBox="0 0 2916 2917" draw:points="729,2188 0,1458 1458,0 2916,1458 1458,2917">
+          <text:p/>
+        </draw:polygon>
+        <draw:line draw:style-name="gr5" draw:text-style-name="P22" draw:layer="layout" svg:x1="4.771cm" svg:y1="7.738cm" svg:x2="23.523cm" svg:y2="7.738cm">
+          <text:p/>
+        </draw:line>
+        <draw:polygon draw:style-name="gr6" draw:text-style-name="P23" draw:layer="layout" svg:width="0.514cm" svg:height="0.514cm" svg:x="4.514cm" svg:y="7.48cm" svg:viewBox="0 0 515 515" draw:points="515,258 514,275 513,292 510,309 507,325 502,341 496,356 489,372 481,387 472,402 462,416 451,428 440,440 428,451 415,462 401,472 386,481 371,489 355,496 340,502 324,507 308,511 291,513 274,514 257,515 240,514 223,513 206,511 190,507 175,502 159,496 144,489 128,481 113,472 99,462 86,451 74,440 63,428 53,416 43,402 34,387 26,372 19,356 13,341 8,325 4,309 2,292 0,275 0,258 0,240 2,224 4,207 8,191 13,175 19,160 26,144 34,129 43,114 53,100 63,87 74,75 86,64 99,53 113,43 128,34 144,26 159,19 175,13 190,8 206,5 223,2 240,0 257,0 275,0 292,2 308,5 324,8 340,13 355,19 371,26 386,34 401,43 415,53 428,64 440,75 451,87 462,100 472,114 481,129 489,144 496,160 502,175 507,191 510,207 513,223 514,240">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr6" draw:text-style-name="P23" draw:layer="layout" svg:width="0.515cm" svg:height="0.514cm" svg:x="23.265cm" svg:y="7.48cm" svg:viewBox="0 0 516 515" draw:points="516,258 515,275 514,292 511,309 507,325 503,340 497,356 489,371 481,387 472,402 462,416 452,429 440,441 428,452 416,462 402,472 387,481 372,489 356,496 341,502 325,507 309,511 292,513 275,514 258,515 240,514 224,513 207,511 191,507 175,502 160,496 144,489 129,481 114,472 100,462 87,452 75,441 64,429 54,416 44,402 35,387 27,371 20,356 14,340 9,325 5,309 2,292 1,275 0,258 1,240 2,224 5,207 9,191 14,175 20,160 27,144 35,129 44,114 54,100 64,87 75,75 87,64 100,53 114,43 129,34 144,26 160,19 175,13 191,8 207,5 223,2 240,0 258,0 275,0 292,2 309,5 325,8 341,13 356,19 372,26 387,34 402,43 416,53 428,64 440,75 452,87 462,100 472,114 481,129 489,144 497,160 503,175 507,191 511,207 514,223 515,240">
+          <text:p/>
+        </draw:polygon>
+        <draw:line draw:style-name="gr5" draw:text-style-name="P22" draw:layer="layout" svg:x1="9.26cm" svg:y1="7.738cm" svg:x2="9.26cm" svg:y2="10.433cm">
+          <text:p/>
+        </draw:line>
+        <draw:line draw:style-name="gr5" draw:text-style-name="P22" draw:layer="layout" svg:x1="18.692cm" svg:y1="7.738cm" svg:x2="18.692cm" svg:y2="10.433cm">
+          <text:p/>
+        </draw:line>
+        <draw:polygon draw:style-name="gr6" draw:text-style-name="P23" draw:layer="layout" svg:width="0.515cm" svg:height="0.514cm" svg:x="9.002cm" svg:y="7.48cm" svg:viewBox="0 0 516 515" draw:points="516,258 515,275 514,292 511,309 507,325 502,341 496,356 489,372 481,387 472,402 462,416 452,428 441,440 429,451 416,462 402,472 387,481 372,489 356,496 341,502 325,507 309,511 292,513 275,514 258,515 240,514 224,513 207,511 191,507 175,502 160,496 144,489 129,481 114,472 100,462 88,451 76,440 64,428 54,416 44,402 35,387 27,372 19,356 13,341 8,325 5,309 2,292 1,275 0,258 1,240 2,224 5,207 8,191 13,175 19,160 27,144 35,129 44,114 54,100 64,87 76,75 88,64 100,53 114,43 129,34 144,26 160,19 175,13 191,8 207,5 224,2 241,0 258,0 276,0 293,2 309,5 325,8 341,13 356,19 372,26 387,34 402,43 416,53 429,64 441,75 452,87 462,100 472,114 481,129 489,144 496,160 502,175 507,191 511,207 514,223 515,240">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr6" draw:text-style-name="P23" draw:layer="layout" svg:width="0.514cm" svg:height="0.514cm" svg:x="13.742cm" svg:y="7.48cm" svg:viewBox="0 0 515 515" draw:points="515,258 514,275 513,292 510,309 507,325 502,340 496,356 489,371 481,387 472,402 462,416 451,429 440,441 428,452 415,462 401,472 386,481 371,489 355,496 340,502 324,507 308,511 291,513 274,514 257,515 240,514 223,513 206,511 191,507 175,502 160,496 144,489 129,481 114,472 100,462 87,452 75,441 64,429 53,416 43,402 34,387 26,371 19,356 13,340 8,325 5,309 2,292 0,275 0,258 0,240 2,224 5,207 8,191 13,175 19,160 26,144 34,129 43,114 53,100 64,87 75,75 87,64 100,53 114,43 129,34 144,26 160,19 175,13 191,8 207,5 223,2 240,0 257,0 275,0 292,2 308,5 324,8 340,13 355,19 371,26 386,34 401,43 415,53 428,64 440,75 451,87 462,100 472,114 481,129 489,144 496,160 502,175 507,191 510,207 513,223 514,240">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr6" draw:text-style-name="P23" draw:layer="layout" svg:width="0.514cm" svg:height="0.514cm" svg:x="18.435cm" svg:y="7.48cm" svg:viewBox="0 0 515 515" draw:points="515,258 514,275 513,292 510,309 507,325 502,340 496,356 489,371 481,387 472,402 462,416 451,429 440,441 428,452 415,462 401,472 386,481 371,489 355,496 340,502 324,507 308,511 291,513 274,514 257,515 240,514 223,513 206,511 190,507 175,502 159,496 144,489 128,481 113,472 99,462 86,452 74,441 63,429 53,416 43,402 34,387 26,371 19,356 13,340 8,325 4,309 2,292 0,275 0,258 0,240 2,224 4,207 8,191 13,175 19,160 26,144 34,129 43,114 53,100 63,87 74,75 86,64 99,53 113,43 128,34 144,26 159,19 175,13 190,8 206,5 223,2 240,0 257,0 275,0 292,2 308,5 324,8 340,13 355,19 371,26 386,34 401,43 415,53 428,64 440,75 451,87 462,100 472,114 481,129 489,144 496,160 502,175 507,191 510,207 513,223 514,240">
+          <text:p/>
+        </draw:polygon>
+        <draw:path draw:style-name="gr7" draw:text-style-name="P23" draw:layer="layout" svg:width="0.877cm" svg:height="0.876cm" svg:x="13.517cm" svg:y="4.555cm" svg:viewBox="0 0 878 877" svg:d="M780 0h-682l-10 1-10 1-9 2-9 4-9 4-8 5-7 5-7 7-7 7-5 7-5 8-4 9-4 9-2 9-1 10-1 10v682l1 10 1 10 2 9 4 9 4 8 5 8 5 8 7 7 7 6 7 5 8 5 9 4 9 4 9 2 10 1 10 1h682l10-1 10-1 9-2 9-4 9-4 8-5 7-5 7-6 7-7 5-8 5-8 4-8 4-9 2-9 1-10 1-10v-682l-1-10-1-10-2-9-4-9-4-9-5-8-5-7-7-7-7-7-7-5-8-5-9-4-9-4-9-2-10-1zM780 780h-682v-682h682zM195 341h98v341h-98zM390 195h98v487h-98zM585 488h98v194h-98z">
+          <text:p/>
+        </draw:path>
+        <draw:path draw:style-name="gr7" draw:text-style-name="P23" draw:layer="layout" svg:width="1.096cm" svg:height="1.096cm" svg:x="8.688cm" svg:y="4.479cm" svg:viewBox="0 0 1097 1097" svg:d="M548 0l-56 3-55 8-52 14-50 18-48 23-46 28-42 31-39 36-35 39-32 42-27 45-23 48-18 50-14 53-8 54-3 56 3 56 8 55 14 52 18 51 23 48 27 45 32 42 35 39 39 36 42 31 46 28 48 23 50 18 52 14 55 8 56 3 56-3 55-8 52-14 51-18 48-23 45-28 42-31 39-36 36-39 31-42 28-45 23-48 18-51 14-52 8-55 3-56-3-56-8-54-14-53-18-50-23-48-28-45-31-42-36-39-39-36-42-31-45-28-48-23-51-18-52-14-55-8zM109 548v-12l1-13 2-24 4-24 5-24 262 262v55l1 11 1 11 3 10 4 10 4 10 6 9 6 8 7 8 8 7 9 6 9 6 9 4 11 4 10 3 11 1 11 1v106l-40-7-38-10-38-14-35-17-34-20-31-23-29-25-28-28-24-30-22-33-19-34-16-36-12-37-9-39-6-41-2-41zM767 768h-55v-165-6l-1-5-2-5-1-5-3-5-3-5-3-4-3-4-4-3-4-4-5-2-5-3-5-2-5-1-5-1h-6-329v-109h110 6l5-1 5-2 5-1 5-3 5-3 4-3 4-3 3-4 3-4 3-5 3-5 1-5 2-5 1-5v-6-110h109l11-1 11-1 11-3 10-4 10-4 9-6 8-6 8-7 7-8 6-8 6-9 4-10 4-10 3-11 1-11 1-11v-22l30 13 28 16 27 17 26 19 24 21 23 23 21 24 19 26 17 27 15 28 14 30 11 30 8 32 7 33 4 33 1 34-2 42-6 41-10 40-13 39-17 37-20 34-23 33-25 30-3-8-4-8-4-7-4-7-5-7-6-6-6-6-7-6-7-4-7-5-8-3-8-3-8-3-9-2-9-1z">
+          <text:p/>
+        </draw:path>
+        <draw:path draw:style-name="gr7" draw:text-style-name="P23" draw:layer="layout" svg:width="0.99cm" svg:height="1.095cm" svg:x="22.971cm" svg:y="4.43cm" svg:viewBox="0 0 991 1096" svg:d="M825 775h-8l-7 1-15 2-15 4-13 5-14 6-12 7-12 8-11 9-393-228 2-10 2-9v-5l1-5v-5-5-5-5l-1-5v-4l-2-10-2-9 388-226 12 10 12 8 13 8 14 6 15 5 15 4 15 2 16 1 17-1 17-2 15-4 16-6 14-7 14-8 13-10 11-10 11-12 10-13 8-13 7-15 6-15 4-16 2-16 1-17-1-17-2-16-4-16-6-15-7-15-8-13-10-13-11-12-11-10-13-10-14-8-14-7-16-6-15-4-17-2-17-1-17 1-16 2-16 4-15 6-15 7-13 8-13 10-12 10-10 12-10 13-8 13-7 15-6 15-4 16-2 16-1 17v5 5l2 9 3 20-388 226-12-10-12-9-13-8-14-6-15-5-15-4-15-2-16-1-17 1-17 2-15 4-16 6-14 7-14 8-12 10-12 10-11 12-9 13-8 13-7 15-6 15-4 16-2 16-1 17 1 17 2 17 4 15 6 16 7 14 8 14 9 13 11 11 12 11 12 10 14 8 14 7 16 6 15 4 17 2 17 1h8l8-1 8-1 7-1 15-4 15-5 14-7 13-8 12-8 12-10 392 229-1 4-1 5-1 4v5l-1 9v9l1 16 2 16 4 15 6 15 6 14 8 13 10 13 10 11 12 10 12 10 13 8 14 6 15 6 16 4 15 2 17 1 16-1 16-2 15-4 15-6 14-6 13-8 13-10 11-10 10-11 10-13 8-13 6-14 6-15 4-15 2-16 1-16-1-17-2-16-4-15-6-15-6-14-8-13-10-12-10-12-11-10-13-10-13-8-14-6-15-6-15-4-16-2-16-1zM825 110h6l5 1 6 1 5 2 5 3 4 2 5 4 4 3 3 4 3 4 3 5 3 5 1 5 2 5 1 5v6 6l-1 5-2 5-1 5-3 5-3 5-3 4-3 4-4 3-5 3-4 3-5 3-5 1-6 2-5 1h-6-6l-5-1-5-2-5-1-5-3-5-3-4-3-4-3-3-4-4-4-2-5-3-5-2-5-1-5-1-5v-6-6l1-5 1-5 2-5 3-5 2-5 4-4 3-4 4-3 4-4 5-2 5-3 5-2 5-1 5-1zM165 605h-6l-5-1-5-2-5-1-5-3-5-2-4-4-4-3-3-4-4-4-2-5-3-5-1-5-2-5-1-5v-6-6l1-5 2-5 1-5 3-5 2-5 4-4 3-4 4-4 4-3 5-2 5-3 5-2 5-1 5-1h6 6l5 1 5 1 5 2 5 3 5 2 4 3 4 4 3 4 4 4 2 5 3 5 1 5 2 5 1 5v6 6l-1 5-2 5-1 5-3 5-2 5-4 4-3 4-4 3-4 4-5 2-5 3-5 1-5 2-5 1zM825 992h-6l-5-1-5-2-5-1-5-3-5-3-4-3-4-3-3-4-4-4-2-5-3-5-2-5-1-5-1-5v-6-6l1-5 1-5 2-5 3-5 2-5 3-4 4-4 4-3 4-4 5-2 5-3 5-2 5-1 5-1h6 6l5 1 5 1 6 2 4 3 5 2 4 4 4 3 4 4 3 4 3 5 3 5 1 5 2 5 1 5v6 6l-1 5-2 5-1 5-3 5-3 5-3 4-3 4-4 3-5 3-4 3-5 3-5 1-6 2-5 1z">
+          <text:p/>
+        </draw:path>
+        <draw:path draw:style-name="gr7" draw:text-style-name="P23" draw:layer="layout" svg:width="0.807cm" svg:height="1.096cm" svg:x="4.369cm" svg:y="4.539cm" svg:viewBox="0 0 808 1097" svg:d="M404 0h-20l-20 2-21 2-10 2-10 2-29 7-29 9-27 11-27 14-26 15-24 17-23 18-21 20-20 22-19 23-16 25-15 25-13 27-11 28-9 29-7 29-4 28-2 28-1 27 1 27 3 26 5 26 6 25 8 25 10 24 10 23 13 22 13 21 15 21 16 19 17 19 18 17 5 4 4 5 4 4 4 5 3 5 3 5 3 5 3 6 2 5 2 6 1 5 2 6 1 6 1 6v6 6 134l1 12 2 11 2 11 4 10 5 11 6 9 7 9 7 8 8 8 9 6 10 6 10 5 11 4 11 3 11 1 12 1h16l4 6 4 6 5 6 5 6 5 5 6 5 6 4 6 4 6 4 7 3 7 3 7 2 8 2 7 1 8 1h8 8l8-1 8-1 7-2 7-2 7-3 7-3 7-4 6-4 6-4 5-5 6-5 5-6 4-6 4-6 4-6h16l12-1 11-1 12-3 10-4 10-5 10-6 9-6 8-8 8-8 6-9 6-9 5-11 4-10 3-11 2-11v-12-134-6l1-6v-6l2-5 1-6 2-6 1-5 3-6 2-5 3-5 3-6 3-4 4-5 4-5 4-4 4-4 15-14 15-15 14-16 13-17 12-17 11-17 10-19 10-19 8-19 7-20 7-21 5-21 4-21 3-22 2-22v-22l-2-41-6-40-10-39-14-37-17-36-20-33-23-31-26-29-29-26-31-23-33-20-36-17-37-14-38-10-41-6zM519 808h-230v-58h230zM289 924v-58h230v58zM581 635h-355l-6-8-2-2-2-2-2-2-2-2-14-13-12-14-12-15-11-15-9-15-9-17-8-17-6-17-5-17-4-18-3-19-2-18-1-19v-19l2-19 3-19 5-21 6-20 8-20 9-19 11-18 12-17 13-17 14-15 15-15 17-13 17-12 18-11 19-9 19-9 21-6 20-5 8-1 7-1 15-2 14-1h15l30 1 28 5 28 7 26 10 26 12 23 14 23 17 20 18 19 21 17 22 14 24 12 25 10 26 7 28 5 29 1 29v15l-2 16-2 15-2 15-4 15-5 14-5 15-6 13-6 14-8 13-8 13-8 13-10 12-10 11-11 11-11 11-3 4-4 3-3 4z">
+          <text:p/>
+        </draw:path>
+        <draw:polygon draw:style-name="gr7" draw:text-style-name="P23" draw:layer="layout" svg:width="0.057cm" svg:height="0.172cm" svg:x="4.744cm" svg:y="5.001cm" svg:viewBox="0 0 58 173" draw:points="0,0 58,0 58,173 0,173">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr7" draw:text-style-name="P23" draw:layer="layout" svg:width="0.162cm" svg:height="0.162cm" svg:x="4.639cm" svg:y="4.878cm" svg:viewBox="0 0 163 163" draw:points="143,143 122,163 0,41 40,0 163,123">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr7" draw:text-style-name="P23" draw:layer="layout" svg:width="0.162cm" svg:height="0.162cm" svg:x="4.744cm" svg:y="4.879cm" svg:viewBox="0 0 163 163" draw:points="143,20 163,41 41,163 0,122 123,0">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr7" draw:text-style-name="P23" draw:layer="layout" svg:width="0.403cm" svg:height="0.403cm" svg:x="18.742cm" svg:y="5.035cm" svg:viewBox="0 0 404 404" draw:points="351,351 299,404 0,105 105,0 404,299">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr7" draw:text-style-name="P23" draw:layer="layout" svg:width="0.941cm" svg:height="0.923cm" svg:x="18.159cm" svg:y="4.514cm" svg:viewBox="0 0 942 924" draw:points="768,368 786,368 803,365 820,361 836,355 851,347 865,338 879,328 891,317 902,305 912,291 921,277 928,261 934,245 938,229 941,211 942,193 942,183 941,172 939,162 936,152 934,142 930,132 926,123 922,113 787,248 713,174 848,39 839,35 829,31 820,28 810,25 800,23 789,21 779,20 768,19 750,20 733,23 716,27 700,33 685,41 670,49 657,59 644,70 633,83 623,96 614,111 607,126 601,142 597,158 594,176 593,193 593,201 594,209 595,216 596,224 597,231 599,238 601,245 604,251 512,343 423,254 458,219 388,149 494,43 483,33 470,24 458,17 444,11 431,6 417,3 402,1 388,0 374,1 359,3 345,6 332,11 318,17 306,24 293,33 282,43 106,220 176,290 36,290 0,325 177,502 212,466 212,325 282,396 318,360 407,449 37,818 143,924 710,357 717,360 724,362 731,364 738,366 746,367 753,368 760,368">
+          <text:p/>
+        </draw:polygon>
+        <draw:frame presentation:style-name="pr25" draw:text-style-name="P24" draw:layer="layout" svg:width="4.064cm" svg:height="5.001cm" svg:x="2.789cm" svg:y="8.151cm">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T13">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mollis dictum volutpat. Donec bibendum magna vel risus consectetur, sit amet aliquet est ullamcorper. Praesent ullamcorper faucibus imperdiet.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr25" draw:text-style-name="P24" draw:layer="layout" svg:width="4.064cm" svg:height="5.001cm" svg:x="7.361cm" svg:y="10.42cm">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T13">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mollis dictum volutpat. Donec bibendum magna vel risus consectetur, sit amet aliquet est ullamcorper. Praesent ullamcorper faucibus imperdiet.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr25" draw:text-style-name="P24" draw:layer="layout" svg:width="4.064cm" svg:height="5.001cm" svg:x="11.933cm" svg:y="8.08cm">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T13">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mollis dictum volutpat. Donec bibendum magna vel risus consectetur, sit amet aliquet est ullamcorper. Praesent ullamcorper faucibus imperdiet.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr25" draw:text-style-name="P24" draw:layer="layout" svg:width="4.064cm" svg:height="5.001cm" svg:x="21.585cm" svg:y="8.08cm">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T13">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mollis dictum volutpat. Donec bibendum magna vel risus consectetur, sit amet aliquet est ullamcorper. Praesent ullamcorper faucibus imperdiet.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr25" draw:text-style-name="P24" draw:layer="layout" svg:width="4.064cm" svg:height="5.001cm" svg:x="16.759cm" svg:y="10.42cm">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T13">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mollis dictum volutpat. Donec bibendum magna vel risus consectetur, sit amet aliquet est ullamcorper. Praesent ullamcorper faucibus imperdiet.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr26" draw:text-style-name="P15" draw:layer="layout" svg:width="7.549cm" svg:height="1.343cm" svg:x="2.22cm" svg:y="0.285cm" presentation:class="title" presentation:user-transformed="true">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T9">Dolor Sit</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <presentation:notes draw:style-name="dp2">
+          <draw:page-thumbnail draw:style-name="gr2" draw:layer="layout" svg:width="18.624cm" svg:height="10.476cm" svg:x="1.482cm" svg:y="2.123cm" draw:page-number="7" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr27" draw:text-style-name="P6" draw:layer="layout" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <draw:page draw:name="page8" draw:style-name="dp1" draw:master-page-name="Infographic3" presentation:presentation-page-layout-name="AL1T1">
+        <draw:polygon draw:style-name="gr8" draw:text-style-name="P25" draw:layer="layout" svg:width="3.098cm" svg:height="2.802cm" svg:x="24.899cm" svg:y="4.238cm" svg:viewBox="0 0 3099 2803" draw:points="3099,0 3099,0 2798,9 2507,36 2225,82 1949,146 1678,229 1411,331 1145,454 880,597 640,745 527,821 418,901 312,984 208,1071 0,1263 1540,2803 1540,2803 1641,2712 1743,2631 1850,2557 1966,2486 2101,2413 2237,2350 2373,2298 2511,2256 2652,2223 2797,2200 2945,2186 3099,2182">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr9" draw:text-style-name="P26" draw:layer="layout" svg:width="2.634cm" svg:height="2.454cm" svg:x="23.716cm" svg:y="5.587cm" svg:viewBox="0 0 2635 2455" draw:points="1090,0 1090,0 900,207 813,311 730,416 651,524 575,636 428,875 294,1123 235,1245 181,1368 131,1493 84,1621 0,1890 2109,2455 2109,2455 2151,2326 2174,2265 2199,2206 2254,2088 2318,1970 2389,1854 2463,1748 2544,1646 2635,1545">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr10" draw:text-style-name="P27" draw:layer="layout" svg:width="2.802cm" svg:height="4.188cm" svg:x="23.547cm" svg:y="7.6cm" svg:viewBox="0 0 2803 4189" draw:points="139,0 139,0 77,274 53,407 34,540 19,673 9,809 0,1090 0,1090 9,1391 36,1682 81,1964 145,2240 228,2511 331,2778 453,3044 596,3309 744,3549 821,3662 900,3770 983,3877 1071,3981 1262,4189 2803,2648 2803,2648 2712,2547 2631,2445 2593,2393 2556,2339 2485,2223 2412,2087 2349,1952 2297,1815 2255,1677 2222,1536 2199,1392 2185,1243 2181,1090 2181,1090 2185,954 2197,825 2217,697 2246,565">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr11" draw:text-style-name="P28" draw:layer="layout" svg:width="3.101cm" svg:height="2.803cm" svg:x="24.896cm" svg:y="10.336cm" svg:viewBox="0 0 3102 2804" draw:points="1544,0 0,1545 0,1545 207,1735 310,1822 416,1905 524,1984 637,2061 876,2208 1142,2351 1408,2474 1676,2576 1948,2659 2225,2723 2508,2768 2800,2795 3102,2804 3102,622 3102,622 2949,617 2800,604 2656,581 2516,548 2378,506 2242,453 2106,391 1971,318 1855,247 1748,172 1646,91">
+          <text:p/>
+        </draw:polygon>
+        <draw:polyline draw:style-name="gr12" draw:text-style-name="P22" draw:layer="layout" svg:width="13.677cm" svg:height="1.24cm" svg:x="12.07cm" svg:y="3.612cm" svg:viewBox="0 0 13678 1241" draw:points="0,0 13678,0 13678,1241">
+          <text:p/>
+        </draw:polyline>
+        <draw:line draw:style-name="gr12" draw:text-style-name="P22" draw:layer="layout" svg:x1="23.987cm" svg:y1="6.76cm" svg:x2="17.747cm" svg:y2="6.76cm">
+          <text:p/>
+        </draw:line>
+        <draw:line draw:style-name="gr12" draw:text-style-name="P22" draw:layer="layout" svg:x1="12.07cm" svg:y1="9.737cm" svg:x2="23.674cm" svg:y2="9.737cm">
+          <text:p/>
+        </draw:line>
+        <draw:polyline draw:style-name="gr12" draw:text-style-name="P22" draw:layer="layout" svg:width="8.048cm" svg:height="0.907cm" svg:x="17.698cm" svg:y="12.529cm" svg:viewBox="0 0 8049 908" draw:points="0,908 35,905 113,903 386,900 1317,896 4077,897 8049,908 8049,0">
+          <text:p/>
+        </draw:polyline>
+        <draw:polygon draw:style-name="gr13" draw:text-style-name="P26" draw:layer="layout" svg:width="0.38cm" svg:height="0.381cm" svg:x="11.88cm" svg:y="3.421cm" svg:viewBox="0 0 381 382" draw:points="381,191 381,204 380,216 378,228 375,240 372,252 367,263 362,275 356,286 349,297 342,307 334,317 326,326 317,334 307,342 297,349 286,356 275,362 263,367 252,372 240,376 229,378 217,380 204,382 191,382 178,382 165,380 153,378 141,376 129,372 118,367 106,362 95,356 84,349 74,342 64,334 55,326 47,317 39,307 32,297 25,286 19,275 14,263 9,252 6,240 3,228 1,216 0,204 0,191 0,178 1,166 3,154 6,142 9,130 14,119 19,107 25,96 32,85 39,75 47,65 55,56 64,48 74,40 84,33 95,26 106,20 118,15 129,10 141,6 153,4 165,2 178,0 191,0 204,0 216,2 228,4 240,6 252,10 263,15 275,20 286,26 297,33 307,40 317,48 326,56 334,65 342,75 349,85 356,96 362,107 367,119 372,130 375,142 378,154 380,166 381,178">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr13" draw:text-style-name="P26" draw:layer="layout" svg:width="0.38cm" svg:height="0.381cm" svg:x="17.557cm" svg:y="6.569cm" svg:viewBox="0 0 381 382" draw:points="381,191 381,204 380,216 378,228 375,240 372,252 367,263 362,275 356,286 349,297 342,307 334,317 326,326 317,334 307,342 297,349 286,356 275,362 263,368 252,372 240,376 228,378 216,380 203,382 190,382 177,382 164,380 152,378 140,376 129,372 118,368 106,362 95,356 84,349 74,342 64,334 55,326 47,317 39,307 32,297 25,286 19,275 14,263 9,252 6,240 3,228 1,216 0,204 0,191 0,178 1,166 3,153 6,141 9,130 14,118 19,106 25,95 32,84 39,74 47,64 55,56 64,47 74,40 84,33 95,26 106,20 118,15 129,10 141,6 152,4 165,2 177,0 190,0 203,0 216,2 228,4 240,6 252,10 263,15 275,20 286,26 297,33 307,40 317,47 326,56 334,64 342,74 349,84 356,95 362,106 367,118 372,130 375,141 378,153 380,166 381,178">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr13" draw:text-style-name="P26" draw:layer="layout" svg:width="0.38cm" svg:height="0.38cm" svg:x="11.88cm" svg:y="9.547cm" svg:viewBox="0 0 381 381" draw:points="381,190 381,203 380,216 378,228 375,240 372,252 367,263 362,275 356,286 349,297 342,307 334,317 326,326 317,334 307,342 297,349 286,356 275,362 263,367 252,372 240,375 228,378 216,380 203,381 190,381 177,381 164,380 152,378 141,375 129,372 118,367 106,362 95,356 84,349 74,342 64,334 55,326 47,317 39,307 32,297 25,286 19,275 14,263 9,252 6,240 3,228 1,216 0,203 0,190 0,177 1,164 3,152 6,141 9,129 14,118 19,106 25,95 32,84 39,74 47,64 55,55 64,47 74,39 84,32 95,25 106,19 118,14 129,9 141,6 153,3 165,1 177,0 190,0 203,0 216,1 228,3 240,6 252,9 263,14 275,19 286,25 297,32 307,39 317,47 326,55 334,64 342,74 349,84 356,95 362,106 367,118 372,129 375,141 378,153 380,165 381,177">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr13" draw:text-style-name="P26" draw:layer="layout" svg:width="0.38cm" svg:height="0.381cm" svg:x="17.507cm" svg:y="13.246cm" svg:viewBox="0 0 381 382" draw:points="381,191 381,204 380,216 378,228 375,240 372,252 367,263 362,275 356,286 349,297 342,307 334,317 326,326 317,334 307,342 297,349 286,356 275,362 263,367 252,372 241,376 229,378 217,380 204,382 191,382 178,382 165,380 153,378 141,376 129,372 118,367 106,362 95,356 84,349 74,342 64,334 55,326 47,317 39,307 32,297 25,286 19,275 14,263 9,252 6,240 3,228 1,216 0,204 0,191 0,178 1,166 3,154 6,142 9,130 14,119 19,107 25,96 32,85 39,75 47,65 55,56 64,48 74,40 84,33 95,26 106,20 118,15 129,10 141,6 153,4 165,2 178,0 191,0 204,0 216,2 229,4 240,6 252,10 263,15 275,20 286,26 297,33 307,40 317,48 326,56 334,65 342,75 349,85 356,96 362,107 367,119 372,130 375,142 378,154 380,166 381,178">
+          <text:p/>
+        </draw:polygon>
+        <draw:polygon draw:style-name="gr14" draw:text-style-name="P23" draw:layer="layout" svg:width="0.463cm" svg:height="0.674cm" svg:x="24.334cm" svg:y="6.378cm" svg:viewBox="0 0 464 675" draw:points="106,675 0,614 210,250 294,116 291,118 283,121 259,131 146,169 126,64 368,0 464,55">
+          <text:p/>
+        </draw:polygon>
+        <draw:path draw:style-name="gr14" draw:text-style-name="P23" draw:layer="layout" svg:width="0.517cm" svg:height="0.664cm" svg:x="24.64cm" svg:y="6.573cm" svg:viewBox="0 0 518 665" svg:d="M417 424l-24 40-23 35-22 33-22 28-22 25-21 22-21 18-10 8-10 6-10 6-10 6-10 4-10 4-10 3-10 2-10 1h-10-11l-10-1-10-2-10-2-11-4-10-4-11-5-10-5-10-7-10-6-8-7-8-8-8-7-6-8-6-9-6-8-4-9-4-10-3-10-3-10-2-10-1-11v-12-11l1-12 2-13 5-26 9-29 11-31 14-34 17-35 19-38 22-39 23-39 23-36 23-32 22-29 22-25 21-22 21-18 10-7 10-7 10-6 10-6 11-4 10-4 10-3 10-2 10-1 11-1h10l10 1 10 2 10 2 11 3 10 4 10 5 10 6 10 6 10 6 9 7 8 8 7 7 7 8 6 8 5 9 5 9 3 10 4 9 2 10 2 11 1 11 1 11-1 11-1 12-1 13-6 27-8 29-11 31-14 34-17 36-20 38zM208 304l-32 58-26 49-18 39-6 16-5 13-3 12-1 6-1 5v5 5 4l1 4 1 4 2 4 2 4 2 3 2 3 3 2 3 3 4 2 2 2 3 1 2 1 3 1h2l3 1h2 3 3l2-1h3l2-1 3-1 3-1 2-1 3-2 5-3 6-5 6-5 7-6 6-8 7-8 15-18 16-23 19-29 46-77 31-56 25-49 10-20 8-19 7-16 4-14 3-12 1-6 1-5v-6-5-4l-1-5-1-4-1-4-2-3-2-4-2-3-3-3-3-2-4-2-4-2-3-2-4-1h-4-4-4l-4 1-4 1-4 1-4 2-4 3-5 3-4 3-4 4-9 9-10 11-10 13-25 36-29 45z">
+          <text:p/>
+        </draw:path>
+        <draw:path draw:style-name="gr14" draw:text-style-name="P23" draw:layer="layout" svg:width="0.678cm" svg:height="0.845cm" svg:x="25.061cm" svg:y="6.771cm" svg:viewBox="0 0 679 846" svg:d="M211 191l-15 26-12 24-5 11-4 10-4 9-2 8-2 7-1 6v4 2l1 3v3l1 2v2l1 2 2 2 1 2 2 2 1 1 2 1 3 2h2l2 1h2 2 3 2l2-1 3-1 2-1 3-1 2-2 6-4 5-5 6-6 7-7 6-8 7-10 15-22 16-26 15-27 12-24 4-11 4-10 3-8 2-8 2-8v-6-3-3-3-3l-1-2-1-2-1-2-1-2-1-2-2-2-2-1-2-1-2-1-2-1-2-1h-2-3-2-2l-3 1-2 1-3 1-2 2-3 1-5 4-6 5-5 6-6 7-6 9-7 9-15 22zM358 275l-14 22-14 21-13 18-14 17-14 15-15 13-14 11-7 4-8 4-7 4-7 3-7 3-8 2-7 1-7 2h-7-7-8l-7-1-7-1-7-2-7-2-8-3-7-4-7-3-7-5-7-4-6-5-6-5-5-6-5-5-4-6-4-6-4-6-3-7-2-6-3-7-1-8-1-7-1-8v-7-9-8l3-17 4-19 6-19 8-20 9-21 11-22 13-24 28-43 14-19 14-17 14-15 14-13 14-11 14-9 14-7 14-4 14-3 14-1 14 1 15 3 14 6 14 7 14 9 12 10 10 11 9 12 7 12 4 14 4 15 1 15-1 17-2 17-4 19-6 19-7 21-9 21zM407 622l-15 27-12 23-5 11-4 10-4 9-2 8-2 7v7l-1 3 1 3v2 3l1 2 1 3 1 2 1 2 1 1 2 2 2 1 2 2 2 1 2 1h2 2l3 1 2-1h2l3-1h2l3-2 3-1 2-2 6-3 5-5 6-6 6-8 7-8 7-10 14-22 16-26 15-27 12-24 4-10 4-10 3-9 2-8 1-7 1-7v-3-3-3-2l-1-3-1-2-1-2-1-2-1-2-2-1-2-2-2-1-2-1-2-1h-2l-2-1h-2l-2 1h-3l-2 1-2 1-3 1-2 1-3 2-5 4-6 5-6 6-6 7-6 8-7 10-15 21zM553 706l-13 23-14 20-14 19-14 16-14 15-14 12-15 11-14 9-7 4-8 3-7 2-7 3-7 1-7 1-8 1h-7-7l-7-1-7-1-7-2-7-2-7-3-8-3-7-4-7-5-7-4-6-5-5-5-6-5-5-6-4-6-4-6-3-6-3-6-3-7-2-7-1-7-2-7v-8l-1-8 1-8v-8l3-18 4-18 6-19 8-21 9-21 11-22 13-23 13-22 14-21 14-18 13-17 14-14 14-13 14-11 14-9 7-4 7-4 8-3 7-2 7-2 7-1 7-1h7 8l7 1 7 1 7 2 7 2 7 3 7 3 8 4 13 9 12 10 11 11 8 12 7 12 5 14 3 15 1 15-1 17-2 18-4 18-6 20-7 20-10 22zM679 207l-597 482-82-48 596-482z">
+          <text:p/>
+        </draw:path>
+        <draw:polygon draw:style-name="gr14" draw:text-style-name="P23" draw:layer="layout" svg:width="0.707cm" svg:height="0.563cm" svg:x="26.088cm" svg:y="4.732cm" svg:viewBox="0 0 708 564" draw:points="627,347 614,354 600,361 586,366 573,370 559,372 546,374 533,374 519,374 507,372 494,369 482,365 469,359 458,353 446,346 435,337 424,327 421,329 426,344 429,359 432,373 433,387 432,401 430,415 428,428 423,441 421,447 418,454 415,460 411,466 403,477 393,488 382,499 370,509 356,519 341,528 320,539 299,549 278,556 257,561 246,562 236,563 226,564 215,564 205,563 195,562 185,560 175,558 165,555 155,551 146,548 137,543 128,538 119,533 111,527 103,521 87,507 72,490 59,472 46,451 35,432 26,413 18,395 12,376 7,358 3,340 1,322 0,305 104,245 103,263 104,282 105,291 106,300 107,309 109,318 111,327 113,335 116,344 119,352 122,360 125,368 129,375 133,382 140,393 147,403 154,412 162,419 166,423 170,426 174,428 178,431 183,433 187,435 192,437 196,438 201,439 206,440 210,441 215,441 220,441 225,440 231,439 236,438 247,435 258,431 270,426 282,419 294,412 304,405 313,397 320,388 326,380 332,371 335,361 338,351 340,341 340,330 339,319 337,308 333,296 328,284 323,271 316,258 297,225 382,176 400,207 407,219 414,229 422,238 429,246 437,253 442,256 446,259 450,261 454,264 459,266 463,267 468,269 472,270 477,271 481,271 486,272 491,272 496,271 501,271 506,270 511,269 521,266 531,261 541,256 549,251 556,246 562,241 567,235 570,233 572,230 574,227 575,224 577,221 578,218 580,214 581,211 582,208 582,205 583,202 583,198 583,195 583,192 583,188 582,185 582,181 581,178 579,171 576,164 572,157 569,151 565,146 561,141 557,136 548,126 537,118 526,110 514,103 500,96 485,90 528,0 552,7 563,11 574,16 584,21 594,27 604,33 614,39 623,47 631,55 640,63 648,72 663,91 676,112 686,130 694,148 700,165 704,182 707,199 708,207 708,216 708,224 707,232 706,240 705,248 703,255 701,263 698,270 695,277 692,284 688,291 684,297 679,304 674,310 669,316 663,321 657,327 643,337">
+          <text:p/>
+        </draw:polygon>
+        <draw:path draw:style-name="gr14" draw:text-style-name="P23" draw:layer="layout" svg:width="0.667cm" svg:height="0.514cm" svg:x="26.349cm" svg:y="5.162cm" svg:viewBox="0 0 668 515" svg:d="M425 416l-40 22-38 19-36 17-33 14-32 11-29 8-27 5-12 2h-12l-12 1-11-1-11-1-10-2-11-2-9-4-10-4-9-4-9-6-8-6-8-6-8-8-7-8-7-9-6-9-7-10-5-11-5-10-4-11-4-10-2-10-2-11-1-10v-10l1-10 1-10 2-10 3-10 4-10 4-10 6-10 6-10 6-10 8-10 18-21 22-20 25-22 29-22 32-22 36-23 39-23 39-22 38-20 36-16 33-14 31-11 30-8 27-5 12-2 13-1h11l12 1 11 1 11 2 10 2 10 3 9 4 10 5 8 5 9 6 8 7 7 7 8 8 7 8 6 9 6 10 6 11 5 10 4 10 3 11 3 10 1 10 1 11 1 10-1 10-1 10-2 10-3 10-4 10-4 10-6 10-6 10-6 10-8 10-18 20-22 21-25 22-29 22-32 23-37 23zM304 207l-57 34-46 29-36 25-13 11-11 9-9 9-3 4-3 4-3 4-2 5-2 4-2 4-1 4-1 4v4 4l1 3 1 4 2 4 2 3 1 3 2 2 1 2 2 2 2 2 2 2 2 1 2 2 3 1 2 1 3 1h2l3 1h3 3 3 7l7-1 8-2 8-2 10-3 10-3 21-9 26-12 31-16 78-43 56-33 45-29 19-13 16-12 14-11 11-10 9-9 4-4 3-5 3-4 2-5 2-4 2-4 1-4 1-4v-4-4l-1-4-1-4-1-4-2-3-2-4-3-3-2-3-4-2-3-2-3-2-4-1-4-1-5-1h-4-5-5l-6 1-5 1-12 3-14 5-16 6-39 19-48 25z">
+          <text:p/>
+        </draw:path>
+        <draw:path draw:style-name="gr14" draw:text-style-name="P23" draw:layer="layout" svg:width="0.804cm" svg:height="0.808cm" svg:x="26.57cm" svg:y="5.515cm" svg:viewBox="0 0 805 809" svg:d="M408 139l-27 16-22 14-10 7-8 6-7 6-7 6-5 6-3 5-2 3-1 2-2 3-1 2v2l-1 3v2 2l1 3v2l1 2 1 2 1 2 2 2 1 1 2 2 2 1 2 1 2 1h3l2 1h3 3 3l7-1 7-1 8-3 9-3 10-3 11-5 24-12 27-15 26-16 22-14 9-7 9-7 7-6 6-6 4-6 4-5 2-2 1-3 1-2 1-3 1-2 1-3v-2-2l-1-2v-3l-1-2-1-2-1-2-2-2-2-1-1-2-2-1-2-1-3-1h-2l-3-1h-2-3-3l-7 1-7 1-8 3-9 3-9 4-11 5-23 12zM493 285l-23 13-22 11-21 9-21 8-19 5-19 4-18 2-9 1h-8l-8-1-8-1-8-1-7-2-7-2-7-2-6-4-7-3-6-4-5-4-6-5-5-5-5-6-5-6-5-6-4-7-4-8-3-7-3-7-3-8-2-7-1-7-1-7-1-8v-7l1-7 1-7 2-7 2-7 3-7 3-7 3-7 5-7 4-7 11-14 13-13 15-14 17-14 18-13 21-14 23-14 46-24 21-9 21-8 19-6 19-4 17-2 17-1 16 1 14 3 14 5 13 6 11 8 11 10 10 12 9 13 7 15 6 15 3 14 1 15v14l-3 14-5 15-6 14-9 14-11 14-12 14-15 14-17 14-18 14zM362 610l-26 16-23 15-9 6-9 7-7 6-6 6-5 5-4 5-2 3-1 3-1 2-1 2-1 3v2l-1 3 1 2v2 2l1 2 1 2 2 2 1 2 2 2 2 1 1 2 3 1h2l2 1 3 1h3 3 3l6-1 8-1 8-2 9-4 10-3 10-5 24-12 27-15 26-16 22-15 9-7 8-6 7-6 6-6 5-6 4-5 2-3 1-2 2-3 1-2v-3l1-2v-2-3-2l-1-2-1-2-1-2-1-2-1-2-2-1-2-2-2-1-2-1-2-1h-2-3l-3-1h-3l-3 1h-7l-7 2-8 2-9 3-9 4-11 5-23 11zM447 757l-23 13-22 10-21 9-21 8-19 5-19 4-18 2-17 1-8-1-8-1-8-1-7-2-7-2-7-3-6-3-7-3-6-4-5-4-6-5-5-5-5-5-5-6-4-7-5-7-4-7-3-8-3-7-3-7-1-7-2-7-1-8v-7-7l1-7 1-7 1-7 3-7 2-7 3-7 4-7 4-7 5-7 11-13 13-14 15-14 16-14 19-13 21-14 23-14 22-12 22-11 21-9 20-8 20-5 18-4 18-3 17-1h8l8 1 7 1 8 1 7 2 7 3 6 3 7 3 6 4 6 4 5 5 5 5 5 6 5 6 5 6 4 7 7 15 6 14 3 15 2 14-1 14-3 15-4 14-7 14-9 14-10 14-13 15-15 14-17 13-19 14zM805 387l-758 119-47-82 758-120z">
+          <text:p/>
+        </draw:path>
+        <draw:path draw:style-name="gr14" draw:text-style-name="P23" draw:layer="layout" svg:width="0.416cm" svg:height="0.721cm" svg:x="24.016cm" svg:y="9.215cm" svg:viewBox="0 0 417 722" svg:d="M417 514l-66 18 43 159-113 31-43-160-210 56-28-103 80-480 129-35 114 426 65-17zM210 457l-38-142-14-63-14-60-3 1-1 27-2 25-3 24-3 23-32 194z">
+          <text:p/>
+        </draw:path>
+        <draw:path draw:style-name="gr14" draw:text-style-name="P23" draw:layer="layout" svg:width="0.421cm" svg:height="0.704cm" svg:x="24.402cm" svg:y="9.129cm" svg:viewBox="0 0 422 705" svg:d="M387 306l12 44 9 42 6 39 5 36 3 33v30l-2 27-2 13-2 12-3 11-3 11-4 10-5 9-5 10-5 8-7 8-7 8-7 7-8 6-9 6-9 6-9 5-11 4-11 4-11 4-12 2-11 2-11 2h-11-10l-11-1-10-2-10-2-10-4-9-4-9-4-9-6-9-6-8-7-8-7-8-9-8-9-8-10-15-23-14-26-15-30-13-33-14-37-12-41-13-43-11-44-9-42-7-38-4-36-3-33v-31l2-27 2-13 2-12 3-11 3-11 4-11 5-10 5-9 6-9 6-8 7-8 7-7 8-6 8-6 9-6 10-5 10-4 10-4 11-3 12-3 11-2 11-1 11-1h11l10 1 10 2 10 2 10 3 9 4 9 5 9 5 9 6 8 7 9 8 8 8 7 9 8 10 15 23 15 26 14 30 14 34 14 37 13 41zM155 368l18 64 16 53 15 40 7 16 6 13 6 10 3 5 4 4 3 4 3 3 4 3 3 3 4 2 4 1 3 2h4l4 1h4l4-1 4-1 3-1 2-1 3-1 2-1 2-1 3-2 2-1 1-2 2-2 2-2 1-2 2-3 1-2 1-3 1-3v-3l2-6 1-7v-9l1-9-1-9-1-11-3-23-4-28-8-34-21-86-18-63-16-51-8-22-7-19-7-16-7-13-6-11-4-4-3-5-4-4-3-3-4-3-3-3-4-2-4-2-4-1-3-1-4-1h-4l-4 1-4 1-4 1-4 2-3 2-3 2-3 3-3 3-2 3-2 4-2 4-2 4-1 5-1 5v5l-1 6v12l1 15 2 17 8 42 12 54z">
+          <text:p/>
+        </draw:path>
+        <draw:path draw:style-name="gr14" draw:text-style-name="P23" draw:layer="layout" svg:width="0.735cm" svg:height="0.786cm" svg:x="24.803cm" svg:y="8.938cm" svg:viewBox="0 0 736 787" svg:d="M112 320l9 29 8 26 4 11 4 10 4 8 4 8 4 6 4 5 2 2 2 2 2 2 2 2 3 1 2 1 2 1h2 2 3 2 2l3-1 2-1 2-1 1-1 2-2 1-2 2-2 1-2 1-2 1-3 1-3 1-3 1-6v-7-9l-1-10-1-10-2-12-5-26-7-30-9-29-8-25-4-11-5-10-4-8-4-7-4-7-4-5-2-2-2-2-3-2-2-1-2-2-2-1h-2l-2-1h-3-2-2l-2 1h-3l-2 1-2 1-2 2-1 1-2 2-1 2-1 2-1 3-1 2-1 3-1 3-1 6v8 8l1 9 1 11 2 11 6 26zM276 275l6 26 5 24 3 23 2 22 1 20-1 19-3 18-2 8-2 9-2 7-3 8-4 7-3 6-4 6-4 6-5 6-5 5-5 5-6 4-6 5-7 3-6 4-7 3-8 2-8 3-8 2-8 1-8 1-7 1h-8l-7-1-7-1-7-1-7-2-7-2-7-3-6-4-6-4-6-4-6-5-6-5-6-6-5-7-11-14-10-16-9-18-9-19-8-22-8-23-7-26-12-50-3-24-2-21-1-21 1-19 2-17 4-17 5-14 6-14 8-12 10-10 11-10 12-7 14-7 15-5 17-3 15-2 15 1 14 2 14 4 13 7 13 8 12 10 11 12 11 14 10 16 10 18 9 19 8 22zM556 486l8 30 8 25 5 11 4 10 4 8 3 8 5 6 4 5 2 2 2 2 2 2 2 2 2 1 2 1 3 1h2l2 1h2l3-1h2l2-1 2-1 2-1 2-1 2-2 1-2 2-2 1-2 1-2 1-3 1-3 1-3 1-6v-8-8-10l-2-10-2-12-5-26-7-30-9-29-8-25-5-11-4-9-4-8-4-7-4-7-5-5-2-3-2-2-2-1-2-2-2-1-2-1-3-1-2-1h-2-2-3l-2 1h-2l-2 1-2 1-1 2-2 1-1 2-2 2-1 2-1 3-1 2-1 3v3l-1 7-1 8v8l1 9 1 10 2 12 5 25zM720 442l6 25 4 25 4 22 1 22 1 20-1 20-3 17-4 17-3 8-3 7-3 7-3 7-4 6-4 6-5 5-5 5-5 5-6 5-6 4-6 3-7 4-7 3-7 3-8 2-8 2-8 1-8 1-8 1h-7l-7-1-7-1-7-1-7-2-7-2-6-3-7-4-6-4-6-4-6-5-6-5-5-6-6-7-10-14-10-16-10-18-8-19-9-22-8-23-7-26-6-25-5-24-3-23-2-21-1-20 1-19 2-18 3-16 3-8 2-8 3-7 4-7 3-6 4-6 5-6 5-5 5-5 6-4 6-4 6-4 7-4 7-3 7-2 8-3 16-3 16-2 14 1 15 2 14 5 13 6 12 8 12 10 12 12 10 14 11 16 9 18 10 20 8 22zM455 0l-82 763-91 24 81-762z">
+          <text:p/>
+        </draw:path>
+        <draw:polygon draw:style-name="gr14" draw:text-style-name="P23" draw:layer="layout" svg:width="0.738cm" svg:height="0.594cm" svg:x="26.072cm" svg:y="12.022cm" svg:viewBox="0 0 739 595" draw:points="739,284 560,595 474,545 380,354 345,286 331,260 319,241 308,225 297,210 286,196 275,183 269,178 262,172 256,167 249,161 242,156 235,152 221,142 212,138 204,134 196,131 188,129 180,127 177,127 173,126 170,126 166,126 163,127 160,127 157,128 154,129 151,130 148,131 145,132 142,133 139,135 137,137 134,139 132,141 130,143 127,145 125,147 123,150 120,156 117,161 114,166 112,172 111,178 110,183 109,189 109,196 109,202 110,209 111,216 112,223 114,232 119,250 125,270 24,292 18,275 13,258 8,243 5,228 2,213 1,200 0,187 0,175 1,163 3,152 5,141 8,130 11,119 16,108 21,97 26,87 37,70 48,55 54,49 60,42 67,36 73,31 80,26 87,22 94,17 102,14 109,11 117,8 125,5 133,3 141,2 150,1 158,0 167,0 175,0 184,1 202,4 220,8 238,15 257,23 276,33 293,44 309,55 317,61 325,67 332,73 339,79 345,86 352,92 365,106 377,121 389,138 401,154 412,172 423,191 434,211 448,239 468,282 526,414 526,414 636,224">
+          <text:p/>
+        </draw:polygon>
+        <draw:path draw:style-name="gr14" draw:text-style-name="P23" draw:layer="layout" svg:width="0.664cm" svg:height="0.517cm" svg:x="26.301cm" svg:y="11.639cm" svg:viewBox="0 0 665 518" svg:d="M424 101l40 23 35 23 33 23 28 22 25 21 22 22 18 20 8 10 6 10 6 10 6 10 4 10 4 10 3 10 2 10 1 11v10 10l-1 10-2 11-2 10-4 10-4 11-5 10-5 11-7 10-6 9-7 9-8 8-7 7-8 7-9 6-8 5-9 5-10 4-10 3-10 2-10 2-11 1-12 1-11-1-12-1-13-1-26-6-29-8-31-11-34-14-35-17-38-19-39-23-39-23-36-23-32-22-29-22-25-22-22-21-18-21-7-10-7-10-6-11-6-10-4-10-4-10-3-10-2-11-1-10-1-10v-10l1-11 2-10 2-10 3-10 4-10 5-11 6-10 6-10 6-9 7-9 8-8 7-7 8-7 8-6 9-5 9-5 10-4 9-3 10-3 11-1 11-2h11 11l12 1 13 2 27 5 29 8 31 12 34 14 36 16 38 20zM304 309l58 33 49 25 39 18 16 7 13 5 12 3 6 1h5l5 1 5-1h4l4-1 4-1 4-1 4-2 3-2 3-3 2-2 3-4 2-3 2-3 1-2 1-3 1-2v-3l1-2v-3-2-3l-1-3v-2l-1-3-1-2-1-3-1-3-2-2-3-6-5-6-5-6-6-6-8-7-8-7-18-14-23-17-29-18-77-46-56-32-49-25-20-10-19-8-16-6-14-5-12-3-6-1h-5l-6-1h-5l-4 1h-5l-4 1-4 2-3 1-4 3-3 2-3 3-2 3-2 3-2 4-2 4-1 4v3 4 4l1 4 1 4 1 4 2 5 3 4 3 4 3 4 4 5 9 9 11 9 13 11 36 25 45 29z">
+          <text:p/>
+        </draw:path>
+        <draw:path draw:style-name="gr14" draw:text-style-name="P23" draw:layer="layout" svg:width="0.845cm" svg:height="0.678cm" svg:x="26.499cm" svg:y="11.057cm" svg:viewBox="0 0 846 679" svg:d="M191 469l26 15 24 12 11 4 10 4 9 4 8 2 7 2 6 1h4 2l3-1h3l2-1h2l2-1 2-2 2-1 2-2 1-1 1-2 2-2v-3l1-2v-2-2-3-2l-1-2-1-3-1-2-1-3-2-2-4-6-5-5-6-6-7-7-8-6-10-7-22-15-26-16-27-15-24-12-11-4-10-4-8-3-8-2-8-1-6-1h-3-3-3-3l-2 1-2 1-2 1-2 1-2 1-2 2-1 2-1 2-1 2-1 2-1 2v2 3 2 2l1 3 1 2 1 3 2 2 1 3 4 5 5 6 6 5 7 6 9 7 9 6 22 15zM275 321l22 14 21 14 18 13 17 14 15 15 13 14 11 14 4 7 4 8 4 7 3 7 3 7 2 8 1 7 2 7v7 8 7l-1 7-1 7-2 7-2 7-3 8-4 7-3 7-5 7-4 7-5 6-5 6-6 5-5 5-6 4-6 4-6 4-7 3-6 3-7 2-8 1-7 2h-8-7-9-8l-17-3-19-4-19-6-20-8-21-9-22-11-24-13-43-28-19-14-17-14-15-14-13-13-11-15-9-14-7-14-4-14-3-14-1-14 1-14 3-15 6-14 7-14 9-14 10-12 11-10 12-9 12-6 14-5 15-3 15-2 17 1 17 2 19 4 19 6 21 7 21 9zM622 272l27 15 23 12 11 5 10 4 9 4 8 2 7 2h7l3 1h3l2-1h3l2-1 3-1 2-1 2-1 1-1 2-2 1-2 2-2 1-2 1-2v-2l1-2v-3l-1-2v-2l-1-3v-2l-2-3-1-3-2-2-3-6-5-5-6-6-8-6-8-7-10-7-22-14-26-16-27-15-24-11-10-5-10-4-9-3-8-2-7-1-7-1h-3-3-3-2l-3 1-2 1-2 1-2 1-2 1-1 2-2 2-1 2-1 2-1 2v2l-1 2v2l1 2v3l1 2 1 2 1 3 1 2 2 3 4 5 5 6 6 6 7 6 8 6 10 7 21 15zM706 126l23 13 20 14 19 14 16 14 15 14 12 14 11 15 9 14 4 8 3 7 2 7 3 7 1 7 1 7 1 8v7 7l-1 7-1 7-2 7-2 7-3 7-3 8-4 7-5 7-4 7-5 6-5 6-5 5-6 5-6 4-6 4-6 3-6 3-7 3-7 2-7 1-7 2h-8l-8 1-8-1h-8l-18-3-18-4-19-6-21-8-21-9-22-11-23-13-22-13-21-14-18-14-17-13-14-14-13-14-11-14-9-14-4-7-4-7-3-7-2-8-2-7-1-7-1-7v-7-7l1-8 1-7 2-7 2-7 3-7 3-7 4-8 9-13 10-12 11-11 12-8 12-7 14-5 15-3 15-1 17 1 18 2 18 4 20 6 20 7 22 10zM207 0l482 597-48 82-482-596z">
+          <text:p/>
+        </draw:path>
+        <draw:frame presentation:style-name="pr28" draw:text-style-name="P30" draw:layer="layout" svg:width="8.692cm" svg:height="2.117cm" svg:x="3cm" svg:y="3.006cm">
+          <draw:text-box>
+            <text:p text:style-name="P29">
+              <text:span text:style-name="T8">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mollis dictum volutpat. Donec bibendum magna vel risus consectetur, sit amet aliquet est ullamcorper.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr28" draw:text-style-name="P30" draw:layer="layout" svg:width="9.398cm" svg:height="2.117cm" svg:x="7.882cm" svg:y="6.054cm">
+          <draw:text-box>
+            <text:p text:style-name="P29">
+              <text:span text:style-name="T8">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mollis dictum volutpat. Donec bibendum magna vel risus consectetur, sit amet aliquet est ullamcorper.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr28" draw:text-style-name="P30" draw:layer="layout" svg:width="9.398cm" svg:height="2.117cm" svg:x="2.294cm" svg:y="9.102cm">
+          <draw:text-box>
+            <text:p text:style-name="P29">
+              <text:span text:style-name="T8">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mollis dictum volutpat. Donec bibendum magna vel risus consectetur, sit amet aliquet est ullamcorper.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr28" draw:text-style-name="P30" draw:layer="layout" svg:width="9.398cm" svg:height="2.117cm" svg:x="7.882cm" svg:y="12.658cm">
+          <draw:text-box>
+            <text:p text:style-name="P29">
+              <text:span text:style-name="T8">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mollis dictum volutpat. Donec bibendum magna vel risus consectetur, sit amet aliquet est ullamcorper.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr29" draw:text-style-name="P15" draw:layer="layout" svg:width="7.549cm" svg:height="1.343cm" svg:x="2.221cm" svg:y="0.286cm" presentation:class="title" presentation:user-transformed="true">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T9">Dolor Sit</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <presentation:notes draw:style-name="dp2">
+          <draw:page-thumbnail draw:style-name="gr2" draw:layer="layout" svg:width="18.624cm" svg:height="10.476cm" svg:x="1.482cm" svg:y="2.123cm" draw:page-number="8" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr30" draw:text-style-name="P6" draw:layer="layout" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <draw:page draw:name="page9" draw:style-name="dp1" draw:master-page-name="End" presentation:presentation-page-layout-name="AL1T1">
+        <draw:frame presentation:style-name="pr31" draw:text-style-name="P31" draw:layer="layout" svg:width="12.192cm" svg:height="1.923cm" svg:x="13.95cm" svg:y="8.875cm" presentation:class="title" presentation:user-transformed="true">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T14">THANK YOU</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <draw:frame presentation:style-name="pr32" draw:text-style-name="P32" draw:layer="layout" svg:width="9.723cm" svg:height="1.843cm" svg:x="13.95cm" svg:y="10.601cm" presentation:class="title" presentation:user-transformed="true">
+          <draw:text-box>
+            <text:p text:style-name="P3">
+              <text:span text:style-name="T15">Yellow Idea Template for LibreOffice Impress.</text:span>
+              <text:span text:style-name="T15">
+                <text:line-break/>
+              </text:span>
+              <text:span text:style-name="T15">Credit by : @ealita.id, 2020.</text:span>
+            </text:p>
+          </draw:text-box>
+        </draw:frame>
+        <presentation:notes draw:style-name="dp2">
+          <draw:page-thumbnail draw:style-name="gr2" draw:layer="layout" svg:width="18.624cm" svg:height="10.476cm" svg:x="1.482cm" svg:y="2.123cm" draw:page-number="9" presentation:class="page"/>
+          <draw:frame presentation:style-name="pr33" draw:text-style-name="P6" draw:layer="layout" svg:width="17.271cm" svg:height="12.572cm" svg:x="2.159cm" svg:y="13.271cm" presentation:class="notes" presentation:placeholder="true">
+            <draw:text-box/>
+          </draw:frame>
+        </presentation:notes>
+      </draw:page>
+      <presentation:settings presentation:mouse-visible="false"/>
+    </office:presentation>
+  </office:body>
+</office:document-content>
