@@ -2372,11 +2372,11 @@ bool CanUseRemoteLink(const OUString &rGrfName)
             task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), nullptr));
 
         uno::Reference< ucb::XProgressHandler > xProgress;
-        ::ucbhelper::CommandEnvironment* pCommandEnv =
+        rtl::Reference<::ucbhelper::CommandEnvironment> pCommandEnv =
               new ::ucbhelper::CommandEnvironment(new comphelper::SimpleFileAccessInteraction( xIH ), xProgress);
 
         ::ucbhelper::Content aCnt(rGrfName,
-                                  static_cast< ucb::XCommandEnvironment* >(pCommandEnv),
+                                  static_cast< ucb::XCommandEnvironment* >(pCommandEnv.get()),
                                   comphelper::getProcessComponentContext());
 
         if ( !INetURLObject( rGrfName ).isAnyKnownWebDAVScheme() )

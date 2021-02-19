@@ -299,7 +299,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleTextFrame::getAccess
 
     // get the frame, and insert prev/next relations into helper
 
-    AccessibleRelationSetHelper* pHelper = new AccessibleRelationSetHelper();
+    rtl::Reference<AccessibleRelationSetHelper> pHelper = new AccessibleRelationSetHelper();
 
     SwFlyFrame* pFlyFrame = getFlyFrame();
     assert(pFlyFrame);

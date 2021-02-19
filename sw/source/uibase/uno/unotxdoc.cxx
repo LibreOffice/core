@@ -381,9 +381,6 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell)
 
     m_bObjectValid(pShell != nullptr),
 
-    m_pDrawPage(nullptr),
-    mxXDrawPage(),
-    m_pBodyText(nullptr),
     mxXNumberingRules(),
     mxXFootnotes(),
     mxXFootnoteSettings(),
@@ -456,10 +453,9 @@ void SwXTextDocument::GetNumberFormatter()
     {
         if ( m_pDocShell->GetDoc() )
         {
-            SvNumberFormatsSupplierObj* pNumFormat = new SvNumberFormatsSupplierObj(
+            rtl::Reference<SvNumberFormatsSupplierObj> pNumFormat = new SvNumberFormatsSupplierObj(
                                 m_pDocShell->GetDoc()->GetNumberFormatter());
-            Reference< util::XNumberFormatsSupplier >  xTmp = pNumFormat;
-            m_xNumFormatAgg.set(xTmp, UNO_QUERY);
+            m_xNumFormatAgg = pNumFormat;
         }
         if(m_xNumFormatAgg.is())
             m_xNumFormatAgg->setDelegator(static_cast<cppu::OWeakObject*>(static_cast<SwXTextDocumentBaseClass*>(this)));
@@ -489,8 +485,7 @@ Reference< XText >  SwXTextDocument::getText()
         throw DisposedException("", static_cast< XTextDocument* >(this));
     if(!m_xBodyText.is())
     {
-        m_pBodyText = new SwXBodyText(m_pDocShell->GetDoc());
-        m_xBodyText = m_pBodyText;
+        m_xBodyText = new SwXBodyText(m_pDocShell->GetDoc());
     }
     return m_xBodyText;
 }
@@ -1337,17 +1332,16 @@ Reference< drawing::XDrawPage >  SwXTextDocument::getDrawPage()
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw DisposedException("", static_cast< XTextDocument* >(this));
-    if(!mxXDrawPage.is())
+    if(!m_xDrawPage.is())
     {
-        m_pDrawPage = new SwXDrawPage(m_pDocShell->GetDoc());
-        mxXDrawPage = m_pDrawPage;
+        m_xDrawPage = new SwXDrawPage(m_pDocShell->GetDoc());
         // Create a Reference to trigger the complete initialization of the
         // object. Otherwise in some corner cases it would get initialized
         // at ::InitNewDoc -> which would get called during
         // close() or dispose() -> n#681746
-        uno::Reference<lang::XComponent> xTriggerInit( mxXDrawPage, uno::UNO_QUERY );
+        uno::Reference<lang::XComponent> xTriggerInit( static_cast<cppu::OWeakObject*>(m_xDrawPage.get()), uno::UNO_QUERY );
     }
-    return mxXDrawPage;
+    return m_xDrawPage;
 }
 
 namespace {
@@ -1478,11 +1472,7 @@ void    SwXTextDocument::InitNewDoc()
         mxXEmbeddedObjects.clear();
     }
 
-    if(m_xBodyText.is())
-    {
-        m_xBodyText = nullptr;
-        m_pBodyText = nullptr;
-    }
+    m_xBodyText = nullptr;
 
     if(m_xNumFormatAgg.is())
     {
@@ -1522,14 +1512,13 @@ void    SwXTextDocument::InitNewDoc()
         mxXTextSections.clear();
     }
 
-    if(mxXDrawPage.is())
+    if(m_xDrawPage.is())
     {
         // #i91798#, #i91895#
         // dispose XDrawPage here. We are the owner and know that it is no longer in a valid condition.
-        uno::Reference<lang::XComponent> xComp( mxXDrawPage, uno::UNO_QUERY );
-        xComp->dispose();
-        m_pDrawPage->InvalidateSwDoc();
-        mxXDrawPage.clear();
+        Reference<XComponent>(static_cast<cppu::OWeakObject*>(m_xDrawPage.get()), UNO_QUERY_THROW)->dispose();
+        m_xDrawPage->InvalidateSwDoc();
+        m_xDrawPage.clear();
     }
 
     if ( mxXNumberingRules.is() )

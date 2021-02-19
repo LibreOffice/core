@@ -423,13 +423,11 @@ SwXFootnote::createTextCursor()
 
     SwTextFootnote const*const pTextFootnote = rFormat.GetTextFootnote();
     SwPosition aPos( *pTextFootnote->GetStartNode() );
-    SwXTextCursor *const pXCursor =
+    rtl::Reference<SwXTextCursor> pXCursor =
         new SwXTextCursor(*GetDoc(), this, CursorType::Footnote, aPos);
     auto& rUnoCursor(pXCursor->GetCursor());
     rUnoCursor.Move(fnMoveForward, GoInNode);
-    const uno::Reference< text::XTextCursor > xRet =
-        static_cast<text::XWordCursor*>(pXCursor);
-    return xRet;
+    return static_cast<text::XWordCursor*>(pXCursor.get());
 }
 
 uno::Reference< text::XTextCursor > SAL_CALL

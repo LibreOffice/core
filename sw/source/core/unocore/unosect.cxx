@@ -206,7 +206,7 @@ SwXTextSection::CreateXTextSection(
     }
     if ( !xSection.is() )
     {
-        SwXTextSection *const pNew = new SwXTextSection(pFormat, bIndexHeader);
+        rtl::Reference<SwXTextSection> pNew = new SwXTextSection(pFormat, bIndexHeader);
         xSection.set(pNew);
         if (pFormat)
         {

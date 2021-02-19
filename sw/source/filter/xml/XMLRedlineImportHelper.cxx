@@ -476,11 +476,11 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
 
         // create (UNO-) cursor
         SwPosition aPos(*pRedlineNode);
-        SwXTextCursor *const pXCursor =
+        rtl::Reference<SwXTextCursor> pXCursor =
             new SwXTextCursor(*pDoc, pXText, CursorType::Redline, aPos);
         pXCursor->GetCursor().Move(fnMoveForward, GoInNode);
         // cast to avoid ambiguity
-        xReturn = static_cast<text::XWordCursor*>(pXCursor);
+        xReturn = static_cast<text::XWordCursor*>(pXCursor.get());
     }
     // else: unknown redline -> Ignore
 

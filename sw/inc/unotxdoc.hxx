@@ -146,11 +146,9 @@ private:
     SwDocShell*             m_pDocShell;
     bool                    m_bObjectValid;
 
-    SwXDrawPage*            m_pDrawPage;
-    css::uno::Reference< css::drawing::XDrawPage >              mxXDrawPage;
+    rtl::Reference<SwXDrawPage>                                 m_xDrawPage;
 
-    css::uno::Reference< css::text::XText >                     m_xBodyText;
-    SwXBodyText*                                                m_pBodyText;
+    rtl::Reference<SwXBodyText>                                 m_xBodyText;
     css::uno::Reference< css::uno::XAggregation >               m_xNumFormatAgg;
 
     css::uno::Reference< css::container::XIndexAccess >         mxXNumberingRules;

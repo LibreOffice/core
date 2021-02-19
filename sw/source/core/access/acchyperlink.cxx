@@ -124,7 +124,7 @@ uno::Reference< XAccessibleKeyBinding > SAL_CALL
 
     if( isValid() )
     {
-        ::comphelper::OAccessibleKeyBindingHelper* pKeyBindingHelper =
+        rtl::Reference<::comphelper::OAccessibleKeyBindingHelper> pKeyBindingHelper =
                new ::comphelper::OAccessibleKeyBindingHelper();
         xKeyBinding = pKeyBindingHelper;
 

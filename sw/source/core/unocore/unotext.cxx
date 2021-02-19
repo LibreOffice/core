@@ -2539,8 +2539,7 @@ uno::Reference<text::XText> SwXHeadFootText::CreateXHeadFootText(
     uno::Reference<text::XText> xText(rHeadFootFormat.GetXObject(), uno::UNO_QUERY);
     if(!xText.is())
     {
-        const auto pXHFT(new SwXHeadFootText(rHeadFootFormat, bIsHeader));
-        xText.set(pXHFT);
+        xText = new SwXHeadFootText(rHeadFootFormat, bIsHeader);
         rHeadFootFormat.SetXObject(xText);
     }
     return xText;
@@ -2624,7 +2623,7 @@ SwXHeadFootText::createTextCursor()
     const SwFormatContent& rFlyContent = rHeadFootFormat.GetContent();
     const SwNode& rNode = rFlyContent.GetContentIdx()->GetNode();
     SwPosition aPos(rNode);
-    SwXTextCursor *const pXCursor = new SwXTextCursor(*GetDoc(), this,
+    rtl::Reference<SwXTextCursor> pXCursor = new SwXTextCursor(*GetDoc(), this,
             (m_pImpl->m_bIsHeader) ? CursorType::Header : CursorType::Footer, aPos);
     auto& rUnoCursor(pXCursor->GetCursor());
     rUnoCursor.Move(fnMoveForward, GoInNode);
@@ -2654,7 +2653,7 @@ SwXHeadFootText::createTextCursor()
         aExcept.Message = "no text available";
         throw aExcept;
     }
-    return static_cast<text::XWordCursor*>(pXCursor);
+    return static_cast<text::XWordCursor*>(pXCursor.get());
 }
 
 uno::Reference<text::XTextCursor> SAL_CALL SwXHeadFootText::createTextCursorByRange(

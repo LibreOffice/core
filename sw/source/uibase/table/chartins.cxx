@@ -209,11 +209,10 @@ SwInsertChart::SwInsertChart( const Link<css::ui::dialogs::DialogClosedEvent*, v
             }
         }
 
-        ::svt::DialogClosedListener* pListener = new ::svt::DialogClosedListener();
+        rtl::Reference<::svt::DialogClosedListener> pListener = new ::svt::DialogClosedListener();
         pListener->SetDialogClosedLink( rLink );
-        css::uno::Reference<css::ui::dialogs::XDialogClosedListener> xListener( pListener );
 
-        xDialog->startExecuteModal( xListener );
+        xDialog->startExecuteModal( pListener );
     }
     else
     {
