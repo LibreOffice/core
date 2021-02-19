@@ -438,51 +438,6 @@ inline T* VclBuilder::get(const OString& sID)
     return static_cast<T*>(w);
 }
 
-
-//helper baseclass to ease retro fitting dialogs/tabpages that load a resource
-//to load a .ui file instead
-//
-//vcl requires the Window Children of a Parent Window to be destroyed before
-//the Parent Window.  VclBuilderContainer owns the VclBuilder which owns the
-//Children Window. So the VclBuilderContainer dtor must be called before
-//the Parent Window dtor.
-//
-//i.e.  class Dialog : public SystemWindow, public VclBuilderContainer
-//not   class Dialog : public VclBuilderContainer, public SystemWindow
-//
-//With the new 'dispose' framework, it is necessary to force the builder
-//dispose before the Window dispose; so a Dialog::dispose() method would
-//finish: disposeBuilder(); SystemWindow::dispose() to capture this ordering.
-
-class VCL_DLLPUBLIC VclBuilderContainer
-{
-public:
-                    VclBuilderContainer();
-    virtual         ~VclBuilderContainer();
-    void            disposeBuilder();
-
-    template <typename T> T* get(VclPtr<T>& ret, const OString& sID)
-    {
-        return m_pUIBuilder->get<T>(ret, sID);
-    }
-    template <typename T = vcl::Window> T* get(const OString & sID)
-    {
-        return m_pUIBuilder->get<T>(sID);
-    }
-    void setDeferredProperties()
-    {
-        if (!m_pUIBuilder)
-            return;
-        m_pUIBuilder->setDeferredProperties();
-    }
-
-protected:
-    std::unique_ptr<VclBuilder> m_pUIBuilder;
-
-    friend class ::SalInstanceBuilder;
-    friend class ::ScreenshotTest;
-};
-
 /*
  * @return true if rValue is "True", "true", "1", etc.
  */

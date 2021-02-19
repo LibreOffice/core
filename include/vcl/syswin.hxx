@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_SYSWIN_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/builder.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/window.hxx>
@@ -32,6 +31,7 @@
 class MenuBar;
 class NotebookBar;
 class TaskPaneList;
+class VclBuilder;
 
 #define ICON_LO_DEFAULT                 1
 #define ICON_TEXT_DOCUMENT              2
@@ -53,6 +53,37 @@ enum class TitleButton
     Docking        = 1,
     Hide           = 2,
     Menu           = 4,
+};
+
+//helper baseclass to ease retro fitting dialogs/tabpages that load a resource
+//to load a .ui file instead
+//
+//vcl requires the Window Children of a Parent Window to be destroyed before
+//the Parent Window.  VclBuilderContainer owns the VclBuilder which owns the
+//Children Window. So the VclBuilderContainer dtor must be called before
+//the Parent Window dtor.
+//
+//i.e.  class Dialog : public SystemWindow, public VclBuilderContainer
+//not   class Dialog : public VclBuilderContainer, public SystemWindow
+//
+//With the new 'dispose' framework, it is necessary to force the builder
+//dispose before the Window dispose; so a Dialog::dispose() method would
+//finish: disposeBuilder(); SystemWindow::dispose() to capture this ordering.
+
+class VCL_DLLPUBLIC VclBuilderContainer
+{
+public:
+                    VclBuilderContainer();
+    virtual         ~VclBuilderContainer();
+    void            disposeBuilder();
+
+    void setDeferredProperties();
+
+protected:
+    std::unique_ptr<VclBuilder> m_pUIBuilder;
+
+    friend class ::SalInstanceBuilder;
+    friend class ::ScreenshotTest;
 };
 
 class VCL_DLLPUBLIC SystemWindow

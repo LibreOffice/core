@@ -569,7 +569,7 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* p
                                              vcl::ILibreOfficeKitNotifier* pNotifier)
     : DockingWindow(pParent, "InterimDockParent", "svx/ui/interimdockparent.ui")
     , mxParentMenu(pParentMenu)
-    , mxBox(get("box"))
+    , mxBox(m_pUIBuilder->get("box"))
 {
     if (pNotifier)
         SetLOKNotifier(pNotifier);

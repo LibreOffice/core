@@ -22,7 +22,6 @@
 
 #include <vcl/dllapi.h>
 #include <o3tl/deleter.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/floatwin.hxx>
 #include <memory>
 #include <vector>
