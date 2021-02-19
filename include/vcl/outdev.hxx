@@ -1485,6 +1485,12 @@ public:
                                     const basegfx::B2DHomMatrix& rTransformation,
                                     const BitmapEx& rBitmapEx);
 
+    /** Return true if DrawTransformedBitmapEx() is fast.
+
+        @since 7.2
+    */
+    bool                        HasFastDrawTransformedBitmap() const;
+
 protected:
 
     virtual void                DrawDeviceBitmap(

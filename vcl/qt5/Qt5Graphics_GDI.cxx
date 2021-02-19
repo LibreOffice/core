@@ -653,6 +653,8 @@ bool Qt5Graphics::drawTransformedBitmap(const basegfx::B2DPoint& rNull, const ba
     return true;
 }
 
+bool Qt5Graphics::hasFastDrawTransformedBitmap() const { return false; }
+
 bool Qt5Graphics::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
                                 tools::Long nHeight, sal_uInt8 nTransparency)
 {

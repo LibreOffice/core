@@ -416,6 +416,8 @@ public:
                                     const SalBitmap* pAlphaBitmap,
                                     const OutputDevice& rOutDev );
 
+    bool                        HasFastDrawTransformedBitmap() const;
+
     bool                        DrawAlphaRect(
                                     tools::Long nX, tools::Long nY,
                                     tools::Long nWidth, tools::Long nHeight,
@@ -579,6 +581,9 @@ protected:
                                     const basegfx::B2DPoint& rY,
                                     const SalBitmap& rSourceBitmap,
                                     const SalBitmap* pAlphaBitmap) = 0;
+
+    /// Used e.g. by canvas to know whether to cache the drawing.
+    virtual bool hasFastDrawTransformedBitmap() const = 0;
 
     /** Render solid rectangle with given transparency
      *

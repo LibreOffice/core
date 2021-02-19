@@ -95,4 +95,9 @@ bool WinSalGraphics::drawTransformedBitmap(
             rSourceBitmap, pAlphaBitmap);
 }
 
+bool WinSalGraphics::hasFastDrawTransformedBitmap() const
+{
+    return mpImpl->hasFastDrawTransformedBitmap();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
