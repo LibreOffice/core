@@ -39,7 +39,7 @@
 #include <drawinglayer/primitive2d/invertprimitive2d.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <primitive2d/wallpaperprimitive2d.hxx>
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/processor2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <primitive2d/textlineprimitive2d.hxx>
 #include <primitive2d/textstrikeoutprimitive2d.hxx>
@@ -1067,7 +1067,7 @@ namespace wmfemfhelper
         const vcl::Font& rFont = rProperty.getFont();
         basegfx::B2DVector aFontScaling;
 
-        rFontAttribute = drawinglayer::primitive2d::getFontAttributeFromVclFont(
+        rFontAttribute = drawinglayer::processor2d::getFontAttributeFromVclFont(
                             aFontScaling,
                             rFont,
                             bool(rProperty.getLayoutMode() & ComplexTextLayoutFlags::BiDiRtl),
@@ -1079,7 +1079,7 @@ namespace wmfemfhelper
         // take text align into account
         if(ALIGN_BASELINE != rFont.GetAlignment())
         {
-            drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
+            drawinglayer::processor2d::TextLayouterDevice aTextLayouterDevice;
             aTextLayouterDevice.setFont(rFont);
 
             if(ALIGN_TOP == rFont.GetAlignment())
@@ -1231,7 +1231,7 @@ namespace wmfemfhelper
         if(pResult && rProperty.getTextFillColorActive())
         {
             // text background is requested, add and encapsulate both to new primitive
-            drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
+            drawinglayer::processor2d::TextLayouterDevice aTextLayouterDevice;
             aTextLayouterDevice.setFont(rFont);
 
             // get text width
@@ -1341,7 +1341,7 @@ namespace wmfemfhelper
         aTextTransform.translate(rAction.GetStartPoint().X(), rAction.GetStartPoint().Y());
 
         // prepare TextLayouter (used in most cases)
-        drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
+        drawinglayer::processor2d::TextLayouterDevice aTextLayouter;
         aTextLayouter.setFont(rProperty.getFont());
 
         if(bOverlineUsed)
@@ -1885,7 +1885,7 @@ namespace wmfemfhelper
 
                     if(nTextLength && rPropertyHolders.Current().getTextColorActive())
                     {
-                        drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
+                        drawinglayer::processor2d::TextLayouterDevice aTextLayouterDevice;
                         aTextLayouterDevice.setFont(rPropertyHolders.Current().getFont());
 
                         std::vector< double > aTextArray(
@@ -1947,7 +1947,7 @@ namespace wmfemfhelper
                         // Since AddTextRectActions is the only way as long as we do not have
                         // a simple text layouter available, i will try to add it to the
                         // TextLayouterDevice isolation.
-                        drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
+                        drawinglayer::processor2d::TextLayouterDevice aTextLayouterDevice;
                         aTextLayouterDevice.setFont(rPropertyHolders.Current().getFont());
                         GDIMetaFile aGDIMetaFile;
 

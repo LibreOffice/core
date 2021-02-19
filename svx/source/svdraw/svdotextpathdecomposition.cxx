@@ -31,7 +31,7 @@
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/processor2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
 
@@ -130,7 +130,7 @@ namespace
 
         double getDisplayLength(sal_Int32 nIndex, sal_Int32 nLength) const
         {
-            drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
+            drawinglayer::processor2d::TextLayouterDevice aTextLayouter;
             double fRetval(0.0);
 
             if(maFont.IsVertical())
@@ -201,7 +201,7 @@ namespace
 
         static double getParagraphTextLength(const ::std::vector< const impPathTextPortion* >& rTextPortions)
         {
-            drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
+            drawinglayer::processor2d::TextLayouterDevice aTextLayouter;
             double fRetval(0.0);
 
             for(const impPathTextPortion* pCandidate : rTextPortions)
@@ -328,13 +328,13 @@ namespace
                 if(pCandidate && pCandidate->getTextLength())
                 {
                     const drawinglayer::attribute::FontAttribute aCandidateFontAttribute(
-                        drawinglayer::primitive2d::getFontAttributeFromVclFont(
+                        drawinglayer::processor2d::getFontAttributeFromVclFont(
                             aFontScaling,
                             pCandidate->getFont(),
                             pCandidate->isRTL(),
                             false));
 
-                    drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
+                    drawinglayer::processor2d::TextLayouterDevice aTextLayouter;
                     aTextLayouter.setFont(pCandidate->getFont());
                     sal_Int32 nUsedTextLength(0);
 

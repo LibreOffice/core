@@ -92,7 +92,7 @@
 #include <drawinglayer/primitive2d/discreteshadowprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/processor2d/textlayoutdevice.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <svx/unoapi.hxx>
@@ -3700,7 +3700,7 @@ void SwColumnFrame::PaintBreak( ) const
     vcl::Font aFont = pOut->GetSettings().GetStyleSettings().GetToolFont();
     aFont.SetFontHeight( 8 * 20 );
     pOut->SetFont( aFont );
-    drawinglayer::attribute::FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(
+    drawinglayer::attribute::FontAttribute aFontAttr = drawinglayer::processor2d::getFontAttributeFromVclFont(
             aFontSize, aFont, IsRightToLeft(), false );
 
     tools::Rectangle aTextRect;

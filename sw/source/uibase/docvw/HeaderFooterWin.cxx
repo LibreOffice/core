@@ -35,8 +35,8 @@
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <drawinglayer/processor2d/textlayoutdevice.hxx>
 #include <editeng/boxitem.hxx>
 #include <svx/hdft.hxx>
 #include <sfx2/bindings.hxx>
@@ -306,7 +306,7 @@ void SwHeaderFooterWin::PaintButton()
     // Create the text primitive
     basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
     B2DVector aFontSize;
-    FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(aFontSize, m_xVirDev->GetFont(), false, false);
+    FontAttribute aFontAttr = drawinglayer::processor2d::getFontAttributeFromVclFont(aFontSize, m_xVirDev->GetFont(), false, false);
 
     FontMetric aFontMetric = m_xVirDev->GetFontMetric(m_xVirDev->GetFont());
     double nTextOffsetY = aFontMetric.GetAscent() + TEXT_PADDING;

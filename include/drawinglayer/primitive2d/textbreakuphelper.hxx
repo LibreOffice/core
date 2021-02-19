@@ -21,7 +21,7 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/processor2d/textlayoutdevice.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 namespace drawinglayer::primitive2d { class TextSimplePortionPrimitive2D; }
@@ -40,7 +40,7 @@ namespace drawinglayer::primitive2d
         private:
             const TextSimplePortionPrimitive2D&     mrSource;
             Primitive2DContainer                       mxResult;
-            TextLayouterDevice                      maTextLayouter;
+            drawinglayer::processor2d::TextLayouterDevice                      maTextLayouter;
             basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose maDecTrans;
 
             bool                                    mbNoDXArray : 1;
@@ -58,7 +58,7 @@ namespace drawinglayer::primitive2d
             virtual bool allowChange(sal_uInt32 nCount, basegfx::B2DHomMatrix& rNewTransform, sal_uInt32 nIndex, sal_uInt32 nLength);
 
             /// allow read access to evtl. useful local parts
-            const TextLayouterDevice& getTextLayouter() const { return maTextLayouter; }
+            const drawinglayer::processor2d::TextLayouterDevice& getTextLayouter() const { return maTextLayouter; }
             const TextSimplePortionPrimitive2D& getSource() const { return mrSource; }
 
         public:

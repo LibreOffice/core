@@ -96,7 +96,6 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/primitive2d/textdecoratedprimitive2d \
     drawinglayer/source/primitive2d/texteffectprimitive2d \
     drawinglayer/source/primitive2d/texthierarchyprimitive2d \
-    drawinglayer/source/primitive2d/textlayoutdevice \
     drawinglayer/source/primitive2d/textlineprimitive2d \
     drawinglayer/source/primitive2d/textprimitive2d \
     drawinglayer/source/primitive2d/textstrikeoutprimitive2d \
@@ -131,6 +130,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/processor2d/objectinfoextractor2d \
     drawinglayer/source/processor2d/processorfromoutputdevice \
     drawinglayer/source/processor2d/textaspolygonextractor2d \
+    drawinglayer/source/processor2d/textlayoutdevice \
     drawinglayer/source/processor2d/vclhelperbufferdevice \
     drawinglayer/source/processor2d/vclmetafileprocessor2d \
     drawinglayer/source/processor2d/vclpixelprocessor2d \

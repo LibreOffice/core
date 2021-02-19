@@ -18,7 +18,7 @@
 #include <comphelper/processfactory.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/processor2d/textlayoutdevice.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <o3tl/safeint.hxx>
@@ -875,7 +875,7 @@ void ThumbnailView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
     OutputDevice& rDevice = pDrawingArea->get_ref_device();
     weld::SetPointFont(rDevice, pDrawingArea->get_font());
-    mpItemAttrs->aFontAttr = getFontAttributeFromVclFont(mpItemAttrs->aFontSize, rDevice.GetFont(), false, true);
+    mpItemAttrs->aFontAttr = drawinglayer::processor2d::getFontAttributeFromVclFont(mpItemAttrs->aFontSize, rDevice.GetFont(), false, true);
 
     SetOutputSizePixel(pDrawingArea->get_preferred_size());
 }

@@ -11,7 +11,7 @@
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonSelectionPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/processor2d/textlayoutdevice.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustrbuf.hxx>
@@ -36,7 +36,7 @@ void EmojiViewItem::calculateItemsPosition (const tools::Long /*nThumbnailHeight
                                                 const tools::Long /*nPadding*/, sal_uInt32 nMaxTextLength,
                                                 const ThumbnailItemAttributes *pAttrs)
 {
-    drawinglayer::primitive2d::TextLayouterDevice aTextDev;
+    drawinglayer::processor2d::TextLayouterDevice aTextDev;
     aTextDev.setFontAttribute(pAttrs->aFontAttr,
                               pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),
                               css::lang::Locale() );

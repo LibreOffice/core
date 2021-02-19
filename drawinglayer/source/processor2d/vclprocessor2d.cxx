@@ -53,7 +53,7 @@
 // for support of Title/Description in all apps when embedding pictures
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 // control support
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/processor2d/textlayoutdevice.hxx>
 
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
@@ -125,7 +125,7 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
             && basegfx::fTools::more(aFontScaling.getY(), 0.0))
         {
             // Get the VCL font (use FontHeight as FontWidth)
-            vcl::Font aFont(primitive2d::getVclFontFromFontAttribute(
+            vcl::Font aFont(processor2d::getVclFontFromFontAttribute(
                 rTextCandidate.getFontAttribute(), aFontScaling.getX(), aFontScaling.getY(),
                 fRotate, rTextCandidate.getLocale()));
 

@@ -18,7 +18,7 @@
  */
 
 #include <primitive2d/textstrikeoutprimitive2d.hxx>
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/processor2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -68,7 +68,7 @@ namespace drawinglayer::primitive2d
             getObjectTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
 
             // prepare TextLayouter
-            TextLayouterDevice aTextLayouter;
+            drawinglayer::processor2d::TextLayouterDevice aTextLayouter;
 
             aTextLayouter.setFontAttribute(
                 getFontAttribute(),

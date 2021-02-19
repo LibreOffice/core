@@ -34,7 +34,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/processor2d/textlayoutdevice.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <basegfx/vector/b2dvector.hxx>
@@ -209,7 +209,7 @@ void UnfloatTableButton::PaintButton()
     basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
     basegfx::B2DVector aFontSize;
     drawinglayer::attribute::FontAttribute aFontAttr
-        = drawinglayer::primitive2d::getFontAttributeFromVclFont(aFontSize, m_xVirDev->GetFont(),
+        = drawinglayer::processor2d::getFontAttributeFromVclFont(aFontSize, m_xVirDev->GetFont(),
                                                                  false, false);
 
     FontMetric aFontMetric = m_xVirDev->GetFontMetric(m_xVirDev->GetFont());

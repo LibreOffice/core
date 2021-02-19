@@ -59,7 +59,7 @@ namespace drawinglayer::primitive2d
                 return;
 
             // common preparations
-            TextLayouterDevice aTextLayouter;
+            drawinglayer::processor2d::TextLayouterDevice aTextLayouter;
 
             // TextLayouterDevice is needed to get metrics for text decorations like
             // underline/strikeout/emphasis marks from it. For setup, the font size is needed

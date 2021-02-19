@@ -23,7 +23,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/processor2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -66,7 +66,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
     // Create the text primitive for the title
     basegfx::B2DVector aFontSize;
     drawinglayer::attribute::FontAttribute aFontAttr =
-        drawinglayer::primitive2d::getFontAttributeFromVclFont(aFontSize, aHeadFont, false, false);
+        drawinglayer::processor2d::getFontAttributeFromVclFont(aFontSize, aHeadFont, false, false);
 
     FontMetric aFontMetric = pDefaultDev->GetFontMetric(aHeadFont);
     Size aHintMargin = pDefaultDev->PixelToLogic(Size(HINT_MARGIN, HINT_MARGIN), rMapMode);
@@ -100,7 +100,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
     nTextOffsetY = aFontMetric.GetAscent();
     sal_Int32 nLineHeight = aFontMetric.GetLineHeight();
 
-    aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(aFontSize, aTextFont, false, false);
+    aFontAttr = drawinglayer::processor2d::getFontAttributeFromVclFont(aFontSize, aTextFont, false, false);
 
     sal_Int32 nIndex = 0;
     Point aLineStart = aTextStart;

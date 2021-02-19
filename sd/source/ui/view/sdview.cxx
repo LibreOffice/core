@@ -69,7 +69,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/processor2d/textlayoutdevice.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/table/tablecontroller.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -364,7 +364,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                             aScaledVclFont.SetFontHeight( 500 * nTextSizeFactor );
 
                             // get basic geometry and get text size
-                            drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
+                            drawinglayer::processor2d::TextLayouterDevice aTextLayouter;
                             aTextLayouter.setFont(aScaledVclFont);
                             const sal_Int32 nTextLength(aObjectString.getLength());
 
@@ -388,7 +388,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                             aVclFont.SetFontHeight( 500 );
 
                             const drawinglayer::attribute::FontAttribute aFontAttribute(
-                                drawinglayer::primitive2d::getFontAttributeFromVclFont(
+                                drawinglayer::processor2d::getFontAttributeFromVclFont(
                                     aTextSizeAttribute,
                                     aVclFont,
                                     false,

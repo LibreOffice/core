@@ -51,7 +51,7 @@
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/processor2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <svx/unoapi.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
@@ -162,7 +162,7 @@ namespace
         OUString caseMappedText = rInfo.mrFont.CalcCaseMap( rInfo.maText );
         basegfx::B2DVector aFontScaling;
         drawinglayer::attribute::FontAttribute aFontAttribute(
-            drawinglayer::primitive2d::getFontAttributeFromVclFont(
+            drawinglayer::processor2d::getFontAttributeFromVclFont(
                 aFontScaling,
                 rInfo.mrFont,
                 rInfo.IsRTL(),
@@ -593,7 +593,7 @@ namespace
             }
 
             // Start position is inside. Get TextBoundRect and TopLeft next
-            drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
+            drawinglayer::processor2d::TextLayouterDevice aTextLayouterDevice;
             aTextLayouterDevice.setFont(pInfo->mrFont);
 
             const basegfx::B2DRange aTextBoundRect(

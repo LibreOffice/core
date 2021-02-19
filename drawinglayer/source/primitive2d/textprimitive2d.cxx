@@ -18,7 +18,7 @@
  */
 
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/processor2d/textlayoutdevice.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
@@ -111,7 +111,7 @@ void TextSimplePortionPrimitive2D::getTextOutlinesAndTransformation(
     const basegfx::B2DVector aFontScale(getCorrectedScaleAndFontScale(aScale));
 
     // prepare textlayoutdevice
-    TextLayouterDevice aTextLayouter;
+    drawinglayer::processor2d::TextLayouterDevice aTextLayouter;
     aTextLayouter.setFontAttribute(getFontAttribute(), aFontScale.getX(), aFontScale.getY(),
                                    getLocale());
 
@@ -271,7 +271,7 @@ TextSimplePortionPrimitive2D::getB2DRange(VisitingParameters const& /*rParameter
             const basegfx::B2DVector aFontScale(getCorrectedScaleAndFontScale(aScale));
 
             // prepare textlayoutdevice
-            TextLayouterDevice aTextLayouter;
+            drawinglayer::processor2d::TextLayouterDevice aTextLayouter;
             aTextLayouter.setFontAttribute(getFontAttribute(), aFontScale.getX(), aFontScale.getY(),
                                            getLocale());
 

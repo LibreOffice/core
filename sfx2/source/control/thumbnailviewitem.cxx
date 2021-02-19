@@ -27,7 +27,7 @@
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonSelectionPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/processor2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <vcl/graph.hxx>
@@ -120,7 +120,7 @@ void ThumbnailViewItem::calculateItemsPosition (const tools::Long nThumbnailHeig
                                                 const tools::Long nPadding, sal_uInt32 nMaxTextLength,
                                                 const ThumbnailItemAttributes *pAttrs)
 {
-    drawinglayer::primitive2d::TextLayouterDevice aTextDev;
+    drawinglayer::processor2d::TextLayouterDevice aTextDev;
     aTextDev.setFontAttribute(pAttrs->aFontAttr,
                               pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),
                               css::lang::Locale() );
@@ -205,7 +205,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
 void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const ThumbnailItemAttributes *pAttrs, Point aPos, drawinglayer::primitive2d::Primitive2DContainer& rSeq)
 {
     // adjust text drawing position according to text font
-    drawinglayer::primitive2d::TextLayouterDevice aTextDev;
+    drawinglayer::processor2d::TextLayouterDevice aTextDev;
     aTextDev.setFontAttribute(
         pAttrs->aFontAttr,
         pAttrs->aFontSize.getX(),
@@ -218,7 +218,7 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
     OUString aOrigText(mrParent.isDrawMnemonic() ? OutputDevice::GetNonMnemonicString(rText, nMnemonicPos) : rText);
 
     TextEngine aTextEngine;
-    aTextEngine.SetFont(getVclFontFromFontAttribute(pAttrs->aFontAttr,
+    aTextEngine.SetFont(drawinglayer::processor2d::getVclFontFromFontAttribute(pAttrs->aFontAttr,
                               pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(), 0,
                               css::lang::Locale()));
     aTextEngine.SetMaxTextWidth(maDrawArea.getWidth());

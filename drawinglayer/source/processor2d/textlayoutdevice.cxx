@@ -23,7 +23,7 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <drawinglayer/attribute/fontattribute.hxx>
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/processor2d/textlayoutdevice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/unique_disposing_ptr.hxx>
 #include <osl/diagnose.h>
@@ -36,7 +36,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
 
-namespace drawinglayer::primitive2d
+namespace drawinglayer::processor2d
 {
 namespace
 {

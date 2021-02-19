@@ -21,7 +21,7 @@
 #include <svgstyleattributes.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
-#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/processor2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textbreakuphelper.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 
@@ -258,7 +258,7 @@ namespace svgio::svgreader
                 css::lang::Locale aLocale;
 
                 // prepare TextLayouterDevice
-                drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
+                drawinglayer::processor2d::TextLayouterDevice aTextLayouterDevice;
                 aTextLayouterDevice.setFontAttribute(aFontAttribute, fFontWidth, fFontHeight, aLocale);
 
                 // prepare TextArray

@@ -49,7 +49,7 @@ struct Locale;
 
 // access to one global impTimedRefDev incarnation in namespace drawinglayer::primitive
 
-namespace drawinglayer::primitive2d
+namespace drawinglayer::processor2d
 {
 /** TextLayouterDevice class
 
@@ -122,6 +122,6 @@ vcl::Font DRAWINGLAYER_DLLPUBLIC getVclFontFromFontAttribute(
 attribute::FontAttribute DRAWINGLAYER_DLLPUBLIC getFontAttributeFromVclFont(
     basegfx::B2DVector& o_rSize, const vcl::Font& rFont, bool bRTL, bool bBiDiStrong);
 
-} // end of namespace drawinglayer::primitive2d
+} // end of namespace drawinglayer::processor2d
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
