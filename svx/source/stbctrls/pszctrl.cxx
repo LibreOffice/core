@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fieldvalues.hxx>
@@ -26,6 +25,8 @@
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 #include <svl/stritem.hxx>
 #include <svl/ptitem.hxx>
 #include <sfx2/module.hxx>
@@ -92,15 +93,18 @@ namespace {
 
 class FunctionPopup_Impl
 {
-    VclBuilder        m_aBuilder;
-    VclPtr<PopupMenu> m_xMenu;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Menu> m_xMenu;
     sal_uInt32        m_nSelected;
     static sal_uInt16 id_to_function(std::string_view rIdent);
-    sal_uInt16 function_to_id(sal_uInt16 nFunc) const;
+    static OString function_to_id(sal_uInt16 nFunc);
 public:
-    explicit FunctionPopup_Impl( sal_uInt32 nCheckEncoded );
-    sal_uInt16 Execute(vcl::Window* pWindow, const Point& rPopupPos) { return m_xMenu->Execute(pWindow, rPopupPos); }
-    sal_uInt32 GetSelected() const;
+    explicit FunctionPopup_Impl(sal_uInt32 nCheckEncoded);
+    OString Execute(weld::Window* pParent, const tools::Rectangle& rRect)
+    {
+        return m_xMenu->popup_at_rect(pParent, rRect);
+    }
+    sal_uInt32 GetSelected(std::string_view curident) const;
 };
 
 }
@@ -126,44 +130,44 @@ sal_uInt16 FunctionPopup_Impl::id_to_function(std::string_view rIdent)
     return 0;
 }
 
-sal_uInt16 FunctionPopup_Impl::function_to_id(sal_uInt16 nFunc) const
+OString FunctionPopup_Impl::function_to_id(sal_uInt16 nFunc)
 {
     switch (nFunc)
     {
         case PSZ_FUNC_AVG:
-            return m_xMenu->GetItemId("avg");
+            return "avg";
         case PSZ_FUNC_COUNT2:
-            return m_xMenu->GetItemId("counta");
+            return "counta";
         case PSZ_FUNC_COUNT:
-            return m_xMenu->GetItemId("count");
+            return "count";
         case PSZ_FUNC_MAX:
-            return m_xMenu->GetItemId("max");
+            return "max";
         case PSZ_FUNC_MIN:
-            return m_xMenu->GetItemId("min");
+            return "min";
         case PSZ_FUNC_SUM:
-            return m_xMenu->GetItemId("sum");
+            return "sum";
         case PSZ_FUNC_SELECTION_COUNT:
-            return m_xMenu->GetItemId("selection");
+            return "selection";
         case PSZ_FUNC_NONE:
-            return m_xMenu->GetItemId("none");
+            return "none";
     }
-    return 0;
+    return OString();
 }
 
 FunctionPopup_Impl::FunctionPopup_Impl(sal_uInt32 nCheckEncoded)
-    : m_aBuilder(nullptr, AllSettings::GetUIRootDir(), "svx/ui/functionmenu.ui", "")
-    , m_xMenu(m_aBuilder.get_menu("menu"))
+    : m_xBuilder(Application::CreateBuilder(nullptr, "svx/ui/functionmenu.ui"))
+    , m_xMenu(m_xBuilder->weld_menu("menu"))
     , m_nSelected(nCheckEncoded)
 {
     for ( sal_uInt16 nCheck = 1; nCheck < 32; ++nCheck )
         if ( nCheckEncoded & (1 << nCheck) )
-            m_xMenu->CheckItem(function_to_id(nCheck));
+            m_xMenu->set_active(function_to_id(nCheck), true);
 }
 
-sal_uInt32 FunctionPopup_Impl::GetSelected() const
+sal_uInt32 FunctionPopup_Impl::GetSelected(std::string_view curident) const
 {
     sal_uInt32 nSelected = m_nSelected;
-    sal_uInt16 nCurItemId = id_to_function(m_xMenu->GetCurItemIdent());
+    sal_uInt16 nCurItemId = id_to_function(curident);
     if ( nCurItemId == PSZ_FUNC_NONE )
         nSelected = ( 1 << PSZ_FUNC_NONE );
     else
@@ -349,10 +353,13 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
         sal_uInt32 nSelect = pImpl->nFunctionSet;
         if (!nSelect)
             nSelect = ( 1 << PSZ_FUNC_NONE );
+        tools::Rectangle aRect(rCEvt.GetMousePosPixel(), Size(1,1));
+        weld::Window* pParent = weld::GetPopupParent(GetStatusBar(), aRect);
         FunctionPopup_Impl aMenu(nSelect);
-        if (aMenu.Execute(&GetStatusBar(), rCEvt.GetMousePosPixel()))
+        OString sIdent = aMenu.Execute(pParent, aRect);
+        if (!sIdent.isEmpty())
         {
-            nSelect = aMenu.GetSelected();
+            nSelect = aMenu.GetSelected(sIdent);
             if (nSelect)
             {
                 if (nSelect == (1 << PSZ_FUNC_NONE))

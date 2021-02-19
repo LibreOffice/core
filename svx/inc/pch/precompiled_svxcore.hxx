@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-02-05 16:11:24 using:
+ Generated on 2021-02-19 12:23:00 using:
  ./bin/update_pch svx svxcore --cutoff=7 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -377,6 +377,7 @@
 #include <svtools/svtdllapi.h>
 #include <svtools/valueset.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <tools/UnitConversion.hxx>
 #include <tools/bigint.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
