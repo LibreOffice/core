@@ -589,10 +589,11 @@ public:
     bool        ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rStartRow,
                                       SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly,
                                       bool bStickyTopRow, bool bStickyLeftCol, bool bConsiderCellNotes,
-                                      bool bConsiderCellDrawObjects ) const;
+                                      bool bConsiderCellDrawObjects, bool bConsiderCellPatterns ) const;
 
-    SCROW GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow,
-                         bool bConsiderCellNotes = false, bool bConsiderCellDrawObjects = false ) const;
+    SCROW       GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow, bool bConsiderCellNotes = false,
+                                bool bConsiderCellDrawObjects = false,
+                                bool bConsiderCellPatterns = false ) const;
 
     SCSIZE      GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow, ScDirection eDir ) const;

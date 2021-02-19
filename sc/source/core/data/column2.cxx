@@ -1351,7 +1351,7 @@ SCROW ScColumn::GetLastDataPos() const
 }
 
 SCROW ScColumn::GetLastDataPos( SCROW nLastRow, bool bConsiderCellNotes,
-                                bool bConsiderCellDrawObjects ) const
+                                bool bConsiderCellDrawObjects, bool bConsiderCellFormats ) const
 {
     sc::CellStoreType::const_position_type aPos = maCells.position(std::min(nLastRow,GetDoc().MaxRow()));
 
@@ -1359,6 +1359,9 @@ SCROW ScColumn::GetLastDataPos( SCROW nLastRow, bool bConsiderCellNotes,
         return nLastRow;
 
     if (bConsiderCellDrawObjects && !IsDrawObjectsEmptyBlock(nLastRow, nLastRow))
+        return nLastRow;
+
+    if (bConsiderCellFormats && HasVisibleAttrIn(nLastRow, nLastRow))
         return nLastRow;
 
     if (aPos.first->type != sc::element_type_empty)
@@ -3128,24 +3131,32 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, bool bDown) const
     rRow = nLastRow;
 }
 
-bool ScColumn::HasDataAt(SCROW nRow, bool bConsiderCellNotes, bool bConsiderCellDrawObjects) const
+bool ScColumn::HasDataAt(SCROW nRow, bool bConsiderCellNotes, bool bConsiderCellDrawObjects,
+                         bool bConsiderCellFormats) const
 {
     if (bConsiderCellNotes && !IsNotesEmptyBlock(nRow, nRow))
         return true;
 
     if (bConsiderCellDrawObjects && !IsDrawObjectsEmptyBlock(nRow, nRow))
+        return true;
+
+    if (bConsiderCellFormats && HasVisibleAttrIn(nRow, nRow))
         return true;
 
     return maCells.get_type(nRow) != sc::element_type_empty;
 }
 
 bool ScColumn::HasDataAt(sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow,
-                         bool bConsiderCellNotes, bool bConsiderCellDrawObjects) const
+                         bool bConsiderCellNotes, bool bConsiderCellDrawObjects,
+                         bool bConsiderCellFormats) const
 {
     if (bConsiderCellNotes && !IsNotesEmptyBlock(nRow, nRow))
         return true;
 
     if (bConsiderCellDrawObjects && !IsDrawObjectsEmptyBlock(nRow, nRow))
+        return true;
+
+    if (bConsiderCellFormats && HasVisibleAttrIn(nRow, nRow))
         return true;
 
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(rBlockPos.miCellPos, nRow);
@@ -3156,12 +3167,15 @@ bool ScColumn::HasDataAt(sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow,
 }
 
 bool ScColumn::HasDataAt(sc::ColumnBlockPosition& rBlockPos, SCROW nRow,
-                         bool bConsiderCellNotes, bool bConsiderCellDrawObjects)
+                         bool bConsiderCellNotes, bool bConsiderCellDrawObjects, bool bConsiderCellFormats)
 {
     if (bConsiderCellNotes && !IsNotesEmptyBlock(nRow, nRow))
         return true;
 
     if (bConsiderCellDrawObjects && !IsDrawObjectsEmptyBlock(nRow, nRow))
+        return true;
+
+    if (bConsiderCellFormats && HasVisibleAttrIn(nRow, nRow))
         return true;
 
     std::pair<sc::CellStoreType::iterator,size_t> aPos = maCells.position(rBlockPos.miCellPos, nRow);
