@@ -479,7 +479,7 @@ void SwAccessibleParagraph::ExecuteAtViewShell( sal_uInt16 nSlot )
     pDispatcher->Execute( nSlot );
 }
 
-SwXTextPortion* SwAccessibleParagraph::CreateUnoPortion(
+rtl::Reference<SwXTextPortion> SwAccessibleParagraph::CreateUnoPortion(
     sal_Int32 nStartIndex,
     sal_Int32 nEndIndex )
 {
@@ -502,10 +502,7 @@ SwXTextPortion* SwAccessibleParagraph::CreateUnoPortion(
 
     // create a (dummy) text portion to be returned
     uno::Reference<text::XText> aEmpty;
-    SwXTextPortion* pPortion =
-        new SwXTextPortion ( pUnoCursor.get(), aEmpty, PORTION_TEXT);
-
-    return pPortion;
+    return new SwXTextPortion ( pUnoCursor.get(), aEmpty, PORTION_TEXT);
 }
 
 // range checking for parameter
@@ -740,7 +737,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccess
 
     ThrowIfDisposed();
 
-    utl::AccessibleRelationSetHelper* pHelper = new utl::AccessibleRelationSetHelper();
+    rtl::Reference<utl::AccessibleRelationSetHelper> pHelper = new utl::AccessibleRelationSetHelper();
 
     const SwTextFrame* pTextFrame = dynamic_cast<const SwTextFrame*>(GetFrame());
     OSL_ENSURE( pTextFrame,
@@ -2666,7 +2663,7 @@ sal_Bool SwAccessibleParagraph::setAttributes(
 
     // create a (dummy) text portion for the sole purpose of calling
     // setPropertyValue on it
-    uno::Reference<XMultiPropertySet> xPortion = CreateUnoPortion( nStartIndex,
+    rtl::Reference<SwXTextPortion> xPortion = CreateUnoPortion( nStartIndex,
                                                               nEndIndex );
 
     // build sorted index array

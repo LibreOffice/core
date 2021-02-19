@@ -21,12 +21,13 @@
 #define INCLUDED_SW_INC_SWSMARTTAGMGR_HXX
 
 #include <svx/SmartTagMgr.hxx>
+#include <rtl/ref.hxx>
 
 // Wrapper for the svx SmartTagMgr
 class SwSmartTagMgr final : public SmartTagMgr
 {
 private:
-    static SwSmartTagMgr* spTheSwSmartTagMgr;
+    static rtl::Reference<SwSmartTagMgr> spTheSwSmartTagMgr;
 
     SwSmartTagMgr(const OUString& rModuleName);
     virtual ~SwSmartTagMgr() override;

@@ -137,8 +137,8 @@ SwXReferenceMark::CreateXReferenceMark(
     }
     if (!xMark.is())
     {
-        SwXReferenceMark *const pMark(new SwXReferenceMark(&rDoc, pMarkFormat));
-        xMark.set(pMark);
+        rtl::Reference<SwXReferenceMark> pMark(new SwXReferenceMark(&rDoc, pMarkFormat));
+        xMark = pMark;
         if (pMarkFormat)
         {
             pMarkFormat->SetXRefMark(xMark);

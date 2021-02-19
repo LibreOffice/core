@@ -141,7 +141,7 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) override;
 
     SwTableBox* GetTableBox() const { return m_pBox; }
-    static SwXCell* CreateXCell(SwFrameFormat* pTableFormat, SwTableBox* pBox, SwTable *pTable = nullptr );
+    static rtl::Reference<SwXCell> CreateXCell(SwFrameFormat* pTableFormat, SwTableBox* pBox, SwTable *pTable = nullptr );
     SwTableBox* FindBox(SwTable* pTable, SwTableBox* pBox);
     SwFrameFormat* GetFrameFormat() const { return m_pTableFormat; }
     double GetForcedNumericalValue() const;

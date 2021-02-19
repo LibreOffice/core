@@ -80,8 +80,7 @@ SwXDrawPageBaseClass;
 class SwXDrawPage final : public SwXDrawPageBaseClass
 {
     SwDoc*          m_pDoc;
-    css::uno::Reference< css::uno::XAggregation >     m_xPageAgg;
-    SwFmDrawPage*   m_pDrawPage;
+    rtl::Reference<SwFmDrawPage>  m_pDrawPage;
 public:
     SwXDrawPage(SwDoc* pDoc);
     virtual ~SwXDrawPage() override;

@@ -1023,12 +1023,11 @@ void paintGraphicUsingPrimitivesHelper(
                 aTarget.append(aClip);
             }
 
-            drawinglayer::primitive2d::MaskPrimitive2D* pNew(
+            rContent.resize(1);
+            rContent[0] =
                 new drawinglayer::primitive2d::MaskPrimitive2D(
                     aTarget,
-                    rContent));
-            rContent.resize(1);
-            rContent[0] = pNew;
+                    rContent);
         }
     }
 
@@ -1036,14 +1035,13 @@ void paintGraphicUsingPrimitivesHelper(
     {
         // Embed to ObjectInfoPrimitive2D when we have Name/Title/Description
         // information available
-        drawinglayer::primitive2d::ObjectInfoPrimitive2D* pNew(
+        rContent.resize(1);
+        rContent[0] =
             new drawinglayer::primitive2d::ObjectInfoPrimitive2D(
                 rContent,
                 rName,
                 rTitle,
-                rDescription));
-        rContent.resize(1);
-        rContent[0] = pNew;
+                rDescription);
     }
 
     basegfx::B2DRange aTargetRange(0.0, 0.0, 1.0, 1.0);

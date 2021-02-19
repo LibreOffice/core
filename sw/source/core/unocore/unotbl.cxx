@@ -117,7 +117,7 @@ namespace
     {
         FindUnoInstanceHint(Tcoretype* pCore) : m_pCore(pCore), m_pResult(nullptr) {};
         const Tcoretype* const m_pCore;
-        mutable Tunotype* m_pResult;
+        mutable rtl::Reference<Tunotype> m_pResult;
     };
     SwFrameFormat* lcl_EnsureCoreConnected(SwFrameFormat* pFormat, cppu::OWeakObject* pObject)
     {
@@ -551,7 +551,7 @@ void SwRangeDescriptor::Normalize()
         std::swap(nLeft, nRight);
 }
 
-static SwXCell* lcl_CreateXCell(SwFrameFormat* pFormat, sal_Int32 nColumn, sal_Int32 nRow)
+static rtl::Reference<SwXCell> lcl_CreateXCell(SwFrameFormat* pFormat, sal_Int32 nColumn, sal_Int32 nRow)
 {
     const OUString sCellName = sw_GetCellName(nColumn, nRow);
     SwTable* pTable = SwTable::FindTable(pFormat);
@@ -941,11 +941,11 @@ uno::Reference<text::XTextCursor> SwXCell::createTextCursor()
         throw uno::RuntimeException();
     const SwStartNode* pSttNd = m_pStartNode ? m_pStartNode : m_pBox->GetSttNd();
     SwPosition aPos(*pSttNd);
-    SwXTextCursor* const pXCursor =
+    rtl::Reference<SwXTextCursor> const pXCursor =
         new SwXTextCursor(*GetDoc(), this, CursorType::TableText, aPos);
     auto& rUnoCursor(pXCursor->GetCursor());
     rUnoCursor.Move(fnMoveForward, GoInNode);
-    return static_cast<text::XWordCursor*>(pXCursor);
+    return static_cast<text::XWordCursor*>(pXCursor.get());
 }
 
 uno::Reference<text::XTextCursor> SwXCell::createTextCursorByRange(const uno::Reference< text::XTextRange > & xTextPosition)
@@ -1137,7 +1137,7 @@ void SwXCell::Notify(const SfxHint& rHint)
     }
 }
 
-SwXCell* SwXCell::CreateXCell(SwFrameFormat* pTableFormat, SwTableBox* pBox, SwTable *pTable )
+rtl::Reference<SwXCell> SwXCell::CreateXCell(SwFrameFormat* pTableFormat, SwTableBox* pBox, SwTable *pTable )
 {
     if(!pTableFormat || !pBox)
         return nullptr;
@@ -1149,7 +1149,7 @@ SwXCell* SwXCell::CreateXCell(SwFrameFormat* pTableFormat, SwTableBox* pBox, SwT
     size_t const nPos = it - pTable->GetTabSortBoxes().begin();
     FindUnoInstanceHint<SwTableBox, SwXCell> aHint{pBox};
     pTableFormat->GetNotifier().Broadcast(aHint);
-    return aHint.m_pResult ? aHint.m_pResult : new SwXCell(pTableFormat, pBox, nPos);
+    return aHint.m_pResult ? aHint.m_pResult.get() : new SwXCell(pTableFormat, pBox, nPos);
 }
 
 /** search if a box exists in a table
@@ -3232,10 +3232,9 @@ rtl::Reference<SwXCellRange> SwXCellRange::CreateXCellRange(
         sw::UnoCursorPointer const& pCursor, SwFrameFormat& rFrameFormat,
         SwRangeDescriptor const & rDesc)
 {
-    SwXCellRange *const pCellRange(new SwXCellRange(pCursor, rFrameFormat, rDesc));
-    uno::Reference<table::XCellRange> xCellRange(pCellRange);
+    rtl::Reference<SwXCellRange> pCellRange(new SwXCellRange(pCursor, rFrameFormat, rDesc));
     // need a permanent Reference to initialize m_wThis
-    pCellRange->m_pImpl->m_wThis = xCellRange;
+    pCellRange->m_pImpl->m_wThis = uno::Reference<table::XCellRange>(pCellRange);
     return pCellRange;
 }
 
@@ -3269,7 +3268,7 @@ SwXCellRange::getCellByPosition(sal_Int32 nColumn, sal_Int32 nRow)
         if(nColumn >= 0 && nRow >= 0 &&
              m_pImpl->GetColumnCount() > nColumn && m_pImpl->GetRowCount() > nRow )
         {
-            SwXCell* pXCell = lcl_CreateXCell(pFormat,
+            rtl::Reference<SwXCell> pXCell = lcl_CreateXCell(pFormat,
                     m_pImpl->m_RangeDescriptor.nLeft + nColumn,
                     m_pImpl->m_RangeDescriptor.nTop + nRow);
             if(pXCell)
@@ -3920,7 +3919,7 @@ uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
     pFrameFormat->GetNotifier().Broadcast(aHint);
     if(!aHint.m_pResult)
         aHint.m_pResult = new SwXTextTableRow(pFrameFormat, pLine);
-    uno::Reference<beans::XPropertySet> xRet = static_cast<beans::XPropertySet*>(aHint.m_pResult);
+    uno::Reference<beans::XPropertySet> xRet = static_cast<beans::XPropertySet*>(aHint.m_pResult.get());
     return uno::makeAny(xRet);
 }
 

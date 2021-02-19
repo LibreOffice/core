@@ -296,13 +296,12 @@ bool SwFormatINetFormat::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_URL_HYPERLINKEVENTS:
         {
             // create (and return) event descriptor
-            SwHyperlinkEventDescriptor* pEvents =
+            rtl::Reference<SwHyperlinkEventDescriptor> pEvents =
                 new SwHyperlinkEventDescriptor();
             pEvents->copyMacrosFromINetFormat(*this);
-            uno::Reference<container::XNameReplace> xNameReplace(pEvents);
 
             // all others return a string; so we just set rVal here and exit
-            rVal <<= xNameReplace;
+            rVal <<= uno::Reference<container::XNameReplace>(pEvents);
         }
         break;
         default:
