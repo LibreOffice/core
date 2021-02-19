@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fc40768e_3c35e360",
+        "filename": "sd/qa/unit/SVGExportTests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-02-19T14:15:47Z",
+      "side": 1,
+      "message": "Thanks for sharing this remark :-)",
+      "parentUuid": "77e351e3_789c662f",
+      "revId": "d75f8d72aa097433f22b4a458c7e2818c06704f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff3e6778_6a2e5e0a",
         "filename": "sd/qa/unit/SVGExportTests.cxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "4ba95411_1ee93560",
+        "filename": "sd/qa/unit/SVGExportTests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-02-19T14:15:47Z",
+      "side": 1,
+      "message": "Fixed in new version",
+      "parentUuid": "ff3e6778_6a2e5e0a",
+      "revId": "d75f8d72aa097433f22b4a458c7e2818c06704f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "37d81b64_3f3e6056",
         "filename": "sd/qa/unit/SVGExportTests.cxx",
         "patchSetId": 1
@@ -50,6 +86,24 @@
       "revId": "d75f8d72aa097433f22b4a458c7e2818c06704f6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "686da6fd_2e2e84ea",
+        "filename": "sd/qa/unit/SVGExportTests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-02-19T14:15:47Z",
+      "side": 1,
+      "message": "Fixed in new version",
+      "parentUuid": "37d81b64_3f3e6056",
+      "revId": "d75f8d72aa097433f22b4a458c7e2818c06704f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
