@@ -10,12 +10,23 @@
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict
-import time
-from uitest.debug import sleep
 from uitest.uihelper.common import select_pos
 
-
 class documentProperties(UITestCase):
+
+   def assert_custom_properties(self, dialog, bIsFirstItemVisible):
+        for i in range(6):
+            aExpected = 'false'
+            if bIsFirstItemVisible and i == 0:
+                aExpected = 'true'
+            xNameBox = dialog.getChild("namebox" + str(i + 1))
+            xTypeBox = dialog.getChild("typebox" + str(i + 1))
+            xValueEdit = dialog.getChild("valueedit" + str(i + 1))
+            xRemoveBtn = dialog.getChild("remove" + str(i + 1))
+            self.assertEqual(aExpected, get_state_as_dict(xNameBox)['ReallyVisible'])
+            self.assertEqual(aExpected, get_state_as_dict(xTypeBox)['ReallyVisible'])
+            self.assertEqual(aExpected, get_state_as_dict(xValueEdit)['ReallyVisible'])
+            self.assertEqual(aExpected, get_state_as_dict(xRemoveBtn)['ReallyVisible'])
 
    def test_open_documentProperties_writer(self):
         self.ui_test.create_doc_in_start_center("writer")
@@ -76,9 +87,18 @@ class documentProperties(UITestCase):
                 dialog_handler=handle_protect_dlg)
 
         select_pos(xTabs, "2")     #tab Custom properties
-#add custom properties  ------>>>>>>>>>>>  not supported
+
+        self.assert_custom_properties(xDialog, False)
+
         xAddBtn = xDialog.getChild("add")
         xAddBtn.executeAction("CLICK", tuple())
+
+        self.assert_custom_properties(xDialog, True)
+
+        xRemoveBtn = xDialog.getChild("remove1")
+        xRemoveBtn.executeAction("CLICK", tuple())
+
+        self.assert_custom_properties(xDialog, False)
 
         select_pos(xTabs, "5")     #tab Statistics
         xUpdateBtn = xDialog.getChild("update")
