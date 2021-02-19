@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "77e351e3_789c662f",
+        "filename": "sd/qa/unit/SVGExportTests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-02-19T12:57:37Z",
+      "side": 1,
+      "message": "A better way is to take a copy and move. Generally, if your class (or function) will make a copy anyway, it\u0027s more efficient to copy then move, instead of taking a reference and copying. (Of course in this case it doesn\u0027t matter much, but I\u0027m taking the opportunity to share this with you.)\n\nThe reason for this is because with the copy+move there might not be a copy at all (when the object is temporary), whereas with reference+copy there will always be a copy operation. So, in the worst case both are the same, in terms of performance and operations, but the copy+move can be collapsed into move only, which is much better.\n\nResetter(std::function\u003cvoid()\u003e func)\n   : m_Func(std::move(func))",
+      "revId": "d75f8d72aa097433f22b4a458c7e2818c06704f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff3e6778_6a2e5e0a",
+        "filename": "sd/qa/unit/SVGExportTests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-02-19T12:57:37Z",
+      "side": 1,
+      "message": "Perhaps CPPUNIT_FAIL ?",
+      "revId": "d75f8d72aa097433f22b4a458c7e2818c06704f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37d81b64_3f3e6056",
+        "filename": "sd/qa/unit/SVGExportTests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-02-19T12:57:37Z",
+      "side": 1,
+      "message": "Any reason why this needs to be a unique_ptr? Why not just Resetter resetter([\u0026]() { Application::SetSettings(aSavedSettings); })); ?",
+      "revId": "d75f8d72aa097433f22b4a458c7e2818c06704f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
