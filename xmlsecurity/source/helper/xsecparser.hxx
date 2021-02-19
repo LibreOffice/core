@@ -53,6 +53,7 @@ public:
     class Context;
 private:
     class UnknownContext;
+    class ReferencedContextImpl;
     class LoPGPOwnerContext;
     class DsPGPKeyPacketContext;
     class DsPGPKeyIDContext;
