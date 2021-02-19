@@ -4614,7 +4614,10 @@ void wwSectionManager::InsertSegments()
                 aDesc.GetPageDesc()->SetFollow( aFollow.GetPageDesc() );
             }
 
-            GiveNodePageDesc(aIter->maStart, aDesc, mrReader.m_rDoc);
+            // Avoid setting the page style at the very beginning since it is always the default style anyway,
+            // unless it is needed to specify a page number.
+            if (aIter != aStart || aDesc.GetNumOffset())
+                GiveNodePageDesc(aIter->maStart, aDesc, mrReader.m_rDoc);
         }
 
         SwTextNode* pTextNd = nullptr;
