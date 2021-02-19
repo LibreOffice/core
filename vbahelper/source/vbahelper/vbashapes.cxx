@@ -42,6 +42,7 @@
 #include <vbahelper/vbashape.hxx>
 #include <vbahelper/vbashapes.hxx>
 #include <vbahelper/vbashaperange.hxx>
+#include <rtl/ref.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -238,7 +239,7 @@ ScVbaShapes::AddRectangle(sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWid
     size.Width = nWidth;
     xShape->setSize( size );
 
-    ScVbaShape *pScVbaShape = new ScVbaShape( getParent(), mxContext, xShape, m_xShapes, m_xModel, ScVbaShape::getType( xShape ) );
+    rtl::Reference<ScVbaShape> pScVbaShape = new ScVbaShape( getParent(), mxContext, xShape, m_xShapes, m_xModel, ScVbaShape::getType( xShape ) );
     return uno::makeAny( uno::Reference< msforms::XShape > ( pScVbaShape ) );
 }
 
@@ -280,7 +281,7 @@ ScVbaShapes::AddEllipse(sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth
     size.Width = nWidth;
     xShape->setSize(size);
 
-    ScVbaShape *pScVbaShape = new ScVbaShape( getParent(), mxContext, xShape, m_xShapes, m_xModel, ScVbaShape::getType( xShape ) );
+    rtl::Reference<ScVbaShape> pScVbaShape = new ScVbaShape( getParent(), mxContext, xShape, m_xShapes, m_xModel, ScVbaShape::getType( xShape ) );
     return uno::makeAny( uno::Reference< msforms::XShape > ( pScVbaShape ) );
 }
 
@@ -315,7 +316,7 @@ ScVbaShapes::AddLine( sal_Int32 StartX, sal_Int32 StartY, sal_Int32 endX, sal_In
     size.Width = nWidth;
     xShape->setSize(size);
 
-    ScVbaShape *pScVbaShape = new ScVbaShape( getParent(), mxContext, xShape, m_xShapes, m_xModel, ScVbaShape::getType( xShape ) );
+    rtl::Reference<ScVbaShape> pScVbaShape = new ScVbaShape( getParent(), mxContext, xShape, m_xShapes, m_xModel, ScVbaShape::getType( xShape ) );
     return uno::makeAny( uno::Reference< msforms::XShape > ( pScVbaShape ) );
 }
 
@@ -382,7 +383,7 @@ ScVbaShapes::AddTextboxInWriter( sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _n
     xShapeProps->setPropertyValue( "LayerName", uno::makeAny( OUString("Heaven") ) );
 
 
-    ScVbaShape *pScVbaShape = new ScVbaShape( getParent(), mxContext, xShape, m_xShapes, m_xModel, ScVbaShape::getType( xShape ) );
+    rtl::Reference<ScVbaShape> pScVbaShape = new ScVbaShape( getParent(), mxContext, xShape, m_xShapes, m_xModel, ScVbaShape::getType( xShape ) );
     return uno::makeAny( uno::Reference< msforms::XShape > ( pScVbaShape ) );
 }
 
