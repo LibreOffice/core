@@ -21,6 +21,7 @@
 #include <xmlsignaturehelper.hxx>
 #include <documentsignaturehelper.hxx>
 #include <xsecctl.hxx>
+#include <biginteger.hxx>
 
 #include <xmlsignaturehelper2.hxx>
 
@@ -44,6 +45,8 @@
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
+
+#include <optional>
 
 #define NS_DOCUMENTSIGNATURES   "http://openoffice.org/2004/documentsignatures"
 #define NS_DOCUMENTSIGNATURES_ODF_1_2 "urn:oasis:names:tc:opendocument:xmlns:digitalsignature:1.0"
@@ -544,6 +547,149 @@ void XMLSignatureHelper::CreateAndWriteOOXMLSignature(const uno::Reference<embed
         mbError = true;
 
     xSaxWriter->endDocument();
+}
+
+/** check this constraint from xmldsig-core 4.5.4:
+
+  All certificates appearing in an X509Data element MUST relate to the
+  validation key by either containing it or being part of a certification
+  chain that terminates in a certificate containing the validation key.
+ */
+static auto CheckX509Data(
+    uno::Reference<xml::crypto::XSecurityEnvironment> const& xSecEnv,
+    std::vector<SignatureInformation::X509Data> const& rX509Datas,
+    std::vector<uno::Reference<security::XCertificate>> & rCerts,
+    std::vector<SignatureInformation::X509Data> & rSorted) -> bool
+{
+    assert(rCerts.empty());
+    assert(rSorted.empty());
+    if (rX509Datas.empty())
+    {
+        SAL_WARN("xmlsecurity.comp", "no X509Data");
+        return false;
+    }
+    std::vector<uno::Reference<security::XCertificate>> certs;
+    for (SignatureInformation::X509Data const& it : rX509Datas)
+    {
+        if (!it.X509Certificate.isEmpty())
+        {
+            certs.emplace_back(xSecEnv->createCertificateFromAscii(it.X509Certificate));
+        }
+        else
+        {
+            certs.emplace_back(xSecEnv->getCertificate(
+                it.X509IssuerName,
+                xmlsecurity::numericStringToBigInteger(it.X509SerialNumber)));
+        }
+        if (!certs.back().is())
+        {
+            SAL_WARN("xmlsecurity.comp", "X509Data cannot be parsed");
+            return false;
+        }
+    }
+
+    // first, search one whose issuer isn't in the list, or a self-signed one
+    std::optional<size_t> start;
+    for (size_t i = 0; i < certs.size(); ++i)
+    {
+        for (size_t j = 0; ; ++j)
+        {
+            if (j == certs.size())
+            {
+                if (start)
+                {
+                    SAL_WARN("xmlsecurity.comp", "X509Data do not form a chain: certificate has no issuer but already have start of chain: " << certs[i]->getSubjectName());
+                    return false;
+                }
+                start = i; // issuer isn't in the list
+                break;
+            }
+            if (xmlsecurity::EqualDistinguishedNames(certs[i]->getIssuerName(), certs[j]->getSubjectName()))
+            {
+                if (i == j) // self signed
+                {
+                    if (start)
+                    {
+                        SAL_WARN("xmlsecurity.comp", "X509Data do not form a chain: certificate is self-signed but already have start of chain: " << certs[i]->getSubjectName());
+                        return false;
+                    }
+                    start = i;
+                }
+                break;
+            }
+        }
+    }
+    std::vector<size_t> chain;
+    if (!start)
+    {
+        // this can only be a cycle?
+        SAL_WARN("xmlsecurity.comp", "X509Data do not form a chain: cycle detected");
+        return false;
+    }
+    chain.emplace_back(*start);
+
+    // second, check that there is a chain, no tree or cycle...
+    for (size_t i = 0; i < certs.size(); ++i)
+    {
+        assert(chain.size() == i + 1);
+        for (size_t j = 0; j < certs.size(); ++j)
+        {
+            if (chain[i] != j)
+            {
+                if (xmlsecurity::EqualDistinguishedNames(
+                        certs[chain[i]]->getSubjectName(), certs[j]->getIssuerName()))
+                {
+                    if (chain.size() != i + 1) // already found issuee?
+                    {
+                        SAL_WARN("xmlsecurity.comp", "X509Data do not form a chain: certificate issued 2 others: " << certs[chain[i]]->getSubjectName());
+                        return false;
+                    }
+                    chain.emplace_back(j);
+                }
+            }
+        }
+        if (i == certs.size() - 1)
+        {   // last one: must be a leaf
+            if (chain.size() != i + 1)
+            {
+                SAL_WARN("xmlsecurity.comp", "X509Data do not form a chain: certificate in cycle: " << certs[chain[i]]->getSubjectName());
+                return false;
+            }
+        }
+        else if (chain.size() != i + 2)
+        {   // not issuer of another?
+            SAL_WARN("xmlsecurity.comp", "X509Data do not form a chain: certificate issued 0 others: " << certs[chain[i]]->getSubjectName());
+            return false;
+        }
+    }
+
+    // success
+    assert(chain.size() == rX509Datas.size());
+    for (auto const& it : chain)
+    {
+        rSorted.emplace_back(rX509Datas[it]);
+        rCerts.emplace_back(certs[it]);
+    }
+    return true;
+}
+
+std::vector<uno::Reference<security::XCertificate>>
+XMLSignatureHelper::CheckAndUpdateSignatureInformation(
+    uno::Reference<xml::crypto::XSecurityEnvironment> const& xSecEnv,
+    SignatureInformation const& rInfo)
+{
+    // if the check fails, it's not possible to determine which X509Data
+    // contained the signing certificate - the UI cannot display something
+    // useful in this case, so prevent anything misleading by clearing the
+    // X509Datas.
+
+    std::vector<uno::Reference<security::XCertificate>> certs;
+    std::vector<SignatureInformation::X509Data> datas;
+    CheckX509Data(xSecEnv, rInfo.X509Datas, certs, datas);
+
+    // rInfo is a copy, update the original
+    mpXSecController->UpdateSignatureInformation(rInfo.nSecurityId, datas);
+    return certs;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

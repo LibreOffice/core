@@ -262,9 +262,11 @@ private:
         sal_Int32 nDigestID );
     void setReferenceCount() const;
 
-    void setX509IssuerName( OUString const & ouX509IssuerName );
-    void setX509SerialNumber( OUString const & ouX509SerialNumber );
-    void setX509Certificate( OUString const & ouX509Certificate );
+    void setX509Data(SignatureInformation::X509Data const& rData);
+    void setX509CertDigest(
+        OUString const& rCertDigest, sal_Int32 const nReferenceDigestID,
+        std::u16string_view const& rX509IssuerName, std::u16string_view const& rX509SerialNumber);
+
     void setSignatureValue( OUString const & ouSignatureValue );
     void setDigestValue( sal_Int32 nDigestID, OUString const & ouDigestValue );
     void setGpgKeyID( OUString const & ouKeyID );
@@ -273,7 +275,6 @@ private:
 
     void setDate(OUString const& rId, OUString const& ouDate);
     void setDescription(OUString const& rId, OUString const& rDescription);
-    void setCertDigest(const OUString& rCertDigest);
     void setValidSignatureImage(const OUString& rValidSigImg);
     void setInvalidSignatureImage(const OUString& rInvalidSigImg);
     void setSignatureLineId(const OUString& rSignatureLineId);
@@ -302,6 +303,9 @@ public:
 
     SignatureInformation    getSignatureInformation( sal_Int32 nSecurityId ) const;
     SignatureInformations   getSignatureInformations() const;
+    /// only verify can figure out which X509Data is the signing certificate
+    void UpdateSignatureInformation(sal_Int32 nSecurityId,
+            std::vector<SignatureInformation::X509Data> const& rDatas);
 
     static void exportSignature(
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler,
