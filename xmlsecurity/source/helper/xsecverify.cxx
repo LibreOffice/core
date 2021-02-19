@@ -143,6 +143,25 @@ void XSecController::switchGpgSignature()
 #endif
 }
 
+bool XSecController::haveReferenceForId(std::u16string_view rId) const
+{
+    if (m_vInternalSignatureInformations.empty())
+    {
+        SAL_INFO("xmlsecurity.helper","XSecController::haveReferenceForId: no signature");
+        return false;
+    }
+    InternalSignatureInformation const& rIsi(m_vInternalSignatureInformations.back());
+    for (SignatureReferenceInformation const& rSri : rIsi.signatureInfor.vSignatureReferenceInfors)
+    {
+        if (rSri.nType == SignatureReferenceType::SAMEDOCUMENT
+            && rSri.ouURI == rId) // ouUri has # stripped
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 void XSecController::addReference( const OUString& ouUri, sal_Int32 nDigestID, const OUString& ouType )
 {
     if (m_vInternalSignatureInformations.empty())
