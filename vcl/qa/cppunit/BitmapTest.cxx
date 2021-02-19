@@ -49,6 +49,7 @@ class BitmapTest : public CppUnit::TestFixture
     void testBitmap32();
     void testOctree();
     void testEmptyAccess();
+    void testMirror();
 
     CPPUNIT_TEST_SUITE(BitmapTest);
     CPPUNIT_TEST(testCreation);
@@ -64,6 +65,7 @@ class BitmapTest : public CppUnit::TestFixture
     CPPUNIT_TEST(testBitmap32);
     CPPUNIT_TEST(testOctree);
     CPPUNIT_TEST(testEmptyAccess);
+    CPPUNIT_TEST(testMirror);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -659,6 +661,69 @@ void BitmapTest::testEmptyAccess()
     BitmapInfoAccess access(empty);
     CPPUNIT_ASSERT_EQUAL(tools::Long(0), access.Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(0), access.Height());
+}
+
+void BitmapTest::testMirror()
+{
+    for (int bpp : { 4, 8, 24, 32 })
+    {
+        Bitmap bitmap(Size(11, 11), bpp);
+        {
+            bitmap.Erase(COL_MAGENTA);
+            BitmapWriteAccess write(bitmap);
+            if (write.HasPalette())
+            {
+                // Note that SetPixel() and GetColor() take arguments as Y,X.
+                write.SetPixel(0, 0, BitmapColor(write.GetBestPaletteIndex(COL_BLACK)));
+                write.SetPixel(10, 0, BitmapColor(write.GetBestPaletteIndex(COL_WHITE)));
+                write.SetPixel(0, 10, BitmapColor(write.GetBestPaletteIndex(COL_RED)));
+                write.SetPixel(10, 10, BitmapColor(write.GetBestPaletteIndex(COL_BLUE)));
+                write.SetPixel(5, 0, BitmapColor(write.GetBestPaletteIndex(COL_GREEN)));
+                write.SetPixel(0, 5, BitmapColor(write.GetBestPaletteIndex(COL_YELLOW)));
+            }
+            else
+            {
+                write.SetPixel(0, 0, COL_BLACK);
+                write.SetPixel(10, 0, COL_WHITE);
+                write.SetPixel(0, 10, COL_RED);
+                write.SetPixel(10, 10, COL_BLUE);
+                write.SetPixel(5, 0, COL_GREEN);
+                write.SetPixel(0, 5, COL_YELLOW);
+            }
+        }
+        bitmap.Mirror(BmpMirrorFlags::Horizontal);
+        {
+            BitmapReadAccess read(bitmap);
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_BLACK), read.GetColor(0, 10));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_WHITE), read.GetColor(10, 10));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_RED), read.GetColor(0, 0));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_BLUE), read.GetColor(10, 0));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_GREEN), read.GetColor(5, 10));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_YELLOW), read.GetColor(0, 5));
+        }
+        bitmap.Mirror(BmpMirrorFlags::Vertical);
+        {
+            BitmapReadAccess read(bitmap);
+            // Now is effectively mirrored in both directions.
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_BLACK), read.GetColor(10, 10));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_WHITE), read.GetColor(0, 10));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_RED), read.GetColor(10, 0));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_BLUE), read.GetColor(0, 0));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_GREEN), read.GetColor(5, 10));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_YELLOW), read.GetColor(10, 5));
+        }
+        bitmap.Mirror(BmpMirrorFlags::Vertical | BmpMirrorFlags::Horizontal);
+        {
+            BitmapReadAccess read(bitmap);
+            // Now is back the original.
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_BLACK), read.GetColor(0, 0));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_WHITE), read.GetColor(10, 0));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_RED), read.GetColor(0, 10));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_BLUE), read.GetColor(10, 10));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_GREEN), read.GetColor(5, 0));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_YELLOW), read.GetColor(0, 5));
+        }
+    }
 }
 
 } // namespace
