@@ -593,7 +593,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                 if (!rInfo.ouGpgCertificate.isEmpty())
                     aType = "OpenPGP";
                 // XML based: XAdES or not.
-                else if (!rInfo.ouCertDigest.isEmpty())
+                else if (!rInfo.X509Datas.empty() && !rInfo.X509Datas.back().CertDigest.isEmpty())
                     aType = "XAdES";
                 else
                     aType = "XML-DSig";
@@ -705,8 +705,8 @@ uno::Reference<security::XCertificate> DigitalSignaturesDialog::getCertificate(c
     uno::Reference<security::XCertificate> xCert;
 
     //First we try to get the certificate which is embedded in the XML Signature
-    if (xSecEnv.is() && !rInfo.ouX509Certificate.isEmpty())
-        xCert = xSecEnv->createCertificateFromAscii(rInfo.ouX509Certificate);
+    if (xSecEnv.is() && !rInfo.X509Datas.empty() && !rInfo.X509Datas.back().X509Certificate.isEmpty())
+        xCert = xSecEnv->createCertificateFromAscii(rInfo.X509Datas.back().X509Certificate);
     else {
         //There must be an embedded certificate because we use it to get the
         //issuer name. We cannot use /Signature/KeyInfo/X509Data/X509IssuerName
@@ -718,8 +718,11 @@ uno::Reference<security::XCertificate> DigitalSignaturesDialog::getCertificate(c
     }
 
     //In case there is no embedded certificate we try to get it from a local store
-    if (!xCert.is() && xSecEnv.is())
-        xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xmlsecurity::numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
+    if (!xCert.is() && xSecEnv.is() && !rInfo.X509Datas.empty())
+    {
+        xCert = xSecEnv->getCertificate(rInfo.X509Datas.back().X509IssuerName,
+            xmlsecurity::numericStringToBigInteger(rInfo.X509Datas.back().X509SerialNumber));
+    }
     if (!xCert.is() && xGpgSecEnv.is())
         xCert = xGpgSecEnv->getCertificate( rInfo.ouGpgKeyID, xmlsecurity::numericStringToBigInteger(u"") );
 
