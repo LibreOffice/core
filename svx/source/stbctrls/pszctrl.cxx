@@ -21,7 +21,6 @@
 #include <vcl/event.hxx>
 #include <vcl/fieldvalues.hxx>
 #include <vcl/status.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

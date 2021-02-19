@@ -28,6 +28,8 @@ namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::container { class XIndexContainer; }
 namespace com::sun::star::container { class XNameAccess; }
 
+class PopupMenu;
+
 // FmGridHeader
 
 struct FmGridHeaderData;

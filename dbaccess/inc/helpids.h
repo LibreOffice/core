@@ -29,8 +29,6 @@
 
 #define HID_BROWSER_COLUMNFORMAT                          "DBACCESS_HID_BROWSER_COLUMNFORMAT"
 #define HID_BROWSER_COLUMNWIDTH                           "DBACCESS_HID_BROWSER_COLUMNWIDTH"
-#define HID_BROWSER_TABLEFORMAT                           "DBACCESS_HID_BROWSER_TABLEFORMAT"
-#define HID_BROWSER_ROWHEIGHT                             "DBACCESS_HID_BROWSER_ROWHEIGHT"
 
 #define HID_CTL_QRYSQLEDIT                                "DBACCESS_HID_CTL_QRYSQLEDIT"
 
