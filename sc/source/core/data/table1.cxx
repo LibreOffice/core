@@ -975,7 +975,7 @@ bool ScTable::GetDataAreaSubrange( ScRange& rRange ) const
 
 bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rStartRow,
         SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly, bool bStickyTopRow, bool bStickyLeftCol,
-        bool bConsiderCellNotes, bool bConsiderCellDrawObjects ) const
+        bool bConsiderCellNotes, bool bConsiderCellDrawObjects, bool bConsiderCellPatterns ) const
 {
     rStartCol = std::min<SCCOL>( rStartCol, aCol.size()-1 );
     // check for rEndCol is done below.
@@ -1015,6 +1015,9 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
             if (bConsiderCellDrawObjects && !aCol[rEndCol].IsDrawObjectsEmptyBlock( rStartRow, rEndRow ))
                 break;
 
+            if (bConsiderCellPatterns && !aCol[rEndCol].IsPatternsEmptyBlock(rStartRow, rEndRow))
+                break;
+
             --rEndCol;
             o_bShrunk = true;
         }
@@ -1034,6 +1037,10 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
                 if (bConsiderCellDrawObjects && !aCol[rStartCol].IsDrawObjectsEmptyBlock( rStartRow, rEndRow ))
                     break;
 
+                if (bConsiderCellPatterns
+                    && !aCol[rEndCol].IsPatternsEmptyBlock(rStartRow, rEndRow))
+                    break;
+
                 ++rStartCol;
                 o_bShrunk = true;
             }
@@ -1051,7 +1058,8 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
                 bool bFound = false;
                 for (SCCOL i=rStartCol; i<=rEndCol && !bFound; i++)
                 {
-                    if (aCol[i].HasDataAt( rStartRow, bConsiderCellNotes, bConsiderCellDrawObjects))
+                    if (aCol[i].HasDataAt(rStartRow, bConsiderCellNotes, bConsiderCellDrawObjects,
+                                          bConsiderCellPatterns))
                         bFound = true;
                 }
                 if (!bFound)
@@ -1066,8 +1074,8 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
 
         while (rStartRow < rEndRow)
         {
-            SCROW nLastDataRow = GetLastDataRow( rStartCol, rEndCol, rEndRow,
-                                                 bConsiderCellNotes, bConsiderCellDrawObjects);
+            SCROW nLastDataRow = GetLastDataRow(rStartCol, rEndCol, rEndRow, bConsiderCellNotes,
+                                                bConsiderCellDrawObjects, bConsiderCellPatterns);
             if (0 <= nLastDataRow && nLastDataRow < rEndRow)
             {
                 rEndRow = std::max( rStartRow, nLastDataRow);
@@ -1081,11 +1089,11 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
     return rStartCol != rEndCol || (bColumnsOnly ?
             !aCol[rStartCol].IsEmptyBlock( rStartRow, rEndRow) :
             (rStartRow != rEndRow ||
-                aCol[rStartCol].HasDataAt( rStartRow, bConsiderCellNotes, bConsiderCellDrawObjects)));
+                aCol[rStartCol].HasDataAt( rStartRow, bConsiderCellNotes, bConsiderCellDrawObjects, bConsiderCellPatterns )));
 }
 
-SCROW ScTable::GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow,
-                               bool bConsiderCellNotes, bool bConsiderCellDrawObjects ) const
+SCROW ScTable::GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow, bool bConsiderCellNotes,
+                               bool bConsiderCellDrawObjects, bool bConsiderCellPatterns ) const
 {
     if ( !IsColValid( nCol1 ) || !ValidCol( nCol2 ) )
         return -1;
@@ -1095,7 +1103,8 @@ SCROW ScTable::GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow,
     SCROW nNewLastRow = 0;
     for (SCCOL i = nCol1; i <= nCol2; ++i)
     {
-        SCROW nThis = aCol[i].GetLastDataPos(nLastRow, bConsiderCellNotes, bConsiderCellDrawObjects);
+        SCROW nThis = aCol[i].GetLastDataPos(nLastRow, bConsiderCellNotes, bConsiderCellDrawObjects,
+                                             bConsiderCellPatterns);
         if (nNewLastRow < nThis)
             nNewLastRow = nThis;
     }

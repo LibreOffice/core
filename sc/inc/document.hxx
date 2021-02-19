@@ -1406,6 +1406,8 @@ public:
                                 If TRUE, consider the presence of cell notes besides data.
                         @param  bConsiderCellDrawObjects
                                 If TRUE, consider the presence of draw objects anchored to the cell.
+                        @param bConsiderCellPatterns
+                                If TRUE, consider the presence of cell patterns.
 
                         @returns true if there is any data, false if not.
                      */
@@ -1414,7 +1416,8 @@ public:
                                           SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly,
                                           bool bStickyTopRow = false, bool bStickyLeftCol = false,
                                           bool bConsiderCellNotes = false,
-                                          bool bConsiderCellDrawObjects = false ) const;
+                                          bool bConsiderCellDrawObjects = false,
+                                          bool bConsiderCellPatterns = false ) const;
 
     /**
      * Return the last non-empty row position in given columns that's no

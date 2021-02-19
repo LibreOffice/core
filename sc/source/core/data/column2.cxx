@@ -1284,6 +1284,11 @@ bool ScColumn::IsNotesEmptyBlock(SCROW nStartRow, SCROW nEndRow) const
     return nEndRow < nNextRow;
 }
 
+bool ScColumn::IsPatternsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const
+{
+    return GetPatternCount(nStartRow, nEndRow) == 0;
+}
+
 SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const
 {
     // Given a range of rows, find a top or bottom empty segment.  Skip the start row.
@@ -1351,7 +1356,7 @@ SCROW ScColumn::GetLastDataPos() const
 }
 
 SCROW ScColumn::GetLastDataPos( SCROW nLastRow, bool bConsiderCellNotes,
-                                bool bConsiderCellDrawObjects ) const
+                                bool bConsiderCellDrawObjects, bool bConsiderCellPatterns ) const
 {
     sc::CellStoreType::const_position_type aPos = maCells.position(std::min(nLastRow,GetDoc().MaxRow()));
 
@@ -1359,6 +1364,9 @@ SCROW ScColumn::GetLastDataPos( SCROW nLastRow, bool bConsiderCellNotes,
         return nLastRow;
 
     if (bConsiderCellDrawObjects && !IsDrawObjectsEmptyBlock(nLastRow, nLastRow))
+        return nLastRow;
+
+    if (bConsiderCellPatterns && !IsPatternsEmptyBlock(nLastRow, nLastRow))
         return nLastRow;
 
     if (aPos.first->type != sc::element_type_empty)
@@ -3128,24 +3136,32 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, bool bDown) const
     rRow = nLastRow;
 }
 
-bool ScColumn::HasDataAt(SCROW nRow, bool bConsiderCellNotes, bool bConsiderCellDrawObjects) const
+bool ScColumn::HasDataAt(SCROW nRow, bool bConsiderCellNotes, bool bConsiderCellDrawObjects,
+                         bool bConsiderCellPatterns) const
 {
     if (bConsiderCellNotes && !IsNotesEmptyBlock(nRow, nRow))
         return true;
 
     if (bConsiderCellDrawObjects && !IsDrawObjectsEmptyBlock(nRow, nRow))
+        return true;
+
+    if (bConsiderCellPatterns && !IsPatternsEmptyBlock(nRow, nRow))
         return true;
 
     return maCells.get_type(nRow) != sc::element_type_empty;
 }
 
 bool ScColumn::HasDataAt(sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow,
-                         bool bConsiderCellNotes, bool bConsiderCellDrawObjects) const
+                         bool bConsiderCellNotes, bool bConsiderCellDrawObjects,
+                         bool bConsiderCellPatterns) const
 {
     if (bConsiderCellNotes && !IsNotesEmptyBlock(nRow, nRow))
         return true;
 
     if (bConsiderCellDrawObjects && !IsDrawObjectsEmptyBlock(nRow, nRow))
+        return true;
+
+    if (bConsiderCellPatterns && !IsPatternsEmptyBlock(nRow, nRow))
         return true;
 
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(rBlockPos.miCellPos, nRow);
@@ -3156,12 +3172,15 @@ bool ScColumn::HasDataAt(sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow,
 }
 
 bool ScColumn::HasDataAt(sc::ColumnBlockPosition& rBlockPos, SCROW nRow,
-                         bool bConsiderCellNotes, bool bConsiderCellDrawObjects)
+                         bool bConsiderCellNotes, bool bConsiderCellDrawObjects, bool bConsiderCellPatterns)
 {
     if (bConsiderCellNotes && !IsNotesEmptyBlock(nRow, nRow))
         return true;
 
     if (bConsiderCellDrawObjects && !IsDrawObjectsEmptyBlock(nRow, nRow))
+        return true;
+
+    if (bConsiderCellPatterns && !IsPatternsEmptyBlock(nRow, nRow))
         return true;
 
     std::pair<sc::CellStoreType::iterator,size_t> aPos = maCells.position(rBlockPos.miCellPos, nRow);
