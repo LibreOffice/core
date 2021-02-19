@@ -139,13 +139,6 @@ void RecentMasterPagesSelector::AssignMasterPageToPageList (
     }
 }
 
-void RecentMasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
-{
-    sal_uInt16 nItemid = rMenu.GetItemId("edit");
-    if (rMenu.GetItemPos(nItemid) != MENU_ITEM_NOTFOUND)
-        rMenu.EnableItem(nItemid, false);
-}
-
 } // end of namespace sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

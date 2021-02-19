@@ -56,8 +56,6 @@ private:
         SdPage* pMasterPage,
         const std::shared_ptr<std::vector<SdPage*> >& rpPageList) override;
 
-    virtual void ProcessPopupMenu (Menu& rMenu) override;
-
     RecentMasterPagesSelector (
         vcl::Window* pParent,
         SdDrawDocument& rDocument,
