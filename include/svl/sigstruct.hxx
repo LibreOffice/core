@@ -87,9 +87,19 @@ struct SignatureInformation
     sal_Int32 nSecurityId;
     css::xml::crypto::SecurityOperationStatus nStatus;
     SignatureReferenceInformations  vSignatureReferenceInfors;
-    OUString ouX509IssuerName;
-    OUString ouX509SerialNumber;
-    OUString ouX509Certificate;
+    struct X509Data
+    {
+        OUString X509IssuerName;
+        OUString X509SerialNumber;
+        OUString X509Certificate;
+        /// OOXML certificate SHA-256 digest, empty for ODF except when doing XAdES signature.
+        OUString CertDigest;
+        /// The certificate owner (aka subject).
+        OUString X509Subject;
+    };
+    // note: at parse time, it's unkown which one is the signing certificate;
+    // ImplVerifySignatures() figures it out and puts it at the back
+    std::vector<X509Data> X509Datas;
 
     OUString ouGpgKeyID;
     OUString ouGpgCertificate;
@@ -122,8 +132,6 @@ struct SignatureInformation
     OUString ouDescription;
     /// The Id attribute of the <SignatureProperty> element that contains the <dc:description>.
     OUString ouDescriptionPropertyId;
-    /// OOXML certificate SHA-256 digest, empty for ODF except when doing XAdES signature.
-    OUString ouCertDigest;
     /// Valid and invalid signature line images
     css::uno::Reference<css::graphic::XGraphic> aValidSignatureImage;
     css::uno::Reference<css::graphic::XGraphic> aInvalidSignatureImage;
@@ -137,9 +145,6 @@ struct SignatureInformation
     bool bHasSigningCertificate;
     /// For PDF: the byte range doesn't cover the whole document.
     bool bPartialDocumentSignature;
-
-    /// The certificate owner (aka subject).
-    OUString ouSubject;
 
     svl::crypto::SignatureMethodAlgorithm eAlgorithmID;
 
