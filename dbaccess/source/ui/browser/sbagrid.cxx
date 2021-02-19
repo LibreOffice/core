@@ -666,7 +666,7 @@ CellController* SbaGridControl::GetController(sal_Int32 nRow, sal_uInt16 nCol)
     return FmGridControl::GetController(nRow, nCol);
 }
 
-void SbaGridControl::PreExecuteRowContextMenu(PopupMenu& rMenu)
+void SbaGridControl::PreExecuteRowContextMenu(weld::Menu& rMenu)
 {
     FmGridControl::PreExecuteRowContextMenu(rMenu);
 
@@ -674,18 +674,18 @@ void SbaGridControl::PreExecuteRowContextMenu(PopupMenu& rMenu)
 
     if (!IsReadOnlyDB())
     {
-        rMenu.InsertItem(ID_BROWSER_TABLEATTR, DBA_RES(RID_STR_TABLE_FORMAT), MenuItemBits::NONE, OString(), nPos++);
-        rMenu.SetHelpId(ID_BROWSER_TABLEATTR, HID_BROWSER_TABLEFORMAT);
-
-        rMenu.InsertItem(ID_BROWSER_ROWHEIGHT, DBA_RES(RID_STR_ROW_HEIGHT), MenuItemBits::NONE, OString(), nPos++);
-        rMenu.SetHelpId(ID_BROWSER_ROWHEIGHT, HID_BROWSER_ROWHEIGHT);
-        rMenu.InsertSeparator(OString(), nPos++);
+        rMenu.insert(nPos++, "tableattr", DBA_RES(RID_STR_TABLE_FORMAT),
+                     nullptr, nullptr, nullptr, TRISTATE_INDET);
+        rMenu.insert(nPos++, "rowheight", DBA_RES(RID_STR_ROW_HEIGHT),
+                     nullptr, nullptr, nullptr, TRISTATE_INDET);
+        rMenu.insert_separator(nPos++, "separator1");
     }
 
     if ( GetSelectRowCount() > 0 )
     {
-        rMenu.InsertItem(ID_BROWSER_COPY, DBA_RES(RID_STR_COPY), MenuItemBits::NONE, OString(), nPos++);
-        rMenu.InsertSeparator(OString(), nPos++);
+        rMenu.insert(nPos++, "copy", DBA_RES(RID_STR_COPY),
+                     nullptr, nullptr, nullptr, TRISTATE_INDET);
+        rMenu.insert_separator(nPos++, "separator2");
     }
 }
 
@@ -821,24 +821,16 @@ void SbaGridControl::SetBrowserAttrs()
     }
 }
 
-void SbaGridControl::PostExecuteRowContextMenu(const PopupMenu& rMenu, sal_uInt16 nExecutionResult)
+void SbaGridControl::PostExecuteRowContextMenu(const OString& rExecutionResult)
 {
-    switch (nExecutionResult)
-    {
-        case ID_BROWSER_TABLEATTR:
-            SetBrowserAttrs();
-            break;
-        case ID_BROWSER_ROWHEIGHT:
-            SetRowHeight();
-            break;
-        case ID_BROWSER_COPY:
-            CopySelectedRowsToClipboard();
-            break;
-
-        default:
-            FmGridControl::PostExecuteRowContextMenu(rMenu, nExecutionResult);
-            break;
-    }
+    if (rExecutionResult == "tableattr")
+        SetBrowserAttrs();
+    else if (rExecutionResult == "rowheight")
+        SetRowHeight();
+    else if (rExecutionResult == "copy")
+        CopySelectedRowsToClipboard();
+    else
+        FmGridControl::PostExecuteRowContextMenu(rExecutionResult);
 }
 
 void SbaGridControl::Select()

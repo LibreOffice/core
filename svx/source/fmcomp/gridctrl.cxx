@@ -43,11 +43,11 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
-#include <vcl/builder.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 
 #include <svx/strings.hrc>
 
@@ -2408,14 +2408,14 @@ sal_uInt32 DbGridControl::GetTotalCellWidth(sal_Int32 nRow, sal_uInt16 nColId)
         return 30;  // FIXME magic number for default cell width
 }
 
-void DbGridControl::PreExecuteRowContextMenu(PopupMenu& rMenu)
+void DbGridControl::PreExecuteRowContextMenu(weld::Menu& rMenu)
 {
     bool bDelete = (m_nOptions & DbGridControlOptions::Delete) && GetSelectRowCount() && !IsCurrentAppending();
     // if only a blank row is selected then do not delete
     bDelete = bDelete && !((m_nOptions & DbGridControlOptions::Insert) && GetSelectRowCount() == 1 && IsRowSelected(GetRowCount() - 1));
 
-    rMenu.EnableItem(rMenu.GetItemId("delete"), bDelete);
-    rMenu.EnableItem(rMenu.GetItemId("save"), IsModified());
+    rMenu.set_visible("delete", bDelete);
+    rMenu.set_visible("save", IsModified());
 
     // the undo is more difficult
     bool bCanUndo = IsModified();
@@ -2424,21 +2424,21 @@ void DbGridControl::PreExecuteRowContextMenu(PopupMenu& rMenu)
         nState = m_aMasterStateProvider.Call(DbGridControlNavigationBarState::Undo);
     bCanUndo &= ( 0 != nState );
 
-    rMenu.EnableItem(rMenu.GetItemId("undo"), bCanUndo);
+    rMenu.set_visible("undo", bCanUndo);
 }
 
-void DbGridControl::PostExecuteRowContextMenu(const PopupMenu& rMenu, sal_uInt16 nExecutionResult)
+void DbGridControl::PostExecuteRowContextMenu(const OString& rExecutionResult)
 {
-    if (nExecutionResult == rMenu.GetItemId("delete"))
+    if (rExecutionResult == "delete")
     {
         // delete asynchronously
         if (m_nDeleteEvent)
             Application::RemoveUserEvent(m_nDeleteEvent);
         m_nDeleteEvent = Application::PostUserEvent(LINK(this,DbGridControl,OnDelete), nullptr, true);
     }
-    else if (nExecutionResult == rMenu.GetItemId("undo"))
+    else if (rExecutionResult == "undo")
         Undo();
-    else if (nExecutionResult == rMenu.GetItemId("save"))
+    else if (rExecutionResult == "save")
         SaveRow();
 }
 
@@ -2531,12 +2531,14 @@ void DbGridControl::copyCellText(sal_Int32 _nRow, sal_uInt16 _nColId)
 
 void DbGridControl::executeRowContextMenu(const Point& _rPreferredPos)
 {
-    VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "svx/ui/rowsmenu.ui", "");
-    VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "svx/ui/rowsmenu.ui"));
+    std::unique_ptr<weld::Menu> xContextMenu(xBuilder->weld_menu("menu"));
 
-    PreExecuteRowContextMenu(*aContextMenu );
-    aContextMenu->RemoveDisabledEntries( true, true );
-    PostExecuteRowContextMenu(*aContextMenu, aContextMenu->Execute(this, _rPreferredPos));
+    tools::Rectangle aRect(_rPreferredPos, Size(1,1));
+    weld::Window* pParent = weld::GetPopupParent(*this, aRect);
+
+    PreExecuteRowContextMenu(*xContextMenu);
+    PostExecuteRowContextMenu(xContextMenu->popup_at_rect(pParent, aRect));
 }
 
 void DbGridControl::Command(const CommandEvent& rEvt)

@@ -37,9 +37,9 @@ namespace com::sun::star::sdbc { class XRowSet; }
 namespace com::sun::star::sdb { class XRowsChangeListener; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::util { class XNumberFormatter; }
+namespace weld { class Menu; }
 
 class CursorWrapper;
-class PopupMenu;
 
 bool CompareBookmark(const css::uno::Any& aLeft, const css::uno::Any& aRight);
 
@@ -345,10 +345,10 @@ protected:
         All disabled entries will be removed before executing the menu, so be careful with separators
         near entries you probably wish to disable ...
     */
-    virtual void PreExecuteRowContextMenu(PopupMenu& rMenu);
+    virtual void PreExecuteRowContextMenu(weld::Menu& rMenu);
     /** After executing the context menu for a row this method is called.
     */
-    virtual void PostExecuteRowContextMenu(const PopupMenu& rMenu, sal_uInt16 nExecutionResult);
+    virtual void PostExecuteRowContextMenu(const OString& rExecutionResult);
 
     /// @throws css::uno::RuntimeException
     void DataSourcePropertyChanged(const css::beans::PropertyChangeEvent& evt);
