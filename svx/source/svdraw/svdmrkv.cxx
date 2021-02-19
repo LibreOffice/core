@@ -891,6 +891,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                 boost::property_tree::ptree poly;
                 boost::property_tree::ptree custom;
                 boost::property_tree::ptree nodes;
+                const bool convertMapMode = mpMarkedPV->GetView().GetFirstOutputDevice()->GetMapMode().GetMapUnit() == MapUnit::Map100thMM;
                 for (size_t i = 0; i < maHdlList.GetHdlCount(); i++)
                 {
                     SdrHdl *pHdl = maHdlList.GetHdl(i);
@@ -900,8 +901,11 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                     child.put("id", pHdl->GetObjHdlNum());
                     child.put("kind", kind);
                     child.put("pointer", static_cast<sal_Int32>(pHdl->GetPointer()));
-                    point.put("x", convertMm100ToTwip(pHdl->GetPos().getX()));
-                    point.put("y", convertMm100ToTwip(pHdl->GetPos().getY()));
+                    Point pHdlPos = pHdl->GetPos();
+                    if (convertMapMode)
+                        pHdlPos = OutputDevice::LogicToLogic(pHdlPos, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                    point.put("x", pHdlPos.getX());
+                    point.put("y", pHdlPos.getY());
                     child.add_child("point", point);
                     const auto node = std::make_pair("", child);
                     boost::property_tree::ptree* selectedNode = nullptr;
@@ -931,7 +935,6 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                     }
                     else
                         kindNode.get().push_back(node);
-
                 }
                 nodes.add_child("rectangle", rectangle);
                 nodes.add_child("poly", poly);
