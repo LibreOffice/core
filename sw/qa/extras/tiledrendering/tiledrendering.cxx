@@ -135,6 +135,7 @@ public:
     void testDeselectCustomShape();
     void testSemiTransparent();
     void testHighlightNumbering();
+    void testHighlightNumbering_shd();
     void testPilcrowRedlining();
     void testClipText();
     void testAnchorTypes();
@@ -212,6 +213,7 @@ public:
     CPPUNIT_TEST(testDeselectCustomShape);
     CPPUNIT_TEST(testSemiTransparent);
     CPPUNIT_TEST(testHighlightNumbering);
+    CPPUNIT_TEST(testHighlightNumbering_shd);
     CPPUNIT_TEST(testPilcrowRedlining);
     CPPUNIT_TEST(testClipText);
     CPPUNIT_TEST(testAnchorTypes);
@@ -2441,7 +2443,7 @@ void SwTiledRenderingTest::testSemiTransparent()
 void SwTiledRenderingTest::testHighlightNumbering()
 {
     // Load a document where the top left tile contains a semi-transparent rectangle shape.
-    SwXTextDocument* pXTextDocument = createDoc("tdf114799.docx");
+    SwXTextDocument* pXTextDocument = createDoc("tdf114799_highlight.docx");
 
     // Render a larger area, and then get the color of the bottom right corner of our tile.
     size_t nCanvasWidth = 1024;
@@ -2461,6 +2463,31 @@ void SwTiledRenderingTest::testHighlightNumbering()
     // Yellow highlighting over numbering
     Color aColor(pAccess->GetPixel(103, 148));
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, aColor);
+}
+
+void SwTiledRenderingTest::testHighlightNumbering_shd()
+{
+    // Load a document where the top left tile contains a semi-transparent rectangle shape.
+    SwXTextDocument* pXTextDocument = createDoc("tdf114799_shd.docx");
+
+    // Render a larger area, and then get the color of the bottom right corner of our tile.
+    size_t nCanvasWidth = 1024;
+    size_t nCanvasHeight = 512;
+    size_t nTileSize = 256;
+    std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight),
+                                                    Fraction(1.0), Point(), aPixmap.data());
+    pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0,
+                              /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
+    pDevice->EnableMapMode(false);
+    Bitmap aBitmap = pDevice->GetBitmap(Point(0, 0), Size(nTileSize, nTileSize));
+    Bitmap::ScopedReadAccess pAccess(aBitmap);
+
+    // No highlighting over numbering - w:shd does not apply to numbering.
+    Color aColor(pAccess->GetPixel(103, 148));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aColor);
 }
 
 void SwTiledRenderingTest::testPilcrowRedlining()

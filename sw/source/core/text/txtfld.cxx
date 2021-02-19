@@ -472,7 +472,7 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
         sal_uInt16 nWhich = aIter.FirstWhich();
         while (nWhich)
         {
-            if (!SwTextNode::IsIgnoredCharFormatForNumbering(nWhich)
+            if (!SwTextNode::IsIgnoredCharFormatForNumbering(nWhich, /*bIsCharStyle=*/true)
                 && !pCleanedSet->HasItem(nWhich)
                 && !(pFormat && pFormat->HasItem(nWhich)) )
             {
@@ -492,12 +492,18 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
     const SfxPoolItem* pItem = aIter.GetCurItem();
     while (pItem)
     {
-        if (pItem->Which() != RES_CHRATR_BACKGROUND)
+        if (SwTextNode::IsIgnoredCharFormatForNumbering(pItem->Which()))
+            pCleanedSet->ClearItem(pItem->Which());
+        else if (pFormat && pFormat->HasItem(pItem->Which()))
+            pCleanedSet->ClearItem(pItem->Which());
+        else if (pItem->Which() == RES_CHRATR_BACKGROUND)
         {
-            if (SwTextNode::IsIgnoredCharFormatForNumbering(pItem->Which()))
+            // If used, BACKGROUND is converted to HIGHLIGHT. So also ignore if a highlight already exists.
+            if (pCleanedSet->HasItem(RES_CHRATR_HIGHLIGHT)
+                || (pFormat && pFormat->HasItem(RES_CHRATR_HIGHLIGHT)))
+            {
                 pCleanedSet->ClearItem(pItem->Which());
-            else if (pFormat && pFormat->HasItem(pItem->Which()))
-                pCleanedSet->ClearItem(pItem->Which());
+            }
         }
         pItem = aIter.NextItem();
     };
