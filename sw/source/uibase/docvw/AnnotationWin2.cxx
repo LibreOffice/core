@@ -51,7 +51,9 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 
+#include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
+#include <vcl/gradient.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -98,7 +100,6 @@ namespace sw::annotation {
 
 #define METABUTTON_WIDTH        16
 #define METABUTTON_HEIGHT       18
-#define METABUTTON_AREA_WIDTH   30
 #define POSTIT_META_FIELD_HEIGHT  sal_Int32(15)
 #define POSTIT_MINIMUMSIZE_WITHOUT_META     50
 
@@ -433,6 +434,13 @@ void SwAnnotationWin::CheckMetaText()
               SwPostItMgr::GetColorAnchor(aIndex));
 }
 
+static Color ColorFromAlphaColor(const sal_uInt8 aTransparency, const Color& aFront, const Color& aBack)
+{
+    return Color(sal_uInt8(aFront.GetRed()   * aTransparency / 255.0 + aBack.GetRed()   * (1 - aTransparency / 255.0)),
+                 sal_uInt8(aFront.GetGreen() * aTransparency / 255.0 + aBack.GetGreen() * (1 - aTransparency / 255.0)),
+                 sal_uInt8(aFront.GetBlue()  * aTransparency / 255.0 + aBack.GetBlue()  * (1 - aTransparency / 255.0)));
+}
+
 void SwAnnotationWin::Rescale()
 {
     // On Android, this method leads to invoke ImpEditEngine::UpdateViews
@@ -460,9 +468,27 @@ void SwAnnotationWin::Rescale()
         mxMetadataDate->set_font(aFont);
     if (mxMetadataResolved)
         mxMetadataResolved->set_font(aFont);
+    if (mxMenuButton)
+    {
+        ScopedVclPtrInstance<VirtualDevice> xVirDev;
+        Size aSize(tools::Long(METABUTTON_WIDTH * rFraction),
+                   tools::Long(METABUTTON_HEIGHT * rFraction));
+        tools::Rectangle aRect(Point(0, 0), aSize);
+        xVirDev->SetOutputSizePixel(aSize);
+
+        Gradient aGradient(GradientStyle::Linear,
+                                 ColorFromAlphaColor(15, mColorAnchor, mColorDark),
+                                 ColorFromAlphaColor(80, mColorAnchor, mColorDark));
+        xVirDev->DrawGradient(aRect, aGradient);
+
+        DecorationView aDecoView(xVirDev.get());
+        aDecoView.DrawSymbol(aRect, SymbolType::SPIN_DOWN, GetTextColor(),
+                             DrawSymbolFlags::NONE);
+        mxMenuButton->set_image(xVirDev);
+        mxMenuButton->set_size_request(aSize.Width() + 4, aSize.Height());
+    }
     if (mxVScrollbar)
         mxVScrollbar->set_scroll_thickness(GetPrefScrollbarWidth());
-
 }
 
 void SwAnnotationWin::SetPosAndSize()
@@ -1160,20 +1186,15 @@ void SwAnnotationWin::ResetAttributes()
 
 int SwAnnotationWin::GetPrefScrollbarWidth() const
 {
-    return mrView.GetWrtShell().GetViewOptions()->GetZoom() / 10;
-}
-
-sal_Int32 SwAnnotationWin::GetMetaButtonAreaWidth() const
-{
-    const Fraction& f( GetMapMode().GetScaleX() );
-    return tools::Long(METABUTTON_AREA_WIDTH * f);
+    const Fraction& f(mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY());
+    return tools::Long(Application::GetSettings().GetStyleSettings().GetScrollBarSize() * f);
 }
 
 sal_Int32 SwAnnotationWin::GetMetaHeight() const
 {
     const Fraction& f(mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY());
     const int fields = GetNumFields();
-    return tools::Long(fields*POSTIT_META_FIELD_HEIGHT*f);
+    return tools::Long(fields*POSTIT_META_FIELD_HEIGHT * f);
 }
 
 sal_Int32 SwAnnotationWin::GetNumFields() const
