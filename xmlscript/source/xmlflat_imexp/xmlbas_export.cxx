@@ -31,6 +31,7 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
+#include <rtl/ref.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -118,8 +119,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
                 // ooo/script:libraries element
                 OUString aLibContElementName = aPrefix + ":libraries";
-                XMLElement* pLibContElement = new XMLElement( aLibContElementName );
-                Reference< xml::sax::XAttributeList > xLibContAttribs( pLibContElement );
+                rtl::Reference<XMLElement> pLibContElement = new XMLElement( aLibContElementName );
 
                 // ooo/script namespace attribute
                 pLibContElement->addAttribute( "xmlns:" + aPrefix, aURI );
@@ -129,7 +129,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
                 // <ooo/script:libraries...
                 m_xHandler->ignorableWhitespace( OUString() );
-                m_xHandler->startElement( aLibContElementName, xLibContAttribs );
+                m_xHandler->startElement( aLibContElementName, pLibContElement );
 
                 Reference< script::XLibraryContainer2 > xLibContainer;
 
@@ -161,8 +161,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                             {
                                 // ooo/script:library-linked element
                                 OUString aLibElementName = aPrefix + ":library-linked";
-                                XMLElement* pLibElement = new XMLElement( aLibElementName );
-                                Reference< xml::sax::XAttributeList > xLibAttribs = static_cast< xml::sax::XAttributeList* >( pLibElement );
+                                rtl::Reference<XMLElement> pLibElement = new XMLElement( aLibElementName );
 
                                 // ooo/script:name attribute
                                 pLibElement->addAttribute( aPrefix + ":name", rLibName );
@@ -185,7 +184,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
                                 // <ooo/script:library-linked...
                                 m_xHandler->ignorableWhitespace( OUString() );
-                                m_xHandler->startElement( aLibElementName, xLibAttribs );
+                                m_xHandler->startElement( aLibElementName, pLibElement );
 
                                 // ...ooo/script:library-linked>
                                 m_xHandler->ignorableWhitespace( OUString() );
@@ -195,8 +194,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                             {
                                 // ooo/script:library-embedded element
                                 OUString aLibElementName = aPrefix + ":library-embedded";
-                                XMLElement* pLibElement = new XMLElement( aLibElementName );
-                                Reference< xml::sax::XAttributeList > xLibAttribs = static_cast< xml::sax::XAttributeList* >( pLibElement );
+                                rtl::Reference<XMLElement> pLibElement = new XMLElement( aLibElementName );
 
                                 // ooo/script:name attribute
                                 pLibElement->addAttribute( aPrefix + ":name", rLibName );
@@ -214,7 +212,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
                                 // <ooo/script:library-embedded...
                                 m_xHandler->ignorableWhitespace( OUString() );
-                                m_xHandler->startElement( aLibElementName, xLibAttribs );
+                                m_xHandler->startElement( aLibElementName, pLibElement );
 
                                 if ( !xLibContainer->isLibraryLoaded( rLibName ) )
                                     xLibContainer->loadLibrary( rLibName );
@@ -231,24 +229,22 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                                         {
                                             // ooo/script:module element
                                             OUString aModElementName = aPrefix + ":module";
-                                            XMLElement* pModElement = new XMLElement( aModElementName );
-                                            Reference< xml::sax::XAttributeList > xModAttribs = static_cast< xml::sax::XAttributeList* >( pModElement );
+                                            rtl::Reference<XMLElement> pModElement = new XMLElement( aModElementName );
 
                                             // ooo/script:name attribute
                                             pModElement->addAttribute( aPrefix + ":name", rModName );
 
                                             // <ooo/script:module...
                                             m_xHandler->ignorableWhitespace( OUString() );
-                                            m_xHandler->startElement( aModElementName, xModAttribs );
+                                            m_xHandler->startElement( aModElementName, pModElement );
 
                                             // ooo/script:source-code element
                                             OUString aSourceElementName = aPrefix + ":source-code";
-                                            XMLElement* pSourceElement = new XMLElement( aSourceElementName );
-                                            Reference< xml::sax::XAttributeList > xSourceAttribs = static_cast< xml::sax::XAttributeList* >( pSourceElement );
+                                            rtl::Reference<XMLElement> pSourceElement = new XMLElement( aSourceElementName );
 
                                             // <ooo/script:source-code...
                                             m_xHandler->ignorableWhitespace( OUString() );
-                                            m_xHandler->startElement( aSourceElementName, xSourceAttribs );
+                                            m_xHandler->startElement( aSourceElementName, pSourceElement );
 
                                             // module data
                                             // TODO: write encrypted data for password protected libraries

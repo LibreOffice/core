@@ -45,14 +45,13 @@ exportLibraryContainer(
     xOut->ignorableWhitespace( OUString() );
 
     OUString aLibrariesName( XMLNS_LIBRARY_PREFIX ":libraries" );
-    XMLElement* pLibsElement = new XMLElement( aLibrariesName );
-    Reference< xml::sax::XAttributeList > xAttributes( pLibsElement );
+    rtl::Reference<XMLElement> pLibsElement = new XMLElement( aLibrariesName );
 
     pLibsElement->addAttribute( "xmlns:" XMLNS_LIBRARY_PREFIX, XMLNS_LIBRARY_URI );
     pLibsElement->addAttribute( "xmlns:" XMLNS_XLINK_PREFIX, XMLNS_XLINK_URI );
 
     xOut->ignorableWhitespace( OUString() );
-    xOut->startElement( aLibrariesName, xAttributes );
+    xOut->startElement( aLibrariesName, pLibsElement );
 
     OUString sTrueStr(aTrueStr);
     OUString sFalseStr(aFalseStr);
