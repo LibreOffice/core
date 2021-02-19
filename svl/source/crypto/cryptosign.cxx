@@ -2022,8 +2022,11 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
             aDerCert[i] = pCertificate->derCert.data[i];
         OUStringBuffer aBuffer;
         comphelper::Base64::encode(aBuffer, aDerCert);
-        rInformation.ouX509Certificate = aBuffer.makeStringAndClear();
-        rInformation.ouSubject = OUString(pCertificate->subjectName, PL_strlen(pCertificate->subjectName), RTL_TEXTENCODING_UTF8);
+        SignatureInformation::X509Data temp;
+        temp.X509Certificate = aBuffer.makeStringAndClear();
+        temp.X509Subject = OUString(pCertificate->subjectName, PL_strlen(pCertificate->subjectName), RTL_TEXTENCODING_UTF8);
+        rInformation.X509Datas.clear();
+        rInformation.X509Datas.emplace_back(temp);
     }
 
     PRTime nSigningTime;
@@ -2202,8 +2205,11 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
             aDerCert[i] = pSignerCertContext->pbCertEncoded[i];
         OUStringBuffer aBuffer;
         comphelper::Base64::encode(aBuffer, aDerCert);
-        rInformation.ouX509Certificate = aBuffer.makeStringAndClear();
-        rInformation.ouSubject = GetSubjectName(pSignerCertContext);
+        SignatureInformation::X509Data temp;
+        temp.X509Certificate = aBuffer.makeStringAndClear();
+        temp.X509Subject = GetSubjectName(pSignerCertContext);
+        rInformation.X509Datas.clear();
+        rInformation.X509Datas.emplace_back(temp);
     }
 
     if (bNonDetached)

@@ -542,26 +542,67 @@ DocumentDigitalSignatures::ImplVerifySignatures(
 
         if (rInfo.ouGpgCertificate.isEmpty()) // X.509
         {
+            std::vector<uno::Reference<XCertificate>> certs(
+                rSignatureHelper.CheckAndUpdateSignatureInformation(
+                    xSecEnv, rInfo));
+#if 0
+            std::vector<uno::Reference<XCertificate>> certs;
+            std::vector<SignatureInformation::X509Data> datas;
+// FIXME TODO
+            bool const isOK(rSignatureHelper.CheckX509Data(xSecEnv, rInfo.X509Datas, certs, datas));
+#endif
+#if 0
             if (!rInfo.ouX509Certificate.isEmpty())
                 rSigInfo.Signer = xSecEnv->createCertificateFromAscii(rInfo.ouX509Certificate);
             if (!rSigInfo.Signer.is())
                 rSigInfo.Signer = xSecEnv->getCertificate(
                     rInfo.ouX509IssuerName,
                     xmlsecurity::numericStringToBigInteger(rInfo.ouX509SerialNumber));
+#endif
 
+#if 0
+            if (!isOK)
+            {
+                // in this case it wasn't possible to determine which X509Data
+                // contained the signing certificate - the UI cannot display
+                // something useful in this case, so prevent anything
+                // misleading by clearing the X509Datas
+                rSignatureHelper.UpdateSignatureInformation(rInfo.nSecurityId, datas);
+#endif
+            if (certs.empty())
+            {
+                rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
+            }
+            else
+            {
+#if 1
+#if 0
+                rSignatureHelper.UpdateSignatureInformation(rInfo.nSecurityId, datas);
+#endif
+                rSigInfo.Signer = certs.back();
+                // get only intermediates
+                certs.pop_back();
+#endif
             // On Windows checking the certificate path is buggy. It does name matching (issuer, subject name)
             // to find the parent certificate. It does not take into account that there can be several certificates
             // with the same subject name.
-            try
-            {
-                rSigInfo.CertificateStatus = xSecEnv->verifyCertificate(
-                    rSigInfo.Signer, Sequence<Reference<css::security::XCertificate>>());
+                try
+                {
+                    rSigInfo.CertificateStatus = xSecEnv->verifyCertificate(
+#if 0
+                        rSigInfo.Signer, Sequence<Reference<css::security::XCertificate>>());
+#else
+                        rSigInfo.Signer, comphelper::containerToSequence(certs));
+#endif
+                }
+                catch (SecurityException&)
+                {
+                    SAL_WARN("xmlsecurity.comp", "Verification of certificate failed");
+                    rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
+                }
+#if 1
             }
-            catch (SecurityException&)
-            {
-                OSL_FAIL("Verification of certificate failed");
-                rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
-            }
+#endif
         }
         else if (xGpgSecEnv.is()) // GPG
         {
