@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec298a94_9af1d800",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Math.xcs",
+        "patchSetId": 15
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-19T14:16:08Z",
+      "side": 1,
+      "message": "Is xs:short (rather than the canonic xs:int integer type) a useful type here?  What do the allowed values 5 and 6 even mean?",
+      "range": {
+        "startLine": 342,
+        "startChar": 56,
+        "endLine": 342,
+        "endChar": 64
+      },
+      "revId": "a260aac0a26dbf659aff55b8a76fdaa7636def53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3438df85_b83a9fde",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Math.xcs",
+        "patchSetId": 15
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-19T14:16:08Z",
+      "side": 1,
+      "message": "what does this mean?",
+      "range": {
+        "startLine": 344,
+        "startChar": 48,
+        "endLine": 344,
+        "endChar": 56
+      },
+      "revId": "a260aac0a26dbf659aff55b8a76fdaa7636def53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
