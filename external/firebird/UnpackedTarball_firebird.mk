@@ -61,6 +61,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 ))
 endif
 
+ifeq ($(ENABLE_MACOSX_SANDBOX),TRUE)
+$(eval $(call gb_UnpackedTarball_add_patches,firebird,\
+	external/firebird/firebird-macosx-sandbox.patch.1 \
+))
+endif
+
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,firebird, \
     external/firebird/sanitizer.patch \
