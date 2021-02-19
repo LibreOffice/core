@@ -24,7 +24,6 @@
 
 #include "MasterPagesSelector.hxx"
 
-
 namespace sd::tools { class EventMultiplexerEvent; }
 
 namespace sd::sidebar {
@@ -57,7 +56,7 @@ public:
 protected:
     virtual OUString GetContextMenuUIFile() const override;
 
-    virtual void ProcessPopupMenu (Menu& rMenu) override;
+    virtual void ProcessPopupMenu(weld::Menu& rMenu) override;
     virtual void ExecuteCommand(const OString &rIdent) override;
 
 private:
