@@ -15,8 +15,6 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
 class tdf118540(UITestCase):
    def test_tdf118540_preview_document_properties(self):
-        # FIXME flaky test, usually passes, but breaks regularly.
-        return
         writer_doc = self.ui_test.load_file(get_url_for_data_file("tdf118540.docx"))
         document = self.ui_test.get_component()
         self.xUITest.executeCommand(".uno:PrintPreview")  #open print preview
