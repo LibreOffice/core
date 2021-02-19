@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c5f010fd_eb29a15e",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Math.xcs",
+        "patchSetId": 15
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-19T16:52:51Z",
+      "side": 1,
+      "message": "I\u0027m not sure my self.\nWhen you save a formula it is saved as a mathml file with an annotation field wich says to be encoded as starmath 5.0. That\u0027s why first version is 5. The next version is then 6.",
+      "parentUuid": "ec298a94_9af1d800",
+      "range": {
+        "startLine": 342,
+        "startChar": 56,
+        "endLine": 342,
+        "endChar": 64
+      },
+      "revId": "a260aac0a26dbf659aff55b8a76fdaa7636def53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3438df85_b83a9fde",
         "filename": "officecfg/registry/schema/org/openoffice/Office/Math.xcs",
         "patchSetId": 15
@@ -45,6 +69,30 @@
       "revId": "a260aac0a26dbf659aff55b8a76fdaa7636def53",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf2ba07e_72d843bf",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Math.xcs",
+        "patchSetId": 15
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-19T16:52:51Z",
+      "side": 1,
+      "message": "Those are side effects of copy paste.",
+      "parentUuid": "3438df85_b83a9fde",
+      "range": {
+        "startLine": 344,
+        "startChar": 48,
+        "endLine": 344,
+        "endChar": 56
+      },
+      "revId": "a260aac0a26dbf659aff55b8a76fdaa7636def53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
