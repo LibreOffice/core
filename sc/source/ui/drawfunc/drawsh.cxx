@@ -203,6 +203,52 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                 pView->SetAttributes(aEmptyAttr, true);
             }
             break;
+        case SID_MOVE_SHAPE_HANDLE:
+        {
+            const SfxItemSet *pArgs = rReq.GetArgs ();
+            if (pArgs && pArgs->Count () == 3)
+            {
+                const SfxUInt32Item* handleNumItem = rReq.GetArg<SfxUInt32Item>(FN_PARAM_1);
+                const SfxUInt32Item* newPosXTwips = rReq.GetArg<SfxUInt32Item>(FN_PARAM_2);
+                const SfxUInt32Item* newPosYTwips = rReq.GetArg<SfxUInt32Item>(FN_PARAM_3);
+
+                const sal_uLong handleNum = handleNumItem->GetValue();
+                const sal_uLong newPosX = convertTwipToMm100(newPosXTwips->GetValue());
+                const sal_uLong newPosY = convertTwipToMm100(newPosYTwips->GetValue());
+
+                if( rMarkList.GetMarkCount())
+                {
+                    const SdrHdlList& sdrHdlList = pView->GetHdlList();
+                    SdrHdl * pHdl = sdrHdlList.GetHdl(handleNum);
+                    if (pHdl == nullptr)
+                        break;
+                    Point aEndPoint(newPosX, newPosY);
+                    const SdrDragStat& rDragStat = pView->GetDragStat();
+                    // start dragging
+                    pView->BegDragObj(pHdl->GetPos(), nullptr, pHdl, 0);
+                    if (pView->IsDragObj())
+                    {
+                        bool bWasNoSnap = rDragStat.IsNoSnap();
+                        bool bWasSnapEnabled = pView->IsSnapEnabled();
+
+                        // switch snapping off
+                        if(!bWasNoSnap)
+                            const_cast<SdrDragStat&>(rDragStat).SetNoSnap();
+                        if(bWasSnapEnabled)
+                            pView->SetSnapEnabled(false);
+
+                        pView->MovAction(aEndPoint);
+                        pView->EndDragObj();
+
+                        if (!bWasNoSnap)
+                            const_cast<SdrDragStat&>(rDragStat).SetNoSnap(bWasNoSnap);
+                        if (bWasSnapEnabled)
+                            pView->SetSnapEnabled(bWasSnapEnabled);
+                    }
+                }
+            }
+        }
+        break;
 
         case SID_ATTR_LINE_STYLE:
         case SID_ATTR_LINEEND_STYLE:
