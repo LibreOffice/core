@@ -105,6 +105,28 @@ bool Bitmap::Invert()
     return bRet;
 }
 
+namespace
+{
+// Put each scanline's content horizontally mirrored into the other one.
+// (optimized version accessing pixel values directly).
+template <int bitCount>
+void mirrorScanlines(Scanline scanline1, Scanline scanline2, tools::Long nWidth)
+{
+    constexpr int byteCount = bitCount / 8;
+    Scanline pos1 = scanline1;
+    Scanline pos2 = scanline2 + (nWidth - 1) * byteCount; // last in second scanline
+    sal_uInt8 tmp[byteCount];
+    for (tools::Long i = 0; i < nWidth; ++i)
+    {
+        memcpy(tmp, pos1, byteCount);
+        memcpy(pos1, pos2, byteCount);
+        memcpy(pos2, tmp, byteCount);
+        pos1 += byteCount;
+        pos2 -= byteCount;
+    }
+}
+}
+
 bool Bitmap::Mirror(BmpMirrorFlags nMirrorFlags)
 {
     bool bHorz(nMirrorFlags & BmpMirrorFlags::Horizontal);
@@ -120,18 +142,40 @@ bool Bitmap::Mirror(BmpMirrorFlags nMirrorFlags)
             const tools::Long nWidth = pAcc->Width();
             const tools::Long nHeight = pAcc->Height();
             const tools::Long nWidth1 = nWidth - 1;
-            const tools::Long nWidth_2 = nWidth >> 1;
+            const tools::Long nWidth_2 = nWidth / 2;
+            const tools::Long nSecondHalf = nWidth - nWidth_2;
 
-            for (tools::Long nY = 0; nY < nHeight; nY++)
+            switch (pAcc->GetBitCount())
             {
-                Scanline pScanline = pAcc->GetScanline(nY);
-                for (tools::Long nX = 0, nOther = nWidth1; nX < nWidth_2; nX++, nOther--)
-                {
-                    const BitmapColor aTemp(pAcc->GetPixelFromData(pScanline, nX));
+                // Special-case these, swap the halves of scanlines while mirroring them.
+                case 32:
+                    for (tools::Long nY = 0; nY < nHeight; nY++)
+                        mirrorScanlines<32>(pAcc->GetScanline(nY),
+                                            pAcc->GetScanline(nY) + 4 * nSecondHalf, nWidth_2);
+                    break;
+                case 24:
+                    for (tools::Long nY = 0; nY < nHeight; nY++)
+                        mirrorScanlines<24>(pAcc->GetScanline(nY),
+                                            pAcc->GetScanline(nY) + 3 * nSecondHalf, nWidth_2);
+                    break;
+                case 8:
+                    for (tools::Long nY = 0; nY < nHeight; nY++)
+                        mirrorScanlines<8>(pAcc->GetScanline(nY),
+                                           pAcc->GetScanline(nY) + nSecondHalf, nWidth_2);
+                    break;
+                default:
+                    for (tools::Long nY = 0; nY < nHeight; nY++)
+                    {
+                        Scanline pScanline = pAcc->GetScanline(nY);
+                        for (tools::Long nX = 0, nOther = nWidth1; nX < nWidth_2; nX++, nOther--)
+                        {
+                            const BitmapColor aTemp(pAcc->GetPixelFromData(pScanline, nX));
 
-                    pAcc->SetPixelOnData(pScanline, nX, pAcc->GetPixelFromData(pScanline, nOther));
-                    pAcc->SetPixelOnData(pScanline, nOther, aTemp);
-                }
+                            pAcc->SetPixelOnData(pScanline, nX,
+                                                 pAcc->GetPixelFromData(pScanline, nOther));
+                            pAcc->SetPixelOnData(pScanline, nOther, aTemp);
+                        }
+                    }
             }
 
             pAcc.reset();
@@ -170,33 +214,65 @@ bool Bitmap::Mirror(BmpMirrorFlags nMirrorFlags)
             const tools::Long nWidth = pAcc->Width();
             const tools::Long nWidth1 = nWidth - 1;
             const tools::Long nHeight = pAcc->Height();
-            tools::Long nHeight_2 = nHeight >> 1;
+            tools::Long nHeight_2 = nHeight / 2;
+            const tools::Long nWidth_2 = nWidth / 2;
+            const tools::Long nSecondHalf = nWidth - nWidth_2;
 
-            for (tools::Long nY = 0, nOtherY = nHeight - 1; nY < nHeight_2; nY++, nOtherY--)
+            switch (pAcc->GetBitCount())
             {
-                Scanline pScanline = pAcc->GetScanline(nY);
-                Scanline pScanlineOther = pAcc->GetScanline(nOtherY);
-                for (tools::Long nX = 0, nOtherX = nWidth1; nX < nWidth; nX++, nOtherX--)
-                {
-                    const BitmapColor aTemp(pAcc->GetPixelFromData(pScanline, nX));
+                case 32:
+                    for (tools::Long nY = 0, nOtherY = nHeight - 1; nY < nHeight_2; nY++, nOtherY--)
+                        mirrorScanlines<32>(pAcc->GetScanline(nY), pAcc->GetScanline(nOtherY),
+                                            nWidth);
+                    if (nHeight & 1)
+                        mirrorScanlines<32>(pAcc->GetScanline(nHeight_2),
+                                            pAcc->GetScanline(nHeight_2) + 4 * nSecondHalf,
+                                            nWidth_2);
+                    break;
+                case 24:
+                    for (tools::Long nY = 0, nOtherY = nHeight - 1; nY < nHeight_2; nY++, nOtherY--)
+                        mirrorScanlines<24>(pAcc->GetScanline(nY), pAcc->GetScanline(nOtherY),
+                                            nWidth);
+                    if (nHeight & 1)
+                        mirrorScanlines<24>(pAcc->GetScanline(nHeight_2),
+                                            pAcc->GetScanline(nHeight_2) + 3 * nSecondHalf,
+                                            nWidth_2);
+                    break;
+                case 8:
+                    for (tools::Long nY = 0, nOtherY = nHeight - 1; nY < nHeight_2; nY++, nOtherY--)
+                        mirrorScanlines<8>(pAcc->GetScanline(nY), pAcc->GetScanline(nOtherY),
+                                           nWidth);
+                    if (nHeight & 1)
+                        mirrorScanlines<8>(pAcc->GetScanline(nHeight_2),
+                                           pAcc->GetScanline(nHeight_2) + nSecondHalf, nWidth_2);
+                    break;
+                default:
+                    for (tools::Long nY = 0, nOtherY = nHeight - 1; nY < nHeight_2; nY++, nOtherY--)
+                    {
+                        Scanline pScanline = pAcc->GetScanline(nY);
+                        Scanline pScanlineOther = pAcc->GetScanline(nOtherY);
+                        for (tools::Long nX = 0, nOtherX = nWidth1; nX < nWidth; nX++, nOtherX--)
+                        {
+                            const BitmapColor aTemp(pAcc->GetPixelFromData(pScanline, nX));
 
-                    pAcc->SetPixelOnData(pScanline, nX,
-                                         pAcc->GetPixelFromData(pScanlineOther, nOtherX));
-                    pAcc->SetPixelOnData(pScanlineOther, nOtherX, aTemp);
-                }
-            }
+                            pAcc->SetPixelOnData(pScanline, nX,
+                                                 pAcc->GetPixelFromData(pScanlineOther, nOtherX));
+                            pAcc->SetPixelOnData(pScanlineOther, nOtherX, aTemp);
+                        }
+                    }
 
-            // if necessary, also mirror the middle line horizontally
-            if (nHeight & 1)
-            {
-                Scanline pScanline = pAcc->GetScanline(nHeight_2);
-                for (tools::Long nX = 0, nOtherX = nWidth1, nWidth_2 = nWidth >> 1; nX < nWidth_2;
-                     nX++, nOtherX--)
-                {
-                    const BitmapColor aTemp(pAcc->GetPixelFromData(pScanline, nX));
-                    pAcc->SetPixelOnData(pScanline, nX, pAcc->GetPixelFromData(pScanline, nOtherX));
-                    pAcc->SetPixelOnData(pScanline, nOtherX, aTemp);
-                }
+                    // if necessary, also mirror the middle line horizontally
+                    if (nHeight & 1)
+                    {
+                        Scanline pScanline = pAcc->GetScanline(nHeight_2);
+                        for (tools::Long nX = 0, nOtherX = nWidth1; nX < nWidth_2; nX++, nOtherX--)
+                        {
+                            const BitmapColor aTemp(pAcc->GetPixelFromData(pScanline, nX));
+                            pAcc->SetPixelOnData(pScanline, nX,
+                                                 pAcc->GetPixelFromData(pScanline, nOtherX));
+                            pAcc->SetPixelOnData(pScanline, nOtherX, aTemp);
+                        }
+                    }
             }
 
             pAcc.reset();
