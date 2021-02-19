@@ -872,7 +872,7 @@ Reference< XResultSetMetaData > SAL_CALL OEvoabResultSet::getMetaData(  )
 
     // the meta data should have been created at construction time
     ENSURE_OR_THROW( m_xMetaData.is(), "internal error: no meta data" );
-    return m_xMetaData.get();
+    return m_xMetaData;
 }
 // XResultSetMetaDataSupplier Interface Ends
 

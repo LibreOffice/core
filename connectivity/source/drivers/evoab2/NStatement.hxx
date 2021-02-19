@@ -230,7 +230,7 @@ namespace connectivity::evoab
                 impl_executeQuery_throw( const QueryData& _rData );
 
             css::uno::Reference< css::sdbc::XConnection >
-                impl_getConnection() { return css::uno::Reference< css::sdbc::XConnection >( m_xConnection.get() ); }
+                impl_getConnection() { return css::uno::Reference< css::sdbc::XConnection >( m_xConnection ); }
 
             OUString
                 impl_getColumnRefColumnName_throw( const ::connectivity::OSQLParseNode& _rColumnRef );
