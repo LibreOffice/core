@@ -243,98 +243,79 @@ class XSecParser::DsX509CertificateContext
     : public XSecParser::Context
 {
     private:
-        OUString m_Value;
+        OUString & m_rValue;
 
     public:
         DsX509CertificateContext(XSecParser & rParser,
-                std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
+                std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap,
+                OUString & rValue)
             : XSecParser::Context(rParser, std::move(pOldNamespaceMap))
+            , m_rValue(rValue)
         {
-        }
-
-        virtual void EndElement() override
-        {
-            m_rParser.m_pXSecController->setX509Certificate(m_Value);
         }
 
         virtual void Characters(OUString const& rChars) override
         {
-            m_Value += rChars;
+            m_rValue += rChars;
         }
 };
 
 class XSecParser::DsX509SerialNumberContext
-    : public XSecParser::ReferencedContextImpl
+    : public XSecParser::Context
 {
     private:
-        OUString m_Value;
+        OUString & m_rValue;
 
     public:
         DsX509SerialNumberContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap,
-                bool const isReferenced)
-            : ReferencedContextImpl(rParser, std::move(pOldNamespaceMap), isReferenced)
+                OUString & rValue)
+            : XSecParser::Context(rParser, std::move(pOldNamespaceMap))
+            , m_rValue(rValue)
         {
-        }
-
-        virtual void EndElement() override
-        {
-            if (m_isReferenced)
-            {
-                m_rParser.m_pXSecController->setX509SerialNumber(m_Value);
-            }
-            else
-            {
-                SAL_INFO("xmlsecurity.helper", "ignoring unsigned X509SerialNumber");
-            }
         }
 
         virtual void Characters(OUString const& rChars) override
         {
-            m_Value += rChars;
+            m_rValue += rChars;
         }
 };
 
 class XSecParser::DsX509IssuerNameContext
-    : public XSecParser::ReferencedContextImpl
+    : public XSecParser::Context
 {
     private:
-        OUString m_Value;
+        OUString & m_rValue;
 
     public:
         DsX509IssuerNameContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap,
-                bool const isReferenced)
-            : ReferencedContextImpl(rParser, std::move(pOldNamespaceMap), isReferenced)
+                OUString & rValue)
+            : XSecParser::Context(rParser, std::move(pOldNamespaceMap))
+            , m_rValue(rValue)
         {
-        }
-
-        virtual void EndElement() override
-        {
-            if (m_isReferenced)
-            {
-                m_rParser.m_pXSecController->setX509IssuerName(m_Value);
-            }
-            else
-            {
-                SAL_INFO("xmlsecurity.helper", "ignoring unsigned X509IssuerName");
-            }
         }
 
         virtual void Characters(OUString const& rChars) override
         {
-            m_Value += rChars;
+            m_rValue += rChars;
         }
 };
 
 class XSecParser::DsX509IssuerSerialContext
-    : public XSecParser::ReferencedContextImpl
+    : public XSecParser::Context
 {
+    private:
+        OUString & m_rX509IssuerName;
+        OUString & m_rX509SerialNumber;
+
     public:
         DsX509IssuerSerialContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap,
-                bool const isReferenced)
-            : ReferencedContextImpl(rParser, std::move(pOldNamespaceMap), isReferenced)
+                OUString & rIssuerName, OUString & rSerialNumber)
+            : XSecParser::Context(rParser, std::move(pOldNamespaceMap))
+            , m_rX509IssuerName(rIssuerName)
+            , m_rX509SerialNumber(rSerialNumber)
         {
         }
 
@@ -344,11 +325,11 @@ class XSecParser::DsX509IssuerSerialContext
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "X509IssuerName")
             {
-                return std::make_unique<DsX509IssuerNameContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
+                return std::make_unique<DsX509IssuerNameContext>(m_rParser, std::move(pOldNamespaceMap), m_rX509IssuerName);
             }
             if (nNamespace == XML_NAMESPACE_DS && rName == "X509SerialNumber")
             {
-                return std::make_unique<DsX509SerialNumberContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
+                return std::make_unique<DsX509SerialNumberContext>(m_rParser, std::move(pOldNamespaceMap), m_rX509SerialNumber);
             }
             // missing: ds:X509SKI, ds:X509SubjectName, ds:X509CRL
             return XSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
@@ -358,11 +339,19 @@ class XSecParser::DsX509IssuerSerialContext
 class XSecParser::DsX509DataContext
     : public XSecParser::Context
 {
+    private:
+        SignatureInformation::X509Data m_X509Data;
+
     public:
         DsX509DataContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap)
             : XSecParser::Context(rParser, std::move(pOldNamespaceMap))
         {
+        }
+
+        virtual void EndElement() override
+        {
+            m_rParser.m_pXSecController->setX509Data(m_X509Data);
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
@@ -372,11 +361,11 @@ class XSecParser::DsX509DataContext
             if (nNamespace == XML_NAMESPACE_DS && rName == "X509IssuerSerial")
             {
                 // can't require KeyInfo to be signed so pass in *true*
-                return std::make_unique<DsX509IssuerSerialContext>(m_rParser, std::move(pOldNamespaceMap), true);
+                return std::make_unique<DsX509IssuerSerialContext>(m_rParser, std::move(pOldNamespaceMap), m_X509Data.X509IssuerName, m_X509Data.X509SerialNumber);
             }
             if (nNamespace == XML_NAMESPACE_DS && rName == "X509Certificate")
             {
-                return std::make_unique<DsX509CertificateContext>(m_rParser, std::move(pOldNamespaceMap));
+                return std::make_unique<DsX509CertificateContext>(m_rParser, std::move(pOldNamespaceMap), m_X509Data.X509Certificate);
             }
             // missing: ds:X509SKI, ds:X509SubjectName, ds:X509CRL
             return XSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
@@ -968,14 +957,49 @@ class XSecParser::LoSignatureLineContext
 };
 
 class XSecParser::XadesCertDigestContext
-    : public XSecParser::ReferencedContextImpl
+    : public XSecParser::Context
 {
     private:
-        OUString m_Value;
-        sal_Int32 m_nReferenceDigestID = css::xml::crypto::DigestID::SHA1;
+        OUString & m_rDigestValue;
+        sal_Int32 & m_rReferenceDigestID;
 
     public:
         XadesCertDigestContext(XSecParser & rParser,
+                std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap,
+                OUString & rDigestValue, sal_Int32 & rReferenceDigestID)
+            : XSecParser::Context(rParser, std::move(pOldNamespaceMap))
+            , m_rDigestValue(rDigestValue)
+            , m_rReferenceDigestID(rReferenceDigestID)
+        {
+        }
+
+        virtual std::unique_ptr<Context> CreateChildContext(
+            std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap,
+            sal_uInt16 const nNamespace, OUString const& rName) override
+        {
+            if (nNamespace == XML_NAMESPACE_DS && rName == "DigestMethod")
+            {
+                return std::make_unique<DsDigestMethodContext>(m_rParser, std::move(pOldNamespaceMap), m_rReferenceDigestID);
+            }
+            if (nNamespace == XML_NAMESPACE_DS && rName == "DigestValue")
+            {
+                return std::make_unique<DsDigestValueContext>(m_rParser, std::move(pOldNamespaceMap), m_rDigestValue);
+            }
+            return XSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
+        }
+};
+
+class XSecParser::XadesCertContext
+    : public XSecParser::ReferencedContextImpl
+{
+    private:
+        sal_Int32 m_nReferenceDigestID = css::xml::crypto::DigestID::SHA1;
+        OUString m_CertDigest;
+        OUString m_X509IssuerName;
+        OUString m_X509SerialNumber;
+
+    public:
+        XadesCertContext(XSecParser & rParser,
                 std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap,
                 bool const isReferenced)
             : ReferencedContextImpl(rParser, std::move(pOldNamespaceMap), isReferenced)
@@ -986,39 +1010,12 @@ class XSecParser::XadesCertDigestContext
         {
             if (m_isReferenced)
             {
-                m_rParser.m_pXSecController->setCertDigest(m_Value/* FIXME , m_nReferenceDigestID*/);
+                m_rParser.m_pXSecController->setX509CertDigest(m_CertDigest, m_nReferenceDigestID, m_X509IssuerName, m_X509SerialNumber);
             }
             else
             {
-                SAL_INFO("xmlsecurity.helper", "ignoring unsigned CertDigest");
+                SAL_INFO("xmlsecurity.helper", "ignoring unsigned xades:Cert");
             }
-        }
-
-        virtual std::unique_ptr<Context> CreateChildContext(
-            std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap,
-            sal_uInt16 const nNamespace, OUString const& rName) override
-        {
-            if (nNamespace == XML_NAMESPACE_DS && rName == "DigestMethod")
-            {
-                return std::make_unique<DsDigestMethodContext>(m_rParser, std::move(pOldNamespaceMap), m_nReferenceDigestID);
-            }
-            if (nNamespace == XML_NAMESPACE_DS && rName == "DigestValue")
-            {
-                return std::make_unique<DsDigestValueContext>(m_rParser, std::move(pOldNamespaceMap), m_Value);
-            }
-            return XSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
-        }
-};
-
-class XSecParser::XadesCertContext
-    : public XSecParser::ReferencedContextImpl
-{
-    public:
-        XadesCertContext(XSecParser & rParser,
-                std::unique_ptr<SvXMLNamespaceMap> pOldNamespaceMap,
-                bool const isReferenced)
-            : ReferencedContextImpl(rParser, std::move(pOldNamespaceMap), isReferenced)
-        {
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
@@ -1027,11 +1024,11 @@ class XSecParser::XadesCertContext
         {
             if (nNamespace == XML_NAMESPACE_XADES132 && rName == "CertDigest")
             {
-                return std::make_unique<XadesCertDigestContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
+                return std::make_unique<XadesCertDigestContext>(m_rParser, std::move(pOldNamespaceMap), m_CertDigest, m_nReferenceDigestID);
             }
             if (nNamespace == XML_NAMESPACE_XADES132 && rName == "IssuerSerial")
             {
-                return std::make_unique<DsX509IssuerSerialContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
+                return std::make_unique<DsX509IssuerSerialContext>(m_rParser, std::move(pOldNamespaceMap), m_X509IssuerName, m_X509SerialNumber);
             }
             return XSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
         }
