@@ -508,6 +508,28 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFNo)
                          static_cast<int>(pObjectShell->GetDocumentSignatureState()));
 }
 
+// document has one signed timestamp and one unsigned timestamp
+CPPUNIT_TEST_FIXTURE(SigningTest, testODFUnsignedTimestamp)
+{
+    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY)
+              + "02_doc_signed_by_trusted_person_manipulated.odt");
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    SignatureState nActual = pObjectShell->GetDocumentSignatureState();
+    CPPUNIT_ASSERT_MESSAGE(
+        (OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
+        (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
+    uno::Sequence<security::DocumentSignatureInformation> const infos(
+        pObjectShell->GetDocumentSignatureInformation(false));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), infos.getLength());
+    // was: 66666666
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(20210126), infos[0].SignatureDate);
+    // was: 0
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(18183742), infos[0].SignatureTime);
+}
+
 /// Test a typical OOXML where a number of (but not all) streams are signed.
 CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLPartial)
 {
