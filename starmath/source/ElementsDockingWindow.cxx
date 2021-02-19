@@ -689,6 +689,8 @@ void SmElementsControl::scrollToElement(const bool bBackward, const SmElement *p
 {
     if (mbVerticalMode)
     {
+        if(mxScroll->get_hpolicy() == VclPolicyType::NEVER)
+            return;
         auto nScrollPos = mxScroll->hadjustment_get_value();
         nScrollPos += pCur->mBoxLocation.X();
         if (!bBackward)
@@ -697,6 +699,8 @@ void SmElementsControl::scrollToElement(const bool bBackward, const SmElement *p
     }
     else
     {
+        if(mxScroll->get_vpolicy() == VclPolicyType::NEVER)
+            return;
         auto nScrollPos = mxScroll->vadjustment_get_value();
         nScrollPos += pCur->mBoxLocation.Y();
         if (!bBackward)
