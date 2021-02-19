@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "0c71ba1a_de61c521",
+        "filename": "offapi/com/sun/star/chart2/XRegressionCurveCalculator.idl",
+        "patchSetId": 10
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-02-19T10:36:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97d6b695_3cd4e2fd",
+      "revId": "1d5ca679ff816f1ecd26dc76ec15f51a7b1d9958",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d378082c_9b2b6fa4",
         "filename": "xmloff/source/chart/PropertyMaps.cxx",
         "patchSetId": 10
