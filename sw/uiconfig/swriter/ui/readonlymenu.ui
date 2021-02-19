@@ -153,12 +153,16 @@
               <object class="GtkMenuItem" id="backaslink">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-              </object>
+                <property name="label" translatable="yes" context="readonlymenu|backaslink">As Link</property>
+                <property name="use_underline">True</property>
+            </object>
             </child>
             <child>
               <object class="GtkMenuItem" id="backascopy">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="label" translatable="yes" context="readonlymenu|backascopy">Copy</property>
+                <property name="use_underline">True</property>
               </object>
             </child>
             <child>
