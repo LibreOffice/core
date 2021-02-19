@@ -158,7 +158,7 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
 
             tools::Rectangle       aFocusRect( mpRepr->CalculateFocusRectangle( p->ePoint ) );
 
-            SvxRectCtlChildAccessibleContext*   pChild = new SvxRectCtlChildAccessibleContext(this, aName,
+            rtl::Reference<SvxRectCtlChildAccessibleContext> pChild = new SvxRectCtlChildAccessibleContext(this, aName,
                     aDescr, aFocusRect, nIndex );
             mvChildren[ nIndex ] = pChild;
             xChild = pChild;
@@ -211,7 +211,7 @@ Reference< XAccessibleRelationSet > SAL_CALL SvxRectCtlAccessibleContext::getAcc
 Reference< XAccessibleStateSet > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleStateSet()
 {
     ::osl::MutexGuard                       aGuard( m_aMutex );
-    utl::AccessibleStateSetHelper*          pStateSetHelper = new utl::AccessibleStateSetHelper;
+    rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
 
     if (mpRepr)
     {
@@ -486,22 +486,20 @@ OUString SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleName()
 */
 Reference<XAccessibleRelationSet> SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleRelationSet()
 {
-    utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
-    uno::Reference< css::accessibility::XAccessibleRelationSet > xSet = pRelationSetHelper;
+    rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSetHelper = new utl::AccessibleRelationSetHelper;
     if( mxParent.is() )
       {
         uno::Sequence< uno::Reference< uno::XInterface > > aSequence { mxParent };
         pRelationSetHelper->AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
-
     }
 
-    return xSet;
+    return pRelationSetHelper;
 }
 
 Reference< XAccessibleStateSet > SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleStateSet()
 {
     ::osl::MutexGuard                       aGuard( m_aMutex );
-    utl::AccessibleStateSetHelper*          pStateSetHelper = new utl::AccessibleStateSetHelper;
+    rtl::Reference<utl::AccessibleStateSetHelper>  pStateSetHelper = new utl::AccessibleStateSetHelper;
 
     if (!rBHelper.bDisposed)
     {

@@ -953,7 +953,7 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
     if( aServiceSpecifier.startsWith( "com.sun.star.presentation.") )
     {
         const OUString aType( aServiceSpecifier.copy(26) );
-        SvxShape* pShape = nullptr;
+        rtl::Reference<SvxShape> pShape;
 
         sal_uInt16 nType = OBJ_TEXT;
         // create a shape wrapper
@@ -1037,15 +1037,15 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
         if( pShape && !mbClipBoard )
             pShape->SetShapeType(aServiceSpecifier);
 
-        xRet = static_cast<uno::XWeak*>(pShape);
+        xRet = static_cast<uno::XWeak*>(pShape.get());
     }
     else if ( aServiceSpecifier == "com.sun.star.drawing.TableShape" )
     {
-        SvxShape* pShape = CreateSvxShapeByTypeAndInventor( OBJ_TABLE, SdrInventor::Default, referer );
+        rtl::Reference<SvxShape> pShape = CreateSvxShapeByTypeAndInventor( OBJ_TABLE, SdrInventor::Default, referer );
         if( pShape && !mbClipBoard )
             pShape->SetShapeType(aServiceSpecifier);
 
-        xRet = static_cast<uno::XWeak*>(pShape);
+        xRet = static_cast<uno::XWeak*>(pShape.get());
     }
     else
     {

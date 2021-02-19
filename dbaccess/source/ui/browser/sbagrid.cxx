@@ -108,7 +108,7 @@ SbaXGridControl::~SbaXGridControl()
 {
 }
 
-FmXGridPeer* SbaXGridControl::imp_CreatePeer(vcl::Window* pParent)
+rtl::Reference<FmXGridPeer> SbaXGridControl::imp_CreatePeer(vcl::Window* pParent)
 {
     FmXGridPeer* pReturn = new SbaXGridPeer(m_xContext);
 
