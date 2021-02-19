@@ -153,7 +153,6 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public InterimItemWindow
         sal_Int32   GetMetaHeight() const;
         sal_Int32   GetMinimumSizeWithMeta() const;
         sal_Int32   GetMinimumSizeWithoutMeta() const;
-        sal_Int32   GetMetaButtonAreaWidth() const;
         int         GetPrefScrollbarWidth() const;
         sal_Int32   GetNumFields() const;
 
