@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2f3e3c6f_b5473514",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Math.xcs",
+        "patchSetId": 12
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-19T09:15:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfcfc61c_8e95c65e",
+      "revId": "cb53514f684f0ca484f08d0f1c29b0e8ec0173e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6592c327_94ad05f2",
         "filename": "officecfg/registry/schema/org/openoffice/Office/Math.xcs",
         "patchSetId": 12
@@ -33,6 +51,24 @@
       "revId": "cb53514f684f0ca484f08d0f1c29b0e8ec0173e4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27b41507_4469df93",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Math.xcs",
+        "patchSetId": 12
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-19T09:15:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6592c327_94ad05f2",
+      "revId": "cb53514f684f0ca484f08d0f1c29b0e8ec0173e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "722b7ca7_909d8c61",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Math.xcs",
+        "patchSetId": 12
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-19T09:15:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0b5e601_08fee98d",
+      "revId": "cb53514f684f0ca484f08d0f1c29b0e8ec0173e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f0b6d8b8_5a43c1d4",
         "filename": "starmath/inc/cfgitem.hxx",
         "patchSetId": 12
@@ -67,6 +121,24 @@
       "revId": "cb53514f684f0ca484f08d0f1c29b0e8ec0173e4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0083fb16_7a957bd2",
+        "filename": "starmath/inc/cfgitem.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-19T09:15:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0b6d8b8_5a43c1d4",
+      "revId": "cb53514f684f0ca484f08d0f1c29b0e8ec0173e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "633d857b_e1d99137",
+        "filename": "starmath/inc/starmath.hrc",
+        "patchSetId": 12
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-19T09:15:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91546d90_bec99058",
+      "revId": "cb53514f684f0ca484f08d0f1c29b0e8ec0173e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82443a28_f241dcc8",
         "filename": "starmath/source/mathml/mathmlimport.cxx",
         "patchSetId": 12
@@ -98,6 +188,24 @@
       "writtenOn": "2021-02-19T08:19:36Z",
       "side": 1,
       "message": "this should default to 5 - if we don\u0027t see an explicit version in the document, we should assume it is an old document",
+      "revId": "cb53514f684f0ca484f08d0f1c29b0e8ec0173e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc1dac8d_24314692",
+        "filename": "starmath/source/mathml/mathmlimport.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-19T09:15:45Z",
+      "side": 1,
+      "message": "If we don\u0027t see any syntax version it means we are importing mathml into starmath (not a document, this filter is used for both).",
+      "parentUuid": "82443a28_f241dcc8",
       "revId": "cb53514f684f0ca484f08d0f1c29b0e8ec0173e4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
