@@ -105,6 +105,7 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:OutlineBullet"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:RemoveBullets" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:BulletListStyle" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:NumberListStyle" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:AlphaListStyle" menu:style="radio"/>
@@ -117,8 +118,6 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:NumberingStart"/>
       <menu:menuitem menu:id=".uno:ContinueNumbering"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:RemoveBullets"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menuseparator/>
