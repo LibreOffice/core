@@ -537,5 +537,10 @@ shell SwDrawShell : SwDrawBaseShell
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+
+    SID_MOVE_SHAPE_HANDLE
+    [
+        ExecMethod = Execute ;
+    ]
 }
 
