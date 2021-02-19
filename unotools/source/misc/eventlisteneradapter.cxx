@@ -146,7 +146,7 @@ namespace utl
             return;
         }
 
-        OEventListenerImpl* pListenerImpl = new OEventListenerImpl(this, _rxComp);
+        rtl::Reference<OEventListenerImpl> pListenerImpl = new OEventListenerImpl(this, _rxComp);
         m_pImpl->aListeners.emplace_back(pListenerImpl);
     }
 
