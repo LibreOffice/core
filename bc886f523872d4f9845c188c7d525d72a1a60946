@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b174e81f_f46f6f1a",
+        "filename": "svx/source/svdraw/svdopath.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2942,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-19T06:30:48Z",
+      "side": 1,
+      "message": "Do you know where this conversion happens? Was curious when came across this code, and just thought we could possibly eliminate that wrong conversion there, instead of special-casing here maybe?",
+      "revId": "bc886f523872d4f9845c188c7d525d72a1a60946",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
