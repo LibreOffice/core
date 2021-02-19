@@ -104,8 +104,8 @@ void test(rtl::Reference<FooStream> l)
     (void)a2;
 }
 // not should about the exact version I should use here,
-// clang 5.0.2 visits the CXXConstructorExpr inside the initializer, while clang 11 does not
-#if CLANG_VERSION >= 60000
+// clang 7.0.1 visits the CXXConstructorExpr inside the initializer, while clang 11 does not
+#if CLANG_VERSION >= 80000
 css::uno::Sequence<css::uno::Reference<css::io::XStreamListener>> getContinuations()
 {
     rtl::Reference<FooStream> noel1;
