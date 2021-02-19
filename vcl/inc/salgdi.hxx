@@ -588,6 +588,7 @@ protected:
                                     double fAlpha) = 0;
 
     /// Used e.g. by canvas to know whether to cache the drawing.
+    /// See also tdf#138068.
     virtual bool hasFastDrawTransformedBitmap() const = 0;
 
     /** Render solid rectangle with given transparency
