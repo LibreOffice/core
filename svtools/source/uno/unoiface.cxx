@@ -25,7 +25,7 @@
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const css::awt::WindowDescriptor* pDescriptor, vcl::Window* pParent, WinBits nWinBits )
+SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( rtl::Reference<VCLXWindow>* ppNewComp, const css::awt::WindowDescriptor* pDescriptor, vcl::Window* pParent, WinBits nWinBits )
 {
     vcl::Window* pWindow = nullptr;
     OUString aServiceName( pDescriptor->WindowServiceName );

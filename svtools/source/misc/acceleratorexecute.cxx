@@ -36,6 +36,7 @@
 #include <sal/log.hxx>
 #include <vcl/lok.hxx>
 #include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 
 namespace svt
 {
@@ -57,7 +58,7 @@ class AsyncAccelExec : public cppu::WeakImplHelper<css::lang::XEventListener>
             This instance can be forced to execute its internal set request
             asynchronous. After that it deletes itself!
          */
-        static AsyncAccelExec* createOneShotInstance(const css::uno::Reference<css::lang::XComponent>& xFrame,
+        static rtl::Reference<AsyncAccelExec> createOneShotInstance(const css::uno::Reference<css::lang::XComponent>& xFrame,
                                                     const css::uno::Reference<css::frame::XDispatch>& xDispatch,
                                                     const css::util::URL& rURL);
 
@@ -215,7 +216,7 @@ bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
         }
         else
         {
-            AsyncAccelExec* pExec = AsyncAccelExec::createOneShotInstance(xFrame, xDispatch, aURL);
+            rtl::Reference<AsyncAccelExec> pExec = AsyncAccelExec::createOneShotInstance(xFrame, xDispatch, aURL);
             pExec->execAsync();
         }
     }
@@ -451,20 +452,20 @@ AsyncAccelExec::AsyncAccelExec(const css::uno::Reference<css::lang::XComponent>&
     , m_aURL(rURL)
     , m_aAsyncCallback(LINK(this, AsyncAccelExec, impl_ts_asyncCallback))
 {
+    acquire();
 }
 
-AsyncAccelExec* AsyncAccelExec::createOneShotInstance(const css::uno::Reference<css::lang::XComponent> &xFrame,
+rtl::Reference<AsyncAccelExec> AsyncAccelExec::createOneShotInstance(const css::uno::Reference<css::lang::XComponent> &xFrame,
                                                      const css::uno::Reference< css::frame::XDispatch >& xDispatch,
                                                      const css::util::URL& rURL)
 {
-    AsyncAccelExec* pExec = new AsyncAccelExec(xFrame, xDispatch, rURL);
+    rtl::Reference<AsyncAccelExec> pExec = new AsyncAccelExec(xFrame, xDispatch, rURL);
     return pExec;
 }
 
 
 void AsyncAccelExec::execAsync()
 {
-    acquire();
     if (m_xFrame.is())
         m_xFrame->addEventListener(this);
     m_aAsyncCallback.Post();

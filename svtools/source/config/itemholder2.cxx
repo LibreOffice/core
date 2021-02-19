@@ -33,6 +33,7 @@
 #include <unotools/options.hxx>
 #include <svtools/miscopt.hxx>
 #include <tools/diagnose_ex.h>
+#include <rtl/ref.hxx>
 
 namespace svtools {
 
@@ -75,7 +76,7 @@ ItemHolder2::~ItemHolder2()
 
 void ItemHolder2::holdConfigItem(EItem eItem)
 {
-    static ItemHolder2* pHolder = new ItemHolder2();
+    static rtl::Reference<ItemHolder2> pHolder = new ItemHolder2();
     pHolder->impl_addItem(eItem);
 }
 
