@@ -1348,6 +1348,24 @@ void SwView::Execute(SfxRequest &rReq)
             rReq.SetReturnValue(SfxBoolItem(nSlot, InsertGraphicDlg( rReq )));
         }
         break;
+        case SID_MOVE_SHAPE_HANDLE:
+        {
+            if (pArgs && pArgs->Count() == 3)
+            {
+                SdrView *pSdrView = m_pWrtShell->HasDrawView() ? m_pWrtShell->GetDrawView() : nullptr;
+                if (pSdrView == nullptr)
+                    break;
+                const SfxUInt32Item* handleNumItem = rReq.GetArg<SfxUInt32Item>(FN_PARAM_1);
+                const SfxUInt32Item* newPosXTwips = rReq.GetArg<SfxUInt32Item>(FN_PARAM_2);
+                const SfxUInt32Item* newPosYTwips = rReq.GetArg<SfxUInt32Item>(FN_PARAM_3);
+
+                const sal_uLong handleNum = handleNumItem->GetValue();
+                const sal_uLong newPosX = newPosXTwips->GetValue();
+                const sal_uLong newPosY = newPosYTwips->GetValue();
+                pSdrView->MoveShapeHandle(handleNum, Point(newPosX, newPosY));
+            }
+            break;
+        }
 
         default:
             OSL_ENSURE(false, "wrong dispatcher");
