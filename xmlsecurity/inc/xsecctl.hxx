@@ -259,6 +259,7 @@ private:
     /// Sets algorithm from <SignatureMethod Algorithm="...">.
     void setSignatureMethod(svl::crypto::SignatureMethodAlgorithm eAlgorithmID);
     void switchGpgSignature();
+    bool haveReferenceForId(OUString const& rId) const;
     void addReference(
         const OUString& ouUri,
         sal_Int32 nDigestID,
