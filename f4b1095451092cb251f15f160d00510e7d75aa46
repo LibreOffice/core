@@ -16,6 +16,24 @@
       "revId": "f4b1095451092cb251f15f160d00510e7d75aa46",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a5a7181_f919ea13",
+        "filename": "compilerplugins/clang/test/referencecasting.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-02-19T11:00:54Z",
+      "side": 1,
+      "message": "Yes, you could probably assert that there are 2 errors, but this old behavior sounds like a bug, so why write a test to assert broken behavior. Anyway, I just want to get my build going, I\u0027m not interested in changing any of these plugins. Rather I want to be able to reproduce these picky clang errors locally. :-)",
+      "parentUuid": "82663a67_7336c785",
+      "revId": "f4b1095451092cb251f15f160d00510e7d75aa46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
