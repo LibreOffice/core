@@ -47,9 +47,9 @@ Reference< xml::input::XElement > Frame::startChildElement(
     else if ( rLocalName == "bulletinboard" )
     {
         // Create new DialogImport for this container
-        DialogImport* pFrameImport = new DialogImport( *m_xImport );
+        rtl::Reference<DialogImport> pFrameImport = new DialogImport( *m_xImport );
         pFrameImport->_xDialogModel = m_xContainer;
-        return new BulletinBoardElement( rLocalName, xAttributes, this,  pFrameImport );
+        return new BulletinBoardElement( rLocalName, xAttributes, this,  pFrameImport.get() );
     }
     else if ( rLocalName == "title" )
     {
@@ -111,9 +111,9 @@ Reference< xml::input::XElement > MultiPage::startChildElement(
     {
         // Create new DialogImport for this container
 
-        DialogImport* pMultiPageImport = new DialogImport( *m_xImport );
+        rtl::Reference<DialogImport> pMultiPageImport = new DialogImport( *m_xImport );
         pMultiPageImport->_xDialogModel = m_xContainer;
-        return new BulletinBoardElement( rLocalName, xAttributes, this,  pMultiPageImport );
+        return new BulletinBoardElement( rLocalName, xAttributes, this,  pMultiPageImport.get() );
     }
     else
     {
@@ -164,9 +164,9 @@ Reference< xml::input::XElement > Page::startChildElement(
     else if ( rLocalName == "bulletinboard" )
     {
 
-        DialogImport* pPageImport = new DialogImport( *m_xImport );
+        rtl::Reference<DialogImport> pPageImport = new DialogImport( *m_xImport );
         pPageImport->_xDialogModel = m_xContainer;
-        return new BulletinBoardElement( rLocalName, xAttributes, this,  pPageImport );
+        return new BulletinBoardElement( rLocalName, xAttributes, this,  pPageImport.get() );
     }
     else
     {
