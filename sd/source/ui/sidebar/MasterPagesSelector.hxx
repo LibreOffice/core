@@ -153,7 +153,7 @@ protected:
 
     virtual void Command (const CommandEvent& rEvent) override;
 
-    virtual void ProcessPopupMenu (Menu& rMenu);
+    virtual void ProcessPopupMenu(weld::Menu& rMenu);
     virtual void ExecuteCommand(const OString& rIdent);
 
 private:
@@ -166,7 +166,6 @@ private:
     DECL_LINK(ClickHandler, ValueSet*, void);
     DECL_LINK(RightClickHandler, const MouseEvent&, void);
     DECL_LINK(ContainerChangeListener, MasterPageContainerChangeEvent&, void);
-    DECL_LINK(OnMenuItemSelected, Menu*, bool);
 
     void SetItem (
         sal_uInt16 nIndex,
