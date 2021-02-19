@@ -151,9 +151,8 @@ protected:
     */
     virtual OUString GetContextMenuUIFile() const;
 
-    virtual void ProcessPopupMenu (Menu& rMenu);
+    virtual void ProcessPopupMenu(weld::Menu& rMenu);
     virtual void ExecuteCommand(const OString& rIdent);
-
 private:
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
 
@@ -164,7 +163,6 @@ private:
     DECL_LINK(ClickHandler, ValueSet*, void);
     DECL_LINK(ContextMenuHandler, const Point*, void);
     DECL_LINK(ContainerChangeListener, MasterPageContainerChangeEvent&, void);
-    DECL_LINK(OnMenuItemSelected, Menu*, bool);
 
     void SetItem (
         sal_uInt16 nIndex,

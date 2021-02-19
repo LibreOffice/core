@@ -215,24 +215,17 @@ void CurrentMasterPagesSelector::ExecuteCommand(const OString &rIdent)
         MasterPagesSelector::ExecuteCommand(rIdent);
 }
 
-void CurrentMasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
+void CurrentMasterPagesSelector::ProcessPopupMenu(weld::Menu& rMenu)
 {
     // Disable the delete entry when there is only one master page.
     if (mrDocument.GetMasterPageUserCount(GetSelectedMasterPage()) > 0)
-    {
-        sal_uInt16 nItemid = rMenu.GetItemId("delete");
-        if (rMenu.GetItemPos(nItemid) != MENU_ITEM_NOTFOUND)
-            rMenu.EnableItem(nItemid, false);
-    }
+        rMenu.set_sensitive("delete", false);
 
     std::shared_ptr<DrawViewShell> pDrawViewShell (
         std::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
-    if (pDrawViewShell
-        && pDrawViewShell->GetEditMode() == EditMode::MasterPage)
+    if (pDrawViewShell && pDrawViewShell->GetEditMode() == EditMode::MasterPage)
     {
-        sal_uInt16 nItemid = rMenu.GetItemId("edit");
-        if (rMenu.GetItemPos(nItemid) != MENU_ITEM_NOTFOUND)
-            rMenu.EnableItem(nItemid, false);
+        rMenu.set_sensitive("edit", false);
     }
 
     MasterPagesSelector::ProcessPopupMenu(rMenu);
