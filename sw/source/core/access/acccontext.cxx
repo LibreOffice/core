@@ -739,16 +739,15 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 
     ThrowIfDisposed();
 
-    ::utl::AccessibleStateSetHelper *pStateSet =
+    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet =
         new ::utl::AccessibleStateSetHelper;
 
     if (m_isSelectedInDoc)
         pStateSet->AddState( AccessibleStateType::SELECTED );
 
-    uno::Reference<XAccessibleStateSet> xStateSet( pStateSet );
     GetStates( *pStateSet );
 
-    return xStateSet;
+    return pStateSet;
 }
 
 lang::Locale SAL_CALL SwAccessibleContext::getLocale()

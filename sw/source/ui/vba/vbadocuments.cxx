@@ -22,6 +22,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <tools/urlobj.hxx>
+#include <rtl/ref.hxx>
 
 #include "vbadocument.hxx"
 #include "vbadocuments.hxx"
@@ -37,7 +38,7 @@ getDocument( uno::Reference< uno::XComponentContext > const & xContext, const un
     if( !xDoc.is() )
         return uno::Any();
 
-    SwVbaDocument *pWb = new SwVbaDocument(  uno::Reference< XHelperInterface >( aApplication, uno::UNO_QUERY_THROW ), xContext, xDoc );
+    rtl::Reference<SwVbaDocument> pWb = new SwVbaDocument(  uno::Reference< XHelperInterface >( aApplication, uno::UNO_QUERY_THROW ), xContext, xDoc );
     return uno::Any( uno::Reference< word::XDocument > (pWb) );
 }
 

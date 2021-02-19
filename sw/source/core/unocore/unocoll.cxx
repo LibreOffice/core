@@ -555,9 +555,7 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
         case  SwServiceType::VbaObjectProvider :
 #if HAVE_FEATURE_SCRIPTING
         {
-            SwVbaObjectForCodeNameProvider* pObjProv =
-                new SwVbaObjectForCodeNameProvider(rDoc.GetDocShell());
-            xRet =  static_cast<cppu::OWeakObject*>(pObjProv);
+            xRet = static_cast<cppu::OWeakObject*>(new SwVbaObjectForCodeNameProvider(rDoc.GetDocShell()));
         }
 #endif
         break;
@@ -566,8 +564,7 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
         {
             if (rDoc.GetDocShell() && ooo::vba::isAlienWordDoc(*rDoc.GetDocShell()))
             {
-                SwVbaCodeNameProvider* pObjProv = new SwVbaCodeNameProvider(rDoc.GetDocShell());
-                xRet =  static_cast<cppu::OWeakObject*>(pObjProv);
+                xRet = static_cast<cppu::OWeakObject*>(new SwVbaCodeNameProvider(rDoc.GetDocShell()));
             }
         }
 #endif

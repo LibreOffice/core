@@ -1880,7 +1880,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrame *pFrame,
 
             if( !xAcc.is() && bCreate )
             {
-                SwAccessibleContext *pAcc = nullptr;
+                rtl::Reference<SwAccessibleContext> pAcc;
                 switch( pFrame->GetType() )
                 {
                 case SwFrameType::Txt:

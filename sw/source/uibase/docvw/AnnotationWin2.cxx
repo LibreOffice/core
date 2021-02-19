@@ -1380,14 +1380,11 @@ void SwAnnotationWin::ChangeSidebarItem( SwSidebarItem const & rSidebarItem )
 
 css::uno::Reference< css::accessibility::XAccessible > SwAnnotationWin::CreateAccessible()
 {
-    SidebarWinAccessible* pAcc( new SidebarWinAccessible( *this,
+    rtl::Reference<SidebarWinAccessible> pAcc( new SidebarWinAccessible( *this,
                                                           mrView.GetWrtShell(),
                                                           mrSidebarItem ) );
-    css::uno::Reference< css::awt::XWindowPeer > xWinPeer( pAcc );
-    SetWindowPeer( xWinPeer, pAcc );
-
-    css::uno::Reference< css::accessibility::XAccessible > xAcc( xWinPeer, css::uno::UNO_QUERY );
-    return xAcc;
+    SetWindowPeer( pAcc, pAcc.get() );
+    return pAcc;
 }
 
 } // eof of namespace sw::sidebarwindows

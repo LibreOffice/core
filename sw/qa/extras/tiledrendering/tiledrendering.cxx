@@ -1778,8 +1778,7 @@ void SwTiledRenderingTest::testUndoRepairResult()
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     int nView1 = SfxLokHelper::getView();
     SfxLokHelper::createView();
-    TestResultListener* pResult2 = new TestResultListener();
-    css::uno::Reference< css::frame::XDispatchResultListener > xListener(static_cast< css::frame::XDispatchResultListener* >(pResult2), css::uno::UNO_QUERY);
+    rtl::Reference<TestResultListener> pResult2 = new TestResultListener();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     int nView2 = SfxLokHelper::getView();
 
@@ -1797,7 +1796,7 @@ void SwTiledRenderingTest::testUndoRepairResult()
 
     // Assert that by default the second view can't undo the action.
     SfxLokHelper::setView(nView2);
-    comphelper::dispatchCommand(".uno:Undo", {}, xListener);
+    comphelper::dispatchCommand(".uno:Undo", {}, pResult2);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), pResult2->m_nDocRepair);
 
@@ -1813,8 +1812,7 @@ void SwTiledRenderingTest::testRedoRepairResult()
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     int nView1 = SfxLokHelper::getView();
     SfxLokHelper::createView();
-    TestResultListener* pResult2 = new TestResultListener();
-    css::uno::Reference< css::frame::XDispatchResultListener > xListener(static_cast< css::frame::XDispatchResultListener* >(pResult2), css::uno::UNO_QUERY);
+    rtl::Reference<TestResultListener> pResult2 = new TestResultListener();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     int nView2 = SfxLokHelper::getView();
 
@@ -1830,12 +1828,12 @@ void SwTiledRenderingTest::testRedoRepairResult()
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'a', 0);
     Scheduler::ProcessEventsToIdle();
 
-    comphelper::dispatchCommand(".uno:Undo", {}, xListener);
+    comphelper::dispatchCommand(".uno:Undo", {}, pResult2);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0), pResult2->m_nDocRepair);
 
     // Assert that by default the second view can't redo the action.
     SfxLokHelper::setView(nView2);
-    comphelper::dispatchCommand(".uno:Redo", {}, xListener);
+    comphelper::dispatchCommand(".uno:Redo", {}, pResult2);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), pResult2->m_nDocRepair);
 
