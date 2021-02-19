@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "82663a67_7336c785",
+        "filename": "compilerplugins/clang/test/referencecasting.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-19T10:57:48Z",
+      "side": 1,
+      "message": "Or maybe just the number of expected errors should depend on compiler version? The different comment versions in #if\u0027s? Interesting, if it would actually work.",
+      "revId": "f4b1095451092cb251f15f160d00510e7d75aa46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
