@@ -7586,6 +7586,17 @@ private:
         }
     }
 
+    static void find_image(GtkWidget *pWidget, gpointer user_data)
+    {
+        if (GTK_IS_IMAGE(pWidget))
+        {
+            GtkImage **ppImage = static_cast<GtkImage**>(user_data);
+            *ppImage = GTK_IMAGE(pWidget);
+        }
+        else if (GTK_IS_CONTAINER(pWidget))
+            gtk_container_forall(GTK_CONTAINER(pWidget), find_image, user_data);
+    }
+
 public:
     GtkInstanceMenuButton(GtkMenuButton* pMenuButton, GtkWidget* pMenuAlign, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceToggleButton(GTK_TOGGLE_BUTTON(pMenuButton), pBuilder, bTakeOwnership)
@@ -7598,6 +7609,7 @@ public:
         , m_nSignalId(0)
     {
         m_pLabel = gtk_bin_get_child(GTK_BIN(m_pMenuButton));
+        find_image(GTK_WIDGET(m_pMenuButton), &m_pImage);
         m_pBox = formatMenuButton(m_pLabel);
     }
 
