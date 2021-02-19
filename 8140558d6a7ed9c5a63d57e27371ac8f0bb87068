@@ -16,6 +16,24 @@
       "revId": "8140558d6a7ed9c5a63d57e27371ac8f0bb87068",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69c0241c_c8b72b03",
+        "filename": "vcl/source/control/button.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1001855
+      },
+      "writtenOn": "2021-02-19T08:01:20Z",
+      "side": 1,
+      "message": "Sorry for my late answer, I\u0027ve overseen this. I think, it\u0027s correct as I want to actualize the text of the tooltip. In my case, we have a button, where the actual sender in wollmux is shown. If the sender name changes, then the original code prevent\u0027s from changing the name in the tooltip.",
+      "parentUuid": "9dca77e3_baee8ffe",
+      "revId": "8140558d6a7ed9c5a63d57e27371ac8f0bb87068",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
