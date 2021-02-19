@@ -976,5 +976,10 @@ interface BaseTextEditView
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
 
+    SID_MOVE_SHAPE_HANDLE
+    [
+        ExecMethod = Execute ;
+    ]
+
 }
 
