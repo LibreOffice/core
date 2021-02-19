@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "640f30a7_f5b75c53",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Math.xcs",
+        "patchSetId": 4
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-19T07:45:21Z",
+      "side": 1,
+      "message": "this new prop is apparently modelled after the exisiting ZoomFactor prop \"for printing formulas\", also in this file, so using the slightly odd xs:short (rather than the canonical xs:int) is probably acceptable",
+      "range": {
+        "startLine": 342,
+        "startChar": 56,
+        "endLine": 342,
+        "endChar": 64
+      },
+      "revId": "34eb93b0eaec1117122549fca15e51d12a52e05f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d04ff0f5_294e03a9",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Math.xcs",
+        "patchSetId": 4
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-19T07:45:21Z",
+      "side": 1,
+      "message": "please remove those cargo-cult comments",
+      "revId": "34eb93b0eaec1117122549fca15e51d12a52e05f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61622234_0af93c9c",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Math.xcs",
+        "patchSetId": 4
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-19T07:45:21Z",
+      "side": 1,
+      "message": "please remove the cargo-cult label element (it was used ages ago in a StarOffice-specific configuration system, and is still allowed in the .xcs sources for backwards compatibility, but is then filtered out anyway when processing these source files further)",
+      "revId": "34eb93b0eaec1117122549fca15e51d12a52e05f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
