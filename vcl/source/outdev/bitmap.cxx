@@ -1265,17 +1265,16 @@ void OutputDevice::DrawTransformedBitmapEx(
     const bool bInvert(RasterOp::Invert == meRasterOp);
     const bool bBitmapChangedColor(mnDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap | DrawModeFlags::GrayBitmap ));
     const bool bTryDirectPaint(!bInvert && !bBitmapChangedColor && !bMetafile);
+    // tdf#130768 CAUTION(!) using GetViewTransformation() is *not* enough here, it may
+    // be that mnOutOffX/mnOutOffY is used - see AOO bug 75163, mentioned at
+    // ImplGetDeviceTransformation declaration
+    basegfx::B2DHomMatrix aFullTransform(ImplGetDeviceTransformation() * rTransformation);
 
     // First try to handle additional alpha blending, either directly, or modify the bitmap.
     if(!rtl::math::approxEqual( fAlpha, 1.0 ))
     {
         if(bTryDirectPaint)
         {
-            // tdf#130768 CAUTION(!) using GetViewTransformation() is *not* enough here, it may
-            // be that mnOutOffX/mnOutOffY is used - see AOO bug 75163, mentioned at
-            // ImplGetDeviceTransformation declaration
-            const basegfx::B2DHomMatrix aFullTransform(ImplGetDeviceTransformation() * rTransformation);
-
             if(DrawTransformBitmapExDirect(aFullTransform, bitmapEx, fAlpha))
             {
                 // we are done
@@ -1289,6 +1288,9 @@ void OutputDevice::DrawTransformedBitmapEx(
             aAlpha.BlendWith( bitmapEx.GetAlpha());
         bitmapEx = BitmapEx( bitmapEx.GetBitmap(), aAlpha );
     }
+
+    if(bTryDirectPaint && mpGraphics->HasFastDrawTransformedBitmap() && DrawTransformBitmapExDirect(aFullTransform, bitmapEx))
+        return;
 
     // decompose matrix to check rotation and shear
     basegfx::B2DVector aScale, aTranslate;
@@ -1324,18 +1326,10 @@ void OutputDevice::DrawTransformedBitmapEx(
         return;
     }
 
-    if(bTryDirectPaint)
+    if(bTryDirectPaint && DrawTransformBitmapExDirect(aFullTransform, bitmapEx))
     {
-        // tdf#130768 CAUTION(!) using GetViewTransformation() is *not* enough here, it may
-        // be that mnOutOffX/mnOutOffY is used - see AOO bug 75163, mentioned at
-        // ImplGetDeviceTransformation declaration
-        const basegfx::B2DHomMatrix aFullTransform(ImplGetDeviceTransformation() * rTransformation);
-
-        if(DrawTransformBitmapExDirect(aFullTransform, bitmapEx))
-        {
-            // we are done
-            return;
-        }
+        // we are done
+        return;
     }
 
     // take the fallback when no rotate and shear, but mirror (else we would have done this above)
@@ -1368,10 +1362,6 @@ void OutputDevice::DrawTransformedBitmapEx(
     const double fOrigArea(rOriginalSizePixel.Width() * rOriginalSizePixel.Height() * 0.5);
     const double fOrigAreaScaled(fOrigArea * 1.44);
     double fMaximumArea(std::clamp(fOrigAreaScaled, 1000000.0, 4500000.0));
-    // tdf#130768 CAUTION(!) using GetViewTransformation() is *not* enough here, it may
-    // be that mnOutOffX/mnOutOffY is used - see AOO bug 75163, mentioned at
-    // ImplGetDeviceTransformation declaration
-    basegfx::B2DHomMatrix aFullTransform(ImplGetDeviceTransformation() * rTransformation);
 
     if(!bMetafile)
     {
