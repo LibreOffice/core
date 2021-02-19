@@ -236,8 +236,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
                 }
 
                 uno::Any aValue = xSet->getPropertyValue(rProp.Name);
-                std::unique_ptr<CustomProperty> pProp(new CustomProperty( rProp.Name, aValue ));
-                m_aCustomProperties.push_back( std::move(pProp) );
+                AddCustomProperty( rProp.Name, aValue );
             }
         }
 
@@ -274,9 +273,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const SfxDocumentInfoItem& rItem )
 {
     for (auto const & pOtherProp : rItem.m_aCustomProperties)
     {
-        std::unique_ptr<CustomProperty> pProp(new CustomProperty( pOtherProp->m_sName,
-                                                    pOtherProp->m_aValue ));
-        m_aCustomProperties.push_back( std::move(pProp) );
+        AddCustomProperty( pOtherProp->m_sName, pOtherProp->m_aValue );
     }
 
     m_aCmisProperties = rItem.m_aCmisProperties;
@@ -1474,6 +1471,17 @@ void CustomPropertiesWindow::CreateNewLine()
     pNewLine->m_xValueEdit->set_accessible_name(m_rHeaderAccValue.get_label());
 
     m_aCustomPropertiesLines.emplace_back( pNewLine );
+
+    // for ui-testing. Distinguish the elements in the lines
+    sal_uInt16 nSize = m_aCustomPropertiesLines.size();
+    pNewLine->m_xNameBox->set_buildable_name(
+        pNewLine->m_xNameBox->get_buildable_name() + OString::number(nSize));
+    pNewLine->m_xTypeBox->set_buildable_name(
+        pNewLine->m_xTypeBox->get_buildable_name() + OString::number(nSize));
+    pNewLine->m_xValueEdit->set_buildable_name(
+        pNewLine->m_xValueEdit->get_buildable_name() + OString::number(nSize));
+    pNewLine->m_xRemoveButton->set_buildable_name(
+        pNewLine->m_xRemoveButton->get_buildable_name() + OString::number(nSize));
 
     pNewLine->DoTypeHdl(*pNewLine->m_xTypeBox);
     pNewLine->m_xNameBox->grab_focus();

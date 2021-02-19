@@ -21,6 +21,21 @@ class tdf81457(UITestCase):
         xDialog = self.xUITest.getTopFocusWindow()
         xTabs = xDialog.getChild("tabcontrol")
         select_pos(xTabs, "2")     #tab Custom properties
+
+        aExpectedNames = ['BookMarkCount', 'BookMarkInfo1', 'BookMarkInfo10', 'BookMarkInfo11',
+                'BookMarkInfo12', 'BookMarkInfo13']
+        aExpectedValues = ['78', '00FF0000FF010', '00FF0000FF1E0', '00FF0000FF1E0',
+                '00FF0000FF210', '00FF0000FF230']
+
+        for i in range(6):
+            xNameBox = xDialog.getChild("namebox" + str(i + 1))
+            xTypeBox = xDialog.getChild("typebox" + str(i + 1))
+            xValueEdit = xDialog.getChild("valueedit" + str(i + 1))
+            self.assertEqual(aExpectedNames[i], get_state_as_dict(xNameBox)['Text'])
+            self.assertEqual('Text', get_state_as_dict(xTypeBox)['DisplayText'])
+            self.assertEqual(aExpectedValues[i], get_state_as_dict(xValueEdit)['Text'][:13])
+
+
         xOkBtn = xDialog.getChild("ok")
         xOkBtn.executeAction("CLICK", tuple())
 
