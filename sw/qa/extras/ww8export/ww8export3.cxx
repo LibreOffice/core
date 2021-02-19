@@ -81,6 +81,10 @@ DECLARE_WW8EXPORT_TEST(testTdf138345_paraCharHighlight, "tdf138345_paraCharHighl
     // Character style formatting must not contain a highlight setting at all.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharHighlight"));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, "CharBackColor"));
+
+    //tdf#118711 - don't explicity specify the default page style at the beginning of the document
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(), xPara->getPropertyValue("PageDescName"));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf104596_wrapInHeaderTable, "tdf104596_wrapInHeaderTable.doc")
