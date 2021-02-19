@@ -1684,7 +1684,7 @@ void ValueSet::ImplInsertItem( std::unique_ptr<ValueSetItem> pItem, const size_t
 int ValueSet::GetScrollWidth() const
 {
     if (mxScrolledWindow)
-        return mxScrolledWindow->get_vscroll_width();
+        return mxScrolledWindow->get_scroll_thickness();
     return 0;
 }
 

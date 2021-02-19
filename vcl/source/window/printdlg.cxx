@@ -683,7 +683,7 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
 
     // lock the dialog height, regardless of later expander state
     mxScrolledWindow->set_size_request(
-        mxScrolledWindow->get_preferred_size().Width() + mxScrolledWindow->get_vscroll_width(),
+        mxScrolledWindow->get_preferred_size().Width() + mxScrolledWindow->get_scroll_thickness(),
         mxScrolledWindow->get_preferred_size().Height());
 }
 

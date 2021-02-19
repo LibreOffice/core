@@ -412,7 +412,7 @@ void AnnotationContents::DoResize()
     if( aTextHeight > aHeight )
     {
         // we need vertical scrollbars and have to reduce the width
-        aWidth -= mxVScrollbar->get_vscroll_width();
+        aWidth -= mxVScrollbar->get_scroll_thickness();
         mxVScrollbar->set_vpolicy(VclPolicyType::ALWAYS);
     }
     else
@@ -582,8 +582,8 @@ void AnnotationContents::SetColor()
 
     mxVScrollbar->customize_scrollbars(maColorLight,
                                        maColorDark,
-                                       maColor,
-                                       GetPrefScrollbarWidth());
+                                       maColor);
+    mxVScrollbar->set_scroll_thickness(GetPrefScrollbarWidth());
 }
 
 void AnnotationContents::GetFocus()
