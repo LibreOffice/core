@@ -734,7 +734,7 @@ void XSecController::exportSignature(
                     xDocumentHandler->startElement(
                         "PGPKeyID",
                         css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
-                    xDocumentHandler->characters( signatureInfo.ouCertDigest );
+                    xDocumentHandler->characters(signatureInfo.ouGpgKeyID);
                     xDocumentHandler->endElement( "PGPKeyID" );
 
                     /* Write PGPKeyPacket element */
@@ -758,43 +758,47 @@ void XSecController::exportSignature(
             }
             else
             {
-                /* Write X509Data element */
-                xDocumentHandler->startElement(
-                    "X509Data",
-                    css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
+                assert(!signatureInfo.X509Datas.empty());
+                for (auto const& it : signatureInfo.X509Datas)
                 {
-                    /* Write X509IssuerSerial element */
+                    /* Write X509Data element */
                     xDocumentHandler->startElement(
-                        "X509IssuerSerial",
+                        "X509Data",
                         css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
                     {
-                        /* Write X509IssuerName element */
+                        /* Write X509IssuerSerial element */
                         xDocumentHandler->startElement(
-                            "X509IssuerName",
+                            "X509IssuerSerial",
                             css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
-                        xDocumentHandler->characters( signatureInfo.ouX509IssuerName );
-                        xDocumentHandler->endElement( "X509IssuerName" );
+                        {
+                            /* Write X509IssuerName element */
+                            xDocumentHandler->startElement(
+                                "X509IssuerName",
+                                css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
+                            xDocumentHandler->characters(it.X509IssuerName);
+                            xDocumentHandler->endElement( "X509IssuerName" );
 
-                        /* Write X509SerialNumber element */
-                        xDocumentHandler->startElement(
-                            "X509SerialNumber",
-                            css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
-                        xDocumentHandler->characters( signatureInfo.ouX509SerialNumber );
-                        xDocumentHandler->endElement( "X509SerialNumber" );
-                    }
-                    xDocumentHandler->endElement( "X509IssuerSerial" );
+                            /* Write X509SerialNumber element */
+                            xDocumentHandler->startElement(
+                                "X509SerialNumber",
+                                css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
+                            xDocumentHandler->characters(it.X509SerialNumber);
+                            xDocumentHandler->endElement( "X509SerialNumber" );
+                        }
+                        xDocumentHandler->endElement( "X509IssuerSerial" );
 
-                    /* Write X509Certificate element */
-                    if (!signatureInfo.ouX509Certificate.isEmpty())
-                    {
-                        xDocumentHandler->startElement(
-                            "X509Certificate",
-                            css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
-                        xDocumentHandler->characters( signatureInfo.ouX509Certificate );
-                        xDocumentHandler->endElement( "X509Certificate" );
+                        /* Write X509Certificate element */
+                        if (!it.X509Certificate.isEmpty())
+                        {
+                            xDocumentHandler->startElement(
+                                "X509Certificate",
+                                css::uno::Reference< css::xml::sax::XAttributeList > (new SvXMLAttributeList()));
+                            xDocumentHandler->characters(it.X509Certificate);
+                            xDocumentHandler->endElement( "X509Certificate" );
+                        }
                     }
+                    xDocumentHandler->endElement( "X509Data" );
                 }
-                xDocumentHandler->endElement( "X509Data" );
             }
         }
         xDocumentHandler->endElement( "KeyInfo" );
@@ -911,6 +915,15 @@ void XSecController::exportOOXMLSignature(const uno::Reference<embed::XStorage>&
 {
     OOXMLSecExporter aExporter(mxCtx, xRootStorage, xDocumentHandler, rInformation);
     aExporter.writeSignature();
+}
+
+void XSecController::UpdateSignatureInformation(sal_Int32 const nSecurityId,
+    std::vector<SignatureInformation::X509Data> const& rDatas)
+{
+    SignatureInformation aInf( 0 );
+    int const nIndex = findSignatureInfor(nSecurityId);
+    assert(nIndex != -1); // nothing should touch this between parsing and verify
+    m_vInternalSignatureInformations[nIndex].signatureInfor.X509Datas = rDatas;
 }
 
 SignatureInformation XSecController::getSignatureInformation( sal_Int32 nSecurityId ) const
