@@ -1143,7 +1143,7 @@ uno::Reference< beans::XMaterialHolder > PDFWriterImpl::initEncryption( const OU
     uno::Reference< beans::XMaterialHolder > xResult;
     if( !i_rOwnerPassword.isEmpty() || !i_rUserPassword.isEmpty() )
     {
-        EncHashTransporter* pTransporter = new EncHashTransporter;
+        rtl::Reference<EncHashTransporter> pTransporter = new EncHashTransporter;
         xResult = pTransporter;
 
         // get padded passwords

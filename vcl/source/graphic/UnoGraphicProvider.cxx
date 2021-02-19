@@ -131,7 +131,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( const OUS
 
         if( nGraphicAddress )
         {
-            ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic;
+            rtl::Reference<::unographic::Graphic> pUnoGraphic = new ::unographic::Graphic;
 
             pUnoGraphic->init( *reinterpret_cast< ::Graphic* >( nGraphicAddress ) );
             xRet = pUnoGraphic;
@@ -211,7 +211,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadBitmap( const uno
 
     if( !aBmpEx.IsEmpty() )
     {
-        ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic;
+        rtl::Reference<::unographic::Graphic> pUnoGraphic = new ::unographic::Graphic;
 
         pUnoGraphic->init( aBmpEx );
         xRet = pUnoGraphic;
@@ -253,7 +253,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
 
     if( xIStm.is() )
     {
-        unographic::GraphicDescriptor* pDescriptor = new unographic::GraphicDescriptor;
+        rtl::Reference<unographic::GraphicDescriptor> pDescriptor = new unographic::GraphicDescriptor;
         pDescriptor->init( xIStm, aURL );
         xRet = pDescriptor;
     }
@@ -273,7 +273,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
         }
         else
         {
-            unographic::GraphicDescriptor* pDescriptor = new unographic::GraphicDescriptor;
+            rtl::Reference<unographic::GraphicDescriptor> pDescriptor = new unographic::GraphicDescriptor;
             pDescriptor->init( aURL );
             xRet = pDescriptor;
         }
@@ -423,7 +423,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
                 if (!aPath.isEmpty() && bLoadAsLink)
                     aVCLGraphic.setOriginURL(aPath);
 
-                ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic;
+                rtl::Reference<::unographic::Graphic> pUnoGraphic = new ::unographic::Graphic;
 
                 pUnoGraphic->init( aVCLGraphic );
                 xRet = pUnoGraphic;
@@ -473,7 +473,7 @@ uno::Sequence< uno::Reference<graphic::XGraphic> > SAL_CALL GraphicProvider::que
 
         if (pGraphic)
         {
-            auto pUnoGraphic = new unographic::Graphic();
+            rtl::Reference<unographic::Graphic> pUnoGraphic = new unographic::Graphic();
             pUnoGraphic->init(*pGraphic);
             xGraphic = pUnoGraphic;
         }

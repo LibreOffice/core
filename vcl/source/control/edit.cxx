@@ -282,8 +282,7 @@ void Edit::ImplInitEditData()
     // note: controls that use a subedit will revert this (SpinField, ComboBox)
     EnableRTL( false );
 
-    vcl::unohelper::DragAndDropWrapper* pDnDWrapper = new vcl::unohelper::DragAndDropWrapper( this );
-    mxDnDListener = pDnDWrapper;
+    mxDnDListener = new vcl::unohelper::DragAndDropWrapper( this );
 }
 
 bool Edit::ImplUseNativeBorder(vcl::RenderContext const & rRenderContext, WinBits nStyle)
@@ -2757,7 +2756,7 @@ void Edit::dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent
     if ( IsTracking() )
         EndTracking();  // before D&D disable tracking
 
-    vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( GetSelected() );
+    rtl::Reference<vcl::unohelper::TextDataObject> pDataObj = new vcl::unohelper::TextDataObject( GetSelected() );
     sal_Int8 nActions = datatransfer::dnd::DNDConstants::ACTION_COPY;
     if ( !IsReadOnly() )
         nActions |= datatransfer::dnd::DNDConstants::ACTION_MOVE;

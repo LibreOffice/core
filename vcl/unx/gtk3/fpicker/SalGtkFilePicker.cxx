@@ -908,8 +908,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute()
     }
     if (pParent)
         gtk_window_set_transient_for(GTK_WINDOW(m_pDialog), pParent);
-    RunDialog* pRunDialog = new RunDialog(m_pDialog, xToolkit, xDesktop);
-    uno::Reference < awt::XTopWindowListener > xLifeCycle(pRunDialog);
+    rtl::Reference<RunDialog> pRunDialog = new RunDialog(m_pDialog, xToolkit, xDesktop);
     while( GTK_RESPONSE_NO == btn )
     {
         btn = GTK_RESPONSE_YES; // we don't want to repeat unless user clicks NO for file save.
@@ -996,8 +995,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute()
                                 OUStringToOString(getResString(FILE_PICKER_TITLE_SAVE ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
                             gtk_window_set_transient_for(GTK_WINDOW(dlg), GTK_WINDOW(m_pDialog));
-                            RunDialog* pAnotherDialog = new RunDialog(dlg, xToolkit, xDesktop);
-                            uno::Reference < awt::XTopWindowListener > xAnotherLifeCycle(pAnotherDialog);
+                            rtl::Reference<RunDialog> pAnotherDialog = new RunDialog(dlg, xToolkit, xDesktop);
                             btn = pAnotherDialog->run();
 
                             gtk_widget_destroy( dlg );

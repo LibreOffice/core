@@ -5936,8 +5936,8 @@ a11yref SalInstanceDrawingArea::get_accessible_parent()
 
 a11yrelationset SalInstanceDrawingArea::get_accessible_relation_set()
 {
-    utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
-    css::uno::Reference<css::accessibility::XAccessibleRelationSet> xSet = pRelationSetHelper;
+    rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSetHelper
+        = new utl::AccessibleRelationSetHelper;
     vcl::Window* pWindow = m_xDrawingArea.get();
     if (pWindow)
     {
@@ -5960,7 +5960,7 @@ a11yrelationset SalInstanceDrawingArea::get_accessible_relation_set()
                 css::accessibility::AccessibleRelationType::MEMBER_OF, aSequence));
         }
     }
-    return xSet;
+    return pRelationSetHelper;
 }
 
 Point SalInstanceDrawingArea::get_accessible_location()

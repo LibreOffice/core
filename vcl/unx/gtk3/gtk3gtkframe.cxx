@@ -3786,7 +3786,7 @@ gboolean GtkDropTarget::signalDragMotion(GtkWidget *pWidget, GdkDragContext *con
 
     css::datatransfer::dnd::DropTargetDragEnterEvent aEvent;
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(this);
-    GtkDropTargetDragContext* pContext = new GtkDropTargetDragContext(context, time);
+    rtl::Reference<GtkDropTargetDragContext> pContext = new GtkDropTargetDragContext(context, time);
     //preliminary accept the Drag and select the preferred action, the fire_* will
     //inform the original caller of our choice and the callsite can decide
     //to overrule this choice. i.e. typically here we default to ACTION_MOVE
