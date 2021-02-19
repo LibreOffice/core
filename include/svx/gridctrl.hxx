@@ -345,10 +345,10 @@ protected:
         All disabled entries will be removed before executing the menu, so be careful with separators
         near entries you probably wish to disable ...
     */
-    virtual void PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu);
+    virtual void PreExecuteRowContextMenu(PopupMenu& rMenu);
     /** After executing the context menu for a row this method is called.
     */
-    virtual void PostExecuteRowContextMenu(sal_uInt16 nRow, const PopupMenu& rMenu, sal_uInt16 nExecutionResult);
+    virtual void PostExecuteRowContextMenu(const PopupMenu& rMenu, sal_uInt16 nExecutionResult);
 
     /// @throws css::uno::RuntimeException
     void DataSourcePropertyChanged(const css::beans::PropertyChangeEvent& evt);
@@ -367,7 +367,7 @@ protected:
     // DragSourceHelper overridables
     virtual void StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
 
-    void    executeRowContextMenu( sal_Int32 _nRow, const Point& _rPreferredPos );
+    void    executeRowContextMenu(const Point& _rPreferredPos);
 
 public:
     DbGridControl(

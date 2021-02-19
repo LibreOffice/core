@@ -252,8 +252,8 @@ namespace dbaui
         virtual ::svt::CellController* GetController(sal_Int32 nRow, sal_uInt16 nCol) override;
 
         // DbGridControl overridables
-        virtual void PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu) override;
-        virtual void PostExecuteRowContextMenu(sal_uInt16 nRow, const PopupMenu& rMenu, sal_uInt16 nExecutionResult) override;
+        virtual void PreExecuteRowContextMenu(PopupMenu& rMenu) override;
+        virtual void PostExecuteRowContextMenu(const PopupMenu& rMenu, sal_uInt16 nExecutionResult) override;
 
         // DbGridControl overridables
         virtual void onRowChange() override;

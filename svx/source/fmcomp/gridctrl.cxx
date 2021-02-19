@@ -2408,7 +2408,7 @@ sal_uInt32 DbGridControl::GetTotalCellWidth(sal_Int32 nRow, sal_uInt16 nColId)
         return 30;  // FIXME magic number for default cell width
 }
 
-void DbGridControl::PreExecuteRowContextMenu(sal_uInt16 /*nRow*/, PopupMenu& rMenu)
+void DbGridControl::PreExecuteRowContextMenu(PopupMenu& rMenu)
 {
     bool bDelete = (m_nOptions & DbGridControlOptions::Delete) && GetSelectRowCount() && !IsCurrentAppending();
     // if only a blank row is selected then do not delete
@@ -2427,7 +2427,7 @@ void DbGridControl::PreExecuteRowContextMenu(sal_uInt16 /*nRow*/, PopupMenu& rMe
     rMenu.EnableItem(rMenu.GetItemId("undo"), bCanUndo);
 }
 
-void DbGridControl::PostExecuteRowContextMenu(sal_uInt16 /*nRow*/, const PopupMenu& rMenu, sal_uInt16 nExecutionResult)
+void DbGridControl::PostExecuteRowContextMenu(const PopupMenu& rMenu, sal_uInt16 nExecutionResult)
 {
     if (nExecutionResult == rMenu.GetItemId("delete"))
     {
@@ -2529,14 +2529,14 @@ void DbGridControl::copyCellText(sal_Int32 _nRow, sal_uInt16 _nColId)
     OStringTransfer::CopyString( GetCurrentRowCellText( pColumn,m_xPaintRow ), this );
 }
 
-void DbGridControl::executeRowContextMenu( sal_Int32 _nRow, const Point& _rPreferredPos )
+void DbGridControl::executeRowContextMenu(const Point& _rPreferredPos)
 {
     VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "svx/ui/rowsmenu.ui", "");
     VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
 
-    PreExecuteRowContextMenu( static_cast<sal_uInt16>(_nRow), *aContextMenu );
+    PreExecuteRowContextMenu(*aContextMenu );
     aContextMenu->RemoveDisabledEntries( true, true );
-    PostExecuteRowContextMenu( static_cast<sal_uInt16>(_nRow), *aContextMenu, aContextMenu->Execute( this, _rPreferredPos ) );
+    PostExecuteRowContextMenu(*aContextMenu, aContextMenu->Execute(this, _rPreferredPos));
 }
 
 void DbGridControl::Command(const CommandEvent& rEvt)
@@ -2558,7 +2558,7 @@ void DbGridControl::Command(const CommandEvent& rEvt)
                     tools::Long nRow = FirstSelectedRow( );
 
                     ::tools::Rectangle aRowRect( GetRowRectPixel( nRow ) );
-                    executeRowContextMenu( nRow, aRowRect.LeftCenter() );
+                    executeRowContextMenu(aRowRect.LeftCenter());
 
                     // handled
                     return;
@@ -2570,7 +2570,7 @@ void DbGridControl::Command(const CommandEvent& rEvt)
 
             if (nColId == HandleColumnId)
             {
-                executeRowContextMenu( nRow, rEvt.GetMousePosPixel() );
+                executeRowContextMenu(rEvt.GetMousePosPixel());
             }
             else if (canCopyCellText(nRow, nColId))
             {
