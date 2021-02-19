@@ -804,8 +804,7 @@ TaskManager::ls( sal_Int32 CommandId,
 uno::Reference< XCommandInfo >
 TaskManager::info_c()
 {
-    XCommandInfo_impl* p = new XCommandInfo_impl( this );
-    return uno::Reference< XCommandInfo >( p );
+    return new XCommandInfo_impl( this );
 }
 
 
@@ -820,8 +819,7 @@ uno::Reference< beans::XPropertySetInfo >
 TaskManager::info_p( const OUString& aUnqPath )
 {
     osl::MutexGuard aGuard( m_aMutex );
-    XPropertySetInfo_impl* p = new XPropertySetInfo_impl( this,aUnqPath );
-    return uno::Reference< beans::XPropertySetInfo >( p );
+    return new XPropertySetInfo_impl( this,aUnqPath );
 }
 
 
@@ -1108,8 +1106,7 @@ TaskManager::getv( sal_Int32 CommandId,
             });
     }
 
-    XRow_impl* p = new XRow_impl( this,seq );
-    return uno::Reference< sdbc::XRow >( p );
+    return new XRow_impl( this,seq );
 }
 
 
@@ -2531,8 +2528,7 @@ TaskManager::getv(
             });
     }
 
-    XRow_impl* p = new XRow_impl( this,seq );
-    row = uno::Reference< sdbc::XRow >( p );
+    row = new XRow_impl( this,seq );
     return true;
 }
 

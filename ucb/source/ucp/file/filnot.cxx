@@ -19,6 +19,7 @@
 
 #include <com/sun/star/ucb/ContentAction.hpp>
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>
+#include <rtl/ref.hxx>
 #include "filnot.hxx"
 #include "filid.hxx"
 #include "bc.hxx"
@@ -58,8 +59,7 @@ ContentEventNotifier::ContentEventNotifier( TaskManager* pMyShell,
 
 void ContentEventNotifier::notifyChildInserted( const OUString& aChildName )
 {
-    FileContentIdentifier* p = new FileContentIdentifier( aChildName );
-    uno::Reference< XContentIdentifier > xChildId( p );
+    rtl::Reference<FileContentIdentifier> xChildId = new FileContentIdentifier( aChildName );
 
     uno::Reference< XContent > xChildContent = m_pMyShell->m_pProvider->queryContent( xChildId );
 
@@ -96,21 +96,17 @@ void ContentEventNotifier::notifyDeleted()
 
 void ContentEventNotifier::notifyRemoved( const OUString& aChildName )
 {
-    FileContentIdentifier* p = new FileContentIdentifier( aChildName );
-    uno::Reference< XContentIdentifier > xChildId( p );
+    rtl::Reference<FileContentIdentifier> xChildId = new FileContentIdentifier( aChildName );
 
-    BaseContent* pp = new BaseContent( m_pMyShell,xChildId,aChildName );
+    rtl::Reference<BaseContent> pp = new BaseContent( m_pMyShell,xChildId,aChildName );
     {
         osl::MutexGuard aGuard( pp->m_aMutex );
         pp->m_nState |= BaseContent::Deleted;
     }
 
-    uno::Reference< XContent > xDeletedContent( pp );
-
-
     ContentEvent aEvt( m_xCreatorContent,
                        ContentAction::REMOVED,
-                       xDeletedContent,
+                       pp,
                        m_xCreatorId );
 
     for( const auto& r : m_sListeners )

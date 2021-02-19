@@ -215,9 +215,10 @@ StorageElementFactory::createStorage( const OUString & rUri,
             return xStorage;
         }
 
-        aIt->second = new Storage( m_xContext, this, aUriKey, xParentStorage, xStorage );
+        rtl::Reference<Storage> pNewStorage = new Storage( m_xContext, this, aUriKey, xParentStorage, xStorage );
+        aIt->second = pNewStorage.get();
         aIt->second->m_aContainerIt = aIt;
-        return aIt->second;
+        return pNewStorage;
     }
 }
 
