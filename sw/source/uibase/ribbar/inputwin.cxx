@@ -30,6 +30,7 @@
 #include <svx/ruler.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/event.hxx>
+#include <vcl/weldutils.hxx>
 
 #include <swtypes.hxx>
 #include <cmdid.h>
@@ -288,15 +289,10 @@ void SwInputWindow::ShowWin()
     }
 }
 
-IMPL_LINK( SwInputWindow, MenuHdl, Menu *, pMenu, bool )
+void SwInputWindow::MenuHdl(std::string_view command)
 {
-    OString aCommand = pMenu->GetCurItemIdent();
-    if (!aCommand.isEmpty())
-    {
-        aCommand += " ";
-        mxEdit->replace_selection(OStringToOUString(aCommand, RTL_TEXTENCODING_ASCII_US));
-    }
-    return false;
+    if (!command.empty())
+        mxEdit->replace_selection(OUString::fromUtf8(command) + " ");
 }
 
 IMPL_LINK_NOARG(SwInputWindow, DropdownClickHdl, ToolBox *, void)
@@ -305,10 +301,11 @@ IMPL_LINK_NOARG(SwInputWindow, DropdownClickHdl, ToolBox *, void)
     EndSelection(); // reset back CurItemId !
     if (nCurID == FN_FORMULA_CALC)
     {
-        VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/swriter/ui/inputwinmenu.ui", "");
-        VclPtr<PopupMenu> aPopMenu(aBuilder.get_menu("menu"));
-        aPopMenu->SetSelectHdl(LINK(this, SwInputWindow, MenuHdl));
-        aPopMenu->Execute(this, GetItemRect(FN_FORMULA_CALC), PopupMenuFlags::NoMouseUpClose);
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/inputwinmenu.ui"));
+        std::unique_ptr<weld::Menu> xPopMenu(xBuilder->weld_menu("menu"));
+        tools::Rectangle aRect(GetItemRect(FN_FORMULA_CALC));
+        weld::Window* pParent = weld::GetPopupParent(*this, aRect);
+        MenuHdl(xPopMenu->popup_at_rect(pParent, aRect));
     }
 }
 
