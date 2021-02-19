@@ -16,6 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#define WIN32_LEAN_AND_MEAN // because of https://stackoverflow.com/questions/11495589/winsock-redefinition-errors
+#include <iostream>
+#include <shlwapi.h>
+//#include <windows.h>
+#include <strsafe.h>
 
 #include "system.h"
 #include <userenv.h>
@@ -665,7 +670,145 @@ static bool getUserNameImpl(oslSecurity Security, rtl_uString **strName,  bool b
     return false;
 }
 
-void SAL_CALL osl_WaitForFileSecurityChanges(oslSecurity Security)
+bool SAL_CALL osl_HasWritePermissions(rtl_uString* pathName)
+{
+    PRIVILEGE_SET PrivilegeSet;
+    DWORD dwPrivSetSize = sizeof(PRIVILEGE_SET);
+    BOOL fAccessGranted = FALSE;
+    DWORD genericAccessRights = GENERIC_READ | GENERIC_WRITE;
+    GENERIC_MAPPING mapping = { 0 };
+    DWORD grantedAccess = 0;
+    HANDLE hToken;
+    DWORD length = 0;
+    LPCWSTR wstrName = o3tl::toW(rtl_uString_getStr(pathName));
+    size_t len = wcslen(wstrName);
+    char* strPathName = (char*)malloc(len * sizeof(char));
+    PSECURITY_DESCRIPTOR security;
+    HANDLE hImpersonatedToken = NULL;
+    char winPath[MAX_PATH];
+    DWORD pcchPath = MAX_PATH;
+    HRESULT hr = S_OK;
+
+    mapping.GenericRead = FILE_GENERIC_READ;
+    mapping.GenericWrite = FILE_GENERIC_WRITE;
+
+    wcstombs(strPathName, wstrName, len);
+    
+    hr = PathCreateFromUrl(strPathName, winPath, &pcchPath, NULL);
+    if (hr != S_OK)
+    {
+        LPVOID lpMsgBuf;
+        LPVOID lpDisplayBuf;
+        DWORD dw = hr;
+
+        FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
+                          | FORMAT_MESSAGE_IGNORE_INSERTS,
+                      NULL, dw, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0,
+                      NULL);
+        lpDisplayBuf
+            = (LPVOID)LocalAlloc(LMEM_ZEROINIT, (lstrlen((LPCTSTR)lpMsgBuf) + 40) * sizeof(TCHAR));
+        StringCchPrintf((LPTSTR)lpDisplayBuf, LocalSize(lpDisplayBuf) / sizeof(TCHAR),
+                        TEXT("path create failed with error %d: %s"), dw, lpMsgBuf);
+        std::cout << "MATT: ERROR: " << GetLastError() << std::endl;
+        MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
+        goto Cleanup;
+    }
+    //strPathName = (char*)"C:/Users/hop/projects/LibreOffice/bugs/47065/fill.ods";
+    if (!GetFileSecurity(winPath,
+                         OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION
+                             | DACL_SECURITY_INFORMATION,
+                         NULL, 0, &length)
+        && ERROR_INSUFFICIENT_BUFFER != GetLastError())
+    {
+        LPVOID lpMsgBuf;
+        LPVOID lpDisplayBuf;
+        DWORD dw = GetLastError();
+
+        FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
+                          | FORMAT_MESSAGE_IGNORE_INSERTS,
+                      NULL, dw, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0,
+                      NULL);
+        lpDisplayBuf
+            = (LPVOID)LocalAlloc(LMEM_ZEROINIT, (lstrlen((LPCTSTR)lpMsgBuf) + 40) * sizeof(TCHAR));
+        StringCchPrintf((LPTSTR)lpDisplayBuf, LocalSize(lpDisplayBuf) / sizeof(TCHAR),
+                        TEXT("get failed with error %d: %s"), dw, lpMsgBuf);
+        std::cout << "MATT: ERROR: " << GetLastError() << std::endl;
+        MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
+        goto Cleanup;
+    }
+
+    security = (PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, length);
+    if (!security || !GetFileSecurity(winPath,
+                            OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION
+                                | DACL_SECURITY_INFORMATION,
+                         security,
+                         length, &length))
+    {
+        goto Cleanup;
+    }
+
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ALL_ACCESS, &hToken))
+    {
+        goto Cleanup;
+    }
+    
+    if (!DuplicateToken( hToken, SecurityImpersonation, &hImpersonatedToken ))
+    {
+        goto Cleanup;
+    }
+
+    MapGenericMask(&genericAccessRights, &mapping);
+
+    if (!AccessCheck(security, // security descriptor to check
+                     hImpersonatedToken, // impersonation token
+                     genericAccessRights, // requested access rights
+                     &mapping, // pointer to GENERIC_MAPPING
+                     &PrivilegeSet, // receives privileges used in check
+                     &dwPrivSetSize, // size of PrivilegeSet buffer
+                     &grantedAccess, // receives mask of allowed access rights
+                     &fAccessGranted)) // receives results of access check
+    {
+        LPVOID lpMsgBuf;
+        LPVOID lpDisplayBuf;
+        DWORD dw = GetLastError();
+
+        FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
+                          | FORMAT_MESSAGE_IGNORE_INSERTS,
+                      NULL, dw, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0,
+                      NULL);
+        lpDisplayBuf
+            = (LPVOID)LocalAlloc(LMEM_ZEROINIT, (lstrlen((LPCTSTR)lpMsgBuf) + 40) * sizeof(TCHAR));
+        StringCchPrintf((LPTSTR)lpDisplayBuf, LocalSize(lpDisplayBuf) / sizeof(TCHAR),
+                        TEXT("AccessCheck failed with error %d: %s"), dw, lpMsgBuf);
+        std::cout << "MATT: ERROR: " << GetLastError() << std::endl;
+        MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
+        goto Cleanup;
+    }
+
+Cleanup:
+
+    if (!RevertToSelf())
+    {
+        // SHOULD EXIT PROCESS AS PER https://docs.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-reverttoself
+        ExitProcess(1);
+    }
+
+    if (strPathName)
+        free(strPathName);
+
+    if (security)
+        LocalFree(security);
+
+    if (hImpersonatedToken != INVALID_HANDLE_VALUE)
+        CloseHandle(hImpersonatedToken);
+
+    if (hToken != INVALID_HANDLE_VALUE)
+        CloseHandle(hToken);
+
+    return fAccessGranted;
+}
+
+/*void SAL_CALL osl_WaitForFileSecurityChanges(oslSecurity Security)
 {
     dwChangeHandles[0]
         = FindFirstChangeNotification("C:\Users\hop\projects\LibreOffice\bugs\47065", // directory to watch
@@ -677,6 +820,6 @@ void SAL_CALL osl_WaitForFileSecurityChanges(oslSecurity Security)
         printf("\n ERROR: FindFirstChangeNotification function failed.\n");
         ExitProcess(GetLastError());
     }
-}
+}*/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

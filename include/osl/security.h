@@ -174,7 +174,9 @@ SAL_DLLPUBLIC void SAL_CALL osl_unloadUserProfile(
     @return nothing is returned!
 */
 
-SAL_DLLPUBLIC void SAL_CALL osl_WaitForFileSecurityChanges(oslSecurity Security);
+//SAL_DLLPUBLIC void SAL_CALL osl_WaitForFileSecurityChanges(oslSecurity Security);
+
+SAL_DLLPUBLIC bool SAL_CALL osl_HasWritePermissions(rtl_uString* pathName);
 
 #ifdef __cplusplus
 }

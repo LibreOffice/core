@@ -933,10 +933,26 @@ OUString tryForeignLockfiles(const OUString& sDocURL)
 IMPL_LINK(SfxMedium, ShowLockedDocumentDialog2, void*, p, void)
 {
     SfxMedium* pMed = static_cast<SfxMedium*>(p);
-    sal_Int32 nContinuations = 3;
-    ::rtl::Reference<::ucbhelper::InteractionRequest> xInteractionRequestImpl;
+    
     OUString aDocumentURL
-        = pMed->GetURLObject().GetLastName(INetURLObject::DecodeMechanism::WithCharset);
+        = pMed->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::WithCharset);
+
+    /*sal_Int32 nContinuations = 3;
+    ::rtl::Reference<::ucbhelper::InteractionRequest> xInteractionRequestImpl;
+
+    osl::DirectoryItem rItem;
+    auto nError1 = osl::DirectoryItem::get(aDocumentURL, rItem);
+    if (nError1 != osl::FileBase::E_None)
+        return;
+    // get the file attributes
+    osl::FileStatus rFileStatus(osl_FileStatus_Mask_Validate | osl_FileStatus_Mask_Attributes);
+    nError1 = rItem.getFileStatus(rFileStatus);
+    if (nError1 != osl::FileBase::E_None)
+        return;
+
+    if ((osl_File_Attribute_ReadOnly & rFileStatus.getAttributes()) == 0)
+        return;
+
     OUString aInfo;
     xInteractionRequestImpl
         = new ::ucbhelper::InteractionRequest(uno::makeAny(document::LockedDocumentRequest(
@@ -947,15 +963,30 @@ IMPL_LINK(SfxMedium, ShowLockedDocumentDialog2, void*, p, void)
     aContinuations[1] = new ::ucbhelper::InteractionApprove(xInteractionRequestImpl.get());
     aContinuations[2] = new ::ucbhelper::InteractionDisapprove(xInteractionRequestImpl.get());
     xInteractionRequestImpl->setContinuations(aContinuations);
-    try
-    {
-        if (xHandler.is())
-            xHandler->handle(xInteractionRequestImpl);
-    }
-    catch (std::exception e)
-    {
-        std::cerr << "MATT: " << e.what() << std::endl;
-    }
+    if (xHandler.is())
+        xHandler->handle(xInteractionRequestImpl);*/
+
+    // SfxApplication* pSfxApp = SfxApplication::Get();
+    //SfxObjectShell sh;
+   //  SfxMedium* searchMed = sh->GetMedium();
+    //SfxObjectShellArr_Impl& rDocs = ;
+    // search for a SfxDocument of the specified type
+     for (SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame;
+          pFrame = SfxViewFrame::GetNext(*pFrame))
+     {
+         if (pFrame->GetObjectShell()->GetMedium() == pMed)
+         {
+             /*SfxAllItemSet aSet(SfxGetpApp()->GetPool());
+             SfxRequest aReq(SID_RELOAD, SfxCallMode::SLOT, aSet);
+             pFrame->ExecReload_Impl(aReq);*/
+             if (osl_HasWritePermissions(aDocumentURL.pData))
+                pFrame->GetDispatcher()->Execute(SID_EDITDOC);
+         }
+     }
+     /*for (SfxObjectShell* pSh : SfxGetpApp()->GetObjectShells_Impl())
+     {
+         pSh->
+     }*/
     /*OUString aMessage;
     std::vector<OUString> aArguments;
     uno::Reference<awt::XWindow> xParent = getParentXWindow();
