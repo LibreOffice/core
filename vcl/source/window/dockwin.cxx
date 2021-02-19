@@ -1058,4 +1058,24 @@ IMPL_LINK_NOARG(DockingWindow, ImplHandleLayoutTimerHdl, Timer*, void)
     setPosSizeOnContainee();
 }
 
+InterimDockingWindow::InterimDockingWindow(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame, bool bTearable)
+    : DockingWindow(pParent,
+                    !bTearable ? OString("InterimDockParent") : OString("InterimTearableParent"),
+                    !bTearable ? OUString("vcl/ui/interimdockparent.ui") : OUString("vcl/ui/interimtearableparent.ui"),
+                    rFrame)
+    , m_xBox(m_pUIBuilder->get("box"))
+{
+}
+
+InterimDockingWindow::~InterimDockingWindow()
+{
+    disposeOnce();
+}
+
+void InterimDockingWindow::dispose()
+{
+    m_xBox.clear();
+    DockingWindow::dispose();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
