@@ -341,7 +341,7 @@
       </prop>
       <prop oor:name="DefaultSmSyntaxVersion" oor:type="xs:short" oor:nillable="false">
         <info>
-          <desc>Specifies which SmParser to use [UNIT=%]</desc>
+          <desc>Specifies which SmParser to use</desc>
         </info>
         <constraints>
           <minInclusive oor:value="5">
