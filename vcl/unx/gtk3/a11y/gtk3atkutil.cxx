@@ -23,7 +23,6 @@
 #undef _LINUX_SOURCE_COMPAT
 #endif
 
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -128,66 +127,6 @@ atk_wrapper_focus_tracker_notify_when_idle( const uno::Reference< accessibility:
 
     focus_notify_handler = g_idle_add (atk_wrapper_focus_idle_handler, xAccessible.get());
 }
-
-/*****************************************************************************/
-
-class DocumentFocusListener :
-    public ::cppu::WeakImplHelper< accessibility::XAccessibleEventListener >
-{
-
-    o3tl::sorted_vector< uno::Reference< uno::XInterface > > m_aRefList;
-
-public:
-    /// @throws lang::IndexOutOfBoundsException
-    /// @throws uno::RuntimeException
-    void attachRecursive(
-        const uno::Reference< accessibility::XAccessible >& xAccessible
-    );
-
-    /// @throws lang::IndexOutOfBoundsException
-    /// @throws uno::RuntimeException
-    void attachRecursive(
-        const uno::Reference< accessibility::XAccessible >& xAccessible,
-        const uno::Reference< accessibility::XAccessibleContext >& xContext
-    );
-
-    /// @throws lang::IndexOutOfBoundsException
-    /// @throws uno::RuntimeException
-    void attachRecursive(
-        const uno::Reference< accessibility::XAccessible >& xAccessible,
-        const uno::Reference< accessibility::XAccessibleContext >& xContext,
-        const uno::Reference< accessibility::XAccessibleStateSet >& xStateSet
-    );
-
-    /// @throws lang::IndexOutOfBoundsException
-    /// @throws uno::RuntimeException
-    void detachRecursive(
-        const uno::Reference< accessibility::XAccessible >& xAccessible
-    );
-
-    /// @throws lang::IndexOutOfBoundsException
-    /// @throws uno::RuntimeException
-    void detachRecursive(
-        const uno::Reference< accessibility::XAccessibleContext >& xContext
-    );
-
-    /// @throws lang::IndexOutOfBoundsException
-    /// @throws uno::RuntimeException
-    void detachRecursive(
-        const uno::Reference< accessibility::XAccessibleContext >& xContext,
-        const uno::Reference< accessibility::XAccessibleStateSet >& xStateSet
-    );
-
-    /// @throws lang::IndexOutOfBoundsException
-    /// @throws uno::RuntimeException
-    static uno::Reference< accessibility::XAccessible > getAccessible(const lang::EventObject& aEvent );
-
-    // XEventListener
-    virtual void SAL_CALL disposing( const lang::EventObject& Source ) override;
-
-    // XAccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const accessibility::AccessibleEventObject& aEvent ) override;
-};
 
 /*****************************************************************************/
 
@@ -511,12 +450,11 @@ WindowList g_aWindowList;
 
 DocumentFocusListener & GtkSalData::GetDocumentFocusListener()
 {
-    if (!m_pDocumentFocusListener)
+    if (!m_xDocumentFocusListener)
     {
-        m_pDocumentFocusListener = new DocumentFocusListener;
-        m_xDocumentFocusListener.set(m_pDocumentFocusListener);
+        m_xDocumentFocusListener = new DocumentFocusListener;
     }
-    return *m_pDocumentFocusListener;
+    return *m_xDocumentFocusListener;
 }
 
 static void handle_get_focus(::VclWindowEvent const * pEvent)

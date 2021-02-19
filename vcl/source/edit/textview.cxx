@@ -177,8 +177,7 @@ TextView::TextView( ExtTextEngine* pEng, vcl::Window* pWindow ) :
 
     if ( pWindow->GetDragGestureRecognizer().is() )
     {
-        vcl::unohelper::DragAndDropWrapper* pDnDWrapper = new vcl::unohelper::DragAndDropWrapper( this );
-        mpImpl->mxDnDListener = pDnDWrapper;
+        mpImpl->mxDnDListener = new vcl::unohelper::DragAndDropWrapper( this );
 
         css::uno::Reference< css::datatransfer::dnd::XDragGestureListener> xDGL( mpImpl->mxDnDListener, css::uno::UNO_QUERY );
         pWindow->GetDragGestureRecognizer()->addDragGestureListener( xDGL );
@@ -887,7 +886,7 @@ void TextView::Copy( css::uno::Reference< css::datatransfer::clipboard::XClipboa
     if ( !rxClipboard.is() )
         return;
 
-    TETextDataObject* pDataObj = new TETextDataObject( GetSelected() );
+    rtl::Reference<TETextDataObject> pDataObj = new TETextDataObject( GetSelected() );
 
     SolarMutexReleaser aReleaser;
 
@@ -1728,7 +1727,7 @@ void TextView::dragGestureRecognized( const css::datatransfer::dnd::DragGestureE
     mpImpl->mpDDInfo.reset(new TextDDInfo);
     mpImpl->mpDDInfo->mbStarterOfDD = true;
 
-    TETextDataObject* pDataObj = new TETextDataObject( GetSelected() );
+    rtl::Reference<TETextDataObject> pDataObj = new TETextDataObject( GetSelected() );
 
     mpImpl->mpCursor->Hide();
 

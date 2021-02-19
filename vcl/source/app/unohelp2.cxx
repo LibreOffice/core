@@ -47,7 +47,7 @@ namespace vcl::unohelper {
         if ( !rxClipboard.is() )
             return;
 
-        TextDataObject* pDataObj = new TextDataObject( rContent );
+        rtl::Reference<TextDataObject> pDataObj = new TextDataObject( rContent );
 
         SolarMutexReleaser aReleaser;
         try

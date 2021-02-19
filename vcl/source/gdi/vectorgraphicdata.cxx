@@ -252,8 +252,7 @@ void VectorGraphicData::ensureSequenceAndRange()
                 {"PageIndex", uno::makeAny<sal_Int32>(mnPageIndex)},
             });
 
-            auto* pUnoBinaryDataContainer = new UnoBinaryDataContainer(getBinaryDataContainer());
-            uno::Reference<util::XBinaryDataContainer> xDataContainer = pUnoBinaryDataContainer;
+            rtl::Reference<UnoBinaryDataContainer> xDataContainer = new UnoBinaryDataContainer(getBinaryDataContainer());
 
             auto xPrimitive2D = xPdfDecomposer->getDecomposition(xDataContainer, aDecompositionParameters);
             maSequence = comphelper::sequenceToContainer<std::deque<uno::Reference<graphic::XPrimitive2D>>>(xPrimitive2D);
