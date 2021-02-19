@@ -219,7 +219,52 @@ void SwDrawShell::Execute(SfxRequest &rReq)
                 GetView().FlipDrawRotate();
             }
             break;
+        case SID_MOVE_SHAPE_HANDLE:
+        {
+            if (pArgs && pArgs->Count() == 3)
+            {
+                const SfxUInt32Item* handleNumItem = rReq.GetArg<SfxUInt32Item>(FN_PARAM_1);
+                const SfxUInt32Item* newPosXTwips = rReq.GetArg<SfxUInt32Item>(FN_PARAM_2);
+                const SfxUInt32Item* newPosYTwips = rReq.GetArg<SfxUInt32Item>(FN_PARAM_3);
 
+                const sal_uLong handleNum = handleNumItem->GetValue();
+                const sal_uLong newPosX = newPosXTwips->GetValue();
+                const sal_uLong newPosY = newPosYTwips->GetValue();
+                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+                if( rMarkList.GetMarkCount())
+                {
+                    const SdrHdlList& sdrHdlList = pSdrView->GetHdlList();
+                    SdrHdl * pHdl = sdrHdlList.GetHdl(handleNum);
+                    if (pHdl == nullptr)
+                        break;
+                    Point aEndPoint(newPosX, newPosY);
+                    const SdrDragStat& rDragStat = pSdrView->GetDragStat();
+                    // start dragging
+                    pSdrView->BegDragObj(pHdl->GetPos(), nullptr, pHdl, 0);
+                    if (pSdrView->IsDragObj())
+                    {
+                        bool bWasNoSnap = rDragStat.IsNoSnap();
+                        bool bWasSnapEnabled = pSdrView->IsSnapEnabled();
+
+                        // switch snapping off
+                        if(!bWasNoSnap)
+                            const_cast<SdrDragStat&>(rDragStat).SetNoSnap();
+                        if(bWasSnapEnabled)
+                            pSdrView->SetSnapEnabled(false);
+
+                        pSdrView->MovAction(aEndPoint);
+                        pSdrView->EndDragObj();
+                        rSh.SetModified();
+
+                        if (!bWasNoSnap)
+                            const_cast<SdrDragStat&>(rDragStat).SetNoSnap(bWasNoSnap);
+                        if (bWasSnapEnabled)
+                            pSdrView->SetSnapEnabled(bWasSnapEnabled);
+                    }
+                }
+            }
+        }
+        break;
         case SID_BEZIER_EDIT:
             if (GetView().IsDrawRotate())
             {
