@@ -252,6 +252,7 @@ private:
      */
     void addSignature();
     void switchGpgSignature();
+    bool haveReferenceForId(OUString const& rId) const;
     void addReference(
         const OUString& ouUri,
         sal_Int32 nDigestID );
