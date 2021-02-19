@@ -24,7 +24,6 @@
 #include <string_view>
 
 #include <vcl/InterimItemWindow.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
 
 #include <sfx2/childwin.hxx>

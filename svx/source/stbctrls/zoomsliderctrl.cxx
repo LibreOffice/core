@@ -19,7 +19,6 @@
 
 #include <svx/zoomsliderctrl.hxx>
 #include <vcl/status.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
