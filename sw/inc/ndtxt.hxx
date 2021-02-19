@@ -804,7 +804,7 @@ public:
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const override;
 
     /// In MS Word, the font underline setting of the paragraph end position won't affect the formatting of numbering, so we ignore it
-    static bool IsIgnoredCharFormatForNumbering(const sal_uInt16 nWhich);
+    static bool IsIgnoredCharFormatForNumbering(const sal_uInt16 nWhich, bool bIsCharStyle = false);
     void FormatDropNotify(const SwFormatDrop& rDrop) override
             { TriggerNodeUpdate(sw::LegacyModifyHint(&rDrop, &rDrop)); };
 };

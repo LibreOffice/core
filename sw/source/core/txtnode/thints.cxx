@@ -45,6 +45,7 @@
 #include <txtftn.hxx>
 #include <txtfld.hxx>
 #include <txtannotationfld.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <charfmt.hxx>
 #include <frmfmt.hxx>
 #include <ftnidx.hxx>
@@ -1809,9 +1810,14 @@ void SwTextNode::DelSoftHyph( const sal_Int32 nStt, const sal_Int32 nEnd )
     }
 }
 
-bool SwTextNode::IsIgnoredCharFormatForNumbering(const sal_uInt16 nWhich)
+bool SwTextNode::IsIgnoredCharFormatForNumbering(const sal_uInt16 nWhich, bool bIsCharStyle)
 {
-    return (nWhich == RES_CHRATR_UNDERLINE || nWhich == RES_CHRATR_BACKGROUND
+    // LO can save the char background as either shading or highlight, so check which mode is currently chosen.
+    // Shading does not affect the numbering. Highlighting does (but isn't allowed in a char style).
+    if (nWhich == RES_CHRATR_BACKGROUND)
+        return bIsCharStyle || SvtFilterOptions::Get().IsCharBackground2Shading();
+
+    return (nWhich == RES_CHRATR_UNDERLINE
             || nWhich == RES_CHRATR_ESCAPEMENT);
 }
 
