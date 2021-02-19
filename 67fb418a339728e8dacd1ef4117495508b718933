@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1c0d22b_7e0b7611",
+        "filename": "sd/qa/unit/uiimpress.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-02-19T19:08:32Z",
+      "side": 1,
+      "message": "When you open a blank impress document, it already has 2 elements, the title and the content, besides, you are adding a shape. When you use xDrawPage-\u003egetByIndex(0), you are retrieving the title element while you want to check the shape. Since the 3 elements use the FillStyle \u0027None\u0027, I would just use a for loop and check them all",
+      "revId": "67fb418a339728e8dacd1ef4117495508b718933",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e245cd4f_3bd0679a",
+        "filename": "sd/qa/unit/uiimpress.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-02-19T19:08:32Z",
+      "side": 1,
+      "message": "this comment is no correct. Without the fix in place, the fillstyle is Solid",
+      "revId": "67fb418a339728e8dacd1ef4117495508b718933",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
