@@ -141,6 +141,11 @@ bool X11SalGraphics::drawTransformedBitmap(
     return mxImpl->drawTransformedBitmap( rNull, rX, rY, rSourceBitmap, pAlphaBitmap );
 }
 
+bool X11SalGraphics::hasFastDrawTransformedBitmap() const
+{
+    return mxImpl->hasFastDrawTransformedBitmap();
+}
+
 bool X11SalGraphics::drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth,
                                     tools::Long nHeight, sal_uInt8 nTransparency )
 {

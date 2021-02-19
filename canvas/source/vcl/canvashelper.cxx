@@ -723,6 +723,28 @@ namespace vclcanvas
                 // itself serves this purpose
                 return uno::Reference< rendering::XCachedPrimitive >(nullptr);
             }
+            else if( !bModulateColors && mpOutDevProvider->getOutDev().HasFastDrawTransformedBitmap())
+            {
+                ::basegfx::B2DHomMatrix aSizeTransform;
+                aSizeTransform.scale( aBmpEx.GetSizePixel().Width(), aBmpEx.GetSizePixel().Height() );
+                aMatrix = aMatrix * aSizeTransform;
+
+                mpOutDevProvider->getOutDev().DrawTransformedBitmapEx( aMatrix, aBmpEx );
+                if( mp2ndOutDevProvider )
+                {
+                    // HACK. Normally, CanvasHelper does not care about
+                    // actually what mp2ndOutDev is...  well, here we do &
+                    // assume a 1bpp target - everything beyond 97%
+                    // transparency is fully transparent
+                    if( aBmpEx.IsAlpha() )
+                    {
+                        BitmapFilter::Filter(aBmpEx, BitmapAlphaClampFilter(253));
+                    }
+
+                    mp2ndOutDevProvider->getOutDev().DrawTransformedBitmapEx( aMatrix, aBmpEx );
+                }
+                return uno::Reference< rendering::XCachedPrimitive >(nullptr);
+            }
             else
             {
                 // Matrix contains non-trivial transformation (or

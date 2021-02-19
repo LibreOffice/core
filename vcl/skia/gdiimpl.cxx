@@ -1751,6 +1751,13 @@ void SkiaSalGraphicsImpl::drawShader(const SalTwoRect& rPosAry, const sk_sp<SkSh
     postDraw();
 }
 
+bool SkiaSalGraphicsImpl::hasFastDrawTransformedBitmap() const
+{
+    // Return true even in raster mode, even that way Skia is faster than e.g. GraphicObject
+    // trying to handle stuff manually.
+    return true;
+}
+
 bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
                                                 const basegfx::B2DPoint& rX,
                                                 const basegfx::B2DPoint& rY,
