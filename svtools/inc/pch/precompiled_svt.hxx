@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-02-05 16:11:16 using:
+ Generated on 2021-02-19 15:35:11 using:
  ./bin/update_pch svtools svt --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -46,7 +46,6 @@
 #include <string>
 #include <string_view>
 #include <type_traits>
-#include <typeinfo>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -90,7 +89,6 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <vcl/BinaryDataContainer.hxx>
-#include <vcl/EnumContext.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/accessiblefactory.hxx>
@@ -99,7 +97,6 @@
 #include <vcl/animate/AnimationBitmap.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/ctrl.hxx>
@@ -119,7 +116,6 @@
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
-#include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/prntypes.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -301,7 +297,6 @@
 #include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
-#include <tools/wintypes.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
@@ -317,7 +312,6 @@
 #include <unotools/nativenumberwrapper.hxx>
 #include <unotools/options.hxx>
 #include <unotools/readwritemutexguard.hxx>
-#include <unotools/resmgr.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/transliterationwrapper.hxx>

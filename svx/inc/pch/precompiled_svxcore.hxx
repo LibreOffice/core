@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-02-19 12:23:00 using:
+ Generated on 2021-02-19 15:35:14 using:
  ./bin/update_pch svx svxcore --cutoff=7 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -47,7 +47,6 @@
 #include <string>
 #include <string_view>
 #include <type_traits>
-#include <typeinfo>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -64,6 +63,7 @@
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
+#include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
@@ -93,7 +93,6 @@
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/BinaryDataContainer.hxx>
 #include <vcl/BitmapColor.hxx>
-#include <vcl/EnumContext.hxx>
 #include <vcl/GraphicAttributes.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/InterimItemWindow.hxx>
@@ -103,7 +102,6 @@
 #include <vcl/animate/AnimationBitmap.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/commandevent.hxx>
@@ -126,7 +124,6 @@
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
-#include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/region.hxx>
@@ -411,7 +408,6 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/options.hxx>
-#include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/unotoolsdllapi.h>

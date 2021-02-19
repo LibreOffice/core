@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-02-05 16:12:50 using:
+ Generated on 2021-02-19 15:35:44 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -66,12 +66,14 @@
 #include <osl/module.hxx>
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
+#include <osl/nlsupport.h>
 #include <osl/process.h>
 #include <osl/signal.h>
 #include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
+#include <rtl/byteseq.hxx>
 #include <rtl/character.hxx>
 #include <rtl/crc.h>
 #include <rtl/digest.h>
@@ -216,6 +218,7 @@
 #include <tools/debug.hxx>
 #include <tools/degree.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-02-05 16:10:04 using:
+ Generated on 2021-02-19 15:34:44 using:
  ./bin/update_pch oox oox --cutoff=6 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -22,6 +22,7 @@
 
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
@@ -76,6 +77,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
+#include <sal/macros.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <vcl/bitmap.hxx>
