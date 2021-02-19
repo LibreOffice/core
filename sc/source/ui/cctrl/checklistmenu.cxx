@@ -568,7 +568,7 @@ ScCheckListMenuControl::~ScCheckListMenuControl()
 ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc, bool bCanHaveSubMenu,
                                              bool bTreeMode, int nWidth, ScCheckListMenuWindow* pParentMenu,
                                              vcl::ILibreOfficeKitNotifier* pNotifier)
-    : DockingWindow(pParent, "InterimDockParent", "svx/ui/interimdockparent.ui")
+    : DockingWindow(pParent, "InterimDockParent", "vcl/ui/interimdockparent.ui")
     , mxParentMenu(pParentMenu)
     , mxBox(m_pUIBuilder->get("box"))
 {

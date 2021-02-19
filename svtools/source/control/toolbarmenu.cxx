@@ -174,11 +174,11 @@ InterimToolbarPopup::InterimToolbarPopup(const css::uno::Reference<css::frame::X
                                          std::unique_ptr<WeldToolbarPopup> xPopup, bool bTearable)
     : DockingWindow(pParent,
                     !bTearable ? OString("InterimDockParent") : OString("InterimTearableParent"),
-                    !bTearable ? OUString("svx/ui/interimdockparent.ui") : OUString("svx/ui/interimtearableparent.ui"),
+                    !bTearable ? OUString("vcl/ui/interimdockparent.ui") : OUString("vcl/ui/interimtearableparent.ui"),
                     rFrame)
     , m_xBox(m_pUIBuilder->get("box"))
     , m_xFrame(rFrame)
-    , m_xBuilder(Application::CreateInterimBuilder(m_xBox.get(), "svx/ui/interimparent.ui", false))
+    , m_xBuilder(Application::CreateInterimBuilder(m_xBox.get(), "svt/ui/interimparent.ui", false))
     , m_xContainer(m_xBuilder->weld_container("container"))
     , m_xPopup(std::move(xPopup))
 {
