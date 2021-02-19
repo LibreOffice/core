@@ -175,7 +175,7 @@ InterimToolbarPopup::InterimToolbarPopup(const css::uno::Reference<css::frame::X
                     !bTearable ? OString("InterimDockParent") : OString("InterimTearableParent"),
                     !bTearable ? OUString("svx/ui/interimdockparent.ui") : OUString("svx/ui/interimtearableparent.ui"),
                     rFrame)
-    , m_xBox(get("box"))
+    , m_xBox(m_pUIBuilder->get("box"))
     , m_xFrame(rFrame)
     , m_xBuilder(Application::CreateInterimBuilder(m_xBox.get(), "svx/ui/interimparent.ui", false))
     , m_xContainer(m_xBuilder->weld_container("container"))

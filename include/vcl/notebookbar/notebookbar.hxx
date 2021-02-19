@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include <vcl/builder.hxx>
+#include <vcl/syswin.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 #include <vcl/settings.hxx>

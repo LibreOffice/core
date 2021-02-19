@@ -1573,6 +1573,13 @@ VclBuilderContainer::VclBuilderContainer()
 {
 }
 
+void VclBuilderContainer::setDeferredProperties()
+{
+    if (!m_pUIBuilder)
+        return;
+    m_pUIBuilder->setDeferredProperties();
+}
+
 VclBuilderContainer::~VclBuilderContainer()
 {
 }
