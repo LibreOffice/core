@@ -5956,11 +5956,19 @@ public:
         return GtkToVcl(eGtkVPolicy);
     }
 
-    virtual int get_vscroll_width() const override
+    virtual int get_scroll_thickness() const override
     {
         if (gtk_scrolled_window_get_overlay_scrolling(m_pScrolledWindow))
             return 0;
         return gtk_widget_get_allocated_width(gtk_scrolled_window_get_vscrollbar(m_pScrolledWindow));
+    }
+
+    virtual void set_scroll_thickness(int nThickness) override
+    {
+        GtkWidget *pHorzBar = gtk_scrolled_window_get_hscrollbar(m_pScrolledWindow);
+        GtkWidget *pVertBar = gtk_scrolled_window_get_vscrollbar(m_pScrolledWindow);
+        gtk_widget_set_size_request(pHorzBar, -1, nThickness);
+        gtk_widget_set_size_request(pVertBar, nThickness, -1);
     }
 
     virtual void disable_notify_events() override
@@ -5979,7 +5987,7 @@ public:
 
     virtual void customize_scrollbars(const Color& rBackgroundColor,
                                       const Color& rShadowColor,
-                                      const Color& rFaceColor, int nThickness) override
+                                      const Color& rFaceColor) override
     {
         GtkWidget *pHorzBar = gtk_scrolled_window_get_hscrollbar(m_pScrolledWindow);
         GtkWidget *pVertBar = gtk_scrolled_window_get_vscrollbar(m_pScrolledWindow);
@@ -6005,9 +6013,6 @@ public:
                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
         gtk_style_context_add_provider(pVertContext, GTK_STYLE_PROVIDER(m_pScrollBarCssProvider),
                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-        gtk_widget_set_size_request(pHorzBar, -1, nThickness);
-        gtk_widget_set_size_request(pVertBar, nThickness, -1);
     }
 
     virtual ~GtkInstanceScrolledWindow() override

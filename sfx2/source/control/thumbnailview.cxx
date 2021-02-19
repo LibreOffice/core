@@ -359,7 +359,7 @@ void ThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
         nScrollRatio = 0;
 
     // calculate ScrollBar width
-    tools::Long nScrBarWidth = mbAllowVScrollBar ? mxScrolledWindow->get_vscroll_width() : 0;
+    tools::Long nScrBarWidth = mbAllowVScrollBar ? mxScrolledWindow->get_scroll_thickness() : 0;
 
     // calculate maximum number of visible columns
     mnCols = static_cast<sal_uInt16>((aWinSize.Width()-nScrBarWidth) / mnItemWidth);

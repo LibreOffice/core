@@ -460,6 +460,9 @@ void SwAnnotationWin::Rescale()
         mxMetadataDate->set_font(aFont);
     if (mxMetadataResolved)
         mxMetadataResolved->set_font(aFont);
+    if (mxVScrollbar)
+        mxVScrollbar->set_scroll_thickness(GetPrefScrollbarWidth());
+
 }
 
 void SwAnnotationWin::SetPosAndSize()
@@ -694,7 +697,7 @@ void SwAnnotationWin::DoResize()
     if (aTextHeight > aHeight)
     {
         // we need vertical scrollbars and have to reduce the width
-        aWidth -= mxVScrollbar->get_vscroll_width();
+        aWidth -= mxVScrollbar->get_scroll_thickness();
         mxVScrollbar->set_vpolicy(VclPolicyType::ALWAYS);
     }
     else
@@ -816,8 +819,7 @@ void SwAnnotationWin::SetColor(Color aColorDark,Color aColorLight, Color aColorA
 
     mxVScrollbar->customize_scrollbars(mColorLight,
                                        mColorAnchor,
-                                       mColorDark,
-                                       GetPrefScrollbarWidth());
+                                       mColorDark);
 }
 
 void SwAnnotationWin::SetSidebarPosition(sw::sidebarwindows::SidebarPosition eSidebarPosition)
