@@ -666,9 +666,9 @@ CellController* SbaGridControl::GetController(sal_Int32 nRow, sal_uInt16 nCol)
     return FmGridControl::GetController(nRow, nCol);
 }
 
-void SbaGridControl::PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu)
+void SbaGridControl::PreExecuteRowContextMenu(PopupMenu& rMenu)
 {
-    FmGridControl::PreExecuteRowContextMenu(nRow, rMenu);
+    FmGridControl::PreExecuteRowContextMenu(rMenu);
 
     sal_uInt16 nPos = 0;
 
@@ -821,7 +821,7 @@ void SbaGridControl::SetBrowserAttrs()
     }
 }
 
-void SbaGridControl::PostExecuteRowContextMenu(sal_uInt16 nRow, const PopupMenu& rMenu, sal_uInt16 nExecutionResult)
+void SbaGridControl::PostExecuteRowContextMenu(const PopupMenu& rMenu, sal_uInt16 nExecutionResult)
 {
     switch (nExecutionResult)
     {
@@ -836,7 +836,7 @@ void SbaGridControl::PostExecuteRowContextMenu(sal_uInt16 nRow, const PopupMenu&
             break;
 
         default:
-            FmGridControl::PostExecuteRowContextMenu(nRow, rMenu, nExecutionResult);
+            FmGridControl::PostExecuteRowContextMenu(rMenu, nExecutionResult);
             break;
     }
 }
