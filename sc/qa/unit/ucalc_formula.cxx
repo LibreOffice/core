@@ -9334,4 +9334,38 @@ void Test::testFormulaAfterDeleteRows()
     ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong value at A4", 3.0, m_pDoc->GetValue(aPos));
 }
 
+void Test::testFormulaMULTINOMIAL()
+{
+  m_pDoc->InsertTab(0, "tdf#43135");
+
+  m_pDoc->SetValue(ScAddress(0,0,0), 3);
+  m_pDoc->SetValue(ScAddress(0,1,0), 4);
+  m_pDoc->SetValue(ScAddress(0,2,0), 5);
+  m_pDoc->SetValue(ScAddress(0,3,0), 6);
+
+  m_pDoc->SetValue(ScAddress(1,0,0), 1000);
+  m_pDoc->SetValue(ScAddress(1,1,0), 0);
+
+  m_pDoc->SetValue(ScAddress(2,0,0), 3.4);
+  m_pDoc->SetValue(ScAddress(2,1,0), 2.3);
+
+  m_pDoc->SetValue(ScAddress(3,0,0), 1073741824);
+  m_pDoc->SetValue(ScAddress(3,1,0), 2);
+  m_pDoc->SetValue(ScAddress(3,2,0), 1);
+
+  m_pDoc->SetString(0, 6, 0, "=MULTINOMIAL(A1:D1)");
+  m_pDoc->SetString(1, 6, 0, "=MULTINOMIAL(A2:B2)");
+  m_pDoc->SetString(2, 6, 0, "=MULTINOMIAL(A3:B3)");
+  m_pDoc->SetString(3, 6, 0, "=MULTINOMIAL(A4:C4)");
+
+  m_pDoc->CalcAll();
+
+  CPPUNIT_ASSERT_EQUAL(514594080.0, m_pDoc->GetValue(0, 6, 0));
+  CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(1, 6, 0));
+  CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(2, 6, 0));
+  CPPUNIT_ASSERT_EQUAL(6.18970023101455E+026, m_pDoc->GetValue(3, 6, 0));
+
+  m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
