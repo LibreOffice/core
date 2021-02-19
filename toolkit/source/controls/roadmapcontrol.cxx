@@ -128,8 +128,8 @@ static void lcl_throwIndexOutOfBoundsException( )
 
     Reference< XInterface > SAL_CALL UnoControlRoadmapModel::createInstance(  )
     {
-        ORoadmapEntry* pRoadmapItem = new ORoadmapEntry();
-        Reference< XInterface > xNewRoadmapItem = static_cast<cppu::OWeakObject*>(pRoadmapItem);
+        rtl::Reference<ORoadmapEntry> pRoadmapItem = new ORoadmapEntry();
+        Reference< XInterface > xNewRoadmapItem = static_cast<cppu::OWeakObject*>(pRoadmapItem.get());
         return xNewRoadmapItem;
     }
 
@@ -137,8 +137,8 @@ static void lcl_throwIndexOutOfBoundsException( )
     Reference< XInterface > SAL_CALL UnoControlRoadmapModel::createInstanceWithArguments( const Sequence< Any >& /*aArguments*/ )
     {
         // Todo: implementation of the arguments handling
-        ORoadmapEntry* pRoadmapItem = new ORoadmapEntry();
-        Reference< XInterface > xNewRoadmapItem = static_cast<cppu::OWeakObject*>(pRoadmapItem);
+        rtl::Reference<ORoadmapEntry> pRoadmapItem = new ORoadmapEntry();
+        Reference< XInterface > xNewRoadmapItem = static_cast<cppu::OWeakObject*>(pRoadmapItem.get());
         return xNewRoadmapItem;
     }
 

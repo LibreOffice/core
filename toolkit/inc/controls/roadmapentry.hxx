@@ -42,10 +42,10 @@ class ORoadmapEntry final : public ORoadmapEntry_Base
 public:
        ORoadmapEntry();
 
-private:
     DECLARE_XINTERFACE()        // merge XInterface implementations
     DECLARE_XTYPEPROVIDER()     // merge XTypeProvider implementations
 
+private:
     /// @see css::beans::XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo >
         SAL_CALL getPropertySetInfo() override;

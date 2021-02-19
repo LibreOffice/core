@@ -67,7 +67,7 @@ css::uno::Reference< css::awt::XDevice > const &  VCLXPrinterPropertySet::GetDev
 {
     if ( !mxPrnDevice.is() )
     {
-        VCLXDevice* pDev = new VCLXDevice;
+        rtl::Reference<VCLXDevice> pDev = new VCLXDevice;
         pDev->SetOutputDevice( GetPrinter() );
         mxPrnDevice = pDev;
     }
