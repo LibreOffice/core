@@ -58,6 +58,7 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
+#include <tools/UnitConversion.hxx>
 
 SFX_IMPL_INTERFACE(ScDrawShell, SfxShell)
 
@@ -201,6 +202,22 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                 pView->SetAttributes(aEmptyAttr, true);
             }
             break;
+        case SID_MOVE_SHAPE_HANDLE:
+        {
+            const SfxItemSet *pArgs = rReq.GetArgs ();
+            if (pArgs && pArgs->Count () == 3)
+            {
+                const SfxUInt32Item* handleNumItem = rReq.GetArg<SfxUInt32Item>(FN_PARAM_1);
+                const SfxUInt32Item* newPosXTwips = rReq.GetArg<SfxUInt32Item>(FN_PARAM_2);
+                const SfxUInt32Item* newPosYTwips = rReq.GetArg<SfxUInt32Item>(FN_PARAM_3);
+
+                const sal_uLong handleNum = handleNumItem->GetValue();
+                const sal_uLong newPosX = convertTwipToMm100(newPosXTwips->GetValue());
+                const sal_uLong newPosY = convertTwipToMm100(newPosYTwips->GetValue());
+                pView->MoveShapeHandle(handleNum, Point(newPosX, newPosY));
+            }
+        }
+        break;
 
         case SID_ATTR_LINE_STYLE:
         case SID_ATTR_LINEEND_STYLE:
