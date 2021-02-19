@@ -512,7 +512,7 @@
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="suffix-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|suffix">Enter a character or the text to display behind the number in the list. If you want to create a numbered list that uses the style "1.)", enter ".)" in this box.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingoptionspage|extended_tip|suffix">Enter a character or the text to display behind the number in the list. To create the numbering scheme "1.)", enter ".)" in this box.</property>
                           </object>
                         </child>
                       </object>
