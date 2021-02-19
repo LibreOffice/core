@@ -600,17 +600,13 @@ XResultSet_impl::getMetaData()
         // @@@ #82177# - Determine correct value!
         aColumnData[ n ].isCaseSensitive = false;
 
-        ::ucbhelper::ResultSetMetaData* p =
-            new ::ucbhelper::ResultSetMetaData(
+        return new ::ucbhelper::ResultSetMetaData(
                 m_pMyShell->m_xContext,
                 m_sProperty,
                 aColumnData );
-        return uno::Reference< sdbc::XResultSetMetaData >( p );
     }
 
-    ::ucbhelper::ResultSetMetaData* p =
-            new ::ucbhelper::ResultSetMetaData( m_pMyShell->m_xContext, m_sProperty );
-    return uno::Reference< sdbc::XResultSetMetaData >( p );
+    return new ::ucbhelper::ResultSetMetaData( m_pMyShell->m_xContext, m_sProperty );
 }
 
 
@@ -630,9 +626,7 @@ XResultSet_impl::getPropertySetInfo()
     seq[1].Type = cppu::UnoType<sal_Bool>::get();
     seq[1].Attributes = beans::PropertyAttribute::READONLY;
 
-    XPropertySetInfo_impl* p = new XPropertySetInfo_impl( m_pMyShell,
-                                                          seq );
-    return uno::Reference< beans::XPropertySetInfo > ( p );
+    return new XPropertySetInfo_impl( m_pMyShell, seq );
 }
 
 
