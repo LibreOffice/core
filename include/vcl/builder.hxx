@@ -106,9 +106,6 @@ public:
         return m_sHelpRoot;
     }
 
-    /// Pre-loads all modules containing UI information
-    static void preload();
-
     static SymbolType mapStockToSymbol(std::u16string_view icon_name);
 
 private:

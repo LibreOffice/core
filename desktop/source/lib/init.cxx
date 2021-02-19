@@ -151,7 +151,6 @@
 #include <unotools/datetime.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/abstdlg.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/uitest/uiobject.hxx>
@@ -6300,7 +6299,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 }
                 { // Force load some modules
                     comphelper::ProfileZone aInit("preload modules");
-                    VclBuilder::preload();
+                    VclBuilderPreload();
                     VclAbstractDialogFactory::Create();
                 }
 

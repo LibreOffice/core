@@ -23,6 +23,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/builder.hxx>
+#include <vcl/dialoghelper.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/edit.hxx>
@@ -1483,7 +1484,9 @@ static std::shared_ptr<NoAutoUnloadModule> g_pMergedLib = std::make_shared<NoAut
 
 #endif
 
-void VclBuilder::preload()
+namespace vcl {
+
+void VclBuilderPreload()
 {
 #ifndef DISABLE_DYNLOADING
 
@@ -1504,6 +1507,8 @@ void VclBuilder::preload()
     }
 #endif // ENABLE_MERGELIBS
 #endif // DISABLE_DYNLOADING
+}
+
 }
 
 #if defined DISABLE_DYNLOADING && !HAVE_FEATURE_DESKTOP
