@@ -230,7 +230,7 @@ interface TableDraw
     SID_ATTR_GLOW_TRANSPARENCY      [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]
 
     SID_ATTR_SOFTEDGE_RADIUS        [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]
-
+    SID_MOVE_SHAPE_HANDLE           [ ExecMethod = ExecDrawAttr; ]
 }
 
 
