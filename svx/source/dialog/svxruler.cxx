@@ -20,7 +20,6 @@
 #include <cstring>
 #include <climits>
 
-#include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fieldvalues.hxx>
