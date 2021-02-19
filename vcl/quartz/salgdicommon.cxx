@@ -375,6 +375,11 @@ bool AquaSalGraphics::drawTransformedBitmap(
     return true;
 }
 
+bool AquaSalGraphics::hasFastDrawTransformedBitmap() const
+{
+    return false;
+}
+
 bool AquaSalGraphics::drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth,
                                      tools::Long nHeight, sal_uInt8 nTransparency )
 {

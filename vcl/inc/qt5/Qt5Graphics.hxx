@@ -155,6 +155,7 @@ public:
     bool drawTransformedBitmap(const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX,
                                const basegfx::B2DPoint& rY, const SalBitmap& rSourceBitmap,
                                const SalBitmap* pAlphaBitmap) override;
+    virtual bool hasFastDrawTransformedBitmap() const override;
 
     virtual bool drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
                                tools::Long nHeight, sal_uInt8 nTransparency) override;

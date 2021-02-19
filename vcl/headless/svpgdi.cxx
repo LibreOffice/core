@@ -831,6 +831,11 @@ bool SvpSalGraphics::drawTransformedBitmap(
     return true;
 }
 
+bool SvpSalGraphics::hasFastDrawTransformedBitmap() const
+{
+    return false;
+}
+
 void SvpSalGraphics::clipRegion(cairo_t* cr, const vcl::Region& rClipRegion)
 {
     RectangleVector aRectangles;

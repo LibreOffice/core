@@ -854,6 +854,11 @@ bool GenPspGraphics::drawTransformedBitmap(
     return false;
 }
 
+bool GenPspGraphics::hasFastDrawTransformedBitmap() const
+{
+    return false;
+}
+
 bool GenPspGraphics::drawAlphaRect( tools::Long, tools::Long, tools::Long, tools::Long, sal_uInt8 )
 {
     return false;

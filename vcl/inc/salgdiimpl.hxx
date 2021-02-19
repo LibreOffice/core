@@ -196,6 +196,9 @@ public:
                 const SalBitmap& rSourceBitmap,
                 const SalBitmap* pAlphaBitmap) = 0;
 
+    /// Used e.g. by canvas to know whether to cache the drawing.
+    virtual bool hasFastDrawTransformedBitmap() const = 0;
+
     virtual bool drawAlphaRect(
                     tools::Long nX, tools::Long nY,
                     tools::Long nWidth, tools::Long nHeight,

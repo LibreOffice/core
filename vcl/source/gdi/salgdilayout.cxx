@@ -859,6 +859,11 @@ bool SalGraphics::DrawTransformedBitmap(
     return drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap);
 }
 
+bool SalGraphics::HasFastDrawTransformedBitmap() const
+{
+    return hasFastDrawTransformedBitmap();
+}
+
 bool SalGraphics::DrawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
                                  sal_uInt8 nTransparency, const OutputDevice& rOutDev )
 {

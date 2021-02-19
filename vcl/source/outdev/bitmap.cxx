@@ -1430,6 +1430,17 @@ void OutputDevice::DrawTransformedBitmapEx(
     DrawBitmapEx(aDestPt, aDestSize, aTransformed);
 }
 
+bool OutputDevice::HasFastDrawTransformedBitmap() const
+{
+    if( ImplIsRecordLayout() )
+        return false;
+
+    if ( !mpGraphics && !AcquireGraphics() )
+        return false;
+
+    return mpGraphics->HasFastDrawTransformedBitmap();
+}
+
 void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, DrawImageFlags nStyle )
 {
     assert(!is_double_buffered_window());
