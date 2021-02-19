@@ -108,6 +108,7 @@
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="shadow_type">in</property>
+                    <property name="tooltip_text" translatable="yes" context="numberingnamedialog|grid1">Names of saved formats.</property>
                     <child>
                       <object class="GtkTreeView" id="form">
                         <property name="visible">True</property>
@@ -134,7 +135,7 @@
                         </child>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="form-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingnamedialog|extended_tip|form">Click a numbering style in the list, and then enter a name for the style. The numbers correspond to the outline level that the styles are assigned to.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="numberingnamedialog|extended_tip|form">Shows the current saved format names.</property>
                           </object>
                         </child>
                       </object>
@@ -151,9 +152,10 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="truncate-multiline">True</property>
+                    <property name="tooltip_text" translatable="yes" context="numberingnamedialog|entry">Enter name to identify the format to be saved.</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="entry-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingnamedialog|extended_tip|entry">Click a numbering style in the list, and then enter a name for the style. The numbers correspond to the outline level that the styles are assigned to.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingnamedialog|extended_tip|entry">Enter a name for the format being saved. Afterwards the name appears in the list shown by the Load/Save button.</property>
                       </object>
                     </child>
                   </object>
