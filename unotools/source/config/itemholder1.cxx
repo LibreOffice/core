@@ -37,6 +37,7 @@
 #include <unotools/viewoptions.hxx>
 #include <unotools/options.hxx>
 #include <unotools/syslocaleoptions.hxx>
+#include <rtl/ref.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
@@ -74,7 +75,7 @@ ItemHolder1::~ItemHolder1()
 
 void ItemHolder1::holdConfigItem(EItem eItem)
 {
-    static ItemHolder1* pHolder = new ItemHolder1();
+    static rtl::Reference<ItemHolder1> pHolder = new ItemHolder1();
     pHolder->impl_addItem(eItem);
 }
 
