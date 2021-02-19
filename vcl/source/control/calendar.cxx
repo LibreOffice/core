@@ -1546,23 +1546,21 @@ namespace
     };
 }
 
-struct ImplCFieldFloatWin : public DockingWindow
+struct ImplCFieldFloatWin : public InterimDockingWindow
 {
     explicit ImplCFieldFloatWin(vcl::Window* pParent);
     virtual void dispose() override;
     virtual ~ImplCFieldFloatWin() override;
     virtual void GetFocus() override;
 
-    VclPtr<vcl::Window> mxBox;
     std::unique_ptr<ImplCFieldFloat> mxWidget;
 };
 
 ImplCFieldFloatWin::ImplCFieldFloatWin(vcl::Window* pParent)
-    : DockingWindow(pParent, "InterimDockParent", "vcl/ui/interimdockparent.ui")
-    , mxBox(m_pUIBuilder->get("box"))
+    : InterimDockingWindow(pParent)
 {
     setDeferredProperties();
-    mxWidget.reset(new ImplCFieldFloat(mxBox.get()));
+    mxWidget.reset(new ImplCFieldFloat(m_xBox.get()));
 }
 
 ImplCFieldFloatWin::~ImplCFieldFloatWin()
@@ -1573,13 +1571,12 @@ ImplCFieldFloatWin::~ImplCFieldFloatWin()
 void ImplCFieldFloatWin::dispose()
 {
     mxWidget.reset();
-    mxBox.disposeAndClear();
-    DockingWindow::dispose();
+    InterimDockingWindow::dispose();
 }
 
 void ImplCFieldFloatWin::GetFocus()
 {
-    DockingWindow::GetFocus();
+    InterimDockingWindow::GetFocus();
     if (!mxWidget)
         return;
     mxWidget->GrabFocus();

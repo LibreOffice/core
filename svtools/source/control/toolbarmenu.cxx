@@ -21,7 +21,6 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 
-#include <vcl/builder.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/svapp.hxx>
 
@@ -172,11 +171,7 @@ IMPL_LINK_NOARG(ToolbarPopupContainer, FocusHdl, weld::Widget&, void)
 
 InterimToolbarPopup::InterimToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParent,
                                          std::unique_ptr<WeldToolbarPopup> xPopup, bool bTearable)
-    : DockingWindow(pParent,
-                    !bTearable ? OString("InterimDockParent") : OString("InterimTearableParent"),
-                    !bTearable ? OUString("vcl/ui/interimdockparent.ui") : OUString("vcl/ui/interimtearableparent.ui"),
-                    rFrame)
-    , m_xBox(m_pUIBuilder->get("box"))
+    : InterimDockingWindow(pParent, rFrame, bTearable)
     , m_xFrame(rFrame)
     , m_xBuilder(Application::CreateInterimBuilder(m_xBox.get(), "svt/ui/interimparent.ui", false))
     , m_xContainer(m_xBuilder->weld_container("container"))
@@ -192,7 +187,7 @@ InterimToolbarPopup::InterimToolbarPopup(const css::uno::Reference<css::frame::X
 
 void InterimToolbarPopup::GetFocus()
 {
-    DockingWindow::GetFocus();
+    InterimDockingWindow::GetFocus();
     if (!m_xPopup)
         return;
     m_xPopup->GrabFocus();
@@ -216,9 +211,8 @@ void InterimToolbarPopup::dispose()
     m_xPopup.reset();
     m_xContainer.reset();
     m_xBuilder.reset();
-    m_xBox.clear();
     m_xFrame.clear();
-    DockingWindow::dispose();
+    InterimDockingWindow::dispose();
 }
 
 InterimToolbarPopup::~InterimToolbarPopup()

@@ -82,10 +82,9 @@ public:
     void unsetPopover();
 };
 
-class SVT_DLLPUBLIC InterimToolbarPopup final : public DockingWindow
+class SVT_DLLPUBLIC InterimToolbarPopup final : public InterimDockingWindow
 {
 private:
-    VclPtr<vcl::Window> m_xBox;
     css::uno::Reference<css::frame::XFrame> m_xFrame;
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xContainer;

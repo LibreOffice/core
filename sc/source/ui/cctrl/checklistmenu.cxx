@@ -21,7 +21,6 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 
-#include <vcl/builder.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
 #include <vcl/dockwin.hxx>
@@ -568,14 +567,13 @@ ScCheckListMenuControl::~ScCheckListMenuControl()
 ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc, bool bCanHaveSubMenu,
                                              bool bTreeMode, int nWidth, ScCheckListMenuWindow* pParentMenu,
                                              vcl::ILibreOfficeKitNotifier* pNotifier)
-    : DockingWindow(pParent, "InterimDockParent", "vcl/ui/interimdockparent.ui")
+    : InterimDockingWindow(pParent)
     , mxParentMenu(pParentMenu)
-    , mxBox(m_pUIBuilder->get("box"))
 {
     if (pNotifier)
         SetLOKNotifier(pNotifier);
     setDeferredProperties();
-    mxControl.reset(new ScCheckListMenuControl(this, mxBox.get(), pDoc, bCanHaveSubMenu, bTreeMode, nWidth));
+    mxControl.reset(new ScCheckListMenuControl(this, m_xBox.get(), pDoc, bCanHaveSubMenu, bTreeMode, nWidth));
     SetBackground(Application::GetSettings().GetStyleSettings().GetMenuColor());
     set_id("check_list_menu");
 }
@@ -588,7 +586,7 @@ bool ScCheckListMenuWindow::EventNotify(NotifyEvent& rNEvt)
         rMenuControl.queueCloseSubMenu();
         rMenuControl.clearSelectedMenuItem();
     }
-    return DockingWindow::EventNotify(rNEvt);
+    return InterimDockingWindow::EventNotify(rNEvt);
 }
 
 ScCheckListMenuWindow::~ScCheckListMenuWindow()
@@ -599,14 +597,13 @@ ScCheckListMenuWindow::~ScCheckListMenuWindow()
 void ScCheckListMenuWindow::dispose()
 {
     mxControl.reset();
-    mxBox.disposeAndClear();
     mxParentMenu.clear();
-    DockingWindow::dispose();
+    InterimDockingWindow::dispose();
 }
 
 void ScCheckListMenuWindow::GetFocus()
 {
-    DockingWindow::GetFocus();
+    InterimDockingWindow::GetFocus();
     if (!mxControl)
         return;
     mxControl->GrabFocus();

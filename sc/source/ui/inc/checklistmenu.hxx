@@ -297,7 +297,7 @@ private:
  * This class implements a popup window for field button, for quick access
  * of hide-item list, and possibly more stuff related to field options.
  */
-class ScCheckListMenuWindow : public DockingWindow
+class ScCheckListMenuWindow : public InterimDockingWindow
 {
 public:
     explicit ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc,
@@ -315,7 +315,6 @@ public:
 
 private:
     VclPtr<ScCheckListMenuWindow> mxParentMenu;
-    VclPtr<vcl::Window> mxBox;
     std::unique_ptr<ScCheckListMenuControl, o3tl::default_delete<ScCheckListMenuControl>> mxControl;
 };
 
