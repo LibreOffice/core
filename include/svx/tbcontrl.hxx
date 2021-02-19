@@ -186,8 +186,7 @@ private:
 #define MAX_FAMILIES 5
 
     SfxStyleSheetBasePool* pStyleSheetPool;
-    SfxStyleControllerItem_Impl* pBoundItems[MAX_FAMILIES];
-    css::uno::Reference<css::lang::XComponent> m_xBoundItems[MAX_FAMILIES];
+    rtl::Reference<SfxStyleControllerItem_Impl> m_xBoundItems[MAX_FAMILIES];
     std::unique_ptr<SfxTemplateItem> pFamilyState[MAX_FAMILIES];
     sal_uInt16 nActFamily; // Id in the ToolBox = Position - 1
 

@@ -3828,20 +3828,19 @@ sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent&
                 return false;
 
             // two continuations allowed: OK and Cancel
-            OParameterContinuation* pParamValues = new OParameterContinuation;
-            OInteractionAbort* pAbort = new OInteractionAbort;
+            rtl::Reference<OParameterContinuation> pParamValues = new OParameterContinuation;
+            rtl::Reference<OInteractionAbort> pAbort = new OInteractionAbort;
             // the request
             ParametersRequest aRequest;
             aRequest.Parameters = aEvent.Parameters;
             aRequest.Connection = getConnection(Reference< XRowSet >(aEvent.Source, UNO_QUERY));
-            OInteractionRequest* pParamRequest = new OInteractionRequest(makeAny(aRequest));
-            Reference< XInteractionRequest > xParamRequest(pParamRequest);
+            rtl::Reference<OInteractionRequest> pParamRequest = new OInteractionRequest(makeAny(aRequest));
             // some knittings
             pParamRequest->addContinuation(pParamValues);
             pParamRequest->addContinuation(pAbort);
 
             // handle the request
-            m_xInteractionHandler->handle(xParamRequest);
+            m_xInteractionHandler->handle(pParamRequest);
 
             if (!pParamValues->wasSelected())
                 // canceled
@@ -3933,8 +3932,8 @@ sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent)
             return false;
 
         // two continuations allowed: Yes and No
-        OInteractionApprove* pApprove = new OInteractionApprove;
-        OInteractionDisapprove* pDisapprove = new OInteractionDisapprove;
+        rtl::Reference<OInteractionApprove> pApprove = new OInteractionApprove;
+        rtl::Reference<OInteractionDisapprove> pDisapprove = new OInteractionDisapprove;
 
         // the request
         SQLWarning aWarning;
@@ -3943,15 +3942,14 @@ sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent)
         aDetails.Message = SvxResId(RID_STR_DELETECONFIRM);
         aWarning.NextException <<= aDetails;
 
-        OInteractionRequest* pRequest = new OInteractionRequest( makeAny( aWarning ) );
-        Reference< XInteractionRequest > xRequest( pRequest );
+        rtl::Reference<OInteractionRequest> pRequest = new OInteractionRequest( makeAny( aWarning ) );
 
         // some knittings
         pRequest->addContinuation( pApprove );
         pRequest->addContinuation( pDisapprove );
 
         // handle the request
-        m_xInteractionHandler->handle( xRequest );
+        m_xInteractionHandler->handle( pRequest );
 
         if ( pApprove->wasSelected() )
             return true;

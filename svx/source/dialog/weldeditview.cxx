@@ -710,9 +710,8 @@ public:
         SAL_CALL getAccessibleStateSet() override
     {
         SolarMutexGuard aGuard;
-        ::utl::AccessibleStateSetHelper* pStateSet = new ::utl::AccessibleStateSetHelper;
-
-        css::uno::Reference<css::accessibility::XAccessibleStateSet> xStateSet(pStateSet);
+        rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet
+            = new ::utl::AccessibleStateSetHelper;
 
         if (!m_pController || !m_xTextHelper)
             pStateSet->AddState(css::accessibility::AccessibleStateType::DEFUNC);
@@ -735,7 +734,7 @@ public:
                 pStateSet->AddState(css::accessibility::AccessibleStateType::OPAQUE);
         }
 
-        return xStateSet;
+        return pStateSet;
     }
 
     virtual css::lang::Locale SAL_CALL getLocale() override
