@@ -7854,6 +7854,7 @@ private:
             // Send a keyboard event through gtk_main_do_event to toggle any active tooltip offs
             // before trying to launch the menu
             // https://gitlab.gnome.org/GNOME/gtk/issues/1785
+            // Fixed in GTK 2.34
             GdkEvent *pKeyEvent = GtkSalFrame::makeFakeKeyPress(pWidget);
             gtk_main_do_event(pKeyEvent);
 
@@ -8159,6 +8160,7 @@ public:
             // Send a keyboard event through gtk_main_do_event to toggle any active tooltip offs
             // before trying to launch the menu
             // https://gitlab.gnome.org/GNOME/gtk/issues/1785
+            // Fixed in GTK 2.34
             GdkEvent *pKeyEvent = GtkSalFrame::makeFakeKeyPress(pWidget);
             gtk_main_do_event(pKeyEvent);
 

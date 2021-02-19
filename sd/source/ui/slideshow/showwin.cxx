@@ -123,7 +123,11 @@ void ShowWindow::KeyInput(const KeyEvent& rKEvt)
     }
     else if( SHOWWINDOWMODE_BLANK == meShowWindowMode )
     {
-        RestartShow();
+        bool bFakeKeyPress = rKEvt.GetKeyCode().GetFullCode() == 0;
+        // Ignore workaround of https://gitlab.gnome.org/GNOME/gtk/issues/1785
+        // See calls to GtkSalFrame::makeFakeKeyPress (Fixed in GTK 2.34)
+        if (!bFakeKeyPress)
+            RestartShow();
         bReturn = true;
     }
     else if( SHOWWINDOWMODE_PAUSE == meShowWindowMode )
@@ -408,7 +412,6 @@ void ShowWindow::RestartShow()
 }
 
 void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
-
 {
     ShowWindowMode eOldShowWindowMode = meShowWindowMode;
 
