@@ -176,6 +176,10 @@ public:
                                        const basegfx::B2DPoint& rY, const SalBitmap& rSourceBitmap,
                                        const SalBitmap* pAlphaBitmap) override;
 
+    virtual bool drawTransformedBitmap(const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX,
+                                       const basegfx::B2DPoint& rY, const SalBitmap& rSourceBitmap,
+                                       const SalBitmap* pAlphaBitmap, double fAlpha) override;
+
     virtual bool hasFastDrawTransformedBitmap() const override;
 
     /** Render solid rectangle with given transparency

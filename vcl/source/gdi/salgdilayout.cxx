@@ -28,6 +28,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <FileDefinitionWidgetDraw.hxx>
+#include <rtl/math.hxx>
 
 // The only common SalFrame method
 
@@ -836,6 +837,7 @@ bool SalGraphics::DrawTransformedBitmap(
     const basegfx::B2DPoint& rY,
     const SalBitmap& rSourceBitmap,
     const SalBitmap* pAlphaBitmap,
+    double fAlpha,
     const OutputDevice& rOutDev)
 {
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || rOutDev.IsRTLEnabled() )
@@ -852,11 +854,17 @@ bool SalGraphics::DrawTransformedBitmap(
             basegfx::B2DPoint aX = aTranslateToMirroredBounds * rX;
             basegfx::B2DPoint aY = aTranslateToMirroredBounds * rY;
 
-            return drawTransformedBitmap(aNull, aX, aY, rSourceBitmap, pAlphaBitmap);
+            if( ::rtl::math::approxEqual(fAlpha, 1.0) )
+                return drawTransformedBitmap(aNull, aX, aY, rSourceBitmap, pAlphaBitmap);
+            else
+                return drawTransformedBitmap(aNull, aX, aY, rSourceBitmap, pAlphaBitmap, fAlpha);
         }
     }
 
-    return drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap);
+    if( ::rtl::math::approxEqual(fAlpha, 1.0) )
+        return drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap);
+    else
+        return drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap, fAlpha);
 }
 
 bool SalGraphics::HasFastDrawTransformedBitmap() const

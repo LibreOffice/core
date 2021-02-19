@@ -141,6 +141,17 @@ bool X11SalGraphics::drawTransformedBitmap(
     return mxImpl->drawTransformedBitmap( rNull, rX, rY, rSourceBitmap, pAlphaBitmap );
 }
 
+bool X11SalGraphics::drawTransformedBitmap(
+    const basegfx::B2DPoint& rNull,
+    const basegfx::B2DPoint& rX,
+    const basegfx::B2DPoint& rY,
+    const SalBitmap& rSourceBitmap,
+    const SalBitmap* pAlphaBitmap,
+    double fAlpha)
+{
+    return mxImpl->drawTransformedBitmap( rNull, rX, rY, rSourceBitmap, pAlphaBitmap, fAlpha );
+}
+
 bool X11SalGraphics::hasFastDrawTransformedBitmap() const
 {
     return mxImpl->hasFastDrawTransformedBitmap();
