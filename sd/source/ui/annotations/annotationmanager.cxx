@@ -28,7 +28,6 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/weld.hxx>
 
 #include <sal/macros.h>

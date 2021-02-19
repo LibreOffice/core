@@ -26,7 +26,6 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
-#include <vcl/menu.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <tools/svborder.hxx>

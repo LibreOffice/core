@@ -26,7 +26,6 @@
 #include "PreviewValueSet.hxx"
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
-#include <vcl/menu.hxx>
 
 #include <osl/mutex.hxx>
 
