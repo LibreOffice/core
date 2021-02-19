@@ -465,6 +465,41 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
+    void testDrawTransformedBitmapExAlpha()
+    {
+        ScopedVclPtrInstance<VirtualDevice> device;
+        device->SetOutputSizePixel(Size(16, 16));
+        device->SetBackground(Wallpaper(COL_WHITE));
+        device->Erase();
+        Bitmap aBitmap(Size(16, 16), 24);
+        {
+            // Fill the top left quarter with black.
+            BitmapScopedWriteAccess pWriteAccess(aBitmap);
+            pWriteAccess->Erase(COL_WHITE);
+            for (int i = 0; i < 8; ++i)
+                for (int j = 0; j < 8; ++j)
+                    pWriteAccess->SetPixel(j, i, COL_BLACK);
+        }
+        BitmapEx aBitmapEx(aBitmap);
+        basegfx::B2DHomMatrix aMatrix;
+        // Draw with no transformation, only alpha change.
+        aMatrix.scale(16, 16);
+        device->DrawTransformedBitmapEx(aMatrix, aBitmapEx, 0.5);
+        BitmapEx result = device->GetBitmapEx(Point(0, 0), Size(16, 16));
+        CPPUNIT_ASSERT_EQUAL(Color(0x80, 0x80, 0x80), result.GetPixelColor(0, 0));
+        CPPUNIT_ASSERT_EQUAL(COL_WHITE, result.GetPixelColor(15, 15));
+        // Draw rotated and move to the bottom-left corner.
+        device->Erase();
+        aMatrix.identity();
+        aMatrix.scale(16, 16);
+        aMatrix.rotate(M_PI / 2);
+        aMatrix.translate(8, 8);
+        device->DrawTransformedBitmapEx(aMatrix, aBitmapEx, 0.5);
+        result = device->GetBitmap(Point(0, 0), Size(16, 16));
+        CPPUNIT_ASSERT_EQUAL(COL_WHITE, result.GetPixelColor(0, 0));
+        CPPUNIT_ASSERT_EQUAL(Color(0x80, 0x80, 0x80), result.GetPixelColor(0, 15));
+    }
+
     void testClipRectangle()
     {
         vcl::test::OutputDeviceTestClip aOutDevTest;
@@ -877,6 +912,7 @@ public:
     CPPUNIT_TEST(testDrawMask);
     CPPUNIT_TEST(testDrawBlend);
     CPPUNIT_TEST(testDrawXor);
+    CPPUNIT_TEST(testDrawTransformedBitmapExAlpha);
 
     CPPUNIT_TEST(testClipRectangle);
     CPPUNIT_TEST(testClipPolygon);

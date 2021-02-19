@@ -626,8 +626,10 @@ bool Qt5Graphics::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rS
 
 bool Qt5Graphics::drawTransformedBitmap(const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX,
                                         const basegfx::B2DPoint& rY, const SalBitmap& rSourceBitmap,
-                                        const SalBitmap* pAlphaBitmap)
+                                        const SalBitmap* pAlphaBitmap, double fAlpha)
 {
+    if (fAlpha != 1.0)
+        return false;
     QImage aImage;
     if (pAlphaBitmap && !getAlphaImage(rSourceBitmap, *pAlphaBitmap, aImage))
         return false;

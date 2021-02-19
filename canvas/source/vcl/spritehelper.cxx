@@ -210,28 +210,7 @@ namespace vclcanvas
         aMoveTransform.translate( aOutPos.X(), aOutPos.Y() );
         aTransform = aMoveTransform * aTransform * aSizeTransform;
 
-        if( ::rtl::math::approxEqual(fAlpha, 1.0) )
-        {
-            // no alpha modulation -> just copy to output
-            rTargetSurface.DrawTransformedBitmapEx( aTransform, *maContent );
-        }
-        else
-        {
-            // TODO(P3): Switch to OutputDevice::DrawTransparent()
-            // here
-
-            // draw semi-transparent
-            sal_uInt8 nColor( static_cast<sal_uInt8>( ::basegfx::fround( 255.0*(1.0 - fAlpha) + .5) ) );
-            AlphaMask aAlpha( maContent->GetSizePixel(),
-                              &nColor );
-
-            // mask out fully transparent areas
-            if( maContent->IsTransparent() )
-                aAlpha.Replace( maContent->GetMask(), 255 );
-
-            // alpha-blend to output
-            rTargetSurface.DrawTransformedBitmapEx( aTransform, BitmapEx( maContent->GetBitmap(), aAlpha ) );
-        }
+        rTargetSurface.DrawTransformedBitmapEx( aTransform, *maContent, fAlpha );
 
         rTargetSurface.Pop();
 

@@ -414,6 +414,7 @@ public:
                                     const basegfx::B2DPoint& rY,
                                     const SalBitmap& rSourceBitmap,
                                     const SalBitmap* pAlphaBitmap,
+                                    double fAlpha,
                                     const OutputDevice& rOutDev );
 
     bool                        HasFastDrawTransformedBitmap() const;
@@ -574,13 +575,17 @@ protected:
                                     const SalBitmap& rSourceBitmap,
                                     const SalBitmap& rAlphaBitmap ) = 0;
 
-    /** draw transformed bitmap (maybe with alpha) where Null, X, Y define the coordinate system */
+    /** draw transformed bitmap (maybe with alpha) where Null, X, Y define the coordinate system
+
+      @param fAlpha additional alpha (0 to 1) to apply while drawing
+    */
     virtual bool                drawTransformedBitmap(
                                     const basegfx::B2DPoint& rNull,
                                     const basegfx::B2DPoint& rX,
                                     const basegfx::B2DPoint& rY,
                                     const SalBitmap& rSourceBitmap,
-                                    const SalBitmap* pAlphaBitmap) = 0;
+                                    const SalBitmap* pAlphaBitmap,
+                                    double fAlpha) = 0;
 
     /// Used e.g. by canvas to know whether to cache the drawing.
     virtual bool hasFastDrawTransformedBitmap() const = 0;

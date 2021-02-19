@@ -1052,7 +1052,8 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
 
 bool OutputDevice::DrawTransformBitmapExDirect(
         const basegfx::B2DHomMatrix& aFullTransform,
-        const BitmapEx& rBitmapEx)
+        const BitmapEx& rBitmapEx,
+        double fAlpha)
 {
     assert(!is_double_buffered_window());
 
@@ -1090,14 +1091,15 @@ bool OutputDevice::DrawTransformBitmapExDirect(
         aTopY,
         *pSalSrcBmp,
         pSalAlphaBmp,
+        fAlpha,
         *this);
 
     if (mpAlphaVDev)
     {
         // Merge bitmap alpha to alpha device
-        AlphaMask aBlack(rBitmapEx.GetSizePixel());
-        aBlack.Erase(0); // opaque
-        mpAlphaVDev->DrawTransformBitmapExDirect(aFullTransform, BitmapEx(aBlack, aAlphaBitmap));
+        AlphaMask aAlpha(rBitmapEx.GetSizePixel());
+        aAlpha.Erase( ( 1 - fAlpha ) * 255 );
+        mpAlphaVDev->DrawTransformBitmapExDirect(aFullTransform, BitmapEx(aAlpha, aAlphaBitmap));
     }
 
     return bDone;
@@ -1212,7 +1214,8 @@ struct LocalTimeTest
 
 void OutputDevice::DrawTransformedBitmapEx(
     const basegfx::B2DHomMatrix& rTransformation,
-    const BitmapEx& rBitmapEx)
+    const BitmapEx& rBitmapEx,
+    double fAlpha)
 {
     assert(!is_double_buffered_window());
 
@@ -1220,6 +1223,9 @@ void OutputDevice::DrawTransformedBitmapEx(
         return;
 
     if(rBitmapEx.IsEmpty())
+        return;
+
+    if(rtl::math::approxEqual( fAlpha, 0.0 ))
         return;
 
     // MM02 compared to other public methods of OutputDevice
@@ -1254,6 +1260,38 @@ void OutputDevice::DrawTransformedBitmapEx(
         : nullptr);
 #endif
 
+    BitmapEx bitmapEx = rBitmapEx;
+
+    const bool bInvert(RasterOp::Invert == meRasterOp);
+    const bool bBitmapChangedColor(mnDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap | DrawModeFlags::GrayBitmap ));
+    const bool bTryDirectPaint(!bInvert && !bBitmapChangedColor && !bMetafile);
+
+    // First try to handle additional alpha blending, either directly, or modify the bitmap.
+    if(!rtl::math::approxEqual( fAlpha, 1.0 ))
+    {
+        if(bTryDirectPaint)
+        {
+            // tdf#130768 CAUTION(!) using GetViewTransformation() is *not* enough here, it may
+            // be that mnOutOffX/mnOutOffY is used - see AOO bug 75163, mentioned at
+            // ImplGetDeviceTransformation declaration
+            const basegfx::B2DHomMatrix aFullTransform(ImplGetDeviceTransformation() * rTransformation);
+
+            if(DrawTransformBitmapExDirect(aFullTransform, bitmapEx, fAlpha))
+            {
+                // we are done
+                return;
+            }
+        }
+        // Apply the alpha manually.
+        sal_uInt8 nColor( static_cast<sal_uInt8>( ::basegfx::fround( 255.0*(1.0 - fAlpha) + .5) ) );
+        AlphaMask aAlpha( bitmapEx.GetSizePixel(), &nColor );
+        if( bitmapEx.IsTransparent())
+            aAlpha.BlendWith( bitmapEx.GetAlpha());
+        bitmapEx = BitmapEx( bitmapEx.GetBitmap(), aAlpha );
+    }
+    if(rtl::math::approxEqual( fAlpha, 1.0 ))
+        fAlpha = 1.0; // avoid the need for approxEqual in backends
+
     // decompose matrix to check rotation and shear
     basegfx::B2DVector aScale, aTranslate;
     double fRotate, fShearX;
@@ -1279,7 +1317,7 @@ void OutputDevice::DrawTransformedBitmapEx(
             EnableMapMode(false);
         }
 
-        DrawBitmapEx(aDestPt, aDestSize, rBitmapEx);
+        DrawBitmapEx(aDestPt, aDestSize, bitmapEx);
         if (!bMetafile && comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
         {
             EnableMapMode();
@@ -1288,9 +1326,6 @@ void OutputDevice::DrawTransformedBitmapEx(
         return;
     }
 
-    const bool bInvert(RasterOp::Invert == meRasterOp);
-    const bool bBitmapChangedColor(mnDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap | DrawModeFlags::GrayBitmap ));
-    const bool bTryDirectPaint(!bInvert && !bBitmapChangedColor && !bMetafile);
     if(bTryDirectPaint)
     {
         // tdf#130768 CAUTION(!) using GetViewTransformation() is *not* enough here, it may
@@ -1298,7 +1333,7 @@ void OutputDevice::DrawTransformedBitmapEx(
         // ImplGetDeviceTransformation declaration
         const basegfx::B2DHomMatrix aFullTransform(ImplGetDeviceTransformation() * rTransformation);
 
-        if(DrawTransformBitmapExDirect(aFullTransform, rBitmapEx))
+        if(DrawTransformBitmapExDirect(aFullTransform, bitmapEx))
         {
             // we are done
             return;
@@ -1316,7 +1351,7 @@ void OutputDevice::DrawTransformedBitmapEx(
             basegfx::fround(aScale.getX() + aTranslate.getX()) - aDestPt.X(),
             basegfx::fround(aScale.getY() + aTranslate.getY()) - aDestPt.Y());
 
-        DrawBitmapEx(aDestPt, aDestSize, rBitmapEx);
+        DrawBitmapEx(aDestPt, aDestSize, bitmapEx);
         return;
     }
 
@@ -1331,7 +1366,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     // by using a fixed minimum (allow at least, but no need to utilize) for good smoothing and an area
     // dependent of original size for good quality when e.g. rotated/sheared. Still, limit to a maximum
     // to avoid crashes/resource problems (ca. 1500x3000 here)
-    const Size& rOriginalSizePixel(rBitmapEx.GetSizePixel());
+    const Size& rOriginalSizePixel(bitmapEx.GetSizePixel());
     const double fOrigArea(rOriginalSizePixel.Width() * rOriginalSizePixel.Height() * 0.5);
     const double fOrigAreaScaled(fOrigArea * 1.44);
     double fMaximumArea(std::clamp(fOrigAreaScaled, 1000000.0, 4500000.0));
@@ -1349,7 +1384,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     if(aVisibleRange.isEmpty())
         return;
 
-    BitmapEx aTransformed(rBitmapEx);
+    BitmapEx aTransformed(bitmapEx);
 
     // #122923# when the result needs an alpha channel due to being rotated or sheared
     // and thus uncovering areas, add these channels so that the own transformer (used

@@ -752,13 +752,17 @@ bool SvpSalGraphics::drawTransformedBitmap(
     const basegfx::B2DPoint& rX,
     const basegfx::B2DPoint& rY,
     const SalBitmap& rSourceBitmap,
-    const SalBitmap* pAlphaBitmap)
+    const SalBitmap* pAlphaBitmap,
+    double fAlpha)
 {
     if (pAlphaBitmap && pAlphaBitmap->GetBitCount() != 8 && pAlphaBitmap->GetBitCount() != 1)
     {
         SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawTransformedBitmap alpha depth case: " << pAlphaBitmap->GetBitCount());
         return false;
     }
+
+    if( fAlpha != 1.0 )
+        return false;
 
     // MM02 try to access buffered BitmapHelper
     std::shared_ptr<BitmapHelper> aSurface;
