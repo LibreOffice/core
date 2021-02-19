@@ -5589,68 +5589,99 @@ PlaceholderShape.prototype.isValid = function()
  */
 PlaceholderShape.prototype.init = function()
 {
-
     var aTextFieldElement = getElementByClassName( this.masterPage.backgroundObjects, this.className );
     if( aTextFieldElement )
     {
-        var aPlaceholderElement = getElementByClassName( aTextFieldElement, 'PlaceholderText' );
-        if( aPlaceholderElement )
+        var aTextElem = getElementByClassName( aTextFieldElement, 'SVGTextShape' );
+        if( aTextElem )
         {
-            // Each text field element has an invisible rectangle that can be
-            // regarded as the text field bounding box.
-            // We exploit such a feature and the exported text adjust attribute
-            // value in order to set up correctly the position and text
-            // adjustment for the placeholder element.
-            var aSVGRectElem = getElementByClassName( aTextFieldElement, 'BoundingBox' );
-            if( aSVGRectElem )
+            var aPlaceholderElement = getElementByClassName(aTextElem, 'PlaceholderText');
+            if( aPlaceholderElement )
             {
-                var aRect = new Rectangle( aSVGRectElem );
-                var sTextAdjust = getOOOAttribute( aTextFieldElement, aOOOAttrTextAdjust ) || 'left';
-                var sTextAnchor, sX;
-                if( sTextAdjust == 'left' )
+                // SVG 1.1 does not support text wrapping wrt a rectangle.
+                // When a text shape contains a placeholder, setting up the position
+                // of each text line doesn't work since the position is computed
+                // before replacing the placeholder text.
+                // Anyway each text shape has an invisible rectangle that can be
+                // regarded as the text shape bounding box.
+                // We exploit such a feature and the exported text adjust attribute
+                // value in order to set up correctly the position and text
+                // adjustment for the text shape content.
+                // We assume that once the real value has been substituted to
+                // the placeholder the resulting content is no more than a single line.
+                // So we remove from <tspan> elements used for setting up the
+                // position of text lines (class TextPosition) the 'x' and 'y' attribute.
+                // In the general case we would need to implement a function
+                // which is able to compute at which words the text shape content has
+                // to be wrapped.
+                var aSVGRectElem = getElementByClassName( aTextFieldElement, 'BoundingBox' );
+                if( aSVGRectElem )
                 {
-                    sTextAnchor = 'start';
-                    sX = String( aRect.left );
-                }
-                else if( sTextAdjust == 'right' )
-                {
-                    sTextAnchor = 'end';
-                    sX = String( aRect.right );
-                }
-                else if( sTextAdjust == 'center' )
-                {
-                    sTextAnchor = 'middle';
-                    var nMiddle = ( aRect.left + aRect.right ) / 2;
-                    sX = String( parseInt( String( nMiddle ) ) );
-                }
-                if( sTextAnchor )
-                    aPlaceholderElement.setAttribute( 'text-anchor', sTextAnchor );
-                if( sX )
-                    aPlaceholderElement.setAttribute( 'x', sX );
-            }
-
-            // date/time fields were not exported correctly when positioned chars are used
-            if( this.masterPage.metaSlide.theMetaDoc.bIsUsePositionedChars )
-            {
-                // We remove all text lines but the first one used as placeholder.
-                var aTextLineGroupElem = aPlaceholderElement.parentNode.parentNode;
-                if( aTextLineGroupElem )
-                {
-                    // Just to be sure it is the element we are looking for.
-                    var sFontFamilyAttr = aTextLineGroupElem.getAttribute( 'font-family' );
-                    if( sFontFamilyAttr )
+                    var aRect = new Rectangle( aSVGRectElem );
+                    var sTextAdjust = getOOOAttribute( aTextFieldElement, aOOOAttrTextAdjust );
+                    // the bbox of the text shape is indeed a bit larger, there is a bit of internal padding
+                    var nMargin = 250; // 1000th mm
+                    var sTextAnchor, sX;
+                    if( sTextAdjust == 'left' )
                     {
-                        var aChildSet = getElementChildren( aTextLineGroupElem );
-                        if( aChildSet.length > 1  )
-                            var i = 1;
-                        for( ; i < aChildSet.length; ++i )
+                        sTextAnchor = 'start';
+                        sX = String( Math.trunc( aRect.left + nMargin ) );
+                    }
+                    else if( sTextAdjust == 'right' )
+                    {
+                        sTextAnchor = 'end';
+                        sX = String( Math.trunc( aRect.right - nMargin ) );
+                    }
+                    else if( sTextAdjust == 'center' )
+                    {
+                        sTextAnchor = 'middle';
+                        var nMiddle = ( aRect.left + aRect.right ) / 2;
+                        sX = String( parseInt( String( nMiddle ) ) );
+                    }
+                    if( sTextAnchor )
+                    {
+                        aTextElem.setAttribute( 'text-anchor', sTextAnchor );
+                        if( sX )
+                            aTextElem.setAttribute( 'x', sX );
+
+                        var aTSpanElements = getElementsByClassName( aTextElem, 'TextPosition' );
+                        if( aTSpanElements )
                         {
-                            aTextLineGroupElem.removeChild( aChildSet[i] );
+                            var i = 0;
+                            for( ; i < aTSpanElements.length; ++i )
+                            {
+                                var aTSpanElem = aTSpanElements[i];
+                                aTSpanElem.removeAttribute( 'x' );
+                                if( i !== 0 )
+                                    aTSpanElem.removeAttribute( 'y' );
+                            }
                         }
                     }
                 }
+
+                // date/time fields were not exported correctly when positioned chars are used
+                if( this.masterPage.metaSlide.theMetaDoc.bIsUsePositionedChars )
+                {
+                    // We remove all text lines but the first one used as placeholder.
+                    var aTextLineGroupElem = aPlaceholderElement.parentNode.parentNode;
+                    if( aTextLineGroupElem )
+                    {
+                        // Just to be sure it is the element we are looking for.
+                        var sFontFamilyAttr = aTextLineGroupElem.getAttribute( 'font-family' );
+                        if( sFontFamilyAttr )
+                        {
+                            var aChildSet = getElementChildren( aTextLineGroupElem );
+                            if( aChildSet.length > 1 )
+                                var i = 1;
+                            for( ; i < aChildSet.length; ++i )
+                            {
+                                aTextLineGroupElem.removeChild( aChildSet[i] );
+                            }
+                        }
+                    }
+                }
+                this.textElement = aPlaceholderElement;
             }
-            this.textElement = aPlaceholderElement;
         }
         this.element = aTextFieldElement;
     }

@@ -2110,14 +2110,18 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
                         bool bIsPageNumber  = ( aShapeClass == "Slide_Number" );
                         bool bIsFooter      = ( aShapeClass == "Footer" );
                         bool bIsDateTime    = ( aShapeClass == "Date/Time" );
-                        if( bIsPageNumber || bIsDateTime || bIsFooter )
+                        bool bTextField = bIsPageNumber || bIsFooter || bIsDateTime;
+                        if( bTextField )
                         {
                             // to notify to the SVGActionWriter::ImplWriteActions method
                             // that we are dealing with a placeholder shape
                             pElementId = &sPlaceholderTag;
 
                             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", "hidden" );
+                        }
 
+                        if( bTextField || ( aShapeClass == "TextShape" ) )
+                        {
                             sal_uInt16 nTextAdjust = sal_uInt16(ParagraphAdjust_LEFT);
                             OUString sTextAdjust;
                             xShapePropSet->getPropertyValue( "ParaAdjust" ) >>= nTextAdjust;
