@@ -67,10 +67,12 @@
 #include "PaneHider.hxx"
 
 #include <bitmaps.hlst>
-#include <vcl/builder.hxx>
+#include <strings.hrc>
+#include <sdresid.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/weldutils.hxx>
 
 #include <vcl/settings.hxx>
 #include <vcl/scheduler.hxx>
@@ -1942,119 +1944,102 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
     if( !mbWasPaused )
         pause();
 
-    VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "modules/simpress/ui/slidecontextmenu.ui", "");
-    VclPtr<PopupMenu> pMenu(aBuilder.get_menu("menu"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/simpress/ui/slidecontextmenu.ui"));
+    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
+    OUString sNextImage(BMP_MENU_NEXT), sPrevImage(BMP_MENU_PREV);
+    xMenu->insert(0, "next", SdResId(RID_SVXSTR_MENU_NEXT), &sNextImage, nullptr, nullptr, TRISTATE_INDET);
+    xMenu->insert(1, "prev", SdResId(RID_SVXSTR_MENU_PREV), &sPrevImage, nullptr, nullptr, TRISTATE_INDET);
 
     // Adding button to display if in Pen  mode
-    pMenu->CheckItem("pen", mbUsePen);
+    xMenu->set_active("pen", mbUsePen);
 
     const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
-    pMenu->EnableItem(pMenu->GetItemId("next"), mpSlideController->getNextSlideIndex() != -1);
-    pMenu->EnableItem(pMenu->GetItemId("prev"), (mpSlideController->getPreviousSlideIndex() != -1 ) || (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK));
-    pMenu->EnableItem(pMenu->GetItemId("edit"), mpViewShell->GetDoc()->IsStartWithPresentation());
+    xMenu->set_visible("next", mpSlideController->getNextSlideIndex() != -1);
+    xMenu->set_visible("prev", (mpSlideController->getPreviousSlideIndex() != -1 ) || (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK));
+    xMenu->set_visible("edit", mpViewShell->GetDoc()->IsStartWithPresentation());
 
-    PopupMenu* pPageMenu = pMenu->GetPopupMenu(pMenu->GetItemId("goto"));
-
-    SfxViewFrame* pViewFrame = getViewFrame();
-    if( pViewFrame )
-    {
-        Reference< css::frame::XFrame > xFrame( pViewFrame->GetFrame().GetFrameInterface() );
-        if( xFrame.is() )
-        {
-            pMenu->SetItemImage(pMenu->GetItemId("next"), vcl::CommandInfoProvider::GetImageForCommand(".uno:NextRecord", xFrame));
-            pMenu->SetItemImage(pMenu->GetItemId("prev"), vcl::CommandInfoProvider::GetImageForCommand(".uno:PrevRecord", xFrame));
-
-            if( pPageMenu )
-            {
-                pPageMenu->SetItemImage(pPageMenu->GetItemId("first"), vcl::CommandInfoProvider::GetImageForCommand(".uno:FirstRecord", xFrame));
-                pPageMenu->SetItemImage(pPageMenu->GetItemId("last"), vcl::CommandInfoProvider::GetImageForCommand(".uno:LastRecord", xFrame));
-            }
-        }
-    }
+    std::unique_ptr<weld::Menu> xPageMenu(xBuilder->weld_menu("gotomenu"));
+    OUString sFirstImage(BMP_MENU_FIRST), sLastImage(BMP_MENU_LAST);
+    xPageMenu->insert(0, "first", SdResId(RID_SVXSTR_MENU_FIRST), &sFirstImage, nullptr, nullptr, TRISTATE_INDET);
+    xPageMenu->insert(1, "last", SdResId(RID_SVXSTR_MENU_LAST), &sLastImage, nullptr, nullptr, TRISTATE_INDET);
 
     // populate slide goto list
-    if( pPageMenu )
+    const sal_Int32 nPageNumberCount = mpSlideController->getSlideNumberCount();
+    if( nPageNumberCount <= 1 )
     {
-        const sal_Int32 nPageNumberCount = mpSlideController->getSlideNumberCount();
-        if( nPageNumberCount <= 1 )
+        xMenu->set_visible("goto", false);
+    }
+    else
+    {
+        sal_Int32 nCurrentSlideNumber = mpSlideController->getCurrentSlideNumber();
+        if( (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) )
+            nCurrentSlideNumber = -1;
+
+        xPageMenu->set_visible("first", mpSlideController->getSlideNumber(0) != nCurrentSlideNumber);
+        xPageMenu->set_visible("last", mpSlideController->getSlideNumber(mpSlideController->getSlideIndexCount() - 1) != nCurrentSlideNumber);
+
+        sal_Int32 nPageNumber;
+
+        for( nPageNumber = 0; nPageNumber < nPageNumberCount; nPageNumber++ )
         {
-            pMenu->EnableItem(pMenu->GetItemId("goto"), false);
-        }
-        else
-        {
-            sal_Int32 nCurrentSlideNumber = mpSlideController->getCurrentSlideNumber();
-            if( (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) )
-                nCurrentSlideNumber = -1;
-
-            pPageMenu->EnableItem(pPageMenu->GetItemId("first"), mpSlideController->getSlideNumber(0) != nCurrentSlideNumber);
-            pPageMenu->EnableItem(pPageMenu->GetItemId("last"), mpSlideController->getSlideNumber(mpSlideController->getSlideIndexCount() - 1) != nCurrentSlideNumber);
-
-            sal_Int32 nPageNumber;
-
-            for( nPageNumber = 0; nPageNumber < nPageNumberCount; nPageNumber++ )
+            if( mpSlideController->isVisibleSlideNumber( nPageNumber ) )
             {
-                if( mpSlideController->isVisibleSlideNumber( nPageNumber ) )
+                SdPage* pPage = mpDoc->GetSdPage(static_cast<sal_uInt16>(nPageNumber), PageKind::Standard);
+                if (pPage)
                 {
-                    SdPage* pPage = mpDoc->GetSdPage(static_cast<sal_uInt16>(nPageNumber), PageKind::Standard);
-                    if (pPage)
-                    {
-                        pPageMenu->InsertItem( static_cast<sal_uInt16>(CM_SLIDES + nPageNumber), pPage->GetName() );
-                        if( nPageNumber == nCurrentSlideNumber )
-                            pPageMenu->CheckItem( static_cast<sal_uInt16>(CM_SLIDES + nPageNumber) );
-                    }
+                    OUString sId(OUString::number(CM_SLIDES + nPageNumber));
+                    xPageMenu->append_check(sId, pPage->GetName());
+                    if (nPageNumber == nCurrentSlideNumber)
+                        xPageMenu->set_active(sId.toUtf8(), true);
                 }
             }
         }
     }
 
-    if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_BLANK )
+    std::unique_ptr<weld::Menu> xBlankMenu(xBuilder->weld_menu("screenmenu"));
+
+    if (mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_BLANK)
     {
-        PopupMenu* pBlankMenu = pMenu->GetPopupMenu(pMenu->GetItemId("screen"));
-        if( pBlankMenu )
-        {
-            pBlankMenu->CheckItem((mpShowWindow->GetBlankColor() == COL_WHITE) ? "white" : "black");
-        }
+        xBlankMenu->set_active((mpShowWindow->GetBlankColor() == COL_WHITE) ? "white" : "black", true);
     }
 
-    PopupMenu* pWidthMenu = pMenu->GetPopupMenu(pMenu->GetItemId("width"));
+    std::unique_ptr<weld::Menu> xWidthMenu(xBuilder->weld_menu("widthmenu"));
 
     // populate color width list
-    if( pWidthMenu )
+    sal_Int32 nIterator;
+    double nWidth;
+
+    nWidth = 4.0;
+    for( nIterator = 1; nIterator < 6; nIterator++)
     {
-        sal_Int32 nIterator;
-        double nWidth;
-
-        nWidth = 4.0;
-        for( nIterator = 1; nIterator < 6; nIterator++)
+        switch(nIterator)
         {
-            switch(nIterator)
-            {
-                case 1:
-                    nWidth = 4.0;
-                    break;
-                case 2:
-                    nWidth = 100.0;
-                    break;
-                case 3:
-                    nWidth = 150.0;
-                    break;
-                case 4:
-                    nWidth = 200.0;
-                    break;
-                case 5:
-                    nWidth = 400.0;
-                    break;
-                default:
-                    break;
-            }
-
-            if (nWidth == mdUserPaintStrokeWidth)
-                pWidthMenu->CheckItem(OString::number(nWidth));
+            case 1:
+                nWidth = 4.0;
+                break;
+            case 2:
+                nWidth = 100.0;
+                break;
+            case 3:
+                nWidth = 150.0;
+                break;
+            case 4:
+                nWidth = 200.0;
+                break;
+            case 5:
+                nWidth = 400.0;
+                break;
+            default:
+                break;
         }
+
+        if (nWidth == mdUserPaintStrokeWidth)
+            xWidthMenu->set_active(OString::number(nWidth), true);
     }
 
-    pMenu->SetSelectHdl( LINK( this, SlideshowImpl, ContextMenuSelectHdl ) );
-    pMenu->Execute( mpShowWindow, maPopupMousePos );
+    ::tools::Rectangle aRect(maPopupMousePos, Size(1,1));
+    weld::Window* pParent = weld::GetPopupParent(*mpShowWindow, aRect);
+    ContextMenuSelectHdl(xMenu->popup_at_rect(pParent, aRect));
 
     if( mxView.is() )
         mxView->ignoreNextMouseReleased();
@@ -2063,36 +2048,31 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
         resume();
 }
 
-IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu, bool )
+void SlideshowImpl::ContextMenuSelectHdl(const OString& rMenuId)
 {
-    if (!pMenu)
-        return false;
-
-    OString sMenuId = pMenu->GetCurItemIdent();
-
-    if (sMenuId == "prev")
+    if (rMenuId == "prev")
     {
         gotoPreviousSlide();
         mbWasPaused = false;
     }
-    else if(sMenuId == "next")
+    else if(rMenuId == "next")
     {
         gotoNextSlide();
         mbWasPaused = false;
     }
-    else if (sMenuId == "first")
+    else if (rMenuId == "first")
     {
         gotoFirstSlide();
         mbWasPaused = false;
     }
-    else if (sMenuId == "last")
+    else if (rMenuId == "last")
     {
         gotoLastSlide();
         mbWasPaused = false;
     }
-    else if (sMenuId == "black" || sMenuId == "white")
+    else if (rMenuId == "black" || rMenuId == "white")
     {
-        const Color aBlankColor(sMenuId == "white" ? COL_WHITE : COL_BLACK);
+        const Color aBlankColor(rMenuId == "white" ? COL_WHITE : COL_BLACK);
         if( mbWasPaused )
         {
             if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_BLANK )
@@ -2101,7 +2081,7 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu, bool )
                 {
                     mbWasPaused = false;
                     mpShowWindow->RestartShow();
-                    return false;
+                    return;
                 }
             }
             mpShowWindow->RestartShow();
@@ -2112,7 +2092,7 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu, bool )
             mbWasPaused = true;
         }
     }
-    else if (sMenuId == "color")
+    else if (rMenuId == "color")
     {
         //Open a color picker based on SvColorDialog
         ::Color aColor( ColorTransparency, mnUserPaintColor );
@@ -2126,42 +2106,42 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu, bool )
         }
         mbWasPaused = false;
     }
-    else if (sMenuId == "4")
+    else if (rMenuId == "4")
     {
         setPenWidth(4.0);
         mbWasPaused = false;
     }
-    else if (sMenuId == "100")
+    else if (rMenuId == "100")
     {
         setPenWidth(100.0);
         mbWasPaused = false;
     }
-    else if (sMenuId == "150")
+    else if (rMenuId == "150")
     {
         setPenWidth(150.0);
         mbWasPaused = false;
     }
-    else if (sMenuId == "200")
+    else if (rMenuId == "200")
     {
         setPenWidth(200.0);
         mbWasPaused = false;
     }
-    else if (sMenuId == "400")
+    else if (rMenuId == "400")
     {
         setPenWidth(400.0);
         mbWasPaused = false;
     }
-    else if (sMenuId == "erase")
+    else if (rMenuId == "erase")
     {
         setEraseAllInk(true);
         mbWasPaused = false;
     }
-    else if (sMenuId == "pen")
+    else if (rMenuId == "pen")
     {
         setUsePen(!mbUsePen);
         mbWasPaused = false;
     }
-    else if (sMenuId == "edit")
+    else if (rMenuId == "edit")
     {
         // When in autoplay mode (pps/ppsx), offer editing of the presentation
         // Turn autostart off, else Impress will close when exiting the Presentation
@@ -2175,7 +2155,7 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu, bool )
         }
         endPresentation();
     }
-    else if (sMenuId == "end")
+    else if (rMenuId == "end")
     {
         // in case the user cancels the presentation, switch to current slide
         // in edit mode
@@ -2188,9 +2168,9 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu, bool )
         }
         endPresentation();
     }
-    else
+    else if (!rMenuId.isEmpty())
     {
-        sal_Int32 nPageNumber = pMenu->GetCurItemId() - CM_SLIDES;
+        sal_Int32 nPageNumber = rMenuId.toInt32() - CM_SLIDES;
         const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
         if( (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) )
         {
@@ -2202,8 +2182,6 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu, bool )
         }
         mbWasPaused = false;
     }
-
-    return false;
 }
 
 Reference< XSlideShow > SlideshowImpl::createSlideShow()
