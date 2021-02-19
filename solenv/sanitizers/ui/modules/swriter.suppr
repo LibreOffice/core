@@ -1,6 +1,7 @@
 sw/uiconfig/swriter/ui/abstractdialog.ui://GtkLabel[@id='label4'] orphan-label
 sw/uiconfig/swriter/ui/addentrydialog.ui://GtkEntry[@id='entry'] no-labelled-by
 sw/uiconfig/swriter/ui/annotation.ui://GtkDrawingArea[@id='editview'] no-labelled-by
+sw/uiconfig/swriter/ui/annotation.ui://GtkMenuButton[@id='menubutton'] button-no-label
 sw/uiconfig/swriter/ui/asciifilterdialog.ui://GtkLabel[@id='label5'] orphan-label
 sw/uiconfig/swriter/ui/authenticationsettingsdialog.ui://GtkLabel[@id='label1'] orphan-label
 sw/uiconfig/swriter/ui/authenticationsettingsdialog.ui://GtkLabel[@id='label2'] orphan-label

@@ -2,6 +2,12 @@
 <!-- Generated with glade 3.38.2 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.20"/>
+  <object class="GtkImage" id="image7">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">sfx2/res/menu.png</property>
+    <property name="icon_size">2</property>
+  </object>
   <object class="GtkMenu" id="menu">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -206,19 +212,16 @@
         <child>
           <object class="GtkMenuButton" id="menubutton">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="focus-on-click">False</property>
-            <property name="label" translatable="no"></property>
-            <property name="receives-default">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="popup">menu</property>
+            <property name="image">image7</property>
+            <property name="always_show_image">True</property>
+            <property name="relief">none</property>
             <property name="valign">start</property>
             <property name="margin-end">10</property>
             <property name="margin-top">5</property>
-            <property name="relief">none</property>
-            <property name="draw-indicator">True</property>
-            <property name="popup">menu</property>
-            <child>
-              <placeholder/>
-            </child>
+            <property name="use_popover">False</property>
             <style>
               <class name="small-button"/>
             </style>
