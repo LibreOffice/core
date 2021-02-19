@@ -605,7 +605,7 @@ std::unique_ptr<SfxStyleSheetIterator> SfxStyleSheetBasePool::CreateIterator
     return std::make_unique<SfxStyleSheetIterator>(this,eFam,mask);
 }
 
-SfxStyleSheetBase* SfxStyleSheetBasePool::Create
+rtl::Reference<SfxStyleSheetBase> SfxStyleSheetBasePool::Create
 (
     const OUString& rName,
     SfxStyleFamily eFam,
@@ -873,7 +873,7 @@ SfxStyleSheetPool::SfxStyleSheetPool( SfxItemPool const& rSet)
 {
 }
 
-SfxStyleSheetBase* SfxStyleSheetPool::Create( const OUString& rName,
+rtl::Reference<SfxStyleSheetBase> SfxStyleSheetPool::Create( const OUString& rName,
                                               SfxStyleFamily eFam, SfxStyleSearchBits mask )
 {
     return new SfxStyleSheet( rName, *this, eFam, mask );

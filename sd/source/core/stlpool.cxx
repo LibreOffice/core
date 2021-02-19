@@ -130,7 +130,7 @@ SdStyleSheetPool::~SdStyleSheetPool()
     DBG_ASSERT( mpDoc == nullptr, "sd::SdStyleSheetPool::~SdStyleSheetPool(), dispose me first!" );
 }
 
-SfxStyleSheetBase* SdStyleSheetPool::Create(const OUString& rName, SfxStyleFamily eFamily, SfxStyleSearchBits _nMask )
+rtl::Reference<SfxStyleSheetBase> SdStyleSheetPool::Create(const OUString& rName, SfxStyleFamily eFamily, SfxStyleSearchBits _nMask )
 {
     return new SdStyleSheet(rName, *this, eFamily, _nMask);
 }
