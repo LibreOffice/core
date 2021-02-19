@@ -275,7 +275,8 @@ void Printer::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask,
 
 bool Printer::DrawTransformBitmapExDirect(
     const basegfx::B2DHomMatrix& /*aFullTransform*/,
-    const BitmapEx& /*rBitmapEx*/)
+    const BitmapEx& /*rBitmapEx*/,
+    double /*fAlpha*/)
 {
     // printers can't draw bitmaps directly
     return false;

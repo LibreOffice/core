@@ -845,7 +845,8 @@ bool X11SalGraphicsImpl::drawTransformedBitmap(
     const basegfx::B2DPoint&,
     const basegfx::B2DPoint&,
     const SalBitmap&,
-    const SalBitmap*)
+    const SalBitmap*,
+    double)
 {
     // here direct support for transformed bitmaps can be implemented
     return false;

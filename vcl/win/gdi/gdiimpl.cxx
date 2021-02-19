@@ -2649,10 +2649,14 @@ bool WinSalGraphicsImpl::drawTransformedBitmap(
     const basegfx::B2DPoint& rX,
     const basegfx::B2DPoint& rY,
     const SalBitmap& rSourceBitmap,
-    const SalBitmap* pAlphaBitmap)
+    const SalBitmap* pAlphaBitmap,
+    double fAlpha)
 {
     assert(dynamic_cast<const WinSalBitmap*>(&rSourceBitmap));
     assert(!pAlphaBitmap || dynamic_cast<const WinSalBitmap*>(pAlphaBitmap));
+
+    if( fAlpha != 1.0 )
+        return false;
 
     const WinSalBitmap& rSalBitmap = static_cast< const WinSalBitmap& >(rSourceBitmap);
     const WinSalBitmap* pSalAlpha = static_cast< const WinSalBitmap* >(pAlphaBitmap);
