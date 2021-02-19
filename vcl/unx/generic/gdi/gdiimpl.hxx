@@ -270,7 +270,8 @@ public:
                 const basegfx::B2DPoint& rX,
                 const basegfx::B2DPoint& rY,
                 const SalBitmap& rSourceBitmap,
-                const SalBitmap* pAlphaBitmap) override;
+                const SalBitmap* pAlphaBitmap,
+                double fAlpha) override;
 
     virtual bool hasFastDrawTransformedBitmap() const override;
 

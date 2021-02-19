@@ -330,10 +330,13 @@ bool AquaSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
 
 bool AquaSalGraphics::drawTransformedBitmap(
     const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX, const basegfx::B2DPoint& rY,
-    const SalBitmap& rSrcBitmap, const SalBitmap* pAlphaBmp )
+    const SalBitmap& rSrcBitmap, const SalBitmap* pAlphaBmp, double fAlpha )
 {
     if( !CheckContext() )
         return true;
+
+    if( fAlpha != 1.0 )
+        return false;
 
     // get the Quartz image
     CGImageRef xImage = nullptr;

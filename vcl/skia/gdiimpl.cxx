@@ -1762,7 +1762,7 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
                                                 const basegfx::B2DPoint& rX,
                                                 const basegfx::B2DPoint& rY,
                                                 const SalBitmap& rSourceBitmap,
-                                                const SalBitmap* pAlphaBitmap)
+                                                const SalBitmap* pAlphaBitmap, double fAlpha)
 {
     assert(dynamic_cast<const SkiaSalBitmap*>(&rSourceBitmap));
     assert(!pAlphaBitmap || dynamic_cast<const SkiaSalBitmap*>(pAlphaBitmap));
@@ -1787,6 +1787,8 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
     // so use mergeCacheBitmaps(), which will cache the result if useful.
     // It is better to use SkShader if in GPU mode, if the operation is simple or if the temporary
     // image would be very large.
+    // The extra fAlpha blending is not cached, with the assumption that it usually gradually changes
+    // for each invocation.
     sk_sp<SkImage> imageToDraw = mergeCacheBitmaps(
         rSkiaBitmap, pSkiaAlphaBitmap, Size(round(aXRel.getLength()), round(aYRel.getLength())));
     if (imageToDraw)
@@ -1808,7 +1810,15 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
         SkPaint paint;
         if (!matrix.isTranslate())
             paint.setFilterQuality(kHigh_SkFilterQuality);
-        canvas->drawImage(imageToDraw, 0, 0, &paint);
+        if (fAlpha == 1.0)
+            canvas->drawImage(imageToDraw, 0, 0, &paint);
+        else
+        {
+            paint.setShader(
+                SkShaders::Blend(SkBlendMode::kDstIn, imageToDraw->makeShader(),
+                                 SkShaders::Color(SkColorSetARGB(fAlpha * 255, 0, 0, 0))));
+            canvas->drawRect(SkRect::MakeWH(imageToDraw->width(), imageToDraw->height()), paint);
+        }
     }
     else
     {
@@ -1831,11 +1841,19 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
             paint.setShader(SkShaders::Blend(SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
                                              rSkiaBitmap.GetSkShader(),
                                              pSkiaAlphaBitmap->GetAlphaSkShader()));
+            if (fAlpha != 1.0)
+                paint.setShader(
+                    SkShaders::Blend(SkBlendMode::kDstIn, paint.refShader(),
+                                     SkShaders::Color(SkColorSetARGB(fAlpha * 255, 0, 0, 0))));
             canvas->drawRect(SkRect::MakeWH(aSize.Width(), aSize.Height()), paint);
         }
-        else if (rSkiaBitmap.PreferSkShader())
+        else if (rSkiaBitmap.PreferSkShader() || fAlpha != 1.0)
         {
             paint.setShader(rSkiaBitmap.GetSkShader());
+            if (fAlpha != 1.0)
+                paint.setShader(
+                    SkShaders::Blend(SkBlendMode::kDstIn, paint.refShader(),
+                                     SkShaders::Color(SkColorSetARGB(fAlpha * 255, 0, 0, 0))));
             canvas->drawRect(SkRect::MakeWH(aSize.Width(), aSize.Height()), paint);
         }
         else

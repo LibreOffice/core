@@ -1480,10 +1480,14 @@ public:
 
         @param rBitmapEx
         The BitmapEx to be painted
+
+        @param fAlpha
+        Optional additional alpha to use for drawing (0 to 1, 1 being no change).
     */
     void                        DrawTransformedBitmapEx(
                                     const basegfx::B2DHomMatrix& rTransformation,
-                                    const BitmapEx& rBitmapEx);
+                                    const BitmapEx& rBitmapEx,
+                                    double fAlpha = 1.0);
 
     /** Return true if DrawTransformedBitmapEx() is fast.
 
@@ -1509,7 +1513,8 @@ protected:
      */
     virtual bool                DrawTransformBitmapExDirect(
                                     const basegfx::B2DHomMatrix& aFullTransform,
-                                    const BitmapEx& rBitmapEx);
+                                    const BitmapEx& rBitmapEx,
+                                    double fAlpha = 1.0);
 
     /** Transform and reduce the area that needs to be drawn of the bitmap and return the new
         visible range and the maximum area.

@@ -723,13 +723,14 @@ namespace vclcanvas
                 // itself serves this purpose
                 return uno::Reference< rendering::XCachedPrimitive >(nullptr);
             }
-            else if( !bModulateColors && mpOutDevProvider->getOutDev().HasFastDrawTransformedBitmap())
+            else if( mpOutDevProvider->getOutDev().HasFastDrawTransformedBitmap())
             {
                 ::basegfx::B2DHomMatrix aSizeTransform;
                 aSizeTransform.scale( aBmpEx.GetSizePixel().Width(), aBmpEx.GetSizePixel().Height() );
                 aMatrix = aMatrix * aSizeTransform;
+                const double fAlpha = bModulateColors ? renderState.DeviceColor[3] : 1.0;
 
-                mpOutDevProvider->getOutDev().DrawTransformedBitmapEx( aMatrix, aBmpEx );
+                mpOutDevProvider->getOutDev().DrawTransformedBitmapEx( aMatrix, aBmpEx, fAlpha );
                 if( mp2ndOutDevProvider )
                 {
                     // HACK. Normally, CanvasHelper does not care about

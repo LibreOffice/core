@@ -234,7 +234,7 @@ protected:
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel) override;
 
     bool                        DrawTransformBitmapExDirect( const basegfx::B2DHomMatrix& aFullTransform,
-                                    const BitmapEx& rBitmapEx) override;
+                                    const BitmapEx& rBitmapEx, double fAlpha = 1.0) override;
 
     bool                        TransformAndReduceBitmapExToTargetRange( const basegfx::B2DHomMatrix& aFullTransform,
                                     basegfx::B2DRange &aVisibleRange, double &fMaximumArea) override;

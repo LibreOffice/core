@@ -194,7 +194,8 @@ public:
                 const basegfx::B2DPoint& rX,
                 const basegfx::B2DPoint& rY,
                 const SalBitmap& rSourceBitmap,
-                const SalBitmap* pAlphaBitmap) = 0;
+                const SalBitmap* pAlphaBitmap,
+                double fAlpha) = 0;
 
     /// Used e.g. by canvas to know whether to cache the drawing.
     virtual bool hasFastDrawTransformedBitmap() const = 0;
