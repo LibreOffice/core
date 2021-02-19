@@ -16,6 +16,8 @@ $(eval $(call gb_UIConfig_add_uifiles,vcl,\
 	vcl/uiconfig/ui/editmenu \
 	vcl/uiconfig/ui/errornocontentdialog \
 	vcl/uiconfig/ui/errornoprinterdialog \
+	vcl/uiconfig/ui/interimdockparent \
+	vcl/uiconfig/ui/interimtearableparent \
 	vcl/uiconfig/ui/menutogglebutton \
 	vcl/uiconfig/ui/printdialog \
 	vcl/uiconfig/ui/printerdevicepage \

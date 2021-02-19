@@ -1558,7 +1558,7 @@ struct ImplCFieldFloatWin : public DockingWindow
 };
 
 ImplCFieldFloatWin::ImplCFieldFloatWin(vcl::Window* pParent)
-    : DockingWindow(pParent, "InterimDockParent", "svx/ui/interimdockparent.ui")
+    : DockingWindow(pParent, "InterimDockParent", "vcl/ui/interimdockparent.ui")
     , mxBox(m_pUIBuilder->get("box"))
 {
     setDeferredProperties();
