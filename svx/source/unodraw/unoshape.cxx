@@ -461,18 +461,14 @@ void SvxShape::ForceMetricToItemPoolMetric(Pair& rPoint) const throw()
     if(eMapUnit == MapUnit::Map100thMM)
         return;
 
-    switch(eMapUnit)
+    if (const auto eTo = MapToO3tlLength(eMapUnit); eTo != o3tl::Length::invalid)
     {
-        case MapUnit::MapTwip :
-        {
-            rPoint.A() = convertMm100ToTwip(rPoint.A());
-            rPoint.B() = convertMm100ToTwip(rPoint.B());
-            break;
-        }
-        default:
-        {
-            OSL_FAIL("AW: Missing unit translation to PoolMetric!");
-        }
+        rPoint.A() = o3tl::convert(rPoint.A(), o3tl::Length::mm100, eTo);
+        rPoint.B() = o3tl::convert(rPoint.B(), o3tl::Length::mm100, eTo);
+    }
+    else
+    {
+        OSL_FAIL("AW: Missing unit translation to PoolMetric!");
     }
 }
 
@@ -486,21 +482,14 @@ void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon
     if(eMapUnit == MapUnit::Map100thMM)
         return;
 
-    switch(eMapUnit)
+    if (const auto eTo = MapToO3tlLength(eMapUnit); eTo != o3tl::Length::invalid)
     {
-        case MapUnit::MapTwip :
-        {
-            basegfx::B2DHomMatrix aTransform;
-            const double fMMToTWIPS(72.0 / 127.0);
-
-            aTransform.scale(fMMToTWIPS, fMMToTWIPS);
-            rPolyPolygon.transform(aTransform);
-            break;
-        }
-        default:
-        {
-            OSL_FAIL("Missing unit translation to PoolMetric!");
-        }
+        const double fConvert(o3tl::convert(1.0, o3tl::Length::mm100, eTo));
+        rPolyPolygon.transform(basegfx::utils::createScaleB2DHomMatrix(fConvert, fConvert));
+    }
+    else
+    {
+        OSL_FAIL("Missing unit translation to PoolMetric!");
     }
 }
 
@@ -514,108 +503,87 @@ void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DHomMatrix& rB2DHomMatrix)
     if(eMapUnit == MapUnit::Map100thMM)
         return;
 
-    switch(eMapUnit)
+    if (const auto eTo = MapToO3tlLength(eMapUnit); eTo != o3tl::Length::invalid)
     {
-        case MapUnit::MapTwip :
-        {
-            const double fMMToTWIPS(72.0 / 127.0);
-            const basegfx::utils::B2DHomMatrixBufferedDecompose aDecomposedTransform(rB2DHomMatrix);
-            rB2DHomMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
-                aDecomposedTransform.getScale() * fMMToTWIPS,
-                aDecomposedTransform.getShearX(),
-                aDecomposedTransform.getRotate(),
-                aDecomposedTransform.getTranslate() * fMMToTWIPS);
-            break;
-        }
-        default:
-        {
-            OSL_FAIL("Missing unit translation to PoolMetric!");
-        }
+        const double fConvert(o3tl::convert(1.0, o3tl::Length::mm100, eTo));
+        const basegfx::utils::B2DHomMatrixBufferedDecompose aDecomposedTransform(rB2DHomMatrix);
+        rB2DHomMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+            aDecomposedTransform.getScale() * fConvert,
+            aDecomposedTransform.getShearX(),
+            aDecomposedTransform.getRotate(),
+            aDecomposedTransform.getTranslate() * fConvert);
+    }
+    else
+    {
+        OSL_FAIL("Missing unit translation to PoolMetric!");
     }
 }
 
 void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const throw()
 {
     DBG_TESTSOLARMUTEX();
-    MapUnit eMapUnit = MapUnit::Map100thMM;
     if(!HasSdrObject())
         return;
 
-    eMapUnit = GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetMetric(0);
+    MapUnit eMapUnit = GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetMetric(0);
     if(eMapUnit == MapUnit::Map100thMM)
         return;
 
-    switch(eMapUnit)
+    if (const auto eFrom = MapToO3tlLength(eMapUnit); eFrom != o3tl::Length::invalid)
     {
-        case MapUnit::MapTwip :
-        {
-            rPoint.A() = convertTwipToMm100(rPoint.A());
-            rPoint.B() = convertTwipToMm100(rPoint.B());
-            break;
-        }
-        default:
-        {
-            OSL_FAIL("AW: Missing unit translation to 100th mm!");
-        }
+        rPoint.A() = o3tl::convert(rPoint.A(), eFrom, o3tl::Length::mm100);
+        rPoint.B() = o3tl::convert(rPoint.B(), eFrom, o3tl::Length::mm100);
+    }
+    else
+    {
+        OSL_FAIL("AW: Missing unit translation to 100th mm!");
     }
 }
 
 void SvxShape::ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) const throw()
 {
     DBG_TESTSOLARMUTEX();
-    MapUnit eMapUnit = MapUnit::Map100thMM;
     if(!HasSdrObject())
         return;
 
-    eMapUnit = GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetMetric(0);
+    MapUnit eMapUnit = GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetMetric(0);
     if(eMapUnit == MapUnit::Map100thMM)
         return;
 
-    switch(eMapUnit)
+    if (const auto eFrom = MapToO3tlLength(eMapUnit); eFrom != o3tl::Length::invalid)
     {
-        case MapUnit::MapTwip :
-        {
-            basegfx::B2DHomMatrix aTransform;
-            const double fTWIPSToMM(127.0 / 72.0);
-            aTransform.scale(fTWIPSToMM, fTWIPSToMM);
-            rPolyPolygon.transform(aTransform);
-            break;
-        }
-        default:
-        {
-            OSL_FAIL("Missing unit translation to 100th mm!");
-        }
+        const double fConvert(o3tl::convert(1.0, eFrom, o3tl::Length::mm100));
+        rPolyPolygon.transform(basegfx::utils::createScaleB2DHomMatrix(fConvert, fConvert));
+    }
+    else
+    {
+        OSL_FAIL("Missing unit translation to 100th mm!");
     }
 }
 
 void SvxShape::ForceMetricTo100th_mm(basegfx::B2DHomMatrix& rB2DHomMatrix) const throw()
 {
     DBG_TESTSOLARMUTEX();
-    MapUnit eMapUnit = MapUnit::Map100thMM;
     if(!HasSdrObject())
         return;
 
-    eMapUnit = GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetMetric(0);
+    MapUnit eMapUnit = GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetMetric(0);
     if(eMapUnit == MapUnit::Map100thMM)
         return;
 
-    switch(eMapUnit)
+    if (const auto eFrom = MapToO3tlLength(eMapUnit); eFrom != o3tl::Length::invalid)
     {
-        case MapUnit::MapTwip :
-        {
-            const double fTWIPSToMM(127.0 / 72.0);
-            const basegfx::utils::B2DHomMatrixBufferedDecompose aDecomposedTransform(rB2DHomMatrix);
-            rB2DHomMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
-                aDecomposedTransform.getScale() * fTWIPSToMM,
-                aDecomposedTransform.getShearX(),
-                aDecomposedTransform.getRotate(),
-                aDecomposedTransform.getTranslate() * fTWIPSToMM);
-            break;
-        }
-        default:
-        {
-            OSL_FAIL("Missing unit translation to 100th mm!");
-        }
+        const double fConvert(o3tl::convert(1.0, eFrom, o3tl::Length::mm100));
+        const basegfx::utils::B2DHomMatrixBufferedDecompose aDecomposedTransform(rB2DHomMatrix);
+        rB2DHomMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+            aDecomposedTransform.getScale() * fConvert,
+            aDecomposedTransform.getShearX(),
+            aDecomposedTransform.getRotate(),
+            aDecomposedTransform.getTranslate() * fConvert);
+    }
+    else
+    {
+        OSL_FAIL("Missing unit translation to 100th mm!");
     }
 }
 

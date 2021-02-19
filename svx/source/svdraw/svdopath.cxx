@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/unit_conversion.hxx>
 #include <tools/bigint.hxx>
 #include <tools/helpers.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -2935,8 +2936,8 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
         // is no length but only a factor here. Convert back.
         if (getSdrModelFromSdrObject().IsWriter())
         {
-            aScale.setX(aScale.getX() * 127.0 / 72.0);
-            aScale.setY(aScale.getY() * 127.0 / 72.0);
+            aScale.setX(o3tl::convert(aScale.getX(), o3tl::Length::twip, o3tl::Length::mm100));
+            aScale.setY(o3tl::convert(aScale.getY(), o3tl::Length::twip, o3tl::Length::mm100));
         }
         fScaleX *= fabs(aScale.getX());
         fScaleY *= fabs(aScale.getY());
