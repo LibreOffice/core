@@ -25,6 +25,7 @@
 #include <unotools/intlwrapper.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/searchopt.hxx>
+#include <unotools/syslocale.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/module.hxx>

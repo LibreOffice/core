@@ -23,6 +23,7 @@
 
 #include <comphelper/string.hxx>
 #include <vcl/toolkit/lstbox.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>

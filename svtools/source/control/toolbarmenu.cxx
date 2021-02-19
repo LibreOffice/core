@@ -21,6 +21,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 
+#include <vcl/builder.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/svapp.hxx>
 

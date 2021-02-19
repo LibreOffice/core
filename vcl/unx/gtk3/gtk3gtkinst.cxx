@@ -26,6 +26,7 @@
 #include <unx/gtk/gtksalmenu.hxx>
 #include <headless/svpvd.hxx>
 #include <headless/svpbmp.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/inputtypes.hxx>
 #include <vcl/transfer.hxx>

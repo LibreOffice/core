@@ -11,6 +11,7 @@
 #define INCLUDED_VCL_INC_MESSAGEDIALOG_HXX
 
 #include <vcl/toolkit/dialog.hxx>
+#include <vcl/toolkit/vclmedit.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/toolkit/fixed.hxx>
 

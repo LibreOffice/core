@@ -27,6 +27,8 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/window.hxx>
 
+#include <map>
+
 class Button;
 
 /** Toolbox that holds the close button (right hand side of the menubar).

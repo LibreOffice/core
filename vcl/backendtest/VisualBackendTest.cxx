@@ -16,6 +16,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
+#include <vcl/bitmapex.hxx>
 #include <vcl/event.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/vclmain.hxx>

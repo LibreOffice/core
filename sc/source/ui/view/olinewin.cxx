@@ -21,6 +21,7 @@
 
 #include <string_view>
 
+#include <vcl/image.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/settings.hxx>
 

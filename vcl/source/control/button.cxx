@@ -19,6 +19,7 @@
 
 #include <tools/poly.hxx>
 
+#include <vcl/builder.hxx>
 #include <vcl/image.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/decoview.hxx>

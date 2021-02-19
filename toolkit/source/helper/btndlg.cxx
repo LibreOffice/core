@@ -17,13 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
-
 #include <vcl/toolkit/button.hxx>
 #include <vcl/stdtext.hxx>
 #include <helper/btndlg.hxx>
 #include <sal/log.hxx>
-
+#include <map>
+#include <memory>
 
 struct ImplBtnDlgItem
 {

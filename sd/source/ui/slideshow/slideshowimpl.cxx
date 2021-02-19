@@ -67,6 +67,7 @@
 #include "PaneHider.hxx"
 
 #include <bitmaps.hlst>
+#include <vcl/builder.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>

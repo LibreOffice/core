@@ -34,6 +34,7 @@
 #include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/headbar.hxx>
 #include <vcl/notebookbar/IPrioritable.hxx>
+#include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 #include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/toolkit/lstbox.hxx>
