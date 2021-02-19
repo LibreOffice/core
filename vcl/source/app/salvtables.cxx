@@ -2184,13 +2184,21 @@ public:
         return VclPolicyType::NEVER;
     }
 
-    virtual int get_vscroll_width() const override
+    virtual int get_scroll_thickness() const override
     {
         return m_xScrolledWindow->getVertScrollBar().get_preferred_size().Width();
     }
 
+    virtual void set_scroll_thickness(int nThickness) override
+    {
+        ScrollBar& rHorzScrollBar = m_xScrolledWindow->getHorzScrollBar();
+        ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
+        rHorzScrollBar.set_height_request(nThickness);
+        rVertScrollBar.set_width_request(nThickness);
+    }
+
     virtual void customize_scrollbars(const Color& rBackgroundColor, const Color& rShadowColor,
-                                      const Color& rFaceColor, int nThickness) override
+                                      const Color& rFaceColor) override
     {
         ScrollBar& rHorzScrollBar = m_xScrolledWindow->getHorzScrollBar();
         ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
@@ -2198,8 +2206,6 @@ public:
                              rFaceColor);
         customize_scrollbars(rVertScrollBar, Color(0, 0, 0), rBackgroundColor, rShadowColor,
                              rFaceColor);
-        rHorzScrollBar.set_height_request(nThickness);
-        rVertScrollBar.set_width_request(nThickness);
     }
 
     virtual ~SalInstanceScrolledWindow() override

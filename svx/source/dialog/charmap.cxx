@@ -85,7 +85,7 @@ void SvxShowCharSet::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     nY = aSize.Height() / ROW_COUNT;
 
     // tdf#121232 set a size request that will result in a 0 m_nXGap by default
-    mxScrollArea->set_size_request(COLUMN_COUNT * nX + mxScrollArea->get_vscroll_width() + 2,
+    mxScrollArea->set_size_request(COLUMN_COUNT * nX + mxScrollArea->get_scroll_thickness() + 2,
                                    ROW_COUNT * nY);
 }
 
