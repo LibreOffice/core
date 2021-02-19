@@ -35,10 +35,10 @@
 #include "PreviewValueSet.hxx"
 #include <ViewShellBase.hxx>
 #include <o3tl/safeint.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/image.hxx>
 #include <vcl/floatwin.hxx>
+#include <vcl/weldutils.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sidebar/Theme.hxx>
@@ -213,18 +213,13 @@ void MasterPagesSelector::ShowContextMenu(const Point* pPos)
         aPosition = *pPos;
 
     // Setup the menu.
-    VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), GetContextMenuUIFile(), "");
-    VclPtr<PopupMenu> pMenu(aBuilder.get_menu("menu"));
-    FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
-    if (pMenuWindow != nullptr)
-        pMenuWindow->SetPopupModeFlags(
-            pMenuWindow->GetPopupModeFlags() | FloatWinPopupFlags::NoMouseUpClose);
-    pMenu->SetSelectHdl(LINK(this, MasterPagesSelector, OnMenuItemSelected));
-
-    ProcessPopupMenu(*pMenu);
-
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, GetContextMenuUIFile()));
+    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
+    ProcessPopupMenu(*xMenu);
+    ::tools::Rectangle aRect(aPosition, Size(1,1));
+    weld::Window* pParent = weld::GetPopupParent(*this, aRect);
     // Show the menu.
-    pMenu->Execute(this, ::tools::Rectangle(aPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
+    ExecuteCommand(xMenu->popup_at_rect(pParent, aRect));
 }
 
 void MasterPagesSelector::Command (const CommandEvent& rEvent)
@@ -233,26 +228,13 @@ void MasterPagesSelector::Command (const CommandEvent& rEvent)
         ShowContextMenu(rEvent.IsMouseEvent() ? &rEvent.GetMousePosPixel() : nullptr);
 }
 
-void MasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
+void MasterPagesSelector::ProcessPopupMenu(weld::Menu& rMenu)
 {
     // Disable some entries.
     if (mpContainer->GetPreviewSize() == MasterPageContainer::SMALL)
-        rMenu.EnableItem(rMenu.GetItemId("small"), false);
+        rMenu.set_sensitive("small", false);
     else
-        rMenu.EnableItem(rMenu.GetItemId("large"), false);
-}
-
-IMPL_LINK(MasterPagesSelector, OnMenuItemSelected, Menu*, pMenu, bool)
-{
-    if (pMenu == nullptr)
-    {
-        OSL_ENSURE(pMenu!=nullptr, "MasterPagesSelector::OnMenuItemSelected: illegal menu!");
-        return false;
-    }
-
-    pMenu->Deactivate();
-    ExecuteCommand(pMenu->GetCurItemIdent());
-    return false;
+        rMenu.set_sensitive("large", false);
 }
 
 void MasterPagesSelector::ExecuteCommand(const OString &rIdent)
