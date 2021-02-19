@@ -388,7 +388,7 @@ void SwAddressPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
     sal_uInt16 nStartRow = 0;
     if (m_xVScrollBar->get_vpolicy() != VclPolicyType::NEVER)
     {
-        aSize.AdjustWidth(-m_xVScrollBar->get_vscroll_width());
+        aSize.AdjustWidth(-m_xVScrollBar->get_scroll_thickness());
         nStartRow = m_xVScrollBar->vadjustment_get_value();
     }
     Size aPartSize(aSize.Width() / pImpl->nColumns,
