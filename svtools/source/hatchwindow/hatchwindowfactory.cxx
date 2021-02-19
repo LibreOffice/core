@@ -56,9 +56,9 @@ uno::Reference< embed::XHatchWindow > SAL_CALL OHatchWindowFactory::createHatchW
         throw lang::IllegalArgumentException(); // TODO
 
     SolarMutexGuard aGuard;
-    VCLXHatchWindow* pResult = new VCLXHatchWindow();
+    rtl::Reference<VCLXHatchWindow> pResult = new VCLXHatchWindow();
     pResult->initializeWindow( xParent, aBounds, aHandlerSize );
-    return uno::Reference< embed::XHatchWindow >( static_cast< embed::XHatchWindow* >( pResult ) );
+    return pResult;
 }
 
 OUString SAL_CALL OHatchWindowFactory::getImplementationName()

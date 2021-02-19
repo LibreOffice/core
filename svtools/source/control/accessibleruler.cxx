@@ -197,7 +197,7 @@ uno::Reference< XAccessibleRelationSet > SAL_CALL SvtRulerAccessible::getAccessi
 uno::Reference< XAccessibleStateSet > SAL_CALL SvtRulerAccessible::getAccessibleStateSet()
 {
     ::osl::MutexGuard                       aGuard( m_aMutex );
-    utl::AccessibleStateSetHelper*          pStateSetHelper = new utl::AccessibleStateSetHelper;
+    rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
 
     if( IsAlive() )
     {

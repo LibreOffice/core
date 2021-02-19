@@ -218,7 +218,7 @@ uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueItemAcc::g
 uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueItemAcc::getAccessibleStateSet()
 {
     const SolarMutexGuard aSolarGuard;
-    ::utl::AccessibleStateSetHelper*    pStateSet = new ::utl::AccessibleStateSetHelper;
+    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet = new ::utl::AccessibleStateSetHelper;
 
     if( mpParent )
     {
@@ -638,7 +638,7 @@ uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueSetAcc::ge
 uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueSetAcc::getAccessibleStateSet()
 {
     ThrowIfDisposed();
-    ::utl::AccessibleStateSetHelper* pStateSet = new ::utl::AccessibleStateSetHelper();
+    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet = new ::utl::AccessibleStateSetHelper();
 
     // Set some states.
     pStateSet->AddState (accessibility::AccessibleStateType::ENABLED);
