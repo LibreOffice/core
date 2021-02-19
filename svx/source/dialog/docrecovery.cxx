@@ -580,8 +580,7 @@ SaveProgressDialog::SaveProgressDialog(weld::Window* pParent, RecoveryCore* pCor
     , m_xProgressBar(m_xBuilder->weld_progress_bar("progress"))
 {
     m_xProgressBar->set_size_request(m_xProgressBar->get_approximate_digit_width() * 50, -1);
-    PluginProgress* pProgress = new PluginProgress(m_xProgressBar.get());
-    m_xProgress.set(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
+    m_xProgress = new PluginProgress(m_xProgressBar.get());
 }
 
 SaveProgressDialog::~SaveProgressDialog()
@@ -655,8 +654,7 @@ RecoveryDialog::RecoveryDialog(weld::Window* pParent, RecoveryCore* pCore)
     const auto nWidth = m_xFileListLB->get_approximate_digit_width() * 70;
     m_xFileListLB->set_size_request(nWidth, m_xFileListLB->get_height_rows(10));
     m_xProgressBar->set_size_request(m_xProgressBar->get_approximate_digit_width() * 50, -1);
-    PluginProgress* pProgress = new PluginProgress(m_xProgressBar.get());
-    m_xProgress.set(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
+    m_xProgress = new PluginProgress(m_xProgressBar.get());
 
     std::vector<int> aWidths;
     aWidths.push_back(m_xFileListLB->get_checkbox_column_width());

@@ -599,9 +599,9 @@ void SvxDrawPage::GetTypeAndInventor( SdrObjKind& rType, SdrInventor& rInventor,
     }
 }
 
-SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInventor nInventor, SdrObject *pObj, SvxDrawPage *mpPage, OUString const & referer )
+rtl::Reference<SvxShape> SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInventor nInventor, SdrObject *pObj, SvxDrawPage *mpPage, OUString const & referer )
 {
-    SvxShape* pRet = nullptr;
+    rtl::Reference<SvxShape> pRet;
 
     switch( nInventor )
     {
@@ -856,7 +856,7 @@ uno::Sequence< OUString > SAL_CALL SvxDrawPage::getSupportedServiceNames()
     return aSeq;
 }
 
-SvxShape* CreateSvxShapeByTypeAndInventor(sal_uInt16 nType, SdrInventor nInventor, OUString const & referer)
+rtl::Reference<SvxShape> CreateSvxShapeByTypeAndInventor(sal_uInt16 nType, SdrInventor nInventor, OUString const & referer)
 {
     return SvxDrawPage::CreateShapeByTypeAndInventor( nType, nInventor, nullptr, nullptr, referer );
 }

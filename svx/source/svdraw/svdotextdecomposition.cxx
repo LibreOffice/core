@@ -94,7 +94,7 @@ namespace
         DECL_LINK(decomposeStretchBulletPrimitive, DrawBulletInfo*, void);
 
         void impCreateTextPortionPrimitive(const DrawPortionInfo& rInfo);
-        static drawinglayer::primitive2d::BasePrimitive2D* impCheckFieldPrimitive(drawinglayer::primitive2d::BasePrimitive2D* pPrimitive, const DrawPortionInfo& rInfo);
+        static rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> impCheckFieldPrimitive(drawinglayer::primitive2d::BasePrimitive2D* pPrimitive, const DrawPortionInfo& rInfo);
         void impFlushTextPortionPrimitivesToLinePrimitives();
         void impFlushLinePrimitivesToParagraphPrimitives(sal_Int32 nPara);
         void impHandleDrawPortionInfo(const DrawPortionInfo& rInfo);
@@ -252,7 +252,7 @@ namespace
         const bool bWordLineMode(rInfo.mrFont.IsWordLineMode() && !rInfo.mbEndOfBullet);
 
         // prepare new primitive
-        drawinglayer::primitive2d::BasePrimitive2D* pNewPrimitive = nullptr;
+        rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pNewPrimitive;
         const bool bDecoratedIsNeeded(
                LINESTYLE_NONE != rInfo.mrFont.GetOverline()
             || LINESTYLE_NONE != rInfo.mrFont.GetUnderline()
@@ -376,7 +376,7 @@ namespace
 
         if(rInfo.mpFieldData)
         {
-            pNewPrimitive = impCheckFieldPrimitive(pNewPrimitive, rInfo);
+            pNewPrimitive = impCheckFieldPrimitive(pNewPrimitive.get(), rInfo);
         }
 
         maTextPortionPrimitives.push_back(pNewPrimitive);
@@ -444,8 +444,9 @@ namespace
         }
     }
 
-    drawinglayer::primitive2d::BasePrimitive2D* impTextBreakupHandler::impCheckFieldPrimitive(drawinglayer::primitive2d::BasePrimitive2D* pPrimitive, const DrawPortionInfo& rInfo)
+    rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> impTextBreakupHandler::impCheckFieldPrimitive(drawinglayer::primitive2d::BasePrimitive2D* pPrimitive, const DrawPortionInfo& rInfo)
     {
+        rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> xRet = pPrimitive;
         if(rInfo.mpFieldData)
         {
             // Support for FIELD_SEQ_BEGIN, FIELD_SEQ_END. If used, create a TextHierarchyFieldPrimitive2D
@@ -471,19 +472,19 @@ namespace
                 meValues.emplace_back("Representation", pURLField->GetRepresentation());
                 meValues.emplace_back("TargetFrame", pURLField->GetTargetFrame());
                 meValues.emplace_back("SvxURLFormat", OUString::number(static_cast<sal_uInt16>(pURLField->GetFormat())));
-                pPrimitive = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(aSequence, drawinglayer::primitive2d::FIELD_TYPE_URL, &meValues);
+                xRet = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(aSequence, drawinglayer::primitive2d::FIELD_TYPE_URL, &meValues);
             }
             else if(pPageField)
             {
-                pPrimitive = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(aSequence, drawinglayer::primitive2d::FIELD_TYPE_PAGE);
+                xRet = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(aSequence, drawinglayer::primitive2d::FIELD_TYPE_PAGE);
             }
             else
             {
-                pPrimitive = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(aSequence, drawinglayer::primitive2d::FIELD_TYPE_COMMON);
+                xRet = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(aSequence, drawinglayer::primitive2d::FIELD_TYPE_COMMON);
             }
         }
 
-        return pPrimitive;
+        return xRet;
     }
 
     void impTextBreakupHandler::impFlushTextPortionPrimitivesToLinePrimitives()
@@ -557,7 +558,7 @@ namespace
 
         // embed in TextHierarchyBulletPrimitive2D
         const drawinglayer::primitive2d::Primitive2DContainer aNewSequence { aNewReference };
-        drawinglayer::primitive2d::BasePrimitive2D* pNewPrimitive = new drawinglayer::primitive2d::TextHierarchyBulletPrimitive2D(aNewSequence);
+        rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pNewPrimitive = new drawinglayer::primitive2d::TextHierarchyBulletPrimitive2D(aNewSequence);
 
         // add to output
         maTextPortionPrimitives.push_back(pNewPrimitive);

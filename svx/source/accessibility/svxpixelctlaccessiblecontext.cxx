@@ -109,8 +109,7 @@ Reference< XAccessibleRelationSet > SAL_CALL SvxPixelCtlAccessible::getAccessibl
 uno::Reference< XAccessibleStateSet > SvxPixelCtlAccessible::getAccessibleStateSet(  )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
-    uno::Reference< XAccessibleStateSet > xRet = pStateSetHelper;
+    rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
 
     if (mpPixelCtl)
     {
@@ -136,7 +135,7 @@ uno::Reference< XAccessibleStateSet > SvxPixelCtlAccessible::getAccessibleStateS
         pStateSetHelper->AddState(AccessibleStateType::MANAGES_DESCENDANTS);
     }
 
-    return xRet;
+    return pStateSetHelper;
 }
 
 uno::Reference<XAccessible > SAL_CALL SvxPixelCtlAccessible::getAccessibleAtPoint (
@@ -413,7 +412,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SvxPixelCtlAccessibleChild::getA
 uno::Reference< XAccessibleStateSet > SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleStateSet()
 {
     ::osl::MutexGuard                       aGuard( m_aMutex );
-    utl::AccessibleStateSetHelper*          pStateSetHelper = new utl::AccessibleStateSetHelper;
+    rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
 
     if (!rBHelper.bDisposed)
     {

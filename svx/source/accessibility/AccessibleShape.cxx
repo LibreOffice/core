@@ -362,7 +362,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
     if (mpParent == nullptr)
         return uno::Reference<XAccessibleRelationSet>();
 
-    ::utl::AccessibleRelationSetHelper* pRelationSet = new utl::AccessibleRelationSetHelper;
+    rtl::Reference<::utl::AccessibleRelationSetHelper> pRelationSet = new utl::AccessibleRelationSetHelper;
 
     //this mxshape is the captioned shape
     uno::Sequence< uno::Reference< uno::XInterface > > aSequence { mpParent->GetAccessibleCaption(mxShape) };
@@ -371,7 +371,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
         pRelationSet->AddRelation(
                                   AccessibleRelation( AccessibleRelationType::DESCRIBED_BY, aSequence ) );
     }
-    return uno::Reference<XAccessibleRelationSet>(pRelationSet);
+    return pRelationSet;
 }
 
 /** Return a copy of the state set.

@@ -110,8 +110,7 @@ Reference< XAccessibleRelationSet > AccFrameSelector::getAccessibleRelationSet( 
 Reference< XAccessibleStateSet > AccFrameSelector::getAccessibleStateSet(  )
 {
     SolarMutexGuard aGuard;
-    utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
-    Reference< XAccessibleStateSet > xRet = pStateSetHelper;
+    rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
 
     if(!mpFrameSel)
         pStateSetHelper->AddState(AccessibleStateType::DEFUNC);
@@ -145,7 +144,7 @@ Reference< XAccessibleStateSet > AccFrameSelector::getAccessibleStateSet(  )
             pStateSetHelper->AddState(AccessibleStateType::SELECTED);
         }
     }
-    return xRet;
+    return pStateSetHelper;
 }
 
 Reference< XAccessible > AccFrameSelector::getAccessibleAtPoint(
@@ -279,8 +278,7 @@ Reference< XAccessibleRelationSet > AccFrameSelectorChild::getAccessibleRelation
 Reference< XAccessibleStateSet > AccFrameSelectorChild::getAccessibleStateSet(  )
 {
     SolarMutexGuard aGuard;
-    utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
-    Reference< XAccessibleStateSet > xRet = pStateSetHelper;
+    rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
 
     if(!mpFrameSel)
         pStateSetHelper->AddState(AccessibleStateType::DEFUNC);
@@ -314,7 +312,7 @@ Reference< XAccessibleStateSet > AccFrameSelectorChild::getAccessibleStateSet(  
             pStateSetHelper->AddState(AccessibleStateType::SELECTED);
         }
     }
-    return xRet;
+    return pStateSetHelper;
 }
 
 Reference< XAccessible > AccFrameSelectorChild::getAccessibleAtPoint(

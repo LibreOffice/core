@@ -310,7 +310,7 @@ public:
     virtual void SAL_CALL setFocus() override;
 
 protected:
-    virtual FmXGridPeer*    imp_CreatePeer(vcl::Window* pParent);
+    virtual rtl::Reference<FmXGridPeer> imp_CreatePeer(vcl::Window* pParent);
         // ImplCreatePeer would be better, but doesn't work because it's not exported
 };
 
