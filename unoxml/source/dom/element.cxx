@@ -56,7 +56,7 @@ namespace DOM
     void CElement::saxify(const Reference< XDocumentHandler >& i_xHandler)
     {
         if (!i_xHandler.is()) throw RuntimeException();
-        comphelper::AttributeList *pAttrs =
+        rtl::Reference<comphelper::AttributeList> pAttrs =
             new comphelper::AttributeList();
         OUString type = "";
         // add namespace definitions to attributes
@@ -90,8 +90,7 @@ namespace DOM
         OUString name = (prefix.isEmpty())
             ? getLocalName()
             : prefix + ":" + getLocalName();
-        Reference< XAttributeList > xAttrList(pAttrs);
-        i_xHandler->startElement(name, xAttrList);
+        i_xHandler->startElement(name, pAttrs);
         // recurse
         for (xmlNodePtr pChild = m_aNodePtr->children;
                         pChild != nullptr; pChild = pChild->next) {

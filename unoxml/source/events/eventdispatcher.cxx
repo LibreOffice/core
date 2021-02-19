@@ -117,7 +117,7 @@ namespace DOM::events {
         if (captureListeners.empty() && targetListeners.empty())
             return;
 
-        CEvent *pEvent = nullptr; // pointer to internal event representation
+        rtl::Reference<CEvent> pEvent; // pointer to internal event representation
 
         OUString const aType = i_xEvent->getType();
         if (aType == "DOMSubtreeModified"          ||
@@ -133,7 +133,7 @@ namespace DOM::events {
                 // dispatch a mutation event
                 // we need to clone the event in order to have complete control
                 // over the implementation
-                CMutationEvent* pMEvent = new CMutationEvent;
+                rtl::Reference<CMutationEvent> pMEvent = new CMutationEvent;
                 pMEvent->initMutationEvent(
                     aType, aMEvent->getBubbles(), aMEvent->getCancelable(),
                     aMEvent->getRelatedNode(), aMEvent->getPrevValue(),
@@ -146,7 +146,7 @@ namespace DOM::events {
             aType == "DOMActivate" )
         {
             Reference< XUIEvent > const aUIEvent(i_xEvent, UNO_QUERY_THROW);
-            CUIEvent* pUIEvent = new CUIEvent;
+            rtl::Reference<CUIEvent> pUIEvent = new CUIEvent;
             pUIEvent->initUIEvent(aType,
                 aUIEvent->getBubbles(), aUIEvent->getCancelable(),
                 aUIEvent->getView(), aUIEvent->getDetail());
@@ -161,7 +161,7 @@ namespace DOM::events {
         {
             Reference< XMouseEvent > const aMouseEvent(i_xEvent,
                     UNO_QUERY_THROW);
-            CMouseEvent *pMouseEvent = new CMouseEvent;
+            rtl::Reference<CMouseEvent> pMouseEvent = new CMouseEvent;
             pMouseEvent->initMouseEvent(aType,
                 aMouseEvent->getBubbles(), aMouseEvent->getCancelable(),
                 aMouseEvent->getView(), aMouseEvent->getDetail(),
