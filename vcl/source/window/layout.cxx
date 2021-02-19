@@ -12,6 +12,7 @@
 #include <o3tl/enumarray.hxx>
 #include <o3tl/enumrange.hxx>
 #include <tools/stream.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/decoview.hxx>

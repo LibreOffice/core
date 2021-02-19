@@ -24,6 +24,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/frmdirlbox.hxx>
+#include <map>
 #include "colex.hxx"
 #include "prcntfld.hxx"
 

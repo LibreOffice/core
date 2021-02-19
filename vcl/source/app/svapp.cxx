@@ -31,6 +31,8 @@
 #include <tools/stream.hxx>
 
 #include <unotools/configmgr.hxx>
+#include <unotools/resmgr.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/syslocaleoptions.hxx>
 
 #include <vcl/toolkit/dialog.hxx>

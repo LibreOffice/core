@@ -33,6 +33,7 @@
 #include <vcl/abstdlg.hxx>
 
 struct DialogImpl;
+class Button;
 class PushButton;
 class VclBox;
 class VclButtonBox;

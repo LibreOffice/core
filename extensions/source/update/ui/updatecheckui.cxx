@@ -30,6 +30,7 @@
 #include <com/sun/star/task/XJob.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/resmgr.hxx>
+#include <vcl/image.hxx>
 #include <vcl/window.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/timer.hxx>

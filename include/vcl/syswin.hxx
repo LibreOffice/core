@@ -25,13 +25,16 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/window.hxx>
 #include <vcl/windowstate.hxx>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <memory>
-#include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 
+class SalInstanceBuilder;
+class ScreenshotTest;
 class MenuBar;
 class NotebookBar;
 class TaskPaneList;
 class VclBuilder;
+struct NotebookBarAddonsItem;
 
 #define ICON_LO_DEFAULT                 1
 #define ICON_TEXT_DOCUMENT              2

@@ -25,6 +25,7 @@
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/progress.hxx>
 #include <misc/scopelock.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>

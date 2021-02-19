@@ -45,6 +45,7 @@
 #include <sfx2/progress.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <tools/debug.hxx>
+#include <vcl/image.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
 #include <svl/urihelper.hxx>

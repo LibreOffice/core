@@ -30,6 +30,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/asyncnotification.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <vcl/QueueInfo.hxx>
 #include <vcl/svapp.hxx>

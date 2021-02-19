@@ -35,6 +35,7 @@
 #include "PreviewValueSet.hxx"
 #include <ViewShellBase.hxx>
 #include <o3tl/safeint.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/image.hxx>
 #include <vcl/floatwin.hxx>

@@ -21,6 +21,7 @@
 
 #include <config_options.h>
 #include <sfx2/dllapi.h>
+#include <vcl/builder.hxx>
 #include <vcl/toolbox.hxx>
 #include <map>
 

@@ -9,6 +9,8 @@
 
 #include <vcl/notebookbar/NotebookbarPopup.hxx>
 #include <vcl/notebookbar/IPrioritable.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/layout.hxx>
 
 NotebookbarPopup::NotebookbarPopup(const VclPtr<VclHBox>& pParent)

@@ -21,6 +21,7 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 
+#include <vcl/builder.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
 #include <vcl/dockwin.hxx>
