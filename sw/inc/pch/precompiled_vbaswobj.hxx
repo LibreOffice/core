@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-02-05 16:12:44 using:
+ Generated on 2021-02-19 15:35:42 using:
  ./bin/update_pch sw vbaswobj --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -52,7 +52,6 @@
 #include <string>
 #include <string_view>
 #include <type_traits>
-#include <typeinfo>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -91,13 +90,11 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <vcl/EnumContext.hxx>
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/cursor.hxx>
@@ -107,7 +104,6 @@
 #include <vcl/exceptiontypes.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
-#include <vcl/image.hxx>
 #include <vcl/inputtypes.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
@@ -157,7 +153,6 @@
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -171,7 +166,6 @@
 #include <com/sun/star/document/EventObject.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
@@ -313,8 +307,6 @@
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/options.hxx>
-#include <unotools/resmgr.hxx>
-#include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <vbahelper/vbadllapi.h>
 #include <vbahelper/vbahelper.hxx>

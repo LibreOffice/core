@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-02-05 16:11:13 using:
+ Generated on 2021-02-19 15:35:10 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -266,6 +266,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/docpasswordhelper.hxx>
@@ -404,6 +405,7 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <sfx2/ctrlitem.hxx>
+#include <sfx2/devtools/DevelopmentToolDockingWindow.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dllapi.h>

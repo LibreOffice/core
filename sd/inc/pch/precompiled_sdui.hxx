@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-02-05 16:11:12 using:
+ Generated on 2021-02-19 15:35:10 using:
  ./bin/update_pch sd sdui --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -95,7 +95,6 @@
 #include <vcl/BitmapColor.hxx>
 #include <vcl/BitmapPalette.hxx>
 #include <vcl/ColorMask.hxx>
-#include <vcl/EnumContext.hxx>
 #include <vcl/GraphicAttributes.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/GraphicObject.hxx>
@@ -107,7 +106,6 @@
 #include <vcl/animate/AnimationBitmap.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/builderpage.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
@@ -131,7 +129,6 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
@@ -184,7 +181,6 @@
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -368,6 +364,7 @@
 #include <svtools/colorcfg.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/svtdllapi.h>
+#include <svtools/tabbar.hxx>
 #include <svtools/unitconv.hxx>
 #include <svtools/valueset.hxx>
 #include <svx/DiagramDataInterface.hxx>
@@ -459,8 +456,6 @@
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/options.hxx>
-#include <unotools/resmgr.hxx>
-#include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4

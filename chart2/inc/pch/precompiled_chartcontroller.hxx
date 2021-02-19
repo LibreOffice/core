@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-02-05 16:09:30 using:
+ Generated on 2021-02-19 15:34:34 using:
  ./bin/update_pch chart2 chartcontroller --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -88,7 +88,6 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <vcl/BinaryDataContainer.hxx>
-#include <vcl/EnumContext.hxx>
 #include <vcl/GraphicAttributes.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/GraphicObject.hxx>
@@ -98,7 +97,6 @@
 #include <vcl/animate/AnimationBitmap.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/builderpage.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
@@ -119,7 +117,6 @@
 #include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>
-#include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
@@ -428,7 +425,6 @@
 #include <unotools/nativenumberwrapper.hxx>
 #include <unotools/options.hxx>
 #include <unotools/readwritemutexguard.hxx>
-#include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/unotoolsdllapi.h>

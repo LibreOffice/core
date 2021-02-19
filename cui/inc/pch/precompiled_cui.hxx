@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-02-05 16:09:46 using:
+ Generated on 2021-02-19 15:34:39 using:
  ./bin/update_pch cui cui --cutoff=8 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -95,7 +95,6 @@
 #include <sal/typesizes.h>
 #include <vcl/BinaryDataContainer.hxx>
 #include <vcl/BitmapFilter.hxx>
-#include <vcl/EnumContext.hxx>
 #include <vcl/GraphicAttributes.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/GraphicObject.hxx>
@@ -106,7 +105,6 @@
 #include <vcl/animate/AnimationBitmap.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/builderpage.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
@@ -129,7 +127,6 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
@@ -403,8 +400,6 @@
 #include <unotools/fontdefs.hxx>
 #include <unotools/options.hxx>
 #include <unotools/pathoptions.hxx>
-#include <unotools/resmgr.hxx>
-#include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
