@@ -47,6 +47,7 @@
 #include <sal/log.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
+#include <tools/UnitConversion.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/hatch.hxx>
@@ -2523,34 +2524,15 @@ namespace wmfemfhelper
                     }
                     else
                     {
-                        switch(rMapMode.GetMapUnit())
+                        const auto eFrom = MapToO3tlLength(rPropertyHolders.Current().getMapUnit()),
+                                   eTo = MapToO3tlLength(rMapMode.GetMapUnit());
+                        if (eFrom != o3tl::Length::invalid && eTo != o3tl::Length::invalid)
                         {
-                            case MapUnit::Map100thMM :
-                            {
-                                if(MapUnit::MapTwip == rPropertyHolders.Current().getMapUnit())
-                                {
-                                    // MapUnit::MapTwip -> MapUnit::Map100thMM
-                                    const double fTwipTo100thMm(127.0 / 72.0);
-                                    aMapping.scale(fTwipTo100thMm, fTwipTo100thMm);
-                                }
-                                break;
-                            }
-                            case MapUnit::MapTwip :
-                            {
-                                if(MapUnit::Map100thMM == rPropertyHolders.Current().getMapUnit())
-                                {
-                                    // MapUnit::Map100thMM -> MapUnit::MapTwip
-                                    const double f100thMmToTwip(72.0 / 127.0);
-                                    aMapping.scale(f100thMmToTwip, f100thMmToTwip);
-                                }
-                                break;
-                            }
-                            default :
-                            {
-                                OSL_FAIL("implInterpretMetafile: MetaActionType::MAPMODE with unsupported MapUnit (!)");
-                                break;
-                            }
+                            const double fConvert(o3tl::convert(1.0, eFrom, eTo));
+                            aMapping.scale(fConvert, fConvert);
                         }
+                        else
+                            OSL_FAIL("implInterpretMetafile: MetaActionType::MAPMODE with unsupported MapUnit (!)");
 
                         aMapping = getTransformFromMapMode(rMapMode) * aMapping;
                         rPropertyHolders.Current().setMapUnit(rMapMode.GetMapUnit());

@@ -38,6 +38,7 @@
 #include <svx/framelinkarray.hxx>
 #include <svx/sdooitm.hxx>
 #include <vcl/canvastools.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 #include <cell.hxx>
 #include "tablelayouter.hxx"
@@ -186,7 +187,8 @@ namespace sdr::contact
                         aLine.SetMirrorWidths( );
                     }
 
-                    const double fTwipsToMM(127.0 / 72.0);
+                    constexpr double fTwipsToMM(
+                        o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::mm100));
                     return svx::frame::Style(&aLine, fTwipsToMM);
                 }
             }
