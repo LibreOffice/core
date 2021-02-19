@@ -61,6 +61,7 @@
 #include <sfx2/digitalsignatures.hxx>
 
 #include <map>
+#include <sal/log.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -468,6 +469,116 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
     return bChanges;
 }
 
+#if 0
+static auto
+CheckX509Data(
+    uno::Reference<xml::crypto::XSecurityEnvironment> const& xSecEnv,
+    std::vector<> const& rX509Datas,
+    std::vector<uno::Reference<XCertificate>> & rCerts) -> bool
+{
+    for (entry : rInfo.X509Datas)
+    {
+        if (!entry.ouX509Certificate.isEmpty())
+        {
+            certs.emplace_back(xSecEnv->createCertificateFromAscii(rInfo.ouX509Certificate));
+        }
+        else
+        {
+            certs.emplace_back(xSecEnv->getCertificate(
+                rInfo.ouX509IssuerName,
+                xmlsecurity::numericStringToBigInteger(rInfo.ouX509SerialNumber));
+        }
+        if (!certs.back.is())
+        {
+            SAL_WARN("xmlsecurity.comp", "X509Data cannot be parsed");
+            return false;
+        }
+    }
+    // first, search one whose issuer isn't in the list, or a self-signed one
+    //uno::Reference<XCertificate> xStart;
+    bool isOK(true);
+//            size_t start(-1);
+    std::optional<size_t> start;
+    for (size_t i = 0; isOK && i < certs.size(); ++i)
+    {
+        for (size_t j = 0; ; ++j)
+        {
+            if (certs[i]->getIssuerName() == certs[j].getSubjectName())
+            {
+                if (i == j) // self signed
+                {
+                    if (start)
+                    {
+                        SAL_WARN("xmlsecurity.comp", "X509Data do not form a chain: certificate is self-signed but already have start of chain: " << certs[i]->getSubjectName());
+                        isOK = false;
+                        break;
+                    }
+                    start = i;
+                }
+                break;
+            }
+            if (j == certs.size())
+            {
+                if (start)
+                {
+                    SAL_WARN("xmlsecurity.comp", "X509Data do not form a chain: certificate has no issuer but already have start of chain: " << certs[i]->getSubjectName());
+                    isOK = false;
+                    break;
+                }
+                start = i; // issuer isn't in the list
+                break;
+            }
+        }
+    }
+    std::vector<size_t> chain;
+    if (!start)
+    {
+        // this can only be a cycle?
+        SAL_WARN("xmlsecurity.comp", "X509Data do not form a chain: certificate has no issuer but already have start of chain: " << certs[i]->getSubjectName());
+        isOK = false;
+    }
+    else
+    {
+        chain.emplace_back(*start);
+    }
+    // second, check that there is a chain, no tree or cycle...
+    //std::vector<size_t> chain = { start };
+    for (size_t current = start, i = 0; isOK && i < certs.size(); ++i)
+    {
+        assert(chain.size() == i+1);
+        //size_t next(-1);
+        for (size_t j = 0; j < certs.size(); ++j)
+        {
+            //if (current != j)
+            if (chain[i] != j)
+            {
+                if (certs[chain[i]]->getSubjectName() == certs[j]->getIssuerName())
+                //if (certs[current]->getSubjectName() == certs[j]->getIssuerName())
+                {
+         //           if (next != -1)
+                    if (chain.size() != i + 1) // already found issuee?
+                    {
+                        SAL_WARN("xmlsecurity.comp", "X509Data do not form a chain: certificate issued 2 others: " << certs[chain[i]]->getSubjectName());
+                        isOK = false;
+                        break;
+                    }
+                    chain.emplace_back(j);
+                    //next = j;
+                }
+            }
+        }
+        if (chain.size() != i + 2) // not issuer of another?
+        {
+            SAL_WARN("xmlsecurity.comp", "X509Data do not form a chain: certificate issued 0 others: " << certs[chain[i]]->getSubjectName());
+            isOK = false;
+            break;
+        }
+        //current = next;
+    }
+
+}
+#endif
+
 Sequence< css::security::DocumentSignatureInformation >
 DocumentDigitalSignatures::ImplVerifySignatures(
     const Reference< css::embed::XStorage >& rxStorage,
@@ -542,26 +653,51 @@ DocumentDigitalSignatures::ImplVerifySignatures(
 
         if (rInfo.ouGpgCertificate.isEmpty()) // X.509
         {
+            std::vector<uno::Reference<XCertificate>> certs;
+// FIXME TODO
+#if 0
+            bool const isOK(CheckX509Data(xSecEnv, rInfo.X509Datas, certs));
+#endif
+#if 0
             if (!rInfo.ouX509Certificate.isEmpty())
                 rSigInfo.Signer = xSecEnv->createCertificateFromAscii(rInfo.ouX509Certificate);
             if (!rSigInfo.Signer.is())
                 rSigInfo.Signer = xSecEnv->getCertificate(
                     rInfo.ouX509IssuerName,
                     xmlsecurity::numericStringToBigInteger(rInfo.ouX509SerialNumber));
+#endif
 
+#if 0
+            if (!isOK)
+            {
+                rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
+            }
+            else
+            {
+            rSigInfo.Signer = certs[chain.back()];
+            // get only intermediates
+            certs.erase(certs.begin() + chain.back());
+#endif
             // On Windows checking the certificate path is buggy. It does name matching (issuer, subject name)
             // to find the parent certificate. It does not take into account that there can be several certificates
             // with the same subject name.
             try
             {
                 rSigInfo.CertificateStatus = xSecEnv->verifyCertificate(
+#if 1
                     rSigInfo.Signer, Sequence<Reference<css::security::XCertificate>>());
+#else
+                    rSigInfo.Signer, comphelper::VectorToSequence(certs));
+#endif
             }
             catch (SecurityException&)
             {
                 OSL_FAIL("Verification of certificate failed");
                 rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
             }
+#if 0
+            }
+#endif
         }
         else if (xGpgSecEnv.is()) // GPG
         {
