@@ -204,6 +204,11 @@
 #define BMP_CUSTOMANIMATION_MEDIA_PAUSE                         "sd/res/breakplayingblue_16.png"
 #define BMP_CUSTOMANIMATION_MEDIA_STOP                          "sd/res/stopplayingblue_16.png"
 
+#define BMP_MENU_NEXT                                           "cmd/sc_nextrecord.png"
+#define BMP_MENU_PREV                                           "cmd/sc_prevrecord.png"
+#define BMP_MENU_FIRST                                          "cmd/sc_firstrecord.png"
+#define BMP_MENU_LAST                                           "cmd/sc_lastrecord.png"
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

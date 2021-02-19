@@ -478,7 +478,12 @@
 
 #define STR_ANIMATION_DIALOG_TITLE                      NC_("STR_ANIMATION_DIALOG_TITLE", "Animation")
 
-#define RID_SVXSTR_EDIT_GRAPHIC                     NC_("RID_SVXSTR_EDIT_GRAPHIC", "Link")
+#define RID_SVXSTR_EDIT_GRAPHIC                         NC_("RID_SVXSTR_EDIT_GRAPHIC", "Link")
+
+#define RID_SVXSTR_MENU_NEXT                            NC_("RID_SVXSTR_MENU_NEXT", "~Next")
+#define RID_SVXSTR_MENU_PREV                            NC_("RID_SVXSTR_MENU_NEXT", "~Previous")
+#define RID_SVXSTR_MENU_FIRST                           NC_("RID_SVXSTR_MENU_FIRST", "~First Slide")
+#define RID_SVXSTR_MENU_LAST                            NC_("RID_SVXSTR_MENU_LAST", "~Last Slide")
 
 #endif
 

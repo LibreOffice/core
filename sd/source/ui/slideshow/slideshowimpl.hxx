@@ -244,7 +244,7 @@ private:
     DECL_LINK( updateHdl, Timer *, void );
     DECL_LINK( ReadyForNextInputHdl, Timer *, void );
     DECL_LINK( endPresentationHdl, void*, void );
-    DECL_LINK( ContextMenuSelectHdl, Menu *, bool );
+    void ContextMenuSelectHdl(const OString& rIdent);
     DECL_LINK( ContextMenuHdl, void*, void );
     DECL_LINK( deactivateHdl, Timer *, void );
     DECL_LINK( EventListenerHdl, VclSimpleEvent&, void );
