@@ -101,6 +101,7 @@ struct SignatureInformation
     // XAdES EncapsulatedX509Certificate values
     std::set<OUString> maEncapsulatedX509Certificates;
 
+    OUString ouSignatureId;
     // signature may contain multiple time stamps - check they're consistent
     bool hasInconsistentSigningTime = false;
     //We also keep the date and time as string. This is done when this
@@ -115,8 +116,8 @@ struct SignatureInformation
     //and the converted time is written back, then the string looks different
     //and the signature is broken.
     OUString ouDateTime;
-    OUString ouSignatureId;
-    OUString ouPropertyId;
+    /// The Id attribute of the <SignatureProperty> element that contains the <dc:date>.
+    OUString ouDateTimePropertyId;
     /// Characters of the <dc:description> element inside the signature.
     OUString ouDescription;
     /// The Id attribute of the <SignatureProperty> element that contains the <dc:description>.
