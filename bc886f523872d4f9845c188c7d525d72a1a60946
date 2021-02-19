@@ -16,6 +16,24 @@
       "revId": "bc886f523872d4f9845c188c7d525d72a1a60946",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc91c747_526d8548",
+        "filename": "svx/source/svdraw/svdopath.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2942,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-02-19T09:51:29Z",
+      "side": 1,
+      "message": "No, I don\u0027t know where it is. But there are similar errors in Writer with dash length (tdf#138501) and hatch distance (tdf#100972).",
+      "parentUuid": "b174e81f_f46f6f1a",
+      "revId": "bc886f523872d4f9845c188c7d525d72a1a60946",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
