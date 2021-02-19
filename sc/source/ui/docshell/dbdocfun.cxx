@@ -526,9 +526,10 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     // column (depending on direction) in any case, not just if it has headers,
     // so empty leading cells will be sorted to the end.
     bool bShrunk = false;
-    rDoc.ShrinkToUsedDataArea( bShrunk, nTab, aLocalParam.nCol1, aLocalParam.nRow1,
-            aLocalParam.nCol2, aLocalParam.nRow2, false, aLocalParam.bByRow, !aLocalParam.bByRow,
-            aLocalParam.bIncludeComments, aLocalParam.bIncludeGraphicObjects );
+    rDoc.ShrinkToUsedDataArea(bShrunk, nTab, aLocalParam.nCol1, aLocalParam.nRow1,
+                              aLocalParam.nCol2, aLocalParam.nRow2, false, aLocalParam.bByRow,
+                              !aLocalParam.bByRow, aLocalParam.bIncludeComments,
+                              aLocalParam.bIncludeGraphicObjects, aLocalParam.bIncludePattern);
 
     SCROW nStartRow = aLocalParam.nRow1;
     if (aLocalParam.bByRow && aLocalParam.bHasHeader && nStartRow < aLocalParam.nRow2)

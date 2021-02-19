@@ -218,17 +218,19 @@ public:
                 // data only:
     bool        IsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const;
     SCSIZE      GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const;
-    bool        HasDataAt(SCROW nRow, bool bConsiderCellNotes=false,
-                          bool bConsiderCellDrawObjects=false) const;
-    bool        HasDataAt(sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow, bool bConsiderCellNotes=false,
-                          bool bConsiderCellDrawObjects=false) const;
-    bool        HasDataAt(sc::ColumnBlockPosition& rBlockPos, SCROW nRow, bool bConsiderCellNotes=false,
-                          bool bConsiderCellDrawObjects=false);
+    bool        HasDataAt(SCROW nRow, bool bConsiderCellNotes = false,
+                   bool bConsiderCellDrawObjects = false, bool bConsiderCellFormats = false) const;
+    bool        HasDataAt(sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow,
+                   bool bConsiderCellNotes = false, bool bConsiderCellDrawObjects = false,
+                   bool bConsiderCellFormats = false) const;
+    bool        HasDataAt(sc::ColumnBlockPosition& rBlockPos, SCROW nRow, bool bConsiderCellNotes = false,
+                   bool bConsiderCellDrawObjects = false, bool bConsiderCellFormats = false);
     bool        HasVisibleDataAt(SCROW nRow) const;
     SCROW       GetFirstDataPos() const;
     SCROW       GetLastDataPos() const;
-    SCROW       GetLastDataPos( SCROW nLastRow, bool bConsiderCellNotes=false,
-                                bool bConsiderCellDrawObjects=false ) const;
+    SCROW       GetLastDataPos(SCROW nLastRow, bool bConsiderCellNotes = false,
+                         bool bConsiderCellDrawObjects = false,
+                         bool bConsiderCellFormats = false) const;
     bool        GetPrevDataPos(SCROW& rRow) const;
     bool        GetNextDataPos(SCROW& rRow) const;
     bool        TrimEmptyBlocks(SCROW& rRowStart, SCROW& rRowEnd) const;
