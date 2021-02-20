@@ -25,6 +25,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <comphelper/attributelist.hxx>
+#include <rtl/ref.hxx>
 
 #include "doctemplateslocal.hxx"
 
@@ -61,24 +62,22 @@ void DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::Reference<
     const OUString aWhiteSpace( " " );
 
     // write the namespace
-    ::comphelper::AttributeList* pRootAttrList = new ::comphelper::AttributeList;
-    uno::Reference< xml::sax::XAttributeList > xRootAttrList( pRootAttrList );
+    rtl::Reference<::comphelper::AttributeList> pRootAttrList = new ::comphelper::AttributeList;
     pRootAttrList->AddAttribute(
         "xmlns:groupuinames",
         aCDATAString,
         "http://openoffice.org/2006/groupuinames" );
 
     xWriterHandler->startDocument();
-    xWriterHandler->startElement( g_sGroupListElement, xRootAttrList );
+    xWriterHandler->startElement( g_sGroupListElement, pRootAttrList );
 
     for (const auto & i : aSequence)
     {
-        ::comphelper::AttributeList *pAttrList = new ::comphelper::AttributeList;
-        uno::Reference< xml::sax::XAttributeList > xAttrList( pAttrList );
+        rtl::Reference<::comphelper::AttributeList> pAttrList = new ::comphelper::AttributeList;
         pAttrList->AddAttribute( g_sNameAttr, aCDATAString, i.First );
         pAttrList->AddAttribute( g_sUINameAttr, aCDATAString, i.Second );
 
-        xWriterHandler->startElement( g_sGroupElement, xAttrList );
+        xWriterHandler->startElement( g_sGroupElement, pAttrList );
         xWriterHandler->ignorableWhitespace( aWhiteSpace );
         xWriterHandler->endElement( g_sGroupElement );
     }
@@ -96,12 +95,11 @@ std::vector< beans::StringPair > DocTemplLocaleHelper::ReadLocalizationSequence_
 
     uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
 
-    DocTemplLocaleHelper* pHelper = new DocTemplLocaleHelper();
-    uno::Reference< xml::sax::XDocumentHandler > xHelper( static_cast< xml::sax::XDocumentHandler* >( pHelper ) );
+    rtl::Reference<DocTemplLocaleHelper> pHelper = new DocTemplLocaleHelper();
     xml::sax::InputSource aParserInput;
     aParserInput.aInputStream = xInStream;
     aParserInput.sSystemId = aStringID;
-    xParser->setDocumentHandler( xHelper );
+    xParser->setDocumentHandler( pHelper );
     xParser->parseStream( aParserInput );
     xParser->setDocumentHandler( uno::Reference < xml::sax::XDocumentHandler > () );
 

@@ -61,12 +61,13 @@ class SFX2_DLLPUBLIC SfxStatusBarControl: public svt::StatusbarController
     sal_uInt16         nId;
     VclPtr<StatusBar>  pBar;
 
-protected:
+public:
     // new controller API
     // XInterface
     virtual void               SAL_CALL acquire() throw() override;
     virtual void               SAL_CALL release() throw() override;
 
+protected:
     // XEventListener
     using svt::StatusbarController::disposing;
 
