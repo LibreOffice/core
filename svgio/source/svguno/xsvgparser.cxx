@@ -30,6 +30,7 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <svgdocumenthandler.hxx>
 #include <tools/diagnose_ex.h>
+#include <rtl/ref.hxx>
 
 #include <svgvisitor.hxx>
 
@@ -124,9 +125,8 @@ namespace svgio::svgreader
             if(xSVGStream.is())
             {
                 // local document handler
-                SvgDocHdl* pSvgDocHdl = new SvgDocHdl(aAbsolutePath);
-                uno::Reference<xml::sax::XDocumentHandler> xSvgDocHdl(pSvgDocHdl);
-                parseSvgXML(xSVGStream, xSvgDocHdl);
+                rtl::Reference<SvgDocHdl> pSvgDocHdl = new SvgDocHdl(aAbsolutePath);
+                parseSvgXML(xSVGStream, pSvgDocHdl);
 
                 // decompose to primitives
                 for(std::unique_ptr<SvgNode> const & pCandidate : pSvgDocHdl->getSvgDocument().getSvgNodeVector())
@@ -154,9 +154,8 @@ namespace svgio::svgreader
             if (!xSvgStream.is())
                 return aAnyResult;
 
-            SvgDocHdl* pSvgDocHdl = new SvgDocHdl(aAbsolutePath);
-            uno::Reference<xml::sax::XDocumentHandler> xSvgDocHdl(pSvgDocHdl);
-            parseSvgXML(xSvgStream, xSvgDocHdl);
+            rtl::Reference<SvgDocHdl> pSvgDocHdl = new SvgDocHdl(aAbsolutePath);
+            parseSvgXML(xSvgStream, pSvgDocHdl);
 
             // decompose to primitives
             for (std::unique_ptr<SvgNode> const & pCandidate : pSvgDocHdl->getSvgDocument().getSvgNodeVector())
