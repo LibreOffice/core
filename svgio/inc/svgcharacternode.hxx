@@ -21,6 +21,7 @@
 #define INCLUDED_SVGIO_INC_SVGCHARACTERNODE_HXX
 
 #include <sal/config.h>
+#include <rtl/ref.hxx>
 
 #include <string_view>
 
@@ -133,7 +134,7 @@ namespace svgio::svgreader
             OUString           maText;
 
             /// local helpers
-            drawinglayer::primitive2d::TextSimplePortionPrimitive2D* createSimpleTextPrimitive(
+            rtl::Reference<drawinglayer::primitive2d::TextSimplePortionPrimitive2D> createSimpleTextPrimitive(
                 SvgTextPosition& rSvgTextPosition,
                 const SvgStyleAttributes& rSvgStyleAttributes) const;
             void decomposeTextWithStyle(

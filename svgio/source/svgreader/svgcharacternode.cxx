@@ -209,12 +209,12 @@ namespace svgio::svgreader
             }
         }
 
-        drawinglayer::primitive2d::TextSimplePortionPrimitive2D* SvgCharacterNode::createSimpleTextPrimitive(
+        rtl::Reference<drawinglayer::primitive2d::TextSimplePortionPrimitive2D> SvgCharacterNode::createSimpleTextPrimitive(
             SvgTextPosition& rSvgTextPosition,
             const SvgStyleAttributes& rSvgStyleAttributes) const
         {
             // prepare retval, index and length
-            drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pRetval = nullptr;
+            rtl::Reference<drawinglayer::primitive2d::TextSimplePortionPrimitive2D> pRetval;
             sal_uInt32 nLength(getText().getLength());
 
             if(nLength)
