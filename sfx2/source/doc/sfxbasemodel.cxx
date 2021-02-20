@@ -3887,8 +3887,8 @@ Reference< frame::XTitle > SfxBaseModel::impl_getTitleHelper ()
         Reference< frame::XUntitledNumbers >    xDesktop( frame::Desktop::create(xContext), UNO_QUERY_THROW);
         Reference< frame::XModel >              xThis   (static_cast< frame::XModel* >(this), UNO_QUERY_THROW);
 
-        ::framework::TitleHelper* pHelper = new ::framework::TitleHelper(xContext);
-        m_pData->m_xTitleHelper.set(static_cast< ::cppu::OWeakObject* >(pHelper), UNO_QUERY_THROW);
+        rtl::Reference<::framework::TitleHelper> pHelper = new ::framework::TitleHelper(xContext);
+        m_pData->m_xTitleHelper = pHelper;
         pHelper->setOwner                   (xThis   );
         pHelper->connectWithUntitledNumbers (xDesktop);
     }
@@ -3904,9 +3904,9 @@ Reference< frame::XUntitledNumbers > SfxBaseModel::impl_getUntitledHelper ()
     if ( ! m_pData->m_xNumberedControllers.is ())
     {
         Reference< frame::XModel > xThis   (static_cast< frame::XModel* >(this), UNO_QUERY_THROW);
-        ::comphelper::NumberedCollection*         pHelper = new ::comphelper::NumberedCollection();
+        rtl::Reference<::comphelper::NumberedCollection> pHelper = new ::comphelper::NumberedCollection();
 
-        m_pData->m_xNumberedControllers.set(static_cast< ::cppu::OWeakObject* >(pHelper), UNO_QUERY_THROW);
+        m_pData->m_xNumberedControllers = pHelper;
 
         pHelper->setOwner          (xThis);
         pHelper->setUntitledPrefix (" : ");
@@ -4047,9 +4047,7 @@ Reference< container::XEnumeration > SAL_CALL SfxBaseModel::getControllers()
     for (i=0; i<c; ++i)
         lEnum[i] <<= m_pData->m_seqControllers[i];
 
-    ::comphelper::OAnyEnumeration*                      pEnum = new ::comphelper::OAnyEnumeration(lEnum);
-    Reference< container::XEnumeration > xEnum(static_cast< container::XEnumeration* >(pEnum), UNO_QUERY_THROW);
-    return xEnum;
+    return new ::comphelper::OAnyEnumeration(lEnum);
 }
 
 

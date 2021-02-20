@@ -122,9 +122,7 @@ void SfxInfoBarWindow::SetCloseButtonImage()
     aPolygon.append(B2DPoint(aRect.Left(), aRect.Bottom()));
     aPolygon.setClosed(true);
 
-    PolyPolygonColorPrimitive2D* pBack
-        = new PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), m_aBackgroundColor);
-    aSeq[0] = pBack;
+    aSeq[0] = new PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), m_aBackgroundColor);
 
     LineAttribute aLineAttribute(m_aForegroundColor, 2.0);
 
@@ -141,10 +139,7 @@ void SfxInfoBarWindow::SetCloseButtonImage()
     aLine2.append(B2DPoint(aRect.Left(), aRect.Bottom()));
     aCross.append(aLine2);
 
-    PolyPolygonStrokePrimitive2D* pCross
-        = new PolyPolygonStrokePrimitive2D(aCross, aLineAttribute, StrokeAttribute());
-
-    aSeq[1] = pCross;
+    aSeq[1] = new PolyPolygonStrokePrimitive2D(aCross, aLineAttribute, StrokeAttribute());
 
     pProcessor->process(aSeq);
 

@@ -133,7 +133,7 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
 
     if ( pSlot )
     {
-        SfxOfficeDispatch* pDispatch = new SfxOfficeDispatch( pAppDisp, pSlot, aURL ) ;
+        rtl::Reference<SfxOfficeDispatch> pDispatch = new SfxOfficeDispatch( pAppDisp, pSlot, aURL ) ;
         pDispatch->SetFrame(m_xFrame);
         pDispatch->SetMasterUnoCommand( bMasterCommand );
         xDisp = pDispatch;

@@ -177,7 +177,7 @@ uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ThumbnailViewAc
 uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ThumbnailViewAcc::getAccessibleStateSet()
 {
     ThrowIfDisposed();
-    ::utl::AccessibleStateSetHelper* pStateSet = new ::utl::AccessibleStateSetHelper();
+    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet = new ::utl::AccessibleStateSetHelper();
 
     // Set some states.
     pStateSet->AddState (accessibility::AccessibleStateType::ENABLED);
@@ -694,7 +694,7 @@ uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ThumbnailViewIt
 uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ThumbnailViewItemAcc::getAccessibleStateSet()
 {
     const SolarMutexGuard aSolarGuard;
-    ::utl::AccessibleStateSetHelper*    pStateSet = new ::utl::AccessibleStateSetHelper;
+    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet = new ::utl::AccessibleStateSetHelper;
 
     if( mpParent )
     {
