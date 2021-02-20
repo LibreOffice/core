@@ -26,6 +26,7 @@
 #include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
 #include <svl/languageoptions.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -138,12 +139,13 @@ struct SmCfgOther
     SmCfgOther();
 };
 
+constexpr sal_uInt16 nDefaultSmSyntaxVersion(5);
 
 SmCfgOther::SmCfgOther()
     : ePrintSize(PRINT_SIZE_NORMAL)
     , nPrintZoomFactor(100)
     // Defaulted as 5 so I have time to code the parser 6
-    , nSmSyntaxVersion(5)
+    , nSmSyntaxVersion(nDefaultSmSyntaxVersion)
     , bPrintTitle(true)
     , bPrintFormulaText(true)
     , bPrintFrame(true)
@@ -1117,6 +1119,8 @@ bool SmMathConfig::IsAutoCloseBrackets() const
 
 sal_uInt16 SmMathConfig::GetDefaultSmSyntaxVersion() const
 {
+    if (utl::ConfigManager::IsFuzzing())
+        return nDefaultSmSyntaxVersion;
     if (!pOther)
         const_cast<SmMathConfig*>(this)->LoadOther();
     return pOther->nSmSyntaxVersion;
@@ -1166,6 +1170,8 @@ void SmMathConfig::SetDefaultSmSyntaxVersion( sal_uInt16 nVal )
 
 bool SmMathConfig::IsIgnoreSpacesRight() const
 {
+    if (utl::ConfigManager::IsFuzzing())
+        return false;
     if (!pOther)
         const_cast<SmMathConfig*>(this)->LoadOther();
     return pOther->bIgnoreSpacesRight;
