@@ -73,7 +73,7 @@ public:
     {
         if (maLocaleLanguageTag != rLocaleLanguageTag)
         {
-            SAL_INFO("comphelper.lok", "Setting locale from " << maLanguageTag.getBcp47() << " to " << rLocaleLanguageTag.getBcp47());
+            SAL_INFO("comphelper.lok", "Setting locale from " << maLocaleLanguageTag.getBcp47() << " to " << rLocaleLanguageTag.getBcp47());
             maLocaleLanguageTag = rLocaleLanguageTag;
         }
     }
