@@ -26,16 +26,17 @@ const char* TEMPLATE_LONG_NAMES_ARY[] =
 {
     NC_("TEMPLATE_LONG_NAMES_ARY", "My Templates"),
     NC_("TEMPLATE_LONG_NAMES_ARY", "Styles"),
-    NC_("TEMPLATE_LONG_NAMES_ARY", "Business Correspondence"),
-    NC_("TEMPLATE_LONG_NAMES_ARY", "Other Business Documents"),
-    NC_("TEMPLATE_LONG_NAMES_ARY", "Personal Correspondence and Documents"),
+    NC_("TEMPLATE_LONG_NAMES_ARY", "Business"),
+    NC_("TEMPLATE_LONG_NAMES_ARY", "Business Additional"),
+    NC_("TEMPLATE_LONG_NAMES_ARY", "Personal"),
     NC_("TEMPLATE_LONG_NAMES_ARY", "Forms and Contracts"),
     NC_("TEMPLATE_LONG_NAMES_ARY", "Finances"),
     NC_("TEMPLATE_LONG_NAMES_ARY", "Education"),
     NC_("TEMPLATE_LONG_NAMES_ARY", "Presentation Backgrounds"),
     NC_("TEMPLATE_LONG_NAMES_ARY", "Presentations"),
-    NC_("TEMPLATE_LONG_NAMES_ARY", "Miscellaneous"),
+    NC_("TEMPLATE_LONG_NAMES_ARY", "Templates"),
     NC_("TEMPLATE_LONG_NAMES_ARY", "Labels")
+    NC_("TEMPLATE_LONG_NAMES_ARY", "Flow Charts")
 };
 
 #endif

@@ -491,6 +491,7 @@ const char* TEMPLATE_SHORT_NAMES_ARY[] =
     "presnt",
     "misc",
     "labels"
+    "draw"
 };
 
 void SfxDocTplService_Impl::readFolderList()

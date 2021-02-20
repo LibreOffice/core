@@ -614,6 +614,11 @@ Directory gid_Dir_Template_Common_Styles
     DosName = "styles";
 End
 
+Directory gid_Dir_Template_Common_Draw
+    ParentID = gid_Dir_Template_Common;
+    DosName = "draw";
+End
+
 Directory gid_Brand_Dir_Program_Services
 #if defined MACOSX
     ParentID = gid_Brand_Dir_Share;
