@@ -1577,18 +1577,17 @@ void UCBStorage_Impl::Init()
                     {
                         if ( !pStream->GetError() )
                         {
-                            ::utl::OInputStreamWrapper* pHelper = new ::utl::OInputStreamWrapper( *pStream );
-                            css::uno::Reference < css::io::XInputStream > xInputStream( pHelper );
+                            rtl::Reference<::utl::OInputStreamWrapper> pHelper = new ::utl::OInputStreamWrapper( *pStream );
 
                             // create a manifest reader object that will read in the manifest from the stream
                             Reference < css::packages::manifest::XManifestReader > xReader =
                                 css::packages::manifest::ManifestReader::create(
                                     ::comphelper::getProcessComponentContext() ) ;
-                            Sequence < Sequence < PropertyValue > > aProps = xReader->readManifestSequence( xInputStream );
+                            Sequence < Sequence < PropertyValue > > aProps = xReader->readManifestSequence( pHelper );
 
                             // cleanup
                             xReader = nullptr;
-                            xInputStream = nullptr;
+                            pHelper = nullptr;
                             SetProps( aProps, OUString() );
                         }
                     }
@@ -2125,8 +2124,7 @@ sal_Int16 UCBStorage_Impl::Commit()
 
                             // get the stream from the temp file and create an output stream wrapper
                             SvStream* pStream = pTempFile->GetStream( StreamMode::STD_READWRITE );
-                            ::utl::OOutputStreamWrapper* pHelper = new ::utl::OOutputStreamWrapper( *pStream );
-                            css::uno::Reference < css::io::XOutputStream > xOutputStream( pHelper );
+                            rtl::Reference<::utl::OOutputStreamWrapper> xOutputStream = new ::utl::OOutputStreamWrapper( *pStream );
 
                             // create a manifest writer object that will fill the stream
                             Reference < css::packages::manifest::XManifestWriter > xWriter =
