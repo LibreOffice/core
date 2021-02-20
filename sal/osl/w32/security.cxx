@@ -687,53 +687,23 @@ bool SAL_CALL osl_HasWritePermissions(rtl_uString* pathName)
     HANDLE hImpersonatedToken = NULL;
     char winPath[MAX_PATH];
     DWORD pcchPath = MAX_PATH;
-    HRESULT hr = S_OK;
 
     mapping.GenericRead = FILE_GENERIC_READ;
     mapping.GenericWrite = FILE_GENERIC_WRITE;
 
     wcstombs(strPathName, wstrName, len);
     
-    hr = PathCreateFromUrl(strPathName, winPath, &pcchPath, NULL);
-    if (hr != S_OK)
+    if (!PathCreateFromUrl(strPathName, winPath, &pcchPath, NULL))
     {
-        LPVOID lpMsgBuf;
-        LPVOID lpDisplayBuf;
-        DWORD dw = hr;
-
-        FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
-                          | FORMAT_MESSAGE_IGNORE_INSERTS,
-                      NULL, dw, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0,
-                      NULL);
-        lpDisplayBuf
-            = (LPVOID)LocalAlloc(LMEM_ZEROINIT, (lstrlen((LPCTSTR)lpMsgBuf) + 40) * sizeof(TCHAR));
-        StringCchPrintf((LPTSTR)lpDisplayBuf, LocalSize(lpDisplayBuf) / sizeof(TCHAR),
-                        TEXT("path create failed with error %d: %s"), dw, lpMsgBuf);
-        std::cout << "MATT: ERROR: " << GetLastError() << std::endl;
-        MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
         goto Cleanup;
     }
-    //strPathName = (char*)"C:/Users/hop/projects/LibreOffice/bugs/47065/fill.ods";
+
     if (!GetFileSecurity(winPath,
                          OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION
                              | DACL_SECURITY_INFORMATION,
                          NULL, 0, &length)
         && ERROR_INSUFFICIENT_BUFFER != GetLastError())
     {
-        LPVOID lpMsgBuf;
-        LPVOID lpDisplayBuf;
-        DWORD dw = GetLastError();
-
-        FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
-                          | FORMAT_MESSAGE_IGNORE_INSERTS,
-                      NULL, dw, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0,
-                      NULL);
-        lpDisplayBuf
-            = (LPVOID)LocalAlloc(LMEM_ZEROINIT, (lstrlen((LPCTSTR)lpMsgBuf) + 40) * sizeof(TCHAR));
-        StringCchPrintf((LPTSTR)lpDisplayBuf, LocalSize(lpDisplayBuf) / sizeof(TCHAR),
-                        TEXT("get failed with error %d: %s"), dw, lpMsgBuf);
-        std::cout << "MATT: ERROR: " << GetLastError() << std::endl;
-        MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
         goto Cleanup;
     }
 
@@ -768,7 +738,7 @@ bool SAL_CALL osl_HasWritePermissions(rtl_uString* pathName)
                      &grantedAccess, // receives mask of allowed access rights
                      &fAccessGranted)) // receives results of access check
     {
-        LPVOID lpMsgBuf;
+        /*LPVOID lpMsgBuf;
         LPVOID lpDisplayBuf;
         DWORD dw = GetLastError();
 
@@ -780,8 +750,7 @@ bool SAL_CALL osl_HasWritePermissions(rtl_uString* pathName)
             = (LPVOID)LocalAlloc(LMEM_ZEROINIT, (lstrlen((LPCTSTR)lpMsgBuf) + 40) * sizeof(TCHAR));
         StringCchPrintf((LPTSTR)lpDisplayBuf, LocalSize(lpDisplayBuf) / sizeof(TCHAR),
                         TEXT("AccessCheck failed with error %d: %s"), dw, lpMsgBuf);
-        std::cout << "MATT: ERROR: " << GetLastError() << std::endl;
-        MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
+        MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);*/
         goto Cleanup;
     }
 

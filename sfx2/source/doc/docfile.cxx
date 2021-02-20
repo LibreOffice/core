@@ -933,25 +933,10 @@ OUString tryForeignLockfiles(const OUString& sDocURL)
 IMPL_LINK(SfxMedium, ShowLockedDocumentDialog2, void*, p, void)
 {
     SfxMedium* pMed = static_cast<SfxMedium*>(p);
-    
     OUString aDocumentURL
         = pMed->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::WithCharset);
-
-    /*sal_Int32 nContinuations = 3;
+    sal_Int32 nContinuations = 3;
     ::rtl::Reference<::ucbhelper::InteractionRequest> xInteractionRequestImpl;
-
-    osl::DirectoryItem rItem;
-    auto nError1 = osl::DirectoryItem::get(aDocumentURL, rItem);
-    if (nError1 != osl::FileBase::E_None)
-        return;
-    // get the file attributes
-    osl::FileStatus rFileStatus(osl_FileStatus_Mask_Validate | osl_FileStatus_Mask_Attributes);
-    nError1 = rItem.getFileStatus(rFileStatus);
-    if (nError1 != osl::FileBase::E_None)
-        return;
-
-    if ((osl_File_Attribute_ReadOnly & rFileStatus.getAttributes()) == 0)
-        return;
 
     OUString aInfo;
     xInteractionRequestImpl
@@ -964,25 +949,14 @@ IMPL_LINK(SfxMedium, ShowLockedDocumentDialog2, void*, p, void)
     aContinuations[2] = new ::ucbhelper::InteractionDisapprove(xInteractionRequestImpl.get());
     xInteractionRequestImpl->setContinuations(aContinuations);
     if (xHandler.is())
-        xHandler->handle(xInteractionRequestImpl);*/
+        xHandler->handle(xInteractionRequestImpl);
 
     // SfxApplication* pSfxApp = SfxApplication::Get();
     //SfxObjectShell sh;
    //  SfxMedium* searchMed = sh->GetMedium();
     //SfxObjectShellArr_Impl& rDocs = ;
     // search for a SfxDocument of the specified type
-     for (SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame;
-          pFrame = SfxViewFrame::GetNext(*pFrame))
-     {
-         if (pFrame->GetObjectShell()->GetMedium() == pMed)
-         {
-             /*SfxAllItemSet aSet(SfxGetpApp()->GetPool());
-             SfxRequest aReq(SID_RELOAD, SfxCallMode::SLOT, aSet);
-             pFrame->ExecReload_Impl(aReq);*/
-             if (osl_HasWritePermissions(aDocumentURL.pData))
-                pFrame->GetDispatcher()->Execute(SID_EDITDOC);
-         }
-     }
+     
      /*for (SfxObjectShell* pSh : SfxGetpApp()->GetObjectShells_Impl())
      {
          pSh->
@@ -1014,14 +988,48 @@ namespace
         }
         virtual void doWork()
         {
-            osl::Thread::wait(std::chrono::milliseconds(5000)); // give it a time to start
-            
-            Application::PostUserEvent(LINK(_pMed, SfxMedium, ShowLockedDocumentDialog2), _pMed);
-            
+            OUString aDocumentURL
+                = _pMed->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::WithCharset);
+            while (1)
+            {
+                osl::Thread::wait(std::chrono::milliseconds(1000)); // give it a time to start
+
+                for (SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame;
+                     pFrame = SfxViewFrame::GetNext(*pFrame))
+                {
+                    if (pFrame->GetObjectShell()->GetMedium() == _pMed)
+                    {
+                        osl::DirectoryItem rItem;
+                        auto nError1 = osl::DirectoryItem::get(aDocumentURL, rItem);
+                        if (nError1 != osl::FileBase::E_None)
+                            break;
+                        // get the file attributes
+                        osl::FileStatus rFileStatus(osl_FileStatus_Mask_Attributes);
+                        nError1 = rItem.getFileStatus(rFileStatus);
+                        if (nError1 != osl::FileBase::E_None)
+                            break;
+                        // check read-only
+                        if ((osl_File_Attribute_ReadOnly & rFileStatus.getAttributes()) != 0)
+                            break;
+
+                        /*SfxAllItemSet aSet(SfxGetpApp()->GetPool());
+             SfxRequest aReq(SID_RELOAD, SfxCallMode::SLOT, aSet);
+             pFrame->ExecReload_Impl(aReq);*/
+                        if (!osl_HasWritePermissions(aDocumentURL.pData))
+                            break;
+
+                        Application::PostUserEvent(
+                            LINK(_pMed, SfxMedium, ShowLockedDocumentDialog2), _pMed);
+
+                        // pFrame->GetDispatcher()->Execute(SID_EDITDOC);
+                        return;
+                    }
+                }
+            }
         }
+
         SfxMedium* _pMed;
         //static inline std::mutex mutex;
-        
     };
 } // namespace
 
