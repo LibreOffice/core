@@ -1067,6 +1067,11 @@ InterimDockingWindow::InterimDockingWindow(vcl::Window* pParent, const css::uno:
 {
 }
 
+InterimDockingWindow::InterimDockingWindow(vcl::Window* pParent, WinBits nStyle)
+    : DockingWindow(pParent, nStyle)
+{
+}
+
 InterimDockingWindow::~InterimDockingWindow()
 {
     disposeOnce();

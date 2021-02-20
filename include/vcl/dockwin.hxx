@@ -386,6 +386,7 @@ public:
     InterimDockingWindow(vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>(),
         bool bTearable = false);
+    InterimDockingWindow(vcl::Window* pParent, WinBits nStyle);
     virtual ~InterimDockingWindow() override;
     virtual void dispose() override;
 };

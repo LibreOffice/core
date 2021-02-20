@@ -20,7 +20,6 @@
 #include <svl/eitem.hxx>
 #include <svl/solar.hrc>
 #include <vcl/event.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 
 #include <vcl/svapp.hxx>
@@ -435,7 +434,7 @@ SfxDockingWindow_Impl::SfxDockingWindow_Impl(SfxDockingWindow* pBase)
 */
 void SfxDockingWindow::Resize()
 {
-    DockingWindow::Resize();
+    InterimDockingWindow::Resize();
     Invalidate();
     if ( !pImpl || !pImpl->bConstructed || !pMgr )
         return;
@@ -730,7 +729,7 @@ void SfxDockingWindow::EndDocking( const tools::Rectangle& rRect, bool bFloatMod
     }
     else
     {
-        DockingWindow::EndDocking(rRect, bFloatMode);
+        InterimDockingWindow::EndDocking(rRect, bFloatMode);
     }
 
     SetAlignment( IsFloatingMode() ? SfxChildAlignment::NOALIGNMENT : pImpl->GetDockAlignment() );
@@ -755,7 +754,7 @@ void SfxDockingWindow::Resizing( Size& /*rSize*/ )
 */
 SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     vcl::Window* pParent, WinBits nWinBits) :
-    DockingWindow (pParent, nWinBits),
+    InterimDockingWindow(pParent, nWinBits),
     pBindings(pBindinx),
     pMgr(pCW)
 {
@@ -767,13 +766,13 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
 */
 SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
-    : DockingWindow(pParent, "DockingWindow", "sfx/ui/dockingwindow.ui")
+    : InterimDockingWindow(pParent, nullptr, true)
     , pBindings(pBindinx)
     , pMgr(pCW)
 {
-    m_xVclContentArea = VclPtr<VclVBox>::Create(this);
-    m_xVclContentArea->Show();
-    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription, true));
+    SetStyle(GetStyle() | WB_SIZEABLE);
+
+    m_xBuilder.reset(Application::CreateInterimBuilder(m_xBox.get(), rUIXMLDescription, true));
     m_xContainer = m_xBuilder->weld_container(rID);
 
     pImpl.reset(new SfxDockingWindow_Impl(this));
@@ -1043,8 +1042,7 @@ void SfxDockingWindow::dispose()
     pImpl.reset();
     m_xContainer.reset();
     m_xBuilder.reset();
-    m_xVclContentArea.disposeAndClear();
-    DockingWindow::dispose();
+    InterimDockingWindow::dispose();
 }
 
 void SfxDockingWindow::ReleaseChildWindow_Impl()
@@ -1437,7 +1435,7 @@ void SfxDockingWindow::Paint(vcl::RenderContext&, const tools::Rectangle& /*rRec
 void SfxDockingWindow::SetMinOutputSizePixel( const Size& rSize )
 {
     pImpl->aMinSize = rSize;
-    DockingWindow::SetMinOutputSizePixel( rSize );
+    InterimDockingWindow::SetMinOutputSizePixel( rSize );
 }
 
 /** Set the minimum size which is returned.*/
@@ -1449,7 +1447,7 @@ const Size& SfxDockingWindow::GetMinOutputSizePixel() const
 bool SfxDockingWindow::EventNotify( NotifyEvent& rEvt )
 {
     if ( !pImpl )
-        return DockingWindow::EventNotify( rEvt );
+        return InterimDockingWindow::EventNotify( rEvt );
 
     if ( rEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
@@ -1464,7 +1462,7 @@ bool SfxDockingWindow::EventNotify( NotifyEvent& rEvt )
         // In VCL EventNotify goes first to the window itself, also call the
         // base class, otherwise the parent learns nothing
         // if ( rEvt.GetWindow() == this )  PB: #i74693# not necessary any longer
-        DockingWindow::EventNotify( rEvt );
+        InterimDockingWindow::EventNotify( rEvt );
         return true;
     }
     else if( rEvt.GetType() == MouseNotifyEvent::KEYINPUT )
@@ -1482,9 +1480,8 @@ bool SfxDockingWindow::EventNotify( NotifyEvent& rEvt )
         pBindings->SetActiveFrame( nullptr );
     }
 
-    return DockingWindow::EventNotify( rEvt );
+    return InterimDockingWindow::EventNotify( rEvt );
 }
-
 
 void SfxDockingWindow::SetItemSize_Impl( const Size& rSize )
 {
@@ -1529,7 +1526,7 @@ void SfxDockingWindow::StateChanged( StateChangedType nStateChange )
     if ( nStateChange == StateChangedType::InitShow )
         Initialize_Impl();
 
-    DockingWindow::StateChanged( nStateChange );
+    InterimDockingWindow::StateChanged( nStateChange );
 }
 
 void SfxDockingWindow::Move()

@@ -77,7 +77,6 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/i18nhelp.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
@@ -2219,7 +2218,7 @@ void SfxHelpWindow_Impl::GetFocus()
     if (pTextWin)
         pTextWin->GrabFocus();
     else
-        DockingWindow::GetFocus();
+        InterimDockingWindow::GetFocus();
 }
 
 void SfxHelpWindow_Impl::MakeLayout()
@@ -2422,7 +2421,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     const css::uno::Reference < css::frame::XFrame2 >& rFrame,
     vcl::Window* pParent ) :
 
-    DockingWindow(pParent, "DockingWindow", "sfx/ui/dockingwindow.ui"),
+    InterimDockingWindow(pParent, nullptr, true),
 
     xFrame              ( rFrame ),
     pTextWin            ( nullptr ),
@@ -2437,13 +2436,11 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     aWinSize            ( 0, 0 ),
     sTitle              ( pParent->GetText() )
 {
-    SetStyle(GetStyle() & ~WB_DOCKABLE);
+    SetStyle((GetStyle() & ~WB_DOCKABLE) | WB_SIZEABLE);
 
     SetHelpId( HID_HELP_WINDOW );
 
-    m_xVclContentArea = VclPtr<VclVBox>::Create(this);
-    m_xVclContentArea->Show();
-    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, "sfx/ui/helpwindow.ui", false));
+    m_xBuilder.reset(Application::CreateInterimBuilder(m_xBox.get(), "sfx/ui/helpwindow.ui", false));
     m_xContainer = m_xBuilder->weld_paned("HelpWindow");
     m_xContainer->connect_size_allocate(LINK(this, SfxHelpWindow_Impl, ResizeHdl));
     m_xHelpPaneWindow = m_xBuilder->weld_container("helppanewindow");
@@ -2483,9 +2480,8 @@ void SfxHelpWindow_Impl::dispose()
     m_xHelpPaneWindow.reset();
     m_xContainer.reset();
     m_xBuilder.reset();
-    m_xVclContentArea.disposeAndClear();
 
-    DockingWindow::dispose();
+    InterimDockingWindow::dispose();
 }
 
 bool SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
