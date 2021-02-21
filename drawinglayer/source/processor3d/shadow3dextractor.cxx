@@ -29,6 +29,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
+#include <rtl/ref.hxx>
 
 
 using namespace com::sun::star;
@@ -71,7 +72,7 @@ namespace drawinglayer::processor3d
 
                     // create 2d shadow primitive with result. This also fetches all entries
                     // from aNewSubList, so there is no need to delete them
-                    primitive2d::BasePrimitive2D* pNew = new primitive2d::ShadowPrimitive2D(
+                    rtl::Reference<primitive2d::BasePrimitive2D> pNew = new primitive2d::ShadowPrimitive2D(
                         rPrimitive.getShadowTransform(),
                         rPrimitive.getShadowColor(),
                         0,  // shadow3d doesn't have rPrimitive.getShadowBlur() yet.
@@ -80,8 +81,7 @@ namespace drawinglayer::processor3d
                     if(basegfx::fTools::more(rPrimitive.getShadowTransparence(), 0.0))
                     {
                         // create simpleTransparencePrimitive, add created primitives
-                        const primitive2d::Primitive2DReference xRef(pNew);
-                        const primitive2d::Primitive2DContainer aNewTransPrimitiveVector { xRef };
+                        const primitive2d::Primitive2DContainer aNewTransPrimitiveVector { pNew };
 
                         pNew = new primitive2d::UnifiedTransparencePrimitive2D(
                             aNewTransPrimitiveVector,

@@ -52,8 +52,7 @@ namespace drawinglayer::primitive2d
                     aLineA.append(aStartA);
                     aLineA.append(aEndA);
                     aLineA.transform(rViewInformation.getInverseObjectToViewTransformation());
-                    PolygonMarkerPrimitive2D* pNewA = new PolygonMarkerPrimitive2D(aLineA, getRGBColA(), getRGBColB(), getDiscreteDashLength());
-                    rContainer.push_back(pNewA);
+                    rContainer.push_back(new PolygonMarkerPrimitive2D(aLineA, getRGBColA(), getRGBColB(), getDiscreteDashLength()));
 
                     const basegfx::B2DVector aPerpendicularNormalizedDirection(basegfx::getPerpendicular(aNormalizedDirection));
                     const basegfx::B2DPoint aStartB(aViewPosition - aPerpendicularNormalizedDirection);
@@ -62,8 +61,7 @@ namespace drawinglayer::primitive2d
                     aLineB.append(aStartB);
                     aLineB.append(aEndB);
                     aLineB.transform(rViewInformation.getInverseObjectToViewTransformation());
-                    PolygonMarkerPrimitive2D* pNewB = new PolygonMarkerPrimitive2D(aLineB, getRGBColA(), getRGBColB(), getDiscreteDashLength());
-                    rContainer.push_back(pNewB);
+                    rContainer.push_back(new PolygonMarkerPrimitive2D(aLineB, getRGBColA(), getRGBColB(), getDiscreteDashLength()));
 
                     break;
                 }
@@ -113,8 +111,7 @@ namespace drawinglayer::primitive2d
                         {
                             basegfx::B2DPolygon aPart(aResult.getB2DPolygon(a));
                             aPart.transform(rViewInformation.getInverseObjectToViewTransformation());
-                            PolygonMarkerPrimitive2D* pNew = new PolygonMarkerPrimitive2D(aPart, getRGBColA(), getRGBColB(), getDiscreteDashLength());
-                            rContainer.push_back(pNew);
+                            rContainer.push_back(new PolygonMarkerPrimitive2D(aPart, getRGBColA(), getRGBColB(), getDiscreteDashLength()));
                         }
                     }
 
