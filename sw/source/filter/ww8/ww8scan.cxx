@@ -7600,16 +7600,16 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize):
     fMirrorMargins(false), fReadOnlyRecommended(false), fDfltTrueType(false),
     fPagSuppressTopSpacing(false), fProtEnabled(false), fDispFormFieldSel(false), fRMView(false),
     fRMPrint(false), fWriteReservation(false), fLockRev(false), fEmbedFonts(false),
-    copts_fNoTabForInd(false), copts_fNoSpaceRaiseLower(false), copts_fSupressSpbfAfterPgBrk(false),
+    copts_fNoTabForInd(false), copts_fNoSpaceRaiseLower(false), copts_fSuppressSpbfAfterPgBrk(false),
     copts_fWrapTrailSpaces(false), copts_fMapPrintTextColor(false), copts_fNoColumnBalance(false),
-    copts_fConvMailMergeEsc(false), copts_fSupressTopSpacing(false),
+    copts_fConvMailMergeEsc(false), copts_fSuppressTopSpacing(false),
     copts_fOrigWordTableRules(false), copts_fTransparentMetafiles(false),
     copts_fShowBreaksInFrames(false), copts_fSwapBordersFacingPgs(false), copts_fExpShRtn(false),
     rncEdn(0), nEdn(0), epc(0), fPrintFormData(false), fSaveFormData(false), fShadeFormData(false),
     fWCFootnoteEdn(false), wvkSaved(0), wScaleSaved(0), zkSaved(0), fRotateFontW6(false),
     iGutterPos(false), fNoTabForInd(false), fNoSpaceRaiseLower(false),
-    fSupressSpbfAfterPageBreak(false), fWrapTrailSpaces(false), fMapPrintTextColor(false),
-    fNoColumnBalance(false), fConvMailMergeEsc(false), fSupressTopSpacing(false),
+    fSuppressSpbfAfterPageBreak(false), fWrapTrailSpaces(false), fMapPrintTextColor(false),
+    fNoColumnBalance(false), fConvMailMergeEsc(false), fSuppressTopSpacing(false),
     fOrigWordTableRules(false), fTransparentMetafiles(false), fShowBreaksInFrames(false),
     fSwapBordersFacingPgs(false), fCompatibilityOptions_Unknown1_13(false), fExpShRtn(false),
     fCompatibilityOptions_Unknown1_15(false), fCompatibilityOptions_Unknown1_16(false),
@@ -7713,12 +7713,12 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize):
         a8Bit = Get_Byte( pData );           // 8 0x08
         copts_fNoTabForInd           = 0 != ( a8Bit  &  0x01   );
         copts_fNoSpaceRaiseLower     = 0 != ( a8Bit  &  0x02   );
-        copts_fSupressSpbfAfterPgBrk = 0 != ( a8Bit  &  0x04   );
+        copts_fSuppressSpbfAfterPgBrk = 0 != ( a8Bit  &  0x04   );
         copts_fWrapTrailSpaces       = 0 != ( a8Bit  &  0x08   );
         copts_fMapPrintTextColor     = 0 != ( a8Bit  &  0x10   );
         copts_fNoColumnBalance       = 0 != ( a8Bit  &  0x20   );
         copts_fConvMailMergeEsc      = 0 != ( a8Bit  &  0x40   );
-        copts_fSupressTopSpacing     = 0 != ( a8Bit  &  0x80   );
+        copts_fSuppressTopSpacing    = 0 != ( a8Bit  &  0x80   );
 
         a8Bit = Get_Byte( pData );           // 9 0x09
         copts_fOrigWordTableRules    = 0 != ( a8Bit  &  0x01   );
@@ -7869,17 +7869,17 @@ WW8Dop::WW8Dop():
     fMirrorMargins(false), fReadOnlyRecommended(false), fDfltTrueType(true),
     fPagSuppressTopSpacing(false), fProtEnabled(false), fDispFormFieldSel(false), fRMView(true),
     fRMPrint(true), fWriteReservation(false), fLockRev(false), fEmbedFonts(false),
-    copts_fNoTabForInd(false), copts_fNoSpaceRaiseLower(false), copts_fSupressSpbfAfterPgBrk(false),
+    copts_fNoTabForInd(false), copts_fNoSpaceRaiseLower(false), copts_fSuppressSpbfAfterPgBrk(false),
     copts_fWrapTrailSpaces(false), copts_fMapPrintTextColor(false), copts_fNoColumnBalance(false),
-    copts_fConvMailMergeEsc(false), copts_fSupressTopSpacing(false),
+    copts_fConvMailMergeEsc(false), copts_fSuppressTopSpacing(false),
     copts_fOrigWordTableRules(false), copts_fTransparentMetafiles(false),
     copts_fShowBreaksInFrames(false), copts_fSwapBordersFacingPgs(false), copts_fExpShRtn(false),
     dxaTab(0x2d0), dxaHotZ(0x168), nRevision(1),
     rncEdn(0), nEdn(1), epc(3), fPrintFormData(false), fSaveFormData(false), fShadeFormData(true),
     fWCFootnoteEdn(false), wvkSaved(2), wScaleSaved(100), zkSaved(0), fRotateFontW6(false),
     iGutterPos(false), fNoTabForInd(false), fNoSpaceRaiseLower(false),
-    fSupressSpbfAfterPageBreak(false), fWrapTrailSpaces(false), fMapPrintTextColor(false),
-    fNoColumnBalance(false), fConvMailMergeEsc(false), fSupressTopSpacing(false),
+    fSuppressSpbfAfterPageBreak(false), fWrapTrailSpaces(false), fMapPrintTextColor(false),
+    fNoColumnBalance(false), fConvMailMergeEsc(false), fSuppressTopSpacing(false),
     fOrigWordTableRules(false), fTransparentMetafiles(false), fShowBreaksInFrames(false),
     fSwapBordersFacingPgs(false), fCompatibilityOptions_Unknown1_13(false), fExpShRtn(false),
     fCompatibilityOptions_Unknown1_15(false), fCompatibilityOptions_Unknown1_16(false),
@@ -7931,12 +7931,12 @@ void WW8Dop::SetCompatibilityOptions(sal_uInt32 a32Bit)
 {
     fNoTabForInd                = ( a32Bit &  0x00000001 )       ;
     fNoSpaceRaiseLower          = ( a32Bit &  0x00000002 ) >>  1 ;
-    fSupressSpbfAfterPageBreak  = ( a32Bit &  0x00000004 ) >>  2 ;
+    fSuppressSpbfAfterPageBreak = ( a32Bit &  0x00000004 ) >>  2 ;
     fWrapTrailSpaces            = ( a32Bit &  0x00000008 ) >>  3 ;
     fMapPrintTextColor          = ( a32Bit &  0x00000010 ) >>  4 ;
     fNoColumnBalance            = ( a32Bit &  0x00000020 ) >>  5 ;
     fConvMailMergeEsc           = ( a32Bit &  0x00000040 ) >>  6 ;
-    fSupressTopSpacing          = ( a32Bit &  0x00000080 ) >>  7 ;
+    fSuppressTopSpacing         = ( a32Bit &  0x00000080 ) >>  7 ;
     fOrigWordTableRules         = ( a32Bit &  0x00000100 ) >>  8 ;
     fTransparentMetafiles       = ( a32Bit &  0x00000200 ) >>  9 ;
     fShowBreaksInFrames         = ( a32Bit &  0x00000400 ) >> 10 ;
@@ -7969,12 +7969,12 @@ sal_uInt32 WW8Dop::GetCompatibilityOptions() const
     sal_uInt32 a32Bit = 0;
     if (fNoTabForInd)                   a32Bit |= 0x00000001;
     if (fNoSpaceRaiseLower)             a32Bit |= 0x00000002;
-    if (fSupressSpbfAfterPageBreak)     a32Bit |= 0x00000004;
+    if (fSuppressSpbfAfterPageBreak)    a32Bit |= 0x00000004;
     if (fWrapTrailSpaces)               a32Bit |= 0x00000008;
     if (fMapPrintTextColor)             a32Bit |= 0x00000010;
     if (fNoColumnBalance)               a32Bit |= 0x00000020;
     if (fConvMailMergeEsc)              a32Bit |= 0x00000040;
-    if (fSupressTopSpacing)             a32Bit |= 0x00000080;
+    if (fSuppressTopSpacing)            a32Bit |= 0x00000080;
     if (fOrigWordTableRules)            a32Bit |= 0x00000100;
     if (fTransparentMetafiles)          a32Bit |= 0x00000200;
     if (fShowBreaksInFrames)            a32Bit |= 0x00000400;
@@ -8152,12 +8152,12 @@ void WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
     a8Bit = 0;                          // 8 0x08
     if( copts_fNoTabForInd )            a8Bit |= 0x01;
     if( copts_fNoSpaceRaiseLower )      a8Bit |= 0x02;
-    if( copts_fSupressSpbfAfterPgBrk )  a8Bit |= 0x04;
+    if( copts_fSuppressSpbfAfterPgBrk ) a8Bit |= 0x04;
     if( copts_fWrapTrailSpaces )        a8Bit |= 0x08;
     if( copts_fMapPrintTextColor )      a8Bit |= 0x10;
     if( copts_fNoColumnBalance )        a8Bit |= 0x20;
     if( copts_fConvMailMergeEsc )       a8Bit |= 0x40;
-    if( copts_fSupressTopSpacing )      a8Bit |= 0x80;
+    if( copts_fSuppressTopSpacing )     a8Bit |= 0x80;
     Set_UInt8( pData, a8Bit );
 
     a8Bit = 0;                          // 9 0x09

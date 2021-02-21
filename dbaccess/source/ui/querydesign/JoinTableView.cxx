@@ -1179,7 +1179,7 @@ void OJoinTableView::Command(const CommandEvent& rEvt)
         Window::Command(rEvt);
 }
 
-OTableConnection* OJoinTableView::GetTabConn(const OTableWindow* pLhs,const OTableWindow* pRhs,bool _bSupressCrossOrNaturalJoin) const
+OTableConnection* OJoinTableView::GetTabConn(const OTableWindow* pLhs,const OTableWindow* pRhs,bool _bSuppressCrossOrNaturalJoin) const
 {
     OTableConnection* pConn = nullptr;
     OSL_ENSURE(pRhs || pLhs, "OJoinTableView::GetTabConn : invalid args !");
@@ -1201,9 +1201,9 @@ OTableConnection* OJoinTableView::GetTabConn(const OTableWindow* pLhs,const OTab
                     )
                 )
             {
-                if ( _bSupressCrossOrNaturalJoin )
+                if ( _bSuppressCrossOrNaturalJoin )
                 {
-                    if ( supressCrossNaturalJoin(pData->GetData()) )
+                    if ( suppressCrossNaturalJoin(pData->GetData()) )
                         continue;
                 }
                 pConn = pData;
@@ -1560,7 +1560,7 @@ void OJoinTableView::onNoColumns_throw()
     throw SQLException();
 }
 
-bool OJoinTableView::supressCrossNaturalJoin(const TTableConnectionData::value_type& ) const
+bool OJoinTableView::suppressCrossNaturalJoin(const TTableConnectionData::value_type& ) const
 {
     return false;
 }
