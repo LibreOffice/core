@@ -41,7 +41,10 @@ namespace ucbhelper{
               only
             - or as base class if interactions must be modified.
  */
-class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper< css::task::XInteractionHandler >
+// extra struct to work around MSVC linking issue
+struct InterceptedInteraction_Base : public ::cppu::WeakImplHelper< css::task::XInteractionHandler > {};
+
+class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction_Base
 {
 
     // types
