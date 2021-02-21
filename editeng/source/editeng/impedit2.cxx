@@ -3473,8 +3473,7 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
     EditSelection aSelection( rSelection );
     aSelection.Adjust( GetEditDoc() );
 
-    EditDataObject* pDataObj = new EditDataObject;
-    uno::Reference< datatransfer::XTransferable > xDataObj = pDataObj;
+    rtl::Reference<EditDataObject> pDataObj = new EditDataObject;
 
     pDataObj->GetString() = convertLineEnd(GetSelected(aSelection), GetSystemLineEnd()); // System specific
 
@@ -3513,7 +3512,7 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
         }
     }
 
-    return xDataObj;
+    return pDataObj;
 }
 
 EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransferable > const & rxDataObj, const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial )

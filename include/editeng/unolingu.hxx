@@ -21,6 +21,7 @@
 #define INCLUDED_EDITENG_UNOLINGU_HXX
 
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <editeng/editengdllapi.h>
 
@@ -52,7 +53,7 @@ class EDITENG_DLLPUBLIC LinguMgr
     static css::uno::Reference< css::linguistic2::XDictionary >               xIgnoreAll;
     static css::uno::Reference< css::linguistic2::XDictionary >               xChangeAll;
 
-    static LinguMgrExitLstnr                           *pExitLstnr;
+    static rtl::Reference<LinguMgrExitLstnr>           pExitLstnr;
     static bool                                        bExiting;
 
     static css::uno::Reference< css::linguistic2::XSpellChecker1 >            GetSpell();
