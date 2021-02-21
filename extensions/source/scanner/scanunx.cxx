@@ -157,10 +157,9 @@ void ScannerThread::run()
     osl_setThreadName("ScannerThread");
 
     osl::MutexGuard         aGuard( m_pHolder->m_aProtector );
-    BitmapTransporter*  pTransporter = new BitmapTransporter;
-    Reference< XInterface >   aIf( static_cast< OWeakObject* >( pTransporter ) );
+    rtl::Reference<BitmapTransporter> pTransporter = new BitmapTransporter;
 
-    m_pHolder->m_xBitmap.set( aIf, UNO_QUERY );
+    m_pHolder->m_xBitmap = pTransporter;
 
     m_pHolder->m_bBusy = true;
     if( m_pHolder->m_aSane.IsOpen() )
