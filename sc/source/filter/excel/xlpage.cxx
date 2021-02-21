@@ -20,6 +20,7 @@
 #include <xlpage.hxx>
 #include <xltools.hxx>
 #include <editeng/paperinf.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <sal/macros.h>
 #include <editeng/brushitem.hxx>
 #include <global.hxx>
@@ -36,15 +37,15 @@ struct XclPaperSize
 
 constexpr tools::Long in2twips(double n_inch)
 {
-    return static_cast<tools::Long>( (n_inch * EXC_TWIPS_PER_INCH) + 0.5);
+    return o3tl::convert(n_inch, o3tl::Length::in, o3tl::Length::twip) + 0.5;
 }
 constexpr tools::Long mm2twips(double n_mm)
 {
-    return static_cast<tools::Long>( (n_mm * EXC_TWIPS_PER_INCH / CM_PER_INCH / 10.0) + 0.5);
+    return o3tl::convert(n_mm, o3tl::Length::mm, o3tl::Length::twip) + 0.5;
 }
 constexpr tools::Long twips2mm(tools::Long n_twips)
 {
-    return static_cast<tools::Long>((static_cast<double>(n_twips) - 0.5) / EXC_TWIPS_PER_INCH * CM_PER_INCH * 10.0);
+    return o3tl::convert(n_twips, o3tl::Length::twip, o3tl::Length::mm);
 }
 
 // see ApiPaperSize spPaperSizeTable in filter and aDinTab in i18nutil

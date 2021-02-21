@@ -58,6 +58,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/editobj.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <svl/poolcach.hxx>
 #include <unotools/charclass.hxx>
 #include <math.h>
@@ -3916,13 +3917,15 @@ void ScTable::SetDrawPageSize(bool bResetStreamValid, bool bUpdateNoteCaptionPos
     ScDrawLayer* pDrawLayer = rDocument.GetDrawLayer();
     if( pDrawLayer )
     {
-        double fValX = GetColOffset( rDocument.MaxCol() + 1 ) * HMM_PER_TWIPS;
-        double fValY = GetRowOffset( rDocument.MaxRow() + 1 ) * HMM_PER_TWIPS;
-        const tools::Long nMax = ::std::numeric_limits<tools::Long>::max();
+        const sal_Int64 nMax = ::std::numeric_limits<tools::Long>::max();
         // #i113884# Avoid int32 overflow with possible negative results than can cause bad effects.
         // If the draw page size is smaller than all rows, only the bottom of the sheet is affected.
-        tools::Long x = ( fValX > static_cast<double>(nMax) ) ? nMax : static_cast<tools::Long>(fValX);
-        tools::Long y = ( fValY > static_cast<double>(nMax) ) ? nMax : static_cast<tools::Long>(fValY);
+        tools::Long x = std::min(o3tl::convert(GetColOffset(rDocument.MaxCol() + 1),
+                                               o3tl::Length::twip, o3tl::Length::mm100),
+                                 nMax);
+        tools::Long y = std::min(o3tl::convert(GetRowOffset(rDocument.MaxRow() + 1),
+                                               o3tl::Length::twip, o3tl::Length::mm100),
+                                 nMax);
 
         if ( IsLayoutRTL() )        // IsNegativePage
             x = -x;

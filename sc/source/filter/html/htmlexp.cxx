@@ -48,6 +48,7 @@
 #include <vcl/outdev.hxx>
 #include <stdio.h>
 #include <osl/diagnose.h>
+#include <o3tl/unit_conversion.hxx>
 
 #include <htmlexp.hxx>
 #include <global.hxx>
@@ -494,7 +495,7 @@ OString ScHTMLExport::BorderToStyle(const char* pBorderName,
         // thickness
         int nWidth = pLine->GetWidth();
         int nPxWidth = (nWidth > 0) ?
-            std::max(int(nWidth / TWIPS_PER_PIXEL), 1) : 0;
+            std::max(o3tl::convert(nWidth, o3tl::Length::twip, o3tl::Length::px), sal_Int64(1)) : 0;
         aOut.append(static_cast<sal_Int32>(nPxWidth)).
             append("px ");
         switch (pLine->GetBorderLineStyle())

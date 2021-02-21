@@ -131,11 +131,6 @@ const sal_Int32 EXC_RK_INT100               = EXC_RK_100FLAG | EXC_RK_INTFLAG;
 
 // Measures -------------------------------------------------------------------
 
-const sal_Int32 EXC_POINTS_PER_INCH         = 72;
-const sal_Int32 EXC_TWIPS_PER_INCH          = EXC_POINTS_PER_INCH * 20;
-
-const double EXC_POINTS_PER_HMM             = static_cast< double >( EXC_POINTS_PER_INCH ) / 2540.0;
-
 const sal_uInt8 EXC_ORIENT_NONE             = 0;        /// Text orientation: not rotated.
 const sal_uInt8 EXC_ORIENT_STACKED          = 1;        /// Text orientation: vertically stacked.
 const sal_uInt8 EXC_ORIENT_90CCW            = 2;        /// Text orientation: 90 deg counterclockwise.

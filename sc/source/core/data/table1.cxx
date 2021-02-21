@@ -20,6 +20,7 @@
 #include <scitems.hxx>
 #include <editeng/justifyitem.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <unotools/textsearch.hxx>
 #include <unotools/charclass.hxx>
 
@@ -302,8 +303,8 @@ ScTable::ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
         if ( pDrawLayer->ScAddPage( nTab ) )    // sal_False (not inserted) during Undo
         {
             pDrawLayer->ScRenamePage( nTab, aName );
-            sal_uLong const nx = sal_uLong(double(rDocument.MaxCol()+1) * STD_COL_WIDTH           * HMM_PER_TWIPS );
-            sal_uLong ny = static_cast<sal_uLong>(double(rDocument.MaxRow()+1) * ScGlobal::nStdRowHeight * HMM_PER_TWIPS );
+            sal_uLong const nx = o3tl::convert((rDocument.MaxCol()+1) * STD_COL_WIDTH, o3tl::Length::twip, o3tl::Length::mm100);
+            sal_uLong ny = o3tl::convert((rDocument.MaxRow()+1) * ScGlobal::nStdRowHeight, o3tl::Length::twip, o3tl::Length::mm10);
             pDrawLayer->SetPageSize( static_cast<sal_uInt16>(nTab), Size( nx, ny ), false );
         }
     }
