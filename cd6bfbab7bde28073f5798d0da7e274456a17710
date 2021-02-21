@@ -16,6 +16,24 @@
       "revId": "cd6bfbab7bde28073f5798d0da7e274456a17710",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70e1f37f_c5761da6",
+        "filename": "starmath/inc/parse.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-02-21T14:20:27Z",
+      "side": 1,
+      "message": "The idea is using parsebase from parse5 and parse6 (parse6 not introduced yet).\nThat way we have the abstract base class file handle all shared resources.\nThen we use parse.hxx to be able to have all the parsers reunited and implement some extra code to get the correct parser.",
+      "parentUuid": "7cc40b09_cf7b1deb",
+      "revId": "cd6bfbab7bde28073f5798d0da7e274456a17710",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
