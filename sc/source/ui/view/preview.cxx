@@ -33,6 +33,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/settings.hxx>
 #include <o3tl/deleter.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 #include <preview.hxx>
 #include <prevwsh.hxx>
@@ -452,15 +453,19 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         if (nPrinted)   // if not, draw everything grey
         {
             aLocalPageSize = pPrintFunc->GetPageSize();
-            aLocalPageSize.setWidth( static_cast<tools::Long>(aLocalPageSize.Width()  * HMM_PER_TWIPS ) );
-            aLocalPageSize.setHeight( static_cast<tools::Long>(aLocalPageSize.Height() * HMM_PER_TWIPS ) );
+            aLocalPageSize.setWidth(
+                o3tl::convert(aLocalPageSize.Width(), o3tl::Length::twip, o3tl::Length::mm100));
+            aLocalPageSize.setHeight(
+                o3tl::convert(aLocalPageSize.Height(), o3tl::Length::twip, o3tl::Length::mm100));
 
-            nLeftMargin = static_cast<tools::Long>( nLeftMargin * HMM_PER_TWIPS );
-            nRightMargin = static_cast<tools::Long>( nRightMargin * HMM_PER_TWIPS );
-            nTopMargin = static_cast<tools::Long>( nTopMargin * HMM_PER_TWIPS );
-            nBottomMargin = static_cast<tools::Long>( nBottomMargin * HMM_PER_TWIPS );
-            nHeaderHeight = static_cast<tools::Long>( nHeaderHeight * HMM_PER_TWIPS * mnScale / 100 + nTopMargin );
-            nFooterHeight = static_cast<tools::Long>( nFooterHeight * HMM_PER_TWIPS * mnScale / 100 + nBottomMargin );
+            nLeftMargin = o3tl::convert(nLeftMargin, o3tl::Length::twip, o3tl::Length::mm100);
+            nRightMargin = o3tl::convert(nRightMargin, o3tl::Length::twip, o3tl::Length::mm100);
+            nTopMargin = o3tl::convert(nTopMargin, o3tl::Length::twip, o3tl::Length::mm100);
+            nBottomMargin = o3tl::convert(nBottomMargin, o3tl::Length::twip, o3tl::Length::mm100);
+            constexpr auto md = o3tl::getConversionMulDiv(o3tl::Length::twip, o3tl::Length::mm10);
+            const auto m = md.first * mnScale, d = md.second * 100;
+            nHeaderHeight = o3tl::convert(nHeaderHeight, m, d) + nTopMargin;
+            nFooterHeight = o3tl::convert(nFooterHeight, m, d) + nBottomMargin;
         }
 
         if (!bStateValid)
@@ -1065,17 +1070,17 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
                 SvxLRSpaceItem aLRItem = rStyleSet.Get( ATTR_LRSPACE );
 
-                if(( bLeftRulerChange || bRightRulerChange ) && ( aButtonUpPt.X() <= ( 0 - aOffset.X() ) || aButtonUpPt.X() > nWidth * HMM_PER_TWIPS - aOffset.X() ) )
+                if(( bLeftRulerChange || bRightRulerChange ) && ( aButtonUpPt.X() <= ( 0 - aOffset.X() ) || aButtonUpPt.X() > o3tl::convert(nWidth, o3tl::Length::twip, o3tl::Length::mm100) - aOffset.X() ) )
                 {
                     bMoveRulerAction = false;
                     Invalidate(tools::Rectangle(0, 0, 10000, 10000));
                 }
-                else if( bLeftRulerChange && ( aButtonUpPt.X() / HMM_PER_TWIPS > nWidth - aLRItem.GetRight() - aOffset.X() / HMM_PER_TWIPS ) )
+                else if( bLeftRulerChange && ( o3tl::convert(aButtonUpPt.X(), o3tl::Length::mm100, o3tl::Length::twip) > nWidth - aLRItem.GetRight() - o3tl::convert(aOffset.X(), o3tl::Length::mm100, o3tl::Length::twip) ) )
                 {
                     bMoveRulerAction = false;
                     Invalidate(tools::Rectangle(0, 0, 10000, 10000));
                 }
-                else if( bRightRulerChange && ( aButtonUpPt.X() / HMM_PER_TWIPS < aLRItem.GetLeft() - aOffset.X() / HMM_PER_TWIPS ) )
+                else if( bRightRulerChange && ( o3tl::convert(aButtonUpPt.X(), o3tl::Length::mm100, o3tl::Length::twip) < aLRItem.GetLeft() - o3tl::convert(aOffset.X(), o3tl::Length::mm100, o3tl::Length::twip) ) )
                 {
                     bMoveRulerAction = false;
                     Invalidate(tools::Rectangle(0, 0, 10000, 10000));
@@ -1090,13 +1095,13 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     ScDocShellModificator aModificator( *pDocShell );
                     if( bLeftRulerChange && bLeftRulerMove )
                     {
-                       aLRItem.SetLeft( static_cast<tools::Long>( aButtonUpPt.X() / HMM_PER_TWIPS + aOffset.X() / HMM_PER_TWIPS ));
+                       aLRItem.SetLeft(o3tl::convert( aButtonUpPt.X(), o3tl::Length::mm100, o3tl::Length::twip) + o3tl::convert(aOffset.X(), o3tl::Length::mm100, o3tl::Length::twip));
                        rStyleSet.Put( aLRItem );
                        pDocShell->SetModified();
                     }
                     else if( bRightRulerChange && bRightRulerMove )
                     {
-                        aLRItem.SetRight( static_cast<tools::Long>( nWidth - aButtonUpPt.X() / HMM_PER_TWIPS - aOffset.X() / HMM_PER_TWIPS ));
+                        aLRItem.SetRight(nWidth - o3tl::convert(aButtonUpPt.X(), o3tl::Length::mm100, o3tl::Length::twip) - o3tl::convert(aOffset.X(), o3tl::Length::mm100, o3tl::Length::twip));
                         rStyleSet.Put( aLRItem );
                         pDocShell->SetModified();
                     }
@@ -1132,7 +1137,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
             SetPointer( PointerStyle::Arrow );
 
             bool bMoveRulerAction = true;
-            if( ( bTopRulerChange || bBottomRulerChange || bHeaderRulerChange || bFooterRulerChange ) && ( aButtonUpPt.Y() <= ( 0 - aOffset.Y() ) || aButtonUpPt.Y() > nHeight * HMM_PER_TWIPS -aOffset.Y() ) )
+            if( ( bTopRulerChange || bBottomRulerChange || bHeaderRulerChange || bFooterRulerChange ) && ( aButtonUpPt.Y() <= ( 0 - aOffset.Y() ) || aButtonUpPt.Y() > o3tl::convert(nHeight, o3tl::Length::twip, o3tl::Length::mm100) -aOffset.Y() ) )
             {
                 bMoveRulerAction = false;
                 Invalidate(tools::Rectangle(0, 0, 10000, 10000));
@@ -1162,13 +1167,13 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
                     if( bTopRulerMove && bTopRulerChange )
                     {
-                        aULItem.SetUpperValue( static_cast<sal_uInt16>( aButtonUpPt.Y() / HMM_PER_TWIPS + aOffset.Y() / HMM_PER_TWIPS ) );
+                        aULItem.SetUpperValue(o3tl::convert(aButtonUpPt.Y(), o3tl::Length::mm100, o3tl::Length::twip) + o3tl::convert(aOffset.Y(), o3tl::Length::mm100, o3tl::Length::twip));
                         rStyleSet.Put( aULItem );
                         pDocShell->SetModified();
                     }
                     else if( bBottomRulerMove && bBottomRulerChange )
                     {
-                        aULItem.SetLowerValue( static_cast<sal_uInt16>( nHeight - aButtonUpPt.Y() / HMM_PER_TWIPS - aOffset.Y() / HMM_PER_TWIPS ) );
+                        aULItem.SetLowerValue(nHeight - o3tl::convert(aButtonUpPt.Y(), o3tl::Length::mm100, o3tl::Length::twip) - o3tl::convert(aOffset.Y(), o3tl::Length::mm100, o3tl::Length::twip));
                         rStyleSet.Put( aULItem );
                         pDocShell->SetModified();
                     }
@@ -1179,7 +1184,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                         {
                             const SfxItemSet& rHeaderSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
                             Size  aHeaderSize = rHeaderSet.Get(ATTR_PAGE_SIZE).GetSize();
-                            aHeaderSize.setHeight( static_cast<tools::Long>( aButtonUpPt.Y() / HMM_PER_TWIPS + aOffset.Y() / HMM_PER_TWIPS - aULItem.GetUpper()) );
+                            aHeaderSize.setHeight(o3tl::convert( aButtonUpPt.Y(), o3tl::Length::mm100, o3tl::Length::twip) + o3tl::convert(aOffset.Y(), o3tl::Length::mm100, o3tl::Length::twip) - aULItem.GetUpper());
                             aHeaderSize.setHeight( aHeaderSize.Height() * 100 / mnScale );
                             SvxSetItem  aNewHeader( rStyleSet.Get(ATTR_PAGE_HEADERSET) );
                             aNewHeader.GetItemSet().Put( SvxSizeItem( ATTR_PAGE_SIZE, aHeaderSize ) );
@@ -1194,7 +1199,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                         {
                             const SfxItemSet& rFooterSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
                             Size aFooterSize = rFooterSet.Get(ATTR_PAGE_SIZE).GetSize();
-                            aFooterSize.setHeight( static_cast<tools::Long>( nHeight - aButtonUpPt.Y() / HMM_PER_TWIPS - aOffset.Y() / HMM_PER_TWIPS - aULItem.GetLower() ) );
+                            aFooterSize.setHeight(nHeight - o3tl::convert(aButtonUpPt.Y(), o3tl::Length::mm100, o3tl::Length::twip) - o3tl::convert(aOffset.Y(), o3tl::Length::mm100, o3tl::Length::twip) - aULItem.GetLower());
                             aFooterSize.setHeight( aFooterSize.Height() * 100 / mnScale );
                             SvxSetItem  aNewFooter( rStyleSet.Get(ATTR_PAGE_FOOTERSET) );
                             aNewFooter.GetItemSet().Put( SvxSizeItem( ATTR_PAGE_SIZE, aFooterSize ) );
@@ -1252,15 +1257,17 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                 tools::Long  nNewColWidth = 0;
                 std::vector<sc::ColRowSpan> aCols(1, sc::ColRowSpan(nColNumberButtonDown,nColNumberButtonDown));
 
+                constexpr auto md = o3tl::getConversionMulDiv(o3tl::Length::mm100, o3tl::Length::twip);
+                const auto m = md.first * 100, d = md.second * mnScale;
                 if( !bLayoutRTL )
                 {
-                    nNewColWidth = static_cast<tools::Long>( PixelToLogic( Point( rMEvt.GetPosPixel().X() - mvRight[ nColNumberButtonDown ], 0), aMMMode ).X() / HMM_PER_TWIPS ) * 100 / mnScale;
+                    nNewColWidth = o3tl::convert(PixelToLogic( Point( rMEvt.GetPosPixel().X() - mvRight[ nColNumberButtonDown ], 0), aMMMode ).X(), m, d);
                     nNewColWidth += pDocShell->GetDocument().GetColWidth( nColNumberButtonDown, nTab );
                 }
                 else
                 {
 
-                    nNewColWidth = static_cast<tools::Long>( PixelToLogic( Point( mvRight[ nColNumberButtonDown ] - rMEvt.GetPosPixel().X(), 0), aMMMode ).X() / HMM_PER_TWIPS ) * 100 / mnScale;
+                    nNewColWidth = o3tl::convert(PixelToLogic( Point( mvRight[ nColNumberButtonDown ] - rMEvt.GetPosPixel().X(), 0), aMMMode ).X(), m, d);
                     nNewColWidth += pDocShell->GetDocument().GetColWidth( nColNumberButtonDown, nTab );
                 }
 
@@ -1308,30 +1315,32 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
         else
             pPrintFunc.reset(new ScPrintFunc( this, pDocShell, nTab, nFirstAttr[nTab], nTotalPages, nullptr, &aOptions ));
 
-        nLeftMargin = static_cast<tools::Long>( pPrintFunc->GetLeftMargin() * HMM_PER_TWIPS - aOffset.X() );
-        nRightMargin = static_cast<tools::Long>( pPrintFunc->GetRightMargin() * HMM_PER_TWIPS );
-        nRightMargin = static_cast<tools::Long>( nWidth * HMM_PER_TWIPS - nRightMargin - aOffset.X() );
-        nTopMargin = static_cast<tools::Long>( pPrintFunc->GetTopMargin() * HMM_PER_TWIPS - aOffset.Y() );
-        nBottomMargin = static_cast<tools::Long>( pPrintFunc->GetBottomMargin() * HMM_PER_TWIPS );
-        nBottomMargin = static_cast<tools::Long>( nHeight * HMM_PER_TWIPS - nBottomMargin - aOffset.Y() );
+        nLeftMargin = o3tl::convert(pPrintFunc->GetLeftMargin(), o3tl::Length::twip, o3tl::Length::mm100) - aOffset.X();
+        nRightMargin = o3tl::convert(pPrintFunc->GetRightMargin(), o3tl::Length::twip, o3tl::Length::mm100);
+        nRightMargin = o3tl::convert(nWidth, o3tl::Length::twip, o3tl::Length::mm100) - nRightMargin - aOffset.X();
+        nTopMargin = o3tl::convert(pPrintFunc->GetTopMargin(), o3tl::Length::twip, o3tl::Length::mm100) - aOffset.Y();
+        nBottomMargin = o3tl::convert(pPrintFunc->GetBottomMargin(), o3tl::Length::twip, o3tl::Length::mm100);
+        nBottomMargin = o3tl::convert(nHeight, o3tl::Length::twip, o3tl::Length::mm100) - nBottomMargin - aOffset.Y();
         if( mnScale > 0 )
         {
-            nHeaderHeight = static_cast<tools::Long>( nTopMargin + pPrintFunc->GetHeader().nHeight * HMM_PER_TWIPS * mnScale / 100 );
-            nFooterHeight = static_cast<tools::Long>( nBottomMargin - pPrintFunc->GetFooter().nHeight * HMM_PER_TWIPS * mnScale / 100 );
+            constexpr auto md = o3tl::getConversionMulDiv(o3tl::Length::twip, o3tl::Length::mm100);
+            const auto m = md.first * mnScale, d = md.second * 100;
+            nHeaderHeight = nTopMargin + o3tl::convert(pPrintFunc->GetHeader().nHeight, m, d);
+            nFooterHeight = nBottomMargin - o3tl::convert(pPrintFunc->GetFooter().nHeight, m, d);
         }
         else
         {
-            nHeaderHeight = static_cast<tools::Long>( nTopMargin + pPrintFunc->GetHeader().nHeight * HMM_PER_TWIPS );
-            nFooterHeight = static_cast<tools::Long>( nBottomMargin - pPrintFunc->GetFooter().nHeight * HMM_PER_TWIPS );
+            nHeaderHeight = nTopMargin + o3tl::convert(pPrintFunc->GetHeader().nHeight, o3tl::Length::twip, o3tl::Length::mm100);
+            nFooterHeight = nBottomMargin - o3tl::convert(pPrintFunc->GetFooter().nHeight, o3tl::Length::twip, o3tl::Length::mm100);
         }
     }
 
     Point   aPixPt( rMEvt.GetPosPixel() );
     Point   aLeftTop = LogicToPixel( Point( nLeftMargin, -aOffset.Y() ) , aMMMode );
-    Point   aLeftBottom = LogicToPixel( Point( nLeftMargin ,static_cast<tools::Long>(nHeight * HMM_PER_TWIPS - aOffset.Y()) ), aMMMode );
+    Point   aLeftBottom = LogicToPixel( Point( nLeftMargin, o3tl::convert(nHeight, o3tl::Length::twip, o3tl::Length::mm100) - aOffset.Y()), aMMMode );
     Point   aRightTop = LogicToPixel( Point( nRightMargin, -aOffset.Y() ), aMMMode );
     Point   aTopLeft = LogicToPixel( Point( -aOffset.X(), nTopMargin ), aMMMode );
-    Point   aTopRight = LogicToPixel( Point( static_cast<tools::Long>(nWidth * HMM_PER_TWIPS - aOffset.X()), nTopMargin ), aMMMode );
+    Point   aTopRight = LogicToPixel( Point( o3tl::convert(nWidth, o3tl::Length::twip, o3tl::Length::mm100) - aOffset.X(), nTopMargin ), aMMMode );
     Point   aBottomLeft = LogicToPixel( Point( -aOffset.X(), nBottomMargin ), aMMMode );
     Point   aHeaderLeft = LogicToPixel( Point(  -aOffset.X(), nHeaderHeight ), aMMMode );
     Point   aFooderLeft = LogicToPixel( Point( -aOffset.X(), nFooterHeight ), aMMMode );
@@ -1341,7 +1350,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
     for( SCCOL i=aPageArea.aStart.Col(); i<= aPageArea.aEnd.Col(); i++ )
     {
         Point   aColumnTop = LogicToPixel( Point( 0, -aOffset.Y() ) ,aMMMode );
-        Point   aColumnBottom = LogicToPixel( Point( 0, static_cast<tools::Long>( nHeight * HMM_PER_TWIPS - aOffset.Y()) ), aMMMode );
+        Point   aColumnBottom = LogicToPixel( Point( 0, o3tl::convert(nHeight, o3tl::Length::twip, o3tl::Length::mm100) - aOffset.Y()), aMMMode );
         tools::Long nRight = i < static_cast<SCCOL>(mvRight.size()) ? mvRight[i] : 0;
         if( aPixPt.X() < ( nRight + 2 ) && ( aPixPt.X() > ( nRight - 2 ) ) && ( aPixPt.X() < aRightTop.X() ) && ( aPixPt.X() > aLeftTop.X() )
             && ( aPixPt.Y() > aColumnTop.Y() ) && ( aPixPt.Y() < aColumnBottom.Y() ) && !bLeftRulerMove && !bRightRulerMove
@@ -1405,7 +1414,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
             SetPointer( PointerStyle::HSplit );
             if( bColRulerMove )
             {
-                if( aMouseMovePoint.X() > -aOffset.X() && aMouseMovePoint.X() < nWidth * HMM_PER_TWIPS - aOffset.X() )
+                if( aMouseMovePoint.X() > -aOffset.X() && aMouseMovePoint.X() < o3tl::convert(nWidth, o3tl::Length::twip, o3tl::Length::mm100) - aOffset.X() )
                    DragMove( aMouseMovePoint.X(), PointerStyle::HSplit );
             }
         }
@@ -1416,7 +1425,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
                 SetPointer( PointerStyle::HSizeBar );
                 if( bLeftRulerMove )
                 {
-                   if( aMouseMovePoint.X() > -aOffset.X() && aMouseMovePoint.X() < nWidth * HMM_PER_TWIPS - aOffset.X() )
+                   if( aMouseMovePoint.X() > -aOffset.X() && aMouseMovePoint.X() < o3tl::convert(nWidth, o3tl::Length::twip, o3tl::Length::mm100) - aOffset.X() )
                        DragMove( aMouseMovePoint.X(), PointerStyle::HSizeBar );
                 }
             }
@@ -1425,7 +1434,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
                 SetPointer( PointerStyle::HSizeBar );
                 if( bRightRulerMove )
                 {
-                   if( aMouseMovePoint.X() > -aOffset.X() && aMouseMovePoint.X() < nWidth * HMM_PER_TWIPS - aOffset.X() )
+                   if( aMouseMovePoint.X() > -aOffset.X() && aMouseMovePoint.X() < o3tl::convert(nWidth, o3tl::Length::twip, o3tl::Length::mm100) - aOffset.X() )
                        DragMove( aMouseMovePoint.X(), PointerStyle::HSizeBar );
                 }
             }
@@ -1444,7 +1453,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
                 SetPointer( PointerStyle::VSizeBar );
                 if( bTopRulerMove )
                 {
-                    if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
+                    if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < o3tl::convert(nHeight, o3tl::Length::twip, o3tl::Length::mm100) - aOffset.Y() )
                         DragMove( aMouseMovePoint.Y(), PointerStyle::VSizeBar );
                 }
             }
@@ -1453,7 +1462,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
                 SetPointer( PointerStyle::VSizeBar );
                 if( bBottomRulerMove )
                 {
-                    if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
+                    if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < o3tl::convert(nHeight, o3tl::Length::twip, o3tl::Length::mm100) - aOffset.Y() )
                         DragMove( aMouseMovePoint.Y(), PointerStyle::VSizeBar );
                 }
             }
@@ -1462,7 +1471,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
                 SetPointer( PointerStyle::VSizeBar );
                 if( bHeaderRulerMove )
                 {
-                    if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
+                    if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < o3tl::convert(nHeight, o3tl::Length::twip, o3tl::Length::mm100) - aOffset.Y() )
                         DragMove( aMouseMovePoint.Y(), PointerStyle::VSizeBar );
                 }
             }
@@ -1471,7 +1480,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
                 SetPointer( PointerStyle::VSizeBar );
                 if( bFooterRulerMove )
                 {
-                    if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < nHeight * HMM_PER_TWIPS - aOffset.Y() )
+                    if( aMouseMovePoint.Y() > -aOffset.Y() && aMouseMovePoint.Y() < o3tl::convert(nHeight, o3tl::Length::twip, o3tl::Length::mm100) - aOffset.Y() )
                         DragMove( aMouseMovePoint.Y(), PointerStyle::VSizeBar );
                 }
             }
@@ -1552,12 +1561,12 @@ void ScPreview::DrawInvert( tools::Long nDragPos, PointerStyle nFlags )
     tools::Long  nWidth = lcl_GetDocPageSize( &pDocShell->GetDocument(), nTab ).Width();
     if( nFlags == PointerStyle::HSizeBar || nFlags == PointerStyle::HSplit )
     {
-        tools::Rectangle aRect( nDragPos, -aOffset.Y(), nDragPos + 1,static_cast<tools::Long>( ( nHeight * HMM_PER_TWIPS ) - aOffset.Y()));
+        tools::Rectangle aRect( nDragPos, -aOffset.Y(), nDragPos + 1, o3tl::convert(nHeight, o3tl::Length::twip, o3tl::Length::mm100) - aOffset.Y());
         Invert( aRect, InvertFlags::N50 );
     }
     else if( nFlags == PointerStyle::VSizeBar )
     {
-        tools::Rectangle aRect( -aOffset.X(), nDragPos,static_cast<tools::Long>( ( nWidth * HMM_PER_TWIPS ) - aOffset.X() ), nDragPos + 1 );
+        tools::Rectangle aRect( -aOffset.X(), nDragPos, o3tl::convert(nWidth, o3tl::Length::twip, o3tl::Length::mm100) - aOffset.X(), nDragPos + 1 );
         Invert( aRect, InvertFlags::N50 );
     }
 }

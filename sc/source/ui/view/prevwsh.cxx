@@ -40,6 +40,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewfac.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 #include <drwlayer.hxx>
 #include <prevwsh.hxx>
@@ -264,8 +265,8 @@ bool ScPreviewShell::GetPageSize( Size& aPageSize )
     const SfxItemSet* pParamSet = &pStyleSheet->GetItemSet();
 
     aPageSize = pParamSet->Get(ATTR_PAGE_SIZE).GetSize();
-    aPageSize.setWidth( static_cast<tools::Long>(aPageSize.Width()  * HMM_PER_TWIPS ) );
-    aPageSize.setHeight( static_cast<tools::Long>(aPageSize.Height() * HMM_PER_TWIPS ) );
+    aPageSize.setWidth(o3tl::convert(aPageSize.Width(), o3tl::Length::twip, o3tl::Length::mm100));
+    aPageSize.setHeight(o3tl::convert(aPageSize.Height(), o3tl::Length::twip, o3tl::Length::mm100));
     return true;
 }
 

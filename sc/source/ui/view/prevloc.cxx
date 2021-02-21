@@ -20,6 +20,7 @@
 #include <prevloc.hxx>
 #include <document.hxx>
 
+#include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 #include <vcl/outdev.hxx>
 
@@ -278,8 +279,6 @@ static ScPreviewLocationEntry* lcl_GetEntryByAddress(
 
 tools::Rectangle ScPreviewLocationData::GetOffsetPixel( const ScAddress& rCellPos, const ScRange& rRange ) const
 {
-    const double nScaleX = HMM_PER_TWIPS;
-    const double nScaleY = HMM_PER_TWIPS;
     SCTAB nTab = rRange.aStart.Tab();
 
     tools::Long nPosX = 0;
@@ -288,14 +287,16 @@ tools::Rectangle ScPreviewLocationData::GetOffsetPixel( const ScAddress& rCellPo
     {
         sal_uInt16 nDocW = pDoc->GetColWidth( nCol, nTab );
         if (nDocW)
-            nPosX += static_cast<tools::Long>(nDocW * nScaleX);
+            nPosX += o3tl::convert(nDocW, o3tl::Length::twip, o3tl::Length::mm100);
     }
-    tools::Long nSizeX = static_cast<tools::Long>( pDoc->GetColWidth( nEndCol, nTab ) * nScaleX );
+    const tools::Long nSizeX
+        = o3tl::convert(pDoc->GetColWidth(nEndCol, nTab), o3tl::Length::twip, o3tl::Length::mm100);
 
     SCROW nEndRow = rCellPos.Row();
-    tools::Long nPosY = static_cast<tools::Long>(pDoc->GetScaledRowHeight( rRange.aStart.Row(),
-            nEndRow, nTab, nScaleY));
-    tools::Long nSizeY = static_cast<tools::Long>( pDoc->GetRowHeight( nEndRow, nTab ) * nScaleY );
+    tools::Long nPosY = o3tl::convert(pDoc->GetRowHeight(rRange.aStart.Row(), nEndRow, nTab),
+                                      o3tl::Length::twip, o3tl::Length::mm100);
+    tools::Long nSizeY
+        = o3tl::convert(pDoc->GetRowHeight(nEndRow, nTab), o3tl::Length::twip, o3tl::Length::mm100);
 
     Size aOffsetLogic( nPosX, nPosY );
     Size aSizeLogic( nSizeX, nSizeY );
@@ -443,9 +444,6 @@ tools::Rectangle ScPreviewLocationData::GetNoteInRangeOutputRect(const tools::Re
 
 void ScPreviewLocationData::GetTableInfo( const tools::Rectangle& rVisiblePixel, ScPreviewTableInfo& rInfo ) const
 {
-    const double nScaleX = HMM_PER_TWIPS;
-    const double nScaleY = HMM_PER_TWIPS;
-
     // from left to right:
     bool bHasHeaderCol = false;
     bool bHasRepCols   = false;
@@ -553,7 +551,8 @@ void ScPreviewLocationData::GetTableInfo( const tools::Rectangle& rVisiblePixel,
                 if (!pDoc->ColHidden(nCol, nTab))
                 {
                     sal_uInt16 nDocW = pDoc->GetColWidth( nCol, nTab );
-                    tools::Long nNextX = nPosX + static_cast<tools::Long>(nDocW * nScaleX);
+                    tools::Long nNextX
+                        = nPosX + o3tl::convert(nDocW, o3tl::Length::twip, o3tl::Length::mm100);
 
                     tools::Long nPixelStart = pWindow->LogicToPixel( Size( nPosX, 0 ), aCellMapMode ).Width();
                     tools::Long nPixelEnd = pWindow->LogicToPixel( Size( nNextX, 0 ), aCellMapMode ).Width() - 1;
@@ -572,7 +571,8 @@ void ScPreviewLocationData::GetTableInfo( const tools::Rectangle& rVisiblePixel,
                 if (!pDoc->ColHidden(nCol, nTab))
                 {
                     sal_uInt16 nDocW = pDoc->GetColWidth( nCol, nTab );
-                    tools::Long nNextX = nPosX + static_cast<tools::Long>(nDocW * nScaleX);
+                    tools::Long nNextX
+                        = nPosX + o3tl::convert(nDocW, o3tl::Length::twip, o3tl::Length::mm100);
 
                     tools::Long nPixelStart = pWindow->LogicToPixel( Size( nPosX, 0 ), aCellMapMode ).Width();
                     tools::Long nPixelEnd = pWindow->LogicToPixel( Size( nNextX, 0 ), aCellMapMode ).Width() - 1;
@@ -618,7 +618,8 @@ void ScPreviewLocationData::GetTableInfo( const tools::Rectangle& rVisiblePixel,
                     continue;
 
                 sal_uInt16 nDocH = pDoc->GetOriginalHeight( nRow, nTab );
-                tools::Long nNextY = nPosY + static_cast<tools::Long>(nDocH * nScaleY);
+                tools::Long nNextY
+                    = nPosY + o3tl::convert(nDocH, o3tl::Length::twip, o3tl::Length::mm100);
 
                 tools::Long nPixelStart = pWindow->LogicToPixel( Size( 0, nPosY ), aCellMapMode ).Height();
                 tools::Long nPixelEnd = pWindow->LogicToPixel( Size( 0, nNextY ), aCellMapMode ).Height() - 1;
@@ -639,7 +640,8 @@ void ScPreviewLocationData::GetTableInfo( const tools::Rectangle& rVisiblePixel,
                     continue;
 
                 sal_uInt16 nDocH = pDoc->GetOriginalHeight( nRow, nTab );
-                tools::Long nNextY = nPosY + static_cast<tools::Long>(nDocH * nScaleY);
+                tools::Long nNextY
+                    = nPosY + o3tl::convert(nDocH, o3tl::Length::twip, o3tl::Length::mm100);
 
                 tools::Long nPixelStart = pWindow->LogicToPixel( Size( 0, nPosY ), aCellMapMode ).Height();
                 tools::Long nPixelEnd = pWindow->LogicToPixel( Size( 0, nNextY ), aCellMapMode ).Height() - 1;

@@ -20,6 +20,7 @@
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <editeng/adjustitem.hxx>
@@ -811,8 +812,8 @@ ScViewData::ScViewData(ScDocument* pDoc, ScDocShell* pDocSh, ScTabViewShell* pVi
     assert(bool(pDoc) != bool(pDocSh)); // either one or the other, not both
     maMarkData.SelectOneTable(0); // Sync with nTabNo
 
-    aScrSize = Size( tools::Long( STD_COL_WIDTH           * PIXEL_PER_TWIPS * OLE_STD_CELLS_X ),
-                     static_cast<tools::Long>( ScGlobal::nStdRowHeight * PIXEL_PER_TWIPS * OLE_STD_CELLS_Y ) );
+    aScrSize = Size( o3tl::convert(STD_COL_WIDTH * OLE_STD_CELLS_X, o3tl::Length::twip, o3tl::Length::px),
+                     o3tl::convert(ScGlobal::nStdRowHeight * OLE_STD_CELLS_Y, o3tl::Length::twip, o3tl::Length::px));
     maTabData.emplace_back( new ScViewDataTable(nullptr) );
     pThisTab = maTabData[nTabNo].get();
 
@@ -1553,7 +1554,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     {
         aPixRect.AdjustRight(1 );
         if (bLOKPrintTwips)
-            aPTwipsRect.AdjustRight(TWIPS_PER_PIXEL);
+            aPTwipsRect.AdjustRight(o3tl::convert(1, o3tl::Length::px, o3tl::Length::twip));
     }
 
     if (bLOKPrintTwips)
@@ -2844,7 +2845,7 @@ void ScViewData::SetPosX( ScHSplitPos eWhich, SCCOL nNewPosX )
 
         pThisTab->nPosX[eWhich] = nNewPosX;
         pThisTab->nTPosX[eWhich] = nTPosX;
-        pThisTab->nMPosX[eWhich] = static_cast<tools::Long>(nTPosX * HMM_PER_TWIPS);
+        pThisTab->nMPosX[eWhich] = o3tl::convert(nTPosX, o3tl::Length::twip, o3tl::Length::mm100);
         pThisTab->nPixPosX[eWhich] = nPixPosX;
     }
     else
@@ -2887,7 +2888,7 @@ void ScViewData::SetPosY( ScVSplitPos eWhich, SCROW nNewPosY )
 
         pThisTab->nPosY[eWhich] = nNewPosY;
         pThisTab->nTPosY[eWhich] = nTPosY;
-        pThisTab->nMPosY[eWhich] = static_cast<tools::Long>(nTPosY * HMM_PER_TWIPS);
+        pThisTab->nMPosY[eWhich] = o3tl::convert(nTPosY, o3tl::Length::twip, o3tl::Length::mm100);
         pThisTab->nPixPosY[eWhich] = nPixPosY;
     }
     else
@@ -2974,7 +2975,7 @@ void ScViewData::SetScreenPos( const Point& rVisAreaStart )
     bool bEnd;
 
     nSize = 0;
-    nTwips = static_cast<tools::Long>(rVisAreaStart.X() / HMM_PER_TWIPS);
+    nTwips = o3tl::convert(rVisAreaStart.X(), o3tl::Length::mm100, o3tl::Length::twip);
     if (mrDoc.IsLayoutRTL(nTabNo))
         nTwips = -nTwips;
     SCCOL nX1 = 0;
@@ -2992,7 +2993,7 @@ void ScViewData::SetScreenPos( const Point& rVisAreaStart )
     }
 
     nSize = 0;
-    nTwips = static_cast<tools::Long>(rVisAreaStart.Y() / HMM_PER_TWIPS);
+    nTwips = o3tl::convert(rVisAreaStart.Y(), o3tl::Length::mm100, o3tl::Length::twip);
     SCROW nY1 = 0;
     bEnd = false;
     while (!bEnd)
@@ -3022,8 +3023,8 @@ void ScViewData::SetScreen( const tools::Rectangle& rVisArea )
     //  here without GetOutputFactor(), since it's for the output into a Metafile
 
     aScrSize = rVisArea.GetSize();
-    aScrSize.setWidth( static_cast<tools::Long>( aScrSize.Width() * ScGlobal::nScreenPPTX / HMM_PER_TWIPS ) );
-    aScrSize.setHeight( static_cast<tools::Long>( aScrSize.Height() * ScGlobal::nScreenPPTY / HMM_PER_TWIPS ) );
+    aScrSize.setWidth(std::round(o3tl::convert( aScrSize.Width(), o3tl::Length::mm100, o3tl::Length::twip) * ScGlobal::nScreenPPTX));
+    aScrSize.setHeight(std::round(o3tl::convert( aScrSize.Height(), o3tl::Length::mm100, o3tl::Length::twip) * ScGlobal::nScreenPPTY));
 }
 
 ScDocFunc& ScViewData::GetDocFunc() const

@@ -26,6 +26,7 @@
 #include <sal/log.hxx>
 #include <tools/svborder.hxx>
 #include <tools/json_writer.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 #include <pagedata.hxx>
 #include <tabview.hxx>
@@ -1673,11 +1674,11 @@ Point ScTabView::GetInsertPos() const
     tools::Long nPosX = 0;
     for (SCCOL i=0; i<nCol; i++)
         nPosX += rDoc.GetColWidth(i,nTab);
-    nPosX = static_cast<tools::Long>(nPosX * HMM_PER_TWIPS);
+    nPosX = o3tl::convert(nPosX, o3tl::Length::twip, o3tl::Length::mm100);
     if ( rDoc.IsNegativePage( nTab ) )
         nPosX = -nPosX;
     tools::Long nPosY = static_cast<tools::Long>(rDoc.GetRowHeight( 0, nRow-1, nTab));
-    nPosY = static_cast<tools::Long>(nPosY * HMM_PER_TWIPS);
+    nPosY = o3tl::convert(nPosY, o3tl::Length::twip, o3tl::Length::mm100);
     return Point(nPosX,nPosY);
 }
 
@@ -1711,8 +1712,8 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
         bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
         tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-        tools::Long nDocX = static_cast<tools::Long>( static_cast<double>(rDoc.GetColOffset( rDoc.MaxCol() + 1, nTab )) * HMM_PER_TWIPS ) * nLayoutSign;
-        tools::Long nDocY = static_cast<tools::Long>( static_cast<double>(rDoc.GetRowOffset( rDoc.MaxRow() + 1, nTab )) * HMM_PER_TWIPS );
+        tools::Long nDocX = o3tl::convert(rDoc.GetColOffset(rDoc.MaxCol() + 1, nTab), o3tl::Length::twip, o3tl::Length::mm100) * nLayoutSign;
+        tools::Long nDocY = o3tl::convert(rDoc.GetRowOffset( rDoc.MaxRow() + 1, nTab ), o3tl::Length::twip, o3tl::Length::mm100);
 
         if ( aVisible.Left() * nLayoutSign > nDocX * nLayoutSign )
             aVisible.SetLeft( nDocX );

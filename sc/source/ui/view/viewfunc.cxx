@@ -27,6 +27,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/justifyitem.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <sfx2/bindings.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -2403,7 +2404,8 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
                         nMargin = sal::static_int_cast<sal_uInt16>(
                             nMargin + pPattern->GetItem(ATTR_INDENT).GetValue() );
 
-                    nWidth = static_cast<sal_uInt16>(nEdit * pDocSh->GetOutputFactor() / HMM_PER_TWIPS)
+                    nWidth = std::round(o3tl::convert(nEdit * pDocSh->GetOutputFactor(),
+                                                      o3tl::Length::mm100, o3tl::Length::twip))
                                 + nMargin + STD_EXTRA_WIDTH;
                 }
             }

@@ -42,6 +42,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <osl/thread.h>
+#include <o3tl/unit_conversion.hxx>
 
 #include <comphelper/automationinvokedzone.hxx>
 #include <comphelper/lok.hxx>
@@ -99,7 +100,8 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             if (rDoc.IsNegativePage(nTab))
                 nXT = -nXT;
             sal_uLong nYT = rDoc.GetRowHeight( 0, nPosY-1, nTab);
-            aPos = Point( static_cast<tools::Long>(nXT * HMM_PER_TWIPS), static_cast<tools::Long>(nYT * HMM_PER_TWIPS) );
+            aPos = Point(o3tl::convert(nXT, o3tl::Length::twip, o3tl::Length::mm100),
+                         o3tl::convert(nYT, o3tl::Length::twip, o3tl::Length::mm100));
         }
     }
 
