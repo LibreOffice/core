@@ -575,10 +575,6 @@ bool SVGFilter::implExportImpressOrDraw( const Reference< XOutputStream >& rxOSt
                 // mpSVGExport = new SVGExport( xDocHandler );
                 mpSVGExport = new SVGExport( xContext, xDocHandler, maFilterData );
 
-                // xKeepAlive is set up only to manage the life-time of the object pointed by mpSVGExport,
-                // and in order to prevent that it is destroyed when passed to AnimationExporter.
-                Reference< XInterface > xKeepAlive = static_cast< css::document::XFilter* >( mpSVGExport );
-
                 // create an id for each draw page
                 for( const auto& rPage : mSelectedPages )
                     implRegisterInterface( rPage );
@@ -663,10 +659,6 @@ bool SVGFilter::implExportWriterOrCalc( const Reference< XOutputStream >& rxOStm
 
             // mpSVGExport = new SVGExport( xDocHandler );
             mpSVGExport = new SVGExport( xContext, xDocHandler, maFilterData );
-
-            // xKeepAlive is set up only to manage the life-time of the object pointed by mpSVGExport,
-            // and in order to prevent that it is destroyed when passed to AnimationExporter.
-            Reference< XInterface > xKeepAlive = static_cast< css::document::XFilter* >( mpSVGExport );
 
             try
             {
@@ -1284,7 +1276,7 @@ void SVGFilter::implGenerateMetaData()
             {
                 OUString sElemId = OUStringLiteral(aOOOElemTextField) + "_" + OUString::number( i );
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sElemId );
-                aFieldSet[i]->elementExport( mpSVGExport );
+                aFieldSet[i]->elementExport( mpSVGExport.get() );
             }
             if( mpSVGExport->IsEmbedFonts() && mpSVGExport->IsUsePositionedCharacters() )
             {

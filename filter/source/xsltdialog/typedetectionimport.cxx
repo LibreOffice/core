@@ -21,6 +21,7 @@
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <tools/diagnose_ex.h>
+#include <rtl/ref.hxx>
 
 #include "typedetectionimport.hxx"
 #include "xmlfiltercommon.hxx"
@@ -48,9 +49,8 @@ void TypeDetectionImporter::doImport( const Reference< XComponentContext >& rxCo
     {
         Reference< XParser > xParser = xml::sax::Parser::create( rxContext );
 
-        TypeDetectionImporter* pImporter = new TypeDetectionImporter;
-        Reference < XDocumentHandler > xDocHandler( pImporter );
-        xParser->setDocumentHandler( xDocHandler );
+        rtl::Reference<TypeDetectionImporter> pImporter = new TypeDetectionImporter;
+        xParser->setDocumentHandler( pImporter );
 
         InputSource source;
         source.aInputStream = xIS;

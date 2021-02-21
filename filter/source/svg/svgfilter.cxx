@@ -70,7 +70,6 @@ namespace
 SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mxContext( rxCtx ),
     mpSVGDoc( nullptr ),
-    mpSVGExport( nullptr ),
     mpSVGFontExport( nullptr ),
     mpSVGWriter( nullptr ),
     mbSinglePage( false ),
