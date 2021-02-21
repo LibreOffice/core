@@ -25,6 +25,7 @@
 #include <editeng/flstitem.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/sizeitem.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sal/log.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -367,7 +368,6 @@ void ScDocShell::CalcOutputFactor()
     OUString aTestString(
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890123456789");
     tools::Long nPrinterWidth = 0;
-    tools::Long nWindowWidth = 0;
     const ScPatternAttr* pPattern = &m_aDocument.GetPool()->GetDefaultItem(ATTR_PATTERN);
 
     vcl::Font aDefFont;
@@ -386,11 +386,11 @@ void ScDocShell::CalcOutputFactor()
     pVirtWindow->SetMapMode(MapMode(MapUnit::MapPixel));
     pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, pVirtWindow);    // font color doesn't matter here
     pVirtWindow->SetFont(aDefFont);
-    nWindowWidth = pVirtWindow->GetTextWidth(aTestString);
-    nWindowWidth = static_cast<tools::Long>( nWindowWidth / ScGlobal::nScreenPPTX * HMM_PER_TWIPS );
+    double nWindowWidth = pVirtWindow->GetTextWidth(aTestString) / ScGlobal::nScreenPPTX;
+    nWindowWidth = o3tl::convert(nWindowWidth, o3tl::Length::twip, o3tl::Length::mm100);
 
     if (nPrinterWidth && nWindowWidth)
-        m_nPrtToScreenFactor = nPrinterWidth / static_cast<double>(nWindowWidth);
+        m_nPrtToScreenFactor = nPrinterWidth / nWindowWidth;
     else
     {
         OSL_FAIL("GetTextSize returns 0 ??");
