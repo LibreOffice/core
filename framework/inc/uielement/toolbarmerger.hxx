@@ -115,7 +115,7 @@ class ToolBarMerger
                                        ToolBox::ImplToolItems::size_type nPos,
                                        const OUString&    rMergeCommandParameter );
 
-        static ::cppu::OWeakObject* CreateController(
+        static rtl::Reference<::cppu::OWeakObject> CreateController(
             const css::uno::Reference< css::uno::XComponentContext > & rxContext,
             const css::uno::Reference< css::frame::XFrame > & xFrame,
             ToolBox*        pToolbar,

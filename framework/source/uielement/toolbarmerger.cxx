@@ -582,7 +582,7 @@ void ToolBarMerger::RemoveItems(
      Returns true for a successful operation otherwise
      false.
 */
-::cppu::OWeakObject* ToolBarMerger::CreateController(
+rtl::Reference<::cppu::OWeakObject> ToolBarMerger::CreateController(
     const uno::Reference< uno::XComponentContext >& rxContext,
     const uno::Reference< frame::XFrame > & xFrame,
     ToolBox*               pToolbar,
@@ -591,7 +591,7 @@ void ToolBarMerger::RemoveItems(
     sal_uInt16             nWidth,
     std::u16string_view rControlType )
 {
-    ::cppu::OWeakObject* pResult( nullptr );
+    rtl::Reference<::cppu::OWeakObject> pResult;
 
     if ( rControlType == TOOLBARCONTROLLER_BUTTON )
         pResult = new ButtonToolbarController( rxContext, pToolbar, rCommandURL );

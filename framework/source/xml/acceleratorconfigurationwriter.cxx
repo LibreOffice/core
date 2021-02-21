@@ -29,6 +29,7 @@
 #include <com/sun/star/awt/KeyModifier.hpp>
 
 #include <comphelper/attributelist.hxx>
+#include <rtl/ref.hxx>
 
 namespace framework{
 
@@ -48,8 +49,7 @@ void AcceleratorConfigurationWriter::flush()
     css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > xExtendedCFG(m_xConfig, css::uno::UNO_QUERY_THROW);
 
     // prepare attribute list
-    ::comphelper::AttributeList* pAttribs = new ::comphelper::AttributeList;
-    css::uno::Reference< css::xml::sax::XAttributeList > xAttribs(static_cast< css::xml::sax::XAttributeList* >(pAttribs), css::uno::UNO_QUERY);
+    rtl::Reference<::comphelper::AttributeList> pAttribs = new ::comphelper::AttributeList;
 
     pAttribs->AddAttribute(
         "xmlns:accel", ATTRIBUTE_TYPE_CDATA,
@@ -65,7 +65,7 @@ void AcceleratorConfigurationWriter::flush()
         " OfficeDocument 1.0//EN\" \"accelerator.dtd\">");
     xExtendedCFG->ignorableWhitespace(OUString());
 
-    xExtendedCFG->startElement(AL_ELEMENT_ACCELERATORLIST, xAttribs);
+    xExtendedCFG->startElement(AL_ELEMENT_ACCELERATORLIST, pAttribs);
     xExtendedCFG->ignorableWhitespace(OUString());
 
     // TODO think about threadsafe using of cache
@@ -91,8 +91,7 @@ void AcceleratorConfigurationWriter::impl_ts_writeKeyCommandPair(const css::awt:
                                                                  const OUString&                                        sCommand,
                                                                  const css::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig )
 {
-    ::comphelper::AttributeList* pAttribs = new ::comphelper::AttributeList;
-    css::uno::Reference< css::xml::sax::XAttributeList > xAttribs (static_cast< css::xml::sax::XAttributeList* >(pAttribs) , css::uno::UNO_QUERY_THROW);
+    rtl::Reference<::comphelper::AttributeList> pAttribs = new ::comphelper::AttributeList;
 
     OUString sKey = KeyMapping::get().mapCodeToIdentifier(aKey.KeyCode);
     // TODO check if key is empty!
@@ -113,7 +112,7 @@ void AcceleratorConfigurationWriter::impl_ts_writeKeyCommandPair(const css::awt:
         pAttribs->AddAttribute("accel:mod3", ATTRIBUTE_TYPE_CDATA, "true");
 
     xConfig->ignorableWhitespace(OUString());
-    xConfig->startElement(AL_ELEMENT_ITEM, xAttribs);
+    xConfig->startElement(AL_ELEMENT_ITEM, pAttribs);
     xConfig->ignorableWhitespace(OUString());
     xConfig->endElement(AL_ELEMENT_ITEM);
     xConfig->ignorableWhitespace(OUString());

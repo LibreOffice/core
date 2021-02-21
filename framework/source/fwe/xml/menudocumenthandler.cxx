@@ -717,8 +717,7 @@ OWriteMenuDocumentHandler::OWriteMenuDocumentHandler(
     m_xWriteDocumentHandler( rDocumentHandler ),
     m_bIsMenuBar( bIsMenuBar )
 {
-    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    m_xEmptyList.set( static_cast<XAttributeList *>(pList), UNO_QUERY );
+    m_xEmptyList = new ::comphelper::AttributeList;
     m_aAttributeType = ATTRIBUTE_TYPE_CDATA;
 }
 
@@ -789,8 +788,7 @@ void OWriteMenuDocumentHandler::WriteMenu( const Reference< XIndexAccess >& rMen
             {
                 if ( !aCommandURL.isEmpty() )
                 {
-                    ::comphelper::AttributeList* pListMenu = new ::comphelper::AttributeList;
-                    Reference< XAttributeList > xListMenu( static_cast<XAttributeList *>(pListMenu) , UNO_QUERY );
+                    rtl::Reference<::comphelper::AttributeList> pListMenu = new ::comphelper::AttributeList;
 
                     pListMenu->AddAttribute( ATTRIBUTE_NS_ID,
                                             m_aAttributeType,
@@ -802,7 +800,7 @@ void OWriteMenuDocumentHandler::WriteMenu( const Reference< XIndexAccess >& rMen
                                                  aLabel );
 
                     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-                    m_xWriteDocumentHandler->startElement( ELEMENT_NS_MENU, xListMenu );
+                    m_xWriteDocumentHandler->startElement( ELEMENT_NS_MENU, pListMenu );
                     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
                     m_xWriteDocumentHandler->startElement( ELEMENT_NS_MENUPOPUP, m_xEmptyList );
                     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
@@ -840,8 +838,7 @@ void OWriteMenuDocumentHandler::WriteMenu( const Reference< XIndexAccess >& rMen
 
 void OWriteMenuDocumentHandler::WriteMenuItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL, sal_Int16 nStyle )
 {
-    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    Reference< XAttributeList > xList( static_cast<XAttributeList *>(pList) , UNO_QUERY );
+    rtl::Reference<::comphelper::AttributeList> pList = new ::comphelper::AttributeList;
 
     pList->AddAttribute( ATTRIBUTE_NS_ID,
                                 m_aAttributeType,
@@ -880,7 +877,7 @@ void OWriteMenuDocumentHandler::WriteMenuItem( const OUString& aCommandURL, cons
     }
 
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->startElement( ELEMENT_NS_MENUITEM, xList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_MENUITEM, pList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     m_xWriteDocumentHandler->endElement( ELEMENT_NS_MENUITEM );
 }

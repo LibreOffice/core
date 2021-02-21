@@ -743,8 +743,8 @@ void ImageManagerImpl::replaceImages(
     const Sequence< OUString >& aCommandURLSequence,
     const Sequence< uno::Reference< XGraphic > >& aGraphicsSequence )
 {
-    GraphicNameAccess* pInsertedImages( nullptr );
-    GraphicNameAccess* pReplacedImages( nullptr );
+    rtl::Reference<GraphicNameAccess> pInsertedImages;
+    rtl::Reference<GraphicNameAccess> pReplacedImages;
 
     {
         SolarMutexGuard g;
@@ -803,8 +803,7 @@ void ImageManagerImpl::replaceImages(
         aInsertEvent.Accessor        <<= xOwner;
         aInsertEvent.Source          = xOwner;
         aInsertEvent.ResourceURL     = m_aResourceString;
-        aInsertEvent.Element         <<= uno::Reference< XNameAccess >(
-                                           static_cast< OWeakObject *>( pInsertedImages ), UNO_QUERY );
+        aInsertEvent.Element         <<= uno::Reference< XNameAccess >(pInsertedImages);
         implts_notifyContainerListener( aInsertEvent, NotifyOp_Insert );
     }
     if ( pReplacedImages != nullptr )
@@ -815,16 +814,15 @@ void ImageManagerImpl::replaceImages(
         aReplaceEvent.Source          = xOwner;
         aReplaceEvent.ResourceURL     = m_aResourceString;
         aReplaceEvent.ReplacedElement = Any();
-        aReplaceEvent.Element         <<= uno::Reference< XNameAccess >(
-                                            static_cast< OWeakObject *>( pReplacedImages ), UNO_QUERY );
+        aReplaceEvent.Element         <<= uno::Reference< XNameAccess >(pReplacedImages);
         implts_notifyContainerListener( aReplaceEvent, NotifyOp_Replace );
     }
 }
 
 void ImageManagerImpl::removeImages( ::sal_Int16 nImageType, const Sequence< OUString >& aCommandURLSequence )
 {
-    GraphicNameAccess* pRemovedImages( nullptr );
-    GraphicNameAccess* pReplacedImages( nullptr );
+    rtl::Reference<GraphicNameAccess> pRemovedImages;
+    rtl::Reference<GraphicNameAccess> pReplacedImages;
 
     {
         SolarMutexGuard g;
@@ -903,8 +901,7 @@ void ImageManagerImpl::removeImages( ::sal_Int16 nImageType, const Sequence< OUS
         aRemoveEvent.Accessor        <<= xOwner;
         aRemoveEvent.Source          = xOwner;
         aRemoveEvent.ResourceURL     = m_aResourceString;
-        aRemoveEvent.Element         <<= uno::Reference< XNameAccess >(
-                                            static_cast< OWeakObject *>( pRemovedImages ), UNO_QUERY );
+        aRemoveEvent.Element         <<= uno::Reference< XNameAccess >(pRemovedImages);
         implts_notifyContainerListener( aRemoveEvent, NotifyOp_Remove );
     }
     if ( pReplacedImages != nullptr )
@@ -915,8 +912,7 @@ void ImageManagerImpl::removeImages( ::sal_Int16 nImageType, const Sequence< OUS
         aReplaceEvent.Source          = xOwner;
         aReplaceEvent.ResourceURL     = m_aResourceString;
         aReplaceEvent.ReplacedElement = Any();
-        aReplaceEvent.Element         <<= uno::Reference< XNameAccess >(
-                                            static_cast< OWeakObject *>( pReplacedImages ), UNO_QUERY );
+        aReplaceEvent.Element         <<= uno::Reference< XNameAccess >(pReplacedImages);
         implts_notifyContainerListener( aReplaceEvent, NotifyOp_Replace );
     }
 }
@@ -959,9 +955,9 @@ void ImageManagerImpl::reload()
             pImageList = implts_getUserImageList(i);
             pImageList->GetImageNames( aNewUserCmdImageSet );
 
-            GraphicNameAccess* pInsertedImages( nullptr );
-            GraphicNameAccess* pReplacedImages( nullptr );
-            GraphicNameAccess* pRemovedImages( nullptr );
+            rtl::Reference<GraphicNameAccess> pInsertedImages;
+            rtl::Reference<GraphicNameAccess> pReplacedImages;
+            rtl::Reference<GraphicNameAccess> pRemovedImages;
 
             for (auto const& newUserCmdImage : aNewUserCmdImageSet)
             {
@@ -1040,8 +1036,7 @@ void ImageManagerImpl::reload()
                 aInsertEvent.Accessor        <<= xOwner;
                 aInsertEvent.Source          = xOwner;
                 aInsertEvent.ResourceURL     = m_aResourceString;
-                aInsertEvent.Element         <<= uno::Reference< XNameAccess >(
-                                                   static_cast< OWeakObject *>( pInsertedImages ), UNO_QUERY );
+                aInsertEvent.Element         <<= uno::Reference< XNameAccess >( pInsertedImages );
                 implts_notifyContainerListener( aInsertEvent, NotifyOp_Insert );
             }
             if ( pReplacedImages != nullptr )
@@ -1052,8 +1047,7 @@ void ImageManagerImpl::reload()
                 aReplaceEvent.Source          = xOwner;
                 aReplaceEvent.ResourceURL     = m_aResourceString;
                 aReplaceEvent.ReplacedElement = Any();
-                aReplaceEvent.Element         <<= uno::Reference< XNameAccess >(
-                                                static_cast< OWeakObject *>( pReplacedImages ), UNO_QUERY );
+                aReplaceEvent.Element         <<= uno::Reference< XNameAccess >( pReplacedImages );
                 implts_notifyContainerListener( aReplaceEvent, NotifyOp_Replace );
             }
             if ( pRemovedImages != nullptr )
@@ -1063,8 +1057,7 @@ void ImageManagerImpl::reload()
                 aRemoveEvent.Accessor        <<= xOwner;
                 aRemoveEvent.Source          = xOwner;
                 aRemoveEvent.ResourceURL     = m_aResourceString;
-                aRemoveEvent.Element         <<= uno::Reference< XNameAccess >(
-                                                    static_cast< OWeakObject *>( pRemovedImages ), UNO_QUERY );
+                aRemoveEvent.Element         <<= uno::Reference< XNameAccess >( pRemovedImages );
                 implts_notifyContainerListener( aRemoveEvent, NotifyOp_Remove );
             }
 

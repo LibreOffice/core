@@ -157,7 +157,6 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments )
 
     // Create VCL menubar which will be filled with settings data
     VclPtr<MenuBar> pVCLMenuBar;
-    VCLXMenuBar*    pAwtMenuBar = nullptr;
     {
         SolarMutexGuard aSolarMutexGuard;
         pVCLMenuBar = VclPtr<MenuBar>::Create();
@@ -208,21 +207,18 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments )
         // support. This feature is currently used for "Inplace editing"!
         Reference< XDispatchProvider > xDispatchProvider;
 
-        MenuBarManager* pMenuBarManager = new MenuBarManager( m_xContext,
+        m_xMenuBarManager = new MenuBarManager( m_xContext,
                                                               xFrame,
                                                               xTrans,
                                                               xDispatchProvider,
                                                               aModuleIdentifier,
                                                               pVCLMenuBar,
                                                               false );
-
-        m_xMenuBarManager.set( static_cast< OWeakObject *>( pMenuBarManager ), UNO_QUERY );
     }
 
     // Initialize toolkit menu bar implementation to have awt::XMenuBar for data exchange.
     // Don't use this toolkit menu bar or one of its functions. It is only used as a data container!
-    pAwtMenuBar = new VCLXMenuBar( pVCLMenuBar );
-    m_xMenuBar = pAwtMenuBar;
+    m_xMenuBar = new VCLXMenuBar( pVCLMenuBar );
 }
 
 // XUIElementSettings
