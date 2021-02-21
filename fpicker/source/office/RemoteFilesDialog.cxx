@@ -683,11 +683,10 @@ IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, const OString&, rIdent, void 
                     {
                         OUString sUserName = aURLEntries.UserList[0].UserName;
 
-                        ::comphelper::SimplePasswordRequest* pPasswordRequest
+                        rtl::Reference<::comphelper::SimplePasswordRequest> pPasswordRequest
                             = new ::comphelper::SimplePasswordRequest;
-                        Reference< XInteractionRequest > rRequest( pPasswordRequest );
 
-                        xInteractionHandler->handle( rRequest );
+                        xInteractionHandler->handle( pPasswordRequest );
 
                         if ( pPasswordRequest->isPassword() )
                         {
@@ -1180,10 +1179,9 @@ bool RemoteFilesDialog::ContentIsDocument( const OUString& rURL )
             // It's a webdav URL, so use the same open sequence as in normal open process.
             // Let's use a comphelper::StillReadWriteInteraction to trap errors here without showing the user.
             // This sequence will result in an exception if the target URL resource is not present
-            comphelper::StillReadWriteInteraction* pInteraction = new comphelper::StillReadWriteInteraction(xInteractionHandler,xInteractionHandler);
-            css::uno::Reference< css::task::XInteractionHandler > xInteraction(static_cast< css::task::XInteractionHandler* >(pInteraction), css::uno::UNO_QUERY);
+            rtl::Reference<comphelper::StillReadWriteInteraction> pInteraction = new comphelper::StillReadWriteInteraction(xInteractionHandler,xInteractionHandler);
 
-            Reference< XCommandEnvironment > xEnv = new ::ucbhelper::CommandEnvironment( xInteraction, Reference< XProgressHandler >() );
+            Reference< XCommandEnvironment > xEnv = new ::ucbhelper::CommandEnvironment( pInteraction, Reference< XProgressHandler >() );
             ::ucbhelper::Content aContent( rURL, xEnv, m_xContext );
 
             aContent.openStream();
