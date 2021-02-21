@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7cc40b09_cf7b1deb",
+        "filename": "starmath/inc/parse.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-02-21T11:28:27Z",
+      "side": 1,
+      "message": "I think the contents of parsebase.hxx should be in this file",
+      "revId": "cd6bfbab7bde28073f5798d0da7e274456a17710",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
