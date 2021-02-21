@@ -31,6 +31,8 @@
 #include <vbahelper/vbahelper.hxx>
 
 #include <osl/file.hxx>
+#include <rtl/ref.hxx>
+
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
@@ -52,7 +54,7 @@ getWorkbook( const uno::Reference< uno::XComponentContext >& xContext,
         return uno::Any( xWb );
     }
 
-    ScVbaWorkbook *pWb = new ScVbaWorkbook( xParent, xContext, xModel );
+    rtl::Reference<ScVbaWorkbook> pWb = new ScVbaWorkbook( xParent, xContext, xModel );
     return uno::Any( uno::Reference< excel::XWorkbook > (pWb) );
 }
 

@@ -426,7 +426,7 @@ bool ScViewFunc::CopyToClipMultiRange( const ScDocument* pInputClipDoc, const Sc
     return bDone;
 }
 
-ScTransferObj* ScViewFunc::CopyToTransferable()
+rtl::Reference<ScTransferObj> ScViewFunc::CopyToTransferable()
 {
     ScRange aRange;
     if ( GetViewData().GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
@@ -453,8 +453,7 @@ ScTransferObj* ScViewFunc::CopyToTransferable()
             TransferableObjectDescriptor aObjDesc;
             pDocSh->FillTransferableObjectDescriptor( aObjDesc );
             aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
-            ScTransferObj* pTransferObj = new ScTransferObj( std::move(pClipDoc), aObjDesc );
-            return pTransferObj;
+            return new ScTransferObj( std::move(pClipDoc), aObjDesc );
         }
     }
 

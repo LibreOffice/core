@@ -227,7 +227,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
         xParentStates = xParentContext->getAccessibleStateSet();
     }
-    utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
+    rtl::Reference<utl::AccessibleStateSetHelper> pStateSet = new utl::AccessibleStateSetHelper();
     if (IsDefunc(xParentStates))
         pStateSet->AddState(AccessibleStateType::DEFUNC);
     else
@@ -277,13 +277,13 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    utl::AccessibleRelationSetHelper* pRelationSet = nullptr;
+    rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSet;
     if (mpAccDoc)
         pRelationSet = mpAccDoc->GetRelationSet(&maCellAddress);
     if (!pRelationSet)
         pRelationSet = new utl::AccessibleRelationSetHelper();
-    FillDependents(pRelationSet);
-    FillPrecedents(pRelationSet);
+    FillDependents(pRelationSet.get());
+    FillPrecedents(pRelationSet.get());
     return pRelationSet;
 }
 

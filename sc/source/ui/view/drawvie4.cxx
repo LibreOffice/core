@@ -395,15 +395,14 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
     aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
     // maSize is set in ScDrawTransferObj ctor
 
-    ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( std::move(pModel), pDocSh, aObjDesc );
-    uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
+    rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( std::move(pModel), pDocSh, aObjDesc );
 
     if ( ScGlobal::xDrawClipDocShellRef.is() )
     {
         pTransferObj->SetDrawPersist( ScGlobal::xDrawClipDocShellRef.get() );    // keep persist for ole objects alive
     }
 
-    return xTransferable;
+    return pTransferObj;
 }
 
 // Calculate correction for 100%, regardless of current settings

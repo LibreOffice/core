@@ -851,7 +851,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
 {
     SolarMutexGuard aGuard;
     ScTabViewShell* pViewSh = GetViewShell();
-    ScCellRangesBase* pObj = nullptr;
+    rtl::Reference<ScCellRangesBase> pObj;
     if (pViewSh)
     {
         //  is something selected in drawing layer?
@@ -925,7 +925,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
         }
     }
 
-    return uno::makeAny(uno::Reference<uno::XInterface>(static_cast<cppu::OWeakObject*>(pObj)));
+    return uno::makeAny(uno::Reference<uno::XInterface>(static_cast<cppu::OWeakObject*>(pObj.get())));
 }
 
 // XEnumerationAccess
@@ -1077,7 +1077,7 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
         rData.GetPosFromPixel( rPoint.X(), rPoint.Y(), eSplitMode, nX, nY);
 
         ScAddress aCellPos (nX, nY, nTab);
-        ScCellObj* pCellObj = new ScCellObj(rData.GetDocShell(), aCellPos);
+        rtl::Reference<ScCellObj> pCellObj = new ScCellObj(rData.GetDocShell(), aCellPos);
 
         xTarget.set(uno::Reference<table::XCell>(pCellObj), uno::UNO_QUERY);
 
@@ -2076,9 +2076,7 @@ css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL ScTabViewObj::g
     if (pDrawShell)
         return pDrawShell->GetDrawView()->CopyToTransferable();
 
-    ScTransferObj* pObj = GetViewShell()->CopyToTransferable();
-    uno::Reference<datatransfer::XTransferable> xTransferable( pObj );
-    return xTransferable;
+    return GetViewShell()->CopyToTransferable();
 }
 
 void SAL_CALL ScTabViewObj::insertTransferable( const css::uno::Reference< css::datatransfer::XTransferable >& xTrans )

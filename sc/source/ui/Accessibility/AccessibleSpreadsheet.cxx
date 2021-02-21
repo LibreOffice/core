@@ -1002,12 +1002,12 @@ sal_Int32 SAL_CALL ScAccessibleSpreadsheet::getBackground(  )
 
 uno::Reference<XAccessibleRelationSet> SAL_CALL ScAccessibleSpreadsheet::getAccessibleRelationSet()
 {
-    utl::AccessibleRelationSetHelper* pRelationSet = nullptr;
+    rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSet;
     if(mpAccDoc)
         pRelationSet = mpAccDoc->GetRelationSet(nullptr);
-    if (!pRelationSet)
-        pRelationSet = new utl::AccessibleRelationSetHelper();
-    return pRelationSet;
+    if (pRelationSet)
+        return pRelationSet;
+    return new utl::AccessibleRelationSetHelper();
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
@@ -1020,7 +1020,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
         xParentStates = xParentContext->getAccessibleStateSet();
     }
-    utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
+    rtl::Reference<utl::AccessibleStateSetHelper> pStateSet = new utl::AccessibleStateSetHelper();
     if (IsDefunc(xParentStates))
         pStateSet->AddState(AccessibleStateType::DEFUNC);
     else

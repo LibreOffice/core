@@ -1551,7 +1551,6 @@ void ScTextWnd::InitEditEngine()
 }
 
 ScTextWnd::ScTextWnd(ScTextWndGroup& rParent, ScTabViewShell* pViewSh) :
-        pAcc(nullptr),
         bIsRTL(AllSettings::GetLayoutRTL()),
         bIsInsertMode(true),
         bFormulaMode (false),

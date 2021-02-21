@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLCHANGETRACKINGEXPORTHELPER_HXX
 
 #include <xmloff/xmltoken.hxx>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::text
 {
@@ -40,8 +41,7 @@ class ScChangeTrackingExportHelper
     ScXMLExport& rExport;
 
     ScChangeTrack* pChangeTrack;
-    ScEditEngineTextObj* pEditTextObj;
-    css::uno::Reference<css::text::XText> xText;
+    rtl::Reference<ScEditEngineTextObj> pEditTextObj;
 
     static OUString GetChangeID(const sal_uInt32 nActionNumber);
     void GetAcceptanceState(const ScChangeAction* pAction);

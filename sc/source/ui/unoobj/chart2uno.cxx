@@ -1478,7 +1478,7 @@ ScChart2DataProvider::createDataSource(
         // No chart position map instance.  Bail out.
         return xResult;
 
-    ScChart2DataSource* pDS = nullptr;
+    rtl::Reference<ScChart2DataSource> pDS;
     ::std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aSeqs;
 
     // Fill Categories

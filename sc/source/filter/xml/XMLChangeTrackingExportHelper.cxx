@@ -41,8 +41,7 @@ using namespace xmloff::token;
 
 ScChangeTrackingExportHelper::ScChangeTrackingExportHelper(ScXMLExport& rTempExport)
     : rExport(rTempExport),
-    pChangeTrack(nullptr),
-    pEditTextObj(nullptr)
+    pChangeTrack(nullptr)
 {
     pChangeTrack = rExport.GetDocument() ? rExport.GetDocument()->GetChangeTrack() : nullptr;
 }
@@ -287,13 +286,9 @@ void ScChangeTrackingExportHelper::WriteEditCell(const ScCellValue& rCell)
     if (rCell.mpEditText && !sString.isEmpty())
     {
         if (!pEditTextObj)
-        {
             pEditTextObj = new ScEditEngineTextObj();
-            xText.set(pEditTextObj);
-        }
         pEditTextObj->SetText(*rCell.mpEditText);
-        if (xText.is())
-            rExport.GetTextParagraphExport()->exportText(xText, false, false);
+        rExport.GetTextParagraphExport()->exportText(pEditTextObj, false, false);
     }
 }
 
@@ -597,14 +592,10 @@ void ScChangeTrackingExportHelper::CollectCellAutoStyles(const ScCellValue& rCel
         return;
 
     if (!pEditTextObj)
-    {
         pEditTextObj = new ScEditEngineTextObj();
-        xText.set(pEditTextObj);
-    }
 
     pEditTextObj->SetText(*rCell.mpEditText);
-    if (xText.is())
-        rExport.GetTextParagraphExport()->collectTextAutoStyles(xText, false, false);
+    rExport.GetTextParagraphExport()->collectTextAutoStyles(pEditTextObj, false, false);
 }
 
 void ScChangeTrackingExportHelper::CollectActionAutoStyles(const ScChangeAction* pAction)
