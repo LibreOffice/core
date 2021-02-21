@@ -2302,8 +2302,8 @@ void XclExpChLegend::Convert( const ScfPropertySet& rPropSet )
             // legend size, Excel expects points in CHFRAMEPOS record
             rFramePos.mnBRMode = EXC_CHFRAMEPOS_ABSSIZE_POINTS;
             css::awt::Size aLegendSize = xChart1Legend->getSize();
-            rFramePos.maRect.mnWidth = static_cast< sal_uInt16 >( aLegendSize.Width * EXC_POINTS_PER_HMM + 0.5 );
-            rFramePos.maRect.mnHeight = static_cast< sal_uInt16 >( aLegendSize.Height * EXC_POINTS_PER_HMM + 0.5 );
+            rFramePos.maRect.mnWidth = o3tl::convert(aLegendSize.Width, o3tl::Length::mm100, o3tl::Length::pt);
+            rFramePos.maRect.mnHeight = o3tl::convert(aLegendSize.Height, o3tl::Length::mm100, o3tl::Length::pt);
             maData.maRect.mnWidth = CalcChartXFromHmm( aLegendSize.Width );
             maData.maRect.mnHeight = CalcChartYFromHmm( aLegendSize.Height );
             eApiExpand = cssc::ChartLegendExpansion_CUSTOM;

@@ -23,6 +23,7 @@
 #include <editeng/autokernitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <osl/thread.h>
 #include <svl/asiancfg.hxx>
 #include <svx/svditer.hxx>
@@ -456,8 +457,8 @@ bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
         for (i=nStartCol; i<=nEndCol; i++)
             nRight += GetColWidth(i,nTab);
 
-        aMMRect.SetLeft( static_cast<tools::Long>(nLeft  * HMM_PER_TWIPS) );
-        aMMRect.SetRight( static_cast<tools::Long>(nRight * HMM_PER_TWIPS) );
+        aMMRect.SetLeft(o3tl::convert(nLeft, o3tl::Length::twip, o3tl::Length::mm100));
+        aMMRect.SetRight(o3tl::convert(nRight, o3tl::Length::twip, o3tl::Length::mm100));
     }
     else
         aMMRect = GetMMRect( nStartCol, nStartRow, nEndCol, nEndRow, nTab );

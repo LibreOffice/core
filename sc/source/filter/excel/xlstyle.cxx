@@ -32,6 +32,7 @@
 #include <svtools/colorcfg.hxx>
 #include <vcl/unohelp.hxx>
 #include <editeng/svxfont.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <global.hxx>
 #include <xlroot.hxx>
 #include <xltools.hxx>
@@ -389,7 +390,7 @@ void XclFontData::SetScStrikeout( FontStrikeout eScStrikeout )
 
 float XclFontData::GetApiHeight() const
 {
-    return static_cast< float >( mnHeight / TWIPS_PER_POINT );
+    return o3tl::convert<double>(mnHeight, o3tl::Length::twip, o3tl::Length::pt);
 }
 
 sal_Int16 XclFontData::GetApiFamily() const
@@ -454,7 +455,7 @@ sal_Int16 XclFontData::GetApiStrikeout() const
 
 void XclFontData::SetApiHeight( float fPoint )
 {
-    mnHeight = static_cast< sal_uInt16 >( ::std::min( fPoint * TWIPS_PER_POINT + 0.5, 32767.0 ) );
+    mnHeight = std::min(o3tl::convert(fPoint, o3tl::Length::pt, o3tl::Length::twip) + 0.5, 32767.0);
 }
 
 void XclFontData::SetApiFamily( sal_Int16 nApiFamily )

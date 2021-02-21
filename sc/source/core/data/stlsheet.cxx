@@ -34,14 +34,15 @@
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/hint.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <attrib.hxx>
 
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <sc.hrc>
 
-#define TWO_CM      1134
-#define HFDIST_CM   142
+constexpr auto TWO_CM = o3tl::convert(2, o3tl::Length::cm, o3tl::Length::twip); // 1134
+constexpr auto HFDIST_CM = o3tl::convert(250, o3tl::Length::mm100, o3tl::Length::twip); // 142
 
 ScStyleSheet::ScStyleSheet( const OUString&     rName,
                             const ScStyleSheetPool& rPoolP,
@@ -163,7 +164,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                         SfxItemSet&     rHFSet = aHFSetItem.GetItemSet();
                         SvxSizeItem     aHFSizeItem( // 0,5 cm + distance
                                             ATTR_PAGE_SIZE,
-                                            Size( 0, tools::Long( 500 / HMM_PER_TWIPS ) + HFDIST_CM ) );
+                                            Size( 0, o3tl::convert(500, o3tl::Length::mm100, o3tl::Length::twip) + HFDIST_CM ) );
 
                         SvxULSpaceItem  aHFDistItem ( HFDIST_CM,// nUp
                                                       HFDIST_CM,// nLow

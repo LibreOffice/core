@@ -94,11 +94,6 @@ using namespace oox;
 namespace
 {
 
-tools::Long lcl_hmm2px(tools::Long nPixel)
-{
-    return static_cast<tools::Long>(nPixel*PIXEL_PER_INCH/1000.0/CM_PER_INCH + 0.5);
-}
-
 const char *ToHorizAlign( SdrTextHorzAdjust eAdjust )
 {
     switch( eAdjust )
@@ -149,10 +144,7 @@ void lcl_WriteAnchorVertex( sax_fastparser::FSHelperPtr const & rComments, const
 
 tools::Long lcl_hmm2output(tools::Long value, bool bInEMU)
 {
-    if (bInEMU)
-        return oox::drawingml::convertHmmToEmu(value);
-    else
-        return lcl_hmm2px(value);
+    return o3tl::convert(value, o3tl::Length::mm100, bInEMU ? o3tl::Length::emu : o3tl::Length::px);
 }
 
 void lcl_GetFromTo( const XclExpRoot& rRoot, const tools::Rectangle &aRect, sal_Int32 nTab, tools::Rectangle &aFrom, tools::Rectangle &aTo, bool bInEMU = false )

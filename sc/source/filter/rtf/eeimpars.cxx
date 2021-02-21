@@ -24,6 +24,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/langitem.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
 #include <svtools/htmlcfg.hxx>
@@ -556,8 +557,8 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
 
     Point aCellInsertPos(
-        static_cast<tools::Long>(static_cast<double>(mpDoc->GetColOffset( nCol, nTab )) * HMM_PER_TWIPS),
-        static_cast<tools::Long>(static_cast<double>(mpDoc->GetRowOffset( nRow, nTab )) * HMM_PER_TWIPS) );
+        o3tl::convert(mpDoc->GetColOffset(nCol, nTab), o3tl::Length::twip, o3tl::Length::mm100),
+        o3tl::convert(mpDoc->GetRowOffset(nRow, nTab), o3tl::Length::twip, o3tl::Length::mm100));
 
     Point aInsertPos( aCellInsertPos );
     Point aSpace;

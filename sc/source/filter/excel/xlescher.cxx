@@ -25,6 +25,7 @@
 
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
+#include <tools/UnitConversion.hxx>
 #include <document.hxx>
 #include <xistream.hxx>
 #include <xlroot.hxx>
@@ -42,20 +43,11 @@ namespace {
 /** Returns the scaling factor to calculate coordinates from twips. */
 double lclGetTwipsScale( MapUnit eMapUnit )
 {
-    /*  We cannot use OutputDevice::LogicToLogic() or the XclTools
-        conversion functions to calculate drawing layer coordinates due to
-        Calc's strange definition of a point (1 inch == 72.27 points, instead
-        of 72 points).
-        NOTE: Calc's definition changed from TeX points (72.27) to PS points
-        (72), so the MapUnit::MapTwip case now actually also delivers a scale of 1.0
-    */
     double fScale = 1.0;
-    switch( eMapUnit )
-    {
-        case MapUnit::MapTwip:      fScale = 1;               break;  // Calc twips <-> real twips
-        case MapUnit::Map100thMM:  fScale = HMM_PER_TWIPS;   break;  // Calc twips <-> 1/100mm
-        default:            OSL_FAIL( "lclGetTwipsScale - map unit not implemented" );
-    }
+    if (const auto eTo = MapToO3tlLength(eMapUnit); eTo != o3tl::Length::invalid)
+        fScale = o3tl::convert(1.0, o3tl::Length::twip, eTo);
+    else
+        OSL_FAIL("lclGetTwipsScale - map unit not implemented");
     return fScale;
 }
 
@@ -183,12 +175,10 @@ void XclObjAnchor::SetRect( const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 
         const tools::Rectangle& rRect, MapUnit eMapUnit )
 {
     double fScale = 1.0;
-    switch( eMapUnit )
-    {
-        case MapUnit::MapTwip:      fScale = HMM_PER_TWIPS; break;  // Calc twips -> 1/100mm
-        case MapUnit::Map100thMM:  fScale = 1.0;           break;  // Calc 1/100mm -> 1/100mm
-        default:            OSL_FAIL( "XclObjAnchor::SetRect - map unit not implemented" );
-    }
+    if (const auto eFrom = MapToO3tlLength(eMapUnit); eFrom != o3tl::Length::invalid)
+        fScale = o3tl::convert(1.0, eFrom, o3tl::Length::mm100);
+    else
+        OSL_FAIL("XclObjAnchor::SetRect - map unit not implemented");
 
     /*  In objects with DFF client anchor, the position of the shape is stored
         in the cell address components of the client anchor. In old BIFF3-BIFF5

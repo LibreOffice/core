@@ -76,6 +76,7 @@
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 #include <comphelper/processfactory.hxx>
 #include <o3tl/numeric.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unoapi.hxx>
@@ -2625,8 +2626,8 @@ Reference< XLegend > XclImpChLegend::CreateLegend() const
                 (pFramePos->maRect.mnWidth > 0) && (pFramePos->maRect.mnHeight > 0) )
             {
                 eApiExpand = cssc::ChartLegendExpansion_CUSTOM;
-                sal_Int32 nWidthHmm = static_cast< sal_Int32 >( pFramePos->maRect.mnWidth / EXC_POINTS_PER_HMM );
-                sal_Int32 nHeightHmm = static_cast< sal_Int32 >( pFramePos->maRect.mnHeight / EXC_POINTS_PER_HMM );
+                sal_Int32 nWidthHmm = o3tl::convert(pFramePos->maRect.mnWidth, o3tl::Length::pt, o3tl::Length::mm100);
+                sal_Int32 nHeightHmm = o3tl::convert(pFramePos->maRect.mnHeight, o3tl::Length::pt, o3tl::Length::mm100);
                 RelativeSize aRelSize( CalcRelativeFromHmmX( nWidthHmm ), CalcRelativeFromHmmY( nHeightHmm ) );
                 aLegendProp.SetProperty( EXC_CHPROP_RELATIVESIZE, aRelSize );
             }

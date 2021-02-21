@@ -44,6 +44,7 @@
 
 #include <editeng/eeitem.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
@@ -420,7 +421,7 @@ tools::Long ScColumn::GetNeededSize(
                 //  to ensure the exact same paper width (and same line breaks) as in
                 //  ScEditUtil::GetEditArea, used for output.
 
-                fWidthFactor = HMM_PER_TWIPS;
+                fWidthFactor = o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::mm100);
             }
 
             // use original width for hidden columns:
@@ -438,8 +439,9 @@ tools::Long ScColumn::GetNeededSize(
             // space for AutoFilter button:  20 * nZoom/100
             constexpr tools::Long nFilterButtonWidthPix = 20; // Autofilter pixel width at 100% zoom.
             if ( pFlag->HasAutoFilter() && !bTextWysiwyg )
-                nDocWidth -= bInPrintTwips ?
-                        (nFilterButtonWidthPix * TWIPS_PER_PIXEL) : tools::Long(rZoomX * nFilterButtonWidthPix);
+                nDocWidth -= bInPrintTwips ? o3tl::convert(nFilterButtonWidthPix, o3tl::Length::px,
+                                                           o3tl::Length::twip)
+                                           : tools::Long(rZoomX * nFilterButtonWidthPix);
 
             aPaper.setWidth( nDocWidth );
 
@@ -572,7 +574,9 @@ tools::Long ScColumn::GetNeededSize(
                 {
                     //  add 1pt extra (default margin value) for line breaks with SetVertical
                     constexpr tools::Long nDefaultMarginInPoints = 1;
-                    nValue += conditionalScaleFunc(nDefaultMarginInPoints * TWIPS_PER_POINT, nPPT);
+                    nValue += conditionalScaleFunc(
+                        o3tl::convert(nDefaultMarginInPoints, o3tl::Length::pt, o3tl::Length::twip),
+                        nPPT);
                 }
             }
         }
@@ -594,8 +598,9 @@ tools::Long ScColumn::GetNeededSize(
         constexpr tools::Long nFilterButtonWidthPix = 20; // Autofilter pixel width at 100% zoom.
         ScMF nFlags = pPattern->GetItem(ATTR_MERGE_FLAG).GetValue();
         if (nFlags & ScMF::Auto)
-            nValue += bInPrintTwips ?
-                (nFilterButtonWidthPix * TWIPS_PER_PIXEL) : tools::Long(rZoomX * nFilterButtonWidthPix);
+            nValue += bInPrintTwips ? o3tl::convert(nFilterButtonWidthPix, o3tl::Length::px,
+                                                    o3tl::Length::twip)
+                                    : tools::Long(rZoomX * nFilterButtonWidthPix);
     }
 
     return nValue;

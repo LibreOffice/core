@@ -21,6 +21,7 @@
 #include <math.h>
 #include <string_view>
 
+#include <o3tl/unit_conversion.hxx>
 #include <sal/mathconf.h>
 #include <sal/macros.h>
 #include <sal/log.hxx>
@@ -271,35 +272,36 @@ XclBoolError XclTools::ErrorToEnum( double& rfDblValue, bool bErrOrBool, sal_uIn
     return eType;
 }
 
+template <typename N> static N to(double f) { return limit_cast<N>(f + 0.5); }
+
 sal_uInt16 XclTools::GetTwipsFromInch( double fInches )
 {
-    return static_cast< sal_uInt16 >(
-        ::std::clamp( fInches * EXC_TWIPS_PER_INCH + 0.5, 0.0, 65535.0 ) );
+    return to<sal_uInt16>(o3tl::convert(fInches, o3tl::Length::in, o3tl::Length::twip));
 }
 
 sal_uInt16 XclTools::GetTwipsFromHmm( sal_Int32 nHmm )
 {
-    return GetTwipsFromInch( static_cast< double >( nHmm ) / 1000.0 / CM_PER_INCH );
+    return limit_cast<sal_uInt16>(o3tl::convert(nHmm, o3tl::Length::mm100, o3tl::Length::twip));
 }
 
 double XclTools::GetInchFromTwips( sal_Int32 nTwips )
 {
-    return static_cast< double >( nTwips ) / EXC_TWIPS_PER_INCH;
+    return o3tl::convert<double>(nTwips, o3tl::Length::twip, o3tl::Length::in);
 }
 
 double XclTools::GetInchFromHmm( sal_Int32 nHmm )
 {
-    return GetInchFromTwips( GetTwipsFromHmm( nHmm ) );
+    return o3tl::convert<double>(nHmm, o3tl::Length::mm100, o3tl::Length::in);
 }
 
 sal_Int32 XclTools::GetHmmFromInch( double fInches )
 {
-    return static_cast< sal_Int32 >( fInches * CM_PER_INCH * 1000 );
+    return to<sal_Int32>(o3tl::convert(fInches, o3tl::Length::in, o3tl::Length::mm100));
 }
 
 sal_Int32 XclTools::GetHmmFromTwips( sal_Int32 nTwips )
 {
-    return GetHmmFromInch( GetInchFromTwips( nTwips ) );
+    return limit_cast<sal_Int32>(o3tl::convert(nTwips, o3tl::Length::twip, o3tl::Length::mm100));
 }
 
 sal_uInt16 XclTools::GetScColumnWidth( sal_uInt16 nXclWidth, tools::Long nScCharWidth )

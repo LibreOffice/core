@@ -23,6 +23,7 @@
 #include <editeng/editobj.hxx>
 #include <svl/srchitem.hxx>
 #include <editeng/langitem.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
@@ -461,8 +462,8 @@ void ScGlobal::InitPPT()
     if (comphelper::LibreOfficeKit::isActive())
     {
         // LOK: the below limited precision is not enough for RowColumnHeader.
-        nScreenPPTX = double(pDev->GetDPIX()) / double(TWIPS_PER_INCH);
-        nScreenPPTY = double(pDev->GetDPIY()) / double(TWIPS_PER_INCH);
+        nScreenPPTX = o3tl::convert<double>(pDev->GetDPIX(), o3tl::Length::twip, o3tl::Length::in);
+        nScreenPPTY = o3tl::convert<double>(pDev->GetDPIY(), o3tl::Length::twip, o3tl::Length::in);
     }
     else
     {

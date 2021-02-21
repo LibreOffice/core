@@ -21,6 +21,7 @@
 #include <svtools/colorcfg.hxx>
 #include <editeng/eeitem.hxx>
 #include <formula/errorcodes.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <svx/sdshitm.hxx>
 #include <svx/sdsxyitm.hxx>
 #include <svx/sdtditm.hxx>
@@ -328,8 +329,8 @@ Point ScDetectiveFunc::GetDrawPos( SCCOL nCol, SCROW nRow, DrawPosMode eMode ) c
         aPos.AdjustX(rDoc.GetColWidth( i, nTab ) );
     aPos.AdjustY(rDoc.GetRowHeight( 0, nRow - 1, nTab ) );
 
-    aPos.setX( static_cast< tools::Long >( aPos.X() * HMM_PER_TWIPS ) );
-    aPos.setY( static_cast< tools::Long >( aPos.Y() * HMM_PER_TWIPS ) );
+    aPos.setX(o3tl::convert(aPos.X(), o3tl::Length::twip, o3tl::Length::mm100));
+    aPos.setY(o3tl::convert(aPos.Y(), o3tl::Length::twip, o3tl::Length::mm100));
 
     if ( rDoc.IsNegativePage( nTab ) )
         aPos.setX( aPos.X() * -1 );
