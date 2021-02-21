@@ -115,7 +115,7 @@ void OXMLRowColumn::fillStyle(const OUString& _sStyleName)
     if ( !pAutoStyles )
         return;
 
-    PropertySetInfo* pInfo = new PropertySetInfo();
+    rtl::Reference<PropertySetInfo> pInfo = new PropertySetInfo();
     static PropertyMapEntry const pMap[] =
     {
         {OUString(PROPERTY_WIDTH),    PROPERTY_ID_WIDTH,        ::cppu::UnoType<sal_Int32>::get()       ,PropertyAttribute::BOUND,0},
@@ -124,7 +124,7 @@ void OXMLRowColumn::fillStyle(const OUString& _sStyleName)
         {OUString(), 0, css::uno::Type(), 0, 0 }
     };
     pInfo->add(pMap);
-    Reference<XPropertySet> xProp = GenericPropertySet_CreateInstance(pInfo);
+    Reference<XPropertySet> xProp = GenericPropertySet_CreateInstance(pInfo.get());
     XMLPropStyleContext* pAutoStyle = const_cast<XMLPropStyleContext*>(dynamic_cast< const XMLPropStyleContext*>(pAutoStyles->FindStyleChildContext(XmlStyleFamily::TABLE_COLUMN,_sStyleName)));
     if ( pAutoStyle )
     {

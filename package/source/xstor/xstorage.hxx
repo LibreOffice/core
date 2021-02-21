@@ -155,7 +155,7 @@ struct OStorage_Impl
     bool        m_bControlVersion;
     OUString m_aVersion;
 
-    SwitchablePersistenceStream* m_pSwitchStream;
+    rtl::Reference<SwitchablePersistenceStream> m_pSwitchStream;
 
     sal_Int32 m_nStorageType; // the mode in which the storage is used
 

@@ -32,6 +32,7 @@
 
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ref.hxx>
 #include <sal/log.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/documentconstants.hxx>
@@ -119,7 +120,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
     const OUString  sPBKDF2_Name         ( PBKDF2_NAME );
     const OUString  sPGP_Name            ( PGP_NAME );
 
-    ::comphelper::AttributeList * pRootAttrList = new ::comphelper::AttributeList;
+    rtl::Reference<::comphelper::AttributeList> pRootAttrList = new ::comphelper::AttributeList;
 
     // find the mediatype of the document if any
     OUString aDocMediaType;
@@ -211,8 +212,6 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
         }
     }
 
-    uno::Reference < xml::sax::XAttributeList > xRootAttrList (pRootAttrList);
-
     xHandler->startDocument();
     uno::Reference < xml::sax::XExtendedDocumentHandler > xExtHandler ( xHandler, uno::UNO_QUERY );
     if ( xExtHandler.is() && bProvideDTD )
@@ -220,7 +219,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
         xExtHandler->unknown ( MANIFEST_DOCTYPE );
         xHandler->ignorableWhitespace ( sWhiteSpace );
     }
-    xHandler->startElement( sManifestElement, xRootAttrList );
+    xHandler->startElement( sManifestElement, pRootAttrList );
 
     const uno::Any *pKeyInfoProperty = nullptr;
     if ( pRootFolderPropSeq )
@@ -271,14 +270,13 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                     xHandler->startElement(isODF13 ? sEncryptedKeyElement13 : sEncryptedKeyElement, nullptr);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    ::comphelper::AttributeList * pNewAttrList = new ::comphelper::AttributeList;
-                    uno::Reference < xml::sax::XAttributeList > xNewAttrList (pNewAttrList);
+                    rtl::Reference<::comphelper::AttributeList> pNewAttrList = new ::comphelper::AttributeList;
                     // TODO: the algorithm should rather be configurable
                     pNewAttrList->AddAttribute(
                         isODF13 ? sAlgorithmAttribute13 : sAlgorithmAttribute,
                         sCdataAttribute,
                                                  "http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p" );
-                    xHandler->startElement(isODF13 ? sEncryptionMethodElement13 : sEncryptionMethodElement, xNewAttrList);
+                    xHandler->startElement(isODF13 ? sEncryptionMethodElement13 : sEncryptionMethodElement, pNewAttrList);
                     xHandler->endElement(isODF13 ? sEncryptionMethodElement13 :  sEncryptionMethodElement);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
@@ -339,7 +337,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
     // now write individual file entries
     for (const uno::Sequence<beans::PropertyValue>& rSequence : rManList)
     {
-        ::comphelper::AttributeList *pAttrList = new ::comphelper::AttributeList;
+        rtl::Reference<::comphelper::AttributeList> pAttrList = new ::comphelper::AttributeList;
         OUString aString;
         const uno::Any *pVector = nullptr, *pSalt = nullptr, *pIterationCount = nullptr, *pDigest = nullptr, *pDigestAlg = nullptr, *pEncryptAlg = nullptr, *pStartKeyAlg = nullptr, *pDerivedKeySize = nullptr;
         for (const beans::PropertyValue& rValue : rSequence)
@@ -386,13 +384,11 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
         }
 
         xHandler->ignorableWhitespace ( sWhiteSpace );
-        uno::Reference < xml::sax::XAttributeList > xAttrList ( pAttrList );
-        xHandler->startElement( sFileEntryElement , xAttrList);
+        xHandler->startElement( sFileEntryElement , pAttrList);
         if ( pVector && pSalt && pIterationCount && pDigest && pDigestAlg && pEncryptAlg && pStartKeyAlg && pDerivedKeySize )
         {
             // ==== Encryption Data
-            ::comphelper::AttributeList * pNewAttrList = new ::comphelper::AttributeList;
-            uno::Reference < xml::sax::XAttributeList > xNewAttrList (pNewAttrList);
+            rtl::Reference<::comphelper::AttributeList> pNewAttrList = new ::comphelper::AttributeList;
             OUStringBuffer aBuffer;
             uno::Sequence < sal_Int8 > aSequence;
 
@@ -414,11 +410,10 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             ::comphelper::Base64::encode(aBuffer, aSequence);
             pNewAttrList->AddAttribute ( sChecksumAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
 
-            xHandler->startElement( sEncryptionDataElement , xNewAttrList);
+            xHandler->startElement( sEncryptionDataElement , pNewAttrList);
 
             // ==== Algorithm
             pNewAttrList = new ::comphelper::AttributeList;
-            xNewAttrList = pNewAttrList;
 
             sal_Int32 nEncAlgID = 0;
             sal_Int32 nDerivedKeySize = 0;
@@ -448,7 +443,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             pNewAttrList->AddAttribute ( sInitialisationVectorAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
 
             xHandler->ignorableWhitespace ( sWhiteSpace );
-            xHandler->startElement( sAlgorithmElement , xNewAttrList);
+            xHandler->startElement( sAlgorithmElement , pNewAttrList);
             xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->endElement( sAlgorithmElement );
 
@@ -456,7 +451,6 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             {
                 // ==== Start Key Generation
                 pNewAttrList = new ::comphelper::AttributeList;
-                xNewAttrList = pNewAttrList;
 
                 OUString sStartKeyAlg;
                 OUString sStartKeySize;
@@ -481,14 +475,13 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 pNewAttrList->AddAttribute ( sKeySizeAttribute, sCdataAttribute, sStartKeySize );
 
                 xHandler->ignorableWhitespace ( sWhiteSpace );
-                xHandler->startElement( sStartKeyGenerationElement , xNewAttrList);
+                xHandler->startElement( sStartKeyGenerationElement , pNewAttrList);
                 xHandler->ignorableWhitespace ( sWhiteSpace );
                 xHandler->endElement( sStartKeyGenerationElement );
             }
 
             // ==== Key Derivation
             pNewAttrList = new ::comphelper::AttributeList;
-            xNewAttrList = pNewAttrList;
 
             if (pKeyInfoProperty)
             {
@@ -522,7 +515,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             }
 
             xHandler->ignorableWhitespace(sWhiteSpace);
-            xHandler->startElement(sKeyDerivationElement, xNewAttrList);
+            xHandler->startElement(sKeyDerivationElement, pNewAttrList);
             xHandler->ignorableWhitespace(sWhiteSpace);
             xHandler->endElement(sKeyDerivationElement);
 

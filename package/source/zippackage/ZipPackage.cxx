@@ -558,10 +558,10 @@ void ZipPackage::getZipFileContents()
                     break;
                 if ( !pCurrent->hasByName( sTemp ) )
                 {
-                    ZipPackageFolder* pPkgFolder = new ZipPackageFolder(m_xContext, m_nFormat, m_bAllowRemoveOnInsert);
+                    rtl::Reference<ZipPackageFolder> pPkgFolder = new ZipPackageFolder(m_xContext, m_nFormat, m_bAllowRemoveOnInsert);
                     pPkgFolder->setName( sTemp );
                     pPkgFolder->doSetParent( pCurrent );
-                    pCurrent = pPkgFolder;
+                    pCurrent = pPkgFolder.get();
                 }
                 else
                 {
@@ -582,7 +582,7 @@ void ZipPackage::getZipFileContents()
 
             if (!pCurrent->hasByName(sTemp))
             {
-                ZipPackageStream *pPkgStream = new ZipPackageStream(*this, m_xContext, m_nFormat, m_bAllowRemoveOnInsert);
+                rtl::Reference<ZipPackageStream> pPkgStream = new ZipPackageStream(*this, m_xContext, m_nFormat, m_bAllowRemoveOnInsert);
                 pPkgStream->SetPackageMember(true);
                 pPkgStream->setZipEntryOnLoading(rEntry);
                 pPkgStream->setName(sTemp);
@@ -1056,8 +1056,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Seq
     // Write the manifest
     uno::Reference < XManifestWriter > xWriter = ManifestWriter::create( m_xContext );
     ZipEntry * pEntry = new ZipEntry;
-    ZipPackageBuffer *pBuffer = new ZipPackageBuffer;
-    uno::Reference < XOutputStream > xManOutStream( *pBuffer, UNO_QUERY );
+    rtl::Reference<ZipPackageBuffer> pBuffer = new ZipPackageBuffer;
 
     pEntry->sPath = "META-INF/manifest.xml";
     pEntry->nMethod = DEFLATED;
@@ -1065,7 +1064,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Seq
     pEntry->nSize = pEntry->nCompressedSize = -1;
     pEntry->nTime = ZipOutputStream::getCurrentDosTime();
 
-    xWriter->writeManifestSequence ( xManOutStream,  comphelper::containerToSequence(aManList) );
+    xWriter->writeManifestSequence ( pBuffer,  comphelper::containerToSequence(aManList) );
 
     sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
     pBuffer->realloc( nBufferLength );
@@ -1082,8 +1081,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Seq
 void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno::Sequence < PropertyValue > >& aManList )
 {
     ZipEntry* pEntry = new ZipEntry;
-    ZipPackageBuffer *pBuffer = new ZipPackageBuffer;
-    uno::Reference< io::XOutputStream > xConTypeOutStream( *pBuffer, UNO_QUERY );
+    rtl::Reference<ZipPackageBuffer> pBuffer = new ZipPackageBuffer;
 
     pEntry->sPath = "[Content_Types].xml";
     pEntry->nMethod = DEFLATED;
@@ -1125,7 +1123,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
     aOverridesSequence.realloc(nOverSeqLength);
 
     ::comphelper::OFOPXMLHelper::WriteContentSequence(
-            xConTypeOutStream, aDefaultsSequence, aOverridesSequence, m_xContext );
+            pBuffer, aDefaultsSequence, aOverridesSequence, m_xContext );
 
     sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
     pBuffer->realloc( nBufferLength );
