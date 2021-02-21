@@ -36,7 +36,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 
 else # $(OS)
 
-icu_CFLAGS:=" \
+icu_CFLAGS:="$(CFLAGS) \
 	$(if $(filter iOS,$(OS)),-DUCONFIG_NO_FILE_IO) \
 	$(if $(SYSBASE),-I$(SYSBASE)/usr/include) \
 	$(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
