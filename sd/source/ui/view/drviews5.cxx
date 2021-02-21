@@ -581,16 +581,14 @@ css::uno::Reference<css::accessibility::XAccessible>
 {
     if (GetViewShellBase().GetController() != nullptr)
     {
-        accessibility::AccessibleDrawDocumentView* pDocumentView =
+        rtl::Reference<accessibility::AccessibleDrawDocumentView> pDocumentView =
             new accessibility::AccessibleDrawDocumentView (
                 pWindow,
                 this,
                 GetViewShellBase().GetController(),
                 pWindow->GetAccessibleParentWindow()->GetAccessible());
         pDocumentView->Init();
-        return css::uno::Reference<css::accessibility::XAccessible>
-            (static_cast< css::uno::XWeak*>(pDocumentView),
-                css::uno::UNO_QUERY);
+        return pDocumentView;
     }
 
     SAL_WARN("sd", "DrawViewShell::CreateAccessibleDocumentView: no controller");

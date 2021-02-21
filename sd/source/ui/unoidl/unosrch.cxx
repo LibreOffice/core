@@ -550,7 +550,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::
 
             if(pParent)
             {
-                SvxUnoTextRange *pRange = new SvxUnoTextRange( *pParent );
+                rtl::Reference<SvxUnoTextRange> pRange = new SvxUnoTextRange( *pParent );
                 xFound = pRange;
                 pRange->SetSelection(aSelection);
             }
