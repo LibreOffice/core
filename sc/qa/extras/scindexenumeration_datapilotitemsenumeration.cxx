@@ -125,7 +125,6 @@ void ScIndexEnumeration_DataPilotItemsEnumeration::setUp()
     CalcUnoApiTest::setUp();
     // create a calc document
     m_xComponent = loadFromDesktop("private:factory/scalc");
-    CPPUNIT_ASSERT_MESSAGE("no component", m_xComponent.is());
 }
 
 void ScIndexEnumeration_DataPilotItemsEnumeration::tearDown()

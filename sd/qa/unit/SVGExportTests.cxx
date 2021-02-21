@@ -53,7 +53,7 @@ protected:
         if (pName)
             std::cout << pName << ",";
         mxComponent = loadFromDesktop(rURL);
-        CPPUNIT_ASSERT(mxComponent.is());
+        
     }
 
     void save()

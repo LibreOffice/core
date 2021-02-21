@@ -106,7 +106,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testNoThumbnail)
     const OUString aURL(m_directories.getURLFromSrc(u"/sfx2/qa/cppunit/misc/hello.odt"));
     uno::Reference<lang::XComponent> xComponent
         = loadFromDesktop(aURL, "com.sun.star.text.TextDocument");
-    CPPUNIT_ASSERT(xComponent.is());
+    
 
     // Save it with the NoThumbnail option and assert that it has no thumbnail.
 #ifndef _WIN32
@@ -167,7 +167,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testHardLinks)
     CPPUNIT_ASSERT_EQUAL(0, nRet);
 
     uno::Reference<lang::XComponent> xComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument");
-    CPPUNIT_ASSERT(xComponent.is());
+    
 
     uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
     xStorable->store();
@@ -201,7 +201,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testOverwrite)
     aTempFile.EnableKillingFile();
     uno::Reference<lang::XComponent> xComponent
         = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
-    CPPUNIT_ASSERT(xComponent.is());
+    
     uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xStorable.is());
 

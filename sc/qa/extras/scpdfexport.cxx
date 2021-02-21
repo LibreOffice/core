@@ -85,7 +85,7 @@ void ScPDFExportTest::setUp()
         args[0].Name = "Hidden";
         args[0].Value <<= true;
         mxComponent = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, args);
-        CPPUNIT_ASSERT(mxComponent.is());
+        
 
         // create a frame
         xTargetFrame = xDesktop->findFrame("_blank", 0);

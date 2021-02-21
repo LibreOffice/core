@@ -104,7 +104,7 @@ void SdDialogsTest::setUp()
 
     mpFact = SdAbstractDialogFactory::Create();
     mxComponent = loadFromDesktop("private:factory/simpress", "com.sun.star.presentation.PresentationDocument");
-    CPPUNIT_ASSERT(mxComponent.is());
+    
 
     mpImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(mpImpressDocument);

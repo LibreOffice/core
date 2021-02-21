@@ -68,7 +68,7 @@ void ScAnchorTest::testUndoAnchor()
     createFileURL(u"document_with_linked_graphic.ods", aFileURL);
     // open the document with graphic included
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
+    
 
     // Get the document model
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
@@ -200,7 +200,7 @@ void ScAnchorTest::testODFAnchorTypes()
     createFileURL(u"3AnchorTypes.ods", aFileURL);
     // open the document with graphic included
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
+    
 
     // Get the document model
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
@@ -245,7 +245,7 @@ void ScAnchorTest::testCopyColumnWithImages()
     createFileURL(u"3AnchorTypes.ods", aFileURL);
     // open the document with graphic included
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
+    
 
     // Get the document model
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
@@ -317,7 +317,7 @@ void ScAnchorTest::testCutWithImages()
     createFileURL(u"3AnchorTypes.ods", aFileURL);
     // open the document with graphic included
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
+    
 
     // Get the document model
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
@@ -375,7 +375,7 @@ void ScAnchorTest::testTdf121963()
     OUString aFileURL;
     createFileURL(u"tdf121963.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
+    
 
     // Without the accompanying fix in place, this test would have never returned due to an infinite
     // invalidation loop, where ScGridWindow::Paint() invalidated itself.
@@ -389,7 +389,7 @@ void ScAnchorTest::testTdf129552()
     OUString aFileURL;
     createFileURL(u"tdf129552.fods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
+    
 
     // Without the accompanying fix in place, this test would have never returned due to an infinite
     // invalidation loop, where ScGridWindow::Paint() invalidated itself.
@@ -403,7 +403,7 @@ void ScAnchorTest::testTdf130556()
     OUString aFileURL;
     createFileURL(u"tdf130556.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
+    
 
     // Without the accompanying fix in place, this test would have never returned due to an infinite
     // invalidation loop, where ScGridWindow::Paint() invalidated itself.
@@ -417,7 +417,7 @@ void ScAnchorTest::testTdf134161()
     OUString aFileURL;
     createFileURL(u"tdf134161.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
+    
 
     // Without the accompanying fix in place, this test would have never returned due to an infinite
     // invalidation loop
