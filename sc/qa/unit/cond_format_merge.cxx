@@ -45,8 +45,6 @@ void ScCondFormatMergeTest::testCondFormatMerge()
     createFileURL(u"cond_format_merge.ods", aFileURL);
     uno::Reference<lang::XComponent> mxComponent = loadFromDesktop(aFileURL);
 
-    CPPUNIT_ASSERT_MESSAGE("Component not loaded", mxComponent.is());
-
     // get the first sheet
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);

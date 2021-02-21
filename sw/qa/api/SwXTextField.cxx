@@ -73,7 +73,6 @@ void SwXTextField::triggerDesktopTerminate() { mxDesktop->terminate(); }
 Reference<XInterface> SwXTextField::init()
 {
     component_ = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-    CPPUNIT_ASSERT(component_.is());
     Reference<text::XTextDocument> xTextDocument(component_, UNO_QUERY_THROW);
     Reference<lang::XMultiServiceFactory> xMSF(component_, UNO_QUERY_THROW);
 

@@ -324,8 +324,6 @@ uno::Reference< sheet::XSpreadsheetDocument> XSpreadsheets2::getDoc(const OUStri
 
     uno::Reference< lang::XComponent > xComp = loadFromDesktop(aFileURL);
 
-    CPPUNIT_ASSERT(xComp.is());
-
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(xComp, UNO_QUERY_THROW);
     return xDoc;
 }

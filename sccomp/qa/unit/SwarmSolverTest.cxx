@@ -60,8 +60,6 @@ void SwarmSolverTest::testUnconstrained()
     createFileURL(u"Simple.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL);
 
-    CPPUNIT_ASSERT_MESSAGE("Component not loaded", mxComponent.is());
-
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xDocument->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
@@ -109,8 +107,6 @@ void SwarmSolverTest::testVariableBounded()
     OUString aFileURL;
     createFileURL(u"Simple.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL);
-
-    CPPUNIT_ASSERT_MESSAGE("Component not loaded", mxComponent.is());
 
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xDocument->getSheets(), uno::UNO_QUERY_THROW);
@@ -161,8 +157,6 @@ void SwarmSolverTest::testVariableConstrained()
     OUString aFileURL;
     createFileURL(u"Simple.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL);
-
-    CPPUNIT_ASSERT_MESSAGE("Component not loaded", mxComponent.is());
 
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xDocument->getSheets(), uno::UNO_QUERY_THROW);
@@ -217,8 +211,6 @@ void SwarmSolverTest::testTwoVariables()
     OUString aFileURL;
     createFileURL(u"TwoVariables.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL);
-
-    CPPUNIT_ASSERT_MESSAGE("Component not loaded", mxComponent.is());
 
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xDocument->getSheets(), uno::UNO_QUERY_THROW);
@@ -281,7 +273,6 @@ void SwarmSolverTest::testMultipleVariables()
     createFileURL(u"MultiVariable.ods", aFileURL);
     mxComponent = loadFromDesktop(aFileURL);
 
-    CPPUNIT_ASSERT_MESSAGE("Component not loaded", mxComponent.is());
 
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIndex(xDocument->getSheets(), uno::UNO_QUERY_THROW);

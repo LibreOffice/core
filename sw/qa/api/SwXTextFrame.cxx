@@ -64,7 +64,6 @@ void SwXTextFrame::setUp()
     mxTextDocument = uno::Reference<text::XTextDocument>(
         loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"),
         uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(mxTextDocument.is());
 }
 
 void SwXTextFrame::tearDown()

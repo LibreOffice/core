@@ -120,8 +120,7 @@ LOKitSearchTest::createDoc(const char* pName, const uno::Sequence<beans::Propert
 
     mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY)
                                   + OUString::createFromAscii(pName));
-
-    CPPUNIT_ASSERT(mxComponent.is());
+    
     SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pImpressDocument);
     pImpressDocument->initializeForTiledRendering(rArguments);

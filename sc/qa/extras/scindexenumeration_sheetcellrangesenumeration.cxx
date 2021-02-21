@@ -104,7 +104,6 @@ void ScIndexEnumeration_SheetCellRangesEnumeration::setUp()
 {
     CalcUnoApiTest::setUp();
     m_xComponent = loadFromDesktop("private:factory/scalc");
-    CPPUNIT_ASSERT_MESSAGE("no component", m_xComponent.is());
 }
 
 void ScIndexEnumeration_SheetCellRangesEnumeration::tearDown()

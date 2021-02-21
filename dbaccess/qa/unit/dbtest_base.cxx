@@ -67,8 +67,6 @@ uno::Reference< XOfficeDatabaseDocument >
 
 uno::Reference<XOfficeDatabaseDocument> DBTestBase::getDocumentForUrl(OUString const & url) {
     uno::Reference< lang::XComponent > xComponent (loadFromDesktop(url));
-    CPPUNIT_ASSERT(xComponent.is());
-
     uno::Reference< XOfficeDatabaseDocument > xDocument(xComponent, UNO_QUERY);
     CPPUNIT_ASSERT(xDocument.is());
 
