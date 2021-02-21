@@ -40,7 +40,7 @@ namespace dbaui
             Expected to throw. */
         virtual void    onNoColumns_throw() override;
 
-        virtual bool supressCrossNaturalJoin(const TTableConnectionData::value_type& _pData) const override;
+        virtual bool suppressCrossNaturalJoin(const TTableConnectionData::value_type& _pData) const override;
 
     public:
         OQueryTableView(vcl::Window* pParent,OQueryDesignView* pView);

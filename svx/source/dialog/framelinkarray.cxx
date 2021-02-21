@@ -1080,7 +1080,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
             // Additionally avoid double-handling by suppressing handling when self not rotated,
             // but above/left is rotated and thus already handled. Two directly connected
             // rotated will paint/create both edges, they might be rotated differently.
-            const bool bSupressLeft(!bRotated && nCol > nFirstCol && CELL(nCol - 1, nRow).IsRotated());
+            const bool bSuppressLeft(!bRotated && nCol > nFirstCol && CELL(nCol - 1, nRow).IsRotated());
             const bool bSuppressAbove(!bRotated && nRow > nFirstRow && CELL(nCol, nRow - 1).IsRotated());
 
             if(!aX.equalZero() && !aY.equalZero())
@@ -1121,7 +1121,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                 // create left line for this Cell
                 if ((!bOverlapX         // true for first column in merged cells or cells
                     || bFirstCol)       // true for non_Calc usages of this tooling
-                    && !bSupressLeft)   // true when left is not rotated, so edge is already handled (see bRotated)
+                    && !bSuppressLeft)  // true when left is not rotated, so edge is already handled (see bRotated)
                 {
                     const Style& rLeft(GetCellStyleLeft(nCol, nRow));
 
@@ -1234,7 +1234,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                 // create left line for this Cell
                 if ((!bOverlapX         // true for first column in merged cells or cells
                     || bFirstCol)       // true for non_Calc usages of this tooling
-                    && !bSupressLeft)   // true when left is not rotated, so edge is already handled (see bRotated)
+                    && !bSuppressLeft)  // true when left is not rotated, so edge is already handled (see bRotated)
                 {
                     const Style& rLeft(GetCellStyleLeft(nCol, nRow));
 

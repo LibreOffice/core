@@ -880,7 +880,7 @@ void OQueryTableView::onNoColumns_throw()
     ::dbtools::throwSQLException( sError, ::dbtools::StandardSQLState::GENERAL_ERROR, nullptr );
 }
 
-bool OQueryTableView::supressCrossNaturalJoin(const TTableConnectionData::value_type& _pData) const
+bool OQueryTableView::suppressCrossNaturalJoin(const TTableConnectionData::value_type& _pData) const
 {
     OQueryTableConnectionData* pQueryData = static_cast<OQueryTableConnectionData*>(_pData.get());
     return pQueryData && (pQueryData->GetJoinType() == CROSS_JOIN);

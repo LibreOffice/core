@@ -196,7 +196,7 @@ namespace dbaui
         */
         sal_Int32 getConnectionCount(const OTableWindow* _pFromWin) const;
 
-        OTableConnection* GetTabConn(const OTableWindow* pLhs,const OTableWindow* pRhs,bool _bSupressCrossOrNaturalJoin = false) const;
+        OTableConnection* GetTabConn(const OTableWindow* pLhs,const OTableWindow* pRhs,bool _bSuppressCrossOrNaturalJoin = false) const;
 
         /** clear the window map and connection vector without destroying it
 
@@ -299,7 +299,7 @@ namespace dbaui
             Expected to throw. */
         virtual void onNoColumns_throw();
 
-        virtual bool supressCrossNaturalJoin(const TTableConnectionData::value_type& _pData) const;
+        virtual bool suppressCrossNaturalJoin(const TTableConnectionData::value_type& _pData) const;
 
     private:
         void InitColors();
