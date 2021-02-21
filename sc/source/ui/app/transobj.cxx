@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
+#include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -769,8 +770,8 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
     for (nCol=0; nCol<nStartX; nCol++)
         nPosX += rDestDoc.GetColWidth( nCol, 0 );
     nPosY += rDestDoc.GetRowHeight( 0, nStartY-1, 0 );
-    nPosX = static_cast<tools::Long>( nPosX * HMM_PER_TWIPS );
-    nPosY = static_cast<tools::Long>( nPosY * HMM_PER_TWIPS );
+    nPosX = o3tl::convert(nPosX, o3tl::Length::twip, o3tl::Length::mm100);
+    nPosY = o3tl::convert(nPosY, o3tl::Length::twip, o3tl::Length::mm100);
 
     aPaperSize.setWidth( aPaperSize.Width() * 2 );       // limit OLE object to double of page size
     aPaperSize.setHeight( aPaperSize.Height() * 2 );
@@ -791,8 +792,8 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
             break;
         nSizeY += nAdd;
     }
-    nSizeX = static_cast<tools::Long>( nSizeX * HMM_PER_TWIPS );
-    nSizeY = static_cast<tools::Long>( nSizeY * HMM_PER_TWIPS );
+    nSizeX = o3tl::convert(nSizeX, o3tl::Length::twip, o3tl::Length::mm100);
+    nSizeY = o3tl::convert(nSizeY, o3tl::Length::twip, o3tl::Length::mm100);
 
 //      pDocSh->SetVisAreaSize( Size(nSizeX,nSizeY) );
 

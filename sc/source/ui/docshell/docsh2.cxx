@@ -26,6 +26,7 @@
 #include <config_folders.h>
 #include <unotools/configmgr.hxx>
 #include <comphelper/processfactory.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 #include <drwlayer.hxx>
 #include <stlpool.hxx>
@@ -46,8 +47,10 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     //  Additional tables are created by the first View, if bIsEmpty is still sal_True
     if( bRet )
     {
-        Size aSize( tools::Long( STD_COL_WIDTH           * HMM_PER_TWIPS * OLE_STD_CELLS_X ),
-                    static_cast<tools::Long>( ScGlobal::nStdRowHeight * HMM_PER_TWIPS * OLE_STD_CELLS_Y ) );
+        Size aSize(
+            o3tl::convert(STD_COL_WIDTH * OLE_STD_CELLS_X, o3tl::Length::twip, o3tl::Length::mm100),
+            o3tl::convert(ScGlobal::nStdRowHeight * OLE_STD_CELLS_Y, o3tl::Length::twip,
+                          o3tl::Length::mm100));
         // Also adjust start here
         SetVisAreaOrSize( tools::Rectangle( Point(), aSize ) );
     }
