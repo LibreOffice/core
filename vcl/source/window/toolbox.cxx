@@ -47,6 +47,7 @@
 #endif
 
 #include <cstdlib>
+#include <map>
 #include <vector>
 #include <math.h>
 
