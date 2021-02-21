@@ -236,7 +236,7 @@ ScTableConditionalFormat::~ScTableConditionalFormat()
 
 void ScTableConditionalFormat::AddEntry_Impl(const ScCondFormatEntryItem& aEntry)
 {
-    ScTableConditionalEntry* pNew = new ScTableConditionalEntry(aEntry);
+    rtl::Reference<ScTableConditionalEntry> pNew = new ScTableConditionalEntry(aEntry);
     maEntries.emplace_back(pNew);
 }
 

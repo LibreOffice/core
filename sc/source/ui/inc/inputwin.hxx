@@ -139,7 +139,7 @@ private:
 
     typedef ::std::vector< ScAccessibleEditLineTextData* > AccTextDataVector;
 
-    ScAccessibleEditObject* pAcc;
+    rtl::Reference<ScAccessibleEditObject> pAcc;
 
     OUString    aString;
     vcl::Font   aTextFont;

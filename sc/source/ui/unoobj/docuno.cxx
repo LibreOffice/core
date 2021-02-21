@@ -834,10 +834,7 @@ uno::Reference<datatransfer::XTransferable> ScModelObj::getSelection()
     else if ( ScDrawShell * pDrawShell = dynamic_cast<ScDrawShell*>( pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) ) )
         xTransferable = pDrawShell->GetDrawView()->CopyToTransferable();
     else
-    {
-        ScTransferObj* pObj = pViewData->GetViewShell()->CopyToTransferable();
-        xTransferable.set( pObj );
-    }
+        xTransferable = pViewData->GetViewShell()->CopyToTransferable();
 
     if (!xTransferable.is())
         xTransferable.set( aDataHelper.GetTransferable() );
@@ -2498,7 +2495,7 @@ uno::Reference<sheet::XConsolidationDescriptor> SAL_CALL ScModelObj::createConso
                                 sal_Bool bEmpty )
 {
     SolarMutexGuard aGuard;
-    ScConsolidationDescriptor* pNew = new ScConsolidationDescriptor;
+    rtl::Reference<ScConsolidationDescriptor> pNew = new ScConsolidationDescriptor;
     if ( pDocShell && !bEmpty )
     {
         ScDocument& rDoc = pDocShell->GetDocument();
@@ -2894,7 +2891,7 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyName )
         }
         else if ( aPropertyName == SC_UNO_REFERENCEDEVICE )
         {
-            VCLXDevice* pXDev = new VCLXDevice();
+            rtl::Reference<VCLXDevice> pXDev = new VCLXDevice();
             pXDev->SetOutputDevice( rDoc.GetRefDevice() );
             aRet <<= uno::Reference< awt::XDevice >( pXDev );
         }

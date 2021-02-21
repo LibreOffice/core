@@ -1097,7 +1097,7 @@ void SAL_CALL ScShapeObj::insertTextContent( const uno::Reference<text::XTextRan
         //  To insert it into drawing text, a SvxUnoTextField is needed instead.
         //  The ScCellFieldObj object is left in non-inserted state.
 
-        SvxUnoTextField* pDrawField = new SvxUnoTextField( text::textfield::Type::URL );
+        rtl::Reference<SvxUnoTextField> pDrawField = new SvxUnoTextField( text::textfield::Type::URL );
         xEffContent.set(pDrawField);
         lcl_CopyOneProperty( *pDrawField, *pCellField, SC_UNONAME_URL );
         lcl_CopyOneProperty( *pDrawField, *pCellField, SC_UNONAME_REPR );
@@ -1154,10 +1154,9 @@ uno::Reference<text::XTextCursor> SAL_CALL ScShapeObj::createTextCursorByRange(
         SvxUnoTextRangeBase* pRange = comphelper::getUnoTunnelImplementation<SvxUnoTextRangeBase>( aTextPosition );
         if ( pText && pRange )
         {
-            SvxUnoTextCursor* pCursor = new ScDrawTextCursor( this, *pText );
-            uno::Reference<text::XTextCursor> xCursor( pCursor );
+            rtl::Reference<SvxUnoTextCursor> pCursor = new ScDrawTextCursor( this, *pText );
             pCursor->SetSelection( pRange->GetSelection() );
-            return xCursor;
+            return pCursor;
         }
     }
 

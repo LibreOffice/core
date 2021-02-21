@@ -116,7 +116,7 @@ public:
                                             bool bIncludeObjects );
     bool                        CopyToClipMultiRange( const ScDocument* pClipDoc, const ScRangeList& rRanges, bool bCut,
                                             bool bApi, bool bIncludeObjects );
-    ScTransferObj*              CopyToTransferable();
+    rtl::Reference<ScTransferObj> CopyToTransferable();
     SC_DLLPUBLIC bool           PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
                                     ScPasteFunc nFunction = ScPasteFunc::NONE, bool bSkipEmpty = false,
                                     bool bTranspose = false, bool bAsLink = false,

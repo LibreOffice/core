@@ -1096,7 +1096,7 @@ private:
     ScRange                 aTotalRange;
 
 private:
-    ScCellRangeObj*         GetObjectByIndex_Impl(tools::Long nIndex) const;
+    rtl::Reference<ScCellRangeObj> GetObjectByIndex_Impl(tools::Long nIndex) const;
 
 public:
                             ScCellFormatsObj(ScDocShell* pDocSh, const ScRange& rR);
@@ -1137,7 +1137,7 @@ private:
 
 private:
     void                    Advance_Impl();
-    ScCellRangeObj*         NextObject_Impl();
+    rtl::Reference<ScCellRangeObj> NextObject_Impl();
 
 public:
                             ScCellFormatsEnumeration(ScDocShell* pDocSh, const ScRange& rR);

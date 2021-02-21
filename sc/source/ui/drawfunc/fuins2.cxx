@@ -670,11 +670,10 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                     }
 
                     pView->AddUndo(std::make_unique<SdrUndoNewObj>(*pObj));
-                    ::svt::DialogClosedListener* pListener = new ::svt::DialogClosedListener();
+                    rtl::Reference<::svt::DialogClosedListener> pListener = new ::svt::DialogClosedListener();
                     pListener->SetDialogClosedLink( rLink );
-                    css::uno::Reference<css::ui::dialogs::XDialogClosedListener> xListener( pListener );
 
-                    xDialog->startExecuteModal( xListener );
+                    xDialog->startExecuteModal( pListener );
                 }
                 else
                 {

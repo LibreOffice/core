@@ -274,7 +274,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
         xParentStates = xParentContext->getAccessibleStateSet();
     }
-    utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
+    rtl::Reference<utl::AccessibleStateSetHelper> pStateSet = new utl::AccessibleStateSetHelper();
     if (IsDefunc(xParentStates))
         pStateSet->AddState(AccessibleStateType::DEFUNC);
     else
@@ -516,8 +516,7 @@ uno::Reference< XAccessibleRelationSet > ScAccessibleEditObject::getAccessibleRe
 {
     SolarMutexGuard aGuard;
     vcl::Window* pWindow = mpWindow;
-    utl::AccessibleRelationSetHelper* rRelationSet = new utl::AccessibleRelationSetHelper;
-    uno::Reference< XAccessibleRelationSet > rSet = rRelationSet;
+    rtl::Reference<utl::AccessibleRelationSetHelper> rRelationSet = new utl::AccessibleRelationSetHelper;
     if ( pWindow )
     {
         vcl::Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
@@ -532,7 +531,7 @@ uno::Reference< XAccessibleRelationSet > ScAccessibleEditObject::getAccessibleRe
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence { pMemberOf->GetAccessible() };
             rRelationSet->AddRelation( AccessibleRelation( AccessibleRelationType::MEMBER_OF, aSequence ) );
         }
-        return rSet;
+        return rRelationSet;
     }
     return uno::Reference< XAccessibleRelationSet >();
 }

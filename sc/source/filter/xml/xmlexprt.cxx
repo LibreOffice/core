@@ -3380,10 +3380,10 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                                     if ( !sRanges.isEmpty() )
                                     {
                                         bIsChart = true;
-                                        SvXMLAttributeList* pAttrList = new SvXMLAttributeList();
+                                        rtl::Reference<SvXMLAttributeList> pAttrList = new SvXMLAttributeList();
                                         pAttrList->AddAttribute(
                                             GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken( XML_NOTIFY_ON_UPDATE_OF_RANGES ) ), sRanges );
-                                        GetShapeExport()->exportShape( xShape, SEF_DEFAULT, pPoint, pAttrList );
+                                        GetShapeExport()->exportShape( xShape, SEF_DEFAULT, pPoint, pAttrList.get() );
                                     }
                                 }
                             }
@@ -3405,7 +3405,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                                 bIsChart = true;
                                 uno::Sequence< OUString > aRepresentations(
                                     xReceiver->getUsedRangeRepresentations());
-                                SvXMLAttributeList* pAttrList = nullptr;
+                                rtl::Reference<SvXMLAttributeList> pAttrList;
                                 if(aRepresentations.hasElements())
                                 {
                                     // add the ranges used by the chart to the shape
@@ -3417,7 +3417,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                                     pAttrList->AddAttribute(
                                         GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken(XML_NOTIFY_ON_UPDATE_OF_RANGES) ), sRanges );
                                 }
-                                GetShapeExport()->exportShape(xShape, SEF_DEFAULT, pPoint, pAttrList);
+                                GetShapeExport()->exportShape(xShape, SEF_DEFAULT, pPoint, pAttrList.get());
                             }
                         }
                     }
