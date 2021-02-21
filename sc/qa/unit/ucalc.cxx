@@ -7259,6 +7259,54 @@ void Test::testProtectedSheetEditByColumn()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSimpleArray()
+{
+  m_pDoc->InsertTab(0, "tdf#56829");
+
+  m_pDoc->SetString(ScAddress(0,0,0), "titulo1");
+  m_pDoc->SetString(ScAddress(1,0,0), "titulo");
+  m_pDoc->SetString(ScAddress(2,0,0), "titulo3");
+  m_pDoc->SetString(ScAddress(3,0,0), "titulo4");
+  m_pDoc->SetString(ScAddress(4,0,0), "titulo5");
+  m_pDoc->SetString(ScAddress(5,0,0), "titulo6");
+  m_pDoc->SetString(ScAddress(6,0,0), "titulo7");
+
+  m_pDoc->SetString(ScAddress(0,1,0), "hola");
+  m_pDoc->SetValue(ScAddress(1,1,0), 1);
+  m_pDoc->SetValue(ScAddress(2,1,0), 3);
+  m_pDoc->SetString(ScAddress(3,1,0), "vay");
+  m_pDoc->SetValue(ScAddress(4,1,0), 2);
+  m_pDoc->SetValue(ScAddress(5,1,0), 3);
+  m_pDoc->SetString(ScAddress(6,1,0), "vay");
+
+  m_pDoc->SetString(ScAddress(0,2,0), "adios");
+  m_pDoc->SetValue(ScAddress(1,2,0), 2);
+  m_pDoc->SetValue(ScAddress(2,2,0), 4);
+  m_pDoc->SetString(ScAddress(3,2,0), "ven");
+  m_pDoc->SetValue(ScAddress(4,2,0), 3);
+  m_pDoc->SetValue(ScAddress(5,2,0), 4);
+  m_pDoc->SetString(ScAddress(6,2,0), "ven");
+
+  ScRange aMatRange(0,4,0,6,6,0);
+  ScMarkData aMark(m_pDoc->GetSheetLimits());
+  aMark.SetMarkArea(aMatRange);
+  m_pDoc->InsertMatrixFormula(0, 4, 6, 6, aMark, "=A1:G3");
+
+  m_pDoc->CalcAll();
+
+  SCCOL nCols=7;
+  SCROW nRows=3;
+  for (SCCOL i = 0; i < nCols; i++)
+  {
+    for(SCROW j = 0; j < nRows; j++)
+    {
+      CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(i, j, 0), m_pDoc->GetString(i, 4+j, 0));
+    }
+  }
+
+  m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 CPPUNIT_PLUGIN_IMPLEMENT();

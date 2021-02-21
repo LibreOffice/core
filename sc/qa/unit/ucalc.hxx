@@ -578,6 +578,7 @@ public:
     void testFuncRowsHidden();
     void testInsertColCellStoreEventSwap();
     void testFormulaAfterDeleteRows();
+    void testSimpleArray();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
@@ -887,6 +888,7 @@ public:
     CPPUNIT_TEST(testFuncRowsHidden);
     CPPUNIT_TEST(testInsertColCellStoreEventSwap);
     CPPUNIT_TEST(testFormulaAfterDeleteRows);
+    CPPUNIT_TEST(testSimpleArray);
     CPPUNIT_TEST_SUITE_END();
 
 private:
