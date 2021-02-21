@@ -213,7 +213,7 @@ Reference< XNameAccess> OComponentDefinition::getColumns()
     return m_pColumns.get();
 }
 
-OColumn* OComponentDefinition::createColumn(const OUString& _rName) const
+rtl::Reference<OColumn> OComponentDefinition::createColumn(const OUString& _rName) const
 {
     const OComponentDefinition_Impl& rDefinition( getDefinition() );
     OComponentDefinition_Impl::const_iterator aFind = rDefinition.find( _rName );

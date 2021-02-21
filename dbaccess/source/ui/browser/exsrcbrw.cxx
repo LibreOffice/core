@@ -61,7 +61,6 @@ Any SAL_CALL SbaExternalSourceBrowser::queryInterface(const Type& _rType)
 SbaExternalSourceBrowser::SbaExternalSourceBrowser(const Reference< css::uno::XComponentContext >& _rM)
     :SbaXDataBrowserController(_rM)
     ,m_aModifyListeners(getMutex())
-    ,m_pDataSourceImpl(nullptr)
     ,m_bInQueryDispatch( false )
 {
 

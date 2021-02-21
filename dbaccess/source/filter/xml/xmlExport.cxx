@@ -910,10 +910,9 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
             if ( aFind != m_aTableDummyColumns.end() )
             {
                 SvXMLElementExport aColumns(*this,XML_NAMESPACE_DB, XML_COLUMNS, true, true);
-                SvXMLAttributeList* pAtt = new SvXMLAttributeList;
-                Reference<XAttributeList> xAtt = pAtt;
+                rtl::Reference<SvXMLAttributeList> pAtt = new SvXMLAttributeList;
                 exportStyleName(aFind->second.get(),*pAtt);
-                AddAttributeList(xAtt);
+                AddAttributeList(pAtt);
                 SvXMLElementExport aColumn(*this,XML_NAMESPACE_DB, XML_COLUMN, true, true);
 
             }
@@ -929,8 +928,7 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
             Reference<XPropertySet> xProp(xNameAccess->getByName(*pIter),UNO_QUERY);
             if ( xProp.is() )
             {
-                SvXMLAttributeList* pAtt = new SvXMLAttributeList;
-                Reference<XAttributeList> xAtt = pAtt;
+                rtl::Reference<SvXMLAttributeList> pAtt = new SvXMLAttributeList;
                 exportStyleName(xProp.get(),*pAtt);
 
                 bool bHidden = getBOOL(xProp->getPropertyValue(PROPERTY_HIDDEN));
@@ -958,7 +956,7 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
                     }
 
                     if ( pAtt->getLength() )
-                        AddAttributeList(xAtt);
+                        AddAttributeList(pAtt);
                 }
 
                 if ( GetAttrList().getLength() )

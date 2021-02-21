@@ -549,18 +549,18 @@ void ODBTableDecorator::refreshColumns()
                                     m_xMetaData.is() && m_xMetaData->supportsAlterTableWithDropColumn());
 
         pCol->setParent(*this);
-        OContainerMediator* pMediator = new OContainerMediator( pCol, m_xColumnDefinitions );
+        rtl::Reference<OContainerMediator> pMediator = new OContainerMediator( pCol, m_xColumnDefinitions );
         m_xColumnMediator = pMediator;
-        pCol->setMediator( pMediator );
+        pCol->setMediator( pMediator.get() );
         m_pColumns.reset(pCol);
     }
     else
         m_pColumns->reFill(aVector);
 }
 
-OColumn* ODBTableDecorator::createColumn(const OUString& _rName) const
+rtl::Reference<OColumn> ODBTableDecorator::createColumn(const OUString& _rName) const
 {
-    OColumn* pReturn = nullptr;
+    rtl::Reference<OColumn> pReturn;
 
     Reference<XNameAccess> xNames;
     if ( m_xTable.is() )
