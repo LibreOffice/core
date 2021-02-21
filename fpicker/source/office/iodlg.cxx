@@ -1401,14 +1401,13 @@ void SvtFileDialog::displayIOException( const OUString& _rURL, IOErrorCode _eCod
         aException.Classification = InteractionClassification_ERROR;
 
         // let and interaction handler handle this exception
-        ::comphelper::OInteractionRequest* pRequest = nullptr;
-        Reference< css::task::XInteractionRequest > xRequest = pRequest =
+        rtl::Reference<::comphelper::OInteractionRequest> pRequest =
             new ::comphelper::OInteractionRequest( makeAny( aException ) );
         pRequest->addContinuation( new ::comphelper::OInteractionAbort( ) );
 
         Reference< XInteractionHandler2 > xHandler(
             InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr ) );
-        xHandler->handle( xRequest );
+        xHandler->handle( pRequest );
     }
     catch( const Exception& )
     {
