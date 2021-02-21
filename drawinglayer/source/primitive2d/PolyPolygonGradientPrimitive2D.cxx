@@ -22,6 +22,7 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <rtl/ref.hxx>
 
 using namespace com::sun::star;
 
@@ -34,10 +35,9 @@ void PolyPolygonGradientPrimitive2D::create2DDecomposition(
     {
         // create SubSequence with FillGradientPrimitive2D
         const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
-        FillGradientPrimitive2D* pNewGradient = new FillGradientPrimitive2D(
+        rtl::Reference<FillGradientPrimitive2D> pNewGradient = new FillGradientPrimitive2D(
             aPolyPolygonRange, getDefinitionRange(), getFillGradient());
-        const Primitive2DReference xSubRef(pNewGradient);
-        const Primitive2DContainer aSubSequence{ xSubRef };
+        const Primitive2DContainer aSubSequence{ pNewGradient };
 
         // create mask primitive
         rContainer.push_back(new MaskPrimitive2D(getB2DPolyPolygon(), aSubSequence));

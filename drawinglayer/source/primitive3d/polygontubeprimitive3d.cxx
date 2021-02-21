@@ -318,8 +318,7 @@ namespace drawinglayer::primitive3d
                             {
                                 const basegfx::B3DPolygon& aPartPolygon(aSphere.getB3DPolygon(a));
                                 const basegfx::B3DPolyPolygon aPartPolyPolygon(aPartPolygon);
-                                BasePrimitive3D* pNew = new PolyPolygonMaterialPrimitive3D(aPartPolyPolygon, rMaterial, false);
-                                aResultVector.push_back(pNew);
+                                aResultVector.push_back(new PolyPolygonMaterialPrimitive3D(aPartPolyPolygon, rMaterial, false));
                             }
                         }
                         else
@@ -466,8 +465,7 @@ namespace drawinglayer::primitive3d
                             if(aNewPolygon.count())
                             {
                                 const basegfx::B3DPolyPolygon aNewPolyPolygon(aNewPolygon);
-                                BasePrimitive3D* pNew = new PolyPolygonMaterialPrimitive3D(aNewPolyPolygon, rMaterial, false);
-                                aResultVector.push_back(pNew);
+                                aResultVector.push_back(new PolyPolygonMaterialPrimitive3D(aNewPolyPolygon, rMaterial, false));
                             }
 
                             if(bMiter && aMiterPolygon.count())
@@ -480,8 +478,7 @@ namespace drawinglayer::primitive3d
 
                                 // create primitive
                                 const basegfx::B3DPolyPolygon aMiterPolyPolygon(aMiterPolygon);
-                                BasePrimitive3D* pNew = new PolyPolygonMaterialPrimitive3D(aMiterPolyPolygon, rMaterial, false);
-                                aResultVector.push_back(pNew);
+                                aResultVector.push_back(new PolyPolygonMaterialPrimitive3D(aMiterPolyPolygon, rMaterial, false));
                             }
 
                             // prepare next step
@@ -615,8 +612,7 @@ using namespace com::sun::star;
                                     aSequence = getLineCapSegments(nSegments, aMaterial);
                                 }
 
-                                TransformPrimitive3D* pNewTransformedA = new TransformPrimitive3D(aCapTrans, aSequence);
-                                aResultVector.push_back(pNewTransformedA);
+                                aResultVector.push_back(new TransformPrimitive3D(aCapTrans, aSequence));
                             }
                             else
                             {
@@ -717,8 +713,7 @@ using namespace com::sun::star;
                 else
                 {
                     // create hairline
-                    PolygonHairlinePrimitive3D* pNew = new PolygonHairlinePrimitive3D(getB3DPolygon(), getBColor());
-                    aResultVector.push_back(pNew);
+                    aResultVector.push_back(new PolygonHairlinePrimitive3D(getB3DPolygon(), getBColor()));
                 }
             }
 

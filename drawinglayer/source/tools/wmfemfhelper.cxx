@@ -1024,7 +1024,7 @@ namespace wmfemfhelper
             aWallpaperRange = vcl::unotools::b2DRectangleFromRectangle(rWallpaper.GetRect());
         }
 
-        drawinglayer::primitive2d::BasePrimitive2D* pBitmapWallpaperFill =
+        rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pBitmapWallpaperFill =
             new drawinglayer::primitive2d::WallpaperBitmapPrimitive2D(
                 aWallpaperRange,
                 aBitmapEx,
@@ -1114,7 +1114,7 @@ namespace wmfemfhelper
         TargetHolder& rTarget,
         PropertyHolder const & rProperty)
     {
-        drawinglayer::primitive2d::BasePrimitive2D* pResult = nullptr;
+        rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pResult;
         const vcl::Font& rFont = rProperty.getFont();
         basegfx::B2DVector aAlignmentOffset(0.0, 0.0);
 
