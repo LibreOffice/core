@@ -79,7 +79,7 @@ uno::Reference<report::XSection> OSection::createOSection(
     const uno::Reference< uno::XComponentContext >& context,
     bool const bPageSection)
 {
-    OSection *const pNew =
+    rtl::Reference<OSection> pNew =
         new OSection(xParentDef, nullptr, context, lcl_getAbsent(bPageSection));
     pNew->init();
     return pNew;
@@ -89,7 +89,7 @@ uno::Reference<report::XSection> OSection::createOSection(
     const uno::Reference< report::XGroup >& xParentGroup,
     const uno::Reference< uno::XComponentContext >& context)
 {
-    OSection *const pNew =
+    rtl::Reference<OSection> pNew =
         new OSection(nullptr, xParentGroup, context, lcl_getGroupAbsent());
     pNew->init();
     return pNew;

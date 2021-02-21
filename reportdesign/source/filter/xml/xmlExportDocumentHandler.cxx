@@ -122,8 +122,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
     bool bExport = true;
     if ( _sName == "office:chart" )
     {
-        SvXMLAttributeList* pList = new SvXMLAttributeList();
-        uno::Reference< xml::sax::XAttributeList > xNewAttribs = pList;
+        rtl::Reference<SvXMLAttributeList> pList = new SvXMLAttributeList();
         OUStringBuffer sValue;
         static const SvXMLEnumMapEntry<sal_uInt16> aXML_CommandTypeEnumMap[] =
         {
@@ -149,16 +148,15 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
 
         pList->AddAttribute(lcl_createAttribute(XML_NP_OFFICE,XML_MIMETYPE),MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII);
 
-        m_xDelegatee->startElement(lcl_createAttribute(XML_NP_OFFICE,XML_REPORT),xNewAttribs);
+        m_xDelegatee->startElement(lcl_createAttribute(XML_NP_OFFICE,XML_REPORT),pList);
 
         const OUString sTableCalc = lcl_createAttribute(XML_NP_TABLE,XML_CALCULATION_SETTINGS);
         m_xDelegatee->startElement(sTableCalc,nullptr);
         pList = new SvXMLAttributeList();
-        uno::Reference< xml::sax::XAttributeList > xNullAttr = pList;
         pList->AddAttribute(lcl_createAttribute(XML_NP_TABLE,XML_DATE_VALUE),"1899-12-30");
 
         const OUString sNullDate = lcl_createAttribute(XML_NP_TABLE,XML_NULL_DATE);
-        m_xDelegatee->startElement(sNullDate,xNullAttr);
+        m_xDelegatee->startElement(sNullDate,pList);
         m_xDelegatee->endElement(sNullDate);
         m_xDelegatee->endElement(sTableCalc);
         bExport = false;
@@ -347,8 +345,7 @@ void ExportDocumentHandler::exportTableRows()
     const OUString sFormulaAttrib( lcl_createAttribute(XML_NP_RPT,XML_FORMULA) );
     static constexpr OUStringLiteral s_sFloat = u"float";
 
-    SvXMLAttributeList* pCellAtt = new SvXMLAttributeList();
-    uno::Reference< xml::sax::XAttributeList > xCellAtt = pCellAtt;
+    rtl::Reference<SvXMLAttributeList> pCellAtt = new SvXMLAttributeList();
     pCellAtt->AddAttribute(sValueType, "string");
 
     bool bRemoveString = true;
@@ -358,7 +355,7 @@ void ExportDocumentHandler::exportTableRows()
         const sal_Int32 nEmptyCellCount = m_nColumnCount - nCount;
         for(sal_Int32 i = 0; i < nEmptyCellCount ; ++i)
         {
-            m_xDelegatee->startElement(sCell,xCellAtt);
+            m_xDelegatee->startElement(sCell,pCellAtt);
             if ( bRemoveString )
             {
                 bRemoveString = false;
@@ -373,11 +370,10 @@ void ExportDocumentHandler::exportTableRows()
     for(const auto& rColumn : std::as_const(m_aColumns))
     {
         OUString sFormula = "field:[" + rColumn + "]";
-        SvXMLAttributeList* pList = new SvXMLAttributeList();
-        uno::Reference< xml::sax::XAttributeList > xAttribs = pList;
+        rtl::Reference<SvXMLAttributeList> pList = new SvXMLAttributeList();
         pList->AddAttribute(sFormulaAttrib,sFormula);
 
-        m_xDelegatee->startElement(sCell,xCellAtt);
+        m_xDelegatee->startElement(sCell,pCellAtt);
         if ( bRemoveString )
         {
             bRemoveString = false;
@@ -385,7 +381,7 @@ void ExportDocumentHandler::exportTableRows()
             pCellAtt->AddAttribute(sValueType,s_sFloat);
         }
         m_xDelegatee->startElement(sP,nullptr);
-        m_xDelegatee->startElement(sFtext,xAttribs);
+        m_xDelegatee->startElement(sFtext,pList);
         m_xDelegatee->startElement(sRElement,nullptr);
         m_xDelegatee->startElement(sRComponent,nullptr);
 
