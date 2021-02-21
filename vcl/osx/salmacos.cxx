@@ -19,7 +19,7 @@
 
 // This file contains the macOS-specific versions of the functions which were touched in the commit
 // to fix tdf#138122. The iOS-specific versions of these functions are kept (for now, when this
-// comment is written) as they were before that commit in vcl/isx/salios.cxx.
+// comment is written) as they were before that commit in vcl/ios/salios.cxx.
 
 #include <sal/config.h>
 #include <sal/log.hxx>

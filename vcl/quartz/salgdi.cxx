@@ -205,14 +205,6 @@ AquaSalGraphics::AquaSalGraphics()
     , mbVirDev( false )
 #ifdef MACOSX
     , mbWindow( false )
-
-    // Window scaling independent from main display may be forced by setting VCL_MACOS_FORCE_WINDOW_SCALING environment variable. If
-    // unset window scaling from main display will be used. After implementation of full support of scaled displays window scaling
-    // will be set to 2.0f for macOS as default.
-
-    // TODO: After implementation of full support of scaled displays VCL_FORCE_WINDOW_SCALING control has to be removed.
-
-    , mbWindowScaling( getenv("VCL_MACOS_FORCE_WINDOW_SCALING") )
 #else
     , mbForeignContext( false )
 #endif
