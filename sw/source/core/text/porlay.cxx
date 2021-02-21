@@ -2654,10 +2654,15 @@ TextFrameIndex SwScriptInfo::CountCJKCharacters(const OUString &rText,
         const lang::Locale &rLocale = g_pBreakIt->GetLocale( aLang );
         while ( nPos < nEnd )
         {
+            TextFrameIndex nOldPos = nPos;
             nPos = TextFrameIndex(g_pBreakIt->GetBreakIter()->nextCharacters(
                     rText, sal_Int32(nPos),
                     rLocale,
                     i18n::CharacterIteratorMode::SKIPCELL, 1, nDone));
+            if (nPos == nOldPos) {
+                SAL_WARN("sw.core", "CountCJKCharacters not moving" );
+                break;
+            }
             nCount++;
         }
     }
