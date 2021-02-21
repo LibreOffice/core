@@ -646,12 +646,11 @@ namespace
 {
     bool lcl_handle( const Reference< XInteractionHandler2 >& _rxHandler, const Any& _rRequest )
     {
-        OInteractionRequest* pRequest = new OInteractionRequest( _rRequest );
-        Reference < XInteractionRequest > xRequest( pRequest );
-        OInteractionAbort* pAbort = new OInteractionAbort;
+        rtl::Reference<OInteractionRequest> pRequest = new OInteractionRequest( _rRequest );
+        rtl::Reference<OInteractionAbort> pAbort = new OInteractionAbort;
         pRequest->addContinuation( pAbort );
 
-        return _rxHandler->handleInteractionRequest( xRequest );
+        return _rxHandler->handleInteractionRequest( pRequest );
     }
 }
 
@@ -969,8 +968,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 
             try
             {
-                AsyncLoader* pAsyncLoader = new AsyncLoader( getORB(), m_pGeneralPage->GetSelectedDocumentURL() );
-                ::rtl::Reference< AsyncLoader > xKeepAlive( pAsyncLoader );
+                rtl::Reference<AsyncLoader> pAsyncLoader = new AsyncLoader( getORB(), m_pGeneralPage->GetSelectedDocumentURL() );
                 pAsyncLoader->doLoadAsync();
             }
             catch( const Exception& )

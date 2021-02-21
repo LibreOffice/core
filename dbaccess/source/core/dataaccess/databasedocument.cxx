@@ -2086,8 +2086,8 @@ Reference< XTitle > const & ODatabaseDocument::impl_getTitleHelper_throw()
         Reference< XUntitledNumbers >  xDesktop(Desktop::create(m_pImpl->m_aContext), uno::UNO_QUERY_THROW);
         Reference< frame::XModel >     xThis   (getThis(), uno::UNO_QUERY_THROW);
 
-        ::framework::TitleHelper* pHelper = new ::framework::TitleHelper(m_pImpl->m_aContext);
-        m_xTitleHelper.set(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
+        rtl::Reference<::framework::TitleHelper> pHelper = new ::framework::TitleHelper(m_pImpl->m_aContext);
+        m_xTitleHelper = pHelper;
         pHelper->setOwner                   (xThis   );
         pHelper->connectWithUntitledNumbers (xDesktop);
     }
@@ -2114,8 +2114,8 @@ uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHel
     if ( aFind == m_aNumberedControllers.end() )
     {
         uno::Reference< frame::XModel > xThis(static_cast< frame::XModel* >(this), uno::UNO_QUERY_THROW);
-        ::comphelper::NumberedCollection* pHelper = new ::comphelper::NumberedCollection();
-        xNumberedControllers.set(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
+        rtl::Reference<::comphelper::NumberedCollection> pHelper = new ::comphelper::NumberedCollection();
+        xNumberedControllers = pHelper;
 
         pHelper->setOwner          (xThis);
 

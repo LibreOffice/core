@@ -76,7 +76,7 @@ namespace dbaccess
         std::unique_ptr<::connectivity::sdbcx::OCollection>       m_pColumns;
 
         // IColumnFactory
-        virtual OColumn*    createColumn(const OUString& _rName) const override;
+        virtual rtl::Reference<OColumn> createColumn(const OUString& _rName) const override;
         virtual css::uno::Reference< css::beans::XPropertySet > createColumnDescriptor() override;
         virtual void columnAppended( const css::uno::Reference< css::beans::XPropertySet >& _rxSourceDescriptor ) override;
         virtual void columnDropped(const OUString& _sName) override;

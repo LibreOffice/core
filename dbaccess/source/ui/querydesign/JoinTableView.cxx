@@ -169,7 +169,6 @@ OJoinTableView::OJoinTableView( vcl::Window* pParent, OJoinDesignView* pView )
     ,m_pSelectedConn( nullptr )
     ,m_pLastFocusTabWin(nullptr)
     ,m_pView( pView )
-    ,m_pAccessible(nullptr)
 {
     SetSizePixel( Size(1000, 1000) );
 

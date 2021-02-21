@@ -165,7 +165,7 @@ connectivity::sdbcx::ObjectType OTableContainer::createObject(const OUString& _r
 
         if ( xSup.is() )
         {
-            ODBTableDecorator* pTable = new ODBTableDecorator( m_xConnection, xSup, ::dbtools::getNumberFormats( m_xConnection ) ,xColumnDefinitions);
+            rtl::Reference<ODBTableDecorator> pTable = new ODBTableDecorator( m_xConnection, xSup, ::dbtools::getNumberFormats( m_xConnection ) ,xColumnDefinitions);
             xRet = pTable;
             pTable->construct();
         }
@@ -198,7 +198,7 @@ connectivity::sdbcx::ObjectType OTableContainer::createObject(const OUString& _r
                 }
             }
             ::comphelper::disposeComponent(xRes);
-            ODBTable* pTable = new ODBTable(this
+            rtl::Reference<ODBTable> pTable = new ODBTable(this
                                 ,m_xConnection
                                 ,sCatalog
                                 ,sSchema
@@ -234,13 +234,13 @@ Reference< XPropertySet > OTableContainer::createDescriptor()
     if ( xDataFactory.is() && m_xMetaData.is() )
     {
         xMasterColumnsSup.set( xDataFactory->createDataDescriptor(), UNO_QUERY );
-        ODBTableDecorator* pTable = new ODBTableDecorator( m_xConnection, xMasterColumnsSup, ::dbtools::getNumberFormats( m_xConnection ) ,nullptr);
+        rtl::Reference<ODBTableDecorator> pTable = new ODBTableDecorator( m_xConnection, xMasterColumnsSup, ::dbtools::getNumberFormats( m_xConnection ) ,nullptr);
         xRet = pTable;
         pTable->construct();
     }
     else
     {
-        ODBTable* pTable = new ODBTable(this, m_xConnection);
+        rtl::Reference<ODBTable> pTable = new ODBTable(this, m_xConnection);
         xRet = pTable;
         pTable->construct();
     }

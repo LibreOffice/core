@@ -1853,7 +1853,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                             }
                             sName = sAlias;
                         }
-                        ORowSetDataColumn* pColumn = new ORowSetDataColumn( getMetaData(),
+                        rtl::Reference<ORowSetDataColumn> pColumn = new ORowSetDataColumn( getMetaData(),
                                                                             this,
                                                                             this,
                                                                             i+1,
@@ -1867,7 +1867,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                         aColumns->emplace_back(pColumn);
                         pColumn->setName(sName);
                         aNames.push_back(sName);
-                        m_aDataColumns.push_back(pColumn);
+                        m_aDataColumns.push_back(pColumn.get());
 
                         pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ISREADONLY,makeAny(rKeyColumns.find(i+1) != rKeyColumns.end()));
 
@@ -1957,7 +1957,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                     {
                         xColumn->getPropertyValue(PROPERTY_LABEL) >>= sParseLabel;
                     }
-                    ORowSetDataColumn* pColumn = new ORowSetDataColumn( getMetaData(),
+                    rtl::Reference<ORowSetDataColumn> pColumn = new ORowSetDataColumn( getMetaData(),
                                                                         this,
                                                                         this,
                                                                         i,
@@ -1980,7 +1980,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                     }
                     pColumn->setName(sColumnLabel);
                     aNames.push_back(sColumnLabel);
-                    m_aDataColumns.push_back(pColumn);
+                    m_aDataColumns.push_back(pColumn.get());
 
                     if ( xColumn.is() )
                         impl_initializeColumnSettings_nothrow( xColumn, pColumn );
@@ -2066,10 +2066,9 @@ Reference< XResultSet > SAL_CALL ORowSet::createResultSet(  )
 
     if(m_xStatement.is())
     {
-        ORowSetClone* pClone = new ORowSetClone( m_aContext, *this, m_pMutex );
-        Reference< XResultSet > xRet(pClone);
-        m_aClones.emplace_back(xRet);
-        return xRet;
+        rtl::Reference<ORowSetClone> pClone = new ORowSetClone( m_aContext, *this, m_pMutex );
+        m_aClones.emplace_back(static_cast<cppu::OWeakObject*>(pClone.get()));
+        return pClone;
     }
     return Reference< XResultSet >();
 }
@@ -2775,7 +2774,7 @@ ORowSetClone::ORowSetClone( const Reference<XComponentContext>& _rContext, ORowS
 
             OUString sParseLabel;
             xColumn->getPropertyValue(PROPERTY_LABEL) >>= sParseLabel;
-            ORowSetColumn* pColumn = new ORowSetColumn( rParent.getMetaData(),
+            rtl::Reference<ORowSetColumn> pColumn = new ORowSetColumn( rParent.getMetaData(),
                                                                 this,
                                                                 i,
                                                                 rParent.m_xActiveConnection->getMetaData(),
@@ -2787,7 +2786,7 @@ ORowSetClone::ORowSetClone( const Reference<XComponentContext>& _rContext, ORowS
             aColumns->emplace_back(pColumn);
             pColumn->setName(*pIter);
             aNames.push_back(*pIter);
-            m_aDataColumns.push_back(pColumn);
+            m_aDataColumns.push_back(pColumn.get());
 
             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
             sal_Int32 nFormatKey = 0;

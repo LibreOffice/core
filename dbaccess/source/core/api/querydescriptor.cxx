@@ -255,7 +255,7 @@ void OQueryDescriptor_Base::refreshColumns()
     rebuildColumns();
 }
 
-OColumn* OQueryDescriptor_Base::createColumn( const OUString& /*_rName*/ ) const
+rtl::Reference<OColumn> OQueryDescriptor_Base::createColumn( const OUString& /*_rName*/ ) const
 {
     // creating a column/descriptor for a query/descriptor does not make sense at all
     return nullptr;

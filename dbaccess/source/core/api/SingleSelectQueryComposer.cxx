@@ -890,7 +890,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
                 if ( !xProp.is() || !xProp->getPropertySetInfo()->hasPropertyByName( PROPERTY_REALNAME ) )
                     continue;
 
-                ::connectivity::parse::OParseColumn* pColumn = new ::connectivity::parse::OParseColumn(xProp,bCase);
+                rtl::Reference<::connectivity::parse::OParseColumn> pColumn = new ::connectivity::parse::OParseColumn(xProp,bCase);
                 pColumn->setFunction(::comphelper::getBOOL(xProp->getPropertyValue("Function")));
                 pColumn->setAggregateFunction(::comphelper::getBOOL(xProp->getPropertyValue("AggregateFunction")));
 

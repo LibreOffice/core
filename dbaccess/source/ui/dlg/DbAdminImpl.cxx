@@ -261,8 +261,7 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
             aRequest.HasAccount  = false;
             // aRequest.Account
 
-            comphelper::OInteractionRequest* pRequest = new comphelper::OInteractionRequest(makeAny(aRequest));
-            uno::Reference< XInteractionRequest > xRequest(pRequest);
+            rtl::Reference<comphelper::OInteractionRequest> pRequest = new comphelper::OInteractionRequest(makeAny(aRequest));
 
             // build an interaction request
             // two continuations (Ok and Cancel)
@@ -280,7 +279,7 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
             {
                 SolarMutexGuard aSolarGuard;
                 // release the mutex when calling the handler, it may need to lock the SolarMutex
-                xHandler->handle(xRequest);
+                xHandler->handle(pRequest);
             }
             catch(Exception&)
             {

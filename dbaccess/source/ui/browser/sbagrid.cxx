@@ -110,7 +110,7 @@ SbaXGridControl::~SbaXGridControl()
 
 rtl::Reference<FmXGridPeer> SbaXGridControl::imp_CreatePeer(vcl::Window* pParent)
 {
-    FmXGridPeer* pReturn = new SbaXGridPeer(m_xContext);
+    rtl::Reference<FmXGridPeer> pReturn = new SbaXGridPeer(m_xContext);
 
     // translate properties into WinBits
     WinBits nStyle = WB_TABSTOP;
