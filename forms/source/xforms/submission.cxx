@@ -416,23 +416,20 @@ void SAL_CALL Submission::submitWithInteraction(
         if( _rxHandler.is() )
         {
             // laboriously create interaction request
-            comphelper::OInteractionRequest* pRequest
+            rtl::Reference<comphelper::OInteractionRequest> pRequest
                 = new comphelper::OInteractionRequest(
                     makeAny( aInvalidDataException ) );
-            Reference<XInteractionRequest> xRequest = pRequest;
 
-            comphelper::OInteractionApprove* pContinue
+            rtl::Reference<comphelper::OInteractionApprove> pContinue
                 = new comphelper::OInteractionApprove();
-            Reference<XInteractionContinuation> xContinue = pContinue;
-            pRequest->addContinuation( xContinue );
+            pRequest->addContinuation( pContinue );
 
-            comphelper::OInteractionDisapprove* pCancel
+            rtl::Reference<comphelper::OInteractionDisapprove> pCancel
                 = new comphelper::OInteractionDisapprove();
-            Reference<XInteractionContinuation> xCancel = pCancel;
-            pRequest->addContinuation( xCancel );
+            pRequest->addContinuation( pCancel );
 
             // ask the handler...
-            _rxHandler->handle( xRequest );
+            _rxHandler->handle( pRequest );
             OSL_ENSURE( pContinue->wasSelected() || pCancel->wasSelected(),
                         "handler didn't select" );
 

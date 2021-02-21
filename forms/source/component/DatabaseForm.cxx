@@ -1373,10 +1373,8 @@ void SAL_CALL ODatabaseForm::clearWarnings(  )
 
 Reference< XCloneable > SAL_CALL ODatabaseForm::createClone(  )
 {
-    ODatabaseForm* pClone = new ODatabaseForm( *this );
-    osl_atomic_increment( &pClone->m_refCount );
+    rtl::Reference<ODatabaseForm> pClone = new ODatabaseForm( *this );
     pClone->clonedFrom( *this );
-    osl_atomic_decrement( &pClone->m_refCount );
     return pClone;
 }
 

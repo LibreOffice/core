@@ -119,14 +119,12 @@ OGridControlModel::~OGridControlModel()
 // XCloneable
 Reference< XCloneable > SAL_CALL OGridControlModel::createClone( )
 {
-    OGridControlModel* pClone = new OGridControlModel( this, getContext() );
-    osl_atomic_increment( &pClone->m_refCount );
+    rtl::Reference<OGridControlModel> pClone = new OGridControlModel( this, getContext() );
     pClone->OControlModel::clonedFrom( this );
     // do not call OInterfaceContainer::clonedFrom, it would clone the elements aka columns, which is
     // already done in the ctor
     //pClone->OInterfaceContainer::clonedFrom( *this );
-    osl_atomic_decrement( &pClone->m_refCount );
-    return static_cast< XCloneable* >( static_cast< OControlModel* >( pClone ) );
+    return static_cast< XCloneable* >( static_cast< OControlModel* >( pClone.get() ) );
 }
 
 void OGridControlModel::cloneColumns( const OGridControlModel* _pOriginalContainer )

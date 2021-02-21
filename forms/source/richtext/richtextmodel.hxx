@@ -101,8 +101,6 @@ namespace frm
     public:
         static  RichTextEngine* getEditEngine( const css::uno::Reference< css::awt::XControlModel >& _rxModel );
 
-    private:
-
         // UNO
         DECLARE_UNO3_AGG_DEFAULTS( ORichTextModel, OControlModel )
         virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
