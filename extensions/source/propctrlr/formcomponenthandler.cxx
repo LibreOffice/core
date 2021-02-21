@@ -992,7 +992,7 @@ namespace pcr
         {
             std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/urlcontrol.ui", m_xContext));
             auto pURLBox = std::make_unique<SvtURLBox>(xBuilder->weld_combo_box("urlcontrol"));
-            auto pControl = new OFileUrlControl(std::move(pURLBox), std::move(xBuilder), false);
+            rtl::Reference<OFileUrlControl> pControl = new OFileUrlControl(std::move(pURLBox), std::move(xBuilder), false);
             pControl->SetModifyHandler();
             aDescriptor.Control = pControl;
 
@@ -1095,7 +1095,7 @@ namespace pcr
                     {
                         std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/formattedsample.ui", m_xContext));
                         auto pContainer = xBuilder->weld_container("formattedsample");
-                        auto pControl = new OFormatSampleControl(std::move(pContainer), std::move(xBuilder), false);
+                        rtl::Reference<OFormatSampleControl> pControl = new OFormatSampleControl(std::move(pContainer), std::move(xBuilder), false);
                         pControl->SetModifyHandler();
 
                         pControl->SetFormatSupplier(pSupplier);
@@ -1110,7 +1110,7 @@ namespace pcr
                         auto pSpinButton = xBuilder->weld_formatted_spin_button("formattedcontrol");
                         // for ui-testing try and distinguish different instances of this formatted control
                         pSpinButton->set_buildable_name(pSpinButton->get_buildable_name() + "-" + aDescriptor.DisplayName.toUtf8());
-                        auto pControl = new OFormattedNumericControl(std::move(pSpinButton), std::move(xBuilder), false);
+                        rtl::Reference<OFormattedNumericControl> pControl = new OFormattedNumericControl(std::move(pSpinButton), std::move(xBuilder), false);
                         pControl->SetModifyHandler();
 
                         FormatDescription aDesc;
@@ -1151,7 +1151,7 @@ namespace pcr
             auto pSpinButton = xBuilder->weld_formatted_spin_button("formattedcontrol");
             // for ui-testing try and distinguish different instances of this formatted control
             pSpinButton->set_buildable_name(pSpinButton->get_buildable_name() + "-" + aDescriptor.DisplayName.toUtf8());
-            auto pControl = new OFormattedNumericControl(std::move(pSpinButton), std::move(xBuilder), false);
+            rtl::Reference<OFormattedNumericControl> pControl = new OFormattedNumericControl(std::move(pSpinButton), std::move(xBuilder), false);
             pControl->SetModifyHandler();
             aDescriptor.Control = pControl;
 
@@ -1285,7 +1285,7 @@ namespace pcr
             {
                 std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/numericfield.ui", m_xContext));
                 auto pSpinButton = xBuilder->weld_metric_spin_button("numericfield", FieldUnit::MILLISECOND);
-                auto pControl = new ONumericControl(std::move(pSpinButton), std::move(xBuilder), bReadOnly);
+                rtl::Reference<ONumericControl> pControl = new ONumericControl(std::move(pSpinButton), std::move(xBuilder), bReadOnly);
                 pControl->SetModifyHandler();
                 pControl->setMinValue( Optional< double >( true, 0 ) );
                 pControl->setMaxValue( Optional< double >( true, std::numeric_limits< double >::max() ) );

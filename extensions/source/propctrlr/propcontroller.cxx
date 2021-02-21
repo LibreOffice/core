@@ -693,7 +693,7 @@ namespace pcr
                 bool bMultiLineTextField = ControlType == PropertyControlType::MultiLineTextField;
                 std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/multiline.ui", m_xContext));
                 auto pContainer = xBuilder->weld_container("multiline");
-                auto pControl = new OMultilineEditControl(std::move(pContainer), std::move(xBuilder),
+                rtl::Reference<OMultilineEditControl> pControl = new OMultilineEditControl(std::move(pContainer), std::move(xBuilder),
                                                           bMultiLineTextField ? eMultiLineText : eStringList, bCreateReadOnly);
                 pControl->SetModifyHandler();
                 xControl = pControl;
@@ -704,7 +704,7 @@ namespace pcr
             {
                 std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/listbox.ui", m_xContext));
                 auto pComboBox = xBuilder->weld_combo_box("listbox");
-                auto pControl = new OListboxControl(std::move(pComboBox), std::move(xBuilder), bCreateReadOnly);
+                rtl::Reference<OListboxControl> pControl = new OListboxControl(std::move(pComboBox), std::move(xBuilder), bCreateReadOnly);
                 pControl->SetModifyHandler();
                 xControl = pControl;
                 break;
@@ -714,7 +714,7 @@ namespace pcr
             {
                 std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/combobox.ui", m_xContext));
                 auto pComboBox = xBuilder->weld_combo_box("combobox");
-                auto pControl = new OComboboxControl(std::move(pComboBox), std::move(xBuilder), bCreateReadOnly);
+                rtl::Reference<OComboboxControl> pControl = new OComboboxControl(std::move(pComboBox), std::move(xBuilder), bCreateReadOnly);
                 pControl->SetModifyHandler();
                 xControl = pControl;
                 break;
@@ -726,7 +726,7 @@ namespace pcr
                 bool bCharacterField = ControlType == PropertyControlType::CharacterField;
                 std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/textfield.ui", m_xContext));
                 auto pEntry = xBuilder->weld_entry("textfield");
-                auto pControl = new OEditControl(std::move(pEntry), std::move(xBuilder), bCharacterField, bCreateReadOnly);
+                rtl::Reference<OEditControl> pControl = new OEditControl(std::move(pEntry), std::move(xBuilder), bCharacterField, bCreateReadOnly);
                 pControl->SetModifyHandler();
                 xControl = pControl;
                 break;
@@ -736,7 +736,7 @@ namespace pcr
             {
                 std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/numericfield.ui", m_xContext));
                 auto pSpinButton = xBuilder->weld_metric_spin_button("numericfield", FieldUnit::NONE);
-                auto pControl = new ONumericControl(std::move(pSpinButton), std::move(xBuilder), bCreateReadOnly);
+                rtl::Reference<ONumericControl> pControl = new ONumericControl(std::move(pSpinButton), std::move(xBuilder), bCreateReadOnly);
                 pControl->SetModifyHandler();
                 xControl = pControl;
                 break;
@@ -746,7 +746,7 @@ namespace pcr
             {
                 std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/datetimefield.ui", m_xContext));
                 auto pContainer = xBuilder->weld_container("datetimefield");
-                auto pControl = new ODateTimeControl(std::move(pContainer), std::move(xBuilder), bCreateReadOnly);
+                rtl::Reference<ODateTimeControl> pControl = new ODateTimeControl(std::move(pContainer), std::move(xBuilder), bCreateReadOnly);
                 pControl->SetModifyHandler();
                 xControl = pControl;
                 break;
@@ -756,7 +756,7 @@ namespace pcr
             {
                 std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/datefield.ui", m_xContext));
                 auto pMenuButton = xBuilder->weld_menu_button("datefield");
-                auto pControl = new ODateControl(std::make_unique<SvtCalendarBox>(std::move(pMenuButton)), std::move(xBuilder), bCreateReadOnly);
+                rtl::Reference<ODateControl> pControl = new ODateControl(std::make_unique<SvtCalendarBox>(std::move(pMenuButton)), std::move(xBuilder), bCreateReadOnly);
                 pControl->SetModifyHandler();
                 xControl = pControl;
                 break;
@@ -766,7 +766,7 @@ namespace pcr
             {
                 std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/timefield.ui", m_xContext));
                 auto pTimeSpinButton = xBuilder->weld_formatted_spin_button("timefield");
-                auto pControl = new OTimeControl(std::move(pTimeSpinButton), std::move(xBuilder), bCreateReadOnly);
+                rtl::Reference<OTimeControl> pControl = new OTimeControl(std::move(pTimeSpinButton), std::move(xBuilder), bCreateReadOnly);
                 pControl->SetModifyHandler();
                 xControl = pControl;
                 break;
@@ -777,7 +777,7 @@ namespace pcr
                 weld::Window* pTopLevel = PropertyHandlerHelper::getDialogParentFrame(m_xContext);
                 std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/colorlistbox.ui", m_xContext));
                 auto pMenuButton = xBuilder->weld_menu_button("colorlistbox");
-                auto pControl = new OColorControl(std::make_unique<ColorListBox>(std::move(pMenuButton), pTopLevel), std::move(xBuilder), bCreateReadOnly);
+                rtl::Reference<OColorControl> pControl = new OColorControl(std::make_unique<ColorListBox>(std::move(pMenuButton), pTopLevel), std::move(xBuilder), bCreateReadOnly);
                 pControl->SetModifyHandler();
                 xControl = pControl;
                 break;
@@ -787,7 +787,7 @@ namespace pcr
             {
                 std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/hyperlinkfield.ui", m_xContext));
                 auto pContainer = xBuilder->weld_container("hyperlinkfield");
-                auto pControl = new OHyperlinkControl(std::move(pContainer), std::move(xBuilder), bCreateReadOnly);
+                rtl::Reference<OHyperlinkControl> pControl = new OHyperlinkControl(std::move(pContainer), std::move(xBuilder), bCreateReadOnly);
                 pControl->SetModifyHandler();
                 xControl = pControl;
                 break;
