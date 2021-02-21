@@ -353,8 +353,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
 {
     OSL_FAIL("not pure virtual ... but not really implemented .-)");
 
-    ::comphelper::OEnumerationByName* pEnum = new ::comphelper::OEnumerationByName(this, css::uno::Sequence< OUString >());
-    return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);
+    return new ::comphelper::OEnumerationByName(this, css::uno::Sequence< OUString >());
 }
 
 
@@ -398,8 +397,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
              instead of checking of NULL returns! */
 
     css::uno::Sequence< OUString > lSubSet = comphelper::containerToSequence(lKeys);
-    ::comphelper::OEnumerationByName* pEnum = new ::comphelper::OEnumerationByName(this, lSubSet);
-    return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);
+    return new ::comphelper::OEnumerationByName(this, lSubSet);
 }
 
 
