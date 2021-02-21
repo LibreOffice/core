@@ -157,9 +157,8 @@ EditPaM SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection
 
     ESelection aSel(rSel.nStartPara+1, 0, rSel.nEndPara+1, 0);
     uno::Reference<text::XText > xParent;
-    SvxUnoText* pUnoText = new SvxUnoText( &aEditSource, &aSvxXMLTextImportComponentPropertySet, xParent );
+    rtl::Reference<SvxUnoText> pUnoText = new SvxUnoText( &aEditSource, &aSvxXMLTextImportComponentPropertySet, xParent );
     pUnoText->SetSelection( aSel );
-    uno::Reference<text::XText > xText( pUnoText );
 
     try
     {
@@ -202,7 +201,7 @@ EditPaM SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection
 */
 
             // uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTextImportComponent( xText ) );
-            rtl::Reference< SvxXMLXTextImportComponent > xImport( new SvxXMLXTextImportComponent( xContext, xText ) );
+            rtl::Reference< SvxXMLXTextImportComponent > xImport( new SvxXMLXTextImportComponent( xContext, pUnoText ) );
 
             xml::sax::InputSource aParserInput;
             aParserInput.aInputStream = xInputStream;
