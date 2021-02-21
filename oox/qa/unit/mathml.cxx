@@ -49,7 +49,6 @@ CPPUNIT_TEST_FIXTURE(OoxMathmlTest, testImportCharacters)
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "import-characters.pptx";
     // Without the accompanying fix in place, this failed with an assertion failure on import.
     getComponent() = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(getComponent().is());
 }
 
 CPPUNIT_TEST_FIXTURE(OoxMathmlTest, testImportMce)
