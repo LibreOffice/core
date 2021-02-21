@@ -909,12 +909,12 @@ namespace oox::ppt {
 
     }
 
-    TimeNodeContext * TimeNodeContext::makeContext(
+    rtl::Reference<TimeNodeContext> TimeNodeContext::makeContext(
             FragmentHandler2 const & rParent, sal_Int32  aElement,
             const Reference< XFastAttributeList >& xAttribs,
             const TimeNodePtr & pNode )
     {
-        TimeNodeContext *pCtx = nullptr;
+        rtl::Reference<TimeNodeContext> pCtx;
         switch( aElement )
         {
         case PPT_TOKEN( animClr ):
@@ -1039,7 +1039,7 @@ namespace oox::ppt {
 
         TimeNodePtr pNode = std::make_shared<TimeNode>(nNodeType);
         maList.push_back( pNode );
-        FragmentHandler2 * pContext = TimeNodeContext::makeContext( *this, aElementToken, rAttribs.getFastAttributeList(), pNode );
+        rtl::Reference<FragmentHandler2> pContext = TimeNodeContext::makeContext( *this, aElementToken, rAttribs.getFastAttributeList(), pNode );
 
         return pContext ? pContext : this;
     }
