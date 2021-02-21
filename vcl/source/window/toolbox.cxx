@@ -4046,12 +4046,8 @@ Size ToolBox::GetOptimalSize() const
 
     Size aSize(const_cast<ToolBox *>(this)->ImplCalcSize( mnLines ));
 
-    for (auto const& expandable : aExpandables)
-    {
-        vcl::Window *pWindow = expandable.first;
-        Size aWinSize = expandable.second;
+    for (auto const& [pWindow, aWinSize] : aExpandables)
         pWindow->SetSizePixel(aWinSize);
-    }
 
     return aSize;
 }
