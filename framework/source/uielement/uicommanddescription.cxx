@@ -658,11 +658,9 @@ Any SAL_CALL UICommandDescription::getByName( const OUString& aName )
             {
                 ensureGenericUICommandsForLanguage(aCurrentLanguage);
 
-                Reference< XNameAccess > xUICommands;
-                ConfigurationAccess_UICommand* pUICommands = new ConfigurationAccess_UICommand( aCommandFile,
-                                                                                               m_xGenericUICommands[aCurrentLanguage],
-                                                                                               m_xContext );
-                xUICommands.set( static_cast< cppu::OWeakObject* >( pUICommands ),UNO_QUERY );
+                Reference< XNameAccess > xUICommands = new ConfigurationAccess_UICommand( aCommandFile,
+                                                                                          m_xGenericUICommands[aCurrentLanguage],
+                                                                                          m_xContext );
                 pIter->second = xUICommands;
                 a <<= xUICommands;
             }

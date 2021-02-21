@@ -384,14 +384,12 @@ void XMLBasedAcceleratorConfiguration::impl_ts_load(const css::uno::Reference< c
     // Note: Use special filter object between parser and reader
     // to get filtered xml with right namespaces ...
     // Use further a temp cache for reading!
-    AcceleratorConfigurationReader*                        pReader = new AcceleratorConfigurationReader(m_aReadCache);
-    css::uno::Reference< css::xml::sax::XDocumentHandler > xReader (static_cast< ::cppu::OWeakObject* >(pReader), css::uno::UNO_QUERY_THROW);
-    SaxNamespaceFilter*                                    pFilter = new SaxNamespaceFilter(xReader);
-    css::uno::Reference< css::xml::sax::XDocumentHandler > xFilter (static_cast< ::cppu::OWeakObject* >(pFilter), css::uno::UNO_QUERY_THROW);
+    rtl::Reference<AcceleratorConfigurationReader> pReader = new AcceleratorConfigurationReader(m_aReadCache);
+    rtl::Reference<SaxNamespaceFilter> pFilter = new SaxNamespaceFilter(pReader);
 
     // connect parser, filter and stream
     css::uno::Reference< css::xml::sax::XParser > xParser = css::xml::sax::Parser::create(xContext);
-    xParser->setDocumentHandler(xFilter);
+    xParser->setDocumentHandler(pFilter);
 
     css::xml::sax::InputSource aSource;
     aSource.aInputStream = xStream;

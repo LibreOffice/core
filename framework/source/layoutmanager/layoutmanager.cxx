@@ -893,7 +893,7 @@ void LayoutManager::implts_createProgressBar()
     aWriteLock.clear();
 
     bool                bRecycled = xProgressBarBackup.is();
-    ProgressBarWrapper* pWrapper  = nullptr;
+    rtl::Reference<ProgressBarWrapper> pWrapper;
     if ( bRecycled )
         pWrapper = static_cast<ProgressBarWrapper*>(xProgressBarBackup.get());
     else if ( xProgressBar.is() )
@@ -926,7 +926,7 @@ void LayoutManager::implts_createProgressBar()
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     aWriteLock.reset();
-    m_aProgressBarElement.m_xUIElement.set( static_cast< cppu::OWeakObject* >( pWrapper ), UNO_QUERY );
+    m_aProgressBarElement.m_xUIElement = pWrapper;
     aWriteLock.clear();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 

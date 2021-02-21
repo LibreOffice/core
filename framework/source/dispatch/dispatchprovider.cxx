@@ -509,51 +509,33 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
     switch (eHelper)
     {
         case E_CREATEDISPATCHER :
-                {
-                    LoadDispatcher* pDispatcher = new LoadDispatcher(m_xContext, xOwner, sTarget, nSearchFlags);
-                    xDispatchHelper.set( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
-                }
+                xDispatchHelper = new LoadDispatcher(m_xContext, xOwner, sTarget, nSearchFlags);
                 break;
 
         case E_BLANKDISPATCHER :
                 {
                     if (xOwner.is())
-                    {
-                        LoadDispatcher* pDispatcher = new LoadDispatcher(m_xContext, xOwner, SPECIALTARGET_BLANK, 0);
-                        xDispatchHelper.set( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
-                    }
+                        xDispatchHelper = new LoadDispatcher(m_xContext, xOwner, SPECIALTARGET_BLANK, 0);
                 }
                 break;
 
         case E_DEFAULTDISPATCHER :
                 {
                     if (xOwner.is())
-                    {
-                        LoadDispatcher* pDispatcher = new LoadDispatcher(m_xContext, xOwner, SPECIALTARGET_DEFAULT, 0);
-                        xDispatchHelper.set( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
-                    }
+                        xDispatchHelper = new LoadDispatcher(m_xContext, xOwner, SPECIALTARGET_DEFAULT, 0);
                 }
                 break;
 
         case E_SELFDISPATCHER :
-                {
-                    LoadDispatcher* pDispatcher = new LoadDispatcher(m_xContext, xOwner, SPECIALTARGET_SELF, 0);
-                    xDispatchHelper.set( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
-                }
+                xDispatchHelper = new LoadDispatcher(m_xContext, xOwner, SPECIALTARGET_SELF, 0);
                 break;
 
         case E_CLOSEDISPATCHER :
-                {
-                    CloseDispatcher* pDispatcher = new CloseDispatcher( m_xContext, xOwner, sTarget );
-                    xDispatchHelper.set( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
-                }
+                xDispatchHelper = new CloseDispatcher( m_xContext, xOwner, sTarget );
                 break;
 
         case E_STARTMODULEDISPATCHER :
-                {
-                    StartModuleDispatcher* pDispatcher = new StartModuleDispatcher( m_xContext );
-                    xDispatchHelper.set( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
-                }
+                xDispatchHelper = new StartModuleDispatcher( m_xContext );
                 break;
     }
 

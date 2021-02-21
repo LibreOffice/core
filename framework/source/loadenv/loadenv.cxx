@@ -892,11 +892,10 @@ bool LoadEnv::impl_handleContent()
         // SAFE -> -----------------------------------
         osl::ClearableMutexGuard aWriteLock(m_mutex);
         m_xAsynchronousJob = xHandler;
-        LoadEnvListener* pListener = new LoadEnvListener(this);
+        rtl::Reference<LoadEnvListener> xListener = new LoadEnvListener(this);
         aWriteLock.clear();
         // <- SAFE -----------------------------------
 
-        css::uno::Reference< css::frame::XDispatchResultListener > xListener(static_cast< css::frame::XDispatchResultListener* >(pListener), css::uno::UNO_QUERY);
         xHandler->dispatchWithNotification(aURL, lDescriptor, xListener);
 
         return true;
@@ -959,13 +958,11 @@ bool LoadEnv::impl_furtherDocsAllowed()
             css::uno::Any                                                                    aInteraction;
             css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations(2);
 
-            comphelper::OInteractionAbort*   pAbort   = new comphelper::OInteractionAbort();
-            comphelper::OInteractionApprove* pApprove = new comphelper::OInteractionApprove();
+            rtl::Reference<comphelper::OInteractionAbort>   pAbort   = new comphelper::OInteractionAbort();
+            rtl::Reference<comphelper::OInteractionApprove> pApprove = new comphelper::OInteractionApprove();
 
-            lContinuations[0].set( static_cast< css::task::XInteractionContinuation* >(pAbort),
-                                   css::uno::UNO_QUERY_THROW);
-            lContinuations[1].set( static_cast< css::task::XInteractionContinuation* >(pApprove),
-                                   css::uno::UNO_QUERY_THROW);
+            lContinuations[0] = pAbort;
+            lContinuations[1] = pApprove;
 
             css::task::ErrorCodeRequest aErrorCode;
             aErrorCode.ErrCode = sal_uInt32(ERRCODE_SFX_NOMOREDOCUMENTSALLOWED);
@@ -1142,11 +1139,10 @@ bool LoadEnv::impl_loadContent()
     if (xAsyncLoader.is())
     {
         m_xAsynchronousJob = xAsyncLoader;
-        LoadEnvListener* pListener = new LoadEnvListener(this);
+        rtl::Reference<LoadEnvListener> xListener = new LoadEnvListener(this);
         aWriteLock.clear();
         // <- SAFE -----------------------------------
 
-        css::uno::Reference< css::frame::XLoadEventListener > xListener(static_cast< css::frame::XLoadEventListener* >(pListener), css::uno::UNO_QUERY);
         xAsyncLoader->load(xTargetFrame, sURL, lDescriptor, xListener);
 
         return true;

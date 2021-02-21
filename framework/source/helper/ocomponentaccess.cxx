@@ -68,8 +68,7 @@ css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration
 
         std::vector< css::uno::Reference< XComponent > > seqComponents;
         impl_collectAllChildComponents( css::uno::Reference< XFramesSupplier >( xLock, UNO_QUERY ), seqComponents );
-        OComponentEnumeration* pEnumeration = new OComponentEnumeration( seqComponents );
-        xReturn.set( static_cast<OWeakObject*>(pEnumeration), UNO_QUERY );
+        xReturn = new OComponentEnumeration( seqComponents );
     }
 
     // Return result of this operation.

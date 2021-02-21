@@ -348,13 +348,13 @@ void StatusBarManager::CreateControllers()
         if ( !xController.is() )
         {
             // 2) Old SFX2 Statusbar controllers
-            svt::StatusbarController* pController = CreateStatusBarController( m_xFrame, m_pStatusBar, nId, aCommandURL );
-            if ( !pController )
+            xController = CreateStatusBarController( m_xFrame, m_pStatusBar, nId, aCommandURL );
+            if ( !xController )
             {
                 // 3) Is Add-on? Generic statusbar controller
                 if ( pItemData )
                 {
-                    pController = new GenericStatusbarController( m_xContext,
+                    xController = new GenericStatusbarController( m_xContext,
                                                                   m_xFrame,
                                                                   xStatusbarItem,
                                                                   pItemData );
@@ -362,11 +362,9 @@ void StatusBarManager::CreateControllers()
                 else
                 {
                     // 4) Default Statusbar controller
-                    pController = new svt::StatusbarController( m_xContext, m_xFrame, aCommandURL, nId );
+                    xController = new svt::StatusbarController( m_xContext, m_xFrame, aCommandURL, nId );
                 }
             }
-
-            xController = pController;
         }
 
         m_aControllerMap[nId] = xController;

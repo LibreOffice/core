@@ -25,6 +25,7 @@
 
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <rtl/ref.hxx>
 
 using namespace cppu;
 using namespace com::sun::star::uno;
@@ -147,12 +148,12 @@ Reference< XIndexAccess > ConstItemContainer::deepCopyContainer( const Reference
     if ( rSubContainer.is() )
     {
         ItemContainer*      pSource = comphelper::getUnoTunnelImplementation<ItemContainer>( rSubContainer );
-        ConstItemContainer* pSubContainer( nullptr );
+        rtl::Reference<ConstItemContainer> pSubContainer;
         if ( pSource )
             pSubContainer = new ConstItemContainer( *pSource );
         else
             pSubContainer = new ConstItemContainer( rSubContainer );
-        xReturn.set( static_cast< OWeakObject* >( pSubContainer ), UNO_QUERY );
+        xReturn = pSubContainer;
     }
 
     return xReturn;

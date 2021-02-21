@@ -308,10 +308,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::crea
         }
     }
 
-    ::comphelper::OAnyEnumeration*                      pEnum =
-                 new ::comphelper::OAnyEnumeration(comphelper::containerToSequence(lResult));
-    css::uno::Reference< css::container::XEnumeration > xEnum(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY_THROW);
-    return xEnum;
+    return new ::comphelper::OAnyEnumeration(comphelper::containerToSequence(lResult));
 }
 
 OUString ModuleManager::implts_identify(const css::uno::Reference< css::uno::XInterface >& xComponent)

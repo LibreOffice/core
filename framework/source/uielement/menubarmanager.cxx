@@ -1009,7 +1009,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 // We have to set an empty popup menu into our menu structure so the controller also
                 // works with inplace OLE.
                 MenuItemHandler* pItemHandler = new MenuItemHandler( nItemId, xStatusListener, xDispatch );
-                VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu(pPopup);
+                rtl::Reference<VCLXPopupMenu> pVCLXPopupMenu = new VCLXPopupMenu(pPopup);
                 pItemHandler->xPopupMenu = pVCLXPopupMenu;
                 pItemHandler->aMenuItemURL = aItemCommand;
                 m_aMenuItemHandlerVector.push_back( std::unique_ptr<MenuItemHandler>(pItemHandler) );
@@ -1041,10 +1041,10 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                         pSubMenu.disposeAndClear();
                 }
 
-                MenuBarManager* pSubMenuManager = new MenuBarManager( m_xContext, rFrame, m_xURLTransformer,
+                rtl::Reference<MenuBarManager> pSubMenuManager = new MenuBarManager( m_xContext, rFrame, m_xURLTransformer,
                     xPopupMenuDispatchProvider, aModuleIdentifier, pPopup, false, m_bHasMenuBar );
 
-                AddMenu(pSubMenuManager, aItemCommand, nItemId);
+                AddMenu(pSubMenuManager.get(), aItemCommand, nItemId);
             }
         }
         else if ( pMenu->GetItemType( i ) != MenuItemType::SEPARATOR )
@@ -1065,7 +1065,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 // Check if we have to create a popup menu for a uno based popup menu controller.
                 // We have to set an empty popup menu into our menu structure so the controller also
                 // works with inplace OLE.
-                VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu;
+                rtl::Reference<VCLXPopupMenu> pVCLXPopupMenu = new VCLXPopupMenu;
                 PopupMenu* pPopupMenu = static_cast<PopupMenu *>(pVCLXPopupMenu->GetMenu());
                 pMenu->SetPopupMenu( pItemHandler->nItemId, pPopupMenu );
                 pItemHandler->xPopupMenu = pVCLXPopupMenu;

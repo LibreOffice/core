@@ -481,30 +481,25 @@ void XFrameImpl::initListeners()
     // Initialize a new dispatchhelper-object to handle dispatches.
     // We use these helper as slave for our interceptor helper ... not directly!
     // But he is event listener on THIS instance!
-    DispatchProvider* pDispatchHelper = new DispatchProvider( m_xContext, this );
-    css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( static_cast< ::cppu::OWeakObject* >(pDispatchHelper), css::uno::UNO_QUERY );
+    rtl::Reference<DispatchProvider> xDispatchProvider = new DispatchProvider( m_xContext, this );
 
-    DispatchInformationProvider* pInfoHelper = new DispatchInformationProvider(m_xContext, this);
-    m_xDispatchInfoHelper.set( static_cast< ::cppu::OWeakObject* >(pInfoHelper), css::uno::UNO_QUERY );
+    m_xDispatchInfoHelper = new DispatchInformationProvider(m_xContext, this);
 
     // Initialize a new interception helper object to handle dispatches and implement an interceptor mechanism.
     // Set created dispatch provider as slowest slave of it.
     // Hold interception helper by reference only - not by pointer!
     // So it's easier to destroy it.
-    InterceptionHelper* pInterceptionHelper = new InterceptionHelper( this, xDispatchProvider );
-    m_xDispatchHelper.set( static_cast< ::cppu::OWeakObject* >(pInterceptionHelper), css::uno::UNO_QUERY );
+    m_xDispatchHelper = new InterceptionHelper( this, xDispatchProvider );
 
     // Initialize a new XFrames-helper-object to handle XIndexAccess and XElementAccess.
     // We hold member as reference ... not as pointer too!
     // Attention: We share our frame container with this helper. Container is threadsafe himself ... So I think we can do that.
     // But look on dispose() for right order of deinitialization.
-    OFrames* pFramesHelper = new OFrames( this, &m_aChildFrameContainer );
-    m_xFramesHelper.set( static_cast< ::cppu::OWeakObject* >(pFramesHelper), css::uno::UNO_QUERY );
+    m_xFramesHelper = new OFrames( this, &m_aChildFrameContainer );
 
     // Initialize the drop target listener.
     // We hold member as reference ... not as pointer too!
-    OpenFileDropTargetListener* pDropListener = new OpenFileDropTargetListener( m_xContext, this );
-    m_xDropTargetListener.set( static_cast< ::cppu::OWeakObject* >(pDropListener), css::uno::UNO_QUERY );
+    m_xDropTargetListener = new OpenFileDropTargetListener( m_xContext, this );
 
     // Safe impossible cases
     // We can't work without these helpers!
@@ -736,9 +731,7 @@ void lcl_enableLayoutManager(const css::uno::Reference< css::frame::XLayoutManag
 
     xFrame->addFrameActionListener(xLayoutManager);
 
-    DockingAreaDefaultAcceptor* pAcceptor = new DockingAreaDefaultAcceptor(xFrame);
-    css::uno::Reference< css::ui::XDockingAreaAcceptor > xDockingAreaAcceptor(
-        static_cast< ::cppu::OWeakObject* >(pAcceptor), css::uno::UNO_QUERY_THROW);
+    rtl::Reference<DockingAreaDefaultAcceptor> xDockingAreaAcceptor = new DockingAreaDefaultAcceptor(xFrame);
     xLayoutManager->setDockingAreaAcceptor(xDockingAreaAcceptor);
 }
 
@@ -831,8 +824,8 @@ void SAL_CALL XFrameImpl::initialize( const css::uno::Reference< css::awt::XWind
     m_pWindowCommandDispatch.reset(new WindowCommandDispatch(m_xContext, this));
 
     // Initialize title functionality
-    TitleHelper* pTitleHelper = new TitleHelper( m_xContext );
-    m_xTitleHelper.set(static_cast< ::cppu::OWeakObject* >(pTitleHelper), css::uno::UNO_QUERY_THROW);
+    rtl::Reference<TitleHelper> pTitleHelper = new TitleHelper( m_xContext );
+    m_xTitleHelper = pTitleHelper;
     pTitleHelper->setOwner(xThis);
 }
 
@@ -3347,8 +3340,8 @@ com_sun_star_comp_framework_Frame_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    XFrameImpl *inst = new XFrameImpl(context);
-    css::uno::XInterface *acquired_inst = cppu::acquire(inst);
+    rtl::Reference<XFrameImpl> inst = new XFrameImpl(context);
+    css::uno::XInterface *acquired_inst = cppu::acquire(inst.get());
 
     inst->initListeners();
 

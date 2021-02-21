@@ -26,6 +26,7 @@
 #include <properties.h>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <rtl/ref.hxx>
 
 using namespace cppu;
 using namespace com::sun::star::uno;
@@ -126,12 +127,12 @@ Reference< XIndexAccess > RootItemContainer::deepCopyContainer( const Reference<
     if ( rSubContainer.is() )
     {
         ConstItemContainer* pSource = comphelper::getUnoTunnelImplementation<ConstItemContainer>( rSubContainer );
-        ItemContainer* pSubContainer( nullptr );
+        rtl::Reference<ItemContainer> pSubContainer;
         if ( pSource )
             pSubContainer = new ItemContainer( *pSource, m_aShareMutex );
         else
             pSubContainer = new ItemContainer( rSubContainer, m_aShareMutex );
-        xReturn.set( static_cast< OWeakObject* >( pSubContainer ), UNO_QUERY );
+        xReturn = pSubContainer;
     }
 
     return xReturn;
