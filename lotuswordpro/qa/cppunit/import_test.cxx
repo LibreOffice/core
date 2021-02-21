@@ -57,8 +57,6 @@ CPPUNIT_TEST_FIXTURE(LotusWordProTest, testTdf129993)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf129993.lwp";
     getComponent() = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(getComponent().is());
-
     uno::Reference<text::XTextDocument> textDocument(getComponent(), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(textDocument->getText(),
                                                                   uno::UNO_QUERY);
@@ -74,8 +72,6 @@ CPPUNIT_TEST_FIXTURE(LotusWordProTest, paragraphProperties)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "paragraphProperties.lwp";
     getComponent() = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(getComponent().is());
-
     uno::Reference<text::XTextDocument> textDocument(getComponent(), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(textDocument->getText(),
                                                                   uno::UNO_QUERY);

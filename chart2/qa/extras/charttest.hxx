@@ -120,7 +120,6 @@ void ChartTest::load( std::u16string_view aDir, const OUString& aName )
     if (mxComponent.is())
         mxComponent->dispose();
     mxComponent = loadFromDesktop(m_directories.getURLFromSrc(aDir) + aName, maServiceName);
-    CPPUNIT_ASSERT(mxComponent.is());
 }
 
 std::shared_ptr<utl::TempFile> ChartTest::save(const OUString& rFilterName)
@@ -160,7 +159,6 @@ std::shared_ptr<utl::TempFile> ChartTest::reload(const OUString& rFilterName)
         if(!mbSkipValidation)
             validate(pTempFile->GetFileName(), test::MSBINARY);
     }
-    CPPUNIT_ASSERT(mxComponent.is());
     return pTempFile;
 }
 

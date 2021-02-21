@@ -56,7 +56,6 @@ void DialogSaveTest::test()
     const OUString aFileName(m_directories.getURLFromWorkdir(u"CppunitTest/testNolibSave.odb"));
     {
         uno::Reference< lang::XComponent > xComponent = loadFromDesktop(aFileName);
-        CPPUNIT_ASSERT(xComponent.is());
         uno::Reference< frame::XStorable > xDocStorable(xComponent, UNO_QUERY_THROW);
         uno::Reference< document::XEmbeddedScripts > xDocScr(xComponent, UNO_QUERY_THROW);
         uno::Reference< script::XStorageBasedLibraryContainer > xStorBasLib(xDocScr->getBasicLibraries());
