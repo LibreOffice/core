@@ -512,7 +512,7 @@ public:
 #define IMPLEMENT_DEFAULT_CLONING( classname ) \
     css::uno::Reference< css::util::XCloneable > SAL_CALL classname::createClone( ) \
     { \
-        classname* pClone = new classname( this, getContext() ); \
+        rtl::Reference<classname> pClone = new classname( this, getContext() ); \
         pClone->clonedFrom( this ); \
         return pClone; \
     }
@@ -587,7 +587,7 @@ private:
     bool                                m_bInputRequired;
 // </properties>
 
-    ::comphelper::OPropertyChangeMultiplexer*
+    rtl::Reference<::comphelper::OPropertyChangeMultiplexer>
                                 m_pAggPropMultiplexer;
 
     bool                        m_bFormListening            : 1;    // are we currently a XLoadListener at our ambient form?

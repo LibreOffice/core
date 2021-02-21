@@ -136,7 +136,7 @@ namespace frm
             nEngineControlWord = nEngineControlWord & ~EEControlBits::AUTOPAGESIZE;
             m_pEngine->SetControlWord( nEngineControlWord );
 
-            VCLXDevice* pUnoRefDevice = new VCLXDevice;
+            rtl::Reference<VCLXDevice> pUnoRefDevice = new VCLXDevice;
             {
                 SolarMutexGuard g;
                 pUnoRefDevice->SetOutputDevice( m_pEngine->GetRefDevice() );

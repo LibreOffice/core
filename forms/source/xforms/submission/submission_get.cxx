@@ -54,13 +54,13 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const css::uno::Reference< 
     css::uno::Reference< XInputStream > aInStream = apSerialization->getInputStream();
 
     // create a commandEnvironment and use the default interaction handler
-    CCommandEnvironmentHelper *pHelper = new CCommandEnvironmentHelper;
+    rtl::Reference<CCommandEnvironmentHelper> pHelper = new CCommandEnvironmentHelper;
     if( aInteractionHandler.is() )
         pHelper->m_aInteractionHandler = aInteractionHandler;
     else
         pHelper->m_aInteractionHandler.set(
             css::task::InteractionHandler::createWithParent(m_xContext, nullptr), UNO_QUERY_THROW);
-    CProgressHandlerHelper *pProgressHelper = new CProgressHandlerHelper;
+    rtl::Reference<CProgressHandlerHelper> pProgressHelper = new CProgressHandlerHelper;
     pHelper->m_aProgressHandler.set(pProgressHelper);
 
     // UCB has ownership of environment...

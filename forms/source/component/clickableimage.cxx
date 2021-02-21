@@ -495,7 +495,7 @@ namespace frm
         {
             if ( m_xAggregateSet.is() )
             {
-                OPropertyChangeMultiplexer* pMultiplexer = new OPropertyChangeMultiplexer( this, m_xAggregateSet );
+                rtl::Reference<OPropertyChangeMultiplexer> pMultiplexer = new OPropertyChangeMultiplexer( this, m_xAggregateSet );
                 pMultiplexer->addProperty( PROPERTY_IMAGE_URL );
             }
         }
