@@ -2619,8 +2619,7 @@ void ImpEditView::AddDragAndDropListeners()
     if (!xDropTarget.is())
         return;
 
-    vcl::unohelper::DragAndDropWrapper* pDnDWrapper = new vcl::unohelper::DragAndDropWrapper(this);
-    mxDnDListener = pDnDWrapper;
+    mxDnDListener = new vcl::unohelper::DragAndDropWrapper(this);
 
     css::uno::Reference<css::datatransfer::dnd::XDragGestureRecognizer> xDragGestureRecognizer(xDropTarget, uno::UNO_QUERY);
     if (xDragGestureRecognizer.is())

@@ -65,7 +65,7 @@ namespace accessibility
         try
         {
             // Create the state set.
-            ::utl::AccessibleStateSetHelper* pStateSet  = new ::utl::AccessibleStateSetHelper ();
+            rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet  = new ::utl::AccessibleStateSetHelper ();
             mxStateSet = pStateSet;
 
             // these are always on
