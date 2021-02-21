@@ -285,7 +285,7 @@ Reference<XAccessibleStateSet > SAL_CALL
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    ::utl::AccessibleStateSetHelper* pStateSet = new ::utl::AccessibleStateSetHelper();
+    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet = new ::utl::AccessibleStateSetHelper();
 
     pStateSet->AddState(AccessibleStateType::FOCUSABLE);
     pStateSet->AddState(AccessibleStateType::SELECTABLE);

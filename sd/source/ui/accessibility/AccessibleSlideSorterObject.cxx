@@ -188,7 +188,7 @@ Reference<XAccessibleStateSet> SAL_CALL
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    ::utl::AccessibleStateSetHelper* pStateSet = new ::utl::AccessibleStateSetHelper();
+    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet = new ::utl::AccessibleStateSetHelper();
 
     if (mxParent.is())
     {

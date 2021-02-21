@@ -182,12 +182,10 @@ Reference<util::XCloneable> SAL_CALL Configuration::createClone()
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
 
-    Configuration* pConfiguration = new Configuration(
+    return new Configuration(
         mxBroadcaster,
         mbBroadcastRequestEvents,
         *mpResourceContainer);
-
-    return Reference<util::XCloneable>(pConfiguration);
 }
 
 //----- XNamed ----------------------------------------------------------------
