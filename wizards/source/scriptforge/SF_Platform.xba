@@ -71,6 +71,14 @@ Property Get CurrentUser() As String
 End Property	&apos;	ScriptForge.SF_Platform.CurrentUser (get)
 
 REM -----------------------------------------------------------------------------
+Property Get Locale() As String
+&apos;&apos;&apos;	Returns the locale combining language-COUNTRY (la-CO)
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		MsgBox platform.Locale
+	Locale = _PropertyGet(&quot;Locale&quot;)
+End Property	&apos;	ScriptForge.SF_Platform.Locale (get)
+
+REM -----------------------------------------------------------------------------
 Property Get Machine() As String
 &apos;&apos;&apos;	Returns the machine type like &apos;i386&apos; or &apos;x86_64&apos;
 &apos;&apos;&apos;	Example:
@@ -138,6 +146,14 @@ Property Get Processor() As String
 	Processor = _PropertyGet(&quot;Processor&quot;)
 End Property	&apos;	ScriptForge.SF_Platform.Processor (get)
 
+REM -----------------------------------------------------------------------------
+Property Get PythonVersion() As String
+&apos;&apos;&apos;	Returns the Python version as string &apos;Python major.minor.patchlevel&apos;
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		MsgBox platform.PythonVersion	&apos;	Python 3.7.7
+	PythonVersion = _PropertyGet(&quot;PythonVersion&quot;)
+End Property	&apos;	ScriptForge.SF_Platform.PythonVersion (get)
+
 REM ===================================================================== METHODS
 
 REM -----------------------------------------------------------------------------
@@ -190,6 +206,7 @@ Public Function Properties() As Variant
 					, &quot;ComputerName&quot; _
 					, &quot;CPUCount&quot; _
 					, &quot;CurrentUser&quot; _
+					, &quot;Locale&quot; _
 					, &quot;Machine&quot; _
 					, &quot;OfficeVersion&quot; _
 					, &quot;OSName&quot; _
@@ -197,6 +214,7 @@ Public Function Properties() As Variant
 					, &quot;OSRelease&quot; _
 					, &quot;OSVersion&quot; _
 					, &quot;Processor&quot; _
+					, &quot;PythonVersion&quot; _
 					)
 
 End Function	&apos;	ScriptForge.SF_Platform.Properties
@@ -238,6 +256,7 @@ Private Function _PropertyGet(Optional ByVal psProperty As String) As Variant
 &apos;&apos;&apos;		psProperty: the name of the property
 
 Dim sOSName As String			&apos;	Operating system
+Dim oLocale As Object			&apos;	com.sun.star.lang.Locale
 
 Const cstPyHelper = &quot;$&quot; &amp; &quot;_SF_Platform&quot;
 Dim cstThisSub As String
@@ -248,10 +267,13 @@ Const cstSubArgs = &quot;&quot;
 
 	Select Case psProperty
 		Case &quot;Architecture&quot;, &quot;ComputerName&quot;, &quot;CPUCount&quot;, &quot;CurrentUser&quot;, &quot;Machine&quot; _
-				, &quot;OSPlatform&quot;, &quot;OSRelease&quot;, &quot;OSVersion&quot;, &quot;Processor&quot;
+				, &quot;OSPlatform&quot;, &quot;OSRelease&quot;, &quot;OSVersion&quot;, &quot;Processor&quot;, &quot;PythonVersion&quot;
 			With ScriptForge.SF_Session
 				_PropertyGet = .ExecutePythonScript(.SCRIPTISSHARED, _SF_.PythonHelper &amp; cstPyHelper, psProperty)
 			End With
+		Case &quot;Locale&quot;
+			Set oLocale = SF_Utils._GetUNOService(&quot;Locale&quot;)
+			_PropertyGet = oLocale.Language &amp; &quot;-&quot; &amp; oLocale.Country
 		Case &quot;OfficeVersion&quot;
 			_PropertyGet = _GetProductName()
 		Case &quot;OSName&quot;
