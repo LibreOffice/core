@@ -49,8 +49,12 @@ public:
     CPPUNIT_TEST_SUITE(BitmapRenderTest);
     CPPUNIT_TEST(testTdf104141);
     CPPUNIT_TEST(testTdf113918);
+
+// TODO: Following unit tests are not executed for macOS unless bitmap scaling is implemented
+#ifndef MACOSX
     CPPUNIT_TEST(testDrawAlphaBitmapEx);
     CPPUNIT_TEST(testAlphaVirtualDevice);
+#endif
     CPPUNIT_TEST(testTdf116888);
 
     CPPUNIT_TEST_SUITE_END();
