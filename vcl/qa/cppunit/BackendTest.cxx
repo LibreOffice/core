@@ -898,10 +898,16 @@ public:
     CPPUNIT_TEST(testRadialGradient);
     CPPUNIT_TEST(testRadialGradientOfs);
 
+// TODO: Following unit tests are not executed for macOS unless bitmap scaling is implemented
+#ifndef MACOSX
     CPPUNIT_TEST(testDrawBlendExtended);
     CPPUNIT_TEST(testDrawAlphaBitmapMirrored);
+#endif
 
+// TODO: Following unit test is not executed for macOS unless bitmap scaling is implemented
+#ifndef MACOSX
     CPPUNIT_TEST(testTdf124848);
+#endif
     CPPUNIT_TEST(testTdf136171);
 
     CPPUNIT_TEST_SUITE_END();

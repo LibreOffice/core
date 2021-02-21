@@ -41,7 +41,11 @@ public:
     void testRTLGuard();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
+
+// TODO: Following unit tests are not executed for macOS unless bitmap scaling is implemented
+#ifndef MACOSX
     CPPUNIT_TEST(testVirtualDevice);
+#endif
     CPPUNIT_TEST(testUseAfterDispose);
     CPPUNIT_TEST(testPrinterBackgroundColor);
     CPPUNIT_TEST(testWindowBackgroundColor);
