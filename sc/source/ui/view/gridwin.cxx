@@ -30,6 +30,7 @@
 #include <editeng/justifyitem.hxx>
 #include <editeng/misspellrange.hxx>
 #include <editeng/editobj.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
@@ -947,7 +948,7 @@ void ScGridWindow::ShowFilterMenu(const tools::Rectangle& rCellRect, bool bLayou
     // minimum width in pixel
     if (comphelper::LibreOfficeKit::isActive())
     {
-        const tools::Long nMinLOKWinWidth = static_cast<tools::Long>(1.3 * STD_COL_WIDTH / TWIPS_PER_PIXEL);
+        const tools::Long nMinLOKWinWidth = o3tl::convert(STD_COL_WIDTH * 13 / 10, o3tl::Length::twip, o3tl::Length::px);
         if (nSizeX < nMinLOKWinWidth)
             nSizeX = nMinLOKWinWidth;
     }

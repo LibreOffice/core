@@ -29,6 +29,7 @@
 #include <sfx2/printer.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/settings.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
@@ -874,8 +875,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         // Tiled offset nScrX, nScrY
         MapMode aMap( MapUnit::MapPixel );
         Point aOrigin = aOriginalMode.GetOrigin();
-        aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScrX);
-        aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScrY);
+        aOrigin.setX(o3tl::convert(aOrigin.getX(), o3tl::Length::twip, o3tl::Length::px) + nScrX);
+        aOrigin.setY(o3tl::convert(aOrigin.getY(), o3tl::Length::twip, o3tl::Length::px) + nScrY);
         aMap.SetOrigin(aOrigin);
         pContentDev->SetMapMode(aMap);
     }
@@ -922,7 +923,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     if (bIsTiledRendering)
     {
         Point aOrigin = aOriginalMode.GetOrigin();
-        Size aPixelOffset(aOrigin.getX() / TWIPS_PER_PIXEL, aOrigin.getY() / TWIPS_PER_PIXEL);
+        Size aPixelOffset(o3tl::convert(aOrigin.getX(), o3tl::Length::twip, o3tl::Length::px),
+                          o3tl::convert(aOrigin.getY(), o3tl::Length::twip, o3tl::Length::px));
         pContentDev->SetPixelOffset(aPixelOffset);
         comphelper::LibreOfficeKit::setLocalRendering();
     }
@@ -985,8 +987,10 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             if (bIsTiledRendering)
             {
                 Point aOrigin = aOriginalMode.GetOrigin();
-                aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + aOutputData.nScrX);
-                aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + aOutputData.nScrY);
+                aOrigin.setX(o3tl::convert(aOrigin.getX(), o3tl::Length::twip, o3tl::Length::px)
+                             + aOutputData.nScrX);
+                aOrigin.setY(o3tl::convert(aOrigin.getY(), o3tl::Length::twip, o3tl::Length::px)
+                             + aOutputData.nScrY);
                 const double twipFactor = 15 * 1.76388889; // 26.45833335
                 aOrigin = Point(aOrigin.getX() * twipFactor,
                                 aOrigin.getY() * twipFactor);
@@ -1052,8 +1056,12 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
                             // Need to draw the background in absolute coords.
                             Point aOrigin = aOriginalMode.GetOrigin();
-                            aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScreenX);
-                            aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScreenY);
+                            aOrigin.setX(
+                                o3tl::convert(aOrigin.getX(), o3tl::Length::twip, o3tl::Length::px)
+                                + nScreenX);
+                            aOrigin.setY(
+                                o3tl::convert(aOrigin.getY(), o3tl::Length::twip, o3tl::Length::px)
+                                + nScreenY);
                             aBackground += aOrigin;
                             rDevice.SetMapMode(aDrawMode);
 
@@ -1136,8 +1144,10 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         {
             // Need to draw the background in absolute coords.
             Point aOrigin = aOriginalMode.GetOrigin();
-            aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScrX);
-            aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScrY);
+            aOrigin.setX(o3tl::convert(aOrigin.getX(), o3tl::Length::twip, o3tl::Length::px)
+                         + nScrX);
+            aOrigin.setY(o3tl::convert(aOrigin.getY(), o3tl::Length::twip, o3tl::Length::px)
+                         + nScrY);
             aBackground += aOrigin;
             rDevice.SetMapMode(aDrawMode);
         }
@@ -1147,8 +1157,10 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         if (bIsTiledRendering)
         {
             Point aOrigin = aOriginalMode.GetOrigin();
-            aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScrX);
-            aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScrY);
+            aOrigin.setX(o3tl::convert(aOrigin.getX(), o3tl::Length::twip, o3tl::Length::px)
+                         + nScrX);
+            aOrigin.setY(o3tl::convert(aOrigin.getY(), o3tl::Length::twip, o3tl::Length::px)
+                         + nScrY);
             static const double twipFactor = 15 * 1.76388889; // 26.45833335
             // keep into account the zoom factor
             aOrigin = Point((aOrigin.getX() * twipFactor) / static_cast<double>(aDrawMode.GetScaleX()),
@@ -1364,8 +1376,8 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     // Similarly to Writer, we should set the mapmode once on the rDevice, and
     // not care about any zoom settings.
 
-    Fraction aFracX(tools::Long(nOutputWidth * TWIPS_PER_PIXEL), nTileWidth);
-    Fraction aFracY(tools::Long(nOutputHeight * TWIPS_PER_PIXEL), nTileHeight);
+    Fraction aFracX(o3tl::convert(nOutputWidth, o3tl::Length::px, o3tl::Length::twip), nTileWidth);
+    Fraction aFracY(o3tl::convert(nOutputHeight, o3tl::Length::px, o3tl::Length::twip), nTileHeight);
 
     const bool bChangeZoom = (aFracX !=  origZoomX || aFracY != origZoomY);
 
@@ -1433,8 +1445,8 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
 
     nTopLeftTileCol = std::max<sal_Int32>(nTopLeftTileCol, 0);
     nTopLeftTileRow = std::max<sal_Int32>(nTopLeftTileRow, 0);
-    nTopLeftTileColOrigin = nTopLeftTileColOrigin * TWIPS_PER_PIXEL;
-    nTopLeftTileRowOrigin = nTopLeftTileRowOrigin * TWIPS_PER_PIXEL;
+    nTopLeftTileColOrigin = o3tl::convert(nTopLeftTileColOrigin, o3tl::Length::px, o3tl::Length::twip);
+    nTopLeftTileRowOrigin = o3tl::convert(nTopLeftTileRowOrigin, o3tl::Length::px, o3tl::Length::twip);
 
     // Checkout -> 'rDoc.ExtendMerge' ... if we miss merged cells.
 

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/unit_conversion.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
@@ -55,8 +58,8 @@ Point ScOutputData::PrePrintDrawingLayer(tools::Long nLogStX, tools::Long nLogSt
     aRect.SetBottom( -aOffset.Y() );
 
     Point aMMOffset( aOffset );
-    aMMOffset.setX( static_cast<tools::Long>(aMMOffset.X() * HMM_PER_TWIPS) );
-    aMMOffset.setY( static_cast<tools::Long>(aMMOffset.Y() * HMM_PER_TWIPS) );
+    aMMOffset.setX(o3tl::convert(aMMOffset.X(), o3tl::Length::twip, o3tl::Length::mm100));
+    aMMOffset.setY(o3tl::convert(aMMOffset.Y(), o3tl::Length::twip, o3tl::Length::mm100));
 
     if (!bMetaFile)
         aMMOffset += Point( nLogStX, nLogStY );
@@ -65,10 +68,10 @@ Point ScOutputData::PrePrintDrawingLayer(tools::Long nLogStX, tools::Long nLogSt
         aRect.AdjustRight(mpDoc->GetColWidth( nCol, nTab ) );
     aRect.AdjustBottom(mpDoc->GetRowHeight( nY1, nY2, nTab ) );
 
-    aRect.SetLeft( static_cast<tools::Long>(aRect.Left()   * HMM_PER_TWIPS) );
-    aRect.SetTop( static_cast<tools::Long>(aRect.Top()    * HMM_PER_TWIPS) );
-    aRect.SetRight( static_cast<tools::Long>(aRect.Right()  * HMM_PER_TWIPS) );
-    aRect.SetBottom( static_cast<tools::Long>(aRect.Bottom() * HMM_PER_TWIPS) );
+    aRect.SetLeft(o3tl::convert(aRect.Left(), o3tl::Length::twip, o3tl::Length::mm100));
+    aRect.SetTop(o3tl::convert(aRect.Top(), o3tl::Length::twip, o3tl::Length::mm100));
+    aRect.SetRight(o3tl::convert(aRect.Right(), o3tl::Length::twip, o3tl::Length::mm100));
+    aRect.SetBottom(o3tl::convert(aRect.Bottom(), o3tl::Length::twip, o3tl::Length::mm100));
 
     if(pViewShell || pDrawView)
     {

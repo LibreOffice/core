@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/unit_conversion.hxx>
 #include <vcl/outdev.hxx>
 
 #include <drawutil.hxx>
@@ -65,8 +68,7 @@ void ScDrawUtil::CalcScale( const ScDocument& rDoc, SCTAB nTab,
     if ( aPixelLog.X() && nTwipsX )
         rScaleX = Fraction( static_cast<double>(aPixelLog.X()) *
                             static_cast<double>(rZoomX.GetNumerator()) /
-                            static_cast<double>(nTwipsX) /
-                            HMM_PER_TWIPS /
+                            o3tl::convert<double>(nTwipsX, o3tl::Length::twip, o3tl::Length::mm100) /
                             static_cast<double>(rZoomX.GetDenominator()) );
     else
         rScaleX = Fraction( 1, 1 );
@@ -74,8 +76,7 @@ void ScDrawUtil::CalcScale( const ScDocument& rDoc, SCTAB nTab,
     if ( aPixelLog.Y() && nTwipsY )
         rScaleY = Fraction( static_cast<double>(aPixelLog.Y()) *
                             static_cast<double>(rZoomY.GetNumerator()) /
-                            static_cast<double>(nTwipsY) /
-                            HMM_PER_TWIPS /
+                            o3tl::convert<double>(nTwipsY, o3tl::Length::twip, o3tl::Length::mm100) /
                             static_cast<double>(rZoomY.GetDenominator()) );
     else
         rScaleY = Fraction( 1, 1 );

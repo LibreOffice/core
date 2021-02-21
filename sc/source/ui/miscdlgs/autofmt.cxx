@@ -30,6 +30,7 @@
 #include <editeng/shdditem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <svl/zforlist.hxx>
 #include <svtools/scriptedtext.hxx>
 #include <svx/framelink.hxx>
@@ -445,7 +446,7 @@ void ScAutoFmtPreview::CalcCellArray( bool bFitWidthP )
 
 static void lclSetStyleFromBorder( svx::frame::Style& rStyle, const ::editeng::SvxBorderLine* pBorder )
 {
-    rStyle.Set( pBorder, 1.0 / TWIPS_PER_POINT, 5 );
+    rStyle.Set(pBorder, o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::pt), 5);
 }
 
 void ScAutoFmtPreview::CalcLineMap()
