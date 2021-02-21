@@ -1255,7 +1255,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
         return nullptr;
 
     // check string index and length
-    if( -1 == nLen || nMinIndex + nLen > rOrigStr.getLength() )
+    if( nLen < 0 || nMinIndex + nLen > rOrigStr.getLength() )
     {
         const sal_Int32 nNewLen = rOrigStr.getLength() - nMinIndex;
         if( nNewLen <= 0 )
