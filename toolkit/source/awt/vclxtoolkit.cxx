@@ -55,6 +55,7 @@
 #include <osl/module.h>
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/process.h>
 #include <sal/log.hxx>
 #include <tools/link.hxx>
@@ -397,7 +398,7 @@ Size MessBox::GetOptimalSize() const
 namespace {
 
 extern "C" typedef vcl::Window* (*FN_SvtCreateWindow)(
-        VCLXWindow** ppNewComp,
+        rtl::Reference<VCLXWindow>* ppNewComp,
         const css::awt::WindowDescriptor* pDescriptor,
         vcl::Window* pParent,
         WinBits nWinBits );
@@ -468,7 +469,7 @@ protected:
 
     virtual void SAL_CALL disposing() override;
 
-    static vcl::Window* ImplCreateWindow( VCLXWindow** ppNewComp, const css::awt::WindowDescriptor& rDescriptor, vcl::Window* pParent,
+    static vcl::Window* ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewComp, const css::awt::WindowDescriptor& rDescriptor, vcl::Window* pParent,
                              WinBits nWinBits, MessBoxStyle nMessBoxStyle );
     css::uno::Reference< css::awt::XWindowPeer > ImplCreateWindow( const css::awt::WindowDescriptor& Descriptor,
                              MessBoxStyle nForceMessBoxStyle );
@@ -1393,7 +1394,7 @@ void SVTXRoadmap::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
     VCLXGraphicControl::ImplGetPropertyIds( rIds );
 }
 
-vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
+vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewComp,
     const css::awt::WindowDescriptor& rDescriptor,
     vcl::Window* pParent, WinBits nWinBits, MessBoxStyle nMessBoxStyle )
 {
@@ -1463,7 +1464,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 pNewWindow = VclPtr<CurrencyField>::Create( pParent, nWinBits );
                 static_cast<CurrencyField*>(pNewWindow.get())->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXNumericField;
-                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<CurrencyField*>(pNewWindow.get())) );
+                static_cast<VCLXFormattedSpinField*>((*ppNewComp).get())->SetFormatter( static_cast<FormatterBase*>(static_cast<CurrencyField*>(pNewWindow.get())) );
             break;
             case WindowType::DATEBOX:
                 pNewWindow = VclPtr<DateBox>::Create( pParent, nWinBits );
@@ -1546,7 +1547,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WindowType::METRICFIELD:
                 pNewWindow = VclPtr<MetricField>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXMetricField;
-                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<MetricField*>(pNewWindow.get())) );
+                static_cast<VCLXFormattedSpinField*>((*ppNewComp).get())->SetFormatter( static_cast<FormatterBase*>(static_cast<MetricField*>(pNewWindow.get())) );
             break;
             case WindowType::DIALOG:
             case WindowType::MODELESSDIALOG:
@@ -1587,7 +1588,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WindowType::PATTERNFIELD:
                 pNewWindow = VclPtr<PatternField>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXPatternField;
-                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<PatternField*>(pNewWindow.get())) );
+                static_cast<VCLXFormattedSpinField*>((*ppNewComp).get())->SetFormatter( static_cast<FormatterBase*>(static_cast<PatternField*>(pNewWindow.get())) );
             break;
             case WindowType::PUSHBUTTON:
                 pNewWindow = VclPtr<PushButton>::Create( pParent, nWinBits );
@@ -1660,7 +1661,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 pNewWindow = VclPtr<TimeField>::Create( pParent, nWinBits );
                 static_cast<TimeField*>(pNewWindow.get())->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXTimeField;
-                static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<TimeField*>(pNewWindow.get())) );
+                static_cast<VCLXFormattedSpinField*>((*ppNewComp).get())->SetFormatter( static_cast<FormatterBase*>(static_cast<TimeField*>(pNewWindow.get())) );
             break;
             case WindowType::TOOLBOX:
                 pNewWindow = VclPtr<ToolBox>::Create( pParent, nWinBits );
@@ -1851,7 +1852,7 @@ extern "C" { static void thisModule() {} }
 
 #else
 
-extern "C" vcl::Window* SAL_CALL CreateWindow( VCLXWindow** ppNewComp, const css::awt::WindowDescriptor* pDescriptor, vcl::Window* pParent, WinBits nWinBits );
+extern "C" vcl::Window* SAL_CALL CreateWindow( rtl::Reference<VCLXWindow>* ppNewComp, const css::awt::WindowDescriptor* pDescriptor, vcl::Window* pParent, WinBits nWinBits );
 
 #endif
 
@@ -1881,7 +1882,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     WinBits nWinBits = aPair.first;
     aPair.second |= nForceMessBoxStyle;
 
-    VCLXWindow* pNewComp = nullptr;
+    rtl::Reference<VCLXWindow> pNewComp;
 
     vcl::Window* pNewWindow = nullptr;
     // Try to create the window with SvTools
