@@ -224,8 +224,8 @@
     { u"" UNO_NAME_SHADOWTRANSPARENCE,SDRATTR_SHADOWTRANSPARENCE, ::cppu::UnoType<sal_Int16>::get(),    0,      0}, \
     { u"" UNO_NAME_SHADOWXDIST,       SDRATTR_SHADOWXDIST,        ::cppu::UnoType<sal_Int32>::get(),    0,      0, PropertyMoreFlags::METRIC_ITEM}, \
     { u"" UNO_NAME_SHADOWYDIST,       SDRATTR_SHADOWYDIST,        ::cppu::UnoType<sal_Int32>::get(),    0,      0, PropertyMoreFlags::METRIC_ITEM}, \
-    { u"" UNO_NAME_SHADOWSIZEX,       SDRATTR_SHADOWSIZEX,        ::cppu::UnoType<sal_Int32>::get(),    0,      0, PropertyMoreFlags::METRIC_ITEM}, \
-    { u"" UNO_NAME_SHADOWSIZEY,       SDRATTR_SHADOWSIZEY,        ::cppu::UnoType<sal_Int32>::get(),    0,      0, PropertyMoreFlags::METRIC_ITEM}, \
+    { u"" UNO_NAME_SHADOWSIZEX,       SDRATTR_SHADOWSIZEX,        ::cppu::UnoType<sal_Int32>::get(),    0,      0}, \
+    { u"" UNO_NAME_SHADOWSIZEY,       SDRATTR_SHADOWSIZEY,        ::cppu::UnoType<sal_Int32>::get(),    0,      0}, \
     { u"" UNO_NAME_SHADOWBLUR,        SDRATTR_SHADOWBLUR,         ::cppu::UnoType<sal_Int32>::get(),    0,      0, PropertyMoreFlags::METRIC_ITEM},
 
 
