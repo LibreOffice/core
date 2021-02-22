@@ -227,8 +227,6 @@ SvxColorDockingWindow::SvxColorDockingWindow(SfxBindings* _pBindings, SfxChildWi
     aItemSize.setHeight( aItemSize.Height() + SvxColorValueSet::getEntryEdgeLength() );
     aItemSize.setHeight( aItemSize.Height() / 2 );
 
-    fprintf(stderr, "size is %" SAL_PRIdINT64 " %" SAL_PRIdINT64 "\n", sal_Int64(aItemSize.Width()), sal_Int64(aItemSize.Height()));
-
     if (_pBindings != nullptr)
         StartListening(*_pBindings, DuplicateHandling::Prevent);
 }
