@@ -16,6 +16,24 @@
       "revId": "927b4e74c4f841336575d20036e77bde10cd335a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f2097ad_353d1e0e",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Math.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-22T09:39:23Z",
+      "side": 0,
+      "message": "\u003e Is it OK to remove the UIHints? It *seems* like they may help translators to understand the context if they translate the strings (do they?)\n\nI think none of these props are oor:localized\u003d\"true\", so there should not be anything here that should get translated.  (Those UIHints might have been useful to better understand what each individual prop is about, but then again these comments are typically so old and un-maintained that the UI locations they reference may well be incorrect by now.  So I thought, \"shrug, should be acceptable to get them cleared away wholesale in response to my comment at \u003chttps://gerrit.libreoffice.org/c/core/+/111155/8#message-dd4186c49f6098444d7751483e67169dbfcafa75\u003e \u0027Adjustable smeditwindow zoom\u0027.\"\n\n\u003e And it would be good to have a reference to the deprecation info - be it a mail, or a release note, or some comment in a bugzilla issue ... just anything :-)\n\nYes, I agree, that would have been useful in the commit message.",
+      "parentUuid": "eea4f932_728f1875",
+      "revId": "927b4e74c4f841336575d20036e77bde10cd335a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
