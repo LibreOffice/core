@@ -127,10 +127,10 @@ struct SwCallMouseEvent final
         switch(pLegacy->GetWhich())
         {
             case RES_FMT_CHG:
-                bClear |= static_cast<SwFormatChg const*>(pLegacy->m_pOld)->pChangedFormat == PTR.pFormat;
+                bClear |= pLegacy->m_pOld->StaticWhichCast(RES_FMT_CHG).pChangedFormat == PTR.pFormat;
                 break;
             case RES_REMOVE_UNO_OBJECT:
-                bClear |= static_cast<SwPtrMsgPoolItem const*>(pLegacy->m_pOld)->pObject == PTR.pFormat;
+                bClear |= pLegacy->m_pOld->StaticWhichCast(RES_REMOVE_UNO_OBJECT).pObject == PTR.pFormat;
         }
         if(bClear)
             Clear();
