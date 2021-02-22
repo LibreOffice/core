@@ -11,6 +11,7 @@
 
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
@@ -34,6 +35,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <tools/lineend.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <unotools/mediadescriptor.hxx>
 
 using namespace com::sun::star;
@@ -855,6 +857,58 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testUserField)
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "//w:docVars/w:docVar", "name", "foo");
     assertXPath(pXmlDoc, "//w:docVars/w:docVar", "val", "bar");
+}
+
+CPPUNIT_TEST_FIXTURE(SwModelTestBase, testHighlightEdit_numbering)
+{
+    // Create the doc model.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf135774_numberingCRProps.docx";
+    loadURL(aURL, nullptr);
+
+    // This only affects when saving as w:highlight - which is not the default since 7.0.
+    SvtFilterOptions& rOpt = SvtFilterOptions::Get();
+    bool bWasExportToShade = rOpt.IsCharBackground2Shading();
+    rOpt.SetCharBackground2Highlighting();
+
+    //Simulate a user editing the char background color of the paragraph 2 marker (CR)
+    uno::Reference<beans::XPropertySet> properties(getParagraph(2), uno::UNO_QUERY);
+    uno::Sequence<beans::NamedValue> aListAutoFormat;
+    CPPUNIT_ASSERT(properties->getPropertyValue("ListAutoFormat") >>= aListAutoFormat);
+    comphelper::SequenceAsHashMap aMap(properties->getPropertyValue("ListAutoFormat"));
+    // change the background color to RES_CHRATR_BACKGROUND.
+    aMap["CharBackColor"] <<= static_cast<sal_Int32>(0xff00ff);
+    // Two attributes can affect character background. Highlight has priority, and is only there for MS compatibility,
+    // so clear any potential highlight set earlier, or override any coming via a style.
+    aMap["CharHighlight"] <<= static_cast<sal_Int32>(COL_TRANSPARENT);
+
+    uno::Sequence<beans::PropertyValue> aGrabBag;
+    aMap["CharInteropGrabBag"] >>= aGrabBag;
+    for (beans::PropertyValue& rProp : aGrabBag)
+    {
+        // The shading is no longer defined from import, so clear that flag.
+        // BackColor 0xff00ff will now attempt to export as highlight, since we set that in SvtFilterOptions.
+        if (rProp.Name == "CharShadingMarker")
+            rProp.Value <<= false;
+    }
+    aMap["CharInteropGrabBag"] <<= aGrabBag;
+
+    aMap >> aListAutoFormat;
+    properties->setPropertyValue("ListAutoFormat", uno::makeAny(aListAutoFormat));
+
+    // Export to docx.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("Office Open XML Text");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    mbExported = true;
+
+    // Paragraph 2 should have only one w:highlight written per w:rPr. Without the fix, there were two.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "//w:body/w:p[2]/w:pPr/w:rPr/w:highlight", "val", "none");
+    // Visually, the "none" highlight means the bullet point should not have a character background.
+
+    if (bWasExportToShade)
+        rOpt.SetCharBackground2Shading();
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf132766, "tdf132766.docx")
