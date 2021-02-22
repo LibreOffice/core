@@ -104,6 +104,24 @@
       "revId": "1d5ca679ff816f1ecd26dc76ec15f51a7b1d9958",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "969796c7_94652192",
+        "filename": "xmloff/source/chart/PropertyMaps.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-02-22T06:36:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d378082c_9b2b6fa4",
+      "revId": "1d5ca679ff816f1ecd26dc76ec15f51a7b1d9958",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
