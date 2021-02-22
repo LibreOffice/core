@@ -39,7 +39,6 @@
 #include <svl/numuno.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 
 #include <svl/zforlist.hxx>
@@ -544,26 +543,21 @@ void SbaGridHeader::ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMouseP
         );
 }
 
-void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu)
+void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, weld::Menu& rMenu,
+                                                weld::Menu& rInsertMenu, weld::Menu& rChangeMenu,
+                                                weld::Menu& rShowMenu)
 {
-    FmGridHeader::PreExecuteColumnContextMenu(nColId, rMenu);
+    FmGridHeader::PreExecuteColumnContextMenu(nColId, rMenu, rInsertMenu, rChangeMenu, rShowMenu);
 
     // some items are valid only if the db isn't readonly
     bool bDBIsReadOnly = static_cast<SbaGridControl*>(GetParent())->IsReadOnlyDB();
 
     if (bDBIsReadOnly)
     {
-        rMenu.EnableItem(rMenu.GetItemId("hide"), false);
-        PopupMenu* pShowColsMenu = rMenu.GetPopupMenu(rMenu.GetItemId("show"));
-        if (pShowColsMenu)
-        {
-            // at most 16 items which mean "show column <name>"
-            for (sal_uInt16 i=1; i<16; ++i)
-                pShowColsMenu->EnableItem(i, false);
-            // "show cols/more..." and "show cols/all"
-            pShowColsMenu->EnableItem(pShowColsMenu->GetItemId("more"), false);
-            pShowColsMenu->EnableItem(pShowColsMenu->GetItemId("all"), false);
-        }
+        rMenu.set_visible("hide", false);
+        rMenu.set_sensitive("hide", false);
+        rMenu.set_visible("show", false);
+        rMenu.set_sensitive("show", false);
     }
 
     // prepend some new items
@@ -589,31 +583,25 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rM
         case DataType::REF:
             break;
         default:
-            rMenu.InsertItem(ID_BROWSER_COLATTRSET, DBA_RES(RID_STR_COLUMN_FORMAT), MenuItemBits::NONE, OString(), nPos++);
-            rMenu.SetHelpId(ID_BROWSER_COLATTRSET, HID_BROWSER_COLUMNFORMAT);
-            rMenu.InsertSeparator(OString(), nPos++);
+            rMenu.insert(nPos++, "colattrset", DBA_RES(RID_STR_COLUMN_FORMAT),
+                         nullptr, nullptr, nullptr, TRISTATE_INDET);
+            rMenu.insert_separator(nPos++, "seperator1");
         }
     }
 
-    rMenu.InsertItem(ID_BROWSER_COLWIDTH, DBA_RES(RID_STR_COLUMN_WIDTH), MenuItemBits::NONE, OString(), nPos++);
-    rMenu.SetHelpId(ID_BROWSER_COLWIDTH, HID_BROWSER_COLUMNWIDTH);
-    rMenu.InsertSeparator(OString(), nPos++);
+    rMenu.insert(nPos++, "colwidth", DBA_RES(RID_STR_COLUMN_WIDTH),
+                 nullptr, nullptr, nullptr, TRISTATE_INDET);
+    rMenu.insert_separator(nPos++, "seperator2");
 }
 
-void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult)
+void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const weld::Menu& rMenu, const OString& rExecutionResult)
 {
-    switch (nExecutionResult)
-    {
-        case ID_BROWSER_COLWIDTH:
-            static_cast<SbaGridControl*>(GetParent())->SetColWidth(nColId);
-            break;
-
-        case ID_BROWSER_COLATTRSET:
-            static_cast<SbaGridControl*>(GetParent())->SetColAttrs(nColId);
-            break;
-
-        default: FmGridHeader::PostExecuteColumnContextMenu(nColId, rMenu, nExecutionResult);
-    }
+    if (rExecutionResult == "colwidth")
+        static_cast<SbaGridControl*>(GetParent())->SetColWidth(nColId);
+    else if (rExecutionResult == "colattrset")
+        static_cast<SbaGridControl*>(GetParent())->SetColAttrs(nColId);
+    else
+        FmGridHeader::PostExecuteColumnContextMenu(nColId, rMenu, rExecutionResult);
 }
 
 // SbaGridControl
