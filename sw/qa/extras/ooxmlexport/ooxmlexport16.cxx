@@ -9,6 +9,11 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <svx/svddef.hxx>
+#include <svx/unoapi.hxx>
+#include <svx/sdmetitm.hxx>
+#include <svx/svdobj.hxx>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
@@ -120,6 +125,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138953, "croppedAndRotated.odt")
     // and the resulting object size was much larger than should be.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(12961), frameRect.Height);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8664), frameRect.Width);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf133473_shadowSize, "tdf133473.docx")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+
+    SdrObject* pObj(GetSdrObjectFromXShape(xShape));
+    const SfxItemSet& rSet = pObj->GetMergedItemSet();
+    sal_Int32 nSize1 = rSet.Get(SDRATTR_SHADOWSIZEX).GetValue();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 200000
+    // - Actual  : 113386
+    // I.e. Shadow size will be smaller than actual.
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(200000), nSize1);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
