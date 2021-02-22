@@ -37,6 +37,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
+#include <rtl/ref.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -517,12 +518,10 @@ void SAL_CALL Axis::setTitleObject( const Reference< chart2::XTitle >& xNewTitle
 // ____ XCloneable ____
 Reference< util::XCloneable > SAL_CALL Axis::createClone()
 {
-    Axis * pNewAxis( new Axis( *this ));
-    // hold a reference to the clone
-    Reference< util::XCloneable > xResult( pNewAxis );
+    rtl::Reference<Axis> pNewAxis( new Axis( *this ));
     // do initialization that uses uno references to the clone
     pNewAxis->Init();
-    return xResult;
+    return pNewAxis;
 }
 
 // ____ XModifyBroadcaster ____
