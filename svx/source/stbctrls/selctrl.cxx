@@ -100,15 +100,18 @@ SvxSelectionModeControl::SvxSelectionModeControl( sal_uInt16 _nSlotId,
                                                   StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
     mnState( 0 ),
-    maImage(StockImage::Yes, RID_SVXBMP_SELECTION)
+    maImage(StockImage::Yes, RID_SVXBMP_SELECTION),
+    mbFeatureEnabled(false)
 {
     GetStatusBar().SetItemText( GetId(), "" );
+    GetStatusBar().SetQuickHelpText(GetId(), u"");
 }
 
 void SvxSelectionModeControl::StateChanged( sal_uInt16, SfxItemState eState,
                                             const SfxPoolItem* pState )
 {
-    if ( SfxItemState::DEFAULT == eState )
+    mbFeatureEnabled = SfxItemState::DEFAULT == eState;
+    if (mbFeatureEnabled)
     {
         DBG_ASSERT( dynamic_cast< const SfxUInt16Item* >(pState) !=  nullptr, "invalid item type" );
         const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pState);
@@ -121,8 +124,8 @@ void SvxSelectionModeControl::StateChanged( sal_uInt16, SfxItemState eState,
 
 bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
 {
-    if (!rEvt.IsMiddle())
-        return false;
+    if (!mbFeatureEnabled || !rEvt.IsMiddle())
+        return true;
 
     ::tools::Rectangle aRect(rEvt.GetPosPixel(), Size(1, 1));
     weld::Window* pPopupParent = weld::GetPopupParent(GetStatusBar(), aRect);
@@ -174,7 +177,7 @@ void SvxSelectionModeControl::Paint( const UserDrawEvent& rUsrEvt )
     Point aPos( aRect.Left() + ( aControlRect.GetWidth() - aImgSize.Width() ) / 2,
             aRect.Top() + ( aControlRect.GetHeight() - aImgSize.Height() ) / 2 );
 
-    pDev->DrawImage( aPos, maImage );
+    pDev->DrawImage(aPos, maImage, mbFeatureEnabled ? DrawImageFlags::NONE : DrawImageFlags::Disable);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
