@@ -239,6 +239,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/pagemargincontrol \
 	sw/uiconfig/swriter/ui/pageorientationcontrol \
 	sw/uiconfig/swriter/ui/pagesizecontrol \
+	sw/uiconfig/swriter/ui/pagestylemenu \
 	sw/uiconfig/swriter/ui/paradialog \
 	sw/uiconfig/swriter/ui/picturedialog \
 	sw/uiconfig/swriter/ui/picturepage \
