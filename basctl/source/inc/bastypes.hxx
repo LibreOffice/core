@@ -77,7 +77,7 @@ struct BasicStatus
 // basctl::DockingWindow -- special docking window for the Basic IDE
 // Not to be confused with ::DockingWindow from vcl.
 
-class DockingWindow : public ::DockingWindow
+class DockingWindow : public ResizableDockingWindow
 {
 public:
     DockingWindow(vcl::Window* pParent, const OUString& rUIXMLDescription, const OString& rID);
@@ -101,7 +101,6 @@ protected:
 
 protected:
     std::unique_ptr<weld::Builder> m_xBuilder;
-    VclPtr<vcl::Window> m_xVclContentArea;
     std::unique_ptr<weld::Container> m_xContainer;
 
 private:

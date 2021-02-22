@@ -22,8 +22,8 @@
 #include <vcl/accel.hxx>
 #include <vcl/event.hxx>
 #include <vcl/floatwin.hxx>
-#include <vcl/dockwin.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/dockwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
@@ -1056,6 +1056,28 @@ IMPL_LINK_NOARG(DockingWindow, ImplHandleLayoutTimerHdl, Timer*, void)
         return;
     }
     setPosSizeOnContainee();
+}
+
+ResizableDockingWindow::ResizableDockingWindow(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame)
+    : DockingWindow(pParent, "DockingWindow", "vcl/ui/dockingwindow.ui", rFrame)
+    , m_xBox(m_pUIBuilder->get("box"))
+{
+}
+
+ResizableDockingWindow::ResizableDockingWindow(vcl::Window* pParent, WinBits nStyle)
+    : DockingWindow(pParent, nStyle)
+{
+}
+
+ResizableDockingWindow::~ResizableDockingWindow()
+{
+    disposeOnce();
+}
+
+void ResizableDockingWindow::dispose()
+{
+    m_xBox.clear();
+    DockingWindow::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
