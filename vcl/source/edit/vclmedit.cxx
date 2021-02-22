@@ -23,9 +23,11 @@
 #include <vcl/builder.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/specialchars.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolkit/vclmedit.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/ptrstyle.hxx>

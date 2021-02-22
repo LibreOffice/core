@@ -36,7 +36,6 @@
 #include <tools/contnr.hxx>
 #include <vcl/toolkit/treelist.hxx>
 #include <vcl/transfer.hxx>
-#include <vcl/menu.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 class SvTreeListBox;
