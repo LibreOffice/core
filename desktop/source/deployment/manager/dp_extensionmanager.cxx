@@ -696,12 +696,11 @@ Reference<css::deployment::XPackage> ExtensionManager::addExtension(
                 //check again dependencies but prevent user interaction,
                 //We can disregard the license, because the user must have already
                 //accepted it, when we called checkPrerequisites the first time
-                SilentCheckPrerequisitesCommandEnv * pSilentCommandEnv =
+                rtl::Reference<SilentCheckPrerequisitesCommandEnv> pSilentCommandEnv =
                     new SilentCheckPrerequisitesCommandEnv();
-                Reference<ucb::XCommandEnvironment> silentCommandEnv(pSilentCommandEnv);
 
                 sal_Int32 failedPrereq = xTmpExtension->checkPrerequisites(
-                    xAbortChannel, silentCommandEnv, true);
+                    xAbortChannel, pSilentCommandEnv, true);
                 if (failedPrereq == 0)
                 {
                     xNewExtension = xPackageManager->addPackage(

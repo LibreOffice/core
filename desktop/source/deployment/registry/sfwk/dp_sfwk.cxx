@@ -244,17 +244,15 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 if (create_ucb_content( &ucb_content, sParcelDescURL,
                         xCmdEnv, false /* no throw */ ))
                 {
-                    ParcelDescDocHandler* pHandler =
+                    rtl::Reference<ParcelDescDocHandler> pHandler =
                         new ParcelDescDocHandler();
-                    Reference< xml::sax::XDocumentHandler >
-                        xDocHandler = pHandler;
 
                     Reference<XComponentContext>
                         xContext( getComponentContext() );
 
                     Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
 
-                    xParser->setDocumentHandler( xDocHandler );
+                    xParser->setDocumentHandler( pHandler );
                     xml::sax::InputSource source;
                     source.aInputStream = ucb_content.openStream();
                     source.sSystemId = ucb_content.getURL();

@@ -340,9 +340,8 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
     Reference<XComponentContext> const & xComponentContext,
     OUString const & context )
 {
-    PackageManagerImpl * that = new PackageManagerImpl(
+    rtl::Reference<PackageManagerImpl> that = new PackageManagerImpl(
         xComponentContext, context );
-    Reference<deployment::XPackageManager> xPackageManager( that );
 
     OUString logFile, stamp;
     if ( context == "user" ) {
@@ -433,7 +432,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         that->initRegistryBackends();
         that->initActivationLayer( xCmdEnv );
 
-        return xPackageManager;
+        return that;
 
     }
     catch (const RuntimeException &) {
