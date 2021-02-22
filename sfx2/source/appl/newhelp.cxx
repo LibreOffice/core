@@ -2422,7 +2422,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     const css::uno::Reference < css::frame::XFrame2 >& rFrame,
     vcl::Window* pParent ) :
 
-    DockingWindow(pParent, "DockingWindow", "sfx/ui/dockingwindow.ui"),
+    DockingWindow(pParent, "DockingWindow", "vcl/ui/dockingwindow.ui"),
 
     xFrame              ( rFrame ),
     pTextWin            ( nullptr ),
