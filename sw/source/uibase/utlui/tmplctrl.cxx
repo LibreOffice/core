@@ -18,12 +18,12 @@
  */
 
 #include <svl/style.hxx>
-#include <vcl/menu.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/status.hxx>
+#include <vcl/weldutils.hxx>
 
 #include <swtypes.hxx>
 #include <strings.hrc>
@@ -36,34 +36,6 @@
 #include <tmplctrl.hxx>
 
 SFX_IMPL_STATUSBAR_CONTROL( SwTemplateControl, SfxStringItem );
-
-namespace {
-
-class SwTemplatePopup_Impl : public PopupMenu
-{
-public:
-    SwTemplatePopup_Impl();
-
-    sal_uInt16          GetCurId() const { return nCurId; }
-
-private:
-    sal_uInt16          nCurId;
-
-    virtual void    Select() override;
-};
-
-}
-
-SwTemplatePopup_Impl::SwTemplatePopup_Impl() :
-    PopupMenu(),
-    nCurId(USHRT_MAX)
-{
-}
-
-void SwTemplatePopup_Impl::Select()
-{
-    nCurId = GetCurItemId();
-}
 
 SwTemplateControl::SwTemplateControl( sal_uInt16 _nSlotId,
                                       sal_uInt16 _nId,
@@ -100,7 +72,6 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
             GetStatusBar().GetItemText( GetId() ).isEmpty())
         return;
 
-    ScopedVclPtrInstance<SwTemplatePopup_Impl> aPop;
     {
         SwView* pView = ::GetActiveView();
         SwWrtShell *const pWrtShell(pView ? pView->GetWrtShellPtr() : nullptr);
@@ -114,18 +85,23 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
             auto xIter = pPool->CreateIterator(SfxStyleFamily::Page);
             if (xIter->Count() > 1)
             {
-                sal_uInt16 nCount = 0;
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/pagestylemenu.ui"));
+                std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("menu"));
+
+                sal_uInt32 nCount = 0;
                 SfxStyleSheetBase* pStyle = xIter->First();
                 while( pStyle )
                 {
-                    aPop->InsertItem( ++nCount, pStyle->GetName() );
+                    xPopup->append(OUString::number(++nCount), pStyle->GetName());
                     pStyle = xIter->Next();
                 }
 
-                aPop->Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
-                const sal_uInt16 nCurrId = aPop->GetCurId();
-                if( nCurrId != USHRT_MAX)
+                ::tools::Rectangle aRect(rCEvt.GetMousePosPixel(), Size(1, 1));
+                weld::Window* pParent = weld::GetPopupParent(GetStatusBar(), aRect);
+                OString sResult = xPopup->popup_at_rect(pParent, aRect);
+                if (!sResult.isEmpty())
                 {
+                    sal_uInt32 nCurrId = sResult.toUInt32();
                     // looks a bit awkward, but another way is not possible
                     pStyle = xIter->operator[]( nCurrId - 1 );
                     SfxStringItem aStyle( FN_SET_PAGE_STYLE, pStyle->GetName() );
