@@ -117,6 +117,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138953, "croppedAndRotated.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8664), frameRect.Width);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf133473_shadowSize, "tdf133473.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:outerShdw/", "sx", "200000");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,6 +26,9 @@
 
 #include <xmloff/odffields.hxx>
 
+#include <svx/svddef.hxx>
+#include <svx/unoapi.hxx>
+#include <svx/sdmetitm.hxx>
 #include <wrtsh.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -698,6 +701,22 @@ DECLARE_OOXMLIMPORT_TEST(testTdf129912, "tdf129912.docx")
         pWrtShell->GotoPrevFootnoteAnchor();
         nCount--;
     }
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf133473_shadowSize, "tdf133473.docx")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+
+    SdrObject* pObj(static_cast<SdrObject*>(GetSdrObjectFromXShape(xShape)));
+    const SfxItemSet& rSet = pObj->GetMergedItemSet();
+    sal_Int32 nSize1 = rSet.Get(SDRATTR_SHADOWSIZEX).GetValue();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 200000
+    // - Actual  : 113386
+    // I.e. Shadow size will be smaller than actual.
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(200000), nSize1);
 }
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
