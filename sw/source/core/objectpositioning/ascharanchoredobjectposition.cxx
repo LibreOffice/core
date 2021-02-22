@@ -28,6 +28,8 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <fmtornt.hxx>
+#include <textboxhelper.hxx>
+#include <fmtanchr.hxx>
 
 
 using namespace ::com::sun::star;
