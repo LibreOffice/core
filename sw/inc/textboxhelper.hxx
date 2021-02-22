@@ -71,6 +71,9 @@ public:
     static void getProperty(SwFrameFormat const* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,
                             css::uno::Any& rValue);
 
+    /// There are two types of enum of anchor type, so this function maps this.
+    static css::text::TextContentAnchorType mapAnchorType(const RndStdIds& rAnchorID);
+
     /// Similar to syncProperty(), but used by the internal API (e.g. for UI purposes).
     static void syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& rSet);
 
