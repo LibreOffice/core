@@ -22,8 +22,8 @@
 #include <vcl/accel.hxx>
 #include <vcl/event.hxx>
 #include <vcl/floatwin.hxx>
-#include <vcl/dockwin.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/dockwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
@@ -1073,6 +1073,28 @@ DropdownDockingWindow::~DropdownDockingWindow()
 }
 
 void DropdownDockingWindow::dispose()
+{
+    m_xBox.clear();
+    DockingWindow::dispose();
+}
+
+ResizableDockingWindow::ResizableDockingWindow(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame)
+    : DockingWindow(pParent, "DockingWindow", "vcl/ui/dockingwindow.ui", rFrame)
+    , m_xBox(m_pUIBuilder->get("box"))
+{
+}
+
+ResizableDockingWindow::ResizableDockingWindow(vcl::Window* pParent, WinBits nStyle)
+    : DockingWindow(pParent, nStyle)
+{
+}
+
+ResizableDockingWindow::~ResizableDockingWindow()
+{
+    disposeOnce();
+}
+
+void ResizableDockingWindow::dispose()
 {
     m_xBox.clear();
     DockingWindow::dispose();

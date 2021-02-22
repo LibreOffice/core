@@ -42,7 +42,6 @@
 #include <svl/srchdefs.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <tools/stream.hxx>
@@ -260,21 +259,19 @@ WinBits const DockingWindow::StyleBits =
     WB_BORDER | WB_3DLOOK | WB_CLIPCHILDREN |
     WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_DOCKABLE;
 
-DockingWindow::DockingWindow(vcl::Window* pParent, const OUString& rUIXMLDescription, const OString& rID) :
-    ::DockingWindow(pParent, "DockingWindow", "vcl/ui/dockingwindow.ui"),
-    pLayout(nullptr),
-    nShowCount(0)
+DockingWindow::DockingWindow(vcl::Window* pParent, const OUString& rUIXMLDescription, const OString& rID)
+    : ResizableDockingWindow(pParent)
+    , pLayout(nullptr)
+    , nShowCount(0)
 {
-    m_xVclContentArea = VclPtr<VclVBox>::Create(this);
-    m_xVclContentArea->Show();
-    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription, true));
+    m_xBuilder.reset(Application::CreateInterimBuilder(m_xBox.get(), rUIXMLDescription, true));
     m_xContainer = m_xBuilder->weld_container(rID);
 }
 
-DockingWindow::DockingWindow (Layout* pParent) :
-    ::DockingWindow(pParent, StyleBits),
-    pLayout(pParent),
-    nShowCount(0)
+DockingWindow::DockingWindow (Layout* pParent)
+    : ResizableDockingWindow(pParent, StyleBits)
+    , pLayout(pParent)
+    , nShowCount(0)
 { }
 
 DockingWindow::~DockingWindow()
@@ -286,9 +283,8 @@ void DockingWindow::dispose()
 {
     m_xContainer.reset();
     m_xBuilder.reset();
-    m_xVclContentArea.disposeAndClear();
     pLayout.clear();
-    ::DockingWindow::dispose();
+    ResizableDockingWindow::dispose();
 }
 
 // Sets the position and the size of the docking window. This property is saved
@@ -327,12 +323,12 @@ void DockingWindow::Show (bool bShow) // = true
     if (bShow)
     {
         if (++nShowCount == 1)
-            ::DockingWindow::Show();
+            ResizableDockingWindow::Show();
     }
     else
     {
         if (--nShowCount == 0)
-            ::DockingWindow::Hide();
+            ResizableDockingWindow::Hide();
     }
 }
 
@@ -361,7 +357,7 @@ bool DockingWindow::Docking( const Point& rPos, tools::Rectangle& rRect )
 void DockingWindow::EndDocking( const tools::Rectangle& rRect, bool bFloatMode )
 {
     if ( bFloatMode )
-        ::DockingWindow::EndDocking( rRect, bFloatMode );
+        ResizableDockingWindow::EndDocking( rRect, bFloatMode );
     else
     {
         SetFloatingMode(false);

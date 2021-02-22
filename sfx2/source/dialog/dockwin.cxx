@@ -20,7 +20,6 @@
 #include <svl/eitem.hxx>
 #include <svl/solar.hrc>
 #include <vcl/event.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 
 #include <vcl/svapp.hxx>
@@ -435,7 +434,7 @@ SfxDockingWindow_Impl::SfxDockingWindow_Impl(SfxDockingWindow* pBase)
 */
 void SfxDockingWindow::Resize()
 {
-    DockingWindow::Resize();
+    ResizableDockingWindow::Resize();
     Invalidate();
     if ( !pImpl || !pImpl->bConstructed || !pMgr )
         return;
@@ -730,7 +729,7 @@ void SfxDockingWindow::EndDocking( const tools::Rectangle& rRect, bool bFloatMod
     }
     else
     {
-        DockingWindow::EndDocking(rRect, bFloatMode);
+        ResizableDockingWindow::EndDocking(rRect, bFloatMode);
     }
 
     SetAlignment( IsFloatingMode() ? SfxChildAlignment::NOALIGNMENT : pImpl->GetDockAlignment() );
@@ -754,10 +753,10 @@ void SfxDockingWindow::Resizing( Size& /*rSize*/ )
     required because the docking is implemented in Sfx through SfxChildWindows.
 */
 SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
-    vcl::Window* pParent, WinBits nWinBits) :
-    DockingWindow (pParent, nWinBits),
-    pBindings(pBindinx),
-    pMgr(pCW)
+    vcl::Window* pParent, WinBits nWinBits)
+    : ResizableDockingWindow(pParent, nWinBits)
+    , pBindings(pBindinx)
+    , pMgr(pCW)
 {
     pImpl.reset(new SfxDockingWindow_Impl(this));
 }
@@ -767,13 +766,11 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
 */
 SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
-    : DockingWindow(pParent, "DockingWindow", "vcl/ui/dockingwindow.ui")
+    : ResizableDockingWindow(pParent)
     , pBindings(pBindinx)
     , pMgr(pCW)
 {
-    m_xVclContentArea = VclPtr<VclVBox>::Create(this);
-    m_xVclContentArea->Show();
-    m_xBuilder.reset(Application::CreateInterimBuilder(m_xVclContentArea, rUIXMLDescription, true));
+    m_xBuilder.reset(Application::CreateInterimBuilder(m_xBox, rUIXMLDescription, true));
     m_xContainer = m_xBuilder->weld_container(rID);
 
     pImpl.reset(new SfxDockingWindow_Impl(this));
@@ -1043,8 +1040,7 @@ void SfxDockingWindow::dispose()
     pImpl.reset();
     m_xContainer.reset();
     m_xBuilder.reset();
-    m_xVclContentArea.disposeAndClear();
-    DockingWindow::dispose();
+    ResizableDockingWindow::dispose();
 }
 
 void SfxDockingWindow::ReleaseChildWindow_Impl()
@@ -1437,7 +1433,7 @@ void SfxDockingWindow::Paint(vcl::RenderContext&, const tools::Rectangle& /*rRec
 void SfxDockingWindow::SetMinOutputSizePixel( const Size& rSize )
 {
     pImpl->aMinSize = rSize;
-    DockingWindow::SetMinOutputSizePixel( rSize );
+    ResizableDockingWindow::SetMinOutputSizePixel( rSize );
 }
 
 /** Set the minimum size which is returned.*/
@@ -1449,7 +1445,7 @@ const Size& SfxDockingWindow::GetMinOutputSizePixel() const
 bool SfxDockingWindow::EventNotify( NotifyEvent& rEvt )
 {
     if ( !pImpl )
-        return DockingWindow::EventNotify( rEvt );
+        return ResizableDockingWindow::EventNotify( rEvt );
 
     if ( rEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
@@ -1464,7 +1460,7 @@ bool SfxDockingWindow::EventNotify( NotifyEvent& rEvt )
         // In VCL EventNotify goes first to the window itself, also call the
         // base class, otherwise the parent learns nothing
         // if ( rEvt.GetWindow() == this )  PB: #i74693# not necessary any longer
-        DockingWindow::EventNotify( rEvt );
+        ResizableDockingWindow::EventNotify( rEvt );
         return true;
     }
     else if( rEvt.GetType() == MouseNotifyEvent::KEYINPUT )
@@ -1482,9 +1478,8 @@ bool SfxDockingWindow::EventNotify( NotifyEvent& rEvt )
         pBindings->SetActiveFrame( nullptr );
     }
 
-    return DockingWindow::EventNotify( rEvt );
+    return ResizableDockingWindow::EventNotify( rEvt );
 }
-
 
 void SfxDockingWindow::SetItemSize_Impl( const Size& rSize )
 {
@@ -1529,7 +1524,7 @@ void SfxDockingWindow::StateChanged( StateChangedType nStateChange )
     if ( nStateChange == StateChangedType::InitShow )
         Initialize_Impl();
 
-    DockingWindow::StateChanged( nStateChange );
+    ResizableDockingWindow::StateChanged( nStateChange );
 }
 
 void SfxDockingWindow::Move()

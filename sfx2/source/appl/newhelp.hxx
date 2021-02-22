@@ -410,13 +410,12 @@ public:
 
 class HelpInterceptor_Impl;
 class HelpListener_Impl;
-class SfxHelpWindow_Impl : public DockingWindow
+class SfxHelpWindow_Impl : public ResizableDockingWindow
 {
 private:
 friend class SfxHelpIndexWindow_Impl;
 
     std::unique_ptr<weld::Builder> m_xBuilder;
-    VclPtr<vcl::Window> m_xVclContentArea;
     std::unique_ptr<weld::Paned> m_xContainer;
     std::unique_ptr<weld::Container> m_xHelpPaneWindow;
     std::unique_ptr<weld::Container> m_xHelpTextWindow;
