@@ -1148,6 +1148,9 @@ namespace
 /// Outputs an item set, that contains the formatting of the paragraph marker.
 void lcl_writeParagraphMarkerProperties(DocxAttributeOutput& rAttributeOutput, const SfxItemSet& rParagraphMarkerProperties)
 {
+    const SfxItemSet* pOldI = rAttributeOutput.GetExport().GetCurItemSet();
+    rAttributeOutput.GetExport().SetCurItemSet(&rParagraphMarkerProperties);
+
     SfxWhichIter aIter(rParagraphMarkerProperties);
     sal_uInt16 nWhichId = aIter.FirstWhich();
     const SfxPoolItem* pItem = nullptr;
@@ -1174,6 +1177,7 @@ void lcl_writeParagraphMarkerProperties(DocxAttributeOutput& rAttributeOutput, c
         }
         nWhichId = aIter.NextWhich();
     }
+    rAttributeOutput.GetExport().SetCurItemSet(pOldI);
 }
 
 const char *RubyAlignValues[] =
@@ -1230,6 +1234,7 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     rtl::Reference<sax_fastparser::FastAttributeList> pCharLangAttrList_Original(m_pCharLangAttrList);
     m_pCharLangAttrList.clear();
 
+    assert (!GetExport().GetCurItemSet() && "Information gathering: Changing CurItemSet and want to ensure that one doesn't already exist in some context that we unknowingly clobber. Known to clobber fake-ish TOX m_pChpIter - have to assume that is OK.");
     lcl_writeParagraphMarkerProperties(*this, rParagraphMarkerProperties);
 
     // Write the collected run properties that are stored in 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList'
