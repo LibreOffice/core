@@ -352,20 +352,30 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
             // is relative to the print area of the anchor text frame.
             tools::Rectangle aTextRectangle = SwTextBoxHelper::getTextRectangle(pShape);
 
-            SwFormatHoriOrient aHori(pTextBox->GetHoriOrient());
-            aHori.SetHoriOrient(css::text::HoriOrientation::NONE);
-            sal_Int32 nLeft = aTextRectangle.getX() - rFrame.getFrameArea().Left()
-                              - rFrame.getFramePrintArea().Left();
-            aHori.SetPos(nLeft);
-
+            const auto aPos(pShape->GetAnchor().GetContentAnchor());
             SwFormatVertOrient aVert(pTextBox->GetVertOrient());
-            aVert.SetVertOrient(css::text::VertOrientation::NONE);
-            sal_Int32 const nTop = aTextRectangle.getY() - rFrame.getFrameArea().Top()
-                                   - rFrame.getFramePrintArea().Top();
-            aVert.SetPos(nTop);
+
+            // tdf#138598 Replace vertical alignment of As_char textboxes in footer
+            // tdf#140158 Remove horizontal positioning of As_char textboxes, because
+            // the anchor moving does the same for it.
+            if (!aPos->nNode.GetNode().FindFooterStartNode())
+            {
+                aVert.SetVertOrient(css::text::VertOrientation::NONE);
+                sal_Int32 const nTop = aTextRectangle.getY() - rFrame.getFrameArea().Top()
+                                       - rFrame.getFramePrintArea().Top();
+                aVert.SetPos(nTop);
+            }
+            else
+            {
+                aVert.SetVertOrient(css::text::VertOrientation::NONE);
+                aVert.SetPos(SwTextBoxHelper::getTextRectangle(pShape, false).getY());
+            }
+
+            SwFormatAnchor aNewTxBxAnchor(pTextBox->GetAnchor());
+            aNewTxBxAnchor.SetAnchor(aPos);
 
             pTextBox->LockModify();
-            pTextBox->SetFormatAttr(aHori);
+            pTextBox->SetFormatAttr(aNewTxBxAnchor);
             pTextBox->SetFormatAttr(aVert);
             pTextBox->UnlockModify();
         }
