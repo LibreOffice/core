@@ -444,23 +444,29 @@ void SwPageDesc::StashFrameFormat(const SwFrameFormat& rFormat, bool bHeader, bo
 
 const SwFrameFormat* SwPageDesc::GetStashedFrameFormat(bool bHeader, bool bLeft, bool bFirst) const
 {
+    std::shared_ptr<SwFrameFormat>* pFormat = nullptr;
+
     if (bLeft && !bFirst)
     {
-        return bHeader ? m_aStashedHeader.m_pStashedLeft.get() : m_aStashedFooter.m_pStashedLeft.get();
+        pFormat = bHeader ? &m_aStashedHeader.m_pStashedLeft : &m_aStashedFooter.m_pStashedLeft;
     }
     else if (!bLeft && bFirst)
     {
-        return bHeader ? m_aStashedHeader.m_pStashedFirst.get() : m_aStashedFooter.m_pStashedFirst.get();
+        pFormat = bHeader ? &m_aStashedHeader.m_pStashedFirst : &m_aStashedFooter.m_pStashedFirst;
     }
     else if (bLeft && bFirst)
     {
-        return bHeader ? m_aStashedHeader.m_pStashedFirstLeft.get() : m_aStashedFooter.m_pStashedFirstLeft.get();
+        pFormat = bHeader ? &m_aStashedHeader.m_pStashedFirstLeft : &m_aStashedFooter.m_pStashedFirstLeft;
     }
     else
     {
         SAL_WARN("sw", "Right page format is never stashed.");
         return nullptr;
     }
+
+    const SwFrameFormat* retVal = pFormat->get();
+    pFormat->reset();
+    return retVal;
 }
 
 // Page styles
