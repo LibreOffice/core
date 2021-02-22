@@ -494,9 +494,8 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
         PasswordRequestMode eRequestMode = PasswordRequestMode_PASSWORD_ENTER;
         while( eResult == DocPasswordVerifierResult::WrongPassword )
         {
-            DocPasswordRequest* pRequest = new DocPasswordRequest( eRequestType, eRequestMode, rDocumentUrl );
-            Reference< XInteractionRequest > xRequest( pRequest );
-            rxInteractHandler->handle( xRequest );
+            rtl::Reference<DocPasswordRequest> pRequest = new DocPasswordRequest( eRequestType, eRequestMode, rDocumentUrl );
+            rxInteractHandler->handle( pRequest );
             if( pRequest->isPassword() )
             {
                 if( !pRequest->getPassword().isEmpty() )
