@@ -65,8 +65,7 @@ AttributeList::~AttributeList()
 
 css::uno::Reference< css::util::XCloneable > AttributeList::createClone()
 {
-    AttributeList *p = new AttributeList( *this );
-    return css::uno::Reference< css::util::XCloneable > ( static_cast<css::util::XCloneable *>(p) );
+    return new AttributeList( *this );
 }
 
 } // namespace comphelper
