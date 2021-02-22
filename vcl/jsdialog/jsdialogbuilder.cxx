@@ -1121,6 +1121,7 @@ void JSTreeView::select(int pos)
         }
     }
     enable_notify_events();
+    sendUpdate();
 }
 
 weld::TreeView* JSTreeView::get_drag_source() const { return g_DragSource; }
