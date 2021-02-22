@@ -185,7 +185,8 @@ void ScTabView::UpdateAutoFillMark(bool bFromPaste)
 {
     // single selection or cursor
     ScRange aMarkRange;
-    bool bMarked = (aViewData.GetSimpleArea( aMarkRange ) == SC_MARK_SIMPLE);
+    ScMarkType eMarkType = aViewData.GetSimpleArea(aMarkRange);
+    bool bMarked = eMarkType == SC_MARK_SIMPLE || eMarkType == SC_MARK_SIMPLE_FILTERED;
 
     for (sal_uInt16 i = 0; i < 4; i++)
     {
