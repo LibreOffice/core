@@ -313,7 +313,11 @@ static OString lcl_escapeQuotes(const OString &rStr)
     {
         if (rStr[i] == '"' || rStr[i] == '\\')
             aBuf.append('\\');
-        aBuf.append(rStr[i]);
+    // when JSON content has newline between quotes, this creates a non valid JSON
+    // only happens because even a non-pretty generated JSON has a newline at the end
+    // and we add " after this function.
+        if (rStr[i] != '\n')
+            aBuf.append(rStr[i]);
     }
     return aBuf.makeStringAndClear();
 }
