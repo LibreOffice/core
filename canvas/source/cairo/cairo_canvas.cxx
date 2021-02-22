@@ -176,7 +176,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_rendering_Canvas_Cairo_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
 {
-    auto p = new cairocanvas::Canvas(args, context);
+    rtl::Reference<cairocanvas::Canvas> p = new cairocanvas::Canvas(args, context);
     p->acquire();
     try {
         p->initialize();
@@ -185,7 +185,7 @@ com_sun_star_comp_rendering_Canvas_Cairo_get_implementation(
         p->release();
         throw;
     }
-    return static_cast<cppu::OWeakObject*>(p);
+    return static_cast<cppu::OWeakObject*>(p.get());
 }
 
 
