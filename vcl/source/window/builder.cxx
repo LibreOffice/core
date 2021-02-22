@@ -592,7 +592,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
         SvTabListBox *pTreeBoxTarget = dynamic_cast<SvTabListBox*>(pTarget);
         // pStore may be empty
         const ListStore *pStore = get_model_by_name(elem.m_sValue.toUtf8());
-        SAL_WARN_IF(!pListBoxTarget && !pComboBoxTarget && !pTreeBoxTarget, "vcl", "missing elements of combobox");
+        SAL_WARN_IF(!pListBoxTarget && !pComboBoxTarget && !pTreeBoxTarget && !dynamic_cast<IconView*>(pTarget), "vcl", "missing elements of combobox");
         if (pListBoxTarget && pStore)
             mungeModel(*pListBoxTarget, *pStore, elem.m_nActiveId);
         else if (pComboBoxTarget && pStore)
