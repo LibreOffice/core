@@ -781,9 +781,8 @@ uno::Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection()
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  )
 {
-    ODatabaseMetaDataResultSet* pResultSet = new
+    rtl::Reference<ODatabaseMetaDataResultSet> pResultSet = new
         ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTableTypes);
-    uno::Reference< XResultSet > xResultSet = pResultSet;
 
     ODatabaseMetaDataResultSet::ORows aResults;
     ODatabaseMetaDataResultSet::ORow aRow(2);
@@ -803,7 +802,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  )
     aResults.push_back(aRow);
 
     pResultSet->setRows(aResults);
-    return xResultSet;
+    return pResultSet;
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
@@ -812,9 +811,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
 
     // this returns an empty resultset where the column-names are already set
     // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet =
+    rtl::Reference<ODatabaseMetaDataResultSet> pResultSet =
             new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTypeInfo);
-    uno::Reference< XResultSet > xResultSet = pResultSet;
     static ODatabaseMetaDataResultSet::ORows aResults = []()
     {
         ODatabaseMetaDataResultSet::ORows tmp;
@@ -1029,7 +1027,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         return tmp;
     }();
     pResultSet->setRows(aResults);
-    return xResultSet;
+    return pResultSet;
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
@@ -1042,9 +1040,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
              "Table: " << sTable
              << " & ColumnNamePattern: " << sColumnNamePattern);
 
-    ODatabaseMetaDataResultSet* pResultSet = new
+    rtl::Reference<ODatabaseMetaDataResultSet> pResultSet = new
         ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eColumnPrivileges);
-    uno::Reference< XResultSet > xResultSet = pResultSet;
     uno::Reference< XStatement > statement = m_pConnection->createStatement();
 
     static const char wld[] = "%";
@@ -1104,7 +1101,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
 
     pResultSet->setRows( aResults );
 
-    return xResultSet;
+    return pResultSet;
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
@@ -1308,12 +1305,11 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
 
         aResults.push_back(aCurrentRow);
     }
-    ODatabaseMetaDataResultSet* pResultSet = new
+    rtl::Reference<ODatabaseMetaDataResultSet> pResultSet = new
             ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eColumns);
-    uno::Reference< XResultSet > xResultSet = pResultSet;
     pResultSet->setRows( aResults );
 
-    return xResultSet;
+    return pResultSet;
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
@@ -1325,9 +1321,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     SAL_INFO("connectivity.firebird", "getTables() with "
              "TableNamePattern: " << tableNamePattern);
 
-    ODatabaseMetaDataResultSet* pResultSet = new
+    rtl::Reference<ODatabaseMetaDataResultSet> pResultSet = new
         ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
-    uno::Reference< XResultSet > xResultSet = pResultSet;
     uno::Reference< XStatement > statement = m_pConnection->createStatement();
 
     static const char wld[] = "%";
@@ -1431,7 +1426,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
     pResultSet->setRows( aResults );
 
-    return xResultSet;
+    return pResultSet;
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
@@ -1477,9 +1472,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
 
 uno::Reference< XResultSet > ODatabaseMetaData::lcl_getKeys(const bool bIsImport, std::u16string_view table )
 {
-    ODatabaseMetaDataResultSet* pResultSet = new
+    rtl::Reference<ODatabaseMetaDataResultSet> pResultSet = new
         ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eImportedKeys);
-    uno::Reference< XResultSet > xResultSet = pResultSet;
 
     uno::Reference< XStatement > statement = m_pConnection->createStatement();
 
@@ -1559,7 +1553,7 @@ uno::Reference< XResultSet > ODatabaseMetaData::lcl_getKeys(const bool bIsImport
     }
 
     pResultSet->setRows( aResults );
-    return xResultSet;
+    return pResultSet;
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
@@ -1610,12 +1604,11 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
 
         aResults.push_back(aCurrentRow);
     }
-    ODatabaseMetaDataResultSet* pResultSet = new
+    rtl::Reference<ODatabaseMetaDataResultSet> pResultSet = new
             ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::ePrimaryKeys);
-    uno::Reference< XResultSet > xResultSet = pResultSet;
     pResultSet->setRows( aResults );
 
-    return xResultSet;
+    return pResultSet;
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
@@ -1704,12 +1697,11 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
 
         aResults.push_back(aCurrentRow);
     }
-    ODatabaseMetaDataResultSet* pResultSet = new
+    rtl::Reference<ODatabaseMetaDataResultSet> pResultSet = new
             ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::ePrimaryKeys);
-    uno::Reference< XResultSet > xResultSet = pResultSet;
     pResultSet->setRows( aResults );
 
-    return xResultSet;
+    return pResultSet;
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
@@ -1729,9 +1721,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     SAL_INFO("connectivity.firebird", "getTablePrivileges() with "
              "TableNamePattern: " << sTableNamePattern);
 
-    ODatabaseMetaDataResultSet* pResultSet = new
+    rtl::Reference<ODatabaseMetaDataResultSet> pResultSet = new
         ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTablePrivileges);
-    uno::Reference< XResultSet > xResultSet = pResultSet;
     uno::Reference< XStatement > statement = m_pConnection->createStatement();
 
     // TODO: column specific privileges are included, we may need
@@ -1785,7 +1776,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
 
     pResultSet->setRows( aResults );
 
-    return xResultSet;
+    return pResultSet;
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(

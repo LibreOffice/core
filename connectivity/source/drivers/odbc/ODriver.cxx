@@ -87,12 +87,11 @@ Reference< XConnection > SAL_CALL ODBCDriver::connect( const OUString& url, cons
         if(!EnvironmentHandle(aPath))
             throw SQLException(aPath,*this,OUString(),1000,Any());
     }
-    OConnection* pCon = new OConnection(m_pDriverHandle,this);
-    Reference< XConnection > xCon = pCon;
+    rtl::Reference<OConnection> pCon = new OConnection(m_pDriverHandle,this);
     pCon->Construct(url,info);
     m_xConnections.push_back(WeakReferenceHelper(*pCon));
 
-    return xCon;
+    return pCon;
 }
 
 sal_Bool SAL_CALL ODBCDriver::acceptsURL( const OUString& url )

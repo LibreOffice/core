@@ -68,12 +68,11 @@ Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url,
     if ( ! acceptsURL(url) )
         return nullptr;
 
-    OCalcConnection* pCon = new OCalcConnection(this);
+    rtl::Reference<OCalcConnection> pCon = new OCalcConnection(this);
     pCon->construct(url,info);
-    Reference< XConnection > xCon = pCon;
     m_xConnections.push_back(WeakReferenceHelper(*pCon));
 
-    return xCon;
+    return pCon;
 }
 
 sal_Bool SAL_CALL ODriver::acceptsURL( const OUString& url )

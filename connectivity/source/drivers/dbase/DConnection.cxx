@@ -74,8 +74,7 @@ css::uno::Reference< XTablesSupplier > ODbaseConnection::createCatalog()
     Reference< XTablesSupplier > xTab = m_xCatalog;
     if(!xTab.is())
     {
-        ODbaseCatalog *pCat = new ODbaseCatalog(this);
-        xTab = pCat;
+        xTab = new ODbaseCatalog(this);
         m_xCatalog = xTab;
     }
     return xTab;
@@ -97,9 +96,7 @@ Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareStatement( con
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-
-    ODbasePreparedStatement* pStmt = new ODbasePreparedStatement(this);
-    Reference< XPreparedStatement > xHoldAlive = pStmt;
+    rtl::Reference<ODbasePreparedStatement> pStmt = new ODbasePreparedStatement(this);
     pStmt->construct(sql);
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
     return pStmt;

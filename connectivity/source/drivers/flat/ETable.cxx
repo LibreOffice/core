@@ -176,7 +176,7 @@ void OFlatTable::fillColumns(const css::lang::Locale& _aLocale)
             aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
         }
 
-        sdbcx::OColumn* pColumn = new sdbcx::OColumn(aAlias,aTypeNames[i],OUString(),OUString(),
+        rtl::Reference<sdbcx::OColumn> pColumn = new sdbcx::OColumn(aAlias,aTypeNames[i],OUString(),OUString(),
                                                 ColumnValue::NULLABLE,
                                                 m_aPrecisions[i],
                                                 m_aScales[i],
@@ -186,8 +186,7 @@ void OFlatTable::fillColumns(const css::lang::Locale& _aLocale)
                                                 false,
                                                 bCase,
                                                 m_CatalogName, getSchema(), getName());
-        Reference< XPropertySet> xCol = pColumn;
-        m_aColumns->push_back(xCol);
+        m_aColumns->push_back(pColumn);
     }
 
     m_pFileStream->Seek(m_aRowPosToFilePos[0].second);

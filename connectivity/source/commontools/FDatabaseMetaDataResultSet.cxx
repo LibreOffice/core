@@ -496,128 +496,126 @@ Any SAL_CALL ODatabaseMetaDataResultSet::getWarnings(  )
 
 void ODatabaseMetaDataResultSet::setProceduresMap()
 {
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData();
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
     pMetaData->setProceduresMap();
     m_xMetaData = pMetaData;
 }
 
 void ODatabaseMetaDataResultSet::setCatalogsMap()
 {
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData();
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
     pMetaData->setCatalogsMap();
     m_xMetaData = pMetaData;
 }
 
 void ODatabaseMetaDataResultSet::setSchemasMap()
 {
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData();
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
     pMetaData->setSchemasMap();
     m_xMetaData = pMetaData;
 }
 
 void ODatabaseMetaDataResultSet::setColumnPrivilegesMap()
 {
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData();
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
     pMetaData->setColumnPrivilegesMap();
     m_xMetaData = pMetaData;
 }
 
 void ODatabaseMetaDataResultSet::setColumnsMap()
 {
-
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData();
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
     pMetaData->setColumnsMap();
     m_xMetaData = pMetaData;
 }
 
 void ODatabaseMetaDataResultSet::setTablesMap()
 {
-
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData();
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
     pMetaData->setTablesMap();
     m_xMetaData = pMetaData;
 }
 
 void ODatabaseMetaDataResultSet::setProcedureColumnsMap()
 {
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData();
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
     pMetaData->setProcedureColumnsMap();
     m_xMetaData = pMetaData;
 }
 
 void ODatabaseMetaDataResultSet::setPrimaryKeysMap()
 {
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData();
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
     pMetaData->setPrimaryKeysMap();
     m_xMetaData = pMetaData;
 }
 
 void ODatabaseMetaDataResultSet::setIndexInfoMap()
 {
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData();
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
     pMetaData->setIndexInfoMap();
     m_xMetaData = pMetaData;
 }
 
 void ODatabaseMetaDataResultSet::setTablePrivilegesMap()
 {
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData();
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
     pMetaData->setTablePrivilegesMap();
     m_xMetaData = pMetaData;
 }
 
 void ODatabaseMetaDataResultSet::setCrossReferenceMap()
 {
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData();
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
     pMetaData->setCrossReferenceMap();
     m_xMetaData = pMetaData;
 }
 
 void ODatabaseMetaDataResultSet::setVersionColumnsMap()
 {
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData();
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
     pMetaData->setVersionColumnsMap();
     m_xMetaData = pMetaData;
 }
 
 void ODatabaseMetaDataResultSet::setBestRowIdentifierMap()
 {
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData();
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
     pMetaData->setBestRowIdentifierMap();
     m_xMetaData = pMetaData;
 }
 
 void ODatabaseMetaDataResultSet::setTypeInfoMap()
 {
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData();
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
     pMetaData->setTypeInfoMap();
     m_xMetaData = pMetaData;
 }
 
 void ODatabaseMetaDataResultSet::setUDTsMap()
 {
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData();
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
     pMetaData->setUDTsMap();
     m_xMetaData = pMetaData;
 }
 
 void ODatabaseMetaDataResultSet::setTableTypes()
 {
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData();
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
     pMetaData->setTableTypes();
     m_xMetaData = pMetaData;
 }
 
 void ODatabaseMetaDataResultSet::setExportedKeysMap()
 {
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData();
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
     pMetaData->setExportedKeysMap();
     m_xMetaData = pMetaData;
 }
 
 void ODatabaseMetaDataResultSet::setImportedKeysMap()
 {
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData();
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
     pMetaData->setImportedKeysMap();
     m_xMetaData = pMetaData;
 }

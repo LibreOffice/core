@@ -150,13 +150,12 @@ Reference< XConnection > SAL_CALL FirebirdDriver::connect(
     if ( ! acceptsURL(url) )
         return nullptr;
 
-    Connection* pCon = new Connection();
-    Reference< XConnection > xCon = pCon;
+    rtl::Reference<Connection> pCon = new Connection();
     pCon->construct(url, info);
 
     m_xConnections.push_back(WeakReferenceHelper(*pCon));
 
-    return xCon;
+    return pCon;
 }
 
 sal_Bool SAL_CALL FirebirdDriver::acceptsURL( const OUString& url )

@@ -372,7 +372,7 @@ Reference< XResultSet > OStatement_Base::getResultSet(bool checkCount)
         ::dbtools::throwFunctionSequenceException(*this);
     }
 
-    OResultSet* pRs = nullptr;
+    rtl::Reference<OResultSet> pRs;
     sal_Int32 numCols = 1;
 
     // If we already know we have result columns, checkCount
@@ -1063,7 +1063,7 @@ void SAL_CALL OStatement::release() throw()
     OStatement_BASE2::release();
 }
 
-OResultSet* OStatement_Base::createResultSet()
+rtl::Reference<OResultSet> OStatement_Base::createResultSet()
 {
     return new OResultSet(m_aStatementHandle,this);
 }

@@ -484,7 +484,7 @@ namespace
                         }
                     }
 
-                    connectivity::sdbcx::OColumn* pRet = new connectivity::sdbcx::OColumn(_rName,
+                    xProp = new connectivity::sdbcx::OColumn(_rName,
                                                 aField6,
                                                 sField13,
                                                 sField12,
@@ -500,7 +500,6 @@ namespace
                                                 _aSchema,
                                                 _aTable);
 
-                    xProp = pRet;
                     break;
                 }
             }

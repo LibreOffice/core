@@ -159,12 +159,11 @@ void OWriterTable::fillColumns()
             aFind = connectivity::find(m_aColumns->begin(), m_aColumns->end(), aAlias, aCase);
         }
 
-        auto pColumn = new sdbcx::OColumn(
+        rtl::Reference<sdbcx::OColumn> pColumn = new sdbcx::OColumn(
             aAlias, aTypeName, OUString(), OUString(), sdbc::ColumnValue::NULLABLE, nPrecision,
             nDecimals, eType, false, false, bCurrency, bStoresMixedCaseQuotedIdentifiers,
             m_CatalogName, getSchema(), getName());
-        uno::Reference<XPropertySet> xCol = pColumn;
-        m_aColumns->push_back(xCol);
+        m_aColumns->push_back(pColumn);
     }
 }
 

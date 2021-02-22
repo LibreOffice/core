@@ -268,14 +268,13 @@ void OMySQLTable::alterColumnType(sal_Int32 nNewType, const OUString& _rColName,
     OUString sSql
         = getAlterTableColumnPart() + " CHANGE " + ::dbtools::quoteName(sQuote, _rColName) + " ";
 
-    OColumn* pColumn = new OColumn(true);
-    Reference<XPropertySet> xProp = pColumn;
-    ::comphelper::copyProperties(_xDescriptor, xProp);
-    xProp->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),
-                            makeAny(nNewType));
+    rtl::Reference<OColumn> pColumn = new OColumn(true);
+    ::comphelper::copyProperties(_xDescriptor, pColumn);
+    pColumn->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),
+                              makeAny(nNewType));
 
     sSql += OTables::adjustSQL(::dbtools::createStandardColumnPart(
-        xProp, getConnection(), static_cast<OTables*>(m_pTables), getTypeCreatePattern()));
+        pColumn, getConnection(), static_cast<OTables*>(m_pTables), getTypeCreatePattern()));
     executeStatement(sSql);
 }
 
