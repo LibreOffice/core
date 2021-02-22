@@ -72,8 +72,8 @@ SwVbaDocuments::getElementType()
 uno::Reference< container::XEnumeration >
 SwVbaDocuments::createEnumeration()
 {
-    // #FIXME its possible the DocumentEnumImpl here doesn't reflect
-    // the state of this object ( although it should ) would be
+    // #FIXME it's possible the DocumentEnumImpl here doesn't reflect
+    // the state of this object (although it should) would be
     // safer to create an enumeration based on this objects state
     // rather than one effectively based of the desktop component
     uno::Reference< container::XEnumerationAccess > xEnumerationAccess( m_xIndexAccess, uno::UNO_QUERY_THROW );
