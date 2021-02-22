@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eea4f932_728f1875",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Math.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-22T09:10:52Z",
+      "side": 0,
+      "message": "Is it OK to remove the UIHints? It *seems* like they may help translators to understand the context if they translate the strings (do they?)\n\nAnd it would be good to have a reference to the deprecation info - be it a mail, or a release note, or some comment in a bugzilla issue ... just anything :-)",
+      "revId": "927b4e74c4f841336575d20036e77bde10cd335a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
