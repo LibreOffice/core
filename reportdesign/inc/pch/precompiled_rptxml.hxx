@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-12 11:04:54 using:
+ Generated on 2021-02-22 20:24:33 using:
  ./bin/update_pch reportdesign rptxml --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -22,7 +22,9 @@
 
 #if PCH_LEVEL >= 1
 #include <cassert>
+#include <cstddef>
 #include <cstring>
+#include <functional>
 #include <limits>
 #include <memory>
 #include <new>
@@ -71,6 +73,7 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <comphelper/comphelperdllapi.h>
