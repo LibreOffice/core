@@ -16,6 +16,24 @@
       "revId": "0239414e5e1a790a0ed9fca41252f093a62f3f65",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d3e2d4f_55827000",
+        "filename": "vcl/jsdialog/executor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000865
+      },
+      "writtenOn": "2021-02-22T19:09:16Z",
+      "side": 1,
+      "message": "Not sure, but calling the \"select\" method if the treeview is configured with single selection it should deselect the old one, not necessary to call \"unselect\". So I think it is better to handle separate actions if it is multiple selections",
+      "parentUuid": "0a18d926_6a6b02d7",
+      "revId": "0239414e5e1a790a0ed9fca41252f093a62f3f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
