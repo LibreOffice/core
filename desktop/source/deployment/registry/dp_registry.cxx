@@ -273,8 +273,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
     OUString const & cachePath,
     Reference<XComponentContext> const & xComponentContext )
 {
-    PackageRegistryImpl * that = new PackageRegistryImpl;
-    Reference<deployment::XPackageRegistry> xRet(that);
+    rtl::Reference<PackageRegistryImpl> that = new PackageRegistryImpl;
 
     // auto-detect all registered package registries:
     Reference<container::XEnumeration> xEnum(
@@ -325,7 +324,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
                     "cannot instantiate PackageRegistryBackend service: "
                     + Reference<lang::XServiceInfo>(
                         element, UNO_QUERY_THROW )->getImplementationName(),
-                    static_cast<OWeakObject *>(that) );
+                    static_cast<OWeakObject *>(that.get()) );
             }
 
             that->insertBackend( xBackend );
@@ -407,7 +406,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
     }
 #endif
 
-    return xRet;
+    return that;
 }
 
 // XUpdatable: broadcast to backends
