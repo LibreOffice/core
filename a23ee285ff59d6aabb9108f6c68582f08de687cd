@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33c6ec83_46c41d97",
+        "filename": "sw/qa/extras/layout/layout2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-22T08:30:06Z",
+      "side": 1,
+      "message": "Here and elsewhere:  For one, I don\u0027t understand the \"Mac Pro 2012\" part of the comment---is it really only that specific model that the test should be excluded on (and why exactly that model)?  For another, the test is excluded unconditionally.",
+      "revId": "a23ee285ff59d6aabb9108f6c68582f08de687cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f38178ab_c2ea5dfd",
+        "filename": "vcl/qa/cppunit/BackendTest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-22T08:30:06Z",
+      "side": 1,
+      "message": "here and elsewhere, it would IMO be better if the comment was closer to the code it comments on (i.e., at least without an empty line between the comment and the #ifndef)",
+      "revId": "a23ee285ff59d6aabb9108f6c68582f08de687cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
