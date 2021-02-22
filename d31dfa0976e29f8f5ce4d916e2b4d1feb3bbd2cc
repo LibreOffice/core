@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dce7acca_6019f5d2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-22T05:38:53Z",
+      "side": 1,
+      "message": "This line is redundant. It simply repeats the first line of the message. No need to use \"Why?\" - this is a technical text, not a novel ;-)",
+      "revId": "d31dfa0976e29f8f5ce4d916e2b4d1feb3bbd2cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfeb82f1_5b08344d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-22T05:38:53Z",
+      "side": 1,
+      "message": "Please split the line to chunks no longer than 80 characters. It\u0027s OK when you keep long lines only when they are non-breakable, like URLs or dumps or logs.",
+      "revId": "d31dfa0976e29f8f5ce4d916e2b4d1feb3bbd2cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6bd94ab_01e2f4a7",
+        "filename": "chart2/qa/extras/charttest.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-22T05:38:53Z",
+      "side": 1,
+      "message": "Please do not leave trailing whitespace, and generally remove whole line when you remove its content.",
+      "revId": "d31dfa0976e29f8f5ce4d916e2b4d1feb3bbd2cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02145f7e_d4f3bdda",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-22T05:38:53Z",
+      "side": 1,
+      "message": "It would be good to mention in the commit message that saveAndReload calls loadFromDesktop itself, so checking its return is also redundant",
+      "revId": "d31dfa0976e29f8f5ce4d916e2b4d1feb3bbd2cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41dfccab_643e0de4",
+        "filename": "sc/qa/perf/scperfobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-22T05:38:53Z",
+      "side": 1,
+      "message": "And here, only *one* empty line should be between line 115 and 119.",
+      "revId": "d31dfa0976e29f8f5ce4d916e2b4d1feb3bbd2cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "265a80db_bd55e267",
+        "filename": "sc/qa/unit/cond_format_merge.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-22T05:38:53Z",
+      "side": 1,
+      "message": "And here, only one empty line between 46 and 49",
+      "revId": "d31dfa0976e29f8f5ce4d916e2b4d1feb3bbd2cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cf8f31a_a4f29474",
+        "filename": "sccomp/qa/unit/SwarmSolverTest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-22T05:38:53Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "d31dfa0976e29f8f5ce4d916e2b4d1feb3bbd2cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d352c36f_ccf076b3",
+        "filename": "sccomp/qa/unit/SwarmSolverTest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-22T05:38:53Z",
+      "side": 1,
+      "message": "... like you correctly did in this case",
+      "revId": "d31dfa0976e29f8f5ce4d916e2b4d1feb3bbd2cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35118109_770c2dda",
+        "filename": "xmlsecurity/qa/unit/signing/signing.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1068,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-22T05:38:53Z",
+      "side": 1,
+      "message": "Why is the check removed here?",
+      "revId": "d31dfa0976e29f8f5ce4d916e2b4d1feb3bbd2cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61a8c46b_378245b2",
+        "filename": "xmlsecurity/qa/unit/signing/signing.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-22T05:38:53Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "d31dfa0976e29f8f5ce4d916e2b4d1feb3bbd2cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82d40be7_1f1783b8",
+        "filename": "xmlsecurity/qa/unit/signing/signing.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-22T05:38:53Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "d31dfa0976e29f8f5ce4d916e2b4d1feb3bbd2cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
