@@ -5628,7 +5628,10 @@ void AttributeOutputBase::CharBackgroundBase( const SvxBrushItem& rBrush )
     }
     else
     {
-        CharHighlight(rBrush);
+        // Don't create a duplicate entry when converting to highlight. An existing one has priority.
+        // Character runs seem to need a different method to detect duplicates? Just continue to ignore that situation.
+        if (GetExport().m_aCurrentCharPropStarts.size() || !GetExport().HasItem(RES_CHRATR_HIGHLIGHT))
+            CharHighlight(rBrush);
     }
 }
 
