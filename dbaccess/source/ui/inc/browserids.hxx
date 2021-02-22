@@ -50,7 +50,6 @@
 #define ID_BROWSER_COLWIDTH                 10021  // column width
 #define ID_BROWSER_TABLEATTR                10022  // table format attributes
 #define ID_BROWSER_ROWHEIGHT                10023  // row height
-#define ID_BROWSER_COLUMNINFO               10024  // copies the column description to insert it into the table design
 #define ID_BROWSER_ADDTABLE                 SID_FM_ADDTABLE
 #define ID_BROWSER_EXPLORER                 SID_DSBROWSER_EXPLORER
 #define ID_BROWSER_DOCUMENT_DATASOURCE      SID_DOCUMENT_DATA_SOURCE
