@@ -27,8 +27,7 @@
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::container { class XIndexContainer; }
 namespace com::sun::star::container { class XNameAccess; }
-
-class PopupMenu;
+namespace weld { class Menu; }
 
 // FmGridHeader
 
@@ -66,10 +65,12 @@ protected:
         All disabled entries will be removed before executing the menu, so be careful with separators
         near entries you probably wish to disable ...
     */
-    virtual void    PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu);
+    virtual void    PreExecuteColumnContextMenu(sal_uInt16 nColId, weld::Menu& rMenu,
+                                                weld::Menu& rInsertMenu, weld::Menu& rChangeMenu,
+                                                weld::Menu& rShowMenu);
     /** After executing the context menu for a column this method is called.
     */
-    virtual void    PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult);
+    virtual void    PostExecuteColumnContextMenu(sal_uInt16 nColId, const weld::Menu& rMenu, const OString& rExecutionResult);
 
     // DropTargetHelper
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;

@@ -161,8 +161,10 @@ namespace dbaui
     protected:
 
         // FmGridHeader overridables
-        virtual void    PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu) override;
-        virtual void    PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult) override;
+        virtual void    PreExecuteColumnContextMenu(sal_uInt16 nColId, weld::Menu& rMenu,
+                                                    weld::Menu& rInsertMenu, weld::Menu& rChangeMenu,
+                                                    weld::Menu& rShowMenu) override;
+        virtual void    PostExecuteColumnContextMenu(sal_uInt16 nColId, const weld::Menu& rMenu, const OString& rExecutionResult) override;
 
     private:
         // DragSourceHelper overridables
