@@ -22,6 +22,23 @@
       "revId": "ae81ce4ee845ef321bed55198e53874ffafda117",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10176496_519180d5",
+        "filename": "basic/qa/basic_coverage/test_vartype_method.vb",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-22T10:27:30Z",
+      "side": 1,
+      "message": "It\u0027s understandable when you want to arrange things in columns; but please no right-aligning. Instead of\n\n    If    V_EMPTY \u003c\u003e 0 Or V_NULL \u003c\u003e 1                                   Then Exit Function\n    If  V_INTEGER \u003c\u003e 2 Or V_LONG \u003c\u003e 3 Or V_SINGLE \u003c\u003e 4 Or V_DOUBLE \u003c\u003e 5 Then Exit Function\n    If V_CURRENCY \u003c\u003e 6 Or V_DATE \u003c\u003e 7 Or V_STRING \u003c\u003e 8                  Then Exit Function\n\nplease do something like\n\n    If V_EMPTY    \u003c\u003e 0 Or V_NULL \u003c\u003e 1                                   Then Exit Function\n    If V_INTEGER  \u003c\u003e 2 Or V_LONG \u003c\u003e 3 Or V_SINGLE \u003c\u003e 4 Or V_DOUBLE \u003c\u003e 5 Then Exit Function\n    If V_CURRENCY \u003c\u003e 6 Or V_DATE \u003c\u003e 7 Or V_STRING \u003c\u003e 8                  Then Exit Function",
+      "revId": "ae81ce4ee845ef321bed55198e53874ffafda117",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
