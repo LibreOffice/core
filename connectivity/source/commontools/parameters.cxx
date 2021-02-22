@@ -643,15 +643,14 @@ namespace dbtools
         OSL_ENSURE ( _rxCompletionHandler.is(), "ParameterManager::completeParameters: invalid interaction handler!" );
 
         // two continuations (Ok and Cancel)
-        OInteractionAbort* pAbort = new OInteractionAbort;
-        OParameterContinuation* pParams = new OParameterContinuation;
+        rtl::Reference<OInteractionAbort> pAbort = new OInteractionAbort;
+        rtl::Reference<OParameterContinuation> pParams = new OParameterContinuation;
 
         // the request
         ParametersRequest aRequest;
         aRequest.Parameters = m_pOuterParameters.get();
         aRequest.Connection = _rxConnection;
-        OInteractionRequest* pRequest = new OInteractionRequest( makeAny( aRequest ) );
-        Reference< XInteractionRequest > xRequest( pRequest );
+        rtl::Reference<OInteractionRequest> pRequest = new OInteractionRequest( makeAny( aRequest ) );
 
         // some knittings
         pRequest->addContinuation( pAbort );
@@ -660,7 +659,7 @@ namespace dbtools
         // execute the request
         try
         {
-            _rxCompletionHandler->handle( xRequest );
+            _rxCompletionHandler->handle( pRequest );
         }
         catch( const Exception& )
         {

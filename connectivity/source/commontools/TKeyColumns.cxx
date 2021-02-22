@@ -99,19 +99,18 @@ sdbcx::ObjectType OKeyColumnsHelper::createObject(const OUString& _rName)
                     // sometimes we get an error when asking for this param
                 }
 
-                OKeyColumn* pRet = new OKeyColumn(aRefColumnName,
-                                                  _rName,
-                                                  aTypeName,
-                                                  sColumnDef,
-                                                  nNull,
-                                                  nSize,
-                                                  nDec,
-                                                  nDataType,
-                                                  isCaseSensitive(),
-                                                  aCatalog,
-                                                  aSchema,
-                                                  aTable);
-                xRet = pRet;
+                xRet = new OKeyColumn(aRefColumnName,
+                                    _rName,
+                                    aTypeName,
+                                    sColumnDef,
+                                    nNull,
+                                    nSize,
+                                    nDec,
+                                    nDataType,
+                                    isCaseSensitive(),
+                                    aCatalog,
+                                    aSchema,
+                                    aTable);
             }
         }
     }

@@ -45,12 +45,11 @@ using namespace ::com::sun::star::container;
 
 sdbcx::ObjectType ODbaseTables::createObject(const OUString& _rName)
 {
-    ODbaseTable* pRet = new ODbaseTable(this, static_cast<ODbaseConnection*>(static_cast<OFileCatalog&>(m_rParent).getConnection()),
+    rtl::Reference<ODbaseTable> pRet = new ODbaseTable(this, static_cast<ODbaseConnection*>(static_cast<OFileCatalog&>(m_rParent).getConnection()),
                                         _rName,"TABLE");
 
-    sdbcx::ObjectType xRet = pRet;
     pRet->construct();
-    return xRet;
+    return pRet;
 }
 
 void ODbaseTables::impl_refresh(  )

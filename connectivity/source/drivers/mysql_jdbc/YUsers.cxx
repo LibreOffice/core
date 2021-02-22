@@ -50,11 +50,7 @@ sdbcx::ObjectType OUsers::createObject(const OUString& _rName)
 
 void OUsers::impl_refresh() { m_pParent->refreshUsers(); }
 
-Reference<XPropertySet> OUsers::createDescriptor()
-{
-    OUserExtend* pNew = new OUserExtend(m_xConnection);
-    return pNew;
-}
+Reference<XPropertySet> OUsers::createDescriptor() { return new OUserExtend(m_xConnection); }
 
 // XAppend
 sdbcx::ObjectType OUsers::appendObject(const OUString& _rForName,

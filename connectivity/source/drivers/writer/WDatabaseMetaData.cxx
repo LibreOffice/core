@@ -47,8 +47,8 @@ uno::Reference<sdbc::XResultSet> SAL_CALL OWriterDatabaseMetaData::getTables(
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    auto pResult = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
-    uno::Reference<sdbc::XResultSet> xRef = pResult;
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult
+        = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
 
     // check if ORowSetValue type is given
     // when no types are given then we have to return all tables e.g. TABLE
@@ -73,7 +73,7 @@ uno::Reference<sdbc::XResultSet> SAL_CALL OWriterDatabaseMetaData::getTables(
         }
     }
     if (!bTableFound)
-        return xRef;
+        return pResult;
 
     // get the table names from the document
 
@@ -104,7 +104,7 @@ uno::Reference<sdbc::XResultSet> SAL_CALL OWriterDatabaseMetaData::getTables(
 
     pResult->setRows(aRows);
 
-    return xRef;
+    return pResult;
 }
 
 } // namespace

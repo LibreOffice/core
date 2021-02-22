@@ -2154,7 +2154,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
 
         OUString sTempName = createTempFile();
 
-        ODbaseTable* pNewTable = new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection));
+        rtl::Reference<ODbaseTable> pNewTable = new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection));
         Reference<XPropertySet> xHoldTable = pNewTable;
         pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sTempName));
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
@@ -2205,7 +2205,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
         pNewTable->construct();
 
         // copy the data
-        copyData(pNewTable,0);
+        copyData(pNewTable.get(),0);
 
         // now drop the old one
         if( DropImpl() ) // we don't want to delete the memo columns too
