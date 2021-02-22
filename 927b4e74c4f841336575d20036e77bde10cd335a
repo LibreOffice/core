@@ -34,6 +34,24 @@
       "revId": "927b4e74c4f841336575d20036e77bde10cd335a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b52cecb_1cb0968a",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Math.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-22T09:45:42Z",
+      "side": 0,
+      "message": "Thanks for clarifying!",
+      "parentUuid": "2f2097ad_353d1e0e",
+      "revId": "927b4e74c4f841336575d20036e77bde10cd335a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
