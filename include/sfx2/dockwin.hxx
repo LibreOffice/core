@@ -37,11 +37,10 @@ enum class SplitWindowItemFlags;
 void SfxDockingWindowFactory( const css::uno::Reference< css::frame::XFrame >& rFrame, const OUString& rDockingWindowName );
 bool IsDockingWindowVisible( const css::uno::Reference< css::frame::XFrame >& rFrame, const OUString& rDockingWindowName );
 
-class SFX2_DLLPUBLIC SfxDockingWindow : public DockingWindow
+class SFX2_DLLPUBLIC SfxDockingWindow : public ResizableDockingWindow
 {
 protected:
     std::unique_ptr<weld::Builder> m_xBuilder;
-    VclPtr<vcl::Window> m_xVclContentArea;
     std::unique_ptr<weld::Container> m_xContainer;
 
 private:
