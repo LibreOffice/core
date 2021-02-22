@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75935b65_fe98be88",
+        "filename": "basic/qa/basic_coverage/test_typename_method.vb",
+        "patchSetId": 12
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-22T15:26:10Z",
+      "side": 1,
+      "message": "This resembles some automated replacement artifact ;-P",
+      "revId": "c3ac2b4311e3b806a1a6e81657224b5cdd052261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb70fe8d_597bc97d",
+        "filename": "basic/qa/basic_coverage/test_typename_method.vb",
+        "patchSetId": 12
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-22T15:26:10Z",
+      "side": 1,
+      "message": "Trailing whitespace",
+      "revId": "c3ac2b4311e3b806a1a6e81657224b5cdd052261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "746f2d26_98f7a8df",
+        "filename": "basic/qa/basic_coverage/test_typename_method.vb",
+        "patchSetId": 12
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-22T15:26:10Z",
+      "side": 1,
+      "message": "Trailing whitespace",
+      "revId": "c3ac2b4311e3b806a1a6e81657224b5cdd052261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a48fd064_8c494ca4",
+        "filename": "basic/qa/basic_coverage/test_typename_method.vb",
+        "patchSetId": 12
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-22T15:26:10Z",
+      "side": 1,
+      "message": "How the MsgBox will behave in unit testing? Will it hang Jenkins? Please test.",
+      "revId": "c3ac2b4311e3b806a1a6e81657224b5cdd052261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
