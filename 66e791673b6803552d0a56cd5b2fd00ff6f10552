@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55364039_0f837e0b",
+        "filename": "basic/qa/basic_coverage/test_typename_method.vb",
+        "patchSetId": 11
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-22T13:19:05Z",
+      "side": 1,
+      "message": "Oh.\nI now looked again at the lines, and it seems very ... strange.\n\n    If TypeName(int16) \u003c\u003e \"Integer\"  Or TypeName(int32) \u003c\u003e \"Long\"     Then Exit Function\n    If TypeName(float) \u003c\u003e \"Single\"   Or TypeName(flaot) \u003c\u003e \"Double\"   Then Exit Function\n    ...\n\nSo a failure on any line would not allow one to know what the problem was - it fails for either of the two checks per line.\n\nPlease never put two checks on a single line. Are you trying to save a few bytes here? One check per line.\n\nYou could create a function in the file, like\n\n    Sub assert(expression As Boolean, errmessage As String)\n        If Not expression Then\n            print errmessage\n            raise ...\n        End If\n    End Sub\n\nand allow it to do the magic of breaking out on error:\n\n    assert(TypeName(int16) \u003d \"Integer\", \"TypeName(int16) is not \"\"Integer\"\"\")",
+      "revId": "66e791673b6803552d0a56cd5b2fd00ff6f10552",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
