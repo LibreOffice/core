@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "eb822d06_5db5777b",
+        "filename": "sw/qa/extras/layout/layout2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1001620
+      },
+      "writtenOn": "2021-02-22T23:53:24Z",
+      "side": 1,
+      "message": "Exclusion of unit tests with comment \"Mac Pro 2012\" removed from change: These exclusions belong to my build preparation for the specific machine type and were included unintentional.\n\nBTW: There are really tests failing dependent on machine type. These tests commented out here are failing on Xeon CPUs in Mac Pros, at laest in 2012 models. With i7 CPUs these tests are successful.",
+      "parentUuid": "33c6ec83_46c41d97",
+      "revId": "a23ee285ff59d6aabb9108f6c68582f08de687cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f38178ab_c2ea5dfd",
         "filename": "vcl/qa/cppunit/BackendTest.cxx",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "a23ee285ff59d6aabb9108f6c68582f08de687cd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a846f7a_271e64cb",
+        "filename": "vcl/qa/cppunit/BackendTest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1001620
+      },
+      "writtenOn": "2021-02-22T23:53:24Z",
+      "side": 1,
+      "message": "Comment moved as close as possible to precompiler directive",
+      "parentUuid": "f38178ab_c2ea5dfd",
+      "revId": "a23ee285ff59d6aabb9108f6c68582f08de687cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
