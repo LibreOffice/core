@@ -18,8 +18,8 @@
  */
 
 #include <vcl/commandevent.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/status.hxx>
+#include <vcl/weldutils.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -35,38 +35,7 @@
 
 SFX_IMPL_STATUSBAR_CONTROL( SdTemplateControl, SfxStringItem );
 
-// class SdTemplatePopup_Impl --------------------------------------------------
-
-namespace {
-
-class SdTemplatePopup_Impl : public PopupMenu
-{
-public:
-    SdTemplatePopup_Impl();
-
-    sal_uInt16          GetCurId() const { return nCurId; }
-
-private:
-    sal_uInt16          nCurId;
-
-    virtual void    Select() override;
-};
-
-}
-
-SdTemplatePopup_Impl::SdTemplatePopup_Impl() :
-    PopupMenu(),
-    nCurId(USHRT_MAX)
-{
-}
-
-void SdTemplatePopup_Impl::Select()
-{
-    nCurId = GetCurItemId();
-}
-
 // class SdTemplateControl ------------------------------------------
-
 SdTemplateControl::SdTemplateControl( sal_uInt16 _nSlotId,
                                       sal_uInt16 _nId,
                                       StatusBar& rStb ) :
@@ -110,29 +79,31 @@ void SdTemplateControl::Command( const CommandEvent& rCEvt )
     if( !pDoc )
         return;
 
-    ScopedVclPtrInstance<SdTemplatePopup_Impl> aPop;
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/simpress/ui/masterpagemenu.ui"));
+    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("menu"));
+
+    const sal_uInt16 nMasterCount = pDoc->GetMasterSdPageCount(PageKind::Standard);
+
+    for (sal_uInt16 nPage = 0; nPage < nMasterCount; ++nPage)
     {
-        const sal_uInt16 nMasterCount = pDoc->GetMasterSdPageCount(PageKind::Standard);
+        SdPage* pMaster = pDoc->GetMasterSdPage(nPage, PageKind::Standard);
+        if (!pMaster)
+            continue;
+        xPopup->append(OUString::number(nPage), pMaster->GetName());
+    }
 
-        sal_uInt16 nCount = 0;
-        for( sal_uInt16 nPage = 0; nPage < nMasterCount; ++nPage )
-        {
-            SdPage* pMaster = pDoc->GetMasterSdPage(nPage, PageKind::Standard);
-            if( pMaster )
-                aPop->InsertItem( ++nCount, pMaster->GetName() );
-        }
-        aPop->Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
-
-        sal_uInt16 nCurrId = aPop->GetCurId()-1;
-        if( nCurrId < nMasterCount )
-        {
-            SdPage* pMaster = pDoc->GetMasterSdPage(nCurrId, PageKind::Standard);
-            SfxStringItem aStyle( ATTR_PRESLAYOUT_NAME, pMaster->GetName() );
-            pViewFrame->GetDispatcher()->ExecuteList(
-                SID_PRESENTATION_LAYOUT, SfxCallMode::SLOT, { &aStyle });
-            pViewFrame->GetBindings().Invalidate(SID_PRESENTATION_LAYOUT);
-            pViewFrame->GetBindings().Invalidate(SID_STATUS_LAYOUT);
-        }
+    ::tools::Rectangle aRect(rCEvt.GetMousePosPixel(), Size(1, 1));
+    weld::Window* pParent = weld::GetPopupParent(GetStatusBar(), aRect);
+    OString sResult = xPopup->popup_at_rect(pParent, aRect);
+    if (!sResult.isEmpty())
+    {
+        sal_uInt16 nCurrId = sResult.toUInt32();
+        SdPage* pMaster = pDoc->GetMasterSdPage(nCurrId, PageKind::Standard);
+        SfxStringItem aStyle( ATTR_PRESLAYOUT_NAME, pMaster->GetName() );
+        pViewFrame->GetDispatcher()->ExecuteList(
+            SID_PRESENTATION_LAYOUT, SfxCallMode::SLOT, { &aStyle });
+        pViewFrame->GetBindings().Invalidate(SID_PRESENTATION_LAYOUT);
+        pViewFrame->GetBindings().Invalidate(SID_STATUS_LAYOUT);
     }
 }
 
