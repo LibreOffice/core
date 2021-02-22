@@ -52,6 +52,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <redline.hxx>
 #include <sfx2/docfile.hxx>
+#include <svl/grabbagitem.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
 #include <editeng/colritem.hxx>
@@ -498,8 +499,21 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
             pCleanedSet->ClearItem(pItem->Which());
         else if (pItem->Which() == RES_CHRATR_BACKGROUND)
         {
+            bool bShadingWasImported = false;
+            // If Shading was imported, it should not be converted to a Highlight,
+            // but remain as Shading which is ignored for numbering.
+            if (pCleanedSet->HasItem(RES_CHRATR_GRABBAG))
+            {
+                SfxGrabBagItem aGrabBag = pCleanedSet->Get(RES_CHRATR_GRABBAG, /*bSrchInParent=*/false);
+                std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
+                auto aIterator = rMap.find("CharShadingMarker");
+                if (aIterator != rMap.end())
+                    aIterator->second >>= bShadingWasImported;
+            }
+
             // If used, BACKGROUND is converted to HIGHLIGHT. So also ignore if a highlight already exists.
-            if (pCleanedSet->HasItem(RES_CHRATR_HIGHLIGHT)
+            if (bShadingWasImported
+                || pCleanedSet->HasItem(RES_CHRATR_HIGHLIGHT)
                 || (pFormat && pFormat->HasItem(RES_CHRATR_HIGHLIGHT)))
             {
                 pCleanedSet->ClearItem(pItem->Which());
