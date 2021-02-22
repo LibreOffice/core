@@ -16,6 +16,10 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#include <com/sun/star/drawing/HomogenMatrix3.hpp>
 
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
 #include <rtl/ustring.hxx>
@@ -104,6 +108,84 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSemiTransparentText)
     double fTransparence = getXPath(pDocument, "//unifiedtransparence", "transparence").toDouble();
     CPPUNIT_ASSERT_EQUAL(nTransparence,
                          static_cast<sal_Int16>(basegfx::fround(fTransparence * 100)));
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandlePathObjScale)
+{
+    // Given a path object:
+    getComponent() = loadFromDesktop("private:factory/sdraw");
+    uno::Reference<lang::XMultiServiceFactory> xFactory(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance("com.sun.star.drawing.ClosedBezierShape"), uno::UNO_QUERY);
+
+    // When setting its scale by both using setSize() and scaling in a transform matrix:
+    // Set size and basic properties.
+    xShape->setPosition(awt::Point(2512, 6062));
+    xShape->setSize(awt::Size(112, 112));
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    xShapeProps->setPropertyValue("FillStyle", uno::makeAny(drawing::FillStyle_SOLID));
+    xShapeProps->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_SOLID));
+    xShapeProps->setPropertyValue("FillColor", uno::makeAny(static_cast<sal_Int32>(0)));
+    // Add it to the draw page.
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    xDrawPage->add(xShape);
+    // Set polygon coordinates.
+    drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords;
+    aPolyPolygonBezierCoords.Coordinates = {
+        {
+            awt::Point(2624, 6118),
+            awt::Point(2624, 6087),
+            awt::Point(2599, 6062),
+            awt::Point(2568, 6062),
+            awt::Point(2537, 6062),
+            awt::Point(2512, 6087),
+            awt::Point(2512, 6118),
+            awt::Point(2512, 6149),
+            awt::Point(2537, 6175),
+            awt::Point(2568, 6174),
+            awt::Point(2599, 6174),
+            awt::Point(2625, 6149),
+            awt::Point(2624, 6118),
+        },
+    };
+    aPolyPolygonBezierCoords.Flags = {
+        {
+            drawing::PolygonFlags_NORMAL,
+            drawing::PolygonFlags_CONTROL,
+            drawing::PolygonFlags_CONTROL,
+            drawing::PolygonFlags_NORMAL,
+            drawing::PolygonFlags_CONTROL,
+            drawing::PolygonFlags_CONTROL,
+            drawing::PolygonFlags_NORMAL,
+            drawing::PolygonFlags_CONTROL,
+            drawing::PolygonFlags_CONTROL,
+            drawing::PolygonFlags_NORMAL,
+            drawing::PolygonFlags_CONTROL,
+            drawing::PolygonFlags_CONTROL,
+            drawing::PolygonFlags_NORMAL,
+        },
+    };
+    xShapeProps->setPropertyValue("PolyPolygonBezier", uno::makeAny(aPolyPolygonBezierCoords));
+    drawing::HomogenMatrix3 aMatrix;
+    aMatrix.Line1.Column1 = 56;
+    aMatrix.Line2.Column1 = -97;
+    aMatrix.Line3.Column1 = 0;
+    aMatrix.Line1.Column2 = 97;
+    aMatrix.Line2.Column2 = 56;
+    aMatrix.Line3.Column2 = 0;
+    aMatrix.Line1.Column3 = 3317;
+    aMatrix.Line2.Column3 = 5583;
+    aMatrix.Line3.Column3 = 1;
+    xShapeProps->setPropertyValue("Transformation", uno::makeAny(aMatrix));
+
+    // Then make sure the scaling is only applied once:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 113
+    // - Actual  : 12566
+    // i.e. the scaling was applied twice.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(113), xShape->getSize().Width);
 }
 }
 
