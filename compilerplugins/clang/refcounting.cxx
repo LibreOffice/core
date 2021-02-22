@@ -211,6 +211,9 @@ bool containsOWeakObjectSubclass(const QualType& qType) {
 bool containsOWeakObjectSubclass(const clang::Type* pType0) {
     if (!pType0)
         return false;
+    if (pType0->isDependentType()) {
+         return false;
+    }
     const clang::Type* pType = pType0->getUnqualifiedDesugaredType();
     if (!pType)
         return false;

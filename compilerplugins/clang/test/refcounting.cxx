@@ -57,4 +57,19 @@ void test2(UnoObject* pUnoObject)
     delete pUnoObject;
 }
 
+template <typename T> struct Dependent : T
+{
+    void f() { delete this; }
+    //TODO: missing expected error@+1 {{cppu::OWeakObject subclass 'Dependent<UnoObject>' being deleted via delete, should be managed via rtl::Reference [loplugin:refcounting]}}
+    void g() { delete this; }
+};
+struct Dummy
+{
+};
+void dummy(Dependent<Dummy>* p1, Dependent<UnoObject>* p2)
+{
+    p1->f();
+    p2->g();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
