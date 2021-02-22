@@ -44,7 +44,6 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <vcl/canvastools.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -274,14 +273,11 @@ void SwHeaderFooterWin::ShowAll(bool bShow)
     m_xMenuButton->set_visible(!bIsEmptyHeaderFooter);
     m_xPushButton->set_visible(bIsEmptyHeaderFooter);
 
-    if (!PopupMenu::IsInExecute())
-    {
-        m_bIsAppearing = bShow;
+    m_bIsAppearing = bShow;
 
-        if (m_aFadeTimer.IsActive())
-            m_aFadeTimer.Stop();
-        m_aFadeTimer.Start();
-    }
+    if (m_aFadeTimer.IsActive())
+        m_aFadeTimer.Stop();
+    m_aFadeTimer.Start();
 }
 
 bool SwHeaderFooterWin::Contains( const Point &rDocPt ) const
