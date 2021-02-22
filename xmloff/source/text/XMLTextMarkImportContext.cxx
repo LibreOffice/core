@@ -197,7 +197,16 @@ static auto InsertFieldmark(SvXMLImport & rImport,
     // setup fieldmark...
     Reference<text::XFormField> const xFormField(xContent, UNO_QUERY);
     assert(xFormField.is());
-    xFormField->setFieldType(fieldmarkTypeName);
+    try {
+        xFormField->setFieldType(fieldmarkTypeName);
+    } catch (uno::RuntimeException const&) {
+        // tdf#140437 somehow old documents had the field code in the type
+        // attribute instead of field:param
+        SAL_INFO("xmloff.text", "invalid fieldmark type, converting to param");
+        // add without checking: FieldParamImporter::Import() catches ElementExistException
+        rHelper.addFieldParam(ODF_CODE_PARAM, fieldmarkTypeName);
+        xFormField->setFieldType(ODF_UNHANDLED);
+    }
     rHelper.setCurrentFieldParamsTo(xFormField);
     // move cursor after setFieldType as that may delete/re-insert
     rHelper.GetCursor()->gotoRange(xContent->getAnchor()->getEnd(), false);

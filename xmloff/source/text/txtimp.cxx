@@ -390,6 +390,7 @@ namespace
             }
             catch(const ElementExistException&)
             {
+                SAL_INFO("xmloff.text", "duplicate fieldmark param");
             }
         }
     }
