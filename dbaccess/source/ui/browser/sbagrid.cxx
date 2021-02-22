@@ -585,13 +585,13 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, weld::Menu& r
         default:
             rMenu.insert(nPos++, "colattrset", DBA_RES(RID_STR_COLUMN_FORMAT),
                          nullptr, nullptr, nullptr, TRISTATE_INDET);
-            rMenu.insert_separator(nPos++, "seperator1");
+            rMenu.insert_separator(nPos++, "separator1");
         }
     }
 
     rMenu.insert(nPos++, "colwidth", DBA_RES(RID_STR_COLUMN_WIDTH),
                  nullptr, nullptr, nullptr, TRISTATE_INDET);
-    rMenu.insert_separator(nPos++, "seperator2");
+    rMenu.insert_separator(nPos++, "separator2");
 }
 
 void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const weld::Menu& rMenu, const OString& rExecutionResult)
