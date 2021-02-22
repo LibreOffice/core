@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3b88b530_bf8a45cb",
+        "filename": "basic/qa/basic_coverage/test_vartype_method.vb",
+        "patchSetId": 7
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-02-22T10:23:19Z",
+      "side": 1,
+      "message": "The editor leaves these indents, but we should delete them in the entire document @line 23, 30, 42 - 49. Same in the other file :(",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 4
+      },
+      "revId": "ae81ce4ee845ef321bed55198e53874ffafda117",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
