@@ -24,7 +24,6 @@
 #include <vcl/event.hxx>
 #include <vcl/fieldvalues.hxx>
 #include <vcl/image.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
@@ -3261,13 +3260,16 @@ void SvxRuler::MenuSelect(std::string_view ident)
     SetUnit(vcl::StringToMetric(OUString::fromUtf8(ident)));
 }
 
-IMPL_LINK( SvxRuler, TabMenuSelect, Menu *, pMenu, bool )
+void SvxRuler::TabMenuSelect(const OString& rIdent)
 {
+    if (rIdent.isEmpty())
+        return;
+    sal_Int32 nId = rIdent.toInt32();
     /* Handler of the tab menu for setting the type */
-    if(mxTabStopItem && mxTabStopItem->Count() > mxRulerImpl->nIdx)
+    if (mxTabStopItem && mxTabStopItem->Count() > mxRulerImpl->nIdx)
     {
         SvxTabStop aTabStop = mxTabStopItem->At(mxRulerImpl->nIdx);
-        aTabStop.GetAdjustment() = ToAttrTab_Impl(pMenu->GetCurItemId() - 1);
+        aTabStop.GetAdjustment() = ToAttrTab_Impl(nId - 1);
         mxTabStopItem->Remove(mxRulerImpl->nIdx);
         mxTabStopItem->Insert(aTabStop);
         sal_uInt16 nTabStopId = bHorz ? SID_ATTR_TABSTOP : SID_ATTR_TABSTOP_VERTICAL;
@@ -3276,7 +3278,6 @@ IMPL_LINK( SvxRuler, TabMenuSelect, Menu *, pMenu, bool )
         UpdateTabs();
         mxRulerImpl->nIdx = 0;
     }
-    return false;
 }
 
 static const char* RID_SVXSTR_RULER_TAB[] =
@@ -3293,42 +3294,43 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
     if ( CommandEventId::ContextMenu == rCommandEvent.GetCommand() )
     {
         CancelDrag();
+
+        tools::Rectangle aRect(rCommandEvent.GetMousePosPixel(), Size(1, 1));
+        weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "svx/ui/rulermenu.ui"));
+        std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
+
         bool bRTL = mxRulerImpl->pTextRTLItem && mxRulerImpl->pTextRTLItem->GetValue();
         if ( !mpTabs.empty() &&
              RulerType::Tab ==
              GetRulerType( rCommandEvent.GetMousePosPixel(), &mxRulerImpl->nIdx ) &&
              mpTabs[mxRulerImpl->nIdx + TAB_GAP].nStyle < RULER_TAB_DEFAULT )
         {
-            ScopedVclPtrInstance<PopupMenu> aMenu;
-            aMenu->SetSelectHdl(LINK(this, SvxRuler, TabMenuSelect));
-            ScopedVclPtrInstance< VirtualDevice > pDev;
+            xMenu->clear();
+
             const Size aSz(ruler_tab_svx.width + 2, ruler_tab_svx.height + 2);
-            pDev->SetOutputSize(aSz);
-            pDev->SetBackground(Wallpaper(COL_WHITE));
-            Color aFillColor(pDev->GetSettings().GetStyleSettings().GetShadowColor());
             const Point aPt(aSz.Width() / 2, aSz.Height() / 2);
 
             for ( sal_uInt16 i = RULER_TAB_LEFT; i < RULER_TAB_DEFAULT; ++i )
             {
+                ScopedVclPtr<VirtualDevice> xDev(pPopupParent->create_virtual_device());
+                xDev->SetOutputSize(aSz);
+
                 sal_uInt16 nStyle = bRTL ? i|RULER_TAB_RTL : i;
                 nStyle |= static_cast<sal_uInt16>(bHorz ? WB_HORZ : WB_VERT);
-                DrawTab(*pDev, aFillColor, aPt, nStyle);
-                BitmapEx aItemBitmapEx(pDev->GetBitmapEx(Point(), aSz));
-                aItemBitmapEx.Replace(COL_WHITE, COL_TRANSPARENT);
-                aMenu->InsertItem(i + 1,
-                                 SvxResId(RID_SVXSTR_RULER_TAB[i]),
-                                 Image(aItemBitmapEx));
-                aMenu->CheckItem(i + 1, i == mpTabs[mxRulerImpl->nIdx + TAB_GAP].nStyle);
-                pDev->SetOutputSize(aSz); // delete device
+
+                Color aFillColor(xDev->GetSettings().GetStyleSettings().GetShadowColor());
+                DrawTab(*xDev, aFillColor, aPt, nStyle);
+
+                OString sId(OString::number(i + 1));
+                xMenu->insert(-1, OUString::fromUtf8(sId), SvxResId(RID_SVXSTR_RULER_TAB[i]),
+                              nullptr, xDev.get(), nullptr, TRISTATE_TRUE);
+                xMenu->set_active(sId, i == mpTabs[mxRulerImpl->nIdx + TAB_GAP].nStyle);
             }
-            aMenu->Execute( this, rCommandEvent.GetMousePosPixel() );
+            TabMenuSelect(xMenu->popup_at_rect(pPopupParent, aRect));
         }
         else
         {
-            tools::Rectangle aRect(rCommandEvent.GetMousePosPixel(), Size(1, 1));
-            weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
-            std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "svx/ui/rulermenu.ui"));
-            std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
             FieldUnit eUnit = GetUnit();
             const int nCount = xMenu->n_children();
 

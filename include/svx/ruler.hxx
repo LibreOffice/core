@@ -217,7 +217,7 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     tools::Long GetLeftMin() const;
     tools::Long GetRightMax() const;
 
-    DECL_LINK( TabMenuSelect, Menu *, bool );
+    void TabMenuSelect(const OString& rIdent);
     void MenuSelect(std::string_view ident);
     void PrepareProportional_Impl(RulerType);
 
