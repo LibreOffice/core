@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba9ddab4_b4b2d9b0",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-02-22T08:45:06Z",
+      "side": 1,
+      "message": "I see the purpose, but this creates a unclear definition possibility. BitmapEx is by definition with AlphaChannel. To stay clean, the version with \u0027double alpha\u0027 should use just Bitmap as Parameter. What is meant to happen when both alphas are used (hopefully not by purpose, but who knows - someone might find a usage and cmplain that it does not work)? Which will you render/use when both are given?\nOf course it would also be not nice to have two calls, but maybe clearer/better. Anyways, the one with Bitmap/Alpha can by default be mapped in the pipe to do what the old one does - map to creating a AlphaBitmap and a BitmapEx, calling the BitmapEx version. That way, you would have the choice in the Backend which to support.\nOptimal would be to have this in the BitmapEx definition: BitmapEx stays by definition the *complete* define for a Bitmap with alpha, but has either none, numerical [0.0 .. 1.0] or an AlphaBitmap with only one being allowed.\nAnd I would call - similar to primtives - the alpha unifiedAlpha then :)\nI know - maybe too much work in one run, but is it worth to expand/unsharpen the GDI LowLevel API now where the goal should be to get that beast leaner/taller/smaller/moreUnified...?\nJust my 2ct...",
+      "range": {
+        "startLine": 1490,
+        "startChar": 36,
+        "endLine": 1490,
+        "endChar": 55
+      },
+      "revId": "eb13b97b913de7b0debb5cf9be49a4beb31ba62a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
