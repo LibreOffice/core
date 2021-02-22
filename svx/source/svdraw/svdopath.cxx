@@ -2877,6 +2877,11 @@ bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
     return true;
 }
 
+void SdrPathObj::SetHandleScale(bool bHandleScale)
+{
+    mbHandleScale = bHandleScale;
+}
+
 // Sets the base geometry of the object using infos contained in the homogeneous 3x3 matrix.
 // If it's an SdrPathObj it will use the provided geometry information. The Polygon has
 // to use (0,0) as upper left and will be scaled to the given size in the matrix.
@@ -2929,7 +2934,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     // be applied to the polygon too, so aScale cannot be ignored while loading.
     // I use "maSnapRect.IsEmpty() && GetPathPoly().count()" to detect this case. Any better
     // idea? The behavior in other cases is the same as it was before this fix.
-    if (maSnapRect.IsEmpty() && GetPathPoly().count())
+    if (maSnapRect.IsEmpty() && GetPathPoly().count() && mbHandleScale)
     {
         // In case of a Writer document, the scaling factors were converted to twips. That is not
         // correct here, because width and height are already in the points coordinates and aScale

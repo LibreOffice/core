@@ -85,6 +85,7 @@
 #include <vcl/wmf.hxx>
 #include <svx/sdtfsitm.hxx>
 #include <svx/svdoutl.hxx>
+#include <svx/svdopath.hxx>
 
 #include <memory>
 #include <vector>
@@ -1608,6 +1609,20 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any&
             mpPropSet->setPropertyValue( pMap, rVal );
         }
 
+        return;
+    }
+
+    if (rPropertyName == "HandlePathObjScale")
+    {
+        auto pPathObj = dynamic_cast<SdrPathObj*>(GetSdrObject());
+        if (pPathObj)
+        {
+            bool bHandleScale{};
+            if (rVal >>= bHandleScale)
+            {
+                pPathObj->SetHandleScale(bHandleScale);
+            }
+        }
         return;
     }
 
