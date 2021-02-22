@@ -146,6 +146,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135973, "tdf135973.odt")
     }
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testVMLallowincell, "shape-atpage-in-table.fodt")
+{
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+
+    // VML o:allowincell, apparently the default is "t"
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]/w:p[1]/w:r/w:pict/v:shape", "allowincell", "f");
+
+#if 0
+    // DML layoutInCell
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]/w:p[1]/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor", "layoutInCell", "0");
+#endif
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

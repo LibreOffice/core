@@ -24,6 +24,7 @@
 #include <fmtcntnt.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
+#include <fmtfollowtextflow.hxx>
 #include <frmatr.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include "docxattributeoutput.hxx"
@@ -825,6 +826,7 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat
     m_pImpl->getDrawingML()->SetFS(m_pImpl->getSerializer());
     // See WinwordAnchoring::SetAnchoring(), these are not part of the SdrObject, have to be passed around manually.
 
+    SwFormatFollowTextFlow const& rFlow(rFrameFormat.GetFollowTextFlow());
     const SwFormatHoriOrient& rHoriOri = rFrameFormat.GetHoriOrient();
     const SwFormatVertOrient& rVertOri = rFrameFormat.GetVertOrient();
     SwFormatSurround const& rSurround(rFrameFormat.GetSurround());
@@ -832,8 +834,8 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat
     std::unique_ptr<sax_fastparser::FastAttributeList> pAttrList(
         docx::SurroundToVMLWrap(rSurround));
     m_pImpl->getExport().VMLExporter().AddSdrObject(
-        *sdrObj, rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(), rHoriOri.GetRelationOrient(),
-        rVertOri.GetRelationOrient(), std::move(pAttrList), true);
+        *sdrObj, rFlow.GetValue(), rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(),
+        rHoriOri.GetRelationOrient(), rVertOri.GetRelationOrient(), std::move(pAttrList), true);
     m_pImpl->getSerializer()->endElementNS(XML_w, XML_pict);
 }
 
