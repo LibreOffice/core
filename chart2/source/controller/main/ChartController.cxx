@@ -588,7 +588,7 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
     aGuard.reset(); // lock for m_aDispatchContainer access
     // set new model at dispatchers
     m_aDispatchContainer.setModel( aNewModelRef->getModel());
-    ControllerCommandDispatch * pDispatch = new ControllerCommandDispatch( m_xCC, this, &m_aDispatchContainer );
+    rtl::Reference<ControllerCommandDispatch> pDispatch = new ControllerCommandDispatch( m_xCC, this, &m_aDispatchContainer );
     pDispatch->initialize();
 
     // the dispatch container will return "this" for all commands returned by
@@ -596,13 +596,13 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
     // is called here at the ChartController.
     m_aDispatchContainer.setChartDispatch( pDispatch, impl_getAvailableCommands() );
 
-    DrawCommandDispatch* pDrawDispatch = new DrawCommandDispatch( m_xCC, this );
+    rtl::Reference<DrawCommandDispatch> pDrawDispatch = new DrawCommandDispatch( m_xCC, this );
     pDrawDispatch->initialize();
-    m_aDispatchContainer.setDrawCommandDispatch( pDrawDispatch );
+    m_aDispatchContainer.setDrawCommandDispatch( pDrawDispatch.get() );
 
-    ShapeController* pShapeController = new ShapeController( m_xCC, this );
+    rtl::Reference<ShapeController> pShapeController = new ShapeController( m_xCC, this );
     pShapeController->initialize();
-    m_aDispatchContainer.setShapeController( pShapeController );
+    m_aDispatchContainer.setShapeController( pShapeController.get() );
     aGuard.clear();
 
 #ifdef TEST_ENABLE_MODIFY_LISTENER

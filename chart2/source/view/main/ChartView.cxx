@@ -1178,26 +1178,16 @@ uno::Any SAL_CALL ChartView::getTransferData( const datatransfer::DataFlavor& aF
     update();
 
     SvMemoryStream aStream( 1024, 1024 );
-    utl::OStreamWrapper* pStreamWrapper = new utl::OStreamWrapper( aStream );
+    rtl::Reference<utl::OStreamWrapper> pStreamWrapper = new utl::OStreamWrapper( aStream );
 
-    uno::Reference< io::XOutputStream > xOutStream( pStreamWrapper );
-    uno::Reference< io::XInputStream > xInStream( pStreamWrapper );
-    uno::Reference< io::XSeekable > xSeekable( pStreamWrapper );
+    this->getMetaFile( pStreamWrapper, bHighContrastMetaFile );
 
-    if( xOutStream.is() )
-    {
-        this->getMetaFile( xOutStream, bHighContrastMetaFile );
-
-        if( xInStream.is() && xSeekable.is() )
-        {
-            xSeekable->seek(0);
-            sal_Int32 nBytesToRead = xInStream->available();
-            uno::Sequence< sal_Int8 > aSeq( nBytesToRead );
-            xInStream->readBytes( aSeq, nBytesToRead);
-            aRet <<= aSeq;
-            xInStream->closeInput();
-        }
-    }
+    pStreamWrapper->seek(0);
+    sal_Int32 nBytesToRead = pStreamWrapper->available();
+    uno::Sequence< sal_Int8 > aSeq( nBytesToRead );
+    pStreamWrapper->readBytes( aSeq, nBytesToRead);
+    aRet <<= aSeq;
+    pStreamWrapper->closeInput();
 
     return aRet;
 }
@@ -3117,7 +3107,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_ChartView_get_implementation(css::uno::XComponentContext *context,
                                                          css::uno::Sequence<css::uno::Any> const &)
 {
-    ::chart::ChartModel *pChartModel = new ::chart::ChartModel(context);
+    rtl::Reference<::chart::ChartModel> pChartModel = new ::chart::ChartModel(context);
     return cppu::acquire(new ::chart::ChartView(context, *pChartModel));
 }
 
