@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72d12f05_4d95d8a5",
+        "filename": "sfx2/source/view/lokhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-02-22T18:16:56Z",
+      "side": 1,
+      "message": "better to move this code to separate function and call on top of this, so nobody will be suprised that \u0027escapeQuotes\u0027 also removes new line characters :)\n\nbut I\u0027m a bit concerned about removing any character. What if we need new-lines in some callbacks?\n\nWhat means \u0027JSON is non valid\u0027? JSON.parse() in JS didn\u0027t work with it?",
+      "revId": "b9e56c81cff632716e00e1c53e8b26f87a0dec4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
