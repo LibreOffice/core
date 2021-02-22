@@ -290,10 +290,10 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
  * The base class is initialized without setting anything
  */
 SwTabPortion::SwTabPortion( const sal_uInt16 nTabPosition, const sal_Unicode cFillChar, const bool bAutoTab )
-    : SwFixPortion(), nTabPos(nTabPosition), cFill(cFillChar), bAutoTabStop( bAutoTab )
+    : SwFixPortion(), m_nTabPos(nTabPosition), m_cFill(cFillChar), m_bAutoTabStop( bAutoTab )
 {
     mnLineLength = TextFrameIndex(1);
-    OSL_ENSURE(!IsFilled() || ' ' != cFill, "SwTabPortion::CTOR: blanks ?!");
+    OSL_ENSURE(!IsFilled() || ' ' != m_cFill, "SwTabPortion::CTOR: blanks ?!");
     SetWhichPor( PortionType::Table );
 }
 
@@ -376,7 +376,7 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
             case PortionType::TabLeft:
             {
                 // handle this case in PostFormat
-                if( bTabOverMargin && !bAutoTabStop && GetTabPos() > rInf.Width() )
+                if( bTabOverMargin && !m_bAutoTabStop && GetTabPos() > rInf.Width() )
                 {
                     rInf.SetLastTab( this );
                     break;
@@ -390,11 +390,11 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
                 // tab stop position is outside the frame:
                 bool bAtParaEnd = rInf.GetIdx() + GetLen() == TextFrameIndex(rInf.GetText().getLength());
                 if ( bFull && bTabCompat &&
-                     ( ( bTabOverflow && ( rInf.IsTabOverflow() || !bAutoTabStop ) ) || bAtParaEnd ) &&
+                     ( ( bTabOverflow && ( rInf.IsTabOverflow() || !m_bAutoTabStop ) ) || bAtParaEnd ) &&
                      GetTabPos() >= rInf.GetTextFrame()->getFrameArea().Width() )
                 {
                     bFull = false;
-                    if ( bTabOverflow && !bAutoTabStop )
+                    if ( bTabOverflow && !m_bAutoTabStop )
                         rInf.SetTabOverflow( true );
                 }
 
@@ -571,7 +571,7 @@ void SwTabPortion::Paint( const SwTextPaintInfo &rInf ) const
         return;
 
     // Tabs with filling/filled tabs
-    const sal_uInt16 nCharWidth = rInf.GetTextSize(OUString(cFill)).Width();
+    const sal_uInt16 nCharWidth = rInf.GetTextSize(OUString(m_cFill)).Width();
     OSL_ENSURE( nCharWidth, "!SwTabPortion::Paint: sophisticated tabchar" );
 
     // Robust:
@@ -579,10 +579,10 @@ void SwTabPortion::Paint( const SwTextPaintInfo &rInf ) const
     {
         // Always with kerning, also on printer!
         sal_uInt16 nChar = Width() / nCharWidth;
-        if ( cFill == '_' )
+        if ( m_cFill == '_' )
             ++nChar; // to avoid gaps
         OUStringBuffer aBuf;
-        comphelper::string::padToLength(aBuf, nChar, cFill);
+        comphelper::string::padToLength(aBuf, nChar, m_cFill);
         rInf.DrawText(aBuf.makeStringAndClear(), *this, TextFrameIndex(0),
                         TextFrameIndex(nChar), true);
     }

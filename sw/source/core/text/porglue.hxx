@@ -27,15 +27,15 @@ class SwLineLayout;
 class SwGluePortion : public SwLinePortion
 {
 private:
-    sal_uInt16 nFixWidth;
+    sal_uInt16 m_nFixWidth;
 public:
     explicit SwGluePortion( const sal_uInt16 nInitFixWidth );
 
     void Join( SwGluePortion *pVictim );
 
     inline tools::Long GetPrtGlue() const;
-    sal_uInt16 GetFixWidth() const { return nFixWidth; }
-    void SetFixWidth( const sal_uInt16 nNew ) { nFixWidth = nNew; }
+    sal_uInt16 GetFixWidth() const { return m_nFixWidth; }
+    void SetFixWidth( const sal_uInt16 nNew ) { m_nFixWidth = nNew; }
     void MoveGlue( SwGluePortion *pTarget, const tools::Long nPrtGlue );
     inline void MoveAllGlue( SwGluePortion *pTarget );
     inline void MoveHalfGlue( SwGluePortion *pTarget );
@@ -48,12 +48,12 @@ public:
 
 class SwFixPortion : public SwGluePortion
 {
-    sal_uInt16 nFix;        // The width offset in the line
+    sal_uInt16 m_nFix;        // The width offset in the line
 public:
     explicit SwFixPortion( const SwRect &rFlyRect );
     SwFixPortion();
-    void   SetFix( const sal_uInt16 nNewFix ) { nFix = nNewFix; }
-    sal_uInt16 GetFix() const { return nFix; }
+    void   SetFix( const sal_uInt16 nNewFix ) { m_nFix = nNewFix; }
+    sal_uInt16 GetFix() const { return m_nFix; }
 };
 
 class SwMarginPortion : public SwGluePortion
@@ -64,13 +64,13 @@ public:
 };
 
 inline tools::Long SwGluePortion::GetPrtGlue() const
-{ return Width() - nFixWidth; }
+{ return Width() - m_nFixWidth; }
 
 // The FixWidth MUST NEVER be larger than the accumulated width!
 inline void SwGluePortion::AdjFixWidth()
 {
-    if( nFixWidth > PrtWidth() )
-        nFixWidth = PrtWidth();
+    if( m_nFixWidth > PrtWidth() )
+        m_nFixWidth = PrtWidth();
 }
 
 inline void SwGluePortion::MoveAllGlue( SwGluePortion *pTarget )

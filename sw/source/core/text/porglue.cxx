@@ -26,9 +26,9 @@
 #include <comphelper/string.hxx>
 
 SwGluePortion::SwGluePortion( const sal_uInt16 nInitFixWidth )
-    : nFixWidth( nInitFixWidth )
+    : m_nFixWidth( nInitFixWidth )
 {
-    PrtWidth( nFixWidth );
+    PrtWidth( m_nFixWidth );
     SetWhichPor( PortionType::Glue );
 }
 
@@ -132,14 +132,14 @@ void SwGluePortion::Join( SwGluePortion *pVictim )
  * We're expecting a frame-local SwRect!
  */
 SwFixPortion::SwFixPortion( const SwRect &rRect )
-       :SwGluePortion( sal_uInt16(rRect.Width()) ), nFix( sal_uInt16(rRect.Left()) )
+       :SwGluePortion( sal_uInt16(rRect.Width()) ), m_nFix( sal_uInt16(rRect.Left()) )
 {
     Height( sal_uInt16(rRect.Height()) );
     SetWhichPor( PortionType::Fix );
 }
 
 SwFixPortion::SwFixPortion()
-       : SwGluePortion(0), nFix(0)
+       : SwGluePortion(0), m_nFix(0)
 {
     SetWhichPor( PortionType::Fix );
 }
