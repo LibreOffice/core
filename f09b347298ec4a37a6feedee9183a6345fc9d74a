@@ -52,6 +52,24 @@
       "revId": "f09b347298ec4a37a6feedee9183a6345fc9d74a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39584c7e_a9afcf5b",
+        "filename": "basic/qa/basic_coverage/test_vartype_method.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2021-02-22T08:32:20Z",
+      "side": 1,
+      "message": "done, well almost",
+      "parentUuid": "266db3f6_1f27f933",
+      "revId": "f09b347298ec4a37a6feedee9183a6345fc9d74a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
