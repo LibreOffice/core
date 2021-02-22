@@ -8,6 +8,10 @@
  */
 
 #include <swmodeltestbase.hxx>
+#include <svx/svddef.hxx>
+#include <svx/unoapi.hxx>
+#include <svx/sdmetitm.hxx>
+#include <svx/svdobj.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -179,6 +183,19 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testGutterTop, "gutter-top.docx")
     // - Actual  : 0
     // i.e. <w:gutterAtTop> was lost.
     assertXPath(pXmlSettings, "/w:settings/w:gutterAtTop", 1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf133473_shadowSize, "tdf133473.docx")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    SdrObject* pObj(GetSdrObjectFromXShape(xShape));
+    const SfxItemSet& rSet = pObj->GetMergedItemSet();
+    sal_Int32 nSize1 = rSet.Get(SDRATTR_SHADOWSIZEX).GetValue();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 200000
+    // - Actual  : 113386
+    // I.e. Shadow size will be smaller than actual.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(200000), nSize1);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
