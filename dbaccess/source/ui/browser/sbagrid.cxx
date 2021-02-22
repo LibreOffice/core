@@ -611,20 +611,6 @@ void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupM
         case ID_BROWSER_COLATTRSET:
             static_cast<SbaGridControl*>(GetParent())->SetColAttrs(nColId);
             break;
-        case ID_BROWSER_COLUMNINFO:
-            {
-                sal_uInt16 nModelPos = static_cast<SbaGridControl*>(GetParent())->GetModelColumnPos(nColId);
-                Reference< XPropertySet >  xField = static_cast<SbaGridControl*>(GetParent())->getField(nModelPos);
-
-                if(!xField.is())
-                    break;
-                std::vector< std::shared_ptr<OTableRow> > vClipboardList;
-                // send it to the clipboard
-                vClipboardList.push_back(std::make_shared<OTableRow>(xField));
-                rtl::Reference<OTableRowExchange> pData = new OTableRowExchange(vClipboardList);
-                pData->CopyToClipboard(GetParent());
-            }
-            break;
 
         default: FmGridHeader::PostExecuteColumnContextMenu(nColId, rMenu, nExecutionResult);
     }
