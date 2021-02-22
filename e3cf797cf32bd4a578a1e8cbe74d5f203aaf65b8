@@ -111,6 +111,24 @@
       "revId": "e3cf797cf32bd4a578a1e8cbe74d5f203aaf65b8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f07ba925_c147754c",
+        "filename": "vcl/qa/cppunit/canvasbitmaptest.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-02-22T19:31:16Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "771b1d5d_2d451c7e",
+      "revId": "e3cf797cf32bd4a578a1e8cbe74d5f203aaf65b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
