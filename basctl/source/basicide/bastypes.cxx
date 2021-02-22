@@ -261,7 +261,7 @@ WinBits const DockingWindow::StyleBits =
     WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_DOCKABLE;
 
 DockingWindow::DockingWindow(vcl::Window* pParent, const OUString& rUIXMLDescription, const OString& rID) :
-    ::DockingWindow(pParent, "DockingWindow", "sfx/ui/dockingwindow.ui"),
+    ::DockingWindow(pParent, "DockingWindow", "vcl/ui/dockingwindow.ui"),
     pLayout(nullptr),
     nShowCount(0)
 {
