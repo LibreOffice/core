@@ -301,12 +301,11 @@ public:
 
     std::vector<std::pair<sal_Int32, OUString>> getColumnValues() override
     {
-        OUString aInString;
         OUString aOutString;
-
         auto xClass = mxMethod->getReturnType();
         aOutString = simpleTypeName(xClass);
 
+        OUString aInString;
         const auto aParameters = mxMethod->getParameterInfos();
         bool bFirst = true;
         for (auto const& rParameterInfo : aParameters)
@@ -334,9 +333,12 @@ public:
             aInString += rParameterInfo.aName + " : " + simpleTypeName(rParameterInfo.aType);
         }
 
+        OUString aImplementationClass = mxMethod->getDeclaringClass()->getName();
+
         return {
             { 1, aOutString },
             { 2, aInString },
+            { 3, aImplementationClass },
         };
     }
 
