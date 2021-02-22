@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-02-19 15:34:34 using:
+ Generated on 2021-02-22 20:24:22 using:
  ./bin/update_pch chart2 chartcore --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -101,6 +101,7 @@
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
+#include <com/sun/star/chart2/MovingAverageType.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>

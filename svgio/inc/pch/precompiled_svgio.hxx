@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-02-05 16:11:15 using:
+ Generated on 2021-02-22 20:24:58 using:
  ./bin/update_pch svgio svgio --cutoff=8 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -32,6 +32,7 @@
 #include <osl/endian.h>
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>

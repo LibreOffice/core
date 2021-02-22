@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-04 10:00:10 using:
+ Generated on 2021-02-22 20:25:29 using:
  ./bin/update_pch vbahelper vbahelper --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -29,7 +29,6 @@
 #include <limits>
 #include <memory>
 #include <string_view>
-#include <type_traits>
 #include <utility>
 #include <vector>
 #include <boost/functional/hash.hpp>
