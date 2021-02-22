@@ -3367,6 +3367,9 @@ void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument* pDoc )
 {
     HideTip();
 
+    if(pRefViewSh->GetViewData().GetRefTabNo() != pRefViewSh->GetViewData().GetTabNo())
+        return;
+
     const ScDocument* pThisDoc = nullptr;
     bool bOtherDoc = (pRefViewSh && ((pThisDoc = pRefViewSh->GetViewData().GetDocument()) != pDoc));
     if (bOtherDoc && !pDoc->GetDocumentShell()->HasName())
