@@ -308,7 +308,11 @@ void SfxLokHelper::setDeviceFormFactor(std::u16string_view rDeviceFormFactor)
         g_deviceFormFactor = LOKDeviceFormFactor::UNKNOWN;
 }
 
-static OString lcl_escapeQuotes(const OString &rStr)
+/*
+* Used for putting a whole JSON string into a string value
+* e.g { key: "{JSON}" }
+*/
+static OString lcl_sanitizeJSONAsValue(const OString &rStr)
 {
     if (rStr.getLength() < 1)
         return rStr;
@@ -318,7 +322,9 @@ static OString lcl_escapeQuotes(const OString &rStr)
     {
         if (rStr[i] == '"' || rStr[i] == '\\')
             aBuf.append('\\');
-        aBuf.append(rStr[i]);
+
+        if (rStr[i] != '\n')
+            aBuf.append(rStr[i]);
     }
     return aBuf.makeStringAndClear();
 }
@@ -341,7 +347,7 @@ static inline OString lcl_generateJSON(const SfxViewShell* pView, std::string_vi
     assert(pView != nullptr && "pView must be valid");
     return OStringLiteral("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView(pView))
            + "\", \"part\": \"" + OString::number(pView->getPart()) + "\", \"" + rKey + "\": \""
-           + lcl_escapeQuotes(rPayload) + "\" }";
+           + lcl_sanitizeJSONAsValue(rPayload) + "\" }";
 }
 
 void SfxLokHelper::notifyOtherView(const SfxViewShell* pThisView, SfxViewShell const* pOtherView,
