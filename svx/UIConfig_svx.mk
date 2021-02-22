@@ -28,6 +28,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/chineseconversiondialog \
 	svx/uiconfig/ui/chinesedictionary \
 	svx/uiconfig/ui/classificationdialog \
+	svx/uiconfig/ui/clipboardmenu \
 	svx/uiconfig/ui/colorwindow \
 	svx/uiconfig/ui/currencywindow \
 	svx/uiconfig/ui/colsmenu \

@@ -19,8 +19,9 @@
 
 #include <sfx2/tbxctrl.hxx>
 #include <svl/intitem.hxx>
-#include <vcl/menu.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weldutils.hxx>
 #include <svx/clipboardctl.hxx>
 #include <svx/clipfmtitem.hxx>
 
@@ -38,7 +39,6 @@ SvxClipBoardControl::SvxClipBoardControl(
         sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
 
     SfxToolBoxControl( nSlotId, nId, rTbx ),
-    pPopup( nullptr ),
     bDisabled( false )
 {
     addStatusListener( ".uno:ClipboardFormatItems");
@@ -47,10 +47,8 @@ SvxClipBoardControl::SvxClipBoardControl(
     rBox.Invalidate();
 }
 
-
 SvxClipBoardControl::~SvxClipBoardControl()
 {
-    DelPopup();
 }
 
 void SvxClipBoardControl::CreatePopupWindow()
@@ -58,10 +56,8 @@ void SvxClipBoardControl::CreatePopupWindow()
     const SvxClipboardFormatItem* pFmtItem = dynamic_cast<SvxClipboardFormatItem*>( pClipboardFmtItem.get()  );
     if ( pFmtItem )
     {
-        if (pPopup)
-            pPopup->Clear();
-        else
-            pPopup = VclPtr<PopupMenu>::Create();
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "svx/ui/clipboardmenu.ui"));
+        std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("menu"));
 
         sal_uInt16 nCount = pFmtItem->Count();
         for (sal_uInt16 i = 0;  i < nCount;  ++i)
@@ -70,20 +66,20 @@ void SvxClipBoardControl::CreatePopupWindow()
             OUString aFmtStr( pFmtItem->GetClipbrdFormatName( i ) );
             if (aFmtStr.isEmpty())
               aFmtStr = SvPasteObjectHelper::GetSotFormatUIName( nFmtID );
-            pPopup->InsertItem( static_cast<sal_uInt16>(nFmtID), aFmtStr );
+            xPopup->append(OUString::number(static_cast<sal_uInt32>(nFmtID)), aFmtStr);
         }
 
         ToolBox& rBox = GetToolBox();
         sal_uInt16 nId = GetId();
         rBox.SetItemDown( nId, true );
 
-        pPopup->Execute( &rBox, rBox.GetItemRect( nId ),
-            (rBox.GetAlign() == WindowAlign::Top || rBox.GetAlign() == WindowAlign::Bottom) ?
-                PopupMenuFlags::ExecuteDown : PopupMenuFlags::ExecuteRight );
+        ::tools::Rectangle aRect(rBox.GetItemRect(nId));
+        weld::Window* pParent = weld::GetPopupParent(rBox, aRect);
+        OString sResult = xPopup->popup_at_rect(pParent, aRect);
 
         rBox.SetItemDown( nId, false );
 
-        SfxUInt32Item aItem( SID_CLIPBOARD_FORMAT_ITEMS, pPopup->GetCurItemId() );
+        SfxUInt32Item aItem(SID_CLIPBOARD_FORMAT_ITEMS, sResult.toUInt32());
 
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
@@ -95,7 +91,6 @@ void SvxClipBoardControl::CreatePopupWindow()
     }
 
     GetToolBox().EndSelection();
-    DelPopup();
 }
 
 void SvxClipBoardControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
@@ -119,15 +114,5 @@ void SvxClipBoardControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
         GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SfxItemState::DISABLED) );
     }
 }
-
-
-void SvxClipBoardControl::DelPopup()
-{
-    if(pPopup)
-    {
-        pPopup.disposeAndClear();
-    }
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
