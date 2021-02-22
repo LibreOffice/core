@@ -2225,7 +2225,9 @@ void SwUiWriterTest::testTextCursorInvalidation()
 // this does not actually delete the header:    xPageStyle->setPropertyValue("HeaderIsOn", uno::makeAny(false));
     pWrtShell->ChangeHeaderOrFooter(u"Default Page Style", true, false, false);
     // must be disposed after deleting header
-    CPPUNIT_ASSERT_THROW(xCursor->goRight(1, false), uno::RuntimeException);
+    // cursor ends up in body
+    // UPDATE: this behaviour has been corrected as a side effect of the fix to tdf#46561:
+    //CPPUNIT_ASSERT_THROW(xCursor->goRight(1, false), uno::RuntimeException);
 }
 
 void SwUiWriterTest::testTdf68183()
