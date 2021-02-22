@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93f58b20_4beb5058",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-02-22T13:58:12Z",
+      "side": 1,
+      "message": "This comes from the early Release Engineers, so it is mysterious indeed. It is related to StartTOX - where it pushes a zero, and pops at the end of the TOC. So all the stuff in the middle - which the UI should have no access to modify the formatting - has the context of a character run starting at zero.\n\nProbably not a mistake, but definitely not documented why...",
+      "revId": "b76436e2badbfa1d54ad2d880da04e9d12b2162c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
