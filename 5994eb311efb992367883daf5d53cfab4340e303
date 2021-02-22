@@ -22,6 +22,30 @@
       "revId": "5994eb311efb992367883daf5d53cfab4340e303",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "069de90e_9c68c839",
+        "filename": "sw/uiconfig/swriter/ui/numparapage.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-22T08:16:24Z",
+      "side": 1,
+      "message": "You are describing a general principle, but if you look at this particular label in its context coupled with a combobox, where \"None\" is the default choice, it makes sense to have an action verb -- to emphasize that an active choice is needed here.  So I propose to try this out -- until a better idea or strong objection comes.",
+      "parentUuid": "114ac3a8_3881b324",
+      "range": {
+        "startLine": 290,
+        "startChar": 83,
+        "endLine": 290,
+        "endChar": 88
+      },
+      "revId": "5994eb311efb992367883daf5d53cfab4340e303",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
