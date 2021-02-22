@@ -354,9 +354,7 @@ Reference< XAccessibleRelationSet > OAccessibleMenuItemComponent::getAccessibleR
 {
     OExternalLockGuard aGuard( this );
 
-    utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
-    Reference< XAccessibleRelationSet > xSet = pRelationSetHelper;
-    return xSet;
+    return new utl::AccessibleRelationSetHelper;
 }
 
 

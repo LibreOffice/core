@@ -48,11 +48,11 @@ AccessibleBrowseBoxHeaderCell::AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnR
     @return
         A filled AccessibleStateSetHelper.
 */
-::utl::AccessibleStateSetHelper* AccessibleBrowseBoxHeaderCell::implCreateStateSetHelper()
+rtl::Reference<::utl::AccessibleStateSetHelper> AccessibleBrowseBoxHeaderCell::implCreateStateSetHelper()
 {
     SolarMethodGuard aGuard( getMutex() );
 
-    ::utl::AccessibleStateSetHelper*
+    rtl::Reference<::utl::AccessibleStateSetHelper>
         pStateSetHelper = new ::utl::AccessibleStateSetHelper;
 
     if( isAlive() )

@@ -212,9 +212,7 @@ Reference< XAccessibleRelationSet > OAccessibleMenuComponent::getAccessibleRelat
 {
     OExternalLockGuard aGuard( this );
 
-    utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
-    Reference< XAccessibleRelationSet > xSet = pRelationSetHelper;
-    return xSet;
+    return new utl::AccessibleRelationSetHelper;
 }
 
 
@@ -307,7 +305,7 @@ Reference< awt::XFont > OAccessibleMenuComponent::getFont(  )
             if ( xDev.is() )
             {
                 const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-                VCLXFont* pVCLXFont = new VCLXFont;
+                rtl::Reference<VCLXFont> pVCLXFont = new VCLXFont;
                 pVCLXFont->Init( *xDev, rStyleSettings.GetMenuFont() );
                 xFont = pVCLXFont;
             }

@@ -212,7 +212,7 @@ AccessibleBrowseBox::implGetHeaderBar(vcl::AccessibleBrowseBoxObjType eObjType)
     {
         if( !pxMember->is() )
         {
-            AccessibleBrowseBoxHeaderBar* pHeaderBar = new AccessibleBrowseBoxHeaderBar(
+            rtl::Reference<AccessibleBrowseBoxHeaderBar> pHeaderBar = new AccessibleBrowseBoxHeaderBar(
                 m_aCreator, *mpBrowseBox, eObjType );
             *pxMember = pHeaderBar;
         }

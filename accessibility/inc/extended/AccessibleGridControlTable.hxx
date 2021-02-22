@@ -43,8 +43,7 @@ public:
 
 private:
     virtual ~AccessibleGridControlTable() override = default;
-    std::vector< AccessibleGridControlTableCell* > m_pCellVector;
-    std::vector< css::uno::Reference< css::accessibility::XAccessible> > m_pAccessCellVector;
+    std::vector< rtl::Reference<AccessibleGridControlTableCell> > m_aCellVector;
 public:
     // XAccessibleContext
 
@@ -141,9 +140,7 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
 
     /**@return m_pCellVector*/
-    std::vector< AccessibleGridControlTableCell* >& getCellVector() { return m_pCellVector;}
-    /**@return m_xAccessCellVector*/
-    std::vector< css::uno::Reference< css::accessibility::XAccessible > >& getAccessibleCellVector() { return m_pAccessCellVector;}
+    std::vector< rtl::Reference<AccessibleGridControlTableCell> >& getCellVector() { return m_aCellVector;}
 
 private:
     // internal virtual methods

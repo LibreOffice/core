@@ -44,9 +44,9 @@ AccessibleGridControlHeaderCell::AccessibleGridControlHeaderCell(sal_Int32 _nCol
     @return
         A filled AccessibleStateSetHelper.
 */
-::utl::AccessibleStateSetHelper* AccessibleGridControlHeaderCell::implCreateStateSetHelper()
+rtl::Reference<::utl::AccessibleStateSetHelper> AccessibleGridControlHeaderCell::implCreateStateSetHelper()
 {
-    ::utl::AccessibleStateSetHelper*
+    rtl::Reference<::utl::AccessibleStateSetHelper>
         pStateSetHelper = new ::utl::AccessibleStateSetHelper;
 
     if( isAlive() )

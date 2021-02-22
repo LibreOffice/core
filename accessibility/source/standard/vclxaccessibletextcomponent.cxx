@@ -352,7 +352,7 @@ sal_Bool VCLXAccessibleTextComponent::copyText( sal_Int32 nStartIndex, sal_Int32
         {
             OUString sText( OCommonAccessibleText::implGetTextRange( implGetText(), nStartIndex, nEndIndex ) );
 
-            vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( sText );
+            rtl::Reference<vcl::unohelper::TextDataObject> pDataObj = new vcl::unohelper::TextDataObject( sText );
 
             SolarMutexReleaser aReleaser;
             xClipboard->setContents( pDataObj, nullptr );

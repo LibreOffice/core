@@ -367,7 +367,7 @@ sal_Bool VCLXAccessibleMenuItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEnd
             {
                 OUString sText( getTextRange( nStartIndex, nEndIndex ) );
 
-                vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( sText );
+                rtl::Reference<vcl::unohelper::TextDataObject> pDataObj = new vcl::unohelper::TextDataObject( sText );
 
                 SolarMutexReleaser aReleaser;
                 xClipboard->setContents( pDataObj, nullptr );
@@ -429,8 +429,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleMenuItem::getAccessibleActionKe
     if ( nIndex != 0 )
         throw IndexOutOfBoundsException();
 
-    OAccessibleKeyBindingHelper* pKeyBindingHelper = new OAccessibleKeyBindingHelper();
-    Reference< XAccessibleKeyBinding > xKeyBinding = pKeyBindingHelper;
+    rtl::Reference<OAccessibleKeyBindingHelper> pKeyBindingHelper = new OAccessibleKeyBindingHelper();
 
     if ( m_pParent )
     {
@@ -494,7 +493,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleMenuItem::getAccessibleActionKe
         }
     }
 
-    return xKeyBinding;
+    return pKeyBindingHelper;
 }
 
 

@@ -184,9 +184,7 @@ Reference< XAccessibleRelationSet > VCLXAccessibleHeaderBarItem::getAccessibleRe
 {
     OExternalLockGuard aGuard( this );
 
-    utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
-    Reference< XAccessibleRelationSet > xSet = pRelationSetHelper;
-    return xSet;
+    return new utl::AccessibleRelationSetHelper;
 }
 
 
@@ -194,8 +192,7 @@ Reference< XAccessibleStateSet > VCLXAccessibleHeaderBarItem::getAccessibleState
 {
     OExternalLockGuard aGuard( this );
 
-    utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
-    Reference< XAccessibleStateSet > xSet = pStateSetHelper;
+    rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
 
     if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
     {
@@ -206,7 +203,7 @@ Reference< XAccessibleStateSet > VCLXAccessibleHeaderBarItem::getAccessibleState
         pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
     }
 
-    return xSet;
+    return pStateSetHelper;
 }
 
 

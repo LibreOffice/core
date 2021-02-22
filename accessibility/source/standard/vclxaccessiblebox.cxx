@@ -305,7 +305,7 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleBox::getAccessibleChild (sal_Int32
             // List.
             if ( ! m_xList.is())
             {
-                VCLXAccessibleList* pList = new VCLXAccessibleList ( GetVCLXWindow(),
+                rtl::Reference<VCLXAccessibleList> pList = new VCLXAccessibleList ( GetVCLXWindow(),
                     (m_aBoxType == LISTBOX ? VCLXAccessibleList::LISTBOX : VCLXAccessibleList::COMBOBOX),
                                                                     this);
                 pList->SetIndexInParent (i);

@@ -302,8 +302,7 @@ namespace accessibility
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
-        Reference< XAccessibleStateSet > xStateSet = pStateSetHelper;
+        rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
 
         if ( IsAlive_Impl() )
         {
@@ -323,7 +322,7 @@ namespace accessibility
         else
             pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
 
-        return xStateSet;
+        return pStateSetHelper;
     }
 
     Locale SAL_CALL AccessibleIconChoiceCtrlEntry::getLocale(  )

@@ -702,7 +702,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
         sal_uInt16 nHighlightItemId = pToolBox->GetHighlightItemId();
         vcl::Window* pItemWindow = pToolBox->GetItemWindow( nItemId );
         // not found -> create a new child
-        VCLXAccessibleToolBoxItem* pChild = new VCLXAccessibleToolBoxItem( pToolBox, i );
+        rtl::Reference<VCLXAccessibleToolBoxItem> pChild = new VCLXAccessibleToolBoxItem( pToolBox, i );
         Reference< XAccessible> xParent = pChild;
         if ( pItemWindow )
         {
