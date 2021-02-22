@@ -1058,7 +1058,7 @@ IMPL_LINK_NOARG(DockingWindow, ImplHandleLayoutTimerHdl, Timer*, void)
     setPosSizeOnContainee();
 }
 
-InterimDockingWindow::InterimDockingWindow(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame, bool bTearable)
+DropdownDockingWindow::DropdownDockingWindow(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame, bool bTearable)
     : DockingWindow(pParent,
                     !bTearable ? OString("InterimDockParent") : OString("InterimTearableParent"),
                     !bTearable ? OUString("vcl/ui/interimdockparent.ui") : OUString("vcl/ui/interimtearableparent.ui"),
@@ -1067,12 +1067,12 @@ InterimDockingWindow::InterimDockingWindow(vcl::Window* pParent, const css::uno:
 {
 }
 
-InterimDockingWindow::~InterimDockingWindow()
+DropdownDockingWindow::~DropdownDockingWindow()
 {
     disposeOnce();
 }
 
-void InterimDockingWindow::dispose()
+void DropdownDockingWindow::dispose()
 {
     m_xBox.clear();
     DockingWindow::dispose();

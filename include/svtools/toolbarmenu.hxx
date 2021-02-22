@@ -82,7 +82,7 @@ public:
     void unsetPopover();
 };
 
-class SVT_DLLPUBLIC InterimToolbarPopup final : public InterimDockingWindow
+class SVT_DLLPUBLIC InterimToolbarPopup final : public DropdownDockingWindow
 {
 private:
     css::uno::Reference<css::frame::XFrame> m_xFrame;
