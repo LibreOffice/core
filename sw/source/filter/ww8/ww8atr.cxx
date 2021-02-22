@@ -5618,7 +5618,13 @@ void AttributeOutputBase::CharBackgroundBase( const SvxBrushItem& rBrush )
     }
     else
     {
-        CharHighlight(rBrush);
+        if (!GetExport().m_aCurrentCharPropStarts.empty() || !GetExport().HasItem(RES_CHRATR_HIGHLIGHT))
+            CharHighlight(rBrush);
+        else
+        {
+            SAL_WARN("sw.ww8","!!!!!!!!!!!!!!!! SKIPPING CharHighlight["<<rBrush.GetColor()<<"] because there is already a highlight");
+            assert (false);
+        }
     }
 }
 
