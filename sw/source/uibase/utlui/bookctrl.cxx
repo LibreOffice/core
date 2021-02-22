@@ -28,7 +28,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/status.hxx>
-#include <vcl/menu.hxx>
+#include <vcl/weldutils.hxx>
 #include <cmdid.h>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
@@ -37,34 +37,6 @@
 #include <map>
 
 SFX_IMPL_STATUSBAR_CONTROL(SwBookmarkControl, SfxStringListItem);
-
-namespace {
-
-class BookmarkPopup_Impl : public PopupMenu
-{
-public:
-    BookmarkPopup_Impl();
-
-    sal_uInt16          GetCurId() const { return nCurId; }
-
-private:
-    sal_uInt16          nCurId;
-
-    virtual void    Select() override;
-};
-
-}
-
-BookmarkPopup_Impl::BookmarkPopup_Impl() :
-    PopupMenu(),
-    nCurId(USHRT_MAX)
-{
-}
-
-void BookmarkPopup_Impl::Select()
-{
-    nCurId = GetCurItemId();
-}
 
 SwBookmarkControl::SwBookmarkControl( sal_uInt16 _nSlotId,
                                       sal_uInt16 _nId,
@@ -103,14 +75,16 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
             GetStatusBar().GetItemText( GetId() ).isEmpty())
         return;
 
-    ScopedVclPtrInstance<BookmarkPopup_Impl> aPop;
     SwWrtShell* pWrtShell = ::GetActiveWrtShell();
     if( !(pWrtShell && pWrtShell->getIDocumentMarkAccess()->getAllMarksCount() > 0) )
         return;
 
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/bookmarkmenu.ui"));
+    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("menu"));
+
     IDocumentMarkAccess* const pMarkAccess = pWrtShell->getIDocumentMarkAccess();
     IDocumentMarkAccess::const_iterator_t ppBookmarkStart = pMarkAccess->getBookmarksBegin();
-    sal_uInt16 nPopupId = 1;
+    sal_uInt32 nPopupId = 1;
     std::map<sal_Int32, sal_uInt16> aBookmarkIdx;
     for(IDocumentMarkAccess::const_iterator_t ppBookmark = ppBookmarkStart;
         ppBookmark != pMarkAccess->getBookmarksEnd();
@@ -118,16 +92,17 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
     {
         if(IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
         {
-            aPop->InsertItem( nPopupId, (*ppBookmark)->GetName() );
+            xPopup->append(OUString::number(nPopupId), (*ppBookmark)->GetName());
             aBookmarkIdx[nPopupId] = static_cast<sal_uInt16>(ppBookmark - ppBookmarkStart);
             nPopupId++;
         }
     }
-    aPop->Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
-    sal_uInt16 nCurrId = aPop->GetCurId();
-    if( nCurrId != USHRT_MAX)
+    ::tools::Rectangle aRect(rCEvt.GetMousePosPixel(), Size(1, 1));
+    weld::Window* pParent = weld::GetPopupParent(GetStatusBar(), aRect);
+    OString sResult = xPopup->popup_at_rect(pParent, aRect);
+    if (!sResult.isEmpty())
     {
-        SfxUInt16Item aBookmark( FN_STAT_BOOKMARK, aBookmarkIdx[nCurrId] );
+        SfxUInt16Item aBookmark( FN_STAT_BOOKMARK, aBookmarkIdx[sResult.toUInt32()] );
         SfxViewFrame::Current()->GetDispatcher()->ExecuteList(FN_STAT_BOOKMARK,
             SfxCallMode::ASYNCHRON|SfxCallMode::RECORD,
             { &aBookmark });
