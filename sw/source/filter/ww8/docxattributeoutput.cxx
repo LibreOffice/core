@@ -30,6 +30,7 @@
 #include <fchrfmt.hxx>
 #include <tgrditem.hxx>
 #include <fmtruby.hxx>
+#include <fmtfollowtextflow.hxx>
 #include <fmtanchr.hxx>
 #include <breakit.hxx>
 #include <redline.hxx>
@@ -5471,11 +5472,13 @@ void DocxAttributeOutput::WriteActiveXControl(const SdrObject* pObject, const Sw
     }
     else
     {
+        SwFormatFollowTextFlow const& rFlow(rFrameFormat.GetFollowTextFlow());
         const SwFormatHoriOrient& rHoriOri = rFrameFormat.GetHoriOrient();
         const SwFormatVertOrient& rVertOri = rFrameFormat.GetVertOrient();
         SwFormatSurround const& rSurround(rFrameFormat.GetSurround());
         rtl::Reference<sax_fastparser::FastAttributeList> pAttrList(docx::SurroundToVMLWrap(rSurround));
         sShapeId = m_rExport.VMLExporter().AddSdrObject(*pObject,
+            rFlow.GetValue(),
             rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(),
             rHoriOri.GetRelationOrient(),
             rVertOri.GetRelationOrient(),

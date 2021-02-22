@@ -86,6 +86,7 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
     sal_Int16 m_eHOri, m_eVOri, m_eHRel, m_eVRel;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pWrapAttrList;
     bool m_bInline; // css::text::TextContentAnchorType_AS_CHARACTER
+    bool m_IsFollowingTextFlow = false;
 
     /// The object we're exporting.
     const SdrObject* m_pSdrObject;
@@ -140,8 +141,9 @@ public:
     /// Export the sdr object as VML.
     ///
     /// Call this when you need to export the object as VML.
-    OString const & AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri = -1,
-            sal_Int16 eVOri = -1, sal_Int16 eHRel = -1,
+    OString const & AddSdrObject( const SdrObject& rObj,
+            bool const bIsFollowingTextFlow = false,
+            sal_Int16 eHOri = -1, sal_Int16 eVOri = -1, sal_Int16 eHRel = -1,
             sal_Int16 eVRel = -1,
             sax_fastparser::FastAttributeList* pWrapAttrList = nullptr,
             const bool bOOxmlExport = false );
