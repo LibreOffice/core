@@ -22,6 +22,30 @@
       "revId": "eb13b97b913de7b0debb5cf9be49a4beb31ba62a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d44dd4d1_22cdf6b1",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-02-22T12:11:13Z",
+      "side": 1,
+      "message": "\u003e Which will you render/use when both are given?\n\nBoth, as that\u0027s the point. Note that the added API documentation says \"additional alpha\". What happens is that Impress renders a slide animation with bitmaps that have an alpha channel, and fades them in (\u003dsecond numeric alpha).",
+      "parentUuid": "ba9ddab4_b4b2d9b0",
+      "range": {
+        "startLine": 1490,
+        "startChar": 36,
+        "endLine": 1490,
+        "endChar": 55
+      },
+      "revId": "eb13b97b913de7b0debb5cf9be49a4beb31ba62a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
