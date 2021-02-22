@@ -22,6 +22,29 @@
       "revId": "aeaf67b724fbcd53ba33e26c57f046d21178895e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f2b404e_84c6a68b",
+        "filename": "sw/uiconfig/swriter/ui/templatedialog1.ui",
+        "patchSetId": 8
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-22T08:32:15Z",
+      "side": 1,
+      "message": "@Heiko - I believe this line should have changed the Standard button to \"Set to Parent\"",
+      "range": {
+        "startLine": 62,
+        "startChar": 15,
+        "endLine": 62,
+        "endChar": 118
+      },
+      "revId": "aeaf67b724fbcd53ba33e26c57f046d21178895e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
