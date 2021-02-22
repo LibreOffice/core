@@ -344,7 +344,7 @@ IMPL_LINK(BibGeneralPage, LastElementKeyInputHdl, const KeyEvent&, rKeyEvent, bo
                     xUpdateCursor->moveToInsertRow();
             }
             else
-                xRowSet->next();
+                (void)xRowSet->next();
         }
         xIdentifierED->grab_focus();
         xIdentifierED->select_region(0, -1);
