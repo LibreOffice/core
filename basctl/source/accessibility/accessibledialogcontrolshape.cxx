@@ -393,9 +393,7 @@ Reference< XAccessibleRelationSet > AccessibleDialogControlShape::getAccessibleR
 {
     OExternalLockGuard aGuard( this );
 
-    utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
-    Reference< XAccessibleRelationSet > xSet = pRelationSetHelper;
-    return xSet;
+    return new utl::AccessibleRelationSetHelper;
 }
 
 
@@ -403,8 +401,7 @@ Reference< XAccessibleStateSet > AccessibleDialogControlShape::getAccessibleStat
 {
     OExternalLockGuard aGuard( this );
 
-    utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
-    Reference< XAccessibleStateSet > xSet = pStateSetHelper;
+    rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
 
     if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
     {
@@ -415,7 +412,7 @@ Reference< XAccessibleStateSet > AccessibleDialogControlShape::getAccessibleStat
         pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
     }
 
-    return xSet;
+    return pStateSetHelper;
 }
 
 
@@ -506,7 +503,7 @@ Reference< awt::XFont > AccessibleDialogControlShape::getFont(  )
                 aFont = pWindow->GetControlFont();
             else
                 aFont = pWindow->GetFont();
-            VCLXFont* pVCLXFont = new VCLXFont;
+            rtl::Reference<VCLXFont> pVCLXFont = new VCLXFont;
             pVCLXFont->Init( *xDev, aFont );
             xFont = pVCLXFont;
         }
