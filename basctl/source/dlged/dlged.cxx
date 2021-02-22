@@ -748,7 +748,7 @@ void DlgEditor::Copy()
         {}
     }
 
-    DlgEdTransferableImpl* pTrans = nullptr;
+    rtl::Reference<DlgEdTransferableImpl> pTrans;
     if( xStringResourcePersistence.is() )
     {
         // With resource, support old and new format
