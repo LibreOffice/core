@@ -30,12 +30,12 @@ struct SwCursorMoveState;
 
 class SwFlyPortion : public SwFixPortion
 {
-    sal_uInt16 nBlankWidth;
+    sal_uInt16 m_nBlankWidth;
 public:
     explicit SwFlyPortion( const SwRect &rFlyRect )
-        : SwFixPortion(rFlyRect), nBlankWidth( 0 ) { SetWhichPor( PortionType::Fly ); }
-    sal_uInt16 GetBlankWidth( ) const { return nBlankWidth; }
-    void SetBlankWidth( const sal_uInt16 nNew ) { nBlankWidth = nNew; }
+        : SwFixPortion(rFlyRect), m_nBlankWidth( 0 ) { SetWhichPor( PortionType::Fly ); }
+    sal_uInt16 GetBlankWidth( ) const { return m_nBlankWidth; }
+    void SetBlankWidth( const sal_uInt16 nNew ) { m_nBlankWidth = nNew; }
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
 };

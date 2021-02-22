@@ -23,9 +23,9 @@
 
 class SwTabPortion : public SwFixPortion
 {
-    const sal_uInt16 nTabPos;
-    const sal_Unicode cFill;
-    const bool bAutoTabStop;
+    const sal_uInt16 m_nTabPos;
+    const sal_Unicode m_cFill;
+    const bool m_bAutoTabStop;
 
     // Format() branches either into PreFormat() or PostFormat()
     bool PreFormat( SwTextFormatInfo &rInf );
@@ -35,8 +35,8 @@ public:
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual void FormatEOL( SwTextFormatInfo &rInf ) override;
     bool PostFormat( SwTextFormatInfo &rInf );
-    bool IsFilled() const { return 0 != cFill; }
-    sal_uInt16 GetTabPos() const { return nTabPos; }
+    bool IsFilled() const { return 0 != m_cFill; }
+    sal_uInt16 GetTabPos() const { return m_nTabPos; }
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
