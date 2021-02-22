@@ -1401,6 +1401,8 @@ sal_Int32 VMLExport::StartShape()
             break;
     }
 
+    m_pShapeAttrList->addNS(XML_o, XML_allowincell, m_IsFollowingTextFlow ? "t" : "f");
+
     // add style
     m_pShapeAttrList->add( XML_style, m_ShapeStyle.makeStringAndClear() );
 
@@ -1535,7 +1537,9 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
     m_pSerializer->endElementNS( XML_v, nShapeElement );
 }
 
-OString const & VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri, sal_Int16 eVOri, sal_Int16 eHRel, sal_Int16 eVRel,
+OString const & VMLExport::AddSdrObject( const SdrObject& rObj,
+        bool const bIsFollowingTextFlow,
+        sal_Int16 eHOri, sal_Int16 eVOri, sal_Int16 eHRel, sal_Int16 eVRel,
         std::unique_ptr<FastAttributeList> pWrapAttrList,
         const bool bOOxmlExport )
 {
@@ -1545,6 +1549,7 @@ OString const & VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri,
     m_eHRel = eHRel;
     m_eVRel = eVRel;
     m_pWrapAttrList = std::move(pWrapAttrList);
+    m_IsFollowingTextFlow = bIsFollowingTextFlow;
     m_bInline = false;
     EscherEx::AddSdrObject(rObj, bOOxmlExport);
     return m_sShapeId;
@@ -1558,6 +1563,7 @@ OString const & VMLExport::AddInlineSdrObject( const SdrObject& rObj, const bool
     m_eHRel = -1;
     m_eVRel = -1;
     m_pWrapAttrList.reset();
+    m_IsFollowingTextFlow = false;
     m_bInline = true;
     EscherEx::AddSdrObject(rObj, bOOxmlExport);
     return m_sShapeId;
