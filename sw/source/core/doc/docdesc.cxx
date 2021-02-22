@@ -388,8 +388,35 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().AppendUndo(
-                std::make_unique<SwUndoPageDesc>(rDesc, rChged, this));
+        // Stash header formats as needed.
+        const SwFormatHeader& rLeftHead = rChged.GetLeft().GetHeader();
+        const SwFormatHeader& rFirstMasterHead = rChged.GetFirstMaster().GetHeader();
+        const SwFormatHeader& rFirstLeftHead = rChged.GetFirstLeft().GetHeader();
+        const bool bStashLeftHead = !rDesc.IsHeaderShared() && rChged.IsHeaderShared();
+        const bool bStashFirstMasterHead = !rDesc.IsFirstShared() && rChged.IsFirstShared();
+        const bool bStashFirstLeftHead = (!rDesc.IsHeaderShared() && rChged.IsHeaderShared()) || (!rDesc.IsFirstShared() && rChged.IsFirstShared());
+        if (bStashLeftHead && rLeftHead.GetRegisteredIn())
+            rDesc.StashFrameFormat(rChged.GetLeft(), true, true, false);
+        if (bStashFirstMasterHead && rFirstMasterHead.GetRegisteredIn())
+            rDesc.StashFrameFormat(rChged.GetFirstMaster(), true, false, true);
+        if (bStashFirstLeftHead && rFirstLeftHead.GetRegisteredIn())
+            rDesc.StashFrameFormat(rChged.GetFirstLeft(), true, true, true);
+
+        // Stash footer formats as needed.
+        const SwFormatFooter& rLeftFoot = rChged.GetLeft().GetFooter();
+        const SwFormatFooter& rFirstMasterFoot = rChged.GetFirstMaster().GetFooter();
+        const SwFormatFooter& rFirstLeftFoot = rChged.GetFirstLeft().GetFooter();
+        const bool bStashLeftFoot = !rDesc.IsFooterShared() && rChged.IsFooterShared();
+        const bool bStashFirstMasterFoot = !rDesc.IsFirstShared() && rChged.IsFirstShared();
+        const bool bStashFirstLeftFoot = (!rDesc.IsFooterShared() && rChged.IsFooterShared()) || (!rDesc.IsFirstShared() && rChged.IsFirstShared());
+        if (bStashLeftFoot && rLeftFoot.GetRegisteredIn())
+            rDesc.StashFrameFormat(rChged.GetLeft(), false, true, false);
+        if (bStashFirstMasterFoot && rFirstMasterFoot.GetRegisteredIn())
+            rDesc.StashFrameFormat(rChged.GetFirstMaster(), false, false, true);
+        if (bStashFirstLeftFoot && rFirstLeftFoot.GetRegisteredIn())
+            rDesc.StashFrameFormat(rChged.GetFirstLeft(), false, true, true);
+
+        GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoPageDesc>(rDesc, rChged, this));
     }
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
@@ -429,24 +456,8 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     // Take over orientation
     rDesc.SetLandscape( rChged.GetLandscape() );
 
-    // #i46909# no undo if header or footer changed
-    bool bHeaderFooterChanged = false;
-
     // Synch header.
     const SwFormatHeader& rMasterHead = rChged.GetMaster().GetHeader();
-    const SwFormatHeader& rLeftHead = rChged.GetLeft().GetHeader();
-    const SwFormatHeader& rFirstMasterHead = rChged.GetFirstMaster().GetHeader();
-    const SwFormatHeader& rFirstLeftHead = rChged.GetFirstLeft().GetHeader();
-    if (undoGuard.UndoWasEnabled())
-    {
-        // #i46909# no undo if header or footer changed
-        // Did something change in the nodes?
-        const SwFormatHeader &rOldMasterHead = rDesc.GetMaster().GetHeader();
-        bHeaderFooterChanged |=
-            ( rMasterHead.IsActive() != rOldMasterHead.IsActive() ||
-              rChged.IsHeaderShared() != rDesc.IsHeaderShared() ||
-              rChged.IsFirstShared() != rDesc.IsFirstShared() );
-    }
     rDesc.GetMaster().SetFormatAttr( rMasterHead );
     const bool bRestoreStashedLeftHead = rDesc.IsHeaderShared() && !rChged.IsHeaderShared();
     const bool bRestoreStashedFirstMasterHead = rDesc.IsFirstShared() && !rChged.IsFirstShared();
@@ -458,33 +469,10 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     CopyMasterHeader(rChged, pStashedFirstMasterFormat ? pStashedFirstMasterFormat->GetHeader() : rMasterHead, rDesc, false, true); // Copy first master
     CopyMasterHeader(rChged, pStashedFirstLeftFormat ? pStashedFirstLeftFormat->GetHeader() : rMasterHead, rDesc, true, true); // Copy first left
 
-    // Stash header formats as needed.
-    const bool bStashLeftHead = !rDesc.IsHeaderShared() && rChged.IsHeaderShared();
-    const bool bStashFirstMasterHead = !rDesc.IsFirstShared() && rChged.IsFirstShared();
-    const bool bStashFirstLeftHead = (!rDesc.IsHeaderShared() && rChged.IsHeaderShared()) || (!rDesc.IsFirstShared() && rChged.IsFirstShared());
-    if (bStashLeftHead && rLeftHead.GetRegisteredIn())
-        rDesc.StashFrameFormat(rChged.GetLeft(), true, true, false);
-    if (bStashFirstMasterHead && rFirstMasterHead.GetRegisteredIn())
-        rDesc.StashFrameFormat(rChged.GetFirstMaster(), true, false, true);
-    if (bStashFirstLeftHead && rFirstLeftHead.GetRegisteredIn())
-        rDesc.StashFrameFormat(rChged.GetFirstLeft(), true, true, true);
-
     rDesc.ChgHeaderShare( rChged.IsHeaderShared() );
 
     // Synch Footer.
     const SwFormatFooter& rMasterFoot = rChged.GetMaster().GetFooter();
-    const SwFormatFooter& rLeftFoot = rChged.GetLeft().GetFooter();
-    const SwFormatFooter& rFirstMasterFoot = rChged.GetFirstMaster().GetFooter();
-    const SwFormatFooter& rFirstLeftFoot = rChged.GetFirstLeft().GetFooter();
-    if (undoGuard.UndoWasEnabled())
-    {
-        // #i46909# no undo if header or footer changed
-        // Did something change in the Nodes?
-        const SwFormatFooter &rOldMasterFoot = rDesc.GetMaster().GetFooter();
-        bHeaderFooterChanged |=
-            ( rMasterFoot.IsActive() != rOldMasterFoot.IsActive() ||
-              rChged.IsFooterShared() != rDesc.IsFooterShared() );
-    }
     rDesc.GetMaster().SetFormatAttr( rMasterFoot );
     const bool bRestoreStashedLeftFoot = rDesc.IsFooterShared() && !rChged.IsFooterShared();
     const bool bRestoreStashedFirstMasterFoot = rDesc.IsFirstShared() && !rChged.IsFirstShared();
@@ -495,17 +483,6 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     CopyMasterFooter(rChged, pStashedLeftFoot ? pStashedLeftFoot->GetFooter() : rMasterFoot, rDesc, true, false); // Copy left footer
     CopyMasterFooter(rChged, pStashedFirstMasterFoot ? pStashedFirstMasterFoot->GetFooter() : rMasterFoot, rDesc, false, true); // Copy first master
     CopyMasterFooter(rChged, pStashedFirstLeftFoot ? pStashedFirstLeftFoot->GetFooter() : rMasterFoot, rDesc, true, true); // Copy first left
-
-    // Stash footer formats as needed.
-    const bool bStashLeftFoot = !rDesc.IsFooterShared() && rChged.IsFooterShared();
-    const bool bStashFirstMasterFoot = !rDesc.IsFirstShared() && rChged.IsFirstShared();
-    const bool bStashFirstLeftFoot = (!rDesc.IsFooterShared() && rChged.IsFooterShared()) || (!rDesc.IsFirstShared() && rChged.IsFirstShared());
-    if (bStashLeftFoot && rLeftFoot.GetRegisteredIn())
-        rDesc.StashFrameFormat(rChged.GetLeft(), false, true, false);
-    if (bStashFirstMasterFoot && rFirstMasterFoot.GetRegisteredIn())
-        rDesc.StashFrameFormat(rChged.GetFirstMaster(), false, false, true);
-    if (bStashFirstLeftFoot && rFirstLeftFoot.GetRegisteredIn())
-        rDesc.StashFrameFormat(rChged.GetFirstLeft(), false, true, true);
 
     rDesc.ChgFooterShare( rChged.IsFooterShared() );
     // there is just one first shared flag for both header and footer?
@@ -566,12 +543,6 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
         rDesc.GetFirstLeft().CallSwClientNotify(aHint);
     }
     getIDocumentState().SetModified();
-
-    // #i46909# no undo if header or footer changed
-    if( bHeaderFooterChanged )
-    {
-        GetIDocumentUndoRedo().DelAllUndoObj();
-    }
 
     SfxBindings* pBindings =
         ( GetDocShell() && GetDocShell()->GetDispatcher() ) ? GetDocShell()->GetDispatcher()->GetBindings() : nullptr;

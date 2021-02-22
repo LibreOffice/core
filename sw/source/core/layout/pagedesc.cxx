@@ -430,33 +430,44 @@ void SwPageDesc::StashFrameFormat(const SwFrameFormat& rFormat, bool bHeader, bo
             pFormat = &m_aStashedFooter.m_pStashedFirstLeft;
     }
 
-    if (!pFormat)
+    if (pFormat)
     {
-        SAL_WARN("sw", "Stashing the right page header/footer is pointless.");
+        *pFormat = std::make_shared<SwFrameFormat>(rFormat);
     }
     else
     {
-        *pFormat = std::make_shared<SwFrameFormat>(rFormat);
+        SAL_WARN("sw", "Stashing the right page header/footer is pointless.");
     }
 }
 
 const SwFrameFormat* SwPageDesc::GetStashedFrameFormat(bool bHeader, bool bLeft, bool bFirst) const
 {
+    std::shared_ptr<SwFrameFormat>* pFormat = nullptr;
+
     if (bLeft && !bFirst)
     {
-        return bHeader ? m_aStashedHeader.m_pStashedLeft.get() : m_aStashedFooter.m_pStashedLeft.get();
+        pFormat = bHeader ? &m_aStashedHeader.m_pStashedLeft : &m_aStashedFooter.m_pStashedLeft;
     }
     else if (!bLeft && bFirst)
     {
-        return bHeader ? m_aStashedHeader.m_pStashedFirst.get() : m_aStashedFooter.m_pStashedFirst.get();
+        pFormat = bHeader ? &m_aStashedHeader.m_pStashedFirst : &m_aStashedFooter.m_pStashedFirst;
     }
     else if (bLeft && bFirst)
     {
-        return bHeader ? m_aStashedHeader.m_pStashedFirstLeft.get() : m_aStashedFooter.m_pStashedFirstLeft.get();
+        pFormat = bHeader ? &m_aStashedHeader.m_pStashedFirstLeft : &m_aStashedFooter.m_pStashedFirstLeft;
     }
 
-    SAL_WARN("sw", "Right page format is never stashed.");
-    return nullptr;
+    if (pFormat)
+    {
+        const SwFrameFormat* retVal = pFormat->get();
+        pFormat->reset();
+        return retVal;
+    }
+    else
+    {
+        SAL_WARN("sw", "Right page format is never stashed.");
+        return nullptr;
+    }
 }
 
 // Page styles
