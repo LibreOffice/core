@@ -13,6 +13,7 @@ $(eval $(call gb_UIConfig_add_uifiles,vcl,\
 	vcl/uiconfig/ui/aboutbox \
 	vcl/uiconfig/ui/combobox \
 	vcl/uiconfig/ui/cupspassworddialog \
+	vcl/uiconfig/ui/dockingwindow \
 	vcl/uiconfig/ui/editmenu \
 	vcl/uiconfig/ui/errornocontentdialog \
 	vcl/uiconfig/ui/errornoprinterdialog \
