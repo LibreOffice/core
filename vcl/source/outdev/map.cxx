@@ -673,8 +673,8 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
         {
             const auto eFrom = MapToO3tlLength(eOld, o3tl::Length::in);
             const auto eTo = MapToO3tlLength(eNew, o3tl::Length::in);
-            const auto& [nNum, nDen] = o3tl::getConversionMulDiv(eFrom, eTo);
-            Fraction aF(nNum, nDen);
+            const auto& [mul, div] = o3tl::getConversionMulDiv(eFrom, eTo);
+            Fraction aF(div, mul);
 
             // a?F =  a?F * aF
             aXF = ImplMakeFraction( aXF.GetNumerator(),   aF.GetNumerator(),
