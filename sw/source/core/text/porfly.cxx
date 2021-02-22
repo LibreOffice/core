@@ -338,39 +338,6 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
         aObjPositioning.CalcPosition();
     }
 
-    SwFrameFormat* pShape = FindFrameFormat(pSdrObj);
-    const SwFormatAnchor& rAnchor(pShape->GetAnchor());
-    if (rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
-    {
-        // This is an inline draw shape, see if it has a textbox.
-        SwFrameFormat* pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT);
-        if (pTextBox)
-        {
-            // It has, so look up its text rectangle, and adjust the position
-            // of the textbox accordingly.
-            // Both rectangles are absolute, SwFormatHori/VertOrient's position
-            // is relative to the print area of the anchor text frame.
-            tools::Rectangle aTextRectangle = SwTextBoxHelper::getTextRectangle(pShape);
-
-            SwFormatHoriOrient aHori(pTextBox->GetHoriOrient());
-            aHori.SetHoriOrient(css::text::HoriOrientation::NONE);
-            sal_Int32 nLeft = aTextRectangle.getX() - rFrame.getFrameArea().Left()
-                              - rFrame.getFramePrintArea().Left();
-            aHori.SetPos(nLeft);
-
-            SwFormatVertOrient aVert(pTextBox->GetVertOrient());
-            aVert.SetVertOrient(css::text::VertOrientation::NONE);
-            sal_Int32 const nTop = aTextRectangle.getY() - rFrame.getFrameArea().Top()
-                                   - rFrame.getFramePrintArea().Top();
-            aVert.SetPos(nTop);
-
-            pTextBox->LockModify();
-            pTextBox->SetFormatAttr(aHori);
-            pTextBox->SetFormatAttr(aVert);
-            pTextBox->UnlockModify();
-        }
-    }
-
     SetAlign( aObjPositioning.GetLineAlignment() );
 
     m_aRef = aObjPositioning.GetAnchorPos();

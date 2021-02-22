@@ -28,6 +28,8 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <fmtornt.hxx>
+#include <textboxhelper.hxx>
+#include <fmtanchr.hxx>
 
 
 using namespace ::com::sun::star;
@@ -86,6 +88,13 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
     Point aAnchorPos( mrProposedAnchorPos );
 
     const SwFrameFormat& rFrameFormat = GetFrameFormat();
+    if (auto pTxBx = SwTextBoxHelper::getOtherTextBoxFormat(&GetFrameFormat(), RES_DRAWFRMFMT))
+    {
+        SwFormatAnchor aNewTxBxAnchor(pTxBx->GetAnchor());
+        aNewTxBxAnchor.SetAnchor(rFrameFormat.GetAnchor().GetContentAnchor());
+        pTxBx->SetFormatAttr(aNewTxBxAnchor);
+
+    }
 
     SwRect aObjBoundRect( GetAnchoredObj().GetObjRect() );
     SwTwips nObjWidth = aRectFnSet.GetWidth(aObjBoundRect);

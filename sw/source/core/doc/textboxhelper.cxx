@@ -382,6 +382,7 @@ tools::Rectangle SwTextBoxHelper::getTextRectangle(SwFrameFormat* pShape, bool b
 {
     tools::Rectangle aRet;
     aRet.SetEmpty();
+
     auto pSdrShape = pShape->FindRealSdrObject();
     auto pCustomShape = dynamic_cast<SdrObjCustomShape*>(pSdrShape);
     if (pCustomShape)
@@ -711,10 +712,31 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                     if (aValue.get<text::TextContentAnchorType>()
                         == text::TextContentAnchorType::TextContentAnchorType_AS_CHARACTER)
                     {
-                        xPropertySet->setPropertyValue(
-                            UNO_NAME_ANCHOR_TYPE,
-                            uno::makeAny(
-                                text::TextContentAnchorType::TextContentAnchorType_AT_PARAGRAPH));
+                        if (const auto aPos = pShape->GetAnchor().GetContentAnchor())
+                        {
+                            xPropertySet->setPropertyValue(
+                                UNO_NAME_ANCHOR_TYPE,
+                                uno::makeAny(text::TextContentAnchorType::
+                                                 TextContentAnchorType_AT_CHARACTER));
+                            xPropertySet->setPropertyValue(
+                                UNO_NAME_HORI_ORIENT_RELATION,
+                                uno::makeAny(text::RelOrientation::CHAR));
+
+                            auto pAnch = pFormat->GetAnchor();
+                            pAnch.SetAnchor(pShape->GetAnchor().GetContentAnchor());
+                            tools::Rectangle aRect(getTextRectangle(pShape, false));
+
+                            SwFormatHoriOrient aNewHOri(pFormat->GetHoriOrient());
+                            aNewHOri.SetPos(aRect.getX());
+                            SwFormatVertOrient aNewVOri(pFormat->GetVertOrient());
+                            aNewVOri.SetPos(aRect.getY());
+
+                            pFormat->SetFormatAttr(aNewHOri);
+                            pFormat->SetFormatAttr(aNewVOri);
+                            pFormat->SetFormatAttr(pAnch);
+                        }
+
+                        return;
                     }
                     else // Otherwise copy the anchor type of the shape
                     {
@@ -725,9 +747,15 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                     if (aValue.get<text::TextContentAnchorType>()
                         == text::TextContentAnchorType::TextContentAnchorType_AT_PAGE)
                     {
-                        xPropertySet->setPropertyValue(
-                            UNO_NAME_ANCHOR_PAGE_NO,
-                            uno::makeAny(pShape->GetAnchor().GetPageNum()));
+                        if (pShape->GetAnchor().GetPageNum())
+                            xPropertySet->setPropertyValue(
+                                UNO_NAME_ANCHOR_PAGE_NO,
+                                uno::makeAny(pShape->GetAnchor().GetPageNum()));
+                        else
+                        {
+                            SAL_WARN("sw.core", "SwTextBoxHelper::syncProperty: Invalid Page Num!");
+                            return;
+                        }
                     }
                     // At-Content Anchors have to be synced:
                     if (aValue.get<text::TextContentAnchorType>()
@@ -748,15 +776,18 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                                      "SwTextBoxHelper::syncProperty: Anchor without content!");
                     }
                     // And the repositioning:
-                    tools::Rectangle aRect(getTextRectangle(pShape, false));
+                    if (pShape->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
+                    {
+                        tools::Rectangle aRect(getTextRectangle(pShape, false));
 
-                    SwFormatHoriOrient aNewHOri(pShape->GetHoriOrient());
-                    aNewHOri.SetPos(aNewHOri.GetPos() + aRect.getX());
-                    SwFormatVertOrient aNewVOri(pShape->GetVertOrient());
-                    aNewVOri.SetPos(aNewVOri.GetPos() + aRect.getY());
+                        SwFormatHoriOrient aNewHOri(pShape->GetHoriOrient());
+                        aNewHOri.SetPos(aNewHOri.GetPos() + aRect.getX());
+                        SwFormatVertOrient aNewVOri(pShape->GetVertOrient());
+                        aNewVOri.SetPos(aNewVOri.GetPos() + aRect.getY());
 
-                    pFormat->SetFormatAttr(aNewHOri);
-                    pFormat->SetFormatAttr(aNewVOri);
+                        pFormat->SetFormatAttr(aNewHOri);
+                        pFormat->SetFormatAttr(aNewVOri);
+                    }
                     return;
                 }
                 break;
@@ -947,6 +978,13 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
     if (!pFormat)
         return;
 
+    if (rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+    {
+        const text::TextContentAnchorType aNewAnchorType
+            = mapAnchorType(rShape.GetAnchor().GetAnchorId());
+        syncProperty(&rShape, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE, uno::Any(aNewAnchorType));
+        return;
+    }
     SfxItemSet aTextBoxSet(pFormat->GetDoc()->GetAttrPool(), aFrameFormatSetRange);
 
     SfxItemIter aIter(rSet);
@@ -962,6 +1000,8 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                 const text::TextContentAnchorType aNewAnchorType
                     = mapAnchorType(rShape.GetAnchor().GetAnchorId());
                 syncProperty(&rShape, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE, uno::Any(aNewAnchorType));
+                if (rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+                    return;
                 auto& rOrient = static_cast<const SwFormatVertOrient&>(*pItem);
                 SwFormatVertOrient aOrient(rOrient);
 
@@ -990,6 +1030,8 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                     = mapAnchorType(rShape.GetAnchor().GetAnchorId());
                 syncProperty(&rShape, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE, uno::Any(aNewAnchorType));
                 auto& rOrient = static_cast<const SwFormatHoriOrient&>(*pItem);
+                if (rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+                    return;
                 SwFormatHoriOrient aOrient(rOrient);
 
                 tools::Rectangle aRect = getTextRectangle(&rShape, /*bAbsolute=*/false);
