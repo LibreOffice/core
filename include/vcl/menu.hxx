@@ -28,8 +28,8 @@
 #include <tools/long.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/keycod.hxx>
+#include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
-#include <vcl/vclevent.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <list>
@@ -49,8 +49,10 @@ class CommandEvent;
 class MenuFloatingWindow;
 class SalMenu;
 class MenuBarWindow;
+class VclMenuEvent;
 struct SystemMenuData;
 enum class FloatWinPopupFlags;
+enum class VclEventId;
 
 namespace com::sun::star::awt { class XPopupMenu; }
 namespace com::sun::star::accessibility { class XAccessible;  }

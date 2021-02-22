@@ -24,6 +24,7 @@
 #include <unotools/resmgr.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/dialoghelper.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/edit.hxx>

@@ -18,7 +18,6 @@
  */
 
 
-#include <memory>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
@@ -41,6 +40,8 @@
 #include <vcl/toolkit/svlbitm.hxx>
 
 #include <map>
+#include <memory>
+#include <list>
 
 using namespace ::com::sun::star;
 using namespace css::uno;

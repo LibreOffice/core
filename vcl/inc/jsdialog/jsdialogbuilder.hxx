@@ -25,6 +25,7 @@
 #include <cppuhelper/compbase.hxx>
 
 #include <deque>
+#include <list>
 
 class ToolBox;
 class ComboBox;

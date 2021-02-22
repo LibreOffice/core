@@ -22,6 +22,7 @@
 #include <vcl/event.hxx>
 #include <vcl/toolkit/roadmap.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclevent.hxx>
 #include <hyperlabel.hxx>
 #include <tools/color.hxx>
 #include <rtl/ustring.hxx>

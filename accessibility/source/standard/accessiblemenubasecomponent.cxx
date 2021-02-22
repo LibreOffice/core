@@ -29,6 +29,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/vclevent.hxx>
 
 #include <array>
 

@@ -25,11 +25,12 @@
 
 #include <memory>
 
-#include <vcl/vclevent.hxx>
 #include <tools/link.hxx>
 
 #include "FormattedFieldBeautifier.hxx"
 #include "FixedTextColor.hxx"
+
+class VclSimpleEvent;
 
 namespace rptui
 {

@@ -31,7 +31,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <o3tl/deleter.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/menu.hxx>
 #include <vcl/dndhelp.hxx>
 #include <vcl/vclptr.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -44,6 +43,7 @@ namespace weld {
     class Widget;
 }
 
+class PopupMenu;
 class VclBuilder;
 struct DDInfo;
 struct Impl_IMEInfos;
