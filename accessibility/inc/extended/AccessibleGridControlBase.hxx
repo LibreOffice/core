@@ -22,6 +22,7 @@
 
 #include <vcl/accessibletable.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include <tools/gen.hxx>
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -219,7 +220,7 @@ protected:
         may overwrite this method and add more states.
         @attention  This method requires locked mutex's.
         @return  A filled AccessibleStateSetHelper. */
-    virtual ::utl::AccessibleStateSetHelper* implCreateStateSetHelper();
+    virtual rtl::Reference<::utl::AccessibleStateSetHelper> implCreateStateSetHelper();
 
     // internal helper methods
 

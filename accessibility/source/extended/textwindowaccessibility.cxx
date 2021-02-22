@@ -1296,8 +1296,7 @@ Document::retrieveParagraphRelationSet( Paragraph const * pParagraph )
 {
     ::osl::MutexGuard aInternalGuard( GetMutex() );
 
-    ::utl::AccessibleRelationSetHelper* pRelationSetHelper = new ::utl::AccessibleRelationSetHelper();
-    css::uno::Reference< css::accessibility::XAccessibleRelationSet > xSet = pRelationSetHelper;
+    rtl::Reference<::utl::AccessibleRelationSetHelper> pRelationSetHelper = new ::utl::AccessibleRelationSetHelper();
 
     Paragraphs::iterator aPara( m_xParagraphs->begin() + pParagraph->getNumber() );
 
@@ -1315,7 +1314,7 @@ Document::retrieveParagraphRelationSet( Paragraph const * pParagraph )
         pRelationSetHelper->AddRelation( aRelation );
     }
 
-    return xSet;
+    return pRelationSetHelper;
 }
 
 // virtual

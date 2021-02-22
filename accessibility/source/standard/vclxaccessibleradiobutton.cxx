@@ -174,8 +174,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleRadioButton::getAccessibleActio
     if ( nIndex != 0 )
         throw IndexOutOfBoundsException();
 
-    OAccessibleKeyBindingHelper* pKeyBindingHelper = new OAccessibleKeyBindingHelper();
-    Reference< XAccessibleKeyBinding > xKeyBinding = pKeyBindingHelper;
+    rtl::Reference<OAccessibleKeyBindingHelper> pKeyBindingHelper = new OAccessibleKeyBindingHelper();
 
     VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
@@ -201,7 +200,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleRadioButton::getAccessibleActio
         }
     }
 
-    return xKeyBinding;
+    return pKeyBindingHelper;
 }
 
 

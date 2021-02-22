@@ -55,18 +55,16 @@ AccessibleGridControlTable::getAccessibleChild( sal_Int32 nChildIndex )
     ensureIsAlive();
     ensureIsValidIndex( nChildIndex );
     sal_Int32 nCount = getAccessibleChildCount();
-    if(m_pAccessCellVector.empty() || m_pAccessCellVector.size() != static_cast<unsigned>(nCount))
+    if(m_aCellVector.empty() || m_aCellVector.size() != static_cast<unsigned>(nCount))
     {
-        m_pAccessCellVector.resize(nCount);
-        m_pCellVector.resize(nCount);
+        m_aCellVector.resize(nCount);
     }
-    if(!m_pAccessCellVector[nChildIndex].is())
+    if(!m_aCellVector[nChildIndex].is())
     {
-        AccessibleGridControlTableCell* pCell = new AccessibleGridControlTableCell(this, m_aTable, nChildIndex/m_aTable.GetColumnCount(), nChildIndex%m_aTable.GetColumnCount());
-        m_pCellVector[nChildIndex] = pCell;
-        m_pAccessCellVector[nChildIndex] = pCell;
+        rtl::Reference<AccessibleGridControlTableCell> pCell = new AccessibleGridControlTableCell(this, m_aTable, nChildIndex/m_aTable.GetColumnCount(), nChildIndex%m_aTable.GetColumnCount());
+        m_aCellVector[nChildIndex] = pCell;
     }
-    return m_pAccessCellVector[nChildIndex];
+    return m_aCellVector[nChildIndex];
 }
 
 sal_Int32 SAL_CALL AccessibleGridControlTable::getAccessibleIndexInParent()
@@ -186,18 +184,16 @@ Reference< XAccessible > SAL_CALL AccessibleGridControlTable::getAccessibleCellA
     ensureIsValidAddress( nRow, nColumn );
     sal_Int32 nCount = getAccessibleChildCount();
     sal_Int32 nChildIndex = nRow*m_aTable.GetColumnCount() + nColumn;
-    if(m_pAccessCellVector.empty() || m_pAccessCellVector.size() != static_cast<unsigned>(nCount))
+    if(m_aCellVector.empty() || m_aCellVector.size() != static_cast<unsigned>(nCount))
     {
-        m_pAccessCellVector.resize(nCount);
-        m_pCellVector.resize(nCount);
+        m_aCellVector.resize(nCount);
     }
-    if(!m_pAccessCellVector[nChildIndex].is())
+    if(!m_aCellVector[nChildIndex].is())
     {
-        AccessibleGridControlTableCell* pCell = new AccessibleGridControlTableCell(this, m_aTable, nRow, nColumn);
-        m_pCellVector[nChildIndex] = pCell;
-        m_pAccessCellVector[nChildIndex] = pCell;
+        rtl::Reference<AccessibleGridControlTableCell> pCell = new AccessibleGridControlTableCell(this, m_aTable, nRow, nColumn);
+        m_aCellVector[nChildIndex] = pCell;
     }
-    return m_pAccessCellVector[nChildIndex];
+    return m_aCellVector[nChildIndex];
 }
 
 sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleSelected(

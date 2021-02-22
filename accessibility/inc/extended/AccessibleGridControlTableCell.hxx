@@ -113,7 +113,7 @@ namespace accessibility
             @return
                 A filled AccessibleStateSetHelper.
         */
-        ::utl::AccessibleStateSetHelper* implCreateStateSetHelper() override;
+        rtl::Reference<::utl::AccessibleStateSetHelper> implCreateStateSetHelper() override;
 
         // XAccessible ------------------------------------------------------------
 

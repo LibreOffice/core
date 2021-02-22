@@ -487,7 +487,7 @@ namespace accessibility
             xParent = implGetParentAccessible();
         if ( xParent.is() )
         {
-            utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
+            rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSetHelper = new utl::AccessibleRelationSetHelper;
             Sequence< Reference< XInterface > > aSequence { xParent };
             pRelationSetHelper->AddRelation(
                 AccessibleRelation( AccessibleRelationType::NODE_CHILD_OF, aSequence ) );
@@ -500,8 +500,7 @@ namespace accessibility
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
-        Reference< XAccessibleStateSet > xStateSet = pStateSetHelper;
+        rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
 
         if ( IsAlive_Impl() )
         {
@@ -531,7 +530,7 @@ namespace accessibility
         else
             pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
 
-        return xStateSet;
+        return pStateSetHelper;
     }
 
     Locale SAL_CALL AccessibleListBoxEntry::getLocale(  )

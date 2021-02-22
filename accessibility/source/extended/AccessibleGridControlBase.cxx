@@ -279,9 +279,9 @@ bool AccessibleGridControlBase::implIsShowing()
     return bShowing;
 }
 
-::utl::AccessibleStateSetHelper* AccessibleGridControlBase::implCreateStateSetHelper()
+rtl::Reference<::utl::AccessibleStateSetHelper> AccessibleGridControlBase::implCreateStateSetHelper()
 {
-    ::utl::AccessibleStateSetHelper*
+    rtl::Reference<::utl::AccessibleStateSetHelper>
         pStateSetHelper = new ::utl::AccessibleStateSetHelper;
 
     if( isAlive() )

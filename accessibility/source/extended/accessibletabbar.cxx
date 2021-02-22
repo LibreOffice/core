@@ -336,9 +336,7 @@ namespace accessibility
     {
         OExternalLockGuard aGuard( this );
 
-        utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
-        Reference< XAccessibleRelationSet > xSet = pRelationSetHelper;
-        return xSet;
+        return new utl::AccessibleRelationSetHelper;
     }
 
 
@@ -346,8 +344,7 @@ namespace accessibility
     {
         OExternalLockGuard aGuard( this );
 
-        utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
-        Reference< XAccessibleStateSet > xSet = pStateSetHelper;
+        rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
 
         if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
         {
@@ -358,7 +355,7 @@ namespace accessibility
             pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
         }
 
-        return xSet;
+        return pStateSetHelper;
     }
 
 
@@ -469,7 +466,7 @@ namespace accessibility
                     aFont = m_pTabBar->GetControlFont();
                 else
                     aFont = m_pTabBar->GetFont();
-                VCLXFont* pVCLXFont = new VCLXFont;
+                rtl::Reference<VCLXFont> pVCLXFont = new VCLXFont;
                 pVCLXFont->Init( *xDev, aFont );
                 xFont = pVCLXFont;
             }

@@ -277,7 +277,7 @@ void AccessibleGridControl::commitCellEvent(sal_Int16 _nEventId,const Any& _rNew
             css::uno::Reference< css::accessibility::XAccessible > xAccessible = getAccessibleChild(i);
             if(css::uno::Reference< css::accessibility::XAccessible >(m_xTable) == xAccessible)
             {
-                std::vector< AccessibleGridControlTableCell* >& rCells =
+                std::vector< rtl::Reference<AccessibleGridControlTableCell> >& rCells =
                     m_xTable->getCellVector();
                 size_t nIndex = m_aTable.GetCurrentRow() * m_aTable.GetColumnCount()
                               + m_aTable.GetCurrentColumn();
@@ -320,10 +320,8 @@ void AccessibleGridControl::commitTableEvent(sal_Int16 _nEventId,const Any& _rNe
         {
             if(aChange.Type == AccessibleTableModelChangeType::DELETE)
             {
-                std::vector< AccessibleGridControlTableCell* >& rCells =
+                std::vector< rtl::Reference<AccessibleGridControlTableCell> >& rCells =
                     m_xTable->getCellVector();
-                std::vector< css::uno::Reference< css::accessibility::XAccessible > >& rAccCells =
-                    m_xTable->getAccessibleCellVector();
                 int nColCount = m_aTable.GetColumnCount();
                 // check valid index - entries are inserted lazily
                 size_t const nStart = nColCount * aChange.FirstRow;
@@ -333,12 +331,6 @@ void AccessibleGridControl::commitTableEvent(sal_Int16 _nEventId,const Any& _rNe
                     m_xTable->getCellVector().erase(
                         rCells.begin() + nStart,
                         rCells.begin() + std::min(rCells.size(), nEnd));
-                }
-                if (nStart < rAccCells.size())
-                {
-                    m_xTable->getAccessibleCellVector().erase(
-                        rAccCells.begin() + nStart,
-                        rAccCells.begin() + std::min(rAccCells.size(), nEnd));
                 }
                 m_xTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
             }

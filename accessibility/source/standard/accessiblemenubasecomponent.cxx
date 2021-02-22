@@ -313,7 +313,7 @@ Reference< XAccessible > OAccessibleMenuBaseComponent::GetChild( sal_Int32 i )
         if ( m_pMenu )
         {
             // create a new child
-            OAccessibleMenuBaseComponent* pChild;
+            rtl::Reference<OAccessibleMenuBaseComponent> pChild;
 
             if ( m_pMenu->GetItemType( static_cast<sal_uInt16>(i) ) == MenuItemType::SEPARATOR )
             {
@@ -691,8 +691,7 @@ Reference< XAccessibleStateSet > OAccessibleMenuBaseComponent::getAccessibleStat
 {
     OExternalLockGuard aGuard( this );
 
-    utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
-    Reference< XAccessibleStateSet > xSet = pStateSetHelper;
+    rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
 
     if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
     {
@@ -703,7 +702,7 @@ Reference< XAccessibleStateSet > OAccessibleMenuBaseComponent::getAccessibleStat
         pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
     }
 
-    return xSet;
+    return pStateSetHelper;
 }
 
 

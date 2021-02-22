@@ -59,7 +59,7 @@ namespace accessibility
             @return
                 A filled AccessibleStateSetHelper.
         */
-        ::utl::AccessibleStateSetHelper* implCreateStateSetHelper() override;
+        rtl::Reference<::utl::AccessibleStateSetHelper> implCreateStateSetHelper() override;
 
     private:
         virtual tools::Rectangle implGetBoundingBox() override;
