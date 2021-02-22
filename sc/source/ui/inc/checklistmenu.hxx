@@ -297,7 +297,7 @@ private:
  * This class implements a popup window for field button, for quick access
  * of hide-item list, and possibly more stuff related to field options.
  */
-class ScCheckListMenuWindow : public InterimDockingWindow
+class ScCheckListMenuWindow : public DropdownDockingWindow
 {
 public:
     explicit ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc,

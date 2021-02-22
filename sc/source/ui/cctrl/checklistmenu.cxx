@@ -567,7 +567,7 @@ ScCheckListMenuControl::~ScCheckListMenuControl()
 ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc, bool bCanHaveSubMenu,
                                              bool bTreeMode, int nWidth, ScCheckListMenuWindow* pParentMenu,
                                              vcl::ILibreOfficeKitNotifier* pNotifier)
-    : InterimDockingWindow(pParent)
+    : DropdownDockingWindow(pParent)
     , mxParentMenu(pParentMenu)
 {
     if (pNotifier)
@@ -586,7 +586,7 @@ bool ScCheckListMenuWindow::EventNotify(NotifyEvent& rNEvt)
         rMenuControl.queueCloseSubMenu();
         rMenuControl.clearSelectedMenuItem();
     }
-    return InterimDockingWindow::EventNotify(rNEvt);
+    return DropdownDockingWindow::EventNotify(rNEvt);
 }
 
 ScCheckListMenuWindow::~ScCheckListMenuWindow()
@@ -598,12 +598,12 @@ void ScCheckListMenuWindow::dispose()
 {
     mxControl.reset();
     mxParentMenu.clear();
-    InterimDockingWindow::dispose();
+    DropdownDockingWindow::dispose();
 }
 
 void ScCheckListMenuWindow::GetFocus()
 {
-    InterimDockingWindow::GetFocus();
+    DropdownDockingWindow::GetFocus();
     if (!mxControl)
         return;
     mxControl->GrabFocus();

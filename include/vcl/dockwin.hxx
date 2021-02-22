@@ -378,15 +378,15 @@ inline void DockingWindow::SetIdleDebugName( const char *pDebugName )
     maLayoutIdle.SetDebugName( pDebugName );
 }
 
-class VCL_DLLPUBLIC InterimDockingWindow : public DockingWindow
+class VCL_DLLPUBLIC DropdownDockingWindow : public DockingWindow
 {
 protected:
     VclPtr<vcl::Window> m_xBox;
 public:
-    InterimDockingWindow(vcl::Window* pParent,
+    DropdownDockingWindow(vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>(),
         bool bTearable = false);
-    virtual ~InterimDockingWindow() override;
+    virtual ~DropdownDockingWindow() override;
     virtual void dispose() override;
 };
 

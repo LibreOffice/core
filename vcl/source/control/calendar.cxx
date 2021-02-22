@@ -1546,7 +1546,7 @@ namespace
     };
 }
 
-struct ImplCFieldFloatWin : public InterimDockingWindow
+struct ImplCFieldFloatWin : public DropdownDockingWindow
 {
     explicit ImplCFieldFloatWin(vcl::Window* pParent);
     virtual void dispose() override;
@@ -1557,7 +1557,7 @@ struct ImplCFieldFloatWin : public InterimDockingWindow
 };
 
 ImplCFieldFloatWin::ImplCFieldFloatWin(vcl::Window* pParent)
-    : InterimDockingWindow(pParent)
+    : DropdownDockingWindow(pParent)
 {
     setDeferredProperties();
     mxWidget.reset(new ImplCFieldFloat(m_xBox.get()));
@@ -1571,12 +1571,12 @@ ImplCFieldFloatWin::~ImplCFieldFloatWin()
 void ImplCFieldFloatWin::dispose()
 {
     mxWidget.reset();
-    InterimDockingWindow::dispose();
+    DropdownDockingWindow::dispose();
 }
 
 void ImplCFieldFloatWin::GetFocus()
 {
-    InterimDockingWindow::GetFocus();
+    DropdownDockingWindow::GetFocus();
     if (!mxWidget)
         return;
     mxWidget->GrabFocus();
