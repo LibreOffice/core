@@ -80,19 +80,17 @@ SfxDialogLibraryContainer::SfxDialogLibraryContainer( const uno::Reference< embe
 }
 
 // Methods to get library instances of the correct type
-SfxLibrary* SfxDialogLibraryContainer::implCreateLibrary( const OUString& aName )
+rtl::Reference<SfxLibrary> SfxDialogLibraryContainer::implCreateLibrary( const OUString& aName )
 {
-    SfxLibrary* pRet = new SfxDialogLibrary( maModifiable, aName, mxSFI, this );
-    return pRet;
+    return new SfxDialogLibrary( maModifiable, aName, mxSFI, this );
 }
 
-SfxLibrary* SfxDialogLibraryContainer::implCreateLibraryLink
+rtl::Reference<SfxLibrary> SfxDialogLibraryContainer::implCreateLibraryLink
     ( const OUString& aName, const OUString& aLibInfoFileURL,
       const OUString& StorageURL, bool ReadOnly )
 {
-    SfxLibrary* pRet = new SfxDialogLibrary
+    return new SfxDialogLibrary
             ( maModifiable, aName, mxSFI, aLibInfoFileURL, StorageURL, ReadOnly, this );
-    return pRet;
 }
 
 Any SfxDialogLibraryContainer::createEmptyLibraryElement()

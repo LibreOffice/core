@@ -292,15 +292,13 @@ namespace basic
         pBasicManager->SetStorageName( aAppBasic.PathToFileName() );
 
         // Basic container
-        SfxScriptLibraryContainer* pBasicCont = new SfxScriptLibraryContainer( Reference< XStorage >() );
-        Reference< XPersistentLibraryContainer > xBasicCont( pBasicCont );
+        rtl::Reference<SfxScriptLibraryContainer> pBasicCont = new SfxScriptLibraryContainer( Reference< XStorage >() );
         pBasicCont->setBasicManager( pBasicManager );
 
         // Dialog container
-        SfxDialogLibraryContainer* pDialogCont = new SfxDialogLibraryContainer( Reference< XStorage >() );
-        Reference< XPersistentLibraryContainer > xDialogCont( pDialogCont );
+        rtl::Reference<SfxDialogLibraryContainer> pDialogCont = new SfxDialogLibraryContainer( Reference< XStorage >() );
 
-        LibraryContainerInfo aInfo( xBasicCont, xDialogCont, static_cast< OldBasicPassword* >( pBasicCont ) );
+        LibraryContainerInfo aInfo( pBasicCont, pDialogCont, static_cast< OldBasicPassword* >( pBasicCont.get() ) );
         pBasicManager->SetLibraryContainerInfo( aInfo );
 
         // global constants
