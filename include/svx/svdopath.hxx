@@ -49,6 +49,7 @@ private:
 
     basegfx::B2DPolyPolygon maPathPolygon;
     SdrObjKind                  meKind;
+    bool mbHandleScale = false;
 
     // for isolation of old Drag/Create code
     std::unique_ptr<ImpPathForDragAndCreate> mpDAC;
@@ -163,6 +164,12 @@ public:
     // If it's an SdrPathObj it will use the provided geometry information. The Polygon has
     // to use (0,0) as upper left and will be scaled to the given size in the matrix.
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon) override;
+
+    /**
+     * Scaling is ignored from the transform matrix by default, to not break compatibility. One can
+     * opt in to handle scaling if matching ODF behavior is more important.
+     */
+    void SetHandleScale(bool bHandleScale);
 };
 
 #endif // INCLUDED_SVX_SVDOPATH_HXX

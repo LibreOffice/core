@@ -471,6 +471,12 @@ void XMLShapeImportHelper::addShape( uno::Reference< drawing::XShape >& rShape,
     {
         // add new shape to parent
         rShapes->add( rShape );
+
+        uno::Reference<beans::XPropertySet> xPropertySet(rShape, uno::UNO_QUERY);
+        if (xPropertySet.is())
+        {
+            xPropertySet->setPropertyValue("HandlePathObjScale", uno::makeAny(true));
+        }
     }
 }
 
