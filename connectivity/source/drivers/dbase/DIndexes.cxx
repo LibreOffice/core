@@ -63,7 +63,7 @@ sdbcx::ObjectType ODbaseIndexes::createObject(const OUString& _rName)
         ReadHeader(*pFileStream, aHeader);
         pFileStream.reset();
 
-        ODbaseIndex* pIndex = new ODbaseIndex(m_pTable,aHeader,_rName);
+        rtl::Reference<ODbaseIndex> pIndex = new ODbaseIndex(m_pTable,aHeader,_rName);
         xRet = pIndex;
         pIndex->openIndexFile();
     }

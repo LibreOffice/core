@@ -71,7 +71,7 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const OUString& url,
     Reference< XConnection > xOut;
     if ( acceptsURL(url ) )
     {
-        java_sql_Connection* pConnection = new java_sql_Connection( *this );
+        rtl::Reference<java_sql_Connection> pConnection = new java_sql_Connection( *this );
         xOut = pConnection;
         if ( !pConnection->construct(url,info) )
             xOut.clear(); // an error occurred and the java driver didn't throw an exception

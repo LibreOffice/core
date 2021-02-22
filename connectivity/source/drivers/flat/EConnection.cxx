@@ -136,8 +136,7 @@ css::uno::Reference< XTablesSupplier > OFlatConnection::createCatalog()
     Reference< XTablesSupplier > xTab = m_xCatalog;
     if(!xTab.is())
     {
-        OFlatCatalog *pCat = new OFlatCatalog(this);
-        xTab = pCat;
+        xTab = new OFlatCatalog(this);
         m_xCatalog = xTab;
     }
     return xTab;
@@ -148,11 +147,9 @@ Reference< XStatement > SAL_CALL OFlatConnection::createStatement(  )
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_B::rBHelper.bDisposed);
 
-    OFlatStatement* pStmt = new OFlatStatement(this);
-
-    Reference< XStatement > xStmt = pStmt;
+    rtl::Reference<OFlatStatement> pStmt = new OFlatStatement(this);
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
-    return xStmt;
+    return pStmt;
 }
 
 Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareStatement( const OUString& sql )
@@ -160,13 +157,10 @@ Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareStatement( cons
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_B::rBHelper.bDisposed);
 
-
-    OFlatPreparedStatement* pStmt = new OFlatPreparedStatement(this);
-    Reference< XPreparedStatement > xStmt = pStmt;
+    rtl::Reference<OFlatPreparedStatement> pStmt = new OFlatPreparedStatement(this);
     pStmt->construct(sql);
-
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
-    return xStmt;
+    return pStmt;
 }
 
 Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareCall( const OUString& /*sql*/ )

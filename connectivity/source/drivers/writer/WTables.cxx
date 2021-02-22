@@ -31,13 +31,13 @@ namespace connectivity::writer
 {
 sdbcx::ObjectType OWriterTables::createObject(const OUString& rName)
 {
-    auto pTable = new OWriterTable(this,
-                                   static_cast<OWriterConnection*>(
-                                       static_cast<file::OFileCatalog&>(m_rParent).getConnection()),
-                                   rName, "TABLE");
-    sdbcx::ObjectType xRet = pTable;
+    rtl::Reference<OWriterTable> pTable
+        = new OWriterTable(this,
+                           static_cast<OWriterConnection*>(
+                               static_cast<file::OFileCatalog&>(m_rParent).getConnection()),
+                           rName, "TABLE");
     pTable->construct();
-    return xRet;
+    return pTable;
 }
 
 } // namespace

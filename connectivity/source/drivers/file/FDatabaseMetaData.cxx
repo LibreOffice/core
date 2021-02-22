@@ -158,9 +158,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTables );
-    Reference< XResultSet > xRef = pResult;
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTables );
 
     // check if any type is given
     // when no types are given then we have to return all tables e.g. TABLE
@@ -185,7 +183,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         }
     }
     if(!bTableFound)
-        return xRef;
+        return pResult;
 
     Reference<XDynamicResultSet> xContent = m_pConnection->getDir();
     Reference < XSortedDynamicResultSetFactory > xSRSFac =
@@ -302,7 +300,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
     pResult->setRows(aRows);
 
-    return xRef;
+    return pResult;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxBinaryLiteralLength(  )
@@ -370,10 +368,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTablePrivileges );
-    Reference< XResultSet > xRef = pResult;
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTablePrivileges );
     ODatabaseMetaDataResultSet::ORows aRows;
-
 
     Reference< XTablesSupplier > xTabSup = m_pConnection->createCatalog();
     if( xTabSup.is())
@@ -424,7 +420,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     }
 
     pResult->setRows(aRows);
-    return xRef;
+    return pResult;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::doesMaxRowSizeIncludeBlobs(  )
@@ -616,8 +612,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTableTypes );
-    Reference< XResultSet > xRef = pResult;
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTableTypes );
     static ODatabaseMetaDataResultSet::ORows aRows;
     if(aRows.empty())
     {
@@ -627,7 +622,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  )
         aRows.push_back(aRow);
     }
     pResult->setRows(aRows);
-    return xRef;
+    return pResult;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatementLength(  )

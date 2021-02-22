@@ -65,7 +65,7 @@ Reference< XResultSet > ODatabaseMetaData::impl_getTypeInfo_throw(  )
     Reference< XResultSet > xRef;
     try
     {
-        ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
+        rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
         xRef = pResult;
         pResult->openTypeInfo();
     }
@@ -88,7 +88,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  )
     {
         try
         {
-            ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
+            rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
             xRef = pResult;
             pResult->openCatalogs();
         }
@@ -115,7 +115,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas(  )
     Reference< XResultSet > xRef;
     try
     {
-        ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
+        rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
         xRef = pResult;
         pResult->openSchemas();
     }
@@ -133,7 +133,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
     Reference< XResultSet > xRef;
     try
     {
-        ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
+        rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
         xRef = pResult;
         pResult->openColumnPrivileges(m_bUseCatalog ? catalog : Any(),schema,table,columnNamePattern);
     }
@@ -151,7 +151,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     Reference< XResultSet > xRef;
     try
     {
-        ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
+        rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
         xRef = pResult;
         pResult->openColumns(m_bUseCatalog ? catalog : Any(),schemaPattern,tableNamePattern,columnNamePattern);
     }
@@ -169,7 +169,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     Reference< XResultSet > xRef;
     try
     {
-        ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
+        rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
         xRef = pResult;
         pResult->openTables(m_bUseCatalog ? catalog : Any(),schemaPattern,tableNamePattern,types);
     }
@@ -187,7 +187,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
     Reference< XResultSet > xRef;
     try
     {
-        ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
+        rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
         xRef = pResult;
         pResult->openProcedureColumns(m_bUseCatalog ? catalog : Any(),schemaPattern,procedureNamePattern,columnNamePattern);
     }
@@ -205,7 +205,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
     Reference< XResultSet > xRef;
     try
     {
-        ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
+        rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
         xRef = pResult;
         pResult->openProcedures(m_bUseCatalog ? catalog : Any(),schemaPattern,procedureNamePattern);
     }
@@ -225,7 +225,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
     {
         if ( !m_pConnection->preventGetVersionColumns() )
         {
-            ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
+            rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
             xRef = pResult;
             pResult->openVersionColumns(m_bUseCatalog ? catalog : Any(),schema,table);
             bSuccess = true;
@@ -333,7 +333,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
     Reference< XResultSet > xRef;
     try
     {
-        ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
+        rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
         xRef = pResult;
         pResult->openExportedKeys(m_bUseCatalog ? catalog : Any(),schema,table);
     }
@@ -350,7 +350,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     Reference< XResultSet > xRef;
     try
     {
-        ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
+        rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
         xRef = pResult;
         pResult->openImportedKeys(m_bUseCatalog ? catalog : Any(),schema,table);
     }
@@ -367,7 +367,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
     Reference< XResultSet > xRef;
     try
     {
-        ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
+        rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
         xRef = pResult;
         pResult->openPrimaryKeys(m_bUseCatalog ? catalog : Any(),schema,table);
     }
@@ -385,7 +385,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
     Reference< XResultSet > xRef;
     try
     {
-        ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
+        rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
         xRef = pResult;
         pResult->openIndexInfo(m_bUseCatalog ? catalog : Any(),schema,table,unique,approximate);
     }
@@ -403,7 +403,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
     Reference< XResultSet > xRef;
     try
     {
-        ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
+        rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
         xRef = pResult;
         pResult->openBestRowIdentifier(m_bUseCatalog ? catalog : Any(),schema,table,scope,nullable);
     }
@@ -421,10 +421,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     {
         return new OResultSetPrivileges(this,catalog,schemaPattern,tableNamePattern);
     }
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
-    Reference< XResultSet > xRef = pResult;
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
     pResult->openTablePrivileges(m_bUseCatalog ? catalog : Any(),schemaPattern,tableNamePattern);
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
@@ -435,7 +434,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
     Reference< XResultSet > xRef;
     try
     {
-        ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
+        rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
         xRef = pResult;
         pResult->openForeignKeys(m_bUseCatalog ? primaryCatalog : Any(),primarySchema.toChar() == '%' ? &primarySchema : nullptr,&primaryTable,
             m_bUseCatalog ? foreignCatalog : Any(), foreignSchema.toChar() == '%' ? &foreignSchema : nullptr,&foreignTable);
@@ -718,7 +717,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  )
     Reference< XResultSet > xRef;
     try
     {
-        ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(m_pConnection);
+        rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
         xRef = pResult;
         pResult->openTablesTypes();
     }

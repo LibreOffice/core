@@ -221,8 +221,7 @@ css::uno::Reference< XTablesSupplier > OCalcConnection::createCatalog()
     Reference< XTablesSupplier > xTab = m_xCatalog;
     if(!xTab.is())
     {
-        OCalcCatalog *pCat = new OCalcCatalog(this);
-        xTab = pCat;
+        xTab = new OCalcCatalog(this);
         m_xCatalog = xTab;
     }
     return xTab;
@@ -247,8 +246,7 @@ Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareStatement( cons
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    auto pStmt = new connectivity::component::OComponentPreparedStatement(this);
-    Reference< XPreparedStatement > xHoldAlive = pStmt;
+    rtl::Reference<connectivity::component::OComponentPreparedStatement> pStmt = new connectivity::component::OComponentPreparedStatement(this);
     pStmt->construct(sql);
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
     return pStmt;
