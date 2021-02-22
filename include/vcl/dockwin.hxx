@@ -390,6 +390,18 @@ public:
     virtual void dispose() override;
 };
 
+class VCL_DLLPUBLIC ResizableDockingWindow : public DockingWindow
+{
+protected:
+    VclPtr<vcl::Window> m_xBox;
+public:
+    ResizableDockingWindow(vcl::Window* pParent,
+        const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
+    ResizableDockingWindow(vcl::Window* pParent, WinBits nStyle);
+    virtual ~ResizableDockingWindow() override;
+    virtual void dispose() override;
+};
+
 #endif // INCLUDED_VCL_DOCKWIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

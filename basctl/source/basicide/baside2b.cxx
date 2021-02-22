@@ -1704,7 +1704,7 @@ void WatchWindow::Resize()
     if ( aBoxSz.Height() < 4 )
         aBoxSz.setHeight( 0 );
 
-    m_xVclContentArea->SetPosSizePixel(Point(DWBORDER, DWBORDER), aBoxSz);
+    m_xBox->SetPosSizePixel(Point(DWBORDER, DWBORDER), aBoxSz);
 
     Invalidate();
 }
@@ -1863,7 +1863,7 @@ void StackWindow::Resize()
     if ( aBoxSz.Height() < 4 )
         aBoxSz.setHeight( 0 );
 
-    m_xVclContentArea->SetPosSizePixel(Point(DWBORDER, DWBORDER), aBoxSz);
+    m_xBox->SetPosSizePixel(Point(DWBORDER, DWBORDER), aBoxSz);
 
     Invalidate();
 }
