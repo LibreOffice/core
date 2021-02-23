@@ -3666,8 +3666,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
         pImpl->m_aName.clear();
     }
 
-    OUString aLogicBase = GetLogicBase(GetURLObject(), pImpl);
-    pImpl->pTempFile.reset( new ::utl::TempFile(aLogicBase.isEmpty() ? nullptr : &aLogicBase) );
+    pImpl->pTempFile = std::make_unique<utl::TempFile>(&GetLogicBase(GetURLObject(), pImpl));
     pImpl->pTempFile->EnableKillingFile();
     pImpl->m_aName = pImpl->pTempFile->GetFileName();
     OUString aTmpURL = pImpl->pTempFile->GetURL();
@@ -3762,8 +3761,7 @@ void SfxMedium::CreateTempFileNoCopy()
     // this call always replaces the existing temporary file
     pImpl->pTempFile.reset();
 
-    OUString aLogicBase = GetLogicBase(GetURLObject(), pImpl);
-    pImpl->pTempFile.reset( new ::utl::TempFile(aLogicBase.isEmpty() ? nullptr : &aLogicBase) );
+    pImpl->pTempFile = std::make_unique<utl::TempFile>(&GetLogicBase(GetURLObject(), pImpl));
     pImpl->pTempFile->EnableKillingFile();
     pImpl->m_aName = pImpl->pTempFile->GetFileName();
     if ( pImpl->m_aName.isEmpty() )
