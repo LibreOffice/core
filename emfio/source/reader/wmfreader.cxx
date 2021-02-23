@@ -1222,6 +1222,9 @@ namespace emfio
             case W_META_ENDDOC:
             break;
         }
+
+        // tdf#127471
+        maScaledFontHelper.applyAlternativeFontScale();
     }
 
     static const long   aMaxWidth = 1024;
