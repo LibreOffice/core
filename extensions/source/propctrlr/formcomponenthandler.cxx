@@ -1108,8 +1108,6 @@ namespace pcr
                     {
                         std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/formattedcontrol.ui", m_xContext));
                         auto pSpinButton = xBuilder->weld_formatted_spin_button("formattedcontrol");
-                        // for ui-testing try and distinguish different instances of this formatted control
-                        pSpinButton->set_buildable_name(pSpinButton->get_buildable_name() + "-" + aDescriptor.DisplayName.toUtf8());
                         rtl::Reference<OFormattedNumericControl> pControl = new OFormattedNumericControl(std::move(pSpinButton), std::move(xBuilder), false);
                         pControl->SetModifyHandler();
 
@@ -1149,8 +1147,6 @@ namespace pcr
         {
             std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/formattedcontrol.ui", m_xContext));
             auto pSpinButton = xBuilder->weld_formatted_spin_button("formattedcontrol");
-            // for ui-testing try and distinguish different instances of this formatted control
-            pSpinButton->set_buildable_name(pSpinButton->get_buildable_name() + "-" + aDescriptor.DisplayName.toUtf8());
             rtl::Reference<OFormattedNumericControl> pControl = new OFormattedNumericControl(std::move(pSpinButton), std::move(xBuilder), false);
             pControl->SetModifyHandler();
             aDescriptor.Control = pControl;
@@ -1211,7 +1207,6 @@ namespace pcr
             }
             break;
         }
-
 
         if ( eType == TypeClass_SEQUENCE )
             nControlType = PropertyControlType::StringListField;
@@ -1379,6 +1374,16 @@ namespace pcr
             aDescriptor.HasPrimaryButton = true;
         if ( !aDescriptor.SecondaryButtonId.isEmpty() )
             aDescriptor.HasSecondaryButton = true;
+
+        // for ui-testing try and distinguish different instances of the controls
+        auto xWindow = aDescriptor.Control->getControlWindow();
+        if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xWindow.get()))
+        {
+            weld::Widget* m_pControlWindow = pTunnel->getWidget();
+            if (m_pControlWindow)
+                m_pControlWindow->set_buildable_name(m_pControlWindow->get_buildable_name() + "-" + aDescriptor.DisplayName.toUtf8());
+        }
+
 
         bool bIsDataProperty = ( nPropertyUIFlags & PROP_FLAG_DATA_PROPERTY ) != 0;
         aDescriptor.Category = bIsDataProperty ? std::u16string_view(u"Data") : std::u16string_view(u"General");
