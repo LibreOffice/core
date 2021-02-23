@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0beb908b_72280c7e",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-23T11:04:07Z",
+      "side": 1,
+      "message": "But now the access to members (including writing) is not synchronized...",
+      "revId": "0b725133532b663c09cd3ff2dc3b981c475a4cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
