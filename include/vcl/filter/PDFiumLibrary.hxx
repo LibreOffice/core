@@ -228,9 +228,9 @@ public:
     virtual std::vector<unsigned int> getTrailerEnds() = 0;
 };
 
-struct PDFiumLibrary final : public rtl::StaticWithInit<std::shared_ptr<PDFium>, PDFiumLibrary>
+struct VCL_DLLPUBLIC PDFiumLibrary final
 {
-    std::shared_ptr<PDFium> operator()() { return std::make_shared<PDFium>(); }
+    static std::shared_ptr<PDFium>& get();
 };
 
 // Tools
