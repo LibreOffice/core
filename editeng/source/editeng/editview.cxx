@@ -415,11 +415,13 @@ vcl::Cursor* EditView::GetCursor() const
     return pImpEditView->pCursor.get();
 }
 
-void EditView::InsertText( const OUString& rStr, bool bSelect )
+void EditView::InsertText( const OUString& rStr, bool bSelect, bool bLOKShowSelect )
 {
 
     EditEngine* pEE = pImpEditView->pEditEngine;
-    pImpEditView->DrawSelectionXOR();
+
+    if (bLOKShowSelect)
+        pImpEditView->DrawSelectionXOR();
 
     EditPaM aPaM1;
     if ( bSelect )
@@ -441,7 +443,8 @@ void EditView::InsertText( const OUString& rStr, bool bSelect )
     else
         pImpEditView->SetEditSelection( EditSelection( aPaM2, aPaM2 ) );
 
-    pEE->FormatAndUpdate( this );
+    if (bLOKShowSelect)
+        pEE->FormatAndUpdate( this );
 }
 
 bool EditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * pFrameWin )
