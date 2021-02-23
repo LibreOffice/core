@@ -26,4 +26,6 @@
  <toolbar:toolbaritem xlink:href=".uno:Draw"/>
  <toolbar:toolbaritem xlink:href=".uno:FormelCursor"/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolCatalogue"/>
+ <toolbar:toolbaritem xlink:href=".uno:FontColor"/>
+ <!-- toolbar:toolbaritem xlink:href=".uno:BackColor" toolbar:visible="false"/ -->
 </toolbar:toolbar>
