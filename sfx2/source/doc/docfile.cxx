@@ -3637,17 +3637,14 @@ OUString GetLogicBase(const INetURLObject& rURL, std::unique_ptr<SfxMedium_Impl>
     (void) pImpl;
 #else
 
-    if (rURL.GetProtocol() == INetProtocol::File && !pImpl->m_pInStream)
+    if (!pImpl->m_bHasEmbeddedObjects // Embedded objects would mean a special base, ignore that.
+        && rURL.GetProtocol() == INetProtocol::File && !pImpl->m_pInStream)
     {
         // Try to create the temp file in the same directory when storing.
         INetURLObject aURL(rURL);
         aURL.removeSegment();
         aLogicBase = aURL.GetMainURL(INetURLObject::DecodeMechanism::WithCharset);
     }
-
-    if (pImpl->m_bHasEmbeddedObjects)
-        // Embedded objects would mean a special base, ignore that.
-        aLogicBase.clear();
 
 #endif // !HAVE_FEATURE_MACOSX_SANDBOX
 
