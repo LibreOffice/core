@@ -103,11 +103,13 @@ namespace com::sun::star {
         // XAggregation
         css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _aType ) override;
 
+    public:
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
         virtual void SAL_CALL acquire(  ) throw() override;
         virtual void SAL_CALL release(  ) throw() override;
 
+    protected:
         // XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 

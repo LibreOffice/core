@@ -187,11 +187,9 @@ css::uno::Reference<css::awt::XPopupMenu> UnoWrapper::CreateMenuInterface( Popup
 
 css::uno::Reference< css::awt::XGraphics> UnoWrapper::CreateGraphics( OutputDevice* pOutDev )
 {
-    css::uno::Reference< css::awt::XGraphics> xGrf;
-    VCLXGraphics* pGrf = new VCLXGraphics;
-    xGrf = pGrf;
+    rtl::Reference<VCLXGraphics> pGrf = new VCLXGraphics;
     pGrf->Init( pOutDev );
-    return xGrf;
+    return pGrf;
 }
 
 void UnoWrapper::ReleaseAllGraphics( OutputDevice* pOutDev )

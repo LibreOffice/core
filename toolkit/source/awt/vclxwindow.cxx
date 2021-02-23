@@ -1888,7 +1888,7 @@ css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
                 if ( !pControl )
                     break;
 
-                VCLXDevice* pDevice = new VCLXDevice;
+                rtl::Reference<VCLXDevice> pDevice = new VCLXDevice;
                 pDevice->SetOutputDevice( pControl->GetReferenceDevice() );
                 aProp <<= Reference< XDevice >( pDevice );
             }
