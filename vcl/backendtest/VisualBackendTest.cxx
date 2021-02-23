@@ -788,8 +788,6 @@ protected:
 
     void DeInit() override
     {
-        uno::Reference<lang::XComponent> xComponent(comphelper::getProcessComponentContext(), uno::UNO_QUERY_THROW);
-        xComponent->dispose();
         comphelper::setProcessServiceFactory(nullptr);
     }
 };
