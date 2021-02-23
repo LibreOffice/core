@@ -64,14 +64,12 @@ public:
     void                SetCharSet( const rtl_TextEncoding eCharSet )   { meCharSet = eCharSet; }
     void                SetFontSize( const Size& rSize )
     {
-#ifndef _WIN32
         if(rSize.Height() != maAverageFontSize.Height())
         {
             // reset evtl. buffered calculated AverageFontSize, it depends
             // on Font::Height
             mnCalculatedAverageFontWidth = 0;
         }
-#endif
         maAverageFontSize = rSize;
     }
 
@@ -91,10 +89,8 @@ public:
     void                IncreaseQualityBy( int nQualityAmount )         { mnQuality += nQualityAmount; }
     void                DecreaseQualityBy( int nQualityAmount )         { mnQuality -= nQualityAmount; }
 
-#ifndef _WIN32
     tools::Long         GetCalculatedAverageFontWidth() const           { return mnCalculatedAverageFontWidth; }
     void                SetCalculatedAverageFontWidth(tools::Long nNew) { mnCalculatedAverageFontWidth = nNew; }
-#endif
 
     bool                operator==( const ImplFont& ) const;
 
@@ -146,9 +142,7 @@ private:
 
     int                 mnQuality;
 
-#ifndef _WIN32
     tools::Long         mnCalculatedAverageFontWidth;
-#endif
 };
 
 #endif // INCLUDED_VCL_INC_IMPFONT_HXX
