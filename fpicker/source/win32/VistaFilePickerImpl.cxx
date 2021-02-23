@@ -187,7 +187,7 @@ VistaFilePickerImpl::VistaFilePickerImpl()
     , m_iEventHandler(new VistaFilePickerEventHandler(this))
     , m_bInExecute   (false)
     , m_bWasExecuted (false)
-    , m_hParentWindow(choose_parent_window())
+    , m_hParentWindow(nullptr)
     , m_sDirectory   ()
     , m_sFilename    ()
     , mnNbCallCoInitializeExForReinit(0)
@@ -1022,19 +1022,25 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
         }
     }
 
-
     HRESULT hResult = E_FAIL;
+    HWND hParentWindow;
+    {
+        osl::MutexGuard aLock(m_aMutex);
+        // Note that there is a potential race between retrieving and
+        // using parent window (window might get destroyed)
+        hParentWindow = m_hParentWindow ? m_hParentWindow : choose_parent_window();
+    }
     try
     {
         // show dialog and wait for user decision
         if (iOpen.is())
-            hResult = iOpen->Show( m_hParentWindow ); // parent window needed
+            hResult = iOpen->Show( hParentWindow ); // parent window needed
         else
         if (iSave.is())
-            hResult = iSave->Show( m_hParentWindow ); // parent window needed
+            hResult = iSave->Show( hParentWindow ); // parent window needed
         else
         if (iPick.is())
-            hResult = iPick->Show( m_hParentWindow ); // parent window needed
+            hResult = iPick->Show( hParentWindow ); // parent window needed
     }
     catch(...)
     {}
