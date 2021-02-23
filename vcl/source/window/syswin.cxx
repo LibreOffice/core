@@ -25,6 +25,7 @@
 
 #include <vcl/accel.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/menu.hxx>
@@ -1197,6 +1198,16 @@ void SystemWindow::ensureRepaint()
     while (!mbPaintComplete)
     {
         Application::Yield();
+    }
+}
+
+void SystemWindow::CollectMenuBarMnemonics(MnemonicGenerator& rMnemonicGenerator) const
+{
+    if (MenuBar* pMenu = GetMenuBar())
+    {
+        sal_uInt16 nMenuItems = pMenu->GetItemCount();
+        for ( sal_uInt16 i = 0; i < nMenuItems; ++i )
+            rMnemonicGenerator.RegisterMnemonic( pMenu->GetItemText( pMenu->GetItemId( i ) ) );
     }
 }
 
