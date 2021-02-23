@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cfc4f27f_53203a67",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-23T10:40:20Z",
+      "side": 1,
+      "message": "I\u0027d remove the resettable guard, and instead used normal guard in (new) scopes around the member access code, including this m_hParentWindow. I\u0027d also used a local hWnd, assigned in the guarded block, to use later in the Show() below outside of the guard.",
+      "parentUuid": "2f21c0b2_25ff3437",
+      "range": {
+        "startLine": 1028,
+        "startChar": 8,
+        "endLine": 1028,
+        "endChar": 22
+      },
+      "revId": "abfcf18852b1d8c266fd4f3dccfbe6500ebfd5bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c1914526_434c2271",
         "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
         "patchSetId": 2
