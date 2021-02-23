@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1914526_434c2271",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-23T10:01:56Z",
+      "side": 1,
+      "message": "It seems that lock\u0027s reset/clear should be moved outside of the try block - to avoid clear being skipped in case of an exception.",
+      "revId": "abfcf18852b1d8c266fd4f3dccfbe6500ebfd5bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
