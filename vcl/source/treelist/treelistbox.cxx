@@ -2300,7 +2300,7 @@ void SvTreeListBox::MouseButtonUp( const MouseEvent& rMEvt )
             SvLBoxItem* pItem = GetItem(pEntry, aPnt.X());
             // if the checkbox button was clicked, that will be toggled later, do not toggle here
             // anyway users probably don't want to toggle the checkbox by clickink on another button
-            if (!pItem || pItem->GetType() != SvLBoxItemType::Button)
+            if (pItem && pItem->GetType() == SvLBoxItemType::String)
             {
                 SvLBoxButton* pItemCheckBox
                     = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
