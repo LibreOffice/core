@@ -39,6 +39,7 @@
 #include <svx/dbaexchange.hxx>
 #include <svx/sdtagitm.hxx>
 
+#include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <comphelper/propertyvalue.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
@@ -50,7 +51,6 @@
 #include <rptui_slotid.hrc>
 
 #include <vcl/commandevent.hxx>
-#include <vcl/menu.hxx>
 
 #include <svl/itempool.hxx>
 #include <svtools/extcolorcfg.hxx>
@@ -437,7 +437,10 @@ void OReportSection::Command( const CommandEvent& _rCEvt )
 
     Point aPos = _rCEvt.GetMousePosPixel();
     m_pView->EndAction();
-    static_cast<PopupMenu*>(xPopupMenu->GetMenu())->Execute(this, aPos);
+
+    xPopupMenu->execute(GetComponentInterface(),
+                        css::awt::Rectangle(aPos.X(), aPos.Y(), 1, 1),
+                        css::awt::PopupMenuDirection::EXECUTE_DOWN);
 
     css::uno::Reference<css::lang::XComponent> xComponent(xMenuController, css::uno::UNO_QUERY);
     xComponent->dispose();
