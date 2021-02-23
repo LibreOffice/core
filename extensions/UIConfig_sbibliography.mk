@@ -14,6 +14,7 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/sbibliography,\
 ))
 
 $(eval $(call gb_UIConfig_add_uifiles,modules/sbibliography,\
+	extensions/uiconfig/sbibliography/ui/autofiltermenu \
 	extensions/uiconfig/sbibliography/ui/choosedatasourcedialog \
 	extensions/uiconfig/sbibliography/ui/combobox \
 	extensions/uiconfig/sbibliography/ui/editbox \
