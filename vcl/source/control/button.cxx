@@ -1748,8 +1748,8 @@ void CancelButton::Click()
     }
 }
 
-CloseButton::CloseButton( vcl::Window* pParent, WinBits nStyle )
-    : CancelButton(pParent, nStyle)
+CloseButton::CloseButton( vcl::Window* pParent )
+    : CancelButton(pParent, 0)
 {
     SetText( GetStandardText( StandardButtonType::Close ) );
 }

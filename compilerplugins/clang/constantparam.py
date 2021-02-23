@@ -13,7 +13,7 @@ def normalizeTypeParams( line ):
     return normalizeTypeParamsRegex.sub("type-parameter-?-?", line)
 
 # reading as binary (since we known it is pure ascii) is much faster than reading as unicode
-with io.open("constantparam.1", "r") as txt:
+with io.open("workdir/loplugin.constantparam.log", "r") as txt:
     line_no = 1;
     try:
         for line in txt:

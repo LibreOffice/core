@@ -151,7 +151,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         if (pSdrView)
         {
             std::shared_ptr<svx::FontWorkGalleryDialog> pDlg = std::make_shared<svx::FontWorkGalleryDialog>(rWin.GetFrameWeld(), *pSdrView);
-            pDlg->SetSdrObjectRef( pSdrView->GetModel(), false );
+            pDlg->SetSdrObjectRef( pSdrView->GetModel() );
             weld::DialogController::runAsync(pDlg, [this, pDlg](int) {
                 vcl::Window& rWin2 = m_pWrtShell->GetView().GetViewFrame()->GetWindow();
 
