@@ -142,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "6eb2169f_0fb35f7d",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-23T13:54:20Z",
+      "side": 1,
+      "message": "Because in this patch, AFAICT, you *only* remove asserts after loadFromDesktop and saveAndReload, not from any other function.",
+      "parentUuid": "03095b3d_30cd5be4",
+      "revId": "d31dfa0976e29f8f5ce4d916e2b4d1feb3bbd2cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "41dfccab_643e0de4",
         "filename": "sc/qa/perf/scperfobj.cxx",
         "patchSetId": 1

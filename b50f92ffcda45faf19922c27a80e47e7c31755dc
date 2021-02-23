@@ -1,0 +1,146 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a324f85_a58cd9f6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-23T13:54:20Z",
+      "side": 1,
+      "message": "The \"see\" itself is redundant. If someone looks at the commit, they can also lookup the function.",
+      "range": {
+        "startLine": 9,
+        "startChar": 63,
+        "endLine": 9,
+        "endChar": 72
+      },
+      "revId": "b50f92ffcda45faf19922c27a80e47e7c31755dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "996141a8_19e20693",
+        "filename": "dbaccess/qa/extras/rowsetclones.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-23T13:54:20Z",
+      "side": 1,
+      "message": "Why keep this line (and in some other places), when you remove the lines elsewhere? This introduces inconsistency into the commit :-)",
+      "revId": "b50f92ffcda45faf19922c27a80e47e7c31755dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1f57b0b_d790ba6d",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-23T13:54:20Z",
+      "side": 1,
+      "message": "And here (and elsewhere) the kept line results in two empty lines, which we generally don\u0027t use.",
+      "revId": "b50f92ffcda45faf19922c27a80e47e7c31755dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5838f5a6_f59687ae",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-23T13:54:20Z",
+      "side": 1,
+      "message": "... and now you have restored the assert, so my idea of mentioning that the asserts after saveAndReload are not needed is useless, and the new comment (where you talk about unneeded checks after saveAndReload) does not match the commit (where you do not remove asserts after saveAndReload).",
+      "revId": "b50f92ffcda45faf19922c27a80e47e7c31755dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29b89e36_4ddb2468",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-23T13:54:20Z",
+      "side": 1,
+      "message": "... same here",
+      "revId": "b50f92ffcda45faf19922c27a80e47e7c31755dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da011906_d662e1db",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 859,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-23T13:54:20Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "b50f92ffcda45faf19922c27a80e47e7c31755dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d49ae8a3_762c764e",
+        "filename": "sd/qa/unit/tiledrendering/LOKitSearchTest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-23T13:54:20Z",
+      "side": 1,
+      "message": "still a trailing whitespace here (and elsewhere - expand all to see)",
+      "revId": "b50f92ffcda45faf19922c27a80e47e7c31755dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae84aac3_68105113",
+        "filename": "xmlsecurity/qa/unit/signing/signing.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-23T13:54:20Z",
+      "side": 1,
+      "message": "But why have you re-introduced *this* assertion?",
+      "revId": "b50f92ffcda45faf19922c27a80e47e7c31755dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
