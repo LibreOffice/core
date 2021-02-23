@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "dbfe8bdd_08ee83ce",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-23T10:48:33Z",
+      "side": 1,
+      "message": "Yes that\u0027s clear; but what is destroying that window? The lock here will not help that, either; its mutex only guards access to this object, and will not prevent other threads destroying unrelated windows in any way. So it would only work here (with or without the lock) just because the code getting HWND is closer to the using code (and so the race is *less* likely), not because the root cause is fixed (which would be if you passed some smart reference to the parent object, which would bind the lifetimes).",
+      "parentUuid": "f86cd63f_71eb0ee1",
+      "range": {
+        "startLine": 1028,
+        "startChar": 8,
+        "endLine": 1028,
+        "endChar": 22
+      },
+      "revId": "abfcf18852b1d8c266fd4f3dccfbe6500ebfd5bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c1914526_434c2271",
         "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
         "patchSetId": 2
