@@ -421,7 +421,8 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                         {
                             const BitmapPalette& rPal = pW->GetPalette();
                             const sal_uInt16 nCount = rPal.GetEntryCount();
-                            BitmapColor* pMap = reinterpret_cast<BitmapColor*>(new sal_uInt8[ nCount * sizeof( BitmapColor ) ]);
+                            std::unique_ptr<sal_uInt8[]> xMap(new sal_uInt8[ nCount * sizeof( BitmapColor )]);
+                            BitmapColor* pMap = reinterpret_cast<BitmapColor*>(xMap.get());
 
                             for( sal_uInt16 i = 0; i < nCount; i++ )
                             {
@@ -470,7 +471,6 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                                     }
                                 }
                             }
-                            delete[] reinterpret_cast<sal_uInt8*>(pMap);
                         }
                         else
                         {
