@@ -2438,6 +2438,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Restart Numbering</value>
         </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Toggle Restart Numbering</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>15</value>
         </prop>
