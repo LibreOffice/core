@@ -290,19 +290,6 @@ void StyleItemController::DrawContentBackground(vcl::RenderContext& rRenderConte
     rRenderContext.DrawRect(aContentRect);
 }
 
-void StyleItemController::DrawSelection(vcl::RenderContext& rRenderContext)
-{
-    Size aSize(rRenderContext.GetOutputSizePixel());
-    tools::Rectangle aFullRect(Point(0, 0), aSize);
-
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-
-    rRenderContext.SetLineColor(rStyleSettings.GetActiveBorderColor());
-    rRenderContext.SetFillColor(rStyleSettings.GetActiveBorderColor());
-
-    rRenderContext.DrawRect(aFullRect);
-}
-
 void StyleItemController::DrawHighlight(vcl::RenderContext& rRenderContext, Color aFontBack)
 {
     tools::Rectangle aTextRect;

@@ -148,11 +148,6 @@ public:
     {
         return sTableErrorString;
     }
-
-    BibDataManager*      GetDataManager()
-    {
-        return pDatMan;
-    }
 };
 
 #endif

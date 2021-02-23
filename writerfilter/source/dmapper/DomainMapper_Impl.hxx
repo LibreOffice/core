@@ -719,7 +719,6 @@ public:
     void    PopProperties(ContextType eId);
 
     ContextType GetTopContextType() const { return m_aContextStack.top(); }
-    int GetCContext() const { return m_aContextStack.size(); }
     const PropertyMapPtr& GetTopContext() const
     {
         return m_pTopContext;

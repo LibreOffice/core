@@ -38,7 +38,6 @@ namespace dbaui
     protected:
     public:
         OTableRow();
-        OTableRow(const css::uno::Reference< css::beans::XPropertySet >& xAffectedCol);
         OTableRow( const OTableRow& rRow, tools::Long nPosition = -1 );
         ~OTableRow();
 

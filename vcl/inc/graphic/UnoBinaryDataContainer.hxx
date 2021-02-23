@@ -29,19 +29,12 @@ private:
     BinaryDataContainer maBinaryDataContainer;
 
 public:
-    UnoBinaryDataContainer() {}
-
     UnoBinaryDataContainer(BinaryDataContainer const& rBinaryDataContainer)
         : maBinaryDataContainer(rBinaryDataContainer)
     {
     }
 
     BinaryDataContainer const& getBinaryDataContainer() const { return maBinaryDataContainer; }
-
-    void setBinaryDataContainer(BinaryDataContainer const& rBinaryDataContainer)
-    {
-        maBinaryDataContainer = rBinaryDataContainer;
-    }
 
     // XBinaryDataContainer
     css::uno::Sequence<sal_Int8> SAL_CALL getCopyAsByteSequence() override;
