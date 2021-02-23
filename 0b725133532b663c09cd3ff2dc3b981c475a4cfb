@@ -70,6 +70,24 @@
       "revId": "0b725133532b663c09cd3ff2dc3b981c475a4cfb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "698fc830_0d59dab4",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-02-23T13:29:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21e44865_cbef168c",
+      "revId": "0b725133532b663c09cd3ff2dc3b981c475a4cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
