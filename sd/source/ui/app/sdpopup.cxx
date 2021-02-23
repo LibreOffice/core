@@ -21,6 +21,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/useroptions.hxx>
+#include <vcl/svapp.hxx>
 
 #include <strings.hrc>
 #include <sdpopup.hxx>
@@ -31,11 +32,12 @@
 /*
  * Popup menu for editing of field command
  */
-SdFieldPopup::SdFieldPopup( const SvxFieldData* pInField, LanguageType eLanguage ) :
-        PopupMenu   (),
-        pField      ( pInField )
+SdFieldPopup::SdFieldPopup(const SvxFieldData* pInField, LanguageType eLanguage)
+    : m_xBuilder(Application::CreateBuilder(nullptr, "modules/simpress/ui/fieldmenu.ui"))
+    , m_xPopup(m_xBuilder->weld_menu("menu"))
+    , m_pField(pInField)
 {
-    Fill( eLanguage );
+    Fill(eLanguage);
 }
 
 SdFieldPopup::~SdFieldPopup()
@@ -45,106 +47,124 @@ SdFieldPopup::~SdFieldPopup()
 void SdFieldPopup::Fill( LanguageType eLanguage )
 {
     sal_uInt16 nID = 1;
-    MenuItemBits nStyle = MenuItemBits::RADIOCHECK | MenuItemBits::AUTOCHECK;
-    InsertItem( nID++, SdResId( STR_FIX ), nStyle );
-    InsertItem( nID++, SdResId( STR_VAR ), nStyle );
-    InsertSeparator();
+    m_xPopup->append_radio(OUString::number(nID++), SdResId(STR_FIX));
+    m_xPopup->append_radio(OUString::number(nID++), SdResId(STR_VAR));
+    m_xPopup->append_separator("separator1");
 
-    if( auto pDateField = dynamic_cast< const SvxDateField *>( pField ) )
+    if( auto pDateField = dynamic_cast< const SvxDateField *>( m_pField ) )
     {
         SvxDateField aDateField( *pDateField );
 
-        if( pDateField->GetType() == SvxDateType::Fix )
-            CheckItem( 1 );
+        if (pDateField->GetType() == SvxDateType::Fix)
+            m_xPopup->set_active("1", true);
         else
-            CheckItem( 2 );
+            m_xPopup->set_active("2", true);
 
         //SvxDateFormat::AppDefault,     // is not used
         //SvxDateFormat::System,         // is not used
-        InsertItem( nID++, SdResId( STR_STANDARD_SMALL ), nStyle );
-        InsertItem( nID++, SdResId( STR_STANDARD_BIG ), nStyle );
+        m_xPopup->append_radio(OUString::number(nID++), SdResId(STR_STANDARD_SMALL));
+        m_xPopup->append_radio(OUString::number(nID++), SdResId(STR_STANDARD_BIG));
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
         aDateField.SetFormat( SvxDateFormat::A );    // 13.02.96
-        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
+        m_xPopup->append_radio(OUString::number(nID++), aDateField.GetFormatted(*pNumberFormatter, eLanguage));
         aDateField.SetFormat( SvxDateFormat::B );    // 13.02.1996
-        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
+        m_xPopup->append_radio(OUString::number(nID++), aDateField.GetFormatted(*pNumberFormatter, eLanguage));
         aDateField.SetFormat( SvxDateFormat::C );    // 13.Feb 1996
-        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
+        m_xPopup->append_radio(OUString::number(nID++), aDateField.GetFormatted(*pNumberFormatter, eLanguage));
 
         aDateField.SetFormat( SvxDateFormat::D );    // 13.Februar 1996
-        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
+        m_xPopup->append_radio(OUString::number(nID++), aDateField.GetFormatted(*pNumberFormatter, eLanguage));
         aDateField.SetFormat( SvxDateFormat::E );    // Die, 13.Februar 1996
-        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
+        m_xPopup->append_radio(OUString::number(nID++), aDateField.GetFormatted(*pNumberFormatter, eLanguage));
         aDateField.SetFormat( SvxDateFormat::F );    // Dienstag, 13.Februar 1996
-        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
+        m_xPopup->append_radio(OUString::number(nID++), aDateField.GetFormatted(*pNumberFormatter, eLanguage));
 
-        CheckItem( static_cast<sal_uInt16>( pDateField->GetFormat() ) + 1 ); // - 2 + 3 !
+        m_xPopup->set_active(OString::number(static_cast<sal_uInt16>( pDateField->GetFormat() ) + 1), true); // - 2 + 3 !
     }
-    else if( auto pTimeField = dynamic_cast< const SvxExtTimeField *>( pField ) )
+    else if( auto pTimeField = dynamic_cast< const SvxExtTimeField *>( m_pField ) )
     {
         SvxExtTimeField aTimeField( *pTimeField );
 
         if( pTimeField->GetType() == SvxTimeType::Fix )
-            CheckItem( 1 );
+            m_xPopup->set_active("1", true);
         else
-            CheckItem( 2 );
+            m_xPopup->set_active("2", true);
 
         //SvxTimeFormat::AppDefault,     // is not used
         //SvxTimeFormat::System,         // is not used
-        InsertItem( nID++, SdResId( STR_STANDARD_NORMAL ), nStyle );
+        m_xPopup->append_radio(OUString::number(nID++), SdResId(STR_STANDARD_NORMAL));
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
         aTimeField.SetFormat( SvxTimeFormat::HH24_MM );    // 13:49
-        InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
+        m_xPopup->append_radio(OUString::number(nID++), aTimeField.GetFormatted(*pNumberFormatter, eLanguage));
         aTimeField.SetFormat( SvxTimeFormat::HH24_MM_SS );   // 13:49:38
-        InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
+        m_xPopup->append_radio(OUString::number(nID++), aTimeField.GetFormatted(*pNumberFormatter, eLanguage));
         aTimeField.SetFormat( SvxTimeFormat::HH24_MM_SS_00 );  // 13:49:38.78
-        InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
+        m_xPopup->append_radio(OUString::number(nID++), aTimeField.GetFormatted(*pNumberFormatter, eLanguage));
 
         aTimeField.SetFormat( SvxTimeFormat::HH12_MM );    // 01:49
-        InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
+        m_xPopup->append_radio(OUString::number(nID++), aTimeField.GetFormatted(*pNumberFormatter, eLanguage));
         aTimeField.SetFormat( SvxTimeFormat::HH12_MM_SS );   // 01:49:38
-        InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
+        m_xPopup->append_radio(OUString::number(nID++), aTimeField.GetFormatted(*pNumberFormatter, eLanguage));
         aTimeField.SetFormat( SvxTimeFormat::HH12_MM_SS_00 );  // 01:49:38.78
-        InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
+        m_xPopup->append_radio(OUString::number(nID++), aTimeField.GetFormatted(*pNumberFormatter, eLanguage));
         //SvxTimeFormat::HH12_MM_AMPM,  // 01:49 PM
         //SvxTimeFormat::HH12_MM_SS_AMPM, // 01:49:38 PM
         //SvxTimeFormat::HH12_MM_SS_00_AMPM // 01:49:38.78 PM
 
-        CheckItem( static_cast<sal_uInt16>( pTimeField->GetFormat() ) + 1 ); // - 2 + 3 !
+        m_xPopup->set_active(OString::number(static_cast<sal_uInt16>( pTimeField->GetFormat() ) + 1), true); // - 2 + 3 !
     }
-    else if( auto pFileField = dynamic_cast< const SvxExtFileField *>( pField ) )
+    else if( auto pFileField = dynamic_cast< const SvxExtFileField *>( m_pField ) )
     {
         //SvxExtFileField aFileField( *pFileField );
 
         if( pFileField->GetType() == SvxFileType::Fix )
-            CheckItem( 1 );
+            m_xPopup->set_active("1", true);
         else
-            CheckItem( 2 );
+            m_xPopup->set_active("1", true);
 
-        InsertItem( nID++, SdResId( STR_FILEFORMAT_NAME_EXT ), nStyle );
-        InsertItem( nID++, SdResId( STR_FILEFORMAT_FULLPATH ), nStyle );
-        InsertItem( nID++, SdResId( STR_FILEFORMAT_PATH ), nStyle );
-        InsertItem( nID++, SdResId( STR_FILEFORMAT_NAME ), nStyle );
+        m_xPopup->append_radio(OUString::number(nID++), SdResId(STR_FILEFORMAT_NAME_EXT));
+        m_xPopup->append_radio(OUString::number(nID++), SdResId(STR_FILEFORMAT_FULLPATH));
+        m_xPopup->append_radio(OUString::number(nID++), SdResId(STR_FILEFORMAT_PATH));
+        m_xPopup->append_radio(OUString::number(nID++), SdResId(STR_FILEFORMAT_NAME));
 
-        CheckItem( static_cast<sal_uInt16>( pFileField->GetFormat() ) + 3 );
+        m_xPopup->set_active(OString::number(static_cast<sal_uInt16>( pFileField->GetFormat() ) + 3), true);
     }
-    else if( auto pAuthorField = dynamic_cast< const SvxAuthorField *>( pField ) )
+    else if( auto pAuthorField = dynamic_cast< const SvxAuthorField *>( m_pField ) )
     {
         SvxAuthorField aAuthorField( *pAuthorField );
 
         if( pAuthorField->GetType() == SvxAuthorType::Fix )
-            CheckItem( 1 );
+            m_xPopup->set_active("1", true);
         else
-            CheckItem( 2 );
+            m_xPopup->set_active("2", true);
 
         for( sal_uInt16 i = 0; i < 4; i++ )
         {
             aAuthorField.SetFormat( static_cast<SvxAuthorFormat>(i) );
-            InsertItem( nID++, aAuthorField.GetFormatted(), nStyle );
+            m_xPopup->append_radio(OUString::number(nID++), aAuthorField.GetFormatted());
         }
-        CheckItem( static_cast<sal_uInt16>( pAuthorField->GetFormat() ) + 3 );
+        m_xPopup->set_active(OString::number(static_cast<sal_uInt16>( pAuthorField->GetFormat() ) + 3), true);
+    }
+}
+
+void SdFieldPopup::Execute(weld::Window* pParent, const tools::Rectangle& rRect)
+{
+    OString sIdent = m_xPopup->popup_at_rect(pParent, rRect);
+    if (!sIdent.isEmpty())
+    {
+        if (sIdent == "1" || sIdent == "2")
+        {
+            m_xPopup->set_active("1", sIdent == "1");
+            m_xPopup->set_active("2", sIdent == "2");
+        }
+        else
+        {
+            int nCount = m_xPopup->n_children();
+            for (int i = 3; i < nCount; i++)
+                m_xPopup->set_active(OString::number(i), sIdent == OString::number(i));
+        }
     }
 }
 
@@ -155,22 +175,23 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
 SvxFieldData* SdFieldPopup::GetField()
 {
     SvxFieldData* pNewField = nullptr;
-    sal_uInt16 nCount = GetItemCount();
 
-    if( auto pDateField = dynamic_cast< const SvxDateField *>( pField ) )
+    sal_uInt16 nCount = m_xPopup->n_children();
+
+    if( auto pDateField = dynamic_cast< const SvxDateField *>( m_pField ) )
     {
         SvxDateType   eType;
         SvxDateFormat eFormat;
         sal_uInt16 i;
 
-        if( IsItemChecked( 1 ) )
+        if (m_xPopup->get_active("1"))
             eType = SvxDateType::Fix;
         else
             eType = SvxDateType::Var;
 
-        for( i = 3; i <= nCount; i++ )
+        for( i = 3; i < nCount; i++ )
         {
-            if( IsItemChecked( i ) )
+            if (m_xPopup->get_active(OString::number(i)))
                 break;
         }
         eFormat = static_cast<SvxDateFormat>( i - 1 );
@@ -189,20 +210,20 @@ SvxFieldData* SdFieldPopup::GetField()
             }
         }
     }
-    else if( auto pTimeField = dynamic_cast< const SvxExtTimeField *>( pField ) )
+    else if( auto pTimeField = dynamic_cast< const SvxExtTimeField *>( m_pField ) )
     {
         SvxTimeType   eType;
         SvxTimeFormat eFormat;
         sal_uInt16 i;
 
-        if( IsItemChecked( 1 ) )
+        if (m_xPopup->get_active("1"))
             eType = SvxTimeType::Fix;
         else
             eType = SvxTimeType::Var;
 
-        for( i = 3; i <= nCount; i++ )
+        for( i = 3; i < nCount; i++ )
         {
-            if( IsItemChecked( i ) )
+            if (m_xPopup->get_active(OString::number(i)))
                 break;
         }
         eFormat = static_cast<SvxTimeFormat>( i - 1 );
@@ -222,20 +243,20 @@ SvxFieldData* SdFieldPopup::GetField()
 
         }
     }
-    else if( auto pFileField = dynamic_cast< const SvxExtFileField *>( pField ) )
+    else if( auto pFileField = dynamic_cast< const SvxExtFileField *>( m_pField ) )
     {
         SvxFileType   eType;
         SvxFileFormat eFormat;
         sal_uInt16 i;
 
-        if( IsItemChecked( 1 ) )
+        if (m_xPopup->get_active("1"))
             eType = SvxFileType::Fix;
         else
             eType = SvxFileType::Var;
 
-        for( i = 3; i <= nCount; i++ )
+        for( i = 3; i < nCount; i++ )
         {
-            if( IsItemChecked( i ) )
+            if (m_xPopup->get_active(OString::number(i)))
                 break;
         }
         eFormat = static_cast<SvxFileFormat>( i - 3 );
@@ -258,20 +279,20 @@ SvxFieldData* SdFieldPopup::GetField()
             }
         }
     }
-    else if( auto pAuthorField = dynamic_cast< const SvxAuthorField *>( pField ) )
+    else if( auto pAuthorField = dynamic_cast< const SvxAuthorField *>( m_pField ) )
     {
         SvxAuthorType   eType;
         SvxAuthorFormat eFormat;
         sal_uInt16 i;
 
-        if( IsItemChecked( 1 ) )
+        if (m_xPopup->get_active("1"))
             eType = SvxAuthorType::Fix;
         else
             eType = SvxAuthorType::Var;
 
-        for( i = 3; i <= nCount; i++ )
+        for( i = 3; i < nCount; i++ )
         {
-            if( IsItemChecked( i ) )
+            if (m_xPopup->get_active(OString::number(i)))
                 break;
         }
         eFormat = static_cast<SvxAuthorFormat>( i - 3 );
