@@ -1307,6 +1307,12 @@ int PDFiumSearchHandleImpl::getSearchResultIndex()
 
 int PDFiumSearchHandleImpl::getSearchCount() { return FPDFText_GetSchCount(mpSearchHandle); }
 
+std::shared_ptr<PDFium>& PDFiumLibrary::get()
+{
+    static auto pInstance = std::make_shared<PDFium>();
+    return pInstance;
+}
+
 } // end vcl::pdf
 
 #endif // HAVE_FEATURE_PDFIUM
