@@ -75,9 +75,11 @@ void ShapeAnchor::importAnchor( sal_Int32 nElement, const AttributeList& rAttrib
     {
         case XDR_TOKEN( absoluteAnchor ):
             meAnchorType = ANCHOR_ABSOLUTE;
+            meEditAs = ANCHOR_ABSOLUTE;
         break;
         case XDR_TOKEN( oneCellAnchor ):
             meAnchorType = ANCHOR_ONECELL;
+            meEditAs = ANCHOR_ONECELL;
         break;
         case XDR_TOKEN( twoCellAnchor ):
         {
