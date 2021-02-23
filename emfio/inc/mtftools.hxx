@@ -27,6 +27,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/outdevstate.hxx>
+#include <rtl/ref.hxx>
 
 #include "emfiodllapi.h"
 
@@ -259,6 +260,8 @@ namespace emfio
 #define HUNDREDTH_MILLIMETERS_PER_MILLIINCH 2.54
 #define MILLIINCH_PER_TWIPS   1.44
 
+class MetaFontAction;
+
 //============================ WmfReader ==================================
 
 namespace emfio
@@ -458,6 +461,24 @@ namespace emfio
         {}
     };
 
+    // tdf#127471 implement detection and correction of wrongly scaled
+    // fonts in own-written, old (before this fix) EMF/WMF files
+    class ScaledFontDetectCorrectHelper
+    {
+    private:
+        rtl::Reference<MetaFontAction>                                  maCurrentMetaFontAction;
+        std::vector<double>                                             maAlternativeFontScales;
+        std::vector<std::pair<rtl::Reference<MetaFontAction>, double>>  maPositiveIdentifiedCases;
+        std::vector<std::pair<rtl::Reference<MetaFontAction>, double>>  maNegativeIdentifiedCases;
+
+    public:
+        ScaledFontDetectCorrectHelper();
+        void endCurrentMetaFontAction();
+        void newCurrentMetaFontAction(rtl::Reference<MetaFontAction>& rNewMetaFontAction);
+        void evaluateAlternativeFontScale(OUString const & rText, tools::Long nImportedTextLength);
+        void applyAlternativeFontScale();
+    };
+
     class MtfTools
     {
         MtfTools(MtfTools const &) = delete;
@@ -520,6 +541,9 @@ namespace emfio
         sal_uInt32          mnStartPos;
         sal_uInt32          mnEndPos;
         std::vector<std::unique_ptr<BSaveStruct>>    maBmpSaveList;
+
+        // tdf#127471 always try to detect - only used with ScaledText
+        ScaledFontDetectCorrectHelper maScaledFontHelper;
 
         bool                mbNopMode : 1;
         bool                mbFillStyleSelected : 1;

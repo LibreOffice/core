@@ -474,7 +474,7 @@ void EMFWriter::ImplCheckTextAttr()
         // specific formats.
         const tools::Long nAverageFontWidth(rFont.GetOrCalculateAverageFontWidth());
 
-        if(nAverageFontWidth > 0)
+        if(nFontHeight > 0)
         {
             const double fScaleFactor(static_cast<double>(nAverageFontWidth) / static_cast<double>(nFontHeight));
             nFontWidth = static_cast<tools::Long>(static_cast<double>(nFontWidth) * fScaleFactor);
