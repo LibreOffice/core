@@ -283,7 +283,7 @@ IMPL_LINK_NOARG(SwOutlineContentVisibilityWin, DelayAppearHandler, Timer*, void)
     if (GetEditWin()->GetSavedOutlineFrame() == GetFrame())
     {
         Show();
-        GrabFocus();
+        //GrabFocus(); commented out for tdf#140567
     }
     m_aDelayTimer.Stop();
 }
