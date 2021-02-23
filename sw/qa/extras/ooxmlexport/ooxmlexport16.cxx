@@ -103,6 +103,11 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFooterMarginLost, "footer-margin-lost.do
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgMar", "footer", "709");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf140572_docDefault_superscript, "tdf140572_docDefault_superscript.docx")
+{
+    // A round-trip was crashing.
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf138953, "croppedAndRotated.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
