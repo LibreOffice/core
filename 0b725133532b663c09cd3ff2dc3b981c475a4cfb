@@ -34,6 +34,24 @@
       "revId": "0b725133532b663c09cd3ff2dc3b981c475a4cfb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c42dbc20_a6292f89",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-02-23T12:47:24Z",
+      "side": 1,
+      "message": "\u003e But now the access to members (including writing) is not synchronized...\n\nChanged this as you suggested (local variable instead of writing member).\n\n\u003e (not that the other write of m_hParentWindow in VistaFilePickerImpl::impl_sta_CreateDialog is, either)\n\nFixed with https://gerrit.libreoffice.org/c/core/+/111393",
+      "parentUuid": "87b4bc30_a01e3e51",
+      "revId": "0b725133532b663c09cd3ff2dc3b981c475a4cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
