@@ -36,6 +36,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <tools/long.hxx>
+#include <rtl/ref.hxx>
 
 #include "LocaleNode.hxx"
 
@@ -316,13 +317,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         int nError = 0;
         // create and connect the document handler to the parser
-        TestDocumentHandler *pDocHandler = new TestDocumentHandler( argv[1], argv[3]);
+        rtl::Reference<TestDocumentHandler> pDocHandler = new TestDocumentHandler( argv[1], argv[3]);
 
-        Reference < XDocumentHandler >  rDocHandler( static_cast<XDocumentHandler *>(pDocHandler) );
-        Reference< XEntityResolver > rEntityResolver( static_cast<XEntityResolver *>(pDocHandler) );
-
-        rParser->setDocumentHandler( rDocHandler );
-        rParser->setEntityResolver( rEntityResolver );
+        rParser->setDocumentHandler( pDocHandler );
+        rParser->setEntityResolver( pDocHandler );
 
         // create the input stream
         InputSource source;
