@@ -52,6 +52,24 @@
       "revId": "0239414e5e1a790a0ed9fca41252f093a62f3f65",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6718f28_e7924939",
+        "filename": "vcl/jsdialog/executor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-02-23T07:15:59Z",
+      "side": 1,
+      "message": "ok, I see it cannob be done using just pos index. so something like this should work:\n\nstd::unique_ptr\u003cweld::TreeIter\u003e itOldEntry(pTreeView-\u003emake_iterator());\npTreeView-\u003eget_iter_abs_pos(*itOldEntry, pTreeView-\u003eget_selected_index());\npTreeView-\u003eunselect(*itOldEntry);\n\nstd::unique_ptr\u003cweld::TreeIter\u003e itEntry(pTreeView-\u003emake_iterator());\npTreeView-\u003eget_iter_abs_pos(*itEntry, nAbsPos);\npTreeView-\u003eselect(*itEntry);",
+      "parentUuid": "9280a9ca_33f1ad4f",
+      "revId": "0239414e5e1a790a0ed9fca41252f093a62f3f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
