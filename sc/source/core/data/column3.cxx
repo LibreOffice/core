@@ -978,7 +978,8 @@ void ScColumn::DeleteCells(
     aFunc.getSpans().getSpans(aSpans);
 
     // Delete the cells for real.
-    std::for_each(aSpans.begin(), aSpans.end(), EmptyCells(rBlockPos, *this));
+    // tdf#139820: Deleting in reverse order is more efficient.
+    std::for_each(aSpans.rbegin(), aSpans.rend(), EmptyCells(rBlockPos, *this));
     CellStorageModified();
 
     aFunc.getSpans().swap(rDeleted);
