@@ -19,7 +19,6 @@
 
 #include <vcl/builderfactory.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/notebookbar/notebookbar.hxx>
 #include <vcl/tabpage.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -30,7 +29,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <toolkit/awt/vclxmenu.hxx>
+#include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -348,10 +347,10 @@ IMPL_LINK(NotebookbarTabControl, OpenNotebookbarPopupMenu, NotebookBar*, pNotebo
         return;
 
     xPopupController->setPopupMenu(xPopupMenu);
-    VCLXMenu* pAwtMenu = comphelper::getUnoTunnelImplementation<VCLXMenu>(xPopupMenu);
-    PopupMenu* pVCLMenu = static_cast<PopupMenu*>(pAwtMenu->GetMenu());
     Point aPos(pNotebookbar->GetSizePixel().getWidth(), NotebookbarTabControl::GetHeaderHeight() - ICON_SIZE + 10);
-    pVCLMenu->Execute(pNotebookbar, tools::Rectangle(aPos, aPos),PopupMenuFlags::ExecuteDown|PopupMenuFlags::NoMouseUpClose);
+    xPopupMenu->execute(pNotebookbar->GetComponentInterface(),
+                        css::awt::Rectangle(aPos.X(), aPos.Y(), 1, 1),
+                        css::awt::PopupMenuDirection::EXECUTE_DOWN);
 
     Reference<css::lang::XComponent> xComponent(xPopupController, UNO_QUERY);
     if (xComponent.is())
