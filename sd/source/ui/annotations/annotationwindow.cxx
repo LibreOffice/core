@@ -149,11 +149,8 @@ bool AnnotationTextWindow::KeyInput(const KeyEvent& rKeyEvt)
 }
 
 /************** AnnotationWindow***********************************++*/
-AnnotationWindow::AnnotationWindow(AnnotationManagerImpl& rManager, DrawDocShell* pDocShell, vcl::Window* pParent)
+AnnotationWindow::AnnotationWindow(DrawDocShell* pDocShell, vcl::Window* pParent)
     : FloatingWindow(pParent, WB_BORDER)
-    , mrManager( rManager )
-    , mpDocShell( pDocShell )
-    , mpDoc( pDocShell->GetDoc() )
     , mxContents(VclPtr<AnnotationContents>::Create(this, pDocShell))
 {
     EnableAlwaysOnTop();

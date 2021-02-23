@@ -134,14 +134,10 @@ public:
 class AnnotationWindow : public FloatingWindow
 {
     private:
-        AnnotationManagerImpl&  mrManager;
-        DrawDocShell*           mpDocShell;
-        SdDrawDocument*         mpDoc;
-
         VclPtr<AnnotationContents> mxContents;
 
     public:
-        AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShell* pDocShell, vcl::Window* pParent );
+        AnnotationWindow( DrawDocShell* pDocShell, vcl::Window* pParent );
         virtual ~AnnotationWindow() override;
         virtual void dispose() override;
 

@@ -127,8 +127,7 @@ namespace sfx2
 
     //= DocumentMacroMode
     DocumentMacroMode::DocumentMacroMode( IMacroDocumentAccess& rDocumentAccess )
-        :m_xData( std::make_shared<DocumentMacroMode_Data>( rDocumentAccess ) ),
-        m_bNeedsContentSigned(false)
+        :m_xData( std::make_shared<DocumentMacroMode_Data>( rDocumentAccess ) )
     {
     }
 
@@ -416,8 +415,6 @@ namespace sfx2
         {
             if (m_xData->m_rDocumentAccess.documentStorageHasMacros() || hasMacroLibrary() || m_xData->m_rDocumentAccess.macroCallsSeenWhileLoading())
             {
-                if (m_xData->m_rDocumentAccess.macroCallsSeenWhileLoading())
-                    m_bNeedsContentSigned = true;
                 bAllow = adjustMacroMode( rxInteraction, bHasValidContentSignature );
             }
             else if ( !isMacroExecutionDisallowed() )

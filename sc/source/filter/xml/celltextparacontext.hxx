@@ -151,7 +151,6 @@ public:
 class ScXMLCellTextRubyContext : public ScXMLImportContext
 {
     ScXMLCellTextParaContext& mrParentCxt;
-    OUString maRubyStyleName;
     OUString maRubyTextStyle;
     OUString maRubyText;
 public:

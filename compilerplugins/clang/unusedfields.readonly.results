@@ -200,8 +200,6 @@ extensions/source/propctrlr/eformshelper.hxx:61
     pcr::EFormsHelper m_aSubmissionUINames pcr::MapStringToPropertySet
 extensions/source/propctrlr/eformshelper.hxx:63
     pcr::EFormsHelper m_aBindingUINames pcr::MapStringToPropertySet
-filter/source/graphicfilter/eps/eps.cxx:114
-    (anonymous namespace)::PSWriter pVDev ScopedVclPtrInstance<class VirtualDevice>
 filter/source/graphicfilter/icgm/cgm.hxx:58
     CGM mbPicture _Bool
 filter/source/graphicfilter/icgm/chart.hxx:49
@@ -212,14 +210,6 @@ filter/source/graphicfilter/icgm/chart.hxx:51
     DataNode nBoxX2 sal_Int16
 filter/source/graphicfilter/icgm/chart.hxx:52
     DataNode nBoxY2 sal_Int16
-filter/source/graphicfilter/idxf/dxf2mtf.hxx:54
-    DXF2GDIMetaFile aDefaultLineInfo const class LineInfo
-filter/source/graphicfilter/idxf/dxfreprd.hxx:76
-    DXFRepresentation aPalette class DXFPalette
-filter/source/graphicfilter/iras/iras.cxx:55
-    (anonymous namespace)::RASReader mnRepCount sal_uInt8
-filter/source/graphicfilter/itga/itga.cxx:55
-    (anonymous namespace)::TGAFileFooter nSignature sal_uInt32 [4]
 filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:86
     XMLFilterSettingsDialog maModuleOpt class SvtModuleOptions
 framework/inc/dispatch/dispatchprovider.hxx:77
@@ -376,7 +366,7 @@ sal/osl/unx/process.cxx:829
     (anonymous namespace)::osl_procStat sigignore char [24]
 sal/osl/unx/process.cxx:830
     (anonymous namespace)::osl_procStat sigcatch char [24]
-sal/qa/OStringBuffer/rtl_OStringBuffer.cxx:1432
+sal/qa/OStringBuffer/rtl_OStringBuffer.cxx:1675
     rtl_OStringBuffer::append_001 empty class rtl::OString
 sal/rtl/alloc_arena.hxx:100
     rtl_arena_st m_hash_table_0 struct rtl_arena_segment_type *[64]
@@ -462,9 +452,9 @@ sc/source/ui/vba/vbaworksheet.hxx:50
     ScVbaWorksheet mxButtons ::rtl::Reference<ScVbaSheetObjectsBase> [2]
 sd/inc/Outliner.hxx:286
     SdOutliner mpFirstObj class SdrObject *
-sd/inc/sdmod.hxx:119
-    SdModule gImplImpressPropertySetInfoCache SdExtPropertySetInfoCache
 sd/inc/sdmod.hxx:120
+    SdModule gImplImpressPropertySetInfoCache SdExtPropertySetInfoCache
+sd/inc/sdmod.hxx:121
     SdModule gImplDrawPropertySetInfoCache SdExtPropertySetInfoCache
 sd/source/core/CustomAnimationCloner.cxx:70
     sd::(anonymous namespace)::CustomAnimationClonerImpl maSourceNodeVector std::vector<Reference<XAnimationNode> >
@@ -558,7 +548,7 @@ sw/inc/calc.hxx:204
     SwCalc m_aSysLocale class SvtSysLocale
 sw/inc/dpage.hxx:35
     SwDPage m_pGridLst std::unique_ptr<SdrPageGridFrameList>
-sw/inc/hints.hxx:268
+sw/inc/hints.hxx:272
     SwAttrSetChg m_bDelSet _Bool
 sw/inc/shellio.hxx:147
     SwReader mpStg tools::SvRef<SotStorage>
@@ -606,7 +596,7 @@ sw/source/uibase/dbui/mmconfigitem.cxx:116
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
 sw/source/uibase/inc/fldmgr.hxx:79
     SwInsertField_Data m_aDBDataSource css::uno::Any
-toolkit/source/awt/vclxtoolkit.cxx:440
+toolkit/source/awt/vclxtoolkit.cxx:441
     (anonymous namespace)::VCLXToolkit mxSelection css::uno::Reference<css::datatransfer::clipboard::XClipboard>
 ucb/source/ucp/gio/gio_mount.hxx:74
     OOoMountOperationClass parent_class GMountOperationClass
@@ -938,6 +928,16 @@ vcl/source/control/roadmapwizard.cxx:63
     vcl::RoadmapWizardImpl aStateDescriptors vcl::(anonymous namespace)::StateDescriptions
 vcl/source/control/tabctrl.cxx:82
     ImplTabCtrlData maLayoutPageIdToLine std::unordered_map<int, int>
+vcl/source/filter/eps/eps.cxx:115
+    (anonymous namespace)::PSWriter pVDev ScopedVclPtrInstance<class VirtualDevice>
+vcl/source/filter/idxf/dxf2mtf.hxx:54
+    DXF2GDIMetaFile aDefaultLineInfo const class LineInfo
+vcl/source/filter/idxf/dxfreprd.hxx:76
+    DXFRepresentation aPalette class DXFPalette
+vcl/source/filter/iras/iras.cxx:56
+    (anonymous namespace)::RASReader mnRepCount sal_uInt8
+vcl/source/filter/itga/itga.cxx:55
+    (anonymous namespace)::TGAFileFooter nSignature sal_uInt32 [4]
 vcl/source/filter/jpeg/Exif.hxx:54
     Exif::ExifIFD tag sal_uInt8 [2]
 vcl/source/filter/jpeg/Exif.hxx:55
@@ -956,7 +956,7 @@ vcl/source/filter/jpeg/transupp.h:148
     (anonymous) crop_xoffset_set JCROP_CODE
 vcl/source/filter/jpeg/transupp.h:150
     (anonymous) crop_yoffset_set JCROP_CODE
-vcl/source/gdi/pdfwriter_impl.hxx:274
+vcl/source/gdi/pdfwriter_impl.hxx:275
     vcl::pdf::TransparencyEmit m_pSoftMaskStream std::unique_ptr<SvMemoryStream>
 vcl/source/treelist/headbar.cxx:41
     ImplHeadItem maHelpId class rtl::OString
@@ -968,7 +968,7 @@ vcl/unx/gtk3/a11y/atkwrapper.hxx:79
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:1653
+vcl/unx/gtk3/gtk3gtkinst.cxx:1644
      out gpointer *
 writerfilter/source/ooxml/OOXMLFactory.hxx:57
     writerfilter::ooxml::AttributeInfo m_nToken writerfilter::Token_t

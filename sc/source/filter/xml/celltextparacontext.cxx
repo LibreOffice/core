@@ -357,7 +357,6 @@ void SAL_CALL ScXMLCellTextRubyContext::startFastElement( sal_Int32 /*nElement*/
         {
             case XML_ELEMENT( TEXT, XML_STYLE_NAME ):
                 // This is ruby style instead of text style.
-                maRubyStyleName = aIter.toString();
             break;
             default:
                 ;

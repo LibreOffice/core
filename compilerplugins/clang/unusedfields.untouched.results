@@ -22,7 +22,7 @@ dbaccess/source/core/inc/databasecontext.hxx:84
     dbaccess::ODatabaseContext m_aBasicDLL class BasicDLL
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:115
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
-desktop/qa/desktop_lib/test_desktop_lib.cxx:2905
+desktop/qa/desktop_lib/test_desktop_lib.cxx:2883
       class AllSettings &
 emfio/source/emfuno/xemfparser.cxx:50
     emfio::emfreader::(anonymous namespace)::XEmfParser context_ uno::Reference<uno::XComponentContext>
@@ -188,12 +188,10 @@ include/vcl/font/Feature.hxx:100
     vcl::font::Feature m_eType enum vcl::font::FeatureType
 include/vcl/pdf/PDFAnnotationMarker.hxx:65
     vcl::pdf::PDFAnnotationMarkerHighlight meTextMarkerType enum vcl::pdf::PDFTextMarkerType
-include/vcl/uitest/uiobject.hxx:283
+include/vcl/uitest/uiobject.hxx:284
     TabPageUIObject mxTabPage VclPtr<class TabPage>
 include/xmloff/formlayerexport.hxx:172
     xmloff::OOfficeFormsExport m_pImpl std::unique_ptr<OFormsRootExport>
-include/xmloff/xmltkmap.hxx:38
-    SvXMLTokenMapEntry nFastToken sal_Int32
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:51
     GtvApplicationWindow parent_instance GtkApplicationWindow
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:55
@@ -240,18 +238,20 @@ sal/qa/osl/condition/osl_Condition.cxx:202
     osl_Condition::wait bRes2 _Bool
 sal/qa/osl/condition/osl_Condition.cxx:273
     osl_Condition::check bRes2 _Bool
-sal/qa/osl/file/osl_File.cxx:1588
+sal/qa/osl/file/osl_File.cxx:1387
+    osl_FileStatus::isValid rItem_link class osl::DirectoryItem
+sal/qa/osl/file/osl_File.cxx:1564
     osl_FileStatus::getFileType m_aFifoItem class osl::DirectoryItem
-sal/qa/osl/file/osl_File.cxx:1588
+sal/qa/osl/file/osl_File.cxx:1564
     osl_FileStatus::getFileType m_aVolumeItem class osl::DirectoryItem
-sal/qa/osl/file/osl_File.cxx:1589
+sal/qa/osl/file/osl_File.cxx:1565
     osl_FileStatus::getFileType m_aLinkItem class osl::DirectoryItem
-sal/qa/osl/file/osl_File.cxx:1589
+sal/qa/osl/file/osl_File.cxx:1565
     osl_FileStatus::getFileType m_aSocketItem class osl::DirectoryItem
-sal/qa/osl/file/osl_File.cxx:1589
+sal/qa/osl/file/osl_File.cxx:1565
     osl_FileStatus::getFileType m_aSpecialItem class osl::DirectoryItem
-sal/qa/osl/file/osl_File.cxx:3417
-    osl_File::setAttributes rItem_hidden class osl::DirectoryItem
+sal/qa/osl/file/osl_File.cxx:2039
+    osl_FileStatus::getLinkTargetURL rItem class osl::DirectoryItem
 sal/qa/osl/module/osl_Module.cxx:70
     osl_Module::ctors bRes1 _Bool
 sal/qa/osl/module/osl_Module.cxx:114
@@ -284,9 +284,9 @@ sal/qa/osl/security/osl_Security.cxx:154
     osl_Security::getUserName bRes1 _Bool
 sal/qa/osl/security/osl_Security.cxx:188
     osl_Security::getConfigDir bRes1 _Bool
-sc/source/core/data/document.cxx:1240
+sc/source/core/data/document.cxx:1232
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aSwitch sc::AutoCalcSwitch
-sc/source/core/data/document.cxx:1241
+sc/source/core/data/document.cxx:1233
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aBulk class ScBulkBroadcast
 sc/source/filter/html/htmlpars.cxx:3018
     (anonymous namespace)::CSSHandler::MemStr mp const char *
@@ -300,6 +300,12 @@ sc/source/ui/inc/PivotLayoutTreeListBase.hxx:48
     ScPivotLayoutTreeListBase maDropTargetHelper class ScPivotLayoutTreeDropTarget
 sd/source/ui/animations/CustomAnimationList.hxx:124
     sd::CustomAnimationList maDropTargetHelper class sd::CustomAnimationListDropTarget
+sd/source/ui/annotations/annotationwindow.hxx:137
+    sd::AnnotationWindow mrManager class sd::AnnotationManagerImpl &
+sd/source/ui/annotations/annotationwindow.hxx:138
+    sd::AnnotationWindow mpDocShell class sd::DrawDocShell *
+sd/source/ui/annotations/annotationwindow.hxx:139
+    sd::AnnotationWindow mpDoc class SdDrawDocument *
 sd/source/ui/inc/sdtreelb.hxx:73
     SdPageObjsTLV m_xDropTargetHelper std::unique_ptr<SdPageObjsTLVDropTarget>
 sd/source/ui/remotecontrol/ZeroconfService.hxx:32
@@ -318,9 +324,9 @@ sd/source/ui/view/viewshel.cxx:1171
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
 sd/source/ui/view/ViewShellBase.cxx:188
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:266
     (anonymous namespace)::PDFGrammar::definition array rule<ScannerT>
-sdext/source/pdfimport/pdfparse/pdfparse.cxx:264
+sdext/source/pdfimport/pdfparse/pdfparse.cxx:266
     (anonymous namespace)::PDFGrammar::definition value rule<ScannerT>
 sfx2/inc/autoredactdialog.hxx:94
     SfxAutoRedactDialog m_xDocShell class SfxObjectShellLock
@@ -338,6 +344,18 @@ slideshow/source/engine/opengl/TransitionImpl.cxx:1992
     (anonymous namespace)::ThreeFloats y GLfloat
 slideshow/source/engine/opengl/TransitionImpl.cxx:1992
     (anonymous namespace)::ThreeFloats z GLfloat
+starmath/inc/mathml/mathmlMo.hxx:64
+    moOperatorData m_motxt class rtl::OUString
+starmath/inc/mathml/mathmlMo.hxx:65
+    moOperatorData m_form enum moOpDF
+starmath/inc/mathml/mathmlMo.hxx:66
+    moOperatorData m_priority sal_uInt16
+starmath/inc/mathml/mathmlMo.hxx:67
+    moOperatorData m_lspace sal_uInt16
+starmath/inc/mathml/mathmlMo.hxx:68
+    moOperatorData m_rspace sal_uInt16
+starmath/inc/mathml/mathmlMo.hxx:69
+    moOperatorData m_properties enum moOpDP
 starmath/inc/smmod.hxx:70
     SmModule mpLocSymbolData std::unique_ptr<SmLocalizedSymbolData>
 starmath/inc/view.hxx:216
@@ -356,7 +374,7 @@ svl/source/crypto/cryptosign.cxx:283
     (anonymous namespace)::PKIStatusInfo failInfo SECItem
 svx/source/dialog/contimp.hxx:75
     SvxSuperContourDlg aContourItem class SvxContourDlgItem
-svx/source/dialog/weldeditview.cxx:371
+svx/source/dialog/weldeditview.cxx:376
     (anonymous namespace)::WeldEditSource m_rEditAcc class WeldEditAccessible &
 svx/source/inc/datanavi.hxx:190
     svxform::XFormsPage m_aDropHelper class svxform::DataTreeDropTarget
@@ -410,19 +428,17 @@ vcl/source/gdi/pdfbuildin_fonts.hxx:33
     vcl::pdf::BuildinFont m_nDescent const int
 vcl/source/gdi/pdfbuildin_fonts.hxx:40
     vcl::pdf::BuildinFont m_aWidths const int [256]
-vcl/source/graphic/VectorGraphicSearch.cxx:205
-    VectorGraphicSearch::Implementation mpPDFium std::shared_ptr<vcl::pdf::PDFium>
 vcl/source/uitest/uno/uitest_uno.cxx:34
     (anonymous namespace)::UITestUnoObj mpUITest std::unique_ptr<UITest>
 vcl/unx/gtk3/a11y/gtk3atkhypertext.cxx:31
     (anonymous namespace)::HyperLink atk_hyper_link const AtkHyperlink
 vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
-vcl/unx/gtk3/gtk3gtkinst.cxx:5306
+vcl/unx/gtk3/gtk3gtkinst.cxx:5264
     (anonymous namespace)::CrippledViewport viewport GtkViewport
-vcl/unx/gtk3/gtk3gtkinst.cxx:5450
+vcl/unx/gtk3/gtk3gtkinst.cxx:5408
     (anonymous namespace)::CustomCellRendererSurface parent GtkCellRendererText
-vcl/unx/gtk3/gtk3gtkinst.cxx:5458
+vcl/unx/gtk3/gtk3gtkinst.cxx:5416
     (anonymous namespace)::CustomCellRendererSurfaceClass parent_class GtkCellRendererTextClass
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:42
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>
