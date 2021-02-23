@@ -306,6 +306,7 @@ public:
     void testDrawCircleInMergeCells();
     void testDeleteCirclesInRowAndCol();
     void testTdf129940();
+    void testTdf139763ShapeAnchor();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCondFormatOperatorsSameRangeXLSX);
@@ -495,6 +496,7 @@ public:
     CPPUNIT_TEST(testDrawCircleInMergeCells);
     CPPUNIT_TEST(testDeleteCirclesInRowAndCol);
     CPPUNIT_TEST(testTdf129940);
+    CPPUNIT_TEST(testTdf139763ShapeAnchor);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5487,6 +5489,36 @@ void ScFiltersTest::testTdf129940()
     // Multiple text:span within text:ruby-base
     aStr = rDoc.GetString(ScAddress(2,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString(u"注音符號"), aStr);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf139763ShapeAnchor()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf139763ShapeAnchor.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load cell-anchored-shapes.xlsx", xDocSh.is());
+
+    // There are two objects on the first sheet, anchored to page by element xdr:absoluteAnchor
+    // and anchored to cell by element xdr:oneCellAnchor. Error was, that they were imported as
+    // "anchor to cell (resize with cell".
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_MESSAGE("There should be at least one sheet.", rDoc.GetTableCount() > 0);
+
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
+    // There should be 2 shapes
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pPage->GetObjCount());
+
+    SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get page anchored object.", pObj);
+    CPPUNIT_ASSERT_MESSAGE("Shape must be page anchored", !ScDrawLayer::IsCellAnchored(*pObj));
+
+    pObj = pPage->GetObj(1);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get cell anchored object.", pObj);
+    CPPUNIT_ASSERT_MESSAGE("Shape must be anchored to cell.", ScDrawLayer::IsCellAnchored(*pObj));
+    CPPUNIT_ASSERT_MESSAGE("Shape must not resize with cell.", !ScDrawLayer::IsResizeWithCell(*pObj));
 
     xDocSh->DoClose();
 }
