@@ -21,23 +21,51 @@
   *
   */
 
-#ifndef INCLUDED_STARMATH_INC_PARSE_HXX
-#define INCLUDED_STARMATH_INC_PARSE_HXX
+#include <parse.hxx>
+#include <smmod.hxx>
+#include <cfgitem.hxx>
 
-#include "parse5.hxx"
-
-namespace starmathdatabase
+AbstractSmParser* starmathdatabase::GetSmDockingWindowSmParser()
 {
-
-AbstractSmParser* GetSmDockingWindowSmParser();
-
-AbstractSmParser* GetDefaultSmParser();
-
-AbstractSmParser* GetVersionSmParser(sal_uInt16 nVersion);
-
-
+    switch(SM_MOD()->GetConfig()->GetDefaultSmSyntaxVersion())
+    {
+    case 5:
+    {
+        AbstractSmParser* aParser = new SmParser();
+        aParser->SetImportSymbolNames(true);
+        return aParser;
+    }
+    default:
+        throw std::range_error("parser depth limit");
+    }
 }
 
-#endif
+AbstractSmParser* starmathdatabase::GetDefaultSmParser()
+{
+    switch(SM_MOD()->GetConfig()->GetDefaultSmSyntaxVersion())
+    {
+    case 5:
+    {
+        AbstractSmParser* aParser = new SmParser();
+        return aParser;
+    }
+    default:
+        throw std::range_error("parser depth limit");
+    }
+}
+
+AbstractSmParser* starmathdatabase::GetVersionSmParser(sal_uInt16 nVersion)
+{
+    switch(nVersion)
+    {
+    case 5:
+    {
+        AbstractSmParser* aParser = new SmParser();
+        return aParser;
+    }
+    default:
+        throw std::range_error("parser depth limit");
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
