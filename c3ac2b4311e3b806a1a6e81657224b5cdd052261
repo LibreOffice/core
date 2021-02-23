@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d609b301_334466a2",
+        "filename": "basic/qa/basic_coverage/test_typename_method.vb",
+        "patchSetId": 12
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2021-02-23T17:59:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75935b65_fe98be88",
+      "revId": "c3ac2b4311e3b806a1a6e81657224b5cdd052261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bb70fe8d_597bc97d",
         "filename": "basic/qa/basic_coverage/test_typename_method.vb",
         "patchSetId": 12
@@ -33,6 +51,24 @@
       "revId": "c3ac2b4311e3b806a1a6e81657224b5cdd052261",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33130933_e3e058ce",
+        "filename": "basic/qa/basic_coverage/test_typename_method.vb",
+        "patchSetId": 12
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2021-02-23T17:59:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb70fe8d_597bc97d",
+      "revId": "c3ac2b4311e3b806a1a6e81657224b5cdd052261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "01f78d01_c7e556f2",
+        "filename": "basic/qa/basic_coverage/test_typename_method.vb",
+        "patchSetId": 12
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2021-02-23T17:59:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "746f2d26_98f7a8df",
+      "revId": "c3ac2b4311e3b806a1a6e81657224b5cdd052261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a48fd064_8c494ca4",
         "filename": "basic/qa/basic_coverage/test_typename_method.vb",
         "patchSetId": 12
@@ -67,6 +121,24 @@
       "revId": "c3ac2b4311e3b806a1a6e81657224b5cdd052261",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18a4227a_09e983e1",
+        "filename": "basic/qa/basic_coverage/test_typename_method.vb",
+        "patchSetId": 12
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2021-02-23T17:59:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a48fd064_8c494ca4",
+      "revId": "c3ac2b4311e3b806a1a6e81657224b5cdd052261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
