@@ -1317,39 +1317,21 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf123202)
     CPPUNIT_ASSERT(pDoc->RowHidden(2, 0));
 }
 
-CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf116215)
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124829)
 {
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
+    ScModelObj* pModelObj = createDoc("tdf124829.ods");
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
-    insertStringToCell(*pModelObj, "A1", "1");
-    insertStringToCell(*pModelObj, "A2", "1");
-    insertStringToCell(*pModelObj, "B1", "1");
-    insertStringToCell(*pModelObj, "B2", "1");
-    goToCell("A1:C3");
-    dispatchCommand(mxComponent, ".uno:AutoSum", {});
 
-    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(0, 2, 0)));
-    OUString aFormula;
-    pDoc->GetFormula(0, 2, 0, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A1:A2)"), aFormula);
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
-    // Without the fix in place, this test would have failed with
-    // - Expected: 2
-    // - Actual  : 4
-    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(1, 2, 0)));
-    pDoc->GetFormula(1, 2, 0, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B1:B2)"), aFormula);
+    for (sal_uInt32 i = 1; i <= 40; i++)
+    {
+        dispatchCommand(mxComponent, ".uno:Undo", {});
+    }
 
-    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(2, 0, 0)));
-    pDoc->GetFormula(2, 0, 0, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A1:B1)"), aFormula);
-
-    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(2, 1, 0)));
-    pDoc->GetFormula(2, 1, 0, aFormula);
-    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A2:B2)"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(6), pDoc->GetTableCount());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
