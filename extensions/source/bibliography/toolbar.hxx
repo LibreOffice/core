@@ -148,9 +148,10 @@ class BibToolBar:   public ToolBox
         weld::ComboBox*         pLbSource;
         VclPtr<EditControl>     xQuery;
         weld::Entry*            pEdQuery;
-        ScopedVclPtr<PopupMenu> pPopupMenu;
+        std::unique_ptr<weld::Builder> xBuilder;
+        std::unique_ptr<weld::Menu> xPopupMenu;
         sal_uInt16              nMenuId;
-        sal_uInt16              nSelMenuItem;
+        OString                 sSelMenuItem;
         OUString                aQueryField;
         Link<void*,void>        aLayoutManager;
         sal_Int16               nSymbolsSize;

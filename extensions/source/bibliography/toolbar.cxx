@@ -34,9 +34,9 @@
 #include <svtools/imgdef.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/event.hxx>
+#include <vcl/weldutils.hxx>
 #include <bitmaps.hlst>
 
 #include "bibtools.hxx"
@@ -228,9 +228,9 @@ BibToolBar::BibToolBar(vcl::Window* pParent, Link<void*,void> aLink)
     , pLbSource(xSource->get_widget())
     , xQuery(VclPtr<EditControl>::Create(this))
     , pEdQuery(xQuery->get_widget())
-    , pPopupMenu(VclPtr<PopupMenu>::Create())
+    , xBuilder(Application::CreateBuilder(nullptr, "modules/sbibliography/ui/autofiltermenu.ui"))
+    , xPopupMenu(xBuilder->weld_menu("menu"))
     , nMenuId(0)
-    , nSelMenuItem(0)
     , aLayoutManager(aLink)
     , nSymbolsSize(SFX_SYMBOLS_SIZE_SMALL)
 {
@@ -280,6 +280,8 @@ void BibToolBar::dispose()
     xQuery.disposeAndClear();
     pLbSource = nullptr;
     xSource.disposeAndClear();
+    xPopupMenu.reset();
+    xBuilder.reset();
     ToolBox::dispose();
 }
 
@@ -411,21 +413,23 @@ void BibToolBar::Click()
 
 void BibToolBar::ClearFilterMenu()
 {
-    pPopupMenu->Clear();
+    xPopupMenu->clear();
     nMenuId=0;
 }
-sal_uInt16 BibToolBar::InsertFilterItem(const OUString& aMenuEntry)
+
+sal_uInt16 BibToolBar::InsertFilterItem(const OUString& rMenuEntry)
 {
     nMenuId++;
-    pPopupMenu->InsertItem(nMenuId,aMenuEntry);
-
+    xPopupMenu->append_check(OUString::number(nMenuId), rMenuEntry);
     return nMenuId;
 }
-void BibToolBar::SelectFilterItem(sal_uInt16    nId)
+
+void BibToolBar::SelectFilterItem(sal_uInt16 nId)
 {
-    pPopupMenu->CheckItem(nId);
-    nSelMenuItem=nId;
-    aQueryField = MnemonicGenerator::EraseAllMnemonicChars( pPopupMenu->GetItemText(nId) );
+    OString sId = OString::number(nId);
+    xPopupMenu->set_active(sId, true);
+    sSelMenuItem = sId;
+    aQueryField = MnemonicGenerator::EraseAllMnemonicChars(xPopupMenu->get_label(sId));
 }
 
 void BibToolBar::EnableSourceList(bool bFlag)
@@ -510,24 +514,26 @@ IMPL_LINK_NOARG( BibToolBar, SendSelHdl, Timer*, void )
     SendDispatch(nTBC_SOURCE, aPropVal);
 }
 
-IMPL_LINK_NOARG( BibToolBar, MenuHdl, ToolBox*, void)
+IMPL_LINK_NOARG(BibToolBar, MenuHdl, ToolBox*, void)
 {
-    sal_uInt16  nId=GetCurItemId();
+    sal_uInt16 nId = GetCurItemId();
     if (nId != nTBC_BT_AUTOFILTER)
         return;
 
     EndSelection();     // before SetDropMode (SetDropMode calls SetItemImage)
 
     SetItemDown(nTBC_BT_AUTOFILTER, true);
-    nId = pPopupMenu->Execute(this, GetItemRect(nTBC_BT_AUTOFILTER));
 
+    tools::Rectangle aRect(GetItemRect(nTBC_BT_AUTOFILTER));
+    weld::Window* pParent = weld::GetPopupParent(*this, aRect);
+    OString sId = xPopupMenu->popup_at_rect(pParent, aRect);
 
-    if(nId>0)
+    if (!sId.isEmpty())
     {
-        pPopupMenu->CheckItem(nSelMenuItem,false);
-        pPopupMenu->CheckItem(nId);
-        nSelMenuItem=nId;
-        aQueryField = MnemonicGenerator::EraseAllMnemonicChars( pPopupMenu->GetItemText(nId) );
+        xPopupMenu->set_active(sSelMenuItem, false);
+        xPopupMenu->set_active(sId, true);
+        sSelMenuItem = sId;
+        aQueryField = MnemonicGenerator::EraseAllMnemonicChars(xPopupMenu->get_label(sId));
         Sequence<PropertyValue> aPropVal(2);
         PropertyValue* pPropertyVal = const_cast<PropertyValue*>(aPropVal.getConstArray());
         pPropertyVal[0].Name = "QueryText";
