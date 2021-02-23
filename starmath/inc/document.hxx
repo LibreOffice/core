@@ -177,7 +177,8 @@ public:
     void            SetFormulaTree(SmTableNode *pTree) { mpTree.reset(pTree); }
     sal_uInt16      GetSmSyntaxVersion() const { return mnSmSyntaxVersion; }
     void            SetSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion)
-    { mnSmSyntaxVersion = nSmSyntaxVersion; }
+    { mnSmSyntaxVersion = nSmSyntaxVersion;
+      starmathdatabase::UpdateDocumentSyntaxVersion(nSmSyntaxVersion); }
 
     const std::set< OUString > &    GetUsedSymbols() const  { return maUsedSymbols; }
 

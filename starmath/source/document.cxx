@@ -628,6 +628,7 @@ SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
 
     SmModule *pp = SM_MOD();
     maFormat = pp->GetConfig()->GetStandardFormat();
+    starmathdatabase::UpdateDocumentSyntaxVersion(mnSmSyntaxVersion);
 
     StartListening(maFormat);
     StartListening(*pp->GetConfig());
