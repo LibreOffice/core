@@ -1794,7 +1794,7 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
                     uno::Reference<XFastContextHandler> pChildContext =
                         mrShapeContext->createFastChildContext(Element, Attribs);
 
-                    OOXMLFastContextHandlerWrapper * pWrapper =
+                    rtl::Reference<OOXMLFastContextHandlerWrapper> pWrapper =
                         new OOXMLFastContextHandlerWrapper(this,
                                                            pChildContext,
                                                            this);
@@ -1975,7 +1975,7 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
     }
     else if (mxWrappedContext.is()  && !bSkipImages)
     {
-        OOXMLFastContextHandlerWrapper * pWrapper =
+        rtl::Reference<OOXMLFastContextHandlerWrapper> pWrapper =
             new OOXMLFastContextHandlerWrapper
             (this, mxWrappedContext->createFastChildContext(Element, Attribs),
              mxShapeHandler);
