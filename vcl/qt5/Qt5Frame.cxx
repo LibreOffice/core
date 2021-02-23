@@ -59,7 +59,6 @@
 
 #include <saldatabasic.hxx>
 #include <window.h>
-#include <vcl/layout.hxx>
 #include <vcl/syswin.hxx>
 
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
