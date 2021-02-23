@@ -90,7 +90,7 @@ public:
     }
 
     constexpr Color(enum ColorAlphaTag, sal_uInt32 nColor)
-        : mValue((nColor & 0xffffff) | (255 - (nColor >> 24)))
+        : mValue((nColor & 0xffffff) | ((255 - (nColor >> 24)) << 24))
     {
     }
 
