@@ -64,14 +64,12 @@ public:
     void                SetCharSet( const rtl_TextEncoding eCharSet )   { meCharSet = eCharSet; }
     void                SetFontSize( const Size& rSize )
     {
-#ifndef _WIN32
         if(rSize.Height() != maAverageFontSize.Height())
         {
             // reset evtl. buffered calculated AverageFontSize, it depends
             // on Font::Height
             mnCalculatedAverageFontWidth = 0;
         }
-#endif
         maAverageFontSize = rSize;
     }
 
@@ -91,10 +89,15 @@ public:
     void                IncreaseQualityBy( int nQualityAmount )         { mnQuality += nQualityAmount; }
     void                DecreaseQualityBy( int nQualityAmount )         { mnQuality -= nQualityAmount; }
 
+<<<<<<< HEAD   (75d5db tdf#127471 correct EMF/WMF im/export for scaled font)
 #ifndef _WIN32
     long                GetCalculatedAverageFontWidth() const           { return mnCalculatedAverageFontWidth; }
     void                SetCalculatedAverageFontWidth(long nNew)        { mnCalculatedAverageFontWidth = nNew; }
 #endif
+=======
+    tools::Long         GetCalculatedAverageFontWidth() const           { return mnCalculatedAverageFontWidth; }
+    void                SetCalculatedAverageFontWidth(tools::Long nNew) { mnCalculatedAverageFontWidth = nNew; }
+>>>>>>> CHANGE (3d33e4 tdf#127471 Detect&Correct EMF/WMF with wrong FontScale)
 
     bool                operator==( const ImplFont& ) const;
 
@@ -146,9 +149,13 @@ private:
 
     int                 mnQuality;
 
+<<<<<<< HEAD   (75d5db tdf#127471 correct EMF/WMF im/export for scaled font)
 #ifndef _WIN32
     long                mnCalculatedAverageFontWidth;
 #endif
+=======
+    tools::Long         mnCalculatedAverageFontWidth;
+>>>>>>> CHANGE (3d33e4 tdf#127471 Detect&Correct EMF/WMF with wrong FontScale)
 };
 
 #endif // INCLUDED_VCL_INC_IMPFONT_HXX
