@@ -585,7 +585,7 @@ void AnnotationTag::OpenPopup( bool bEdit )
 
             ::tools::Rectangle aRect( aPos, maSize );
 
-            mpAnnotationWindow.reset( VclPtr<AnnotationWindow>::Create( mrManager, mrView.GetDocSh(), pWindow->GetWindow(GetWindowType::Frame) ) );
+            mpAnnotationWindow.reset( VclPtr<AnnotationWindow>::Create( mrView.GetDocSh(), pWindow->GetWindow(GetWindowType::Frame) ) );
             AnnotationContents& rAnnotation = mpAnnotationWindow->GetContents();
             rAnnotation.InitControls();
             rAnnotation.setAnnotation(mxAnnotation);

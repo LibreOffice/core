@@ -296,7 +296,6 @@ namespace sfx2
 
     private:
         std::shared_ptr< DocumentMacroMode_Data >   m_xData;
-        bool m_bNeedsContentSigned;
     };
 
 

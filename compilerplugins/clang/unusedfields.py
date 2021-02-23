@@ -177,7 +177,8 @@ for d in definitionSet:
         or srcLoc.startswith("include/oox/")
         or srcLoc.startswith("include/filter/")
         or srcLoc.startswith("hwpfilter/")
-        or srcLoc.startswith("filter/")):
+        or srcLoc.startswith("filter/")
+        or srcLoc.startswith("vcl/source/filter/")):
         continue
 
     writeonlySet.add((d[0] + " " + d[1] + " " + definitionToTypeMap[d], srcLoc))
