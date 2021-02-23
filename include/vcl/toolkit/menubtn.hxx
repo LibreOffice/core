@@ -64,7 +64,7 @@ public:
     virtual void    KeyInput( const KeyEvent& rKEvt ) override;
 
     virtual void    Activate() override;
-    virtual void    Select();
+    void            Select();
 
     void            ExecuteMenu();
     bool            InPopupMode() const;

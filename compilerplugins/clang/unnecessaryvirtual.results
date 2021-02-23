@@ -296,8 +296,10 @@ include/vbahelper/vbareturntypes.hxx:39
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
 include/vcl/customweld.hxx:45
     class rtl::OUString weld::CustomWidgetController::GetHelpText()const
-include/vcl/toolkit/dialog.hxx:98
+include/vcl/toolkit/dialog.hxx:99
     void Dialog::set_content_area(class VclBox *,)
+include/vcl/toolkit/menubtn.hxx:67
+    void MenuButton::Select()
 include/vcl/weld.hxx:100
     void weld::Widget::set_visible(_Bool,)
 sc/source/core/opencl/formulagroupcl.cxx:1061
@@ -400,18 +402,26 @@ slideshow/source/inc/shape.hxx:221
     void slideshow::internal::Shape::setIsForeground(const _Bool,)
 sw/inc/flypos.hxx:37
     void SwPosFlyFrame::~SwPosFlyFrame()
+sw/source/core/inc/MarkManager.hxx:104
+    void sw::mark::MarkManager::LOKUpdateActiveField(class SfxViewShell *,)
 toolkit/inc/controls/geometrycontrolmodel.hxx:182
     void OGeometryControlModel::fillProperties(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,)const
-vcl/inc/jsdialog/jsdialogbuilder.hxx:190
+vcl/inc/jsdialog/jsdialogbuilder.hxx:90
+    void JSDialogSender::sendFullUpdate(_Bool,)
+vcl/inc/jsdialog/jsdialogbuilder.hxx:92
+    void JSDialogSender::sendUpdate(class VclPtr<class vcl::Window>,_Bool,)
+vcl/inc/jsdialog/jsdialogbuilder.hxx:250
     void JSWidget::show()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:196
+vcl/inc/jsdialog/jsdialogbuilder.hxx:256
     void JSWidget::hide()
-vcl/inc/jsdialog/jsdialogbuilder.hxx:203
+vcl/inc/jsdialog/jsdialogbuilder.hxx:263
     void JSWidget::set_sensitive(_Bool,)
-vcl/inc/jsdialog/jsdialogbuilder.hxx:209
+vcl/inc/jsdialog/jsdialogbuilder.hxx:271
     class com::sun::star::uno::Reference<class com::sun::star::datatransfer::dnd::XDropTarget> JSWidget::get_drop_target()
-vcl/inc/salbmp.hxx:118
-    void SalBitmap::updateChecksum()const
+vcl/inc/jsdialog/jsdialogbuilder.hxx:279
+    void JSWidget::freeze()
+vcl/inc/jsdialog/jsdialogbuilder.hxx:285
+    void JSWidget::thaw()
 vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
 vcl/inc/salframe.hxx:194
@@ -424,9 +434,11 @@ vcl/inc/salobj.hxx:49
     void SalObject::Enable(_Bool,)
 vcl/inc/salprn.hxx:116
     enum SalPrinterError SalPrinter::GetErrorCode()
+vcl/inc/salvtables.hxx:1577
+    _Bool SalInstanceTreeView::get_iter_abs_pos(class weld::TreeIter &,int,)const
 vcl/inc/skia/gdiimpl.hxx:236
     void SkiaSalGraphicsImpl::createSurface()
-vcl/inc/unx/gtk/gtkdata.hxx:121
+vcl/inc/unx/gtk/gtkdata.hxx:180
     int GtkSalDisplay::CaptureMouse(class SalFrame *,)
 vcl/inc/unx/saldata.hxx:50
     void X11SalData::Init()
@@ -450,7 +462,7 @@ vcl/inc/unx/saldisp.hxx:197
     _Bool SalXLib::CheckTimeout(_Bool,)
 vcl/inc/unx/saldisp.hxx:404
     void SalX11Display::Yield()
-vcl/inc/unx/salframe.h:207
+vcl/inc/unx/salframe.h:206
     void X11SalFrame::updateGraphics(_Bool,)
 vcl/inc/unx/salinst.h:41
     class SalX11Display * X11SalInstance::CreateDisplay()const
