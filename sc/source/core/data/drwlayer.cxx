@@ -742,9 +742,9 @@ void lcl_SetLogicRectFromAnchor(SdrObject* pObj, ScDrawObjData& rAnchor, ScDocum
 } // namespace
 
 void ScDrawLayer::ResizeLastRectFromAnchor(const SdrObject* pObj, ScDrawObjData& rData,
-                                           bool bUseLogicRect, bool bNegativePage, bool bCanResize)
+                                           bool bNegativePage, bool bCanResize)
 {
-    tools::Rectangle aRect = bUseLogicRect ? pObj->GetLogicRect() : pObj->GetSnapRect();
+    tools::Rectangle aRect = pObj->GetSnapRect();
     SCCOL nCol1 = rData.maStart.Col();
     SCROW nRow1 = rData.maStart.Row();
     SCTAB nTab1 = rData.maStart.Tab();
@@ -1168,7 +1168,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         bool bCanResize = bValid2 && !pObj->IsResizeProtect() && rData.mbResizeWithCell;
 
         // update anchor with snap rect
-        ResizeLastRectFromAnchor( pObj, rData, false, bNegativePage, bCanResize );
+        ResizeLastRectFromAnchor( pObj, rData, bNegativePage, bCanResize );
 
         ScDrawObjData& rNoRotatedAnchor = *GetNonRotatedObjData( pObj, true /*bCreate*/);
 

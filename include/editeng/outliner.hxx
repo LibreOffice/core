@@ -347,7 +347,7 @@ public:
         const bool bAtSelection = false );
 
     bool        IsCursorAtWrongSpelledWord();
-    bool        IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWrong = false );
+    bool        IsWrongSpelledWordAtPos( const Point& rPosPixel );
     void        ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void> const * pCallBack );
 
     void        SetInvalidateMore( sal_uInt16 nPixel );
