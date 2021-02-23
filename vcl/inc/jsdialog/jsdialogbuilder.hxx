@@ -287,6 +287,7 @@ public:
     {
         BaseInstanceClass::thaw();
         m_bIsFreezed = false;
+        sendUpdate();
     }
 
     virtual void sendClose() override
