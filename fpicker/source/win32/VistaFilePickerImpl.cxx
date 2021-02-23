@@ -490,7 +490,10 @@ void VistaFilePickerImpl::impl_sta_CreateDialog(const RequestRef& rRequest, Pick
             sal_Int64 tmp = 0;
             aAny >>= tmp;
             if(tmp != 0)
+            {
+                osl::MutexGuard aLock(m_aMutex);
                 m_hParentWindow = reinterpret_cast<HWND>(tmp);
+            }
         }
     }
 
