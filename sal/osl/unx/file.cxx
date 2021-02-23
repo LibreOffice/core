@@ -1618,4 +1618,7 @@ oslFileError SAL_CALL osl_setFileSize(oslFileHandle Handle, sal_uInt64 uSize)
     return pImpl->setSize(uSize);
 }
 
+// not implemented in unix yet
+sal_Bool SAL_CALL osl_FileExists(rtl_uString* strPath) { return false; }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

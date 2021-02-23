@@ -686,6 +686,28 @@ oslFileError SAL_CALL osl_openFile(
     return result;
 }
 
+sal_Bool SAL_CALL osl_FileExists(rtl_uString* strPath)
+{
+    rtl_uString* strSysPath = nullptr;
+    bool bExists = false;
+    oslFileError result = osl_getSystemPathFromFileURL_(strPath, &strSysPath, false);
+    if (result != osl_File_E_None)
+        return false;
+
+    WIN32_FIND_DATA FindFileData;
+    HANDLE hFile = FindFirstFileW(o3tl::toW(rtl_uString_getStr(strSysPath)), (LPWIN32_FIND_DATAW)&FindFileData);
+
+    if (IsValidHandle(hFile))
+    {
+        FindClose(hFile);
+        bExists = true;
+    }
+
+    rtl_uString_release(strSysPath);
+
+    return bExists;
+}
+
 oslFileError SAL_CALL osl_syncFile(oslFileHandle Handle)
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
