@@ -171,10 +171,19 @@ namespace svt
         virtual void SetEditableReadOnly(bool bReadOnly);
 
         virtual bool ProcessKey(const KeyEvent& rKEvt);
+
+        // chain after the FocusOutHdl
+        void SetFocusInHdl(const Link<LinkParamNone*,void>& rHdl)
+        {
+            m_aFocusInHdl = rHdl;
+        }
+
     protected:
         DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
         DECL_LINK(FocusInHdl, weld::Widget&, void);
         DECL_LINK(FocusOutHdl, weld::Widget&, void);
+    private:
+        Link<LinkParamNone*,void> m_aFocusInHdl;
     };
 
     class SVT_DLLPUBLIC EditControlBase : public ControlBase
