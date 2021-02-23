@@ -272,9 +272,10 @@ namespace sdr::contact
                 pOutDev->SetLayoutMode(ComplexTextLayoutFlags::Default); // reset, default is no BiDi/RTL
 
                 // create renderer
+                const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(getViewInformation2D());
                 std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(
                     drawinglayer::processor2d::createProcessor2DFromOutputDevice(
-                        rTargetOutDev, getViewInformation2D()));
+                        rTargetOutDev, aVisitingParameters));
 
                 pProcessor2D->process(xPrimitiveSequence);
             }

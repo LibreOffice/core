@@ -174,7 +174,7 @@ namespace drawinglayer::processor2d
                 {
                     // remember current transformation and ViewInformation
                     const primitive2d::TransformPrimitive2D& rTransformCandidate(static_cast< const primitive2d::TransformPrimitive2D& >(rCandidate));
-                    const geometry::ViewInformation2D aLastViewInformation2D(getViewInformation2D());
+                    primitive2d::VisitingParameters aLastParameters(maVisitingParameters);
 
                     // create new transformations for CurrentTransformation and for local ViewInformation2D
                     const geometry::ViewInformation2D aViewInformation2D(
@@ -184,13 +184,15 @@ namespace drawinglayer::processor2d
                         getViewInformation2D().getVisualizedPage(),
                         getViewInformation2D().getViewTime(),
                         getViewInformation2D().getExtendedInformationSequence());
-                    updateViewInformation(aViewInformation2D);
+
+                    primitive2d::VisitingParameters aParameters(aViewInformation2D);
+                    updateVisitingParameters(aParameters);
 
                     // process content
                     process(rTransformCandidate.getChildren());
 
                     // restore transformations
-                    updateViewInformation(aLastViewInformation2D);
+                    updateVisitingParameters(aLastParameters);
 
                     break;
                 }
@@ -216,8 +218,8 @@ namespace drawinglayer::processor2d
             }
         }
 
-        TextAsPolygonExtractor2D::TextAsPolygonExtractor2D(const geometry::ViewInformation2D& rViewInformation)
-        :   BaseProcessor2D(rViewInformation),
+        TextAsPolygonExtractor2D::TextAsPolygonExtractor2D(primitive2d::VisitingParameters const& rVisitingParameters)
+        :   BaseProcessor2D(rVisitingParameters),
             maTarget(),
             maBColorModifierStack(),
             mnInText(0)

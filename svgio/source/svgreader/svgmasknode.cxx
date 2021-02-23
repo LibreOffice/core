@@ -201,9 +201,9 @@ namespace svgio::svgreader
             if(!aMaskTarget.empty())
             {
                 // get range of content to be masked
-                const basegfx::B2DRange aContentRange(
-                        rTarget.getB2DRange(
-                            drawinglayer::geometry::ViewInformation2D()));
+                const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+                const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+                const basegfx::B2DRange aContentRange = rTarget.getB2DRange(aVisitingParameters);
                 const double fContentWidth(aContentRange.getWidth());
                 const double fContentHeight(aContentRange.getHeight());
 

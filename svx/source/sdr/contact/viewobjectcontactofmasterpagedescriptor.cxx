@@ -108,7 +108,8 @@ namespace sdr::contact
             {
                 // get range of MasterPage sub hierarchy
                 const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-                const basegfx::B2DRange aSubHierarchyRange(xMasterPageSequence.getB2DRange(rViewInformation2D));
+                const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(rViewInformation2D);
+                const basegfx::B2DRange aSubHierarchyRange(xMasterPageSequence.getB2DRange(aVisitingParameters));
 
                 if (rPageFillRange.isInside(aSubHierarchyRange))
                 {

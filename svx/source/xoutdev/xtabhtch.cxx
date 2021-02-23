@@ -138,7 +138,6 @@ BitmapEx XHatchList::CreateBitmap( tools::Long nIndex, const Size& rSize) const
 
         // prepare VirtualDevice
         ScopedVclPtrInstance< VirtualDevice > pVirtualDevice;
-        const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
 
         pVirtualDevice->SetOutputSizePixel(rSize);
         pVirtualDevice->SetDrawMode(rStyleSettings.GetHighContrastMode()
@@ -160,9 +159,10 @@ BitmapEx XHatchList::CreateBitmap( tools::Long nIndex, const Size& rSize) const
         }
 
         // create processor and draw primitives
-        std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
-            *pVirtualDevice,
-            aNewViewInformation2D));
+        const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
+        const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aNewViewInformation2D);
+        auto pProcessor2D = drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
+            *pVirtualDevice, aVisitingParameters);
 
         drawinglayer::primitive2d::Primitive2DContainer aSequence(2);
 

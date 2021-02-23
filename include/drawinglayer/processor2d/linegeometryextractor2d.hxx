@@ -46,7 +46,7 @@ namespace drawinglayer::processor2d
             void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate) override;
 
         public:
-            LineGeometryExtractor2D(const geometry::ViewInformation2D& rViewInformation);
+            LineGeometryExtractor2D(primitive2d::VisitingParameters const& rVisitingParameters);
             virtual ~LineGeometryExtractor2D() override;
 
             const basegfx::B2DPolygonVector& getExtractedHairlines() const { return maExtractedHairlines; }

@@ -36,9 +36,9 @@ using namespace com::sun::star;
 namespace drawinglayer::processor2d
 {
         ContourExtractor2D::ContourExtractor2D(
-            const geometry::ViewInformation2D& rViewInformation,
+            primitive2d::VisitingParameters const& rVisitingParameters,
             bool bExtractFillOnly)
-        :   BaseProcessor2D(rViewInformation),
+        :   BaseProcessor2D(rVisitingParameters),
             maExtractedContour(),
             mbExtractFillOnly(bExtractFillOnly)
         {
@@ -121,7 +121,7 @@ namespace drawinglayer::processor2d
                 {
                     // remember current ViewInformation2D
                     const primitive2d::TransformPrimitive2D& rTransformCandidate(static_cast< const primitive2d::TransformPrimitive2D& >(rCandidate));
-                    const geometry::ViewInformation2D aLastViewInformation2D(getViewInformation2D());
+                    primitive2d::VisitingParameters aLastVisitingParameters(maVisitingParameters);
 
                     // create new local ViewInformation2D
                     const geometry::ViewInformation2D aViewInformation2D(
@@ -131,13 +131,14 @@ namespace drawinglayer::processor2d
                         getViewInformation2D().getVisualizedPage(),
                         getViewInformation2D().getViewTime(),
                         getViewInformation2D().getExtendedInformationSequence());
-                    updateViewInformation(aViewInformation2D);
+                    primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+                    updateVisitingParameters(aVisitingParameters);
 
                     // process content
                     process(rTransformCandidate.getChildren());
 
                     // restore transformations
-                    updateViewInformation(aLastViewInformation2D);
+                    updateVisitingParameters(aLastVisitingParameters);
 
                     break;
                 }
@@ -173,7 +174,7 @@ namespace drawinglayer::processor2d
                 case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D :
                 {
                     // primitives who's BoundRect will be added in world coordinates
-                    basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
+                    basegfx::B2DRange aRange(rCandidate.getB2DRange(maVisitingParameters));
                     if (!aRange.isEmpty())
                     {
                         aRange.transform(getViewInformation2D().getObjectTransformation());

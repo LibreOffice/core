@@ -119,9 +119,10 @@ void ObjectContactOfObjListPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
     // if there is something to show, use a vclProcessor to render it
     if(!xPrimitiveSequence.empty())
     {
+        const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(getViewInformation2D());
         std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
             *pTargetDevice,
-            getViewInformation2D()));
+            aVisitingParameters));
 
         pProcessor2D->process(xPrimitiveSequence);
     }

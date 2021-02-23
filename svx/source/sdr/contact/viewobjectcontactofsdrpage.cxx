@@ -382,8 +382,10 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageHierarchy
         if(!xRetval.empty())
         {
             // get ranges
+
             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-            const basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
+            const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(rViewInformation2D);
+            const basegfx::B2DRange aObjectRange(xRetval.getB2DRange(aVisitingParameters));
             const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
 
             // check geometrical visibility
@@ -608,7 +610,8 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSdrPage::getP
         {
             // get ranges
             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-            const basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
+            const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(rViewInformation2D);
+            const basegfx::B2DRange aObjectRange(xRetval.getB2DRange(aVisitingParameters));
             const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
 
             // check geometrical visibility

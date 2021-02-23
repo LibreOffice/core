@@ -84,7 +84,7 @@ namespace drawinglayer::primitive2d
 
                 // I will take the last one here. The small overhead of two primitives will only be
                 // used when UnifiedTransparencePrimitive2D is not handled directly.
-                const basegfx::B2DRange aPolygonRange(getChildren().getB2DRange(rParameters.getViewInformation()));
+                const basegfx::B2DRange aPolygonRange(getChildren().getB2DRange(rParameters));
                 const basegfx::B2DPolygon aPolygon(basegfx::utils::createPolygonFromRect(aPolygonRange));
                 const basegfx::BColor aGray(getTransparence(), getTransparence(), getTransparence());
                 Primitive2DContainer aTransparenceContent(2);

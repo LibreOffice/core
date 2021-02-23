@@ -904,9 +904,10 @@ static bool paintUsingPrimitivesHelper(
                 uno::Sequence< beans::PropertyValue >());
 
             // get a primitive processor for rendering
+            const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
             std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(
                 drawinglayer::processor2d::createProcessor2DFromOutputDevice(
-                                                rOutputDevice, aViewInformation2D) );
+                                                rOutputDevice, aVisitingParameters));
 
             // render and cleanup
             pProcessor2D->process(rSequence);

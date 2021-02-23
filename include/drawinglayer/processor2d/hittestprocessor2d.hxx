@@ -68,7 +68,7 @@ namespace drawinglayer::processor2d
 
         public:
             HitTestProcessor2D(
-                const geometry::ViewInformation2D& rViewInformation,
+                primitive2d::VisitingParameters const& rVisitingParameters,
                 const basegfx::B2DPoint& rLogicHitPosition,
                 double fLogicHitTolerance,
                 bool bHitTextOnly);

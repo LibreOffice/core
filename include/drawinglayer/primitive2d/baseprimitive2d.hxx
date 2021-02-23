@@ -30,25 +30,30 @@
 #include <cppuhelper/basemutex.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 
-namespace drawinglayer::geometry
-{
-class ViewInformation2D;
-}
 
 namespace drawinglayer::primitive2d
 {
 class DRAWINGLAYERCORE_DLLPUBLIC VisitingParameters
 {
-    const geometry::ViewInformation2D& mrViewInformation;
+private:
+    geometry::ViewInformation2D maViewInformation;
 
 public:
-    VisitingParameters(const geometry::ViewInformation2D& rViewInformation)
-        : mrViewInformation(rViewInformation)
+    explicit VisitingParameters(const geometry::ViewInformation2D& rViewInformation)
+        : maViewInformation(rViewInformation)
     {
     }
 
-    const geometry::ViewInformation2D& getViewInformation() const { return mrViewInformation; }
+    const css::uno::Sequence<css::beans::PropertyValue> getUnoProperties()
+    {
+        css::uno::Sequence<css::beans::PropertyValue> aPropertyValues;
+        aPropertyValues = maViewInformation.getViewInformationSequence();
+        return aPropertyValues;
+    }
+
+    const geometry::ViewInformation2D& getViewInformation() const { return maViewInformation; }
 };
 
 typedef cppu::WeakComponentImplHelper<css::graphic::XPrimitive2D, css::util::XAccounting>

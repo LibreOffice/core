@@ -37,7 +37,7 @@ namespace drawinglayer
 
     BitmapEx convertToBitmapEx(
         const drawinglayer::primitive2d::Primitive2DContainer& rSeq,
-        const geometry::ViewInformation2D& rViewInformation2D,
+        drawinglayer::primitive2d::VisitingParameters const& rParameters,
         sal_uInt32 nDiscreteWidth,
         sal_uInt32 nDiscreteHeight,
         sal_uInt32 nMaxSquarePixels)
@@ -81,9 +81,7 @@ namespace drawinglayer
             // create pixel processor, also already takes care of AAing and
             // checking the getOptionsDrawinglayer().IsAntiAliasing() switch. If
             // not wanted, change after this call as needed
-            std::unique_ptr<processor2d::BaseProcessor2D> pContentProcessor = processor2d::createPixelProcessor2DFromOutputDevice(
-                *pContent,
-                rViewInformation2D);
+            auto pContentProcessor = processor2d::createPixelProcessor2DFromOutputDevice(*pContent, rParameters);
 
 #ifdef DBG_UTIL
             static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore

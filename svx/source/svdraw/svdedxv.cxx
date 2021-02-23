@@ -771,9 +771,10 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const tools::
     {
         // completely reworked to use primitives; this ensures same look and functionality
         const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+        const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
         std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(
             drawinglayer::processor2d::createProcessor2DFromOutputDevice(rTargetDevice,
-                                                                         aViewInformation2D));
+                                                                         aVisitingParameters));
 
         const bool bMapModeEnabled(rTargetDevice.IsMapModeEnabled());
         const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(aPixRect);

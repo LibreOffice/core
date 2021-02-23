@@ -61,7 +61,7 @@ protected:
 
 public:
     AnimatedExtractingProcessor2D(
-        const drawinglayer::geometry::ViewInformation2D& rViewInformation,
+        drawinglayer::primitive2d::VisitingParameters const& rParameters,
         bool bTextAnimationAllowed,
         bool bGraphicAnimationAllowed);
 
@@ -70,10 +70,10 @@ public:
 };
 
 AnimatedExtractingProcessor2D::AnimatedExtractingProcessor2D(
-    const drawinglayer::geometry::ViewInformation2D& rViewInformation,
+    drawinglayer::primitive2d::VisitingParameters const& rParameters,
     bool bTextAnimationAllowed,
     bool bGraphicAnimationAllowed)
-:   drawinglayer::processor2d::BaseProcessor2D(rViewInformation),
+:   drawinglayer::processor2d::BaseProcessor2D(rParameters),
     maPrimitive2DSequence(),
     mbTextAnimationAllowed(bTextAnimationAllowed),
     mbGraphicAnimationAllowed(bGraphicAnimationAllowed)
@@ -199,8 +199,9 @@ const basegfx::B2DRange& ViewObjectContact::getObjectRange() const
 
             if(!xSequence.empty())
             {
+                const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(rViewInfo2D);
                 const_cast< ViewObjectContact* >(this)->maObjectRange =
-                    xSequence.getB2DRange(rViewInfo2D);
+                    xSequence.getB2DRange(aVisitingParameters);
             }
         }
     }
@@ -279,8 +280,9 @@ void ViewObjectContact::checkForPrimitive2DAnimations()
 
     if(bTextAnimationAllowed || bGraphicAnimationAllowed)
     {
-        AnimatedExtractingProcessor2D aAnimatedExtractor(GetObjectContact().getViewInformation2D(),
-            bTextAnimationAllowed, bGraphicAnimationAllowed);
+        const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(GetObjectContact().getViewInformation2D());
+
+        AnimatedExtractingProcessor2D aAnimatedExtractor(aVisitingParameters, bTextAnimationAllowed, bGraphicAnimationAllowed);
         aAnimatedExtractor.process(mxPrimitive2DSequence);
 
         if(!aAnimatedExtractor.getPrimitive2DSequence().empty())
@@ -357,7 +359,8 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
 
     // always update object range when PrimitiveSequence changes
     const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-    const_cast< ViewObjectContact* >(this)->maObjectRange = mxPrimitive2DSequence.getB2DRange(rViewInformation2D);
+    const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(rViewInformation2D);
+    const_cast< ViewObjectContact* >(this)->maObjectRange = mxPrimitive2DSequence.getB2DRange(aVisitingParameters);
 
     // check and eventually embed to GridOffset transform primitive
     if(GetObjectContact().supportsGridOffsets())
@@ -417,7 +420,8 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::getPrimitive2
         {
             // get ranges
             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-            const basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
+            const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(rViewInformation2D);
+            const basegfx::B2DRange aObjectRange(xRetval.getB2DRange(aVisitingParameters));
             const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
 
             // check geometrical visibility

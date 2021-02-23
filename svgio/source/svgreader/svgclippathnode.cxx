@@ -129,6 +129,7 @@ namespace svgio::svgreader
                 return;
 
             const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+            const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
             drawinglayer::primitive2d::Primitive2DContainer aClipTarget;
             basegfx::B2DPolyPolygon aClipPolyPolygon;
 
@@ -138,7 +139,7 @@ namespace svgio::svgreader
             if(!aClipTarget.empty())
             {
                 // extract filled polygons as base for a mask PolyPolygon
-                drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D, true);
+                drawinglayer::processor2d::ContourExtractor2D aExtractor(aVisitingParameters, true);
 
                 aExtractor.process(aClipTarget);
 
@@ -161,7 +162,7 @@ namespace svgio::svgreader
                 if (SvgUnits::objectBoundingBox == getClipPathUnits())
                 {
                     // clip is object-relative, transform using content transformation
-                    const basegfx::B2DRange aContentRange(rContent.getB2DRange(aViewInformation2D));
+                    const basegfx::B2DRange aContentRange(rContent.getB2DRange(aVisitingParameters));
 
                     aClipPolyPolygon.transform(
                         basegfx::utils::createScaleTranslateB2DHomMatrix(
@@ -187,9 +188,7 @@ namespace svgio::svgreader
                     // ClipRegion is a rectangle, thus it is not expensive to tell
                     // if the content is completely inside or outside of it; get ranges
                     const basegfx::B2DRange aClipRange(aClipPolyPolygon.getB2DRange());
-                    const basegfx::B2DRange aContentRange(
-                        rContent.getB2DRange(
-                            aViewInformation2D));
+                    const basegfx::B2DRange aContentRange(rContent.getB2DRange(aVisitingParameters));
 
                     if(aClipRange.isInside(aContentRange))
                     {

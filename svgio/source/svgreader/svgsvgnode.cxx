@@ -357,9 +357,9 @@ namespace svgio::svgreader
                                 // Even outermost svg has not all information to resolve relative values,
                                 // I use content itself as fallback to set missing values for viewport
                                 // Any better idea for such ill structured svg documents?
-                                const basegfx::B2DRange aChildRange(
-                                            aSequence.getB2DRange(
-                                                drawinglayer::geometry::ViewInformation2D()));
+                                const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+                                const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+                                const basegfx::B2DRange aChildRange = aSequence.getB2DRange(aVisitingParameters);
                                 fWReference = aChildRange.getWidth();
                             }
                         }
@@ -391,9 +391,9 @@ namespace svgio::svgreader
                             // Even outermost svg has not all information to resolve relative values,
                                 // I use content itself as fallback to set missing values for viewport
                                 // Any better idea for such ill structured svg documents?
-                                const basegfx::B2DRange aChildRange(
-                                        aSequence.getB2DRange(
-                                            drawinglayer::geometry::ViewInformation2D()));
+                                const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+                                const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+                                const basegfx::B2DRange aChildRange = aSequence.getB2DRange(aVisitingParameters);
                                 fHReference = aChildRange.getHeight();
                             }
                         }
@@ -593,9 +593,10 @@ namespace svgio::svgreader
                             {
                                 // There exists no parent to resolve relative width or height.
                                 // Use child size as fallback. We get viewport >= content, therefore no clipping.
-                                const basegfx::B2DRange aChildRange(
-                                     aSequence.getB2DRange(
-                                         drawinglayer::geometry::ViewInformation2D()));
+                                const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+                                const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+                                const basegfx::B2DRange aChildRange = aSequence.getB2DRange(aVisitingParameters);
+
                                 const double fChildWidth(aChildRange.getWidth());
                                 const double fChildHeight(aChildRange.getHeight());
                                 const double fChildLeft(aChildRange.getMinX());
@@ -617,9 +618,9 @@ namespace svgio::svgreader
 
                         // different from Svg we have the possibility with primitives to get
                         // a correct bounding box for the geometry. Get it for evtl. taking action
-                        const basegfx::B2DRange aContentRange(
-                            aSequence.getB2DRange(
-                                drawinglayer::geometry::ViewInformation2D()));
+                        const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+                        const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+                        const basegfx::B2DRange aContentRange = aSequence.getB2DRange(aVisitingParameters);
 
                         if(aSvgCanvasRange.isInside(aContentRange))
                         {

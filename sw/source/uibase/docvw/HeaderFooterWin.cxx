@@ -373,8 +373,8 @@ void SwHeaderFooterWin::PaintButton()
 
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
-    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
-        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(*m_xVirDev, aNewViewInfos));
+    const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aNewViewInfos);
+    auto pProcessor = drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(*m_xVirDev, aVisitingParameters);
 
     // TODO Ghost it all if needed
     drawinglayer::primitive2d::Primitive2DContainer aGhostedSeq(1);

@@ -1723,9 +1723,9 @@ std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> ScOutputData::Create
             GetXDrawPageForSdrPage( pDrawPage ),
             0.0,
             uno::Sequence< beans::PropertyValue >() );
+    const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aNewViewInfos);
 
-    return drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
-                    *mpDev, aNewViewInfos );
+    return drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(*mpDev, aVisitingParameters);
 }
 
 // Printer

@@ -166,7 +166,9 @@ basegfx::B2DRange ViewContactOfSdrOle2Obj::getRange( const drawinglayer::geometr
             aObjectMatrix,
             aAttribute));
 
-    return drawinglayer::primitive2d::getB2DRangeFromPrimitive2DReference(xReference, rViewInfo2D);
+    const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(rViewInfo2D);
+
+    return drawinglayer::primitive2d::getB2DRangeFromPrimitive2DReference(xReference, aVisitingParameters);
 }
 
 drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrOle2Obj::createViewIndependentPrimitive2DSequence() const

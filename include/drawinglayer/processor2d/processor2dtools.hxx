@@ -22,8 +22,8 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <memory>
 
-namespace drawinglayer::geometry { class ViewInformation2D; }
 namespace drawinglayer::processor2d { class BaseProcessor2D; }
+namespace drawinglayer::primitive2d { class VisitingParameters; }
 
 class OutputDevice;
 
@@ -43,7 +43,7 @@ namespace drawinglayer::processor2d
         */
         DRAWINGLAYER_DLLPUBLIC std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
             OutputDevice& rTargetOutDev,
-            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D);
+            drawinglayer::primitive2d::VisitingParameters const& rParameters);
 
         /** create a BaseProcessor2D dependent on some states of the
             given OutputDevice. If metafile is recorded, the needed
@@ -61,7 +61,7 @@ namespace drawinglayer::processor2d
         */
         DRAWINGLAYER_DLLPUBLIC std::unique_ptr<BaseProcessor2D> createProcessor2DFromOutputDevice(
             OutputDevice& rTargetOutDev,
-            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D);
+            drawinglayer::primitive2d::VisitingParameters const& rParameters);
 
 
 } // end of namespace drawinglayer::processor2d

@@ -214,7 +214,7 @@ VclMetafileProcessor2D::impDumpToMetaFile(const primitive2d::Primitive2DContaine
     // Prepare VDev, MetaFile and connections
     OutputDevice* pLastOutputDevice = mpOutputDevice;
     GDIMetaFile* pLastMetafile = mpMetaFile;
-    basegfx::B2DRange aPrimitiveRange(rContent.getB2DRange(getViewInformation2D()));
+    basegfx::B2DRange aPrimitiveRange(rContent.getB2DRange(maVisitingParameters));
 
     // transform primitive range with current transformation (e.g shadow offset)
     aPrimitiveRange.transform(maCurrentTransformation);
@@ -548,9 +548,9 @@ void VclMetafileProcessor2D::popList()
 // init static break iterator
 uno::Reference<css::i18n::XBreakIterator> VclMetafileProcessor2D::mxBreakIterator;
 
-VclMetafileProcessor2D::VclMetafileProcessor2D(const geometry::ViewInformation2D& rViewInformation,
-                                               OutputDevice& rOutDev)
-    : VclProcessor2D(rViewInformation, rOutDev)
+VclMetafileProcessor2D::VclMetafileProcessor2D(
+    drawinglayer::primitive2d::VisitingParameters const& rParameters, OutputDevice& rOutDev)
+    : VclProcessor2D(rParameters, rOutDev)
     , mpMetaFile(rOutDev.GetConnectMetaFile())
     , mnSvtGraphicFillCount(0)
     , mnSvtGraphicStrokeCount(0)
@@ -564,7 +564,7 @@ VclMetafileProcessor2D::VclMetafileProcessor2D(const geometry::ViewInformation2D
                "VclMetafileProcessor2D: Used on OutDev which has no MetaFile Target (!)");
     // draw to logic coordinates, do not initialize maCurrentTransformation to viewTransformation
     // but only to ObjectTransformation. Do not change MapMode of destination.
-    maCurrentTransformation = rViewInformation.getObjectTransformation();
+    maCurrentTransformation = rParameters.getViewInformation().getObjectTransformation();
 }
 
 VclMetafileProcessor2D::~VclMetafileProcessor2D()
@@ -1123,7 +1123,7 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
         {
             // still need to fill in the location (is a class Rectangle)
             const basegfx::B2DRange aRangeLogic(
-                rControlPrimitive.getB2DRange(getViewInformation2D()));
+                rControlPrimitive.getB2DRange(maVisitingParameters));
             const tools::Rectangle aRectLogic(static_cast<sal_Int32>(floor(aRangeLogic.getMinX())),
                                               static_cast<sal_Int32>(floor(aRangeLogic.getMinY())),
                                               static_cast<sal_Int32>(ceil(aRangeLogic.getMaxX())),
@@ -1234,7 +1234,7 @@ void VclMetafileProcessor2D::processTextHierarchyFieldPrimitive2D(
 
     // process recursively
     primitive2d::Primitive2DContainer rContent;
-    rFieldPrimitive.get2DDecomposition(rContent, getViewInformation2D());
+    rFieldPrimitive.get2DDecomposition(rContent, maVisitingParameters);
     process(rContent);
 
     // for the end comment the type is not relevant yet, they are all the same. Just add.
@@ -1245,7 +1245,7 @@ void VclMetafileProcessor2D::processTextHierarchyFieldPrimitive2D(
         return;
 
     // emulate data handling from ImpEditEngine::Paint
-    const basegfx::B2DRange aViewRange(rContent.getB2DRange(getViewInformation2D()));
+    const basegfx::B2DRange aViewRange(rContent.getB2DRange(maVisitingParameters));
     const tools::Rectangle aRectLogic(static_cast<sal_Int32>(floor(aViewRange.getMinX())),
                                       static_cast<sal_Int32>(floor(aViewRange.getMinY())),
                                       static_cast<sal_Int32>(ceil(aViewRange.getMaxX())),
@@ -2251,7 +2251,7 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
         // transparence primitives with non-trivial transparence content) i will for now not
         // refine to tiling here.
 
-        basegfx::B2DRange aViewRange(rContent.getB2DRange(getViewInformation2D()));
+        basegfx::B2DRange aViewRange(rContent.getB2DRange(maVisitingParameters));
         aViewRange.transform(maCurrentTransformation);
         const tools::Rectangle aRectLogic(static_cast<sal_Int32>(floor(aViewRange.getMinX())),
                                           static_cast<sal_Int32>(floor(aViewRange.getMinY())),
@@ -2311,7 +2311,9 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
                 getViewInformation2D().getVisualizedPage(), getViewInformation2D().getViewTime(),
                 getViewInformation2D().getExtendedInformationSequence());
 
-            VclPixelProcessor2D aBufferProcessor(aViewInfo, *aBufferDevice);
+            primitive2d::VisitingParameters aVisitingParameters(aViewInfo);
+
+            VclPixelProcessor2D aBufferProcessor(aVisitingParameters, *aBufferDevice);
 
             // draw content using pixel renderer
             const Point aEmptyPoint;
@@ -2442,14 +2444,16 @@ VclMetafileProcessor2D::CreateBufferDevice(const basegfx::B2DRange& rCandidateRa
 void VclMetafileProcessor2D::processPrimitive2DOnPixelProcessor(
     const primitive2d::BasePrimitive2D& rCandidate)
 {
-    basegfx::B2DRange aViewRange(rCandidate.getB2DRange(getViewInformation2D()));
+    basegfx::B2DRange aViewRange(rCandidate.getB2DRange(maVisitingParameters));
     geometry::ViewInformation2D aViewInfo;
     tools::Rectangle aRectLogic;
     Size aSizePixel;
     auto pBufferDevice(CreateBufferDevice(aViewRange, aViewInfo, aRectLogic, aSizePixel));
     if (pBufferDevice)
     {
-        VclPixelProcessor2D aBufferProcessor(aViewInfo, *pBufferDevice, maBColorModifierStack);
+        primitive2d::VisitingParameters aVisitingParameters(aViewInfo);
+        VclPixelProcessor2D aBufferProcessor(aVisitingParameters, *pBufferDevice,
+                                             maBColorModifierStack);
 
         // draw content using pixel renderer
         primitive2d::Primitive2DReference aRef(

@@ -690,10 +690,9 @@ void FrameSelectorImpl::DrawAllFrameBorders()
     // This is one more hint to enhance the primitive visualization further to
     // support diagonals better - that's the way to go.
     const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
-    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(
-        drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
-            *mpVirDev,
-            aNewViewInformation2D));
+    const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aNewViewInformation2D);
+    auto pProcessor2D = drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
+            *mpVirDev, aVisitingParameters);
 
     pProcessor2D->process(maArray.CreateB2DPrimitiveArray());
     pProcessor2D.reset();

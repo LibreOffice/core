@@ -100,17 +100,19 @@ namespace drawinglayer::primitive2d
             // see if buffering is wanted. If so, create buffered content in given resolution
             if(0 != mnDiscreteWidth && 0 != mnDiscreteHeight)
             {
-                const geometry::ViewInformation2D aViewInformation2D;
                 const primitive2d::Primitive2DReference xEmbedRef(
                     new primitive2d::TransformPrimitive2D(
                         basegfx::utils::createScaleB2DHomMatrix(mnDiscreteWidth, mnDiscreteHeight),
                         getChildren()));
                 const primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
 
+                const geometry::ViewInformation2D aViewInformation2D;
+                primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+
                 const BitmapEx aBitmapEx(
                     convertToBitmapEx(
                         xEmbedSeq,
-                        aViewInformation2D,
+                        aVisitingParameters,
                         mnDiscreteWidth,
                         mnDiscreteHeight,
                         mnDiscreteWidth * mnDiscreteHeight));

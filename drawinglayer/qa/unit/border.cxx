@@ -66,9 +66,10 @@ CPPUNIT_TEST_FIXTURE(DrawinglayerBorderTest, testDoubleDecompositionSolid)
                                                              aStrokeAttribute));
 
     // Decompose it into polygons.
-    drawinglayer::geometry::ViewInformation2D aView;
+    const drawinglayer::geometry::ViewInformation2D aView;
+    const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aView);
     drawinglayer::primitive2d::Primitive2DContainer aContainer;
-    aBorder->get2DDecomposition(aContainer, aView);
+    aBorder->get2DDecomposition(aContainer, aVisitingParameters);
 
     // Make sure it results in two borders as it's a double one.
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), aContainer.size());
@@ -91,8 +92,9 @@ CPPUNIT_TEST_FIXTURE(DrawinglayerBorderTest, testDoublePixelProcessing)
     // Create a pixel processor.
     ScopedVclPtrInstance<VirtualDevice> pDev;
     drawinglayer::geometry::ViewInformation2D aView;
-    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
-        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(*pDev, aView));
+    const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aView);
+    auto pProcessor = drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
+        *pDev, aVisitingParameters);
     CPPUNIT_ASSERT(pProcessor);
     GDIMetaFile aMetaFile;
     // Start recording after the processor is created, so we can test the pixel processor.

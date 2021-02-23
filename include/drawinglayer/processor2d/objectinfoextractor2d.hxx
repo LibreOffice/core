@@ -41,7 +41,7 @@ namespace drawinglayer::processor2d
             void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate) override;
 
         public:
-            ObjectInfoPrimitiveExtractor2D(const geometry::ViewInformation2D& rViewInformation);
+            ObjectInfoPrimitiveExtractor2D(primitive2d::VisitingParameters const& rVisitingParameters);
             virtual ~ObjectInfoPrimitiveExtractor2D() override;
 
             const primitive2d::ObjectInfoPrimitive2D* getResult() const { return mpFound; }

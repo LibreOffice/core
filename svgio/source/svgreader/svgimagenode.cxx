@@ -265,7 +265,9 @@ namespace svgio::svgreader
 
                     if(!aNewTarget.empty())
                     {
-                        aViewBox = aNewTarget.getB2DRange(drawinglayer::geometry::ViewInformation2D());
+                        const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+                        const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+                        aViewBox = aNewTarget.getB2DRange(aVisitingParameters);
                     }
                 }
             }

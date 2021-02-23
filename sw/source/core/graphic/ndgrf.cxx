@@ -327,8 +327,9 @@ void SwGrfNode::onGraphicChanged()
 
         if(!aSequence.empty())
         {
-            drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-            drawinglayer::processor2d::ObjectInfoPrimitiveExtractor2D aProcessor(aViewInformation2D);
+            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+            const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+            drawinglayer::processor2d::ObjectInfoPrimitiveExtractor2D aProcessor(aVisitingParameters);
 
             aProcessor.process(aSequence);
 

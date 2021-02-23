@@ -270,7 +270,8 @@ namespace sdr::contact
                     // decompose immediately with neutral ViewInformation. This will
                     // layout the text to more simple TextPrimitives from drawinglayer
                     const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-                    xBlockTextPrimitive->get2DDecomposition(xRetval, aViewInformation2D);
+                    const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+                    xBlockTextPrimitive->get2DDecomposition(xRetval, aVisitingParameters);
                 }
 
                 // always use SdrObject::Free(...) for SdrObjects (!)

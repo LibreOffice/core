@@ -486,7 +486,8 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked, const
 
                 // get logic range
                 const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-                const basegfx::B2DRange aRange(xPrimitives.getB2DRange(aViewInformation2D));
+                const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+                const basegfx::B2DRange aRange(xPrimitives.getB2DRange(aVisitingParameters));
 
                 if(!aRange.isEmpty())
                 {

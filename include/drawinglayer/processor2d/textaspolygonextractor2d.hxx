@@ -79,7 +79,7 @@ namespace drawinglayer::processor2d
             void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate) override;
 
         public:
-            explicit TextAsPolygonExtractor2D(const geometry::ViewInformation2D& rViewInformation);
+            explicit TextAsPolygonExtractor2D(primitive2d::VisitingParameters const& rVisitingParameters);
             virtual ~TextAsPolygonExtractor2D() override;
 
             // data read access

@@ -995,7 +995,8 @@ void SdrObject::RecalcBoundRect()
 
     // use neutral ViewInformation and get the range of the primitives
     const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-    const basegfx::B2DRange aRange(xPrimitives.getB2DRange(aViewInformation2D));
+    const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+    const basegfx::B2DRange aRange(xPrimitives.getB2DRange(aVisitingParameters));
 
     if(!aRange.isEmpty())
     {
@@ -1195,9 +1196,10 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
         {
             // use neutral ViewInformation
             const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+            const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
 
             // create extractor, process and get result (with hairlines as opened polygons)
-            drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D, false);
+            drawinglayer::processor2d::ContourExtractor2D aExtractor(aVisitingParameters, false);
             aExtractor.process(xSequence);
             const basegfx::B2DPolyPolygonVector& rResult(aExtractor.getExtractedContour());
             const sal_uInt32 nSize(rResult.size());
@@ -2372,8 +2374,10 @@ static void extractLineContourFromPrimitive2DSequence(
     // use neutral ViewInformation
     const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
 
+     drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+
     // create extractor, process and get result
-    drawinglayer::processor2d::LineGeometryExtractor2D aExtractor(aViewInformation2D);
+    drawinglayer::processor2d::LineGeometryExtractor2D aExtractor(aVisitingParameters);
     aExtractor.process(rxSequence);
 
     // copy line results

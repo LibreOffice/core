@@ -30,8 +30,8 @@ namespace drawinglayer::processor2d
         {
         }
 
-        BaseProcessor2D::BaseProcessor2D(const geometry::ViewInformation2D& rViewInformation)
-        :   maViewInformation2D(rViewInformation)
+        BaseProcessor2D::BaseProcessor2D(primitive2d::VisitingParameters const & rVisitingParameters)
+        :   maVisitingParameters(rVisitingParameters)
         {
         }
 
@@ -42,7 +42,7 @@ namespace drawinglayer::processor2d
         void BaseProcessor2D::process(const primitive2d::BasePrimitive2D& rCandidate)
         {
             primitive2d::Primitive2DContainer aContainer;
-            rCandidate.get2DDecomposition(aContainer, getViewInformation2D());
+            rCandidate.get2DDecomposition(aContainer, maVisitingParameters);
             process(aContainer);
         }
 
@@ -71,7 +71,7 @@ namespace drawinglayer::processor2d
                     else
                     {
                         // unknown implementation, use UNO API call instead and process recursively
-                        const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation2D().getViewInformationSequence());
+                        const uno::Sequence<beans::PropertyValue>& rViewParameters(maVisitingParameters.getUnoProperties());
                         process(comphelper::sequenceToContainer<primitive2d::Primitive2DContainer>(xReference->getDecomposition(rViewParameters)));
                     }
                 }

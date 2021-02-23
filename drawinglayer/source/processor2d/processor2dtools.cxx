@@ -29,15 +29,15 @@ namespace drawinglayer::processor2d
 {
         std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
             OutputDevice& rTargetOutDev,
-            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
+            const drawinglayer::primitive2d::VisitingParameters& rParameters)
         {
             // create Pixel Vcl-Processor
-            return std::make_unique<VclPixelProcessor2D>(rViewInformation2D, rTargetOutDev);
+            return std::make_unique<VclPixelProcessor2D>(rParameters, rTargetOutDev);
         }
 
         std::unique_ptr<BaseProcessor2D> createProcessor2DFromOutputDevice(
             OutputDevice& rTargetOutDev,
-            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
+            const drawinglayer::primitive2d::VisitingParameters& rParameters)
         {
             const GDIMetaFile* pMetaFile = rTargetOutDev.GetConnectMetaFile();
             const bool bOutputToRecordingMetaFile(pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
@@ -45,14 +45,12 @@ namespace drawinglayer::processor2d
             if(bOutputToRecordingMetaFile)
             {
                 // create MetaFile Vcl-Processor and process
-                return std::make_unique<VclMetafileProcessor2D>(rViewInformation2D, rTargetOutDev);
+                return std::make_unique<VclMetafileProcessor2D>(rParameters, rTargetOutDev);
             }
             else
             {
                 // create Pixel Vcl-Processor
-                return createPixelProcessor2DFromOutputDevice(
-                    rTargetOutDev,
-                    rViewInformation2D);
+                return createPixelProcessor2DFromOutputDevice(rTargetOutDev, rParameters);
             }
         }
 

@@ -32,8 +32,8 @@ SwDashedLine::~SwDashedLine( )
 void SwDashedLine::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
-    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
-        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
+    const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aNewViewInfos);
+    auto pProcessor = drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aVisitingParameters);
 
     // Compute the start and end points
     const tools::Rectangle aRect(tools::Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));

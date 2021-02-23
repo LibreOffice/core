@@ -47,9 +47,9 @@ namespace sdr::overlay
             const bool bIsAntiAliasing(SvtOptionsDrawinglayer::IsAntiAliasing());
 
             // create processor
+            const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(getCurrentViewInformation2D());
             std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
-                rDestinationDevice,
-                getCurrentViewInformation2D()));
+                rDestinationDevice, aVisitingParameters));
 
             for(const auto& rpOverlayObject : maOverlayObjects)
             {

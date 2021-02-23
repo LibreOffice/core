@@ -29,8 +29,8 @@ using namespace com::sun::star;
 
 namespace drawinglayer::processor2d
 {
-        LineGeometryExtractor2D::LineGeometryExtractor2D(const geometry::ViewInformation2D& rViewInformation)
-        :   BaseProcessor2D(rViewInformation),
+        LineGeometryExtractor2D::LineGeometryExtractor2D(primitive2d::VisitingParameters const& rVisitingParameters)
+        :   BaseProcessor2D(rVisitingParameters),
             maExtractedHairlines(),
             maExtractedLineFills(),
             mbInLineGeometry(false)
@@ -83,7 +83,7 @@ namespace drawinglayer::processor2d
                 {
                     // remember current transformation and ViewInformation
                     const primitive2d::TransformPrimitive2D& rTransformCandidate(static_cast< const primitive2d::TransformPrimitive2D& >(rCandidate));
-                    const geometry::ViewInformation2D aLastViewInformation2D(getViewInformation2D());
+                    primitive2d::VisitingParameters aLastVisitingParameters(maVisitingParameters);
 
                     // create new transformations for CurrentTransformation and for local ViewInformation2D
                     const geometry::ViewInformation2D aViewInformation2D(
@@ -93,13 +93,15 @@ namespace drawinglayer::processor2d
                         getViewInformation2D().getVisualizedPage(),
                         getViewInformation2D().getViewTime(),
                         getViewInformation2D().getExtendedInformationSequence());
-                    updateViewInformation(aViewInformation2D);
+
+                    primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+                    updateVisitingParameters(aVisitingParameters);
 
                     // process content
                     process(rTransformCandidate.getChildren());
 
                     // restore transformations
-                    updateViewInformation(aLastViewInformation2D);
+                    updateVisitingParameters(aLastVisitingParameters);
 
                     break;
                 }

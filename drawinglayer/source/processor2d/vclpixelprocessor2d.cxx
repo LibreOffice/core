@@ -78,14 +78,15 @@ struct VclPixelProcessor2D::Impl
     }
 };
 
-VclPixelProcessor2D::VclPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation,
+VclPixelProcessor2D::VclPixelProcessor2D(primitive2d::VisitingParameters const& rVisitingParameters,
                                          OutputDevice& rOutDev,
                                          const basegfx::BColorModifierStack& rInitStack)
-    : VclProcessor2D(rViewInformation, rOutDev, rInitStack)
+    : VclProcessor2D(rVisitingParameters, rOutDev, rInitStack)
     , m_pImpl(new Impl(rOutDev))
 {
     // prepare maCurrentTransformation matrix with viewTransformation to target directly to pixels
-    maCurrentTransformation = rViewInformation.getObjectToViewTransformation();
+    maCurrentTransformation
+        = rVisitingParameters.getViewInformation().getObjectToViewTransformation();
 
     // prepare output directly to pixels
     mpOutputDevice->Push(PushFlags::MAPMODE);
@@ -1024,7 +1025,7 @@ AlphaMask ProcessAndBlurAlphaMask(const Bitmap& rMask, double fErodeDilateRadius
 
 void VclPixelProcessor2D::processGlowPrimitive2D(const primitive2d::GlowPrimitive2D& rCandidate)
 {
-    basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
+    basegfx::B2DRange aRange(rCandidate.getB2DRange(maVisitingParameters));
     aRange.transform(maCurrentTransformation);
     basegfx::B2DVector aGlowRadiusVector(rCandidate.getGlowRadius(), 0);
     // Calculate the pixel size of glow radius in current transformation
@@ -1092,7 +1093,7 @@ void VclPixelProcessor2D::processSoftEdgePrimitive2D(
     // borders, where they don't end. Ideally, process the full object once at maximal reasonable
     // resolution, and store the resulting alpha mask in primitive's cache; then reuse it later,
     // applying the transform.
-    basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
+    basegfx::B2DRange aRange(rCandidate.getB2DRange(maVisitingParameters));
     aRange.transform(maCurrentTransformation);
     basegfx::B2DVector aRadiusVector(rCandidate.getRadius(), 0);
     // Calculate the pixel size of soft edge radius in current transformation
@@ -1152,7 +1153,7 @@ void VclPixelProcessor2D::processShadowPrimitive2D(const primitive2d::ShadowPrim
         return;
     }
 
-    basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
+    basegfx::B2DRange aRange(rCandidate.getB2DRange(maVisitingParameters));
     aRange.transform(maCurrentTransformation);
     basegfx::B2DVector aBlurRadiusVector(rCandidate.getShadowBlur(), 0);
     aBlurRadiusVector *= maCurrentTransformation;

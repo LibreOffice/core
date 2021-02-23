@@ -280,7 +280,8 @@ namespace svgio::svgreader
                 // text geometry is needed, create
                 // use neutral ViewInformation and create LineGeometryExtractor2D
                 const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-                drawinglayer::processor2d::TextAsPolygonExtractor2D aExtractor(aViewInformation2D);
+                const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+                drawinglayer::processor2d::TextAsPolygonExtractor2D aExtractor(aVisitingParameters);
 
                 // process
                 aExtractor.process(rSource);
@@ -750,7 +751,8 @@ namespace svgio::svgreader
 
                 // use neutral ViewInformation and create LineGeometryExtractor2D
                 const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-                drawinglayer::processor2d::LineGeometryExtractor2D aExtractor(aViewInformation2D);
+                const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+                drawinglayer::processor2d::LineGeometryExtractor2D aExtractor(aVisitingParameters);
 
                 // process
                 aExtractor.process(aSeq);

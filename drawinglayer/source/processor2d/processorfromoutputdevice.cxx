@@ -29,7 +29,7 @@ namespace drawinglayer::processor2d
 {
         std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> createBaseProcessor2DFromOutputDevice(
             OutputDevice& rTargetOutDev,
-            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
+            drawinglayer::primitive2d::VisitingParameters const& rParameters)
         {
             const GDIMetaFile* pMetaFile = rTargetOutDev.GetConnectMetaFile();
             const bool bOutputToRecordingMetaFile(pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
@@ -37,12 +37,12 @@ namespace drawinglayer::processor2d
             if(bOutputToRecordingMetaFile)
             {
                 // create MetaFile Vcl-Processor and process
-                return std::make_unique<drawinglayer::processor2d::VclMetafileProcessor2D>(rViewInformation2D, rTargetOutDev);
+                return std::make_unique<drawinglayer::processor2d::VclMetafileProcessor2D>(rParameters, rTargetOutDev);
             }
             else
             {
                 // create Pixel Vcl-Processor
-                return std::make_unique<drawinglayer::processor2d::VclPixelProcessor2D>(rViewInformation2D, rTargetOutDev);
+                return std::make_unique<drawinglayer::processor2d::VclPixelProcessor2D>(rParameters, rTargetOutDev);
             }
         }
 } // end of namespace

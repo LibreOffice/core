@@ -721,8 +721,9 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
         if(!xPrimitives.empty())
         {
             const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+            const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
             basegfx::B2DRange aRange(
-                xPrimitives.getB2DRange(aViewInformation2D));
+                xPrimitives.getB2DRange(aVisitingParameters));
 
             if(!aRange.isEmpty())
             {

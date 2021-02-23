@@ -300,7 +300,8 @@ SdrObjectUniquePtr SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly
     {
         // create an extractor with neutral ViewInformation
         const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-        drawinglayer::processor2d::TextAsPolygonExtractor2D aExtractor(aViewInformation2D);
+        const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+        drawinglayer::processor2d::TextAsPolygonExtractor2D aExtractor(aVisitingParameters);
 
         // extract text as polygons
         aExtractor.process(xSequence);

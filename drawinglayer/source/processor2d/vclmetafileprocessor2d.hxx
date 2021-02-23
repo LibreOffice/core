@@ -203,7 +203,7 @@ protected:
 
 public:
     /// constructor/destructor
-    VclMetafileProcessor2D(const geometry::ViewInformation2D& rViewInformation,
+    VclMetafileProcessor2D(drawinglayer::primitive2d::VisitingParameters const& rParameters,
                            OutputDevice& rOutDev);
     virtual ~VclMetafileProcessor2D() override;
 };

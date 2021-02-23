@@ -121,7 +121,9 @@ void SwAnnotationWin::PaintTile(vcl::RenderContext& rRenderContext, const tools:
     m_xContainer->draw(rRenderContext, rRect.TopLeft(), GetSizePixel());
 
     const drawinglayer::geometry::ViewInformation2D aViewInformation;
-    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aViewInformation));
+    const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aViewInformation);
+    auto pProcessor = drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
+        rRenderContext, aVisitingParameters);
 
     // drawinglayer sets the map mode to pixels, not needed here.
     rRenderContext.Pop();
@@ -210,9 +212,9 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
     mxSidebarTextControl->DrawForPage(pDev, rPt);
 
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
-    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
-        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
-            *pDev, aNewViewInfos ));
+    const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aNewViewInfos);
+    auto pProcessor = drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
+            *pDev, aVisitingParameters);
 
     if (mpAnchor)
         pProcessor->process(mpAnchor->getOverlayObjectPrimitive2DSequence());

@@ -88,8 +88,9 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
     Point aTextStart(nLeft + aHintMargin.Width() + aIndent.Width(),
                      nTop + aHintMargin.Height() + aFontMetric.GetLineHeight() + aIndent.Height());
 
-    drawinglayer::geometry::ViewInformation2D aDummy;
-    rRange.expand(pTitle->getB2DRange(aDummy));
+    drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+    const drawinglayer::primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+    rRange.expand(pTitle->getB2DRange(aVisitingParameters));
 
     drawinglayer::primitive2d::Primitive2DContainer aSeq { pTitle };
 
@@ -125,7 +126,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
                                                 std::vector<double>(), aFontAttr, css::lang::Locale(),
                                                 rColor.getBColor());
 
-        rRange.expand(pMessage->getB2DRange(aDummy));
+        rRange.expand(pMessage->getB2DRange(aVisitingParameters));
 
         aSeq.push_back(pMessage);
 

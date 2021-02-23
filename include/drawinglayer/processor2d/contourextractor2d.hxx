@@ -46,7 +46,7 @@ namespace drawinglayer::processor2d
 
         public:
             explicit ContourExtractor2D(
-                const geometry::ViewInformation2D& rViewInformation,
+                primitive2d::VisitingParameters const& rVisitingParameters,
                 bool bExtractFillOnly);
 
             virtual ~ContourExtractor2D() override;

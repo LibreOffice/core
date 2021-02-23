@@ -38,7 +38,7 @@ namespace drawinglayer::processor2d
         // deletion is duty of the caller
         DRAWINGLAYER_DLLPUBLIC std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> createBaseProcessor2DFromOutputDevice(
             OutputDevice& rTargetOutDev,
-            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D);
+            drawinglayer::primitive2d::VisitingParameters const& rParameters);
 
 } // end of namespace drawinglayer::processor2d
 
