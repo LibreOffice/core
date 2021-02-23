@@ -106,7 +106,6 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public InterimItemWindow
         Outliner* GetOutliner() { return mpOutliner.get();}
         bool HasScrollbar() const;
         bool IsScrollbarVisible() const;
-        weld::ScrolledWindow* Scrollbar() { return mxVScrollbar.get(); }
         ::sw::sidebarwindows::AnchorOverlayObject* Anchor() { return mpAnchor.get();}
         ::sw::sidebarwindows::ShadowOverlayObject* Shadow() { return mpShadow.get();}
         ::sw::overlay::OverlayRanges* TextRange() { return mpTextRangeOverlay.get();}
@@ -140,7 +139,6 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public InterimItemWindow
         }
 
         void         SetColor(Color aColorDark,Color aColorLight, Color aColorAnchor);
-        const Color& ColorAnchor() { return mColorAnchor; }
         const Color& ColorDark() { return mColorDark; }
         const Color& ColorLight() { return mColorLight; }
         void         Rescale();

@@ -67,8 +67,6 @@ class SidebarTextControl : public WeldEditView
         virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
         virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
 
-        OutlinerView* GetTextView() const;
-
         void SetMapMode(const MapMode& rNewMapMode)
         {
             OutputDevice& rDevice = GetDrawingArea()->get_ref_device();

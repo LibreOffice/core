@@ -143,15 +143,6 @@ namespace dbaui
         return xGraphic;
     }
 
-    Image ImageProvider::getDefaultImage( sal_Int32 _nDatabaseObjectType )
-    {
-        Image aObjectImage;
-        OUString sImageResourceID( getDefaultImageResourceID( _nDatabaseObjectType) );
-        if (!sImageResourceID.isEmpty())
-            aObjectImage = Image(StockImage::Yes, sImageResourceID);
-        return aObjectImage;
-    }
-
     OUString ImageProvider::getDefaultImageResourceID( sal_Int32 _nDatabaseObjectType)
     {
         OUString sImageResourceID;

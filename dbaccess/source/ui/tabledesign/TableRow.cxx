@@ -35,15 +35,6 @@ OTableRow::OTableRow()
 {
 }
 
-OTableRow::OTableRow(const Reference< XPropertySet >& xAffectedCol)
-    :m_pActFieldDescr( nullptr )
-    ,m_nPos( -1 )
-    ,m_bReadOnly( false )
-    ,m_bOwnsDescriptions(true)
-{
-    m_pActFieldDescr = new OFieldDescription(xAffectedCol);
-}
-
 OTableRow::OTableRow( const OTableRow& rRow, tools::Long nPosition )
     :m_pActFieldDescr(nullptr)
     ,m_nPos( nPosition )
