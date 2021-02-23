@@ -2297,17 +2297,22 @@ void SvTreeListBox::MouseButtonUp( const MouseEvent& rMEvt )
         SvTreeListEntry* pEntry = GetEntry(aPnt);
         if (pEntry && pEntry->m_Items.size() > 0 && (mnClicksToToggle == 1 || pEntry == pImpl->m_pCursorOld))
         {
-            SvLBoxItem* pItem = GetItem(pEntry, aPnt.X());
-            // if the checkbox button was clicked, that will be toggled later, do not toggle here
-            // anyway users probably don't want to toggle the checkbox by clickink on another button
-            if (!pItem || pItem->GetType() != SvLBoxItemType::Button)
+            // tdf#140136 Do no toggle its checkbox if the item has children,
+            // double click is used to expand/collapse the list
+            if ( !pEntry->HasChildrenOnDemand() && !pEntry->HasChildren() )
             {
-                SvLBoxButton* pItemCheckBox
-                    = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
-                if (pItemCheckBox)
+                SvLBoxItem* pItem = GetItem(pEntry, aPnt.X());
+                // if the checkbox button was clicked, that will be toggled later, do not toggle here
+                // anyway users probably don't want to toggle the checkbox by clickink on another button
+                if (!pItem || pItem->GetType() != SvLBoxItemType::Button)
                 {
-                    pItemCheckBox->ClickHdl(pEntry);
-                    InvalidateEntry(pEntry);
+                    SvLBoxButton* pItemCheckBox
+                        = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
+                    if (pItemCheckBox)
+                    {
+                        pItemCheckBox->ClickHdl(pEntry);
+                        InvalidateEntry(pEntry);
+                    }
                 }
             }
         }
