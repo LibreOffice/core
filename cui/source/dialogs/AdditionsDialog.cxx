@@ -755,14 +755,12 @@ IMPL_LINK_NOARG(AdditionsItem, InstallHdl, weld::Button&, void)
         return;
     }
 
-    TmpRepositoryCommandEnv* pCmdEnv = new TmpRepositoryCommandEnv();
-    uno::Reference<ucb::XCommandEnvironment> xCmdEnv(static_cast<cppu::OWeakObject*>(pCmdEnv),
-                                                     uno::UNO_QUERY);
+    rtl::Reference<TmpRepositoryCommandEnv> pCmdEnv = new TmpRepositoryCommandEnv();
     uno::Reference<task::XAbortChannel> xAbortChannel;
     try
     {
         m_pParentDialog->m_xExtensionManager->addExtension(
-            aExtensionFile, uno::Sequence<beans::NamedValue>(), "user", xAbortChannel, xCmdEnv);
+            aExtensionFile, uno::Sequence<beans::NamedValue>(), "user", xAbortChannel, pCmdEnv);
         m_xButtonInstall->set_label(CuiResId(RID_SVXSTR_ADDITIONS_INSTALLEDBUTTON));
     }
     catch (const ucb::CommandFailedException)
