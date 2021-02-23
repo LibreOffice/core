@@ -34,6 +34,24 @@
       "revId": "0239414e5e1a790a0ed9fca41252f093a62f3f65",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9280a9ca_33f1ad4f",
+        "filename": "vcl/jsdialog/executor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-02-23T07:13:06Z",
+      "side": 1,
+      "message": "yes I agree, multi selection can be handled in other \u0027action\u0027.\nbut for now to not break stuff, can this be done like this:\n\npTreeView-\u003eunselect(pTreeView-\u003eget_selected_index());\npTreeView-\u003eselect(*itEntry);\n\nbecause code in current state makes no sense:\npTreeView-\u003eunselect(*itEntry);\npTreeView-\u003eselect(*itEntry);",
+      "parentUuid": "0d3e2d4f_55827000",
+      "revId": "0239414e5e1a790a0ed9fca41252f093a62f3f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
