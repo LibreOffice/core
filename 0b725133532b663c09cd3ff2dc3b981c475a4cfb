@@ -16,6 +16,24 @@
       "revId": "0b725133532b663c09cd3ff2dc3b981c475a4cfb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87b4bc30_a01e3e51",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-23T11:14:52Z",
+      "side": 1,
+      "message": "(not that the other write of m_hParentWindow in VistaFilePickerImpl::impl_sta_CreateDialog is, either)",
+      "parentUuid": "0beb908b_72280c7e",
+      "revId": "0b725133532b663c09cd3ff2dc3b981c475a4cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
