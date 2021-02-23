@@ -812,11 +812,6 @@ class DeleteAreaHandler
     bool mbDateTime:1;
     ScColumn& mrCol;
 
-    SCROW mLastToDeleteRow1;
-    SCROW mLastToDeleteRow2;
-    SCROW mLastEmptyRow1;
-    SCROW mLastEmptyRow2;
-
 public:
     DeleteAreaHandler(ScDocument& rDoc, InsertDeleteFlags nDelFlag, ScColumn& rCol) :
         mrDoc(rDoc),
@@ -825,12 +820,7 @@ public:
         mbString(nDelFlag & InsertDeleteFlags::STRING),
         mbFormula(nDelFlag & InsertDeleteFlags::FORMULA),
         mbDateTime(nDelFlag & InsertDeleteFlags::DATETIME),
-        mrCol(rCol),
-        mLastToDeleteRow1(-1),
-        mLastToDeleteRow2(-1),
-        mLastEmptyRow1(-1),
-        mLastEmptyRow2(-1)
-        {}
+        mrCol(rCol) {}
 
     void operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
     {
@@ -867,20 +857,6 @@ public:
             }
             break;
             case sc::element_type_empty:
-            {
-                // See usage below.
-                if( mLastToDeleteRow1 >= 0 )
-                {
-                    SCROW nRow1 = node.position + nOffset;
-                    SCROW nRow2 = nRow1 + nDataSize - 1;
-                    if( nRow1 == mLastToDeleteRow2 + 1 )
-                    {
-                        mLastEmptyRow1 = nRow1;
-                        mLastEmptyRow2 = nRow2;
-                    }
-                }
-                return;
-            }
             default:
                 return;
         }
@@ -888,16 +864,7 @@ public:
         // Tag these cells for deletion.
         SCROW nRow1 = node.position + nOffset;
         SCROW nRow2 = nRow1 + nDataSize - 1;
-        // tdf#139820: Decide whether to include 'empty' cells in the range to delete.
-        // This may make sense because if the column contains a mix of empty and non-empty
-        // cells, then deleting a range of those cells would normally make mdds operate
-        // on ranges of such cells, event though it could simply delete them all in one go.
-        if( mLastEmptyRow1 >= 0 && nRow1 == mLastEmptyRow2 + 1 )
-            nRow1 = mLastEmptyRow1;
         maDeleteRanges.set(nRow1, nRow2, true);
-        mLastToDeleteRow1 = nRow1;
-        mLastToDeleteRow2 = nRow2;
-        mLastEmptyRow1 = mLastEmptyRow2 = -1;
     }
 
     void deleteNumeric(const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
