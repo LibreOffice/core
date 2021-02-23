@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "079d231a_4a00f7e3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1002965
+      },
+      "writtenOn": "2021-02-23T14:50:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a324f85_a58cd9f6",
+      "range": {
+        "startLine": 9,
+        "startChar": 63,
+        "endLine": 9,
+        "endChar": 72
+      },
+      "revId": "b50f92ffcda45faf19922c27a80e47e7c31755dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "996141a8_19e20693",
         "filename": "dbaccess/qa/extras/rowsetclones.cxx",
         "patchSetId": 2
