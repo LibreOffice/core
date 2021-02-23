@@ -1352,6 +1352,23 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf116215)
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A2:B2)"), aFormula);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124829)
+{
+    ScModelObj* pModelObj = createDoc("tdf124829.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+
+    for (sal_uInt32 i = 1; i <= 40; i++)
+    {
+        dispatchCommand(mxComponent, ".uno:Undo", {});
+    }
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(6), pDoc->GetTableCount());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
