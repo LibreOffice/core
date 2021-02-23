@@ -81,8 +81,7 @@ static std::unique_ptr<SvStream> lcl_CreateStream( const OUString& rFileName, St
             {
                 // make sure that the desired file exists before trying to open
                 SvMemoryStream aStream(0,0);
-                ::utl::OInputStreamWrapper* pInput = new ::utl::OInputStreamWrapper( aStream );
-                Reference< XInputStream > xInput( pInput );
+                rtl::Reference<::utl::OInputStreamWrapper> xInput = new ::utl::OInputStreamWrapper( aStream );
 
                 ::ucbhelper::Content aContent(
                     rFileName, Reference < XCommandEnvironment >(),
