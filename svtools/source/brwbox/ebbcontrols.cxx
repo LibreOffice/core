@@ -356,12 +356,13 @@ namespace svt
 
     IMPL_LINK_NOARG(ControlBase, FocusInHdl, weld::Widget&, void)
     {
-        return static_cast<BrowserDataWin*>(GetParent())->GetParent()->ChildFocusIn();
+        static_cast<BrowserDataWin*>(GetParent())->GetParent()->ChildFocusIn();
     }
 
     IMPL_LINK_NOARG(ControlBase, FocusOutHdl, weld::Widget&, void)
     {
-        return static_cast<BrowserDataWin*>(GetParent())->GetParent()->ChildFocusOut();
+        m_aFocusInHdl.Call(nullptr);
+        static_cast<BrowserDataWin*>(GetParent())->GetParent()->ChildFocusOut();
     }
 
     void EditControlBase::dispose()
