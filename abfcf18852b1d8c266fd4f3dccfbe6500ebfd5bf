@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "f86cd63f_71eb0ee1",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-02-23T10:44:12Z",
+      "side": 1,
+      "message": "Sadly that won\u0027t help with the problem.\nThe problem is *not* that the window handle changes.\n\nThe problem is that the window got destroyed after calling choose_parent_window, but before calling Show(). So the window handle pointed to a no longer existing window.",
+      "parentUuid": "cfc4f27f_53203a67",
+      "range": {
+        "startLine": 1028,
+        "startChar": 8,
+        "endLine": 1028,
+        "endChar": 22
+      },
+      "revId": "abfcf18852b1d8c266fd4f3dccfbe6500ebfd5bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c1914526_434c2271",
         "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
         "patchSetId": 2
@@ -99,6 +123,24 @@
       "revId": "abfcf18852b1d8c266fd4f3dccfbe6500ebfd5bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "561efd32_7a1b2798",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-02-23T10:44:12Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ddae9d59_65aaf9ad",
+      "revId": "abfcf18852b1d8c266fd4f3dccfbe6500ebfd5bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
