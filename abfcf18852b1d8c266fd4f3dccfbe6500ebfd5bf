@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "e53feeab_5663f137",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-23T10:49:36Z",
+      "side": 1,
+      "message": "\u003e The problem is that the window got destroyed after calling choose_parent_window, but before calling Show(). So the window handle pointed to a no longer existing window.\n\nBut how does locking VistaFilePickerImpl\u0027s local m_aMutex around establishing and using m_hParentWindow help then?  Can\u0027t the window still get destroyed after establishing m_hParentWindow and before using it?",
+      "parentUuid": "f86cd63f_71eb0ee1",
+      "range": {
+        "startLine": 1028,
+        "startChar": 8,
+        "endLine": 1028,
+        "endChar": 22
+      },
+      "revId": "abfcf18852b1d8c266fd4f3dccfbe6500ebfd5bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c1914526_434c2271",
         "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
         "patchSetId": 2
