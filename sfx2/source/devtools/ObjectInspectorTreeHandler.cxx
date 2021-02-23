@@ -367,6 +367,8 @@ public:
     {
     }
 
+    uno::Any getAny() { return maAny; }
+
     bool shouldShowExpander() override
     {
         if (maAny.hasValue())
@@ -607,6 +609,9 @@ ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
         LINK(this, ObjectInspectorTreeHandler, ExpandingHandlerProperties));
     mpMethodsTreeView->connect_expanding(
         LINK(this, ObjectInspectorTreeHandler, ExpandingHandlerMethods));
+
+    mpPropertiesTreeView->connect_popup_menu(
+        LINK(this, ObjectInspectorTreeHandler, PopupMenuHandler));
 }
 
 void ObjectInspectorTreeHandler::handleExpanding(std::unique_ptr<weld::TreeView>& pTreeView,
@@ -645,6 +650,43 @@ IMPL_LINK(ObjectInspectorTreeHandler, ExpandingHandlerProperties, weld::TreeIter
 IMPL_LINK(ObjectInspectorTreeHandler, ExpandingHandlerMethods, weld::TreeIter const&, rParent, bool)
 {
     handleExpanding(mpMethodsTreeView, rParent);
+    return true;
+}
+
+IMPL_LINK(ObjectInspectorTreeHandler, PopupMenuHandler, const CommandEvent&, rCommandEvent, bool)
+{
+    if (rCommandEvent.GetCommand() != CommandEventId::ContextMenu)
+        return false;
+
+    uno::Any aAny;
+    OUString sID = mpPropertiesTreeView->get_selected_id();
+    if (sID.isEmpty())
+        return false;
+
+    auto* pNode = reinterpret_cast<ObjectInspectorNodeInterface*>(sID.toInt64());
+    if (pNode)
+    {
+        auto* pBasicValueNode = dynamic_cast<BasicValueNode*>(pNode);
+        if (pBasicValueNode)
+        {
+            aAny = pBasicValueNode->getAny();
+            uno::Reference<uno::XInterface> xInterface(aAny, uno::UNO_QUERY);
+            if (xInterface.is())
+            {
+                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(
+                    mpPropertiesTreeView.get(), "sfx/ui/devtoolsmenu.ui"));
+                std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("inspect_menu"));
+
+                OString sCommand(xMenu->popup_at_rect(
+                    mpPropertiesTreeView.get(),
+                    tools::Rectangle(rCommandEvent.GetMousePosPixel(), Size(1, 1))));
+                if (sCommand == "inspect")
+                {
+                    introspect(xInterface);
+                }
+            }
+        }
+    }
     return true;
 }
 
