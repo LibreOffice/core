@@ -52,6 +52,24 @@
       "revId": "aaf7fe0326b3be088a5440525363317fb3d0f158",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b65e33cf_71ba47e2",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3637,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-02-23T10:56:47Z",
+      "side": 1,
+      "message": "Ah, I see. I\u0027ll leave that to Tor, I don\u0027t have a macOS sandbox build at hand and I\u0027m shy to do blind fixes.",
+      "parentUuid": "468bf328_598af70a",
+      "revId": "aaf7fe0326b3be088a5440525363317fb3d0f158",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
