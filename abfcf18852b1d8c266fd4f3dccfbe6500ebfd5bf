@@ -57,6 +57,24 @@
       "revId": "abfcf18852b1d8c266fd4f3dccfbe6500ebfd5bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddae9d59_65aaf9ad",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-23T10:37:17Z",
+      "side": 1,
+      "message": "I might be wrong, but (1) Show() is a virtual method, and some of its implementations might throw; and (2) an exception might arise from COM dispatch before the method is even called. So to be on the safe side, I\u0027d keep the try block.",
+      "parentUuid": "e5794990_f3d4cd0e",
+      "revId": "abfcf18852b1d8c266fd4f3dccfbe6500ebfd5bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
