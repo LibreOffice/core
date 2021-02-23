@@ -187,7 +187,7 @@ VistaFilePickerImpl::VistaFilePickerImpl()
     , m_iEventHandler(new VistaFilePickerEventHandler(this))
     , m_bInExecute   (false)
     , m_bWasExecuted (false)
-    , m_hParentWindow(choose_parent_window())
+    , m_hParentWindow(nullptr)
     , m_sDirectory   ()
     , m_sFilename    ()
     , mnNbCallCoInitializeExForReinit(0)
@@ -1023,6 +1023,13 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
     HRESULT hResult = E_FAIL;
     try
     {
+        // Synchronized: Make sure that the chosen parent window still exists
+        // when calling Show() on file dialog
+        osl::MutexGuard aLock(m_aMutex);
+
+        if (m_hParentWindow == nullptr)
+            m_hParentWindow = choose_parent_window();
+
         // show dialog and wait for user decision
         if (iOpen.is())
             hResult = iOpen->Show( m_hParentWindow ); // parent window needed
