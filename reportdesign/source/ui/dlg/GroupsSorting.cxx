@@ -375,7 +375,7 @@ void OFieldExpressionControl::lateInit()
         rComboBox.connect_changed(LINK(this,OFieldExpressionControl,CBChangeHdl));
         m_pComboCell->SetHelpId(HID_RPT_FIELDEXPRESSION);
 
-        rComboBox.connect_focus_in(LINK(m_pParent, OGroupsSortingDialog, OnControlFocusGot));
+        m_pComboCell->SetFocusInHdl(LINK(m_pParent, OGroupsSortingDialog, OnControlFocusGot));
 
 
         // set browse mode
@@ -931,7 +931,7 @@ sal_Int32 OGroupsSortingDialog::getColumnDataType(const OUString& _sColumnName)
     return nDataType;
 }
 
-IMPL_LINK_NOARG(OGroupsSortingDialog, OnControlFocusGot, weld::Widget&, void )
+IMPL_LINK_NOARG(OGroupsSortingDialog, OnControlFocusGot, LinkParamNone*, void )
 {
     m_xHelpWindow->set_label(RptResId(STR_RPT_HELP_FIELD));
 }
