@@ -77,22 +77,6 @@ namespace dbaui
         css::uno::Reference<css::graphic::XGraphic> getXGraphic(const OUString& _rName,
                                                                 const sal_Int32 _nDatabaseObjectType);
 
-        /** returns the default image to be used for a database object
-
-            In opposite to getImageId, this method does not check the concrete object
-            for its image, but returns a default image to be used for all objects of the given
-            type.
-
-            @param  _nDatabaseObjectType
-                the type of the object. Must be one of the css.sdb.application.DatabaseObject
-                constants.
-            @return
-                the image to be used for the object type.
-        */
-        static Image getDefaultImage(
-            sal_Int32 _nDatabaseObjectType
-        );
-
         /** returns the resource ID for the default image to be used for a database object
 
             In opposite to getImageId, this method does not check the concrete object

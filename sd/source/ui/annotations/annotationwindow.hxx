@@ -143,7 +143,6 @@ class AnnotationWindow : public FloatingWindow
 
         AnnotationContents&  GetContents() const { return *mxContents; }
 
-        void            InitControls();
         void            DoResize();
 
         virtual void    GetFocus() override;

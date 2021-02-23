@@ -944,11 +944,6 @@ void FixedImage::SetImage( const Image& rImage )
     }
 }
 
-void FixedImage::SetModeImage( const Image& rImage )
-{
-    SetImage( rImage );
-}
-
 Image FixedImage::loadThemeImage(const OUString &rFileName)
 {
     return Image(StockImage::Yes, rFileName);
