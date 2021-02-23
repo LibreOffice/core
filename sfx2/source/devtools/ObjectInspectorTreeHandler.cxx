@@ -30,6 +30,8 @@
 #include <com/sun/star/reflection/XEnumTypeDescription.hpp>
 
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/Invocation.hpp>
@@ -482,6 +484,30 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
 {
     if (!maAny.hasValue())
         return;
+
+    const auto xNameAccess = uno::Reference<container::XNameAccess>(maAny, uno::UNO_QUERY);
+    if (xNameAccess.is())
+    {
+        const uno::Sequence<OUString> aNames = xNameAccess->getElementNames();
+        for (OUString const& rName : aNames)
+        {
+            uno::Any aAny = xNameAccess->getByName(rName);
+            auto* pObjectInspectorNode = createNodeObjectForAny("@" + rName, aAny);
+            lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
+        }
+    }
+
+    const auto xIndexAccess = uno::Reference<container::XIndexAccess>(maAny, uno::UNO_QUERY);
+    if (xIndexAccess.is())
+    {
+        for (sal_Int32 nIndex = 0; nIndex < xIndexAccess->getCount(); ++nIndex)
+        {
+            uno::Any aAny = xIndexAccess->getByIndex(nIndex);
+            auto* pObjectInspectorNode
+                = createNodeObjectForAny("@" + OUString::number(nIndex), aAny);
+            lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
+        }
+    }
 
     uno::Reference<beans::XIntrospection> xIntrospection = beans::theIntrospection::get(mxContext);
     auto xIntrospectionAccess = xIntrospection->inspect(maAny);
