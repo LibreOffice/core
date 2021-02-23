@@ -238,6 +238,31 @@ bool IsFileMovable(const INetURLObject& rURL)
 
 } // anonymous namespace
 
+namespace
+{
+class CheckReadOnlyTask : public comphelper::ThreadTask
+{
+public:
+    DECL_LINK(ShowReloadEditableDialog, void*, void);
+
+    CheckReadOnlyTask(SfxMedium* pMed, const std::shared_ptr<comphelper::ThreadTaskTag>& pTag)
+        : ThreadTask(pTag)
+    {
+        _pMed = pMed;
+    }
+
+    ~CheckReadOnlyTask()
+    {
+        if (_pMed != nullptr)
+            _pMed->ReleaseRef();
+    }
+
+    virtual void doWork();
+
+    SfxMedium* _pMed;
+};
+}
+
 class SfxMedium_Impl
 {
 public:
@@ -924,39 +949,43 @@ OUString tryForeignLockfiles(const OUString& sDocURL)
 }
 }
 
- /** callback function, which is triggered by input stream data manager on
-119      filling of the data container to provide retrieved input stream to the
-120      thread Consumer using <Application::PostUserEvent(..)>
-121  
-122      #i73788#
-123      Note: This method has to be run in the main thread.
-124  */
-IMPL_LINK(SfxMedium, ShowLockedDocumentDialog2, void*, p, void)
+/** callback function, which is triggered by worker thread after successfully checking if the file
+     is editable. Sent from <Application::PostUserEvent(..)>
+  
+     Note: This method has to be run in the main thread.
+*/
+IMPL_LINK(CheckReadOnlyTask, ShowReloadEditableDialog, void*, p, void)
 {
     SfxMedium* pMed = static_cast<SfxMedium*>(p);
+    if (pMed == nullptr)
+        return;
+
     OUString aDocumentURL
-        = pMed->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::WithCharset);
+        = pMed->GetURLObject().GetLastName(INetURLObject::DecodeMechanism::WithCharset);
     sal_Int32 nContinuations = 2;
     ::rtl::Reference<::ucbhelper::InteractionRequest> xInteractionRequestImpl;
+    ::rtl::Reference<::ucbhelper::InteractionContinuation> xSelected;
+    uno::Sequence<uno::Reference<task::XInteractionContinuation>> aContinuations(nContinuations);
+    uno::Reference<task::XInteractionHandler> xHandler = pMed->GetInteractionHandler();
+    if (!xHandler.is())
+        goto Cleanup;
 
     xInteractionRequestImpl
         = new ::ucbhelper::InteractionRequest(uno::makeAny(document::ReloadEditableRequest(
             OUString(), uno::Reference<uno::XInterface>(), aDocumentURL)));
-    uno::Reference<task::XInteractionHandler> xHandler = pMed->GetInteractionHandler();
-    uno::Sequence<uno::Reference<task::XInteractionContinuation>> aContinuations(nContinuations);
+    if (xInteractionRequestImpl == nullptr)
+        goto Cleanup;
+
     aContinuations[0] = new ::ucbhelper::InteractionAbort(xInteractionRequestImpl.get());
     aContinuations[1] = new ::ucbhelper::InteractionApprove(xInteractionRequestImpl.get());
     xInteractionRequestImpl->setContinuations(aContinuations);
-    if (!xHandler.is())
-        return;
 
     xHandler->handle(xInteractionRequestImpl);
 
-    ::rtl::Reference<::ucbhelper::InteractionContinuation> xSelected
-        = xInteractionRequestImpl->getSelection();
+    xSelected = xInteractionRequestImpl->getSelection();
     if (uno::Reference<task::XInteractionAbort>(xSelected.get(), uno::UNO_QUERY).is())
     {
-        SetError(ERRCODE_ABORT);
+        pMed->SetError(ERRCODE_ABORT);
     }
     else
     {
@@ -970,88 +999,63 @@ IMPL_LINK(SfxMedium, ShowLockedDocumentDialog2, void*, p, void)
             }
         }
     }
-
-    // SfxApplication* pSfxApp = SfxApplication::Get();
-    //SfxObjectShell sh;
-   //  SfxMedium* searchMed = sh->GetMedium();
-    //SfxObjectShellArr_Impl& rDocs = ;
-    // search for a SfxDocument of the specified type
-     
-     /*for (SfxObjectShell* pSh : SfxGetpApp()->GetObjectShells_Impl())
-     {
-         pSh->
-     }*/
-    /*OUString aMessage;
-    std::vector<OUString> aArguments;
-    uno::Reference<awt::XWindow> xParent = getParentXWindow();
-    std::locale aResLocale = Translate::Create("uui");
-    //aArguments.push_back(aDocumentURL);
-    aArguments.push_back(Translate::get(STR_UNKNOWNUSER, aResLocale);
-    aArguments.push_back("");
-    aMessage = Translate::get(STR_OPENLOCKED_MSG, aResLocale);
-    aMessage = UUIInteractionHelper::replaceMessageWithArguments(aMessage, aArguments);
-
-    OpenLockedQueryBox aDialog(Application::GetFrameWeld(xParent), aResLocale, aMessage, false);
-    aDialog.run();*/
+Cleanup:
+    pMed->ReleaseRef();
 }
 
-namespace
+// worker thread method
+void CheckReadOnlyTask::doWork()
 {
-    class CheckReadOnlyTask : public comphelper::ThreadTask
+    if (_pMed == nullptr)
+        return;
+
+    OUString aDocumentURL
+        = _pMed->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::WithCharset);
+
+    while (1)
     {
-    public:
-        CheckReadOnlyTask(SfxMedium* pMed, const std::shared_ptr<comphelper::ThreadTaskTag>& pTag)
-            : ThreadTask(pTag)
+        bool bFoundMed = false;
+
+        osl::Thread::wait(std::chrono::milliseconds(1000)); // give it a time to start
+
+        for (SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame;
+             pFrame = SfxViewFrame::GetNext(*pFrame))
         {
-            _pMed = pMed;
-            _pMed->AddNextRef();
-        }
-        virtual void doWork()
-        {
-            OUString aDocumentURL
-                = _pMed->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::WithCharset);
-            while (1)
+            if (pFrame->GetObjectShell()->GetMedium() == _pMed)
             {
-                osl::Thread::wait(std::chrono::milliseconds(1000)); // give it a time to start
+                bFoundMed = true;
+                osl::DirectoryItem rItem;
+                auto nError1 = osl::DirectoryItem::get(aDocumentURL, rItem);
+                if (nError1 != osl::FileBase::E_None)
+                    break;
+                // get the file attributes
+                osl::FileStatus rFileStatus(osl_FileStatus_Mask_Attributes);
+                nError1 = rItem.getFileStatus(rFileStatus);
+                if (nError1 != osl::FileBase::E_None)
+                    break;
+                // check read-only
+                if ((osl_File_Attribute_ReadOnly & rFileStatus.getAttributes()) != 0)
+                    break;
 
-                for (SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame;
-                     pFrame = SfxViewFrame::GetNext(*pFrame))
+                if (!osl_HasWritePermissions(aDocumentURL.pData))
+                    break;
+
+                _pMed->AddNextRef();
+                if (Application::PostUserEvent(
+                        LINK(this, CheckReadOnlyTask, ShowReloadEditableDialog), _pMed)
+                    == nullptr)
                 {
-                    if (pFrame->GetObjectShell()->GetMedium() == _pMed)
-                    {
-                        osl::DirectoryItem rItem;
-                        auto nError1 = osl::DirectoryItem::get(aDocumentURL, rItem);
-                        if (nError1 != osl::FileBase::E_None)
-                            break;
-                        // get the file attributes
-                        osl::FileStatus rFileStatus(osl_FileStatus_Mask_Attributes);
-                        nError1 = rItem.getFileStatus(rFileStatus);
-                        if (nError1 != osl::FileBase::E_None)
-                            break;
-                        // check read-only
-                        if ((osl_File_Attribute_ReadOnly & rFileStatus.getAttributes()) != 0)
-                            break;
-
-                        /*SfxAllItemSet aSet(SfxGetpApp()->GetPool());
-             SfxRequest aReq(SID_RELOAD, SfxCallMode::SLOT, aSet);
-             pFrame->ExecReload_Impl(aReq);*/
-                        if (!osl_HasWritePermissions(aDocumentURL.pData))
-                            break;
-
-                        Application::PostUserEvent(
-                            LINK(_pMed, SfxMedium, ShowLockedDocumentDialog2), _pMed);
-
-                        // pFrame->GetDispatcher()->Execute(SID_EDITDOC);
-                        return;
-                    }
+                    _pMed->ReleaseRef();
                 }
+
+                return;
             }
         }
 
-        SfxMedium* _pMed;
-        //static inline std::mutex mutex;
-    };
-} // namespace
+        if (!bFoundMed)
+            return;
+    }
+}
 
 SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntry& aData,
                                                               bool bIsLoading, bool bOwnLock,
@@ -1163,12 +1167,17 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntr
             if (bIsLoading)
             {
                 GetItemSet()->Put(SfxBoolItem(SID_DOC_READONLY, true));
-                //MATT: DO WORK
+
+                // Start a thread to periodically check if the file is editable
                 comphelper::ThreadPool& rSharedPool
                     = comphelper::ThreadPool::getSharedOptimalPool();
                 std::shared_ptr<comphelper::ThreadTaskTag> pTag
                     = comphelper::ThreadPool::createThreadTaskTag();
-                rSharedPool.pushTask(std::make_unique<CheckReadOnlyTask>(this, pTag));
+                if (pTag != nullptr)
+                {
+                    rSharedPool.pushTask(std::make_unique<CheckReadOnlyTask>(this, pTag));
+                    this->AddNextRef();
+                }
             }
             else
                 nResult = ShowLockResult::Try;

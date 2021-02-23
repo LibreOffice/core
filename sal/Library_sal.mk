@@ -55,7 +55,6 @@ $(eval $(call gb_Library_use_system_win32_libs,sal,\
 	userenv \
 	wer \
 	ws2_32 \
-    shlwapi \
 ))
 
 $(eval $(call gb_Library_add_libs,sal,\

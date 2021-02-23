@@ -72,8 +72,6 @@ class SFX2_DLLPUBLIC SfxMedium final : public SvRefBase
 
 public:
 
-   DECL_LINK(ShowLockedDocumentDialog2, void*, void);
-
                         SfxMedium();
                         SfxMedium( const OUString &rName,
                                    StreamMode nOpenMode,
