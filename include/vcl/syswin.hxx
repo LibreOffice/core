@@ -31,6 +31,7 @@
 class SalInstanceBuilder;
 class ScreenshotTest;
 class MenuBar;
+class MnemonicGenerator;
 class NotebookBar;
 class TaskPaneList;
 class VclBuilder;
@@ -193,6 +194,7 @@ public:
     void            SetMenuBar(MenuBar* pMenuBar);
     MenuBar*        GetMenuBar() const { return mpMenuBar; }
     void            SetMenuBarMode( MenuBarMode nMode );
+    void            CollectMenuBarMnemonics(MnemonicGenerator& rMnemonicGenerator) const;
 
     void SetNotebookBar(const OUString& rUIXMLDescription,
                         const css::uno::Reference<css::frame::XFrame>& rFrame,

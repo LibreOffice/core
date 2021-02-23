@@ -52,7 +52,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include <vcl/menu.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
@@ -648,14 +647,8 @@ void OApplicationController::onLoadedMenu(const Reference< css::frame::XLayoutMa
         // we need to share the "mnemonic space":
         MnemonicGenerator aMnemonicGenerator;
         // - the menu already has mnemonics
-        SystemWindow* pSystemWindow = getContainer()->GetSystemWindow();
-        MenuBar* pMenu = pSystemWindow ? pSystemWindow->GetMenuBar() : nullptr;
-        if ( pMenu )
-        {
-            sal_uInt16 nMenuItems = pMenu->GetItemCount();
-            for ( sal_uInt16 i = 0; i < nMenuItems; ++i )
-                aMnemonicGenerator.RegisterMnemonic( pMenu->GetItemText( pMenu->GetItemId( i ) ) );
-        }
+        if (SystemWindow* pSystemWindow = getContainer()->GetSystemWindow())
+            pSystemWindow->CollectMenuBarMnemonics(aMnemonicGenerator);
         // - the icons should use automatic ones
         getContainer()->createIconAutoMnemonics( aMnemonicGenerator );
         // - as well as the entries in the task pane
