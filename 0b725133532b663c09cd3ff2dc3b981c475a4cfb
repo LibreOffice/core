@@ -52,6 +52,24 @@
       "revId": "0b725133532b663c09cd3ff2dc3b981c475a4cfb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "21e44865_cbef168c",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-02-23T12:50:24Z",
+      "side": 1,
+      "message": "\u003e Fixed with https://gerrit.libreoffice.org/c/core/+/111393\n\nbut then you should also lock here on the consuming side?",
+      "parentUuid": "c42dbc20_a6292f89",
+      "revId": "0b725133532b663c09cd3ff2dc3b981c475a4cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
