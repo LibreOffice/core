@@ -3667,7 +3667,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
     }
 
     OUString aLogicBase = GetLogicBase(GetURLObject(), pImpl);
-    pImpl->pTempFile.reset( new ::utl::TempFile(aLogicBase.isEmpty() ? nullptr : &aLogicBase) );
+    pImpl->pTempFile.reset(new ::utl::TempFile(&aLogicBase));
     pImpl->pTempFile->EnableKillingFile();
     pImpl->m_aName = pImpl->pTempFile->GetFileName();
     OUString aTmpURL = pImpl->pTempFile->GetURL();
@@ -3763,7 +3763,7 @@ void SfxMedium::CreateTempFileNoCopy()
     pImpl->pTempFile.reset();
 
     OUString aLogicBase = GetLogicBase(GetURLObject(), pImpl);
-    pImpl->pTempFile.reset( new ::utl::TempFile(aLogicBase.isEmpty() ? nullptr : &aLogicBase) );
+    pImpl->pTempFile.reset(new ::utl::TempFile(&aLogicBase));
     pImpl->pTempFile->EnableKillingFile();
     pImpl->m_aName = pImpl->pTempFile->GetFileName();
     if ( pImpl->m_aName.isEmpty() )
