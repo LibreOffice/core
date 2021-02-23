@@ -93,13 +93,12 @@ void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
     if (xParser.is())
     {
         uno::Reference<uno::XComponentContext> xContext(mpStream->getContext());
-        OOXMLFastDocumentHandler * pDocHandler =
+        rtl::Reference<OOXMLFastDocumentHandler> pDocHandler =
                         new OOXMLFastDocumentHandler(xContext, &rStreamHandler, this, mnXNoteId);
 
-        uno::Reference<xml::sax::XFastDocumentHandler> xDocumentHandler(pDocHandler);
         uno::Reference<xml::sax::XFastTokenHandler> xTokenHandler(mpStream->getFastTokenHandler());
 
-        xParser->setFastDocumentHandler(xDocumentHandler);
+        xParser->setFastDocumentHandler(pDocHandler);
         xParser->setTokenHandler(xTokenHandler);
 
         uno::Reference<io::XInputStream> xInputStream = pStream->getDocumentStream();
@@ -462,10 +461,9 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
 
     uno::Reference<uno::XComponentContext> xContext(mpStream->getContext());
 
-    OOXMLFastDocumentHandler * pDocHandler =
+    rtl::Reference<OOXMLFastDocumentHandler> pDocHandler =
                 new OOXMLFastDocumentHandler(xContext, &rStream, this, mnXNoteId);
     pDocHandler->setIsSubstream( mbIsSubstream );
-    uno::Reference < xml::sax::XFastDocumentHandler > xDocumentHandler(pDocHandler);
     uno::Reference < xml::sax::XFastTokenHandler > xTokenHandler(mpStream->getFastTokenHandler());
 
     resolveFastSubStream(rStream, OOXMLStream::SETTINGS);
@@ -484,7 +482,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
     resolveFastSubStream(rStream, OOXMLStream::STYLES);
     resolveFastSubStream(rStream, OOXMLStream::NUMBERING);
 
-    xParser->setFastDocumentHandler( xDocumentHandler );
+    xParser->setFastDocumentHandler( pDocHandler );
     xParser->setTokenHandler( xTokenHandler );
 
     xml::sax::InputSource aParserInput;
