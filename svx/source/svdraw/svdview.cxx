@@ -1407,6 +1407,41 @@ bool SdrView::BegMark(const Point& rPnt, bool bAddMark, bool bUnmark)
     }
 }
 
+bool SdrView::MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint)
+{
+    if (!GetMarkedObjectList().GetMarkCount())
+        return false;
+
+    SdrHdl * pHdl = GetHdlList().GetHdl(handleNum);
+    if (pHdl == nullptr)
+        return false;
+
+    const SdrDragStat& rDragStat = GetDragStat();
+    // start dragging
+    BegDragObj(pHdl->GetPos(), nullptr, pHdl, 0);
+    if (!IsDragObj())
+        return false;
+
+    bool bWasNoSnap = rDragStat.IsNoSnap();
+    bool bWasSnapEnabled = IsSnapEnabled();
+
+    // switch snapping off
+    if(!bWasNoSnap)
+        const_cast<SdrDragStat&>(rDragStat).SetNoSnap();
+    if(bWasSnapEnabled)
+        SetSnapEnabled(false);
+
+    MovAction(aEndPoint);
+    EndDragObj();
+
+    if (!bWasNoSnap)
+        const_cast<SdrDragStat&>(rDragStat).SetNoSnap(bWasNoSnap);
+    if (bWasSnapEnabled)
+        SetSnapEnabled(bWasSnapEnabled);
+
+    return true;
+}
+
 void SdrView::ConfigurationChanged( ::utl::ConfigurationBroadcaster*p, ConfigurationHints nHint)
 {
     onAccessibilityOptionsChanged();
