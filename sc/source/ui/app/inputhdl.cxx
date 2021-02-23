@@ -3473,13 +3473,16 @@ void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument& rDoc )
         else
             aRefStr = rRef.Format(rDoc, ScRefFlags::VALID, aAddrDetails);
     }
+    bool bLOKShowSelect = true;
+    if(comphelper::LibreOfficeKit::isActive() && pRefViewSh->GetViewData().GetRefTabNo() != pRefViewSh->GetViewData().GetTabNo())
+        bLOKShowSelect = false;
 
     if (pTableView || pTopView)
     {
         if (pTableView)
-            pTableView->InsertText( aRefStr, true );
+            pTableView->InsertText( aRefStr, true, bLOKShowSelect );
         if (pTopView)
-            pTopView->InsertText( aRefStr, true );
+            pTopView->InsertText( aRefStr, true, bLOKShowSelect );
 
         DataChanged();
     }
