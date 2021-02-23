@@ -299,6 +299,184 @@ namespace emfio
 #endif
     };
 
+    // tdf#127471
+    ScaledFontDetectCorrectHelper::ScaledFontDetectCorrectHelper()
+    :   maCurrentMetaFontAction(),
+        maAlternativeFontScales(),
+        maPositiveIdentifiedCases(),
+        maNegativeIdentifiedCases()
+    {
+    }
+
+    void ScaledFontDetectCorrectHelper::endCurrentMetaFontAction()
+    {
+        if(maCurrentMetaFontAction.is() && !maAlternativeFontScales.empty())
+        {
+            // create average corrected FontScale value and count
+            // positive/negative hits
+            sal_uInt32 nPositive(0);
+            sal_uInt32 nNegative(0);
+            double fAverage(0.0);
+
+            for(double fPart : maAlternativeFontScales)
+            {
+                if(fPart < 0.0)
+                {
+                    nNegative++;
+                    fAverage += -fPart;
+                }
+                else
+                {
+                    nPositive++;
+                    fAverage += fPart;
+                }
+            }
+
+            fAverage /= static_cast<double>(maAlternativeFontScales.size());
+
+            if(nPositive >= nNegative)
+            {
+                // correction intended, it is probably an old imported file
+                maPositiveIdentifiedCases.push_back(std::pair<rtl::Reference<MetaFontAction>, double>(maCurrentMetaFontAction, fAverage));
+            }
+            else
+            {
+                // correction not favorable in the majority of cases for this Font, still
+                // remember to have a weight in the last decision for correction
+                maNegativeIdentifiedCases.push_back(std::pair<rtl::Reference<MetaFontAction>, double>(maCurrentMetaFontAction, fAverage));
+            }
+        }
+
+        maCurrentMetaFontAction.clear();
+        maAlternativeFontScales.clear();
+    }
+
+    void ScaledFontDetectCorrectHelper::newCurrentMetaFontAction(rtl::Reference<MetaFontAction>& rNewMetaFontAction)
+    {
+        maCurrentMetaFontAction.clear();
+        maAlternativeFontScales.clear();
+
+        if(rNewMetaFontAction.is())
+        {
+            // check 1st criteria for FontScale active. We usually write this,
+            // so this will already sort out most situations
+            const vcl::Font& rCandidate(rNewMetaFontAction->GetFont());
+
+            if(0 != rCandidate.GetAverageFontWidth())
+            {
+                const tools::Long nUnscaledAverageFontWidth(rCandidate.GetOrCalculateAverageFontWidth());
+
+                // check 2nd (system-dependent) criteria for FontScale
+                if(nUnscaledAverageFontWidth != rCandidate.GetFontHeight())
+                {
+                    // FontScale is active, remrmber and use as current
+                    maCurrentMetaFontAction = rNewMetaFontAction;
+                }
+            }
+        }
+    }
+
+    void ScaledFontDetectCorrectHelper::evaluateAlternativeFontScale(OUString const & rText, tools::Long nImportedTextLength)
+    {
+        if(maCurrentMetaFontAction.is())
+        {
+            SolarMutexGuard aGuard; // VirtualDevice is not thread-safe
+            ScopedVclPtrInstance< VirtualDevice > pTempVirtualDevice;
+
+            // calculate measured TextLength
+            const vcl::Font& rFontCandidate(maCurrentMetaFontAction->GetFont());
+            pTempVirtualDevice->SetFont(rFontCandidate);
+            const tools::Long nMeasuredTextLength(pTempVirtualDevice->GetTextWidth(rText));
+
+            // compare expected and imported TextLengths
+            if(nImportedTextLength != nMeasuredTextLength)
+            {
+                const double fFactorText(static_cast<double>(nImportedTextLength) / static_cast<double>(nMeasuredTextLength));
+                const double fFactorTextPercent(fabs(1.0 - fFactorText) * 100.0);
+
+                // if we assume that loaded file was written on old linux, we have to
+                // back-convert the scale value depending on which system we run
+#ifdef _WIN32
+                // When running on Windows the value was not adapted at font import (see WinMtfFontStyle
+                // constructor), so it is still NormedFontScaling and we need to convert to Windows-style
+                // scaling
+#else
+                // When running on unx (non-Windows) the value was already adapted at font import (see WinMtfFontStyle
+                // constructor). It was wrongly assumed to be Windows-style FontScaling, so we need to revert that
+                // to get back to the needed unx-style FontScale
+#endif
+                // Interestingly this leads to the *same* correction, so no need to make this
+                // system-dependent (!)
+                const tools::Long nUnscaledAverageFontWidth(rFontCandidate.GetOrCalculateAverageFontWidth());
+                const tools::Long nScaledAverageFontWidth(rFontCandidate.GetAverageFontWidth());
+                const double fScaleFactor(static_cast<double>(nUnscaledAverageFontWidth) / static_cast<double>(rFontCandidate.GetFontHeight()));
+                const double fCorrectedAverageFontWidth(static_cast<double>(nScaledAverageFontWidth) * fScaleFactor);
+                tools::Long nCorrectedTextLength(0);
+
+                { // do in own scope, only need nUnscaledAverageFontWidth
+                    vcl::Font rFontCandidate2(rFontCandidate);
+                    rFontCandidate2.SetAverageFontWidth(static_cast<tools::Long>(fCorrectedAverageFontWidth));
+                    pTempVirtualDevice->SetFont(rFontCandidate2);
+                    nCorrectedTextLength = pTempVirtualDevice->GetTextWidth(rText);
+                }
+
+                const double fFactorCorrectedText(static_cast<double>(nImportedTextLength) / static_cast<double>(nCorrectedTextLength));
+                const double fFactorCorrectedTextPercent(fabs(1.0 - fFactorCorrectedText) * 100.0);
+
+                // If FactorCorrectedText fits better than FactorText this is probably
+                // an import of an old EMF/WMF written by LibreOffice on a non-Windows (unx) system
+                // and should be corrected.
+                // Usually in tested cases this lies inside 5% of range, so detecting this just using
+                //  fFactorTextPercent indside 5% -> no old file
+                //  fFactorCorrectedTextPercent indside 5% -> is old file
+                // works not too bad, but there are some strange not so often used fonts where that
+                // values do deviate, so better just compare if old corrected would fit better than
+                // the uncorrected case, that is usually safe.
+                if(fFactorCorrectedTextPercent < fFactorTextPercent)
+                {
+                    maAlternativeFontScales.push_back(fCorrectedAverageFontWidth);
+                }
+                else
+                {
+                    // also push, but negative to remember non-fitting case
+                    maAlternativeFontScales.push_back(-fCorrectedAverageFontWidth);
+                }
+            }
+        }
+    }
+
+    void ScaledFontDetectCorrectHelper::applyAlternativeFontScale()
+    {
+        // make sure last evtl. detected current FontAction gets added to identified cases
+        endCurrentMetaFontAction();
+
+        // Take final decision to correct FontScaling for this imported Metafile or not.
+        // It is possible to weight positive against negative cases, so to only finally
+        // correct when more positive cases were detected.
+        // But that would be inconsequent and wrong. *If* the detected case is an old import
+        // the whole file was written with wrong FontScale values and all Font actions
+        // need to be corrected. Thus, for now, correct all when there are/is positive
+        // cases detected.
+        // On the other hand it *may* be that for some strange fonts there is a false-positive
+        // in the positive cases, so at least insist on positive cases being more than negative.
+        // Still, do then correct *all* cases.
+        if(!maPositiveIdentifiedCases.empty()
+            && maPositiveIdentifiedCases.size() >= maNegativeIdentifiedCases.size())
+        {
+            for(std::pair<rtl::Reference<MetaFontAction>, double>& rCandidate : maPositiveIdentifiedCases)
+            {
+                rCandidate.first->correctFontScale(static_cast<tools::Long>(rCandidate.second));
+            }
+            for(std::pair<rtl::Reference<MetaFontAction>, double>& rCandidate : maNegativeIdentifiedCases)
+            {
+                rCandidate.first->correctFontScale(static_cast<tools::Long>(rCandidate.second));
+            }
+        }
+
+        maPositiveIdentifiedCases.clear();
+        maNegativeIdentifiedCases.clear();
+    }
+
     Color MtfTools::ReadColor()
     {
         sal_uInt32 nColor;
@@ -927,6 +1105,7 @@ namespace emfio
         mnStartPos(0),
         mnEndPos(0),
         maBmpSaveList(),
+        maScaledFontHelper(),
         mbNopMode(false),
         mbFillStyleSelected(false),
         mbClipNeedsUpdate(true),
@@ -1617,14 +1796,29 @@ namespace emfio
                 maActPos = rPosition + aActPosDelta;
             }
         }
-        if ( bChangeFont || ( maLatestFont != aTmp ) )
+
+        if(bChangeFont || (maLatestFont != aTmp))
         {
             maLatestFont = aTmp;
-            mpGDIMetaFile->AddAction( new MetaFontAction( aTmp ) );
+            rtl::Reference<MetaFontAction> aNewMetaFontAction(new MetaFontAction(aTmp));
+
+            // tdf#127471 end evtl active MetaFontAction scale corrector detector/collector
+            maScaledFontHelper.endCurrentMetaFontAction();
+
+            // !bRecordPath: else no MetaTextArrayAction will be created
+            // nullptr != pDXArry: detection only possible when text size is given
+            // rText.getLength(): no useful check without text
+            if(!bRecordPath && nullptr != pDXArry && 0 != rText.getLength())
+            {
+                maScaledFontHelper.newCurrentMetaFontAction(aNewMetaFontAction);
+            }
+
+            mpGDIMetaFile->AddAction( aNewMetaFontAction );
             mpGDIMetaFile->AddAction( new MetaTextAlignAction( aTmp.GetAlignment() ) );
             mpGDIMetaFile->AddAction( new MetaTextColorAction( aTmp.GetColor() ) );
             mpGDIMetaFile->AddAction( new MetaTextFillColorAction( aTmp.GetFillColor(), !aTmp.IsTransparent() ) );
         }
+
         if ( bRecordPath )
         {
             // TODO
@@ -1645,7 +1839,18 @@ namespace emfio
                 /* because text without dx array is badly scaled, we
                    will create such an array if necessary */
                 tools::Long* pDX = pDXArry;
-                if (!pDXArry)
+                if (pDXArry)
+                {
+                    // only useful when we have an imported DXArray
+                    if(!rText.isEmpty())
+                    {
+                        maScaledFontHelper.evaluateAlternativeFontScale(
+                            rText,
+                            pDXArry[rText.getLength() - 1] // extract imported TextLength
+                        );
+                    }
+                }
+                else
                 {
                     // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading
                     SolarMutexGuard aGuard;
