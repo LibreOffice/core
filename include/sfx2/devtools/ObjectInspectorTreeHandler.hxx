@@ -12,6 +12,8 @@
 
 #include <sfx2/dllapi.h>
 #include <vcl/weld.hxx>
+#include <vcl/commandevent.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -48,6 +50,7 @@ public:
     DECL_LINK(ExpandingHandlerServices, const weld::TreeIter&, bool);
     DECL_LINK(ExpandingHandlerProperties, const weld::TreeIter&, bool);
     DECL_LINK(ExpandingHandlerMethods, const weld::TreeIter&, bool);
+    DECL_LINK(PopupMenuHandler, const CommandEvent&, bool);
 
     void introspect(css::uno::Reference<css::uno::XInterface> const& xInterface);
 
