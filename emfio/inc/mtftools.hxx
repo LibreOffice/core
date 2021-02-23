@@ -28,7 +28,11 @@
 #include <vcl/lineinfo.hxx>
 #include <o3tl/make_unique.hxx>
 #include <vcl/outdevstate.hxx>
+<<<<<<< HEAD   (0ce79d tdf#127471 correct EMF/WMF im/export for scaled font)
 #include <vcl/FilterConfigItem.hxx>
+=======
+#include <rtl/ref.hxx>
+>>>>>>> CHANGE (3d33e4 tdf#127471 Detect&Correct EMF/WMF with wrong FontScale)
 
 #include "emfiodllapi.h"
 
@@ -261,6 +265,8 @@ namespace emfio
 #define HUNDREDTH_MILLIMETERS_PER_MILLIINCH 2.54
 #define MILLIINCH_PER_TWIPS   1.44
 
+class MetaFontAction;
+
 //============================ WmfReader ==================================
 
 namespace emfio
@@ -456,7 +462,29 @@ namespace emfio
         {}
     };
 
+<<<<<<< HEAD   (0ce79d tdf#127471 correct EMF/WMF im/export for scaled font)
     class EMFIO_DLLPUBLIC MtfTools
+=======
+    // tdf#127471 implement detection and correction of wrongly scaled
+    // fonts in own-written, old (before this fix) EMF/WMF files
+    class ScaledFontDetectCorrectHelper
+    {
+    private:
+        rtl::Reference<MetaFontAction>                                  maCurrentMetaFontAction;
+        std::vector<double>                                             maAlternativeFontScales;
+        std::vector<std::pair<rtl::Reference<MetaFontAction>, double>>  maPositiveIdentifiedCases;
+        std::vector<std::pair<rtl::Reference<MetaFontAction>, double>>  maNegativeIdentifiedCases;
+
+    public:
+        ScaledFontDetectCorrectHelper();
+        void endCurrentMetaFontAction();
+        void newCurrentMetaFontAction(rtl::Reference<MetaFontAction>& rNewMetaFontAction);
+        void evaluateAlternativeFontScale(OUString const & rText, tools::Long nImportedTextLength);
+        void applyAlternativeFontScale();
+    };
+
+    class MtfTools
+>>>>>>> CHANGE (3d33e4 tdf#127471 Detect&Correct EMF/WMF with wrong FontScale)
     {
         MtfTools(MtfTools &) = delete;
         void operator =(MtfTools) = delete;
@@ -518,6 +546,9 @@ namespace emfio
         sal_uInt32          mnStartPos;
         sal_uInt32          mnEndPos;
         std::vector<std::unique_ptr<BSaveStruct>>    maBmpSaveList;
+
+        // tdf#127471 always try to detect - only used with ScaledText
+        ScaledFontDetectCorrectHelper maScaledFontHelper;
 
         bool                mbNopMode : 1;
         bool                mbFillStyleSelected : 1;
