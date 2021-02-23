@@ -777,7 +777,8 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                                 aGraphCrop.Bottom = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Height ) * aFillRect.Y2 ) / 100000 );
                             rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
 
-                            if(bIsCustomShape)
+                            if(bIsCustomShape &&
+                               ( aGraphCrop.Left != 0 || aGraphCrop.Right != 0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0))
                             {
                                 xGraphic = lclCropGraphic(xGraphic, aFillRect);
                                 rPropMap.setProperty(ShapeProperty::FillBitmap, xGraphic);
@@ -883,17 +884,17 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
                 if ( oClipRect.Y2 )
                     aGraphCrop.Bottom = rtl::math::round( ( static_cast< double >( aOriginalSize.Height ) * oClipRect.Y2 ) / 100000 );
                 rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
+
+                if(mbIsCustomShape &&
+                   ( aGraphCrop.Left != 0 || aGraphCrop.Right != 0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0))
+                {
+                    geometry::IntegerRectangle2D aCropRect = oClipRect;
+                    lclCalculateCropPercentage(xGraphic, aCropRect);
+                    xGraphic = lclCropGraphic(xGraphic, aCropRect);
+
+                    rPropMap.setProperty(PROP_FillBitmap, xGraphic);
+                }
             }
-
-            if(mbIsCustomShape)
-            {
-                geometry::IntegerRectangle2D aCropRect = oClipRect;
-                lclCalculateCropPercentage(xGraphic, aCropRect);
-                xGraphic = lclCropGraphic(xGraphic, aCropRect);
-
-                rPropMap.setProperty(PROP_FillBitmap, xGraphic);
-            }
-
         }
 
         if(mbIsCustomShape)
