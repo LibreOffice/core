@@ -124,13 +124,11 @@ namespace
 
 bool SvpSalGraphics::blendBitmap( const SalTwoRect&, const SalBitmap& /*rBitmap*/ )
 {
-    SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::blendBitmap case");
     return false;
 }
 
 bool SvpSalGraphics::blendAlphaBitmap( const SalTwoRect&, const SalBitmap&, const SalBitmap&, const SalBitmap& )
 {
-    SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::blendAlphaBitmap case");
     return false;
 }
 
