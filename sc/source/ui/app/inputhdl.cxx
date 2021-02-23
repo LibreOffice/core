@@ -502,7 +502,10 @@ void ScInputHandler::UpdateLokReferenceMarks()
         tools::Long nX2 = rViewData.GetRefEndX();
         tools::Long nY1 = rViewData.GetRefStartY();
         tools::Long nY2 = rViewData.GetRefEndY();
-        tools::Long nTab = rViewData.GetTabNo();
+        tools::Long nTab = rViewData.GetRefStartZ();
+
+        if (rViewData.GetRefEndZ() == rViewData.GetTabNo())
+            nTab = rViewData.GetRefEndZ();
 
         PutInOrder(nX1, nX2);
         PutInOrder(nY1, nY2);
