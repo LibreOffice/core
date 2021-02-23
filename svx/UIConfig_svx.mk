@@ -34,7 +34,6 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/colsmenu \
 	svx/uiconfig/ui/columnswindow \
 	svx/uiconfig/ui/compressgraphicdialog \
-	svx/uiconfig/ui/convertmenu \
 	svx/uiconfig/ui/crashreportdlg \
 	svx/uiconfig/ui/datanavigator \
 	svx/uiconfig/ui/defaultshapespanel \

@@ -54,6 +54,28 @@
 #define STR_SET_LANGUAGE_FOR_PARAGRAPH              NC_("STR_SET_LANGUAGE_FOR_PARAGRAPH", "Set Language for Paragraph" )
 #define STR_LANGSTATUS_HINT                         NC_("STR_LANGSTATUS_HINT", "Text Language. Right-click to set character or paragraph language" )
 
+#define RID_STR_PROPTITLE_EDIT                      NC_("RID_STR_PROPTITLE_EDIT", "Text Box")
+#define RID_STR_PROPTITLE_CHECKBOX                  NC_("RID_STR_PROPTITLE_CHECKBOX", "Check Box")
+#define RID_STR_PROPTITLE_COMBOBOX                  NC_("RID_STR_PROPTITLE_COMBOBOX", "Combo Box")
+#define RID_STR_PROPTITLE_LISTBOX                   NC_("RID_STR_PROPTITLE_LISTBOX", "List Box")
+#define RID_STR_PROPTITLE_DATEFIELD                 NC_("RID_STR_PROPTITLE_DATEFIELD", "Date Field")
+#define RID_STR_PROPTITLE_TIMEFIELD                 NC_("RID_STR_PROPTITLE_TIMEFIELD", "Time Field")
+#define RID_STR_PROPTITLE_NUMERICFIELD              NC_("RID_STR_PROPTITLE_NUMERICFIELD", "Numeric Field")
+#define RID_STR_PROPTITLE_CURRENCYFIELD             NC_("RID_STR_PROPTITLE_CURRENCYFIELD", "Currency Field")
+#define RID_STR_PROPTITLE_PATTERNFIELD              NC_("RID_STR_PROPTITLE_PATTERNFIELD", "Pattern Field")
+#define RID_STR_PROPTITLE_FORMATTED                 NC_("RID_STR_PROPTITLE_FORMATTED", "Formatted Field")
+
+#define RID_STR_PROPTITLE_PUSHBUTTON                NC_("RID_STR_PROPTITLE_PUSHBUTTON", "Push Button")
+#define RID_STR_PROPTITLE_RADIOBUTTON               NC_("RID_STR_PROPTITLE_RADIOBUTTON", "Option Button")
+#define RID_STR_PROPTITLE_FIXEDTEXT                 NC_("RID_STR_PROPTITLE_FIXEDTEXT", "Label Field")
+#define RID_STR_PROPTITLE_GROUPBOX                  NC_("RID_STR_PROPTITLE_GROUPBOX", "Group Box")
+#define RID_STR_PROPTITLE_IMAGEBUTTON               NC_("RID_STR_PROPTITLE_IMAGEBUTTON", "Image Button")
+#define RID_STR_PROPTITLE_IMAGECONTROL              NC_("RID_STR_PROPTITLE_IMAGECONTROL", "Image Control")
+#define RID_STR_PROPTITLE_FILECONTROL               NC_("RID_STR_PROPTITLE_FILECONTROL", "File Selection")
+#define RID_STR_PROPTITLE_SCROLLBAR                 NC_("RID_STR_PROPTITLE_SCROLLBAR", "Scrollbar")
+#define RID_STR_PROPTITLE_SPINBUTTON                NC_("RID_STR_PROPTITLE_SPINBUTTON", "Spin Button")
+#define RID_STR_PROPTITLE_NAVBAR                    NC_("RID_STR_PROPTITLE_NAVBAR", "Navigation Bar")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
