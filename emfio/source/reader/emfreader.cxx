@@ -2043,6 +2043,10 @@ namespace emfio
             }
             mpInputStream->Seek( nNextPos );
         }
+
+        // tdf#127471
+        maScaledFontHelper.applyAlternativeFontScale();
+
         if( !maBmpSaveList.empty() )
             ResolveBitmapActions( maBmpSaveList );
 
