@@ -34,6 +34,24 @@
       "revId": "aaf7fe0326b3be088a5440525363317fb3d0f158",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "468bf328_598af70a",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3637,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-23T08:27:48Z",
+      "side": 1,
+      "message": "I mean adding\n\n  (void)rURL;\n\nhere in the #if HAVE_FEATURE_MACOSX_SANDBOX section, where the newly added argument is not used :-)",
+      "parentUuid": "c1f3bc20_72fabb3d",
+      "revId": "aaf7fe0326b3be088a5440525363317fb3d0f158",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
