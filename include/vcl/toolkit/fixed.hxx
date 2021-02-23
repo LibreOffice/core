@@ -168,7 +168,6 @@ public:
     void            SetImage( const Image& rImage );
     const Image&    GetImage() const { return maImage; }
 
-    void            SetModeImage( const Image& rImage );
     const Image&    GetModeImage( ) const { return maImage;}
     virtual bool    set_property(const OString &rKey, const OUString &rValue) override;
 

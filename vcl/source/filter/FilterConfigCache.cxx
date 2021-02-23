@@ -344,13 +344,6 @@ OUString FilterConfigCache::GetImportFormatName( sal_uInt16 nFormat )
     return OUString();
 }
 
-OUString FilterConfigCache::GetImportFormatMediaType( sal_uInt16 nFormat )
-{
-    if( nFormat < aImport.size() )
-        return aImport[ nFormat ].sMediaType;
-    return OUString();
-}
-
 OUString FilterConfigCache::GetImportFormatShortName( sal_uInt16 nFormat )
 {
     if( nFormat < aImport.size() )

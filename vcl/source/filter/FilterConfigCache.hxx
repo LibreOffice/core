@@ -76,8 +76,6 @@ public:
     OUString    GetImportFilterTypeName( sal_uInt16 nFormat );
 
 
-    bool    IsImportInternalFilter( sal_uInt16 nFormat );
-
     sal_uInt16  GetExportFormatCount() const
         { return sal::static_int_cast< sal_uInt16 >(aExport.size()); };
     sal_uInt16  GetExportFormatNumber( std::u16string_view rFormatName );
@@ -92,7 +90,6 @@ public:
     OUString    GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
     OUString    GetExportInternalFilterName( sal_uInt16 nFormat );
 
-    bool    IsExportInternalFilter( sal_uInt16 nFormat );
     bool    IsExportPixelFormat( sal_uInt16 nFormat );
 
     explicit FilterConfigCache( bool bUseConfig );

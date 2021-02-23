@@ -52,15 +52,10 @@ public:
 
     void Paint(vcl::RenderContext& rRenderContext);
 
-    void SetStyle(const std::pair<OUString, OUString>& sStyleName);
-
-    void Select(bool bSelect);
-
 private:
     void DrawEntry(vcl::RenderContext& rRenderContext);
     void DrawText(vcl::RenderContext& rRenderContext);
     void DrawHighlight(vcl::RenderContext& rRenderContext, Color aFontBack);
-    static void DrawSelection(vcl::RenderContext& rRenderContext);
     static void DrawContentBackground(vcl::RenderContext& rRenderContext,
                                       const tools::Rectangle& aContentRect, const Color& aColor);
 };
