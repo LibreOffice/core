@@ -42,8 +42,8 @@
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <comphelper/propertyvalue.hxx>
-#include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/convert.hxx>
+#include <tools/diagnose_ex.h>
 #include <RptDef.hxx>
 #include <SectionWindow.hxx>
 #include <helpids.h>
@@ -432,7 +432,13 @@ void OReportSection::Command( const CommandEvent& _rCEvt )
     if (!xMenuController.is())
         return;
 
-    rtl::Reference<VCLXPopupMenu> xPopupMenu(new VCLXPopupMenu);
+    css::uno::Reference<css::awt::XPopupMenu> xPopupMenu(
+        xContext->getServiceManager()->createInstanceWithContext(
+        "com.sun.star.awt.PopupMenu", xContext), css::uno::UNO_QUERY);
+
+    if (!xPopupMenu.is())
+        return;
+
     xMenuController->setPopupMenu(xPopupMenu);
 
     Point aPos = _rCEvt.GetMousePosPixel();
