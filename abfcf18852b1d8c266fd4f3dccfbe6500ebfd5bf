@@ -16,6 +16,24 @@
       "revId": "abfcf18852b1d8c266fd4f3dccfbe6500ebfd5bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5794990_f3d4cd0e",
+        "filename": "fpicker/source/win32/VistaFilePickerImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-02-23T10:23:41Z",
+      "side": 1,
+      "message": "Ah right - although I wonder if the try/catch block is necessary at all.\nLooks like the Show() method does not throw any exceptions.\nhttps://docs.microsoft.com/en-us/windows/win32/api/shobjidl_core/nf-shobjidl_core-imodalwindow-show",
+      "parentUuid": "c1914526_434c2271",
+      "revId": "abfcf18852b1d8c266fd4f3dccfbe6500ebfd5bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
