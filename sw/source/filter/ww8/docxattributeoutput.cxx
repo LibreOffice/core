@@ -7498,9 +7498,9 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
     if ( !sIss.isEmpty() )
         m_pSerializer->singleElementNS(XML_w, XML_vertAlign, FSNS(XML_w, XML_val), sIss);
 
-    const SvxFontHeightItem& rItem = m_rExport.GetItem(RES_CHRATR_FONTSIZE);
     if (sIss.isEmpty() || sIss.match("baseline"))
     {
+        const SvxFontHeightItem& rItem = m_rExport.GetItem(RES_CHRATR_FONTSIZE);
         float fHeight = rItem.GetHeight();
         OString sPos = OString::number( round(( fHeight * nEsc ) / 1000) );
         m_pSerializer->singleElementNS(XML_w, XML_position, FSNS(XML_w, XML_val), sPos);
