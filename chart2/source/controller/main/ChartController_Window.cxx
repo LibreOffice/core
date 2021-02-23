@@ -78,7 +78,6 @@
 #include <svx/svddrgmt.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
@@ -1289,19 +1288,19 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
         {
             if (SfxViewShell* pViewShell = SfxViewShell::Current())
             {
-                PopupMenu* pPopupMenu = static_cast<PopupMenu*>(comphelper::getUnoTunnelImplementation<VCLXMenu>(xPopupMenu)->GetMenu());
                 ControllerCommandDispatch* pCommandDispatch = dynamic_cast<ControllerCommandDispatch*>(m_aDispatchContainer.getChartDispatcher().get());
-                if(pCommandDispatch)
+                if (pCommandDispatch)
                 {
-                    for (sal_uInt16 nPos = 0; nPos < pPopupMenu->GetItemCount(); nPos++)
+                    for (int nPos = 0, nCount = xPopupMenu->getItemCount(); nPos < nCount; ++nPos)
                     {
-                        const sal_uInt16 nItemId = pPopupMenu->GetItemId(nPos);
-                        OUString aCommandURL = pPopupMenu->GetItemCommand(nItemId);
-                        if(!pCommandDispatch->commandAvailable(aCommandURL))
-                            pPopupMenu->EnableItem(nItemId, false);
+                        auto nItemId = xPopupMenu->getItemId(nPos);
+                        OUString aCommandURL = xPopupMenu->getCommand(nItemId);
+                        if (!pCommandDispatch->commandAvailable(aCommandURL))
+                            xPopupMenu->enableItem(nItemId, false);
                     }
                 }
 
+                Menu* pPopupMenu = comphelper::getUnoTunnelImplementation<VCLXMenu>(xPopupMenu)->GetMenu();
                 boost::property_tree::ptree aMenu = SfxDispatcher::fillPopupMenu(pPopupMenu);
                 boost::property_tree::ptree aRoot;
                 aRoot.add_child("menu", aMenu);
