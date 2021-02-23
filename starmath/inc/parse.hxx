@@ -26,6 +26,20 @@
 
 #include "parse5.hxx"
 
+namespace starmathdatabase
+{
+
+AbstractSmParser* GetSmDockingWindowSmParser();
+
+AbstractSmParser* GetDefaultSmParser();
+
+AbstractSmParser* GetVersionSmParser(sal_uInt16 nVersion);
+
+void UpdateDocumentSyntaxVersion(uint_fast16_t nVersion);
+
+
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

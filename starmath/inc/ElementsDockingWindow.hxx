@@ -25,14 +25,13 @@
 #include <vcl/weld.hxx>
 
 #include "format.hxx"
+#include "parse.hxx"
 #include <memory>
 #include <tuple>
 
 #include "AccessibleSmElementsControl.hxx"
 
 class SmDocShell;
-class SmNode;
-class SmParser;
 
 class SmElement
 {
@@ -93,6 +92,7 @@ class SmElementsControl : public weld::CustomWidgetController
     css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
     SmDocShell*   mpDocShell;
+    AbstractSmParser* maParser;
     SmFormat      maFormat;
     OString       msCurrentSetId;
     sal_uInt16    m_nCurrentElement;
@@ -107,7 +107,7 @@ class SmElementsControl : public weld::CustomWidgetController
     bool m_bFirstPaintAfterLayout;
     rtl::Reference<AccessibleSmElementsControl> m_xAccessible;
 
-    void addElement(SmParser &rParser, const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
+    void addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
     void addElements(const SmElementDescr aElementsArray[], sal_uInt16 size);
     SmElement* current() const;
     void setCurrentElement(sal_uInt16);
