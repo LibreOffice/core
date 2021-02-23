@@ -33,6 +33,7 @@
 
 #include <rtl/instance.hxx>
 #include <TypeSerializer.hxx>
+#include <vcl/svapp.hxx>
 
 #ifdef _WIN32
 #include <vcl/metric.hxx>
@@ -366,34 +367,49 @@ void Font::GetFontAttributes( FontAttributes& rAttrs ) const
 // tdf#127471 for corrections on EMF/WMF we need the AvgFontWidth in Windows-specific notation
 long Font::GetOrCalculateAverageFontWidth() const
 {
-#ifdef _WIN32
-    // on windows we just have it available
-    return GetAverageFontWidth();
-#else
-    // On non-Windows systems we need to calculate AvgFontWidth
-    // as close as possible (discussion see documentation in task)
     if(0 == mpImplFont->GetCalculatedAverageFontWidth())
     {
-        // calculate it. For discussion of method used, see task
-        const std::size_t nSize(127 - 32);
-        std::array<sal_Unicode, nSize> aArray;
+        // VirtualDevice is not thread safe
+        SolarMutexGuard aGuard;
 
-        for(sal_Unicode a(0); a < nSize; a++)
+        // create unscaled copy of font (this), a VirtualDevice and set it there
+        vcl::Font aUnscaledFont(*this);
+        ScopedVclPtr<VirtualDevice> pTempVirtualDevice(VclPtr<VirtualDevice>::Create());
+        aUnscaledFont.SetAverageFontWidth(0);
+        pTempVirtualDevice->SetFont(aUnscaledFont);
+
+#ifdef _WIN32
+        // on Windows systems use FontMetric to get/create AverageFontWidth from system
+        const FontMetric aMetric(pTempVirtualDevice->GetFontMetric());
+        const_cast<Font*>(this)->mpImplFont->SetCalculatedAverageFontWidth(aMetric.GetAverageFontWidth());
+#else
+        // On non-Windows systems we need to calculate AvgFontWidth
+        // as close as possible (discussion see documentation in task),
+        // so calculate it. For discussion of method used, see task
+        // buffer measure string creation, will always use the same
+        static OUString aMeasureString;
+
+        if(!aMeasureString.getLength())
         {
-            aArray[a] = a + 32;
+            const std::size_t nSize(127 - 32);
+            std::array<sal_Unicode, nSize> aArray;
+
+            for(sal_Unicode a(0); a < nSize; a++)
+            {
+                aArray[a] = a + 32;
+            }
+
+            aMeasureString = OUString(aArray.data());
         }
 
-        vcl::Font aUnscaledFont(*this);
-        ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
-        aUnscaledFont.SetAverageFontWidth(0);
-        pVirDev->SetFont(aUnscaledFont);
         const double fAverageFontWidth(
-            pVirDev->GetTextWidth(OUString(aArray.data())) / static_cast<double>(nSize));
+            pTempVirtualDevice->GetTextWidth(aMeasureString, aMeasureString.getLength()) /
+            static_cast<double>(aMeasureString.getLength()));
         const_cast<Font*>(this)->mpImplFont->SetCalculatedAverageFontWidth(basegfx::fround(fAverageFontWidth));
+#endif
     }
 
     return mpImplFont->GetCalculatedAverageFontWidth();
-#endif
 }
 
 SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont, long& rnNormedFontScaling )
@@ -517,7 +533,7 @@ SvStream& ReadFont( SvStream& rIStm, vcl::Font& rFont )
                 aUnscaledFont.SetAverageFontWidth(0);
                 const FontMetric aUnscaledFontMetric(Application::GetDefaultDevice()->GetFontMetric(aUnscaledFont));
 
-                if (aUnscaledFontMetric.GetAverageFontWidth() > 0)
+                if (nHeight > 0)
                 {
                     const double fScaleFactor(static_cast<double>(nNormedFontScaling) / static_cast<double>(nHeight));
                     nScaledWidth = basegfx::fround(static_cast<double>(aUnscaledFontMetric.GetAverageFontWidth()) * fScaleFactor);
@@ -881,10 +897,8 @@ ImplFont::ImplFont() :
     maFillColor( COL_TRANSPARENT ),
     mbWordLine( false ),
     mnOrientation( 0 ),
-    mnQuality( 0 )
-#ifndef _WIN32
-    , mnCalculatedAverageFontWidth(0)
-#endif
+    mnQuality( 0 ),
+    mnCalculatedAverageFontWidth( 0 )
 {}
 
 ImplFont::ImplFont( const ImplFont& rImplFont ) :
@@ -916,10 +930,8 @@ ImplFont::ImplFont( const ImplFont& rImplFont ) :
     maFillColor( rImplFont.maFillColor ),
     mbWordLine( rImplFont.mbWordLine ),
     mnOrientation( rImplFont.mnOrientation ),
-    mnQuality( rImplFont.mnQuality )
-#ifndef _WIN32
-    , mnCalculatedAverageFontWidth(rImplFont.mnCalculatedAverageFontWidth)
-#endif
+    mnQuality( rImplFont.mnQuality ),
+    mnCalculatedAverageFontWidth( rImplFont.mnCalculatedAverageFontWidth )
 {}
 
 bool ImplFont::operator==( const ImplFont& rOther ) const
