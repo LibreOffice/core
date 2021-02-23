@@ -20,9 +20,6 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 
 #include <DrawViewShell.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
-
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urlbmk.hxx>
@@ -38,9 +35,12 @@
 #include <svx/svdopath.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <editeng/editview.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/cursor.hxx>
 #include <vcl/commandevent.hxx>
-#include <tools/diagnose_ex.h>
+#include <vcl/menu.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/weldutils.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>
@@ -569,16 +569,19 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             //fdo#44998 if the outliner has captured the mouse events release the lock
             //so the SdFieldPopup can get them
             pOLV->ReleaseMouse();
-            ScopedVclPtrInstance<SdFieldPopup> aFieldPopup( pFldItem->GetField(), eLanguage );
+            SdFieldPopup aFieldPopup(pFldItem->GetField(), eLanguage);
 
             if ( rCEvt.IsMouseEvent() )
                 aMPos = rCEvt.GetMousePosPixel();
             else
                 aMPos = Point( 20, 20 );
-            aFieldPopup->Execute( pWin, aMPos );
+            ::tools::Rectangle aRect(aMPos, Size(1, 1));
+            weld::Window* pParent = weld::GetPopupParent(*pWin, aRect);
 
-            std::unique_ptr<SvxFieldData> pField(aFieldPopup->GetField());
-            if( pField )
+            aFieldPopup.Execute(pParent, aRect);
+
+            std::unique_ptr<SvxFieldData> pField(aFieldPopup.GetField());
+            if (pField)
             {
                 SvxFieldItem aFieldItem( *pField, EE_FEATURE_FIELD );
                 // select field, so that it will be deleted on insert

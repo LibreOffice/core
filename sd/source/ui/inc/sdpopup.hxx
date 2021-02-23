@@ -21,25 +21,26 @@
 #define INCLUDED_SD_SOURCE_UI_INC_SDPOPUP_HXX
 
 #include <i18nlangtag/lang.h>
-#include <vcl/menu.hxx>
+#include <vcl/weld.hxx>
 
 class SvxFieldData;
 
 /**
  * PopupMenu for editing field-commands
  */
-class SdFieldPopup : public PopupMenu
+class SdFieldPopup
 {
 private:
-    const SvxFieldData* pField;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Menu> m_xPopup;
+    const SvxFieldData* m_pField;
 
     void                Fill( LanguageType eLanguage );
 
 public:
-                        SdFieldPopup( const SvxFieldData* pInField, LanguageType eLanguage );
-                        virtual ~SdFieldPopup() override;
-
-    //virtual void      Select();
+    SdFieldPopup(const SvxFieldData* pInField, LanguageType eLanguage);
+    void Execute(weld::Window* pParent, const tools::Rectangle& rRect);
+    ~SdFieldPopup();
 
     SvxFieldData*       GetField();
 };
