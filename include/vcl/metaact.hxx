@@ -1399,11 +1399,19 @@ public:
     const MapMode&      GetMapMode() const { return maMapMode; }
 };
 
+// tdf#127471 decl for friend below
+namespace emfio { class ScaledFontDetectCorrectHelper; }
+
 class VCL_DLLPUBLIC MetaFontAction final : public MetaAction
 {
 private:
 
     vcl::Font           maFont;
+
+    // tdf#127471 for import correction of own wrong written EMF/WMF files allow correction
+    // of FontScale after import. Only from there, so use a friend here and keep the method private
+    friend class emfio::ScaledFontDetectCorrectHelper;
+    void correctFontScale(long nNewFontScale) { maFont.SetAverageFontWidth(nNewFontScale); }
 
 public:
                         MetaFontAction();
