@@ -132,9 +132,9 @@ void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
         maCtlFavorites->select(0);
 }
 
-void FontWorkGalleryDialog::SetSdrObjectRef( SdrModel* pModel, bool bInsertIntoPage )
+void FontWorkGalleryDialog::SetSdrObjectRef( SdrModel* pModel)
 {
-    mbInsertIntoPage = bInsertIntoPage;
+    mbInsertIntoPage = false;
     mpDestModel = pModel;
 }
 

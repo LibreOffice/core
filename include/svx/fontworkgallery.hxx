@@ -70,7 +70,7 @@ public:
     virtual ~FontWorkGalleryDialog() override;
 
     // SJ: if the SdrObject** is set, the SdrObject is not inserted into the page when executing the dialog
-    void SetSdrObjectRef( SdrModel* pModel, bool bInsertIntoPage = true );
+    void SetSdrObjectRef( SdrModel* pModel );
     SdrObject* GetSdrObjectRef() { return mppSdrObject; }
 };
 
