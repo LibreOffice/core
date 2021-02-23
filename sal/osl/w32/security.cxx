@@ -678,52 +678,138 @@ bool SAL_CALL osl_HasWritePermissions(rtl_uString* pathName)
     DWORD genericAccessRights = GENERIC_READ | GENERIC_WRITE;
     GENERIC_MAPPING mapping = { 0 };
     DWORD grantedAccess = 0;
-    HANDLE hToken;
+    HANDLE hToken = INVALID_HANDLE_VALUE;
     DWORD length = 0;
     LPCWSTR wstrName = o3tl::toW(rtl_uString_getStr(pathName));
     size_t len = wcslen(wstrName);
-    char* strPathName = (char*)malloc(len * sizeof(char));
-    PSECURITY_DESCRIPTOR security;
+    //char* strPathName = (char*)malloc(len * sizeof(char));
+    PSECURITY_DESCRIPTOR security = NULL;
     HANDLE hImpersonatedToken = NULL;
-    char winPath[MAX_PATH];
+    wchar_t winPath[MAX_PATH];
     DWORD pcchPath = MAX_PATH;
+    rtl_uString* pSysPath = nullptr;
 
     mapping.GenericRead = FILE_GENERIC_READ;
     mapping.GenericWrite = FILE_GENERIC_WRITE;
 
-    wcstombs(strPathName, wstrName, len);
+    //wcstombs(strPathName, wstrName, len);
     
-    if (!PathCreateFromUrl(strPathName, winPath, &pcchPath, NULL))
+    /*if (!PathCreateFromUrlW(wstrName, winPath, &pcchPath, NULL))
     {
+        LPVOID lpMsgBuf;
+        LPVOID lpDisplayBuf;
+        DWORD dw = GetLastError();
+
+        FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
+                          | FORMAT_MESSAGE_IGNORE_INSERTS,
+                      NULL, dw, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0,
+                      NULL);
+        lpDisplayBuf
+            = (LPVOID)LocalAlloc(LMEM_ZEROINIT, (lstrlen((LPCTSTR)wstrName) + 40) * sizeof(TCHAR));
+        StringCchPrintf((LPTSTR)lpDisplayBuf, LocalSize(lpDisplayBuf) / sizeof(TCHAR),
+                        TEXT("PathCreateFromUrlW failed with error %d: %s"), dw, wstrName);
+        MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
+        goto Cleanup;
+    }
+    */
+
+    if (osl_getSystemPathFromFileURL(pathName, &pSysPath) != osl_File_E_None)
+    {
+        LPVOID lpMsgBuf;
+        LPVOID lpDisplayBuf;
+        DWORD dw = GetLastError();
+
+        FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
+                          | FORMAT_MESSAGE_IGNORE_INSERTS,
+                      NULL, dw, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0,
+                      NULL);
+        lpDisplayBuf
+            = (LPVOID)LocalAlloc(LMEM_ZEROINIT, (lstrlen((LPCTSTR)lpMsgBuf) + 40) * sizeof(TCHAR));
+        StringCchPrintf((LPTSTR)lpDisplayBuf, LocalSize(lpDisplayBuf) / sizeof(TCHAR),
+                        TEXT("osl_getSystemPathFromFileURL failed with error %d: %s"), dw, lpMsgBuf);
+        MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
         goto Cleanup;
     }
 
-    if (!GetFileSecurity(winPath,
+    if (!GetFileSecurityW(o3tl::toW(rtl_uString_getStr(pSysPath)),
                          OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION
                              | DACL_SECURITY_INFORMATION,
                          NULL, 0, &length)
         && ERROR_INSUFFICIENT_BUFFER != GetLastError())
     {
+        LPVOID lpMsgBuf;
+        LPVOID lpDisplayBuf;
+        DWORD dw = GetLastError();
+
+        FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
+                          | FORMAT_MESSAGE_IGNORE_INSERTS,
+                      NULL, dw, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0,
+                      NULL);
+        lpDisplayBuf
+            = (LPVOID)LocalAlloc(LMEM_ZEROINIT, (lstrlen((LPCTSTR)lpMsgBuf) + 40) * sizeof(TCHAR));
+        StringCchPrintf((LPTSTR)lpDisplayBuf, LocalSize(lpDisplayBuf) / sizeof(TCHAR),
+                        TEXT("1st GetFileSecurityW failed with error %d: %s"), dw, lpMsgBuf);
+        MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
         goto Cleanup;
     }
 
     security = (PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, length);
-    if (!security || !GetFileSecurity(winPath,
+    if (!security
+        || !GetFileSecurityW(o3tl::toW(rtl_uString_getStr(pSysPath)),
                             OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION
                                 | DACL_SECURITY_INFORMATION,
                          security,
                          length, &length))
     {
+        LPVOID lpMsgBuf;
+        LPVOID lpDisplayBuf;
+        DWORD dw = GetLastError();
+
+        FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
+                          | FORMAT_MESSAGE_IGNORE_INSERTS,
+                      NULL, dw, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0,
+                      NULL);
+        lpDisplayBuf
+            = (LPVOID)LocalAlloc(LMEM_ZEROINIT, (lstrlen((LPCTSTR)lpMsgBuf) + 40) * sizeof(TCHAR));
+        StringCchPrintf((LPTSTR)lpDisplayBuf, LocalSize(lpDisplayBuf) / sizeof(TCHAR),
+                        TEXT("2nd GetFileSecurityW failed with error %d: %s"), dw, lpMsgBuf);
+        MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
         goto Cleanup;
     }
 
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ALL_ACCESS, &hToken))
     {
+        LPVOID lpMsgBuf;
+        LPVOID lpDisplayBuf;
+        DWORD dw = GetLastError();
+
+        FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
+                          | FORMAT_MESSAGE_IGNORE_INSERTS,
+                      NULL, dw, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0,
+                      NULL);
+        lpDisplayBuf
+            = (LPVOID)LocalAlloc(LMEM_ZEROINIT, (lstrlen((LPCTSTR)lpMsgBuf) + 40) * sizeof(TCHAR));
+        StringCchPrintf((LPTSTR)lpDisplayBuf, LocalSize(lpDisplayBuf) / sizeof(TCHAR),
+                        TEXT("OpenProcessToken failed with error %d: %s"), dw, lpMsgBuf);
+        MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
         goto Cleanup;
     }
     
     if (!DuplicateToken( hToken, SecurityImpersonation, &hImpersonatedToken ))
     {
+        LPVOID lpMsgBuf;
+        LPVOID lpDisplayBuf;
+        DWORD dw = GetLastError();
+
+        FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
+                          | FORMAT_MESSAGE_IGNORE_INSERTS,
+                      NULL, dw, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0,
+                      NULL);
+        lpDisplayBuf
+            = (LPVOID)LocalAlloc(LMEM_ZEROINIT, (lstrlen((LPCTSTR)lpMsgBuf) + 40) * sizeof(TCHAR));
+        StringCchPrintf((LPTSTR)lpDisplayBuf, LocalSize(lpDisplayBuf) / sizeof(TCHAR),
+                        TEXT("DuplicateToken failed with error %d: %s"), dw, lpMsgBuf);
+        MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
         goto Cleanup;
     }
 
@@ -738,7 +824,7 @@ bool SAL_CALL osl_HasWritePermissions(rtl_uString* pathName)
                      &grantedAccess, // receives mask of allowed access rights
                      &fAccessGranted)) // receives results of access check
     {
-        /*LPVOID lpMsgBuf;
+        LPVOID lpMsgBuf;
         LPVOID lpDisplayBuf;
         DWORD dw = GetLastError();
 
@@ -750,7 +836,7 @@ bool SAL_CALL osl_HasWritePermissions(rtl_uString* pathName)
             = (LPVOID)LocalAlloc(LMEM_ZEROINIT, (lstrlen((LPCTSTR)lpMsgBuf) + 40) * sizeof(TCHAR));
         StringCchPrintf((LPTSTR)lpDisplayBuf, LocalSize(lpDisplayBuf) / sizeof(TCHAR),
                         TEXT("AccessCheck failed with error %d: %s"), dw, lpMsgBuf);
-        MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);*/
+        MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
         goto Cleanup;
     }
 
@@ -758,12 +844,25 @@ Cleanup:
 
     if (!RevertToSelf())
     {
+        LPVOID lpMsgBuf;
+        LPVOID lpDisplayBuf;
+        DWORD dw = GetLastError();
+
+        FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
+                          | FORMAT_MESSAGE_IGNORE_INSERTS,
+                      NULL, dw, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0,
+                      NULL);
+        lpDisplayBuf
+            = (LPVOID)LocalAlloc(LMEM_ZEROINIT, (lstrlen((LPCTSTR)lpMsgBuf) + 40) * sizeof(TCHAR));
+        StringCchPrintf((LPTSTR)lpDisplayBuf, LocalSize(lpDisplayBuf) / sizeof(TCHAR),
+                        TEXT("RevertToSelf failed with error %d: %s"), dw, lpMsgBuf);
+        MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
         // SHOULD EXIT PROCESS AS PER https://docs.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-reverttoself
         ExitProcess(1);
     }
 
-    if (strPathName)
-        free(strPathName);
+    //if (strPathName)
+   //    free(strPathName);
 
     if (security)
         LocalFree(security);

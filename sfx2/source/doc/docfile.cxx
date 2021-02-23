@@ -41,6 +41,7 @@
 #include <com/sun/star/document/LockFileIgnoreRequest.hpp>
 #include <com/sun/star/document/LockFileCorruptRequest.hpp>
 #include <com/sun/star/document/ChangedByOthersRequest.hpp>
+#include <com/sun/star/document/ReloadEditableRequest.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/UseBackupException.hpp>
@@ -935,21 +936,40 @@ IMPL_LINK(SfxMedium, ShowLockedDocumentDialog2, void*, p, void)
     SfxMedium* pMed = static_cast<SfxMedium*>(p);
     OUString aDocumentURL
         = pMed->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::WithCharset);
-    sal_Int32 nContinuations = 3;
+    sal_Int32 nContinuations = 2;
     ::rtl::Reference<::ucbhelper::InteractionRequest> xInteractionRequestImpl;
 
-    OUString aInfo;
     xInteractionRequestImpl
-        = new ::ucbhelper::InteractionRequest(uno::makeAny(document::LockedDocumentRequest(
-            OUString(), uno::Reference<uno::XInterface>(), aDocumentURL, aInfo)));
+        = new ::ucbhelper::InteractionRequest(uno::makeAny(document::ReloadEditableRequest(
+            OUString(), uno::Reference<uno::XInterface>(), aDocumentURL)));
     uno::Reference<task::XInteractionHandler> xHandler = pMed->GetInteractionHandler();
     uno::Sequence<uno::Reference<task::XInteractionContinuation>> aContinuations(nContinuations);
     aContinuations[0] = new ::ucbhelper::InteractionAbort(xInteractionRequestImpl.get());
     aContinuations[1] = new ::ucbhelper::InteractionApprove(xInteractionRequestImpl.get());
-    aContinuations[2] = new ::ucbhelper::InteractionDisapprove(xInteractionRequestImpl.get());
     xInteractionRequestImpl->setContinuations(aContinuations);
-    if (xHandler.is())
-        xHandler->handle(xInteractionRequestImpl);
+    if (!xHandler.is())
+        return;
+
+    xHandler->handle(xInteractionRequestImpl);
+
+    ::rtl::Reference<::ucbhelper::InteractionContinuation> xSelected
+        = xInteractionRequestImpl->getSelection();
+    if (uno::Reference<task::XInteractionAbort>(xSelected.get(), uno::UNO_QUERY).is())
+    {
+        SetError(ERRCODE_ABORT);
+    }
+    else
+    {
+        for (SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame;
+             pFrame = SfxViewFrame::GetNext(*pFrame))
+        {
+            if (pFrame->GetObjectShell()->GetMedium() == pMed)
+            {
+                pFrame->GetDispatcher()->Execute(SID_EDITDOC);
+                break;
+            }
+        }
+    }
 
     // SfxApplication* pSfxApp = SfxApplication::Get();
     //SfxObjectShell sh;

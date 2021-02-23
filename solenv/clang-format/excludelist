@@ -14348,6 +14348,7 @@ uui/source/passwordcontainer.cxx
 uui/source/passwordcontainer.hxx
 uui/source/passworddlg.cxx
 uui/source/passworddlg.hxx
+uui/source/reloadeditable.cxx
 uui/source/requeststringresolver.cxx
 uui/source/requeststringresolver.hxx
 uui/source/secmacrowarnings.cxx
