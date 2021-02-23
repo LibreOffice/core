@@ -631,20 +631,18 @@ uno::Reference< accessibility::XAccessibleRelationSet > VCLXAccessibleComponent:
 {
     OExternalLockGuard aGuard( this );
 
-    utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
-    uno::Reference< accessibility::XAccessibleRelationSet > xSet = pRelationSetHelper;
+    rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSetHelper = new utl::AccessibleRelationSetHelper;
     FillAccessibleRelationSet( *pRelationSetHelper );
-    return xSet;
+    return pRelationSetHelper;
 }
 
 uno::Reference< accessibility::XAccessibleStateSet > VCLXAccessibleComponent::getAccessibleStateSet(  )
 {
     OExternalLockGuard aGuard( this );
 
-    utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
-    uno::Reference< accessibility::XAccessibleStateSet > xSet = pStateSetHelper;
+    rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
     FillAccessibleStateSet( *pStateSetHelper );
-    return xSet;
+    return pStateSetHelper;
 }
 
 lang::Locale VCLXAccessibleComponent::getLocale()
@@ -790,7 +788,7 @@ uno::Reference< awt::XFont > SAL_CALL VCLXAccessibleComponent::getFont(  )
                 aFont = pWindow->GetControlFont();
             else
                 aFont = pWindow->GetFont();
-            VCLXFont* pVCLXFont = new VCLXFont;
+            rtl::Reference<VCLXFont> pVCLXFont = new VCLXFont;
             pVCLXFont->Init( *xDev, aFont );
             xFont = pVCLXFont;
         }

@@ -1021,8 +1021,7 @@ css::uno::Reference< css::awt::XDevice > VCLXToolkit::createScreenCompatibleDevi
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    css::uno::Reference< css::awt::XDevice > xRef;
-    VCLXVirtualDevice* pVDev = new VCLXVirtualDevice;
+    rtl::Reference<VCLXVirtualDevice> pVDev = new VCLXVirtualDevice;
 
     SolarMutexGuard aSolarGuard;
 
@@ -1030,8 +1029,7 @@ css::uno::Reference< css::awt::XDevice > VCLXToolkit::createScreenCompatibleDevi
     pV->SetOutputSizePixel( Size( Width, Height ) );
     pVDev->SetVirtualDevice( pV );
 
-    xRef = pVDev;
-    return xRef;
+    return pVDev;
 }
 
 css::uno::Reference< css::awt::XRegion > VCLXToolkit::createRegion(  )
@@ -1804,7 +1802,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
                 }
                 else if (aServiceName == "tree")
                 {
-                    TreeControlPeer* pPeer = new TreeControlPeer;
+                    rtl::Reference<TreeControlPeer> pPeer = new TreeControlPeer;
                     *ppNewComp = pPeer;
                     pNewWindow = pPeer->createVclControl( pParent, nWinBits );
                 }
@@ -1829,7 +1827,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
                     static_cast<CalendarField*>(pNewWindow.get())->EnableToday();
                     static_cast<CalendarField*>(pNewWindow.get())->EnableNone();
                     static_cast<CalendarField*>(pNewWindow.get())->EnableEmptyFieldValue( true );
-                    SVTXDateField * newComp = new SVTXDateField;
+                    rtl::Reference<SVTXDateField> newComp = new SVTXDateField;
                     *ppNewComp = newComp;
                     newComp->SetFormatter( static_cast<FormatterBase*>(static_cast<DateField*>(pNewWindow.get())) );
                 }
@@ -2045,7 +2043,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( con
     css::uno::Reference< css::awt::XWindowPeer > xPeer;
     if ( pChildWindow )
     {
-        VCLXTopWindow* pPeer = new VCLXTopWindow;
+        rtl::Reference<VCLXTopWindow> pPeer = new VCLXTopWindow;
         SolarMutexGuard aGuard;
         pPeer->SetWindow( pChildWindow );
         xPeer = pPeer;

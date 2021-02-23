@@ -7275,7 +7275,7 @@ void SVTXFormattedField::setFormatsSupplier(const css::uno::Reference< css::util
 {
     VclPtr<FormattedField> pField = GetAs< FormattedField >();
 
-    SvNumberFormatsSupplierObj* pNew = nullptr;
+    rtl::Reference<SvNumberFormatsSupplierObj> pNew;
     if (!xSupplier.is())
     {
         if (pField)

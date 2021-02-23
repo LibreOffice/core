@@ -187,13 +187,12 @@ tools::Polygon VCLUnoHelper::CreatePolygon( const css::uno::Sequence< sal_Int32 
 
 css::uno::Reference< css::awt::XControlContainer> VCLUnoHelper::CreateControlContainer( vcl::Window* pWindow )
 {
-    UnoControlContainer* pContainer = new UnoControlContainer( pWindow->GetComponentInterface() );
-    css::uno::Reference< css::awt::XControlContainer > x = pContainer;
+    rtl::Reference<UnoControlContainer> pContainer = new UnoControlContainer( pWindow->GetComponentInterface() );
 
-    UnoControlModel* pContainerModel = new UnoControlContainerModel( ::comphelper::getProcessComponentContext() );
-    pContainer->setModel( static_cast<css::awt::XControlModel*>(pContainerModel) );
+    rtl::Reference<UnoControlModel> pContainerModel = new UnoControlContainerModel( ::comphelper::getProcessComponentContext() );
+    pContainer->setModel( pContainerModel );
 
-    return x;
+    return pContainer;
 }
 
 css::awt::FontDescriptor VCLUnoHelper::CreateFontDescriptor( const vcl::Font& rFont )
