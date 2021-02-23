@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f09b6938_5d143a1a",
+        "filename": "basic/qa/basic_coverage/test_typename_method.vb",
+        "patchSetId": 14
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-02-23T19:42:23Z",
+      "side": 1,
+      "message": "Is this a typo?",
+      "range": {
+        "startLine": 30,
+        "startChar": 2,
+        "endLine": 30,
+        "endChar": 79
+      },
+      "revId": "298e36e5e3b0c34bade87ff47c45b800c46e3f2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
