@@ -241,6 +241,8 @@ public:
     virtual sdr::contact::ObjectContact* createViewSpecificObjectContact(
         SdrPageWindow& rPageWindow,
         const char* pDebugName) const;
+
+    bool MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint);
 };
 
 // First of all the app creates a SdrModel.
