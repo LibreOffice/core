@@ -37,7 +37,6 @@
 #include <o3tl/safeint.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/image.hxx>
-#include <vcl/floatwin.hxx>
 #include <vcl/weldutils.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
