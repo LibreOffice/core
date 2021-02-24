@@ -24,4 +24,19 @@ class Forms(UITestCase):
         self.assertEqual("Yes", get_state_as_dict(xChild)['SelectEntryText'])
 
         self.ui_test.close_doc()
+
+    def test_tdf140198(self):
+
+        self.ui_test.load_file(get_url_for_data_file("tdf140198.odt"))
+
+        self.xUITest.executeCommand(".uno:JumpToNextFrame")
+
+        self.ui_test.execute_modeless_dialog_through_command(".uno:ControlProperties")
+        xChild = self.ui_test.wait_until_child_is_available('listbox-Text type')
+
+        # Without the fix in place, this test would have failed with
+        # AssertionError: 'Multi-line' != 'Single-line'
+        self.assertEqual("Multi-line", get_state_as_dict(xChild)['SelectEntryText'])
+
+        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
