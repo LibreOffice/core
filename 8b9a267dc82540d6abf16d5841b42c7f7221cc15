@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b38337c_9a7a3133",
+        "filename": "basic/qa/basic_coverage/test_typelen_method.vb",
+        "patchSetId": 16
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-24T10:45:30Z",
+      "side": 1,
+      "message": "Sigh, a trailing whitespace again. Please take some time to review what you plan to submit; gerrit warns you about trailing whitespaces with these reddish highlightings.",
+      "revId": "8b9a267dc82540d6abf16d5841b42c7f7221cc15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75a510eb_f2c59a50",
+        "filename": "basic/qa/basic_coverage/test_vartype_method.vb",
+        "patchSetId": 16
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-24T10:45:30Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "8b9a267dc82540d6abf16d5841b42c7f7221cc15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
