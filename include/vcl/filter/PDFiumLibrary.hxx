@@ -49,23 +49,16 @@ class PDFiumBitmap;
 class PDFiumDocument;
 class PDFiumPageObject;
 
-class VCL_DLLPUBLIC PDFium final
+class VCL_DLLPUBLIC PDFium
 {
-private:
-    PDFium(const PDFium&) = delete;
-    PDFium& operator=(const PDFium&) = delete;
-
-    OUString maLastError;
-
 public:
-    PDFium();
-    ~PDFium();
+    virtual ~PDFium() = default;
 
-    const OUString& getLastError() const { return maLastError; }
+    virtual const OUString& getLastError() const = 0;
 
-    std::unique_ptr<PDFiumDocument> openDocument(const void* pData, int nSize);
-    static PDFErrorType getLastErrorCode();
-    std::unique_ptr<PDFiumBitmap> createBitmap(int nWidth, int nHeight, int nAlpha);
+    virtual std::unique_ptr<PDFiumDocument> openDocument(const void* pData, int nSize) = 0;
+    virtual PDFErrorType getLastErrorCode() = 0;
+    virtual std::unique_ptr<PDFiumBitmap> createBitmap(int nWidth, int nHeight, int nAlpha) = 0;
 };
 
 class PDFiumPage;

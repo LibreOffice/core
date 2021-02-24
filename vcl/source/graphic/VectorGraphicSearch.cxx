@@ -233,7 +233,7 @@ bool VectorGraphicSearch::searchPDF(std::shared_ptr<VectorGraphicData> const& rD
     if (!mpImplementation->mpPdfDocument)
     {
         //TODO: Handle failure to load.
-        switch (vcl::pdf::PDFium::getLastErrorCode())
+        switch (mpImplementation->mpPDFium->getLastErrorCode())
         {
             case vcl::pdf::PDFErrorType::Success:
                 break;
