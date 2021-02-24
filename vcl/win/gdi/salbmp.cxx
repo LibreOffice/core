@@ -237,14 +237,14 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
 {
     Gdiplus::Bitmap* pRetval(nullptr);
     WinSalBitmap* pSalRGB = this;
-    WinSalBitmap* pExtraWinSalRGB = nullptr;
+    std::unique_ptr<WinSalBitmap> pExtraWinSalRGB;
 
     if(!pSalRGB->ImplGethDIB())
     {
         // we need DIB for success with AcquireBuffer, create a replacement WinSalBitmap
-        pExtraWinSalRGB = new WinSalBitmap();
+        pExtraWinSalRGB.reset(new WinSalBitmap());
         pExtraWinSalRGB->Create(*pSalRGB, pSalRGB->GetBitCount());
-        pSalRGB = pExtraWinSalRGB;
+        pSalRGB = pExtraWinSalRGB.get();
     }
 
     BitmapBuffer* pRGB = pSalRGB->AcquireBuffer(BitmapAccessMode::Read);
@@ -313,11 +313,6 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
         pSalRGB->ReleaseBuffer(pRGB, BitmapAccessMode::Read);
     }
 
-    if(pExtraWinSalRGB)
-    {
-        delete pExtraWinSalRGB;
-    }
-
     return pRetval;
 }
 
@@ -325,14 +320,14 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
 {
     Gdiplus::Bitmap* pRetval(nullptr);
     WinSalBitmap* pSalRGB = this;
-    WinSalBitmap* pExtraWinSalRGB = nullptr;
+    std::unique_ptr<WinSalBitmap> pExtraWinSalRGB;
 
     if(!pSalRGB->ImplGethDIB())
     {
         // we need DIB for success with AcquireBuffer, create a replacement WinSalBitmap
-        pExtraWinSalRGB = new WinSalBitmap();
+        pExtraWinSalRGB.reset(new WinSalBitmap());
         pExtraWinSalRGB->Create(*pSalRGB, pSalRGB->GetBitCount());
-        pSalRGB = pExtraWinSalRGB;
+        pSalRGB = pExtraWinSalRGB.get();
     }
 
     BitmapBuffer* pRGB = pSalRGB->AcquireBuffer(BitmapAccessMode::Read);
@@ -352,14 +347,14 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
     }
 
     WinSalBitmap* pSalA = const_cast< WinSalBitmap* >(&rAlphaSource);
-    WinSalBitmap* pExtraWinSalA = nullptr;
+    std::unique_ptr<WinSalBitmap> pExtraWinSalA;
 
     if(!pSalA->ImplGethDIB())
     {
         // we need DIB for success with AcquireBuffer, create a replacement WinSalBitmap
-        pExtraWinSalA = new WinSalBitmap();
+        pExtraWinSalA.reset(new WinSalBitmap());
         pExtraWinSalA->Create(*pSalA, pSalA->GetBitCount());
-        pSalA = pExtraWinSalA;
+        pSalA = pExtraWinSalA.get();
     }
 
     BitmapBuffer* pA = pSalA->AcquireBuffer(BitmapAccessMode::Read);
@@ -447,10 +442,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
         pSalA->ReleaseBuffer(pA, BitmapAccessMode::Read);
     }
 
-    if(pExtraWinSalA)
-    {
-        delete pExtraWinSalA;
-    }
+    pExtraWinSalA.reset();
 
     if(pExtraRGB)
     {
@@ -464,10 +456,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
         pSalRGB->ReleaseBuffer(pRGB, BitmapAccessMode::Read);
     }
 
-    if(pExtraWinSalRGB)
-    {
-        delete pExtraWinSalRGB;
-    }
+    pExtraWinSalRGB.reset();
 
     return pRetval;
 }
