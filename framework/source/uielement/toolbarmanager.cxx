@@ -64,6 +64,7 @@
 #include <svtools/imgdef.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/floatwin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/taskpanelist.hxx>

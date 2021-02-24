@@ -44,6 +44,7 @@
 #include <svl/itemset.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/stritem.hxx>
+#include <vcl/floatwin.hxx>
 #include <vcl/transfer.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svl/whiter.hxx>
