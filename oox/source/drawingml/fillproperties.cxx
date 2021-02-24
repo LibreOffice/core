@@ -778,10 +778,14 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                             rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
 
                             if(bIsCustomShape &&
-                               ( aGraphCrop.Left != 0 || aGraphCrop.Right != 0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0))
+                               ( aGraphCrop.Left != 0 || aGraphCrop.Right !=0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0) &&
+                               ( aGraphCrop.Left >= 0 && aGraphCrop.Right >= 0 && aGraphCrop.Top >= 0 && aGraphCrop.Bottom >= 0))
                             {
                                 xGraphic = lclCropGraphic(xGraphic, aFillRect);
-                                rPropMap.setProperty(ShapeProperty::FillBitmap, xGraphic);
+                                if (rPropMap.supportsProperty(ShapeProperty::FillBitmapName))
+                                    rPropMap.setProperty(ShapeProperty::FillBitmapName, xGraphic);
+                                else
+                                    rPropMap.setProperty(ShapeProperty::FillBitmap, xGraphic);
                             }
                         }
                     }
@@ -886,13 +890,12 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
                 rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
 
                 if(mbIsCustomShape &&
-                   ( aGraphCrop.Left != 0 || aGraphCrop.Right != 0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0))
+                   (aGraphCrop.Left != 0 || aGraphCrop.Right !=0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0) &&
+                   (aGraphCrop.Left >= 0 && aGraphCrop.Right >= 0 && aGraphCrop.Top >= 0 && aGraphCrop.Bottom >= 0))
                 {
                     geometry::IntegerRectangle2D aCropRect = oClipRect;
                     lclCalculateCropPercentage(xGraphic, aCropRect);
                     xGraphic = lclCropGraphic(xGraphic, aCropRect);
-
-                    rPropMap.setProperty(PROP_FillBitmap, xGraphic);
                 }
             }
         }
