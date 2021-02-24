@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00b1a61a_7bab875f",
+        "filename": "vcl/source/font/font.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-24T09:25:08Z",
+      "side": 1,
+      "message": "Is passing size as start index to GetTextWidth intentional here?",
+      "revId": "3d33e4ce3987ea17e73a72e84f7f0df7af8101a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
