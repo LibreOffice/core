@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7b307c1d_78d927e5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2021-02-24T15:39:05Z",
+      "side": 1,
+      "message": "I shall not publish any help update that may not obtain a consensus. My assumption is that gerrit review mechanism is garanteeing such a consensus.\nPlease advise if help intended updates should follow another process that\u0027s available somewhere (wiki or else) …\n\nThx for all your requests for improvements always appreciated …",
+      "parentUuid": "31948ccc_f5520069",
+      "revId": "8b9a267dc82540d6abf16d5841b42c7f7221cc15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4b38337c_9a7a3133",
         "filename": "basic/qa/basic_coverage/test_typelen_method.vb",
         "patchSetId": 16
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "eb851a2e_4d7d68de",
+        "filename": "basic/qa/basic_coverage/test_typelen_method.vb",
+        "patchSetId": 16
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2021-02-24T15:39:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b38337c_9a7a3133",
+      "revId": "8b9a267dc82540d6abf16d5841b42c7f7221cc15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75a510eb_f2c59a50",
         "filename": "basic/qa/basic_coverage/test_vartype_method.vb",
         "patchSetId": 16
@@ -50,6 +86,24 @@
       "revId": "8b9a267dc82540d6abf16d5841b42c7f7221cc15",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69f24b4a_488e9819",
+        "filename": "basic/qa/basic_coverage/test_vartype_method.vb",
+        "patchSetId": 16
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2021-02-24T15:39:05Z",
+      "side": 1,
+      "message": "corrected",
+      "parentUuid": "75a510eb_f2c59a50",
+      "revId": "8b9a267dc82540d6abf16d5841b42c7f7221cc15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

@@ -22,6 +22,30 @@
       "revId": "298e36e5e3b0c34bade87ff47c45b800c46e3f2f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e09c33c7_4628492e",
+        "filename": "basic/qa/basic_coverage/test_typename_method.vb",
+        "patchSetId": 14
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2021-02-24T15:39:05Z",
+      "side": 1,
+      "message": "No, but it\u0027s misleading. Changed as fl(oa)t64",
+      "parentUuid": "f09b6938_5d143a1a",
+      "range": {
+        "startLine": 30,
+        "startChar": 2,
+        "endLine": 30,
+        "endChar": 79
+      },
+      "revId": "298e36e5e3b0c34bade87ff47c45b800c46e3f2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
