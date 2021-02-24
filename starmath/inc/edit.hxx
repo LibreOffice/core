@@ -88,6 +88,7 @@ class SmEditWindow final : public vcl::Window, public DropTargetHelper
     void InitScrollBars();
     void InvalidateSlots();
     void UpdateStatus(bool bSetDocModified);
+    void UserPossiblyChangedText();
 
 public:
     explicit SmEditWindow(SmCmdBoxWindow& rMyCmdBoxWin);
