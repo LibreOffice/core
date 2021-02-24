@@ -37,7 +37,6 @@
 
 #include <rtl/instance.hxx>
 #include <vcl/TypeSerializer.hxx>
-#include <vcl/svapp.hxx>
 
 #ifdef _WIN32
 #include <vcl/metric.hxx>
