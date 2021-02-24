@@ -5045,7 +5045,7 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
     {
         bDef = false;
 
-        ExtTextInputAttr* pSalAttrAry = nullptr;
+        std::unique_ptr<ExtTextInputAttr[]> pSalAttrAry;
         LONG    nTextLen = ImmGetCompositionStringW( hIMC, GCS_COMPSTR, nullptr, 0 ) / sizeof( WCHAR );
         if ( nTextLen > 0 )
         {
@@ -5066,8 +5066,8 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
             if ( pAttrBuf )
             {
                 sal_Int32 nTextLen2 = aEvt.maText.getLength();
-                pSalAttrAry = new ExtTextInputAttr[nTextLen2];
-                memset( pSalAttrAry, 0, nTextLen2*sizeof( sal_uInt16 ) );
+                pSalAttrAry.reset(new ExtTextInputAttr[nTextLen2]);
+                memset( pSalAttrAry.get(), 0, nTextLen2*sizeof( sal_uInt16 ) );
                 for( sal_Int32 i = 0; (i < nTextLen2) && (i < nAttrLen); i++ )
                 {
                     BYTE nWinAttr = pAttrBuf.get()[i];
@@ -5088,7 +5088,7 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
                     pSalAttrAry[i] = nSalAttr;
                 }
 
-                aEvt.mpTextAttr = pSalAttrAry;
+                aEvt.mpTextAttr = pSalAttrAry.get();
             }
         }
 
@@ -5123,9 +5123,6 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
             }
             ImplUpdateIMECursorPos( pFrame, hIMC );
         }
-
-        if ( pSalAttrAry )
-            delete [] pSalAttrAry;
     }
 
     return !bDef;
