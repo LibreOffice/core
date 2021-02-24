@@ -728,6 +728,10 @@ void Converter::convertAngle(OUStringBuffer& rBuffer, sal_Int16 const nAngle,
 bool Converter::convertAngle(sal_Int16& rAngle, std::u16string_view rString,
         bool const isWrongOOo10thDegAngle)
 {
+    const std::u16string_view deg = u"deg";
+    const std::u16string_view grad = u"grad";
+    const std::u16string_view rad = u"rad";
+
     // ODF 1.1 leaves it undefined what the number means, but ODF 1.2 says it's
     // degrees, while OOo has historically used 10th of degrees :(
     // So import degrees when we see the "deg" suffix but continue with 10th of
@@ -737,15 +741,15 @@ bool Converter::convertAngle(sal_Int16& rAngle, std::u16string_view rString,
     sal_Int32 nValue(0);
     double fValue(0.0);
     bool bRet = ::sax::Converter::convertDouble(fValue, rString);
-    if (std::u16string_view::npos != rString.find(u"deg"))
+    if (std::u16string_view::npos != rString.find(deg))
     {
         nValue = fValue * 10.0;
     }
-    else if (std::u16string_view::npos != rString.find(u"grad"))
+    else if (std::u16string_view::npos != rString.find(grad))
     {
         nValue = (fValue * 9.0 / 10.0) * 10.0;
     }
-    else if (std::u16string_view::npos != rString.find(u"rad"))
+    else if (std::u16string_view::npos != rString.find(rad))
     {
         nValue = basegfx::rad2deg(fValue) * 10.0;
     }
