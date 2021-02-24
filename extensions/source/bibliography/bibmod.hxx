@@ -21,6 +21,7 @@
 #define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBMOD_HXX
 
 #include <locale>
+#include <rtl/ref.hxx>
 
 class BibDataManager;
 class BibConfig;
@@ -38,7 +39,7 @@ class BibModul
         const std::locale&      GetResLocale() const { return m_aResLocale; }
         static BibConfig*       GetConfig();
 
-        static BibDataManager*  createDataManager();
+        static rtl::Reference<BibDataManager>  createDataManager();
 
 };
 

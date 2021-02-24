@@ -208,7 +208,7 @@ ResultSetFactory::ResultSetFactory(const Reference<XComponentContext >&  rxConte
 }
 
 
-ResultSetBase* ResultSetFactory::createResultSet()
+rtl::Reference<ResultSetBase> ResultSetFactory::createResultSet()
 {
     return new ResultSetI(m_xContext,
                           m_xProvider,

@@ -21,6 +21,7 @@
 #define INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_RESULTSETFACTORY_HXX
 
 #include "resultsetbase.hxx"
+#include <rtl/ref.hxx>
 
 namespace chelp {
 
@@ -32,7 +33,7 @@ namespace chelp {
 
         virtual ~ResultSetFactory() { };
 
-        virtual ResultSetBase* createResultSet() = 0;
+        virtual rtl::Reference<ResultSetBase> createResultSet() = 0;
     };
 
 

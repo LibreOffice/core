@@ -140,7 +140,7 @@ ContentProperties::getCreatableContentsInfo( PackageUri const & rUri ) const
 
 
 // static ( "virtual" ctor )
-Content* Content::create(
+rtl::Reference<Content> Content::create(
             const uno::Reference< uno::XComponentContext >& rxContext,
             ContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier )
@@ -192,7 +192,7 @@ Content* Content::create(
 
 
 // static ( "virtual" ctor )
-Content* Content::create(
+rtl::Reference<Content> Content::create(
             const uno::Reference< uno::XComponentContext >& rxContext,
             ContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier,

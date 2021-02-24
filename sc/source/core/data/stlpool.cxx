@@ -107,7 +107,7 @@ rtl::Reference<SfxStyleSheetBase> ScStyleSheetPool::Create( const OUString&   rN
     return pSheet;
 }
 
-SfxStyleSheetBase* ScStyleSheetPool::Create( const SfxStyleSheetBase& rStyle )
+rtl::Reference<SfxStyleSheetBase> ScStyleSheetPool::Create( const SfxStyleSheetBase& rStyle )
 {
     OSL_ENSURE( rStyle.isScStyleSheet(), "Invalid StyleSheet-class! :-/" );
     return new ScStyleSheet( static_cast<const ScStyleSheet&>(rStyle) );

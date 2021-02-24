@@ -69,7 +69,7 @@ enum ParaFrameMode
 struct SwXParaFrameEnumeration
     : public SwSimpleEnumeration_Base
 {
-    static SwXParaFrameEnumeration* Create(const SwPaM& rPaM, const enum ParaFrameMode eParaFrameMode, SwFrameFormat* const pFormat = nullptr);
+    static rtl::Reference<SwXParaFrameEnumeration> Create(const SwPaM& rPaM, const enum ParaFrameMode eParaFrameMode, SwFrameFormat* const pFormat = nullptr);
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNOPARAFRAMEENUM_HXX
