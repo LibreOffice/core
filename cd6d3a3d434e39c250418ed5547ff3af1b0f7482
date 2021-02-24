@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7862c90a_01818bc1",
+        "filename": "sfx2/source/dialog/backingwindow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-02-24T15:58:46Z",
+      "side": 0,
+      "message": "Dropping this line is IMO a bad idea as the two buttons of \"recentlyused\" and \"templates\" are basically radiobuttons that control what is shown in the main panel of the startcenter so one or the other is always active/depressed to show which category is being shown.\n\nWhat about removing that mxOpenButton-\u003egrab_focus() as done in the first hunk, but here after this set_active add \"mxRecentButton-\u003egrab_focus()\" so the recently-used button starts off by default both depressed and with the keyboard focus ?",
+      "revId": "cd6d3a3d434e39c250418ed5547ff3af1b0f7482",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
