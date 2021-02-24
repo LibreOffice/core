@@ -4207,7 +4207,10 @@ void ScViewData::OverrideWithLOKFreeze(ScSplitMode& eExHSplitMode, ScSplitMode& 
             eExHSplitMode = SC_SPLIT_FIX;
 
         if (eExHSplitMode == SC_SPLIT_FIX)
+        {
             nExFixPosX = nFreezeCol;
+            pThisTab->nPosX[SC_SPLIT_RIGHT] = nFreezeCol;
+        }
         else
             bConvertToScrPosX = true;
     }
@@ -4218,7 +4221,10 @@ void ScViewData::OverrideWithLOKFreeze(ScSplitMode& eExHSplitMode, ScSplitMode& 
             eExVSplitMode = SC_SPLIT_FIX;
 
         if (eExVSplitMode == SC_SPLIT_FIX)
+        {
             nExFixPosY = nFreezeRow;
+            pThisTab->nPosY[SC_SPLIT_BOTTOM] = nFreezeRow;
+        }
         else
             bConvertToScrPosY = true;
     }
