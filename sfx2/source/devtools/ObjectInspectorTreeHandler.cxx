@@ -159,6 +159,12 @@ OUString AnyToString(const uno::Any& aValue, const uno::Reference<uno::XComponen
             aRetStr = OUString::number(aNumber);
             break;
         }
+        case uno::TypeClass_TYPE:
+        {
+            auto aType = aValue.get<uno::Type>();
+            aRetStr = aType.getTypeName();
+            break;
+        }
         case uno::TypeClass_ENUM:
         {
             sal_Int32 nIntValue = 0;
