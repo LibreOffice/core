@@ -18,6 +18,7 @@
  */
 
 #include <vcl/dockwin.hxx>
+#include <vcl/floatwin.hxx>
 #include <vcl/taskpanelist.hxx>
 
 #include <svdata.hxx>

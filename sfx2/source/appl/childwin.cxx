@@ -29,6 +29,7 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 
+#include <vcl/floatwin.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/app.hxx>
