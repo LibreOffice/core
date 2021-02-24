@@ -21,7 +21,6 @@
 #include <vcl/accel.hxx>
 #include <vcl/event.hxx>
 #include <vcl/help.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -351,11 +350,7 @@ void BackingWindow::ApplyStyleSettings()
     // compute the menubar height
     sal_Int32 nMenuHeight = 0;
     if (SystemWindow* pSystemWindow = GetSystemWindow())
-    {
-        MenuBar* pMenuBar = pSystemWindow->GetMenuBar();
-        if (pMenuBar)
-            nMenuHeight = pMenuBar->GetMenuBarHeight();
-    }
+        nMenuHeight = pSystemWindow->GetMenuBarHeight();
 
     // fdo#34392: we do the layout dynamically, the layout depends on the font,
     // so we should handle data changed events (font changing) of the last child

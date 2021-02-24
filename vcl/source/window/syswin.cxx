@@ -1211,4 +1211,11 @@ void SystemWindow::CollectMenuBarMnemonics(MnemonicGenerator& rMnemonicGenerator
     }
 }
 
+int SystemWindow::GetMenuBarHeight() const
+{
+    if (MenuBar* pMenuBar = GetMenuBar())
+        return pMenuBar->GetMenuBarHeight();
+    return 0;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
