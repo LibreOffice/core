@@ -249,8 +249,10 @@ static void lcl_InvalidateLowerObjs( SwLayoutFrame& _rLayoutFrame,
         }
         if ( pLowerFrame->GetDrawObjs() )
         {
-            for (SwAnchoredObject* pAnchoredObj : *pLowerFrame->GetDrawObjs())
+            for (size_t i = 0, nCount = pLowerFrame->GetDrawObjs()->size(); i < nCount; ++i)
             {
+                SwAnchoredObject* pAnchoredObj = (*pLowerFrame->GetDrawObjs())[i];
+
                 // invalidate position of anchored object
                 pAnchoredObj->SetTmpConsiderWrapInfluence( false );
                 pAnchoredObj->SetConsiderForTextWrap( false );
