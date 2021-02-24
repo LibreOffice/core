@@ -18,6 +18,8 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 
+#include <vcl/floatwin.hxx>
+
 #include "SelectionChangeHandler.hxx"
 
 using namespace css;

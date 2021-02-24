@@ -27,6 +27,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/floatwin.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/menu.hxx>

@@ -38,6 +38,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/i18nhelp.hxx>
+#include <vcl/floatwin.hxx>
 #include <vcl/dockingarea.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

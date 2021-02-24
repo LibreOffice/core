@@ -40,6 +40,7 @@
 #include <toolkit/helper/property.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
+#include <vcl/floatwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <tools/color.hxx>
