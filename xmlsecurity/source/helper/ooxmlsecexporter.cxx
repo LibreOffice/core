@@ -201,15 +201,19 @@ void OOXMLSecExporter::Impl::writeKeyInfo()
 {
     m_xDocumentHandler->startElement(
         "KeyInfo", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
-    assert(!m_rInformation.X509Datas.empty());
-    for (auto const& it : m_rInformation.X509Datas)
+    assert(m_rInformation.GetSigningCertificate());
+    for (auto const& rData : m_rInformation.X509Datas)
     {
         m_xDocumentHandler->startElement(
             "X509Data", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
-        m_xDocumentHandler->startElement(
-            "X509Certificate", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
-        m_xDocumentHandler->characters(it.X509Certificate);
-        m_xDocumentHandler->endElement("X509Certificate");
+        for (auto const& it : rData)
+        {
+            m_xDocumentHandler->startElement(
+                "X509Certificate",
+                uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+            m_xDocumentHandler->characters(it.X509Certificate);
+            m_xDocumentHandler->endElement("X509Certificate");
+        }
         m_xDocumentHandler->endElement("X509Data");
     }
     m_xDocumentHandler->endElement("KeyInfo");
