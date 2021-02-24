@@ -34,9 +34,13 @@ using namespace ::cppu;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 
+// We run unit tests in parallel, which is a problem when touching a shared resource
+// the system clipboard, so rather use the dummy GenericClipboard.
+static const bool bRunningUnitTest = getenv("LO_TESTNAME");
+
 uno::Reference< XInterface > AquaSalInstance::CreateClipboard( const Sequence< Any >& i_rArguments )
 {
-    if ( Application::IsHeadlessModeEnabled() )
+    if ( Application::IsHeadlessModeEnabled() || bRunningUnitTest )
         return SalInstance::CreateClipboard( i_rArguments );
 
     SalData* pSalData = GetSalData();
@@ -47,7 +51,7 @@ uno::Reference< XInterface > AquaSalInstance::CreateClipboard( const Sequence< A
 
 uno::Reference<XInterface> AquaSalInstance::CreateDragSource()
 {
-    if ( Application::IsHeadlessModeEnabled() )
+    if ( Application::IsHeadlessModeEnabled() || bRunningUnitTest )
         return SalInstance::CreateDragSource();
 
     return uno::Reference<XInterface>(static_cast< XInitialization* >(new DragSource()), UNO_QUERY);
@@ -55,7 +59,7 @@ uno::Reference<XInterface> AquaSalInstance::CreateDragSource()
 
 uno::Reference<XInterface> AquaSalInstance::CreateDropTarget()
 {
-    if ( Application::IsHeadlessModeEnabled() )
+    if ( Application::IsHeadlessModeEnabled() || bRunningUnitTest )
         return SalInstance::CreateDropTarget();
 
     return uno::Reference<XInterface>(static_cast< XInitialization* >(new DropTarget()), UNO_QUERY);
