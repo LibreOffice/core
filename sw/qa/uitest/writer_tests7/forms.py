@@ -6,6 +6,7 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import change_measurement_unit
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class Forms(UITestCase):
@@ -89,6 +90,52 @@ class Forms(UITestCase):
         # Without the fix in place, this test would have failed with
         # AssertionError: '12345' != '54321'
         self.assertEqual("12345", get_state_as_dict(xChild)['Text'])
+
+        self.ui_test.close_doc()
+
+    def test_tdf139486(self):
+
+        # Reuse file from another test
+        self.ui_test.load_file(get_url_for_data_file("tdf140198.odt"))
+
+        change_measurement_unit(self, "Centimeter")
+
+        self.xUITest.executeCommand(".uno:JumpToNextFrame")
+
+        document = self.ui_test.get_component()
+        drawPage = document.getDrawPages().getByIndex(0)
+        shape = drawPage.getByIndex(0)
+        self.assertEqual(13996, shape.getSize().Width)
+        self.assertEqual(2408, shape.getSize().Height)
+
+        self.ui_test.execute_modeless_dialog_through_command(".uno:ControlProperties")
+        xWidth = self.ui_test.wait_until_child_is_available('numericfield-Width')
+        xHeight = self.ui_test.wait_until_child_is_available('numericfield-Height')
+
+        self.assertEqual("14.00 cm", get_state_as_dict(xWidth)['Text'])
+        self.assertEqual("2.41 cm", get_state_as_dict(xHeight)['Text'])
+
+        xWidth.executeAction("FOCUS", tuple())
+        xWidth.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xWidth.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xWidth.executeAction("TYPE", mkPropertyValues({"TEXT":"20 cm"}))
+
+        self.assertEqual("20 cm", get_state_as_dict(xWidth)['Text'])
+
+        xHeight.executeAction("FOCUS", tuple())
+        xHeight.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xHeight.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xHeight.executeAction("TYPE", mkPropertyValues({"TEXT":"5 cm"}))
+
+        self.assertEqual("5 cm", get_state_as_dict(xHeight)['Text'])
+
+        # Move the focus to another element so the changes done before take effect on the document
+        xDialog = self.xUITest.getTopFocusWindow()
+        xDialog.getChild('numericfield-PositionY').executeAction("FOCUS", tuple())
+
+        # Without the fix in place, the size of the form wouldn't have changed
+        self.assertEqual(20001, shape.getSize().Width)
+        self.assertEqual(5001, shape.getSize().Height)
 
         self.ui_test.close_doc()
 
