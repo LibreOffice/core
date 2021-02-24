@@ -688,7 +688,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
 
     tools::Rectangle aSelection(rRect);
     bool bIsChart = false;
-
+    Point addLogicOffset = Point(0,0);
     if (!rRect.IsEmpty())
     {
         sal_uInt32 nTotalPaintWindows = this->PaintWindowCount();
@@ -703,6 +703,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                 {
                     Point aOffsetPx = pWin->GetOffsetPixelFrom(*pViewShellWindow);
                     Point aLogicOffset = pWin->PixelToLogic(aOffsetPx);
+                    addLogicOffset = aLogicOffset;
                     aSelection.Move(aLogicOffset.getX(), aLogicOffset.getY());
                 }
             }
@@ -857,8 +858,6 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                                                 }
                                                 sPolygonElem += R"elem(\" style=\"stroke: none; fill: rgb(114,159,207); fill-opacity: 0.8\"/>)elem";
 
-                                                aSelection = OutputDevice::LogicToLogic(aSelection, MapMode(MapUnit::MapTwip), MapMode(MapUnit::Map100thMM));
-
                                                 OString sSVGElem = R"elem(<svg version=\"1.2\" width=\")elem" +
                                                     OString::number(aSelection.GetWidth() / 100.0) +
                                                     R"elem(mm\" height=\")elem" +
@@ -902,6 +901,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                     child.put("kind", kind);
                     child.put("pointer", static_cast<sal_Int32>(pHdl->GetPointer()));
                     Point pHdlPos = pHdl->GetPos();
+                    pHdlPos.Move(addLogicOffset.getX(), addLogicOffset.getY());
                     if (convertMapMode)
                         pHdlPos = OutputDevice::LogicToLogic(pHdlPos, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
                     point.put("x", pHdlPos.getX());
