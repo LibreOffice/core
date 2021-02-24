@@ -1375,16 +1375,6 @@ namespace pcr
         if ( !aDescriptor.SecondaryButtonId.isEmpty() )
             aDescriptor.HasSecondaryButton = true;
 
-        // for ui-testing try and distinguish different instances of the controls
-        auto xWindow = aDescriptor.Control->getControlWindow();
-        if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xWindow.get()))
-        {
-            weld::Widget* m_pControlWindow = pTunnel->getWidget();
-            if (m_pControlWindow)
-                m_pControlWindow->set_buildable_name(m_pControlWindow->get_buildable_name() + "-" + aDescriptor.DisplayName.toUtf8());
-        }
-
-
         bool bIsDataProperty = ( nPropertyUIFlags & PROP_FLAG_DATA_PROPERTY ) != 0;
         aDescriptor.Category = bIsDataProperty ? std::u16string_view(u"Data") : std::u16string_view(u"General");
         return aDescriptor;

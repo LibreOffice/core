@@ -1105,6 +1105,16 @@ namespace pcr
             }
 
             _rDescriptor.bReadOnly = impl_isReadOnlyModel_throw();
+
+            // for ui-testing try and distinguish different instances of the controls
+            auto xWindow = _rDescriptor.Control->getControlWindow();
+            if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xWindow.get()))
+            {
+                weld::Widget* m_pControlWindow = pTunnel->getWidget();
+                if (m_pControlWindow)
+                    m_pControlWindow->set_buildable_name(m_pControlWindow->get_buildable_name() + "-" + _rDescriptor.DisplayName.toUtf8());
+            }
+
         }
         catch( const Exception& )
         {
