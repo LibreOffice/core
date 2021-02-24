@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f728cf4_84b27b6a",
+        "filename": "fpicker/source/office/fileview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-24T11:39:25Z",
+      "side": 1,
+      "message": "Please don\u0027t add space between \u0027maResetQuickSearch\u0027 and \u0027(\u0027",
+      "revId": "86754164997f3cb2076428256aa544555198da50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4cdca1f_552e4530",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4627,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-24T11:39:25Z",
+      "side": 1,
+      "message": "The comment here is placed in a non-standard way, and it looks as if it relates to the function body (opening brace), not to the line below. Please don\u0027t put comments like this.",
+      "revId": "86754164997f3cb2076428256aa544555198da50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60cdfb56_6e3be9e1",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4628,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-24T11:39:25Z",
+      "side": 1,
+      "message": "Likely this could be moved to member initializer list, as in the other places?",
+      "revId": "86754164997f3cb2076428256aa544555198da50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
