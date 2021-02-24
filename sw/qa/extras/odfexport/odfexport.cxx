@@ -767,6 +767,45 @@ DECLARE_ODFEXPORT_TEST(testFdo60769, "fdo60769.odt")
     }
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf115815, "tdf115815.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    // Test comment range feature on tracked deletion.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+    bool bAnnotationStart = false;
+    bool bBeforeAnnotation = true;
+    OUString sTextBeforeAnnotation;
+    while (xRunEnum->hasMoreElements())
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
+        OUString aType = getProperty<OUString>(xPropertySet, "TextPortionType");
+        // there is no AnnotationEnd with preceding AnnotationStart,
+        // i.e. annotation with lost range
+        CPPUNIT_ASSERT(aType != "AnnotationEnd" || !bAnnotationStart);
+
+        bAnnotationStart = (aType == "Annotation");
+
+        // collect paragraph text before the first annotation
+        if (bBeforeAnnotation)
+        {
+            if (bAnnotationStart)
+                bBeforeAnnotation = false;
+            else if (aType == "Text")
+            {
+                uno::Reference<text::XTextRange> xRun(xPropertySet, uno::UNO_QUERY);
+                sTextBeforeAnnotation += xRun->getString();
+            }
+        }
+    }
+
+    // This was "Lorem ipsum" (collapsed annotation range)
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem "), sTextBeforeAnnotation);
+}
+
 DECLARE_ODFEXPORT_TEST(testFdo58949, "fdo58949.docx")
 {
     /*
