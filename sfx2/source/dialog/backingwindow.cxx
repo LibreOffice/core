@@ -354,7 +354,7 @@ void BackingWindow::ApplyStyleSettings()
     {
         MenuBar* pMenuBar = pSystemWindow->GetMenuBar();
         if (pMenuBar)
-            nMenuHeight = pMenuBar->ImplGetWindow()->GetOutputSizePixel().Height();
+            nMenuHeight = pMenuBar->GetMenuBarHeight();
     }
 
     // fdo#34392: we do the layout dynamically, the layout depends on the font,
