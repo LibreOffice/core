@@ -27,6 +27,9 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
+#include <vcl/svapp.hxx>
+#include <svdata.hxx>
+#include <salinst.hxx>
 
 #include <com/sun/star/datatransfer/clipboard/RenderingCapabilities.hpp>
 #include "XNotifyingDataObject.hxx"
@@ -299,11 +302,26 @@ uno::Sequence<OUString> SAL_CALL CWinClipboard::getSupportedServiceNames()
     return { "com.sun.star.datatransfer.clipboard.SystemClipboard" };
 }
 
+// We run unit tests in parallel, which is a problem when touching a shared resource
+// the system clipboard, so rather use the dummy GenericClipboard.
+static const bool bRunningUnitTest = getenv("LO_TESTNAME");
+
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 dtrans_CWinClipboard_get_implementation(css::uno::XComponentContext* context,
-                                        css::uno::Sequence<css::uno::Any> const&)
+                                        css::uno::Sequence<css::uno::Any> const& args)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new CWinClipboard(context, "")));
+    if (bRunningUnitTest)
+    {
+        SolarMutexGuard aGuard;
+        auto xClipboard = ImplGetSVData()->mpDefInst->CreateClipboard(args);
+        if (xClipboard.is())
+            xClipboard->acquire();
+        return xClipboard.get();
+    }
+    else
+    {
+        return cppu::acquire(static_cast<cppu::OWeakObject*>(new CWinClipboard(context, "")));
+    }
 }
 
 void CWinClipboard::onReleaseDataObject(CXNotifyingDataObject* theCaller)
