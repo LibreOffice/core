@@ -394,6 +394,25 @@ public:
     std::unique_ptr<PDFiumSignature> getSignature(int nIndex) override;
     std::vector<unsigned int> getTrailerEnds() override;
 };
+
+class PDFiumImpl : public PDFium
+{
+private:
+    PDFiumImpl(const PDFiumImpl&) = delete;
+    PDFiumImpl& operator=(const PDFiumImpl&) = delete;
+
+    OUString maLastError;
+
+public:
+    PDFiumImpl();
+    ~PDFiumImpl() override;
+
+    const OUString& getLastError() const override { return maLastError; }
+
+    std::unique_ptr<PDFiumDocument> openDocument(const void* pData, int nSize) override;
+    PDFErrorType getLastErrorCode() override;
+    std::unique_ptr<PDFiumBitmap> createBitmap(int nWidth, int nHeight, int nAlpha) override;
+};
 }
 
 OUString convertPdfDateToISO8601(OUString const& rInput)
@@ -453,7 +472,7 @@ OUString convertPdfDateToISO8601(OUString const& rInput)
            + sTimeZoneString;
 }
 
-PDFium::PDFium()
+PDFiumImpl::PDFiumImpl()
 {
     FPDF_LIBRARY_CONFIG aConfig;
     aConfig.version = 2;
@@ -463,9 +482,9 @@ PDFium::PDFium()
     FPDF_InitLibraryWithConfig(&aConfig);
 }
 
-PDFium::~PDFium() { FPDF_DestroyLibrary(); }
+PDFiumImpl::~PDFiumImpl() { FPDF_DestroyLibrary(); }
 
-std::unique_ptr<PDFiumDocument> PDFium::openDocument(const void* pData, int nSize)
+std::unique_ptr<PDFiumDocument> PDFiumImpl::openDocument(const void* pData, int nSize)
 {
     maLastError = OUString();
     std::unique_ptr<PDFiumDocument> pPDFiumDocument;
@@ -509,9 +528,12 @@ std::unique_ptr<PDFiumDocument> PDFium::openDocument(const void* pData, int nSiz
     return pPDFiumDocument;
 }
 
-PDFErrorType PDFium::getLastErrorCode() { return static_cast<PDFErrorType>(FPDF_GetLastError()); }
+PDFErrorType PDFiumImpl::getLastErrorCode()
+{
+    return static_cast<PDFErrorType>(FPDF_GetLastError());
+}
 
-std::unique_ptr<PDFiumBitmap> PDFium::createBitmap(int nWidth, int nHeight, int nAlpha)
+std::unique_ptr<PDFiumBitmap> PDFiumImpl::createBitmap(int nWidth, int nHeight, int nAlpha)
 {
     std::unique_ptr<PDFiumBitmap> pPDFiumBitmap;
     FPDF_BITMAP pPdfBitmap = FPDFBitmap_Create(nWidth, nHeight, nAlpha);
@@ -1309,7 +1331,7 @@ int PDFiumSearchHandleImpl::getSearchCount() { return FPDFText_GetSchCount(mpSea
 
 std::shared_ptr<PDFium>& PDFiumLibrary::get()
 {
-    static auto pInstance = std::make_shared<PDFium>();
+    static std::shared_ptr<PDFium> pInstance = std::make_shared<PDFiumImpl>();
     return pInstance;
 }
 
