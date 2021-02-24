@@ -48,7 +48,7 @@ private:
     std::unique_ptr<ImplSplitSet> mpMainSet;
     ImplSplitSet*       mpBaseSet;
     ImplSplitSet*       mpSplitSet;
-    tools::Long*               mpLastSizes;
+    std::unique_ptr<tools::Long[]> mpLastSizes;
     tools::Rectangle           maDragRect;
     tools::Long                mnDX;
     tools::Long                mnDY;
