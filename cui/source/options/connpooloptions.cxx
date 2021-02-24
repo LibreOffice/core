@@ -19,14 +19,11 @@
 
 #include <osl/diagnose.h>
 #include "connpooloptions.hxx"
-#include <svtools/editbrowsebox.hxx>
 #include "connpoolsettings.hxx"
 #include <svl/eitem.hxx>
 #include <svx/databaseregistrationui.hxx>
 #include <strings.hrc>
 #include <dialmgr.hxx>
-
-using ::svt::EditBrowseBox;
 
 namespace offapp
 {
