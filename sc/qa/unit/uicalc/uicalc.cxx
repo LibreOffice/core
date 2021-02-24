@@ -1285,6 +1285,21 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf123202)
     CPPUNIT_ASSERT(pDoc->RowHidden(2, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf85403)
+{
+    ScModelObj* pModelObj = createDoc("tdf85403.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    goToCell("A1");
+
+    dispatchCommand(mxComponent, ".uno:TextToColumns", {});
+
+    pDoc->CalcAll();
+
+    CPPUNIT_ASSERT_EQUAL(123.0, pDoc->GetValue(ScAddress(1, 0, 0)));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
