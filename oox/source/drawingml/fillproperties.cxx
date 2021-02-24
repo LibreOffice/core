@@ -716,17 +716,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 // TODO: "rotate with shape" is not possible with our current core
 
                 if (xGraphic.is())
-                {
-                    if (rPropMap.supportsProperty(ShapeProperty::FillBitmapName) &&
-                        rPropMap.setProperty(ShapeProperty::FillBitmapName, xGraphic))
-                    {
-                        eFillStyle = FillStyle_BITMAP;
-                    }
-                    else if (rPropMap.setProperty(ShapeProperty::FillBitmap, xGraphic))
-                    {
-                        eFillStyle = FillStyle_BITMAP;
-                    }
-                }
+                    eFillStyle = FillStyle_BITMAP;
 
                 // set other bitmap properties, if bitmap has been inserted into the map
                 if( eFillStyle == FillStyle_BITMAP )
@@ -778,13 +768,18 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                             rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
 
                             if(bIsCustomShape &&
-                               ( aGraphCrop.Left != 0 || aGraphCrop.Right != 0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0))
-                            {
+                               ( aGraphCrop.Left != 0 || aGraphCrop.Right !=0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0) &&
+                               ( aGraphCrop.Left >= 0 && aGraphCrop.Right >= 0 && aGraphCrop.Top >= 0 && aGraphCrop.Bottom >= 0))
                                 xGraphic = lclCropGraphic(xGraphic, aFillRect);
-                                rPropMap.setProperty(ShapeProperty::FillBitmap, xGraphic);
-                            }
                         }
                     }
+
+                    if (rPropMap.supportsProperty(ShapeProperty::FillBitmapName))
+                        rPropMap.setProperty(ShapeProperty::FillBitmapName, xGraphic);
+                    else
+                        rPropMap.setProperty(ShapeProperty::FillBitmap, xGraphic);
+
+
                 }
 
                 if (maBlipProps.moAlphaModFix.has())
@@ -885,14 +880,13 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
                     aGraphCrop.Bottom = rtl::math::round( ( static_cast< double >( aOriginalSize.Height ) * oClipRect.Y2 ) / 100000 );
                 rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
 
-                if(mbIsCustomShape &&
-                   ( aGraphCrop.Left != 0 || aGraphCrop.Right != 0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0))
+               if(mbIsCustomShape &&
+                  ( aGraphCrop.Left != 0 || aGraphCrop.Right !=0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0) &&
+                  ( aGraphCrop.Left >= 0 && aGraphCrop.Right >= 0 && aGraphCrop.Top >= 0 && aGraphCrop.Bottom >= 0))
                 {
                     geometry::IntegerRectangle2D aCropRect = oClipRect;
                     lclCalculateCropPercentage(xGraphic, aCropRect);
                     xGraphic = lclCropGraphic(xGraphic, aCropRect);
-
-                    rPropMap.setProperty(PROP_FillBitmap, xGraphic);
                 }
             }
         }
