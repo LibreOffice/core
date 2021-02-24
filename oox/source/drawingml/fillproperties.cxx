@@ -777,11 +777,17 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                                 aGraphCrop.Bottom = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Height ) * aFillRect.Y2 ) / 100000 );
                             rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
 
+                            // GraphicCrop can take negative and positive values. Here negative values
+                            // mean cropped. We handled only negative values with lclCropGraphic.
                             if(bIsCustomShape &&
-                               ( aGraphCrop.Left != 0 || aGraphCrop.Right != 0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0))
+                               ( aGraphCrop.Left != 0 || aGraphCrop.Right !=0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0) &&
+                               ( aGraphCrop.Left <= 0 && aGraphCrop.Right <= 0 && aGraphCrop.Top <= 0 && aGraphCrop.Bottom <= 0))
                             {
                                 xGraphic = lclCropGraphic(xGraphic, aFillRect);
-                                rPropMap.setProperty(ShapeProperty::FillBitmap, xGraphic);
+                                if (rPropMap.supportsProperty(ShapeProperty::FillBitmapName))
+                                    rPropMap.setProperty(ShapeProperty::FillBitmapName, xGraphic);
+                                else
+                                    rPropMap.setProperty(ShapeProperty::FillBitmap, xGraphic);
                             }
                         }
                     }
@@ -885,14 +891,15 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
                     aGraphCrop.Bottom = rtl::math::round( ( static_cast< double >( aOriginalSize.Height ) * oClipRect.Y2 ) / 100000 );
                 rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
 
+                // GraphicCrop can take positive and negative values. Here positive values mean
+                // cropped. We handled only positive values in lclCropGraphic.
                 if(mbIsCustomShape &&
-                   ( aGraphCrop.Left != 0 || aGraphCrop.Right != 0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0))
+                   (aGraphCrop.Left != 0 || aGraphCrop.Right !=0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0) &&
+                   (aGraphCrop.Left >= 0 && aGraphCrop.Right >= 0 && aGraphCrop.Top >= 0 && aGraphCrop.Bottom >= 0))
                 {
                     geometry::IntegerRectangle2D aCropRect = oClipRect;
                     lclCalculateCropPercentage(xGraphic, aCropRect);
                     xGraphic = lclCropGraphic(xGraphic, aCropRect);
-
-                    rPropMap.setProperty(PROP_FillBitmap, xGraphic);
                 }
             }
         }
