@@ -39,4 +39,35 @@ class Forms(UITestCase):
         self.assertEqual("Multi-line", get_state_as_dict(xChild)['SelectEntryText'])
 
         self.ui_test.close_doc()
+
+    def test_tdf140239(self):
+
+        self.ui_test.load_file(get_url_for_data_file("tdf140239.odt"))
+
+        self.xUITest.executeCommand(".uno:JumpToNextFrame")
+
+        self.ui_test.execute_modeless_dialog_through_command(".uno:ControlProperties")
+        xAction = self.ui_test.wait_until_child_is_available('listbox-Action')
+        xURL = self.ui_test.wait_until_child_is_available('urlcontrol-URL')
+
+        self.assertEqual("None", get_state_as_dict(xAction)['SelectEntryText'])
+        self.assertEqual("false", get_state_as_dict(xURL)['Enabled'])
+
+        xAction.executeAction("SELECT", mkPropertyValues({"TEXT": "Open document/web page"}))
+
+        self.assertEqual("Open document/web page", get_state_as_dict(xAction)['SelectEntryText'])
+        self.assertEqual("true", get_state_as_dict(xURL)['Enabled'])
+
+        xURL.executeAction("TYPE", mkPropertyValues({"TEXT": "1"}))
+        xURL.executeAction("TYPE", mkPropertyValues({"TEXT": "2"}))
+        xURL.executeAction("TYPE", mkPropertyValues({"TEXT": "3"}))
+        xURL.executeAction("TYPE", mkPropertyValues({"TEXT": "4"}))
+        xURL.executeAction("TYPE", mkPropertyValues({"TEXT": "5"}))
+
+        # Without the fix in place, this test would have failed with
+        # AssertionError: '12345' != '54321'
+        self.assertEqual("12345", get_state_as_dict(xURL)['Text'])
+
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
