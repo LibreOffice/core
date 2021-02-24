@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22bbe033_dd083540",
+        "filename": "vcl/source/font/font.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-24T12:56:45Z",
+      "side": 1,
+      "message": "Heh, so this non-Win32 include needs to go then ...",
+      "revId": "9cf08aa859dd7b2ac1df867f986782055714f53d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
