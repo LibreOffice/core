@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d67189d4_d07f3809",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3456,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-02-24T08:10:47Z",
+      "side": 1,
+      "message": "let\u0027s make it LOK only:\n\u0026\u0026 comphelper::LibreOfficeKit::isActive()",
+      "revId": "e0f0a386566ebfa04e1a9b69da5fb24f53ca5861",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
