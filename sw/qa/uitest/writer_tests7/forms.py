@@ -139,4 +139,39 @@ class Forms(UITestCase):
 
         self.ui_test.close_doc()
 
+    def test_tdf138271(self):
+
+        self.ui_test.load_file(get_url_for_data_file("tdf138271.odt"))
+
+        self.xUITest.executeCommand(".uno:JumpToNextFrame")
+
+        aOldValue = ["-1000000.00", "1000000.00"]
+        aNewValue = ["-100.00", "100.00"]
+
+        for i, name in enumerate(['formattedcontrol-Value min.', 'formattedcontrol-Value max.']):
+
+            self.ui_test.execute_modeless_dialog_through_command(".uno:ControlProperties")
+            xChild = self.ui_test.wait_until_child_is_available(name)
+
+            self.assertEqual(aOldValue[i], get_state_as_dict(xChild)['Text'])
+
+            xChild.executeAction("FOCUS", tuple())
+            xChild.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            xChild.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+            xChild.executeAction("TYPE", mkPropertyValues({"TEXT": aNewValue[i]}))
+
+            #Close the dialog and open it again
+            self.xUITest.executeCommand(".uno:ControlProperties")
+
+            self.ui_test.execute_modeless_dialog_through_command(".uno:ControlProperties")
+            xChild = self.ui_test.wait_until_child_is_available(name)
+
+            # Without the fix in place, this test would have failed here because
+            # the values wouldn't have changed
+            self.assertEqual(aNewValue[i], get_state_as_dict(xChild)['Text'])
+
+            self.xUITest.executeCommand(".uno:ControlProperties")
+
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
