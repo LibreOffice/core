@@ -36,13 +36,15 @@ using ::com::sun::star::uno::Sequence;
 namespace chart
 {
 
-RegressionCurveCalculator::RegressionCurveCalculator() :
-        m_fCorrelationCoefficient(0.0),
-        mDegree(2),
-        mForceIntercept(false),
-        mInterceptValue(0.0),
-        mPeriod(2),
-        mXName("x"), mYName("f(x)")
+RegressionCurveCalculator::RegressionCurveCalculator()
+    : m_fCorrelationCoefficient(0.0)
+    , mDegree(2)
+    , mForceIntercept(false)
+    , mInterceptValue(0.0)
+    , mPeriod(2)
+    , mXName("x")
+    , mYName("f(x)")
+    , mnMovingType(0)
 {
     rtl::math::setNan( &m_fCorrelationCoefficient );
     rtl::math::setNan( &mInterceptValue );
