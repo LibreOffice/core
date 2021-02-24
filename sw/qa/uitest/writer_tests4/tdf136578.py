@@ -13,16 +13,10 @@ class tdf136578(UITestCase):
 
         self.ui_test.load_file(get_url_for_data_file("tdf136578.odt"))
 
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
-
         document = self.ui_test.get_component()
-
         self.assertEqual(document.CurrentController.PageCount, 2)
 
-        self.ui_test.wait_until_child_is_available(xWriterEdit, 'PageBreak')
-        xPageBreak = xWriterEdit.getChild('PageBreak')
-
+        xPageBreak = self.ui_test.wait_until_child_is_available('PageBreak')
         xPageBreak.executeAction("DELETE", tuple())
 
         # Without the fix in place, this test would have failed with

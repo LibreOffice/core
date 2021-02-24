@@ -24,7 +24,7 @@ class tdf137802(UITestCase):
 
         self.xUITest.executeCommand(".uno:JumpToNextFrame")
 
-        self.ui_test.wait_until_child_is_available(xWriterEdit, 'metricfield')
+        self.ui_test.wait_until_child_is_available('metricfield')
 
         self.ui_test.execute_dialog_through_command(".uno:TransformDialog")
 
@@ -49,7 +49,7 @@ class tdf137802(UITestCase):
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "ESC"}))
 
         # Wait until the shape is deselected and the cursor is on the document
-        self.ui_test.wait_until_child_is_available(xWriterEdit, 'FontNameBox')
+        self.ui_test.wait_until_child_is_available('FontNameBox')
 
         # Delete the second paragraph. Shape 2 is anchored to this paragraph
         # so it should be deleted

@@ -24,16 +24,14 @@ class tdf137274(UITestCase):
         self.xUITest.executeCommandWithParameters(".uno:InsertAnnotation", xArgs)
 
         # wait until the comment is available
-        self.ui_test.wait_until_child_is_available(xMainWindow, 'Comment1')
+        self.ui_test.wait_until_child_is_available('Comment1')
 
         self.xUITest.executeCommand(".uno:Sidebar")
 
         xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "SwNavigatorPanel"}))
 
         # wait until the navigator panel is available
-        self.ui_test.wait_until_child_is_available(xMainWindow, 'NavigatorPanelParent')
-
-        xNavigatorPanel = xWriterEdit.getChild("NavigatorPanelParent")
+        xNavigatorPanel = self.ui_test.wait_until_child_is_available('NavigatorPanelParent')
 
         xContentTree = xNavigatorPanel.getChild("contenttree")
         xComments = xContentTree.getChild('10')
@@ -50,7 +48,7 @@ class tdf137274(UITestCase):
         self.xUITest.executeCommandWithParameters(".uno:InsertAnnotation", xArgs)
 
         # wait until the second comment is available
-        self.ui_test.wait_until_child_is_available(xMainWindow, 'Comment2')
+        self.ui_test.wait_until_child_is_available('Comment2')
 
         xComments.executeAction("EXPAND", tuple())
 

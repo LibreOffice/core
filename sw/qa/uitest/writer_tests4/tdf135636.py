@@ -17,11 +17,7 @@ class tdf135636(UITestCase):
 
         self.assertEqual(document.CurrentController.PageCount, 2)
 
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
-        self.ui_test.wait_until_child_is_available(xWriterEdit, 'PageBreak')
-        xPageBreak = xWriterEdit.getChild('PageBreak')
-
+        xPageBreak = self.ui_test.wait_until_child_is_available('PageBreak')
         self.ui_test.execute_dialog_through_action(xPageBreak, "EDIT")
 
         xDialog = self.xUITest.getTopFocusWindow()

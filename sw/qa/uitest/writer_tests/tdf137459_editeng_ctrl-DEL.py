@@ -8,7 +8,6 @@
 #
 
 from uitest.framework import UITestCase
-import time
 from uitest.uihelper.common import get_state_as_dict, type_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
@@ -18,15 +17,11 @@ class tdf137459(UITestCase):
 
         xMainDoc = self.ui_test.create_doc_in_start_center("writer")
 
-        xMainWindow = self.xUITest.getTopFocusWindow()
-
-        xwriter_edit = xMainWindow.getChild("writer_edit")
         # adding new Comment
         self.xUITest.executeCommand(".uno:InsertAnnotation")
         # wait until the comment is available
-        self.ui_test.wait_until_child_is_available(xMainWindow, 'Comment1')
+        xComment1 = self.ui_test.wait_until_child_is_available('Comment1')
 
-        xComment1 = xMainWindow.getChild("Comment1")
         xEditView1 = xComment1.getChild("editview")
         sText = "Ctrl+Del should not delete BACKWARDS"
         xEditView1.executeAction("TYPE", mkPropertyValues({"TEXT": sText}))
