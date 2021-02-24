@@ -26,6 +26,7 @@
 #include <vcl/font.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/virdev.hxx>
 
 #include <impfont.hxx>
 #include <fontattributes.hxx>
