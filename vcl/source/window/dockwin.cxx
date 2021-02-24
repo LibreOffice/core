@@ -1058,6 +1058,47 @@ IMPL_LINK_NOARG(DockingWindow, ImplHandleLayoutTimerHdl, Timer*, void)
     setPosSizeOnContainee();
 }
 
+void DockingWindow::RollDown()
+{
+    if ( mpFloatWin )
+        mpFloatWin->RollDown();
+    mbRollUp = false;
+}
+
+bool DockingWindow::IsRollUp() const
+{
+    if ( mpFloatWin )
+        return mpFloatWin->IsRollUp();
+    return mbRollUp;
+}
+
+void DockingWindow::SetMinOutputSizePixel( const Size& rSize )
+{
+    if ( mpFloatWin )
+        mpFloatWin->SetMinOutputSizePixel( rSize );
+    maMinOutSize = rSize;
+}
+
+const Size& DockingWindow::GetMinOutputSizePixel() const
+{
+    if ( mpFloatWin )
+        return mpFloatWin->GetMinOutputSizePixel();
+    return maMinOutSize;
+}
+
+void DockingWindow::SetFloatingPos( const Point& rNewPos )
+{
+    if ( mpFloatWin )
+        mpFloatWin->SetPosPixel( rNewPos );
+    else
+        maFloatPos = rNewPos;
+}
+
+void DockingWindow::SetIdleDebugName( const char *pDebugName )
+{
+    maLayoutIdle.SetDebugName( pDebugName );
+}
+
 DropdownDockingWindow::DropdownDockingWindow(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame, bool bTearable)
     : DockingWindow(pParent,
                     !bTearable ? OString("InterimDockParent") : OString("InterimTearableParent"),

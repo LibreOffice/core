@@ -24,6 +24,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/floatwin.hxx>
 #include <vcl/idle.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>

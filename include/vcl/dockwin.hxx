@@ -17,14 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_DOCKWIN_HXX
-#define INCLUDED_VCL_DOCKWIN_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
+#include <vcl/syswin.hxx>
 #include <o3tl/deleter.hxx>
-#include <vcl/floatwin.hxx>
 #include <memory>
 #include <vector>
+
+class ToolBox;
+class FloatingWindow;
+enum class FloatWinPopupFlags;
 
 // data to be sent with docking events
 struct DockingData
@@ -335,49 +338,6 @@ public:
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 };
 
-
-inline void DockingWindow::RollDown()
-{
-    if ( mpFloatWin )
-        mpFloatWin->RollDown();
-    mbRollUp = false;
-}
-
-inline bool DockingWindow::IsRollUp() const
-{
-    if ( mpFloatWin )
-        return mpFloatWin->IsRollUp();
-    return mbRollUp;
-}
-
-
-inline void DockingWindow::SetMinOutputSizePixel( const Size& rSize )
-{
-    if ( mpFloatWin )
-        mpFloatWin->SetMinOutputSizePixel( rSize );
-    maMinOutSize = rSize;
-}
-
-inline const Size& DockingWindow::GetMinOutputSizePixel() const
-{
-    if ( mpFloatWin )
-        return mpFloatWin->GetMinOutputSizePixel();
-    return maMinOutSize;
-}
-
-inline void DockingWindow::SetFloatingPos( const Point& rNewPos )
-{
-    if ( mpFloatWin )
-        mpFloatWin->SetPosPixel( rNewPos );
-    else
-        maFloatPos = rNewPos;
-}
-
-inline void DockingWindow::SetIdleDebugName( const char *pDebugName )
-{
-    maLayoutIdle.SetDebugName( pDebugName );
-}
-
 class VCL_DLLPUBLIC DropdownDockingWindow : public DockingWindow
 {
 protected:
@@ -401,7 +361,5 @@ public:
     virtual ~ResizableDockingWindow() override;
     virtual void dispose() override;
 };
-
-#endif // INCLUDED_VCL_DOCKWIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
