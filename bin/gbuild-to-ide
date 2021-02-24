@@ -1511,33 +1511,33 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
    <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
     """
 
-    def generate_pro_user_content(self, lib_folder):
+    def generate_pro_shared_content(self, lib_folder):
 
         build_configs = self.generate_build_configs(lib_folder)
         deploy_configs = self.generate_deploy_configs(lib_folder)
         run_configs = self.generate_run_configs(lib_folder)
 
-        xml = QtCreatorIntegrationGenerator.pro_user_template % {
+        xml = QtCreatorIntegrationGenerator.pro_shared_template % {
             'build_configs': build_configs,
             'deploy_configs': deploy_configs,
             'run_configs': run_configs,
         }
         return xml
 
-    def generate_meta_pro_user_content(self):
+    def generate_meta_pro_shared_content(self):
 
         build_configs = self.generate_meta_build_configs()
         deploy_configs = self.generate_deploy_configs("")
         run_configs = self.generate_run_configs("")
 
-        xml = QtCreatorIntegrationGenerator.pro_user_template % {
+        xml = QtCreatorIntegrationGenerator.pro_shared_template % {
             'build_configs': build_configs,
             'deploy_configs': deploy_configs,
             'run_configs': run_configs,
         }
         return xml
 
-    pro_user_template = """<?xml version="1.0" encoding="UTF-8"?>
+    pro_shared_template = """<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
 <!-- Written by QtCreator 3.1.1, 2015-05-14T15:54:34. -->
 <qtcreator>
@@ -1645,10 +1645,10 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                 self._log("unable to remove %s\n" % afile)
 
         do_remove_file(self.base_folder, "lo.pro")
-        do_remove_file(self.base_folder, "lo.pro.user")
+        do_remove_file(self.base_folder, "lo.pro.shared")
         for location in self.target_by_location:
             for f in os.listdir(location):
-                if f.endswith('.pro') or f.endswith('.pro.user'):
+                if f.endswith('.pro') or f.endswith('.pro.shared'):
                     do_remove_file(location, f)
 
     def get_source_extension(self, src_file):
@@ -1756,7 +1756,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
 
         self.base_folder = self.gbuildparser.builddir
 
-        # we remove existing '.pro' and '.pro.user' files
+        # we remove existing '.pro' and '.pro.shared' files
         self.remove_qt_files()
 
         # for .pro files, we must explicitly list all files (.c, .h)
@@ -1797,15 +1797,15 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                 print(temp, file=sys.stderr)
                 print("\n\n", file=sys.stderr)
 
-            # create .pro.user file
-            qt_pro_user_file = '%s/%s.pro.user' % (lib_loc, lib_name)
+            # create .pro.shared file
+            qt_pro_shared_file = '%s/%s.pro.shared' % (lib_loc, lib_name)
             try:
-                with open(qt_pro_user_file, mode) as fprouser:
-                    fprouser.write(self.generate_pro_user_content(lib_folder))
-                self._log("created %s\n" % qt_pro_user_file)
+                with open(qt_pro_shared_file, mode) as fproshared:
+                    fproshared.write(self.generate_pro_shared_content(lib_folder))
+                self._log("created %s\n" % qt_pro_shared_file)
 
             except Exception as e:
-                print("ERROR : creating pro.user file=" + qt_pro_user_file, file=sys.stderr)
+                print("ERROR : creating pro.shared file=" + qt_pro_shared_file, file=sys.stderr)
                 print(e, file=sys.stderr)
                 temp = traceback.format_exc()
                 print(temp, file=sys.stderr)
@@ -1826,15 +1826,15 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             print(temp, file=sys.stderr)
             print("\n\n", file=sys.stderr)
 
-        # create meta .pro.user file
-        qt_meta_pro_user_file = 'lo.pro.user'
+        # create meta .pro.shared file
+        qt_meta_pro_shared_file = 'lo.pro.shared'
         try:
-            with open(qt_meta_pro_user_file, mode) as fmprouser:
-                fmprouser.write(self.generate_meta_pro_user_content())
-            self._log("created %s\n" % qt_meta_pro_user_file)
+            with open(qt_meta_pro_shared_file, mode) as fmproshared:
+                fmproshared.write(self.generate_meta_pro_shared_content())
+            self._log("created %s\n" % qt_meta_pro_shared_file)
 
         except Exception as e:
-            print("ERROR : creating lo.pro.user file=" + qt_meta_pro_user_file, file=sys.stderr)
+            print("ERROR : creating lo.pro.shared file=" + qt_meta_pro_shared_file, file=sys.stderr)
             print(e, file=sys.stderr)
             temp = traceback.format_exc()
             print(temp, file=sys.stderr)

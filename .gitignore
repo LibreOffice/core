@@ -142,6 +142,7 @@ LibreOffice.VC.VC.opendb
 
 # QtCreator specific
 *.pro
+*.pro.shared
 *.pro.user
 *.pro.user.*
 
