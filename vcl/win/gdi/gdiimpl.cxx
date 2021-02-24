@@ -725,7 +725,7 @@ void WinSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
         ImplDrawBitmap( hMaskDC.get(), aPosAry, rSalBitmap, false, SRCERASE );
         // now MaskDC contains the bitmap area with black background
         BitBlt( hMemDC.get(), 0, 0, nDstWidth, nDstHeight, hMaskDC.get(), 0, 0, SRCINVERT );
-        // now MemDC contains background XORed bitmap area ontop
+        // now MemDC contains background XORed bitmap area on top
     }
     else
     {

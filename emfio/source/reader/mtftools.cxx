@@ -369,7 +369,7 @@ namespace emfio
                 // check 2nd (system-dependent) criteria for FontScale
                 if(nUnscaledAverageFontWidth != rCandidate.GetFontHeight())
                 {
-                    // FontScale is active, remrmber and use as current
+                    // FontScale is active, remember and use as current
                     maCurrentMetaFontAction = rNewMetaFontAction;
                 }
             }
@@ -427,8 +427,8 @@ namespace emfio
                 // an import of an old EMF/WMF written by LibreOffice on a non-Windows (unx) system
                 // and should be corrected.
                 // Usually in tested cases this lies inside 5% of range, so detecting this just using
-                //  fFactorTextPercent indside 5% -> no old file
-                //  fFactorCorrectedTextPercent indside 5% -> is old file
+                //  fFactorTextPercent inside 5% -> no old file
+                //  fFactorCorrectedTextPercent inside 5% -> is old file
                 // works not too bad, but there are some strange not so often used fonts where that
                 // values do deviate, so better just compare if old corrected would fit better than
                 // the uncorrected case, that is usually safe.
