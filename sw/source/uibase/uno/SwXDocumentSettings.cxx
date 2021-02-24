@@ -151,7 +151,7 @@ enum SwDocumentSettingsPropertyHandles
 
 }
 
-static MasterPropertySetInfo * lcl_createSettingsInfo()
+static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
 {
     static PropertyInfo const aWriterSettingsInfoMap[] =
     {
@@ -272,7 +272,7 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
 }
 
 SwXDocumentSettings::SwXDocumentSettings ( SwXTextDocument * pModel )
-: MasterPropertySet ( lcl_createSettingsInfo (),
+: MasterPropertySet ( lcl_createSettingsInfo().get(),
                       &Application::GetSolarMutex () )
 , mpModel ( pModel )
 , mpDocSh ( nullptr )

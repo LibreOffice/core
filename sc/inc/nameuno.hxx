@@ -137,8 +137,8 @@ private:
          import. */
     bool                    mbModifyAndBroadcast;
 
-    virtual ScNamedRangeObj* GetObjectByIndex_Impl(sal_uInt16 nIndex) = 0;
-    virtual ScNamedRangeObj* GetObjectByName_Impl(const OUString& aName) = 0;
+    virtual rtl::Reference<ScNamedRangeObj> GetObjectByIndex_Impl(sal_uInt16 nIndex) = 0;
+    virtual rtl::Reference<ScNamedRangeObj> GetObjectByName_Impl(const OUString& aName) = 0;
 
     virtual ScRangeName*    GetRangeName_Impl() = 0;
     virtual SCTAB           GetTab_Impl() = 0;
@@ -219,8 +219,8 @@ class ScGlobalNamedRangesObj final : public ScNamedRangesObj
 {
 private:
 
-    virtual ScNamedRangeObj* GetObjectByIndex_Impl(sal_uInt16 nIndex) override;
-    virtual ScNamedRangeObj* GetObjectByName_Impl(const OUString& aName) override;
+    virtual rtl::Reference<ScNamedRangeObj> GetObjectByIndex_Impl(sal_uInt16 nIndex) override;
+    virtual rtl::Reference<ScNamedRangeObj> GetObjectByName_Impl(const OUString& aName) override;
 
     virtual ScRangeName*    GetRangeName_Impl() override;
     virtual SCTAB           GetTab_Impl() override;
@@ -234,8 +234,8 @@ class ScLocalNamedRangesObj final : public ScNamedRangesObj
 {
 private:
 
-    virtual ScNamedRangeObj* GetObjectByIndex_Impl(sal_uInt16 nIndex) override;
-    virtual ScNamedRangeObj* GetObjectByName_Impl(const OUString& aName) override;
+    virtual rtl::Reference<ScNamedRangeObj> GetObjectByIndex_Impl(sal_uInt16 nIndex) override;
+    virtual rtl::Reference<ScNamedRangeObj> GetObjectByName_Impl(const OUString& aName) override;
 
     virtual ScRangeName*    GetRangeName_Impl() override;
     virtual SCTAB           GetTab_Impl() override;
@@ -288,7 +288,7 @@ private:
     ScDocShell*             pDocShell;
     bool                    bColumn;
 
-    ScLabelRangeObj*        GetObjectByIndex_Impl(size_t nIndex);
+    rtl::Reference<ScLabelRangeObj> GetObjectByIndex_Impl(size_t nIndex);
 
 public:
                             ScLabelRangesObj(ScDocShell* pDocSh, bool bCol);

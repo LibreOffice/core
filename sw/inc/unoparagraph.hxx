@@ -212,7 +212,7 @@ public:
 struct SwXParagraphEnumeration
     : public SwSimpleEnumeration_Base
 {
-    static SwXParagraphEnumeration* Create(
+    static rtl::Reference<SwXParagraphEnumeration> Create(
         css::uno::Reference< css::text::XText > const & xParent,
         const std::shared_ptr<SwUnoCursor>& pCursor,
         const CursorType eType,

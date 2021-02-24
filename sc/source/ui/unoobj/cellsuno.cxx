@@ -4060,7 +4060,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScCellRangesObj::getImplementationId()
 
 // XCellRanges
 
-ScCellRangeObj* ScCellRangesObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
+rtl::Reference<ScCellRangeObj> ScCellRangesObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
 {
     ScDocShell* pDocSh = GetDocShell();
     const ScRangeList& rRanges = GetRangeList();
