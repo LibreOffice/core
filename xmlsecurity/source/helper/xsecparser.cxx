@@ -336,11 +336,15 @@ class XSecParser::DsX509IssuerSerialContext
         }
 };
 
+/// can't be sure what is supposed to happen here because the spec is clear as mud
 class XSecParser::DsX509DataContext
     : public XSecParser::Context
 {
     private:
-        SignatureInformation::X509Data m_X509Data;
+        // sigh... "No ordering is implied by the above constraints."
+        // so store the ball of mud in vectors and try to figure it out later.
+        std::vector<std::pair<OUString, OUString>> m_X509IssuerSerials;
+        std::vector<OUString> m_X509Certificates;
 
     public:
         DsX509DataContext(XSecParser & rParser,
@@ -351,7 +355,7 @@ class XSecParser::DsX509DataContext
 
         virtual void EndElement() override
         {
-            m_rParser.m_pXSecController->setX509Data(m_X509Data);
+            m_rParser.m_pXSecController->setX509Data(m_X509IssuerSerials, m_X509Certificates);
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
@@ -360,12 +364,13 @@ class XSecParser::DsX509DataContext
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "X509IssuerSerial")
             {
-                // can't require KeyInfo to be signed so pass in *true*
-                return std::make_unique<DsX509IssuerSerialContext>(m_rParser, std::move(pOldNamespaceMap), m_X509Data.X509IssuerName, m_X509Data.X509SerialNumber);
+                m_X509IssuerSerials.emplace_back();
+                return std::make_unique<DsX509IssuerSerialContext>(m_rParser, std::move(pOldNamespaceMap), m_X509IssuerSerials.back().first, m_X509IssuerSerials.back().second);
             }
             if (nNamespace == XML_NAMESPACE_DS && rName == "X509Certificate")
             {
-                return std::make_unique<DsX509CertificateContext>(m_rParser, std::move(pOldNamespaceMap), m_X509Data.X509Certificate);
+                m_X509Certificates.emplace_back();
+                return std::make_unique<DsX509CertificateContext>(m_rParser, std::move(pOldNamespaceMap), m_X509Certificates.back());
             }
             // missing: ds:X509SKI, ds:X509SubjectName, ds:X509CRL
             return XSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
