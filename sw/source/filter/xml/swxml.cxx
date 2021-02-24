@@ -56,6 +56,7 @@
 #include <docfunc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <DocumentRedlineManager.hxx>
 #include <docary.hxx>
@@ -953,6 +954,9 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
             }
         }
     }
+
+    // tdf#115815 restore annotation ranges stored in temporary bookmarks
+    rDoc.getIDocumentMarkAccess()->restoreAnnotationMarks();
 
     if (xStatusIndicator.is())
     {
