@@ -260,6 +260,7 @@
                         <property name="toolbar_style">icons</property>
                         <child>
                           <object class="GtkToggleToolButton" id="contenttoggle">
+                            <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="tooltip_text" translatable="yes" context="navigatorpanel|contenttoggle|tooltip_text">Toggle Master View</property>
                             <property name="icon_name">sw/res/sc20244.png</property>
