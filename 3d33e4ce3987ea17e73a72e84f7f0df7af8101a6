@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "180768be_fda12c92",
+        "filename": "vcl/source/font/font.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-02-24T20:40:34Z",
+      "side": 1,
+      "message": "True - thanks for the improved version! Will add a note to the fixed bug, too!",
+      "parentUuid": "96d39f24_170a2e46",
+      "revId": "3d33e4ce3987ea17e73a72e84f7f0df7af8101a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "00b1a61a_7bab875f",
         "filename": "vcl/source/font/font.cxx",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2021-02-24T09:25:08Z",
       "side": 1,
       "message": "Is passing size as start index to GetTextWidth intentional here?",
+      "revId": "3d33e4ce3987ea17e73a72e84f7f0df7af8101a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "221b10a9_f90e3cf3",
+        "filename": "vcl/source/font/font.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-02-24T20:40:34Z",
+      "side": 1,
+      "message": "Thanks again! Argh - did just not back-check API of GetTextWidth after adapting to a conflict with stuff from Stefan :-)",
+      "parentUuid": "00b1a61a_7bab875f",
       "revId": "3d33e4ce3987ea17e73a72e84f7f0df7af8101a6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
