@@ -40,8 +40,6 @@
 
 #ifdef _WIN32
 #include <vcl/metric.hxx>
-#else
-#include <vcl/virdev.hxx>
 #endif
 
 using namespace vcl;
