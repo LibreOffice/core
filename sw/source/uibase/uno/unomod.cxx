@@ -124,7 +124,7 @@ enum SwPrintSettingsPropertyHandles
 
 }
 
-static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
+static rtl::Reference<ChainablePropertySetInfo> lcl_createViewSettingsInfo()
 {
     static PropertyInfo const aViewSettingsMap_Impl[] =
     {
@@ -181,7 +181,7 @@ static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
     return new ChainablePropertySetInfo ( aViewSettingsMap_Impl );
 }
 
-static ChainablePropertySetInfo * lcl_createPrintSettingsInfo()
+static rtl::Reference<ChainablePropertySetInfo> lcl_createPrintSettingsInfo()
 {
     static PropertyInfo const aPrintSettingsMap_Impl[] =
     {
@@ -256,7 +256,7 @@ Sequence< OUString > SwXModule::getSupportedServiceNames()
 }
 
 SwXPrintSettings::SwXPrintSettings(SwXPrintSettingsType eType, SwDoc* pDoc)
-: ChainablePropertySet ( lcl_createPrintSettingsInfo (), &Application::GetSolarMutex() )
+: ChainablePropertySet ( lcl_createPrintSettingsInfo().get(), &Application::GetSolarMutex() )
 , meType(eType)
 , mpPrtOpt ( nullptr )
 , mpDoc ( pDoc )
@@ -522,7 +522,7 @@ Sequence< OUString > SwXPrintSettings::getSupportedServiceNames()
 }
 
 SwXViewSettings::SwXViewSettings(SwView* pVw)
-    : ChainablePropertySet( lcl_createViewSettingsInfo (), &Application::GetSolarMutex() )
+    : ChainablePropertySet( lcl_createViewSettingsInfo().get(), &Application::GetSolarMutex() )
     , pView(pVw)
     , mpConstViewOption(nullptr)
     , bObjectValid(true)

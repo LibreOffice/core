@@ -159,7 +159,7 @@ private:
     bool                                    bDrawSelModeSet;
     bool                                    bFilteredRangeSelection;
 
-    ScViewPaneObj*          GetObjectByIndex_Impl(sal_uInt16 nIndex) const;
+    rtl::Reference<ScViewPaneObj> GetObjectByIndex_Impl(sal_uInt16 nIndex) const;
     sal_Int16                   GetZoom() const;
     void                    SetZoom(sal_Int16 Zoom);
     sal_Int16                   GetZoomType() const;

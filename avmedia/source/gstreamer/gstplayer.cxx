@@ -897,12 +897,12 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    FrameGrabber* pFrameGrabber = nullptr;
+    rtl::Reference<FrameGrabber> pFrameGrabber;
     const awt::Size aPrefSize( getPreferredPlayerWindowSize() );
 
     if( ( aPrefSize.Width > 0 ) && ( aPrefSize.Height > 0 ) )
         pFrameGrabber = FrameGrabber::create( maURL );
-    SAL_INFO( "avmedia.gstreamer", AVVERSION "created FrameGrabber " << pFrameGrabber );
+    SAL_INFO( "avmedia.gstreamer", AVVERSION "created FrameGrabber " << pFrameGrabber.get() );
 
     return pFrameGrabber;
 }

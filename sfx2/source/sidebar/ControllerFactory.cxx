@@ -59,13 +59,11 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
     // Create a controller for the new item.
     if ( !bFactoryHasController )
     {
-        xController.set(
-            static_cast<XWeak*>(::framework::CreateToolBoxController(
+        xController = ::framework::CreateToolBoxController(
                     rxFrame,
                     pToolBox,
                     nItemId,
-                    rsCommandName)),
-            UNO_QUERY);
+                    rsCommandName);
     }
     if ( ! xController.is())
     {

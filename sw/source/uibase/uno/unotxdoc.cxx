@@ -706,8 +706,8 @@ SwUnoCursor* SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & x
     getText();
     XText *const pText = m_xBodyText.get();
     SwXBodyText* pBText = static_cast<SwXBodyText*>(pText);
-    SwXTextCursor *const pXTextCursor = pBText->CreateTextCursor(true);
-    xCursor.set( static_cast<text::XWordCursor*>(pXTextCursor) );
+    rtl::Reference<SwXTextCursor> pXTextCursor = pBText->CreateTextCursor(true);
+    xCursor.set( static_cast<text::XWordCursor*>(pXTextCursor.get()) );
 
     auto& rUnoCursor(pXTextCursor->GetCursor());
     rUnoCursor.SetRemainInSection(false);

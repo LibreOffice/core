@@ -25,7 +25,7 @@ using namespace connectivity::file;
 using namespace com::sun::star::uno;
 
 
-OResultSet* ODbaseStatement::createResultSet()
+rtl::Reference<OResultSet> ODbaseStatement::createResultSet()
 {
     return new ODbaseResultSet(this,m_aSQLIterator);
 }

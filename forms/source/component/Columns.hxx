@@ -32,6 +32,7 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase2.hxx>
+#include <rtl/ref.hxx>
 
 using namespace comphelper;
 
@@ -106,7 +107,7 @@ protected:
     static void clearAggregateProperties(css::uno::Sequence< css::beans::Property>& seqProps, bool bAllowDropDown);
     static void setOwnProperties(css::uno::Sequence< css::beans::Property>& seqProps);
 
-    virtual OGridColumn* createCloneColumn() const = 0;
+    virtual rtl::Reference<OGridColumn> createCloneColumn() const = 0;
 };
 
 #define DECL_COLUMN(ClassName)                                                                              \
@@ -126,7 +127,7 @@ public:                                                                         
         css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps  \
         ) const override;                                                                                            \
                                                                                                             \
-    virtual OGridColumn* createCloneColumn() const override;                                                         \
+    virtual rtl::Reference<OGridColumn> createCloneColumn() const override;                                                         \
 };
 
 
@@ -160,7 +161,7 @@ void ClassName::fillProperties( \
         setOwnProperties(_rProps); \
     } \
 } \
-OGridColumn* ClassName::createCloneColumn() const \
+rtl::Reference<OGridColumn> ClassName::createCloneColumn() const \
 { \
     return new ClassName( this ); \
 } \

@@ -430,7 +430,7 @@ void ScStyleFamiliesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XStyleFamilies
 
-ScStyleFamilyObj*ScStyleFamiliesObj::GetObjectByType_Impl(SfxStyleFamily nType) const
+rtl::Reference<ScStyleFamilyObj> ScStyleFamiliesObj::GetObjectByType_Impl(SfxStyleFamily nType) const
 {
     if ( pDocShell )
     {
@@ -443,7 +443,7 @@ ScStyleFamilyObj*ScStyleFamiliesObj::GetObjectByType_Impl(SfxStyleFamily nType) 
     return nullptr;
 }
 
-ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByIndex_Impl(sal_uInt32 nIndex) const
+rtl::Reference<ScStyleFamilyObj> ScStyleFamiliesObj::GetObjectByIndex_Impl(sal_uInt32 nIndex) const
 {
     if ( nIndex < SC_STYLE_FAMILY_COUNT )
         return GetObjectByType_Impl(aStyleFamilyTypes[nIndex]);
@@ -451,7 +451,7 @@ ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByIndex_Impl(sal_uInt32 nIndex) c
     return nullptr;    // invalid index
 }
 
-ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByName_Impl(std::u16string_view aName) const
+rtl::Reference<ScStyleFamilyObj> ScStyleFamiliesObj::GetObjectByName_Impl(std::u16string_view aName) const
 {
     if ( pDocShell )
     {
@@ -634,7 +634,7 @@ void ScStyleFamilyObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XStyleFamily
 
-ScStyleObj* ScStyleFamilyObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
+rtl::Reference<ScStyleObj> ScStyleFamilyObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
 {
     if ( pDocShell )
     {
@@ -654,7 +654,7 @@ ScStyleObj* ScStyleFamilyObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
     return nullptr;
 }
 
-ScStyleObj* ScStyleFamilyObj::GetObjectByName_Impl(const OUString& aName)
+rtl::Reference<ScStyleObj> ScStyleFamilyObj::GetObjectByName_Impl(const OUString& aName)
 {
     if ( pDocShell )
     {

@@ -429,7 +429,7 @@ Reference< XInterface > SAL_CALL SdStyleFamily::createInstance()
         throw IllegalAccessException();
     }
     return Reference<XInterface>(
-        static_cast<XStyle*>(SdStyleSheet::CreateEmptyUserStyle(*mxPool, mnFamily)));
+        static_cast<XStyle*>(SdStyleSheet::CreateEmptyUserStyle(*mxPool, mnFamily).get()));
 }
 
 Reference< XInterface > SAL_CALL SdStyleFamily::createInstanceWithArguments( const Sequence< Any >&  )

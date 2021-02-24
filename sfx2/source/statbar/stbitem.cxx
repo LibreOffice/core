@@ -66,7 +66,7 @@ sal_uInt16 SfxStatusBarControl::convertAwtToVCLMouseButtons( sal_Int16 nAwtMouse
 }
 
 
-svt::StatusbarController* SfxStatusBarControllerFactory(
+rtl::Reference<svt::StatusbarController> SfxStatusBarControllerFactory(
     const uno::Reference< frame::XFrame >& rFrame,
     StatusBar* pStatusBar,
     unsigned short nID,
@@ -516,7 +516,7 @@ void SfxStatusBarControl::Paint
 }
 
 
-SfxStatusBarControl* SfxStatusBarControl::CreateControl
+rtl::Reference<SfxStatusBarControl> SfxStatusBarControl::CreateControl
 (
     sal_uInt16     nSlotID,
     sal_uInt16     nStbId,

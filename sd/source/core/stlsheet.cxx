@@ -675,7 +675,7 @@ void SdStyleSheet::throwIfDisposed()
         throw DisposedException();
 }
 
-SdStyleSheet* SdStyleSheet::CreateEmptyUserStyle( SfxStyleSheetBasePool& rPool, SfxStyleFamily eFamily )
+rtl::Reference<SdStyleSheet> SdStyleSheet::CreateEmptyUserStyle( SfxStyleSheetBasePool& rPool, SfxStyleFamily eFamily )
 {
     OUString aName;
     sal_Int32 nIndex = 1;

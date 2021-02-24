@@ -23,7 +23,8 @@
 
 namespace chart
 {
-AccessibleBase* ChartElementFactory::CreateChartElement(const AccessibleElementInfo& rAccInfo)
+rtl::Reference<AccessibleBase>
+ChartElementFactory::CreateChartElement(const AccessibleElementInfo& rAccInfo)
 {
     ObjectIdentifier aOID(rAccInfo.m_aOID);
     ObjectType eType(aOID.getObjectType());

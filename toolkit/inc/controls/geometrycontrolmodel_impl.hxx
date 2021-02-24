@@ -60,7 +60,7 @@ css::uno::Sequence<sal_Int8> SAL_CALL OGeometryControlModel<CONTROLMODEL>::getIm
 }
 
 template <class CONTROLMODEL>
-OGeometryControlModel_Base* OGeometryControlModel<CONTROLMODEL>::createClone_Impl(
+rtl::Reference<OGeometryControlModel_Base> OGeometryControlModel<CONTROLMODEL>::createClone_Impl(
     css::uno::Reference<css::util::XCloneable>& _rxAggregateInstance)
 {
     return new OGeometryControlModel<CONTROLMODEL>(_rxAggregateInstance);

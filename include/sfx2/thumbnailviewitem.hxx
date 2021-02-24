@@ -23,6 +23,7 @@
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <vcl/bitmapex.hxx>
 #include <sfx2/dllapi.h>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::accessibility { class XAccessible; }
 namespace drawinglayer::primitive2d { class Primitive2DContainer; }
@@ -122,7 +123,7 @@ public:
                         const ThumbnailItemAttributes *pAttrs);
     void addTextPrimitives (const OUString& rText, const ThumbnailItemAttributes *pAttrs, Point aPos, drawinglayer::primitive2d::Primitive2DContainer& rSeq);
 
-    static drawinglayer::primitive2d::PolygonHairlinePrimitive2D*
+    static rtl::Reference<drawinglayer::primitive2d::PolygonHairlinePrimitive2D>
         createBorderLine (const basegfx::B2DPolygon &rPolygon);
 
     virtual void MouseButtonUp(const MouseEvent&) {}

@@ -383,7 +383,7 @@ void ScSheetLinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XSheetLinks
 
-ScSheetLinkObj* ScSheetLinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
+rtl::Reference<ScSheetLinkObj> ScSheetLinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
 {
     if (!pDocShell)
         return nullptr;
@@ -411,7 +411,7 @@ ScSheetLinkObj* ScSheetLinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
     return nullptr;    // no document or index too large
 }
 
-ScSheetLinkObj* ScSheetLinksObj::GetObjectByName_Impl(const OUString& aName)
+rtl::Reference<ScSheetLinkObj> ScSheetLinksObj::GetObjectByName_Impl(const OUString& aName)
 {
     //  Name is the same as file name
 
@@ -898,7 +898,7 @@ void ScAreaLinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XAreaLinks
 
-ScAreaLinkObj* ScAreaLinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
+rtl::Reference<ScAreaLinkObj> ScAreaLinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
 {
     if ( pDocShell && nIndex >= 0 && nIndex < getCount() )
         return new ScAreaLinkObj( pDocShell, static_cast<size_t>(nIndex) );
@@ -1208,7 +1208,7 @@ void ScDDELinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XDDELinks
 
-ScDDELinkObj* ScDDELinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
+rtl::Reference<ScDDELinkObj> ScDDELinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
 {
     if (pDocShell)
     {
@@ -1219,7 +1219,7 @@ ScDDELinkObj* ScDDELinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
     return nullptr;
 }
 
-ScDDELinkObj* ScDDELinksObj::GetObjectByName_Impl(std::u16string_view aName)
+rtl::Reference<ScDDELinkObj> ScDDELinksObj::GetObjectByName_Impl(std::u16string_view aName)
 {
     if (pDocShell)
     {

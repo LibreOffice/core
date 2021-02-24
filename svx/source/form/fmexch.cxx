@@ -306,7 +306,7 @@ namespace svxform
     }
 
     //= OControlExchangeHelper
-    OLocalExchange* OControlExchangeHelper::createExchange() const
+    rtl::Reference<OLocalExchange> OControlExchangeHelper::createExchange() const
     {
         return new OControlExchange;
     }

@@ -2369,7 +2369,7 @@ SwXBodyText::queryInterface(const uno::Type& rType)
         :   ret;
 }
 
-SwXTextCursor * SwXBodyText::CreateTextCursor(const bool bIgnoreTables)
+rtl::Reference<SwXTextCursor> SwXBodyText::CreateTextCursor(const bool bIgnoreTables)
 {
     if(!IsValid())
     {
@@ -2402,8 +2402,8 @@ SwXBodyText::createTextCursor()
 {
     SolarMutexGuard aGuard;
 
-    const uno::Reference< text::XTextCursor > xRef(
-            static_cast<text::XWordCursor*>(CreateTextCursor()) );
+    const uno::Reference< text::XTextCursor > xRef =
+            static_cast<text::XWordCursor*>(CreateTextCursor().get());
     if (!xRef.is())
     {
         uno::RuntimeException aRuntime;

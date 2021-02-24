@@ -169,7 +169,7 @@ protected:
 
     /** This method creates and returns an accessible table.
         @return  An AccessibleBrowseBoxTable. */
-    virtual AccessibleBrowseBoxTable*   createAccessibleTable();
+    virtual rtl::Reference<AccessibleBrowseBoxTable> createAccessibleTable();
 
 private:
     /// the css::accessibility::XAccessible which created the AccessibleBrowseBox

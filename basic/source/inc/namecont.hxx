@@ -297,7 +297,7 @@ protected:
 
     // #56666, Creates another library container
     //         instance of the same derived class
-    virtual SfxLibraryContainer* createInstanceImpl() = 0;
+    virtual rtl::Reference<SfxLibraryContainer> createInstanceImpl() = 0;
 
 
     // Interface to get the BasicManager (Hack for password implementation)

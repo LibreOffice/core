@@ -25,7 +25,7 @@
 
 namespace accessibility {
 
-static AccessibleShape*
+static rtl::Reference<AccessibleShape>
     CreateSdAccessibleShape (
         const AccessibleShapeInfo& rShapeInfo,
         const AccessibleShapeTreeInfo& rShapeTreeInfo,

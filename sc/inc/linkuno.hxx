@@ -122,8 +122,8 @@ class ScSheetLinksObj final : public cppu::WeakImplHelper<
 private:
     ScDocShell*             pDocShell;
 
-    ScSheetLinkObj*         GetObjectByIndex_Impl(sal_Int32 nIndex);
-    ScSheetLinkObj*         GetObjectByName_Impl(const OUString& aName);
+    rtl::Reference<ScSheetLinkObj> GetObjectByIndex_Impl(sal_Int32 nIndex);
+    rtl::Reference<ScSheetLinkObj> GetObjectByName_Impl(const OUString& aName);
 
 public:
                             ScSheetLinksObj(ScDocShell* pDocSh);
@@ -230,7 +230,7 @@ class ScAreaLinksObj final : public cppu::WeakImplHelper<
 private:
     ScDocShell*             pDocShell;
 
-    ScAreaLinkObj*          GetObjectByIndex_Impl(sal_Int32 nIndex);
+    rtl::Reference<ScAreaLinkObj> GetObjectByIndex_Impl(sal_Int32 nIndex);
 
 public:
                             ScAreaLinksObj(ScDocShell* pDocSh);
@@ -326,8 +326,8 @@ class ScDDELinksObj final : public cppu::WeakImplHelper<
 private:
     ScDocShell*             pDocShell;
 
-    ScDDELinkObj*           GetObjectByIndex_Impl(sal_Int32 nIndex);
-    ScDDELinkObj*           GetObjectByName_Impl(std::u16string_view aName);
+    rtl::Reference<ScDDELinkObj> GetObjectByIndex_Impl(sal_Int32 nIndex);
+    rtl::Reference<ScDDELinkObj> GetObjectByName_Impl(std::u16string_view aName);
 
 public:
                             ScDDELinksObj(ScDocShell* pDocSh);

@@ -39,7 +39,7 @@ namespace canvas
                 "RectangularGradient"};
     }
 
-    ParametricPolyPolygon* ParametricPolyPolygon::create(
+    rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::create(
         const uno::Reference< rendering::XGraphicDevice >& rDevice,
         std::u16string_view rServiceName,
         const uno::Sequence< uno::Any >& rArgs )
@@ -110,7 +110,7 @@ namespace canvas
         return nullptr;
     }
 
-    ParametricPolyPolygon* ParametricPolyPolygon::createLinearHorizontalGradient(
+    rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::createLinearHorizontalGradient(
         const uno::Reference< rendering::XGraphicDevice >&  rDevice,
         const uno::Sequence< uno::Sequence< double > >&     colors,
         const uno::Sequence< double >&                      stops )
@@ -120,7 +120,7 @@ namespace canvas
         return new ParametricPolyPolygon( rDevice, GradientType::Linear, colors, stops );
     }
 
-    ParametricPolyPolygon* ParametricPolyPolygon::createEllipticalGradient(
+    rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::createEllipticalGradient(
         const uno::Reference< rendering::XGraphicDevice >&  rDevice,
         const uno::Sequence< uno::Sequence< double > >&     colors,
         const uno::Sequence< double >&                      stops,
@@ -136,7 +136,7 @@ namespace canvas
             colors, stops, fAspectRatio );
     }
 
-    ParametricPolyPolygon* ParametricPolyPolygon::createRectangularGradient( const uno::Reference< rendering::XGraphicDevice >& rDevice,
+    rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::createRectangularGradient( const uno::Reference< rendering::XGraphicDevice >& rDevice,
                                                                              const uno::Sequence< uno::Sequence< double > >&    colors,
                                                                              const uno::Sequence< double >&                     stops,
                                                                              double                                             fAspectRatio )

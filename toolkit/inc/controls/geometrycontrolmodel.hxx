@@ -27,6 +27,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <comphelper/IdPropArrayHelper.hxx>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::resource { class XStringResourceResolver; }
 
@@ -144,7 +145,7 @@ namespace com::sun::star {
             SAL_CALL getEvents(  ) override;
 
         // XCloneable implementation - to be overwritten
-        virtual OGeometryControlModel_Base* createClone_Impl(
+        virtual rtl::Reference<OGeometryControlModel_Base> createClone_Impl(
             css::uno::Reference< css::util::XCloneable >& _rxAggregateInstance) = 0;
 
         // XComponent
@@ -190,7 +191,7 @@ namespace com::sun::star {
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
         // OGeometryControlModel_Base
-        virtual OGeometryControlModel_Base* createClone_Impl(
+        virtual rtl::Reference<OGeometryControlModel_Base> createClone_Impl(
             css::uno::Reference< css::util::XCloneable >& _rxAggregateInstance) override;
 
         // XTypeProvider
@@ -230,7 +231,7 @@ namespace com::sun::star {
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
         // OGeometryControlModel_Base
-        virtual OGeometryControlModel_Base* createClone_Impl(
+        virtual rtl::Reference<OGeometryControlModel_Base> createClone_Impl(
             css::uno::Reference< css::util::XCloneable >& _rxAggregateInstance) override;
 
         // XTypeProvider

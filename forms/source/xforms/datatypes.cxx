@@ -89,9 +89,9 @@ namespace xforms
     }
 
 
-    OXSDDataType* OXSDDataType::clone( const OUString& _rNewName ) const
+    rtl::Reference<OXSDDataType> OXSDDataType::clone( const OUString& _rNewName ) const
     {
-        OXSDDataType* pClone = createClone( _rNewName );
+        rtl::Reference<OXSDDataType> pClone = createClone( _rNewName );
         pClone->initializeClone( *this );
         return pClone;
     }
@@ -568,7 +568,7 @@ namespace xforms
     {
     }
 
-    OXSDDataType* OBooleanType::createClone( const OUString& _rName ) const
+    rtl::Reference<OXSDDataType> OBooleanType::createClone( const OUString& _rName ) const
     {
         return new OBooleanType( _rName );
     }
@@ -695,7 +695,7 @@ namespace xforms
         :classname##_Base( _rName, DataTypeClass::typeclass )   \
     {                                                           \
     }                                                           \
-    OXSDDataType* classname::createClone( const OUString& _rName ) const \
+    rtl::Reference<OXSDDataType> classname::createClone( const OUString& _rName ) const \
     {                                                       \
         return new classname( _rName );                     \
     }                                                       \

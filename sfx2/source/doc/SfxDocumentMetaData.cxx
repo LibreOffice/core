@@ -234,7 +234,7 @@ public:
 
 protected:
     virtual ~SfxDocumentMetaData() override {}
-    virtual SfxDocumentMetaData* createMe( css::uno::Reference< css::uno::XComponentContext > const & context ) { return new SfxDocumentMetaData( context ); };
+    virtual rtl::Reference<SfxDocumentMetaData> createMe( css::uno::Reference< css::uno::XComponentContext > const & context ) { return new SfxDocumentMetaData( context ); };
     const css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     /// for notification
@@ -307,7 +307,7 @@ class CompatWriterDocPropsImpl : public CompatWriterDocPropsImpl_BASE
     OUString msCategory;
     OUString msCompany;
 protected:
-    virtual SfxDocumentMetaData* createMe( css::uno::Reference< css::uno::XComponentContext > const & context ) override { return new CompatWriterDocPropsImpl( context ); };
+    virtual rtl::Reference<SfxDocumentMetaData> createMe( css::uno::Reference< css::uno::XComponentContext > const & context ) override { return new CompatWriterDocPropsImpl( context ); };
 public:
     explicit CompatWriterDocPropsImpl( css::uno::Reference< css::uno::XComponentContext > const & context) : CompatWriterDocPropsImpl_BASE( context ) {}
 
@@ -1987,7 +1987,7 @@ SfxDocumentMetaData::createClone()
     ::osl::MutexGuard g(m_aMutex);
     checkInit();
 
-    SfxDocumentMetaData *pNew = createMe(m_xContext);
+    rtl::Reference<SfxDocumentMetaData> pNew = createMe(m_xContext);
 
     // NB: do not copy the modification listeners, only DOM
     css::uno::Reference<css::xml::dom::XDocument> xDoc = createDOM();

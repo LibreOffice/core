@@ -66,7 +66,7 @@ private:
     virtual rtl::Reference<SfxStyleSheetBase> Create( const OUString&  rName,
                                        SfxStyleFamily   eFamily,
                                        SfxStyleSearchBits     nMask) override;
-    virtual SfxStyleSheetBase* Create( const SfxStyleSheetBase& rStyle ) override;
+    virtual rtl::Reference<SfxStyleSheetBase> Create( const SfxStyleSheetBase& rStyle ) override;
 
     SfxStyleSheetBase*  pActualStyleSheet;
     ScDocument*         pDoc;

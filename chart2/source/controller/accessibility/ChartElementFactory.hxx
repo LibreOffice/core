@@ -18,6 +18,8 @@
  */
 #pragma once
 
+#include <rtl/ref.hxx>
+
 namespace chart
 {
 class AccessibleBase;
@@ -29,7 +31,7 @@ public:
     /** @return a newly created object (using the new operator) that corresponds
                 to the given unique id
      */
-    static AccessibleBase* CreateChartElement(const AccessibleElementInfo& rAccInfo);
+    static rtl::Reference<AccessibleBase> CreateChartElement(const AccessibleElementInfo& rAccInfo);
 };
 
 } // namespace chart

@@ -437,14 +437,14 @@ void Qt5Instance::ProcessEvent(SalUserEvent aEvent)
     aEvent.m_pFrame->CallCallback(aEvent.m_nEvent, aEvent.m_pData);
 }
 
-Qt5FilePicker*
+rtl::Reference<Qt5FilePicker>
 Qt5Instance::createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                           QFileDialog::FileMode eMode)
 {
     if (!IsMainThread())
     {
         SolarMutexGuard g;
-        Qt5FilePicker* pPicker;
+        rtl::Reference<Qt5FilePicker> pPicker;
         RunInMainThread([&, this]() { pPicker = createPicker(context, eMode); });
         assert(pPicker);
         return pPicker;

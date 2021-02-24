@@ -322,7 +322,7 @@ void ScDataPilotTablesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XDataPilotTables
 
-ScDataPilotTableObj* ScDataPilotTablesObj::GetObjectByIndex_Impl( sal_Int32 nIndex )
+rtl::Reference<ScDataPilotTableObj> ScDataPilotTablesObj::GetObjectByIndex_Impl( sal_Int32 nIndex )
 {
     if (pDocShell)
     {
@@ -350,7 +350,7 @@ ScDataPilotTableObj* ScDataPilotTablesObj::GetObjectByIndex_Impl( sal_Int32 nInd
     return nullptr;
 }
 
-ScDataPilotTableObj* ScDataPilotTablesObj::GetObjectByName_Impl(const OUString& rName)
+rtl::Reference<ScDataPilotTableObj> ScDataPilotTablesObj::GetObjectByName_Impl(const OUString& rName)
 {
     if (hasByName(rName))
         return new ScDataPilotTableObj( pDocShell, nTab, rName );
@@ -1536,7 +1536,7 @@ static bool lcl_GetFieldDataByName( ScDPObject* pDPObj, const OUString& rFieldNa
 
 // XDataPilotFields
 
-ScDataPilotFieldObj* ScDataPilotFieldsObj::GetObjectByIndex_Impl( sal_Int32 nIndex ) const
+rtl::Reference<ScDataPilotFieldObj> ScDataPilotFieldsObj::GetObjectByIndex_Impl( sal_Int32 nIndex ) const
 {
     if (ScDPObject* pObj = GetDPObject())
     {
@@ -1547,7 +1547,7 @@ ScDataPilotFieldObj* ScDataPilotFieldsObj::GetObjectByIndex_Impl( sal_Int32 nInd
     return nullptr;
 }
 
-ScDataPilotFieldObj* ScDataPilotFieldsObj::GetObjectByName_Impl(const OUString& aName) const
+rtl::Reference<ScDataPilotFieldObj> ScDataPilotFieldsObj::GetObjectByName_Impl(const OUString& aName) const
 {
     if (ScDPObject* pDPObj = GetDPObject())
     {

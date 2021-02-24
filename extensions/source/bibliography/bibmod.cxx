@@ -74,7 +74,7 @@ BibModul::~BibModul()
     pBibConfig = nullptr;
 }
 
-BibDataManager*  BibModul::createDataManager()
+rtl::Reference<BibDataManager>  BibModul::createDataManager()
 {
     return new BibDataManager();
 }

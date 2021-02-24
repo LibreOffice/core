@@ -29,12 +29,12 @@ class SfxModule;
 class SfxStatusBarControl;
 class StatusBar;
 
-svt::StatusbarController* SfxStatusBarControllerFactory(
+rtl::Reference<svt::StatusbarController> SfxStatusBarControllerFactory(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     StatusBar* pStatusBar,
     unsigned short nID,
     const OUString& aCommandURL );
-typedef SfxStatusBarControl* (*SfxStatusBarControlCtor)( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar &rStb );
+typedef rtl::Reference<SfxStatusBarControl> (*SfxStatusBarControlCtor)( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar &rStb );
 
 struct SfxStbCtrlFactory
 {
@@ -111,18 +111,18 @@ public:
     sal_uInt16      GetId() const { return nId; }
     StatusBar&      GetStatusBar() const { return *pBar; }
 
-    static SfxStatusBarControl* CreateControl( sal_uInt16 nSlotID, sal_uInt16 nId, StatusBar *pBar, SfxModule const * );
+    static rtl::Reference<SfxStatusBarControl> CreateControl( sal_uInt16 nSlotID, sal_uInt16 nId, StatusBar *pBar, SfxModule const * );
     static void RegisterStatusBarControl(SfxModule*, const SfxStbCtrlFactory&);
 
 };
 
 
 #define SFX_DECL_STATUSBAR_CONTROL() \
-        static SfxStatusBarControl* CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar &rStb ); \
+        static rtl::Reference<SfxStatusBarControl> CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar &rStb ); \
         static void RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=nullptr)
 
 #define SFX_IMPL_STATUSBAR_CONTROL(Class, nItemClass) \
-        SfxStatusBarControl* Class::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar &rStb ) \
+        rtl::Reference<SfxStatusBarControl> Class::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar &rStb ) \
                { return new Class( nSlotId, nId, rStb ); } \
         void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
                { SfxStatusBarControl::RegisterStatusBarControl( pMod, SfxStbCtrlFactory( \

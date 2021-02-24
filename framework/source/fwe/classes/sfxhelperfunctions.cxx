@@ -20,6 +20,8 @@
 #include <framework/sfxhelperfunctions.hxx>
 #include <framework/ContextChangeEventMultiplexerTunnel.hxx>
 #include <helper/mischelper.hxx>
+#include <svtools/toolboxcontroller.hxx>
+#include <svtools/statusbarcontroller.hxx>
 
 static pfunc_setToolBoxControllerCreator   pToolBoxControllerCreator   = nullptr;
 static pfunc_setStatusBarControllerCreator pStatusBarControllerCreator = nullptr;
@@ -41,7 +43,7 @@ pfunc_setToolBoxControllerCreator SetToolBoxControllerCreator( pfunc_setToolBoxC
     return pOldSetToolBoxControllerCreator;
 }
 
-svt::ToolboxController* CreateToolBoxController( const Reference< XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const OUString& aCommandURL )
+rtl::Reference<svt::ToolboxController> CreateToolBoxController( const Reference< XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const OUString& aCommandURL )
 {
     pfunc_setToolBoxControllerCreator pFactory = nullptr;
     {
@@ -63,7 +65,7 @@ pfunc_setStatusBarControllerCreator SetStatusBarControllerCreator( pfunc_setStat
     return pOldSetStatusBarControllerCreator;
 }
 
-svt::StatusbarController* CreateStatusBarController( const Reference< XFrame >& rFrame, StatusBar* pStatusBar, unsigned short nID, const OUString& aCommandURL )
+rtl::Reference<svt::StatusbarController> CreateStatusBarController( const Reference< XFrame >& rFrame, StatusBar* pStatusBar, unsigned short nID, const OUString& aCommandURL )
 {
     pfunc_setStatusBarControllerCreator pFactory = nullptr;
     {

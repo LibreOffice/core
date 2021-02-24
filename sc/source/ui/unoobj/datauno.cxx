@@ -537,7 +537,7 @@ ScSubTotalDescriptorBase::~ScSubTotalDescriptorBase()
 
 // XSubTotalDescriptor
 
-ScSubTotalFieldObj* ScSubTotalDescriptorBase::GetObjectByIndex_Impl(sal_uInt16 nIndex)
+rtl::Reference<ScSubTotalFieldObj> ScSubTotalDescriptorBase::GetObjectByIndex_Impl(sal_uInt16 nIndex)
 {
     if ( nIndex < getCount() )
         return new ScSubTotalFieldObj( this, nIndex );
@@ -2127,7 +2127,7 @@ void ScDatabaseRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XDatabaseRanges
 
-ScDatabaseRangeObj* ScDatabaseRangesObj::GetObjectByIndex_Impl(size_t nIndex)
+rtl::Reference<ScDatabaseRangeObj> ScDatabaseRangesObj::GetObjectByIndex_Impl(size_t nIndex)
 {
     if (!pDocShell)
         return nullptr;
@@ -2145,7 +2145,7 @@ ScDatabaseRangeObj* ScDatabaseRangesObj::GetObjectByIndex_Impl(size_t nIndex)
     return new ScDatabaseRangeObj(pDocShell, (*itr)->GetName());
 }
 
-ScDatabaseRangeObj* ScDatabaseRangesObj::GetObjectByName_Impl(const OUString& aName)
+rtl::Reference<ScDatabaseRangeObj> ScDatabaseRangesObj::GetObjectByName_Impl(const OUString& aName)
 {
     if ( pDocShell && hasByName(aName) )
     {

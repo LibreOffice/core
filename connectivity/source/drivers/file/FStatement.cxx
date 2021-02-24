@@ -216,7 +216,7 @@ void SAL_CALL OStatement_Base::clearWarnings(  )
     return *getArrayHelper();
 }
 
-OResultSet* OStatement::createResultSet()
+rtl::Reference<OResultSet> OStatement::createResultSet()
 {
     return new OResultSet(this,m_aSQLIterator);
 }
@@ -251,9 +251,9 @@ Reference< XResultSet > SAL_CALL OStatement::executeQuery( const OUString& sql )
 
     construct(sql);
     Reference< XResultSet > xRS;
-    OResultSet* pResult = createResultSet();
+    rtl::Reference<OResultSet> pResult = createResultSet();
     xRS = pResult;
-    initializeResultSet(pResult);
+    initializeResultSet(pResult.get());
     m_xResultSet = xRS;
 
     pResult->OpenImpl();

@@ -135,7 +135,7 @@ private:
 
     /** This method creates and returns an accessible table.
         @return  An AccessibleGridControlTable. */
-    AccessibleGridControlTable* createAccessibleTable();
+    rtl::Reference<AccessibleGridControlTable> createAccessibleTable();
 
     /// the css::accessibility::XAccessible which created the AccessibleGridControl
     css::uno::WeakReference< css::accessibility::XAccessible >                    m_aCreator;

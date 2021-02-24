@@ -81,7 +81,7 @@ void ScChartsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-ScChartObj* ScChartsObj::GetObjectByIndex_Impl(tools::Long nIndex) const
+rtl::Reference<ScChartObj> ScChartsObj::GetObjectByIndex_Impl(tools::Long nIndex) const
 {
     OUString aName;
     if ( pDocShell )
@@ -121,7 +121,7 @@ ScChartObj* ScChartsObj::GetObjectByIndex_Impl(tools::Long nIndex) const
     return nullptr;
 }
 
-ScChartObj* ScChartsObj::GetObjectByName_Impl(const OUString& aName) const
+rtl::Reference<ScChartObj> ScChartsObj::GetObjectByName_Impl(const OUString& aName) const
 {
     if (sc::tools::findChartsByName(pDocShell, nTab, aName, sc::tools::ChartSourceType::CELL_RANGE))
         return new ScChartObj( pDocShell, nTab, aName );

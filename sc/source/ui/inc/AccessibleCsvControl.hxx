@@ -423,7 +423,7 @@ private:
     /** Returns the contents of the specified cell (including header). Indexes must be valid. */
     OUString implGetCellText( sal_Int32 nRow, sal_Int32 nColumn ) const;
     /** Creates a new accessible object of the specified cell. Indexes must be valid. */
-    ScAccessibleCsvCell* implCreateCellObj(sal_Int32 nRow, sal_Int32 nColumn);
+    rtl::Reference<ScAccessibleCsvCell> implCreateCellObj(sal_Int32 nRow, sal_Int32 nColumn);
 
     css::uno::Reference<css::accessibility::XAccessible> getAccessibleCell(sal_Int32 nRow, sal_Int32 nColumn);
 };

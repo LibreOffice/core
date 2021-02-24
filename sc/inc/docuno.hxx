@@ -441,8 +441,8 @@ class ScTableSheetsObj final : public cppu::WeakImplHelper<
 private:
     ScDocShell*             pDocShell;
 
-    ScTableSheetObj*        GetObjectByIndex_Impl(sal_Int32 nIndex) const;
-    ScTableSheetObj*        GetObjectByName_Impl(const OUString& aName) const;
+    rtl::Reference<ScTableSheetObj> GetObjectByIndex_Impl(sal_Int32 nIndex) const;
+    rtl::Reference<ScTableSheetObj> GetObjectByName_Impl(const OUString& aName) const;
 
 public:
                             ScTableSheetsObj(ScDocShell* pDocSh);
@@ -519,8 +519,8 @@ private:
     SCCOL                   nStartCol;
     SCCOL                   nEndCol;
 
-    ScTableColumnObj*       GetObjectByIndex_Impl(sal_Int32 nIndex) const;
-    ScTableColumnObj*       GetObjectByName_Impl(const OUString& aName) const;
+    rtl::Reference<ScTableColumnObj> GetObjectByIndex_Impl(sal_Int32 nIndex) const;
+    rtl::Reference<ScTableColumnObj> GetObjectByName_Impl(const OUString& aName) const;
 
 public:
                             ScTableColumnsObj(ScDocShell* pDocSh, SCTAB nT,
@@ -585,7 +585,7 @@ private:
     SCROW                   nStartRow;
     SCROW                   nEndRow;
 
-    ScTableRowObj*          GetObjectByIndex_Impl(sal_Int32 nIndex) const;
+    rtl::Reference<ScTableRowObj> GetObjectByIndex_Impl(sal_Int32 nIndex) const;
 
 public:
                             ScTableRowsObj(ScDocShell* pDocSh, SCTAB nT,
@@ -671,7 +671,7 @@ private:
     SCTAB                   nTab;           ///< Collection belongs to the sheet
 
     bool                    GetAddressByIndex_Impl( sal_Int32 nIndex, ScAddress& rPos ) const;
-    ScAnnotationObj*        GetObjectByIndex_Impl( sal_Int32 nIndex ) const;
+    rtl::Reference<ScAnnotationObj> GetObjectByIndex_Impl( sal_Int32 nIndex ) const;
 
 public:
                             ScAnnotationsObj(ScDocShell* pDocSh, SCTAB nT);
@@ -716,8 +716,8 @@ private:
     SCTAB                   nTab;
 
     bool                    GetScenarioIndex_Impl( std::u16string_view rName, SCTAB& rIndex );
-    ScTableSheetObj*        GetObjectByIndex_Impl(sal_Int32 nIndex);
-    ScTableSheetObj*        GetObjectByName_Impl(std::u16string_view aName);
+    rtl::Reference<ScTableSheetObj> GetObjectByIndex_Impl(sal_Int32 nIndex);
+    rtl::Reference<ScTableSheetObj> GetObjectByName_Impl(std::u16string_view aName);
 
 public:
                             ScScenariosObj(ScDocShell* pDocSh, SCTAB nT);

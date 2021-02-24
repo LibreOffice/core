@@ -455,8 +455,7 @@ Any OGridColumn::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 
 Reference< XCloneable > SAL_CALL OGridColumn::createClone(  )
 {
-    OGridColumn* pNewColumn = createCloneColumn();
-    return pNewColumn;
+    return createCloneColumn();
 }
 
 // XPersistObject

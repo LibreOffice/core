@@ -44,7 +44,7 @@ typedef int ShapeTypeId;
 /** Define the function type for creating accessible objects for given
     service names.
 */
-typedef AccessibleShape* (*tCreateFunction)
+typedef rtl::Reference<AccessibleShape> (*tCreateFunction)
     (const AccessibleShapeInfo& rShapeInfo,
     const AccessibleShapeTreeInfo& rShapeTreeInfo,
     ShapeTypeId nId);

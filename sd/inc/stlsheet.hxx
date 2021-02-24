@@ -72,7 +72,7 @@ public:
 
     static OUString GetFamilyString( SfxStyleFamily eFamily );
 
-    static SdStyleSheet* CreateEmptyUserStyle( SfxStyleSheetBasePool& rPool, SfxStyleFamily eFamily );
+    static rtl::Reference<SdStyleSheet> CreateEmptyUserStyle( SfxStyleSheetBasePool& rPool, SfxStyleFamily eFamily );
 
     //Broadcast that a SdStyleSheet has changed, taking into account outline sublevels
     //which need to be explicitly broadcast as changing if their parent style was

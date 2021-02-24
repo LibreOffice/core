@@ -1226,9 +1226,9 @@ namespace svx
             SfxSlotId* pSlots = _pZeroTerminatedSlots;
             while ( *pSlots )
             {
-                FmTextControlFeature* pDispatcher = implGetFeatureDispatcher( xProvider, pApplication, *pSlots );
+                rtl::Reference<FmTextControlFeature> pDispatcher = implGetFeatureDispatcher( xProvider, pApplication, *pSlots );
                 if ( pDispatcher )
-                    _rDispatchers.emplace( *pSlots, ControlFeature( pDispatcher ) );
+                    _rDispatchers.emplace( *pSlots, pDispatcher );
 
                 ++pSlots;
             }
@@ -1236,7 +1236,7 @@ namespace svx
     }
 
 
-    FmTextControlFeature* FmTextControlShell::implGetFeatureDispatcher( const Reference< XDispatchProvider >& _rxProvider, SfxApplication const * _pApplication, SfxSlotId _nSlot )
+    rtl::Reference<FmTextControlFeature> FmTextControlShell::implGetFeatureDispatcher( const Reference< XDispatchProvider >& _rxProvider, SfxApplication const * _pApplication, SfxSlotId _nSlot )
     {
         OSL_PRECOND( _rxProvider.is() && _pApplication, "FmTextControlShell::implGetFeatureDispatcher: invalid arg(s)!" );
         URL aFeatureURL;

@@ -22,6 +22,7 @@
 
 #include <framework/fwkdllapi.h>
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::uno { template <typename > class Reference; }
@@ -31,13 +32,13 @@ namespace svt { class ToolboxController; }
 class StatusBar;
 class ToolBox;
 
-typedef svt::ToolboxController* ( *pfunc_setToolBoxControllerCreator)(
+typedef rtl::Reference<svt::ToolboxController> ( *pfunc_setToolBoxControllerCreator)(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     ToolBox* pToolbox,
     unsigned short nID,
     const OUString& aCommandURL );
 
-typedef svt::StatusbarController* ( *pfunc_setStatusBarControllerCreator)(
+typedef rtl::Reference<svt::StatusbarController> ( *pfunc_setStatusBarControllerCreator)(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     StatusBar* pStatusBar,
     unsigned short nID,
@@ -58,14 +59,14 @@ typedef bool ( *pfunc_isDockingWindowVisible)(
 namespace framework
 {
 FWK_DLLPUBLIC pfunc_setToolBoxControllerCreator SetToolBoxControllerCreator( pfunc_setToolBoxControllerCreator pSetToolBoxControllerCreator );
-FWK_DLLPUBLIC svt::ToolboxController* CreateToolBoxController(
+FWK_DLLPUBLIC rtl::Reference<svt::ToolboxController> CreateToolBoxController(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     ToolBox* pToolbox,
     unsigned short nID,
     const OUString& aCommandURL );
 
 FWK_DLLPUBLIC pfunc_setStatusBarControllerCreator SetStatusBarControllerCreator( pfunc_setStatusBarControllerCreator pSetStatusBarControllerCreator );
-FWK_DLLPUBLIC svt::StatusbarController* CreateStatusBarController(
+FWK_DLLPUBLIC rtl::Reference<svt::StatusbarController> CreateStatusBarController(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     StatusBar* pStatusBar,
     unsigned short nID,

@@ -260,7 +260,7 @@ AccessibleGridControl::implGetFixedChild( sal_Int32 nChildIndex )
     return xRet;
 }
 
-AccessibleGridControlTable* AccessibleGridControl::createAccessibleTable()
+rtl::Reference<AccessibleGridControlTable> AccessibleGridControl::createAccessibleTable()
 {
     css::uno::Reference< css::accessibility::XAccessible > xCreator(m_aCreator);
     OSL_ENSURE( xCreator.is(), "extended/AccessibleGridControl::createAccessibleTable: my creator died - how this?" );

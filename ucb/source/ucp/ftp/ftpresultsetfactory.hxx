@@ -29,6 +29,7 @@
 #include "ftpdirp.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/Property.hpp>
+#include <rtl/ref.hxx>
 #include <vector>
 
 namespace ftp {
@@ -43,7 +44,7 @@ public:
                       const css::uno::Sequence<css::beans::Property>& seq,
                       const std::vector<FTPDirentry>& dirvec);
 
-    ResultSetBase* createResultSet();
+    rtl::Reference<ResultSetBase> createResultSet();
 private:
     css::uno::Reference< css::uno::XComponentContext >        m_xContext;
     css::uno::Reference< css::ucb::XContentProvider >         m_xProvider;

@@ -26,6 +26,7 @@
 #include "gstplayer.hxx"
 #include <com/sun/star/media/XFrameGrabber.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 namespace avmedia::gstreamer {
 
@@ -43,7 +44,7 @@ public:
     const FrameGrabber& operator=(const FrameGrabber&) =delete;
 
     // static create method instead of public Ctor
-    static FrameGrabber* create( std::u16string_view rURL );
+    static rtl::Reference<FrameGrabber> create( std::u16string_view rURL );
 
     virtual ~FrameGrabber() override;
 

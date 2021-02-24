@@ -69,7 +69,7 @@ using namespace ::com::sun::star::ui;
 
 SFX_IMPL_TOOLBOX_CONTROL_ARG(SfxToolBoxControl, SfxStringItem, true);
 
-svt::ToolboxController* SfxToolBoxControllerFactory( const Reference< XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const OUString& aCommandURL )
+rtl::Reference<svt::ToolboxController> SfxToolBoxControllerFactory( const Reference< XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const OUString& aCommandURL )
 {
     SolarMutexGuard aGuard;
 
@@ -170,7 +170,7 @@ void SfxToolBoxControl::RegisterToolBoxControl( SfxModule* pMod, const SfxTbxCtr
     SfxGetpApp()->RegisterToolBoxControl_Impl( pMod, rFact );
 }
 
-SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uInt16 nTbxId, ToolBox *pBox, SfxModule const * pMod  )
+rtl::Reference<SfxToolBoxControl> SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uInt16 nTbxId, ToolBox *pBox, SfxModule const * pMod  )
 {
     SolarMutexGuard aGuard;
 
@@ -184,7 +184,7 @@ SfxToolBoxControl* SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uIn
     const std::type_info* aSlotType = pSlotPool->GetSlotType( nSlotId );
     if ( aSlotType )
     {
-        SfxToolBoxControl *pCtrl;
+        rtl::Reference<SfxToolBoxControl> pCtrl;
         if ( pMod )
         {
             SfxTbxCtrlFactArr_Impl *pFactories = pMod->GetTbxCtrlFactories_Impl();

@@ -104,7 +104,7 @@ namespace svxform
         SVX_DLLPRIVATE void     setClipboardListener( const Link<OLocalExchange&,void>& _rListener ) { if ( m_xTransferable.is() ) m_xTransferable->setClipboardListener( _rListener ); }
 
     protected:
-        SVX_DLLPRIVATE virtual OLocalExchange* createExchange() const = 0;
+        SVX_DLLPRIVATE virtual rtl::Reference<OLocalExchange> createExchange() const = 0;
 
     protected:
         SVX_DLLPRIVATE void implReset();
@@ -215,7 +215,7 @@ namespace svxform
         OControlExchange& operator*() const { return *static_cast< OControlExchange* >( m_xTransferable.get() ); }
 
     protected:
-        virtual OLocalExchange* createExchange() const override;
+        virtual rtl::Reference<OLocalExchange> createExchange() const override;
     };
 
 

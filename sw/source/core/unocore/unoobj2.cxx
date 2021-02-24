@@ -446,7 +446,7 @@ struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
 
 }
 
-SwXParagraphEnumeration* SwXParagraphEnumeration::Create(
+rtl::Reference<SwXParagraphEnumeration> SwXParagraphEnumeration::Create(
     uno::Reference< text::XText > const& xParent,
     const std::shared_ptr<SwUnoCursor>& pCursor,
     const CursorType eType,
@@ -1606,7 +1606,7 @@ void SwXTextRangesImpl::MakeRanges()
     }
 }
 
-SwXTextRanges* SwXTextRanges::Create(SwPaM *const pPaM)
+rtl::Reference<SwXTextRanges> SwXTextRanges::Create(SwPaM *const pPaM)
     { return new SwXTextRangesImpl(pPaM); }
 
 namespace
@@ -1714,7 +1714,7 @@ struct SwXParaFrameEnumerationImpl final : public SwXParaFrameEnumeration
 
 }
 
-SwXParaFrameEnumeration* SwXParaFrameEnumeration::Create(const SwPaM& rPaM, const enum ParaFrameMode eParaFrameMode, SwFrameFormat* const pFormat)
+rtl::Reference<SwXParaFrameEnumeration> SwXParaFrameEnumeration::Create(const SwPaM& rPaM, const enum ParaFrameMode eParaFrameMode, SwFrameFormat* const pFormat)
     { return new SwXParaFrameEnumerationImpl(rPaM, eParaFrameMode, pFormat); }
 
 SwXParaFrameEnumerationImpl::SwXParaFrameEnumerationImpl(
