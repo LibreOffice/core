@@ -58,6 +58,7 @@ public:
     bool VisitTypeLoc(clang::TypeLoc typeLoc);
     bool VisitCXXDeleteExpr(const CXXDeleteExpr *);
     bool VisitBinaryOperator(const BinaryOperator *);
+    bool VisitReturnStmt(const ReturnStmt *);
 
     // Creation of temporaries with one argument are represented by
     // CXXFunctionalCastExpr, while any other number of arguments are
@@ -520,6 +521,7 @@ bool RefCounting::VisitCXXDeleteExpr(const CXXDeleteExpr * cxxDeleteExpr)
     }
     return true;
 }
+
 bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (ignoreLocation(fieldDecl)) {
         return true;
@@ -599,6 +601,33 @@ bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
     return true;
 }
 
+bool RefCounting::VisitReturnStmt(const ReturnStmt * returnStmt) {
+    if (ignoreLocation(returnStmt)) {
+        return true;
+    }
+
+    if (!returnStmt->getRetValue())
+        return true;
+    auto cxxNewExpr = dyn_cast<CXXNewExpr>(compat::IgnoreImplicit(returnStmt->getRetValue()));
+    if (!cxxNewExpr)
+        return true;
+
+    auto qt = returnStmt->getRetValue()->getType();
+    if (!qt->isPointerType())
+        return false;
+    qt = qt->getPointeeType();
+
+    if (containsOWeakObjectSubclass(qt)) {
+        report(
+            DiagnosticsEngine::Warning,
+            "new object of cppu::OWeakObject subclass %0 being returned via raw pointer, should be returned by via rtl::Reference",
+            compat::getBeginLoc(returnStmt))
+            << qt
+            << returnStmt->getSourceRange();
+    }
+
+    return true;
+}
 
 bool RefCounting::VisitVarDecl(const VarDecl * varDecl) {
     if (ignoreLocation(varDecl))
