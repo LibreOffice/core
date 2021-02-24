@@ -112,6 +112,7 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames() const
 #if defined(__GNUC__) && !defined(__clang__)
     // clang 8.0.0 says strcmp isn't constexpr
     static_assert(std::strcmp("Update/Link", aPropNames[g_UpdateLinkIndex]) == 0);
+    static_assert(std::strcmp("Display/DefaultAnchor", aPropNames[g_DefaultAnchor]) == 0);
 #endif
     const int nCount = m_bWeb ? 12 : SAL_N_ELEMENTS(aPropNames);
     Sequence<OUString> aNames(nCount);
