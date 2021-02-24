@@ -1,0 +1,30 @@
+--- /src/Soros.cxx	2021-02-24 15:31:59.003956770 +0000
++++ /src/Soros.cxx	2021-02-24 15:32:29.156601577 +0000
+@@ -45,6 +45,9 @@
+     begins(0),
+     ends(0)
+ {
++    const std::wstring_view numbertext = L"__numbertext__";
++    const std::wstring_view semicolon = L";";
++	
+     program = translate(program, m, c, L"\\");     // \\, \", \;, \# -> \uE000..\uE003
+     // switch off all country-dependent lines, and switch on the requested ones
+     program = regex_replace(program, wregex(L"(^|[\n;])([^\n;#]*#[^\n]*\\[:[^\n:\\]]*:\\][^\n]*)"), L"$1#$2");
+@@ -52,7 +55,7 @@
+     program = regex_replace(program, wregex(L"(^|[\n;])#([^\n;#]*#[^\n]*\\[:" + filtered_lang + L":\\][^\n]*)"), L"$1$2");
+     program = regex_replace(program, wregex(L"(#[^\n]*)?(\n|$)"), L";"); // remove comments
+     // __numbertext__ sets the place of left zero deletion rule
+-    if (program.find(L"__numbertext__") == std::wstring::npos)
++    if (program.find(numbertext) == std::wstring::npos)
+         program.insert(0, L"__numbertext__;");
+     program = regex_replace(program, wregex(L"__numbertext__"),
+                         // default left zero deletion
+@@ -69,7 +72,7 @@
+     wregex quoteStart(L"^\"");
+     wregex quoteEnd(L"\"$");
+     std::wstring smacro;
+-    while ((pos = program.find(L";", pos)) != std::wstring::npos) {
++    while ((pos = program.find(semicolon, pos)) != std::wstring::npos) {
+         wsmatch sp;
+         std::wstring linOrig = program.substr(old_pos, pos - old_pos);
+         // pattern extension after == macro ==:
