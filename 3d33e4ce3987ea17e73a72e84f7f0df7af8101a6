@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "96d39f24_170a2e46",
+        "filename": "vcl/source/font/font.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-24T09:52:07Z",
+      "side": 1,
+      "message": "This will fail because aArray does not end with \u0027\\0\u0027 - see commit e0f2256b90fb30a5a7858f93c168d9da12061e70.\n\nSee https://gerrit.libreoffice.org/c/core/+/111431 which should simplify and fix this.",
+      "revId": "3d33e4ce3987ea17e73a72e84f7f0df7af8101a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "00b1a61a_7bab875f",
         "filename": "vcl/source/font/font.cxx",
         "patchSetId": 4
