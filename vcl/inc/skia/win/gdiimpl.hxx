@@ -21,9 +21,9 @@
 #include <svdata.hxx>
 
 #include <SkFont.h>
+#include <SkFontMgr.h>
 
 class SkTypeface;
-class SkFontMgr;
 class ControlCacheKey;
 
 class SkiaCompatibleDC : public CompatibleDC
@@ -63,10 +63,10 @@ protected:
     virtual void performFlush() override;
     sk_sp<SkTypeface> createDirectWriteTypeface(const LOGFONTW& logFont);
     static void initFontInfo();
-    IDWriteFactory* dwriteFactory;
-    IDWriteGdiInterop* dwriteGdiInterop;
-    sk_sp<SkFontMgr> dwriteFontMgr;
-    bool dwriteDone = false;
+    inline static IDWriteFactory* dwriteFactory;
+    inline static IDWriteGdiInterop* dwriteGdiInterop;
+    inline static sk_sp<SkFontMgr> dwriteFontMgr;
+    inline static bool dwriteDone = false;
     static SkFont::Edging fontEdging;
 };
 
