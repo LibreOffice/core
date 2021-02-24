@@ -28,7 +28,7 @@ namespace connectivity::dbase
         class ODbasePreparedStatement : public file::OPreparedStatement
         {
         protected:
-            virtual file::OResultSet* createResultSet() override;
+            virtual rtl::Reference<file::OResultSet> createResultSet() override;
         public:
             ODbasePreparedStatement( file::OConnection* _pConnection) : file::OPreparedStatement( _pConnection){}
             DECLARE_SERVICE_INFO();

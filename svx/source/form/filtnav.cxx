@@ -103,7 +103,7 @@ SotClipboardFormatId OFilterItemExchange::getFormatId()
     return s_nFormat;
 }
 
-OLocalExchange* OFilterExchangeHelper::createExchange() const
+rtl::Reference<OLocalExchange> OFilterExchangeHelper::createExchange() const
 {
     return new OFilterItemExchange;
 }

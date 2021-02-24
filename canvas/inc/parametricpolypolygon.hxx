@@ -26,6 +26,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 #include <canvas/canvastoolsdllapi.h>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::rendering { class XGraphicDevice; }
 
@@ -85,7 +86,7 @@ namespace canvas
         };
 
         static css::uno::Sequence< OUString > getAvailableServiceNames();
-        static ParametricPolyPolygon* create(
+        static rtl::Reference<ParametricPolyPolygon> create(
             const css::uno::Reference< css::rendering::XGraphicDevice >& rDevice,
             std::u16string_view rServiceName,
             const css::uno::Sequence< css::uno::Any >& rArgs );
@@ -112,16 +113,16 @@ namespace canvas
         ParametricPolyPolygon(const ParametricPolyPolygon&) = delete;
         ParametricPolyPolygon& operator=( const ParametricPolyPolygon& ) = delete;
 
-        static ParametricPolyPolygon* createLinearHorizontalGradient( const css::uno::Reference<
+        static rtl::Reference<ParametricPolyPolygon> createLinearHorizontalGradient( const css::uno::Reference<
                                                                          css::rendering::XGraphicDevice >& rDevice,
                                                                       const css::uno::Sequence< css::uno::Sequence< double > >& colors,
                                                                       const css::uno::Sequence< double >& stops );
-        static ParametricPolyPolygon* createEllipticalGradient( const css::uno::Reference<
+        static rtl::Reference<ParametricPolyPolygon> createEllipticalGradient( const css::uno::Reference<
                                                                    css::rendering::XGraphicDevice >& rDevice,
                                                                 const css::uno::Sequence< css::uno::Sequence< double > >& colors,
                                                                 const css::uno::Sequence< double >& stops,
                                                                 double fAspect );
-        static ParametricPolyPolygon* createRectangularGradient( const css::uno::Reference<
+        static rtl::Reference<ParametricPolyPolygon> createRectangularGradient( const css::uno::Reference<
                                                                     css::rendering::XGraphicDevice >& rDevice,
                                                                  const css::uno::Sequence< css::uno::Sequence< double > >& colors,
                                                                  const css::uno::Sequence< double >& stops,

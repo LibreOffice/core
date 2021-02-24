@@ -117,7 +117,7 @@ namespace connectivity::file
 
             virtual void parseParamterElem(const OUString& _sColumnName,OSQLParseNode* pRow_Value_Constructor_Elem);
             // factory method for resultset's
-            virtual OResultSet* createResultSet() = 0;
+            virtual rtl::Reference<OResultSet> createResultSet() = 0;
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
             // OPropertySetHelper
@@ -175,7 +175,7 @@ namespace connectivity::file
         {
         protected:
             // factory method for resultset's
-            virtual OResultSet* createResultSet() override;
+            virtual rtl::Reference<OResultSet> createResultSet() override;
         public:
             // a Constructor, that is needed for when Returning the Object is needed:
             OStatement( OConnection* _pConnection) : OStatement_BASE2( _pConnection){}

@@ -107,7 +107,7 @@ namespace comphelper
                     getParent() const { return m_xParentAccessible; }
 
         // own overridables
-        virtual OAccessibleContextWrapper* createAccessibleContext(
+        virtual rtl::Reference<OAccessibleContextWrapper> createAccessibleContext(
                 const css::uno::Reference< css::accessibility::XAccessibleContext >& _rxInnerContext
             );
 

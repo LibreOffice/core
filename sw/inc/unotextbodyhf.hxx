@@ -48,7 +48,7 @@ public:
 
     SwXBodyText(SwDoc *const pDoc);
 
-    SwXTextCursor * CreateTextCursor(const bool bIgnoreTables = false);
+    rtl::Reference<SwXTextCursor> CreateTextCursor(const bool bIgnoreTables = false);
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface(

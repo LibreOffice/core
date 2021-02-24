@@ -116,7 +116,7 @@ namespace
         DECLARE_XTYPEPROVIDER( )
 
         // OAccessibleWrapper
-        virtual OAccessibleContextWrapper* createAccessibleContext(
+        virtual rtl::Reference<OAccessibleContextWrapper> createAccessibleContext(
                 const css::uno::Reference< css::accessibility::XAccessibleContext >& _rxInnerContext
             ) override;
 
@@ -127,7 +127,7 @@ namespace
     IMPLEMENT_FORWARD_XINTERFACE2( OToolBoxWindowItem, OAccessibleWrapper, OToolBoxWindowItem_Base )
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OToolBoxWindowItem, OAccessibleWrapper, OToolBoxWindowItem_Base )
 
-    OAccessibleContextWrapper* OToolBoxWindowItem::createAccessibleContext(
+    rtl::Reference<OAccessibleContextWrapper> OToolBoxWindowItem::createAccessibleContext(
             const Reference< XAccessibleContext >& _rxInnerContext )
     {
         return new OToolBoxWindowItemContext( m_nIndexInParent, getComponentContext(), _rxInnerContext, this, getParent() );

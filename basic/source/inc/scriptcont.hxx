@@ -56,7 +56,7 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
 
     virtual void importFromOldStorage( const OUString& aFile ) override;
 
-    virtual SfxLibraryContainer* createInstanceImpl() override;
+    virtual rtl::Reference<SfxLibraryContainer> createInstanceImpl() override;
 
 
     // Password encryption

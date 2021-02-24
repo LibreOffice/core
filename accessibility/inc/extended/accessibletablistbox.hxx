@@ -86,7 +86,7 @@ private:
 
     /** This method creates and returns an accessible table.
         @return  An AccessibleBrowseBoxTable. */
-    virtual AccessibleBrowseBoxTable*   createAccessibleTable() override;
+    virtual rtl::Reference<AccessibleBrowseBoxTable> createAccessibleTable() override;
 };
 
 

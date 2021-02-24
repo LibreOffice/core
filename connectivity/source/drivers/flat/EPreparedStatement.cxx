@@ -24,7 +24,7 @@ using namespace connectivity::flat;
 using namespace connectivity::file;
 using namespace ::com::sun::star::uno;
 
-OResultSet* OFlatPreparedStatement::createResultSet()
+rtl::Reference<OResultSet> OFlatPreparedStatement::createResultSet()
 {
     return new OFlatResultSet(this, m_aSQLIterator);
 }

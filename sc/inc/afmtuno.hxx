@@ -45,8 +45,8 @@ class ScAutoFormatsObj final : public ::cppu::WeakImplHelper<
                             css::lang::XServiceInfo >
 {
 private:
-    static ScAutoFormatObj* GetObjectByIndex_Impl(sal_uInt16 nIndex);
-    static ScAutoFormatObj* GetObjectByName_Impl(std::u16string_view aName);
+    static rtl::Reference<ScAutoFormatObj> GetObjectByIndex_Impl(sal_uInt16 nIndex);
+    static rtl::Reference<ScAutoFormatObj> GetObjectByName_Impl(std::u16string_view aName);
 
 public:
                             ScAutoFormatsObj();
@@ -96,7 +96,7 @@ private:
     SfxItemPropertySet      aPropSet;
     sal_uInt16              nFormatIndex;
 
-    ScAutoFormatFieldObj*   GetObjectByIndex_Impl(sal_uInt16 nIndex);
+    rtl::Reference<ScAutoFormatFieldObj> GetObjectByIndex_Impl(sal_uInt16 nIndex);
 
 public:
                             ScAutoFormatObj(sal_uInt16 nIndex);

@@ -151,7 +151,7 @@ namespace svx
     private:
         bool    isControllerListening() const { return !m_aControlObservers.empty(); }
 
-        FmTextControlFeature*
+        rtl::Reference<FmTextControlFeature>
                         implGetFeatureDispatcher(
                             const css::uno::Reference< css::frame::XDispatchProvider >& _rxProvider,
                             SfxApplication const * _pApplication,
