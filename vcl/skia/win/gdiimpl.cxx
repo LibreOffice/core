@@ -159,6 +159,8 @@ sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(const LOGFON
         }
         dwriteDone = true;
     }
+    if (!dwriteFontMgr)
+        return nullptr;
     IDWriteFont* font = nullptr;
     IDWriteFontFace* fontFace;
     IDWriteFontFamily* fontFamily;
