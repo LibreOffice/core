@@ -1442,6 +1442,35 @@ void SwRangeRedline::CopyToSection()
         SwNodeIndex aNdIdx( *pSttNd, 1 );
         SwTextNode* pTextNd = aNdIdx.GetNode().GetTextNode();
         SwPosition aPos( aNdIdx, SwIndex( pTextNd ));
+
+        // tdf#115815 keep original start position of collapsed annotation ranges
+        // as temporary bookmarks (removed after file saving and file loading)
+        auto & rDMA(*rDoc.getIDocumentMarkAccess());
+        for (auto iter = rDMA.getAnnotationMarksBegin();
+              iter != rDMA.getAnnotationMarksEnd(); )
+        {
+            SwPosition const& rStartPos((**iter).GetMarkStart());
+            if ( *pStt <= rStartPos && rStartPos < *pEnd )
+            {
+                // at start of redlines use a 1-character length bookmark range
+                // instead of a 0-character length bookmark position to avoid its losing
+                sal_Int32 nLen = (*pStt == rStartPos) ? 1 : 0;
+                SwPaM aPam( rStartPos.nNode, rStartPos.nContent.GetIndex(),
+                                rStartPos.nNode, rStartPos.nContent.GetIndex() + nLen);
+                ::sw::mark::IMark* pMark = rDMA.makeMark(
+                    aPam,
+                    (**iter).GetName() + "____",
+                    IDocumentMarkAccess::MarkType::BOOKMARK, sw::mark::InsertMode::New);
+                ::sw::mark::IBookmark* pBookmark = dynamic_cast< ::sw::mark::IBookmark* >(pMark);
+                if (pBookmark)
+                {
+                    pBookmark->SetKeyCode(vcl::KeyCode());
+                    pBookmark->SetShortName(OUString());
+                }
+            }
+            ++iter;
+        }
+
         rDoc.getIDocumentContentOperations().CopyRange(*this, aPos, SwCopyFlags::CheckPosInFly);
 
         // Take over the style from the EndNode if needed

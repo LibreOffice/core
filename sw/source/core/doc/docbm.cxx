@@ -1641,6 +1641,34 @@ namespace sw::mark
             CompareIMarkStartsAfter());
     }
 
+    // restore text ranges of annotations of tracked deletions
+    // based on the helper bookmarks (which can survive I/O and hiding redlines)
+    void MarkManager::restoreAnnotationMarks()
+    {
+        for (auto iter = getBookmarksBegin();
+              iter != getBookmarksEnd(); )
+        {
+            const OUString & rBookmarkName = (**iter).GetName();
+            sal_Int32 nPos;
+            if ( rBookmarkName.startsWith("__Annotation__") &&
+                  (nPos = rBookmarkName.indexOf("____")) > -1 )
+            {
+                ::sw::UndoGuard const undoGuard(m_rDoc.GetIDocumentUndoRedo());
+                IDocumentMarkAccess::const_iterator_t pMark = findAnnotationMark(rBookmarkName.copy(0, nPos));
+                if ( pMark != getAnnotationMarksEnd() )
+                {
+                    const SwPaM aPam((**iter).GetMarkStart(), (**pMark).GetMarkEnd());
+                    repositionMark(*pMark, aPam);
+                }
+                deleteMark(&**iter);
+                // this invalidates iter, have to start over...
+                iter = getBookmarksBegin();
+            }
+            else
+                ++iter;
+        }
+    }
+
     OUString MarkManager::getUniqueMarkName(const OUString& rName) const
     {
         OSL_ENSURE(rName.getLength(),
