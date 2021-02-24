@@ -30,7 +30,7 @@ class Comments(UITestCase):
         self.xUITest.executeCommand(".uno:InsertAnnotation")
 
         # wait until the comment is available
-        self.ui_test.wait_until_child_is_available(xMainWindow, 'Comment1')
+        self.ui_test.wait_until_child_is_available('Comment1')
 
         xComment1 = xMainWindow.getChild("Comment1")
         xEditView1 = xComment1.getChild("editview")
@@ -78,7 +78,7 @@ class Comments(UITestCase):
         xwriter_edit.executeAction("TYPE", mkPropertyValues({"TEXT": "Line 1"}))
         self.xUITest.executeCommand(".uno:InsertAnnotation")
         # wait until the comment is available
-        self.ui_test.wait_until_child_is_available(xMainWindow, 'Comment1')
+        self.ui_test.wait_until_child_is_available('Comment1')
         xComment1 = xMainWindow.getChild("Comment1")
         xEditView1 = xComment1.getChild("editview")
         xEditView1.executeAction("TYPE", mkPropertyValues({"TEXT": "First Comment"}))
@@ -88,7 +88,7 @@ class Comments(UITestCase):
         xwriter_edit.executeAction("TYPE", mkPropertyValues({"TEXT": "Line 2"}))
         self.xUITest.executeCommand(".uno:InsertAnnotation")
         # wait until the comment is available
-        self.ui_test.wait_until_child_is_available(xMainWindow, 'Comment2')
+        self.ui_test.wait_until_child_is_available('Comment2')
         xComment2 = xMainWindow.getChild("Comment2")
         xEditView2 = xComment2.getChild("editview")
         xEditView2.executeAction("TYPE", mkPropertyValues({"TEXT": "Second Comment"}))
@@ -98,7 +98,7 @@ class Comments(UITestCase):
         xwriter_edit.executeAction("TYPE", mkPropertyValues({"TEXT": "Line 3"}))
         self.xUITest.executeCommand(".uno:InsertAnnotation")
         # wait until the comment is available
-        self.ui_test.wait_until_child_is_available(xMainWindow, 'Comment3')
+        self.ui_test.wait_until_child_is_available('Comment3')
         xComment3 = xMainWindow.getChild("Comment3")
         xEditView3 = xComment3.getChild("editview")
         xEditView3.executeAction("TYPE", mkPropertyValues({"TEXT": "Third Comment"}))

@@ -21,10 +21,9 @@ class tdf134439(UITestCase):
         xCursor = document.CurrentController.ViewCursor
         self.assertEqual("Chap 1", xCursor.PageStyleName)
 
+        self.ui_test.wait_until_child_is_available('PageBreak')
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
-        self.ui_test.wait_until_child_is_available(xWriterEdit, 'PageBreak')
-        xPageBreak = xWriterEdit.getChild('PageBreak')
+        xPageBreak = xWriterDoc.getChild('PageBreak')
 
         self.ui_test.execute_dialog_through_action(xPageBreak, "EDIT")
 

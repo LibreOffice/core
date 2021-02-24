@@ -45,7 +45,7 @@ class Tdf140257(UITestCase):
     xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "SwNavigatorPanel"}))
 
     # wait until the navigator panel is available
-    self.ui_test.wait_until_child_is_available(xMainWindow, 'NavigatorPanelParent')
+    self.ui_test.wait_until_child_is_available('NavigatorPanelParent')
 
     xNavigatorPanel = xWriterEdit.getChild("NavigatorPanelParent")
 
@@ -86,7 +86,7 @@ class Tdf140257(UITestCase):
     xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "SwNavigatorPanel"}))
 
     # wait until the navigator panel is available
-    self.ui_test.wait_until_child_is_available(xMainWindow, 'NavigatorPanelParent')
+    self.ui_test.wait_until_child_is_available('NavigatorPanelParent')
 
     xNavigatorPanel = xWriterEdit.getChild("NavigatorPanelParent")
 

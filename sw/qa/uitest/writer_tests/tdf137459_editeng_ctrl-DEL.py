@@ -8,7 +8,6 @@
 #
 
 from uitest.framework import UITestCase
-import time
 from uitest.uihelper.common import get_state_as_dict, type_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
@@ -24,7 +23,7 @@ class tdf137459(UITestCase):
         # adding new Comment
         self.xUITest.executeCommand(".uno:InsertAnnotation")
         # wait until the comment is available
-        self.ui_test.wait_until_child_is_available(xMainWindow, 'Comment1')
+        self.ui_test.wait_until_child_is_available('Comment1')
 
         xComment1 = xMainWindow.getChild("Comment1")
         xEditView1 = xComment1.getChild("editview")
