@@ -45,6 +45,7 @@
 #include <doc.hxx>
 #include <docfunc.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <IDocumentStatistics.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
@@ -408,6 +409,9 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     nRedlineFlags |= RedlineFlags::ShowInsert;
     nRedlineFlags |= nOrigRedlineFlags & RedlineFlags::ShowMask;
     m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags( nRedlineFlags );
+
+    // tdf#115815 restore annotation ranges collapsed by hide redlines
+    m_pDoc->getIDocumentMarkAccess()->restoreAnnotationMarks();
 
     if (xStatusIndicator.is())
     {
