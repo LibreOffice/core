@@ -165,7 +165,7 @@ ScAutoFormatsObj_get_implementation(css::uno::XComponentContext*, css::uno::Sequ
 
 // XTableAutoFormats
 
-ScAutoFormatObj* ScAutoFormatsObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
+rtl::Reference<ScAutoFormatObj> ScAutoFormatsObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
 {
     if (nIndex < ScGlobal::GetOrCreateAutoFormat()->size())
         return new ScAutoFormatObj(nIndex);
@@ -173,7 +173,7 @@ ScAutoFormatObj* ScAutoFormatsObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
     return nullptr;    // wrong index
 }
 
-ScAutoFormatObj* ScAutoFormatsObj::GetObjectByName_Impl(std::u16string_view aName)
+rtl::Reference<ScAutoFormatObj> ScAutoFormatsObj::GetObjectByName_Impl(std::u16string_view aName)
 {
     sal_uInt16 nIndex;
     if (lcl_FindAutoFormatIndex(
@@ -362,7 +362,7 @@ UNO3_GETIMPLEMENTATION_IMPL(ScAutoFormatObj);
 
 // XTableAutoFormat
 
-ScAutoFormatFieldObj* ScAutoFormatObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
+rtl::Reference<ScAutoFormatFieldObj> ScAutoFormatObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
 {
     if ( IsInserted() && nIndex < SC_AF_FIELD_COUNT )
         return new ScAutoFormatFieldObj( nFormatIndex, nIndex );

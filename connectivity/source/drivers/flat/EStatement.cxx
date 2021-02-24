@@ -24,7 +24,7 @@ using namespace connectivity::flat;
 using namespace connectivity::file;
 using namespace css::uno;
 
-OResultSet* OFlatStatement::createResultSet()
+rtl::Reference<OResultSet> OFlatStatement::createResultSet()
 {
     return new OFlatResultSet(this,m_aSQLIterator);
 }

@@ -131,7 +131,7 @@ namespace xforms
             throw ElementExistException( OUString(), *this );
 
         aTypePos = implLocate( sourceName );
-        OXSDDataType* pClone = aTypePos->second->clone( newName );
+        rtl::Reference<OXSDDataType> pClone = aTypePos->second->clone( newName );
         m_aRepository[ newName ] = pClone;
 
         return pClone;

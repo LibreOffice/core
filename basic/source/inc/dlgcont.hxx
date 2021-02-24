@@ -56,7 +56,7 @@ class SfxDialogLibraryContainer : public SfxLibraryContainer
 
     virtual void importFromOldStorage( const OUString& aFile ) override;
 
-    virtual SfxLibraryContainer* createInstanceImpl() override;
+    virtual rtl::Reference<SfxLibraryContainer> createInstanceImpl() override;
 
     virtual void onNewRootStorage() override;
 

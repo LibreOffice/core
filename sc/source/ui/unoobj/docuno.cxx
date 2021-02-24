@@ -3569,7 +3569,7 @@ void ScTableSheetsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XSpreadsheets
 
-ScTableSheetObj* ScTableSheetsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
+rtl::Reference<ScTableSheetObj> ScTableSheetsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
 {
     if ( pDocShell && nIndex >= 0 && nIndex < pDocShell->GetDocument().GetTableCount() )
         return new ScTableSheetObj( pDocShell, static_cast<SCTAB>(nIndex) );
@@ -3577,7 +3577,7 @@ ScTableSheetObj* ScTableSheetsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
     return nullptr;
 }
 
-ScTableSheetObj* ScTableSheetsObj::GetObjectByName_Impl(const OUString& aName) const
+rtl::Reference<ScTableSheetObj> ScTableSheetsObj::GetObjectByName_Impl(const OUString& aName) const
 {
     if (pDocShell)
     {
@@ -3788,7 +3788,7 @@ sal_Int32 ScTableSheetsObj::importSheet(
 uno::Reference< table::XCell > SAL_CALL ScTableSheetsObj::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow, sal_Int32 nSheet )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<table::XCellRange> xSheet(static_cast<ScCellRangeObj*>(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nSheet))));
+    rtl::Reference<ScTableSheetObj> xSheet = GetObjectByIndex_Impl(static_cast<sal_uInt16>(nSheet));
     if (! xSheet.is())
         throw lang::IndexOutOfBoundsException();
 
@@ -3798,7 +3798,7 @@ uno::Reference< table::XCell > SAL_CALL ScTableSheetsObj::getCellByPosition( sal
 uno::Reference< table::XCellRange > SAL_CALL ScTableSheetsObj::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom, sal_Int32 nSheet )
 {
     SolarMutexGuard aGuard;
-    uno::Reference<table::XCellRange> xSheet(static_cast<ScCellRangeObj*>(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nSheet))));
+    rtl::Reference<ScTableSheetObj> xSheet = GetObjectByIndex_Impl(static_cast<sal_uInt16>(nSheet));
     if (! xSheet.is())
         throw lang::IndexOutOfBoundsException();
 
@@ -3946,7 +3946,7 @@ void ScTableColumnsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XTableColumns
 
-ScTableColumnObj* ScTableColumnsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
+rtl::Reference<ScTableColumnObj> ScTableColumnsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
 {
     SCCOL nCol = static_cast<SCCOL>(nIndex) + nStartCol;
     if ( pDocShell && nCol <= nEndCol )
@@ -3955,7 +3955,7 @@ ScTableColumnObj* ScTableColumnsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) con
     return nullptr;    // wrong index
 }
 
-ScTableColumnObj* ScTableColumnsObj::GetObjectByName_Impl(const OUString& aName) const
+rtl::Reference<ScTableColumnObj> ScTableColumnsObj::GetObjectByName_Impl(const OUString& aName) const
 {
     SCCOL nCol = 0;
     if ( ::AlphaToCol( pDocShell->GetDocument(), nCol, aName) )
@@ -4203,7 +4203,7 @@ void ScTableRowsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XTableRows
 
-ScTableRowObj* ScTableRowsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
+rtl::Reference<ScTableRowObj> ScTableRowsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
 {
     SCROW nRow = static_cast<SCROW>(nIndex) + nStartRow;
     if ( pDocShell && nRow <= nEndRow )
@@ -4507,7 +4507,7 @@ bool ScAnnotationsObj::GetAddressByIndex_Impl( sal_Int32 nIndex, ScAddress& rPos
     return rPos.IsValid();
 }
 
-ScAnnotationObj* ScAnnotationsObj::GetObjectByIndex_Impl( sal_Int32 nIndex ) const
+rtl::Reference<ScAnnotationObj> ScAnnotationsObj::GetObjectByIndex_Impl( sal_Int32 nIndex ) const
 {
     if (pDocShell)
     {
@@ -4646,7 +4646,7 @@ bool ScScenariosObj::GetScenarioIndex_Impl( std::u16string_view rName, SCTAB& rI
     return false;
 }
 
-ScTableSheetObj* ScScenariosObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
+rtl::Reference<ScTableSheetObj> ScScenariosObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
 {
     sal_uInt16 nCount = static_cast<sal_uInt16>(getCount());
     if ( pDocShell && nIndex >= 0 && nIndex < nCount )
@@ -4655,7 +4655,7 @@ ScTableSheetObj* ScScenariosObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
     return nullptr;    // no document or wrong index
 }
 
-ScTableSheetObj* ScScenariosObj::GetObjectByName_Impl(std::u16string_view aName)
+rtl::Reference<ScTableSheetObj> ScScenariosObj::GetObjectByName_Impl(std::u16string_view aName)
 {
     SCTAB nIndex;
     if ( pDocShell && GetScenarioIndex_Impl( aName, nIndex ) )

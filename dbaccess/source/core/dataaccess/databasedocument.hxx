@@ -286,7 +286,7 @@ protected:
 
 public:
     struct FactoryAccess { friend class ODatabaseModelImpl; private: FactoryAccess() { } };
-    static ODatabaseDocument* createDatabaseDocument( const ::rtl::Reference<ODatabaseModelImpl>& _pImpl, FactoryAccess /*accessControl*/ )
+    static rtl::Reference<ODatabaseDocument> createDatabaseDocument( const ::rtl::Reference<ODatabaseModelImpl>& _pImpl, FactoryAccess /*accessControl*/ )
     {
         return new ODatabaseDocument( _pImpl );
     }

@@ -979,7 +979,7 @@ sal_Bool SAL_CALL ScTabViewObj::hasElements()
 
 // XSpreadsheetView
 
-ScViewPaneObj* ScTabViewObj::GetObjectByIndex_Impl(sal_uInt16 nIndex) const
+rtl::Reference<ScViewPaneObj> ScTabViewObj::GetObjectByIndex_Impl(sal_uInt16 nIndex) const
 {
     static const ScSplitPos ePosHV[4] =
         { SC_SPLIT_TOPLEFT, SC_SPLIT_BOTTOMLEFT, SC_SPLIT_TOPRIGHT, SC_SPLIT_BOTTOMRIGHT };

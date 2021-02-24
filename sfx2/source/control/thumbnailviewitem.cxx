@@ -308,7 +308,7 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
     }
 }
 
-drawinglayer::primitive2d::PolygonHairlinePrimitive2D*
+rtl::Reference<drawinglayer::primitive2d::PolygonHairlinePrimitive2D>
 ThumbnailViewItem::createBorderLine (const basegfx::B2DPolygon& rPolygon)
 {
     return new PolygonHairlinePrimitive2D(rPolygon, Color(128, 128, 128).getBColor());

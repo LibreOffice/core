@@ -80,7 +80,7 @@ using namespace hierarchy_ucp;
 
 
 // static ( "virtual" ctor )
-HierarchyContent* HierarchyContent::create(
+rtl::Reference<HierarchyContent> HierarchyContent::create(
             const uno::Reference< uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier )
@@ -95,7 +95,7 @@ HierarchyContent* HierarchyContent::create(
 
 
 // static ( "virtual" ctor )
-HierarchyContent* HierarchyContent::create(
+rtl::Reference<HierarchyContent> HierarchyContent::create(
             const uno::Reference< uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier,

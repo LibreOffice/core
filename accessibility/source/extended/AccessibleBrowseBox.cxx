@@ -240,7 +240,7 @@ AccessibleBrowseBox::implGetFixedChild( sal_Int32 nChildIndex )
     return xRet;
 }
 
-AccessibleBrowseBoxTable* AccessibleBrowseBox::createAccessibleTable()
+rtl::Reference<AccessibleBrowseBoxTable> AccessibleBrowseBox::createAccessibleTable()
 {
     css::uno::Reference< css::accessibility::XAccessible > xCreator(m_aCreator);
     OSL_ENSURE( xCreator.is(), "extended/AccessibleBrowseBox::createAccessibleTable: my creator died - how this?" );
