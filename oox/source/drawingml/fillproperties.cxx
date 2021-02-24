@@ -111,6 +111,8 @@ void lclCalculateCropPercentage(uno::Reference<graphic::XGraphic> const & xGraph
     aFillRect.Y2 = -nBottomPercentage;
 }
 
+// Crops a piece of the bitmap. Takes negative aFillRect values. Negative values means "crop",
+// positive values means "grow" bitmap with empty spaces. lclCropGraphic doesn't handle growing.
 Reference< XGraphic > lclCropGraphic(uno::Reference<graphic::XGraphic> const & xGraphic, geometry::IntegerRectangle2D aFillRect)
 {
     ::Graphic aGraphic(xGraphic);
@@ -777,11 +779,17 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                                 aGraphCrop.Bottom = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Height ) * aFillRect.Y2 ) / 100000 );
                             rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
 
-                            if(bIsCustomShape &&
-                               ( aGraphCrop.Left != 0 || aGraphCrop.Right != 0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0))
+                            bool bHasCropValues = aGraphCrop.Left != 0 || aGraphCrop.Right !=0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0;
+                            // Negative GraphicCrop values means "crop" here.
+                            bool bNeedCrop = aGraphCrop.Left <= 0 && aGraphCrop.Right <= 0 && aGraphCrop.Top <= 0 && aGraphCrop.Bottom <= 0;
+
+                            if(bIsCustomShape && bHasCropValues && bNeedCrop)
                             {
                                 xGraphic = lclCropGraphic(xGraphic, aFillRect);
-                                rPropMap.setProperty(ShapeProperty::FillBitmap, xGraphic);
+                                if (rPropMap.supportsProperty(ShapeProperty::FillBitmapName))
+                                    rPropMap.setProperty(ShapeProperty::FillBitmapName, xGraphic);
+                                else
+                                    rPropMap.setProperty(ShapeProperty::FillBitmap, xGraphic);
                             }
                         }
                     }
@@ -885,14 +893,15 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
                     aGraphCrop.Bottom = rtl::math::round( ( static_cast< double >( aOriginalSize.Height ) * oClipRect.Y2 ) / 100000 );
                 rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
 
-                if(mbIsCustomShape &&
-                   ( aGraphCrop.Left != 0 || aGraphCrop.Right != 0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0))
+                bool bHasCropValues = aGraphCrop.Left != 0 || aGraphCrop.Right !=0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0;
+                // Positive GraphicCrop values means "crop" here.
+                bool bNeedCrop = aGraphCrop.Left >= 0 && aGraphCrop.Right >= 0 && aGraphCrop.Top >= 0 && aGraphCrop.Bottom >= 0;
+
+                if(mbIsCustomShape && bHasCropValues && bNeedCrop)
                 {
                     geometry::IntegerRectangle2D aCropRect = oClipRect;
                     lclCalculateCropPercentage(xGraphic, aCropRect);
                     xGraphic = lclCropGraphic(xGraphic, aCropRect);
-
-                    rPropMap.setProperty(PROP_FillBitmap, xGraphic);
                 }
             }
         }
