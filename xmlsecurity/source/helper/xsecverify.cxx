@@ -241,7 +241,9 @@ void XSecController::setReferenceCount() const
     xReferenceCollector->setReferenceCount( referenceCount );
 }
 
-void XSecController::setX509Data(SignatureInformation::X509Data const& rData)
+void XSecController::setX509Data(
+        std::vector<std::pair<OUString, OUString>> & rX509IssuerSerials,
+        std::vector<OUString> const& rX509Certificates)
 {
     if (m_vInternalSignatureInformations.empty())
     {
@@ -249,8 +251,52 @@ void XSecController::setX509Data(SignatureInformation::X509Data const& rData)
         return;
     }
     InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
-    // TODO: ImplVerifySignatures() handles all-empty case?
-    isi.signatureInfor.X509Datas.push_back(rData);
+    SignatureInformation::X509Data data;
+    // due to the excessive flexibility of the spec it's possible that there
+    // is both a reference to a cert and the cert itself in one X509Data
+    for (OUString const& it : rX509Certificates)
+    {
+        try
+        {
+            data.emplace_back();
+            data.back().X509Certificate = it;
+            uno::Reference<xml::crypto::XSecurityEnvironment> const xSecEnv(m_xSecurityContext->getSecurityEnvironment());
+            uno::Reference<security::XCertificate> const xCert(xSecEnv->createCertificateFromAscii(it));
+            if (!xCert.is())
+            {
+                SAL_INFO("xmlsecurity.helper", "cannot parse X509Certificate");
+                continue; // will be handled in CheckX509Data
+            }
+            OUString const issuerName(xCert->getIssuerName());
+            OUString const serialNumber(xmlsecurity::bigIntegerToNumericString(xCert->getSerialNumber()));
+            auto const iter = std::find_if(rX509IssuerSerials.begin(), rX509IssuerSerials.end(),
+                [&](auto const& rX509IssuerSerial) {
+                    return xmlsecurity::EqualDistinguishedNames(issuerName, rX509IssuerSerial.first)
+                        && serialNumber == rX509IssuerSerial.second;
+                });
+            if (iter != rX509IssuerSerials.end())
+            {
+                data.back().X509IssuerName = iter->first;
+                data.back().X509SerialNumber = iter->second;
+                rX509IssuerSerials.erase(iter);
+            }
+        }
+        catch (uno::Exception const&)
+        {
+            SAL_INFO("xmlsecurity.helper", "cannot parse X509Certificate");
+        }
+    }
+    // now handle any that are left...
+    for (auto const& it : rX509IssuerSerials)
+    {
+        data.emplace_back();
+        data.back().X509IssuerName = it.first;
+        data.back().X509SerialNumber = it.second;
+    }
+    if (!data.empty())
+    {
+        isi.signatureInfor.X509Datas.push_back(data);
+    }
 }
 
 void XSecController::setSignatureValue( OUString const & ouSignatureValue )
@@ -368,41 +414,47 @@ void XSecController::setX509CertDigest(
         return;
 
     InternalSignatureInformation& rInformation = m_vInternalSignatureInformations.back();
-    for (auto & it : rInformation.signatureInfor.X509Datas)
+    for (auto & rData : rInformation.signatureInfor.X509Datas)
     {
-        if (xmlsecurity::EqualDistinguishedNames(it.X509IssuerName, rX509IssuerName)
-            && it.X509SerialNumber == rX509SerialNumber)
+        for (auto & it : rData)
         {
-            it.CertDigest = rCertDigest;
-            return;
+            if (xmlsecurity::EqualDistinguishedNames(it.X509IssuerName, rX509IssuerName)
+                && it.X509SerialNumber == rX509SerialNumber)
+            {
+                it.CertDigest = rCertDigest;
+                return;
+            }
         }
     }
     // fall-back: read the actual certificates
-    for (auto & it : rInformation.signatureInfor.X509Datas)
+    for (auto & rData : rInformation.signatureInfor.X509Datas)
     {
-        if (!it.X509Certificate.isEmpty())
+        for (auto & it : rData)
         {
-            try
+            if (!it.X509Certificate.isEmpty())
             {
-                uno::Reference<xml::crypto::XSecurityEnvironment> const xSecEnv(m_xSecurityContext->getSecurityEnvironment());
-                uno::Reference<security::XCertificate> const xCert(xSecEnv->createCertificateFromAscii(it.X509Certificate));
-                if (!xCert.is())
+                try
+                {
+                    uno::Reference<xml::crypto::XSecurityEnvironment> const xSecEnv(m_xSecurityContext->getSecurityEnvironment());
+                    uno::Reference<security::XCertificate> const xCert(xSecEnv->createCertificateFromAscii(it.X509Certificate));
+                    if (!xCert.is())
+                    {
+                        SAL_INFO("xmlsecurity.helper", "cannot parse X509Certificate");
+                    }
+                    else if (xmlsecurity::EqualDistinguishedNames(xCert->getIssuerName(),rX509IssuerName)
+                        && xmlsecurity::bigIntegerToNumericString(xCert->getSerialNumber()) == rX509SerialNumber)
+                    {
+                        it.CertDigest = rCertDigest;
+                        // note: testInsertCertificate_PEM_DOCX requires these!
+                        it.X509SerialNumber = rX509SerialNumber;
+                        it.X509IssuerName = rX509IssuerName;
+                        return;
+                    }
+                }
+                catch (uno::Exception const&)
                 {
                     SAL_INFO("xmlsecurity.helper", "cannot parse X509Certificate");
                 }
-                else if (xmlsecurity::EqualDistinguishedNames(xCert->getIssuerName(),rX509IssuerName)
-                    && xmlsecurity::bigIntegerToNumericString(xCert->getSerialNumber()) == rX509SerialNumber)
-                {
-                    it.CertDigest = rCertDigest;
-                    // note: testInsertCertificate_PEM_DOCX requires these!
-                    it.X509SerialNumber = rX509SerialNumber;
-                    it.X509IssuerName = rX509IssuerName;
-                    return;
-                }
-            }
-            catch (uno::Exception const&)
-            {
-                SAL_INFO("xmlsecurity.helper", "cannot parse X509Certificate");
             }
         }
     }

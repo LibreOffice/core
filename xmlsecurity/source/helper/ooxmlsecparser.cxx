@@ -187,11 +187,17 @@ void SAL_CALL OOXMLSecParser::endElement(const OUString& rName)
     }
     else if (rName == "X509Data")
     {
-        SignatureInformation::X509Data temp;
-        temp.X509Certificate = m_aX509Certificate;
-        temp.X509IssuerName = m_aX509IssuerName;
-        temp.X509SerialNumber = m_aX509SerialNumber;
-        m_pXSecController->setX509Data(temp);
+        std::vector<std::pair<OUString, OUString>> X509IssuerSerials;
+        std::vector<OUString> X509Certificates;
+        if (!m_aX509Certificate.isEmpty())
+        {
+            X509Certificates.emplace_back(m_aX509Certificate);
+        }
+        if (!m_aX509IssuerName.isEmpty() && !m_aX509SerialNumber.isEmpty())
+        {
+            X509IssuerSerials.emplace_back(m_aX509IssuerName, m_aX509SerialNumber);
+        }
+        m_pXSecController->setX509Data(X509IssuerSerials, X509Certificates);
     }
     else if (rName == "X509Certificate")
     {

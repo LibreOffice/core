@@ -557,19 +557,19 @@ void XMLSignatureHelper::CreateAndWriteOOXMLSignature(const uno::Reference<embed
  */
 static auto CheckX509Data(
     uno::Reference<xml::crypto::XSecurityEnvironment> const& xSecEnv,
-    std::vector<SignatureInformation::X509Data> const& rX509Datas,
+    std::vector<SignatureInformation::X509CertInfo> const& rX509CertInfos,
     std::vector<uno::Reference<security::XCertificate>> & rCerts,
-    std::vector<SignatureInformation::X509Data> & rSorted) -> bool
+    std::vector<SignatureInformation::X509CertInfo> & rSorted) -> bool
 {
     assert(rCerts.empty());
     assert(rSorted.empty());
-    if (rX509Datas.empty())
+    if (rX509CertInfos.empty())
     {
         SAL_WARN("xmlsecurity.comp", "no X509Data");
         return false;
     }
     std::vector<uno::Reference<security::XCertificate>> certs;
-    for (SignatureInformation::X509Data const& it : rX509Datas)
+    for (SignatureInformation::X509CertInfo const& it : rX509CertInfos)
     {
         if (!it.X509Certificate.isEmpty())
         {
@@ -664,10 +664,10 @@ static auto CheckX509Data(
     }
 
     // success
-    assert(chain.size() == rX509Datas.size());
+    assert(chain.size() == rX509CertInfos.size());
     for (auto const& it : chain)
     {
-        rSorted.emplace_back(rX509Datas[it]);
+        rSorted.emplace_back(rX509CertInfos[it]);
         rCerts.emplace_back(certs[it]);
     }
     return true;
@@ -685,7 +685,22 @@ XMLSignatureHelper::CheckAndUpdateSignatureInformation(
 
     std::vector<uno::Reference<security::XCertificate>> certs;
     std::vector<SignatureInformation::X509Data> datas;
-    CheckX509Data(xSecEnv, rInfo.X509Datas, certs, datas);
+    // TODO: for now, just merge all X509Datas together for checking...
+    // (this will probably break round-trip of signature with multiple X509Data,
+    // no idea if that is a problem)
+    SignatureInformation::X509Data temp;
+    SignatureInformation::X509Data tempResult;
+    for (auto const& rData : rInfo.X509Datas)
+    {
+        for (auto const& it : rData)
+        {
+            temp.emplace_back(it);
+        }
+    }
+    if (CheckX509Data(xSecEnv, temp, certs, tempResult))
+    {
+        datas.emplace_back(tempResult);
+    }
 
     // rInfo is a copy, update the original
     mpXSecController->UpdateSignatureInformation(rInfo.nSecurityId, datas);
