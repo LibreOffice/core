@@ -299,6 +299,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_pLastCharacterContext(),
         m_sCurrentParaStyleName(),
         m_sDefaultParaStyleName(),
+        m_bInDocDefaultsImport(false),
         m_bInStyleSheetImport( false ),
         m_bInAnyTableImport( false ),
         m_eInHeaderFooterImport( HeaderFooterImportState::none ),
