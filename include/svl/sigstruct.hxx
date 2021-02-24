@@ -87,7 +87,7 @@ struct SignatureInformation
     sal_Int32 nSecurityId;
     css::xml::crypto::SecurityOperationStatus nStatus;
     SignatureReferenceInformations  vSignatureReferenceInfors;
-    struct X509Data
+    struct X509CertInfo
     {
         OUString X509IssuerName;
         OUString X509SerialNumber;
@@ -97,9 +97,20 @@ struct SignatureInformation
         /// The certificate owner (aka subject).
         OUString X509Subject;
     };
+    typedef std::vector<X509CertInfo> X509Data;
     // note: at parse time, it's unkown which one is the signing certificate;
     // ImplVerifySignatures() figures it out and puts it at the back
     std::vector<X509Data> X509Datas;
+
+    X509CertInfo const* GetSigningCertificate() const
+    {
+        if (X509Datas.empty())
+        {
+            return nullptr;
+        }
+        assert(!X509Datas.back().empty());
+        return & X509Datas.back().back();
+    }
 
     OUString ouGpgKeyID;
     OUString ouGpgCertificate;

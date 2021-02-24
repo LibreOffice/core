@@ -262,7 +262,9 @@ private:
         sal_Int32 nDigestID );
     void setReferenceCount() const;
 
-    void setX509Data(SignatureInformation::X509Data const& rData);
+    void setX509Data(
+        std::vector<std::pair<OUString, OUString>> & rX509IssuerSerials,
+        std::vector<OUString> const& rX509Certificates);
     void setX509CertDigest(
         OUString const& rCertDigest, sal_Int32 const nReferenceDigestID,
         std::u16string_view const& rX509IssuerName, std::u16string_view const& rX509SerialNumber);
