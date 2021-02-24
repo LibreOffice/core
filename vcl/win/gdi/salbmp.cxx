@@ -791,7 +791,7 @@ HANDLE WinSalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB )
 
 BitmapBuffer* WinSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
 {
-    BitmapBuffer* pBuffer = nullptr;
+    std::unique_ptr<BitmapBuffer> pBuffer;
 
     if( mhDIB )
     {
@@ -826,7 +826,7 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
 
         if( pBIH->biPlanes == 1 )
         {
-            pBuffer = new BitmapBuffer;
+            pBuffer.reset(new BitmapBuffer);
 
             pBuffer->mnFormat = pBIH->biBitCount == 1 ? ScanlineFormat::N1BitMsbPal :
                                 pBIH->biBitCount == 4 ? ScanlineFormat::N4BitMsnPal :
@@ -894,15 +894,14 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
             else
             {
                 GlobalUnlock( mhDIB );
-                delete pBuffer;
-                pBuffer = nullptr;
+                pBuffer.reset();
             }
         }
         else
             GlobalUnlock( mhDIB );
     }
 
-    return pBuffer;
+    return pBuffer.release();
 }
 
 void WinSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode )
