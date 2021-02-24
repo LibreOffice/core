@@ -186,7 +186,6 @@ BackingWindow::BackingWindow(vcl::Window* i_pParent)
     Reference<XDesktop2> xDesktop = Desktop::create( comphelper::getProcessComponentContext() );
     mxDesktopDispatchProvider = xDesktop;
 
-    mxOpenButton->grab_focus();
 }
 
 IMPL_LINK(BackingWindow, ClickHelpHdl, weld::Button&, rButton, void)
@@ -271,6 +270,7 @@ void BackingWindow::initControls()
     mxAllRecentThumbnails->Reload();
     mxAllRecentThumbnails->ShowTooltips( true );
     mxRecentButton->set_active(true);
+    mxRecentButton->grab_focus();
 
     //initialize Template view
     mxLocalView->Hide();
