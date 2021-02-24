@@ -39,7 +39,6 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/vclenum.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/settings.hxx>
