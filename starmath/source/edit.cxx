@@ -364,7 +364,10 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
     if (bForwardEvt)
     {
         if (pEditView)
-            pEditView->Command( rCEvt );
+        {
+            if (pEditView->Command(rCEvt))
+                UserPossiblyChangedText();
+        }
         else
             Window::Command (rCEvt);
     }
@@ -475,13 +478,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
         }
         else
         {
-            // have doc-shell modified only for formula input/change and not
-            // cursor travelling and such things...
-            SmDocShell *pDocShell = GetDoc();
-            EditEngine *pEditEngine = GetEditEngine();
-            if (pDocShell && pEditEngine)
-                pDocShell->SetModified(pEditEngine->IsModified());
-            aModifyIdle.Start();
+            UserPossiblyChangedText();
         }
 
         // get the current char of the key event
@@ -507,6 +504,17 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
 
         InvalidateSlots();
     }
+}
+
+void SmEditWindow::UserPossiblyChangedText()
+{
+    // have doc-shell modified only for formula input/change and not
+    // cursor travelling and such things...
+    SmDocShell *pDocShell = GetDoc();
+    EditEngine *pEditEngine = GetEditEngine();
+    if (pDocShell && pEditEngine)
+        pDocShell->SetModified(pEditEngine->IsModified());
+    aModifyIdle.Start();
 }
 
 void SmEditWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
