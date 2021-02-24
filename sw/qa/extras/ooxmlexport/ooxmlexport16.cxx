@@ -18,6 +18,7 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <editeng/escapementitem.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
 
@@ -111,6 +112,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFooterMarginLost, "footer-margin-lost.do
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf140572_docDefault_superscript, "tdf140572_docDefault_superscript.docx")
 {
     // A round-trip was crashing.
+
+    // Without the fix, everything was DFLT_ESC_AUTO_SUPER (default superscript)
+    CPPUNIT_ASSERT_EQUAL( sal_Int16(0), getProperty<sal_Int16>(getRun(getParagraph(1), 1), "CharEscapement") );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf138953, "croppedAndRotated.odt")

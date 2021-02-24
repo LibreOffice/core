@@ -519,6 +519,7 @@ private:
     ::std::vector<DeletableTabStop> m_aCurrentTabStops;
     OUString                        m_sCurrentParaStyleName; //highly inaccurate. Overwritten by "overlapping" paragraphs like comments, flys.
     OUString                        m_sDefaultParaStyleName; //caches the ConvertedStyleName of the default paragraph style
+    bool                            m_bInDocDefaultsImport;
     bool                            m_bInStyleSheetImport; //in import of fonts, styles, lists or lfos
     bool                            m_bInAnyTableImport; //in import of fonts, styles, lists or lfos
     enum class HeaderFooterImportState
@@ -780,6 +781,8 @@ public:
     css::uno::Any GetPropertyFromCharStyleSheet(PropertyIds eId, const PropertyMapPtr& rContext);
     // get property first from the given context, or secondly via inheritance from styles/docDefaults
     css::uno::Any GetAnyProperty(PropertyIds eId, const PropertyMapPtr& rContext);
+    void        SetDocDefaultsImport( bool bSet ) { m_bInDocDefaultsImport = bSet;}
+    bool        IsDocDefaultsImport()const { return m_bInDocDefaultsImport;}
     void        SetStyleSheetImport( bool bSet ) { m_bInStyleSheetImport = bSet;}
     bool        IsStyleSheetImport()const { return m_bInStyleSheetImport;}
     void        SetAnyTableImport( bool bSet ) { m_bInAnyTableImport = bSet;}
