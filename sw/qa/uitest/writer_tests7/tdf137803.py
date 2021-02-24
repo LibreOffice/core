@@ -19,13 +19,11 @@ class tdf137803(UITestCase):
     def test_tdf137803(self):
         # load the sample file
         self.ui_test.load_file(get_url_for_data_file("tdf137803.odt"))
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
         document = self.ui_test.get_component()
 
         # select the shape
         self.xUITest.executeCommand(".uno:JumpToNextFrame")
-        self.ui_test.wait_until_child_is_available(xWriterEdit, 'metricfield')
+        self.ui_test.wait_until_child_is_available('metricfield')
 
         # open textattrs dialog
         self.ui_test.execute_dialog_through_command(".uno:TextAttributes")

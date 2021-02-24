@@ -30,9 +30,8 @@ class Comments(UITestCase):
         self.xUITest.executeCommand(".uno:InsertAnnotation")
 
         # wait until the comment is available
-        self.ui_test.wait_until_child_is_available(xMainWindow, 'Comment1')
+        xComment1 = self.ui_test.wait_until_child_is_available('Comment1')
 
-        xComment1 = xMainWindow.getChild("Comment1")
         xEditView1 = xComment1.getChild("editview")
         xEditView1.executeAction("TYPE", mkPropertyValues({"TEXT": "This is the First Comment"}))
         self.assertEqual(get_state_as_dict(xComment1)["Text"], "This is the First Comment" )
@@ -78,8 +77,7 @@ class Comments(UITestCase):
         xwriter_edit.executeAction("TYPE", mkPropertyValues({"TEXT": "Line 1"}))
         self.xUITest.executeCommand(".uno:InsertAnnotation")
         # wait until the comment is available
-        self.ui_test.wait_until_child_is_available(xMainWindow, 'Comment1')
-        xComment1 = xMainWindow.getChild("Comment1")
+        xComment1 = self.ui_test.wait_until_child_is_available('Comment1')
         xEditView1 = xComment1.getChild("editview")
         xEditView1.executeAction("TYPE", mkPropertyValues({"TEXT": "First Comment"}))
         xComment1.executeAction("LEAVE", mkPropertyValues({}))
@@ -88,8 +86,7 @@ class Comments(UITestCase):
         xwriter_edit.executeAction("TYPE", mkPropertyValues({"TEXT": "Line 2"}))
         self.xUITest.executeCommand(".uno:InsertAnnotation")
         # wait until the comment is available
-        self.ui_test.wait_until_child_is_available(xMainWindow, 'Comment2')
-        xComment2 = xMainWindow.getChild("Comment2")
+        xComment2 = self.ui_test.wait_until_child_is_available('Comment2')
         xEditView2 = xComment2.getChild("editview")
         xEditView2.executeAction("TYPE", mkPropertyValues({"TEXT": "Second Comment"}))
         xComment2.executeAction("LEAVE", mkPropertyValues({}))
@@ -98,8 +95,7 @@ class Comments(UITestCase):
         xwriter_edit.executeAction("TYPE", mkPropertyValues({"TEXT": "Line 3"}))
         self.xUITest.executeCommand(".uno:InsertAnnotation")
         # wait until the comment is available
-        self.ui_test.wait_until_child_is_available(xMainWindow, 'Comment3')
-        xComment3 = xMainWindow.getChild("Comment3")
+        xComment3 = self.ui_test.wait_until_child_is_available('Comment3')
         xEditView3 = xComment3.getChild("editview")
         xEditView3.executeAction("TYPE", mkPropertyValues({"TEXT": "Third Comment"}))
         xComment3.executeAction("LEAVE", mkPropertyValues({}))

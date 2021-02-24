@@ -25,16 +25,13 @@ class tdf137397(UITestCase):
         self.xUITest.executeCommand(".uno:Sidebar")
         xGridWin.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "TextPropertyPanel"}))
 
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-
-
-        self.ui_test.wait_until_child_is_available(xCalcDoc, 'selectwidth')
-        self.assertEqual(get_state_as_dict(xCalcDoc.getChild('selectwidth'))['Text'], '6.00 cm')
+        xChild = self.ui_test.wait_until_child_is_available('selectwidth')
+        self.assertEqual(get_state_as_dict(xChild)['Text'], '6.00 cm')
 
         # Without the fix in place, this test would have failed with
         # AssertionError: '-14,585,309.84 cm' != '2.00 cm'
-        self.ui_test.wait_until_child_is_available(xCalcDoc, 'selectheight')
-        self.assertEqual(get_state_as_dict(xCalcDoc.getChild('selectheight'))['Text'], '2.00 cm')
+        xChild = self.ui_test.wait_until_child_is_available('selectheight')
+        self.assertEqual(get_state_as_dict(xChild)['Text'], '2.00 cm')
 
 
         self.xUITest.executeCommand(".uno:Sidebar")

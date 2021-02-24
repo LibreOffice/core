@@ -17,14 +17,10 @@ class tdf132169(UITestCase):
         #set measurement to points
         change_measurement_unit(self, "Point")
 
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
-
         self.xUITest.executeCommand(".uno:JumpToNextFrame")
 
         #wait until the toolbar is available
-        self.ui_test.wait_until_child_is_available(xWriterEdit, 'metricfield')
-        xLineMetric = xWriterEdit.getChild('metricfield')
+        xLineMetric = self.ui_test.wait_until_child_is_available('metricfield')
         self.assertEqual(get_state_as_dict(xLineMetric)["Text"], "0.0 pt")
 
         #Check changing value from dialog also works
