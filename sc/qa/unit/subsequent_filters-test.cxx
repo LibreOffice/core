@@ -4644,7 +4644,7 @@ void ScFiltersTest::testDeleteCircles()
 
     // Mark invalid value
     bool bOverflow;
-    bool bMarkInvalid = ScDetectiveFunc(rDoc, 0).MarkInvalid(bOverflow);
+    bool bMarkInvalid = ScDetectiveFunc(&rDoc, 0).MarkInvalid(bOverflow);
     CPPUNIT_ASSERT_EQUAL(true, bMarkInvalid);
 
     // There should be a circle object!
@@ -4658,7 +4658,7 @@ void ScFiltersTest::testDeleteCircles()
     bool bValidA1 = pData->IsDataValid(aCellA1, aPosA1);
     // if valid, delete circle.
     if (bValidA1)
-        ScDetectiveFunc(rDoc, 0).DeleteCirclesAt(aPosA1.Col(), aPosA1.Row());
+        ScDetectiveFunc(&rDoc, 0).DeleteCirclesAt(aPosA1.Col(), aPosA1.Row());
 
     // There should not be a circle object!
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
