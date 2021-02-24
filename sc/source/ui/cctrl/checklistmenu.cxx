@@ -23,6 +23,7 @@
 
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
+#include <vcl/floatwin.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
