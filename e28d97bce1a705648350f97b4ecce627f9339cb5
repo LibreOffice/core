@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95f7ba77_3dcc4ec0",
+        "filename": "sw/qa/uitest/writer_tests7/tdf139301.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-02-24T16:06:25Z",
+      "side": 1,
+      "message": "you dont need these sleeps here. See https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d6631aa3060ebbb3462391d784e406ac2a1060f8c",
+      "revId": "e28d97bce1a705648350f97b4ecce627f9339cb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
