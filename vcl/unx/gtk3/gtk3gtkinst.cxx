@@ -1145,8 +1145,15 @@ void VclGtkClipboard::removeClipboardListener( const Reference< datatransfer::cl
     m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), listener), m_aListeners.end());
 }
 
+// We run unit tests in parallel, which is a problem when touching a shared resource
+// the system clipboard, so rather use the dummy GenericClipboard.
+const bool bRunningUnitTest = getenv("LO_TESTNAME");
+
 Reference< XInterface > GtkInstance::CreateClipboard(const Sequence< Any >& arguments)
 {
+    if ( bRunningUnitTest )
+        return SalInstance::CreateClipboard( arguments );
+
     OUString sel;
     if (!arguments.hasElements()) {
         sel = "CLIPBOARD";
@@ -1312,6 +1319,9 @@ void GtkDropTarget::setDefaultActions(sal_Int8 nDefaultActions)
 
 Reference< XInterface > GtkInstance::CreateDropTarget()
 {
+    if ( bRunningUnitTest )
+        return SalInstance::CreateDropTarget();
+
     return Reference<XInterface>(static_cast<cppu::OWeakObject*>(new GtkDropTarget));
 }
 
@@ -1381,6 +1391,9 @@ css::uno::Sequence<OUString> SAL_CALL GtkDragSource::getSupportedServiceNames()
 
 Reference< XInterface > GtkInstance::CreateDragSource()
 {
+    if ( bRunningUnitTest )
+        return SalInstance::CreateDragSource();
+
     return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new GtkDragSource()) );
 }
 
