@@ -32,6 +32,7 @@
 #include <sft.hxx>
 
 #include <algorithm>
+#include <numeric>
 #include <string_view>
 
 #include <rtl/instance.hxx>
@@ -390,23 +391,15 @@ tools::Long Font::GetOrCalculateAverageFontWidth() const
         // as close as possible (discussion see documentation in task),
         // so calculate it. For discussion of method used, see task
         // buffer measure string creation, will always use the same
-        static OUString aMeasureString;
-
-        if(!aMeasureString.getLength())
-        {
-            const std::size_t nSize(127 - 32);
-            std::array<sal_Unicode, nSize> aArray;
-
-            for(sal_Unicode a(0); a < nSize; a++)
-            {
-                aArray[a] = a + 32;
-            }
-
-            aMeasureString = OUString(aArray.data());
-        }
+        static const OUStringLiteral aMeasureString = [] { // not constexpr yet because of std::iota
+            sal_Unicode aArray[127 - 32 + 1];
+            std::iota(aArray, aArray + SAL_N_ELEMENTS(aArray) - 1, 32);
+            aArray[SAL_N_ELEMENTS(aArray) - 1] = u'\0';
+            return OUStringLiteral(aArray);
+        }();
 
         const double fAverageFontWidth(
-            pTempVirtualDevice->GetTextWidth(aMeasureString, aMeasureString.getLength()) /
+            pTempVirtualDevice->GetTextWidth(aMeasureString) /
             static_cast<double>(aMeasureString.getLength()));
         const_cast<Font*>(this)->mpImplFont->SetCalculatedAverageFontWidth(basegfx::fround(fAverageFontWidth));
 #endif
