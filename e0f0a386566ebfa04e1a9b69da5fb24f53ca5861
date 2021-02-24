@@ -16,6 +16,24 @@
       "revId": "e0f0a386566ebfa04e1a9b69da5fb24f53ca5861",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2fad0a3_4847897b",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3456,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-02-24T09:48:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d67189d4_d07f3809",
+      "revId": "e0f0a386566ebfa04e1a9b69da5fb24f53ca5861",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
