@@ -850,12 +850,22 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
                     m_pImpl->getSerializer()->startElementNS(XML_wp, XML_wrapPolygon, XML_edited,
                                                              "0");
 
-                    // There are the coordinates
-                    for (sal_Int32 i = 0; i < aCoords.getLength(); i++)
-                        m_pImpl->getSerializer()->singleElementNS(
-                            XML_wp, (i == 0 ? XML_start : XML_lineTo), XML_x,
-                            OString::number(aCoords[i].First.Value.get<double>()), XML_y,
-                            OString::number(aCoords[i].Second.Value.get<double>()));
+                    try
+                    {
+                        // There are the coordinates
+                        for (sal_Int32 i = 0; i < aCoords.getLength(); i++)
+                            m_pImpl->getSerializer()->singleElementNS(
+                                XML_wp, (i == 0 ? XML_start : XML_lineTo), XML_x,
+                                OString::number(aCoords[i].First.Value.get<double>()), XML_y,
+                                OString::number(aCoords[i].Second.Value.get<double>()));
+                    }
+                    catch (const uno::Exception& e)
+                    {
+                        // e.g. on exporting first attachment of tdf#94591 to docx
+                        TOOLS_WARN_EXCEPTION(
+                            "sw.ww8",
+                            "DocxSdrExport::startDMLAnchorInline: bad coordinate: " << e.Message);
+                    }
 
                     m_pImpl->getSerializer()->endElementNS(XML_wp, XML_wrapPolygon);
 
