@@ -195,6 +195,7 @@ public:
     MenuBar*        GetMenuBar() const { return mpMenuBar; }
     void            SetMenuBarMode( MenuBarMode nMode );
     void            CollectMenuBarMnemonics(MnemonicGenerator& rMnemonicGenerator) const;
+    int             GetMenuBarHeight() const;
 
     void SetNotebookBar(const OUString& rUIXMLDescription,
                         const css::uno::Reference<css::frame::XFrame>& rFrame,
