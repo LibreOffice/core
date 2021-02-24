@@ -214,12 +214,12 @@ std::shared_ptr< Gdiplus::Bitmap > WinSalBitmap::ImplGetGdiPlusBitmap(const WinS
 
         if(pAlphaSource)
         {
-            aRetval.reset(const_cast< WinSalBitmap* >(this)->ImplCreateGdiPlusBitmap(*pAlphaSource));
+            aRetval = const_cast< WinSalBitmap* >(this)->ImplCreateGdiPlusBitmap(*pAlphaSource);
             pAssociatedAlpha = pAlphaSource;
         }
         else
         {
-            aRetval.reset(const_cast< WinSalBitmap* >(this)->ImplCreateGdiPlusBitmap());
+            aRetval = const_cast< WinSalBitmap* >(this)->ImplCreateGdiPlusBitmap();
             pAssociatedAlpha = nullptr;
         }
 
@@ -233,9 +233,9 @@ std::shared_ptr< Gdiplus::Bitmap > WinSalBitmap::ImplGetGdiPlusBitmap(const WinS
     return aRetval;
 }
 
-Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
+std::unique_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap()
 {
-    Gdiplus::Bitmap* pRetval(nullptr);
+    std::unique_ptr<Gdiplus::Bitmap> pRetval;
     WinSalBitmap* pSalRGB = this;
     std::unique_ptr<WinSalBitmap> pExtraWinSalRGB;
 
@@ -271,7 +271,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
         const sal_uInt32 nW(pRGB->mnWidth);
         const sal_uInt32 nH(pRGB->mnHeight);
 
-        pRetval = new Gdiplus::Bitmap(nW, nH, PixelFormat24bppRGB);
+        pRetval.reset(new Gdiplus::Bitmap(nW, nH, PixelFormat24bppRGB));
 
         if ( pRetval->GetLastStatus() == Gdiplus::Ok )
         {
@@ -296,8 +296,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
         }
         else
         {
-            delete pRetval;
-            pRetval = nullptr;
+            pRetval.reset();
         }
     }
 
@@ -316,9 +315,9 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
     return pRetval;
 }
 
-Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlphaSource)
+std::unique_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlphaSource)
 {
-    Gdiplus::Bitmap* pRetval(nullptr);
+    std::unique_ptr<Gdiplus::Bitmap> pRetval;
     WinSalBitmap* pSalRGB = this;
     std::unique_ptr<WinSalBitmap> pExtraWinSalRGB;
 
@@ -389,7 +388,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
         const sal_uInt32 nW(pRGB->mnWidth);
         const sal_uInt32 nH(pRGB->mnHeight);
 
-        pRetval = new Gdiplus::Bitmap(nW, nH, PixelFormat32bppARGB);
+        pRetval.reset(new Gdiplus::Bitmap(nW, nH, PixelFormat32bppARGB));
 
         if ( pRetval->GetLastStatus() == Gdiplus::Ok ) // 2nd place to secure with new Gdiplus::Bitmap
         {
@@ -425,8 +424,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
         }
         else
         {
-            delete pRetval;
-            pRetval = nullptr;
+            pRetval.reset();
         }
     }
 
