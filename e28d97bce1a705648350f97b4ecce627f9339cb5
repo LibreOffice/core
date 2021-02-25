@@ -34,6 +34,24 @@
       "revId": "e28d97bce1a705648350f97b4ecce627f9339cb5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a378c0ca_9d3ecdd0",
+        "filename": "sw/qa/uitest/writer_tests7/tdf139301.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-02-25T08:20:43Z",
+      "side": 1,
+      "message": "Hi László,\nI see, thanks for the clarification. I don\u0027t think we need to use the first solution though. I\u0027ll ask Stephan in IRC if he still reproduces it, but there is no need to use time.sleep, we can always use wait_until_child_is_available...",
+      "parentUuid": "2adb7c4a_4557ecfc",
+      "revId": "e28d97bce1a705648350f97b4ecce627f9339cb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
