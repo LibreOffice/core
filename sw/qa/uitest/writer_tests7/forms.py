@@ -50,6 +50,7 @@ class Forms(UITestCase):
         self.ui_test.execute_modeless_dialog_through_command(".uno:ControlProperties")
         xAction = self.ui_test.wait_until_child_is_available('listbox-Action')
         xURL = self.ui_test.wait_until_child_is_available('urlcontrol-URL')
+        xEntry = self.ui_test.wait_until_child_is_available('entry')
 
         self.assertEqual("None", get_state_as_dict(xAction)['SelectEntryText'])
         self.assertEqual("false", get_state_as_dict(xURL)['Enabled'])
@@ -68,6 +69,20 @@ class Forms(UITestCase):
         # Without the fix in place, this test would have failed with
         # AssertionError: '12345' != '54321'
         self.assertEqual("12345", get_state_as_dict(xURL)['Text'])
+
+        xEntry.executeAction("FOCUS", tuple())
+        self.assertEqual("Push Button", get_state_as_dict(xEntry)['Text'])
+
+        xEntry.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+        xEntry.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+        xEntry.executeAction("TYPE", mkPropertyValues({"TEXT": "Push"}))
+
+        # Move the focus to another element so the changes done before will take effect
+        xAction.executeAction("FOCUS", tuple())
+
+        # tdf#131522: Without the fix in place, this test would have failed with
+        # AssertionError: 'Push' != 'Push Button'
+        self.assertEqual("Push", get_state_as_dict(xEntry)['Text'])
 
         self.ui_test.close_doc()
 
