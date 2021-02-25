@@ -6379,6 +6379,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         activateNotebookbar(u"Writer");
         activateNotebookbar(u"Calc");
         activateNotebookbar(u"Impress");
+        activateNotebookbar(u"Draw");
     }
 
     return bInitialized;
