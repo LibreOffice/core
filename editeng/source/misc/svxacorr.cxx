@@ -1515,7 +1515,10 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
         if( lcl_IsSymbolChar( rCC, rTxt, nCapLttrPos, nInsPos ))
             break;
 
-        if( IsAutoCorrFlag( ACFlags::Autocorrect ) )
+        if( IsAutoCorrFlag( ACFlags::Autocorrect ) &&
+            // tdf#134940 fix regression of arrow "-->" resulted by premature
+            // replacement of "--" since '>' was added to IsAutoCorrectChar()
+            '>' != cChar )
         {
             // WARNING ATTENTION: rTxt is an alias of the text node's OUString
             // and becomes INVALID if ChgAutoCorrWord returns true!
