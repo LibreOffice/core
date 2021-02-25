@@ -1635,22 +1635,6 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
 </qtcreator>
 """
 
-    def remove_qt_files(self):
-
-        def do_remove_file(loc, afile):
-            try:
-                os.remove(os.path.join(loc, afile))
-                self._log("removed %s\n" % afile)
-            except OSError:
-                self._log("unable to remove %s\n" % afile)
-
-        do_remove_file(self.base_folder, "lo.pro")
-        do_remove_file(self.base_folder, "lo.pro.shared")
-        for location in self.target_by_location:
-            for f in os.listdir(location):
-                if f.endswith('.pro') or f.endswith('.pro.shared'):
-                    do_remove_file(location, f)
-
     def get_source_extension(self, src_file):
         path = os.path.join(self.base_folder, src_file)
         for ext in (".cxx", ".cpp", ".c", ".mm"):
@@ -1756,9 +1740,6 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
 
         mode = 'w+'
         self.base_folder = self.gbuildparser.builddir
-
-        # we remove existing '.pro' and '.pro.shared' files
-        self.remove_qt_files()
 
         # for .pro files, we must explicitly list all files (.c, .h)
         # so we can't reuse directly the same method than for kde integration.
