@@ -510,30 +510,36 @@ DocumentDigitalSignatures::ImplVerifySignatures(
         const SignatureInformation& rInfo = aSignInfos[n];
         css::security::DocumentSignatureInformation& rSigInfo = arInfos[n];
 
-        if (rInfo.ouGpgCertificate.isEmpty()) // X.509
+        if (!rInfo.X509Datas.empty()) // X.509
         {
-            if (!rInfo.ouX509Certificate.isEmpty())
-                rSigInfo.Signer = xSecEnv->createCertificateFromAscii(rInfo.ouX509Certificate);
-            if (!rSigInfo.Signer.is())
-                rSigInfo.Signer = xSecEnv->getCertificate(
-                    rInfo.ouX509IssuerName,
-                    xmlsecurity::numericStringToBigInteger(rInfo.ouX509SerialNumber));
-
+            std::vector<uno::Reference<XCertificate>> certs(
+                rSignatureHelper.CheckAndUpdateSignatureInformation(
+                    xSecEnv, rInfo));
+            if (certs.empty())
+            {
+                rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
+            }
+            else
+            {
+                rSigInfo.Signer = certs.back();
+                // get only intermediates
+                certs.pop_back();
             // On Windows checking the certificate path is buggy. It does name matching (issuer, subject name)
             // to find the parent certificate. It does not take into account that there can be several certificates
             // with the same subject name.
-            try
-            {
-                rSigInfo.CertificateStatus = xSecEnv->verifyCertificate(
-                    rSigInfo.Signer, Sequence<Reference<css::security::XCertificate>>());
-            }
-            catch (SecurityException&)
-            {
-                OSL_FAIL("Verification of certificate failed");
-                rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
+                try
+                {
+                    rSigInfo.CertificateStatus = xSecEnv->verifyCertificate(
+                        rSigInfo.Signer, comphelper::containerToSequence(certs));
+                }
+                catch (SecurityException&)
+                {
+                    SAL_WARN("xmlsecurity.comp", "Verification of certificate failed");
+                    rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
+                }
             }
         }
-        else if (xGpgSecEnv.is()) // GPG
+        else if (!rInfo.ouGpgCertificate.isEmpty() && xGpgSecEnv.is()) // GPG
         {
             // TODO not ideal to retrieve cert by keyID, might
             // collide, or PGPKeyID format might change - can't we
@@ -619,15 +625,19 @@ void DocumentDigitalSignatures::showCertificate(
 }
 
 sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
-    const Reference< css::security::XCertificate >& Author )
+    const Reference<css::security::XCertificate>& xAuthor)
 {
-    OUString sSerialNum = xmlsecurity::bigIntegerToNumericString( Author->getSerialNumber() );
+    if (!xAuthor.is())
+    {
+        return false;
+    }
+    OUString sSerialNum = xmlsecurity::bigIntegerToNumericString(xAuthor->getSerialNumber());
 
     Sequence< SvtSecurityOptions::Certificate > aTrustedAuthors = SvtSecurityOptions().GetTrustedAuthors();
 
     return std::any_of(aTrustedAuthors.begin(), aTrustedAuthors.end(),
-        [&Author, &sSerialNum](const SvtSecurityOptions::Certificate& rAuthor) {
-            return ( rAuthor[0] == Author->getIssuerName() )
+        [&xAuthor, &sSerialNum](const SvtSecurityOptions::Certificate& rAuthor) {
+            return xmlsecurity::EqualDistinguishedNames(rAuthor[0], xAuthor->getIssuerName())
                 && ( rAuthor[1] == sSerialNum );
         });
 }
