@@ -74,8 +74,6 @@ void SwXDocumentSettings::tearDown()
 uno::Reference<uno::XInterface> SwXDocumentSettings::init()
 {
     mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<lang::XMultiServiceFactory> xFactory(xTextDocument, uno::UNO_QUERY_THROW);
 

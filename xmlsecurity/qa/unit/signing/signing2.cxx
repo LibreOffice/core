@@ -78,12 +78,9 @@ void SigningTest2::tearDown()
 CPPUNIT_TEST_FIXTURE(SigningTest2, testPreserveMacroSignatureODB)
 {
     const OUString aURL(m_directories.getURLFromSrc(DATA_DIRECTORY) + "odb_signed_macros.odb");
-    const OUString sLoadMessage = "loading failed: " + aURL;
 
     // load the file
     mxComponent = loadFromDesktop(aURL, "com.sun.star.sdb.OfficeDatabaseDocument");
-    CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
-                           mxComponent.is());
 
     // save as ODB
     utl::TempFile aTempFileSaveAsODB;
