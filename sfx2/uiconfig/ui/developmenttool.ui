@@ -134,7 +134,7 @@
           </packing>
         </child>
         <child>
-          <!-- n-columns=2 n-rows=2 -->
+          <!-- n-columns=1 n-rows=2 -->
           <object class="GtkGrid">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -144,38 +144,6 @@
             <property name="margin-bottom">6</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <child>
-              <object class="GtkLabel" id="class_name_label">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="hexpand">False</property>
-                <property name="vexpand">False</property>
-                <property name="label" translatable="yes" context="developmenttool|classname">Class name:</property>
-                <accessibility>
-                  <relation type="label-for" target="class_name_value_id"/>
-                </accessibility>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="class_name_value_id">
-                <property name="name">class_name_id</property>
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="selectable">True</property>
-                <accessibility>
-                  <relation type="labelled-by" target="class_name_label"/>
-                </accessibility>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
             <child>
               <object class="GtkNotebook">
                 <property name="visible">True</property>
@@ -443,7 +411,94 @@
               <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">1</property>
-                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <child>
+                  <object class="GtkToolbar" id="object_inspector_toolbar">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="toolbar-style">icons</property>
+                    <child>
+                      <object class="GtkToolButton" id="back">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="tooltip-text" translatable="yes" context="developmenttool|back">Back</property>
+                        <property name="label" translatable="yes" context="developmenttool|back">Back</property>
+                        <property name="use-underline">True</property>
+                        <property name="icon-name">cmd/lc_prevrecord.png</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="inspect">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="tooltip-text" translatable="yes" context="developmenttool|inspect">Inspect</property>
+                        <property name="label" translatable="yes" context="developmenttool|inspect">Inspect</property>
+                        <property name="use-underline">True</property>
+                        <property name="icon-name">cmd/lc_recsearch.png</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="class_name_label">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hexpand">False</property>
+                    <property name="vexpand">False</property>
+                    <property name="xpad">6</property>
+                    <property name="ypad">6</property>
+                    <property name="label" translatable="yes" context="developmenttool|classname">Class name:</property>
+                    <accessibility>
+                      <relation type="label-for" target="class_name_value_id"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="class_name_value_id">
+                    <property name="name">class_name_id</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="selectable">True</property>
+                    <property name="xalign">0</property>
+                    <property name="yalign">0.5</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="class_name_label"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
           </object>
