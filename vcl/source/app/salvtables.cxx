@@ -6611,6 +6611,54 @@ IMPL_LINK(SalInstanceEntryTreeView, AutocompleteHdl, Edit&, rEdit, void)
     }
 }
 
+namespace
+{
+class SalInstancePopover : public SalInstanceContainer, public virtual weld::Popover
+{
+private:
+    VclPtr<DockingWindow> m_xPopover;
+
+    DECL_LINK(PopupModeEndHdl, FloatingWindow*, void);
+
+public:
+    SalInstancePopover(DockingWindow* pPopover, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : SalInstanceContainer(pPopover, pBuilder, bTakeOwnership)
+        , m_xPopover(pPopover)
+    {
+    }
+
+    virtual void popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) override
+    {
+        SalInstanceWidget* pVclWidget = dynamic_cast<SalInstanceWidget*>(pParent);
+        assert(pVclWidget);
+        vcl::Window* pWidget = pVclWidget->getWidget();
+
+        tools::Rectangle aRect;
+        Point aPt = pWidget->OutputToScreenPixel(rRect.TopLeft());
+        aRect.SetLeft(aPt.X());
+        aRect.SetTop(aPt.Y());
+        aPt = pWidget->OutputToScreenPixel(rRect.BottomRight());
+        aRect.SetRight(aPt.X());
+        aRect.SetBottom(aPt.Y());
+
+        FloatWinPopupFlags nFlags = FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus;
+        m_xPopover->EnableDocking();
+        DockingManager* pDockingManager = vcl::Window::GetDockingManager();
+        pDockingManager->SetPopupModeEndHdl(m_xPopover,
+                                            LINK(this, SalInstancePopover, PopupModeEndHdl));
+        pDockingManager->StartPopupMode(m_xPopover, aRect, nFlags);
+    }
+
+    virtual void popdown() override
+    {
+        vcl::Window::GetDockingManager()->EndPopupMode(m_xPopover);
+        m_xPopover->EnableDocking(false);
+    }
+};
+}
+
+IMPL_LINK_NOARG(SalInstancePopover, PopupModeEndHdl, FloatingWindow*, void) { signal_closed(); }
+
 SalInstanceBuilder::SalInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot,
                                        const OUString& rUIFile,
                                        const css::uno::Reference<css::frame::XFrame>& rFrame)
@@ -6920,6 +6968,20 @@ std::unique_ptr<weld::Menu> SalInstanceBuilder::weld_menu(const OString& id)
 {
     PopupMenu* pMenu = m_xBuilder->get_menu(id);
     return pMenu ? std::make_unique<SalInstanceMenu>(pMenu, true) : nullptr;
+}
+
+std::unique_ptr<weld::Popover> SalInstanceBuilder::weld_popover(const OString& id)
+{
+    DockingWindow* pDockingWindow = m_xBuilder->get<DockingWindow>(id);
+    std::unique_ptr<weld::Popover> pRet(
+        pDockingWindow ? new SalInstancePopover(pDockingWindow, this, false) : nullptr);
+    if (pDockingWindow)
+    {
+        assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
+        m_aOwnedToplevel.set(pDockingWindow);
+        m_xBuilder->drop_ownership(pDockingWindow);
+    }
+    return pRet;
 }
 
 std::unique_ptr<weld::Toolbar> SalInstanceBuilder::weld_toolbar(const OString& id)

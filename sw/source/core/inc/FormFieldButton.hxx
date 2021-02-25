@@ -10,10 +10,10 @@
 #pragma once
 
 #include <vcl/ctrl.hxx>
+#include <vcl/weld.hxx>
 #include <swrect.hxx>
 
 class SwEditWin;
-class FloatingWindow;
 namespace sw::mark
 {
 class Fieldmark;
@@ -32,19 +32,21 @@ public:
     void CalcPosAndSize(const SwRect& rPortionPaintArea);
 
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
-    DECL_LINK(FieldPopupModeEndHdl, FloatingWindow*, void);
+    DECL_LINK(FieldPopupModeEndHdl, weld::Popover&, void);
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual WindowHitTest ImplHitTest(const Point& rFramePos) override;
 
-    virtual void InitPopup() = 0;
+    virtual void LaunchPopup();
+    virtual void DestroyPopup();
 
 private:
     tools::Rectangle m_aFieldFramePixel;
 
 protected:
     sw::mark::Fieldmark& m_rFieldmark;
-    VclPtr<FloatingWindow> m_pFieldPopup;
+    std::unique_ptr<weld::Builder> m_xFieldPopupBuilder;
+    std::unique_ptr<weld::Popover> m_xFieldPopup;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

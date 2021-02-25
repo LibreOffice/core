@@ -2264,6 +2264,21 @@ public:
     virtual ~Menu() {}
 };
 
+class VCL_DLLPUBLIC Popover : virtual public Container
+{
+private:
+    Link<weld::Popover&, void> m_aCloseHdl;
+
+protected:
+    void signal_closed() { m_aCloseHdl.Call(*this); }
+
+public:
+    virtual void popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) = 0;
+    virtual void popdown() = 0;
+
+    void connect_closed(const Link<weld::Popover&, void>& rLink) { m_aCloseHdl = rLink; }
+};
+
 class VCL_DLLPUBLIC Toolbar : virtual public Widget
 {
 protected:
@@ -2383,6 +2398,7 @@ public:
                                                                 const OString& treeviewid)
         = 0;
     virtual std::unique_ptr<Menu> weld_menu(const OString& id) = 0;
+    virtual std::unique_ptr<Popover> weld_popover(const OString& id) = 0;
     virtual std::unique_ptr<Toolbar> weld_toolbar(const OString& id) = 0;
     virtual std::unique_ptr<SizeGroup> create_size_group() = 0;
     /* return a Dialog suitable to take a screenshot of containing the contents of the .ui file.
