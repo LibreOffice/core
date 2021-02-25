@@ -82,6 +82,7 @@ const OUString PROP_CONTROL_ENABLE("control_enable"     ); // [sal_Bool] true=ON
 const OUString PROP_PARENT_WINDOW("ParentWindow"); //[css::awt::XWindow] preferred parent window
 const OUString STRING_SEPARATOR("------------------------------------------" );
 
+class TDialogImplBase;
 
 /** native implementation of the file picker on Vista and upcoming windows versions.
  *  This dialog uses COM internally. Further it marshall every request so it will
@@ -278,30 +279,12 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         void impl_SetDefaultExtension( const OUString& currentFilter );
 
    private:
-        enum class PickerDialog
-        {
-            FileOpen,
-            FileSave,
-            Folder,
-        };
-
-        void impl_sta_CreateDialog(const RequestRef& rRequest, PickerDialog eType, DWORD nOrFlags);
+        template <class TDialogImplClass> void impl_sta_CreateDialog();
+        void impl_sta_InitDialog(const RequestRef& rRequest, DWORD nOrFlags);
 
 
-        /// COM object representing a file open dialog
-        TFileOpenDialog m_iDialogOpen;
-
-
-        /// COM object representing a file save dialog
-        TFileSaveDialog m_iDialogSave;
-
-
-        /// COM object representing a folder picker dialog
-        TFolderPickerDialog m_iFolderPicker;
-
-
-        /// knows the return state of the last COM call
-        HRESULT m_hLastResult;
+        /// object representing a file dialog
+        std::shared_ptr<TDialogImplBase> m_pDialog;
 
 
         /// @todo document me
