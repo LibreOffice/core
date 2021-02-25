@@ -693,8 +693,6 @@ typedef void *oslFileHandle;
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_openFile(
         rtl_uString *pustrFileURL, oslFileHandle *pHandle, sal_uInt32 uFlags );
 
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_FileExists(rtl_uString* strPath);
-
 #define osl_Pos_Absolut 1
 #define osl_Pos_Current 2
 #define osl_Pos_End     3

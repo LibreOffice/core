@@ -112,7 +112,9 @@ public:
      */
     void                SetFilter(const std::shared_ptr<const SfxFilter>& pFilter);
     const std::shared_ptr<const SfxFilter>& GetFilter() const;
-    void                SetCheckEditableWorkerTag(comphelper::ThreadTaskTag* pTag);
+    void  SetCheckEditableWorkerTag(
+        const std::shared_ptr<comphelper::ThreadTaskTag>& pTag);
+    const std::shared_ptr<comphelper::ThreadTaskTag>& GetCheckEditableWorkerTag() const;
     const OUString&     GetOrigURL() const;
 
     SfxItemSet  *       GetItemSet() const;

@@ -127,6 +127,13 @@
 
 #include <memory>
 
+#define WIN32_LEAN_AND_MEAN
+//#include <Windows.h>
+//#include <systools/win32/uwinapi.h>
+#include <windef.h>
+#include <winuser.h>
+#include <o3tl/char16_t2wchar_t.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::uno;
@@ -234,10 +241,6 @@ bool IsFileMovable(const INetURLObject& rURL)
 #endif
 }
 
-} // anonymous namespace
-
-namespace
-{
 class CheckReadOnlyTask : public comphelper::ThreadTask
 {
 public:
@@ -260,6 +263,31 @@ public:
 
     SfxMedium* _pMed;
 };
+
+} // anonymous namespace
+
+void LaunchCheckEditableWorkerThread(SfxMedium* pMed)
+{
+    bool bStartNewTask = true;
+    // Start a thread to periodically check if the file is editable
+    if (pMed->GetCheckEditableWorkerTag())
+    {
+        if (!comphelper::ThreadPool::isTaskTagDone(pMed->GetCheckEditableWorkerTag()))
+            bStartNewTask = false;
+    }
+
+    if (bStartNewTask)
+    {
+        comphelper::ThreadPool& rSharedPool = comphelper::ThreadPool::getSharedOptimalPool();
+        std::shared_ptr<comphelper::ThreadTaskTag> pTag
+            = comphelper::ThreadPool::createThreadTaskTag();
+        if (pTag != nullptr)
+        {
+            pMed->SetCheckEditableWorkerTag(pTag);
+            rSharedPool.pushTask(std::make_unique<CheckReadOnlyTask>(pMed, pTag));
+            pMed->AddNextRef();
+        }
+    }
 }
 
 class SfxMedium_Impl
@@ -958,7 +986,6 @@ OUString tryForeignLockfiles(const OUString& sDocURL)
      Note: This method has to be run in the main thread.
 */
 IMPL_STATIC_LINK(SfxMedium_Impl, ShowReloadEditableDialog, void*, p, void)
-  //  IMPL_LINK(CheckReadOnlyTask, ShowReloadEditableDialog, void*, p, void)
 {
     SfxMedium* pMed = static_cast<SfxMedium*>(p);
     if (pMed == nullptr)
@@ -1009,27 +1036,25 @@ Cleanup:
 
 bool SfxMedium::CheckCanGetLockfile()
 {
+    bool bCanReload = false;
     ::svt::DocumentLockFile aLockFile(pImpl->m_aLogicName);
     LockFileEntry aData;
-    bool bCanReload = false;
 
-    if (osl_FileExists(aLockFile.GetURL().pData))
+    //MessageBoxW(NULL, (LPCWSTR)o3tl::toW(rtl_uString_getStr(aLockFile.GetURL().pData)),
+    //          (LPCWSTR)L"After lock file, before checking exists",
+    //           MB_ICONWARNING | MB_CANCELTRYCONTINUE | MB_DEFBUTTON2);
+    osl::DirectoryItem rItem;
+    auto nError1 = osl::DirectoryItem::get(aLockFile.GetURL(), rItem);
+    if (nError1 == osl::FileBase::E_None)
     {
         try
         {
-            //LockFileEntry aLockData;
-            // aLockData[LockFileComponent::OOOUSERNAME] = "Matt start";
-
             aData = aLockFile.GetLockData();
-
-            // ShowLockedDocumentDialog(aLockData, true, false, false);
         }
         catch (const io::WrongFormatException&)
         {
             // we get empty or corrupt data
-            // info to the user
             return false;
-            //ShowLockFileProblemDialog(MessageDlg::LockFileCorrupt);
         }
         catch (const uno::Exception&)
         {
@@ -1049,7 +1074,7 @@ bool SfxMedium::CheckCanGetLockfile()
             bCanReload = true;
         }
     }
-    else // file doesn't exist
+    else if (nError1 == osl_File_E_NOENT) // file doesn't exist
     {
         bCanReload = true;
     }
@@ -1068,49 +1093,38 @@ void CheckReadOnlyTask::doWork()
 
     while (1)
     {
-        bool bFoundMed = false;
+        osl::Thread::wait(std::chrono::milliseconds(1000)); // give it some time before checking
 
-        osl::Thread::wait(std::chrono::milliseconds(1000)); // give it a time to start
+        osl::DirectoryItem rItem;
+        auto nError1 = osl::DirectoryItem::get(aDocumentURL, rItem);
+        if (nError1 != osl::FileBase::E_None)
+            continue;
+        // get the file attributes
+        osl::FileStatus rFileStatus(osl_FileStatus_Mask_Attributes);
+        nError1 = rItem.getFileStatus(rFileStatus);
+        if (nError1 != osl::FileBase::E_None)
+            continue;
+        // check read-only
+        if ((osl_File_Attribute_ReadOnly & rFileStatus.getAttributes()) != 0)
+            continue;
 
-        for (SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame;
-             pFrame = SfxViewFrame::GetNext(*pFrame))
+        if (!osl_HasWritePermissions(aDocumentURL.pData))
+            continue;
+
+        if (!_pMed->CheckCanGetLockfile())
         {
-            if (pFrame->GetObjectShell()->GetMedium() == _pMed)
-            {
-                bFoundMed = true;
-                osl::DirectoryItem rItem;
-                auto nError1 = osl::DirectoryItem::get(aDocumentURL, rItem);
-                if (nError1 != osl::FileBase::E_None)
-                    break;
-                // get the file attributes
-                osl::FileStatus rFileStatus(osl_FileStatus_Mask_Attributes);
-                nError1 = rItem.getFileStatus(rFileStatus);
-                if (nError1 != osl::FileBase::E_None)
-                    break;
-                // check read-only
-                if ((osl_File_Attribute_ReadOnly & rFileStatus.getAttributes()) != 0)
-                    break;
-
-                if (!osl_HasWritePermissions(aDocumentURL.pData))
-                    break;
-
-                if (!_pMed->CheckCanGetLockfile())
-                    break;
-
-                _pMed->AddNextRef();
-                if (Application::PostUserEvent(
-                        LINK(nullptr, SfxMedium_Impl, ShowReloadEditableDialog), _pMed)
-                    == nullptr)
-                {
-                    _pMed->ReleaseRef();
-                }
-
-                return;
-            }
+            continue;
+        }
+        _pMed->GetItemSet()->ClearItem(SID_DOC_READONLY);
+        _pMed->AddNextRef();
+        if (Application::PostUserEvent(LINK(nullptr, SfxMedium_Impl, ShowReloadEditableDialog),
+                                       _pMed)
+            == nullptr)
+        {
+            _pMed->ReleaseRef();
         }
 
-        if (!bFoundMed)
-            return;
+        return;
     }
 }
 
@@ -1225,16 +1239,7 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntr
             {
                 GetItemSet()->Put(SfxBoolItem(SID_DOC_READONLY, true));
 
-                // Start a thread to periodically check if the file is editable
-                comphelper::ThreadPool& rSharedPool
-                    = comphelper::ThreadPool::getSharedOptimalPool();
-                std::shared_ptr<comphelper::ThreadTaskTag> pTag
-                    = comphelper::ThreadPool::createThreadTaskTag();
-                if (pTag != nullptr)
-                {
-                    rSharedPool.pushTask(std::make_unique<CheckReadOnlyTask>(this, pTag));
-                    this->AddNextRef();
-                }
+                LaunchCheckEditableWorkerThread(this);
             }
             else
                 nResult = ShowLockResult::Try;
@@ -1291,15 +1296,7 @@ bool SfxMedium::ShowLockFileProblemDialog(MessageDlg nWhichDlg)
         {
             GetItemSet()->Put(SfxBoolItem(SID_DOC_READONLY, true));
 
-            // Start a thread to periodically check if the file is editable
-            comphelper::ThreadPool& rSharedPool = comphelper::ThreadPool::getSharedOptimalPool();
-            std::shared_ptr<comphelper::ThreadTaskTag> pTag
-                = comphelper::ThreadPool::createThreadTaskTag();
-            if (pTag != nullptr)
-            {
-                rSharedPool.pushTask(std::make_unique<CheckReadOnlyTask>(this, pTag));
-                this->AddNextRef();
-            }
+            LaunchCheckEditableWorkerThread(this);
         }
         else
         {
@@ -1503,7 +1500,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
             bResult = ( bLoading && pTemplateItem && pTemplateItem->GetValue() );
         }
 
-        if ( !bResult )
+        if ( !bResult && !IsReadOnly() )
         {
             bool bContentReadonly = false;
             if ( bLoading && GetURLObject().GetProtocol() == INetProtocol::File )
@@ -1704,28 +1701,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
             }
             else // read-only
             {
-                bool bStartNewTask = true;
-                // Start a thread to periodically check if the file is editable
-                if (pImpl->m_pCheckEditableWorkerTag)
-                {
-                    if (!comphelper::ThreadPool::isTaskTagDone(
-                            pImpl->m_pCheckEditableWorkerTag))
-                        bStartNewTask = false;
-                }
-
-                if (bStartNewTask)
-                {
-                    comphelper::ThreadPool& rSharedPool
-                        = comphelper::ThreadPool::getSharedOptimalPool();
-                    std::shared_ptr<comphelper::ThreadTaskTag> pTag
-                        = comphelper::ThreadPool::createThreadTaskTag();
-                    if (pTag != nullptr)
-                    {
-                        pImpl->m_pCheckEditableWorkerTag = pTag;
-                        rSharedPool.pushTask(std::make_unique<CheckReadOnlyTask>(this, pTag));
-                        this->AddNextRef();
-                    }
-                }
+                LaunchCheckEditableWorkerThread(this);
             }
         }
 
@@ -1748,7 +1724,6 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
         if ( bResult )
         {
             eResult = LockFileResult::Succeeded;
-            GetItemSet()->ClearItem(SID_DOC_READONLY);
         }
     }
     catch( const uno::Exception& )
@@ -3138,10 +3113,16 @@ const std::shared_ptr<const SfxFilter>& SfxMedium::GetFilter() const
     return pImpl->m_pFilter;
 }
 
-void SfxMedium::SetCheckEditableWorkerTag(comphelper::ThreadTaskTag* pTag)
+void SfxMedium::SetCheckEditableWorkerTag(
+    const std::shared_ptr<comphelper::ThreadTaskTag>& pTag)
 {
-    std::shared_ptr<comphelper::ThreadTaskTag> ptr(pTag);
-    pImpl->m_pCheckEditableWorkerTag = ptr;
+    //std::shared_ptr<comphelper::ThreadTaskTag> ptr(pTag);
+    pImpl->m_pCheckEditableWorkerTag = pTag;
+}
+
+const std::shared_ptr<comphelper::ThreadTaskTag>& SfxMedium::GetCheckEditableWorkerTag() const
+{
+    return pImpl->m_pCheckEditableWorkerTag;
 }
 
 sal_uInt32 SfxMedium::CreatePasswordToModifyHash( const OUString& aPasswd, bool bWriter )
