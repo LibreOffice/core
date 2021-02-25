@@ -386,10 +386,13 @@ namespace emfio
             // calculate measured TextLength
             const vcl::Font& rFontCandidate(maCurrentMetaFontAction->GetFont());
             pTempVirtualDevice->SetFont(rFontCandidate);
-            const tools::Long nMeasuredTextLength(pTempVirtualDevice->GetTextWidth(rText));
+            tools::Long nMeasuredTextLength(pTempVirtualDevice->GetTextWidth(rText));
+            // on failure, use original length
+            if (!nMeasuredTextLength)
+                nMeasuredTextLength = nImportedTextLength;
 
             // compare expected and imported TextLengths
-            if (nImportedTextLength != nMeasuredTextLength && nMeasuredTextLength)
+            if (nImportedTextLength != nMeasuredTextLength)
             {
                 const double fFactorText(static_cast<double>(nImportedTextLength) / static_cast<double>(nMeasuredTextLength));
                 const double fFactorTextPercent(fabs(1.0 - fFactorText) * 100.0);
@@ -418,6 +421,9 @@ namespace emfio
                     rFontCandidate2.SetAverageFontWidth(static_cast<tools::Long>(fCorrectedAverageFontWidth));
                     pTempVirtualDevice->SetFont(rFontCandidate2);
                     nCorrectedTextLength = pTempVirtualDevice->GetTextWidth(rText);
+                    // on failure, use original length
+                    if (!nCorrectedTextLength)
+                        nCorrectedTextLength = nImportedTextLength;
                 }
 
                 const double fFactorCorrectedText(static_cast<double>(nImportedTextLength) / static_cast<double>(nCorrectedTextLength));
