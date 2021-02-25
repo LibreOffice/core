@@ -1635,19 +1635,19 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
 </qtcreator>
 """
 
-    def get_source_extension(self, src_file):
-        path = os.path.join(self.base_folder, src_file)
-        for ext in (".cxx", ".cpp", ".c", ".mm"):
-            if os.path.isfile(path + ext):
-                return ext
+    def get_file_path(self, src_file, ext_choices):
+        path = os.path.join(self.gbuildparser.srcdir, src_file)
+        for ext in ext_choices:
+            full_path = path + ext
+            if os.path.isfile(full_path):
+                return full_path
         return ""
 
-    def get_header_extension(self, src_file):
-        path = os.path.join(self.base_folder, src_file)
-        for ext in (".hxx", ".hpp", ".h"):
-            if os.path.isfile(path + ext):
-                return ext
-        return ""
+    def get_source_path(self, src_file):
+        return self.get_file_path(src_file, (".cxx", ".cpp", ".c", ".mm"))
+
+    def get_header_path(self, src_file):
+        return self.get_file_path(src_file, (".hxx", ".hpp", ".h"))
 
     def build_data_libs(self):
 
@@ -1682,14 +1682,14 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             for file_ in lib.cxxobjects:
                 # the file has no extension : search it
                 # self._log("\n    file : %s" % file_)
-                ext = self.get_source_extension(file_)
-                if ext:
-                    sources_list.append(lopath(file_ + ext))
+                path = self.get_source_path(file_)
+                if path:
+                    sources_list.append(lopath(path))
 
                 # few cxxobject files have a header beside
-                ext = self.get_header_extension(file_)
-                if ext:
-                    headers_list.append(lopath(file_ + ext))
+                path = self.get_header_path(file_)
+                if path:
+                    headers_list.append(lopath(path))
 
             cxxflags_list = []
             for cxxflag in lib.cxxflags:
