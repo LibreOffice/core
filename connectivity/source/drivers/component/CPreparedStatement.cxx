@@ -24,7 +24,7 @@ using namespace connectivity::component;
 using namespace connectivity::file;
 using namespace com::sun::star::uno;
 
-OResultSet* OComponentPreparedStatement::createResultSet()
+rtl::Reference<OResultSet> OComponentPreparedStatement::createResultSet()
 {
     return new connectivity::component::OComponentResultSet(this,m_aSQLIterator);
 }
