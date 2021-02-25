@@ -1356,11 +1356,6 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, tools::Long nWidth, tool
             {
                 addSquareOnRight(pData->maHideRect, 0);
             }
-
-            if ( pBorderWindow->GetStyle() & WB_ROLLABLE )
-            {
-                addSquareOnRight(pData->maRollRect, 0);
-            }
         }
         else
         {
@@ -1574,7 +1569,7 @@ void ImplBorderWindow::ImplInit( vcl::Window* pParent,
 {
     // remove all unwanted WindowBits
     WinBits nOrgStyle = nStyle;
-    WinBits nTestStyle = (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_CLOSEABLE | WB_STANDALONE | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_SYSTEMFLOATWIN | WB_INTROWIN | WB_DEFAULTWIN | WB_TOOLTIPWIN | WB_NOSHADOW | WB_OWNERDRAWDECORATION | WB_SYSTEMCHILDWINDOW  | WB_POPUP);
+    WinBits nTestStyle = (WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE | WB_STANDALONE | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_SYSTEMFLOATWIN | WB_INTROWIN | WB_DEFAULTWIN | WB_TOOLTIPWIN | WB_NOSHADOW | WB_OWNERDRAWDECORATION | WB_SYSTEMCHILDWINDOW  | WB_POPUP);
     if ( nTypeStyle & BorderWindowStyle::App )
         nTestStyle |= WB_APP;
     nStyle &= nTestStyle;

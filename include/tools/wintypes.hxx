@@ -120,7 +120,6 @@ WinBits const WB_ALLOWMENUBAR =         0x00000080;
 
 // Window-Bits for SystemWindows
 WinBits const WB_MOVEABLE =             0x00000100;
-WinBits const WB_ROLLABLE =             0x00000200;
 WinBits const WB_CLOSEABLE =            0x00000400;
 WinBits const WB_STANDALONE =           0x00000800;
 WinBits const WB_APP =                  0x00001000;
@@ -214,7 +213,7 @@ WinBits const WB_NOSPLITDRAW =          0x01000000;
 // Standard-WinBits
 WinBits const WB_STDWORK =              WB_SIZEMOVE | WB_CLOSEABLE;
 WinBits const WB_STDDOCKWIN =           WB_DOCKABLE | WB_MOVEABLE | WB_CLOSEABLE;
-WinBits const WB_STDFLOATWIN =          WB_SIZEMOVE | WB_CLOSEABLE | WB_ROLLABLE;
+WinBits const WB_STDFLOATWIN =          WB_SIZEMOVE | WB_CLOSEABLE;
 WinBits const WB_STDDIALOG =            WB_MOVEABLE | WB_CLOSEABLE;
 WinBits const WB_STDMODELESS =          WB_STDDIALOG;
 WinBits const WB_STDMODAL =             WB_STDDIALOG;

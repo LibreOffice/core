@@ -82,7 +82,7 @@ void FloatingWindow::ImplInitFloating( vcl::Window* pParent, WinBits nStyle )
         if (!(nStyle & WB_NODIALOGCONTROL))
             nStyle |= WB_DIALOGCONTROL;
 
-        if (nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_CLOSEABLE | WB_STANDALONE)
+        if (nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE | WB_STANDALONE)
             && !(nStyle & WB_OWNERDRAWDECORATION))
         {
             WinBits nFloatWinStyle = nStyle;

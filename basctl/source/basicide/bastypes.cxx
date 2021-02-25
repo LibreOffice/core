@@ -257,7 +257,7 @@ bool BaseWindow::HasActiveEditor () const
 // style bits for DockingWindow
 WinBits const DockingWindow::StyleBits =
     WB_BORDER | WB_3DLOOK | WB_CLIPCHILDREN |
-    WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_DOCKABLE;
+    WB_MOVEABLE | WB_SIZEABLE | WB_DOCKABLE;
 
 DockingWindow::DockingWindow(vcl::Window* pParent, const OUString& rUIXMLDescription, const OString& rID)
     : ResizableDockingWindow(pParent)
