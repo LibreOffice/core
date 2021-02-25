@@ -235,8 +235,7 @@ private:
     VCL_DLLPRIVATE void             ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     VCL_DLLPRIVATE tools::Long             ImplGetItemPos( sal_uInt16 nPos ) const;
     VCL_DLLPRIVATE tools::Rectangle ImplGetItemRect( sal_uInt16 nPos ) const;
-    using Window::ImplHitTest;
-    VCL_DLLPRIVATE sal_uInt16       ImplHitTest( const Point& rPos, tools::Long& nMouseOff, sal_uInt16& nPos ) const;
+    VCL_DLLPRIVATE sal_uInt16       ImplDoHitTest( const Point& rPos, tools::Long& nMouseOff, sal_uInt16& nPos ) const;
     VCL_DLLPRIVATE void             ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos );
     VCL_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
                                                  const tools::Rectangle& rItemRect, const tools::Rectangle* pRect);

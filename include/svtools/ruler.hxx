@@ -688,8 +688,7 @@ private:
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
-    using Window::ImplHitTest;
-    SVT_DLLPRIVATE bool ImplHitTest( const Point& rPosition,
+    SVT_DLLPRIVATE bool ImplDoHitTest( const Point& rPosition,
                                          RulerSelection* pHitTest,
                                          bool bRequiredStyle = false,
                                          RulerIndentStyle nRequiredStyle = RulerIndentStyle::Top ) const;
