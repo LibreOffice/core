@@ -198,6 +198,7 @@ void XSecController::signAStream( sal_Int32 securityId, const OUString& uri, boo
     }
 }
 
+// note: this is called when creating a new signature from scratch
 void XSecController::setX509Certificate(
     sal_Int32 nSecurityId,
     const OUString& ouX509IssuerName,
@@ -211,10 +212,13 @@ void XSecController::setX509Certificate(
     if ( index == -1 )
     {
         InternalSignatureInformation isi(nSecurityId, nullptr);
-        isi.signatureInfor.ouX509IssuerName = ouX509IssuerName;
-        isi.signatureInfor.ouX509SerialNumber = ouX509SerialNumber;
-        isi.signatureInfor.ouX509Certificate = ouX509Cert;
-        isi.signatureInfor.ouCertDigest = ouX509CertDigest;
+        isi.signatureInfor.X509Datas.clear();
+        isi.signatureInfor.X509Datas.emplace_back();
+        isi.signatureInfor.X509Datas.back().emplace_back();
+        isi.signatureInfor.X509Datas.back().back().X509IssuerName = ouX509IssuerName;
+        isi.signatureInfor.X509Datas.back().back().X509SerialNumber = ouX509SerialNumber;
+        isi.signatureInfor.X509Datas.back().back().X509Certificate = ouX509Cert;
+        isi.signatureInfor.X509Datas.back().back().CertDigest = ouX509CertDigest;
         isi.signatureInfor.eAlgorithmID = eAlgorithmID;
         m_vInternalSignatureInformations.push_back( isi );
     }
@@ -222,16 +226,19 @@ void XSecController::setX509Certificate(
     {
         SignatureInformation &si
             = m_vInternalSignatureInformations[index].signatureInfor;
-        si.ouX509IssuerName = ouX509IssuerName;
-        si.ouX509SerialNumber = ouX509SerialNumber;
-        si.ouX509Certificate = ouX509Cert;
-        si.ouCertDigest = ouX509CertDigest;
+        si.X509Datas.clear();
+        si.X509Datas.emplace_back();
+        si.X509Datas.back().emplace_back();
+        si.X509Datas.back().back().X509IssuerName = ouX509IssuerName;
+        si.X509Datas.back().back().X509SerialNumber = ouX509SerialNumber;
+        si.X509Datas.back().back().X509Certificate = ouX509Cert;
+        si.X509Datas.back().back().CertDigest = ouX509CertDigest;
     }
 }
 
 void XSecController::setGpgCertificate(
         sal_Int32 nSecurityId,
-        const OUString& ouCertDigest,
+        const OUString& ouKeyDigest,
         const OUString& ouCert,
         const OUString& ouOwner)
 {
@@ -242,16 +249,17 @@ void XSecController::setGpgCertificate(
         InternalSignatureInformation isi(nSecurityId, nullptr);
         isi.signatureInfor.ouGpgCertificate = ouCert;
         isi.signatureInfor.ouGpgOwner = ouOwner;
-        isi.signatureInfor.ouCertDigest = ouCertDigest;
+        isi.signatureInfor.ouGpgKeyID = ouKeyDigest;
         m_vInternalSignatureInformations.push_back( isi );
     }
     else
     {
         SignatureInformation &si
             = m_vInternalSignatureInformations[index].signatureInfor;
+        si.X509Datas.clear(); // it is a PGP signature now
         si.ouGpgCertificate = ouCert;
         si.ouGpgOwner = ouOwner;
-        si.ouCertDigest = ouCertDigest;
+        si.ouGpgKeyID = ouKeyDigest;
     }
 }
 

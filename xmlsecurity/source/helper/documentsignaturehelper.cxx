@@ -512,6 +512,29 @@ void DocumentSignatureHelper::writeDigestMethod(
     xDocumentHandler->endElement("DigestMethod");
 }
 
+static void WriteXadesCert(
+    uno::Reference<xml::sax::XDocumentHandler> const& xDocumentHandler,
+    SignatureInformation::X509CertInfo const& rCertInfo)
+{
+    xDocumentHandler->startElement("xd:Cert", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->startElement("xd:CertDigest", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    DocumentSignatureHelper::writeDigestMethod(xDocumentHandler);
+    xDocumentHandler->startElement("DigestValue", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    assert(!rCertInfo.CertDigest.isEmpty());
+    xDocumentHandler->characters(rCertInfo.CertDigest);
+    xDocumentHandler->endElement("DigestValue");
+    xDocumentHandler->endElement("xd:CertDigest");
+    xDocumentHandler->startElement("xd:IssuerSerial", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->startElement("X509IssuerName", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->characters(rCertInfo.X509IssuerName);
+    xDocumentHandler->endElement("X509IssuerName");
+    xDocumentHandler->startElement("X509SerialNumber", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    xDocumentHandler->characters(rCertInfo.X509SerialNumber);
+    xDocumentHandler->endElement("X509SerialNumber");
+    xDocumentHandler->endElement("xd:IssuerSerial");
+    xDocumentHandler->endElement("xd:Cert");
+}
+
 void DocumentSignatureHelper::writeSignedProperties(
     const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler,
     const SignatureInformation& signatureInfo,
@@ -528,26 +551,26 @@ void DocumentSignatureHelper::writeSignedProperties(
     xDocumentHandler->characters(sDate);
     xDocumentHandler->endElement("xd:SigningTime");
     xDocumentHandler->startElement("xd:SigningCertificate", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
-    xDocumentHandler->startElement("xd:Cert", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
-    xDocumentHandler->startElement("xd:CertDigest", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
-    writeDigestMethod(xDocumentHandler);
-
-    xDocumentHandler->startElement("DigestValue", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
-    // TODO: this is empty for gpg signatures currently
-    //assert(!signatureInfo.ouCertDigest.isEmpty());
-    xDocumentHandler->characters(signatureInfo.ouCertDigest);
-    xDocumentHandler->endElement("DigestValue");
-
-    xDocumentHandler->endElement("xd:CertDigest");
-    xDocumentHandler->startElement("xd:IssuerSerial", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
-    xDocumentHandler->startElement("X509IssuerName", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
-    xDocumentHandler->characters(signatureInfo.ouX509IssuerName);
-    xDocumentHandler->endElement("X509IssuerName");
-    xDocumentHandler->startElement("X509SerialNumber", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
-    xDocumentHandler->characters(signatureInfo.ouX509SerialNumber);
-    xDocumentHandler->endElement("X509SerialNumber");
-    xDocumentHandler->endElement("xd:IssuerSerial");
-    xDocumentHandler->endElement("xd:Cert");
+    assert(signatureInfo.GetSigningCertificate() || !signatureInfo.ouGpgKeyID.isEmpty());
+    if (signatureInfo.GetSigningCertificate())
+    {
+        // how should this deal with multiple X509Data elements?
+        // for now, let's write all of the certificates ...
+        for (auto const& rData : signatureInfo.X509Datas)
+        {
+            for (auto const& it : rData)
+            {
+                WriteXadesCert(xDocumentHandler, it);
+            }
+        }
+    }
+    else
+    {
+        // for PGP, write empty mandatory X509IssuerName, X509SerialNumber
+        SignatureInformation::X509CertInfo temp;
+        temp.CertDigest = signatureInfo.ouGpgKeyID;
+        WriteXadesCert(xDocumentHandler, temp);
+    }
     xDocumentHandler->endElement("xd:SigningCertificate");
     xDocumentHandler->startElement("xd:SignaturePolicyIdentifier", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
     xDocumentHandler->startElement("xd:SignaturePolicyImplied", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
