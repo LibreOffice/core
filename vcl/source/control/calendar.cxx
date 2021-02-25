@@ -326,7 +326,7 @@ void Calendar::ImplFormat()
     mbFormat = false;
 }
 
-sal_uInt16 Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
+sal_uInt16 Calendar::ImplDoHitTest( const Point& rPos, Date& rDate ) const
 {
     if ( mbFormat )
         return 0;
@@ -928,7 +928,7 @@ void Calendar::ImplShowMenu( const Point& rPos, const Date& rDate )
 void Calendar::ImplTracking( const Point& rPos, bool bRepeat )
 {
     Date    aTempDate = maCurDate;
-    sal_uInt16  nHitTest = ImplHitTest( rPos, aTempDate );
+    sal_uInt16  nHitTest = ImplDoHitTest( rPos, aTempDate );
 
     if ( mbSpinDown )
     {
@@ -1006,7 +1006,7 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeft() && !mbMenuDown )
     {
         Date    aTempDate = maCurDate;
-        sal_uInt16  nHitTest = ImplHitTest( rMEvt.GetPosPixel(), aTempDate );
+        sal_uInt16  nHitTest = ImplDoHitTest( rMEvt.GetPosPixel(), aTempDate );
         if ( nHitTest )
         {
             if ( nHitTest & CALENDAR_HITTEST_MONTHTITLE )
@@ -1200,7 +1200,7 @@ void Calendar::Command( const CommandEvent& rCEvt )
         if ( rCEvt.IsMouseEvent() )
         {
             Date    aTempDate = maCurDate;
-            sal_uInt16  nHitTest = ImplHitTest( rCEvt.GetMousePosPixel(), aTempDate );
+            sal_uInt16  nHitTest = ImplDoHitTest( rCEvt.GetMousePosPixel(), aTempDate );
             if ( nHitTest & CALENDAR_HITTEST_MONTHTITLE )
             {
                 ImplShowMenu( rCEvt.GetMousePosPixel(), aTempDate );
@@ -1369,7 +1369,7 @@ sal_uInt16 Calendar::GetMonthCount() const
 bool Calendar::GetDate( const Point& rPos, Date& rDate ) const
 {
     Date    aDate = maCurDate;
-    sal_uInt16  nHitTest = ImplHitTest( rPos, aDate );
+    sal_uInt16  nHitTest = ImplDoHitTest( rPos, aDate );
     if ( nHitTest & CALENDAR_HITTEST_DAY )
     {
         rDate = aDate;
