@@ -127,13 +127,6 @@
 
 #include <memory>
 
-#define WIN32_LEAN_AND_MEAN
-//#include <Windows.h>
-//#include <systools/win32/uwinapi.h>
-#include <windef.h>
-#include <winuser.h>
-#include <o3tl/char16_t2wchar_t.hxx>
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::uno;
@@ -254,7 +247,6 @@ public:
     {
         if (_pMed != nullptr)
         {
-            _pMed->SetCheckEditableWorkerTag(nullptr);
             _pMed->ReleaseRef();
         }
     }
@@ -273,7 +265,18 @@ void LaunchCheckEditableWorkerThread(SfxMedium* pMed)
     if (pMed->GetCheckEditableWorkerTag())
     {
         if (!comphelper::ThreadPool::isTaskTagDone(pMed->GetCheckEditableWorkerTag()))
+        {
             bStartNewTask = false;
+        }
+    }
+
+    if (pMed->GetCheckEditableCondition())
+    {
+        bStartNewTask = false;
+    }
+    else
+    {
+        pMed->SetCheckEditableCondition(std::make_shared<::osl::Condition>());
     }
 
     if (bStartNewTask)
@@ -284,7 +287,8 @@ void LaunchCheckEditableWorkerThread(SfxMedium* pMed)
         if (pTag != nullptr)
         {
             pMed->SetCheckEditableWorkerTag(pTag);
-            rSharedPool.pushTask(std::make_unique<CheckReadOnlyTask>(pMed, pTag));
+            rSharedPool.pushTask(
+                std::make_unique<CheckReadOnlyTask>(pMed, pTag));
             pMed->AddNextRef();
         }
     }
@@ -333,6 +337,7 @@ public:
     std::shared_ptr<const SfxFilter> m_pCustomFilter;
 
     std::shared_ptr<comphelper::ThreadTaskTag> m_pCheckEditableWorkerTag;
+    std::shared_ptr<::osl::Condition> m_pMyCond;
 
     std::unique_ptr<SvStream> m_pInStream;
     std::unique_ptr<SvStream> m_pOutStream;
@@ -1025,6 +1030,11 @@ IMPL_STATIC_LINK(SfxMedium_Impl, ShowReloadEditableDialog, void*, p, void)
         {
             if (pFrame->GetObjectShell()->GetMedium() == pMed)
             {
+                // reset read-only fields if we're able to reload
+                pMed->GetItemSet()->Put(SfxBoolItem(SID_DOC_READONLY, false));
+                pMed->SetOpenMode(StreamMode::READWRITE, true);
+                pMed->SetOriginallyReadOnly(false);
+
                 pFrame->GetDispatcher()->Execute(SID_EDITDOC);
                 break;
             }
@@ -1040,9 +1050,6 @@ bool SfxMedium::CheckCanGetLockfile()
     ::svt::DocumentLockFile aLockFile(pImpl->m_aLogicName);
     LockFileEntry aData;
 
-    //MessageBoxW(NULL, (LPCWSTR)o3tl::toW(rtl_uString_getStr(aLockFile.GetURL().pData)),
-    //          (LPCWSTR)L"After lock file, before checking exists",
-    //           MB_ICONWARNING | MB_CANCELTRYCONTINUE | MB_DEFBUTTON2);
     osl::DirectoryItem rItem;
     auto nError1 = osl::DirectoryItem::get(aLockFile.GetURL(), rItem);
     if (nError1 == osl::FileBase::E_None)
@@ -1093,7 +1100,13 @@ void CheckReadOnlyTask::doWork()
 
     while (1)
     {
-        osl::Thread::wait(std::chrono::milliseconds(1000)); // give it some time before checking
+        switch (_pMed->GetCheckEditableCondition()->wait({ 60 /*secs*/, 0 }))
+        {
+            case ::osl::Condition::result_timeout:
+                break;
+            default: // signalled or error
+                return;
+        }
 
         osl::DirectoryItem rItem;
         auto nError1 = osl::DirectoryItem::get(aDocumentURL, rItem);
@@ -1115,7 +1128,8 @@ void CheckReadOnlyTask::doWork()
         {
             continue;
         }
-        _pMed->GetItemSet()->ClearItem(SID_DOC_READONLY);
+
+        // we can load, ask user
         _pMed->AddNextRef();
         if (Application::PostUserEvent(LINK(nullptr, SfxMedium_Impl, ShowReloadEditableDialog),
                                        _pMed)
@@ -1666,7 +1680,10 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                                         bUIStatus = ShowLockedDocumentDialog(
                                             aData, bLoading, bOwnLock, bHandleSysLocked);
                                     else if (bLoading && bTryIgnoreLockFile && !bHandleSysLocked)
+                                    {
                                         bUIStatus = ShowLockResult::Succeeded;
+                                        SignalCheckEditableThread();
+                                    }
 
                                     if ( bUIStatus == ShowLockResult::Succeeded )
                                     {
@@ -3102,6 +3119,13 @@ SfxMedium::GetInteractionHandler( bool bGetAlways )
     return pImpl->xInteraction;
 }
 
+void SfxMedium::SignalCheckEditableThread()
+{
+    if (GetCheckEditableCondition())
+    {
+        GetCheckEditableCondition()->set();
+    }
+}
 
 void SfxMedium::SetFilter( const std::shared_ptr<const SfxFilter>& pFilter )
 {
@@ -3116,13 +3140,22 @@ const std::shared_ptr<const SfxFilter>& SfxMedium::GetFilter() const
 void SfxMedium::SetCheckEditableWorkerTag(
     const std::shared_ptr<comphelper::ThreadTaskTag>& pTag)
 {
-    //std::shared_ptr<comphelper::ThreadTaskTag> ptr(pTag);
     pImpl->m_pCheckEditableWorkerTag = pTag;
 }
 
 const std::shared_ptr<comphelper::ThreadTaskTag>& SfxMedium::GetCheckEditableWorkerTag() const
 {
     return pImpl->m_pCheckEditableWorkerTag;
+}
+
+void SfxMedium::SetCheckEditableCondition(const std::shared_ptr<::osl::Condition>& pCond)
+{
+    pImpl->m_pMyCond = pCond;
+}
+
+const std::shared_ptr<::osl::Condition>& SfxMedium::GetCheckEditableCondition() const
+{
+    return pImpl->m_pMyCond;
 }
 
 sal_uInt32 SfxMedium::CreatePasswordToModifyHash( const OUString& aPasswd, bool bWriter )
@@ -3573,6 +3606,14 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUS
 
 SfxMedium::~SfxMedium()
 {
+    if (GetCheckEditableCondition())
+    {
+        GetCheckEditableCondition()->set();
+
+        comphelper::ThreadPool& rSharedPool = comphelper::ThreadPool::getSharedOptimalPool();
+        rSharedPool.waitUntilDone(GetCheckEditableWorkerTag());
+    }
+
     // if there is a requirement to clean the backup this is the last possibility to do it
     ClearBackup_Impl();
 
@@ -3821,6 +3862,11 @@ bool SfxMedium::IsReadOnly() const
 bool SfxMedium::IsOriginallyReadOnly() const
 {
     return pImpl->m_bOriginallyReadOnly;
+}
+
+void SfxMedium::SetOriginallyReadOnly(bool val)
+{
+    pImpl->m_bOriginallyReadOnly = val;
 }
 
 bool SfxMedium::IsOriginallyLoadedReadOnly() const
