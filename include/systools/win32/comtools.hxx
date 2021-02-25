@@ -17,19 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SYSTOOLS_WIN32_COMTOOLS_HXX
-#define INCLUDED_SYSTOOLS_WIN32_COMTOOLS_HXX
+#pragma once
 
 #include <string>
 #include <stdexcept>
 #include <objbase.h>
 
-namespace sal
+namespace sal::systools
 {
-namespace systools
-{
-    typedef int HRESULT;
-
     /* Simple exception class for propagating COM errors */
     class ComError : public std::runtime_error
     {
@@ -39,10 +34,7 @@ namespace systools
             hr_(hr)
         {}
 
-        HRESULT GetHresult() const
-        {
-            return hr_;
-        }
+        HRESULT GetHresult() const { return hr_; }
 
     private:
         HRESULT hr_;
@@ -53,19 +45,8 @@ namespace systools
     class COMReference
     {
     public:
-        COMReference() :
-            com_ptr_(NULL)
-        {
-        }
-
-        explicit COMReference(T* comptr) :
-            com_ptr_(comptr)
-        {
-            addRef();
-        }
-
         /* Explicitly controllable whether AddRef will be called or not */
-        COMReference(T* comptr, bool bAddRef) :
+        COMReference(T* comptr = nullptr, bool bAddRef = true) :
             com_ptr_(comptr)
         {
             if (bAddRef)
@@ -80,8 +61,7 @@ namespace systools
 
         COMReference<T>& operator=(const COMReference<T>& other)
         {
-            if (other.com_ptr_)
-                other.com_ptr_->AddRef();
+            other.addRef();
             release();
             com_ptr_ = other.com_ptr_;
             return *this;
@@ -95,10 +75,7 @@ namespace systools
             return *this;
         }
 
-        ~COMReference()
-        {
-            release();
-        }
+        ~COMReference() { release(); }
 
         template<typename InterfaceType>
         COMReference<InterfaceType> QueryInterface(REFIID iid)
@@ -114,70 +91,49 @@ namespace systools
             return ip;
         }
 
-        T* operator->() const
-        {
-            return com_ptr_;
-        }
+        T* operator->() const { return com_ptr_; }
 
-        T& operator*() const
-        {
-            return *com_ptr_;
-        }
+        T& operator*() const { return *com_ptr_; }
 
         /* Necessary for assigning com_ptr_ from functions like
            CoCreateInstance which require a 'void**' */
         T** operator&()
         {
-            release();
-            com_ptr_ = NULL;
+            clear();
             return &com_ptr_;
         }
 
-        T* get() const
-        {
-            return com_ptr_;
-        }
+        T* get() const { return com_ptr_; }
 
         COMReference<T>& clear()
         {
             release();
-            com_ptr_ = NULL;
+            com_ptr_ = nullptr;
             return *this;
         }
 
-        bool is() const
-        {
-            return (com_ptr_ != NULL);
-        }
+        bool is() const { return (com_ptr_ != nullptr); }
 
     private:
-        ULONG addRef()
+        void addRef() const
         {
-            ULONG cnt = 0;
             if (com_ptr_)
-                cnt = com_ptr_->AddRef();
-            return cnt;
+                com_ptr_->AddRef();
         }
 
-        ULONG release()
+        void release() const
         {
-            ULONG cnt = 0;
             if (com_ptr_)
-                cnt = com_ptr_->Release();
-            return cnt;
+                com_ptr_->Release();
         }
 
-    private:
         T* com_ptr_;
     };
 
-} // systools
-} // sal
+} // sal::systools
 
 /* Typedefs for some popular COM interfaces */
 typedef sal::systools::COMReference<IDataObject> IDataObjectPtr;
 typedef sal::systools::COMReference<IStream> IStreamPtr;
-
-#endif // INCLUDED_SYSTOOLS_WIN32_COMTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
