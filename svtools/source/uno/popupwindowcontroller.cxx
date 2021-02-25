@@ -20,7 +20,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include <vcl/floatwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 

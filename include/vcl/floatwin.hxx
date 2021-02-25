@@ -27,28 +27,6 @@
 
 class ToolBox;
 
-
-enum class FloatWinPopupFlags
-{
-    NONE                 = 0x000000,
-    AllowTearOff         = 0x000001,
-    Down                 = 0x000002,
-    Up                   = 0x000004,
-    Left                 = 0x000008,
-    Right                = 0x000010,
-    NoKeyClose           = 0x000020,
-    AllMouseButtonClose  = 0x000040,
-    NoAppFocusClose      = 0x000080,
-    NewLevel             = 0x000100,
-    NoMouseUpClose       = 0x000200,
-    GrabFocus            = 0x000400,
-    NoHorzPlacement      = 0x000800,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<FloatWinPopupFlags> : is_typed_flags<FloatWinPopupFlags, 0x0fff> {};
-}
-
 enum class FloatWinPopupEndFlags
 {
     NONE              = 0x00,
