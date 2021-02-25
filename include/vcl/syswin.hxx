@@ -100,9 +100,7 @@ class VCL_DLLPUBLIC SystemWindow
 private:
     VclPtr<MenuBar> mpMenuBar;
     Size            maOrgSize;
-    Size            maRollUpOutSize;
     Size            maMinOutSize;
-    bool            mbRollUp;
     bool            mbDockBtn;
     bool            mbHideBtn;
     bool            mbSysChild;
@@ -175,13 +173,6 @@ public:
 
     void            ShowTitleButton( TitleButton nButton, bool bVisible );
     bool            IsTitleButtonVisible( TitleButton nButton ) const;
-
-    void            RollUp();
-    void            RollDown();
-    bool            IsRollUp() const { return mbRollUp; }
-
-    void            SetRollUpOutputSizePixel( const Size& rSize ) { maRollUpOutSize = rSize; }
-    const Size&     GetRollUpOutputSizePixel() const { return maRollUpOutSize; }
 
     void            SetMinOutputSizePixel( const Size& rSize );
     const Size&     GetMinOutputSizePixel() const { return maMinOutSize; }

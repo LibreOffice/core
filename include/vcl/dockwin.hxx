@@ -88,7 +88,6 @@ private:
     Point           maFloatPos;
     Point           maDockPos;
     Point           maMouseOff;
-    Size            maRollUpOutSize;
     Size            maMinOutSize;
     Size            maMaxOutSize;
     tools::Rectangle       maDragArea;
@@ -104,7 +103,6 @@ private:
     bool            mbDockCanceled:1,
                     mbDocking:1,
                     mbLastFloatMode:1,
-                    mbRollUp:1,
                     mbDockBtn:1,
                     mbHideBtn:1,
                     mbStartDockingEnabled:1,
@@ -223,7 +221,6 @@ private:
     Point           maFloatPos;
     Point           maDockPos;
     Point           maMouseOff;
-    Size            maRollUpOutSize;
     Size            maMinOutSize;
     tools::Long            mnTrackX;
     tools::Long            mnTrackY;
@@ -241,7 +238,6 @@ private:
                     mbDragFull:1,
                     mbLastFloatMode:1,
                     mbStartFloat:1,
-                    mbRollUp:1,
                     mbDockBtn:1,
                     mbHideBtn:1,
                     mbIsCalculatingInitialLayoutSize:1;
@@ -300,9 +296,6 @@ public:
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     virtual void    StateChanged( StateChangedType nType ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-
-    void            RollDown();
-    bool            IsRollUp() const;
 
     void            SetMinOutputSizePixel( const Size& rSize );
     const Size&     GetMinOutputSizePixel() const;

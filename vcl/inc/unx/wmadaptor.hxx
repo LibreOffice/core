@@ -54,7 +54,6 @@ public:
         NET_WM_STATE_MAXIMIZED_HORZ,
         NET_WM_STATE_MAXIMIZED_VERT,
         NET_WM_STATE_MODAL,
-        NET_WM_STATE_SHADED,
         NET_WM_STATE_SKIP_PAGER,
         NET_WM_STATE_SKIP_TASKBAR,
         NET_WM_STATE_STAYS_ON_TOP,
@@ -233,11 +232,6 @@ public:
      *  tells whether fullscreen mode is supported by WM
      */
     bool supportsFullScreen() const { return m_aWMAtoms[ NET_WM_STATE_FULLSCREEN ] != 0; }
-
-    /*
-     *  shade/unshade frame
-     */
-    virtual void shade( X11SalFrame* pFrame, bool bToShaded ) const;
 
     /*
      *  set hints what decoration is needed;

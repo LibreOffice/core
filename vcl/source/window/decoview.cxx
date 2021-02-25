@@ -293,19 +293,6 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
             }
             break;
 
-        case SymbolType::ROLLDOWN:
-            pDev->DrawLine( Point( nRect.Left(), nRect.Top() ),
-                            Point( nRect.Left(), nRect.Bottom() ) );
-            pDev->DrawLine( Point( nRect.Right(), nRect.Top() ),
-                            Point( nRect.Right(), nRect.Bottom() ) );
-            pDev->DrawLine( Point( nRect.Left(), nRect.Bottom() ),
-                            Point( nRect.Right(), nRect.Bottom() ) );
-            [[fallthrough]];
-        case SymbolType::ROLLUP:
-            pDev->DrawRect( tools::Rectangle( nRect.Left(), nRect.Top(),
-                                       nRect.Right(), nRect.Top()+n8 ) );
-            break;
-
         case SymbolType::CHECKMARK:
             {
                 tools::Long n3 = nSide/3;

@@ -91,8 +91,6 @@ enum class SymbolType : sal_uInt16
     PLAY             = 16,
     STOP             = 19,
     CLOSE            = 25,
-    ROLLUP           = 26,
-    ROLLDOWN         = 27,
     CHECKMARK        = 28,
     RADIOCHECKMARK   = 29,
     FLOAT            = 31,
@@ -307,6 +305,8 @@ enum class WindowStateState {
     Normal         = 0x0001,
     Minimized      = 0x0002,
     Maximized      = 0x0004,
+    // Rollup is no longer used, but retained because WindowStateState is serialized
+    // from/to strings describing window state that are stored in a users config
     Rollup         = 0x0008,
     MaximizedHorz  = 0x0010,
     MaximizedVert  = 0x0020,

@@ -1539,8 +1539,7 @@ IMPL_LINK_NOARG(SfxDockingWindow, TimerHdl, Timer *, void)
     pImpl->aMoveIdle.Stop();
     if ( IsReallyVisible() && IsFloatingMode() )
     {
-        if( !GetFloatingWindow()->IsRollUp() )
-            SetFloatingSize( GetOutputSizePixel() );
+        SetFloatingSize( GetOutputSizePixel() );
         pImpl->aWinState = GetFloatingWindow()->GetWindowState();
         SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
         pWorkWin->ConfigChild_Impl( SfxChildIdentifier::SPLITWINDOW, SfxDockingConfig::ALIGNDOCKINGWINDOW, pMgr->GetType() );

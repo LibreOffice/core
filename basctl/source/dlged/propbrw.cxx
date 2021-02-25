@@ -228,9 +228,6 @@ bool PropBrw::Close()
 {
     ImplDestroyController();
 
-    if( IsRollUp() )
-        RollDown();
-
     return DockingWindow::Close();
 }
 
