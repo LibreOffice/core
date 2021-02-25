@@ -94,7 +94,11 @@ public:
 
                         virtual ~SfxMedium() override;
 
-                        bool CheckCanGetLockfile();
+    bool CheckCanGetLockfile();
+    const std::shared_ptr<::osl::Condition>& GetCheckEditableCondition() const;
+    void SetCheckEditableCondition(const std::shared_ptr<::osl::Condition>& pTag);
+    void SignalCheckEditableThread();
+    void SetOriginallyReadOnly(bool val);
 
     void                UseInteractionHandler( bool );
     css::uno::Reference< css::task::XInteractionHandler >
