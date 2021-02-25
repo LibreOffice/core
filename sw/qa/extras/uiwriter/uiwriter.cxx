@@ -7870,6 +7870,16 @@ void SwUiWriterTest::testTdf133524()
     pWrtShell->AutoCorrect(corr, '"');
     sReplaced += u".”";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // tdf#134940 avoid premature replacement of "--" in "-->"
+    pWrtShell->Insert(u" --");
+    pWrtShell->AutoCorrect(corr, '>');
+    OUString sReplaced2(sReplaced + u" -->");
+    // This was "–>" instead of "-->"
+    CPPUNIT_ASSERT_EQUAL(sReplaced2, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    pWrtShell->AutoCorrect(corr, ' ');
+    sReplaced += u" → ";
+    // This was "–>" instead of "→"
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
 void SwUiWriterTest::testTdf133524_Romanian()
