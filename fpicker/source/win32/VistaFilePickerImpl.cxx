@@ -27,6 +27,7 @@
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
 #include <com/sun/star/lang/SystemDependent.hpp>
 #include <comphelper/sequence.hxx>
+#include <comphelper/windowserrorstring.hxx>
 #include <fpicker/strings.hrc>
 #include <fpsofficeResMgr.hxx>
 #include <osl/file.hxx>
@@ -91,6 +92,59 @@ const GUID CLIENTID_FILEOPEN_LINK_TEMPLATE   = {0x32237796, 0x1509, 0x49D1, 0xBB
 const GUID CLIENTID_FILEOPEN_LINK_ANCHOR     = {0xBE3188CB, 0x399A, 0x45AE, 0x8F, 0x78, 0x75, 0x17, 0xAF, 0x26, 0x81, 0xEA};
 const GUID CLIENTID_FILEOPEN_PLAY            = {0x32CFB147, 0xF5AE, 0x4F90, 0xA1, 0xF1, 0x81, 0x20, 0x72, 0xBB, 0x2F, 0xC5};
 const GUID CLIENTID_FILEOPEN_LINK            = {0x39AC4BAE, 0x7D2D, 0x46BC, 0xBE, 0x2E, 0xF8, 0x8C, 0xB5, 0x65, 0x5E, 0x6A};
+
+
+class TDialogImplBase
+{
+public:
+    template <class ComPtrDialog> TDialogImplBase(ComPtrDialog&& iDialog)
+    {
+        HRESULT hResult = iDialog.create();
+        if (FAILED(hResult))
+            throw css::uno::RuntimeException(WindowsErrorStringFromHRESULT(hResult));
+        hResult = iDialog.query(&m_iDialog);
+        if (FAILED(hResult))
+            throw css::uno::RuntimeException(WindowsErrorStringFromHRESULT(hResult));
+    }
+
+    TFileDialog getComPtr() { return m_iDialog; };
+    virtual ComPtr<IShellItemArray> getResult(bool bInExecute)
+    {
+        ComPtr<IShellItem> iItem;
+        if (bInExecute)
+            m_iDialog->GetCurrentSelection(&iItem);
+        else
+            m_iDialog->GetResult(&iItem);
+        void* iItems = nullptr;
+        SHCreateShellItemArrayFromShellItem(iItem, IID_IShellItemArray, &iItems);
+        return ComPtr<IShellItemArray>(reinterpret_cast<IShellItemArray*>(iItems));
+    }
+
+private:
+    TFileDialog m_iDialog;
+};
+
+template <class ComPtrDialog> class TDialogImpl : public TDialogImplBase
+{
+public:
+    TDialogImpl() : TDialogImplBase(ComPtrDialog()) {}
+};
+
+class TOpenDialogImpl : public TDialogImpl<TFileOpenDialog>
+{
+public:
+    ComPtr<IShellItemArray> getResult(bool bInExecute) override
+    {
+        ComPtr<IShellItemArray> iItems;
+        TFileOpenDialog iDialog{ getComPtr() };
+        if (FAILED(bInExecute ? iDialog->GetSelectedItems(&iItems) : iDialog->GetResults(&iItems)))
+            iItems = TDialogImplBase::getResult(bInExecute);
+        return iItems;
+    }
+};
+
+using TSaveDialogImpl = TDialogImpl<TFileSaveDialog>;
+using TFolderPickerDialogImpl = TDialogImpl<TFolderPickerDialog>;
 
 
 static OUString lcl_getURLFromShellItem (IShellItem* pItem)
@@ -179,11 +233,7 @@ static ::std::vector<COMDLG_FILTERSPEC> lcl_buildFilterList(CFilterContainer& rC
 
 
 VistaFilePickerImpl::VistaFilePickerImpl()
-    : m_iDialogOpen  ()
-    , m_iDialogSave  ()
-    , m_iFolderPicker()
-    , m_hLastResult  ()
-    , m_lFilters     ()
+    : m_lFilters     ()
     , m_iEventHandler(new VistaFilePickerEventHandler(this))
     , m_bInExecute   (false)
     , m_bWasExecuted (false)
@@ -209,7 +259,7 @@ void VistaFilePickerImpl::before()
     // osl::Thread class initializes COm already in MTA mode because it's needed
     // by VCL and UNO so. There is no way to change that from outside...
     // but we need a STA environment...
-    m_hLastResult = o3tl::safeCoInitializeEx(COINIT_APARTMENTTHREADED, mnNbCallCoInitializeExForReinit);
+    o3tl::safeCoInitializeEx(COINIT_APARTMENTTHREADED, mnNbCallCoInitializeExForReinit);
 }
 
 
@@ -433,37 +483,20 @@ void VistaFilePickerImpl::impl_sta_getCurrentFilter(const RequestRef& rRequest)
 }
 
 
-void VistaFilePickerImpl::impl_sta_CreateDialog(const RequestRef& rRequest, PickerDialog eType, DWORD nOrFlags)
+template <class TDialogImplClass> void VistaFilePickerImpl::impl_sta_CreateDialog()
+{
+    // SYNCHRONIZED->
+    osl::ClearableMutexGuard aLock(m_aMutex);
+    m_pDialog.reset(new TDialogImplClass);
+}
+
+
+void VistaFilePickerImpl::impl_sta_InitDialog(const RequestRef& rRequest, DWORD nOrFlags)
 {
     // SYNCHRONIZED->
     osl::ClearableMutexGuard aLock(m_aMutex);
 
-    TFileDialog iDialog;
-
-    switch (eType)
-    {
-    case PickerDialog::FileOpen:
-        m_hLastResult = m_iDialogOpen.create();
-        if (FAILED(m_hLastResult))
-            return;
-        m_iDialogOpen.query(&iDialog);
-        break;
-
-    case PickerDialog::FileSave:
-        m_hLastResult = m_iDialogSave.create();
-        if (FAILED(m_hLastResult))
-            return;
-        m_iDialogSave.query(&iDialog);
-        break;
-
-    case PickerDialog::Folder:
-        m_hLastResult = m_iFolderPicker.create();
-        if (FAILED(m_hLastResult))
-            return;
-        m_iFolderPicker.query(&iDialog);
-        break;
-    }
-
+    TFileDialog iDialog = impl_getBaseDialogInterface();
     TFileDialogEvents iHandler = m_iEventHandler;
 
     aLock.clear();
@@ -509,30 +542,22 @@ void VistaFilePickerImpl::impl_sta_CreateDialog(const RequestRef& rRequest, Pick
 
 void VistaFilePickerImpl::impl_sta_CreateOpenDialog(const RequestRef& rRequest)
 {
-    DWORD nFlags = 0;
-    nFlags |=  FOS_FILEMUSTEXIST;
-    nFlags |=  FOS_OVERWRITEPROMPT;
-
-    impl_sta_CreateDialog(rRequest, PickerDialog::FileOpen, nFlags);
+    impl_sta_CreateDialog<TOpenDialogImpl>();
+    impl_sta_InitDialog(rRequest, FOS_FILEMUSTEXIST | FOS_OVERWRITEPROMPT);
 }
 
 
 void VistaFilePickerImpl::impl_sta_CreateSaveDialog(const RequestRef& rRequest)
 {
-    DWORD nFlags = 0;
-    nFlags |=  FOS_FILEMUSTEXIST;
-    nFlags |=  FOS_OVERWRITEPROMPT;
-
-    impl_sta_CreateDialog(rRequest, PickerDialog::FileSave, nFlags);
+    impl_sta_CreateDialog<TSaveDialogImpl>();
+    impl_sta_InitDialog(rRequest, FOS_FILEMUSTEXIST | FOS_OVERWRITEPROMPT);
 }
 
 
 void VistaFilePickerImpl::impl_sta_CreateFolderPicker(const RequestRef& rRequest)
 {
-    DWORD nFlags = 0;
-    nFlags |=  FOS_PICKFOLDERS;
-
-    impl_sta_CreateDialog(rRequest, PickerDialog::Folder, nFlags);
+    impl_sta_CreateDialog<TFolderPickerDialogImpl>();
+    impl_sta_InitDialog(rRequest, FOS_PICKFOLDERS);
 }
 
 
@@ -710,7 +735,7 @@ void VistaFilePickerImpl::impl_sta_SetMultiSelectionMode(const RequestRef& rRequ
     // <- SYNCHRONIZED
 
     DWORD nFlags = 0;
-    m_hLastResult = iDialog->GetOptions ( &nFlags );
+    iDialog->GetOptions(&nFlags);
 
     if (bMultiSelection)
         nFlags |=  FOS_ALLOWMULTISELECT;
@@ -866,76 +891,31 @@ void VistaFilePickerImpl::impl_sta_getSelectedFiles(const RequestRef& rRequest)
     // SYNCHRONIZED->
     osl::ClearableMutexGuard aLock(m_aMutex);
 
-    TFileOpenDialog iOpen      = m_iDialogOpen;
-    TFileSaveDialog iSave      = m_iDialogSave;
-    TFolderPickerDialog iPick  = m_iFolderPicker;
+    std::shared_ptr<TDialogImplBase> pDialog(m_pDialog);
     bool bInExecute = m_bInExecute;
 
     aLock.clear();
     // <- SYNCHRONIZED
 
+    if (!pDialog)
+        return;
+
     // ask dialog for results
-    // Note        : we must differ between single/multi selection !
-    // Note further: we must react different if dialog is in execute or not .-(
-    ComPtr< IShellItem >      iItem;
-    ComPtr< IShellItemArray > iItems;
-    HRESULT                   hResult = E_FAIL;
-
-    if (iOpen.is())
-    {
-        if (bInExecute)
-            hResult = iOpen->GetSelectedItems(&iItems);
-        else
-        {
-            hResult = iOpen->GetResults(&iItems);
-            if (FAILED(hResult))
-                hResult = iOpen->GetResult(&iItem);
-        }
-    }
-    else if (iSave.is())
-    {
-        if (bInExecute)
-            hResult = iSave->GetCurrentSelection(&iItem);
-        else
-            hResult = iSave->GetResult(&iItem);
-    }
-    else if (iPick.is())
-    {
-        if (bInExecute)
-            hResult = iPick->GetCurrentSelection(&iItem);
-        else
-        {
-            hResult = iPick->GetResult(&iItem);
-        }
-    }
-
-    if (FAILED(hResult))
+    // we must react different if dialog is in execute or not .-(
+    ComPtr<IShellItemArray> iItems = pDialog->getResult(bInExecute);
+    if (!iItems)
         return;
 
     // convert and pack results
     std::vector< OUString > lFiles;
-    if (iItem.is())
+    if (DWORD nCount; SUCCEEDED(iItems->GetCount(&nCount)))
     {
-        const OUString sURL = lcl_getURLFromShellItem(iItem);
-        if (sURL.getLength() > 0)
-            lFiles.push_back(sURL);
-    }
-
-    if (iItems.is())
-    {
-        DWORD nCount;
-        hResult = iItems->GetCount(&nCount);
-        if ( SUCCEEDED(hResult) )
+        for (DWORD i = 0; i < nCount; ++i)
         {
-            for (DWORD i=0; i<nCount; ++i)
+            if (ComPtr<IShellItem> iItem; SUCCEEDED(iItems->GetItemAt(i, &iItem)))
             {
-                hResult = iItems->GetItemAt(i, &iItem);
-                if ( SUCCEEDED(hResult) )
-                {
-                    const OUString sURL = lcl_getURLFromShellItem(iItem);
-                    if (sURL.getLength() > 0)
-                        lFiles.push_back(sURL);
-                }
+                if (const OUString sURL = lcl_getURLFromShellItem(iItem); !sURL.isEmpty())
+                    lFiles.push_back(sURL);
             }
         }
     }
@@ -952,9 +932,6 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
     TFileDialog iDialog = impl_getBaseDialogInterface();
-    TFileOpenDialog iOpen = m_iDialogOpen;
-    TFileSaveDialog iSave = m_iDialogSave;
-    TFolderPickerDialog iPick = m_iFolderPicker;
 
     // it's important to know if we are showing the dialog.
     // Some dialog interface methods can't be called then or some
@@ -1033,14 +1010,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
     try
     {
         // show dialog and wait for user decision
-        if (iOpen.is())
-            hResult = iOpen->Show( hParentWindow ); // parent window needed
-        else
-        if (iSave.is())
-            hResult = iSave->Show( hParentWindow ); // parent window needed
-        else
-        if (iPick.is())
-            hResult = iPick->Show( hParentWindow ); // parent window needed
+        hResult = iDialog->Show(hParentWindow); // parent window needed
     }
     catch(...)
     {}
@@ -1065,13 +1035,8 @@ TFileDialog VistaFilePickerImpl::impl_getBaseDialogInterface()
 
     // SYNCHRONIZED->
     osl::MutexGuard aLock(m_aMutex);
-
-    if (m_iDialogOpen.is())
-        m_iDialogOpen.query(&iDialog);
-    if (m_iDialogSave.is())
-        m_iDialogSave.query(&iDialog);
-    if (m_iFolderPicker.is())
-        m_iFolderPicker.query(&iDialog);
+    if (m_pDialog)
+        iDialog = m_pDialog->getComPtr();
 
     return iDialog;
 }
@@ -1084,12 +1049,8 @@ TFileDialogCustomize VistaFilePickerImpl::impl_getCustomizeInterface()
     // SYNCHRONIZED->
     osl::MutexGuard aLock(m_aMutex);
 
-    if (m_iDialogOpen.is())
-        m_iDialogOpen.query(&iCustom);
-    else if (m_iDialogSave.is())
-        m_iDialogSave.query(&iCustom);
-    else if (m_iFolderPicker.is())
-        m_iFolderPicker.query(&iCustom);
+    if (m_pDialog)
+        m_pDialog->getComPtr().query(&iCustom);
 
     return iCustom;
 }
