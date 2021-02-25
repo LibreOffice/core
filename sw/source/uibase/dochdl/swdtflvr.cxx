@@ -134,7 +134,6 @@
 #include <iodetect.hxx>
 #include <unotextrange.hxx>
 #include <unoframe.hxx>
-#include <txatbase.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 
@@ -435,34 +434,33 @@ namespace
 
 sal_Bool SAL_CALL SwTransferable::isComplex()
 {
+    // Copy into a new Doc so we don't mess with the existing one.
+    //FIXME: We *should* be able to avoid this and improve the performance.
+    m_pClpDocFac.reset(new SwDocFac);
+    SwDoc* const pTmpDoc = lcl_GetDoc(*m_pClpDocFac);
+
+    pTmpDoc->getIDocumentFieldsAccess()
+        .LockExpFields(); // never update fields - leave text as it is
+    lclOverWriteDoc(*m_pWrtShell, *pTmpDoc);
+
     sal_Int32 nTextLength = 0;
-    SwNodes& aNodes = m_pWrtShell->GetDoc()->GetNodes();
-    for (SwPaM& rPaM : m_pWrtShell->GetCursor()->GetRingContainer())
+    const SwNode* pEndOfContent = &m_pWrtShell->GetDoc()->GetNodes().GetEndOfContent();
+    SwNodes& aNodes = pTmpDoc->GetNodes();
+    for( sal_uLong nIndex = 0; nIndex < aNodes.Count(); ++nIndex)
     {
-        for (sal_uLong nIndex = rPaM.GetMark()->nNode.GetIndex();
-             nIndex <= rPaM.GetPoint()->nNode.GetIndex(); ++nIndex)
+        SwNode& rNd = *aNodes[nIndex];
+        if (&rNd == pEndOfContent)
+            break;
+
+        if (rNd.IsOLENode() || rNd.IsGrfNode())
+            return true; // Complex
+
+        SwTextNode* pTextNode = rNd.GetTextNode();
+        if (pTextNode)
         {
-            SwNode& rNd = *aNodes[nIndex];
-
-            SwTextNode* pTextNode = rNd.GetTextNode();
-            if (pTextNode)
-            {
-                if (pTextNode->HasHints())
-                {
-                    for (size_t nHint = 0; pTextNode->GetSwpHints().Count(); ++nHint)
-                    {
-                        SwTextAttr* pHint = pTextNode->GetSwpHints().Get(nHint);
-                        if (pHint->Which() == RES_TXTATR_FLYCNT)
-                        {
-                            return true; // Complex
-                        }
-                    }
-                }
-
-                nTextLength += pTextNode->GetText().getLength();
-                if (nTextLength >= 1024 * 512)
-                    return true; // Complex
-            }
+            nTextLength += pTextNode->GetText().getLength();
+            if (nTextLength >= 1024 * 512)
+                return true; // Complex
         }
     }
 
