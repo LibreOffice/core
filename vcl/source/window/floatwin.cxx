@@ -775,9 +775,6 @@ void FloatingWindow::SetTitleType( FloatWinTitleType nTitle )
 
 void FloatingWindow::StartPopupMode( const tools::Rectangle& rRect, FloatWinPopupFlags nFlags )
 {
-    if ( IsRollUp() )
-        RollDown();
-
     // remove title
     mnOldTitle = mnTitle;
     if ( ( mpWindowImpl->mnStyle & WB_POPUP ) && !GetText().isEmpty() )

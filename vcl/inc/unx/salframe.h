@@ -110,7 +110,6 @@ class X11SalFrame final : public SalFrame
     WMWindowType    meWindowType;
     bool            mbMaximizedVert;
     bool            mbMaximizedHorz;
-    bool            mbShaded;
     bool            mbFullScreen;
 
     // icon id

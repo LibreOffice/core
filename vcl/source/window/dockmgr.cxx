@@ -477,7 +477,6 @@ ImplDockingWindowWrapper::ImplDockingWindowWrapper( const vcl::Window *pWindow )
     , mbDockCanceled(false)
     , mbDocking(false)
     , mbLastFloatMode(false)
-    , mbRollUp(false)
     , mbDockBtn(false)
     , mbHideBtn(false)
     // must be enabled in Window::Notify to prevent permanent docking during mouse move
@@ -939,11 +938,6 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
         // pass on DockingData to FloatingWindow
         pWin->ShowTitleButton( TitleButton::Docking, mbDockBtn );
         pWin->ShowTitleButton( TitleButton::Hide, mbHideBtn );
-        if ( mbRollUp )
-            pWin->RollUp();
-        else
-            pWin->RollDown();
-        pWin->SetRollUpOutputSizePixel( maRollUpOutSize );
         pWin->SetMinOutputSizePixel( maMinOutSize );
         pWin->SetMaxOutputSizePixel( maMaxOutSize );
 
@@ -962,8 +956,6 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
         maFloatPos      = mpFloatWin->GetPosPixel();
         mbDockBtn       = mpFloatWin->IsTitleButtonVisible( TitleButton::Docking );
         mbHideBtn       = mpFloatWin->IsTitleButtonVisible( TitleButton::Hide );
-        mbRollUp        = mpFloatWin->IsRollUp();
-        maRollUpOutSize = mpFloatWin->GetRollUpOutputSizePixel();
         maMinOutSize    = mpFloatWin->GetMinOutputSizePixel();
         maMaxOutSize    = mpFloatWin->GetMaxOutputSizePixel();
 

@@ -240,7 +240,6 @@ OUString PropBrw::getCurrentPage() const
     return sCurrentPage;
 }
 
-
 bool PropBrw::Close()
 {
     m_xLastSection.clear();
@@ -260,14 +259,10 @@ bool PropBrw::Close()
     }
     implDetachController();
 
-    if( IsRollUp() )
-        RollDown();
-
     m_pDesignView->getController().executeUnChecked(SID_PROPERTYBROWSER_LAST_PAGE,uno::Sequence< beans::PropertyValue>());
 
     return true;
 }
-
 
 uno::Sequence< Reference<uno::XInterface> > PropBrw::CreateCompPropSet(const SdrMarkList& _rMarkList)
 {

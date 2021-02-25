@@ -54,13 +54,12 @@ enum class BorderWindowHitTest {
     BottomLeft     = 0x0100,
     BottomRight    = 0x0200,
     Close          = 0x0400,
-    Roll           = 0x0800,
-    Dock           = 0x1000,
-    Hide           = 0x2000,
-    Help           = 0x4000,
+    Dock           = 0x0800,
+    Hide           = 0x1000,
+    Help           = 0x2000,
 };
 namespace o3tl {
-    template<> struct typed_flags<BorderWindowHitTest> : is_typed_flags<BorderWindowHitTest, 0x7fff> {};
+    template<> struct typed_flags<BorderWindowHitTest> : is_typed_flags<BorderWindowHitTest, 0x3fff> {};
 };
 
 enum class BorderWindowTitleType {
@@ -95,7 +94,6 @@ private:
     bool                    mbFloatWindow;
     bool                    mbSmallOutBorder;
     bool                    mbFrameBorder;
-    bool                    mbRollUp;
     bool                    mbMenuHide;
     bool                    mbDockBtn;
     bool                    mbHideBtn;
@@ -143,7 +141,6 @@ public:
     void                    SetTitleType( BorderWindowTitleType nTitleType, const Size& rSize );
     void                    SetBorderStyle( WindowBorderStyle nStyle );
     WindowBorderStyle       GetBorderStyle() const { return mnBorderStyle; }
-    void                    SetRollUp( bool bRollUp, const Size& rSize );
     void                    SetCloseButton();
     void                    SetDockButton( bool bDockButton );
     void                    SetHideButton( bool bHideButton );
@@ -179,7 +176,6 @@ struct ImplBorderFrameData
     VclPtr<OutputDevice>     mpOutDev;
     tools::Rectangle                maTitleRect;
     tools::Rectangle                maCloseRect;
-    tools::Rectangle                maRollRect;
     tools::Rectangle                maDockRect;
     tools::Rectangle                maMenuRect;
     tools::Rectangle                maHideRect;
@@ -200,7 +196,6 @@ struct ImplBorderFrameData
     tools::Long                     mnTitleHeight;
     BorderWindowHitTest      mnHitTest;
     DrawButtonFlags          mnCloseState;
-    DrawButtonFlags          mnRollState;
     DrawButtonFlags          mnDockState;
     DrawButtonFlags          mnMenuState;
     DrawButtonFlags          mnHideState;

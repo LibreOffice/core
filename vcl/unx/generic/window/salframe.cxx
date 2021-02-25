@@ -860,7 +860,6 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
     meWindowType                = WMWindowType::Normal;
     mbMaximizedVert             = false;
     mbMaximizedHorz             = false;
-    mbShaded                    = false;
     mbFullScreen                = false;
 
     mnIconID                    = SV_ICON_ID_OFFICE;
@@ -1787,8 +1786,6 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
         if (nShowState_ != SHOWSTATE_NORMAL)
             Restore();
     }
-    if (pState->mnState & WindowStateState::Rollup)
-        GetDisplay()->getWMAdaptor()->shade( this, true );
 }
 
 bool X11SalFrame::GetWindowState( SalFrameState* pState )
@@ -1808,8 +1805,6 @@ bool X11SalFrame::GetWindowState( SalFrameState* pState )
         pState->mnState |= WindowStateState::MaximizedHorz;
     if( mbMaximizedVert )
         pState->mnState |= WindowStateState::MaximizedVert;
-    if( mbShaded )
-        pState->mnState |= WindowStateState::Rollup;
 
     pState->mnX      = aPosSize.Left();
     pState->mnY      = aPosSize.Top();

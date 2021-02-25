@@ -296,7 +296,6 @@ void DockingWindow::ImplInitDockingWindowData()
     mbDragFull     = false;
     mbLastFloatMode = false;
     mbStartFloat   = false;
-    mbRollUp       = false;
     mbDockBtn      = false;
     mbHideBtn      = false;
     mbIsDeferredInit = false;
@@ -750,11 +749,6 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
         // pass on DockingData to FloatingWindow
         pWin->ShowTitleButton( TitleButton::Docking, mbDockBtn );
         pWin->ShowTitleButton( TitleButton::Hide, mbHideBtn );
-        if ( mbRollUp )
-            pWin->RollUp();
-        else
-            pWin->RollDown();
-        pWin->SetRollUpOutputSizePixel( maRollUpOutSize );
         pWin->SetMinOutputSizePixel( maMinOutSize );
 
         pWin->SetMaxOutputSizePixel( mpImplData->maMaxOutSize );
@@ -772,8 +766,6 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
         maFloatPos      = mpFloatWin->GetPosPixel();
         mbDockBtn       = mpFloatWin->IsTitleButtonVisible( TitleButton::Docking );
         mbHideBtn       = mpFloatWin->IsTitleButtonVisible( TitleButton::Hide );
-        mbRollUp        = mpFloatWin->IsRollUp();
-        maRollUpOutSize = mpFloatWin->GetRollUpOutputSizePixel();
         maMinOutSize    = mpFloatWin->GetMinOutputSizePixel();
         mpImplData->maMaxOutSize = mpFloatWin->GetMaxOutputSizePixel();
 
@@ -1056,20 +1048,6 @@ IMPL_LINK_NOARG(DockingWindow, ImplHandleLayoutTimerHdl, Timer*, void)
         return;
     }
     setPosSizeOnContainee();
-}
-
-void DockingWindow::RollDown()
-{
-    if ( mpFloatWin )
-        mpFloatWin->RollDown();
-    mbRollUp = false;
-}
-
-bool DockingWindow::IsRollUp() const
-{
-    if ( mpFloatWin )
-        return mpFloatWin->IsRollUp();
-    return mbRollUp;
 }
 
 void DockingWindow::SetMinOutputSizePixel( const Size& rSize )

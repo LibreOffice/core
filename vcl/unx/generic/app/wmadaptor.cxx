@@ -50,7 +50,6 @@ public:
 
     virtual void setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const override;
     virtual void maximizeFrame( X11SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const override;
-    virtual void shade( X11SalFrame* pFrame, bool bToShaded ) const override;
     virtual void setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, X11SalFrame* pTransientFrame ) const override;
     virtual void enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) const override;
     virtual int handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEvent ) const override;
@@ -70,7 +69,6 @@ public:
     explicit GnomeWMAdaptor( SalDisplay * );
 
     virtual void maximizeFrame( X11SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const override;
-    virtual void shade( X11SalFrame* pFrame, bool bToShaded ) const override;
     virtual void enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) const override;
     virtual int handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEvent ) const override;
 };
@@ -110,7 +108,6 @@ const WMAdaptorProtocol aProtocolTab[] =
     { "_NET_WM_STATE_MAXIMIZED_HORZ", WMAdaptor::NET_WM_STATE_MAXIMIZED_HORZ },
     { "_NET_WM_STATE_MAXIMIZED_VERT", WMAdaptor::NET_WM_STATE_MAXIMIZED_VERT },
     { "_NET_WM_STATE_MODAL", WMAdaptor::NET_WM_STATE_MODAL },
-    { "_NET_WM_STATE_SHADED", WMAdaptor::NET_WM_STATE_SHADED },
     { "_NET_WM_STATE_SKIP_PAGER", WMAdaptor::NET_WM_STATE_SKIP_PAGER },
     { "_NET_WM_STATE_SKIP_TASKBAR", WMAdaptor::NET_WM_STATE_SKIP_TASKBAR },
     { "_NET_WM_STATE_STAYS_ON_TOP", WMAdaptor::NET_WM_STATE_STAYS_ON_TOP },
@@ -1079,8 +1076,6 @@ void NetWMAdaptor::setNetWMState( X11SalFrame* pFrame ) const
         aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_HORZ ];
     if( pFrame->bAlwaysOnTop_ && m_aWMAtoms[ NET_WM_STATE_STAYS_ON_TOP ] )
         aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_STAYS_ON_TOP ];
-    if( pFrame->mbShaded && m_aWMAtoms[ NET_WM_STATE_SHADED ] )
-        aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_SHADED ];
     if( pFrame->mbFullScreen && m_aWMAtoms[ NET_WM_STATE_FULLSCREEN ] )
         aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_FULLSCREEN ];
     if( pFrame->meWindowType == WMWindowType::Utility && m_aWMAtoms[ NET_WM_STATE_SKIP_TASKBAR ] )
@@ -1180,8 +1175,6 @@ void GnomeWMAdaptor::setGnomeWMState( X11SalFrame* pFrame ) const
         nWinWMState |= 1 << 2;
     if( pFrame->mbMaximizedHorz )
         nWinWMState |= 1 << 3;
-    if( pFrame->mbShaded )
-        nWinWMState |= 1 << 5;
 
     XChangeProperty( m_pDisplay,
                      pFrame->GetShellWindow(),
@@ -1771,7 +1764,6 @@ int NetWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEv
     if( pEvent->atom == m_aWMAtoms[ NET_WM_STATE ] )
     {
         pFrame->mbMaximizedHorz = pFrame->mbMaximizedVert = false;
-        pFrame->mbShaded = false;
 
         if( pEvent->state == PropertyNewValue )
         {
@@ -1803,8 +1795,6 @@ int NetWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEv
                                 pFrame->mbMaximizedVert = true;
                             else if( pStates[i] == m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_HORZ ] && m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_HORZ ] )
                                 pFrame->mbMaximizedHorz = true;
-                            else if( pStates[i] == m_aWMAtoms[ NET_WM_STATE_SHADED ] && m_aWMAtoms[ NET_WM_STATE_SHADED ] )
-                                pFrame->mbShaded = true;
                         }
                     }
                     XFree( pData );
@@ -1847,7 +1837,6 @@ int GnomeWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* p
     if( pEvent->atom == m_aWMAtoms[ WIN_STATE ] )
     {
         pFrame->mbMaximizedHorz = pFrame->mbMaximizedVert = false;
-        pFrame->mbShaded = false;
 
         if( pEvent->state == PropertyNewValue )
         {
@@ -1875,8 +1864,6 @@ int GnomeWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* p
                         pFrame->mbMaximizedVert = true;
                     if( nWinState & (1<<3) )
                         pFrame->mbMaximizedHorz = true;
-                    if( nWinState & (1<<5) )
-                        pFrame->mbShaded = true;
                 }
                 XFree( pData );
             }
@@ -1902,87 +1889,6 @@ int GnomeWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* p
         nHandled = 0;
 
     return nHandled;
-}
-
-/*
- * WMAdaptor::shade
- */
-void WMAdaptor::shade( X11SalFrame*, bool /*bToShaded*/ ) const
-{
-}
-
-/*
- * NetWMAdaptor::shade
- */
-void NetWMAdaptor::shade( X11SalFrame* pFrame, bool bToShaded ) const
-{
-    if( !(m_aWMAtoms[ NET_WM_STATE ]
-        && m_aWMAtoms[ NET_WM_STATE_SHADED ]
-        && ( pFrame->nStyle_ & ~SalFrameStyleFlags::DEFAULT ))
-        )
-        return;
-
-    pFrame->mbShaded = bToShaded;
-    if( pFrame->bMapped_ )
-    {
-        // window already mapped, send WM a message
-        XEvent aEvent;
-        aEvent.type                 = ClientMessage;
-        aEvent.xclient.display      = m_pDisplay;
-        aEvent.xclient.window       = pFrame->GetShellWindow();
-        aEvent.xclient.message_type = m_aWMAtoms[ NET_WM_STATE ];
-        aEvent.xclient.format       = 32;
-        aEvent.xclient.data.l[0]    = bToShaded ? 1 : 0;
-        aEvent.xclient.data.l[1]    = m_aWMAtoms[ NET_WM_STATE_SHADED ];
-        aEvent.xclient.data.l[2]    = 0;
-        aEvent.xclient.data.l[3]    = 0;
-        aEvent.xclient.data.l[4]    = 0;
-        XSendEvent( m_pDisplay,
-                    m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
-                    False,
-                    SubstructureNotifyMask | SubstructureRedirectMask,
-                    &aEvent
-                    );
-    }
-    else
-    {
-        // window not mapped yet, set _NET_WM_STATE directly
-        setNetWMState( pFrame );
-    }
-}
-
-/*
- *  GnomeWMAdaptor::shade
- */
-void GnomeWMAdaptor::shade( X11SalFrame* pFrame, bool bToShaded ) const
-{
-    if( !(m_aWMAtoms[ WIN_STATE ]) )
-        return;
-
-    pFrame->mbShaded = bToShaded;
-    if( pFrame->bMapped_ )
-    {
-        // window already mapped, send WM a message
-        XEvent aEvent;
-        aEvent.type                 = ClientMessage;
-        aEvent.xclient.display      = m_pDisplay;
-        aEvent.xclient.window       = pFrame->GetShellWindow();
-        aEvent.xclient.message_type = m_aWMAtoms[ WIN_STATE ];
-        aEvent.xclient.format       = 32;
-        aEvent.xclient.data.l[0]    = (1<<5);
-        aEvent.xclient.data.l[1]    = bToShaded ? (1<<5) : 0;
-        aEvent.xclient.data.l[2]    = 0;
-        aEvent.xclient.data.l[3]    = 0;
-        aEvent.xclient.data.l[4]    = 0;
-        XSendEvent( m_pDisplay,
-                    m_pSalDisplay->GetRootWindow( pFrame->GetScreenNumber() ),
-                    False,
-                    SubstructureNotifyMask | SubstructureRedirectMask,
-                    &aEvent
-                    );
-    }
-    else
-        setGnomeWMState( pFrame );
 }
 
 /*

@@ -2150,8 +2150,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 
 void Svx3DWin::Resize()
 {
-    if ( !IsFloatingMode() ||
-         !GetFloatingWindow()->IsRollUp() )
+    if (!IsFloatingMode())
     {
         Size aWinSize( GetOutputSizePixel() ); // why rSize in Resizing()?
 

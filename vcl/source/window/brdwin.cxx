@@ -179,8 +179,6 @@ BorderWindowHitTest ImplBorderWindowView::ImplHitTest( ImplBorderFrameData const
     {
         if ( pData->maCloseRect.IsInside( rPos ) )
             return BorderWindowHitTest::Close;
-        else if ( pData->maRollRect.IsInside( rPos ) )
-            return BorderWindowHitTest::Roll;
         else if ( pData->maMenuRect.IsInside( rPos ) )
             return BorderWindowHitTest::Menu;
         else if ( pData->maDockRect.IsInside( rPos ) )
@@ -193,8 +191,7 @@ BorderWindowHitTest ImplBorderWindowView::ImplHitTest( ImplBorderFrameData const
             return BorderWindowHitTest::Title;
     }
 
-    if ( (pBorderWindow->GetStyle() & WB_SIZEABLE) &&
-         !pBorderWindow->mbRollUp )
+    if (pBorderWindow->GetStyle() & WB_SIZEABLE)
     {
         tools::Long nSizeWidth = pData->mnNoTitleTop+pData->mnTitleHeight;
         if ( nSizeWidth < 16 )
@@ -301,14 +298,6 @@ OUString ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData const * pDat
             pHelpId     = SV_HELPTEXT_CLOSE;
             rHelpRect   = pData->maCloseRect;
         }
-        else if ( nHitTest & BorderWindowHitTest::Roll )
-        {
-            if ( pData->mpBorderWindow->mbRollUp )
-                pHelpId = SV_HELPTEXT_ROLLDOWN;
-            else
-                pHelpId = SV_HELPTEXT_ROLLUP;
-            rHelpRect   = pData->maRollRect;
-        }
         else if ( nHitTest & BorderWindowHitTest::Dock )
         {
             pHelpId     = SV_HELPTEXT_MAXIMIZE;
@@ -354,7 +343,6 @@ tools::Long ImplBorderWindowView::ImplCalcTitleWidth( const ImplBorderFrameData*
     ImplBorderWindow* pBorderWindow = pData->mpBorderWindow;
     tools::Long nTitleWidth = pBorderWindow->GetTextWidth( pBorderWindow->GetText() )+6;
     nTitleWidth += pData->maCloseRect.GetWidth();
-    nTitleWidth += pData->maRollRect.GetWidth();
     nTitleWidth += pData->maDockRect.GetWidth();
     nTitleWidth += pData->maMenuRect.GetWidth();
     nTitleWidth += pData->maHideRect.GetWidth();
@@ -747,7 +735,6 @@ ImplStdBorderWindowView::ImplStdBorderWindowView( ImplBorderWindow* pBorderWindo
     maFrameData.mbDragFull      = false;
     maFrameData.mnHitTest       = BorderWindowHitTest::NONE;
     maFrameData.mnCloseState    = DrawButtonFlags::NONE;
-    maFrameData.mnRollState     = DrawButtonFlags::NONE;
     maFrameData.mnDockState     = DrawButtonFlags::NONE;
     maFrameData.mnMenuState     = DrawButtonFlags::NONE;
     maFrameData.mnHideState     = DrawButtonFlags::NONE;
@@ -782,11 +769,6 @@ bool ImplStdBorderWindowView::MouseButtonDown( const MouseEvent& rMEvt )
             if ( maFrameData.mnHitTest & BorderWindowHitTest::Close )
             {
                 maFrameData.mnCloseState |= DrawButtonFlags::Pressed;
-                pBorderWindow->InvalidateBorder();
-            }
-            else if ( maFrameData.mnHitTest & BorderWindowHitTest::Roll )
-            {
-                maFrameData.mnRollState |= DrawButtonFlags::Pressed;
                 pBorderWindow->InvalidateBorder();
             }
             else if ( maFrameData.mnHitTest & BorderWindowHitTest::Dock )
@@ -903,27 +885,6 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                 }
             }
         }
-        else if ( nHitTest & BorderWindowHitTest::Roll )
-        {
-            if ( maFrameData.mnRollState & DrawButtonFlags::Pressed )
-            {
-                maFrameData.mnRollState &= ~DrawButtonFlags::Pressed;
-                pBorderWindow->InvalidateBorder();
-
-                // do not call a Click-Handler when aborting
-                if ( !rTEvt.IsTrackingCanceled() )
-                {
-                    if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
-                    {
-                        SystemWindow* pClientWindow = static_cast<SystemWindow*>(pBorderWindow->ImplGetClientWindow());
-                        if ( pClientWindow->IsRollUp() )
-                            pClientWindow->RollDown();
-                        else
-                            pClientWindow->RollUp();
-                    }
-                }
-            }
-        }
         else if ( nHitTest & BorderWindowHitTest::Dock )
         {
             if ( maFrameData.mnDockState & DrawButtonFlags::Pressed )
@@ -1022,25 +983,6 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                 if ( maFrameData.mnCloseState & DrawButtonFlags::Pressed )
                 {
                     maFrameData.mnCloseState &= ~DrawButtonFlags::Pressed;
-                    pBorderWindow->InvalidateBorder();
-                }
-            }
-        }
-        else if ( maFrameData.mnHitTest & BorderWindowHitTest::Roll )
-        {
-            if ( maFrameData.maRollRect.IsInside( aMousePos ) )
-            {
-                if ( !(maFrameData.mnRollState & DrawButtonFlags::Pressed) )
-                {
-                    maFrameData.mnRollState |= DrawButtonFlags::Pressed;
-                    pBorderWindow->InvalidateBorder();
-                }
-            }
-            else
-            {
-                if ( maFrameData.mnRollState & DrawButtonFlags::Pressed )
-                {
-                    maFrameData.mnRollState &= ~DrawButtonFlags::Pressed;
                     pBorderWindow->InvalidateBorder();
                 }
             }
@@ -1363,7 +1305,6 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, tools::Long nWidth, tool
             pData->maDockRect.SetEmpty();
             pData->maMenuRect.SetEmpty();
             pData->maHideRect.SetEmpty();
-            pData->maRollRect.SetEmpty();
             pData->maHelpRect.SetEmpty();
         }
 
@@ -1376,7 +1317,6 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, tools::Long nWidth, tool
         pData->maDockRect.SetEmpty();
         pData->maMenuRect.SetEmpty();
         pData->maHideRect.SetEmpty();
-        pData->maRollRect.SetEmpty();
         pData->maHelpRect.SetEmpty();
     }
 }
@@ -1482,8 +1422,6 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, con
 
             if (!pData->maHelpRect.IsEmpty())
                 aInRect.SetRight( pData->maHelpRect.Left() - 2 );
-            else if (!pData->maRollRect.IsEmpty())
-                aInRect.SetRight( pData->maRollRect.Left() - 2 );
             else if (!pData->maHideRect.IsEmpty())
                 aInRect.SetRight( pData->maHideRect.Left() - 2 );
             else if (!pData->maDockRect.IsEmpty())
@@ -1539,18 +1477,6 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, con
         if (pOffset)
             aSymbolRect.Move(pOffset->X(), pOffset->Y());
         ImplDrawBrdWinSymbolButton(&rRenderContext, aSymbolRect, SymbolType::HIDE, pData->mnHideState);
-    }
-    if (!pData->maRollRect.IsEmpty())
-    {
-        SymbolType eType;
-        if (pBorderWindow->mbRollUp)
-            eType = SymbolType::ROLLDOWN;
-        else
-            eType = SymbolType::ROLLUP;
-        tools::Rectangle aSymbolRect(pData->maRollRect);
-        if (pOffset)
-            aSymbolRect.Move(pOffset->X(), pOffset->Y());
-        ImplDrawBrdWinSymbolButton(&rRenderContext, aSymbolRect, eType, pData->mnRollState);
     }
 
     if (!pData->maHelpRect.IsEmpty())
@@ -1623,7 +1549,6 @@ void ImplBorderWindow::ImplInit( vcl::Window* pParent,
     mnMaxWidth      = SHRT_MAX;
     mnMaxHeight     = SHRT_MAX;
     mnOrgMenuHeight = 0;
-    mbRollUp        = false;
     mbMenuHide      = false;
     mbDockBtn       = false;
     mbMenuBtn       = false;
@@ -1739,72 +1664,69 @@ void ImplBorderWindow::Resize()
 {
     Size aSize = GetOutputSizePixel();
 
-    if ( !mbRollUp )
+    vcl::Window* pClientWindow = ImplGetClientWindow();
+
+    sal_Int32 nLeftBorder;
+    sal_Int32 nTopBorder;
+    sal_Int32 nRightBorder;
+    sal_Int32 nBottomBorder;
+    mpBorderView->GetBorder( nLeftBorder, nTopBorder, nRightBorder, nBottomBorder );
+
+    if (mpMenuBarWindow)
     {
-        vcl::Window* pClientWindow = ImplGetClientWindow();
-
-        sal_Int32 nLeftBorder;
-        sal_Int32 nTopBorder;
-        sal_Int32 nRightBorder;
-        sal_Int32 nBottomBorder;
-        mpBorderView->GetBorder( nLeftBorder, nTopBorder, nRightBorder, nBottomBorder );
-
-        if (mpMenuBarWindow)
+        tools::Long nMenuHeight = mpMenuBarWindow->GetSizePixel().Height();
+        if ( mbMenuHide )
         {
-            tools::Long nMenuHeight = mpMenuBarWindow->GetSizePixel().Height();
-            if ( mbMenuHide )
-            {
-                if ( nMenuHeight )
-                    mnOrgMenuHeight = nMenuHeight;
-                nMenuHeight = 0;
-            }
-            else
-            {
-                if ( !nMenuHeight )
-                    nMenuHeight = mnOrgMenuHeight;
-            }
-            mpMenuBarWindow->setPosSizePixel(
-                    nLeftBorder, nTopBorder,
-                    aSize.Width()-nLeftBorder-nRightBorder,
-                    nMenuHeight);
-
-            // shift the notebookbar down accordingly
-            nTopBorder += nMenuHeight;
+            if ( nMenuHeight )
+                mnOrgMenuHeight = nMenuHeight;
+            nMenuHeight = 0;
         }
-
-        if (mpNotebookBar)
+        else
         {
-            tools::Long nNotebookBarHeight = mpNotebookBar->GetSizePixel().Height();
-
-            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-            const BitmapEx& aPersona = rStyleSettings.GetPersonaHeader();
-            // since size of notebookbar changes, to make common persona for menubar
-            // and notebookbar persona should be set again with changed coordinates
-            if (!aPersona.IsEmpty())
-                {
-                    Wallpaper aWallpaper(aPersona);
-                    aWallpaper.SetStyle(WallpaperStyle::TopRight);
-                    aWallpaper.SetRect(tools::Rectangle(Point(0, -nTopBorder),
-                           Size(aSize.Width() - nLeftBorder - nRightBorder,
-                                nNotebookBarHeight + nTopBorder)));
-                    mpNotebookBar->SetBackground(aWallpaper);
-                }
-
-            mpNotebookBar->setPosSizePixel(
-                    nLeftBorder, nTopBorder,
-                    aSize.Width() - nLeftBorder - nRightBorder,
-                    nNotebookBarHeight);
+            if ( !nMenuHeight )
+                nMenuHeight = mnOrgMenuHeight;
         }
+        mpMenuBarWindow->setPosSizePixel(
+                nLeftBorder, nTopBorder,
+                aSize.Width()-nLeftBorder-nRightBorder,
+                nMenuHeight);
 
-        GetBorder( pClientWindow->mpWindowImpl->mnLeftBorder, pClientWindow->mpWindowImpl->mnTopBorder,
-                   pClientWindow->mpWindowImpl->mnRightBorder, pClientWindow->mpWindowImpl->mnBottomBorder );
-        pClientWindow->ImplPosSizeWindow( pClientWindow->mpWindowImpl->mnLeftBorder,
-                                          pClientWindow->mpWindowImpl->mnTopBorder,
-                                          aSize.Width()-pClientWindow->mpWindowImpl->mnLeftBorder-pClientWindow->mpWindowImpl->mnRightBorder,
-                                          aSize.Height()-pClientWindow->mpWindowImpl->mnTopBorder-pClientWindow->mpWindowImpl->mnBottomBorder,
-                                          PosSizeFlags::X | PosSizeFlags::Y |
-                                          PosSizeFlags::Width | PosSizeFlags::Height );
+        // shift the notebookbar down accordingly
+        nTopBorder += nMenuHeight;
     }
+
+    if (mpNotebookBar)
+    {
+        tools::Long nNotebookBarHeight = mpNotebookBar->GetSizePixel().Height();
+
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        const BitmapEx& aPersona = rStyleSettings.GetPersonaHeader();
+        // since size of notebookbar changes, to make common persona for menubar
+        // and notebookbar persona should be set again with changed coordinates
+        if (!aPersona.IsEmpty())
+            {
+                Wallpaper aWallpaper(aPersona);
+                aWallpaper.SetStyle(WallpaperStyle::TopRight);
+                aWallpaper.SetRect(tools::Rectangle(Point(0, -nTopBorder),
+                       Size(aSize.Width() - nLeftBorder - nRightBorder,
+                            nNotebookBarHeight + nTopBorder)));
+                mpNotebookBar->SetBackground(aWallpaper);
+            }
+
+        mpNotebookBar->setPosSizePixel(
+                nLeftBorder, nTopBorder,
+                aSize.Width() - nLeftBorder - nRightBorder,
+                nNotebookBarHeight);
+    }
+
+    GetBorder( pClientWindow->mpWindowImpl->mnLeftBorder, pClientWindow->mpWindowImpl->mnTopBorder,
+               pClientWindow->mpWindowImpl->mnRightBorder, pClientWindow->mpWindowImpl->mnBottomBorder );
+    pClientWindow->ImplPosSizeWindow( pClientWindow->mpWindowImpl->mnLeftBorder,
+                                      pClientWindow->mpWindowImpl->mnTopBorder,
+                                      aSize.Width()-pClientWindow->mpWindowImpl->mnLeftBorder-pClientWindow->mpWindowImpl->mnRightBorder,
+                                      aSize.Height()-pClientWindow->mpWindowImpl->mnTopBorder-pClientWindow->mpWindowImpl->mnBottomBorder,
+                                      PosSizeFlags::X | PosSizeFlags::Y |
+                                      PosSizeFlags::Width | PosSizeFlags::Height );
 
     // UpdateView
     mpBorderView->Init( this, aSize.Width(), aSize.Height() );
@@ -1953,12 +1875,6 @@ void ImplBorderWindow::SetBorderStyle( WindowBorderStyle nStyle )
         mnBorderStyle = nStyle;
         UpdateView( false, ImplGetWindow()->GetOutputSizePixel() );
     }
-}
-
-void ImplBorderWindow::SetRollUp( bool bRollUp, const Size& rSize )
-{
-    mbRollUp = bRollUp;
-    UpdateView( false, rSize );
 }
 
 void ImplBorderWindow::SetCloseButton()

@@ -66,7 +66,6 @@ SystemWindow::ImplData::ImplData()
 
 SystemWindow::SystemWindow(WindowType nType)
     : Window(nType)
-    , mbRollUp(false)
     , mbDockBtn(false)
     , mbHideBtn(false)
     , mbSysChild(false)
@@ -365,34 +364,6 @@ bool SystemWindow::IsTitleButtonVisible( TitleButton nButton ) const
         return mbDockBtn;
     else /* if ( nButton == TitleButton::Hide ) */
         return mbHideBtn;
-}
-
-void SystemWindow::RollUp()
-{
-    if ( !mbRollUp )
-    {
-        maOrgSize = GetOutputSizePixel();
-        Size aSize = maRollUpOutSize;
-        if ( !aSize.Width() )
-            aSize.setWidth( GetOutputSizePixel().Width() );
-        mbRollUp = true;
-        if ( mpWindowImpl->mpBorderWindow )
-            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetRollUp( true, aSize );
-        else
-            SetOutputSizePixel( aSize );
-    }
-}
-
-void SystemWindow::RollDown()
-{
-    if ( mbRollUp )
-    {
-        mbRollUp = false;
-        if ( mpWindowImpl->mpBorderWindow )
-            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetRollUp( false, maOrgSize );
-        else
-            SetOutputSizePixel( maOrgSize );
-    }
 }
 
 void SystemWindow::SetMinOutputSizePixel( const Size& rSize )
@@ -766,9 +737,6 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         if ( nValidMask & WindowStateMask::Height )
             nPosSize |= PosSizeFlags::Height;
 
-        if( IsRollUp() )
-            RollDown();
-
         tools::Long nX         = rData.GetX();
         tools::Long nY         = rData.GetY();
         tools::Long nWidth     = rData.GetWidth();
@@ -784,16 +752,6 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
             nY = rGeom.nHeight - nHeight;
         setPosSizePixel( nX, nY, nWidth, nHeight, nPosSize );
         maOrgSize = Size( nWidth, nHeight );
-
-        // 91625 - ignore Minimize
-        if ( nValidMask & WindowStateMask::State )
-        {
-            const WindowStateState nState = rData.GetState();
-            if ( nState & WindowStateState::Rollup )
-                RollUp();
-            else
-                RollDown();
-        }
     }
 }
 
@@ -862,12 +820,6 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
         Point   aPos = GetPosPixel();
         Size    aSize = GetSizePixel();
         WindowStateState nState = WindowStateState::NONE;
-
-        if ( IsRollUp() )
-        {
-            aSize.AdjustHeight(maOrgSize.Height() );
-            nState = WindowStateState::Rollup;
-        }
 
         if ( nValidMask & WindowStateMask::X )
             rData.SetX( aPos.X() );

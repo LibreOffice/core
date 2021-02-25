@@ -34,8 +34,6 @@
 #define SV_HELPTEXT_MINIMIZE                         NC_("SV_HELPTEXT_MINIMIZE", "Minimize")
 #define SV_HELPTEXT_MAXIMIZE                         NC_("SV_HELPTEXT_MAXIMIZE", "Maximize")
 #define SV_HELPTEXT_RESTORE                          NC_("SV_HELPTEXT_RESTORE", "Restore")
-#define SV_HELPTEXT_ROLLDOWN                         NC_("SV_HELPTEXT_ROLLDOWN", "Drop down")
-#define SV_HELPTEXT_ROLLUP                           NC_("SV_HELPTEXT_ROLLUP", "Roll up")
 #define SV_HELPTEXT_HELP                             NC_("SV_HELPTEXT_HELP", "Help")
 #define SV_HELPTEXT_SCREENSHOT                       NC_("SV_HELPTEXT_SCREENSHOT", "Take and annotate a screenshot")
 #define SV_HELPTEXT_FADEIN                           NC_("SV_HELPTEXT_FADEIN", "Show")
