@@ -86,6 +86,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121374_sectionHF2, "tdf121374_sectionHF2.doc")
     CPPUNIT_ASSERT( xHeaderText->getString().startsWith("virkamatka-anomus") );
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121666_lostPage, "tdf121666_lostPage.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:br", "type", "page");
+    // The second page break is exported too.
+    // Before this fix, if a node had both section break and page break, then only the section break was exported.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:br", "type", "page");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:sectPr/w:type", "val", "nextPage");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf95848, "tdf95848.docx")
 {
     OUString listId;

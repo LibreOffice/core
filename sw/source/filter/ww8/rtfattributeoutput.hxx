@@ -165,8 +165,8 @@ public:
 
     /// Write a section break
     /// msword::ColumnBreak or msword::PageBreak
-    void SectionBreak(sal_uInt8 nC, bool bBreakAfter,
-                      const WW8_SepInfo* pSectionInfo = nullptr) override;
+    void SectionBreak(sal_uInt8 nC, bool bBreakAfter, const WW8_SepInfo* pSectionInfo = nullptr,
+                      bool bExtraPageBreak = false) override;
 
     /// Start of the section properties.
     void StartSection() override;

@@ -273,7 +273,7 @@ public:
     /// Write a section break
     /// msword::ColumnBreak or msword::PageBreak
     /// bBreakAfter: the break must be scheduled for insertion in the end of current paragraph
-    virtual void SectionBreak( sal_uInt8 nC, bool bBreakAfter, const WW8_SepInfo* pSectionInfo = nullptr ) override;
+    virtual void SectionBreak( sal_uInt8 nC, bool bBreakAfter, const WW8_SepInfo* pSectionInfo = nullptr, bool bExtraPageBreak = false ) override;
 
     // preserve DOCX page vertical alignment
     virtual void TextVerticalAdjustment( const css::drawing::TextVerticalAdjust ) override;
