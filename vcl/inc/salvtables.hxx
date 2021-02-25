@@ -121,6 +121,8 @@ public:
 
     virtual std::unique_ptr<weld::Menu> weld_menu(const OString& id) override;
 
+    virtual std::unique_ptr<weld::Popover> weld_popover(const OString& id) override;
+
     virtual std::unique_ptr<weld::Toolbar> weld_toolbar(const OString& id) override;
 
     virtual std::unique_ptr<weld::SizeGroup> create_size_group() override;
