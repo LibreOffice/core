@@ -26,6 +26,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include "x509certificate_mscryptimpl.hxx"
 #include <certificateextension_xmlsecimpl.hxx>
+#include <biginteger.hxx>
 #include "sanextension_mscryptimpl.hxx"
 
 #include "oid.hxx"
@@ -650,5 +651,46 @@ Sequence<OUString> SAL_CALL X509Certificate_MSCryptImpl::getSupportedServiceName
 {
     return { OUString() };
 }
+
+namespace xmlsecurity {
+
+static bool EncodeDistinguishedName(OUString const& rName, CERT_NAME_BLOB & rBlob)
+{
+    LPCWSTR pszError;
+    if (!CertStrToNameW(X509_ASN_ENCODING, rName.getStr(), CERT_X500_NAME_STR, nullptr, nullptr, &rBlob.cbData, nullptr, &pszError))
+    {
+        SAL_INFO("xmlsecurity.xmlsec", "CertStrToNameW failed: " << WindowsErrorString(GetLastError()) << "; " << static_cast<char16_t*>(pszError));
+        return false;
+    }
+    rBlob.pbData = new BYTE[rBlob.cbData];
+    if (!CertStrToNameW(X509_ASN_ENCODING, rName.getStr(), CERT_X500_NAME_STR, nullptr, &rBlob.pbData, &rBlob.cbData, nullptr, &pszError))
+    {
+        SAL_INFO("xmlsecurity.xmlsec", "CertStrToNameW failed: " << WindowsErrorString(GetLastError()) << "; " << static_cast<char16_t*>(pszError));
+        return false;
+    }
+
+}
+
+bool EqualDistinguishedNames(std::u16string_view const rName1, std::u16string_view const rName2)
+{
+    CERT_NAME_BLOB blob1;
+    if (!EncodeDistinguishedName(rName1, blob1))
+    {
+        return false;
+    }
+    CERT_NAME_BLOB blob2;
+    if (!EncodeDistinguishedName(rName2, blob2))
+    {
+        delete[] blob1.pbData;
+        return false;
+    }
+    bool const ret(CertCompareCertificateName(X509_ASN_ENCODING,
+            &blob1, &blob2) == TRUE);
+    delete[] blob2.pbData;
+    delete[] blob1.pbData;
+    return ret;
+}
+
+} // namespace xmlsecurity
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,6 +34,9 @@ namespace xmlsecurity
 XSECXMLSEC_DLLPUBLIC OUString bigIntegerToNumericString(const css::uno::Sequence<sal_Int8>& serial);
 XSECXMLSEC_DLLPUBLIC css::uno::Sequence<sal_Int8>
 numericStringToBigInteger(std::u16string_view serialNumber);
+
+XSECXMLSEC_DLLPUBLIC bool EqualDistinguishedNames(std::u16string_view rName1,
+                                                  std::u16string_view rName2);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
