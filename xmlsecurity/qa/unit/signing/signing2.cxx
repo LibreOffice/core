@@ -82,8 +82,6 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPreserveMacroSignatureODB)
 
     // load the file
     mxComponent = loadFromDesktop(aURL, "com.sun.star.sdb.OfficeDatabaseDocument");
-    CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
-                           mxComponent.is());
 
     // save as ODB
     utl::TempFile aTempFileSaveAsODB;
