@@ -298,7 +298,7 @@ public:
     /// Write a section break
     /// msword::ColumnBreak or msword::PageBreak
     /// bBreakAfter: the break must be scheduled for insertion in the end of current paragraph
-    virtual void SectionBreak( sal_uInt8 nC, bool bBreakAfter, const WW8_SepInfo* pSectionInfo = nullptr ) = 0;
+    virtual void SectionBreak( sal_uInt8 nC, bool bBreakAfter, const WW8_SepInfo* pSectionInfo = nullptr, bool bExtraPageBreak = false ) = 0;
 
     // preserve page vertical alignment
     virtual void TextVerticalAdjustment( const css::drawing::TextVerticalAdjust) {};

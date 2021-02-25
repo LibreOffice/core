@@ -470,6 +470,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
     bool bNewPageDesc = false;
     const SfxPoolItem* pItem=nullptr;
     const SwFormatPageDesc *pPgDesc=nullptr;
+    bool bExtraPageBreakBeforeSectionBreak = false;
 
     //Output a sectionbreak if there's a new pagedescriptor. Otherwise output a
     //pagebreak if there is a pagebreak here, unless the new page (follow
@@ -507,6 +508,14 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
             bNewPageDesc = true;
             pPgDesc = static_cast<const SwFormatPageDesc*>(pItem);
             m_pCurrentPageDesc = pPgDesc->GetPageDesc();
+
+            // tdf#121666: nodes that have pagebreak + sectionbreak may need to export both breaks
+            // tested / implemented with docx format only.
+            // If other formats (rtf /doc) need similar fix, then that may can be done similar way.
+            if (SfxItemState::SET == pSet->GetItemState(RES_BREAK, false, &pItem))
+            {
+                bExtraPageBreakBeforeSectionBreak = true;
+            }
         }
         else if ( SfxItemState::SET == pSet->GetItemState( RES_BREAK, false, &pItem ) )
         {
@@ -595,7 +604,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
 
     if ( bNewPageDesc && m_pCurrentPageDesc )
     {
-        PrepareNewPageDesc( pSet, rNd, pPgDesc, m_pCurrentPageDesc );
+        PrepareNewPageDesc( pSet, rNd, pPgDesc, m_pCurrentPageDesc, bExtraPageBreakBeforeSectionBreak );
     }
     m_bBreakBefore = false;
 }
@@ -647,7 +656,8 @@ sal_uLong MSWordExportBase::GetSectionLineNo( const SfxItemSet* pSet, const SwNo
 void WW8Export::PrepareNewPageDesc( const SfxItemSet*pSet,
                                       const SwNode& rNd,
                                       const SwFormatPageDesc* pNewPgDescFormat,
-                                      const SwPageDesc* pNewPgDesc )
+                                      const SwPageDesc* pNewPgDesc,
+                                      bool /*bExtraPageBreak*/ )
 {
     // The PageDescs will only be inserted in WW8Writer::pSepx with the corresponding
     // position by the occurrences of PageDesc attributes. The construction and
@@ -3931,7 +3941,7 @@ void AttributeOutputBase::FormatBreak( const SvxFormatBreakItem& rBreak )
     }
 }
 
-void WW8AttributeOutput::SectionBreak( sal_uInt8 nC, bool /*bBreakAfter*/, const WW8_SepInfo* /*pSectionInfo*/ )
+void WW8AttributeOutput::SectionBreak( sal_uInt8 nC, bool /*bBreakAfter*/, const WW8_SepInfo* /*pSectionInfo*/, bool /*bExtraPageBreak*/ )
 {
     m_rWW8Export.ReplaceCr( nC );
 }
