@@ -113,9 +113,6 @@ void SwMacrosTest::testVba()
         OUString aFileName;
         createFileURL(testInfo[i].sFileBaseName, u"doc", aFileName);
         uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
-        OUString sMsg = "Failed to load " + aFileName;
-        CPPUNIT_ASSERT_MESSAGE( OUStringToOString( sMsg, RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
-
         OUString sUrl = testInfo[i].sMacroUrl;
         Any aRet;
         Sequence< sal_Int16 > aOutParamIndex;
@@ -349,9 +346,6 @@ void SwMacrosTest::testFdo68983()
     createFileURL(u"fdo68983.", u"odt", aFileName);
     Reference< css::lang::XComponent > xComponent =
         loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to load fdo68983.odt", xComponent.is());
-
     Reference< frame::XStorable > xDocStorable(xComponent, UNO_QUERY_THROW);
 
     utl::TempFile aTempFile;
