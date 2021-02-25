@@ -53,19 +53,8 @@ namespace systools
     class COMReference
     {
     public:
-        COMReference() :
-            com_ptr_(NULL)
-        {
-        }
-
-        explicit COMReference(T* comptr) :
-            com_ptr_(comptr)
-        {
-            addRef();
-        }
-
         /* Explicitly controllable whether AddRef will be called or not */
-        COMReference(T* comptr, bool bAddRef) :
+        COMReference(T* comptr = nullptr, bool bAddRef = true) :
             com_ptr_(comptr)
         {
             if (bAddRef)
@@ -80,8 +69,7 @@ namespace systools
 
         COMReference<T>& operator=(const COMReference<T>& other)
         {
-            if (other.com_ptr_)
-                other.com_ptr_->AddRef();
+            other.addRef();
             release();
             com_ptr_ = other.com_ptr_;
             return *this;
@@ -128,8 +116,7 @@ namespace systools
            CoCreateInstance which require a 'void**' */
         T** operator&()
         {
-            release();
-            com_ptr_ = NULL;
+            clear();
             return &com_ptr_;
         }
 
@@ -141,13 +128,13 @@ namespace systools
         COMReference<T>& clear()
         {
             release();
-            com_ptr_ = NULL;
+            com_ptr_ = nullptr;
             return *this;
         }
 
         bool is() const
         {
-            return (com_ptr_ != NULL);
+            return (com_ptr_ != nullptr);
         }
 
     private:
