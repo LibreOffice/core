@@ -10,10 +10,14 @@
 #include <swmodeltestbase.hxx>
 
 #include <vcl/transfer.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
 
 #include <docsh.hxx>
 #include <swdtflvr.hxx>
 #include <wrtsh.hxx>
+#include <view.hxx>
 
 /// Covers sw/source/uibase/dochdl/ fixes.
 class SwUibaseDochdlTest : public SwModelTestBase
@@ -44,6 +48,30 @@ CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testSelectPasteFormat)
     // - Actual  : 145 (RICHTEXT)
     // i.e. RTF was selected for Writer->Writer out of process copying, which is worse than ODF.
     CPPUNIT_ASSERT_EQUAL(SotClipboardFormatId::EMBED_SOURCE, nFormat);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testComplexSelection)
+{
+    // Given a document where a text node has hints, but no as-char images.
+    SwDoc* pDoc = createSwDoc();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert2("abc");
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    SfxItemSet aSet(pWrtShell->GetView().GetPool(),
+                    svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>{});
+    // Bold, italic, underline.
+    aSet.Put(SvxWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+    aSet.Put(SvxPostureItem(ITALIC_NORMAL, RES_CHRATR_POSTURE));
+    aSet.Put(SvxUnderlineItem(LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE));
+    pWrtShell->SetAttrSet(aSet);
+    uno::Reference<datatransfer::XTransferable2> xTransfer = new SwTransferable(*pWrtShell);
+
+    // When checking if the selection is complex, then there should be no crash.
+    // Without the accompanying fix in place, this test would have crashed, because we read past the
+    // end of the hints array.
+    CPPUNIT_ASSERT(!xTransfer->isComplex());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
