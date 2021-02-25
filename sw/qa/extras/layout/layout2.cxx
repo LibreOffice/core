@@ -1781,9 +1781,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122607_regression)
     // inline the loading because currently properties can't be passed...
     mxComponent = loadFromDesktop(url, "com.sun.star.text.TextDocument",
                                   comphelper::containerToSequence(aFilterOptions));
-
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Sequence<beans::PropertyValue> props(comphelper::InitPropertySequence({
         { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
     }));

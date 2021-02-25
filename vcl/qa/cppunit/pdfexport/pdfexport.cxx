@@ -83,8 +83,6 @@ PdfExportTest::exportAndParse(const OUString& rURL, const utl::MediaDescriptor& 
 {
     // Import the bugdoc and export as PDF.
     mxComponent = loadFromDesktop(rURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->storeToURL(maTempFile.GetURL(), rDescriptor.getAsConstPropertyValueList());
 
@@ -122,8 +120,6 @@ void PdfExportTest::saveAsPDF(std::u16string_view rFile)
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFile;
     mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
@@ -145,8 +141,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106059)
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106059.odt";
     mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
@@ -232,8 +226,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105461)
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf105461.odp";
     mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
@@ -280,8 +272,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107868)
     // Import the bugdoc and print to PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf107868.odt";
     mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XPrintable> xPrintable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPrintable.is());
@@ -369,8 +359,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106206)
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106206.odt";
     mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
@@ -419,8 +407,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf109143)
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf109143.odt";
     mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
@@ -460,8 +446,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106972)
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106972.odt";
     mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
@@ -510,8 +494,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106972Pdf17)
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106972-pdf17.odt";
     mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
@@ -550,8 +532,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testSofthyphenPos)
     // Import the bugdoc and print to PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "softhyphen_pdf.odt";
     mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XPrintable> xPrintable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPrintable.is());
@@ -810,8 +790,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf108963)
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf108963.odp";
     mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
@@ -1063,8 +1041,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_1a)
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf115117-1.odt";
     mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
@@ -1110,8 +1086,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_2a)
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf115117-2.odt";
     mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
@@ -1440,8 +1414,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105954)
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf105954.odt";
     mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
@@ -1769,7 +1741,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTocLink)
     // Load the Writer document.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "toc-link.fodt";
     mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
 
     // Update the ToC.
     uno::Reference<text::XDocumentIndexesSupplier> xDocumentIndexesSupplier(mxComponent,
@@ -1947,7 +1918,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageResourceInlineXObjectRef)
 {
     // Create an empty document.
     mxComponent = loadFromDesktop("private:factory/swriter");
-    CPPUNIT_ASSERT(mxComponent.is());
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -2020,7 +1990,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testDefaultVersion)
 {
     // Create an empty document.
     mxComponent = loadFromDesktop("private:factory/swriter");
-    CPPUNIT_ASSERT(mxComponent.is());
 
     // Save as PDF.
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -2043,7 +2012,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testVersion15)
 {
     // Create an empty document.
     mxComponent = loadFromDesktop("private:factory/swriter");
-    CPPUNIT_ASSERT(mxComponent.is());
 
     // Save as PDF.
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -2090,8 +2058,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testMultiPagePDF)
     // Load the PDF and save as PDF
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "SimpleMultiPagePDF.pdf";
     mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
@@ -2273,8 +2239,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReexportPDF)
     // Load the PDF and save as PDF
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "PDFWithImages.pdf";
     mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
@@ -2489,8 +2453,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReexportDocumentWithComplexResources)
     // Load the PDF and save as PDF
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "ComplexContentDictionary.pdf";
     mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
@@ -2579,8 +2541,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfUaMetadata)
     // Import a basic document (document doesn't really matter)
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "BrownFoxLazyDog.odt";
     mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");

@@ -94,8 +94,6 @@ void EPUBExportTest::createDoc(std::u16string_view rFile,
     // Import the bugdoc and export as EPUB.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + rFile;
     mxComponent = loadFromDesktop(aURL);
-    CPPUNIT_ASSERT(mxComponent.is());
-
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     maTempFile.EnableKillingFile();
     utl::MediaDescriptor aMediaDescriptor;
