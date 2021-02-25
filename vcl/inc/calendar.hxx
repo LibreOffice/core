@@ -166,8 +166,7 @@ class Calendar final : public Control
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
     void         ImplFormat();
-    using Window::ImplHitTest;
-    sal_uInt16   ImplHitTest( const Point& rPos, Date& rDate ) const;
+    sal_uInt16   ImplDoHitTest( const Point& rPos, Date& rDate ) const;
     void         ImplDrawSpin(vcl::RenderContext& rRenderContext);
     void         ImplDrawDate(vcl::RenderContext& rRenderContext, tools::Long nX, tools::Long nY,
                                              sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear,
