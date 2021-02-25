@@ -334,14 +334,24 @@ void SkiaSalGraphicsImpl::createWindowSurface(bool forceRaster)
 #endif
 }
 
+bool SkiaSalGraphicsImpl::isOffscreen() const
+{
+    if (mProvider == nullptr || mProvider->IsOffScreen())
+        return true;
+    // HACK: Sometimes (tdf#131939, tdf#138022, tdf#140288) VCL passes us a zero-sized window,
+    // and zero size is invalid for Skia, so force offscreen surface, where we handle this.
+    if (GetWidth() <= 0 || GetHeight() <= 0)
+        return true;
+    return false;
+}
+
 void SkiaSalGraphicsImpl::createOffscreenSurface()
 {
     SkiaZone zone;
     assert(isOffscreen());
     assert(!mSurface);
     assert(!mWindowContext);
-    // When created (especially on Windows), Init() gets called with size (0,0), which is invalid size
-    // for Skia. May happen also in rare cases such as shutting down (tdf#131939).
+    // HACK: See isOffscreen().
     int width = std::max(1, GetWidth());
     int height = std::max(1, GetHeight());
     switch (SkiaHelper::renderMethodToUse())
@@ -460,17 +470,7 @@ void SkiaSalGraphicsImpl::checkSurface()
     }
     else if (GetWidth() != mSurface->width() || GetHeight() != mSurface->height())
     {
-        if (avoidRecreateByResize())
-            return;
-
-        if (!GetWidth() || !GetHeight())
-        {
-            SAL_WARN("vcl.skia", "recreate(" << this << "): can't create empty surface "
-                                             << Size(GetWidth(), GetHeight())
-                                             << " => keeping old one!");
-            return;
-        }
-
+        if (!avoidRecreateByResize())
         {
             Size oldSize(mSurface->width(), mSurface->height());
             // Recreating a surface means that the old SkSurface contents will be lost.
@@ -501,6 +501,14 @@ void SkiaSalGraphicsImpl::checkSurface()
                                                    << Size(GetWidth(), GetHeight()));
         }
     }
+}
+
+bool SkiaSalGraphicsImpl::avoidRecreateByResize() const
+{
+    // Keep the old surface if VCL sends us a broken size (see isOffscreen()).
+    if (GetWidth() == 0 || GetHeight() == 0)
+        return true;
+    return false;
 }
 
 void SkiaSalGraphicsImpl::flushDrawing()
