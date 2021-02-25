@@ -335,7 +335,7 @@ void SfxDialogLibraryContainer::importFromOldStorage( const OUString& )
     // Nothing to do here, old dialogs cannot be imported
 }
 
-SfxLibraryContainer* SfxDialogLibraryContainer::createInstanceImpl()
+rtl::Reference<SfxLibraryContainer> SfxDialogLibraryContainer::createInstanceImpl()
 {
     return new SfxDialogLibraryContainer();
 }
