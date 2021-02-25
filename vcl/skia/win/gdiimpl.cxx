@@ -144,7 +144,7 @@ static HRESULT checkResult(HRESULT hr, const char* file, size_t line)
 #define CHECKHR(funct) (funct)
 #endif
 
-sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(const LOGFONTW& logFont)
+sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(HDC hdc, HFONT hfont)
 {
     if (!dwriteDone)
     {
@@ -153,25 +153,43 @@ sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(const LOGFON
                                             reinterpret_cast<IUnknown**>(&dwriteFactory)))))
         {
             if (SUCCEEDED(CHECKHR(dwriteFactory->GetGdiInterop(&dwriteGdiInterop))))
-                dwriteFontMgr = SkFontMgr_New_DirectWrite(dwriteFactory);
+                dwriteFontMgr = SkFontMgr_New_DirectWrite(dwriteFactory.get());
             else
-                dwriteFactory->Release();
+                dwriteFactory.clear();
         }
         dwriteDone = true;
     }
     if (!dwriteFontMgr)
         return nullptr;
-    IDWriteFont* font = nullptr;
-    IDWriteFontFace* fontFace;
-    IDWriteFontFamily* fontFamily;
-    if (FAILED(CHECKHR(dwriteGdiInterop->CreateFontFromLOGFONT(&logFont, &font))))
+
+    // tdf#137122: We need to get the exact same font as HFONT refers to,
+    // since VCL core computes things like glyph ids based on that, and getting
+    // a different font could lead to mismatches (e.g. if there's a slightly
+    // different version of the same font installed system-wide).
+    // For that CreateFromFaceFromHdc() is necessary. The simpler
+    // CreateFontFromLOGFONT() seems to search for the best matching font,
+    // which may not be the exact font. Our private fonts are installed
+    // using AddFontResourceExW( FR_PRIVATE ) and that apparently does
+    // not make them available to DirectWrite (at least, they are not
+    // included the DWrite system font collection). For such cases, we'll
+    // need to fall back to Skia's GDI-based font rendering.
+    HFONT oldFont = SelectFont(hdc, hfont);
+    auto restoreFont = [hdc, oldFont]() { SelectFont(hdc, oldFont); };
+    sal::systools::COMReference<IDWriteFontFace> fontFace;
+    if (FAILED(CHECKHR(dwriteGdiInterop->CreateFontFaceFromHdc(hdc, &fontFace))))
         return nullptr;
-    if (FAILED(CHECKHR(font->CreateFontFace(&fontFace))))
+    sal::systools::COMReference<IDWriteFontCollection> collection;
+    if (FAILED(CHECKHR(dwriteFactory->GetSystemFontCollection(&collection))))
         return nullptr;
+    sal::systools::COMReference<IDWriteFont> font;
+    // Do not use CHECKHR() here, as said above, this fails for our fonts.
+    if (FAILED(collection->GetFontFromFontFace(fontFace.get(), &font)))
+        return nullptr;
+    sal::systools::COMReference<IDWriteFontFamily> fontFamily;
     if (FAILED(CHECKHR(font->GetFontFamily(&fontFamily))))
         return nullptr;
     return sk_sp<SkTypeface>(
-        SkCreateTypefaceDirectWrite(dwriteFontMgr, fontFace, font, fontFamily));
+        SkCreateTypefaceDirectWrite(dwriteFontMgr, fontFace.get(), font.get(), fontFamily.get()));
 }
 
 bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
@@ -188,7 +206,7 @@ bool WinSkiaSalGraphicsImpl::DrawTextLayout(const GenericSalLayout& rLayout)
         assert(false);
         return false;
     }
-    sk_sp<SkTypeface> typeface = createDirectWriteTypeface(logFont);
+    sk_sp<SkTypeface> typeface = createDirectWriteTypeface(mWinParent.getHDC(), hLayoutFont);
     GlyphOrientation glyphOrientation = GlyphOrientation::Apply;
     if (!typeface) // fall back to GDI text rendering
     {
@@ -250,6 +268,8 @@ void WinSkiaSalGraphicsImpl::initFontInfo()
 void WinSkiaSalGraphicsImpl::ClearDevFontCache()
 {
     dwriteFontMgr.reset();
+    dwriteFactory.clear();
+    dwriteGdiInterop.clear();
     dwriteDone = false;
     initFontInfo(); // get font info again, just in case
 }
