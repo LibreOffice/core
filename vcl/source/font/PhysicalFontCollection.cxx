@@ -948,7 +948,8 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
     if( !Count() )
         return nullptr;
 
-    if (getenv("SAL_NO_FONT_LOOKUP") != nullptr)
+    static bool noFontLookup = getenv("SAL_NO_FONT_LOOKUP") != nullptr;
+    if (noFontLookup)
     {
         // Hard code the use of Liberation Sans and skip font search.
         sal_Int32 nIndex = 0;
