@@ -615,7 +615,7 @@ rtl::Reference<SfxStyleSheetBase> SfxStyleSheetBasePool::Create
     return new SfxStyleSheetBase( rName, this, eFam, mask );
 }
 
-SfxStyleSheetBase* SfxStyleSheetBasePool::Create( const SfxStyleSheetBase& r )
+rtl::Reference<SfxStyleSheetBase> SfxStyleSheetBasePool::Create( const SfxStyleSheetBase& r )
 {
     return new SfxStyleSheetBase( r );
 }
