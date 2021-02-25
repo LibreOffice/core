@@ -593,7 +593,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                 if (!rInfo.ouGpgCertificate.isEmpty())
                     aType = "OpenPGP";
                 // XML based: XAdES or not.
-                else if (!rInfo.ouCertDigest.isEmpty())
+                else if (rInfo.GetSigningCertificate() && !rInfo.GetSigningCertificate()->CertDigest.isEmpty())
                     aType = "XAdES";
                 else
                     aType = "XML-DSig";
@@ -691,8 +691,8 @@ uno::Reference<security::XCertificate> DigitalSignaturesDialog::getCertificate(c
     uno::Reference<security::XCertificate> xCert;
 
     //First we try to get the certificate which is embedded in the XML Signature
-    if (xSecEnv.is() && !rInfo.ouX509Certificate.isEmpty())
-        xCert = xSecEnv->createCertificateFromAscii(rInfo.ouX509Certificate);
+    if (xSecEnv.is() && rInfo.GetSigningCertificate() && !rInfo.GetSigningCertificate()->X509Certificate.isEmpty())
+        xCert = xSecEnv->createCertificateFromAscii(rInfo.GetSigningCertificate()->X509Certificate);
     else {
         //There must be an embedded certificate because we use it to get the
         //issuer name. We cannot use /Signature/KeyInfo/X509Data/X509IssuerName
@@ -704,9 +704,12 @@ uno::Reference<security::XCertificate> DigitalSignaturesDialog::getCertificate(c
     }
 
     //In case there is no embedded certificate we try to get it from a local store
-    if (!xCert.is() && xSecEnv.is())
-        xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xmlsecurity::numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
-    if (!xCert.is() && xGpgSecEnv.is())
+    if (!xCert.is() && xSecEnv.is() && rInfo.GetSigningCertificate())
+    {
+        xCert = xSecEnv->getCertificate(rInfo.GetSigningCertificate()->X509IssuerName,
+            xmlsecurity::numericStringToBigInteger(rInfo.GetSigningCertificate()->X509SerialNumber));
+    }
+    if (!xCert.is() && xGpgSecEnv.is() && !rInfo.ouGpgKeyID.isEmpty())
         xCert = xGpgSecEnv->getCertificate( rInfo.ouGpgKeyID, xmlsecurity::numericStringToBigInteger("") );
 
     SAL_WARN_IF( !xCert.is(), "xmlsecurity.dialogs", "Certificate not found and can't be created!" );

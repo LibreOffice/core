@@ -591,6 +591,18 @@ void DocumentSignatureManager::read(bool bUseTempStream, bool bCacheLastSignatur
                                                             bCacheLastSignature);
         maSignatureHelper.EndMission();
 
+        // this parses the XML independently from ImplVerifySignatures() - check
+        // certificates here too ...
+        for (auto const& it : maSignatureHelper.GetSignatureInformations())
+        {
+            if (!it.X509Datas.empty())
+            {
+                uno::Reference<xml::crypto::XSecurityEnvironment> const xSecEnv(
+                    getSecurityEnvironment());
+                maSignatureHelper.CheckAndUpdateSignatureInformation(xSecEnv, it);
+            }
+        }
+
         maCurrentSignatureInformations = maSignatureHelper.GetSignatureInformations();
     }
     else
