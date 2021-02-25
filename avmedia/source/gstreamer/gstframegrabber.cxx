@@ -87,7 +87,7 @@ FrameGrabber::~FrameGrabber()
     disposePipeline();
 }
 
-FrameGrabber* FrameGrabber::create( std::u16string_view rURL )
+rtl::Reference<FrameGrabber> FrameGrabber::create( std::u16string_view rURL )
 {
     return new FrameGrabber( rURL );
 }
