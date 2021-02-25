@@ -28,6 +28,9 @@
 #include "securityenvironment_nssimpl.hxx"
 
 #include <xmlsec-wrapper.h>
+
+#include <sal/log.hxx>
+
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 
 using namespace ::com::sun::star;
@@ -258,6 +261,7 @@ SAL_CALL XMLSignature_NssImpl::validate(
                     ++nReferenceGood;
             }
         }
+        SAL_INFO("xmlsecurity.xmlsec", "xmlSecDSigCtxVerify status " << pDsigCtx->status << ", references good " << nReferenceGood << " of " << nReferenceCount);
 
         if (rs == 0 && pDsigCtx->status == xmlSecDSigStatusSucceeded && nReferenceCount == nReferenceGood)
         {

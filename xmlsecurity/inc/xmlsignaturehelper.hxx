@@ -37,6 +37,9 @@
 #include <com/sun/star/xml/crypto/sax/XSignatureCreationResultListener.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultListener.hpp>
 
+#include <com/sun/star/security/XCertificate.hpp>
+#include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
+
 class DateTime;
 
 namespace com {
@@ -95,6 +98,15 @@ public:
                 // After signing/verifying, get information about signatures
     SignatureInformation  GetSignatureInformation( sal_Int32 nSecurityId ) const;
     SignatureInformations GetSignatureInformations() const;
+    /// ImplVerifySignature calls this to figure out which X509Data is the
+    /// signing certificate and update the internal state with the result.
+    /// @return
+    ///    A sequence with the signing certificate at the back on success.
+    ///    An empty sequence on failure.
+    std::vector<css::uno::Reference<css::security::XCertificate>>
+    CheckAndUpdateSignatureInformation(
+        css::uno::Reference<css::xml::crypto::XSecurityEnvironment> const& xSecEnv,
+        SignatureInformation const& rInfo);
 
                 // See XSecController for documentation
     void        StartMission(const css::uno::Reference<css::xml::crypto::XXMLSecurityContext>& xSecurityContext);
