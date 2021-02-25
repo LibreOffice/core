@@ -619,11 +619,11 @@ sal_uLong DocxExport::ReplaceCr( sal_uInt8 )
 
 void DocxExport::PrepareNewPageDesc( const SfxItemSet* pSet,
         const SwNode& rNd, const SwFormatPageDesc* pNewPgDescFormat,
-        const SwPageDesc* pNewPgDesc )
+        const SwPageDesc* pNewPgDesc, bool bExtraPageBreak )
 {
     // tell the attribute output that we are ready to write the section
     // break [has to be output inside paragraph properties]
-    AttrOutput().SectionBreak( msword::PageBreak, false, m_pSections->CurrentSectionInfo() );
+    AttrOutput().SectionBreak( msword::PageBreak, false, m_pSections->CurrentSectionInfo(), bExtraPageBreak );
 
     const SwSectionFormat* pFormat = GetSectionFormat( rNd );
     const sal_uLong nLnNm = GetSectionLineNo( pSet, rNd );
