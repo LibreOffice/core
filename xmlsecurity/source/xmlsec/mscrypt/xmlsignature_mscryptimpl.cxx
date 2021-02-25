@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 #include <rtl/uuid.h>
 
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
@@ -250,6 +251,7 @@ SAL_CALL XMLSignature_MSCryptImpl::validate(
                  ++nReferenceGood;
         }
     }
+    SAL_INFO("xmlsecurity.xmlsec", "xmlSecDSigCtxVerify status " << pDsigCtx->status << ", references good " << nReferenceGood << " of " << nReferenceCount);
 
     if (rs == 0 && nReferenceCount == nReferenceGood)
     {

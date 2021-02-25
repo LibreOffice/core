@@ -411,8 +411,9 @@ std::pair<bool, OUString> lcl_MakeParagraphSignatureFieldText(const SignatureDes
             valid = valid
                     && aInfo.nStatus == xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
 
-            msg = SwResId(STR_SIGNED_BY) + ": " + aInfo.ouSubject + ", ";
-            msg += aDescr.msDate;
+            assert(aInfo.GetSigningCertificate()); // it was valid
+            msg = SwResId(STR_SIGNED_BY) + ": " + aInfo.GetSigningCertificate()->X509Subject + ", " +
+                aDescr.msDate;
             msg += (!aDescr.msUsage.isEmpty() ? (" (" + aDescr.msUsage + "): ") : OUString(": "));
             msg += (valid ? SwResId(STR_VALID) : SwResId(STR_INVALID));
         }
@@ -432,7 +433,7 @@ lcl_MakeParagraphSignatureFieldText(const uno::Reference<frame::XModel>& xModel,
     return lcl_MakeParagraphSignatureFieldText(aDescr, utf8Text);
 }
 
-/// Generate the next valid ID for the a new signature on this paragraph.
+/// Generate the next valid ID for the new signature on this paragraph.
 OUString lcl_getNextSignatureId(const uno::Reference<frame::XModel>& xModel,
                                 const uno::Reference<text::XTextContent>& xParagraph)
 {
