@@ -843,7 +843,8 @@ protected:
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,
                                      const SwNode& rNd,
                                      const SwFormatPageDesc* pNewPgDescFormat,
-                                     const SwPageDesc* pNewPgDesc ) = 0;
+                                     const SwPageDesc* pNewPgDesc,
+                                     bool bExtraPageBreak = false ) = 0;
 
     /// Return value indicates if an inherited outline numbering is suppressed.
     virtual bool DisallowInheritingOutlineNumbering(const SwFormat &rFormat) = 0;
@@ -1106,7 +1107,8 @@ public:
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,
                                      const SwNode& rNd,
                                      const SwFormatPageDesc* pNewPgDescFormat,
-                                     const SwPageDesc* pNewPgDesc ) override;
+                                     const SwPageDesc* pNewPgDesc,
+                                     bool bExtraPageBreak = false ) override;
 
     static void Out_BorderLine(ww::bytes& rO, const ::editeng::SvxBorderLine* pLine,
         sal_uInt16 nDist, sal_uInt16 nSprmNo, sal_uInt16 nSprmNoVer9,
