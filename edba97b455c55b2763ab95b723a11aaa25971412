@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e3e27f9_a56649b7",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-25T11:06:29Z",
+      "side": 1,
+      "message": "I\u0027d delegate this to\n\n  Color(ColorAlpha, 255, 0, 0, 0)",
+      "revId": "edba97b455c55b2763ab95b723a11aaa25971412",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ce83152_3ad68ec0",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-25T11:06:29Z",
+      "side": 1,
+      "message": "This could be delegated to\n\n  Color(ColorAlpha, nColor | 0xFF000000)\n\nbut that is just me trying to delegate as much as possible...",
+      "revId": "edba97b455c55b2763ab95b723a11aaa25971412",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "201bffe6_e9ca677a",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-25T11:06:29Z",
+      "side": 1,
+      "message": "No idea if compiler optimizes this out, but I find it simpler to read as\n\n  (FF000000 - (nColor \u0026 FF000000))",
+      "range": {
+        "startLine": 93,
+        "startChar": 40,
+        "endLine": 93,
+        "endChar": 69
+      },
+      "revId": "edba97b455c55b2763ab95b723a11aaa25971412",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f351846_c0dac6cf",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-25T11:06:29Z",
+      "side": 1,
+      "message": "This returns 0; you likely meant \u0027operator sal_uInt32()\u0027",
+      "range": {
+        "startLine": 131,
+        "startChar": 25,
+        "endLine": 131,
+        "endChar": 37
+      },
+      "revId": "edba97b455c55b2763ab95b723a11aaa25971412",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
