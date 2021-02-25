@@ -1745,6 +1745,8 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
         # so we can't reuse directly the same method than for kde integration.
         self.build_data_libs()
 
+        # subdirs for the meta .pro file
+        subdirs_meta_pro = []
         subdirs_list = self.data_libs.keys()
         # Now we can create Qt files
         for lib_folder in subdirs_list:
@@ -1763,7 +1765,8 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             defines = " \\\n".join(defines_list)
 
             # create .pro file
-            qt_pro_file = '%s/%s.pro' % (lib_loc, lib_name)
+            subdirs_meta_pro.append(lib_name)
+            qt_pro_file = os.path.join(self.base_folder, lib_name, lib_name + '.pro')
             try:
                 content = QtCreatorIntegrationGenerator.pro_template % {'sources': sources, 'headers': headers,
                                                                         'cxxflags': cxxflags, 'includepath': includepath, 'defines': defines}
@@ -1779,7 +1782,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                 print("\n\n", file=sys.stderr)
 
             # create .pro.shared file
-            qt_pro_shared_file = '%s/%s.pro.shared' % (lib_loc, lib_name)
+            qt_pro_shared_file = os.path.join(self.base_folder, lib_name, lib_name + '.pro.shared')
             try:
                 with open(qt_pro_shared_file, mode) as fproshared:
                     fproshared.write(self.generate_pro_shared_content(lib_folder))
@@ -1793,9 +1796,9 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                 print("\n\n", file=sys.stderr)
 
         # create meta .pro file (lists all sub projects)
-        qt_meta_pro_file = 'lo.pro'
+        qt_meta_pro_file = os.path.join(self.base_folder, 'lo.pro')
         try:
-            subdirs = " \\\n".join(sorted(subdirs_list))
+            subdirs = " \\\n".join(sorted(subdirs_meta_pro))
             content = QtCreatorIntegrationGenerator.pro_meta_template % {'subdirs': subdirs}
             with open(qt_meta_pro_file, 'w+') as fmpro:
                 fmpro.write(content)
@@ -1808,7 +1811,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             print("\n\n", file=sys.stderr)
 
         # create meta .pro.shared file
-        qt_meta_pro_shared_file = 'lo.pro.shared'
+        qt_meta_pro_shared_file = os.path.join(self.base_folder, 'lo.pro.shared')
         try:
             with open(qt_meta_pro_shared_file, mode) as fmproshared:
                 fmproshared.write(self.generate_meta_pro_shared_content())
