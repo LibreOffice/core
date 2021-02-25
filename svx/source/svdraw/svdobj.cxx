@@ -1784,6 +1784,26 @@ void SdrObject::SetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> pTextO
     if (GetCurrentBoundRect()!=aBoundRect0) {
         SendUserCall(SdrUserCallType::Resize,aBoundRect0);
     }
+
+    if (getSdrModelFromSdrObject().IsUndoEnabled())
+    {
+        // Don't do this during import.
+        SdrObject* pTopGroupObj = nullptr;
+        if (getParentSdrObjectFromSdrObject())
+        {
+            pTopGroupObj = getParentSdrObjectFromSdrObject();
+            while (pTopGroupObj->getParentSdrObjectFromSdrObject())
+            {
+                pTopGroupObj = pTopGroupObj->getParentSdrObjectFromSdrObject();
+            }
+        }
+        if (pTopGroupObj)
+        {
+            // A shape was modified, which is in a group shape. Empty the group shape's grab-bag,
+            // which potentially contains the old text of the shapes in case of diagrams.
+            pTopGroupObj->SetGrabBagItem(uno::makeAny(uno::Sequence<beans::PropertyValue>()));
+        }
+    }
 }
 
 void SdrObject::NbcSetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> /*pTextObject*/)

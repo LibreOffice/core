@@ -29,6 +29,12 @@
 #include <svx/svdpage.hxx>
 #include <svx/unopage.hxx>
 #include <vcl/virdev.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <sfx2/viewsh.hxx>
+#include <svx/svdview.hxx>
+#include <svx/unoapi.hxx>
+#include <sal/log.hxx>
+
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>
 
 using namespace ::com::sun::star;
@@ -186,6 +192,55 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandlePathObjScale)
     // - Actual  : 12566
     // i.e. the scaling was applied twice.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(113), xShape->getSize().Width);
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testTextEditEmptyGrabBag)
+{
+    // Given a document with a groupshape, which has 2 children.
+    getComponent() = loadFromDesktop("private:factory/sdraw");
+    uno::Reference<lang::XMultiServiceFactory> xFactory(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xRect1(
+        xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xRect1->setPosition(awt::Point(1000, 1000));
+    xRect1->setSize(awt::Size(10000, 10000));
+    uno::Reference<drawing::XShape> xRect2(
+        xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xRect2->setPosition(awt::Point(1000, 1000));
+    xRect2->setSize(awt::Size(10000, 10000));
+    uno::Reference<drawing::XShapes> xGroup(
+        xFactory->createInstance("com.sun.star.drawing.GroupShape"), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xGroupShape(xGroup, uno::UNO_QUERY);
+    xDrawPage->add(xGroupShape);
+    xGroup->add(xRect1);
+    xGroup->add(xRect2);
+    uno::Reference<text::XTextRange> xRect2Text(xRect2, uno::UNO_QUERY);
+    xRect2Text->setString("x");
+    uno::Sequence<beans::PropertyValue> aGrabBag = {
+        comphelper::makePropertyValue("OOXLayout", true),
+    };
+    uno::Reference<beans::XPropertySet> xGroupProps(xGroup, uno::UNO_QUERY);
+    xGroupProps->setPropertyValue("InteropGrabBag", uno::makeAny(aGrabBag));
+
+    // When editing the shape text of the 2nd rectangle (insert a char at the start).
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SdrView* pSdrView = pViewShell->GetDrawView();
+    SdrObject* pObject = GetSdrObjectFromXShape(xRect2);
+    pSdrView->SdrBeginTextEdit(pObject);
+    EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
+    rEditView.InsertText("y");
+    pSdrView->SdrEndTextEdit();
+
+    // Then make sure that grab-bag is empty to avoid loosing the new text.
+    xGroupProps->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+    // Without the accompanying fix in place, this test would have failed with:
+    // assertion failed
+    // - Expression: !aGrabBag.hasElements()
+    // i.e. the grab-bag was still around after modifying the shape, and that grab-bag contained the
+    // old text.
+    CPPUNIT_ASSERT(!aGrabBag.hasElements());
 }
 }
 
