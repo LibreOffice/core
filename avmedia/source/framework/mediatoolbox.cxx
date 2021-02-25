@@ -65,7 +65,7 @@ void MediaToolBoxControl_Impl::execute( const MediaItem& rItem )
 }
 
 
-SFX_IMPL_TOOLBOX_CONTROL( ::avmedia::MediaToolBoxControl, ::avmedia::MediaItem );
+SFX_IMPL_TOOLBOX_CONTROL( MediaToolBoxControl, ::avmedia::MediaItem );
 
 
 MediaToolBoxControl::MediaToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
