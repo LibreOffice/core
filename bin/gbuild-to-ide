@@ -1660,15 +1660,15 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             lib_folder = os.path.relpath(lib.location, self.base_folder)
 
             def lopath(path):
-                if platform =="cygwin":
+                if platform == "cygwin":
                     # absolute paths from GbuildToJson are Windows paths,
                     # so convert everything to such ones
                     abs_path = path
                     if not ntpath.isabs(abs_path):
                         abs_path = ntpath.join(self.gbuildparser.srcdir, path)
-                    return ntpath.relpath(abs_path, lib.location).replace('\\', '/')
+                    return abs_path.replace('\\', '/')
 
-                return os.path.relpath(path, lib.location)
+                return os.path.abspath(path)
 
             defines_list = []
             sources_list = []
