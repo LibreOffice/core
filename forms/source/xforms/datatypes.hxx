@@ -30,6 +30,7 @@
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/broadcasthelper.hxx>
+#include <rtl/ref.hxx>
 
 #include <unicode/regex.h>
 
@@ -101,7 +102,7 @@ namespace xforms
         virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     public:
-        OXSDDataType* clone( const OUString& _rNewName ) const;
+        rtl::Reference<OXSDDataType> clone( const OUString& _rNewName ) const;
 
     protected:
         // XPropertySet and friends
@@ -113,7 +114,7 @@ namespace xforms
 
         // --- own overridables ---
         // helper for implementing cloning of data types
-        virtual OXSDDataType*   createClone( const OUString& _rName ) const = 0;
+        virtual rtl::Reference<OXSDDataType> createClone( const OUString& _rName ) const = 0;
         virtual void            initializeClone( const OXSDDataType& _rCloneSource );
 
         // helper method for validate and explainInvalid
@@ -131,11 +132,11 @@ namespace xforms
     //= helper for deriving from OXSDDataType
 
 #define DECLARE_DEFAULT_CLONING( classname )        \
-    virtual OXSDDataType* createClone( const OUString& _rName ) const override;    \
+    virtual rtl::Reference<OXSDDataType> createClone( const OUString& _rName ) const override;    \
     virtual void       initializeClone( const OXSDDataType& _rCloneSource ) override;
 
 #define IMPLEMENT_DEFAULT_TYPED_CLONING( classname, baseclass )   \
-    OXSDDataType* classname::createClone( const OUString& _rName ) const              \
+    rtl::Reference<OXSDDataType> classname::createClone( const OUString& _rName ) const              \
     {                                                       \
         return new classname( _rName, getTypeClass() );     \
     }                                                       \
