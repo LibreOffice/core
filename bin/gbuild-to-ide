@@ -1754,6 +1754,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
 
     def emit(self):
 
+        mode = 'w+'
         self.base_folder = self.gbuildparser.builddir
 
         # we remove existing '.pro' and '.pro.shared' files
@@ -1785,7 +1786,6 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             try:
                 content = QtCreatorIntegrationGenerator.pro_template % {'sources': sources, 'headers': headers,
                                                                         'cxxflags': cxxflags, 'includepath': includepath, 'defines': defines}
-                mode = 'w+'
                 with open(qt_pro_file, mode) as fpro:
                     fpro.write(content)
                 self._log("created %s\n" % qt_pro_file)
