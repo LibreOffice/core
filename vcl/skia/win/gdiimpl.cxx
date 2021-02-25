@@ -39,6 +39,11 @@ void WinSkiaSalGraphicsImpl::createWindowContext(bool forceRaster)
 {
     SkiaZone zone;
     sk_app::DisplayParams displayParams;
+<<<<<<< HEAD   (55a6b2 tdf#139039 sfx2 store: fix export to PDF when dir name is UR)
+=======
+    assert(GetWidth() > 0 && GetHeight() > 0);
+    displayParams.fSurfaceProps = *SkiaHelper::surfaceProps();
+>>>>>>> CHANGE (21305f generic Skia workaround for VCL sending empty size (tdf#1402)
     switch (forceRaster ? SkiaHelper::RenderRaster : SkiaHelper::renderMethodToUse())
     {
         case SkiaHelper::RenderRaster:

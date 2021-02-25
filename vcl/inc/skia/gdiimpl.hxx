@@ -229,7 +229,7 @@ protected:
     void checkSurface();
     void destroySurface();
     // Reimplemented for X11.
-    virtual bool avoidRecreateByResize() const { return false; }
+    virtual bool avoidRecreateByResize() const;
     void createWindowSurface(bool forceRaster = false);
     virtual void createWindowContext(bool forceRaster = false) = 0;
     void createOffscreenSurface();
@@ -239,7 +239,7 @@ protected:
 
     void setProvider(SalGeometryProvider* provider) { mProvider = provider; }
 
-    bool isOffscreen() const { return mProvider == nullptr || mProvider->IsOffScreen(); }
+    bool isOffscreen() const;
     bool isGPU() const { return mIsGPU; }
 
     void invert(basegfx::B2DPolygon const& rPoly, SalInvert eFlags);
