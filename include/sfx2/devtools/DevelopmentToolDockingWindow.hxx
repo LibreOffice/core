@@ -37,6 +37,7 @@ private:
     std::unique_ptr<weld::TreeView> mpDocumentModelTreeView;
     std::unique_ptr<weld::ToggleButton> mpSelectionToggle;
     std::unique_ptr<weld::Toolbar> mpObjectInspectorToolbar;
+    std::unique_ptr<weld::Notebook> mpObjectInspectorNotebook;
 
     css::uno::Reference<css::uno::XInterface> mxRoot;
     css::uno::Reference<css::uno::XInterface> mxCurrentSelection;
