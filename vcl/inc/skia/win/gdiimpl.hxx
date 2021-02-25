@@ -11,8 +11,9 @@
 #define INCLUDED_VCL_INC_SKIA_WIN_GDIIMPL_HXX
 
 #include <memory>
-#include <vcl/dllapi.h>
+#include <systools/win32/comtools.hxx>
 
+#include <vcl/dllapi.h>
 #include <skia/gdiimpl.hxx>
 #include <win/salgdi.h>
 #include <win/wingdiimpl.hxx>
@@ -61,10 +62,10 @@ public:
 protected:
     virtual void createWindowContext(bool forceRaster = false) override;
     virtual void performFlush() override;
-    sk_sp<SkTypeface> createDirectWriteTypeface(const LOGFONTW& logFont);
+    sk_sp<SkTypeface> createDirectWriteTypeface(HDC hdc, HFONT hfont);
     static void initFontInfo();
-    inline static IDWriteFactory* dwriteFactory;
-    inline static IDWriteGdiInterop* dwriteGdiInterop;
+    inline static sal::systools::COMReference<IDWriteFactory> dwriteFactory;
+    inline static sal::systools::COMReference<IDWriteGdiInterop> dwriteGdiInterop;
     inline static sk_sp<SkFontMgr> dwriteFontMgr;
     inline static bool dwriteDone = false;
     static SkFont::Edging fontEdging;
