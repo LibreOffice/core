@@ -8,10 +8,6 @@
  *
  */
 
-#include <config_features.h>
-
-#if HAVE_FEATURE_PDFIUM
-
 #include <vcl/filter/PDFiumLibrary.hxx>
 
 #include <cassert>
@@ -1336,7 +1332,5 @@ std::shared_ptr<PDFium>& PDFiumLibrary::get()
 }
 
 } // end vcl::pdf
-
-#endif // HAVE_FEATURE_PDFIUM
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
