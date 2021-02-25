@@ -1384,7 +1384,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
         }
         return xml
 
-    # By default, QtCreator creates 2 BuildStepList : "Build" et "Clean"
+    # By default, QtCreator creates 2 BuildStepList : "Build" and "Clean"
     # but the "clean" can be empty.
     build_configs_template = """
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.%(index)s">
