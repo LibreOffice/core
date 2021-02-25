@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d766a98_648f9ae3",
+        "filename": "sw/CppunitTest_sw_ooxmlimport2.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-02-25T06:54:44Z",
+      "side": 1,
+      "message": "This is left-over code from an earlier version of the patch. It should not have been included (but I assume no big deal, so it could stay...)",
+      "range": {
+        "startLine": 37,
+        "startChar": 2,
+        "endLine": 37,
+        "endChar": 8
+      },
+      "revId": "c0720a28fea59b0066d2484df6e7260570da88ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
