@@ -42,35 +42,29 @@ public:
         InterimItemWindow::dispose();
     }
 };
+}
 
 /**
  * Popup dialog for drop-down form field showing the list items of the field.
  * The user can select the item using this popup while filling in a form.
  */
-class SwFieldDialog : public FloatingWindow
+class SwFieldDialog final
 {
 private:
-    VclPtr<SwFieldListBox> m_xListBox;
+    std::unique_ptr<weld::TreeView> m_xTreeView;
     sw::mark::IFieldmark* m_pFieldmark;
 
-    DECL_LINK(MyListBoxHandler, weld::TreeView&, bool);
-    DECL_STATIC_LINK(SwFieldDialog, KeyInputHdl, const KeyEvent&, bool);
-
 public:
-    SwFieldDialog(SwEditWin* parent, sw::mark::IFieldmark* fieldBM, tools::Long nMinListWidth);
-    virtual ~SwFieldDialog() override;
-    virtual void dispose() override;
+    SwFieldDialog(weld::Builder& rBuilder, sw::mark::IFieldmark* fieldBM,
+                  tools::Long nMinListWidth);
+    weld::TreeView& get_widget() { return *m_xTreeView; }
 };
-}
 
-SwFieldDialog::SwFieldDialog(SwEditWin* parent, sw::mark::IFieldmark* fieldBM,
+SwFieldDialog::SwFieldDialog(weld::Builder& rBuilder, sw::mark::IFieldmark* fieldBM,
                              tools::Long nMinListWidth)
-    : FloatingWindow(parent, WB_BORDER | WB_SYSTEMWINDOW)
-    , m_xListBox(VclPtr<SwFieldListBox>::Create(this))
+    : m_xTreeView(rBuilder.weld_tree_view("list"))
     , m_pFieldmark(fieldBM)
 {
-    weld::TreeView& rTreeView = m_xListBox->get_widget();
-
     if (fieldBM != nullptr)
     {
         const sw::mark::IFieldmark::parameter_map_t* const pParameters = fieldBM->GetParameters();
@@ -82,12 +76,12 @@ SwFieldDialog::SwFieldDialog(SwEditWin* parent, sw::mark::IFieldmark* fieldBM,
         {
             pListEntries->second >>= vListEntries;
             for (OUString const& i : std::as_const(vListEntries))
-                rTreeView.append_text(i);
+                m_xTreeView->append_text(i);
         }
 
         if (!vListEntries.hasElements())
         {
-            rTreeView.append_text(SwResId(STR_DROP_DOWN_EMPTY_LIST));
+            m_xTreeView->append_text(SwResId(STR_DROP_DOWN_EMPTY_LIST));
         }
 
         // Select the current one
@@ -97,68 +91,45 @@ SwFieldDialog::SwFieldDialog(SwEditWin* parent, sw::mark::IFieldmark* fieldBM,
         {
             sal_Int32 nSelection = -1;
             pResult->second >>= nSelection;
-            rTreeView.set_cursor(nSelection);
-            rTreeView.select(nSelection);
+            m_xTreeView->set_cursor(nSelection);
+            m_xTreeView->select(nSelection);
         }
     }
 
-    auto nHeight = rTreeView.get_height_rows(
+    auto nHeight = m_xTreeView->get_height_rows(
         std::min<int>(Application::GetSettings().GetStyleSettings().GetListBoxMaximumLineCount(),
-                      rTreeView.n_children()));
-    rTreeView.set_size_request(-1, nHeight);
-    Size lbSize(rTreeView.get_preferred_size());
+                      m_xTreeView->n_children()));
+    m_xTreeView->set_size_request(-1, nHeight);
+    Size lbSize(m_xTreeView->get_preferred_size());
     lbSize.AdjustWidth(4);
     lbSize.AdjustHeight(4);
     lbSize.setWidth(std::max(lbSize.Width(), nMinListWidth));
-    m_xListBox->SetSizePixel(lbSize);
-    rTreeView.connect_row_activated(LINK(this, SwFieldDialog, MyListBoxHandler));
-    rTreeView.connect_key_press(LINK(this, SwFieldDialog, KeyInputHdl));
-    m_xListBox->Show();
+    m_xTreeView->set_size_request(lbSize.Width(), lbSize.Height());
 
-    rTreeView.grab_focus();
-
-    SetSizePixel(lbSize);
+    m_xTreeView->grab_focus();
 }
 
-SwFieldDialog::~SwFieldDialog() { disposeOnce(); }
-
-void SwFieldDialog::dispose()
-{
-    m_xListBox.disposeAndClear();
-    FloatingWindow::dispose();
-}
-
-IMPL_LINK(SwFieldDialog, MyListBoxHandler, weld::TreeView&, rBox, bool)
+IMPL_LINK(DropDownFormFieldButton, MyListBoxHandler, weld::TreeView&, rBox, bool)
 {
     OUString sSelection = rBox.get_selected_text();
     if (sSelection == SwResId(STR_DROP_DOWN_EMPTY_LIST))
     {
-        EndPopupMode();
+        m_xFieldPopup->popdown();
         return true;
     }
 
     sal_Int32 nSelection = rBox.get_selected_index();
     if (nSelection >= 0)
     {
-        (*m_pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] <<= nSelection;
-        m_pFieldmark->Invalidate();
+        (*m_rFieldmark.GetParameters())[ODF_FORMDROPDOWN_RESULT] <<= nSelection;
+        m_rFieldmark.Invalidate();
         SwView& rView = static_cast<SwEditWin*>(GetParent())->GetView();
         rView.GetDocShell()->SetModified();
     }
 
-    EndPopupMode();
+    m_xFieldPopup->popdown();
 
     return true;
-}
-
-IMPL_STATIC_LINK(SwFieldDialog, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
-{
-    bool bDone = false;
-    vcl::KeyCode aCode = rKeyEvent.GetKeyCode();
-    // nowhere to tab to
-    if (aCode.GetCode() == KEY_TAB)
-        bDone = true;
-    return bDone;
 }
 
 DropDownFormFieldButton::DropDownFormFieldButton(SwEditWin* pEditWin,
@@ -171,8 +142,19 @@ DropDownFormFieldButton::~DropDownFormFieldButton() { disposeOnce(); }
 
 void DropDownFormFieldButton::InitPopup()
 {
-    m_pFieldPopup = VclPtr<SwFieldDialog>::Create(static_cast<SwEditWin*>(GetParent()),
-                                                  &m_rFieldmark, GetSizePixel().Width());
+    m_xFieldPopupBuilder.reset(
+        Application::CreateBuilder(GetFrameWeld(), "modules/swriter/ui/formdropdown.ui"));
+    m_xFieldPopup = m_xFieldPopupBuilder->weld_popover("FormDropDown");
+    m_xFieldDialog.reset(
+        new SwFieldDialog(*m_xFieldPopupBuilder, &m_rFieldmark, GetSizePixel().Width()));
+    m_xFieldDialog->get_widget().connect_row_activated(
+        LINK(this, DropDownFormFieldButton, MyListBoxHandler));
+}
+
+void DropDownFormFieldButton::DeInitPopup()
+{
+    m_xFieldDialog.reset();
+    FormFieldButton::DeInitPopup();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

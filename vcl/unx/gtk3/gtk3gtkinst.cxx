@@ -16579,6 +16579,56 @@ public:
 
         return false;
     }
+
+class GtkInstancePopover : public GtkInstanceContainer, public virtual weld::Popover
+{
+private:
+    GtkPopover* m_pPopover;
+    gulong m_nSignalId;
+
+    static void signalClosed(GtkPopover*, gpointer widget)
+    {
+        GtkInstancePopover* pThis = static_cast<GtkInstancePopover*>(widget);
+        pThis->signal_closed();
+    }
+
+public:
+    GtkInstancePopover(GtkPopover* pPopover, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : GtkInstanceContainer(GTK_CONTAINER(pPopover), pBuilder, bTakeOwnership)
+        , m_pPopover(pPopover)
+        , m_nSignalId(g_signal_connect(m_pPopover, "closed", G_CALLBACK(signalClosed), this))
+    {
+    }
+
+    virtual void popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) override
+    {
+        GtkInstanceWidget* pGtkWidget = dynamic_cast<GtkInstanceWidget*>(pParent);
+        assert(pGtkWidget);
+
+        GtkWidget* pWidget = pGtkWidget->getWidget();
+
+        gtk_popover_set_relative_to(m_pPopover, pWidget);
+
+        GdkRectangle aRect{static_cast<int>(rRect.Left()), static_cast<int>(rRect.Top()),
+                           static_cast<int>(rRect.GetWidth()), static_cast<int>(rRect.GetHeight())};
+        if (::SwapForRTL(pWidget))
+            aRect.x = gtk_widget_get_allocated_width(pWidget) - aRect.width - 1 - aRect.x;
+
+        gtk_popover_set_pointing_to(m_pPopover, &aRect);
+        gtk_popover_popup(m_pPopover);
+    }
+
+    virtual void popdown() override
+    {
+        gtk_popover_popdown(m_pPopover);
+    }
+
+    virtual ~GtkInstancePopover() override
+    {
+        g_signal_handler_disconnect(m_pPopover, m_nSignalId);
+    }
+};
+
 }
 
 namespace
@@ -17373,6 +17423,18 @@ public:
         if (!pMenu)
             return nullptr;
         return std::make_unique<GtkInstanceMenu>(pMenu, true);
+    }
+
+    virtual std::unique_ptr<weld::Popover> weld_popover(const OString &id) override
+    {
+        GtkPopover* pPopover = GTK_POPOVER(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        if (!pPopover)
+            return nullptr;
+#if 0
+        if (m_pParentWidget)
+            gtk_popover_set_relative_to(pPopover, m_pParentWidget);
+#endif
+        return std::make_unique<GtkInstancePopover>(pPopover, this, true);
     }
 
     virtual std::unique_ptr<weld::Toolbar> weld_toolbar(const OString &id) override

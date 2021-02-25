@@ -114,9 +114,11 @@ DateFormFieldButton::~DateFormFieldButton() { disposeOnce(); }
 
 void DateFormFieldButton::InitPopup()
 {
+#if 0
     sw::mark::DateFieldmark* pDateFieldmark = dynamic_cast<sw::mark::DateFieldmark*>(&m_rFieldmark);
     m_pFieldPopup = VclPtr<SwDatePickerDialog>::Create(static_cast<SwEditWin*>(GetParent()),
                                                        pDateFieldmark, m_pNumberFormatter);
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

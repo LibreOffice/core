@@ -11,7 +11,7 @@
 #include <edtwin.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include <bookmrk.hxx>
-#include <vcl/floatwin.hxx>
+#include <vcl/weldutils.hxx>
 #include <vcl/event.hxx>
 
 FormFieldButton::FormFieldButton(SwEditWin* pEditWin, sw::mark::Fieldmark& rFieldmark)
@@ -29,9 +29,15 @@ FormFieldButton::FormFieldButton(SwEditWin* pEditWin, sw::mark::Fieldmark& rFiel
 
 FormFieldButton::~FormFieldButton() { disposeOnce(); }
 
+void FormFieldButton::DeInitPopup()
+{
+    m_xFieldPopup.reset();
+    m_xFieldPopupBuilder.reset();
+}
+
 void FormFieldButton::dispose()
 {
-    m_pFieldPopup.disposeAndClear();
+    DeInitPopup();
     Control::dispose();
 }
 
@@ -63,23 +69,23 @@ void FormFieldButton::CalcPosAndSize(const SwRect& rPortionPaintArea)
 
 void FormFieldButton::MouseButtonDown(const MouseEvent&)
 {
-    assert(GetParent());
-
-    // sets m_pFieldPopup
+    // sets m_xFieldPopup
     InitPopup();
 
-    m_pFieldPopup->SetPopupModeEndHdl(LINK(this, DropDownFormFieldButton, FieldPopupModeEndHdl));
+    m_xFieldPopup->connect_closed(LINK(this, DropDownFormFieldButton, FieldPopupModeEndHdl));
 
-    Size aSize = GetSizePixel();
-    Point aPos(GetParent()->OutputToScreenPixel(GetPosPixel()));
-    tools::Rectangle aRect(aPos, aSize);
-    m_pFieldPopup->StartPopupMode(aRect, FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus);
+    fprintf(stderr, "startpopup\n");
+    tools::Rectangle aRect(Point(0, 0), GetSizePixel());
+    weld::Window* pParent = weld::GetPopupParent(*this, aRect);
+    m_xFieldPopup->popup_at_rect(pParent, aRect);
+    fprintf(stderr, "after popup started\n");
     Invalidate();
 }
 
-IMPL_LINK_NOARG(FormFieldButton, FieldPopupModeEndHdl, FloatingWindow*, void)
+IMPL_LINK_NOARG(FormFieldButton, FieldPopupModeEndHdl, weld::Popover&, void)
 {
-    m_pFieldPopup.disposeAndClear();
+    fprintf(stderr, "endpopup\n");
+    DeInitPopup();
     m_rFieldmark.Invalidate();
     // Hide the button here and make it visible later, to make transparent background work with SAL_USE_VCLPLUGIN=gen
     Show(false);
@@ -99,7 +105,7 @@ void FormFieldButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
 
     //const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     Color aLineColor = COL_BLACK;
-    Color aFillColor(lcl_GetFillColor(aLineColor.getBColor(), (m_pFieldPopup ? 0.5 : 0.75)));
+    Color aFillColor(lcl_GetFillColor(aLineColor.getBColor(), (m_xFieldPopup ? 0.5 : 0.75)));
 
     // Draw the frame around the field
     // GTK3 backend cuts down the frame's top and left border, to avoid that add a padding around the frame
