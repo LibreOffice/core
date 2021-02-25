@@ -311,7 +311,7 @@ Any SfxScriptLibraryContainer::importLibraryElement
     return aRetAny;
 }
 
-SfxLibraryContainer* SfxScriptLibraryContainer::createInstanceImpl()
+rtl::Reference<SfxLibraryContainer> SfxScriptLibraryContainer::createInstanceImpl()
 {
     return new SfxScriptLibraryContainer();
 }
