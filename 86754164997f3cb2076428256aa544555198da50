@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "15fe5bb3_19867132",
+        "filename": "fpicker/source/office/fileview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1002970
+      },
+      "writtenOn": "2021-02-25T14:43:57Z",
+      "side": 1,
+      "message": "Fixed this, sorry!",
+      "parentUuid": "5f728cf4_84b27b6a",
+      "revId": "86754164997f3cb2076428256aa544555198da50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b4cdca1f_552e4530",
         "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "7adab195_3cc19315",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4627,
+      "author": {
+        "id": 1002970
+      },
+      "writtenOn": "2021-02-25T14:43:57Z",
+      "side": 1,
+      "message": "thank you for guiding me. I have changed the line.",
+      "parentUuid": "b4cdca1f_552e4530",
+      "revId": "86754164997f3cb2076428256aa544555198da50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60cdfb56_6e3be9e1",
         "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2021-02-24T11:39:25Z",
       "side": 1,
       "message": "Likely this could be moved to member initializer list, as in the other places?",
+      "revId": "86754164997f3cb2076428256aa544555198da50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86096b65_b285e8a7",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4628,
+      "author": {
+        "id": 1002970
+      },
+      "writtenOn": "2021-02-25T14:43:57Z",
+      "side": 1,
+      "message": "This is the constructor of the class and this Idle object is used only in this class, so I initialized it here. Isnt it more appropriate to intialize it in the class constructor? That was my thinking when I did this, please do let me know",
+      "parentUuid": "60cdfb56_6e3be9e1",
       "revId": "86754164997f3cb2076428256aa544555198da50",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
