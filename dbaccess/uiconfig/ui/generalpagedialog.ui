@@ -16,6 +16,8 @@
         <property name="xalign">0</property>
         <property name="yalign">0</property>
         <property name="label" translatable="yes" context="generalpagedialog|datasourceTypePre">Select the type of database to which you want to establish a connection.</property>
+        <property name="use_underline">True</property>
+        <property name="mnemonic_widget">datasourceTypePre</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -60,6 +62,8 @@
         <property name="label" translatable="yes" context="generalpagedialog|datasourceTypeHelp">On the following pages, you can make detailed settings for the connection.
 
 The new settings you make will overwrite your existing settings.</property>
+        <property name="use_underline">True</property>
+        <property name="mnemonic_widget">datasourceTypeHelp</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
