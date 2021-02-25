@@ -629,13 +629,15 @@ ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
     std::unique_ptr<weld::TreeView>& pPropertiesTreeView,
     std::unique_ptr<weld::TreeView>& pMethodsTreeView,
     std::unique_ptr<weld::Label>& pClassNameLabel,
-    std::unique_ptr<weld::Toolbar>& pObjectInspectorToolbar)
+    std::unique_ptr<weld::Toolbar>& pObjectInspectorToolbar,
+    std::unique_ptr<weld::Notebook>& pObjectInspectorNotebook)
     : mpInterfacesTreeView(pInterfacesTreeView)
     , mpServicesTreeView(pServicesTreeView)
     , mpPropertiesTreeView(pPropertiesTreeView)
     , mpMethodsTreeView(pMethodsTreeView)
     , mpClassNameLabel(pClassNameLabel)
     , mpObjectInspectorToolbar(pObjectInspectorToolbar)
+    , mpObjectInspectorNotebook(pObjectInspectorNotebook)
 {
     mpInterfacesTreeView->connect_expanding(
         LINK(this, ObjectInspectorTreeHandler, ExpandingHandlerInterfaces));
@@ -658,6 +660,11 @@ ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
         LINK(this, ObjectInspectorTreeHandler, ToolbarButtonClicked));
     mpObjectInspectorToolbar->set_item_sensitive("inspect", false);
     mpObjectInspectorToolbar->set_item_sensitive("back", false);
+
+    mpObjectInspectorNotebook->connect_leave_page(
+        LINK(this, ObjectInspectorTreeHandler, NotebookLeavePage));
+    mpObjectInspectorNotebook->connect_enter_page(
+        LINK(this, ObjectInspectorTreeHandler, NotebookEnterPage));
 }
 
 void ObjectInspectorTreeHandler::handleExpanding(std::unique_ptr<weld::TreeView>& pTreeView,
@@ -762,6 +769,72 @@ IMPL_LINK(ObjectInspectorTreeHandler, ToolbarButtonClicked, const OString&, rSel
             inspectObject(xInterface);
         }
     }
+}
+
+IMPL_LINK(ObjectInspectorTreeHandler, NotebookEnterPage, const OString&, rPageId, void)
+{
+    uno::Any aAny = maInspectionStack.back();
+    if (aAny.hasValue())
+    {
+        uno::Reference<uno::XInterface> xInterface(aAny, uno::UNO_QUERY);
+        if (rPageId == "object_inspector_interfaces_tab")
+        {
+            mpInterfacesTreeView->freeze();
+            clearAll(mpInterfacesTreeView);
+            appendInterfaces(xInterface);
+            mpInterfacesTreeView->thaw();
+        }
+        else if (rPageId == "object_inspector_services_tab")
+        {
+            mpServicesTreeView->freeze();
+            clearAll(mpServicesTreeView);
+            appendServices(xInterface);
+            mpServicesTreeView->thaw();
+        }
+        else if (rPageId == "object_inspector_properties_tab")
+        {
+            mpPropertiesTreeView->freeze();
+            clearAll(mpPropertiesTreeView);
+            appendProperties(xInterface);
+            mpPropertiesTreeView->thaw();
+        }
+        else if (rPageId == "object_inspector_methods_tab")
+        {
+            mpMethodsTreeView->freeze();
+            clearAll(mpMethodsTreeView);
+            appendMethods(xInterface);
+            mpMethodsTreeView->thaw();
+        }
+    }
+}
+
+IMPL_LINK(ObjectInspectorTreeHandler, NotebookLeavePage, const OString&, rPageId, bool)
+{
+    if (rPageId == "object_inspector_interfaces_tab")
+    {
+        mpInterfacesTreeView->freeze();
+        clearAll(mpInterfacesTreeView);
+        mpInterfacesTreeView->thaw();
+    }
+    else if (rPageId == "object_inspector_services_tab")
+    {
+        mpServicesTreeView->freeze();
+        clearAll(mpServicesTreeView);
+        mpServicesTreeView->thaw();
+    }
+    else if (rPageId == "object_inspector_properties_tab")
+    {
+        mpPropertiesTreeView->freeze();
+        clearAll(mpPropertiesTreeView);
+        mpPropertiesTreeView->thaw();
+    }
+    else if (rPageId == "object_inspector_methods_tab")
+    {
+        mpMethodsTreeView->freeze();
+        clearAll(mpMethodsTreeView);
+        mpMethodsTreeView->thaw();
+    }
+    return true;
 }
 
 void ObjectInspectorTreeHandler::clearObjectInspectorChildren(
@@ -891,26 +964,8 @@ void ObjectInspectorTreeHandler::inspectObject(uno::Reference<uno::XInterface> c
     OUString aImplementationName = xServiceInfo->getImplementationName();
     mpClassNameLabel->set_label(aImplementationName);
 
-    // fill object inspector
-    mpInterfacesTreeView->freeze();
-    clearAll(mpInterfacesTreeView);
-    appendInterfaces(xInterface);
-    mpInterfacesTreeView->thaw();
-
-    mpServicesTreeView->freeze();
-    clearAll(mpServicesTreeView);
-    appendServices(xInterface);
-    mpServicesTreeView->thaw();
-
-    mpPropertiesTreeView->freeze();
-    clearAll(mpPropertiesTreeView);
-    appendProperties(xInterface);
-    mpPropertiesTreeView->thaw();
-
-    mpMethodsTreeView->freeze();
-    clearAll(mpMethodsTreeView);
-    appendMethods(xInterface);
-    mpMethodsTreeView->thaw();
+    auto rPageId = mpObjectInspectorNotebook->get_current_page_ident();
+    NotebookEnterPage(rPageId);
 }
 
 void ObjectInspectorTreeHandler::introspect(uno::Reference<uno::XInterface> const& xInterface)
