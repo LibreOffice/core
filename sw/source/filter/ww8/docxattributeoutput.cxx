@@ -6521,7 +6521,7 @@ void DocxAttributeOutput::PageBreakBefore( bool bBreak )
                 FSNS( XML_w, XML_val ), "false" );
 }
 
-void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, bool bBreakAfter, const WW8_SepInfo* pSectionInfo )
+void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, bool bBreakAfter, const WW8_SepInfo* pSectionInfo, bool bExtraPageBreak)
 {
     switch ( nC )
     {
@@ -6572,10 +6572,22 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, bool bBreakAfter, const WW
                     m_rExport.SectionProperties( *pSectionInfo );
 
                     m_pSerializer->endElementNS( XML_w, XML_pPr );
+                    if (bExtraPageBreak)
+                    {
+                        m_pSerializer->startElementNS(XML_w, XML_r);
+                        m_pSerializer->singleElementNS(XML_w, XML_br, FSNS(XML_w, XML_type), "page");
+                        m_pSerializer->endElementNS(XML_w, XML_r);
+                    }
                     m_pSerializer->endElementNS( XML_w, XML_p );
                 }
                 else
                 {
+                    if (bExtraPageBreak && m_bParagraphOpened)
+                    {
+                        m_pSerializer->startElementNS(XML_w, XML_r);
+                        m_pSerializer->singleElementNS(XML_w, XML_br, FSNS(XML_w, XML_type), "page");
+                        m_pSerializer->endElementNS(XML_w, XML_r);
+                    }
                     // postpone the output of this; it has to be done inside the
                     // paragraph properties, so remember it until then
                     m_pSectionInfo.reset( new WW8_SepInfo( *pSectionInfo ));
