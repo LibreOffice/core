@@ -38,6 +38,7 @@ void WinSkiaSalGraphicsImpl::createWindowContext(bool forceRaster)
 {
     SkiaZone zone;
     sk_app::DisplayParams displayParams;
+    assert(GetWidth() > 0 && GetHeight() > 0);
     displayParams.fSurfaceProps = *SkiaHelper::surfaceProps();
     switch (forceRaster ? SkiaHelper::RenderRaster : SkiaHelper::renderMethodToUse())
     {

@@ -108,6 +108,8 @@ X11SkiaSalGraphicsImpl::createWindowContext(Display* display, Drawable drawable,
 
 bool X11SkiaSalGraphicsImpl::avoidRecreateByResize() const
 {
+    if (SkiaSalGraphicsImpl::avoidRecreateByResize())
+        return true;
     if (!mSurface || isOffscreen())
         return false;
     // Skia's WindowContext uses actual dimensions of the X window, which due to X11 being
