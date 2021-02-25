@@ -160,7 +160,7 @@ tools::Rectangle HeaderBar::ImplGetItemRect( sal_uInt16 nPos ) const
     return aRect;
 }
 
-sal_uInt16 HeaderBar::ImplHitTest( const Point& rPos,
+sal_uInt16 HeaderBar::ImplDoHitTest( const Point& rPos,
                                tools::Long& nMouseOff, sal_uInt16& nPos ) const
 {
     size_t          nCount = static_cast<sal_uInt16>(mvItemList.size());
@@ -600,7 +600,7 @@ void HeaderBar::ImplUpdate(sal_uInt16 nPos, bool bEnd)
 void HeaderBar::ImplStartDrag( const Point& rMousePos, bool bCommand )
 {
     sal_uInt16  nPos;
-    sal_uInt16  nHitTest = ImplHitTest( rMousePos, mnMouseOff, nPos );
+    sal_uInt16  nHitTest = ImplDoHitTest( rMousePos, mnMouseOff, nPos );
     if ( !nHitTest )
         return;
 
@@ -807,7 +807,7 @@ void HeaderBar::MouseButtonDown( const MouseEvent& rMEvt )
     {
         tools::Long    nTemp;
         sal_uInt16  nPos;
-        sal_uInt16  nHitTest = ImplHitTest( rMEvt.GetPosPixel(), nTemp, nPos );
+        sal_uInt16  nHitTest = ImplDoHitTest( rMEvt.GetPosPixel(), nTemp, nPos );
         if ( nHitTest )
         {
             auto& pItem = mvItemList[ nPos ];
@@ -830,7 +830,7 @@ void HeaderBar::MouseMove( const MouseEvent& rMEvt )
     tools::Long            nTemp1;
     sal_uInt16          nTemp2;
     PointerStyle    eStyle = PointerStyle::Arrow;
-    sal_uInt16          nHitTest = ImplHitTest( rMEvt.GetPosPixel(), nTemp1, nTemp2 );
+    sal_uInt16          nHitTest = ImplDoHitTest( rMEvt.GetPosPixel(), nTemp1, nTemp2 );
 
     if ( nHitTest & HEAD_HITTEST_DIVIDER )
         eStyle = PointerStyle::HSizeBar;

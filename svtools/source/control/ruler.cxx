@@ -1412,7 +1412,7 @@ void Ruler::ImplUpdate( bool bMustCalc )
     }
 }
 
-bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
+bool Ruler::ImplDoHitTest( const Point& rPos, RulerSelection* pHitTest,
                          bool bRequireStyle, RulerIndentStyle nRequiredStyle ) const
 {
     sal_Int32   i;
@@ -1728,7 +1728,7 @@ bool Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
         else
             aPos.setX( RULER_OFF + 1 );
 
-        if ( ImplHitTest( aPos, pHitTest, bRequiredStyle, nRequiredStyle ) )
+        if ( ImplDoHitTest( aPos, pHitTest, bRequiredStyle, nRequiredStyle ) )
         {
             if ( (pHitTest->eType == eDragType) || (eDragType == RulerType::DontKnow) )
                 return true;
@@ -1744,7 +1744,7 @@ bool Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
         else
             aPos.setX( mnWidth - RULER_OFF - 1 );
 
-        if ( ImplHitTest( aPos, pHitTest, bRequiredStyle, nRequiredStyle ) )
+        if ( ImplDoHitTest( aPos, pHitTest, bRequiredStyle, nRequiredStyle ) )
         {
             if ( (pHitTest->eType == eDragType) || (eDragType == RulerType::DontKnow) )
                 return true;
@@ -1759,7 +1759,7 @@ bool Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
         else
             aPos.setX( RULER_OFF + (mnVirHeight / 2) );
 
-        if ( ImplHitTest( aPos, pHitTest ) )
+        if ( ImplDoHitTest( aPos, pHitTest ) )
         {
             if ( (pHitTest->eType == eDragType) || (eDragType == RulerType::DontKnow) )
                 return true;
@@ -1935,7 +1935,7 @@ void Ruler::MouseButtonDown( const MouseEvent& rMEvt )
     else
     {
         std::unique_ptr<RulerSelection> pHitTest(new RulerSelection);
-        bool bHitTestResult = ImplHitTest(aMousePos, pHitTest.get());
+        bool bHitTestResult = ImplDoHitTest(aMousePos, pHitTest.get());
 
         if ( nMouseClicks == 1 )
         {
@@ -1953,7 +1953,7 @@ void Ruler::MouseButtonDown( const MouseEvent& rMEvt )
                     mnDragPos = 0;
 
                     // call HitTest again as a click, for example, could set a new tab
-                    if ( ImplHitTest(aMousePos, pHitTest.get()) )
+                    if ( ImplDoHitTest(aMousePos, pHitTest.get()) )
                         ImplStartDrag(pHitTest.get(), nMouseModifier);
                 }
             }
@@ -1986,7 +1986,7 @@ void Ruler::MouseMove( const MouseEvent& rMEvt )
 
     maHoverSelection.eType = RulerType::DontKnow;
 
-    if (ImplHitTest( rMEvt.GetPosPixel(), mxCurrentHitTest.get() ))
+    if (ImplDoHitTest( rMEvt.GetPosPixel(), mxCurrentHitTest.get() ))
     {
         maHoverSelection = *mxCurrentHitTest;
 
@@ -2319,7 +2319,7 @@ RulerType Ruler::GetRulerType( const Point& rPos, sal_uInt16* pAryPos )
         Invalidate(InvalidateFlags::NoErase);
     }
 
-    (void)ImplHitTest(rPos, &aHitTest);
+    (void)ImplDoHitTest(rPos, &aHitTest);
 
     // return values
     if ( pAryPos )
