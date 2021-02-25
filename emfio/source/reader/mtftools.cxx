@@ -389,7 +389,7 @@ namespace emfio
             const tools::Long nMeasuredTextLength(pTempVirtualDevice->GetTextWidth(rText));
 
             // compare expected and imported TextLengths
-            if(nImportedTextLength != nMeasuredTextLength)
+            if (nImportedTextLength != nMeasuredTextLength && nMeasuredTextLength)
             {
                 const double fFactorText(static_cast<double>(nImportedTextLength) / static_cast<double>(nMeasuredTextLength));
                 const double fFactorTextPercent(fabs(1.0 - fFactorText) * 100.0);
