@@ -593,6 +593,34 @@ ObjectInspectorNodeInterface* BasicValueNode::createNodeObjectForAny(OUString co
     return new BasicValueNode(rName, rAny, mxContext);
 }
 
+ObjectInspectorNodeInterface* getSelectedNode(weld::TreeView const& rTreeView)
+{
+    OUString sID = rTreeView.get_selected_id();
+    if (sID.isEmpty())
+        return nullptr;
+
+    if (auto* pNode = reinterpret_cast<ObjectInspectorNodeInterface*>(sID.toInt64()))
+        return pNode;
+
+    return nullptr;
+}
+
+uno::Reference<uno::XInterface> getSelectedXInterface(weld::TreeView const& rTreeView)
+{
+    uno::Reference<uno::XInterface> xInterface;
+
+    if (auto* pNode = getSelectedNode(rTreeView))
+    {
+        if (auto* pBasicValueNode = dynamic_cast<BasicValueNode*>(pNode))
+        {
+            uno::Any aAny = pBasicValueNode->getAny();
+            xInterface.set(aAny, uno::UNO_QUERY);
+        }
+    }
+
+    return xInterface;
+}
+
 } // end anonymous namespace
 
 ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
@@ -600,12 +628,14 @@ ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
     std::unique_ptr<weld::TreeView>& pServicesTreeView,
     std::unique_ptr<weld::TreeView>& pPropertiesTreeView,
     std::unique_ptr<weld::TreeView>& pMethodsTreeView,
-    std::unique_ptr<weld::Label>& pClassNameLabel)
+    std::unique_ptr<weld::Label>& pClassNameLabel,
+    std::unique_ptr<weld::Toolbar>& pObjectInspectorToolbar)
     : mpInterfacesTreeView(pInterfacesTreeView)
     , mpServicesTreeView(pServicesTreeView)
     , mpPropertiesTreeView(pPropertiesTreeView)
     , mpMethodsTreeView(pMethodsTreeView)
     , mpClassNameLabel(pClassNameLabel)
+    , mpObjectInspectorToolbar(pObjectInspectorToolbar)
 {
     mpInterfacesTreeView->connect_expanding(
         LINK(this, ObjectInspectorTreeHandler, ExpandingHandlerInterfaces));
@@ -618,6 +648,16 @@ ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
 
     mpPropertiesTreeView->connect_popup_menu(
         LINK(this, ObjectInspectorTreeHandler, PopupMenuHandler));
+
+    mpInterfacesTreeView->connect_changed(LINK(this, ObjectInspectorTreeHandler, SelectionChanged));
+    mpServicesTreeView->connect_changed(LINK(this, ObjectInspectorTreeHandler, SelectionChanged));
+    mpPropertiesTreeView->connect_changed(LINK(this, ObjectInspectorTreeHandler, SelectionChanged));
+    mpMethodsTreeView->connect_changed(LINK(this, ObjectInspectorTreeHandler, SelectionChanged));
+
+    mpObjectInspectorToolbar->connect_clicked(
+        LINK(this, ObjectInspectorTreeHandler, ToolbarButtonClicked));
+    mpObjectInspectorToolbar->set_item_sensitive("inspect", false);
+    mpObjectInspectorToolbar->set_item_sensitive("back", false);
 }
 
 void ObjectInspectorTreeHandler::handleExpanding(std::unique_ptr<weld::TreeView>& pTreeView,
@@ -659,41 +699,69 @@ IMPL_LINK(ObjectInspectorTreeHandler, ExpandingHandlerMethods, weld::TreeIter co
     return true;
 }
 
+IMPL_LINK(ObjectInspectorTreeHandler, SelectionChanged, weld::TreeView&, rTreeView, void)
+{
+    bool bHaveNodeWithObject = false;
+
+    if (mpPropertiesTreeView.get() == &rTreeView)
+    {
+        auto* pNode = getSelectedNode(rTreeView);
+        if (auto* pBasicValueNode = dynamic_cast<BasicValueNode*>(pNode))
+        {
+            uno::Any aAny = pBasicValueNode->getAny();
+            uno::Reference<uno::XInterface> xInterface(aAny, uno::UNO_QUERY);
+            bHaveNodeWithObject = xInterface.is();
+        }
+    }
+
+    mpObjectInspectorToolbar->set_item_sensitive("inspect", bHaveNodeWithObject);
+}
+
 IMPL_LINK(ObjectInspectorTreeHandler, PopupMenuHandler, const CommandEvent&, rCommandEvent, bool)
 {
     if (rCommandEvent.GetCommand() != CommandEventId::ContextMenu)
         return false;
 
-    uno::Any aAny;
-    OUString sID = mpPropertiesTreeView->get_selected_id();
-    if (sID.isEmpty())
-        return false;
-
-    auto* pNode = reinterpret_cast<ObjectInspectorNodeInterface*>(sID.toInt64());
-    if (pNode)
+    auto xInterface = getSelectedXInterface(*mpPropertiesTreeView);
+    if (xInterface.is())
     {
-        auto* pBasicValueNode = dynamic_cast<BasicValueNode*>(pNode);
-        if (pBasicValueNode)
-        {
-            aAny = pBasicValueNode->getAny();
-            uno::Reference<uno::XInterface> xInterface(aAny, uno::UNO_QUERY);
-            if (xInterface.is())
-            {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(
-                    mpPropertiesTreeView.get(), "sfx/ui/devtoolsmenu.ui"));
-                std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("inspect_menu"));
+        std::unique_ptr<weld::Builder> xBuilder(
+            Application::CreateBuilder(mpPropertiesTreeView.get(), "sfx/ui/devtoolsmenu.ui"));
+        std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("inspect_menu"));
 
-                OString sCommand(xMenu->popup_at_rect(
-                    mpPropertiesTreeView.get(),
-                    tools::Rectangle(rCommandEvent.GetMousePosPixel(), Size(1, 1))));
-                if (sCommand == "inspect")
-                {
-                    introspect(xInterface);
-                }
-            }
+        OString sCommand(
+            xMenu->popup_at_rect(mpPropertiesTreeView.get(),
+                                 tools::Rectangle(rCommandEvent.GetMousePosPixel(), Size(1, 1))));
+
+        if (sCommand == "inspect")
+        {
+            addToStack(uno::Any(xInterface));
+            inspectObject(xInterface);
         }
     }
     return true;
+}
+
+IMPL_LINK(ObjectInspectorTreeHandler, ToolbarButtonClicked, const OString&, rSelectionId, void)
+{
+    if (rSelectionId == "inspect")
+    {
+        auto xInterface = getSelectedXInterface(*mpPropertiesTreeView);
+        if (xInterface.is())
+        {
+            addToStack(uno::Any(xInterface));
+            inspectObject(xInterface);
+        }
+    }
+    else if (rSelectionId == "back")
+    {
+        uno::Any aAny = popFromStack();
+        if (aAny.hasValue())
+        {
+            uno::Reference<uno::XInterface> xInterface(aAny, uno::UNO_QUERY);
+            inspectObject(xInterface);
+        }
+    }
 }
 
 void ObjectInspectorTreeHandler::clearObjectInspectorChildren(
@@ -784,7 +852,32 @@ void ObjectInspectorTreeHandler::appendMethods(uno::Reference<uno::XInterface> c
     }
 }
 
-void ObjectInspectorTreeHandler::introspect(uno::Reference<uno::XInterface> const& xInterface)
+void ObjectInspectorTreeHandler::updateBackButtonState()
+{
+    mpObjectInspectorToolbar->set_item_sensitive("back", maInspectionStack.size() > 1);
+}
+
+void ObjectInspectorTreeHandler::clearStack()
+{
+    maInspectionStack.clear();
+    updateBackButtonState();
+}
+
+void ObjectInspectorTreeHandler::addToStack(css::uno::Any const& rAny)
+{
+    maInspectionStack.push_back(rAny);
+    updateBackButtonState();
+}
+
+css::uno::Any ObjectInspectorTreeHandler::popFromStack()
+{
+    maInspectionStack.pop_back();
+    uno::Any aAny = maInspectionStack.back();
+    updateBackButtonState();
+    return aAny;
+}
+
+void ObjectInspectorTreeHandler::inspectObject(uno::Reference<uno::XInterface> const& xInterface)
 {
     if (!xInterface.is())
         return;
@@ -818,6 +911,13 @@ void ObjectInspectorTreeHandler::introspect(uno::Reference<uno::XInterface> cons
     clearAll(mpMethodsTreeView);
     appendMethods(xInterface);
     mpMethodsTreeView->thaw();
+}
+
+void ObjectInspectorTreeHandler::introspect(uno::Reference<uno::XInterface> const& xInterface)
+{
+    clearStack();
+    addToStack(uno::Any(xInterface));
+    inspectObject(xInterface);
 }
 
 void ObjectInspectorTreeHandler::dispose()

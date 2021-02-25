@@ -18,6 +18,9 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <memory>
+#include <deque>
+
 class ObjectInspectorTreeHandler
 {
 private:
@@ -25,8 +28,10 @@ private:
     std::unique_ptr<weld::TreeView>& mpServicesTreeView;
     std::unique_ptr<weld::TreeView>& mpPropertiesTreeView;
     std::unique_ptr<weld::TreeView>& mpMethodsTreeView;
-
     std::unique_ptr<weld::Label>& mpClassNameLabel;
+    std::unique_ptr<weld::Toolbar>& mpObjectInspectorToolbar;
+
+    std::deque<css::uno::Any> maInspectionStack;
 
     static void clearObjectInspectorChildren(std::unique_ptr<weld::TreeView>& pTreeView,
                                              weld::TreeIter const& rParent);
@@ -39,18 +44,30 @@ private:
     void appendProperties(css::uno::Reference<css::uno::XInterface> const& xInterface);
     void appendMethods(css::uno::Reference<css::uno::XInterface> const& xInterface);
 
+    void inspectObject(css::uno::Reference<css::uno::XInterface> const& xInterface);
+
+    void clearStack();
+    void addToStack(css::uno::Any const& rAny);
+    css::uno::Any popFromStack();
+
+    void updateBackButtonState();
+
 public:
     ObjectInspectorTreeHandler(std::unique_ptr<weld::TreeView>& pInterfacesTreeView,
                                std::unique_ptr<weld::TreeView>& pServicesTreeView,
                                std::unique_ptr<weld::TreeView>& pPropertiesTreeView,
                                std::unique_ptr<weld::TreeView>& pMethodsTreeView,
-                               std::unique_ptr<weld::Label>& pClassNameLabel);
+                               std::unique_ptr<weld::Label>& pClassNameLabel,
+                               std::unique_ptr<weld::Toolbar>& pObjectInspectorToolbar);
 
     DECL_LINK(ExpandingHandlerInterfaces, const weld::TreeIter&, bool);
     DECL_LINK(ExpandingHandlerServices, const weld::TreeIter&, bool);
     DECL_LINK(ExpandingHandlerProperties, const weld::TreeIter&, bool);
     DECL_LINK(ExpandingHandlerMethods, const weld::TreeIter&, bool);
+    DECL_LINK(SelectionChanged, weld::TreeView&, void);
+
     DECL_LINK(PopupMenuHandler, const CommandEvent&, bool);
+    DECL_LINK(ToolbarButtonClicked, const OString&, void);
 
     void introspect(css::uno::Reference<css::uno::XInterface> const& xInterface);
 

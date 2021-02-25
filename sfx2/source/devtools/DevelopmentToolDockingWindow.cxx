@@ -34,11 +34,12 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
     , mpMethodsTreeView(m_xBuilder->weld_tree_view("methods_treeview_id"))
     , mpDocumentModelTreeView(m_xBuilder->weld_tree_view("leftside_treeview_id"))
     , mpSelectionToggle(m_xBuilder->weld_toggle_button("selection_toggle"))
+    , mpObjectInspectorToolbar(m_xBuilder->weld_toolbar("object_inspector_toolbar"))
     , maDocumentModelTreeHandler(
           mpDocumentModelTreeView,
           pInputBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetBaseModel())
     , maObjectInspectorTreeHandler(mpInterfacesTreeView, mpServicesTreeView, mpPropertiesTreeView,
-                                   mpMethodsTreeView, mpClassNameLabel)
+                                   mpMethodsTreeView, mpClassNameLabel, mpObjectInspectorToolbar)
 {
     mpDocumentModelTreeView->connect_changed(
         LINK(this, DevelopmentToolDockingWindow, DocumentModelTreeViewSelectionHandler));
@@ -116,6 +117,7 @@ void DevelopmentToolDockingWindow::dispose()
     mpMethodsTreeView.reset();
     mpSelectionToggle.reset();
     mpDocumentModelTreeView.reset();
+    mpObjectInspectorToolbar.reset();
 
     SfxDockingWindow::dispose();
 }
