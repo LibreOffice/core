@@ -399,7 +399,8 @@ lcl_MakeParagraphSignatureFieldText(const SignatureDescr& aDescr,
             valid = svl::crypto::Signing::Verify(data, false, sig, aInfo);
             valid = valid && aInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
 
-            msg = SwResId(STR_SIGNED_BY) + ": " + aInfo.ouSubject + ", ";
+            assert(aInfo.GetSigningCertificate()); // it was valid
+            msg = SwResId(STR_SIGNED_BY) + ": " + aInfo.GetSigningCertificate()->X509Subject + ", ";
             msg += aDescr.msDate;
             msg += (!aDescr.msUsage.isEmpty() ? (" (" + aDescr.msUsage + "): ") : OUString(": "));
             msg += (valid ? SwResId(STR_VALID) : SwResId(STR_INVALID));
