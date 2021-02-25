@@ -16,6 +16,24 @@
       "revId": "e28d97bce1a705648350f97b4ecce627f9339cb5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2adb7c4a_4557ecfc",
+        "filename": "sw/qa/uitest/writer_tests7/tdf139301.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-02-25T07:47:09Z",
+      "side": 1,
+      "message": "Hi Xisco: these sleeps were added by Stephan Bergmann for slow testing, see commit commit 6b00d0576a310796590631d14c54d7d5ea6814ac\nAuthor: Stephan Bergmann \u003csbergman@redhat.com\u003e\nDate:   Mon Feb 8 07:48:59 2021 +0100\n\n    Improve loplugin:cppunitassertequal for CPPUNIT_ASSERT(a \u0026\u0026 b)\n\nThe problem is that we must wait for the right child, its next occurrence. Maybe we need to use the first solution of the test again to avoid of these sleeps: loading n times the same document.",
+      "parentUuid": "95f7ba77_3dcc4ec0",
+      "revId": "e28d97bce1a705648350f97b4ecce627f9339cb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
