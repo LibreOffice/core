@@ -947,7 +947,7 @@ ErrCode RtfExport::ExportDocument_Impl()
 
 void RtfExport::PrepareNewPageDesc(const SfxItemSet* pSet, const SwNode& rNd,
                                    const SwFormatPageDesc* pNewPgDescFormat,
-                                   const SwPageDesc* pNewPgDesc)
+                                   const SwPageDesc* pNewPgDesc, bool bExtraPageBreak)
 {
     const SwSectionFormat* pFormat = GetSectionFormat(rNd);
     const sal_uLong nLnNm = GetSectionLineNo(pSet, rNd);
@@ -962,7 +962,8 @@ void RtfExport::PrepareNewPageDesc(const SfxItemSet* pSet, const SwNode& rNd,
     // Don't insert a page break, when we're changing page style just because the next page has to be a different one.
     if (!m_pAttrOutput->GetPrevPageDesc()
         || m_pAttrOutput->GetPrevPageDesc()->GetFollow() != pNewPgDesc)
-        AttrOutput().SectionBreak(msword::PageBreak, false, m_pSections->CurrentSectionInfo());
+        AttrOutput().SectionBreak(msword::PageBreak, false, m_pSections->CurrentSectionInfo(),
+                                  bExtraPageBreak);
 }
 
 bool RtfExport::DisallowInheritingOutlineNumbering(const SwFormat& rFormat)
