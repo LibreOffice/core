@@ -773,7 +773,12 @@ bool ValidateSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignat
             aDerCert[i] = pCertificate->derCert.data[i];
         OUStringBuffer aBuffer;
         sax::Converter::encodeBase64(aBuffer, aDerCert);
-        rInformation.ouX509Certificate = aBuffer.makeStringAndClear();
+        SignatureInformation::X509Data temp;
+        temp.emplace_back();
+        temp.back().X509Certificate = aBuffer.makeStringAndClear();
+//        temp.back().X509Subject = OUString(pCertificate->subjectName, PL_strlen(pCertificate->subjectName), RTL_TEXTENCODING_UTF8);
+        rInformation.X509Datas.clear();
+        rInformation.X509Datas.emplace_back(temp);
     }
 
     PRTime nSigningTime;
@@ -975,7 +980,12 @@ bool ValidateSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignat
             aDerCert[i] = pSignerCertContext->pbCertEncoded[i];
         OUStringBuffer aBuffer;
         sax::Converter::encodeBase64(aBuffer, aDerCert);
-        rInformation.ouX509Certificate = aBuffer.makeStringAndClear();
+        SignatureInformation::X509Data temp;
+        temp.emplace_back();
+        temp.back().X509Certificate = aBuffer.makeStringAndClear();
+//        temp.back().X509Subject = GetSubjectName(pSignerCertContext);
+        rInformation.X509Datas.clear();
+        rInformation.X509Datas.emplace_back(temp);
     }
 
     if (bNonDetached)

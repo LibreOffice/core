@@ -78,8 +78,12 @@ uno::Sequence<security::DocumentSignatureInformation> PDFSignatureHelper::GetDoc
         const SignatureInformation& rInternal = m_aSignatureInfos[i];
         security::DocumentSignatureInformation& rExternal = aRet[i];
         rExternal.SignatureIsValid = rInternal.nStatus == xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
-        if (!rInternal.ouX509Certificate.isEmpty())
-            rExternal.Signer = xSecEnv->createCertificateFromAscii(rInternal.ouX509Certificate);
+        if (rInternal.GetSigningCertificate()
+            && !rInternal.GetSigningCertificate()->X509Certificate.isEmpty())
+        {
+            rExternal.Signer = xSecEnv->createCertificateFromAscii(
+                rInternal.GetSigningCertificate()->X509Certificate);
+        }
         rExternal.PartialDocumentSignature = rInternal.bPartialDocumentSignature;
 
         // Verify certificate.
