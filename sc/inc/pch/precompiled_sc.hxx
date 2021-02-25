@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-02-19 15:35:00 using:
+ Generated on 2021-02-25 10:10:23 using:
  ./bin/update_pch sc sc --cutoff=12 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -123,7 +123,6 @@
 #include <vcl/customweld.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
-#include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gfxlink.hxx>
@@ -332,6 +331,7 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/thread.hxx>
