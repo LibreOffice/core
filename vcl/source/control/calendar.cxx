@@ -26,7 +26,6 @@
 #include <vcl/toolkit/calendar.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/dockwin.hxx>
-#include <vcl/floatwin.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/i18n/Weekdays.hpp>
