@@ -1029,6 +1029,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                             rOtherBind.Invalidate( SID_WINDOW_FIX_COL );
                             rOtherBind.Invalidate( SID_WINDOW_FIX_ROW );
                         });
+                        if (!GetViewData().GetDocShell()->IsReadOnly())
+                            GetViewData().GetDocShell()->SetDocumentModified();
                     }
                 }
             }
