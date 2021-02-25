@@ -30,6 +30,7 @@ private:
     std::unique_ptr<weld::TreeView>& mpMethodsTreeView;
     std::unique_ptr<weld::Label>& mpClassNameLabel;
     std::unique_ptr<weld::Toolbar>& mpObjectInspectorToolbar;
+    std::unique_ptr<weld::Notebook>& mpObjectInspectorNotebook;
 
     std::deque<css::uno::Any> maInspectionStack;
 
@@ -58,7 +59,8 @@ public:
                                std::unique_ptr<weld::TreeView>& pPropertiesTreeView,
                                std::unique_ptr<weld::TreeView>& pMethodsTreeView,
                                std::unique_ptr<weld::Label>& pClassNameLabel,
-                               std::unique_ptr<weld::Toolbar>& pObjectInspectorToolbar);
+                               std::unique_ptr<weld::Toolbar>& pObjectInspectorToolbar,
+                               std::unique_ptr<weld::Notebook>& pObjectInspectorNotebook);
 
     DECL_LINK(ExpandingHandlerInterfaces, const weld::TreeIter&, bool);
     DECL_LINK(ExpandingHandlerServices, const weld::TreeIter&, bool);
@@ -68,6 +70,8 @@ public:
 
     DECL_LINK(PopupMenuHandler, const CommandEvent&, bool);
     DECL_LINK(ToolbarButtonClicked, const OString&, void);
+    DECL_LINK(NotebookEnterPage, const OString&, void);
+    DECL_LINK(NotebookLeavePage, const OString&, bool);
 
     void introspect(css::uno::Reference<css::uno::XInterface> const& xInterface);
 

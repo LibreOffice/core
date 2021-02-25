@@ -35,11 +35,13 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
     , mpDocumentModelTreeView(m_xBuilder->weld_tree_view("leftside_treeview_id"))
     , mpSelectionToggle(m_xBuilder->weld_toggle_button("selection_toggle"))
     , mpObjectInspectorToolbar(m_xBuilder->weld_toolbar("object_inspector_toolbar"))
+    , mpObjectInspectorNotebook(m_xBuilder->weld_notebook("object_inspector_notebookbar"))
     , maDocumentModelTreeHandler(
           mpDocumentModelTreeView,
           pInputBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetBaseModel())
     , maObjectInspectorTreeHandler(mpInterfacesTreeView, mpServicesTreeView, mpPropertiesTreeView,
-                                   mpMethodsTreeView, mpClassNameLabel, mpObjectInspectorToolbar)
+                                   mpMethodsTreeView, mpClassNameLabel, mpObjectInspectorToolbar,
+                                   mpObjectInspectorNotebook)
 {
     mpDocumentModelTreeView->connect_changed(
         LINK(this, DevelopmentToolDockingWindow, DocumentModelTreeViewSelectionHandler));
