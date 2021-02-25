@@ -363,7 +363,7 @@ void SAL_CALL OPreparedStatement::clearParameters(  )
     m_aParameterRow->push_back(new ORowSetValueDecorator(sal_Int32(0)) );
 }
 
-OResultSet* OPreparedStatement::createResultSet()
+rtl::Reference<OResultSet> OPreparedStatement::createResultSet()
 {
     return new OResultSet(this,m_aSQLIterator);
 }

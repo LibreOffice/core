@@ -48,7 +48,7 @@ namespace connectivity::file
             ::rtl::Reference<connectivity::OSQLColumns>           m_xParamColumns;    // the parameter columns
 
             // factory method for resultset's
-            virtual OResultSet* createResultSet() override;
+            virtual rtl::Reference<OResultSet> createResultSet() override;
             ::rtl::Reference< OResultSet > makeResultSet();
             void initResultSet(OResultSet*);
 

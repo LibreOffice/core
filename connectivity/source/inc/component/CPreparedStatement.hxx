@@ -29,7 +29,7 @@ namespace connectivity::component
         class OOO_DLLPUBLIC_FILE OComponentPreparedStatement : public file::OPreparedStatement
         {
         protected:
-            virtual file::OResultSet* createResultSet() override;
+            virtual rtl::Reference<file::OResultSet> createResultSet() override;
         public:
             OComponentPreparedStatement( file::OConnection* _pConnection) : file::OPreparedStatement( _pConnection){}
             DECLARE_SERVICE_INFO();
