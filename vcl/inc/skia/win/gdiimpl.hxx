@@ -11,8 +11,9 @@
 #define INCLUDED_VCL_INC_SKIA_WIN_GDIIMPL_HXX
 
 #include <memory>
-#include <vcl/dllapi.h>
+#include <systools/win32/comtools.hxx>
 
+#include <vcl/dllapi.h>
 #include <skia/gdiimpl.hxx>
 #include <win/salgdi.h>
 #include <win/wingdiimpl.hxx>
@@ -75,12 +76,19 @@ public:
 protected:
     virtual void createWindowContext(bool forceRaster = false) override;
     virtual void performFlush() override;
-    sk_sp<SkTypeface> createDirectWriteTypeface(const LOGFONTW& logFont);
+    sk_sp<SkTypeface> createDirectWriteTypeface(HDC hdc, HFONT hfont);
     static void initFontInfo();
+<<<<<<< HEAD   (2b2082 tdf#136570 OOXML import: fix height of OLE objects)
     IDWriteFactory* dwriteFactory;
     IDWriteGdiInterop* dwriteGdiInterop;
     sk_sp<SkFontMgr> dwriteFontMgr;
     bool dwriteDone = false;
+=======
+    inline static sal::systools::COMReference<IDWriteFactory> dwriteFactory;
+    inline static sal::systools::COMReference<IDWriteGdiInterop> dwriteGdiInterop;
+    inline static sk_sp<SkFontMgr> dwriteFontMgr;
+    inline static bool dwriteDone = false;
+>>>>>>> CHANGE (13f537 make sure Skia DWrite matches the given HFONT exactly (tdf#1)
     static SkFont::Edging fontEdging;
 };
 
