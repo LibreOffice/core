@@ -13,7 +13,6 @@
 #include "FormFieldButton.hxx"
 
 class SwEditWin;
-class FloatingWindow;
 class SvNumberFormatter;
 namespace sw::mark
 {
@@ -26,15 +25,21 @@ class DateFieldmark;
  */
 class DateFormFieldButton : public FormFieldButton
 {
+private:
+    SvNumberFormatter* m_pNumberFormatter;
+    sw::mark::DateFieldmark* m_pDateFieldmark;
+
+    std::unique_ptr<weld::Calendar> m_xCalendar;
+
+    DECL_LINK(ImplSelectHdl, weld::Calendar&, void);
+
 public:
     DateFormFieldButton(SwEditWin* pEditWin, sw::mark::DateFieldmark& rFieldMark,
                         SvNumberFormatter* pNumberFormatter);
     virtual ~DateFormFieldButton() override;
 
-    virtual void InitPopup() override;
-
-private:
-    SvNumberFormatter* m_pNumberFormatter;
+    virtual void LaunchPopup() override;
+    virtual void DestroyPopup() override;
 };
 
 #endif

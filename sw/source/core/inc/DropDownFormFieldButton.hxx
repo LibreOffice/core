@@ -7,13 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_TEXT_DROPDOWNFORMEFIELDBUTTO_HXX
-#define INCLUDED_SW_SOURCE_CORE_TEXT_DROPDOWNFORMEFIELDBUTTO_HXX
+#pragma once
 
 #include "FormFieldButton.hxx"
 
 class SwEditWin;
-class FloatingWindow;
 namespace sw::mark
 {
 class DropDownFieldmark;
@@ -25,13 +23,19 @@ class DropDownFieldmark;
  */
 class DropDownFormFieldButton : public FormFieldButton
 {
+private:
+    std::unique_ptr<weld::TreeView> m_xTreeView;
+
+    DECL_LINK(MyListBoxHandler, weld::TreeView&, bool);
+
+    void InitDropdown();
+
 public:
     DropDownFormFieldButton(SwEditWin* pEditWin, sw::mark::DropDownFieldmark& rFieldMark);
     virtual ~DropDownFormFieldButton() override;
 
-    virtual void InitPopup() override;
+    virtual void LaunchPopup() override;
+    virtual void DestroyPopup() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
