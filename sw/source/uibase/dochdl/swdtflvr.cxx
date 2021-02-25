@@ -441,7 +441,7 @@ sal_Bool SAL_CALL SwTransferable::isComplex()
             {
                 if (pTextNode->HasHints())
                 {
-                    for (size_t nHint = 0; pTextNode->GetSwpHints().Count(); ++nHint)
+                    for (size_t nHint = 0; nHint < pTextNode->GetSwpHints().Count(); ++nHint)
                     {
                         SwTextAttr* pHint = pTextNode->GetSwpHints().Get(nHint);
                         if (pHint->Which() == RES_TXTATR_FLYCNT)
