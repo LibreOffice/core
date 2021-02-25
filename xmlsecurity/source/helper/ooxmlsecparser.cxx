@@ -176,9 +176,22 @@ void SAL_CALL OOXMLSecParser::endElement(const OUString& rName)
         m_pXSecController->setSignatureValue(m_aSignatureValue);
         m_bInSignatureValue = false;
     }
+    else if (rName == "X509Data")
+    {
+        std::vector<std::pair<OUString, OUString>> X509IssuerSerials;
+        std::vector<OUString> X509Certificates;
+        if (!m_aX509Certificate.isEmpty())
+        {
+            X509Certificates.emplace_back(m_aX509Certificate);
+        }
+        if (!m_aX509IssuerName.isEmpty() && !m_aX509SerialNumber.isEmpty())
+        {
+            X509IssuerSerials.emplace_back(m_aX509IssuerName, m_aX509SerialNumber);
+        }
+        m_pXSecController->setX509Data(X509IssuerSerials, X509Certificates);
+    }
     else if (rName == "X509Certificate")
     {
-        m_pXSecController->setX509Certificate(m_aX509Certificate);
         m_bInX509Certificate = false;
     }
     else if (rName == "mdssi:Value")
@@ -193,17 +206,18 @@ void SAL_CALL OOXMLSecParser::endElement(const OUString& rName)
     }
     else if (rName == "X509IssuerName")
     {
-        m_pXSecController->setX509IssuerName(m_aX509IssuerName);
         m_bInX509IssuerName = false;
     }
     else if (rName == "X509SerialNumber")
     {
-        m_pXSecController->setX509SerialNumber(m_aX509SerialNumber);
         m_bInX509SerialNumber = false;
+    }
+    else if (rName == "xd:Cert")
+    {
+        m_pXSecController->setX509CertDigest(m_aCertDigest, css::xml::crypto::DigestID::SHA1, m_aX509IssuerName, m_aX509SerialNumber);
     }
     else if (rName == "xd:CertDigest")
     {
-        m_pXSecController->setCertDigest(m_aCertDigest);
         m_bInCertDigest = false;
     }
     else if (rName == "Object")
