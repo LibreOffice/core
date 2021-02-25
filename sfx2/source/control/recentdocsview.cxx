@@ -266,6 +266,13 @@ void RecentDocsView::Reload()
                     SvMemoryStream aStream(aDecoded.getArray(), aDecoded.getLength(), StreamMode::READ);
                     vcl::PNGReader aReader(aStream);
                     aThumbnail = aReader.Read();
+                } else
+                {
+                    INetURLObject aUrl(aURL);
+                    if (mnFileTypes & ApplicationType::TYPE_DATABASE && typeMatchesExtension(ApplicationType::TYPE_DATABASE, aUrl.getExtension()))
+                    {
+                        aThumbnail = BitmapEx(ThumbnailView::ItemHeight() > 192 ? SFX_THUMBNAIL_BASE_256 : SFX_THUMBNAIL_BASE_192);
+                    }
                 }
             }
         }
