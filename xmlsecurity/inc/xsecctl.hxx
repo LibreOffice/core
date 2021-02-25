@@ -303,18 +303,21 @@ private:
         sal_Int32 nDigestID );
     void setReferenceCount() const;
 
-    void setX509IssuerName( OUString& ouX509IssuerName );
-    void setX509SerialNumber( OUString& ouX509SerialNumber );
-    void setX509Certificate( OUString& ouX509Certificate );
-    void setSignatureValue( OUString& ouSignatureValue );
-    void setDigestValue( sal_Int32 nDigestID, OUString& ouDigestValue );
-    void setGpgKeyID( OUString& ouKeyID );
-    void setGpgCertificate( OUString& ouGpgCert );
-    void setGpgOwner( OUString& ouGpgOwner );
+    void setX509Data(
+        std::vector<std::pair<OUString, OUString>> & rX509IssuerSerials,
+        std::vector<OUString> const& rX509Certificates);
+    void setX509CertDigest(
+        OUString const& rCertDigest, sal_Int32 const nReferenceDigestID,
+        OUString const& rX509IssuerName, OUString const& rX509SerialNumber);
+
+    void setSignatureValue( OUString const & ouSignatureValue );
+    void setDigestValue( sal_Int32 nDigestID, OUString const & ouDigestValue );
+    void setGpgKeyID( OUString const & ouKeyID );
+    void setGpgCertificate( OUString const & ouGpgCert );
+    void setGpgOwner( OUString const & ouGpgOwner );
 
     void setDate(OUString const& rId, OUString const& ouDate);
     void setDescription(OUString const& rId, OUString const& rDescription);
-    void setCertDigest(const OUString& rCertDigest);
 
 public:
     void setSignatureBytes(const css::uno::Sequence<sal_Int8>& rBytes);
@@ -346,6 +349,10 @@ public:
 
     SignatureInformation    getSignatureInformation( sal_Int32 nSecurityId ) const;
     SignatureInformations   getSignatureInformations() const;
+
+    /// only verify can figure out which X509Data is the signing certificate
+    void UpdateSignatureInformation(sal_Int32 nSecurityId,
+            std::vector<SignatureInformation::X509Data> const& rDatas);
 
     static void exportSignature(
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler,
