@@ -36,7 +36,7 @@ SfxNavigatorWrapper::SfxNavigatorWrapper( vcl::Window* pParentWnd ,
                     : SfxChildWindow( pParentWnd , nId )
 {
     SetWindow( VclPtr<SfxNavigator>::Create( pBindings, this, pParentWnd,
-        WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE) );
+        WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK ) );
 
     GetWindow()->SetHelpId ( HID_NAVIGATOR_WINDOW );
     GetWindow()->SetOutputSizePixel( Size( 270, 240 ) );

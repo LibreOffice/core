@@ -81,7 +81,7 @@ namespace
 
 
 PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, vcl::Window* pParent, ODesignView*  _pDesignView)
-    : DockingWindow(pParent,WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE))
+    : DockingWindow(pParent,WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK))
     , m_xContentArea(VclPtr<VclVBox>::Create(this))
     , m_xORB(_xORB)
     , m_pDesignView(_pDesignView)

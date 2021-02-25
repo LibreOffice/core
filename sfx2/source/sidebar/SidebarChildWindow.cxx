@@ -35,7 +35,7 @@ SidebarChildWindow::SidebarChildWindow(vcl::Window* pParentWindow, sal_uInt16 nI
 {
     auto pDockWin = VclPtr<SidebarDockingWindow>::Create(
         pBindings, *this, pParentWindow, WB_STDDOCKWIN | WB_OWNERDRAWDECORATION | WB_CLIPCHILDREN
-                                             | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE);
+                                             | WB_SIZEABLE | WB_3DLOOK);
     SetWindow(pDockWin);
     SetAlignment(SfxChildAlignment::RIGHT);
 
