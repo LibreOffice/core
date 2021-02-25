@@ -304,6 +304,12 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAPDF)
     // Read back the signature and make sure that it's valid.
     aManager.read(/*bUseTempStream=*/false);
     std::vector<SignatureInformation>& rInformations = aManager.getCurrentSignatureInformations();
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
     // This was SecurityOperationStatus_UNKNOWN, signing with an ECDSA key was
     // broken.
@@ -550,6 +556,12 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFGood)
     CPPUNIT_ASSERT(pObjectShell);
     // We expect NOTVALIDATED in case the root CA is not imported on the system, and OK otherwise, so accept both.
     SignatureState nActual = pObjectShell->GetDocumentSignatureState();
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
     CPPUNIT_ASSERT_MESSAGE(
         (OString::number(o3tl::underlyingEnumValue(nActual)).getStr()),
         (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
@@ -563,6 +575,12 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFBad)
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
     CPPUNIT_ASSERT(pObjectShell);
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::BROKEN),
                          static_cast<int>(pObjectShell->GetDocumentSignatureState()));
 }
@@ -575,6 +593,12 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFHideAndReplace)
     CPPUNIT_ASSERT(pBaseModel);
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
     CPPUNIT_ASSERT(pObjectShell);
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2 (BROKEN)
     // - Actual  : 6 (NOTVALIDATED_PARTIAL_OK)

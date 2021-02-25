@@ -318,7 +318,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/pdf/ResourceDict \
     vcl/source/pdf/Matrix3 \
     vcl/source/pdf/XmpMetadata \
-    vcl/source/pdf/PDFiumLibrary \
     vcl/source/pdf/ExternalPDFStreams \
     vcl/source/graphic/BinaryDataContainer \
     vcl/source/graphic/BinaryDataContainerTools \
@@ -519,6 +518,20 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/jsdialog/jsdialogbuilder \
     vcl/jsdialog/executor \
 ))
+
+ifneq ($(filter PDFIUM,$(BUILD_TYPE)),)
+
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/pdf/PDFiumLibrary \
+))
+
+else
+
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/pdf/DummyPDFiumLibrary \
+))
+
+endif
 
 $(eval $(call gb_Library_add_cobjects,vcl,\
     vcl/source/filter/jpeg/transupp \
