@@ -1754,6 +1754,30 @@ namespace
         return AllSettings::GetLayoutRTL();
     }
 
+    GtkWidget* getPopupRect(GtkWidget* pWidget, const tools::Rectangle& rInRect, GdkRectangle& rOutRect)
+    {
+        if (GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(pWidget))
+        {
+            // this is the relatively unusual case where pParent is the toplevel GtkSalFrame and not a stock GtkWidget
+            // so use the same style of logic as GtkSalMenu::ShowNativePopupMenu to get the right position
+            tools::Rectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(pFrame->GetWindow(), rInRect);
+            aFloatRect.Move(-pFrame->maGeometry.nX, -pFrame->maGeometry.nY);
+
+            rOutRect = GdkRectangle{static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
+                                    static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
+
+            pWidget = pFrame->getMouseEventWidget();
+        }
+        else
+        {
+            rOutRect = GdkRectangle{static_cast<int>(rInRect.Left()), static_cast<int>(rInRect.Top()),
+                                 static_cast<int>(rInRect.GetWidth()), static_cast<int>(rInRect.GetHeight())};
+            if (SwapForRTL(pWidget))
+                rOutRect.x = gtk_widget_get_allocated_width(pWidget) - rOutRect.width - 1 - rOutRect.x;
+        }
+        return pWidget;
+    }
+
     void replaceWidget(GtkWidget* pWidget, GtkWidget* pReplacement)
     {
         // remove the widget and replace it with pReplacement
@@ -8150,25 +8174,7 @@ public:
         if (gtk_check_version(3, 22, 0) == nullptr)
         {
             GdkRectangle aRect;
-            if (GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(pWidget))
-            {
-                // this is the relatively unusual case where pParent is the toplevel GtkSalFrame and not a stock GtkWidget
-                // so use the same style of logic as GtkSalMenu::ShowNativePopupMenu to get the right position
-                tools::Rectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(pFrame->GetWindow(), rRect);
-                aFloatRect.Move(-pFrame->maGeometry.nX, -pFrame->maGeometry.nY);
-
-                aRect = GdkRectangle{static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
-                                     static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
-
-                pWidget = pFrame->getMouseEventWidget();
-            }
-            else
-            {
-                aRect = GdkRectangle{static_cast<int>(rRect.Left()), static_cast<int>(rRect.Top()),
-                                     static_cast<int>(rRect.GetWidth()), static_cast<int>(rRect.GetHeight())};
-                if (SwapForRTL(pWidget))
-                    aRect.x = gtk_widget_get_allocated_width(pWidget) - aRect.width - 1 - aRect.x;
-            }
+            pWidget = getPopupRect(pWidget, rRect, aRect);
 
             // Send a keyboard event through gtk_main_do_event to toggle any active tooltip offs
             // before trying to launch the menu
@@ -16579,6 +16585,74 @@ public:
 
         return false;
     }
+
+class GtkInstancePopover : public GtkInstanceContainer, public virtual weld::Popover
+{
+private:
+    GtkPopover* m_pPopover;
+    gulong m_nSignalId;
+    ImplSVEvent* m_pClosedEvent;
+
+    static void signalClosed(GtkPopover*, gpointer widget)
+    {
+        GtkInstancePopover* pThis = static_cast<GtkInstancePopover*>(widget);
+        // call signal-closed async so the closed callback isn't called
+        // whilc the GtkPopover handler is still in-execution
+        pThis->launch_signal_closed();
+    }
+
+    DECL_LINK(async_signal_closed, void*, void);
+
+    void launch_signal_closed()
+    {
+        if (m_pClosedEvent)
+            Application::RemoveUserEvent(m_pClosedEvent);
+        m_pClosedEvent = Application::PostUserEvent(LINK(this, GtkInstancePopover, async_signal_closed));
+    }
+
+public:
+    GtkInstancePopover(GtkPopover* pPopover, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : GtkInstanceContainer(GTK_CONTAINER(pPopover), pBuilder, bTakeOwnership)
+        , m_pPopover(pPopover)
+        , m_nSignalId(g_signal_connect(m_pPopover, "closed", G_CALLBACK(signalClosed), this))
+        , m_pClosedEvent(nullptr)
+    {
+    }
+
+    virtual void popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) override
+    {
+        GtkInstanceWidget* pGtkWidget = dynamic_cast<GtkInstanceWidget*>(pParent);
+        assert(pGtkWidget);
+
+        GtkWidget* pWidget = pGtkWidget->getWidget();
+
+        GdkRectangle aRect;
+        pWidget = getPopupRect(pWidget, rRect, aRect);
+
+        gtk_popover_set_relative_to(m_pPopover, pWidget);
+        gtk_popover_set_pointing_to(m_pPopover, &aRect);
+        gtk_popover_popup(m_pPopover);
+    }
+
+    virtual void popdown() override
+    {
+        gtk_popover_popdown(m_pPopover);
+    }
+
+    virtual ~GtkInstancePopover() override
+    {
+        if (m_pClosedEvent)
+            Application::RemoveUserEvent(m_pClosedEvent);
+        g_signal_handler_disconnect(m_pPopover, m_nSignalId);
+    }
+};
+
+IMPL_LINK_NOARG(GtkInstancePopover, async_signal_closed, void*, void)
+{
+    m_pClosedEvent = nullptr;
+    signal_closed();
+}
+
 }
 
 namespace
@@ -17373,6 +17447,14 @@ public:
         if (!pMenu)
             return nullptr;
         return std::make_unique<GtkInstanceMenu>(pMenu, true);
+    }
+
+    virtual std::unique_ptr<weld::Popover> weld_popover(const OString &id) override
+    {
+        GtkPopover* pPopover = GTK_POPOVER(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        if (!pPopover)
+            return nullptr;
+        return std::make_unique<GtkInstancePopover>(pPopover, this, true);
     }
 
     virtual std::unique_ptr<weld::Toolbar> weld_toolbar(const OString &id) override
