@@ -53,7 +53,6 @@ css::uno::Reference<css::uno::XInterface> TerminateTest::init()
 {
     auto const component
         = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-    CPPUNIT_ASSERT(component.is());
     css::uno::Reference<css::text::XTextDocument> xTextDocument(component,
                                                                 css::uno::UNO_QUERY_THROW);
     css::uno::Reference<css::lang::XMultiServiceFactory> xMSF(component, css::uno::UNO_QUERY_THROW);
