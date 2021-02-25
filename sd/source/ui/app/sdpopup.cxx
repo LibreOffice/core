@@ -122,7 +122,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         if( pFileField->GetType() == SvxFileType::Fix )
             m_xPopup->set_active("1", true);
         else
-            m_xPopup->set_active("1", true);
+            m_xPopup->set_active("2", true);
 
         m_xPopup->append_radio(OUString::number(nID++), SdResId(STR_FILEFORMAT_NAME_EXT));
         m_xPopup->append_radio(OUString::number(nID++), SdResId(STR_FILEFORMAT_FULLPATH));
