@@ -74,6 +74,8 @@
 #define SFX_FILE_THUMBNAIL_DATABASE         "res/odb_48_8.png"
 #define SFX_FILE_THUMBNAIL_MATH             "res/odf_48_8.png"
 #define SFX_FILE_THUMBNAIL_DEFAULT          "res/mainapp_48_8.png"
+#define SFX_THUMBNAIL_BASE_192              "res/base_thumbnail_192.png"
+#define SFX_THUMBNAIL_BASE_256              "res/base_thumbnail_256.png"
 
 #define BMP_RECENTDOC_REMOVE                "res/recentdoc_remove.png"
 #define BMP_RECENTDOC_REMOVE_HIGHLIGHTED    "res/recentdoc_remove_highlighted.png"
