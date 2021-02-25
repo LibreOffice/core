@@ -70,7 +70,7 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Color
 
 public:
     constexpr Color()
-        : mValue(0) // black
+        : Color(ColorAlpha, 255, 0, 0, 0) // black
     {}
 
 #if HAVE_CPP_CONSTEVAL
@@ -79,37 +79,36 @@ public:
     constexpr
 #endif
     Color(const sal_uInt32 nColor)
-        : mValue(nColor)
+        : mValue(nColor | 0xff000000)
     {
-        assert(nColor <= 0xffffff && "don't pass transparency to this constructor, use the Color(ColorTransparencyTag,...) or Color(ColorAlphaTag,...) constructor to make it explicit");
-    }
-
-    constexpr Color(enum ColorTransparencyTag, sal_uInt32 nColor)
-        : mValue(nColor)
-    {
+        assert(nColor <= 0xffffff && "don't pass transparency/alpha to this constructor, use the Color(ColorTransparencyTag,...) or Color(ColorAlphaTag,...) constructor to make it explicit");
     }
 
     constexpr Color(enum ColorAlphaTag, sal_uInt32 nColor)
+        : mValue(nColor)
+    {
+    }
+
+    constexpr Color(enum ColorTransparencyTag, sal_uInt32 nColor)
         : mValue((nColor & 0xffffff) | ((255 - (nColor >> 24)) << 24))
     {
     }
 
-    constexpr Color(enum ColorTransparencyTag, sal_uInt8 nTransparency, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
-        : mValue(sal_uInt32(nBlue) | (sal_uInt32(nGreen) << 8) | (sal_uInt32(nRed) << 16) | (sal_uInt32(nTransparency) << 24))
+    constexpr Color(enum ColorAlphaTag, sal_uInt8 nAlpha, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
+        : mValue(sal_uInt32(nBlue) | (sal_uInt32(nGreen) << 8) | (sal_uInt32(nRed) << 16) | (sal_uInt32(nAlpha) << 24))
     {}
 
-    constexpr Color(enum ColorAlphaTag, sal_uInt8 nAlpha, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
-        : Color(ColorTransparency, 255 - nAlpha, nRed, nGreen, nBlue)
+    constexpr Color(enum ColorTransparencyTag, sal_uInt8 nTransparency, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
+        : Color(ColorAlpha, 255 - nTransparency, nRed, nGreen, nBlue)
     {}
 
     constexpr Color(sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
-        : Color(ColorTransparency, 0, nRed, nGreen, nBlue)
+        : Color(ColorAlpha, 255, nRed, nGreen, nBlue)
     {}
 
     // constructor to create a tools-Color from ::basegfx::BColor
     explicit Color(const basegfx::BColor& rBColor)
-        : Color(ColorTransparency, 0,
-                sal_uInt8(std::lround(rBColor.getRed() * 255.0)),
+        : Color(sal_uInt8(std::lround(rBColor.getRed() * 255.0)),
                 sal_uInt8(std::lround(rBColor.getGreen() * 255.0)),
                 sal_uInt8(std::lround(rBColor.getBlue() * 255.0)))
     {}
@@ -120,7 +119,7 @@ public:
       */
     constexpr explicit operator sal_uInt32() const
     {
-        return mValue;
+        return (mValue & 0xffffff) | ((255 - (mValue >> 24)) << 24);
     }
 
     /** Casts the color to corresponding iInt32.
@@ -129,7 +128,7 @@ public:
       */
     constexpr explicit operator sal_Int32() const
     {
-        return sal_Int32(mValue);
+        return sal_Int32(operator sal_uInt32());
     }
 
     /* Basic RGBA operations */
@@ -163,7 +162,7 @@ public:
       */
     sal_uInt8 GetAlpha() const
     {
-        return 255 - A;
+        return A;
     }
 
     /** Is the color transparent?
@@ -177,7 +176,7 @@ public:
      */
     bool IsFullyTransparent() const
     {
-        return A == 255;
+        return A == 0;
     }
 
     /** Sets the red value.
@@ -209,7 +208,7 @@ public:
       */
     void SetAlpha(sal_uInt8 nAlpha)
     {
-        A = 255 - nAlpha;
+        A = nAlpha;
     }
 
     /** Returns the same color but ignoring the transparency value.
