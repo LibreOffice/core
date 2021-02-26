@@ -21,6 +21,7 @@
 
 #include <string>
 #include <stdexcept>
+#include <type_traits>
 #include <objbase.h>
 
 namespace sal::systools
@@ -39,6 +40,12 @@ namespace sal::systools
     private:
         HRESULT hr_;
     };
+
+    struct COM_QUERY_TAG {} constexpr COM_QUERY;
+    struct COM_QUERY_THROW_TAG {} constexpr COM_QUERY_THROW;
+    template <typename TAG>
+    constexpr bool is_COM_query_tag
+        = std::is_same_v<TAG, COM_QUERY_TAG> || std::is_same_v<TAG, COM_QUERY_THROW_TAG>;
 
     /* A simple COM smart pointer template */
     template <typename T>
@@ -59,6 +66,13 @@ namespace sal::systools
             addRef();
         }
 
+        // Query from IUnknown*, using COM_QUERY or COM_QUERY_THROW tags
+        template <typename T2, typename TAG>
+        COMReference(const COMReference<T2>& p, TAG t)
+            : COMReference(p.QueryInterface<T>(t))
+        {
+        }
+
         COMReference<T>& operator=(const COMReference<T>& other)
         {
             other.addRef();
@@ -77,18 +91,31 @@ namespace sal::systools
 
         ~COMReference() { release(); }
 
-        template<typename InterfaceType>
-        COMReference<InterfaceType> QueryInterface(REFIID iid)
+        template <typename T2, typename TAG, std::enable_if_t<is_COM_query_tag<TAG>, int> = 0>
+        COMReference<T2> QueryInterface(TAG) const
         {
-            COMReference<InterfaceType> ip;
+            void* ip = nullptr;
             HRESULT hr = E_FAIL;
             if (com_ptr_)
-                hr = com_ptr_->QueryInterface(iid, reinterpret_cast<LPVOID*>(&ip));
+                hr = com_ptr_->QueryInterface(__uuidof(T2), &ip);
 
+            if constexpr (std::is_same_v<TAG, COM_QUERY_THROW_TAG>)
+                if (FAILED(hr))
+                    throw ComError("QueryInterface failed: Interface not supported!", hr);
+
+            return { static_cast<T2*>(ip), false };
+        }
+
+        COMReference<T>& CoCreateInstance(REFCLSID clsid, IUnknown* pOuter = nullptr,
+                                          DWORD nCtx = CLSCTX_ALL)
+        {
+            clear();
+            HRESULT hr = ::CoCreateInstance(clsid, pOuter, nCtx, __uuidof(T),
+                                            reinterpret_cast<void**>(&com_ptr_));
             if (FAILED(hr))
-                throw ComError("QueryInterface failed: Interface not supported!", hr);
+                throw ComError("CoCreateInstance failed!", hr);
 
-            return ip;
+            return *this;
         }
 
         T* operator->() const { return com_ptr_; }
@@ -105,11 +132,10 @@ namespace sal::systools
 
         T* get() const { return com_ptr_; }
 
-        COMReference<T>& clear()
+        void clear()
         {
             release();
             com_ptr_ = nullptr;
-            return *this;
         }
 
         bool is() const { return (com_ptr_ != nullptr); }

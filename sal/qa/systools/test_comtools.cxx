@@ -20,6 +20,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <systools/win32/comtools.hxx>
+#include <shobjidl.h>
 
 namespace {
 
@@ -183,30 +184,36 @@ namespace test_comtools
 
         void test_query_interface()
         {
-            try
-            {
-                sal::systools::COMReference<IUnknown> r1 = comObjectSource();
-                sal::systools::COMReference<IUnknown> r2 = r1.QueryInterface<IUnknown>(IID_IUnknown);
-                CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count, 2 is expected", ULONG(2), reinterpret_cast<COMObject*>(r2.get())->GetRefCount());
-            }
-            catch(const sal::systools::ComError&)
-            {
-                CPPUNIT_ASSERT_MESSAGE("Exception should not have been thrown", false);
-            }
+            sal::systools::COMReference<IUnknown> r1 = comObjectSource();
+            sal::systools::COMReference<IUnknown> r2;
+            CPPUNIT_ASSERT_NO_THROW_MESSAGE(
+                "Exception should not have been thrown",
+                r2 = r1.QueryInterface<IUnknown>(sal::systools::COM_QUERY_THROW));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong reference count, 2 is expected", ULONG(2),
+                                         reinterpret_cast<COMObject*>(r2.get())->GetRefCount());
         }
 
         void test_query_interface_throw()
         {
-            try
-            {
-                sal::systools::COMReference<IUnknown> r1 = comObjectSource();
-                sal::systools::COMReference<IPersistFile> r2 = r1.QueryInterface<IPersistFile>(IID_IPersistFile);
-            }
-            catch(const sal::systools::ComError&)
-            {
+            sal::systools::COMReference<IUnknown> r1 = comObjectSource();
+            CPPUNIT_ASSERT_THROW_MESSAGE("Exception should have been thrown",
+                auto r2 = r1.QueryInterface<IPersistFile>(sal::systools::COM_QUERY_THROW),
+                sal::systools::ComError);
+        }
+
+        void test_CoCreateInstance()
+        {
+            if (FAILED(CoInitialize(nullptr)))
                 return;
+            {
+                // Use scope to destroy the reference before calling CoUninitialize
+                sal::systools::COMReference<IFileOpenDialog> r;
+                CPPUNIT_ASSERT_NO_THROW(r.CoCreateInstance(__uuidof(FileOpenDialog)));
+                // Immediately after CoCreateInstance, refcount must be 1; increasing once gives 2
+                CPPUNIT_ASSERT_EQUAL(ULONG(2), r->AddRef());
+                r->Release();
             }
-            CPPUNIT_ASSERT_MESSAGE("Exception should have been thrown", false);
+            CoUninitialize();
         }
 
         // Change the following lines only, if you add, remove or rename
@@ -227,6 +234,7 @@ namespace test_comtools
         CPPUNIT_TEST(test_clear);
         CPPUNIT_TEST(test_query_interface);
         CPPUNIT_TEST(test_query_interface_throw);
+        CPPUNIT_TEST(test_CoCreateInstance);
         CPPUNIT_TEST_SUITE_END();
     };
 

@@ -229,7 +229,7 @@ void VistaFilePickerEventHandler::stopListening()
     if (m_pDialog.is())
     {
         m_pDialog->Unadvise(m_nListenerHandle);
-        m_pDialog.release();
+        m_pDialog.clear();
     }
 }
 

@@ -25,7 +25,6 @@
 #include <shobjidl.h>
 
 #include "asyncrequests.hxx"
-#include "comptr.hxx"
 #include "vistatypes.h"
 #include "FilterContainer.hxx"
 #include "VistaFilePickerEventHandler.hxx"
