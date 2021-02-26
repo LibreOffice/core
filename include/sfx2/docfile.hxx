@@ -30,6 +30,7 @@
 #include <svl/itemset.hxx>
 #include <tools/link.hxx>
 #include <tools/stream.hxx>
+#include <comphelper/threadpool.hxx>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::embed { class XStorage; }
@@ -92,6 +93,17 @@ public:
                         SfxMedium( const css::uno::Sequence< css::beans::PropertyValue >& aArgs );
 
                         virtual ~SfxMedium() override;
+
+    bool CheckCanGetLockfile() const;
+    void SetOriginallyReadOnly(bool val);
+    void LaunchCheckEditableWorkerThread();
+    void SetCheckEditableWorkerDone();
+    void SetCheckEditableWorkerRunning(bool bIsRunning);
+    void SetWorkerReloadEvent(ImplSVEvent* pEvent);
+    ImplSVEvent* GetWorkerReloadEvent() const;
+    bool GetCheckEditableWorkerRunning() const;
+    std::shared_ptr<std::recursive_mutex> GetCheckEditableMutex() const;
+    void CancelCheckEditableThread();
 
     void                UseInteractionHandler( bool );
     css::uno::Reference< css::task::XInteractionHandler >
@@ -292,6 +304,37 @@ private:
     enum class MessageDlg { LockFileIgnore, LockFileCorrupt };
     bool                ShowLockFileProblemDialog(MessageDlg nWhichDlg);
 
+};
+
+class CheckReadOnlyTask : public comphelper::ThreadTask
+{
+public:
+    CheckReadOnlyTask(SfxMedium* pMed, const std::shared_ptr<std::recursive_mutex>& pMutex,
+                      const std::shared_ptr<std::condition_variable_any>& pCond,
+                      const std::shared_ptr<bool>& pIsDestructed,
+                      const std::shared_ptr<comphelper::ThreadTaskTag>& pTag)
+        : ThreadTask(pTag)
+        , _pMed(pMed)
+        , _pMutex(pMutex)
+        , _pMyCond(pCond)
+        , _pIsDestructed(pIsDestructed)
+    {
+    }
+
+    ~CheckReadOnlyTask()
+    {
+        if (_pMed != nullptr)
+        {
+            _pMed->ReleaseRef();
+        }
+    }
+
+    virtual void doWork() override;
+
+    SfxMedium* _pMed;
+    std::shared_ptr<std::recursive_mutex> _pMutex;
+    std::shared_ptr<std::condition_variable_any> _pMyCond;
+    std::shared_ptr<bool> _pIsDestructed;
 };
 
 #endif
