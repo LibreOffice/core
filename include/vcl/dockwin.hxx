@@ -319,7 +319,7 @@ public:
     virtual void    setPosSizePixel( tools::Long nX, tools::Long nY,
                                      tools::Long nWidth, tools::Long nHeight,
                                      PosSizeFlags nFlags = PosSizeFlags::All ) override;
-    using Window::SetPosSizePixel;
+
     Point           GetPosPixel() const override;
     Size            GetSizePixel() const override;
     void            SetOutputSizePixel( const Size& rNewSize ) override;
