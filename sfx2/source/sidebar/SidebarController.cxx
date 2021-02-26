@@ -35,7 +35,6 @@
 
 
 #include <framework/ContextChangeEventMultiplexerTunnel.hxx>
-#include <vcl/floatwin.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <vcl/svapp.hxx>

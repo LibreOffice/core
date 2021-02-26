@@ -371,8 +371,8 @@ void ToolBox::Select()
 
     // TODO: GetFloatingWindow in DockingWindow is currently inline, change it to check dockingwrapper
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
-    if( pWrapper && pWrapper->GetFloatingWindow() && pWrapper->GetFloatingWindow()->IsInPopupMode() )
-        pWrapper->GetFloatingWindow()->EndPopupMode();
+    if( pWrapper && pWrapper->GetFloatingWindow() && static_cast<FloatingWindow*>(pWrapper->GetFloatingWindow())->IsInPopupMode() )
+        static_cast<FloatingWindow*>(pWrapper->GetFloatingWindow())->EndPopupMode();
 }
 
 void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage, ToolBoxItemBits nBits, ImplToolItems::size_type nPos )
@@ -1657,7 +1657,7 @@ bool ToolBox::ImplIsInPopupMode() const
     else
     {
         ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
-        return ( pWrapper && pWrapper->GetFloatingWindow() && pWrapper->GetFloatingWindow()->IsInPopupMode() );
+        return ( pWrapper && pWrapper->GetFloatingWindow() && static_cast<FloatingWindow*>(pWrapper->GetFloatingWindow())->IsInPopupMode() );
     }
 }
 
