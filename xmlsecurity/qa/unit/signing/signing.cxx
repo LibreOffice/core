@@ -24,6 +24,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
@@ -80,6 +81,11 @@ public:
     /// Document has a signature stream, but no actual signatures.
     void testODFNo();
     void testODFUnsignedTimestamp();
+    void testODFX509CertificateChain();
+    void testODFDoubleX509Data();
+    void testODFTripleX509Data();
+    void testODFMacroDoubleX509Data();
+    void testODFDoubleX509Certificate();
     /// Test a typical OOXML where a number of (but not all) streams are signed.
     void testOOXMLPartial();
     /// Test a typical broken OOXML signature where one stream is corrupted.
@@ -137,6 +143,11 @@ public:
     CPPUNIT_TEST(testODFNo);
     CPPUNIT_TEST(testODFBroken);
     CPPUNIT_TEST(testODFUnsignedTimestamp);
+    CPPUNIT_TEST(testODFX509CertificateChain);
+    CPPUNIT_TEST(testODFDoubleX509Data);
+    CPPUNIT_TEST(testODFTripleX509Data);
+    CPPUNIT_TEST(testODFMacroDoubleX509Data);
+    CPPUNIT_TEST(testODFDoubleX509Certificate);
     CPPUNIT_TEST(testOOXMLPartial);
     CPPUNIT_TEST(testOOXMLBroken);
     CPPUNIT_TEST(testOOXMLDescription);
@@ -571,6 +582,105 @@ void SigningTest::testODFUnsignedTimestamp()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(20210126), infos[0].SignatureDate);
     // was: 0
     CPPUNIT_ASSERT_EQUAL(sal_Int32(18183742), infos[0].SignatureTime);
+}
+
+void SigningTest::testODFX509CertificateChain()
+{
+    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY)
+              + "signed_with_x509certificate_chain.odt");
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    SignatureState nActual = pObjectShell->GetDocumentSignatureState();
+    CPPUNIT_ASSERT_MESSAGE(
+        (OString::number(/*o3tl::underlyingEnumValue(*/(int)nActual/*)*/).getStr()),
+        (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
+    uno::Sequence<security::DocumentSignatureInformation> const infos(
+        pObjectShell->ImplAnalyzeSignature(false));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), infos.getLength());
+    // check that the signing certificate was picked, not one of the 2 CA ones
+    CPPUNIT_ASSERT_EQUAL(security::CertificateValidity::VALID, infos[0].CertificateStatus);
+    CPPUNIT_ASSERT(infos[0].Signer.is());
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("CN=Xmlsecurity RSA Test example Alice,O=Xmlsecurity RSA Test,ST=England,C=UK"),
+        infos[0].Signer->getSubjectName());
+}
+
+void SigningTest::testODFDoubleX509Data()
+{
+    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY)
+              + "02_doc_signed_by_attacker_manipulated.odt");
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    SignatureState nActual = pObjectShell->GetDocumentSignatureState();
+    CPPUNIT_ASSERT_MESSAGE(
+        (OString::number(/*o3tl::underlyingEnumValue(*/(int)nActual/*)*/).getStr()),
+        (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
+    uno::Sequence<security::DocumentSignatureInformation> const infos(
+        pObjectShell->ImplAnalyzeSignature(false));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), infos.getLength());
+    CPPUNIT_ASSERT_EQUAL(security::CertificateValidity::INVALID, infos[0].CertificateStatus);
+    CPPUNIT_ASSERT(!infos[0].Signer.is());
+}
+
+void SigningTest::testODFTripleX509Data()
+{
+    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY)
+              + "02_doc_signed_by_attacker_manipulated_triple.odt");
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    SignatureState nActual = pObjectShell->GetDocumentSignatureState();
+    // here, libxmlsec will pick the 1st X509Data but signing key is the 2nd
+    CPPUNIT_ASSERT_EQUAL_MESSAGE((OString::number(/*o3tl::underlyingEnumValue(*/(int)nActual/*)*/).getStr()),
+                                 SignatureState::BROKEN, nActual);
+    uno::Sequence<security::DocumentSignatureInformation> const infos(
+        pObjectShell->ImplAnalyzeSignature(false));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), infos.getLength());
+    CPPUNIT_ASSERT_EQUAL(security::CertificateValidity::INVALID, infos[0].CertificateStatus);
+    CPPUNIT_ASSERT(!infos[0].Signer.is());
+}
+
+void SigningTest::testODFMacroDoubleX509Data()
+{
+    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY)
+              + "02_doc_macros_signed_by_attacker_manipulated.odt");
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    SignatureState nActual = pObjectShell->GetScriptingSignatureState();
+    CPPUNIT_ASSERT_MESSAGE(
+        (OString::number(/*o3tl::underlyingEnumValue(*/(int)nActual/*)*/).getStr()),
+        (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
+    uno::Sequence<security::DocumentSignatureInformation> const infos(
+        pObjectShell->ImplAnalyzeSignature(true));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), infos.getLength());
+    CPPUNIT_ASSERT_EQUAL(security::CertificateValidity::INVALID, infos[0].CertificateStatus);
+    CPPUNIT_ASSERT(!infos[0].Signer.is());
+}
+
+void SigningTest::testODFDoubleX509Certificate()
+{
+    createDoc(m_directories.getURLFromSrc(DATA_DIRECTORY)
+              + "02_doc_signed_by_attacker_manipulated2.odt");
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    SignatureState nActual = pObjectShell->GetDocumentSignatureState();
+    CPPUNIT_ASSERT_MESSAGE(
+        (OString::number(/*o3tl::underlyingEnumValue(*/(int)nActual/*)*/).getStr()),
+        (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
+    uno::Sequence<security::DocumentSignatureInformation> const infos(
+        pObjectShell->ImplAnalyzeSignature(false));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), infos.getLength());
+    CPPUNIT_ASSERT_EQUAL(security::CertificateValidity::INVALID, infos[0].CertificateStatus);
+    CPPUNIT_ASSERT(!infos[0].Signer.is());
 }
 
 void SigningTest::testOOXMLPartial()
