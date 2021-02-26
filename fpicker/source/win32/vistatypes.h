@@ -20,8 +20,8 @@
 #ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_VISTATYPES_H
 #define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_VISTATYPES_H
 
-#include "comptr.hxx"
 #include <shobjidl.h>
+#include <systools/win32/comtools.hxx>
 
 namespace fpicker{
 namespace win32{
@@ -31,12 +31,11 @@ namespace vista{
 // types, const etcpp.
 
 
-typedef ComPtr< IFileDialog         , IID_IFileDialog                             > TFileDialog;
-typedef ComPtr< IFileOpenDialog     , IID_IFileOpenDialog  , CLSID_FileOpenDialog > TFileOpenDialog;
-typedef ComPtr< IFileSaveDialog     , IID_IFileSaveDialog  , CLSID_FileSaveDialog > TFileSaveDialog;
-typedef ComPtr< IFileDialogEvents   , IID_IFileDialogEvents                       > TFileDialogEvents;
-typedef ComPtr< IFileDialogCustomize, IID_IFileDialogCustomize                    > TFileDialogCustomize;
-typedef TFileOpenDialog TFolderPickerDialog;
+typedef sal::systools::COMReference<IFileDialog> TFileDialog;
+typedef sal::systools::COMReference<IFileOpenDialog> TFileOpenDialog;
+typedef sal::systools::COMReference<IFileSaveDialog> TFileSaveDialog;
+typedef sal::systools::COMReference<IFileDialogEvents> TFileDialogEvents;
+typedef sal::systools::COMReference<IFileDialogCustomize> TFileDialogCustomize;
 
 } // namespace vista
 } // namespace win32

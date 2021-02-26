@@ -278,25 +278,27 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                     break;
                 }
                 sal::systools::COMReference<IShellLinkW> link;
-                auto e2 = CoCreateInstance(
-                    CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER, IID_IShellLinkW,
-                    reinterpret_cast<LPVOID *>(&link));
-                if (FAILED(e2)) {
+                try
+                {
+                    link.CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER);
+                }
+                catch (sal::systools::ComError& e)
+                {
                     throw css::lang::IllegalArgumentException(
                         ("XSystemShellExecute.execute, CoCreateInstance failed with "
-                         + OUString::number(e2)),
+                         + OUString::number(e.GetHresult())),
                         {}, 0);
                 }
                 sal::systools::COMReference<IPersistFile> file;
                 try {
-                    file = link.QueryInterface<IPersistFile>(IID_IPersistFile);
+                    file = link.QueryInterface<IPersistFile>(sal::systools::COM_QUERY_THROW);
                 } catch(sal::systools::ComError & e3) {
                     throw css::lang::IllegalArgumentException(
                         ("XSystemShellExecute.execute, QueryInterface failed with: "
                          + o3tl::runtimeToOUString(e3.what())),
                         {}, 0);
                 }
-                e2 = file->Load(path, STGM_READ);
+                HRESULT e2 = file->Load(path, STGM_READ);
                 if (FAILED(e2)) {
                     throw css::lang::IllegalArgumentException(
                         ("XSystemShellExecute.execute, IPersistFile.Load failed with "
