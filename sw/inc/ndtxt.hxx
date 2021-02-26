@@ -746,7 +746,7 @@ public:
     /// change text to Upper/Lower/Hiragana/Katakana/...
     void TransliterateText( utl::TransliterationWrapper& rTrans,
                             sal_Int32 nStart, sal_Int32 nEnd,
-                            SwUndoTransliterate* pUndo );
+                            SwUndoTransliterate* pUndo, bool bUseRedlining = false );
 
     /// count words in given range - returns true if we refreshed out count
     bool CountWords( SwDocStat& rStat, sal_Int32 nStart, sal_Int32 nEnd ) const;
