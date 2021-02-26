@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d4df2b39_55a8e84f",
+        "filename": "sw/source/core/txtnode/txtedt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1924,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-02-26T15:49:19Z",
+      "side": 0,
+      "message": "avoid not relevant changes",
+      "revId": "c89f5fa26a8ec6e36ddd5562a5c3c276f9e4ff80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
