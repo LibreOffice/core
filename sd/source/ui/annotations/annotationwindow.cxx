@@ -399,11 +399,13 @@ void AnnotationWindow::DoResize()
 
 void AnnotationContents::DoResize()
 {
-    ::tools::Long aTextHeight = LogicToPixel( mpOutliner->CalcTextSize()).Height();
     ::tools::Long aHeight = GetSizePixel().Height();
     ::tools::ULong aWidth = GetSizePixel().Width();
 
     aHeight -= POSTIT_META_HEIGHT;
+
+    mpOutliner->SetPaperSize( PixelToLogic( Size(aWidth, aHeight) ) ) ;
+    ::tools::Long aTextHeight = LogicToPixel( mpOutliner->CalcTextSize()).Height();
 
     if( aTextHeight > aHeight )
     {
@@ -415,8 +417,6 @@ void AnnotationContents::DoResize()
     {
         mxVScrollbar->set_vpolicy(VclPolicyType::NEVER);
     }
-
-    mpOutliner->SetPaperSize( PixelToLogic( Size(aWidth,aHeight) ) ) ;
 
     ::tools::Rectangle aOutputArea = PixelToLogic(::tools::Rectangle(0, 0, aWidth, aHeight));
     if (mxVScrollbar->get_vpolicy() == VclPolicyType::NEVER)
