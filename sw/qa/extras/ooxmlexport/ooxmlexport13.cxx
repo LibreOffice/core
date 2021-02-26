@@ -96,6 +96,17 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf121666_lostPage, "tdf121666_lostPage.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:sectPr/w:type", "val", "nextPage");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf140182_extraPagebreak, "tdf140182_extraPagebreak.docx")
+{
+    // Table, page break, section break should be only 2 pages
+    // 2 breaks would normally results in 3 pages, but page break + section break is a special case
+    // that is handled so to break only 1 page that result only 2 pages.
+    // Because of the table, a hack (m_bDummyParaAddedForTableInSection) is set for the entire section,
+    // that canceled the page break + section break special case handling, resulting 3 pages.
+    // The accompanying fix eliminates this cancelation.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf95848, "tdf95848.docx")
 {
     OUString listId;
