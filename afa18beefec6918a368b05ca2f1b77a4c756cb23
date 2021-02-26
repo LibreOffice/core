@@ -34,6 +34,24 @@
       "revId": "afa18beefec6918a368b05ca2f1b77a4c756cb23",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e1033ac_a3eaf002",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7141,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-02-26T06:09:27Z",
+      "side": 1,
+      "message": "Oh - just look at the list above. It only writes out ascii, hAnsi, and cs.  It doesn\u0027t write out eastAsia or whatever it is called.  That\u0027s why.",
+      "parentUuid": "359dc632_161b7e4c",
+      "revId": "afa18beefec6918a368b05ca2f1b77a4c756cb23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
