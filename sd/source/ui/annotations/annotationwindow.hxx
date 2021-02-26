@@ -19,8 +19,7 @@
 
 #pragma once
 
-#include <vcl/floatwin.hxx>
-#include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld.hxx>
 #include <tools/long.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svx/weldeditview.hxx>
@@ -35,19 +34,18 @@ class SdDrawDocument;
 namespace sd {
 
 class AnnotationManagerImpl;
-class AnnotationWindow;
 class DrawDocShell;
 class TextApiObject;
 
-class AnnotationContents;
+class AnnotationWindow;
 
 class AnnotationTextWindow : public WeldEditView
 {
 private:
-    AnnotationContents& mrContents;
+    AnnotationWindow& mrContents;
 
 public:
-    AnnotationTextWindow(AnnotationContents& rContents);
+    AnnotationTextWindow(AnnotationWindow& rContents);
 
     virtual EditView* GetEditView() const override;
 
@@ -62,9 +60,13 @@ public:
     virtual bool Command(const CommandEvent& rCEvt) override;
 };
 
-class AnnotationContents final : public InterimItemWindow
+class AnnotationWindow final
 {
 private:
+    std::unique_ptr<weld::Builder> mxBuilder;
+    std::unique_ptr<weld::Popover> mxPopover;
+    std::unique_ptr<weld::Widget> mxContainer;
+
     DrawDocShell* mpDocShell;
     SdDrawDocument* mpDoc;
 
@@ -92,19 +94,25 @@ private:
 
     DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
     DECL_LINK(MenuItemSelectedHdl, const OString&, void);
-    DECL_LINK(MenuButtonToggledHdl, weld::ToggleButton&, void);
+
+    void FillMenuButton();
+    void InitControls();
+
+    void SetMapMode(const MapMode& rNewMapMode);
+    void setAnnotation(const css::uno::Reference<css::office::XAnnotation>& xAnnotation);
 
     static sal_Int32 GetPrefScrollbarWidth() { return 16; }
 public:
-    AnnotationContents(vcl::Window* pParent, DrawDocShell* pDocShell);
+    AnnotationWindow(weld::Window* pParent, const ::tools::Rectangle& rRect, DrawDocShell* pDocShell,
+                     const css::uno::Reference<css::office::XAnnotation>& xAnnotation);
 
-    void InitControls();
+    void connect_closed(const Link<weld::Popover&, void>& rLink) { mxPopover->connect_closed(rLink); }
+
     void DoResize();
     void ResizeIfNecessary(::tools::Long aOldHeight, ::tools::Long aNewHeight);
     void SetScrollbar();
     void StartEdit();
 
-    void setAnnotation(const css::uno::Reference<css::office::XAnnotation>& xAnnotation);
     const css::uno::Reference<css::office::XAnnotation>& getAnnotation() const { return mxAnnotation; }
 
     void SaveToDocument();
@@ -123,29 +131,9 @@ public:
 
     OutlinerView* GetOutlinerView() { return mpOutlinerView.get();}
     ::Outliner* GetOutliner() { return mpOutliner.get();}
-    virtual ~AnnotationContents() override { disposeOnce(); }
-    virtual void dispose() override;
-
-    virtual void GetFocus() override;
+    ~AnnotationWindow();
 
     void SetColor();
-};
-
-class AnnotationWindow : public FloatingWindow
-{
-    private:
-        VclPtr<AnnotationContents> mxContents;
-
-    public:
-        AnnotationWindow( DrawDocShell* pDocShell, vcl::Window* pParent );
-        virtual ~AnnotationWindow() override;
-        virtual void dispose() override;
-
-        AnnotationContents&  GetContents() const { return *mxContents; }
-
-        void            DoResize();
-
-        virtual void    GetFocus() override;
 };
 
 TextApiObject* getTextApiObject( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );

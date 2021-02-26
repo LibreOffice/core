@@ -70,10 +70,11 @@ private:
     virtual void deselect() override;
 
     DECL_LINK( WindowEventHandler, VclWindowEvent&, void );
+    DECL_LINK(PopupModeEndHdl, weld::Popover&, void);
 
     AnnotationManagerImpl& mrManager;
     css::uno::Reference< css::office::XAnnotation > mxAnnotation;
-    VclPtr<AnnotationWindow>                        mpAnnotationWindow;
+    std::unique_ptr<AnnotationWindow>               mpAnnotationWindow;
     Color                                           maColor;
     int                                             mnIndex;
     const vcl::Font&                                mrFont;

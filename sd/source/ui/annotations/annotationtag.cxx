@@ -578,43 +578,34 @@ void AnnotationTag::OpenPopup( bool bEdit )
         if( pWindow )
         {
             RealPoint2D aPosition( mxAnnotation->getPosition() );
-            Point aPos( pWindow->OutputToScreenPixel( pWindow->LogicToPixel( Point( static_cast<::tools::Long>(aPosition.X * 100.0), static_cast<::tools::Long>(aPosition.Y * 100.0) ) ) ) );
+            Point aPos(pWindow->LogicToPixel( Point( static_cast<::tools::Long>(aPosition.X * 100.0), static_cast<::tools::Long>(aPosition.Y * 100.0) ) ) );
 
             aPos.AdjustX(4 ); // magic!
             aPos.AdjustY(1 );
 
             ::tools::Rectangle aRect( aPos, maSize );
 
-            mpAnnotationWindow.reset( VclPtr<AnnotationWindow>::Create( mrView.GetDocSh(), pWindow->GetWindow(GetWindowType::Frame) ) );
-            AnnotationContents& rAnnotation = mpAnnotationWindow->GetContents();
-            rAnnotation.InitControls();
-            rAnnotation.setAnnotation(mxAnnotation);
-
-            sal_uInt16 nArrangeIndex = 0;
-            Point aPopupPos( FloatingWindow::CalcFloatingPosition( mpAnnotationWindow.get(), aRect, FloatWinPopupFlags::Right, nArrangeIndex ) );
-            Size aPopupSize( 320, 240 );
-
-            mpAnnotationWindow->SetPosSizePixel( aPopupPos, aPopupSize );
-            mpAnnotationWindow->DoResize();
-
-            mpAnnotationWindow->Show();
-            mpAnnotationWindow->GrabFocus();
-            mpAnnotationWindow->AddEventListener( LINK(this, AnnotationTag, WindowEventHandler));
+            weld::Window* pParent = weld::GetPopupParent(*pWindow, aRect);
+            mpAnnotationWindow.reset(new AnnotationWindow(pParent, aRect, mrView.GetDocSh(), mxAnnotation));
+            mpAnnotationWindow->connect_closed(LINK(this, AnnotationTag, PopupModeEndHdl));
         }
     }
 
     if (bEdit && mpAnnotationWindow)
-        mpAnnotationWindow->GetContents().StartEdit();
+        mpAnnotationWindow->StartEdit();
+}
+
+IMPL_LINK_NOARG(AnnotationTag, PopupModeEndHdl, weld::Popover&, void)
+{
+    ClosePopup();
 }
 
 void AnnotationTag::ClosePopup()
 {
-    if( mpAnnotationWindow )
+    if (mpAnnotationWindow)
     {
-        mpAnnotationWindow->RemoveEventListener( LINK(this, AnnotationTag, WindowEventHandler));
-        AnnotationContents& rAnnotation = mpAnnotationWindow->GetContents();
-        rAnnotation.SaveToDocument();
-        mpAnnotationWindow.disposeAndClear();
+        mpAnnotationWindow->SaveToDocument();
+        mpAnnotationWindow.reset();
     }
 }
 
