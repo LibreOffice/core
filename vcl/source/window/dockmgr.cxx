@@ -759,16 +759,17 @@ void ImplDockingWindowWrapper::ShowTitleButton( TitleButton nButton, bool bVisib
 
 void ImplDockingWindowWrapper::ImplPreparePopupMode()
 {
-    GetWindow()->Show( false, ShowFlags::NoFocusChange );
+    VclPtr<vcl::Window> xWindow = GetWindow();
+    xWindow->Show( false, ShowFlags::NoFocusChange );
 
     // prepare reparenting
-    vcl::Window* pRealParent = GetWindow()->GetWindow( GetWindowType::Parent );
-    mpOldBorderWin = GetWindow()->GetWindow( GetWindowType::Border );
-    if( mpOldBorderWin.get() == GetWindow() )
+    vcl::Window* pRealParent = xWindow->GetWindow( GetWindowType::Parent );
+    mpOldBorderWin = xWindow->GetWindow( GetWindowType::Border );
+    if( mpOldBorderWin.get() == xWindow )
         mpOldBorderWin = nullptr;  // no border window found
 
     // the new parent for popup mode
-    VclPtrInstance<ImplPopupFloatWin> pWin( mpParent, GetWindow()->GetType() == WindowType::TOOLBOX );
+    VclPtrInstance<ImplPopupFloatWin> pWin( mpParent, xWindow->GetType() == WindowType::TOOLBOX );
     pWin->SetPopupModeEndHdl( LINK( this, ImplDockingWindowWrapper, PopupModeEnd ) );
 
     // At least for DockingWindow, GetText() has a side effect of setting deferred
@@ -776,24 +777,24 @@ void ImplDockingWindowWrapper::ImplPreparePopupMode()
     // so that the border width will end up in mpWindowImpl->mnBorderWidth, not in
     // the border window (See DockingWindow::setPosSizeOnContainee() and
     // DockingWindow::GetOptimalSize()).
-    pWin->SetText( GetWindow()->GetText() );
-    pWin->SetOutputSizePixel( GetWindow()->GetSizePixel() );
+    pWin->SetText( xWindow->GetText() );
+    pWin->SetOutputSizePixel( xWindow->GetSizePixel() );
 
-    GetWindow()->mpWindowImpl->mpBorderWindow  = nullptr;
-    GetWindow()->mpWindowImpl->mnLeftBorder    = 0;
-    GetWindow()->mpWindowImpl->mnTopBorder     = 0;
-    GetWindow()->mpWindowImpl->mnRightBorder   = 0;
-    GetWindow()->mpWindowImpl->mnBottomBorder  = 0;
+    xWindow->mpWindowImpl->mpBorderWindow  = nullptr;
+    xWindow->mpWindowImpl->mnLeftBorder    = 0;
+    xWindow->mpWindowImpl->mnTopBorder     = 0;
+    xWindow->mpWindowImpl->mnRightBorder   = 0;
+    xWindow->mpWindowImpl->mnBottomBorder  = 0;
 
     // reparent borderwindow and window
     if ( mpOldBorderWin )
         mpOldBorderWin->SetParent( pWin );
-    GetWindow()->SetParent( pWin );
+    xWindow->SetParent( pWin );
 
     // correct border window pointers
-    GetWindow()->mpWindowImpl->mpBorderWindow = pWin;
-    pWin->mpWindowImpl->mpClientWindow = GetWindow();
-    GetWindow()->mpWindowImpl->mpRealParent = pRealParent;
+    xWindow->mpWindowImpl->mpBorderWindow = pWin;
+    pWin->mpWindowImpl->mpClientWindow = xWindow;
+    xWindow->mpWindowImpl->mpRealParent = pRealParent;
 
     // set mpFloatWin not until all window positioning is done !!!
     // (SetPosPixel etc. check for valid mpFloatWin pointer)
@@ -842,31 +843,32 @@ void ImplDockingWindowWrapper::StartPopupMode( const tools::Rectangle& rRect, Fl
 
 IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd, FloatingWindow*, void)
 {
-    GetWindow()->Show( false, ShowFlags::NoFocusChange );
+    VclPtr<vcl::Window> xWindow = GetWindow();
+    xWindow->Show( false, ShowFlags::NoFocusChange );
 
     // set parameter for handler before destroying floating window
     EndPopupModeData aData( mpFloatWin->GetWindow( GetWindowType::Border )->GetPosPixel(), mpFloatWin->IsPopupModeTearOff() );
 
     // before deleting change parent back, so we can delete the floating window alone
-    vcl::Window* pRealParent = GetWindow()->GetWindow( GetWindowType::Parent );
-    GetWindow()->mpWindowImpl->mpBorderWindow = nullptr;
+    vcl::Window* pRealParent = xWindow->GetWindow( GetWindowType::Parent );
+    xWindow->mpWindowImpl->mpBorderWindow = nullptr;
     if ( mpOldBorderWin )
     {
-        GetWindow()->SetParent( mpOldBorderWin );
+        xWindow->SetParent( mpOldBorderWin );
         static_cast<ImplBorderWindow*>(mpOldBorderWin.get())->GetBorder(
-            GetWindow()->mpWindowImpl->mnLeftBorder, GetWindow()->mpWindowImpl->mnTopBorder,
-            GetWindow()->mpWindowImpl->mnRightBorder, GetWindow()->mpWindowImpl->mnBottomBorder );
+            xWindow->mpWindowImpl->mnLeftBorder, xWindow->mpWindowImpl->mnTopBorder,
+            xWindow->mpWindowImpl->mnRightBorder, xWindow->mpWindowImpl->mnBottomBorder );
         mpOldBorderWin->Resize();
     }
-    GetWindow()->mpWindowImpl->mpBorderWindow = mpOldBorderWin;
-    GetWindow()->SetParent( pRealParent );
-    GetWindow()->mpWindowImpl->mpRealParent = pRealParent;
+    xWindow->mpWindowImpl->mpBorderWindow = mpOldBorderWin;
+    xWindow->SetParent( pRealParent );
+    xWindow->mpWindowImpl->mpRealParent = pRealParent;
 
     maPopupModeEndHdl.Call(mpFloatWin);
     mpFloatWin.disposeAndClear();
 
     // call handler - which will destroy the window and thus the wrapper as well !
-    GetWindow()->CallEventListeners( VclEventId::WindowEndPopupMode, &aData );
+    xWindow->CallEventListeners( VclEventId::WindowEndPopupMode, &aData );
 }
 
 bool ImplDockingWindowWrapper::IsInPopupMode() const
