@@ -42,6 +42,7 @@ class ErrCode;
 #define ERRCODE_SFX_DOCUMENT_MACRO_DISABLED_MAC \
                                             ErrCode(WarningFlag::Yes, ErrCodeArea::Sfx, ErrCodeClass::NONE, 56)
 #define ERRCODE_SFX_FORMAT_ROWCOL           ErrCode(ErrCodeArea::Sfx, ErrCodeClass::NONE, 57)
+#define ERRCODE_SFX_RELOAD_CANCELED         ErrCode(ErrCodeArea::Sfx, ErrCodeClass::Abort, 58)
 
 
 // Various
