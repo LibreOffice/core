@@ -39,6 +39,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138892_noNumbering, "tdf138892_noNumbering.docx"
     CPPUNIT_ASSERT_MESSAGE("Para3: <blank line>", getProperty<OUString>(getParagraph(3), "NumberingStyleName").isEmpty());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf140668, "tdf140668.docx")
+{
+    // Don't crash when document is opened
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134619_numberingProps, "tdf134619_numberingProps.doc")
 {
     // Get the third paragraph's numbering style's 1st level's bullet size
