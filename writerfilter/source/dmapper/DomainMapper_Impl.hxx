@@ -986,8 +986,7 @@ public:
         m_bFrameDirectionSet = false;
     }
     void SetFrameDirection(sal_Int16 nDirection) {
-        if (!m_bFrameDirectionSet) {
-            assert(!m_aFrameDirectionQueue.empty());
+        if (!m_bFrameDirectionSet && !m_aFrameDirectionQueue.empty()) {
             m_aFrameDirectionQueue.back() = nDirection;
             m_bFrameDirectionSet = true;
         }
