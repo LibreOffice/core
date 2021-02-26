@@ -490,6 +490,19 @@ DECLARE_ODFEXPORT_TEST(testredlineTextFrame, "redlineTextFrame.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf140437, "tdf140437.odt")
+{
+    // Without the fix in place, the document would have failed to load
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    // at least one field should be detected
+    CPPUNIT_ASSERT(xFields->hasMoreElements());
+}
+
 DECLARE_ODFEXPORT_TEST(testTdf131621, "tdf131621.ott")
 {
     CPPUNIT_ASSERT_EQUAL(12, getShapes());
