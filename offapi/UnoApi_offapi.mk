@@ -2212,6 +2212,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/document,\
 	OwnLockOnDocumentRequest \
 	PrinterIndependentLayout \
 	RedlineDisplayType \
+	ReloadEditableRequest \
 	UndoContextNotClosedException \
 	UndoFailedException \
 	UndoManagerEvent \
