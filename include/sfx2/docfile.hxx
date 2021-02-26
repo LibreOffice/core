@@ -31,6 +31,7 @@
 #include <tools/link.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/threadpool.hxx>
+#include "osl/conditn.hxx"
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::embed { class XStorage; }
