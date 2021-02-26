@@ -168,15 +168,13 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_loadUserProfile(
 SAL_DLLPUBLIC void SAL_CALL osl_unloadUserProfile(
         oslSecurity Security);
 
-/** Wait for file security changes
-    Implemented just for Windows
-    @param[in] Security previously fetch Security of the User
-    @return nothing is returned!
+/** Check for Write Access permissions of a file
+    @param[in] pathName the URL pathname for the file to be checked for access permissions
+    @return True if the file refernced by pathName has security access permissions to read/write, False otherwise.
 */
 
-//SAL_DLLPUBLIC void SAL_CALL osl_WaitForFileSecurityChanges(oslSecurity Security);
-
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_HasWritePermissions(rtl_uString* pathName);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_HasWritePermissions(
+        rtl_uString* pathName);
 
 #ifdef __cplusplus
 }

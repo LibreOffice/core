@@ -358,11 +358,11 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         return;
                     }
                 }
-                //tdf#47065 comment these to refresh the UI on reload thread success
-                //nOpenMode = SFX_STREAM_READONLY;
+                //tdf#47065 refresh the UI on reload thread success
                 nOpenMode = pSh->IsOriginallyReadOnlyMedium() ? SFX_STREAM_READONLY
                                                               : SFX_STREAM_READWRITE;
-                //aReadOnlyUIGuard.m_bSetRO = true;
+                if (nOpenMode == SFX_STREAM_READONLY)
+                    aReadOnlyUIGuard.m_bSetRO = true;
             }
             else
             {

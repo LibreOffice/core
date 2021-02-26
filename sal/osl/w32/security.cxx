@@ -712,7 +712,7 @@ sal_Bool SAL_CALL osl_HasWritePermissions(rtl_uString* pathName)
     {
         goto Cleanup;
     }
-    
+
     if (!DuplicateToken( hToken, SecurityImpersonation, &hImpersonatedToken ))
     {
         goto Cleanup;

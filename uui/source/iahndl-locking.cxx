@@ -78,8 +78,6 @@ void handleReloadEditableRequest_(
     aMessage = Translate::get(STR_RELOADEDITABLE_MSG, aResLocale);
     aMessage = UUIInteractionHelper::replaceMessageWithArguments(aMessage, aArguments);
 
-    //OpenLockedQueryBox aDialog(pParent, aResLocale, aMessage);
-
     ReloadEditableQueryBox aDialog(pParent, aResLocale, aMessage);
     sal_Int32 nResult = aDialog.run();
 
