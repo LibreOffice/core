@@ -35,6 +35,7 @@ AlreadyOpenQueryBox::AlreadyOpenQueryBox(weld::Window* pParent, const std::local
     else
     {
         m_xQueryBox->add_button(Translate::get(STR_ALREADYOPEN_READONLY_BTN, rLocale), RET_YES);
+        m_xQueryBox->add_button(Translate::get(STR_ALREADYOPEN_READONLY_NOTIFY_BTN, rLocale), RET_RETRY);
         m_xQueryBox->add_button(Translate::get(STR_ALREADYOPEN_OPEN_BTN, rLocale), RET_NO);
     }
     m_xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
