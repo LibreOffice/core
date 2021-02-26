@@ -532,4 +532,7 @@ sal_Bool SAL_CALL osl_loadUserProfile(SAL_UNUSED_PARAMETER oslSecurity)
 
 void SAL_CALL osl_unloadUserProfile(SAL_UNUSED_PARAMETER oslSecurity) {}
 
+// not implemented on unix yet
+sal_Bool SAL_CALL osl_HasWritePermissions(SAL_UNUSED_PARAMETER rtl_uString*) { return false; }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

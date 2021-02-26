@@ -2205,6 +2205,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/document,\
 	LockFileCorruptRequest \
 	LockFileIgnoreRequest \
 	LockedDocumentRequest \
+	ReloadEditableRequest \
 	LockedOnSavingRequest \
 	MacroExecMode \
 	NoSuchFilterRequest \
