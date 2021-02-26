@@ -486,7 +486,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         // LockOrigFileOnDemand might set the readonly flag itself, it should be set back
                         pMed->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, !( nOpenMode & StreamMode::WRITE ) ) );
 
-                        if ( !pMed->GetErrorCode() )
+                        if ( !pMed->GetErrorCode()
+                            || pMed->GetErrorCode() == ERRCODE_SFX_RELOAD_CANCELED )
                             bOK = true;
                     }
 
@@ -502,6 +503,10 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             bOpenTemplate = RET_YES == nUserAnswer;
                             // Always reset this here to avoid infinite loop
                             bRetryIgnoringLock = RET_IGNORE == nUserAnswer;
+                            if (RET_CANCEL == nUserAnswer)
+                                pMed->LaunchCheckEditableWorkerThread();
+                            else if (RET_IGNORE == nUserAnswer)
+                                pMed->SignalAndWaitCheckEditableThread();
                         }
                         else
                             bRetryIgnoringLock = false;
