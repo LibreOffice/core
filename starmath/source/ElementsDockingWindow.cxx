@@ -34,7 +34,6 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/event.hxx>
-#include <vcl/floatwin.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <vcl/uitest/logger.hxx>

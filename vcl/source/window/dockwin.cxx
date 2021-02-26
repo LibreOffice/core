@@ -1077,6 +1077,11 @@ void DockingWindow::SetIdleDebugName( const char *pDebugName )
     maLayoutIdle.SetDebugName( pDebugName );
 }
 
+SystemWindow* DockingWindow::GetFloatingWindow() const
+{
+    return mpFloatWin;
+}
+
 DropdownDockingWindow::DropdownDockingWindow(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame, bool bTearable)
     : DockingWindow(pParent,
                     !bTearable ? OString("InterimDockParent") : OString("InterimTearableParent"),

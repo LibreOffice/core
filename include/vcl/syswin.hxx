@@ -235,6 +235,8 @@ public:
 
     void            SetApplicationID( const OUString &rApplicationID );
 
+    bool            UpdatePositionData();
+
     void SetCloseHdl(const Link<SystemWindow&,void>& rLink);
     const Link<SystemWindow&,void>& GetCloseHdl() const;
 

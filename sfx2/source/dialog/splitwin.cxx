@@ -27,7 +27,6 @@
 #include <tools/debug.hxx>
 
 #include <vcl/event.hxx>
-#include <vcl/floatwin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/svapp.hxx>
