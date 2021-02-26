@@ -700,6 +700,11 @@ DECLARE_OOXMLIMPORT_TEST(testTdf129912, "tdf129912.docx")
     }
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf140668, "tdf140668.docx")
+{
+    // don't crash when document is opened
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
