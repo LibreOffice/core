@@ -4615,6 +4615,9 @@ module com {
      string DocumentURL;
      string UserInfo;
     };
+    published exception ReloadEditableRequest : ::com::sun::star::uno::Exception {
+        string DocumentURL;
+    };
     published exception LockedOnSavingRequest: ::com::sun::star::uno::Exception {
      string DocumentURL;
      string UserInfo;
