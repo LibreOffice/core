@@ -4401,6 +4401,10 @@ if test -n "$ENABLE_DBGUTIL" -o \( -n "$enable_debug" -a "$enable_debug" != "no"
     else
         AC_MSG_RESULT([yes])
     fi
+    if test "$_os" = "Emscripten" -a -z "$enable_optimized"; then
+        # Otherwise binaries simply become too large (linker OOM + browser fails to load)
+        enable_optimized=debug
+    fi
 else
     ENABLE_DEBUG=""
     AC_MSG_RESULT([no])

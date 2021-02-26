@@ -101,20 +101,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	    lotuswordpro/util/lwpfilter \
 	) \
 	oox/util/oox \
-	sc/util/sc \
-	sc/util/scd \
-	sc/util/scfilt \
-	scaddins/source/analysis/analysis \
-	scaddins/source/datefunc/date \
-	scaddins/source/pricing/pricing \
-	sd/util/sd \
-	sd/util/sdd \
-	sd/util/sdfilt \
-	sdext/source/presenter/presenter \
-	sdext/source/minimizer/minimizer \
-	slideshow/util/slideshow \
-	starmath/util/sm \
-	starmath/util/smd \
 	svx/util/svx \
 	svx/util/textconversiondlgs \
 	sw/util/msword \
@@ -144,7 +130,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(ENABLE_LPSOLVE), \
 		sccomp/source/solver/lpsolvesolver \
 	) \
-	sccomp/source/solver/swarmsolver \
 	writerfilter/util/writerfilter \
 	writerperfect/source/draw/wpftdraw \
 	writerperfect/source/impress/wpftimpress \
