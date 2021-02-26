@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "830f60ac_f6e83d5f",
+        "filename": "include/osl/security.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-02-26T16:59:00Z",
+      "side": 1,
+      "message": "The security changes are to check the Windows Access Control Lists which can further restrict write access.  Note that this check is different than simple read-only file checking. See the full changes implemented in https://gerrit.libreoffice.org/c/core/+/111654.",
+      "parentUuid": "cb9f4eb9_a72d7ed4",
+      "revId": "421fc3fa9c708776a1c2238e2a64a67ffd183895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf893783_e7c62340",
         "filename": "sal/osl/w32/security.cxx",
         "patchSetId": 1
@@ -118,6 +136,24 @@
       "revId": "421fc3fa9c708776a1c2238e2a64a67ffd183895",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06ba155b_dd1330fe",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-02-26T16:59:00Z",
+      "side": 1,
+      "message": "This is consistent with the usage in other locations such as SfxMedium::ShowLockedDocumentDialog",
+      "parentUuid": "16328a79_96f64a5d",
+      "revId": "421fc3fa9c708776a1c2238e2a64a67ffd183895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
