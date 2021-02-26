@@ -76,4 +76,8 @@
 #define STR_LOCKCORRUPT_MSG                     NC_("STR_LOCKCORRUPT_MSG", "The lock file is corrupted and probably empty. Opening the document read-only and closing it again removes the corrupted lock file.")
 #define STR_LOCKCORRUPT_OPENREADONLY_BTN        NC_("STR_LOCKCORRUPT_OPENREADONLY_BTN", "Open ~Read-Only")
 
+#define STR_RELOADEDITABLE_TITLE                NC_("STR_RELOADEDITABLE_TITLE", "Document is now editable")
+#define STR_RELOADEDITABLE_MSG                  NC_("STR_RELOADEDITABLE_MSG", "Document file '$(ARG1)' is now editable \n\nReload this document for editing?")
+#define STR_RELOADEDITABLE_BTN                  NC_("STR_RELOADEDITABLE_BTN", "~Reload")
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
