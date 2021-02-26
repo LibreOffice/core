@@ -412,8 +412,9 @@ SdrPage* SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
 
     bool bLast = ((nPgNum+1)/2 == (GetPageCount()+1)/2);
 
-    static_cast<SdPage*>(pPage)->DisconnectLink();
-    ReplacePageInCustomShows( dynamic_cast< SdPage* >( pPage ), nullptr );
+    auto pSdPage = static_cast<SdPage*>(pPage);
+    pSdPage->DisconnectLink();
+    ReplacePageInCustomShows( pSdPage, nullptr );
     UpdatePageObjectsInNotes(nPgNum);
 
     if (!bLast)

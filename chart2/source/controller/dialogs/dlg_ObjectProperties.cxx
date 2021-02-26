@@ -535,8 +535,9 @@ void SchAttribTabDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
     else if (rId == "axislabel")
     {
         bool bShowStaggeringControls = m_pParameter->CanAxisLabelsBeStaggered();
-        static_cast<SchAxisLabelTabPage&>(rPage).ShowStaggeringControls( bShowStaggeringControls );
-        dynamic_cast< SchAxisLabelTabPage& >( rPage ).SetComplexCategories( m_pParameter->IsComplexCategoriesAxis() );
+        auto & rLabelPage = static_cast<SchAxisLabelTabPage&>(rPage);
+        rLabelPage.ShowStaggeringControls( bShowStaggeringControls );
+        rLabelPage.SetComplexCategories( m_pParameter->IsComplexCategoriesAxis() );
     }
     else if (rId == "axispos")
     {
