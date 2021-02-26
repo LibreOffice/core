@@ -218,6 +218,10 @@ public:
                    // Windows-only extensions/source/scanner/scanwin.cxx, problematic
                    // Twain::mpThread -> ShimListenerThread::mxTopWindow released via Twain::Reset
                    // clearing mpThread
+                || name == "g_newReadOnlyDocs"
+                   // sfx2/source/doc/docfile.cxx, warning about map's key
+                || name == "g_existingReadOnlyDocs"
+                   // sfx2/source/doc/docfile.cxx, warning about map's key
                ) // these variables appear unproblematic
             {
                 return true;
