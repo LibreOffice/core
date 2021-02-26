@@ -154,9 +154,11 @@ boost::property_tree::ptree JSDialogNotifyIdle::generateCloseMessage() const
 
 void JSDialogNotifyIdle::Invoke()
 {
-    for (auto& rMessage : m_aMessageQueue)
+    auto rMessage = m_aMessageQueue.begin();
+
+    while (rMessage != m_aMessageQueue.end())
     {
-        jsdialog::MessageType eType = rMessage.first;
+        jsdialog::MessageType eType = rMessage->first;
 
         switch (eType)
         {
@@ -165,19 +167,25 @@ void JSDialogNotifyIdle::Invoke()
                 break;
 
             case jsdialog::MessageType::WidgetUpdate:
-                send(generateWidgetUpdate(rMessage.second));
+                send(generateWidgetUpdate(rMessage->second));
                 break;
 
             case jsdialog::MessageType::Close:
                 send(generateCloseMessage());
                 break;
         }
-    }
 
-    m_aMessageQueue.clear();
+        rMessage = m_aMessageQueue.erase(rMessage);
+    }
 }
 
-JSDialogSender::~JSDialogSender() { sendClose(); }
+void JSDialogNotifyIdle::clearQueue() { m_aMessageQueue.clear(); }
+
+JSDialogSender::~JSDialogSender()
+{
+    sendClose();
+    mpIdleNotify->Stop();
+}
 
 void JSDialogSender::sendFullUpdate(bool bForce)
 {
@@ -190,6 +198,7 @@ void JSDialogSender::sendFullUpdate(bool bForce)
 
 void JSDialogSender::sendClose()
 {
+    mpIdleNotify->clearQueue();
     mpIdleNotify->sendMessage(jsdialog::MessageType::Close, nullptr);
     flush();
 }
