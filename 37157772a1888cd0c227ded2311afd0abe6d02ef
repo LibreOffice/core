@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e86f32f4_41158aa1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-26T15:11:25Z",
+      "side": 1,
+      "message": "This is what is being done in this case. \nWriter has both .uno:CharBackColor and .uno:BackColor, while the other modules only have .uno:CharBackColor -- where they should have the same tooltip \"Character Highlighting Color\"\nThe \"problem\" arises in the Customize dialog for Writer, because both .unos appear (as intended) as \"Character Highlighting Color\", so the idea is to use \"Label\" to differentiate them, while in the UI it always appears as \"Character Highlighting Color\"",
+      "parentUuid": "14690209_e1ba69de",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 46
+      },
+      "revId": "37157772a1888cd0c227ded2311afd0abe6d02ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60a0d140_d2cef8e8",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
         "patchSetId": 4
