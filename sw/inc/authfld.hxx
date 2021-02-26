@@ -183,6 +183,8 @@ public:
 
     /// Returns the line matching the source's default row in the ToX.
     OUString GetAuthority(const SwTextAttr* pTextAttr, const SwRootFrame* pLayout) const;
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 inline OUString const & SwAuthEntry::GetAuthorField(ToxAuthorityField ePos) const

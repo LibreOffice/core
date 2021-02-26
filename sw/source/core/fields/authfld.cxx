@@ -18,6 +18,9 @@
  */
 
 #include <memory>
+
+#include <libxml/xmlwriter.h>
+
 #include <comphelper/string.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/any.hxx>
@@ -600,6 +603,26 @@ OUString SwAuthorityField::GetAuthority(const SwTextAttr* pTextAttr,
     }
 
     return aText;
+}
+
+void SwAuthorityField::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwAuthorityField"));
+    SwField::dumpAsXml(pWriter);
+
+    xmlTextWriterStartElement(pWriter, BAD_CAST("m_xAuthEntry"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", m_xAuthEntry.get());
+    xmlTextWriterEndElement(pWriter);
+    xmlTextWriterStartElement(pWriter, BAD_CAST("m_nTempSequencePos"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::number(m_nTempSequencePos).getStr()));
+    xmlTextWriterEndElement(pWriter);
+    xmlTextWriterStartElement(pWriter, BAD_CAST("m_nTempSequencePosRLHidden"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::number(m_nTempSequencePosRLHidden).getStr()));
+    xmlTextWriterEndElement(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 const char* const aFieldNames[] =
