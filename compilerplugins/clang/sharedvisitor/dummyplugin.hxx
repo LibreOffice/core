@@ -43,6 +43,7 @@ public:
     bool TraverseWhileStmt( WhileStmt* ) { return complain(); }
     bool TraverseDoStmt( DoStmt* ) { return complain(); }
     bool TraverseForStmt( ForStmt* ) { return complain(); }
+    bool TraverseCompoundStmt( CompoundStmt* ) { return complain(); }
     bool TraverseCXXForRangeStmt( CXXForRangeStmt* ) { return complain(); }
     bool TraverseConditionalOperator( ConditionalOperator* ) { return complain(); }
     bool TraverseCXXCatchStmt( CXXCatchStmt* ) { return complain(); }
