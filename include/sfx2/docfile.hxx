@@ -30,6 +30,7 @@
 #include <svl/itemset.hxx>
 #include <tools/link.hxx>
 #include <tools/stream.hxx>
+#include <comphelper/threadpool.hxx>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::embed { class XStorage; }
@@ -93,6 +94,13 @@ public:
 
                         virtual ~SfxMedium() override;
 
+    bool CheckCanGetLockfile() const;
+    const std::shared_ptr<std::condition_variable>& GetCheckEditableCondition() const;
+    void SetCheckEditableCondition(const std::shared_ptr<std::condition_variable>& pTag);
+    void SignalAndWaitCheckEditableThread();
+    void SetOriginallyReadOnly(bool val);
+    void LaunchCheckEditableWorkerThread();
+
     void                UseInteractionHandler( bool );
     css::uno::Reference< css::task::XInteractionHandler >
                         GetInteractionHandler( bool bGetAlways = false );
@@ -109,6 +117,9 @@ public:
      */
     void                SetFilter(const std::shared_ptr<const SfxFilter>& pFilter);
     const std::shared_ptr<const SfxFilter>& GetFilter() const;
+    void  SetCheckEditableWorkerTag(
+        const std::shared_ptr<comphelper::ThreadTaskTag>& pTag);
+    const std::shared_ptr<comphelper::ThreadTaskTag>& GetCheckEditableWorkerTag() const;
     const OUString&     GetOrigURL() const;
 
     SfxItemSet  *       GetItemSet() const;
