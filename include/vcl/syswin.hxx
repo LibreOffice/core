@@ -99,7 +99,6 @@ class VCL_DLLPUBLIC SystemWindow
 
 private:
     VclPtr<MenuBar> mpMenuBar;
-    Size            maOrgSize;
     Size            maMinOutSize;
     bool            mbDockBtn;
     bool            mbHideBtn;

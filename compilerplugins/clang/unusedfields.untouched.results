@@ -300,12 +300,6 @@ sc/source/ui/inc/PivotLayoutTreeListBase.hxx:48
     ScPivotLayoutTreeListBase maDropTargetHelper class ScPivotLayoutTreeDropTarget
 sd/source/ui/animations/CustomAnimationList.hxx:124
     sd::CustomAnimationList maDropTargetHelper class sd::CustomAnimationListDropTarget
-sd/source/ui/annotations/annotationwindow.hxx:137
-    sd::AnnotationWindow mrManager class sd::AnnotationManagerImpl &
-sd/source/ui/annotations/annotationwindow.hxx:138
-    sd::AnnotationWindow mpDocShell class sd::DrawDocShell *
-sd/source/ui/annotations/annotationwindow.hxx:139
-    sd::AnnotationWindow mpDoc class SdDrawDocument *
 sd/source/ui/inc/sdtreelb.hxx:73
     SdPageObjsTLV m_xDropTargetHelper std::unique_ptr<SdPageObjsTLVDropTarget>
 sd/source/ui/remotecontrol/ZeroconfService.hxx:32

@@ -550,12 +550,6 @@ sd/source/filter/ppt/pptin.hxx:82
     SdPPTImport maParam struct PowerPointImportParam
 sd/source/ui/animations/CustomAnimationList.hxx:124
     sd::CustomAnimationList maDropTargetHelper class sd::CustomAnimationListDropTarget
-sd/source/ui/annotations/annotationwindow.hxx:137
-    sd::AnnotationWindow mrManager class sd::AnnotationManagerImpl &
-sd/source/ui/annotations/annotationwindow.hxx:138
-    sd::AnnotationWindow mpDocShell class sd::DrawDocShell *
-sd/source/ui/annotations/annotationwindow.hxx:139
-    sd::AnnotationWindow mpDoc class SdDrawDocument *
 sd/source/ui/inc/AccessibleDocumentViewBase.hxx:261
     accessibility::AccessibleDocumentViewBase maViewForwarder class accessibility::AccessibleViewForwarder
 sd/source/ui/inc/OutlineBulletDlg.hxx:44
@@ -710,7 +704,7 @@ svx/source/inc/datanavi.hxx:190
     svxform::XFormsPage m_aDropHelper class svxform::DataTreeDropTarget
 svx/source/svdraw/svdcrtv.cxx:48
     ImplConnectMarkerOverlay maObjects sdr::overlay::OverlayObjectList
-svx/source/svdraw/svdmrkv.cxx:132
+svx/source/svdraw/svdmrkv.cxx:134
     MarkingSubSelectionOverlay maObjects sdr::overlay::OverlayObjectList
 svx/source/tbxctrls/extrusioncontrols.hxx:66
     svx::ExtrusionDirectionWindow maImgDirection class Image [9]
@@ -772,7 +766,7 @@ ucb/source/ucp/gio/gio_mount.hxx:79
     OOoMountOperationClass _gtk_reserved3 void (*)(void)
 ucb/source/ucp/gio/gio_mount.hxx:80
     OOoMountOperationClass _gtk_reserved4 void (*)(void)
-vcl/headless/svpgdi.cxx:397
+vcl/headless/svpgdi.cxx:395
     (anonymous namespace)::BitmapHelper aTmpBmp class SvpSalBitmap
 vcl/inc/canvasbitmap.hxx:40
     vcl::unotools::VclCanvasBitmap m_aAlpha ::Bitmap
