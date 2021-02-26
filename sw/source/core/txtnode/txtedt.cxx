@@ -1684,7 +1684,7 @@ namespace
 void SwTextNode::TransliterateText(
     utl::TransliterationWrapper& rTrans,
     sal_Int32 nStt, sal_Int32 nEnd,
-    SwUndoTransliterate* pUndo )
+    SwUndoTransliterate* pUndo, bool bIsTooMuch)
 {
     if (nStt >= nEnd)
         return;
@@ -1909,6 +1909,9 @@ void SwTextNode::TransliterateText(
     // yet unchanged text parts remain the same.
     size_t nSum(0);
     bool bIsRedlineOn(GetDoc().getIDocumentRedlineAccess().IsRedlineOn());
+    if(bIsTooMuch){
+        bIsRedlineOn=false;
+    }
     for (size_t i = 0; i < aChanges.size(); ++i)
     {   // check this here since AddChanges cannot be moved below
         // call to ReplaceTextOnly
@@ -1921,7 +1924,6 @@ void SwTextNode::TransliterateText(
                     "node text with insertion > node capacity.");
             return;
         }
-
         if ( bIsRedlineOn )
         {
             // create SwPaM with mark & point spanning the attributed text
