@@ -723,7 +723,7 @@ uno::Reference<security::XCertificate> DigitalSignaturesDialog::getCertificate(c
         xCert = xSecEnv->getCertificate(rInfo.GetSigningCertificate()->X509IssuerName,
             xmlsecurity::numericStringToBigInteger(rInfo.GetSigningCertificate()->X509SerialNumber));
     }
-    if (!xCert.is() && xGpgSecEnv.is())
+    if (!xCert.is() && xGpgSecEnv.is() && !rInfo.ouGpgKeyID.isEmpty())
         xCert = xGpgSecEnv->getCertificate( rInfo.ouGpgKeyID, xmlsecurity::numericStringToBigInteger(u"") );
 
     SAL_WARN_IF( !xCert.is(), "xmlsecurity.dialogs", "Certificate not found and can't be created!" );
