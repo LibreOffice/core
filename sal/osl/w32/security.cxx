@@ -665,4 +665,91 @@ static bool getUserNameImpl(oslSecurity Security, rtl_uString **strName,  bool b
     return false;
 }
 
+sal_Bool SAL_CALL osl_HasWritePermissions(rtl_uString* pathName)
+{
+    PRIVILEGE_SET PrivilegeSet;
+    DWORD dwPrivSetSize = sizeof(PRIVILEGE_SET);
+    BOOL fAccessGranted = FALSE;
+    DWORD genericAccessRights = GENERIC_READ | GENERIC_WRITE;
+    GENERIC_MAPPING mapping = { 0 };
+    DWORD grantedAccess = 0;
+    HANDLE hToken = INVALID_HANDLE_VALUE;
+    DWORD length = 0;
+    PSECURITY_DESCRIPTOR security = nullptr;
+    HANDLE hImpersonatedToken = INVALID_HANDLE_VALUE;
+    rtl_uString* pSysPath = nullptr;
+
+    mapping.GenericRead = FILE_GENERIC_READ;
+    mapping.GenericWrite = FILE_GENERIC_WRITE;
+
+    if (osl_getSystemPathFromFileURL(pathName, &pSysPath) != osl_File_E_None)
+    {
+        goto Cleanup;
+    }
+
+    // first call to get length
+    if (!GetFileSecurityW(o3tl::toW(rtl_uString_getStr(pSysPath)),
+                         OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION
+                             | DACL_SECURITY_INFORMATION,
+                         NULL, 0, &length)
+        && ERROR_INSUFFICIENT_BUFFER != GetLastError())
+    {
+        goto Cleanup;
+    }
+
+    security = (PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, length);
+    if (!security
+        || !GetFileSecurityW(o3tl::toW(rtl_uString_getStr(pSysPath)),
+                            OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION
+                                | DACL_SECURITY_INFORMATION,
+                         security,
+                         length, &length))
+    {
+        goto Cleanup;
+    }
+
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ALL_ACCESS, &hToken))
+    {
+        goto Cleanup;
+    }
+
+    if (!DuplicateToken( hToken, SecurityImpersonation, &hImpersonatedToken ))
+    {
+        goto Cleanup;
+    }
+
+    MapGenericMask(&genericAccessRights, &mapping);
+
+    if (!AccessCheck(security, // security descriptor to check
+                     hImpersonatedToken, // impersonation token
+                     genericAccessRights, // requested access rights
+                     &mapping, // pointer to GENERIC_MAPPING
+                     &PrivilegeSet, // receives privileges used in check
+                     &dwPrivSetSize, // size of PrivilegeSet buffer
+                     &grantedAccess, // receives mask of allowed access rights
+                     &fAccessGranted)) // receives results of access check
+    {
+        goto Cleanup;
+    }
+
+Cleanup:
+
+    if (!RevertToSelf())
+    {
+        // SHOULD EXIT PROCESS AS PER https://docs.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-reverttoself
+        ExitProcess(1);
+    }
+
+    if (security != nullptr)
+        LocalFree(security);
+
+    if (hImpersonatedToken != INVALID_HANDLE_VALUE)
+        CloseHandle(hImpersonatedToken);
+
+    if (hToken != INVALID_HANDLE_VALUE)
+        CloseHandle(hToken);
+
+    return fAccessGranted;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
