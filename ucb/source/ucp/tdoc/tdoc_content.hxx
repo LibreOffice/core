@@ -201,13 +201,13 @@ private:
 
 public:
     // Create existing content. Fail, if not already exists.
-    static Content* create(
+    static rtl::Reference<Content> create(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             ContentProvider* pProvider,
             const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier );
 
     // Create new content. Fail, if already exists.
-    static Content* create(
+    static rtl::Reference<Content> create(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             ContentProvider* pProvider,
             const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
