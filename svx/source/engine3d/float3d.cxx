@@ -49,7 +49,6 @@
 #include <svtools/unitconv.hxx>
 
 #include <svx/float3d.hxx>
-#include <vcl/floatwin.hxx>
 
 #include <bitmaps.hlst>
 
