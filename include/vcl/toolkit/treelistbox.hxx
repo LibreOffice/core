@@ -637,6 +637,7 @@ public:
     void            InvalidateEntry( SvTreeListEntry* );
     SvLBoxItem*     GetItem( SvTreeListEntry*, tools::Long nX, SvLBoxTab** ppTab);
     SvLBoxItem*     GetItem( SvTreeListEntry*, tools::Long nX );
+    std::pair<tools::Long, tools::Long> GetItemPos(SvTreeListEntry* pEntry, sal_uInt16 nTabIdx);
 
     void            SetDragDropMode( DragDropMode );
     void            SetSelectionMode( SelectionMode );
