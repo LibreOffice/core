@@ -107,12 +107,10 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	$(call gb_Helper_optional,DESKTOP,setup_native) \
 	sfx2 \
 	shell \
-	slideshow \
 	smoketest \
 	solenv \
 	soltools \
 	sot \
-	starmath \
 	stoc \
 	store \
 	svl \
@@ -143,6 +141,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	vbahelper \
 	vcl \
 	wasm \
+	wasm-qt \
 	winaccessibility \
 	wizards \
 	writerfilter \
@@ -177,11 +176,10 @@ endef
 # the default goal is build (see Module.mk)
 ifeq (,$(filter-out build check unitcheck slowcheck screenshot subsequentcheck uicheck,$(MAKECMDGOALS)))
 $(eval $(call repositorymodule_serialize,\
-	scfilt \
 	$(call gb_Helper_optional,SCRIPTING,vbaobj) \
-	sc msword \
+	msword \
 	$(call gb_Helper_optional,DESKTOP,swui) \
-	sw sd \
+	sw \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbu) \
 	writerfilter cui chartcontroller chartcore oox \
 	$(if $(MERGELIBS), merged, \

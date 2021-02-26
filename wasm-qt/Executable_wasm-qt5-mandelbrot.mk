@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Executable_Executable,wasm-qt5-mandelbrot))
 
-$(eval $(call gb_Executable_use_custom_headers,wasm-qt5-mandelbrot,wasm/qt5-mandelbrot))
+$(eval $(call gb_Executable_use_custom_headers,wasm-qt5-mandelbrot,wasm-qt/qt5-mandelbrot))
 
 $(eval $(call gb_Executable_use_externals,wasm-qt5-mandelbrot,\
     graphite \
@@ -20,9 +20,9 @@ $(eval $(call gb_Executable_use_externals,wasm-qt5-mandelbrot,\
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,wasm-qt5-mandelbrot,\
-    wasm/source/qt5-mandelbrot/main \
-    wasm/source/qt5-mandelbrot/mandelbrotwidget \
-    wasm/source/qt5-mandelbrot/renderthread \
+    wasm-qt/source/qt5-mandelbrot/main \
+    wasm-qt/source/qt5-mandelbrot/mandelbrotwidget \
+    wasm-qt/source/qt5-mandelbrot/renderthread \
 ))
 
 $(eval $(call gb_Executable_add_defs,wasm-qt5-mandelbrot,\

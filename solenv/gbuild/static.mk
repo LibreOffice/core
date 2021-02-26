@@ -232,7 +232,7 @@ $$(if $$(filter-out GBUILD_TOUCHED,$$(call gb_$(2)__get_all_externals,$(3))), \
 	$$(eval $$(call gb_$(2)_use_externals,$(3),$$(filter-out GBUILD_TOUCHED,$$(call gb_$(2)__get_all_externals,$(3)))))) \
 $$(if $$(filter icui28n icuuc,$$(call gb_$(2)__get_all_externals,$(3))), \
 	$$(eval $$(call gb_$(2)_use_externals,$(3),icudata))) \
-$$(if $$(and $$(filter EMSCRIPTEN,$$(OS)),$$(call gb_$(2)__has_any_dependencies,$(3))), \
+$$(if $$(and $$(filter EMSCRIPTEN,$$(OS)),$$(call gb_$(2)__has_any_dependencies,$(3)),), \
 	$$(if $$(gb_$(2)__LAST_KNOWN), \
 		$$(if $$(gb_DEBUG_STATIC),$$(info $$(call gb_$(2)_get_linktargetfile,$(3)) => $$(call gb_$(2)_get_linktargetfile,$$(gb_$(2)__LAST_KNOWN)))) \
 		$$(eval $$(call gb_$(2)_get_linktargetfile,$(3)) : $$(call gb_$(2)_get_linktargetfile,$$(gb_$(2)__LAST_KNOWN)))) \

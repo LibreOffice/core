@@ -31,6 +31,9 @@ $(eval $(call gb_Module_add_targets,vcl,\
         Package_skia_denylist ) \
     $(if $(filter DESKTOP,$(BUILD_TYPE))$(filter EMSCRIPTEN,$(OS)), \
         StaticLibrary_vclmain \
+        $(if $(ENABLE_MACOSX_SANDBOX),, \
+            $(if $(DISABLE_GUI),, \
+                Executable_ui-previewer)) \
         $(if $(filter EMSCRIPTEN LINUX MACOSX SOLARIS WNT %BSD,$(OS)), \
             $(if $(DISABLE_GUI),, \
                 Executable_vcldemo ))) \

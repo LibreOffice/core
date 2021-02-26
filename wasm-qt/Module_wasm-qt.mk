@@ -6,13 +6,13 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-$(eval $(call gb_Module_Module,wasm))
+$(eval $(call gb_Module_Module,wasm-qt))
 
 ifeq ($(OS),EMSCRIPTEN)
 
-$(eval $(call gb_Module_add_targets,wasm,\
-    CustomTarget_components \
-    Library_components \
+$(eval $(call gb_Module_add_targets,wasm-qt,\
+    CustomTarget_wasm-qt5-mandelbrot_moc \
+    Executable_wasm-qt5-mandelbrot \
 ))
 
 endif
