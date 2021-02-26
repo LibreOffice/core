@@ -815,6 +815,9 @@ UUIInteractionHelper::handleRequest_impl(
             if ( handleLockFileProblemRequest( rRequest ) )
                 return true;
 
+            if ( handleReloadEditableRequest( rRequest ) )
+                return true;
+
             task::DocumentMacroConfirmationRequest aMacroConfirmRequest;
             if (aAnyRequest >>= aMacroConfirmRequest)
             {
