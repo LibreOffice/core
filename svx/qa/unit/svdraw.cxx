@@ -233,7 +233,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTextEditEmptyGrabBag)
     rEditView.InsertText("y");
     pSdrView->SdrEndTextEdit();
 
-    // Then make sure that grab-bag is empty to avoid loosing the new text.
+    // Then make sure that grab-bag is empty to avoid losing the new text.
     xGroupProps->getPropertyValue("InteropGrabBag") >>= aGrabBag;
     // Without the accompanying fix in place, this test would have failed with:
     // assertion failed
