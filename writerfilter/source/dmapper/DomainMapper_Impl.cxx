@@ -318,6 +318,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsFirstParaInSection( true ),
         m_bIsFirstParaInSectionAfterRedline( true ),
         m_bDummyParaAddedForTableInSection( false ),
+        m_bDummyParaAddedForTableInSectionPage( false ),
         m_bTextFrameInserted(false),
         m_bIsPreviousParagraphFramed( false ),
         m_bIsLastParaInSection( false ),
@@ -628,6 +629,12 @@ void DomainMapper_Impl::SetIsFirstParagraphInShape(bool bIsFirst)
 void DomainMapper_Impl::SetIsDummyParaAddedForTableInSection( bool bIsAdded )
 {
     m_bDummyParaAddedForTableInSection = bIsAdded;
+    m_bDummyParaAddedForTableInSectionPage = bIsAdded;
+}
+
+void DomainMapper_Impl::SetIsDummyParaAddedForTableInSectionPage( bool bIsAdded )
+{
+    m_bDummyParaAddedForTableInSectionPage = bIsAdded;
 }
 
 
