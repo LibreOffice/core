@@ -105,7 +105,8 @@
         <!-- line breaks in lists need an indent similar to the list label -->
         <xsl:if test="$listIndent">
             <xsl:element namespace="{$namespace}" name="span">
-                <xsl:attribute name="style">margin-left:<xsl:value-of select="$listIndent"/>cm</xsl:attribute>
+                <!-- some locales use , instead of . so replace it -->
+                <xsl:attribute name="style">margin-left:<xsl:value-of select="replace($listIndent, ',', '.')"/>cm</xsl:attribute>
             </xsl:element>
         </xsl:if>
     </xsl:template>
