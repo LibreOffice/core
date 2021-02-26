@@ -2304,7 +2304,7 @@ void SvTreeListBox::MouseButtonUp( const MouseEvent& rMEvt )
             {
                 SvLBoxButton* pItemCheckBox
                     = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
-                if (pItemCheckBox)
+                if (pItemCheckBox && GetItemPos(pEntry, 0).first < aPnt.X() - GetMapMode().GetOrigin().X())
                 {
                     pItemCheckBox->ClickHdl(pEntry);
                     InvalidateEntry(pEntry);
@@ -3033,6 +3033,45 @@ SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, tools::Long nX
         nNextItem++;
     }
     return pItemClicked;
+}
+
+std::pair<tools::Long, tools::Long> SvTreeListBox::GetItemPos(SvTreeListEntry* pEntry, sal_uInt16 nTabIdx)
+{
+    sal_uInt16 nTabCount = aTabs.size();
+    sal_uInt16 nItemCount = pEntry->ItemCount();
+    if (nTabIdx >= nItemCount || nTabIdx >= nTabCount)
+        return std::make_pair(-1, -1);
+
+    SvLBoxTab* pTab = aTabs.front().get();
+    SvLBoxItem* pItem = &pEntry->GetItem(nTabIdx);
+    sal_uInt16 nNextItem = nTabIdx + 1;
+
+    tools::Long nRealWidth = pImpl->GetOutputSize().Width();
+    nRealWidth -= GetMapMode().GetOrigin().X();
+
+    SvLBoxTab* pNextTab = nNextItem < nTabCount ? aTabs[nNextItem].get() : nullptr;
+    tools::Long nStart = GetTabPos(pEntry, pTab);
+
+    tools::Long nNextTabPos;
+    if (pNextTab)
+        nNextTabPos = GetTabPos(pEntry, pNextTab);
+    else
+    {
+        nNextTabPos = nRealWidth;
+        if (nStart > nRealWidth)
+            nNextTabPos += 50;
+    }
+
+    auto nItemWidth(pItem->GetWidth(this, pEntry));
+    nStart += pTab->CalcOffset(nItemWidth, nNextTabPos - nStart);
+    auto nLen = nItemWidth;
+    if (pNextTab)
+    {
+        tools::Long nTabWidth = GetTabPos(pEntry, pNextTab) - nStart;
+        if (nTabWidth < nLen)
+            nLen = nTabWidth;
+    }
+    return std::make_pair(nStart, nLen);
 }
 
 tools::Long SvTreeListBox::getPreferredDimensions(std::vector<tools::Long> &rWidths) const
