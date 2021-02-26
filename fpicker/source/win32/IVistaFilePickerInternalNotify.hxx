@@ -17,22 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_IVISTAFILEPICKERINTERNALNOTIFY_HXX
-#define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_IVISTAFILEPICKERINTERNALNOTIFY_HXX
+#pragma once
 
-#include "vistatypes.h"
+#include <systools/win32/uwinapi.h>
 
-#include <cppuhelper/basemutex.hxx>
-#include <osl/interlck.h>
-
-#include <shobjidl.h>
-
-namespace fpicker{
-namespace win32{
-namespace vista{
+namespace fpicker::win32::vista{
 
 
-// types, const etcpp.
+// types, const etc.
 
 
 /** todo document me
@@ -51,8 +43,6 @@ class IVistaFilePickerInternalNotify
         ~IVistaFilePickerInternalNotify() {}
 };
 
-}}}
-
-#endif // INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_IVISTAFILEPICKERINTERNALNOTIFY_HXX
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

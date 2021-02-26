@@ -308,15 +308,12 @@ static std::wstring getShellLinkTarget(const std::wstring& aLnkFile)
     try
     {
         sal::systools::COMReference<IShellLinkW> pIShellLink;
-        HRESULT hr = CoCreateInstance(
-            CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER, IID_IShellLinkW, reinterpret_cast<LPVOID*>(&pIShellLink));
-        if (FAILED(hr))
-            return target;
+        pIShellLink.CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER);
 
-        sal::systools::COMReference<IPersistFile> pIPersistFile =
-            pIShellLink.QueryInterface<IPersistFile>(IID_IPersistFile);
+        sal::systools::COMReference<IPersistFile> pIPersistFile(pIShellLink,
+                                                                sal::systools::COM_QUERY_THROW);
 
-        hr = pIPersistFile->Load(aLnkFile.c_str(), STGM_READ);
+        HRESULT hr = pIPersistFile->Load(aLnkFile.c_str(), STGM_READ);
         if (FAILED(hr))
             return target;
 

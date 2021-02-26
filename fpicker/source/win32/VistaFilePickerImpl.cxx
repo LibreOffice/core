@@ -27,7 +27,6 @@
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
 #include <com/sun/star/lang/SystemDependent.hpp>
 #include <comphelper/sequence.hxx>
-#include <comphelper/windowserrorstring.hxx>
 #include <fpicker/strings.hrc>
 #include <fpsofficeResMgr.hxx>
 #include <osl/file.hxx>
@@ -56,7 +55,8 @@ static HWND choose_parent_window()
 
 namespace {
 
-bool createFolderItem(OUString const & url, ComPtr<IShellItem> & folder) {
+bool createFolderItem(OUString const& url, sal::systools::COMReference<IShellItem>& folder)
+{
     OUString path;
     if (osl::FileBase::getSystemPathFromFileURL(url, path)
         != osl::FileBase::E_None)
@@ -97,54 +97,53 @@ const GUID CLIENTID_FILEOPEN_LINK            = {0x39AC4BAE, 0x7D2D, 0x46BC, 0xBE
 class TDialogImplBase
 {
 public:
-    template <class ComPtrDialog> TDialogImplBase(ComPtrDialog&& iDialog)
+    TDialogImplBase(IFileDialog* iDialog)
+        : m_iDialog(iDialog)
     {
-        HRESULT hResult = iDialog.create();
-        if (FAILED(hResult))
-            throw css::uno::RuntimeException(WindowsErrorStringFromHRESULT(hResult));
-        hResult = iDialog.query(&m_iDialog);
-        if (FAILED(hResult))
-            throw css::uno::RuntimeException(WindowsErrorStringFromHRESULT(hResult));
     }
 
-    TFileDialog getComPtr() { return m_iDialog; };
-    virtual ComPtr<IShellItemArray> getResult(bool bInExecute)
+    TFileDialog getComPtr() { return m_iDialog; }
+    virtual sal::systools::COMReference<IShellItemArray> getResult(bool bInExecute)
     {
-        ComPtr<IShellItem> iItem;
+        sal::systools::COMReference<IShellItem> iItem;
         if (bInExecute)
             m_iDialog->GetCurrentSelection(&iItem);
         else
             m_iDialog->GetResult(&iItem);
         void* iItems = nullptr;
-        SHCreateShellItemArrayFromShellItem(iItem, IID_IShellItemArray, &iItems);
-        return ComPtr<IShellItemArray>(reinterpret_cast<IShellItemArray*>(iItems));
+        if (iItem.is())
+            SHCreateShellItemArrayFromShellItem(iItem.get(), IID_IShellItemArray, &iItems);
+        return static_cast<IShellItemArray*>(iItems);
     }
 
 private:
     TFileDialog m_iDialog;
 };
 
-template <class ComPtrDialog> class TDialogImpl : public TDialogImplBase
+template <class ComPtrDialog, REFCLSID CLSID> class TDialogImpl : public TDialogImplBase
 {
 public:
-    TDialogImpl() : TDialogImplBase(ComPtrDialog()) {}
+    TDialogImpl()
+        : TDialogImplBase(ComPtrDialog().CoCreateInstance(CLSID).get())
+    {
+    }
 };
 
-class TOpenDialogImpl : public TDialogImpl<TFileOpenDialog>
+class TOpenDialogImpl : public TDialogImpl<TFileOpenDialog, CLSID_FileOpenDialog>
 {
 public:
-    ComPtr<IShellItemArray> getResult(bool bInExecute) override
+    sal::systools::COMReference<IShellItemArray> getResult(bool bInExecute) override
     {
-        ComPtr<IShellItemArray> iItems;
-        TFileOpenDialog iDialog{ getComPtr() };
+        sal::systools::COMReference<IShellItemArray> iItems;
+        TFileOpenDialog iDialog(getComPtr(), sal::systools::COM_QUERY_THROW);
         if (FAILED(bInExecute ? iDialog->GetSelectedItems(&iItems) : iDialog->GetResults(&iItems)))
             iItems = TDialogImplBase::getResult(bInExecute);
         return iItems;
     }
 };
 
-using TSaveDialogImpl = TDialogImpl<TFileSaveDialog>;
-using TFolderPickerDialogImpl = TDialogImpl<TFolderPickerDialog>;
+using TSaveDialogImpl = TDialogImpl<TFileSaveDialog, CLSID_FileSaveDialog>;
+using TFolderPickerDialogImpl = TDialogImpl<TFileOpenDialog, CLSID_FileOpenDialog>;
 
 
 static OUString lcl_getURLFromShellItem (IShellItem* pItem)
@@ -384,9 +383,11 @@ void VistaFilePickerImpl::impl_sta_addFilePickerListener(const RequestRef& rRequ
     aLock.clear();
     // <- SYNCHRONIZED
 
-    VistaFilePickerEventHandler* pHandlerImpl = static_cast<VistaFilePickerEventHandler*>(iHandler.get());
-    if (pHandlerImpl)
+    if (iHandler.is())
+    {
+        auto* pHandlerImpl = static_cast<VistaFilePickerEventHandler*>(iHandler.get());
         pHandlerImpl->addFilePickerListener(xListener);
+    }
 }
 
 
@@ -403,9 +404,11 @@ void VistaFilePickerImpl::impl_sta_removeFilePickerListener(const RequestRef& rR
     aLock.clear();
     // <- SYNCHRONIZED
 
-    VistaFilePickerEventHandler* pHandlerImpl = static_cast<VistaFilePickerEventHandler*>(iHandler.get());
-    if (pHandlerImpl)
+    if (iHandler.is())
+    {
+        auto* pHandlerImpl = static_cast<VistaFilePickerEventHandler*>(iHandler.get());
         pHandlerImpl->removeFilePickerListener(xListener);
+    }
 }
 
 
@@ -534,9 +537,11 @@ void VistaFilePickerImpl::impl_sta_InitDialog(const RequestRef& rRequest, DWORD 
     ::sal_Int32 nTemplate = rRequest->getArgumentOrDefault(PROP_TEMPLATE_DESCR, ::sal_Int32(0));
     impl_sta_enableFeatures(nFeatures, nTemplate);
 
-    VistaFilePickerEventHandler* pHandlerImpl = static_cast<VistaFilePickerEventHandler*>(iHandler.get());
-    if (pHandlerImpl)
+    if (iHandler.is())
+    {
+        auto* pHandlerImpl = static_cast<VistaFilePickerEventHandler*>(iHandler.get());
         pHandlerImpl->startListening(iDialog);
+    }
 }
 
 
@@ -794,21 +799,21 @@ void VistaFilePickerImpl::impl_sta_SetDirectory(const RequestRef& rRequest)
     aLock.clear();
     // <- SYNCHRONIZED
 
-    ComPtr< IShellItem > pFolder;
+    sal::systools::COMReference<IShellItem> pFolder;
     if ( !createFolderItem(sDirectory, pFolder) )
         return;
 
-    iDialog->SetFolder(pFolder);
+    iDialog->SetFolder(pFolder.get());
 }
 
 OUString VistaFilePickerImpl::GetDirectory()
 {
     TFileDialog iDialog = impl_getBaseDialogInterface();
-    ComPtr< IShellItem > pFolder;
+    sal::systools::COMReference<IShellItem> pFolder;
     HRESULT hResult = iDialog->GetFolder( &pFolder );
     if ( FAILED(hResult) )
         return OUString();
-    return lcl_getURLFromShellItem(pFolder);
+    return lcl_getURLFromShellItem(pFolder.get());
 }
 
 void VistaFilePickerImpl::impl_sta_GetDirectory(const RequestRef& rRequest)
@@ -902,8 +907,8 @@ void VistaFilePickerImpl::impl_sta_getSelectedFiles(const RequestRef& rRequest)
 
     // ask dialog for results
     // we must react different if dialog is in execute or not .-(
-    ComPtr<IShellItemArray> iItems = pDialog->getResult(bInExecute);
-    if (!iItems)
+    sal::systools::COMReference<IShellItemArray> iItems = pDialog->getResult(bInExecute);
+    if (!iItems.is())
         return;
 
     // convert and pack results
@@ -912,9 +917,10 @@ void VistaFilePickerImpl::impl_sta_getSelectedFiles(const RequestRef& rRequest)
     {
         for (DWORD i = 0; i < nCount; ++i)
         {
-            if (ComPtr<IShellItem> iItem; SUCCEEDED(iItems->GetItemAt(i, &iItem)))
+            if (sal::systools::COMReference<IShellItem> iItem;
+                SUCCEEDED(iItems->GetItemAt(i, &iItem)))
             {
-                if (const OUString sURL = lcl_getURLFromShellItem(iItem); !sURL.isEmpty())
+                if (const OUString sURL = lcl_getURLFromShellItem(iItem.get()); !sURL.isEmpty())
                     lFiles.push_back(sURL);
             }
         }
@@ -948,7 +954,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
     // according to its client guid.
     if( m_sDirectory.getLength())
     {
-        ComPtr< IShellItem > pFolder;
+        sal::systools::COMReference<IShellItem> pFolder;
         if ( createFolderItem(m_sDirectory, pFolder) )
         {
             if (m_sFilename.getLength())
@@ -988,14 +994,14 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
                 WIN32_FIND_DATAW aFindFileData;
                 HANDLE  hFind = FindFirstFileW( o3tl::toW(aSystemPath.getStr()), &aFindFileData );
                 if (hFind != INVALID_HANDLE_VALUE)
-                    iDialog->SetFolder(pFolder);
+                    iDialog->SetFolder(pFolder.get());
                 else
-                    hResult = iDialog->AddPlace(pFolder, FDAP_TOP);
+                    hResult = iDialog->AddPlace(pFolder.get(), FDAP_TOP);
 
                 FindClose( hFind );
             }
             else
-                iDialog->AddPlace(pFolder, FDAP_TOP);
+                iDialog->AddPlace(pFolder.get(), FDAP_TOP);
         }
     }
 
@@ -1044,15 +1050,13 @@ TFileDialog VistaFilePickerImpl::impl_getBaseDialogInterface()
 
 TFileDialogCustomize VistaFilePickerImpl::impl_getCustomizeInterface()
 {
-    TFileDialogCustomize iCustom;
-
     // SYNCHRONIZED->
     osl::MutexGuard aLock(m_aMutex);
 
     if (m_pDialog)
-        m_pDialog->getComPtr().query(&iCustom);
+        return { m_pDialog->getComPtr(), sal::systools::COM_QUERY_THROW };
 
-    return iCustom;
+    return {};
 }
 
 
