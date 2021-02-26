@@ -232,11 +232,11 @@ extensions/source/propctrlr/commoncontrol.hxx:140
     void pcr::CommonBehaviourControl::notifyModifiedValue()
 extensions/source/propctrlr/commoncontrol.hxx:155
     void pcr::CommonBehaviourControl::disposing()
-forms/source/xforms/datatypes.hxx:233
+forms/source/xforms/datatypes.hxx:234
     class cppu::IPropertyArrayHelper * xforms::ODerivedDataType::createArrayHelper()const
-forms/source/xforms/datatypes.hxx:236
-    class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySetInfo> xforms::ODerivedDataType::getPropertySetInfo()
 forms/source/xforms/datatypes.hxx:237
+    class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySetInfo> xforms::ODerivedDataType::getPropertySetInfo()
+forms/source/xforms/datatypes.hxx:238
     class cppu::IPropertyArrayHelper & xforms::ODerivedDataType::getInfoHelper()
 forms/source/xforms/namedcollection.hxx:82
     class com::sun::star::uno::Type NamedCollection::getElementType()
@@ -296,10 +296,10 @@ include/vbahelper/vbareturntypes.hxx:39
     type-parameter-0-0 ooo::vba::DefaultReturnHelper::getValue()
 include/vcl/customweld.hxx:45
     class rtl::OUString weld::CustomWidgetController::GetHelpText()const
+include/vcl/menu.hxx:236
+    void Menu::Select()
 include/vcl/toolkit/dialog.hxx:99
     void Dialog::set_content_area(class VclBox *,)
-include/vcl/toolkit/menubtn.hxx:67
-    void MenuButton::Select()
 include/vcl/weld.hxx:100
     void weld::Widget::set_visible(_Bool,)
 sc/source/core/opencl/formulagroupcl.cxx:1061
@@ -402,14 +402,10 @@ slideshow/source/inc/shape.hxx:221
     void slideshow::internal::Shape::setIsForeground(const _Bool,)
 sw/inc/flypos.hxx:37
     void SwPosFlyFrame::~SwPosFlyFrame()
-sw/source/core/inc/MarkManager.hxx:104
-    void sw::mark::MarkManager::LOKUpdateActiveField(class SfxViewShell *,)
-toolkit/inc/controls/geometrycontrolmodel.hxx:182
+toolkit/inc/controls/geometrycontrolmodel.hxx:185
     void OGeometryControlModel::fillProperties(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,)const
 vcl/inc/jsdialog/jsdialogbuilder.hxx:90
     void JSDialogSender::sendFullUpdate(_Bool,)
-vcl/inc/jsdialog/jsdialogbuilder.hxx:92
-    void JSDialogSender::sendUpdate(class VclPtr<class vcl::Window>,_Bool,)
 vcl/inc/jsdialog/jsdialogbuilder.hxx:250
     void JSWidget::show()
 vcl/inc/jsdialog/jsdialogbuilder.hxx:256
@@ -436,7 +432,7 @@ vcl/inc/salprn.hxx:116
     enum SalPrinterError SalPrinter::GetErrorCode()
 vcl/inc/salvtables.hxx:1577
     _Bool SalInstanceTreeView::get_iter_abs_pos(class weld::TreeIter &,int,)const
-vcl/inc/skia/gdiimpl.hxx:236
+vcl/inc/skia/gdiimpl.hxx:238
     void SkiaSalGraphicsImpl::createSurface()
 vcl/inc/unx/gtk/gtkdata.hxx:180
     int GtkSalDisplay::CaptureMouse(class SalFrame *,)
@@ -462,7 +458,7 @@ vcl/inc/unx/saldisp.hxx:197
     _Bool SalXLib::CheckTimeout(_Bool,)
 vcl/inc/unx/saldisp.hxx:404
     void SalX11Display::Yield()
-vcl/inc/unx/salframe.h:206
+vcl/inc/unx/salframe.h:205
     void X11SalFrame::updateGraphics(_Bool,)
 vcl/inc/unx/salinst.h:41
     class SalX11Display * X11SalInstance::CreateDisplay()const
@@ -479,7 +475,7 @@ workdir/../vcl/inc/qt5/Qt5Frame.hxx:162
 workdir/../vcl/inc/qt5/Qt5Frame.hxx:163
     void Qt5Frame::deregisterDropTarget(const class Qt5DropTarget *,)
 workdir/../vcl/inc/qt5/Qt5Instance.hxx:84
-    class Qt5FilePicker * Qt5Instance::createPicker(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,enum QFileDialog::FileMode,)
+    class rtl::Reference<class Qt5FilePicker> Qt5Instance::createPicker(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,enum QFileDialog::FileMode,)
 writerfilter/source/dmapper/TableManager.hxx:484
     void writerfilter::dmapper::TableManager::tableExceptionProps(const class tools::SvRef<class writerfilter::dmapper::TablePropertyMap> &,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:66
