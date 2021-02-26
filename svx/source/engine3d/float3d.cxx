@@ -2150,49 +2150,46 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 
 void Svx3DWin::Resize()
 {
-    if (!IsFloatingMode())
+    Size aWinSize( GetOutputSizePixel() ); // why rSize in Resizing()?
+
+    if( aWinSize.Height() >= GetMinOutputSizePixel().Height() &&
+        aWinSize.Width() >= GetMinOutputSizePixel().Width() )
     {
-        Size aWinSize( GetOutputSizePixel() ); // why rSize in Resizing()?
+        // Hide
+        m_xBtnUpdate->hide();
+        m_xBtnAssign->hide();
 
-        if( aWinSize.Height() >= GetMinOutputSizePixel().Height() &&
-            aWinSize.Width() >= GetMinOutputSizePixel().Width() )
-        {
-            // Hide
-            m_xBtnUpdate->hide();
-            m_xBtnAssign->hide();
+        m_xBtnConvertTo3D->hide();
+        m_xBtnLatheObject->hide();
+        m_xBtnPerspective->hide();
 
-            m_xBtnConvertTo3D->hide();
-            m_xBtnLatheObject->hide();
-            m_xBtnPerspective->hide();
+        m_xCtlPreview->Hide();
+        m_xLightPreviewGrid->hide();
 
-            m_xCtlPreview->Hide();
-            m_xLightPreviewGrid->hide();
+        m_xFLGeometrie->hide();
+        m_xFLRepresentation->hide();
+        m_xFLLight->hide();
+        m_xFLTexture->hide();
+        m_xFLMaterial->hide();
 
-            m_xFLGeometrie->hide();
-            m_xFLRepresentation->hide();
-            m_xFLLight->hide();
-            m_xFLTexture->hide();
-            m_xFLMaterial->hide();
+        // Show
+        m_xBtnUpdate->show();
+        m_xBtnAssign->show();
 
-            // Show
-            m_xBtnUpdate->show();
-            m_xBtnAssign->show();
+        m_xBtnConvertTo3D->show();
+        m_xBtnLatheObject->show();
+        m_xBtnPerspective->show();
 
-            m_xBtnConvertTo3D->show();
-            m_xBtnLatheObject->show();
-            m_xBtnPerspective->show();
-
-            if( m_xBtnGeo->get_active() )
-                ClickViewTypeHdl(*m_xBtnGeo);
-            if( m_xBtnRepresentation->get_active() )
-                ClickViewTypeHdl(*m_xBtnRepresentation);
-            if( m_xBtnLight->get_active() )
-                ClickViewTypeHdl(*m_xBtnLight);
-            if( m_xBtnTexture->get_active() )
-                ClickViewTypeHdl(*m_xBtnTexture);
-            if( m_xBtnMaterial->get_active() )
-                ClickViewTypeHdl(*m_xBtnMaterial);
-        }
+        if( m_xBtnGeo->get_active() )
+            ClickViewTypeHdl(*m_xBtnGeo);
+        if( m_xBtnRepresentation->get_active() )
+            ClickViewTypeHdl(*m_xBtnRepresentation);
+        if( m_xBtnLight->get_active() )
+            ClickViewTypeHdl(*m_xBtnLight);
+        if( m_xBtnTexture->get_active() )
+            ClickViewTypeHdl(*m_xBtnTexture);
+        if( m_xBtnMaterial->get_active() )
+            ClickViewTypeHdl(*m_xBtnMaterial);
     }
 
     SfxDockingWindow::Resize();
