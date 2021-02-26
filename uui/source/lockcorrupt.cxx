@@ -29,6 +29,7 @@ LockCorruptQueryBox::LockCorruptQueryBox(weld::Window* pParent, const std::local
 {
     m_xQueryBox->set_title(Translate::get(STR_LOCKCORRUPT_TITLE, rResLocale));
     m_xQueryBox->add_button(Translate::get(STR_LOCKCORRUPT_OPENREADONLY_BTN, rResLocale), RET_OK);
+    m_xQueryBox->add_button(Translate::get(STR_LOCKCORRUPT_OPENREADONLY_NOTIFY_BTN, rResLocale), RET_RETRY);
     m_xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
     m_xQueryBox->set_default_response(RET_OK);
 }
