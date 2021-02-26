@@ -183,14 +183,14 @@ private:
 
 public:
     // Create existing content. Fail, if not already exists.
-    static HierarchyContent* create(
+    static rtl::Reference<HierarchyContent> create(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const css::uno::Reference<
                 css::ucb::XContentIdentifier >& Identifier );
 
     // Create new content. Fail, if already exists.
-    static HierarchyContent* create(
+    static rtl::Reference<HierarchyContent> create(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
