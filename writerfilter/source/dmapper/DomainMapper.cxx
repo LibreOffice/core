@@ -3562,7 +3562,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                            (!m_pImpl->GetParaChanged() && m_pImpl->GetParaSectpr()
                             && !bSingleParagraphAfterRedline
                             && !m_pImpl->GetParaHadField()
-                            && !m_pImpl->GetIsDummyParaAddedForTableInSection()
+                            && (!m_pImpl->GetIsDummyParaAddedForTableInSection() || !m_pImpl->GetIsFirstParagraphInSection())
                             && !( pSectionContext && pSectionContext->GetBreakType() != -1 && pContext && pContext->isSet(PROP_BREAK_TYPE) )
                             && !m_pImpl->GetIsPreviousParagraphFramed()
                             && !m_pImpl->HasTopAnchoredObjects()

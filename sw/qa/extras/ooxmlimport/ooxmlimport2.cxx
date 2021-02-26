@@ -116,6 +116,17 @@ DECLARE_OOXMLIMPORT_TEST(testTdf108849, "tdf108849.docx")
                                  getPages());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf140182_extraPagebreak, "tdf140182_extraPagebreak.docx")
+{
+    // Table, page break, section break should be only 2 pages
+    // 2 breaks would normally result in 3 pages, but page break + section break is a special case
+    // that is handled so to break only 1 page that result only 2 pages.
+    // Because of the table, a hack (m_bDummyParaAddedForTableInSection) is set for the entire section,
+    // that canceled the page break + section break special case handling, resulting 3 pages.
+    // The accompanying fix eliminate this cancelation.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf97038, "tdf97038.docx")
 {
     // Without the accompanying fix in place, this test would have failed, as the importer lost the
