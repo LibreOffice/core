@@ -307,6 +307,12 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
             SfxMedium* pMed = pSh->GetMedium();
 
+            // copied from SfxObjectShell::~SfxObjectShell
+            // otherwise SfxMedium::SetOpenMode clears the storage
+            if (pMed && pMed->HasStorage_Impl()
+                && pMed->GetStorage(false) == pSh->Get_Impl()->m_xDocStorage)
+                pMed->CanDisposeStorage_Impl(false);
+
             const SfxBoolItem* pItem = SfxItemSet::GetItem<SfxBoolItem>(pSh->GetMedium()->GetItemSet(), SID_VIEWONLY, false);
             if ( pItem && pItem->GetValue() )
             {
@@ -353,8 +359,11 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         return;
                     }
                 }
-                nOpenMode = SFX_STREAM_READONLY;
-                aReadOnlyUIGuard.m_bSetRO = true;
+                //tdf#47065 refresh the UI on reload thread success
+                nOpenMode = pSh->IsOriginallyReadOnlyMedium() ? SFX_STREAM_READONLY
+                                                              : SFX_STREAM_READWRITE;
+                if (nOpenMode == SFX_STREAM_READONLY)
+                    aReadOnlyUIGuard.m_bSetRO = true;
             }
             else
             {
