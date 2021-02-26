@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "480460d7_56f8ef8e",
+        "filename": "include/osl/security.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-26T16:00:43Z",
+      "side": 1,
+      "message": "Here a code introduced in the previous commit was commented out, and a new one added.\nFirst, no need to keep the code, just remove it, as told in a previous change\u0027s comment.\nSecond, this shows that the previous change is just some preliminary test, and is not needed in the history.",
+      "revId": "97cf78852f4ab31921a6ec08a777baa7fa148d25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9dc09d91_6844997f",
+        "filename": "sal/Library_sal.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-26T16:00:43Z",
+      "side": 1,
+      "message": "Here the line starts with spaces, unlike the previous lines starting with tabs (inconsistency).",
+      "revId": "97cf78852f4ab31921a6ec08a777baa7fa148d25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d57e953d_539d83eb",
+        "filename": "sal/osl/w32/security.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-26T16:00:43Z",
+      "side": 1,
+      "message": "Do not use this. Instead, just\n\n  #include \u003cprewin.h\u003e\n  // ... other Windows includes\n  #include \u003cpostwin.h\u003e\n\nIf you had no other Windows-specific includes, you could do just\n\n  #include \u003csystools/win32/uwinapi.h\u003e\n\n... and there it is, at line 33 - so you need to replace it with the sequence I suggested.",
+      "revId": "97cf78852f4ab31921a6ec08a777baa7fa148d25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
