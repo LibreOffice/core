@@ -655,15 +655,19 @@ void DocumentDigitalSignatures::showCertificate(
 }
 
 sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
-    const Reference< css::security::XCertificate >& Author )
+    const Reference<css::security::XCertificate>& xAuthor)
 {
-    OUString sSerialNum = xmlsecurity::bigIntegerToNumericString( Author->getSerialNumber() );
+    if (!xAuthor.is())
+    {
+        return false;
+    }
+    OUString sSerialNum = xmlsecurity::bigIntegerToNumericString(xAuthor->getSerialNumber());
 
     std::vector< SvtSecurityOptions::Certificate > aTrustedAuthors = SvtSecurityOptions().GetTrustedAuthors();
 
     return std::any_of(aTrustedAuthors.begin(), aTrustedAuthors.end(),
-        [&Author, &sSerialNum](const SvtSecurityOptions::Certificate& rAuthor) {
-            return ( rAuthor.SubjectName == Author->getIssuerName() )
+        [&xAuthor, &sSerialNum](const SvtSecurityOptions::Certificate& rAuthor) {
+            return xmlsecurity::EqualDistinguishedNames(rAuthor.SubjectName, xAuthor->getIssuerName())
                 && ( rAuthor.SerialNumber == sSerialNum );
         });
 }
