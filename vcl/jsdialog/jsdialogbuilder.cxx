@@ -174,10 +174,16 @@ void JSDialogNotifyIdle::Invoke()
         }
     }
 
-    m_aMessageQueue.clear();
+    clearQueue();
 }
 
-JSDialogSender::~JSDialogSender() { sendClose(); }
+void JSDialogNotifyIdle::clearQueue() { m_aMessageQueue.clear(); }
+
+JSDialogSender::~JSDialogSender()
+{
+    sendClose();
+    mpIdleNotify->Stop();
+}
 
 void JSDialogSender::sendFullUpdate(bool bForce)
 {
@@ -190,6 +196,7 @@ void JSDialogSender::sendFullUpdate(bool bForce)
 
 void JSDialogSender::sendClose()
 {
+    mpIdleNotify->clearQueue();
     mpIdleNotify->sendMessage(jsdialog::MessageType::Close, nullptr);
     flush();
 }
