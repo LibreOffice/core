@@ -23,6 +23,8 @@
 #include <com/sun/star/document/LockFileIgnoreRequest.hpp>
 #include <com/sun/star/document/LockFileCorruptRequest.hpp>
 #include <com/sun/star/document/OwnLockOnDocumentRequest.hpp>
+#include <com/sun/star/document/ReadOnlyOpenRequest.hpp>
+#include <com/sun/star/document/ReloadEditableRequest.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
@@ -41,6 +43,8 @@
 #include "filechanged.hxx"
 #include "lockfailed.hxx"
 #include "lockcorrupt.hxx"
+#include "readonlyopen.hxx"
+#include "reloadeditable.hxx"
 
 #include "iahndl.hxx"
 
@@ -52,6 +56,66 @@
 using namespace com::sun::star;
 
 namespace {
+
+void handleReadOnlyOpenRequest_(
+    weld::Window* pParent, const OUString& aDocumentURL,
+    uno::Sequence<uno::Reference<task::XInteractionContinuation>> const& rContinuations)
+{
+    uno::Reference<task::XInteractionApprove> xApprove;
+    uno::Reference<task::XInteractionAbort> xAbort;
+    getContinuations(rContinuations, &xApprove, &xAbort);
+
+    if (!xApprove.is() || !xAbort.is())
+        return;
+
+    SolarMutexGuard aGuard;
+    std::locale aResLocale = Translate::Create("uui");
+
+    OUString aMessage;
+    std::vector<OUString> aArguments;
+    aArguments.push_back(aDocumentURL);
+
+    aMessage = Translate::get(STR_READONLYOPEN_MSG, aResLocale);
+    aMessage = UUIInteractionHelper::replaceMessageWithArguments(aMessage, aArguments);
+
+    ReadOnlyOpenQueryBox aDialog(pParent, aResLocale, aMessage);
+    int nResult = aDialog.run();
+
+    if (nResult == RET_YES)
+        xApprove->select();
+    else if (nResult != RET_RETRY)
+        xAbort->select();
+}
+
+void handleReloadEditableRequest_(
+    weld::Window* pParent, const OUString& aDocumentURL,
+    uno::Sequence<uno::Reference<task::XInteractionContinuation>> const& rContinuations)
+{
+    uno::Reference<task::XInteractionApprove> xApprove;
+    uno::Reference<task::XInteractionAbort> xAbort;
+    getContinuations(rContinuations, &xApprove, &xAbort);
+
+    if (!xApprove.is() || !xAbort.is())
+        return;
+
+    SolarMutexGuard aGuard;
+    std::locale aResLocale = Translate::Create("uui");
+
+    OUString aMessage;
+    std::vector<OUString> aArguments;
+    aArguments.push_back(aDocumentURL);
+
+    aMessage = Translate::get(STR_RELOADEDITABLE_MSG, aResLocale);
+    aMessage = UUIInteractionHelper::replaceMessageWithArguments(aMessage, aArguments);
+
+    ReloadEditableQueryBox aDialog(pParent, aResLocale, aMessage);
+    int nResult = aDialog.run();
+
+    if (nResult == RET_YES)
+        xApprove->select();
+    else
+        xAbort->select();
+}
 
 void
 handleLockedDocumentRequest_(
@@ -132,7 +196,7 @@ handleLockedDocumentRequest_(
         xDisapprove->select();
     else if ( nResult == RET_IGNORE && xRetry.is() )
         xRetry->select();
-    else
+    else if ( nResult != RET_RETRY )
         xAbort->select();
 }
 
@@ -196,7 +260,7 @@ handleLockFileProblemRequest_(
 
     if ( nResult == RET_OK )
         xApprove->select();
-    else
+    else if ( nResult != RET_RETRY )
         xAbort->select();
 }
 
@@ -287,6 +351,42 @@ UUIInteractionHelper::handleLockFileProblemRequest(
         uno::Reference<awt::XWindow> xParent = getParentXWindow();
         handleLockFileProblemRequest_(Application::GetFrameWeld(xParent),
                                       rRequest->getContinuations(), UUI_DOC_CorruptErrDlg);
+        return true;
+    }
+
+    return false;
+}
+
+bool UUIInteractionHelper::handleReadOnlyOpenRequest(
+    uno::Reference<task::XInteractionRequest> const& rRequest)
+{
+    uno::Any aAnyRequest(rRequest->getRequest());
+
+    document::ReadOnlyOpenRequest aReadOnlyOpenRequest;
+    if (aAnyRequest >>= aReadOnlyOpenRequest)
+    {
+        uno::Reference<awt::XWindow> xParent = getParentXWindow();
+        handleReadOnlyOpenRequest_(Application::GetFrameWeld(xParent),
+                                     aReadOnlyOpenRequest.DocumentURL,
+                                     rRequest->getContinuations());
+        return true;
+    }
+
+    return false;
+}
+
+bool UUIInteractionHelper::handleReloadEditableRequest(
+    uno::Reference<task::XInteractionRequest> const& rRequest)
+{
+    uno::Any aAnyRequest(rRequest->getRequest());
+
+    document::ReloadEditableRequest aReloadEditableRequest;
+    if (aAnyRequest >>= aReloadEditableRequest)
+    {
+        uno::Reference<awt::XWindow> xParent = getParentXWindow();
+        handleReloadEditableRequest_(
+            Application::GetFrameWeld(xParent), aReloadEditableRequest.DocumentURL,
+            rRequest->getContinuations());
         return true;
     }
 
