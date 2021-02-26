@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/drawing/XDrawView.hpp>
+#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
