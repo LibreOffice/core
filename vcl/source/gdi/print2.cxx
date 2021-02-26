@@ -220,7 +220,7 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
         {
             // blend with alpha channel
             aBmp.Convert(BmpConversion::N24Bit);
-            aBmp.Blend(aBmpEx.GetAlpha(), aBgColor);
+            aBmp.Blend(aBmpEx.GetAlpha1(), aBgColor); // TODO ???
         }
 
         // add corresponding action

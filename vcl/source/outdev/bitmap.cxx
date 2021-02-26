@@ -339,7 +339,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                     // DRAWMODE_BLACK/WHITEBITMAP requires monochrome
                     // output, having alpha-induced grey levels is not
                     // acceptable.
-                    BitmapEx aMaskEx(aBmpEx.GetAlpha().GetBitmap());
+                    BitmapEx aMaskEx(aBmpEx.GetAlpha1().GetBitmap()); // TODO ???
                     BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(129));
                     aBmpEx = BitmapEx(aColorBmp, aMaskEx.GetBitmap());
                 }
@@ -513,7 +513,7 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
 
     if (rBitmapEx.IsAlpha())
     {
-        DrawDeviceAlphaBitmap(rBitmapEx.GetBitmap(), rBitmapEx.GetAlpha(), rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel);
+        DrawDeviceAlphaBitmap1(rBitmapEx.GetBitmap(), rBitmapEx.GetAlpha1(), rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel);
     }
     else if (!!rBitmapEx)
     {
@@ -531,13 +531,13 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
                 rBitmapEx.Mirror(nMirrFlags);
 
             const SalBitmap* pSalSrcBmp = rBitmapEx.ImplGetBitmapSalBitmap().get();
-            std::shared_ptr<SalBitmap> xMaskBmp = rBitmapEx.ImplGetMaskSalBitmap();
+            std::shared_ptr<SalBitmap> xMaskBmp = rBitmapEx.ImplGetMaskSalBitmap1();
 
             if (xMaskBmp)
             {
                 bool bTryDirectPaint(pSalSrcBmp);
 
-                if (bTryDirectPaint && mpGraphics->DrawAlphaBitmap(aPosAry, *pSalSrcBmp, *xMaskBmp, *this))
+                if (bTryDirectPaint && mpGraphics->DrawAlphaBitmap1(aPosAry, *pSalSrcBmp, *xMaskBmp, *this))
                 {
                     // tried to paint as alpha directly. If this worked, we are done (except
                     // alpha, see below)
@@ -600,7 +600,7 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
                         }
                     }
 
-                    mpGraphics->DrawBitmap(aPosAry, *pSalSrcBmp, *xMaskBmp, *this);
+                    mpGraphics->DrawBitmap1(aPosAry, *pSalSrcBmp, *xMaskBmp, *this);
                 }
 
                 // #110958# Paint mask to alpha channel. Luckily, the
@@ -632,10 +632,12 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
     }
 }
 
-void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& rAlpha,
+void OutputDevice::DrawDeviceAlphaBitmap1( const Bitmap& rBmp, const AlphaMask& rAlpha,
                                     const Point& rDestPt, const Size& rDestSize,
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel )
 {
+    // TODO ????
+
     assert(!is_double_buffered_window());
 
     Point     aOutPt(LogicToPixel(rDestPt));
@@ -701,7 +703,7 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
         }
         else
         {
-            if (mpGraphics->DrawAlphaBitmap(aTR, *pSalSrcBmp, *pSalAlphaBmp, *this))
+            if (mpGraphics->DrawAlphaBitmap1(aTR, *pSalSrcBmp, *pSalAlphaBmp, *this)) // TODO ????
                 return;
         }
 
@@ -1070,7 +1072,7 @@ bool OutputDevice::DrawTransformBitmapExDirect(
     {
         if(rBitmapEx.IsAlpha())
         {
-            aAlphaBitmap = rBitmapEx.GetAlpha();
+            aAlphaBitmap = rBitmapEx.GetAlpha1(); // TODO ????
         }
         else
         {
@@ -1285,7 +1287,7 @@ void OutputDevice::DrawTransformedBitmapEx(
         sal_uInt8 nColor( static_cast<sal_uInt8>( ::basegfx::fround( 255.0*(1.0 - fAlpha) + .5) ) );
         AlphaMask aAlpha( bitmapEx.GetSizePixel(), &nColor );
         if( bitmapEx.IsTransparent())
-            aAlpha.BlendWith( bitmapEx.GetAlpha());
+            aAlpha.BlendWith( bitmapEx.GetAlpha1()); // TODO ????
         bitmapEx = BitmapEx( bitmapEx.GetBitmap(), aAlpha );
     }
     if(rtl::math::approxEqual( fAlpha, 1.0 ))

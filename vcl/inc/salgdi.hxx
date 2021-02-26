@@ -301,7 +301,7 @@ public:
                                     const SalBitmap& rSalBitmap,
                                     const OutputDevice& rOutDev );
 
-    void                        DrawBitmap(
+    void                        DrawBitmap1(
                                     const SalTwoRect& rPosAry,
                                     const SalBitmap& rSalBitmap,
                                     const SalBitmap& rTransparentBitmap,
@@ -402,7 +402,7 @@ public:
                                     const SalBitmap& rSalAlphaBitmap,
                                     const OutputDevice& rOutDev );
 
-    bool                        DrawAlphaBitmap(
+    bool                        DrawAlphaBitmap1(
                                     const SalTwoRect&,
                                     const SalBitmap& rSourceBitmap,
                                     const SalBitmap& rAlphaBitmap,
@@ -518,7 +518,7 @@ protected:
 
     virtual void                drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) = 0;
 
-    virtual void                drawBitmap(
+    virtual void                drawBitmap1(
                                     const SalTwoRect& rPosAry,
                                     const SalBitmap& rSalBitmap,
                                     const SalBitmap& rMaskBitmap ) = 0;
@@ -570,7 +570,7 @@ protected:
         otherwise. In this case, clients should try to emulate alpha
         compositing themselves
      */
-    virtual bool                drawAlphaBitmap(
+    virtual bool                drawAlphaBitmap1(
                                     const SalTwoRect&,
                                     const SalBitmap& rSourceBitmap,
                                     const SalBitmap& rAlphaBitmap ) = 0;

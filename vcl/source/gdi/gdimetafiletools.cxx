@@ -174,7 +174,7 @@ namespace
         if(rBitmapEx.IsTransparent())
         {
             // use given alpha channel
-            aVDev->DrawBitmap(Point(0, 0), rBitmapEx.GetAlpha().GetBitmap());
+            aVDev->DrawBitmap(Point(0, 0), rBitmapEx.GetAlpha1().GetBitmap()); // TODO ????
         }
         else
         {

@@ -725,7 +725,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     xVDev->EnableMapMode( false );
 
                     AlphaMask aAlpha(xVDev->GetBitmap(Point(), xVDev->GetOutputSizePixel()));
-                    aAlpha.BlendWith(aPaint.GetAlpha());
+                    aAlpha.BlendWith(aPaint.GetAlpha1()); // TODO ???
 
                     xVDev.disposeAndClear();
 

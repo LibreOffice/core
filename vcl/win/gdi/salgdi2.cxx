@@ -177,7 +177,7 @@ void WinSalGraphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSal
     }
 }
 
-void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
+void WinSalGraphics::drawBitmap1( const SalTwoRect& rPosAry,
                               const SalBitmap& rSSalBitmap,
                               const SalBitmap& rSTransparentBitmap )
 {
@@ -196,11 +196,11 @@ void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
         SalBitmap& rConstTransparentBitmap = const_cast<SalBitmap&>(rSTransparentBitmap);
         convertToWinSalBitmap(rConstTransparentBitmap, *pWinTransparentSalBitmap);
 
-        mpImpl->drawBitmap(rPosAry, *pWinSalBitmap, *pWinTransparentSalBitmap);
+        mpImpl->drawBitmap(true, *pWinSalBitmap, *pWinTransparentSalBitmap);
     }
     else
     {
-        mpImpl->drawBitmap(rPosAry, rSSalBitmap, rSTransparentBitmap);
+        mpImpl->drawBitmap1(rPosAry, rSSalBitmap, rSTransparentBitmap);
     }
 }
 

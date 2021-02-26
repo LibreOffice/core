@@ -76,12 +76,12 @@ bool WinSalGraphics::blendAlphaBitmap(
     return mpImpl->blendAlphaBitmap(rTR, rSrcBmp, rMaskBmp, rAlphaBmp);
 }
 
-bool WinSalGraphics::drawAlphaBitmap(
+bool WinSalGraphics::drawAlphaBitmap1(
     const SalTwoRect& rTR,
     const SalBitmap& rSrcBitmap,
     const SalBitmap& rAlphaBmp)
 {
-    return mpImpl->drawAlphaBitmap(rTR, rSrcBitmap, rAlphaBmp);
+    return mpImpl->drawAlphaBitmap(true, rSrcBitmap, rAlphaBmp);
 }
 
 bool WinSalGraphics::drawTransformedBitmap(

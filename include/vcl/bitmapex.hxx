@@ -79,7 +79,7 @@ public:
     Bitmap              GetMask() const;
 
     bool                IsAlpha() const;
-    AlphaMask           GetAlpha() const;
+    AlphaMask           GetAlpha1() const;
 
     const Size&         GetSizePixel() const { return maBitmapSize; }
     void                SetSizePixel(const Size& rNewSize);
@@ -458,7 +458,7 @@ public:
                             sal_uInt32& rnWidth, sal_uInt32& rnHeight, sal_uInt8& rnBitCount);
 
     SAL_DLLPRIVATE std::shared_ptr<SalBitmap> const & ImplGetBitmapSalBitmap() const { return maBitmap.ImplGetSalBitmap(); }
-    SAL_DLLPRIVATE std::shared_ptr<SalBitmap> const & ImplGetMaskSalBitmap() const { return maMask.ImplGetSalBitmap(); }
+    SAL_DLLPRIVATE std::shared_ptr<SalBitmap> const & ImplGetMaskSalBitmap1() const { return maMask1.ImplGetSalBitmap(); }
 
 
 private:
@@ -473,7 +473,7 @@ private:
     void  loadFromIconTheme( const OUString& rIconName );
 
     Bitmap              maBitmap;
-    Bitmap              maMask;
+    Bitmap              maMask1;
     Size                maBitmapSize;
     Color               maTransparentColor;
     TransparentType     meTransparent;

@@ -205,7 +205,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
         if ( aBitmapEx.IsTransparent() )
         {
             if ( aBitmapEx.IsAlpha() )
-                aMask = aBitmapEx.GetAlpha().GetBitmap();
+                aMask = aBitmapEx.GetAlpha1().GetBitmap(); // TODO ???
             else
                 aMask = aBitmapEx.GetMask();
         }

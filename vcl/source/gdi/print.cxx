@@ -302,7 +302,7 @@ void Printer::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,
         // bitmap, but perform a full alpha blend against a white
         // background here.
         Bitmap aBmp( rBmpEx.GetBitmap() );
-        aBmp.Blend( rBmpEx.GetAlpha(), COL_WHITE );
+        aBmp.Blend( rBmpEx.GetAlpha1(), COL_WHITE ); // TODO ????
         DrawBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmp );
     }
     else

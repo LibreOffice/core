@@ -238,7 +238,7 @@ void FileDefinitionWidgetDraw::drawBitmap(SalGraphics& rGraphics, const SalTwoRe
                                           const SalBitmap& rSalBitmap,
                                           const SalBitmap& rTransparentBitmap)
 {
-    rGraphics.drawBitmap(rPosAry, rSalBitmap, rTransparentBitmap);
+    rGraphics.drawBitmap1(rPosAry, rSalBitmap, rTransparentBitmap); // TODO ???
 }
 
 void FileDefinitionWidgetDraw::implDrawGradient(SalGraphics& rGraphics,
@@ -496,7 +496,7 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                     if (aBitmap.IsAlpha())
                     {
                         const std::shared_ptr<SalBitmap> pSalBitmapAlpha
-                            = aBitmap.GetAlpha().ImplGetSalBitmap();
+                            = aBitmap.GetAlpha1().ImplGetSalBitmap(); // TODO ????
                         FileDefinitionWidgetDraw::drawBitmap(rGraphics, aTR, *pSalBitmap,
                                                              *pSalBitmapAlpha);
                     }

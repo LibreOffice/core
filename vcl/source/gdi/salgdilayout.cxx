@@ -621,7 +621,7 @@ void SalGraphics::DrawBitmap( const SalTwoRect& rPosAry,
         drawBitmap( rPosAry, rSalBitmap );
 }
 
-void SalGraphics::DrawBitmap( const SalTwoRect& rPosAry,
+void SalGraphics::DrawBitmap1( const SalTwoRect& rPosAry,
                               const SalBitmap& rSalBitmap,
                               const SalBitmap& rTransparentBitmap, const OutputDevice& rOutDev )
 {
@@ -629,10 +629,10 @@ void SalGraphics::DrawBitmap( const SalTwoRect& rPosAry,
     {
         SalTwoRect aPosAry2 = rPosAry;
         mirror( aPosAry2.mnDestX, aPosAry2.mnDestWidth, rOutDev );
-        drawBitmap( aPosAry2, rSalBitmap, rTransparentBitmap );
+        drawBitmap1( aPosAry2, rSalBitmap, rTransparentBitmap );
     }
     else
-        drawBitmap( rPosAry, rSalBitmap, rTransparentBitmap );
+        drawBitmap1( rPosAry, rSalBitmap, rTransparentBitmap );
 }
 
 void SalGraphics::DrawMask( const SalTwoRect& rPosAry,
@@ -817,7 +817,7 @@ bool SalGraphics::BlendAlphaBitmap( const SalTwoRect& rPosAry,
         return blendAlphaBitmap( rPosAry, rSrcBitmap, rMaskBitmap, rAlphaBitmap );
 }
 
-bool SalGraphics::DrawAlphaBitmap( const SalTwoRect& rPosAry,
+bool SalGraphics::DrawAlphaBitmap1( const SalTwoRect& rPosAry,
                                    const SalBitmap& rSourceBitmap,
                                    const SalBitmap& rAlphaBitmap,
                                    const OutputDevice& rOutDev )
@@ -826,10 +826,10 @@ bool SalGraphics::DrawAlphaBitmap( const SalTwoRect& rPosAry,
     {
         SalTwoRect aPosAry2 = rPosAry;
         mirror( aPosAry2.mnDestX, aPosAry2.mnDestWidth, rOutDev );
-        return drawAlphaBitmap( aPosAry2, rSourceBitmap, rAlphaBitmap );
+        return drawAlphaBitmap1( aPosAry2, rSourceBitmap, rAlphaBitmap );
     }
     else
-        return drawAlphaBitmap( rPosAry, rSourceBitmap, rAlphaBitmap );
+        return drawAlphaBitmap1( rPosAry, rSourceBitmap, rAlphaBitmap );
 }
 
 bool SalGraphics::DrawTransformedBitmap(

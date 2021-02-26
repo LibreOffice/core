@@ -8729,7 +8729,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         }
         else if( aBitmap.GetBitCount() != 8 )
         {
-            aBitmap = getExportBitmap(rObject.m_aBitmap.GetAlpha().GetBitmap());
+            aBitmap = getExportBitmap(rObject.m_aBitmap.GetAlpha1().GetBitmap()); // TODO ???
             aBitmap.Convert( BmpConversion::N8BitGreys );
             SAL_WARN_IF( aBitmap.GetBitCount() != 8, "vcl.pdfwriter", "alpha mask conversion failed" );
         }
@@ -9163,7 +9163,7 @@ const BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx& i_rBitmap, co
     aID.m_nChecksum         = aBitmap.GetBitmap().GetChecksum();
     aID.m_nMaskChecksum     = 0;
     if( aBitmap.IsAlpha() )
-        aID.m_nMaskChecksum = aBitmap.GetAlpha().GetChecksum();
+        aID.m_nMaskChecksum = aBitmap.GetAlpha1().GetChecksum();
     else
     {
         Bitmap aMask = aBitmap.GetMask();

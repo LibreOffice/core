@@ -1534,7 +1534,7 @@ protected:
 
 private:
 
-    SAL_DLLPRIVATE void         DrawDeviceAlphaBitmap(
+    SAL_DLLPRIVATE void         DrawDeviceAlphaBitmap1(
                                     const Bitmap& rBmp,
                                     const AlphaMask& rAlpha,
                                     const Point& rDestPt,

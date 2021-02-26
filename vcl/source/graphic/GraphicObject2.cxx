@@ -308,7 +308,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const tools::Rectangle& r
                 GraphicObject aAlphaGraphic;
 
                 if( GetGraphic().IsAlpha() )
-                    aAlphaGraphic.SetGraphic(BitmapEx(GetGraphic().GetBitmapEx().GetAlpha().GetBitmap()));
+                    aAlphaGraphic.SetGraphic(BitmapEx(GetGraphic().GetBitmapEx().GetAlpha1().GetBitmap())); // TODO ???
                 else
                     aAlphaGraphic.SetGraphic(BitmapEx(GetGraphic().GetBitmapEx().GetMask()));
 
@@ -458,7 +458,7 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
             if( rBmpEx.IsTransparent() )
             {
                 if( rBmpEx.IsAlpha() )
-                    aBmpEx2 = BitmapEx( rBmpEx.GetBitmap(), rBmpEx.GetAlpha() );
+                    aBmpEx2 = BitmapEx( rBmpEx.GetBitmap(), rBmpEx.GetAlpha1() );
                 else
                     aBmpEx2 = BitmapEx( rBmpEx.GetBitmap(), rBmpEx.GetMask() );
             }
