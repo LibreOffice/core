@@ -64,6 +64,49 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityLinkClick)
     // i.e. the URL was not clickable and the table row was a single text portion.
     CPPUNIT_ASSERT_EQUAL(OUString("http://www.example.com/test.pdf"), aActual);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryURL)
+{
+    // Given a document with a bibliography reference (of type WWW) in it:
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xField(
+        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aFields = {
+        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue("Identifier", OUString("AT")),
+        comphelper::makePropertyValue("Author", OUString("Author")),
+        comphelper::makePropertyValue("Title", OUString("Title")),
+        comphelper::makePropertyValue("URL", OUString("http://www.example.com/test.pdf#page=1")),
+    };
+    xField->setPropertyValue("Fields", uno::makeAny(aFields));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
+    // Create a bibliography table.
+    uno::Reference<text::XTextContent> xTable(
+        xFactory->createInstance("com.sun.star.text.Bibliography"), uno::UNO_QUERY);
+    xCursor->gotoEnd(/*bExpand=*/false);
+    xText->insertControlCharacter(xCursor, text::ControlCharacter::APPEND_PARAGRAPH,
+                                  /*bAbsorb=*/false);
+    xText->insertTextContent(xCursor, xTable, /*bAbsorb=*/false);
+
+    // When updating that table:
+    uno::Reference<text::XDocumentIndex> xTableIndex(xTable, uno::UNO_QUERY);
+    xTableIndex->update();
+
+    // Then the page number from the source's URL should be stripped:
+    // Paragraph index: Reference, table header, table row.
+    // Portion index: ID, etc; then the URL.
+    auto aActual = getProperty<OUString>(getRun(getParagraph(3), 2), "HyperLinkURL");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: http://www.example.com/test.pdf
+    // - Actual  : http://www.example.com/test.pdf#page=1
+    // i.e. the page number was still part of the bibliography table.
+    CPPUNIT_ASSERT_EQUAL(OUString("http://www.example.com/test.pdf"), aActual);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

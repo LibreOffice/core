@@ -19,6 +19,7 @@
 
 #include <unotools/charclass.hxx>
 #include <osl/diagnose.h>
+#include <tools/urlobj.hxx>
 #include <txtfld.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -844,7 +845,18 @@ OUString SwTOXAuthority::GetText(sal_uInt16 nAuthField, const SwRootFrame* pLayo
 void SwTOXAuthority::FillText(SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField,
                               SwRootFrame const* const pLayout) const
 {
-    rNd.InsertText(GetText(nAuthField, pLayout), rInsPos);
+    OUString aText = GetText(nAuthField, pLayout);
+    if (nAuthField == AUTH_FIELD_URL)
+    {
+        INetURLObject aObject(aText);
+        if (aObject.GetMark().startsWith("page="))
+        {
+            aObject.SetMark(OUString());
+            aText = aObject.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        }
+    }
+
+    rNd.InsertText(aText, rInsPos);
 }
 
 bool SwTOXAuthority::equivalent(const SwTOXSortTabBase& rCmp)
