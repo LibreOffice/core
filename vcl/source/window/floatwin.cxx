@@ -956,7 +956,8 @@ void FloatingWindow::AddPopupModeWindow(vcl::Window* pWindow)
     // !!! up-to-now only 1 window and not yet a list
     mpFirstPopupModeWin = pWindow;
 }
-bool FloatingWindow::UpdatePositionData()
+
+bool SystemWindow::UpdatePositionData()
 {
     auto pWin = ImplGetParent();
     if (pWin)

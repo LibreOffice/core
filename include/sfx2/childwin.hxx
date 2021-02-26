@@ -112,7 +112,6 @@ struct SFX2_DLLPUBLIC SfxChildWinFactory
     ~SfxChildWinFactory();
 };
 
-class FloatingWindow;
 struct SfxChildWindow_Impl;
 class SFX2_DLLPUBLIC SfxChildWindowContext
 {
@@ -133,7 +132,7 @@ public:
     sal_uInt16          GetContextId() const
                         { return nContextId; }
 
-    static FloatingWindow* GetFloatingWindow(vcl::Window *pParent);
+    static SystemWindow* GetFloatingWindow(vcl::Window *pParent);
 
     static void         RegisterChildWindowContext(SfxModule*, sal_uInt16, std::unique_ptr<SfxChildWinContextFactory>);
 };

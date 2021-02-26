@@ -362,8 +362,8 @@ bool DockingManager::IsInPopupMode( const vcl::Window *pWindow )
 void DockingManager::EndPopupMode( const vcl::Window *pWin )
 {
     ImplDockingWindowWrapper *pWrapper = GetDockingWindowWrapper( pWin );
-    if( pWrapper && pWrapper->GetFloatingWindow() && pWrapper->GetFloatingWindow()->IsInPopupMode() )
-        pWrapper->GetFloatingWindow()->EndPopupMode();
+    if( pWrapper && pWrapper->GetFloatingWindow() && static_cast<FloatingWindow*>(pWrapper->GetFloatingWindow())->IsInPopupMode() )
+        static_cast<FloatingWindow*>(pWrapper->GetFloatingWindow())->EndPopupMode();
 }
 
 void DockingManager::SetPopupModeEndHdl( const vcl::Window *pWindow, const Link<FloatingWindow*,void>& rLink )
@@ -876,7 +876,7 @@ IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd, FloatingWindow*, void)
 bool ImplDockingWindowWrapper::IsInPopupMode() const
 {
     if( GetFloatingWindow() )
-        return GetFloatingWindow()->IsInPopupMode();
+        return static_cast<FloatingWindow*>(GetFloatingWindow())->IsInPopupMode();
     else
         return false;
 }
@@ -1065,5 +1065,9 @@ void ImplDockingWindowWrapper::Unlock()
         pToolBox->Lock( mbLocked );
 }
 
+SystemWindow* ImplDockingWindowWrapper::GetFloatingWindow() const
+{
+    return mpFloatWin;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

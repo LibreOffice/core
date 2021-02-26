@@ -29,7 +29,6 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 
-#include <vcl/floatwin.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/app.hxx>
@@ -530,7 +529,7 @@ SfxChildWindowContext::~SfxChildWindowContext()
     pWindow.disposeAndClear();
 }
 
-FloatingWindow* SfxChildWindowContext::GetFloatingWindow(vcl::Window *pParent)
+SystemWindow* SfxChildWindowContext::GetFloatingWindow(vcl::Window *pParent)
 {
     if (pParent->GetType() == WindowType::DOCKINGWINDOW || pParent->GetType() == WindowType::TOOLBOX)
     {
@@ -538,7 +537,7 @@ FloatingWindow* SfxChildWindowContext::GetFloatingWindow(vcl::Window *pParent)
     }
     if (pParent->GetType() == WindowType::FLOATINGWINDOW)
     {
-        return static_cast<FloatingWindow*>(pParent);
+        return static_cast<SystemWindow*>(pParent);
     }
     return nullptr;
 }
