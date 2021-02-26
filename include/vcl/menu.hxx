@@ -233,7 +233,7 @@ public:
 
     void Activate();
     void Deactivate();
-    virtual void Select();
+    void Select();
 
     void InsertItem(sal_uInt16 nItemId, const OUString& rStr,
                     MenuItemBits nItemBits = MenuItemBits::NONE,
