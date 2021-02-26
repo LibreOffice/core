@@ -82,32 +82,58 @@ public:
             || type.Class("unordered_set").StdNamespace()
             || type.Class("vector").StdNamespace())
         {
-            std::vector<QualType> copy(rParents);
-            copy.push_back(rpType.getUnqualifiedType().getCanonicalType());
             auto ctsd = dyn_cast<ClassTemplateSpecializationDecl>(
                 pRecordType->getDecl());
             assert(ctsd != nullptr);
             auto const & args = ctsd->getTemplateArgs();
             assert(args.size() >= 1);
-            return isBadStaticType(args.get(0).getAsType(), chain, copy);
+            QualType const& argType = args.get(0).getAsType();
+            QualType const argCanonical(argType.getUnqualifiedType().getCanonicalType());
+            // ignore pointers, nothing happens to them on shutdown
+            if (!argCanonical->isPointerType())
+            {
+                std::vector<QualType> copy(rParents);
+                copy.push_back(rpType.getUnqualifiedType().getCanonicalType());
+                return isBadStaticType(argType, chain, copy);
+            }
+            return std::make_pair(false, std::vector<FieldDecl const*>());
         }
         if (type.Class("map").StdNamespace()
             || type.Class("multimap").StdNamespace()
             || type.Class("unordered_map").StdNamespace()
             || type.Class("unordered_multimap").StdNamespace())
         {
-            std::vector<QualType> copy(rParents);
-            copy.push_back(rpType.getUnqualifiedType().getCanonicalType());
+            std::vector<QualType> copy;
             auto ctsd = dyn_cast<ClassTemplateSpecializationDecl>(
                 pRecordType->getDecl());
             assert(ctsd != nullptr);
             auto const & args = ctsd->getTemplateArgs();
             assert(args.size() >= 2);
-            auto ret = isBadStaticType(args.get(0).getAsType(), chain, copy);
-            if (ret.first) {
-                return ret;
+            QualType const& firstArgType = args.get(0).getAsType();
+            QualType const firstArgCanonical(firstArgType.getUnqualifiedType().getCanonicalType());
+            // ignore pointers, nothing happens to them on shutdown
+            if (!firstArgCanonical->isPointerType())
+            {
+                copy = rParents;
+                copy.push_back(rpType.getUnqualifiedType().getCanonicalType());
+                auto ret = isBadStaticType(firstArgType, chain, copy);
+                if (ret.first) {
+                    return ret;
+                }
             }
-            return isBadStaticType(args.get(1).getAsType(), chain, copy);
+            QualType const& secArgType = args.get(1).getAsType();
+            QualType const secArgCanonical(secArgType.getUnqualifiedType().getCanonicalType());
+            // ignore pointers, nothing happens to them on shutdown
+            if (!secArgCanonical->isPointerType())
+            {
+                if (copy.size() == 0)
+                {
+                    copy = rParents;
+                    copy.push_back(rpType.getUnqualifiedType().getCanonicalType());
+                }
+                return isBadStaticType(secArgType, chain, copy);
+            }
+            return std::make_pair(false, std::vector<FieldDecl const*>());
         }
         RecordDecl const*const pDefinition(pRecordType->getDecl()->getDefinition());
         if (!pDefinition) { // maybe no definition if it's a pointer/reference

@@ -30,6 +30,7 @@
 #include <svl/itemset.hxx>
 #include <tools/link.hxx>
 #include <tools/stream.hxx>
+#include <mutex>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::embed { class XStorage; }
@@ -53,6 +54,7 @@ class SfxMedium_Impl;
 class INetURLObject;
 class SfxFrame;
 class DateTime;
+struct ImplSVEvent;
 
 namespace weld
 {
@@ -92,6 +94,15 @@ public:
                         SfxMedium( const css::uno::Sequence< css::beans::PropertyValue >& aArgs );
 
                         virtual ~SfxMedium() override;
+
+    DECL_STATIC_LINK(SfxMedium, ShowReloadEditableDialog, void*, void);
+    bool CheckCanGetLockfile() const;
+    void SetOriginallyReadOnly(bool val);
+    void AddToCheckEditableWorkerList();
+    void SetWorkerReloadEvent(ImplSVEvent* pEvent);
+    ImplSVEvent* GetWorkerReloadEvent() const;
+    std::shared_ptr<std::recursive_mutex> GetCheckEditableMutex() const;
+    void CancelCheckEditableEntry(bool bRemoveEvent = true);
 
     void                UseInteractionHandler( bool );
     css::uno::Reference< css::task::XInteractionHandler >
@@ -291,6 +302,7 @@ private:
                                             bool bIsLoading, bool bOwnLock, bool bHandleSysLocked);
     enum class MessageDlg { LockFileIgnore, LockFileCorrupt };
     bool                ShowLockFileProblemDialog(MessageDlg nWhichDlg);
+    bool ShowReadOnlyOpenDialog();
 
 };
 
