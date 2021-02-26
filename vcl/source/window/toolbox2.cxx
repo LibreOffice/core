@@ -35,6 +35,7 @@
 #include <vcl/IconThemeInfo.hxx>
 #include <vcl/commandinfoprovider.hxx>
 
+#include <dockingwrapper.hxx>
 #include <svdata.hxx>
 #include <brdwin.hxx>
 #include <toolbox.h>

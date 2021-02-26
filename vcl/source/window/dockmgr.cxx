@@ -22,6 +22,7 @@
 #include <o3tl/deleter.hxx>
 
 #include <brdwin.hxx>
+#include <dockingwrapper.hxx>
 #include <svdata.hxx>
 #include <window.h>
 

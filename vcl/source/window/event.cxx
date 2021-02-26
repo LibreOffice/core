@@ -24,6 +24,7 @@
 #include <sal/log.hxx>
 
 #include <window.h>
+#include <dockingwrapper.hxx>
 #include <svdata.hxx>
 #include <salframe.hxx>
 #include <config_features.h>

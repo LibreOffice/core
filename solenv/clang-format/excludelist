@@ -14460,6 +14460,7 @@ vcl/inc/debugevent.hxx
 vcl/inc/displayconnectiondispatch.hxx
 vcl/inc/dndeventdispatcher.hxx
 vcl/inc/dndlistenercontainer.hxx
+vcl/inc/dockingwrapper.hxx
 vcl/inc/factory.hxx
 vcl/inc/fltcall.hxx
 vcl/inc/fontattributes.hxx

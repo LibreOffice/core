@@ -39,6 +39,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
+#include <dockingwrapper.hxx>
 #include <svdata.hxx>
 #include <window.h>
 #include <toolbox.h>

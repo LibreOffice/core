@@ -34,6 +34,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
 
+#include <dockingwrapper.hxx>
 #include <salinst.hxx>
 #include <svdata.hxx>
 #include <strings.hrc>
