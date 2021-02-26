@@ -1293,13 +1293,11 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf85403)
 
     goToCell("A1");
 
-    //CPPUNIT_ASSERT_EQUAL(OUString("'123"), pDoc->GetString(ScAddress(1, 0, 0)));
-
     dispatchCommand(mxComponent, ".uno:TextToColumns", {});
 
     pDoc->CalcAll();
 
-    CPPUNIT_ASSERT_EQUAL(1234.0, pDoc->GetValue(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(123.0, pDoc->GetValue(ScAddress(1, 0, 0)));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
