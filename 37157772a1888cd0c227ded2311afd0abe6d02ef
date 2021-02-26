@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "14690209_e1ba69de",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2021-02-26T14:29:55Z",
+      "side": 1,
+      "message": "Tip: You can redefine the command in WriterCommands.xcu, and it will be used instead of what is in GenericCommands.xcu, while other modules will continue to get their labels from GenericCommands.xcu.",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 46
+      },
+      "revId": "37157772a1888cd0c227ded2311afd0abe6d02ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60a0d140_d2cef8e8",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 3307,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2021-02-26T14:29:55Z",
+      "side": 1,
+      "message": "Don\u0027t think this is needed.",
+      "range": {
+        "startLine": 3307,
+        "startChar": 59,
+        "endLine": 3307,
+        "endChar": 79
+      },
+      "revId": "37157772a1888cd0c227ded2311afd0abe6d02ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db84e7b1_bda9353e",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 3310,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2021-02-26T14:29:55Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 3310,
+        "startChar": 59,
+        "endLine": 3310,
+        "endChar": 79
+      },
+      "revId": "37157772a1888cd0c227ded2311afd0abe6d02ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46c1c539_a03c268a",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 3311,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2021-02-26T14:29:55Z",
+      "side": 1,
+      "message": "As of now TooltipLabel inherits from PopupLabel, which in turn inherits from ContextLabel. So no need to define both.",
+      "revId": "37157772a1888cd0c227ded2311afd0abe6d02ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
