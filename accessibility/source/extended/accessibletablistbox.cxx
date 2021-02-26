@@ -58,7 +58,7 @@ namespace accessibility
         }
     }
 
-    AccessibleBrowseBoxTable* AccessibleTabListBox::createAccessibleTable()
+    rtl::Reference<AccessibleBrowseBoxTable> AccessibleTabListBox::createAccessibleTable()
     {
         return new AccessibleTabListBoxTable( this, *m_pTabListBox );
     }
