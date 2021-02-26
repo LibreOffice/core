@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -18,20 +18,21 @@
  */
 
 #include <strings.hrc>
-#include "lockfailed.hxx"
+#include "readonlyopen.hxx"
+#include <officecfg/Office/Common.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 
-LockFailedQueryBox::LockFailedQueryBox(weld::Window* pParent, const std::locale& rLocale)
-    : m_xQueryBox(Application::CreateMessageDialog(pParent, VclMessageType::Error,
-                  VclButtonsType::NONE, Translate::get(STR_LOCKFAILED_MSG, rLocale)))
+ReadOnlyOpenQueryBox::ReadOnlyOpenQueryBox(weld::Window* pParent, const std::locale& rResLocale,
+                                           const OUString& rMessage)
+    : m_xQueryBox(Application::CreateMessageDialog(pParent, VclMessageType::Question,
+                                                   VclButtonsType::NONE, rMessage))
 {
-    m_xQueryBox->set_title(Translate::get(STR_LOCKFAILED_TITLE, rLocale));
-    m_xQueryBox->add_button(Translate::get(STR_LOCKFAILED_OPENREADONLY_BTN, rLocale), RET_OK);
-    m_xQueryBox->add_button(Translate::get(STR_LOCKFAILED_OPENREADONLY_NOTIFY_BTN, rLocale), RET_RETRY);
+    m_xQueryBox->set_title(Translate::get(STR_READONLYOPEN_TITLE, rResLocale));
+    m_xQueryBox->add_button(Translate::get(STR_READONLYOPEN_BTN, rResLocale), RET_YES);
+    m_xQueryBox->add_button(Translate::get(STR_READONLYOPEN_NOTIFY_BTN, rResLocale), RET_RETRY);
     m_xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
-    m_xQueryBox->set_default_response(RET_OK);
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

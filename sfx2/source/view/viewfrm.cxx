@@ -307,6 +307,12 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
             SfxMedium* pMed = pSh->GetMedium();
 
+            std::shared_ptr<std::recursive_mutex> pChkEditMutex = pMed->GetCheckEditableMutex();
+            std::unique_lock<std::recursive_mutex> chkEditLock;
+            if (pChkEditMutex != nullptr)
+                chkEditLock = std::unique_lock<std::recursive_mutex>(*pChkEditMutex);
+            pMed->CancelCheckEditableThread();
+
             const SfxBoolItem* pItem = SfxItemSet::GetItem<SfxBoolItem>(pSh->GetMedium()->GetItemSet(), SID_VIEWONLY, false);
             if ( pItem && pItem->GetValue() )
             {
@@ -502,6 +508,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             bOpenTemplate = RET_YES == nUserAnswer;
                             // Always reset this here to avoid infinite loop
                             bRetryIgnoringLock = RET_IGNORE == nUserAnswer;
+                            if (RET_CANCEL == nUserAnswer)
+                                pMed->LaunchCheckEditableWorkerThread();
                         }
                         else
                             bRetryIgnoringLock = false;
@@ -623,6 +631,12 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             if ( bDo )
             {
                 SfxMedium *pMedium = xOldObj->GetMedium();
+                std::shared_ptr<std::recursive_mutex> pChkEditMutex
+                    = pMedium->GetCheckEditableMutex();
+                std::unique_lock<std::recursive_mutex> chkEditLock;
+                if (pChkEditMutex != nullptr)
+                    chkEditLock = std::unique_lock<std::recursive_mutex>(*pChkEditMutex);
+                pMedium->CancelCheckEditableThread();
 
                 bool bHandsOff =
                     ( pMedium->GetURLObject().GetProtocol() == INetProtocol::File && !xOldObj->IsDocShared() );
@@ -764,6 +778,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 {
                     xNewObj->DoClose();
                     xNewObj = nullptr;
+                    pMedium->LaunchCheckEditableWorkerThread();
                 }
 
                 pNewSet.reset();
