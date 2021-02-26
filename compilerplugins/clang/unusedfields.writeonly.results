@@ -266,7 +266,7 @@ embeddedobj/source/inc/oleembobj.hxx:174
     OleEmbeddedObject m_nStatusAspect sal_Int64
 embeddedobj/source/inc/oleembobj.hxx:188
     OleEmbeddedObject m_bFromClipboard _Bool
-emfio/inc/mtftools.hxx:515
+emfio/inc/mtftools.hxx:536
     emfio::MtfTools mrclBounds tools::Rectangle
 extensions/source/propctrlr/genericpropertyhandler.hxx:65
     pcr::GenericPropertyHandler m_xComponentIntrospectionAccess css::uno::Reference<css::beans::XIntrospectionAccess>
@@ -346,8 +346,6 @@ include/opencl/platforminfo.hxx:30
     OpenCLDeviceInfo mnComputeUnits size_t
 include/opencl/platforminfo.hxx:31
     OpenCLDeviceInfo mnFrequency size_t
-include/sfx2/docmacromode.hxx:299
-    sfx2::DocumentMacroMode m_bNeedsContentSigned _Bool
 include/sfx2/minfitem.hxx:35
     SfxMacroInfoItem aCommentText class rtl::OUString
 include/svtools/brwbox.hxx:326
@@ -414,15 +412,17 @@ include/vcl/salnativewidgets.hxx:534
     PushButtonValue mbSingleLine _Bool
 include/vcl/sysdata.hxx:68
     SystemEnvData pSalFrame class SalFrame *
+include/vcl/syswin.hxx:102
+    SystemWindow maOrgSize class Size
 include/vcl/textrectinfo.hxx:35
     TextRectInfo mnLineCount sal_uInt16
-include/vcl/vclenum.hxx:202
+include/vcl/vclenum.hxx:200
     ItalicMatrix xx double
-include/vcl/vclenum.hxx:202
+include/vcl/vclenum.hxx:200
     ItalicMatrix xy double
-include/vcl/vclenum.hxx:202
+include/vcl/vclenum.hxx:200
     ItalicMatrix yx double
-include/vcl/vclenum.hxx:202
+include/vcl/vclenum.hxx:200
     ItalicMatrix yy double
 include/xmloff/shapeimport.hxx:94
     SdXML3DSceneAttributesHelper mbVRPUsed _Bool
@@ -540,8 +540,6 @@ sc/source/filter/inc/tokstack.hxx:142
     TokenPool pP_Err TokenPoolPool<sal_uInt16, 8>
 sc/source/filter/lotus/lotfilter.hxx:54
     LotusContext eActType enum Lotus123Typ
-sc/source/filter/xml/celltextparacontext.hxx:154
-    ScXMLCellTextRubyContext maRubyStyleName class rtl::OUString
 sc/source/filter/xml/xmlcondformat.hxx:111
     ScXMLIconSetFormatContext mpFormatData struct ScIconSetFormatData *
 sc/source/filter/xml/XMLDetectiveContext.hxx:97
@@ -1046,15 +1044,15 @@ vcl/source/fontsubset/sft.cxx:92
     vcl::(anonymous namespace)::TTGlyphMetrics lsb sal_Int16
 vcl/source/fontsubset/ttcr.cxx:350
     vcl::(anonymous namespace)::tdata_post ptr void *
-vcl/unx/generic/app/wmadaptor.cxx:1272
+vcl/unx/generic/app/wmadaptor.cxx:1265
     _mwmhints deco unsigned long
-vcl/unx/generic/app/wmadaptor.cxx:1272
+vcl/unx/generic/app/wmadaptor.cxx:1265
     _mwmhints flags unsigned long
-vcl/unx/generic/app/wmadaptor.cxx:1272
+vcl/unx/generic/app/wmadaptor.cxx:1265
     _mwmhints func unsigned long
-vcl/unx/generic/app/wmadaptor.cxx:1273
+vcl/unx/generic/app/wmadaptor.cxx:1266
     _mwmhints input_mode tools::Long
-vcl/unx/generic/app/wmadaptor.cxx:1274
+vcl/unx/generic/app/wmadaptor.cxx:1267
     _mwmhints status unsigned long
 vcl/unx/generic/gdi/cairotextrender.cxx:39
     (anonymous namespace)::CairoFontsCache::CacheId maFace (anonymous namespace)::FT_Face

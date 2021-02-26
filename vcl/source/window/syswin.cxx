@@ -751,7 +751,6 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         if( nY + nHeight > static_cast<tools::Long>(rGeom.nHeight) )
             nY = rGeom.nHeight - nHeight;
         setPosSizePixel( nX, nY, nWidth, nHeight, nPosSize );
-        maOrgSize = Size( nWidth, nHeight );
     }
 }
 
