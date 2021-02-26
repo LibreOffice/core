@@ -315,6 +315,7 @@ void SAL_CALL LangSelectionStatusbarController::statusChanged( const FeatureStat
     if ( Event.State >>= aStrValue )
     {
         m_xStatusbarItem->setText( aStrValue );
+        m_xStatusbarItem->setQuickHelpText(FwkResId(STR_LANGSTATUS_HINT));
         m_aCurLang = aStrValue;
     }
     else if ( Event.State >>= aSeq )
@@ -327,6 +328,7 @@ void SAL_CALL LangSelectionStatusbarController::statusChanged( const FeatureStat
                 aStatusText = FwkResId(STR_LANGSTATUS_MULTIPLE_LANGUAGES);
             }
             m_xStatusbarItem->setText( aStatusText );
+            m_xStatusbarItem->setQuickHelpText(FwkResId(STR_LANGSTATUS_HINT));
 
             // Retrieve all other values from the sequence and
             // store it members!
@@ -339,6 +341,7 @@ void SAL_CALL LangSelectionStatusbarController::statusChanged( const FeatureStat
     else if ( !Event.State.hasValue() )
     {
         m_xStatusbarItem->setText( OUString() );
+        m_xStatusbarItem->setQuickHelpText(u"");
         m_bShowMenu = false;    // no language -> no menu
     }
 }
