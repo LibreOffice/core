@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75bc979c_5fd6c03e",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport16.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-02-26T11:57:08Z",
+      "side": 1,
+      "message": "I think these properly belong in sw/qa/core/data/ooxml/pass. Caolan will know for sure. I think this is only needed here for documents that require a roundtrip.  (At least, I just did one of those in here.  Hmm, it looks like I probably could have used sw/qa/core/exportdata/ooxml)",
+      "range": {
+        "startLine": 77,
+        "startChar": 7,
+        "endLine": 77,
+        "endChar": 42
+      },
+      "revId": "e2f65a100ca13c9cfcc5a19229129b192dce80d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
