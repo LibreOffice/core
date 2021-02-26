@@ -418,7 +418,8 @@
                             <xsl:choose>
                                 <xsl:when test="contains($imageParagraphStyle, 'margin-left:')">
                                     <xsl:call-template name="convert2cm">
-                                        <xsl:with-param name="value" select="normalize-space(substring-before(substring-after($imageParagraphStyle, 'margin-left:'), ';'))"/>
+                                        <!-- some locales use , instead of . so replace it -->
+                                        <xsl:with-param name="value" select="replace(normalize-space(substring-before(substring-after($imageParagraphStyle, 'margin-left:'), ';'), ',', '.')"/>
                                     </xsl:call-template>
                                 </xsl:when>
                                 <xsl:otherwise>0</xsl:otherwise>
@@ -946,7 +947,8 @@
                     <xsl:choose>
                         <xsl:when test="contains($imageParagraphStyle, 'margin-left:')">
                             <xsl:call-template name="convert2cm">
-                                <xsl:with-param name="value" select="normalize-space(substring-before(substring-after($imageParagraphStyle, 'margin-left:'), ';'))"/>
+                                <!-- some locales use , instead of . so replace it -->
+                                <xsl:with-param name="value" select="replace(normalize-space(substring-before(substring-after($imageParagraphStyle, 'margin-left:'), ';'), ',', '.')"/>
                             </xsl:call-template>
                         </xsl:when>
                         <xsl:otherwise>0</xsl:otherwise>
@@ -1798,7 +1800,8 @@
             <xsl:choose>
                 <xsl:when test="contains($firstParaStyles, 'margin-left:')">
                     <xsl:call-template name="convert2cm">
-                        <xsl:with-param name="value" select="normalize-space(substring-before(substring-after($firstParaStyles, 'margin-left:'), ';'))"/>
+                        <!-- some locales use , instead of . so replace it -->
+                        <xsl:with-param name="value" select="replace(normalize-space(substring-before(substring-after($firstParaStyles, 'margin-left:'), ';'), ',', '.')"/>
                     </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>0</xsl:otherwise>
