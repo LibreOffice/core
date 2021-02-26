@@ -84,10 +84,9 @@ public:
         {
             std::vector<QualType> copy(rParents);
             copy.push_back(rpType.getUnqualifiedType().getCanonicalType());
-            auto ctsd = dyn_cast<ClassTemplateSpecializationDecl>(
-                pRecordType->getDecl());
+            auto ctsd = dyn_cast<ClassTemplateSpecializationDecl>(pRecordType->getDecl());
             assert(ctsd != nullptr);
-            auto const & args = ctsd->getTemplateArgs();
+            auto const& args = ctsd->getTemplateArgs();
             assert(args.size() >= 1);
             return isBadStaticType(args.get(0).getAsType(), chain, copy);
         }
@@ -98,13 +97,13 @@ public:
         {
             std::vector<QualType> copy(rParents);
             copy.push_back(rpType.getUnqualifiedType().getCanonicalType());
-            auto ctsd = dyn_cast<ClassTemplateSpecializationDecl>(
-                pRecordType->getDecl());
+            auto ctsd = dyn_cast<ClassTemplateSpecializationDecl>(pRecordType->getDecl());
             assert(ctsd != nullptr);
-            auto const & args = ctsd->getTemplateArgs();
+            auto const& args = ctsd->getTemplateArgs();
             assert(args.size() >= 2);
             auto ret = isBadStaticType(args.get(0).getAsType(), chain, copy);
-            if (ret.first) {
+            if (ret.first)
+            {
                 return ret;
             }
             return isBadStaticType(args.get(1).getAsType(), chain, copy);
@@ -218,6 +217,10 @@ public:
                    // Windows-only extensions/source/scanner/scanwin.cxx, problematic
                    // Twain::mpThread -> ShimListenerThread::mxTopWindow released via Twain::Reset
                    // clearing mpThread
+                || name == "g_newReadOnlyDocs"
+                   // sfx2/source/doc/docfile.cxx, warning about map's key
+                || name == "g_existingReadOnlyDocs"
+                   // sfx2/source/doc/docfile.cxx, warning about map's key
                ) // these variables appear unproblematic
             {
                 return true;
