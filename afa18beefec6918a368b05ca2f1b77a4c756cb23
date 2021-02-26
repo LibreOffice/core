@@ -16,6 +16,24 @@
       "revId": "afa18beefec6918a368b05ca2f1b77a4c756cb23",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "359dc632_161b7e4c",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7141,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-02-26T06:05:24Z",
+      "side": 1,
+      "message": "Yes, that was intentional, but now I forget why.\n\nI started with all three, but then after a bit of research I dropped the one (in master patchset 3). [Too bad I missed this comment earlier or else I might have remembered better.]\n\nI think it was because I could only find evidence that those two were-being/could-be tampered with. I don\u0027t think I removed it because I could see it causing a specific potential problem.\n\nMostly, I\u0027m not super clear of all the implications of what removing those fonts might entail, to so I wanted to minimize the damage.",
+      "parentUuid": "8400588f_29aa93fa",
+      "revId": "afa18beefec6918a368b05ca2f1b77a4c756cb23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
