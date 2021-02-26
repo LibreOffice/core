@@ -62,6 +62,7 @@ public:
 
     void Invoke() override;
 
+    void clearQueue();
     void forceUpdate();
     void sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow);
 
