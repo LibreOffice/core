@@ -745,7 +745,7 @@ public:
     // configuration items
     SAL_DLLPRIVATE SignatureState ImplGetSignatureState( bool bScriptingContent = false );
 
-    SAL_DLLPRIVATE css::uno::Sequence< css::security::DocumentSignatureInformation >
+    /*SAL_DLLPRIVATE*/ css::uno::Sequence< css::security::DocumentSignatureInformation >
         ImplAnalyzeSignature(
             bool bScriptingContent,
             const css::uno::Reference< css::security::XDocumentDigitalSignatures >& xSigner
