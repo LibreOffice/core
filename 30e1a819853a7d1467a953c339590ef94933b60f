@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b30c17f_9bdeb50d",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3256,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-02-26T08:09:24Z",
+      "side": 1,
+      "message": "Fine, but next time it may make sense to use a test document which has 0x00ff00 as green, and then this assert can be more readable when you use a hex form for the color value.",
+      "revId": "30e1a819853a7d1467a953c339590ef94933b60f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
