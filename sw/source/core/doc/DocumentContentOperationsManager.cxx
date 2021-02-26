@@ -29,6 +29,7 @@
 #include <docary.hxx>
 #include <textboxhelper.hxx>
 #include <dcontact.hxx>
+#include <docstat.hxx>
 #include <grfatr.hxx>
 #include <numrule.hxx>
 #include <charfmt.hxx>
@@ -70,10 +71,12 @@
 #include <fmtflcnt.hxx>
 #include <docedt.hxx>
 #include <frameformats.hxx>
+#include <i18nutil/transliteration.hxx>
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/configmgr.hxx>
+#include <unotools/transliterationwrapper.hxx>
 #include <sfx2/Metadatable.hxx>
 #include <sot/exchange.hxx>
 #include <svl/stritem.hxx>
@@ -2821,6 +2824,23 @@ void DocumentContentOperationsManager::TransliterateText(
         }
     }
 
+    const sal_uLong nMaxRedlines = 500;
+    bool bAllowRedlining = true;
+    sal_uLong nAffectedNodes = 0;
+    sal_uLong nAffectedChars = 0;
+    SwNodeIndex aNodes(pStt->nNode);
+    for(; aNodes.GetIndex() <= nEndNd; aNodes++){
+        nAffectedChars+=aNodes.GetNode().GetTextNode()->GetText().getLength();
+        nAffectedNodes++;
+        if( (rTrans.getType()==TransliterationFlags::TITLE_CASE && nAffectedChars/5 >= nMaxRedlines) || nAffectedNodes >= nMaxRedlines ){
+            bAllowRedlining=false;
+            break;
+        }
+        else{
+            bAllowRedlining=true;
+        }
+    }
+
     if( nSttNd != nEndNd )  // is more than one text node involved?
     {
         // iterate over all effected text nodes, the first and the last one
@@ -2832,7 +2852,7 @@ void DocumentContentOperationsManager::TransliterateText(
             ++aIdx;
             if( pTNd )
                 pTNd->TransliterateText(
-                        rTrans, nSttCnt, pTNd->GetText().getLength(), pUndo.get());
+                        rTrans, nSttCnt, pTNd->GetText().getLength(), pUndo.get(), bAllowRedlining);
         }
 
         for( ; aIdx.GetIndex() < nEndNd; ++aIdx )
@@ -2841,16 +2861,15 @@ void DocumentContentOperationsManager::TransliterateText(
             if (pTNd)
             {
                 pTNd->TransliterateText(
-                        rTrans, 0, pTNd->GetText().getLength(), pUndo.get());
+                        rTrans, 0, pTNd->GetText().getLength(), pUndo.get(), bAllowRedlining);
             }
         }
 
         if( nEndCnt && nullptr != ( pTNd = pEnd->nNode.GetNode().GetTextNode() ))
-            pTNd->TransliterateText( rTrans, 0, nEndCnt, pUndo.get() );
+            pTNd->TransliterateText( rTrans, 0, nEndCnt, pUndo.get(), bAllowRedlining );
     }
     else if( pTNd && nSttCnt < nEndCnt )
-        pTNd->TransliterateText( rTrans, nSttCnt, nEndCnt, pUndo.get() );
-
+        pTNd->TransliterateText( rTrans, nSttCnt, nEndCnt, pUndo.get(), bAllowRedlining );
     if( pUndo && pUndo->HasData() )
     {
         m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
