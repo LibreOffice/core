@@ -127,7 +127,6 @@
 #include <tools/json_writer.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
-#include <vcl/floatwin.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <vcl/graphicfilter.hxx>
 #ifdef IOS
@@ -5467,12 +5466,7 @@ static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindo
 
     if (nAction == LOK_WINDOW_CLOSE)
     {
-        bool bWasDialog = vcl::CloseDialog(pWindow);
-        if (!bWasDialog)
-        {
-            if (FloatingWindow* pFloatWin = dynamic_cast<FloatingWindow*>(pWindow.get()))
-                pFloatWin->EndPopupMode(FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll);
-        }
+        vcl::CloseTopLevel(pWindow);
     }
     else if (nAction == LOK_WINDOW_PASTE)
     {

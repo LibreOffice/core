@@ -23,7 +23,7 @@ VCL_DLLPUBLIC void EndAllDialogs(vcl::Window const* pParent);
 
 /* for LibreOffice kit */
 VCL_DLLPUBLIC void EnableDialogInput(vcl::Window* pDialog);
-VCL_DLLPUBLIC bool CloseDialog(vcl::Window* pDialog);
+VCL_DLLPUBLIC void CloseTopLevel(vcl::Window* pDialog);
 /// Pre-loads all modules containing UI information
 VCL_DLLPUBLIC void VclBuilderPreload();
 }

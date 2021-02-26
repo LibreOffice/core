@@ -43,6 +43,7 @@
 #include <vcl/abstdlg.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/builder.hxx>
+#include <vcl/floatwin.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
@@ -1201,14 +1202,12 @@ namespace vcl
         }
     }
 
-    bool CloseDialog(vcl::Window* pWindow)
+    void CloseTopLevel(vcl::Window* pWindow)
     {
         if (Dialog* pDialog = dynamic_cast<Dialog*>(pWindow))
-        {
             pDialog->Close();
-            return true;
-        }
-        return false;
+        else if (FloatingWindow* pFloatWin = dynamic_cast<FloatingWindow*>(pWindow))
+            pFloatWin->EndPopupMode(FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll);
     }
 }
 
