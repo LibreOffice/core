@@ -864,8 +864,10 @@ IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd, FloatingWindow*, void)
     xWindow->SetParent( pRealParent );
     xWindow->mpWindowImpl->mpRealParent = pRealParent;
 
-    maPopupModeEndHdl.Call(mpFloatWin);
-    mpFloatWin.disposeAndClear();
+    // take ownership to local variable to protect against maPopupModeEndHdl destroying this object
+    auto xFloatWin = std::move(mpFloatWin);
+    maPopupModeEndHdl.Call(xFloatWin);
+    xFloatWin.disposeAndClear();
 
     // call handler - which will destroy the window and thus the wrapper as well !
     xWindow->CallEventListeners( VclEventId::WindowEndPopupMode, &aData );
