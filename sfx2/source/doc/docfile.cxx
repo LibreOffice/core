@@ -38,6 +38,7 @@
 #include <com/sun/star/document/LockFileIgnoreRequest.hpp>
 #include <com/sun/star/document/LockFileCorruptRequest.hpp>
 #include <com/sun/star/document/ChangedByOthersRequest.hpp>
+#include <com/sun/star/document/ReloadEditableRequest.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/UseBackupException.hpp>
@@ -108,6 +109,7 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/frame.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -120,6 +122,9 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/fltrcfg.hxx>
 #include <sfx2/digitalsignatures.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <comphelper/threadpool.hxx>
+#include <condition_variable>
 
 #include <com/sun/star/io/WrongFormatException.hpp>
 
@@ -232,7 +237,36 @@ bool IsFileMovable(const INetURLObject& rURL)
 #endif
 }
 
+class CheckReadOnlyTask : public comphelper::ThreadTask
+{
+public:
+    CheckReadOnlyTask(SfxMedium* pMed, const std::shared_ptr<std::recursive_mutex>& pMutex,
+                      const std::shared_ptr<std::condition_variable_any>& pCond,
+                      const std::shared_ptr<bool>& pIsDestructed,
+                      const std::shared_ptr<comphelper::ThreadTaskTag>& pTag);
+
+    virtual void doWork() override;
+
+    SfxMedium* _pMed;
+    std::shared_ptr<std::recursive_mutex> _pMutex;
+    std::shared_ptr<std::condition_variable_any> _pMyCond;
+    std::shared_ptr<bool> _pIsDestructed;
+};
+
 } // anonymous namespace
+
+CheckReadOnlyTask::CheckReadOnlyTask(SfxMedium* pMed,
+                                     const std::shared_ptr<std::recursive_mutex>& pMutex,
+                                     const std::shared_ptr<std::condition_variable_any>& pCond,
+                                     const std::shared_ptr<bool>& pIsDestructed,
+                                     const std::shared_ptr<comphelper::ThreadTaskTag>& pTag)
+    : ThreadTask(pTag)
+    , _pMed(pMed)
+    , _pMutex(pMutex)
+    , _pMyCond(pCond)
+    , _pIsDestructed(pIsDestructed)
+{
+}
 
 class SfxMedium_Impl
 {
@@ -273,6 +307,11 @@ public:
 
     std::shared_ptr<const SfxFilter> m_pFilter;
     std::shared_ptr<const SfxFilter> m_pCustomFilter;
+
+    std::shared_ptr<std::recursive_mutex> m_pCheckEditableWorkerMutex;
+    std::shared_ptr<std::condition_variable_any> m_pCheckEditableWorkerCond;
+    std::shared_ptr<bool> m_pIsDestructed;
+    ImplSVEvent* m_pReloadEvent;
 
     std::unique_ptr<SvStream> m_pInStream;
     std::unique_ptr<SvStream> m_pOutStream;
@@ -320,7 +359,6 @@ public:
         { return !m_pFilter ? OUString() : m_pFilter->GetMimeType(); }
 };
 
-
 SfxMedium_Impl::SfxMedium_Impl() :
     m_nStorOpenMode(SFX_STREAM_READWRITE),
     m_eError(ERRCODE_NONE),
@@ -345,6 +383,7 @@ SfxMedium_Impl::SfxMedium_Impl() :
     m_bRemote(false),
     m_bInputStreamIsReadOnly(false),
     m_bInCheckIn(false),
+    m_pReloadEvent(nullptr),
     aExpireTime( DateTime( DateTime::SYSTEM ) + static_cast<sal_Int32>(10) ),
     nLastStorageError( ERRCODE_NONE ),
     m_nSignatureState( SignatureState::NOSIGNATURES )
@@ -1026,7 +1065,11 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntr
             // TODO/LATER: alien lock on saving, user has selected to retry saving
 
             if ( bIsLoading )
+            {
                 GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
+
+                LaunchCheckEditableWorkerThread();
+            }
             else
                 nResult = ShowLockResult::Try;
         }
@@ -1081,6 +1124,8 @@ bool SfxMedium::ShowLockFileProblemDialog(MessageDlg nWhichDlg)
         if (bReadOnly)
         {
             GetItemSet()->Put(SfxBoolItem(SID_DOC_READONLY, true));
+
+            LaunchCheckEditableWorkerThread();
         }
         else
         {
@@ -1482,6 +1527,10 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                     // this is no file URL, check whether the file is readonly
                     bResult = !bContentReadonly;
                 }
+            }
+            else // read-only
+            {
+                LaunchCheckEditableWorkerThread();
             }
         }
 
@@ -2831,6 +2880,7 @@ void SfxMedium::Init_Impl()
         {
             if ((stat.getAttributes() & osl_File_Attribute_ReadOnly) != 0) {
                 pImpl->m_bOriginallyReadOnly = true;
+                LaunchCheckEditableWorkerThread();
             }
         }
     }
@@ -2879,7 +2929,6 @@ SfxMedium::GetInteractionHandler( bool bGetAlways )
         task::InteractionHandler::createWithParent(xContext, nullptr), UNO_QUERY_THROW );
     return pImpl->xInteraction;
 }
-
 
 void SfxMedium::SetFilter( const std::shared_ptr<const SfxFilter>& pFilter )
 {
@@ -3155,7 +3204,6 @@ void SfxMedium::SetPhysicalName_Impl( const OUString& rNameP )
     }
 }
 
-
 void SfxMedium::ReOpen()
 {
     bool bUseInteractionHandler = pImpl->bUseInteractionHandler;
@@ -3163,7 +3211,6 @@ void SfxMedium::ReOpen()
     GetMedium_Impl();
     pImpl->bUseInteractionHandler = bUseInteractionHandler;
 }
-
 
 void SfxMedium::CompleteReOpen()
 {
@@ -3336,9 +3383,11 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUS
         GetItemSet()->Put( *p );
 }
 
-
+// NOTE: should only be called on main thread
 SfxMedium::~SfxMedium()
 {
+    CancelCheckEditableThread();
+
     // if there is a requirement to clean the backup this is the last possibility to do it
     ClearBackup_Impl();
 
@@ -3587,6 +3636,11 @@ bool SfxMedium::IsReadOnly() const
 bool SfxMedium::IsOriginallyReadOnly() const
 {
     return pImpl->m_bOriginallyReadOnly;
+}
+
+void SfxMedium::SetOriginallyReadOnly(bool val)
+{
+    pImpl->m_bOriginallyReadOnly = val;
 }
 
 bool SfxMedium::IsOriginallyLoadedReadOnly() const
@@ -4299,6 +4353,226 @@ void SfxMedium::SetInCheckIn( bool bInCheckIn )
 bool SfxMedium::IsInCheckIn( ) const
 {
     return pImpl->m_bInCheckIn;
+}
+
+// should only be called on main thread
+std::shared_ptr<std::recursive_mutex> SfxMedium::GetCheckEditableMutex() const
+{
+    return pImpl->m_pCheckEditableWorkerMutex;
+}
+
+// should only be called while holding pImpl->m_pCheckEditableWorkerMutex
+void SfxMedium::SetWorkerReloadEvent(ImplSVEvent* pEvent)
+{
+    pImpl->m_pReloadEvent = pEvent;
+}
+
+// should only be called while holding pImpl->m_pCheckEditableWorkerMutex
+ImplSVEvent* SfxMedium::GetWorkerReloadEvent() const
+{
+    return pImpl->m_pReloadEvent;
+}
+
+// should only be called on main thread
+void SfxMedium::LaunchCheckEditableWorkerThread()
+{
+    CancelCheckEditableThread();
+
+    if (pImpl->m_pCheckEditableWorkerMutex == nullptr)
+    {
+        pImpl->m_pCheckEditableWorkerMutex = std::make_shared<std::recursive_mutex>();
+        if (pImpl->m_pCheckEditableWorkerMutex == nullptr)
+            return;
+    }
+
+    std::unique_lock<std::recursive_mutex> lock(*(pImpl->m_pCheckEditableWorkerMutex));
+
+    pImpl->m_pIsDestructed = std::make_shared<bool>(false);
+    if (pImpl->m_pIsDestructed == nullptr)
+        return;
+
+    if (pImpl->m_pCheckEditableWorkerCond == nullptr)
+    {
+        pImpl->m_pCheckEditableWorkerCond = std::make_shared<std::condition_variable_any>();
+        if (pImpl->m_pCheckEditableWorkerCond == nullptr)
+            return;
+    }
+
+    std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
+    if (pTag != nullptr)
+    {
+        comphelper::ThreadPool::getSharedOptimalPool().pushTask(std::make_unique<CheckReadOnlyTask>(
+            this, pImpl->m_pCheckEditableWorkerMutex, pImpl->m_pCheckEditableWorkerCond,
+            pImpl->m_pIsDestructed, pTag));
+    }
+}
+
+// should only be called on main thread
+void SfxMedium::CancelCheckEditableThread(bool bRemoveEvent)
+{
+    if (pImpl->m_pCheckEditableWorkerMutex != nullptr)
+    {
+        std::unique_lock<std::recursive_mutex> lock(*(pImpl->m_pCheckEditableWorkerMutex));
+
+        if (pImpl->m_pReloadEvent != nullptr)
+        {
+            if (bRemoveEvent)
+                Application::RemoveUserEvent(pImpl->m_pReloadEvent);
+            // make sure destructor doesn't use a freed reference
+            // and reset the event so we can check again
+            pImpl->m_pReloadEvent = nullptr;
+        }
+
+        if (pImpl->m_pIsDestructed != nullptr)
+            *(pImpl->m_pIsDestructed) = true;
+
+        lock.unlock();
+        if (pImpl->m_pCheckEditableWorkerCond != nullptr)
+            pImpl->m_pCheckEditableWorkerCond->notify_all();
+    }
+}
+
+/** callback function, which is triggered by worker thread after successfully checking if the file
+     is editable. Sent from <Application::PostUserEvent(..)>
+     Note: This method has to be run in the main thread.
+*/
+IMPL_STATIC_LINK(SfxMedium, ShowReloadEditableDialog, void*, p, void)
+{
+    SfxMedium* pMed = static_cast<SfxMedium*>(p);
+    if (pMed == nullptr)
+        return;
+
+    pMed->CancelCheckEditableThread(false);
+
+    uno::Reference<task::XInteractionHandler> xHandler = pMed->GetInteractionHandler();
+    if (xHandler.is())
+    {
+        OUString aDocumentURL
+            = pMed->GetURLObject().GetLastName(INetURLObject::DecodeMechanism::WithCharset);
+        ::rtl::Reference<::ucbhelper::InteractionRequest> xInteractionRequestImpl;
+        xInteractionRequestImpl
+            = new ::ucbhelper::InteractionRequest(uno::makeAny(document::ReloadEditableRequest(
+                OUString(), uno::Reference<uno::XInterface>(), aDocumentURL)));
+        if (xInteractionRequestImpl != nullptr)
+        {
+            sal_Int32 nContinuations = 2;
+            uno::Sequence<uno::Reference<task::XInteractionContinuation>> aContinuations(
+                nContinuations);
+            aContinuations[0] = new ::ucbhelper::InteractionAbort(xInteractionRequestImpl.get());
+            aContinuations[1] = new ::ucbhelper::InteractionApprove(xInteractionRequestImpl.get());
+            xInteractionRequestImpl->setContinuations(aContinuations);
+            xHandler->handle(xInteractionRequestImpl);
+            ::rtl::Reference<::ucbhelper::InteractionContinuation> xSelected
+                = xInteractionRequestImpl->getSelection();
+            if (uno::Reference<task::XInteractionApprove>(xSelected.get(), uno::UNO_QUERY).is())
+            {
+                for (SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame;
+                     pFrame = SfxViewFrame::GetNext(*pFrame))
+                {
+                    if (pFrame->GetObjectShell()->GetMedium() == pMed)
+                    {
+                        // special case to ensure view isn't set to read-only in
+                        // SfxViewFrame::ExecReload_Impl after reloading
+                        pMed->SetOriginallyReadOnly(false);
+                        pFrame->GetDispatcher()->Execute(SID_RELOAD);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
+bool SfxMedium::CheckCanGetLockfile() const
+{
+#if !HAVE_FEATURE_MULTIUSER_ENVIRONMENT
+    bool bCanReload = true;
+#else
+    bool bCanReload = false;
+    ::svt::DocumentLockFile aLockFile(GetName());
+    LockFileEntry aData;
+    osl::DirectoryItem rItem;
+    auto nError1 = osl::DirectoryItem::get(aLockFile.GetURL(), rItem);
+    if (nError1 == osl::FileBase::E_None)
+    {
+        try
+        {
+            aData = aLockFile.GetLockData();
+        }
+        catch (const io::WrongFormatException&)
+        {
+            // we get empty or corrupt data
+            return false;
+        }
+        catch (const uno::Exception&)
+        {
+            // locked from other app
+            return false;
+        }
+        LockFileEntry aOwnData = svt::LockFileCommon::GenerateOwnEntry();
+        bool bOwnLock
+            = aOwnData[LockFileComponent::SYSUSERNAME] == aData[LockFileComponent::SYSUSERNAME];
+        if (bOwnLock
+            && aOwnData[LockFileComponent::LOCALHOST] == aData[LockFileComponent::LOCALHOST]
+            && aOwnData[LockFileComponent::USERURL] == aData[LockFileComponent::USERURL])
+        {
+            // this is own lock from the same installation, it could remain because of crash
+            bCanReload = true;
+        }
+    }
+    else if (nError1 == osl::FileBase::E_NOENT) // file doesn't exist
+    {
+        bCanReload = true;
+    }
+#endif
+    return bCanReload;
+}
+
+// worker thread method
+void CheckReadOnlyTask::doWork()
+{
+    if (_pMed == nullptr || _pMyCond == nullptr || _pMutex == nullptr || _pIsDestructed == nullptr)
+        return;
+
+    std::unique_lock<std::recursive_mutex> lock(*_pMutex);
+
+    if (*_pIsDestructed || _pMed->GetWorkerReloadEvent() != nullptr)
+        return;
+
+    OUString aDocumentURL
+        = _pMed->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::WithCharset);
+
+    while (true)
+    {
+        switch (_pMyCond->wait_for(lock, std::chrono::seconds(60)))
+        {
+            case std::cv_status::timeout:
+                break;
+            default: // signalled or error
+                return;
+        }
+
+        // prevent use after destruction, and prevent multiple reload events from occurring
+        if (*_pIsDestructed || _pMed->GetWorkerReloadEvent() != nullptr)
+            return;
+
+        osl::File aFile(aDocumentURL);
+        if (aFile.open(osl_File_OpenFlag_Write) != osl::FileBase::E_None)
+            continue;
+
+        if (!_pMed->CheckCanGetLockfile())
+            continue;
+
+        if (aFile.close() != osl::FileBase::E_None)
+            return;
+
+        // we can load, ask user
+        ImplSVEvent* pEvent
+            = Application::PostUserEvent(LINK(nullptr, SfxMedium, ShowReloadEditableDialog), _pMed);
+        _pMed->SetWorkerReloadEvent(pEvent);
+
+        return;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
