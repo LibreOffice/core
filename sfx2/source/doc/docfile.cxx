@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/threadpool.hxx>
+#include <iostream>
+
 #include <config_features.h>
 
 #ifdef UNX
@@ -920,6 +923,77 @@ OUString tryForeignLockfiles(const OUString& sDocURL)
 }
 }
 
+ /** callback function, which is triggered by input stream data manager on
+119      filling of the data container to provide retrieved input stream to the
+120      thread Consumer using <Application::PostUserEvent(..)>
+121  
+122      #i73788#
+123      Note: This method has to be run in the main thread.
+124  */
+IMPL_LINK(SfxMedium, ShowLockedDocumentDialog2, void*, p, void)
+{
+    SfxMedium* pMed = static_cast<SfxMedium*>(p);
+    sal_Int32 nContinuations = 3;
+    ::rtl::Reference<::ucbhelper::InteractionRequest> xInteractionRequestImpl;
+    OUString aDocumentURL
+        = pMed->GetURLObject().GetLastName(INetURLObject::DecodeMechanism::WithCharset);
+    OUString aInfo;
+    xInteractionRequestImpl
+        = new ::ucbhelper::InteractionRequest(uno::makeAny(document::LockedDocumentRequest(
+            OUString(), uno::Reference<uno::XInterface>(), aDocumentURL, aInfo)));
+    uno::Reference<task::XInteractionHandler> xHandler = pMed->GetInteractionHandler();
+    uno::Sequence<uno::Reference<task::XInteractionContinuation>> aContinuations(nContinuations);
+    aContinuations[0] = new ::ucbhelper::InteractionAbort(xInteractionRequestImpl.get());
+    aContinuations[1] = new ::ucbhelper::InteractionApprove(xInteractionRequestImpl.get());
+    aContinuations[2] = new ::ucbhelper::InteractionDisapprove(xInteractionRequestImpl.get());
+    xInteractionRequestImpl->setContinuations(aContinuations);
+    try
+    {
+        if (xHandler.is())
+            xHandler->handle(xInteractionRequestImpl);
+    }
+    catch (std::exception e)
+    {
+        std::cerr << "MATT: " << e.what() << std::endl;
+    }
+    /*OUString aMessage;
+    std::vector<OUString> aArguments;
+    uno::Reference<awt::XWindow> xParent = getParentXWindow();
+    std::locale aResLocale = Translate::Create("uui");
+    //aArguments.push_back(aDocumentURL);
+    aArguments.push_back(Translate::get(STR_UNKNOWNUSER, aResLocale);
+    aArguments.push_back("");
+    aMessage = Translate::get(STR_OPENLOCKED_MSG, aResLocale);
+    aMessage = UUIInteractionHelper::replaceMessageWithArguments(aMessage, aArguments);
+
+    OpenLockedQueryBox aDialog(Application::GetFrameWeld(xParent), aResLocale, aMessage, false);
+    aDialog.run();*/
+}
+
+namespace
+{
+    class CheckReadOnlyTask : public comphelper::ThreadTask
+    {
+    public:
+        CheckReadOnlyTask(SfxMedium* pMed, const std::shared_ptr<comphelper::ThreadTaskTag>& pTag)
+            : ThreadTask(pTag)
+        {
+            _pMed = pMed;
+            _pMed->AddNextRef();
+        }
+        virtual void doWork()
+        {
+            osl::Thread::wait(std::chrono::milliseconds(5000)); // give it a time to start
+            
+            Application::PostUserEvent(LINK(_pMed, SfxMedium, ShowLockedDocumentDialog2), _pMed);
+            
+        }
+        SfxMedium* _pMed;
+        //static inline std::mutex mutex;
+        
+    };
+} // namespace
+
 SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntry& aData,
                                                               bool bIsLoading, bool bOwnLock,
                                                               bool bHandleSysLocked)
@@ -1027,8 +1101,16 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntr
             // alien lock on loading, user has selected to retry saving
             // TODO/LATER: alien lock on saving, user has selected to retry saving
 
-            if ( bIsLoading )
-                GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
+            if (bIsLoading)
+            {
+                GetItemSet()->Put(SfxBoolItem(SID_DOC_READONLY, true));
+                //MATT: DO WORK
+                comphelper::ThreadPool& rSharedPool
+                    = comphelper::ThreadPool::getSharedOptimalPool();
+                std::shared_ptr<comphelper::ThreadTaskTag> pTag
+                    = comphelper::ThreadPool::createThreadTaskTag();
+                rSharedPool.pushTask(std::make_unique<CheckReadOnlyTask>(this, pTag));
+            }
             else
                 nResult = ShowLockResult::Try;
         }

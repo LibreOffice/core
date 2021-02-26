@@ -168,6 +168,14 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_loadUserProfile(
 SAL_DLLPUBLIC void SAL_CALL osl_unloadUserProfile(
         oslSecurity Security);
 
+/** Wait for file security changes
+    Implemented just for Windows
+    @param[in] Security previously fetch Security of the User
+    @return nothing is returned!
+*/
+
+SAL_DLLPUBLIC void SAL_CALL osl_WaitForFileSecurityChanges(oslSecurity Security);
+
 #ifdef __cplusplus
 }
 #endif

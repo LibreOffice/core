@@ -665,4 +665,18 @@ static bool getUserNameImpl(oslSecurity Security, rtl_uString **strName,  bool b
     return false;
 }
 
+void SAL_CALL osl_WaitForFileSecurityChanges(oslSecurity Security)
+{
+    dwChangeHandles[0]
+        = FindFirstChangeNotification("C:\Users\hop\projects\LibreOffice\bugs\47065", // directory to watch
+                                      FALSE, // do not watch subtree
+                                      FILE_NOTIFY_CHANGE_FILE_NAME); // watch file name changes
+
+    if (dwChangeHandles[0] == INVALID_HANDLE_VALUE)
+    {
+        printf("\n ERROR: FindFirstChangeNotification function failed.\n");
+        ExitProcess(GetLastError());
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
