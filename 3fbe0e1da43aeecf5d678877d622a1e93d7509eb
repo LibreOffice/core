@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ede20bd_94571c14",
+        "filename": "sc/source/ui/view/cellsh.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-02-26T11:15:34Z",
+      "side": 1,
+      "message": "redundant expression?\n\nnTotal \u003e nSelected",
+      "range": {
+        "startLine": 784,
+        "startChar": 24,
+        "endLine": 784,
+        "endChar": 59
+      },
+      "revId": "3fbe0e1da43aeecf5d678877d622a1e93d7509eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
