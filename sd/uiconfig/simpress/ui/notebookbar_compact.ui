@@ -874,13 +874,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuHelp-GetInvolved">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:GetInvolved</property>
-      </object>
-    </child>
-    <child>
       <object class="GtkSeparatorMenuItem" id="MenuHelp-separator2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
