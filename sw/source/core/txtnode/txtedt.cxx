@@ -1684,7 +1684,7 @@ namespace
 void SwTextNode::TransliterateText(
     utl::TransliterationWrapper& rTrans,
     sal_Int32 nStt, sal_Int32 nEnd,
-    SwUndoTransliterate* pUndo )
+    SwUndoTransliterate* pUndo, bool bUseRedlining )
 {
     if (nStt >= nEnd)
         return;
@@ -1908,7 +1908,7 @@ void SwTextNode::TransliterateText(
     // now apply the changes from end to start to leave the offsets of the
     // yet unchanged text parts remain the same.
     size_t nSum(0);
-    bool bIsRedlineOn(GetDoc().getIDocumentRedlineAccess().IsRedlineOn());
+
     for (size_t i = 0; i < aChanges.size(); ++i)
     {   // check this here since AddChanges cannot be moved below
         // call to ReplaceTextOnly
@@ -1922,7 +1922,7 @@ void SwTextNode::TransliterateText(
             return;
         }
 
-        if ( bIsRedlineOn )
+        if ( bUseRedlining )
         {
             // create SwPaM with mark & point spanning the attributed text
             //SwPaM aCurPaM( *this, *this, nBegin, nBegin + nLen ); <-- wrong c-tor, does sth different
