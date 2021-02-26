@@ -6,15 +6,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-$(eval $(call gb_Module_Module,wasm))
+module_directory:=$(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
-ifeq ($(OS),EMSCRIPTEN)
-
-$(eval $(call gb_Module_add_targets,wasm,\
-    CustomTarget_components \
-    Library_components \
-))
-
-endif
+include $(module_directory)/../solenv/gbuild/partial_build.mk
 
 # vim: set noet sw=4 ts=4:

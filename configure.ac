@@ -1506,7 +1506,8 @@ libo_FUZZ_ARG_ENABLE(optimized,
         [Whether to compile with optimization flags.
          By default, disabled for --enable-debug and --enable-dbgutil, enabled
          otherwise. Using 'debug' will try to use only optimizations that should
-         not interfere with debugging.]))
+         not interfere with debugging. For Emscripten we default to optimized (-O1)
+         debug build, as otherwise biaries become too large.]))
 
 libo_FUZZ_ARG_ENABLE(runtime-optimizations,
     AS_HELP_STRING([--disable-runtime-optimizations],
@@ -4369,6 +4370,10 @@ if test -n "$ENABLE_DBGUTIL" -o \( -n "$enable_debug" -a "$enable_debug" != "no"
     else
         AC_MSG_RESULT([yes])
     fi
+    if test "$_os" = "Emscripten" -a -z "$enable_optimized"; then
+        # Otherwise binaries simply become too large (linker OOM + browser fails to load)
+        enable_optimized=debug
+    fi
 else
     ENABLE_DEBUG=""
     AC_MSG_RESULT([no])
@@ -4646,7 +4651,7 @@ elif test "$enable_optimized" = debug; then
     ENABLE_OPTIMIZED_DEBUG=TRUE
     AC_MSG_RESULT([yes (debug)])
     HAVE_GCC_OG=
-    if test "$GCC" = "yes"; then
+    if test "$GCC" = "yes" -a "$_os" != "Emscripten"; then
         AC_MSG_CHECKING([whether $CC_BASE supports -Og])
         save_CFLAGS=$CFLAGS
         CFLAGS="$CFLAGS -Werror -Og"
@@ -4658,7 +4663,7 @@ elif test "$enable_optimized" = debug; then
             AC_MSG_RESULT([no])
         fi
     fi
-    if test -z "$HAVE_GCC_OG"; then
+    if test -z "$HAVE_GCC_OG" -a "$_os" != "Emscripten"; then
         AC_MSG_ERROR([The compiler does not support optimizations suitable for debugging.])
     fi
 else
