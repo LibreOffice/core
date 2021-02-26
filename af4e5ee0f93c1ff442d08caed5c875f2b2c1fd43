@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b8e7308_fcff5a6e",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 971,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-02-26T04:46:20Z",
+      "side": 1,
+      "message": "My guess is that this should be \"if !m_bFrameDirectionSet || m_aFrameDirectionQueue.empty()\"",
+      "range": {
+        "startLine": 971,
+        "startChar": 8,
+        "endLine": 971,
+        "endChar": 43
+      },
+      "revId": "af4e5ee0f93c1ff442d08caed5c875f2b2c1fd43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
