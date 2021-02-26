@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb9f4eb9_a72d7ed4",
+        "filename": "include/osl/security.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-26T15:53:56Z",
+      "side": 1,
+      "message": "Does it watch *security* changes? IIUC, the task is to watch *locking* changes",
+      "revId": "421fc3fa9c708776a1c2238e2a64a67ffd183895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf893783_e7c62340",
+        "filename": "sal/osl/w32/security.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-26T15:53:56Z",
+      "side": 1,
+      "message": "Why is there user\u0027s local path?\n\nPlease keep lines shorter than 100 characters.",
+      "revId": "421fc3fa9c708776a1c2238e2a64a67ffd183895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4ba1a7c_993c714c",
+        "filename": "sal/osl/w32/security.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-26T15:53:56Z",
+      "side": 1,
+      "message": "Please use SAL_WARN and friends, not printf. Thanks!",
+      "revId": "421fc3fa9c708776a1c2238e2a64a67ffd183895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1622d8c_5d412ad4",
+        "filename": "sal/osl/w32/security.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-26T15:53:56Z",
+      "side": 1,
+      "message": "std::abort is what we use.",
+      "revId": "421fc3fa9c708776a1c2238e2a64a67ffd183895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b325139f_84751062",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-26T15:53:56Z",
+      "side": 1,
+      "message": "What are these numbers starting the lines?",
+      "revId": "421fc3fa9c708776a1c2238e2a64a67ffd183895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "822c255a_db891625",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-26T15:53:56Z",
+      "side": 1,
+      "message": "Please no trailing whitespace",
+      "revId": "421fc3fa9c708776a1c2238e2a64a67ffd183895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16328a79_96f64a5d",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-26T15:53:56Z",
+      "side": 1,
+      "message": "Why the explicit global namespace? It is not required, and is inconsistent with the rest",
+      "revId": "421fc3fa9c708776a1c2238e2a64a67ffd183895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eca0c05b_085aaa9a",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-26T15:53:56Z",
+      "side": 1,
+      "message": "What this message means?",
+      "revId": "421fc3fa9c708776a1c2238e2a64a67ffd183895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8dbef404_5aa1dccd",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-26T15:53:56Z",
+      "side": 1,
+      "message": "Please no commented out code. If you introduce it first time, it at least needs some comments like \"this code should be uncommented when ...\"; if you comment out existing code, just remove it and rely on git history keeping it safe.",
+      "revId": "421fc3fa9c708776a1c2238e2a64a67ffd183895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac13000d_6fa31cd6",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-26T15:53:56Z",
+      "side": 1,
+      "message": "Trailing whitespace here and below",
+      "revId": "421fc3fa9c708776a1c2238e2a64a67ffd183895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6951519_f28a5f2b",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-26T15:53:56Z",
+      "side": 1,
+      "message": "What does this comment tell?",
+      "revId": "421fc3fa9c708776a1c2238e2a64a67ffd183895",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
