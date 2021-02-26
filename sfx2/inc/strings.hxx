@@ -18,7 +18,7 @@
 #define STR_TEMPLATE_NAME2_DEF "Beehive"
 #define STR_TEMPLATE_NAME3_DEF "Blue Curve"
 #define STR_TEMPLATE_NAME4_DEF "Blueprint Plans"
-#define STR_TEMPLATE_NAME5_DEF ""
+#define STR_TEMPLATE_NAME5_DEF "Candy"
 #define STR_TEMPLATE_NAME6_DEF ""
 #define STR_TEMPLATE_NAME7_DEF "DNA"
 #define STR_TEMPLATE_NAME8_DEF "Focus"
