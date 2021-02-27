@@ -48,4 +48,5 @@ AbstractSmParser* starmathdatabase::GetVersionSmParser(sal_uInt16 nVersion)
         throw std::range_error("parser depth limit");
     }
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

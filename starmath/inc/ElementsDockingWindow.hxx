@@ -25,14 +25,13 @@
 #include <vcl/weld.hxx>
 
 #include "format.hxx"
+#include "parse.hxx"
 #include <memory>
 #include <tuple>
 
 #include "AccessibleSmElementsControl.hxx"
 
 class SmDocShell;
-class SmNode;
-class SmParser;
 
 class SmElement
 {
