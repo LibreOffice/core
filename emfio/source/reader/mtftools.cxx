@@ -1879,7 +1879,7 @@ namespace emfio
             vcl::bitmap::DrawAndClipBitmap(rPos, rSize, rBitmap, aBmpEx, maClipPath.getClipPath());
         }
 
-        if ( aBmpEx.IsTransparent() )
+        if ( aBmpEx.IsAlpha() )
             mpGDIMetaFile->AddAction( new MetaBmpExScaleAction( rPos, rSize, aBmpEx ) );
         else
             mpGDIMetaFile->AddAction( new MetaBmpScaleAction( rPos, rSize, aBmpEx.GetBitmap() ) );

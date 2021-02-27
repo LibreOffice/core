@@ -911,21 +911,12 @@ CGImageRef CreateCGImage( const Image& rImage )
         return nullptr;
 
     CGImageRef xImage = nullptr;
-    if( ! (aBmpEx.IsAlpha() || aBmpEx.IsTransparent() ) )
+    if( !aBmpEx.IsAlpha() )
         xImage = pSalBmp->CreateCroppedImage( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
-    else if( aBmpEx.IsAlpha() )
+    else
     {
         AlphaMask aAlphaMask( aBmpEx.GetAlpha() );
         Bitmap aMask( aAlphaMask.GetBitmap() );
-        QuartzSalBitmap* pMaskBmp = static_cast<QuartzSalBitmap*>(aMask.ImplGetSalBitmap().get());
-        if( pMaskBmp )
-            xImage = pSalBmp->CreateWithMask( *pMaskBmp, 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
-        else
-            xImage = pSalBmp->CreateCroppedImage( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
-    }
-    else if( aBmpEx.GetTransparentType() == TransparentType::Bitmap )
-    {
-        Bitmap aMask( aBmpEx.GetMask() );
         QuartzSalBitmap* pMaskBmp = static_cast<QuartzSalBitmap*>(aMask.ImplGetSalBitmap().get());
         if( pMaskBmp )
             xImage = pSalBmp->CreateWithMask( *pMaskBmp, 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );

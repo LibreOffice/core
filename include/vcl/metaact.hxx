@@ -775,7 +775,7 @@ public:
 
     const BitmapEx&     GetBitmapEx() const { return maBmpEx; }
     const Point&        GetPoint() const { return maPt; }
-    bool                IsTransparent() const override { return GetBitmapEx().IsTransparent(); }
+    bool                IsTransparent() const override { return GetBitmapEx().IsAlpha(); }
 };
 
 class VCL_DLLPUBLIC MetaBmpExScaleAction final : public MetaAction
@@ -809,7 +809,7 @@ public:
     const BitmapEx&     GetBitmapEx() const { return maBmpEx; }
     const Point&        GetPoint() const { return maPt; }
     const Size&         GetSize() const { return maSz; }
-    bool                IsTransparent() const override { return GetBitmapEx().IsTransparent(); }
+    bool                IsTransparent() const override { return GetBitmapEx().IsAlpha(); }
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaBmpExScalePartAction final : public MetaAction
@@ -848,7 +848,7 @@ public:
     const Size&         GetDestSize() const { return maDstSz; }
     const Point&        GetSrcPoint() const { return maSrcPt; }
     const Size&         GetSrcSize() const { return maSrcSz; }
-    bool                IsTransparent() const override { return GetBitmapEx().IsTransparent(); }
+    bool                IsTransparent() const override { return GetBitmapEx().IsAlpha(); }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaMaskAction final : public MetaAction

@@ -307,9 +307,8 @@ void Printer::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,
     }
     else
     {
-        Bitmap aBmp( rBmpEx.GetBitmap() ), aMask( rBmpEx.GetMask() );
-        aBmp.Replace( aMask, COL_WHITE );
-        ImplPrintTransparent( aBmp, aMask, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
+        Bitmap aBmp( rBmpEx.GetBitmap() );
+        ImplPrintTransparent( aBmp, Bitmap(), rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
     }
 }
 

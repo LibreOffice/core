@@ -242,7 +242,7 @@ bool GIFWriter::CreateAccess( const BitmapEx& rBmpEx )
 {
     if( bStatus )
     {
-        Bitmap aMask( rBmpEx.GetMask() );
+        Bitmap aMask( rBmpEx.GetAlpha() );
 
         aAccBmp = rBmpEx.GetBitmap();
         bTransparent = false;

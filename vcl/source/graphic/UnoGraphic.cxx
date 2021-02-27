@@ -171,7 +171,7 @@ uno::Sequence<sal_Int8> SAL_CALL Graphic::getMaskDIB()
     {
         SvMemoryStream aMemoryStream;
 
-        WriteDIB(maGraphic.GetBitmapEx().GetMask(), aMemoryStream, false, true);
+        WriteDIB(maGraphic.GetBitmapEx().GetAlpha(), aMemoryStream, false, true);
         return css::uno::Sequence<sal_Int8>( static_cast<sal_Int8 const *>(aMemoryStream.GetData()), aMemoryStream.Tell() );
     }
     else

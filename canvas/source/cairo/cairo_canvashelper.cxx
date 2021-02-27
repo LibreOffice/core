@@ -351,7 +351,7 @@ namespace cairocanvas
             // there's no pixmap for alpha bitmap. we might still
             // use rgb pixmap and only access alpha pixels the
             // slow way. now we just speedup rgb bitmaps
-            if( !aBmpEx.IsTransparent() && !aBmpEx.IsAlpha() )
+            if( !aBmpEx.IsAlpha() )
             {
                 pSurface = rSurfaceProvider->createSurface( aBitmap );
                 data = nullptr;
