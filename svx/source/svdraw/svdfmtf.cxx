@@ -1609,7 +1609,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction const & rAct)
 
     if(bHasNewMask || bFixedTransparence)
     {
-        if(!aBitmapEx.IsAlpha() && !aBitmapEx.IsTransparent())
+        if(!aBitmapEx.IsAlpha())
         {
             // no transparence yet, apply new one
             if(bFixedTransparence)
