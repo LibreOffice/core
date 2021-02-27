@@ -1737,7 +1737,7 @@ bool ReadDIBBitmapEx(
             {
                 switch (tmp)
                 {
-                case static_cast<int>(TransparentType::Bitmap):
+                case 2: // TransparentType::Bitmap
                     {
                         Bitmap aMask;
 
@@ -1845,11 +1845,11 @@ bool WriteDIBBitmapEx(
     {
         rOStm.WriteUInt32( 0x25091962 );
         rOStm.WriteUInt32( 0xACB20201 );
-        rOStm.WriteUChar( static_cast<unsigned char>(rSource.meTransparent) );
+        rOStm.WriteUChar( rSource.IsAlpha() ? 2 : 0 ); // Used to be TransparentType enum
 
-        if(TransparentType::Bitmap == rSource.meTransparent)
+        if(rSource.IsAlpha())
         {
-            return ImplWriteDIB(rSource.maMask, rOStm, true, true);
+            return ImplWriteDIB(rSource.maAlphaMask, rOStm, true, true);
         }
     }
 
