@@ -1887,12 +1887,6 @@ bool WriteDIBBitmapEx(
         {
             return ImplWriteDIB(rSource.maMask, rOStm, true, true);
         }
-        else if(TransparentType::Color == rSource.meTransparent)
-        {
-            tools::GenericTypeSerializer aSerializer(rOStm);
-            aSerializer.writeColor(rSource.maTransparentColor);
-            return true;
-        }
     }
 
     return false;
