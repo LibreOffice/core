@@ -51,7 +51,6 @@ class ScOutputData;
 class SdrObject;
 class SdrEditView;
 class ScNoteMarker;
-class FloatingWindow;
 class SdrHdlList;
 class ScTransferObj;
 struct SpellCallbackInfo;
@@ -84,7 +83,6 @@ struct SpellCallbackInfo;
 namespace sdr::overlay { class OverlayObjectList; }
 
 class ScFilterListBox;
-class ScFilterFloatingWindow;
 
 class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSourceHelper
 {
@@ -155,8 +153,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
 
     std::unique_ptr<ScNoteMarker, o3tl::default_delete<ScNoteMarker>> mpNoteMarker;
 
-    VclPtr<ScFilterListBox>          mpFilterBox;
-    VclPtr<ScFilterFloatingWindow>   mpFilterFloat;
+    std::shared_ptr<ScFilterListBox> mpFilterBox;
     VclPtr<ScCheckListMenuWindow>    mpAutoFilterPopup;
     VclPtr<ScCheckListMenuWindow>    mpDPFieldPopup;
     std::unique_ptr<ScDPFieldButton> mpFilterButton;
@@ -216,7 +213,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
     bool                    bAutoMarkVisible:1;
     bool                    bListValButton:1;
 
-    DECL_LINK( PopupModeEndHdl, FloatingWindow*, void );
+    DECL_LINK( PopupModeEndHdl, weld::Popover&, void );
     DECL_LINK( PopupSpellingHdl, SpellCallbackInfo&, void );
 
     bool            TestMouse( const MouseEvent& rMEvt, bool bAction );
@@ -384,7 +381,7 @@ public:
 
     void            UpdateFormulas(SCCOL nX1 = -1, SCROW nY1 = -1, SCCOL nX2 = -1, SCROW nY2 = -1);
 
-    void            ShowFilterMenu(const tools::Rectangle& rCellRect, bool bLayoutRTL);
+    void            ShowFilterMenu(weld::Window* pParent, const tools::Rectangle& rCellRect, bool bLayoutRTL);
 
     void            LaunchDataSelectMenu( SCCOL nCol, SCROW nRow );
     void            DoScenarioMenu( const ScRange& rScenRange );
