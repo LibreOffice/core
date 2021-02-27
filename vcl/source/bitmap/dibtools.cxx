@@ -1766,14 +1766,13 @@ bool ReadDIBBitmapEx(
         {
             sal_uInt8 tmp = 0;
             rIStm.ReadUChar( tmp );
-            TransparentType transparent = static_cast<TransparentType>(tmp);
             bRetval = !rIStm.GetError();
 
             if(bRetval)
             {
-                switch (transparent)
+                switch (tmp)
                 {
-                case TransparentType::Bitmap:
+                case static_cast<int>(TransparentType::Bitmap):
                     {
                         Bitmap aMask;
 
@@ -1800,7 +1799,7 @@ bool ReadDIBBitmapEx(
                         }
                         break;
                     }
-                case TransparentType::Color:
+                case 1: // backwards compat for old option TransparentType::Color
                     {
                         Color aTransparentColor;
 
@@ -1886,12 +1885,6 @@ bool WriteDIBBitmapEx(
         if(TransparentType::Bitmap == rSource.meTransparent)
         {
             return ImplWriteDIB(rSource.maMask, rOStm, true, true);
-        }
-        else if(TransparentType::Color == rSource.meTransparent)
-        {
-            tools::GenericTypeSerializer aSerializer(rOStm);
-            aSerializer.writeColor(rSource.maTransparentColor);
-            return true;
         }
     }
 

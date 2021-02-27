@@ -121,17 +121,6 @@ namespace drawinglayer::texture
                 {
                     break;
                 }
-                case TransparentType::Color:
-                {
-                    const BitmapColor aBitmapColor(mpReadBitmap->GetColor(rY, rX));
-
-                    if(maBitmapEx.GetTransparentColor() == aBitmapColor)
-                    {
-                        return 255;
-                    }
-
-                    break;
-                }
                 case TransparentType::Bitmap:
                 {
                     OSL_ENSURE(mpReadTransparence, "OOps, transparence type Bitmap, but no read access created in the constructor (?)");

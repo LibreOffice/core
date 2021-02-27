@@ -932,12 +932,6 @@ CGImageRef CreateCGImage( const Image& rImage )
         else
             xImage = pSalBmp->CreateCroppedImage( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
     }
-    else if( aBmpEx.GetTransparentType() == TransparentType::Color )
-    {
-        Color aTransColor( aBmpEx.GetTransparentColor() );
-        Color nTransColor( aTransColor.GetRed(), aTransColor.GetGreen(), aTransColor.GetBlue() );
-        xImage = pSalBmp->CreateColorMask( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight, nTransColor );
-    }
 
     return xImage;
 }
