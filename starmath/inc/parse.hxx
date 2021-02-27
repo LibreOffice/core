@@ -25,6 +25,16 @@
 #define INCLUDED_STARMATH_INC_PARSE_HXX
 
 #include "parse5.hxx"
+#include "parse6.hxx"
+
+namespace starmathdatabase
+{
+
+AbstractSmParser* GetDefaultSmParser();
+
+AbstractSmParser* GetVersionSmParser(sal_uInt16 nVersion);
+
+}
 
 namespace starmathdatabase
 {
