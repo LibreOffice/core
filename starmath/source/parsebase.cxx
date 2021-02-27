@@ -21,21 +21,34 @@
   *
   */
 
-#ifndef INCLUDED_STARMATH_INC_PARSE_HXX
-#define INCLUDED_STARMATH_INC_PARSE_HXX
+#include "parse.hxx"
+#include <strings.hrc>
+#include <smmod.hxx>
 
-#include "parse5.hxx"
-#include "parse6.hxx"
+const char* starmathdatabase::SmParseErrorDesc[] = {
+    // clang-format off
+    RID_ERR_NONE,
+    RID_ERR_UNEXPECTEDCHARACTER,
+    RID_ERR_UNEXPECTEDTOKEN,
+    RID_ERR_POUNDEXPECTED,
+    RID_ERR_COLOREXPECTED,
+    RID_ERR_LGROUPEXPECTED,
+    RID_ERR_RGROUPEXPECTED,
+    RID_ERR_LBRACEEXPECTED,
+    RID_ERR_RBRACEEXPECTED,
+    RID_ERR_PARENTMISMATCH,
+    RID_ERR_RIGHTEXPECTED,
+    RID_ERR_FONTEXPECTED,
+    RID_ERR_SIZEEXPECTED,
+    RID_ERR_DOUBLEALIGN,
+    RID_ERR_DOUBLESUBSUPSCRIPT,
+    RID_ERR_NUMBEREXPECTED
+    // clang-format on
+};
 
-namespace starmathdatabase
+OUString starmathdatabase::getParseErrorDesc(SmParseError err)
 {
-
-AbstractSmParser* GetDefaultSmParser();
-
-AbstractSmParser* GetVersionSmParser(sal_uInt16 nVersion);
-
+    return SmResId(starmathdatabase::SmParseErrorDesc[static_cast<uint_fast8_t>(err)]);
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

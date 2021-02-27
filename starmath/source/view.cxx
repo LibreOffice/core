@@ -1288,7 +1288,7 @@ void SmViewShell::SetStatusText(const OUString& rText)
 void SmViewShell::ShowError(const SmErrorDesc* pErrorDesc)
 {
     assert(GetDoc());
-    if (pErrorDesc || nullptr != (pErrorDesc = GetDoc()->GetParser().GetError()) )
+    if (pErrorDesc || nullptr != (pErrorDesc = GetDoc()->GetParser()->GetError()) )
     {
         SetStatusText( pErrorDesc->m_aText );
         GetEditWindow()->MarkError( Point( pErrorDesc->m_pNode->GetColumn(),
@@ -1299,7 +1299,7 @@ void SmViewShell::ShowError(const SmErrorDesc* pErrorDesc)
 void SmViewShell::NextError()
 {
     assert(GetDoc());
-    const SmErrorDesc   *pErrorDesc = GetDoc()->GetParser().NextError();
+    const SmErrorDesc   *pErrorDesc = GetDoc()->GetParser()->NextError();
 
     if (pErrorDesc)
         ShowError( pErrorDesc );
@@ -1308,7 +1308,7 @@ void SmViewShell::NextError()
 void SmViewShell::PrevError()
 {
     assert(GetDoc());
-    const SmErrorDesc   *pErrorDesc = GetDoc()->GetParser().PrevError();
+    const SmErrorDesc   *pErrorDesc = GetDoc()->GetParser()->PrevError();
 
     if (pErrorDesc)
         ShowError( pErrorDesc );
