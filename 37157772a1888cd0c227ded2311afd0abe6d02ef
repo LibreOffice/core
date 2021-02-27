@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "30419039_76b30f40",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2021-02-27T23:32:58Z",
+      "side": 1,
+      "message": "What I meant is that you can have the same .uno:CharBackColor in *both* WriterCommands.xcu and GenericCommands.xcu, with completely different set of labels for Writer. (just for general information, as this likely not needed, given your new solution.)",
+      "parentUuid": "e86f32f4_41158aa1",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 46
+      },
+      "revId": "37157772a1888cd0c227ded2311afd0abe6d02ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60a0d140_d2cef8e8",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
         "patchSetId": 4
