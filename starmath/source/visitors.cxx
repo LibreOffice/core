@@ -13,8 +13,8 @@
 #include <vcl/lineinfo.hxx>
 #include <visitors.hxx>
 #include "tmpdevice.hxx"
-#include <cursor.hxx>
-#include <cassert>
+#include "cursor.hxx"
+
 #include <starmathdatabase.hxx>
 
 // SmDefaultingVisitor
