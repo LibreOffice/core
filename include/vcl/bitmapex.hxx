@@ -36,9 +36,9 @@ namespace basegfx { class BColorModifierStack; }
 
 enum class TransparentType
 {
-    NONE,
-    Color,
-    Bitmap
+    NONE = 0,
+    // Color = 1, Never actually used in BitmapEx, only present for backwards compat with existing SVM files
+    Bitmap = 2
 };
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC BitmapEx
@@ -89,8 +89,6 @@ public:
 
     const MapMode&      GetPrefMapMode() const { return maBitmap.GetPrefMapMode(); }
     void                SetPrefMapMode( const MapMode& rPrefMapMode ) { maBitmap.SetPrefMapMode( rPrefMapMode ); }
-
-    const Color&        GetTransparentColor() const { return maTransparentColor; }
 
     sal_uInt16          GetBitCount() const { return maBitmap.GetBitCount(); }
     sal_uLong           GetSizeBytes() const;
@@ -475,7 +473,6 @@ private:
     Bitmap              maBitmap;
     Bitmap              maMask;
     Size                maBitmapSize;
-    Color               maTransparentColor;
     TransparentType     meTransparent;
     bool                mbAlpha;
 

@@ -8699,7 +8699,6 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     CHECK_RETURN( updateObject( rObject.m_nObject ) );
 
     Bitmap  aBitmap;
-    Color   aTransparentColor( COL_TRANSPARENT );
     bool    bWriteMask = false;
     if( ! bMask )
     {
@@ -8715,9 +8714,6 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
             switch( rObject.m_aBitmap.GetTransparentType() )
             {
                 case TransparentType::NONE:
-                    break;
-                case TransparentType::Color:
-                    aTransparentColor = rObject.m_aBitmap.GetTransparentColor();
                     break;
                 case TransparentType::Bitmap:
                     bWriteMask = true;
@@ -8902,32 +8898,8 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
             aLine.append( nMaskObject );
             aLine.append( " 0 R\n" );
         }
-        else if( aTransparentColor != COL_TRANSPARENT )
-        {
-            aLine.append( "/Mask[ " );
-            if( bTrueColor )
-            {
-                aLine.append( static_cast<sal_Int32>(aTransparentColor.GetRed()) );
-                aLine.append( ' ' );
-                aLine.append( static_cast<sal_Int32>(aTransparentColor.GetRed()) );
-                aLine.append( ' ' );
-                aLine.append( static_cast<sal_Int32>(aTransparentColor.GetGreen()) );
-                aLine.append( ' ' );
-                aLine.append( static_cast<sal_Int32>(aTransparentColor.GetGreen()) );
-                aLine.append( ' ' );
-                aLine.append( static_cast<sal_Int32>(aTransparentColor.GetBlue()) );
-                aLine.append( ' ' );
-                aLine.append( static_cast<sal_Int32>(aTransparentColor.GetBlue()) );
-            }
-            else
-            {
-                sal_Int32 nIndex = pAccess->GetBestPaletteIndex( BitmapColor( aTransparentColor ) );
-                aLine.append( nIndex );
-            }
-            aLine.append( " ]\n" );
-        }
     }
-    else if( m_bIsPDF_A1 && (bWriteMask || aTransparentColor != COL_TRANSPARENT) )
+    else if( m_bIsPDF_A1 && bWriteMask )
         m_aErrors.insert( PDFWriter::Warning_Transparency_Omitted_PDFA );
 
     aLine.append( ">>\n"
