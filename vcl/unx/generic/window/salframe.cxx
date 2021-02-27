@@ -2046,7 +2046,7 @@ void X11SalFrame::Restore()
 
     if( SHOWSTATE_UNKNOWN == nShowState_ || SHOWSTATE_HIDDEN == nShowState_ )
     {
-        SAL_WARN( "vcl", "X11SalFrame::Restore on withdrawn window" );
+        SAL_INFO( "vcl", "X11SalFrame::Restore on withdrawn window" );
         return;
     }
 
