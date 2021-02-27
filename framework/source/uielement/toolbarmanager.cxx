@@ -669,7 +669,7 @@ void ToolBarManager::CreateControllers()
         bool                     bCreate( true );
         Reference< XStatusListener > xController;
 
-        svt::ToolboxController* pController( nullptr );
+        rtl::Reference<svt::ToolboxController> pController;
 
         OUString aCommandURL( m_pToolBar->GetItemCommand( nId ) );
         // Command can be just an alias to another command.
@@ -768,7 +768,7 @@ void ToolBarManager::CreateControllers()
             }
             else if ( pController )
             {
-                xController.set( static_cast< ::cppu::OWeakObject *>( pController ), UNO_QUERY );
+                xController = pController;
             }
         }
 
