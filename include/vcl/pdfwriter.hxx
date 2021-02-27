@@ -847,7 +847,7 @@ The following structure describes the permissions used in PDF security
     the same pixel size as the image and
     be either 1 bit black&white or 8 bit grey
     */
-    void                DrawJPGBitmap( SvStream& rJPGData, bool bIsTrueColor, const Size& rSrcSizePixel, const tools::Rectangle& rTargetArea, const Bitmap& rMask, const Graphic& rGraphic );
+    void                DrawJPGBitmap( SvStream& rJPGData, bool bIsTrueColor, const Size& rSrcSizePixel, const tools::Rectangle& rTargetArea, const AlphaMask& rAlphaMask, const Graphic& rGraphic );
 
     /** Create a new named destination to be used in a link from another PDF document
 

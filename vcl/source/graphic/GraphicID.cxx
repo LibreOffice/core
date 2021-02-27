@@ -55,9 +55,7 @@ GraphicID::GraphicID(ImpGraphic const& rGraphic)
         {
             const BitmapEx aBmpEx(rGraphic.getBitmapEx(GraphicConversionParameters()));
 
-            mnID1 |= (((static_cast<sal_uLong>(aBmpEx.GetTransparentType()) << 8)
-                       | (aBmpEx.IsAlpha() ? 1 : 0))
-                      & 0x0fffffff);
+            mnID1 |= aBmpEx.IsAlpha() ? 1 : 0;
             mnID2 = aBmpEx.GetSizePixel().Width();
             mnID3 = aBmpEx.GetSizePixel().Height();
             mnID4 = rGraphic.getChecksum();
