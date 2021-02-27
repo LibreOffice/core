@@ -20,7 +20,6 @@
 #ifndef INCLUDED_STARMATH_INC_DOCUMENT_HXX
 #define INCLUDED_STARMATH_INC_DOCUMENT_HXX
 
-#include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
@@ -30,11 +29,7 @@
 #include <oox/core/filterbase.hxx>
 #include <oox/export/utils.hxx>
 
-#include <memory>
-#include <set>
-
 #include "format.hxx"
-#include "node.hxx"
 #include "parse.hxx"
 #include "smdllapi.hxx"
 

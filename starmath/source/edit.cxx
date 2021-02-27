@@ -40,7 +40,6 @@
 #include <document.hxx>
 #include <cfgitem.hxx>
 #include "accessibility.hxx"
-#include <memory>
 
 #define SCROLL_LINE         24
 

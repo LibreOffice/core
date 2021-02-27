@@ -24,7 +24,6 @@
 #include <vcl/errcode.hxx>
 
 #include <deque>
-#include <memory>
 
 class SmNode;
 class SfxMedium;
