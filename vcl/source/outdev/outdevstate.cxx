@@ -471,12 +471,6 @@ void OutputDevice::SetBackground( const Wallpaper& rBackground )
                     case TransparentType::NONE:
                         mpAlphaVDev->SetBackground( Wallpaper( COL_BLACK ));
                         break;
-                    case TransparentType::Color:
-                    {
-                        AlphaMask mask( bitmap.GetBitmap().CreateMask( bitmap.GetTransparentColor()));
-                        mpAlphaVDev->SetBackground( Wallpaper( BitmapEx( bitmap.GetBitmap(), mask )));
-                        break;
-                    }
                     case TransparentType::Bitmap:
                         mpAlphaVDev->SetBackground( Wallpaper( BitmapEx( bitmap.GetMask())));
                         break;
