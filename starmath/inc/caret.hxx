@@ -10,12 +10,7 @@
 #define INCLUDED_STARMATH_INC_CARET_HXX
 
 #include <sal/config.h>
-
 #include "node.hxx"
-
-#include <cassert>
-#include <memory>
-#include <vector>
 
 /** Representation of caret position with an equation */
 struct SmCaretPos

@@ -23,12 +23,10 @@
 #define INCLUDED_STARMATH_INC_VISITORS_HXX
 
 #include <sal/config.h>
-
 #include <sal/log.hxx>
 
 #include "node.hxx"
 #include "caret.hxx"
-#include <memory>
 
 /** Base class for visitors that visits a tree of SmNodes
  * @remarks all methods have been left abstract to ensure that implementers

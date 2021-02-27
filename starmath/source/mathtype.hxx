@@ -20,15 +20,9 @@
 #ifndef INCLUDED_STARMATH_SOURCE_MATHTYPE_HXX
 #define INCLUDED_STARMATH_SOURCE_MATHTYPE_HXX
 
-#include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
-
-#include <set>
-#include <vector>
+#include <node.hxx>
 
 class SfxMedium;
-class SmMatrixNode;
-class SmNode;
 class SotStorage;
 class SvStream;
 
