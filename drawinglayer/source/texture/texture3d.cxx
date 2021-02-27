@@ -66,26 +66,16 @@ namespace drawinglayer::texture
             maSize(rRange.getRange()),
             mfMulX(0.0),
             mfMulY(0.0),
-            mbIsAlpha(false),
-            mbIsTransparent(maBitmapEx.IsTransparent())
+            mbIsAlpha(maBitmapEx.IsAlpha())
         {
             if(vcl::bitmap::convertBitmap32To24Plus8(maBitmapEx,maBitmapEx))
-                mbIsTransparent = maBitmapEx.IsTransparent();
+                mbIsAlpha = maBitmapEx.IsAlpha();
             // #121194# Todo: use alpha channel, too (for 3d)
             maBitmap = maBitmapEx.GetBitmap();
 
-            if(mbIsTransparent)
+            if(mbIsAlpha)
             {
-                if(maBitmapEx.IsAlpha())
-                {
-                    mbIsAlpha = true;
-                    maTransparence = rBitmapEx.GetAlpha().GetBitmap();
-                }
-                else
-                {
-                    maTransparence = rBitmapEx.GetMask();
-                }
-
+                maTransparence = rBitmapEx.GetAlpha().GetBitmap();
                 mpReadTransparence = Bitmap::ScopedReadAccess(maTransparence);
             }
 
@@ -115,32 +105,12 @@ namespace drawinglayer::texture
 
         sal_uInt8 GeoTexSvxBitmapEx::impGetTransparence(sal_Int32 rX, sal_Int32 rY) const
         {
-            switch(maBitmapEx.GetTransparentType())
+            if(mbIsAlpha)
             {
-                case TransparentType::NONE:
-                {
-                    break;
-                }
-                case TransparentType::Bitmap:
-                {
-                    OSL_ENSURE(mpReadTransparence, "OOps, transparence type Bitmap, but no read access created in the constructor (?)");
-                    const BitmapColor aBitmapColor(mpReadTransparence->GetPixel(rY, rX));
-
-                    if(mbIsAlpha)
-                    {
-                        return aBitmapColor.GetIndex();
-                    }
-                    else
-                    {
-                        if(0x00 != aBitmapColor.GetIndex())
-                        {
-                            return 255;
-                        }
-                    }
-                    break;
-                }
+                OSL_ENSURE(mpReadTransparence, "OOps, transparence type Bitmap, but no read access created in the constructor (?)");
+                const BitmapColor aBitmapColor(mpReadTransparence->GetPixel(rY, rX));
+                return aBitmapColor.GetIndex();
             }
-
             return 0;
         }
 
@@ -176,7 +146,7 @@ namespace drawinglayer::texture
 
                 rBColor = aBSource;
 
-                if(mbIsTransparent)
+                if(mbIsAlpha)
                 {
                     // when we have a transparence, make use of it
                     const sal_uInt8 aLuminance(impGetTransparence(nX, nY));
@@ -200,7 +170,7 @@ namespace drawinglayer::texture
 
             if(impIsValid(rUV, nX, nY))
             {
-                if(mbIsTransparent)
+                if(mbIsAlpha)
                 {
                     // this texture has an alpha part, use it
                     const sal_uInt8 aLuminance(impGetTransparence(nX, nY));

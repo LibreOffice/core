@@ -310,7 +310,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const tools::Rectangle& r
                 if( GetGraphic().IsAlpha() )
                     aAlphaGraphic.SetGraphic(BitmapEx(GetGraphic().GetBitmapEx().GetAlpha().GetBitmap()));
                 else
-                    aAlphaGraphic.SetGraphic(BitmapEx(GetGraphic().GetBitmapEx().GetMask()));
+                    aAlphaGraphic.SetGraphic(BitmapEx(Bitmap()));
 
                 if( aAlphaGraphic.ImplRenderTempTile( *aVDev, nNumTilesInCacheX,
                                                       nNumTilesInCacheY, rSizePixel, pAttr ) )
@@ -455,17 +455,14 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
 
             BitmapEx aBmpEx2;
 
-            if( rBmpEx.IsTransparent() )
+            if( rBmpEx.IsAlpha() )
             {
-                if( rBmpEx.IsAlpha() )
-                    aBmpEx2 = BitmapEx( rBmpEx.GetBitmap(), rBmpEx.GetAlpha() );
-                else
-                    aBmpEx2 = BitmapEx( rBmpEx.GetBitmap(), rBmpEx.GetMask() );
+                aBmpEx2 = BitmapEx( rBmpEx.GetBitmap(), rBmpEx.GetAlpha() );
             }
             else
             {
                 // #104115# Generate mask bitmap and init to zero
-                Bitmap aMask(aBmpSize, vcl::PixelFormat::N1_BPP);
+                Bitmap aMask(aBmpSize, vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
                 aMask.Erase( Color(0,0,0) );
 
                 // #104115# Always generate transparent bitmap, we need the border transparent

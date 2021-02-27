@@ -363,7 +363,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
     if( !pBmpAcc )
         return;
 
-    Bitmap              aMask( aBmpEx.GetMask() );
+    Bitmap              aMask( aBmpEx.GetAlpha() );
     BitmapReadAccess*   pMskAcc = !aMask.IsEmpty() ? aMask.AcquireReadAccess() : nullptr;
     const tools::Long          nWidth = pBmpAcc->Width();
     const tools::Long          nHeight = pBmpAcc->Height();
