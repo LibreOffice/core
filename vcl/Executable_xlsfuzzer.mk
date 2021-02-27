@@ -44,7 +44,7 @@ $(eval $(call gb_Executable_add_exception_objects,xlsfuzzer,\
 ))
 
 $(eval $(call gb_Executable_add_libs,xlsfuzzer,\
-	-lFuzzingEngine \
+	$(LIB_FUZZING_ENGINE) \
 ))
 
 # vim: set noet sw=4 ts=4:
