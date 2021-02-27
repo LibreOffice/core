@@ -1586,7 +1586,7 @@ BitmapEx AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)
         if ( !aBmpSize.IsEmpty() )
         {
             // Support non-transparent bitmaps to be downward compatible with OOo 1.1.x addons
-            if( !aBitmapEx.IsTransparent() )
+            if( !aBitmapEx.IsAlpha() )
                 aBitmapEx = BitmapEx( aBitmapEx.GetBitmap(), COL_LIGHTMAGENTA );
 
             aImage = aBitmapEx;
@@ -1675,7 +1675,7 @@ bool AddonsOptions_Impl::CreateImageFromSequence( BitmapEx& rImage, Sequence< sa
 
         ReadDIBBitmapEx(rImage, aMemStream);
 
-        if( !rImage.IsTransparent() )
+        if( !rImage.IsAlpha() )
         {
             // Support non-transparent bitmaps to be downward compatible with OOo 1.1.x addons
             rImage = BitmapEx( rImage.GetBitmap(), COL_LIGHTMAGENTA );

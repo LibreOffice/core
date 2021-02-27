@@ -47,7 +47,7 @@ BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const& rBitmapEx) const
         }
     }
 
-    if (rBitmapEx.IsTransparent())
+    if (rBitmapEx.IsAlpha())
     {
         aReturnBitmap = BitmapEx(aGrey, rBitmapEx.GetAlpha());
     }

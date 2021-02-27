@@ -264,7 +264,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt,
     if( ImplIsRecordLayout() )
         return;
 
-    if( TransparentType::NONE == rBitmapEx.GetTransparentType() )
+    if( !rBitmapEx.IsAlpha() )
     {
         DrawBitmap( rDestPt, rBitmapEx.GetBitmap() );
     }
@@ -283,7 +283,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
     if( ImplIsRecordLayout() )
         return;
 
-    if ( TransparentType::NONE == rBitmapEx.GetTransparentType() )
+    if ( !rBitmapEx.IsAlpha() )
     {
         DrawBitmap( rDestPt, rDestSize, rBitmapEx.GetBitmap() );
     }
@@ -303,7 +303,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
     if( ImplIsRecordLayout() )
         return;
 
-    if( TransparentType::NONE == rBitmapEx.GetTransparentType() )
+    if( !rBitmapEx.IsAlpha() )
     {
         DrawBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmapEx.GetBitmap() );
     }
@@ -345,7 +345,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                 }
                 else
                 {
-                    aBmpEx = BitmapEx( aColorBmp, aBmpEx.GetMask() );
+                    aBmpEx = BitmapEx( aColorBmp, aBmpEx.GetAlpha() );
                 }
             }
             else if( !aBmpEx.IsEmpty() )
@@ -531,7 +531,7 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
                 rBitmapEx.Mirror(nMirrFlags);
 
             const SalBitmap* pSalSrcBmp = rBitmapEx.ImplGetBitmapSalBitmap().get();
-            std::shared_ptr<SalBitmap> xMaskBmp = rBitmapEx.ImplGetMaskSalBitmap();
+            std::shared_ptr<SalBitmap> xMaskBmp = rBitmapEx.maAlphaMask.ImplGetSalBitmap();
 
             if (xMaskBmp)
             {
@@ -615,8 +615,8 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
                 if (mpAlphaVDev)
                     mpAlphaVDev->DrawBitmapEx(rDestPt,
                                               rDestSize,
-                                              BitmapEx(rBitmapEx.GetMask(),
-                                                       rBitmapEx.GetMask()));
+                                              BitmapEx(rBitmapEx.GetAlpha(),
+                                                       rBitmapEx.GetAlpha()));
             }
             else
             {
@@ -1066,16 +1066,9 @@ bool OutputDevice::DrawTransformBitmapExDirect(
     SalBitmap* pSalSrcBmp = rBitmapEx.GetBitmap().ImplGetSalBitmap().get();
     Bitmap aAlphaBitmap;
 
-    if(rBitmapEx.IsTransparent())
+    if(rBitmapEx.IsAlpha())
     {
-        if(rBitmapEx.IsAlpha())
-        {
-            aAlphaBitmap = rBitmapEx.GetAlpha();
-        }
-        else
-        {
-            aAlphaBitmap = rBitmapEx.GetMask();
-        }
+        aAlphaBitmap = rBitmapEx.GetAlpha();
     }
     else if (mpAlphaVDev)
     {
@@ -1284,7 +1277,7 @@ void OutputDevice::DrawTransformedBitmapEx(
         // Apply the alpha manually.
         sal_uInt8 nColor( static_cast<sal_uInt8>( ::basegfx::fround( 255.0*(1.0 - fAlpha) + .5) ) );
         AlphaMask aAlpha( bitmapEx.GetSizePixel(), &nColor );
-        if( bitmapEx.IsTransparent())
+        if( bitmapEx.IsAlpha())
             aAlpha.BlendWith( bitmapEx.GetAlpha());
         bitmapEx = BitmapEx( bitmapEx.GetBitmap(), aAlpha );
     }
@@ -1379,7 +1372,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     // #122923# when the result needs an alpha channel due to being rotated or sheared
     // and thus uncovering areas, add these channels so that the own transformer (used
     // in getTransformed) also creates a transformed alpha channel
-    if(!aTransformed.IsTransparent() && (bSheared || bRotated))
+    if(!aTransformed.IsAlpha() && (bSheared || bRotated))
     {
         // parts will be uncovered, extend aTransformed with a mask bitmap
         const Bitmap aContent(aTransformed.GetBitmap());

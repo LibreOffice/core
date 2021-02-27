@@ -23,7 +23,7 @@ bool BitmapFilter::Filter(BitmapEx& rBmpEx, BitmapFilter const& rFilter)
 
     if (aTmpBmpEx.IsEmpty())
     {
-        SAL_WARN("vcl.gdi", "Bitmap filter failed");
+        SAL_WARN("vcl.gdi", "Bitmap filter failed " << typeid(rFilter).name());
         return false;
     }
 

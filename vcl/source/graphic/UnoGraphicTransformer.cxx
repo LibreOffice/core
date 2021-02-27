@@ -59,7 +59,6 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
         aGraphic.GetType() == GraphicType::GdiMetafile)
     {
         BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
-        Bitmap aBitmap(aBitmapEx.GetBitmap());
 
         if (aBitmapEx.IsAlpha())
         {
@@ -67,27 +66,11 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
             aBitmapEx.Replace(aColorFrom, aColorTo, nTolerance);
             aReturnGraphic = ::Graphic(aBitmapEx);
         }
-        else if (aBitmapEx.IsTransparent())
-        {
-            if (nAlphaTo == sal::static_int_cast< sal_Int8 >(0xff))
-            {
-                Bitmap aMask(aBitmapEx.GetMask());
-                Bitmap aMask2(aBitmap.CreateMask(aColorFrom, nTolerance));
-                aMask.CombineSimple(aMask2, BmpCombine::Or);
-                aBitmap.Replace(aColorFrom, aColorTo, nTolerance);
-                aReturnGraphic = ::Graphic(BitmapEx(aBitmap, aMask));
-            }
-            else
-            {
-                aBitmapEx.setAlphaFrom(cIndexFrom, 0xff - nAlphaTo);
-                aBitmapEx.Replace(aColorFrom, aColorTo, nTolerance);
-                aReturnGraphic = ::Graphic(aBitmapEx);
-            }
-        }
         else
         {
             if ((nAlphaTo == 0) || (nAlphaTo == sal::static_int_cast< sal_Int8 >(0xff)))
             {
+                Bitmap aBitmap(aBitmapEx.GetBitmap());
                 Bitmap aMask(aBitmap.CreateMask(aColorFrom, nTolerance));
                 aBitmap.Replace(aColorFrom, aColorTo, nTolerance);
                 aReturnGraphic = ::Graphic(BitmapEx(aBitmap, aMask));

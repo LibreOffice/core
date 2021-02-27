@@ -230,7 +230,7 @@ struct JPGEmit
     BitmapID            m_aID;
     std::unique_ptr<SvMemoryStream>
                         m_pStream;
-    Bitmap              m_aMask;
+    AlphaMask           m_aAlphaMask;
     sal_Int32           m_nObject;
     bool                m_bTrueColor;
     ReferenceXObjectEmit m_aReferenceXObject;
@@ -1204,7 +1204,7 @@ public:
 
     void drawBitmap( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap, const Graphic& rGraphic );
     void drawBitmap( const Point& rDestPoint, const Size& rDestSize, const BitmapEx& rBitmap );
-    void drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const tools::Rectangle& rTargetArea, const Bitmap& rMask, const Graphic& rGraphic );
+    void drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const tools::Rectangle& rTargetArea, const AlphaMask& rAlphaMask, const Graphic& rGraphic );
     /// Stores the original PDF data from rGraphic as an embedded file.
     void createEmbeddedFile(const Graphic& rGraphic, ReferenceXObjectEmit& rEmit, sal_Int32 nBitmapObject);
 
