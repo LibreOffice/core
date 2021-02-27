@@ -263,7 +263,8 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
 
                                 pVDev->SetRasterOp( RasterOp::Xor );
                                 pVDev->DrawBitmap( aPt, aSize, aBitmap );
-                                aGraphic = BitmapEx( aBitmap, pVDev->GetBitmap( aPt, aSize ) );
+                                // TODO ????
+                                //aGraphic = BitmapEx( aBitmap, pVDev->GetBitmap( aPt, aSize ) );
                             }
                             else
                                 aGraphic = rGraphic.GetBitmapEx();

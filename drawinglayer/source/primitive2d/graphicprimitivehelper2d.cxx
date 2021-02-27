@@ -164,25 +164,8 @@ namespace drawinglayer::primitive2d
             {
                 // create BitmapEx by extracting from VirtualDevices
                 const Bitmap aMainBitmap(maVirtualDevice->GetBitmap(Point(), maVirtualDevice->GetOutputSizePixel()));
-                bool useAlphaMask = false;
-#if defined(MACOSX) || defined(IOS)
-                useAlphaMask = true;
-#else
-                // GetBitmap()-> AlphaMask is optimized with SkiaSalBitmap::InterpretAs8Bit(), 1bpp mask is not.
-                if( SkiaHelper::isVCLSkiaEnabled())
-                    useAlphaMask = true;
-#endif
-                BitmapEx bitmap;
-                if( useAlphaMask )
-                {
-                    const AlphaMask aMaskBitmap(maVirtualDeviceMask->GetBitmap(Point(), maVirtualDeviceMask->GetOutputSizePixel()));
-                    bitmap = BitmapEx(aMainBitmap, aMaskBitmap);
-                }
-                else
-                {
-                    const Bitmap aMaskBitmap(maVirtualDeviceMask->GetBitmap(Point(), maVirtualDeviceMask->GetOutputSizePixel()));
-                    bitmap = BitmapEx(aMainBitmap, aMaskBitmap);
-                }
+                const AlphaMask aMaskBitmap(maVirtualDeviceMask->GetBitmap(Point(), maVirtualDeviceMask->GetOutputSizePixel()));
+                BitmapEx bitmap = BitmapEx(aMainBitmap, aMaskBitmap);
 
                 return Primitive2DReference(
                     new BitmapPrimitive2D(
@@ -256,52 +239,31 @@ namespace drawinglayer::primitive2d
                         case Disposal::Not:
                         {
                             maVirtualDevice->DrawBitmapEx(rAnimationBitmap.maPositionPixel, rAnimationBitmap.maBitmapEx);
-                            Bitmap aMask = rAnimationBitmap.maBitmapEx.GetMask();
-
-                            if (aMask.IsEmpty())
-                            {
-                                const Point aEmpty;
-                                const ::tools::Rectangle aRect(aEmpty, maVirtualDeviceMask->GetOutputSizePixel());
-                                const Wallpaper aWallpaper(COL_BLACK);
-                                maVirtualDeviceMask->DrawWallpaper(aRect, aWallpaper);
-                            }
-                            else
-                            {
-                                BitmapEx aExpandVisibilityMask(aMask, aMask);
-                                maVirtualDeviceMask->DrawBitmapEx(rAnimationBitmap.maPositionPixel, aExpandVisibilityMask);
-                            }
+                            const Point aEmpty;
+                            const ::tools::Rectangle aRect(aEmpty, maVirtualDeviceMask->GetOutputSizePixel());
+                            const Wallpaper aWallpaper(COL_BLACK);
+                            maVirtualDeviceMask->DrawWallpaper(aRect, aWallpaper);
 
                             break;
                         }
                         case Disposal::Back:
                         {
                             // #i70772# react on no mask, for primitives, too.
-                            const Bitmap & rMask(rAnimationBitmap.maBitmapEx.GetMask());
                             const Bitmap & rContent(rAnimationBitmap.maBitmapEx.GetBitmap());
 
                             maVirtualDeviceMask->Erase();
                             maVirtualDevice->DrawBitmap(rAnimationBitmap.maPositionPixel, rContent);
 
-                            if (rMask.IsEmpty())
-                            {
-                                const ::tools::Rectangle aRect(rAnimationBitmap.maPositionPixel, rContent.GetSizePixel());
-                                maVirtualDeviceMask->SetFillColor(COL_BLACK);
-                                maVirtualDeviceMask->SetLineColor();
-                                maVirtualDeviceMask->DrawRect(aRect);
-                            }
-                            else
-                            {
-                                BitmapEx aExpandVisibilityMask(rMask, rMask);
-                                maVirtualDeviceMask->DrawBitmapEx(rAnimationBitmap.maPositionPixel, aExpandVisibilityMask);
-                            }
+                            const ::tools::Rectangle aRect(rAnimationBitmap.maPositionPixel, rContent.GetSizePixel());
+                            maVirtualDeviceMask->SetFillColor(COL_BLACK);
+                            maVirtualDeviceMask->SetLineColor();
+                            maVirtualDeviceMask->DrawRect(aRect);
 
                             break;
                         }
                         case Disposal::Previous:
                         {
                             maVirtualDevice->DrawBitmapEx(rAnimationBitmap.maPositionPixel, rAnimationBitmap.maBitmapEx);
-                            BitmapEx aExpandVisibilityMask(rAnimationBitmap.maBitmapEx.GetMask(), rAnimationBitmap.maBitmapEx.GetMask());
-                            maVirtualDeviceMask->DrawBitmapEx(rAnimationBitmap.maPositionPixel, aExpandVisibilityMask);
                             break;
                         }
                     }

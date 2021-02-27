@@ -115,7 +115,8 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
             }
         }
         else if( rGraphic.IsTransparent() )
-            aBmp = rGraphic.GetBitmapEx().GetMask();
+            // TODO ???
+            ;//aBmp = rGraphic.GetBitmapEx().GetMask();
         else
         {
             aBmp = rGraphic.GetBitmapEx().GetBitmap();
@@ -633,8 +634,9 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
 
             Bitmap aMask = aGraphic.GetBitmapEx().GetBitmap().CreateMask( rColor, nTol );
 
-            if( aGraphic.IsTransparent() )
-                aMask.CombineSimple( aGraphic.GetBitmapEx().GetMask(), BmpCombine::Or );
+            // TODO ???
+            //if( aGraphic.IsTransparent() )
+            //    aMask.CombineSimple( aGraphic.GetBitmapEx().GetMask(), BmpCombine::Or );
 
             if( !!aMask )
             {
@@ -646,7 +648,8 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
                 aRedoGraphic = Graphic();
                 aUndoGraphic = aGraphic;
                 Bitmap aBmp = aGraphic.GetBitmapEx().GetBitmap();
-                aGraphic = Graphic( BitmapEx( aBmp, aMask ) );
+                // TODO ???
+                //aGraphic = Graphic( BitmapEx( aBmp, aMask ) );
                 mnGrfChanged++;
 
                 bNewContour = (xQBox->run() == RET_YES);

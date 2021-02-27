@@ -258,7 +258,8 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     mpMetaFile  = nullptr;
     EnableMapMode( false );
 
-    DrawMask( aPoint, aBmp, GetTextColor() );
+// TODO
+    //DrawMask( aPoint, aBmp, GetTextColor() );
 
     EnableMapMode( bOldMap );
     mnOutOffX   = nOldOffX;

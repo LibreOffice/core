@@ -166,10 +166,7 @@ namespace vclcanvas
                 // Note: since we retrieved aBmp and aMask
                 // directly from an OutDev, it's already a
                 // 'display bitmap' on windows.
-                if( aMask.GetBitCount() == 1 )
-                    maContent = BitmapEx( aBmp.GetBitmap(), aMask.GetBitmap() );
-                else
-                    maContent = BitmapEx( aBmp.GetBitmap(), AlphaMask( aMask.GetBitmap()) );
+                maContent = BitmapEx( aBmp.GetBitmap(), AlphaMask( aMask.GetBitmap()) );
             }
         }
 

@@ -37,8 +37,7 @@ namespace basegfx { class BColorModifierStack; }
 enum class TransparentType
 {
     NONE,
-    Color,
-    Bitmap
+    Color
 };
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC BitmapEx
@@ -51,7 +50,6 @@ public:
                         BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize );
                         BitmapEx( Size aSize, sal_uInt16 nBitCount );
     explicit            BitmapEx( const Bitmap& rBmp );
-                        BitmapEx( const Bitmap& rBmp, const Bitmap& rMask );
                         BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask );
                         BitmapEx( const Bitmap& rBmp, const Color& rTransparentColor );
 
@@ -76,7 +74,6 @@ public:
     Bitmap              GetBitmap( Color aTransparentReplaceColor ) const;
     /// Gives direct access to the contained bitmap.
     const Bitmap&       GetBitmap() const;
-    Bitmap              GetMask() const;
 
     bool                IsAlpha() const;
     AlphaMask           GetAlpha() const;
@@ -458,7 +455,6 @@ public:
                             sal_uInt32& rnWidth, sal_uInt32& rnHeight, sal_uInt8& rnBitCount);
 
     SAL_DLLPRIVATE std::shared_ptr<SalBitmap> const & ImplGetBitmapSalBitmap() const { return maBitmap.ImplGetSalBitmap(); }
-    SAL_DLLPRIVATE std::shared_ptr<SalBitmap> const & ImplGetMaskSalBitmap() const { return maMask.ImplGetSalBitmap(); }
 
 
 private:
@@ -473,7 +469,6 @@ private:
     void  loadFromIconTheme( const OUString& rIconName );
 
     Bitmap              maBitmap;
-    Bitmap              maMask;
     Size                maBitmapSize;
     Color               maTransparentColor;
     TransparentType     meTransparent;

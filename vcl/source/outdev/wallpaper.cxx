@@ -222,7 +222,8 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
 
             aBmpEx = rWallpaper.GetBitmap();
             aBmpEx.Scale( aSize );
-            aBmpEx = BitmapEx( aBmpEx.GetBitmap().CreateDisplayBitmap( this ), aBmpEx.GetMask() );
+            // TODO
+            //aBmpEx = BitmapEx( aBmpEx.GetBitmap().CreateDisplayBitmap( this ), aBmpEx.GetMask() );
         }
         break;
 

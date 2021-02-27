@@ -668,7 +668,8 @@ BitmapEx ImpGraphic::getBitmapEx(const GraphicConversionParameters& rParameters)
             const ImpGraphic aMonoMask( maMetaFile.GetMonochromeMtf( COL_BLACK ) );
 
             // use maBitmapEx as local buffer for rendered metafile
-            const_cast< ImpGraphic* >(this)->maBitmapEx = BitmapEx(getBitmap(rParameters), aMonoMask.getBitmap(rParameters));
+            assert(false && "TODO");
+            //const_cast< ImpGraphic* >(this)->maBitmapEx = BitmapEx(getBitmap(rParameters), aMonoMask.getBitmap(rParameters));
         }
 
         aRetBmpEx = maBitmapEx;

@@ -27,128 +27,129 @@
 #include <salgdi.hxx>
 #include <salbmp.hxx>
 
-void OutputDevice::DrawMask( const Point& rDestPt,
-                             const Bitmap& rBitmap, const Color& rMaskColor )
-{
-    assert(!is_double_buffered_window());
 
-    const Size aSizePix( rBitmap.GetSizePixel() );
-    DrawMask( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmap, rMaskColor, MetaActionType::MASK );
-}
+// void OutputDevice::DrawMask( const Point& rDestPt,
+                             // const Bitmap& rBitmap, const Color& rMaskColor )
+// {
+    // assert(!is_double_buffered_window());
 
-void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
-                             const Bitmap& rBitmap, const Color& rMaskColor )
-{
-    assert(!is_double_buffered_window());
+    // const Size aSizePix( rBitmap.GetSizePixel() );
+    // DrawMask( rDestPt, PixelToLogic( aSizePix ), Point(), aSizePix, rBitmap, rMaskColor, MetaActionType::MASK );
+// }
 
-    DrawMask( rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(), rBitmap, rMaskColor, MetaActionType::MASKSCALE );
-}
+// void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
+                             // const Bitmap& rBitmap, const Color& rMaskColor )
+// {
+    // assert(!is_double_buffered_window());
 
-void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
-                             const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                             const Bitmap& rBitmap, const Color& rMaskColor,
-                             const MetaActionType nAction )
-{
-    assert(!is_double_buffered_window());
+    // DrawMask( rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(), rBitmap, rMaskColor, MetaActionType::MASKSCALE );
+// }
 
-    if( ImplIsRecordLayout() )
-        return;
+// void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
+                             // const Point& rSrcPtPixel, const Size& rSrcSizePixel,
+                             // const Bitmap& rBitmap, const Color& rMaskColor,
+                             // const MetaActionType nAction )
+// {
+    // assert(!is_double_buffered_window());
 
-    if( RasterOp::Invert == meRasterOp )
-    {
-        DrawRect( tools::Rectangle( rDestPt, rDestSize ) );
-        return;
-    }
+    // if( ImplIsRecordLayout() )
+        // return;
 
-    if ( mpMetaFile )
-    {
-        switch( nAction )
-        {
-            case MetaActionType::MASK:
-                mpMetaFile->AddAction( new MetaMaskAction( rDestPt,
-                    rBitmap, rMaskColor ) );
-            break;
+    // if( RasterOp::Invert == meRasterOp )
+    // {
+        // DrawRect( tools::Rectangle( rDestPt, rDestSize ) );
+        // return;
+    // }
 
-            case MetaActionType::MASKSCALE:
-                mpMetaFile->AddAction( new MetaMaskScaleAction( rDestPt,
-                    rDestSize, rBitmap, rMaskColor ) );
-            break;
+    // if ( mpMetaFile )
+    // {
+        // switch( nAction )
+        // {
+            // case MetaActionType::MASK:
+                // mpMetaFile->AddAction( new MetaMaskAction( rDestPt,
+                    // rBitmap, rMaskColor ) );
+            // break;
 
-            case MetaActionType::MASKSCALEPART:
-                mpMetaFile->AddAction( new MetaMaskScalePartAction( rDestPt, rDestSize,
-                    rSrcPtPixel, rSrcSizePixel, rBitmap, rMaskColor ) );
-            break;
+            // case MetaActionType::MASKSCALE:
+                // mpMetaFile->AddAction( new MetaMaskScaleAction( rDestPt,
+                    // rDestSize, rBitmap, rMaskColor ) );
+            // break;
 
-            default: break;
-        }
-    }
+            // case MetaActionType::MASKSCALEPART:
+                // mpMetaFile->AddAction( new MetaMaskScalePartAction( rDestPt, rDestSize,
+                    // rSrcPtPixel, rSrcSizePixel, rBitmap, rMaskColor ) );
+            // break;
 
-    if ( !IsDeviceOutputNecessary() )
-        return;
+            // default: break;
+        // }
+    // }
 
-    if ( !mpGraphics && !AcquireGraphics() )
-        return;
+    // if ( !IsDeviceOutputNecessary() )
+        // return;
 
-    if ( mbInitClipRegion )
-        InitClipRegion();
+    // if ( !mpGraphics && !AcquireGraphics() )
+        // return;
 
-    if ( mbOutputClipped )
-        return;
+    // if ( mbInitClipRegion )
+        // InitClipRegion();
 
-    DrawDeviceMask( rBitmap, rMaskColor, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
+    // if ( mbOutputClipped )
+        // return;
 
-}
+    // DrawDeviceMask( rBitmap, rMaskColor, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
 
-void OutputDevice::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
-                              const Point& rDestPt, const Size& rDestSize,
-                              const Point& rSrcPtPixel, const Size& rSrcSizePixel )
-{
-    assert(!is_double_buffered_window());
+// }
 
-    const std::shared_ptr<SalBitmap>& xImpBmp = rMask.ImplGetSalBitmap();
-    if (xImpBmp)
-    {
-        SalTwoRect aPosAry(rSrcPtPixel.X(), rSrcPtPixel.Y(), rSrcSizePixel.Width(), rSrcSizePixel.Height(),
-                           ImplLogicXToDevicePixel(rDestPt.X()), ImplLogicYToDevicePixel(rDestPt.Y()),
-                           ImplLogicWidthToDevicePixel(rDestSize.Width()),
-                           ImplLogicHeightToDevicePixel(rDestSize.Height()));
+// void OutputDevice::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
+                              // const Point& rDestPt, const Size& rDestSize,
+                              // const Point& rSrcPtPixel, const Size& rSrcSizePixel )
+// {
+    // assert(!is_double_buffered_window());
 
-        // we don't want to mirror via coordinates
-        const BmpMirrorFlags nMirrFlags = AdjustTwoRect( aPosAry, xImpBmp->GetSize() );
+    // const std::shared_ptr<SalBitmap>& xImpBmp = rMask.ImplGetSalBitmap();
+    // if (xImpBmp)
+    // {
+        // SalTwoRect aPosAry(rSrcPtPixel.X(), rSrcPtPixel.Y(), rSrcSizePixel.Width(), rSrcSizePixel.Height(),
+                           // ImplLogicXToDevicePixel(rDestPt.X()), ImplLogicYToDevicePixel(rDestPt.Y()),
+                           // ImplLogicWidthToDevicePixel(rDestSize.Width()),
+                           // ImplLogicHeightToDevicePixel(rDestSize.Height()));
 
-        // check if output is necessary
-        if( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
-        {
+        // // we don't want to mirror via coordinates
+        // const BmpMirrorFlags nMirrFlags = AdjustTwoRect( aPosAry, xImpBmp->GetSize() );
 
-            if( nMirrFlags != BmpMirrorFlags::NONE )
-            {
-                Bitmap aTmp( rMask );
-                aTmp.Mirror( nMirrFlags );
-                mpGraphics->DrawMask( aPosAry, *aTmp.ImplGetSalBitmap(),
-                                      rMaskColor, *this);
-            }
-            else
-                mpGraphics->DrawMask( aPosAry, *xImpBmp, rMaskColor, *this );
+        // // check if output is necessary
+        // if( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
+        // {
 
-        }
-    }
+            // if( nMirrFlags != BmpMirrorFlags::NONE )
+            // {
+                // Bitmap aTmp( rMask );
+                // aTmp.Mirror( nMirrFlags );
+                // mpGraphics->DrawMask( aPosAry, *aTmp.ImplGetSalBitmap(),
+                                      // rMaskColor, *this);
+            // }
+            // else
+                // mpGraphics->DrawMask( aPosAry, *xImpBmp, rMaskColor, *this );
 
-    // TODO: Use mask here
-    if( !mpAlphaVDev )
-        return;
+        // }
+    // }
 
-    const Bitmap& rAlphaMask( rMask.CreateMask( rMaskColor ) );
+    // // TODO: Use mask here
+    // if( !mpAlphaVDev )
+        // return;
 
-    // #i25167# Restrict mask painting to _opaque_ areas
-    // of the mask, otherwise we spoil areas where no
-    // bitmap content was ever visible. Interestingly
-    // enough, this can be achieved by taking the mask as
-    // the transparency mask of itself
-    mpAlphaVDev->DrawBitmapEx( rDestPt,
-                               rDestSize,
-                               rSrcPtPixel,
-                               rSrcSizePixel,
-                               BitmapEx( rAlphaMask, rMask ) );
-}
+    // const Bitmap& rAlphaMask( rMask.CreateMask( rMaskColor ) );
+
+    // // #i25167# Restrict mask painting to _opaque_ areas
+    // // of the mask, otherwise we spoil areas where no
+    // // bitmap content was ever visible. Interestingly
+    // // enough, this can be achieved by taking the mask as
+    // // the transparency mask of itself
+    // mpAlphaVDev->DrawBitmapEx( rDestPt,
+                               // rDestSize,
+                               // rSrcPtPixel,
+                               // rSrcSizePixel,
+                               // BitmapEx( rAlphaMask, rMask ) );
+// }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -477,9 +477,6 @@ void OutputDevice::SetBackground( const Wallpaper& rBackground )
                         mpAlphaVDev->SetBackground( Wallpaper( BitmapEx( bitmap.GetBitmap(), mask )));
                         break;
                     }
-                    case TransparentType::Bitmap:
-                        mpAlphaVDev->SetBackground( Wallpaper( BitmapEx( bitmap.GetMask())));
-                        break;
                 }
             }
         }
