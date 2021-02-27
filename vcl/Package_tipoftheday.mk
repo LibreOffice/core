@@ -21,6 +21,12 @@ $(eval $(call gb_Package_add_files_with_dir,tipoftheday_images,$(LIBO_SHARE_FOLD
 	formdocuments.png \
 	masterdocument.png \
 	statusbar.png \
+	expand_formula_bar.png \
+	fraction.png \
+	hybrid_pdf.png \
+	icon_sets.png \
+	remove_hyperlink.png \
+	sum_sheets.png \
 ))
 
 # vim: set noet sw=4 ts=4:
