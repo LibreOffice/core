@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "06e4b7f6_3299258a",
+        "filename": "vcl/headless/svpinst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2021-02-27T15:36:43Z",
+      "side": 1,
+      "message": "I\u0027m getting -Werror\u003dunused-result on this line:\n\n  svpinst.cxx:372:22: error: ignoring return value of ‘ssize_t write(int, const void*, size_t)’, declared with attribute warn_unused_result [-Werror\u003dunused-result]\n                 write(m_FeedbackFDs[1], \u0026bEvents, sizeof(bool));\n                 ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+      "revId": "0efd06de8fca4036c4132b2745a11273b1755df2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
