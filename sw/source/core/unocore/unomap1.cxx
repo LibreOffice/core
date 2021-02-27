@@ -185,7 +185,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetCharStylePropertyMa
         { u"" UNO_NAME_CHAR_AUTO_KERNING, RES_CHRATR_AUTOKERN  ,  cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},
         { u"" UNO_NAME_CHAR_BACK_TRANSPARENT, RES_CHRATR_BACKGROUND,  cppu::UnoType<bool>::get(),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
         { u"" UNO_NAME_CHAR_BACK_COLOR, RES_CHRATR_BACKGROUND,    cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR        },
-        // RES_CHRATR_HIGHLIGHT was only here for MS compatibility, but MS ignores highlighting in char-styles
+        { u"" UNO_NAME_CHAR_HIGHLIGHT, RES_CHRATR_HIGHLIGHT, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_BACK_COLOR },
         { u"" UNO_NAME_CHAR_CASE_MAP, RES_CHRATR_CASEMAP,     cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE, 0},
         { u"" UNO_NAME_CHAR_COLOR, RES_CHRATR_COLOR,      cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE, 0},
         { u"" UNO_NAME_CHAR_TRANSPARENCE, RES_CHRATR_COLOR, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE, MID_COLOR_ALPHA},
