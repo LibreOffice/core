@@ -43,6 +43,7 @@
 #include <vcl/inputctx.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weldutils.hxx>
 #include <sot/formats.hxx>
 #include <comphelper/classids.hxx>
 
@@ -139,7 +140,6 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include <FilterListBox.hxx>
-#include <FilterFloatingWindow.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -181,18 +181,20 @@ bool ScGridWindow::VisibleRange::set(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
 }
 
 //  ListBox in a FloatingWindow (pParent)
-ScFilterListBox::ScFilterListBox( vcl::Window* pParent, ScGridWindow* pGrid,
-                                  SCCOL nNewCol, SCROW nNewRow, ScFilterBoxMode eNewMode ) :
-    InterimItemWindow(pParent, "modules/scalc/ui/filterlist.ui", "FilterList"),
-    xTreeView(m_xBuilder->weld_tree_view("list")),
-    pGridWin( pGrid ),
-    nCol( nNewCol ),
-    nRow( nNewRow ),
-    bInit( true ),
-    bCancelled( false ),
-    nSel( 0 ),
-    eMode( eNewMode ),
-    nAsyncSelectHdl(nullptr)
+ScFilterListBox::ScFilterListBox(weld::Window* pParent, ScGridWindow* pGrid,
+                                 SCCOL nNewCol, SCROW nNewRow, ScFilterBoxMode eNewMode)
+    : xBuilder(Application::CreateBuilder(pParent, "modules/scalc/ui/filterlist.ui"))
+    , xPopover(xBuilder->weld_popover("FilterList"))
+    , xTreeView(xBuilder->weld_tree_view("list"))
+    , pGridWin(pGrid)
+    , nCol(nNewCol)
+    , nRow(nNewRow)
+    , bInit(true)
+    , bCancelled(false)
+    , bGridHadMouseCaptured(pGrid->IsMouseCaptured())
+    , nSel(0)
+    , eMode(eNewMode)
+    , nAsyncSelectHdl(nullptr)
 {
     xTreeView->connect_row_activated(LINK(this, ScFilterListBox, SelectHdl));
     xTreeView->connect_key_press(LINK(this, ScFilterListBox, KeyInputHdl));
@@ -200,19 +202,11 @@ ScFilterListBox::ScFilterListBox( vcl::Window* pParent, ScGridWindow* pGrid,
 
 ScFilterListBox::~ScFilterListBox()
 {
-    disposeOnce();
-}
-
-void ScFilterListBox::dispose()
-{
     if (nAsyncSelectHdl)
     {
         Application::RemoveUserEvent(nAsyncSelectHdl);
         nAsyncSelectHdl = nullptr;
     }
-    pGridWin.clear();
-    xTreeView.reset();
-    InterimItemWindow::dispose();
 }
 
 void ScFilterListBox::EndInit()
@@ -265,31 +259,14 @@ IMPL_LINK_NOARG(ScFilterListBox, AsyncSelectHdl, void*, void)
     nAsyncSelectHdl = nullptr;
 
     //tdf#133971 hold self-ref until we return
-    VclPtr<ScFilterListBox> xThis(this);
+    auto xThis(shared_from_this());
     pGridWin->FilterSelect(nSel);
-    if (!pGridWin)
+    if (xThis.use_count() == 1)
     {
         // tdf#133855 we got disposed by FilterSelect
         return;
     }
     pGridWin->ClickExtern();
-}
-
-ScFilterFloatingWindow::ScFilterFloatingWindow(vcl::Window* pParent)
-    : FloatingWindow( pParent, WB_BORDER | WB_SYSTEMWINDOW ) // make it a system floater
-    , m_bGridHadMouseCaptured(pParent->IsMouseCaptured())
-{
-}
-
-ScFilterFloatingWindow::~ScFilterFloatingWindow()
-{
-    disposeOnce();
-}
-
-void ScFilterFloatingWindow::dispose()
-{
-    EndPopupMode();
-    FloatingWindow::dispose();
 }
 
 static bool lcl_IsEditableMatrix( ScDocument& rDoc, const ScRange& rRange )
@@ -378,7 +355,6 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData& rData, ScSplitPos 
             eWhich( eWhichPos ),
             mpNoteMarker(),
             mpFilterBox(),
-            mpFilterFloat(),
             mpAutoFilterPopup(),
             mpDPFieldPopup(),
             mpFilterButton(),
@@ -459,8 +435,7 @@ void ScGridWindow::dispose()
 {
     ImpDestroyOverlayObjects();
 
-    mpFilterBox.disposeAndClear();
-    mpFilterFloat.disposeAndClear();
+    mpFilterBox.reset();
     mpNoteMarker.reset();
     mpAutoFilterPopup.disposeAndClear();
     mpDPFieldPopup.disposeAndClear();
@@ -480,8 +455,7 @@ void ScGridWindow::ClickExtern()
         // #i84277# when initializing the filter box, a Basic error can deactivate the view
         if (mpFilterBox && mpFilterBox->IsInInit())
             break;
-        mpFilterBox.disposeAndClear();
-        mpFilterFloat.disposeAndClear();
+        mpFilterBox.reset();
     }
     while (false);
 
@@ -492,14 +466,17 @@ void ScGridWindow::ClickExtern()
     }
 }
 
-IMPL_LINK_NOARG(ScGridWindow, PopupModeEndHdl, FloatingWindow*, void)
+IMPL_LINK_NOARG(ScGridWindow, PopupModeEndHdl, weld::Popover&, void)
 {
     if (mpFilterBox)
+    {
+        bool bMouseWasCaptured = mpFilterBox->MouseWasCaptured();
         mpFilterBox->SetCancelled();     // cancel select
-    // restore the mouse capture state of the GridWindow to
-    // what it was at initial popup time
-    if (mpFilterFloat->MouseWasCaptured())
-        CaptureMouse();
+        // restore the mouse capture state of the GridWindow to
+        // what it was at initial popup time
+        if (bMouseWasCaptured)
+            CaptureMouse();
+    }
     GrabFocus();
 }
 
@@ -941,7 +918,7 @@ void ScGridWindow::LaunchDPFieldMenu( SCCOL nCol, SCROW nRow )
     DPLaunchFieldPopupMenu(OutputToScreenPixel(aScrPos), aScrSize, ScAddress(nCol, nRow, nTab), pDPObj);
 }
 
-void ScGridWindow::ShowFilterMenu(const tools::Rectangle& rCellRect, bool bLayoutRTL)
+void ScGridWindow::ShowFilterMenu(weld::Window* pParent, const tools::Rectangle& rCellRect, bool bLayoutRTL)
 {
     auto nSizeX = rCellRect.GetWidth();
 
@@ -981,12 +958,11 @@ void ScGridWindow::ShowFilterMenu(const tools::Rectangle& rCellRect, bool bLayou
         aCellRect.SetLeft( nNewX );
     }
 
-    mpFilterBox->SetSizePixel(aSize);
-    mpFilterFloat->SetOutputSizePixel(aSize);
+    rFilterBox.set_size_request(aSize.Width(), aSize.Height());
 
     if (IsMouseCaptured())
         ReleaseMouse();
-    mpFilterFloat->StartPopupMode(aCellRect, FloatWinPopupFlags::Down|FloatWinPopupFlags::GrabFocus|FloatWinPopupFlags::NoMouseUpClose);
+    mpFilterBox->popup_at_rect(pParent, aCellRect);
 }
 
 void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
@@ -994,8 +970,7 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     bool bMenuAtTop = true;
 
     ScDocument& rDoc = mrViewData.GetDocument();
-    mpFilterBox.disposeAndClear();
-    mpFilterFloat.disposeAndClear();
+    mpFilterBox.reset();
 
     SCCOL nCol = rScenRange.aEnd.Col();     // Cell is below the Buttons
     SCROW nRow = rScenRange.aStart.Row();
@@ -1017,7 +992,7 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     Point aPos = mrViewData.GetScrPos( nCol, nRow, eWhich );
     if ( bLayoutRTL )
         aPos.AdjustX( -nSizeX );
-    tools::Rectangle aCellRect( OutputToScreenPixel(aPos), Size(nSizeX,nSizeY) );
+    tools::Rectangle aCellRect(aPos, Size(nSizeX, nSizeY));
     aCellRect.AdjustTop( -nSizeY );
     aCellRect.AdjustBottom( -(nSizeY - 1) );
     if (!bMenuAtTop)
@@ -1029,14 +1004,11 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     //  Place the ListBox directly below the black line of the cell grid
     //  (It looks odd if the line gets hidden...)
 
-    mpFilterFloat.reset(VclPtr<ScFilterFloatingWindow>::Create(this));
-    mpFilterFloat->SetPopupModeEndHdl(LINK(this, ScGridWindow, PopupModeEndHdl));
-    mpFilterBox.reset(VclPtr<ScFilterListBox>::Create(mpFilterFloat.get(), this, nCol, nRow, ScFilterBoxMode::Scenario));
+    weld::Window* pParent = weld::GetPopupParent(*this, aCellRect);
+    mpFilterBox = std::make_shared<ScFilterListBox>(pParent, this, nCol, nRow, ScFilterBoxMode::Scenario);
+    mpFilterBox->connect_closed(LINK(this, ScGridWindow, PopupModeEndHdl));
     weld::TreeView& rFilterBox = mpFilterBox->get_widget();
     rFilterBox.set_direction(bLayoutRTL); // Fix for bug fdo#44925 use sheet direction for widget RTL/LTR
-
-    mpFilterBox->Show();                 // Show has to be before SetUpdateMode !!!
-    //  SetOutputSizePixel/StartPopupMode first below, when the size is set
 
     //  Listbox fill
     rFilterBox.freeze();
@@ -1057,7 +1029,7 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     }
     rFilterBox.thaw();
 
-    ShowFilterMenu(aCellRect, bLayoutRTL);
+    ShowFilterMenu(pParent, aCellRect, bLayoutRTL);
 
     rFilterBox.grab_focus();
 
@@ -1080,8 +1052,7 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
 
 void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
 {
-    mpFilterBox.disposeAndClear();
-    mpFilterFloat.disposeAndClear();
+    mpFilterBox.reset();
 
     ScDocument& rDoc = mrViewData.GetDocument();
     SCTAB nTab = mrViewData.GetTabNo();
@@ -1110,15 +1081,11 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
 
     if ( bLayoutRTL )
         aPos.AdjustX( -nSizeX );
+    tools::Rectangle aCellRect(aPos, Size(nSizeX, nSizeY));
 
-    tools::Rectangle aCellRect( OutputToScreenPixel(aPos), Size(nSizeX,nSizeY) );
-
-    aPos.AdjustX( -1 );
-    aPos.AdjustY( nSizeY - 1 );
-
-    mpFilterFloat.reset(VclPtr<ScFilterFloatingWindow>::Create(this));
-    mpFilterFloat->SetPopupModeEndHdl(LINK(this, ScGridWindow, PopupModeEndHdl));
-    mpFilterBox.reset(VclPtr<ScFilterListBox>::Create(mpFilterFloat.get(), this, nCol, nRow, ScFilterBoxMode::DataSelect));
+    weld::Window* pParent = weld::GetPopupParent(*this, aCellRect);
+    mpFilterBox = std::make_shared<ScFilterListBox>(pParent, this, nCol, nRow, ScFilterBoxMode::DataSelect);
+    mpFilterBox->connect_closed(LINK(this, ScGridWindow, PopupModeEndHdl));
     weld::TreeView& rFilterBox = mpFilterBox->get_widget();
     rFilterBox.set_direction(bLayoutRTL); // Fix for bug fdo#44925 use sheet direction for widget RTL/LTR
 
@@ -1133,7 +1100,6 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
 
     if (!bEmpty)
     {
-        mpFilterBox->Show();                 // Show has to be before freeze !!!
         rFilterBox.freeze();
 
         // Fill Listbox
@@ -1150,7 +1116,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
 
         rFilterBox.thaw();
 
-        ShowFilterMenu(aCellRect, bLayoutRTL);
+        ShowFilterMenu(pParent, aCellRect, bLayoutRTL);
     }
 
     sal_Int32 nSelPos = -1;
@@ -1190,8 +1156,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
 
     if ( bEmpty )
     {
-        mpFilterBox.disposeAndClear();
-        mpFilterFloat.disposeAndClear();
+        mpFilterBox.reset();
     }
     else
     {
@@ -1228,8 +1193,8 @@ void ScGridWindow::FilterSelect( sal_uLong nSel )
             break;
     }
 
-    if (mpFilterFloat)
-        mpFilterFloat->EndPopupMode();
+    if (mpFilterBox)
+        mpFilterBox->popdown();
 
     GrabFocus();        // Otherwise the focus would be wrong on OS/2
 }
