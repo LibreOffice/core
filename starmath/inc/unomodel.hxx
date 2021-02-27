@@ -27,8 +27,6 @@
 #include <vcl/print.hxx>
 #include <oox/mathml/export.hxx>
 #include <oox/mathml/import.hxx>
-#include <memory>
-
 
 #define PRTUIOPT_TITLE_ROW          "TitleRow"
 #define PRTUIOPT_FORMULA_TEXT       "FormulaText"
