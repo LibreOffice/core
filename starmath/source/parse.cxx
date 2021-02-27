@@ -17,24 +17,35 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/** Parses the starmath code and creates the nodes.
-  *
-  */
+#include <parse.hxx>
+#include <smmod.hxx>
+#include <cfgitem.hxx>
 
-#ifndef INCLUDED_STARMATH_INC_PARSE_HXX
-#define INCLUDED_STARMATH_INC_PARSE_HXX
-
-#include "parse5.hxx"
-
-namespace starmathdatabase
+AbstractSmParser* starmathdatabase::GetDefaultSmParser()
 {
-
-AbstractSmParser* GetDefaultSmParser();
-
-AbstractSmParser* GetVersionSmParser(sal_uInt16 nVersion);
-
+    switch(SM_MOD()->GetConfig()->GetDefaultSmSyntaxVersion())
+    {
+    case 5:
+    {
+        AbstractSmParser* aParser = new SmParser();
+        return aParser;
+    }
+    default:
+        throw std::range_error("parser depth limit");
+    }
 }
 
-#endif
-
+AbstractSmParser* starmathdatabase::GetVersionSmParser(sal_uInt16 nVersion)
+{
+    switch(nVersion)
+    {
+    case 5:
+    {
+        AbstractSmParser* aParser = new SmParser();
+        return aParser;
+    }
+    default:
+        throw std::range_error("parser depth limit");
+    }
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
