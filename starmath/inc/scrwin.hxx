@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_SCRWIN_HXX
+#define INCLUDED_SCRWIN_HXX
 
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
@@ -64,5 +65,7 @@ public:
 private:
     Size         GetOutputSizePixel() const;
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
