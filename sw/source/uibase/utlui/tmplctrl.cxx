@@ -42,7 +42,6 @@ SwTemplateControl::SwTemplateControl( sal_uInt16 _nSlotId,
                                       StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb )
 {
-    GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_TMPLCTRL_HINT));
 }
 
 SwTemplateControl::~SwTemplateControl()
@@ -57,9 +56,13 @@ void SwTemplateControl::StateChanged(
     {
         sTemplate = pItem->GetValue();
         GetStatusBar().SetItemText(GetId(), sTemplate);
+        GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_TMPLCTRL_HINT));
     }
     else
+    {
         GetStatusBar().SetItemText(GetId(), OUString());
+        GetStatusBar().SetQuickHelpText(GetId(), u"");
+    }
 }
 
 void SwTemplateControl::Paint( const UserDrawEvent&  )
