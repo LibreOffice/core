@@ -24,10 +24,7 @@
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 
-#include "format.hxx"
-#include <memory>
-#include <tuple>
-
+#include "parse.hxx"
 #include "AccessibleSmElementsControl.hxx"
 
 class SmDocShell;

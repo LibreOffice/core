@@ -29,11 +29,16 @@
 #ifndef INCLUDED_STARMATH_INC_TOKEN_HXX
 #define INCLUDED_STARMATH_INC_TOKEN_HXX
 
-#include <sal/types.h>
 #include "types.hxx"
 #include <rtl/ustring.hxx>
-#include <o3tl/typed_flags_set.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <tools/color.hxx>
+#include <o3tl/typed_flags_set.hxx>
+
+#include <vector>
+#include <tuple>
+#include <set>
+#include <cassert>
 
 // TokenGroups
 enum class TG
