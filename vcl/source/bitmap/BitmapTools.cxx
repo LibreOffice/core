@@ -486,10 +486,6 @@ void DrawAlphaBitmapAndAlphaGradient(BitmapEx & rBitmapEx, bool bFixedTransparen
     {
         aOldMask = rBitmapEx.GetMask();
     }
-    else if(TransparentType::Color == rBitmapEx.GetTransparentType())
-    {
-        aOldMask = rBitmapEx.GetBitmap().CreateMask(rBitmapEx.GetTransparentColor());
-    }
 
     {
         AlphaScopedWriteAccess pOld(aOldMask);
@@ -611,14 +607,7 @@ void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const BitmapEx& rBi
             // need to blend in Mask quality (1Bit)
             Bitmap aMask(aVDevMask.CreateMask(COL_WHITE));
 
-            if ( rBitmap.GetTransparentColor() == COL_WHITE )
-            {
-                aMask.CombineSimple( rBitmap.GetMask(), BmpCombine::Or );
-            }
-            else
-            {
-                aMask.CombineSimple( rBitmap.GetMask(), BmpCombine::And );
-            }
+            aMask.CombineSimple( rBitmap.GetMask(), BmpCombine::And );
 
             aBmpEx = BitmapEx( rBitmap.GetBitmap(), aMask );
         }
