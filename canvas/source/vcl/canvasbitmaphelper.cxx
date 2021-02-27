@@ -53,7 +53,7 @@ namespace vclcanvas
         CanvasHelper::init( rDevice,
                             mpBackBuffer,
                             false,
-                            rBitmap.IsTransparent() );
+                            rBitmap.IsAlpha() );
     }
 
     void CanvasBitmapHelper::disposing()

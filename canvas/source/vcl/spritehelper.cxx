@@ -81,10 +81,8 @@ namespace vclcanvas
     void SpriteHelper::redraw( OutputDevice&                rTargetSurface,
                                const ::basegfx::B2DPoint&   rPos,
                                bool&                        io_bSurfacesDirty,
-                               bool                         bBufferedUpdate ) const
+                               bool                         /*bBufferedUpdate*/ ) const
     {
-        (void)bBufferedUpdate; // not used on every platform
-
         if( !mpBackBuffer ||
             !mpBackBufferMask )
         {
@@ -145,31 +143,10 @@ namespace vclcanvas
                 BitmapEx aMask( mpBackBufferMask->getOutDev().GetBitmapEx( aEmptyPoint,
                                                                        aOutputSize ) );
 
-                // bitmasks are much faster than alphamasks on some platforms
-                // so convert to bitmask if useful
-                bool convertTo1Bpp = aMask.getPixelFormat() != vcl::PixelFormat::N1_BPP;
-#ifdef MACOSX
-                convertTo1Bpp = false;
-#endif
-                if( SkiaHelper::isVCLSkiaEnabled())
-                    convertTo1Bpp = false;
-
-                if( convertTo1Bpp )
-                {
-                    OSL_FAIL("CanvasCustomSprite::redraw(): Mask bitmap is not "
-                               "monochrome (performance!)");
-                    BitmapEx aMaskEx(aMask);
-                    BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(255));
-                    aMask = aMaskEx.GetBitmap();
-                }
-
                 // Note: since we retrieved aBmp and aMask
                 // directly from an OutDev, it's already a
                 // 'display bitmap' on windows.
-                if (aMask.getPixelFormat() == vcl::PixelFormat::N1_BPP)
-                    maContent = BitmapEx( aBmp.GetBitmap(), aMask.GetBitmap() );
-                else
-                    maContent = BitmapEx( aBmp.GetBitmap(), AlphaMask( aMask.GetBitmap()) );
+                maContent = BitmapEx( aBmp.GetBitmap(), AlphaMask( aMask.GetBitmap()) );
             }
         }
 
