@@ -50,6 +50,7 @@
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use-underline">True</property>
+                <property name="tooltip_text" translatable="yes" context="templatedialog1|apply">All modifications are saved. Cannot be reverted.</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -59,12 +60,12 @@
             </child>
             <child>
               <object class="GtkButton" id="standard">
-                <property name="label" translatable="yes" context="templatedialog1|standard">_Set to Parent</property>
+                <property name="label" translatable="no">_Standard</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
-                <property name="tooltip_text" translatable="yes" context="templatedialog1|standard">Set values shown here with the values from the style specified in “Inherit From” in Organizer.</property>
+                <property name="tooltip_text" translatable="yes" context="templatedialog1|standard">For a user-defined character style, reset to original template values.</property>
               </object>
               <packing>
                 <property name="expand">False</property>
