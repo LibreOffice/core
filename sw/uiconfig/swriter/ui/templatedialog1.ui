@@ -29,7 +29,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use-underline">True</property>
-                <property name="tooltip_text" translatable="yes" context="templatedialog1|reset">Unsaved modifications to this tab are reverted.</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="reset-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="templatedialog1|extended_tip|reset">Revert any changes made on the tab shown here to the settings that were present when this dialog was opened.</property>
@@ -59,12 +58,11 @@
             </child>
             <child>
               <object class="GtkButton" id="standard">
-                <property name="label" translatable="yes" context="templatedialog1|standard">_Set to Parent</property>
+                <property name="label" translatable="no">_Standard</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
-                <property name="tooltip_text" translatable="yes" context="templatedialog1|standard">Set values shown here with the values from the style specified in “Inherit From” in Organizer.</property>
               </object>
               <packing>
                 <property name="expand">False</property>
