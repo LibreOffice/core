@@ -469,13 +469,13 @@ void SmXMLExport::ExportContent_()
     if (pDocShell)
     {
         nSmSyntaxVersion = pDocShell->GetSmSyntaxVersion();
-        SmParser& rParser = pDocShell->GetParser();
-        bool bVal = rParser.IsExportSymbolNames();
-        rParser.SetExportSymbolNames(true);
-        auto pTmpTree = rParser.Parse(aText);
-        aText = rParser.GetText();
+        AbstractSmParser* rParser = pDocShell->GetParser();
+        bool bVal = rParser->IsExportSymbolNames();
+        rParser->SetExportSymbolNames(true);
+        auto pTmpTree = rParser->Parse(aText);
+        aText = rParser->GetText();
         pTmpTree.reset();
-        rParser.SetExportSymbolNames(bVal);
+        rParser->SetExportSymbolNames(bVal);
     }
 
     OUStringBuffer sStrBuf(12);

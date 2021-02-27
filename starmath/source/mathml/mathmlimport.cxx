@@ -471,13 +471,13 @@ void SmXMLImport::endDocument()
             }
 
             // Convert symbol names
-            SmParser& rParser = pDocShell->GetParser();
-            bool bVal = rParser.IsImportSymbolNames();
-            rParser.SetImportSymbolNames(true);
-            auto pTmpTree = rParser.Parse(aText);
-            aText = rParser.GetText();
+            AbstractSmParser* rParser = pDocShell->GetParser();
+            bool bVal = rParser->IsImportSymbolNames();
+            rParser->SetImportSymbolNames(true);
+            auto pTmpTree = rParser->Parse(aText);
+            aText = rParser->GetText();
             pTmpTree.reset();
-            rParser.SetImportSymbolNames(bVal);
+            rParser->SetImportSymbolNames(bVal);
 
             pDocShell->SetText(aText);
             pDocShell->SetSmSyntaxVersion(mnSmSyntaxVersion);
