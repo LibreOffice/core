@@ -996,7 +996,7 @@ namespace wmfemfhelper
 
         // if bitmap visualisation is transparent, maybe background
         // needs to be filled. Create background
-        if(aBitmapEx.IsTransparent()
+        if(aBitmapEx.IsAlpha()
             || (WallpaperStyle::Tile != eWallpaperStyle && WallpaperStyle::Scale != eWallpaperStyle))
         {
             if(rWallpaper.IsGradient())
