@@ -613,7 +613,7 @@ void Test::testCharStyleHighlight()
         const sal_Int32 nBackColor(0xFFDBB6); //orange-y
 
         // Always export character style's background colour as shading, never as highlighting.
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), false, hasProperty(xCharStyle,"CharHighlight"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xCharStyle,"CharHighlight"));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), nBackColor, getProperty<sal_Int32>(xCharStyle,"CharBackColor"));
     }
 }

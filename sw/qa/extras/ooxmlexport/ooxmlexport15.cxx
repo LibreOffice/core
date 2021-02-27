@@ -789,6 +789,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138345_charStyleHighlight, "tdf138345_charStyleH
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xRun,"CharBackColor"));
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf138345_numberingHighlight, "tdf138345_numberingHighlight.docx")
+{
+    // Before the fix, the highlight was completely lost.
+    xmlDocUniquePtr pXmlStyles = parseExport("word/numbering.xml");
+    if (pXmlStyles)
+        assertXPath(pXmlStyles, "/w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:rPr/w:highlight", "val", "red");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf134063, "tdf134063.docx")
 {
     CPPUNIT_ASSERT_EQUAL(2, getPages());
