@@ -451,12 +451,11 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                             rWriter.SetClipRegion( aRect);
                         }
 
-                        Bitmap aMask;
+                        AlphaMask aAlphaMask;
                         if (nTransparency)
                         {
-                            AlphaMask aAlphaMask(aGraphic.GetSizePixel());
+                            aAlphaMask = AlphaMask(aGraphic.GetSizePixel());
                             aAlphaMask.Erase(nTransparency);
-                            aMask = aAlphaMask.GetBitmap();
                         }
 
                         SvMemoryStream aTmp;
@@ -483,7 +482,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                                 }
                             }
 
-                            rWriter.DrawJPGBitmap( aTmp, aGraphic.GetBitmapEx().GetBitCount() > 8, aGraphic.GetSizePixel(), aOutputRect, aMask, aGraphic );
+                            rWriter.DrawJPGBitmap( aTmp, aGraphic.GetBitmapEx().GetBitCount() > 8, aGraphic.GetSizePixel(), aOutputRect, aAlphaMask, aGraphic );
                         }
 
                         if ( bClippingNeeded )

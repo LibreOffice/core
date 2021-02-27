@@ -466,7 +466,7 @@ bool ImpGraphic::isTransparent() const
     }
     else if (meType == GraphicType::Bitmap && !maVectorGraphicData)
     {
-        bRet = mpAnimation ? mpAnimation->IsTransparent() : maBitmapEx.IsTransparent();
+        bRet = mpAnimation ? mpAnimation->IsTransparent() : maBitmapEx.IsAlpha();
     }
 
     return bRet;
@@ -668,7 +668,8 @@ BitmapEx ImpGraphic::getBitmapEx(const GraphicConversionParameters& rParameters)
             const ImpGraphic aMonoMask( maMetaFile.GetMonochromeMtf( COL_BLACK ) );
 
             // use maBitmapEx as local buffer for rendered metafile
-            const_cast< ImpGraphic* >(this)->maBitmapEx = BitmapEx(getBitmap(rParameters), aMonoMask.getBitmap(rParameters));
+            assert(false && "TODO");
+            //const_cast< ImpGraphic* >(this)->maBitmapEx = BitmapEx(getBitmap(rParameters), aMonoMask.getBitmap(rParameters));
         }
 
         aRetBmpEx = maBitmapEx;
@@ -741,7 +742,7 @@ const GDIMetaFile& ImpGraphic::getGDIMetaFile() const
 
         // #123983# directly create a metafile with the same PrefSize and PrefMapMode
         // the bitmap has, this will be an always correct metafile
-        if(maBitmapEx.IsTransparent())
+        if(maBitmapEx.IsAlpha())
         {
             pThat->maMetaFile.AddAction(new MetaBmpExScaleAction(Point(), maBitmapEx.GetPrefSize(), maBitmapEx));
         }
