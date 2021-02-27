@@ -553,6 +553,23 @@ SwNumRule& SwNumRule::operator=( const SwNumRule& rNumRule )
     return *this;
 }
 
+void SwNumRule::Reset( const OUString& rName )
+{
+    for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
+        Set( n, nullptr);
+
+    meRuleType = NUM_RULE;
+    msName = rName;
+    mbAutoRuleFlag = true;
+    mbInvalidRuleFlag = true;
+    mbContinusNum = false;
+    mbAbsSpaces = false;
+    mbHidden = false;
+    mnPoolFormatId = USHRT_MAX;
+    mnPoolHelpId = USHRT_MAX;
+    mnPoolHlpFileId = UCHAR_MAX;
+}
+
 bool SwNumRule::operator==( const SwNumRule& rRule ) const
 {
     bool bRet = meRuleType == rRule.meRuleType &&
