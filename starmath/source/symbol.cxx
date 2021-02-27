@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vector>
-
 #include <symbol.hxx>
 #include <utility.hxx>
 #include <cfgitem.hxx>

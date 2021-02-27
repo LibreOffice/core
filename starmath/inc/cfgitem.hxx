@@ -23,14 +23,11 @@
 #include "utility.hxx"
 
 #include <string_view>
-#include <vector>
-
 #include <rtl/ustring.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <unotools/configitem.hxx>
 
 #include "types.hxx"
-#include <memory>
 
 namespace com::sun::star::uno
 {

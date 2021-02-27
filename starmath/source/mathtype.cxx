@@ -18,15 +18,12 @@
  */
 
 #include "mathtype.hxx"
+#include "eqnolefilehdr.hxx"
 
 #include <filter/msfilter/classids.hxx>
 #include <osl/diagnose.h>
 #include <sfx2/docfile.hxx>
 #include <sot/storage.hxx>
-#include <sal/log.hxx>
-
-#include "eqnolefilehdr.hxx"
-#include <node.hxx>
 
 void MathType::Init()
 {
