@@ -1800,21 +1800,6 @@ bool ReadDIBBitmapEx(
                         }
                         break;
                     }
-                case TransparentType::Color:
-                    {
-                        Color aTransparentColor;
-
-                        tools::GenericTypeSerializer aSerializer(rIStm);
-                        aSerializer.readColor(aTransparentColor);
-
-                        bRetval = !rIStm.GetError();
-
-                        if(bRetval)
-                        {
-                            rTarget = BitmapEx(aBmp, aTransparentColor);
-                        }
-                        break;
-                    }
                 default: break;
                 }
             }
@@ -1886,12 +1871,6 @@ bool WriteDIBBitmapEx(
         if(TransparentType::Bitmap == rSource.meTransparent)
         {
             return ImplWriteDIB(rSource.maMask, rOStm, true, true);
-        }
-        else if(TransparentType::Color == rSource.meTransparent)
-        {
-            tools::GenericTypeSerializer aSerializer(rOStm);
-            aSerializer.writeColor(rSource.maTransparentColor);
-            return true;
         }
     }
 

@@ -37,7 +37,6 @@ namespace basegfx { class BColorModifierStack; }
 enum class TransparentType
 {
     NONE,
-    Color,
     Bitmap
 };
 
@@ -89,8 +88,6 @@ public:
 
     const MapMode&      GetPrefMapMode() const { return maBitmap.GetPrefMapMode(); }
     void                SetPrefMapMode( const MapMode& rPrefMapMode ) { maBitmap.SetPrefMapMode( rPrefMapMode ); }
-
-    const Color&        GetTransparentColor() const { return maTransparentColor; }
 
     sal_uInt16          GetBitCount() const { return maBitmap.GetBitCount(); }
     sal_uLong           GetSizeBytes() const;
@@ -475,7 +472,6 @@ private:
     Bitmap              maBitmap;
     Bitmap              maMask;
     Size                maBitmapSize;
-    Color               maTransparentColor;
     TransparentType     meTransparent;
     bool                mbAlpha;
 
