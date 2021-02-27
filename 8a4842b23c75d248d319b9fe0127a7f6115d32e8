@@ -1,0 +1,293 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9642d62f_283e2b57",
+        "filename": "include/osl/security.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-27T04:52:14Z",
+      "side": 1,
+      "message": "Please limit lines to 100 characters.\n\n@since is missing: see line 130.",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4f25006_d47ecac8",
+        "filename": "include/sfx2/docfile.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-27T04:52:14Z",
+      "side": 1,
+      "message": "See ## Rules for #include directives (C/C++) in README.md for rules about includes. Here osl/conditn.hxx must be in angle brackets.",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45118731_39a96d66",
+        "filename": "offapi/com/sun/star/document/ReloadEditableRequest.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-27T04:52:14Z",
+      "side": 1,
+      "message": "Does it really incorporate that? Please see TEMPLATE.SOURCECODE.HEADER.",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39ba46a4_6990c839",
+        "filename": "offapi/com/sun/star/document/ReloadEditableRequest.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-27T04:52:14Z",
+      "side": 1,
+      "message": "This seems wrong.",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b7e7dc8_3a1daf17",
+        "filename": "sal/osl/unx/security.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-27T04:52:14Z",
+      "side": 1,
+      "message": "please no \"unix\". We have e.g. UNX abbreviation - fine to use.",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a74a31f9_7713e08d",
+        "filename": "sal/osl/w32/security.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-27T04:52:14Z",
+      "side": 1,
+      "message": "Please declare variables in the place where it is used. No need to declare (and initialize) variables, only to re-initialize them unconditionally 20 lines below.",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "875c6d3b_372fe5c5",
+        "filename": "sal/osl/w32/security.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-27T04:52:14Z",
+      "side": 1,
+      "message": "Please use C++ functions like osl::FileBase::getSystemPathFromFileURL instead of the underlying C API. It allows to use e.g. string classes, removing the need to cleanup pointers to structs.",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da6c20ec_fb804dc2",
+        "filename": "sal/osl/w32/security.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-27T04:52:14Z",
+      "side": 1,
+      "message": "Please make it more C++. Use RAII instead of goto.",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72c72c71_7336ef29",
+        "filename": "sal/osl/w32/security.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-27T04:52:14Z",
+      "side": 1,
+      "message": "std::abort",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bbfdb7b_4efe3fc3",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-27T04:52:14Z",
+      "side": 1,
+      "message": "Better use member initialization list:\n\n        : ThreadTask(pTag)\n        , _pMed(pMed)\n    {\n    }",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cb8bbea_8d71283b",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1047,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-27T04:52:14Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be const?",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afa1a4dd_c1f6e378",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-27T04:52:14Z",
+      "side": 1,
+      "message": "Do we need to check this continuously?",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b397dbb1_ea127350",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-27T04:52:14Z",
+      "side": 1,
+      "message": "This line change is unrelated: only the following lines are related",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c98f98d4_c0137482",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1734,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-27T04:52:14Z",
+      "side": 1,
+      "message": "This is a formatting-only change, *unrelated* to your change. Please revert.",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e30a5140_db9cf49f",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1742,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-27T04:52:14Z",
+      "side": 1,
+      "message": "This, too, should be reverted as unrelated.",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1b63f69_58ebfc00",
+        "filename": "solenv/clang-format/excludelist",
+        "patchSetId": 1
+      },
+      "lineNbr": 14351,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-27T04:52:14Z",
+      "side": 1,
+      "message": "We must never add new files to this exclude list. Only old files, which would be severely reformatted by the plugin, and thus get much noise in history making git blame complicated, are here.",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b4019a4_6d7b9d79",
+        "filename": "uui/source/reloadeditable.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-02-27T04:52:14Z",
+      "side": 1,
+      "message": "Why \"short\"?",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
