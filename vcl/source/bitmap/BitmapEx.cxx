@@ -156,18 +156,19 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask ) :
     }
 }
 
+
 BitmapEx::BitmapEx( const Bitmap& rBmp, const Color& rTransparentColor ) :
         maBitmap             ( rBmp ),
         maBitmapSize         ( maBitmap.GetSizePixel() ),
-        maTransparentColor   ( rTransparentColor ),
         meTransparent        ( TransparentType::Bitmap ),
         mbAlpha              ( false )
 {
-    maMask = maBitmap.CreateMask( maTransparentColor );
+    maMask = maBitmap.CreateMask( rTransparentColor );
 
     SAL_WARN_IF(rBmp.GetSizePixel() != maMask.GetSizePixel(), "vcl",
                 "BitmapEx::BitmapEx(): size mismatch for bitmap and alpha mask.");
 }
+
 
 BitmapEx& BitmapEx::operator=( const BitmapEx& ) = default;
 
@@ -180,10 +181,6 @@ bool BitmapEx::operator==( const BitmapEx& rBitmapEx ) const
         return false;
 
     if (meTransparent != rBitmapEx.meTransparent)
-        return false;
-
-    if (meTransparent == TransparentType::Color
-        && maTransparentColor != rBitmapEx.maTransparentColor)
         return false;
 
     if (mbAlpha != rBitmapEx.mbAlpha)
@@ -234,12 +231,7 @@ Bitmap BitmapEx::GetBitmap( Color aTransparentReplaceColor ) const
 
     if( meTransparent != TransparentType::NONE )
     {
-        Bitmap aTempMask;
-
-        if( meTransparent == TransparentType::Color )
-            aTempMask = maBitmap.CreateMask( maTransparentColor );
-        else
-            aTempMask = maMask;
+        Bitmap aTempMask = maMask;
 
         if( !IsAlpha() )
             aRetBmp.Replace( aTempMask, aTransparentReplaceColor );
@@ -315,12 +307,7 @@ bool BitmapEx::Invert()
     bool bRet = false;
 
     if (!!maBitmap)
-    {
         bRet = maBitmap.Invert();
-
-        if (bRet && (meTransparent == TransparentType::Color))
-            maTransparentColor.Invert();
-    }
 
     return bRet;
 }
@@ -392,22 +379,17 @@ bool BitmapEx::Rotate( Degree10 nAngle10, const Color& rFillColor )
 
         if( bTransRotate )
         {
-            if( meTransparent == TransparentType::Color )
-                bRet = maBitmap.Rotate( nAngle10, maTransparentColor );
-            else
+            bRet = maBitmap.Rotate( nAngle10, COL_BLACK );
+
+            if( meTransparent == TransparentType::NONE )
             {
-                bRet = maBitmap.Rotate( nAngle10, COL_BLACK );
-
-                if( meTransparent == TransparentType::NONE )
-                {
-                    maMask = Bitmap(GetSizePixel(), 1);
-                    maMask.Erase( COL_BLACK );
-                    meTransparent = TransparentType::Bitmap;
-                }
-
-                if( bRet && !!maMask )
-                    maMask.Rotate( nAngle10, COL_WHITE );
+                maMask = Bitmap(GetSizePixel(), 1);
+                maMask.Erase( COL_BLACK );
+                meTransparent = TransparentType::Bitmap;
             }
+
+            if( bRet && !!maMask )
+                maMask.Rotate( nAngle10, COL_WHITE );
         }
         else
         {
@@ -691,22 +673,6 @@ sal_uInt8 BitmapEx::GetAlpha(sal_Int32 nX, sal_Int32 nY) const
                 {
                     // Not transparent, ergo all covered
                     nAlpha = 255;
-                    break;
-                }
-                case TransparentType::Color:
-                {
-                    Bitmap aTestBitmap(maBitmap);
-                    Bitmap::ScopedReadAccess pRead(aTestBitmap);
-
-                    if(pRead)
-                    {
-                        const BitmapColor aBmpColor = pRead->GetColor(nY, nX);
-
-                        // If color is not equal to TransparentColor, we are not transparent
-                        if (aBmpColor != maTransparentColor)
-                            nAlpha = 255;
-
-                    }
                     break;
                 }
                 case TransparentType::Bitmap:
@@ -1336,7 +1302,6 @@ void BitmapEx::ReplaceTransparency(const Color& rColor)
         maBitmap.Replace( GetMask(), rColor );
         maMask = Bitmap();
         maBitmapSize = maBitmap.GetSizePixel();
-        maTransparentColor = Color();
         meTransparent = TransparentType::NONE;
         mbAlpha = false;
     }
