@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SYSTOOLS_WIN32_UWINAPI_H
 #define INCLUDED_SYSTOOLS_WIN32_UWINAPI_H
 
-#include "sal/macros.h"
-
 #include "prewin.h"
 #include "postwin.h"
 
