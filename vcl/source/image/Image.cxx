@@ -142,7 +142,7 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
 
         if (nStyle & DrawImageFlags::SemiTransparent)
         {
-            if (aTempBitmapEx.IsTransparent())
+            if (aTempBitmapEx.IsAlpha())
             {
                 Bitmap aAlphaBmp(aTempBitmapEx.GetAlpha().GetBitmap());
                 aAlphaBmp.Adjust(50);

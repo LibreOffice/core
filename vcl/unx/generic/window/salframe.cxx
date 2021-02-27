@@ -264,19 +264,7 @@ static void CreateNetWmAppIcon( sal_uInt16 nIcon, NetWmIconData& netwm_icon )
             continue;
         vcl::bitmap::convertBitmap32To24Plus8(aIcon, aIcon);
         Bitmap icon = aIcon.GetBitmap();
-        AlphaMask mask;
-        switch( aIcon.GetTransparentType())
-        {
-            case TransparentType::NONE:
-            {
-                sal_uInt8 nTrans = 0;
-                mask = AlphaMask( icon.GetSizePixel(), &nTrans );
-            }
-            break;
-            case TransparentType::Bitmap:
-                mask = aIcon.GetAlpha();
-            break;
-        }
+        AlphaMask mask = aIcon.GetAlpha();
         BitmapReadAccess* iconData = icon.AcquireReadAccess();
         BitmapReadAccess* maskData = mask.AcquireReadAccess();
         netwm_icon[ pos++ ] = size; // width
@@ -340,7 +328,7 @@ static bool lcl_SelectAppIconPixmap( SalDisplay const *pDisplay, SalX11Screen nX
 
     icon_mask = None;
 
-    if( TransparentType::Bitmap == aIcon.GetTransparentType() )
+    if( aIcon.IsAlpha() )
     {
         icon_mask = XCreatePixmap( pDisplay->GetDisplay(),
                                    pDisplay->GetRootWindow( pDisplay->GetDefaultXScreen() ),
@@ -353,7 +341,7 @@ static bool lcl_SelectAppIconPixmap( SalDisplay const *pDisplay, SalX11Screen nX
         GC aMonoGC = XCreateGC( pDisplay->GetDisplay(), icon_mask,
             GCFunction|GCForeground|GCBackground, &aValues );
 
-        Bitmap aMask = aIcon.GetMask();
+        Bitmap aMask = aIcon.GetAlpha();
         aMask.Invert();
 
         X11SalBitmap *pMask = static_cast < X11SalBitmap * >

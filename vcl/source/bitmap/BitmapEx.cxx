@@ -49,16 +49,12 @@
 using namespace ::com::sun::star;
 
 BitmapEx::BitmapEx()
-    : meTransparent(TransparentType::NONE)
-    , mbAlpha(false)
 {
 }
 
 BitmapEx::BitmapEx( const BitmapEx& ) = default;
 
 BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize )
-    : meTransparent(TransparentType::NONE)
-    , mbAlpha(false)
 {
     if( rBitmapEx.IsEmpty() || aSize.IsEmpty() )
         return;
@@ -66,12 +62,7 @@ BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize )
     maBitmap = Bitmap(aSize, rBitmapEx.maBitmap.getPixelFormat());
     SetSizePixel(aSize);
     if( rBitmapEx.IsAlpha() )
-    {
-        mbAlpha = true;
-        maMask = AlphaMask( aSize ).ImplGetBitmap();
-    }
-    else if( rBitmapEx.IsTransparent() )
-        maMask = Bitmap(aSize, rBitmapEx.maMask.getPixelFormat());
+        maAlphaMask = AlphaMask( aSize ).ImplGetBitmap();
 
     tools::Rectangle aDestRect( Point( 0, 0 ), aSize );
     tools::Rectangle aSrcRect( aSrc, aSize );
@@ -79,16 +70,12 @@ BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize )
 }
 
 BitmapEx::BitmapEx(Size aSize, vcl::PixelFormat ePixelFormat)
-    : meTransparent(TransparentType::NONE)
-    , mbAlpha(false)
 {
     maBitmap = Bitmap(aSize, ePixelFormat);
     SetSizePixel(aSize);
 }
 
 BitmapEx::BitmapEx( const OUString& rIconName )
-    : meTransparent(TransparentType::NONE)
-    , mbAlpha(false)
 {
     loadFromIconTheme( rIconName );
 }
@@ -113,30 +100,25 @@ void BitmapEx::loadFromIconTheme( const OUString& rIconName )
 
 BitmapEx::BitmapEx( const Bitmap& rBmp ) :
         maBitmap     ( rBmp ),
-        maBitmapSize ( maBitmap.GetSizePixel() ),
-        meTransparent( TransparentType::NONE ),
-        mbAlpha      ( false )
+        maBitmapSize ( maBitmap.GetSizePixel() )
 {
 }
 
 BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
         maBitmap         ( rBmp ),
-        maMask           ( rMask ),
-        maBitmapSize     ( maBitmap.GetSizePixel() ),
-        meTransparent    ( rMask.IsEmpty() ? TransparentType::NONE : TransparentType::Bitmap ),
-        mbAlpha          ( !rMask.IsEmpty() )
+        maBitmapSize     ( maBitmap.GetSizePixel() )
 {
     if (rMask.IsEmpty())
         return;
 
-    if( maMask.getPixelFormat() == vcl::PixelFormat::N8_BPP && maMask.HasGreyPalette8Bit() )
-        maMask = rMask;
-    else if (maMask.getPixelFormat() == vcl::PixelFormat::N1_BPP)
+    if( rMask.getPixelFormat() == vcl::PixelFormat::N8_BPP && rMask.HasGreyPalette8Bit() )
+        maAlphaMask = rMask;
+    else if (rMask.getPixelFormat() == vcl::PixelFormat::N1_BPP)
     {
         // convert 1-bit mask to alpha bitmap
         BitmapEx aBmpEx(rMask);
         BitmapFilter::Filter(aBmpEx, BitmapMaskToAlphaFilter());
-        maMask = aBmpEx.GetBitmap();
+        maAlphaMask = aBmpEx.GetBitmap();
     }
     else
     {
@@ -145,40 +127,36 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
         BitmapEx aMaskEx(rMask);
         BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(255));
         BitmapFilter::Filter(aMaskEx, BitmapMaskToAlphaFilter());
-        maMask = aMaskEx.GetBitmap();
+        maAlphaMask = aMaskEx.GetBitmap();
     }
 
-    if (!maBitmap.IsEmpty() && maBitmap.GetSizePixel() != maMask.GetSizePixel())
+    if (!maBitmap.IsEmpty() && maBitmap.GetSizePixel() != maAlphaMask.GetSizePixel())
     {
         OSL_ENSURE(false, "Mask size differs from Bitmap size, corrected Mask (!)");
-        maMask.Scale(maBitmap.GetSizePixel());
+        maAlphaMask.Scale(maBitmap.GetSizePixel());
     }
 }
 
 BitmapEx::BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask ) :
         maBitmap         ( rBmp ),
-        maMask           ( rAlphaMask.ImplGetBitmap() ),
-        maBitmapSize     ( maBitmap.GetSizePixel() ),
-        meTransparent    ( rAlphaMask.IsEmpty() ? TransparentType::NONE : TransparentType::Bitmap ),
-        mbAlpha          ( !rAlphaMask.IsEmpty() )
+        maAlphaMask      ( rAlphaMask.ImplGetBitmap() ),
+        maBitmapSize     ( maBitmap.GetSizePixel() )
 {
-    if (!maBitmap.IsEmpty() && !maMask.IsEmpty() && maBitmap.GetSizePixel() != maMask.GetSizePixel())
+    if (!maBitmap.IsEmpty() && !maAlphaMask.IsEmpty() && maBitmap.GetSizePixel() != maAlphaMask.GetSizePixel())
     {
         OSL_ENSURE(false, "Alpha size differs from Bitmap size, corrected Mask (!)");
-        maMask.Scale(rBmp.GetSizePixel());
+        maAlphaMask.Scale(rBmp.GetSizePixel());
     }
 }
 
 
 BitmapEx::BitmapEx( const Bitmap& rBmp, const Color& rTransparentColor ) :
         maBitmap             ( rBmp ),
-        maBitmapSize         ( maBitmap.GetSizePixel() ),
-        meTransparent        ( TransparentType::Bitmap ),
-        mbAlpha              ( false )
+        maBitmapSize         ( maBitmap.GetSizePixel() )
 {
-    maMask = maBitmap.CreateMask( rTransparentColor );
+    maAlphaMask = maBitmap.CreateMask( rTransparentColor );
 
-    SAL_WARN_IF(rBmp.GetSizePixel() != maMask.GetSizePixel(), "vcl",
+    SAL_WARN_IF(rBmp.GetSizePixel() != maAlphaMask.GetSizePixel(), "vcl",
                 "BitmapEx::BitmapEx(): size mismatch for bitmap and alpha mask.");
 }
 
@@ -187,35 +165,24 @@ BitmapEx& BitmapEx::operator=( const BitmapEx& ) = default;
 
 bool BitmapEx::operator==( const BitmapEx& rBitmapEx ) const
 {
-    if (meTransparent != rBitmapEx.meTransparent)
-        return false;
-
     if (GetSizePixel() != rBitmapEx.GetSizePixel())
-        return false;
-
-    if (meTransparent != rBitmapEx.meTransparent)
-        return false;
-
-    if (mbAlpha != rBitmapEx.mbAlpha)
         return false;
 
     if (maBitmap != rBitmapEx.maBitmap)
         return false;
 
-    return maMask == rBitmapEx.maMask;
+    return maAlphaMask == rBitmapEx.maAlphaMask;
 }
 
 bool BitmapEx::IsEmpty() const
 {
-    return( maBitmap.IsEmpty() && maMask.IsEmpty() );
+    return( maBitmap.IsEmpty() && maAlphaMask.IsEmpty() );
 }
 
 void BitmapEx::SetEmpty()
 {
     maBitmap.SetEmpty();
-    maMask.SetEmpty();
-    meTransparent = TransparentType::NONE;
-    mbAlpha = false;
+    maAlphaMask.SetEmpty();
 }
 
 void BitmapEx::Clear()
@@ -223,14 +190,9 @@ void BitmapEx::Clear()
     SetEmpty();
 }
 
-bool BitmapEx::IsTransparent() const
-{
-    return( meTransparent != TransparentType::NONE );
-}
-
 bool BitmapEx::IsAlpha() const
 {
-    return( IsTransparent() && mbAlpha );
+    return !maAlphaMask.IsEmpty();
 }
 
 const Bitmap& BitmapEx::GetBitmap() const
@@ -242,49 +204,25 @@ Bitmap BitmapEx::GetBitmap( Color aTransparentReplaceColor ) const
 {
     Bitmap aRetBmp( maBitmap );
 
-    if( meTransparent != TransparentType::NONE )
+    if( !maAlphaMask.IsEmpty() )
     {
-        Bitmap aTempMask = maMask;
-
-        if( !IsAlpha() )
-            aRetBmp.Replace( aTempMask, aTransparentReplaceColor );
-        else
-            aRetBmp.Replace( GetAlpha(), aTransparentReplaceColor );
+        aRetBmp.Replace( maAlphaMask, aTransparentReplaceColor );
     }
 
     return aRetBmp;
 }
 
-Bitmap BitmapEx::GetMask() const
-{
-    if (!IsAlpha())
-        return maMask;
-
-    BitmapEx aMaskEx(maMask);
-    BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(255));
-    return aMaskEx.GetBitmap();
-}
-
 AlphaMask BitmapEx::GetAlpha() const
 {
-    if( IsAlpha() )
-    {
-        AlphaMask aAlpha;
-        aAlpha.ImplSetBitmap( maMask );
-        return aAlpha;
-    }
-    else
-    {
-        return AlphaMask(maMask);
-    }
+    return AlphaMask(maAlphaMask);
 }
 
 sal_uLong BitmapEx::GetSizeBytes() const
 {
     sal_uLong nSizeBytes = maBitmap.GetSizeBytes();
 
-    if( meTransparent == TransparentType::Bitmap )
-        nSizeBytes += maMask.GetSizeBytes();
+    if( !maAlphaMask.IsEmpty() )
+        nSizeBytes += maAlphaMask.GetSizeBytes();
 
     return nSizeBytes;
 }
@@ -292,18 +230,11 @@ sal_uLong BitmapEx::GetSizeBytes() const
 BitmapChecksum BitmapEx::GetChecksum() const
 {
     BitmapChecksum  nCrc = maBitmap.GetChecksum();
-    SVBT32      aBT32;
 
-    UInt32ToSVBT32( o3tl::underlyingEnumValue(meTransparent), aBT32 );
-    nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
-
-    UInt32ToSVBT32( sal_uInt32(mbAlpha), aBT32 );
-    nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
-
-    if( ( TransparentType::Bitmap == meTransparent ) && !maMask.IsEmpty() )
+    if( !maAlphaMask.IsEmpty() )
     {
         BitmapChecksumOctetArray aBCOA;
-        BCToBCOA( maMask.GetChecksum(), aBCOA );
+        BCToBCOA( maAlphaMask.GetChecksum(), aBCOA );
         nCrc = vcl_get_checksum( nCrc, aBCOA, BITMAP_CHECKSUM_SIZE );
     }
 
@@ -333,8 +264,8 @@ bool BitmapEx::Mirror( BmpMirrorFlags nMirrorFlags )
     {
         bRet = maBitmap.Mirror( nMirrorFlags );
 
-        if( bRet && ( meTransparent == TransparentType::Bitmap ) && !maMask.IsEmpty() )
-            maMask.Mirror( nMirrorFlags );
+        if( bRet && !maAlphaMask.IsEmpty() )
+            maAlphaMask.Mirror( nMirrorFlags );
     }
 
     return bRet;
@@ -348,14 +279,14 @@ bool BitmapEx::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag
     {
         bRet = maBitmap.Scale( rScaleX, rScaleY, nScaleFlag );
 
-        if( bRet && ( meTransparent == TransparentType::Bitmap ) && !maMask.IsEmpty() )
+        if( bRet && !maAlphaMask.IsEmpty() )
         {
-            maMask.Scale( rScaleX, rScaleY, nScaleFlag );
+            maAlphaMask.Scale( rScaleX, rScaleY, nScaleFlag );
         }
 
         SetSizePixel(maBitmap.GetSizePixel());
 
-        SAL_WARN_IF( !maMask.IsEmpty() && maBitmap.GetSizePixel() != maMask.GetSizePixel(), "vcl",
+        SAL_WARN_IF( !maAlphaMask.IsEmpty() && maBitmap.GetSizePixel() != maAlphaMask.GetSizePixel(), "vcl",
                     "BitmapEx::Scale(): size mismatch for bitmap and alpha mask." );
     }
 
@@ -394,27 +325,26 @@ bool BitmapEx::Rotate( Degree10 nAngle10, const Color& rFillColor )
         {
             bRet = maBitmap.Rotate( nAngle10, COL_BLACK );
 
-            if( meTransparent == TransparentType::NONE )
+            if( maAlphaMask.IsEmpty() )
             {
-                maMask = Bitmap(GetSizePixel(), vcl::PixelFormat::N1_BPP);
-                maMask.Erase( COL_BLACK );
-                meTransparent = TransparentType::Bitmap;
+                maAlphaMask = Bitmap(GetSizePixel(), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
+                maAlphaMask.Erase( COL_BLACK );
             }
 
-            if( bRet && !maMask.IsEmpty() )
-                maMask.Rotate( nAngle10, COL_WHITE );
+            if( bRet && !maAlphaMask.IsEmpty() )
+                maAlphaMask.Rotate( nAngle10, COL_WHITE );
         }
         else
         {
             bRet = maBitmap.Rotate( nAngle10, rFillColor );
 
-            if( bRet && ( meTransparent == TransparentType::Bitmap ) && !maMask.IsEmpty() )
-                maMask.Rotate( nAngle10, COL_WHITE );
+            if( bRet && !maAlphaMask.IsEmpty() )
+                maAlphaMask.Rotate( nAngle10, COL_WHITE );
         }
 
         SetSizePixel(maBitmap.GetSizePixel());
 
-        SAL_WARN_IF(!maMask.IsEmpty() && maBitmap.GetSizePixel() != maMask.GetSizePixel(), "vcl",
+        SAL_WARN_IF(!maAlphaMask.IsEmpty() && maBitmap.GetSizePixel() != maAlphaMask.GetSizePixel(), "vcl",
                     "BitmapEx::Rotate(): size mismatch for bitmap and alpha mask.");
     }
 
@@ -429,12 +359,12 @@ bool BitmapEx::Crop( const tools::Rectangle& rRectPixel )
     {
         bRet = maBitmap.Crop( rRectPixel );
 
-        if( bRet && ( meTransparent == TransparentType::Bitmap ) && !maMask.IsEmpty() )
-            maMask.Crop( rRectPixel );
+        if( bRet && !maAlphaMask.IsEmpty() )
+            maAlphaMask.Crop( rRectPixel );
 
         SetSizePixel(maBitmap.GetSizePixel());
 
-        SAL_WARN_IF(!maMask.IsEmpty() && maBitmap.GetSizePixel() != maMask.GetSizePixel(), "vcl",
+        SAL_WARN_IF(!maAlphaMask.IsEmpty() && maBitmap.GetSizePixel() != maAlphaMask.GetSizePixel(), "vcl",
                     "BitmapEx::Crop(): size mismatch for bitmap and alpha mask.");
     }
 
@@ -455,15 +385,15 @@ void BitmapEx::Expand( sal_uLong nDX, sal_uLong nDY, bool bExpandTransparent )
 
     bRet = maBitmap.Expand( nDX, nDY );
 
-    if( bRet && ( meTransparent == TransparentType::Bitmap ) && !maMask.IsEmpty() )
+    if( bRet && !maAlphaMask.IsEmpty() )
     {
         Color aColor( bExpandTransparent ? COL_WHITE : COL_BLACK );
-        maMask.Expand( nDX, nDY, &aColor );
+        maAlphaMask.Expand( nDX, nDY, &aColor );
     }
 
     SetSizePixel(maBitmap.GetSizePixel());
 
-    SAL_WARN_IF(!maMask.IsEmpty() && maBitmap.GetSizePixel() != maMask.GetSizePixel(), "vcl",
+    SAL_WARN_IF(!maAlphaMask.IsEmpty() && maBitmap.GetSizePixel() != maAlphaMask.GetSizePixel(), "vcl",
                 "BitmapEx::Expand(): size mismatch for bitmap and alpha mask.");
 }
 
@@ -478,8 +408,8 @@ bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectang
         {
             bRet = maBitmap.CopyPixel( rRectDst, rRectSrc );
 
-            if( bRet && ( meTransparent == TransparentType::Bitmap ) && !maMask.IsEmpty() )
-                maMask.CopyPixel( rRectDst, rRectSrc );
+            if( bRet && !maAlphaMask.IsEmpty() )
+                maAlphaMask.CopyPixel( rRectDst, rRectSrc );
         }
     }
     else
@@ -494,45 +424,15 @@ bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectang
                 {
                     if( IsAlpha() )
                         // cast to use the optimized AlphaMask::CopyPixel
-                        maMask.CopyPixel_AlphaOptimized( rRectDst, rRectSrc, &pBmpExSrc->maMask );
-                    else if( IsTransparent() )
-                    {
-                        std::unique_ptr<AlphaMask> pAlpha(new AlphaMask( maMask ));
-
-                        maMask = pAlpha->ImplGetBitmap();
-                        pAlpha.reset();
-                        mbAlpha = true;
-                        maMask.CopyPixel( rRectDst, rRectSrc, &pBmpExSrc->maMask );
-                    }
+                        maAlphaMask.CopyPixel_AlphaOptimized( rRectDst, rRectSrc, &pBmpExSrc->maAlphaMask );
                     else
                     {
                         sal_uInt8 cBlack = 0;
                         std::unique_ptr<AlphaMask> pAlpha(new AlphaMask(GetSizePixel(), &cBlack));
 
-                        maMask = pAlpha->ImplGetBitmap();
+                        maAlphaMask = pAlpha->ImplGetBitmap();
                         pAlpha.reset();
-                        meTransparent = TransparentType::Bitmap;
-                        mbAlpha = true;
-                        maMask.CopyPixel( rRectDst, rRectSrc, &pBmpExSrc->maMask );
-                    }
-                }
-                else if( pBmpExSrc->IsTransparent() )
-                {
-                    if (IsAlpha())
-                    {
-                        AlphaMask aAlpha( pBmpExSrc->maMask );
-                        maMask.CopyPixel( rRectDst, rRectSrc, &aAlpha.ImplGetBitmap() );
-                    }
-                    else if (IsTransparent())
-                    {
-                        maMask.CopyPixel( rRectDst, rRectSrc, &pBmpExSrc->maMask );
-                    }
-                    else
-                    {
-                        maMask = Bitmap(GetSizePixel(), vcl::PixelFormat::N1_BPP);
-                        maMask.Erase(COL_BLACK);
-                        meTransparent = TransparentType::Bitmap;
-                        maMask.CopyPixel( rRectDst, rRectSrc, &pBmpExSrc->maMask );
+                        maAlphaMask.CopyPixel( rRectDst, rRectSrc, &pBmpExSrc->maAlphaMask );
                     }
                 }
                 else if (IsAlpha())
@@ -540,14 +440,7 @@ bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectang
                     sal_uInt8 cBlack = 0;
                     const AlphaMask aAlphaSrc(pBmpExSrc->GetSizePixel(), &cBlack);
 
-                    maMask.CopyPixel( rRectDst, rRectSrc, &aAlphaSrc.ImplGetBitmap() );
-                }
-                else if (IsTransparent())
-                {
-                    Bitmap aMaskSrc(pBmpExSrc->GetSizePixel(), vcl::PixelFormat::N1_BPP);
-
-                    aMaskSrc.Erase( COL_BLACK );
-                    maMask.CopyPixel( rRectDst, rRectSrc, &aMaskSrc );
+                    maAlphaMask.CopyPixel( rRectDst, rRectSrc, &aAlphaSrc.ImplGetBitmap() );
                 }
             }
         }
@@ -564,18 +457,18 @@ bool BitmapEx::Erase( const Color& rFillColor )
     {
         bRet = maBitmap.Erase( rFillColor );
 
-        if( bRet && ( meTransparent == TransparentType::Bitmap ) && !maMask.IsEmpty() )
+        if( bRet && !maAlphaMask.IsEmpty() )
         {
             // Respect transparency on fill color
             if( rFillColor.IsTransparent() )
             {
                 const Color aFill( 255 - rFillColor.GetAlpha(), 255 - rFillColor.GetAlpha(), 255 - rFillColor.GetAlpha() );
-                maMask.Erase( aFill );
+                maAlphaMask.Erase( aFill );
             }
             else
             {
                 const Color aBlack( COL_BLACK );
-                maMask.Erase( aBlack );
+                maAlphaMask.Erase( aBlack );
             }
         }
     }
@@ -682,42 +575,22 @@ sal_uInt8 BitmapEx::GetAlpha(sal_Int32 nX, sal_Int32 nY) const
         return GetPixelColor(nX, nY).GetAlpha();
 
     sal_uInt8 nAlpha(0);
-    switch(meTransparent)
+    if (maAlphaMask.IsEmpty())
     {
-        case TransparentType::NONE:
-        {
-            // Not transparent, ergo all covered
-            nAlpha = 255;
-            break;
-        }
-        case TransparentType::Bitmap:
-        {
-            if(!maMask.IsEmpty())
-            {
-                Bitmap aTestBitmap(maMask);
-                Bitmap::ScopedReadAccess pRead(aTestBitmap);
+        // Not transparent, ergo all covered
+        nAlpha = 255;
+    }
+    else
+    {
+        Bitmap aTestBitmap(maAlphaMask);
+        Bitmap::ScopedReadAccess pRead(aTestBitmap);
 
-                if(pRead)
-                {
-                    const BitmapColor aBitmapColor(pRead->GetPixel(nY, nX));
-
-                    if(mbAlpha)
-                    {
-                        nAlpha = 255 - aBitmapColor.GetIndex();
-                    }
-                    else
-                    {
-                        if(0x00 == aBitmapColor.GetIndex())
-                        {
-                            nAlpha = 255;
-                        }
-                    }
-                }
-            }
-            break;
+        if(pRead)
+        {
+            const BitmapColor aBitmapColor(pRead->GetPixel(nY, nX));
+            nAlpha = 255 - aBitmapColor.GetIndex();
         }
     }
-
     return nAlpha;
 }
 
@@ -891,18 +764,10 @@ BitmapEx BitmapEx::TransformBitmapEx(
     const Bitmap aDestination(impTransformBitmap(GetBitmap(), aDestinationSize, rTransformation, bSmooth));
 
     // create mask
-    if(IsTransparent())
+    if(IsAlpha())
     {
-        if(IsAlpha())
-        {
-            const Bitmap aAlpha(impTransformBitmap(GetAlpha().GetBitmap(), aDestinationSize, rTransformation, bSmooth));
-            return BitmapEx(aDestination, AlphaMask(aAlpha));
-        }
-        else
-        {
-            const Bitmap aLclMask(impTransformBitmap(GetMask(), aDestinationSize, rTransformation, false));
-            return BitmapEx(aDestination, aLclMask);
-        }
+        const Bitmap aAlpha(impTransformBitmap(GetAlpha().GetBitmap(), aDestinationSize, rTransformation, bSmooth));
+        return BitmapEx(aDestination, AlphaMask(aAlpha));
     }
 
     return BitmapEx(aDestination);
@@ -1002,7 +867,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
         if(pReplace)
         {
             // complete replace
-            if(IsTransparent())
+            if(IsAlpha())
             {
                 // clear bitmap with dest color
                 if (vcl::isPalettePixelFormat(aChangedBitmap.getPixelFormat()))
@@ -1122,16 +987,9 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
     }
     else
     {
-        if(IsTransparent())
+        if(IsAlpha())
         {
-            if(IsAlpha())
-            {
-                return BitmapEx(aChangedBitmap, GetAlpha());
-            }
-            else
-            {
-                return BitmapEx(aChangedBitmap, GetMask());
-            }
+            return BitmapEx(aChangedBitmap, GetAlpha());
         }
         else
         {
@@ -1310,13 +1168,11 @@ void BitmapEx::Replace( const Color* pSearchColors,
 
 void BitmapEx::ReplaceTransparency(const Color& rColor)
 {
-    if( IsTransparent() )
+    if( IsAlpha() )
     {
-        maBitmap.Replace( GetMask(), rColor );
-        maMask = Bitmap();
+        maBitmap.Replace( GetAlpha(), rColor );
+        maAlphaMask = Bitmap();
         maBitmapSize = maBitmap.GetSizePixel();
-        meTransparent = TransparentType::NONE;
-        mbAlpha = false;
     }
 }
 
@@ -1536,14 +1392,9 @@ void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
 {
     AlphaMask   aAlpha;
 
-    if (!IsTransparent())
+    if (!IsAlpha())
     {
         aAlpha = AlphaMask(GetSizePixel(), &cTrans);
-    }
-    else if( !IsAlpha() )
-    {
-        aAlpha = GetMask();
-        aAlpha.Replace( 0, cTrans );
     }
     else
     {
@@ -1592,10 +1443,9 @@ void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
 void BitmapEx::CombineMaskOr(Color maskColor, sal_uInt8 nTol)
 {
     Bitmap aNewMask = maBitmap.CreateMask( maskColor, nTol );
-    if ( IsTransparent() )
-         aNewMask.CombineSimple( maMask, BmpCombine::Or );
-    maMask = aNewMask;
-    meTransparent = TransparentType::Bitmap;
+    if ( IsAlpha() )
+         aNewMask.CombineSimple( maAlphaMask, BmpCombine::Or );
+    maAlphaMask = aNewMask;
 }
 
 /**
@@ -1628,7 +1478,7 @@ void  BitmapEx::GetColorModel(css::uno::Sequence< sal_Int32 >& rRGBPalette,
                 *pTmp |= sal_Int32(0x000000ffL);
             }
 
-            if( IsTransparent() )
+            if( IsAlpha() )
             {
                 // append transparent entry
                 *pTmp = sal_Int32(0xffffff00L);

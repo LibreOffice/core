@@ -468,17 +468,7 @@ void OutputDevice::SetBackground( const Wallpaper& rBackground )
             if( bitmap.IsAlpha())
                 mpAlphaVDev->SetBackground( Wallpaper( BitmapEx( Bitmap( bitmap.GetAlpha()))));
             else
-            {
-                switch( bitmap.GetTransparentType())
-                {
-                    case TransparentType::NONE:
-                        mpAlphaVDev->SetBackground( Wallpaper( COL_BLACK ));
-                        break;
-                    case TransparentType::Bitmap:
-                        mpAlphaVDev->SetBackground( Wallpaper( BitmapEx( bitmap.GetMask())));
-                        break;
-                }
-            }
+                mpAlphaVDev->SetBackground( Wallpaper( COL_BLACK ));
         }
         else if( rBackground.IsGradient())
             mpAlphaVDev->SetBackground( Wallpaper( COL_BLACK ));
