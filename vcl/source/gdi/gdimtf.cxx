@@ -1780,8 +1780,6 @@ BitmapEx GDIMetaFile::ImplBmpMonoFnc( const BitmapEx& rBmpEx, const void* pBmpPa
 
     if( rBmpEx.IsAlpha() )
         return BitmapEx( aBmp, rBmpEx.GetAlpha() );
-    else if( rBmpEx.IsTransparent() )
-        return BitmapEx( aBmp, rBmpEx.GetMask() );
     else
         return BitmapEx( aBmp );
 }

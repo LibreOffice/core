@@ -40,7 +40,6 @@
 #define PNGCHUNK_IDAT 0x49444154
 #define PNGCHUNK_IEND 0x49454e44
 #define PNGCHUNK_pHYs 0x70485973
-#define PNGCHUNK_tRNS 0x74524e53
 
 namespace vcl
 {
@@ -83,7 +82,6 @@ private:
     void ImplWriteIDAT();
     sal_uLong ImplGetFilter(sal_uLong nY, sal_uLong nXStart = 0, sal_uLong nXAdd = 1);
     void ImplClearFirstScanline();
-    void ImplWriteTransparent();
     bool ImplWriteHeader();
     void ImplWritePalette();
     void ImplOpenChunk(sal_uLong nChunkType);
@@ -144,86 +142,39 @@ PNGWriterImpl::PNGWriterImpl(const BitmapEx& rBitmapEx,
     }
     mnBitsPerPixel = sal_uInt8(vcl::pixelFormatBitCount(aBmp.getPixelFormat()));
 
-    if (aBitmapEx.IsTransparent())
+    if (aBitmapEx.IsAlpha())
     {
-        if (mnBitsPerPixel <= 8 && aBitmapEx.IsAlpha())
+        if (mnBitsPerPixel <= 8)
         {
             aBmp.Convert(BmpConversion::N24Bit);
             mnBitsPerPixel = 24;
         }
 
-        if (mnBitsPerPixel <= 8) // transparent palette
+        mpAccess = Bitmap::ScopedReadAccess(aBmp); // true RGB with alphachannel
+        if (mpAccess)
         {
-            aBmp.Convert(BmpConversion::N8BitTrans);
-            aBmp.Replace(aBitmapEx.GetMask(), BMP_COL_TRANS);
-            mnBitsPerPixel = 8;
-            mpAccess = Bitmap::ScopedReadAccess(aBmp);
-            if (mpAccess)
+            mbTrueAlpha = true;
+            AlphaMask aMask(aBitmapEx.GetAlpha());
+            mpMaskAccess = aMask.AcquireReadAccess();
+            if (mpMaskAccess)
             {
                 if (ImplWriteHeader())
                 {
                     ImplWritepHYs(aBitmapEx);
-                    ImplWritePalette();
-                    ImplWriteTransparent();
                     ImplWriteIDAT();
                 }
-                mpAccess.reset();
+                aMask.ReleaseAccess(mpMaskAccess);
+                mpMaskAccess = nullptr;
             }
             else
             {
                 mbStatus = false;
             }
+            mpAccess.reset();
         }
         else
         {
-            mpAccess = Bitmap::ScopedReadAccess(aBmp); // true RGB with alphachannel
-            if (mpAccess)
-            {
-                mbTrueAlpha = aBitmapEx.IsAlpha();
-                if (mbTrueAlpha)
-                {
-                    AlphaMask aMask(aBitmapEx.GetAlpha());
-                    mpMaskAccess = aMask.AcquireReadAccess();
-                    if (mpMaskAccess)
-                    {
-                        if (ImplWriteHeader())
-                        {
-                            ImplWritepHYs(aBitmapEx);
-                            ImplWriteIDAT();
-                        }
-                        aMask.ReleaseAccess(mpMaskAccess);
-                        mpMaskAccess = nullptr;
-                    }
-                    else
-                    {
-                        mbStatus = false;
-                    }
-                }
-                else
-                {
-                    Bitmap aMask(aBitmapEx.GetMask());
-                    mpMaskAccess = aMask.AcquireReadAccess();
-                    if (mpMaskAccess)
-                    {
-                        if (ImplWriteHeader())
-                        {
-                            ImplWritepHYs(aBitmapEx);
-                            ImplWriteIDAT();
-                        }
-                        Bitmap::ReleaseAccess(mpMaskAccess);
-                        mpMaskAccess = nullptr;
-                    }
-                    else
-                    {
-                        mbStatus = false;
-                    }
-                }
-                mpAccess.reset();
-            }
-            else
-            {
-                mbStatus = false;
-            }
+            mbStatus = false;
         }
     }
     else
@@ -337,19 +288,6 @@ void PNGWriterImpl::ImplWritePalette()
         *pTmp++ = rColor.GetBlue();
     }
     ImplWriteChunk(pTempBuf.get(), nCount * 3);
-}
-
-void PNGWriterImpl::ImplWriteTransparent()
-{
-    const sal_uLong nTransIndex = mpAccess->GetBestPaletteIndex(BMP_COL_TRANS);
-
-    ImplOpenChunk(PNGCHUNK_tRNS);
-
-    for (sal_uLong n = 0; n <= nTransIndex; n++)
-    {
-        ImplWriteChunk((nTransIndex == n) ? static_cast<sal_uInt8>(0x0)
-                                          : static_cast<sal_uInt8>(0xff));
-    }
 }
 
 void PNGWriterImpl::ImplWritepHYs(const BitmapEx& rBmpEx)
