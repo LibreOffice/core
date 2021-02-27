@@ -659,8 +659,6 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
                         const BitmapEx& rBitmapEx = rContext.m_pGraphic->GetBitmapExRef();
                         Bitmap& rBitmap = const_cast<Bitmap&>(rBitmapEx.GetBitmap());
                         rContext.m_pAccess = std::make_unique<BitmapScopedWriteAccess>(rBitmap);
-                        // The png reader either uses only Bitmap or Bitmap+AlphaMask.
-                        assert(rBitmapEx.IsAlpha() || !rBitmapEx.IsTransparent());
                         if(rBitmapEx.IsAlpha())
                         {
                             // The separate alpha bitmap causes a number of complications. Not only

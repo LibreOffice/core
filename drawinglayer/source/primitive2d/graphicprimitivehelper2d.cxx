@@ -256,9 +256,9 @@ namespace drawinglayer::primitive2d
                         case Disposal::Not:
                         {
                             maVirtualDevice->DrawBitmapEx(rAnimationBitmap.maPositionPixel, rAnimationBitmap.maBitmapEx);
-                            Bitmap aMask = rAnimationBitmap.maBitmapEx.GetMask();
+                            Bitmap aAlphaMask = rAnimationBitmap.maBitmapEx.GetAlpha();
 
-                            if (aMask.IsEmpty())
+                            if (aAlphaMask.IsEmpty())
                             {
                                 const Point aEmpty;
                                 const ::tools::Rectangle aRect(aEmpty, maVirtualDeviceMask->GetOutputSizePixel());
@@ -267,7 +267,7 @@ namespace drawinglayer::primitive2d
                             }
                             else
                             {
-                                BitmapEx aExpandVisibilityMask(aMask, aMask);
+                                BitmapEx aExpandVisibilityMask(aAlphaMask, aAlphaMask);
                                 maVirtualDeviceMask->DrawBitmapEx(rAnimationBitmap.maPositionPixel, aExpandVisibilityMask);
                             }
 
@@ -276,7 +276,7 @@ namespace drawinglayer::primitive2d
                         case Disposal::Back:
                         {
                             // #i70772# react on no mask, for primitives, too.
-                            const Bitmap & rMask(rAnimationBitmap.maBitmapEx.GetMask());
+                            const Bitmap & rMask(rAnimationBitmap.maBitmapEx.GetAlpha());
                             const Bitmap & rContent(rAnimationBitmap.maBitmapEx.GetBitmap());
 
                             maVirtualDeviceMask->Erase();
@@ -300,7 +300,7 @@ namespace drawinglayer::primitive2d
                         case Disposal::Previous:
                         {
                             maVirtualDevice->DrawBitmapEx(rAnimationBitmap.maPositionPixel, rAnimationBitmap.maBitmapEx);
-                            BitmapEx aExpandVisibilityMask(rAnimationBitmap.maBitmapEx.GetMask(), rAnimationBitmap.maBitmapEx.GetMask());
+                            BitmapEx aExpandVisibilityMask(rAnimationBitmap.maBitmapEx.GetAlpha(), rAnimationBitmap.maBitmapEx.GetAlpha());
                             maVirtualDeviceMask->DrawBitmapEx(rAnimationBitmap.maPositionPixel, aExpandVisibilityMask);
                             break;
                         }

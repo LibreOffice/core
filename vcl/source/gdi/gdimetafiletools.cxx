@@ -171,7 +171,7 @@ namespace
         aVDev->SetFillColor( COL_WHITE);
         aVDev->SetLineColor();
 
-        if(rBitmapEx.IsTransparent())
+        if(rBitmapEx.IsAlpha())
         {
             // use given alpha channel
             aVDev->DrawBitmap(Point(0, 0), rBitmapEx.GetAlpha().GetBitmap());

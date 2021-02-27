@@ -357,7 +357,7 @@ void GalleryIconView::UserDraw(const UserDrawEvent& rUDEvt)
             ((aSize.Height() - aBitmapExSizePixel.Height()) >> 1) + rRect.Top());
         OutputDevice* pDev = rUDEvt.GetRenderContext();
 
-        if(aBitmapEx.IsTransparent())
+        if(aBitmapEx.IsAlpha())
         {
             // draw checkered background for full rectangle.
             GalleryIconView::drawTransparenceBackground(*pDev, rRect.TopLeft(), rRect.GetSize());
