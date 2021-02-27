@@ -34,13 +34,6 @@ namespace com::sun::star::rendering {
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 namespace basegfx { class BColorModifierStack; }
 
-enum class TransparentType
-{
-    NONE = 0,
-    // Color = 1, Never actually used in BitmapEx, only present for backwards compat with existing SVM files
-    Bitmap = 2
-};
-
 class SAL_WARN_UNUSED VCL_DLLPUBLIC BitmapEx
 {
 public:
@@ -69,13 +62,9 @@ public:
     void                Draw( OutputDevice* pOutDev,
                               const Point& rDestPt, const Size& rDestSize ) const;
 
-    bool                IsTransparent() const;
-    TransparentType     GetTransparentType() const { return meTransparent; }
-
     Bitmap              GetBitmap( Color aTransparentReplaceColor ) const;
     /// Gives direct access to the contained bitmap.
     const Bitmap&       GetBitmap() const;
-    Bitmap              GetMask() const;
 
     bool                IsAlpha() const;
     AlphaMask           GetAlpha() const;
@@ -459,7 +448,6 @@ public:
                             sal_uInt32& rnWidth, sal_uInt32& rnHeight, sal_uInt8& rnBitCount);
 
     SAL_DLLPRIVATE std::shared_ptr<SalBitmap> const & ImplGetBitmapSalBitmap() const { return maBitmap.ImplGetSalBitmap(); }
-    SAL_DLLPRIVATE std::shared_ptr<SalBitmap> const & ImplGetMaskSalBitmap() const { return maMask.ImplGetSalBitmap(); }
 
 
 private:
@@ -474,11 +462,8 @@ private:
     void  loadFromIconTheme( const OUString& rIconName );
 
     Bitmap              maBitmap;
-    Bitmap              maMask;
+    Bitmap              maAlphaMask;
     Size                maBitmapSize;
-    TransparentType     meTransparent;
-    bool                mbAlpha;
-
 };
 
 

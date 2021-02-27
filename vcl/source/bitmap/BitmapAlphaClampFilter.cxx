@@ -15,7 +15,7 @@
 
 BitmapEx BitmapAlphaClampFilter::execute(BitmapEx const& rBitmapEx) const
 {
-    if (!rBitmapEx.IsTransparent())
+    if (!rBitmapEx.IsAlpha())
         return rBitmapEx;
 
     AlphaMask aBitmapAlpha(rBitmapEx.GetAlpha());

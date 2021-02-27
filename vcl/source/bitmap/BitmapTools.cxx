@@ -341,22 +341,19 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
 
     // differentiate mask and alpha channel (on-off
     // vs. multi-level transparency)
-    if( rBitmap.IsTransparent() )
+    if( rBitmap.IsAlpha() )
     {
-        if( rBitmap.IsAlpha() )
-            aSrcAlpha = rBitmap.GetAlpha().GetBitmap();
-        else
-            aSrcAlpha = rBitmap.GetMask();
+        aSrcAlpha = rBitmap.GetAlpha().GetBitmap();
     }
 
     Bitmap::ScopedReadAccess pReadAccess( aSrcBitmap );
-    Bitmap::ScopedReadAccess pAlphaReadAccess( rBitmap.IsTransparent() ?
+    Bitmap::ScopedReadAccess pAlphaReadAccess( rBitmap.IsAlpha() ?
                                              aSrcAlpha.AcquireReadAccess() :
                                              nullptr,
                                              aSrcAlpha );
 
     if( pReadAccess.get() == nullptr ||
-        (pAlphaReadAccess.get() == nullptr && rBitmap.IsTransparent()) )
+        (pAlphaReadAccess.get() == nullptr && rBitmap.IsAlpha()) )
     {
         // TODO(E2): Error handling!
         ENSURE_OR_THROW( false,
@@ -368,29 +365,15 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
     // paletted 1-bit masks).
     sal_uInt8 aAlphaMap[256];
 
-    if( rBitmap.IsTransparent() )
+    if( rBitmap.IsAlpha() )
     {
-        if( rBitmap.IsAlpha() )
-        {
-            // source already has alpha channel - 1:1 mapping,
-            // i.e. aAlphaMap[0]=0,...,aAlphaMap[255]=255.
-            sal_uInt8  val=0;
-            sal_uInt8* pCur=aAlphaMap;
-            sal_uInt8* const pEnd=&aAlphaMap[256];
-            while(pCur != pEnd)
-                *pCur++ = val++;
-        }
-        else
-        {
-            // mask transparency - determine used palette colors
-            const BitmapColor& rCol0( pAlphaReadAccess->GetPaletteColor( 0 ) );
-            const BitmapColor& rCol1( pAlphaReadAccess->GetPaletteColor( 1 ) );
-
-            // shortcut for true luminance calculation
-            // (assumes that palette is grey-level)
-            aAlphaMap[0] = rCol0.GetRed();
-            aAlphaMap[1] = rCol1.GetRed();
-        }
+        // source already has alpha channel - 1:1 mapping,
+        // i.e. aAlphaMap[0]=0,...,aAlphaMap[255]=255.
+        sal_uInt8  val=0;
+        sal_uInt8* pCur=aAlphaMap;
+        sal_uInt8* const pEnd=&aAlphaMap[256];
+        while(pCur != pEnd)
+            *pCur++ = val++;
     }
     // else: mapping table is not used
 
@@ -428,7 +411,7 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
             {
                 // differentiate mask and alpha channel (on-off
                 // vs. multi-level transparency)
-                if( rBitmap.IsTransparent() )
+                if( rBitmap.IsAlpha() )
                 {
                     Scanline pScan = pWriteAccess->GetScanline( y );
                     Scanline pScanAlpha = pAlphaWriteAccess->GetScanline( y );
@@ -499,10 +482,6 @@ void DrawAlphaBitmapAndAlphaGradient(BitmapEx & rBitmapEx, bool bFixedTransparen
     if(rBitmapEx.IsAlpha())
     {
         aOldMask = rBitmapEx.GetAlpha();
-    }
-    else if(TransparentType::Bitmap == rBitmapEx.GetTransparentType())
-    {
-        aOldMask = rBitmapEx.GetMask();
     }
 
     {
@@ -580,55 +559,43 @@ void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const BitmapEx& rBi
     pVDev->EnableMapMode( false );
     const Bitmap aVDevMask(pVDev->GetBitmap(Point(), aSizePixel));
 
-    if(aBmpEx.IsTransparent())
+    if(aBmpEx.IsAlpha())
     {
         // bitmap already uses a Mask or Alpha, we need to blend that with
-        // the new masking in pVDev
-        if(aBmpEx.IsAlpha())
+        // the new masking in pVDev.
+        // need to blend in AlphaMask quality (8Bit)
+        AlphaMask fromVDev(aVDevMask);
+        AlphaMask fromBmpEx(aBmpEx.GetAlpha());
+        AlphaMask::ScopedReadAccess pR(fromVDev);
+        AlphaScopedWriteAccess pW(fromBmpEx);
+
+        if(pR && pW)
         {
-            // need to blend in AlphaMask quality (8Bit)
-            AlphaMask fromVDev(aVDevMask);
-            AlphaMask fromBmpEx(aBmpEx.GetAlpha());
-            AlphaMask::ScopedReadAccess pR(fromVDev);
-            AlphaScopedWriteAccess pW(fromBmpEx);
+            const tools::Long nWidth(std::min(pR->Width(), pW->Width()));
+            const tools::Long nHeight(std::min(pR->Height(), pW->Height()));
 
-            if(pR && pW)
+            for(tools::Long nY(0); nY < nHeight; nY++)
             {
-                const tools::Long nWidth(std::min(pR->Width(), pW->Width()));
-                const tools::Long nHeight(std::min(pR->Height(), pW->Height()));
-
-                for(tools::Long nY(0); nY < nHeight; nY++)
+                Scanline pScanlineR = pR->GetScanline( nY );
+                Scanline pScanlineW = pW->GetScanline( nY );
+                for(tools::Long nX(0); nX < nWidth; nX++)
                 {
-                    Scanline pScanlineR = pR->GetScanline( nY );
-                    Scanline pScanlineW = pW->GetScanline( nY );
-                    for(tools::Long nX(0); nX < nWidth; nX++)
-                    {
-                        const sal_uInt8 nIndR(pR->GetIndexFromData(pScanlineR, nX));
-                        const sal_uInt8 nIndW(pW->GetIndexFromData(pScanlineW, nX));
+                    const sal_uInt8 nIndR(pR->GetIndexFromData(pScanlineR, nX));
+                    const sal_uInt8 nIndW(pW->GetIndexFromData(pScanlineW, nX));
 
-                        // these values represent transparency (0 == no, 255 == fully transparent),
-                        // so to blend these we have to multiply the inverse (opacity)
-                        // and re-invert the result to transparence
-                        const sal_uInt8 nCombined(0x00ff - (((0x00ff - nIndR) * (0x00ff - nIndW)) >> 8));
+                    // these values represent transparency (0 == no, 255 == fully transparent),
+                    // so to blend these we have to multiply the inverse (opacity)
+                    // and re-invert the result to transparence
+                    const sal_uInt8 nCombined(0x00ff - (((0x00ff - nIndR) * (0x00ff - nIndW)) >> 8));
 
-                        pW->SetPixelOnData(pScanlineW, nX, BitmapColor(nCombined));
-                    }
+                    pW->SetPixelOnData(pScanlineW, nX, BitmapColor(nCombined));
                 }
             }
-
-            pR.reset();
-            pW.reset();
-            aBmpEx = BitmapEx(aBmpEx.GetBitmap(), fromBmpEx);
         }
-        else
-        {
-            // need to blend in Mask quality (1Bit)
-            Bitmap aMask(aVDevMask.CreateMask(COL_WHITE));
 
-            aMask.CombineSimple( rBitmap.GetMask(), BmpCombine::And );
-
-            aBmpEx = BitmapEx( rBitmap.GetBitmap(), aMask );
-        }
+        pR.reset();
+        pW.reset();
+        aBmpEx = BitmapEx(aBmpEx.GetBitmap(), fromBmpEx);
     }
     else
     {
@@ -645,12 +612,6 @@ css::uno::Sequence< sal_Int8 > GetMaskDIB(BitmapEx const & aBmpEx)
     {
         SvMemoryStream aMem;
         WriteDIB(aBmpEx.GetAlpha().GetBitmap(), aMem, false, true);
-        return css::uno::Sequence< sal_Int8 >( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
-    }
-    else if ( aBmpEx.IsTransparent() )
-    {
-        SvMemoryStream aMem;
-        WriteDIB(aBmpEx.GetMask(), aMem, false, true);
         return css::uno::Sequence< sal_Int8 >( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
     }
 
@@ -712,7 +673,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
     tools::Long nX, nY;
     bool bIsAlpha = false;
 
-    if( aBmpEx.IsTransparent() || aBmpEx.IsAlpha() )
+    if( aBmpEx.IsAlpha() )
         pAlphaReadAcc = aAlpha.AcquireReadAccess();
 
     data = static_cast<unsigned char*>(malloc( nWidth*nHeight*4 ));
@@ -1007,7 +968,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
     {
         bool bRet(false);
 
-        if(!rBitmapEx.IsTransparent())
+        if(!rBitmapEx.IsAlpha())
         {
             Bitmap aBitmap(rBitmapEx.GetBitmap());
 
@@ -1162,7 +1123,7 @@ bool convertBitmap32To24Plus8(BitmapEx const & rInput, BitmapEx & rResult)
             }
         }
     }
-    if (rInput.IsTransparent())
+    if (rInput.IsAlpha())
         rResult = BitmapEx(aResultBitmap, rInput.GetAlpha());
     else
         rResult = BitmapEx(aResultBitmap, aResultAlpha);

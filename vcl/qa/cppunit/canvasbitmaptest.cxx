@@ -102,7 +102,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
                             sal_Int32(200), xBmp->getSize().Height);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "alpha state mismatch",
-                            aContainedBmpEx.IsTransparent(), bool(xBmp->hasAlpha()));
+                            aContainedBmpEx.IsAlpha(), bool(xBmp->hasAlpha()));
 
     CPPUNIT_ASSERT_MESSAGE( "getScaledBitmap() failed",
                             xBmp->getScaledBitmap( geometry::RealSize2D(500,500), false ).is());
@@ -111,7 +111,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     uno::Sequence<sal_Int8> aPixelData = xBmp->getData(aLayout, geometry::IntegerRectangle2D(0,0,1,1));
 
     const sal_Int32 nExpectedBitsPerPixel(
-        (aContainedBmpEx.IsTransparent() ? std::max(8,nDepth)+8 : nDepth) + extraBpp);
+        (aContainedBmpEx.IsAlpha() ? std::max(8,nDepth)+8 : nDepth) + extraBpp);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "# scanlines not 1",
                             static_cast<sal_Int32>(1), aLayout.ScanLines);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "# scanline bytes mismatch",
@@ -164,7 +164,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
         "First pixel is not white", 1.0, pRGBStart[0].Blue, 1E-12);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
         "Second pixel is not opaque", 1.0, pARGBStart[1].Alpha, 1E-12);
-    if( aContainedBmpEx.IsTransparent() )
+    if( aContainedBmpEx.IsAlpha() )
     {
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "First pixel is not fully transparent",
                                 0.0, pARGBStart[0].Alpha);
@@ -235,7 +235,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     CPPUNIT_ASSERT_MESSAGE( "Green pixel from bitmap mismatch with manually converted green pixel",
                             bool(aPixel3 == aPixel4));
 
-    if( !aContainedBmpEx.IsTransparent() )
+    if( !aContainedBmpEx.IsAlpha() )
     {
         aPixel3 = xBmp->convertIntegerFromRGB( aRGBColor );
         CPPUNIT_ASSERT_MESSAGE( "Green pixel from bitmap mismatch with manually RGB-converted green pixel",
@@ -675,7 +675,7 @@ void CanvasBitmapTest::runTest()
 
         checkCanvasBitmap( xBmp, "single bitmap", nDepth );
 
-        Bitmap aMask(Size(200,200), vcl::PixelFormat::N1_BPP);
+        Bitmap aMask(Size(200,200), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
         aMask.Erase(COL_WHITE);
         {
             BitmapScopedWriteAccess pAcc(aMask);
@@ -683,9 +683,9 @@ void CanvasBitmapTest::runTest()
             {
                 pAcc->SetFillColor(COL_BLACK);
                 pAcc->FillRect(tools::Rectangle(0,0,100,100));
-                pAcc->SetPixel(0,0,BitmapColor(1));
+                pAcc->SetPixel(0,0,BitmapColor(255));
                 pAcc->SetPixel(0,1,BitmapColor(0));
-                pAcc->SetPixel(0,2,BitmapColor(1));
+                pAcc->SetPixel(0,2,BitmapColor(255));
             }
         }
 
@@ -719,8 +719,8 @@ void CanvasBitmapTest::runTest()
         new TestBitmap( geometry::IntegerSize2D(10,10), true ));
 
     BitmapEx aBmp = vcl::unotools::bitmapExFromXBitmap(xTestBmp);
-    CPPUNIT_ASSERT_MESSAGE( "Palette bitmap is transparent",
-                            !aBmp.IsTransparent());
+    CPPUNIT_ASSERT_MESSAGE( "Palette bitmap is alpha",
+                            !aBmp.IsAlpha());
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap does not have size (10,10)",
                             Size(10,10), aBmp.GetSizePixel());
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap does not have the expected pixel format",
@@ -745,8 +745,6 @@ void CanvasBitmapTest::runTest()
     xTestBmp.set( new TestBitmap( geometry::IntegerSize2D(10,10), false ));
 
     aBmp = vcl::unotools::bitmapExFromXBitmap(xTestBmp);
-    CPPUNIT_ASSERT_MESSAGE( "Palette bitmap is not transparent",
-                            aBmp.IsTransparent());
     CPPUNIT_ASSERT_MESSAGE( "Palette bitmap has no alpha",
                             aBmp.IsAlpha());
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap does not have size (10,10)",
