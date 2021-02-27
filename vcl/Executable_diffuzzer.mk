@@ -42,7 +42,7 @@ $(eval $(call gb_Executable_add_exception_objects,diffuzzer,\
 ))
 
 $(eval $(call gb_Executable_add_libs,diffuzzer,\
-	-lFuzzingEngine \
+	$(LIB_FUZZING_ENGINE) \
 ))
 
 # vim: set noet sw=4 ts=4:
