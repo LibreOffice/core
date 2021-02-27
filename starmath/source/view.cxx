@@ -75,8 +75,6 @@
 #include "accessibility.hxx"
 #include <ElementsDockingWindow.hxx>
 #include <helpids.h>
-#include <cassert>
-#include <memory>
 
 #define MINZOOM sal_uInt16(25)
 #define MAXZOOM sal_uInt16(800)

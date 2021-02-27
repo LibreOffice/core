@@ -60,8 +60,6 @@ one go*/
 #include <svx/strings.hrc>
 #include <tools/diagnose_ex.h>
 
-#include <memory>
-
 #include <mathmlattr.hxx>
 #include <xparsmlbase.hxx>
 #include <mathmlimport.hxx>

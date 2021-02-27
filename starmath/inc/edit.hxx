@@ -23,7 +23,6 @@
 #include <vcl/idle.hxx>
 #include <vcl/transfer.hxx>
 #include <editeng/editdata.hxx>
-#include <memory>
 
 class SmDocShell;
 class SmViewShell;

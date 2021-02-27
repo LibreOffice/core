@@ -6,7 +6,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <memory>
 #include <cursor.hxx>
 #include <visitors.hxx>
 #include <document.hxx>
@@ -14,7 +13,6 @@
 #include <comphelper/string.hxx>
 #include <editeng/editeng.hxx>
 #include <osl/diagnose.h>
-#include <cassert>
 
 void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMoveAnchor){
     SmCaretPosGraphEntry* NewPos = nullptr;

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
 #include <ElementsDockingWindow.hxx>
 
 #include <starmath.hrc>
@@ -26,7 +25,6 @@
 #include <view.hxx>
 #include <visitors.hxx>
 #include <document.hxx>
-#include <node.hxx>
 #include "uiobject.hxx"
 #include <strings.hxx>
 

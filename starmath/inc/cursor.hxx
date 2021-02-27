@@ -9,12 +9,7 @@
 #ifndef INCLUDED_STARMATH_INC_CURSOR_HXX
 #define INCLUDED_STARMATH_INC_CURSOR_HXX
 
-#include "node.hxx"
 #include "caret.hxx"
-
-#include <cassert>
-#include <list>
-#include <memory>
 
 /** Factor to multiple the squared horizontal distance with
  * Used for Up and Down movement.

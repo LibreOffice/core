@@ -20,8 +20,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <cassert>
-
 #include <comphelper/string.hxx>
 #include <o3tl/temporary.hxx>
 #include <svl/eitem.hxx>
