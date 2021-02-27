@@ -23,7 +23,6 @@
 #include <vcl/outdev.hxx>
 #include <vcl/customweld.hxx>
 #include "symbol.hxx"
-#include <memory>
 
 class SubsetMap;
 class SmFormat;

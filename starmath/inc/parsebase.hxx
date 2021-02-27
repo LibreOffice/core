@@ -25,11 +25,7 @@
 #define INCLUDED_STARMATH_INC_PARSEBASE_HXX
 
 #include <unotools/charclass.hxx>
-#include <memory>
-#include <set>
-#include <vector>
 
-#include "token.hxx"
 #include "node.hxx"
 
 #define DEPTH_LIMIT 1024

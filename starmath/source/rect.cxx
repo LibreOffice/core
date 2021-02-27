@@ -29,8 +29,6 @@
 #include <types.hxx>
 #include <smmod.hxx>
 
-#include <cassert>
-
 namespace {
 
 bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,

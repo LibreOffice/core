@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cassert>
-#include <memory>
-#include <vector>
-
 #include <svl/itemset.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/i18n/KParseTokens.hpp>
 #include <com/sun/star/i18n/KParseType.hpp>
@@ -25,16 +24,12 @@
 #include <tools/lineend.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
-#include <node.hxx>
 #include <parse5.hxx>
 #include <strings.hrc>
 #include <smmod.hxx>
 #include <cfgitem.hxx>
-#include <cassert>
-#include <stack>
 #include <starmathdatabase.hxx>
 
 using namespace ::com::sun::star::i18n;
