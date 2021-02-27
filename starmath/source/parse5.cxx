@@ -39,32 +39,6 @@
 
 using namespace ::com::sun::star::i18n;
 
-const char* starmathdatabase::SmParseErrorDesc[] = {
-    // clang-format off
-    RID_ERR_NONE,
-    RID_ERR_UNEXPECTEDCHARACTER,
-    RID_ERR_UNEXPECTEDTOKEN,
-    RID_ERR_POUNDEXPECTED,
-    RID_ERR_COLOREXPECTED,
-    RID_ERR_LGROUPEXPECTED,
-    RID_ERR_RGROUPEXPECTED,
-    RID_ERR_LBRACEEXPECTED,
-    RID_ERR_RBRACEEXPECTED,
-    RID_ERR_PARENTMISMATCH,
-    RID_ERR_RIGHTEXPECTED,
-    RID_ERR_FONTEXPECTED,
-    RID_ERR_SIZEEXPECTED,
-    RID_ERR_DOUBLEALIGN,
-    RID_ERR_DOUBLESUBSUPSCRIPT,
-    RID_ERR_NUMBEREXPECTED
-    // clang-format on
-};
-
-OUString starmathdatabase::getParseErrorDesc(SmParseError err)
-{
-    return SmResId(starmathdatabase::SmParseErrorDesc[static_cast<uint_fast8_t>(err)]);
-}
-
 //Definition of math keywords
 const SmTokenTableEntry aTokenTable[]
     = { { u"abs", TABS, '\0', TG::UnOper, 13 },
