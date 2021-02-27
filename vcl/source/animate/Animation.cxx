@@ -113,7 +113,7 @@ bool Animation::IsTransparent() const
     // as the application (?) does not invalidate on non-transparent
     // graphics due to performance reasons.
 
-    return maBitmapEx.IsTransparent()
+    return maBitmapEx.IsAlpha()
            || std::any_of(maList.begin(), maList.end(),
                           [&aRect](const std::unique_ptr<AnimationBitmap>& pAnim) -> bool {
                               return pAnim->meDisposal == Disposal::Back
