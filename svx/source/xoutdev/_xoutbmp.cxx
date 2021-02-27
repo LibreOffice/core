@@ -105,219 +105,207 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                                  const Size* pMtfSize_100TH_MM,
                                  const css::uno::Sequence< css::beans::PropertyValue >* pFilterData )
 {
-    if( rGraphic.GetType() != GraphicType::NONE )
+    if( rGraphic.GetType() == GraphicType::NONE )
+        return ERRCODE_NONE;
+
+    INetURLObject   aURL( rFileName );
+    Graphic         aGraphic;
+    OUString        aExt;
+    GraphicFilter&  rFilter = GraphicFilter::GetGraphicFilter();
+    ErrCode         nErr = ERRCODE_GRFILTER_FILTERERROR;
+    bool            bTransparent = rGraphic.IsTransparent(), bAnimated = rGraphic.IsAnimated();
+
+    DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "XOutBitmap::WriteGraphic(...): invalid URL" );
+
+    // calculate correct file name
+    if( !( nFlags & XOutFlags::DontExpandFilename ) )
     {
-        INetURLObject   aURL( rFileName );
-        Graphic         aGraphic;
-        OUString        aExt;
-        GraphicFilter&  rFilter = GraphicFilter::GetGraphicFilter();
-        ErrCode         nErr = ERRCODE_GRFILTER_FILTERERROR;
-        bool            bTransparent = rGraphic.IsTransparent(), bAnimated = rGraphic.IsAnimated();
+        OUString aStr( OUString::number( rGraphic.GetChecksum(), 16 ) );
+        if ( aStr[0] == '-' )
+            aStr = OUString::Concat("m") + aStr.subView(1);
+        OUString aName = aURL.getBase() + "_" + aURL.getExtension() + "_" + aStr;
+        aURL.setBase( aName );
+    }
 
-        DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "XOutBitmap::WriteGraphic(...): invalid URL" );
+    // #i121128# use shortcut to write Vector Graphic Data data in original form (if possible)
+    auto const & rVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
 
-        // calculate correct file name
-        if( !( nFlags & XOutFlags::DontExpandFilename ) )
+    if (rVectorGraphicDataPtr && rVectorGraphicDataPtr->getBinaryDataContainer().getSize())
+    {
+        const bool bIsSvg(rFilterName.equalsIgnoreAsciiCase("svg") && VectorGraphicDataType::Svg == rVectorGraphicDataPtr->getType());
+        const bool bIsWmf(rFilterName.equalsIgnoreAsciiCase("wmf") && VectorGraphicDataType::Wmf == rVectorGraphicDataPtr->getType());
+        const bool bIsEmf(rFilterName.equalsIgnoreAsciiCase("emf") && VectorGraphicDataType::Emf == rVectorGraphicDataPtr->getType());
+        const bool bIsPdf(rFilterName.equalsIgnoreAsciiCase("pdf") && VectorGraphicDataType::Pdf == rVectorGraphicDataPtr->getType());
+
+        if (bIsSvg || bIsWmf || bIsEmf || bIsPdf)
         {
-            OUString aStr( OUString::number( rGraphic.GetChecksum(), 16 ) );
-            if ( aStr[0] == '-' )
-                aStr = OUString::Concat("m") + aStr.subView(1);
-            OUString aName = aURL.getBase() + "_" + aURL.getExtension() + "_" + aStr;
-            aURL.setBase( aName );
-        }
-
-        // #i121128# use shortcut to write Vector Graphic Data data in original form (if possible)
-        auto const & rVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
-
-        if (rVectorGraphicDataPtr && rVectorGraphicDataPtr->getBinaryDataContainer().getSize())
-        {
-            const bool bIsSvg(rFilterName.equalsIgnoreAsciiCase("svg") && VectorGraphicDataType::Svg == rVectorGraphicDataPtr->getType());
-            const bool bIsWmf(rFilterName.equalsIgnoreAsciiCase("wmf") && VectorGraphicDataType::Wmf == rVectorGraphicDataPtr->getType());
-            const bool bIsEmf(rFilterName.equalsIgnoreAsciiCase("emf") && VectorGraphicDataType::Emf == rVectorGraphicDataPtr->getType());
-            const bool bIsPdf(rFilterName.equalsIgnoreAsciiCase("pdf") && VectorGraphicDataType::Pdf == rVectorGraphicDataPtr->getType());
-
-            if (bIsSvg || bIsWmf || bIsEmf || bIsPdf)
+            if (!(nFlags & XOutFlags::DontAddExtension))
             {
-                if (!(nFlags & XOutFlags::DontAddExtension))
-                {
-                    aURL.setExtension(rFilterName);
-                }
-
-                rFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-                SfxMedium aMedium(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE | StreamMode::SHARE_DENYNONE | StreamMode::TRUNC);
-                SvStream* pOStm = aMedium.GetOutStream();
-
-                if (pOStm)
-                {
-                    auto & rDataContainer = rVectorGraphicDataPtr->getBinaryDataContainer();
-                    pOStm->WriteBytes(rDataContainer.getData(), rDataContainer.getSize());
-                    aMedium.Commit();
-
-                    if (!aMedium.GetError())
-                    {
-                        nErr = ERRCODE_NONE;
-                    }
-                }
-            }
-        }
-
-        if( ERRCODE_NONE != nErr )
-        {
-            if( ( nFlags & XOutFlags::UseNativeIfPossible ) &&
-                !( nFlags & XOutFlags::MirrorHorz ) &&
-                !( nFlags & XOutFlags::MirrorVert ) &&
-                ( rGraphic.GetType() != GraphicType::GdiMetafile ) && rGraphic.IsGfxLink() )
-            {
-                // try to write native link
-                const GfxLink aGfxLink( rGraphic.GetGfxLink() );
-
-                switch( aGfxLink.GetType() )
-                {
-                    case GfxLinkType::NativeGif: aExt = FORMAT_GIF; break;
-
-                    // #i15508# added BMP type for better exports (no call/trigger found, prob used in HTML export)
-                    case GfxLinkType::NativeBmp: aExt = FORMAT_BMP; break;
-
-                    case GfxLinkType::NativeJpg: aExt = FORMAT_JPG; break;
-                    case GfxLinkType::NativePng: aExt = FORMAT_PNG; break;
-
-                    default:
-                    break;
-                }
-
-                // tdf#60684: use native format if possible but it must correspond to filter name
-                // or no specific format has been required
-                // without this, you may save for example file with png extension but jpg content
-                if( !aExt.isEmpty() && (aExt == rFilterName || rFilterName.isEmpty()) )
-                {
-                    if( !(nFlags & XOutFlags::DontAddExtension) )
-                        aURL.setExtension( aExt );
-                    rFileName = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-
-                    SfxMedium   aMedium(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE | StreamMode::SHARE_DENYNONE | StreamMode::TRUNC);
-                    SvStream*   pOStm = aMedium.GetOutStream();
-
-                    if( pOStm && aGfxLink.GetDataSize() && aGfxLink.GetData() )
-                    {
-                        pOStm->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
-                        aMedium.Commit();
-
-                        if( !aMedium.GetError() )
-                            nErr = ERRCODE_NONE;
-                    }
-                }
-            }
-        }
-
-        if( ERRCODE_NONE != nErr )
-        {
-            OUString  aFilter( rFilterName );
-            bool    bWriteTransGrf = ( aFilter.equalsIgnoreAsciiCase( "transgrf" ) ) ||
-                                     ( aFilter.equalsIgnoreAsciiCase( "gif" ) ) ||
-                                     ( nFlags & XOutFlags::UseGifIfPossible ) ||
-                                     ( ( nFlags & XOutFlags::UseGifIfSensible ) && ( bAnimated || bTransparent ) );
-
-            // get filter and extension
-            if( bWriteTransGrf )
-                aFilter = FORMAT_GIF;
-
-            sal_uInt16 nFilter = rFilter.GetExportFormatNumberForShortName( aFilter );
-
-            if( GRFILTER_FORMAT_NOTFOUND == nFilter )
-            {
-                nFilter = rFilter.GetExportFormatNumberForShortName( FORMAT_PNG );
-
-                if( GRFILTER_FORMAT_NOTFOUND == nFilter )
-                    nFilter = rFilter.GetExportFormatNumberForShortName( FORMAT_BMP );
+                aURL.setExtension(rFilterName);
             }
 
-            if( GRFILTER_FORMAT_NOTFOUND != nFilter )
+            rFileName = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+            SfxMedium aMedium(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE | StreamMode::SHARE_DENYNONE | StreamMode::TRUNC);
+            SvStream* pOStm = aMedium.GetOutStream();
+
+            if (pOStm)
             {
-                aExt = rFilter.GetExportFormatShortName( nFilter ).toAsciiLowerCase();
+                auto & rDataContainer = rVectorGraphicDataPtr->getBinaryDataContainer();
+                pOStm->WriteBytes(rDataContainer.getData(), rDataContainer.getSize());
+                aMedium.Commit();
 
-                if( bWriteTransGrf )
+                if (!aMedium.GetError())
+                    return ERRCODE_NONE;
+            }
+        }
+    }
+
+    if( ( nFlags & XOutFlags::UseNativeIfPossible ) &&
+        !( nFlags & XOutFlags::MirrorHorz ) &&
+        !( nFlags & XOutFlags::MirrorVert ) &&
+        ( rGraphic.GetType() != GraphicType::GdiMetafile ) && rGraphic.IsGfxLink() )
+    {
+        // try to write native link
+        const GfxLink aGfxLink( rGraphic.GetGfxLink() );
+
+        switch( aGfxLink.GetType() )
+        {
+            case GfxLinkType::NativeGif: aExt = FORMAT_GIF; break;
+
+            // #i15508# added BMP type for better exports (no call/trigger found, prob used in HTML export)
+            case GfxLinkType::NativeBmp: aExt = FORMAT_BMP; break;
+
+            case GfxLinkType::NativeJpg: aExt = FORMAT_JPG; break;
+            case GfxLinkType::NativePng: aExt = FORMAT_PNG; break;
+
+            default:
+            break;
+        }
+
+        // tdf#60684: use native format if possible but it must correspond to filter name
+        // or no specific format has been required
+        // without this, you may save for example file with png extension but jpg content
+        if( !aExt.isEmpty() && (aExt == rFilterName || rFilterName.isEmpty()) )
+        {
+            if( !(nFlags & XOutFlags::DontAddExtension) )
+                aURL.setExtension( aExt );
+            rFileName = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+
+            SfxMedium   aMedium(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE | StreamMode::SHARE_DENYNONE | StreamMode::TRUNC);
+            SvStream*   pOStm = aMedium.GetOutStream();
+
+            if( pOStm && aGfxLink.GetDataSize() && aGfxLink.GetData() )
+            {
+                pOStm->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
+                aMedium.Commit();
+
+                if( !aMedium.GetError() )
+                    return ERRCODE_NONE;
+            }
+        }
+    }
+
+    OUString  aFilter( rFilterName );
+    bool    bWriteTransGrf = ( aFilter.equalsIgnoreAsciiCase( "transgrf" ) ) ||
+                                ( aFilter.equalsIgnoreAsciiCase( "gif" ) ) ||
+                                ( nFlags & XOutFlags::UseGifIfPossible ) ||
+                                ( ( nFlags & XOutFlags::UseGifIfSensible ) && ( bAnimated || bTransparent ) );
+
+    // get filter and extension
+    if( bWriteTransGrf )
+        aFilter = FORMAT_GIF;
+
+    sal_uInt16 nFilter = rFilter.GetExportFormatNumberForShortName( aFilter );
+
+    if( GRFILTER_FORMAT_NOTFOUND == nFilter )
+    {
+        nFilter = rFilter.GetExportFormatNumberForShortName( FORMAT_PNG );
+
+        if( GRFILTER_FORMAT_NOTFOUND == nFilter )
+            nFilter = rFilter.GetExportFormatNumberForShortName( FORMAT_BMP );
+    }
+
+    if( GRFILTER_FORMAT_NOTFOUND != nFilter )
+    {
+        aExt = rFilter.GetExportFormatShortName( nFilter ).toAsciiLowerCase();
+
+        if( bWriteTransGrf )
+        {
+            if( bAnimated  )
+                aGraphic = rGraphic;
+            else
+            {
+                if( pMtfSize_100TH_MM && ( rGraphic.GetType() != GraphicType::Bitmap ) )
                 {
-                    if( bAnimated  )
-                        aGraphic = rGraphic;
-                    else
+                    ScopedVclPtrInstance< VirtualDevice > pVDev;
+                    const Size aSize(pVDev->LogicToPixel(*pMtfSize_100TH_MM, MapMode(MapUnit::Map100thMM)));
+
+                    if( pVDev->SetOutputSizePixel( aSize ) )
                     {
-                        if( pMtfSize_100TH_MM && ( rGraphic.GetType() != GraphicType::Bitmap ) )
-                        {
-                            ScopedVclPtrInstance< VirtualDevice > pVDev;
-                            const Size aSize(pVDev->LogicToPixel(*pMtfSize_100TH_MM, MapMode(MapUnit::Map100thMM)));
+                        const Wallpaper aWallpaper( pVDev->GetBackground() );
+                        const Point     aPt;
 
-                            if( pVDev->SetOutputSizePixel( aSize ) )
-                            {
-                                const Wallpaper aWallpaper( pVDev->GetBackground() );
-                                const Point     aPt;
+                        pVDev->SetBackground( Wallpaper( COL_BLACK ) );
+                        pVDev->Erase();
+                        rGraphic.Draw( pVDev.get(), aPt, aSize );
 
-                                pVDev->SetBackground( Wallpaper( COL_BLACK ) );
-                                pVDev->Erase();
-                                rGraphic.Draw( pVDev.get(), aPt, aSize );
+                        const Bitmap aBitmap( pVDev->GetBitmap( aPt, aSize ) );
 
-                                const Bitmap aBitmap( pVDev->GetBitmap( aPt, aSize ) );
+                        pVDev->SetBackground( aWallpaper );
+                        pVDev->Erase();
+                        rGraphic.Draw( pVDev.get(), aPt, aSize );
 
-                                pVDev->SetBackground( aWallpaper );
-                                pVDev->Erase();
-                                rGraphic.Draw( pVDev.get(), aPt, aSize );
-
-                                pVDev->SetRasterOp( RasterOp::Xor );
-                                pVDev->DrawBitmap( aPt, aSize, aBitmap );
-                                aGraphic = BitmapEx( aBitmap, pVDev->GetBitmap( aPt, aSize ) );
-                            }
-                            else
-                                aGraphic = rGraphic.GetBitmapEx();
-                        }
-                        else
-                            aGraphic = rGraphic.GetBitmapEx();
-                    }
-                }
-                else
-                {
-                    if( pMtfSize_100TH_MM && ( rGraphic.GetType() != GraphicType::Bitmap ) )
-                    {
-                        ScopedVclPtrInstance< VirtualDevice > pVDev;
-                        const Size aSize(pVDev->LogicToPixel(*pMtfSize_100TH_MM, MapMode(MapUnit::Map100thMM)));
-
-                        if( pVDev->SetOutputSizePixel( aSize ) )
-                        {
-                            rGraphic.Draw( pVDev.get(), Point(), aSize );
-                            aGraphic = BitmapEx(pVDev->GetBitmap(Point(), aSize));
-                        }
-                        else
-                            aGraphic = rGraphic.GetBitmapEx();
+                        pVDev->SetRasterOp( RasterOp::Xor );
+                        pVDev->DrawBitmap( aPt, aSize, aBitmap );
+                        aGraphic = BitmapEx( aBitmap, pVDev->GetBitmap( aPt, aSize ) );
                     }
                     else
                         aGraphic = rGraphic.GetBitmapEx();
                 }
-
-                // mirror?
-                if( ( nFlags & XOutFlags::MirrorHorz ) || ( nFlags & XOutFlags::MirrorVert ) )
-                {
-                    BmpMirrorFlags nBmpMirrorFlags = BmpMirrorFlags::NONE;
-                    if( nFlags & XOutFlags::MirrorHorz )
-                      nBmpMirrorFlags |= BmpMirrorFlags::Horizontal;
-                    if( nFlags & XOutFlags::MirrorVert )
-                      nBmpMirrorFlags |= BmpMirrorFlags::Vertical;
-                    aGraphic = MirrorGraphic( aGraphic, nBmpMirrorFlags );
-                }
-
-                if (aGraphic.GetType() != GraphicType::NONE)
-                {
-                    if( !(nFlags & XOutFlags::DontAddExtension) )
-                        aURL.setExtension( aExt );
-                    rFileName = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-                    nErr = ExportGraphic( aGraphic, aURL, rFilter, nFilter, pFilterData );
-                }
+                else
+                    aGraphic = rGraphic.GetBitmapEx();
             }
         }
+        else
+        {
+            if( pMtfSize_100TH_MM && ( rGraphic.GetType() != GraphicType::Bitmap ) )
+            {
+                ScopedVclPtrInstance< VirtualDevice > pVDev;
+                const Size aSize(pVDev->LogicToPixel(*pMtfSize_100TH_MM, MapMode(MapUnit::Map100thMM)));
 
-        return nErr;
+                if( pVDev->SetOutputSizePixel( aSize ) )
+                {
+                    rGraphic.Draw( pVDev.get(), Point(), aSize );
+                    aGraphic = BitmapEx(pVDev->GetBitmap(Point(), aSize));
+                }
+                else
+                    aGraphic = rGraphic.GetBitmapEx();
+            }
+            else
+                aGraphic = rGraphic.GetBitmapEx();
+        }
+
+        // mirror?
+        if( ( nFlags & XOutFlags::MirrorHorz ) || ( nFlags & XOutFlags::MirrorVert ) )
+        {
+            BmpMirrorFlags nBmpMirrorFlags = BmpMirrorFlags::NONE;
+            if( nFlags & XOutFlags::MirrorHorz )
+                nBmpMirrorFlags |= BmpMirrorFlags::Horizontal;
+            if( nFlags & XOutFlags::MirrorVert )
+                nBmpMirrorFlags |= BmpMirrorFlags::Vertical;
+            aGraphic = MirrorGraphic( aGraphic, nBmpMirrorFlags );
+        }
+
+        if (aGraphic.GetType() != GraphicType::NONE)
+        {
+            if( !(nFlags & XOutFlags::DontAddExtension) )
+                aURL.setExtension( aExt );
+            rFileName = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+            nErr = ExportGraphic( aGraphic, aURL, rFilter, nFilter, pFilterData );
+        }
     }
-    else
-    {
-        return ERRCODE_NONE;
-    }
+
+    return nErr;
 }
 
 bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString, bool bAddPrefix,
