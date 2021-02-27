@@ -112,9 +112,9 @@ BitmapEx BitmapFastScaleFilter::execute(BitmapEx const& rBitmapEx) const
         }
     }
 
-    Bitmap aMask(rBitmapEx.GetMask());
+    AlphaMask aMask(rBitmapEx.GetAlpha());
 
-    if (bRet && (rBitmapEx.GetTransparentType() == TransparentType::Bitmap) && !aMask.IsEmpty())
+    if (bRet && !aMask.IsEmpty())
         bRet = aMask.Scale(maSize, BmpScaleFlag::Fast);
 
     SAL_WARN_IF(!aMask.IsEmpty() && aBitmap.GetSizePixel() != aMask.GetSizePixel(), "vcl",

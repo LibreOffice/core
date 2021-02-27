@@ -131,7 +131,7 @@ namespace dxcanvas::tools
                 return false;
             }
 
-            /** Create a chunk of raw RGBA data GDI+ Bitmap from VCL BbitmapEX
+            /** Create a chunk of raw RGBA data GDI+ Bitmap from VCL BitmapEx
              */
             RawRGBABitmap bitmapFromVCLBitmapEx( const ::BitmapEx& rBmpEx )
             {
@@ -141,9 +141,9 @@ namespace dxcanvas::tools
                 // make the local bitmap copy unique, effectively
                 // duplicating the memory used)
 
-                ENSURE_OR_THROW( rBmpEx.IsTransparent(),
+                ENSURE_OR_THROW( rBmpEx.IsAlpha(),
                                   "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
-                                  "BmpEx not transparent" );
+                                  "BmpEx has no alpha" );
 
                 // convert transparent bitmap to 32bit RGBA
                 // ========================================
@@ -166,9 +166,9 @@ namespace dxcanvas::tools
                                   "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
                                   "Unable to acquire read access to bitmap" );
 
-                if (rBmpEx.IsAlpha() || rBmpEx.GetMask().getPixelFormat() == vcl::PixelFormat::N8_BPP)
+                if( rBmpEx.IsAlpha() )
                 {
-                    Bitmap aAlpha( rBmpEx.IsAlpha() ? rBmpEx.GetAlpha().GetBitmap() : rBmpEx.GetMask());
+                    Bitmap aAlpha( rBmpEx.GetAlpha().GetBitmap() );
 
                     Bitmap::ScopedReadAccess pAlphaReadAccess( aAlpha );
 
@@ -286,10 +286,6 @@ namespace dxcanvas::tools
                 }
                 else
                 {
-                    Bitmap aMask( rBmpEx.GetMask() );
-
-                    Bitmap::ScopedReadAccess pMaskReadAccess( aMask );
-
                     // By convention, the access buffer always has
                     // one of the following formats:
 
@@ -304,35 +300,12 @@ namespace dxcanvas::tools
                     // WinSalBitmap::AcquireBuffer() sets up the
                     // buffer
 
-                    ENSURE_OR_THROW( pMaskReadAccess.get() != nullptr,
-                                      "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
-                                      "Unable to acquire read access to mask" );
-
-                    ENSURE_OR_THROW( pMaskReadAccess->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal,
-                                      "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
-                                      "Unsupported mask scanline format" );
-
                     BitmapColor     aCol;
                     int             nCurrBit;
                     const int       nMask( 1 );
                     const int       nInitialBit(7);
                     sal_uInt8*      pCurrOutput(aBmpData.maBitmapData.data());
                     int             x, y;
-
-                    // mapping table, to get from mask index color to
-                    // alpha value (which depends on the mask's palette)
-                    sal_uInt8 aColorMap[2];
-
-                    const BitmapColor& rCol0( pMaskReadAccess->GetPaletteColor( 0 ) );
-                    const BitmapColor& rCol1( pMaskReadAccess->GetPaletteColor( 1 ) );
-
-                    // shortcut for true luminance calculation
-                    // (assumes that palette is grey-level). Note the
-                    // swapped the indices here, to account for the
-                    // fact that VCL's notion of alpha is inverted to
-                    // the rest of the world's.
-                    aColorMap[0] = rCol1.GetRed();
-                    aColorMap[1] = rCol0.GetRed();
 
                     for( y=0; y<nHeight; ++y )
                     {
@@ -341,7 +314,6 @@ namespace dxcanvas::tools
                             case ScanlineFormat::N8BitPal:
                             {
                                 Scanline pScan  = pReadAccess->GetScanline( y );
-                                Scanline pMScan = pMaskReadAccess->GetScanline( y );
 
                                 for( x=0, nCurrBit=nInitialBit; x<nWidth; ++x )
                                 {
@@ -351,7 +323,7 @@ namespace dxcanvas::tools
                                     *pCurrOutput++ = aCol.GetGreen();
                                     *pCurrOutput++ = aCol.GetRed();
 
-                                    *pCurrOutput++ = aColorMap[ (pMScan[ (x & ~7) >> 3 ] >> nCurrBit ) & nMask ];
+                                    *pCurrOutput++ = 0xff;
                                     nCurrBit = ((nCurrBit - 1) % 8) & 7;
                                 }
                             }
@@ -360,7 +332,6 @@ namespace dxcanvas::tools
                             case ScanlineFormat::N24BitTcBgr:
                             {
                                 Scanline pScan  = pReadAccess->GetScanline( y );
-                                Scanline pMScan = pMaskReadAccess->GetScanline( y );
 
                                 for( x=0, nCurrBit=nInitialBit; x<nWidth; ++x )
                                 {
@@ -369,7 +340,7 @@ namespace dxcanvas::tools
                                     *pCurrOutput++ = *pScan++;
                                     *pCurrOutput++ = *pScan++;
 
-                                    *pCurrOutput++ = aColorMap[ (pMScan[ (x & ~7) >> 3 ] >> nCurrBit ) & nMask ];
+                                    *pCurrOutput++ = 0xff;
                                     nCurrBit = ((nCurrBit - 1) % 8) & 7;
                                 }
                             }
@@ -381,8 +352,6 @@ namespace dxcanvas::tools
                             case ScanlineFormat::N1BitMsbPal:
                             case ScanlineFormat::N32BitTcMask:
                             {
-                                Scanline pMScan = pMaskReadAccess->GetScanline( y );
-
                                 // using fallback for those
                                 // seldom formats
                                 for( x=0, nCurrBit=nInitialBit; x<nWidth; ++x )
@@ -395,7 +364,7 @@ namespace dxcanvas::tools
                                     *pCurrOutput++ = aCol.GetGreen();
                                     *pCurrOutput++ = aCol.GetRed();
 
-                                    *pCurrOutput++ = aColorMap[ (pMScan[ (x & ~7) >> 3 ] >> nCurrBit ) & nMask ];
+                                    *pCurrOutput++ = 0xff;
                                     nCurrBit = ((nCurrBit - 1) % 8) & 7;
                                 }
                             }
@@ -422,7 +391,7 @@ namespace dxcanvas::tools
             bool drawVCLBitmapEx( const std::shared_ptr< Gdiplus::Graphics >& rGraphics,
                                   const ::BitmapEx&                               rBmpEx )
             {
-                if( !rBmpEx.IsTransparent() )
+                if( !rBmpEx.IsAlpha() )
                 {
                     Bitmap aBmp( rBmpEx.GetBitmap() );
                     return drawVCLBitmap( rGraphics, aBmp );

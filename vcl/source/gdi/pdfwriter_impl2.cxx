@@ -172,21 +172,21 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
         bUseJPGCompression = false;
 
     auto   pStrm=std::make_shared<SvMemoryStream>();
-    Bitmap aMask;
+    AlphaMask aAlphaMask;
 
     bool bTrueColorJPG = true;
     if ( bUseJPGCompression )
     {
         // TODO this checks could be done much earlier, saving us
         // from trying conversion & stores before...
-        if ( !aBitmapEx.IsTransparent() )
+        if ( !aBitmapEx.IsAlpha() )
         {
             const auto& rCacheEntry=m_aPDFBmpCache.find(
                 aBitmapEx.GetChecksum());
             if ( rCacheEntry != m_aPDFBmpCache.end() )
             {
                 m_rOuterFace.DrawJPGBitmap( *rCacheEntry->second, true, aSizePixel,
-                                            tools::Rectangle( aPoint, aSize ), aMask, i_Graphic );
+                                            tools::Rectangle( aPoint, aSize ), aAlphaMask, i_Graphic );
                 return;
             }
         }
@@ -199,13 +199,8 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
             WriteDIBBitmapEx(aBitmapEx, aTemp); // is capable of zlib stream compression
             nZippedFileSize = aTemp.TellEnd();
         }
-        if ( aBitmapEx.IsTransparent() )
-        {
-            if ( aBitmapEx.IsAlpha() )
-                aMask = aBitmapEx.GetAlpha().GetBitmap();
-            else
-                aMask = aBitmapEx.GetMask();
-        }
+        if ( aBitmapEx.IsAlpha() )
+            aAlphaMask = aBitmapEx.GetAlpha();
         Graphic aGraphic(BitmapEx(aBitmapEx.GetBitmap()));
 
         Sequence< PropertyValue > aFilterData( 2 );
@@ -261,15 +256,15 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
     }
     if ( bUseJPGCompression )
     {
-        m_rOuterFace.DrawJPGBitmap( *pStrm, bTrueColorJPG, aSizePixel, tools::Rectangle( aPoint, aSize ), aMask, i_Graphic );
-        if (!aBitmapEx.IsTransparent() && bTrueColorJPG)
+        m_rOuterFace.DrawJPGBitmap( *pStrm, bTrueColorJPG, aSizePixel, tools::Rectangle( aPoint, aSize ), aAlphaMask, i_Graphic );
+        if (!aBitmapEx.IsAlpha() && bTrueColorJPG)
         {
             // Cache last jpeg export
             m_aPDFBmpCache.insert(
                 {aBitmapEx.GetChecksum(), pStrm});
         }
     }
-    else if ( aBitmapEx.IsTransparent() )
+    else if ( aBitmapEx.IsAlpha() )
         m_rOuterFace.DrawBitmapEx( aPoint, aSize, aBitmapEx );
     else
         m_rOuterFace.DrawBitmap( aPoint, aSize, aBitmapEx.GetBitmap(), i_Graphic );
