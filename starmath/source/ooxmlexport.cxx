@@ -8,7 +8,6 @@
  */
 
 #include "ooxmlexport.hxx"
-#include <node.hxx>
 
 #include <oox/token/tokens.hxx>
 #include <rtl/ustring.hxx>

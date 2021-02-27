@@ -67,12 +67,6 @@
 #include "rect.hxx"
 #include "format.hxx"
 
-#include <o3tl/typed_flags_set.hxx>
-#include <rtl/ustrbuf.hxx>
-
-#include <cassert>
-#include <vector>
-
 enum class FontAttribute {
     None   = 0x0000,
     Bold   = 0x0001,

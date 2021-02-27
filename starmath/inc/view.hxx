@@ -20,9 +20,6 @@
 #define INCLUDED_STARMATH_INC_VIEW_HXX
 
 #include <sal/config.h>
-
-#include <memory>
-
 #include <rtl/ref.hxx>
 #include <sfx2/docinsert.hxx>
 #include <sfx2/dockwin.hxx>
@@ -38,7 +35,6 @@
 class SmViewShell;
 class SmPrintUIOptions;
 class SmGraphicAccessible;
-class SmNode;
 
 namespace svtools { class ColorConfig; }
 

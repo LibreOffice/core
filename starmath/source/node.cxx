@@ -18,27 +18,13 @@
  */
 
 
-#include <node.hxx>
-#include <rect.hxx>
 #include <symbol.hxx>
 #include <smmod.hxx>
 #include "tmpdevice.hxx"
 #include <visitors.hxx>
 
-#include <tools/color.hxx>
-#include <tools/fract.hxx>
-#include <tools/gen.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/outdev.hxx>
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
-
-#include <cassert>
-#include <cstdlib>
-#include <math.h>
-#include <memory>
-#include <float.h>
-#include <vector>
 
 bool starmathdatabase::isStructuralNode(SmNodeType ntype)
 {
