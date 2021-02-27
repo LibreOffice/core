@@ -220,7 +220,7 @@
                   </object>
                 </child>
                 <child type="tab">
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="interfaces">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="developmenttool|interfaces">Interfaces</property>
@@ -269,7 +269,7 @@
                   </packing>
                 </child>
                 <child type="tab">
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="services">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="developmenttool|services">Services</property>
@@ -343,7 +343,7 @@
                   </packing>
                 </child>
                 <child type="tab">
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="properties">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="developmenttool|properties">Properties</property>
@@ -429,7 +429,7 @@
                   </packing>
                 </child>
                 <child type="tab">
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="methods">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="developmenttool|methods">Methods</property>
