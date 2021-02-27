@@ -310,7 +310,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const tools::Rectangle& r
                 if( GetGraphic().IsAlpha() )
                     aAlphaGraphic.SetGraphic(BitmapEx(GetGraphic().GetBitmapEx().GetAlpha().GetBitmap()));
                 else
-                    aAlphaGraphic.SetGraphic(BitmapEx(GetGraphic().GetBitmapEx().GetMask()));
+                    assert(false);
 
                 if( aAlphaGraphic.ImplRenderTempTile( *aVDev, nNumTilesInCacheX,
                                                       nNumTilesInCacheY, rSizePixel, pAttr ) )
@@ -320,8 +320,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const tools::Rectangle& r
                         aTileBitmap = BitmapEx( aTileBitmap.GetBitmap(),
                                                 AlphaMask( aVDev->GetBitmap( Point(0,0), aVDev->GetOutputSize() ) ) );
                     else
-                        aTileBitmap = BitmapEx( aTileBitmap.GetBitmap(),
-                                                aVDev->GetBitmap( Point(0,0), aVDev->GetOutputSize() ).CreateMask( COL_WHITE ) );
+                        assert(false);
                 }
             }
 
@@ -455,24 +454,13 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
 
             BitmapEx aBmpEx2;
 
-            if( rBmpEx.IsTransparent() )
+            if( rBmpEx.IsAlpha() )
             {
-                if( rBmpEx.IsAlpha() )
-                    aBmpEx2 = BitmapEx( rBmpEx.GetBitmap(), rBmpEx.GetAlpha() );
-                else
-                    aBmpEx2 = BitmapEx( rBmpEx.GetBitmap(), rBmpEx.GetMask() );
+                aBmpEx2 = BitmapEx( rBmpEx.GetBitmap(), rBmpEx.GetAlpha() );
             }
             else
             {
-                // #104115# Generate mask bitmap and init to zero
-                Bitmap aMask(aBmpSize, vcl::PixelFormat::N1_BPP);
-                aMask.Erase( Color(0,0,0) );
-
-                // #104115# Always generate transparent bitmap, we need the border transparent
-                aBmpEx2 = BitmapEx( rBmpEx.GetBitmap(), aMask );
-
-                // #104115# Add opaque mask to source bitmap, otherwise the destination remains transparent
-                rBmpEx = aBmpEx2;
+                assert(false); // TODO ?
             }
 
             aBmpEx2.Scale(Size(nPadTotalWidth, nPadTotalHeight));

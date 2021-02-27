@@ -165,19 +165,7 @@ uno::Sequence<sal_Int8> SAL_CALL Graphic::getDIB()
 
 uno::Sequence<sal_Int8> SAL_CALL Graphic::getMaskDIB()
 {
-    SolarMutexGuard aGuard;
-
-    if (!maGraphic.IsNone())
-    {
-        SvMemoryStream aMemoryStream;
-
-        WriteDIB(maGraphic.GetBitmapEx().GetMask(), aMemoryStream, false, true);
-        return css::uno::Sequence<sal_Int8>( static_cast<sal_Int8 const *>(aMemoryStream.GetData()), aMemoryStream.Tell() );
-    }
-    else
-    {
-        return uno::Sequence<sal_Int8>();
-    }
+    return uno::Sequence<sal_Int8>();
 }
 
 sal_Int64 SAL_CALL Graphic::getSomething( const uno::Sequence< sal_Int8 >& rId )

@@ -200,11 +200,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadBitmap( const uno
 
     if( aMaskSeq.hasElements() )
     {
-        SvMemoryStream aMaskStream( aMaskSeq.getArray(), aMaskSeq.getLength(), StreamMode::READ );
-        Bitmap aMask;
-
-        ReadDIB(aMask, aMaskStream, true);
-        aBmpEx = BitmapEx( aBmp, aMask );
+        assert(false);
     }
     else
         aBmpEx = BitmapEx( aBmp );

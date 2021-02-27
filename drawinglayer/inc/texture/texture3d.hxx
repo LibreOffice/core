@@ -62,7 +62,6 @@ namespace drawinglayer::texture
             double                                      mfMulY;
 
             bool                                        mbIsAlpha : 1;
-            bool                                        mbIsTransparent : 1;
 
             // helpers
             bool impIsValid(const basegfx::B2DPoint& rUV, sal_Int32& rX, sal_Int32& rY) const;
