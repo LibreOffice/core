@@ -51,6 +51,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use-underline">True</property>
+                <property name="tooltip_text" translatable="yes" context="optionsdialog|revert">Unsaved modifications to this tab are reverted.</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="revert-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="optionsdialog|extended_tip|revert">Resets changes made to the current tab to those applicable when this dialog was opened.</property>
@@ -70,6 +71,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use-underline">True</property>
+                <property name="tooltip_text" translatable="yes" context="optionsdialog|apply">Save all modifications without closing dialog. Cannot be reverted with Reset.</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -86,6 +88,7 @@
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use-underline">True</property>
+                <property name="tooltip_text" translatable="yes" context="optionsdialog|ok">Save all changes and close dialog.</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="ok-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="optionsdialog|extended_tip|ok">Saves all changes and closes dialog.</property>
@@ -105,9 +108,10 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use-underline">True</property>
+                <property name="tooltip_text" translatable="yes" context="optionsdialog|cancel">Discard all unsaved changes and close dialog.</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="cancel-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="optionsdialog|extended_tip|cancel">Closes dialog and discards all changes.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="optionsdialog|extended_tip|cancel">Closes dialog and discards all unsaved changes.</property>
                   </object>
                 </child>
               </object>
