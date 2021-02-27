@@ -115,7 +115,7 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
             }
         }
         else if( rGraphic.IsTransparent() )
-            aBmp = rGraphic.GetBitmapEx().GetMask();
+            aBmp = rGraphic.GetBitmapEx().GetAlpha();
         else
         {
             aBmp = rGraphic.GetBitmapEx().GetBitmap();
@@ -634,7 +634,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
             Bitmap aMask = aGraphic.GetBitmapEx().GetBitmap().CreateMask( rColor, nTol );
 
             if( aGraphic.IsTransparent() )
-                aMask.CombineSimple( aGraphic.GetBitmapEx().GetMask(), BmpCombine::Or );
+                aMask.CombineSimple( aGraphic.GetBitmapEx().GetAlpha(), BmpCombine::Or );
 
             if( !aMask.IsEmpty() )
             {

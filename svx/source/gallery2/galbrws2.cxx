@@ -868,7 +868,7 @@ void GalleryBrowser2::UpdateRows(bool bVisibleOnly)
 
             mxDev->Erase();
 
-            if (aBitmapEx.IsTransparent())
+            if (aBitmapEx.IsAlpha())
             {
                 // draw checkered background
                 GalleryIconView::drawTransparenceBackground(*mxDev, aPos, aBitmapExSizePixel);

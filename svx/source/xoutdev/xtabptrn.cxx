@@ -89,7 +89,7 @@ BitmapEx XPatternList::CreateBitmap( tools::Long nIndex, const Size& rSize ) con
         ScopedVclPtrInstance< VirtualDevice > pVirtualDevice;
         pVirtualDevice->SetOutputSizePixel(rSize);
 
-        if(rBitmapEx.IsTransparent())
+        if(rBitmapEx.IsAlpha())
         {
             const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 

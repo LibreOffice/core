@@ -331,14 +331,12 @@ OString convertLineStyleToString(const MetaActionType nActionType)
     return "";
 }
 
-OUString convertBitmapExTransparentType(TransparentType eType)
+OUString convertBitmapExTransparentType(BitmapEx const & rBitmapEx)
 {
-    switch (eType)
-    {
-        default:
-        case TransparentType::NONE:   return "none";
-        case TransparentType::Bitmap: return "bitmap";
-    }
+    if (rBitmapEx.IsAlpha())
+        return "bitmap";
+    else
+        return "none";
 }
 
 OUString convertMapUnitToString(MapUnit eUnit)
@@ -843,7 +841,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 rWriter.startElement(sCurrentElementTag);
                 writePoint(rWriter, pMeta->GetPoint());
                 rWriter.attribute("crc", hex32(pMeta->GetBitmapEx().GetBitmap().GetChecksum()));
-                rWriter.attribute("transparenttype", convertBitmapExTransparentType(pMeta->GetBitmapEx().GetTransparentType()));
+                rWriter.attribute("transparenttype", convertBitmapExTransparentType(pMeta->GetBitmapEx()));
                 rWriter.endElement();
             }
             break;
@@ -855,7 +853,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 writePoint(rWriter, pMeta->GetPoint());
                 writeSize(rWriter, pMeta->GetSize());
                 rWriter.attribute("crc", hex32(pMeta->GetBitmapEx().GetBitmap().GetChecksum()));
-                rWriter.attribute("transparenttype", convertBitmapExTransparentType(pMeta->GetBitmapEx().GetTransparentType()));
+                rWriter.attribute("transparenttype", convertBitmapExTransparentType(pMeta->GetBitmapEx()));
                 rWriter.endElement();
             }
             break;
@@ -873,7 +871,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 rWriter.attribute("srcwidth", pMeta->GetSrcSize().Width());
                 rWriter.attribute("srcheight", pMeta->GetSrcSize().Height());
                 rWriter.attribute("crc", hex32(pMeta->GetBitmapEx().GetBitmap().GetChecksum()));
-                rWriter.attribute("transparenttype", convertBitmapExTransparentType(pMeta->GetBitmapEx().GetTransparentType()));
+                rWriter.attribute("transparenttype", convertBitmapExTransparentType(pMeta->GetBitmapEx()));
                 rWriter.endElement();
             }
             break;
@@ -989,7 +987,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                     rWriter.startElement("bitmap");
                     BitmapEx const & rBitmapEx = rWallpaper.GetBitmap();
                     rWriter.attribute("crc", hex32(rBitmapEx.GetChecksum()));
-                    rWriter.attribute("transparenttype", convertBitmapExTransparentType(rBitmapEx.GetTransparentType()));
+                    rWriter.attribute("transparenttype", convertBitmapExTransparentType(rBitmapEx));
                     rWriter.attribute("bitcount", hex32(rBitmapEx.GetBitmap().GetBitCount()));
                     rWriter.attribute("width", hex32(rBitmapEx.GetSizePixel().Width()));
                     rWriter.attribute("height", hex32(rBitmapEx.GetSizePixel().Height()));
