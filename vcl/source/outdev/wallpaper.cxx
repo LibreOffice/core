@@ -156,7 +156,7 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
 
     const tools::Long nBmpWidth = aBmpEx.GetSizePixel().Width();
     const tools::Long nBmpHeight = aBmpEx.GetSizePixel().Height();
-    const bool bTransparent = aBmpEx.IsTransparent();
+    const bool bTransparent = aBmpEx.IsAlpha();
 
     // draw background
     if( bTransparent )
@@ -222,7 +222,7 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
 
             aBmpEx = rWallpaper.GetBitmap();
             aBmpEx.Scale( aSize );
-            aBmpEx = BitmapEx( aBmpEx.GetBitmap().CreateDisplayBitmap( this ), aBmpEx.GetMask() );
+            aBmpEx = BitmapEx( aBmpEx.GetBitmap().CreateDisplayBitmap( this ), aBmpEx.GetAlpha() );
         }
         break;
 

@@ -1735,7 +1735,7 @@ void PDFWriterImpl::endPage()
         {
             writeJPG( jpeg );
             jpeg.m_pStream.reset();
-            jpeg.m_aMask = Bitmap();
+            jpeg.m_aAlphaMask = AlphaMask();
         }
     }
     for (auto & item : m_aTransparentObjects)
@@ -8368,12 +8368,10 @@ void PDFWriterImpl::writeJPG( JPGEmit& rObject )
     rObject.m_pStream->Seek( STREAM_SEEK_TO_BEGIN );
 
     sal_Int32 nMaskObject = 0;
-    if( !rObject.m_aMask.IsEmpty() )
+    if( !rObject.m_aAlphaMask.IsEmpty() )
     {
-        if (rObject.m_aMask.getPixelFormat() == vcl::PixelFormat::N1_BPP
-            || (rObject.m_aMask.getPixelFormat() == vcl::PixelFormat::N8_BPP
-                && m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4
-                && !m_bIsPDF_A1))
+        if (m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4
+                && !m_bIsPDF_A1)
         {
             nMaskObject = createObject();
         }
@@ -8404,7 +8402,7 @@ void PDFWriterImpl::writeJPG( JPGEmit& rObject )
     aLine.append( nLength );
     if( nMaskObject )
     {
-        aLine.append(rObject.m_aMask.getPixelFormat() == vcl::PixelFormat::N1_BPP ? " /Mask " : " /SMask ");
+        aLine.append(" /SMask ");
         aLine.append( nMaskObject );
         aLine.append( " 0 R " );
     }
@@ -8423,10 +8421,7 @@ void PDFWriterImpl::writeJPG( JPGEmit& rObject )
     {
         BitmapEmit aEmit;
         aEmit.m_nObject = nMaskObject;
-        if (rObject.m_aMask.getPixelFormat() == vcl::PixelFormat::N1_BPP)
-            aEmit.m_aBitmap = BitmapEx( rObject.m_aMask, rObject.m_aMask );
-        else if(rObject.m_aMask.getPixelFormat() == vcl::PixelFormat::N8_BPP)
-            aEmit.m_aBitmap = BitmapEx( rObject.m_aMask, AlphaMask( rObject.m_aMask ) );
+        aEmit.m_aBitmap = BitmapEx( rObject.m_aAlphaMask, rObject.m_aAlphaMask );
         writeBitmapObject( aEmit, true );
     }
 
@@ -8708,23 +8703,12 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
                 bWriteMask = true;
             // else draw without alpha channel
         }
-        else
-        {
-            switch( rObject.m_aBitmap.GetTransparentType() )
-            {
-                case TransparentType::NONE:
-                    break;
-                case TransparentType::Bitmap:
-                    bWriteMask = true;
-                    break;
-            }
-        }
     }
     else
     {
         if( m_aContext.Version < PDFWriter::PDFVersion::PDF_1_4 || ! rObject.m_aBitmap.IsAlpha() )
         {
-            aBitmap = getExportBitmap(rObject.m_aBitmap.GetMask());
+            aBitmap = getExportBitmap(rObject.m_aBitmap.GetAlpha());
             aBitmap.Convert( BmpConversion::N1BitThreshold );
             SAL_WARN_IF(aBitmap.getPixelFormat() != vcl::PixelFormat::N1_BPP, "vcl.pdfwriter", "mask conversion failed" );
         }
@@ -9003,7 +8987,7 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
     rEmit.m_aPixelSize = rGraphic.GetPrefSize();
 }
 
-void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const tools::Rectangle& rTargetArea, const Bitmap& rMask, const Graphic& rGraphic )
+void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const tools::Rectangle& rTargetArea, const AlphaMask& rAlphaMask, const Graphic& rGraphic )
 {
     MARK( "drawJPGBitmap" );
 
@@ -9023,10 +9007,10 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
         // load stream to bitmap and draw the bitmap instead
         Graphic aGraphic;
         GraphicConverter::Import( rDCTData, aGraphic, ConvertDataFormat::JPG );
-        if( !rMask.IsEmpty() && rMask.GetSizePixel() == aGraphic.GetSizePixel() )
+        if( !rAlphaMask.IsEmpty() && rAlphaMask.GetSizePixel() == aGraphic.GetSizePixel() )
         {
             Bitmap aBmp( aGraphic.GetBitmapEx().GetBitmap() );
-            BitmapEx aBmpEx( aBmp, rMask );
+            BitmapEx aBmpEx( aBmp, rAlphaMask );
             drawBitmap( rTargetArea.TopLeft(), rTargetArea.GetSize(), aBmpEx );
         }
         else
@@ -9043,8 +9027,8 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
     aID.m_nSize         = pStream->Tell();
     pStream->Seek( STREAM_SEEK_TO_BEGIN );
     aID.m_nChecksum     = vcl_get_checksum( 0, pStream->GetData(), aID.m_nSize );
-    if( ! rMask.IsEmpty() )
-        aID.m_nMaskChecksum = rMask.GetChecksum();
+    if( ! rAlphaMask.IsEmpty() )
+        aID.m_nMaskChecksum = rAlphaMask.GetChecksum();
 
     std::vector< JPGEmit >::const_iterator it = std::find_if(m_aJPGs.begin(), m_aJPGs.end(),
                                              [&](const JPGEmit& arg) { return aID == arg.m_aID; });
@@ -9057,8 +9041,8 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
         rEmit.m_aID         = aID;
         rEmit.m_pStream = std::move( pStream );
         rEmit.m_bTrueColor  = bIsTrueColor;
-        if( !rMask.IsEmpty() && rMask.GetSizePixel() == rSizePixel )
-            rEmit.m_aMask   = rMask;
+        if( !rAlphaMask.IsEmpty() && rAlphaMask.GetSizePixel() == rSizePixel )
+            rEmit.m_aAlphaMask = rAlphaMask;
         createEmbeddedFile(rGraphic, rEmit.m_aReferenceXObject, rEmit.m_nObject);
 
         it = m_aJPGs.begin();
@@ -9140,12 +9124,6 @@ const BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx& i_rBitmap, co
     aID.m_nMaskChecksum     = 0;
     if( aBitmap.IsAlpha() )
         aID.m_nMaskChecksum = aBitmap.GetAlpha().GetChecksum();
-    else
-    {
-        Bitmap aMask = aBitmap.GetMask();
-        if( ! aMask.IsEmpty() )
-            aID.m_nMaskChecksum = aMask.GetChecksum();
-    }
     std::list< BitmapEmit >::const_iterator it = std::find_if(m_aBitmaps.begin(), m_aBitmaps.end(),
                                              [&](const BitmapEmit& arg) { return aID == arg.m_aID; });
     if( it == m_aBitmaps.end() )
@@ -9412,7 +9390,7 @@ void PDFWriterImpl::drawWallpaper( const tools::Rectangle& rRect, const Wallpape
             bDrawBitmap = true;
         }
 
-        if( aBitmap.IsTransparent() )
+        if( aBitmap.IsAlpha() )
         {
             if( rWall.IsGradient() )
                 bDrawGradient = true;
