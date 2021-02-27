@@ -21,7 +21,7 @@
 
 #include <types.hxx>
 
-#include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld.hxx>
 
 class ScGridWindow;
 
@@ -31,15 +31,18 @@ enum class ScFilterBoxMode
     Scenario
 };
 
-class ScFilterListBox final : public InterimItemWindow
+class ScFilterListBox final : public std::enable_shared_from_this<ScFilterListBox>
 {
 private:
+    std::unique_ptr<weld::Builder> xBuilder;
+    std::unique_ptr<weld::Popover> xPopover;
     std::unique_ptr<weld::TreeView> xTreeView;
     VclPtr<ScGridWindow> pGridWin;
     SCCOL nCol;
     SCROW nRow;
     bool bInit;
     bool bCancelled;
+    bool bGridHadMouseCaptured;
     sal_uLong nSel;
     ScFilterBoxMode eMode;
     ImplSVEvent* nAsyncSelectHdl;
@@ -49,10 +52,18 @@ private:
     DECL_LINK(AsyncSelectHdl, void*, void);
 
 public:
-    ScFilterListBox(vcl::Window* pParent, ScGridWindow* pGrid, SCCOL nNewCol, SCROW nNewRow,
+    ScFilterListBox(weld::Window* pParent, ScGridWindow* pGrid, SCCOL nNewCol, SCROW nNewRow,
                     ScFilterBoxMode eNewMode);
-    virtual ~ScFilterListBox() override;
-    virtual void dispose() override;
+    void popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect)
+    {
+        xPopover->popup_at_rect(pParent, rRect);
+    }
+    void connect_closed(const Link<weld::Popover&, void>& rLink)
+    {
+        xPopover->connect_closed(rLink);
+    }
+    void popdown() { xPopover->popdown(); }
+    ~ScFilterListBox();
 
     weld::TreeView& get_widget() { return *xTreeView; }
 
@@ -61,6 +72,7 @@ public:
     ScFilterBoxMode GetMode() const { return eMode; }
     void EndInit();
     bool IsInInit() const { return bInit; }
+    bool MouseWasCaptured() const { return bGridHadMouseCaptured; }
     void SetCancelled() { bCancelled = true; }
 };
 
