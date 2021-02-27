@@ -100,6 +100,12 @@ void SmDocShell::InitInterface_Impl()
     GetStaticInterface()->RegisterPopupMenu("view");
 }
 
+void SmDocShell::SetSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion)
+{
+    mnSmSyntaxVersion = nSmSyntaxVersion;
+    maParser.reset(starmathdatabase::GetVersionSmParser(mnSmSyntaxVersion));
+}
+
 SFX_IMPL_OBJECTFACTORY(SmDocShell, SvGlobalName(SO3_SM_CLASSID), "smath" )
 
 void SmDocShell::Notify(SfxBroadcaster&, const SfxHint& rHint)
@@ -218,13 +224,14 @@ OUString const & SmDocShell::GetAccessibleText()
 
 void SmDocShell::Parse()
 {
+    printf("%d\n", mnSmSyntaxVersion);
     mpTree.reset();
     ReplaceBadChars();
-    mpTree = maParser.Parse(maText);
+    mpTree = maParser->Parse(maText);
     mnModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
     SetFormulaArranged( false );
     InvalidateCursor();
-    maUsedSymbols = maParser.GetUsedSymbols();
+    maUsedSymbols = maParser->GetUsedSymbols();
 }
 
 
@@ -628,6 +635,7 @@ SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
 
     SmModule *pp = SM_MOD();
     maFormat = pp->GetConfig()->GetStandardFormat();
+    maParser.reset(starmathdatabase::GetVersionSmParser(mnSmSyntaxVersion));
 
     StartListening(maFormat);
     StartListening(*pp->GetConfig());
