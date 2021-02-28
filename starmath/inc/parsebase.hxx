@@ -21,8 +21,7 @@
   *
   */
 
-#ifndef INCLUDED_STARMATH_INC_PARSEBASE_HXX
-#define INCLUDED_STARMATH_INC_PARSEBASE_HXX
+#pragma once
 
 #include <unotools/charclass.hxx>
 
@@ -112,7 +111,5 @@ public:
     virtual const SmErrorDesc* GetError() const = 0;
     virtual const std::set<OUString>& GetUsedSymbols() const = 0;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

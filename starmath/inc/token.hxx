@@ -26,8 +26,7 @@
    *    Location of the token in the starmath code.
    */
 
-#ifndef INCLUDED_STARMATH_INC_TOKEN_HXX
-#define INCLUDED_STARMATH_INC_TOKEN_HXX
+#pragma once
 
 #include "types.hxx"
 #include <rtl/ustring.hxx>
@@ -308,7 +307,5 @@ struct SmToken
 
     void setChar(sal_Unicode cChar) { cMathChar = OUString(&cChar, 1); }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
