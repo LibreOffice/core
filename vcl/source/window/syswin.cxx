@@ -1041,13 +1041,12 @@ void SystemWindow::setPosSizeOnContainee(Size aSize, Window &rBox)
 
 IMPL_LINK_NOARG( SystemWindow, ImplHandleLayoutTimerHdl, Timer*, void )
 {
+    Window *pBox = GetWindow(GetWindowType::FirstChild);
     if (!isLayoutEnabled())
     {
-        SAL_WARN("vcl.layout", "SystemWindow has become non-layout because extra children have been added directly to it.");
+        SAL_WARN_IF(pBox, "vcl.layout", "SystemWindow has become non-layout because extra children have been added directly to it.");
         return;
     }
-
-    Window *pBox = GetWindow(GetWindowType::FirstChild);
     assert(pBox);
     setPosSizeOnContainee(GetSizePixel(), *pBox);
 }
