@@ -22,8 +22,7 @@
   * Will remember the char name, char code and font.
   */
 
-#ifndef INCLUDED_STARMATH_INC_SYMBOL_HXX
-#define INCLUDED_STARMATH_INC_SYMBOL_HXX
+#pragma once
 
 #include <map>
 #include <vector>
@@ -105,7 +104,5 @@ public:
     void        Load();
     void        Save();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

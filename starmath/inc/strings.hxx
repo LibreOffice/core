@@ -13,8 +13,7 @@
   * The user can then graphically insert them.
   */
 
-#ifndef INCLUDED_STARMATH_INC_STRINGS_HXX
-#define INCLUDED_STARMATH_INC_STRINGS_HXX
+#pragma once
 
 #define RID_UNDOFORMATNAME "Format"
 
@@ -301,7 +300,5 @@
 #define RID_XNOTPRECEDESY       "<?> nprec <?> "
 #define RID_XNOTSUCCEEDSY       "<?> nsucc <?> "
 // clang-format on
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

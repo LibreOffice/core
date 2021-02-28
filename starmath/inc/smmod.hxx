@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_STARMATH_INC_SMMOD_HXX
-#define INCLUDED_STARMATH_INC_SMMOD_HXX
+#pragma once
 
 #include <sfx2/module.hxx>
 #include <sfx2/app.hxx>
@@ -100,7 +99,5 @@ public:
 };
 
 #define SM_MOD() ( static_cast<SmModule*>(SfxApplication::GetModule(SfxToolsModule::Math)) )
-
-#endif // INCLUDED_STARMATH_INC_SMMOD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

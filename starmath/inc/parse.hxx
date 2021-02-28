@@ -21,8 +21,7 @@
   *
   */
 
-#ifndef INCLUDED_STARMATH_INC_PARSE_HXX
-#define INCLUDED_STARMATH_INC_PARSE_HXX
+#pragma once
 
 #include "parse5.hxx"
 
@@ -34,7 +33,5 @@ AbstractSmParser* GetDefaultSmParser();
 AbstractSmParser* GetVersionSmParser(sal_uInt16 nVersion);
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -21,8 +21,7 @@
   *
   */
 
-#ifndef INCLUDED_STARMATH_INC_PARSE5_HXX
-#define INCLUDED_STARMATH_INC_PARSE5_HXX
+#pragma once
 
 #include "parsebase.hxx"
 
@@ -117,7 +116,5 @@ public:
 };
 
 inline bool SmParser::TokenInGroup(TG nGroup) { return bool(m_aCurToken.nGroup & nGroup); }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
