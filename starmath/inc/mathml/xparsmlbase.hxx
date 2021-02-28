@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef XPARSEMLBASE
-#define XPARSEMLBASE
+#pragma once
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/Pair.hpp>
@@ -51,4 +50,4 @@ const extern ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUS
     icustomMathmlHtmlEntitiesExport;
 };
 
-#endif /*XPARSEMLBASE*/
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
