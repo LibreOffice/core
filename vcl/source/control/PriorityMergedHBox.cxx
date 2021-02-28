@@ -20,9 +20,9 @@
 #include <vcl/toolkit/button.hxx>
 #include <vcl/layout.hxx>
 #include <bitmaps.hlst>
+#include <NotebookbarPopup.hxx>
 #include <PriorityHBox.hxx>
 #include <PriorityMergedHBox.hxx>
-#include <vcl/notebookbar/NotebookbarPopup.hxx>
 #include <comphelper/lok.hxx>
 
 #define DUMMY_WIDTH 50

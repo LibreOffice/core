@@ -19,8 +19,8 @@
 
 #include <vcl/toolkit/button.hxx>
 #include <vcl/layout.hxx>
+#include "NotebookbarPopup.hxx"
 #include "PriorityHBox.hxx"
-#include <vcl/notebookbar/NotebookbarPopup.hxx>
 
 class PriorityMergedHBox : public PriorityHBox
 {
