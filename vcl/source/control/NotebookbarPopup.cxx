@@ -7,11 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <vcl/notebookbar/NotebookbarPopup.hxx>
 #include <vcl/notebookbar/IPrioritable.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/layout.hxx>
+#include <NotebookbarPopup.hxx>
 
 NotebookbarPopup::NotebookbarPopup(const VclPtr<VclHBox>& pParent)
     : FloatingWindow(pParent, "Popup", "sfx/ui/notebookbarpopup.ui")

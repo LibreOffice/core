@@ -21,8 +21,8 @@
 #define INCLUDED_SFX2_NOTEBOOKBAR_DROPDOWNBOX_HXX
 
 #include <vcl/notebookbar/IPrioritable.hxx>
-#include <vcl/notebookbar/NotebookbarPopup.hxx>
 #include <vcl/layout.hxx>
+#include "NotebookbarPopup.hxx"
 
 class DropdownBox : public VclHBox, public vcl::IPrioritable
 {
