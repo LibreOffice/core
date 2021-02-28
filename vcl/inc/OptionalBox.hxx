@@ -17,11 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OPTIONALBOX_HXX
-#define INCLUDED_VCL_OPTIONALBOX_HXX
+#pragma once
 
-#include <vcl/notebookbar/IPrioritable.hxx>
 #include <vcl/layout.hxx>
+#include "IPrioritable.hxx"
 
 class OptionalBox final : public VclHBox, public vcl::IPrioritable
 {
@@ -36,7 +35,5 @@ public:
     void ShowContent() override;
     bool IsHidden() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

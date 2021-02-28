@@ -6420,7 +6420,6 @@ include/vcl/metaact.hxx
 include/vcl/metaactiontypes.hxx
 include/vcl/metric.hxx
 include/vcl/mnemonic.hxx
-include/vcl/notebookbar/IPrioritable.hxx
 include/vcl/notebookbar/notebookbar.hxx
 include/vcl/oldprintadaptor.hxx
 include/vcl/opengl/OpenGLContext.hxx
@@ -14443,6 +14442,7 @@ vcl/headless/svpprn.cxx
 vcl/headless/svptext.cxx
 vcl/headless/svpvd.cxx
 vcl/inc/IconThemeSelector.hxx
+vcl/inc/IPrioritable.hxx
 vcl/inc/PhysicalFontCollection.hxx
 vcl/inc/PhysicalFontFace.hxx
 vcl/inc/PhysicalFontFamily.hxx
