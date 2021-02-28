@@ -17,13 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/notebookbar/IPrioritable.hxx>
+#pragma once
+
 #include <vcl/layout.hxx>
+#include "IPrioritable.hxx"
 
 #include <vector>
-
-#ifndef INCLUDED_SFX2_NOTEBOOKBAR_PRIORITYHBOX_HXX
-#define INCLUDED_SFX2_NOTEBOOKBAR_PRIORITYHBOX_HXX
 
 /*
  * PriorityHBox is a VclHBox which hides its own children if there is no sufficient space.
@@ -57,7 +56,5 @@ public:
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

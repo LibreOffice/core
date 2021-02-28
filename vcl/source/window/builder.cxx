@@ -34,7 +34,6 @@
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
 #include <vcl/headbar.hxx>
-#include <vcl/notebookbar/IPrioritable.hxx>
 #include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 #include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/layout.hxx>
@@ -64,6 +63,7 @@
 #include <messagedialog.hxx>
 #include <ContextVBox.hxx>
 #include <DropdownBox.hxx>
+#include <IPrioritable.hxx>
 #include <OptionalBox.hxx>
 #include <PriorityMergedHBox.hxx>
 #include <PriorityHBox.hxx>
