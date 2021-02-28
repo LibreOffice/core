@@ -1806,7 +1806,6 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         // Scenario selection comes from MouseButtonDown:
         // The next MouseMove on the FilterBox is like a ButtonDown
         nMouseStatus = SC_GM_FILTER;
-
         return;
     }
 
@@ -2411,19 +2410,6 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
     {
         SetPointer( PointerStyle::Fill );
         return;
-    }
-
-    if (nMouseStatus == SC_GM_FILTER && mpFilterBox)
-    {
-        Point aRelPos = mpFilterBox->ScreenToOutputPixel( OutputToScreenPixel( rMEvt.GetPosPixel() ) );
-        if ( tools::Rectangle(Point(), mpFilterBox->GetOutputSizePixel()).IsInside(aRelPos) )
-        {
-            nButtonDown = 0;
-            nMouseStatus = SC_GM_NONE;
-            ReleaseMouse();
-            mpFilterBox->MouseButtonDown( MouseEvent( aRelPos, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT ) );
-            return;
-        }
     }
 
     bool bFormulaMode = pScMod->IsFormulaMode();            // next click -> reference
