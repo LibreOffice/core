@@ -1030,7 +1030,7 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     //  (It looks odd if the line gets hidden...)
 
     mpFilterFloat.reset(VclPtr<ScFilterFloatingWindow>::Create(this));
-    mpFilterFloat->SetPopupModeEndHdl( LINK( this, ScGridWindow, PopupModeEndHdl ) );
+    mpFilterFloat->SetPopupModeEndHdl(LINK(this, ScGridWindow, PopupModeEndHdl));
     mpFilterBox.reset(VclPtr<ScFilterListBox>::Create(mpFilterFloat.get(), this, nCol, nRow, ScFilterBoxMode::Scenario));
     weld::TreeView& rFilterBox = mpFilterBox->get_widget();
     rFilterBox.set_direction(bLayoutRTL); // Fix for bug fdo#44925 use sheet direction for widget RTL/LTR
@@ -1117,11 +1117,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
     aPos.AdjustY( nSizeY - 1 );
 
     mpFilterFloat.reset(VclPtr<ScFilterFloatingWindow>::Create(this));
-    if (bLOKActive)
-    {
-        mpFilterFloat->SetLOKNotifier(SfxViewShell::Current());
-    }
-    mpFilterFloat->SetPopupModeEndHdl(LINK( this, ScGridWindow, PopupModeEndHdl));
+    mpFilterFloat->SetPopupModeEndHdl(LINK(this, ScGridWindow, PopupModeEndHdl));
     mpFilterBox.reset(VclPtr<ScFilterListBox>::Create(mpFilterFloat.get(), this, nCol, nRow, ScFilterBoxMode::DataSelect));
     weld::TreeView& rFilterBox = mpFilterBox->get_widget();
     rFilterBox.set_direction(bLayoutRTL); // Fix for bug fdo#44925 use sheet direction for widget RTL/LTR
