@@ -4022,9 +4022,6 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
 
     pop();
 
-    OStringBuffer aDA( 256 );
-    appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
-    rBox.m_aDAString = aDA.makeStringAndClear();
     //to encrypt this (el)
     rBox.m_aMKDict = "/CA";
     //after this assignment, to m_aMKDic cannot be added anything
@@ -4037,6 +4034,7 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     SvMemoryStream* pCheckStream = new SvMemoryStream( 256, 256 );
 
     beginRedirect( pCheckStream, aCheckRect );
+    OStringBuffer aDA( 256 );
     aDA.append( "/Tx BMC\nq BT\n" );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
     aDA.append( ' ' );
