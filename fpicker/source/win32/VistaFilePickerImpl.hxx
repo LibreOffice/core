@@ -60,26 +60,26 @@ const ::sal_Int32 FEATURE_VERSION        = 1024;
 const ::sal_Int32 FEATURE_GPGPASSWORD    = 2048;
 const ::sal_Int32 FEATURE_IMAGEANCHOR    = 4096;
 
-const OUString PROP_PICKER_LISTENER("picker_listener"   ); // [XFilePickerListenert]
-const OUString PROP_DIALOG_SHOW_RESULT("dialog_show_result" ); // [sal_Bool] true=OK, false=CANCEL
-const OUString PROP_SELECTED_FILES("selected_files"     ); // [seq< OUString >] contains all user selected files (can be empty!)
-const OUString PROP_MULTISELECTION_MODE("multiselection_mode"); // [sal_Bool] true=ON, false=OFF
-const OUString PROP_TITLE("title"              ); // [OUString]
-const OUString PROP_FILENAME("filename"          ); // [OUString]
-const OUString PROP_DIRECTORY("directory"          ); // [OUString]
-const OUString PROP_FEATURES("features"           ); // [sal_Int32]
-const OUString PROP_TEMPLATE_DESCR("templatedescription"); // [sal_Int32]
-const OUString PROP_FILTER_TITLE("filter_title"       ); // [OUString]
-const OUString PROP_FILTER_VALUE("filter_value"       ); // [OUString]
-const OUString PROP_FILTER_GROUP("filter-group"       ); // [seq< css:beans::StringPair >] contains a group of filters
+constexpr OUStringLiteral PROP_PICKER_LISTENER(u"picker_listener"   ); // [XFilePickerListenert]
+constexpr OUStringLiteral PROP_DIALOG_SHOW_RESULT(u"dialog_show_result" ); // [sal_Bool] true=OK, false=CANCEL
+constexpr OUStringLiteral PROP_SELECTED_FILES(u"selected_files"     ); // [seq< OUString >] contains all user selected files (can be empty!)
+constexpr OUStringLiteral PROP_MULTISELECTION_MODE(u"multiselection_mode"); // [sal_Bool] true=ON, false=OFF
+constexpr OUStringLiteral PROP_TITLE(u"title"              ); // [OUString]
+constexpr OUStringLiteral PROP_FILENAME(u"filename"          ); // [OUString]
+constexpr OUStringLiteral PROP_DIRECTORY(u"directory"          ); // [OUString]
+constexpr OUStringLiteral PROP_FEATURES(u"features"           ); // [sal_Int32]
+constexpr OUStringLiteral PROP_TEMPLATE_DESCR(u"templatedescription"); // [sal_Int32]
+constexpr OUStringLiteral PROP_FILTER_TITLE(u"filter_title"       ); // [OUString]
+constexpr OUStringLiteral PROP_FILTER_VALUE(u"filter_value"       ); // [OUString]
+constexpr OUStringLiteral PROP_FILTER_GROUP(u"filter-group"       ); // [seq< css:beans::StringPair >] contains a group of filters
 
-const OUString PROP_CONTROL_ID("control_id"         ); // [sal_Int16]
-const OUString PROP_CONTROL_ACTION("control_action"     ); // [sal_Int16]
-const OUString PROP_CONTROL_VALUE("control_value"      ); // [Any]
-const OUString PROP_CONTROL_LABEL("control_label"      ); // [OUString]
-const OUString PROP_CONTROL_ENABLE("control_enable"     ); // [sal_Bool] true=ON, false=OFF
-const OUString PROP_PARENT_WINDOW("ParentWindow"); //[css::awt::XWindow] preferred parent window
-const OUString STRING_SEPARATOR("------------------------------------------" );
+constexpr OUStringLiteral PROP_CONTROL_ID(u"control_id"         ); // [sal_Int16]
+constexpr OUStringLiteral PROP_CONTROL_ACTION(u"control_action"     ); // [sal_Int16]
+constexpr OUStringLiteral PROP_CONTROL_VALUE(u"control_value"      ); // [Any]
+constexpr OUStringLiteral PROP_CONTROL_LABEL(u"control_label"      ); // [OUString]
+constexpr OUStringLiteral PROP_CONTROL_ENABLE(u"control_enable"     ); // [sal_Bool] true=ON, false=OFF
+constexpr OUStringLiteral PROP_PARENT_WINDOW(u"ParentWindow"); //[css::awt::XWindow] preferred parent window
+constexpr OUStringLiteral STRING_SEPARATOR(u"------------------------------------------" );
 
 class TDialogImplBase;
 
