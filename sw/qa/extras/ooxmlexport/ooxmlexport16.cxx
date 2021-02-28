@@ -81,6 +81,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138953, "croppedAndRotated.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8664), frameRect.Width);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf140137, "tdf140137.docx")
+{
+    // Don't throw exception during load
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
