@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_STARMATH_INC_DOCUMENT_HXX
-#define INCLUDED_STARMATH_INC_DOCUMENT_HXX
+#pragma once
 
 #include <rtl/strbuf.hxx>
 #include <sfx2/docfac.hxx>
@@ -213,7 +212,5 @@ public:
 
     void UpdateEditEngineDefaultFonts(const Color& aTextColor);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

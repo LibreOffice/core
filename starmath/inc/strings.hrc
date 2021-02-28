@@ -24,8 +24,7 @@
   * When passing the mouse over them, those descriptions will be displayed.
   */
 
-#ifndef INCLUDED_SM_INC_STRINGS_HRC
-#define INCLUDED_SM_INC_STRINGS_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -401,7 +400,5 @@
 #define RID_PRINTUIOPT_FITTOPAGE            NC_("RID_PRINTUIOPT_FITTOPAGE", "Fit to ~page" )
 #define RID_PRINTUIOPT_SCALING              NC_("RID_PRINTUIOPT_SCALING", "~Scaling" )
 // clang-format on
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

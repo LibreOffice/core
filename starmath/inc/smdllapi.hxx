@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_STARMATH_INC_SMDLLAPI_HXX
-#define INCLUDED_STARMATH_INC_SMDLLAPI_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -16,8 +15,6 @@
 #define SM_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
 #else
 #define SM_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -328,3 +328,5 @@ SmColorTokenTableEntry Identify_ColorName_HTML(const OUString& colorname);
   */
 const SmColorTokenTableEntry* Identify_ColorName_DVIPSNAMES(const OUString& colorname);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
