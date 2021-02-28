@@ -1088,24 +1088,6 @@ void Window::SetWindowRegionPixel( const vcl::Region& rRegion )
                 }
 
                 mpWindowImpl->mpFrame->EndSetClipRegion();
-
-                //long                nX;
-                //long                nY;
-                //long                nWidth;
-                //long                nHeight;
-                //sal_uLong               nRectCount;
-                //ImplRegionInfo      aInfo;
-                //sal_Bool                bRegionRect;
-
-                //nRectCount = mpWindowImpl->maWinRegion.GetRectCount();
-                //mpWindowImpl->mpFrame->BeginSetClipRegion( nRectCount );
-                //bRegionRect = mpWindowImpl->maWinRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
-                //while ( bRegionRect )
-                //{
-                //    mpWindowImpl->mpFrame->UnionClipRegion( nX, nY, nWidth, nHeight );
-                //    bRegionRect = mpWindowImpl->maWinRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
-                //}
-                //mpWindowImpl->mpFrame->EndSetClipRegion();
             }
             else
                 SetWindowRegionPixel();

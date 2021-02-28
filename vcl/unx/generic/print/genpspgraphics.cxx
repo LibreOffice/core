@@ -264,20 +264,6 @@ bool GenPspGraphics::setClipRegion( const vcl::Region& i_rClip )
 
     m_pPrinterGfx->EndSetClipRegion();
 
-    //m_pPrinterGfx->BeginSetClipRegion( i_rClip.GetRectCount() );
-
-    //ImplRegionInfo aInfo;
-    //long nX, nY, nW, nH;
-    //bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
-    //while( bRegionRect )
-    //{
-    //    if ( nW && nH )
-    //    {
-    //        m_pPrinterGfx->UnionClipRegion( nX, nY, nW, nH );
-    //    }
-    //    bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
-    //}
-    //m_pPrinterGfx->EndSetClipRegion();
     return true;
 }
 
