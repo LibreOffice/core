@@ -59,8 +59,7 @@
   *
   */
 
-#ifndef INCLUDED_STARMATH_INC_NODE_HXX
-#define INCLUDED_STARMATH_INC_NODE_HXX
+#pragma once
 
 #include "types.hxx"
 #include "token.hxx"
@@ -2103,8 +2102,5 @@ public:
     void Accept(SmVisitor* pVisitor) override;
 
 };
-
-#endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

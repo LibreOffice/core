@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_STARMATH_SOURCE_ACCESSIBILITY_HXX
-#define INCLUDED_STARMATH_SOURCE_ACCESSIBILITY_HXX
+#pragma once
 
 #include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -354,8 +353,5 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
-
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
