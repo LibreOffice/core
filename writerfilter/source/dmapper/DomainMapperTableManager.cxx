@@ -693,17 +693,25 @@ void DomainMapperTableManager::endOfRowAction()
         size_t nWidthsBound = getCurrentGridBefore() + m_nCell.back() - 1;
         if (nWidthsBound)
         {
-            if (nFullWidthRelative == 0)
-                throw o3tl::divide_by_zero();
-
             ::std::vector< sal_uInt32 >::const_iterator aSpansIter = rCurrentSpans.begin();
             for( size_t nBorder = 0; nBorder < nWidthsBound; ++nBorder )
             {
-                double fGridWidth = 0.;
+                double nRelPos, fGridWidth = 0.;
                 for ( sal_Int32 nGridCount = *aSpansIter; nGridCount > 0; --nGridCount )
                     fGridWidth += (*pTableGrid)[nBorderGridIndex++];
 
-                double nRelPos = (fGridWidth * 10000) / nFullWidthRelative;
+                if (fGridWidth == 0.)
+                {
+                    // allow nFullWidthRelative here, with a sane 0.0 result
+                    nRelPos = 0.;
+                }
+                else
+                {
+                    if (nFullWidthRelative == 0)
+                        throw o3tl::divide_by_zero();
+
+                    nRelPos = (fGridWidth * 10000) / nFullWidthRelative;
+                }
 
                 pSeparators[nBorder].Position = rtl::math::round(nRelPos + nLastRelPos);
                 pSeparators[nBorder].IsVisible = true;

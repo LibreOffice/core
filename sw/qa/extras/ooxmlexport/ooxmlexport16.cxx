@@ -147,6 +147,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133473_shadowSize, "tdf133473.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(200000), nSize1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf140137, "tdf140137.docx")
+{
+    // Don't throw exception during load
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
