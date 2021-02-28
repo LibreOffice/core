@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "c9c26f48_122862c9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-02-28T00:50:49Z",
+      "side": 1,
+      "message": "Thanks Maxim. I agree. Useful to know that WriterCommands.xcu labels can override/not clash with GenericCommands.xcu.  Nice to have an authoritative opinion, rather than a hopeful guess.",
+      "parentUuid": "30419039_76b30f40",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 46
+      },
+      "revId": "37157772a1888cd0c227ded2311afd0abe6d02ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60a0d140_d2cef8e8",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
         "patchSetId": 4
