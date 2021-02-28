@@ -369,7 +369,11 @@ void SvpSalYieldMutex::doAcquire(sal_uInt32 const nLockCount)
                 m_bNoYieldLock = true;
                 bool const bEvents = pInst->DoYield(false, request == SvpRequest::MainThreadDispatchAllEvents);
                 m_bNoYieldLock = false;
-                write(m_FeedbackFDs[1], &bEvents, sizeof(bool));
+                if (write(m_FeedbackFDs[1], &bEvents, sizeof(bool)) != sizeof(bool))
+                {
+                    SAL_WARN("vcl.headless", "Could not write: " << strerror(errno));
+                    std::abort();
+                }
             }
         }
         while (true);
