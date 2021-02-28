@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_STARMATH_SOURCE_WORDEXPORTBASE_HXX
-#define INCLUDED_STARMATH_SOURCE_WORDEXPORTBASE_HXX
+#pragma once
 
 #include <node.hxx>
 
@@ -45,7 +44,5 @@ protected:
 private:
     const SmNode* const m_pTree;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

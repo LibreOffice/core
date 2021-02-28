@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_STARMATH_SOURCE_OOXMLEXPORT_HXX
-#define INCLUDED_STARMATH_SOURCE_OOXMLEXPORT_HXX
+#pragma once
 
 #include "wordexportbase.hxx"
 
@@ -43,7 +42,5 @@ private:
     /// needed to determine markup for nested run properties
     oox::drawingml::DocumentType const m_DocumentType;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
