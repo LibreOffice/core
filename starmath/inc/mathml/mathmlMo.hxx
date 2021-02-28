@@ -24,8 +24,7 @@
  may be significant
 */
 
-#ifndef MATH_MO_HXX
-#define MATH_MO_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -106,7 +105,5 @@ constexpr size_t MATHML_MO_COUNT = 1100;
 
 extern std::vector<moOperatorData> moOperatorDataDictionary;
 }
-
-#endif /* MATH_MO_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

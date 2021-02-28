@@ -19,8 +19,7 @@
  *
  */
 
-#ifndef INCLUDED_STARMATH_INC_VISITORS_HXX
-#define INCLUDED_STARMATH_INC_VISITORS_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sal/log.hxx>
@@ -492,7 +491,5 @@ private:
     /** Output text generated from the pNodes */
     OUStringBuffer maCmdText;
 };
-
-#endif // INCLUDED_STARMATH_INC_VISITORS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
