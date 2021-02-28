@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_STARMATH_INC_TYPES_HXX
-#define INCLUDED_STARMATH_INC_TYPES_HXX
+#pragma once
 
 #include <sal/types.h>
 #define FONTNAME_MATH "OpenSymbol"
@@ -203,7 +202,5 @@ sal_Unicode const MS_SUCCEEDSEQUAL = 0x227D;
 sal_Unicode const MS_SUCCEEDSEQUIV = 0x227F;
 sal_Unicode const MS_NOTPRECEDES = 0x2280;
 sal_Unicode const MS_NOTSUCCEEDS = 0x2281;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

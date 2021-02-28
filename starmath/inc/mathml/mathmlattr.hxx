@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_STARMATH_SOURCE_MATHMLATTR_HXX
-#define INCLUDED_STARMATH_SOURCE_MATHMLATTR_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -73,7 +72,5 @@ enum class MathMLMathvariantValue
 };
 
 bool GetMathMLMathvariantValue(const OUString& rStr, MathMLMathvariantValue& rV);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

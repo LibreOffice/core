@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_STARMATH_INC_ACCESSIBLESMELEMENTSCONTROL_HXX
-#define INCLUDED_STARMATH_INC_ACCESSIBLESMELEMENTSCONTROL_HXX
+
+#pragma once
 
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
@@ -102,7 +102,5 @@ public:
 void AccessibleSmElementsControl::AcquireFocus() { UpdateFocus(SAL_MAX_UINT16); }
 
 void AccessibleSmElementsControl::ReleaseFocus(sal_uInt16 nPos) { UpdateFocus(nPos); }
-
-#endif // INCLUDED_STARMATH_INC_ACCESSIBLESMELEMENTSCONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

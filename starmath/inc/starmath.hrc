@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_STARMATH_INC_STARMATH_HRC
-#define INCLUDED_STARMATH_INC_STARMATH_HRC
+#pragma once
 
 #include <svl/solar.hrc>
 
@@ -69,7 +68,5 @@
 #define SID_ELEMENTSDOCKINGWINDOW   (SID_SMA_START + 126)
 #define SID_AUTO_CLOSE_BRACKETS     (SID_SMA_START + 127)
 #define SID_DEFAULT_SM_SYNTAX_VERSION (SID_SMA_START + 130)
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

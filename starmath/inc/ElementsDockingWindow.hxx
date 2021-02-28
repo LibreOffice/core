@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_STARMATH_INC_ELEMENTSDOCKINGWINDOW_HXX
-#define INCLUDED_STARMATH_INC_ELEMENTSDOCKINGWINDOW_HXX
+#pragma once
 
 #include <sfx2/dockwin.hxx>
 #include <vcl/customweld.hxx>
@@ -188,7 +187,5 @@ class SmElementsDockingWindowWrapper final : public SfxChildWindow
                                     SfxChildWinInfo* pInfo );
     virtual ~SmElementsDockingWindowWrapper() override;
 };
-
-#endif // INCLUDED_STARMATH_INC_ELEMENTSDOCKINGWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

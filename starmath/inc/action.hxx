@@ -8,6 +8,7 @@
  *
  * This file incorporates work covered by the following license notice:
  *
+    virtual void Redo() override;
  *   Licensed to the Apache Software Foundation (ASF) under one or more
  *   contributor license agreements. See the NOTICE file distributed
  *   with this work for additional information regarding copyright
@@ -16,6 +17,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #pragma once
 
 #include <svl/undo.hxx>
