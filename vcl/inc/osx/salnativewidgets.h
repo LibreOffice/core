@@ -22,7 +22,6 @@
 
 #define TAB_HEIGHT 20             // height of tab header in pixels
 #define TAB_TEXT_MARGIN 12        // left/right margin of text within tab headers
-#define VCL_TAB_TEXT_SEPARATOR 2  // Space between two tabs required by VCL
 
 #define FOCUS_RING_WIDTH 4  // width of focus ring in pixels
 
