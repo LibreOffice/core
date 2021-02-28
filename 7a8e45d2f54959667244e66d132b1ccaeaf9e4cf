@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "636b7df2_ffd8da16",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2827,
+      "author": {
+        "id": 1002855
+      },
+      "writtenOn": "2021-02-28T10:24:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9aa2bb4_ab703cf2",
+      "range": {
+        "startLine": 2827,
+        "startChar": 4,
+        "endLine": 2827,
+        "endChar": 28
+      },
+      "revId": "7a8e45d2f54959667244e66d132b1ccaeaf9e4cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "06c4ed9b_a0e44e31",
         "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
         "patchSetId": 1
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "48aae3c6_522a13b1",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2828,
+      "author": {
+        "id": 1002855
+      },
+      "writtenOn": "2021-02-28T10:24:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06c4ed9b_a0e44e31",
+      "revId": "7a8e45d2f54959667244e66d132b1ccaeaf9e4cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f91125c1_56692481",
         "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
         "patchSetId": 1
@@ -53,6 +95,30 @@
       "writtenOn": "2021-02-26T15:49:19Z",
       "side": 1,
       "message": "follow the coding standard:\n\nfor ...\n{\n}\nelse\n{\n}",
+      "range": {
+        "startLine": 2832,
+        "startChar": 48,
+        "endLine": 2832,
+        "endChar": 49
+      },
+      "revId": "7a8e45d2f54959667244e66d132b1ccaeaf9e4cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0be78107_13589d7e",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2832,
+      "author": {
+        "id": 1002855
+      },
+      "writtenOn": "2021-02-28T10:24:09Z",
+      "side": 1,
+      "message": "Do you mean, that I should use the else branch too, to make it more readable? If yes, in patchset3 it is done too.",
+      "parentUuid": "f91125c1_56692481",
       "range": {
         "startLine": 2832,
         "startChar": 48,
@@ -111,6 +177,30 @@
     },
     {
       "key": {
+        "uuid": "b2f2b31d_91b429f3",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2836,
+      "author": {
+        "id": 1002855
+      },
+      "writtenOn": "2021-02-28T10:24:09Z",
+      "side": 1,
+      "message": "Done, and swapped the boolean assignment to \"false\" because of the suggested meaning of the new name of the variable.",
+      "parentUuid": "f6971edc_8bade329",
+      "range": {
+        "startLine": 2836,
+        "startChar": 27,
+        "endLine": 2836,
+        "endChar": 28
+      },
+      "revId": "7a8e45d2f54959667244e66d132b1ccaeaf9e4cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c5d5ff11_97f626c7",
         "filename": "sw/source/core/txtnode/txtedt.cxx",
         "patchSetId": 1
@@ -125,6 +215,24 @@
       "revId": "7a8e45d2f54959667244e66d132b1ccaeaf9e4cf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be9a6543_5819e555",
+        "filename": "sw/source/core/txtnode/txtedt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1913,
+      "author": {
+        "id": 1002855
+      },
+      "writtenOn": "2021-02-28T10:24:09Z",
+      "side": 1,
+      "message": "Done. Thank you for this suggestment, it is much cleaner this way.",
+      "parentUuid": "c5d5ff11_97f626c7",
+      "revId": "7a8e45d2f54959667244e66d132b1ccaeaf9e4cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

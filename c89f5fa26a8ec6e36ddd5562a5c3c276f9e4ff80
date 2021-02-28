@@ -16,6 +16,24 @@
       "revId": "c89f5fa26a8ec6e36ddd5562a5c3c276f9e4ff80",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01447f7f_718c8f6a",
+        "filename": "sw/source/core/txtnode/txtedt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1924,
+      "author": {
+        "id": 1002855
+      },
+      "writtenOn": "2021-02-28T10:24:09Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "d4df2b39_55a8e84f",
+      "revId": "c89f5fa26a8ec6e36ddd5562a5c3c276f9e4ff80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
