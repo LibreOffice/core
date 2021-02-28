@@ -1583,9 +1583,14 @@ static bool IsNotBackspaceHeuristic(
         SwPosition const& rStart, SwPosition const& rEnd)
 {
     // check if the selection is backspace/delete created by DelLeft/DelRight
-    return rStart.nNode.GetIndex() + 1 != rEnd.nNode.GetIndex()
-        || rEnd.nContent != 0
-        || rStart.nContent != rStart.nNode.GetNode().GetTextNode()->Len();
+    if (rStart.nNode.GetIndex() + 1 != rEnd.nNode.GetIndex())
+        return true;
+    if (rEnd.nContent != 0)
+        return true;
+    const SwTextNode* pTextNode = rStart.nNode.GetNode().GetTextNode();
+    if (!pTextNode || rStart.nContent != pTextNode->Len())
+        return true;
+    return false;
 }
 
 bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
