@@ -661,8 +661,6 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                     else if (aTabItemDrawInfo.position == kHIThemeTabPositionLast)
                         aTabItemDrawInfo.position = kHIThemeTabPositionFirst;
                 }
-                rc.size.width += VCL_TAB_TEXT_SEPARATOR;
-                rc.origin.x -= 1;
                 HIThemeDrawTab(&rc, &aTabItemDrawInfo, maContextHolder.get(), kHIThemeOrientationNormal, nullptr);
                 bOK=true;
             }
@@ -812,7 +810,8 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                                         ? kThemeAdornmentDefault : kThemeAdornmentNone;
                     if (nUpperState & ControlState::FOCUSED || nLowerState & ControlState::FOCUSED)
                         aSpinInfo.adornment |= kThemeAdornmentFocus;
-                    rc.origin.x += rc.size.width + 2 * FOCUS_RING_WIDTH;
+                    rc.origin.x += rc.size.width + FOCUS_RING_WIDTH + 1;
+                    rc.origin.y -= 1;
                     rc.size.width = SPIN_BUTTON_WIDTH;
                     rc.size.height = SPIN_LOWER_BUTTON_HEIGHT + SPIN_LOWER_BUTTON_HEIGHT;
                     HIThemeDrawButton(&rc, &aSpinInfo, maContextHolder.get(), kHIThemeOrientationNormal, nullptr);
@@ -968,7 +967,7 @@ bool AquaSalGraphics::getNativeControlRegion(ControlType nType,
             break;
         case ControlType::TabItem:
             {
-                w = aCtrlBoundRect.GetWidth() + 2 * TAB_TEXT_MARGIN - 2 * VCL_TAB_TEXT_SEPARATOR;
+                w = aCtrlBoundRect.GetWidth() + 2 * TAB_TEXT_MARGIN;
                 h = TAB_HEIGHT + 2;
                 rNativeContentRegion = tools::Rectangle(Point(x, y), Size(w, h));
                 rNativeBoundingRegion = tools::Rectangle(Point(x, y), Size(w, h));
