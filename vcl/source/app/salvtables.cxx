@@ -6641,7 +6641,8 @@ public:
         aRect.SetRight(aPt.X());
         aRect.SetBottom(aPt.Y());
 
-        FloatWinPopupFlags nFlags = FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus;
+        FloatWinPopupFlags nFlags = FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus
+                                    | FloatWinPopupFlags::NoMouseUpClose;
         m_xPopover->EnableDocking();
         DockingManager* pDockingManager = vcl::Window::GetDockingManager();
         pDockingManager->SetPopupModeEndHdl(m_xPopover,
