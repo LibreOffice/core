@@ -757,38 +757,42 @@ namespace sw
             std::for_each(maStack.begin(), maStack.end(), SetEndIfOpen(rPos));
         }
 
-        void RedlineStack::MoveAttrsFieldmarkInserted(const SwPosition& rPos)
+        void MoveAttrFieldmarkInserted(SwFltPosition& rMkPos, SwFltPosition& rPtPos, const SwPosition& rPos)
         {
-            size_t nCnt = maStack.size();
             sal_Int32 const nInserted = 2; // CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDSEP
             sal_uLong nPosNd = rPos.nNode.GetIndex();
             sal_Int32 nPosCt = rPos.nContent.GetIndex() - nInserted;
 
-            for (size_t i=0; i < nCnt; ++i)
+            bool const isPoint(rMkPos == rPtPos);
+            if ((rMkPos.m_nNode.GetIndex()+1 == nPosNd) &&
+                (nPosCt <= rMkPos.m_nContent))
+            {
+                rMkPos.m_nContent += nInserted;
+                SAL_WARN_IF(rMkPos.m_nContent > rPos.nNode.GetNodes()[nPosNd]->GetContentNode()->Len(),
+                        "sw.ww8", "redline ends after end of line");
+                if (isPoint) // sigh ... important special case...
+                {
+                    rPtPos.m_nContent += nInserted;
+                    return;
+                }
+            }
+            // for the end position, leave it alone if it's *on* the dummy
+            // char position, that should remain *before*
+            if ((rPtPos.m_nNode.GetIndex()+1 == nPosNd) &&
+                (nPosCt < rPtPos.m_nContent))
+            {
+                rPtPos.m_nContent += nInserted;
+                SAL_WARN_IF(rPtPos.m_nContent > rPos.nNode.GetNodes()[nPosNd]->GetContentNode()->Len(),
+                        "sw.ww8", "range ends after end of line");
+            }
+        }
+
+        void RedlineStack::MoveAttrsFieldmarkInserted(const SwPosition& rPos)
+        {
+            for (size_t i = 0, nCnt = maStack.size(); i < nCnt; ++i)
             {
                 SwFltStackEntry& rEntry = *maStack[i];
-                bool const isPoint(rEntry.m_aMkPos == rEntry.m_aPtPos);
-                if ((rEntry.m_aMkPos.m_nNode.GetIndex()+1 == nPosNd) &&
-                    (nPosCt <= rEntry.m_aMkPos.m_nContent))
-                {
-                    rEntry.m_aMkPos.m_nContent += nInserted;
-                    SAL_WARN_IF(rEntry.m_aMkPos.m_nContent > rPos.nNode.GetNodes()[nPosNd]->GetContentNode()->Len(),
-                            "sw.ww8", "redline ends after end of line");
-                    if (isPoint) // sigh ... important special case...
-                    {
-                        rEntry.m_aPtPos.m_nContent += nInserted;
-                        continue;
-                    }
-                }
-                // for the end position, leave it alone if it's *on* the dummy
-                // char position, that should remain *before*
-                if ((rEntry.m_aPtPos.m_nNode.GetIndex()+1 == nPosNd) &&
-                    (nPosCt < rEntry.m_aPtPos.m_nContent))
-                {
-                    rEntry.m_aPtPos.m_nContent += nInserted;
-                    SAL_WARN_IF(rEntry.m_aPtPos.m_nContent > rPos.nNode.GetNodes()[nPosNd]->GetContentNode()->Len(),
-                            "sw.ww8", "redline ends after end of line");
-                }
+                MoveAttrFieldmarkInserted(rEntry.m_aMkPos, rEntry.m_aPtPos, rPos);
             }
         }
 
