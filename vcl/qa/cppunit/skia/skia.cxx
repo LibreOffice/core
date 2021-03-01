@@ -17,6 +17,7 @@
 #include <vcl/skia/SkiaHelper.hxx>
 
 #include <skia/salbmp.hxx>
+#include <skia/utils.hxx>
 #include <bitmap/BitmapWriteAccess.hxx>
 
 // This tests backends that use Skia (i.e. intentionally not the svp one, which is the default.)
@@ -37,6 +38,7 @@ public:
     void testInterpretAs8Bit();
     void testAlphaBlendWith();
     void testBitmapCopyOnWrite();
+    void testMatrixQuality();
     void testTdf137329();
 
     CPPUNIT_TEST_SUITE(SkiaTest);
@@ -45,6 +47,7 @@ public:
     CPPUNIT_TEST(testInterpretAs8Bit);
     CPPUNIT_TEST(testAlphaBlendWith);
     CPPUNIT_TEST(testBitmapCopyOnWrite);
+    CPPUNIT_TEST(testMatrixQuality);
     CPPUNIT_TEST(testTdf137329);
     CPPUNIT_TEST_SUITE_END();
 
@@ -307,8 +310,25 @@ void SkiaTest::testBitmapCopyOnWrite()
     CPPUNIT_ASSERT(bitmap.unittestGetAlphaImage() != oldAlphaImage);
 }
 
+void SkiaTest::testMatrixQuality()
+{
+    if (!SkiaHelper::isVCLSkiaEnabled())
+        return;
+    // Not changing the size (but possibly rotated/flipped) does not need high quality transformations.
+    CPPUNIT_ASSERT(!SkiaTests::matrixNeedsHighQuality(SkMatrix()));
+    CPPUNIT_ASSERT(!SkiaTests::matrixNeedsHighQuality(SkMatrix::RotateDeg(90)));
+    CPPUNIT_ASSERT(!SkiaTests::matrixNeedsHighQuality(SkMatrix::RotateDeg(180)));
+    CPPUNIT_ASSERT(!SkiaTests::matrixNeedsHighQuality(SkMatrix::RotateDeg(270)));
+    CPPUNIT_ASSERT(!SkiaTests::matrixNeedsHighQuality(SkMatrix::Scale(1, -1)));
+    CPPUNIT_ASSERT(SkiaTests::matrixNeedsHighQuality(SkMatrix::Scale(0, -1)));
+    CPPUNIT_ASSERT(SkiaTests::matrixNeedsHighQuality(SkMatrix::Scale(2, 1)));
+    CPPUNIT_ASSERT(SkiaTests::matrixNeedsHighQuality(SkMatrix::RotateDeg(89)));
+}
+
 void SkiaTest::testTdf137329()
 {
+    if (!SkiaHelper::isVCLSkiaEnabled())
+        return;
     // Draw a filled polygon in the entire device, with AA enabled.
     // All pixels in the device should be black, even those at edges (i.e. not affected by AA).
     ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);

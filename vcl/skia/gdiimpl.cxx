@@ -1766,6 +1766,33 @@ bool SkiaSalGraphicsImpl::hasFastDrawTransformedBitmap() const
     return true;
 }
 
+// Whether applying matrix needs image smoothing for the transformation.
+static bool matrixNeedsHighQuality(const SkMatrix& matrix)
+{
+    if (matrix.isIdentity())
+        return false;
+    if (matrix.isScaleTranslate())
+    {
+        if (abs(matrix.getScaleX()) == 1 && abs(matrix.getScaleY()) == 1)
+            return false; // Only at most flipping and keeping the size.
+        return true;
+    }
+    assert(!matrix.hasPerspective()); // we do not use this
+    if (matrix.getScaleX() == 0 && matrix.getScaleY() == 0)
+    {
+        // Rotating 90 or 270 degrees while keeping the size.
+        if ((matrix.getSkewX() == 1 && matrix.getSkewY() == -1)
+            || (matrix.getSkewX() == -1 && matrix.getSkewY() == 1))
+            return false;
+    }
+    return true;
+}
+
+namespace SkiaTests
+{
+bool matrixNeedsHighQuality(const SkMatrix& matrix) { return ::matrixNeedsHighQuality(matrix); }
+}
+
 bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
                                                 const basegfx::B2DPoint& rX,
                                                 const basegfx::B2DPoint& rY,
@@ -1816,7 +1843,7 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
         SkAutoCanvasRestore autoRestore(canvas, true);
         canvas->concat(matrix);
         SkPaint paint;
-        if (!matrix.isTranslate())
+        if (matrixNeedsHighQuality(matrix))
             paint.setFilterQuality(kHigh_SkFilterQuality);
         if (fAlpha == 1.0)
             canvas->drawImage(imageToDraw, 0, 0, &paint);
@@ -1842,7 +1869,7 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
         SkAutoCanvasRestore autoRestore(canvas, true);
         canvas->concat(matrix);
         SkPaint paint;
-        if (!matrix.isTranslate())
+        if (matrixNeedsHighQuality(matrix))
             paint.setFilterQuality(kHigh_SkFilterQuality);
         if (pSkiaAlphaBitmap)
         {
