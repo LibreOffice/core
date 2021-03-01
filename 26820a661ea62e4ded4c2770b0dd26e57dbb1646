@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8bacc81_79d265c2",
+        "filename": "vcl/source/window/printdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-01T11:19:16Z",
+      "side": 1,
+      "message": "xs:int maps to sal_Int32, not int (and xs:long maps to sal_Int64, not long, but apparently nobody noticed that mistake in the original code)",
+      "revId": "26820a661ea62e4ded4c2770b0dd26e57dbb1646",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
