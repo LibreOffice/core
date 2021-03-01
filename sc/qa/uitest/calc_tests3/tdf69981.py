@@ -17,8 +17,6 @@ class tdf69981(UITestCase):
 
     def test_tdf69981_text_to_columns(self):
 
-        # FIXME flaky test, passed once, but broke multiple times.
-        return
         calc_doc = self.ui_test.load_file(get_url_for_data_file("tdf69981.ods"))
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
