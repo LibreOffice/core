@@ -22,6 +22,30 @@
       "revId": "149807eb6100090e178505ba4a264bb38eba1e0c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83e68e64_1fe0d6e6",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 6
+      },
+      "lineNbr": 3505,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-01T10:43:10Z",
+      "side": 1,
+      "message": "32k resolution display coming soon :-)",
+      "parentUuid": "f0c3e548_aee66e8f",
+      "range": {
+        "startLine": 3505,
+        "startChar": 41,
+        "endLine": 3505,
+        "endChar": 48
+      },
+      "revId": "149807eb6100090e178505ba4a264bb38eba1e0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
