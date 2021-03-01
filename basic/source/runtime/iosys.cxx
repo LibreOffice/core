@@ -441,7 +441,7 @@ ErrCode const & SbiStream::Open
         {
 
         // #??? For write access delete file if it already exists (not for appending)
-        if( (nStrmMode & StreamMode::WRITE) && !IsAppend() && !IsBinary() && !IsRandom() &&
+        if( (nStrmMode & StreamMode::WRITE) && !IsAppend() && !IsRandom() &&
             xSFI->exists( aNameStr ) && !xSFI->isFolder( aNameStr ) )
         {
             xSFI->kill( aNameStr );
