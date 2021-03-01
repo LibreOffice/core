@@ -2051,7 +2051,10 @@ bool VclScrolledWindow::EventNotify(NotifyEvent& rNEvt)
             const CommandWheelData* pData = rCEvt.GetWheelData();
             if( !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) )
             {
-                bDone = HandleScrollCommand(rCEvt, m_pHScroll, m_pVScroll);
+                // tdf#140537 only handle scroll commands in the valid shown scrollbars
+                bDone = HandleScrollCommand(rCEvt,
+                                            m_pHScroll->IsVisible() ? m_pHScroll : nullptr,
+                                            m_pVScroll->IsVisible() ? m_pVScroll : nullptr);
             }
         }
     }
