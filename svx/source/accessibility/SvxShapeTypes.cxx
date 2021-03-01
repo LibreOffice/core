@@ -28,7 +28,7 @@
 
 namespace accessibility {
 
-static AccessibleShape* CreateSvxAccessibleShape (
+static rtl::Reference<AccessibleShape> CreateSvxAccessibleShape (
     const AccessibleShapeInfo& rShapeInfo,
     const AccessibleShapeTreeInfo& rShapeTreeInfo,
     ShapeTypeId nId)
