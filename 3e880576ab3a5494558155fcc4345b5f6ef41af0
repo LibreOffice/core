@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df27eaf1_9dfb80e5",
+        "filename": "starmath/source/document.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-03-01T13:08:06Z",
+      "side": 1,
+      "message": "remove printf please, if you need debugging output that you want to stay in, use SAL_WARN or SAL_INFO",
+      "revId": "3e880576ab3a5494558155fcc4345b5f6ef41af0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
