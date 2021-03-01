@@ -623,7 +623,7 @@ private:
     std::optional<css::drawing::FillStyle> m_oFillStyle;
 
     /// If we're in the process of exporting a hyperlink, then its URL.
-    OUString m_sURL;
+    std::stack<OUString> m_aURLs;
 
     /// If original file had \sbauto.
     bool m_bParaBeforeAutoSpacing;
