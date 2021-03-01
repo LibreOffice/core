@@ -329,6 +329,8 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                         // #i36010# - set layout direction of the position
                         pFormat->SetPositionLayoutDir(
                             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
+                        if (pSubObj->GetName().isEmpty())
+                            pSubObj->SetName(pFormat->GetName());
                         pFormatsAndObjs[i].emplace_back( pFormat, pSubObj );
 
                         if( bUndo )
