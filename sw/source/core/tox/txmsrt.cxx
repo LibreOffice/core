@@ -842,18 +842,25 @@ OUString SwTOXAuthority::GetText(sal_uInt16 nAuthField, const SwRootFrame* pLayo
     return sText;
 }
 
+OUString SwTOXAuthority::GetSourceURL(const OUString& rText)
+{
+    OUString aText = rText;
+    INetURLObject aObject(aText);
+    if (aObject.GetMark().startsWith("page="))
+    {
+        aObject.SetMark(OUString());
+        aText = aObject.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+    }
+    return aText;
+}
+
 void SwTOXAuthority::FillText(SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField,
                               SwRootFrame const* const pLayout) const
 {
     OUString aText = GetText(nAuthField, pLayout);
     if (nAuthField == AUTH_FIELD_URL)
     {
-        INetURLObject aObject(aText);
-        if (aObject.GetMark().startsWith("page="))
-        {
-            aObject.SetMark(OUString());
-            aText = aObject.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-        }
+        aText = GetSourceURL(aText);
     }
 
     rNd.InsertText(aText, rInsPos);
@@ -861,9 +868,42 @@ void SwTOXAuthority::FillText(SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt1
 
 bool SwTOXAuthority::equivalent(const SwTOXSortTabBase& rCmp)
 {
-    return nType == rCmp.nType &&
-            static_cast<SwAuthorityField*>(m_rField.GetField())->GetAuthEntry() ==
-                static_cast<SwAuthorityField*>(static_cast<const SwTOXAuthority&>(rCmp).m_rField.GetField())->GetAuthEntry();
+    if (nType != rCmp.nType)
+    {
+        return false;
+    }
+
+    // Compare our SwAuthEntry and rCmp's SwAuthEntry, but the URL is considered equivalent, as long
+    // as it only differs in a page number, as that's still the same source.
+    const SwAuthEntry* pThis = static_cast<SwAuthorityField*>(m_rField.GetField())->GetAuthEntry();
+    const SwAuthEntry* pOther = static_cast<SwAuthorityField*>(
+                                    static_cast<const SwTOXAuthority&>(rCmp).m_rField.GetField())
+                                    ->GetAuthEntry();
+    if (pThis == pOther)
+    {
+        return true;
+    }
+
+    for (int i = 0; i < AUTH_FIELD_END; ++i)
+    {
+        auto eField = static_cast<ToxAuthorityField>(i);
+        if (eField == AUTH_FIELD_URL)
+        {
+            if (GetSourceURL(pThis->GetAuthorField(AUTH_FIELD_URL))
+                != GetSourceURL(pOther->GetAuthorField(AUTH_FIELD_URL)))
+            {
+                return false;
+            }
+            continue;
+        }
+
+        if (pThis->GetAuthorField(eField) != pOther->GetAuthorField(eField))
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 bool SwTOXAuthority::sort_lt(const SwTOXSortTabBase& rBase)
