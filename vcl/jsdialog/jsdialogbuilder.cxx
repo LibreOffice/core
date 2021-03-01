@@ -21,6 +21,7 @@
 
 using namespace weld;
 
+#define ACTION_TYPE "action_type"
 namespace
 {
 void response_help(vcl::Window* pWindow)
@@ -79,7 +80,19 @@ void JSDialogNotifyIdle::send(const boost::property_tree::ptree& rTree)
     }
 }
 
-void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow)
+namespace
+{
+OUString extractActionType(const ActionDataMap& rData)
+{
+    auto it = rData.find(ACTION_TYPE);
+    if (it != rData.end())
+        return it->second;
+    return "";
+}
+};
+
+void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow,
+                                     std::unique_ptr<ActionDataMap> pData)
 {
     // we want only the latest update of same type
     // TODO: also if we met full update - previous updates are not valid
@@ -87,13 +100,22 @@ void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Wi
 
     while (it != m_aMessageQueue.end())
     {
-        if (it->first == eType && it->second == pWindow)
+        if (it->m_eType == eType && it->m_pWindow == pWindow)
+        {
+            if (it->m_pData && pData
+                && extractActionType(*it->m_pData) != extractActionType(*pData))
+            {
+                it++;
+                continue;
+            }
             it = m_aMessageQueue.erase(it);
+        }
         else
             it++;
     }
 
-    m_aMessageQueue.push_back(std::make_pair(eType, pWindow));
+    JSDialogMessageInfo aMessage(eType, pWindow, std::move(pData));
+    m_aMessageQueue.push_back(aMessage);
 }
 
 boost::property_tree::ptree JSDialogNotifyIdle::generateFullUpdate() const
@@ -152,13 +174,34 @@ boost::property_tree::ptree JSDialogNotifyIdle::generateCloseMessage() const
     return aTree;
 }
 
+boost::property_tree::ptree
+JSDialogNotifyIdle::generateActionMessage(VclPtr<vcl::Window> pWindow,
+                                          std::unique_ptr<ActionDataMap> pData) const
+{
+    boost::property_tree::ptree aTree;
+
+    aTree.put("jsontype", m_sTypeOfJSON);
+    aTree.put("action", "action");
+    aTree.put("id", m_aNotifierWindow->GetLOKWindowId());
+
+    boost::property_tree::ptree aDataTree;
+    aDataTree.put("control_id", pWindow->get_id());
+
+    for (auto it = pData->begin(); it != pData->end(); it++)
+        aDataTree.put(it->first, it->second);
+
+    aTree.add_child("data", aDataTree);
+
+    return aTree;
+}
+
 void JSDialogNotifyIdle::Invoke()
 {
     auto rMessage = m_aMessageQueue.begin();
 
     while (rMessage != m_aMessageQueue.end())
     {
-        jsdialog::MessageType eType = rMessage->first;
+        jsdialog::MessageType eType = rMessage->m_eType;
 
         switch (eType)
         {
@@ -167,11 +210,15 @@ void JSDialogNotifyIdle::Invoke()
                 break;
 
             case jsdialog::MessageType::WidgetUpdate:
-                send(generateWidgetUpdate(rMessage->second));
+                send(generateWidgetUpdate(rMessage->m_pWindow));
                 break;
 
             case jsdialog::MessageType::Close:
                 send(generateCloseMessage());
+                break;
+
+            case jsdialog::MessageType::Action:
+                send(generateActionMessage(rMessage->m_pWindow, std::move(rMessage->m_pData)));
                 break;
         }
 
@@ -209,6 +256,12 @@ void JSDialogSender::sendUpdate(VclPtr<vcl::Window> pWindow, bool bForce)
         mpIdleNotify->forceUpdate();
 
     mpIdleNotify->sendMessage(jsdialog::MessageType::WidgetUpdate, pWindow);
+    mpIdleNotify->Start();
+}
+
+void JSDialogSender::sendAction(VclPtr<vcl::Window> pWindow, std::unique_ptr<ActionDataMap> pData)
+{
+    mpIdleNotify->sendMessage(jsdialog::MessageType::Action, pWindow, std::move(pData));
     mpIdleNotify->Start();
 }
 
@@ -1193,7 +1246,11 @@ void JSIconView::clear()
 void JSIconView::select(int pos)
 {
     SalInstanceIconView::select(pos);
-    sendUpdate();
+
+    std::unique_ptr<ActionDataMap> pMap = std::make_unique<ActionDataMap>();
+    (*pMap)[ACTION_TYPE] = "select";
+    (*pMap)["position"] = OUString::number(pos);
+    sendAction(std::move(pMap));
 }
 
 void JSIconView::unselect(int pos)
