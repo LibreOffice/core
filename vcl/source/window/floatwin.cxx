@@ -148,8 +148,9 @@ void FloatingWindow::ImplInitSettings()
     SetBackground(aColor);
 }
 
-FloatingWindow::FloatingWindow(vcl::Window* pParent, WinBits nStyle) :
-    SystemWindow(WindowType::FLOATINGWINDOW)
+FloatingWindow::FloatingWindow(vcl::Window* pParent, WinBits nStyle, VclPtr<vcl::Window> pDockingWindow) :
+    SystemWindow(WindowType::FLOATINGWINDOW),
+    mxDockingWindow(pDockingWindow)
 {
     ImplInitFloating(pParent, nStyle);
 }
@@ -654,6 +655,12 @@ void FloatingWindow::StateChanged( StateChangedType nType )
             else
             {
                 SetLOKNotifier(pParent->GetLOKNotifier());
+
+                // docking window creates child floating window
+                // LOK will communicate using that floating window's id
+                // we need to set the same id here to identify invalidations properly
+                if (mxDockingWindow)
+                    mxDockingWindow->SetLOKWindowId(GetLOKWindowId());
                 if (dynamic_cast<HelpTextWindow*>(this))
                     aItems.emplace_back("type", "tooltip");
                 else
@@ -675,6 +682,8 @@ void FloatingWindow::StateChanged( StateChangedType nType )
             {
                 pNotifier->notifyWindow(GetLOKWindowId(), "close");
                 ReleaseLOKNotifier();
+                if (mxDockingWindow)
+                    mxDockingWindow->ReleaseLOKNotifier();
             }
         }
     }

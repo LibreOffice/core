@@ -78,6 +78,7 @@ private:
     VclPtr<FloatingWindow>  mpNextFloat;
     VclPtr<vcl::Window>     mpFirstPopupModeWin;
     VclPtr<vcl::Window>     mxPrevFocusWin;
+    VclPtr<vcl::Window>     mxDockingWindow;
     std::unique_ptr<ImplData> mpImplData;
     tools::Rectangle       maFloatRect;
     ImplSVEvent *   mnPostId;
@@ -123,7 +124,7 @@ public:
                    void             PixelInvalidate(const tools::Rectangle* pRectangle) override;
 
 public:
-    explicit        FloatingWindow(vcl::Window* pParent, WinBits nStyle);
+    explicit        FloatingWindow(vcl::Window* pParent, WinBits nStyle, VclPtr<vcl::Window> pDockingWindow = nullptr);
     explicit        FloatingWindow(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
                                    const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
     virtual         ~FloatingWindow() override;

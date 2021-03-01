@@ -418,13 +418,13 @@ private:
     bool const mbToolBox;
 
 public:
-    ImplPopupFloatWin( vcl::Window* pParent, bool bToolBox );
+    ImplPopupFloatWin( vcl::Window* pParent, bool bToolBox, VclPtr<vcl::Window> pDockingWindow = nullptr );
     virtual ~ImplPopupFloatWin() override;
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 };
 
-ImplPopupFloatWin::ImplPopupFloatWin( vcl::Window* pParent, bool bToolBox ) :
-    FloatingWindow( pParent, bToolBox ? WB_BORDER | WB_POPUP | WB_SYSTEMWINDOW | WB_NOSHADOW : WB_STDPOPUP ),
+ImplPopupFloatWin::ImplPopupFloatWin( vcl::Window* pParent, bool bToolBox, VclPtr<vcl::Window> pDockingWindow ) :
+    FloatingWindow( pParent, bToolBox ? WB_BORDER | WB_POPUP | WB_SYSTEMWINDOW | WB_NOSHADOW : WB_STDPOPUP, pDockingWindow),
     mbToolBox( bToolBox )
 {
     if ( bToolBox )
@@ -753,7 +753,7 @@ void ImplDockingWindowWrapper::ShowTitleButton( TitleButton nButton, bool bVisib
     }
 }
 
-void ImplDockingWindowWrapper::ImplPreparePopupMode()
+void ImplDockingWindowWrapper::ImplPreparePopupMode(VclPtr<vcl::Window> pDockingWindow)
 {
     GetWindow()->Show( false, ShowFlags::NoFocusChange );
 
@@ -764,7 +764,7 @@ void ImplDockingWindowWrapper::ImplPreparePopupMode()
         mpOldBorderWin = nullptr;  // no border window found
 
     // the new parent for popup mode
-    VclPtrInstance<ImplPopupFloatWin> pWin( mpParent, GetWindow()->GetType() == WindowType::TOOLBOX );
+    VclPtrInstance<ImplPopupFloatWin> pWin( mpParent, GetWindow()->GetType() == WindowType::TOOLBOX, pDockingWindow );
     pWin->SetPopupModeEndHdl( LINK( this, ImplDockingWindowWrapper, PopupModeEnd ) );
 
     // At least for DockingWindow, GetText() has a side effect of setting deferred
@@ -802,7 +802,7 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     if( IsFloatingMode() )
         return;
 
-    ImplPreparePopupMode();
+    ImplPreparePopupMode(mpDockingWindow);
 
     // don't allow tearoff, if globally disabled
     if( !StyleSettings::GetDockingFloatsSupported() ||
