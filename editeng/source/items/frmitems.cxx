@@ -725,7 +725,7 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
         case MID_UP_MARGIN :
-            if(!(rVal >>= nVal) || nVal < 0)
+            if(!(rVal >>= nVal))
                 return false;
             SetUpper(static_cast<sal_uInt16>(bConvert ? convertMm100ToTwip(nVal) : nVal));
             break;

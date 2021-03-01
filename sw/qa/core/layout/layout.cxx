@@ -357,6 +357,36 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMirrorMargin)
     CPPUNIT_ASSERT_EQUAL(nGutterTwips, nOldRight - nNewRight);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMarginPageBorder)
+{
+// FIXME this is 3369 on macOS -- calculate this number dynamically?
+#if !defined(MACOSX)
+    // Given a document with a non-0 gutter margin.
+    SwDoc* pDoc = createSwDoc();
+    uno::Reference<beans::XPropertySet> xStandard(getStyles("PageStyles")->getByName("Standard"),
+                                                  uno::UNO_QUERY);
+    sal_Int32 nGutterMm100 = 2000;
+    xStandard->setPropertyValue("GutterMargin", uno::makeAny(nGutterMm100));
+
+    // When setting a left border.
+    table::BorderLine2 aBorder;
+    aBorder.LineWidth = 2;
+    aBorder.OuterLineWidth = 2;
+    xStandard->setPropertyValue("LeftBorder", uno::makeAny(aBorder));
+
+    // Then make sure border is at the left edge of the text area.
+    SwDocShell* pShell = pDoc->GetDocShell();
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2565
+    // - Actual  : 1425
+    // Where 2565 is close to the left edge of the text area (2553).
+    assertXPath(pXmlDoc, "//polyline[@style='solid']/point[1]", "x", "2565");
+#endif
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

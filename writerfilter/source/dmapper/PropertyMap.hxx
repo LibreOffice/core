@@ -316,7 +316,8 @@ private:
                                    PropertyIds eDistId,
                                    sal_Int32 nDistance,
                                    BorderOffsetFrom eOffsetFrom,
-                                   sal_uInt32 nLineWidth );
+                                   sal_uInt32 nLineWidth,
+                                   DomainMapper_Impl& rDM_Impl );
 
     // Determines if conversion of a given floating table is wanted or not.
     bool FloatingTableConversion( const DomainMapper_Impl& rDM_Impl, FloatingTableInfo& rInfo );
