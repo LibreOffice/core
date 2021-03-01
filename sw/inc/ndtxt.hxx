@@ -16,9 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_NDTXT_HXX
-#define INCLUDED_SW_INC_NDTXT_HXX
 
+#pragma once
 #include <cppuhelper/weakref.hxx>
 
 #include "swdllapi.h"
@@ -868,6 +867,6 @@ inline sal_Int32 SwTextNode::GetSpaceLeft() const
     return TXTNODE_MAX-m_Text.getLength();
 }
 
-#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
