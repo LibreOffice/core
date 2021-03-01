@@ -473,6 +473,8 @@ public:
     virtual void remove(int pos) override;
     virtual void remove(const weld::TreeIter& rIter) override;
 
+    virtual void clear() override;
+
     void drag_start();
     void drag_end();
 };
