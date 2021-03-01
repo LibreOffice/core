@@ -684,8 +684,8 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
         450);
 
     // restore dialog size
-    std::optional<long> aWidth = officecfg::Office::Common::Print::Dialog::Width::get();
-    std::optional<long> aHeight = officecfg::Office::Common::Print::Dialog::Height::get();
+    std::optional<int> aWidth = officecfg::Office::Common::Print::Dialog::Width::get();
+    std::optional<int> aHeight = officecfg::Office::Common::Print::Dialog::Height::get();
     WindowStateData aState;
     if (aWidth) aState.SetWidth(*aWidth); else aWidth = -1;
     if (aHeight) aState.SetHeight(*aHeight); else aHeight = -1;
