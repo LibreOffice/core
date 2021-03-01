@@ -538,7 +538,7 @@ void RtfAttributeOutput::EndRuby(const SwTextNode& /*rNode*/, sal_Int32 /*nPos*/
 
 bool RtfAttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget)
 {
-    m_sURL = rUrl;
+    m_aURLs.push(rUrl);
     // Ignore hyperlink without a URL.
     if (!rUrl.isEmpty())
     {
@@ -568,7 +568,13 @@ bool RtfAttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget)
 
 bool RtfAttributeOutput::EndURL(bool const isAtEndOfParagraph)
 {
-    if (!m_sURL.isEmpty())
+    if (m_aURLs.empty())
+    {
+        return true;
+    }
+
+    const OUString& rURL = m_aURLs.top();
+    if (!rURL.isEmpty())
     {
         // UGLY: usually EndRun is called earlier, but there is an extra
         // call to OutAttrWithRange() when at the end of the paragraph,
@@ -588,8 +594,8 @@ bool RtfAttributeOutput::EndURL(bool const isAtEndOfParagraph)
             // close the field group
             m_aRun->append('}');
         }
-        m_sURL.clear();
     }
+    m_aURLs.pop();
     return true;
 }
 
