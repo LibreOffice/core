@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c40643be_17038a65",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-01T10:48:11Z",
+      "side": 1,
+      "message": "Strange limitation. But anyway, is this check/assert actually needed? The resulting OUStringLiteral could possibly make the trailing zero itself - or was there some problem with this, I don\u0027t remember clearly.",
+      "revId": "5b33c29fc0090a41a530669d43759e9559978726",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
