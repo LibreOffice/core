@@ -1346,8 +1346,8 @@ SwFootnoteSave::~SwFootnoteSave() COVERITY_NOEXCEPT_FALSE
 SwFootnotePortion::SwFootnotePortion( const OUString &rExpand,
                             SwTextFootnote *pFootn, sal_uInt16 nReal )
         : SwFieldPortion( rExpand, nullptr )
-        , pFootnote(pFootn)
-        , nOrigHeight( nReal )
+        , m_pFootnote(pFootn)
+        , m_nOrigHeight( nReal )
         // #i98418#
         , mbPreferredScriptTypeSet( false )
         , mnPreferredScriptType( SwFontScript::Latin )
@@ -1366,7 +1366,7 @@ bool SwFootnotePortion::Format( SwTextFormatInfo &rInf )
 {
     // #i98418#
 //    SwFootnoteSave aFootnoteSave( rInf, pFootnote );
-    SwFootnoteSave aFootnoteSave( rInf, pFootnote, mbPreferredScriptTypeSet, mnPreferredScriptType );
+    SwFootnoteSave aFootnoteSave( rInf, m_pFootnote, mbPreferredScriptTypeSet, mnPreferredScriptType );
     // the idx is manipulated in SwExpandPortion::Format
     // this flag indicates, that a footnote is allowed to trigger
     // an underflow during SwTextGuess::Guess
@@ -1385,7 +1385,7 @@ void SwFootnotePortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     // #i98418#
 //    SwFootnoteSave aFootnoteSave( rInf, pFootnote );
-    SwFootnoteSave aFootnoteSave( rInf, pFootnote, mbPreferredScriptTypeSet, mnPreferredScriptType );
+    SwFootnoteSave aFootnoteSave( rInf, m_pFootnote, mbPreferredScriptTypeSet, mnPreferredScriptType );
     rInf.DrawViewOpt( *this, PortionType::Footnote );
     SwExpandPortion::Paint( rInf );
 }
@@ -1394,7 +1394,7 @@ SwPosSize SwFootnotePortion::GetTextSize( const SwTextSizeInfo &rInfo ) const
 {
     // #i98418#
 //    SwFootnoteSave aFootnoteSave( rInfo, pFootnote );
-    SwFootnoteSave aFootnoteSave( rInfo, pFootnote, mbPreferredScriptTypeSet, mnPreferredScriptType );
+    SwFootnoteSave aFootnoteSave( rInfo, m_pFootnote, mbPreferredScriptTypeSet, mnPreferredScriptType );
     return SwExpandPortion::GetTextSize( rInfo );
 }
 
@@ -1407,11 +1407,11 @@ void SwFootnotePortion::SetPreferredScriptType( SwFontScript nPreferredScriptTyp
 
 SwFieldPortion *SwQuoVadisPortion::Clone( const OUString &rExpand ) const
 {
-    return new SwQuoVadisPortion( rExpand, aErgo );
+    return new SwQuoVadisPortion( rExpand, m_aErgo );
 }
 
 SwQuoVadisPortion::SwQuoVadisPortion( const OUString &rExp, const OUString& rStr )
-    : SwFieldPortion( rExp ), aErgo(rStr)
+    : SwFieldPortion( rExp ), m_aErgo(rStr)
 {
     SetLen(TextFrameIndex(0));
     SetWhichPor( PortionType::QuoVadis );
@@ -1450,13 +1450,13 @@ bool SwQuoVadisPortion::GetExpText( const SwTextSizeInfo &, OUString &rText ) co
     // if this QuoVadisPortion has a follow, the follow is responsible for
     // the ergo text.
     if ( ! HasFollow() )
-        rText += aErgo;
+        rText += m_aErgo;
     return true;
 }
 
 void SwQuoVadisPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    rPH.Special( GetLen(), m_aExpand + aErgo, GetWhichPor() );
+    rPH.Special( GetLen(), m_aExpand + m_aErgo, GetWhichPor() );
 }
 
 void SwQuoVadisPortion::Paint( const SwTextPaintInfo &rInf ) const

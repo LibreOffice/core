@@ -36,24 +36,24 @@ extern SwDropCapCache *pDropCapCache;
 // attribute changes inside them.
 class SwDropPortionPart
 {
-    std::unique_ptr<SwDropPortionPart> pFollow;
-    std::unique_ptr<SwFont> pFnt;
-    TextFrameIndex nLen;
-    sal_uInt16 nWidth;
+    std::unique_ptr<SwDropPortionPart> m_pFollow;
+    std::unique_ptr<SwFont> m_pFnt;
+    TextFrameIndex m_nLen;
+    sal_uInt16 m_nWidth;
     bool m_bJoinBorderWithNext;
     bool m_bJoinBorderWithPrev;
 
 public:
     SwDropPortionPart( SwFont& rFont, const TextFrameIndex nL )
-            : pFnt( &rFont ), nLen( nL ), nWidth( 0 ), m_bJoinBorderWithNext(false), m_bJoinBorderWithPrev(false) {};
+            : m_pFnt( &rFont ), m_nLen( nL ), m_nWidth( 0 ), m_bJoinBorderWithNext(false), m_bJoinBorderWithPrev(false) {};
     ~SwDropPortionPart();
 
-    SwDropPortionPart* GetFollow() const { return pFollow.get(); };
-    void SetFollow( std::unique_ptr<SwDropPortionPart> pNew ) { pFollow = std::move(pNew); };
-    SwFont& GetFont() const { return *pFnt; }
-    TextFrameIndex GetLen() const { return nLen; }
-    sal_uInt16 GetWidth() const { return nWidth; }
-    void SetWidth( sal_uInt16 nNew )  { nWidth = nNew; }
+    SwDropPortionPart* GetFollow() const { return m_pFollow.get(); };
+    void SetFollow( std::unique_ptr<SwDropPortionPart> pNew ) { m_pFollow = std::move(pNew); };
+    SwFont& GetFont() const { return *m_pFnt; }
+    TextFrameIndex GetLen() const { return m_nLen; }
+    sal_uInt16 GetWidth() const { return m_nWidth; }
+    void SetWidth( sal_uInt16 nNew )  { m_nWidth = nNew; }
 
     bool GetJoinBorderWithPrev() const { return m_bJoinBorderWithPrev; }
     bool GetJoinBorderWithNext() const { return m_bJoinBorderWithNext; }
@@ -64,13 +64,13 @@ public:
 class SwDropPortion : public SwTextPortion
 {
     friend class SwDropCapCache;
-    std::unique_ptr<SwDropPortionPart> pPart; // due to script/attribute changes
-    sal_uInt16 nLines;          // Line count
-    sal_uInt16 nDropHeight;     // Height
-    sal_uInt16 nDropDescent;    // Distance to the next line
-    sal_uInt16 nDistance;       // Distance to the text
-    sal_uInt16 nFix;            // Fixed position
-    short nY;               // Y Offset
+    std::unique_ptr<SwDropPortionPart> m_pPart; // due to script/attribute changes
+    sal_uInt16 m_nLines;          // Line count
+    sal_uInt16 m_nDropHeight;     // Height
+    sal_uInt16 m_nDropDescent;    // Distance to the next line
+    sal_uInt16 m_nDistance;       // Distance to the text
+    sal_uInt16 m_nFix;            // Fixed position
+    short m_nY;               // Y Offset
 
     bool FormatText( SwTextFormatInfo &rInf );
     void PaintText( const SwTextPaintInfo &rInf ) const;
@@ -88,18 +88,18 @@ public:
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
     virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const override;
 
-    sal_uInt16 GetLines() const { return nLines; }
-    sal_uInt16 GetDistance() const { return nDistance; }
-    sal_uInt16 GetDropHeight() const { return nDropHeight; }
-    sal_uInt16 GetDropDescent() const { return nDropDescent; }
-    sal_uInt16 GetDropLeft() const { return Width() + nFix; }
+    sal_uInt16 GetLines() const { return m_nLines; }
+    sal_uInt16 GetDistance() const { return m_nDistance; }
+    sal_uInt16 GetDropHeight() const { return m_nDropHeight; }
+    sal_uInt16 GetDropDescent() const { return m_nDropDescent; }
+    sal_uInt16 GetDropLeft() const { return Width() + m_nFix; }
 
-    SwDropPortionPart* GetPart() const { return pPart.get(); }
-    void SetPart( std::unique_ptr<SwDropPortionPart> pNew ) { pPart = std::move(pNew); }
+    SwDropPortionPart* GetPart() const { return m_pPart.get(); }
+    void SetPart( std::unique_ptr<SwDropPortionPart> pNew ) { m_pPart = std::move(pNew); }
 
-    void SetY( short nNew )  { nY = nNew; }
+    void SetY( short nNew )  { m_nY = nNew; }
 
-    SwFont* GetFnt() const { return pPart ? &pPart->GetFont() : nullptr; }
+    SwFont* GetFnt() const { return m_pPart ? &m_pPart->GetFont() : nullptr; }
 
     static void DeleteDropCapCache();
 };

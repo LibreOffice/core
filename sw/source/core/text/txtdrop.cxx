@@ -96,8 +96,8 @@ SwDropSave::~SwDropSave()
 /// SwDropPortionPart DTor
 SwDropPortionPart::~SwDropPortionPart()
 {
-    pFollow.reset();
-    pFnt.reset();
+    m_pFollow.reset();
+    m_pFnt.reset();
 }
 
 /// SwDropPortion CTor, DTor
@@ -105,19 +105,19 @@ SwDropPortion::SwDropPortion( const sal_uInt16 nLineCnt,
                               const sal_uInt16 nDrpHeight,
                               const sal_uInt16 nDrpDescent,
                               const sal_uInt16 nDist )
-  : nLines( nLineCnt ),
-    nDropHeight(nDrpHeight),
-    nDropDescent(nDrpDescent),
-    nDistance(nDist),
-    nFix(0),
-    nY(0)
+  : m_nLines( nLineCnt ),
+    m_nDropHeight(nDrpHeight),
+    m_nDropDescent(nDrpDescent),
+    m_nDistance(nDist),
+    m_nFix(0),
+    m_nY(0)
 {
     SetWhichPor( PortionType::Drop );
 }
 
 SwDropPortion::~SwDropPortion()
 {
-    pPart.reset();
+    m_pPart.reset();
 }
 
 /// nWishLen = 0 indicates that we want a whole word
@@ -299,7 +299,7 @@ bool SwTextNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDesce
 /// Manipulate the width, otherwise the chars are being stretched
 void SwDropPortion::PaintText( const SwTextPaintInfo &rInf ) const
 {
-    OSL_ENSURE( nDropHeight && pPart && nLines != 1, "Drop Portion painted twice" );
+    OSL_ENSURE( m_nDropHeight && m_pPart && m_nLines != 1, "Drop Portion painted twice" );
 
     const SwDropPortionPart* pCurrPart = GetPart();
     const TextFrameIndex nOldLen = GetLen();
@@ -307,8 +307,8 @@ void SwDropPortion::PaintText( const SwTextPaintInfo &rInf ) const
     const sal_uInt16 nOldAscent = GetAscent();
 
     const SwTwips nBasePosY  = rInf.Y();
-    const_cast<SwTextPaintInfo&>(rInf).Y( nBasePosY + nY );
-    const_cast<SwDropPortion*>(this)->SetAscent( nOldAscent + nY );
+    const_cast<SwTextPaintInfo&>(rInf).Y( nBasePosY + m_nY );
+    const_cast<SwDropPortion*>(this)->SetAscent( nOldAscent + m_nY );
     SwDropSave aSave( rInf );
     // for text inside drop portions we let vcl handle the text directions
     SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
@@ -348,7 +348,7 @@ void SwDropPortion::PaintText( const SwTextPaintInfo &rInf ) const
 void SwDropPortion::PaintDrop( const SwTextPaintInfo &rInf ) const
 {
     // normal output is being done during the normal painting
-    if( ! nDropHeight || ! pPart || nLines == 1 )
+    if( ! m_nDropHeight || ! m_pPart || m_nLines == 1 )
         return;
 
     // set the lying values
@@ -363,11 +363,11 @@ void SwDropPortion::PaintDrop( const SwTextPaintInfo &rInf ) const
     // make good for retouching
 
     // Set baseline
-    const_cast<SwTextPaintInfo&>(rInf).Y( aOutPos.Y() + nDropHeight );
+    const_cast<SwTextPaintInfo&>(rInf).Y( aOutPos.Y() + m_nDropHeight );
 
     // for background
-    const_cast<SwDropPortion*>(this)->Height( nDropHeight + nDropDescent );
-    const_cast<SwDropPortion*>(this)->SetAscent( nDropHeight );
+    const_cast<SwDropPortion*>(this)->Height( m_nDropHeight + m_nDropDescent );
+    const_cast<SwDropPortion*>(this)->SetAscent( m_nDropHeight );
 
     // Always adapt Clipregion to us, never set it off using the existing ClipRect
     // as that could be set for the line
@@ -393,7 +393,7 @@ void SwDropPortion::PaintDrop( const SwTextPaintInfo &rInf ) const
 void SwDropPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     // normal output is being done here
-    if( !(! nDropHeight || ! pPart || 1 == nLines) )
+    if( !(! m_nDropHeight || ! m_pPart || 1 == m_nLines) )
         return;
 
     if ( rInf.OnWin() &&
@@ -982,12 +982,12 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
 bool SwDropPortion::Format( SwTextFormatInfo &rInf )
 {
     bool bFull = false;
-    nFix = static_cast<sal_uInt16>(rInf.X());
+    m_nFix = static_cast<sal_uInt16>(rInf.X());
 
     SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
     aLayoutModeModifier.SetAuto();
 
-    if( nDropHeight && pPart && nLines!=1 )
+    if( m_nDropHeight && m_pPart && m_nLines!=1 )
     {
         if( !pDropCapCache )
             pDropCapCache = new SwDropCapCache;
@@ -998,7 +998,7 @@ bool SwDropPortion::Format( SwTextFormatInfo &rInf )
         const tools::Long nOldX = rInf.X();
         {
             SwDropSave aSave( rInf );
-            SwDropPortionPart* pCurrPart = pPart.get();
+            SwDropPortionPart* pCurrPart = m_pPart.get();
 
             while ( pCurrPart )
             {
@@ -1037,7 +1037,7 @@ bool SwDropPortion::Format( SwTextFormatInfo &rInf )
 
         // Quit when Flys are overlapping
         if( ! bFull )
-            bFull = lcl_IsDropFlyInter( rInf, Width(), nDropHeight );
+            bFull = lcl_IsDropFlyInter( rInf, Width(), m_nDropHeight );
 
         if( bFull )
         {
@@ -1046,8 +1046,8 @@ bool SwDropPortion::Format( SwTextFormatInfo &rInf )
                 Height( rInf.GetTextHeight() );
 
             // And now for another round
-            nDropHeight = nLines = 0;
-            pPart.reset();
+            m_nDropHeight = m_nLines = 0;
+            m_pPart.reset();
 
             // Meanwhile use normal formatting
             bFull = SwTextPortion::Format( rInf );
@@ -1062,16 +1062,16 @@ bool SwDropPortion::Format( SwTextFormatInfo &rInf )
         bFull = SwTextPortion::Format( rInf );
 
     if( bFull )
-        nDistance = 0;
+        m_nDistance = 0;
     else
     {
         const sal_uInt16 nWant = Width() + GetDistance();
         const sal_uInt16 nRest = static_cast<sal_uInt16>(rInf.Width() - rInf.X());
         if( ( nWant > nRest ) ||
-            lcl_IsDropFlyInter( rInf, Width() + GetDistance(), nDropHeight ) )
-            nDistance = 0;
+            lcl_IsDropFlyInter( rInf, Width() + GetDistance(), m_nDropHeight ) )
+            m_nDistance = 0;
 
-        Width( Width() + nDistance );
+        Width( Width() + m_nDistance );
     }
     return bFull;
 }
