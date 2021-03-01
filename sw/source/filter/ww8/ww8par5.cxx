@@ -220,7 +220,7 @@ tools::Long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
     if (!m_aFieldStack.empty())
     {
         const WW8FieldEntry &rTest = m_aFieldStack.back();
-        aStart = rTest.maStartPos;
+        aStart = rTest.maStartPos.ToSwPosition();
     }
 
     const OUString sOrigName = BookmarkToWriter(*pName);
@@ -522,7 +522,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
         case ww::eFORMTEXT:
         if (bUseEnhFields && m_pPaM!=nullptr && m_pPaM->GetPoint()!=nullptr) {
             SwPosition aEndPos = *m_pPaM->GetPoint();
-            SwPaM aFieldPam( m_aFieldStack.back().GetPtNode(), m_aFieldStack.back().GetPtContent(), aEndPos.nNode, aEndPos.nContent.GetIndex());
+            SwPaM aFieldPam(m_aFieldStack.back().maStartPos.ToSwPosition(), aEndPos);
             IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
             IFieldmark *pFieldmark = pMarksAccess->makeFieldBookmark(
                         aFieldPam, m_aFieldStack.back().GetBookmarkName(), ODF_FORMTEXT,
@@ -584,7 +584,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
             case ww::eMERGEINC:
             case ww::eINCLUDETEXT:
                 //Move outside the section associated with this type of field
-                *m_pPaM->GetPoint() = m_aFieldStack.back().maStartPos;
+                *m_pPaM->GetPoint() = m_aFieldStack.back().maStartPos.ToSwPosition();
                 break;
             case ww::eIF: // IF-field
             {
@@ -616,9 +616,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                 {
                     // Unhandled field with stored code
                     SwPosition aEndPos = *m_pPaM->GetPoint();
-                    SwPaM aFieldPam(
-                            m_aFieldStack.back().GetPtNode(), m_aFieldStack.back().GetPtContent(),
-                            aEndPos.nNode, aEndPos.nContent.GetIndex());
+                    SwPaM aFieldPam(m_aFieldStack.back().maStartPos.ToSwPosition(), aEndPos);
 
                     IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
 

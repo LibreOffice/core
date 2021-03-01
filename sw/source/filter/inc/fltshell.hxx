@@ -60,6 +60,7 @@ public:
         m_nNode = rNode;
         m_nContent = nIdx;
     }
+
     //operators with SwPosition, where the node is hacked to the previous one,
     //and the offset to content is de-dynamic-ified
     SwFltPosition(const SwPosition &rPos)
@@ -67,10 +68,19 @@ public:
         , m_nContent(rPos.nContent.GetIndex())
     {
     }
-    void SetPos(const SwPosition &rPos)
+
+    void FromSwPosition(const SwPosition &rPos)
     {
         m_nNode = rPos.nNode.GetIndex()-1;
         m_nContent = rPos.nContent.GetIndex();
+    }
+
+    SwPosition ToSwPosition() const
+    {
+        SwNodeIndex m_nCorrectNode(m_nNode, +1);
+        SwPosition aRet(m_nCorrectNode);
+        aRet.nContent.Assign(m_nCorrectNode.GetNode().GetContentNode(), m_nContent);
+        return aRet;
     }
 };
 

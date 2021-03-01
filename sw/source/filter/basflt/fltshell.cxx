@@ -101,7 +101,7 @@ void SwFltStackEntry::SetEndPos(const SwPosition& rEndPos)
     // the cursor position moves the attribute's range
     // That's not the desired behavior!
     bOpen = false;                  // release and remember END
-    m_aPtPos.SetPos(rEndPos);
+    m_aPtPos.FromSwPosition(rEndPos);
 }
 
 bool SwFltStackEntry::MakeRegion(SwDoc& rDoc, SwPaM& rRegion, RegionMode const eCheck,
