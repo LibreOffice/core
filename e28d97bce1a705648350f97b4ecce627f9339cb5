@@ -52,6 +52,24 @@
       "revId": "e28d97bce1a705648350f97b4ecce627f9339cb5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5130f62d_e09bab46",
+        "filename": "sw/qa/uitest/writer_tests7/tdf139301.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-03-01T12:28:01Z",
+      "side": 1,
+      "message": "Hi László,\nThe time.sleeps can go. I\u0027ve just asked sberg in IRC:\n\u003csberg\u003e x1sc0, oh, that was accidental; I\u0027ll revert that part\n\u003cx1sc0\u003e sberg, no problem, I did it last week\n\u003csberg\u003e x1sc0, you already reverted it? thanks",
+      "parentUuid": "a378c0ca_9d3ecdd0",
+      "revId": "e28d97bce1a705648350f97b4ecce627f9339cb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
