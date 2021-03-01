@@ -26,6 +26,7 @@
 
 #include <deque>
 #include <list>
+#include <unordered_map>
 
 class ToolBox;
 class ComboBox;
@@ -34,6 +35,7 @@ class SvTabListBox;
 class IconView;
 
 typedef std::map<OString, weld::Widget*> WidgetMap;
+typedef std::unordered_map<std::string, OUString> ActionDataMap;
 
 namespace jsdialog
 {
@@ -41,9 +43,51 @@ enum MessageType
 {
     FullUpdate,
     WidgetUpdate,
-    Close
+    Close,
+    Action
 };
 }
+
+/// Class with the message description for storing in the queue
+class JSDialogMessageInfo
+{
+public:
+    jsdialog::MessageType m_eType;
+    VclPtr<vcl::Window> m_pWindow;
+    std::unique_ptr<ActionDataMap> m_pData;
+
+private:
+    void copy(const JSDialogMessageInfo& rInfo)
+    {
+        this->m_eType = rInfo.m_eType;
+        this->m_pWindow = rInfo.m_pWindow;
+        if (rInfo.m_pData)
+        {
+            std::unique_ptr<ActionDataMap> pData(new ActionDataMap(*rInfo.m_pData));
+            this->m_pData = std::move(pData);
+        }
+    }
+
+public:
+    JSDialogMessageInfo(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow,
+                        std::unique_ptr<ActionDataMap> pData)
+        : m_eType(eType)
+        , m_pWindow(pWindow)
+        , m_pData(std::move(pData))
+    {
+    }
+
+    JSDialogMessageInfo(const JSDialogMessageInfo& rInfo) { copy(rInfo); }
+
+    JSDialogMessageInfo& operator=(JSDialogMessageInfo aInfo)
+    {
+        if (this == &aInfo)
+            return *this;
+
+        copy(aInfo);
+        return *this;
+    }
+};
 
 class JSDialogNotifyIdle : public Idle
 {
@@ -55,7 +99,7 @@ class JSDialogNotifyIdle : public Idle
     std::string m_LastNotificationMessage;
     bool m_bForce;
 
-    std::deque<std::pair<jsdialog::MessageType, VclPtr<vcl::Window>>> m_aMessageQueue;
+    std::deque<JSDialogMessageInfo> m_aMessageQueue;
 
 public:
     JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
@@ -65,13 +109,16 @@ public:
 
     void clearQueue();
     void forceUpdate();
-    void sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow);
+    void sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow,
+                     std::unique_ptr<ActionDataMap> pData = nullptr);
 
 private:
     void send(tools::JsonWriter& aJsonWriter);
     std::unique_ptr<tools::JsonWriter> generateFullUpdate() const;
     std::unique_ptr<tools::JsonWriter> generateWidgetUpdate(VclPtr<vcl::Window> pWindow) const;
     std::unique_ptr<tools::JsonWriter> generateCloseMessage() const;
+    std::unique_ptr<tools::JsonWriter>
+    generateActionMessage(VclPtr<vcl::Window> pWindow, std::unique_ptr<ActionDataMap> pData) const;
 };
 
 class JSDialogSender
@@ -91,6 +138,7 @@ public:
     virtual void sendFullUpdate(bool bForce = false);
     void sendClose();
     void sendUpdate(VclPtr<vcl::Window> pWindow, bool bForce = false);
+    virtual void sendAction(VclPtr<vcl::Window> pWindow, std::unique_ptr<ActionDataMap> pData);
     void flush() { mpIdleNotify->Invoke(); }
 
 protected:
@@ -218,6 +266,8 @@ public:
     virtual void sendUpdate(bool bForce = false) = 0;
 
     virtual void sendFullUpdate(bool bForce = false) = 0;
+
+    virtual void sendAction(std::unique_ptr<ActionDataMap> pData) = 0;
 };
 
 template <class BaseInstanceClass, class VclClass>
@@ -306,6 +356,12 @@ public:
     {
         if ((!m_bIsFreezed || bForce) && m_pSender)
             m_pSender->sendFullUpdate(bForce);
+    }
+
+    virtual void sendAction(std::unique_ptr<ActionDataMap> pData) override
+    {
+        if (!m_bIsFreezed && m_pSender && pData)
+            m_pSender->sendAction(BaseInstanceClass::m_xWidget, std::move(pData));
     }
 };
 
