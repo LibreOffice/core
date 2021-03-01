@@ -496,6 +496,15 @@ void SwWW8ImplReader::UpdateFields()
     m_rDoc.SetInitDBFields(true);             // Also update fields in the database
 }
 
+namespace
+{
+    void MoveAttrsFieldmarkInserted(std::deque<WW8FieldEntry>& rFieldStack, const SwPosition& rPos)
+    {
+        for (size_t i = 0, nCnt = rFieldStack.size(); i < nCnt; ++i)
+            MoveAttrFieldmarkInserted(rFieldStack[i].maStartPos, rFieldStack[i].maStartPos, rPos);
+    }
+}
+
 sal_uInt16 SwWW8ImplReader::End_Field()
 {
     sal_uInt16 nRet = 0;
@@ -511,28 +520,32 @@ sal_uInt16 SwWW8ImplReader::End_Field()
     OSL_ENSURE(!m_aFieldStack.empty(), "Empty field stack");
     if (!m_aFieldStack.empty())
     {
+        WW8FieldEntry aEntry = m_aFieldStack.back();
+        m_aFieldStack.pop_back();
+
         /*
         only hyperlinks currently need to be handled like this, for the other
         cases we have inserted a field not an attribute with an unknown end
         point
         */
-        nRet = m_aFieldStack.back().mnFieldId;
+        nRet = aEntry.mnFieldId;
         switch (nRet)
         {
         case ww::eFORMTEXT:
         if (bUseEnhFields && m_pPaM!=nullptr && m_pPaM->GetPoint()!=nullptr) {
             SwPosition aEndPos = *m_pPaM->GetPoint();
-            SwPaM aFieldPam(m_aFieldStack.back().maStartPos.ToSwPosition(), aEndPos);
+            SwPaM aFieldPam(aEntry.maStartPos.ToSwPosition(), aEndPos);
             IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
             IFieldmark *pFieldmark = pMarksAccess->makeFieldBookmark(
-                        aFieldPam, m_aFieldStack.back().GetBookmarkName(), ODF_FORMTEXT,
+                        aFieldPam, aEntry.GetBookmarkName(), ODF_FORMTEXT,
                         aFieldPam.Start() /*same pos as start!*/ );
             OSL_ENSURE(pFieldmark!=nullptr, "hmmm; why was the bookmark not created?");
             if (pFieldmark!=nullptr) {
                 // adapt redline positions to inserted field mark start
                 // dummy char (assume not necessary for end dummy char)
                 m_xRedlineStack->MoveAttrsFieldmarkInserted(*aFieldPam.Start());
-                const IFieldmark::parameter_map_t& rParametersToAdd = m_aFieldStack.back().getParameters();
+                MoveAttrsFieldmarkInserted(m_aFieldStack, *aFieldPam.Start());
+                const IFieldmark::parameter_map_t& rParametersToAdd = aEntry.getParameters();
                 pFieldmark->GetParameters()->insert(rParametersToAdd.begin(), rParametersToAdd.end());
             }
         }
@@ -584,12 +597,12 @@ sal_uInt16 SwWW8ImplReader::End_Field()
             case ww::eMERGEINC:
             case ww::eINCLUDETEXT:
                 //Move outside the section associated with this type of field
-                *m_pPaM->GetPoint() = m_aFieldStack.back().maStartPos.ToSwPosition();
+                *m_pPaM->GetPoint() = aEntry.maStartPos.ToSwPosition();
                 break;
             case ww::eIF: // IF-field
             {
                 // conditional field parameters
-                const OUString& fieldDefinition = m_aFieldStack.back().GetBookmarkCode();
+                const OUString& fieldDefinition = aEntry.GetBookmarkCode();
 
                 OUString paramCondition;
                 OUString paramTrue;
@@ -611,18 +624,18 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                 break;
             }
             default:
-                OUString aCode = m_aFieldStack.back().GetBookmarkCode();
+                OUString aCode = aEntry.GetBookmarkCode();
                 if (!aCode.isEmpty() && !aCode.trim().startsWith("SHAPE"))
                 {
                     // Unhandled field with stored code
                     SwPosition aEndPos = *m_pPaM->GetPoint();
-                    SwPaM aFieldPam(m_aFieldStack.back().maStartPos.ToSwPosition(), aEndPos);
+                    SwPaM aFieldPam(aEntry.maStartPos.ToSwPosition(), aEndPos);
 
                     IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
 
                     IFieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(
                                 aFieldPam,
-                                m_aFieldStack.back().GetBookmarkName(),
+                                aEntry.GetBookmarkName(),
                                 ODF_UNHANDLED,
                                 aFieldPam.Start() /*same pos as start!*/ );
                     if ( pFieldmark )
@@ -630,9 +643,10 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                         // adapt redline positions to inserted field mark start
                         // dummy char (assume not necessary for end dummy char)
                         m_xRedlineStack->MoveAttrsFieldmarkInserted(*aFieldPam.Start());
-                        const IFieldmark::parameter_map_t& rParametersToAdd = m_aFieldStack.back().getParameters();
+                        MoveAttrsFieldmarkInserted(m_aFieldStack, *aFieldPam.Start());
+                        const IFieldmark::parameter_map_t& rParametersToAdd = aEntry.getParameters();
                         pFieldmark->GetParameters()->insert(rParametersToAdd.begin(), rParametersToAdd.end());
-                        OUString sFieldId = OUString::number( m_aFieldStack.back().mnFieldId );
+                        OUString sFieldId = OUString::number( aEntry.mnFieldId );
                         pFieldmark->GetParameters()->insert(
                                 std::pair< OUString, uno::Any > (
                                     ODF_ID_PARAM,
@@ -642,11 +656,11 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                                     ODF_CODE_PARAM,
                                     uno::makeAny( aCode ) ) );
 
-                        if ( m_aFieldStack.back().mnObjLocFc > 0 )
+                        if ( aEntry.mnObjLocFc > 0 )
                         {
                             // Store the OLE object as an internal link
                             OUString sOleId = "_" +
-                                OUString::number( m_aFieldStack.back().mnObjLocFc );
+                                OUString::number( aEntry.mnObjLocFc );
 
                             tools::SvRef<SotStorage> xSrc0 = m_pStg->OpenSotStorage(SL::aObjectPool);
                             tools::SvRef<SotStorage> xSrc1 = xSrc0->OpenSotStorage( sOleId, StreamMode::READ );
@@ -682,7 +696,6 @@ sal_uInt16 SwWW8ImplReader::End_Field()
 
                 break;
         }
-        m_aFieldStack.pop_back();
     }
     return nRet;
 }
