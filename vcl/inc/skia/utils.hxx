@@ -26,6 +26,7 @@
 #include <driverblocklist.hxx>
 
 #include <SkRegion.h>
+#include <SkSurface.h>
 #include <tools/sk_app/VulkanWindowContext.h>
 
 namespace SkiaHelper
@@ -94,7 +95,13 @@ inline DriverBlocklist::DeviceVendor getVendor()
     return DriverBlocklist::GetVendorFromId(vendorId);
 }
 
-} // namespace
+} // namespace SkiaHelper
+
+// For unittests.
+namespace SkiaTests
+{
+VCL_DLLPUBLIC bool matrixNeedsHighQuality(const SkMatrix& matrix);
+}
 
 template <typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
