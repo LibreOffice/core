@@ -612,6 +612,24 @@
       "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "87bee43c_4ca3fb81",
+        "filename": "uui/source/reloadeditable.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-01T19:23:43Z",
+      "side": 1,
+      "message": "Changed it to return int and store int to the variable in core\\uui\\source\\iahndl-locking.cxx",
+      "parentUuid": "76aed10d_f54b5700",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
