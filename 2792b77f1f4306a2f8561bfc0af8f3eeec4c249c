@@ -1,0 +1,146 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "743e7560_9b122dbb",
+        "filename": "offapi/UnoApi_offapi.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 2208,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-01T09:51:32Z",
+      "side": 1,
+      "message": "please keep this list sorted",
+      "revId": "2792b77f1f4306a2f8561bfc0af8f3eeec4c249c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02c1f88a_ba539bcb",
+        "filename": "offapi/com/sun/star/document/ReloadEditableRequest.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-01T09:51:32Z",
+      "side": 1,
+      "message": "for new files, please pick the appropriate header/footer boilerplate from TEMPLATE.SOURCECODE.HEADER",
+      "revId": "2792b77f1f4306a2f8561bfc0af8f3eeec4c249c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b51262be_85c5575e",
+        "filename": "offapi/com/sun/star/document/ReloadEditableRequest.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-01T09:51:32Z",
+      "side": 1,
+      "message": "what are the last two includes needed for?",
+      "revId": "2792b77f1f4306a2f8561bfc0af8f3eeec4c249c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60fb8fbf_9403a406",
+        "filename": "offapi/com/sun/star/document/ReloadEditableRequest.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-01T09:51:32Z",
+      "side": 1,
+      "message": "that would rather be \"LibreOffice 7.2\"",
+      "range": {
+        "startLine": 36,
+        "startChar": 11,
+        "endLine": 36,
+        "endChar": 18
+      },
+      "revId": "2792b77f1f4306a2f8561bfc0af8f3eeec4c249c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63f4d722_900b9a71",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 4620,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-01T09:51:32Z",
+      "side": 1,
+      "message": "this file must not be edited manually, it is updated wholesale after releases (see offapi/README for its purpose)",
+      "revId": "2792b77f1f4306a2f8561bfc0af8f3eeec4c249c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ce75343_01796f46",
+        "filename": "solenv/clang-format/excludelist",
+        "patchSetId": 1
+      },
+      "lineNbr": 14351,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-01T09:51:32Z",
+      "side": 1,
+      "message": "completely new source files should be formatted according to clang-format, not added to this excludelist",
+      "revId": "2792b77f1f4306a2f8561bfc0af8f3eeec4c249c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c921c28_4cc96b3b",
+        "filename": "uui/source/reloadeditable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-01T09:51:32Z",
+      "side": 1,
+      "message": "for new files, please pick the appropriate header/footer boilerplate from TEMPLATE.SOURCECODE.HEADER",
+      "revId": "2792b77f1f4306a2f8561bfc0af8f3eeec4c249c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d30f1e36_12172c88",
+        "filename": "uui/source/reloadeditable.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-01T09:51:32Z",
+      "side": 1,
+      "message": "for new files, please pick the appropriate header/footer boilerplate from TEMPLATE.SOURCECODE.HEADER",
+      "revId": "2792b77f1f4306a2f8561bfc0af8f3eeec4c249c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
