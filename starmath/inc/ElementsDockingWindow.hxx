@@ -92,6 +92,7 @@ class SmElementsControl : public weld::CustomWidgetController
     sal_uInt16    m_nCurrentElement;
     sal_uInt16    m_nCurrentRolloverElement;
     sal_uInt16 m_nCurrentOffset;
+    SmParser maParser;
     Link<SmElement&,void> maSelectHdlLink;
 
     std::vector< std::unique_ptr<SmElement> > maElementList;
@@ -101,7 +102,7 @@ class SmElementsControl : public weld::CustomWidgetController
     bool m_bFirstPaintAfterLayout;
     rtl::Reference<AccessibleSmElementsControl> m_xAccessible;
 
-    void addElement(SmParser &rParser, const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
+    void addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
     void addElements(const SmElementDescr aElementsArray[], sal_uInt16 size);
     SmElement* current() const;
     void setCurrentElement(sal_uInt16);
