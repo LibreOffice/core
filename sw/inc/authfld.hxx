@@ -44,6 +44,7 @@ public:
     inline OUString const & GetAuthorField(ToxAuthorityField ePos) const;
     inline void             SetAuthorField(ToxAuthorityField ePos,
                                             const OUString& rField);
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 struct SwTOXSortKey

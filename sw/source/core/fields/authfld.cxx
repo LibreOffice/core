@@ -612,6 +612,10 @@ void SwAuthorityField::dumpAsXml(xmlTextWriterPtr pWriter) const
 
     xmlTextWriterStartElement(pWriter, BAD_CAST("m_xAuthEntry"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", m_xAuthEntry.get());
+    if (m_xAuthEntry.is())
+    {
+        m_xAuthEntry->dumpAsXml(pWriter);
+    }
     xmlTextWriterEndElement(pWriter);
     xmlTextWriterStartElement(pWriter, BAD_CAST("m_nTempSequencePos"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
@@ -659,6 +663,21 @@ const char* const aFieldNames[] =
     "Custom5",
     "ISBN"
 };
+
+void SwAuthEntry::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwAuthEntry"));
+
+    for (int i = 0; i < AUTH_FIELD_END; ++i)
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("m_aAuthField"));
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("key"), BAD_CAST(aFieldNames[i]));
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(m_aAuthFields[i].toUtf8().getStr()));
+        xmlTextWriterEndElement(pWriter);
+    }
+
+    xmlTextWriterEndElement(pWriter);
+}
 
 bool    SwAuthorityField::QueryValue( Any& rAny, sal_uInt16 /*nWhichId*/ ) const
 {
