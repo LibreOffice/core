@@ -221,6 +221,9 @@
 
 #define CHEVRON                      "sfx2/res/chevron.png"
 
+#define RID_UPDATE_AVAILABLE_16      "extensions/res/update/ui/onlineupdate_16.png"
+#define RID_UPDATE_AVAILABLE_26      "extensions/res/update/ui/onlineupdate_26.png"
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
