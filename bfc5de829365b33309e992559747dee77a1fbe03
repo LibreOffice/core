@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ad05c4d_cd5a7cc6",
+        "filename": "sw/qa/uitest/writer_tests7/tdf140117.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-01T12:22:36Z",
+      "side": 1,
+      "message": "use examples which self-explanatory for everyone.",
+      "range": {
+        "startLine": 43,
+        "startChar": 42,
+        "endLine": 43,
+        "endChar": 46
+      },
+      "revId": "bfc5de829365b33309e992559747dee77a1fbe03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "560ef99a_1518d5f9",
+        "filename": "sw/source/core/layout/pagedesc.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-01T12:22:36Z",
+      "side": 1,
+      "message": "It\u0027s not self-evident, that pFormat cannot be nullptr. A clean-up could help this.",
+      "range": {
+        "startLine": 442,
+        "startChar": 4,
+        "endLine": 442,
+        "endChar": 13
+      },
+      "revId": "bfc5de829365b33309e992559747dee77a1fbe03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9061090_5b90cbc7",
+        "filename": "sw/source/core/layout/pagedesc.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-01T12:22:36Z",
+      "side": 1,
+      "message": "It\u0027s not self-evident, that there is a default (\u003d not conditional) return value.",
+      "revId": "bfc5de829365b33309e992559747dee77a1fbe03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
