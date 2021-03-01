@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "22dd1ac8_e40630b2",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2218,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-01T13:27:14Z",
+      "side": 0,
+      "message": "In this case, line 2218 is unrelated to any removal of asserts after loadFromDesktop (you didn\u0027t remove lines 2217 or 2219). If it was directly after an assert that you removed in this patch, then I would not object. But here it is just an unrelated change.",
+      "parentUuid": "4f0e1269_04254e39",
+      "revId": "e5c703940972df5bd6d515c8e0979963f6116fc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d48c44eb_cab4fc36",
         "filename": "xmlsecurity/qa/unit/signing/signing.cxx",
         "patchSetId": 2
