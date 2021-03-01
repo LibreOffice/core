@@ -16,6 +16,24 @@
       "revId": "67ccb86e905f9da7266d40002639c85970e08d1e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fd28c61_5d9b5239",
+        "filename": "sw/source/core/text/txtfld.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-03-01T09:44:06Z",
+      "side": 1,
+      "message": "\u003e If you have to access this information in the grab-bag, then probably the doc model has to be extended. But then I understand that we already have two pool items for char background and char shading? So I\u0027m a bit confused here. :-)\n\nThis CharShadingMarker flag is just an indicator that the background came from an IMPORTED SHD. Since it was already a SHD in the original doc, it should not be converted into/treated as a highlight. \n\nYes - there are two items. One is the standard CharBackColor (which by itself doesn\u0027t mean anything) and one is CharHighlight - which is a special only-available-from-import item that always means highlight.  CharBackColor means shd if we will export to shading, or it means highlight if we export as highlight.  (The exception is when CharBackColor came from an import. In that case it should only mean shd.)\n\nEverything about Char highlight is confusing...\n\n\u003e Can you think of a way to avoid reading the grab-bag in layout code?\n\nI\u0027m just copy/pasting what I see in source/uibase/utlui/uitool.cxx from Tomaz. Since he refuses to even talk about CharHighlight now, I\u0027m certainly not comfortable making any significant changes to his design.",
+      "parentUuid": "64dabe1f_dbbfda99",
+      "revId": "67ccb86e905f9da7266d40002639c85970e08d1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
