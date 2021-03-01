@@ -397,8 +397,7 @@ bool SkiaSalBitmap::ConvertToGreyscale()
     {
         if (mBitCount == 8 && mPalette.IsGreyPalette8Bit())
             return true;
-        sk_sp<SkSurface> surface
-            = SkiaHelper::createSkSurface(mPixelsSize, mImage->imageInfo().alphaType());
+        sk_sp<SkSurface> surface = createSkSurface(mPixelsSize, mImage->imageInfo().alphaType());
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
         // VCL uses different coefficients for conversion to gray than Skia, so use the VCL
@@ -414,7 +413,7 @@ bool SkiaSalBitmap::ConvertToGreyscale()
         mBitCount = 8;
         ComputeScanlineSize();
         mPalette = Bitmap::GetGreyPalette(256);
-        ResetToSkImage(SkiaHelper::makeCheckedImageSnapshot(surface));
+        ResetToSkImage(makeCheckedImageSnapshot(surface));
         SAL_INFO("vcl.skia.trace", "converttogreyscale(" << this << ")");
         return true;
     }
@@ -517,13 +516,13 @@ bool SkiaSalBitmap::AlphaBlendWith(const SalBitmap& rSalBmp)
             return false;
         otherBitmap = otherBitmapAllocated.get();
     }
-    sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize);
+    sk_sp<SkSurface> surface = createSkSurface(mSize);
     SkPaint paint;
     paint.setBlendMode(SkBlendMode::kSrc); // set as is
     surface->getCanvas()->drawImage(GetSkImage(), 0, 0, SkSamplingOptions(), &paint);
     paint.setBlendMode(SkBlendMode::kScreen); // src+dest - src*dest/255 (in 0..1)
     surface->getCanvas()->drawImage(otherBitmap->GetSkImage(), 0, 0, SkSamplingOptions(), &paint);
-    ResetToSkImage(SkiaHelper::makeCheckedImageSnapshot(surface));
+    ResetToSkImage(makeCheckedImageSnapshot(surface));
     SAL_INFO("vcl.skia.trace", "alphablendwith(" << this << ") : with image " << otherBitmap);
     return true;
 }
@@ -656,8 +655,7 @@ bool SkiaSalBitmap::ConserveMemory() const
     constexpr bool is32Bit = sizeof(void*) == 4;
     // 16MiB bitmap data at least (set to 0 for easy testing).
     constexpr tools::Long maxBufferSize = 2000 * 2000 * 4;
-    return !keepBitmapBuffer
-           && (SkiaHelper::renderMethodToUse() == SkiaHelper::RenderRaster || is32Bit)
+    return !keepBitmapBuffer && (renderMethodToUse() == RenderRaster || is32Bit)
            && mPixelsSize.Height() * mScanlineSize > maxBufferSize
            && (mBitCount > 8 || (mBitCount == 8 && mPalette.IsGreyPalette8Bit()));
 }
@@ -670,17 +668,16 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
     if (mEraseColorSet)
     {
         SkiaZone zone;
-        sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(
+        sk_sp<SkSurface> surface = createSkSurface(
             mSize, mEraseColor.IsTransparent() ? kPremul_SkAlphaType : kOpaque_SkAlphaType);
         assert(surface);
         surface->getCanvas()->clear(toSkColor(mEraseColor));
         SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
-        thisPtr->mImage = SkiaHelper::makeCheckedImageSnapshot(surface);
+        thisPtr->mImage = makeCheckedImageSnapshot(surface);
         SAL_INFO("vcl.skia.trace", "getskimage(" << this << ") from erase color " << mEraseColor);
         return mImage;
     }
-    if (mPixelsSize != mSize && !mImage
-        && SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster)
+    if (mPixelsSize != mSize && !mImage && renderMethodToUse() != RenderRaster)
     {
         // The bitmap has a pending scaling, but no image. This function would below call GetAsSkBitmap(),
         // which would do CPU-based pixel scaling, and then it would get converted to an image.
@@ -691,7 +688,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
         Size savedSize = mSize;
         thisPtr->mSize = mPixelsSize; // block scaling
         SkiaZone zone;
-        sk_sp<SkImage> image = SkiaHelper::createSkImage(GetAsSkBitmap());
+        sk_sp<SkImage> image = createSkImage(GetAsSkBitmap());
         assert(image);
         thisPtr->mSize = savedSize;
         thisPtr->ResetToSkImage(image);
@@ -702,8 +699,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
         {
             assert(!mBuffer); // This code should be only called if only mImage holds data.
             SkiaZone zone;
-            sk_sp<SkSurface> surface
-                = SkiaHelper::createSkSurface(mSize, mImage->imageInfo().alphaType());
+            sk_sp<SkSurface> surface = createSkSurface(mSize, mImage->imageInfo().alphaType());
             assert(surface);
             SkPaint paint;
             paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
@@ -715,12 +711,12 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
                                                      << "->" << mSize << ":"
                                                      << static_cast<int>(mScaleQuality));
             SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
-            thisPtr->mImage = SkiaHelper::makeCheckedImageSnapshot(surface);
+            thisPtr->mImage = makeCheckedImageSnapshot(surface);
         }
         return mImage;
     }
     SkiaZone zone;
-    sk_sp<SkImage> image = SkiaHelper::createSkImage(GetAsSkBitmap());
+    sk_sp<SkImage> image = createSkImage(GetAsSkBitmap());
     assert(image);
     SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
     thisPtr->mImage = image;
@@ -743,11 +739,11 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
     if (mEraseColorSet)
     {
         SkiaZone zone;
-        sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize, kAlpha_8_SkColorType);
+        sk_sp<SkSurface> surface = createSkSurface(mSize, kAlpha_8_SkColorType);
         assert(surface);
         surface->getCanvas()->clear(fromEraseColorToAlphaImageColor(mEraseColor));
         SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
-        thisPtr->mAlphaImage = SkiaHelper::makeCheckedImageSnapshot(surface);
+        thisPtr->mAlphaImage = makeCheckedImageSnapshot(surface);
         SAL_INFO("vcl.skia.trace",
                  "getalphaskimage(" << this << ") from erase color " << mEraseColor);
         return mAlphaImage;
@@ -790,7 +786,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
                                      bitmap.width());
             }
             alphaBitmap.setImmutable();
-            sk_sp<SkImage> alphaImage = SkiaHelper::createSkImage(alphaBitmap);
+            sk_sp<SkImage> alphaImage = createSkImage(alphaBitmap);
             assert(alphaImage);
             SAL_INFO("vcl.skia.trace", "getalphaskimage(" << this << ") from raster image");
             // Don't bother here with ConserveMemory(), mImage -> mAlphaImage conversions should
@@ -811,7 +807,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
         paint.setColorFilter(SkColorFilters::Matrix(redToAlpha));
         if (scaling)
             assert(!mBuffer); // This code should be only called if only mImage holds data.
-        sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize, kAlpha_8_SkColorType);
+        sk_sp<SkSurface> surface = createSkSurface(mSize, kAlpha_8_SkColorType);
         assert(surface);
         paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
         surface->getCanvas()->drawImageRect(
@@ -828,7 +824,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
         // generally only happen with the separate-alpha-outdev hack, and those bitmaps should
         // be temporary.
         SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
-        thisPtr->mAlphaImage = SkiaHelper::makeCheckedImageSnapshot(surface);
+        thisPtr->mAlphaImage = makeCheckedImageSnapshot(surface);
         return mAlphaImage;
     }
     SkiaZone zone;
@@ -847,13 +843,13 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
                 [](void* addr, void*) { delete[] static_cast<sal_uInt8*>(addr); }, nullptr))
             abort();
         alphaBitmap.setImmutable();
-        sk_sp<SkImage> image = SkiaHelper::createSkImage(alphaBitmap);
+        sk_sp<SkImage> image = createSkImage(alphaBitmap);
         assert(image);
         const_cast<sk_sp<SkImage>&>(mAlphaImage) = image;
     }
     else
     {
-        sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize, kAlpha_8_SkColorType);
+        sk_sp<SkSurface> surface = createSkSurface(mSize, kAlpha_8_SkColorType);
         assert(surface);
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
@@ -868,7 +864,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
         surface->getCanvas()->drawImage(GetAsSkBitmap().asImage(), 0, 0, SkSamplingOptions(),
                                         &paint);
         SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
-        thisPtr->mAlphaImage = SkiaHelper::makeCheckedImageSnapshot(surface);
+        thisPtr->mAlphaImage = makeCheckedImageSnapshot(surface);
     }
     // The data is now stored both in the SkImage and in our mBuffer, so drop the buffer
     // if conserving memory and the conversion back would be simple (it'll be converted back

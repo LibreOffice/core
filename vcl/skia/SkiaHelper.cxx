@@ -389,9 +389,9 @@ sk_sp<SkSurface> createSkSurface(int width, int height, SkColorType type, SkAlph
     SkiaZone zone;
     assert(type == kN32_SkColorType || type == kAlpha_8_SkColorType);
     sk_sp<SkSurface> surface;
-    switch (SkiaHelper::renderMethodToUse())
+    switch (renderMethodToUse())
     {
-        case SkiaHelper::RenderVulkan:
+        case RenderVulkan:
         {
             if (GrDirectContext* grDirectContext = getSharedGrDirectContext())
             {
@@ -432,9 +432,9 @@ sk_sp<SkImage> createSkImage(const SkBitmap& bitmap)
 {
     SkiaZone zone;
     assert(bitmap.colorType() == kN32_SkColorType || bitmap.colorType() == kAlpha_8_SkColorType);
-    switch (SkiaHelper::renderMethodToUse())
+    switch (renderMethodToUse())
     {
-        case SkiaHelper::RenderVulkan:
+        case RenderVulkan:
         {
             if (GrDirectContext* grDirectContext = getSharedGrDirectContext())
             {
