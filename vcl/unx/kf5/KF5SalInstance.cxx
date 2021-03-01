@@ -57,14 +57,14 @@ bool KF5SalInstance::hasNativeFileSelection() const
     return Qt5Instance::hasNativeFileSelection();
 }
 
-Qt5FilePicker*
+rtl::Reference<Qt5FilePicker>
 KF5SalInstance::createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                              QFileDialog::FileMode eMode)
 {
     if (!IsMainThread())
     {
         SolarMutexGuard g;
-        Qt5FilePicker* pPicker;
+        rtl::Reference<Qt5FilePicker> pPicker;
         RunInMainThread([&, this]() { pPicker = createPicker(context, eMode); });
         assert(pPicker);
         return pPicker;
