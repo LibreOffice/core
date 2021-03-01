@@ -680,6 +680,9 @@ static bool UCBOpenContentSync(
     {
         pMod = new Moderator(xContent,xInteract,rArg);
         pMod->create();
+            //TODO: a protocol is missing how to join with the launched thread before exit(3), to
+            // ensure the thread is no longer relying on any infrastructure while that
+            // infrastructure is being shut down in atexit handlers
     }
     catch (const ContentCreationException&)
     {
