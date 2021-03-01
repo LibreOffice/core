@@ -1676,6 +1676,7 @@ StringMap MenuButtonUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
     aMap["Label"] = mxMenuButton->GetDisplayText();
+    aMap["CurrentItem"] = OUString::createFromAscii(mxMenuButton->GetCurItemIdent());
     return aMap;
 }
 
