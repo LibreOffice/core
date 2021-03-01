@@ -64,6 +64,7 @@ constexpr OUStringLiteral TM_SETTING_VIEWMODE = u"ViewMode";
 #define MNI_ACTION_DELETE_FOLDER "delete"
 #define MNI_ACTION_REFRESH   "refresh"
 #define MNI_ACTION_DEFAULT   "default"
+#define MNI_ACTION_PATH_TEMPLATE_EDIT  "path_template_edit"
 #define MNI_WRITER           1
 #define MNI_CALC             2
 #define MNI_IMPRESS          3
@@ -158,6 +159,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
     , mxMoveButton(m_xBuilder->weld_button("move_btn"))
     , mxExportButton(m_xBuilder->weld_button("export_btn"))
     , mxImportButton(m_xBuilder->weld_button("import_btn"))
+    //, mxPathTemplateEditButton(m_xBuilder->weld_button("pathtemplateedit_btn"))
     , mxMoreTemplatesButton(m_xBuilder->weld_button("btnMoreTemplates"))
     , mxCBXHideDlg(m_xBuilder->weld_check_button("hidedialogcb"))
     , mxActionBar(m_xBuilder->weld_menu_button("action_menu"))
@@ -178,8 +180,9 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
     mxActionBar->insert_item(0, MNI_ACTION_NEW_FOLDER, SfxResId(STR_CATEGORY_NEW), nullptr, nullptr, TRISTATE_INDET);
     mxActionBar->insert_item(1, MNI_ACTION_RENAME_FOLDER, SfxResId(STR_CATEGORY_RENAME), nullptr, nullptr, TRISTATE_INDET);
     mxActionBar->insert_item(2, MNI_ACTION_DELETE_FOLDER, SfxResId(STR_CATEGORY_DELETE), nullptr, nullptr, TRISTATE_INDET);
-    mxActionBar->insert_separator(3, "separator");
-    mxActionBar->insert_item(4, MNI_ACTION_REFRESH, SfxResId(STR_ACTION_REFRESH), nullptr, nullptr, TRISTATE_INDET);
+    mxActionBar->insert_item(3, MNI_ACTION_PATH_TEMPLATE_EDIT, SfxResId(STR_CATEGORY_PATH_TEMPLATE_EDIT), nullptr, nullptr, TRISTATE_INDET);
+    mxActionBar->insert_separator(4, "separator");
+    mxActionBar->insert_item(5, MNI_ACTION_REFRESH, SfxResId(STR_ACTION_REFRESH), nullptr, nullptr, TRISTATE_INDET);
     mxActionBar->connect_selected(LINK(this,SfxTemplateManagerDlg,MenuSelectHdl));
 
     mxLocalView->setItemMaxTextLength(TEMPLATE_ITEM_MAX_TEXT_LENGTH);
@@ -521,7 +524,7 @@ IMPL_LINK(SfxTemplateManagerDlg, TVItemStateHdl, const ThumbnailViewItem*, pItem
         OnTemplateState(pItem);
 }
 
-IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, const OString&, rIdent, void)
+IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, const OString&, rIdent, void)                           //here need to enter
 {
     if (rIdent == MNI_ACTION_NEW_FOLDER)
         OnCategoryNew();
@@ -534,6 +537,10 @@ IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, const OString&, rIdent, void)
         mxLocalView->reload();
         if(mxSearchView->IsVisible())
             SearchUpdateHdl(*mxSearchFilter);
+    }
+    else if(rIdent == MNI_ACTION_PATH_TEMPLATE_EDIT)
+    {
+      OnCategoryPathTemplateEdit();
     }
     else if (rIdent != MNI_ACTION_DEFAULT)
         DefaultTemplateMenuSelectHdl(rIdent);
@@ -1234,6 +1241,46 @@ void SfxTemplateManagerDlg::OnCategoryDelete()
     mxCBApp->set_active(0);
     mxCBFolder->set_active(0);
     mxActionBar->set_item_visible(MNI_ACTION_RENAME_FOLDER, false);
+}
+
+void SfxTemplateManagerDlg::OnCategoryPathTemplateEdit()
+{
+  SfxTemplateCategoryDialog aDlg(m_xDialog.get());
+  aDlg.SetCategoryLBEntries(mxLocalView->getFolderNames());
+  aDlg.HideNewCategoryOption();
+  aDlg.set_title(MnemonicGenerator::EraseAllMnemonicChars(SfxResId(STR_CATEGORY_DELETE)));
+  aDlg.SetSelectLabelText(SfxResId(STR_CATEGORY_SELECT));
+
+  if (aDlg.run() == RET_OK)
+  {
+      const OUString& sCategory = aDlg.GetSelectedCategory();
+      std::unique_ptr<weld::MessageDialog> popupDlg(Application::CreateMessageDialog(m_xDialog.get(),
+                                                    VclMessageType::Question, VclButtonsType::YesNo,
+                                                    SfxResId(STR_QMSG_SEL_FOLDER_DELETE)));
+      if (popupDlg->run() != RET_YES)
+          return;
+
+      sal_Int16 nItemId = mxLocalView->getRegionId(sCategory);
+
+      if (!mxLocalView->removeRegion(nItemId))
+      {
+          OUString sMsg( SfxResId(STR_MSG_ERROR_DELETE_FOLDER) );
+          std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
+                                                    VclMessageType::Warning, VclButtonsType::Ok,
+                                                    sMsg.replaceFirst("$1",sCategory)));
+          xBox->run();
+      }
+      else
+      {
+          mxCBFolder->remove_text(sCategory);
+      }
+  }
+
+  mxLocalView->reload();
+  mxLocalView->showAllTemplates();
+  mxCBApp->set_active(0);
+  mxCBFolder->set_active(0);
+  mxActionBar->set_item_visible(MNI_ACTION_RENAME_FOLDER, false);
 }
 
 void SfxTemplateManagerDlg::createDefaultTemplateMenu ()
