@@ -1428,6 +1428,9 @@ bool SdrView::BegMark(const Point& rPnt, bool bAddMark, bool bUnmark)
 
 bool SdrView::MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint)
 {
+    if (GetHdlList().IsMoveOutside())
+        return false;
+
     if (!GetMarkedObjectList().GetMarkCount())
         return false;
 
