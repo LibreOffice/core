@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0c3e548_aee66e8f",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 6
+      },
+      "lineNbr": 3505,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-01T09:31:46Z",
+      "side": 1,
+      "message": "Is xs:long (64-bit) a more suitable type than the canonic xs:int (32-bit) here?  (And same for \"Height\" below.  Note that there is a, seemingly unused, \"DialogSize\" template in this file, which uses xs:int.)",
+      "range": {
+        "startLine": 3505,
+        "startChar": 41,
+        "endLine": 3505,
+        "endChar": 48
+      },
+      "revId": "149807eb6100090e178505ba4a264bb38eba1e0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
