@@ -111,7 +111,7 @@ private:
                     DECL_LINK( PopupModeEnd, FloatingWindow*, void );
     void            ImplEnableStartDocking()  { mbStartDockingEnabled = true; }
     bool            ImplStartDockingEnabled() const { return mbStartDockingEnabled; }
-    void            ImplPreparePopupMode();
+    void            ImplPreparePopupMode(VclPtr<vcl::Window> pDockingWindow = nullptr);
 
 public:
     ImplDockingWindowWrapper( const vcl::Window *pWindow );

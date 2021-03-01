@@ -2685,6 +2685,10 @@ SvxCurrencyList_Impl::SvxCurrencyList_Impl(
     if ( nSelectedPos >= 0 )
         m_pCurrencyLb->SelectEntryPos( nSelectedPos );
     m_pCurrencyLb->Show();
+
+    auto parentNotifier = GetParentWithLOKNotifier();
+    if(parentNotifier)
+        SetLOKNotifier(parentNotifier->GetLOKNotifier());
 }
 
 void SvxCurrencyList_Impl::dispose()
