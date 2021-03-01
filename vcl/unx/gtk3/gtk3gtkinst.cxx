@@ -16597,7 +16597,7 @@ private:
     {
         GtkInstancePopover* pThis = static_cast<GtkInstancePopover*>(widget);
         // call signal-closed async so the closed callback isn't called
-        // whilc the GtkPopover handler is still in-execution
+        // while the GtkPopover handler is still in-execution
         pThis->launch_signal_closed();
     }
 
