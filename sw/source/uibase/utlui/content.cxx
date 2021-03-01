@@ -3243,8 +3243,21 @@ void SwContentTree::UpdateTracking()
         {
             SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(0);
             OUString aName(pSelected->GetName());
-            lcl_SelectByContentTypeAndName(this, *m_xTreeView,
-                                           SwResId(STR_CONTENT_TYPE_DRAWOBJECT), aName);
+            if (!aName.isEmpty())
+                lcl_SelectByContentTypeAndName(this, *m_xTreeView,
+                                               SwResId(STR_CONTENT_TYPE_DRAWOBJECT), aName);
+            else
+            {
+                // clear treeview selections
+                m_xTreeView->unselect_all();
+                Select();
+            }
+        }
+        else
+        {
+            // clear treeview selections
+            m_xTreeView->unselect_all();
+            Select();
         }
         return;
     }
