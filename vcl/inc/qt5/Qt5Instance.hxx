@@ -80,7 +80,7 @@ Q_SIGNALS:
     void deleteObjectLaterSignal(QObject* pObject);
 
 protected:
-    virtual Qt5FilePicker*
+    virtual rtl::Reference<Qt5FilePicker>
     createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                  QFileDialog::FileMode);
 
