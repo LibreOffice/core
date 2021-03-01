@@ -25,6 +25,8 @@
 
 #include <X11/Xutil.h>
 
+using namespace SkiaHelper;
+
 X11SkiaSalGraphicsImpl::X11SkiaSalGraphicsImpl(X11SalGraphics& rParent)
     : SkiaSalGraphicsImpl(rParent, rParent.GetGeometryProvider())
     , mX11Parent(rParent)
@@ -43,16 +45,15 @@ void X11SkiaSalGraphicsImpl::Init()
 void X11SkiaSalGraphicsImpl::createWindowContext(bool forceRaster)
 {
     assert(mX11Parent.GetDrawable() != None);
-    mWindowContext = createWindowContext(
-        mX11Parent.GetXDisplay(), mX11Parent.GetDrawable(), &mX11Parent.GetVisual(), GetWidth(),
-        GetHeight(), forceRaster ? SkiaHelper::RenderRaster : SkiaHelper::renderMethodToUse(),
-        false);
+    mWindowContext = createWindowContext(mX11Parent.GetXDisplay(), mX11Parent.GetDrawable(),
+                                         &mX11Parent.GetVisual(), GetWidth(), GetHeight(),
+                                         forceRaster ? RenderRaster : renderMethodToUse(), false);
 }
 
 std::unique_ptr<sk_app::WindowContext>
 X11SkiaSalGraphicsImpl::createWindowContext(Display* display, Drawable drawable,
                                             const XVisualInfo* visual, int width, int height,
-                                            SkiaHelper::RenderMethod renderMethod, bool temporary)
+                                            RenderMethod renderMethod, bool temporary)
 {
     SkiaZone zone;
     sk_app::DisplayParams displayParams;
@@ -61,7 +62,7 @@ X11SkiaSalGraphicsImpl::createWindowContext(Display* display, Drawable drawable,
     // WORKAROUND: VSync causes freezes that can even temporarily freeze the entire desktop.
     // This happens even with the latest 450.66 drivers despite them claiming a fix for vsync.
     // https://forums.developer.nvidia.com/t/hangs-freezes-when-vulkan-v-sync-vk-present-mode-fifo-khr-is-enabled/67751
-    if (SkiaHelper::getVendor() == DriverBlocklist::VendorNVIDIA)
+    if (getVendor() == DriverBlocklist::VendorNVIDIA)
         displayParams.fDisableVsync = true;
 #endif
     sk_app::window_context_factory::XlibWindowInfo winInfo;
@@ -90,7 +91,7 @@ X11SkiaSalGraphicsImpl::createWindowContext(Display* display, Drawable drawable,
 #endif
     switch (renderMethod)
     {
-        case SkiaHelper::RenderRaster:
+        case RenderRaster:
             // Make sure we ask for color type that matches the X11 visual. If red mask
             // is larger value than blue mask, then on little endian this means blue is first.
             // This should also preferably match SK_R32_SHIFT set in config_skia.h, as that
@@ -100,7 +101,7 @@ X11SkiaSalGraphicsImpl::createWindowContext(Display* display, Drawable drawable,
                 = (visual->red_mask > visual->blue_mask ? kBGRA_8888_SkColorType
                                                         : kRGBA_8888_SkColorType);
             return sk_app::window_context_factory::MakeRasterForXlib(winInfo, displayParams);
-        case SkiaHelper::RenderVulkan:
+        case RenderVulkan:
             return sk_app::window_context_factory::MakeVulkanForXlib(winInfo, displayParams);
     }
     abort();
@@ -170,7 +171,7 @@ std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext(bool temporary)
         visual = visuals;
     }
     std::unique_ptr<sk_app::WindowContext> ret = X11SkiaSalGraphicsImpl::createWindowContext(
-        salDisplay->GetDisplay(), None, visual, 1, 1, SkiaHelper::RenderVulkan, temporary);
+        salDisplay->GetDisplay(), None, visual, 1, 1, RenderVulkan, temporary);
     if (temporary)
         XFree(visuals);
     return ret;

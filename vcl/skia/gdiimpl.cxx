@@ -319,20 +319,20 @@ void SkiaSalGraphicsImpl::createWindowSurface(bool forceRaster)
         mSurface = mWindowContext->getBackbufferSurface();
     if (!mSurface)
     {
-        switch (SkiaHelper::renderMethodToUse())
+        switch (renderMethodToUse())
         {
-            case SkiaHelper::RenderVulkan:
+            case RenderVulkan:
                 SAL_WARN("vcl.skia",
                          "cannot create Vulkan GPU window surface, falling back to Raster");
                 destroySurface(); // destroys also WindowContext
                 return createWindowSurface(true); // try again
-            case SkiaHelper::RenderRaster:
+            case RenderRaster:
                 abort(); // This should not really happen, do not even try to cope with it.
         }
     }
     mIsGPU = mSurface->getCanvas()->recordingContext() != nullptr;
 #ifdef DBG_UTIL
-    SkiaHelper::prefillSurface(mSurface);
+    prefillSurface(mSurface);
 #endif
 }
 
@@ -356,13 +356,13 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
     // HACK: See isOffscreen().
     int width = std::max(1, GetWidth());
     int height = std::max(1, GetHeight());
-    switch (SkiaHelper::renderMethodToUse())
+    switch (renderMethodToUse())
     {
-        case SkiaHelper::RenderVulkan:
+        case RenderVulkan:
         {
-            if (SkiaHelper::getSharedGrDirectContext())
+            if (getSharedGrDirectContext())
             {
-                mSurface = SkiaHelper::createSkSurface(width, height);
+                mSurface = createSkSurface(width, height);
                 if (mSurface)
                 {
                     mIsGPU = mSurface->getCanvas()->recordingContext() != nullptr;
@@ -375,7 +375,7 @@ void SkiaSalGraphicsImpl::createOffscreenSurface()
             break;
     }
     // Create raster surface as a fallback.
-    mSurface = SkiaHelper::createSkSurface(width, height);
+    mSurface = createSkSurface(width, height);
     assert(mSurface);
     assert(!mSurface->getCanvas()->recordingContext()); // is not GPU-backed
     mIsGPU = false;
@@ -485,7 +485,7 @@ void SkiaSalGraphicsImpl::checkSurface()
             if (!isOffscreen())
             {
                 flushDrawing();
-                snapshot = SkiaHelper::makeCheckedImageSnapshot(mSurface);
+                snapshot = makeCheckedImageSnapshot(mSurface);
             }
 
             destroySurface();
@@ -654,8 +654,8 @@ void SkiaSalGraphicsImpl::applyXor()
     paint.setBlendMode(SkBlendMode::kSrc); // copy as is
     SkCanvas canvas(surfaceBitmap);
     SkRect area = SkRect::Make(mXorRegion.getBounds());
-    canvas.drawImageRect(SkiaHelper::makeCheckedImageSnapshot(mSurface), area, area,
-                         SkSamplingOptions(), &paint, SkCanvas::kFast_SrcRectConstraint);
+    canvas.drawImageRect(makeCheckedImageSnapshot(mSurface), area, area, SkSamplingOptions(),
+                         &paint, SkCanvas::kFast_SrcRectConstraint);
     // xor to surfaceBitmap
     assert(surfaceBitmap.info().alphaType() == kUnpremul_SkAlphaType);
     assert(mXorBitmap.info().alphaType() == kUnpremul_SkAlphaType);
@@ -924,7 +924,7 @@ void SkiaSalGraphicsImpl::performDrawPolyPolygon(const basegfx::B2DPolyPolygon& 
     // WORKAROUND: The logo in the about dialog has drawing errors. This seems to happen
     // only on Linux (not Windows on the same machine), with both AMDGPU and Mesa,
     // and only when antialiasing is enabled. Flushing seems to avoid the problem.
-    if (useAA && SkiaHelper::getVendor() == DriverBlocklist::VendorAMD)
+    if (useAA && getVendor() == DriverBlocklist::VendorAMD)
         mSurface->flushAndSubmit();
 #endif
 }
@@ -1192,7 +1192,7 @@ static void copyArea(SkCanvas* canvas, sk_sp<SkSurface> surface, tools::Long nDe
     {
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
-        canvas->drawImageRect(SkiaHelper::makeCheckedImageSnapshot(surface),
+        canvas->drawImageRect(makeCheckedImageSnapshot(surface),
                               SkRect::MakeXYWH(nSrcX, nSrcY, nSrcWidth, nSrcHeight),
                               SkRect::MakeXYWH(nDestX, nDestY, nSrcWidth, nSrcHeight),
                               SkSamplingOptions(), &paint, SkCanvas::kFast_SrcRectConstraint);
@@ -1265,7 +1265,7 @@ void SkiaSalGraphicsImpl::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcG
     {
         SAL_INFO("vcl.skia.trace", "copybits(" << this << "): (" << src << "): " << rPosAry);
         // Do not use makeImageSnapshot(rect), as that one may make a needless data copy.
-        sk_sp<SkImage> image = SkiaHelper::makeCheckedImageSnapshot(src->mSurface);
+        sk_sp<SkImage> image = makeCheckedImageSnapshot(src->mSurface);
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kSrc); // copy as is, including alpha
         getDrawCanvas()->drawImageRect(image,
@@ -1389,8 +1389,8 @@ std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(tools::Long nX, tools:
     // TODO makeImageSnapshot(rect) may copy the data, which may be a waste if this is used
     // e.g. for VirtualDevice's lame alpha blending, in which case the image will eventually end up
     // in blendAlphaBitmap(), where we could simply use the proper rect of the image.
-    sk_sp<SkImage> image = SkiaHelper::makeCheckedImageSnapshot(
-        mSurface, SkIRect::MakeXYWH(nX, nY, nWidth, nHeight));
+    sk_sp<SkImage> image
+        = makeCheckedImageSnapshot(mSurface, SkIRect::MakeXYWH(nX, nY, nWidth, nHeight));
     return std::make_shared<SkiaSalBitmap>(image);
 }
 
@@ -1418,8 +1418,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
     // with SkBlendMode::kDifference(?) and surfaces wider than 1024 pixels, resulting
     // in drawing errors. Work that around by fetching the relevant part of the surface
     // and drawing using CPU.
-    bool intelHack
-        = (isGPU() && SkiaHelper::getVendor() == DriverBlocklist::VendorIntel && !mXorMode);
+    bool intelHack = (isGPU() && getVendor() == DriverBlocklist::VendorIntel && !mXorMode);
     SkPath aPath;
     addPolygonToPath(rPoly, aPath);
     aPath.setFillType(SkPathFillType::kEvenOdd);
@@ -1446,18 +1445,18 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
             SkRect area;
             aPath.getBounds().roundOut(&area);
             SkRect size = SkRect::MakeWH(area.width(), area.height());
-            sk_sp<SkSurface> surface = SkSurface::MakeRasterN32Premul(area.width(), area.height(),
-                                                                      SkiaHelper::surfaceProps());
+            sk_sp<SkSurface> surface
+                = SkSurface::MakeRasterN32Premul(area.width(), area.height(), surfaceProps());
             SkPaint copy;
             copy.setBlendMode(SkBlendMode::kSrc);
             flushDrawing();
-            surface->getCanvas()->drawImageRect(SkiaHelper::makeCheckedImageSnapshot(mSurface),
-                                                area, size, SkSamplingOptions(), &copy,
+            surface->getCanvas()->drawImageRect(makeCheckedImageSnapshot(mSurface), area, size,
+                                                SkSamplingOptions(), &copy,
                                                 SkCanvas::kFast_SrcRectConstraint);
             aPath.offset(-area.x(), -area.y());
             surface->getCanvas()->drawPath(aPath, aPaint);
-            getDrawCanvas()->drawImageRect(SkiaHelper::makeCheckedImageSnapshot(surface), size,
-                                           area, SkSamplingOptions(), &copy,
+            getDrawCanvas()->drawImageRect(makeCheckedImageSnapshot(surface), size, area,
+                                           SkSamplingOptions(), &copy,
                                            SkCanvas::kFast_SrcRectConstraint);
         }
     }
@@ -1472,7 +1471,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
         if (eFlags == SalInvert::N50)
         {
             // This creates 2x2 checker pattern bitmap
-            // TODO Use SkiaHelper::createSkSurface() and cache the image
+            // TODO Use createSkSurface() and cache the image
             SkBitmap aBitmap;
             aBitmap.allocN32Pixels(2, 2);
             const SkPMColor white = SkPreMultiplyARGB(0xFF, 0xFF, 0xFF, 0xFF);
@@ -1497,18 +1496,18 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
             SkRect area;
             aPath.getBounds().roundOut(&area);
             SkRect size = SkRect::MakeWH(area.width(), area.height());
-            sk_sp<SkSurface> surface = SkSurface::MakeRasterN32Premul(area.width(), area.height(),
-                                                                      SkiaHelper::surfaceProps());
+            sk_sp<SkSurface> surface
+                = SkSurface::MakeRasterN32Premul(area.width(), area.height(), surfaceProps());
             SkPaint copy;
             copy.setBlendMode(SkBlendMode::kSrc);
             flushDrawing();
-            surface->getCanvas()->drawImageRect(SkiaHelper::makeCheckedImageSnapshot(mSurface),
-                                                area, size, SkSamplingOptions(), &copy,
+            surface->getCanvas()->drawImageRect(makeCheckedImageSnapshot(mSurface), area, size,
+                                                SkSamplingOptions(), &copy,
                                                 SkCanvas::kFast_SrcRectConstraint);
             aPath.offset(-area.x(), -area.y());
             surface->getCanvas()->drawPath(aPath, aPaint);
-            getDrawCanvas()->drawImageRect(SkiaHelper::makeCheckedImageSnapshot(surface), size,
-                                           area, SkSamplingOptions(), &copy,
+            getDrawCanvas()->drawImageRect(makeCheckedImageSnapshot(surface), size, area,
+                                           SkSamplingOptions(), &copy,
                                            SkCanvas::kFast_SrcRectConstraint);
         }
     }
@@ -1590,7 +1589,7 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
         }
     }
     // Do not cache the result if it would take most of the cache and thus get evicted soon.
-    if (targetSize.Width() * targetSize.Height() * 4 > SkiaHelper::maxImageCacheSize() * 0.7)
+    if (targetSize.Width() * targetSize.Height() * 4 > maxImageCacheSize() * 0.7)
         return image;
     OString key;
     OStringBuffer keyBuf;
@@ -1602,14 +1601,14 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
     if (alphaBitmap)
         keyBuf.append("_").append(alphaBitmap->GetAlphaImageKey());
     key = keyBuf.makeStringAndClear();
-    image = SkiaHelper::findCachedImage(key);
+    image = findCachedImage(key);
     if (image)
     {
         assert(image->width() == targetSize.Width() && image->height() == targetSize.Height());
         return image;
     }
-    sk_sp<SkSurface> tmpSurface = SkiaHelper::createSkSurface(
-        targetSize, alphaBitmap ? kPremul_SkAlphaType : bitmap.alphaType());
+    sk_sp<SkSurface> tmpSurface
+        = createSkSurface(targetSize, alphaBitmap ? kPremul_SkAlphaType : bitmap.alphaType());
     if (!tmpSurface)
         return nullptr;
     SkCanvas* canvas = tmpSurface->getCanvas();
@@ -1638,8 +1637,8 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
     }
     else
         canvas->drawImage(bitmap.GetSkImage(), 0, 0, samplingOptions, &paint);
-    image = SkiaHelper::makeCheckedImageSnapshot(tmpSurface);
-    SkiaHelper::addCachedImage(key, image);
+    image = makeCheckedImageSnapshot(tmpSurface);
+    addCachedImage(key, image);
     return image;
 }
 

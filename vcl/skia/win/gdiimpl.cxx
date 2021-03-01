@@ -27,6 +27,8 @@
 
 #include <windows.h>
 
+using namespace SkiaHelper;
+
 WinSkiaSalGraphicsImpl::WinSkiaSalGraphicsImpl(WinSalGraphics& rGraphics,
                                                SalGeometryProvider* mpProvider)
     : SkiaSalGraphicsImpl(rGraphics, mpProvider)
@@ -39,14 +41,14 @@ void WinSkiaSalGraphicsImpl::createWindowContext(bool forceRaster)
     SkiaZone zone;
     sk_app::DisplayParams displayParams;
     assert(GetWidth() > 0 && GetHeight() > 0);
-    displayParams.fSurfaceProps = *SkiaHelper::surfaceProps();
-    switch (forceRaster ? SkiaHelper::RenderRaster : SkiaHelper::renderMethodToUse())
+    displayParams.fSurfaceProps = *surfaceProps();
+    switch (forceRaster ? RenderRaster : renderMethodToUse())
     {
-        case SkiaHelper::RenderRaster:
+        case RenderRaster:
             mWindowContext = sk_app::window_context_factory::MakeRasterForWin(mWinParent.gethWnd(),
                                                                               displayParams);
             break;
-        case SkiaHelper::RenderVulkan:
+        case RenderVulkan:
             mWindowContext = sk_app::window_context_factory::MakeVulkanForWin(mWinParent.gethWnd(),
                                                                               displayParams);
             break;
@@ -262,7 +264,7 @@ void WinSkiaSalGraphicsImpl::initFontInfo()
         else
             fontEdging = SkFont::Edging::kAntiAlias;
     }
-    SkiaHelper::setPixelGeometry(pixelGeometry);
+    setPixelGeometry(pixelGeometry);
 }
 
 void WinSkiaSalGraphicsImpl::ClearDevFontCache()
@@ -313,7 +315,7 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsImageDiff(const SkiaCompatibleDC& white) c
     }
     tmpBitmap.notifyPixelsChanged();
     tmpBitmap.setImmutable();
-    sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(tmpBitmap.width(), tmpBitmap.height());
+    sk_sp<SkSurface> surface = createSkSurface(tmpBitmap.width(), tmpBitmap.height());
     SkPaint paint;
     paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
     SkCanvas* canvas = surface->getCanvas();
@@ -325,7 +327,7 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsImageDiff(const SkiaCompatibleDC& white) c
     canvas->concat(matrix);
     canvas->drawImage(tmpBitmap.asImage(), 0, 0, SkSamplingOptions(), &paint);
     canvas->restore();
-    return SkiaHelper::makeCheckedImageSnapshot(surface);
+    return makeCheckedImageSnapshot(surface);
 }
 
 SkiaControlsCache::SkiaControlsCache()
