@@ -1120,6 +1120,12 @@ void JSTreeView::remove(const weld::TreeIter& rIter)
     sendUpdate();
 }
 
+void JSTreeView::clear()
+{
+    SalInstanceTreeView::clear();
+    sendUpdate();
+}
+
 void JSTreeView::expand_row(const weld::TreeIter& rIter)
 {
     SalInstanceTreeView::expand_row(rIter);
