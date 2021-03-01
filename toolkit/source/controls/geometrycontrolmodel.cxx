@@ -372,7 +372,7 @@
         OSL_ENSURE(xAggregateClone.is(), "OGeometryControlModel_Base::createClone: suspicious return of the aggregate!");
 
         // create a new wrapper aggregating this return value
-        OGeometryControlModel_Base* pOwnClone = createClone_Impl(xAggregateClone);
+        rtl::Reference<OGeometryControlModel_Base> pOwnClone = createClone_Impl(xAggregateClone);
         OSL_ENSURE(pOwnClone, "OGeometryControlModel_Base::createClone: invalid derivee behaviour!");
         OSL_ENSURE(!xAggregateClone.is(), "OGeometryControlModel_Base::createClone: invalid ctor behaviour!");
             // should have been reset
@@ -391,13 +391,11 @@
         // Clone event container
         Reference< css::script::XScriptEventsSupplier > xEventsSupplier =
             static_cast< css::script::XScriptEventsSupplier* >( this );
-        Reference< css::script::XScriptEventsSupplier > xCloneEventsSupplier =
-            static_cast< css::script::XScriptEventsSupplier* >( pOwnClone );
 
-        if( xEventsSupplier.is() && xCloneEventsSupplier.is() )
+        if( xEventsSupplier.is() )
         {
             Reference< XNameContainer > xEventCont = xEventsSupplier->getEvents();
-            Reference< XNameContainer > xCloneEventCont = xCloneEventsSupplier->getEvents();
+            Reference< XNameContainer > xCloneEventCont = pOwnClone->getEvents();
 
             const css::uno::Sequence< OUString > aNames =
                 xEventCont->getElementNames();
@@ -561,7 +559,7 @@
     }
 
 
-    OGeometryControlModel_Base* OCommonGeometryControlModel::createClone_Impl( Reference< XCloneable >& _rxAggregateInstance )
+    rtl::Reference<OGeometryControlModel_Base> OCommonGeometryControlModel::createClone_Impl( Reference< XCloneable >& _rxAggregateInstance )
     {
         return new OCommonGeometryControlModel( _rxAggregateInstance, m_sServiceSpecifier );
     }
