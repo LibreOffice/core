@@ -36,7 +36,7 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 
 // We run unit tests in parallel, which is a problem when touching a shared resource
 // the system clipboard, so rather use the dummy GenericClipboard.
-static const bool bRunningUnitTest = getenv("LO_TESTNAME");
+const bool bRunningUnitTest = getenv("LO_TESTNAME");
 
 uno::Reference< XInterface > AquaSalInstance::CreateClipboard( const Sequence< Any >& i_rArguments )
 {
