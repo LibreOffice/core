@@ -208,6 +208,7 @@ public:
     void testOptimalHeightReset();
     void testCustomNumFormatHybridCellODS();
     void testTdf121040();
+    void testTdf118086();
     void testTdf118624();
     void testTdf124454();
 
@@ -401,6 +402,7 @@ public:
     CPPUNIT_TEST(testOptimalHeightReset);
     CPPUNIT_TEST(testCustomNumFormatHybridCellODS);
     CPPUNIT_TEST(testTdf121040);
+    CPPUNIT_TEST(testTdf118086);
     CPPUNIT_TEST(testTdf118624);
     CPPUNIT_TEST(testTdf124454);
     CPPUNIT_TEST(testPrintRangeODS);
@@ -3274,6 +3276,24 @@ void ScFiltersTest::testTdf121040()
     {
         CPPUNIT_ASSERT_EQUAL(nHeight, rDoc.GetRowHeight(nRow, nTab, false));
     }
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf118086()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf118086.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf118086.ods", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(477), rDoc.GetRowHeight(2, static_cast<SCTAB>(0), false));
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 256
+    // - Actual  : 477
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(256), rDoc.GetRowHeight(2, static_cast<SCTAB>(1), false));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(256), rDoc.GetRowHeight(2, static_cast<SCTAB>(2), false));
 
     xDocSh->DoClose();
 }
