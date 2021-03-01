@@ -29,15 +29,15 @@ class SwTextFootnote;
 
 class SwFootnotePortion : public SwFieldPortion
 {
-    SwTextFootnote *pFootnote;
-    sal_uInt16 nOrigHeight;
+    SwTextFootnote *m_pFootnote;
+    sal_uInt16 m_nOrigHeight;
     // #i98418#
     bool mbPreferredScriptTypeSet;
     SwFontScript mnPreferredScriptType;
 public:
     SwFootnotePortion( const OUString &rExpand, SwTextFootnote *pFootnote,
                   sal_uInt16 nOrig = USHRT_MAX );
-    sal_uInt16& Orig() { return nOrigHeight; }
+    sal_uInt16& Orig() { return m_nOrigHeight; }
 
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
@@ -47,7 +47,7 @@ public:
     // #i98418#
     void SetPreferredScriptType( SwFontScript nPreferredScriptType );
 
-    const SwTextFootnote* GetTextFootnote() const { return pFootnote; };
+    const SwTextFootnote* GetTextFootnote() const { return m_pFootnote; };
 };
 
 class SwFootnoteNumPortion : public SwNumberPortion
@@ -66,16 +66,16 @@ public:
  */
 class SwQuoVadisPortion : public SwFieldPortion
 {
-    OUString   aErgo;
+    OUString   m_aErgo;
 public:
     SwQuoVadisPortion( const OUString &rExp, const OUString& rStr );
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
 
-    void SetNumber( const OUString& rStr ) { aErgo = rStr; }
+    void SetNumber( const OUString& rStr ) { m_aErgo = rStr; }
     const OUString& GetQuoText() const { return m_aExpand; }
-    const OUString &GetContText() const { return aErgo; }
+    const OUString &GetContText() const { return m_aErgo; }
 
     // Field cloner for SplitGlue
     virtual SwFieldPortion *Clone( const OUString &rExpand ) const override;
