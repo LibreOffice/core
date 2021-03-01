@@ -17,10 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <rtl/ustrbuf.hxx>
 #include <vcl/bubblewindow.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <unotools/resmgr.hxx>
+#include <bitmaps.hlst>
 
 #define TIP_HEIGHT             15
 #define TIP_WIDTH               7
@@ -46,8 +49,6 @@ BubbleWindow::BubbleWindow( vcl::Window* pParent, const OUString& rTitle,
 
 void BubbleWindow::Resize()
 {
-    SolarMutexGuard aGuard;
-
     FloatingWindow::Resize();
 
     Size aSize = GetSizePixel();
@@ -87,8 +88,6 @@ void BubbleWindow::SetTitleAndText( const OUString& rTitle,
 
 void BubbleWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& /*rRect*/)
 {
-    SolarMutexGuard aGuard;
-
     LineInfo aThickLine( LineStyle::Solid, 2 );
 
     DrawPolyLine( maRectPoly, aThickLine );
@@ -130,8 +129,6 @@ void BubbleWindow::MouseButtonDown( const MouseEvent& )
 
 void BubbleWindow::Show( bool bVisible )
 {
-    SolarMutexGuard aGuard;
-
     if ( !bVisible )
     {
         FloatingWindow::Show( bVisible );
@@ -214,6 +211,344 @@ void BubbleWindow::RecalcTextRects()
     }
     maTitleRect.Move( 2*BUBBLE_BORDER, BUBBLE_BORDER + TIP_HEIGHT );
     maTextRect.Move( 2*BUBBLE_BORDER, BUBBLE_BORDER + TIP_HEIGHT + maTitleRect.GetHeight() + aBoldFont.GetFontHeight() * 3 / 4 );
+}
+
+MenuBarUpdateIconManager::MenuBarUpdateIconManager()
+    : mnIconID (0)
+    , mbShowMenuIcon(false)
+    , mbShowBubble(false)
+    , mbBubbleChanged( false )
+{
+    maTimeoutTimer.SetTimeout( 10000 );
+    maTimeoutTimer.SetInvokeHandler(LINK(this, MenuBarUpdateIconManager, TimeOutHdl));
+
+    maWaitIdle.SetPriority( TaskPriority::LOWEST );
+    maWaitIdle.SetInvokeHandler(LINK(this, MenuBarUpdateIconManager, WaitTimeOutHdl));
+
+    maApplicationEventHdl = LINK(this, MenuBarUpdateIconManager, ApplicationEventHdl);
+    Application::AddEventListener( maApplicationEventHdl );
+
+    maWindowEventHdl = LINK(this, MenuBarUpdateIconManager, WindowEventHdl);
+}
+
+VclPtr<BubbleWindow> MenuBarUpdateIconManager::GetBubbleWindow()
+{
+    if ( !mpIconSysWin )
+        return nullptr;
+
+    tools::Rectangle aIconRect = mpIconMBar->GetMenuBarButtonRectPixel( mnIconID );
+    if( aIconRect.IsEmpty() )
+        return nullptr;
+
+    auto pBubbleWin = mpBubbleWin;
+
+    if ( !pBubbleWin ) {
+        pBubbleWin = VclPtr<BubbleWindow>::Create( mpIconSysWin, maBubbleTitle,
+                                       maBubbleText, maBubbleImage );
+        mbBubbleChanged = false;
+    }
+    else if ( mbBubbleChanged ) {
+        pBubbleWin->SetTitleAndText( maBubbleTitle, maBubbleText,
+                                     maBubbleImage );
+        mbBubbleChanged = false;
+    }
+
+    Point aWinPos = aIconRect.BottomCenter();
+
+    pBubbleWin->SetTipPosPixel( aWinPos );
+
+    return pBubbleWin;
+}
+
+IMPL_LINK_NOARG(MenuBarUpdateIconManager, TimeOutHdl, Timer *, void)
+{
+    RemoveBubbleWindow( false );
+}
+
+IMPL_LINK(MenuBarUpdateIconManager, WindowEventHdl, VclWindowEvent&, rEvent, void)
+{
+    VclEventId nEventID = rEvent.GetId();
+
+    if ( VclEventId::ObjectDying == nEventID )
+    {
+        if ( mpIconSysWin == rEvent.GetWindow() )
+        {
+            mpIconSysWin->RemoveEventListener( maWindowEventHdl );
+            RemoveBubbleWindow( true );
+        }
+    }
+    else if ( VclEventId::WindowMenubarAdded == nEventID )
+    {
+        vcl::Window *pWindow = rEvent.GetWindow();
+        if ( pWindow )
+        {
+            SystemWindow *pSysWin = pWindow->GetSystemWindow();
+            if ( pSysWin )
+            {
+                AddMenuBarIcon( pSysWin, false );
+            }
+        }
+    }
+    else if ( VclEventId::WindowMenubarRemoved == nEventID )
+    {
+        MenuBar *pMBar = static_cast<MenuBar*>(rEvent.GetData());
+        if ( pMBar && ( pMBar == mpIconMBar ) )
+            RemoveBubbleWindow( true );
+    }
+    else if ( ( nEventID == VclEventId::WindowMove ) ||
+              ( nEventID == VclEventId::WindowResize ) )
+    {
+        if ( ( mpIconSysWin == rEvent.GetWindow() ) &&
+             mpBubbleWin && ( mpIconMBar != nullptr ) )
+        {
+            tools::Rectangle aIconRect = mpIconMBar->GetMenuBarButtonRectPixel( mnIconID );
+            Point aWinPos = aIconRect.BottomCenter();
+            mpBubbleWin->SetTipPosPixel( aWinPos );
+            if ( mpBubbleWin->IsVisible() )
+                mpBubbleWin->Show();    // This will recalc the screen position of the bubble
+        }
+    }
+}
+
+IMPL_LINK(MenuBarUpdateIconManager, ApplicationEventHdl, VclSimpleEvent&, rEvent, void)
+{
+    switch (rEvent.GetId())
+    {
+        case VclEventId::WindowShow:
+        case VclEventId::WindowActivate:
+        case VclEventId::WindowGetFocus: {
+
+            vcl::Window *pWindow = static_cast< VclWindowEvent * >(&rEvent)->GetWindow();
+            if ( pWindow && pWindow->IsTopWindow() )
+            {
+                SystemWindow *pSysWin = pWindow->GetSystemWindow();
+                MenuBar *pMBar = pSysWin ? pSysWin->GetMenuBar() : nullptr;
+                if (pMBar)
+                {
+                    AddMenuBarIcon( pSysWin, true );
+                }
+            }
+            break;
+        }
+        default: break;
+    }
+}
+
+IMPL_LINK_NOARG(MenuBarUpdateIconManager, UserEventHdl, void*, void)
+{
+    vcl::Window *pTopWin = Application::GetFirstTopLevelWindow();
+    vcl::Window *pActiveWin = Application::GetActiveTopWindow();
+    SystemWindow *pActiveSysWin = nullptr;
+
+    vcl::Window *pBubbleWin = nullptr;
+    if ( mpBubbleWin )
+        pBubbleWin = mpBubbleWin;
+
+    if ( pActiveWin && ( pActiveWin != pBubbleWin ) && pActiveWin->IsTopWindow() )
+        pActiveSysWin = pActiveWin->GetSystemWindow();
+
+    if ( pActiveWin == pBubbleWin )
+        pActiveSysWin = nullptr;
+
+    while ( !pActiveSysWin && pTopWin )
+    {
+        if ( ( pTopWin != pBubbleWin ) && pTopWin->IsTopWindow() )
+            pActiveSysWin = pTopWin->GetSystemWindow();
+        if ( !pActiveSysWin )
+            pTopWin = Application::GetNextTopLevelWindow( pTopWin );
+    }
+
+    if ( pActiveSysWin )
+        AddMenuBarIcon( pActiveSysWin, true );
+}
+
+IMPL_LINK_NOARG(MenuBarUpdateIconManager, ClickHdl, MenuBar::MenuBarButtonCallbackArg&, bool)
+{
+    maWaitIdle.Stop();
+    if ( mpBubbleWin )
+        mpBubbleWin->Show( false );
+
+    maClickHdl.Call(nullptr);
+
+    return false;
+}
+
+IMPL_LINK(MenuBarUpdateIconManager, HighlightHdl, MenuBar::MenuBarButtonCallbackArg&, rData, bool)
+{
+    if ( rData.bHighlight )
+        maWaitIdle.Start();
+    else
+        RemoveBubbleWindow(false);
+
+    return false;
+}
+
+IMPL_LINK_NOARG(MenuBarUpdateIconManager, WaitTimeOutHdl, Timer *, void)
+{
+    mpBubbleWin = GetBubbleWindow();
+
+    if ( mpBubbleWin )
+    {
+        mpBubbleWin->Show();
+    }
+}
+
+MenuBarUpdateIconManager::~MenuBarUpdateIconManager()
+{
+    Application::RemoveEventListener( maApplicationEventHdl );
+
+    RemoveBubbleWindow(true);
+}
+
+void MenuBarUpdateIconManager::SetShowMenuIcon(bool bShowMenuIcon)
+{
+    if ( bShowMenuIcon != mbShowMenuIcon )
+    {
+        mbShowMenuIcon = bShowMenuIcon;
+        if ( bShowMenuIcon )
+            Application::PostUserEvent(LINK(this, MenuBarUpdateIconManager, UserEventHdl));
+        else
+            RemoveBubbleWindow( true );
+    }
+}
+
+void MenuBarUpdateIconManager::SetShowBubble(bool bShowBubble)
+{
+    mbShowBubble = bShowBubble;
+    if ( mbShowBubble )
+        Application::PostUserEvent(LINK(this, MenuBarUpdateIconManager, UserEventHdl));
+    else if ( mpBubbleWin )
+        mpBubbleWin->Show( false );
+}
+
+void MenuBarUpdateIconManager::SetBubbleChanged()
+{
+    mbBubbleChanged = true;
+    if (mbBubbleChanged && mpBubbleWin)
+        mpBubbleWin->Show( false );
+}
+
+void MenuBarUpdateIconManager::SetBubbleImage(const Image& rImage)
+{
+    maBubbleImage = rImage;
+    SetBubbleChanged();
+}
+
+void MenuBarUpdateIconManager::SetBubbleTitle(const OUString& rTitle)
+{
+    if (rTitle != maBubbleTitle)
+    {
+        maBubbleTitle = rTitle;
+        SetBubbleChanged();
+    }
+}
+
+void MenuBarUpdateIconManager::SetBubbleText(const OUString& rText)
+{
+    if (rText != maBubbleText)
+    {
+        maBubbleText = rText;
+        SetBubbleChanged();
+    }
+}
+
+namespace {
+Image GetMenuBarIcon( MenuBar const * pMBar )
+{
+    OUString sResID;
+    vcl::Window *pMBarWin = pMBar->GetWindow();
+    sal_uInt32 nMBarHeight = 20;
+
+    if ( pMBarWin )
+        nMBarHeight = pMBarWin->GetOutputSizePixel().getHeight();
+
+    if (nMBarHeight >= 35)
+        sResID = RID_UPDATE_AVAILABLE_26;
+    else
+        sResID = RID_UPDATE_AVAILABLE_16;
+
+    return Image(StockImage::Yes, sResID);
+}
+}
+
+void MenuBarUpdateIconManager::AddMenuBarIcon(SystemWindow *pSysWin, bool bAddEventHdl)
+{
+    if ( ! mbShowMenuIcon )
+        return;
+
+    MenuBar *pActiveMBar = pSysWin->GetMenuBar();
+    if ( ( pSysWin != mpIconSysWin ) || ( pActiveMBar != mpIconMBar ) )
+    {
+        if ( bAddEventHdl && mpIconSysWin )
+            mpIconSysWin->RemoveEventListener( maWindowEventHdl );
+
+        RemoveBubbleWindow( true );
+
+        if ( pActiveMBar )
+        {
+            OUStringBuffer aBuf;
+            if( !maBubbleTitle.isEmpty() )
+                aBuf.append( maBubbleTitle );
+            if( !maBubbleText.isEmpty() )
+            {
+                if( !maBubbleTitle.isEmpty() )
+                    aBuf.append( "\n\n" );
+                aBuf.append( maBubbleText );
+            }
+
+            Image aImage = GetMenuBarIcon( pActiveMBar );
+            mnIconID = pActiveMBar->AddMenuBarButton( aImage,
+                                    LINK( this, MenuBarUpdateIconManager, ClickHdl ),
+                                    aBuf.makeStringAndClear()
+                                    );
+            pActiveMBar->SetMenuBarButtonHighlightHdl( mnIconID,
+                                    LINK( this, MenuBarUpdateIconManager, HighlightHdl ) );
+        }
+        mpIconMBar = pActiveMBar;
+        mpIconSysWin = pSysWin;
+        if ( bAddEventHdl && mpIconSysWin )
+            mpIconSysWin->AddEventListener( maWindowEventHdl );
+    }
+
+    if ( mbShowBubble && pActiveMBar )
+    {
+        mpBubbleWin = GetBubbleWindow();
+        if ( mpBubbleWin )
+        {
+            mpBubbleWin->Show();
+            maTimeoutTimer.Start();
+        }
+        mbShowBubble = false;
+    }
+}
+
+void MenuBarUpdateIconManager::RemoveBubbleWindow( bool bRemoveIcon )
+{
+    maWaitIdle.Stop();
+    maTimeoutTimer.Stop();
+
+    if ( mpBubbleWin )
+    {
+        mpBubbleWin.disposeAndClear();
+    }
+
+    if ( bRemoveIcon )
+    {
+        try {
+            if ( mpIconMBar && ( mnIconID != 0 ) )
+            {
+                mpIconMBar->RemoveMenuBarButton( mnIconID );
+                mpIconMBar = nullptr;
+                mnIconID = 0;
+            }
+        }
+        catch ( ... ) {
+            mpIconMBar = nullptr;
+            mnIconID = 0;
+        }
+
+        mpIconSysWin = nullptr;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
