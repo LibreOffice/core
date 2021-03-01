@@ -209,7 +209,7 @@ public:
     OFilterItemExchange& operator*() const { return *static_cast<OFilterItemExchange*>(m_xTransferable.get()); }
 
 protected:
-    virtual OLocalExchange* createExchange() const override;
+    virtual rtl::Reference<OLocalExchange> createExchange() const override;
 };
 
 class FmFilterNavigator;
