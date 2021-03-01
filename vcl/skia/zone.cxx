@@ -59,9 +59,9 @@ void SkiaZone::checkDebug(int nUnchanged, const CrashWatchdogTimingsValues& aTim
 
 const CrashWatchdogTimingsValues& SkiaZone::getCrashWatchdogTimingsValues()
 {
-    switch (SkiaHelper::renderMethodToUse())
+    switch (renderMethodToUse())
     {
-        case SkiaHelper::RenderVulkan:
+        case RenderVulkan:
         {
 #if defined(SK_RELEASE)
             static const CrashWatchdogTimingsValues vulkanValues = { 6, 20 }; /* 1.5s,  5s */
@@ -72,7 +72,7 @@ const CrashWatchdogTimingsValues& SkiaZone::getCrashWatchdogTimingsValues()
 #endif
             return vulkanValues;
         }
-        case SkiaHelper::RenderRaster:
+        case RenderRaster:
         {
             // CPU-based operations with large images may take a noticeably long time,
             // so use large values. CPU-based rendering shouldn't use any unstable drivers anyway.
