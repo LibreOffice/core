@@ -962,7 +962,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134253)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, TestAsCharTextBox)
 {
-    // Releated tickets:
+    // Related tickets:
     // tdf#138598 Replace vertical alignment of As_char textboxes in footer
     // tdf#140158 Remove horizontal positioning of As_char textboxes, because
     // the anchor moving does the same for it.
