@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e033afa_29c5fc5e",
+        "filename": "sd/qa/unit/export-tests-ooxml2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2752,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-03-01T08:11:36Z",
+      "side": 1,
+      "message": "Next time, it\u0027s useful to document what was the old value of that attribute before your fix. Something like:\n\n Without the accompanying fix in place, this test would have failed with:\n - expected:\n - actual:\n\nThis helps to understand the situation better when the test fails. For example, if the current value is not 5400000, it\u0027s useful to know if the old bad value was 1000 or 5300000.",
+      "revId": "6a6a137ac94bab1ed406e357a3bcff8ead4b86c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
