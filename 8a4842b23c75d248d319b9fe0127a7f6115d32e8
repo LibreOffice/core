@@ -594,6 +594,24 @@
       "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "76aed10d_f54b5700",
+        "filename": "uui/source/reloadeditable.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-01T17:44:51Z",
+      "side": 1,
+      "message": "Well, this is not a correct approach. Please check the type that is returned from m_xQueryBox-\u003erun() :-) - and unless you have a good reason to use a different type, it\u0027s best to just use the type that is returned. Note what is the type of the variable that you finally assign value from *this* your function. This all looks like using three different types for unclear reason (although the first and the last accidentally happen to have the same range).",
+      "parentUuid": "42b10609_859559d8",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
