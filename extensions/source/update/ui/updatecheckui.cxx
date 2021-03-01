@@ -31,12 +31,8 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/image.hxx>
-#include <vcl/window.hxx>
 #include <vcl/bubblewindow.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/idle.hxx>
-#include <vcl/lineinfo.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
@@ -59,62 +55,22 @@ using namespace ::com::sun::star;
 namespace
 {
 
-Image GetMenuBarIcon( MenuBar const * pMBar )
-{
-    OUString sResID;
-    vcl::Window *pMBarWin = pMBar->GetWindow();
-    sal_uInt32 nMBarHeight = 20;
-
-    if ( pMBarWin )
-        nMBarHeight = pMBarWin->GetOutputSizePixel().getHeight();
-
-    if (nMBarHeight >= 35)
-        sResID = RID_UPDATE_AVAILABLE_26;
-    else
-        sResID = RID_UPDATE_AVAILABLE_16;
-
-    return Image(StockImage::Yes, sResID);
-}
-
 class UpdateCheckUI : public ::cppu::WeakImplHelper
                         < lang::XServiceInfo, document::XDocumentEventListener, beans::XPropertySet >
 {
     uno::Reference< uno::XComponentContext > m_xContext;
     uno::Reference< task::XJob > mrJob;
-    OUString       maBubbleTitle;
-    OUString       maBubbleText;
     OUString       maBubbleImageURL;
-    Image               maBubbleImage;
-    VclPtr<BubbleWindow> mpBubbleWin;
-    VclPtr<SystemWindow> mpIconSysWin;
-    VclPtr<MenuBar>     mpIconMBar;
+    MenuBarUpdateIconManager maBubbleManager;
     std::locale         maSfxLocale;
-    Idle                maWaitIdle;
-    Timer               maTimeoutTimer;
-    Link<VclWindowEvent&,void> maWindowEventHdl;
-    Link<VclSimpleEvent&,void> maApplicationEventHdl;
-    bool                mbShowBubble;
-    bool                mbShowMenuIcon;
-    bool                mbBubbleChanged;
-    sal_uInt16              mnIconID;
 
 private:
-                    DECL_LINK(ClickHdl, MenuBar::MenuBarButtonCallbackArg&, bool);
-                    DECL_LINK(HighlightHdl, MenuBar::MenuBarButtonCallbackArg&, bool);
-                    DECL_LINK(WaitTimeOutHdl, Timer *, void);
-                    DECL_LINK(TimeOutHdl, Timer *, void);
-                    DECL_LINK(UserEventHdl, void *, void);
-                    DECL_LINK(WindowEventHdl, VclWindowEvent&, void);
-                    DECL_LINK(ApplicationEventHdl, VclSimpleEvent&, void);
+                    DECL_LINK(ClickHdl, LinkParamNone*, void);
 
-    VclPtr<BubbleWindow> GetBubbleWindow();
-    void            RemoveBubbleWindow( bool bRemoveIcon );
-    void            AddMenuBarIcon( SystemWindow* pSysWin, bool bAddEventHdl );
     Image           GetBubbleImage( OUString const &rURL );
 
 public:
     explicit        UpdateCheckUI(const uno::Reference<uno::XComponentContext>&);
-    virtual        ~UpdateCheckUI() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -139,36 +95,18 @@ public:
                                                        const uno::Reference< beans::XVetoableChangeListener > & aListener) override;
 };
 
-UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xContext) :
-      m_xContext(xContext)
-    , mpIconMBar( nullptr )
-    , mbShowBubble( false )
-    , mbShowMenuIcon( false )
-    , mbBubbleChanged( false )
-    , mnIconID( 0 )
+UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xContext)
+    : m_xContext(xContext)
 {
     maSfxLocale = Translate::Create("sfx");
-
-    maBubbleImage = GetBubbleImage( maBubbleImageURL );
-
-    maWaitIdle.SetPriority( TaskPriority::LOWEST );
-    maWaitIdle.SetInvokeHandler( LINK( this, UpdateCheckUI, WaitTimeOutHdl ) );
-
-    maTimeoutTimer.SetTimeout( 10000 );
-    maTimeoutTimer.SetInvokeHandler( LINK( this, UpdateCheckUI, TimeOutHdl ) );
 
     uno::Reference< document::XDocumentEventBroadcaster > xBroadcaster( frame::theGlobalEventBroadcaster::get(m_xContext) );
     xBroadcaster->addDocumentEventListener( this );
 
-    maWindowEventHdl = LINK( this, UpdateCheckUI, WindowEventHdl );
-    maApplicationEventHdl = LINK( this, UpdateCheckUI, ApplicationEventHdl );
-    Application::AddEventListener( maApplicationEventHdl );
-}
+    SolarMutexGuard aGuard;
 
-UpdateCheckUI::~UpdateCheckUI()
-{
-    Application::RemoveEventListener( maApplicationEventHdl );
-    RemoveBubbleWindow( true );
+    maBubbleManager.SetBubbleImage(GetBubbleImage(maBubbleImageURL));
+    maBubbleManager.SetClickHdl(LINK(this, UpdateCheckUI, ClickHdl));
 }
 
 OUString SAL_CALL
@@ -225,82 +163,24 @@ Image UpdateCheckUI::GetBubbleImage( OUString const &rURL )
     return aImage;
 }
 
-
-void UpdateCheckUI::AddMenuBarIcon( SystemWindow *pSysWin, bool bAddEventHdl )
-{
-    if ( ! mbShowMenuIcon )
-        return;
-
-    SolarMutexGuard aGuard;
-
-    MenuBar *pActiveMBar = pSysWin->GetMenuBar();
-    if ( ( pSysWin != mpIconSysWin ) || ( pActiveMBar != mpIconMBar ) )
-    {
-        if ( bAddEventHdl && mpIconSysWin )
-            mpIconSysWin->RemoveEventListener( maWindowEventHdl );
-
-        RemoveBubbleWindow( true );
-
-        if ( pActiveMBar )
-        {
-            OUStringBuffer aBuf;
-            if( !maBubbleTitle.isEmpty() )
-                aBuf.append( maBubbleTitle );
-            if( !maBubbleText.isEmpty() )
-            {
-                if( !maBubbleTitle.isEmpty() )
-                    aBuf.append( "\n\n" );
-                aBuf.append( maBubbleText );
-            }
-
-            Image aImage = GetMenuBarIcon( pActiveMBar );
-            mnIconID = pActiveMBar->AddMenuBarButton( aImage,
-                                    LINK( this, UpdateCheckUI, ClickHdl ),
-                                    aBuf.makeStringAndClear()
-                                    );
-            pActiveMBar->SetMenuBarButtonHighlightHdl( mnIconID,
-                                    LINK( this, UpdateCheckUI, HighlightHdl ) );
-        }
-        mpIconMBar = pActiveMBar;
-        mpIconSysWin = pSysWin;
-        if ( bAddEventHdl && mpIconSysWin )
-            mpIconSysWin->AddEventListener( maWindowEventHdl );
-    }
-
-    if ( mbShowBubble && pActiveMBar )
-    {
-        mpBubbleWin = GetBubbleWindow();
-        if ( mpBubbleWin )
-        {
-            mpBubbleWin->Show();
-            maTimeoutTimer.Start();
-        }
-        mbShowBubble = false;
-    }
-}
-
-
 void SAL_CALL UpdateCheckUI::documentEventOccured(const document::DocumentEvent& rEvent)
 {
     SolarMutexGuard aGuard;
 
     if( rEvent.EventName == "OnPrepareViewClosing" )
     {
-        RemoveBubbleWindow( true );
+        maBubbleManager.RemoveBubbleWindow(true);
     }
 }
-
 
 void SAL_CALL UpdateCheckUI::disposing(const lang::EventObject&)
 {
 }
 
-
 uno::Reference< beans::XPropertySetInfo > UpdateCheckUI::getPropertySetInfo()
 {
     return nullptr;
 }
-
 
 void UpdateCheckUI::setPropertyValue(const OUString& rPropertyName,
                                      const uno::Any& rValue)
@@ -311,32 +191,23 @@ void UpdateCheckUI::setPropertyValue(const OUString& rPropertyName,
 
     if( rPropertyName == PROPERTY_TITLE ) {
         rValue >>= aString;
-        if ( aString != maBubbleTitle ) {
-            maBubbleTitle = aString;
-            mbBubbleChanged = true;
-        }
+        maBubbleManager.SetBubbleTitle(aString);
     }
     else if( rPropertyName == PROPERTY_TEXT ) {
         rValue >>= aString;
-        if ( aString != maBubbleText ) {
-            maBubbleText = aString;
-            mbBubbleChanged = true;
-        }
+        maBubbleManager.SetBubbleText(aString);
     }
     else if( rPropertyName == PROPERTY_IMAGE ) {
         rValue >>= aString;
         if ( aString != maBubbleImageURL ) {
             maBubbleImageURL = aString;
-            maBubbleImage = GetBubbleImage( maBubbleImageURL );
-            mbBubbleChanged = true;
+            maBubbleManager.SetBubbleImage(GetBubbleImage(maBubbleImageURL));
         }
     }
     else if( rPropertyName == PROPERTY_SHOW_BUBBLE ) {
-        rValue >>= mbShowBubble;
-        if ( mbShowBubble )
-            Application::PostUserEvent( LINK( this, UpdateCheckUI, UserEventHdl ) );
-        else if ( mpBubbleWin )
-            mpBubbleWin->Show( false );
+        bool bShowBubble= false;
+        rValue >>= bShowBubble;
+        maBubbleManager.SetShowBubble(bShowBubble);
     }
     else if( rPropertyName == PROPERTY_CLICK_HDL ) {
         uno::Reference< task::XJob > aJob;
@@ -348,22 +219,11 @@ void UpdateCheckUI::setPropertyValue(const OUString& rPropertyName,
     else if (rPropertyName == PROPERTY_SHOW_MENUICON ) {
         bool bShowMenuIcon = false;
         rValue >>= bShowMenuIcon;
-        if ( bShowMenuIcon != mbShowMenuIcon )
-        {
-            mbShowMenuIcon = bShowMenuIcon;
-            if ( bShowMenuIcon )
-                Application::PostUserEvent( LINK( this, UpdateCheckUI, UserEventHdl ) );
-            else
-                RemoveBubbleWindow( true );
-        }
+        maBubbleManager.SetShowMenuIcon(bShowMenuIcon);
     }
     else
         throw beans::UnknownPropertyException(rPropertyName);
-
-    if ( mbBubbleChanged && mpBubbleWin )
-        mpBubbleWin->Show( false );
 }
-
 
 uno::Any UpdateCheckUI::getPropertyValue(const OUString& rPropertyName)
 {
@@ -372,17 +232,17 @@ uno::Any UpdateCheckUI::getPropertyValue(const OUString& rPropertyName)
     uno::Any aRet;
 
     if( rPropertyName == PROPERTY_TITLE )
-        aRet <<= maBubbleTitle;
+        aRet <<= maBubbleManager.GetBubbleTitle();
     else if( rPropertyName == PROPERTY_TEXT )
-        aRet <<= maBubbleText;
+        aRet <<= maBubbleManager.GetBubbleText();
     else if( rPropertyName == PROPERTY_SHOW_BUBBLE )
-        aRet <<= mbShowBubble;
+        aRet <<= maBubbleManager.GetShowBubble();
     else if( rPropertyName == PROPERTY_IMAGE )
         aRet <<= maBubbleImageURL;
     else if( rPropertyName == PROPERTY_CLICK_HDL )
         aRet <<= mrJob;
     else if( rPropertyName == PROPERTY_SHOW_MENUICON )
-        aRet <<= mbShowMenuIcon;
+        aRet <<= maBubbleManager.GetShowMenuIcon();
     else
         throw beans::UnknownPropertyException(rPropertyName);
 
@@ -403,13 +263,11 @@ void UpdateCheckUI::removePropertyChangeListener( const OUString& /*aPropertyNam
     //no bound properties
 }
 
-
 void UpdateCheckUI::addVetoableChangeListener( const OUString& /*aPropertyName*/,
                                                const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
 {
     //no vetoable properties
 }
-
 
 void UpdateCheckUI::removeVetoableChangeListener( const OUString& /*aPropertyName*/,
                                                   const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
@@ -417,76 +275,9 @@ void UpdateCheckUI::removeVetoableChangeListener( const OUString& /*aPropertyNam
     //no vetoable properties
 }
 
-
-VclPtr<BubbleWindow> UpdateCheckUI::GetBubbleWindow()
-{
-    if ( !mpIconSysWin )
-        return nullptr;
-
-    tools::Rectangle aIconRect = mpIconMBar->GetMenuBarButtonRectPixel( mnIconID );
-    if( aIconRect.IsEmpty() )
-        return nullptr;
-
-    auto pBubbleWin = mpBubbleWin;
-
-    if ( !pBubbleWin ) {
-        pBubbleWin = VclPtr<BubbleWindow>::Create( mpIconSysWin, maBubbleTitle,
-                                       maBubbleText, maBubbleImage );
-        mbBubbleChanged = false;
-    }
-    else if ( mbBubbleChanged ) {
-        pBubbleWin->SetTitleAndText( maBubbleTitle, maBubbleText,
-                                     maBubbleImage );
-        mbBubbleChanged = false;
-    }
-
-    Point aWinPos = aIconRect.BottomCenter();
-
-    pBubbleWin->SetTipPosPixel( aWinPos );
-
-    return pBubbleWin;
-}
-
-
-void UpdateCheckUI::RemoveBubbleWindow( bool bRemoveIcon )
+IMPL_LINK_NOARG(UpdateCheckUI, ClickHdl, LinkParamNone*, void)
 {
     SolarMutexGuard aGuard;
-
-    maWaitIdle.Stop();
-    maTimeoutTimer.Stop();
-
-    if ( mpBubbleWin )
-    {
-        mpBubbleWin.disposeAndClear();
-    }
-
-    if ( bRemoveIcon )
-    {
-        try {
-            if ( mpIconMBar && ( mnIconID != 0 ) )
-            {
-                mpIconMBar->RemoveMenuBarButton( mnIconID );
-                mpIconMBar = nullptr;
-                mnIconID = 0;
-            }
-        }
-        catch ( ... ) {
-            mpIconMBar = nullptr;
-            mnIconID = 0;
-        }
-
-        mpIconSysWin = nullptr;
-    }
-}
-
-
-IMPL_LINK_NOARG(UpdateCheckUI, ClickHdl, MenuBar::MenuBarButtonCallbackArg&, bool)
-{
-    SolarMutexGuard aGuard;
-
-    maWaitIdle.Stop();
-    if ( mpBubbleWin )
-        mpBubbleWin->Show( false );
 
     if ( mrJob.is() )
     {
@@ -500,145 +291,6 @@ IMPL_LINK_NOARG(UpdateCheckUI, ClickHdl, MenuBar::MenuBarButtonCallbackArg&, boo
                                                            Translate::get(STR_NO_WEBBROWSER_FOUND, maSfxLocale)));
             xErrorBox->run();
         }
-    }
-
-    return false;
-}
-
-
-IMPL_LINK( UpdateCheckUI, HighlightHdl, MenuBar::MenuBarButtonCallbackArg&, rData, bool )
-{
-    if ( rData.bHighlight )
-        maWaitIdle.Start();
-    else
-        RemoveBubbleWindow( false );
-
-    return false;
-}
-
-
-IMPL_LINK_NOARG(UpdateCheckUI, WaitTimeOutHdl, Timer *, void)
-{
-    SolarMutexGuard aGuard;
-
-    mpBubbleWin = GetBubbleWindow();
-
-    if ( mpBubbleWin )
-    {
-        mpBubbleWin->Show();
-    }
-}
-
-
-IMPL_LINK_NOARG(UpdateCheckUI, TimeOutHdl, Timer *, void)
-{
-    RemoveBubbleWindow( false );
-}
-
-
-IMPL_LINK_NOARG(UpdateCheckUI, UserEventHdl, void*, void)
-{
-    SolarMutexGuard aGuard;
-
-    vcl::Window *pTopWin = Application::GetFirstTopLevelWindow();
-    vcl::Window *pActiveWin = Application::GetActiveTopWindow();
-    SystemWindow *pActiveSysWin = nullptr;
-
-    vcl::Window *pBubbleWin = nullptr;
-    if ( mpBubbleWin )
-        pBubbleWin = mpBubbleWin;
-
-    if ( pActiveWin && ( pActiveWin != pBubbleWin ) && pActiveWin->IsTopWindow() )
-        pActiveSysWin = pActiveWin->GetSystemWindow();
-
-    if ( pActiveWin == pBubbleWin )
-        pActiveSysWin = nullptr;
-
-    while ( !pActiveSysWin && pTopWin )
-    {
-        if ( ( pTopWin != pBubbleWin ) && pTopWin->IsTopWindow() )
-            pActiveSysWin = pTopWin->GetSystemWindow();
-        if ( !pActiveSysWin )
-            pTopWin = Application::GetNextTopLevelWindow( pTopWin );
-    }
-
-    if ( pActiveSysWin )
-        AddMenuBarIcon( pActiveSysWin, true );
-}
-
-
-IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent&, rEvent, void )
-{
-    VclEventId nEventID = rEvent.GetId();
-
-    if ( VclEventId::ObjectDying == nEventID )
-    {
-        SolarMutexGuard aGuard;
-        if ( mpIconSysWin == rEvent.GetWindow() )
-        {
-            mpIconSysWin->RemoveEventListener( maWindowEventHdl );
-            RemoveBubbleWindow( true );
-        }
-    }
-    else if ( VclEventId::WindowMenubarAdded == nEventID )
-    {
-        SolarMutexGuard aGuard;
-        vcl::Window *pWindow = rEvent.GetWindow();
-        if ( pWindow )
-        {
-            SystemWindow *pSysWin = pWindow->GetSystemWindow();
-            if ( pSysWin )
-            {
-                AddMenuBarIcon( pSysWin, false );
-            }
-        }
-    }
-    else if ( VclEventId::WindowMenubarRemoved == nEventID )
-    {
-        SolarMutexGuard aGuard;
-        MenuBar *pMBar = static_cast<MenuBar*>(rEvent.GetData());
-        if ( pMBar && ( pMBar == mpIconMBar ) )
-            RemoveBubbleWindow( true );
-    }
-    else if ( ( nEventID == VclEventId::WindowMove ) ||
-              ( nEventID == VclEventId::WindowResize ) )
-    {
-        SolarMutexGuard aGuard;
-        if ( ( mpIconSysWin == rEvent.GetWindow() ) &&
-             mpBubbleWin && ( mpIconMBar != nullptr ) )
-        {
-            tools::Rectangle aIconRect = mpIconMBar->GetMenuBarButtonRectPixel( mnIconID );
-            Point aWinPos = aIconRect.BottomCenter();
-            mpBubbleWin->SetTipPosPixel( aWinPos );
-            if ( mpBubbleWin->IsVisible() )
-                mpBubbleWin->Show();    // This will recalc the screen position of the bubble
-        }
-    }
-}
-
-
-IMPL_LINK( UpdateCheckUI, ApplicationEventHdl, VclSimpleEvent&, rEvent, void)
-{
-    switch (rEvent.GetId())
-    {
-        case VclEventId::WindowShow:
-        case VclEventId::WindowActivate:
-        case VclEventId::WindowGetFocus: {
-            SolarMutexGuard aGuard;
-
-            vcl::Window *pWindow = static_cast< VclWindowEvent * >(&rEvent)->GetWindow();
-            if ( pWindow && pWindow->IsTopWindow() )
-            {
-                SystemWindow *pSysWin = pWindow->GetSystemWindow();
-                MenuBar *pMBar = pSysWin ? pSysWin->GetMenuBar() : nullptr;
-                if (pMBar)
-                {
-                    AddMenuBarIcon( pSysWin, true );
-                }
-            }
-            break;
-        }
-        default: break;
     }
 }
 
