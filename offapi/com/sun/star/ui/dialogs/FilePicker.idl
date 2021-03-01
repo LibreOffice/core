@@ -52,6 +52,9 @@ published service FilePicker : XFilePicker3
         The implementation of a FileSave dialog should automatically check
         for existence of a file and issue a warning if a file with the same
         name already exist.</p>
+        <p>Note that when creating a file picker, the top window is selected
+        as the parent window for the file picker. Make sure that it does not get
+        closed while opening the file picker, as there is a potential race.</p>
 
         @see com::sun::star::ui::dialogs::TemplateDescription
     */
