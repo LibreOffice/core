@@ -177,12 +177,7 @@ public:
     void testTdf134255();
     void testTdf134977();
     void testTdf137917();
-<<<<<<< HEAD   (800bdf tdf#135198 tdf#138050 sw editing: fix text box position sync)
-=======
-    void testTdf138204();
-    void testTdf138181();
     void testCustomShapeText();
->>>>>>> CHANGE (1aacd8 tdf#138307 Chart import: fix lost custom shape text)
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -323,12 +318,7 @@ public:
     CPPUNIT_TEST(testTdf134255);
     CPPUNIT_TEST(testTdf134977);
     CPPUNIT_TEST(testTdf137917);
-<<<<<<< HEAD   (800bdf tdf#135198 tdf#138050 sw editing: fix text box position sync)
-=======
-    CPPUNIT_TEST(testTdf138204);
-    CPPUNIT_TEST(testTdf138181);
     CPPUNIT_TEST(testCustomShapeText);
->>>>>>> CHANGE (1aacd8 tdf#138307 Chart import: fix lost custom shape text)
 
     CPPUNIT_TEST_SUITE_END();
 
