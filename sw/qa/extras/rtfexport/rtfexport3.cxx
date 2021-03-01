@@ -16,6 +16,7 @@
 #include <com/sun/star/text/XEndnotesSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
@@ -253,6 +254,52 @@ DECLARE_RTFEXPORT_TEST(testTdf112520, "tdf112520.docx")
     // instead of the good 0/at-page/white, 1/at-char/yellow, 2/at-char/white.
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,
                          getProperty<text::TextContentAnchorType>(getShape(3), "AnchorType"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testNestedHyperlink)
+{
+    // Given a hyperlink contains a footnote which contains a hyperlink:
+    {
+        createSwDoc();
+        uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+        uno::Reference<text::XTextContent> xFootnote(
+            xFactory->createInstance("com.sun.star.text.Footnote"), uno::UNO_QUERY);
+        uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+        uno::Reference<text::XText> xText = xTextDocument->getText();
+        uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+        xText->insertString(xCursor, "a", /*bAbsorb=*/false);
+        xText->insertTextContent(xCursor, xFootnote, /*bAbsorb=*/false);
+        xText->insertString(xCursor, "b", /*bAbsorb=*/false);
+        xCursor->gotoStart(/*bExpand=*/false);
+        xCursor->gotoEnd(/*bExpand=*/true);
+        uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
+        xCursorProps->setPropertyValue("HyperLinkURL", uno::makeAny(OUString("http://body.com/")));
+        uno::Reference<text::XText> xFootnoteText(xFootnote, uno::UNO_QUERY);
+        xCursor = xFootnoteText->createTextCursor();
+        xFootnoteText->insertString(xCursor, "x", /*bAbsorb=*/false);
+        xCursor->gotoStart(/*bExpand=*/false);
+        xCursor->gotoEnd(/*bExpand=*/true);
+        xCursorProps.set(xCursor, uno::UNO_QUERY);
+        xCursorProps->setPropertyValue("HyperLinkURL",
+                                       uno::makeAny(OUString("http://footnote.com/")));
+    }
+
+    // When exporting to RTF:
+    // Without the accompanying fix in place, this test would have failed with:
+    // assertion failed
+    // - Expression: xComponent.is()
+    // i.e. the RTF output was not well-formed, loading failed.
+    reload(mpFilter, "nested-hyperlink.rtf");
+
+    // Then make sure both hyperlinks are have the correct URLs.
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
+    uno::Reference<text::XTextRange> xPortion = getRun(xParagraph, 1);
+    CPPUNIT_ASSERT_EQUAL(OUString("http://body.com/"),
+                         getProperty<OUString>(xPortion, "HyperLinkURL"));
+    auto xFootnote = getProperty<uno::Reference<text::XText>>(getRun(xParagraph, 2), "Footnote");
+    uno::Reference<text::XTextRange> xFootnotePortion = getRun(getParagraphOfText(1, xFootnote), 1);
+    CPPUNIT_ASSERT_EQUAL(OUString("http://footnote.com/"),
+                         getProperty<OUString>(xFootnotePortion, "HyperLinkURL"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf121623, "tdf121623.rtf")
