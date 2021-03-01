@@ -287,6 +287,8 @@ namespace sw
             std::map<std::unique_ptr<InsertedTableListener>, SwNodeIndex*> maTables;
         };
 
+        void MoveAttrFieldmarkInserted(SwFltPosition& rMkPos, SwFltPosition& rPtPos, const SwPosition& rPos);
+
         class RedlineStack
         {
         private:
