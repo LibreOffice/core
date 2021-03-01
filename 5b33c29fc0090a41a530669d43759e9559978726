@@ -16,6 +16,24 @@
       "revId": "5b33c29fc0090a41a530669d43759e9559978726",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "578b519c_ef208e41",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-01T11:00:06Z",
+      "side": 1,
+      "message": "The idea is that OUStringLiteral is constructed with a string literal (\"A wrapper dressing a string literal as a static-refcount rtl_uString.\"), so the trailing NUL terminator needs to be discarded when copying the content.  And the assert is some kind of safety check that the constructor is actually called with a string literal (or at least something that is also NUL terminated), so that a misguided construction from another array would not unexpectedly discard a terminating non-NUL character.",
+      "parentUuid": "c40643be_17038a65",
+      "revId": "5b33c29fc0090a41a530669d43759e9559978726",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
