@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3231fed_ba1abb8b",
+        "filename": "sw/qa/api/SwXDocumentIndex.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-01T11:01:14Z",
+      "side": 0,
+      "message": "Oh, and here the check was doubly-redundant: reference ctor taking uno::UNO_QUERY_THROW would never pass to the next line if the reference was invalid :-)",
+      "revId": "e5c703940972df5bd6d515c8e0979963f6116fc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "abe20a66_cc1d7aa4",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4444,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-01T11:01:14Z",
+      "side": 0,
+      "message": "I agree with this removed check after \u0027load\u0027; but then again, you should mention the rationale in the commit message why you do this: load calls loadFromDesktop internally, so mxComponent is guaranteed to be valid at this point.",
+      "revId": "e5c703940972df5bd6d515c8e0979963f6116fc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de7edb89_8ae474fe",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2218,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-01T11:01:14Z",
+      "side": 0,
+      "message": "This line removal is unrelated to the change - please revert",
+      "revId": "e5c703940972df5bd6d515c8e0979963f6116fc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d48c44eb_cab4fc36",
+        "filename": "xmlsecurity/qa/unit/signing/signing.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-01T11:01:14Z",
+      "side": 0,
+      "message": "Why the test is kept here?",
+      "revId": "e5c703940972df5bd6d515c8e0979963f6116fc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
