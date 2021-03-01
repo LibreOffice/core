@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc5e5768_dfecf26d",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-01T05:27:22Z",
+      "side": 1,
+      "message": "Please add a comment here, something like \"allow nFullWidthRelative \u003d\u003d 0 here\", explicitly explaining your intent of this additional check.",
+      "revId": "3cbfea18506039fe7a5241a3fdd0b051597cdbdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
