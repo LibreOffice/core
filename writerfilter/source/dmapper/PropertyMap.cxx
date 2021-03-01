@@ -620,10 +620,10 @@ void SectionPropertyMap::ApplyBorderToPageStyles( DomainMapper_Impl& rDM_Impl,
                 nLineWidth = m_oBorderLines[nBorder]->LineWidth;
             if ( xFirst.is() )
                 SetBorderDistance( xFirst, aMarginIds[nBorder], aBorderDistanceIds[nBorder],
-                    m_nBorderDistances[nBorder], eOffsetFrom, nLineWidth );
+                    m_nBorderDistances[nBorder], eOffsetFrom, nLineWidth, rDM_Impl );
             if ( xSecond.is() )
                 SetBorderDistance( xSecond, aMarginIds[nBorder], aBorderDistanceIds[nBorder],
-                    m_nBorderDistances[nBorder], eOffsetFrom, nLineWidth );
+                    m_nBorderDistances[nBorder], eOffsetFrom, nLineWidth, rDM_Impl );
         }
     }
 
@@ -655,7 +655,8 @@ void SectionPropertyMap::SetBorderDistance( const uno::Reference< beans::XProper
                                             PropertyIds eDistId,
                                             sal_Int32 nDistance,
                                             BorderOffsetFrom eOffsetFrom,
-                                            sal_uInt32 nLineWidth )
+                                            sal_uInt32 nLineWidth,
+                                            DomainMapper_Impl& rDM_Impl )
 {
     if (!xStyle.is())
         return;
@@ -666,6 +667,25 @@ void SectionPropertyMap::SetBorderDistance( const uno::Reference< beans::XProper
     aMargin >>= nMargin;
     editeng::BorderDistanceFromWord(eOffsetFrom == BorderOffsetFrom::Edge, nMargin, nDistance,
                                     nLineWidth);
+
+    if (eOffsetFrom == BorderOffsetFrom::Edge)
+    {
+        uno::Any aGutterMargin = xStyle->getPropertyValue( "GutterMargin" );
+        sal_Int32 nGutterMargin = 0;
+        aGutterMargin >>= nGutterMargin;
+
+        if (eMarginId == PROP_LEFT_MARGIN && !rDM_Impl.GetSettingsTable()->GetGutterAtTop())
+        {
+            nMargin -= nGutterMargin;
+            nDistance += nGutterMargin;
+        }
+
+        if (eMarginId == PROP_TOP_MARGIN && rDM_Impl.GetSettingsTable()->GetGutterAtTop())
+        {
+            nMargin -= nGutterMargin;
+            nDistance += nGutterMargin;
+        }
+    }
 
     // Change the margins with the border distance
     uno::Reference< beans::XMultiPropertySet > xMultiSet( xStyle, uno::UNO_QUERY_THROW );

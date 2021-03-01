@@ -1289,33 +1289,6 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrame *pFrame,
 
         SwRectFn fnRect = pFrame->IsVertical() ? ( pFrame->IsVertLR() ? (pFrame->IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert ) : fnRectHori;
 
-        if (pFrame->IsPageFrame() && rAttrs.GetLRSpace())
-        {
-            tools::Long nGutterMargin = rAttrs.GetLRSpace()->GetGutterMargin();
-            tools::Long nRightGutterMargin = rAttrs.GetLRSpace()->GetRightGutterMargin();
-            const auto pPageFrame = static_cast<const SwPageFrame*>(pFrame);
-            bool bGutterAtTop = pPageFrame->GetFormat()->getIDocumentSettingAccess().get(
-                DocumentSettingId::GUTTER_AT_TOP);
-            if (bGutterAtTop)
-            {
-                // Paint the top border based on the top margin, ignoring the gutter margin.
-                (rRect.*fnRect->fnSubTop)(nGutterMargin);
-            }
-            else
-            {
-                if (nGutterMargin)
-                {
-                    // Paint the left border based on the left margin, ignoring the gutter margin.
-                    (rRect.*fnRect->fnSubLeft)(nGutterMargin);
-                }
-                if (nRightGutterMargin)
-                {
-                    // Paint the right border based on the right margin, ignoring the gutter margin.
-                    (rRect.*fnRect->fnAddRight)(nRightGutterMargin);
-                }
-            }
-        }
-
         const SvxBoxItem &rBox = rAttrs.GetBox();
         const bool bTop = 0 != (pFrame->*fnRect->fnGetTopMargin)();
         if ( bTop )

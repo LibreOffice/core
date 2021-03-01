@@ -6738,6 +6738,15 @@ void DocxAttributeOutput::SectionPageBorders( const SwFrameFormat* pFormat, cons
     if (aGlue.HasFooter())
         aMargins.nBottom = aGlue.dyaHdrBottom;
 
+    if (pFormat->GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::GUTTER_AT_TOP))
+    {
+        aMargins.nTop += pFormat->GetLRSpace().GetGutterMargin();
+    }
+    else
+    {
+        aMargins.nLeft += pFormat->GetLRSpace().GetGutterMargin();
+    }
+
     aOutputBorderOptions.pDistances = std::make_shared<editeng::WordBorderDistances>();
     editeng::BorderDistancesToWord(rBox, aMargins, *aOutputBorderOptions.pDistances);
 
