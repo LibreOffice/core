@@ -3502,12 +3502,12 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="Width" oor:type="xs:long">
+        <prop oor:name="Width" oor:type="xs:int">
           <info>
             <desc>Stores the width of the print dialog.</desc>
           </info>
         </prop>
-        <prop oor:name="Height" oor:type="xs:long">
+        <prop oor:name="Height" oor:type="xs:int">
           <info>
             <desc>Stores the height of the print dialog.</desc>
           </info>
