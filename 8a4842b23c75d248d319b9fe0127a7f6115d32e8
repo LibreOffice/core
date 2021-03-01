@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8d0ad9fd_af42b6bf",
+        "filename": "include/osl/security.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-01T17:36:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9642d62f_283e2b57",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b4f25006_d47ecac8",
         "filename": "include/sfx2/docfile.hxx",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d85e6293_4e08eac5",
+        "filename": "include/sfx2/docfile.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-01T17:36:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4f25006_d47ecac8",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "569c1e83_eae3e94a",
+        "filename": "offapi/com/sun/star/document/ReloadEditableRequest.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-01T17:36:02Z",
+      "side": 1,
+      "message": "It is copy/edited from core\\offapi\\com\\sun\\star\\document\\LockedDocumentRequest.idl, so I\u0027ve updated the statement based on the \"is based in any way on an existing module\" rule.",
+      "parentUuid": "45118731_39a96d66",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "39ba46a4_6990c839",
         "filename": "offapi/com/sun/star/document/ReloadEditableRequest.idl",
         "patchSetId": 1
@@ -67,6 +121,24 @@
       "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6628fb35_1c295c63",
+        "filename": "offapi/com/sun/star/document/ReloadEditableRequest.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-01T17:36:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39ba46a4_6990c839",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "b173aaf6_c85cc78e",
+        "filename": "sal/osl/unx/security.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-01T17:36:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b7e7dc8_3a1daf17",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a74a31f9_7713e08d",
         "filename": "sal/osl/w32/security.cxx",
         "patchSetId": 1
@@ -101,6 +191,24 @@
       "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20ebc3dc_5a19308f",
+        "filename": "sal/osl/w32/security.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-01T17:36:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a74a31f9_7713e08d",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "77cc0dda_999b9dcf",
+        "filename": "sal/osl/w32/security.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-01T17:36:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "875c6d3b_372fe5c5",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da6c20ec_fb804dc2",
         "filename": "sal/osl/w32/security.cxx",
         "patchSetId": 1
@@ -135,6 +261,24 @@
       "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97751708_3b8f535b",
+        "filename": "sal/osl/w32/security.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-01T17:36:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da6c20ec_fb804dc2",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "073acc7f_7966b222",
+        "filename": "sal/osl/w32/security.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-01T17:36:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72c72c71_7336ef29",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7bbfdb7b_4efe3fc3",
         "filename": "sfx2/source/doc/docfile.cxx",
         "patchSetId": 1
@@ -169,6 +331,24 @@
       "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c42c6456_f118750a",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-01T17:36:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7bbfdb7b_4efe3fc3",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -189,6 +369,24 @@
     },
     {
       "key": {
+        "uuid": "56737b98_8b73db11",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1047,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-01T17:36:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3cb8bbea_8d71283b",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "afa1a4dd_c1f6e378",
         "filename": "sfx2/source/doc/docfile.cxx",
         "patchSetId": 1
@@ -203,6 +401,24 @@
       "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "923b3cfe_f12b7131",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-01T17:36:02Z",
+      "side": 1,
+      "message": "Changed this to File.open, but yes we need to check write permissions and lock file every time the thread wakes up.",
+      "parentUuid": "afa1a4dd_c1f6e378",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -223,6 +439,24 @@
     },
     {
       "key": {
+        "uuid": "c8473dfe_250f1778",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-01T17:36:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b397dbb1_ea127350",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c98f98d4_c0137482",
         "filename": "sfx2/source/doc/docfile.cxx",
         "patchSetId": 1
@@ -237,6 +471,24 @@
       "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00c20824_9c7be86b",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1734,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-01T17:36:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c98f98d4_c0137482",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -257,6 +509,24 @@
     },
     {
       "key": {
+        "uuid": "904b7bbe_ffc3f146",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1742,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-01T17:36:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e30a5140_db9cf49f",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c1b63f69_58ebfc00",
         "filename": "solenv/clang-format/excludelist",
         "patchSetId": 1
@@ -274,6 +544,24 @@
     },
     {
       "key": {
+        "uuid": "21e54b80_7e8a7bf8",
+        "filename": "solenv/clang-format/excludelist",
+        "patchSetId": 1
+      },
+      "lineNbr": 14351,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-01T17:36:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1b63f69_58ebfc00",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2b4019a4_6d7b9d79",
         "filename": "uui/source/reloadeditable.hxx",
         "patchSetId": 1
@@ -288,6 +576,24 @@
       "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42b10609_859559d8",
+        "filename": "uui/source/reloadeditable.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-01T17:36:02Z",
+      "side": 1,
+      "message": "This is copy/pasted from core\\uui\\source\\openlocked.hxx, and also matches other dialogs that are used core\\uui\\source\\iahndl-locking.cxx",
+      "parentUuid": "2b4019a4_6d7b9d79",
+      "revId": "8a4842b23c75d248d319b9fe0127a7f6115d32e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
