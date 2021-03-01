@@ -1150,6 +1150,38 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf71339)
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A1:A3)"), aFormula);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf116421)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "A1", "1");
+    insertStringToCell(*pModelObj, "A2", "1");
+    insertStringToCell(*pModelObj, "A3", "1");
+
+    goToCell("A4");
+
+    dispatchCommand(mxComponent, ".uno:AutoSum", {});
+
+    // Use RETURN key to exit autosum edit view
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 3
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(0, 3, 0)));
+
+    OUString aFormula;
+    pDoc->GetFormula(0, 3, 0, aFormula);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A1:A3)"), aFormula);
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf86305)
 {
     ScModelObj* pModelObj = createDoc("tdf86305.ods");
