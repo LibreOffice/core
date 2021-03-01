@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64dabe1f_dbbfda99",
+        "filename": "sw/source/core/text/txtfld.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-03-01T08:21:06Z",
+      "side": 1,
+      "message": "Can you think of a way to avoid reading the grab-bag in layout code? The intention of the grab-bag is to just preserve some information we can\u0027t handle, without influencing any of the layout or UI code.\n\nIf you have to access this information in the grab-bag, then probably the doc model has to be extended. But then I understand that we already have two pool items for char background and char shading? So I\u0027m a bit confused here. :-)",
+      "revId": "67ccb86e905f9da7266d40002639c85970e08d1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
