@@ -50,8 +50,8 @@ private:
     ScDocShell*             pDocShell;
     SCTAB                   nTab;           // Charts are per sheet
 
-    ScChartObj*             GetObjectByIndex_Impl(tools::Long nIndex) const;
-    ScChartObj*             GetObjectByName_Impl(const OUString& aName) const;
+    rtl::Reference<ScChartObj> GetObjectByIndex_Impl(tools::Long nIndex) const;
+    rtl::Reference<ScChartObj> GetObjectByName_Impl(const OUString& aName) const;
 
 public:
                             ScChartsObj(ScDocShell* pDocSh, SCTAB nT);

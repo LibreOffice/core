@@ -387,7 +387,7 @@ private:
     struct Impl;
     std::unique_ptr<Impl> m_pImpl;
 
-    ScCellRangeObj*         GetObjectByIndex_Impl(sal_Int32 nIndex) const;
+    rtl::Reference<ScCellRangeObj> GetObjectByIndex_Impl(sal_Int32 nIndex) const;
 
 public:
                             ScCellRangesObj(ScDocShell* pDocSh, const ScRangeList& rR);
