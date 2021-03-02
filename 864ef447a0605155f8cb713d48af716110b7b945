@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d386997_3db30824",
+        "filename": "cui/uiconfig/ui/optionsdialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-02T09:27:37Z",
+      "side": 1,
+      "message": "Why not use what\u0027s on the help site? \"Resets changes made to the current tab to those applicable when this dialog was opened.\"",
+      "range": {
+        "startLine": 54,
+        "startChar": 96,
+        "endLine": 54,
+        "endChar": 143
+      },
+      "revId": "864ef447a0605155f8cb713d48af716110b7b945",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a7728e7_b705132f",
+        "filename": "cui/uiconfig/ui/optionsdialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-02T09:27:37Z",
+      "side": 1,
+      "message": "Saving with Apply sounds confusing. How about \"Apply and store changes made to the current tab.\" (not sure if we should scare users with the \"Cannot be reverted\" part, maybe somethign like \"To revert you have to change the options again\".",
+      "range": {
+        "startLine": 74,
+        "startChar": 95,
+        "endLine": 74,
+        "endChar": 138
+      },
+      "revId": "864ef447a0605155f8cb713d48af716110b7b945",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16ce33e3_3bc57611",
+        "filename": "cui/uiconfig/ui/optionsdialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-02T09:27:37Z",
+      "side": 1,
+      "message": "How about \"Discard all changes that have not been applied and close dialog.\"",
+      "range": {
+        "startLine": 111,
+        "startChar": 96,
+        "endLine": 111,
+        "endChar": 133
+      },
+      "revId": "864ef447a0605155f8cb713d48af716110b7b945",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
