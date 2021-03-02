@@ -22,6 +22,7 @@
 #include <starmath.hrc>
 #include <strings.hrc>
 #include <smmod.hxx>
+#include <cfgitem.hxx>
 #include <view.hxx>
 #include <visitors.hxx>
 #include <document.hxx>
@@ -285,13 +286,15 @@ SmElementsControl::SmElementsControl(std::unique_ptr<weld::ScrolledWindow> xScro
     , m_nCurrentElement(SAL_MAX_UINT16)
     , m_nCurrentRolloverElement(SAL_MAX_UINT16)
     , m_nCurrentOffset(1) // Default offset of 1 due to the ScrollBar child
+    , m_nSmSyntaxVersion(SM_MOD()->GetConfig()->GetDefaultSmSyntaxVersion())
     , mbVerticalMode(true)
     , mxScroll(std::move(xScrolledWindow))
     , m_bFirstPaintAfterLayout(false)
 {
     mxScroll->connect_hadjustment_changed( LINK(this, SmElementsControl, ScrollHdl) );
     mxScroll->connect_vadjustment_changed( LINK(this, SmElementsControl, ScrollHdl) );
-    maParser.SetImportSymbolNames(true);
+    maParser.reset(starmathdatabase::GetVersionSmParser(m_nSmSyntaxVersion));
+    maParser->SetImportSymbolNames(true);
 }
 
 SmElementsControl::~SmElementsControl()
@@ -844,7 +847,7 @@ void SmElementsControl::addElement(const OUString& aElementVisual, const OUStrin
 {
     // SAL_MAX_UINT16 is invalid, zero is the scrollbar
     assert(maElementList.size() < SAL_MAX_UINT16 - 2);
-    auto pNode = maParser.ParseExpression(aElementVisual);
+    auto pNode = maParser->ParseExpression(aElementVisual);
 
     OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
     rDevice.Push(PushFlags::MAPMODE);
@@ -1139,6 +1142,16 @@ void SmElementsControl::setItemHighlighted(sal_uInt16 nPos)
     Invalidate();
 }
 
+void SmElementsControl::setSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion)
+{
+    if( m_nSmSyntaxVersion != nSmSyntaxVersion )
+    {
+        m_nSmSyntaxVersion = nSmSyntaxVersion;
+        maParser.reset(starmathdatabase::GetVersionSmParser(nSmSyntaxVersion));
+        maParser->SetImportSymbolNames(true);
+    }
+}
+
 OUString SmElementsControl::itemName(sal_uInt16 nPos) const
 {
     if (nPos < m_nCurrentOffset)
@@ -1206,6 +1219,11 @@ void SmElementsDockingWindow::ToggleFloatingMode()
     Invalidate();
 }
 
+void SmElementsDockingWindow::setSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion)
+{
+    mxElementsControl->setSmSyntaxVersion(nSmSyntaxVersion);
+}
+
 void SmElementsDockingWindow::EndDocking( const tools::Rectangle& rReactangle, bool bFloatMode)
 {
     SfxDockingWindow::EndDocking(rReactangle, bFloatMode);
@@ -1235,6 +1253,7 @@ IMPL_LINK( SmElementsDockingWindow, ElementSelectedHandle, weld::ComboBox&, rLis
         if (aCurrentCategoryString == rList.get_active_text())
         {
             mxElementsControl->setElementSetId(pCurrentCategory);
+            setSmSyntaxVersion(GetView()->GetDoc()->GetSmSyntaxVersion());
             return;
         }
     }
