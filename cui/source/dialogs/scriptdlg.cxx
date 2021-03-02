@@ -46,6 +46,7 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1319,10 +1320,17 @@ IMPL_STATIC_LINK( SvxScriptErrorDialog, ShowDialog, void*, p, void )
     if ( message.isEmpty() )
         message = CuiResId( RID_SVXSTR_ERROR_TITLE );
 
-    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(xData->pParent,
-                                              VclMessageType::Warning, VclButtonsType::Ok, message));
+    std::shared_ptr<weld::MessageDialog> xBox;
+    xBox.reset(Application::CreateMessageDialog(
+            xData->pParent,
+            VclMessageType::Warning,
+            VclButtonsType::Ok,
+            message,
+            comphelper::LibreOfficeKit::isActive()));
+
     xBox->set_title(CuiResId(RID_SVXSTR_ERROR_TITLE));
-    xBox->run();
+
+    xBox->runAsync(xBox, [](sal_Int32 /*nResult*/) {});
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
