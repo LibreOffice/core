@@ -175,7 +175,7 @@ SwVbaApplication::getActiveDocument()
     return new SwVbaDocument( this, mxContext, getCurrentDocument() );
 }
 
-SwVbaWindow *
+rtl::Reference<SwVbaWindow>
 SwVbaApplication::getActiveSwVbaWindow()
 {
     // #FIXME so far can't determine Parent
