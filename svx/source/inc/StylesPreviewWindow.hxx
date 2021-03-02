@@ -40,6 +40,19 @@ public:
     void StateChanged(SfxItemState eState, const SfxPoolItem* pState) override;
 };
 
+
+class StylePoolChangeListener : public SfxListener
+{
+    StylesPreviewWindow_Base* m_pPreviewControl;
+    SfxStyleSheetBasePool* m_pStyleSheetPool;
+
+public:
+    StylePoolChangeListener(StylesPreviewWindow_Base* pPreviewControl);
+    ~StylePoolChangeListener();
+
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
+};
+
 class StyleItemController
 {
     static constexpr unsigned LEFT_MARGIN = 8;
@@ -75,6 +88,7 @@ protected:
     std::unique_ptr<weld::IconView> m_xStylesView;
 
     StyleStatusListener* m_pStatusListener;
+    std::unique_ptr<StylePoolChangeListener> m_pStylePoolChangeListener;
     css::uno::Reference<css::lang::XComponent> m_xStatusListener;
 
     std::vector<std::pair<OUString, OUString>> m_aDefaultStyles;
@@ -93,10 +107,10 @@ public:
     ~StylesPreviewWindow_Base();
 
     void Select(const OUString& rStyleName);
+    void UpdateStylesList();
 
 private:
     void Update();
-    void UpdateStylesList();
     bool Command(const CommandEvent& rEvent);
 };
 
