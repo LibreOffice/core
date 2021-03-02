@@ -314,6 +314,7 @@ public:
     void            SetFloatingMode( bool bFloatMode );
     bool            IsFloatingMode() const;
     FloatingWindow* GetFloatingWindow() const { return mpFloatWin; }
+    void            SetFloatingWindow( VclPtr<FloatingWindow> pFloatWin) { mpFloatWin = pFloatWin; }
 
     void            SetFloatingPos( const Point& rNewPos );
     Point           GetFloatingPos() const;
