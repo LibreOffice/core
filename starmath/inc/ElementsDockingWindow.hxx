@@ -91,8 +91,9 @@ class SmElementsControl : public weld::CustomWidgetController
     OString       msCurrentSetId;
     sal_uInt16    m_nCurrentElement;
     sal_uInt16    m_nCurrentRolloverElement;
-    sal_uInt16 m_nCurrentOffset;
-    SmParser maParser;
+    sal_uInt16    m_nCurrentOffset;
+    sal_uInt16    m_nSmSyntaxVersion;
+    std::unique_ptr<AbstractSmParser> maParser;
     Link<SmElement&,void> maSelectHdlLink;
 
     std::vector< std::unique_ptr<SmElement> > maElementList;
@@ -139,6 +140,7 @@ public:
     OUString itemName(sal_uInt16) const;
     bool itemTrigger(sal_uInt16);
     void setItemHighlighted(sal_uInt16);
+    void setSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion);
     sal_uInt16 itemOffset() const { return m_nCurrentOffset; }
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
@@ -176,6 +178,8 @@ public:
 
     virtual void EndDocking( const tools::Rectangle& rReactangle, bool bFloatMode) override;
     virtual void ToggleFloatingMode() override;
+
+    void setSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion);
 };
 
 class SmElementsDockingWindowWrapper final : public SfxChildWindow
