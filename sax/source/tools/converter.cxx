@@ -728,6 +728,9 @@ void Converter::convertAngle(OUStringBuffer& rBuffer, sal_Int16 const nAngle,
 bool Converter::convertAngle(sal_Int16& rAngle, std::u16string_view rString,
         bool const isWrongOOo10thDegAngle)
 {
+    //TODO: Work around
+    // <https://github.com/AFLplusplus/AFLplusplus/commit/333509bb0a56be9bd2e236f0e2f37d4af2dd7d59>
+    // "better unicode support" for now:
     const std::u16string_view deg = u"deg";
     const std::u16string_view grad = u"grad";
     const std::u16string_view rad = u"rad";
