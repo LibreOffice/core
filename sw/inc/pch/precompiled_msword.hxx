@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-02-19 15:35:21 using:
+ Generated on 2021-03-02 11:17:01 using:
  ./bin/update_pch sw msword --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -44,6 +44,7 @@
 #include <math.h>
 #include <memory>
 #include <new>
+#include <numeric>
 #include <optional>
 #include <ostream>
 #include <set>
@@ -538,6 +539,7 @@
 #include <fmtcol.hxx>
 #include <fmtflcnt.hxx>
 #include <fmtfld.hxx>
+#include <fmtfollowtextflow.hxx>
 #include <fmtfsize.hxx>
 #include <fmtftn.hxx>
 #include <fmthdft.hxx>
