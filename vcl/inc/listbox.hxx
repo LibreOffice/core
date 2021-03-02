@@ -24,7 +24,7 @@
 
 #include <o3tl/safeint.hxx>
 #include <vcl/toolkit/button.hxx>
-#include <vcl/floatwin.hxx>
+#include <vcl/toolkit/floatwin.hxx>
 #include <vcl/quickselectionengine.hxx>
 #include <vcl/glyphitem.hxx>
 #include <vcl/vcllayout.hxx>

@@ -24,7 +24,7 @@
 #include <strings.hrc>
 #include <bitmaps.hlst>
 
-#include <vcl/floatwin.hxx>
+#include <vcl/toolkit/floatwin.hxx>
 #include <window.h>
 
 Qt5Menu::Qt5Menu(bool bMenuBar)

@@ -30,7 +30,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/floatwin.hxx>
+#include <vcl/toolkit/floatwin.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/IDialogRenderable.hxx>
 
