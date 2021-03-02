@@ -66,16 +66,6 @@ public:
         return (OString(filename).endsWith(".rtf")
                 && std::find(vDenylist.begin(), vDenylist.end(), filename) == vDenylist.end());
     }
-
-    virtual void postLoad(const char* pFilename) override
-    {
-        if (OString(pFilename) == "tdf90421.fodt")
-        {
-            // Change the hyperlink, so its URL is empty.
-            uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 2), uno::UNO_QUERY);
-            xRun->setPropertyValue("HyperLinkURL", uno::makeAny(OUString()));
-        }
-    }
 };
 
 DECLARE_RTFEXPORT_TEST(testZoom, "zoom.rtf")
@@ -1019,17 +1009,19 @@ DECLARE_RTFEXPORT_TEST(testTdf80708, "tdf80708.rtf")
                              .getLength());
 }
 
-DECLARE_RTFEXPORT_TEST(testTdf90421, "tdf90421.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testHyperlinkWithoutURL)
 {
-    if (mbExported)
-    {
-        SvMemoryStream aMemoryStream;
-        SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-        aStream.ReadStream(aMemoryStream);
-        OString aData(static_cast<const char*>(aMemoryStream.GetData()), aMemoryStream.GetSize());
-        // This was some positive number, i.e. we exported a hyperlink with an empty URL.
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), aData.indexOf("HYPERLINK"));
-    }
+    load(mpTestDocumentPath, "tdf90421.fodt");
+    // Change the hyperlink, so its URL is empty.
+    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 2), uno::UNO_QUERY);
+    xRun->setPropertyValue("HyperLinkURL", uno::makeAny(OUString()));
+    reload(mpFilter, "gutter-left.rtf");
+    SvMemoryStream aMemoryStream;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    aStream.ReadStream(aMemoryStream);
+    OString aData(static_cast<const char*>(aMemoryStream.GetData()), aMemoryStream.GetSize());
+    // This was some positive number, i.e. we exported a hyperlink with an empty URL.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), aData.indexOf("HYPERLINK"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf92521, "tdf92521.odt")
