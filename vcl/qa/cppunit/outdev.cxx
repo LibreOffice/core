@@ -42,10 +42,7 @@ public:
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
 
-// TODO: Following unit tests are not executed for macOS unless bitmap scaling is implemented
-#ifndef MACOSX
     CPPUNIT_TEST(testVirtualDevice);
-#endif
     CPPUNIT_TEST(testUseAfterDispose);
     CPPUNIT_TEST(testPrinterBackgroundColor);
     CPPUNIT_TEST(testWindowBackgroundColor);
@@ -87,6 +84,8 @@ void VclOutdevTest::testWindowBackgroundColor()
 
 void VclOutdevTest::testVirtualDevice()
 {
+// TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
+#ifndef MACOSX
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     pVDev->SetOutputSizePixel(Size(32, 32));
     pVDev->SetBackground(Wallpaper(COL_WHITE));
@@ -134,6 +133,7 @@ void VclOutdevTest::testVirtualDevice()
     VclPtr<vcl::Window> pWin = VclPtr<WorkWindow>::Create( (vcl::Window *)nullptr );
     CPPUNIT_ASSERT( pWin );
     OutputDevice *pOutDev = pWin.get();
+#endif
 #endif
 }
 
