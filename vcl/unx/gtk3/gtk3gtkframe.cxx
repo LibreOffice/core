@@ -29,7 +29,7 @@
 #include <headless/svpgdi.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/floatwin.hxx>
+#include <vcl/toolkit/floatwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>

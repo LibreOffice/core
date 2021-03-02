@@ -26,7 +26,7 @@
 #include <vcl/image.hxx>
 #include <vcl/event.hxx>
 #include <vcl/help.hxx>
-#include <vcl/floatwin.hxx>
+#include <vcl/toolkit/floatwin.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/taskpanelist.hxx>

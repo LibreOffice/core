@@ -26,7 +26,7 @@
 #include <window.h>
 
 #include <vcl/event.hxx>
-#include <vcl/floatwin.hxx>
+#include <vcl/toolkit/floatwin.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/floatwin.hxx>
+#include <vcl/toolkit/floatwin.hxx>
 #include <vcl/image.hxx>
 #include <vcl/menu.hxx>
 

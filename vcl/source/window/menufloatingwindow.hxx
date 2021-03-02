@@ -22,7 +22,7 @@
 
 #include "menuwindow.hxx"
 
-#include <vcl/floatwin.hxx>
+#include <vcl/toolkit/floatwin.hxx>
 #include <vcl/menu.hxx>
 
 #define EXTRASPACEY         2

@@ -67,6 +67,7 @@ endif
 
 $(eval $(call gb_Library_add_defs,vclplug_osx,\
     -DMACOSX_BUNDLE_IDENTIFIER=\"$(MACOSX_BUNDLE_IDENTIFIER)\" \
+    -DVCL_INTERNALS \
 ))
 
 $(eval $(call gb_Library_add_objcxxobjects,vclplug_osx,\
