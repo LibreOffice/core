@@ -27,12 +27,11 @@
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/safeCoInitUninit.hxx>
+#include <rtl/ref.hxx>
 #include <strings.hrc>
 #include <objbase.h>
 
 #include <resource/sharedresources.hxx>
-
-#include <memory>
 
 using namespace connectivity;
 using namespace connectivity::ado;
@@ -94,13 +93,12 @@ Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const S
         return nullptr;
 
     // we need to wrap the connection as the construct call might throw
-    std::unique_ptr<OConnection> pCon(new OConnection(this));
+    rtl::Reference<OConnection> pCon(new OConnection(this));
     pCon->construct(url,info);
     OConnection* pPtr = pCon.get();
-    Reference< XConnection > xCon = pCon.release();
     m_xConnections.push_back(WeakReferenceHelper(*pPtr));
 
-    return xCon;
+    return pCon;
 }
 
 sal_Bool SAL_CALL ODriver::acceptsURL( const OUString& url )
