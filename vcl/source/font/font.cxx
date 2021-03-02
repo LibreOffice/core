@@ -33,7 +33,6 @@
 #include <sft.hxx>
 
 #include <algorithm>
-#include <numeric>
 #include <string_view>
 
 #include <rtl/instance.hxx>
