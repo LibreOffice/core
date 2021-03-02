@@ -235,7 +235,7 @@ MSAAServiceImpl::MSAAServiceImpl()
     if( xToolkit.is() )
     {
         m_pTopWindowListener.set(new AccTopWindowListener());
-        Reference<XTopWindowListener> const xRef(m_pTopWindowListener.get());
+        Reference<XTopWindowListener> const xRef(m_pTopWindowListener);
         xToolkit->addTopWindowListener( xRef );
         SAL_INFO( "iacc2", "successfully connected to the toolkit event hose" );
     }

@@ -67,7 +67,7 @@ namespace dxcanvas
 
         // also init base class
         CanvasCustomSpriteHelper::init( rSpriteSize,
-                                        rSpriteCanvas.get() );
+                                        rSpriteCanvas );
     }
 
     void SpriteHelper::disposing()

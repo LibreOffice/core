@@ -105,7 +105,7 @@ namespace dxcanvas
             aDrawHelper.queryTextBounds(
                 maText,
                 maLogicalAdvancements,
-                mpFont.get(),
+                mpFont,
                 mpFont->getFontMatrix()));
 
         return aBounds;
@@ -176,7 +176,7 @@ namespace dxcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        return mpFont.get();
+        return mpFont;
     }
 
     rendering::StringContext SAL_CALL TextLayout::getText(  )
@@ -205,7 +205,7 @@ namespace dxcanvas
             rOutputOffset,
             maText,
             maLogicalAdvancements,
-            mpFont.get(),
+            mpFont,
             mpFont->getFontMatrix(),
             bAlphaSurface,
             mnTextDirection != 0);
