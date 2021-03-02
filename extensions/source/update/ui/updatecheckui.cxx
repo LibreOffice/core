@@ -31,12 +31,10 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/image.hxx>
-#include <vcl/bubblewindow.hxx>
-#include <vcl/timer.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/weld.hxx>
+#include <vcl/menubarupdateicon.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/strings.hrc>
 #include <rtl/ustrbuf.hxx>
 

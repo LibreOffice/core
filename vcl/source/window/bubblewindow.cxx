@@ -18,11 +18,12 @@
  */
 
 #include <rtl/ustrbuf.hxx>
-#include <vcl/bubblewindow.hxx>
+#include <vcl/menubarupdateicon.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/resmgr.hxx>
+#include <bubblewindow.hxx>
 #include <bitmaps.hlst>
 
 #define TIP_HEIGHT             15

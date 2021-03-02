@@ -6363,7 +6363,6 @@ include/vcl/accessibletableprovider.hxx
 include/vcl/alpha.hxx
 include/vcl/bitmap.hxx
 include/vcl/bitmapex.hxx
-include/vcl/bubblewindow.hxx
 include/vcl/builder.hxx
 include/vcl/builderfactory.hxx
 include/vcl/cairo.hxx
@@ -14453,6 +14452,7 @@ vcl/inc/bitmap/bmpfast.hxx
 vcl/inc/accel.h
 vcl/inc/accmgr.hxx
 vcl/inc/brdwin.hxx
+vcl/inc/bubblewindow.hxx
 vcl/inc/calendar.hxx
 vcl/inc/canvasbitmap.hxx
 vcl/inc/configsettings.hxx

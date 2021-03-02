@@ -19,69 +19,45 @@
 
 #pragma once
 
-#include <vcl/floatwin.hxx>
+#include <tools/link.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/image.hxx>
 #include <vcl/menu.hxx>
 
-class VCL_DLLPUBLIC BubbleWindow final : public FloatingWindow
-{
-    Point           maTipPos;
-    vcl::Region     maBounds;
-    tools::Polygon  maRectPoly;
-    tools::Polygon  maTriPoly;
-    OUString        maBubbleTitle;
-    OUString        maBubbleText;
-    Image           maBubbleImage;
-    Size            maMaxTextSize;
-    tools::Rectangle       maTitleRect;
-    tools::Rectangle       maTextRect;
-    tools::Long     mnTipOffset;
-
-private:
-    void            RecalcTextRects();
-
-public:
-                    BubbleWindow( vcl::Window* pParent, const OUString& rTitle,
-                                  const OUString& rText, const Image& rImage );
-
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-    void            Resize() override;
-    void            Show( bool bVisible = true );
-    void            SetTipPosPixel( const Point& rTipPos ) { maTipPos = rTipPos; }
-    void            SetTitleAndText( const OUString& rTitle, const OUString& rText,
-                                     const Image& rImage );
-};
+class BubbleWindow;
+class SystemWindow;
+class VclSimpleEvent;
+class VclWindowEvent;
 
 class VCL_DLLPUBLIC MenuBarUpdateIconManager
 {
 private:
-    OUString       maBubbleTitle;
-    OUString       maBubbleText;
-    OUString       maBubbleImageURL;
-    Image               maBubbleImage;
+    OUString maBubbleTitle;
+    OUString maBubbleText;
+    OUString maBubbleImageURL;
+    Image maBubbleImage;
     VclPtr<BubbleWindow> mpBubbleWin;
     VclPtr<SystemWindow> mpIconSysWin;
-    VclPtr<MenuBar>     mpIconMBar;
+    VclPtr<MenuBar> mpIconMBar;
 
-    Link<VclWindowEvent&,void> maWindowEventHdl;
-    Link<VclSimpleEvent&,void> maApplicationEventHdl;
-    Link<LinkParamNone*,void> maClickHdl;
+    Link<VclWindowEvent&, void> maWindowEventHdl;
+    Link<VclSimpleEvent&, void> maApplicationEventHdl;
+    Link<LinkParamNone*, void> maClickHdl;
 
-    Timer               maTimeoutTimer;
-    Idle                maWaitIdle;
+    Timer maTimeoutTimer;
+    Idle maWaitIdle;
 
-    sal_uInt16          mnIconID;
+    sal_uInt16 mnIconID;
 
-    bool                mbShowMenuIcon;
-    bool                mbShowBubble;
-    bool                mbBubbleChanged;
+    bool mbShowMenuIcon;
+    bool mbShowBubble;
+    bool mbBubbleChanged;
 
-    DECL_LINK(UserEventHdl, void *, void);
-    DECL_LINK(TimeOutHdl, Timer *, void);
+    DECL_LINK(UserEventHdl, void*, void);
+    DECL_LINK(TimeOutHdl, Timer*, void);
     DECL_LINK(WindowEventHdl, VclWindowEvent&, void);
     DECL_LINK(ApplicationEventHdl, VclSimpleEvent&, void);
-    DECL_LINK(WaitTimeOutHdl, Timer *, void);
+    DECL_LINK(WaitTimeOutHdl, Timer*, void);
     DECL_LINK(ClickHdl, MenuBar::MenuBarButtonCallbackArg&, bool);
     DECL_LINK(HighlightHdl, MenuBar::MenuBarButtonCallbackArg&, bool);
 
@@ -98,7 +74,7 @@ public:
     void SetBubbleTitle(const OUString& rTitle);
     void SetBubbleText(const OUString& rText);
 
-    void SetClickHdl(const Link<LinkParamNone*,void>& rHdl) { maClickHdl = rHdl; }
+    void SetClickHdl(const Link<LinkParamNone*, void>& rHdl) { maClickHdl = rHdl; }
 
     bool GetShowMenuIcon() const { return mbShowMenuIcon; }
     bool GetShowBubble() const { return mbShowBubble; }
@@ -107,7 +83,7 @@ public:
 
     void RemoveBubbleWindow(bool bRemoveIcon);
 
-    void AddMenuBarIcon(SystemWindow *pSysWin, bool bAddEventHdl);
+    void AddMenuBarIcon(SystemWindow* pSysWin, bool bAddEventHdl);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
