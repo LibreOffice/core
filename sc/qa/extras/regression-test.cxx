@@ -76,8 +76,6 @@ void ScChartRegressionTest::test()
     createFileURL( "testChart.ods", aFileName);
     uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-    CPPUNIT_ASSERT(xComponent.is());
-
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(xComponent, UNO_QUERY_THROW);
 
     uno::Reference< container::XIndexAccess > xIA(xDoc->getSheets(), UNO_QUERY_THROW);

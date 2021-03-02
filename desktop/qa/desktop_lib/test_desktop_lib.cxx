@@ -330,7 +330,6 @@ DesktopLOKTest::loadDocUrlImpl(const OUString& rFileURL, LibreOfficeKitDocumentT
     static int nDocumentIdCounter = 0;
     SfxViewShell::SetCurrentDocId(ViewShellDocId(nDocumentIdCounter));
     uno::Reference<lang::XComponent> xComponent = loadFromDesktop(rFileURL, aService);
-    CPPUNIT_ASSERT(xComponent.is());
 
     std::unique_ptr<LibLODocument_Impl> pDocument(new LibLODocument_Impl(xComponent, nDocumentIdCounter));
     ++nDocumentIdCounter;
