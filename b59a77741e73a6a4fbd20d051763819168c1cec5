@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d040ba90_0270eef5",
+        "filename": "include/vcl/dockwin.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-03-02T15:04:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e769a980_db913c89",
+      "revId": "b59a77741e73a6a4fbd20d051763819168c1cec5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d8bc4e43_240a77fe",
         "filename": "svx/source/tbxctrls/tbcontrl.cxx",
         "patchSetId": 11
@@ -33,6 +51,24 @@
       "revId": "b59a77741e73a6a4fbd20d051763819168c1cec5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccbae7bb_2d9b20f1",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2706,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-03-02T15:04:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8bc4e43_240a77fe",
+      "revId": "b59a77741e73a6a4fbd20d051763819168c1cec5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "a5acf3ec_b74f9382",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2711,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-03-02T15:04:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a002f3a8_e39f6916",
+      "revId": "b59a77741e73a6a4fbd20d051763819168c1cec5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "718474b8_d025a2f0",
         "filename": "svx/source/tbxctrls/tbcontrl.cxx",
         "patchSetId": 11
@@ -67,6 +121,24 @@
       "revId": "b59a77741e73a6a4fbd20d051763819168c1cec5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0677a82_fd195149",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2714,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-03-02T15:04:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "718474b8_d025a2f0",
+      "revId": "b59a77741e73a6a4fbd20d051763819168c1cec5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "f830f778_9e7b15c1",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2719,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-03-02T15:04:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1374659f_2c3c4414",
+      "revId": "b59a77741e73a6a4fbd20d051763819168c1cec5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "677a36da_7a574fb7",
         "filename": "vcl/source/window/dockmgr.cxx",
         "patchSetId": 11
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "c4278135_8c7ec444",
+        "filename": "vcl/source/window/dockmgr.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-03-02T15:04:29Z",
+      "side": 1,
+      "message": "it is VclPtr\u003cvcl::Window\u003e. I did what is already done a few times in the file at other places for similar kind of purpose",
+      "parentUuid": "677a36da_7a574fb7",
+      "revId": "b59a77741e73a6a4fbd20d051763819168c1cec5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fe04738f_39174e05",
         "filename": "vcl/source/window/dockwin.cxx",
         "patchSetId": 11
@@ -118,6 +226,24 @@
       "revId": "b59a77741e73a6a4fbd20d051763819168c1cec5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fe14229_9b024a84",
+        "filename": "vcl/source/window/dockwin.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-03-02T15:04:29Z",
+      "side": 1,
+      "message": "it is 0; dockwindow has its own LOK window Id too so i will change this it mnLOKPopUpWinId.",
+      "parentUuid": "fe04738f_39174e05",
+      "revId": "b59a77741e73a6a4fbd20d051763819168c1cec5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
