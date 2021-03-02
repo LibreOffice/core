@@ -15,6 +15,9 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libnumbertext))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libnumbertext,1))
 
+#TODO: For external/libnumbertext/Afl++ICE.patch1, see
+# <https://github.com/AFLplusplus/AFLplusplus/pull/775> "Filter out std string functions taking
+# non-char character types":
 $(eval $(call gb_UnpackedTarball_add_patches,libnumbertext, \
     external/libnumbertext/MSVCNonBMPBug.patch1 \
     external/libnumbertext/WinUnicodePath.patch1 \
