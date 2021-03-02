@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d123d476_e41ea24d",
+        "filename": "offapi/com/sun/star/document/ReloadEditableRequest.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-02T07:37:57Z",
+      "side": 1,
+      "message": "does it?",
+      "revId": "b187ccd86977d9bcca808aa2cc6cb57175c54248",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50285122_88397275",
+        "filename": "uui/source/reloadeditable.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-02T07:37:57Z",
+      "side": 1,
+      "message": "does it?",
+      "revId": "b187ccd86977d9bcca808aa2cc6cb57175c54248",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b644463d_80fb9e0b",
+        "filename": "uui/source/reloadeditable.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-02T07:37:57Z",
+      "side": 1,
+      "message": "does it?",
+      "revId": "b187ccd86977d9bcca808aa2cc6cb57175c54248",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
