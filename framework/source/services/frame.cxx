@@ -1448,7 +1448,7 @@ sal_Bool SAL_CALL XFrameImpl::setComponent(const css::uno::Reference< css::awt::
     css::uno::Reference< css::awt::XWindow > xOldComponentWindow = m_xComponentWindow;
     css::uno::Reference< css::frame::XController > xOldController = m_xController;
     VclPtr<vcl::Window> pOwnWindow = VCLUnoHelper::GetWindow( xContainerWindow );
-    bool bHadFocus = pOwnWindow->HasChildPathFocus();
+    bool bHadFocus = pOwnWindow != nullptr && pOwnWindow->HasChildPathFocus();
     bool bWasConnected = m_bConnected;
     aReadLock.clear();
     /* } SAFE */
