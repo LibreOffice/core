@@ -22,6 +22,7 @@
 #include <starmath.hrc>
 #include <strings.hrc>
 #include <smmod.hxx>
+#include <cfgitem.hxx>
 #include <view.hxx>
 #include <visitors.hxx>
 #include <document.hxx>
@@ -51,7 +52,7 @@ SmElementSeparator::SmElementSeparator() :
     SmElement(std::unique_ptr<SmNode>(), OUString(), OUString())
 {}
 
-const SmElementDescr SmElementsControl::m_aUnaryBinaryOperatorsList[] =
+const SmElementDescr SmElementsControl::m_a5UnaryBinaryOperatorsList[] =
 {
     {RID_PLUSX, RID_PLUSX_HELP}, {RID_MINUSX, RID_MINUSX_HELP},
     {RID_PLUSMINUSX, RID_PLUSMINUSX_HELP}, {RID_MINUSPLUSX, RID_MINUSPLUSX_HELP},
@@ -69,7 +70,7 @@ const SmElementDescr SmElementsControl::m_aUnaryBinaryOperatorsList[] =
     {RID_NEGX, RID_NEGX_HELP}, {RID_XANDY, RID_XANDY_HELP}, {RID_XORY, RID_XORY_HELP}
 };
 
-const SmElementDescr SmElementsControl::m_aRelationsList[] =
+const SmElementDescr SmElementsControl::m_a5RelationsList[] =
 {
     {RID_XEQY, RID_XEQY_HELP}, {RID_XNEQY, RID_XNEQY_HELP}, {RID_XLTY, RID_XLTY_HELP},
     {RID_XLEY, RID_XLEY_HELP}, {RID_XLESLANTY, RID_XLESLANTY_HELP}, {RID_XGTY, RID_XGTY_HELP},
@@ -90,7 +91,7 @@ const SmElementDescr SmElementsControl::m_aRelationsList[] =
     {RID_XNOTPRECEDESY, RID_XNOTPRECEDESY_HELP}, {RID_XNOTSUCCEEDSY, RID_XNOTSUCCEEDSY_HELP},
 };
 
-const SmElementDescr SmElementsControl::m_aSetOperationsList[] =
+const SmElementDescr SmElementsControl::m_a5SetOperationsList[] =
 {
     {RID_XINY, RID_XINY_HELP}, {RID_XNOTINY, RID_XNOTINY_HELP}, {RID_XOWNSY, RID_XOWNSY_HELP},
     {nullptr, nullptr},
@@ -105,7 +106,7 @@ const SmElementDescr SmElementsControl::m_aSetOperationsList[] =
     {RID_SETZ, RID_SETZ_HELP}, {RID_SETQ, RID_SETQ_HELP}, {RID_SETR, RID_SETR_HELP}, {RID_SETC, RID_SETC_HELP}
 };
 
-const SmElementDescr SmElementsControl::m_aFunctionsList[] =
+const SmElementDescr SmElementsControl::m_a5FunctionsList[] =
 {
     {RID_ABSX, RID_ABSX_HELP}, {RID_FACTX, RID_FACTX_HELP}, {RID_SQRTX, RID_SQRTX_HELP},
     {RID_NROOTXY, RID_NROOTXY_HELP}, {RID_RSUPX, RID_RSUPX_HELP}, {RID_EX, RID_EX_HELP},
@@ -122,7 +123,7 @@ const SmElementDescr SmElementsControl::m_aFunctionsList[] =
     {RID_FUNCX, RID_FUNCX_HELP}
 };
 
-const SmElementDescr SmElementsControl::m_aOperatorsList[] =
+const SmElementDescr SmElementsControl::m_a5OperatorsList[] =
 {
     {RID_LIMX, RID_LIMX_HELP}, {RID_LIM_FROMX, RID_LIM_FROMX_HELP},
     {RID_LIM_TOX, RID_LIM_TOX_HELP}, {RID_LIM_FROMTOX, RID_LIM_FROMTOX_HELP},
@@ -164,7 +165,7 @@ const SmElementDescr SmElementsControl::m_aOperatorsList[] =
     {RID_OPER_TOX, RID_OPER_TOX_HELP}, {RID_OPER_FROMTOX, RID_OPER_FROMTOX_HELP}
 };
 
-const SmElementDescr SmElementsControl::m_aAttributesList[] =
+const SmElementDescr SmElementsControl::m_a5AttributesList[] =
 {
     {RID_ACUTEX, RID_ACUTEX_HELP}, {RID_GRAVEX, RID_GRAVEX_HELP}, {RID_BREVEX, RID_BREVEX_HELP},
     {RID_CIRCLEX, RID_CIRCLEX_HELP}, {RID_DOTX, RID_DOTX_HELP}, {RID_DDOTX, RID_DDOTX_HELP},
@@ -197,7 +198,7 @@ const SmElementDescr SmElementsControl::m_aAttributesList[] =
     {RID_COLORX_SNOW, RID_COLORX_SNOW_HELP},
 };
 
-const SmElementDescr SmElementsControl::m_aBracketsList[] =
+const SmElementDescr SmElementsControl::m_a5BracketsList[] =
 {
     {RID_LRGROUPX, RID_LRGROUPX_HELP},
     {nullptr, nullptr},
@@ -219,7 +220,7 @@ const SmElementDescr SmElementsControl::m_aBracketsList[] =
     {RID_EVAL_TOX, RID_EVALUATE_TOX_HELP}, {RID_EVAL_FROMTOX, RID_EVALUATE_FROMTOX_HELP},
 };
 
-const SmElementDescr SmElementsControl::m_aFormatsList[] =
+const SmElementDescr SmElementsControl::m_a5FormatsList[] =
 {
     {RID_RSUPX, RID_RSUPX_HELP}, {RID_RSUBX, RID_RSUBX_HELP}, {RID_LSUPX, RID_LSUPX_HELP},
     {RID_LSUBX, RID_LSUBX_HELP}, {RID_CSUPX, RID_CSUPX_HELP}, {RID_CSUBX, RID_CSUBX_HELP},
@@ -232,7 +233,7 @@ const SmElementDescr SmElementsControl::m_aFormatsList[] =
     {RID_MATRIX, RID_MATRIX_HELP},
 };
 
-const SmElementDescr SmElementsControl::m_aOthersList[] =
+const SmElementDescr SmElementsControl::m_a5OthersList[] =
 {
     {RID_INFINITY, RID_INFINITY_HELP}, {RID_PARTIAL, RID_PARTIAL_HELP}, {RID_NABLA, RID_NABLA_HELP},
     {RID_EXISTS, RID_EXISTS_HELP}, {RID_NOTEXISTS, RID_NOTEXISTS_HELP}, {RID_FORALL, RID_FORALL_HELP},
@@ -247,7 +248,7 @@ const SmElementDescr SmElementsControl::m_aOthersList[] =
     {RID_DOTSUP, RID_DOTSUP_HELP}, {RID_DOTSDOWN, RID_DOTSDOWN_HELP}
 };
 
-const SmElementDescr SmElementsControl::m_aExamplesList[] =
+const SmElementDescr SmElementsControl::m_a5ExamplesList[] =
 {
     {"{func e}^{i %pi} + 1 = 0", RID_EXAMPLE_EULER_IDENTITY_HELP},
     {"C = %pi cdot d = 2 cdot %pi cdot r", RID_EXAMPLE_CIRCUMFERENCE_HELP},
@@ -264,34 +265,36 @@ const SmElementDescr SmElementsControl::m_aExamplesList[] =
 };
 
 #define AS_PAIR(a) a, SAL_N_ELEMENTS(a)
-const std::tuple<const char*, const SmElementDescr*, size_t> SmElementsControl::m_aCategories[] =
+const std::tuple<const char*, const SmElementDescr*, size_t> SmElementsControl::m_a5Categories[] =
 {
-    {RID_CATEGORY_UNARY_BINARY_OPERATORS, AS_PAIR(m_aUnaryBinaryOperatorsList)},
-    {RID_CATEGORY_RELATIONS, AS_PAIR(m_aRelationsList)},
-    {RID_CATEGORY_SET_OPERATIONS, AS_PAIR(m_aSetOperationsList)},
-    {RID_CATEGORY_FUNCTIONS, AS_PAIR(m_aFunctionsList)},
-    {RID_CATEGORY_OPERATORS, AS_PAIR(m_aOperatorsList)},
-    {RID_CATEGORY_ATTRIBUTES, AS_PAIR(m_aAttributesList)},
-    {RID_CATEGORY_BRACKETS, AS_PAIR(m_aBracketsList)},
-    {RID_CATEGORY_FORMATS, AS_PAIR(m_aFormatsList)},
-    {RID_CATEGORY_OTHERS, AS_PAIR(m_aOthersList)},
-    {RID_CATEGORY_EXAMPLES, AS_PAIR(m_aExamplesList)},
+    {RID_CATEGORY_UNARY_BINARY_OPERATORS, AS_PAIR(m_a5UnaryBinaryOperatorsList)},
+    {RID_CATEGORY_RELATIONS, AS_PAIR(m_a5RelationsList)},
+    {RID_CATEGORY_SET_OPERATIONS, AS_PAIR(m_a5SetOperationsList)},
+    {RID_CATEGORY_FUNCTIONS, AS_PAIR(m_a5FunctionsList)},
+    {RID_CATEGORY_OPERATORS, AS_PAIR(m_a5OperatorsList)},
+    {RID_CATEGORY_ATTRIBUTES, AS_PAIR(m_a5AttributesList)},
+    {RID_CATEGORY_BRACKETS, AS_PAIR(m_a5BracketsList)},
+    {RID_CATEGORY_FORMATS, AS_PAIR(m_a5FormatsList)},
+    {RID_CATEGORY_OTHERS, AS_PAIR(m_a5OthersList)},
+    {RID_CATEGORY_EXAMPLES, AS_PAIR(m_a5ExamplesList)},
 };
 
-const size_t SmElementsControl::m_aCategoriesSize = SAL_N_ELEMENTS(m_aCategories);
+const size_t SmElementsControl::m_a5CategoriesSize = SAL_N_ELEMENTS(m_a5Categories);
 
 SmElementsControl::SmElementsControl(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
     : mpDocShell(new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT))
     , m_nCurrentElement(SAL_MAX_UINT16)
     , m_nCurrentRolloverElement(SAL_MAX_UINT16)
     , m_nCurrentOffset(1) // Default offset of 1 due to the ScrollBar child
+    , m_nSmSyntaxVersion(SM_MOD()->GetConfig()->GetDefaultSmSyntaxVersion())
     , mbVerticalMode(true)
     , mxScroll(std::move(xScrolledWindow))
     , m_bFirstPaintAfterLayout(false)
 {
     mxScroll->connect_hadjustment_changed( LINK(this, SmElementsControl, ScrollHdl) );
     mxScroll->connect_vadjustment_changed( LINK(this, SmElementsControl, ScrollHdl) );
-    maParser.SetImportSymbolNames(true);
+    maParser.reset(starmathdatabase::GetVersionSmParser(m_nSmSyntaxVersion));
+    maParser->SetImportSymbolNames(true);
 }
 
 SmElementsControl::~SmElementsControl()
@@ -844,7 +847,7 @@ void SmElementsControl::addElement(const OUString& aElementVisual, const OUStrin
 {
     // SAL_MAX_UINT16 is invalid, zero is the scrollbar
     assert(maElementList.size() < SAL_MAX_UINT16 - 2);
-    auto pNode = maParser.ParseExpression(aElementVisual);
+    auto pNode = maParser->ParseExpression(aElementVisual);
 
     OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
     rDevice.Push(PushFlags::MAPMODE);
@@ -1029,15 +1032,26 @@ void SmElementsControl::build()
     // The first element is the scrollbar. We can't change its indexInParent
     // value, as this is set by being a child of the SmElementsControl.
     m_nCurrentOffset = 1;
-    for (sal_uInt16 n = 0; n < SAL_N_ELEMENTS(m_aCategories); ++n)
+
+    switch(m_nSmSyntaxVersion)
     {
-        if (msCurrentSetId == std::get<0>(m_aCategories[n]))
+        case 5:
         {
-            addElements(std::get<1>(m_aCategories[n]), std::get<2>(m_aCategories[n]));
+            for (sal_uInt16 n = 0; n < m_a5CategoriesSize; ++n)
+            {
+                if (msCurrentSetId == std::get<0>(m_a5Categories[n]))
+                {
+                    addElements(std::get<1>(m_a5Categories[n]), std::get<2>(m_a5Categories[n]));
+                    break;
+                }
+                else
+                    m_nCurrentOffset += std::get<2>(m_a5Categories[n]);
+            }
             break;
         }
-        else
-            m_nCurrentOffset += std::get<2>(m_aCategories[n]);
+        case 6:
+        default:
+            throw std::range_error("parser version limit");
     }
 
     m_nCurrentRolloverElement = SAL_MAX_UINT16;
@@ -1139,6 +1153,18 @@ void SmElementsControl::setItemHighlighted(sal_uInt16 nPos)
     Invalidate();
 }
 
+void SmElementsControl::setSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion)
+{
+    if( m_nSmSyntaxVersion != nSmSyntaxVersion )
+    {
+        m_nSmSyntaxVersion = nSmSyntaxVersion;
+        maParser.reset(starmathdatabase::GetVersionSmParser(nSmSyntaxVersion));
+        maParser->SetImportSymbolNames(true);
+        // Be carefull, we need the parser in order to build !!!
+        build();
+    }
+}
+
 OUString SmElementsControl::itemName(sal_uInt16 nPos) const
 {
     if (nPos < m_nCurrentOffset)
@@ -1206,6 +1232,11 @@ void SmElementsDockingWindow::ToggleFloatingMode()
     Invalidate();
 }
 
+void SmElementsDockingWindow::setSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion)
+{
+    mxElementsControl->setSmSyntaxVersion(nSmSyntaxVersion);
+}
+
 void SmElementsDockingWindow::EndDocking( const tools::Rectangle& rReactangle, bool bFloatMode)
 {
     SfxDockingWindow::EndDocking(rReactangle, bFloatMode);
@@ -1235,6 +1266,7 @@ IMPL_LINK( SmElementsDockingWindow, ElementSelectedHandle, weld::ComboBox&, rLis
         if (aCurrentCategoryString == rList.get_active_text())
         {
             mxElementsControl->setElementSetId(pCurrentCategory);
+            setSmSyntaxVersion(GetView()->GetDoc()->GetSmSyntaxVersion());
             return;
         }
     }
