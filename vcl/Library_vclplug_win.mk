@@ -29,6 +29,7 @@ $(eval $(call gb_Library_set_include,vclplug_win,\
 
 $(eval $(call gb_Library_add_defs,vclplug_win,\
     -DVCLPLUG_WIN_IMPLEMENTATION \
+    -DVCL_INTERNALS \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,vclplug_win,\

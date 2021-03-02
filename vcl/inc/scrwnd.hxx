@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_SCRWND_HXX
 #define INCLUDED_VCL_INC_SCRWND_HXX
 
-#include <vcl/floatwin.hxx>
+#include <vcl/toolkit/floatwin.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/image.hxx>
 

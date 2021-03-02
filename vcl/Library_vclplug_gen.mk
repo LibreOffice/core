@@ -121,6 +121,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
 
 $(eval $(call gb_Library_add_defs,vclplug_gen,\
     -DVCLPLUG_GEN_IMPLEMENTATION \
+    -DVCL_INTERNALS \
 ))
 
 ## handle RandR

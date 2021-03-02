@@ -6383,7 +6383,6 @@ include/vcl/errcode.hxx
 include/vcl/errinf.hxx
 include/vcl/event.hxx
 include/vcl/evntpost.hxx
-include/vcl/floatwin.hxx
 include/vcl/formatter.hxx
 include/vcl/fntstyle.hxx
 include/vcl/font.hxx
@@ -6473,6 +6472,7 @@ include/vcl/toolkit/edit.hxx
 include/vcl/toolkit/field.hxx
 include/vcl/toolkit/fixed.hxx
 include/vcl/toolkit/fixedhyper.hxx
+include/vcl/toolkit/floatwin.hxx
 include/vcl/toolkit/fmtfield.hxx
 include/vcl/toolkit/group.hxx
 include/vcl/toolkit/imgctrl.hxx
