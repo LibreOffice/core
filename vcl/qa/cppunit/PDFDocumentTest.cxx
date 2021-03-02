@@ -156,6 +156,18 @@ CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseBasicPDF)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(PDFDocumentTest, testParseDocumentWithNullAsWhitespace)
+{
+    // tdf#140606
+    // Bug document contained a null, which cause the parser to panic,
+    // but other PDF readers can handle the file well.
+
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "DocumentWithNull.pdf";
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(aURL, StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+}
+
 namespace
 {
 vcl::filter::PDFObjectElement*
