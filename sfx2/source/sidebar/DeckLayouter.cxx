@@ -297,46 +297,39 @@ sal_Int32 PlacePanels (
             nY += nDeckSeparatorHeight;
         }
 
-        // Place the title bar.
-        VclPtr<PanelTitleBar> pTitleBar = rPanel.GetTitleBar();
-        if (pTitleBar)
-        {
-            const sal_Int32 nPanelTitleBarHeight (Theme::GetInteger(Theme::Int_PanelTitleBarHeight) * rPanel.GetDPIScaleFactor());
+        const sal_Int32 nPanelTitleBarHeight(Theme::GetInteger(Theme::Int_PanelTitleBarHeight) * rPanel.GetDPIScaleFactor());
 
-            if (iItem->mbShowTitleBar)
-            {
-                pTitleBar->setPosSizePixel(0, nY, nWidth, nPanelTitleBarHeight);
-                pTitleBar->Show();
-                nY += nPanelTitleBarHeight;
-            }
-            else
-            {
-                pTitleBar->Hide();
-            }
-        }
+        bool bShowTitlebar = iItem->mbShowTitleBar;
+        rPanel.ShowTitlebar(bShowTitlebar);
 
-        if (rPanel.IsExpanded() && !rPanel.IsLurking())
+        bool bExpanded = rPanel.IsExpanded() && !rPanel.IsLurking();
+        if (bShowTitlebar || bExpanded)
         {
             rPanel.Show();
 
-            // Determine the height of the panel depending on layout
-            // mode and distributed heights.
-            sal_Int32 nPanelHeight (0);
-            switch(eMode)
+            sal_Int32 nPanelHeight(0);
+            if (bExpanded)
             {
-                case MinimumOrLarger:
-                    nPanelHeight = iItem->maLayoutSize.Minimum + iItem->mnDistributedHeight;
-                    break;
-                case PreferredOrLarger:
-                    nPanelHeight = iItem->maLayoutSize.Preferred + iItem->mnDistributedHeight;
-                    break;
-                case Preferred:
-                    nPanelHeight = iItem->maLayoutSize.Preferred;
-                    break;
-                default:
-                    OSL_ASSERT(false);
-                    break;
+                // Determine the height of the panel depending on layout
+                // mode and distributed heights.
+                switch(eMode)
+                {
+                    case MinimumOrLarger:
+                        nPanelHeight = iItem->maLayoutSize.Minimum + iItem->mnDistributedHeight;
+                        break;
+                    case PreferredOrLarger:
+                        nPanelHeight = iItem->maLayoutSize.Preferred + iItem->mnDistributedHeight;
+                        break;
+                    case Preferred:
+                        nPanelHeight = iItem->maLayoutSize.Preferred;
+                        break;
+                    default:
+                        OSL_ASSERT(false);
+                        break;
+                }
             }
+            if (bShowTitlebar)
+                nPanelHeight += nPanelTitleBarHeight;
 
             // Place the panel.
             Point aNewPos(0, nY);
@@ -354,7 +347,10 @@ sal_Int32 PlacePanels (
         else
         {
             rPanel.Hide();
+        }
 
+        if (!bExpanded)
+        {
             // Add a separator below the collapsed panel, if it is the
             // last panel in the deck.
             if (iItem == rLayoutItems.end()-1)
