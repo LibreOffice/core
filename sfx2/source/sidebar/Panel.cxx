@@ -47,9 +47,8 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
              const bool bIsInitiallyExpanded,
              const std::function<void()>& rDeckLayoutTrigger,
              const std::function<Context()>& rContextAccess,
-             const css::uno::Reference<css::frame::XFrame>& rxFrame
-            )
-    : Window(pParentWindow)
+             const css::uno::Reference<css::frame::XFrame>& rxFrame)
+    : InterimItemWindow(pParentWindow, "sfx/ui/panel.ui", "Panel")
     , msPanelId(rPanelDescriptor.msId)
     , mbIsTitleBarOptional(rPanelDescriptor.mbIsTitleBarOptional)
     , mxElement()
@@ -59,15 +58,18 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
     , maDeckLayoutTrigger(rDeckLayoutTrigger)
     , maContextAccess(rContextAccess)
     , mxFrame(rxFrame)
-    , mpTitleBar(VclPtr<PanelTitleBar>::Create(rPanelDescriptor.msTitle, pParentWindow, this))
+    , mxTitleBar(new PanelTitleBar(rPanelDescriptor.msTitle, *m_xBuilder, this))
+    , mxContents(m_xBuilder->weld_container("contents"))
+    , mxXWindow(mxContents->CreateChildFrame())
 {
     SetText(rPanelDescriptor.msTitle);
+    mxContents->set_visible(mbIsExpanded);
 }
 
 Panel::~Panel()
 {
     disposeOnce();
-    assert(!mpTitleBar);
+    assert(!mxTitleBar);
 }
 
 void Panel::SetLurkMode(bool bLurk)
@@ -85,7 +87,7 @@ void Panel::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     if (!IsLurking())
     {
-        vcl::Window::DumpAsPropertyTree(rJsonWriter);
+        InterimItemWindow::DumpAsPropertyTree(rJsonWriter);
         rJsonWriter.put("type", "panel");
     }
 }
@@ -107,14 +109,23 @@ void Panel::dispose()
             xComponent->dispose();
     }
 
-    mpTitleBar.disposeAndClear();
+    mxTitleBar.reset();
 
-    vcl::Window::dispose();
+    mxXWindow->dispose();
+    mxXWindow.clear();
+    mxContents.reset();
+
+    InterimItemWindow::dispose();
 }
 
-VclPtr<PanelTitleBar> const & Panel::GetTitleBar() const
+PanelTitleBar* Panel::GetTitleBar() const
 {
-    return mpTitleBar;
+    return mxTitleBar.get();
+}
+
+void Panel::ShowTitlebar(bool bShowTitlebar)
+{
+    mxTitleBar->Show(bShowTitlebar);
 }
 
 void Panel::SetUIElement (const Reference<ui::XUIElement>& rxElement)
@@ -134,7 +145,7 @@ void Panel::SetExpanded (const bool bIsExpanded)
         return;
 
     mbIsExpanded = bIsExpanded;
-    mpTitleBar->UpdateExpandedState();
+    mxTitleBar->UpdateExpandedState();
     maDeckLayoutTrigger();
 
     if (maContextAccess && pSidebarController)
@@ -144,25 +155,13 @@ void Panel::SetExpanded (const bool bIsExpanded)
             bIsExpanded,
             maContextAccess());
     }
+
+    mxContents->set_visible(mbIsExpanded);
 }
 
 bool Panel::HasIdPredicate (std::u16string_view rsId) const
 {
     return msPanelId == rsId;
-}
-
-void Panel::Resize()
-{
-    Window::Resize();
-
-    // Forward new size to window of XUIElement.
-    Reference<awt::XWindow> xElementWindow (GetElementWindow());
-    if(xElementWindow.is())
-    {
-        const Size aSize(GetSizePixel());
-        xElementWindow->setPosSize(0, 0, aSize.Width(), aSize.Height(),
-                                   awt::PosSize::POSSIZE);
-    }
 }
 
 void Panel::DataChanged (const DataChangedEvent&)
