@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2a0466bf_53d0cf2a",
+        "filename": "sw/uiconfig/swriter/ui/templatedialog1.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-03-02T13:12:27Z",
+      "side": 1,
+      "message": "Same reply.(-:",
+      "parentUuid": "952ce416_dd51bf9e",
+      "range": {
+        "startLine": 53,
+        "startChar": 97,
+        "endLine": 53,
+        "endChar": 145
+      },
+      "revId": "76f9c83c62bef31d5ad5e08ac8a2eb82bc003e4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9deff61e_c0414e2a",
         "filename": "sw/uiconfig/swriter/ui/templatedialog1.ui",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2021-03-02T09:32:37Z",
       "side": 1,
       "message": "Which leads to the question what happens for modified in-built styles. Guess it takes what is defined in the Default (which is odd).",
+      "range": {
+        "startLine": 68,
+        "startChar": 100,
+        "endLine": 68,
+        "endChar": 169
+      },
+      "revId": "76f9c83c62bef31d5ad5e08ac8a2eb82bc003e4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44b9a34b_dcaf1048",
+        "filename": "sw/uiconfig/swriter/ui/templatedialog1.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-03-02T13:12:27Z",
+      "side": 1,
+      "message": "Quick test suggests that your guess is correct.  Open any built-in character style, choose a tab with non-default values. Press Standard.  Goes to default.   Perhaps tooltip needs both?\n\n\"For builtin character styles, set values shown here to the values from Default Character Style; for user-defined styles, reset to original template values.\"\n\n(or maybe this is a bug report about \"Standard\" for character styles -- and the intended behavior should something like:\n\n\"Set values shown here back to original template values\"",
+      "parentUuid": "9deff61e_c0414e2a",
       "range": {
         "startLine": 68,
         "startChar": 100,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "3525491a_683c6846",
+        "filename": "sw/uiconfig/swriter/ui/templatedialog4.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-03-02T13:12:27Z",
+      "side": 1,
+      "message": "Not sure about your question.  Most dialogs already have an extended_tip for \"Reset\" It seemed missing here, so I added it.",
+      "parentUuid": "f83ff9fa_f0de1d20",
+      "range": {
+        "startLine": 34,
+        "startChar": 33,
+        "endLine": 34,
+        "endChar": 42
+      },
+      "revId": "76f9c83c62bef31d5ad5e08ac8a2eb82bc003e4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e04536e2_f6f469bd",
         "filename": "sw/uiconfig/swriter/ui/templatedialog4.ui",
         "patchSetId": 2
@@ -82,6 +154,30 @@
       "writtenOn": "2021-03-02T09:32:37Z",
       "side": 1,
       "message": "Different tip? And it leaves open what happens if the style is derived from None.",
+      "range": {
+        "startLine": 68,
+        "startChar": 100,
+        "endLine": 68,
+        "endChar": 193
+      },
+      "revId": "76f9c83c62bef31d5ad5e08ac8a2eb82bc003e4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b205c6f8_f7110694",
+        "filename": "sw/uiconfig/swriter/ui/templatedialog4.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-03-02T13:12:27Z",
+      "side": 1,
+      "message": "Probably.  I see now that all Frames inherit from \"None\".\n\nAnd even worse...Standard does not reset Area and Border tabs (in my quick experiment of making Graphic inherit from Frame).  \"Type\" seems to be where most of the \"reset\" happens.\n\nMaybe better to have no tooltip right now?!  on the grounds that no information is better than seemingly \"authoritative information\" that is either wrong (because of bugs) or because we do not know that rules are being used in the case of None.",
+      "parentUuid": "e04536e2_f6f469bd",
       "range": {
         "startLine": 68,
         "startChar": 100,
