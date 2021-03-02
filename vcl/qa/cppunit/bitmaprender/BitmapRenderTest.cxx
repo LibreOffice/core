@@ -50,11 +50,8 @@ public:
     CPPUNIT_TEST(testTdf104141);
     CPPUNIT_TEST(testTdf113918);
 
-// TODO: Following unit tests are not executed for macOS unless bitmap scaling is implemented
-#ifndef MACOSX
     CPPUNIT_TEST(testDrawAlphaBitmapEx);
     CPPUNIT_TEST(testAlphaVirtualDevice);
-#endif
     CPPUNIT_TEST(testTdf116888);
 
     CPPUNIT_TEST_SUITE_END();
@@ -110,7 +107,7 @@ void BitmapRenderTest::testTdf113918()
     CPPUNIT_ASSERT(aColor.GetGreen() > 100);
 }
 
-#if defined(_WIN32) || defined(MACOSX) || defined(IOS)
+#if defined(_WIN32) || defined(IOS)
 
 namespace
 {
@@ -128,6 +125,8 @@ int deltaColor(BitmapColor aColor1, BitmapColor aColor2)
 
 void BitmapRenderTest::testDrawAlphaBitmapEx()
 {
+// TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
+#ifndef MACOSX
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     pVDev->SetOutputSizePixel(Size(8, 8));
     pVDev->SetBackground(Wallpaper(COL_WHITE));
@@ -175,10 +174,13 @@ void BitmapRenderTest::testDrawAlphaBitmapEx()
 #else
     CPPUNIT_ASSERT_EQUAL(Color(0x7F, 0xFF, 0x7F), pVDev->GetPixel(Point(2, 2)));
 #endif
+#endif
 }
 
 void BitmapRenderTest::testAlphaVirtualDevice()
 {
+// TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
+#ifndef MACOSX
     // Create an alpha virtual device
     ScopedVclPtr<VirtualDevice> pAlphaVirtualDevice(VclPtr<VirtualDevice>::Create(
         *Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::DEFAULT));
@@ -239,6 +241,7 @@ void BitmapRenderTest::testAlphaVirtualDevice()
     CPPUNIT_ASSERT_LESS(6, deltaColor(Color(ColorTransparency, 0x4422FF55), aColor));
 #else
     CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0x4422FF55), aColor);
+#endif
 #endif
 }
 
