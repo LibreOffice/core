@@ -405,6 +405,26 @@ IMPL_STATIC_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBas
     return false;
 #else
 
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        OUString aError;
+        std::unique_ptr<ErrorInfo> pErrorInfo = ErrorInfo::GetErrorInfo(StarBASIC::GetErrorCode());
+        if (ErrorStringFactory::CreateString(pErrorInfo.get(), aError))
+        {
+            const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+            std::shared_ptr<weld::MessageDialog> xBox(
+                Application::CreateMessageDialog(
+                    pViewFrame->GetWindow().GetFrameWeld(),
+                    VclMessageType::Error,
+                    VclButtonsType::Ok,
+                    aError,
+                    true));
+
+            xBox->runAsync(xBox, [](sal_Int32 /*nResult*/) {});
+        }
+        return true;
+    }
+
 #ifndef DISABLE_DYNLOADING
     basicide_handle_basic_error pSymbol = reinterpret_cast<basicide_handle_basic_error>(sfx2::getBasctlFunction("basicide_handle_basic_error"));
 
