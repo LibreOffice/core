@@ -23,6 +23,8 @@
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 #define NNC_(Context, StringSingular, StringPlural) reinterpret_cast<char const *>(Context "\004" u8##StringSingular "\004" u8##StringPlural)
 
+
+#define STR_STANDARD_ACTION                     NC_("STR_STANDARD_ACTION", "Set to ~Parent")
 // Format names
 #define STR_POOLCHR_STANDARD                    NC_("STR_POOLCHR_STANDARD", "Default Character Style")
 #define STR_POOLCHR_FOOTNOTE                    NC_("STR_POOLCHR_FOOTNOTE", "Footnote Characters")
