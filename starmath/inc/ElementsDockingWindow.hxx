@@ -63,18 +63,26 @@ class SmElementsControl : public weld::CustomWidgetController
     friend class ElementSelectorUIObject;
     friend class ElementUIObject;
 
-    static const SmElementDescr m_aUnaryBinaryOperatorsList[];
-    static const SmElementDescr m_aRelationsList[];
-    static const SmElementDescr m_aSetOperationsList[];
-    static const SmElementDescr m_aFunctionsList[];
-    static const SmElementDescr m_aOperatorsList[];
-    static const SmElementDescr m_aAttributesList[];
-    static const SmElementDescr m_aBracketsList[];
-    static const SmElementDescr m_aFormatsList[];
-    static const SmElementDescr m_aOthersList[];
-    static const SmElementDescr m_aExamplesList[];
-    static const std::tuple<const char*, const SmElementDescr*, size_t> m_aCategories[];
-    static const size_t m_aCategoriesSize;
+    // SmParser 5 elements
+    static const SmElementDescr m_a5UnaryBinaryOperatorsList[];
+    static const SmElementDescr m_a5RelationsList[];
+    static const SmElementDescr m_a5SetOperationsList[];
+    static const SmElementDescr m_a5FunctionsList[];
+    static const SmElementDescr m_a5OperatorsList[];
+    static const SmElementDescr m_a5AttributesList[];
+    static const SmElementDescr m_a5BracketsList[];
+    static const SmElementDescr m_a5FormatsList[];
+    static const SmElementDescr m_a5OthersList[];
+    static const SmElementDescr m_a5ExamplesList[];
+    static const std::tuple<const char*, const SmElementDescr*, size_t> m_a5Categories[];
+    static const size_t m_a5CategoriesSize;
+
+    // SmParser 6 elements
+    static const std::tuple<const char*, const SmElementDescr*, size_t> m_a6Categories[0];
+    static const size_t m_a6CategoriesSize = 0;
+
+    // Parser for them
+    std::unique_ptr<AbstractSmParser> maParser;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
@@ -91,8 +99,8 @@ class SmElementsControl : public weld::CustomWidgetController
     OString       msCurrentSetId;
     sal_uInt16    m_nCurrentElement;
     sal_uInt16    m_nCurrentRolloverElement;
-    sal_uInt16 m_nCurrentOffset;
-    SmParser maParser;
+    sal_uInt16    m_nCurrentOffset;
+    sal_uInt16    m_nSmSyntaxVersion;
     Link<SmElement&,void> maSelectHdlLink;
 
     std::vector< std::unique_ptr<SmElement> > maElementList;
@@ -123,8 +131,8 @@ public:
     explicit SmElementsControl(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
     virtual ~SmElementsControl() override;
 
-    static const auto& categories() { return m_aCategories; }
-    static size_t categoriesSize() { return m_aCategoriesSize; }
+    static const auto& categories() { return m_a5Categories; }
+    static size_t categoriesSize() { return m_a5CategoriesSize; }
     const OString& elementSetId() const { return msCurrentSetId; }
     void setElementSetId(const char* pSetId);
 
@@ -139,6 +147,7 @@ public:
     OUString itemName(sal_uInt16) const;
     bool itemTrigger(sal_uInt16);
     void setItemHighlighted(sal_uInt16);
+    void setSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion);
     sal_uInt16 itemOffset() const { return m_nCurrentOffset; }
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
@@ -176,6 +185,8 @@ public:
 
     virtual void EndDocking( const tools::Rectangle& rReactangle, bool bFloatMode) override;
     virtual void ToggleFloatingMode() override;
+
+    void setSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion);
 };
 
 class SmElementsDockingWindowWrapper final : public SfxChildWindow
