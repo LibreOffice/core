@@ -294,6 +294,7 @@ public:
     void testTdf137091();
     void testTdf62268();
     void testTdf137453();
+    void testTdf74827();
     void testTdf35636();
     void testVBAMacroFunctionODS();
     void testAutoheight2Rows();
@@ -485,6 +486,7 @@ public:
     CPPUNIT_TEST(testTdf137091);
     CPPUNIT_TEST(testTdf62268);
     CPPUNIT_TEST(testTdf137453);
+    CPPUNIT_TEST(testTdf74827);
     CPPUNIT_TEST(testTdf35636);
     CPPUNIT_TEST(testVBAMacroFunctionODS);
     CPPUNIT_TEST(testAutoheight2Rows);
@@ -5167,6 +5169,21 @@ void ScFiltersTest::testTdf137453()
     // - Expected: 3333333333/100
     // - Actual  : -961633963/100
     CPPUNIT_ASSERT_EQUAL(OUString("3333333333/100"), rDoc.GetString(ScAddress(0,0,0)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf74827()
+{
+    // Without the fix in place, this test would have hung
+
+    ScDocShellRef xDocSh = loadDoc(u"tdf74827.", FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("name"), rDoc.GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"أسمي walid"), rDoc.GetString(ScAddress(0,1,0)));
 
     xDocSh->DoClose();
 }
