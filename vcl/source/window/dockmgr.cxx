@@ -794,6 +794,10 @@ void ImplDockingWindowWrapper::ImplPreparePopupMode()
     // set mpFloatWin not until all window positioning is done !!!
     // (SetPosPixel etc. check for valid mpFloatWin pointer)
     mpFloatWin = pWin;
+
+    DockingWindow *pDockWin = dynamic_cast< DockingWindow* > ( mpDockingWindow.get() );
+    if(pDockWin)
+        pDockWin->SetFloatingWindow(mpFloatWin);
 }
 
 void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWinPopupFlags nFlags )
