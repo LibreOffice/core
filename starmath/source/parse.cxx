@@ -31,7 +31,7 @@ AbstractSmParser* starmathdatabase::GetDefaultSmParser()
         return aParser;
     }
     default:
-        throw std::range_error("parser depth limit");
+        throw std::range_error("parser version limit");
     }
 }
 
@@ -45,7 +45,7 @@ AbstractSmParser* starmathdatabase::GetVersionSmParser(sal_uInt16 nVersion)
         return aParser;
     }
     default:
-        throw std::range_error("parser depth limit");
+        throw std::range_error("parser version limit");
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
