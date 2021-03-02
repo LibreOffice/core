@@ -84,6 +84,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf140668, "tdf140668.docx")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf138771, "tdf138771.docx")
+{
+    // Don't crash when document is imported
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134619_numberingProps, "tdf134619_numberingProps.doc")
 {
     // Get the third paragraph's numbering style's 1st level's bullet size
