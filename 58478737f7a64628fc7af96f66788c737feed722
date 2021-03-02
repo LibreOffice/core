@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "033bb553_63f5a694",
+        "filename": "include/vcl/dockwin.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-03-02T12:33:02Z",
+      "side": 1,
+      "message": "best to add comment here why it is needed",
+      "revId": "58478737f7a64628fc7af96f66788c737feed722",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
