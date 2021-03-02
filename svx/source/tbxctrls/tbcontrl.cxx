@@ -626,27 +626,6 @@ public:
     virtual void dispose() override { m_aLineStyleLb.disposeAndClear(); ToolbarPopup::dispose(); }
 };
 
-class SvxCurrencyList_Impl : public svtools::ToolbarPopup
-{
-private:
-    VclPtr<ListBox> m_pCurrencyLb;
-    rtl::Reference<SvxCurrencyToolBoxControl> m_xControl;
-    OUString&       m_rSelectedFormat;
-    LanguageType&   m_eSelectedLanguage;
-
-    std::vector<OUString> m_aFormatEntries;
-    LanguageType          m_eFormatLanguage;
-    DECL_LINK( SelectHdl, ListBox&, void );
-
-public:
-    SvxCurrencyList_Impl( SvxCurrencyToolBoxControl* pControl,
-                          vcl::Window* pParentWindow,
-                          OUString&     rSelectFormat,
-                          LanguageType& eSelectLanguage );
-    virtual ~SvxCurrencyList_Impl() override { disposeOnce(); }
-    virtual void dispose() override;
-};
-
 class SvxStyleToolBoxControl;
 
 class SfxStyleControllerItem_Impl : public SfxStatusListener
@@ -2685,13 +2664,29 @@ SvxCurrencyList_Impl::SvxCurrencyList_Impl(
     if ( nSelectedPos >= 0 )
         m_pCurrencyLb->SelectEntryPos( nSelectedPos );
     m_pCurrencyLb->Show();
+
+    auto parentNotifier = GetParentWithLOKNotifier();
+    if(parentNotifier)
+        SetLOKNotifier(parentNotifier->GetLOKNotifier());
 }
 
 void SvxCurrencyList_Impl::dispose()
 {
+    ReleaseLOKNotifier();
     m_xControl.clear();
     m_pCurrencyLb.disposeAndClear();
     ToolbarPopup::dispose();
+}
+
+void SvxCurrencyList_Impl::PixelInvalidate(const tools::Rectangle* /*pRectangle*/)
+{
+    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+    {
+        std::vector<vcl::LOKPayloadItem> aPayload;
+        const tools::Rectangle aRect(Point(0,0), Size(GetSizePixel().Width()+1, GetSizePixel().Height()+1));
+        aPayload.push_back(std::make_pair(OString("rectangle"), aRect.toString()));
+        pNotifier->notifyWindow(GetLOKWindowId(), "invalidate", aPayload);
+    }
 }
 
 SvxLineWindow_Impl::SvxLineWindow_Impl( svt::ToolboxController& rController, vcl::Window* pParentWindow ) :

@@ -285,6 +285,28 @@ public:
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
 };
 
+class SvxCurrencyList_Impl : public svtools::ToolbarPopup
+{
+private:
+    VclPtr<ListBox> m_pCurrencyLb;
+    rtl::Reference<SvxCurrencyToolBoxControl> m_xControl;
+    OUString&       m_rSelectedFormat;
+    LanguageType&   m_eSelectedLanguage;
+
+    std::vector<OUString> m_aFormatEntries;
+    LanguageType          m_eFormatLanguage;
+    DECL_LINK( SelectHdl, ListBox&, void );
+
+public:
+    SvxCurrencyList_Impl( SvxCurrencyToolBoxControl* pControl,
+                          vcl::Window* pParentWindow,
+                          OUString&     rSelectFormat,
+                          LanguageType& eSelectLanguage );
+    virtual ~SvxCurrencyList_Impl() override { disposeOnce(); }
+    virtual void dispose() override;
+    void PixelInvalidate(const tools::Rectangle* pRectangle) override;
+};
+
 #endif // INCLUDED_SVX_TBCONTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

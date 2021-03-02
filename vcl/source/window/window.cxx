@@ -3212,6 +3212,24 @@ bool Window::IsLOKWindowsEmpty()
 void Window::ReleaseLOKNotifier()
 {
     // unregister the LOK window binding
+    long nErased = -1;
+    if (mpWindowImpl->mnLOKWindowId > 0)
+        nErased = GetLOKWindowsMap().erase(mpWindowImpl->mnLOKWindowId);
+
+    // This makes sure if any notifier id was is changed manually,
+    // then those notifers are erased too
+    if(nErased == 0)
+    {
+        for (auto it = GetLOKWindowsMap().begin(); it != GetLOKWindowsMap().end(); ++it)
+        {
+            if (it->second->GetLOKWindowId() == mpWindowImpl->mnLOKWindowId)
+            {
+                GetLOKWindowsMap().erase(it->first);
+                break;
+            }
+        }
+    }
+
     if (mpWindowImpl->mnLOKWindowId > 0)
         GetLOKWindowsMap().erase(mpWindowImpl->mnLOKWindowId);
 
@@ -3249,6 +3267,11 @@ const vcl::ILibreOfficeKitNotifier* Window::GetLOKNotifier() const
 vcl::LOKWindowId Window::GetLOKWindowId() const
 {
     return mpWindowImpl ? mpWindowImpl->mnLOKWindowId : 0;
+}
+
+void Window::SetLOKWindowId(vcl::LOKWindowId nId)
+{
+    mpWindowImpl->mnLOKWindowId = nId;
 }
 
 VclPtr<vcl::Window> Window::GetParentWithLOKNotifier()

@@ -32,6 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/settings.hxx>
+#include <svx/tbcontrl.hxx>
 
 #define DOCKWIN_FLOATSTYLES         (WB_SIZEABLE | WB_MOVEABLE | WB_CLOSEABLE | WB_STANDALONE | WB_ROLLABLE )
 
@@ -816,6 +817,13 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
 
     mpFloatWin->StartPopupMode( pParentToolBox, nFlags );
     GetWindow()->Show();
+
+    // to invalidate docking window (i.e: currency list window) correctly
+    // flaoting window and docking window both needs to be invalidated together
+    // and to do that we manually make LOK id same for both the window
+    SvxCurrencyList_Impl *pDockWin = dynamic_cast< SvxCurrencyList_Impl* > ( mpDockingWindow.get() );
+    if(pDockWin)
+        pDockWin->SetLOKWindowId(mpFloatWin->GetLOKWindowId());
 
     if( pParentToolBox->IsKeyEvent() )
     {
