@@ -29,21 +29,25 @@ struct VCL_DLLPUBLIC ExternalPDFStream
 
     std::map<sal_Int32, sal_Int32>& getCopiedResources() { return maCopiedResources; }
 
-    filter::PDFDocument& getPDFDocument()
+    std::shared_ptr<filter::PDFDocument>& getPDFDocument()
     {
         if (!mpPDFDocument)
         {
             SvMemoryStream aPDFStream;
             aPDFStream.WriteBytes(maData.data(), maData.size());
             aPDFStream.Seek(0);
-            mpPDFDocument = std::make_unique<filter::PDFDocument>();
-            if (!mpPDFDocument->Read(aPDFStream))
+            auto pPDFDocument = std::make_shared<filter::PDFDocument>();
+            if (!pPDFDocument->Read(aPDFStream))
             {
                 SAL_WARN("vcl.pdfwriter",
                          "PDFWriterImpl::writeReferenceXObject: reading the PDF document failed");
             }
+            else
+            {
+                mpPDFDocument = pPDFDocument;
+            }
         }
-        return *mpPDFDocument;
+        return mpPDFDocument;
     }
 };
 
