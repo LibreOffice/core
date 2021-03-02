@@ -74,6 +74,32 @@ void StyleStatusListener::StateChanged(SfxItemState /*eState*/, const SfxPoolIte
         m_pPreviewControl->Select(pStateItem->GetStyleName());
 }
 
+StylePoolChangeListener::StylePoolChangeListener(StylesPreviewWindow_Base* pPreviewControl)
+    : SfxListener()
+    , m_pPreviewControl(pPreviewControl)
+{
+    SfxObjectShell* pDocShell = SfxObjectShell::Current();
+
+    if (pDocShell)
+        m_pStyleSheetPool = pDocShell->GetStyleSheetPool();
+
+    if (m_pStyleSheetPool)
+    {
+        StartListening(*m_pStyleSheetPool);
+    }
+}
+
+StylePoolChangeListener::~StylePoolChangeListener()
+{
+    if (m_pStyleSheetPool)
+        EndListening(*m_pStyleSheetPool);
+}
+
+void StylePoolChangeListener::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
+{
+    m_pPreviewControl->UpdateStylesList();
+}
+
 StyleItemController::StyleItemController(const std::pair<OUString, OUString>& aStyleName)
     : m_eStyleFamily(SfxStyleFamily::Para)
     , m_aStyleName(aStyleName)
@@ -351,6 +377,9 @@ StylesPreviewWindow_Base::StylesPreviewWindow_Base(
     m_pStatusListener = new StyleStatusListener(this, xDispatchProvider);
     m_xStatusListener.set(static_cast<cppu::OWeakObject*>(m_pStatusListener), css::uno::UNO_QUERY);
 
+    m_pStylePoolChangeListener.reset(new StylePoolChangeListener(this));
+
+    UpdateStylesList();
     Update();
 }
 
@@ -406,14 +435,11 @@ void StylesPreviewWindow_Base::Select(const OUString& rStyleName)
 {
     m_sSelectedStyle = rStyleName;
 
-    UpdateStylesList();
     Update();
 }
 
 void StylesPreviewWindow_Base::Update()
 {
-    UpdateStylesList();
-
     for (unsigned long i = 0; i < m_aAllStyles.size(); ++i)
     {
         if (m_aAllStyles[i].first == m_sSelectedStyle || m_aAllStyles[i].second == m_sSelectedStyle)
