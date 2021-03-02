@@ -433,7 +433,15 @@ IMPL_STATIC_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBas
     return false;
 #else
 
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+        ErrorHandler::HandleError(StarBASIC::GetErrorCode(), pViewFrame->GetWindow().GetFrameWeld());
+        return true;
+    }
+
 #ifndef DISABLE_DYNLOADING
+
     // load basctl module
     osl::Module aMod;
     aMod.loadRelative(&thisModule, SVLIBRARY("basctl"));
