@@ -2082,9 +2082,9 @@ SwXTextCursor::getPropertySetInfo()
             m_pImpl->m_rPropSet.getPropertySetInfo();
         // extend PropertySetInfo!
         const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
-        return new SfxExtItemPropertySetInfo(
+        return rtl::Reference<SfxExtItemPropertySetInfo>(new SfxExtItemPropertySetInfo(
             aCursorExtMap_Impl,
-            aPropSeq );
+            aPropSeq ));
     }();
     return xRef;
 }

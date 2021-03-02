@@ -31,6 +31,7 @@
 #include <ooo/vba/word/XSelection.hpp>
 #include <vbahelper/vbaapplicationbase.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 #include "vbawindow.hxx"
 
@@ -55,7 +56,7 @@ public:
     sal_uInt32 AddSink( const css::uno::Reference< ooo::vba::XSink >& xSink );
     void RemoveSink( sal_uInt32 nNumber );
 
-    SwVbaWindow* getActiveSwVbaWindow();
+    rtl::Reference<SwVbaWindow> getActiveSwVbaWindow();
     css::uno::Reference< css::uno::XComponentContext > const & getContext() const;
 
     // XApplication
