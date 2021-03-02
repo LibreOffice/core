@@ -206,7 +206,6 @@ void SwMacrosTest::testControlShapeGrouping()
     createFileURL(u"testControlShapeGrouping.", u"odt", aFileName);
     Reference< css::lang::XComponent > xComponent(
         loadFromDesktop(aFileName, "com.sun.star.text.TextDocument"));
-    CPPUNIT_ASSERT(xComponent.is());
 
     uno::Reference<frame::XModel> const xModel(xComponent, UNO_QUERY);
     CPPUNIT_ASSERT(xModel.is());
