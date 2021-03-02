@@ -165,6 +165,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="templatedialog16|organizer">Organizer</property>
+                <property name="tooltip_text" translatable="yes" context="templatedialog16|organizer">Name and hide user-defined styles</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -212,6 +213,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="templatedialog16|bullets">Unordered</property>
+                <property name="tooltip_text" translatable="yes" context="templatedialog16|bullets">Choose a predefined bullet type</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -260,7 +262,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="templatedialog16|numbering">Ordered</property>
-                <property name="tooltip_text" translatable="yes" context="templatedialog16|numbering|tooltip_text">Numbering schemes for ordered lists</property>
+                <property name="tooltip_text" translatable="yes" context="templatedialog16|numbering">Choose a predefined ordered list</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -309,7 +311,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="templatedialog16|outline">Outline</property>
-                 <property name="tooltip_text" translatable="yes" context="templatedialog16|outline|tooltip_text">Numbering schemes for hierarchical lists</property>
+                 <property name="tooltip_text" translatable="yes" context="templatedialog16|outline">Choose a predefined outline format</property>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -358,7 +360,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="templatedialog16|graphics">Image</property>
-                <property name="tooltip_text" translatable="yes" context="templatedialog16|graphics|tooltip_text">Graphic bullet symbols</property>
+                <property name="tooltip_text" translatable="yes" context="templatedialog16|graphics">Choose a predefined graphic bullet symbol</property>
               </object>
               <packing>
                 <property name="position">4</property>
@@ -407,7 +409,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="templatedialog16|position">Position</property>
-                <property name="tooltip_text" translatable="yes" context="templatedialog16|position|tooltip_text">Indent, spacing, and alignment options for ordered and unordered lists</property>
+                <property name="tooltip_text" translatable="yes" context="templatedialog16|position">Modify indent, spacing, and alignment for list numbers or symbols</property>
               </object>
               <packing>
                 <property name="position">5</property>
@@ -456,7 +458,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="templatedialog16|customize">Customize</property>
-                <property name="tooltip_text" translatable="yes" context="templatedialog16|customize|tooltip_text">Design your own bullet or numbering scheme</property>
+                <property name="tooltip_text" translatable="yes" context="templatedialog16|customize">Design your own list or outline format</property>
               </object>
               <packing>
                 <property name="position">6</property>
