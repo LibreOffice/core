@@ -32,6 +32,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
 #include <resource/sharedresources.hxx>
+#include <rtl/ref.hxx>
 #include <strings.hrc>
 
 using namespace connectivity::macab;
@@ -397,8 +398,7 @@ Reference< XResultSet > SAL_CALL MacabCommonStatement::executeQuery(
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(rBHelper.bDisposed);
 
-    MacabResultSet* pResult = new MacabResultSet(this);
-    Reference< XResultSet > xRS = pResult;
+    rtl::Reference<MacabResultSet> pResult = new MacabResultSet(this);
     OUString aErr;
 
     m_pParseTree = m_aParser.parseTree(aErr, sql).release();
@@ -428,9 +428,9 @@ Reference< XResultSet > SAL_CALL MacabCommonStatement::executeQuery(
 
                     pResult->setTableName(sTableName);
 
-                    setMacabFields(pResult);        // SELECT which columns ?
-                    selectRecords(pResult); // WHERE which condition ?
-                    sortRecords(pResult);   // ORDER BY which columns ?
+                    setMacabFields(pResult.get());        // SELECT which columns ?
+                    selectRecords(pResult.get()); // WHERE which condition ?
+                    sortRecords(pResult.get());   // ORDER BY which columns ?
                 }
 // To be continued: DISTINCT
 //                  etc...
@@ -446,7 +446,7 @@ Reference< XResultSet > SAL_CALL MacabCommonStatement::executeQuery(
     }
 
     m_xResultSet = Reference<XResultSet>(pResult);
-    return xRS;
+    return pResult;
 }
 
 Reference< XConnection > SAL_CALL MacabCommonStatement::getConnection(  )

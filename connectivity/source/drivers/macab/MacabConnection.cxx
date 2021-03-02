@@ -27,6 +27,7 @@
 #include "MacabCatalog.hxx"
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
+#include <cppuhelper/weak.hxx>
 
 using namespace connectivity::macab;
 using namespace com::sun::star::uno;
@@ -295,8 +296,7 @@ Reference< XTablesSupplier > MacabConnection::createCatalog()
     Reference< XTablesSupplier > xTab = m_xCatalog;
     if (!m_xCatalog.is())
     {
-        MacabCatalog *pCat = new MacabCatalog(this);
-        xTab = pCat;
+        xTab = new MacabCatalog(this);
         m_xCatalog = xTab;
     }
     return xTab;
@@ -309,10 +309,8 @@ MacabAddressBook* MacabConnection::getAddressBook() const
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* createMacabConnection( void* _pDriver )
 {
-    MacabConnection* pConnection = new MacabConnection( static_cast< MacabDriver* >( _pDriver ) );
     // by definition, the pointer crossing library boundaries as void ptr is acquired once
-    pConnection->acquire();
-    return pConnection;
+    return cppu::acquire(new MacabConnection( static_cast< MacabDriver* >( _pDriver ) ));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
