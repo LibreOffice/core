@@ -308,7 +308,6 @@ void ScShapeTest::testTdf140252_LayerOfControl()
     OUString aFileURL;
     createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get ScDocShell
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
@@ -344,7 +343,6 @@ void ScShapeTest::testTdf137082_LTR_to_RTL()
     OUString aFileURL;
     createFileURL(u"tdf137082_LTR_arrow_image.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get document
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
@@ -379,7 +377,6 @@ void ScShapeTest::testTdf137082_RTL_cell_anchored()
     OUString aFileURL;
     createFileURL(u"tdf137082_RTL_cell_anchored.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get document
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
@@ -422,7 +419,6 @@ void ScShapeTest::testTdf137081_RTL_page_anchored()
     OUString aFileURL;
     createFileURL(u"tdf137081_RTL_page_anchored.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get document
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
@@ -489,7 +485,6 @@ void ScShapeTest::testTdf139583_Rotate180deg()
     OUString aFileURL;
     createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get document and draw page
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
@@ -530,7 +525,6 @@ void ScShapeTest::testTdf137033_FlipHori_Resize()
     OUString aFileURL;
     createFileURL(u"tdf137033_FlipHoriRotCustomShape.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get document and shape
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
@@ -569,7 +563,6 @@ void ScShapeTest::testTdf137033_RotShear_ResizeHide()
     OUString aFileURL;
     createFileURL(u"tdf137033_RotShearResizeAnchor.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get document
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
@@ -629,7 +622,6 @@ void ScShapeTest::testTdf137033_RotShear_Hide()
     OUString aFileURL;
     createFileURL(u"tdf137033_RotShearCellAnchor.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get document
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
@@ -674,7 +666,6 @@ void ScShapeTest::testTdf137576_LogicRectInDefaultMeasureline()
     OUString aFileURL;
     createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get ScDocShell
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
@@ -731,7 +722,6 @@ void ScShapeTest::testTdf137576_LogicRectInNewMeasureline()
     OUString aFileURL;
     createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get document and draw page
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
@@ -768,7 +758,6 @@ void ScShapeTest::testMeasurelineHideColSave()
     OUString aFileURL;
     createFileURL(u"measurelineHideColSave.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get document and shape
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
@@ -815,7 +804,6 @@ void ScShapeTest::testHideColsShow()
     OUString aFileURL;
     createFileURL(u"hideColsShow.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get document and shape
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
@@ -860,7 +848,6 @@ void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()
     OUString aFileURL;
     createFileURL(u"tdf138138_MoveCellWithRotatedShape.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get document and shape
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
@@ -909,7 +896,6 @@ void ScShapeTest::testLoadVerticalFlip()
     OUString aFileURL;
     createFileURL(u"loadVerticalFlip.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get document and shape
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
@@ -930,7 +916,6 @@ void ScShapeTest::testTdf117948_CollapseBeforeShape()
     OUString aFileURL;
     createFileURL(u"tdf117948_CollapseBeforeShape.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get document and objects
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
@@ -984,7 +969,6 @@ void ScShapeTest::testTdf137355_UndoHideRows()
     OUString aFileURL;
     createFileURL(u"tdf137355_UndoHideRows.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get document and shape
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
@@ -1028,7 +1012,6 @@ void ScShapeTest::testTdf115655_HideDetail()
     OUString aFileURL;
     createFileURL(u"tdf115655_HideDetail.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get document and image
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
@@ -1078,7 +1061,6 @@ void ScShapeTest::testFitToCellSize()
     OUString aFileURL;
     createFileURL(u"tdf119191_FitToCellSize.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get document and shape
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
@@ -1112,7 +1094,6 @@ void ScShapeTest::testCustomShapeCellAnchoredRotatedShape()
     OUString aFileURL;
     createFileURL(u"tdf119191_transformedShape.ods", aFileURL);
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get document and shape
     ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
