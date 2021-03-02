@@ -35,6 +35,7 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <osl/file.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
 using namespace utl;
@@ -486,7 +487,7 @@ Reference< XSpellAlternatives >
     }
 
     // now return an empty alternative for no suggestions or the list of alternatives if some found
-    SpellAlternatives *pAlt = new SpellAlternatives;
+    rtl::Reference<SpellAlternatives> pAlt = new SpellAlternatives;
     pAlt->SetWordLanguage( rWord, nLang );
     pAlt->SetFailureType( SpellFailure::SPELLING_ERROR );
     pAlt->SetAlternatives( aStr );
