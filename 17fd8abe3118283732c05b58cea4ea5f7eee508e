@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5850f235_0c2e2a7b",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2688,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-03-02T08:04:16Z",
+      "side": 1,
+      "message": "can you check if something like this will work (without seting the same id for both windows)\n`GetFloatingWindow() ? GetFloatingWindow()-\u003eGetLOKWindowId() : GetLOKWindowId()`",
+      "revId": "17fd8abe3118283732c05b58cea4ea5f7eee508e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
