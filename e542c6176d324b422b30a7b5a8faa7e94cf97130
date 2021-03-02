@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8616e084_fa5bdcd9",
+        "filename": "vcl/source/window/dockmgr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-03-02T11:36:53Z",
+      "side": 1,
+      "message": "FloatingWindow is set but later not resetted",
+      "revId": "e542c6176d324b422b30a7b5a8faa7e94cf97130",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38d2628f_9bdb226b",
+        "filename": "vcl/source/window/dockmgr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-03-02T11:36:53Z",
+      "side": 1,
+      "message": "somewhere here you need to reset floatingwindow member",
+      "revId": "e542c6176d324b422b30a7b5a8faa7e94cf97130",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
