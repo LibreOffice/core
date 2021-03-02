@@ -349,9 +349,6 @@ void Deck::ShowPanel(const Panel& rPanel)
     // Get vertical extent of the panel.
     sal_Int32 nPanelTop (rPanel.GetPosPixel().Y());
     const sal_Int32 nPanelBottom (nPanelTop + rPanel.GetSizePixel().Height() - 1);
-    // Add the title bar into the extent.
-    if (rPanel.GetTitleBar() && rPanel.GetTitleBar()->IsVisible())
-        nPanelTop = rPanel.GetTitleBar()->GetPosPixel().Y();
 
     // Determine what the new thumb position should be like.
     // When the whole panel does not fit then make its top visible
