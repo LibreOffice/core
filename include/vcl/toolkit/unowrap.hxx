@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNOWRAP_HXX
-#define INCLUDED_VCL_UNOWRAP_HXX
+#pragma once
 
 #if !defined(VCL_DLLIMPLEMENTATION) && !defined(TOOLKIT_DLLIMPLEMENTATION) && !defined(VCL_INTERNALS)
 #error "don't use this in new code"
@@ -90,7 +89,5 @@ public:
 protected:
     ~UnoWrapperBase() {}
 };
-
-#endif // INCLUDED_VCL_UNOWRAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
