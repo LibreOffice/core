@@ -398,7 +398,7 @@ void StylesPreviewWindow_Base::Update()
 {
     UpdateStylesList();
 
-    for (unsigned long i = 0; i < m_aAllStyles.size(); ++i)
+    for (std::vector<std::pair<OUString, OUString>>::size_type i = 0; i < m_aAllStyles.size(); ++i)
     {
         if (m_aAllStyles[i].first == m_sSelectedStyle || m_aAllStyles[i].second == m_sSelectedStyle)
         {
