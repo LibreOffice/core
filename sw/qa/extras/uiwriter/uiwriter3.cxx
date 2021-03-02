@@ -17,6 +17,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
@@ -185,6 +186,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134227)
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139638)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf139638.odt");
+
+    uno::Reference<text::XDocumentIndexesSupplier> xIndexSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexes = xIndexSupplier->getDocumentIndexes();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexes->getCount());
+    uno::Reference<text::XDocumentIndex> xTOCIndex(xIndexes->getByIndex(0), uno::UNO_QUERY);
+
+    // Without the fix in place, this test would have crashed
+    xTOCIndex->update();
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135412)
