@@ -20,6 +20,7 @@
 #include <memory>
 #include <utility>
 
+#include <sfx2/viewfrm.hxx>
 #include <sal/log.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
@@ -46,6 +47,7 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1343,10 +1345,29 @@ IMPL_STATIC_LINK( SvxScriptErrorDialog, ShowDialog, void*, p, void )
         message = CuiResId( RID_SVXSTR_ERROR_TITLE );
     }
 
-    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
-                                              VclMessageType::Warning, VclButtonsType::Ok, message));
+    std::shared_ptr<weld::MessageDialog> xBox;
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+        xBox.reset(Application::CreateMessageDialog(
+                       pViewFrame->GetWindow().GetFrameWeld(),
+                       VclMessageType::Warning,
+                       VclButtonsType::Ok, message,
+                       true));
+    }
+    else
+    {
+        xBox.reset(Application::CreateMessageDialog(
+                       nullptr,
+                       VclMessageType::Warning, VclButtonsType::Ok, message));
+    }
+
     xBox->set_title(CuiResId(RID_SVXSTR_ERROR_TITLE));
-    xBox->run();
+
+    if (comphelper::LibreOfficeKit::isActive())
+        xBox->runAsync(xBox, [](sal_Int32 /*nResult*/) {});
+    else
+        xBox->run();
 
     delete pMessage;
 }
