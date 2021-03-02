@@ -61,6 +61,10 @@ rtl_uString rtl::str::EmptyStringImpl<rtl_uString>::data =
     { 0 }                                            /*sal_Unicode  buffer[1];*/
 };
 
+namespace rtl {
+rtl_uString* const PEMPTY_OUSTRING = &rtl::str::EmptyStringImpl<rtl_uString>::data;
+}
+
 /* ======================================================================= */
 
 sal_Int32 rtl_ustr_indexOfAscii_WithLength(

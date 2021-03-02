@@ -145,6 +145,12 @@ private:
 };
 #endif
 
+#if defined LIBO_INTERNAL_ONLY
+/// @cond INTERNAL
+SAL_DLLPUBLIC extern rtl_String* const PEMPTY_OSTRING;
+/// @endcond
+#endif
+
 /* ======================================================================= */
 
 /**
@@ -183,8 +189,12 @@ public:
     */
     OString()
     {
+#if defined LIBO_INTERNAL_ONLY
+        pData = PEMPTY_OSTRING;
+#else
         pData = NULL;
         rtl_string_new( &pData );
+#endif
     }
 
     /**

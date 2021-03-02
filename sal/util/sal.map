@@ -752,7 +752,13 @@ PRIVATE_1.6 { # LibreOffice 6.4
 PRIVATE_1.7 { # LibreOffice 7.1
     global:
         rtl_uString_newReplaceAllFromIndexUtf16LUtf16L;
-} PRIVATE_1.5;
+} PRIVATE_1.6;
+
+PRIVATE_1.8 { # LibreOffice 7.1
+    global:
+        _ZN3rtl15PEMPTY_OUSTRINGE; # rtl::PEMPTY_OUSTRING
+        _ZN3rtl14PEMPTY_OSTRINGE; # rtl::PEMPTY_OSTRING
+} PRIVATE_1.7;
 
 PRIVATE_textenc.1 { # LibreOffice 3.6
     global:

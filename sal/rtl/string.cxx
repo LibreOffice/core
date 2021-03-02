@@ -53,6 +53,10 @@ rtl_String rtl::str::EmptyStringImpl<rtl_String>::data =
     { 0 }   /* char     buffer[1];  */
 };
 
+namespace rtl {
+rtl_String* const PEMPTY_OSTRING = &rtl::str::EmptyStringImpl<rtl_String>::data;
+}
+
 /* ======================================================================= */
 
 sal_Int32 SAL_CALL rtl_str_valueOfFloat(char * pStr, float f)

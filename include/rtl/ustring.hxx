@@ -136,6 +136,12 @@ template<std::size_t N> struct ExceptCharArrayDetector<OUStringLiteral<N>> {};
 /// @endcond
 #endif
 
+#if defined LIBO_INTERNAL_ONLY
+/// @cond INTERNAL
+SAL_DLLPUBLIC extern rtl_uString* const PEMPTY_OUSTRING;
+/// @endcond
+#endif
+
 /* ======================================================================= */
 
 /**
@@ -173,8 +179,12 @@ public:
     */
     OUString()
     {
+#if defined LIBO_INTERNAL_ONLY
+        pData = PEMPTY_OUSTRING;
+#else
         pData = NULL;
         rtl_uString_new( &pData );
+#endif
     }
 
     /**
