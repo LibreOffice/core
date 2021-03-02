@@ -216,6 +216,7 @@ class VCL_DLLPUBLIC DockingWindow
     class   ImplData;
 private:
     VclPtr<FloatingWindow> mpFloatWin;
+    VclPtr<FloatingWindow> mpPopUpWin;
     VclPtr<vcl::Window>    mpOldBorderWin;
     std::unique_ptr<ImplData> mpImplData;
     Point           maFloatPos;
@@ -314,6 +315,8 @@ public:
     void            SetFloatingMode( bool bFloatMode );
     bool            IsFloatingMode() const;
     FloatingWindow* GetFloatingWindow() const { return mpFloatWin; }
+    void            SetPopUpWindow( VclPtr<FloatingWindow> pPopUpWin) { mpPopUpWin = pPopUpWin; }
+    FloatingWindow* GetPopUpWindow() const { return mpPopUpWin; }
 
     void            SetFloatingPos( const Point& rNewPos );
     Point           GetFloatingPos() const;

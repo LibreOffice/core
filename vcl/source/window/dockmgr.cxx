@@ -794,6 +794,10 @@ void ImplDockingWindowWrapper::ImplPreparePopupMode()
     // set mpFloatWin not until all window positioning is done !!!
     // (SetPosPixel etc. check for valid mpFloatWin pointer)
     mpFloatWin = pWin;
+
+    DockingWindow *pDockWin = dynamic_cast< DockingWindow* > ( mpDockingWindow.get() );
+    if(pDockWin)
+        pDockWin->SetPopUpWindow(mpFloatWin);
 }
 
 void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWinPopupFlags nFlags )
@@ -838,6 +842,11 @@ void ImplDockingWindowWrapper::StartPopupMode( const tools::Rectangle& rRect, Fl
 
 IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd, FloatingWindow*, void)
 {
+
+    DockingWindow *pDockWin = dynamic_cast< DockingWindow* > ( mpDockingWindow.get() );
+    if(pDockWin)
+        pDockWin->SetPopUpWindow(nullptr);
+
     GetWindow()->Show( false, ShowFlags::NoFocusChange );
 
     // set parameter for handler before destroying floating window
