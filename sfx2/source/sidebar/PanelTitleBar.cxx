@@ -31,15 +31,17 @@ using namespace css::uno;
 namespace sfx2::sidebar {
 
 PanelTitleBar::PanelTitleBar(const OUString& rsTitle,
-                             vcl::Window* pParentWindow,
+                             weld::Builder& rBuilder,
                              Panel* pPanel)
-    : TitleBar(pParentWindow, "sfx/ui/paneltitlebar.ui", "PanelTitleBar",
-               Theme::Color_PanelTitleBarBackground),
-      mxExpander(m_xBuilder->weld_expander("expander")),
+    : TitleBarBase(rBuilder, Theme::Color_PanelTitleBarBackground),
+      mxTitlebar(rBuilder.weld_container("titlebar")),
+      mxExpander(rBuilder.weld_expander("expander")),
       mpPanel(pPanel),
       msIdent("button"),
       msMoreOptionsCommand()
 {
+    mxTitlebar->set_background(Theme::GetColor(meThemeItem));
+
     mxExpander->set_label(rsTitle);
     mxExpander->connect_expanded(LINK(this, PanelTitleBar, ExpandHdl));
 
@@ -50,6 +52,11 @@ PanelTitleBar::PanelTitleBar(const OUString& rsTitle,
 #ifdef DEBUG
     SetText(OUString("PanelTitleBar"));
 #endif
+}
+
+bool PanelTitleBar::GetVisible() const
+{
+    return mxTitlebar->get_visible();
 }
 
 void PanelTitleBar::SetTitle(const OUString& rsTitle)
@@ -69,18 +76,14 @@ void PanelTitleBar::UpdateExpandedState()
 
 PanelTitleBar::~PanelTitleBar()
 {
-    disposeOnce();
-}
-
-void PanelTitleBar::dispose()
-{
     Reference<lang::XComponent> xComponent(mxController, UNO_QUERY);
     if (xComponent.is())
         xComponent->dispose();
     mxController.clear();
     mpPanel.clear();
     mxExpander.reset();
-    TitleBar::dispose();
+    mxTitlebar.reset();
+    reset();
 }
 
 void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
@@ -106,7 +109,7 @@ void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
         xComponent->dispose();
     mxController =
         ControllerFactory::CreateToolBoxController(
-            *mxToolBox, *m_xBuilder, msMoreOptionsCommand, rxFrame, rxController, true);
+            *mxToolBox, mrBuilder, msMoreOptionsCommand, rxFrame, rxController, true);
 
     mxToolBox->show();
 }
@@ -124,12 +127,6 @@ IMPL_LINK(PanelTitleBar, ExpandHdl, weld::Expander&, rExpander, void)
     if (!mpPanel)
         return;
     mpPanel->SetExpanded(rExpander.get_expanded());
-}
-
-void PanelTitleBar::DataChanged (const DataChangedEvent& rEvent)
-{
-    mxToolBox->set_item_icon_name(msIdent, "sfx2/res/symphony/morebutton.png");
-    TitleBar::DataChanged(rEvent);
 }
 
 } // end of namespace sfx2::sidebar
