@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "cf43d1b1_fc133213",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2683,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-03-02T08:08:51Z",
+      "side": 1,
+      "message": "if (LOK::isActive)\n    current code\nelse\n    svtools::ToolbarPopup::PixelInvalidate(pRectangle);",
+      "revId": "17fd8abe3118283732c05b58cea4ea5f7eee508e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5850f235_0c2e2a7b",
         "filename": "svx/source/tbxctrls/tbcontrl.cxx",
         "patchSetId": 7
