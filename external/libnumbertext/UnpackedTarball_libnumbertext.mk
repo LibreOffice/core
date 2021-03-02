@@ -15,6 +15,9 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libnumbertext))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libnumbertext,1))
 
+#TODO: external/libnumbertext/Afl++ICE.patch1 works around
+# <https://github.com/AFLplusplus/AFLplusplus/commit/333509bb0a56be9bd2e236f0e2f37d4af2dd7d59>
+# "better unicode support" for now:
 $(eval $(call gb_UnpackedTarball_add_patches,libnumbertext, \
     external/libnumbertext/MSVCNonBMPBug.patch1 \
     external/libnumbertext/WinUnicodePath.patch1 \
