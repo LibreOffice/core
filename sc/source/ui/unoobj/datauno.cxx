@@ -1135,8 +1135,9 @@ void fillQueryParam(
                     aItem.maString = rPool.intern(aStr);
                 }
 
-                // filter all dates starting with the given date filter YYYY or YYYY-MM
-                if( aItem.meType == ScQueryEntry::ByDate && aItem.maString.getLength() < 10 )
+                // filter all dates starting with the given date filter YYYY or YYYY-MM and filter all datetimes
+                // starting with the given datetime filter YYYY-MM-DD, YYYY-MM-DD HH, or YYYY-MM-DD HH:MM
+                if( aItem.meType == ScQueryEntry::ByDate && aItem.maString.getLength() < 19 )
                 {
                     ScFilterEntries aFilterEntries;
                     pDoc->GetFilterEntries(rEntry.nField, rParam.nRow1, rParam.nTab, aFilterEntries);
