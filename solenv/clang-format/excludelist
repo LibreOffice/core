@@ -15117,6 +15117,7 @@ vcl/source/window/errinf.cxx
 vcl/source/window/event.cxx
 vcl/source/window/floatwin.cxx
 vcl/source/window/globalization.cxx
+vcl/source/window/impldockingwrapper.hxx
 vcl/source/window/keycod.cxx
 vcl/source/window/keyevent.cxx
 vcl/source/window/layout.cxx

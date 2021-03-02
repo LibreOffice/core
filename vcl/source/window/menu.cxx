@@ -105,9 +105,9 @@ void ImplClosePopupToolBox( const VclPtr<vcl::Window>& pWin )
 {
     if ( pWin->GetType() == WindowType::TOOLBOX && ImplGetDockingManager()->IsInPopupMode( pWin ) )
     {
-        ImplDockingWindowWrapper* pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( pWin );
-        if ( pWrapper && pWrapper->GetFloatingWindow() )
-            static_cast<FloatingWindow*>(pWrapper->GetFloatingWindow())->EndPopupMode( FloatWinPopupEndFlags::CloseAll );
+        SystemWindow* pFloatingWindow = ImplGetDockingManager()->GetFloatingWindow(pWin);
+        if (pFloatingWindow)
+            static_cast<FloatingWindow*>(pFloatingWindow)->EndPopupMode( FloatWinPopupEndFlags::CloseAll );
     }
 }
 

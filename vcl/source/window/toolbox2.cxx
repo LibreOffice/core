@@ -44,6 +44,8 @@
 
 #include <vcl/uitest/uiobject.hxx>
 
+#include "impldockingwrapper.hxx"
+
 using namespace vcl;
 
 #define TB_SEP_SIZE     8  // Separator size

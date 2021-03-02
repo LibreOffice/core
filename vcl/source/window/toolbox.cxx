@@ -52,6 +52,7 @@
 #include <vector>
 #include <math.h>
 
+#include "impldockingwrapper.hxx"
 
 #define SMALLBUTTON_HSIZE           7
 #define SMALLBUTTON_VSIZE           7
