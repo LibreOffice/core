@@ -47,6 +47,7 @@
 #include <poolfmt.hxx>
 #include <uitool.hxx>
 #include <shellres.hxx>
+#include <strings.hrc>
 
 #include <cmdid.h>
 #include <SwStyleNameMapper.hxx>
@@ -75,6 +76,10 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
 {
     nHtmlMode = ::GetHtmlMode(pWrtShell->GetView().GetDocShell());
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+
+    weld::Button& pStandardButton(GetStandardButton());
+    pStandardButton.set_label(SwResId(STR_STANDARD_ACTION));
+
     // stitch TabPages together
     switch( nRegion )
     {

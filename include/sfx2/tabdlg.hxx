@@ -138,6 +138,7 @@ public:
 
     virtual weld::Button& GetOKButton() const override { return *m_xOKBtn; }
     weld::Button&       GetCancelButton() const { return *m_xCancelBtn; }
+    weld::Button&       GetStandardButton() const { return *m_xBaseFmtBtn; }
     weld::Button*       GetUserButton() const { return m_xUserBtn.get(); }
     void                RemoveResetButton();
     void                RemoveStandardButton();
