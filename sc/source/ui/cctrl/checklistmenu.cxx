@@ -999,7 +999,9 @@ void ScCheckListMenuControl::addDateMember(const OUString& rsName, double nVal, 
 void ScCheckListMenuControl::addMember(const OUString& rName, bool bVisible)
 {
     ScCheckListMember aMember;
-    aMember.maName = rName;
+    // tdf#46062 - indicate hidden whitespaces using quotes
+    aMember.maName = rName.trim() != rName ? "\"" + rName + "\"" : rName;
+    aMember.maRealName = rName;
     aMember.mbDate = false;
     aMember.mbLeaf = true;
     aMember.mbVisible = bVisible;
@@ -1356,10 +1358,7 @@ void ScCheckListMenuControl::getResult(ResultType& rResult)
 
             ResultEntry aResultEntry;
             aResultEntry.bValid = bState;
-            if ( maMembers[i].mbDate )
-                aResultEntry.aName = maMembers[i].maRealName;
-            else
-                aResultEntry.aName = maMembers[i].maName;
+            aResultEntry.aName = maMembers[i].maRealName;
             aResultEntry.bDate = maMembers[i].mbDate;
             aResult.insert(aResultEntry);
         }
