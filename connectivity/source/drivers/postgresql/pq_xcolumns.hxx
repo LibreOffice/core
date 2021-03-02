@@ -41,6 +41,8 @@
 
 #include <string_view>
 
+#include <rtl/ref.hxx>
+
 #include "pq_xcontainer.hxx"
 #include "pq_xbase.hxx"
 
@@ -72,7 +74,7 @@ public: // instances Columns 'exception safe'
         ConnectionSettings *pSettings,
         const OUString &schemaName,
         const OUString &tableName,
-        Columns **pColumns);
+        rtl::Reference<Columns> *pColumns);
 
 private:
     Columns(

@@ -37,10 +37,16 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XTABLES_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XTABLES_HXX
 
+#include <sal/config.h>
+
+#include <rtl/ref.hxx>
+
 #include "pq_xcontainer.hxx"
 
 namespace pq_sdbc_driver
 {
+
+struct ConnectionSettings;
 
 class Tables : public Container
 {
@@ -50,7 +56,7 @@ public: // instances Tables 'exception safe'
         const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
-        Tables ** ppTables);
+        rtl::Reference<Tables> * ppTables);
 
 protected:
     Tables(

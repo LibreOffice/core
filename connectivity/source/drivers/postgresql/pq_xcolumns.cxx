@@ -34,6 +34,7 @@
  *
  ************************************************************************/
 
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -294,11 +295,11 @@ void Columns::refresh()
         int columnIndex = 0;
         while( rs->next() )
         {
-            Column * pColumn =
+            rtl::Reference<Column> pColumn =
                 new Column( m_xMutex, m_origin, m_pSettings );
             Reference< css::beans::XPropertySet > prop = pColumn;
 
-            OUString name = columnMetaData2SDBCX( pColumn, xRow );
+            OUString name = columnMetaData2SDBCX( pColumn.get(), xRow );
 //             pColumn->addPropertyChangeListener(
 //                 st.HELP_TEXT,
 //                 new CommentChanger(
@@ -526,14 +527,13 @@ Reference< css::container::XNameAccess > Columns::create(
     ConnectionSettings *pSettings,
     const OUString &schemaName,
     const OUString &tableName,
-    Columns **ppColumns)
+    rtl::Reference<Columns> *ppColumns)
 {
     *ppColumns = new Columns(
         refMutex, origin, pSettings, schemaName, tableName );
-    Reference< css::container::XNameAccess > ret = *ppColumns;
     (*ppColumns)->refresh();
 
-    return ret;
+    return *ppColumns;
 }
 
 

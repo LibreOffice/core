@@ -36,6 +36,7 @@
 
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <rtl/ref.hxx>
 
 #include "pq_xkey.hxx"
 #include "pq_xkeycolumns.hxx"
@@ -71,7 +72,7 @@ Key::Key( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
 
 Reference< XPropertySet > Key::createDataDescriptor(  )
 {
-    KeyDescriptor * pKeyDescriptor = new KeyDescriptor(
+    rtl::Reference<KeyDescriptor> pKeyDescriptor = new KeyDescriptor(
         m_xMutex, m_conn, m_pSettings );
     pKeyDescriptor->copyValuesFrom( this );
 
@@ -134,7 +135,7 @@ KeyDescriptor::KeyDescriptor( const ::rtl::Reference< comphelper::RefCountedMute
 
 Reference< XPropertySet > KeyDescriptor::createDataDescriptor(  )
 {
-    KeyDescriptor * pKeyDescriptor = new KeyDescriptor(
+    rtl::Reference<KeyDescriptor> pKeyDescriptor = new KeyDescriptor(
         m_xMutex, m_conn, m_pSettings );
     pKeyDescriptor->copyValuesFrom( this );
 

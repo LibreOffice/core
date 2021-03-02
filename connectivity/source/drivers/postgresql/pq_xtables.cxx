@@ -34,6 +34,7 @@
  *
  ************************************************************************/
 
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -103,7 +104,7 @@ void Tables::refresh()
         {
             // if creating all these tables turns out to have too bad performance, we might
             // instead offer a factory interface
-            Table * pTable =
+            rtl::Reference<Table> pTable =
                 new Table( m_xMutex, m_origin, m_pSettings );
             Reference< css::beans::XPropertySet > prop = pTable;
 
@@ -355,13 +356,12 @@ Reference< css::container::XNameAccess > Tables::create(
     const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const css::uno::Reference< css::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings,
-    Tables **ppTables)
+    rtl::Reference<Tables> *ppTables)
 {
     *ppTables = new Tables( refMutex, origin, pSettings );
-    Reference< css::container::XNameAccess > ret = *ppTables;
     (*ppTables)->refresh();
 
-    return ret;
+    return *ppTables;
 }
 
 };

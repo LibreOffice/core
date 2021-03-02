@@ -34,6 +34,7 @@
  *
  ************************************************************************/
 
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -91,7 +92,7 @@ void Users::refresh()
         sal_Int32 tableIndex = 0;
         while( rs->next() )
         {
-            User * pUser =
+            rtl::Reference<User> pUser =
                 new User( m_xMutex, m_origin, m_pSettings );
             Reference< css::beans::XPropertySet > prop = pUser;
 
@@ -185,11 +186,10 @@ Reference< css::container::XNameAccess > Users::create(
     const css::uno::Reference< css::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings )
 {
-    Users *pUsers = new Users( refMutex, origin, pSettings );
-    Reference< css::container::XNameAccess > ret = pUsers;
+    rtl::Reference<Users> pUsers = new Users( refMutex, origin, pSettings );
     pUsers->refresh();
 
-    return ret;
+    return pUsers;
 }
 
 void Users::disposing()

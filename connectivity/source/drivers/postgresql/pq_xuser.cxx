@@ -35,6 +35,7 @@
  ************************************************************************/
 
 #include <sal/log.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <cppuhelper/typeprovider.hxx>
@@ -73,7 +74,7 @@ User::User( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
 
 Reference< XPropertySet > User::createDataDescriptor(  )
 {
-    UserDescriptor * pUser = new UserDescriptor( m_xMutex, m_conn, m_pSettings );
+    rtl::Reference<UserDescriptor> pUser = new UserDescriptor( m_xMutex, m_conn, m_pSettings );
     pUser->copyValuesFrom( this );
 
     return Reference< XPropertySet > ( pUser );
@@ -159,7 +160,7 @@ UserDescriptor::UserDescriptor(
 
 Reference< XPropertySet > UserDescriptor::createDataDescriptor(  )
 {
-    UserDescriptor * pUser = new UserDescriptor( m_xMutex, m_conn, m_pSettings );
+    rtl::Reference<UserDescriptor> pUser = new UserDescriptor( m_xMutex, m_conn, m_pSettings );
     pUser->copyValuesFrom( this );
 
     return Reference< XPropertySet > ( pUser );

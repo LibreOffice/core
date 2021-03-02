@@ -66,7 +66,7 @@ class Table : public ReflectionBase,
     css::uno::Reference< css::container::XNameAccess > m_columns;
     css::uno::Reference< css::container::XIndexAccess > m_keys;
     css::uno::Reference< css::container::XNameAccess > m_indexes;
-    Columns *m_pColumns;
+    rtl::Reference<Columns> m_pColumns;
 
 public:
     Table( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,

@@ -43,6 +43,7 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <cppuhelper/exc_hlp.hxx>
+#include <rtl/ref.hxx>
 
 #include "pq_xcolumns.hxx"
 #include "pq_xindexcolumns.hxx"
@@ -124,11 +125,11 @@ void IndexColumns::refresh()
             if( index >= m_columns.getLength() )
                 continue;
 
-            IndexColumn * pIndexColumn =
+            rtl::Reference<IndexColumn> pIndexColumn =
                 new IndexColumn( m_xMutex, m_origin, m_pSettings );
             Reference< css::beans::XPropertySet > prop = pIndexColumn;
 
-            columnMetaData2SDBCX( pIndexColumn, xRow );
+            columnMetaData2SDBCX( pIndexColumn.get(), xRow );
             pIndexColumn->setPropertyValue_NoBroadcast_public(
                 st.IS_ASCENDING , makeAny( false ) );
 
@@ -234,12 +235,11 @@ Reference< css::container::XNameAccess > IndexColumns::create(
     const OUString &indexName,
     const Sequence< OUString > &columns )
 {
-    IndexColumns *pIndexColumns = new IndexColumns(
+    rtl::Reference<IndexColumns> pIndexColumns = new IndexColumns(
         refMutex, origin, pSettings, schemaName, tableName, indexName, columns );
-    Reference< css::container::XNameAccess > ret = pIndexColumns;
     pIndexColumns->refresh();
 
-    return ret;
+    return pIndexColumns;
 }
 
 
