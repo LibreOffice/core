@@ -45,6 +45,52 @@
       "revId": "36affceb76f473afc95ae77fd3417bbbb5334179",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47f48b12_d4f022b3",
+        "filename": "include/vcl/toolkit/treelistbox.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-02T10:19:36Z",
+      "side": 1,
+      "message": "sal_Int16, see nFirstTab below",
+      "range": {
+        "startLine": 640,
+        "startChar": 60,
+        "endLine": 640,
+        "endChar": 63
+      },
+      "revId": "36affceb76f473afc95ae77fd3417bbbb5334179",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ba56190_821add74",
+        "filename": "include/vcl/toolkit/treelistbox.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-02T10:19:36Z",
+      "side": 1,
+      "message": "Is it possible, that GetFirstTab() is enough, yet? I.e. it returns with the TabPos, so adding GetItemPos is unnecessary.",
+      "range": {
+        "startLine": 640,
+        "startChar": 24,
+        "endLine": 640,
+        "endChar": 34
+      },
+      "revId": "36affceb76f473afc95ae77fd3417bbbb5334179",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
