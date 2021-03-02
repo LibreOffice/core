@@ -298,6 +298,7 @@ void DockingWindow::ImplInitDockingWindowData()
     mbIsDeferredInit = false;
     mbIsCalculatingInitialLayoutSize = false;
     mpDialogParent = nullptr;
+    mnPopUpWinId = 0;
 
     //To-Do, reuse maResizeTimer
     maLayoutIdle.SetPriority(TaskPriority::RESIZE);
