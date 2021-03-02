@@ -754,7 +754,7 @@ void SidebarController::CreatePanels(const OUString& rDeckId, const Context& rCo
 
                     // Depending on the context we have to change the command
                     // for the "more options" dialog.
-                    VclPtr<PanelTitleBar> pTitleBar = aNewPanels[nWriteIndex]->GetTitleBar();
+                    PanelTitleBar* pTitleBar = aNewPanels[nWriteIndex]->GetTitleBar();
                     if (pTitleBar)
                     {
                         pTitleBar->SetMoreOptionsCommand(
@@ -934,8 +934,9 @@ VclPtr<Panel> SidebarController::CreatePanel (
         mxFrame);
 
     // Create the XUIElement.
+    Reference<awt::XWindowPeer> xPeer(pPanel->GetElementParentWindow(), UNO_QUERY);
     Reference<ui::XUIElement> xUIElement (CreateUIElement(
-            pPanel->GetComponentInterface(),
+            xPeer,
             xPanelDescriptor->msImplementationURL,
             xPanelDescriptor->mbWantsCanvas,
             rContext));

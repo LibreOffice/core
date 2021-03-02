@@ -54,7 +54,7 @@ OUString SAL_CALL SfxUnoPanel::getTitle()
 {
     SolarMutexGuard aGuard;
 
-    VclPtr<PanelTitleBar> pTitleBar = mpPanel->GetTitleBar();
+    PanelTitleBar* pTitleBar = mpPanel->GetTitleBar();
     if (pTitleBar)
         return pTitleBar->GetTitle();
     else
@@ -71,7 +71,7 @@ void SAL_CALL SfxUnoPanel::setTitle( const OUString& newTitle )
     if (xPanelDescriptor)
     {
         xPanelDescriptor->msTitle = newTitle;
-        VclPtr<PanelTitleBar> pTitleBar = mpPanel->GetTitleBar();
+        PanelTitleBar* pTitleBar = mpPanel->GetTitleBar();
         if (pTitleBar)
             pTitleBar->SetTitle(newTitle);
     }
