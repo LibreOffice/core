@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "952ce416_dd51bf9e",
+        "filename": "sw/uiconfig/swriter/ui/templatedialog1.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-02T09:32:37Z",
+      "side": 1,
+      "message": "Same comment as on 26d56470e6af28b9f537690e1f97ec827b1a4737",
+      "range": {
+        "startLine": 53,
+        "startChar": 97,
+        "endLine": 53,
+        "endChar": 145
+      },
+      "revId": "76f9c83c62bef31d5ad5e08ac8a2eb82bc003e4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9deff61e_c0414e2a",
+        "filename": "sw/uiconfig/swriter/ui/templatedialog1.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-02T09:32:37Z",
+      "side": 1,
+      "message": "Which leads to the question what happens for modified in-built styles. Guess it takes what is defined in the Default (which is odd).",
+      "range": {
+        "startLine": 68,
+        "startChar": 100,
+        "endLine": 68,
+        "endChar": 169
+      },
+      "revId": "76f9c83c62bef31d5ad5e08ac8a2eb82bc003e4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f83ff9fa_f0de1d20",
+        "filename": "sw/uiconfig/swriter/ui/templatedialog4.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-02T09:32:37Z",
+      "side": 1,
+      "message": "Why only here?",
+      "range": {
+        "startLine": 34,
+        "startChar": 33,
+        "endLine": 34,
+        "endChar": 42
+      },
+      "revId": "76f9c83c62bef31d5ad5e08ac8a2eb82bc003e4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e04536e2_f6f469bd",
+        "filename": "sw/uiconfig/swriter/ui/templatedialog4.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-02T09:32:37Z",
+      "side": 1,
+      "message": "Different tip? And it leaves open what happens if the style is derived from None.",
+      "range": {
+        "startLine": 68,
+        "startChar": 100,
+        "endLine": 68,
+        "endChar": 193
+      },
+      "revId": "76f9c83c62bef31d5ad5e08ac8a2eb82bc003e4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
