@@ -21,19 +21,45 @@
 
 namespace sfx2::sidebar {
 
+TitleBarBase::TitleBarBase(weld::Builder& rBuilder, Theme::ThemeItem eThemeItem)
+    : mrBuilder(rBuilder)
+    , mxAddonImage(rBuilder.weld_image("addonimage"))
+    , mxToolBox(rBuilder.weld_toolbar("toolbar"))
+    , meThemeItem(eThemeItem)
+{
+    mxToolBox->set_background(Theme::GetColor(meThemeItem));
+
+    mxToolBox->connect_clicked(LINK(this, TitleBarBase, SelectionHandler));
+}
+
+TitleBarBase::~TitleBarBase()
+{
+}
+
+void TitleBarBase::reset()
+{
+    mxToolBox.reset();
+    mxAddonImage.reset();
+}
+
+void TitleBarBase::SetIcon(const css::uno::Reference<css::graphic::XGraphic>& rIcon)
+{
+    mxAddonImage->set_image(rIcon);
+    mxAddonImage->set_visible(rIcon.is());
+}
+
+IMPL_LINK_NOARG(TitleBarBase, SelectionHandler, const OString&, void)
+{
+    HandleToolBoxItemClick();
+}
+
 TitleBar::TitleBar(vcl::Window* pParentWindow,
                    const OUString& rUIXMLDescription, const OString& rID,
                    Theme::ThemeItem eThemeItem)
     : InterimItemWindow(pParentWindow, rUIXMLDescription, rID)
-    , mxAddonImage(m_xBuilder->weld_image("addonimage"))
-    , mxToolBox(m_xBuilder->weld_toolbar("toolbar"))
-    , meThemeItem(eThemeItem)
+    , TitleBarBase(*m_xBuilder, eThemeItem)
 {
-    Color aBgColor = Theme::GetColor(meThemeItem);
-    m_xContainer->set_background(aBgColor);
-    mxToolBox->set_background(aBgColor);
-
-    mxToolBox->connect_clicked(LINK(this, TitleBar, SelectionHandler));
+    m_xContainer->set_background(Theme::GetColor(meThemeItem));
 }
 
 TitleBar::~TitleBar()
@@ -43,25 +69,13 @@ TitleBar::~TitleBar()
 
 void TitleBar::dispose()
 {
-    mxToolBox.reset();
-    mxAddonImage.reset();
+    reset();
     InterimItemWindow::dispose();
-}
-
-void TitleBar::SetIcon(const css::uno::Reference<css::graphic::XGraphic>& rIcon)
-{
-    mxAddonImage->set_image(rIcon);
-    mxAddonImage->set_visible(rIcon.is());
 }
 
 void TitleBar::DataChanged (const DataChangedEvent& /*rEvent*/)
 {
     m_xContainer->set_background(Theme::GetColor(meThemeItem));
-}
-
-IMPL_LINK_NOARG(TitleBar, SelectionHandler, const OString&, void)
-{
-    HandleToolBoxItemClick();
 }
 
 } // end of namespace sfx2::sidebar
