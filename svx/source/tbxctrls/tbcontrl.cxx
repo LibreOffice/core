@@ -645,6 +645,8 @@ public:
                           LanguageType& eSelectLanguage );
     virtual ~SvxCurrencyList_Impl() override { disposeOnce(); }
     virtual void dispose() override;
+
+    void PixelInvalidate(const tools::Rectangle* pRectangle) override;
 };
 
 class SvxStyleToolBoxControl;
@@ -2685,13 +2687,30 @@ SvxCurrencyList_Impl::SvxCurrencyList_Impl(
     if ( nSelectedPos >= 0 )
         m_pCurrencyLb->SelectEntryPos( nSelectedPos );
     m_pCurrencyLb->Show();
+
+    auto parentNotifier = GetParentWithLOKNotifier();
+    if (parentNotifier)
+        SetLOKNotifier(parentNotifier->GetLOKNotifier());
 }
 
 void SvxCurrencyList_Impl::dispose()
 {
+    ReleaseLOKNotifier();
     m_xControl.clear();
     m_pCurrencyLb.disposeAndClear();
     ToolbarPopup::dispose();
+}
+
+void SvxCurrencyList_Impl::PixelInvalidate(const tools::Rectangle* pRectangle)
+{
+    const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier();
+    if (pNotifier && pRectangle && GetPopUpWindowLOKId() != 0)
+    {
+        std::vector<vcl::LOKPayloadItem> aPayload;
+        aPayload.push_back(std::make_pair(OString("rectangle"), pRectangle->toString()));
+        pNotifier->notifyWindow(GetPopUpWindowLOKId(), "invalidate", aPayload);
+    }
+    svtools::ToolbarPopup::PixelInvalidate(pRectangle);
 }
 
 SvxLineWindow_Impl::SvxLineWindow_Impl( svt::ToolboxController& rController, vcl::Window* pParentWindow ) :
