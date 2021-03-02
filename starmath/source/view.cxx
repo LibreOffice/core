@@ -1276,6 +1276,15 @@ SmEditWindow *SmViewShell::GetEditWindow()
     return nullptr;
 }
 
+SmElementsDockingWindow* SmViewShell::GetDockingWindow()
+{
+    auto eldockwinwrap = GetViewFrame()->GetChildWindow(SmElementsDockingWindowWrapper::GetChildWindowId());
+    if(eldockwinwrap)
+        return dynamic_cast<SmElementsDockingWindow*>(eldockwinwrap->GetWindow());
+    else
+        return nullptr;
+}
+
 void SmViewShell::SetStatusText(const OUString& rText)
 {
     maStatusText = rText;
