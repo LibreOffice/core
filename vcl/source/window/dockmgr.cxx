@@ -366,6 +366,14 @@ void DockingManager::EndPopupMode( const vcl::Window *pWin )
         static_cast<FloatingWindow*>(pWrapper->GetFloatingWindow())->EndPopupMode();
 }
 
+SystemWindow* DockingManager::GetFloatingWindow(const vcl::Window *pWin)
+{
+    ImplDockingWindowWrapper *pWrapper = GetDockingWindowWrapper( pWin );
+    if (pWrapper)
+        return pWrapper->GetFloatingWindow();
+    return nullptr;
+}
+
 void DockingManager::SetPopupModeEndHdl( const vcl::Window *pWindow, const Link<FloatingWindow*,void>& rLink )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );

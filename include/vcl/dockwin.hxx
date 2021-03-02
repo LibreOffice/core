@@ -69,7 +69,7 @@ struct EndPopupModeData
  *  All DockingWindows should be converted the new class.
  */
 
-class VCL_DLLPUBLIC ImplDockingWindowWrapper final
+class ImplDockingWindowWrapper final
 {
     friend class ::vcl::Window;
     friend class DockingManager;
@@ -186,6 +186,7 @@ public:
 
     bool IsFloating( const vcl::Window *pWin );
     void SetFloatingMode( const vcl::Window *pWin, bool bFloating );
+    SystemWindow* GetFloatingWindow(const vcl::Window *pWin);
 
     void Lock( const vcl::Window *pWin );
     void Unlock( const vcl::Window *pWin );
