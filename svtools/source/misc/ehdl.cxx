@@ -23,6 +23,7 @@
 #include <vcl/weld.hxx>
 #include <sal/log.hxx>
 
+#include <comphelper/lok.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/sfxecode.hxx>
@@ -90,8 +91,13 @@ static DialogMask aWndFunc(
         }
     }
 
-    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin,
-                                              eMessageType, eButtonsType, aErr));
+    std::shared_ptr<weld::MessageDialog> xBox(
+        Application::CreateMessageDialog(
+            pWin,
+            eMessageType,
+            eButtonsType,
+            aErr,
+            comphelper::LibreOfficeKit::isActive() ? true : false));
 
     if (bAddRetry)
         xBox->add_button(GetStandardText(StandardButtonType::Retry), RET_RETRY);
@@ -115,6 +121,13 @@ static DialogMask aWndFunc(
     }
 
     DialogMask nRet = DialogMask::NONE;
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        xBox->runAsync(xBox, [](sal_Int32 /*nResult*/) {});
+        return nRet;
+    }
+
     switch (xBox->run())
     {
         case RET_OK:
