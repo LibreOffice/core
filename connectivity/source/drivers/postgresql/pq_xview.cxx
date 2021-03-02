@@ -34,6 +34,7 @@
  *
  ************************************************************************/
 
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <cppuhelper/typeprovider.hxx>
@@ -76,7 +77,7 @@ View::View( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
 
 Reference< XPropertySet > View::createDataDescriptor(  )
 {
-    ViewDescriptor * pView = new ViewDescriptor(
+    rtl::Reference<ViewDescriptor> pView = new ViewDescriptor(
         m_xMutex, m_conn, m_pSettings );
     pView->copyValuesFrom( this );
 
@@ -205,7 +206,7 @@ ViewDescriptor::ViewDescriptor(
 
 Reference< XPropertySet > ViewDescriptor::createDataDescriptor(  )
 {
-    ViewDescriptor * pView = new ViewDescriptor(
+    rtl::Reference<ViewDescriptor> pView = new ViewDescriptor(
         m_xMutex, m_conn, m_pSettings );
     pView->copyValuesFrom( this );
 

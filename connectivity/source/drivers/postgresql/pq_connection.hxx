@@ -61,19 +61,18 @@
 #include <libpq-fe.h>
 #include <unordered_map>
 
+#include "pq_xtables.hxx"
+#include "pq_xviews.hxx"
+
 namespace pq_sdbc_driver
 {
 struct ConnectionSettings;
-class Tables;
-class Views;
 struct ConnectionSettings
 {
     ConnectionSettings() :
         pConnection(nullptr),
         maxNameLen(0),
-        maxIndexKeys(0),
-        pTablesImpl(nullptr),
-        pViewsImpl(nullptr)
+        maxIndexKeys(0)
     {}
     static const rtl_TextEncoding encoding = RTL_TEXTENCODING_UTF8;
     PGconn *pConnection;
@@ -83,8 +82,8 @@ struct ConnectionSettings
     css::uno::Reference< css::container::XNameAccess > tables;
     css::uno::Reference< css::container::XNameAccess > users;
     css::uno::Reference< css::container::XNameAccess > views;
-    Tables *pTablesImpl;  // needed to implement renaming of tables / views
-    Views *pViewsImpl;   // needed to implement renaming of tables / views
+    rtl::Reference<Tables> pTablesImpl;  // needed to implement renaming of tables / views
+    rtl::Reference<Views> pViewsImpl;   // needed to implement renaming of tables / views
     OUString user;
     OUString catalog;
 };

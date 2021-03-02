@@ -34,6 +34,7 @@
  *
  ************************************************************************/
 
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <cppuhelper/typeprovider.hxx>
@@ -78,13 +79,12 @@ Table::Table( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         refMutex,
         connection,
         pSettings,
-        * getStatics().refl.table.pProps ),
-      m_pColumns( nullptr )
+        * getStatics().refl.table.pProps )
 {}
 
 Reference< XPropertySet > Table::createDataDescriptor(  )
 {
-    TableDescriptor * pTable = new TableDescriptor(
+    rtl::Reference<TableDescriptor> pTable = new TableDescriptor(
         m_xMutex, m_conn, m_pSettings );
     pTable->copyValuesFrom( this );
 
@@ -381,7 +381,7 @@ Any TableDescriptor::queryInterface( const Type & reqType )
 
 Reference< XPropertySet > TableDescriptor::createDataDescriptor(  )
 {
-    TableDescriptor * pTable = new TableDescriptor(
+    rtl::Reference<TableDescriptor> pTable = new TableDescriptor(
         m_xMutex, m_conn, m_pSettings );
 
     // TODO: deep copies

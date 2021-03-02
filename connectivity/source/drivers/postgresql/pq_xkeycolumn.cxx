@@ -34,6 +34,10 @@
  *
  ************************************************************************/
 
+#include <sal/config.h>
+
+#include <rtl/ref.hxx>
+
 #include "pq_xkeycolumn.hxx"
 
 using com::sun::star::uno::Reference;
@@ -56,7 +60,7 @@ KeyColumn::KeyColumn( const ::rtl::Reference< comphelper::RefCountedMutex > & re
 
 Reference< XPropertySet > KeyColumn::createDataDescriptor(  )
 {
-    KeyColumnDescriptor * pKeyColumn = new KeyColumnDescriptor(
+    rtl::Reference<KeyColumnDescriptor> pKeyColumn = new KeyColumnDescriptor(
         m_xMutex, m_conn, m_pSettings );
     pKeyColumn->copyValuesFrom( this );
 
@@ -78,7 +82,7 @@ KeyColumnDescriptor::KeyColumnDescriptor(
 
 Reference< XPropertySet > KeyColumnDescriptor::createDataDescriptor(  )
 {
-    KeyColumnDescriptor * pKeyColumn = new KeyColumnDescriptor(
+    rtl::Reference<KeyColumnDescriptor> pKeyColumn = new KeyColumnDescriptor(
         m_xMutex, m_conn, m_pSettings );
     pKeyColumn->copyValuesFrom( this );
 

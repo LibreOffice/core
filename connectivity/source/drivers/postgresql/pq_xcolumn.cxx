@@ -34,6 +34,10 @@
  *
  ************************************************************************/
 
+#include <sal/config.h>
+
+#include <rtl/ref.hxx>
+
 #include "pq_xcolumn.hxx"
 
 using com::sun::star::uno::Reference;
@@ -56,7 +60,7 @@ Column::Column( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex
 
 Reference< XPropertySet > Column::createDataDescriptor(  )
 {
-    ColumnDescriptor * pColumn = new ColumnDescriptor(
+    rtl::Reference<ColumnDescriptor> pColumn = new ColumnDescriptor(
         m_xMutex, m_conn, m_pSettings );
     pColumn->copyValuesFrom( this );
     return Reference< XPropertySet > ( pColumn );
@@ -77,7 +81,7 @@ ColumnDescriptor::ColumnDescriptor(
 
 Reference< XPropertySet > ColumnDescriptor::createDataDescriptor(  )
 {
-    ColumnDescriptor * pColumn = new ColumnDescriptor(
+    rtl::Reference<ColumnDescriptor> pColumn = new ColumnDescriptor(
         m_xMutex, m_conn, m_pSettings );
     pColumn->copyValuesFrom( this );
 

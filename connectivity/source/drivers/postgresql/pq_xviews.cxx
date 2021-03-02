@@ -34,6 +34,7 @@
  *
  ************************************************************************/
 
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -106,7 +107,7 @@ void Views::refresh()
             table = xRow->getString( 2 );
             command = xRow->getString( 3 );
 
-            View *pView = new View (m_xMutex, m_origin, m_pSettings );
+            rtl::Reference<View> pView = new View (m_xMutex, m_origin, m_pSettings );
             Reference< css::beans::XPropertySet > prop = pView;
 
             pView->setPropertyValue_NoBroadcast_public(st.NAME , makeAny(table) );
@@ -204,13 +205,12 @@ Reference< css::container::XNameAccess > Views::create(
     const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const css::uno::Reference< css::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings,
-    Views **ppViews)
+    rtl::Reference<Views> *ppViews)
 {
     *ppViews = new Views( refMutex, origin, pSettings );
-    Reference< css::container::XNameAccess > ret = *ppViews;
     (*ppViews)->refresh();
 
-    return ret;
+    return *ppViews;
 }
 
 };

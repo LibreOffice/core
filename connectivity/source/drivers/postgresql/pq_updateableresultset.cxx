@@ -35,6 +35,7 @@
  ************************************************************************/
 
 #include <sal/log.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <cppuhelper/queryinterface.hxx>
@@ -118,16 +119,14 @@ css::uno::Reference< css::sdbc::XCloseable > UpdateableResultSet::createFromPGRe
         data[row] = aRow;
     }
 
-    UpdateableResultSet *pRS =  new UpdateableResultSet(
+    rtl::Reference<UpdateableResultSet> pRS =  new UpdateableResultSet(
         mutex, owner, columnNames, data, ppSettings, schema, table, primaryKey );
-
-    Reference <XCloseable > ret = pRS; // give it a refcount
 
     pRS->m_meta = new ResultSetMetaData( mutex, pRS,nullptr, ppSettings, result, schema, table );
 
     PQclear( result ); // we don't need it anymore
 
-    return ret;
+    return pRS;
 }
 
 css::uno::Any  UpdateableResultSet::queryInterface(

@@ -34,6 +34,10 @@
  *
  ************************************************************************/
 
+#include <sal/config.h>
+
+#include <rtl/ref.hxx>
+
 #include "pq_xindexcolumn.hxx"
 
 using com::sun::star::uno::Reference;
@@ -56,7 +60,7 @@ IndexColumn::IndexColumn( const ::rtl::Reference< comphelper::RefCountedMutex > 
 
 Reference< XPropertySet > IndexColumn::createDataDescriptor(  )
 {
-    IndexColumnDescriptor * pIndexColumn = new IndexColumnDescriptor(
+    rtl::Reference<IndexColumnDescriptor> pIndexColumn = new IndexColumnDescriptor(
         m_xMutex, m_conn, m_pSettings  );
     pIndexColumn->copyValuesFrom( this );
 
@@ -79,7 +83,7 @@ IndexColumnDescriptor::IndexColumnDescriptor(
 
 Reference< XPropertySet > IndexColumnDescriptor::createDataDescriptor(  )
 {
-    IndexColumnDescriptor * pIndexColumn = new IndexColumnDescriptor(
+    rtl::Reference<IndexColumnDescriptor> pIndexColumn = new IndexColumnDescriptor(
         m_xMutex, m_conn, m_pSettings  );
     pIndexColumn->copyValuesFrom( this );
 
