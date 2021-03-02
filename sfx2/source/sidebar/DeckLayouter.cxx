@@ -433,7 +433,16 @@ void GetRequestedSizes (
                          << " Maximum: " << rItem.maLayoutSize.Maximum);
             }
 
-            sal_Int32 nWidth = xPanel->getMinimalWidth();
+            sal_Int32 nWidth = rMinimalWidth;
+            try
+            {
+                // The demo sidebar extension "Analog Clock" fails with
+                // java.lang.AbstractMethodError here
+                nWidth = xPanel->getMinimalWidth();
+            }
+            catch (...)
+            {
+            }
 
             uno::Reference<frame::XDesktop2> xDesktop
                 = frame::Desktop::create(comphelper::getProcessComponentContext());
