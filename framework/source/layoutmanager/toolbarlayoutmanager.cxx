@@ -1851,12 +1851,11 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfos( ui::DockingArea eD
                             DockingManager* pDockMgr = vcl::Window::GetDockingManager();
                             if (pDockMgr != nullptr)
                             {
-                                ImplDockingWindowWrapper* pWrapper
-                                    = pDockMgr->GetDockingWindowWrapper(pWindow);
-                                if (pWrapper != nullptr && pWrapper->GetFloatingWindow())
+                                SystemWindow* pFloatingWindow = pDockMgr->GetFloatingWindow(pWindow);
+                                if (pFloatingWindow)
                                 {
                                     // update the position data of the floating window
-                                    if (pWrapper->GetFloatingWindow()->UpdatePositionData())
+                                    if (pFloatingWindow->UpdatePositionData())
                                     {
                                         awt::Rectangle aTmpRect = xWindow->getPosSize();
                                         UIElement uiElem = elem;
