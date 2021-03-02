@@ -274,6 +274,7 @@ public:
     {
         return *mpGraphic;
     }
+    SmElementsDockingWindow* GetDockingWindow();
 
     SmElementsDockingWindow* GetDockingWindow();
 
