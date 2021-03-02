@@ -28,6 +28,7 @@
 
 class StylesPreviewWindow_Base;
 
+/// Listener for style selection
 class StyleStatusListener : public SfxStatusListener
 {
     StylesPreviewWindow_Base* m_pPreviewControl;
@@ -38,6 +39,19 @@ public:
         const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider);
 
     void StateChanged(SfxItemState eState, const SfxPoolItem* pState) override;
+};
+
+/// Listener for styles creation or modification
+class StylePoolChangeListener : public SfxListener
+{
+    StylesPreviewWindow_Base* m_pPreviewControl;
+    SfxStyleSheetBasePool* m_pStyleSheetPool;
+
+public:
+    StylePoolChangeListener(StylesPreviewWindow_Base* pPreviewControl);
+    ~StylePoolChangeListener();
+
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 };
 
 class StyleItemController
@@ -70,6 +84,7 @@ protected:
     std::unique_ptr<weld::IconView> m_xStylesView;
 
     rtl::Reference<StyleStatusListener> m_xStatusListener;
+    std::unique_ptr<StylePoolChangeListener> m_pStylePoolChangeListener;
 
     std::vector<std::pair<OUString, OUString>> m_aDefaultStyles;
     std::vector<std::pair<OUString, OUString>> m_aAllStyles;
@@ -87,10 +102,10 @@ public:
     ~StylesPreviewWindow_Base();
 
     void Select(const OUString& rStyleName);
+    void UpdateStylesList();
 
 private:
     void Update();
-    void UpdateStylesList();
     bool Command(const CommandEvent& rEvent);
 };
 

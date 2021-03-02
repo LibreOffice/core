@@ -1317,6 +1317,8 @@ void SwDocShell::UpdateStyle(const OUString &rName, SfxStyleFamily nFamily, SwWr
         break;
         default: break;
     }
+
+    m_xDoc->BroadcastStyleOperation(rName, nFamily, SfxHintId::StyleSheetModified);
 }
 
 // NewByExample
@@ -1510,6 +1512,8 @@ void SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily nFamily,
 
         default: break;
     }
+
+    m_xDoc->BroadcastStyleOperation(rName, nFamily, SfxHintId::StyleSheetCreated);
 }
 
 sfx::AccessibilityIssueCollection SwDocShell::runAccessibilityCheck()
