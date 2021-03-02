@@ -785,7 +785,7 @@ ScGlobalNamedRangesObj::~ScGlobalNamedRangesObj()
 
 }
 
-ScNamedRangeObj* ScGlobalNamedRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
+rtl::Reference<ScNamedRangeObj> ScGlobalNamedRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
 {
     if (!pDocShell)
         return nullptr;
@@ -807,7 +807,7 @@ ScNamedRangeObj* ScGlobalNamedRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex
     return nullptr;
 }
 
-ScNamedRangeObj* ScGlobalNamedRangesObj::GetObjectByName_Impl(const OUString& aName)
+rtl::Reference<ScNamedRangeObj> ScGlobalNamedRangesObj::GetObjectByName_Impl(const OUString& aName)
 {
     if ( pDocShell && hasByName(aName) )
         return new ScNamedRangeObj(this, pDocShell, aName);
@@ -836,7 +836,7 @@ ScLocalNamedRangesObj::~ScLocalNamedRangesObj()
 
 }
 
-ScNamedRangeObj* ScLocalNamedRangesObj::GetObjectByName_Impl(const OUString& aName)
+rtl::Reference<ScNamedRangeObj> ScLocalNamedRangesObj::GetObjectByName_Impl(const OUString& aName)
 {
     if ( pDocShell && hasByName( aName ) )
         return new ScNamedRangeObj( this, pDocShell, aName, mxSheet);
@@ -844,7 +844,7 @@ ScNamedRangeObj* ScLocalNamedRangesObj::GetObjectByName_Impl(const OUString& aNa
 
 }
 
-ScNamedRangeObj* ScLocalNamedRangesObj::GetObjectByIndex_Impl( sal_uInt16 nIndex )
+rtl::Reference<ScNamedRangeObj> ScLocalNamedRangesObj::GetObjectByIndex_Impl( sal_uInt16 nIndex )
 {
     if (!pDocShell)
         return nullptr;
@@ -1026,7 +1026,7 @@ void ScLabelRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // sheet::XLabelRanges
 
-ScLabelRangeObj* ScLabelRangesObj::GetObjectByIndex_Impl(size_t nIndex)
+rtl::Reference<ScLabelRangeObj> ScLabelRangesObj::GetObjectByIndex_Impl(size_t nIndex)
 {
     if (pDocShell)
     {

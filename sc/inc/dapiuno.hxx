@@ -87,8 +87,8 @@ private:
     ScDocShell*             pDocShell;
     SCTAB                   nTab;
 
-    ScDataPilotTableObj*    GetObjectByIndex_Impl( sal_Int32 nIndex );
-    ScDataPilotTableObj*    GetObjectByName_Impl(const OUString& aName);
+    rtl::Reference<ScDataPilotTableObj> GetObjectByIndex_Impl( sal_Int32 nIndex );
+    rtl::Reference<ScDataPilotTableObj> GetObjectByName_Impl(const OUString& aName);
 
 public:
                             ScDataPilotTablesObj(ScDocShell* pDocSh, SCTAB nT);
@@ -374,8 +374,8 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
-    ScDataPilotFieldObj*    GetObjectByIndex_Impl( sal_Int32 nIndex ) const;
-    ScDataPilotFieldObj*    GetObjectByName_Impl( const OUString& rName ) const;
+    rtl::Reference<ScDataPilotFieldObj> GetObjectByIndex_Impl( sal_Int32 nIndex ) const;
+    rtl::Reference<ScDataPilotFieldObj> GetObjectByName_Impl( const OUString& rName ) const;
 
 private:
     css::uno::Any maOrient;    /// Field orientation, no value = all fields.

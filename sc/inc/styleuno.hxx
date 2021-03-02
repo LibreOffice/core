@@ -56,9 +56,9 @@ class ScStyleFamiliesObj final : public ::cppu::WeakImplHelper<
 private:
     ScDocShell*             pDocShell;
 
-    ScStyleFamilyObj*       GetObjectByType_Impl(SfxStyleFamily nType) const;
-    ScStyleFamilyObj*       GetObjectByIndex_Impl(sal_uInt32 nIndex) const;
-    ScStyleFamilyObj*       GetObjectByName_Impl(std::u16string_view aName) const;
+    rtl::Reference<ScStyleFamilyObj> GetObjectByType_Impl(SfxStyleFamily nType) const;
+    rtl::Reference<ScStyleFamilyObj> GetObjectByIndex_Impl(sal_uInt32 nIndex) const;
+    rtl::Reference<ScStyleFamilyObj> GetObjectByName_Impl(std::u16string_view aName) const;
 
 public:
                             ScStyleFamiliesObj(ScDocShell* pDocSh);
@@ -110,8 +110,8 @@ private:
     ScDocShell*             pDocShell;
     SfxStyleFamily          eFamily;        // Family
 
-    ScStyleObj*             GetObjectByIndex_Impl(sal_Int32 nIndex);
-    ScStyleObj*             GetObjectByName_Impl(const OUString& Name);
+    rtl::Reference<ScStyleObj> GetObjectByIndex_Impl(sal_Int32 nIndex);
+    rtl::Reference<ScStyleObj> GetObjectByName_Impl(const OUString& Name);
 
 public:
                             ScStyleFamilyObj(ScDocShell* pDocSh, SfxStyleFamily eFam);
