@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8200bfa_60a3a8e1",
+        "filename": "ucb/source/sorter/sortresult.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-03-02T12:50:17Z",
+      "side": 1,
+      "message": "the return type can be sal_Int32 too, it\u0027s ultimately from OUString::compareTo returning sal_int32 and XAnyCompare::compare returning sal_Int16 so sal_Int32 is sufficient for both",
+      "revId": "44d854d1cf1803250f98de73c0fc759a11df06b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e0e63f3_9e12cf16",
+        "filename": "ucb/source/sorter/sortresult.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-03-02T12:50:17Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "44d854d1cf1803250f98de73c0fc759a11df06b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

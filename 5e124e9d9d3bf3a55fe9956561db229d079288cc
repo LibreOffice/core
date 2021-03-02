@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cdbe1658_47d6ff92",
+        "filename": "ucb/source/sorter/sortresult.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-03-02T12:50:17Z",
+      "side": 0,
+      "message": "you need to change the sal_IntPtr here too, that\u0027s why it fails to compile, the declaration does not match the definition",
+      "revId": "5e124e9d9d3bf3a55fe9956561db229d079288cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
