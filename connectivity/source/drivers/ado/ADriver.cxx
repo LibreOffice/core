@@ -180,7 +180,7 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
 
         auto foundConnection = std::any_of(m_xConnections.begin(), m_xConnections.end(),
             [&pSearchConnection](const css::uno::WeakReferenceHelper& rxConnection) {
-                return static_cast<OConnection*>(Reference< XConnection >::query(rxConnection.get().get()).get()) == pSearchConnection; });
+                return static_cast<OConnection*>(Reference< XConnection >::query(rxConnection.get()).get()) == pSearchConnection; });
         if (foundConnection)
             pConnection = pSearchConnection;
     }

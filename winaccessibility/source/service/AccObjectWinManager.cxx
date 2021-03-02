@@ -721,7 +721,7 @@ bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentX
     Reference<XAccessibleEventBroadcaster> broadcaster(xComponent,UNO_QUERY);
     if (broadcaster.is())
     {
-        Reference<XAccessibleEventListener> const xListener(pListener.get());
+        Reference<XAccessibleEventListener> const xListener(pListener);
         broadcaster->addAccessibleEventListener(xListener);
     }
     else
