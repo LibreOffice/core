@@ -2472,6 +2472,14 @@ class FilterEntriesHandler
             sal_uInt32 nIndex = pFormatter->GetFormatIndex( NF_DATE_DIN_YYYYMMDD);
             pFormatter->GetInputLineString( fVal, nIndex, aStr);
         }
+        else if (nType == SvNumFormatType::DATETIME)
+        {
+            // special case for datetime values.
+            // Convert string representation to ISO 8601 (with blank instead of T) datetime
+            // to eliminate locale dependent behaviour later when filtering for datetimes.
+            sal_uInt32 nIndex = pFormatter->GetFormatIndex(NF_DATETIME_ISO_YYYYMMDD_HHMMSS);
+            pFormatter->GetInputLineString(fVal, nIndex, aStr);
+        }
         // maybe extend ScTypedStrData enum is also an option here
         mrFilterEntries.push_back(ScTypedStrData(aStr, fVal, ScTypedStrData::Value,bDate));
     }
