@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c2d575c_c6b1b5e7",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-03-02T07:58:12Z",
+      "side": 1,
+      "message": "I think this will help with the problem, hopefully.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 54
+      },
+      "revId": "a30db39a04cc6b12a78407255f510800b381f315",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
