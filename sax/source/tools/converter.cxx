@@ -728,6 +728,8 @@ void Converter::convertAngle(OUStringBuffer& rBuffer, sal_Int16 const nAngle,
 bool Converter::convertAngle(sal_Int16& rAngle, std::u16string_view rString,
         bool const isWrongOOo10thDegAngle)
 {
+    //TODO: Work around <https://github.com/AFLplusplus/AFLplusplus/pull/775> "Filter out std string
+    // functions taking non-char character types" for now:
     const std::u16string_view deg = u"deg";
     const std::u16string_view grad = u"grad";
     const std::u16string_view rad = u"rad";
