@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad1859a9_de243982",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-02T21:34:41Z",
+      "side": 1,
+      "message": "I suppose that locking an automatic variable mutex is not useful - have you forgotten to make it static?",
+      "range": {
+        "startLine": 369,
+        "startChar": 30,
+        "endLine": 369,
+        "endChar": 42
+      },
+      "revId": "ad2c750235c15777cd2352e4f95fd0efa0a57ccf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
