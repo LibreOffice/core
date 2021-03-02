@@ -1466,7 +1466,7 @@ include/vcl/filter/PDFiumLibrary.hxx:224
     _Bool vcl::pdf::PDFiumDocument::saveWithVersion(class SvMemoryStream &,int)
     int nFileVersion
     16
-include/vcl/floatwin.hxx:159
+include/vcl/toolkit/floatwin.hxx:159
     class Point FloatingWindow::CalcFloatingPosition(class vcl::Window *,const class tools::Rectangle &,enum FloatWinPopupFlags,unsigned short &)
     enum FloatWinPopupFlags nFlags
     16

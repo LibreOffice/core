@@ -12,7 +12,7 @@
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/glomenu.h>
 #include <unx/gtk/gloactiongroup.h>
-#include <vcl/floatwin.hxx>
+#include <vcl/toolkit/floatwin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/pngwrite.hxx>
 

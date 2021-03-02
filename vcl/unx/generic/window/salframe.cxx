@@ -25,7 +25,7 @@
 #include <tools/debug.hxx>
 
 #include <vcl/event.hxx>
-#include <vcl/floatwin.hxx>
+#include <vcl/toolkit/floatwin.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/BitmapReadAccess.hxx>

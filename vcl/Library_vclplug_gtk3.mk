@@ -36,6 +36,7 @@ $(eval $(call gb_Library_set_include,vclplug_gtk3,\
 
 $(eval $(call gb_Library_add_defs,vclplug_gtk3,\
     -DVCLPLUG_GTK_IMPLEMENTATION \
+    -DVCL_INTERNALS \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,vclplug_gtk3,\
