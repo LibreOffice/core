@@ -19,6 +19,7 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <editeng/escapementitem.hxx>
+#include <unotools/fltrcfg.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
 
@@ -26,6 +27,24 @@ class Test : public SwModelTestBase
 {
 public:
     Test() : SwModelTestBase(DATA_DIRECTORY, "Office Open XML Text") {}
+
+virtual std::unique_ptr<Resetter> preTest(const char* filename) override
+    {
+        if (OString(filename) == "tdf135774_numberingShading.docx")
+        {
+            bool bIsExportAsShading = SvtFilterOptions::Get().IsCharBackground2Shading();
+            // This function is run at the end of the test - returning the filter options to normal.
+            std::unique_ptr<Resetter> pResetter(new Resetter(
+                [bIsExportAsShading] () {
+                    if (bIsExportAsShading)
+                        SvtFilterOptions::Get().SetCharBackground2Shading();
+                }));
+            // For these tests, ensure exporting CharBackground as w:highlight.
+            SvtFilterOptions::Get().SetCharBackground2Highlighting();
+            return pResetter;
+        }
+        return nullptr;
+    }
 
 protected:
     /**
@@ -102,6 +121,15 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134619_numberingProps, "tdf134619_num
     // Make sure that the blue bullet's font size is 72 points, not 12 points.
     uno::Reference<beans::XPropertySet> xStyle(getStyles("CharacterStyles")->getByName(aCharStyleName), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(72.f, getProperty<float>(xStyle, "CharHeight"));
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf135773_numberingShading, "tdf135774_numberingShading.docx")
+{
+    // This test uses preTest to export CharBackground as Highlight instead of the 7.0 default of Shading.
+
+    // Before the fix, the imported shading was converted into a red highlight.
+    xmlDocUniquePtr pXmlStyles = parseExport("word/numbering.xml");
+    assertXPath(pXmlStyles, "/w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:rPr/w:shd", "fill", "ED4C05");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf139580, "tdf139580.odt")
