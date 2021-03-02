@@ -250,6 +250,9 @@ public:
                                                     VclButtonsType eButtonType,
                                                     const OUString& rPrimaryMessage);
 
+    static void AddChildWidget(sal_uInt64 nWindowId, const OString& id, weld::Widget* pWidget);
+    static void RemoveWindowWidget(sal_uInt64 nWindowId);
+
 private:
     const std::string& GetTypeOfJSON();
     VclPtr<vcl::Window>& GetContentWindow();
@@ -450,11 +453,17 @@ public:
 class JSMessageDialog : public JSWidget<SalInstanceMessageDialog, ::MessageDialog>
 {
     std::unique_ptr<JSDialogSender> m_pOwnedSender;
+    std::unique_ptr<JSButton> m_pOK;
+    std::unique_ptr<JSButton> m_pCancel;
+
+    DECL_LINK(OKHdl, weld::Button&, void);
+    DECL_LINK(CancelHdl, weld::Button&, void);
 
 public:
     JSMessageDialog(JSDialogSender* pSender, ::MessageDialog* pDialog, SalInstanceBuilder* pBuilder,
                     bool bTakeOwnership);
     JSMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+    virtual ~JSMessageDialog();
 
     virtual void set_primary_text(const OUString& rText) override;
 
