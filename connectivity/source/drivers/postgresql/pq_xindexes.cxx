@@ -35,6 +35,7 @@
  ************************************************************************/
 
 #include <sal/log.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -133,7 +134,7 @@ void Indexes::refresh()
             static const sal_Int32 C_IS_PRIMARY = 6;
             static const sal_Int32 C_COLUMNS = 7;
             OUString currentIndexName = row->getString( C_INDEXNAME );
-            Index *pIndex =
+            rtl::Reference<Index> pIndex =
                 new Index( m_xMutex, m_origin, m_pSettings,
                            m_schemaName, m_tableName );
 
@@ -268,10 +269,10 @@ Reference< css::container::XNameAccess > Indexes::create(
     const OUString & schemaName,
     const OUString & tableName)
 {
-    Indexes *pIndexes = new Indexes( refMutex, origin, pSettings, schemaName, tableName );
-    Reference< css::container::XNameAccess > ret = pIndexes;
+    rtl::Reference<Indexes> pIndexes
+        = new Indexes( refMutex, origin, pSettings, schemaName, tableName );
     pIndexes->refresh();
-    return ret;
+    return pIndexes;
 }
 
 

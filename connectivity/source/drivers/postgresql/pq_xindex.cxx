@@ -36,6 +36,7 @@
 
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <rtl/ref.hxx>
 
 #include "pq_xindex.hxx"
 #include "pq_xindexcolumns.hxx"
@@ -72,7 +73,7 @@ Index::Index( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
 
 Reference< XPropertySet > Index::createDataDescriptor(  )
 {
-    IndexDescriptor * pIndex = new IndexDescriptor(
+    rtl::Reference<IndexDescriptor> pIndex = new IndexDescriptor(
         m_xMutex, m_conn, m_pSettings );
     pIndex->copyValuesFrom( this );
 
@@ -133,7 +134,7 @@ IndexDescriptor::IndexDescriptor(
 
 Reference< XPropertySet > IndexDescriptor::createDataDescriptor(  )
 {
-    IndexDescriptor * pIndex = new IndexDescriptor(
+    rtl::Reference<IndexDescriptor> pIndex = new IndexDescriptor(
         m_xMutex, m_conn, m_pSettings );
     pIndex->copyValuesFrom( this );
     return Reference< XPropertySet > ( pIndex );

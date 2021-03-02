@@ -41,21 +41,25 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 
+#include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 
 #include <com/sun/star/util/XRefreshable.hpp>
 
+#include <comphelper/refcountedmutex.hxx>
 #include <cppuhelper/compbase.hxx>
+#include <rtl/ref.hxx>
 
 #include <unordered_map>
 
-#include "pq_connection.hxx"
 #include "pq_statics.hxx"
 
 namespace pq_sdbc_driver
 {
+
+struct ConnectionSettings;
 
 class EventBroadcastHelper
 {

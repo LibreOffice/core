@@ -39,6 +39,7 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <cppuhelper/exc_hlp.hxx>
+#include <rtl/ref.hxx>
 
 #include "pq_xcolumns.hxx"
 #include "pq_xkeycolumns.hxx"
@@ -117,11 +118,11 @@ void KeyColumns::refresh()
             if( m_columnNames.getLength() == keyindex )
                 continue;
 
-            KeyColumn * pKeyColumn =
+            rtl::Reference<KeyColumn> pKeyColumn =
                 new KeyColumn( m_xMutex, m_origin, m_pSettings );
             Reference< css::beans::XPropertySet > prop = pKeyColumn;
 
-            OUString name = columnMetaData2SDBCX( pKeyColumn, xRow );
+            OUString name = columnMetaData2SDBCX( pKeyColumn.get(), xRow );
             if( keyindex < m_foreignColumnNames.getLength() )
             {
                 pKeyColumn->setPropertyValue_NoBroadcast_public(
@@ -214,12 +215,11 @@ Reference< css::container::XNameAccess > KeyColumns::create(
     const Sequence< OUString > &columnNames ,
     const Sequence< OUString > &foreignColumnNames )
 {
-    KeyColumns *pKeyColumns = new KeyColumns(
+    rtl::Reference<KeyColumns> pKeyColumns = new KeyColumns(
         refMutex, origin, pSettings, schemaName, tableName, columnNames, foreignColumnNames );
-    Reference< css::container::XNameAccess > ret = pKeyColumns;
     pKeyColumns->refresh();
 
-    return ret;
+    return pKeyColumns;
 }
 
 

@@ -48,6 +48,7 @@
 #include "pq_xviews.hxx"
 #include "pq_xusers.hxx"
 
+#include <rtl/ref.hxx>
 #include <rtl/uuid.h>
 #include <sal/log.hxx>
 
@@ -186,13 +187,12 @@ Reference< XStatement > Connection::createStatement()
     MutexGuard guard( m_xMutex->GetMutex() );
     checkClosed();
 
-    Statement *stmt = new Statement( m_xMutex, this , &m_settings );
-    Reference< XStatement > ret( stmt );
+    rtl::Reference<Statement> stmt = new Statement( m_xMutex, this , &m_settings );
     ::rtl::ByteSequence id( 16 );
     rtl_createUuid( reinterpret_cast<sal_uInt8*>(id.getArray()), nullptr, false );
     m_myStatements[ id ] = Reference< XCloseable > ( stmt );
     stmt->queryAdapter()->addReference( new ClosableReference( id, this ) );
-    return ret;
+    return stmt;
 }
 
 Reference< XPreparedStatement > Connection::prepareStatement( const OUString& sql )
@@ -201,14 +201,14 @@ Reference< XPreparedStatement > Connection::prepareStatement( const OUString& sq
     checkClosed();
 
     OString byteSql = OUStringToOString( sql, ConnectionSettings::encoding );
-    PreparedStatement *stmt = new PreparedStatement( m_xMutex, this, &m_settings, byteSql );
-    Reference< XPreparedStatement > ret = stmt;
+    rtl::Reference<PreparedStatement> stmt
+        = new PreparedStatement( m_xMutex, this, &m_settings, byteSql );
 
     ::rtl::ByteSequence id( 16 );
     rtl_createUuid( reinterpret_cast<sal_uInt8*>(id.getArray()), nullptr, false );
     m_myStatements[ id ] = Reference< XCloseable > ( stmt );
     stmt->queryAdapter()->addReference( new ClosableReference( id, this ) );
-    return ret;
+    return stmt;
 }
 
 Reference< XPreparedStatement > Connection::prepareCall( const OUString& )

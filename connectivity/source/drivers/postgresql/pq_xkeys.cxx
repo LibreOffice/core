@@ -39,6 +39,7 @@
 #include <string_view>
 
 #include <sal/log.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -150,7 +151,7 @@ void Keys::refresh()
         int keyIndex = 0;
         while( rs->next() )
         {
-            Key * pKey =
+            rtl::Reference<Key> pKey =
                 new Key( m_xMutex, m_origin, m_pSettings , m_schemaName, m_tableName );
             Reference< css::beans::XPropertySet > prop = pKey;
 
@@ -262,11 +263,10 @@ Reference< css::container::XIndexAccess > Keys::create(
     const OUString & schemaName,
     const OUString & tableName)
 {
-    Keys *pKeys = new Keys( refMutex, origin, pSettings, schemaName, tableName );
-    Reference< css::container::XIndexAccess > ret = pKeys;
+    rtl::Reference<Keys> pKeys = new Keys( refMutex, origin, pSettings, schemaName, tableName );
     pKeys->refresh();
 
-    return ret;
+    return pKeys;
 }
 
 KeyDescriptors::KeyDescriptors(
