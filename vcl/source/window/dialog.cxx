@@ -43,7 +43,7 @@
 #include <vcl/abstdlg.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/floatwin.hxx>
+#include <vcl/toolkit/floatwin.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>

@@ -38,7 +38,7 @@
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/dialoghelper.hxx>
 #include <vcl/lok.hxx>
-#include <vcl/floatwin.hxx>
+#include <vcl/toolkit/floatwin.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/event.hxx>

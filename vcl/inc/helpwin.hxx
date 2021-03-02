@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_HELPWIN_HXX
 #define INCLUDED_VCL_INC_HELPWIN_HXX
 
-#include <vcl/floatwin.hxx>
+#include <vcl/toolkit/floatwin.hxx>
 #include <vcl/timer.hxx>
 
 enum class QuickHelpFlags;

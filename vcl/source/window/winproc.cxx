@@ -35,7 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/floatwin.hxx>
+#include <vcl/toolkit/floatwin.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/edit.hxx>
 #include <vcl/help.hxx>

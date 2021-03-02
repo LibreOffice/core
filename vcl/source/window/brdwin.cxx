@@ -27,7 +27,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/dockwin.hxx>
-#include <vcl/floatwin.hxx>
+#include <vcl/toolkit/floatwin.hxx>
 #include <vcl/help.hxx>
 #include <vcl/toolkit/edit.hxx>
 #include <vcl/settings.hxx>
