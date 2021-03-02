@@ -817,6 +817,10 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     mpFloatWin->StartPopupMode( pParentToolBox, nFlags );
     GetWindow()->Show();
 
+    DockingWindow* pDockWin = dynamic_cast<DockingWindow*>(mpDockingWindow.get());
+    if (pDockWin)
+        pDockWin->SetPopUpWindowLOKId(mpFloatWin->GetLOKWindowId());
+
     if( pParentToolBox->IsKeyEvent() )
     {
         // send HOME key to subtoolbar in order to select first item
@@ -838,6 +842,10 @@ void ImplDockingWindowWrapper::StartPopupMode( const tools::Rectangle& rRect, Fl
 
 IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd, FloatingWindow*, void)
 {
+    DockingWindow* pDockWin = dynamic_cast<DockingWindow*>(mpDockingWindow.get());
+    if (pDockWin)
+        pDockWin->SetPopUpWindowLOKId(0);
+
     GetWindow()->Show( false, ShowFlags::NoFocusChange );
 
     // set parameter for handler before destroying floating window

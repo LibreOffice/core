@@ -216,6 +216,16 @@ class VCL_DLLPUBLIC DockingWindow
     class   ImplData;
 private:
     VclPtr<FloatingWindow> mpFloatWin;
+
+    // in the case when docking window is displayed in popup mode
+    // there are 2 window instance docking window and floating window
+    // and to make things work correctly both needs to be invalidated together
+    // but unfortunatly from any docking window we don't have access to floating window notifier
+    // so we can use this mnPopUpWinId to store the floating win id when we can to use later
+    // this was primarily introduced to fix the currency popup window in calc LOK
+    // if there is any better approach
+    // FIXME
+    vcl::LOKWindowId mnLOKPopUpWinId;
     VclPtr<vcl::Window>    mpOldBorderWin;
     std::unique_ptr<ImplData> mpImplData;
     Point           maFloatPos;
@@ -314,6 +324,12 @@ public:
     void            SetFloatingMode( bool bFloatMode );
     bool            IsFloatingMode() const;
     FloatingWindow* GetFloatingWindow() const { return mpFloatWin; }
+
+    // These two methods are used when docking window is displayed in popup mode
+    // By setting this popup window id we can access floating window notifier in docking window
+    // one of the example can be found in SvxCurrencyList_Impl::PixelInvalidate
+    void SetPopUpWindowLOKId(vcl::LOKWindowId pLOKPopUpWinId) { mnLOKPopUpWinId = pLOKPopUpWinId; }
+    vcl::LOKWindowId GetPopUpWindowLOKId() const { return mnLOKPopUpWinId; }
 
     void            SetFloatingPos( const Point& rNewPos );
     Point           GetFloatingPos() const;
