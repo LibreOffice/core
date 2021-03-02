@@ -83,6 +83,7 @@
 #include <cfgitem.hxx>
 #include <utility>
 #include <oox/mathml/export.hxx>
+#include <ElementsDockingWindow.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -103,6 +104,15 @@ void SmDocShell::SetSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion)
 {
     mnSmSyntaxVersion = nSmSyntaxVersion;
     maParser.reset(starmathdatabase::GetVersionSmParser(mnSmSyntaxVersion));
+    SmViewShell* pViewSh = SmGetActiveView();
+    if (pViewSh)
+    {
+        SmElementsDockingWindow* dockingWindow = pViewSh->GetDockingWindow();
+        if(dockingWindow)
+        {
+            dockingWindow->setSmSyntaxVersion(nSmSyntaxVersion);
+        }
+    }
 }
 
 SFX_IMPL_OBJECTFACTORY(SmDocShell, SvGlobalName(SO3_SM_CLASSID), "smath" )
@@ -633,12 +643,12 @@ SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
 
     SmModule *pp = SM_MOD();
     maFormat = pp->GetConfig()->GetStandardFormat();
-    maParser.reset(starmathdatabase::GetVersionSmParser(mnSmSyntaxVersion));
 
     StartListening(maFormat);
     StartListening(*pp->GetConfig());
 
     SetBaseModel(new SmModel(this));
+    SetSmSyntaxVersion(mnSmSyntaxVersion);
 }
 
 SmDocShell::~SmDocShell()
