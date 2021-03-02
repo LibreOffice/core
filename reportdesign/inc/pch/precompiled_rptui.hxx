@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-02-19 15:34:45 using:
+ Generated on 2021-03-02 11:16:26 using:
  ./bin/update_pch reportdesign rptui --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -132,7 +132,6 @@
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/syswin.hxx>
 #include <vcl/task.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
@@ -185,7 +184,6 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
@@ -249,13 +247,11 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/weak.hxx>
 #include <connectivity/dbtools.hxx>
