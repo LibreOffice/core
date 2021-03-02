@@ -817,6 +817,11 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     mpFloatWin->StartPopupMode( pParentToolBox, nFlags );
     GetWindow()->Show();
 
+    // to invalidate docking window (i.e: currency list window) correctly
+    // flaoting window and docking window both needs to be invalidated together
+    // and to do that we manually make LOK id same for both the window
+    mpDockingWindow->SetLOKWindowId(mpFloatWin->GetLOKWindowId());
+
     if( pParentToolBox->IsKeyEvent() )
     {
         // send HOME key to subtoolbar in order to select first item
