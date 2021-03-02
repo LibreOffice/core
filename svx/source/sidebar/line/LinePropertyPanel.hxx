@@ -32,7 +32,6 @@ class XLineEndList;
 class XDashList;
 class ListBox;
 class ToolBox;
-class FloatingWindow;
 
 namespace svx::sidebar
 {
