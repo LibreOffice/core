@@ -31,6 +31,7 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
+#include <rtl/ref.hxx>
 
 #include <vector>
 
@@ -734,8 +735,7 @@ Reference< XConnection > SAL_CALL MacabDatabaseMetaData::getConnection(  )
 
 Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTableTypes(  )
 {
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTableTypes);
-    Reference< XResultSet > xRef = pResult;
+    rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTableTypes);
 
     static ODatabaseMetaDataResultSet::ORows aRows = [&]
     {
@@ -748,13 +748,12 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTableTypes(  )
         return tmp;
     }();
     pResult->setRows(aRows);
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTypeInfo(  )
 {
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTypeInfo);
-    Reference< XResultSet > xRef = pResult;
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTypeInfo);
 
     static ODatabaseMetaDataResultSet::ORows aRows = [&]()
     {
@@ -806,7 +805,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTypeInfo(  )
         return tmp;
     }();
     pResult->setRows(aRows);
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getCatalogs(  )
@@ -832,8 +831,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getColumns(
     const OUString& tableNamePattern,
     const OUString& columnNamePattern)
 {
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eColumns);
-    Reference< XResultSet > xRef = pResult;
+    rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eColumns);
     MacabRecords *aRecords;
     OUString sTableName;
 
@@ -910,7 +908,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getColumns(
         }
     }
     pResult->setRows(aRows);
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTables(
@@ -919,8 +917,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTables(
     const OUString&,
     const Sequence< OUString >& types)
 {
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTables);
-    Reference< XResultSet > xRef = pResult;
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTables);
 
     // check whether we have tables in the requested types
     // for the moment, we answer only the "TABLE" table type
@@ -944,7 +941,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTables(
         p++;
     }
     if (!bTableFound)
-        return xRef;
+        return pResult;
 
     static ODatabaseMetaDataResultSet::ORows aRows = [&]()
     {
@@ -972,7 +969,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTables(
         return tmp;
     }();
     pResult->setRows(aRows);
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getProcedureColumns(
@@ -992,8 +989,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getProcedures(
 Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getVersionColumns(
     const Any&, const OUString&, const OUString& table )
 {
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eVersionColumns);
-    Reference< XResultSet > xRef = pResult;
+    rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eVersionColumns);
 
     ODatabaseMetaDataResultSet::ORows aRows;
 
@@ -1017,7 +1013,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getVersionColumns(
         aRows.push_back(aRow);
     }
     pResult->setRows(aRows);
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getExportedKeys(

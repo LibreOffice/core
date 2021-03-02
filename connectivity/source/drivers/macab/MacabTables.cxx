@@ -52,14 +52,13 @@ sdbcx::ObjectType MacabTables::createObject(const OUString& _rName)
         Reference< XRow > xRow(xResult, UNO_QUERY);
         if (xResult->next()) // there can be only one table with this name
         {
-            MacabTable* pRet = new MacabTable(
+            xRet = new MacabTable(
                     this,
                     static_cast<MacabCatalog&>(m_rParent).getConnection(),
                     aName,
                     xRow->getString(4),
                     xRow->getString(5),
                     "");
-            xRet = pRet;
         }
     }
     ::comphelper::disposeComponent(xResult);
