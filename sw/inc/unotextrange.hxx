@@ -217,7 +217,7 @@ typedef ::cppu::WeakImplHelper
 struct SwXTextRanges : public SwXTextRanges_Base
 {
     virtual SwUnoCursor* GetCursor() =0;
-    static SwXTextRanges* Create(SwPaM* const pCursor);
+    static rtl::Reference<SwXTextRanges> Create(SwPaM* const pCursor);
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 };
 
