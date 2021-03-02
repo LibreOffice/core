@@ -8458,10 +8458,16 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
         // object.
         if (rEmit.m_nExternalPDFDataIndex < 0)
             return;
-        auto & rExternalPDFStream = m_aExternalPDFStreams.get(rEmit.m_nExternalPDFDataIndex);
-        auto & rPDFDocument = rExternalPDFStream.getPDFDocument();
+        auto& rExternalPDFStream = m_aExternalPDFStreams.get(rEmit.m_nExternalPDFDataIndex);
+        auto& pPDFDocument = rExternalPDFStream.getPDFDocument();
+        if (!pPDFDocument)
+        {
+            // Couldn't parse the document and can't continue
+            SAL_WARN("vcl.pdfwriter", "PDFWriterImpl::writeReferenceXObject: failed to parse the document");
+            return;
+        }
 
-        std::vector<filter::PDFObjectElement*> aPages = rPDFDocument.GetPages();
+        std::vector<filter::PDFObjectElement*> aPages = pPDFDocument->GetPages();
         if (aPages.empty())
         {
             SAL_WARN("vcl.pdfwriter", "PDFWriterImpl::writeReferenceXObject: no pages");

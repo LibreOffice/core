@@ -1324,12 +1324,18 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode,
                 }
                 else
                 {
-                    if (!rtl::isAsciiWhiteSpace(static_cast<unsigned char>(ch)))
+                    auto uChar = static_cast<unsigned char>(ch);
+                    // Be more lenient and allow unexpected null char
+                    if (!rtl::isAsciiWhiteSpace(uChar) && uChar != 0)
                     {
-                        SAL_WARN("vcl.filter", "PDFDocument::Tokenize: unexpected character: "
-                                                   << ch << " at byte position " << rStream.Tell());
+                        SAL_WARN("vcl.filter",
+                                 "PDFDocument::Tokenize: unexpected character with code "
+                                     << sal_Int32(ch) << " at byte position " << rStream.Tell());
                         return false;
                     }
+                    SAL_WARN_IF(uChar == 0, "vcl.filter",
+                                "PDFDocument::Tokenize: unexpected null character at "
+                                    << rStream.Tell() << " - ignoring");
                 }
                 break;
             }
