@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "cb58b4f1_8f749a79",
+        "filename": "vcl/source/window/dockmgr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-03-02T12:38:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8616e084_fa5bdcd9",
+      "revId": "e542c6176d324b422b30a7b5a8faa7e94cf97130",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "38d2628f_9bdb226b",
         "filename": "vcl/source/window/dockmgr.cxx",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "e542c6176d324b422b30a7b5a8faa7e94cf97130",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "332edd52_a59d3e7b",
+        "filename": "vcl/source/window/dockmgr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-03-02T12:38:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38d2628f_9bdb226b",
+      "revId": "e542c6176d324b422b30a7b5a8faa7e94cf97130",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
