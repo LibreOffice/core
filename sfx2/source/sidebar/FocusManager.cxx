@@ -146,9 +146,6 @@ FocusManager::FocusLocation FocusManager::GetFocusLocation (const vcl::Window& r
     {
         if (maPanels[nIndex] == &rWindow)
             return FocusLocation(PC_PanelContent, nIndex);
-        VclPtr<TitleBar> pTitleBar = maPanels[nIndex]->GetTitleBar();
-        if (pTitleBar == &rWindow)
-            return FocusLocation(PC_PanelTitle, nIndex);
     }
 
     return FocusLocation(PC_None, -1);
@@ -163,7 +160,7 @@ FocusManager::FocusLocation FocusManager::GetFocusLocation() const
     // Search the panels.
     for (size_t nIndex = 0; nIndex < maPanels.size(); ++nIndex)
     {
-        VclPtr<PanelTitleBar> pTitleBar = maPanels[nIndex]->GetTitleBar();
+        PanelTitleBar* pTitleBar = maPanels[nIndex]->GetTitleBar();
         if (!pTitleBar)
             continue;
         if (pTitleBar->GetExpander().has_focus())
@@ -199,7 +196,7 @@ void FocusManager::FocusDeckTitle()
 
 bool FocusManager::IsDeckTitleVisible() const
 {
-    return mpDeckTitleBar != nullptr && mpDeckTitleBar->IsVisible();
+    return mpDeckTitleBar != nullptr && mpDeckTitleBar->GetVisible();
 }
 
 bool FocusManager::IsPanelTitleVisible (const sal_Int32 nPanelIndex) const
@@ -207,10 +204,10 @@ bool FocusManager::IsPanelTitleVisible (const sal_Int32 nPanelIndex) const
     if (nPanelIndex<0 || nPanelIndex>=static_cast<sal_Int32>(maPanels.size()))
         return false;
 
-    VclPtr<TitleBar> pTitleBar = maPanels[nPanelIndex]->GetTitleBar();
+    TitleBarBase* pTitleBar = maPanels[nPanelIndex]->GetTitleBar();
     if (!pTitleBar)
         return false;
-    return pTitleBar->IsVisible();
+    return pTitleBar->GetVisible();
 }
 
 void FocusManager::FocusPanel (
@@ -225,8 +222,8 @@ void FocusManager::FocusPanel (
     }
 
     Panel& rPanel (*maPanels[nPanelIndex]);
-    VclPtr<PanelTitleBar> pTitleBar = rPanel.GetTitleBar();
-    if (pTitleBar && pTitleBar->IsVisible())
+    PanelTitleBar* pTitleBar = rPanel.GetTitleBar();
+    if (pTitleBar && pTitleBar->GetVisible())
     {
         rPanel.SetExpanded(true);
         pTitleBar->GetExpander().grab_focus();
