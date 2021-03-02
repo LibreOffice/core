@@ -221,6 +221,19 @@ private:
     HRESULT m_hResult;
 };
 
+template <typename Func> HRESULT RetryIfFailed(int times, int msTimeout, Func func)
+{
+    HRESULT hr = E_FAIL;
+    for (int i = 0; i < times; ++i)
+    {
+        hr = func();
+        if (SUCCEEDED(hr))
+            break;
+        Sleep(msTimeout);
+    }
+    return hr;
+}
+
 }
 
 // ctor
@@ -465,7 +478,7 @@ bool CMtaOleClipboard::onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncCli
 
 HRESULT CMtaOleClipboard::onSetClipboard( IDataObject* pIDataObject )
 {
-    return OleSetClipboard( pIDataObject );
+    return RetryIfFailed(10, 100, [pIDataObject] { return OleSetClipboard(pIDataObject); });
 }
 
 HRESULT CMtaOleClipboard::onGetClipboard( LPSTREAM* ppStream )
@@ -475,7 +488,7 @@ HRESULT CMtaOleClipboard::onGetClipboard( LPSTREAM* ppStream )
     IDataObjectPtr pIDataObject;
 
     // forward the request to the OleClipboard
-    HRESULT hr = OleGetClipboard( &pIDataObject );
+    HRESULT hr = RetryIfFailed(10, 100, [p = &pIDataObject] { return OleGetClipboard(p); });
     if ( SUCCEEDED( hr ) )
     {
         hr = MarshalIDataObjectInStream(pIDataObject.get(), ppStream);
@@ -488,7 +501,7 @@ HRESULT CMtaOleClipboard::onGetClipboard( LPSTREAM* ppStream )
 
 HRESULT CMtaOleClipboard::onFlushClipboard( )
 {
-    return OleFlushClipboard();
+    return RetryIfFailed(10, 100, [] { return OleFlushClipboard(); });
 }
 
 // handle clipboard update event
