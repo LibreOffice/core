@@ -47,6 +47,7 @@
 #include <comphelper/classids.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.hxx>
+#include <rtl/ref.hxx>
 #include <sal/log.hxx>
 
 #include <closepreventer.hxx>
@@ -926,12 +927,12 @@ OUString OleEmbeddedObject::GetTempURL_Impl()
 }
 
 
-void OleEmbeddedObject::CreateOleComponent_Impl( OleComponent* pOleComponent )
+void OleEmbeddedObject::CreateOleComponent_Impl(
+    rtl::Reference<OleComponent> const & pOleComponent )
 {
     if ( !m_pOleComponent )
     {
         m_pOleComponent = pOleComponent ? pOleComponent : new OleComponent( m_xContext, this );
-        m_pOleComponent->acquire(); // TODO: needs holder?
 
         if ( !m_xClosePreventer.is() )
             m_xClosePreventer.set( static_cast< ::cppu::OWeakObject* >( new OClosePreventer ),
@@ -942,7 +943,8 @@ void OleEmbeddedObject::CreateOleComponent_Impl( OleComponent* pOleComponent )
 }
 
 
-void OleEmbeddedObject::CreateOleComponentAndLoad_Impl( OleComponent* pOleComponent )
+void OleEmbeddedObject::CreateOleComponentAndLoad_Impl(
+    rtl::Reference<OleComponent> const & pOleComponent )
 {
     if ( !m_pOleComponent )
     {
@@ -1886,13 +1888,12 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
     OUString aOldTempURL = m_aTempURL;
     m_aTempURL.clear();
 
-    OleComponent* pNewOleComponent = new OleComponent(m_xContext, this);
+    rtl::Reference<OleComponent> pNewOleComponent = new OleComponent(m_xContext, this);
     try {
         pNewOleComponent->InitEmbeddedCopyOfLink(m_pOleComponent);
     }
     catch (const uno::Exception&)
     {
-        delete pNewOleComponent;
         if (!m_aTempURL.isEmpty())
             KillFile_Impl(m_aTempURL, m_xContext);
         m_aTempURL = aOldTempURL;
@@ -1904,7 +1905,6 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
     }
     catch (const uno::Exception&)
     {
-        delete pNewOleComponent;
         if (!m_aTempURL.isEmpty())
             KillFile_Impl(m_aTempURL, m_xContext);
         m_aTempURL = aOldTempURL;

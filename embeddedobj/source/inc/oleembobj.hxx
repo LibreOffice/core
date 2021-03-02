@@ -120,7 +120,7 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper
 
     ::osl::Mutex    m_aMutex;
 
-    OleComponent*   m_pOleComponent;
+    rtl::Reference<OleComponent> m_pOleComponent;
 
     std::unique_ptr<::cppu::OMultiTypeInterfaceContainerHelper> m_pInterfaceContainer;
 
@@ -274,8 +274,8 @@ protected:
 #ifdef _WIN32
     bool SaveObject_Impl();
     bool OnShowWindow_Impl( bool bShow );
-    void CreateOleComponent_Impl( OleComponent* pOleComponent = nullptr );
-    void CreateOleComponentAndLoad_Impl( OleComponent* pOleComponent = nullptr );
+    void CreateOleComponent_Impl( rtl::Reference<OleComponent> const & pOleComponent = {} );
+    void CreateOleComponentAndLoad_Impl( rtl::Reference<OleComponent> const & pOleComponent = {} );
     void CreateOleComponentFromClipboard_Impl( OleComponent* pOleComponent = nullptr );
     OUString CreateTempURLEmpty_Impl();
     OUString GetTempURL_Impl();

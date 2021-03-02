@@ -32,7 +32,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-
+#include <rtl/ref.hxx>
 
 namespace cppu {
     class OMultiTypeInterfaceContainerHelper;
@@ -103,7 +103,7 @@ public:
                         const css::uno::Reference< css::datatransfer::XTransferable >& xTransfer );
     void CreateObjectFromFile( const OUString& aFileName );
     void CreateLinkFromFile( const OUString& aFileName );
-    void InitEmbeddedCopyOfLink( OleComponent const * pOleLinkComponent );
+    void InitEmbeddedCopyOfLink( rtl::Reference<OleComponent> const & pOleLinkComponent );
 
 
     void RunObject(); // switch OLE object to running state
