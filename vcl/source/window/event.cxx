@@ -29,6 +29,8 @@
 #include <config_features.h>
 #include <comphelper/scopeguard.hxx>
 
+#include "impldockingwrapper.hxx"
+
 namespace vcl {
 
 void Window::DataChanged( const DataChangedEvent& )

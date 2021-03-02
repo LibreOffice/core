@@ -80,6 +80,7 @@
 #include <win/salframe.h>
 #endif
 
+#include "impldockingwrapper.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
