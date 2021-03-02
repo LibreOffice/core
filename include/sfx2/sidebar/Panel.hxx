@@ -20,7 +20,7 @@
 
 #include <sfx2/dllapi.h>
 
-#include <vcl/window.hxx>
+#include <vcl/InterimItemWindow.hxx>
 
 #include <vector>
 
@@ -51,7 +51,7 @@ class Context;
  * Multiple panels form a single deck.
  * E.g. the Properties deck has panels like Styles, Character, paragraph.
  */
-class SFX2_DLLPUBLIC Panel final : public vcl::Window
+class SFX2_DLLPUBLIC Panel final : public InterimItemWindow
 {
 public:
     Panel(const PanelDescriptor& rPanelDescriptor, vcl::Window* pParentWindow,
@@ -62,13 +62,15 @@ public:
     virtual ~Panel() override;
     virtual void dispose() override;
 
-    VclPtr<PanelTitleBar> const& GetTitleBar() const;
+    PanelTitleBar* GetTitleBar() const;
+    void ShowTitlebar(bool bShowTitlebar);
     bool IsTitleBarOptional() const { return mbIsTitleBarOptional; }
     void SetUIElement(const css::uno::Reference<css::ui::XUIElement>& rxElement);
     const css::uno::Reference<css::ui::XSidebarPanel>& GetPanelComponent() const
     {
         return mxPanelComponent;
     }
+    css::uno::Reference<css::awt::XWindow> GetElementParentWindow() const { return mxXWindow; }
     css::uno::Reference<css::awt::XWindow> GetElementWindow();
     void SetExpanded(const bool bIsExpanded);
     bool IsExpanded() const { return mbIsExpanded; }
@@ -80,7 +82,6 @@ public:
     void SetLurkMode(bool bLurk);
     bool IsLurking() const { return mbLurking; }
 
-    virtual void Resize() override;
     virtual void DataChanged(const DataChangedEvent& rEvent) override;
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
     virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
@@ -95,7 +96,9 @@ private:
     const std::function<void()> maDeckLayoutTrigger;
     const std::function<Context()> maContextAccess;
     const css::uno::Reference<css::frame::XFrame>& mxFrame;
-    VclPtr<PanelTitleBar> mpTitleBar;
+    std::unique_ptr<PanelTitleBar> mxTitleBar;
+    std::unique_ptr<weld::Container> mxContents;
+    css::uno::Reference<css::awt::XWindow> mxXWindow;
 };
 typedef std::vector<VclPtr<Panel>> SharedPanelContainer;
 
