@@ -117,7 +117,7 @@ class ScSubTotalDescriptorBase : public cppu::WeakImplHelper<
 private:
     SfxItemPropertySet      aPropSet;
 
-    ScSubTotalFieldObj*     GetObjectByIndex_Impl(sal_uInt16 nIndex);
+    rtl::Reference<ScSubTotalFieldObj> GetObjectByIndex_Impl(sal_uInt16 nIndex);
 
 public:
                             ScSubTotalDescriptorBase();
@@ -489,8 +489,8 @@ class ScDatabaseRangesObj final : public cppu::WeakImplHelper<
 private:
     ScDocShell*             pDocShell;
 
-    ScDatabaseRangeObj*     GetObjectByIndex_Impl(size_t nIndex);
-    ScDatabaseRangeObj*     GetObjectByName_Impl(const OUString& aName);
+    rtl::Reference<ScDatabaseRangeObj> GetObjectByIndex_Impl(size_t nIndex);
+    rtl::Reference<ScDatabaseRangeObj> GetObjectByName_Impl(const OUString& aName);
 
 public:
                             ScDatabaseRangesObj(ScDocShell* pDocSh);

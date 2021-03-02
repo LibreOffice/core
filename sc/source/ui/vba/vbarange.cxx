@@ -1223,7 +1223,7 @@ bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, const 
 }
 
 /// @throws uno::RuntimeException
-static ScVbaRange*
+static rtl::Reference<ScVbaRange>
 getRangeForName( const uno::Reference< uno::XComponentContext >& xContext, const OUString& sName, ScDocShell* pDocSh, const table::CellRangeAddress& pAddr, formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1 )
 {
     ScRangeList aCellRanges;

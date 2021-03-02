@@ -137,7 +137,7 @@ protected:
 
         @throws uno::RuntimeException
     */
-    virtual ScVbaSheetObjectBase* implCreateVbaObject( const uno::Reference< drawing::XShape >& rxShape ) = 0;
+    virtual rtl::Reference<ScVbaSheetObjectBase> implCreateVbaObject( const uno::Reference< drawing::XShape >& rxShape ) = 0;
     /** Derived classes return the service name of the UNO shape. */
     virtual OUString implGetShapeServiceName() const = 0;
 
@@ -499,7 +499,7 @@ public:
         bool bOptionButtons);
 
 protected:
-    virtual ScVbaSheetObjectBase* implCreateVbaObject( const uno::Reference< drawing::XShape >& rxShape ) override;
+    virtual rtl::Reference<ScVbaSheetObjectBase> implCreateVbaObject( const uno::Reference< drawing::XShape >& rxShape ) override;
     virtual bool implCheckProperties( const uno::Reference< beans::XPropertySet >& rxModelProps ) const override;
 };
 
@@ -524,7 +524,7 @@ ScVbaButtonContainer::ScVbaButtonContainer(
 {
 }
 
-ScVbaSheetObjectBase* ScVbaButtonContainer::implCreateVbaObject( const uno::Reference< drawing::XShape >& rxShape )
+rtl::Reference<ScVbaSheetObjectBase> ScVbaButtonContainer::implCreateVbaObject( const uno::Reference< drawing::XShape >& rxShape )
 {
     uno::Reference< drawing::XControlShape > xControlShape( rxShape, uno::UNO_QUERY_THROW );
     return new ScVbaButton( mxParent, mxContext, mxModel, createForm(), xControlShape );

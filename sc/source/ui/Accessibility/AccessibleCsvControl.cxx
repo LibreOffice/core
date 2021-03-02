@@ -1270,7 +1270,7 @@ OUString ScAccessibleCsvGrid::implGetCellText( sal_Int32 nRow, sal_Int32 nColumn
     return aCellStr;
 }
 
-ScAccessibleCsvCell* ScAccessibleCsvGrid::implCreateCellObj( sal_Int32 nRow, sal_Int32 nColumn )
+rtl::Reference<ScAccessibleCsvCell> ScAccessibleCsvGrid::implCreateCellObj( sal_Int32 nRow, sal_Int32 nColumn )
 {
     return new ScAccessibleCsvCell(implGetGrid(), implGetCellText(nRow, nColumn), nRow, nColumn);
 }
