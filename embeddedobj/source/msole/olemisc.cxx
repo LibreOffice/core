@@ -36,9 +36,7 @@
 
 #include "ownview.hxx"
 
-#if defined(_WIN32)
 #include "olecomponent.hxx"
-#endif
 
 using namespace ::com::sun::star;
 
@@ -46,8 +44,7 @@ using namespace ::com::sun::star;
 OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< uno::XComponentContext >& xContext,
                                       const uno::Sequence< sal_Int8 >& aClassID,
                                       const OUString& aClassName )
-: m_pOleComponent( nullptr )
-, m_bReadOnly( false )
+: m_bReadOnly( false )
 , m_bDisposed( false )
 , m_nObjectState( -1 )
 , m_nTargetState( -1 )
@@ -78,8 +75,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< uno::XComponentConte
 // In case of loading from persistent entry the classID of the object
 // will be retrieved from the entry, during construction it is unknown
 OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< uno::XComponentContext >& xContext, bool bLink )
-: m_pOleComponent( nullptr )
-, m_bReadOnly( false )
+: m_bReadOnly( false )
 , m_bDisposed( false )
 , m_nObjectState( -1 )
 , m_nTargetState( -1 )
@@ -107,8 +103,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< uno::XComponentConte
 
 // this constructor let object be initialized from clipboard
 OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< uno::XComponentContext >& xContext )
-: m_pOleComponent( nullptr )
-, m_bReadOnly( false )
+: m_bReadOnly( false )
 , m_bDisposed( false )
 , m_nObjectState( -1 )
 , m_nTargetState( -1 )
@@ -245,8 +240,7 @@ void OleEmbeddedObject::GetRidOfComponent()
         }
 
         m_pOleComponent->disconnectEmbeddedObject();
-        m_pOleComponent->release();
-        m_pOleComponent = nullptr;
+        m_pOleComponent.clear();
     }
 #endif
 }
@@ -376,13 +370,13 @@ uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
     }
 
 #if defined(_WIN32)
-    if (m_pOleComponent != nullptr)
+    if (m_pOleComponent.is())
     {
-        return uno::Reference< util::XCloseable >( static_cast< ::cppu::OWeakObject* >( m_pOleComponent ), uno::UNO_QUERY );
+        return uno::Reference< util::XCloseable >( m_pOleComponent );
     }
 #endif
 
-    assert(m_pOleComponent == nullptr);
+    assert(!m_pOleComponent.is());
     // TODO/LATER: Is it correct???
     return uno::Reference< util::XCloseable >();
     // throw uno::RuntimeException(); // TODO
