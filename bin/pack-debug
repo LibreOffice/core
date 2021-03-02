@@ -133,7 +133,7 @@ do
 
 	# create stripped libraries and linked debug info files
 
-	for j in $(cat $i | awk '/^%attr.*[.](so|bin)([.].*)?"$/{print$2}')
+	for j in $(cat $i | awk '/^%attr.*libpython.*[.]so.*-gdb[.]py.*?"$/{next} /^%attr.*[.](so|bin)([.].*)?"$/{print$2}')
 	do
 		so=$(echo $j | tr -d '"')
 		cd ./$(dirname $so)
@@ -160,6 +160,7 @@ do
 	cat $i | awk '
 		/^Name:/ { print "Summary: Debug information for package "$2; print $0"-debuginfo";next }
 		/^Group:/ { print $1" Development/Debug";next }
+		/^%attr.*libpython.*[.]so.*-gdb[.]py.*?"$/ { next }
 		/^%attr.*[.](so|bin)([.].*)?"$/ { print substr($0, 1, length($0) - 1)".dbg\""; next }
 		/^%attr/ || /^Summary:/ { next }
 		{print}
@@ -267,7 +268,7 @@ do
 
 	# create stripped libraries and linked debug info files
 
-	for j in $(cat $i | awk '/^f .*[.](so|bin)([.].*)?$/{print$6}')
+	for j in $(cat $i | awk '/^f .*libpython.*[.]so.*-gdb[.]py.*$/{next} /^f .*[.](so|bin)([.].*)?$/{print$6}')
 	do
 		cd $(dirname $j)
 		so=$(basename $j)
@@ -290,6 +291,7 @@ do
 	cat $i | awk '
 		/^%product/ { print gensub("%product", "%product Debug info package of", "", $0);next }
 		/^%description/ { print gensub("%description", "%description Debug info package of", "", $0);next }
+		/^f .*libpython.*[.]so.*-gdb[.]py.*$/ { next }
 		/^f .*[.](so|bin)([.].*)?$/ { print $1,$2,$3,$4,$5".dbg",$6".dbg"; next }
 		/^[cf] / { next }
 		{print}
@@ -300,7 +302,7 @@ do
 
 	# restore original non stripped library files
 
-	for j in $(cat $i | awk '/^f .*[.](so|bin)([.].*)?$/{print$6}')
+	for j in $(cat $i | awk '/^f .*libpython.*[.]so.*-gdb[.]py.*$/{next} /^f .*[.](so|bin)([.].*)?$/{print$6}')
 	do
 		cd $(dirname $j)
 		so=$(basename $j)
