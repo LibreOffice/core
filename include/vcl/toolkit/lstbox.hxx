@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_LSTBOX_HXX
-#define INCLUDED_VCL_LSTBOX_HXX
+#pragma once
 
 #if !defined(VCL_DLLIMPLEMENTATION) && !defined(TOOLKIT_DLLIMPLEMENTATION) && !defined(VCL_INTERNALS)
 #error "don't use this in new code"
@@ -263,7 +262,5 @@ public:
     explicit        MultiListBox( vcl::Window* pParent, WinBits nStyle );
 
 };
-
-#endif // INCLUDED_VCL_LSTBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
