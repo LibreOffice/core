@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a4c7c25a_d20dacf1",
+        "filename": "offapi/com/sun/star/document/ReloadEditableRequest.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-02T17:54:27Z",
+      "side": 1,
+      "message": "Yes, it is copy/edited from core\\offapi\\com\\sun\\star\\document\\LockedDocumentRequest.idl, so I\u0027ve updated the statement based on the \"is based in any way on an existing module\" rule.",
+      "parentUuid": "d123d476_e41ea24d",
+      "revId": "b187ccd86977d9bcca808aa2cc6cb57175c54248",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50285122_88397275",
         "filename": "uui/source/reloadeditable.cxx",
         "patchSetId": 5
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "c2f5dce3_6abd3d38",
+        "filename": "uui/source/reloadeditable.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-02T17:54:27Z",
+      "side": 1,
+      "message": "Yes, it is copy/edited from core\\uui\\source\\openlocked.cxx, so I\u0027ve updated the statement based on the \"is based in any way on an existing module\" rule.",
+      "parentUuid": "50285122_88397275",
+      "revId": "b187ccd86977d9bcca808aa2cc6cb57175c54248",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b644463d_80fb9e0b",
         "filename": "uui/source/reloadeditable.hxx",
         "patchSetId": 5
@@ -50,6 +86,24 @@
       "revId": "b187ccd86977d9bcca808aa2cc6cb57175c54248",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b66ef60_d649112a",
+        "filename": "uui/source/reloadeditable.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-02T17:54:27Z",
+      "side": 1,
+      "message": "Yes, it is copy/edited from core\\uui\\source\\openlocked.hxx, so I\u0027ve updated the statement based on the \"is based in any way on an existing module\" rule.",
+      "parentUuid": "b644463d_80fb9e0b",
+      "revId": "b187ccd86977d9bcca808aa2cc6cb57175c54248",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
