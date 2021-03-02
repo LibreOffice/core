@@ -154,7 +154,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableURLDeduplication)
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: AT: Author, Title, , http://www.example.com/test2.pdf
     // - Actual  : AT: Author, Title, , http://www.example.com/test.pdf
-    // i.e. test.pdf was mentionted twice, without deduplication.
+    // i.e. test.pdf was mentioned twice, without deduplication.
     CPPUNIT_ASSERT_EQUAL(OUString("AT: Author, Title, , http://www.example.com/test2.pdf"),
                          getParagraph(4)->getString());
 }
