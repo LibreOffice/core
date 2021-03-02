@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "37f9e969_843aac0f",
+        "filename": "cui/uiconfig/ui/optionsdialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-03-02T13:06:58Z",
+      "side": 1,
+      "message": "Um...in general...my understanding was that your preference was for short tooltips...while longer versions could go into extended tooltips.  In this case, if you look at the next three lines, you will see that your proposal is exactly the extended tooltip.\n\nMeanwhile -- this particular tooltip formulation for \"reset\" was what \"survived\" in the discussion in tdf#128469.",
+      "parentUuid": "4d386997_3db30824",
+      "range": {
+        "startLine": 54,
+        "startChar": 96,
+        "endLine": 54,
+        "endChar": 143
+      },
+      "revId": "864ef447a0605155f8cb713d48af716110b7b945",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6a7728e7_b705132f",
         "filename": "cui/uiconfig/ui/optionsdialog.ui",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "ef2c0cee_42dd6727",
+        "filename": "cui/uiconfig/ui/optionsdialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-03-02T13:06:58Z",
+      "side": 1,
+      "message": "Maybe this should also be brought up for discussion in tdf#128469 ?\nWould be useful to settle with a clear agreement, given that this button appears in several dialogs.  (also not a matter of scaring people, but I am pretty sure there is a BZ complaint that it should be possible to \"undo\" or \"cancel\" Apply before closing the dialog.  Seems better to give fair warning!)",
+      "parentUuid": "6a7728e7_b705132f",
+      "range": {
+        "startLine": 74,
+        "startChar": 95,
+        "endLine": 74,
+        "endChar": 138
+      },
+      "revId": "864ef447a0605155f8cb713d48af716110b7b945",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "16ce33e3_3bc57611",
         "filename": "cui/uiconfig/ui/optionsdialog.ui",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2021-03-02T09:27:37Z",
       "side": 1,
       "message": "How about \"Discard all changes that have not been applied and close dialog.\"",
+      "range": {
+        "startLine": 111,
+        "startChar": 96,
+        "endLine": 111,
+        "endChar": 133
+      },
+      "revId": "864ef447a0605155f8cb713d48af716110b7b945",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5cf5d809_f91e3dcc",
+        "filename": "cui/uiconfig/ui/optionsdialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-03-02T13:06:58Z",
+      "side": 1,
+      "message": "Good point. I was just following the extended tooltip, which should also be changed.  Will use:  Discard all unsaved changes and close dialog",
+      "parentUuid": "16ce33e3_3bc57611",
       "range": {
         "startLine": 111,
         "startChar": 96,
