@@ -44,6 +44,7 @@
 #include <process.h>
 
 #include <systools/win32/comtools.hxx>
+#include <systools/win32/retry_if_failed.hxx>
 
 #include <comphelper/windowserrorstring.hxx>
 
@@ -465,7 +466,8 @@ bool CMtaOleClipboard::onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncCli
 
 HRESULT CMtaOleClipboard::onSetClipboard( IDataObject* pIDataObject )
 {
-    return OleSetClipboard( pIDataObject );
+    return sal::systools::RetryIfFailed(10, 100,
+                                        [pIDataObject] { return OleSetClipboard(pIDataObject); });
 }
 
 HRESULT CMtaOleClipboard::onGetClipboard( LPSTREAM* ppStream )
@@ -475,7 +477,8 @@ HRESULT CMtaOleClipboard::onGetClipboard( LPSTREAM* ppStream )
     IDataObjectPtr pIDataObject;
 
     // forward the request to the OleClipboard
-    HRESULT hr = OleGetClipboard( &pIDataObject );
+    HRESULT hr
+        = sal::systools::RetryIfFailed(10, 100, [p = &pIDataObject] { return OleGetClipboard(p); });
     if ( SUCCEEDED( hr ) )
     {
         hr = MarshalIDataObjectInStream(pIDataObject.get(), ppStream);
@@ -488,7 +491,7 @@ HRESULT CMtaOleClipboard::onGetClipboard( LPSTREAM* ppStream )
 
 HRESULT CMtaOleClipboard::onFlushClipboard( )
 {
-    return OleFlushClipboard();
+    return sal::systools::RetryIfFailed(10, 100, [] { return OleFlushClipboard(); });
 }
 
 // handle clipboard update event
