@@ -49,7 +49,7 @@ class tdf140117(UITestCase):
 
                 # Option "same content on left and right pages" is false again.
                 # This was "right" instead of keeping the header content disabled
-                # temporarily for the second interation of the loop.
+                # temporarily for the second interaction of the loop.
                 elif i == 2:
                         self.assertEqual("XXXXleft", xHeaderLeftText)
 
