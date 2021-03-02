@@ -22,6 +22,30 @@
       "revId": "ad2c750235c15777cd2352e4f95fd0efa0a57ccf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "322bcad7_7480abe5",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-02T23:02:20Z",
+      "side": 1,
+      "message": "The mutex isn\u0027t really used, it\u0027s just needed for the condition_variable wait call.  There should only be one CheckReadOnly thread at a time so there\u0027s nothing really to lock, and we aren\u0027t using this mutex on the main thread.",
+      "parentUuid": "ad1859a9_de243982",
+      "range": {
+        "startLine": 369,
+        "startChar": 30,
+        "endLine": 369,
+        "endChar": 42
+      },
+      "revId": "ad2c750235c15777cd2352e4f95fd0efa0a57ccf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
