@@ -2850,7 +2850,7 @@ include/vcl/filter/pdfdocument.hxx:294
     enum vcl::filter::TokenizeMode END_OF_STREAM
 include/vcl/filter/pdfdocument.hxx:300
     enum vcl::filter::TokenizeMode STORED_OBJECT
-include/vcl/floatwin.hxx:68
+include/vcl/toolkit/floatwin.hxx:68
     enum FloatWinTitleType Unknown
 include/vcl/fntstyle.hxx:31
     enum FontKerning FontSpecific

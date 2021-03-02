@@ -14,7 +14,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/event.hxx>
-#include <vcl/floatwin.hxx>
+#include <vcl/toolkit/floatwin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>

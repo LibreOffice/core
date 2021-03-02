@@ -21,7 +21,7 @@
 #define INCLUDED_SFX2_NOTEBOOKBAR_NOTEBOOKBARPOPUP_HXX
 
 #include <vcl/layout.hxx>
-#include <vcl/floatwin.hxx>
+#include <vcl/toolkit/floatwin.hxx>
 
 /*
  * Popup - shows hidden content, controls are moved to this popup
