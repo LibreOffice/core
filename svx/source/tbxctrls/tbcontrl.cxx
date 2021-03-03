@@ -738,7 +738,7 @@ private:
                         GetColorLine2( GetItemCount( ) ),
                         GetColorDist( GetItemCount( ) ),
                         pData->GetStyle(), aBmp );
-                InsertItem(nId, Image(aBmp));
+                InsertItem(nId, Image(aBmp), SvtLineListBox::GetLineStyleName(pData->GetStyle()));
                 Size aBmpSize = aBmp.GetSizePixel();
                 if (aBmpSize.Width() > aSize.Width())
                     aSize.setWidth(aBmpSize.getWidth());
