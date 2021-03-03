@@ -21,11 +21,14 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
+#include <osl/file.hxx>
 #include <osl/file.h>
 #include <sal/macros.h>
 #include <tools/debug.hxx>
+#include <tools/urlobj.hxx>
 #include <unotools/resmgr.hxx>
 #include <com/sun/star/security/NoPasswordException.hpp>
 
@@ -90,7 +93,13 @@ IMPL_STATIC_LINK_NOARG(MacroWarning, InstallLOKNotifierHdl, void*, vcl::ILibreOf
 void MacroWarning::SetDocumentURL( const OUString& rDocURL )
 {
     OUString aAbbreviatedPath;
-    osl_abbreviateSystemPath(rDocURL.pData, &aAbbreviatedPath.pData, 50, nullptr);
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        osl::FileBase::getFileURLFromSystemPath(rDocURL, aAbbreviatedPath);
+        aAbbreviatedPath = INetURLObject(aAbbreviatedPath).GetLastName();
+    }
+    else
+        osl_abbreviateSystemPath(rDocURL.pData, &aAbbreviatedPath.pData, 50, nullptr);
     m_xDialog->set_primary_text(aAbbreviatedPath);
 }
 
