@@ -217,6 +217,7 @@ public:
     void testBookmarkUndo();
     void testFdo85876();
     void testCaretPositionMovingUp();
+    void testTdf93441();
     void testTdf81226();
     void testTdf79717();
     void testTdf137532();
@@ -451,6 +452,7 @@ public:
     CPPUNIT_TEST(testBookmarkUndo);
     CPPUNIT_TEST(testFdo85876);
     CPPUNIT_TEST(testCaretPositionMovingUp);
+    CPPUNIT_TEST(testTdf93441);
     CPPUNIT_TEST(testTdf81226);
     CPPUNIT_TEST(testTdf79717);
     CPPUNIT_TEST(testTdf137532);
@@ -2041,6 +2043,22 @@ void SwUiWriterTest::testCaretPositionMovingUp()
     pWrtShell->Insert("before");
 
     CPPUNIT_ASSERT_EQUAL(OUString(u"beforeAfter" + OUStringChar(CH_TXTATR_NEWLINE)), getParagraph(1)->getString());
+}
+
+void SwUiWriterTest::testTdf93441()
+{
+    SwDoc* const pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("Hello");
+    pWrtShell->InsertLineBreak();
+    pWrtShell->Insert("Hello World");
+    pWrtShell->Up(false);
+    pWrtShell->Insert(" World");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Hello World\nHello World
+    // - Actual  :  WorldHello\nHello World
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Hello World" + OUStringChar(CH_TXTATR_NEWLINE) + u"Hello World"), getParagraph(1)->getString());
 }
 
 void SwUiWriterTest::testTdf81226()
