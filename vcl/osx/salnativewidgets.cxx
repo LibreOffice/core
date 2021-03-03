@@ -732,16 +732,14 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 case ControlPart::ListboxWindow:
                     HIThemeFrameDrawInfo aTextDrawInfo;
                     aTextDrawInfo.version = 0;
-                    aTextDrawInfo.kind = kHIThemeFrameTextFieldSquare;
-                    aTextDrawInfo.state = getState(nState);
+                    aTextDrawInfo.kind = kHIThemeFrameListBox;
+                    aTextDrawInfo.state = kThemeStateActive;
                     aTextDrawInfo.isFocused = false;
-                    rc.size.width -= 2 * FOCUS_RING_WIDTH;
-                    rc.size.height -= 2 * FOCUS_RING_WIDTH;
-                    rc.origin.x += FOCUS_RING_WIDTH;
-                    rc.origin.y += FOCUS_RING_WIDTH;
+                    rc.size.width += 2 * kThemeMetricListBoxFrameOutset - 2;
+                    rc.size.height += 2 * kThemeMetricListBoxFrameOutset - 2;
+                    rc.origin.x -= kThemeMetricListBoxFrameOutset - 1;
+                    rc.origin.y -= kThemeMetricListBoxFrameOutset - 1;
                     HIThemeDrawFrame(&rc, &aTextDrawInfo, maContextHolder.get(), kHIThemeOrientationNormal);
-                    if (nState & ControlState::FOCUSED)
-                        HIThemeDrawFocusRect(&rc, true, maContextHolder.get(), kHIThemeOrientationNormal);
                     bOK = true;
                     break;
                 default:
@@ -1043,6 +1041,16 @@ bool AquaSalGraphics::getNativeControlRegion(ControlType nType,
                 x += FOCUS_RING_WIDTH + LISTBOX_BORDER_WIDTH + LISTBOX_TEXT_MARGIN;
                 y += FOCUS_RING_WIDTH + LISTBOX_BORDER_WIDTH;
                 rNativeBoundingRegion = tools::Rectangle(Point(x, y), Size(w, h));
+                rNativeContentRegion = tools::Rectangle(Point(x, y), Size(w, h));
+                toReturn = true;
+            }
+            else if (nPart == ControlPart::ListboxWindow)
+            {
+                w = aCtrlBoundRect.GetWidth() - 2 * kThemeMetricListBoxFrameOutset;
+                h = aCtrlBoundRect.GetHeight() - 2 * kThemeMetricListBoxFrameOutset;
+                x += kThemeMetricListBoxFrameOutset;
+                y += kThemeMetricListBoxFrameOutset;
+                rNativeBoundingRegion = aCtrlBoundRect;
                 rNativeContentRegion = tools::Rectangle(Point(x, y), Size(w, h));
                 toReturn = true;
             }

@@ -2792,6 +2792,9 @@ void ImplBtn::MouseButtonDown( const MouseEvent& )
 ImplListBoxFloatingWindow::ImplListBoxFloatingWindow( vcl::Window* pParent ) :
     FloatingWindow( pParent, WB_BORDER | WB_SYSTEMWINDOW | WB_NOSHADOW )    // no drop shadow for list boxes
 {
+    // for native widget rendering we must be able to detect this window type
+    SetType( WindowType::LISTBOXWINDOW );
+
     mpImplLB = nullptr;
     mnDDLineCount = 0;
     mbAutoWidth = false;
