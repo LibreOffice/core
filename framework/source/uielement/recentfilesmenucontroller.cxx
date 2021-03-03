@@ -28,6 +28,9 @@
 #include <unotools/historyoptions.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/image.hxx>
+#include <vcl/settings.hxx>
+#include <svtools/imagemgr.hxx>
 
 using namespace css;
 using namespace com::sun::star::uno;
@@ -131,6 +134,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 
     int nPickListMenuItems = std::min<sal_Int32>( aHistoryList.getLength(), MAX_MENU_ITEMS );
     m_aRecentFilesItems.clear();
+
     if (( nPickListMenuItems > 0 ) && !m_bDisabled )
     {
         for ( int i = 0; i < nPickListMenuItems; i++ )
@@ -181,6 +185,9 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             INetURLObject   aURL( m_aRecentFilesItems[i] );
             OUString aTipHelpText( aURL.getFSysPath( FSysStyle::Detect ) );
 
+            StyleSettings aIconSettings;
+            bool aIsIconsAllowed = aIconSettings.GetUseImagesInMenus();
+
             if ( aURL.GetProtocol() == INetProtocol::File )
             {
                 // Do handle file URL differently: don't show the protocol, just the file name
@@ -195,6 +202,12 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             aMenuShortCut.append( aMenuTitle );
 
             pVCLPopupMenu->InsertItem( sal_uInt16( i+1 ), aMenuShortCut.makeStringAndClear() );
+
+            if ( aIsIconsAllowed ) {
+                Image aThumbnail = SvFileInformationManager::GetImage(aURL);
+                pVCLPopupMenu->SetItemImage(sal_uInt16 ( i+1 ), aThumbnail);
+            }
+
             pVCLPopupMenu->SetTipHelpText( sal_uInt16( i+1 ), aTipHelpText );
             pVCLPopupMenu->SetItemCommand( sal_uInt16( i+1 ), aURLString );
         }
@@ -225,7 +238,10 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
         }
         else
         {
-            // No recent documents => insert "no document" string
+            // Add InsertSeparator(), otherwise it will display
+            // the first item icon of recent files instead of displaying no icon.
+            pVCLPopupMenu->InsertSeparator();
+            // No recent documents => insert "no documents" string
             pVCLPopupMenu->InsertItem( 1, FwkResId(STR_NODOCUMENT) );
             // Do not disable it, otherwise the Toolbar controller and MenuButton
             // will display SV_RESID_STRING_NOSELECTIONPOSSIBLE instead of STR_NODOCUMENT
