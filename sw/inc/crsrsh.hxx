@@ -341,7 +341,7 @@ public:
     // start parenthesing, hide SV-Cursor and selected areas
     void StartAction();
     // end parenthesing, show SV-Cursor and selected areas
-    void EndAction( const bool bIdleEnd = false, const bool DoSetPosX = false );
+    void EndAction( const bool bIdleEnd = false );
 
     // basic cursor travelling
     tools::Long GetUpDownX() const             { return m_nUpDownX; }
