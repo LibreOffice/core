@@ -122,6 +122,40 @@ public:
     }
 };
 
+class ParagraphEntry : public DocumentModelTreeEntry
+{
+public:
+    ParagraphEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
+        : DocumentModelTreeEntry(xObject)
+    {
+    }
+
+    void fill(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
+              weld::TreeIter const& rParent) override
+    {
+        uno::Reference<container::XEnumerationAccess> xEnumAccess(getMainObject(), uno::UNO_QUERY);
+        if (!xEnumAccess.is())
+            return;
+
+        uno::Reference<container::XEnumeration> xTextPortions = xEnumAccess->createEnumeration();
+
+        if (xTextPortions.is())
+        {
+            for (sal_Int32 i = 0; xTextPortions->hasMoreElements(); i++)
+            {
+                uno::Reference<text::XTextRange> const xTextPortion(xTextPortions->nextElement(),
+                                                                    uno::UNO_QUERY);
+                OUString aString = lclGetNamed(xTextPortion);
+                if (aString.isEmpty())
+                    aString = "Text Portion " + OUString::number(i + 1);
+
+                auto pEntry = std::make_unique<DocumentModelTreeEntry>(xTextPortion);
+                lclAppendToParentEntry(pDocumentModelTree, rParent, aString, pEntry.release());
+            }
+        }
+    }
+};
+
 class ParagraphsEntry : public DocumentModelTreeEntry
 {
 public:
@@ -158,8 +192,9 @@ public:
                 if (aString.isEmpty())
                     aString = "Paragraph " + OUString::number(i + 1);
 
-                auto pEntry = std::make_unique<DocumentModelTreeEntry>(xParagraph);
-                lclAppendToParentEntry(pDocumentModelTree, rParent, aString, pEntry.release());
+                auto pEntry = std::make_unique<ParagraphEntry>(xParagraph);
+                lclAppendToParentEntry(pDocumentModelTree, rParent, aString, pEntry.release(),
+                                       true);
             }
         }
     }
