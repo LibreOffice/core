@@ -10,6 +10,8 @@
 
 $(eval $(call gb_Module_Module,connectivity))
 
+$(eval $(call gb_Module_add_defs,connectivity,-D_WIN32_WINNT=0x0601))
+
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Library_dbtools \
 ))

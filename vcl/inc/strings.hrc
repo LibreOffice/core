@@ -135,6 +135,10 @@
 
 #define STR_SEPARATOR                                NC_("STR_SEPARATOR", "Separator")
 
+#define STR_FILEEXT_NONDEFAULT_ASK                   NC_("STR_FILEEXT_NONDEFAULT_ASK", "The following file formats are not registered to be opened by default in LibreOffice:\n$1\nSelect OK if you want to change default file format registrations.")
+#define STR_ANSWER_OK                                NC_("STR_ANSWER_OK", "OK")
+#define STR_ANSWER_CANCEL                            NC_("STR_ANSWER_CANCEL", "Cancel")
+
 #define KEY_VERSION_CHECK                            NC_("KEY_VERSION_CHECK", "Warning: Not all of the imported EPS graphics could be saved at level1\nas some are at a higher level!")
 
 #endif // INCLUDED_VCL_INC_STRINGS_HRC
