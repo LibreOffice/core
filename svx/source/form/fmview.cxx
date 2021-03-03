@@ -41,7 +41,9 @@
 #include <fmundo.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/awt/XControl.hpp>
 #include <tools/debug.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -491,6 +493,25 @@ bool FmFormView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
             pFormShell->GetImpl()->handleShowPropertiesRequest_Lock();
         }
 
+    }
+
+    // tdf#139804 Allow triggering form controls with Alt-<Mnemonic>
+    if (rKeyCode.IsMod2() && rKeyCode.GetCode())
+    {
+        FmFormPage* pCurPage = GetCurPage();
+        for (size_t a = 0; a < pCurPage->GetObjCount(); ++a)
+        {
+            SdrObject* pObj = pCurPage->GetObj(a);
+            FmFormObj* pFormObject = FmFormObj::GetFormObject(pObj);
+            if (!pFormObject)
+                continue;
+
+            Reference<awt::XControl> xControl(pFormObject->GetUnoControl(*this, *pWin), UNO_QUERY);
+            if (!xControl.is())
+                continue;
+            VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xControl->getPeer() );
+            pWindow->KeyInput(rKEvt);
+        }
     }
 
     if ( !bDone )

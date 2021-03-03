@@ -28,8 +28,13 @@
 #include <salframe.hxx>
 #include <config_features.h>
 #include <comphelper/scopeguard.hxx>
+#include <i18nlangtag/languagetag.hxx>
+
+#include <com/sun/star/i18n/XCharacterClassification.hpp>
 
 #include "impldockingwrapper.hxx"
+
+using namespace css;
 
 namespace vcl {
 
@@ -203,6 +208,30 @@ bool Window::EventNotify( NotifyEvent& rNEvt )
                 if ( pFirstChild )
                     pFirstChild->ImplControlFocus();
             }
+        }
+    }
+    else if ((rNEvt.GetType() == MouseNotifyEvent::KEYINPUT))
+    {
+        // tdf#139804 Handle mnemonics on form controls inside document
+        uno::Reference<i18n::XCharacterClassification> const& xCharClass(ImplGetCharClass());
+        const css::lang::Locale& rLocale
+            = Application::GetSettings().GetUILanguageTag().getLocale();
+        sal_Unicode cCharCode = rNEvt.GetKeyEvent()->GetCharCode();
+        cCharCode = xCharClass->toUpper(OUString(cCharCode), 0, 1, rLocale)[0];
+        const OUString aStr = GetText();
+        sal_Int32 nPos = aStr.indexOf('~');
+        sal_Unicode cCompareChar;
+        while (nPos != -1)
+        {
+            cCompareChar = aStr[nPos + 1];
+            cCompareChar = xCharClass->toUpper(OUString(cCompareChar), 0, 1, rLocale)[0];
+            if (cCompareChar == cCharCode)
+            {
+                ImplControlFocus(GetFocusFlags::Mnemonic);
+                bRet = true;
+            }
+
+            nPos = aStr.indexOf('~', nPos + 1);
         }
     }
 
