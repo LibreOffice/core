@@ -427,6 +427,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, tools::Long nWidth, to
             // for native widget drawing we must find out what
             // control this border belongs to
             ControlType aCtrlType = ControlType::Generic;
+            ControlPart aCtrlPart = ControlPart::Entire;
             if (pCtrl)
             {
                 switch( pCtrl->GetType() )
@@ -437,6 +438,11 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, tools::Long nWidth, to
                             aCtrlType = ControlType::Listbox;
                             mbNWFBorder = true;
                         }
+                        break;
+                    case WindowType::LISTBOXWINDOW:
+                        aCtrlType = ControlType::Listbox;
+                        aCtrlPart = ControlPart::ListboxWindow;
+                        mbNWFBorder = true;
                         break;
                     case WindowType::COMBOBOX:
                         if( pCtrl->GetStyle() & WB_DROPDOWN )
@@ -475,7 +481,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, tools::Long nWidth, to
                 if( aMinSize.Height() < 10 ) aMinSize.setHeight( 10 );
                 tools::Rectangle aCtrlRegion( Point(mnLeftBorder, mnTopBorder), aMinSize );
                 tools::Rectangle aBounds, aContent;
-                if( pWin->GetNativeControlRegion( aCtrlType, ControlPart::Entire, aCtrlRegion,
+                if( pWin->GetNativeControlRegion( aCtrlType, aCtrlPart, aCtrlRegion,
                                                   ControlState::ENABLED, aControlValue,
                                                   aBounds, aContent ) )
                 {
