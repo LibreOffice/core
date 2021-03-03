@@ -1716,8 +1716,11 @@ bool SwWrtShell::Pop(SwCursorShell::PopMode const eDelete)
     bool bRet = SwCursorShell::Pop(eDelete);
     if( bRet && IsSelection() )
     {
-        m_fnSetCursor = &SwWrtShell::SetCursorKillSel;
-        m_fnKillSel = &SwWrtShell::ResetSelect;
+        if (!IsAddMode())
+        {
+            m_fnSetCursor = &SwWrtShell::SetCursorKillSel;
+            m_fnKillSel = &SwWrtShell::ResetSelect;
+        }
     }
     return bRet;
 }
