@@ -70,7 +70,7 @@ public:
     {
         return mxPanelComponent;
     }
-    css::uno::Reference<css::awt::XWindow> GetElementParentWindow() const { return mxXWindow; }
+    css::uno::Reference<css::awt::XWindow> GetElementParentWindow();
     css::uno::Reference<css::awt::XWindow> GetElementWindow();
     void SetExpanded(const bool bIsExpanded);
     bool IsExpanded() const { return mbIsExpanded; }
@@ -98,7 +98,7 @@ private:
     const css::uno::Reference<css::frame::XFrame>& mxFrame;
     std::unique_ptr<PanelTitleBar> mxTitleBar;
     std::unique_ptr<weld::Container> mxContents;
-    css::uno::Reference<css::awt::XWindow> mxXWindow;
+    css::uno::Reference<css::awt::XWindow> mxAwtXWindow;
 };
 typedef std::vector<VclPtr<Panel>> SharedPanelContainer;
 
