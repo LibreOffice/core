@@ -39,7 +39,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-namespace com::sun::star::awt { class XWindowPeer; }
+namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::frame { class XDispatch; }
 namespace com::sun::star::ui { class XUIElement; }
 
@@ -231,7 +231,7 @@ private:
     void UpdateConfigurations();
 
     css::uno::Reference<css::ui::XUIElement> CreateUIElement (
-        const css::uno::Reference<css::awt::XWindowPeer>& rxWindow,
+        const css::uno::Reference<css::awt::XWindow>& rxWindow,
         const OUString& rsImplementationURL,
         const bool bWantsCanvas,
         const Context& rContext);
