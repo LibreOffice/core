@@ -285,6 +285,7 @@ public:
     void testTdf130583();
     void testTdf85617();
     void testTdf134234();
+    void testTdf42481();
     void testNamedExpressionsXLSXML();
     void testEmptyRowsXLSXML();
     void testBorderDirectionsXLSXML();
@@ -477,6 +478,7 @@ public:
     CPPUNIT_TEST(testTdf130583);
     CPPUNIT_TEST(testTdf85617);
     CPPUNIT_TEST(testTdf134234);
+    CPPUNIT_TEST(testTdf42481);
     CPPUNIT_TEST(testNamedExpressionsXLSXML);
     CPPUNIT_TEST(testEmptyRowsXLSXML);
     CPPUNIT_TEST(testBorderDirectionsXLSXML);
@@ -4633,6 +4635,21 @@ void ScFiltersTest::testTdf134234()
     //Without the fix in place, SUMPRODUCT would have returned 0
     CPPUNIT_ASSERT_EQUAL(36.54, rDoc.GetValue(ScAddress(2,0,1)));
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(833), static_cast<sal_uInt32>(rDoc.GetValue(ScAddress(3,0,1))));
+}
+
+void ScFiltersTest::testTdf42481()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf42481.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the document", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), rDoc.GetString(ScAddress(3,9,0)));
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: #VALUE!
+    // - Actual  : 14
+    CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), rDoc.GetString(ScAddress(3,10,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("14"), rDoc.GetString(ScAddress(3,11,0)));
 }
 
 void ScFiltersTest::testNamedExpressionsXLSXML()
