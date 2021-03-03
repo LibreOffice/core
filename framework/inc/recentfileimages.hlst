@@ -1,0 +1,20 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#define RECENT_FILE_THUMBNAIL_TEXT             "res/odt_16_8.png"
+#define RECENT_FILE_THUMBNAIL_SHEET            "res/ods_16_8.png"
+#define RECENT_FILE_THUMBNAIL_PRESENTATION     "res/odp_16_8.png"
+#define RECENT_FILE_THUMBNAIL_DRAWING          "res/odg_16_8.png"
+#define RECENT_FILE_THUMBNAIL_DATABASE         "res/odb_16_8.png"
+#define RECENT_FILE_THUMBNAIL_MATH             "res/odf_16_8.png"
+#define RECENT_FILE_THUMBNAIL_DEFAULT          "res/mainapp_16_8.png"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
