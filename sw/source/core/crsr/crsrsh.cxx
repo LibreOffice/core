@@ -236,15 +236,10 @@ void SwCursorShell::StartAction()
     SwViewShell::StartAction(); // to the SwViewShell
 }
 
-void SwCursorShell::EndAction( const bool bIdleEnd, const bool DoSetPosX )
+void SwCursorShell::EndAction( const bool bIdleEnd )
 {
     comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll());
     bool bVis = m_bSVCursorVis;
-
-    sal_uInt16 eFlags = SwCursorShell::CHKRANGE;
-    if ( !DoSetPosX )
-        eFlags |= SwCursorShell::UPDOWN;
-
 
     // Idle-formatting?
     if( bIdleEnd && Imp()->GetRegion() )
@@ -273,6 +268,7 @@ void SwCursorShell::EndAction( const bool bIdleEnd, const bool DoSetPosX )
         return;
     }
 
+    sal_uInt16 eFlags = SwCursorShell::CHKRANGE;
     if ( !bIdleEnd )
         eFlags |= SwCursorShell::SCROLLWIN;
 
@@ -312,7 +308,7 @@ void SwCursorShell::EndCursorMove( const bool bIdleEnd )
 #ifdef DBG_UTIL
     OSL_ENSURE( m_nCursorMove, "EndCursorMove() without SttCursorMove()." );
 #endif
-    EndAction( bIdleEnd, true );
+    EndAction( bIdleEnd );
     --m_nCursorMove;
 #ifdef DBG_UTIL
     if( !m_nCursorMove )
