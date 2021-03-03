@@ -8,7 +8,6 @@
  */
 
 #include <sal/config.h>
-#include <config_features.h>
 
 #include <string_view>
 
@@ -24,6 +23,7 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/filter/pdfdocument.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
 
 #include <documentsignaturemanager.hxx>
 #include <pdfsignaturehelper.hxx>
@@ -87,11 +87,11 @@ std::vector<SignatureInformation> PDFSigningTest::verify(const OUString& rURL, s
     PDFSignatureHelper aHelper;
     CPPUNIT_ASSERT(aHelper.ReadAndVerifySignatureSvStream(aStream));
 
-#if HAVE_FEATURE_PDFIUM
-    CPPUNIT_ASSERT_EQUAL(nCount, aHelper.GetSignatureInformations().size());
-#else
-    (void)nCount;
-#endif
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (pPDFium)
+    {
+        CPPUNIT_ASSERT_EQUAL(nCount, aHelper.GetSignatureInformations().size());
+    }
     for (size_t i = 0; i < aHelper.GetSignatureInformations().size(); ++i)
     {
         const SignatureInformation& rInfo = aHelper.GetSignatureInformations()[i];
@@ -167,10 +167,15 @@ bool PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL,
     return bSignSuccessful;
 }
 
-#if HAVE_FEATURE_PDFIUM
 /// Test adding a new signature to a previously unsigned file.
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFAdd)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
     OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
     OUString aInURL = aSourceDir + "no.pdf";
     OUString aTargetDir
@@ -191,7 +196,6 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFAdd)
         CPPUNIT_ASSERT_EQUAL(xml::crypto::DigestID::SHA256, aInfos[0].nDigestID);
     }
 }
-#endif
 
 /// Test signing a previously unsigned file twice.
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFAdd2)
@@ -213,10 +217,15 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFAdd2)
         sign(aInURL, aOutURL, 1);
 }
 
-#if HAVE_FEATURE_PDFIUM
 /// Test removing a signature from a previously signed file.
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFRemove)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
     // Make sure that good.pdf has 1 valid signature.
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
         = xml::crypto::SEInitializer::create(mxComponentContext);
@@ -255,6 +264,12 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFRemove)
 /// Test removing all signatures from a previously multi-signed file.
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFRemoveAll)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
     // Make sure that good2.pdf has 2 valid signatures.  Unlike in
     // testPDFRemove(), here intentionally test DocumentSignatureManager and
     // PDFSignatureHelper code as well.
@@ -292,8 +307,6 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFRemoveAll)
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), rInformations.size());
 }
 
-#endif
-
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testTdf107782)
 {
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
@@ -316,10 +329,15 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testTdf107782)
         aManager.getSecurityEnvironment());
 }
 
-#if HAVE_FEATURE_PDFIUM
 /// Test a PDF 1.4 document, signed by Adobe.
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDF14Adobe)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
     // Two signatures, first is SHA1, the second is SHA256.
     // This was 0, as we failed to find the Annots key's value when it was a
     // reference-to-array, not an array.
@@ -328,7 +346,6 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDF14Adobe)
     // This was 0, out-of-PKCS#7 signature date wasn't read.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2016), aInfos[1].stDateTime.Year);
 }
-#endif
 
 /// Test a PDF 1.6 document, signed by Adobe.
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDF16Adobe)
@@ -372,10 +389,15 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDF14LOWin)
     verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf14lowin.pdf", 1);
 }
 
-#if HAVE_FEATURE_PDFIUM
 /// Test a PAdES document, signed by LO on Linux.
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFPAdESGood)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
     std::vector<SignatureInformation> aInfos
         = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "good-pades.pdf", 1);
     CPPUNIT_ASSERT(aInfos[0].bHasSigningCertificate);
@@ -384,6 +406,12 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFPAdESGood)
 /// Test a valid signature that does not cover the whole file.
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPartial)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
     std::vector<SignatureInformation> aInfos
         = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "partial.pdf", 1);
     CPPUNIT_ASSERT(!aInfos.empty());
@@ -393,6 +421,12 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPartial)
 
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPartialInBetween)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
     std::vector<SignatureInformation> aInfos
         = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "partial-in-between.pdf", 2);
     CPPUNIT_ASSERT(!aInfos.empty());
@@ -404,6 +438,12 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPartialInBetween)
 
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testBadCertP1)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
     std::vector<SignatureInformation> aInfos
         = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "bad-cert-p1.pdf", 1);
     CPPUNIT_ASSERT(!aInfos.empty());
@@ -418,6 +458,12 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testBadCertP1)
 
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testBadCertP3Stamp)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
     std::vector<SignatureInformation> aInfos
         = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "bad-cert-p3-stamp.pdf", 1);
     CPPUNIT_ASSERT(!aInfos.empty());
@@ -434,6 +480,12 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testBadCertP3Stamp)
 /// Test writing a PAdES signature.
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testSigningCertificateAttribute)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
     // Create a new signature.
     OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
     OUString aInURL = aSourceDir + "no.pdf";
@@ -455,6 +507,12 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testSigningCertificateAttribute)
 /// Test that we accept files which are supposed to be good.
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testGood)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
     const std::initializer_list<std::u16string_view> aNames = {
         // We failed to determine if this is good or bad.
         u"good-non-detached.pdf",
@@ -472,7 +530,6 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testGood)
                              static_cast<int>(rInformation.nStatus));
     }
 }
-#endif
 
 /// Test that we don't crash / loop while tokenizing these files.
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testTokenize)
@@ -505,11 +562,16 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testTokenize)
             CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aDocument.GetPages().size());
     }
 }
-#if HAVE_FEATURE_PDFIUM
 
 /// Test handling of unknown SubFilter values.
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testUnknownSubFilter)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
     // Tokenize the bugdoc.
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
         = xml::crypto::SEInitializer::create(mxComponentContext);
@@ -529,6 +591,12 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testUnknownSubFilter)
 
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testGoodCustomMagic)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
     // Tokenize the bugdoc.
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
         = xml::crypto::SEInitializer::create(mxComponentContext);
@@ -549,7 +617,6 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testGoodCustomMagic)
     std::vector<SignatureInformation>& rInformations = aManager.getCurrentSignatureInformations();
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), rInformations.size());
 }
-#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
