@@ -453,7 +453,7 @@ private:
     rtl::Reference<SvxFrameToolBoxControl> mxControl;
     std::unique_ptr<SvxFrmValueSet_Impl> mxFrameSet;
     std::unique_ptr<weld::CustomWeld> mxFrameSetWin;
-    std::vector<BitmapEx>       aImgVec;
+    std::vector<std::pair<BitmapEx, OUString>> aImgVec;
     bool                        bParagraphMode;
 
     void InitImageList();
@@ -2180,12 +2180,12 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld:
     sal_uInt16 i = 0;
 
     for ( i=1; i<9; i++ )
-        mxFrameSet->InsertItem(i, Image(aImgVec[i-1]));
+        mxFrameSet->InsertItem(i, Image(aImgVec[i-1].first), aImgVec[i-1].second);
 
     //bParagraphMode should have been set in StateChanged
     if ( !bParagraphMode )
         for ( i = 9; i < 13; i++ )
-            mxFrameSet->InsertItem(i, Image(aImgVec[i-1]));
+            mxFrameSet->InsertItem(i, Image(aImgVec[i-1].first), aImgVec[i-1].second);
 
     mxFrameSet->SetColCount( 4 );
     mxFrameSet->SetSelectHdl( LINK( this, SvxFrameWindow_Impl, SelectHdl ) );
@@ -2354,7 +2354,7 @@ void SvxFrameWindow_Impl::statusChanged( const css::frame::FeatureStateEvent& rE
     else if ( !bTableMode && !bParagraphMode )
     {
         for ( sal_uInt16 i = 9; i < 13; i++ )
-            mxFrameSet->InsertItem(i, Image(aImgVec[i-1]));
+            mxFrameSet->InsertItem(i, Image(aImgVec[i-1].first), aImgVec[i-1].second);
         bResize = true;
     }
 
@@ -2376,19 +2376,20 @@ void SvxFrameWindow_Impl::CalcSizeValueSet()
 
 void SvxFrameWindow_Impl::InitImageList()
 {
-    aImgVec.clear();
-    aImgVec.emplace_back(RID_SVXBMP_FRAME1);
-    aImgVec.emplace_back(RID_SVXBMP_FRAME2);
-    aImgVec.emplace_back(RID_SVXBMP_FRAME3);
-    aImgVec.emplace_back(RID_SVXBMP_FRAME4);
-    aImgVec.emplace_back(RID_SVXBMP_FRAME5);
-    aImgVec.emplace_back(RID_SVXBMP_FRAME6);
-    aImgVec.emplace_back(RID_SVXBMP_FRAME7);
-    aImgVec.emplace_back(RID_SVXBMP_FRAME8);
-    aImgVec.emplace_back(RID_SVXBMP_FRAME9);
-    aImgVec.emplace_back(RID_SVXBMP_FRAME10);
-    aImgVec.emplace_back(RID_SVXBMP_FRAME11);
-    aImgVec.emplace_back(RID_SVXBMP_FRAME12);
+    aImgVec = {
+        {BitmapEx(RID_SVXBMP_FRAME1), SvxResId(RID_SVXSTR_TABLE_PRESET_NONE)},
+        {BitmapEx(RID_SVXBMP_FRAME2), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYLEFT)},
+        {BitmapEx(RID_SVXBMP_FRAME3), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYRIGHT)},
+        {BitmapEx(RID_SVXBMP_FRAME4), SvxResId(RID_SVXSTR_PARA_PRESET_LEFTRIGHT)},
+        {BitmapEx(RID_SVXBMP_FRAME5), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYTOP)},
+        {BitmapEx(RID_SVXBMP_FRAME6), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYTBOTTOM)},
+        {BitmapEx(RID_SVXBMP_FRAME7), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOM)},
+        {BitmapEx(RID_SVXBMP_FRAME8), SvxResId(RID_SVXSTR_TABLE_PRESET_ONLYOUTER)},
+        {BitmapEx(RID_SVXBMP_FRAME9), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOMHORI)},
+        {BitmapEx(RID_SVXBMP_FRAME10), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERHORI)},
+        {BitmapEx(RID_SVXBMP_FRAME11), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERVERI)},
+        {BitmapEx(RID_SVXBMP_FRAME12), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERALL)}
+    };
 }
 
 static Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
