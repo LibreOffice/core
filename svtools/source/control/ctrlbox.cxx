@@ -1403,23 +1403,6 @@ void SvtLineListBox::ImpGetLine( tools::Long nLine1, tools::Long nLine2, tools::
     rBmp = aVirDev->GetBitmapEx( Point(), Size( aSize.Width(), n1+nDist+n2 ) );
 }
 
-namespace
-{
-    OUString GetLineStyleName(SvxBorderLineStyle eStyle)
-    {
-        OUString sRet;
-        for (sal_uInt32 i = 0; i < SAL_N_ELEMENTS(RID_SVXSTR_BORDERLINE); ++i)
-        {
-            if (eStyle == RID_SVXSTR_BORDERLINE[i].second)
-            {
-                sRet = SvtResId(RID_SVXSTR_BORDERLINE[i].first);
-                break;
-            }
-        }
-        return sRet;
-    }
-}
-
 SvtLineListBox::SvtLineListBox(std::unique_ptr<weld::MenuButton> pControl)
     : m_xControl(std::move(pControl))
     , m_xBuilder(Application::CreateBuilder(m_xControl.get(), "svt/ui/linewindow.ui"))
@@ -1484,6 +1467,20 @@ IMPL_LINK_NOARG(SvtLineListBox, NoneHdl, weld::Button&, void)
 
 SvtLineListBox::~SvtLineListBox()
 {
+}
+
+OUString SvtLineListBox::GetLineStyleName(SvxBorderLineStyle eStyle)
+{
+    OUString sRet;
+    for (sal_uInt32 i = 0; i < SAL_N_ELEMENTS(RID_SVXSTR_BORDERLINE); ++i)
+    {
+        if (eStyle == RID_SVXSTR_BORDERLINE[i].second)
+        {
+            sRet = SvtResId(RID_SVXSTR_BORDERLINE[i].first);
+            break;
+        }
+    }
+    return sRet;
 }
 
 sal_Int32 SvtLineListBox::GetStylePos( sal_Int32 nListPos )
