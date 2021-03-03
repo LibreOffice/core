@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d7e9d347_80a8259b",
+        "filename": "sw/qa/api/SwXDocumentIndex.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1002965
+      },
+      "writtenOn": "2021-03-03T22:37:53Z",
+      "side": 0,
+      "message": "I actually removed it because I think that this is some sort of constructor that uses the function loadFromDesktop to return a component. so, it probably asserts the value too. I dug a bit deeper to understand, but I am not sure what you mean by \"reference ctor\", so I omitted it, because I am not 100% about how to describe it in the commit message. I removed it from the other files too.",
+      "parentUuid": "c3231fed_ba1abb8b",
+      "revId": "e5c703940972df5bd6d515c8e0979963f6116fc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "abe20a66_cc1d7aa4",
         "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
         "patchSetId": 2
@@ -83,6 +101,24 @@
       "side": 0,
       "message": "In this case, line 2218 is unrelated to any removal of asserts after loadFromDesktop (you didn\u0027t remove lines 2217 or 2219). If it was directly after an assert that you removed in this patch, then I would not object. But here it is just an unrelated change.",
       "parentUuid": "4f0e1269_04254e39",
+      "revId": "e5c703940972df5bd6d515c8e0979963f6116fc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d5c6c9b_1212614a",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2218,
+      "author": {
+        "id": 1002965
+      },
+      "writtenOn": "2021-03-03T22:37:53Z",
+      "side": 0,
+      "message": "awesome, got it!",
+      "parentUuid": "22dd1ac8_e40630b2",
       "revId": "e5c703940972df5bd6d515c8e0979963f6116fc2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
