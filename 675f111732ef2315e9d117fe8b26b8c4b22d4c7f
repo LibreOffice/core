@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f432843_871d4352",
+        "filename": "filter/source/svg/svgfilter.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-03T08:04:24Z",
+      "side": 1,
+      "message": "I would suggest to use const OUStringLiteral(u\"SLIDE_BACKGROUND\"), since it removes OUString constructor overhead completely.",
+      "revId": "675f111732ef2315e9d117fe8b26b8c4b22d4c7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
