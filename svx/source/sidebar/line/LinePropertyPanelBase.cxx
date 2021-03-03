@@ -417,7 +417,7 @@ void LinePropertyPanelBase::SetWidthIcon()
         return;
     }
 
-    tools::Long nVal = LogicToLogic(mnWidthCoreValue * 10, meMapUnit, MapUnit::MapPoint);
+    tools::Long nVal = OutputDevice::LogicToLogic(mnWidthCoreValue * 10, meMapUnit, MapUnit::MapPoint);
 
     if(nVal <= 6)
         mxTBWidth->set_item_icon_name(SELECTWIDTH, maIMGWidthIcon[0]);
