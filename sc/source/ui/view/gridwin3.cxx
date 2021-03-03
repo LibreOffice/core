@@ -142,10 +142,14 @@ bool ScGridWindow::DrawCommand(const CommandEvent& rCEvt)
     return false;
 }
 
-bool ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
+bool ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
 {
     ScDrawView* pDrView = pViewData->GetScDrawView();
     FuPoor* pDraw = pViewData->GetView()->GetDrawFuncPtr();
+
+    if (pDrView && pDrView->KeyInput(rKEvt, pWin))
+        return true;
+
     if (pDrView && pDraw && !pViewData->IsRefMode())
     {
         pDraw->SetWindow( this );
