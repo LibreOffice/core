@@ -41,11 +41,14 @@
 #include <fmundo.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/awt/XControl.hpp>
 #include <tools/debug.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svxids.hrc>
+#include <vcl/i18nhelp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -491,6 +494,31 @@ bool FmFormView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
             pFormShell->GetImpl()->handleShowPropertiesRequest_Lock();
         }
 
+    }
+
+    // tdf#139804 Allow selecting form controls with Alt-<Mnemonic>
+    if (rKeyCode.IsMod2() && rKeyCode.GetCode())
+    {
+        FmFormPage* pCurPage = GetCurPage();
+        for (size_t a = 0; a < pCurPage->GetObjCount(); ++a)
+        {
+            SdrObject* pObj = pCurPage->GetObj(a);
+            FmFormObj* pFormObject = FmFormObj::GetFormObject(pObj);
+            if (!pFormObject)
+                continue;
+
+            Reference<awt::XControl> xControl = pFormObject->GetUnoControl(*this, *pWin);
+            if (!xControl.is())
+                continue;
+            const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
+            VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xControl->getPeer());
+            if (rI18nHelper.MatchMnemonic(pWindow->GetText(), rKEvt.GetCharCode()))
+            {
+                pWindow->GrabFocus();
+                bDone = true;
+                break;
+            }
+        }
     }
 
     if ( !bDone )

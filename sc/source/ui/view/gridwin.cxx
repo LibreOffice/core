@@ -3250,7 +3250,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
         if (mrViewData.GetDocShell()->GetProgress())
             return;
 
-        if (DrawKeyInput(rKEvt))
+        if (DrawKeyInput(rKEvt, this))
         {
             const vcl::KeyCode& rLclKeyCode = rKEvt.GetKeyCode();
             if (rLclKeyCode.GetCode() == KEY_DOWN
