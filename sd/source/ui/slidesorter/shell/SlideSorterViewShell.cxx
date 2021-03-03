@@ -216,6 +216,7 @@ SlideSorterViewShell* SlideSorterViewShell::GetSlideSorter (ViewShellBase& rBase
         FrameworkHelper::msCenterPaneURL,
         FrameworkHelper::msFullScreenPaneURL,
         FrameworkHelper::msLeftImpressPaneURL,
+        FrameworkHelper::msLeftDrawPaneURL,
         OUString()};
 
     try
