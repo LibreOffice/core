@@ -174,6 +174,9 @@
 #define STR_BOOTSTRAP_ERR_NO_PATHSET_SERVICE                NC_("STR_BOOTSTRAP_ERR_NO_PATHSET_SERVICE", "The path manager is not available.\n")
 #define STR_BOOTSTRAP_ERR_NOTENOUGHDISKSPACE                 NC_("STR_BOOTSTRAP_ERR_NOTENOUGHDISKSPACE", "%PRODUCTNAME user installation could not be completed due to insufficient free disk space. Please free more disc space at the following location and restart %PRODUCTNAME:\n\n")
 #define STR_BOOTSTRAP_ERR_NOACCESSRIGHTS                     NC_("STR_BOOTSTRAP_ERR_NOACCESSRIGHTS", "%PRODUCTNAME user installation could not be processed due to missing access rights. Please make sure that you have sufficient access rights for the following location and restart %PRODUCTNAME:\n\n")
+#define STR_FILEEXT_NONDEFAULT_ASK                          NC_("STR_FILEEXT_NONDEFAULT_ASK", "The following file formats are not registered to be opened by default in LibreOffice:\n$1\nSelect OK if you want to change default file format registrations.")
+#define STR_ANSWER_OK                                       NC_("STR_ANSWER_OK", "OK")
+#define STR_ANSWER_CANCEL                                   NC_("STR_ANSWER_CANCEL", "Cancel")
 
 #define RID_STR_UNOPKG_ACCEPT_LIC_1                         NC_("RID_STR_UNOPKG_ACCEPT_LIC_1", "Extension Software License Agreement of $NAME:")
 #define RID_STR_UNOPKG_ACCEPT_LIC_2                         NC_("RID_STR_UNOPKG_ACCEPT_LIC_2", "Read the complete License Agreement displayed above. " \
