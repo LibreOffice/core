@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e251f0d3_0ce562ad",
+        "filename": "include/vcl/dockwin.hxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-03-03T09:23:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "223fbf48_a06a5cfb",
+      "revId": "c76ceae645964ed4d1db8f99dc54067027c1e9f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6942822d_b52711fd",
         "filename": "svx/source/tbxctrls/tbcontrl.cxx",
         "patchSetId": 13
@@ -33,6 +51,24 @@
       "revId": "c76ceae645964ed4d1db8f99dc54067027c1e9f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5149552c_47ba50c1",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 2706,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-03-03T09:23:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6942822d_b52711fd",
+      "revId": "c76ceae645964ed4d1db8f99dc54067027c1e9f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "66b4207f_a6863e81",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 2712,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-03-03T09:23:10Z",
+      "side": 1,
+      "message": "Done. checked not error related to this.",
+      "parentUuid": "c5aa69d0_997212b3",
+      "revId": "c76ceae645964ed4d1db8f99dc54067027c1e9f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "702ea501_c23b9cf4",
         "filename": "vcl/source/window/dockmgr.cxx",
         "patchSetId": 13
@@ -67,6 +121,24 @@
       "revId": "c76ceae645964ed4d1db8f99dc54067027c1e9f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de940362_f1808b3f",
+        "filename": "vcl/source/window/dockmgr.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2021-03-03T09:23:10Z",
+      "side": 1,
+      "message": "https://opengrok.libreoffice.org/xref/core/vcl/source/window/dockmgr.cxx?r\u003d15b86b9d#487\nhttps://opengrok.libreoffice.org/xref/core/vcl/source/window/dockmgr.cxx?r\u003d15b86b9d#742",
+      "parentUuid": "702ea501_c23b9cf4",
+      "revId": "c76ceae645964ed4d1db8f99dc54067027c1e9f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
