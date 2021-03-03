@@ -21,10 +21,6 @@
 namespace com::sun::star::util { class XModifyListener; }
 namespace com::sun::star::view { class XSelectionChangeListener; }
 
-class Edit;
-class ListBox;
-class MetricField;
-
 namespace chart {
 
 class ChartController;
