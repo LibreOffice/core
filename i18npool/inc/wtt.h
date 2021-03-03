@@ -19,6 +19,8 @@
 #ifndef INCLUDED_I18NPOOL_INC_WTT_H
 #define INCLUDED_I18NPOOL_INC_WTT_H
 
+#include <sal/types.h> //for sal_Unicode
+
 namespace i18npool {
 
 /*

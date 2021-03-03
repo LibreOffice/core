@@ -20,6 +20,8 @@
 #ifndef INCLUDED_HWPFILTER_SOURCE_CSPLINE_H
 #define INCLUDED_HWPFILTER_SOURCE_CSPLINE_H
 
+#include <memory>
+
 void NaturalSpline (int N, const double* x, const double* a, std::unique_ptr<double[]>& b, std::unique_ptr<double[]>& c,
     std::unique_ptr<double[]>& d);
 void PeriodicSpline (int N, const double* x, const double* a, std::unique_ptr<double[]>& b, std::unique_ptr<double[]>& c,

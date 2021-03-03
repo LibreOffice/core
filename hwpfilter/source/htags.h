@@ -20,7 +20,9 @@
 #ifndef INCLUDED_HWPFILTER_SOURCE_HTAGS_H
 #define INCLUDED_HWPFILTER_SOURCE_HTAGS_H
 
+#include "hwplib.h"
 #include <memory>
+
 #ifdef _WIN32
 #include <objidl.h>
 #endif

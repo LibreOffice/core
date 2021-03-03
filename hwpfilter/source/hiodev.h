@@ -25,14 +25,13 @@
 #ifndef INCLUDED_HWPFILTER_SOURCE_HIODEV_H
 #define INCLUDED_HWPFILTER_SOURCE_HIODEV_H
 
-#include <sal/config.h>
-
-#include <stdio.h>
-
-#include <memory>
-#include <sal/types.h>
-
 #include "hwplib.h"
+#include <memory>
+#include <cstdio>
+
+
+class HStream;
+
 /**
  * @short Abstract IO class
  */

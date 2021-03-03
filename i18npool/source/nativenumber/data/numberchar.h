@@ -20,6 +20,8 @@
 #ifndef INCLUDED_I18NPOOL_SOURCE_NATIVENUMBER_DATA_NUMBERCHAR_H
 #define INCLUDED_I18NPOOL_SOURCE_NATIVENUMBER_DATA_NUMBERCHAR_H
 
+#include <sal/types.h>
+
 namespace i18npool {
 
 const sal_Int16 NumberChar_HalfWidth     = 0;

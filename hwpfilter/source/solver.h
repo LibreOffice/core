@@ -20,6 +20,8 @@
 #ifndef INCLUDED_HWPFILTER_SOURCE_SOLVER_H
 #define INCLUDED_HWPFILTER_SOURCE_SOLVER_H
 
+#include <memory>
+
 class mgcLinearSystemD
 {
 public:

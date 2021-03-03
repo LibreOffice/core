@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+class Node;
+
 typedef union {
     char *dval;
     char *str;

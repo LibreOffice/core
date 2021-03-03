@@ -21,6 +21,7 @@
 /*
  * KSC5601.1987-0
  */
+#include "hwplib.h"
 
 const hchar ksc5601_2uni_page21[1115] = {
   /* 0x21 */

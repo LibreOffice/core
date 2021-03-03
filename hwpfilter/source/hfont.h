@@ -20,8 +20,7 @@
 #ifndef INCLUDED_HWPFILTER_SOURCE_HFONT_H
 #define INCLUDED_HWPFILTER_SOURCE_HFONT_H
 
-#include <stdlib.h>
-#include <string.h>
+#include "hwplib.h"
 #include <memory>
 
 #define MAXFONTS    256
