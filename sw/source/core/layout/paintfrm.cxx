@@ -2632,6 +2632,8 @@ void SwTabFramePainter::FindStylesForLine( const Point& rStartPoint,
                                          svx::frame::Style* pStyles,
                                          bool bHori ) const
 {
+    // For example, aLFromB means: this vertical line intersects my horizontal line at its left end,
+    // from bottom.
     // pStyles[ 1 ] = bHori ? aLFromT : TFromL
     // pStyles[ 2 ] = bHori ? aLFromL : TFromT,
     // pStyles[ 3 ] = bHori ? aLFromB : TFromR,
