@@ -122,6 +122,7 @@
 #include <vcl/window.hxx>
 #include "langselect.hxx"
 #include <salhelper/thread.hxx>
+#include "fileextcheck.hxx"
 
 #if defined MACOSX
 #include <errno.h>
@@ -1892,6 +1893,7 @@ IMPL_LINK_NOARG(Desktop, OpenClients_Impl, void*, void)
 
     CloseSplashScreen();
     CheckFirstRun( );
+    fileextcheck::CheckFileExtRegistration();
 #ifdef _WIN32
     // Registers a COM class factory of the service manager with the windows operating system.
     Reference< XMultiServiceFactory > xSMgr=  comphelper::getProcessServiceFactory();

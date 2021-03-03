@@ -55,6 +55,11 @@ $(eval $(call gb_Library_add_defs,sofficeapp,\
 
 $(eval $(call gb_Library_set_precompiled_header,sofficeapp,desktop/inc/pch/precompiled_sofficeapp))
 
+$(eval $(call gb_Library_use_system_win32_libs,sofficeapp,\
+    Ole32 \
+    Netapi32 \
+))
+
 $(eval $(call gb_Library_use_libraries,sofficeapp,\
     comphelper \
     cppu \
@@ -121,6 +126,7 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
     desktop/source/app/cmdlinehelp \
     desktop/source/app/desktopcontext \
     desktop/source/app/dispatchwatcher \
+    desktop/source/app/fileextcheck \
     desktop/source/app/langselect \
     desktop/source/app/lockfile2 \
     desktop/source/app/officeipcthread \
