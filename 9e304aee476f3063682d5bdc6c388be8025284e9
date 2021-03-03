@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a0e8ef2_eb441efc",
+        "filename": "sfx2/inc/doctempl.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-03T11:21:10Z",
+      "side": 1,
+      "message": "The English sounds wrong to me",
+      "range": {
+        "startLine": 30,
+        "startChar": 36,
+        "endLine": 30,
+        "endChar": 55
+      },
+      "revId": "9e304aee476f3063682d5bdc6c388be8025284e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad7e75ad_21f102f1",
+        "filename": "sfx2/inc/doctempl.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-03T11:21:10Z",
+      "side": 1,
+      "message": "For Impress, the filter is now [Presentations] [Presentations] listing all shipped templates. This new \"Templates\" does not show up because it\u0027s empty but if someone stores a template under this category it might be confusing.",
+      "range": {
+        "startLine": 37,
+        "startChar": 36,
+        "endLine": 37,
+        "endChar": 45
+      },
+      "revId": "9e304aee476f3063682d5bdc6c388be8025284e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc0ff884_d92ced38",
+        "filename": "sfx2/inc/doctempl.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-03T11:21:10Z",
+      "side": 1,
+      "message": "When adding an entry at the end you must not forget to also add a comma before.",
+      "range": {
+        "startLine": 38,
+        "startChar": 43,
+        "endLine": 38,
+        "endChar": 44
+      },
+      "revId": "9e304aee476f3063682d5bdc6c388be8025284e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e20eb2b8_3ad8b794",
+        "filename": "sfx2/inc/doctempl.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-03T11:21:10Z",
+      "side": 1,
+      "message": "While this is just \"bpmn\" for now (in lower case!) you call the category \"draw\" which is probably better long-named \"Drawings\".",
+      "range": {
+        "startLine": 39,
+        "startChar": 36,
+        "endLine": 39,
+        "endChar": 47
+      },
+      "revId": "9e304aee476f3063682d5bdc6c388be8025284e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff57541f_ea4f801b",
+        "filename": "sfx2/source/doc/doctemplates.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-03T11:21:10Z",
+      "side": 1,
+      "message": "Comma missing here as well",
+      "range": {
+        "startLine": 493,
+        "startChar": 11,
+        "endLine": 493,
+        "endChar": 12
+      },
+      "revId": "9e304aee476f3063682d5bdc6c388be8025284e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
