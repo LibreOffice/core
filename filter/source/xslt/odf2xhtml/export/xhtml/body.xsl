@@ -1687,7 +1687,7 @@
 
         <!-- $globalData/styles-file/*/office:styles/ -->
         <xsl:variable name="listLevelStyle" select="$listStyle/*/*[@text:level = number($listLevel)]"/>
-        <!-- 2DO: Acces new list styles
+        <!-- 2DO: Access new list styles
         <xsl:variable name="listLevelLabelAlignment1" select="$listLevelStyle/style:list-level-properties/style:list-level-label-alignment"/>-->
         <xsl:variable name="listIndent">
             <xsl:call-template name="getListIndent">
