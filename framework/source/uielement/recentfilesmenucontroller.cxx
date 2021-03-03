@@ -28,6 +28,10 @@
 #include <unotools/historyoptions.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/image.hxx>
+#include <map>
+#include <recentfileimages.hlst>
 
 using namespace css;
 using namespace com::sun::star::uno;
@@ -43,6 +47,28 @@ namespace {
 constexpr OUStringLiteral CMD_CLEAR_LIST = u".uno:ClearRecentFileList";
 constexpr OUStringLiteral CMD_OPEN_AS_TEMPLATE = u".uno:OpenTemplate";
 constexpr OUStringLiteral CMD_OPEN_REMOTE = u".uno:OpenRemote";
+
+enum ApplicationType
+{
+    TYPE_NONE     =      0,
+    TYPE_WRITER   = 1 << 0,
+    TYPE_CALC     = 1 << 1,
+    TYPE_IMPRESS  = 1 << 2,
+    TYPE_DRAW     = 1 << 3,
+    TYPE_DATABASE = 1 << 4,
+    TYPE_MATH     = 1 << 5,
+    TYPE_OTHER    = 1 << 6
+};
+
+static std::map<ApplicationType,OUString> BitmapForExtension =
+{
+    { ApplicationType::TYPE_WRITER, RECENT_FILE_THUMBNAIL_TEXT },
+    { ApplicationType::TYPE_CALC, RECENT_FILE_THUMBNAIL_SHEET },
+    { ApplicationType::TYPE_IMPRESS, RECENT_FILE_THUMBNAIL_PRESENTATION },
+    { ApplicationType::TYPE_DRAW, RECENT_FILE_THUMBNAIL_DRAWING },
+    { ApplicationType::TYPE_DATABASE, RECENT_FILE_THUMBNAIL_DATABASE },
+    { ApplicationType::TYPE_MATH, RECENT_FILE_THUMBNAIL_MATH }
+};
 
 class RecentFilesMenuController :  public svt::PopupMenuControllerBase
 {
@@ -86,6 +112,8 @@ public:
 
 private:
     virtual void impl_setPopupMenu() override;
+    static bool typeMatchesExtension(ApplicationType type, std::u16string_view rExt);
+    static Image getSmallThumbnail(const INetURLObject &rUrl);
     void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
     void executeEntry( sal_Int32 nIndex );
 
@@ -112,6 +140,64 @@ RecentFilesMenuController::RecentFilesMenuController( const uno::Reference< uno:
     }
 }
 
+bool RecentFilesMenuController::typeMatchesExtension(ApplicationType type, std::u16string_view rExt)
+{
+    bool bRet = false;
+
+    if (rExt == u"odt" || rExt == u"fodt" || rExt == u"doc" || rExt == u"docx" ||
+        rExt == u"rtf" || rExt == u"txt" || rExt == u"odm" || rExt == u"otm")
+    {
+        bRet = static_cast<bool>(type & ApplicationType::TYPE_WRITER);
+    }
+    else if (rExt == u"ods" || rExt == u"fods" || rExt == u"xls" || rExt == u"xlsx")
+    {
+        bRet = static_cast<bool>(type & ApplicationType::TYPE_CALC);
+    }
+    else if (rExt == u"odp" || rExt == u"fodp" || rExt == u"pps" || rExt == u"ppt" ||
+            rExt == u"pptx")
+    {
+        bRet = static_cast<bool>(type & ApplicationType::TYPE_IMPRESS);
+    }
+    else if (rExt == u"odg" || rExt == u"fodg")
+    {
+        bRet = static_cast<bool>(type & ApplicationType::TYPE_DRAW);
+    }
+    else if (rExt == u"odb")
+    {
+        bRet = static_cast<bool>(type & ApplicationType::TYPE_DATABASE);
+    }
+    else if (rExt == u"odf")
+    {
+        bRet = static_cast<bool>(type & ApplicationType::TYPE_MATH);
+    }
+    else
+    {
+        bRet = static_cast<bool>(type & ApplicationType::TYPE_OTHER);
+    }
+
+    return bRet;
+}
+
+Image RecentFilesMenuController::getSmallThumbnail(const INetURLObject &rUrl)
+{
+    BitmapEx aImg;
+    OUString aExt = rUrl.getExtension();
+
+    const std::map<ApplicationType, OUString>& rMap = BitmapForExtension;
+
+    std::map<ApplicationType, OUString>::const_iterator mIt =
+    std::find_if(rMap.begin(), rMap.end(),
+                 [aExt] ( const std::pair<ApplicationType, OUString>& aEntry)
+                 { return typeMatchesExtension( aEntry.first, aExt); } );
+
+    if (mIt != rMap.end())
+        aImg = BitmapEx(mIt->second);
+    else
+        aImg = BitmapEx(RECENT_FILE_THUMBNAIL_DEFAULT);
+
+    return Image(aImg);
+}
+
 // private function
 void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
@@ -131,6 +217,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 
     int nPickListMenuItems = std::min<sal_Int32>( aHistoryList.getLength(), MAX_MENU_ITEMS );
     m_aRecentFilesItems.clear();
+
     if (( nPickListMenuItems > 0 ) && !m_bDisabled )
     {
         for ( int i = 0; i < nPickListMenuItems; i++ )
@@ -180,6 +267,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             OUString   aMenuTitle;
             INetURLObject   aURL( m_aRecentFilesItems[i] );
             OUString aTipHelpText( aURL.getFSysPath( FSysStyle::Detect ) );
+            Image aThumbnail = getSmallThumbnail(aURL);
 
             if ( aURL.GetProtocol() == INetProtocol::File )
             {
@@ -195,6 +283,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             aMenuShortCut.append( aMenuTitle );
 
             pVCLPopupMenu->InsertItem( sal_uInt16( i+1 ), aMenuShortCut.makeStringAndClear() );
+            pVCLPopupMenu->SetItemImage(sal_uInt16 ( i+1 ), aThumbnail);
             pVCLPopupMenu->SetTipHelpText( sal_uInt16( i+1 ), aTipHelpText );
             pVCLPopupMenu->SetItemCommand( sal_uInt16( i+1 ), aURLString );
         }
@@ -225,7 +314,10 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
         }
         else
         {
-            // No recent documents => insert "no document" string
+            // Add InsertSeparator(), otherwise it will displays
+            // the first item icon of recent files instead of displaying no icon.
+            pVCLPopupMenu->InsertSeparator();
+            // No recent documents => insert "no documents" string
             pVCLPopupMenu->InsertItem( 1, FwkResId(STR_NODOCUMENT) );
             // Do not disable it, otherwise the Toolbar controller and MenuButton
             // will display SV_RESID_STRING_NOSELECTIONPOSSIBLE instead of STR_NODOCUMENT
