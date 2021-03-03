@@ -216,6 +216,7 @@ public:
     void testCreatePortions();
     void testBookmarkUndo();
     void testFdo85876();
+    void testCaretPositionMovingUp();
     void testTdf81226();
     void testTdf79717();
     void testTdf137532();
@@ -449,6 +450,7 @@ public:
     CPPUNIT_TEST(testCreatePortions);
     CPPUNIT_TEST(testBookmarkUndo);
     CPPUNIT_TEST(testFdo85876);
+    CPPUNIT_TEST(testCaretPositionMovingUp);
     CPPUNIT_TEST(testTdf81226);
     CPPUNIT_TEST(testTdf79717);
     CPPUNIT_TEST(testTdf137532);
@@ -2027,6 +2029,18 @@ void SwUiWriterTest::testFdo85876()
         // this used to be BOLD too with fdo#85876
         CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xCursor, "CharWeight"));
     }
+}
+
+void SwUiWriterTest::testCaretPositionMovingUp()
+{
+    SwDoc* const pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("after");
+    pWrtShell->InsertLineBreak();
+    pWrtShell->Up(false);
+    pWrtShell->Insert("before");
+
+    CPPUNIT_ASSERT_EQUAL(OUString(u"beforeAfter" + OUStringChar(CH_TXTATR_NEWLINE)), getParagraph(1)->getString());
 }
 
 void SwUiWriterTest::testTdf81226()
