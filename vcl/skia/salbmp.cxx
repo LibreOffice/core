@@ -279,6 +279,12 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
 
 void SkiaSalBitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
 {
+    ReleaseBuffer(pBuffer, nMode, false);
+}
+
+void SkiaSalBitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode,
+                                  bool dontChangeToErase)
+{
     if (nMode == BitmapAccessMode::Write)
     {
 #ifdef DBG_UTIL
@@ -298,6 +304,62 @@ void SkiaSalBitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
     assert(pBuffer->mpBits == mBuffer.get() || nMode == BitmapAccessMode::Info);
     verify();
     delete pBuffer;
+    if (nMode == BitmapAccessMode::Write && !dontChangeToErase)
+    {
+        // This saves memory and is also used by IsFullyOpaqueAsAlpha() to avoid unnecessary
+        // alpha blending.
+        if (IsAllBlack())
+        {
+            SAL_INFO("vcl.skia.trace", "releasebuffer(" << this << "): erasing to black");
+            EraseInternal(COL_BLACK);
+        }
+    }
+}
+
+static bool isAllZero(const sal_uInt8* data, size_t size)
+{ // For performance, check in larger data chunks.
+#ifdef UINT64_MAX
+    const int64_t* d = reinterpret_cast<const int64_t*>(data);
+#else
+    const int32_t* d = reinterpret_cast<const int32_t*>(data);
+#endif
+    constexpr size_t step = sizeof(*d) * 8;
+    for (size_t i = 0; i < size / step; ++i)
+    { // Unrolled loop.
+        if (d[0] != 0)
+            return false;
+        if (d[1] != 0)
+            return false;
+        if (d[2] != 0)
+            return false;
+        if (d[3] != 0)
+            return false;
+        if (d[4] != 0)
+            return false;
+        if (d[5] != 0)
+            return false;
+        if (d[6] != 0)
+            return false;
+        if (d[7] != 0)
+            return false;
+        d += 8;
+    }
+    for (size_t i = size / step * step; i < size; ++i)
+        if (data[i] != 0)
+            return false;
+    return true;
+}
+
+bool SkiaSalBitmap::IsAllBlack() const
+{
+    if (mBitCount % 8 != 0 || (!!mPalette && mPalette[0] != COL_BLACK))
+        return false; // Don't bother.
+    if (mSize.Width() * mBitCount / 8 == mScanlineSize)
+        return isAllZero(mBuffer.get(), mScanlineSize * mSize.Height());
+    for (tools::Long y = 0; y < mSize.Height(); ++y)
+        if (!isAllZero(mBuffer.get() + mScanlineSize * y, mSize.Width() * mBitCount / 8))
+            return false;
+    return true;
 }
 
 bool SkiaSalBitmap::GetSystemData(BitmapSystemData&)
@@ -899,8 +961,8 @@ sk_sp<SkShader> SkiaSalBitmap::GetAlphaSkShader(const SkSamplingOptions& samplin
 
 bool SkiaSalBitmap::IsFullyOpaqueAsAlpha() const
 {
-    if (!mEraseColorSet)
-        return false; // don't bother figuring it out from the pixels
+    if (!mEraseColorSet) // Set from Erase() or ReleaseBuffer().
+        return false;
     // If the erase color is set so that this bitmap used as alpha would
     // mean a fully opaque alpha mask (= noop), we can skip using it.
     // Note that for alpha bitmaps we use the VCL "transparency" convention,
@@ -943,7 +1005,7 @@ void SkiaSalBitmap::PerformErase()
             memcpy(scanline + y * bitmapBuffer->mnScanlineSize, scanline,
                    bitmapBuffer->mnScanlineSize);
     }
-    ReleaseBuffer(bitmapBuffer, BitmapAccessMode::Write);
+    ReleaseBuffer(bitmapBuffer, BitmapAccessMode::Write, true);
 }
 
 void SkiaSalBitmap::EnsureBitmapData()

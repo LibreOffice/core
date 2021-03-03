@@ -123,6 +123,10 @@ private:
     void EraseInternal(const Color& color);
     // Sets pixels to the erase color.
     void PerformErase();
+    // Try to find out if the content is completely black. Used for optimizations,
+    // not guaranteed to always return true for such bitmaps.
+    bool IsAllBlack() const;
+    void ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode, bool dontChangeToErase);
     SkBitmap GetAsSkBitmap() const;
     bool ConserveMemory() const;
     void verify() const
