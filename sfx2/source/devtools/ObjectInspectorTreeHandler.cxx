@@ -32,6 +32,7 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/Invocation.hpp>
@@ -514,6 +515,22 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
             auto* pObjectInspectorNode
                 = createNodeObjectForAny("@" + OUString::number(nIndex), aAny);
             lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
+        }
+    }
+
+    const auto xEnumAccess = uno::Reference<container::XEnumerationAccess>(maAny, uno::UNO_QUERY);
+    if (xEnumAccess.is())
+    {
+        uno::Reference<container::XEnumeration> xEnumeration = xEnumAccess->createEnumeration();
+        if (xEnumeration.is())
+        {
+            for (sal_Int32 nIndex = 0; xEnumeration->hasMoreElements(); nIndex++)
+            {
+                uno::Any aAny = xEnumeration->nextElement();
+                auto* pObjectInspectorNode
+                    = createNodeObjectForAny("@{" + OUString::number(nIndex) + "}", aAny);
+                lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
+            }
         }
     }
 
