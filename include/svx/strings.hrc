@@ -1759,6 +1759,21 @@
 
 #define RID_SVXSTR_TRANSPARENCY                             NC_("RID_SVXSTR_TRANSPARENCY", "Transparency:")
 
+
+// strings related to borders
+#define RID_SVXSTR_TABLE_PRESET_NONE                NC_("RID_SVXSTR_TABLE_PRESET_NONE", "Set No Borders")
+#define RID_SVXSTR_TABLE_PRESET_ONLYOUTER           NC_("RID_SVXSTR_TABLE_PRESET_ONLYOUTER", "Set Outer Border Only")
+#define RID_SVXSTR_TABLE_PRESET_OUTERHORI           NC_("RID_SVXSTR_TABLE_PRESET_OUTERHORI", "Set Outer Border and Horizontal Lines")
+#define RID_SVXSTR_TABLE_PRESET_OUTERALL            NC_("RID_SVXSTR_TABLE_PRESET_OUTERALL", "Set Outer Border and All Inner Lines")
+#define RID_SVXSTR_TABLE_PRESET_OUTERINNER          NC_("RID_SVXSTR_TABLE_PRESET_OUTERINNER", "Set Outer Border Without Changing Inner Lines")
+#define RID_SVXSTR_PARA_PRESET_DIAGONAL             NC_("RID_SVXSTR_PARA_PRESET_DIAGONAL", "Set Diagonal Lines Only")
+#define RID_SVXSTR_PARA_PRESET_ALL                  NC_("RID_SVXSTR_PARA_PRESET_ALL", "Set All Four Borders")
+#define RID_SVXSTR_PARA_PRESET_LEFTRIGHT            NC_("RID_SVXSTR_PARA_PRESET_LEFTRIGHT", "Set Left and Right Borders Only")
+#define RID_SVXSTR_PARA_PRESET_TOPBOTTOM            NC_("RID_SVXSTR_PARA_PRESET_TOPBOTTOM", "Set Top and Bottom Borders Only")
+#define RID_SVXSTR_PARA_PRESET_ONLYLEFT             NC_("RID_SVXSTR_PARA_PRESET_ONLYLEFT", "Set Left Border Only")
+#define RID_SVXSTR_HOR_PRESET_ONLYHOR               NC_("RID_SVXSTR_HOR_PRESET_ONLYHOR", "Set Top and Bottom Borders, and All Inner Lines")
+#define RID_SVXSTR_VER_PRESET_ONLYVER               NC_("RID_SVXSTR_VER_PRESET_ONLYVER", "Set Left and Right Borders, and All Inner Lines")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

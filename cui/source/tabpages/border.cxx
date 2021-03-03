@@ -22,6 +22,7 @@
 #include <string_view>
 
 #include <sfx2/objsh.hxx>
+#include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 
 #include <strings.hrc>
