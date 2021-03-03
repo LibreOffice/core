@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "223fbf48_a06a5cfb",
+        "filename": "include/vcl/dockwin.hxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-03-03T00:07:33Z",
+      "side": 1,
+      "message": "pLOKPopUpWinId is supposed to have n instead of p as first letter?",
+      "revId": "c76ceae645964ed4d1db8f99dc54067027c1e9f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6942822d_b52711fd",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 2706,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-03-03T00:07:33Z",
+      "side": 1,
+      "message": "This is redundant with pNotifier !\u003d nullptr. It\u0027s not an issue, but it\u0027s easier to just test for the notifier to be set (it implies LOK is active).",
+      "revId": "c76ceae645964ed4d1db8f99dc54067027c1e9f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5aa69d0_997212b3",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 2712,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-03-03T00:07:33Z",
+      "side": 1,
+      "message": "I assume toString() on the rectangle gives us the expected formatting and there are no errors in the loolwsd logs or anything weird, right?",
+      "revId": "c76ceae645964ed4d1db8f99dc54067027c1e9f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "702ea501_c23b9cf4",
+        "filename": "vcl/source/window/dockmgr.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2021-03-03T00:07:33Z",
+      "side": 1,
+      "message": "I couldn\u0027t find any other dynamic casts on mpDockingWindow, but I suppose there isn\u0027t much choice, unfortunately.",
+      "revId": "c76ceae645964ed4d1db8f99dc54067027c1e9f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
