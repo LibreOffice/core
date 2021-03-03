@@ -207,6 +207,8 @@ public:
     SvtLineListBox(std::unique_ptr<weld::MenuButton> pControl);
     ~SvtLineListBox();
 
+    static OUString GetLineStyleName(SvxBorderLineStyle eStyle);
+
     /** Set the width in Twips */
     void SetWidth(tools::Long nWidth)
     {
