@@ -8637,6 +8637,26 @@ void Test::testTdf107459()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testTdf93415()
+{
+    CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Sheet1"));
+
+    ScCalcConfig aConfig;
+    aConfig.SetStringRefSyntax( formula::FormulaGrammar::CONV_XL_R1C1 );
+    m_pDoc->SetCalcConfig(aConfig);
+    m_pDoc->CalcAll();
+
+    ScAddress aPos(0,0,0);
+    m_pDoc->SetString(aPos, "=ADDRESS(1,1,,,\"Sheet1\")");
+
+    // Without the fix in place, this would have failed with
+    // - Expected: Sheet1!$A$1
+    // - Actual  : Sheet1.$A$1
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet1!$A$1"), m_pDoc->GetString(aPos));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testTdf133260()
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
