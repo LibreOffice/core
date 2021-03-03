@@ -260,7 +260,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
     bool            DrawMouseButtonDown(const MouseEvent& rMEvt);
     bool            DrawMouseButtonUp(const MouseEvent& rMEvt);
     bool            DrawMouseMove(const MouseEvent& rMEvt);
-    bool            DrawKeyInput(const KeyEvent& rKEvt);
+    bool            DrawKeyInput(const KeyEvent& rKEvt, vcl::Window* pWin);
     bool            DrawCommand(const CommandEvent& rCEvt);
     bool            DrawHasMarkedObj();
     void            DrawEndAction();

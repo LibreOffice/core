@@ -493,6 +493,26 @@ bool FmFormView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
 
     }
 
+    // tdf#139804 Allow triggering form controls with Alt-<Mnemonic>
+    if (rKeyCode.IsMod2() && rKeyCode.GetCode())
+    {
+        FmFormPage* pCurPage = GetCurPage();
+        for (size_t a = 0; a < pCurPage->GetObjCount(); ++a)
+        {
+            SdrObject* pObj = pCurPage->GetObj(a);
+            FmFormObj* pFormObject = FmFormObj::GetFormObject(pObj);
+            if (!pFormObject)
+                continue;
+
+            Reference<awt::XWindow> xWindow(pFormObject->GetUnoControl(*this, *pWin), UNO_QUERY);
+            if (!xWindow.is())
+                continue;
+
+            xWindow->setFocus();
+            bDone = true;
+        }
+    }
+
     if ( !bDone )
         bDone = E3dView::KeyInput(rKEvt,pWin);
     return bDone;
