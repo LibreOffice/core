@@ -3740,17 +3740,23 @@ public:
         maLayoutIdle.Start();
     }
 
+    void Layout()
+    {
+        if (vcl::Window *pChild = GetWindow(GetWindowType::FirstChild))
+            pChild->SetPosSizePixel(Point(0, 0), GetSizePixel());
+    }
+
     virtual void Resize() override
     {
+        maLayoutIdle.Stop();
+        Layout();
         WorkWindow::Resize();
-        queue_resize();
     }
 };
 
 IMPL_LINK_NOARG(ChildFrame, ImplHandleLayoutTimerHdl, Timer*, void)
 {
-    if (vcl::Window *pChild = GetWindow(GetWindowType::FirstChild))
-        pChild->SetPosSizePixel(Point(0, 0), GetSizePixel());
+    Layout();
 }
 
 class GtkInstanceContainer : public GtkInstanceWidget, public virtual weld::Container
