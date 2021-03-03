@@ -134,7 +134,6 @@ public:
 
     void            SelectionHasChanged();
     void            ModelHasChanged();
-    virtual void    Activate(bool bIsMDIActivate) override;
     virtual void    Deactivate(bool IsMDIActivate) override;
     virtual void    UIActivating( SfxInPlaceClient* ) override;
     virtual void    UIDeactivated( SfxInPlaceClient* ) override;
