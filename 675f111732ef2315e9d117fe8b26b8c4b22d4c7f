@@ -16,6 +16,24 @@
       "revId": "675f111732ef2315e9d117fe8b26b8c4b22d4c7f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e148d523_f4dfb237",
+        "filename": "filter/source/svg/svgfilter.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2021-03-03T10:20:49Z",
+      "side": 1,
+      "message": "Thanks for your suggestion. The problem is that with OStringLiteral gcc reports the following error: \u0027sTiledBackgroundTag’ defined but not used. I don\u0027t understand why gcc want it to be used even in the header file.\nAnyway I think I\u0027ll skip OStringLiteral for this time.",
+      "parentUuid": "6f432843_871d4352",
+      "revId": "675f111732ef2315e9d117fe8b26b8c4b22d4c7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
