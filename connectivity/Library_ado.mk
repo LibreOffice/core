@@ -19,6 +19,8 @@ $(eval $(call gb_Library_set_include,ado,\
 	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
+$(eval $(call gb_Library_add_defs,ado,-U_WIN32_WINNT -D_WIN32_WINNT=0x0601))
+
 $(eval $(call gb_Library_use_external,ado,boost_headers))
 
 $(eval $(call gb_Library_set_precompiled_header,ado,connectivity/inc/pch/precompiled_ado))
