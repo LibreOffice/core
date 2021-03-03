@@ -60,7 +60,7 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
     , mxFrame(rxFrame)
     , mxTitleBar(new PanelTitleBar(rPanelDescriptor.msTitle, *m_xBuilder, this))
     , mxContents(m_xBuilder->weld_container("contents"))
-    , mxXWindow(mxContents->CreateChildFrame())
+    , mxAwtXWindow(mxContents->CreateChildFrame())
 {
     SetText(rPanelDescriptor.msTitle);
     mxContents->set_visible(mbIsExpanded);
@@ -111,8 +111,11 @@ void Panel::dispose()
 
     mxTitleBar.reset();
 
-    mxXWindow->dispose();
-    mxXWindow.clear();
+    if (mxAwtXWindow)
+    {
+        mxAwtXWindow->dispose();
+        mxAwtXWindow.clear();
+    }
     mxContents.reset();
 
     InterimItemWindow::dispose();
@@ -179,6 +182,13 @@ Reference<awt::XWindow> Panel::GetElementWindow()
     }
 
     return nullptr;
+}
+
+Reference<awt::XWindow> Panel::GetElementParentWindow()
+{
+    if (!mxAwtXWindow)
+        mxAwtXWindow = mxContents->CreateChildFrame();
+    return mxAwtXWindow;
 }
 
 } // end of namespace sfx2::sidebar
