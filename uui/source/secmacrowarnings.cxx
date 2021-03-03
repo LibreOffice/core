@@ -19,12 +19,18 @@
 
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
+#include <comphelper/documentconstants.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
+#include <osl/file.hxx>
 #include <osl/file.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <unotools/securityoptions.hxx>
+#include <tools/urlobj.hxx>
+#include <unotools/resmgr.hxx>
+#include <com/sun/star/security/NoPasswordException.hpp>
 
 using namespace ::com::sun::star::security;
 
@@ -87,7 +93,13 @@ IMPL_STATIC_LINK_NOARG(MacroWarning, InstallLOKNotifierHdl, void*, vcl::ILibreOf
 void MacroWarning::SetDocumentURL( const OUString& rDocURL )
 {
     OUString aAbbreviatedPath;
-    osl_abbreviateSystemPath(rDocURL.pData, &aAbbreviatedPath.pData, 50, nullptr);
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        osl::FileBase::getFileURLFromSystemPath(rDocURL, aAbbreviatedPath);
+        aAbbreviatedPath = INetURLObject(aAbbreviatedPath).GetLastName();
+    }
+    else
+        osl_abbreviateSystemPath(rDocURL.pData, &aAbbreviatedPath.pData, 50, nullptr);
     m_xDialog->set_primary_text(aAbbreviatedPath);
 }
 
