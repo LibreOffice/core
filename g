@@ -38,6 +38,9 @@ refresh_submodule_hooks()
     if [ -d "${repo?}"/.git ] ; then
         # use core's hook by default
         for hook_name in "${COREDIR?}/.git-hooks"/* ; do
+            if [ ! -e "${hook_name}" ] ; then
+                continue
+            fi
             hook="${repo?}/.git/hooks/${hook_name##*/}"
             if [ ! -e "${hook?}" ] || [ -L "${hook?}" ] ; then
                 rm -f "${hook?}"
@@ -46,6 +49,9 @@ refresh_submodule_hooks()
         done
         # override if need be by the submodules' own hooks
         for hook_name in "${COREDIR?}/${repo?}/.git-hooks"/* ; do
+            if [ ! -e "${hook_name}" ] ; then
+                continue
+            fi
             hook="${repo?}/.git/hooks/${hook_name##*/}"
             if [ ! -e "${hook?}" ] || [ -L "${hook?}" ] ; then
                 rm -f "${hook?}"
@@ -54,6 +60,9 @@ refresh_submodule_hooks()
         done
     elif [ -d .git/modules/"${repo}"/hooks ] ; then
         for hook_name in "${COREDIR?}/.git-hooks"/* ; do
+            if [ ! -e "${hook_name}" ] ; then
+                continue
+            fi
             hook=".git/modules/${repo?}/hooks/${hook_name##*/}"
             if [ ! -e "${hook?}" ] || [ -L "${hook?}" ] ; then
                 rm -f "${hook?}"
@@ -62,6 +71,9 @@ refresh_submodule_hooks()
         done
         # override if need be by the submodules' own hooks
         for hook_name in "${COREDIR?}/${repo?}/.git-hooks"/* ; do
+            if [ ! -e "${hook_name}" ] ; then
+                continue
+            fi
             hook=".git/modules/${repo?}/hooks/${hook_name##*/}"
             if [ ! -e "${hook?}" ] || [ -L "${hook?}" ] ; then
                 rm -f "${hook?}"
