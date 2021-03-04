@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c147eb2_73b5d2cc",
+        "filename": "vcl/jsdialog/jsdialogbuilder.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-03-04T08:49:31Z",
+      "side": 1,
+      "message": "Can you check if \u0027x\u0027 button works? (dialog will disappear, but check if you will receive \u0027close\u0027 message).\n\nI think: \"RememberWidget(\"__DIALOG__\", aJSMessageDialog.get());\" is needed here\n__DIALOG__ id is used for handling standard buttons (without explicit handlers) and \u0027x\u0027 button.\n\nmaybe it will even be not needed to add these handlers below with that line added. worth checking too.",
+      "revId": "b86d881540a7574f8eb0ebe80a12e52159e43fc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
