@@ -3186,48 +3186,56 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     rParam.adjustForHyperlinkInPDF(aURLStart, mpDev);
 }
 
-void ScOutputData::ShowClipMarks( DrawEditParam& rParam, tools::Long nEngineHeight, const Size& aCellSize,
-                                  bool bMerged, OutputAreaParam& aAreaParam)
+void ScOutputData::ShowClipMarks( DrawEditParam& rParam, tools::Long nEngineWidth, const Size& aCellSize,
+                                  bool bMerged, OutputAreaParam& aAreaParam, bool bTop)
 {
-    //  Show clip marks if height is at least 5pt too small and
+    //  Show clip marks if width is at least 5pt too small and
     //  there are several lines of text.
     //  Not for asian vertical text, because that would interfere
     //  with the default right position of the text.
     //  Only with automatic line breaks, to avoid having to find
     //  the cells with the horizontal end of the text again.
-    if ( !(nEngineHeight - aCellSize.Height() > 100 &&
-            rParam.mbBreak && bMarkClipped &&
-            ( rParam.mpEngine->GetParagraphCount() > 1 || rParam.mpEngine->GetLineCount(0) > 1 )) )
-        return;
-
-    CellInfo* pClipMarkCell = nullptr;
-    if ( bMerged )
+    if (nEngineWidth - aCellSize.Width() > 100 && rParam.mbBreak && bMarkClipped
+        && (rParam.mpEngine->GetParagraphCount() > 1 || rParam.mpEngine->GetLineCount(0) > 1))
     {
-        //  anywhere in the merged area...
-        SCCOL nClipX = ( rParam.mnX < nX1 ) ? nX1 : rParam.mnX;
-        pClipMarkCell = &pRowInfo[(rParam.mnArrY != 0) ? rParam.mnArrY : 1].pCellInfo[nClipX+1];
+        CellInfo* pClipMarkCell = nullptr;
+        if (bMerged)
+        {
+            //  anywhere in the merged area...
+            SCCOL nClipX = (rParam.mnX < nX1) ? nX1 : rParam.mnX;
+            pClipMarkCell = &pRowInfo[(rParam.mnArrY != 0) ? rParam.mnArrY : 1].pCellInfo[nClipX + 1];
+        }
+        else
+            pClipMarkCell = &rParam.mpThisRowInfo->pCellInfo[rParam.mnX + 1];
+
+        bAnyClipped = true;
+        bVertical = true;
+        const tools::Long nMarkPixel = static_cast<tools::Long>(SC_CLIPMARK_SIZE * mnPPTX);
+        if (bTop)
+        {
+            pClipMarkCell->nClipMark |= ScClipMark::Top;
+            if (aAreaParam.maClipRect.Top() - nMarkPixel < aAreaParam.maClipRect.Bottom())
+                aAreaParam.maClipRect.AdjustTop(+nMarkPixel);
+        }
+        else
+        {
+            pClipMarkCell->nClipMark |= ScClipMark::Bottom;
+            if (aAreaParam.maClipRect.Top() - nMarkPixel < aAreaParam.maClipRect.Bottom())
+                aAreaParam.maClipRect.AdjustBottom(-nMarkPixel);
+        }
     }
-    else
-        pClipMarkCell = &rParam.mpThisRowInfo->pCellInfo[rParam.mnX+1];
-
-    pClipMarkCell->nClipMark |= ScClipMark::Right;      //! also allow left?
-    bAnyClipped = true;
-
-    const tools::Long nMarkPixel = static_cast<tools::Long>( SC_CLIPMARK_SIZE * mnPPTX );
-    if ( aAreaParam.maClipRect.Right() - nMarkPixel > aAreaParam.maClipRect.Left() )
-        aAreaParam.maClipRect.AdjustRight( -nMarkPixel );
 }
 
 ClearableClipRegionPtr ScOutputData::Clip( DrawEditParam& rParam, const Size& aCellSize,
-                                                        OutputAreaParam& aAreaParam, tools::Long nEngineHeight,
-                                                        bool bWrapFields)
+                                                        OutputAreaParam& aAreaParam, tools::Long nEngineWidth,
+                                                        bool bWrapFields, bool bTop)
 {
     // Also take fields in a cell with automatic breaks into account: clip to cell width
     bool bClip = AdjustAreaParamClipRect(aAreaParam) || aAreaParam.mbLeftClip || aAreaParam.mbRightClip || bWrapFields;
     bool bSimClip = false;
 
     const Size& aRefOne = mpRefDevice->PixelToLogic(Size(1,1));
-    if ( nEngineHeight >= aCellSize.Height() + aRefOne.Height() )
+    if ( nEngineWidth >= aCellSize.Width() + aRefOne.Width() )
     {
         const ScMergeAttr* pMerge = &rParam.mpPattern->GetItem(ATTR_MERGE);
         const bool bMerged = pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1;
@@ -3243,7 +3251,7 @@ ClearableClipRegionPtr ScOutputData::Clip( DrawEditParam& rParam, const Size& aC
         else
             bSimClip = true;
 
-        ShowClipMarks( rParam, nEngineHeight, aCellSize, bMerged, aAreaParam);
+        ShowClipMarks( rParam, nEngineWidth, aCellSize, bMerged, aAreaParam, bTop);
     }
 
         // Clip marks are already handled in GetOutputArea
@@ -3425,7 +3433,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     Point aURLStart;
 
     {
-        const auto pClipRegion = Clip( rParam, aCellSize, aAreaParam, nEngineHeight, bWrapFields );
+        const auto pClipRegion = Clip( rParam, aCellSize, aAreaParam, nEngineWidth, bWrapFields, true );
 
         Point aLogicStart(nStartX, nStartY);
         rParam.calcStartPosForVertical(aLogicStart, aCellSize.Width(), nEngineWidth, nTopM, mpRefDevice);
@@ -3671,7 +3679,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
     Point aURLStart;
 
     {
-        const auto pClipRegion = Clip( rParam, aCellSize, aAreaParam, nEngineHeight, bWrapFields );
+        const auto pClipRegion = Clip( rParam, aCellSize, aAreaParam, nEngineWidth, bWrapFields, false );
 
         Point aLogicStart(nStartX, nStartY);
         rParam.calcStartPosForVertical(aLogicStart, aCellSize.Width(), nEngineWidth, nTopM, mpRefDevice);
