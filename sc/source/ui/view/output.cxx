@@ -2552,19 +2552,36 @@ void ScOutputData::DrawClipMarks()
                     tools::Long nMarkPixel = static_cast<tools::Long>( SC_CLIPMARK_SIZE * mnPPTX );
                     Size aMarkSize( nMarkPixel, (nMarkPixel-1)*2 );
 
-                    if ( pInfo->nClipMark & ( bLayoutRTL ? ScClipMark::Right : ScClipMark::Left ) )
+                    if (pInfo->nClipMark == ScClipMark::Left)
                     {
                         //  visually left
                         tools::Rectangle aMarkRect = aCellRect;
-                        aMarkRect.SetRight( aCellRect.Left()+nMarkPixel-1 );
-                        SvxFont::DrawArrow( *mpDev, aMarkRect, aMarkSize, aArrowFillCol, true );
+                        aMarkRect.SetRight(aCellRect.Left() + nMarkPixel - 1);
+                        SvxFont::DrawArrow(*mpDev, aMarkRect, aMarkSize, aArrowFillCol, true,
+                                           false);
                     }
-                    if ( pInfo->nClipMark & ( bLayoutRTL ? ScClipMark::Left : ScClipMark::Right ) )
+                    else if (pInfo->nClipMark == ScClipMark::Right)
                     {
                         //  visually right
                         tools::Rectangle aMarkRect = aCellRect;
-                        aMarkRect.SetLeft( aCellRect.Right()-nMarkPixel+1 );
-                        SvxFont::DrawArrow( *mpDev, aMarkRect, aMarkSize, aArrowFillCol, false );
+                        aMarkRect.SetLeft(aCellRect.Right() - nMarkPixel + 1);
+                        SvxFont::DrawArrow(*mpDev, aMarkRect, aMarkSize, aArrowFillCol, false,
+                                           false);
+                    }
+                    else if (pInfo->nClipMark == ScClipMark::Top)
+                    {
+                        //  visually top
+                        tools::Rectangle aMarkRect = aCellRect;
+                        aMarkRect.SetBottom(aCellRect.Top() + nMarkPixel - 1);
+                        SvxFont::DrawArrow(*mpDev, aMarkRect, aMarkSize, aArrowFillCol, true, true);
+                    }
+                    else if (pInfo->nClipMark == ScClipMark::Bottom)
+                    {
+                        //  visually bottom
+                        tools::Rectangle aMarkRect = aCellRect;
+                        aMarkRect.SetTop(aCellRect.Bottom() + nMarkPixel + 1);
+                        SvxFont::DrawArrow(*mpDev, aMarkRect, aMarkSize, aArrowFillCol, false,
+                                           true);
                     }
                 }
                 nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
