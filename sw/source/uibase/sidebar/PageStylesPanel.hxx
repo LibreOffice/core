@@ -45,8 +45,8 @@ class PageStylesPanel:
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    static VclPtr<PanelLayout> Create(
-        vcl::Window* pParent,
+    static std::unique_ptr<PanelLayout> Create(
+        weld::Widget* pParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
         SfxBindings* pBindings);
 
@@ -61,11 +61,10 @@ public:
 
     SfxBindings* GetBindings() const { return mpBindings; }
     PageStylesPanel(
-        vcl::Window* pParent,
+        weld::Widget* pParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
         SfxBindings* pBindings);
     virtual ~PageStylesPanel() override;
-    virtual void dispose() override;
 
 private:
 

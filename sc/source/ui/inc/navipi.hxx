@@ -105,6 +105,8 @@ private:
     std::unique_ptr<weld::ComboBox> m_xLbDocuments;
     std::unique_ptr<weld::Menu> m_xDragModeMenu;
 
+    VclPtr<SfxNavigator> m_xNavigatorDlg;
+
     Size            aExpandedSize;
     Idle            aContentIdle;
 
@@ -168,16 +170,17 @@ private:
     void    StartOfDataArea ();
     void    EndOfDataArea   ();
 
+    void    UpdateInitShow();
+
     static void ReleaseFocus();
 
 public:
-    ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent);
+    ScNavigatorDlg(SfxBindings* pB, weld::Widget* pParent, SfxNavigator* pNavigatorDlg);
+    virtual weld::Window* GetFrameWeld() const override;
     virtual ~ScNavigatorDlg() override;
-    virtual void dispose() override;
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    virtual void StateChanged(StateChangedType nStateChange) override;
 };
 
 class ScNavigatorWrapper final : public SfxNavigatorWrapper

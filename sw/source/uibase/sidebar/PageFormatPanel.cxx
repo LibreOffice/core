@@ -43,8 +43,8 @@
 
 namespace sw::sidebar{
 
-VclPtr<PanelLayout> PageFormatPanel::Create(
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> PageFormatPanel::Create(
+    weld::Widget* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings)
 {
@@ -53,7 +53,7 @@ VclPtr<PanelLayout> PageFormatPanel::Create(
     if( !rxFrame.is() )
         throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to PageFormatPanel::Create", nullptr, 0);
 
-    return VclPtr<PageFormatPanel>::Create(pParent, rxFrame, pBindings);
+    return std::make_unique<PageFormatPanel>(pParent, rxFrame, pBindings);
 }
 
 void PageFormatPanel::SetMarginFieldUnit()
@@ -84,10 +84,10 @@ void PageFormatPanel::SetMarginFieldUnit()
 }
 
 PageFormatPanel::PageFormatPanel(
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings) :
-    PanelLayout(pParent, "PageFormatPanel", "modules/swriter/ui/pageformatpanel.ui", rxFrame),
+    PanelLayout(pParent, "PageFormatPanel", "modules/swriter/ui/pageformatpanel.ui"),
     mpBindings( pBindings ),
     mxPaperSizeBox(new SvxPaperSizeListBox(m_xBuilder->weld_combo_box("papersize"))),
     mxPaperWidth(new SvxRelativeField(m_xBuilder->weld_metric_spin_button("paperwidth", FieldUnit::CM))),
@@ -112,11 +112,6 @@ PageFormatPanel::PageFormatPanel(
 
 PageFormatPanel::~PageFormatPanel()
 {
-    disposeOnce();
-}
-
-void PageFormatPanel::dispose()
-{
     mxPaperSizeBox.reset();
     mxPaperWidth.reset();
     mxPaperHeight.reset();
@@ -132,8 +127,6 @@ void PageFormatPanel::dispose()
     mpPageULMarginItem.reset();
     mpPageLRMarginItem.reset();
     mpPageItem.reset();
-
-    PanelLayout::dispose();
 }
 
 void PageFormatPanel::Initialize()
