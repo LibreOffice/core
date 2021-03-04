@@ -41,15 +41,13 @@ class ParaPropertyPanel
 {
 public:
     virtual ~ParaPropertyPanel() override;
-    virtual void dispose() override;
 
-    static VclPtr<PanelLayout> Create (
-        vcl::Window* pParent,
+    static std::unique_ptr<PanelLayout> Create (
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
 
-    virtual void DataChanged (const DataChangedEvent& rEvent) override;
     SfxBindings* GetBindings() { return mpBindings;}
 
     virtual void HandleContextChange (
@@ -67,7 +65,7 @@ public:
     static FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );
 
     ParaPropertyPanel (
-        vcl::Window* pParent,
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);

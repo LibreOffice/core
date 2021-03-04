@@ -277,10 +277,10 @@ OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
 }
 
 ChartSeriesPanel::ChartSeriesPanel(
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     ChartController* pController)
-    : PanelLayout(pParent, "ChartSeriesPanel", "modules/schart/ui/sidebarseries.ui", rxFrame)
+    : PanelLayout(pParent, "ChartSeriesPanel", "modules/schart/ui/sidebarseries.ui")
     , mxCBLabel(m_xBuilder->weld_check_button("checkbutton_label"))
     , mxCBTrendline(m_xBuilder->weld_check_button("checkbutton_trendline"))
     , mxCBXError(m_xBuilder->weld_check_button("checkbutton_x_error"))
@@ -297,16 +297,9 @@ ChartSeriesPanel::ChartSeriesPanel(
     , mbModelValid(true)
 {
     Initialize();
-
-    m_pInitialFocusWidget = mxCBLabel.get();
 }
 
 ChartSeriesPanel::~ChartSeriesPanel()
-{
-    disposeOnce();
-}
-
-void ChartSeriesPanel::dispose()
 {
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcaster->removeModifyListener(mxListener);
@@ -327,8 +320,6 @@ void ChartSeriesPanel::dispose()
 
     mxFTSeriesName.reset();
     mxFTSeriesTemplate.reset();
-
-    PanelLayout::dispose();
 }
 
 void ChartSeriesPanel::Initialize()
@@ -385,8 +376,8 @@ void ChartSeriesPanel::updateData()
     mxFTSeriesName->set_label(aFrameLabel);
 }
 
-VclPtr<PanelLayout> ChartSeriesPanel::Create (
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> ChartSeriesPanel::Create (
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     ChartController* pController)
 {
@@ -395,13 +386,12 @@ VclPtr<PanelLayout> ChartSeriesPanel::Create (
     if ( ! rxFrame.is())
         throw lang::IllegalArgumentException("no XFrame given to ChartSeriesPanel::Create", nullptr, 1);
 
-    return  VclPtr<ChartSeriesPanel>::Create(
-                        pParent, rxFrame, pController);
+    return std::make_unique<ChartSeriesPanel>(pParent, rxFrame, pController);
 }
 
-void ChartSeriesPanel::DataChanged(
-    const DataChangedEvent& )
+void ChartSeriesPanel::DataChanged(const DataChangedEvent& rEvent)
 {
+    PanelLayout::DataChanged(rEvent);
     updateData();
 }
 

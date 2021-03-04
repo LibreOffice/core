@@ -36,6 +36,7 @@ public:
     sal_Int32 mnOrderIndex;
     bool mbShowForReadOnlyDocuments;
     bool mbWantsCanvas;
+    bool mbWantsAWT;
     bool mbExperimental;
 
     OUString msNodeName; // some impress panel nodes names are different from their Id

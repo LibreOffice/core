@@ -36,10 +36,10 @@ namespace svx::sidebar {
 
 
 GraphicPropertyPanel::GraphicPropertyPanel(
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
-:   PanelLayout(pParent, "GraphicPropertyPanel", "svx/ui/sidebargraphic.ui", rxFrame),
+:   PanelLayout(pParent, "GraphicPropertyPanel", "svx/ui/sidebargraphic.ui"),
     maBrightControl(SID_ATTR_GRAF_LUMINANCE, *pBindings, *this),
     maContrastControl(SID_ATTR_GRAF_CONTRAST, *pBindings, *this),
     maTransparenceControl(SID_ATTR_GRAF_TRANSPARENCE, *pBindings, *this),
@@ -60,11 +60,6 @@ GraphicPropertyPanel::GraphicPropertyPanel(
 
 GraphicPropertyPanel::~GraphicPropertyPanel()
 {
-    disposeOnce();
-}
-
-void GraphicPropertyPanel::dispose()
-{
     mxMtrBrightness.reset();
     mxMtrContrast.reset();
     mxLBColorMode.reset();
@@ -78,8 +73,6 @@ void GraphicPropertyPanel::dispose()
     maBlueControl.dispose();
     maGammaControl.dispose();
     maModeControl.dispose();
-
-    PanelLayout::dispose();
 }
 
 void GraphicPropertyPanel::Initialize()
@@ -130,8 +123,8 @@ IMPL_LINK_NOARG( GraphicPropertyPanel, ClickColorModeHdl, weld::ComboBox&, void 
             SfxCallMode::RECORD, { &aTransItem });
 }
 
-VclPtr<PanelLayout> GraphicPropertyPanel::Create (
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> GraphicPropertyPanel::Create (
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
@@ -142,17 +135,8 @@ VclPtr<PanelLayout> GraphicPropertyPanel::Create (
     if (pBindings == nullptr)
         throw lang::IllegalArgumentException("no SfxBindings given to GraphicPropertyPanel::Create", nullptr, 2);
 
-    return VclPtr<GraphicPropertyPanel>::Create(
-                pParent,
-                rxFrame,
-                pBindings);
+    return std::make_unique<GraphicPropertyPanel>(pParent, rxFrame, pBindings);
 }
-
-void GraphicPropertyPanel::DataChanged(
-    const DataChangedEvent& /*rEvent*/)
-{
-}
-
 
 void GraphicPropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
@@ -259,7 +243,6 @@ void GraphicPropertyPanel::NotifyItemUpdate(
         }
     }
 }
-
 
 // namespace close
 

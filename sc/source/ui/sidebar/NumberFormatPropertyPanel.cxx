@@ -31,10 +31,10 @@ using namespace css::uno;
 namespace sc::sidebar {
 
 NumberFormatPropertyPanel::NumberFormatPropertyPanel(
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
-    : PanelLayout(pParent,"NumberFormatPropertyPanel", "modules/scalc/ui/sidebarnumberformat.ui", rxFrame)
+    : PanelLayout(pParent,"NumberFormatPropertyPanel", "modules/scalc/ui/sidebarnumberformat.ui")
     , mxLbCategory(m_xBuilder->weld_combo_box("numberformatcombobox"))
     , mxTBCategory(m_xBuilder->weld_toolbar("numberformat"))
     , mxCategoryDispatch(new ToolbarUnoDispatcher(*mxTBCategory, *m_xBuilder, rxFrame))
@@ -54,15 +54,9 @@ NumberFormatPropertyPanel::NumberFormatPropertyPanel(
     , mpBindings(pBindings)
 {
     Initialize();
-    m_pInitialFocusWidget = mxLbCategory.get();
 }
 
 NumberFormatPropertyPanel::~NumberFormatPropertyPanel()
-{
-    disposeOnce();
-}
-
-void NumberFormatPropertyPanel::dispose()
 {
     mxLbCategory.reset();
     mxCategoryDispatch.reset();
@@ -79,8 +73,6 @@ void NumberFormatPropertyPanel::dispose()
 
     maNumFormatControl.dispose();
     maFormatControl.dispose();
-
-    PanelLayout::dispose();
 }
 
 void NumberFormatPropertyPanel::Initialize()
@@ -151,8 +143,8 @@ IMPL_LINK_NOARG( NumberFormatPropertyPanel, NumFormatValueHdl, weld::SpinButton&
             SfxCallMode::RECORD, { &aItem });
 }
 
-VclPtr<PanelLayout> NumberFormatPropertyPanel::Create (
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> NumberFormatPropertyPanel::Create (
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
@@ -163,13 +155,8 @@ VclPtr<PanelLayout> NumberFormatPropertyPanel::Create (
     if (pBindings == nullptr)
         throw lang::IllegalArgumentException("no SfxBindings given to NumberFormatPropertyPanel::Create", nullptr, 2);
 
-    return  VclPtr<NumberFormatPropertyPanel>::Create(
-                        pParent, rxFrame, pBindings);
+    return std::make_unique<NumberFormatPropertyPanel>(pParent, rxFrame, pBindings);
 }
-
-void NumberFormatPropertyPanel::DataChanged(
-    const DataChangedEvent&)
-{}
 
 void NumberFormatPropertyPanel::HandleContextChange(
     const vcl::EnumContext& rContext)
