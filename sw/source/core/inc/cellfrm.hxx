@@ -62,6 +62,12 @@ public:
     const SwCellFrame& FindStartEndOfRowSpanCell( bool bStart ) const;
     tools::Long GetLayoutRowSpan() const;
 
+    /// If this is a vertically merged cell, then looks up its covered cell in rRow.
+    const SwCellFrame* GetCoveredCellInRow(const SwRowFrame& rRow) const;
+
+    /// If this is a vertically merged cell, then looks up its covered cells.
+    std::vector<const SwCellFrame*> GetCoveredCells() const;
+
     void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
 };
 
