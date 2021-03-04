@@ -8641,25 +8641,6 @@ void Test::testTdf93415()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTdf133260()
-{
-    CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
-
-    ScAddress aPos1(0,0,0);
-    m_pDoc->SetString(aPos1, "=SUM(ABS(MUNIT(2)))");
-
-    ScAddress aPos2(0,1,0);
-    m_pDoc->SetString(aPos2, "=SUM(ABS(MUNIT(2)*-1))");
-
-    // Without the fix in place, this test would have failed with
-    // - Expected: 2
-    // - Actual  : 1
-    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(aPos1));
-    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(aPos2));
-
-    m_pDoc->DeleteTab(0);
-}
-
 void Test::testTdf100818()
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Sheet1"));
