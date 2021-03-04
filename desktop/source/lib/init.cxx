@@ -2731,6 +2731,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:SelectionMode"),
         OUString(".uno:PageStatus"),
         OUString(".uno:LayoutStatus"),
+        OUString(".uno:Scale"),
         OUString(".uno:Context"),
         OUString(".uno:WrapText"),
         OUString(".uno:ToggleMergeCells"),

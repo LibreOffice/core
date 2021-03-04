@@ -54,6 +54,7 @@
 #include <SdShapeTypes.hxx>
 #include <TextObjectBar.hxx>
 #include <tmplctrl.hxx>
+#include <scalectrl.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/bmpmask.hxx>
@@ -198,6 +199,7 @@ void SdDLL::RegisterControllers(SdModule* pMod)
 #endif
     XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pMod );
     SdTemplateControl::RegisterControl( SID_STATUS_LAYOUT, pMod );
+    SdScaleControl::RegisterControl( SID_SCALE, pMod );
     SvxTbxCtlDraw::RegisterControl(SID_INSERT_DRAW, pMod );
 }
 

@@ -860,6 +860,11 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
             aLayoutStr = aLayoutStr.copy(0, nIndex);
         rSet.Put( SfxStringItem( SID_STATUS_LAYOUT, aLayoutStr ) );
     }
+    //Scale value
+    const Fraction& aUIScale = mrSlideSorter.GetModel().GetDocument()->GetUIScale();
+    OUString aString = OUString::number(aUIScale.GetNumerator()) +
+        ":" + OUString::number(aUIScale.GetDenominator());
+    rSet.Put( SfxStringItem( SID_SCALE, aString ) );
 }
 
 void SlotManager::RenameSlide(const SfxRequest& rRequest)

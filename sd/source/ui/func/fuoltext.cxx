@@ -77,6 +77,7 @@ const sal_uInt16 SidArray[] = {
                 SID_PARASPACE_DECREASE,
                 SID_STATUS_PAGE,
                 SID_STATUS_LAYOUT,
+                SID_SCALE,
                 SID_EXPAND_PAGE,
                 SID_SUMMARY_PAGE,
                 0 };

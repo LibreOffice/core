@@ -714,6 +714,14 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             aString = aString.copy(0, nPos);
         rSet.Put( SfxStringItem( SID_STATUS_LAYOUT, aString ) );
     }
+    // Scale
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_SCALE ) )
+    {
+        const Fraction& aUIScale = GetDoc()->GetUIScale();
+        OUString aString = OUString::number(aUIScale.GetNumerator()) +
+            ":" + OUString::number(aUIScale.GetDenominator());
+        rSet.Put( SfxStringItem( SID_SCALE, aString ) );
+    }
 }
 
 void DrawViewShell::Notify (SfxBroadcaster&, const SfxHint& rHint)
