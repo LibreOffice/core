@@ -231,6 +231,7 @@ private:
     bool    bSnapPixel;
 
     bool    bAnyClipped;        // internal
+    bool    bVertical;
     bool    bTabProtected;
     bool    bLayoutRTL;
 
@@ -277,11 +278,11 @@ private:
 
     std::unique_ptr<ScFieldEditEngine> CreateOutputEditEngine();
 
-    void ShowClipMarks( DrawEditParam& rParam, tools::Long nEngineHeight, const Size& aCellSize,
-                        bool bMerged, OutputAreaParam& aAreaParam );
+    void ShowClipMarks( DrawEditParam& rParam, tools::Long nEngineWidth, const Size& aCellSize,
+                        bool bMerged, OutputAreaParam& aAreaParam, bool bTop );
 
     ClearableClipRegionPtr Clip(DrawEditParam& rParam, const Size& aCellSize, OutputAreaParam& aAreaParam,
-                                tools::Long nEngineHeight, bool bWrapFields);
+                                tools::Long nEngineWidth, bool bWrapFields, bool bTop);
 
     bool AdjustAreaParamClipRect(OutputAreaParam& rAreaParam);
     tools::Long SetEngineTextAndGetWidth( DrawEditParam& rParam, const OUString& rSetString,

@@ -173,6 +173,7 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     bMarkClipped( false ), // sal_False for printer/metafile etc.
     bSnapPixel( false ),
     bAnyClipped( false ),
+    bVertical(false),
     mpTargetPaintWindow(nullptr), // #i74769# use SdrPaintWindow direct
     mpSpellCheckCxt(nullptr)
 {
@@ -2552,19 +2553,42 @@ void ScOutputData::DrawClipMarks()
                     tools::Long nMarkPixel = static_cast<tools::Long>( SC_CLIPMARK_SIZE * mnPPTX );
                     Size aMarkSize( nMarkPixel, (nMarkPixel-1)*2 );
 
-                    if ( pInfo->nClipMark & ( bLayoutRTL ? ScClipMark::Right : ScClipMark::Left ) )
+                    if (bVertical)
                     {
-                        //  visually left
-                        tools::Rectangle aMarkRect = aCellRect;
-                        aMarkRect.SetRight( aCellRect.Left()+nMarkPixel-1 );
-                        SvxFont::DrawArrow( *mpDev, aMarkRect, aMarkSize, aArrowFillCol, true );
+                        if (pInfo->nClipMark & (bLayoutRTL ? ScClipMark::Bottom : ScClipMark::Top))
+                        {
+                            //  visually top
+                            tools::Rectangle aMarkRect = aCellRect;
+                            aMarkRect.SetBottom(aCellRect.Top() + nMarkPixel - 1);
+                            SvxFont::DrawArrow(*mpDev, aMarkRect, aMarkSize, aArrowFillCol, true, true);
+                        }
+                        if (pInfo->nClipMark & (bLayoutRTL ? ScClipMark::Top : ScClipMark::Bottom))
+                        {
+                            //  visually bottom
+                            tools::Rectangle aMarkRect = aCellRect;
+                            aMarkRect.SetTop(aCellRect.Bottom() + nMarkPixel + 1);
+                            SvxFont::DrawArrow(*mpDev, aMarkRect, aMarkSize, aArrowFillCol, false,
+                                true);
+                        }
                     }
-                    if ( pInfo->nClipMark & ( bLayoutRTL ? ScClipMark::Left : ScClipMark::Right ) )
+                    else
                     {
-                        //  visually right
-                        tools::Rectangle aMarkRect = aCellRect;
-                        aMarkRect.SetLeft( aCellRect.Right()-nMarkPixel+1 );
-                        SvxFont::DrawArrow( *mpDev, aMarkRect, aMarkSize, aArrowFillCol, false );
+                        if (pInfo->nClipMark & (bLayoutRTL ? ScClipMark::Right : ScClipMark::Left))
+                        {
+                            //  visually left
+                            tools::Rectangle aMarkRect = aCellRect;
+                            aMarkRect.SetRight(aCellRect.Left() + nMarkPixel - 1);
+                            SvxFont::DrawArrow(*mpDev, aMarkRect, aMarkSize, aArrowFillCol, true,
+                                false);
+                        }
+                        if (pInfo->nClipMark & (bLayoutRTL ? ScClipMark::Left : ScClipMark::Right))
+                        {
+                            //  visually right
+                            tools::Rectangle aMarkRect = aCellRect;
+                            aMarkRect.SetLeft(aCellRect.Right() - nMarkPixel + 1);
+                            SvxFont::DrawArrow(*mpDev, aMarkRect, aMarkSize, aArrowFillCol, false,
+                                false);
+                        }
                     }
                 }
                 nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;

@@ -109,6 +109,7 @@ public:
 
     //ods, xls, xlsx filter tests
     void testCondFormatOperatorsSameRangeXLSX();
+    void testTdf119292();
     void testCondFormatFormulaIsXLSX();
     void testCondFormatBeginsAndEndsWithXLSX();
     void testExtCondFormatXLSX();
@@ -316,6 +317,7 @@ public:
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCondFormatOperatorsSameRangeXLSX);
+    CPPUNIT_TEST(testTdf119292);
     CPPUNIT_TEST(testCondFormatFormulaIsXLSX);
     CPPUNIT_TEST(testCondFormatBeginsAndEndsWithXLSX);
     CPPUNIT_TEST(testExtCondFormatXLSX);
@@ -582,21 +584,54 @@ void ScFiltersTest::testCondFormatOperatorsSameRangeXLSX()
     CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::ExtCondition, pEntry->GetType());
 
     const ScCondFormatEntry* pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
-    CPPUNIT_ASSERT_EQUAL( ScConditionMode::ContainsText,  pCondition->GetOperation());
+    CPPUNIT_ASSERT_EQUAL(ScConditionMode::ContainsText, pCondition->GetOperation());
 
     pEntry = pFormat->GetEntry(1);
     CPPUNIT_ASSERT(pEntry);
     CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::ExtCondition, pEntry->GetType());
 
     pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
-    CPPUNIT_ASSERT_EQUAL( ScConditionMode::BeginsWith,  pCondition->GetOperation());
+    CPPUNIT_ASSERT_EQUAL(ScConditionMode::BeginsWith, pCondition->GetOperation());
 
     pEntry = pFormat->GetEntry(2);
     CPPUNIT_ASSERT(pEntry);
     CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::ExtCondition, pEntry->GetType());
 
     pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
-    CPPUNIT_ASSERT_EQUAL( ScConditionMode::EndsWith,  pCondition->GetOperation());
+    CPPUNIT_ASSERT_EQUAL(ScConditionMode::EndsWith, pCondition->GetOperation());
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf119292()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf119292.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf119292.xlsx", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    auto* pDev = rDoc.GetRefDevice();
+    Size aMarkSize(4, 6);
+    Color aArrowFillCol(COL_LIGHTRED);
+
+    // check the points of the polygon if the text is rotated 90 degrees
+    tools::Rectangle aMarkRect1(0, 0, 45, 3);
+    tools::Polygon aPoly90degrees = SvxFont::DrawArrow(*pDev, aMarkRect1, aMarkSize, aArrowFillCol, true, true);
+    Point aPoly90Pos1 = aPoly90degrees.GetPoint(0);
+    Point aPoly90Pos2 = aPoly90degrees.GetPoint(1);
+    Point aPoly90Pos3 = aPoly90degrees.GetPoint(2);
+    CPPUNIT_ASSERT_EQUAL(Point(19,3),aPoly90Pos1);
+    CPPUNIT_ASSERT_EQUAL(Point(22,0),aPoly90Pos2);
+    CPPUNIT_ASSERT_EQUAL(Point(25,3),aPoly90Pos3);
+
+    // check the points of the polygon if the text is rotated 270 degrees
+    tools::Rectangle aMarkRect2(89, 62, 134, 57);
+    tools::Polygon aPoly270degrees = SvxFont::DrawArrow(*pDev, aMarkRect2, aMarkSize, aArrowFillCol, false, true);
+    Point aPoly270Pos1 = aPoly270degrees.GetPoint(0);
+    Point aPoly270Pos2 = aPoly270degrees.GetPoint(1);
+    Point aPoly270Pos3 = aPoly270degrees.GetPoint(2);
+    CPPUNIT_ASSERT_EQUAL(Point(108,54),aPoly270Pos1);
+    CPPUNIT_ASSERT_EQUAL(Point(111,57),aPoly270Pos2);
+    CPPUNIT_ASSERT_EQUAL(Point(114,54),aPoly270Pos3);
 
     xDocSh->DoClose();
 }

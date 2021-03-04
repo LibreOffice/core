@@ -42,10 +42,10 @@ enum class ScRotateDir : sal_uInt8 {
 };
 
 enum class ScClipMark : sal_uInt8 {
-    NONE = 0x00, Left = 0x01, Right = 0x02
+    NONE = 0x00, Left = 0x01, Right = 0x02, Bottom = 0x03, Top = 0x04
 };
 namespace o3tl {
-    template<> struct typed_flags<ScClipMark> : is_typed_flags<ScClipMark, 0x03> {};
+    template<> struct typed_flags<ScClipMark> : is_typed_flags<ScClipMark, 0x07> {};
 }
 
 const sal_uInt8 SC_CLIPMARK_SIZE     = 64;
