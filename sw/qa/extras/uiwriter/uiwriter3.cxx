@@ -2555,12 +2555,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133477)
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
 
     // Read it back and check the color of the first pixel.
+    // (Actually check at one-pixel offset, because imprecise shape positioning may
+    // result in blending with background for the first pixel).
     Graphic aGraphic;
     TypeSerializer aSerializer(aStream);
     aSerializer.readGraphic(aGraphic);
 
     BitmapEx aBitmap = aGraphic.GetBitmapEx();
-    CPPUNIT_ASSERT_EQUAL(Color(0, 102, 204), aBitmap.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(0, 102, 204), aBitmap.GetPixelColor(1, 1));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf137964)
