@@ -76,6 +76,8 @@ class SwNavigationPI : public PanelLayout
     OUString            m_sContentFileName;
     OUString            m_aStatusArr[4];
 
+    VclPtr<SfxNavigator> m_xNavigatorDlg;
+
     std::unique_ptr<SfxObjectShellLock>  m_pxObjectShell;
     SwView              *m_pContentView;
     SwWrtShell          *m_pContentWrtShell;
@@ -114,6 +116,8 @@ class SwNavigationPI : public PanelLayout
     bool EditAction();
     void UsePage();
 
+    void UpdateInitShow();
+
 protected:
 
     // release ObjectShellLock early enough for app end
@@ -124,14 +128,13 @@ protected:
 
 public:
 
-    static VclPtr<vcl::Window> Create(vcl::Window* pParent,
+    static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
             SfxBindings* pBindings);
-    SwNavigationPI(vcl::Window* pParent,
+    SwNavigationPI(weld::Widget* pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
-            SfxBindings* _pBindings);
+            SfxBindings* _pBindings, SfxNavigator* pNavigatorDlg);
     virtual ~SwNavigationPI() override;
-    virtual void    dispose() override;
 
     void            UpdateListBox();
     void            MoveOutline(SwOutlineNodes::size_type nSource, SwOutlineNodes::size_type nTarget);
@@ -142,8 +145,6 @@ public:
 
     virtual void GetControlState(const sal_uInt16 /*nSId*/,
                                  boost::property_tree::ptree& /*rState*/) override {};
-
-    virtual void    StateChanged(StateChangedType nStateChange) override;
 
     static OUString CreateDropFileName( TransferableDataHelper& rData );
     static OUString CleanEntry(const OUString& rEntry);
@@ -158,6 +159,8 @@ public:
     bool            IsGlobalMode() const {return    m_bGlobalMode;}
 
     SwView*         GetCreateView() const;
+
+    virtual weld::Window* GetFrameWeld() const override;
 };
 
 class SwNavigatorWrapper final : public SfxNavigatorWrapper

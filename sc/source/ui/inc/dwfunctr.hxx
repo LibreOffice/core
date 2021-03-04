@@ -29,13 +29,13 @@ class ScFunctionWin;
 
 class EnglishFunctionNameChange : public comphelper::ConfigurationListenerProperty<bool>
 {
-    VclPtr<ScFunctionWin> m_xFunctionWin;
+    ScFunctionWin* m_pFunctionWin;
 protected:
     virtual void setProperty(const css::uno::Any &rProperty) override;
 public:
     EnglishFunctionNameChange(const rtl::Reference<comphelper::ConfigurationListener> &rListener, ScFunctionWin* pFunctionWin)
         : ConfigurationListenerProperty(rListener, "EnglishFunctionName")
-        , m_xFunctionWin(pFunctionWin)
+        , m_pFunctionWin(pFunctionWin)
     {
     }
 };
@@ -66,10 +66,9 @@ private:
                     DECL_LINK( SelTreeHdl, weld::TreeView&, void );
 
 public:
-    ScFunctionWin(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame> &rFrame);
+    ScFunctionWin(weld::Widget* pParent);
 
     virtual ~ScFunctionWin() override;
-    virtual void    dispose() override;
 
     void            InitLRUList();
     void            UpdateFunctionList();

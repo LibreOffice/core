@@ -89,6 +89,7 @@ public:
 private:
     const OUString msPanelId;
     const bool mbIsTitleBarOptional;
+    const bool mbWantsAWT;
     css::uno::Reference<css::ui::XUIElement> mxElement;
     css::uno::Reference<css::ui::XSidebarPanel> mxPanelComponent;
     bool mbIsExpanded;
@@ -98,7 +99,7 @@ private:
     const css::uno::Reference<css::frame::XFrame>& mxFrame;
     std::unique_ptr<PanelTitleBar> mxTitleBar;
     std::unique_ptr<weld::Container> mxContents;
-    css::uno::Reference<css::awt::XWindow> mxAwtXWindow;
+    css::uno::Reference<css::awt::XWindow> mxXWindow;
 };
 typedef std::vector<VclPtr<Panel>> SharedPanelContainer;
 

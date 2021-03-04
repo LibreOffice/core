@@ -30,14 +30,13 @@ namespace sidebar
 class FontworkPropertyPanel : public PanelLayout
 {
 public:
-    static VclPtr<vcl::Window> Create(vcl::Window* pParent,
-                                      const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    static std::unique_ptr<FontworkPropertyPanel>
+    Create(weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     // constructor/destructor
-    FontworkPropertyPanel(vcl::Window* pParent,
+    FontworkPropertyPanel(weld::Widget* pParent,
                           const css::uno::Reference<css::frame::XFrame>& rxFrame);
     ~FontworkPropertyPanel();
-    void dispose() override;
 
 private:
     std::unique_ptr<weld::Toolbar> m_pToolbar;

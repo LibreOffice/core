@@ -39,8 +39,6 @@ class SFX2_DLLPUBLIC SfxNavigator : public SfxDockingWindow
 public:
     SfxNavigator(SfxBindings* pBindings, SfxChildWindow* pChildWin,
                  vcl::Window* pParent);
-
-    virtual void Resize() override;
 };
 
 #endif

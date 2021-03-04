@@ -228,6 +228,14 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="WantsAWT" oor:type="xs:boolean">
+        <info>
+          <desc>This flag controls whether the panel requires a awt::XWindow parent. This option cannot be false if WantsCanvas
+          is also true. The default of true is suitable for third party sidebar panels, false is only useful for built-in
+          internal panels.</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
   </templates>
   <component>

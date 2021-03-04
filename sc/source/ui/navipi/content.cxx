@@ -161,7 +161,6 @@ ScContentTree::~ScContentTree()
         Application::RemoveUserEvent(m_nAsyncMouseReleaseId);
         m_nAsyncMouseReleaseId = nullptr;
     }
-    pParentWindow.clear();
 }
 
 static const char* SCSTR_CONTENT_ARY[] =

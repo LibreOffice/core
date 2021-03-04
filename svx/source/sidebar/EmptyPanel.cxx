@@ -21,19 +21,13 @@
 
 namespace svx::sidebar
 {
-EmptyPanel::EmptyPanel(vcl::Window* pParent)
-    : PanelLayout(pParent, "EmptyPanel", "svx/ui/sidebarempty.ui", nullptr)
+EmptyPanel::EmptyPanel(weld::Widget* pParent)
+    : PanelLayout(pParent, "EmptyPanel", "svx/ui/sidebarempty.ui")
     , mxMessageControl(m_xBuilder->weld_label("message"))
 {
 }
 
-EmptyPanel::~EmptyPanel() { disposeOnce(); }
-
-void EmptyPanel::dispose()
-{
-    mxMessageControl.reset();
-    PanelLayout::dispose();
-}
+EmptyPanel::~EmptyPanel() {}
 
 } // end of namespace svx::sidebar
 
