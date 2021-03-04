@@ -885,6 +885,7 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUString&               
         aArgs.remove( "Frame" );
         aArgs.remove( "Password" );
         aArgs.remove( "EncryptionData" );
+        aArgs.remove( "ShareUsers" );
 
         // TODO/LATER: all the parameters that are accepted by ItemSet of the DocShell must be removed here
 
@@ -1136,6 +1137,11 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
         else if (rArg.Name == "EncryptionData")
         {
             pMedium->GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, rArg.Value));
+            ok = true;
+        }
+        else if (rArg.Name == "ShareUsers")
+        {
+            pMedium->GetItemSet()->Put(SfxUnoAnyItem(SID_SHAREUSERS, rArg.Value));
             ok = true;
         }
         if (!ok)
@@ -1714,6 +1720,7 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUString&                   rURL
     attachResource( rURL, aSequence );
 
     loadCmisProperties( );
+    loadShareProperties();
 
 #if OSL_DEBUG_LEVEL > 0
     const SfxStringItem* pPasswdItem = SfxItemSet::GetItem<SfxStringItem>(m_pData->m_pObjectShell->GetMedium()->GetItemSet(), SID_PASSWORD, false);
@@ -1979,6 +1986,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
 
     pMedium = handleLoadError(nError, pMedium);
     loadCmisProperties();
+    loadShareProperties();
     setUpdatePickList(pMedium);
 
 #if OSL_DEBUG_LEVEL > 0
@@ -2733,6 +2741,53 @@ void SfxBaseModel::loadCmisProperties( )
     catch (const ucb::CommandAbortedException &)
     {
     }
+}
+
+void SfxBaseModel::loadShareProperties()
+{
+    SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
+    if ( !pMedium )
+        return;
+
+    ::ucbhelper::Content aContent(
+        pMedium->GetName(),
+        utl::UCBContentHelper::getDefaultCommandEnvironment(),
+        comphelper::getProcessComponentContext() );
+
+    // try to get NextCloud/OwnCloud properties from webdav UCB
+    uno::Any owner = aContent.getPropertyValue(
+        "<prop:owner-id xmlns:prop=\"http://owncloud.org/ns\">" );
+    uno::Any sharees = aContent.getPropertyValue(
+        "<prop:sharees xmlns:prop=\"http://nextcloud.org/ns\">" );
+
+    OUString sOwner;
+    if (owner.has<OUString>())
+        sOwner = owner.get<OUString>();
+
+    OUString sSharees;
+    if (sharees.has<OUString>())
+    {
+        sSharees = sharees.get<OUString>();
+
+        const sal_Int32 nStart=sSharees.indexOfAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("http://nextcloud.org/nsid>"))
+            +RTL_CONSTASCII_LENGTH("http://nextcloud.org/nsid>");
+        sSharees = sSharees.copy(
+            nStart,
+            sSharees.indexOfAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("</http://nextcloud.org/nsid"),
+                nStart) - nStart);
+    }
+
+    uno::Sequence< beans::NamedValue > aShareUsers(
+        {
+            beans::NamedValue( "Owner",  makeAny(sOwner) ),
+            beans::NamedValue( "Sharees",  makeAny(
+                                   uno::Sequence<OUString>(
+                                       { sSharees })) )
+        } );
+    pMedium->GetItemSet()->Put(SfxUnoAnyItem(SID_SHAREUSERS,
+                                             makeAny(aShareUsers)));
 }
 
 SfxMedium* SfxBaseModel::handleLoadError( ErrCode nError, SfxMedium* pMedium )
@@ -3756,6 +3811,7 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const Reference< embed::XStorage >&
             Reference< XInterface >(), sal_uInt32(nError));
     }
     loadCmisProperties( );
+    loadShareProperties();
 }
 
 void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& xStorage,

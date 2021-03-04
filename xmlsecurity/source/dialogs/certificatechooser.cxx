@@ -225,9 +225,13 @@ void CertificateChooser::ImplInitialize()
                 {
                     if ( meAction == UserAction::Sign || meAction == UserAction::SelectSign )
                         m_xCertLB->select(nRow);
-                    else if ( meAction == UserAction::Encrypt &&
-                              aUserOpts.GetEncryptToSelf() )
+
+                    if ( meAction == UserAction::Encrypt &&
+                         aUserOpts.GetEncryptToSelf() )
+                    {
+                        m_xCertLB->select(nRow);
                         mxEncryptToSelf = xCert;
+                    }
                 }
             }
 #endif
@@ -240,6 +244,12 @@ void CertificateChooser::ImplInitialize()
     // enable/disable buttons
     CertificateHighlightHdl(*m_xCertLB);
     mbInitialized = true;
+
+    // code above might have pre-selected keys
+    bool bEnable = m_xCertLB->get_selected_index() != -1;
+    m_xViewBtn->set_sensitive(bEnable);
+    m_xOKBtn->set_sensitive(bEnable);
+    m_xDescriptionED->set_sensitive(bEnable);
 }
 
 uno::Sequence<uno::Reference< css::security::XCertificate > > CertificateChooser::GetSelectedCertificates()

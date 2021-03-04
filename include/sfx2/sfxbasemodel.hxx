@@ -735,6 +735,8 @@ private:
 
     SAL_DLLPRIVATE void loadCmisProperties();
 
+    SAL_DLLPRIVATE void loadShareProperties();
+
     SAL_DLLPRIVATE SfxMedium* handleLoadError( ErrCode nError, SfxMedium* pMedium );
 
 

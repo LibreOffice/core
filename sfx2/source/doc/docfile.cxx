@@ -975,6 +975,7 @@ void SfxMedium::SetEncryptionDataToStorage_Impl()
 
     try
     {
+        // this happens on load
         ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( pImpl->xStorage, aEncryptionData );
     }
     catch( const uno::Exception& )

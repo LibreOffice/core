@@ -125,6 +125,23 @@ service MediaDescriptor
      */
     [optional,property] string DocumentTitle;
 
+    /** Share information on file sharing platforms
+
+        <p>
+        Property contains a list of key/value pairs, giving
+        information what users this document is shared with on a file
+        sharing platform.
+
+        Example:
+        * Owner / OwnerEMail
+        * Sharee / ShareeEMail
+
+        There might be more than one entry per keyword value, if
+        e.g. a document is shared with multiple users.
+        </p>
+     */
+    [optional,property] sequence< ::com::sun::star::beans::NamedValue > ShareUsers;
+
     /** encryption information for encryption/decryption of documents
 
         <p>

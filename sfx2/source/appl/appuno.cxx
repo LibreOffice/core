@@ -145,6 +145,7 @@ constexpr OUStringLiteral sModifyPasswordInfo = u"ModifyPasswordInfo";
 constexpr OUStringLiteral sSuggestedSaveAsDir = u"SuggestedSaveAsDir";
 constexpr OUStringLiteral sSuggestedSaveAsName = u"SuggestedSaveAsName";
 constexpr OUStringLiteral sEncryptionData = u"EncryptionData";
+constexpr OUStringLiteral sShareUsers[] = "ShareUsers";
 constexpr OUStringLiteral sFailOnWarning = u"FailOnWarning";
 constexpr OUStringLiteral sDocumentService = u"DocumentService";
 constexpr OUStringLiteral sFilterProvider = u"FilterProvider";
@@ -796,6 +797,10 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
             {
                 rSet.Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, rProp.Value ) );
             }
+            else if ( aName == sShareUsers )
+            {
+                rSet.Put( SfxUnoAnyItem( SID_SHAREUSERS, rProp.Value ) );
+            }
             else if ( aName == sSuggestedSaveAsDir )
             {
                 OUString sVal;
@@ -1083,6 +1088,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                 nAdditional++;
             if ( rSet.GetItemState( SID_ENCRYPTIONDATA ) == SfxItemState::SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_SHAREUSERS ) == SfxItemState::SET )
+                nAdditional++;
             if ( rSet.GetItemState( SID_SUGGESTEDSAVEASNAME ) == SfxItemState::SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_DOC_SERVICE ) == SfxItemState::SET )
@@ -1241,6 +1248,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                     if ( nId == SID_NOAUTOSAVE )
                         continue;
                     if ( nId == SID_ENCRYPTIONDATA )
+                        continue;
+                    if ( nId == SID_SHAREUSERS )
                         continue;
                     if ( nId == SID_DOC_SERVICE )
                         continue;
@@ -1637,6 +1646,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         if ( rSet.GetItemState( SID_ENCRYPTIONDATA, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = sEncryptionData;
+            pValue[nActProp++].Value = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
+        }
+        if ( rSet.GetItemState( SID_SHAREUSERS, false, &pItem ) == SfxItemState::SET )
+        {
+            pValue[nActProp].Name = sShareUsers;
             pValue[nActProp++].Value = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_SUGGESTEDSAVEASDIR, false, &pItem ) == SfxItemState::SET )
