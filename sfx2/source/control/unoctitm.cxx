@@ -1219,6 +1219,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "PageStyleName" ||
              aEvent.FeatureURL.Path == "PageStatus" ||
              aEvent.FeatureURL.Path == "LayoutStatus" ||
+             aEvent.FeatureURL.Path == "Scale" ||
              aEvent.FeatureURL.Path == "Context")
     {
         OUString aString;

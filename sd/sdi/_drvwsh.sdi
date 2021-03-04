@@ -1682,6 +1682,11 @@ interface DrawView
         ExecMethod = ExecStatusBar ;
         StateMethod = GetStatusBarState ;
     ]
+    SID_SCALE // ole : no, status : ?
+    [
+        ExecMethod = ExecStatusBar ;
+        StateMethod = GetStatusBarState ;
+    ]
     SID_LINEEND_POLYGON // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;

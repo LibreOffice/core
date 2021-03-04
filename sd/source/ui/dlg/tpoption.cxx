@@ -253,9 +253,9 @@ SdTpOptionsMisc::SdTpOptionsMisc(weld::Container* pPage, weld::DialogController*
     sal_uInt16 aTable[ TABLE_COUNT ] =
         { 1, 2, 4, 5, 8, 10, 16, 20, 30, 40, 50, 100 };
 
-    for( sal_uInt16 i = 0; i < TABLE_COUNT; i++ )
+    for( sal_uInt16 i = TABLE_COUNT-1; i > 0 ; i-- )
         m_xCbScale->append_text( GetScale( 1, aTable[i] ) );
-    for( sal_uInt16 i = 1; i < TABLE_COUNT; i++ )
+    for( sal_uInt16 i = 0; i < TABLE_COUNT; i++ )
         m_xCbScale->append_text( GetScale(  aTable[i], 1 ) );
 }
 
