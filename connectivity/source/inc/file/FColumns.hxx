@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FCOLUMNS_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FCOLUMNS_HXX
+#pragma once
 
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
@@ -44,6 +43,5 @@ namespace connectivity::file
         };
 
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FCOLUMNS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

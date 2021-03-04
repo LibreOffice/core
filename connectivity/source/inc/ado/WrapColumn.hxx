@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPCOLUMN_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPCOLUMN_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -59,7 +58,5 @@ namespace connectivity::ado
             void put_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject);
         };
 }
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_WRAPCOLUMN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABRECORDS_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABRECORDS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -123,7 +122,5 @@ namespace connectivity::macab
 
         };
 }
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABRECORDS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

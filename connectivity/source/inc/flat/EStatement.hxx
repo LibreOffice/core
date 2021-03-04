@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_ESTATEMENT_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_ESTATEMENT_HXX
+#pragma once
 
 #include <file/FStatement.hxx>
 
@@ -35,7 +34,5 @@ namespace connectivity::flat
         };
 
 }
-
-#endif //_CONNECTIVITY_FLAT_DSTATEMENT_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

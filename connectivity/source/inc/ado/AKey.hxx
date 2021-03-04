@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AKEY_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AKEY_HXX
+#pragma once
 
 #include <sdbcx/VKey.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
@@ -56,6 +55,5 @@ namespace connectivity::ado
             static KeyTypeEnum Map2KeyRule(sal_Int32 _eNum);
         };
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AKEY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

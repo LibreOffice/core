@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NRESULTSETMETADATA_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NRESULTSETMETADATA_HXX
+#pragma once
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -74,7 +73,5 @@ namespace connectivity::evoab
         };
 }
 
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NRESULTSETMETADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

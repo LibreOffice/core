@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_MYSQLC_SOURCE_MYSQLC_CONNECTION_HXX
-#define INCLUDED_MYSQLC_SOURCE_MYSQLC_CONNECTION_HXX
+#pragma once
 
 #include <memory>
 #include "mysqlc_subcomponent.hxx"
@@ -182,6 +181,5 @@ public:
 //inline OUString getPattern(OUString p) { return (p.getLength()) ? p : ASC2OU("%"); }
 } /* mysqlc */
 } /* connectivity */
-#endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_CONNECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

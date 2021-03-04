@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OFUNCTIONS_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OFUNCTIONS_HXX
+#pragma once
 
 #include <connectivity/odbc.hxx>
 #include <rtl/ustring.hxx>
@@ -596,8 +595,6 @@ bool LoadLibrary_ODBC3(OUString &_rPath);
     extern T3SQLGetCursorName pODBC3SQLGetCursorName;
     extern T3SQLNativeSql pODBC3SQLNativeSql;
 }
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OFUNCTIONS_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
