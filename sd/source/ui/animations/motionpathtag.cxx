@@ -45,7 +45,7 @@
 #include <svx/polypolygoneditor.hxx>
 #include <svx/svddrgmt.hxx>
 
-#include "CustomAnimationPane.hxx"
+#include <CustomAnimationPane.hxx>
 #include <View.hxx>
 #include "motionpathtag.hxx"
 #include <ViewShell.hxx>
