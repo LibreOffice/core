@@ -152,6 +152,7 @@
 #define SID_DELETE_LAYER                    (SID_SD_START+81)
 #define SID_DISMANTLE                       (SID_SD_START+82)
     // FREE
+#define SID_SCALE                           (SID_SD_START+85)
 #define SID_STATUS_PAGE                     (SID_SD_START+86)
 #define SID_STATUS_LAYOUT                   (SID_SD_START+87)
 #define SID_STATUS_SELMODE                  (SID_SD_START+88)
