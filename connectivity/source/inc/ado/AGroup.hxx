@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AGROUP_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AGROUP_HXX
+#pragma once
 
 #include <sdbcx/VGroup.hxx>
 #include <ado/Awrapadox.hxx>
@@ -59,6 +58,5 @@ namespace connectivity::ado
             WpADOGroup getImpl() const { return m_aGroup; }
         };
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AGROUP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_MYSQLC_SOURCE_MYSQLC_SUBCOMPONENT_HXX
-#define INCLUDED_MYSQLC_SOURCE_MYSQLC_SUBCOMPONENT_HXX
+#pragma once
 
 #include <cppuhelper/propshlp.hxx>
 #include <osl/diagnose.h>
@@ -141,7 +140,5 @@ css::uno::Sequence<T> concatSequences(const css::uno::Sequence<T>& _rLeft,
     return aReturn;
 }
 }
-
-#endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_SUBCOMPONENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

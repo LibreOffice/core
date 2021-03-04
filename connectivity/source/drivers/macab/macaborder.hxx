@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABORDER_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABORDER_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include "MacabHeader.hxx"
@@ -61,7 +60,5 @@ namespace connectivity::macab
             virtual sal_Int32 compare(const MacabRecord *record1, const MacabRecord *record2) const override;
         };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

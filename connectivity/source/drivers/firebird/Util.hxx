@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_UTIL_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_UTIL_HXX
+#pragma once
 
 #include <ibase.h>
 
@@ -123,6 +122,5 @@ public:
         sal_Int64 pow10Integer( int nDecimalCount );
 
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_UTIL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

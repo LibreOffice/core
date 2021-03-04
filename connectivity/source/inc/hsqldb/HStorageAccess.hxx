@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HSTORAGEACCESS_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HSTORAGEACCESS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -40,7 +39,5 @@ jint read_from_storage_stream( JNIEnv * env, jstring name, jstring key );
 jint read_from_storage_stream_into_buffer( JNIEnv * env, jstring name, jstring key, jbyteArray buffer, jint off, jint len );
 void write_to_storage_stream_from_buffer( JNIEnv* env, jstring name, jstring key, jbyteArray buffer, jint off, jint len );
 void write_to_storage_stream( JNIEnv* env, jstring name, jstring key, jint v );
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HSTORAGEACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

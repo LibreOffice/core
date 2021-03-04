@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ADRIVER_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ADRIVER_HXX
+#pragma once
 
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
@@ -76,7 +75,6 @@ namespace connectivity::ado
         };
 
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ADRIVER_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

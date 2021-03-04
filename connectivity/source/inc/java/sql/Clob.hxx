@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_CLOB_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_CLOB_HXX
+#pragma once
 
 #include <java/lang/Object.hxx>
 #include <com/sun/star/sdbc/XClob.hpp>
@@ -51,6 +50,5 @@ namespace connectivity
         virtual sal_Int64 SAL_CALL positionOfClob( const css::uno::Reference< css::sdbc::XClob >& pattern, sal_Int64 start ) override;
     };
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_CLOB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
