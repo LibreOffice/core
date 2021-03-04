@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c05baf3b_242234e2",
+        "filename": "starmath/inc/ElementsDockingWindow.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-03-04T14:59:33Z",
+      "side": 1,
+      "message": "There is value in keeping that \"m_\" prefix. Could you please restore that?\n\nSee https://wiki.openoffice.org/wiki/Writer/Code_Conventions for some background, though we don\u0027t do all that in new code. But at least preserving \"m_\" helps readability, I would way.",
+      "revId": "df02c97fcd452d6ac5e1ff3b9772f710fb4cc3e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
