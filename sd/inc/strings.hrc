@@ -104,6 +104,7 @@
 #define STR_DLG_INSERT_PAGES_FROM_FILE                  NC_("STR_DLG_INSERT_PAGES_FROM_FILE", "Insert File")
 #define STR_READ_DATA_ERROR                             NC_("STR_READ_DATA_ERROR", "The file could not be loaded!")
 #define STR_SCALE_OBJECTS                               NC_("STR_SCALE_OBJECTS", "The page size of the target document is different than the source document.\n\nDo you want to scale the copied objects to fit the new page size?")
+#define STR_SCALE_TOOLTIP                               NC_("STR_SCALE_TOOLTIP", "Scaling factor of the document; right-click to change.")
 #define STR_CREATE_PAGES                                NC_("STR_CREATE_PAGES", "Create Slides")
 #define STR_UNDO_CHANGE_PAGEFORMAT                      NC_("STR_UNDO_CHANGE_PAGEFORMAT", "Modify page format")
 #define STR_UNDO_CHANGE_PAGEBORDER                      NC_("STR_UNDO_CHANGE_PAGEBORDER", "Modify page margins")
