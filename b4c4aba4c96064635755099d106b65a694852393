@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d2d942fd_78ee30be",
+        "filename": "sw/qa/uitest/writer_tests7/tdf140117.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1002852
+      },
+      "writtenOn": "2021-03-04T06:50:07Z",
+      "side": 0,
+      "message": "This is inside a for-loop with i as the iterator, so I\u0027m pretty sure this was supposed to be \"iteration\", not \"interaction\".  Also see \"iteration\" in line 62.",
+      "revId": "b4c4aba4c96064635755099d106b65a694852393",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
