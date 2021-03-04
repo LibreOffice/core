@@ -130,7 +130,7 @@ BitmapEx CreatePreview(OUString const & aUrl, OUString const & aName)
 
 }
 
-VclPtr<PanelLayout> StylePresetsPanel::Create (vcl::Window* pParent,
+std::unique_ptr<PanelLayout> StylePresetsPanel::Create(weld::Widget* pParent,
                                         const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (pParent == nullptr)
@@ -138,10 +138,10 @@ VclPtr<PanelLayout> StylePresetsPanel::Create (vcl::Window* pParent,
     if (!rxFrame.is())
         throw css::lang::IllegalArgumentException("no XFrame given to StylePresetsPanel::Create", nullptr, 1);
 
-    return VclPtr<StylePresetsPanel>::Create(pParent, rxFrame);
+    return std::make_unique<StylePresetsPanel>(pParent, rxFrame);
 }
 
-StylePresetsPanel::StylePresetsPanel(vcl::Window* pParent,
+StylePresetsPanel::StylePresetsPanel(weld::Widget* pParent,
                                const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, "StylePresetsPanel", "modules/swriter/ui/sidebarstylepresets.ui", rxFrame)
     , mxValueSet(new ValueSet(nullptr))
@@ -182,15 +182,6 @@ void StylePresetsPanel::RefreshList()
 
 StylePresetsPanel::~StylePresetsPanel()
 {
-    disposeOnce();
-}
-
-void StylePresetsPanel::dispose()
-{
-    mxValueSetWin.reset();
-    mxValueSet.reset();
-
-    PanelLayout::dispose();
 }
 
 IMPL_LINK_NOARG(StylePresetsPanel, DoubleClickHdl, ValueSet*, void)

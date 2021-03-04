@@ -26,6 +26,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <avmedia/MediaControlBase.hxx>
+#include <vcl/idle.hxx>
 
 using namespace css;
 using namespace ::com::sun::star::uno;
@@ -42,15 +43,14 @@ class MediaPlaybackPanel
 {
 public:
     MediaPlaybackPanel (
-        vcl::Window* pParent,
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
-    static VclPtr<PanelLayout> Create(
-        vcl::Window* pParent,
+    static std::unique_ptr<PanelLayout> Create(
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
     virtual ~MediaPlaybackPanel() override;
-    virtual void dispose() override;
 
 protected:
     virtual void UpdateToolBoxes(const avmedia::MediaItem& rMediaItem) override;

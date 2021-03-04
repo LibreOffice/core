@@ -204,7 +204,7 @@ double getAxisRotation(const css::uno::Reference<css::frame::XModel>& xModel,
 }
 
 ChartAxisPanel::ChartAxisPanel(
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     ChartController* pController)
     : PanelLayout(pParent, "ChartAxisPanel", "modules/schart/ui/sidebaraxis.ui", rxFrame)
@@ -225,11 +225,6 @@ ChartAxisPanel::ChartAxisPanel(
 
 ChartAxisPanel::~ChartAxisPanel()
 {
-    disposeOnce();
-}
-
-void ChartAxisPanel::dispose()
-{
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcaster->removeModifyListener(mxModifyListener);
 
@@ -244,8 +239,6 @@ void ChartAxisPanel::dispose()
     mxGridLabel.reset();
 
     mxNFRotation.reset();
-
-    PanelLayout::dispose();
 }
 
 void ChartAxisPanel::Initialize()
@@ -288,8 +281,8 @@ void ChartAxisPanel::updateData()
     mxNFRotation->set_value(getAxisRotation(mxModel, aCID), FieldUnit::DEGREE);
 }
 
-VclPtr<PanelLayout> ChartAxisPanel::Create (
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> ChartAxisPanel::Create (
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     ChartController* pController)
 {
@@ -298,13 +291,12 @@ VclPtr<PanelLayout> ChartAxisPanel::Create (
     if ( ! rxFrame.is())
         throw lang::IllegalArgumentException("no XFrame given to ChartAxisPanel::Create", nullptr, 1);
 
-    return  VclPtr<ChartAxisPanel>::Create(
-                        pParent, rxFrame, pController);
+    return std::make_unique<ChartAxisPanel>(pParent, rxFrame, pController);
 }
 
-void ChartAxisPanel::DataChanged(
-    const DataChangedEvent& )
+void ChartAxisPanel::DataChanged(const DataChangedEvent& rEvent)
 {
+    PanelLayout::DataChanged(rEvent);
     updateData();
 }
 

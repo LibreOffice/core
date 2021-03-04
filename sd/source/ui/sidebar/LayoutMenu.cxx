@@ -154,7 +154,7 @@ public:
 };
 
 LayoutMenu::LayoutMenu (
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     ViewShellBase& rViewShellBase,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
     : PanelLayout( pParent, "LayoutPanel", "modules/simpress/ui/layoutpanel.ui", nullptr ),
@@ -207,16 +207,10 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
 
 LayoutMenu::~LayoutMenu()
 {
-    disposeOnce();
-}
-
-void LayoutMenu::dispose()
-{
     SAL_INFO("sd.ui", "destroying LayoutMenu at " << this);
     Dispose();
     mxLayoutValueSetWin.reset();
     mxLayoutValueSet.reset();
-    PanelLayout::dispose();
 }
 
 void LayoutMenu::Dispose()
@@ -707,7 +701,7 @@ IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEve
             break;
 
         case EventMultiplexerEventId::MainViewRemoved:
-            HideFocus();
+//TODO            HideFocus();
             break;
 
         case EventMultiplexerEventId::ConfigurationUpdated:
@@ -723,8 +717,9 @@ IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEve
     }
 }
 
-void LayoutMenu::DataChanged (const DataChangedEvent& /*rEvent*/)
+void LayoutMenu::DataChanged(const DataChangedEvent& rEvent)
 {
+    PanelLayout::DataChanged(rEvent);
     Fill();
     mxLayoutValueSet->StyleUpdated();
     mxLayoutValueSet->SetColor(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Color_PanelBackground));

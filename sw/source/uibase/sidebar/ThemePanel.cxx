@@ -397,18 +397,18 @@ BitmapEx GenerateColorPreview(const svx::ColorSet& rColorSet)
 
 namespace sw::sidebar {
 
-VclPtr<PanelLayout> ThemePanel::Create (vcl::Window* pParent,
-                                        const css::uno::Reference<css::frame::XFrame>& rxFrame)
+std::unique_ptr<PanelLayout> ThemePanel::Create(weld::Widget* pParent,
+                                       const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (pParent == nullptr)
         throw css::lang::IllegalArgumentException("no parent Window given to PagePropertyPanel::Create", nullptr, 0);
     if (!rxFrame.is())
         throw css::lang::IllegalArgumentException("no XFrame given to PagePropertyPanel::Create", nullptr, 1);
 
-    return VclPtr<ThemePanel>::Create(pParent, rxFrame);
+    return std::make_unique<ThemePanel>(pParent, rxFrame);
 }
 
-ThemePanel::ThemePanel(vcl::Window* pParent,
+ThemePanel::ThemePanel(weld::Widget* pParent,
                        const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, "ThemePanel", "modules/swriter/ui/sidebartheme.ui", rxFrame)
     , mxListBoxFonts(m_xBuilder->weld_tree_view("listbox_fonts"))
@@ -453,17 +453,10 @@ ThemePanel::ThemePanel(vcl::Window* pParent,
 
 ThemePanel::~ThemePanel()
 {
-    disposeOnce();
-}
-
-void ThemePanel::dispose()
-{
     mxListBoxFonts.reset();
     mxValueSetColorsWin.reset();
     mxValueSetColors.reset();
     mxApplyButton.reset();
-
-    PanelLayout::dispose();
 }
 
 IMPL_LINK_NOARG(ThemePanel, ClickHdl, weld::Button&, void)

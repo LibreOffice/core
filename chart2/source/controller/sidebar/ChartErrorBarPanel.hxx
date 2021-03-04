@@ -32,8 +32,8 @@ class ChartErrorBarPanel : public PanelLayout,
     public ChartSidebarModifyListenerParent
 {
 public:
-    static VclPtr<PanelLayout> Create(
-        vcl::Window* pParent,
+    static std::unique_ptr<PanelLayout> Create(
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController);
 
@@ -54,11 +54,10 @@ public:
 
     // constructor/destructor
     ChartErrorBarPanel(
-        vcl::Window* pParent,
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController);
     virtual ~ChartErrorBarPanel() override;
-    virtual void dispose() override;
 
     virtual void updateData() override;
     virtual void modelInvalid() override;

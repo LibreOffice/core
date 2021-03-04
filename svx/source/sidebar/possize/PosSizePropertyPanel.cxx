@@ -56,7 +56,7 @@ constexpr OUStringLiteral USERITEM_NAME = u"FitItem";
 namespace svx::sidebar {
 
 PosSizePropertyPanel::PosSizePropertyPanel(
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
@@ -136,11 +136,6 @@ PosSizePropertyPanel::PosSizePropertyPanel(
 
 PosSizePropertyPanel::~PosSizePropertyPanel()
 {
-    disposeOnce();
-}
-
-void PosSizePropertyPanel::dispose()
-{
     mxFtPosX.reset();
     mxMtrPosX.reset();
     mxFtPosY.reset();
@@ -180,10 +175,7 @@ void PosSizePropertyPanel::dispose()
     maAutoWidthControl.dispose();
     maAutoHeightControl.dispose();
     m_aMetricCtl.dispose();
-
-    PanelLayout::dispose();
 }
-
 
 namespace
 {
@@ -254,8 +246,8 @@ void PosSizePropertyPanel::Initialize()
     mePoolUnit = maTransfWidthControl.GetCoreMetric();
 }
 
-VclPtr<PanelLayout> PosSizePropertyPanel::Create (
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> PosSizePropertyPanel::Create (
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
@@ -267,16 +259,7 @@ VclPtr<PanelLayout> PosSizePropertyPanel::Create (
     if (pBindings == nullptr)
         throw lang::IllegalArgumentException("no SfxBindings given to PosSizePropertyPanel::Create", nullptr, 2);
 
-    return VclPtr<PosSizePropertyPanel>::Create(
-                        pParent,
-                        rxFrame,
-                        pBindings,
-                        rxSidebar);
-}
-
-void PosSizePropertyPanel::DataChanged(
-    const DataChangedEvent& /*rEvent*/)
-{
+    return std::make_unique<PosSizePropertyPanel>(pParent, rxFrame, pBindings, rxSidebar);
 }
 
 void PosSizePropertyPanel::HandleContextChange(
@@ -864,6 +847,8 @@ void PosSizePropertyPanel::executeSize()
     }
 }
 
+#if 0
+//TODO
 void PosSizePropertyPanel::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     if (meDlgUnit != GetCurrentUnit(SfxItemState::DEFAULT, nullptr))
@@ -873,6 +858,7 @@ void PosSizePropertyPanel::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 
     PanelLayout::DumpAsPropertyTree(rJsonWriter);
 }
+#endif
 
 void PosSizePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* pState )
 {

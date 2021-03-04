@@ -29,7 +29,7 @@ using namespace css::uno;
 namespace svx::sidebar {
 
 ShadowPropertyPanel::ShadowPropertyPanel(
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     const uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 :   PanelLayout(pParent, "ShadowPropertyPanel", "svx/ui/sidebarshadow.ui", rxFrame),
@@ -61,11 +61,6 @@ ShadowPropertyPanel::ShadowPropertyPanel(
 
 ShadowPropertyPanel::~ShadowPropertyPanel()
 {
-    disposeOnce();
-}
-
-void ShadowPropertyPanel::dispose()
-{
     mxShowShadow.reset();
     mxFTAngle.reset();
     mxShadowAngle.reset();
@@ -85,7 +80,6 @@ void ShadowPropertyPanel::dispose()
     maShadowColorController.dispose();
     maShadowXDistanceController.dispose();
     maShadowYDistanceController.dispose();
-    PanelLayout::dispose();
 }
 
 void ShadowPropertyPanel::Initialize()
@@ -250,10 +244,6 @@ void ShadowPropertyPanel::SetTransparencyValue(tools::Long nVal)
     mxShadowTransMetric->set_value(nVal, FieldUnit::PERCENT);
 }
 
-void ShadowPropertyPanel::DataChanged(const DataChangedEvent& /*rEvent*/)
-{
-}
-
 void ShadowPropertyPanel::InsertAngleValues()
 {
     OUString sSuffix = weld::MetricSpinButton::MetricToString(FieldUnit::DEGREE);
@@ -362,8 +352,8 @@ void ShadowPropertyPanel::NotifyItemUpdate(
     UpdateControls();
 }
 
-VclPtr<PanelLayout> ShadowPropertyPanel::Create (
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> ShadowPropertyPanel::Create (
+    weld::Widget* pParent,
     const uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
@@ -374,7 +364,7 @@ VclPtr<PanelLayout> ShadowPropertyPanel::Create (
     if(pBindings == nullptr)
         throw lang::IllegalArgumentException("no SfxBindings given to ShadowPropertyPanel::Create", nullptr, 2);
 
-    return VclPtr<ShadowPropertyPanel>::Create(pParent, rxFrame, pBindings);
+    return std::make_unique<ShadowPropertyPanel>(pParent, rxFrame, pBindings);
 }
 }
 

@@ -44,8 +44,8 @@ namespace svx::sidebar {
 #define MAX_SC_SD               116220200
 #define NEGA_MAXVALUE          -10000000
 
-VclPtr<PanelLayout> ParaPropertyPanel::Create (
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> ParaPropertyPanel::Create (
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
@@ -57,11 +57,7 @@ VclPtr<PanelLayout> ParaPropertyPanel::Create (
     if (pBindings == nullptr)
         throw lang::IllegalArgumentException("no SfxBindings given to ParaPropertyPanel::Create", nullptr, 2);
 
-    return VclPtr<ParaPropertyPanel>::Create(
-                pParent,
-                rxFrame,
-                pBindings,
-                rxSidebar);
+    return std::make_unique<ParaPropertyPanel>(pParent, rxFrame, pBindings, rxSidebar);
 }
 
 void ParaPropertyPanel::HandleContextChange (
@@ -128,8 +124,6 @@ void ParaPropertyPanel::HandleContextChange (
             break;
     }
 }
-
-void ParaPropertyPanel::DataChanged (const DataChangedEvent&) {}
 
 void ParaPropertyPanel::ReSize()
 {
@@ -397,7 +391,7 @@ FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolI
     return eUnit;
 }
 
-ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
+ParaPropertyPanel::ParaPropertyPanel(weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
@@ -463,11 +457,6 @@ void ParaPropertyPanel::limitMetricWidths()
 
 ParaPropertyPanel::~ParaPropertyPanel()
 {
-    disposeOnce();
-}
-
-void ParaPropertyPanel::dispose()
-{
     mxHorzAlignDispatch.reset();
     mxTBxHorzAlign.reset();
 
@@ -501,8 +490,6 @@ void ParaPropertyPanel::dispose()
     maLRSpaceControl.dispose();
     maULSpaceControl.dispose();
     m_aMetricCtl.dispose();
-
-    PanelLayout::dispose();
 }
 
 } // end of namespace svx::sidebar

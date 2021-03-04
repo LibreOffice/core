@@ -29,8 +29,6 @@
 #include <com/sun/star/ui/XSidebarPanel.hpp>
 #include <com/sun/star/ui/XUpdateModel.hpp>
 
-#include <vcl/vclptr.hxx>
-
 class PanelLayout;
 
 namespace sfx2::sidebar {
@@ -51,7 +49,7 @@ class SFX2_DLLPUBLIC SidebarPanelBase final : private ::cppu::BaseMutex,
 public:
     static css::uno::Reference<css::ui::XUIElement> Create(const OUString& rsResourceURL,
                                                            const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                                                           PanelLayout* pControl,
+                                                           std::unique_ptr<PanelLayout> xControl,
                                                            const css::ui::LayoutSize& rLayoutSize);
 
     // XContextChangeEventListener
@@ -80,7 +78,7 @@ public:
 
 private:
     SidebarPanelBase(const OUString& rsResourceURL, const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                     PanelLayout* pWindow, const css::ui::LayoutSize& rLayoutSize);
+                     std::unique_ptr<PanelLayout> xControl, const css::ui::LayoutSize& rLayoutSize);
     virtual ~SidebarPanelBase() override;
     SidebarPanelBase(const SidebarPanelBase&) = delete;
     SidebarPanelBase& operator=( const SidebarPanelBase& ) = delete;
@@ -88,7 +86,7 @@ private:
     virtual void SAL_CALL disposing() override;
 
     css::uno::Reference<css::frame::XFrame> mxFrame;
-    VclPtr<PanelLayout> mpControl;
+    std::unique_ptr<PanelLayout> mxControl;
     const OUString msResourceURL;
     const css::ui::LayoutSize maLayoutSize;
 };

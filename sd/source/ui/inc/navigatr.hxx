@@ -87,10 +87,9 @@ public:
             update is necessary.  When <FALSE/> the navigator will
             rely on others to trigger updates.
     */
-    SdNavigatorWin(vcl::Window* pParent, SfxBindings* pBindings);
+    SdNavigatorWin(weld::Widget* pParent, SfxBindings* pBindings);
     void SetUpdateRequestFunctor(const UpdateRequestFunctor& rUpdateRequest);
     virtual ~SdNavigatorWin() override;
-    virtual void                dispose() override;
 
     void                        InitTreeLB( const SdDrawDocument* pDoc );
     void                        RefreshDocumentLB( const OUString* pDocName = nullptr );
@@ -156,7 +155,7 @@ protected:
                                 const SfxPoolItem* pState ) override;
 
 private:
-    VclPtr<SdNavigatorWin> pNavigatorWin;
+    SdNavigatorWin* pNavigatorWin;
     const SdNavigatorWin::UpdateRequestFunctor maUpdateRequest;
 };
 
@@ -173,7 +172,7 @@ protected:
                                 const SfxPoolItem* pState ) override;
 
 private:
-    VclPtr<SdNavigatorWin> pNavigatorWin;
+    SdNavigatorWin* pNavigatorWin;
 };
 
 #endif
