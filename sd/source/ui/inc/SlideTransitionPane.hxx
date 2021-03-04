@@ -21,6 +21,8 @@
 
 #include "SlideSorterViewShell.hxx"
 
+#include <com/sun/star/ui/LayoutSize.hpp>
+
 #include <svtools/valueset.hxx>
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
@@ -51,17 +53,12 @@ class SlideTransitionPane : public PanelLayout
 {
 public:
     explicit SlideTransitionPane(
-        Window * pParent,
-        ViewShellBase & rBase,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame );
+        weld::Widget* pParent,
+        ViewShellBase & rBase);
     virtual ~SlideTransitionPane() override;
-    virtual void dispose() override;
 
     // ILayoutableWindow
     virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) override;
-
-    // Window
-    virtual void DataChanged (const DataChangedEvent& rEvent) override;
 
     void onSelectionChanged();
     void onChangeCurrentPage();
@@ -83,8 +80,6 @@ private:
     void removeListener();
 
     ::sd::slidesorter::SharedPageSelection getSelectedPages() const;
-
-    void UpdateLook();
 
     void Initialize(SdDrawDocument* pDoc);
 

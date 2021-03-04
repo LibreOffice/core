@@ -44,8 +44,8 @@
 #*
 #************************************************************************/
 
-ScFunctionWin::ScFunctionWin(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame> &rFrame)
-    : PanelLayout(pParent, "FunctionPanel", "modules/scalc/ui/functionpanel.ui", rFrame)
+ScFunctionWin::ScFunctionWin(weld::Widget* pParent)
+    : PanelLayout(pParent, "FunctionPanel", "modules/scalc/ui/functionpanel.ui")
     , xCatBox(m_xBuilder->weld_combo_box("category"))
     , xFuncList(m_xBuilder->weld_tree_view("funclist"))
     , xInsertButton(m_xBuilder->weld_button("insert"))
@@ -70,8 +70,6 @@ ScFunctionWin::ScFunctionWin(vcl::Window* pParent, const css::uno::Reference<css
     xCatBox->set_active(0);
 
     SelComboHdl(*xCatBox);
-
-    m_pInitialFocusWidget = xCatBox.get();
 }
 
 /*************************************************************************
@@ -90,22 +88,14 @@ ScFunctionWin::ScFunctionWin(vcl::Window* pParent, const css::uno::Reference<css
 
 ScFunctionWin::~ScFunctionWin()
 {
-    disposeOnce();
-}
+    xConfigChange.reset();
+    xConfigListener->dispose();
+    xConfigListener.clear();
 
-void ScFunctionWin::dispose()
-{
-    if (xConfigChange)
-    {
-        xConfigChange.reset();
-        xConfigListener->dispose();
-        xConfigListener.clear();
-    }
     xCatBox.reset();
     xFuncList.reset();
     xInsertButton.reset();
     xFiFuncDesc.reset();
-    PanelLayout::dispose();
 }
 
 /*************************************************************************
@@ -277,9 +267,10 @@ void ScFunctionWin::DoEnter()
         ScInputHandler* pHdl = pScMod->GetInputHdl( pViewSh );
         if(!pScMod->IsEditMode())
         {
+            rtl::Reference<comphelper::ConfigurationListener> xDetectDisposed(xConfigListener);
             pScMod->SetInputMode(SC_INPUT_TABLE);
             // the above call can result in us being disposed
-            if (OutputDevice::isDisposed())
+            if (xDetectDisposed->isDisposed())
                 return;
             aString = "=" + xFuncList->get_selected_text();
             if (pHdl)
@@ -412,8 +403,8 @@ IMPL_LINK_NOARG( ScFunctionWin, SetRowActivatedHdl, weld::TreeView&, bool )
 void EnglishFunctionNameChange::setProperty(const css::uno::Any &rProperty)
 {
     ConfigurationListenerProperty::setProperty(rProperty);
-    m_xFunctionWin->InitLRUList();
-    m_xFunctionWin->UpdateFunctionList();
+    m_pFunctionWin->InitLRUList();
+    m_pFunctionWin->UpdateFunctionList();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

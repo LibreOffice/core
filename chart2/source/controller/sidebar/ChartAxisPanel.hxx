@@ -14,7 +14,6 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
-
 #include "ChartSidebarModifyListener.hxx"
 #include "ChartSidebarSelectionListener.hxx"
 
@@ -39,9 +38,8 @@ class ChartAxisPanel : public PanelLayout,
     public ChartSidebarSelectionListenerParent
 {
 public:
-    static VclPtr<vcl::Window> Create(
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    static std::unique_ptr<PanelLayout> Create(
+        weld::Widget* pParent,
         ChartController* pController);
 
     virtual void DataChanged(
@@ -61,11 +59,9 @@ public:
 
     // constructor/destructor
     ChartAxisPanel(
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        weld::Widget* pParent,
         ChartController* pController);
     virtual ~ChartAxisPanel() override;
-    virtual void dispose() override;
 
     virtual void updateData() override;
     virtual void modelInvalid() override;

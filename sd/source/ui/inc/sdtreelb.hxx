@@ -72,7 +72,7 @@ private:
     std::unique_ptr<weld::TreeIter> m_xScratchIter;
     std::unique_ptr<SdPageObjsTLVDropTarget> m_xDropTargetHelper;
     std::unique_ptr<::svt::AcceleratorExecute> m_xAccel;
-    VclPtr<SdNavigatorWin> m_xNavigator;
+    SdNavigatorWin* m_pNavigator;
     const SdDrawDocument* m_pDoc;
     SdDrawDocument* m_pBookmarkDoc;
     SfxMedium* m_pMedium;

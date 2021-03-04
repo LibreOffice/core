@@ -38,6 +38,8 @@ class SfxTemplateControllerItem;
 #include <sfx2/styfitem.hxx>
 #include <sfx2/templdlg.hxx>
 
+#include <vcl/idle.hxx>
+
 class SfxStyleFamilyItem;
 class SfxTemplateItem;
 class SfxBindings;

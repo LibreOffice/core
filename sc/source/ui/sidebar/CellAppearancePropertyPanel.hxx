@@ -22,8 +22,9 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
-#include "CellBorderStyleControl.hxx"
-#include "CellLineStyleControl.hxx"
+#include <vcl/EnumContext.hxx>
+#include <vcl/image.hxx>
+#include <com/sun/star/frame/XFrame.hpp>
 
 class ToolbarUnoDispatcher;
 class ToolbarPopupContainer;
@@ -40,13 +41,10 @@ private:
     friend class CellBorderStylePopup;
 
 public:
-    static VclPtr<vcl::Window> Create(
-        vcl::Window* pParent,
+    static std::unique_ptr<PanelLayout> Create(
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
-
-    virtual void DataChanged(
-        const DataChangedEvent& rEvent) override;
 
     virtual void HandleContextChange(
         const vcl::EnumContext& rContext) override;
@@ -64,11 +62,10 @@ public:
 
     // constructor/destructor
     CellAppearancePropertyPanel(
-        vcl::Window* pParent,
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
     virtual ~CellAppearancePropertyPanel() override;
-    virtual void dispose() override;
 
 private:
     //ui controls

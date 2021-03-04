@@ -36,17 +36,13 @@ namespace svx::sidebar
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) GalleryControl final : public PanelLayout
 {
 public:
-    GalleryControl(vcl::Window* pParentWindow);
+    GalleryControl(weld::Widget* pParentWindow);
+    virtual ~GalleryControl() override;
 
 private:
     Gallery* mpGallery;
     std::unique_ptr<GalleryBrowser1> mxBrowser1;
     std::unique_ptr<GalleryBrowser2> mxBrowser2;
-
-    virtual void GetFocus() override;
-
-    virtual ~GalleryControl() override;
-    virtual void dispose() override;
 };
 
 } // end of namespace svx::sidebar

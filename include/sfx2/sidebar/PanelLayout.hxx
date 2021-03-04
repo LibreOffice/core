@@ -10,41 +10,43 @@
 #pragma once
 
 #include <sfx2/dllapi.h>
-
-#include <vcl/ctrl.hxx>
-#include <vcl/timer.hxx>
-#include <vcl/idle.hxx>
 #include <vcl/weld.hxx>
 
-#include <com/sun/star/frame/XFrame.hpp>
+class DataChangedEvent;
+class VclSimpleEvent;
+namespace sfx2 { namespace sidebar { class Panel; } }
+namespace tools { class JsonWriter; }
 
 /// This class is the base for the Widget Layout-based sidebar panels.
-class SFX2_DLLPUBLIC PanelLayout : public Control
+class SFX2_DLLPUBLIC PanelLayout
 {
 protected:
+    VclPtr<sfx2::sidebar::Panel> m_xPanel;
     std::unique_ptr<weld::Builder> m_xBuilder;
-    VclPtr<vcl::Window> m_xVclContentArea;
     std::unique_ptr<weld::Container> m_xContainer;
-    weld::Widget* m_pInitialFocusWidget;
+
+    virtual void DataChanged(const DataChangedEvent& rEvent);
+    virtual void DumpAsPropertyTree(tools::JsonWriter&);
+
+    virtual weld::Window* GetFrameWeld() const;
 
 private:
-    Idle m_aPanelLayoutIdle;
-    bool m_bInClose;
-    css::uno::Reference<css::frame::XFrame> mxFrame;
-
-    DECL_DLLPRIVATE_LINK(ImplHandlePanelLayoutTimerHdl, Timer*, void);
+    DECL_LINK(DataChangedEventListener, VclSimpleEvent&, void);
+    DECL_LINK(DumpAsPropertyTreeHdl, tools::JsonWriter&, void);
 
 public:
-    PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
-                const css::uno::Reference<css::frame::XFrame> &rFrame);
-    virtual ~PanelLayout() override;
-    virtual void dispose() override;
+    PanelLayout(weld::Widget* pParent, const OString& rID, const OUString& rUIXMLDescription);
 
-    virtual Size GetOptimalSize() const override;
-    virtual void GetFocus() override;
-    virtual void setPosSizePixel(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, PosSizeFlags nFlags = PosSizeFlags::All) override;
-    virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
-    virtual bool EventNotify(NotifyEvent& rNEvt) override;
+    void SetPanel(sfx2::sidebar::Panel* pPanel);
+
+    virtual ~PanelLayout();
+
+    Size get_preferred_size() const
+    {
+        return m_xContainer->get_preferred_size();
+    }
+
+    void queue_resize();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
