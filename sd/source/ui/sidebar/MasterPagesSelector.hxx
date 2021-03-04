@@ -150,8 +150,6 @@ protected:
     */
     virtual OUString GetContextMenuUIFile() const;
 
-    virtual void Command (const CommandEvent& rEvent) override;
-
     virtual void ProcessPopupMenu(weld::Menu& rMenu);
     virtual void ExecuteCommand(const OString& rIdent);
 
@@ -163,7 +161,7 @@ private:
         of an index for a token.
     */
     DECL_LINK(ClickHandler, ValueSet*, void);
-    DECL_LINK(RightClickHandler, const MouseEvent&, void);
+    DECL_LINK(ContextMenuHandler, const Point*, void);
     DECL_LINK(ContainerChangeListener, MasterPageContainerChangeEvent&, void);
 
     void SetItem (

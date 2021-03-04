@@ -72,8 +72,8 @@ MasterPagesSelector::MasterPagesSelector (
 {
     mxPreviewValueSet->SetSelectHdl (
         LINK(this, MasterPagesSelector, ClickHandler));
-    mxPreviewValueSet->SetRightMouseClickHandler (
-        LINK(this, MasterPagesSelector, RightClickHandler));
+    mxPreviewValueSet->SetContextMenuHandler (
+        LINK(this, MasterPagesSelector, ContextMenuHandler));
     mxPreviewValueSet->SetStyle(mxPreviewValueSet->GetStyle() | WB_NO_DIRECTSELECT);
 
     if ( GetDPIScaleFactor() > 1 )
@@ -167,27 +167,22 @@ IMPL_LINK_NOARG(MasterPagesSelector, ClickHandler, ValueSet*, void)
     ExecuteCommand(gsDefaultClickAction);
 }
 
-IMPL_LINK(MasterPagesSelector, RightClickHandler, const MouseEvent&, rEvent, void)
+IMPL_LINK(MasterPagesSelector, ContextMenuHandler, const Point*, pPos, void)
 {
-    // Here we only prepare the display of the context menu: the item under
-    // the mouse is selected.
-    mxPreviewValueSet->GrabFocus ();
-    mxPreviewValueSet->ReleaseMouse();
-    SfxViewFrame* pViewFrame = mrBase.GetViewFrame();
-    if (pViewFrame == nullptr)
-        return;
-
-    SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
-    if (pDispatcher != nullptr)
+    if (pPos)
     {
-        sal_uInt16 nIndex = mxPreviewValueSet->GetItemId (rEvent.GetPosPixel());
+        // Here we only prepare the display of the context menu: on right
+        // click the item under the mouse is selected.
+        mxPreviewValueSet->GrabFocus();
+        mxPreviewValueSet->ReleaseMouse();
+
+        sal_uInt16 nIndex = mxPreviewValueSet->GetItemId(*pPos);
         if (nIndex > 0)
-        {
-            mxPreviewValueSet->SelectItem (nIndex);
-            // Now do the actual display of the context menu
-            ShowContextMenu(&rEvent.GetPosPixel());
-        }
+            mxPreviewValueSet->SelectItem(nIndex);
     }
+
+    // Now do the actual display of the context menu
+    ShowContextMenu(pPos);
 }
 
 void MasterPagesSelector::ShowContextMenu(const Point* pPos)
@@ -219,12 +214,6 @@ void MasterPagesSelector::ShowContextMenu(const Point* pPos)
     weld::Window* pParent = weld::GetPopupParent(*this, aRect);
     // Show the menu.
     ExecuteCommand(xMenu->popup_at_rect(pParent, aRect));
-}
-
-void MasterPagesSelector::Command (const CommandEvent& rEvent)
-{
-    if (rEvent.GetCommand() == CommandEventId::ContextMenu)
-        ShowContextMenu(rEvent.IsMouseEvent() ? &rEvent.GetMousePosPixel() : nullptr);
 }
 
 void MasterPagesSelector::ProcessPopupMenu(weld::Menu& rMenu)
