@@ -446,12 +446,39 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
             {
                 SbiExpression aExpr( this, *pDef );
                 aExpr.Gen();
+
+                /* tdf#88442
+                 * Don't initialize a
+                 *      Global X as New SomeObjectType
+                 * if it has already been initialized.
+                 * This approach relies on JUMPT evaluating Object->NULL as being 'false'
+                 * But the effect of this code is similar to inserting
+                 *  If IsNull(YourGlobal)
+                 *      Set YourGlobal = ' new obj
+                 *  End If ' If IsNull(YourGlobal)
+                 * Only for globals. For locals that check is skipped as it's unnecessary
+                 */
+                sal_uInt32 come_from = 0;
+                if ( pDef->GetScope() == SbGLOBAL )
+                {
+                    come_from = aGen.Gen( SbiOpcode::JUMPT_, 0 );
+                    aGen.Gen( SbiOpcode::FIND_, pDef->GetId(), pDef->GetTypeId() );
+                }
+
                 SbiOpcode eOp_ = pDef->IsNew() ? SbiOpcode::CREATE_ : SbiOpcode::TCREATE_;
                 aGen.Gen( eOp_, pDef->GetId(), pDef->GetTypeId() );
                 if ( bVBASupportOn )
                     aGen.Gen( SbiOpcode::VBASET_ );
                 else
                     aGen.Gen( SbiOpcode::SET_ );
+
+                if ( come_from )
+                {
+                    // See other tdf#88442 comment above where come_from is
+                        // initialized. This is effectively 'inserting' the
+                        // End If ' If IsNull(YourGlobal)
+                    aGen.BackChain( come_from );
+                }
             }
         }
         else
