@@ -21,7 +21,7 @@
 
 namespace svx::sidebar
 {
-EffectPropertyPanel::EffectPropertyPanel(vcl::Window* pParent,
+EffectPropertyPanel::EffectPropertyPanel(weld::Widget* pParent,
                                          const css::uno::Reference<css::frame::XFrame>& rxFrame,
                                          SfxBindings* pBindings)
     : PanelLayout(pParent, "EffectPropertyPanel", "svx/ui/sidebareffect.ui", rxFrame)
@@ -45,9 +45,7 @@ EffectPropertyPanel::EffectPropertyPanel(vcl::Window* pParent,
     m_pInitialFocusWidget = &mxGlowRadius->get_widget();
 }
 
-EffectPropertyPanel::~EffectPropertyPanel() { disposeOnce(); }
-
-void EffectPropertyPanel::dispose()
+EffectPropertyPanel::~EffectPropertyPanel()
 {
     mxGlowRadius.reset();
     mxLBGlowColor.reset();
@@ -58,7 +56,6 @@ void EffectPropertyPanel::dispose()
     mxSoftEdgeRadius.reset();
     mxFTRadiusGlow.reset();
 
-    PanelLayout::dispose();
     maGlowColorController.dispose();
     maGlowRadiusController.dispose();
     maGlowTransparencyController.dispose();
@@ -167,8 +164,8 @@ void EffectPropertyPanel::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState eState,
     UpdateControls();
 }
 
-VclPtr<PanelLayout>
-EffectPropertyPanel::Create(vcl::Window* pParent,
+std::unique_ptr<PanelLayout>
+EffectPropertyPanel::Create(weld::Widget* pParent,
                             const css::uno::Reference<css::frame::XFrame>& rxFrame,
                             SfxBindings* pBindings)
 {
@@ -182,7 +179,7 @@ EffectPropertyPanel::Create(vcl::Window* pParent,
         throw css::lang::IllegalArgumentException(
             "no SfxBindings given to EffectPropertyPanel::Create", nullptr, 2);
 
-    return VclPtr<EffectPropertyPanel>::Create(pParent, rxFrame, pBindings);
+    return std::make_unique<EffectPropertyPanel>(pParent, rxFrame, pBindings);
 }
 }
 

@@ -26,6 +26,11 @@
 #include <svx/Palette.hxx>
 #include <vcl/toolbox.hxx>
 
+inline weld::Window* GetFrameWeld()
+{
+    return nullptr;
+}
+
 namespace com::sun::star::frame { class XFrame; }
 
 class PaletteManager;

@@ -212,6 +212,7 @@ IMPL_LINK(SwNavigationPI, ToolBoxSelectHdl, const OString&, rCommand, void)
     }
     else if (rCommand == "listbox")
     {
+#if 0
         if (SfxChildWindowContext::GetFloatingWindow(GetParent()))
         {
             if (IsZoomedIn())
@@ -223,6 +224,7 @@ IMPL_LINK(SwNavigationPI, ToolBoxSelectHdl, const OString&, rCommand, void)
                 ZoomIn();
             }
         }
+#endif
         return;
     }
     // Functions that will trigger a direct action.
@@ -411,6 +413,7 @@ bool SwNavigationPI::EditAction()
 
 void SwNavigationPI::ZoomOut()
 {
+#if 0
     if (!IsZoomedIn())
         return;
     SfxNavigator* pNav = dynamic_cast<SfxNavigator*>(GetParent());
@@ -439,10 +442,12 @@ void SwNavigationPI::ZoomOut()
     m_xContentTree->Select(); // Enable toolbox
     m_pConfig->SetSmall(false);
     m_xContent6ToolBox->set_item_active("listbox", true);
+#endif
 }
 
 void SwNavigationPI::ZoomIn()
 {
+#if 0
     if (IsZoomedIn())
         return;
     SfxNavigator* pNav = dynamic_cast<SfxNavigator*>(GetParent());
@@ -468,6 +473,7 @@ void SwNavigationPI::ZoomIn()
 
     m_pConfig->SetSmall(true);
     m_xContent6ToolBox->set_item_active("listbox", false);
+#endif
 }
 
 namespace {
@@ -481,7 +487,7 @@ enum StatusIndex
 
 }
 
-VclPtr<PanelLayout> SwNavigationPI::Create(vcl::Window* pParent,
+std::unique_ptr<PanelLayout> SwNavigationPI::Create(weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
@@ -491,10 +497,10 @@ VclPtr<PanelLayout> SwNavigationPI::Create(vcl::Window* pParent,
         throw css::lang::IllegalArgumentException("no XFrame given to SwNavigationPI::Create", nullptr, 0);
     if( pBindings == nullptr )
         throw css::lang::IllegalArgumentException("no SfxBindings given to SwNavigationPI::Create", nullptr, 0);
-    return VclPtr<SwNavigationPI>::Create(pParent, rxFrame, pBindings);
+    return std::make_unique<SwNavigationPI>(pParent, rxFrame, pBindings);
 }
 
-SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
+SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* _pBindings)
     : PanelLayout(pParent, "NavigatorPanel", "modules/swriter/ui/navigatorpanel.ui", rxFrame)
@@ -531,7 +537,9 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
 {
     m_xContainer->connect_container_focus_changed(LINK(this, SwNavigationPI, SetFocusChildHdl));
 
+#if 0
     set_id("NavigatorPanelParent"); // for uitest/writer_tests5/tdf114724.py
+#endif
 
     GetCreateView();
 
@@ -581,7 +589,11 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
 
     m_aStatusArr[3] = SwResId(STR_ACTIVE_VIEW);
 
+#if 0
     bool bFloatingNavigator = SfxChildWindowContext::GetFloatingWindow(GetParent()) != nullptr;
+#else
+    bool bFloatingNavigator = false;
+#endif
 
     m_xContentTree->set_selection_mode(SelectionMode::Single);
     m_xContentTree->ShowTree();
@@ -647,11 +659,6 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
 
 SwNavigationPI::~SwNavigationPI()
 {
-    disposeOnce();
-}
-
-void SwNavigationPI::dispose()
-{
     if (IsGlobalDoc() && !IsGlobalMode())
     {
         SwView *pView = GetCreateView();
@@ -693,8 +700,6 @@ void SwNavigationPI::dispose()
 
     m_aDocFullName.dispose();
     m_aPageStats.dispose();
-
-    PanelLayout::dispose();
 }
 
 void SwNavigationPI::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState /*eState*/,
@@ -736,6 +741,7 @@ void SwNavigationPI::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState /*eState*/,
     }
 }
 
+#if 0
 void SwNavigationPI::StateChanged(StateChangedType nStateChange)
 {
     PanelLayout::StateChanged(nStateChange);
@@ -756,6 +762,7 @@ void SwNavigationPI::StateChanged(StateChangedType nStateChange)
         }
     }
 }
+#endif
 
 IMPL_LINK_NOARG(SwNavigationPI, SetFocusChildHdl, weld::Container&, void)
 {
@@ -1113,6 +1120,7 @@ SwNavigationChild::SwNavigationChild( vcl::Window* pParent,
                         SfxBindings* _pBindings )
     : SfxChildWindowContext( nId )
 {
+#if 0
     Reference< XFrame > xFrame = _pBindings->GetActiveFrame();
     VclPtr< SwNavigationPI > pNavi = VclPtr< SwNavigationPI >::Create( pParent, xFrame, _pBindings );
     _pBindings->Invalidate(SID_NAVIGATOR);
@@ -1140,6 +1148,7 @@ SwNavigationChild::SwNavigationChild( vcl::Window* pParent,
     }
 
     SetWindow(pNavi);
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

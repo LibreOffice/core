@@ -47,7 +47,7 @@
 /**
  * SdNavigatorWin - FloatingWindow
  */
-SdNavigatorWin::SdNavigatorWin(vcl::Window* pParent, SfxBindings* pInBindings)
+SdNavigatorWin::SdNavigatorWin(weld::Widget* pParent, SfxBindings* pInBindings)
     : PanelLayout(pParent, "NavigatorPanel", "modules/simpress/ui/navigatorpanel.ui", nullptr)
     , mxToolbox(m_xBuilder->weld_toolbar("toolbox"))
     , mxTlbObjects(new SdPageObjsTLV(m_xBuilder->weld_tree_view("tree")))
@@ -104,11 +104,6 @@ void SdNavigatorWin::SetUpdateRequestFunctor(const UpdateRequestFunctor& rUpdate
 
 SdNavigatorWin::~SdNavigatorWin()
 {
-    disposeOnce();
-}
-
-void SdNavigatorWin::dispose()
-{
     mpNavigatorCtrlItem.reset();
     mpPageNameCtrlItem.reset();
     mxDragModeMenu.reset();
@@ -116,7 +111,6 @@ void SdNavigatorWin::dispose()
     mxToolbox.reset();
     mxTlbObjects.reset();
     mxLbDocs.reset();
-    PanelLayout::dispose();
 }
 
 //when object is marked , fresh the corresponding entry tree .

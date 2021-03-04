@@ -268,6 +268,7 @@ void DrawViewShell::StartRulerDrag (
 
 void DrawViewShell::FreshNavigatrTree()
 {
+#if 0
     SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( SID_NAVIGATOR );
     if( pWindow )
     {
@@ -275,6 +276,7 @@ void DrawViewShell::FreshNavigatrTree()
         if( pNavWin )
             pNavWin->FreshTree( GetDoc() );
     }
+#endif
 }
 
 void DrawViewShell::MouseButtonDown(const MouseEvent& rMEvt,

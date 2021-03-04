@@ -44,8 +44,9 @@ namespace sw::sidebar
 {
 static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& aStore);
 
-VclPtr<PanelLayout> WriterInspectorTextPanel::Create(vcl::Window* pParent,
-                                                     const uno::Reference<frame::XFrame>& rxFrame)
+std::unique_ptr<PanelLayout>
+WriterInspectorTextPanel::Create(weld::Widget* pParent,
+                                 const uno::Reference<frame::XFrame>& rxFrame)
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException(
@@ -54,10 +55,10 @@ VclPtr<PanelLayout> WriterInspectorTextPanel::Create(vcl::Window* pParent,
         throw lang::IllegalArgumentException("no XFrame given to WriterInspectorTextPanel::Create",
                                              nullptr, 1);
 
-    return VclPtr<WriterInspectorTextPanel>::Create(pParent, rxFrame);
+    return std::make_unique<WriterInspectorTextPanel>(pParent, rxFrame);
 }
 
-WriterInspectorTextPanel::WriterInspectorTextPanel(vcl::Window* pParent,
+WriterInspectorTextPanel::WriterInspectorTextPanel(weld::Widget* pParent,
                                                    const uno::Reference<frame::XFrame>& rxFrame)
     : InspectorTextPanel(pParent, rxFrame)
 {
@@ -76,14 +77,7 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(vcl::Window* pParent,
     updateEntries(aStore);
 }
 
-WriterInspectorTextPanel::~WriterInspectorTextPanel() { disposeOnce(); }
-
-void WriterInspectorTextPanel::dispose()
-{
-    m_pShell->SetChgLnk(m_oldLink);
-
-    InspectorTextPanel::dispose();
-}
+WriterInspectorTextPanel::~WriterInspectorTextPanel() { m_pShell->SetChgLnk(m_oldLink); }
 
 static OUString PropertyNametoRID(const OUString& rName)
 {

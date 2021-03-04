@@ -317,13 +317,15 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(vcl::Window* pParent,
                                                    SAL_UNUSED_PARAMETER SfxChildWinInfo* /* pInfo */)
     : SfxChildWindowContext(nId)
 {
+#if 0
     pNavigator = VclPtr<ScNavigatorDlg>::Create(pBind, pParent);
     if (SfxNavigator* pNav = dynamic_cast<SfxNavigator*>(pParent))
         pNav->SetMinOutputSizePixel(pNavigator->GetOptimalSize());
     SetWindow(pNavigator);
+#endif
 }
 
-ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
+ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, weld::Widget* pParent)
     : PanelLayout(pParent, "NavigatorPanel", "modules/scalc/ui/navigatorpanel.ui", nullptr)
     , rBindings(*pB)
     , m_xEdCol(m_xBuilder->weld_spin_button("column"))
@@ -344,7 +346,9 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
     , nCurRow(0)
     , nCurTab(0)
 {
+#if 0
     set_id("NavigatorPanelParent"); // for uitests
+#endif
 
     m_xTbxCmd1->set_item_visible("contents", false); // start off hidden, show if made floating
 
@@ -430,6 +434,7 @@ void ScNavigatorDlg::UpdateSheetLimits()
     }
 }
 
+#if 0
 void ScNavigatorDlg::StateChanged(StateChangedType nStateChange)
 {
     PanelLayout::StateChanged(nStateChange);
@@ -441,13 +446,9 @@ void ScNavigatorDlg::StateChanged(StateChangedType nStateChange)
         m_xTbxCmd1->set_item_visible("contents", SfxChildWindowContext::GetFloatingWindow(GetParent()) != nullptr);
     }
 }
+#endif
 
 ScNavigatorDlg::~ScNavigatorDlg()
-{
-    disposeOnce();
-}
-
-void ScNavigatorDlg::dispose()
 {
     aContentIdle.Stop();
 
@@ -467,7 +468,6 @@ void ScNavigatorDlg::dispose()
     m_xWndScenarios.reset();
     m_xScenarioBox.reset();
     m_xLbDocuments.reset();
-    PanelLayout::dispose();
 }
 
 void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -755,11 +755,13 @@ void ScNavigatorDlg::SetListMode(NavListMode eMode)
 {
     if (eMode != eListMode)
     {
+#if 0
         bool bForceParentResize = SfxChildWindowContext::GetFloatingWindow(GetParent()) &&
                                   (eMode == NAV_LMODE_NONE || eListMode == NAV_LMODE_NONE);
         SfxNavigator* pNav = bForceParentResize ? dynamic_cast<SfxNavigator*>(GetParent()) : nullptr;
         if (pNav && eMode == NAV_LMODE_NONE) //save last normal size on minimizing
             aExpandedSize = GetSizePixel();
+#endif
 
         eListMode = eMode;
 
@@ -785,6 +787,7 @@ void ScNavigatorDlg::SetListMode(NavListMode eMode)
             rCfg.SetListMode( static_cast<sal_uInt16>(eMode) );
         }
 
+#if 0
         if (pNav)
         {
             Size aOptimalSize(m_xContainer->get_preferred_size());
@@ -793,6 +796,7 @@ void ScNavigatorDlg::SetListMode(NavListMode eMode)
             pNav->SetMinOutputSizePixel(aOptimalSize);
             pNav->SetOutputSizePixel(aNewSize);
         }
+#endif
     }
 
     if (pMarkArea)

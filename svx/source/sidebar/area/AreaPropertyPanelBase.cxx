@@ -61,7 +61,7 @@ const sal_Int32 AreaPropertyPanelBase::DEFAULT_ENDVALUE = 16777215;
 const sal_Int32 AreaPropertyPanelBase::DEFAULT_BORDER = 0;
 
 AreaPropertyPanelBase::AreaPropertyPanelBase(
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, "AreaPropertyPanel", "svx/ui/sidebararea.ui", rxFrame),
       meLastXFS(static_cast<sal_uInt16>(-1)),
@@ -104,19 +104,12 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
       mpFloatTransparenceItem(),
       mpTransparanceItem()
 {
-    mpPanel = dynamic_cast<sfx2::sidebar::Panel*>(pParent);
-
     Initialize();
 
     m_pInitialFocusWidget = mxLbFillType.get();
 }
 
 AreaPropertyPanelBase::~AreaPropertyPanelBase()
-{
-    disposeOnce();
-}
-
-void AreaPropertyPanelBase::dispose()
 {
     mxTrGrPopup.reset();
     mxColorTextFT.reset();
@@ -134,9 +127,6 @@ void AreaPropertyPanelBase::dispose()
     mxLbFillGradTo.reset();
     mxGradientStyle.reset();
     mxBmpImport.reset();
-    mpPanel.clear();
-
-    PanelLayout::dispose();
 }
 
 void AreaPropertyPanelBase::Initialize()
@@ -449,8 +439,8 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, weld::ComboBox&, void)
 
     meLastXFS = static_cast<sal_uInt16>(nPos);
 
-    if(mpPanel)
-        mpPanel->TriggerDeckLayouting();
+    if (m_xPanel)
+        m_xPanel->TriggerDeckLayouting();
 }
 
 IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillColorHdl, ColorListBox&, void)
@@ -466,11 +456,6 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillAttrHdl, weld::ComboBox&, void)
 IMPL_LINK_NOARG(AreaPropertyPanelBase, ChangeGradientAngle, weld::MetricSpinButton&, void)
 {
     SelectFillAttrHdl_Impl();
-}
-
-void AreaPropertyPanelBase::DataChanged(
-    const DataChangedEvent& /*rEvent*/)
-{
 }
 
 void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
@@ -613,8 +598,8 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
             break;
         }
     }
-    if(mpPanel)
-        mpPanel->TriggerDeckLayouting();
+    if (m_xPanel)
+        m_xPanel->TriggerDeckLayouting();
 }
 
 void AreaPropertyPanelBase::ImpUpdateTransparencies()
@@ -869,8 +854,8 @@ void AreaPropertyPanelBase::updateFillStyle(bool bDisabled, bool bDefaultOrSet, 
     mxToolBoxColor->hide();
     meLastXFS = static_cast<sal_uInt16>(-1);
     mpStyleItem.reset();
-    if(mpPanel)
-        mpPanel->TriggerDeckLayouting();
+    if (m_xPanel)
+        m_xPanel->TriggerDeckLayouting();
 }
 
 void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState)
@@ -910,8 +895,8 @@ void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefaultOrSe
             mxLbFillGradTo->SetNoSelection();
         }
     }
-    if(mpPanel)
-        mpPanel->TriggerDeckLayouting();
+    if (m_xPanel)
+        m_xPanel->TriggerDeckLayouting();
 }
 
 void AreaPropertyPanelBase::updateFillHatch(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState)
@@ -943,8 +928,8 @@ void AreaPropertyPanelBase::updateFillHatch(bool bDisabled, bool bDefaultOrSet, 
             mxLbFillAttr->set_active(-1);
         }
     }
-    if(mpPanel)
-        mpPanel->TriggerDeckLayouting();
+    if (m_xPanel)
+        m_xPanel->TriggerDeckLayouting();
 }
 
 void AreaPropertyPanelBase::updateFillColor(bool bDefaultOrSet, const SfxPoolItem* pState)
@@ -962,8 +947,8 @@ void AreaPropertyPanelBase::updateFillColor(bool bDefaultOrSet, const SfxPoolIte
         mxLbFillType->set_active(SOLID);
         Update();
     }
-    if(mpPanel)
-        mpPanel->TriggerDeckLayouting();
+    if (m_xPanel)
+        m_xPanel->TriggerDeckLayouting();
 }
 
 void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState)
@@ -997,8 +982,8 @@ void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefaultOrSet,
             mxLbFillAttr->set_active(-1);
         }
     }
-    if(mpPanel)
-        mpPanel->TriggerDeckLayouting();
+    if (m_xPanel)
+        m_xPanel->TriggerDeckLayouting();
 }
 
 void AreaPropertyPanelBase::NotifyItemUpdate(
@@ -1265,8 +1250,8 @@ void AreaPropertyPanelBase::Update()
                 OSL_ENSURE(false, "Non supported FillType (!)");
             break;
         }
-        if(mpPanel)
-            mpPanel->TriggerDeckLayouting();
+        if (m_xPanel)
+            m_xPanel->TriggerDeckLayouting();
 }
 
 IMPL_LINK_NOARG(AreaPropertyPanelBase, ModifyTransSliderHdl, weld::Scale&, void)
