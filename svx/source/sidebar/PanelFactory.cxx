@@ -117,7 +117,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
             "PanelFactory::createUIElement called without SfxBindings",
             nullptr);
 
-    VclPtr<vcl::Window> pControl;
+    VclPtr<PanelLayout> pControl;
     ui::LayoutSize aLayoutSize (-1,-1,-1);
 
     if (rsResourceURL.endsWith("/TextPropertyPanel"))

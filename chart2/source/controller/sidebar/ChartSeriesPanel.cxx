@@ -385,7 +385,7 @@ void ChartSeriesPanel::updateData()
     mxFTSeriesName->set_label(aFrameLabel);
 }
 
-VclPtr<vcl::Window> ChartSeriesPanel::Create (
+VclPtr<PanelLayout> ChartSeriesPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     ChartController* pController)

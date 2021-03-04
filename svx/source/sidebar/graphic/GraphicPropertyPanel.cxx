@@ -130,8 +130,7 @@ IMPL_LINK_NOARG( GraphicPropertyPanel, ClickColorModeHdl, weld::ComboBox&, void 
             SfxCallMode::RECORD, { &aTransItem });
 }
 
-
-VclPtr<vcl::Window> GraphicPropertyPanel::Create (
+VclPtr<PanelLayout> GraphicPropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
@@ -148,7 +147,6 @@ VclPtr<vcl::Window> GraphicPropertyPanel::Create (
                 rxFrame,
                 pBindings);
 }
-
 
 void GraphicPropertyPanel::DataChanged(
     const DataChangedEvent& /*rEvent*/)

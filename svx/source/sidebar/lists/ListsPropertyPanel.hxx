@@ -31,7 +31,7 @@ public:
     virtual ~ListsPropertyPanel() override;
     virtual void dispose() override;
 
-    static VclPtr<vcl::Window> Create(vcl::Window* pParent,
+    static VclPtr<PanelLayout> Create(vcl::Window* pParent,
                                       const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     ListsPropertyPanel(vcl::Window* pParent,

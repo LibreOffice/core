@@ -76,7 +76,7 @@ static SvxPageUsage PosToPageUsage_Impl( sal_uInt16 nPos )
     return aArr[nPos];
 }
 
-VclPtr<vcl::Window> PageStylesPanel::Create(
+VclPtr<PanelLayout> PageStylesPanel::Create(
     vcl::Window* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings)

@@ -26,7 +26,7 @@ class StylePresetsPanel : public PanelLayout,
 {
     friend class VclPtr<StylePresetsPanel>;
 public:
-    static VclPtr<vcl::Window> Create(vcl::Window* pParent,
+    static VclPtr<PanelLayout> Create(vcl::Window* pParent,
                                   const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     virtual void NotifyItemUpdate(const sal_uInt16 nSId,

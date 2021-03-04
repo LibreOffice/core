@@ -349,7 +349,7 @@ void ChartErrorBarPanel::updateData()
     }
 }
 
-VclPtr<vcl::Window> ChartErrorBarPanel::Create (
+VclPtr<PanelLayout> ChartErrorBarPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     ChartController* pController)

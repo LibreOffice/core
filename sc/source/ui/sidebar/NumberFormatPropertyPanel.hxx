@@ -34,7 +34,7 @@ class NumberFormatPropertyPanel
 {
 public:
 public:
-    static VclPtr<vcl::Window> Create(
+    static VclPtr<PanelLayout> Create(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);

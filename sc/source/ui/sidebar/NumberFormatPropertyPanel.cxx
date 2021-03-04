@@ -151,7 +151,7 @@ IMPL_LINK_NOARG( NumberFormatPropertyPanel, NumFormatValueHdl, weld::SpinButton&
             SfxCallMode::RECORD, { &aItem });
 }
 
-VclPtr<vcl::Window> NumberFormatPropertyPanel::Create (
+VclPtr<PanelLayout> NumberFormatPropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)

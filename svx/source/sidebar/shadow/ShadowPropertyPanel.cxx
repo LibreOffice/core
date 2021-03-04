@@ -362,7 +362,7 @@ void ShadowPropertyPanel::NotifyItemUpdate(
     UpdateControls();
 }
 
-VclPtr<vcl::Window> ShadowPropertyPanel::Create (
+VclPtr<PanelLayout> ShadowPropertyPanel::Create (
     vcl::Window* pParent,
     const uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)

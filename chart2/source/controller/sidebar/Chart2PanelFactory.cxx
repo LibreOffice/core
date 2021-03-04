@@ -82,7 +82,7 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
                 "ChartPanelFactory::createUIElement called without valid ChartController",
                 nullptr);
 
-        VclPtr<vcl::Window> pPanel;
+        VclPtr<PanelLayout> pPanel;
         if (rsResourceURL.endsWith("/ElementsPanel"))
             pPanel = ChartElementsPanel::Create( pParentWindow, xFrame, pController );
         else if (rsResourceURL.endsWith("/TypePanel"))

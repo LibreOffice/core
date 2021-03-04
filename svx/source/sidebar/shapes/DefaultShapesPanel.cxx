@@ -57,7 +57,7 @@ DefaultShapesPanel::DefaultShapesPanel (
     m_pInitialFocusWidget = mxLineArrowSet->GetDrawingArea();
 }
 
-VclPtr< vcl::Window > DefaultShapesPanel::Create(
+VclPtr<PanelLayout> DefaultShapesPanel::Create(
     vcl::Window* pParent,
     const Reference< XFrame >& rxFrame)
 {

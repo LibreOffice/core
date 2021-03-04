@@ -50,7 +50,7 @@ MediaPlaybackPanel::MediaPlaybackPanel (
     m_pInitialFocusWidget = mxTimeEdit.get();
 }
 
-VclPtr< vcl::Window > MediaPlaybackPanel::Create(
+VclPtr<PanelLayout> MediaPlaybackPanel::Create(
     vcl::Window* pParent,
     const Reference< XFrame >& rxFrame,
     SfxBindings* pBindings)

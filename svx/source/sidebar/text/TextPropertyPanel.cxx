@@ -27,7 +27,7 @@ using namespace css;
 
 namespace svx::sidebar {
 
-VclPtr<vcl::Window> TextPropertyPanel::Create (
+VclPtr<PanelLayout> TextPropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {

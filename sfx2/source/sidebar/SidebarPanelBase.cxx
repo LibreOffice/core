@@ -20,6 +20,7 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
 #include <vcl/layout.hxx>
 #include <comphelper/processfactory.hxx>
@@ -35,7 +36,7 @@ namespace sfx2::sidebar {
 Reference<ui::XUIElement> SidebarPanelBase::Create (
     const OUString& rsResourceURL,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
-    vcl::Window* pWindow,
+    PanelLayout* pWindow,
     const css::ui::LayoutSize& rLayoutSize)
 {
     Reference<ui::XUIElement> xUIElement (
@@ -50,7 +51,7 @@ Reference<ui::XUIElement> SidebarPanelBase::Create (
 SidebarPanelBase::SidebarPanelBase (
     const OUString& rsResourceURL,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
-    vcl::Window* pWindow,
+    PanelLayout* pWindow,
     const css::ui::LayoutSize& rLayoutSize)
     : SidebarPanelBaseInterfaceBase(m_aMutex),
       mxFrame(rxFrame),

@@ -44,7 +44,7 @@ namespace sw::sidebar
 {
 static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& aStore);
 
-VclPtr<vcl::Window> WriterInspectorTextPanel::Create(vcl::Window* pParent,
+VclPtr<PanelLayout> WriterInspectorTextPanel::Create(vcl::Window* pParent,
                                                      const uno::Reference<frame::XFrame>& rxFrame)
 {
     if (pParent == nullptr)

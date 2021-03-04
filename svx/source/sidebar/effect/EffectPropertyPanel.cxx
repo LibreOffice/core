@@ -167,7 +167,7 @@ void EffectPropertyPanel::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState eState,
     UpdateControls();
 }
 
-VclPtr<vcl::Window>
+VclPtr<PanelLayout>
 EffectPropertyPanel::Create(vcl::Window* pParent,
                             const css::uno::Reference<css::frame::XFrame>& rxFrame,
                             SfxBindings* pBindings)

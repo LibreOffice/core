@@ -43,7 +43,7 @@
 
 namespace sw::sidebar{
 
-VclPtr<vcl::Window> PageFormatPanel::Create(
+VclPtr<PanelLayout> PageFormatPanel::Create(
     vcl::Window* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings)

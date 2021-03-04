@@ -130,7 +130,7 @@ BitmapEx CreatePreview(OUString const & aUrl, OUString const & aName)
 
 }
 
-VclPtr<vcl::Window> StylePresetsPanel::Create (vcl::Window* pParent,
+VclPtr<PanelLayout> StylePresetsPanel::Create (vcl::Window* pParent,
                                         const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (pParent == nullptr)

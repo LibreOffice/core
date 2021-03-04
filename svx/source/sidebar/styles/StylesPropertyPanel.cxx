@@ -17,7 +17,7 @@ using namespace css::uno;
 
 namespace svx::sidebar {
 
-VclPtr<vcl::Window> StylesPropertyPanel::Create (
+VclPtr<PanelLayout> StylesPropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {

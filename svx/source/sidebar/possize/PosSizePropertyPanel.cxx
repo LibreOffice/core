@@ -254,7 +254,7 @@ void PosSizePropertyPanel::Initialize()
     mePoolUnit = maTransfWidthControl.GetCoreMetric();
 }
 
-VclPtr<vcl::Window> PosSizePropertyPanel::Create (
+VclPtr<PanelLayout> PosSizePropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
@@ -273,7 +273,6 @@ VclPtr<vcl::Window> PosSizePropertyPanel::Create (
                         pBindings,
                         rxSidebar);
 }
-
 
 void PosSizePropertyPanel::DataChanged(
     const DataChangedEvent& /*rEvent*/)

@@ -72,7 +72,7 @@ void AreaPropertyPanel::dispose()
     AreaPropertyPanelBase::dispose();
 }
 
-VclPtr<vcl::Window> AreaPropertyPanel::Create (
+VclPtr<PanelLayout> AreaPropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)

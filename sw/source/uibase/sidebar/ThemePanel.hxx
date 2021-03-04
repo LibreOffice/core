@@ -23,7 +23,7 @@ class ThemePanel : public PanelLayout,
 {
     friend class VclPtr<ThemePanel>;
 public:
-    static VclPtr<vcl::Window> Create(vcl::Window* pParent,
+    static VclPtr<PanelLayout> Create(vcl::Window* pParent,
                                   const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     virtual void NotifyItemUpdate(const sal_uInt16 nSId,
