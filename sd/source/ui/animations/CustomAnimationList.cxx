@@ -27,7 +27,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include "CustomAnimationList.hxx"
+#include <CustomAnimationList.hxx>
 #include <CustomAnimationPreset.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
