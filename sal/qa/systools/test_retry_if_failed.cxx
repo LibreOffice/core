@@ -13,19 +13,22 @@
 
 namespace test_systools
 {
+constexpr int ClockRes = 15; // default interval between system clock ticks is ~15 ms on x86
+
 class test_retry_if_failed : public CppUnit::TestFixture
 {
 public:
     void test_success()
     {
         const DWORD nTicksBefore = GetTickCount();
-        HRESULT hr = sal::systools::RetryIfFailed(10, 100, Tester(5));
+        HRESULT hr = sal::systools::RetryIfFailed(10, 200, Tester(5));
         const DWORD nTicksAfter = GetTickCount();
         const DWORD nTicksElapsed = nTicksAfter > nTicksBefore ? nTicksAfter - nTicksBefore
                                                                : std::numeric_limits<DWORD>::max()
                                                                      - nTicksBefore + nTicksAfter;
         CPPUNIT_ASSERT(SUCCEEDED(hr));
-        CPPUNIT_ASSERT(nTicksElapsed >= 400); // 5 attempts, 4 sleeps by 100 ms
+        // 5 attempts, 4 sleeps by ~200 ms
+        CPPUNIT_ASSERT_GREATER(DWORD(800 - ClockRes), nTicksElapsed);
     }
 
     void test_failure()
@@ -37,7 +40,8 @@ public:
                                                                : std::numeric_limits<DWORD>::max()
                                                                      - nTicksBefore + nTicksAfter;
         CPPUNIT_ASSERT(FAILED(hr));
-        CPPUNIT_ASSERT(nTicksElapsed >= 900); // 10 attempts, 9 sleeps by 100 ms
+        // 1 + 10 attempts, 10 sleeps by ~100 ms
+        CPPUNIT_ASSERT_GREATER(DWORD(1000 - ClockRes), nTicksElapsed);
     }
 
     CPPUNIT_TEST_SUITE(test_retry_if_failed);

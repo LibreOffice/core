@@ -26,16 +26,12 @@ template <typename Func>
 std::enable_if_t<std::is_same_v<std::invoke_result_t<Func>, HRESULT>, HRESULT>
 RetryIfFailed(unsigned times, unsigned msTimeout, Func func)
 {
-    HRESULT hr = E_FAIL;
-    for (unsigned i = 0; i < times; ++i)
+    for (unsigned i = 0;; ++i)
     {
-        hr = func();
-        if (SUCCEEDED(hr))
-            break;
-        if (i < times - 1)
-            Sleep(msTimeout);
+        if (HRESULT hr = func(); SUCCEEDED(hr) || i >= times)
+            return hr;
+        Sleep(msTimeout);
     }
-    return hr;
 }
 }
 
