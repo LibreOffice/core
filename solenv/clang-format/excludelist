@@ -10009,8 +10009,6 @@ sd/source/ui/sidebar/MasterPagesSelector.hxx
 sd/source/ui/sidebar/NavigatorWrapper.cxx
 sd/source/ui/sidebar/NavigatorWrapper.hxx
 sd/source/ui/sidebar/PageMarginUtils.hxx
-sd/source/ui/sidebar/PanelBase.cxx
-sd/source/ui/sidebar/PanelBase.hxx
 sd/source/ui/sidebar/PanelFactory.cxx
 sd/source/ui/sidebar/PanelFactory.hxx
 sd/source/ui/sidebar/PreviewValueSet.cxx
