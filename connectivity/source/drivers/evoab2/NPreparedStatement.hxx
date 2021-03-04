@@ -57,7 +57,6 @@ namespace connectivity::evoab
 
             void construct( const OUString& _sql );
 
-        private:
             DECLARE_SERVICE_INFO();
             //XInterface
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;

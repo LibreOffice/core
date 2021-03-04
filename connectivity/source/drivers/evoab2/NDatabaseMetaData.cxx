@@ -23,6 +23,7 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/FValue.hxx>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
+#include <rtl/ref.hxx>
 
 #include <cstddef>
 #include <string.h>
@@ -984,8 +985,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  )
     {
         u"TABLE" // Currently we only support a 'TABLE' nothing more complex
     };
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTableTypes);
-    Reference< XResultSet > xRef = pResult;
+    rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTableTypes);
 
     // here we fill the rows which should be visible when ask for data from the resultset returned here
     ODatabaseMetaDataResultSet::ORows aRows;
@@ -1000,7 +1000,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  )
     }
     // here we set the rows at the resultset
     pResult->setRows(aRows);
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
@@ -1009,9 +1009,8 @@ Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
      * Return the proper type information required by evo driver
      */
 
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTypeInfo);
+    rtl::Reference<ODatabaseMetaDataResultSet> pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTypeInfo);
 
-    Reference< XResultSet > xResultSet = pResultSet;
     static ODatabaseMetaDataResultSet::ORows aRows = []()
     {
         ODatabaseMetaDataResultSet::ORows tmp;
@@ -1047,7 +1046,7 @@ Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
         return tmp;
     }();
     pResultSet->setRows(aRows);
-    return xResultSet;
+    return pResultSet;
 }
 
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getColumns(
@@ -1056,10 +1055,9 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getColumns(
 {
     // this returns an empty resultset where the column-names are already set
     // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eColumns );
-    Reference< XResultSet > xResultSet = pResultSet;
+    rtl::Reference<ODatabaseMetaDataResultSet> pResultSet = new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eColumns );
     pResultSet->setRows( getColumnRows( columnNamePattern ) );
-    return xResultSet;
+    return pResultSet;
 }
 
 
@@ -1078,8 +1076,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTableTypes);
-    Reference< XResultSet > xRef = pResult;
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTableTypes);
 
     // check if any type is given
     // when no types are given then we have to return all tables e.g. TABLE
@@ -1104,7 +1101,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
                 }
         }
     if(!bTableFound)
-        return xRef;
+        return pResult;
 
     ODatabaseMetaDataResultSet::ORows aRows;
 
@@ -1207,7 +1204,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
 
     pResult->setRows(aRows);
 
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getUDTs( const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*typeNamePattern*/, const Sequence< sal_Int32 >& /*types*/ )

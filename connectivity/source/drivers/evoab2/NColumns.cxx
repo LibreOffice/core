@@ -55,7 +55,7 @@ sdbcx::ObjectType OEvoabColumns::createObject(const OUString& _rName)
         {
             if (xRow->getString(4) == _rName)
             {
-                OColumn* pRet = new OColumn(
+                xRet = new OColumn(
                         _rName,
                         xRow->getString(6),
                         xRow->getString(13),
@@ -71,7 +71,6 @@ sdbcx::ObjectType OEvoabColumns::createObject(const OUString& _rName)
                         sCatalogName,
                         sSchemaName,
                         sTableName);
-                xRet = pRet;
                 break;
             }
         }

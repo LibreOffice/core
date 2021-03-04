@@ -48,7 +48,7 @@ ObjectType OEvoabTables::createObject(const OUString& aName)
         Reference< XRow > xRow(xResult,UNO_QUERY);
         if(xResult->next()) // there can be only one table with this name
         {
-            OEvoabTable* pRet = new OEvoabTable(
+            xRet = new OEvoabTable(
                     this,
                     static_cast<OEvoabCatalog&>(m_rParent).getConnection(),
                     aName,
@@ -56,7 +56,6 @@ ObjectType OEvoabTables::createObject(const OUString& aName)
                     xRow->getString(5),
                     "",
                     "");
-            xRet = pRet;
         }
     }
 

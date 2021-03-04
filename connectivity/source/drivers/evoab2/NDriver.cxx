@@ -23,6 +23,7 @@
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/ucb/XContentAccess.hpp>
+#include <rtl/ref.hxx>
 #include <strings.hrc>
 #include <resource/sharedresources.hxx>
 
@@ -103,12 +104,11 @@ Reference< XConnection > SAL_CALL OEvoabDriver::connect( const OUString& url, co
     if ( ! acceptsURL(url) )
         return nullptr;
 
-    OEvoabConnection* pCon = new OEvoabConnection( *this );
+    rtl::Reference<OEvoabConnection> pCon = new OEvoabConnection( *this );
     pCon->construct(url,info);
-    Reference< XConnection > xCon = pCon;
     m_xConnections.push_back(WeakReferenceHelper(*pCon));
 
-    return xCon;
+    return pCon;
 }
 
 sal_Bool SAL_CALL OEvoabDriver::acceptsURL( const OUString& url )
