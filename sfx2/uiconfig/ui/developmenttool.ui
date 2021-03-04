@@ -426,7 +426,7 @@
                       <object class="GtkToolButton" id="back">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="tooltip-text" translatable="yes" context="developmenttool|back">Back</property>
+                        <property name="tooltip-text" translatable="yes" context="developmenttool|tooltip-back">Back</property>
                         <property name="label" translatable="yes" context="developmenttool|back">Back</property>
                         <property name="use-underline">True</property>
                         <property name="icon-name">cmd/lc_prevrecord.png</property>
@@ -440,10 +440,24 @@
                       <object class="GtkToolButton" id="inspect">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="tooltip-text" translatable="yes" context="developmenttool|inspect">Inspect</property>
+                        <property name="tooltip-text" translatable="yes" context="developmenttool|tooltip-inspect">Inspect</property>
                         <property name="label" translatable="yes" context="developmenttool|inspect">Inspect</property>
                         <property name="use-underline">True</property>
                         <property name="icon-name">cmd/lc_recsearch.png</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="refresh">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="tooltip-text" translatable="yes" context="developmenttool|tooltip-refresh">Refresh</property>
+                        <property name="label" translatable="yes" context="developmenttool|refresh">Refresh</property>
+                        <property name="use-underline">True</property>
+                        <property name="icon-name">cmd/lc_reload.png</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
