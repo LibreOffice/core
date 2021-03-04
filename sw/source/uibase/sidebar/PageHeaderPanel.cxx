@@ -33,8 +33,8 @@
 
 namespace sw::sidebar{
 
-VclPtr<PanelLayout> PageHeaderPanel::Create(
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> PageHeaderPanel::Create(
+    weld::Widget* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings)
 {
@@ -45,7 +45,7 @@ VclPtr<PanelLayout> PageHeaderPanel::Create(
     if( pBindings == nullptr )
         throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PageHeaderPanel::Create", nullptr, 0);
 
-    return VclPtr<PageHeaderPanel>::Create(pParent, rxFrame, pBindings);
+    return std::make_unique<PageHeaderPanel>(pParent, rxFrame, pBindings);
 }
 
 void PageHeaderPanel::SetMarginsAndSpacingFieldUnit()
@@ -55,7 +55,7 @@ void PageHeaderPanel::SetMarginsAndSpacingFieldUnit()
 }
 
 PageHeaderPanel::PageHeaderPanel(
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings
     ) :
@@ -83,18 +83,11 @@ PageHeaderPanel::PageHeaderPanel(
 
 PageHeaderPanel::~PageHeaderPanel()
 {
-    disposeOnce();
-}
-
-void PageHeaderPanel::dispose()
-{
     mxHeaderToggle.reset();
     mxHeaderSpacingLB.reset();
     mxHeaderLayoutLB.reset();
     mxHeaderMarginPresetLB.reset();
     mxCustomEntry.reset();
-
-    PanelLayout::dispose();
 }
 
 FieldUnit PageHeaderPanel::GetCurrentUnit(SfxItemState eState, const SfxPoolItem* pState)

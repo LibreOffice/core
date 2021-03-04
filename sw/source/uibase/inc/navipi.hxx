@@ -121,14 +121,13 @@ protected:
 
 public:
 
-    static VclPtr<PanelLayout> Create(vcl::Window* pParent,
+    static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
             SfxBindings* pBindings);
-    SwNavigationPI(vcl::Window* pParent,
+    SwNavigationPI(weld::Widget* pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
             SfxBindings* _pBindings);
     virtual ~SwNavigationPI() override;
-    virtual void    dispose() override;
 
     void            UpdateListBox();
     void            MoveOutline(SwOutlineNodes::size_type nSource, SwOutlineNodes::size_type nTarget);
@@ -140,7 +139,7 @@ public:
     virtual void GetControlState(const sal_uInt16 /*nSId*/,
                                  boost::property_tree::ptree& /*rState*/) override {};
 
-    virtual void    StateChanged(StateChangedType nStateChange) override;
+//TODO    virtual void    StateChanged(StateChangedType nStateChange) override;
 
     static OUString CreateDropFileName( TransferableDataHelper& rData );
     static OUString CleanEntry(const OUString& rEntry);

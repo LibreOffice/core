@@ -48,13 +48,12 @@ class MasterPagesSelector : public PanelLayout
 {
 public:
     MasterPagesSelector (
-        vcl::Window* pParent,
+        weld::Widget* pParent,
         SdDrawDocument& rDocument,
         ViewShellBase& rBase,
         const std::shared_ptr<MasterPageContainer>& rpContainer,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~MasterPagesSelector() override;
-    virtual void dispose() override;
 
     virtual void LateInit();
 

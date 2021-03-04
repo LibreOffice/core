@@ -298,7 +298,7 @@ void setLegendPos(const css::uno::Reference<css::frame::XModel>& xModel, sal_Int
 }
 
 ChartElementsPanel::ChartElementsPanel(
-    vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame,
     ChartController* pController)
     : PanelLayout(pParent, "ChartElementsPanel", "modules/schart/ui/sidebarelements.ui", rxFrame)
     , mxCBTitle(m_xBuilder->weld_check_button("checkbutton_title"))
@@ -342,11 +342,6 @@ ChartElementsPanel::ChartElementsPanel(
 
 ChartElementsPanel::~ChartElementsPanel()
 {
-    disposeOnce();
-}
-
-void ChartElementsPanel::dispose()
-{
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcaster->removeModifyListener(mxListener);
     mxCBTitle.reset();
@@ -378,8 +373,6 @@ void ChartElementsPanel::dispose()
 
     mxTextTitle.reset();
     mxTextSubTitle.reset();
-
-    PanelLayout::dispose();
 }
 
 void ChartElementsPanel::Initialize()
@@ -540,8 +533,8 @@ void ChartElementsPanel::updateData()
     mxLBLegendPosition->set_active(getLegendPos(mxModel));
 }
 
-VclPtr<PanelLayout> ChartElementsPanel::Create (
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> ChartElementsPanel::Create (
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     ChartController* pController)
 {
@@ -549,13 +542,12 @@ VclPtr<PanelLayout> ChartElementsPanel::Create (
         throw lang::IllegalArgumentException("no parent Window given to ChartElementsPanel::Create", nullptr, 0);
     if ( ! rxFrame.is())
         throw lang::IllegalArgumentException("no XFrame given to ChartElementsPanel::Create", nullptr, 1);
-    return  VclPtr<ChartElementsPanel>::Create(
-                        pParent, rxFrame, pController);
+    return std::make_unique<ChartElementsPanel>(pParent, rxFrame, pController);
 }
 
-void ChartElementsPanel::DataChanged(
-    const DataChangedEvent& )
+void ChartElementsPanel::DataChanged(const DataChangedEvent& rEvent)
 {
+    PanelLayout::DataChanged(rEvent);
     updateData();
 }
 
