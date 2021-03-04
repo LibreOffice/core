@@ -2401,6 +2401,24 @@ SfxStringItem LayoutStatus SID_STATUS_LAYOUT
     GroupId = SfxGroupId::View;
 ]
 
+SfxStringItem Scale SID_SCALE
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::View;
+]
+
 SfxBoolItem LeaveAllGroups SID_LEAVE_ALL_GROUPS
 
 [

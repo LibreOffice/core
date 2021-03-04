@@ -1081,6 +1081,13 @@ void  DrawViewShell::ExecStatusBar(SfxRequest& rReq)
             GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION_LAYOUT, SfxCallMode::ASYNCHRON );
         }
         break;
+        case SID_SCALE:
+        {
+//            GetViewFrame()->GetDispatcher()->Execute( SID_SCALE, SfxCallMode::ASYNCHRON );
+//            ::tools::Rectangle aRect(rCEvt.GetMousePosPixel(), Size(1, 1));
+//            weld::Window* pPopupParent = weld::GetPopupParent(GetStatusBar(), aRect);
+        }
+        break;
     }
 }
 
