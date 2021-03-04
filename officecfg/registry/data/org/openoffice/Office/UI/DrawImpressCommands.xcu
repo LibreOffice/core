@@ -1180,6 +1180,14 @@
           <value xml:lang="en-US">Layout</value>
         </prop>
       </node>
+      <node oor:name=".uno:Scale" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Scale</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Scaling at the current document</value>
+        </prop>
+      </node>
       <node oor:name=".uno:CrookRotate" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Set in Circle (perspective)</value>

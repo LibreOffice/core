@@ -261,6 +261,11 @@ interface OutlineView
         ExecMethod = ExecStatusBar ;
         StateMethod = GetStatusBarState ;
     ]
+    SID_SCALE // ole : no, status : ?
+    [
+        ExecMethod = ExecStatusBar ;
+        StateMethod = GetStatusBarState ;
+    ]
     SID_THESAURUS // ole : no, status : ?
     [
         ExecMethod = FuTemporaryModify ;
