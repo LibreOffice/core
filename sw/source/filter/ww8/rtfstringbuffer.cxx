@@ -63,7 +63,7 @@ OString RtfStringBuffer::makeStringAndClear()
 OStringBuffer& RtfStringBuffer::getLastBuffer()
 {
     if (m_aValues.empty() || m_aValues.back().isGraphic())
-        m_aValues.emplace_back(RtfStringBufferValue());
+        m_aValues.emplace_back();
     return m_aValues.back().getBuffer();
 }
 
@@ -73,7 +73,7 @@ void RtfStringBuffer::clear() { m_aValues.clear(); }
 
 void RtfStringBuffer::append(const SwFlyFrameFormat* pFlyFrameFormat, const SwGrfNode* pGrfNode)
 {
-    m_aValues.emplace_back(RtfStringBufferValue(pFlyFrameFormat, pGrfNode));
+    m_aValues.emplace_back(pFlyFrameFormat, pGrfNode);
 }
 
 void RtfStringBuffer::appendAndClear(RtfStringBuffer& rBuf)

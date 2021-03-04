@@ -1483,8 +1483,7 @@ void RTFDocumentImpl::text(OUString& rString)
     if (m_aStates.top().getTableCellSprms().find(NS_ooxml::LN_CT_TcPrBase_vAlign)
         && m_nTopLevelCells == 0)
     {
-        m_aTableBufferStack.back().emplace_back(
-            Buf_t(BUFFER_UTEXT, new RTFValue(rString), nullptr));
+        m_aTableBufferStack.back().emplace_back(BUFFER_UTEXT, new RTFValue(rString), nullptr);
         return;
     }
 
@@ -3673,9 +3672,9 @@ void RTFDocumentImpl::resetFrame() { m_aStates.top().getFrame() = RTFFrame(&m_aS
 void RTFDocumentImpl::bufferProperties(RTFBuffer_t& rBuffer, const RTFValue::Pointer_t& pValue,
                                        const tools::SvRef<TableRowBuffer>& pTableProperties)
 {
-    rBuffer.emplace_back(
-        Buf_t(BUFFER_SETSTYLE, new RTFValue(m_aStates.top().getCurrentStyleIndex()), nullptr));
-    rBuffer.emplace_back(Buf_t(BUFFER_PROPS, pValue, pTableProperties));
+    rBuffer.emplace_back(BUFFER_SETSTYLE, new RTFValue(m_aStates.top().getCurrentStyleIndex()),
+                         nullptr);
+    rBuffer.emplace_back(BUFFER_PROPS, pValue, pTableProperties);
 }
 
 RTFShape::RTFShape() = default;
