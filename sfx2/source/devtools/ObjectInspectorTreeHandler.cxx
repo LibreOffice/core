@@ -182,7 +182,11 @@ OUString AnyToString(const uno::Any& aValue, const uno::Reference<uno::XComponen
     return aRetStr;
 }
 
-OUString getAnyType(const uno::Any& aValue) { return aValue.getValueType().getTypeName(); }
+OUString getAnyType(const uno::Any& aValue)
+{
+    OUString aTypeName = aValue.getValueType().getTypeName();
+    return aTypeName.replaceAll("com.sun.star", "css");
+}
 
 // Object inspector nodes
 
@@ -460,8 +464,9 @@ public:
 
         int nLength = xIdlArray->getLen(maAny);
 
-        OUString aValue = "0 to " + OUString::number(nLength - 1);
-        OUString aType = getAnyType(maAny);
+        OUString aValue = "<Sequence>";
+        OUString aType = getAnyType(maAny).replaceAll(u"[]", u"");
+        aType += u"[" + OUString::number(nLength) + u"]";
 
         return {
             { 1, aValue },
