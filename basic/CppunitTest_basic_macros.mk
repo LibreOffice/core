@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,basic_macros, \
 	basic/qa/cppunit/test_language_conditionals \
 	basic/qa/cppunit/test_nested_struct \
 	basic/qa/cppunit/test_vba \
+	basic/qa/cppunit/test_global_as_new \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,basic_macros, \
