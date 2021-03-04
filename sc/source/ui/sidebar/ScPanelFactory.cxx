@@ -26,8 +26,7 @@
 #include <dwfunctr.hxx>
 
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/window.hxx>
+#include <vcl/weldutils.hxx>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -61,8 +60,11 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
         const sal_uInt64 nBindingsValue (aArguments.getOrDefault("SfxBindings", sal_uInt64(0)));
         SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
 
-        VclPtr<vcl::Window> pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
-        if ( ! xParentWindow.is() || pParentWindow==nullptr)
+        weld::Widget* pParent(nullptr);
+        if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xParentWindow.get()))
+            pParent = pTunnel->getWidget();
+
+        if (!pParent)
             throw RuntimeException(
                 "PanelFactory::createUIElement called without ParentWindow",
                 nullptr);
@@ -76,29 +78,29 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
                 nullptr);
 
         sal_Int32 nMinimumSize = -1;
-        VclPtr<PanelLayout> pPanel;
+        std::unique_ptr<PanelLayout> xPanel;
         if (rsResourceURL.endsWith("/AlignmentPropertyPanel"))
-            pPanel = AlignmentPropertyPanel::Create( pParentWindow, xFrame, pBindings );
+            xPanel = AlignmentPropertyPanel::Create( pParent, xFrame, pBindings );
         else if (rsResourceURL.endsWith("/CellAppearancePropertyPanel"))
-            pPanel = CellAppearancePropertyPanel::Create( pParentWindow, xFrame, pBindings );
+            xPanel = CellAppearancePropertyPanel::Create( pParent, xFrame, pBindings );
         else if (rsResourceURL.endsWith("/NumberFormatPropertyPanel"))
-            pPanel = NumberFormatPropertyPanel::Create( pParentWindow, xFrame, pBindings );
+            xPanel = NumberFormatPropertyPanel::Create( pParent, xFrame, pBindings );
         else if (rsResourceURL.endsWith("/NavigatorPanel"))
         {
-            pPanel = VclPtr<ScNavigatorDlg>::Create(pBindings, pParentWindow);
+            xPanel = std::make_unique<ScNavigatorDlg>(pBindings, pParent, nullptr);
             nMinimumSize = 0;
         }
         else if (rsResourceURL.endsWith("/FunctionsPanel"))
         {
-            pPanel = VclPtr<ScFunctionWin>::Create(pParentWindow, xFrame);
+            xPanel = std::make_unique<ScFunctionWin>(pParent);
             nMinimumSize = 0;
         }
 
-        if (pPanel)
+        if (xPanel)
             xElement = sfx2::sidebar::SidebarPanelBase::Create(
                 rsResourceURL,
                 xFrame,
-                pPanel,
+                std::move(xPanel),
                 ui::LayoutSize(nMinimumSize,-1,-1));
     }
     catch (const uno::RuntimeException &)

@@ -18,10 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/frame/XFrame.hpp>
-
 #include <sfx2/sidebar/PanelLayout.hxx>
-
 #include <sfx2/sidebar/ControllerItem.hxx>
 
 #include <svx/pageitem.hxx>
@@ -36,14 +33,13 @@
 
 namespace sw::sidebar {
 
-class PageFormatPanel:
+class PageFormatPanel :
     public PanelLayout,
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    static VclPtr<PanelLayout> Create(
-        vcl::Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+    static std::unique_ptr<PanelLayout> Create(
+        weld::Widget* pParent,
         SfxBindings* pBindings);
 
     virtual void NotifyItemUpdate(
@@ -56,11 +52,9 @@ public:
         boost::property_tree::ptree& /*rState*/) override {};
 
     PageFormatPanel(
-        vcl::Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+        weld::Widget* pParent,
         SfxBindings* pBindings);
     virtual ~PageFormatPanel() override;
-    virtual void dispose() override;
 
     static FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );
 

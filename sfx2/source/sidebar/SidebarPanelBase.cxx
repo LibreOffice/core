@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
-#include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
@@ -36,14 +35,14 @@ namespace sfx2::sidebar {
 Reference<ui::XUIElement> SidebarPanelBase::Create (
     const OUString& rsResourceURL,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
-    PanelLayout* pWindow,
+    std::unique_ptr<PanelLayout> xControl,
     const css::ui::LayoutSize& rLayoutSize)
 {
     Reference<ui::XUIElement> xUIElement (
         new SidebarPanelBase(
             rsResourceURL,
             rxFrame,
-            pWindow,
+            std::move(xControl),
             rLayoutSize));
     return xUIElement;
 }
@@ -51,11 +50,11 @@ Reference<ui::XUIElement> SidebarPanelBase::Create (
 SidebarPanelBase::SidebarPanelBase (
     const OUString& rsResourceURL,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
-    PanelLayout* pWindow,
+    std::unique_ptr<PanelLayout> xControl,
     const css::ui::LayoutSize& rLayoutSize)
     : SidebarPanelBaseInterfaceBase(m_aMutex),
       mxFrame(rxFrame),
-      mpControl(pWindow),
+      mxControl(std::move(xControl)),
       msResourceURL(rsResourceURL),
       maLayoutSize(rLayoutSize)
 {
@@ -66,22 +65,24 @@ SidebarPanelBase::SidebarPanelBase (
                 ::comphelper::getProcessComponentContext()));
         xMultiplexer->addContextChangeEventListener(this, mxFrame->getController());
     }
-    if (mpControl != nullptr)
-    {
-        mpControl->SetBackground(Theme::GetColor(Theme::Color_PanelBackground));
-        mpControl->Show();
-    }
 }
 
 SidebarPanelBase::~SidebarPanelBase()
 {
 }
 
+void SidebarPanelBase::SetParentPanel(sfx2::sidebar::Panel* pPanel)
+{
+    if (!mxControl)
+        return;
+    mxControl->SetPanel(pPanel);
+}
+
 void SAL_CALL SidebarPanelBase::disposing()
 {
     SolarMutexGuard aGuard;
 
-    mpControl.disposeAndClear();
+    mxControl.reset();
 
     if (mxFrame.is())
     {
@@ -100,7 +101,7 @@ void SAL_CALL SidebarPanelBase::notifyContextChangeEvent (
     SolarMutexGuard aGuard;
 
     IContextChangeReceiver* pContextChangeReceiver
-        = dynamic_cast<IContextChangeReceiver*>(mpControl.get());
+        = dynamic_cast<IContextChangeReceiver*>(mxControl.get());
     if (pContextChangeReceiver != nullptr)
     {
         const vcl::EnumContext aContext(
@@ -116,7 +117,7 @@ void SAL_CALL SidebarPanelBase::disposing (
     SolarMutexGuard aGuard;
 
     mxFrame = nullptr;
-    mpControl = nullptr;
+    mxControl.reset();
 }
 
 css::uno::Reference<css::frame::XFrame> SAL_CALL SidebarPanelBase::getFrame()
@@ -142,20 +143,14 @@ Reference<XInterface> SAL_CALL SidebarPanelBase::getRealInterface()
 Reference<accessibility::XAccessible> SAL_CALL SidebarPanelBase::createAccessible (
     const Reference<accessibility::XAccessible>&)
 {
-    // Not yet implemented.
+    // Not implemented.
     return nullptr;
 }
 
 Reference<awt::XWindow> SAL_CALL SidebarPanelBase::getWindow()
 {
-    SolarMutexGuard aGuard;
-
-    if (mpControl != nullptr)
-        return Reference<awt::XWindow>(
-            mpControl->GetComponentInterface(),
-            UNO_QUERY);
-    else
-        return nullptr;
+    // Not implemented
+    return nullptr;
 }
 
 ui::LayoutSize SAL_CALL SidebarPanelBase::getHeightForWidth (const sal_Int32 nWidth)
@@ -164,46 +159,33 @@ ui::LayoutSize SAL_CALL SidebarPanelBase::getHeightForWidth (const sal_Int32 nWi
 
     if (maLayoutSize.Minimum >= 0)
         return maLayoutSize;
+
+    ILayoutableWindow* pLayoutableWindow = dynamic_cast<ILayoutableWindow*>(mxControl.get());
+    if (pLayoutableWindow)
+        return pLayoutableWindow->GetHeightForWidth(nWidth);
     else
     {
-        ILayoutableWindow* pLayoutableWindow = dynamic_cast<ILayoutableWindow*>(mpControl.get());
-        if (pLayoutableWindow)
-            return pLayoutableWindow->GetHeightForWidth(nWidth);
-        else if (isLayoutEnabled(mpControl))
-        {
-            // widget layout-based sidebar
-            mpControl->queue_resize();
-            Size aSize(mpControl->get_preferred_size());
-            return ui::LayoutSize(aSize.Height(), aSize.Height(), aSize.Height());
-        }
-        else if (mpControl != nullptr)
-        {
-            const sal_Int32 nHeight (mpControl->GetSizePixel().Height());
-            return ui::LayoutSize(nHeight,nHeight,nHeight);
-        }
+        // widget layout-based sidebar
+        mxControl->queue_resize();
+        Size aSize(mxControl->get_preferred_size());
+        return ui::LayoutSize(aSize.Height(), aSize.Height(), aSize.Height());
     }
-
-    return ui::LayoutSize(0,0,0);
 }
 
 sal_Int32 SAL_CALL SidebarPanelBase::getMinimalWidth ()
 {
     SolarMutexGuard aGuard;
 
-    if (isLayoutEnabled(mpControl))
-    {
-        // widget layout-based sidebar
-        Size aSize(mpControl->get_preferred_size());
-        return aSize.Width();
-    }
-    return 0;
+    // widget layout-based sidebar
+    Size aSize(mxControl->get_preferred_size());
+    return aSize.Width();
 }
 
 void SAL_CALL SidebarPanelBase::updateModel(const css::uno::Reference<css::frame::XModel>& xModel)
 {
     SolarMutexGuard aGuard;
 
-    SidebarModelUpdate* pModelUpdate = dynamic_cast<SidebarModelUpdate*>(mpControl.get());
+    SidebarModelUpdate* pModelUpdate = dynamic_cast<SidebarModelUpdate*>(mxControl.get());
     if (!pModelUpdate)
         return;
 

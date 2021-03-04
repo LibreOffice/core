@@ -83,7 +83,7 @@ namespace sd {
 class SdNavigatorFloat : public SfxNavigator
 {
 private:
-    VclPtr<SdNavigatorWin> pNavWin;
+    std::unique_ptr<SdNavigatorWin> m_xNavWin;
 public:
     SdNavigatorFloat(SfxBindings* _pBindings, SfxChildWindow* pMgr, vcl::Window* pParent);
     void InitTreeLB(const SdDrawDocument* pDoc);
@@ -106,10 +106,9 @@ public:
             update is necessary.  When <FALSE/> the navigator will
             rely on others to trigger updates.
     */
-    SdNavigatorWin(vcl::Window* pParent, SfxBindings* pBindings);
+    SdNavigatorWin(weld::Widget* pParent, SfxBindings* pBindings, SfxNavigator* pNavigatorDlg);
     void SetUpdateRequestFunctor(const UpdateRequestFunctor& rUpdateRequest);
     virtual ~SdNavigatorWin() override;
-    virtual void                dispose() override;
 
     void                        InitTreeLB( const SdDrawDocument* pDoc );
     void                        RefreshDocumentLB( const OUString* pDocName = nullptr );
@@ -129,6 +128,8 @@ private:
     std::unique_ptr<weld::ComboBox> mxLbDocs;
     std::unique_ptr<weld::Menu> mxDragModeMenu;
     std::unique_ptr<weld::Menu> mxShapeMenu;
+
+    VclPtr<SfxNavigator> mxNavigatorDlg;
 
     bool                        mbDocImported;
     OUString                    maDropFileName;
@@ -159,6 +160,8 @@ private:
 public:
     //when object is marked , fresh the corresponding entry tree .
     void                        FreshTree ( const  SdDrawDocument* pDoc );
+
+    virtual weld::Window* GetFrameWeld() const override;
 };
 
 /**
@@ -175,7 +178,7 @@ protected:
                                 const SfxPoolItem* pState ) override;
 
 private:
-    VclPtr<SdNavigatorWin> pNavigatorWin;
+    SdNavigatorWin* pNavigatorWin;
     const SdNavigatorWin::UpdateRequestFunctor maUpdateRequest;
 };
 
@@ -192,7 +195,7 @@ protected:
                                 const SfxPoolItem* pState ) override;
 
 private:
-    VclPtr<SdNavigatorWin> pNavigatorWin;
+    SdNavigatorWin* pNavigatorWin;
 };
 
 #endif

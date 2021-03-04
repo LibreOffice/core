@@ -22,6 +22,7 @@
 
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
+#include <vcl/idle.hxx>
 #include "CustomAnimationList.hxx"
 #include <misc/scopelock.hxx>
 
@@ -50,9 +51,8 @@ class CustomAnimationPane : public PanelLayout
 {
     friend class MotionPathTag;
 public:
-    CustomAnimationPane( vcl::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame );
+    CustomAnimationPane(weld::Widget* pParent, ViewShellBase& rBase);
     virtual ~CustomAnimationPane() override;
-    virtual void dispose() override;
 
     // ILayoutableWindow
     virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) override;
@@ -76,9 +76,6 @@ public:
     virtual void onContextMenu(const OString& rIdent) override;
     virtual void onDragNDropComplete( std::vector< CustomAnimationEffectPtr > pEffectsDragged, CustomAnimationEffectPtr pEffectInsertBefore ) override;
 
-    // Window
-    virtual void DataChanged (const DataChangedEvent& rEvent) override;
-
     void addUndo();
 
     double getDuration() const;
@@ -100,7 +97,6 @@ private:
 
     static css::uno::Any getProperty1Value( sal_Int32 nType, const CustomAnimationEffectPtr& pEffect );
     static bool setProperty1Value( sal_Int32 nType, const CustomAnimationEffectPtr& pEffect, const css::uno::Any& rValue );
-    void UpdateLook();
     sal_Int32 fillAnimationLB( bool bHasText );
     PathKind getCreatePathKind() const;
     void createPath( PathKind eKind, std::vector< ::com::sun::star::uno::Any >& rTargets, double fDuration );
