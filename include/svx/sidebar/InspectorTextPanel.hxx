@@ -45,12 +45,11 @@ class SVX_DLLPUBLIC InspectorTextPanel : public PanelLayout
 {
 public:
     virtual ~InspectorTextPanel() override;
-    virtual void dispose() override;
 
-    static VclPtr<vcl::Window> Create(vcl::Window* pParent,
-                                      const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    static std::unique_ptr<PanelLayout>
+    Create(weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    InspectorTextPanel(vcl::Window* pParent,
+    InspectorTextPanel(weld::Widget* pParent,
                        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     void updateEntries(const std::vector<TreeNode>& rStore);

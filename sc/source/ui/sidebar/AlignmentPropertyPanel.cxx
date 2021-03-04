@@ -37,7 +37,7 @@ using namespace css::uno;
 namespace sc::sidebar {
 
 AlignmentPropertyPanel::AlignmentPropertyPanel(
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
     : PanelLayout(pParent, "AlignmentPropertyPanel", "modules/scalc/ui/sidebaralignment.ui", rxFrame)
@@ -78,11 +78,6 @@ AlignmentPropertyPanel::AlignmentPropertyPanel(
 
 AlignmentPropertyPanel::~AlignmentPropertyPanel()
 {
-    disposeOnce();
-}
-
-void AlignmentPropertyPanel::dispose()
-{
     mxIndentButtonsDispatch.reset();
     mxIndentButtons.reset();
     mxWriteDirectionDispatch.reset();
@@ -111,8 +106,6 @@ void AlignmentPropertyPanel::dispose()
     maAngleControl.dispose();
     maVrtStackControl.dispose();
     maRefEdgeControl.dispose();
-
-    PanelLayout::dispose();
 }
 
 void AlignmentPropertyPanel::Initialize()
@@ -199,8 +192,8 @@ IMPL_LINK_NOARG(AlignmentPropertyPanel, CBOXWrapTextClkHdl, weld::ToggleButton&,
             SfxCallMode::RECORD, { &aItem });
 }
 
-VclPtr<PanelLayout> AlignmentPropertyPanel::Create (
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> AlignmentPropertyPanel::Create (
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
@@ -211,13 +204,8 @@ VclPtr<PanelLayout> AlignmentPropertyPanel::Create (
     if (pBindings == nullptr)
         throw lang::IllegalArgumentException("no SfxBindings given to AlignmentPropertyPanel::Create", nullptr, 2);
 
-    return  VclPtr<AlignmentPropertyPanel>::Create(
-                        pParent, rxFrame, pBindings);
+    return std::make_unique<AlignmentPropertyPanel>(pParent, rxFrame, pBindings);
 }
-
-void AlignmentPropertyPanel::DataChanged(
-    const DataChangedEvent&)
-{}
 
 void AlignmentPropertyPanel::HandleContextChange(
     const vcl::EnumContext& rContext)

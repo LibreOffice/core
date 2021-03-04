@@ -33,8 +33,8 @@ using namespace css;
 
 namespace svx::sidebar
 {
-VclPtr<vcl::Window>
-InspectorTextPanel::Create(vcl::Window* pParent,
+std::unique_ptr<PanelLayout>
+InspectorTextPanel::Create(weld::Widget* pParent,
                            const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (pParent == nullptr)
@@ -44,10 +44,10 @@ InspectorTextPanel::Create(vcl::Window* pParent,
         throw lang::IllegalArgumentException("no XFrame given to InspectorTextPanel::Create",
                                              nullptr, 1);
 
-    return VclPtr<InspectorTextPanel>::Create(pParent, rxFrame);
+    return std::make_unique<InspectorTextPanel>(pParent, rxFrame);
 }
 
-InspectorTextPanel::InspectorTextPanel(vcl::Window* pParent,
+InspectorTextPanel::InspectorTextPanel(weld::Widget* pParent,
                                        const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, "InspectorTextPanel", "svx/ui/inspectortextpanel.ui", rxFrame)
     , mpListBoxStyles(m_xBuilder->weld_tree_view("listbox_fonts"))
@@ -156,14 +156,7 @@ void InspectorTextPanel::updateEntries(const std::vector<TreeNode>& rStore)
     mpListBoxStyles->collapse_row(*pEntry); // Collapse "Default Paragraph Style"
 }
 
-InspectorTextPanel::~InspectorTextPanel() { disposeOnce(); }
-
-void InspectorTextPanel::dispose()
-{
-    mpListBoxStyles.reset();
-
-    PanelLayout::dispose();
-}
+InspectorTextPanel::~InspectorTextPanel() {}
 
 } // end of namespace svx::sidebar
 
