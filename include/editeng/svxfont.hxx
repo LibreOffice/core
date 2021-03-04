@@ -23,6 +23,7 @@
 #include <tools/long.hxx>
 #include <vcl/font.hxx>
 #include <editeng/editengdllapi.h>
+#include <tools/poly.hxx>
 
 // Percentage of height of lower case small capital letters compared to upper case letters
 // See i#1526# for full explanation
@@ -103,8 +104,10 @@ public:
                    const Point &rPos, const OUString &rTxt,
                    const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32 ) const;
 
-    static void DrawArrow( OutputDevice &rOut, const tools::Rectangle& rRect,
-                           const Size& rSize, const Color& rCol, bool bLeft );
+    static tools::Polygon DrawArrow( OutputDevice &rOut, const tools::Rectangle& rRect,
+                                    const Size& rSize, const Color& rCol, bool bLeftOrTop,
+                                    bool bVertical );
+
     SvxFont&    operator=( const SvxFont& rFont );
     SvxFont&    operator=( const Font& rFont );
 };
