@@ -86,32 +86,62 @@ void SvxFont::SetNonAutoEscapement(short nNewEsc, const OutputDevice* pOutDev)
         nEsc = -MAX_ESC_POS;
 }
 
-void SvxFont::DrawArrow( OutputDevice &rOut, const tools::Rectangle& rRect,
-    const Size& rSize, const Color& rCol, bool bLeft )
+tools::Polygon SvxFont::DrawArrow( OutputDevice &rOut, const tools::Rectangle& rRect,
+    const Size& rSize, const Color& rCol, bool bLeftOrTop, bool bVertical )
 {
-    tools::Long nLeft = ( rRect.Left() + rRect.Right() - rSize.Width() )/ 2;
-    tools::Long nRight = nLeft + rSize.Width();
-    tools::Long nMid = ( rRect.Top() + rRect.Bottom() ) / 2;
-    tools::Long nTop = nMid - rSize.Height() / 2;
-    tools::Long nBottom = nTop + rSize.Height();
-    if( nLeft < rRect.Left() )
-    {
-        nLeft = rRect.Left();
-        nRight = rRect.Right();
-    }
-    if( nTop < rRect.Top() )
-    {
-        nTop = rRect.Top();
-        nBottom = rRect.Bottom();
-    }
     tools::Polygon aPoly;
-    Point aTmp( bLeft ? nLeft : nRight, nMid );
-    Point aNxt( bLeft ? nRight : nLeft, nTop );
-    aPoly.Insert( 0, aTmp );
-    aPoly.Insert( 0, aNxt );
-    aNxt.setY( nBottom );
-    aPoly.Insert( 0, aNxt );
-    aPoly.Insert( 0, aTmp );
+    Point aTmp;
+    Point aNxt;
+    if (bVertical)
+    {
+        tools::Long nLeft = ((rRect.Left() + rRect.Right()) / 2) - (rSize.Height() / 2);
+        tools::Long nRight = ((rRect.Left() + rRect.Right()) / 2) + (rSize.Height() / 2);
+        tools::Long nMid = (rRect.Left() + rRect.Right()) / 2;
+        tools::Long nTop = ((rRect.Top() + rRect.Bottom()) / 2) - (rSize.Height() / 2);
+        tools::Long nBottom = nTop + rSize.Height();
+        if (nTop < rRect.Top())
+        {
+            if (bLeftOrTop)
+            {
+                nTop = rRect.Top();
+                nBottom = rRect.Bottom();
+            }
+            else
+            {
+                nTop = rRect.Bottom();
+                nBottom = rRect.Bottom() - (rSize.Height() / 2);
+            }
+        }
+        aTmp.setX(nRight);
+        aTmp.setY(nBottom);
+        aNxt.setX(nMid);
+        aNxt.setY(nTop);
+        aPoly.Insert(0, aTmp);
+        aPoly.Insert(0, aNxt);
+        aTmp.setX(nLeft);
+        aPoly.Insert(0, aTmp);
+    }
+    else
+    {
+        tools::Long nLeft = (rRect.Left() + rRect.Right() - rSize.Width()) / 2;
+        tools::Long nRight = nLeft + rSize.Width();
+        tools::Long nMid = (rRect.Top() + rRect.Bottom()) / 2;
+        tools::Long nTop = nMid - rSize.Height() / 2;
+        tools::Long nBottom = nTop + rSize.Height();
+        if (nLeft < rRect.Left())
+        {
+            nLeft = rRect.Left();
+            nRight = rRect.Right();
+        }
+        aTmp.setX(bLeftOrTop ? nLeft : nRight);
+        aTmp.setY(nMid);
+        aNxt.setX(bLeftOrTop ? nRight : nLeft);
+        aNxt.setY(nTop);
+        aPoly.Insert(0, aTmp);
+        aPoly.Insert(0, aNxt);
+        aNxt.setY(nBottom);
+        aPoly.Insert(0, aNxt);
+    }
     Color aOldLineColor = rOut.GetLineColor();
     Color aOldFillColor = rOut.GetFillColor();
     rOut.SetFillColor( rCol );
@@ -120,8 +150,8 @@ void SvxFont::DrawArrow( OutputDevice &rOut, const tools::Rectangle& rRect,
     rOut.DrawLine( aTmp, aNxt );
     rOut.SetLineColor( aOldLineColor );
     rOut.SetFillColor( aOldFillColor );
+    return aPoly;
 }
-
 
 OUString SvxFont::CalcCaseMap(const OUString &rTxt) const
 {
