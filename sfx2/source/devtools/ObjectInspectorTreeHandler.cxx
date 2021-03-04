@@ -535,7 +535,13 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
     }
 
     uno::Reference<beans::XIntrospection> xIntrospection = beans::theIntrospection::get(mxContext);
+    if (!xIntrospection.is())
+        return;
+
     auto xIntrospectionAccess = xIntrospection->inspect(maAny);
+    if (!xIntrospectionAccess.is())
+        return;
+
     auto xInvocationFactory = css::script::Invocation::create(mxContext);
     uno::Sequence<uno::Any> aParameters = { maAny };
     auto xInvocationInterface = xInvocationFactory->createInstanceWithArguments(aParameters);
@@ -609,6 +615,8 @@ ObjectInspectorNodeInterface* BasicValueNode::createNodeObjectForAny(OUString co
 
     return new BasicValueNode(rName, rAny, mxContext);
 }
+
+// helper functions
 
 ObjectInspectorNodeInterface* getSelectedNode(weld::TreeView const& rTreeView)
 {
