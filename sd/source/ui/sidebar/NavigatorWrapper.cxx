@@ -30,34 +30,13 @@ NavigatorWrapper::NavigatorWrapper (
     vcl::Window* pParent,
     sd::ViewShellBase& rViewShellBase,
     SfxBindings* pBindings)
-    : Control(pParent, 0),
-      mrViewShellBase(rViewShellBase),
-      maNavigator(VclPtr<SdNavigatorWin>::Create(
-        this, pBindings))
+    : SdNavigatorWin(pParent, pBindings)
+    , mrViewShellBase(rViewShellBase)
 {
-    maNavigator->SetUpdateRequestFunctor(
+    SetUpdateRequestFunctor(
             [this] () { return this->UpdateNavigator(); });
-    maNavigator->SetPosSizePixel(
-        Point(0,0),
-        GetSizePixel());
-    maNavigator->SetBackground(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Color_PanelBackground));
-    maNavigator->Show();
-}
-
-NavigatorWrapper::~NavigatorWrapper()
-{
-    disposeOnce();
-}
-
-void NavigatorWrapper::dispose()
-{
-    maNavigator.disposeAndClear();
-    Control::dispose();
-}
-
-void NavigatorWrapper::Resize()
-{
-    maNavigator->SetSizePixel(GetSizePixel());
+    SetBackground(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Color_PanelBackground));
+    Show();
 }
 
 css::ui::LayoutSize NavigatorWrapper::GetHeightForWidth (const sal_Int32)
@@ -67,15 +46,7 @@ css::ui::LayoutSize NavigatorWrapper::GetHeightForWidth (const sal_Int32)
 
 void NavigatorWrapper::UpdateNavigator()
 {
-    maNavigator->InitTreeLB(mrViewShellBase.GetDocument());
-}
-
-void NavigatorWrapper::GetFocus()
-{
-    if (maNavigator)
-        maNavigator->GrabFocus();
-    else
-        Control::GetFocus();
+    InitTreeLB(mrViewShellBase.GetDocument());
 }
 
 } // end of namespace sd::sidebar
