@@ -2213,10 +2213,13 @@ struct SwLineEntry
     SwTwips mnKey;
     SwTwips mnStartPos;
     SwTwips mnEndPos;
+    SwTwips mnLimitedEndPos;
 
     svx::frame::Style maAttribute;
 
     enum OverlapType { NO_OVERLAP, OVERLAP1, OVERLAP2, OVERLAP3 };
+
+    enum class VerticalType { LEFT, RIGHT };
 
 public:
     SwLineEntry( SwTwips nKey,
@@ -2225,6 +2228,12 @@ public:
                  const svx::frame::Style& rAttribute );
 
     OverlapType Overlaps( const SwLineEntry& rComp ) const;
+
+    /**
+     * Assuming that this entry is for a Word-style covering cell and the border matching eType is
+     * set, limit the end position of this border in case covered cells have no borders set.
+     */
+    void LimitVerticalEndPos(const SwFrame& rFrame, VerticalType eType);
 };
 
 SwLineEntry::SwLineEntry( SwTwips nKey,
@@ -2234,6 +2243,7 @@ SwLineEntry::SwLineEntry( SwTwips nKey,
     :   mnKey( nKey ),
         mnStartPos( nStartPos ),
         mnEndPos( nEndPos ),
+        mnLimitedEndPos(0),
         maAttribute( rAttribute )
 {
 }
@@ -2285,6 +2295,37 @@ SwLineEntry::OverlapType SwLineEntry::Overlaps( const SwLineEntry& rNew )  const
 
     // 8, 9
     return eRet;
+}
+
+void SwLineEntry::LimitVerticalEndPos(const SwFrame& rFrame, VerticalType eType)
+{
+    if (!rFrame.IsCellFrame())
+    {
+        return;
+    }
+
+    const auto& rCellFrame = static_cast<const SwCellFrame&>(rFrame);
+    std::vector<const SwCellFrame*> aCoveredCells = rCellFrame.GetCoveredCells();
+    // Iterate in reverse order, so we can stop at the first cell that has a border. This can
+    // determine what is the minimal end position that is safe to use as a limit.
+    for (auto it = aCoveredCells.rbegin(); it != aCoveredCells.rend(); ++it)
+    {
+        const SwCellFrame* pCoveredCell = *it;
+        SwBorderAttrAccess aAccess( SwFrame::GetCache(), pCoveredCell );
+        const SwBorderAttrs& rAttrs = *aAccess.Get();
+        const SvxBoxItem& rBox = rAttrs.GetBox();
+        if (eType == VerticalType::LEFT && rBox.GetLeft())
+        {
+            break;
+        }
+
+        if (eType == VerticalType::RIGHT && rBox.GetRight())
+        {
+            break;
+        }
+
+        mnLimitedEndPos = pCoveredCell->getFrameArea().Top();
+    }
 }
 
 struct lt_SwLineEntry
@@ -2422,6 +2463,12 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
             svx::frame::Style aStyles[ 7 ];
             aStyles[ 0 ] = rEntryStyle;
             FindStylesForLine( aStart, aEnd, aStyles, bHori );
+
+            if (!bHori && rEntry.mnLimitedEndPos)
+            {
+                aEnd.setY(rEntry.mnLimitedEndPos);
+            }
+
             SwRect aRepaintRect( aStart, aEnd );
 
             // the repaint rectangle has to be moved a bit for the centered lines:
@@ -2741,8 +2788,17 @@ void SwTabFramePainter::Insert(const SwFrame& rFrame, const SvxBoxItem& rBoxItem
 
     SwLineEntry aLeft  (nLeft,   nTop,  nBottom,
             bVert ? aB                         : (bR2L ? aR : aL));
+    if (bWordTableCell && rBoxItem.GetLeft())
+    {
+        aLeft.LimitVerticalEndPos(rFrame, SwLineEntry::VerticalType::LEFT);
+    }
+
     SwLineEntry aRight (nRight,  nTop,  nBottom,
             bVert ? (bBottomAsTop ? aB : aT) : (bR2L ? aL : aR));
+    if (bWordTableCell && rBoxItem.GetRight())
+    {
+        aRight.LimitVerticalEndPos(rFrame, SwLineEntry::VerticalType::RIGHT);
+    }
     SwLineEntry aTop   (nTop,    nLeft, nRight,
             bVert ? aL                         : (bBottomAsTop ? aB : aT));
     SwLineEntry aBottom(nBottom, nLeft, nRight,
@@ -2773,6 +2829,14 @@ void SwTabFramePainter::Insert( SwLineEntry& rNew, bool bHori )
     while ( aIter != pLineSet->end() && rNew.mnStartPos < rNew.mnEndPos )
     {
         const SwLineEntry& rOld = *aIter;
+
+        if (rOld.mnLimitedEndPos)
+        {
+            // Don't merge with this line entry as it ends sooner than mnEndPos.
+            ++aIter;
+            continue;
+        }
+
         const SwLineEntry::OverlapType nOverlapType = rOld.Overlaps( rNew );
 
         const svx::frame::Style& rOldAttr = rOld.maAttribute;
