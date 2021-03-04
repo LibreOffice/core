@@ -16,6 +16,24 @@
       "revId": "13f53741dabc33c5ac12ae26538a2803c6ba1073",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83cf2088_57281a25",
+        "filename": "vcl/skia/win/gdiimpl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-03-04T16:43:29Z",
+      "side": 1,
+      "message": "Oopsie, thanks.",
+      "parentUuid": "77674eca_eefb4f95",
+      "revId": "13f53741dabc33c5ac12ae26538a2803c6ba1073",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
