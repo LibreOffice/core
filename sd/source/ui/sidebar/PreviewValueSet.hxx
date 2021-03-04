@@ -33,8 +33,10 @@ public:
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual ~PreviewValueSet() override;
 
-    void SetRightMouseClickHandler(const Link<const MouseEvent&, void>& rLink);
+    void SetContextMenuHandler(const Link<const Point*, void>& rLink);
+
     virtual void Resize() override;
+    virtual bool Command(const CommandEvent& rEvent) override;
 
     void SetPreviewSize(const Size& rSize);
 
@@ -45,11 +47,8 @@ public:
     */
     void Rearrange();
 
-protected:
-    virtual bool MouseButtonDown(const MouseEvent& rEvent) override;
-
 private:
-    Link<const MouseEvent&, void> maRightMouseClickHandler;
+    Link<const Point*, void> maContextMenuHandler;
     Size maPreviewSize;
 
     sal_uInt16 CalculateColumnCount(int nWidth) const;
