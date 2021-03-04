@@ -366,6 +366,10 @@ public:
             switch (maAny.getValueType().getTypeClass())
             {
                 case uno::TypeClass_INTERFACE:
+                {
+                    uno::Reference<uno::XInterface> xInterface(maAny, uno::UNO_QUERY);
+                    return xInterface.is();
+                }
                 case uno::TypeClass_SEQUENCE:
                     return true;
                 default:
