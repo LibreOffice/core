@@ -567,7 +567,6 @@ public:
     void testTdf97369();
     void testTdf97587();
     void testTdf93415();
-    void testTdf133260();
     void testTdf100818();
 
     void testEmptyCalcDocDefaults();
@@ -878,7 +877,6 @@ public:
     CPPUNIT_TEST(testTdf97369);
     CPPUNIT_TEST(testTdf97587);
     CPPUNIT_TEST(testTdf93415);
-    CPPUNIT_TEST(testTdf133260);
     CPPUNIT_TEST(testTdf100818);
     CPPUNIT_TEST(testEmptyCalcDocDefaults);
     CPPUNIT_TEST(testPrecisionAsShown);
