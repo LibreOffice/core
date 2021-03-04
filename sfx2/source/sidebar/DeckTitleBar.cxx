@@ -121,14 +121,14 @@ void DeckTitleBar::SetCloserVisible (const bool bIsCloserVisible)
 
     if (mbIsCloserVisible)
     {
-        mxToolBox->set_item_visible("button", true);
+        mxToolBox->show();
         mxToolBox->set_item_icon_name("button", "sfx2/res/closedoc.png");
         mxToolBox->set_item_tooltip_text("button",
                                     SfxResId(SFX_STR_SIDEBAR_CLOSE_DECK));
     }
     else
     {
-        mxToolBox->set_item_visible("button", false);
+        mxToolBox->hide();
     }
 }
 
