@@ -566,7 +566,6 @@ public:
 
     void testTdf97369();
     void testTdf97587();
-    void testTdf107459();
     void testTdf93415();
     void testTdf133260();
     void testTdf100818();
