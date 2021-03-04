@@ -427,13 +427,12 @@ void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
     mxPB_PLAY = m_xBuilder->weld_button("play");
     mxCB_AUTO_PREVIEW = m_xBuilder->weld_check_button("auto_preview");
 
-    weld::SpinButton& rSpinButton = mxMF_ADVANCE_AUTO_AFTER->get_widget();
-    auto nMax = rSpinButton.get_max();
-    rSpinButton.set_max(1000);
-    Size aOptimalSize(rSpinButton.get_preferred_size());
-    rSpinButton.set_size_request(aOptimalSize.Width(), -1);
-    mxCBX_duration->get_widget().set_size_request(aOptimalSize.Width(), -1);
-    rSpinButton.set_max(nMax);
+    auto nMax = mxMF_ADVANCE_AUTO_AFTER->get_max(FieldUnit::SECOND);
+    mxMF_ADVANCE_AUTO_AFTER->set_max(99, FieldUnit::SECOND);
+    int nWidthChars = mxMF_ADVANCE_AUTO_AFTER->get_width_chars();
+    mxMF_ADVANCE_AUTO_AFTER->set_max(nMax, FieldUnit::SECOND);
+    mxMF_ADVANCE_AUTO_AFTER->set_width_chars(nWidthChars);
+    mxCBX_duration->set_width_chars(nWidthChars);
 
     mxVS_TRANSITION_ICONS.reset(new TransitionPane(m_xBuilder->weld_scrolled_window("transitions_iconswin", true)));
     mxVS_TRANSITION_ICONSWin.reset(new weld::CustomWeld(*m_xBuilder, "transitions_icons", *mxVS_TRANSITION_ICONS));
