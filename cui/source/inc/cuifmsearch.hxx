@@ -41,6 +41,7 @@ class FmSearchDialog final : public weld::GenericDialogController
     friend class FmSearchEngine;
 
     OUString m_sSearch;
+    OUString m_sReplace;
     OUString m_sCancel;
 
     Link<FmFoundRecordInformation&, void> m_lnkFoundHandler; ///< Handler for "found"
@@ -64,6 +65,9 @@ class FmSearchDialog final : public weld::GenericDialogController
     std::unique_ptr<weld::ComboBox> m_pcmbSearchText;
     std::unique_ptr<weld::Label> m_pftForm;
     std::unique_ptr<weld::ComboBox> m_plbForm;
+    std::unique_ptr<weld::RadioButton> m_prbReplaceWithText;
+    std::unique_ptr<weld::RadioButton> m_prbReplaceWithNull;
+    std::unique_ptr<weld::ComboBox> m_pcmbReplaceText;
     std::unique_ptr<weld::RadioButton> m_prbAllFields;
     std::unique_ptr<weld::RadioButton> m_prbSingleField;
     std::unique_ptr<weld::ComboBox> m_plbField;
@@ -83,6 +87,7 @@ class FmSearchDialog final : public weld::GenericDialogController
     std::unique_ptr<weld::Label> m_pftRecord;
     std::unique_ptr<weld::Label> m_pftHint;
     std::unique_ptr<weld::Button> m_pbSearchAgain;
+    std::unique_ptr<weld::Button> m_pbReplaceAgain;
     std::unique_ptr<weld::Button> m_pbClose;
 
 public:
@@ -150,15 +155,20 @@ private:
     // Handler for the Controls
     DECL_LINK(OnClickedFieldRadios, weld::Button&, void);
     DECL_LINK(OnClickedSearchAgain, weld::Button&, void);
+    DECL_LINK(OnClickedReplaceAgain, weld::Button&, void);
     DECL_LINK(OnClickedSpecialSettings, weld::Button&, void);
 
+    DECL_LINK(OnClickedReplaceWithNull, weld::Button&, void);
+    DECL_LINK(OnClickedReplaceWithText, weld::Button&, void);
+
     DECL_LINK(OnSearchTextModified, weld::ComboBox&, void);
+    DECL_LINK(OnReplaceTextModified, weld::ComboBox&, void);
 
     DECL_LINK(OnPositionSelected, weld::ComboBox&, void);
     DECL_LINK(OnFieldSelected, weld::ComboBox&, void);
 
-    DECL_LINK(OnFocusGrabbed, weld::Widget&, void);
-    DECL_LINK(OnCheckBoxToggled, weld::ToggleButton&, void);
+    DECL_LINK(OnFocusGrabbedSearch, weld::Widget&, void);
+    DECL_LINK(OnFocusGrabbedReplace, weld::Widget&, void);
 
     DECL_LINK(OnContextSelection, weld::ComboBox&, void);
 
