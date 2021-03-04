@@ -1999,6 +1999,7 @@ public:
     // invalidated when changing the units, range or digits, so to have effect
     // must come after changing those values
     void set_width_chars(int nChars) { m_xSpinButton->set_width_chars(nChars); }
+    int get_width_chars() const { return m_xSpinButton->get_width_chars(); }
     weld::SpinButton& get_widget() { return *m_xSpinButton; }
 };
 
