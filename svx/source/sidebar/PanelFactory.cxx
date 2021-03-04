@@ -37,8 +37,7 @@
 #include "EmptyPanel.hxx"
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/templdlg.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/window.hxx>
+#include <vcl/weldutils.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -103,8 +102,11 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     const sal_uInt64 nBindingsValue (aArguments.getOrDefault("SfxBindings", sal_uInt64(0)));
     SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
 
-    VclPtr<vcl::Window> pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
-    if ( ! xParentWindow.is() || pParentWindow==nullptr)
+    weld::Widget* pParent(nullptr);
+    if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xParentWindow.get()))
+        pParent = pTunnel->getWidget();
+
+    if (!pParent)
         throw RuntimeException(
             "PanelFactory::createUIElement called without ParentWindow",
             nullptr);
@@ -117,81 +119,81 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
             "PanelFactory::createUIElement called without SfxBindings",
             nullptr);
 
-    VclPtr<PanelLayout> pControl;
+    std::unique_ptr<PanelLayout> xControl;
     ui::LayoutSize aLayoutSize (-1,-1,-1);
 
     if (rsResourceURL.endsWith("/TextPropertyPanel"))
     {
-        pControl = TextPropertyPanel::Create(pParentWindow, xFrame);
+        xControl = TextPropertyPanel::Create(pParent, xFrame);
     }
     else if (rsResourceURL.endsWith("/StylesPropertyPanel"))
     {
-        pControl = StylesPropertyPanel::Create(pParentWindow, xFrame);
+        xControl = StylesPropertyPanel::Create(pParent, xFrame);
     }
     else if (rsResourceURL.endsWith("/ParaPropertyPanel"))
     {
-        pControl = ParaPropertyPanel::Create(pParentWindow, xFrame, pBindings, xSidebar);
+        xControl = ParaPropertyPanel::Create(pParent, xFrame, pBindings, xSidebar);
     }
     else if (rsResourceURL.endsWith("/ListsPropertyPanel"))
     {
-        pControl = ListsPropertyPanel::Create(pParentWindow, xFrame);
+        xControl = ListsPropertyPanel::Create(pParent, xFrame);
     }
     else if (rsResourceURL.endsWith("/AreaPropertyPanel"))
     {
-        pControl = AreaPropertyPanel::Create(pParentWindow, xFrame, pBindings);
+        xControl = AreaPropertyPanel::Create(pParent, xFrame, pBindings);
     }
     else if (rsResourceURL.endsWith("/ShadowPropertyPanel"))
     {
-        pControl = ShadowPropertyPanel::Create(pParentWindow, xFrame, pBindings);
+        xControl = ShadowPropertyPanel::Create(pParent, pBindings);
     }
     else if (rsResourceURL.endsWith("/EffectPropertyPanel"))
     {
-        pControl = EffectPropertyPanel::Create(pParentWindow, xFrame, pBindings);
+        xControl = EffectPropertyPanel::Create(pParent, pBindings);
     }
     else if (rsResourceURL.endsWith("/GraphicPropertyPanel"))
     {
-        pControl = GraphicPropertyPanel::Create(pParentWindow, xFrame, pBindings);
+        xControl = GraphicPropertyPanel::Create(pParent, pBindings);
     }
     else if (rsResourceURL.endsWith("/LinePropertyPanel"))
     {
-        pControl = LinePropertyPanel::Create(pParentWindow, xFrame, pBindings);
+        xControl = LinePropertyPanel::Create(pParent, xFrame, pBindings);
     }
     else if (rsResourceURL.endsWith("/PosSizePropertyPanel"))
     {
-        pControl = PosSizePropertyPanel::Create(pParentWindow, xFrame, pBindings, xSidebar);
+        xControl = PosSizePropertyPanel::Create(pParent, xFrame, pBindings, xSidebar);
     }
     else if (rsResourceURL.endsWith("/DefaultShapesPanel"))
     {
-        pControl = DefaultShapesPanel::Create(pParentWindow, xFrame);
+        xControl = DefaultShapesPanel::Create(pParent, xFrame);
     }
 #if HAVE_FEATURE_AVMEDIA
     else if (rsResourceURL.endsWith("/MediaPlaybackPanel"))
     {
-        pControl = MediaPlaybackPanel::Create(pParentWindow, xFrame, pBindings);
+        xControl = MediaPlaybackPanel::Create(pParent, pBindings);
     }
 #endif
     else if (rsResourceURL.endsWith("/GalleryPanel"))
     {
-        pControl.reset(VclPtr<GalleryControl>::Create(pParentWindow));
+        xControl = std::make_unique<GalleryControl>(pParent);
         aLayoutSize = ui::LayoutSize(300,-1,400);
     }
     else if (rsResourceURL.endsWith("/StyleListPanel"))
     {
-        pControl.reset(VclPtr<SfxTemplatePanelControl>::Create(pBindings, pParentWindow));
+        xControl = std::make_unique<SfxTemplatePanelControl>(pBindings, pParent);
         aLayoutSize = ui::LayoutSize(0,-1,-1);
     }
     else if (rsResourceURL.endsWith("/EmptyPanel"))
     {
-        pControl.reset(VclPtr<EmptyPanel>::Create(pParentWindow));
+        xControl = std::make_unique<EmptyPanel>(pParent);
         aLayoutSize = ui::LayoutSize(20,-1, 50);
     }
 
-    if (pControl)
+    if (xControl)
     {
         return sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
-            pControl,
+            std::move(xControl),
             aLayoutSize);
     }
     else

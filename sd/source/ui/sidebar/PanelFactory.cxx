@@ -35,8 +35,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <vcl/window.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/weldutils.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -72,8 +71,11 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     Reference<ui::XSidebar> xSidebar (aArguments.getOrDefault("Sidebar", Reference<ui::XSidebar>()));
 
     // Throw exceptions when the arguments are not as expected.
-    VclPtr<vcl::Window> pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
-    if ( ! xParentWindow.is() || !pParentWindow)
+    weld::Widget* pParent(nullptr);
+    if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xParentWindow.get()))
+        pParent = pTunnel->getWidget();
+
+    if (!pParent)
         throw RuntimeException(
             "PanelFactory::createUIElement called without ParentWindow");
     if ( ! xFrame.is())
@@ -93,7 +95,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
 
     // Create a framework view.
-    VclPtr<PanelLayout> pControl;
+    std::unique_ptr<PanelLayout> xControl;
     css::ui::LayoutSize aLayoutSize (-1,-1,-1);
 
     /** Note that these names have to be identical to (the tail of)
@@ -101,25 +103,25 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
         for the TaskPanelFactory.
     */
     if (rsUIElementResourceURL.endsWith("/CustomAnimations"))
-        pControl = VclPtr<CustomAnimationPane>::Create(pParentWindow, *pBase, xFrame);
+        xControl = std::make_unique<CustomAnimationPane>(pParent, *pBase);
     else if (rsUIElementResourceURL.endsWith("/Layouts"))
-        pControl = VclPtr<LayoutMenu>::Create(pParentWindow, *pBase, xSidebar);
+        xControl = std::make_unique<LayoutMenu>(pParent, *pBase, xSidebar);
     else if (rsUIElementResourceURL.endsWith("/AllMasterPages"))
-        pControl = AllMasterPagesSelector::Create(pParentWindow, *pBase, xSidebar);
+        xControl = AllMasterPagesSelector::Create(pParent, *pBase, xSidebar);
     else if (rsUIElementResourceURL.endsWith("/RecentMasterPages"))
-        pControl = RecentMasterPagesSelector::Create(pParentWindow, *pBase, xSidebar);
+        xControl = RecentMasterPagesSelector::Create(pParent, *pBase, xSidebar);
     else if (rsUIElementResourceURL.endsWith("/UsedMasterPages"))
-        pControl = CurrentMasterPagesSelector::Create(pParentWindow, *pBase, xSidebar);
+        xControl = CurrentMasterPagesSelector::Create(pParent, *pBase, xSidebar);
     else if (rsUIElementResourceURL.endsWith("/SlideTransitions"))
-        pControl = VclPtr<SlideTransitionPane>::Create(pParentWindow, *pBase, xFrame);
+        xControl = std::make_unique<SlideTransitionPane>(pParent, *pBase);
     else if (rsUIElementResourceURL.endsWith("/TableDesign"))
-        pControl = VclPtr<TableDesignPane>::Create(pParentWindow, *pBase);
+        xControl = std::make_unique<TableDesignPane>(pParent, *pBase);
     else if (rsUIElementResourceURL.endsWith("/NavigatorPanel"))
-        pControl = VclPtr<NavigatorWrapper>::Create(pParentWindow, *pBase, pBindings);
+        xControl = std::make_unique<NavigatorWrapper>(pParent, *pBase, pBindings);
     else if (rsUIElementResourceURL.endsWith("/SlideBackgroundPanel"))
-        pControl = VclPtr<SlideBackground>::Create(pParentWindow, *pBase, xFrame, pBindings);
+        xControl = std::make_unique<SlideBackground>(pParent, *pBase, xFrame, pBindings);
 
-    if (!pControl)
+    if (!xControl)
         throw lang::IllegalArgumentException();
 
     // Create a wrapper around the control that implements the
@@ -127,7 +129,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     return sfx2::sidebar::SidebarPanelBase::Create(
         rsUIElementResourceURL,
         xFrame,
-        pControl,
+        std::move(xControl),
         aLayoutSize);
 }
 
