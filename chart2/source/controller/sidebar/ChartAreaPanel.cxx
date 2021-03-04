@@ -256,8 +256,8 @@ private:
 
 }
 
-VclPtr<PanelLayout> ChartAreaPanel::Create(
-        vcl::Window* pParent,
+std::unique_ptr<PanelLayout> ChartAreaPanel::Create(
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController)
 {
@@ -266,11 +266,10 @@ VclPtr<PanelLayout> ChartAreaPanel::Create(
     if (!rxFrame.is())
         throw css::lang::IllegalArgumentException("no XFrame given to ChartAxisPanel::Create", nullptr, 1);
 
-    return VclPtr<ChartAreaPanel>::Create(
-                        pParent, rxFrame, pController);
+    return std::make_unique<ChartAreaPanel>(pParent, rxFrame, pController);
 }
 
-ChartAreaPanel::ChartAreaPanel(vcl::Window* pParent,
+ChartAreaPanel::ChartAreaPanel(weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController):
     svx::sidebar::AreaPropertyPanelBase(pParent, rxFrame),
@@ -290,19 +289,12 @@ ChartAreaPanel::ChartAreaPanel(vcl::Window* pParent,
 
 ChartAreaPanel::~ChartAreaPanel()
 {
-    disposeOnce();
-}
-
-void ChartAreaPanel::dispose()
-{
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcaster->removeModifyListener(mxListener);
 
     css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
         xSelectionSupplier->removeSelectionChangeListener(mxSelectionListener);
-
-    AreaPropertyPanelBase::dispose();
 }
 
 void ChartAreaPanel::Initialize()

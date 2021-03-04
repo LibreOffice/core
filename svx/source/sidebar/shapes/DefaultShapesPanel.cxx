@@ -22,13 +22,14 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 namespace svx::sidebar {
 
 DefaultShapesPanel::DefaultShapesPanel (
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : PanelLayout(pParent, "DefaultShapesPanel", "svx/ui/defaultshapespanel.ui", rxFrame)
+    : PanelLayout(pParent, "DefaultShapesPanel", "svx/ui/defaultshapespanel.ui")
     , SvxShapeCommandsMap()
     , mxLineArrowSet(new ValueSet(nullptr))
     , mxLineArrowSetWin(new weld::CustomWeld(*m_xBuilder, "LinesArrows", *mxLineArrowSet))
@@ -53,12 +54,10 @@ DefaultShapesPanel::DefaultShapesPanel (
     , mxFrame(rxFrame)
 {
     Initialize();
-
-    m_pInitialFocusWidget = mxLineArrowSet->GetDrawingArea();
 }
 
-VclPtr<PanelLayout> DefaultShapesPanel::Create(
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> DefaultShapesPanel::Create(
+    weld::Widget* pParent,
     const Reference< XFrame >& rxFrame)
 {
     if (pParent == nullptr)
@@ -66,14 +65,7 @@ VclPtr<PanelLayout> DefaultShapesPanel::Create(
     if ( ! rxFrame.is())
         throw lang::IllegalArgumentException("no XFrame given to DefaultShapesPanel::Create", nullptr, 1);
 
-    return VclPtr<DefaultShapesPanel>::Create(
-                pParent,
-                rxFrame);
-}
-
-DefaultShapesPanel::~DefaultShapesPanel()
-{
-    disposeOnce();
+    return std::make_unique<DefaultShapesPanel>(pParent, rxFrame);
 }
 
 void DefaultShapesPanel::Initialize()
@@ -93,12 +85,12 @@ void DefaultShapesPanel::Initialize()
     populateShapes();
     for(auto& aSetMap: mpShapesSetMap)
     {
-        aSetMap.first->SetColor(GetSettings().GetStyleSettings().GetDialogColor());
+        aSetMap.first->SetColor(Application::GetSettings().GetStyleSettings().GetDialogColor());
         aSetMap.first->SetSelectHdl(LINK(this, DefaultShapesPanel, ShapeSelectHdl));
     }
 }
 
-void DefaultShapesPanel::dispose()
+DefaultShapesPanel::~DefaultShapesPanel()
 {
     mpShapesSetMap.clear();
     mxLineArrowSetWin.reset();
@@ -121,7 +113,6 @@ void DefaultShapesPanel::dispose()
     mxStarSet.reset();
     mx3DObjectSetWin.reset();
     mx3DObjectSet.reset();
-    PanelLayout::dispose();
 }
 
 IMPL_LINK(DefaultShapesPanel, ShapeSelectHdl, ValueSet*, rValueSet, void)

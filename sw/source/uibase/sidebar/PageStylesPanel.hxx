@@ -20,20 +20,16 @@
 #define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGESTYLESPANEL_HXX
 
 #include <memory>
-#include <com/sun/star/frame/XFrame.hpp>
 
 #include <sfx2/sidebar/PanelLayout.hxx>
-
 #include <sfx2/sidebar/ControllerItem.hxx>
-
-#include <svx/pageitem.hxx>
-
 #include <svl/intitem.hxx>
 #include <svl/poolitem.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
+#include <svx/pageitem.hxx>
 #include <svx/pagenumberlistbox.hxx>
 
 class List;
@@ -45,9 +41,8 @@ class PageStylesPanel:
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    static VclPtr<PanelLayout> Create(
-        vcl::Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+    static std::unique_ptr<PanelLayout> Create(
+        weld::Widget* pParent,
         SfxBindings* pBindings);
 
     virtual void NotifyItemUpdate(
@@ -61,11 +56,9 @@ public:
 
     SfxBindings* GetBindings() const { return mpBindings; }
     PageStylesPanel(
-        vcl::Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+        weld::Widget* pParent,
         SfxBindings* pBindings);
     virtual ~PageStylesPanel() override;
-    virtual void dispose() override;
 
 private:
 

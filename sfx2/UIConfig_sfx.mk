@@ -49,6 +49,7 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/linkeditdialog \
 	sfx2/uiconfig/ui/loadtemplatedialog \
 	sfx2/uiconfig/ui/managestylepage \
+	sfx2/uiconfig/ui/navigator \
 	sfx2/uiconfig/ui/newstyle \
 	sfx2/uiconfig/ui/notebookbar \
 	sfx2/uiconfig/ui/optprintpage \

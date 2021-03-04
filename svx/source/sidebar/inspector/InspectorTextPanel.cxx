@@ -33,23 +33,16 @@ using namespace css;
 
 namespace svx::sidebar
 {
-VclPtr<vcl::Window>
-InspectorTextPanel::Create(vcl::Window* pParent,
-                           const css::uno::Reference<css::frame::XFrame>& rxFrame)
+std::unique_ptr<PanelLayout> InspectorTextPanel::Create(weld::Widget* pParent)
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException("no parent Window given to InspectorTextPanel::Create",
                                              nullptr, 0);
-    if (!rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to InspectorTextPanel::Create",
-                                             nullptr, 1);
-
-    return VclPtr<InspectorTextPanel>::Create(pParent, rxFrame);
+    return std::make_unique<InspectorTextPanel>(pParent);
 }
 
-InspectorTextPanel::InspectorTextPanel(vcl::Window* pParent,
-                                       const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : PanelLayout(pParent, "InspectorTextPanel", "svx/ui/inspectortextpanel.ui", rxFrame)
+InspectorTextPanel::InspectorTextPanel(weld::Widget* pParent)
+    : PanelLayout(pParent, "InspectorTextPanel", "svx/ui/inspectortextpanel.ui")
     , mpListBoxStyles(m_xBuilder->weld_tree_view("listbox_fonts"))
 {
     mpListBoxStyles->set_size_request(-1, -1);
@@ -58,7 +51,6 @@ InspectorTextPanel::InspectorTextPanel(vcl::Window* pParent,
     aWidths.push_back(fWidth * 34);
     aWidths.push_back(fWidth * 34);
     mpListBoxStyles->set_column_fixed_widths(aWidths);
-    m_pInitialFocusWidget = mpListBoxStyles.get();
 }
 
 static bool GetPropertyValues(const OUString& rPropName, const uno::Any& rAny, OUString& rString)
@@ -156,14 +148,7 @@ void InspectorTextPanel::updateEntries(const std::vector<TreeNode>& rStore)
     mpListBoxStyles->collapse_row(*pEntry); // Collapse "Default Paragraph Style"
 }
 
-InspectorTextPanel::~InspectorTextPanel() { disposeOnce(); }
-
-void InspectorTextPanel::dispose()
-{
-    mpListBoxStyles.reset();
-
-    PanelLayout::dispose();
-}
+InspectorTextPanel::~InspectorTextPanel() {}
 
 } // end of namespace svx::sidebar
 

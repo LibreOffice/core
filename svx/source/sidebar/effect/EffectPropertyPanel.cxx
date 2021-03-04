@@ -21,10 +21,8 @@
 
 namespace svx::sidebar
 {
-EffectPropertyPanel::EffectPropertyPanel(vcl::Window* pParent,
-                                         const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                                         SfxBindings* pBindings)
-    : PanelLayout(pParent, "EffectPropertyPanel", "svx/ui/sidebareffect.ui", rxFrame)
+EffectPropertyPanel::EffectPropertyPanel(weld::Widget* pParent, SfxBindings* pBindings)
+    : PanelLayout(pParent, "EffectPropertyPanel", "svx/ui/sidebareffect.ui")
     , maGlowColorController(SID_ATTR_GLOW_COLOR, *pBindings, *this)
     , maGlowRadiusController(SID_ATTR_GLOW_RADIUS, *pBindings, *this)
     , maGlowTransparencyController(SID_ATTR_GLOW_TRANSPARENCY, *pBindings, *this)
@@ -42,13 +40,9 @@ EffectPropertyPanel::EffectPropertyPanel(vcl::Window* pParent,
     , mxSoftEdgeRadius(m_xBuilder->weld_metric_spin_button("SB_SOFTEDGE_RADIUS", FieldUnit::POINT))
 {
     Initialize();
-
-    m_pInitialFocusWidget = &mxGlowRadius->get_widget();
 }
 
-EffectPropertyPanel::~EffectPropertyPanel() { disposeOnce(); }
-
-void EffectPropertyPanel::dispose()
+EffectPropertyPanel::~EffectPropertyPanel()
 {
     mxGlowRadius.reset();
     mxLBGlowColor.reset();
@@ -59,7 +53,6 @@ void EffectPropertyPanel::dispose()
     mxSoftEdgeRadius.reset();
     mxFTRadiusGlow.reset();
 
-    PanelLayout::dispose();
     maGlowColorController.dispose();
     maGlowRadiusController.dispose();
     maGlowTransparencyController.dispose();
@@ -168,22 +161,17 @@ void EffectPropertyPanel::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState eState,
     UpdateControls();
 }
 
-VclPtr<PanelLayout>
-EffectPropertyPanel::Create(vcl::Window* pParent,
-                            const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                            SfxBindings* pBindings)
+std::unique_ptr<PanelLayout> EffectPropertyPanel::Create(weld::Widget* pParent,
+                                                         SfxBindings* pBindings)
 {
     if (pParent == nullptr)
         throw css::lang::IllegalArgumentException(
             "no parent Window given to EffectPropertyPanel::Create", nullptr, 0);
-    if (!rxFrame.is())
-        throw css::lang::IllegalArgumentException("no XFrame given to EffectPropertyPanel::Create",
-                                                  nullptr, 1);
     if (pBindings == nullptr)
         throw css::lang::IllegalArgumentException(
             "no SfxBindings given to EffectPropertyPanel::Create", nullptr, 2);
 
-    return VclPtr<EffectPropertyPanel>::Create(pParent, rxFrame, pBindings);
+    return std::make_unique<EffectPropertyPanel>(pParent, pBindings);
 }
 }
 

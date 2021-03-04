@@ -24,8 +24,8 @@ using namespace css::uno;
 
 namespace svx::sidebar
 {
-VclPtr<PanelLayout>
-ListsPropertyPanel::Create(vcl::Window* pParent,
+std::unique_ptr<PanelLayout>
+ListsPropertyPanel::Create(weld::Widget* pParent,
                            const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (pParent == nullptr)
@@ -35,31 +35,27 @@ ListsPropertyPanel::Create(vcl::Window* pParent,
         throw lang::IllegalArgumentException("no XFrame given to ListsPropertyPanel::Create",
                                              nullptr, 1);
 
-    return VclPtr<ListsPropertyPanel>::Create(pParent, rxFrame);
+    return std::make_unique<ListsPropertyPanel>(pParent, rxFrame);
 }
 
-ListsPropertyPanel::ListsPropertyPanel(vcl::Window* pParent,
+ListsPropertyPanel::ListsPropertyPanel(weld::Widget* pParent,
                                        const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : PanelLayout(pParent, "ListsPropertyPanel", "svx/ui/sidebarlists.ui", rxFrame)
+    : PanelLayout(pParent, "ListsPropertyPanel", "svx/ui/sidebarlists.ui")
     , mxTBxNumBullet(m_xBuilder->weld_toolbar("numberbullet"))
     , mxNumBulletDispatcher(new ToolbarUnoDispatcher(*mxTBxNumBullet, *m_xBuilder, rxFrame))
     , mxTBxOutline(m_xBuilder->weld_toolbar("outline"))
     , mxOutlineDispatcher(new ToolbarUnoDispatcher(*mxTBxOutline, *m_xBuilder, rxFrame))
 {
-    m_pInitialFocusWidget = mxTBxNumBullet.get();
 }
 
-ListsPropertyPanel::~ListsPropertyPanel() { disposeOnce(); }
-
-void ListsPropertyPanel::dispose()
+ListsPropertyPanel::~ListsPropertyPanel()
 {
     mxOutlineDispatcher.reset();
     mxTBxOutline.reset();
     mxNumBulletDispatcher.reset();
     mxTBxNumBullet.reset();
-
-    PanelLayout::dispose();
 }
+
 } // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

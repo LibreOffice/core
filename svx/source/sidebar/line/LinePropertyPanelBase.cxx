@@ -65,9 +65,9 @@ namespace
 
 
 LinePropertyPanelBase::LinePropertyPanelBase(
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     const uno::Reference<css::frame::XFrame>& rxFrame)
-:   PanelLayout(pParent, "LinePropertyPanel", "svx/ui/sidebarline.ui", rxFrame),
+:   PanelLayout(pParent, "LinePropertyPanel", "svx/ui/sidebarline.ui"),
     mxTBColor(m_xBuilder->weld_toolbar("color")),
     mxColorDispatch(new ToolbarUnoDispatcher(*mxTBColor, *m_xBuilder, rxFrame)),
     mxLineStyleTB(m_xBuilder->weld_toolbar("linestyle")),
@@ -97,11 +97,6 @@ LinePropertyPanelBase::LinePropertyPanelBase(
 
 LinePropertyPanelBase::~LinePropertyPanelBase()
 {
-    disposeOnce();
-}
-
-void LinePropertyPanelBase::dispose()
-{
     mxLineWidthPopup.reset();
     mxFTWidth.reset();
     mxTBWidth.reset();
@@ -117,8 +112,6 @@ void LinePropertyPanelBase::dispose()
     mxLBCapStyle.reset();
     mxGridLineProps.reset();
     mxBoxArrowProps.reset();
-
-    PanelLayout::dispose();
 }
 
 void LinePropertyPanelBase::Initialize()

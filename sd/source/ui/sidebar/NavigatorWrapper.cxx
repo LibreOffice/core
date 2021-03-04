@@ -19,24 +19,19 @@
 
 #include "NavigatorWrapper.hxx"
 #include <ViewShellBase.hxx>
-
-#include <sfx2/sidebar/Theme.hxx>
 #include <navigatr.hxx>
-
 
 namespace sd::sidebar {
 
 NavigatorWrapper::NavigatorWrapper (
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     sd::ViewShellBase& rViewShellBase,
     SfxBindings* pBindings)
-    : SdNavigatorWin(pParent, pBindings)
+    : SdNavigatorWin(pParent, pBindings, nullptr)
     , mrViewShellBase(rViewShellBase)
 {
     SetUpdateRequestFunctor(
             [this] () { return this->UpdateNavigator(); });
-    SetBackground(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Color_PanelBackground));
-    Show();
 }
 
 css::ui::LayoutSize NavigatorWrapper::GetHeightForWidth (const sal_Int32)
