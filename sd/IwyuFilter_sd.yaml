@@ -87,12 +87,6 @@ excludelist:
     sd/source/filter/eppt/eppt.hxx:
     # base class has to be a complete type
     - escherex.hxx
-    sd/source/ui/animations/CustomAnimationPane.hxx:
-    # Needed for typedef
-    - motionpathtag.hxx
-    sd/source/ui/animations/CustomAnimationPane.cxx:
-    # Avoid loplugin:unreffun error
-    - createcustomanimationpanel.hxx
     sd/source/ui/annotations/annotationmanagerimpl.hxx:
     # base class has to be a complete type
     - annotationtag.hxx
@@ -180,6 +174,9 @@ excludelist:
     - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
     - com/sun/star/accessibility/XAccessibleSelection.hpp
     - com/sun/star/lang/XServiceInfo.hpp
+    sd/source/ui/inc/CustomAnimationPane.hxx:
+    # Needed for typedef
+    - motionpathtag.hxx
     sd/source/ui/inc/DrawDocShell.hxx:
     # base class has to be a complete type
     - fupoor.hxx

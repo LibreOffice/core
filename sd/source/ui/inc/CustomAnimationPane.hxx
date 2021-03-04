@@ -20,10 +20,9 @@
 #ifndef INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONPANE_HXX
 #define INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONPANE_HXX
 
+#include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
-#include "CustomAnimationDialog.hxx"
 #include "CustomAnimationList.hxx"
-#include "motionpathtag.hxx"
 #include <misc/scopelock.hxx>
 
 #include <vector>
@@ -38,18 +37,25 @@ enum class PathKind { NONE, CURVE, POLYGON, FREEFORM };
 
 namespace sd {
 
+class MotionPathTag;
+class SdPropertySubControl;
 class STLPropertySet;
 class ViewShellBase;
 
 typedef std::vector< rtl::Reference< MotionPathTag > > MotionPathTagVector;
 
-class CustomAnimationPane : public PanelLayout, public ICustomAnimationListController
+class CustomAnimationPane : public PanelLayout
+                          , public sfx2::sidebar::ILayoutableWindow
+                          , public ICustomAnimationListController
 {
     friend class MotionPathTag;
 public:
     CustomAnimationPane( vcl::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame );
     virtual ~CustomAnimationPane() override;
     virtual void dispose() override;
+
+    // ILayoutableWindow
+    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) override;
 
     // callbacks
     void onSelectionChanged();
