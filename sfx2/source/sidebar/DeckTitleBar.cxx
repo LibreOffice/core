@@ -119,7 +119,7 @@ void DeckTitleBar::SetCloserVisible (const bool bIsCloserVisible)
 
     mbIsCloserVisible = bIsCloserVisible;
 
-    mxToolBox->set_item_visible("button", mbIsCloserVisible);
+    mxToolBox->set_visible(mbIsCloserVisible);
 }
 
 void DeckTitleBar::HandleToolBoxItemClick()

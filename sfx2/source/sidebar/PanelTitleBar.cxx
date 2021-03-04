@@ -91,7 +91,7 @@ void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
         return;
 
     if (!msMoreOptionsCommand.isEmpty())
-        mxToolBox->set_item_visible(msIdent, false);
+        mxToolBox->hide();
 
     msMoreOptionsCommand = rsCommandName;
 
@@ -108,7 +108,7 @@ void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
         ControllerFactory::CreateToolBoxController(
             *mxToolBox, *m_xBuilder, msMoreOptionsCommand, rxFrame, rxController, true);
 
-    mxToolBox->set_item_visible(msIdent, true);
+    mxToolBox->show();
 }
 
 void PanelTitleBar::HandleToolBoxItemClick()
