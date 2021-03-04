@@ -26,6 +26,7 @@ $(eval $(call gb_Package_add_files,wizards_basicsrvscriptforge,$(LIBO_SHARE_FOLD
 	SF_FileSystem.xba \
 	SF_L10N.xba \
 	SF_Platform.xba \
+	SF_PythonHelper.xba \
 	SF_Root.xba \
 	SF_Services.xba \
 	SF_Session.xba \
@@ -52,4 +53,7 @@ $(eval $(call gb_Package_add_files,wizards_basicsrvscriptforge,$(LIBO_SHARE_FOLD
 	po/en.po \
 ))
 
+$(eval $(call gb_Package_add_files,wizards_basicsrvscriptforge,$(LIBO_LIB_PYUNO_FOLDER),\
+	python/scriptforge.py \
+))
 # vim: set noet sw=4 ts=4:

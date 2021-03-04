@@ -1091,14 +1091,14 @@ Check:
 
 Try:
 	Select Case UCase(PropertyName)
-		Case &quot;ConfigFolder&quot;			:	GetProperty = ConfigFolder
-		Case &quot;ExtensionsFolder&quot;		:	GetProperty = ExtensionsFolder
-		Case &quot;FileNaming&quot;			:	GetProperty = FileNaming
-		Case &quot;HomeFolder&quot;			:	GetProperty = HomeFolder
-		Case &quot;InstallFolder&quot;		:	GetProperty = InstallFolder
-		Case &quot;TemplatesFolder&quot;		:	GetProperty = TemplatesFolder
-		Case &quot;TemporaryFolder&quot;		:	GetProperty = TemporaryFolder
-		Case &quot;UserTemplatesFolder&quot;	:	GetProperty = UserTemplatesFolder
+		Case UCase(&quot;ConfigFolder&quot;)			:	GetProperty = ConfigFolder
+		Case UCase(&quot;ExtensionsFolder&quot;)		:	GetProperty = ExtensionsFolder
+		Case UCase(&quot;FileNaming&quot;)			:	GetProperty = FileNaming
+		Case UCase(&quot;HomeFolder&quot;)			:	GetProperty = HomeFolder
+		Case UCase(&quot;InstallFolder&quot;)			:	GetProperty = InstallFolder
+		Case UCase(&quot;TemplatesFolder&quot;)		:	GetProperty = TemplatesFolder
+		Case UCase(&quot;TemporaryFolder&quot;)		:	GetProperty = TemporaryFolder
+		Case UCase(&quot;UserTemplatesFolder&quot;)	:	GetProperty = UserTemplatesFolder
 		Case Else
 	End Select
 
@@ -1611,6 +1611,7 @@ Check:
 
 Try:
 	Select Case UCase(PropertyName)
+		Case UCase(&quot;FileNaming&quot;)		:	FileNaming = Value	
 		Case Else
 	End Select
 

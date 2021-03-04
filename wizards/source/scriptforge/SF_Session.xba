@@ -166,7 +166,7 @@ Try:
 	&apos;	Execute script
 	Set oScript = SF_Session._GetScript(&quot;Basic&quot;, Scope, Script)
 	On Local Error GoTo CatchExec
-	If Not IsNull(oScript) Then vReturn = oScript.Invoke(pvArgs(), Array(), Array())
+	If Not IsNull(oScript) Then vReturn = oScript.Invoke(pvArgs, Array(), Array())
 
 Finally:
 	ExecuteBasicScript = vReturn

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
-"POT-Creation-Date: 2021-02-03 15:55:36\n"
+"POT-Creation-Date: 2021-03-04 16:31:25\n"
 "PO-Revision-Date: YYYY-MM-DD HH:MM:SS\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -263,13 +263,13 @@ msgstr ""
 #. SF_Array.ExtractColumn (...) error message
 #. %1: 'Column' or 'Row' of a matrix
 #. %2, %3: array contents
-#. 'Array_2D', 'From' and 'UpTo' should not be translated
+#. 'Array_1D', 'From' and 'UpTo' should not be translated
 #, kde-format
 msgctxt "ARRAYINDEX2"
 msgid  ""
 "The given slice limits do not fit within the bounds of the array.\n"
 "\n"
-"    « Array_2D » = %1\n"
+"    « Array_1D » = %1\n"
 "    « From »     = %2\n"
 "    « UpTo »     = %3"
 msgstr ""
