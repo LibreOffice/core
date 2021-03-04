@@ -34,7 +34,6 @@ class VCL_DLLPUBLIC MenuBarUpdateIconManager
 private:
     OUString maBubbleTitle;
     OUString maBubbleText;
-    OUString maBubbleImageURL;
     Image maBubbleImage;
     VclPtr<BubbleWindow> mpBubbleWin;
     VclPtr<SystemWindow> mpIconSysWin;
