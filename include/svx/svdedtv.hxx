@@ -305,7 +305,12 @@ public:
     // geometrical attribute (position, size, rotation angle)
     // A PageOrigin set at a position is taken into account.
     SfxItemSet GetGeoAttrFromMarked() const;
-    void SetGeoAttrToMarked(const SfxItemSet& rAttr);
+    // In Online, interactive moving uses this function
+    // in that case, margin should be re-added.
+    // otherwise the final position of the shape will become incorrect
+    // However, for TransformDialog, it should be default to false
+    // since Point 0,0 of the page must be + the margins
+    void SetGeoAttrToMarked(const SfxItemSet& rAttr, bool discardPageMargin = false);
 
     // Returns NULL if:
     // - nothing is marked,

@@ -74,7 +74,7 @@
 #include <rtl/ustring.hxx>
 #include <sfx2/viewsh.hxx>
 #include <comphelper/lok.hxx>
-
+#include <sal/log.hxx>
 // EditView
 
 
@@ -1534,7 +1534,7 @@ static Point ImpGetPoint(const tools::Rectangle& rRect, RectPoint eRP)
     return Point(); // Should not happen!
 }
 
-void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
+void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool discardPageMargin)
 {
     const bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
 
@@ -1542,6 +1542,12 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
     if(GetSdrPageView())
     {
+        if (discardPageMargin)
+        {
+            SdrPage * pPage = GetSdrPageView()->GetPage();
+            Point upperLeft(pPage->GetLeftBorder(), pPage->GetUpperBorder());
+            aRect.Move(upperLeft.getX(), upperLeft.getY());
+        }
         GetSdrPageView()->LogicToPagePos(aRect);
     }
 
