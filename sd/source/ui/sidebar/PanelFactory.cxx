@@ -27,7 +27,7 @@
 #include "AllMasterPagesSelector.hxx"
 #include "CustomAnimationPanel.hxx"
 #include "NavigatorWrapper.hxx"
-#include "SlideTransitionPanel.hxx"
+#include <SlideTransitionPane.hxx>
 #include "TableDesignPanel.hxx"
 #include "SlideBackground.hxx"
 
@@ -111,7 +111,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     else if (rsUIElementResourceURL.endsWith("/UsedMasterPages"))
         pControl = CurrentMasterPagesSelector::Create(pParentWindow, *pBase, xSidebar);
     else if (rsUIElementResourceURL.endsWith("/SlideTransitions"))
-        pControl = VclPtr<SlideTransitionPanel>::Create(pParentWindow, *pBase, xFrame);
+        pControl = VclPtr<SlideTransitionPane>::Create(pParentWindow, *pBase, xFrame);
     else if (rsUIElementResourceURL.endsWith("/TableDesign"))
         pControl = VclPtr<TableDesignPanel>::Create(pParentWindow, *pBase);
     else if (rsUIElementResourceURL.endsWith("/NavigatorPanel"))

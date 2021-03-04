@@ -341,7 +341,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/sidebar/PreviewValueSet \
 	sd/source/ui/sidebar/RecentlyUsedMasterPages \
 	sd/source/ui/sidebar/RecentMasterPagesSelector \
-	sd/source/ui/sidebar/SlideTransitionPanel \
 	sd/source/ui/sidebar/SlideBackground \
 	sd/source/ui/sidebar/TableDesignPanel \
 	sd/source/ui/slideshow/PaneHider \
