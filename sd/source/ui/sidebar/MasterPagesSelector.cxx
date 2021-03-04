@@ -53,12 +53,12 @@ namespace sd::sidebar {
 constexpr OStringLiteral gsDefaultClickAction = "applyselect";
 
 MasterPagesSelector::MasterPagesSelector (
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
     const std::shared_ptr<MasterPageContainer>& rpContainer,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
-    : PanelLayout( pParent, "MasterPagePanel", "modules/simpress/ui/masterpagepanel.ui", nullptr ),
+    : PanelLayout( pParent, "MasterPagePanel", "modules/simpress/ui/masterpagepanel.ui" ),
       maMutex(),
       mpContainer(rpContainer),
       mxPreviewValueSet(new PreviewValueSet),
@@ -86,16 +86,9 @@ MasterPagesSelector::MasterPagesSelector (
 
     Link<MasterPageContainerChangeEvent&,void> aChangeListener (LINK(this,MasterPagesSelector,ContainerChangeListener));
     mpContainer->AddChangeListener(aChangeListener);
-
-    m_pInitialFocusWidget = mxPreviewValueSet->GetDrawingArea();
 }
 
 MasterPagesSelector::~MasterPagesSelector()
-{
-    disposeOnce();
-}
-
-void MasterPagesSelector::dispose()
 {
     Clear();
     UpdateLocks(ItemList());
@@ -105,8 +98,6 @@ void MasterPagesSelector::dispose()
     mpContainer.reset();
     mxPreviewValueSetWin.reset();
     mxPreviewValueSet.reset();
-
-    PanelLayout::dispose();
 }
 
 void MasterPagesSelector::LateInit()

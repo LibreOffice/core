@@ -39,9 +39,8 @@ class ChartElementsPanel : public PanelLayout,
     public ChartSidebarModifyListenerParent
 {
 public:
-    static VclPtr<PanelLayout> Create(
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    static std::unique_ptr<PanelLayout> Create(
+        weld::Widget* pParent,
         ChartController* pController);
 
     virtual void DataChanged(
@@ -52,13 +51,10 @@ public:
 
     // constructor/destructor
     ChartElementsPanel(
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        weld::Widget* pParent,
         ChartController* pController);
 
     virtual ~ChartElementsPanel() override;
-
-    virtual void dispose() override;
 
     virtual void updateData() override;
     virtual void modelInvalid() override;

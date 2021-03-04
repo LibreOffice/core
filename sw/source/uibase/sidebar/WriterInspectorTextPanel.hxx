@@ -27,14 +27,11 @@ namespace sw::sidebar
 class WriterInspectorTextPanel final : public svx::sidebar::InspectorTextPanel
 {
 public:
-    static VclPtr<PanelLayout> Create(vcl::Window* pParent,
-                                      const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent);
 
-    WriterInspectorTextPanel(vcl::Window* pParent,
-                             const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    WriterInspectorTextPanel(weld::Widget* pParent);
 
     virtual ~WriterInspectorTextPanel() override;
-    virtual void dispose() override;
 
 private:
     SwWrtShell* m_pShell;

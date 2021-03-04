@@ -29,9 +29,8 @@ namespace svx::sidebar
 class EmptyPanel final : public PanelLayout
 {
 public:
-    explicit EmptyPanel(vcl::Window* pParent);
+    explicit EmptyPanel(weld::Widget* pParent);
     virtual ~EmptyPanel() override;
-    virtual void dispose() override;
 
 private:
     std::unique_ptr<weld::Label> mxMessageControl;

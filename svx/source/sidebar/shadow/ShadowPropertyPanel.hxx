@@ -9,7 +9,6 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_AREA_SHADOWPROPERTYPANEL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_AREA_SHADOWPROPERTYPANEL_HXX
 
-#include <vcl/vclptr.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 
@@ -23,15 +22,10 @@ class ShadowPropertyPanel
 {
 public:
     virtual ~ShadowPropertyPanel() override;
-    virtual void dispose() override;
 
-    static VclPtr<PanelLayout> Create(
-    vcl::Window* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    static std::unique_ptr<PanelLayout> Create(
+    weld::Widget* pParent,
     SfxBindings* pBindings);
-
-    virtual void DataChanged(
-    const DataChangedEvent& rEvent) override;
 
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
@@ -47,8 +41,7 @@ public:
     void Initialize();
 
     ShadowPropertyPanel(
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        weld::Widget* pParent,
         SfxBindings* pBindings);
 
 private:

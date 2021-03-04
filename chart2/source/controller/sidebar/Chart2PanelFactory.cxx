@@ -20,12 +20,11 @@
 #include "Chart2PanelFactory.hxx"
 
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/window.hxx>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <vcl/weldutils.hxx>
 
 #include "ChartElementsPanel.hxx"
 #include "ChartTypePanel.hxx"
@@ -62,8 +61,11 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
         Reference<css::awt::XWindow> xParentWindow (aArguments.getOrDefault("ParentWindow", Reference<css::awt::XWindow>()));
         Reference<css::frame::XController> xController (aArguments.getOrDefault("Controller", Reference<css::frame::XController>()));
 
-        VclPtr<vcl::Window> pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
-        if ( ! xParentWindow.is() || pParentWindow==nullptr)
+        weld::Widget* pParent(nullptr);
+        if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xParentWindow.get()))
+            pParent = pTunnel->getWidget();
+
+        if (!pParent)
             throw RuntimeException(
                 "PanelFactory::createUIElement called without ParentWindow",
                 nullptr);
@@ -82,35 +84,27 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
                 "ChartPanelFactory::createUIElement called without valid ChartController",
                 nullptr);
 
-        VclPtr<PanelLayout> pPanel;
+        std::unique_ptr<PanelLayout> xPanel;
         if (rsResourceURL.endsWith("/ElementsPanel"))
-            pPanel = ChartElementsPanel::Create( pParentWindow, xFrame, pController );
+            xPanel = ChartElementsPanel::Create( pParent, pController );
         else if (rsResourceURL.endsWith("/TypePanel"))
-        {
-            //pPanel = ChartTypePanel::Create( pParentWindow, xFrame, pController );
-            VclPtrInstance<ChartTypePanel> ppPanel(pParentWindow, xFrame, pController);
-            xElement = sfx2::sidebar::SidebarPanelBase::Create(
-                rsResourceURL,
-                xFrame,
-                ppPanel,
-                css::ui::LayoutSize(-1,-1,-1));
-        }
+            xPanel = std::make_unique<ChartTypePanel>(pParent, pController);
         else if (rsResourceURL.endsWith("/SeriesPanel"))
-            pPanel = ChartSeriesPanel::Create(pParentWindow, xFrame, pController);
+            xPanel = ChartSeriesPanel::Create(pParent, pController);
         else if (rsResourceURL.endsWith("/AxisPanel"))
-            pPanel = ChartAxisPanel::Create(pParentWindow, xFrame, pController);
+            xPanel = ChartAxisPanel::Create(pParent, pController);
         else if (rsResourceURL.endsWith("/ErrorBarPanel"))
-            pPanel = ChartErrorBarPanel::Create(pParentWindow, xFrame, pController);
+            xPanel = ChartErrorBarPanel::Create(pParent, pController);
         else if (rsResourceURL.endsWith("/AreaPanel"))
-            pPanel = ChartAreaPanel::Create(pParentWindow, xFrame, pController);
+            xPanel = ChartAreaPanel::Create(pParent, xFrame, pController);
         else if (rsResourceURL.endsWith("/LinePanel"))
-            pPanel = ChartLinePanel::Create(pParentWindow, xFrame, pController);
+            xPanel = ChartLinePanel::Create(pParent, xFrame, pController);
 
-        if (pPanel)
+        if (xPanel)
             xElement = sfx2::sidebar::SidebarPanelBase::Create(
                 rsResourceURL,
                 xFrame,
-                pPanel,
+                std::move(xPanel),
                 css::ui::LayoutSize(-1,-1,-1));
     }
     catch (const css::uno::RuntimeException &)

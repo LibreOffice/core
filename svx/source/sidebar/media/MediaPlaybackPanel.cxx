@@ -29,10 +29,9 @@ using namespace avmedia;
 namespace svx::sidebar {
 
 MediaPlaybackPanel::MediaPlaybackPanel (
-    vcl::Window* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    weld::Widget* pParent,
     SfxBindings* pBindings)
-    : PanelLayout(pParent, "MediaPlaybackPanel", "svx/ui/mediaplayback.ui", rxFrame),
+    : PanelLayout(pParent, "MediaPlaybackPanel", "svx/ui/mediaplayback.ui"),
     MediaControlBase(),
     maMediaController(SID_AVMEDIA_TOOLBOX, *pBindings, *this),
     maIdle("MediaPlaybackPanel"),
@@ -46,31 +45,18 @@ MediaPlaybackPanel::MediaPlaybackPanel (
     mxZoomListBox = m_xBuilder->weld_combo_box("zoombox");
 
     Initialize();
-
-    m_pInitialFocusWidget = mxTimeEdit.get();
 }
 
-VclPtr<PanelLayout> MediaPlaybackPanel::Create(
-    vcl::Window* pParent,
-    const Reference< XFrame >& rxFrame,
+std::unique_ptr<PanelLayout> MediaPlaybackPanel::Create(
+    weld::Widget* pParent,
     SfxBindings* pBindings)
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException("no parent Window given to MediaPlaybackPanel::Create", nullptr, 0);
-    if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to MediaPlaybackPanel::Create", nullptr, 1);
     if (pBindings == nullptr)
         throw lang::IllegalArgumentException("no SfxBindings given to MediaPlaybackPanel::Create", nullptr, 2);
 
-    return VclPtr<MediaPlaybackPanel>::Create(
-                pParent,
-                rxFrame,
-                pBindings);
-}
-
-MediaPlaybackPanel::~MediaPlaybackPanel()
-{
-    disposeOnce();
+    return std::make_unique<MediaPlaybackPanel>(pParent, pBindings);
 }
 
 void MediaPlaybackPanel::Initialize()
@@ -87,10 +73,9 @@ void MediaPlaybackPanel::Initialize()
     mpBindings->Invalidate(SID_AVMEDIA_TOOLBOX);
 }
 
-void MediaPlaybackPanel::dispose()
+MediaPlaybackPanel::~MediaPlaybackPanel()
 {
     disposeWidgets();
-    PanelLayout::dispose();
 }
 
 void MediaPlaybackPanel::NotifyItemUpdate(
