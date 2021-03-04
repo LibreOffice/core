@@ -50,22 +50,6 @@ namespace
 constexpr OUStringLiteral constTypeDescriptionManagerSingletonName
     = u"/singletons/com.sun.star.reflection.theTypeDescriptionManager";
 
-uno::Reference<reflection::XIdlClass>
-TypeToIdlClass(const uno::Type& rType, const uno::Reference<uno::XComponentContext>& xContext)
-{
-    auto xReflection = reflection::theCoreReflection::get(xContext);
-
-    uno::Reference<reflection::XIdlClass> xRetClass;
-    typelib_TypeDescription* pTD = nullptr;
-    rType.getDescription(&pTD);
-    if (pTD)
-    {
-        OUString sOWName(pTD->pTypeName);
-        xRetClass = xReflection->forName(sOWName);
-    }
-    return xRetClass;
-}
-
 OUString AnyToString(const uno::Any& aValue, const uno::Reference<uno::XComponentContext>& xContext)
 {
     OUString aRetStr;
@@ -198,12 +182,7 @@ OUString AnyToString(const uno::Any& aValue, const uno::Reference<uno::XComponen
     return aRetStr;
 }
 
-OUString getAnyType(const uno::Any& aValue, const uno::Reference<uno::XComponentContext>& xContext)
-{
-    uno::Type aValType = aValue.getValueType();
-    auto xIdlClass = TypeToIdlClass(aValType, xContext);
-    return xIdlClass->getName();
-}
+OUString getAnyType(const uno::Any& aValue) { return aValue.getValueType().getTypeName(); }
 
 // Object inspector nodes
 
@@ -399,7 +378,7 @@ public:
     std::vector<std::pair<sal_Int32, OUString>> getColumnValues() override
     {
         OUString aValue = AnyToString(maAny, mxContext);
-        OUString aType = getAnyType(maAny, mxContext);
+        OUString aType = getAnyType(maAny);
 
         return {
             { 1, aValue },
@@ -478,7 +457,7 @@ public:
         int nLength = xIdlArray->getLen(maAny);
 
         OUString aValue = "0 to " + OUString::number(nLength - 1);
-        OUString aType = getAnyType(maAny, mxContext);
+        OUString aType = getAnyType(maAny);
 
         return {
             { 1, aValue },
