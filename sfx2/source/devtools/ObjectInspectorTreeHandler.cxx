@@ -786,6 +786,11 @@ IMPL_LINK(ObjectInspectorTreeHandler, ToolbarButtonClicked, const OString&, rSel
             inspectObject(xInterface);
         }
     }
+    else if (rSelectionId == "refresh")
+    {
+        auto rPageId = mpObjectInspectorNotebook->get_current_page_ident();
+        NotebookEnterPage(rPageId);
+    }
 }
 
 IMPL_LINK(ObjectInspectorTreeHandler, NotebookEnterPage, const OString&, rPageId, void)
