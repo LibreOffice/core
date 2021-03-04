@@ -38,13 +38,12 @@ class DefaultShapesPanel
 {
 public:
     DefaultShapesPanel (
-        vcl::Window* pParent,
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
-    static VclPtr<PanelLayout> Create(
-        vcl::Window* pParent,
+    static std::unique_ptr<PanelLayout> Create(
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
     virtual ~DefaultShapesPanel() override;
-    virtual void dispose() override;
 
 private:
     std::unique_ptr<ValueSet> mxLineArrowSet;

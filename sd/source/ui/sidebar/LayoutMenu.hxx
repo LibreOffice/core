@@ -62,10 +62,9 @@ public:
         @param i_rPanelViewShell
             the view shell of the task pane.
     */
-    LayoutMenu(vcl::Window* pParent, ViewShellBase& rViewShellBase,
+    LayoutMenu(weld::Widget* pParent, ViewShellBase& rViewShellBase,
                const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~LayoutMenu() override;
-    virtual void dispose() override;
 
     void Dispose();
 
@@ -86,13 +85,6 @@ public:
     /** The context menu is requested over this ShowContextMenu() method.
     */
     void ShowContextMenu(const Point* pPos);
-
-    /** Call Fill() when switching to or from high contrast mode so that the
-        correct set of icons is displayed.
-    */
-    virtual void DataChanged(const DataChangedEvent& rEvent) override;
-
-    using Window::GetWindow;
 
 private:
     ViewShellBase& mrBase;

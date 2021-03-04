@@ -34,13 +34,10 @@ class NumberFormatPropertyPanel
 {
 public:
 public:
-    static VclPtr<PanelLayout> Create(
-        vcl::Window* pParent,
+    static std::unique_ptr<PanelLayout> Create(
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
-
-    virtual void DataChanged(
-        const DataChangedEvent& rEvent) override;
 
     virtual void HandleContextChange(
         const vcl::EnumContext& rContext) override;
@@ -58,11 +55,10 @@ public:
 
     // constructor/destructor
     NumberFormatPropertyPanel(
-        vcl::Window* pParent,
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
     virtual ~NumberFormatPropertyPanel() override;
-    virtual void dispose() override;
 private:
     //ui controls
     std::unique_ptr<weld::ComboBox> mxLbCategory;

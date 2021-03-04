@@ -41,8 +41,8 @@ class PageFormatPanel:
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    static VclPtr<PanelLayout> Create(
-        vcl::Window* pParent,
+    static std::unique_ptr<PanelLayout> Create(
+        weld::Widget* pParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
         SfxBindings* pBindings);
 
@@ -56,11 +56,10 @@ public:
         boost::property_tree::ptree& /*rState*/) override {};
 
     PageFormatPanel(
-        vcl::Window* pParent,
+        weld::Widget* pParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
         SfxBindings* pBindings);
     virtual ~PageFormatPanel() override;
-    virtual void dispose() override;
 
     static FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );
 

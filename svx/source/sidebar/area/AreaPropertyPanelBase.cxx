@@ -61,7 +61,7 @@ const sal_Int32 AreaPropertyPanelBase::DEFAULT_ENDVALUE = 16777215;
 const sal_Int32 AreaPropertyPanelBase::DEFAULT_BORDER = 0;
 
 AreaPropertyPanelBase::AreaPropertyPanelBase(
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, "AreaPropertyPanel", "svx/ui/sidebararea.ui", rxFrame),
       meLastXFS(static_cast<sal_uInt16>(-1)),
@@ -113,11 +113,6 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
 
 AreaPropertyPanelBase::~AreaPropertyPanelBase()
 {
-    disposeOnce();
-}
-
-void AreaPropertyPanelBase::dispose()
-{
     mxTrGrPopup.reset();
     mxColorTextFT.reset();
     mxLbFillType.reset();
@@ -135,8 +130,6 @@ void AreaPropertyPanelBase::dispose()
     mxGradientStyle.reset();
     mxBmpImport.reset();
     mpPanel.clear();
-
-    PanelLayout::dispose();
 }
 
 void AreaPropertyPanelBase::Initialize()
@@ -466,11 +459,6 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillAttrHdl, weld::ComboBox&, void)
 IMPL_LINK_NOARG(AreaPropertyPanelBase, ChangeGradientAngle, weld::MetricSpinButton&, void)
 {
     SelectFillAttrHdl_Impl();
-}
-
-void AreaPropertyPanelBase::DataChanged(
-    const DataChangedEvent& /*rEvent*/)
-{
 }
 
 void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()

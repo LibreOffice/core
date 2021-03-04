@@ -50,6 +50,7 @@ NavigatorChildWindow::NavigatorChildWindow (
     SfxChildWinInfo* )
     : SfxChildWindowContext( nId )
 {
+#if 0
     VclPtr<SdNavigatorWin> pNavWin = VclPtr<SdNavigatorWin>::Create(
         pParent, pBindings);
 
@@ -60,6 +61,7 @@ NavigatorChildWindow::NavigatorChildWindow (
         pNav->SetMinOutputSizePixel(pNavWin->GetOptimalSize());
 
     SetWindow( pNavWin );
+#endif
 }
 
 } // end of namespace sd

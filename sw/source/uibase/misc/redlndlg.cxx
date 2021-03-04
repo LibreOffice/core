@@ -1246,7 +1246,7 @@ void SwRedlineAcceptDlg::FillInfo(OUString &rExtraData) const
     rExtraData += ")";
 }
 
-SwRedlineAcceptPanel::SwRedlineAcceptPanel(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame)
+SwRedlineAcceptPanel::SwRedlineAcceptPanel(weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame)
     : PanelLayout(pParent, "ManageChangesPanel", "modules/swriter/ui/managechangessidebar.ui", rFrame)
     , mxContentArea(m_xBuilder->weld_container("content_area"))
 {
@@ -1260,14 +1260,6 @@ SwRedlineAcceptPanel::SwRedlineAcceptPanel(vcl::Window* pParent, const css::uno:
 
 SwRedlineAcceptPanel::~SwRedlineAcceptPanel()
 {
-    disposeOnce();
-}
-
-void SwRedlineAcceptPanel::dispose()
-{
-    mpImplDlg.reset();
-    mxContentArea.reset();
-    PanelLayout::dispose();
 }
 
 void SwRedlineAcceptPanel::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)

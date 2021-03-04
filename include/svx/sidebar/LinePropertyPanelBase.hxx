@@ -46,7 +46,6 @@ class SVX_DLLPUBLIC LinePropertyPanelBase : public PanelLayout
 {
 public:
     virtual ~LinePropertyPanelBase() override;
-    virtual void dispose() override;
 
     void SetWidth(tools::Long nWidth);
     void SetWidthIcon(int n);
@@ -55,7 +54,7 @@ public:
     void EndLineWidthPopup();
 
     // constructor/destructor
-    LinePropertyPanelBase(vcl::Window* pParent,
+    LinePropertyPanelBase(weld::Widget* pParent,
                           const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     virtual void setLineWidth(const XLineWidthItem& rItem) = 0;

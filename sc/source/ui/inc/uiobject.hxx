@@ -47,6 +47,7 @@ private:
 
 class ScNavigatorDlg;
 
+#if 0
 class ScNavigatorDlgUIObject : public WindowUIObject
 {
     VclPtr<ScNavigatorDlg> mxScNavigatorDlg;
@@ -61,5 +62,6 @@ public:
 protected:
     virtual OUString get_name() const override;
 };
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
