@@ -18,7 +18,7 @@
  */
 
 #include "PreviewValueSet.hxx"
-#include <vcl/event.hxx>
+#include <vcl/commandevent.hxx>
 
 namespace sd::sidebar {
 
@@ -53,19 +53,17 @@ void PreviewValueSet::SetPreviewSize (const Size& rSize)
     maPreviewSize = rSize;
 }
 
-void PreviewValueSet::SetRightMouseClickHandler (const Link<const MouseEvent&,void>& rLink)
+void PreviewValueSet::SetContextMenuHandler(const Link<const Point*, void>& rLink)
 {
-    maRightMouseClickHandler = rLink;
+    maContextMenuHandler = rLink;
 }
 
-bool PreviewValueSet::MouseButtonDown (const MouseEvent& rEvent)
+bool PreviewValueSet::Command(const CommandEvent& rEvent)
 {
-    if (rEvent.IsRight())
-    {
-        maRightMouseClickHandler.Call(rEvent);
-        return true;
-    }
-    return ValueSet::MouseButtonDown(rEvent);
+    if (rEvent.GetCommand() != CommandEventId::ContextMenu)
+        return ValueSet::Command(rEvent);
+    maContextMenuHandler.Call(rEvent.IsMouseEvent() ? &rEvent.GetMousePosPixel() : nullptr);
+    return true;
 }
 
 void PreviewValueSet::Resize()
