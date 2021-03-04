@@ -176,10 +176,13 @@ sk_sp<SkTypeface> WinSkiaSalGraphicsImpl::createDirectWriteTypeface(HDC hdc, HFO
     // included the DWrite system font collection). For such cases, we'll
     // need to fall back to Skia's GDI-based font rendering.
     HFONT oldFont = SelectFont(hdc, hfont);
-    auto restoreFont = [hdc, oldFont]() { SelectFont(hdc, oldFont); };
     sal::systools::COMReference<IDWriteFontFace> fontFace;
     if (FAILED(CHECKHR(dwriteGdiInterop->CreateFontFaceFromHdc(hdc, &fontFace))))
+    {
+        SelectFont(hdc, oldFont);
         return nullptr;
+    }
+    SelectFont(hdc, oldFont);
     sal::systools::COMReference<IDWriteFontCollection> collection;
     if (FAILED(CHECKHR(dwriteFactory->GetSystemFontCollection(&collection))))
         return nullptr;
