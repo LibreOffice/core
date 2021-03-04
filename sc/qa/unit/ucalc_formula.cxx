@@ -8621,22 +8621,6 @@ void Test::testTdf97587()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTdf107459()
-{
-    CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
-
-    ScAddress aPos(0,0,0);
-    m_pDoc->SetString(aPos,
-            "=MATCH(5;{20;19;18;17;16;15;14;13;12;11;10;6;6;5;5;4;4;3;2;1};-1)");
-
-    // Without the fix in place, this would have failed with
-    // - Expected: 15
-    // - Actual  : 14
-    CPPUNIT_ASSERT_EQUAL(15.0, m_pDoc->GetValue(aPos));
-
-    m_pDoc->DeleteTab(0);
-}
-
 void Test::testTdf93415()
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Sheet1"));

@@ -5847,9 +5847,18 @@
      <table:table-cell table:number-columns-repeated="16"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce13" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce16"/>
-     <table:table-cell table:style-name="ce19"/>
+     <table:table-cell table:formula="of:=MATCH(5;{20;19;18;17;16;15;14;13;12;11;10;6;6;5;5;4;4;3;2;1};-1)" office:value-type="float" office:value="15" calcext:value-type="float">
+      <text:p>15</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce13" office:value-type="float" office:value="15" calcext:value-type="float">
+      <text:p>15.000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce15" table:formula="of:=[.A117]=[.B117]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce19" table:formula="of:=FORMULA([.A117])" office:value-type="string" office:string-value="=MATCH(5;{20;19;18;17;16;15;14;13;12;11;10;6;6;5;5;4;4;3;2;1};-1)" calcext:value-type="string">
+      <text:p>=MATCH(5;{20;19;18;17;16;15;14;13;12;11;10;6;6;5;5;4;4;3;2;1};-1)</text:p>
+     </table:table-cell>
      <table:table-cell table:number-columns-repeated="3"/>
      <table:table-cell office:value-type="float" office:value="5" calcext:value-type="float">
       <text:p>5</text:p>
