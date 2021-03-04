@@ -212,74 +212,7 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
     }
 }
 
-#elif defined( MACOSX )
-
-#include <dlfcn.h>
-#include <stdio.h>
-#include "backtrace.h"
-
-/* glib backtrace is only available on MacOsX 10.5 or higher
-   so we do it on our own */
-
-int backtrace( void **buffer, int max_frames )
-{
-    void **frame = (void **)__builtin_frame_address(0);
-    void **bp = ( void **)(*frame);
-    void *ip = frame[1];
-    int i;
-
-    for ( i = 0; bp && ip && i < max_frames; i++ )
-    {
-        *(buffer++) = ip;
-
-        ip = bp[1];
-        bp = (void**)(bp[0]);
-    }
-
-    return i;
-}
-
-char ** backtrace_symbols(void * const * buffer, int size)
-{
-    (void)buffer; (void)size;
-    return NULL; /*TODO*/
-}
-
-void backtrace_symbols_fd( void **buffer, int size, int fd )
-{
-    FILE    *fp = fdopen( fd, "w" );
-
-    if ( fp )
-    {
-        void **pFramePtr;
-
-        for ( pFramePtr = buffer; size > 0 && pFramePtr && *pFramePtr; pFramePtr++, size-- )
-        {
-            Dl_info     dli;
-
-            if ( 0 != dladdr( *pFramePtr, &dli ) )
-            {
-                ptrdiff_t offset;
-
-                if ( dli.dli_fname && dli.dli_fbase )
-                {
-                    offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_fbase;
-                    fprintf( fp, "%s+0x%tx", dli.dli_fname, offset );
-                }
-                if ( dli.dli_sname && dli.dli_saddr )
-                {
-                    offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_saddr;
-                    fprintf( fp, "(%s+0x%tx)", dli.dli_sname, offset );
-                }
-            }
-            fprintf( fp, "[%p]\n", *pFramePtr );
-        }
-
-        fclose( fp );
-    }
-}
-
-#elif !defined LINUX
+#elif !defined LINUX && !defined MACOSX && !defined IOS
 
 int backtrace( void **buffer, int max_frames )
 {
