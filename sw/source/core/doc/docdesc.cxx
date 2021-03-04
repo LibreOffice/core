@@ -462,11 +462,11 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     const bool bStashLeftHead = !rDesc.IsHeaderShared() && rChged.IsHeaderShared();
     const bool bStashFirstMasterHead = !rDesc.IsFirstShared() && rChged.IsFirstShared();
     const bool bStashFirstLeftHead = (!rDesc.IsHeaderShared() && rChged.IsHeaderShared()) || (!rDesc.IsFirstShared() && rChged.IsFirstShared());
-    if (rLeftHead.GetRegisteredIn() && bStashLeftHead)
+    if (bStashLeftHead && rLeftHead.GetRegisteredIn())
         rDesc.StashFrameFormat(rChged.GetLeft(), true, true, false);
-    if (rFirstMasterHead.GetRegisteredIn() && bStashFirstMasterHead)
+    if (bStashFirstMasterHead && rFirstMasterHead.GetRegisteredIn())
         rDesc.StashFrameFormat(rChged.GetFirstMaster(), true, false, true);
-    if (rFirstLeftHead.GetRegisteredIn() && bStashFirstLeftHead)
+    if (bStashFirstLeftHead && rFirstLeftHead.GetRegisteredIn())
         rDesc.StashFrameFormat(rChged.GetFirstLeft(), true, true, true);
 
     rDesc.ChgHeaderShare( rChged.IsHeaderShared() );
@@ -500,11 +500,11 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     const bool bStashLeftFoot = !rDesc.IsFooterShared() && rChged.IsFooterShared();
     const bool bStashFirstMasterFoot = !rDesc.IsFirstShared() && rChged.IsFirstShared();
     const bool bStashFirstLeftFoot = (!rDesc.IsFooterShared() && rChged.IsFooterShared()) || (!rDesc.IsFirstShared() && rChged.IsFirstShared());
-    if (rLeftFoot.GetRegisteredIn() && bStashLeftFoot)
+    if (bStashLeftFoot && rLeftFoot.GetRegisteredIn())
         rDesc.StashFrameFormat(rChged.GetLeft(), false, true, false);
-    if (rFirstMasterFoot.GetRegisteredIn() && bStashFirstMasterFoot)
+    if (bStashFirstMasterFoot && rFirstMasterFoot.GetRegisteredIn())
         rDesc.StashFrameFormat(rChged.GetFirstMaster(), false, false, true);
-    if (rFirstLeftFoot.GetRegisteredIn() && bStashFirstLeftFoot)
+    if (bStashFirstLeftFoot && rFirstLeftFoot.GetRegisteredIn())
         rDesc.StashFrameFormat(rChged.GetFirstLeft(), false, true, true);
 
     rDesc.ChgFooterShare( rChged.IsFooterShared() );
