@@ -9844,6 +9844,7 @@ sd/source/ui/inc/SlideSorter.hxx
 sd/source/ui/inc/SlideSorterViewShell.hxx
 sd/source/ui/inc/SlideTransitionPane.hxx
 sd/source/ui/inc/TabControl.hxx
+sd/source/ui/inc/TableDesignPane.hxx
 sd/source/ui/inc/TextObjectBar.hxx
 sd/source/ui/inc/ToolBarManager.hxx
 sd/source/ui/inc/View.hxx
@@ -10021,8 +10022,6 @@ sd/source/ui/sidebar/SlideBackground.cxx
 sd/source/ui/sidebar/SlideBackground.hxx
 sd/source/ui/sidebar/SlideTransitionPanel.cxx
 sd/source/ui/sidebar/SlideTransitionPanel.hxx
-sd/source/ui/sidebar/TableDesignPanel.cxx
-sd/source/ui/sidebar/TableDesignPanel.hxx
 sd/source/ui/slideshow/SlideShowRestarter.cxx
 sd/source/ui/slideshow/showwin.cxx
 sd/source/ui/slideshow/showwindow.hxx
@@ -10100,7 +10099,6 @@ sd/source/ui/slidesorter/view/SlsTheme.cxx
 sd/source/ui/slidesorter/view/SlsToolTip.cxx
 sd/source/ui/slidesorter/view/SlsViewCacheContext.cxx
 sd/source/ui/table/TableDesignPane.cxx
-sd/source/ui/table/TableDesignPane.hxx
 sd/source/ui/table/tablefunction.cxx
 sd/source/ui/table/tableobjectbar.cxx
 sd/source/ui/table/tableobjectbar.hxx

@@ -51,8 +51,7 @@
 #include <svx/sdr/table/tabledesign.hxx>
 #include <o3tl/enumrange.hxx>
 
-#include "TableDesignPane.hxx"
-#include <createtabledesignpanel.hxx>
+#include <TableDesignPane.hxx>
 
 #include <ViewShell.hxx>
 #include <ViewShellBase.hxx>
@@ -757,19 +756,6 @@ void TableDesignWidget::FillDesignPreviewControl()
         TOOLS_WARN_EXCEPTION( "sd", "sd::TableDesignWidget::FillDesignPreviewControl()");
     }
     m_xValueSet->SelectItem(nSelectedItem);
-}
-
-VclPtr<vcl::Window> createTableDesignPanel( vcl::Window* pParent, ViewShellBase& rBase )
-{
-    VclPtr<TableDesignPane> pRet = nullptr;
-    try
-    {
-        pRet = VclPtr<TableDesignPane>::Create( pParent, rBase );
-    }
-    catch (const uno::Exception&)
-    {
-    }
-    return pRet;
 }
 
 }
