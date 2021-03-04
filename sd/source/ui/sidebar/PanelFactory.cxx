@@ -25,7 +25,7 @@
 #include "CurrentMasterPagesSelector.hxx"
 #include "RecentMasterPagesSelector.hxx"
 #include "AllMasterPagesSelector.hxx"
-#include "CustomAnimationPanel.hxx"
+#include <CustomAnimationPane.hxx>
 #include "NavigatorWrapper.hxx"
 #include <SlideTransitionPane.hxx>
 #include "TableDesignPanel.hxx"
@@ -101,7 +101,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
         for the TaskPanelFactory.
     */
     if (rsUIElementResourceURL.endsWith("/CustomAnimations"))
-        pControl = VclPtr<CustomAnimationPanel>::Create(pParentWindow, *pBase, xFrame);
+        pControl = VclPtr<CustomAnimationPane>::Create(pParentWindow, *pBase, xFrame);
     else if (rsUIElementResourceURL.endsWith("/Layouts"))
         pControl = VclPtr<LayoutMenu>::Create(pParentWindow, *pBase, xSidebar);
     else if (rsUIElementResourceURL.endsWith("/AllMasterPages"))
