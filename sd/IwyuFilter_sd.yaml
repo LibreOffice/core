@@ -90,9 +90,6 @@ excludelist:
     sd/source/ui/animations/CustomAnimationPane.hxx:
     # Needed for typedef
     - motionpathtag.hxx
-    sd/source/ui/animations/SlideTransitionPane.cxx:
-    # Avoid loplugin:unreffun error
-    - /createslidetransitionpanel.hxx
     sd/source/ui/animations/CustomAnimationPane.cxx:
     # Avoid loplugin:unreffun error
     - createcustomanimationpanel.hxx

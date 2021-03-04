@@ -19,7 +19,6 @@
 
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <SlideTransitionPane.hxx>
-#include <createslidetransitionpanel.hxx>
 
 #include <TransitionPreset.hxx>
 #include <sdresid.hxx>
@@ -393,18 +392,23 @@ public:
 SlideTransitionPane::SlideTransitionPane(
     Window * pParent,
     ViewShellBase & rBase,
-    SdDrawDocument* pDoc,
     const css::uno::Reference<css::frame::XFrame>& rxFrame ) :
         PanelLayout( pParent, "SlideTransitionsPanel", "modules/simpress/ui/slidetransitionspanel.ui", rxFrame ),
 
         mrBase( rBase ),
-        mpDrawDoc( pDoc ),
+        mpDrawDoc( rBase.GetDocShell() ? rBase.GetDocShell()->GetDoc() : nullptr ),
         mbHasSelection( false ),
         mbUpdatingControls( false ),
         mbIsMainViewChangePending( false ),
         maLateInitTimer()
 {
-    Initialize(pDoc);
+    Initialize(mpDrawDoc);
+}
+
+css::ui::LayoutSize SlideTransitionPane::GetHeightForWidth(const sal_Int32 /*nWidth*/)
+{
+    sal_Int32 nMinimumHeight = get_preferred_size().Height();
+    return css::ui::LayoutSize(nMinimumHeight, -1, nMinimumHeight);
 }
 
 void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
@@ -1162,19 +1166,6 @@ IMPL_LINK_NOARG(SlideTransitionPane, LateInitCallback, Timer *, void)
 
     updateSoundList();
     updateControls();
-}
-
-vcl::Window * createSlideTransitionPanel( vcl::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame )
-{
-    vcl::Window* pWindow = nullptr;
-
-    DrawDocShell* pDocSh = rBase.GetDocShell();
-    if( pDocSh )
-    {
-        pWindow = VclPtr<SlideTransitionPane>::Create( pParent, rBase, pDocSh->GetDoc(), rxFrame );
-    }
-
-    return pWindow;
 }
 
 } //  namespace sd
