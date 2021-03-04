@@ -229,6 +229,7 @@ void SelectionManager::SelectionHasChanged ()
     // StatusBar
     pViewShell->Invalidate (SID_STATUS_PAGE);
     pViewShell->Invalidate (SID_STATUS_LAYOUT);
+    pViewShell->Invalidate (SID_SCALE);
 
     OSL_ASSERT(mrController.GetCurrentSlideManager());
     SharedPageDescriptor pDescriptor(mrController.GetCurrentSlideManager()->GetCurrentSlide());

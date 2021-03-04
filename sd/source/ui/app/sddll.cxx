@@ -198,6 +198,7 @@ void SdDLL::RegisterControllers(SdModule* pMod)
 #endif
     XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pMod );
     SdTemplateControl::RegisterControl( SID_STATUS_LAYOUT, pMod );
+    SdTemplateControl::RegisterControl( SID_SCALE, pMod );
     SvxTbxCtlDraw::RegisterControl(SID_INSERT_DRAW, pMod );
 }
 

@@ -104,6 +104,7 @@ void SdTemplateControl::Command( const CommandEvent& rCEvt )
             SID_PRESENTATION_LAYOUT, SfxCallMode::SLOT, { &aStyle });
         pViewFrame->GetBindings().Invalidate(SID_PRESENTATION_LAYOUT);
         pViewFrame->GetBindings().Invalidate(SID_STATUS_LAYOUT);
+        pViewFrame->GetBindings().Invalidate(SID_SCALE);
     }
 }
 
