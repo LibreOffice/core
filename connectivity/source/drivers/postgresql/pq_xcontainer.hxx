@@ -34,8 +34,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XCONTAINER_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XCONTAINER_HXX
+#pragma once
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -187,6 +186,5 @@ protected:
 };
 
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

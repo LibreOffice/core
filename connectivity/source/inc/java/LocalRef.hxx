@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_LOCALREF_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_LOCALREF_HXX
+#pragma once
 
 #if defined __clang__
 #pragma clang diagnostic push
@@ -92,7 +91,5 @@ namespace connectivity::jdbc
 
 } // namespace connectivity::jdbc
 
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_LOCALREF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

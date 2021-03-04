@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_TOOLS_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_TOOLS_HXX
+#pragma once
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.h>
@@ -59,7 +58,5 @@ namespace connectivity
     jobject createByteInputStream(const css::uno::Reference< css::io::XInputStream >& x,sal_Int32 length);
     jobject createCharArrayReader(const css::uno::Reference< css::io::XInputStream >& x,sal_Int32 length);
 }
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_TOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

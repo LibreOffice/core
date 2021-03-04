@@ -25,8 +25,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#ifndef __User_FWD_DEFINED__
-#define __User_FWD_DEFINED__
+#pragma once
 typedef struct _ADOUser User;
 #endif
 
@@ -53,7 +52,6 @@ typedef struct _ADOKey Key;
 #ifndef __Table_FWD_DEFINED__
 #define __Table_FWD_DEFINED__
 typedef struct _ADOTable Table;
-#endif
 
 
 #include <adoint.h>

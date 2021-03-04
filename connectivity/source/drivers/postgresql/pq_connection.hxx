@@ -34,8 +34,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_CONNECTION_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_CONNECTION_HXX
+#pragma once
 
 #include <config_lgpl.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -191,6 +190,5 @@ public: // helper function
 };
 
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AINDEX_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AINDEX_HXX
+#pragma once
 
 #include <sdbcx/VIndex.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
@@ -46,6 +45,5 @@ namespace connectivity::ado
             WpADOIndex      getImpl() const { return m_aIndex;}
         };
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AINDEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

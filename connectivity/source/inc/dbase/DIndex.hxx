@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DINDEX_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DINDEX_HXX
+#pragma once
 
 #include <sdbcx/VIndex.hxx>
 #include <dbase/DTable.hxx>
@@ -135,8 +134,6 @@ namespace connectivity::dbase
 
         void ReadHeader(SvStream & rStream, ODbaseIndex::NDXHeader & rHeader);
 }
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DINDEX_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

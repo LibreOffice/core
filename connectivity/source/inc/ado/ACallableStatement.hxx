@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ACALLABLESTATEMENT_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ACALLABLESTATEMENT_HXX
+#pragma once
 
 #include <ado/APreparedStatement.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -72,7 +71,6 @@ namespace connectivity::ado
             virtual void SAL_CALL registerNumericOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, sal_Int32 scale ) override;
         };
 }
-#endif // _CONNECTIVITY_OCallableStatement_HXX_
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

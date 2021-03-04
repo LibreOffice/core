@@ -34,8 +34,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_RESULTSETMETADATA_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_RESULTSETMETADATA_HXX
+#pragma once
 #include <vector>
 
 #include "pq_connection.hxx"
@@ -124,7 +123,5 @@ public:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

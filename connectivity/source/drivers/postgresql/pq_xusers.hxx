@@ -34,8 +34,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XUSERS_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XUSERS_HXX
+#pragma once
 
 #include "pq_xcontainer.hxx"
 
@@ -79,6 +78,5 @@ private:
 };
 
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ODATABASEMETADATA_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ODATABASEMETADATA_HXX
+#pragma once
 
 #include <odbc/OConnection.hxx>
 #include <odbc/odbcbasedllapi.hxx>
@@ -200,6 +199,5 @@ namespace connectivity::odbc
         };
 
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ODATABASEMETADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

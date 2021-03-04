@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_MYSQLC_SOURCE_MYSQLC_GENERAL_HXX
-#define INCLUDED_MYSQLC_SOURCE_MYSQLC_GENERAL_HXX
+#pragma once
 
 #include <config_lgpl.h>
 
@@ -113,7 +112,5 @@ sal_Int32 mysqlStrToOOOType(const OUString& sType);
 
 OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding);
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

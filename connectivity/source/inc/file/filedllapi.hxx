@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FILEDLLAPI_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FILEDLLAPI_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -28,8 +27,6 @@
 #define OOO_DLLPUBLIC_FILE SAL_DLLPUBLIC_EXPORT
 #else
 #define OOO_DLLPUBLIC_FILE SAL_DLLPUBLIC_IMPORT
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

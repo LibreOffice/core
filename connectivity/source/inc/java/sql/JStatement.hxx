@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_JSTATEMENT_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_JSTATEMENT_HXX
+#pragma once
 
 #include <java/lang/Object.hxx>
 #include <com/sun/star/sdbc/XStatement.hpp>
@@ -231,6 +230,5 @@ namespace connectivity
         virtual css::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) override;
     };
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_JSTATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

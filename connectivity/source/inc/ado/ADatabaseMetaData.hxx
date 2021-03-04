@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ADATABASEMETADATA_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ADATABASEMETADATA_HXX
+#pragma once
 
 #include <TDatabaseMetaDataBase.hxx>
 #include <map>
@@ -217,8 +216,6 @@ namespace connectivity::ado
             virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getUDTs( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& typeNamePattern, const css::uno::Sequence< sal_Int32 >& types ) override;
         };
 }
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ADATABASEMETADATA_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
