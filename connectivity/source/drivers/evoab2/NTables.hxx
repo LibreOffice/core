@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NTABLES_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NTABLES_HXX
+#pragma once
 
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
@@ -40,7 +39,5 @@ namespace connectivity::evoab
             virtual void disposing() override;
         };
 }
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NTABLES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

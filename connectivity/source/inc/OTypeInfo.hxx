@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_OTYPEINFO_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_OTYPEINFO_HXX
+#pragma once
 
 #include <com/sun/star/sdbc/DataType.hpp>
 
@@ -47,7 +46,5 @@ namespace connectivity
         bool operator != (const OTypeInfo& lh) const { return lh.nType != nType; }
     };
 }
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_OTYPEINFO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

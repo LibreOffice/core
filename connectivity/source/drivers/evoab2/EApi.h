@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_EAPI_H
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_EAPI_H
+#pragma once
 #include <glib-object.h>
 
 // Initializes the API below, returns false if not available
@@ -157,6 +156,5 @@ ESourceRegistry *get_e_source_registry();
 bool isSourceBackend(ESource *pSource, const char *backendname);
 
 G_END_DECLS
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

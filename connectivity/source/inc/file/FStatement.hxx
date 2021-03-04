@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FSTATEMENT_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FSTATEMENT_HXX
+#pragma once
 
 #include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
@@ -193,6 +192,5 @@ namespace connectivity::file
         };
 
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FSTATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

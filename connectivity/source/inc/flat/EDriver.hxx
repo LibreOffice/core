@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_EDRIVER_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_FLAT_EDRIVER_HXX
+#pragma once
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <connectivity/CommonTools.hxx>
@@ -42,6 +41,5 @@ namespace connectivity::flat
         };
 
 }
-#endif //_CONNECTIVITY_FLAT_DDRIVER_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

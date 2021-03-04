@@ -34,8 +34,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_STATEMENT_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_STATEMENT_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -195,6 +194,5 @@ css::uno::Reference< css::sdbc::XResultSet > getGeneratedValuesFromLastInsert(
 
 
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

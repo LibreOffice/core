@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FPREPAREDSTATEMENT_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FPREPAREDSTATEMENT_HXX
+#pragma once
 
 #include <file/filedllapi.hxx>
 #include <file/FStatement.hxx>
@@ -117,7 +116,6 @@ namespace connectivity::file
         };
 
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FPREPAREDSTATEMENT_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_HCOLUMN_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_HCOLUMN_HXX
+#pragma once
 
 #include <connectivity/sdbcx/VColumn.hxx>
 
@@ -29,6 +28,5 @@ namespace connectivity::firebird
         };
 
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HCOLUMNS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_MATH_BIGDECIMAL_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_MATH_BIGDECIMAL_HXX
+#pragma once
 
 #include <java/lang/Object.hxx>
 
@@ -37,8 +36,6 @@ namespace connectivity
         java_math_BigDecimal( const double& _par0 );
     };
 }
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_MATH_BIGDECIMAL_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

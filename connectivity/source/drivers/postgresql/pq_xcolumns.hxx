@@ -34,8 +34,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XCOLUMNS_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XCOLUMNS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -119,6 +118,5 @@ public: // XDataDescriptorFactory
 };
 
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

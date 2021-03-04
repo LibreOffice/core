@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABUTILITIES_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABUTILITIES_HXX
+#pragma once
 
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -134,7 +133,5 @@ namespace connectivity::macab
 
         void impl_throwError(const char* pErrorId);
 }
-
-#endif // _ CONNECTIVITY_MACAB_UTILITIES_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
