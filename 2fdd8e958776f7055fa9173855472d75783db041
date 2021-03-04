@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a44decb2_b861ead8",
+        "filename": "drawinglayer/source/processor2d/vclprocessor2d.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 768,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-04T15:23:25Z",
+      "side": 1,
+      "message": "Maybe here \u0027\u0026\u0026\u0027 is needed?",
+      "range": {
+        "startLine": 768,
+        "startChar": 43,
+        "endLine": 768,
+        "endChar": 45
+      },
+      "revId": "2fdd8e958776f7055fa9173855472d75783db041",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
