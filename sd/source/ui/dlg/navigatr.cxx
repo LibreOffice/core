@@ -49,13 +49,14 @@
 /**
  * SdNavigatorWin - FloatingWindow
  */
-SdNavigatorWin::SdNavigatorWin(vcl::Window* pParent, SfxBindings* pInBindings)
-    : PanelLayout(pParent, "NavigatorPanel", "modules/simpress/ui/navigatorpanel.ui", nullptr)
+SdNavigatorWin::SdNavigatorWin(weld::Widget* pParent, SfxBindings* pInBindings, SfxNavigator* pNavigatorDlg)
+    : PanelLayout(pParent, "NavigatorPanel", "modules/simpress/ui/navigatorpanel.ui")
     , mxToolbox(m_xBuilder->weld_toolbar("toolbox"))
     , mxTlbObjects(new SdPageObjsTLV(m_xBuilder->weld_tree_view("tree")))
     , mxLbDocs(m_xBuilder->weld_combo_box("documents"))
     , mxDragModeMenu(m_xBuilder->weld_menu("dragmodemenu"))
     , mxShapeMenu(m_xBuilder->weld_menu("shapemenu"))
+    , mxNavigatorDlg(pNavigatorDlg)
     , mbDocImported ( false )
       // On changes of the DragType: adjust SelectionMode of TLB!
     , meDragType ( NAVIGATOR_DRAGTYPE_EMBEDDED )
@@ -90,8 +91,13 @@ SdNavigatorWin::SdNavigatorWin(vcl::Window* pParent, SfxBindings* pInBindings)
     mxToolbox->connect_key_press(LINK(this, SdNavigatorWin, KeyInputHdl));
     mxTlbObjects->connect_key_press(LINK(this, SdNavigatorWin, KeyInputHdl));
     mxLbDocs->connect_key_press(LINK(this, SdNavigatorWin, KeyInputHdl));
+}
 
-    m_pInitialFocusWidget = mxToolbox.get();
+weld::Window* SdNavigatorWin::GetFrameWeld() const
+{
+    if (mxNavigatorDlg)
+        return mxNavigatorDlg->GetFrameWeld();
+    return PanelLayout::GetFrameWeld();
 }
 
 void SdNavigatorWin::SetUpdateRequestFunctor(const UpdateRequestFunctor& rUpdateRequest)
@@ -106,11 +112,6 @@ void SdNavigatorWin::SetUpdateRequestFunctor(const UpdateRequestFunctor& rUpdate
 
 SdNavigatorWin::~SdNavigatorWin()
 {
-    disposeOnce();
-}
-
-void SdNavigatorWin::dispose()
-{
     mpNavigatorCtrlItem.reset();
     mpPageNameCtrlItem.reset();
     mxDragModeMenu.reset();
@@ -118,7 +119,6 @@ void SdNavigatorWin::dispose()
     mxToolbox.reset();
     mxTlbObjects.reset();
     mxLbDocs.reset();
-    PanelLayout::dispose();
 }
 
 //when object is marked , fresh the corresponding entry tree .

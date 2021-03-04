@@ -39,10 +39,8 @@ using namespace css::uno;
 
 namespace chart::sidebar
 {
-ChartTypePanel::ChartTypePanel(vcl::Window* pParent,
-                               const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                               ::chart::ChartController* pController)
-    : PanelLayout(pParent, "ChartTypePanel", "modules/schart/ui/sidebartype.ui", rxFrame)
+ChartTypePanel::ChartTypePanel(weld::Widget* pParent, ::chart::ChartController* pController)
+    : PanelLayout(pParent, "ChartTypePanel", "modules/schart/ui/sidebartype.ui")
     , maContext()
     , mxModel(pController->getModel())
     , mxListener(new ChartSidebarModifyListener(this))
@@ -119,13 +117,9 @@ ChartTypePanel::ChartTypePanel(vcl::Window* pParent,
     m_pSortByXValuesResourceGroup->setChangeListener(this);
 
     Initialize();
-
-    m_pInitialFocusWidget = m_xMainTypeList.get();
 }
 
-ChartTypePanel::~ChartTypePanel() { disposeOnce(); }
-
-void ChartTypePanel::dispose()
+ChartTypePanel::~ChartTypePanel()
 {
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel,
                                                                     css::uno::UNO_QUERY_THROW);
@@ -146,8 +140,6 @@ void ChartTypePanel::dispose()
     m_xSubTypeListWin.reset();
     m_xSubTypeList.reset();
     m_xMainTypeList.reset();
-
-    PanelLayout::dispose();
 }
 
 IMPL_LINK_NOARG(ChartTypePanel, SelectMainTypeHdl, weld::ComboBox&, void) { selectMainType(); }
@@ -251,7 +243,11 @@ void ChartTypePanel::updateData()
     }
 }
 
-void ChartTypePanel::DataChanged(const DataChangedEvent&) { updateData(); }
+void ChartTypePanel::DataChanged(const DataChangedEvent& rEvent)
+{
+    PanelLayout::DataChanged(rEvent);
+    updateData();
+}
 
 void ChartTypePanel::HandleContextChange(const vcl::EnumContext& rContext)
 {

@@ -18,7 +18,7 @@ class navigator(UITestCase):
         xGridWin.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "ScNavigatorPanel"}))
 
         xCalcDoc = self.xUITest.getTopFocusWindow()
-        xNavigatorPanel = xCalcDoc.getChild("NavigatorPanelParent")
+        xNavigatorPanel = xCalcDoc.getChild("NavigatorPanel")
         xContentBox = xNavigatorPanel.getChild('contentbox')
         xSheets = xContentBox.getChild("0")
         self.assertEqual(get_state_as_dict(xSheets)['Text'], 'Sheets')
@@ -45,7 +45,7 @@ class navigator(UITestCase):
         self.ui_test.close_dialog_through_button(xOKBtn)
 
         xCalcDoc = self.xUITest.getTopFocusWindow()
-        xNavigatorPanel = xCalcDoc.getChild("NavigatorPanelParent")
+        xNavigatorPanel = xCalcDoc.getChild("NavigatorPanel")
         xContentBox = xNavigatorPanel.getChild('contentbox')
         xSheets = xContentBox.getChild("0")
         self.assertEqual(get_state_as_dict(xSheets)['Text'], 'Sheets')
@@ -61,7 +61,7 @@ class navigator(UITestCase):
         self.xUITest.executeCommand(".uno:Undo")
 
         xCalcDoc = self.xUITest.getTopFocusWindow()
-        xNavigatorPanel = xCalcDoc.getChild("NavigatorPanelParent")
+        xNavigatorPanel = xCalcDoc.getChild("NavigatorPanel")
         xContentBox = xNavigatorPanel.getChild('contentbox')
         xSheets = xContentBox.getChild("0")
         self.assertEqual(get_state_as_dict(xSheets)['Text'], 'Sheets')
@@ -90,7 +90,7 @@ class navigator(UITestCase):
         xGridWin.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "ScNavigatorPanel"}))
 
         xCalcDoc = self.xUITest.getTopFocusWindow()
-        xNavigatorPanel = xCalcDoc.getChild("NavigatorPanelParent")
+        xNavigatorPanel = xCalcDoc.getChild("NavigatorPanel")
         xToolBar = xNavigatorPanel.getChild("toolbox2")
         xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "0"})) # 'toggle' button
 
@@ -124,7 +124,7 @@ class navigator(UITestCase):
         xGridWin.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "ScNavigatorPanel"}))
 
         xCalcDoc = self.xUITest.getTopFocusWindow()
-        xNavigatorPanel = xCalcDoc.getChild("NavigatorPanelParent")
+        xNavigatorPanel = xCalcDoc.getChild("NavigatorPanel")
         xToolBar = xNavigatorPanel.getChild("toolbox2")
         xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "0"})) # 'toggle' button
 
