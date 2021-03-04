@@ -73,6 +73,7 @@ Private Interface			As Object	&apos; ScriptForge own L10N service
 Private OSName				As String	&apos; WIN, LINUX, MACOS
 Private SFDialogs			As Variant	&apos; Persistent storage for the SFDialogs library
 Private SFForms				As Variant	&apos; Persistent storage for the SF_Form class in the SFDocuments library
+Private PythonStorage		As Variant	&apos; Persistent storage for the objects created and processed in Python
 
 REM ====================================================== CONSTRUCTOR/DESTRUCTOR
 
@@ -120,6 +121,7 @@ Private Sub Class_Initialize()
 	OSName = &quot;&quot;
 	SFDialogs = Empty
 	SFForms = Empty
+	PythonStorage = Empty
 End Sub		&apos;	ScriptForge.SF_Root Constructor
 
 REM -----------------------------------------------------------------------------
@@ -167,6 +169,49 @@ Dim sLine As String			&apos;	Alias of psLine
 	End If
 
 End Sub		&apos;	ScriptForge.SF_Root._AddToConsole
+
+REM -----------------------------------------------------------------------------
+Public Function _AddToPythonStorage(ByRef poObject As Object) As Long
+&apos;&apos;&apos;	Insert a newly created object in the Python persistent storage
+&apos;&apos;&apos;	and return the index of the used entry
+&apos;&apos;&apos;	The persistent storage is a simple array of objects
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		poObject: the object to insert
+
+Dim lIndex As Long			&apos;	Return value
+Dim lSize As Long			&apos;	UBound of the persistent storage
+Dim i As Long
+
+Check:
+	lIndex = -1
+	If IsNull(poObject) Then Exit Function
+	On Local Error GoTo Finally
+	If IsEmpty(PythonStorage) Then PythonStorage = Array()
+	lSize = UBound(PythonStorage)
+
+Try:
+	&apos;	Can an empty entry be reused ?
+	For i = 0 To lSize
+		If IsNull(PythonStorage(i)) Then
+			lIndex = i
+			Exit For
+		End If
+	Next i
+
+	&apos;	Resize Python storage if no empty space
+	If lIndex &lt; 0 Then
+		lSize = lSize + 1
+		ReDim Preserve PythonStorage(0 To lSize)
+		lIndex = lSize
+	End If
+
+	&apos;	Insert new object
+	Set PythonStorage(lIndex) = poObject
+
+Finally:
+	_AddToPythonStorage = lIndex
+	Exit Function
+End Function	&apos;	ScriptForge.SF_Root._AddToPythonStorage
 
 REM -----------------------------------------------------------------------------
 Public Sub _LoadLocalizedInterface(Optional ByVal psMode As String)
@@ -380,13 +425,13 @@ Try:
 	&apos;	SF_Array.ExtractColumn, ExtractRow
 			.AddText(	Context := &quot;ARRAYINDEX2&quot; _
 						, MsgId := &quot;The given slice limits do not fit within the bounds of the array.\n\n&quot; _
-									&amp; &quot;\t« Array_2D » = %1\n&quot; _
+									&amp; &quot;\t« Array_1D » = %1\n&quot; _
 									&amp; &quot;\t« From »     = %2\n&quot; _
 									&amp; &quot;\t« UpTo »     = %3&quot; _
 						, Comment :=	&quot;SF_Array.ExtractColumn (...) error message\n&quot; _
 									&amp;	&quot;%1: &apos;Column&apos; or &apos;Row&apos; of a matrix\n&quot; _
 									&amp;	&quot;%2, %3: array contents\n&quot; _
-									&amp;	&quot;&apos;Array_2D&apos;, &apos;From&apos; and &apos;UpTo&apos; should not be translated&quot; _
+									&amp;	&quot;&apos;Array_1D&apos;, &apos;From&apos; and &apos;UpTo&apos; should not be translated&quot; _
 					)
 	&apos;	SF_Array.ImportFromCSVFile
 			.AddText(	Context := &quot;CSVPARSING&quot; _

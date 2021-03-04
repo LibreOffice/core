@@ -417,9 +417,9 @@ Dim cstSubArgs As String
 			End Select
 			_PropertyGet = Fix(dDuration * 1000 / DSECOND) / 1000
 		Case UCase(&quot;IsStarted&quot;)
-			_PropertyGet = ( _TimerStatus = STATUSSTARTED Or _TimerStatus = STATUSSUSPENDED )
+			_PropertyGet = CBool( _TimerStatus = STATUSSTARTED Or _TimerStatus = STATUSSUSPENDED )
 		Case UCase(&quot;IsSuspended&quot;)
-			_PropertyGet = ( _TimerStatus = STATUSSUSPENDED )
+			_PropertyGet = CBool( _TimerStatus = STATUSSUSPENDED )
 		Case UCase(&quot;SuspendDuration&quot;)
 			Select Case _TimerStatus
 				Case STATUSINACTIVE		:	dDuration = 0.0
