@@ -2975,24 +2975,46 @@ void SbiRuntime::StepJUMP( sal_uInt32 nOp1 )
     pCode = pImg->GetCode() + nOp1;
 }
 
-// evaluate TOS, conditional jump (+target)
+bool SbiRuntime::EvaluateTopOfStackAsBool()
+{
+    SbxVariableRef tos = PopVar();
+    // In a test e.g. If Null then
+        // will evaluate Null will act as if False
+    if ( bVBAEnabled && tos->IsNull() )
+    {
+        return false;
+    }
+    if ( tos->IsObject() )
+    {
+        return tos->GetObject();
+    }
+    else
+    {
+        /* Curious factoid: this is doing aliasing (through an enum)
+         * If the thing's not a Bool you're really just asking if one of the first 8 bits is set
+         * So for example an Object pointing to NULL would always be false anyhow
+         */
+        return tos->GetBool();
+    }
+}
 
+// evaluate TOS, conditional jump (+target)
 void SbiRuntime::StepJUMPT( sal_uInt32 nOp1 )
 {
-    SbxVariableRef p = PopVar();
-    if( p->GetBool() )
+    if ( EvaluateTopOfStackAsBool() )
+    {
         StepJUMP( nOp1 );
+    }
 }
 
 // evaluate TOS, conditional jump (+target)
 
 void SbiRuntime::StepJUMPF( sal_uInt32 nOp1 )
 {
-    SbxVariableRef p = PopVar();
-    // In a test e.g. If Null then
-        // will evaluate Null will act as if False
-    if( ( bVBAEnabled && p->IsNull() ) || !p->GetBool() )
+    if ( !EvaluateTopOfStackAsBool() )
+    {
         StepJUMP( nOp1 );
+    }
 }
 
 // evaluate TOS, jump into JUMP-table (+MaxVal)
