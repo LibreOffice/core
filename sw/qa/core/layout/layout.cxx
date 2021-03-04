@@ -389,6 +389,80 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMarginPageBorder)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testVerticallyMergedCellBorder)
+{
+    // Given a document with a table: 2 columns, 5 rows. B2 -> B5 is merged:
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "vmerge-cell-border.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // When rendering the table:
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+
+    // Make sure that B4->B5 has no borders.
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    // Collect vertical positions of all border points.
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//polyline[@style='solid']/point");
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    std::vector<sal_Int32> aBorderPositions;
+    for (int i = 0; i < xmlXPathNodeSetGetLength(pXmlNodes); ++i)
+    {
+        xmlNodePtr pXmlNode = pXmlNodes->nodeTab[i];
+        xmlChar* pValue = xmlGetProp(pXmlNode, BAD_CAST("y"));
+        sal_Int32 nValue = OString(reinterpret_cast<char const*>(pValue)).toInt32();
+        aBorderPositions.push_back(nValue);
+    }
+    xmlXPathFreeObject(pXmlObj);
+    // Collect top and bottom of the B1->B3 rows.
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    pXmlObj = getXPathNode(pLayout, "//tab/row/infos/bounds");
+    pXmlNodes = pXmlObj->nodesetval;
+    std::vector<sal_Int32> aLayoutPositions;
+    for (int i = 0; i < 3; ++i)
+    {
+        xmlNodePtr pXmlNode = pXmlNodes->nodeTab[i];
+        if (i == 0)
+        {
+            xmlChar* pValue = xmlGetProp(pXmlNode, BAD_CAST("top"));
+            sal_Int32 nValue = OString(reinterpret_cast<char const*>(pValue)).toInt32();
+            aLayoutPositions.push_back(nValue);
+        }
+        xmlChar* pValue = xmlGetProp(pXmlNode, BAD_CAST("bottom"));
+        sal_Int32 nValue = OString(reinterpret_cast<char const*>(pValue)).toInt32();
+        aLayoutPositions.push_back(nValue);
+    }
+    xmlXPathFreeObject(pXmlObj);
+    // Check if any border is outside the B1->B3 range.
+    for (const auto nBorderPosition : aBorderPositions)
+    {
+        bool bFound = false;
+        for (const auto nLayoutPosition : aLayoutPositions)
+        {
+            if (std::abs(nBorderPosition - nLayoutPosition) <= 15)
+            {
+                bFound = true;
+                break;
+            }
+        }
+        std::stringstream ss;
+        ss << "Bad vertical position for border point: " << nBorderPosition;
+        ss << " Expected positions: ";
+        for (size_t i = 0; i < aLayoutPositions.size(); ++i)
+        {
+            if (i > 0)
+            {
+                ss << ", ";
+            }
+            ss << aLayoutPositions[i];
+        }
+
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Bad vertical position for border point: 5624 Expected positions: 3022, 3540, 4059, 4578
+        // i.e. the middle vertical border end was the bottom of B5, not bottom of B3.
+        CPPUNIT_ASSERT_MESSAGE(ss.str(), bFound);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -5497,6 +5497,90 @@ tools::Long SwCellFrame::GetLayoutRowSpan() const
     return  nRet;
 }
 
+const SwCellFrame* SwCellFrame::GetCoveredCellInRow(const SwRowFrame& rRow) const
+{
+    if (GetLayoutRowSpan() <= 1)
+    {
+        // Not merged vertically.
+        return nullptr;
+    }
+
+    for (const SwFrame* pCell = rRow.GetLower(); pCell; pCell = pCell->GetNext())
+    {
+        if (!pCell->IsCellFrame())
+        {
+            continue;
+        }
+
+        auto pCellFrame = static_cast<const SwCellFrame*>(pCell);
+        if (!pCellFrame->IsCoveredCell())
+        {
+            continue;
+        }
+
+        if (pCellFrame->getFrameArea().Left() != getFrameArea().Left())
+        {
+            continue;
+        }
+
+        if (pCellFrame->getFrameArea().Width() != getFrameArea().Width())
+        {
+            continue;
+        }
+
+        // pCellFrame is covered, there are only covered cell frames between "this" and pCellFrame
+        // and the horizontal position/size matches "this".
+        return pCellFrame;
+    }
+
+    return nullptr;
+}
+
+std::vector<const SwCellFrame*> SwCellFrame::GetCoveredCells() const
+{
+    std::vector<const SwCellFrame*> aRet;
+    if (GetLayoutRowSpan() <= 1)
+    {
+        return aRet;
+    }
+
+    if (!GetUpper()->IsRowFrame())
+    {
+        return aRet;
+    }
+
+    auto pFirstRowFrame = static_cast<const SwRowFrame*>(GetUpper());
+    if (!pFirstRowFrame->GetNext())
+    {
+        return aRet;
+    }
+
+    if (!pFirstRowFrame->GetNext()->IsRowFrame())
+    {
+        return aRet;
+    }
+
+    for (const SwFrame* pRow = pFirstRowFrame->GetNext(); pRow; pRow = pRow->GetNext())
+    {
+        if (!pRow->IsRowFrame())
+        {
+            continue;
+        }
+
+        auto pRowFrame = static_cast<const SwRowFrame*>(pRow);
+        const SwCellFrame* pCovered = GetCoveredCellInRow(*pRowFrame);
+        if (!pCovered)
+        {
+            continue;
+        }
+
+        // Found a cell in a next row that is covered by "this".
+        aRet.push_back(pCovered);
+    }
+
+    return aRet;
+}
+
 void SwCellFrame::dumpAsXmlAttributes(xmlTextWriterPtr pWriter) const
 {
     SwFrame::dumpAsXmlAttributes(pWriter);
