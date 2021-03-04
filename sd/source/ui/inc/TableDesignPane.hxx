@@ -21,6 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_TABLE_TABLEDESIGNPANE_HXX
 
 #include <svtools/valueset.hxx>
+#include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <vcl/weld.hxx>
 
@@ -102,6 +103,7 @@ private:
 };
 
 class TableDesignPane : public PanelLayout
+                      , public sfx2::sidebar::ILayoutableWindow
 {
 private:
     std::unique_ptr<TableDesignWidget> m_xImpl;
@@ -112,6 +114,11 @@ public:
         , m_xImpl(new TableDesignWidget(*m_xBuilder, rBase))
     {
         m_pInitialFocusWidget = m_xImpl->GetInitialFocusWidget();
+    }
+    virtual css::ui::LayoutSize GetHeightForWidth(const sal_Int32 /*nWidth*/) override
+    {
+        sal_Int32 nMinimumHeight = get_preferred_size().Height();
+        return css::ui::LayoutSize(nMinimumHeight, -1, nMinimumHeight);
     }
     virtual void dispose() override
     {

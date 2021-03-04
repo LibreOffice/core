@@ -28,7 +28,7 @@
 #include <CustomAnimationPane.hxx>
 #include "NavigatorWrapper.hxx"
 #include <SlideTransitionPane.hxx>
-#include "TableDesignPanel.hxx"
+#include <TableDesignPane.hxx>
 #include "SlideBackground.hxx"
 
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
@@ -113,7 +113,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     else if (rsUIElementResourceURL.endsWith("/SlideTransitions"))
         pControl = VclPtr<SlideTransitionPane>::Create(pParentWindow, *pBase, xFrame);
     else if (rsUIElementResourceURL.endsWith("/TableDesign"))
-        pControl = VclPtr<TableDesignPanel>::Create(pParentWindow, *pBase);
+        pControl = VclPtr<TableDesignPane>::Create(pParentWindow, *pBase);
     else if (rsUIElementResourceURL.endsWith("/NavigatorPanel"))
         pControl = VclPtr<NavigatorWrapper>::Create(pParentWindow, *pBase, pBindings);
     else if (rsUIElementResourceURL.endsWith("/SlideBackgroundPanel"))
