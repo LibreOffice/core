@@ -20,9 +20,9 @@
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_NAVIGATORWRAPPER_HXX
 
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
-#include <vcl/ctrl.hxx>
+#include <sfx2/sidebar/PanelLayout.hxx>
+#include <navigatr.hxx>
 
-class SdNavigatorWin;
 class SfxBindings;
 namespace sd { class ViewShellBase; }
 
@@ -36,7 +36,7 @@ namespace sd::sidebar {
     - Forward size changes from sidebar to navigator.
 */
 class NavigatorWrapper
-    : public Control,
+    : public SdNavigatorWin,
       public sfx2::sidebar::ILayoutableWindow
 {
 public:
@@ -44,19 +44,12 @@ public:
         vcl::Window* pParent,
         sd::ViewShellBase& rViewShellBase,
         SfxBindings* pBindings);
-    virtual ~NavigatorWrapper() override;
-    virtual void dispose() override;
-
-    // Control
-    virtual void Resize() override;
-    virtual void GetFocus() override;
 
     // From ILayoutableWindow
     virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) override;
 
 private:
     ViewShellBase& mrViewShellBase;
-    VclPtr<SdNavigatorWin> maNavigator;
 
     void UpdateNavigator();
 };
