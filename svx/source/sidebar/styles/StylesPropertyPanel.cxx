@@ -17,8 +17,8 @@ using namespace css::uno;
 
 namespace svx::sidebar {
 
-VclPtr<PanelLayout> StylesPropertyPanel::Create (
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> StylesPropertyPanel::Create (
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (pParent == nullptr)
@@ -26,10 +26,10 @@ VclPtr<PanelLayout> StylesPropertyPanel::Create (
     if ( ! rxFrame.is())
         throw lang::IllegalArgumentException("no XFrame given to StylesPropertyPanel::Create", nullptr, 1);
 
-    return VclPtr<StylesPropertyPanel>::Create(pParent,rxFrame);
+    return std::make_unique<StylesPropertyPanel>(pParent, rxFrame);
 }
 
-StylesPropertyPanel::StylesPropertyPanel ( vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame )
+StylesPropertyPanel::StylesPropertyPanel(weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, "SidebarStylesPanel", "svx/ui/sidebarstylespanel.ui", rxFrame)
     , m_xFontStyle(m_xBuilder->weld_toolbar("fontstyletoolbox"))
     , m_xFontStyleDispatch(new ToolbarUnoDispatcher(*m_xFontStyle, *m_xBuilder, rxFrame))
@@ -41,22 +41,10 @@ StylesPropertyPanel::StylesPropertyPanel ( vcl::Window* pParent, const css::uno:
 
 StylesPropertyPanel::~StylesPropertyPanel()
 {
-    disposeOnce();
-}
-
-void StylesPropertyPanel::dispose()
-{
     m_xStyleDispatch.reset();
     m_xStyle.reset();
     m_xFontStyleDispatch.reset();
     m_xFontStyle.reset();
-
-    PanelLayout::dispose();
-}
-
-void StylesPropertyPanel::DataChanged( const DataChangedEvent& /*rEvent*/)
-{
-
 }
 
 }

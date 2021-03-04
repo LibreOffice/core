@@ -231,6 +231,7 @@ void comphelper::ConfigurationListener::dispose()
         listener->dispose();
     }
     maListeners.clear();
+    mbDisposed = true;
 }
 
 void SAL_CALL comphelper::ConfigurationListener::disposing(css::lang::EventObject const &)

@@ -31,15 +31,11 @@ class GraphicPropertyPanel
 {
 public:
     virtual ~GraphicPropertyPanel() override;
-    virtual void dispose() override;
 
-    static VclPtr<PanelLayout> Create(
-        vcl::Window* pParent,
+    static std::unique_ptr<PanelLayout> Create(
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
-
-    virtual void DataChanged(
-        const DataChangedEvent& rEvent) override;
 
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
@@ -54,7 +50,7 @@ public:
 
     // constructor/destructor
     GraphicPropertyPanel(
-        vcl::Window* pParent,
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
 

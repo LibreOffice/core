@@ -51,11 +51,6 @@ class SVX_DLLPUBLIC AreaPropertyPanelBase
 {
 public:
 
-    virtual void dispose() override;
-
-    virtual void DataChanged(
-        const DataChangedEvent& rEvent) override;
-
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
         const SfxItemState eState,
@@ -78,7 +73,7 @@ public:
 
     // constructor/destructor
     AreaPropertyPanelBase(
-        vcl::Window* pParent,
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     virtual ~AreaPropertyPanelBase() override;

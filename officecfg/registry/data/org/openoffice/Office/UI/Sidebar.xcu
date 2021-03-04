@@ -348,6 +348,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>100</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="TextPropertyPanel" oor:op="replace">
@@ -392,6 +395,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>120</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="InspectorTextPanel" oor:op="replace">
@@ -418,6 +424,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>100</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="MediaPlaybackPanel" oor:op="replace">
@@ -440,6 +449,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>100</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
       </node>
 
@@ -467,6 +479,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>200</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="PageFormatPanel" oor:op="replace">
@@ -492,6 +507,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>100</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
       </node>
 
@@ -519,6 +537,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>400</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="PageFooterPanel" oor:op="replace">
@@ -544,6 +565,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>500</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
       </node>
 
@@ -581,6 +605,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>300</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="EffectPropertyPanel" oor:op="replace">
@@ -606,6 +633,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>300</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
       </node>
 
@@ -638,6 +668,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>300</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
       </node>
 
@@ -675,6 +708,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>400</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="GalleryPanel" oor:op="replace">
@@ -700,6 +736,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>100</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
       </node>
 
@@ -748,6 +787,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>500</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="GraphicPropertyPanel" oor:op="replace">
@@ -773,6 +815,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>300</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="DefaultShapesPanel" oor:op="replace">
@@ -795,6 +840,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>100</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
       </node>
 
@@ -827,7 +875,11 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>100</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
+
       <node oor:name="SdLayoutsPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Layouts</value>
@@ -856,7 +908,11 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>200</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
+
       <node oor:name="SdUsedMasterPagesPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Used in This Presentation</value>
@@ -880,6 +936,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>100</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
       </node>
 
@@ -907,6 +966,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>200</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="SdAllMasterPagesPanel" oor:op="replace">
@@ -932,6 +994,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>300</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
       </node>
 
@@ -959,6 +1024,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>100</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="SdSlideTransitionPanel" oor:op="replace">
@@ -984,6 +1052,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>100</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
       </node>
 
@@ -1011,6 +1082,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>300</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="EmptyPanel" oor:op="replace">
@@ -1036,6 +1110,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>100</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
       </node>
 
@@ -1067,6 +1144,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>200</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="ScCellAppearancePropertyPanel" oor:op="replace">
@@ -1097,6 +1177,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>300</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="ScNumberFormatPropertyPanel" oor:op="replace">
@@ -1126,6 +1209,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>150</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
       </node>
 
@@ -1166,6 +1252,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>200</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="ListsPropertyPanel" oor:op="replace">
@@ -1193,6 +1282,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>120</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
       </node>
 
@@ -1226,6 +1318,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>500</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="SwNavigatorPanel" oor:op="replace">
@@ -1254,6 +1349,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>100</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
       </node>
 
@@ -1284,6 +1382,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>100</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="SdNavigatorPanel" oor:op="replace">
@@ -1312,6 +1413,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>100</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
       </node>
 
@@ -1342,6 +1446,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>100</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="StyleListPanel" oor:op="replace">
@@ -1367,6 +1474,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>100</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
       </node>
 
@@ -1394,7 +1504,11 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>100</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
+
       <node oor:name="SwStylePresetsPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Style Presets</value>
@@ -1418,6 +1532,9 @@
         </prop>
         <prop oor:name="IsExperimental" oor:type="xs:boolean">
           <value>true</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
       </node>
 
@@ -1445,6 +1562,9 @@
         <prop oor:name="IsExperimental" oor:type="xs:boolean">
           <value>true</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="ChartElementsPanel" oor:op="replace">
@@ -1467,6 +1587,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>1</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
       </node>
 
@@ -1494,6 +1617,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>2</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="ChartErrorBarPanel" oor:op="replace">
@@ -1519,6 +1645,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>4</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
       </node>
 
@@ -1546,6 +1675,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>5</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="ChartAreaPanel" oor:op="replace">
@@ -1572,6 +1704,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>6</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
         </prop>
       </node>
 
@@ -1604,6 +1739,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>7</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="TableEditPanel" oor:op="replace">
@@ -1633,6 +1771,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>300</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
 
       <node oor:name="ChartTypePanel" oor:op="replace">
@@ -1656,7 +1797,11 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>0</value>
         </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
       </node>
+
     </node>
   </node>
 </oor:component-data>

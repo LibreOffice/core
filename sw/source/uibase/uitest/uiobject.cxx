@@ -146,6 +146,7 @@ std::unique_ptr<UIObject> SwEditWinUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new SwEditWinUIObject(pEditWin));
 }
 
+#if 0
 SwNavigationPIUIObject::SwNavigationPIUIObject(const VclPtr<SwNavigationPI>& xSwNavigationPI):
     WindowUIObject(xSwNavigationPI),
     mxSwNavigationPI(xSwNavigationPI)
@@ -185,6 +186,7 @@ OUString SwNavigationPIUIObject::get_name() const
 {
     return "SwNavigationPIUIObject";
 }
+#endif
 
 CommentUIObject::CommentUIObject(const VclPtr<sw::annotation::SwAnnotationWin>& xCommentUIObject):
     WindowUIObject(xCommentUIObject),

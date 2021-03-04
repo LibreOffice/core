@@ -32,8 +32,8 @@ namespace sw::sidebar {
         , public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
     {
     public:
-        static VclPtr<PanelLayout> Create(
-            vcl::Window* pParent,
+        static std::unique_ptr<PanelLayout> Create(
+            weld::Widget* pParent,
             const css::uno::Reference< css::frame::XFrame>& rxFrame,
             SfxBindings* pBindings );
 
@@ -48,10 +48,9 @@ namespace sw::sidebar {
             boost::property_tree::ptree& /*rState*/) override {};
 
         virtual ~WrapPropertyPanel() override;
-        virtual void dispose() override;
 
         WrapPropertyPanel(
-            vcl::Window* pParent,
+            weld::Widget* pParent,
             const css::uno::Reference< css::frame::XFrame >& rxFrame,
             SfxBindings* pBindings );
     private:

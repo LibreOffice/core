@@ -29,7 +29,7 @@ using namespace avmedia;
 namespace svx::sidebar {
 
 MediaPlaybackPanel::MediaPlaybackPanel (
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
     : PanelLayout(pParent, "MediaPlaybackPanel", "svx/ui/mediaplayback.ui", rxFrame),
@@ -50,8 +50,8 @@ MediaPlaybackPanel::MediaPlaybackPanel (
     m_pInitialFocusWidget = mxTimeEdit.get();
 }
 
-VclPtr<PanelLayout> MediaPlaybackPanel::Create(
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> MediaPlaybackPanel::Create(
+    weld::Widget* pParent,
     const Reference< XFrame >& rxFrame,
     SfxBindings* pBindings)
 {
@@ -62,15 +62,7 @@ VclPtr<PanelLayout> MediaPlaybackPanel::Create(
     if (pBindings == nullptr)
         throw lang::IllegalArgumentException("no SfxBindings given to MediaPlaybackPanel::Create", nullptr, 2);
 
-    return VclPtr<MediaPlaybackPanel>::Create(
-                pParent,
-                rxFrame,
-                pBindings);
-}
-
-MediaPlaybackPanel::~MediaPlaybackPanel()
-{
-    disposeOnce();
+    return std::make_unique<MediaPlaybackPanel>(pParent, rxFrame, pBindings);
 }
 
 void MediaPlaybackPanel::Initialize()
@@ -87,10 +79,9 @@ void MediaPlaybackPanel::Initialize()
     mpBindings->Invalidate(SID_AVMEDIA_TOOLBOX);
 }
 
-void MediaPlaybackPanel::dispose()
+MediaPlaybackPanel::~MediaPlaybackPanel()
 {
     disposeWidgets();
-    PanelLayout::dispose();
 }
 
 void MediaPlaybackPanel::NotifyItemUpdate(

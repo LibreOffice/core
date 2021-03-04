@@ -28,8 +28,8 @@
 
 namespace sd::sidebar {
 
-VclPtr<PanelLayout> RecentMasterPagesSelector::Create (
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> RecentMasterPagesSelector::Create (
+    weld::Widget* pParent,
     ViewShellBase& rViewShellBase,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
@@ -39,20 +39,20 @@ VclPtr<PanelLayout> RecentMasterPagesSelector::Create (
 
     auto pContainer = std::make_shared<MasterPageContainer>();
 
-    VclPtrInstance<RecentMasterPagesSelector> pSelector(
+    auto xSelector(std::make_unique<RecentMasterPagesSelector>(
             pParent,
             *pDocument,
             rViewShellBase,
             pContainer,
-            rxSidebar);
-    pSelector->LateInit();
-    pSelector->SetHelpId(HID_SD_TASK_PANE_PREVIEW_RECENT);
+            rxSidebar));
+    xSelector->LateInit();
+    xSelector->SetHelpId(HID_SD_TASK_PANE_PREVIEW_RECENT);
 
-    return pSelector;
+    return xSelector;
 }
 
 RecentMasterPagesSelector::RecentMasterPagesSelector (
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
     const std::shared_ptr<MasterPageContainer>& rpContainer,
@@ -63,14 +63,8 @@ RecentMasterPagesSelector::RecentMasterPagesSelector (
 
 RecentMasterPagesSelector::~RecentMasterPagesSelector()
 {
-    disposeOnce();
-}
-
-void RecentMasterPagesSelector::dispose()
-{
     RecentlyUsedMasterPages::Instance().RemoveEventListener (
         LINK(this,RecentMasterPagesSelector,MasterPageListListener));
-    MasterPagesSelector::dispose();
 }
 
 void RecentMasterPagesSelector::LateInit()

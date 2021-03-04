@@ -31,7 +31,7 @@ using namespace css::uno;
 namespace svx::sidebar {
 
 AreaPropertyPanel::AreaPropertyPanel(
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
     : AreaPropertyPanelBase(pParent, rxFrame),
@@ -52,11 +52,6 @@ AreaPropertyPanel::AreaPropertyPanel(
 
 AreaPropertyPanel::~AreaPropertyPanel()
 {
-    disposeOnce();
-}
-
-void AreaPropertyPanel::dispose()
-{
     maStyleControl.dispose();
     maColorControl.dispose();
     maGradientControl.dispose();
@@ -68,12 +63,10 @@ void AreaPropertyPanel::dispose()
     maPatternListControl.dispose();
     maFillTransparenceController.dispose();
     maFillFloatTransparenceController.dispose();
-
-    AreaPropertyPanelBase::dispose();
 }
 
-VclPtr<PanelLayout> AreaPropertyPanel::Create (
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> AreaPropertyPanel::Create (
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
@@ -84,10 +77,7 @@ VclPtr<PanelLayout> AreaPropertyPanel::Create (
     if (pBindings == nullptr)
         throw lang::IllegalArgumentException("no SfxBindings given to AreaPropertyPanel::Create", nullptr, 2);
 
-    return VclPtr<AreaPropertyPanel>::Create(
-                pParent,
-                rxFrame,
-                pBindings);
+    return std::make_unique<AreaPropertyPanel>(pParent, rxFrame, pBindings);
 }
 
 void AreaPropertyPanel::setFillTransparence(const XFillTransparenceItem& rItem)

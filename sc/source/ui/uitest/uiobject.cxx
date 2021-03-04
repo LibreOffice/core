@@ -381,6 +381,7 @@ OUString ScGridWinUIObject::get_name() const
     return "ScGridWinUIObject";
 }
 
+#if 0
 ScNavigatorDlgUIObject::ScNavigatorDlgUIObject(const VclPtr<ScNavigatorDlg>& xScNavigatorDlg):
     WindowUIObject(xScNavigatorDlg),
     mxScNavigatorDlg(xScNavigatorDlg)
@@ -409,4 +410,6 @@ OUString ScNavigatorDlgUIObject::get_name() const
 {
     return "ScNavigatorDlgUIObject";
 }
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

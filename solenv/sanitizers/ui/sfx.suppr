@@ -45,7 +45,6 @@ sfx2/uiconfig/ui/templatepanel.ui://GtkToggleToolButton[@id='5'] button-no-label
 sfx2/uiconfig/ui/templatepanel.ui://GtkToggleToolButton[@id='6'] button-no-label
 sfx2/uiconfig/ui/templatepanel.ui://GtkToggleToolButton[@id='65535'] button-no-label
 sfx2/uiconfig/ui/templatedlg.ui://GtkLabel[@id='label1'] orphan-label
-sfx2/uiconfig/ui/paneltitlebar.ui://GtkImage[@id='addonimage'] no-labelled-by
 sfx2/uiconfig/ui/versioncommentdialog.ui://GtkLabel[@id='timestamp'] orphan-label
 sfx2/uiconfig/ui/versioncommentdialog.ui://GtkLabel[@id='author'] orphan-label
 sfx2/uiconfig/ui/versioncommentdialog.ui://GtkTextView[@id='textview'] no-labelled-by

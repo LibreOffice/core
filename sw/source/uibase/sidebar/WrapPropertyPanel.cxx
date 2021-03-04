@@ -33,8 +33,8 @@
 
 namespace sw::sidebar {
 
-VclPtr<PanelLayout> WrapPropertyPanel::Create (
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> WrapPropertyPanel::Create (
+    weld::Widget* pParent,
     const css::uno::Reference< css::frame::XFrame >& rxFrame,
     SfxBindings* pBindings)
 {
@@ -45,14 +45,11 @@ VclPtr<PanelLayout> WrapPropertyPanel::Create (
     if (pBindings == nullptr)
         throw css::lang::IllegalArgumentException("no SfxBindings given to WrapPropertyPanel::Create", nullptr, 2);
 
-    return VclPtr<WrapPropertyPanel>::Create(
-                        pParent,
-                        rxFrame,
-                        pBindings);
+    return std::make_unique<WrapPropertyPanel>(pParent, rxFrame, pBindings);
 }
 
 WrapPropertyPanel::WrapPropertyPanel(
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     const css::uno::Reference< css::frame::XFrame >& rxFrame,
     SfxBindings* pBindings )
     : PanelLayout(pParent, "WrapPropertyPanel", "modules/swriter/ui/sidebarwrap.ui", rxFrame)
@@ -81,20 +78,12 @@ WrapPropertyPanel::WrapPropertyPanel(
 
 WrapPropertyPanel::~WrapPropertyPanel()
 {
-    disposeOnce();
-}
-
-void WrapPropertyPanel::dispose()
-{
-    mxSpacingLB.reset();
 
     mxWrapOptionsDispatch.reset();
     mxWrapOptions.reset();
 
     maSwLRSpacingControl.dispose();
     maSwULSpacingControl.dispose();
-
-    PanelLayout::dispose();
 }
 
 void WrapPropertyPanel::Initialize()

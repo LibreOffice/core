@@ -364,8 +364,8 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, PopupTreeMenuHdl, const CommandEvent&, r
     return true;
 }
 
-SfxTemplatePanelControl::SfxTemplatePanelControl(SfxBindings* pBindings, vcl::Window* pParentWindow)
-    : PanelLayout(pParentWindow, "TemplatePanel", "sfx/ui/templatepanel.ui", nullptr)
+SfxTemplatePanelControl::SfxTemplatePanelControl(SfxBindings* pBindings, weld::Widget* pParent)
+    : PanelLayout(pParent, "TemplatePanel", "sfx/ui/templatepanel.ui", nullptr)
     , pImpl(new SfxTemplateDialog_Impl(pBindings, this))
 {
     OSL_ASSERT(pBindings!=nullptr);
@@ -374,13 +374,6 @@ SfxTemplatePanelControl::SfxTemplatePanelControl(SfxBindings* pBindings, vcl::Wi
 
 SfxTemplatePanelControl::~SfxTemplatePanelControl()
 {
-    disposeOnce();
-}
-
-void SfxTemplatePanelControl::dispose()
-{
-    pImpl.reset();
-    PanelLayout::dispose();
 }
 
 static void MakeExpanded_Impl(const weld::TreeView& rBox, std::vector<OUString>& rEntries)
