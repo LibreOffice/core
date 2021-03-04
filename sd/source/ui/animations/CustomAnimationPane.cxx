@@ -40,12 +40,11 @@
 #include <sfx2/viewfrm.hxx>
 #include <tools/debug.hxx>
 #include "STLPropertySet.hxx"
-#include "CustomAnimationPane.hxx"
+#include <CustomAnimationPane.hxx>
 #include "CustomAnimationDialog.hxx"
-#include "CustomAnimationList.hxx"
+#include <CustomAnimationList.hxx>
 #include "motionpathtag.hxx"
 #include <CustomAnimationPreset.hxx>
-#include <createcustomanimationpanel.hxx>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/sequence.hxx>
@@ -156,6 +155,12 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
 {
     initialize();
     m_pInitialFocusWidget = &mxCustomAnimationList->get_widget();
+}
+
+css::ui::LayoutSize CustomAnimationPane::GetHeightForWidth(const sal_Int32 /*nWidth*/)
+{
+    sal_Int32 nMinimumHeight = get_preferred_size().Height();
+    return css::ui::LayoutSize(nMinimumHeight, -1, nMinimumHeight);
 }
 
 void CustomAnimationPane::initialize()
@@ -2540,19 +2545,6 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
 
         pEffect->updatePathFromSdrPathObj( *pPathObj );
     }
-}
-
-vcl::Window * createCustomAnimationPanel( vcl::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame )
-{
-    vcl::Window* pWindow = nullptr;
-
-    DrawDocShell* pDocSh = rBase.GetDocShell();
-    if( pDocSh )
-    {
-        pWindow = VclPtr<CustomAnimationPane>::Create( pParent, rBase, rxFrame );
-    }
-
-    return pWindow;
 }
 
 }

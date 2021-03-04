@@ -9639,9 +9639,7 @@ sd/source/ui/accessibility/SdShapeTypes.cxx
 sd/source/ui/animations/CustomAnimationDialog.cxx
 sd/source/ui/animations/CustomAnimationDialog.hxx
 sd/source/ui/animations/CustomAnimationList.cxx
-sd/source/ui/animations/CustomAnimationList.hxx
 sd/source/ui/animations/CustomAnimationPane.cxx
-sd/source/ui/animations/CustomAnimationPane.hxx
 sd/source/ui/animations/STLPropertySet.cxx
 sd/source/ui/animations/STLPropertySet.hxx
 sd/source/ui/animations/SlideTransitionPane.cxx
@@ -9819,6 +9817,8 @@ sd/source/ui/inc/AccessiblePresentationShape.hxx
 sd/source/ui/inc/AccessibleSlideSorterObject.hxx
 sd/source/ui/inc/AccessibleSlideSorterView.hxx
 sd/source/ui/inc/AnimationChildWindow.hxx
+sd/source/ui/inc/CustomAnimationList.hxx
+sd/source/ui/inc/CustomAnimationPane.hxx
 sd/source/ui/inc/DocumentRenderer.hxx
 sd/source/ui/inc/DrawController.hxx
 sd/source/ui/inc/DrawDocShell.hxx
@@ -9852,8 +9852,6 @@ sd/source/ui/inc/ViewShellBase.hxx
 sd/source/ui/inc/ViewTabBar.hxx
 sd/source/ui/inc/animobjs.hxx
 sd/source/ui/inc/assclass.hxx
-sd/source/ui/inc/createcustomanimationpanel.hxx
-sd/source/ui/inc/createslidetransitionpanel.hxx
 sd/source/ui/inc/custsdlg.hxx
 sd/source/ui/inc/dlgfield.hxx
 sd/source/ui/inc/dlgpage.hxx
@@ -9994,8 +9992,6 @@ sd/source/ui/sidebar/AllMasterPagesSelector.cxx
 sd/source/ui/sidebar/AllMasterPagesSelector.hxx
 sd/source/ui/sidebar/CurrentMasterPagesSelector.cxx
 sd/source/ui/sidebar/CurrentMasterPagesSelector.hxx
-sd/source/ui/sidebar/CustomAnimationPanel.cxx
-sd/source/ui/sidebar/CustomAnimationPanel.hxx
 sd/source/ui/sidebar/DocumentHelper.cxx
 sd/source/ui/sidebar/DocumentHelper.hxx
 sd/source/ui/sidebar/LayoutMenu.cxx

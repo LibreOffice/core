@@ -57,7 +57,7 @@
 #include <sdresid.hxx>
 
 #include "CustomAnimationDialog.hxx"
-#include "CustomAnimationPane.hxx"
+#include <CustomAnimationPane.hxx>
 #include "STLPropertySet.hxx"
 #include <CustomAnimationPreset.hxx>
 

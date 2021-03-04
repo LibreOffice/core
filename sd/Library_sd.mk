@@ -325,7 +325,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/presenter/SlideRenderer \
 	sd/source/ui/sidebar/AllMasterPagesSelector \
 	sd/source/ui/sidebar/CurrentMasterPagesSelector \
-	sd/source/ui/sidebar/CustomAnimationPanel \
 	sd/source/ui/sidebar/DocumentHelper \
 	sd/source/ui/sidebar/LayoutMenu \
 	sd/source/ui/sidebar/MasterPageContainer \
