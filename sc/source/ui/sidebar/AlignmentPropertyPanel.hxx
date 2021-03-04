@@ -33,13 +33,10 @@ class AlignmentPropertyPanel
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    static VclPtr<PanelLayout> Create(
-        vcl::Window* pParent,
+    static std::unique_ptr<PanelLayout> Create(
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
-
-    virtual void DataChanged(
-        const DataChangedEvent& rEvent) override;
 
     virtual void HandleContextChange(
         const vcl::EnumContext& rContext) override;
@@ -57,11 +54,10 @@ public:
 
     // constructor/destructor
     AlignmentPropertyPanel(
-        vcl::Window* pParent,
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
     virtual ~AlignmentPropertyPanel() override;
-    virtual void dispose() override;
 
 private:
     //ui controls

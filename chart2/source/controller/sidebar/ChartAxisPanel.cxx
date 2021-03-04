@@ -204,10 +204,9 @@ double getAxisRotation(const css::uno::Reference<css::frame::XModel>& xModel,
 }
 
 ChartAxisPanel::ChartAxisPanel(
-    vcl::Window* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    weld::Widget* pParent,
     ChartController* pController)
-    : PanelLayout(pParent, "ChartAxisPanel", "modules/schart/ui/sidebaraxis.ui", rxFrame)
+    : PanelLayout(pParent, "ChartAxisPanel", "modules/schart/ui/sidebaraxis.ui")
     , mxCBShowLabel(m_xBuilder->weld_check_button("checkbutton_show_label"))
     , mxCBReverse(m_xBuilder->weld_check_button("checkbutton_reverse"))
     , mxLBLabelPos(m_xBuilder->weld_combo_box("comboboxtext_label_position"))
@@ -219,16 +218,9 @@ ChartAxisPanel::ChartAxisPanel(
     , mbModelValid(true)
 {
     Initialize();
-
-    m_pInitialFocusWidget = mxCBShowLabel.get();
 }
 
 ChartAxisPanel::~ChartAxisPanel()
-{
-    disposeOnce();
-}
-
-void ChartAxisPanel::dispose()
 {
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcaster->removeModifyListener(mxModifyListener);
@@ -244,8 +236,6 @@ void ChartAxisPanel::dispose()
     mxGridLabel.reset();
 
     mxNFRotation.reset();
-
-    PanelLayout::dispose();
 }
 
 void ChartAxisPanel::Initialize()
@@ -288,23 +278,18 @@ void ChartAxisPanel::updateData()
     mxNFRotation->set_value(getAxisRotation(mxModel, aCID), FieldUnit::DEGREE);
 }
 
-VclPtr<PanelLayout> ChartAxisPanel::Create (
-    vcl::Window* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+std::unique_ptr<PanelLayout> ChartAxisPanel::Create (
+    weld::Widget* pParent,
     ChartController* pController)
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException("no parent Window given to ChartAxisPanel::Create", nullptr, 0);
-    if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to ChartAxisPanel::Create", nullptr, 1);
-
-    return  VclPtr<ChartAxisPanel>::Create(
-                        pParent, rxFrame, pController);
+    return std::make_unique<ChartAxisPanel>(pParent, pController);
 }
 
-void ChartAxisPanel::DataChanged(
-    const DataChangedEvent& )
+void ChartAxisPanel::DataChanged(const DataChangedEvent& rEvent)
 {
+    PanelLayout::DataChanged(rEvent);
     updateData();
 }
 

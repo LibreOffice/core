@@ -19,13 +19,13 @@
 #pragma once
 
 #include <memory>
-#include <com/sun/star/frame/XFrame.hpp>
 
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <avmedia/mediaitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <avmedia/MediaControlBase.hxx>
+#include <vcl/idle.hxx>
 
 using namespace css;
 using namespace ::com::sun::star::uno;
@@ -42,15 +42,12 @@ class MediaPlaybackPanel
 {
 public:
     MediaPlaybackPanel (
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        weld::Widget* pParent,
         SfxBindings* pBindings);
-    static VclPtr<PanelLayout> Create(
-        vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    static std::unique_ptr<PanelLayout> Create(
+        weld::Widget* pParent,
         SfxBindings* pBindings);
     virtual ~MediaPlaybackPanel() override;
-    virtual void dispose() override;
 
 protected:
     virtual void UpdateToolBoxes(const avmedia::MediaItem& rMediaItem) override;

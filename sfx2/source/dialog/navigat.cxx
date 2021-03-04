@@ -48,19 +48,12 @@ void SfxNavigatorWrapper::Initialize(SfxChildWinInfo* pInfo)
 SfxNavigator::SfxNavigator( SfxBindings* pBind ,
                             SfxChildWindow* pChildWin ,
                             vcl::Window* pParent )
-                        : SfxDockingWindow( pBind ,
-                                            pChildWin ,
-                                            pParent ,
-                                            WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK )
+                        : SfxDockingWindow(pBind ,
+                                           pChildWin ,
+                                           pParent ,
+                                           "Navigator", "sfx/ui/navigator.ui")
 {
     SetText(SfxResId(STR_SID_NAVIGATOR));
-}
-
-void SfxNavigator::Resize()
-{
-    SfxDockingWindow::Resize();
-    if (vcl::Window *pChild = GetWindow(GetWindowType::FirstChild))
-        VclContainer::setLayoutAllocation(*pChild, Point(0, 0), GetSizePixel());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
