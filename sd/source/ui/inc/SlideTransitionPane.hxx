@@ -22,6 +22,7 @@
 #include "SlideSorterViewShell.hxx"
 
 #include <svtools/valueset.hxx>
+#include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <vcl/weld.hxx>
 
@@ -46,15 +47,18 @@ namespace impl
 }
 
 class SlideTransitionPane : public PanelLayout
+                          , public sfx2::sidebar::ILayoutableWindow
 {
 public:
     explicit SlideTransitionPane(
         Window * pParent,
         ViewShellBase & rBase,
-        SdDrawDocument* pDoc,
         const css::uno::Reference<css::frame::XFrame>& rxFrame );
     virtual ~SlideTransitionPane() override;
     virtual void dispose() override;
+
+    // ILayoutableWindow
+    virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) override;
 
     // Window
     virtual void DataChanged (const DataChangedEvent& rEvent) override;
