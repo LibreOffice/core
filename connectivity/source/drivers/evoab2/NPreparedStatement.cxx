@@ -21,6 +21,7 @@
 #include "NPreparedStatement.hxx"
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
+#include <rtl/ref.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <strings.hrc>
@@ -54,7 +55,8 @@ void OEvoabPreparedStatement::construct( const OUString& _sql )
     ENSURE_OR_THROW( m_aQueryData.xSelectColumns.is(), "no SelectColumn" );
 
     // create our meta data
-    OEvoabResultSetMetaData* pMeta = new OEvoabResultSetMetaData( m_aQueryData.sTable );
+    rtl::Reference<OEvoabResultSetMetaData> pMeta
+        = new OEvoabResultSetMetaData( m_aQueryData.sTable );
     m_xMetaData = pMeta;
     pMeta->setEvoabFields( m_aQueryData.xSelectColumns );
 }

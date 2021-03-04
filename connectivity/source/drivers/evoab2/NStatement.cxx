@@ -22,6 +22,7 @@
 #include <string_view>
 
 #include <osl/diagnose.h>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
@@ -564,13 +565,12 @@ QueryData OCommonStatement::impl_getEBookQuery_throw( const OUString& _rSql )
 Reference< XResultSet > OCommonStatement::impl_executeQuery_throw( const QueryData& _rQueryData )
 {
     // create result set
-    OEvoabResultSet* pResult = new OEvoabResultSet( this, m_xConnection.get() );
-    Reference< XResultSet > xRS = pResult;
+    rtl::Reference<OEvoabResultSet> pResult = new OEvoabResultSet( this, m_xConnection.get() );
     pResult->construct( _rQueryData );
 
     // done
-    m_xResultSet = xRS;
-    return xRS;
+    m_xResultSet = pResult;
+    return pResult;
 }
 
 

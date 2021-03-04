@@ -24,6 +24,7 @@
 #include "NPreparedStatement.hxx"
 #include "NStatement.hxx"
 #include <connectivity/dbexception.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
@@ -117,8 +118,7 @@ css::uno::Reference< XTablesSupplier > OEvoabConnection::createCatalog()
     Reference< XTablesSupplier > xTab = m_xCatalog;
     if(!xTab.is())
     {
-         OEvoabCatalog *pCat = new OEvoabCatalog(this);
-         xTab = pCat;
+         xTab = new OEvoabCatalog(this);
          m_xCatalog = xTab;
     }
     return xTab;
@@ -129,10 +129,8 @@ Reference< XStatement > SAL_CALL OEvoabConnection::createStatement(  )
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    OStatement* pStmt = new OStatement(this);
-
-    Reference< XStatement > xStmt = pStmt;
-    m_aStatements.push_back(WeakReferenceHelper(*pStmt));
+    Reference< XStatement > xStmt = new OStatement(this);
+    m_aStatements.push_back(WeakReferenceHelper(xStmt));
     return xStmt;
 }
 
@@ -141,12 +139,11 @@ Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareStatement( con
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    OEvoabPreparedStatement* pStmt = new OEvoabPreparedStatement( this );
-    Reference< XPreparedStatement > xStmt = pStmt;
+    rtl::Reference<OEvoabPreparedStatement> pStmt = new OEvoabPreparedStatement( this );
     pStmt->construct( sql );
 
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
-    return xStmt;
+    return pStmt;
 }
 
 Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareCall( const OUString& /*sql*/ )
