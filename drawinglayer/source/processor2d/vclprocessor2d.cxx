@@ -751,7 +751,7 @@ void VclProcessor2D::RenderPolyPolygonGraphicPrimitive2D(
     }
 }
 
-// mask group. Force output to VDev and create mask from given mask
+// mask group
 void VclProcessor2D::RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive2D& rMaskCandidate)
 {
     if (rMaskCandidate.getChildren().empty())
@@ -763,6 +763,17 @@ void VclProcessor2D::RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive
         return;
 
     aMask.transform(maCurrentTransformation);
+
+    // Unless smooth edges are needed, simply use clipping.
+    if (basegfx::utils::isRectangle(aMask) || !getOptionsDrawinglayer().IsAntiAliasing())
+    {
+        mpOutputDevice->Push(PushFlags::CLIPREGION);
+        mpOutputDevice->IntersectClipRegion(vcl::Region(aMask));
+        process(rMaskCandidate.getChildren());
+        mpOutputDevice->Pop();
+        return;
+    }
+
     const basegfx::B2DRange aRange(basegfx::utils::getRange(aMask));
     impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
 
@@ -779,19 +790,11 @@ void VclProcessor2D::RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive
     // back to old OutDev
     mpOutputDevice = pLastOutputDevice;
 
-    // if the mask fills the whole area we can skip
-    // creating a transparent vd and filling it.
-    if (!basegfx::utils::isRectangle(aMask))
-    {
-        // draw mask
-        // with AA, use 8bit AlphaMask to get nice borders; no AA -> use 1bit mask
-        VirtualDevice& rMask = getOptionsDrawinglayer().IsAntiAliasing()
-                                   ? aBufferDevice.getTransparence()
-                                   : aBufferDevice.getMask();
-        rMask.SetLineColor();
-        rMask.SetFillColor(COL_BLACK);
-        rMask.DrawPolyPolygon(aMask);
-    }
+    // draw mask
+    VirtualDevice& rMask = aBufferDevice.getTransparence();
+    rMask.SetLineColor();
+    rMask.SetFillColor(COL_BLACK);
+    rMask.DrawPolyPolygon(aMask);
 
     // dump buffer to outdev
     aBufferDevice.paint();
