@@ -446,12 +446,30 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
             {
                 SbiExpression aExpr( this, *pDef );
                 aExpr.Gen();
+
+                /* tdf#88442
+                 * Don't initialize a
+                 *      Global X as New SomeObjectType
+                 * if it has already been initialized.
+                 * This approach relies on JUMPT evaluating Object->NULL as being 'false'
+                 */
+                sal_uInt32 come_from = 0;
+                if ( pDef->GetScope() == SbGLOBAL )
+                {
+                    come_from = aGen.Gen( SbiOpcode::JUMPT_, 0 );
+                    aGen.Gen( SbiOpcode::FIND_, pDef->GetId(), pDef->GetTypeId() );
+                }
+
                 SbiOpcode eOp_ = pDef->IsNew() ? SbiOpcode::CREATE_ : SbiOpcode::TCREATE_;
                 aGen.Gen( eOp_, pDef->GetId(), pDef->GetTypeId() );
                 if ( bVBASupportOn )
                     aGen.Gen( SbiOpcode::VBASET_ );
                 else
                     aGen.Gen( SbiOpcode::SET_ );
+
+                if ( come_from ) {
+                    aGen.BackChain( come_from );//ENDIF ' IF IsNull(YourVariable)
+                }
             }
         }
         else
