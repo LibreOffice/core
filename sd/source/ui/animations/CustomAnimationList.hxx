@@ -109,7 +109,11 @@ public:
     void set_sensitive(bool bSensitive) { mxTreeView->set_sensitive(bSensitive); }
     int get_height_rows(int nRows) { return mxTreeView->get_height_rows(nRows); }
     int get_approximate_digit_width() const { return mxTreeView->get_approximate_digit_width(); }
-    void set_size_request(int nWidth, int nHeight) { mxTreeView->set_size_request(nWidth, nHeight); }
+    void set_size_request(int nWidth, int nHeight)
+    {
+        mxTreeView->set_size_request(nWidth, nHeight);
+        mxEmptyLabel->set_size_request(nWidth, nHeight);
+    }
     void unselect_all() { mxTreeView->unselect_all(); }
     weld::TreeView& get_widget() { return *mxTreeView; }
 
