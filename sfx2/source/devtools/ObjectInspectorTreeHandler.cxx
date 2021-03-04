@@ -425,28 +425,34 @@ public:
 
 class SequenceNode : public BasicValueNode
 {
+    uno::Reference<reflection::XIdlArray> mxIdlArray;
+
 public:
     SequenceNode(OUString const& rName, uno::Any const& rAny,
                  uno::Reference<uno::XComponentContext> const& xContext)
         : BasicValueNode(rName, rAny, xContext)
     {
+        auto xReflection = reflection::theCoreReflection::get(mxContext);
+        OUString aTypeName = maAny.getValueType().getTypeName();
+        auto xClass = xReflection->forName(aTypeName);
+        mxIdlArray = xClass->getArray();
     }
 
-    bool shouldShowExpander() override { return true; }
+    bool shouldShowExpander() override
+    {
+        // Show expnder only if the sequence has elements
+        int nLength = mxIdlArray->getLen(maAny);
+        return nLength > 0;
+    }
 
     void fillChildren(std::unique_ptr<weld::TreeView>& pTree,
                       const weld::TreeIter* pParent) override
     {
-        auto xReflection = reflection::theCoreReflection::get(mxContext);
-        uno::Reference<reflection::XIdlClass> xClass
-            = xReflection->forName(maAny.getValueType().getTypeName());
-        uno::Reference<reflection::XIdlArray> xIdlArray = xClass->getArray();
-
-        int nLength = xIdlArray->getLen(maAny);
+        int nLength = mxIdlArray->getLen(maAny);
 
         for (int i = 0; i < nLength; i++)
         {
-            uno::Any aArrayValue = xIdlArray->get(maAny, i);
+            uno::Any aArrayValue = mxIdlArray->get(maAny, i);
             uno::Reference<uno::XInterface> xCurrent;
 
             auto* pObjectInspectorNode = createNodeObjectForAny(OUString::number(i), aArrayValue);
@@ -457,12 +463,7 @@ public:
 
     std::vector<std::pair<sal_Int32, OUString>> getColumnValues() override
     {
-        auto xReflection = reflection::theCoreReflection::get(mxContext);
-        uno::Reference<reflection::XIdlClass> xClass
-            = xReflection->forName(maAny.getValueType().getTypeName());
-        uno::Reference<reflection::XIdlArray> xIdlArray = xClass->getArray();
-
-        int nLength = xIdlArray->getLen(maAny);
+        int nLength = mxIdlArray->getLen(maAny);
 
         OUString aValue = "<Sequence>";
         OUString aType = getAnyType(maAny).replaceAll(u"[]", u"");
