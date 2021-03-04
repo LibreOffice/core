@@ -325,6 +325,11 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
 
 void SvxDrawPage::sort( const css::uno::Sequence< sal_Int32 >& sortOrder )
 {
+    SolarMutexGuard aGuard;
+
+    if ((mpModel == nullptr) || (mpPage == nullptr))
+        throw lang::DisposedException();
+
     auto newOrder = comphelper::sequenceToContainer<std::vector<sal_Int32>>(sortOrder);
     mpPage->sort(newOrder);
 }
