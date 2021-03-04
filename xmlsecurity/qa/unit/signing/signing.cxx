@@ -54,11 +54,6 @@
 #include <comphelper/propertyvalue.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 
-#if HAVE_FEATURE_PDFIUM
-#include <fpdf_annot.h>
-#include <fpdfview.h>
-#endif
-
 using namespace com::sun::star;
 
 namespace
@@ -619,9 +614,14 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFNo)
                          static_cast<int>(pObjectShell->GetDocumentSignatureState()));
 }
 
-#if HAVE_FEATURE_PDFIUM
 CPPUNIT_TEST_FIXTURE(SigningTest, testPDFAddVisibleSignature)
 {
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+
     // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
     // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
     if (!IsDefaultDPI())
@@ -670,7 +670,6 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFAddVisibleSignature)
     pObjectShell->SignDocumentContentUsingCertificate(aCertificates[0]);
 
     // Then: count the # of shapes on the signature widget/annotation.
-    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
     SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
@@ -685,7 +684,6 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFAddVisibleSignature)
     // i.e. the signature was there, but it was empty / not visible.
     CPPUNIT_ASSERT_EQUAL(4, pAnnot->getObjectCount());
 }
-#endif
 
 #endif
 
