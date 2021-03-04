@@ -31,7 +31,7 @@ class RecentMasterPagesSelector final
 {
     friend class VclPtrInstance<RecentMasterPagesSelector>;
 public:
-    static VclPtr<vcl::Window> Create (
+    static VclPtr<PanelLayout> Create (
         vcl::Window* pParent,
         ViewShellBase& rViewShellBase,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);

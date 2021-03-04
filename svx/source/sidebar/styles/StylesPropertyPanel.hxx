@@ -13,8 +13,7 @@
 
 namespace svx::sidebar{
 
-class StylesPropertyPanel:
-    public PanelLayout
+class StylesPropertyPanel : public PanelLayout
 {
 private:
     std::unique_ptr<weld::Toolbar> m_xFontStyle;
@@ -26,7 +25,7 @@ private:
 public:
     virtual ~StylesPropertyPanel() override;
 
-    static VclPtr<vcl::Window> Create (
+    static VclPtr<PanelLayout> Create (
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 

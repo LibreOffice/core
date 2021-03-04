@@ -28,7 +28,7 @@
 
 namespace sd::sidebar {
 
-VclPtr<vcl::Window> RecentMasterPagesSelector::Create (
+VclPtr<PanelLayout> RecentMasterPagesSelector::Create (
     vcl::Window* pParent,
     ViewShellBase& rViewShellBase,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)

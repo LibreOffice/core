@@ -107,7 +107,7 @@ private:
 
 }
 
-VclPtr<vcl::Window> ChartLinePanel::Create(
+VclPtr<PanelLayout> ChartLinePanel::Create(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController)

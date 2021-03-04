@@ -41,7 +41,7 @@ class PageFormatPanel:
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    static VclPtr<vcl::Window> Create(
+    static VclPtr<PanelLayout> Create(
         vcl::Window* pParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
         SfxBindings* pBindings);

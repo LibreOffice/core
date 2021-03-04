@@ -256,7 +256,7 @@ private:
 
 }
 
-VclPtr<vcl::Window> ChartAreaPanel::Create(
+VclPtr<PanelLayout> ChartAreaPanel::Create(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController)

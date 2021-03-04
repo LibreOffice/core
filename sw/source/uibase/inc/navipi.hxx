@@ -120,7 +120,7 @@ protected:
 
 public:
 
-    static VclPtr<vcl::Window> Create(vcl::Window* pParent,
+    static VclPtr<PanelLayout> Create(vcl::Window* pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
             SfxBindings* pBindings);
     SwNavigationPI(vcl::Window* pParent,

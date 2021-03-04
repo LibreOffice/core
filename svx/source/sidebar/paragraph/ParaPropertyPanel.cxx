@@ -44,7 +44,7 @@ namespace svx::sidebar {
 #define MAX_SC_SD               116220200
 #define NEGA_MAXVALUE          -10000000
 
-VclPtr<vcl::Window> ParaPropertyPanel::Create (
+VclPtr<PanelLayout> ParaPropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,

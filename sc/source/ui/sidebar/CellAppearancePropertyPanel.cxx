@@ -184,7 +184,7 @@ IMPL_LINK_NOARG(CellAppearancePropertyPanel, TbxLineStyleMenuHdl, const OString&
     pPopup->GrabFocus();
 }
 
-VclPtr<vcl::Window> CellAppearancePropertyPanel::Create (
+VclPtr<PanelLayout> CellAppearancePropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)

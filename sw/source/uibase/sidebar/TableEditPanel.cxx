@@ -24,7 +24,7 @@
 
 namespace sw::sidebar
 {
-VclPtr<vcl::Window> TableEditPanel::Create(vcl::Window* pParent,
+VclPtr<PanelLayout> TableEditPanel::Create(vcl::Window* pParent,
                                            const css::uno::Reference<css::frame::XFrame>& rxFrame,
                                            SfxBindings* pBindings)
 {

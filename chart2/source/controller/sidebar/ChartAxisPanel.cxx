@@ -288,7 +288,7 @@ void ChartAxisPanel::updateData()
     mxNFRotation->set_value(getAxisRotation(mxModel, aCID), FieldUnit::DEGREE);
 }
 
-VclPtr<vcl::Window> ChartAxisPanel::Create (
+VclPtr<PanelLayout> ChartAxisPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     ChartController* pController)

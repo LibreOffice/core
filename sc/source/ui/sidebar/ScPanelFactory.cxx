@@ -76,7 +76,7 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
                 nullptr);
 
         sal_Int32 nMinimumSize = -1;
-        VclPtr<vcl::Window> pPanel;
+        VclPtr<PanelLayout> pPanel;
         if (rsResourceURL.endsWith("/AlignmentPropertyPanel"))
             pPanel = AlignmentPropertyPanel::Create( pParentWindow, xFrame, pBindings );
         else if (rsResourceURL.endsWith("/CellAppearancePropertyPanel"))

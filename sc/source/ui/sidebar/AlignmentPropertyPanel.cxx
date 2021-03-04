@@ -199,7 +199,7 @@ IMPL_LINK_NOARG(AlignmentPropertyPanel, CBOXWrapTextClkHdl, weld::ToggleButton&,
             SfxCallMode::RECORD, { &aItem });
 }
 
-VclPtr<vcl::Window> AlignmentPropertyPanel::Create (
+VclPtr<PanelLayout> AlignmentPropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)

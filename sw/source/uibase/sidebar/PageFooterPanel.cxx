@@ -33,7 +33,7 @@
 
 namespace sw::sidebar{
 
-VclPtr<vcl::Window> PageFooterPanel::Create(
+VclPtr<PanelLayout> PageFooterPanel::Create(
     vcl::Window* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings)

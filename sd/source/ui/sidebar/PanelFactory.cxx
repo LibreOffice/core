@@ -93,7 +93,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
 
     // Create a framework view.
-    VclPtr<vcl::Window> pControl;
+    VclPtr<PanelLayout> pControl;
     css::ui::LayoutSize aLayoutSize (-1,-1,-1);
 
     /** Note that these names have to be identical to (the tail of)

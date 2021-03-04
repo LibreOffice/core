@@ -31,8 +31,7 @@
 
 #include <vcl/vclptr.hxx>
 
-
-namespace vcl { class Window; }
+class PanelLayout;
 
 namespace sfx2::sidebar {
 
@@ -52,7 +51,7 @@ class SFX2_DLLPUBLIC SidebarPanelBase final : private ::cppu::BaseMutex,
 public:
     static css::uno::Reference<css::ui::XUIElement> Create(const OUString& rsResourceURL,
                                                            const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                                                           vcl::Window* pControl,
+                                                           PanelLayout* pControl,
                                                            const css::ui::LayoutSize& rLayoutSize);
 
     // XContextChangeEventListener
@@ -81,7 +80,7 @@ public:
 
 private:
     SidebarPanelBase(const OUString& rsResourceURL, const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                     vcl::Window* pWindow, const css::ui::LayoutSize& rLayoutSize);
+                     PanelLayout* pWindow, const css::ui::LayoutSize& rLayoutSize);
     virtual ~SidebarPanelBase() override;
     SidebarPanelBase(const SidebarPanelBase&) = delete;
     SidebarPanelBase& operator=( const SidebarPanelBase& ) = delete;
@@ -89,7 +88,7 @@ private:
     virtual void SAL_CALL disposing() override;
 
     css::uno::Reference<css::frame::XFrame> mxFrame;
-    VclPtr<vcl::Window> mpControl;
+    VclPtr<PanelLayout> mpControl;
     const OUString msResourceURL;
     const css::ui::LayoutSize maLayoutSize;
 };

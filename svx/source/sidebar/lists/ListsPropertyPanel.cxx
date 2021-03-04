@@ -24,7 +24,7 @@ using namespace css::uno;
 
 namespace svx::sidebar
 {
-VclPtr<vcl::Window>
+VclPtr<PanelLayout>
 ListsPropertyPanel::Create(vcl::Window* pParent,
                            const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {

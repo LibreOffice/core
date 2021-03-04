@@ -37,7 +37,7 @@ using namespace ::com::sun::star;
 
 namespace sd::sidebar {
 
-VclPtr<vcl::Window> CurrentMasterPagesSelector::Create (
+VclPtr<PanelLayout> CurrentMasterPagesSelector::Create (
     vcl::Window* pParent,
     ViewShellBase& rViewShellBase,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)

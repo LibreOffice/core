@@ -397,7 +397,7 @@ BitmapEx GenerateColorPreview(const svx::ColorSet& rColorSet)
 
 namespace sw::sidebar {
 
-VclPtr<vcl::Window> ThemePanel::Create (vcl::Window* pParent,
+VclPtr<PanelLayout> ThemePanel::Create (vcl::Window* pParent,
                                         const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (pParent == nullptr)

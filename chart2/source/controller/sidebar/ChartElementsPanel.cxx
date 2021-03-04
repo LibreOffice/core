@@ -540,7 +540,7 @@ void ChartElementsPanel::updateData()
     mxLBLegendPosition->set_active(getLegendPos(mxModel));
 }
 
-VclPtr<vcl::Window> ChartElementsPanel::Create (
+VclPtr<PanelLayout> ChartElementsPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     ChartController* pController)

@@ -66,7 +66,7 @@ void LinePropertyPanel::dispose()
     LinePropertyPanelBase::dispose();
 }
 
-VclPtr<vcl::Window> LinePropertyPanel::Create (
+VclPtr<PanelLayout> LinePropertyPanel::Create (
     vcl::Window* pParent,
     const uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)

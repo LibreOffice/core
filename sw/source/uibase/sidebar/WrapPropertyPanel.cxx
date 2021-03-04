@@ -33,7 +33,7 @@
 
 namespace sw::sidebar {
 
-VclPtr<vcl::Window> WrapPropertyPanel::Create (
+VclPtr<PanelLayout> WrapPropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference< css::frame::XFrame >& rxFrame,
     SfxBindings* pBindings)
