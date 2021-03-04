@@ -24,9 +24,10 @@
 
 namespace sw::sidebar
 {
-VclPtr<PanelLayout> TableEditPanel::Create(vcl::Window* pParent,
-                                           const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                                           SfxBindings* pBindings)
+std::unique_ptr<PanelLayout>
+TableEditPanel::Create(weld::Widget* pParent,
+                       const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                       SfxBindings* pBindings)
 {
     if (pParent == nullptr)
         throw css::lang::IllegalArgumentException(
@@ -35,7 +36,7 @@ VclPtr<PanelLayout> TableEditPanel::Create(vcl::Window* pParent,
         throw css::lang::IllegalArgumentException("no XFrame given to TableEditPanel::Create",
                                                   nullptr, 1);
 
-    return VclPtr<TableEditPanel>::Create(pParent, rxFrame, pBindings);
+    return std::make_unique<TableEditPanel>(pParent, rxFrame, pBindings);
 }
 
 void TableEditPanel::NotifyItemUpdate(const sal_uInt16 nSID, const SfxItemState eState,
@@ -86,10 +87,10 @@ void TableEditPanel::NotifyItemUpdate(const sal_uInt16 nSID, const SfxItemState 
     }
 }
 
-TableEditPanel::TableEditPanel(vcl::Window* pParent,
+TableEditPanel::TableEditPanel(weld::Widget* pParent,
                                const css::uno::Reference<css::frame::XFrame>& rxFrame,
                                SfxBindings* pBindings)
-    : PanelLayout(pParent, "TableEditPanel", "modules/swriter/ui/sidebartableedit.ui", rxFrame)
+    : PanelLayout(pParent, "TableEditPanel", "modules/swriter/ui/sidebartableedit.ui")
     , m_pBindings(pBindings)
     , m_xRowHeightEdit(
           new SvxRelativeField(m_xBuilder->weld_metric_spin_button("rowheight", FieldUnit::CM)))
@@ -137,11 +138,7 @@ TableEditPanel::TableEditPanel(vcl::Window* pParent,
 
     if (comphelper::LibreOfficeKit::isActive())
         m_xMisc->set_item_visible(".uno:InsertFormula", false);
-
-    m_pInitialFocusWidget = &m_xRowHeightEdit->get_widget();
 }
-
-TableEditPanel::~TableEditPanel() { disposeOnce(); }
 
 void TableEditPanel::InitRowHeightToolitem()
 {
@@ -171,7 +168,7 @@ void TableEditPanel::InitColumnWidthToolitem()
     limitWidthForSidebar(*m_xColumnWidthEdit);
 }
 
-void TableEditPanel::dispose()
+TableEditPanel::~TableEditPanel()
 {
     m_xRowHeightEdit.reset();
     m_xColumnWidthEdit.reset();
@@ -213,8 +210,6 @@ void TableEditPanel::dispose()
     m_aSetOptimalColumnWidthController.dispose();
     m_aDistributeColumnsController.dispose();
     m_aMergeCellsController.dispose();
-
-    PanelLayout::dispose();
 }
 
 IMPL_LINK_NOARG(TableEditPanel, RowHeightMofiyHdl, weld::MetricSpinButton&, void)

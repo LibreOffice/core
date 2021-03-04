@@ -108,22 +108,16 @@ class TableDesignPane : public PanelLayout
 private:
     std::unique_ptr<TableDesignWidget> m_xImpl;
 public:
-    TableDesignPane( vcl::Window* pParent, ViewShellBase& rBase )
+    TableDesignPane( weld::Widget* pParent, ViewShellBase& rBase )
         : PanelLayout(pParent, "TableDesignPanel",
-            "modules/simpress/ui/tabledesignpanel.ui", css::uno::Reference<css::frame::XFrame>())
+            "modules/simpress/ui/tabledesignpanel.ui")
         , m_xImpl(new TableDesignWidget(*m_xBuilder, rBase))
     {
-        m_pInitialFocusWidget = m_xImpl->GetInitialFocusWidget();
     }
     virtual css::ui::LayoutSize GetHeightForWidth(const sal_Int32 /*nWidth*/) override
     {
         sal_Int32 nMinimumHeight = get_preferred_size().Height();
         return css::ui::LayoutSize(nMinimumHeight, -1, nMinimumHeight);
-    }
-    virtual void dispose() override
-    {
-        m_xImpl.reset();
-        PanelLayout::dispose();
     }
 };
 

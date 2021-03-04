@@ -22,8 +22,8 @@
 #include <sidebar/PanelDescriptor.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
-
 #include <sfx2/sidebar/SidebarController.hxx>
+#include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <tools/json_writer.hxx>
 
 
@@ -36,6 +36,8 @@
 #include <com/sun/star/ui/XToolPanel.hpp>
 #include <com/sun/star/ui/XSidebarPanel.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
+
+#include <vcl/weldutils.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -51,6 +53,7 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
     : InterimItemWindow(pParentWindow, "sfx/ui/panel.ui", "Panel")
     , msPanelId(rPanelDescriptor.msId)
     , mbIsTitleBarOptional(rPanelDescriptor.mbIsTitleBarOptional)
+    , mbWantsAWT(rPanelDescriptor.mbWantsAWT)
     , mxElement()
     , mxPanelComponent()
     , mbIsExpanded(bIsInitiallyExpanded)
@@ -60,7 +63,6 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
     , mxFrame(rxFrame)
     , mxTitleBar(new PanelTitleBar(rPanelDescriptor.msTitle, *m_xBuilder, this))
     , mxContents(m_xBuilder->weld_container("contents"))
-    , mxAwtXWindow(mxContents->CreateChildFrame())
 {
     SetText(rPanelDescriptor.msTitle);
     mxContents->set_visible(mbIsExpanded);
@@ -111,10 +113,10 @@ void Panel::dispose()
 
     mxTitleBar.reset();
 
-    if (mxAwtXWindow)
+    if (mxXWindow)
     {
-        mxAwtXWindow->dispose();
-        mxAwtXWindow.clear();
+        mxXWindow->dispose();
+        mxXWindow.clear();
     }
     mxContents.reset();
 
@@ -134,10 +136,14 @@ void Panel::ShowTitlebar(bool bShowTitlebar)
 void Panel::SetUIElement (const Reference<ui::XUIElement>& rxElement)
 {
     mxElement = rxElement;
-    if (mxElement.is())
-    {
-        mxPanelComponent.set(mxElement->getRealInterface(), UNO_QUERY);
-    }
+    if (!mxElement.is())
+        return;
+    mxPanelComponent.set(mxElement->getRealInterface(), UNO_QUERY);
+    if (mbWantsAWT)
+        return;
+    sfx2::sidebar::SidebarPanelBase* pPanelBase = dynamic_cast<sfx2::sidebar::SidebarPanelBase*>(mxElement.get());
+    assert(pPanelBase && "internal panels are all expected to inherit from SidebarPanelBase");
+    pPanelBase->SetParentPanel(this);
 }
 
 void Panel::SetExpanded (const bool bIsExpanded)
@@ -186,9 +192,14 @@ Reference<awt::XWindow> Panel::GetElementWindow()
 
 Reference<awt::XWindow> Panel::GetElementParentWindow()
 {
-    if (!mxAwtXWindow)
-        mxAwtXWindow = mxContents->CreateChildFrame();
-    return mxAwtXWindow;
+    if (!mxXWindow)
+    {
+        if (mbWantsAWT)
+            mxXWindow = mxContents->CreateChildFrame();
+        else
+            mxXWindow = Reference<awt::XWindow>(new weld::TransportAsXWindow(mxContents.get()));
+    }
+    return mxXWindow;
 }
 
 } // end of namespace sfx2::sidebar

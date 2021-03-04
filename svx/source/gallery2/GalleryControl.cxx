@@ -25,8 +25,8 @@
 
 namespace svx::sidebar {
 
-GalleryControl::GalleryControl(vcl::Window* pParent)
-    : PanelLayout(pParent, "GalleryPanel", "svx/ui/sidebargallery.ui", nullptr)
+GalleryControl::GalleryControl(weld::Widget* pParent)
+    : PanelLayout(pParent, "GalleryPanel", "svx/ui/sidebargallery.ui")
     , mpGallery(Gallery::GetGalleryInstance())
     , mxBrowser1(new GalleryBrowser1(
               *m_xBuilder,
@@ -36,26 +36,10 @@ GalleryControl::GalleryControl(vcl::Window* pParent)
     , mxBrowser2(new GalleryBrowser2(*m_xBuilder, mpGallery))
 {
     mxBrowser1->SelectTheme(0);
-    m_pInitialFocusWidget = mxBrowser1->GetInitialFocusWidget();
 }
 
 GalleryControl::~GalleryControl()
 {
-    disposeOnce();
-}
-
-void GalleryControl::dispose()
-{
-    mxBrowser2.reset();
-    mxBrowser1.reset();
-    PanelLayout::dispose();
-}
-
-void GalleryControl::GetFocus()
-{
-    Window::GetFocus();
-    if (mxBrowser1)
-        mxBrowser1->GrabFocus();
 }
 
 } // end of namespace svx::sidebar

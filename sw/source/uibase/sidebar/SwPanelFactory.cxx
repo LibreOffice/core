@@ -32,8 +32,7 @@
 #include <redlndlg.hxx>
 
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/window.hxx>
+#include <vcl/weldutils.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/namedvaluecollection.hxx>
@@ -94,8 +93,11 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     const sal_uInt64 nBindingsValue (aArguments.getOrDefault("SfxBindings", sal_uInt64(0)));
     SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
 
-    VclPtr<vcl::Window> pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
-    if ( ! xParentWindow.is() || pParentWindow==nullptr)
+    weld::Widget* pParent(nullptr);
+    if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xParentWindow.get()))
+        pParent = pTunnel->getWidget();
+
+    if (!pParent)
         throw RuntimeException(
             "PanelFactory::createUIElement called without ParentWindow",
             nullptr);
@@ -110,93 +112,93 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
 
     if(rsResourceURL.endsWith("/PageStylesPanel"))
     {
-        VclPtr<PanelLayout> pPanel = sw::sidebar::PageStylesPanel::Create( pParentWindow, xFrame, pBindings );
+        std::unique_ptr<PanelLayout> xPanel = sw::sidebar::PageStylesPanel::Create( pParent, pBindings );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
-            pPanel,
+            std::move(xPanel),
             ui::LayoutSize(-1,-1,-1));
     }
     else if(rsResourceURL.endsWith("/PageFormatPanel"))
     {
-        VclPtr<PanelLayout> pPanel = sw::sidebar::PageFormatPanel::Create( pParentWindow, xFrame, pBindings );
+        std::unique_ptr<PanelLayout> xPanel = sw::sidebar::PageFormatPanel::Create( pParent, pBindings );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
-            pPanel,
+            std::move(xPanel),
             ui::LayoutSize(-1,-1,-1));
     }
     else if(rsResourceURL.endsWith("/PageHeaderPanel"))
     {
-        VclPtr<PanelLayout> pPanel = sw::sidebar::PageHeaderPanel::Create( pParentWindow, xFrame, pBindings );
+        std::unique_ptr<PanelLayout> xPanel = sw::sidebar::PageHeaderPanel::Create( pParent, pBindings );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
-            pPanel,
+            std::move(xPanel),
             ui::LayoutSize(-1,-1,-1));
     }
     else if(rsResourceURL.endsWith("/PageFooterPanel"))
     {
-        VclPtr<PanelLayout> pPanel = sw::sidebar::PageFooterPanel::Create( pParentWindow, xFrame, pBindings );
+        std::unique_ptr<PanelLayout> xPanel = sw::sidebar::PageFooterPanel::Create( pParent, pBindings );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
-            pPanel,
+            std::move(xPanel),
             ui::LayoutSize(-1,-1,-1));
     }
     else if (rsResourceURL.endsWith("/WrapPropertyPanel"))
     {
-        VclPtr<PanelLayout> pPanel = sw::sidebar::WrapPropertyPanel::Create( pParentWindow, xFrame, pBindings );
+        std::unique_ptr<PanelLayout> xPanel = sw::sidebar::WrapPropertyPanel::Create( pParent, xFrame, pBindings );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
-            pPanel,
+            std::move(xPanel),
             ui::LayoutSize(-1,-1,-1));
     }
     else if (rsResourceURL.endsWith("/NavigatorPanel"))
     {
-        VclPtr<PanelLayout> pPanel = SwNavigationPI::Create( pParentWindow, xFrame, pBindings );
+        std::unique_ptr<PanelLayout> xPanel = SwNavigationPI::Create( pParent, xFrame, pBindings );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
-            pPanel,
+            std::move(xPanel),
             ui::LayoutSize(0,-1,-1));
     }
     else if (rsResourceURL.endsWith("/ManageChangesPanel"))
     {
-        VclPtrInstance<SwRedlineAcceptPanel> pPanel(pParentWindow, xFrame);
+        auto xPanel = std::make_unique<SwRedlineAcceptPanel>(pParent);
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
-            pPanel,
+            std::move(xPanel),
             ui::LayoutSize(-1,-1,-1));
     }
     else if (rsResourceURL.endsWith("/WriterInspectorTextPanel"))
     {
-        VclPtr<PanelLayout> pPanel = sw::sidebar::WriterInspectorTextPanel::Create( pParentWindow, xFrame);
+        std::unique_ptr<PanelLayout> xPanel = sw::sidebar::WriterInspectorTextPanel::Create(pParent);
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
-            pPanel,
+            std::move(xPanel),
             ui::LayoutSize(0,-1,-1));
     }
     else if (rsResourceURL.endsWith("/StylePresetsPanel"))
     {
-        VclPtr<PanelLayout> pPanel = sw::sidebar::StylePresetsPanel::Create(pParentWindow, xFrame);
+        std::unique_ptr<PanelLayout> xPanel = sw::sidebar::StylePresetsPanel::Create(pParent);
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
-                        rsResourceURL, xFrame, pPanel, ui::LayoutSize(-1,-1,-1));
+                        rsResourceURL, xFrame, std::move(xPanel), ui::LayoutSize(-1,-1,-1));
     }
     else if (rsResourceURL.endsWith("/ThemePanel"))
     {
-        VclPtr<PanelLayout> pPanel = sw::sidebar::ThemePanel::Create(pParentWindow, xFrame);
+        std::unique_ptr<PanelLayout> xPanel = sw::sidebar::ThemePanel::Create(pParent);
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
-                        rsResourceURL, xFrame, pPanel, ui::LayoutSize(-1,-1,-1));
+                        rsResourceURL, xFrame, std::move(xPanel), ui::LayoutSize(-1,-1,-1));
     }
     else if (rsResourceURL.endsWith("/TableEditPanel"))
     {
-        VclPtr<PanelLayout> pPanel = sw::sidebar::TableEditPanel::Create(pParentWindow, xFrame, pBindings );
+        std::unique_ptr<PanelLayout> xPanel = sw::sidebar::TableEditPanel::Create(pParent, xFrame, pBindings );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
-                        rsResourceURL, xFrame, pPanel, ui::LayoutSize(-1,-1,-1));
+                        rsResourceURL, xFrame, std::move(xPanel), ui::LayoutSize(-1,-1,-1));
     }
 
     return xElement;

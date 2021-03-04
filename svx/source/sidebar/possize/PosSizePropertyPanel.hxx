@@ -47,16 +47,12 @@ class PosSizePropertyPanel
 {
 public:
     virtual ~PosSizePropertyPanel() override;
-    virtual void dispose() override;
 
-    static VclPtr<PanelLayout> Create(
-        vcl::Window* pParent,
+    static std::unique_ptr<PanelLayout> Create(
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
-
-    virtual void DataChanged(
-        const DataChangedEvent& rEvent) override;
 
     virtual void HandleContextChange(
         const vcl::EnumContext& rContext) override;
@@ -72,7 +68,7 @@ public:
 
     // constructor/destructor
     PosSizePropertyPanel(
-        vcl::Window* pParent,
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);

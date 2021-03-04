@@ -44,10 +44,10 @@ constexpr OStringLiteral LINESTYLE = "LineStyle";
 namespace sc::sidebar {
 
 CellAppearancePropertyPanel::CellAppearancePropertyPanel(
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
-:   PanelLayout(pParent, "CellAppearancePropertyPanel", "modules/scalc/ui/sidebarcellappearance.ui", rxFrame),
+:   PanelLayout(pParent, "CellAppearancePropertyPanel", "modules/scalc/ui/sidebarcellappearance.ui"),
 
     mxTBCellBorder(m_xBuilder->weld_toolbar("cellbordertype")),
     mxTBCellBackground(m_xBuilder->weld_toolbar("cellbackgroundcolor")),
@@ -106,11 +106,6 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
 
 CellAppearancePropertyPanel::~CellAppearancePropertyPanel()
 {
-    disposeOnce();
-}
-
-void CellAppearancePropertyPanel::dispose()
-{
     mxCellBorderPopoverContainer.reset();
     mxTBCellBorder.reset();
     mxBackColorDispatch.reset();
@@ -126,8 +121,6 @@ void CellAppearancePropertyPanel::dispose()
     maGridShowControl.dispose();
     maBorderTLBRControl.dispose();
     maBorderBLTRControl.dispose();
-
-    PanelLayout::dispose();
 }
 
 void CellAppearancePropertyPanel::Initialize()
@@ -184,8 +177,8 @@ IMPL_LINK_NOARG(CellAppearancePropertyPanel, TbxLineStyleMenuHdl, const OString&
     pPopup->GrabFocus();
 }
 
-VclPtr<PanelLayout> CellAppearancePropertyPanel::Create (
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> CellAppearancePropertyPanel::Create (
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
@@ -196,13 +189,8 @@ VclPtr<PanelLayout> CellAppearancePropertyPanel::Create (
     if (pBindings == nullptr)
         throw lang::IllegalArgumentException("no SfxBindings given to CellAppearancePropertyPanel::Create", nullptr, 2);
 
-    return VclPtr<CellAppearancePropertyPanel>::Create(
-                        pParent, rxFrame, pBindings);
+    return std::make_unique<CellAppearancePropertyPanel>(pParent, rxFrame, pBindings);
 }
-
-void CellAppearancePropertyPanel::DataChanged(
-    const DataChangedEvent&)
-{}
 
 void CellAppearancePropertyPanel::HandleContextChange(const vcl::EnumContext& rContext)
 {

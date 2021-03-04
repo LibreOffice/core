@@ -20,7 +20,7 @@ class tdf114724(UITestCase):
         self.xUITest.executeCommand(".uno:Sidebar")
         xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "SwNavigatorPanel"}))
 
-        xNavigatorPanel = xWriterEdit.getChild("NavigatorPanelParent")
+        xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
         xToolBar = xNavigatorPanel.getChild("content5")
         xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "0"})) # 'root' button
 

@@ -130,20 +130,16 @@ BitmapEx CreatePreview(OUString const & aUrl, OUString const & aName)
 
 }
 
-VclPtr<PanelLayout> StylePresetsPanel::Create (vcl::Window* pParent,
-                                        const css::uno::Reference<css::frame::XFrame>& rxFrame)
+std::unique_ptr<PanelLayout> StylePresetsPanel::Create(weld::Widget* pParent)
 {
     if (pParent == nullptr)
         throw css::lang::IllegalArgumentException("no parent Window given to StylePresetsPanel::Create", nullptr, 0);
-    if (!rxFrame.is())
-        throw css::lang::IllegalArgumentException("no XFrame given to StylePresetsPanel::Create", nullptr, 1);
 
-    return VclPtr<StylePresetsPanel>::Create(pParent, rxFrame);
+    return std::make_unique<StylePresetsPanel>(pParent);
 }
 
-StylePresetsPanel::StylePresetsPanel(vcl::Window* pParent,
-                               const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : PanelLayout(pParent, "StylePresetsPanel", "modules/swriter/ui/sidebarstylepresets.ui", rxFrame)
+StylePresetsPanel::StylePresetsPanel(weld::Widget* pParent)
+    : PanelLayout(pParent, "StylePresetsPanel", "modules/swriter/ui/sidebarstylepresets.ui")
     , mxValueSet(new ValueSet(nullptr))
     , mxValueSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxValueSet))
 {
@@ -152,8 +148,6 @@ StylePresetsPanel::StylePresetsPanel(vcl::Window* pParent,
     mxValueSet->SetDoubleClickHdl(LINK(this, StylePresetsPanel, DoubleClickHdl));
 
     RefreshList();
-
-    m_pInitialFocusWidget = mxValueSet->GetDrawingArea();
 }
 
 void StylePresetsPanel::RefreshList()
@@ -182,15 +176,6 @@ void StylePresetsPanel::RefreshList()
 
 StylePresetsPanel::~StylePresetsPanel()
 {
-    disposeOnce();
-}
-
-void StylePresetsPanel::dispose()
-{
-    mxValueSetWin.reset();
-    mxValueSet.reset();
-
-    PanelLayout::dispose();
 }
 
 IMPL_LINK_NOARG(StylePresetsPanel, DoubleClickHdl, ValueSet*, void)

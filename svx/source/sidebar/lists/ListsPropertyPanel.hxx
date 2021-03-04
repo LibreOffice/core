@@ -29,12 +29,11 @@ class ListsPropertyPanel : public PanelLayout
 {
 public:
     virtual ~ListsPropertyPanel() override;
-    virtual void dispose() override;
 
-    static VclPtr<PanelLayout> Create(vcl::Window* pParent,
-                                      const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    static std::unique_ptr<PanelLayout>
+    Create(weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    ListsPropertyPanel(vcl::Window* pParent,
+    ListsPropertyPanel(weld::Widget* pParent,
                        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
 private:

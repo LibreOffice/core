@@ -32,17 +32,16 @@ class TextPropertyPanel
 {
 public:
     virtual ~TextPropertyPanel() override;
-    virtual void dispose() override;
 
-    static VclPtr<PanelLayout> Create (
-        vcl::Window* pParent,
+    static std::unique_ptr<PanelLayout> Create (
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     virtual void HandleContextChange (
         const vcl::EnumContext& rContext) override;
 
     TextPropertyPanel (
-        vcl::Window* pParent,
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
 private:
