@@ -197,7 +197,7 @@ IMPL_LINK(SwNavigationPI, ToolBoxSelectHdl, const OString&, rCommand, void)
     }
     else if (rCommand == "listbox")
     {
-        if (ParentIsFloatingWindow(GetParent()))
+        if (ParentIsFloatingWindow(m_xNavigatorDlg))
         {
             if (IsZoomedIn())
             {
@@ -398,7 +398,7 @@ void SwNavigationPI::ZoomOut()
 {
     if (!IsZoomedIn())
         return;
-    SfxNavigator* pNav = dynamic_cast<SfxNavigator*>(GetParent());
+    SfxNavigator* pNav = m_xNavigatorDlg.get();
     if (!pNav)
         return;
     m_bIsZoomedIn = false;
@@ -415,7 +415,8 @@ void SwNavigationPI::ZoomOut()
         m_xDocListBox->show();
     }
 
-    Size aOptimalSize(GetOptimalSize());
+    pNav->InvalidateChildSizeCache();
+    Size aOptimalSize(pNav->GetOptimalSize());
     Size aNewSize(pNav->GetOutputSizePixel());
     aNewSize.setHeight( m_aExpandedSize.Height() );
     pNav->SetMinOutputSizePixel(aOptimalSize);
@@ -430,11 +431,11 @@ void SwNavigationPI::ZoomIn()
 {
     if (IsZoomedIn())
         return;
-    SfxNavigator* pNav = dynamic_cast<SfxNavigator*>(GetParent());
+    SfxNavigator* pNav = m_xNavigatorDlg.get();
     if (!pNav)
         return;
 
-    m_aExpandedSize = GetSizePixel();
+    m_aExpandedSize = m_xNavigatorDlg->GetSizePixel();
 
     m_xContentBox->hide();
     m_xContentTree->HideTree();
@@ -443,7 +444,8 @@ void SwNavigationPI::ZoomIn()
     m_xDocListBox->hide();
     m_bIsZoomedIn = true;
 
-    Size aOptimalSize(GetOptimalSize());
+    pNav->InvalidateChildSizeCache();
+    Size aOptimalSize(pNav->GetOptimalSize());
     Size aNewSize(pNav->GetOutputSizePixel());
     aNewSize.setHeight( aOptimalSize.Height() );
     pNav->SetMinOutputSizePixel(aOptimalSize);
@@ -466,7 +468,7 @@ enum StatusIndex
 
 }
 
-VclPtr<vcl::Window> SwNavigationPI::Create(vcl::Window* pParent,
+std::unique_ptr<PanelLayout> SwNavigationPI::Create(weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
@@ -476,13 +478,13 @@ VclPtr<vcl::Window> SwNavigationPI::Create(vcl::Window* pParent,
         throw css::lang::IllegalArgumentException("no XFrame given to SwNavigationPI::Create", nullptr, 0);
     if( pBindings == nullptr )
         throw css::lang::IllegalArgumentException("no SfxBindings given to SwNavigationPI::Create", nullptr, 0);
-    return VclPtr<SwNavigationPI>::Create(pParent, rxFrame, pBindings);
+    return std::make_unique<SwNavigationPI>(pParent, rxFrame, pBindings, nullptr);
 }
 
-SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
+SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
-    SfxBindings* _pBindings)
-    : PanelLayout(pParent, "NavigatorPanel", "modules/swriter/ui/navigatorpanel.ui", rxFrame)
+    SfxBindings* _pBindings, SfxNavigator* pNavigatorDlg)
+    : PanelLayout(pParent, "NavigatorPanel", "modules/swriter/ui/navigatorpanel.ui")
     , m_aDocFullName(SID_DOCFULLNAME, *_pBindings, *this)
     , m_aPageStats(FN_STAT_PAGE, *_pBindings, *this)
     , m_xContent1ToolBox(m_xBuilder->weld_toolbar("content1"))
@@ -504,6 +506,7 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
     , m_xGlobalBox(m_xBuilder->weld_widget("globalbox"))
     , m_xGlobalTree(new SwGlobalTree(m_xBuilder->weld_tree_view("globaltree"), this))
     , m_xDocListBox(m_xBuilder->weld_combo_box("documents"))
+    , m_xNavigatorDlg(pNavigatorDlg)
     , m_pContentView(nullptr)
     , m_pContentWrtShell(nullptr)
     , m_pActContView(nullptr)
@@ -516,7 +519,7 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
 {
     m_xContainer->connect_container_focus_changed(LINK(this, SwNavigationPI, SetFocusChildHdl));
 
-    set_id("NavigatorPanelParent"); // for uitest/writer_tests5/tdf114724.py
+    UpdateInitShow();
 
     GetCreateView();
 
@@ -566,7 +569,7 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
 
     m_aStatusArr[3] = SwResId(STR_ACTIVE_VIEW);
 
-    bool bFloatingNavigator = ParentIsFloatingWindow(GetParent());
+    bool bFloatingNavigator = ParentIsFloatingWindow(m_xNavigatorDlg);
 
     m_xContentTree->set_selection_mode(SelectionMode::Single);
     m_xContentTree->ShowTree();
@@ -625,17 +628,17 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
     m_xGlobalTree->set_accessible_name(SwResId(STR_ACCESS_TL_GLOBAL));
     m_xDocListBox->set_accessible_name(m_aStatusArr[3]);
 
-    m_aExpandedSize = GetOptimalSize();
+    m_aExpandedSize = m_xContainer->get_preferred_size();
+}
 
-    m_pInitialFocusWidget = m_xContent1ToolBox.get();
+weld::Window* SwNavigationPI::GetFrameWeld() const
+{
+    if (m_xNavigatorDlg)
+        return m_xNavigatorDlg->GetFrameWeld();
+    return PanelLayout::GetFrameWeld();
 }
 
 SwNavigationPI::~SwNavigationPI()
-{
-    disposeOnce();
-}
-
-void SwNavigationPI::dispose()
 {
     if (IsGlobalDoc() && !IsGlobalMode())
     {
@@ -678,8 +681,6 @@ void SwNavigationPI::dispose()
 
     m_aDocFullName.dispose();
     m_aPageStats.dispose();
-
-    PanelLayout::dispose();
 }
 
 void SwNavigationPI::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState /*eState*/,
@@ -721,24 +722,21 @@ void SwNavigationPI::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState /*eState*/,
     }
 }
 
-void SwNavigationPI::StateChanged(StateChangedType nStateChange)
+void SwNavigationPI::UpdateInitShow()
 {
-    PanelLayout::StateChanged(nStateChange);
-    if (nStateChange == StateChangedType::InitShow)
+    // if the parent isn't a float, then the navigator is displayed in
+    // the sidebar or is otherwise docked. While the navigator could change
+    // its size, the sidebar can not, and the navigator would just waste
+    // space. Therefore disable this button.
+    bool bParentIsFloatingWindow(ParentIsFloatingWindow(m_xNavigatorDlg));
+    m_xContent6ToolBox->set_item_sensitive("listbox", bParentIsFloatingWindow);
+    // show content if docked
+    if (!bParentIsFloatingWindow && IsZoomedIn())
+        ZoomOut();
+    if (m_xContentTree)
     {
-        // if the parent isn't a float, then the navigator is displayed in
-        // the sidebar or is otherwise docked. While the navigator could change
-        // its size, the sidebar can not, and the navigator would just waste
-        // space. Therefore disable this button.
-        m_xContent6ToolBox->set_item_sensitive("listbox", ParentIsFloatingWindow(GetParent()));
-        // show content if docked
-        if (!ParentIsFloatingWindow(GetParent()) && IsZoomedIn())
-            ZoomOut();
-        if (m_xContentTree)
-        {
-            m_xContentTree->SetActiveShell(GetActiveWrtShell());
-            m_xContentTree->UpdateTracking();
-        }
+        m_xContentTree->SetActiveShell(GetActiveWrtShell());
+        m_xContentTree->UpdateTracking();
     }
 }
 
@@ -1096,12 +1094,13 @@ SwView*  SwNavigationPI::GetCreateView() const
 class SwNavigatorWin : public SfxNavigator
 {
 private:
-    VclPtr<SwNavigationPI> pNavi;
+    std::unique_ptr<SwNavigationPI> m_xNavi;
 public:
     SwNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, vcl::Window* pParent);
+    virtual void StateChanged(StateChangedType nStateChange) override;
     virtual void dispose() override
     {
-        pNavi.disposeAndClear();
+        m_xNavi.reset();
         SfxNavigator::dispose();
     }
     virtual ~SwNavigatorWin() override
@@ -1112,9 +1111,8 @@ public:
 
 SwNavigatorWin::SwNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, vcl::Window* pParent)
     : SfxNavigator(_pBindings, _pMgr, pParent)
+    , m_xNavi(std::make_unique<SwNavigationPI>(m_xContainer.get(), _pBindings->GetActiveFrame(), _pBindings, this))
 {
-    Reference< XFrame > xFrame = _pBindings->GetActiveFrame();
-    pNavi = VclPtr< SwNavigationPI >::Create( this, xFrame, _pBindings );
     _pBindings->Invalidate(SID_NAVIGATOR);
 
     SwNavigationConfig* pNaviConfig = SW_MOD()->GetNavigationConfig();
@@ -1122,20 +1120,26 @@ SwNavigatorWin::SwNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, v
     const ContentTypeId nRootType = pNaviConfig->GetRootType();
     if( nRootType != ContentTypeId::UNKNOWN )
     {
-        pNavi->m_xContentTree->SetRootType(nRootType);
-        pNavi->m_xContent5ToolBox->set_item_active("root", true);
+        m_xNavi->m_xContentTree->SetRootType(nRootType);
+        m_xNavi->m_xContent5ToolBox->set_item_active("root", true);
         if (nRootType == ContentTypeId::OUTLINE)
         {
-            pNavi->m_xContentTree->set_selection_mode(SelectionMode::Multiple);
+            m_xNavi->m_xContentTree->set_selection_mode(SelectionMode::Multiple);
         }
     }
-    pNavi->m_xContentTree->SetOutlineLevel( static_cast< sal_uInt8 >( pNaviConfig->GetOutlineLevel() ) );
-    pNavi->SetRegionDropMode( pNaviConfig->GetRegionMode() );
-    pNavi->Show();
+    m_xNavi->m_xContentTree->SetOutlineLevel( static_cast< sal_uInt8 >( pNaviConfig->GetOutlineLevel() ) );
+    m_xNavi->SetRegionDropMode( pNaviConfig->GetRegionMode() );
 
-    SetMinOutputSizePixel(pNavi->GetOptimalSize());
+    SetMinOutputSizePixel(GetOptimalSize());
     if (pNaviConfig->IsSmall())
-        pNavi->ZoomIn();
+        m_xNavi->ZoomIn();
+}
+
+void SwNavigatorWin::StateChanged(StateChangedType nStateChange)
+{
+    SfxNavigator::StateChanged(nStateChange);
+    if (nStateChange == StateChangedType::InitShow)
+        m_xNavi->UpdateInitShow();
 }
 
 SFX_IMPL_DOCKINGWINDOW(SwNavigatorWrapper, SID_NAVIGATOR);

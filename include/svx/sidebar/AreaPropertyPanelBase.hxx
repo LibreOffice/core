@@ -51,11 +51,6 @@ class SVX_DLLPUBLIC AreaPropertyPanelBase
 {
 public:
 
-    virtual void dispose() override;
-
-    virtual void DataChanged(
-        const DataChangedEvent& rEvent) override;
-
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
         const SfxItemState eState,
@@ -78,7 +73,7 @@ public:
 
     // constructor/destructor
     AreaPropertyPanelBase(
-        vcl::Window* pParent,
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     virtual ~AreaPropertyPanelBase() override;
@@ -147,8 +142,6 @@ protected:
     OUString maImgRadial;
     OUString maImgSquare;
     OUString  maImgLinear;
-
-    VclPtr<sfx2::sidebar::Panel>                    mpPanel;
 
     std::unique_ptr< XFillFloatTransparenceItem >   mpFloatTransparenceItem;
     std::unique_ptr< SfxUInt16Item >                mpTransparanceItem;

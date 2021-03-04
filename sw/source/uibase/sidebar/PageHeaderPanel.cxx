@@ -31,19 +31,16 @@
 
 namespace sw::sidebar{
 
-VclPtr<vcl::Window> PageHeaderPanel::Create(
-    vcl::Window* pParent,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+std::unique_ptr<PanelLayout> PageHeaderPanel::Create(
+    weld::Widget* pParent,
     SfxBindings* pBindings)
 {
     if( pParent == nullptr )
         throw ::com::sun::star::lang::IllegalArgumentException("no parent window given to PageHeaderPanel::Create", nullptr, 0);
-    if( !rxFrame.is() )
-        throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to PageHeaderPanel::Create", nullptr, 0);
     if( pBindings == nullptr )
         throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PageHeaderPanel::Create", nullptr, 0);
 
-    return VclPtr<PageHeaderPanel>::Create(pParent, rxFrame, pBindings);
+    return std::make_unique<PageHeaderPanel>(pParent, pBindings);
 }
 
 void PageHeaderPanel::SetMarginsAndSpacingFieldUnit()
@@ -53,11 +50,10 @@ void PageHeaderPanel::SetMarginsAndSpacingFieldUnit()
 }
 
 PageHeaderPanel::PageHeaderPanel(
-    vcl::Window* pParent,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+    weld::Widget* pParent,
     SfxBindings* pBindings
     ) :
-    PanelLayout(pParent, "PageHeaderPanel", "modules/swriter/ui/pageheaderpanel.ui", rxFrame),
+    PanelLayout(pParent, "PageHeaderPanel", "modules/swriter/ui/pageheaderpanel.ui"),
     mpBindings( pBindings ),
     maHFToggleController(SID_ATTR_PAGE_HEADER, *pBindings, *this),
     maMetricController(SID_ATTR_METRIC, *pBindings,*this),
@@ -81,18 +77,11 @@ PageHeaderPanel::PageHeaderPanel(
 
 PageHeaderPanel::~PageHeaderPanel()
 {
-    disposeOnce();
-}
-
-void PageHeaderPanel::dispose()
-{
     mxHeaderToggle.reset();
     mxHeaderSpacingLB.reset();
     mxHeaderLayoutLB.reset();
     mxHeaderMarginPresetLB.reset();
     mxCustomEntry.reset();
-
-    PanelLayout::dispose();
 }
 
 FieldUnit PageHeaderPanel::GetCurrentUnit(SfxItemState eState, const SfxPoolItem* pState)

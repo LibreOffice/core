@@ -62,12 +62,9 @@ public:
     virtual void HandleContextChange(const vcl::EnumContext& rContext) override;
 
     // constructor/destructor
-    ChartTypePanel(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                   ::chart::ChartController* pController);
+    ChartTypePanel(weld::Widget* pParent, ::chart::ChartController* pController);
 
     virtual ~ChartTypePanel() override;
-
-    virtual void dispose() override;
 
     virtual void updateData() override;
     virtual void modelInvalid() override;

@@ -20,6 +20,7 @@
 #include <svl/intitem.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/drawitem.hxx>
+#include <svx/itemwin.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
@@ -67,7 +68,6 @@ static sal_uInt16 PageUsageToPos_Impl( SvxPageUsage nUsage )
     return 3;
 }
 
-
 static SvxPageUsage PosToPageUsage_Impl( sal_uInt16 nPos )
 {
     if ( nPos >= SAL_N_ELEMENTS(aArr) )
@@ -75,27 +75,21 @@ static SvxPageUsage PosToPageUsage_Impl( sal_uInt16 nPos )
     return aArr[nPos];
 }
 
-VclPtr<vcl::Window> PageStylesPanel::Create(
-    vcl::Window* pParent,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
-    SfxBindings* pBindings)
+std::unique_ptr<PanelLayout> PageStylesPanel::Create(weld::Widget* pParent, SfxBindings* pBindings)
 {
     if( pParent == nullptr )
         throw ::com::sun::star::lang::IllegalArgumentException("no parent window given to PageStylesPanel::Create", nullptr, 0);
-    if( !rxFrame.is() )
-        throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to PageStylesPanel::Create", nullptr, 0);
     if( pBindings == nullptr )
         throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PageStylesPanel::Create", nullptr, 0);
 
-    return VclPtr<PageStylesPanel>::Create(pParent, rxFrame, pBindings);
+    return std::make_unique<PageStylesPanel>(pParent, pBindings);
 }
 
 PageStylesPanel::PageStylesPanel(
-    vcl::Window* pParent,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+    weld::Widget* pParent,
     SfxBindings* pBindings
     ) :
-    PanelLayout(pParent, "PageStylesPanel", "modules/swriter/ui/pagestylespanel.ui", rxFrame),
+    PanelLayout(pParent, "PageStylesPanel", "modules/swriter/ui/pagestylespanel.ui"),
     mpBindings( pBindings ),
     mpPageColumnItem( new SfxInt16Item(SID_ATTR_PAGE_COLUMN) ),
     mpPageItem( new SvxPageItem(SID_ATTR_PAGE) ),
@@ -122,11 +116,6 @@ PageStylesPanel::PageStylesPanel(
 
 PageStylesPanel::~PageStylesPanel()
 {
-    disposeOnce();
-}
-
-void PageStylesPanel::dispose()
-{
     mxColumnCount.reset();
     mxNumberSelectLB.reset();
     mxBgFillType.reset();
@@ -144,7 +133,6 @@ void PageStylesPanel::dispose()
     maBgHatchingControl.dispose();
     maPageColumnControl.dispose();
     maPageNumFormatControl.dispose();
-    PanelLayout::dispose();
 }
 
 void PageStylesPanel::Initialize()

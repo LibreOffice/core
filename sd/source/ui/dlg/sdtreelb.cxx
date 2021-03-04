@@ -389,7 +389,7 @@ bool SdPageObjsTLV::StartDrag()
  */
 bool SdPageObjsTLV::DoDrag()
 {
-    if (!m_xNavigator)
+    if (!m_pNavigator)
         return true;
 
     if (!m_xHelper)
@@ -706,7 +706,7 @@ void SdPageObjsTLV::Select()
     if (m_bSelectionHandlerNavigates)
         m_aRowActivatedHdl.Call(*m_xTreeView);
 
-    if (!m_xNavigator)
+    if (!m_pNavigator)
     {
         m_xHelper.clear();
         return;
@@ -714,7 +714,7 @@ void SdPageObjsTLV::Select()
 
     ::sd::DrawDocShell* pDocShell = m_pDoc->GetDocSh();
     OUString aURL = INetURLObject(pDocShell->GetMedium()->GetPhysicalName(), INetProtocol::File).GetMainURL(INetURLObject::DecodeMechanism::NONE);
-    NavigatorDragType eDragType = m_xNavigator->GetNavigatorDragType();
+    NavigatorDragType eDragType = m_pNavigator->GetNavigatorDragType();
 
     OUString sSelectedEntry = m_xTreeView->get_selected_text();
     aURL += "#" + sSelectedEntry;
@@ -923,7 +923,7 @@ IMPL_LINK(SdPageObjsTLV, RequestingChildrenHdl, const weld::TreeIter&, rFileEntr
 
 void SdPageObjsTLV::SetSdNavigator(SdNavigatorWin* pNavigator)
 {
-    m_xNavigator = pNavigator;
+    m_pNavigator = pNavigator;
 }
 
 void SdPageObjsTLV::SetViewFrame(const SfxViewFrame* pViewFrame)

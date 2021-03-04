@@ -2377,11 +2377,10 @@ void SdTiledRenderingTest::testTdf115873()
     SfxViewShell* pViewShell = SfxViewShell::Current();
     CPPUNIT_ASSERT(pViewShell);
     SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
-    ScopedVclPtrInstance<SdNavigatorWin> pNavigator(nullptr, &rBindings);
-    pNavigator->InitTreeLB(pXImpressDocument->GetDoc());
-    pNavigator->Show();
-    SdPageObjsTLV& rObjects = pNavigator->GetObjects();
-    rObjects.SelectEntry("Slide 1");
+    auto xNavigator = std::make_unique<SdNavigatorWin>(nullptr, &rBindings, nullptr);
+    xNavigator->InitTreeLB(pXImpressDocument->GetDoc());
+    SdPageObjsTLV& rObjects = xNavigator->GetObjects();
+    rObjects.SelectEntry(u"Slide 1");
     rObjects.Select();
     sd::ViewShell* pSdViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdrView* pSdrView = pSdViewShell->GetView();
@@ -2411,9 +2410,9 @@ void SdTiledRenderingTest::testTdf115873Group()
     SfxViewShell* pViewShell = SfxViewShell::Current();
     CPPUNIT_ASSERT(pViewShell);
     SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
-    ScopedVclPtrInstance<SdNavigatorWin> pNavigator(nullptr, &rBindings);
-    pNavigator->InitTreeLB(pXImpressDocument->GetDoc());
-    SdPageObjsTLV& rObjects = pNavigator->GetObjects();
+    auto xNavigator = std::make_unique<SdNavigatorWin>(nullptr, &rBindings, nullptr);
+    xNavigator->InitTreeLB(pXImpressDocument->GetDoc());
+    SdPageObjsTLV& rObjects = xNavigator->GetObjects();
     // This failed, Fill() and IsEqualToDoc() were out of sync for group
     // shapes.
     CPPUNIT_ASSERT(rObjects.IsEqualToDoc(pXImpressDocument->GetDoc()));

@@ -20,30 +20,24 @@
 #pragma once
 
 #include <memory>
-#include <com/sun/star/frame/XFrame.hpp>
-
 #include <sfx2/sidebar/PanelLayout.hxx>
-
 #include <sfx2/sidebar/ControllerItem.hxx>
-
-#include <svx/rulritem.hxx>
-
 #include <svl/intitem.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
 #include <svx/spacinglistbox.hxx>
 #include <svx/samecontentlistbox.hxx>
+#include <svx/rulritem.hxx>
 
 namespace sw::sidebar {
 
-class PageHeaderPanel:
+class PageHeaderPanel :
     public PanelLayout,
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    static VclPtr<vcl::Window> Create(
-        vcl::Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+    static std::unique_ptr<PanelLayout> Create(
+        weld::Widget* pParent,
         SfxBindings* pBindings);
 
     virtual void NotifyItemUpdate(
@@ -57,11 +51,9 @@ public:
 
     SfxBindings* GetBindings() const { return mpBindings; }
     PageHeaderPanel(
-        vcl::Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+        weld::Widget* pParent,
         SfxBindings* pBindings);
     virtual ~PageHeaderPanel() override;
-    virtual void dispose() override;
 
 private:
 

@@ -42,29 +42,27 @@ static void RequestNavigatorUpdate (SfxBindings const * pBindings)
 
 SdNavigatorFloat::SdNavigatorFloat(SfxBindings* _pBindings, SfxChildWindow* _pMgr, vcl::Window* _pParent)
     : SfxNavigator(_pBindings, _pMgr, _pParent)
+    , m_xNavWin(std::make_unique<SdNavigatorWin>(m_xContainer.get(), _pBindings, this))
 {
-    pNavWin = VclPtr<SdNavigatorWin>::Create(this, _pBindings);
-    pNavWin->Show();
-
-    pNavWin->SetUpdateRequestFunctor(
+    m_xNavWin->SetUpdateRequestFunctor(
         [_pBindings] () { return RequestNavigatorUpdate(_pBindings); });
 
-    SetMinOutputSizePixel(pNavWin->GetOptimalSize());
+    SetMinOutputSizePixel(GetOptimalSize());
 }
 
 void SdNavigatorFloat::InitTreeLB(const SdDrawDocument* pDoc)
 {
-    pNavWin->InitTreeLB(pDoc);
+    m_xNavWin->InitTreeLB(pDoc);
 }
 
 void SdNavigatorFloat::FreshTree(const SdDrawDocument* pDoc)
 {
-    pNavWin->FreshTree(pDoc);
+    m_xNavWin->FreshTree(pDoc);
 }
 
 void SdNavigatorFloat::dispose()
 {
-    pNavWin.disposeAndClear();
+    m_xNavWin.reset();
     SfxNavigator::dispose();
 }
 

@@ -39,9 +39,9 @@ namespace svx
 {
 namespace sidebar
 {
-FontworkPropertyPanel::FontworkPropertyPanel(vcl::Window* pParent,
+FontworkPropertyPanel::FontworkPropertyPanel(weld::Widget* pParent,
                                              const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : PanelLayout(pParent, "FontworkPropertyPanel", "svx/ui/sidebarfontwork.ui", rxFrame)
+    : PanelLayout(pParent, "FontworkPropertyPanel", "svx/ui/sidebarfontwork.ui")
     , m_pToolbar(m_xBuilder->weld_toolbar("fontwork-toolbox"))
     , m_xToolbar(new ToolbarUnoDispatcher(*m_pToolbar, *m_xBuilder, rxFrame))
 {
@@ -49,18 +49,14 @@ FontworkPropertyPanel::FontworkPropertyPanel(vcl::Window* pParent,
         m_pToolbar->set_item_visible(".uno:ExtrusionToggle", false);
 }
 
-FontworkPropertyPanel::~FontworkPropertyPanel() { disposeOnce(); }
-
-void FontworkPropertyPanel::dispose()
+FontworkPropertyPanel::~FontworkPropertyPanel()
 {
     m_xToolbar.reset(nullptr);
     m_pToolbar.reset(nullptr);
-
-    PanelLayout::dispose();
 }
 
-VclPtr<vcl::Window>
-FontworkPropertyPanel::Create(vcl::Window* pParent,
+std::unique_ptr<FontworkPropertyPanel>
+FontworkPropertyPanel::Create(weld::Widget* pParent,
                               const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (pParent == nullptr)
@@ -70,7 +66,7 @@ FontworkPropertyPanel::Create(vcl::Window* pParent,
         throw lang::IllegalArgumentException("no XFrame given to FontworkPropertyPanel::Create",
                                              nullptr, 1);
 
-    return VclPtr<FontworkPropertyPanel>::Create(pParent, rxFrame);
+    return std::make_unique<FontworkPropertyPanel>(pParent, rxFrame);
 }
 }
 } // end of namespace svx::sidebar

@@ -154,10 +154,10 @@ public:
 };
 
 LayoutMenu::LayoutMenu (
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     ViewShellBase& rViewShellBase,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
-    : PanelLayout( pParent, "LayoutPanel", "modules/simpress/ui/layoutpanel.ui", nullptr ),
+    : PanelLayout( pParent, "LayoutPanel", "modules/simpress/ui/layoutpanel.ui" ),
       mrBase(rViewShellBase),
       mxLayoutValueSet(new LayoutValueSet(*this)),
       mxLayoutValueSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxLayoutValueSet)),
@@ -171,11 +171,6 @@ LayoutMenu::LayoutMenu (
     mxLayoutValueSet->SetStyle(mxLayoutValueSet->GetStyle() | WB_ITEMBORDER | WB_FLATVALUESET | WB_TABSTOP);
 
     mxLayoutValueSet->SetColor(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Color_PanelBackground));
-
-#ifdef DEBUG
-    SetText(OUString("sd:LayoutMenu"));
-#endif
-    m_pInitialFocusWidget = mxLayoutValueSet->GetDrawingArea();
 }
 
 void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
@@ -210,16 +205,10 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
 
 LayoutMenu::~LayoutMenu()
 {
-    disposeOnce();
-}
-
-void LayoutMenu::dispose()
-{
     SAL_INFO("sd.ui", "destroying LayoutMenu at " << this);
     Dispose();
     mxLayoutValueSetWin.reset();
     mxLayoutValueSet.reset();
-    PanelLayout::dispose();
 }
 
 void LayoutMenu::Dispose()
@@ -726,8 +715,9 @@ IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEve
     }
 }
 
-void LayoutMenu::DataChanged (const DataChangedEvent& /*rEvent*/)
+void LayoutMenu::DataChanged(const DataChangedEvent& rEvent)
 {
+    PanelLayout::DataChanged(rEvent);
     Fill();
     mxLayoutValueSet->StyleUpdated();
     mxLayoutValueSet->SetColor(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Color_PanelBackground));
