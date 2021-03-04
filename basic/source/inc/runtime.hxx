@@ -288,6 +288,7 @@ class SbiRuntime
 
     // #56204 swap out DIM-functionality into help method (step0.cxx)
     void DimImpl(const SbxVariableRef& refVar);
+    bool EvaluateTopOfStackAsBool();
 
     static bool implIsClass( SbxObject const * pObj, const OUString& aClass );
 
