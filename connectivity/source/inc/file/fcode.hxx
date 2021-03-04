@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FCODE_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FCODE_HXX
+#pragma once
 
 #include <connectivity/sqliterator.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -327,7 +326,5 @@ namespace connectivity
         };
     }
 }
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FCODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

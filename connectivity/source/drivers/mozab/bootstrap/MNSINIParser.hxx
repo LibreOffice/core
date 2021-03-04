@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSINIPARSER_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSINIPARSER_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -51,7 +50,5 @@ public:
     /// @throws css::io::IOException
     explicit IniParser(OUString const & rIniName);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

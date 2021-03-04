@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CONNECTIVITY_INC_STRINGS_HXX
-#define INCLUDED_CONNECTIVITY_INC_STRINGS_HXX
+#pragma once
 
 // = log messages for the JDBC driver
 
@@ -71,7 +70,5 @@
 
 #define STR_DB_NOT_CONNECTED_STATE              "08003"
 #define STR_DATA_CANNOT_SELECT_UNFILTERED_STATE "IM001"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

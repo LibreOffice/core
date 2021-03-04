@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABCOLUMNS_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABCOLUMNS_HXX
+#pragma once
 
 #include "MacabTable.hxx"
 #include <connectivity/sdbcx/VCollection.hxx>
@@ -39,7 +38,5 @@ namespace connectivity::macab
                         const ::std::vector< OUString> &_rVector);
         };
 }
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABCOLUMNS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

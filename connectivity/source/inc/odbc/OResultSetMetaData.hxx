@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ORESULTSETMETADATA_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ORESULTSETMETADATA_HXX
+#pragma once
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -113,6 +112,5 @@ namespace connectivity::odbc
         };
 
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ORESULTSETMETADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

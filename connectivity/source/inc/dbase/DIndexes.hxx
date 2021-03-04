@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DINDEXES_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DINDEXES_HXX
+#pragma once
 
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <dbase/DTable.hxx>
@@ -47,6 +46,5 @@ namespace connectivity::dbase
         };
 
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DINDEXES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

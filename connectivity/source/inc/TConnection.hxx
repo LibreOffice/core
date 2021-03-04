@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_TCONNECTION_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_TCONNECTION_HXX
+#pragma once
 
 #include <rtl/textenc.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -77,7 +76,6 @@ namespace connectivity
         static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
     };
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_TCONNECTION_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

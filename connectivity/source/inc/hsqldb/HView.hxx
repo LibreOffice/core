@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HVIEW_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HVIEW_HXX
+#pragma once
 
 #include <connectivity/sdbcx/VView.hxx>
 
@@ -85,7 +84,5 @@ namespace connectivity::hsqldb
 
 } // namespace connectivity::hsqldb
 
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

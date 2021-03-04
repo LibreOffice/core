@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABTABLE_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABTABLE_HXX
+#pragma once
 
 #include "MacabConnection.hxx"
 #include <connectivity/sdbcx/VTable.hxx>
@@ -51,7 +50,5 @@ namespace connectivity::macab
             OUString const & getSchema() const { return m_SchemaName; }
         };
 }
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABTABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

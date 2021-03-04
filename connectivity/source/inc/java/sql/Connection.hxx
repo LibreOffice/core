@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_CONNECTION_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_CONNECTION_HXX
+#pragma once
 
 #include <java/lang/Object.hxx>
 #include <TConnection.hxx>
@@ -132,6 +131,5 @@ namespace connectivity
         virtual void SAL_CALL clearWarnings(  ) override;
     };
 }
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_CONNECTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
