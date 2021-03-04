@@ -42,6 +42,7 @@ private:
 
 };
 
+#if 0
 class SwNavigationPIUIObject : public WindowUIObject
 {
     VclPtr<SwNavigationPI> mxSwNavigationPI;
@@ -61,6 +62,7 @@ protected:
 
     OUString get_name() const override;
 };
+#endif
 
 // This class handles the Comments as a UIObject to be used in UITest Framework
 class CommentUIObject : public WindowUIObject

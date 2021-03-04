@@ -21,12 +21,14 @@ namespace sw::sidebar
 class TableEditPanel : public PanelLayout,
                        public sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
-    friend class VclPtr<TableEditPanel>;
-
 public:
-    static VclPtr<PanelLayout> Create(vcl::Window* pParent,
-                                      const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                                      SfxBindings* pBindings);
+    static std::unique_ptr<PanelLayout>
+    Create(weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame,
+           SfxBindings* pBindings);
+
+    TableEditPanel(weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                   SfxBindings* pBindings);
+    virtual ~TableEditPanel() override;
 
     virtual void NotifyItemUpdate(const sal_uInt16 nSId, const SfxItemState eState,
                                   const SfxPoolItem* pState) override;
@@ -35,11 +37,6 @@ public:
                                  boost::property_tree::ptree& /*rState*/) override{};
 
 private:
-    TableEditPanel(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                   SfxBindings* pBindings);
-    virtual ~TableEditPanel() override;
-    virtual void dispose() override;
-
     void InitRowHeightToolitem();
     void InitColumnWidthToolitem();
 

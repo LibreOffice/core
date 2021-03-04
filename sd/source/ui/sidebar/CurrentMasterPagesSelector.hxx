@@ -36,10 +36,18 @@ class CurrentMasterPagesSelector
 {
     friend class VclPtrInstance<CurrentMasterPagesSelector>;
 public:
-    static VclPtr<PanelLayout> Create (
-        vcl::Window* pParent,
+    static std::unique_ptr<PanelLayout> Create (
+        weld::Widget* pParent,
         ViewShellBase& rViewShellBase,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
+
+    CurrentMasterPagesSelector (
+        weld::Widget* pParent,
+        SdDrawDocument& rDocument,
+        ViewShellBase& rBase,
+        const std::shared_ptr<MasterPageContainer>& rpContainer,
+        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
+    virtual ~CurrentMasterPagesSelector() override;
 
     /** Set the selection so that the master page is selected that is
         used by the currently selected page of the document in the
@@ -60,15 +68,6 @@ protected:
     virtual void ExecuteCommand(const OString &rIdent) override;
 
 private:
-    CurrentMasterPagesSelector (
-        vcl::Window* pParent,
-        SdDrawDocument& rDocument,
-        ViewShellBase& rBase,
-        const std::shared_ptr<MasterPageContainer>& rpContainer,
-        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
-    virtual ~CurrentMasterPagesSelector() override;
-    virtual void dispose() override;
-
     virtual void LateInit() override;
 
     DECL_LINK(EventMultiplexerListener,sd::tools::EventMultiplexerEvent&, void);

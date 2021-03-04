@@ -33,6 +33,7 @@ PanelDescriptor::PanelDescriptor()
       mnOrderIndex(10000), // Default value as defined in Sidebar.xcs
       mbShowForReadOnlyDocuments(false),
       mbWantsCanvas(false),
+      mbWantsAWT(true),
       mbExperimental(false)
 {
 }
@@ -49,6 +50,7 @@ PanelDescriptor::PanelDescriptor (const PanelDescriptor& rOther)
       mnOrderIndex(rOther.mnOrderIndex),
       mbShowForReadOnlyDocuments(rOther.mbShowForReadOnlyDocuments),
       mbWantsCanvas(rOther.mbWantsCanvas),
+      mbWantsAWT(rOther.mbWantsAWT),
       mbExperimental(rOther.mbExperimental)
 {
 }

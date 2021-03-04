@@ -51,17 +51,13 @@ class SlideTransitionPane : public PanelLayout
 {
 public:
     explicit SlideTransitionPane(
-        Window * pParent,
+        weld::Widget* pParent,
         ViewShellBase & rBase,
         const css::uno::Reference<css::frame::XFrame>& rxFrame );
     virtual ~SlideTransitionPane() override;
-    virtual void dispose() override;
 
     // ILayoutableWindow
     virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) override;
-
-    // Window
-    virtual void DataChanged (const DataChangedEvent& rEvent) override;
 
     void onSelectionChanged();
     void onChangeCurrentPage();

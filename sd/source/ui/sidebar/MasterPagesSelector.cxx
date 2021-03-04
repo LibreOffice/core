@@ -53,7 +53,7 @@ namespace sd::sidebar {
 constexpr OStringLiteral gsDefaultClickAction = "applyselect";
 
 MasterPagesSelector::MasterPagesSelector (
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
     const std::shared_ptr<MasterPageContainer>& rpContainer,
@@ -76,8 +76,10 @@ MasterPagesSelector::MasterPagesSelector (
         LINK(this, MasterPagesSelector, ContextMenuHandler));
     mxPreviewValueSet->SetStyle(mxPreviewValueSet->GetStyle() | WB_NO_DIRECTSELECT);
 
+#if 0
     if ( GetDPIScaleFactor() > 1 )
         mpContainer->SetPreviewSize(MasterPageContainer::LARGE);
+#endif
 
     mxPreviewValueSet->SetPreviewSize(mpContainer->GetPreviewSizePixel());
     mxPreviewValueSet->Show();
@@ -92,11 +94,6 @@ MasterPagesSelector::MasterPagesSelector (
 
 MasterPagesSelector::~MasterPagesSelector()
 {
-    disposeOnce();
-}
-
-void MasterPagesSelector::dispose()
-{
     Clear();
     UpdateLocks(ItemList());
 
@@ -105,8 +102,6 @@ void MasterPagesSelector::dispose()
     mpContainer.reset();
     mxPreviewValueSetWin.reset();
     mxPreviewValueSet.reset();
-
-    PanelLayout::dispose();
 }
 
 void MasterPagesSelector::LateInit()

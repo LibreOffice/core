@@ -54,6 +54,7 @@
 
 #include <svx/unoapi.hxx>
 #include <svx/svxids.hrc>
+#include <svx/colorwindow.hxx>
 #include <DrawDocShell.hxx>
 #include <ViewShellBase.hxx>
 #include <DrawViewShell.hxx>
@@ -117,7 +118,7 @@ void fillRepeatComboBox(weld::ComboBox& rBox)
     rBox.append_text(aEndOfSlide);
 }
 
-CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
+CustomAnimationPane::CustomAnimationPane( weld::Widget* pParent, ViewShellBase& rBase,
                                           const css::uno::Reference<css::frame::XFrame>& rxFrame )
     : PanelLayout(pParent, "CustomAnimationsPanel", "modules/simpress/ui/customanimationspanel.ui", rxFrame)
     , mrBase(rBase)
@@ -217,11 +218,6 @@ void CustomAnimationPane::initialize()
 
 CustomAnimationPane::~CustomAnimationPane()
 {
-    disposeOnce();
-}
-
-void CustomAnimationPane::dispose()
-{
     maLateInitTimer.Stop();
 
     removeListener();
@@ -253,8 +249,6 @@ void CustomAnimationPane::dispose()
     mxLBCategory.reset();
     mxFTAnimation.reset();
     mxLBAnimation.reset();
-
-    PanelLayout::dispose();
 }
 
 void CustomAnimationPane::addUndo()
@@ -866,17 +860,14 @@ void CustomAnimationPane::onContextMenu(const OString &rIdent)
     updateControls();
 }
 
-void CustomAnimationPane::DataChanged (const DataChangedEvent&)
-{
-    UpdateLook();
-}
-
 void CustomAnimationPane::UpdateLook()
 {
+#if 0
     Color aBackground (
         ::sfx2::sidebar::Theme::GetColor(
             ::sfx2::sidebar::Theme::Color_PanelBackground));
     SetBackground(aBackground);
+#endif
 }
 
 static void addValue( const std::unique_ptr<STLPropertySet>& pSet, sal_Int32 nHandle, const Any& rValue )

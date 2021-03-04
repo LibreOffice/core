@@ -54,6 +54,7 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
     {
         case SID_NAVIGATOR_INIT:
         {
+#if 0
             SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( SID_NAVIGATOR );
             if( pWindow )
             {
@@ -61,6 +62,7 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
                 if( pNavWin )
                     pNavWin->InitTreeLB( GetDoc() );
             }
+#endif
             SfxBindings& rBindings = GetViewFrame()->GetBindings();
             rBindings.Invalidate(SID_NAVIGATOR_STATE, true);
             rBindings.Invalidate(SID_NAVIGATOR_PAGENAME, true);

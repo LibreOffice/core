@@ -33,7 +33,7 @@ using namespace css::uno;
 namespace svx::sidebar {
 
 LinePropertyPanel::LinePropertyPanel(
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     const uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 :   LinePropertyPanelBase(pParent, rxFrame),
@@ -51,23 +51,16 @@ LinePropertyPanel::LinePropertyPanel(
 
 LinePropertyPanel::~LinePropertyPanel()
 {
-    disposeOnce();
-}
-
-void LinePropertyPanel::dispose()
-{
     maStyleControl.dispose();
     maDashControl.dispose();
     maWidthControl.dispose();
     maTransControl.dispose();
     maEdgeStyle.dispose();
     maCapStyle.dispose();
-
-    LinePropertyPanelBase::dispose();
 }
 
-VclPtr<PanelLayout> LinePropertyPanel::Create (
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> LinePropertyPanel::Create (
+    weld::Widget* pParent,
     const uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
@@ -78,7 +71,7 @@ VclPtr<PanelLayout> LinePropertyPanel::Create (
     if (pBindings == nullptr)
         throw lang::IllegalArgumentException("no SfxBindings given to LinePropertyPanel::Create", nullptr, 2);
 
-    return VclPtr<LinePropertyPanel>::Create(pParent, rxFrame, pBindings);
+    return std::make_unique<LinePropertyPanel>(pParent, rxFrame, pBindings);
 }
 
 void LinePropertyPanel::NotifyItemUpdate(

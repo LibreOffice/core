@@ -31,10 +31,18 @@ class RecentMasterPagesSelector final
 {
     friend class VclPtrInstance<RecentMasterPagesSelector>;
 public:
-    static VclPtr<PanelLayout> Create (
-        vcl::Window* pParent,
+    static std::unique_ptr<PanelLayout> Create (
+        weld::Widget* pParent,
         ViewShellBase& rViewShellBase,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
+
+    RecentMasterPagesSelector (
+        weld::Widget* pParent,
+        SdDrawDocument& rDocument,
+        ViewShellBase& rBase,
+        const std::shared_ptr<MasterPageContainer>& rpContainer,
+        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
+    virtual ~RecentMasterPagesSelector() override;
 
 private:
     DECL_LINK(MasterPageListListener, LinkParamNone*, void);
@@ -55,15 +63,6 @@ private:
     virtual void AssignMasterPageToPageList (
         SdPage* pMasterPage,
         const std::shared_ptr<std::vector<SdPage*> >& rpPageList) override;
-
-    RecentMasterPagesSelector (
-        vcl::Window* pParent,
-        SdDrawDocument& rDocument,
-        ViewShellBase& rBase,
-        const std::shared_ptr<MasterPageContainer>& rpContainer,
-        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
-    virtual ~RecentMasterPagesSelector() override;
-    virtual void dispose() override;
 
     virtual void LateInit() override;
 };

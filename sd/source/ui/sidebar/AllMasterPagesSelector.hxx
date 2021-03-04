@@ -34,10 +34,19 @@ class AllMasterPagesSelector
 {
     friend class VclPtrInstance<AllMasterPagesSelector>;
 public:
-    static VclPtr<PanelLayout> Create (
-        vcl::Window* pParent,
+    static std::unique_ptr<PanelLayout> Create (
+        weld::Widget* pParent,
         ViewShellBase& rViewShellBase,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
+
+    AllMasterPagesSelector (
+        weld::Widget* pParent,
+        SdDrawDocument& rDocument,
+        ViewShellBase& rBase,
+        const std::shared_ptr<MasterPageContainer>& rpContainer,
+        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
+    virtual ~AllMasterPagesSelector() override;
+
 
     /** Scan the set of templates for the ones whose first master pages are
         shown by this control and store them in the MasterPageContainer.
@@ -52,14 +61,6 @@ private:
     */
     class SortedMasterPageDescriptorList;
     ::std::unique_ptr<SortedMasterPageDescriptorList> mpSortedMasterPages;
-
-    AllMasterPagesSelector (
-        vcl::Window* pParent,
-        SdDrawDocument& rDocument,
-        ViewShellBase& rBase,
-        const std::shared_ptr<MasterPageContainer>& rpContainer,
-        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
-    virtual ~AllMasterPagesSelector() override;
 
     void AddItem (MasterPageContainer::Token aToken);
 

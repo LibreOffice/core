@@ -171,15 +171,14 @@ private:
     static void ReleaseFocus();
 
 public:
-    ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent);
+    ScNavigatorDlg(SfxBindings* pB, weld::Widget* pParent);
     virtual ~ScNavigatorDlg() override;
-    virtual void dispose() override;
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    virtual void StateChanged(StateChangedType nStateChange) override;
+//TODO    virtual void StateChanged(StateChangedType nStateChange) override;
 
-    FactoryFunction GetUITestFactory() const override;
+//TODO    FactoryFunction GetUITestFactory() const override;
 };
 
 class ScNavigatorDialogWrapper: public SfxChildWindowContext
@@ -191,9 +190,10 @@ public:
                                       SfxChildWinInfo*  pInfo );
 
     SFX_DECL_CHILDWINDOWCONTEXT(ScNavigatorDialogWrapper)
-
+#if 0
 private:
     VclPtr<ScNavigatorDlg> pNavigator;
+#endif
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_NAVIPI_HXX

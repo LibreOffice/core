@@ -24,10 +24,14 @@ namespace sw::sidebar {
 class StylePresetsPanel : public PanelLayout,
                        public sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
-    friend class VclPtr<StylePresetsPanel>;
 public:
-    static VclPtr<PanelLayout> Create(vcl::Window* pParent,
+    static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent,
                                   const css::uno::Reference<css::frame::XFrame>& rxFrame);
+
+    StylePresetsPanel(weld::Widget* pParent,
+                   const css::uno::Reference<css::frame::XFrame>& rxFrame);
+
+    virtual ~StylePresetsPanel() override;
 
     virtual void NotifyItemUpdate(const sal_uInt16 nSId,
                                   const SfxItemState eState,
@@ -48,12 +52,6 @@ private:
     };
 
     void RefreshList();
-
-    StylePresetsPanel(vcl::Window* pParent,
-                   const css::uno::Reference<css::frame::XFrame>& rxFrame);
-
-    virtual ~StylePresetsPanel() override;
-    virtual void dispose() override;
 
     std::unique_ptr<ValueSet> mxValueSet;
     std::unique_ptr<weld::CustomWeld> mxValueSetWin;

@@ -37,8 +37,8 @@ using namespace ::com::sun::star;
 
 namespace sd::sidebar {
 
-VclPtr<PanelLayout> CurrentMasterPagesSelector::Create (
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> CurrentMasterPagesSelector::Create (
+    weld::Widget* pParent,
     ViewShellBase& rViewShellBase,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
@@ -48,20 +48,20 @@ VclPtr<PanelLayout> CurrentMasterPagesSelector::Create (
 
     auto pContainer = std::make_shared<MasterPageContainer>();
 
-    VclPtrInstance<CurrentMasterPagesSelector> pSelector(
+    auto xSelector(std::make_unique<CurrentMasterPagesSelector>(
             pParent,
             *pDocument,
             rViewShellBase,
             pContainer,
-            rxSidebar);
-    pSelector->LateInit();
-    pSelector->SetHelpId( HID_SD_TASK_PANE_PREVIEW_CURRENT );
+            rxSidebar));
+    xSelector->LateInit();
+    xSelector->SetHelpId( HID_SD_TASK_PANE_PREVIEW_CURRENT );
 
-    return pSelector;
+    return xSelector;
 }
 
 CurrentMasterPagesSelector::CurrentMasterPagesSelector (
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
     const std::shared_ptr<MasterPageContainer>& rpContainer,
@@ -74,11 +74,6 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
 
 CurrentMasterPagesSelector::~CurrentMasterPagesSelector()
 {
-    disposeOnce();
-}
-
-void CurrentMasterPagesSelector::dispose()
-{
     if (mrDocument.GetDocSh() != nullptr)
     {
         EndListening(*mrDocument.GetDocSh());
@@ -90,8 +85,6 @@ void CurrentMasterPagesSelector::dispose()
 
     Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->RemoveEventListener(aLink);
-
-    MasterPagesSelector::dispose();
 }
 
 void CurrentMasterPagesSelector::LateInit()

@@ -27,7 +27,7 @@
 namespace sd::sidebar {
 
 NavigatorWrapper::NavigatorWrapper (
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     sd::ViewShellBase& rViewShellBase,
     SfxBindings* pBindings)
     : SdNavigatorWin(pParent, pBindings)
@@ -35,8 +35,10 @@ NavigatorWrapper::NavigatorWrapper (
 {
     SetUpdateRequestFunctor(
             [this] () { return this->UpdateNavigator(); });
+#if 0
     SetBackground(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Color_PanelBackground));
     Show();
+#endif
 }
 
 css::ui::LayoutSize NavigatorWrapper::GetHeightForWidth (const sal_Int32)

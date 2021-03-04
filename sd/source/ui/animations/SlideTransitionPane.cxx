@@ -36,6 +36,7 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <svx/gallery.hxx>
+#include <svx/colorwindow.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -390,7 +391,7 @@ public:
 
 // SlideTransitionPane
 SlideTransitionPane::SlideTransitionPane(
-    Window * pParent,
+    weld::Widget* pParent,
     ViewShellBase & rBase,
     const css::uno::Reference<css::frame::XFrame>& rxFrame ) :
         PanelLayout( pParent, "SlideTransitionsPanel", "modules/simpress/ui/slidetransitionspanel.ui", rxFrame ),
@@ -483,11 +484,6 @@ void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
 
 SlideTransitionPane::~SlideTransitionPane()
 {
-    disposeOnce();
-}
-
-void SlideTransitionPane::dispose()
-{
     maLateInitTimer.Stop();
     removeListener();
     mxVS_TRANSITION_ICONSWin.reset();
@@ -505,17 +501,11 @@ void SlideTransitionPane::dispose()
     mxPB_APPLY_TO_ALL.reset();
     mxPB_PLAY.reset();
     mxCB_AUTO_PREVIEW.reset();
-    PanelLayout::dispose();
-}
-
-void SlideTransitionPane::DataChanged (const DataChangedEvent&)
-{
-    UpdateLook();
 }
 
 void SlideTransitionPane::UpdateLook()
 {
-    SetBackground(::sfx2::sidebar::Theme::GetColor(::sfx2::sidebar::Theme::Color_PanelBackground));
+//TODO    SetBackground(::sfx2::sidebar::Theme::GetColor(::sfx2::sidebar::Theme::Color_PanelBackground));
 }
 
 void SlideTransitionPane::onSelectionChanged()
@@ -888,7 +878,7 @@ void SlideTransitionPane::applyToSelectedPages(bool bPreview = true)
     if(  mbUpdatingControls )
         return;
 
-    Window *pFocusWindow = Application::GetFocusWindow();
+    vcl::Window *pFocusWindow = Application::GetFocusWindow();
 
     ::sd::slidesorter::SharedPageSelection pSelectedPages( getSelectedPages());
     impl::TransitionEffect aEffect = getTransitionEffectFromControls();
