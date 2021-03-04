@@ -20,27 +20,31 @@ class test_retry_if_failed : public CppUnit::TestFixture
 public:
     void test_success()
     {
+        unsigned counter = 0;
         const DWORD nTicksBefore = GetTickCount();
-        HRESULT hr = sal::systools::RetryIfFailed(10, 200, Tester(5));
+        HRESULT hr = sal::systools::RetryIfFailed(10, 200, Tester(5, counter));
         const DWORD nTicksAfter = GetTickCount();
         const DWORD nTicksElapsed = nTicksAfter > nTicksBefore ? nTicksAfter - nTicksBefore
                                                                : std::numeric_limits<DWORD>::max()
                                                                      - nTicksBefore + nTicksAfter;
         CPPUNIT_ASSERT(SUCCEEDED(hr));
         // 5 attempts, 4 sleeps by ~200 ms
+        CPPUNIT_ASSERT_EQUAL(5U, counter);
         CPPUNIT_ASSERT_GREATER(DWORD(800 - ClockRes), nTicksElapsed);
     }
 
     void test_failure()
     {
+        unsigned counter = 0;
         const DWORD nTicksBefore = GetTickCount();
-        HRESULT hr = sal::systools::RetryIfFailed(10, 100, Tester(15));
+        HRESULT hr = sal::systools::RetryIfFailed(10, 100, Tester(15, counter));
         const DWORD nTicksAfter = GetTickCount();
         const DWORD nTicksElapsed = nTicksAfter > nTicksBefore ? nTicksAfter - nTicksBefore
                                                                : std::numeric_limits<DWORD>::max()
                                                                      - nTicksBefore + nTicksAfter;
         CPPUNIT_ASSERT(FAILED(hr));
         // 1 + 10 attempts, 10 sleeps by ~100 ms
+        CPPUNIT_ASSERT_EQUAL(11U, counter);
         CPPUNIT_ASSERT_GREATER(DWORD(1000 - ClockRes), nTicksElapsed);
     }
 
@@ -52,18 +56,16 @@ public:
 private:
     struct Tester
     {
-        Tester(unsigned triesBeforeSuccess)
+        Tester(unsigned triesBeforeSuccess, unsigned& counter)
             : m_nTriesBeforeSuccess(triesBeforeSuccess)
+            , m_rCounter(counter)
         {
         }
 
-        HRESULT operator()()
-        {
-            return ++m_nTriesAttempted >= m_nTriesBeforeSuccess ? S_OK : E_FAIL;
-        }
+        HRESULT operator()() { return ++m_rCounter >= m_nTriesBeforeSuccess ? S_OK : E_FAIL; }
 
         unsigned m_nTriesBeforeSuccess;
-        unsigned m_nTriesAttempted = 0;
+        unsigned& m_rCounter;
     };
 };
 
