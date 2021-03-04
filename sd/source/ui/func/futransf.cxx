@@ -48,14 +48,13 @@ rtl::Reference<FuPoor> FuTransform::Create( ViewShell* pViewSh, ::sd::Window* pW
 
 namespace {
 
-void setUndo(::sd::View* pView, const SfxItemSet* pArgs)
+void setUndo(::sd::View* pView, const SfxItemSet* pArgs, bool discardPageMargin = true)
 {
     // Undo
     OUString aString = pView->GetDescriptionOfMarkedObjects() +
         " " + SdResId(STR_TRANSFORM);
     pView->BegUndo(aString);
-
-    pView->SetGeoAttrToMarked(*pArgs);
+    pView->SetGeoAttrToMarked(*pArgs, discardPageMargin);
     pView->SetAttributes(*pArgs);
     pView->EndUndo();
 }
@@ -71,7 +70,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
 
     if (pArgs)
     {
-        setUndo(mpView, pArgs);
+        setUndo(mpView, pArgs, true);
         return;
     }
 
@@ -115,7 +114,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
         if (nResult == RET_OK)
         {
             pRequest->Done(*(pDlg->GetOutputItemSet()));
-            setUndo(mpView, pRequest->GetArgs());
+            setUndo(mpView, pRequest->GetArgs(), false);
         }
 
         // deferred until the dialog ends
