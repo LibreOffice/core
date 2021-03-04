@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "abfeb05d_aeb598ce",
+        "filename": "include/vcl/menubarupdateicon.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-03-04T17:16:08Z",
+      "side": 0,
+      "message": "the \"real\" maBubbleImageURL is in extensions so this shouldn\u0027t appear here",
+      "revId": "eef43192d4c7b2867638c54a2ac31adfc26476c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
