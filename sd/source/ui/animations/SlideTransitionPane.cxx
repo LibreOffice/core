@@ -36,6 +36,7 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <svx/gallery.hxx>
+#include <svx/colorwindow.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -390,10 +391,9 @@ public:
 
 // SlideTransitionPane
 SlideTransitionPane::SlideTransitionPane(
-    Window * pParent,
-    ViewShellBase & rBase,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame ) :
-        PanelLayout( pParent, "SlideTransitionsPanel", "modules/simpress/ui/slidetransitionspanel.ui", rxFrame ),
+    weld::Widget* pParent,
+    ViewShellBase & rBase) :
+        PanelLayout( pParent, "SlideTransitionsPanel", "modules/simpress/ui/slidetransitionspanel.ui" ),
 
         mrBase( rBase ),
         mpDrawDoc( rBase.GetDocShell() ? rBase.GetDocShell()->GetDoc() : nullptr ),
@@ -477,16 +477,9 @@ void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
     maLateInitTimer.SetTimeout(200);
     maLateInitTimer.SetInvokeHandler(LINK(this, SlideTransitionPane, LateInitCallback));
     maLateInitTimer.Start();
-
-    UpdateLook();
 }
 
 SlideTransitionPane::~SlideTransitionPane()
-{
-    disposeOnce();
-}
-
-void SlideTransitionPane::dispose()
 {
     maLateInitTimer.Stop();
     removeListener();
@@ -505,17 +498,6 @@ void SlideTransitionPane::dispose()
     mxPB_APPLY_TO_ALL.reset();
     mxPB_PLAY.reset();
     mxCB_AUTO_PREVIEW.reset();
-    PanelLayout::dispose();
-}
-
-void SlideTransitionPane::DataChanged (const DataChangedEvent&)
-{
-    UpdateLook();
-}
-
-void SlideTransitionPane::UpdateLook()
-{
-    SetBackground(::sfx2::sidebar::Theme::GetColor(::sfx2::sidebar::Theme::Color_PanelBackground));
 }
 
 void SlideTransitionPane::onSelectionChanged()
@@ -888,7 +870,7 @@ void SlideTransitionPane::applyToSelectedPages(bool bPreview = true)
     if(  mbUpdatingControls )
         return;
 
-    Window *pFocusWindow = Application::GetFocusWindow();
+    vcl::Window *pFocusWindow = Application::GetFocusWindow();
 
     ::sd::slidesorter::SharedPageSelection pSelectedPages( getSelectedPages());
     impl::TransitionEffect aEffect = getTransitionEffectFromControls();

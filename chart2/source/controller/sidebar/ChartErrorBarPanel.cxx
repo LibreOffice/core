@@ -234,10 +234,8 @@ OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
 
 }
 
-ChartErrorBarPanel::ChartErrorBarPanel(
-    vcl::Window* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame, ChartController* pController)
-    : PanelLayout(pParent, "ChartErrorBarPanel", "modules/schart/ui/sidebarerrorbar.ui", rxFrame)
+ChartErrorBarPanel::ChartErrorBarPanel(weld::Widget* pParent, ChartController* pController)
+    : PanelLayout(pParent, "ChartErrorBarPanel", "modules/schart/ui/sidebarerrorbar.ui")
     , mxRBPosAndNeg(m_xBuilder->weld_radio_button("radiobutton_positive_negative"))
     , mxRBPos(m_xBuilder->weld_radio_button("radiobutton_positive"))
     , mxRBNeg(m_xBuilder->weld_radio_button("radiobutton_negative"))
@@ -249,16 +247,9 @@ ChartErrorBarPanel::ChartErrorBarPanel(
     , mbModelValid(true)
 {
     Initialize();
-
-    m_pInitialFocusWidget = mxRBPosAndNeg.get();
 }
 
 ChartErrorBarPanel::~ChartErrorBarPanel()
-{
-    disposeOnce();
-}
-
-void ChartErrorBarPanel::dispose()
 {
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcaster->removeModifyListener(mxListener);
@@ -271,8 +262,6 @@ void ChartErrorBarPanel::dispose()
 
     mxMFPos.reset();
     mxMFNeg.reset();
-
-    PanelLayout::dispose();
 }
 
 void ChartErrorBarPanel::Initialize()
@@ -349,23 +338,18 @@ void ChartErrorBarPanel::updateData()
     }
 }
 
-VclPtr<PanelLayout> ChartErrorBarPanel::Create (
-    vcl::Window* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+std::unique_ptr<PanelLayout> ChartErrorBarPanel::Create (
+    weld::Widget* pParent,
     ChartController* pController)
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException("no parent Window given to ChartErrorBarPanel::Create", nullptr, 0);
-    if ( ! rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to ChartErrorBarPanel::Create", nullptr, 1);
-
-    return  VclPtr<ChartErrorBarPanel>::Create(
-                        pParent, rxFrame, pController);
+    return std::make_unique<ChartErrorBarPanel>(pParent, pController);
 }
 
-void ChartErrorBarPanel::DataChanged(
-    const DataChangedEvent& )
+void ChartErrorBarPanel::DataChanged(const DataChangedEvent& rEvent)
 {
+    PanelLayout::DataChanged(rEvent);
     updateData();
 }
 

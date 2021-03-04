@@ -89,7 +89,7 @@ class SwContentTree final : public SfxListener
     std::unique_ptr<weld::TreeView> m_xTreeView;
     std::unique_ptr<weld::TreeIter> m_xScratchIter;
     SwContentTreeDropTarget m_aDropTargetHelper;
-    VclPtr<SwNavigationPI> m_xDialog;
+    SwNavigationPI*     m_pDialog;
     OUString            m_sSpace;
     AutoTimer           m_aUpdTimer;
 
@@ -298,7 +298,7 @@ class SwGlobalTree final
 private:
     std::unique_ptr<weld::TreeView> m_xTreeView;
     SwGlobalTreeDropTarget  m_aDropTargetHelper;
-    VclPtr<SwNavigationPI>  m_xDialog;
+    SwNavigationPI*         m_pDialog;
     AutoTimer               m_aUpdateTimer;
     OUString                m_aContextStrings[GLOBAL_CONTEXT_COUNT];
 

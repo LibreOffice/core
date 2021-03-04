@@ -43,10 +43,8 @@ class AreaTransparencyGradientControl;
 class AreaPropertyPanel : public AreaPropertyPanelBase
 {
 public:
-    virtual void dispose() override;
-
-    static VclPtr<PanelLayout> Create(
-        vcl::Window* pParent,
+    static std::unique_ptr<PanelLayout> Create(
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
 
@@ -54,7 +52,7 @@ public:
 
     // constructor/destructor
     AreaPropertyPanel(
-        vcl::Window* pParent,
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
 
