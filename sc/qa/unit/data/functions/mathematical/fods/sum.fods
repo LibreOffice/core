@@ -2102,6 +2102,34 @@
      <table:table-cell table:number-columns-repeated="5"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce11" table:formula="of:=SUM(ABS(MUNIT(2)))" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce55" table:formula="of:=ROUND([.A11];12)=ROUND([.B11];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce28" table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="=SUM(ABS(MUNIT(2)))" calcext:value-type="string">
+      <text:p>=SUM(ABS(MUNIT(2)))</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce11" table:formula="of:=SUM(ABS(MUNIT(2)*-1))" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce55" table:formula="of:=ROUND([.A12];12)=ROUND([.B12];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce28" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=SUM(ABS(MUNIT(2)*-1))" calcext:value-type="string">
+      <text:p>=SUM(ABS(MUNIT(2)*-1))</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
      <table:table-cell table:style-name="ce11"/>
      <table:table-cell/>
      <table:table-cell table:style-name="ce55"/>
