@@ -72,7 +72,7 @@ OUString AnyToString(const uno::Any& aValue, const uno::Reference<uno::XComponen
 
     // return early if we don't have any value
     if (!aValue.hasValue())
-        return aRetStr;
+        return "NULL";
 
     uno::Type aValType = aValue.getValueType();
     uno::TypeClass eType = aValType.getTypeClass();
@@ -81,7 +81,11 @@ OUString AnyToString(const uno::Any& aValue, const uno::Reference<uno::XComponen
     {
         case uno::TypeClass_INTERFACE:
         {
-            aRetStr = "<Object>";
+            uno::Reference<uno::XInterface> xInterface(aValue, uno::UNO_QUERY);
+            if (!xInterface.is())
+                aRetStr = "NULL";
+            else
+                aRetStr = "<Object>";
             break;
         }
         case uno::TypeClass_STRUCT:
@@ -394,18 +398,13 @@ public:
 
     std::vector<std::pair<sal_Int32, OUString>> getColumnValues() override
     {
-        if (maAny.hasValue())
-        {
-            OUString aValue = AnyToString(maAny, mxContext);
-            OUString aType = getAnyType(maAny, mxContext);
+        OUString aValue = AnyToString(maAny, mxContext);
+        OUString aType = getAnyType(maAny, mxContext);
 
-            return {
-                { 1, aValue },
-                { 2, aType },
-            };
-        }
-
-        return ObjectInspectorNodeInterface::getColumnValues();
+        return {
+            { 1, aValue },
+            { 2, aType },
+        };
     }
 };
 
@@ -595,9 +594,6 @@ void StructNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree, const weld
 ObjectInspectorNodeInterface* BasicValueNode::createNodeObjectForAny(OUString const& rName,
                                                                      uno::Any& rAny)
 {
-    if (!rAny.hasValue())
-        return nullptr;
-
     switch (rAny.getValueType().getTypeClass())
     {
         case uno::TypeClass_INTERFACE:
