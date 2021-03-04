@@ -800,15 +800,15 @@ std::unique_ptr<SfxStyleFamilies> SdModule::CreateStyleFamilies()
 {
     std::unique_ptr<SfxStyleFamilies> pStyleFamilies(new SfxStyleFamilies);
 
-    pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
-                                                    SdResId(STR_GRAPHICS_STYLE_FAMILY),
-                                                    BMP_STYLES_FAMILY_GRAPHICS,
-                                                    RID_GRAPHICSTYLEFAMILY, SD_MOD()->GetResLocale()));
+    pStyleFamilies->emplace_back(SfxStyleFamily::Para,
+                                 SdResId(STR_GRAPHICS_STYLE_FAMILY),
+                                 BMP_STYLES_FAMILY_GRAPHICS,
+                                 RID_GRAPHICSTYLEFAMILY, SD_MOD()->GetResLocale());
 
-    pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Pseudo,
-                                                    SdResId(STR_PRESENTATIONS_STYLE_FAMILY),
-                                                    BMP_STYLES_FAMILY_PRESENTATIONS,
-                                                    RID_PRESENTATIONSTYLEFAMILY, SD_MOD()->GetResLocale()));
+    pStyleFamilies->emplace_back(SfxStyleFamily::Pseudo,
+                                 SdResId(STR_PRESENTATIONS_STYLE_FAMILY),
+                                 BMP_STYLES_FAMILY_PRESENTATIONS,
+                                 RID_PRESENTATIONSTYLEFAMILY, SD_MOD()->GetResLocale());
 
     return pStyleFamilies;
 }
