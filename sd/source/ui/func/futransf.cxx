@@ -28,6 +28,7 @@
 #include <sdresid.hxx>
 #include <drawdoc.hxx>
 #include <svx/svxdlg.hxx>
+#include <comphelper/lok.hxx>
 
 #include <memory>
 
@@ -48,14 +49,13 @@ rtl::Reference<FuPoor> FuTransform::Create( ViewShell* pViewSh, ::sd::Window* pW
 
 namespace {
 
-void setUndo(::sd::View* pView, const SfxItemSet* pArgs)
+void setUndo(::sd::View* pView, const SfxItemSet* pArgs, bool addPageMargin)
 {
     // Undo
     OUString aString = pView->GetDescriptionOfMarkedObjects() +
         " " + SdResId(STR_TRANSFORM);
     pView->BegUndo(aString);
-
-    pView->SetGeoAttrToMarked(*pArgs);
+    pView->SetGeoAttrToMarked(*pArgs, addPageMargin);
     pView->SetAttributes(*pArgs);
     pView->EndUndo();
 }
@@ -71,7 +71,9 @@ void FuTransform::DoExecute( SfxRequest& rReq )
 
     if (pArgs)
     {
-        setUndo(mpView, pArgs);
+        // If this comes from LOK, that means the shape is moved by mouse
+        // only then pArgs is pre-set.
+        setUndo(mpView, pArgs, comphelper::LibreOfficeKit::isActive());
         return;
     }
 
@@ -115,7 +117,8 @@ void FuTransform::DoExecute( SfxRequest& rReq )
         if (nResult == RET_OK)
         {
             pRequest->Done(*(pDlg->GetOutputItemSet()));
-            setUndo(mpView, pRequest->GetArgs());
+            // Page margin is already calculated at this point.
+            setUndo(mpView, pRequest->GetArgs(), false);
         }
 
         // deferred until the dialog ends

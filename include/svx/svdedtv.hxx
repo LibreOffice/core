@@ -304,7 +304,11 @@ public:
     // geometrical attribute (position, size, rotation angle)
     // A PageOrigin set at a position is taken into account.
     SfxItemSet GetGeoAttrFromMarked() const;
-    void SetGeoAttrToMarked(const SfxItemSet& rAttr);
+    // In LOK, interactive shape movement uses this function
+    // in that case, margin is not taken into account
+    // and the final position of the shape becomes incorrect
+    // However, "Position and Size" dialog and other cases already add the margins.
+    void SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin = false);
 
     // Returns NULL if:
     // - nothing is marked,

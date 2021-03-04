@@ -1512,7 +1512,7 @@ static Point ImpGetPoint(const tools::Rectangle& rRect, RectPoint eRP)
     return Point(); // Should not happen!
 }
 
-void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
+void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin)
 {
     const bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
 
@@ -1520,6 +1520,12 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
     if(GetSdrPageView())
     {
+        if (addPageMargin)
+        {
+            SdrPage * pPage = GetSdrPageView()->GetPage();
+            Point upperLeft(pPage->GetLeftBorder(), pPage->GetUpperBorder());
+            aRect.Move(upperLeft.getX(), upperLeft.getY());
+        }
         GetSdrPageView()->LogicToPagePos(aRect);
     }
 
