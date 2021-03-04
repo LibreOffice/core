@@ -45,7 +45,7 @@ class ScContentTree
     std::unique_ptr<weld::TreeView> m_xTreeView;
     std::unique_ptr<weld::TreeIter> m_xScratchIter;
     rtl::Reference<ScLinkTransferObj> m_xTransferObj;
-    VclPtr<ScNavigatorDlg>  pParentWindow;
+    ScNavigatorDlg*  pParentWindow;
     o3tl::enumarray<ScContentId, std::unique_ptr<weld::TreeIter>> m_aRootNodes;
     ScContentId             nRootType;          // set as Root
     OUString                aManualDoc;         // Switched in Navigator (Title)

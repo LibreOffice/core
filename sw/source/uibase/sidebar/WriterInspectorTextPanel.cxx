@@ -28,6 +28,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -44,22 +45,16 @@ namespace sw::sidebar
 {
 static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& aStore);
 
-VclPtr<PanelLayout> WriterInspectorTextPanel::Create(vcl::Window* pParent,
-                                                     const uno::Reference<frame::XFrame>& rxFrame)
+std::unique_ptr<PanelLayout> WriterInspectorTextPanel::Create(weld::Widget* pParent)
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException(
             "no parent Window given to WriterInspectorTextPanel::Create", nullptr, 0);
-    if (!rxFrame.is())
-        throw lang::IllegalArgumentException("no XFrame given to WriterInspectorTextPanel::Create",
-                                             nullptr, 1);
-
-    return VclPtr<WriterInspectorTextPanel>::Create(pParent, rxFrame);
+    return std::make_unique<WriterInspectorTextPanel>(pParent);
 }
 
-WriterInspectorTextPanel::WriterInspectorTextPanel(vcl::Window* pParent,
-                                                   const uno::Reference<frame::XFrame>& rxFrame)
-    : InspectorTextPanel(pParent, rxFrame)
+WriterInspectorTextPanel::WriterInspectorTextPanel(weld::Widget* pParent)
+    : InspectorTextPanel(pParent)
 {
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
     m_pShell = pDocSh->GetWrtShell();
@@ -76,14 +71,7 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(vcl::Window* pParent,
     updateEntries(aStore);
 }
 
-WriterInspectorTextPanel::~WriterInspectorTextPanel() { disposeOnce(); }
-
-void WriterInspectorTextPanel::dispose()
-{
-    m_pShell->SetChgLnk(m_oldLink);
-
-    InspectorTextPanel::dispose();
-}
+WriterInspectorTextPanel::~WriterInspectorTextPanel() { m_pShell->SetChgLnk(m_oldLink); }
 
 static OUString PropertyNametoRID(const OUString& rName)
 {

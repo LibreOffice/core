@@ -41,7 +41,7 @@ class NavigatorWrapper
 {
 public:
     NavigatorWrapper (
-        vcl::Window* pParent,
+        weld::Widget* pParent,
         sd::ViewShellBase& rViewShellBase,
         SfxBindings* pBindings);
 

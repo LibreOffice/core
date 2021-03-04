@@ -37,14 +37,14 @@ class ChartLinePanel : public svx::sidebar::LinePropertyPanelBase,
     public ChartSidebarSelectionListenerParent
 {
 public:
-    static VclPtr<PanelLayout> Create(
-        vcl::Window* pParent,
+    static std::unique_ptr<PanelLayout> Create(
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController);
 
     // constructor/destructor
     ChartLinePanel(
-        vcl::Window* pParent,
+        weld::Widget* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController);
 
@@ -54,8 +54,6 @@ public:
     virtual void modelInvalid() override;
 
     virtual void selectionChanged(bool bCorrectType) override;
-
-    virtual void dispose() override;
 
     virtual void updateModel(css::uno::Reference<css::frame::XModel> xModel) override;
 

@@ -33,8 +33,8 @@
 
 namespace sw::sidebar{
 
-VclPtr<PanelLayout> PageFooterPanel::Create(
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> PageFooterPanel::Create(
+    weld::Widget* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings)
 {
@@ -43,7 +43,7 @@ VclPtr<PanelLayout> PageFooterPanel::Create(
     if( !rxFrame.is() )
         throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to PageFooterPanel::Create", nullptr, 0);
 
-    return VclPtr<PageFooterPanel>::Create(pParent, rxFrame, pBindings);
+    return std::make_unique<PageFooterPanel>(pParent, rxFrame, pBindings);
 }
 
 void PageFooterPanel::SetMarginsAndSpacingFieldUnit()
@@ -53,10 +53,10 @@ void PageFooterPanel::SetMarginsAndSpacingFieldUnit()
 }
 
 PageFooterPanel::PageFooterPanel(
-    vcl::Window* pParent,
+    weld::Widget* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings) :
-    PanelLayout(pParent, "PageFooterPanel", "modules/swriter/ui/pagefooterpanel.ui", rxFrame),
+    PanelLayout(pParent, "PageFooterPanel", "modules/swriter/ui/pagefooterpanel.ui"),
     mpBindings( pBindings ),
     maHFToggleController(SID_ATTR_PAGE_FOOTER, *pBindings, *this),
     maMetricController(SID_ATTR_METRIC, *pBindings,*this),
@@ -80,19 +80,12 @@ PageFooterPanel::PageFooterPanel(
 
 PageFooterPanel::~PageFooterPanel()
 {
-    disposeOnce();
-}
-
-void PageFooterPanel::dispose()
-{
     mxFooterToggle.reset();
     maMetricController.dispose();
     mxFooterSpacingLB.reset();
     mxFooterLayoutLB.reset();
     mxFooterMarginPresetLB.reset();
     mxCustomEntry.reset();
-
-    PanelLayout::dispose();
 }
 
 FieldUnit PageFooterPanel::GetCurrentUnit(SfxItemState eState, const SfxPoolItem* pState)

@@ -27,8 +27,8 @@ using namespace css;
 
 namespace svx::sidebar {
 
-VclPtr<PanelLayout> TextPropertyPanel::Create (
-    vcl::Window* pParent,
+std::unique_ptr<PanelLayout> TextPropertyPanel::Create (
+    weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (pParent == nullptr)
@@ -36,11 +36,11 @@ VclPtr<PanelLayout> TextPropertyPanel::Create (
     if ( ! rxFrame.is())
         throw lang::IllegalArgumentException("no XFrame given to TextPropertyPanel::Create", nullptr, 1);
 
-    return VclPtr<TextPropertyPanel>::Create(pParent, rxFrame);
+    return std::make_unique<TextPropertyPanel>(pParent, rxFrame);
 }
 
-TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame )
-    : PanelLayout(pParent, "SidebarTextPanel", "svx/ui/sidebartextpanel.ui", rxFrame)
+TextPropertyPanel::TextPropertyPanel(weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame)
+    : PanelLayout(pParent, "SidebarTextPanel", "svx/ui/sidebartextpanel.ui")
     , mxFont(m_xBuilder->weld_toolbar("font"))
     , mxFontDispatch(new ToolbarUnoDispatcher(*mxFont, *m_xBuilder, rxFrame))
     , mxFontHeight(m_xBuilder->weld_toolbar("fontheight"))
@@ -70,16 +70,9 @@ TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Ref
             pViewShell && pViewShell->isLOKMobilePhone())
         isMobilePhone = true;
     mxSpacingBar->set_visible(!isMobilePhone);
-
-    m_pInitialFocusWidget = mxFont.get();
 }
 
 TextPropertyPanel::~TextPropertyPanel()
-{
-    disposeOnce();
-}
-
-void TextPropertyPanel::dispose()
 {
     mxResetBarDispatch.reset();
     mxDefaultBarDispatch.reset();
@@ -104,8 +97,6 @@ void TextPropertyPanel::dispose()
     mxFontEffects.reset();
     mxFontHeight.reset();
     mxFont.reset();
-
-    PanelLayout::dispose();
 }
 
 void TextPropertyPanel::HandleContextChange (

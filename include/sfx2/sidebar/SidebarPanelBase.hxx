@@ -29,11 +29,11 @@
 #include <com/sun/star/ui/XSidebarPanel.hpp>
 #include <com/sun/star/ui/XUpdateModel.hpp>
 
-#include <vcl/vclptr.hxx>
-
 class PanelLayout;
 
 namespace sfx2::sidebar {
+
+class Panel;
 
 typedef cppu::WeakComponentImplHelper<css::ui::XContextChangeEventListener,
                                        css::ui::XUIElement,
@@ -51,7 +51,7 @@ class SFX2_DLLPUBLIC SidebarPanelBase final : private ::cppu::BaseMutex,
 public:
     static css::uno::Reference<css::ui::XUIElement> Create(const OUString& rsResourceURL,
                                                            const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                                                           PanelLayout* pControl,
+                                                           std::unique_ptr<PanelLayout> xControl,
                                                            const css::ui::LayoutSize& rLayoutSize);
 
     // XContextChangeEventListener
@@ -78,9 +78,11 @@ public:
     // XUpdateModel
     virtual void SAL_CALL updateModel(const css::uno::Reference<css::frame::XModel>& xModel) override;
 
+    void SetParentPanel(sfx2::sidebar::Panel* pPanel);
+
 private:
     SidebarPanelBase(const OUString& rsResourceURL, const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                     PanelLayout* pWindow, const css::ui::LayoutSize& rLayoutSize);
+                     std::unique_ptr<PanelLayout> xControl, const css::ui::LayoutSize& rLayoutSize);
     virtual ~SidebarPanelBase() override;
     SidebarPanelBase(const SidebarPanelBase&) = delete;
     SidebarPanelBase& operator=( const SidebarPanelBase& ) = delete;
@@ -88,7 +90,7 @@ private:
     virtual void SAL_CALL disposing() override;
 
     css::uno::Reference<css::frame::XFrame> mxFrame;
-    VclPtr<PanelLayout> mpControl;
+    std::unique_ptr<PanelLayout> mxControl;
     const OUString msResourceURL;
     const css::ui::LayoutSize maLayoutSize;
 };

@@ -9,7 +9,6 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_EFFECT_EFFECTPROPERTYPANEL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_EFFECT_EFFECTPROPERTYPANEL_HXX
 
-#include <vcl/vclptr.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 
@@ -21,15 +20,10 @@ class EffectPropertyPanel : public PanelLayout,
                             public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    EffectPropertyPanel(vcl::Window* pParent,
-                        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                        SfxBindings* pBindings);
+    EffectPropertyPanel(weld::Widget* pParent, SfxBindings* pBindings);
     virtual ~EffectPropertyPanel() override;
-    virtual void dispose() override;
 
-    static VclPtr<PanelLayout> Create(vcl::Window* pParent,
-                                      const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                                      SfxBindings* pBindings);
+    static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent, SfxBindings* pBindings);
 
     virtual void NotifyItemUpdate(const sal_uInt16 nSId, const SfxItemState eState,
                                   const SfxPoolItem* pState) override;

@@ -125,7 +125,7 @@ static const char* GLOBAL_CONTEXT_ARY[] =
 SwGlobalTree::SwGlobalTree(std::unique_ptr<weld::TreeView> xTreeView, SwNavigationPI* pDialog)
     : m_xTreeView(std::move(xTreeView))
     , m_aDropTargetHelper(*this)
-    , m_xDialog(pDialog)
+    , m_pDialog(pDialog)
     , m_pActiveShell(nullptr)
 {
     m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 30,
@@ -153,7 +153,6 @@ SwGlobalTree::~SwGlobalTree()
     m_pSwGlblDocContents.reset();
     m_pDocInserter.reset();
     m_aUpdateTimer.Stop();
-    m_xDialog.clear();
 }
 
 SwGlobalTreeDropTarget::SwGlobalTreeDropTarget(SwGlobalTree& rTreeView)
@@ -513,7 +512,8 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont, const OUString* 
     Sequence< OUString > aFileNames;
     if ( !pFileName )
     {
-        m_pDocInserter.reset(new ::sfx2::DocumentInserter(GetParentWindow()->GetFrameWeld(), "swriter", sfx2::DocumentInserter::Mode::InsertMulti));
+        SwNavigationPI* pNavi = GetParentWindow();
+        m_pDocInserter.reset(new ::sfx2::DocumentInserter(pNavi->GetFrameWeld(), "swriter", sfx2::DocumentInserter::Mode::InsertMulti));
         m_pDocInserter->StartExecuteModal( LINK( this, SwGlobalTree, DialogClosedHdl ) );
     }
     else if ( !pFileName->isEmpty() )
@@ -963,7 +963,7 @@ IMPL_LINK_NOARG( SwGlobalTree, DoubleClickHdl, weld::TreeView&, bool)
 
 SwNavigationPI* SwGlobalTree::GetParentWindow()
 {
-    return m_xDialog;
+    return m_pDialog;
 }
 
 IMPL_STATIC_LINK_NOARG(SwGlobalTree, ShowFrameHdl, void*, void)

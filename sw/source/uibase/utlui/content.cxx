@@ -925,7 +925,7 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
     : m_xTreeView(std::move(xTreeView))
     , m_xScratchIter(m_xTreeView->make_iterator())
     , m_aDropTargetHelper(*this)
-    , m_xDialog(pDialog)
+    , m_pDialog(pDialog)
     , m_sSpace(OUString("                    "))
     , m_sInvisible(SwResId(STR_INVISIBLE))
     , m_pHiddenShell(nullptr)
@@ -978,7 +978,6 @@ SwContentTree::~SwContentTree()
     clear(); // If applicable erase content types previously.
     m_aUpdTimer.Stop();
     SetActiveShell(nullptr);
-    m_xDialog.clear();
 }
 
 // Drag&Drop methods
@@ -4542,7 +4541,7 @@ bool NaviContentBookmark::Paste( TransferableDataHelper& rData )
 
 SwNavigationPI* SwContentTree::GetParentWindow()
 {
-    return m_xDialog;
+    return m_pDialog;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
