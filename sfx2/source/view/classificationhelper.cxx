@@ -183,7 +183,7 @@ void SAL_CALL SfxClassificationParser::startElement(const OUString& rName, const
             OUString aIdentifier = xAttribs->getValueByName("Identifier");
 
             // Create a new category and initialize it with the data that's true for all categories.
-            m_aCategories.emplace_back(SfxClassificationCategory());
+            m_aCategories.emplace_back();
             SfxClassificationCategory& rCategory = m_aCategories.back();
 
             rCategory.m_aName = aName;

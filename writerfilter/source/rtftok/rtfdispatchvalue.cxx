@@ -273,7 +273,7 @@ bool RTFDocumentImpl::dispatchParagraphSprmValue(RTFKeyword nKeyword, int nParam
         {
             while (m_aTableBufferStack.size() < sal::static_int_cast<std::size_t>(nParam))
             {
-                m_aTableBufferStack.emplace_back(RTFBuffer_t());
+                m_aTableBufferStack.emplace_back();
             }
             // Invalid tables may omit INTBL after ITAP
             dispatchFlag(RTF_INTBL); // sets newly pushed buffer as current
@@ -1637,8 +1637,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             if (rDrawingObject.getPolyLinePoints().empty())
                 dispatchValue(RTF_DPPOLYCOUNT, 2);
 
-            rDrawingObject.getPolyLinePoints().emplace_back(
-                awt::Point(convertTwipToMm100(nParam), 0));
+            rDrawingObject.getPolyLinePoints().emplace_back(convertTwipToMm100(nParam), 0);
         }
         break;
         case RTF_DPPTY:

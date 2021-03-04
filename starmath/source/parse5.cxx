@@ -2359,7 +2359,7 @@ std::unique_ptr<SmBracebodyNode> SmParser::DoBracebody(bool bIsLeftRight)
             {
                 aNodes.push_back(DoAlign());
                 if (m_aCurToken.eType != TMLINE && m_aCurToken.eType != TRIGHT)
-                    aNodes.emplace_back(DoError(SmParseError::RightExpected));
+                    aNodes.emplace_back(SmParseError::RightExpected);
             }
         } while (m_aCurToken.eType != TEND && m_aCurToken.eType != TRIGHT);
     }
@@ -2376,7 +2376,7 @@ std::unique_ptr<SmBracebodyNode> SmParser::DoBracebody(bool bIsLeftRight)
             {
                 aNodes.push_back(DoAlign());
                 if (m_aCurToken.eType != TMLINE && !TokenInGroup(TG::RBrace))
-                    aNodes.emplace_back(DoError(SmParseError::RbraceExpected));
+                    aNodes.emplace_back(SmParseError::RbraceExpected);
             }
         } while (m_aCurToken.eType != TEND && !TokenInGroup(TG::RBrace));
     }
@@ -2483,7 +2483,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoStack()
     if (m_aCurToken.eType == TRGROUP)
         NextToken();
     else
-        aExprArr.emplace_back(DoError(SmParseError::RgroupExpected));
+        aExprArr.emplace_back(SmParseError::RgroupExpected);
 
     xSNode->SetSubNodes(buildNodeArray(aExprArr));
     return xSNode;

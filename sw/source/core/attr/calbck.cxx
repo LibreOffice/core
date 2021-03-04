@@ -268,7 +268,7 @@ sw::WriterMultiListener::~WriterMultiListener()
 void sw::WriterMultiListener::StartListening(SwModify* pDepend)
 {
     EndListening(nullptr);
-    m_vDepends.emplace_back(ListenerEntry(&m_rToTell, pDepend));
+    m_vDepends.emplace_back(&m_rToTell, pDepend);
 }
 
 

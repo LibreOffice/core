@@ -170,7 +170,7 @@ namespace dbaui
                     OUString sDecodedURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
                     m_xControl->append_text(sTitle);
-                    m_aURLs.emplace_back(StringPair(sDecodedURL, sFilter));
+                    m_aURLs.emplace_back(sDecodedURL, sFilter);
                 }
             }
             catch( Exception& ) {}

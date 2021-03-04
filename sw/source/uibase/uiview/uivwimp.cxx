@@ -230,7 +230,7 @@ void SwView_Impl::AddTransferable(SwTransferable& rTransferable)
                 return !xTunnel.is();
             }), mxTransferables.end());
 
-        mxTransferables.emplace_back(uno::Reference<lang::XUnoTunnel>(&rTransferable));
+        mxTransferables.emplace_back(&rTransferable);
     }
     osl_atomic_decrement(&rTransferable.m_refCount);
 }
