@@ -40,9 +40,9 @@
 #include <sfx2/viewfrm.hxx>
 #include <tools/debug.hxx>
 #include "STLPropertySet.hxx"
-#include "CustomAnimationPane.hxx"
+#include <CustomAnimationPane.hxx>
 #include "CustomAnimationDialog.hxx"
-#include "CustomAnimationList.hxx"
+#include <CustomAnimationList.hxx>
 #include "motionpathtag.hxx"
 #include <CustomAnimationPreset.hxx>
 #include <createcustomanimationpanel.hxx>
@@ -156,6 +156,12 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
 {
     initialize();
     m_pInitialFocusWidget = &mxCustomAnimationList->get_widget();
+}
+
+css::ui::LayoutSize CustomAnimationPane::GetHeightForWidth(const sal_Int32 /*nWidth*/)
+{
+    sal_Int32 nMinimumHeight = get_preferred_size().Height();
+    return css::ui::LayoutSize(nMinimumHeight, -1, nMinimumHeight);
 }
 
 void CustomAnimationPane::initialize()
