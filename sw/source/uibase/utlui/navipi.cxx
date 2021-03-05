@@ -760,11 +760,8 @@ void SwNavigationPI::StateChanged(StateChangedType nStateChange)
     }
     else if (nStateChange == StateChangedType::ControlFocus)
     {
-        if (m_xContentTree)
-        {
-            // update documents listbox
-            UpdateListBox();
-        }
+        // update documents listbox
+        UpdateListBox();
     }
 }
 
@@ -812,7 +809,7 @@ IMPL_LINK( SwNavigationPI, HeadingsMenuSelectHdl, const OString&, rMenuId, void 
 
 void SwNavigationPI::UpdateListBox()
 {
-    if (isDisposed())
+    if (!m_xDocListBox) // disposed
         return;
 
     m_xDocListBox->freeze();
@@ -1069,7 +1066,7 @@ bool SwNavigationPI::IsGlobalDoc() const
 
 IMPL_LINK_NOARG(SwNavigationPI, ChangePageHdl, Timer *, void)
 {
-    if (IsDisposed())
+    if (!m_xDocListBox) // disposed
         return;
     // tdf#134959 if the SpinButton changed value this Timer was launched, now
     // change to the desired page, but we leave focus where it currently is,
