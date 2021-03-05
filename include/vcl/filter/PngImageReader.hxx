@@ -34,6 +34,11 @@ public:
     PngImageReader(SvStream& rStream);
 
     bool read(BitmapEx& rBitmap);
+
+    // Returns the contents of the msOG chunk (containing a Gif image), if it exists.
+    // Does not change position in the stream.
+    static std::unique_ptr<sal_uInt8[]> getMicrosoftGifChunk(SvStream& rStream,
+                                                             sal_Int32* chunkSize = nullptr);
 };
 
 } // namespace vcl
