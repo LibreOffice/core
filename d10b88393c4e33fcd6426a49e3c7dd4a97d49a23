@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3b2dda5a_921ec8a8",
+        "filename": "sw/source/ui/fmtui/tmpdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-03-05T09:01:15Z",
+      "side": 1,
+      "message": "Will it be possible to \"override\" this in .ui, using \u003cproperty name\u003d\"tooltip_text\"...\u003e?\nif there are differences, as it seems right now, between Paragraph, Character, and Frame? (the three with \"Standard\")",
+      "range": {
+        "startLine": 81,
+        "startChar": 25,
+        "endLine": 81,
+        "endChar": 73
+      },
+      "revId": "d10b88393c4e33fcd6426a49e3c7dd4a97d49a23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
