@@ -85,6 +85,10 @@ SdNavigatorWin::SdNavigatorWin(vcl::Window* pParent, SfxBindings* pInBindings)
 
     SetDragImage();
 
+    mxToolbox->connect_key_press(LINK(this, SdNavigatorWin, KeyInputHdl));
+    mxTlbObjects->connect_key_press(LINK(this, SdNavigatorWin, KeyInputHdl));
+    mxLbDocs->connect_key_press(LINK(this, SdNavigatorWin, KeyInputHdl));
+
     m_pInitialFocusWidget = mxToolbox.get();
 }
 
@@ -578,72 +582,25 @@ NavDocInfo* SdNavigatorWin::GetDocInfo()
 }
 
 /**
- * PreNotify
- */
-bool SdNavigatorWin::EventNotify(NotifyEvent& rNEvt)
-{
-    const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-    bool            bOK = false;
-
-    if( pKEvt )
-    {
-        if( KEY_ESCAPE == pKEvt->GetKeyCode().GetCode() )
-        {
-            if( SdPageObjsTLV::IsInDrag() )
-            {
-                // during drag'n'drop we just stop the drag but do not close the navigator
-                bOK = true;
-            }
-            else
-            {
-                ::sd::ViewShellBase* pBase = ::sd::ViewShellBase::GetViewShellBase( mpBindings->GetDispatcher()->GetFrame());
-                if( pBase )
-                {
-                    sd::SlideShow::Stop( *pBase );
-                    // Stopping the slide show may result in a synchronous
-                    // deletion of the navigator window.  Calling the
-                    // parent's EventNotify after this is unsafe.  Therefore we
-                    // return now.
-                    return true;
-                }
-            }
-        }
-    }
-
-    if( !bOK )
-        bOK = Window::EventNotify(rNEvt);
-
-    return bOK;
-}
-
-/**
  * catch ESCAPE in order to end show
  */
-void SdNavigatorWin::KeyInput( const KeyEvent& rKEvt )
+IMPL_LINK(SdNavigatorWin, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 {
-    bool bOK = false;
+    bool bConsumed = false;
 
-    if (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
+    if (KEY_ESCAPE == rKEvt.GetKeyCode().GetCode())
     {
-        if( SdPageObjsTLV::IsInDrag() )
-        {
-            // during drag'n'drop we just stop the drag but do not close the navigator
-            bOK = true;
-        }
-        else
+        // during drag'n'drop we just stop the drag but do not close the navigator
+        if (!SdPageObjsTLV::IsInDrag())
         {
             ::sd::ViewShellBase* pBase = ::sd::ViewShellBase::GetViewShellBase( mpBindings->GetDispatcher()->GetFrame());
-            if(pBase)
-            {
-                ::sd::SlideShow::Stop( *pBase );
-            }
+            if (pBase)
+                sd::SlideShow::Stop(*pBase);
+            bConsumed = true;
         }
     }
 
-    if (!bOK)
-    {
-        Window::KeyInput(rKEvt);
-    }
+    return bConsumed;
 }
 
 void SdNavigatorWin::SetDragImage()

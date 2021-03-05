@@ -105,6 +105,7 @@ private:
     ::sd::DrawDocShellRef m_xBookmarkDocShRef; ///< for the loading of bookmarks
     Link<weld::TreeView&, void> m_aChangeHdl;
     Link<weld::TreeView&, bool> m_aRowActivatedHdl;
+    Link<const KeyEvent&, bool> m_aKeyPressHdl;
 
     /** Return the name of the object.  When the object has no user supplied
         name and the bCreate flag is <TRUE/> then a name is created
@@ -204,6 +205,11 @@ public:
     void connect_row_activated(const Link<weld::TreeView&, bool>& rLink)
     {
         m_aRowActivatedHdl = rLink;
+    }
+
+    void connect_key_press(const Link<const KeyEvent&, bool>& rLink)
+    {
+        m_aKeyPressHdl = rLink;
     }
 
     bool HasSelectedChildren(std::u16string_view rName);
