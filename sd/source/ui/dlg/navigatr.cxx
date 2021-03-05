@@ -59,8 +59,6 @@ SdNavigatorWin::SdNavigatorWin(vcl::Window* pParent, SfxBindings* pInBindings)
     , meDragType ( NAVIGATOR_DRAGTYPE_EMBEDDED )
     , mpBindings ( pInBindings )
 {
-    Size aSize(LogicToPixel(Size(97, 67), MapMode(MapUnit::MapAppFont)));
-    mxTlbObjects->set_size_request(aSize.Width(), aSize.Height());
     mxTlbObjects->SetViewFrame( mpBindings->GetDispatcher()->GetFrame() );
 
     mxTlbObjects->connect_row_activated(LINK(this, SdNavigatorWin, ClickObjectHdl));
