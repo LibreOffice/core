@@ -1018,7 +1018,6 @@ void SwNavigationPI::ToggleTree()
     bool bGlobalDoc = IsGlobalDoc();
     if (!IsGlobalMode() && bGlobalDoc)
     {
-        SetUpdateMode(false);
         if (IsZoomedIn())
             ZoomOut();
         m_xGlobalBox->show();
@@ -1034,7 +1033,6 @@ void SwNavigationPI::ToggleTree()
         m_xContent6ToolBox->hide();
         m_xDocListBox->hide();
         SetGlobalMode(true);
-        SetUpdateMode(true);
     }
     else
     {
