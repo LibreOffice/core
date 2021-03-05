@@ -195,7 +195,7 @@ void PageFooterPanel::NotifyItemUpdate(
     const SfxItemState eState,
     const SfxPoolItem* pState)
 {
-    if (IsDisposed())
+    if (!mxFooterToggle) //disposed
         return;
 
     switch(nSid)
