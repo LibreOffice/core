@@ -33,10 +33,10 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/conditn.hxx>
+#include <systools/win32/comtools.hxx>
 
 #include "MtaOleClipb.hxx"
-
-class CXNotifyingDataObject;
+#include "XNotifyingDataObject.hxx"
 
 // implements the XClipboard[Ex] ... interfaces
 // for the clipboard viewer mechanism we need a static callback function
@@ -114,6 +114,8 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+    IDataObjectPtr getIDataObject();
 };
 
 #endif
