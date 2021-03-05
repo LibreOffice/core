@@ -77,8 +77,17 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
     nHtmlMode = ::GetHtmlMode(pWrtShell->GetView().GetDocShell());
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
-    weld::Button& pStandardButton(GetStandardButton());
-    pStandardButton.set_label(SwResId(STR_STANDARD_ACTION));
+    GetStandardButton()->set_label(SwResId(STR_STANDARD_LABEL));
+    GetStandardButton()->set_tooltip_text(SwResId(STR_STANDARD_TOOLTIP));
+    GetStandardButton()->set_accessible_description(SwResId(STR_STANDARD_EXTENDEDTIP));
+
+    GetApplyButton()->set_label(SwResId(STR_APPLY_LABEL));
+    GetApplyButton()->set_tooltip_text(SwResId(STR_APPLY_TOOLTIP));
+    GetApplyButton()->set_accessible_description(SwResId(STR_APPLY_EXTENDEDTIP));
+
+    GeResetButton()->set_label(SwResId(STR_RESET_LABEL));
+    GeResetButton()->set_tooltip_text(SwResId(STR_RESET_TOOLTIP));
+    GeResetButton()->set_accessible_description(SwResId(STR_RESET_EXTENDEDTIP));
 
     // stitch TabPages together
     switch( nRegion )
