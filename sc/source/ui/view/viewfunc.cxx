@@ -2177,7 +2177,18 @@ void ScViewFunc::SetWidthOrHeight(
                     aCxt.setExtraHeight(nSizeTwips);
                     rDoc.SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab, true);
                     if (bAll)
-                        rDoc.ShowRows( nStartNo, nEndNo, nTab, true );
+                    {
+                        for (SCROW nRow = nStartNo; nRow <= nEndNo; ++nRow)
+                        {
+                            SCROW nLastRow = nRow;
+                            if (rDoc.RowFiltered(nRow, nTab, nullptr, &nLastRow))
+                            {
+                                nRow = nLastRow;
+                                continue;
+                            }
+                            rDoc.ShowRow(nRow, nTab, true);
+                        }
+                    }
 
                     //  Manual-Flag already (re)set in SetOptimalHeight in case of bAll=sal_True
                     //  (set for Extra-Height, else reset).
@@ -2190,7 +2201,16 @@ void ScViewFunc::SetWidthOrHeight(
                         rDoc.SetManualHeight( nStartNo, nEndNo, nTab, true );          // height was set manually
                     }
 
-                    rDoc.ShowRows( nStartNo, nEndNo, nTab, nSizeTwips != 0 );
+                    for (SCROW nRow = nStartNo; nRow <= nEndNo; ++nRow)
+                    {
+                        SCROW nLastRow = nRow;
+                        if (rDoc.RowFiltered(nRow, nTab, nullptr, &nLastRow))
+                        {
+                            nRow = nLastRow;
+                            continue;
+                        }
+                        rDoc.ShowRow(nRow, nTab, nSizeTwips != 0);
+                    }
 
                     if (!bShow && nStartNo <= nCurY && nCurY <= nEndNo && nTab == nCurTab)
                     {
