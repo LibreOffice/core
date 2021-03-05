@@ -324,6 +324,11 @@ public:
 
 class VCL_DLLPUBLIC Container : virtual public Widget
 {
+protected:
+    Link<Container&, void> m_aContainerFocusChangedHdl;
+
+    void signal_container_focus_changed() { m_aContainerFocusChangedHdl.Call(*this); }
+
 public:
     // remove and add in one go
     virtual void move(weld::Widget* pWidget, weld::Container* pNewParent) = 0;
@@ -332,6 +337,12 @@ public:
     // create an XWindow as a child of this container. The XWindow is
     // suitable to contain css::awt::XControl items
     virtual css::uno::Reference<css::awt::XWindow> CreateChildFrame() = 0;
+    // rLink is called when the focus transitions from a widget outside the container
+    // to a widget inside the container or vice versa
+    virtual void connect_container_focus_changed(const Link<Container&, void>& rLink)
+    {
+        m_aContainerFocusChangedHdl = rLink;
+    }
 };
 
 class VCL_DLLPUBLIC Box : virtual public Container

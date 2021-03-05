@@ -413,6 +413,8 @@ private:
 public:
     SalInstanceContainer(vcl::Window* pContainer, SalInstanceBuilder* pBuilder,
                          bool bTakeOwnership);
+    virtual void HandleEventListener(VclWindowEvent& rEvent) override;
+    virtual void connect_container_focus_changed(const Link<Container&, void>& rLink) override;
     virtual void move(weld::Widget* pWidget, weld::Container* pNewParent) override;
     virtual void recursively_unset_default_buttons() override;
     virtual css::uno::Reference<css::awt::XWindow> CreateChildFrame() override;
