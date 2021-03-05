@@ -64,7 +64,7 @@ class SW_DLLPUBLIC SwFlyFrame : public SwLayoutFrame, public SwAnchoredObject
     friend void Notify( SwFlyFrame *, SwPageFrame *pOld, const SwRect &rOld,
                         const SwRect* pOldPrt );
 
-    void InitDrawObj();     // these to methods are called in the
+    void InitDrawObj(SwFrame const&); // these to methods are called in the
     void FinitDrawObj();    // constructors
 
     void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
