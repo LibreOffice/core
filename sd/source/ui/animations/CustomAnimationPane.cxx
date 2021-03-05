@@ -268,12 +268,6 @@ void CustomAnimationPane::addUndo()
     }
 }
 
-void CustomAnimationPane::KeyInput( const KeyEvent& rKEvt )
-{
-    if (mxCustomAnimationList)
-        mxCustomAnimationList->KeyInputHdl(rKEvt);
-}
-
 void CustomAnimationPane::addListener()
 {
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,CustomAnimationPane,EventMultiplexerListener) );
