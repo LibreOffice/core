@@ -453,7 +453,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
     SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(sUNO_LayerName_background);
     SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects);
 
-    SdPage* pStandardPage = nullptr;
+    rtl::Reference<SdPage> pStandardPage;
 
     if( 0 == nPageCount )
     {
@@ -462,7 +462,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
 
         Size aDefSize(21000, 29700);   // A4 portrait orientation
         pStandardPage->SetSize( aDefSize );
-        mpDoc->InsertPage(pStandardPage, 0);
+        mpDoc->InsertPage(pStandardPage.get(), 0);
     }
     else
     {
@@ -487,7 +487,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
         * standard page
         **************************************************************/
         if( bDuplicate )
-            pStandardPage = static_cast<SdPage*>( pPreviousStandardPage->CloneSdrPage(*mpDoc) );
+            pStandardPage = static_cast<SdPage*>( pPreviousStandardPage->CloneSdrPage(*mpDoc).get() );
         else
             pStandardPage = mpDoc->AllocSdPage(false);
 
@@ -500,7 +500,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
         pStandardPage->SetName(OUString());
 
         // insert page after current page
-        mpDoc->InsertPage(pStandardPage, nStandardPageNum);
+        mpDoc->InsertPage(pStandardPage.get(), nStandardPageNum);
 
         if( !bDuplicate )
         {
@@ -519,10 +519,10 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
         /**************************************************************
         * notes page
         **************************************************************/
-        SdPage* pNotesPage = nullptr;
+        rtl::Reference<SdPage> pNotesPage;
 
         if( bDuplicate )
-            pNotesPage = static_cast<SdPage*>( pPreviousNotesPage->CloneSdrPage(*mpDoc) );
+            pNotesPage = static_cast<SdPage*>( pPreviousNotesPage->CloneSdrPage(*mpDoc).get() );
         else
             pNotesPage = mpDoc->AllocSdPage(false);
 
@@ -536,7 +536,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
         pNotesPage->SetPageKind(PageKind::Notes);
 
         // insert page after current page
-        mpDoc->InsertPage(pNotesPage, nNotesPageNum);
+        mpDoc->InsertPage(pNotesPage.get(), nNotesPageNum);
 
         if( !bDuplicate )
         {
@@ -549,7 +549,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
 
     SetModified();
 
-    return pStandardPage;
+    return pStandardPage.get();
 }
 
 void SdXImpressDocument::SetModified() throw()
@@ -2962,11 +2962,6 @@ void SAL_CALL SdDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPag
                 {
                     rDoc.EndUndo();
                 }
-                else
-                {
-                    delete pNotesPage;
-                    delete pPage;
-                }
             }
         }
     }
@@ -3135,14 +3130,14 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
         SdPage* pRefNotesPage = mpModel->mpDoc->GetSdPage( sal_uInt16(0), PageKind::Notes);
 
         // create and insert new draw masterpage
-        SdPage* pMPage = mpModel->mpDoc->AllocSdPage(true);
+        rtl::Reference<SdPage> pMPage = mpModel->mpDoc->AllocSdPage(true);
         pMPage->SetSize( pPage->GetSize() );
         pMPage->SetBorder( pPage->GetLeftBorder(),
                            pPage->GetUpperBorder(),
                            pPage->GetRightBorder(),
                            pPage->GetLowerBorder() );
         pMPage->SetLayoutName( aLayoutName );
-        pDoc->InsertMasterPage(pMPage,  static_cast<sal_uInt16>(nInsertPos));
+        pDoc->InsertMasterPage(pMPage.get(),  static_cast<sal_uInt16>(nInsertPos));
 
         {
             // ensure default MasterPage fill
@@ -3152,7 +3147,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
         xDrawPage.set( pMPage->getUnoPage(), uno::UNO_QUERY );
 
         // create and insert new notes masterpage
-        SdPage* pMNotesPage = mpModel->mpDoc->AllocSdPage(true);
+        rtl::Reference<SdPage> pMNotesPage = mpModel->mpDoc->AllocSdPage(true);
         pMNotesPage->SetSize( pRefNotesPage->GetSize() );
         pMNotesPage->SetPageKind(PageKind::Notes);
         pMNotesPage->SetBorder( pRefNotesPage->GetLeftBorder(),
@@ -3160,7 +3155,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
                                 pRefNotesPage->GetRightBorder(),
                                 pRefNotesPage->GetLowerBorder() );
         pMNotesPage->SetLayoutName( aLayoutName );
-        pDoc->InsertMasterPage(pMNotesPage,  static_cast<sal_uInt16>(nInsertPos) + 1);
+        pDoc->InsertMasterPage(pMNotesPage.get(),  static_cast<sal_uInt16>(nInsertPos) + 1);
         pMNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, true, true);
         mpModel->SetModified();
     }
@@ -3218,11 +3213,6 @@ void SAL_CALL SdMasterPagesAccess::remove( const uno::Reference< drawing::XDrawP
     if( bUndo )
     {
         rDoc.EndUndo();
-    }
-    else
-    {
-        delete pNotesPage;
-        delete pPage;
     }
 }
 

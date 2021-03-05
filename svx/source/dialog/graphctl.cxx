@@ -108,7 +108,7 @@ void GraphCtrl::InitSdrModel()
 {
     SolarMutexGuard aGuard;
 
-    SdrPage* pPage;
+    rtl::Reference<SdrPage> pPage;
 
     // destroy old junk
     pView.reset();
@@ -125,7 +125,7 @@ void GraphCtrl::InitSdrModel()
 
     pPage->SetSize( aGraphSize );
     pPage->SetBorder( 0, 0, 0, 0 );
-    pModel->InsertPage( pPage );
+    pModel->InsertPage( pPage.get() );
     pModel->SetChanged( false );
 
     // Creating a View

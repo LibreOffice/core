@@ -595,7 +595,7 @@ bool ImplSdPPTImport::Import()
         for ( sal_uInt16 nMasterNum = 0; nMasterNum < nMasterCnt; nMasterNum++ )
         {
             SetPageNum( nMasterNum, PPT_MASTERPAGE );
-            SdPage* pPage = static_cast<SdPage*>(MakeBlankPage( true ));
+            rtl::Reference<SdPage> pPage = static_cast<SdPage*>(MakeBlankPage( true ).get());
             if ( pPage )
             {
                 bool bNotesMaster = (*GetPageList( m_eCurrentPageKind ) )[ m_nCurrentPageNum ].bNotesMaster;
@@ -607,7 +607,7 @@ bool ImplSdPPTImport::Import()
                     ePgKind = PageKind::Handout;
 
                 pPage->SetPageKind( ePgKind );
-                pSdrModel->InsertMasterPage( static_cast<SdrPage*>(pPage) );
+                pSdrModel->InsertMasterPage( pPage.get() );
                 if ( bNotesMaster && bStarDrawFiller )
                     pPage->SetAutoLayout( AUTOLAYOUT_NOTES, true );
                 if ( nMasterNum )
@@ -754,13 +754,14 @@ bool ImplSdPPTImport::Import()
             if ( pPersist->bStarDrawFiller && pPersist->bNotesMaster && ( m_nCurrentPageNum > 2 ) && ( ( m_nCurrentPageNum & 1 ) == 0 ) )
             {
                 pSdrModel->DeleteMasterPage( m_nCurrentPageNum );
-                SdrPage* pNotesClone = static_cast<SdPage*>(pSdrModel->GetMasterPage( 2 ))->CloneSdrPage(*pSdrModel);
-                pSdrModel->InsertMasterPage( pNotesClone, m_nCurrentPageNum );
+                SdPage* pMasterPage2 = static_cast<SdPage*>(pSdrModel->GetMasterPage( 2 ));
+                rtl::Reference<SdPage> pNotesClone = static_cast<SdPage*>(pMasterPage2->CloneSdrPage(*pSdrModel).get());
+                pSdrModel->InsertMasterPage( pNotesClone.get(), m_nCurrentPageNum );
                 if ( pNotesClone )
                 {
                     OUString aLayoutName( static_cast<SdPage*>(pSdrModel->GetMasterPage( m_nCurrentPageNum - 1 ))->GetLayoutName() );
-                    static_cast<SdPage*>(pNotesClone)->SetPresentationLayout( aLayoutName, false, false );
-                    static_cast<SdPage*>(pNotesClone)->SetLayoutName( aLayoutName );
+                    pNotesClone->SetPresentationLayout( aLayoutName, false, false );
+                    pNotesClone->SetLayoutName( aLayoutName );
                 }
             }
             else if ( !pPersist->bStarDrawFiller )
@@ -923,9 +924,9 @@ bool ImplSdPPTImport::Import()
         PptPageKind     ePageKind = m_eCurrentPageKind;
         sal_uInt16          nPageNum = m_nCurrentPageNum;
 
-        SdPage* pHandoutPage = static_cast<SdPage*>(MakeBlankPage( false ));
+        rtl::Reference<SdPage> pHandoutPage = static_cast<SdPage*>(MakeBlankPage( false ).get());
         pHandoutPage->SetPageKind( PageKind::Handout );
-        pSdrModel->InsertPage( pHandoutPage );
+        pSdrModel->InsertPage( pHandoutPage.get() );
 
         sal_uInt16 nPageCnt = GetPageCount();
         if ( nPageCnt )
@@ -934,7 +935,7 @@ bool ImplSdPPTImport::Import()
             {
                 mePresChange = PresChange::SemiAuto;
                 SetPageNum( nPage );
-                SdPage* pPage = static_cast<SdPage*>(MakeBlankPage( false ));
+                rtl::Reference<SdPage> pPage = static_cast<SdPage*>(MakeBlankPage( false ).get());
                 PptSlidePersistEntry* pMasterPersist = nullptr;
                 if ( HasMasterPage( nPage ) )     // try to get the LayoutName from the masterpage
                 {
@@ -946,9 +947,9 @@ bool ImplSdPPTImport::Import()
                     pPage->SetLayoutName(static_cast<SdPage&>(pPage->TRG_GetMasterPage()).GetLayoutName());
                 }
                 pPage->SetPageKind( PageKind::Standard );
-                pSdrModel->InsertPage( pPage );         // SJ: #i29625# because of form controls, the
-                ImportPage( pPage, pMasterPersist );    //  page must be inserted before importing
-                SetHeaderFooterPageSettings( pPage, pMasterPersist );
+                pSdrModel->InsertPage( pPage.get() );         // SJ: #i29625# because of form controls, the
+                ImportPage( pPage.get(), pMasterPersist );    //  page must be inserted before importing
+                SetHeaderFooterPageSettings( pPage.get(), pMasterPersist );
                 // CWS preseng01: pPage->SetPageKind( PageKind::Standard );
 
                 DffRecordHeader aPageHd;
@@ -1006,12 +1007,12 @@ bool ImplSdPPTImport::Import()
                         if (!aHd.SeekToEndOfRecord(rStCtrl))
                             break;
                     }
-                    ImportPageEffect( pPage, bNewAnimationsUsed );
+                    ImportPageEffect( pPage.get(), bNewAnimationsUsed );
                 }
 
                 // creating the corresponding note page
                 m_eCurrentPageKind = PPT_NOTEPAGE;
-                SdPage* pNotesPage = static_cast<SdPage*>(MakeBlankPage( false ));
+                rtl::Reference<SdPage> pNotesPage = static_cast<SdPage*>(MakeBlankPage( false ).get());
                 sal_uInt16 nNotesMasterNum = GetMasterPageIndex( nPage ) + 1;
                 sal_uInt32 nNotesPageId = GetNotesPageId( nPage );
                 if ( nNotesPageId )
@@ -1032,9 +1033,9 @@ bool ImplSdPPTImport::Import()
                     }
                     pNotesPage->SetPageKind( PageKind::Notes );
                     pNotesPage->TRG_SetMasterPage(*pSdrModel->GetMasterPage(nNotesMasterNum));
-                    pSdrModel->InsertPage( pNotesPage );        // SJ: #i29625# because of form controls, the
-                    ImportPage( pNotesPage, pMasterPersist2 );  // page must be inserted before importing
-                    SetHeaderFooterPageSettings( pNotesPage, pMasterPersist2 );
+                    pSdrModel->InsertPage( pNotesPage.get() );        // SJ: #i29625# because of form controls, the
+                    ImportPage( pNotesPage.get(), pMasterPersist2 );  // page must be inserted before importing
+                    SetHeaderFooterPageSettings( pNotesPage.get(), pMasterPersist2 );
                     pNotesPage->SetAutoLayout( AUTOLAYOUT_NOTES );
                 }
                 else
@@ -1042,7 +1043,7 @@ bool ImplSdPPTImport::Import()
                     pNotesPage->SetPageKind( PageKind::Notes );
                     pNotesPage->TRG_SetMasterPage(*pSdrModel->GetMasterPage(nNotesMasterNum));
                     pNotesPage->SetAutoLayout( AUTOLAYOUT_NOTES, true );
-                    pSdrModel->InsertPage( pNotesPage );
+                    pSdrModel->InsertPage( pNotesPage.get() );
                     SdrObject* pPageObj = pNotesPage->GetPresObj( PresObjKind::Page );
                     if ( pPageObj )
                         static_cast<SdrPageObj*>(pPageObj)->SetReferencedPage(pSdrModel->GetPage(( nPage << 1 ) + 1));
@@ -1056,8 +1057,8 @@ bool ImplSdPPTImport::Import()
         {
             // that can happen by document templates
             m_eCurrentPageKind = PPT_SLIDEPAGE;
-            SdrPage* pPage = MakeBlankPage( false );
-            pSdrModel->InsertPage( pPage );
+            rtl::Reference<SdPage> pPage = static_cast<SdPage*>(MakeBlankPage( false ).get());
+            pSdrModel->InsertPage( pPage.get() );
 
             // #i37397#, trying to set the title master for the first page
             sal_uInt16 nMaster, nMasterCount = pSdrModel->GetMasterPageCount();
@@ -1078,14 +1079,14 @@ bool ImplSdPPTImport::Import()
             }
             if ( pFoundMaster )
             {
-                static_cast<SdPage*>(pPage)->TRG_SetMasterPage( *pFoundMaster );
-                static_cast<SdPage*>(pPage)->SetLayoutName( pFoundMaster->GetLayoutName() );
+                pPage->TRG_SetMasterPage( *pFoundMaster );
+                pPage->SetLayoutName( pFoundMaster->GetLayoutName() );
             }
-            static_cast<SdPage*>(pPage)->SetAutoLayout( AUTOLAYOUT_TITLE, true, true );
+            pPage->SetAutoLayout( AUTOLAYOUT_TITLE, true, true );
 
             m_eCurrentPageKind = PPT_NOTEPAGE;
-            SdrPage* pNPage = MakeBlankPage( false );
-            pSdrModel->InsertPage( pNPage );
+            rtl::Reference<SdrPage> pNPage = MakeBlankPage( false );
+            pSdrModel->InsertPage( pNPage.get() );
         }
         SetPageNum( nPageNum, ePageKind );
         rStCtrl.Seek( nOldFPos );

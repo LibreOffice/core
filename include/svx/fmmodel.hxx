@@ -49,11 +49,11 @@ public:
 
     virtual ~FmFormModel() override;
 
-    virtual SdrPage* AllocPage(bool bMasterPage) override;
+    virtual rtl::Reference<SdrPage> AllocPage(bool bMasterPage) override;
     virtual void     InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) override;
-    virtual SdrPage* RemovePage(sal_uInt16 nPgNum) override;
+    virtual rtl::Reference<SdrPage> RemovePage(sal_uInt16 nPgNum) override;
     virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) override;
-    virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum) override;
+    virtual rtl::Reference<SdrPage> RemoveMasterPage(sal_uInt16 nPgNum) override;
 
     SfxObjectShell*         GetObjectShell() const { return m_pObjShell; }
     void                    SetObjectShell( SfxObjectShell* pShell );

@@ -62,13 +62,13 @@ void SvxXConnectionPreview::Resize()
 void SvxXConnectionPreview::AdaptSize()
 {
     // Adapt size
-    if( !pSdrPage )
+    if( !mxSdrPage )
         return;
 
     SetMapMode(MapMode(MapUnit::Map100thMM));
 
     OutputDevice* pOD = pView->GetFirstOutputDevice(); // GetWin( 0 );
-    tools::Rectangle aRect = pSdrPage->GetAllObjBoundRect();
+    tools::Rectangle aRect = mxSdrPage->GetAllObjBoundRect();
 
     MapMode aMapMode = GetMapMode();
     aMapMode.SetMapUnit( pOD->GetMapMode().GetMapUnit() );
@@ -146,15 +146,15 @@ void SvxXConnectionPreview::Construct()
 
                 // potential memory leak here (!). Create SdrObjList only when there is
                 // not yet one.
-                if(!pSdrPage)
+                if(!mxSdrPage)
                 {
-                    pSdrPage.reset( new SdrPage(
+                    mxSdrPage = new SdrPage(
                         pView->getSdrModelFromSdrView(),
-                        false) );
+                        false);
                 }
 
                 const SdrEdgeObj* pTmpEdgeObj = static_cast<const SdrEdgeObj*>(pObj);
-                pEdgeObj = pTmpEdgeObj->CloneSdrObject(pSdrPage->getSdrModelFromSdrPage());
+                pEdgeObj = pTmpEdgeObj->CloneSdrObject(mxSdrPage->getSdrModelFromSdrPage());
 
                 SdrObjConnection& rConn1 = pEdgeObj->GetConnection( true );
                 SdrObjConnection& rConn2 = pEdgeObj->GetConnection( false );
@@ -167,19 +167,19 @@ void SvxXConnectionPreview::Construct()
 
                 if( pTmpObj1 )
                 {
-                    SdrObject* pObj1 = pTmpObj1->CloneSdrObject(pSdrPage->getSdrModelFromSdrPage());
-                    pSdrPage->InsertObject( pObj1 );
+                    SdrObject* pObj1 = pTmpObj1->CloneSdrObject(mxSdrPage->getSdrModelFromSdrPage());
+                    mxSdrPage->InsertObject( pObj1 );
                     pEdgeObj->ConnectToNode( true, pObj1 );
                 }
 
                 if( pTmpObj2 )
                 {
-                    SdrObject* pObj2 = pTmpObj2->CloneSdrObject(pSdrPage->getSdrModelFromSdrPage());
-                    pSdrPage->InsertObject( pObj2 );
+                    SdrObject* pObj2 = pTmpObj2->CloneSdrObject(mxSdrPage->getSdrModelFromSdrPage());
+                    mxSdrPage->InsertObject( pObj2 );
                     pEdgeObj->ConnectToNode( false, pObj2 );
                 }
 
-                pSdrPage->InsertObject( pEdgeObj );
+                mxSdrPage->InsertObject( pEdgeObj );
             }
         }
     }
@@ -202,7 +202,7 @@ void SvxXConnectionPreview::Paint(vcl::RenderContext& rRenderContext, const tool
     rRenderContext.SetDrawMode(rStyles.GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR);
     rRenderContext.SetBackground(Wallpaper(rStyles.GetFieldColor()));
 
-    if (pSdrPage)
+    if (mxSdrPage)
     {
         // This will not work anymore. To not start at Adam and Eve, i will
         // ATM not try to change all this stuff to really using an own model
@@ -213,9 +213,9 @@ void SvxXConnectionPreview::Paint(vcl::RenderContext& rRenderContext, const tool
         // New stuff: Use an ObjectContactOfObjListPainter.
         sdr::contact::SdrObjectVector aObjectVector;
 
-        for (size_t a = 0; a < pSdrPage->GetObjCount(); ++a)
+        for (size_t a = 0; a < mxSdrPage->GetObjCount(); ++a)
         {
-            SdrObject* pObject = pSdrPage->GetObj(a);
+            SdrObject* pObject = mxSdrPage->GetObj(a);
             DBG_ASSERT(pObject,
                 "SvxXConnectionPreview::Paint: Corrupt ObjectList (!)");
             aObjectVector.push_back(pObject);

@@ -518,7 +518,7 @@ public:
 class SdrUndoPage : public SdrUndoAction
 {
 protected:
-    SdrPage&                    mrPage;
+    rtl::Reference<SdrPage>   mxPage;
 
 protected:
     void ImpInsertPage(sal_uInt16 nNum);
@@ -527,6 +527,7 @@ protected:
 
 protected:
     SdrUndoPage(SdrPage& rNewPg);
+    ~SdrUndoPage();
 
     static OUString ImpGetDescriptionStr(const char* pStrCacheID);
 };
@@ -539,10 +540,6 @@ class SVXCORE_DLLPUBLIC SdrUndoPageList : public SdrUndoPage
 {
 protected:
     sal_uInt16                      nPageNum;
-
-    // It's possible that the object is re-assigned during a Undo/Redo.
-    // The Page is deleted in the dtor, if bItsMine==TRUE
-    bool                        bItsMine;
 
 protected:
     SdrUndoPageList(SdrPage& rNewPg);

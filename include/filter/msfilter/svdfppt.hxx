@@ -601,7 +601,7 @@ protected:
                                 const int _nCalledByGroup
                             ) const override;
     std::unique_ptr<SvMemoryStream> ImportExOleObjStg( sal_uInt32 nPersistPtr, sal_uInt32& nOleId ) const;
-    SdrPage*                MakeBlankPage(bool bMaster) const;
+    rtl::Reference<SdrPage> MakeBlankPage(bool bMaster) const;
     bool                    ReadFontCollection();
     PptSlidePersistList*    GetPageList(PptPageKind ePageKind) const;
     sal_uInt32              GetCurrentPageId();

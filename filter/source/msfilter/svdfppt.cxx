@@ -2678,9 +2678,9 @@ bool SdrPowerPointImport::SeekToShape( SvStream& rSt, SvxMSDffClientData* pClien
     return bRet;
 }
 
-SdrPage* SdrPowerPointImport::MakeBlankPage( bool bMaster ) const
+rtl::Reference<SdrPage> SdrPowerPointImport::MakeBlankPage( bool bMaster ) const
 {
-    SdrPage* pRet = pSdrModel->AllocPage( bMaster );
+    rtl::Reference<SdrPage> pRet = pSdrModel->AllocPage( bMaster );
     pRet->SetSize( GetPageSize() );
 
     return pRet;

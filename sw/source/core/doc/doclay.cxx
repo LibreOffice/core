@@ -109,8 +109,9 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
     SdrPage *pPg = getIDocumentDrawModelAccess().GetOrCreateDrawModel()->GetPage( 0 );
     if( !pPg )
     {
-        pPg = getIDocumentDrawModelAccess().GetDrawModel()->AllocPage( false );
-        getIDocumentDrawModelAccess().GetDrawModel()->InsertPage( pPg );
+        auto pNewPage = getIDocumentDrawModelAccess().GetDrawModel()->AllocPage( false );
+        getIDocumentDrawModelAccess().GetDrawModel()->InsertPage( pNewPage.get() );
+        pPg = pNewPage.get();
     }
 
     // TTTT Clone directly to target SdrModel

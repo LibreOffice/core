@@ -410,7 +410,7 @@ SvxGalleryDrawModel::SvxGalleryDrawModel()
             reinterpret_cast<SdrModel*>(xTunnel->getSomething(SdrModel::getUnoTunnelId())));
         if( mpFormModel )
         {
-            mpFormModel->InsertPage( mpFormModel->AllocPage( false ) );
+            mpFormModel->InsertPage( mpFormModel->AllocPage( false ).get() );
         }
     }
 }

@@ -702,8 +702,8 @@ std::unique_ptr<SdrModel> SdrExchangeView::CreateMarkedObjModel() const
     // use a copy.
     SortMarkedObjects();
     std::unique_ptr<SdrModel> pNewModel(mpModel->AllocModel());
-    SdrPage* pNewPage(pNewModel->AllocPage(false));
-    pNewModel->InsertPage(pNewPage);
+    rtl::Reference<SdrPage> pNewPage = pNewModel->AllocPage(false);
+    pNewModel->InsertPage(pNewPage.get());
     ::std::vector< SdrObject* > aSdrObjects(GetMarkedObjects());
 
     // #i13033#
