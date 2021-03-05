@@ -77,10 +77,6 @@ public:
     // From ILayoutableWindow
     virtual css::ui::LayoutSize GetHeightForWidth(const sal_Int32 nWidth) override;
 
-    /** Show a context menu when the right mouse button is pressed.
-    */
-    virtual void MouseButtonDown(const MouseEvent& rEvent) override;
-
     /** Call this method when the set of displayed layouts is not up-to-date
         anymore.  It will re-assemble this set according to the current
         settings.

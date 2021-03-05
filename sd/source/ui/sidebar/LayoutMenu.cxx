@@ -150,15 +150,7 @@ public:
 
     virtual void Resize() override;
 
-    virtual bool Command(const CommandEvent& rEvent) override
-    {
-        if (rEvent.GetCommand() == CommandEventId::ContextMenu)
-        {
-            mrMenu.ShowContextMenu(rEvent.IsMouseEvent() ? &rEvent.GetMousePosPixel() : nullptr);
-            return true;
-        }
-        return false;
-    }
+    virtual bool Command(const CommandEvent& rEvent) override;
 };
 
 LayoutMenu::LayoutMenu (
@@ -312,19 +304,22 @@ void LayoutValueSet::Resize()
     ValueSet::Resize();
 }
 
-void LayoutMenu::MouseButtonDown (const MouseEvent& rEvent)
+bool LayoutValueSet::Command(const CommandEvent& rEvent)
 {
+    if (rEvent.GetCommand() != CommandEventId::ContextMenu)
+        return false;
+
     // As a preparation for the context menu the item under the mouse is
     // selected.
-    if (rEvent.IsRight())
+    if (rEvent.IsMouseEvent())
     {
-        ReleaseMouse();
-        sal_uInt16 nIndex = mxLayoutValueSet->GetItemId(rEvent.GetPosPixel());
+        sal_uInt16 nIndex = GetItemId(rEvent.GetMousePosPixel());
         if (nIndex > 0)
-            mxLayoutValueSet->SelectItem(nIndex);
+            SelectItem(nIndex);
     }
 
-    mxLayoutValueSet->MouseButtonDown(rEvent);
+    mrMenu.ShowContextMenu(rEvent.IsMouseEvent() ? &rEvent.GetMousePosPixel() : nullptr);
+    return true;
 }
 
 void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
