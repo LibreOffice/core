@@ -41,7 +41,7 @@
 #include <vcl/dibtools.hxx>
 #include <vcl/event.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/pngread.hxx>
+#include <vcl/filter/PngImageReader.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wmf.hxx>
 #include <vcl/wrkwin.hxx>
@@ -155,8 +155,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         else if (strcmp(argv[2], "png") == 0)
         {
             SvFileStream aFileStream(out, StreamMode::READ);
-            vcl::PNGReader aReader(aFileStream);
-            ret = static_cast<int>(!!aReader.Read());
+            vcl::PngImageReader aReader(aFileStream);
+            ret = static_cast<int>(!!aReader.read());
         }
         else if (strcmp(argv[2], "bmp") == 0)
         {

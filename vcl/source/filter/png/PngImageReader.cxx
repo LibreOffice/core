@@ -425,6 +425,13 @@ bool PngImageReader::read(BitmapEx& rBitmapEx)
     return reader(mrStream, rBitmapEx, bSupportsBitmap32);
 }
 
+BitmapEx PngImageReader::read()
+{
+    BitmapEx bitmap;
+    read(bitmap);
+    return bitmap;
+}
+
 std::unique_ptr<sal_uInt8[]> PngImageReader::getMicrosoftGifChunk(SvStream& rStream,
                                                                   sal_Int32* chunkSize)
 {

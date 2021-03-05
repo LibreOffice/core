@@ -54,7 +54,7 @@
 #include <svx/svdotable.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <rtl/uri.hxx>
-#include <vcl/pngread.hxx>
+#include <vcl/filter/PngImageReader.hxx>
 
 using namespace css;
 
@@ -1344,8 +1344,8 @@ void SdOOXMLExportTest1::testNarrationMimeType()
     OUString aImageRelName;
     CPPUNIT_ASSERT(aImageAbsName.startsWith("file:///", &aImageRelName));
     std::unique_ptr<SvStream> pImageStream = parseExportStream(aTempFile, aImageRelName);
-    vcl::PNGReader aReader(*pImageStream);
-    BitmapEx aBitmapEx = aReader.Read();
+    vcl::PngImageReader aReader(*pImageStream);
+    BitmapEx aBitmapEx = aReader.read();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 256
     // - Actual  : 120

@@ -60,7 +60,7 @@
 #include <rtl/strbuf.hxx>
 #include <cstdio>
 #include <vcl/dibtools.hxx>
-#include <vcl/pngread.hxx>
+#include <vcl/filter/PngImageReader.hxx>
 #include <vcl/pngwrite.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <memory>
@@ -1590,9 +1590,8 @@ bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& r
         if(!bSuppressPNG && rFlavor.MimeType.equalsIgnoreAsciiCase("image/png"))
         {
             // it's a PNG, import to BitmapEx
-            vcl::PNGReader aPNGReader(*xStm);
-
-            rBmpEx = aPNGReader.Read();
+            vcl::PngImageReader aPNGReader(*xStm);
+            rBmpEx = aPNGReader.read();
         }
         else if(!bSuppressJPEG && rFlavor.MimeType.equalsIgnoreAsciiCase("image/jpeg"))
         {
