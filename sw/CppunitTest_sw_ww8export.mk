@@ -32,6 +32,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_ww8export, \
     sw \
 	swqahelper \
     tl \
+    vcl \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_ww8export,\
