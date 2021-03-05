@@ -930,7 +930,7 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
     m_xTreeView->connect_collapsing(LINK(this, SwContentTree, CollapseHdl));
     m_xTreeView->connect_row_activated(LINK(this, SwContentTree, ContentDoubleClickHdl));
     m_xTreeView->connect_changed(LINK(this, SwContentTree, SelectHdl));
-    m_xTreeView->connect_focus_in(LINK(this, SwContentTree, FocusHdl));
+    m_xTreeView->connect_focus_in(LINK(this, SwContentTree, FocusInHdl));
     m_xTreeView->connect_key_press(LINK(this, SwContentTree, KeyInputHdl));
     m_xTreeView->connect_popup_menu(LINK(this, SwContentTree, CommandHdl));
     m_xTreeView->connect_query_tooltip(LINK(this, SwContentTree, QueryTooltipHdl));
@@ -3496,7 +3496,7 @@ void SwContentTree::MoveOutline(SwOutlineNodes::size_type nTargetPos)
 }
 
 // Update immediately
-IMPL_LINK_NOARG(SwContentTree, FocusHdl, weld::Widget&, void)
+IMPL_LINK_NOARG(SwContentTree, FocusInHdl, weld::Widget&, void)
 {
     SwView* pActView = GetParentWindow()->GetCreateView();
     if(pActView)
