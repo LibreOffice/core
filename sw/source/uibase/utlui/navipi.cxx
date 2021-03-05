@@ -812,7 +812,7 @@ IMPL_LINK( SwNavigationPI, HeadingsMenuSelectHdl, const OString&, rMenuId, void 
 
 void SwNavigationPI::UpdateListBox()
 {
-    if (isDisposed())
+    if (!m_xDocListBox) // disposed
         return;
 
     m_xDocListBox->freeze();
