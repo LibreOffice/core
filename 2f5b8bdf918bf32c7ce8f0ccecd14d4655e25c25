@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a7f13773_fb04a053",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 942,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-05T03:22:56Z",
+      "side": 1,
+      "message": "Looks like we can call Application::RemoveUserEvent to prevent this.",
+      "parentUuid": "03c41d73_798a4ce0",
+      "range": {
+        "startLine": 942,
+        "startChar": 57,
+        "endLine": 942,
+        "endChar": 63
+      },
+      "revId": "2f5b8bdf918bf32c7ce8f0ccecd14d4655e25c25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9d41006f_3fa323fc",
         "filename": "sfx2/source/doc/docfile.cxx",
         "patchSetId": 10
