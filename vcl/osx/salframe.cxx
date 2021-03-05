@@ -1328,7 +1328,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     // used for selected tab text. As a workaround the current OS version has to be considered. This code has to be reviewed once
     // issue is covered by documentation.
 
-    NSOperatingSystemVersion aOSVersion = { .majorVersion = 11, .minorVersion = 0, .patchVersion = 0 };
+    NSOperatingSystemVersion aOSVersion = { .majorVersion = 10, .minorVersion = 16, .patchVersion = 0 };
     if ([NSProcessInfo.processInfo isOperatingSystemAtLeastVersion: aOSVersion])
         aStyleSettings.SetTabHighlightTextColor(aSelectedControlTextColor);
     else
