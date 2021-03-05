@@ -478,8 +478,28 @@ SwFlyDrawContact::~SwFlyDrawContact()
     }
 }
 
-sal_uInt32 SwFlyDrawContact::GetOrdNumForNewRef(const SwFlyFrame* pFly)
+sal_uInt32 SwFlyDrawContact::GetOrdNumForNewRef(const SwFlyFrame* pFly,
+        SwFrame const& rAnchorFrame)
 {
+    // maintain invariant that a shape's textbox immediately follows the shape
+    // also for the multiple SdrVirtObj created for shapes in header/footer
+    if (SwFrameFormat const*const pDrawFormat =
+            SwTextBoxHelper::getOtherTextBoxFormat(GetFormat(), RES_FLYFRMFMT))
+    {
+        // assume that the draw SdrVirtObj is always created before the flyframe one
+        if (SwSortedObjs const*const pObjs = rAnchorFrame.GetDrawObjs())
+        {
+            for (SwAnchoredObject const*const pAnchoredObj : *pObjs)
+            {
+                if (&pAnchoredObj->GetFrameFormat() == pDrawFormat)
+                {
+                    return pAnchoredObj->GetDrawObj()->GetOrdNum() + 1;
+                }
+            }
+        }
+        // if called from AppendObjs(), this is a problem; if called from lcl_SetFlyFrameAttr() it's not
+        SAL_INFO("sw", "GetOrdNumForNewRef: cannot find SdrObject for text box's shape");
+    }
     // search for another Writer fly frame registered at same frame format
     SwIterator<SwFlyFrame,SwFormat> aIter(*GetFormat());
     const SwFlyFrame* pFlyFrame(nullptr);
@@ -501,7 +521,8 @@ sal_uInt32 SwFlyDrawContact::GetOrdNumForNewRef(const SwFlyFrame* pFly)
     return GetMaster()->GetOrdNumDirect();
 }
 
-SwVirtFlyDrawObj* SwFlyDrawContact::CreateNewRef(SwFlyFrame* pFly, SwFlyFrameFormat* pFormat)
+SwVirtFlyDrawObj* SwFlyDrawContact::CreateNewRef(SwFlyFrame* pFly,
+        SwFlyFrameFormat* pFormat, SwFrame const& rAnchorFrame)
 {
     // Find ContactObject from the Format. If there's already one, we just
     // need to create a new Ref, else we create the Contact now.
@@ -528,7 +549,7 @@ SwVirtFlyDrawObj* SwFlyDrawContact::CreateNewRef(SwFlyFrame* pFly, SwFlyFrameFor
     // #i27030# - insert new <SwVirtFlyDrawObj> instance
     // into drawing page with correct order number
     else
-        rIDDMA.GetDrawModel()->GetPage(0)->InsertObject(pDrawObj, pContact->GetOrdNumForNewRef(pFly));
+        rIDDMA.GetDrawModel()->GetPage(0)->InsertObject(pDrawObj, pContact->GetOrdNumForNewRef(pFly, rAnchorFrame));
     // #i38889# - assure, that new <SwVirtFlyDrawObj> instance
     // is in a visible layer.
     pContact->MoveObjToVisibleLayer(pDrawObj);
