@@ -173,7 +173,7 @@ class SwContentTree final : public SfxListener
     DECL_LINK(CollapseHdl, const weld::TreeIter&, bool);
     DECL_LINK(ContentDoubleClickHdl, weld::TreeView&, bool);
     DECL_LINK(SelectHdl, weld::TreeView&, void);
-    DECL_LINK(FocusHdl, weld::Widget&, void);
+    DECL_LINK(FocusInHdl, weld::Widget&, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(CommandHdl, const CommandEvent&, bool);
     DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
@@ -252,7 +252,7 @@ public:
     void grab_focus()
     {
         m_xTreeView->grab_focus();
-        FocusHdl(*m_xTreeView);
+        FocusInHdl(*m_xTreeView);
     }
 
     OUString get_selected_text() const
