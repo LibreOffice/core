@@ -110,8 +110,6 @@ public:
     virtual ~SdNavigatorWin() override;
     virtual void                dispose() override;
 
-    virtual void                KeyInput( const KeyEvent& rKEvt ) override;
-
     void                        InitTreeLB( const SdDrawDocument* pDoc );
     void                        RefreshDocumentLB( const OUString* pDocName = nullptr );
 
@@ -119,9 +117,6 @@ public:
 
     NavigatorDragType           GetNavigatorDragType();
     SdPageObjsTLV&              GetObjects();
-
-protected:
-    virtual bool                EventNotify(NotifyEvent& rNEvt) override;
 
 private:
     friend class SdNavigatorFloat;
@@ -156,6 +151,7 @@ private:
                                 DECL_LINK( SelectDocumentHdl, weld::ComboBox&, void );
                                 DECL_LINK( MenuSelectHdl, const OString&, void );
                                 DECL_LINK( ShapeFilterCallback, const OString&, void );
+                                DECL_LINK( KeyInputHdl, const KeyEvent&, bool );
 
     void                        SetDragImage();
 
