@@ -33,7 +33,11 @@ void lclReadStream(png_structp pPng, png_bytep pOutBytes, png_size_t nBytesToRea
     sal_Size nBytesRead = pStream->ReadBytes(pOutBytes, nBytesToRead);
 
     if (nBytesRead != nBytesToRead)
-        png_error(pPng, "Error reading");
+    {
+        // Make sure to not reuse old data (could cause infinite loop).
+        memset(pOutBytes + nBytesRead, 0, nBytesToRead - nBytesRead);
+        png_warning(pPng, "Error reading");
+    }
 }
 
 bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
@@ -61,9 +65,32 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
         return false;
     }
 
+    // All variables holding resources need to be declared here in order to be
+    // properly cleaned up in case of an error, otherwise libpng's longjmp()
+    // jumps over the destructor calls.
+    Bitmap aBitmap;
+    AlphaMask aBitmapAlpha;
+    Size prefSize;
+    BitmapScopedWriteAccess pWriteAccess;
+    AlphaScopedWriteAccess pWriteAccessAlpha;
+    std::vector<std::vector<png_byte>> aRows;
+
     if (setjmp(png_jmpbuf(pPng)))
     {
         png_destroy_read_struct(&pPng, &pInfo, nullptr);
+        // Set the bitmap if it contains something, even on failure. This allows
+        // reading images that are only partially broken.
+        pWriteAccess.reset();
+        pWriteAccessAlpha.reset();
+        if (!aBitmap.IsEmpty() && !aBitmapAlpha.IsEmpty())
+            rBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
+        else if (!aBitmap.IsEmpty())
+            rBitmapEx = BitmapEx(aBitmap);
+        if (!rBitmapEx.IsEmpty() && !prefSize.IsEmpty())
+        {
+            rBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+            rBitmapEx.SetPrefSize(prefSize);
+        }
         return false;
     }
 
@@ -133,7 +160,6 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
         return false;
     }
 
-    Size prefSize;
     png_uint_32 res_x = 0;
     png_uint_32 res_y = 0;
     int unit_type = 0;
@@ -150,14 +176,15 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
         {
             size_t aRowSizeBytes = png_get_rowbytes(pPng, pInfo);
 
-            Bitmap aBitmap(Size(width, height), 24);
+            aBitmap = Bitmap(Size(width, height), 24);
+            aBitmap.Erase(COL_WHITE);
             {
-                BitmapScopedWriteAccess pWriteAccess(aBitmap);
+                pWriteAccess = BitmapScopedWriteAccess(aBitmap);
                 ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
                 if (eFormat == ScanlineFormat::N24BitTcBgr)
                     png_set_bgr(pPng);
 
-                std::vector<std::vector<png_byte>> aRows(height);
+                aRows = std::vector<std::vector<png_byte>>(height);
                 for (auto& rRow : aRows)
                     rRow.resize(aRowSizeBytes, 0);
 
@@ -177,6 +204,7 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                         }
                     }
                 }
+                pWriteAccess.reset();
             }
             rBitmapEx = BitmapEx(aBitmap);
         }
@@ -186,9 +214,10 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
 
             if (bUseBitmap32)
             {
-                Bitmap aBitmap(Size(width, height), 32);
+                aBitmap = Bitmap(Size(width, height), 32);
+                aBitmap.Erase(COL_WHITE);
                 {
-                    BitmapScopedWriteAccess pWriteAccess(aBitmap);
+                    pWriteAccess = BitmapScopedWriteAccess(aBitmap);
                     ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
                     if (eFormat == ScanlineFormat::N32BitTcAbgr
                         || eFormat == ScanlineFormat::N32BitTcBgra)
@@ -196,7 +225,7 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                         png_set_bgr(pPng);
                     }
 
-                    std::vector<std::vector<png_byte>> aRows(height);
+                    aRows = std::vector<std::vector<png_byte>>(height);
                     for (auto& rRow : aRows)
                         rRow.resize(aRowSizeBytes, 0);
 
@@ -227,22 +256,25 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                             }
                         }
                     }
+                    pWriteAccess.reset();
                 }
                 rBitmapEx = BitmapEx(aBitmap);
             }
             else
             {
-                Bitmap aBitmap(Size(width, height), 24);
-                AlphaMask aBitmapAlpha(Size(width, height), nullptr);
+                aBitmap = Bitmap(Size(width, height), 24);
+                aBitmapAlpha = AlphaMask(Size(width, height), nullptr);
+                aBitmap.Erase(COL_WHITE);
+                aBitmapAlpha.Erase(0xff); // transparent
                 {
-                    BitmapScopedWriteAccess pWriteAccess(aBitmap);
+                    pWriteAccess = BitmapScopedWriteAccess(aBitmap);
                     ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
                     if (eFormat == ScanlineFormat::N24BitTcBgr)
                         png_set_bgr(pPng);
 
-                    AlphaScopedWriteAccess pWriteAccessAlpha(aBitmapAlpha);
+                    pWriteAccessAlpha = AlphaScopedWriteAccess(aBitmapAlpha);
 
-                    std::vector<std::vector<png_byte>> aRows(height);
+                    aRows = std::vector<std::vector<png_byte>>(height);
                     for (auto& rRow : aRows)
                         rRow.resize(aRowSizeBytes, 0);
 
@@ -265,6 +297,8 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                             }
                         }
                     }
+                    pWriteAccess.reset();
+                    pWriteAccessAlpha.reset();
                 }
                 rBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
             }
