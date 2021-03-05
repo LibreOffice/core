@@ -46,6 +46,30 @@
       "revId": "d10b88393c4e33fcd6426a49e3c7dd4a97d49a23",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb9c01ca_91c6fd2c",
+        "filename": "sw/source/ui/fmtui/tmpdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-03-05T10:26:19Z",
+      "side": 1,
+      "message": "Sure.  Take a look at the \"Reset\" and \"Standard\" buttons in the Character Style dialog.",
+      "parentUuid": "bf30fc82_4b957a81",
+      "range": {
+        "startLine": 81,
+        "startChar": 25,
+        "endLine": 81,
+        "endChar": 73
+      },
+      "revId": "d10b88393c4e33fcd6426a49e3c7dd4a97d49a23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
