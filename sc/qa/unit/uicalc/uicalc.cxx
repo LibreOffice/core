@@ -1396,6 +1396,27 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf99913)
     CPPUNIT_ASSERT(pDoc->RowFiltered(2, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf91425)
+{
+    //Bug 91425 - CRASH - Calc Insert Columns Left
+    ScModelObj* pModelObj = createDoc("tdf91425.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    //1) Open test file provided in report
+    //2) Move mouse pointer over Column A header, the right mouse button click
+    CPPUNIT_ASSERT(pDoc);
+    goToCell("A1");
+    //3) Insert columns left
+    dispatchCommand(mxComponent, ".uno:InsertColumnsBefore", {});
+    //verify
+    CPPUNIT_ASSERT_EQUAL(OUString("C"), pDoc->GetString(ScAddress(3, 0, 0)));
+    //undo
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("C"), pDoc->GetString(ScAddress(2, 0, 0)));
+    //redo
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("C"), pDoc->GetString(ScAddress(3, 0, 0)));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
