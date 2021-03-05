@@ -580,8 +580,11 @@ bool SfxObjectShell::PrepareClose
                 pPoolItem = pFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, ppArgs );
             }
 
-            if ( !pPoolItem || pPoolItem->IsVoidItem() || ( dynamic_cast< const SfxBoolItem *>( pPoolItem ) != nullptr && !static_cast<const SfxBoolItem*>( pPoolItem )->GetValue() ) )
+            if ( !pPoolItem || pPoolItem->IsVoidItem() )
                 return false;
+            if ( auto pBoolItem = dynamic_cast< const SfxBoolItem *>( pPoolItem ) )
+                if ( !pBoolItem->GetValue() )
+                    return false;
         }
         else if ( RET_CANCEL == nRet )
             // Cancelled

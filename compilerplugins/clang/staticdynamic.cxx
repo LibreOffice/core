@@ -45,22 +45,26 @@ public:
 
 private:
     // the key is the pair of VarDecl and the type being cast to.
-    typedef std::map<std::pair<VarDecl const*, clang::Type const*>, SourceLocation> MapType;
-    MapType staticCastVars;
+    struct BlockState
+    {
+        std::map<std::pair<VarDecl const*, clang::Type const*>, SourceLocation> staticCastVars;
+        std::map<std::pair<VarDecl const*, clang::Type const*>, SourceLocation> dynamicCastVars;
+    };
     // only maintain state inside a single basic block, we're not trying to analyse
     // cross-block interactions.
-    std::vector<MapType> blockStack;
+    std::vector<BlockState> blockStack;
+    BlockState blockState;
 };
 
 bool StaticDynamic::PreTraverseCompoundStmt(CompoundStmt*)
 {
-    blockStack.push_back(std::move(staticCastVars));
+    blockStack.push_back(std::move(blockState));
     return true;
 }
 
 bool StaticDynamic::PostTraverseCompoundStmt(CompoundStmt*, bool)
 {
-    staticCastVars = std::move(blockStack.back());
+    blockState = std::move(blockStack.back());
     blockStack.pop_back();
     return true;
 }
@@ -86,8 +90,28 @@ bool StaticDynamic::VisitCXXStaticCastExpr(CXXStaticCastExpr const* staticCastEx
     auto varDecl = dyn_cast_or_null<VarDecl>(subExprDecl->getDecl());
     if (!varDecl)
         return true;
-    staticCastVars.insert({ { varDecl, staticCastExpr->getTypeAsWritten().getTypePtr() },
-                            compat::getBeginLoc(staticCastExpr) });
+    auto it = blockState.dynamicCastVars.find(
+        { varDecl, staticCastExpr->getTypeAsWritten().getTypePtr() });
+    if (it != blockState.dynamicCastVars.end())
+    {
+        StringRef fn = getFilenameOfLocation(
+            compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(staticCastExpr)));
+        // loop
+        if (loplugin::isSamePathname(fn, SRCDIR "/basctl/source/basicide/basobj3.cxx"))
+            return true;
+        if (loplugin::isSamePathname(fn, SRCDIR "/sw/source/core/doc/swserv.cxx"))
+            return true;
+        if (loplugin::isSamePathname(fn, SRCDIR "/sw/source/core/text/txtfly.cxx"))
+            return true;
+
+        report(DiagnosticsEngine::Warning, "static_cast after dynamic_cast",
+               compat::getBeginLoc(staticCastExpr))
+            << staticCastExpr->getSourceRange();
+        report(DiagnosticsEngine::Note, "dynamic_cast here", it->second);
+        return true;
+    }
+    blockState.staticCastVars.insert({ { varDecl, staticCastExpr->getTypeAsWritten().getTypePtr() },
+                                       compat::getBeginLoc(staticCastExpr) });
     return true;
 }
 
@@ -102,13 +126,27 @@ bool StaticDynamic::VisitCXXDynamicCastExpr(CXXDynamicCastExpr const* dynamicCas
     auto varDecl = dyn_cast_or_null<VarDecl>(subExprDecl->getDecl());
     if (!varDecl)
         return true;
-    auto it = staticCastVars.find({ varDecl, dynamicCastExpr->getTypeAsWritten().getTypePtr() });
-    if (it == staticCastVars.end())
+    auto it = blockState.staticCastVars.find(
+        { varDecl, dynamicCastExpr->getTypeAsWritten().getTypePtr() });
+    if (it != blockState.staticCastVars.end())
+    {
+        report(DiagnosticsEngine::Warning, "dynamic_cast after static_cast",
+               compat::getBeginLoc(dynamicCastExpr))
+            << dynamicCastExpr->getSourceRange();
+        report(DiagnosticsEngine::Note, "static_cast here", it->second);
         return true;
-    report(DiagnosticsEngine::Warning, "dynamic_cast after static_cast",
-           compat::getBeginLoc(dynamicCastExpr))
-        << dynamicCastExpr->getSourceRange();
-    report(DiagnosticsEngine::Note, "static_cast here", it->second);
+    }
+    auto loc = compat::getBeginLoc(dynamicCastExpr);
+    if (compiler.getSourceManager().isMacroArgExpansion(loc)
+        && (Lexer::getImmediateMacroNameForDiagnostics(loc, compiler.getSourceManager(),
+                                                       compiler.getLangOpts())
+            == "assert"))
+    {
+        return true;
+    }
+    blockState.dynamicCastVars.insert(
+        { { varDecl, dynamicCastExpr->getTypeAsWritten().getTypePtr() },
+          compat::getBeginLoc(dynamicCastExpr) });
     return true;
 }
 

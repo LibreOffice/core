@@ -25,4 +25,12 @@ void f1(ClassA* p1)
     dynamic_cast<ClassB*>(p1)->foo();
 };
 
+void f2(ClassA* p1)
+{
+    // expected-note@+1 {{dynamic_cast here [loplugin:staticdynamic]}}
+    dynamic_cast<ClassB*>(p1)->foo();
+    // expected-error@+1 {{static_cast after dynamic_cast [loplugin:staticdynamic]}}
+    static_cast<ClassB*>(p1)->foo();
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
