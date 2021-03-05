@@ -3763,6 +3763,8 @@ class GtkInstanceContainer : public GtkInstanceWidget, public virtual weld::Cont
 {
 private:
     GtkContainer* m_pContainer;
+    gulong m_nSetFocusChildSignalId;
+    bool m_bChildHasFocus;
 
     static void implResetDefault(GtkWidget *pWidget, gpointer user_data)
     {
@@ -3772,11 +3774,35 @@ private:
             gtk_container_forall(GTK_CONTAINER(pWidget), implResetDefault, user_data);
     }
 
+    void signal_set_focus_child(bool bChildHasFocus)
+    {
+        if (m_bChildHasFocus != bChildHasFocus)
+        {
+            m_bChildHasFocus = bChildHasFocus;
+            signal_container_focus_changed();
+        }
+    }
+
+    static void signalSetFocusChild(GtkContainer*, GtkWidget* pChild, gpointer widget)
+    {
+        GtkInstanceContainer* pThis = static_cast<GtkInstanceContainer*>(widget);
+        pThis->signal_set_focus_child(pChild != nullptr);
+    }
+
 public:
     GtkInstanceContainer(GtkContainer* pContainer, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pContainer), pBuilder, bTakeOwnership)
         , m_pContainer(pContainer)
+        , m_nSetFocusChildSignalId(0)
+        , m_bChildHasFocus(false)
     {
+    }
+
+    virtual void connect_container_focus_changed(const Link<Container&, void>& rLink) override
+    {
+        if (!m_nSetFocusChildSignalId)
+            m_nSetFocusChildSignalId = g_signal_connect(G_OBJECT(m_pContainer), "set-focus-child", G_CALLBACK(signalSetFocusChild), this);
+        weld::Container::connect_container_focus_changed(rLink);
     }
 
     GtkContainer* getContainer() { return m_pContainer; }
@@ -3829,6 +3855,12 @@ public:
         xEmbedWindow->Show(true, ShowFlags::NoActivate);
         css::uno::Reference<css::awt::XWindow> xWindow(xEmbedWindow->GetComponentInterface(), css::uno::UNO_QUERY);
         return xWindow;
+    }
+
+    virtual ~GtkInstanceContainer() override
+    {
+        if (m_nSetFocusChildSignalId)
+            g_signal_handler_disconnect(m_pContainer, m_nSetFocusChildSignalId);
     }
 };
 

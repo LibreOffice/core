@@ -107,6 +107,8 @@ class SwNavigationPI : public PanelLayout
     DECL_LINK( ChangePageHdl, Timer*, void );
     DECL_LINK( PageEditModifyHdl, weld::SpinButton&, void );
     DECL_LINK( EditActionHdl, weld::Entry&, bool );
+    DECL_LINK( SetFocusChildHdl, weld::Container&, void );
+
     bool EditAction();
     void UsePage();
 

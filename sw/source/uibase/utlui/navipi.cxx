@@ -534,6 +534,8 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
     , m_bIsZoomedIn(false)
     , m_bGlobalMode(false)
 {
+    m_xContainer->connect_container_focus_changed(LINK(this, SwNavigationPI, SetFocusChildHdl));
+
     set_id("NavigatorPanelParent"); // for uitest/writer_tests5/tdf114724.py
 
     GetCreateView();
@@ -758,11 +760,12 @@ void SwNavigationPI::StateChanged(StateChangedType nStateChange)
             m_xContentTree->UpdateTracking();
         }
     }
-    else if (nStateChange == StateChangedType::ControlFocus)
-    {
-        // update documents listbox
-        UpdateListBox();
-    }
+}
+
+IMPL_LINK_NOARG(SwNavigationPI, SetFocusChildHdl, weld::Container&, void)
+{
+    // update documents listbox
+    UpdateListBox();
 }
 
 // Notification on modified DocInfo

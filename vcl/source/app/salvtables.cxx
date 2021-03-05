@@ -1146,6 +1146,23 @@ void SalInstanceContainer::implResetDefault(const vcl::Window* _pWindow)
     }
 }
 
+void SalInstanceContainer::connect_container_focus_changed(const Link<Container&, void>& rLink)
+{
+    ensure_event_listener();
+    weld::Container::connect_container_focus_changed(rLink);
+}
+
+void SalInstanceContainer::HandleEventListener(VclWindowEvent& rEvent)
+{
+    if (rEvent.GetId() == VclEventId::WindowActivate
+        || rEvent.GetId() == VclEventId::WindowDeactivate)
+    {
+        signal_container_focus_changed();
+        return;
+    }
+    SalInstanceWidget::HandleEventListener(rEvent);
+}
+
 SalInstanceContainer::SalInstanceContainer(vcl::Window* pContainer, SalInstanceBuilder* pBuilder,
                                            bool bTakeOwnership)
     : SalInstanceWidget(pContainer, pBuilder, bTakeOwnership)
