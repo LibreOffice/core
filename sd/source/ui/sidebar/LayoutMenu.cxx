@@ -603,7 +603,7 @@ void LayoutMenu::ShowContextMenu(const Point* pPos)
 
     // Setup the menu.
     ::tools::Rectangle aRect(aMenuPosition, Size(1, 1));
-    weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
+    weld::Widget* pPopupParent = mxLayoutValueSet->GetDrawingArea();
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "modules/simpress/ui/layoutmenu.ui"));
     std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
 
