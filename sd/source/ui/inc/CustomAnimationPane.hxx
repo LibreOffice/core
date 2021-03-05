@@ -71,7 +71,6 @@ public:
     void remove( CustomAnimationEffectPtr const & pEffect );
 
     // Control
-    virtual void StateChanged( StateChangedType nStateChange ) override;
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
 
     // ICustomAnimationListController
