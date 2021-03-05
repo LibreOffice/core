@@ -467,6 +467,8 @@ public:
 
     void testDrawTransformedBitmapExAlpha()
     {
+// TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
+#ifndef MACOSX
         ScopedVclPtrInstance<VirtualDevice> device;
         device->SetOutputSizePixel(Size(16, 16));
         device->SetBackground(Wallpaper(COL_WHITE));
@@ -498,6 +500,7 @@ public:
         result = device->GetBitmap(Point(0, 0), Size(16, 16));
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, result.GetPixelColor(0, 0));
         CPPUNIT_ASSERT_EQUAL(Color(0x80, 0x80, 0x80), result.GetPixelColor(0, 15));
+#endif
     }
 
     void testClipRectangle()
@@ -856,6 +859,8 @@ public:
 
     void testTdf136171()
     {
+// TODO: Following unit tests are not executed for macOS unless bitmap scaling is implemented
+#ifndef MACOSX
         // Create virtual device with alpha.
         ScopedVclPtr<VirtualDevice> device
             = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
@@ -877,6 +882,7 @@ public:
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(0, 9)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(9, 9)));
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(4, 4)));
+#endif
     }
 
     CPPUNIT_TEST_SUITE(BackendTest);
@@ -922,10 +928,7 @@ public:
     CPPUNIT_TEST(testDrawBlend);
     CPPUNIT_TEST(testDrawXor);
 
-// TODO: Following unit test is not executed for macOS unless bitmap scaling is implemented
-#ifndef MACOSX
     CPPUNIT_TEST(testDrawTransformedBitmapExAlpha);
-#endif
 
     CPPUNIT_TEST(testClipRectangle);
     CPPUNIT_TEST(testClipPolygon);
@@ -950,11 +953,8 @@ public:
     CPPUNIT_TEST(testDrawBlendExtended);
     CPPUNIT_TEST(testDrawAlphaBitmapMirrored);
 
-// TODO: Following unit tests are not executed for macOS unless bitmap scaling is implemented
-#ifndef MACOSX
     CPPUNIT_TEST(testTdf124848);
     CPPUNIT_TEST(testTdf136171);
-#endif
 
     CPPUNIT_TEST_SUITE_END();
 };
