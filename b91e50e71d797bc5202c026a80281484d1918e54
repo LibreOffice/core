@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78cddf99_4ad2067d",
+        "filename": "sd/source/ui/app/scalectrl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-05T17:04:03Z",
+      "side": 1,
+      "message": "Is this supposed to work, Caolan?",
+      "range": {
+        "startLine": 100,
+        "startChar": 29,
+        "endLine": 100,
+        "endChar": 53
+      },
+      "revId": "b91e50e71d797bc5202c026a80281484d1918e54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
