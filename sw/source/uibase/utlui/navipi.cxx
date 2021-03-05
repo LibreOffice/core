@@ -435,7 +435,7 @@ void SwNavigationPI::ZoomOut()
         m_xDocListBox->show();
     }
 
-    Size aOptimalSize(GetOptimalSize());
+    Size aOptimalSize(m_xContainer->get_preferred_size());
     Size aNewSize(pNav->GetOutputSizePixel());
     aNewSize.setHeight( m_aExpandedSize.Height() );
     pNav->SetMinOutputSizePixel(aOptimalSize);
@@ -463,7 +463,7 @@ void SwNavigationPI::ZoomIn()
     m_xDocListBox->hide();
     m_bIsZoomedIn = true;
 
-    Size aOptimalSize(GetOptimalSize());
+    Size aOptimalSize(m_xContainer->get_preferred_size());
     Size aNewSize(pNav->GetOutputSizePixel());
     aNewSize.setHeight( aOptimalSize.Height() );
     pNav->SetMinOutputSizePixel(aOptimalSize);
@@ -645,7 +645,7 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
     m_xGlobalTree->set_accessible_name(SwResId(STR_ACCESS_TL_GLOBAL));
     m_xDocListBox->set_accessible_name(m_aStatusArr[3]);
 
-    m_aExpandedSize = GetOptimalSize();
+    m_aExpandedSize = m_xContainer->get_preferred_size();
 
     m_pInitialFocusWidget = m_xContent1ToolBox.get();
 }
