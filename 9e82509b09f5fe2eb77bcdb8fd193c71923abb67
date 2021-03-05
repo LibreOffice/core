@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3db049e2_273bd3ab",
+        "filename": "xmlsecurity/source/helper/documentsignaturemanager.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-05T07:03:34Z",
+      "side": 1,
+      "message": "getSignatureHelper() seems to be the same as maSignatureHelper, is there a reason for the inconsistency?",
+      "revId": "9e82509b09f5fe2eb77bcdb8fd193c71923abb67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
