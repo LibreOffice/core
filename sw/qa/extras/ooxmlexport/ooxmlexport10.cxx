@@ -453,10 +453,8 @@ DECLARE_OOXMLEXPORT_TEST(testPictureWithSchemeColor, "picture-with-schemecolor.d
     BitmapEx aBitmap(aVclGraphic.GetBitmapEx());
     CPPUNIT_ASSERT_EQUAL(tools::Long(341), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(181), aBitmap.GetSizePixel().Height());
-    Color aColor(aBitmap.GetPixelColor(120, 30));
-    CPPUNIT_ASSERT_EQUAL(aColor, Color( 0xb1, 0xc8, 0xdd ));
-    aColor = aBitmap.GetPixelColor(260, 130);
-    CPPUNIT_ASSERT_EQUAL(aColor, Color( 0xb1, 0xc8, 0xdd ));
+    CPPUNIT_ASSERT_EQUAL(Color( 0xad, 0xc5, 0xdb ), aBitmap.GetPixelColor(120, 30));
+    CPPUNIT_ASSERT_EQUAL(Color( 0xad, 0xc5, 0xdb ), aBitmap.GetPixelColor(260, 130));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo69656, "Table_cell_auto_width_fdo69656.docx")

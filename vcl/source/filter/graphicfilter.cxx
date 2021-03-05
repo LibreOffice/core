@@ -32,7 +32,7 @@
 #include <vcl/dibtools.hxx>
 #include <fltcall.hxx>
 #include <vcl/salctype.hxx>
-#include <vcl/pngread.hxx>
+#include <vcl/filter/PngImageReader.hxx>
 #include <vcl/pngwrite.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 #include <vcl/virdev.hxx>
@@ -86,8 +86,6 @@
 
 #include <graphic/GraphicFormatDetector.hxx>
 #include <graphic/GraphicReader.hxx>
-
-#define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
 
 typedef ::std::vector< GraphicFilter* > FilterList_impl;
 static FilterList_impl* pFilterHdlList = nullptr;
@@ -755,35 +753,12 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
         }
         else if (aFilterName.equalsIgnoreAsciiCase(IMP_PNG))
         {
-            vcl::PNGReader aPNGReader(rIStream);
-
             // check if this PNG contains a GIF chunk!
-            const std::vector<vcl::PNGReader::ChunkData>& rChunkData = aPNGReader.GetChunks();
-            for (auto const& chunk : rChunkData)
-            {
-                // Microsoft Office is storing Animated GIFs in following chunk
-                if (chunk.nType == PMGCHUNG_msOG)
-                {
-                    sal_uInt32 nChunkSize = chunk.aData.size();
-
-                    if (nChunkSize > 11)
-                    {
-                        const std::vector<sal_uInt8>& rData = chunk.aData;
-                        nGraphicContentSize = nChunkSize - 11;
-                        SvMemoryStream aIStrm(const_cast<sal_uInt8*>(&rData[11]), nGraphicContentSize, StreamMode::READ);
-                        pGraphicContent.reset(new sal_uInt8[nGraphicContentSize]);
-                        sal_uInt64 aCurrentPosition = aIStrm.Tell();
-                        aIStrm.ReadBytes(pGraphicContent.get(), nGraphicContentSize);
-                        aIStrm.Seek(aCurrentPosition);
-                        eLinkType = GfxLinkType::NativeGif;
-                        break;
-                    }
-                }
-            }
-            if (eLinkType == GfxLinkType::NONE)
-            {
+            pGraphicContent = vcl::PngImageReader::getMicrosoftGifChunk(rIStream, &nGraphicContentSize);
+            if( pGraphicContent )
+                eLinkType = GfxLinkType::NativeGif;
+            else
                 eLinkType = GfxLinkType::NativePng;
-            }
         }
         else if (aFilterName.equalsIgnoreAsciiCase(IMP_JPEG))
         {
@@ -955,36 +930,19 @@ ErrCode GraphicFilter::readPNG(SvStream & rStream, Graphic & rGraphic, GfxLinkTy
 {
     ErrCode aReturnCode = ERRCODE_NONE;
 
-    vcl::PNGReader aPNGReader(rStream);
+    // check if this PNG contains a GIF chunk!
+    rpGraphicContent = vcl::PngImageReader::getMicrosoftGifChunk(rStream, &rGraphicContentSize);
+    if( rpGraphicContent )
     {
-        // check if this PNG contains a GIF chunk!
-        const std::vector<vcl::PNGReader::ChunkData>& rChunkData = aPNGReader.GetChunks();
-        for (auto const& chunk : rChunkData)
-        {
-            // Microsoft Office is storing Animated GIFs in following chunk
-            if (chunk.nType == PMGCHUNG_msOG)
-            {
-                sal_uInt32 nChunkSize = chunk.aData.size();
-
-                if (nChunkSize > 11)
-                {
-                    const std::vector<sal_uInt8>& rData = chunk.aData;
-                    rGraphicContentSize = nChunkSize - 11;
-                    SvMemoryStream aIStrm(const_cast<sal_uInt8*>(&rData[11]), rGraphicContentSize, StreamMode::READ);
-                    rpGraphicContent.reset(new sal_uInt8[rGraphicContentSize]);
-                    sal_uInt64 aCurrentPosition = aIStrm.Tell();
-                    aIStrm.ReadBytes(rpGraphicContent.get(), rGraphicContentSize);
-                    aIStrm.Seek(aCurrentPosition);
-                    ImportGIF(aIStrm, rGraphic);
-                    rLinkType = GfxLinkType::NativeGif;
-                    return aReturnCode;
-                }
-            }
-        }
+        SvMemoryStream aIStrm(rpGraphicContent.get(), rGraphicContentSize, StreamMode::READ);
+        ImportGIF(aIStrm, rGraphic);
+        rLinkType = GfxLinkType::NativeGif;
+        return aReturnCode;
     }
 
     // PNG has no GIF chunk
-    BitmapEx aBitmapEx(aPNGReader.Read());
+    vcl::PngImageReader aPNGReader(rStream);
+    BitmapEx aBitmapEx(aPNGReader.read());
     if (!aBitmapEx.IsEmpty())
     {
         rGraphic = aBitmapEx;

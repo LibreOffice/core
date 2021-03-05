@@ -33,7 +33,11 @@ class VCL_DLLPUBLIC PngImageReader
 public:
     PngImageReader(SvStream& rStream);
 
+    // Returns true if image was successfully read without errors.
+    // A usable bitmap may be returned even if there were errors (e.g. incomplete image).
     bool read(BitmapEx& rBitmap);
+    // Returns a bitmap without indicating if there were errors.
+    BitmapEx read();
 
     // Returns the contents of the msOG chunk (containing a Gif image), if it exists.
     // Does not change position in the stream.

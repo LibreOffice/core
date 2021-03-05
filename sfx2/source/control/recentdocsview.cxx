@@ -24,7 +24,7 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/historyoptions.hxx>
 #include <vcl/event.hxx>
-#include <vcl/pngread.hxx>
+#include <vcl/filter/PngImageReader.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
@@ -264,8 +264,8 @@ void RecentDocsView::Reload()
                     comphelper::Base64::decode(aDecoded, aBase64);
 
                     SvMemoryStream aStream(aDecoded.getArray(), aDecoded.getLength(), StreamMode::READ);
-                    vcl::PNGReader aReader(aStream);
-                    aThumbnail = aReader.Read();
+                    vcl::PngImageReader aReader(aStream);
+                    aThumbnail = aReader.read();
                 } else
                 {
                     INetURLObject aUrl(aURL);
