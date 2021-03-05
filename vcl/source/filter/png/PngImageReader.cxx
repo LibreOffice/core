@@ -10,6 +10,7 @@
 
 #include <vcl/filter/PngImageReader.hxx>
 #include <png.h>
+#include <rtl/crc.h>
 #include <tools/stream.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/alpha.hxx>
@@ -40,18 +41,20 @@ void lclReadStream(png_structp pPng, png_bytep pOutBytes, png_size_t nBytesToRea
     }
 }
 
-bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
-{
-    enum
-    {
-        PNG_SIGNATURE_SIZE = 8
-    };
+constexpr int PNG_SIGNATURE_SIZE = 8;
 
+bool isPng(SvStream& rStream)
+{
     // Check signature bytes
     sal_uInt8 aHeader[PNG_SIGNATURE_SIZE];
     rStream.ReadBytes(aHeader, PNG_SIGNATURE_SIZE);
 
-    if (png_sig_cmp(aHeader, 0, PNG_SIGNATURE_SIZE))
+    return png_sig_cmp(aHeader, 0, PNG_SIGNATURE_SIZE) == 0;
+}
+
+bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
+{
+    if (!isPng(rStream))
         return false;
 
     png_structp pPng = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
@@ -347,6 +350,64 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
     return true;
 }
 
+std::unique_ptr<sal_uInt8[]> getMsGifChunk(SvStream& rStream, sal_Int32* chunkSize)
+{
+    if (chunkSize)
+        *chunkSize = 0;
+    if (!isPng(rStream))
+        return nullptr;
+    // It's easier to read manually the contents and find the chunk than
+    // try to get it using libpng.
+    // https://en.wikipedia.org/wiki/Portable_Network_Graphics#File_format
+    // Each chunk is: 4 bytes length, 4 bytes type, <length> bytes, 4 bytes crc
+    for (;;)
+    {
+        sal_uInt32 length, type, crc;
+        rStream.ReadUInt32(length);
+        rStream.ReadUInt32(type);
+        if (!rStream.good())
+            return nullptr;
+        constexpr sal_uInt32 PNGCHUNK_msOG = 0x6d734f47; // Microsoft Office Animated GIF
+        constexpr sal_uInt64 MSGifHeaderSize = 11; // "MSOFFICE9.0"
+        if (type == PNGCHUNK_msOG && length > MSGifHeaderSize)
+        {
+            // calculate chunktype CRC (swap it back to original byte order)
+            sal_uInt32 typeForCrc = type;
+#if defined(__LITTLEENDIAN) || defined(OSL_LITENDIAN)
+            typeForCrc = OSL_SWAPDWORD(typeForCrc);
+#endif
+            sal_uInt32 computedCrc = rtl_crc32(0, &typeForCrc, 4);
+            const sal_uInt64 pos = rStream.Tell();
+            if (pos + length >= rStream.TellEnd())
+                return nullptr; // broken PNG
+
+            char msHeader[MSGifHeaderSize];
+            if (rStream.ReadBytes(msHeader, MSGifHeaderSize) != MSGifHeaderSize)
+                return nullptr;
+            computedCrc = rtl_crc32(computedCrc, msHeader, MSGifHeaderSize);
+            length -= MSGifHeaderSize;
+
+            std::unique_ptr<sal_uInt8[]> chunk(new sal_uInt8[length]);
+            if (rStream.ReadBytes(chunk.get(), length) != length)
+                return nullptr;
+            computedCrc = rtl_crc32(computedCrc, chunk.get(), length);
+            rStream.ReadUInt32(crc);
+            if (crc != computedCrc)
+                continue; // invalid chunk, ignore
+            if (chunkSize)
+                *chunkSize = length;
+            return chunk;
+        }
+        if (rStream.remainingSize() < length)
+            return nullptr;
+        rStream.SeekRel(length);
+        rStream.ReadUInt32(crc);
+        constexpr sal_uInt32 PNGCHUNK_IEND = 0x49454e44;
+        if (type == PNGCHUNK_IEND)
+            return nullptr;
+    }
+}
+
 } // anonymous namespace
 
 namespace vcl
@@ -362,6 +423,18 @@ bool PngImageReader::read(BitmapEx& rBitmapEx)
     bool bSupportsBitmap32 = pBackendCapabilities->mbSupportsBitmap32;
 
     return reader(mrStream, rBitmapEx, bSupportsBitmap32);
+}
+
+std::unique_ptr<sal_uInt8[]> PngImageReader::getMicrosoftGifChunk(SvStream& rStream,
+                                                                  sal_Int32* chunkSize)
+{
+    sal_uInt64 originalPosition = rStream.Tell();
+    SvStreamEndian originalEndian = rStream.GetEndian();
+    rStream.SetEndian(SvStreamEndian::BIG);
+    std::unique_ptr<sal_uInt8[]> chunk = getMsGifChunk(rStream, chunkSize);
+    rStream.SetEndian(originalEndian);
+    rStream.Seek(originalPosition);
+    return chunk;
 }
 
 } // namespace vcl
