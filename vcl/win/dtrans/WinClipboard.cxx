@@ -112,6 +112,32 @@ uno::Reference<datatransfer::XTransferable> SAL_CALL CWinClipboard::getContents(
 
     uno::Reference<datatransfer::XTransferable> rClipContent;
 
+    // get the current format list from clipboard
+    if (UINT nFormats; !GetUpdatedClipboardFormats(nullptr, 0, &nFormats)
+                       && GetLastError() == ERROR_INSUFFICIENT_BUFFER)
+    {
+        std::vector<UINT> aUINTFormats(nFormats);
+        if (GetUpdatedClipboardFormats(aUINTFormats.data(), nFormats, &nFormats))
+        {
+            std::vector<sal_uInt32> aFormats(aUINTFormats.begin(), aUINTFormats.end());
+            rClipContent = new CDOTransferable(m_xContext, this, aFormats);
+
+            osl::MutexGuard aGuard2(m_ClipContentMutex);
+            m_foreignContent = rClipContent;
+        }
+    }
+
+    return rClipContent;
+}
+
+IDataObjectPtr CWinClipboard::getIDataObject()
+{
+    osl::MutexGuard aGuard(m_aMutex);
+
+    if (rBHelper.bDisposed)
+        throw lang::DisposedException("object is already disposed",
+                                      static_cast<XClipboardEx*>(this));
+
     // get the current dataobject from clipboard
     IDataObjectPtr pIDataObject;
     HRESULT hr = m_MtaOleClipboard.getClipboard(&pIDataObject);
@@ -120,16 +146,10 @@ uno::Reference<datatransfer::XTransferable> SAL_CALL CWinClipboard::getContents(
     {
         // create an apartment neutral dataobject and initialize it with a
         // com smart pointer to the IDataObject from clipboard
-        IDataObjectPtr pIDo(new CAPNDataObject(pIDataObject));
-
-        // remember pIDo destroys itself due to the smart pointer
-        rClipContent = CDOTransferable::create(m_xContext, pIDo);
-
-        osl::MutexGuard aGuard2(m_ClipContentMutex);
-        m_foreignContent = rClipContent;
+        pIDataObject = new CAPNDataObject(pIDataObject);
     }
 
-    return rClipContent;
+    return pIDataObject;
 }
 
 void SAL_CALL CWinClipboard::setContents(

@@ -333,8 +333,7 @@ HRESULT DropTarget::DragEnter( IDataObject *pDataObj,
         else
         {
             // Convert the IDataObject to a XTransferable
-            m_currentData= CDOTransferable::create(
-                                            m_xContext, IDataObjectPtr(pDataObj));
+            m_currentData = new CDOTransferable(m_xContext, IDataObjectPtr(pDataObj));
         }
 
         //<-- TRA

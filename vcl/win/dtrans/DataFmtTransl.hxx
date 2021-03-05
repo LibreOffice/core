@@ -42,7 +42,7 @@ public:
 
     CFormatEtc getFormatEtcFromDataFlavor( const css::datatransfer::DataFlavor& aDataFlavor ) const;
     css::datatransfer::DataFlavor getDataFlavorFromFormatEtc(
-        const FORMATETC& aFormatEtc, LCID lcid = GetThreadLocale( ) ) const;
+        sal_uInt32 cfFormat, LCID lcid = GetThreadLocale()) const;
 
     static CFormatEtc getFormatEtcForClipformat( CLIPFORMAT cf );
     static CFormatEtc getFormatEtcForClipformatName( const OUString& aClipFmtName );

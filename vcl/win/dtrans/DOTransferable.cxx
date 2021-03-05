@@ -25,6 +25,7 @@
 #include "DOTransferable.hxx"
 #include "ImplHelper.hxx"
 #include "WinClip.hxx"
+#include "WinClipboard.hxx"
 #include "DTransHelper.hxx"
 #include "TxtCnvtHlp.hxx"
 #include "MimeAttrib.hxx"
@@ -208,19 +209,6 @@ bool cmpAllContentTypeParameter(
 
 } // end namespace
 
-Reference< XTransferable > CDOTransferable::create( const Reference< XComponentContext >& rxContext,
-                                                                                     IDataObjectPtr pIDataObject )
-{
-    CDOTransferable* pTransf = new CDOTransferable(rxContext, pIDataObject);
-    Reference<XTransferable> refDOTransf(pTransf);
-
-    pTransf->acquire();
-    pTransf->initFlavorList();
-    pTransf->release();
-
-    return refDOTransf;
-}
-
 CDOTransferable::CDOTransferable(
     const Reference< XComponentContext >& rxContext, IDataObjectPtr rDataObject ) :
     m_rDataObject( rDataObject ),
@@ -229,6 +217,20 @@ CDOTransferable::CDOTransferable(
     m_bUnicodeRegistered( false ),
     m_TxtFormatOnClipboard( CF_INVALID )
 {
+    initFlavorList();
+}
+
+CDOTransferable::CDOTransferable(
+    const Reference<XComponentContext>& rxContext,
+    const css::uno::Reference<css::datatransfer::clipboard::XClipboard>& xClipboard,
+    const std::vector<sal_uInt32>& rFormats)
+    : m_xClipboard(xClipboard)
+    , m_xContext(rxContext)
+    , m_DataFormatTranslator(rxContext)
+    , m_bUnicodeRegistered(false)
+    , m_TxtFormatOnClipboard(CF_INVALID)
+{
+    initFlavorListFromFormatList(rFormats);
 }
 
 Any SAL_CALL CDOTransferable::getTransferData( const DataFlavor& aFlavor )
@@ -312,6 +314,7 @@ sal_Bool SAL_CALL CDOTransferable::isDataFlavorSupported( const DataFlavor& aFla
 
 void CDOTransferable::initFlavorList( )
 {
+    std::vector<sal_uInt32> aFormats;
     sal::systools::COMReference<IEnumFORMATETC> pEnumFormatEtc;
     HRESULT hr = m_rDataObject->EnumFormatEtc( DATADIR_GET, &pEnumFormatEtc );
     if ( SUCCEEDED( hr ) )
@@ -321,39 +324,38 @@ void CDOTransferable::initFlavorList( )
         FORMATETC fetc;
         while ( S_OK == pEnumFormatEtc->Next( 1, &fetc, nullptr ) )
         {
-            // we use locales only to determine the
-            // charset if there is text on the cliboard
-            // we don't offer this format
-            if ( CF_LOCALE == fetc.cfFormat )
-                continue;
-
-            DataFlavor aFlavor = formatEtcToDataFlavor( fetc );
-
-            // if text or oemtext is offered we also pretend to have unicode text
-            if ( CDataFormatTranslator::isOemOrAnsiTextFormat( fetc.cfFormat ) &&
-                 !m_bUnicodeRegistered )
-            {
-                addSupportedFlavor( aFlavor );
-
-                m_TxtFormatOnClipboard = fetc.cfFormat;
-                m_bUnicodeRegistered   = true;
-
-                // register unicode text as accompany format
-                aFlavor = formatEtcToDataFlavor(
-                    CDataFormatTranslator::getFormatEtcForClipformat( CF_UNICODETEXT ) );
-                addSupportedFlavor( aFlavor );
-            }
-            else if ( (CF_UNICODETEXT == fetc.cfFormat) && !m_bUnicodeRegistered )
-            {
-                addSupportedFlavor( aFlavor );
-                m_bUnicodeRegistered = true;
-            }
-            else
-                addSupportedFlavor( aFlavor );
-
+            aFormats.push_back(fetc.cfFormat);
             // see MSDN IEnumFORMATETC
             CoTaskMemFree( fetc.ptd );
         }
+        initFlavorListFromFormatList(aFormats);
+    }
+}
+
+void CDOTransferable::initFlavorListFromFormatList(const std::vector<sal_uInt32>& rFormats)
+{
+    for (sal_uInt32 cfFormat : rFormats)
+    {
+        // we use locales only to determine the
+        // charset if there is text on the cliboard
+        // we don't offer this format
+        if (CF_LOCALE == cfFormat)
+            continue;
+
+        // if text or oemtext is offered we pretend to have unicode text
+        if (CDataFormatTranslator::isTextFormat(cfFormat))
+        {
+            if (!m_bUnicodeRegistered)
+            {
+                m_TxtFormatOnClipboard = cfFormat;
+                m_bUnicodeRegistered   = true;
+
+                // register unicode text as format
+                addSupportedFlavor(formatEtcToDataFlavor(CF_UNICODETEXT));
+            }
+        }
+        else
+            addSupportedFlavor(formatEtcToDataFlavor(cfFormat));
     }
 }
 
@@ -370,18 +372,9 @@ void CDOTransferable::addSupportedFlavor( const DataFlavor& aFlavor )
     }
 }
 
-DataFlavor CDOTransferable::formatEtcToDataFlavor( const FORMATETC& aFormatEtc )
+DataFlavor CDOTransferable::formatEtcToDataFlavor(sal_uInt32 cfFormat)
 {
-    LCID lcid = 0;
-
-    // for non-unicode text format we must provide a locale to get
-    // the character-set of the text, if there is no locale on the
-    // clipboard we assume the text is in a charset appropriate for
-    // the current thread locale
-    if ( (CF_TEXT == aFormatEtc.cfFormat) || (CF_OEMTEXT == aFormatEtc.cfFormat) )
-        lcid = getLocaleFromClipboard( );
-
-    return m_DataFormatTranslator.getDataFlavorFromFormatEtc( aFormatEtc, lcid );
+    return m_DataFormatTranslator.getDataFlavorFromFormatEtc(cfFormat);
 }
 
 // returns the current locale on clipboard; if there is no locale on
@@ -411,6 +404,18 @@ LCID CDOTransferable::getLocaleFromClipboard( )
     return lcid;
 }
 
+void CDOTransferable::tryToGetIDataObjectIfAbsent()
+{
+    if (!m_rDataObject.is())
+    {
+        auto xClipboard = m_xClipboard.get(); // holding the reference while we get the object
+        if (CWinClipboard* pWinClipboard = dynamic_cast<CWinClipboard*>(xClipboard.get()))
+        {
+            m_rDataObject = pWinClipboard->getIDataObject();
+        }
+    }
+}
+
 // I think it's not necessary to call ReleaseStgMedium
 // in case of failures because nothing should have been
 // allocated etc.
@@ -418,6 +423,9 @@ LCID CDOTransferable::getLocaleFromClipboard( )
 CDOTransferable::ByteSequence_t CDOTransferable::getClipboardData( CFormatEtc& aFormatEtc )
 {
     STGMEDIUM stgmedium;
+    tryToGetIDataObjectIfAbsent();
+    if (!m_rDataObject.is()) // Maybe we are shutting down, and clipboard is already destroyed?
+        throw RuntimeException();
     HRESULT hr = m_rDataObject->GetData( aFormatEtc, &stgmedium );
 
     // in case of failure to get a WMF metafile handle, try to get a memory block
