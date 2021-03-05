@@ -58,7 +58,7 @@ static int CalcBuffSizeForTextConversion( UINT code_page, LPCWSTR lpWideCharStri
 
 int MultiByteToWideCharEx( UINT cp_src,
                            LPCSTR lpMultiByteString,
-                           sal_uInt32 lenStr,
+                           int lenStr,
                            CStgTransferHelper& refDTransHelper,
                            BOOL bEnsureTrailingZero )
 {
@@ -92,7 +92,7 @@ int MultiByteToWideCharEx( UINT cp_src,
 
 int WideCharToMultiByteEx( UINT cp_dest,
                            LPCWSTR lpWideCharString,
-                           sal_uInt32 lenStr,
+                           int lenStr,
                            CStgTransferHelper& refDTransHelper,
                            BOOL bEnsureTrailingZero )
 {

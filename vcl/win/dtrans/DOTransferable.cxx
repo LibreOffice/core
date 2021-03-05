@@ -536,7 +536,7 @@ OUString CDOTransferable::synthesizeUnicodeText( )
     // convert the text
     MultiByteToWideCharEx( cpForTxtCnvt,
                            reinterpret_cast<char*>( aTextSequence.getArray( ) ),
-                           sal::static_int_cast<sal_uInt32>(-1), // Huh ?
+                           -1,
                            stgTransferHelper,
                            false);
 
