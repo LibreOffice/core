@@ -20,6 +20,7 @@
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyConcept.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -349,15 +350,18 @@ class BasicValueNode : public SimpleStringNode
 {
 protected:
     uno::Any maAny;
+    OUString mrInfo;
     uno::Reference<uno::XComponentContext> mxContext;
 
-    ObjectInspectorNodeInterface* createNodeObjectForAny(OUString const& rName, uno::Any& rAny);
+    ObjectInspectorNodeInterface* createNodeObjectForAny(OUString const& rName, uno::Any& rAny,
+                                                         OUString const& mrInfo);
 
 public:
-    BasicValueNode(OUString const& rName, uno::Any const& rAny,
+    BasicValueNode(OUString const& rName, uno::Any const& rAny, OUString const& rInfo,
                    uno::Reference<uno::XComponentContext> const& xContext)
         : SimpleStringNode(rName)
         , maAny(rAny)
+        , mrInfo(rInfo)
         , mxContext(xContext)
     {
     }
@@ -389,19 +393,16 @@ public:
         OUString aValue = AnyToString(maAny, mxContext);
         OUString aType = getAnyType(maAny);
 
-        return {
-            { 1, aValue },
-            { 2, aType },
-        };
+        return { { 1, aValue }, { 2, aType }, { 3, mrInfo } };
     }
 };
 
 class GenericPropertiesNode : public BasicValueNode
 {
 public:
-    GenericPropertiesNode(OUString const& rName, uno::Any const& rAny,
+    GenericPropertiesNode(OUString const& rName, uno::Any const& rAny, OUString const& rInfo,
                           uno::Reference<uno::XComponentContext> const& xContext)
-        : BasicValueNode(rName, rAny, xContext)
+        : BasicValueNode(rName, rAny, rInfo, xContext)
     {
     }
 
@@ -412,9 +413,9 @@ public:
 class StructNode : public BasicValueNode
 {
 public:
-    StructNode(OUString const& rName, uno::Any const& rAny,
+    StructNode(OUString const& rName, uno::Any const& rAny, OUString const& rInfo,
                uno::Reference<uno::XComponentContext> const& xContext)
-        : BasicValueNode(rName, rAny, xContext)
+        : BasicValueNode(rName, rAny, rInfo, xContext)
     {
     }
 
@@ -429,9 +430,9 @@ class SequenceNode : public BasicValueNode
     uno::Reference<reflection::XIdlArray> mxIdlArray;
 
 public:
-    SequenceNode(OUString const& rName, uno::Any const& rAny,
+    SequenceNode(OUString const& rName, uno::Any const& rAny, OUString const& rInfo,
                  uno::Reference<uno::XComponentContext> const& xContext)
-        : BasicValueNode(rName, rAny, xContext)
+        : BasicValueNode(rName, rAny, rInfo, xContext)
     {
         auto xReflection = reflection::theCoreReflection::get(mxContext);
         OUString aTypeName = maAny.getValueType().getTypeName();
@@ -456,7 +457,8 @@ public:
             uno::Any aArrayValue = mxIdlArray->get(maAny, i);
             uno::Reference<uno::XInterface> xCurrent;
 
-            auto* pObjectInspectorNode = createNodeObjectForAny(OUString::number(i), aArrayValue);
+            auto* pObjectInspectorNode
+                = createNodeObjectForAny(OUString::number(i), aArrayValue, "");
             if (pObjectInspectorNode)
                 lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
         }
@@ -490,7 +492,8 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
         for (OUString const& rName : aNames)
         {
             uno::Any aAny = xNameAccess->getByName(rName);
-            auto* pObjectInspectorNode = createNodeObjectForAny("@" + rName, aAny);
+            auto* pObjectInspectorNode
+                = createNodeObjectForAny(u"@" + rName, aAny, u"name container");
             lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
         }
     }
@@ -502,7 +505,7 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
         {
             uno::Any aAny = xIndexAccess->getByIndex(nIndex);
             auto* pObjectInspectorNode
-                = createNodeObjectForAny("@" + OUString::number(nIndex), aAny);
+                = createNodeObjectForAny(u"@" + OUString::number(nIndex), aAny, u"index container");
             lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
         }
     }
@@ -517,7 +520,7 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
             {
                 uno::Any aAny = xEnumeration->nextElement();
                 auto* pObjectInspectorNode
-                    = createNodeObjectForAny("@{" + OUString::number(nIndex) + "}", aAny);
+                    = createNodeObjectForAny(u"@" + OUString::number(nIndex), aAny, u"enumeration");
                 lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
             }
         }
@@ -533,6 +536,8 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
     if (!xInvocation.is())
         return;
 
+    const auto xInvocationAccess = xInvocation->getIntrospection();
+
     const auto aInvocationInfoSequence = xInvocation->getInfo();
     for (auto const& aInvocationInfo : aInvocationInfoSequence)
     {
@@ -540,15 +545,84 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
         {
             uno::Any aCurrentAny;
             auto const& aPropertyName = aInvocationInfo.aName;
+
+            bool bIsAttribute = false;
+            bool bIsGetSetMethod = false;
+            bool bMethodGet = false;
+            bool bMethodSet = false;
+            bool bMethodIs = false;
             try
             {
                 aCurrentAny = xInvocation->getValue(aPropertyName);
+                bIsAttribute = xInvocationAccess->hasProperty(aPropertyName,
+                                                              beans::PropertyConcept::ATTRIBUTES);
+                bIsGetSetMethod = xInvocationAccess->hasProperty(aPropertyName,
+                                                                 beans::PropertyConcept::METHODS);
+                if (bIsGetSetMethod)
+                {
+                    bMethodGet = xInvocationAccess->hasMethod(u"get" + aPropertyName,
+                                                              beans::MethodConcept::PROPERTY);
+                    bMethodSet = xInvocationAccess->hasMethod(u"set" + aPropertyName,
+                                                              beans::MethodConcept::PROPERTY);
+                    bMethodIs = xInvocationAccess->hasMethod(u"is" + aPropertyName,
+                                                             beans::MethodConcept::PROPERTY);
+                }
             }
             catch (...)
             {
             }
 
-            auto* pObjectInspectorNode = createNodeObjectForAny(aPropertyName, aCurrentAny);
+            std::vector<OUString> aInfoCollection;
+            if (bIsAttribute)
+                aInfoCollection.push_back(u"attribute");
+            if (bIsGetSetMethod)
+            {
+                bool bSet = false;
+                OUString aString;
+                if (bMethodGet || bMethodIs)
+                {
+                    aString += u"get";
+                    bSet = true;
+                }
+                if (bMethodSet)
+                {
+                    if (bSet)
+                        aString += u", ";
+                    aString += u"set";
+                }
+                aInfoCollection.push_back(u"(" + aString + u")");
+            }
+            if (aInvocationInfo.PropertyAttribute & beans::PropertyAttribute::MAYBEVOID)
+                aInfoCollection.push_back(u"may be void");
+            if (aInvocationInfo.PropertyAttribute & beans::PropertyAttribute::READONLY)
+                aInfoCollection.push_back(u"read-only");
+            if (aInvocationInfo.PropertyAttribute & beans::PropertyAttribute::REMOVABLE)
+                aInfoCollection.push_back(u"removeable");
+            if (aInvocationInfo.PropertyAttribute & beans::PropertyAttribute::BOUND)
+                aInfoCollection.push_back(u"bound");
+            if (aInvocationInfo.PropertyAttribute & beans::PropertyAttribute::CONSTRAINED)
+                aInfoCollection.push_back(u"constrained");
+            if (aInvocationInfo.PropertyAttribute & beans::PropertyAttribute::TRANSIENT)
+                aInfoCollection.push_back(u"transient");
+            if (aInvocationInfo.PropertyAttribute & beans::PropertyAttribute::MAYBEAMBIGUOUS)
+                aInfoCollection.push_back(u"may be ambiguous");
+            if (aInvocationInfo.PropertyAttribute & beans::PropertyAttribute::MAYBEDEFAULT)
+                aInfoCollection.push_back(u"may be default");
+
+            bool bSet = false;
+            OUString aInfoString;
+            for (auto const& rString : aInfoCollection)
+            {
+                if (bSet)
+                    aInfoString += ", ";
+                else
+                    bSet = true;
+
+                aInfoString += rString;
+            }
+
+            auto* pObjectInspectorNode
+                = createNodeObjectForAny(aPropertyName, aCurrentAny, aInfoString);
             if (pObjectInspectorNode)
                 lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
         }
@@ -568,7 +642,7 @@ void StructNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree, const weld
         OUString aFieldName = xField->getName();
         uno::Any aFieldValue = xField->get(maAny);
 
-        auto* pObjectInspectorNode = createNodeObjectForAny(aFieldName, aFieldValue);
+        auto* pObjectInspectorNode = createNodeObjectForAny(aFieldName, aFieldValue, "");
         if (pObjectInspectorNode)
         {
             lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
@@ -576,25 +650,25 @@ void StructNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree, const weld
     }
 }
 
-ObjectInspectorNodeInterface* BasicValueNode::createNodeObjectForAny(OUString const& rName,
-                                                                     uno::Any& rAny)
+ObjectInspectorNodeInterface*
+BasicValueNode::createNodeObjectForAny(OUString const& rName, uno::Any& rAny, OUString const& rInfo)
 {
     switch (rAny.getValueType().getTypeClass())
     {
         case uno::TypeClass_INTERFACE:
-            return new GenericPropertiesNode(rName, rAny, mxContext);
+            return new GenericPropertiesNode(rName, rAny, rInfo, mxContext);
 
         case uno::TypeClass_SEQUENCE:
-            return new SequenceNode(rName, rAny, mxContext);
+            return new SequenceNode(rName, rAny, rInfo, mxContext);
 
         case uno::TypeClass_STRUCT:
-            return new StructNode(rName, rAny, mxContext);
+            return new StructNode(rName, rAny, rInfo, mxContext);
 
         default:
             break;
     }
 
-    return new BasicValueNode(rName, rAny, mxContext);
+    return new BasicValueNode(rName, rAny, rInfo, mxContext);
 }
 
 // helper functions
@@ -916,7 +990,8 @@ void ObjectInspectorTreeHandler::appendProperties(uno::Reference<uno::XInterface
 {
     if (!xInterface.is())
         return;
-    GenericPropertiesNode aNode("", uno::Any(xInterface), comphelper::getProcessComponentContext());
+    GenericPropertiesNode aNode("", uno::Any(xInterface), "",
+                                comphelper::getProcessComponentContext());
     aNode.fillChildren(mpPropertiesTreeView, nullptr);
 }
 
