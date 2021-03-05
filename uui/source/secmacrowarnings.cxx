@@ -23,6 +23,11 @@
 #include <vcl/svapp.hxx>
 #include <osl/file.h>
 #include <rtl/ustrbuf.hxx>
+#include <comphelper/documentconstants.hxx>
+#include <comphelper/processfactory.hxx>
+#include <vcl/svapp.hxx>
+#include <osl/file.hxx>
+#include <sal/macros.h>
 #include <tools/debug.hxx>
 #include <unotools/securityoptions.hxx>
 
@@ -86,9 +91,11 @@ IMPL_STATIC_LINK_NOARG(MacroWarning, InstallLOKNotifierHdl, void*, vcl::ILibreOf
 
 void MacroWarning::SetDocumentURL( const OUString& rDocURL )
 {
-    OUString aAbbreviatedPath;
-    osl_abbreviateSystemPath(rDocURL.pData, &aAbbreviatedPath.pData, 50, nullptr);
-    m_xDialog->set_primary_text(aAbbreviatedPath);
+    OUString aPath;
+
+    osl::FileBase::getFileURLFromSystemPath(rDocURL, aPath);
+    aPath = INetURLObject(aPath).GetLastName();
+    m_xDialog->set_primary_text(aPath);
 }
 
 IMPL_LINK_NOARG(MacroWarning, ViewSignsBtnHdl, weld::Button&, void)
