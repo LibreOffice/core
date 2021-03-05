@@ -146,6 +146,11 @@ ScContentTree::ScContentTree(std::unique_ptr<weld::TreeView> xTreeView, ScNaviga
     m_xTreeView->enable_drag_source(xHelper, DND_ACTION_COPY | DND_ACTION_LINK);
 
     m_xTreeView->connect_drag_begin(LINK(this, ScContentTree, DragBeginHdl));
+
+    m_xTreeView->set_selection_mode( SelectionMode::Single );
+
+    m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 30,
+                                  m_xTreeView->get_text_height() * 13);
 }
 
 ScContentTree::~ScContentTree()
