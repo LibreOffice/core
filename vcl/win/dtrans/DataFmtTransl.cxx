@@ -92,13 +92,13 @@ CFormatEtc CDataFormatTranslator::getFormatEtcFromDataFlavor( const DataFlavor& 
     return sal::static_int_cast<CFormatEtc>(getFormatEtcForClipformat( sal::static_int_cast<CLIPFORMAT>(cf) ));
 }
 
-DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc( const FORMATETC& aFormatEtc, LCID lcid ) const
+DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc(sal_uInt32 cfFormat, LCID lcid) const
 {
     DataFlavor aFlavor;
 
     try
     {
-        CLIPFORMAT aClipformat = aFormatEtc.cfFormat;
+        CLIPFORMAT aClipformat = cfFormat;
 
         Any aAny;
         aAny <<= static_cast< sal_Int32 >( aClipformat );
