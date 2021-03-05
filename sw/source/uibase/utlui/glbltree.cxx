@@ -128,8 +128,8 @@ SwGlobalTree::SwGlobalTree(std::unique_ptr<weld::TreeView> xTreeView, SwNavigati
     , m_xDialog(pDialog)
     , m_pActiveShell(nullptr)
 {
-    Size aSize(m_xDialog->LogicToPixel(Size(110, 112), MapMode(MapUnit::MapAppFont)));;
-    m_xTreeView->set_size_request(aSize.Width(), aSize.Height());
+    m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 30,
+                                  m_xTreeView->get_text_height() * 14);
 
     m_aUpdateTimer.SetTimeout(GLOBAL_UPDATE_TIMEOUT);
     m_aUpdateTimer.SetInvokeHandler(LINK(this, SwGlobalTree, Timeout));
