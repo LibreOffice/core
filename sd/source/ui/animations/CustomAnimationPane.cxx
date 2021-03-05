@@ -798,7 +798,7 @@ void CustomAnimationPane::updateMotionPathTags()
             pView = xViewShell->GetView();
     }
 
-    if( IsVisible() && mpMainSequence && pView )
+    if (mpMainSequence && pView)
     {
         bChanges = updateMotionPathImpl( *this, *pView, mpMainSequence->getBegin(), mpMainSequence->getEnd(), aTags, maMotionPathTags );
 
