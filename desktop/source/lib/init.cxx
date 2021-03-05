@@ -137,6 +137,8 @@
 #include <vcl/ITiledRenderable.hxx>
 #include <vcl/dialoghelper.hxx>
 #include <unicode/uchar.h>
+#include <unotools/securityoptions.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -2264,6 +2266,18 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction);
         aFilterOptions[1].Name = "InteractionHandler";
         aFilterOptions[1].Value <<= xInteraction;
+
+        int nMacroSecurityLevel = 1;
+        const OUString aMacroSecurityLevel = extractParameter(aOptions, u"MacroSecurityLevel");
+        if (!aMacroSecurityLevel.isEmpty())
+        {
+            double nNumber;
+            sal_uInt32 nFormat = 1;
+            SvNumberFormatter aFormatter(::comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US);
+            if (aFormatter.IsNumberFormat(aMacroSecurityLevel, nFormat, nNumber))
+                nMacroSecurityLevel = static_cast<int>(nNumber);
+        }
+        SvtSecurityOptions().SetMacroSecurityLevel(nMacroSecurityLevel);
 
         const OUString aEnableMacrosExecution = extractParameter(aOptions, u"EnableMacrosExecution");
         sal_Int16 nMacroExecMode = aEnableMacrosExecution == "true" ? document::MacroExecMode::USE_CONFIG :
