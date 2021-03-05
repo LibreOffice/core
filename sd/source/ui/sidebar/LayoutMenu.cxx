@@ -170,9 +170,6 @@ LayoutMenu::LayoutMenu (
 
     mxLayoutValueSet->SetColor(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Color_PanelBackground));
 
-#ifdef DEBUG
-    SetText(OUString("sd:LayoutMenu"));
-#endif
     m_pInitialFocusWidget = mxLayoutValueSet->GetDrawingArea();
 }
 
