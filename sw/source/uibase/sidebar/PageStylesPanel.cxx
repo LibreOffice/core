@@ -325,7 +325,7 @@ void PageStylesPanel::NotifyItemUpdate(
     const SfxItemState eState,
     const SfxPoolItem* pState)
 {
-    if(IsDisposed())
+    if (!mxColumnCount) //disposed
         return;
 
     switch(nSid)

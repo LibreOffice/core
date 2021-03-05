@@ -197,7 +197,7 @@ void PageHeaderPanel::NotifyItemUpdate(
     const SfxItemState eState,
     const SfxPoolItem* pState)
 {
-    if (IsDisposed())
+    if (!mxHeaderToggle) //disposed
         return;
 
     switch(nSid)
