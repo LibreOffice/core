@@ -263,20 +263,6 @@ void CustomAnimationPane::addUndo()
     }
 }
 
-void CustomAnimationPane::StateChanged( StateChangedType nStateChange )
-{
-    Control::StateChanged( nStateChange );
-
-    if( nStateChange == StateChangedType::Visible )
-        updateMotionPathTags();
-}
-
-void CustomAnimationPane::KeyInput( const KeyEvent& rKEvt )
-{
-    if (mxCustomAnimationList)
-        mxCustomAnimationList->KeyInputHdl(rKEvt);
-}
-
 void CustomAnimationPane::addListener()
 {
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,CustomAnimationPane,EventMultiplexerListener) );

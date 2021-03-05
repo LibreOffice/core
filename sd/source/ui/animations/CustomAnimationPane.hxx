@@ -64,10 +64,6 @@ public:
     void preview( const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode );
     void remove( CustomAnimationEffectPtr const & pEffect );
 
-    // Control
-    virtual void StateChanged( StateChangedType nStateChange ) override;
-    virtual void KeyInput( const KeyEvent& rKEvt ) override;
-
     // ICustomAnimationListController
     virtual void onSelect() override;
     virtual void onDoubleClick() override;
