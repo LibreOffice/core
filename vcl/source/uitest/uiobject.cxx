@@ -437,7 +437,7 @@ void addChildren(vcl::Window const * pParent, std::set<OUString>& rChildren)
             if (!aId.isEmpty())
             {
                 auto ret = rChildren.insert(aId);
-                SAL_WARN_IF(!ret.second, "vcl.uitest", "duplicate ids for ui elements. violates locally unique requirement");
+                SAL_WARN_IF(!ret.second, "vcl.uitest", "duplicate ids '" << aId << "' for ui elements. violates locally unique requirement");
             }
 
             addChildren(pChild, rChildren);
