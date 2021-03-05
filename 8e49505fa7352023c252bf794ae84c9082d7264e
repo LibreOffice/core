@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "156afed1_4c66d98c",
+        "filename": "sw/source/core/access/accmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-05T07:48:44Z",
+      "side": 0,
+      "message": "Wow, what a nice monster made extinct... :-)",
+      "revId": "8e49505fa7352023c252bf794ae84c9082d7264e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
