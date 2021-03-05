@@ -34,8 +34,9 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 
-#include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/Invocation.hpp>
+#include <com/sun/star/script/XInvocation2.hpp>
+#include <com/sun/star/script/MemberType.hpp>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -522,40 +523,35 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
         }
     }
 
-    uno::Reference<beans::XIntrospection> xIntrospection = beans::theIntrospection::get(mxContext);
-    if (!xIntrospection.is())
-        return;
-
-    auto xIntrospectionAccess = xIntrospection->inspect(maAny);
-    if (!xIntrospectionAccess.is())
-        return;
-
     auto xInvocationFactory = css::script::Invocation::create(mxContext);
     uno::Sequence<uno::Any> aParameters = { maAny };
     auto xInvocationInterface = xInvocationFactory->createInstanceWithArguments(aParameters);
-    uno::Reference<script::XInvocation> xInvocation(xInvocationInterface, uno::UNO_QUERY);
+    if (!xInvocationInterface.is())
+        return;
 
-    const auto xProperties = xIntrospectionAccess->getProperties(
-        beans::PropertyConcept::ALL - beans::PropertyConcept::DANGEROUS);
+    uno::Reference<script::XInvocation2> xInvocation(xInvocationInterface, uno::UNO_QUERY);
+    if (!xInvocation.is())
+        return;
 
-    for (auto const& xProperty : xProperties)
+    const auto aInvocationInfoSequence = xInvocation->getInfo();
+    for (auto const& aInvocationInfo : aInvocationInfoSequence)
     {
-        uno::Any aCurrentAny;
-
-        try
+        if (aInvocationInfo.eMemberType == script::MemberType_PROPERTY)
         {
-            if (xInvocation->hasProperty(xProperty.Name))
+            uno::Any aCurrentAny;
+            auto const& aPropertyName = aInvocationInfo.aName;
+            try
             {
-                aCurrentAny = xInvocation->getValue(xProperty.Name);
+                aCurrentAny = xInvocation->getValue(aPropertyName);
             }
-        }
-        catch (...)
-        {
-        }
+            catch (...)
+            {
+            }
 
-        auto* pObjectInspectorNode = createNodeObjectForAny(xProperty.Name, aCurrentAny);
-        if (pObjectInspectorNode)
-            lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
+            auto* pObjectInspectorNode = createNodeObjectForAny(aPropertyName, aCurrentAny);
+            if (pObjectInspectorNode)
+                lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
+        }
     }
 }
 
