@@ -8,7 +8,7 @@
  */
 
 #include <tools/stream.hxx>
-#include <vcl/pngread.hxx>
+#include <vcl/filter/PngImageReader.hxx>
 #include "commonfuzzer.hxx"
 
 #include <config_features.h>
@@ -48,8 +48,8 @@ extern "C" void* lo_get_custom_widget_func(const char*)
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {
     SvMemoryStream aStream(const_cast<uint8_t*>(data), size, StreamMode::READ);
-    vcl::PNGReader aReader(aStream);
-    (void)aReader.Read();
+    vcl::PngImageReader aReader(aStream);
+    (void)aReader.read();
     return 0;
 }
 

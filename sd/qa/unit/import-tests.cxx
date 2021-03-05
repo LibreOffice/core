@@ -92,7 +92,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/graphicmimetype.hxx>
 #include <comphelper/lok.hxx>
-#include <vcl/pngread.hxx>
+#include <vcl/filter/PngImageReader.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/dibtools.hxx>
 #include <svx/svdograf.hxx>
@@ -1614,8 +1614,8 @@ void SdImportTest::testTdf113163()
     xGraphicExporter->filter(aDescriptor);
 
     SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
-    vcl::PNGReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.Read();
+    vcl::PngImageReader aPNGReader(aFileStream);
+    BitmapEx aBMPEx = aPNGReader.read();
 
     // make sure the bitmap is not empty and correct size (PNG export->import was successful)
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aBMPEx.GetSizePixel());
@@ -1665,8 +1665,8 @@ void SdImportTest::testTdf93124()
     xGraphicExporter->filter(aDescriptor);
 
     SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
-    vcl::PNGReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.Read();
+    vcl::PngImageReader aPNGReader(aFileStream);
+    BitmapEx aBMPEx = aPNGReader.read();
 
     // make sure the bitmap is not empty and correct size (PNG export->import was successful)
     CPPUNIT_ASSERT_EQUAL(Size(320, 180), aBMPEx.GetSizePixel());
@@ -1730,8 +1730,8 @@ void SdImportTest::testTdf99729()
         xGraphicExporter->filter(aDescriptor);
 
         SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
-        vcl::PNGReader aPNGReader(aFileStream);
-        BitmapEx aBMPEx = aPNGReader.Read();
+        vcl::PngImageReader aPNGReader(aFileStream);
+        BitmapEx aBMPEx = aPNGReader.read();
         Bitmap aBMP = aBMPEx.GetBitmap();
         Bitmap::ScopedReadAccess pRead(aBMP);
         for (tools::Long nX = 154; nX < (154 + 12); ++nX)
@@ -2768,7 +2768,7 @@ void SdImportTest::testTdf134210()
 
     Graphic aGraphic(xGraphic);
     BitmapEx aBitmap(aGraphic.GetBitmapEx());
-    CPPUNIT_ASSERT_EQUAL( Color(6708292), aBitmap.GetPixelColor( 0, 0 ));
+    CPPUNIT_ASSERT_EQUAL( Color(6313534), aBitmap.GetPixelColor( 0, 0 ));
 
     xDocShRef->DoClose();
 }

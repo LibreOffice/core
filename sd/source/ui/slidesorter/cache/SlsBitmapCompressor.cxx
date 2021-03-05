@@ -21,7 +21,7 @@
 
 #include <tools/stream.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/pngread.hxx>
+#include <vcl/filter/PngImageReader.hxx>
 #include <vcl/pngwrite.hxx>
 
 namespace sd::slidesorter::cache {
@@ -180,8 +180,8 @@ BitmapEx PngCompression::Decompress (
     if (pData != nullptr)
     {
         SvMemoryStream aStream (pData->mpData, pData->mnDataSize, StreamMode::READ);
-        vcl::PNGReader aReader (aStream);
-        aResult = aReader.Read().GetBitmap();
+        vcl::PngImageReader aReader (aStream);
+        aResult = aReader.read().GetBitmap();
     }
 
     return aResult;

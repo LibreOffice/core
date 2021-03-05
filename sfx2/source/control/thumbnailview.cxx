@@ -30,7 +30,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
-#include <vcl/pngread.hxx>
+#include <vcl/filter/PngImageReader.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -138,8 +138,8 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
     {
         std::unique_ptr<SvStream> pStream (
             ::utl::UcbStreamHelper::CreateStream (xIStream));
-        vcl::PNGReader aReader (*pStream);
-        aThumbnail = aReader.Read ();
+        vcl::PngImageReader aReader (*pStream);
+        aThumbnail = aReader.read ();
     }
 
     // Note that the preview is returned without scaling it to the desired
