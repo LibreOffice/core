@@ -23,11 +23,15 @@
 
 #include <cppuhelper/implbase.hxx>
 #include "DataFmtTransl.hxx"
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
 #include <com/sun/star/datatransfer/XSystemTransferable.hpp>
+#include <cppuhelper/weakref.hxx>
 
 #include <systools/win32/comtools.hxx>
+
+#include <vector>
 
 // forward
 class CFormatEtc;
@@ -38,9 +42,6 @@ class CDOTransferable : public ::cppu::WeakImplHelper<
 {
 public:
     typedef css::uno::Sequence< sal_Int8 > ByteSequence_t;
-
-    static css::uno::Reference< css::datatransfer::XTransferable > create(
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext, IDataObjectPtr pIDataObject );
 
     // XTransferable
 
@@ -54,18 +55,25 @@ public:
 
     virtual css::uno::Any SAL_CALL getData( const css::uno::Sequence<sal_Int8>& aProcessId  ) override;
 
-private:
+    explicit CDOTransferable(
+        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        const css::uno::Reference<css::datatransfer::clipboard::XClipboard>& xClipboard,
+        const std::vector<sal_uInt32>& rFormats);
+
     explicit CDOTransferable(
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         IDataObjectPtr rDataObject );
 
+private:
     // some helper functions
 
     void initFlavorList( );
+    void initFlavorListFromFormatList(const std::vector<sal_uInt32>& rFormats);
 
     void addSupportedFlavor( const css::datatransfer::DataFlavor& aFlavor );
-    css::datatransfer::DataFlavor formatEtcToDataFlavor( const FORMATETC& aFormatEtc );
+    css::datatransfer::DataFlavor formatEtcToDataFlavor(sal_uInt32 cfFormat);
 
+    void tryToGetIDataObjectIfAbsent();
     ByteSequence_t getClipboardData( CFormatEtc& aFormatEtc );
     OUString synthesizeUnicodeText( );
 
@@ -75,6 +83,7 @@ private:
                                           const css::datatransfer::DataFlavor& rhs );
 
 private:
+    css::uno::WeakReference<css::datatransfer::clipboard::XClipboard> m_xClipboard;
     IDataObjectPtr                                                                          m_rDataObject;
     css::uno::Sequence< css::datatransfer::DataFlavor >               m_FlavorList;
     const css::uno::Reference< css::uno::XComponentContext >          m_xContext;
