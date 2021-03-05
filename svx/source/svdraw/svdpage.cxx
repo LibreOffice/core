@@ -1225,7 +1225,6 @@ void SdrPageProperties::SetStyleSheet(SfxStyleSheet* pStyleSheet)
 
 SdrPage::SdrPage(SdrModel& rModel, bool bMasterPage)
 :   SdrObjList(),
-    tools::WeakBase(),
     maPageUsers(),
     mrSdrModelFromSdrPage(rModel),
     mnWidth(10),
@@ -1329,9 +1328,9 @@ void SdrPage::lateInit(const SdrPage& rSrcPage)
     }
 }
 
-SdrPage* SdrPage::CloneSdrPage(SdrModel& rTargetModel) const
+rtl::Reference<SdrPage> SdrPage::CloneSdrPage(SdrModel& rTargetModel) const
 {
-    SdrPage* pClonedPage(new SdrPage(rTargetModel));
+    rtl::Reference<SdrPage> pClonedPage(new SdrPage(rTargetModel));
     pClonedPage->lateInit(*this);
     return pClonedPage;
 }

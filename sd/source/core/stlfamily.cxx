@@ -27,7 +27,7 @@
 #include <svl/style.hxx>
 
 #include <tools/debug.hxx>
-#include <tools/weakbase.hxx>
+#include <unotools/weakref.hxx>
 
 #include <strings.hrc>
 #include <stlfamily.hxx>
@@ -49,7 +49,7 @@ typedef std::map< OUString, rtl::Reference< SdStyleSheet > > PresStyleMap;
 
 struct SdStyleFamilyImpl
 {
-    tools::WeakReference<SdPage> mxMasterPage;
+    unotools::WeakReference<SdPage> mxMasterPage;
     OUString maLayoutName;
 
     PresStyleMap& getStyleSheets();
@@ -61,9 +61,13 @@ private:
 
 PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
 {
-    if( mxMasterPage.is() && (mxMasterPage->GetLayoutName() != maLayoutName) )
+    auto pMasterPage = mxMasterPage.get();
+    if (!pMasterPage)
+        return maStyleSheets;
+
+    if (pMasterPage->GetLayoutName() != maLayoutName )
     {
-        maLayoutName = mxMasterPage->GetLayoutName();
+        maLayoutName = pMasterPage->GetLayoutName();
 
         OUString aLayoutName( maLayoutName );
         const sal_Int32 nLen = aLayoutName.indexOf(SD_LT_SEPARATOR ) + 4;
@@ -102,7 +106,7 @@ SdStyleFamily::SdStyleFamily( const rtl::Reference< SfxStyleSheetPool >& xPool, 
 , mxPool( xPool )
 , mpImpl( new SdStyleFamilyImpl )
 {
-    mpImpl->mxMasterPage.reset( const_cast< SdPage* >( pMasterPage ) );
+    mpImpl->mxMasterPage = const_cast< SdPage* >( pMasterPage );
     mpImpl->mxPool = xPool;
 }
 
@@ -183,7 +187,7 @@ OUString SAL_CALL SdStyleFamily::getName()
 {
     if( mnFamily == SfxStyleFamily::Page )
     {
-        SdPage* pPage = mpImpl->mxMasterPage.get();
+        rtl::Reference<SdPage> pPage = mpImpl->mxMasterPage.get();
         if( pPage == nullptr )
             throw DisposedException();
 

@@ -71,7 +71,7 @@ FmFormModel::~FmFormModel()
     SetMaxUndoActionCount(1);
 }
 
-SdrPage* FmFormModel::AllocPage(bool bMasterPage)
+rtl::Reference<SdrPage> FmFormModel::AllocPage(bool bMasterPage)
 {
     return new FmFormPage(*this, bMasterPage);
 }
@@ -85,7 +85,7 @@ void FmFormModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
     SdrModel::InsertPage( pPage, nPos );
 }
 
-SdrPage* FmFormModel::RemovePage(sal_uInt16 nPgNum)
+rtl::Reference<SdrPage> FmFormModel::RemovePage(sal_uInt16 nPgNum)
 {
     FmFormPage* pToBeRemovedPage = dynamic_cast< FmFormPage* >( GetPage( nPgNum ) );
     OSL_ENSURE( pToBeRemovedPage, "FmFormModel::RemovePage: *which page*?" );
@@ -97,7 +97,7 @@ SdrPage* FmFormModel::RemovePage(sal_uInt16 nPgNum)
             m_pImpl->mxUndoEnv->RemoveForms( xForms );
     }
 
-    FmFormPage* pRemovedPage = static_cast<FmFormPage*>(SdrModel::RemovePage(nPgNum));
+    rtl::Reference<FmFormPage> pRemovedPage = static_cast<FmFormPage*>(SdrModel::RemovePage(nPgNum).get());
     OSL_ENSURE( pRemovedPage == pToBeRemovedPage, "FmFormModel::RemovePage: inconsistency!" );
     return pRemovedPage;
 }
@@ -111,9 +111,9 @@ void FmFormModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
     SdrModel::InsertMasterPage(pPage, nPos);
 }
 
-SdrPage* FmFormModel::RemoveMasterPage(sal_uInt16 nPgNum)
+rtl::Reference<SdrPage> FmFormModel::RemoveMasterPage(sal_uInt16 nPgNum)
 {
-    FmFormPage* pPage = static_cast<FmFormPage*>(SdrModel::RemoveMasterPage(nPgNum));
+    rtl::Reference<FmFormPage> pPage = static_cast<FmFormPage*>(SdrModel::RemoveMasterPage(nPgNum).get());
 
     if ( pPage )
     {

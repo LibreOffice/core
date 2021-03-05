@@ -677,7 +677,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             xShell->DoInitNew();
 
             SdDrawDocument* pModel = xShell->GetDoc();
-            pModel->InsertPage(pModel->AllocPage(false));
+            pModel->InsertPage(pModel->AllocPage(false).get());
 
             Reference< XComponent > xComponent = xShell->GetModel();
             xStm->Seek( 0 );
@@ -1530,7 +1530,7 @@ bool View::PasteRTFTable( const ::tools::SvRef<SotTempStream>& xStm, SdrPage* pP
     std::unique_ptr<SdDrawDocument> pModel(new SdDrawDocument( DocumentType::Impress, mpDocSh ));
     pModel->NewOrLoadCompleted(DocCreationMode::New);
     pModel->GetItemPool().SetDefaultMetric(MapUnit::Map100thMM);
-    pModel->InsertPage(pModel->AllocPage(false));
+    pModel->InsertPage(pModel->AllocPage(false).get());
 
     Reference< XComponent > xComponent( new SdXImpressDocument( pModel.get(), true ) );
     pModel->setUnoModel( Reference< XInterface >::query( xComponent ) );

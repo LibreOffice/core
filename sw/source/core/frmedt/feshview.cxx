@@ -1992,8 +1992,9 @@ bool SwFEShell::ImpEndCreate()
         if( !pPg )
         {
             SdrModel* pTmpSdrModel = getIDocumentDrawModelAccess().GetDrawModel();
-            pPg = pTmpSdrModel->AllocPage( false );
-            pTmpSdrModel->InsertPage( pPg );
+            auto pNewPage = pTmpSdrModel->AllocPage( false );
+            pTmpSdrModel->InsertPage( pNewPage.get() );
+            pPg = pNewPage.get();
         }
         pPg->RecalcObjOrdNums();
         SdrObject* pRemovedObject = pPg->RemoveObject( rSdrObj.GetOrdNumDirect() );

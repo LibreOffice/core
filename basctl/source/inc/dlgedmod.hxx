@@ -37,7 +37,7 @@ public:
     DlgEdModel();
     virtual ~DlgEdModel() override;
 
-    virtual SdrPage* AllocPage(bool bMasterPage) override;
+    virtual rtl::Reference<SdrPage> AllocPage(bool bMasterPage) override;
 };
 
 } // namespace basctl

@@ -1273,50 +1273,52 @@ OUString SdrUndoDelLayer::GetComment() const
 
 SdrUndoPage::SdrUndoPage(SdrPage& rNewPg)
 :   SdrUndoAction(rNewPg.getSdrModelFromSdrPage())
-    ,mrPage(rNewPg)
+    ,mxPage(&rNewPg)
 {
 }
 
+SdrUndoPage::~SdrUndoPage() {}
+
 void SdrUndoPage::ImpInsertPage(sal_uInt16 nNum)
 {
-    DBG_ASSERT(!mrPage.IsInserted(),"SdrUndoPage::ImpInsertPage(): mrPage is already inserted.");
-    if (!mrPage.IsInserted())
+    DBG_ASSERT(!mxPage->IsInserted(),"SdrUndoPage::ImpInsertPage(): mxPage is already inserted.");
+    if (!mxPage->IsInserted())
     {
-        if (mrPage.IsMasterPage())
+        if (mxPage->IsMasterPage())
         {
-            rMod.InsertMasterPage(&mrPage,nNum);
+            rMod.InsertMasterPage(mxPage.get(), nNum);
         }
         else
         {
-            rMod.InsertPage(&mrPage,nNum);
+            rMod.InsertPage(mxPage.get(), nNum);
         }
     }
 }
 
 void SdrUndoPage::ImpRemovePage(sal_uInt16 nNum)
 {
-    DBG_ASSERT(mrPage.IsInserted(),"SdrUndoPage::ImpRemovePage(): mrPage is not inserted.");
-    if (!mrPage.IsInserted())
+    DBG_ASSERT(mxPage->IsInserted(),"SdrUndoPage::ImpRemovePage(): mxPage is not inserted.");
+    if (!mxPage->IsInserted())
         return;
 
-    SdrPage* pChkPg=nullptr;
-    if (mrPage.IsMasterPage())
+    rtl::Reference<SdrPage> pChkPg;
+    if (mxPage->IsMasterPage())
     {
-        pChkPg=rMod.RemoveMasterPage(nNum);
+        pChkPg = rMod.RemoveMasterPage(nNum);
     }
     else
     {
-        pChkPg=rMod.RemovePage(nNum);
+        pChkPg = rMod.RemovePage(nNum);
     }
-    DBG_ASSERT(pChkPg==&mrPage,"SdrUndoPage::ImpRemovePage(): RemovePage!=&mrPage");
+    DBG_ASSERT(pChkPg==mxPage,"SdrUndoPage::ImpRemovePage(): RemovePage!=mxPage");
 }
 
 void SdrUndoPage::ImpMovePage(sal_uInt16 nOldNum, sal_uInt16 nNewNum)
 {
-    DBG_ASSERT(mrPage.IsInserted(),"SdrUndoPage::ImpMovePage(): mrPage is not inserted.");
-    if (mrPage.IsInserted())
+    DBG_ASSERT(mxPage->IsInserted(),"SdrUndoPage::ImpMovePage(): mxPage is not inserted.");
+    if (mxPage->IsInserted())
     {
-        if (mrPage.IsMasterPage())
+        if (mxPage->IsMasterPage())
         {
             rMod.MoveMasterPage(nOldNum,nNewNum);
         }
@@ -1335,17 +1337,12 @@ OUString SdrUndoPage::ImpGetDescriptionStr(const char* pStrCacheID)
 
 SdrUndoPageList::SdrUndoPageList(SdrPage& rNewPg)
     : SdrUndoPage(rNewPg)
-    , bItsMine(false)
 {
     nPageNum=rNewPg.GetPageNum();
 }
 
 SdrUndoPageList::~SdrUndoPageList()
 {
-    if(bItsMine)
-    {
-        delete &mrPage;
-    }
 }
 
 
@@ -1353,24 +1350,22 @@ SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg)
     : SdrUndoPageList(rNewPg)
     , mbHasFillBitmap(false)
 {
-    bItsMine = true;
-
     // keep fill bitmap separately to remove it from pool if not used elsewhere
-    if (mrPage.IsMasterPage())
+    if (mxPage->IsMasterPage())
     {
-        SfxStyleSheet* const pStyleSheet = mrPage.getSdrPageProperties().GetStyleSheet();
+        SfxStyleSheet* const pStyleSheet = mxPage->getSdrPageProperties().GetStyleSheet();
         if (pStyleSheet)
             queryFillBitmap(pStyleSheet->GetItemSet());
     }
     else
     {
-        queryFillBitmap(mrPage.getSdrPageProperties().GetItemSet());
+        queryFillBitmap(mxPage->getSdrPageProperties().GetItemSet());
     }
     if (bool(mpFillBitmapItem))
         clearFillBitmap();
 
     // now remember the master page relationships
-    if(!mrPage.IsMasterPage())
+    if(!mxPage->IsMasterPage())
         return;
 
     sal_uInt16 nPageCnt(rMod.GetPageCount());
@@ -1383,7 +1378,7 @@ SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg)
         {
             SdrPage& rMasterPage = pDrawPage->TRG_GetMasterPage();
 
-            if(&mrPage == &rMasterPage)
+            if(mxPage.get() == &rMasterPage)
             {
                 if(!pUndoGroup)
                 {
@@ -1410,8 +1405,6 @@ void SdrUndoDelPage::Undo()
         // recover master page relationships
         pUndoGroup->Undo();
     }
-    DBG_ASSERT(bItsMine,"UndoDeletePage: mrPage does not belong to UndoAction.");
-    bItsMine=false;
 }
 
 void SdrUndoDelPage::Redo()
@@ -1419,9 +1412,6 @@ void SdrUndoDelPage::Redo()
     ImpRemovePage(nPageNum);
     if (bool(mpFillBitmapItem))
         clearFillBitmap();
-    // master page relations are dissolved automatically
-    DBG_ASSERT(!bItsMine,"RedoDeletePage: mrPage already belongs to UndoAction.");
-    bItsMine=true;
 }
 
 OUString SdrUndoDelPage::GetComment() const
@@ -1454,9 +1444,9 @@ void SdrUndoDelPage::queryFillBitmap(const SfxItemSet& rItemSet)
 
 void SdrUndoDelPage::clearFillBitmap()
 {
-    if (mrPage.IsMasterPage())
+    if (mxPage->IsMasterPage())
     {
-        SfxStyleSheet* const pStyleSheet = mrPage.getSdrPageProperties().GetStyleSheet();
+        SfxStyleSheet* const pStyleSheet = mxPage->getSdrPageProperties().GetStyleSheet();
         assert(bool(pStyleSheet)); // who took away my stylesheet?
         if (pStyleSheet->GetListenerCount() == 1)
         {
@@ -1468,7 +1458,7 @@ void SdrUndoDelPage::clearFillBitmap()
     }
     else
     {
-        SdrPageProperties &rPageProps = mrPage.getSdrPageProperties();
+        SdrPageProperties &rPageProps = mxPage->getSdrPageProperties();
         rPageProps.ClearItem(XATTR_FILLBITMAP);
         if (mbHasFillBitmap)
             rPageProps.ClearItem(XATTR_FILLSTYLE);
@@ -1477,9 +1467,9 @@ void SdrUndoDelPage::clearFillBitmap()
 
 void SdrUndoDelPage::restoreFillBitmap()
 {
-    if (mrPage.IsMasterPage())
+    if (mxPage->IsMasterPage())
     {
-        SfxStyleSheet* const pStyleSheet = mrPage.getSdrPageProperties().GetStyleSheet();
+        SfxStyleSheet* const pStyleSheet = mxPage->getSdrPageProperties().GetStyleSheet();
         assert(bool(pStyleSheet)); // who took away my stylesheet?
         if (pStyleSheet->GetListenerCount() == 1)
         {
@@ -1491,7 +1481,7 @@ void SdrUndoDelPage::restoreFillBitmap()
     }
     else
     {
-        SdrPageProperties &rPageProps = mrPage.getSdrPageProperties();
+        SdrPageProperties &rPageProps = mxPage->getSdrPageProperties();
         rPageProps.PutItem(*mpFillBitmapItem);
         if (mbHasFillBitmap)
             rPageProps.PutItem(XFillStyleItem(css::drawing::FillStyle_BITMAP));
@@ -1502,15 +1492,11 @@ void SdrUndoDelPage::restoreFillBitmap()
 void SdrUndoNewPage::Undo()
 {
     ImpRemovePage(nPageNum);
-    DBG_ASSERT(!bItsMine,"UndoNewPage: mrPage already belongs to UndoAction.");
-    bItsMine=true;
 }
 
 void SdrUndoNewPage::Redo()
 {
     ImpInsertPage(nPageNum);
-    DBG_ASSERT(bItsMine,"RedoNewPage: mrPage does not belong to UndoAction.");
-    bItsMine=false;
 }
 
 OUString SdrUndoNewPage::GetComment() const
@@ -1557,14 +1543,14 @@ OUString SdrUndoSetPageNum::GetComment() const
 
 SdrUndoPageMasterPage::SdrUndoPageMasterPage(SdrPage& rChangedPage)
     : SdrUndoPage(rChangedPage)
-    , mbOldHadMasterPage(mrPage.TRG_HasMasterPage())
+    , mbOldHadMasterPage(mxPage->TRG_HasMasterPage())
     , maOldMasterPageNumber(0)
 {
     // get current state from page
     if(mbOldHadMasterPage)
     {
-        maOldSet = mrPage.TRG_GetMasterPageVisibleLayers();
-        maOldMasterPageNumber = mrPage.TRG_GetMasterPage().GetPageNum();
+        maOldSet = mxPage->TRG_GetMasterPageVisibleLayers();
+        maOldMasterPageNumber = mxPage->TRG_GetMasterPage().GetPageNum();
     }
 }
 
@@ -1581,14 +1567,14 @@ void SdrUndoPageRemoveMasterPage::Undo()
 {
     if(mbOldHadMasterPage)
     {
-        mrPage.TRG_SetMasterPage(*mrPage.getSdrModelFromSdrPage().GetMasterPage(maOldMasterPageNumber));
-        mrPage.TRG_SetMasterPageVisibleLayers(maOldSet);
+        mxPage->TRG_SetMasterPage(*mxPage->getSdrModelFromSdrPage().GetMasterPage(maOldMasterPageNumber));
+        mxPage->TRG_SetMasterPageVisibleLayers(maOldSet);
     }
 }
 
 void SdrUndoPageRemoveMasterPage::Redo()
 {
-    mrPage.TRG_ClearMasterPage();
+    mxPage->TRG_ClearMasterPage();
 }
 
 OUString SdrUndoPageRemoveMasterPage::GetComment() const
@@ -1606,19 +1592,19 @@ SdrUndoPageChangeMasterPage::SdrUndoPageChangeMasterPage(SdrPage& rChangedPage)
 void SdrUndoPageChangeMasterPage::Undo()
 {
     // remember values from new page
-    if(mrPage.TRG_HasMasterPage())
+    if(mxPage->TRG_HasMasterPage())
     {
         mbNewHadMasterPage = true;
-        maNewSet = mrPage.TRG_GetMasterPageVisibleLayers();
-        maNewMasterPageNumber = mrPage.TRG_GetMasterPage().GetPageNum();
+        maNewSet = mxPage->TRG_GetMasterPageVisibleLayers();
+        maNewMasterPageNumber = mxPage->TRG_GetMasterPage().GetPageNum();
     }
 
     // restore old values
     if(mbOldHadMasterPage)
     {
-        mrPage.TRG_ClearMasterPage();
-        mrPage.TRG_SetMasterPage(*mrPage.getSdrModelFromSdrPage().GetMasterPage(maOldMasterPageNumber));
-        mrPage.TRG_SetMasterPageVisibleLayers(maOldSet);
+        mxPage->TRG_ClearMasterPage();
+        mxPage->TRG_SetMasterPage(*mxPage->getSdrModelFromSdrPage().GetMasterPage(maOldMasterPageNumber));
+        mxPage->TRG_SetMasterPageVisibleLayers(maOldSet);
     }
 }
 
@@ -1627,9 +1613,9 @@ void SdrUndoPageChangeMasterPage::Redo()
     // restore new values
     if(mbNewHadMasterPage)
     {
-        mrPage.TRG_ClearMasterPage();
-        mrPage.TRG_SetMasterPage(*mrPage.getSdrModelFromSdrPage().GetMasterPage(maNewMasterPageNumber));
-        mrPage.TRG_SetMasterPageVisibleLayers(maNewSet);
+        mxPage->TRG_ClearMasterPage();
+        mxPage->TRG_SetMasterPage(*mxPage->getSdrModelFromSdrPage().GetMasterPage(maNewMasterPageNumber));
+        mxPage->TRG_SetMasterPageVisibleLayers(maNewSet);
     }
 }
 

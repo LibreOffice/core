@@ -23,7 +23,7 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/svdpage.hxx>
-#include <tools/weakbase.hxx>
+#include <unotools/weakref.hxx>
 
 class SdrPage;
 class SdrObject;
@@ -87,7 +87,7 @@ class ObjectContactOfPagePainter : public ObjectContactPainter
     ObjectContact&                                  mrOriginalObjectContact;
 
     // Set StartPoint for next run, also given in constructor
-    tools::WeakReference<SdrPage>                   mxStartPage;
+    unotools::WeakReference<SdrPage>                mxStartPage;
 
 protected:
     // Hierarchy access methods
@@ -101,8 +101,8 @@ public:
 
     // set another page
     void SetStartPage(const SdrPage* pPage);
-    const SdrPage* GetStartPage() const { return mxStartPage.get(); }
-    SdrPage* GetStartPage() { return mxStartPage.get(); }
+    const SdrPage* GetStartPage() const { return mxStartPage.get().get(); }
+    SdrPage* GetStartPage() { return mxStartPage.get().get(); }
 
     virtual OutputDevice* TryToGetOutputDevice() const override;
 };

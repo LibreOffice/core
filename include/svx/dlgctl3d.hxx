@@ -39,7 +39,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DPreviewControl : public weld::CustomWid
 {
 protected:
     std::unique_ptr<FmFormModel> mpModel;
-    FmFormPage*             mpFmPage;
+    rtl::Reference<FmFormPage> mxFmPage;
     std::unique_ptr<E3dView> mp3DView;
     E3dScene*               mpScene;
     E3dObject*              mp3DObj;

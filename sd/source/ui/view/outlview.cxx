@@ -390,12 +390,12 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
 
     // this page is exemplary
     SdPage* pExample = mrDoc.GetSdPage(static_cast<sal_uInt16>(nExample), PageKind::Standard);
-    SdPage* pPage = mrDoc.AllocSdPage(false);
+    rtl::Reference<SdPage> pPage = mrDoc.AllocSdPage(false);
 
     pPage->SetLayoutName(pExample->GetLayoutName());
 
     // insert (page)
-    mrDoc.InsertPage(pPage, static_cast<sal_uInt16>(nTarget) * 2 + 1);
+    mrDoc.InsertPage(pPage.get(), static_cast<sal_uInt16>(nTarget) * 2 + 1);
     if( isRecordingUndo() )
         AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoNewPage(*pPage));
 
@@ -427,14 +427,14 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     |* now the notes page
     \*********************************************************************/
     pExample = mrDoc.GetSdPage(static_cast<sal_uInt16>(nExample), PageKind::Notes);
-    SdPage* pNotesPage = mrDoc.AllocSdPage(false);
+    rtl::Reference<SdPage> pNotesPage = mrDoc.AllocSdPage(false);
 
     pNotesPage->SetLayoutName(pExample->GetLayoutName());
 
     pNotesPage->SetPageKind(PageKind::Notes);
 
     // insert (notes page)
-    mrDoc.InsertPage(pNotesPage, static_cast<sal_uInt16>(nTarget) * 2 + 2);
+    mrDoc.InsertPage(pNotesPage.get(), static_cast<sal_uInt16>(nTarget) * 2 + 2);
     if( isRecordingUndo() )
         AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));
 
@@ -453,7 +453,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
 
     mrOutliner.UpdateFields();
 
-    return pPage;
+    return pPage.get();
 }
 
 /**

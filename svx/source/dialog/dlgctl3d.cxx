@@ -45,8 +45,7 @@
 using namespace com::sun::star;
 
 Svx3DPreviewControl::Svx3DPreviewControl()
-    : mpFmPage(nullptr)
-    , mpScene(nullptr)
+    : mpScene(nullptr)
     , mp3DObj(nullptr)
     , mnObjectType(SvxPreviewObjectType::SPHERE)
 {
@@ -81,8 +80,8 @@ void Svx3DPreviewControl::Construct()
     mpModel->GetItemPool().FreezeIdRanges();
 
     // Page
-    mpFmPage = new FmFormPage( *mpModel );
-    mpModel->InsertPage( mpFmPage, 0 );
+    mxFmPage = new FmFormPage( *mpModel );
+    mpModel->InsertPage( mxFmPage.get(), 0 );
 
     // 3D View
     mp3DView.reset(new E3dView(*mpModel, &rDevice));
@@ -112,7 +111,7 @@ void Svx3DPreviewControl::Construct()
     rCamera.SetFocalLength(fDefaultCamFocal);
 
     mpScene->SetCamera( rCamera );
-    mpFmPage->InsertObject( mpScene );
+    mxFmPage->InsertObject( mpScene );
 
     basegfx::B3DHomMatrix aRotation;
     aRotation.rotate(DEG2RAD( 25 ), 0.0, 0.0);
@@ -132,7 +131,7 @@ void Svx3DPreviewControl::Construct()
     mpScene->SetMergedItemSet(aSet);
 
     // PageView
-    SdrPageView* pPageView = mp3DView->ShowSdrPage( mpFmPage );
+    SdrPageView* pPageView = mp3DView->ShowSdrPage( mxFmPage.get() );
     mp3DView->hideMarkHandles();
 
     // mark scene
@@ -144,7 +143,7 @@ void Svx3DPreviewControl::Resize()
     // size of page
     Size aSize(GetOutputSizePixel());
     aSize = GetDrawingArea()->get_ref_device().PixelToLogic(aSize);
-    mpFmPage->SetSize(aSize);
+    mxFmPage->SetSize(aSize);
 
     // set size
     Size aObjSize( aSize.Width()*5/6, aSize.Height()*5/6 );
@@ -685,7 +684,7 @@ void Svx3DLightControl::Resize()
 {
     // set size of page
     const Size aSize(GetDrawingArea()->get_ref_device().PixelToLogic(GetOutputSizePixel()));
-    mpFmPage->SetSize(aSize);
+    mxFmPage->SetSize(aSize);
 
     // set position and size of scene
     mpScene->SetSnapRect(tools::Rectangle(Point(0, 0), aSize));

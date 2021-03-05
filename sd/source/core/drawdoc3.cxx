@@ -721,9 +721,6 @@ bool SdDrawDocument::InsertBookmarkAsPage(
                             AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pStandardPage));
 
                         RemovePage(nDestPageNum);
-
-                        if( !bUndo )
-                            delete pStandardPage;
                     }
 
                     SdPage* pNotesPage = nullptr;
@@ -747,9 +744,6 @@ bool SdDrawDocument::InsertBookmarkAsPage(
                             AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pNotesPage));
 
                         RemovePage(nDestPageNum);
-
-                        if( !bUndo )
-                            delete pNotesPage;
                     }
 
                     nReplacedStandardPages++;
@@ -787,8 +781,6 @@ bool SdDrawDocument::InsertBookmarkAsPage(
 
                 RemoveMasterPage(nPage);
 
-                if( !bUndo )
-                    delete pRefPage;
                 nNewMPageCount--;
                 break;
             }
@@ -1253,16 +1245,10 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, bool bOnl
 
                 RemoveMasterPage( pNotesMaster->GetPageNum() );
 
-                if( !bUndo )
-                    delete pNotesMaster;
-
                 if( bUndo )
                     AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pMaster));
 
                 RemoveMasterPage( pMaster->GetPageNum() );
-
-                if( !bUndo )
-                    delete pMaster;
 
                 if( bUndo )
                     EndUndo();  // do this here already, so Joe's actions happen _between_ our own
@@ -1394,8 +1380,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
     SdPage* pNotes          = static_cast<SdPage*>( GetPage(pSelectedPage->GetPageNum()+1) );
     SdPage& rOldMaster      = static_cast<SdPage&>(pSelectedPage->TRG_GetMasterPage());
     SdPage& rOldNotesMaster = static_cast<SdPage&>(pNotes->TRG_GetMasterPage());
-    SdPage* pMaster         = nullptr;
-    SdPage* pNotesMaster    = nullptr;
+    rtl::Reference<SdPage> pMaster;
+    rtl::Reference<SdPage> pNotesMaster;
     OUString aOldPageLayoutName(pSelectedPage->GetLayoutName());
     OUString aOldLayoutName(aOldPageLayoutName);
     sal_Int32 nIndex = aOldLayoutName.indexOf( SD_LT_SEPARATOR );
@@ -1465,8 +1451,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         if (pSourceDoc != this)
         {
             // #i121863# clone masterpages, they are from another model (!)
-            std::unique_ptr<SdPage> pNewNotesMaster(dynamic_cast< SdPage* >(pNotesMaster->CloneSdrPage(*this)));
-            std::unique_ptr<SdPage> pNewMaster(dynamic_cast< SdPage* >(pMaster->CloneSdrPage(*this)));
+            rtl::Reference<SdPage> pNewNotesMaster(dynamic_cast< SdPage* >(pNotesMaster->CloneSdrPage(*this).get()));
+            rtl::Reference<SdPage> pNewMaster(dynamic_cast< SdPage* >(pMaster->CloneSdrPage(*this).get()));
 
             if(!pNewNotesMaster || !pNewMaster)
             {
@@ -1474,8 +1460,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                 return;
             }
 
-            pNotesMaster = pNewNotesMaster.release();
-            pMaster = pNewMaster.release();
+            pNotesMaster = pNewNotesMaster;
+            pMaster = pNewMaster;
 
             // layout name needs to be unique
             aTargetNewLayoutName = pMaster->GetLayoutName();
@@ -1648,14 +1634,14 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
             if (!bLayoutReloaded)
                 nInsertPos = 0xFFFF;
-            InsertMasterPage(pMaster, nInsertPos);
+            InsertMasterPage(pMaster.get(), nInsertPos);
             if( bUndo )
                 AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pMaster));
 
             nInsertPos++;
             if (!bLayoutReloaded)
                 nInsertPos = 0xFFFF;
-            InsertMasterPage(pNotesMaster, nInsertPos);
+            InsertMasterPage(pNotesMaster.get(), nInsertPos);
             if( bUndo )
             {
                 AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pNotesMaster));
@@ -1665,7 +1651,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         }
 
         // Fill list with pages
-        std::vector<SdPage*> aPageList;
+        std::vector<rtl::Reference<SdPage>> aPageList;
 
 //      #98456, this has to be removed according to CL (KA 07/08/2002)
 //      #109884# but we need them again to restore the styles of the presentation objects while undo
@@ -1691,7 +1677,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             aPageList.push_back(pNotes);
         }
 
-        for (SdPage* pPage : aPageList)
+        for (rtl::Reference<SdPage>& pPage : aPageList)
         {
             AutoLayout eAutoLayout = pPage->GetAutoLayout();
 
@@ -1701,7 +1687,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                         (this,
                         pPage->IsMasterPage() ? aLayoutName : aOldLayoutName,
                         aLayoutName,
-                         eAutoLayout, eAutoLayout, false, pPage));
+                         eAutoLayout, eAutoLayout, false, pPage.get()));
             }
             pPage->SetPresentationLayout(aLayoutName);
             pPage->SetAutoLayout(eAutoLayout);
@@ -1776,7 +1762,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                            pSelectedPage->GetLowerBorder() );
         pMaster->SetName(aName);
         pMaster->SetLayoutName(aPageLayoutName);
-        InsertMasterPage(pMaster);
+        InsertMasterPage(pMaster.get());
 
         if( bUndo )
             AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pMaster));
@@ -1792,7 +1778,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                                 pNotes->GetLowerBorder() );
         pNotesMaster->SetName(aName);
         pNotesMaster->SetLayoutName(aPageLayoutName);
-        InsertMasterPage(pNotesMaster);
+        InsertMasterPage(pNotesMaster.get());
 
         if( bUndo )
             AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pNotesMaster));

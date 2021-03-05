@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SVX_SVDPAGE_HXX
 #define INCLUDED_SVX_SVDPAGE_HXX
 
+#include <cppuhelper/weak.hxx>
 #include <svl/stylesheetuser.hxx>
 #include <vcl/prntypes.hxx>
-#include <tools/weakbase.h>
 #include <svl/itemset.hxx>
 #include <svx/sdrpageuser.hxx>
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
@@ -362,7 +362,7 @@ public:
 //          SwDPage
 //      OReportPage
 
-class SVXCORE_DLLPUBLIC SdrPage : public SdrObjList, public tools::WeakBase
+class SVXCORE_DLLPUBLIC SdrPage : public SdrObjList, public cppu::OWeakObject
 {
     // #i9076#
     friend class SdrModel;
@@ -446,7 +446,7 @@ public:
     explicit SdrPage(SdrModel& rModel, bool bMasterPage=false);
     virtual ~SdrPage() override;
 
-    virtual SdrPage* CloneSdrPage(SdrModel& rTargetModel) const;
+    virtual rtl::Reference<SdrPage> CloneSdrPage(SdrModel& rTargetModel) const;
     bool             IsMasterPage() const       { return mbMaster; }
     void             SetInserted(bool bNew = true);
     bool             IsInserted() const         { return mbInserted; }

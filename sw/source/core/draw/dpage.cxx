@@ -66,10 +66,10 @@ void SwDPage::lateInit(const SwDPage& rSrcPage)
     }
 }
 
-SwDPage* SwDPage::CloneSdrPage(SdrModel& rTargetModel) const
+rtl::Reference<SdrPage> SwDPage::CloneSdrPage(SdrModel& rTargetModel) const
 {
     SwDrawModel& rSwDrawModel(static_cast< SwDrawModel& >(rTargetModel));
-    SwDPage* pClonedSwDPage(
+    rtl::Reference<SwDPage> pClonedSwDPage(
         new SwDPage(
             rSwDrawModel,
             IsMasterPage()));
