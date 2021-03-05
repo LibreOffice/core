@@ -22,6 +22,30 @@
       "revId": "d10b88393c4e33fcd6426a49e3c7dd4a97d49a23",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf30fc82_4b957a81",
+        "filename": "sw/source/ui/fmtui/tmpdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-05T09:28:58Z",
+      "side": 1,
+      "message": "Think so (can also make it optional). Have you ever checked if setting up a tooltip in the ui file is effective at all?",
+      "parentUuid": "3b2dda5a_921ec8a8",
+      "range": {
+        "startLine": 81,
+        "startChar": 25,
+        "endLine": 81,
+        "endChar": 73
+      },
+      "revId": "d10b88393c4e33fcd6426a49e3c7dd4a97d49a23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
