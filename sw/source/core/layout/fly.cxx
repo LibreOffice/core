@@ -161,7 +161,7 @@ SwFlyFrame::SwFlyFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch
     // First the Init, then the Content:
     // This is due to the fact that the Content may have Objects/Frames,
     // which are then registered
-    InitDrawObj();
+    InitDrawObj(*pAnch);
 
     Chain( pAnch );
 
@@ -352,9 +352,9 @@ void SwFlyFrame::DeleteCnt()
     InvalidatePage();
 }
 
-void SwFlyFrame::InitDrawObj()
+void SwFlyFrame::InitDrawObj(SwFrame const& rAnchorFrame)
 {
-    SetDrawObj(*SwFlyDrawContact::CreateNewRef(this, GetFormat()));
+    SetDrawObj(*SwFlyDrawContact::CreateNewRef(this, GetFormat(), rAnchorFrame));
 
     // Set the right Layer
     IDocumentDrawModelAccess& rIDDMA = GetFormat()->getIDocumentDrawModelAccess();
