@@ -1423,7 +1423,10 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
         const drawing::FillStyle eFillStyle = pAttrObj->GetMergedItem(XATTR_FILLSTYLE).GetValue();
 
         // Take fill style/closed state of pAttrObj in account when deciding to change the line style
-        bool bIsClosedPathObj(dynamic_cast<const SdrPathObj*>( pAttrObj) != nullptr && static_cast<const SdrPathObj*>(pAttrObj)->IsClosed());
+        bool bIsClosedPathObj = false;
+        if (auto pPathObj = dynamic_cast<const SdrPathObj*>(pAttrObj))
+            if (pPathObj->IsClosed())
+                bIsClosedPathObj = true;
 
         if(drawing::LineStyle_NONE == eLineStyle && (drawing::FillStyle_NONE == eFillStyle || !bIsClosedPathObj))
         {

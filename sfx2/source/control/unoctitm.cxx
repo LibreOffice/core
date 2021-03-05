@@ -894,7 +894,9 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     bool bNotify = true;
     if ( pState && !IsInvalidItem( pState ) )
     {
-        if ( dynamic_cast< const SfxVisibilityItem *>( pState ) ==  nullptr )
+        if ( auto pVisibilityItem = dynamic_cast< const SfxVisibilityItem *>( pState ) )
+            bVisible = pVisibilityItem->GetValue();
+        else
         {
             if (pLastState && !IsInvalidItem(pLastState))
             {
@@ -904,8 +906,6 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
             pLastState = !IsInvalidItem(pState) ? pState->Clone() : pState;
             bVisible = true;
         }
-        else
-            bVisible = static_cast<const SfxVisibilityItem *>(pState)->GetValue();
     }
     else
     {

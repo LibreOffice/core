@@ -1299,8 +1299,9 @@ bool SwFEShell::IsFrameVertical(const bool bEnvironment, bool& bRTL, bool& bVert
             return bVert;
         }
 
-        if ( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr && !bEnvironment )
-            pRef = static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrame();
+        if ( !bEnvironment )
+            if ( auto pVirtFly = dynamic_cast<const SwVirtFlyDrawObj*>( pObj) )
+                pRef = pVirtFly->GetFlyFrame();
 
         bVert = pRef->IsVertical();
         bRTL = pRef->IsRightToLeft();

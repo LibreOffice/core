@@ -79,8 +79,7 @@ bool SwSdrHdl::IsFocusHdl() const
 
 static const SwFrame *lcl_FindAnchor( const SdrObject *pObj, bool bAll )
 {
-    const SwVirtFlyDrawObj *pVirt = dynamic_cast< const SwVirtFlyDrawObj *>( pObj ) !=  nullptr ?
-                                            static_cast<const SwVirtFlyDrawObj*>(pObj) : nullptr;
+    const SwVirtFlyDrawObj *pVirt = dynamic_cast< const SwVirtFlyDrawObj *>( pObj );
     if ( pVirt )
     {
         if ( bAll || !pVirt->GetFlyFrame()->IsFlyInContentFrame() )

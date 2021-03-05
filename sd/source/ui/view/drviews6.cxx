@@ -326,12 +326,9 @@ void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
     // valid graphic object?
-    if( dynamic_cast< const SdrGrafObj *>( pObj ) &&
-        !static_cast<const SdrGrafObj*>(pObj)->IsEPS() &&
-        !mpDrawView->IsTextEdit() )
-    {
-        bEnable = true;
-    }
+    if( auto pGrafObj = dynamic_cast< const SdrGrafObj *>( pObj ) )
+        if (!pGrafObj->IsEPS() && !mpDrawView->IsTextEdit() )
+            bEnable = true;
 
     // put value
     rSet.Put( SfxBoolItem( SID_BMPMASK_EXEC, bEnable ) );
