@@ -1435,23 +1435,6 @@ OString SalInstanceWindow::get_window_state(WindowStateMask nMask) const
 
 SystemEnvData SalInstanceWindow::get_system_data() const { return *m_xWindow->GetSystemData(); }
 
-void SalInstanceWindow::connect_toplevel_focus_changed(const Link<weld::Widget&, void>& rLink)
-{
-    ensure_event_listener();
-    weld::Window::connect_toplevel_focus_changed(rLink);
-}
-
-void SalInstanceWindow::HandleEventListener(VclWindowEvent& rEvent)
-{
-    if (rEvent.GetId() == VclEventId::WindowActivate
-        || rEvent.GetId() == VclEventId::WindowDeactivate)
-    {
-        signal_toplevel_focus_changed();
-        return;
-    }
-    SalInstanceContainer::HandleEventListener(rEvent);
-}
-
 VclPtr<VirtualDevice> SalInstanceWindow::screenshot()
 {
     SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_xWindow.get());

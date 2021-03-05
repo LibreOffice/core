@@ -108,7 +108,7 @@ void SfxModelessDialogController::Init(SfxBindings *pBindinx, SfxChildWindow *pC
     If a ModelessDialog is enabled its ViewFrame will be activated.
     This is necessary by PluginInFrames.
 */
-IMPL_LINK_NOARG(SfxDialogController, FocusChangeHdl, weld::Widget&, void)
+IMPL_LINK_NOARG(SfxDialogController, FocusChangeHdl, weld::Container&, void)
 {
     if (m_xDialog->has_toplevel_focus())
         Activate();
@@ -207,7 +207,7 @@ SfxDialogController::SfxDialogController(weld::Widget* pParent, const OUString& 
                                     && SfxViewShell::Current()->isLOKMobilePhone())
 {
     m_xDialog->SetInstallLOKNotifierHdl(LINK(this, SfxDialogController, InstallLOKNotifierHdl));
-    m_xDialog->connect_toplevel_focus_changed(LINK(this, SfxDialogController, FocusChangeHdl));
+    m_xDialog->connect_container_focus_changed(LINK(this, SfxDialogController, FocusChangeHdl));
 }
 
 IMPL_STATIC_LINK_NOARG(SfxDialogController, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)

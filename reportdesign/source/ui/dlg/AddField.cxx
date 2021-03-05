@@ -77,7 +77,7 @@ OAddFieldWindow::OAddFieldWindow(weld::Window* pParent, const uno::Reference< be
     m_xListBox->enable_drag_source(xHelper, DND_ACTION_COPYMOVE | DND_ACTION_LINK);
     m_xListBox->connect_drag_begin(LINK(this, OAddFieldWindow, DragBeginHdl));
 
-    m_xDialog->connect_toplevel_focus_changed(LINK(this, OAddFieldWindow, FocusChangeHdl));
+    m_xDialog->connect_container_focus_changed(LINK(this, OAddFieldWindow, FocusChangeHdl));
 
     m_xDialog->set_help_id(HID_RPT_FIELD_SEL_WIN);
 
@@ -117,7 +117,7 @@ OAddFieldWindow::~OAddFieldWindow()
         m_pContainerListener->dispose();
 }
 
-IMPL_LINK_NOARG(OAddFieldWindow, FocusChangeHdl, weld::Widget&, void)
+IMPL_LINK_NOARG(OAddFieldWindow, FocusChangeHdl, weld::Container&, void)
 {
     if (m_xDialog->has_toplevel_focus())
         m_xListBox->grab_focus();
