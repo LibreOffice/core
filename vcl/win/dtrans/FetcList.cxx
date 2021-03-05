@@ -286,10 +286,7 @@ OUString SAL_CALL CFormatRegistrar::getCharsetFromDataFlavor( const DataFlavor& 
 
 bool SAL_CALL CFormatRegistrar::hasUnicodeFlavor( const Reference< XTransferable >& aXTransferable ) const
 {
-    CFormatEtc fetc( CF_UNICODETEXT );
-
-    DataFlavor aFlavor =
-        m_DataFormatTranslator.getDataFlavorFromFormatEtc( fetc );
+    DataFlavor aFlavor = m_DataFormatTranslator.getDataFlavorFromFormatEtc(CF_UNICODETEXT);
 
     return aXTransferable->isDataFlavorSupported( aFlavor );
 }
