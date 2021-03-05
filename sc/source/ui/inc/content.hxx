@@ -125,16 +125,6 @@ public:
 
     void     SetNavigatorDlgFlag(bool isInNavigateDlg){ bisInNavigatoeDlg=isInNavigateDlg;};
 
-    void    set_selection_mode(SelectionMode eMode)
-    {
-        m_xTreeView->set_selection_mode(eMode);
-    }
-
-    void set_size_request(int nWidth, int nHeight)
-    {
-        m_xTreeView->set_size_request(nWidth, nHeight);
-    }
-
     void    hide()
     {
         m_xTreeView->hide();
