@@ -219,9 +219,9 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, ClickImportBitmapHdl, weld::Button&, void
         return;
 
     Graphic aGraphic;
-    EnterWait();
+    auto xWait = std::make_unique<weld::WaitObject>(m_xContainer.get());
     ErrCode nError = aDlg.GetGraphic( aGraphic );
-    LeaveWait();
+    xWait.reset();
     if( nError != ERRCODE_NONE )
         return;
 
