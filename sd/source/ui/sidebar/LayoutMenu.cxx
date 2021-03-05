@@ -205,10 +205,6 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
         aStateChangeLink,
         Reference<frame::XDispatchProvider>(mrBase.GetController()->getFrame(), UNO_QUERY),
         ".uno:VerticalTextState");
-
-    SetSizePixel(GetParent()->GetSizePixel());
-    Link<VclWindowEvent&,void> aWindowEventHandlerLink (LINK(this,LayoutMenu,WindowEventHandler));
-    GetParent()->AddEventListener(aWindowEventHandlerLink);
 }
 
 LayoutMenu::~LayoutMenu()
@@ -241,9 +237,6 @@ void LayoutMenu::Dispose()
     Clear();
     Link<tools::EventMultiplexerEvent&,void> aLink (LINK(this,LayoutMenu,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->RemoveEventListener (aLink);
-
-    Link<VclWindowEvent&,void> aWindowEventHandlerLink (LINK(this,LayoutMenu,WindowEventHandler));
-    GetParent()->RemoveEventListener(aWindowEventHandlerLink);
 }
 
 AutoLayout LayoutMenu::GetSelectedAutoLayout() const
@@ -740,19 +733,6 @@ IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEve
 
         default:
             break;
-    }
-}
-
-IMPL_LINK(LayoutMenu, WindowEventHandler, VclWindowEvent&, rEvent, void)
-{
-    switch (rEvent.GetId())
-    {
-        case VclEventId::WindowShow:
-        case VclEventId::WindowResize:
-            SetSizePixel(GetParent()->GetSizePixel());
-            break;
-
-        default: break;
     }
 }
 
