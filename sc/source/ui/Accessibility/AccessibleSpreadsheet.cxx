@@ -493,8 +493,9 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 if(aNewCell.Tab() != maActiveCell.Tab())
                 {
                     aEvent.EventId = AccessibleEventId::PAGE_CHANGED;
+                    auto pAccParent = getAccessibleParent();
                     ScAccessibleDocument *pAccDoc =
-                        static_cast<ScAccessibleDocument*>(getAccessibleParent().get());
+                        static_cast<ScAccessibleDocument*>(pAccParent.get());
                     if(pAccDoc)
                     {
                         pAccDoc->CommitChange(aEvent);

@@ -863,7 +863,8 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                             m_xUndoManager );
 
                         bool bChanged = false;
-                        ChartModel* pModel = dynamic_cast<ChartModel*>(getModel().get());
+                        css::uno::Reference< css::frame::XModel > xModel = getModel();
+                        ChartModel* pModel = dynamic_cast<ChartModel*>(xModel.get());
                         assert(pModel);
                         if ( eObjectType == OBJECTTYPE_LEGEND )
                             bChanged = DiagramHelper::switchDiagramPositioningToExcludingPositioning( *pModel, false , true );
@@ -2090,7 +2091,8 @@ void ChartController::sendPopupRequest(OUString const & rCID, tools::Rectangle a
 
     OUString sPivotTableName = xPivotTableDataProvider->getPivotTableName();
 
-    PopupRequest* pPopupRequest = dynamic_cast<PopupRequest*>(pChartModel->getPopupRequest().get());
+    css::uno::Reference<css::awt::XRequestCallback> xPopupRequest = pChartModel->getPopupRequest();
+    PopupRequest* pPopupRequest = dynamic_cast<PopupRequest*>(xPopupRequest.get());
     if (!pPopupRequest)
         return;
 
