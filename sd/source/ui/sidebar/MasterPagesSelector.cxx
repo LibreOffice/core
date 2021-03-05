@@ -207,11 +207,11 @@ void MasterPagesSelector::ShowContextMenu(const Point* pPos)
         aPosition = *pPos;
 
     // Setup the menu.
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, GetContextMenuUIFile()));
+    weld::Widget* pParent = mxPreviewValueSet->GetDrawingArea();
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pParent, GetContextMenuUIFile()));
     std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("menu"));
     ProcessPopupMenu(*xMenu);
     ::tools::Rectangle aRect(aPosition, Size(1,1));
-    weld::Window* pParent = weld::GetPopupParent(*this, aRect);
     // Show the menu.
     ExecuteCommand(xMenu->popup_at_rect(pParent, aRect));
 }
