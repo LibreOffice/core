@@ -268,14 +268,6 @@ void CustomAnimationPane::addUndo()
     }
 }
 
-void CustomAnimationPane::StateChanged( StateChangedType nStateChange )
-{
-    Control::StateChanged( nStateChange );
-
-    if( nStateChange == StateChangedType::Visible )
-        updateMotionPathTags();
-}
-
 void CustomAnimationPane::KeyInput( const KeyEvent& rKEvt )
 {
     if (mxCustomAnimationList)
