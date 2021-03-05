@@ -133,6 +133,18 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
         return false;
     }
 
+    Size prefSize;
+    png_uint_32 res_x = 0;
+    png_uint_32 res_y = 0;
+    int unit_type = 0;
+    if (png_get_pHYs(pPng, pInfo, &res_x, &res_y, &unit_type) != 0
+        && unit_type == PNG_RESOLUTION_METER && res_x && res_y)
+    {
+        // convert into MapUnit::Map100thMM
+        prefSize = Size(static_cast<sal_Int32>((100000.0 * width) / res_x),
+                        static_cast<sal_Int32>((100000.0 * height) / res_y));
+    }
+
     {
         if (colorType == PNG_COLOR_TYPE_RGB)
         {
@@ -262,6 +274,12 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
     png_read_end(pPng, pInfo);
 
     png_destroy_read_struct(&pPng, &pInfo, nullptr);
+
+    if (!prefSize.IsEmpty())
+    {
+        rBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+        rBitmapEx.SetPrefSize(prefSize);
+    }
 
     return true;
 }
