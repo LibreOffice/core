@@ -659,6 +659,9 @@ SdPageObjsTLV::SdPageObjsTLV(std::unique_ptr<weld::TreeView> xTreeView)
     m_xTreeView->connect_key_press(LINK(this, SdPageObjsTLV, KeyInputHdl));
     m_xTreeView->connect_mouse_press(LINK(this, SdPageObjsTLV, MousePressHdl));
     m_xTreeView->connect_mouse_release(LINK(this, SdPageObjsTLV, MouseReleaseHdl));
+
+    m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 28,
+                                  m_xTreeView->get_text_height() * 8);
 }
 
 IMPL_LINK_NOARG(SdPageObjsTLV, SelectHdl, weld::TreeView&, void)
