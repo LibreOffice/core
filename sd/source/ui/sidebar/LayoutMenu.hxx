@@ -157,6 +157,7 @@ private:
     DECL_LINK(EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, void);
     DECL_LINK(WindowEventHandler, VclWindowEvent&, void);
     DECL_LINK(OnMenuItemSelected, Menu*, bool);
+    void OnMenuItemSelected(std::string_view ident);
 };
 
 } // end of namespace ::sd::toolpanel
