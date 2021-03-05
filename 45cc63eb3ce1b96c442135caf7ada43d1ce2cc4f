@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "147beb27_f32fd5fd",
+        "filename": "wizards/source/scriptforge/SF_PythonHelper.xba",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1000521
+      },
+      "writtenOn": "2021-03-05T17:12:38Z",
+      "side": 1,
+      "message": "pattern\n\n(Python arguments are lower-cased)",
+      "range": {
+        "startLine": 323,
+        "startChar": 32,
+        "endLine": 323,
+        "endChar": 33
+      },
+      "revId": "45cc63eb3ce1b96c442135caf7ada43d1ce2cc4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
