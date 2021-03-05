@@ -818,20 +818,19 @@ ONavigator::ONavigator(weld::Window* pParent, OReportController& rController)
     m_pImpl.reset(new ONavigatorImpl(rController, *m_xBuilder));
     m_pImpl->m_xNavigatorTree->grab_focus();
 
-    m_xDialog->connect_toplevel_focus_changed(LINK(this, ONavigator, FocusChangeHdl));
+    m_xDialog->connect_container_focus_changed(LINK(this, ONavigator, FocusChangeHdl));
 }
 
 ONavigator::~ONavigator()
 {
 }
 
-IMPL_LINK_NOARG(ONavigator, FocusChangeHdl, weld::Widget&, void)
+IMPL_LINK_NOARG(ONavigator, FocusChangeHdl, weld::Container&, void)
 {
     if (m_xDialog->has_toplevel_focus())
         m_pImpl->m_xNavigatorTree->grab_focus();
 }
 
 } // rptui
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

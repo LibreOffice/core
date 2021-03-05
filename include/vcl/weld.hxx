@@ -483,9 +483,6 @@ class VCL_DLLPUBLIC Window : virtual public Container
 {
 protected:
     Link<Widget&, bool> m_aHelpRequestHdl;
-    Link<Widget&, void> m_aTopLevelFocusChangedHdl;
-
-    void signal_toplevel_focus_changed() { m_aTopLevelFocusChangedHdl.Call(*this); }
 
 public:
     virtual void set_title(const OUString& rTitle) = 0;
@@ -509,6 +506,8 @@ public:
     // off again.
     virtual void set_centered_on_parent(bool bTrackGeometryRequests) = 0;
     // returns whether the widget that has focus is within this Window
+    // (its very possible to move this to weld::Container if that becomes
+    // desirable)
     virtual bool has_toplevel_focus() const = 0;
     virtual void present() = 0;
     virtual void set_window_state(const OString& rStr) = 0;
@@ -517,10 +516,6 @@ public:
     virtual css::uno::Reference<css::awt::XWindow> GetXWindow() = 0;
 
     void connect_help(const Link<Widget&, bool>& rLink) { m_aHelpRequestHdl = rLink; }
-    virtual void connect_toplevel_focus_changed(const Link<Widget&, void>& rLink)
-    {
-        m_aTopLevelFocusChangedHdl = rLink;
-    }
 
     virtual SystemEnvData get_system_data() const = 0;
 
