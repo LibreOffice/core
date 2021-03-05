@@ -636,10 +636,10 @@ DataFlavor CXTDataObject::formatEtcToDataFlavor( const FORMATETC& aFormatEtc ) c
     DataFlavor aFlavor;
 
     if ( m_FormatRegistrar.hasSynthesizedLocale( ) )
-        aFlavor =
-            m_DataFormatTranslator.getDataFlavorFromFormatEtc( aFormatEtc, CFormatRegistrar::getSynthesizedLocale( ) );
+        aFlavor = m_DataFormatTranslator.getDataFlavorFromFormatEtc(
+            aFormatEtc.cfFormat, CFormatRegistrar::getSynthesizedLocale());
     else
-        aFlavor = m_DataFormatTranslator.getDataFlavorFromFormatEtc( aFormatEtc );
+        aFlavor = m_DataFormatTranslator.getDataFlavorFromFormatEtc(aFormatEtc.cfFormat);
 
     if ( !aFlavor.MimeType.getLength( ) )
         throw UnsupportedFlavorException( );
