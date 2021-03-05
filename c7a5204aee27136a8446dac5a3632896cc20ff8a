@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ef72034_5d4625de",
+        "filename": "sfx2/source/doc/templatedlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-03-05T08:41:19Z",
+      "side": 0,
+      "message": "why all these changes ?",
+      "revId": "c7a5204aee27136a8446dac5a3632896cc20ff8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
