@@ -170,7 +170,7 @@ public:
 };
 
 /** ContactObject for connection between frames (or their formats respectively)
- in SwClient and the drawobjects of Drawing (DsrObjUserCall). */
+ in SwClient and the drawobjects of Drawing (SdrObjUserCall). */
 
 class SW_DLLPUBLIC SwFlyDrawContact final : public SwContact
 {
@@ -206,7 +206,9 @@ public:
 };
 
 /** new class for re-direct methods calls at a 'virtual'
-      drawing object to its referenced object. */
+      drawing object to its referenced object.
+    For example, if an SdrObject is anchored in a header, then later pages will have a SwDrawVirtObj
+    in later headers. */
 class SwDrawVirtObj final : public SdrVirtObj
 {
     private:

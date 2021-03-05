@@ -55,6 +55,8 @@ public:
 // virtual objects for Flys
 // Flys will always be shown with virtual objects. By doing that, they can be
 // shown multiple times if needed (header/footer).
+// For example, if an SwFlyFrameFormat is anchored in a header, then all pages will have a separate
+// SwVirtFlyDrawObj in their headers.
 class SwVirtFlyDrawObj final : public SdrVirtObj
 {
 private:
