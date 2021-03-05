@@ -412,7 +412,7 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
         eNavMode = NAV_LMODE_AREAS;
     SetListMode(eNavMode);
 
-    aExpandedSize = GetOptimalSize();
+    aExpandedSize = m_xContainer->get_preferred_size();
 
     m_pInitialFocusWidget = m_xEdCol.get();
 }
@@ -790,7 +790,7 @@ void ScNavigatorDlg::SetListMode(NavListMode eMode)
 
         if (pNav)
         {
-            Size aOptimalSize(GetOptimalSize());
+            Size aOptimalSize(m_xContainer->get_preferred_size());
             Size aNewSize(pNav->GetOutputSizePixel());
             aNewSize.setHeight( eMode == NAV_LMODE_NONE ? aOptimalSize.Height() : aExpandedSize.Height() );
             pNav->SetMinOutputSizePixel(aOptimalSize);
