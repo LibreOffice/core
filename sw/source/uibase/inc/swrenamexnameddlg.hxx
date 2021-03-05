@@ -40,7 +40,7 @@ class SwRenameXNamedDlg : public weld::GenericDialogController
     DECL_LINK(ModifyHdl, weld::Entry&, void);
 
 public:
-    SwRenameXNamedDlg(weld::Window* pParent,
+    SwRenameXNamedDlg(weld::Widget* pParent,
                       css::uno::Reference< css::container::XNamed > & xNamed,
                       css::uno::Reference< css::container::XNameAccess > & xNameAccess );
 

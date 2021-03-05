@@ -703,7 +703,7 @@ public:
         const SfxItemSet* pItemSet, SwWrtShell* pSh) override;
     virtual VclPtr<AbstractSwFieldDlg> CreateSwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, weld::Window *pParent) override;
     virtual VclPtr<SfxAbstractDialog>   CreateSwFieldEditDlg ( SwView& rVw ) override;
-    virtual VclPtr<AbstractSwRenameXNamedDlg> CreateSwRenameXNamedDlg(weld::Window* pParent,
+    virtual VclPtr<AbstractSwRenameXNamedDlg> CreateSwRenameXNamedDlg(weld::Widget* pParent,
         css::uno::Reference< css::container::XNamed > & xNamed,
         css::uno::Reference< css::container::XNameAccess > & xNameAccess) override;
     virtual VclPtr<AbstractSwModalRedlineAcceptDlg> CreateSwModalRedlineAcceptDlg(weld::Window *pParent) override;
