@@ -134,7 +134,9 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
     if (bitDepth < 8)
         png_set_packing(pPng);
 
-    if (colorType == PNG_COLOR_TYPE_GRAY || colorType == PNG_COLOR_TYPE_GRAY_ALPHA)
+    // Convert gray+alpha to RGBA, keep gray as gray.
+    if (colorType == PNG_COLOR_TYPE_GRAY_ALPHA
+        || (colorType == PNG_COLOR_TYPE_GRAY && png_get_valid(pPng, pInfo, PNG_INFO_tRNS)))
     {
         png_set_gray_to_rgb(pPng);
     }
@@ -154,7 +156,9 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
         return false;
     }
 
-    if (bitDepth != 8 || (colorType != PNG_COLOR_TYPE_RGB && colorType != PNG_COLOR_TYPE_RGB_ALPHA))
+    if (bitDepth != 8
+        || (colorType != PNG_COLOR_TYPE_RGB && colorType != PNG_COLOR_TYPE_RGB_ALPHA
+            && colorType != PNG_COLOR_TYPE_GRAY))
     {
         png_destroy_read_struct(&pPng, &pInfo, nullptr);
         return false;
@@ -298,6 +302,35 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                 }
                 rBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
             }
+        }
+        else if (colorType == PNG_COLOR_TYPE_GRAY)
+        {
+            size_t aRowSizeBytes = png_get_rowbytes(pPng, pInfo);
+
+            aBitmap = Bitmap(Size(width, height), 8, &Bitmap::GetGreyPalette(256));
+            aBitmap.Erase(COL_WHITE);
+            {
+                pWriteAccess = BitmapScopedWriteAccess(aBitmap);
+
+                aRows = std::vector<std::vector<png_byte>>(height);
+                for (auto& rRow : aRows)
+                    rRow.resize(aRowSizeBytes, 0);
+
+                for (int pass = 0; pass < nNumberOfPasses; pass++)
+                {
+                    for (png_uint_32 y = 0; y < height; y++)
+                    {
+                        Scanline pScanline = pWriteAccess->GetScanline(y);
+                        png_bytep pRow = aRows[y].data();
+                        png_read_row(pPng, pRow, nullptr);
+                        size_t iColor = 0;
+                        for (size_t i = 0; i < aRowSizeBytes; ++i)
+                            pScanline[iColor++] = pRow[i];
+                    }
+                }
+                pWriteAccess.reset();
+            }
+            rBitmapEx = BitmapEx(aBitmap);
         }
     }
 
