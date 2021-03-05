@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "03c41d73_798a4ce0",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 942,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-05T02:56:43Z",
+      "side": 1,
+      "message": "This can result in a use after free if SfxMedium is destructed (e.g. close the file before reload pops up).  Is there a way to check if the medium has been destructed?",
+      "range": {
+        "startLine": 942,
+        "startChar": 57,
+        "endLine": 942,
+        "endChar": 63
+      },
+      "revId": "2f5b8bdf918bf32c7ce8f0ccecd14d4655e25c25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9d41006f_3fa323fc",
         "filename": "sfx2/source/doc/docfile.cxx",
         "patchSetId": 10
