@@ -22,6 +22,15 @@ submit() {
             fi
             echo "no branch specified, guessing current branch $BRANCH"
         fi
+
+        if [ "$BRANCH" = "master" ]; then
+            WEEKOLDDATE=$(date --date="7 days ago" +%s)
+            PARENTDATE=$(git show -s --format=%ct HEAD~1)
+            if [[ $PARENTDATE -lt $WEEKOLDDATE ]]; then
+                echo "Your branch is older than a week, do './g pull -r' and retry"
+                exit 1
+            fi
+        fi
         git push "$GERRITURL" "HEAD:refs/for/$BRANCH$TYPE"
 }
 
