@@ -63,7 +63,7 @@ rtl::Reference<FuPoor> FuSummaryPage::Create( ViewShell* pViewSh, ::sd::Window* 
 void FuSummaryPage::DoExecute( SfxRequest& )
 {
     std::unique_ptr<SdOutliner> pOutl;
-    SdPage* pSummaryPage = nullptr;
+    rtl::Reference<SdPage> pSummaryPage;
     sal_uInt16 i = 0;
     sal_uInt16 nFirstPage = SDRPAGE_NOTFOUND;
     sal_uInt16 nSelectedPages = 0;
@@ -126,7 +126,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                                      pActualPage->GetLowerBorder() );
 
                     // insert page at the back
-                    mpDoc->InsertPage(pSummaryPage, nCount * 2 + 1);
+                    mpDoc->InsertPage(pSummaryPage.get(), nCount * 2 + 1);
                     if( bUndo )
                         mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pSummaryPage));
 
@@ -138,7 +138,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     pSummaryPage->setHeaderFooterSettings(pActualPage->getHeaderFooterSettings());
 
                     // notes-page
-                    SdPage* pNotesPage = mpDoc->AllocSdPage(false);
+                    rtl::Reference<SdPage> pNotesPage = mpDoc->AllocSdPage(false);
                     pNotesPage->SetSize(pActualNotesPage->GetSize());
                     pNotesPage->SetBorder(pActualNotesPage->GetLeftBorder(),
                                           pActualNotesPage->GetUpperBorder(),
@@ -147,7 +147,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     pNotesPage->SetPageKind(PageKind::Notes);
 
                     // insert page at the back
-                    mpDoc->InsertPage(pNotesPage, nCount * 2 + 2);
+                    mpDoc->InsertPage(pNotesPage.get(), nCount * 2 + 2);
 
                     if( bUndo )
                         mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));

@@ -62,13 +62,13 @@ FmFormPage::~FmFormPage()
 {
 }
 
-SdrPage* FmFormPage::CloneSdrPage(SdrModel& rTargetModel) const
+rtl::Reference<SdrPage> FmFormPage::CloneSdrPage(SdrModel& rTargetModel) const
 {
     FmFormModel& rFmFormModel(static_cast< FmFormModel& >(rTargetModel));
-    FmFormPage* pClonedFmFormPage(
+    rtl::Reference<FmFormPage> pClonedFmFormPage =
         new FmFormPage(
             rFmFormModel,
-            IsMasterPage()));
+            IsMasterPage());
     pClonedFmFormPage->lateInit(*this);
     return pClonedFmFormPage;
 }

@@ -603,14 +603,14 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SvxUnoDrawPagesAccess::insertNewBy
 
     if( mrModel.mpDoc )
     {
-        SdrPage* pPage;
+        rtl::Reference<SdrPage> pPage;
 
         if( auto pFormModel = dynamic_cast<FmFormModel*>( mrModel.mpDoc )  )
             pPage = new FmFormPage(*pFormModel);
         else
             pPage = new SdrPage(*mrModel.mpDoc);
 
-        mrModel.mpDoc->InsertPage( pPage, static_cast<sal_uInt16>(nIndex) );
+        mrModel.mpDoc->InsertPage( pPage.get(), static_cast<sal_uInt16>(nIndex) );
         xDrawPage.set( pPage->getUnoPage(), uno::UNO_QUERY );
     }
 

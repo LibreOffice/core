@@ -32,10 +32,10 @@ ScDrawPage::~ScDrawPage()
 {
 }
 
-ScDrawPage* ScDrawPage::CloneSdrPage(SdrModel& rTargetModel) const
+rtl::Reference<SdrPage> ScDrawPage::CloneSdrPage(SdrModel& rTargetModel) const
 {
     ScDrawLayer& rScDrawLayer(static_cast< ScDrawLayer& >(rTargetModel));
-    ScDrawPage* pClonedScDrawPage(
+    rtl::Reference<ScDrawPage> pClonedScDrawPage(
         new ScDrawPage(
             rScDrawLayer,
             IsMasterPage()));

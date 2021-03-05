@@ -39,7 +39,7 @@ public:
     explicit SwDPage(SwDrawModel& rNewModel, bool bMasterPage);
     virtual ~SwDPage() override;
 
-    virtual SwDPage* CloneSdrPage(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrPage> CloneSdrPage(SdrModel& rTargetModel) const override;
 
     // #i3694#
     // This GetOffset() method is not needed anymore, it even leads to errors.

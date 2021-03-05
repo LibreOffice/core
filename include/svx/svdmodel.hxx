@@ -162,8 +162,8 @@ private:
     std::unordered_set< const SdrObject* >  maAllIncarnatedObjects;
 #endif
 protected:
-    std::vector<SdrPage*> maMaPag;     // master pages
-    std::vector<SdrPage*> maPages;
+    std::vector<rtl::Reference<SdrPage>> maMaPag;     // master pages
+    std::vector<rtl::Reference<SdrPage>> maPages;
     std::function<void(std::unique_ptr<SdrUndoAction>)> m_aUndoLink;  // link to a NotifyUndo-Handler
     Size           m_aMaxObjSize; // e.g. for auto-growing text
     Fraction       m_aObjUnit;   // description of the coordinate units for ClipBoard, Drag&Drop, ...
@@ -304,7 +304,7 @@ public:
     void BurnInStyleSheetAttributes();
     // If you inherit from SdrPage you also need to inherit from SdrModel
     // and implement both VM AllocPage() and AllocModel()...
-    virtual SdrPage*  AllocPage(bool bMasterPage);
+    virtual rtl::Reference<SdrPage>  AllocPage(bool bMasterPage);
     virtual SdrModel* AllocModel() const;
 
     // Changes on the layers set the modified flag and broadcast on the model!
@@ -397,7 +397,7 @@ public:
     virtual void     InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
     virtual void     DeletePage(sal_uInt16 nPgNum);
     // Remove means transferring ownership to the caller (opposite of Insert)
-    virtual SdrPage* RemovePage(sal_uInt16 nPgNum);
+    virtual rtl::Reference<SdrPage> RemovePage(sal_uInt16 nPgNum);
     virtual void     MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos);
     const SdrPage*   GetPage(sal_uInt16 nPgNum) const;
     SdrPage*         GetPage(sal_uInt16 nPgNum);
@@ -408,7 +408,7 @@ public:
     virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
     void             DeleteMasterPage(sal_uInt16 nPgNum);
     // Remove means transferring ownership to the caller (opposite of Insert)
-    virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum);
+    virtual rtl::Reference<SdrPage> RemoveMasterPage(sal_uInt16 nPgNum);
     void             MoveMasterPage(sal_uInt16 nPgNum, sal_uInt16 nNewPos);
     const SdrPage*   GetMasterPage(sal_uInt16 nPgNum) const;
     SdrPage*         GetMasterPage(sal_uInt16 nPgNum);

@@ -318,8 +318,9 @@ Reference< drawing::XDrawPage > SAL_CALL DrawController::getCurrentPage()
 
     // When there is not yet a sub controller (during initialization) then fall back
     // to the current page in mpCurrentPage.
-    if ( ! xPage.is() && mpCurrentPage.is())
-        xPage.set(mpCurrentPage->getUnoPage(), UNO_QUERY);
+    if ( ! xPage.is() )
+        if (rtl::Reference<SdPage> pPage = mpCurrentPage.get())
+            xPage.set(pPage->getUnoPage(), UNO_QUERY);
 
     return xPage;
 }
@@ -403,8 +404,8 @@ void DrawController::FireChangeLayerMode (bool bLayerMode) throw()
 
 void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) throw()
 {
-    SdrPage* pCurrentPage  = mpCurrentPage.get();
-    if (pNewCurrentPage == pCurrentPage)
+    rtl::Reference<SdrPage> pCurrentPage  = mpCurrentPage.get();
+    if (pNewCurrentPage == pCurrentPage.get())
         return;
 
     try
@@ -421,7 +422,7 @@ void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) throw()
 
         FirePropertyChange(PROPERTY_CURRENTPAGE, aNewValue, aOldValue);
 
-        mpCurrentPage.reset(pNewCurrentPage);
+        mpCurrentPage = pNewCurrentPage;
     }
     catch (const uno::Exception&)
     {

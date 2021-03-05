@@ -90,7 +90,7 @@ IMPL_LINK_NOARG(ScNoteMarker, TimeHdl, Timer *, void)
             rOutliner.SetRefDevice(pPrinter);
         }
 
-        if( SdrPage* pPage = m_pModel->AllocPage( false ) )
+        if( rtl::Reference<SdrPage> pPage = m_pModel->AllocPage( false ) )
 
         {
             m_xObject = ScNoteUtil::CreateTempCaption( *m_pDoc, m_aDocPos, *pPage, m_aUserText, m_aVisRect, m_bLeft );
@@ -107,7 +107,7 @@ IMPL_LINK_NOARG(ScNoteMarker, TimeHdl, Timer *, void)
             }
 
             // Insert page so that the model recognise it and also deleted
-            m_pModel->InsertPage( pPage );
+            m_pModel->InsertPage( pPage.get() );
 
         }
         m_bVisible = true;

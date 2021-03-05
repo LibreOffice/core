@@ -66,7 +66,7 @@ void OReportModel::detachController()
     m_xUndoEnv->Clear(OXUndoEnvironment::Accessor());
 }
 
-SdrPage* OReportModel::AllocPage(bool /*bMasterPage*/)
+rtl::Reference<SdrPage> OReportModel::AllocPage(bool /*bMasterPage*/)
 {
     OSL_FAIL("Who called me!");
     return nullptr;
@@ -86,19 +86,19 @@ void OReportModel::SetModified(bool _bModified)
         m_pController->setModified(_bModified);
 }
 
-SdrPage* OReportModel::RemovePage(sal_uInt16 nPgNum)
+rtl::Reference<SdrPage> OReportModel::RemovePage(sal_uInt16 nPgNum)
 {
-    OReportPage* pPage = dynamic_cast<OReportPage*>(SdrModel::RemovePage(nPgNum));
+    rtl::Reference<OReportPage> pPage = dynamic_cast<OReportPage*>(SdrModel::RemovePage(nPgNum).get());
     return pPage;
 }
 
 OReportPage* OReportModel::createNewPage(const uno::Reference< report::XSection >& _xSection)
 {
     SolarMutexGuard aSolarGuard;
-    OReportPage* pPage = new OReportPage( *this ,_xSection);
-    InsertPage(pPage);
+    rtl::Reference<OReportPage> pPage = new OReportPage( *this ,_xSection);
+    InsertPage(pPage.get());
     m_xUndoEnv->AddSection(_xSection);
-    return pPage;
+    return pPage.get();
 }
 
 OReportPage* OReportModel::getPage(const uno::Reference< report::XSection >& _xSection)

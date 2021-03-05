@@ -154,7 +154,7 @@ public:
     SdPage(SdDrawDocument& rNewDoc, bool bMasterPage);
     virtual ~SdPage() override;
 
-    virtual SdrPage* CloneSdrPage(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrPage> CloneSdrPage(SdrModel& rTargetModel) const override;
 
     virtual void    SetSize(const Size& aSize) override;
     virtual void    SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32 Lwr) override;

@@ -224,8 +224,8 @@ public:
     SAL_DLLPRIVATE SdDrawDocument*     AllocSdDrawDocument() const;
     SAL_DLLPRIVATE virtual SdrModel*   AllocModel() const override; //forwards to AllocSdDrawDocument
 
-    SAL_DLLPRIVATE SdPage*             AllocSdPage(bool bMasterPage);
-    SAL_DLLPRIVATE virtual SdrPage*    AllocPage(bool bMasterPage) override; //forwards to AllocSdPage
+    SAL_DLLPRIVATE rtl::Reference<SdPage>          AllocSdPage(bool bMasterPage);
+    SAL_DLLPRIVATE virtual rtl::Reference<SdrPage> AllocPage(bool bMasterPage) override; //forwards to AllocSdPage
 
     SAL_DLLPRIVATE virtual bool        IsReadOnly() const override;
     SAL_DLLPRIVATE virtual void        SetChanged(bool bFlag = true) override;
@@ -262,10 +262,10 @@ public:
     SAL_DLLPRIVATE void                MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos) override;
     SAL_DLLPRIVATE void                InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) override;
     SAL_DLLPRIVATE void                DeletePage(sal_uInt16 nPgNum) override;
-    SAL_DLLPRIVATE SdrPage*            RemovePage(sal_uInt16 nPgNum) override;
+    SAL_DLLPRIVATE rtl::Reference<SdrPage> RemovePage(sal_uInt16 nPgNum) override;
 
     SAL_DLLPRIVATE virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) override;
-    SAL_DLLPRIVATE virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum) override;
+    SAL_DLLPRIVATE virtual rtl::Reference<SdrPage> RemoveMasterPage(sal_uInt16 nPgNum) override;
 
     SAL_DLLPRIVATE void                RemoveUnnecessaryMasterPages( SdPage* pMaster=nullptr, bool bOnlyDuplicatePages=false, bool bUndo=true );
     void   SetMasterPage(sal_uInt16 nSdPageNum, std::u16string_view rLayoutName,

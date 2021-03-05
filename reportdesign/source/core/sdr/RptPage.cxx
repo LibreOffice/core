@@ -41,10 +41,10 @@ OReportPage::~OReportPage()
 {
 }
 
-SdrPage* OReportPage::CloneSdrPage(SdrModel& rTargetModel) const
+rtl::Reference<SdrPage> OReportPage::CloneSdrPage(SdrModel& rTargetModel) const
 {
     OReportModel& rOReportModel(static_cast< OReportModel& >(rTargetModel));
-    OReportPage* pClonedOReportPage(
+    rtl::Reference<OReportPage> pClonedOReportPage(
         new OReportPage(
             rOReportModel,
             m_xSection));

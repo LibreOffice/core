@@ -50,7 +50,7 @@ public:
     explicit FmFormPage(FmFormModel& rModel, bool bMasterPage=false);
     virtual ~FmFormPage() override;
 
-    virtual SdrPage* CloneSdrPage(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrPage> CloneSdrPage(SdrModel& rTargetModel) const override;
 
     virtual void    InsertObject(SdrObject* pObj, size_t nPos = SAL_MAX_SIZE) override;
 

@@ -37,7 +37,7 @@ public:
     /// Put needed items for XPropertyList entries from the DrawModel.
     void PutAreaListItems(SfxItemSet& rSet) const;
 
-    virtual SdrPage* AllocPage(bool bMasterPage) override;
+    virtual rtl::Reference<SdrPage> AllocPage(bool bMasterPage) override;
 
     virtual css::uno::Reference<css::embed::XStorage> GetDocumentStorage() const override;
 

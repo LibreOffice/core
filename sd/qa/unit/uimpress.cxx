@@ -17,6 +17,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <vcl/svapp.hxx>
+#include <svx/svdpage.hxx>
 #include <sddll.hxx>
 #include <drawdoc.hxx>
 
@@ -77,16 +78,16 @@ void Test::tearDown()
 
 void Test::testAddPage()
 {
-    SdrPage* pPage = m_pDoc->AllocPage(false);
-    m_pDoc->InsertPage(pPage);
+    rtl::Reference<SdrPage> pPage = m_pDoc->AllocPage(false);
+    m_pDoc->InsertPage(pPage.get());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("added one page to model",
                                  static_cast<sal_uInt16>(1), m_pDoc->GetPageCount());
     m_pDoc->DeletePage(0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("removed one page to model",
                                  static_cast<sal_uInt16>(0), m_pDoc->GetPageCount());
 
-    SdrPage* pMasterPage = m_pDoc->AllocPage(true);
-    m_pDoc->InsertMasterPage(pMasterPage);
+    rtl::Reference<SdrPage> pMasterPage = m_pDoc->AllocPage(true);
+    m_pDoc->InsertMasterPage(pMasterPage.get());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("added one master page to model",
                                  static_cast<sal_uInt16>(1), m_pDoc->GetMasterPageCount());
     m_pDoc->DeleteMasterPage(0);
