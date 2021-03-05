@@ -321,7 +321,7 @@ IMPL_LINK(SdPageObjsTLV, KeyInputHdl, const KeyEvent&, rKEvt, bool)
         m_aRowActivatedHdl.Call(*m_xTreeView);
         return true;
     }
-    return false;
+    return m_aKeyPressHdl.Call(rKEvt);
 }
 
 IMPL_LINK(SdPageObjsTLV, MousePressHdl, const MouseEvent&, rMEvt, bool)
