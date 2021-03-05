@@ -132,12 +132,23 @@ class LayoutValueSet : public ValueSet
 {
 private:
     LayoutMenu& mrMenu;
+
+    /** Calculate the number of displayed rows.  This depends on the given
+        item size, the given number of columns, and the size of the
+        control.  Note that this is not the number of rows managed by the
+        valueset.  This number may be larger.  In that case a vertical
+        scroll bar is displayed.
+    */
+    int CalculateRowCount(const Size& rItemSize, int nColumnCount);
+
 public:
     LayoutValueSet(LayoutMenu& rMenu)
         : ValueSet(nullptr)
         , mrMenu(rMenu)
     {
     }
+
+    virtual void Resize() override;
 
     virtual bool Command(const CommandEvent& rEvent) override
     {
@@ -272,16 +283,16 @@ ui::LayoutSize LayoutMenu::GetHeightForWidth (const sal_Int32 nWidth)
     return ui::LayoutSize(nPreferredHeight,nPreferredHeight,nPreferredHeight);
 }
 
-void LayoutMenu::Resize()
+void LayoutValueSet::Resize()
 {
     Size aWindowSize = GetOutputSizePixel();
     if (IsVisible() && aWindowSize.Width() > 0)
     {
         // Calculate the number of rows and columns.
-        if (mxLayoutValueSet->GetItemCount() > 0)
+        if (GetItemCount() > 0)
         {
-            Image aImage = mxLayoutValueSet->GetItemImage(mxLayoutValueSet->GetItemId(0));
-            Size aItemSize = mxLayoutValueSet->CalcItemSizePixel (
+            Image aImage = GetItemImage(GetItemId(0));
+            Size aItemSize = CalcItemSizePixel (
                 aImage.GetSizePixel());
             aItemSize.AdjustWidth(8 );
             aItemSize.AdjustHeight(8 );
@@ -293,12 +304,12 @@ void LayoutMenu::Resize()
 
             int nRowCount = CalculateRowCount (aItemSize, nColumnCount);
 
-            mxLayoutValueSet->SetColCount(nColumnCount);
-            mxLayoutValueSet->SetLineCount(nRowCount);
+            SetColCount(nColumnCount);
+            SetLineCount(nRowCount);
         }
     }
 
-    mxLayoutValueSet->Resize();
+    ValueSet::Resize();
 }
 
 void LayoutMenu::MouseButtonDown (const MouseEvent& rEvent)
@@ -356,14 +367,13 @@ void LayoutMenu::InvalidateContent()
     UpdateSelection();
 }
 
-int LayoutMenu::CalculateRowCount (const Size&, int nColumnCount)
+int LayoutValueSet::CalculateRowCount (const Size&, int nColumnCount)
 {
     int nRowCount = 0;
 
-    if (mxLayoutValueSet->GetItemCount() > 0 && nColumnCount > 0)
+    if (GetItemCount() > 0 && nColumnCount > 0)
     {
-        nRowCount = (mxLayoutValueSet->GetItemCount() + nColumnCount - 1) / nColumnCount;
-        //        nRowCount = GetOutputSizePixel().Height() / rItemSize.Height();
+        nRowCount = (GetItemCount() + nColumnCount - 1) / nColumnCount;
         if (nRowCount < 1)
             nRowCount = 1;
     }

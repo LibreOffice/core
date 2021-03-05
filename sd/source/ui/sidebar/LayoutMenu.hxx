@@ -77,9 +77,6 @@ public:
     // From ILayoutableWindow
     virtual css::ui::LayoutSize GetHeightForWidth(const sal_Int32 nWidth) override;
 
-    // From vcl::Window
-    virtual void Resize() override;
-
     /** Show a context menu when the right mouse button is pressed.
     */
     virtual void MouseButtonDown(const MouseEvent& rEvent) override;
@@ -114,14 +111,6 @@ private:
     bool mbIsMainViewChangePending;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
     bool mbIsDisposed;
-
-    /** Calculate the number of displayed rows.  This depends on the given
-        item size, the given number of columns, and the size of the
-        control.  Note that this is not the number of rows managed by the
-        valueset.  This number may be larger.  In that case a vertical
-        scroll bar is displayed.
-    */
-    int CalculateRowCount(const Size& rItemSize, int nColumnCount);
 
     /** Fill the value set with the layouts that are applicable to the
         current main view shell.
