@@ -156,6 +156,11 @@ public:
     SdPageObjsTLV(std::unique_ptr<weld::TreeView> xTreeview);
     ~SdPageObjsTLV();
 
+    void set_sensitive(bool bSensitive)
+    {
+        m_xTreeView->set_sensitive(bSensitive);
+    }
+
     void hide()
     {
         m_xTreeView->hide();

@@ -44,6 +44,8 @@
 #include <FrameView.hxx>
 #include <Window.hxx>
 
+#include <DrawViewShell.hxx>
+
 /**
  * SdNavigatorWin - FloatingWindow
  */
@@ -628,13 +630,23 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
     if( eState < SfxItemState::DEFAULT || nSId != SID_NAVIGATOR_STATE )
         return;
 
-    const SfxUInt32Item& rStateItem = dynamic_cast<const SfxUInt32Item&>(*pItem);
-    NavState nState = static_cast<NavState>(rStateItem.GetValue());
-
     // only if doc in LB is the active
     NavDocInfo* pInfo = pNavigatorWin->GetDocInfo();
     if( !(pInfo && pInfo->IsActive()) )
         return;
+
+    if (::sd::DrawDocShell* pDrawDocShell = pInfo->GetDrawDocShell())
+    {
+        const auto pDrawViewShell =
+                static_cast<::sd::DrawViewShell *>(pDrawDocShell->GetViewShell());
+        bool bEditModePage(pDrawViewShell->GetEditMode() == EditMode::Page);
+        pNavigatorWin->mxToolbox->set_sensitive(bEditModePage);
+        pNavigatorWin->mxLbDocs->set_sensitive(bEditModePage);
+        pNavigatorWin->mxTlbObjects->set_sensitive(bEditModePage);
+    }
+
+    const SfxUInt32Item& rStateItem = dynamic_cast<const SfxUInt32Item&>(*pItem);
+    NavState nState = static_cast<NavState>(rStateItem.GetValue());
 
     // First
     if (nState & NavState::BtnFirstEnabled &&
