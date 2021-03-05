@@ -500,16 +500,12 @@ DECLARE_WW8EXPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.doc")
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> graphic;
     imageProperties->getPropertyValue( "Graphic" ) >>= graphic;
-    uno::Reference<awt::XBitmap> bitmap(graphic, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(58), bitmap->getSize().Width );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(320), bitmap->getSize().Height );
-    const uno::Sequence< sal_Int8 > data = bitmap->getDIB(); // as .bmp data
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(20278), data.getLength());
-    CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6b0])); // -50 = 206 pixel value
-    CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6b1]));
-    CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6b2]));
-    CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6b3]));
-    CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6b4]));
+    Graphic vclGraphic(graphic);
+    BitmapEx bitmap(vclGraphic.GetBitmapEx());
+    CPPUNIT_ASSERT_EQUAL( tools::Long(58), bitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL( tools::Long(320), bitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL( Color(206,206,206), bitmap.GetPixelColor(16,27));
+    CPPUNIT_ASSERT_EQUAL( Color(206,206,206), bitmap.GetPixelColor(22,48));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf95321, "tdf95321.doc")
