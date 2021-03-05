@@ -29,7 +29,8 @@
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <vcl/pngread.hxx>
+#include <vcl/filter/PngImageReader.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/svapp.hxx>
 
 namespace {
@@ -38,8 +39,8 @@ namespace {
         INetURLObject aObj( rPath );
         SvFileStream aStrm( aObj.PathToFileName(), StreamMode::STD_READ );
         if ( !aStrm.GetError() ) {
-            vcl::PNGReader aReader( aStrm );
-            rBitmap = aReader.Read();
+            vcl::PngImageReader aReader( aStrm );
+            rBitmap = aReader.read();
             return !rBitmap.IsEmpty();
         }
         else

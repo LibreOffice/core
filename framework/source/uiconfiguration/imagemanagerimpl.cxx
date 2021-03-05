@@ -42,7 +42,7 @@
 #include <osl/mutex.hxx>
 #include <comphelper/sequence.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <vcl/pngread.hxx>
+#include <vcl/filter/PngImageReader.hxx>
 #include <vcl/pngwrite.hxx>
 #include <rtl/instance.hxx>
 #include <memory>
@@ -333,8 +333,8 @@ void ImageManagerImpl::implts_loadUserImages(
                     BitmapEx aUserBitmap;
                     {
                         std::unique_ptr<SvStream> pSvStream(utl::UcbStreamHelper::CreateStream( xBitmapStream ));
-                        vcl::PNGReader aPngReader( *pSvStream );
-                        aUserBitmap = aPngReader.Read();
+                        vcl::PngImageReader aPngReader( *pSvStream );
+                        aUserBitmap = aPngReader.read();
                     }
 
                     // Delete old image list and create a new one from the read bitmap

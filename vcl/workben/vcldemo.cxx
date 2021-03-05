@@ -39,7 +39,6 @@
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/pngread.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/graphicfilter.hxx>
