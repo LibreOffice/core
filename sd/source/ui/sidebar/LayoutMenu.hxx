@@ -168,7 +168,6 @@ private:
     DECL_LINK(ClickHandler, ValueSet*, void);
     DECL_LINK(StateChangeHandler, const OUString&, void);
     DECL_LINK(EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, void);
-    DECL_LINK(WindowEventHandler, VclWindowEvent&, void);
     void OnMenuItemSelected(std::string_view ident);
 };
 
