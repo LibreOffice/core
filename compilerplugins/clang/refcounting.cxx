@@ -73,6 +73,7 @@ private:
                            const RecordDecl* parent, const std::string& rDeclName);
 
     bool visitTemporaryObjectExpr(Expr const * expr);
+    bool isCastingReference(const Expr* expr);
 };
 
 bool containsXInterfaceSubclass(const clang::Type* pType0);
@@ -693,6 +694,56 @@ bool RefCounting::VisitVarDecl(const VarDecl * varDecl) {
                     << pointeeType
                     << varDecl->getSourceRange();
         }
+        if (isCastingReference(varDecl->getInit()))
+        {
+            // TODO false+ code
+            StringRef fileName = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(varDecl)));
+            if (loplugin::isSamePathname(fileName, SRCDIR "/sw/source/core/unocore/unotbl.cxx"))
+                return true;
+            auto pointeeType = varDecl->getType()->getPointeeType();
+            if (containsOWeakObjectSubclass(pointeeType))
+                report(
+                    DiagnosticsEngine::Warning,
+                    "cppu::OWeakObject subclass %0 being managed via raw pointer, should be managed via rtl::Reference",
+                    varDecl->getLocation())
+                    << pointeeType
+                    << varDecl->getSourceRange();
+        }
+    }
+    return true;
+}
+
+/**
+    Look for code like
+        static_cast<FooChild*>(makeFoo().get());
+    where makeFoo() returns a Reference<Foo>
+*/
+bool RefCounting::isCastingReference(const Expr* expr)
+{
+    expr = compat::IgnoreImplicit(expr);
+    auto castExpr = dyn_cast<CastExpr>(expr);
+    if (!castExpr)
+        return false;
+    auto memberCallExpr = dyn_cast<CXXMemberCallExpr>(castExpr->getSubExpr());
+    if (!memberCallExpr)
+        return false;
+    if (!memberCallExpr->getMethodDecl()->getIdentifier() || memberCallExpr->getMethodDecl()->getName() != "get")
+        return false;
+    QualType objectType = memberCallExpr->getImplicitObjectArgument()->getType();
+    if (!loplugin::TypeCheck(objectType).Class("Reference"))
+        return false;
+    // ignore "x.get()" where x is a var
+    auto obj = compat::IgnoreImplicit(memberCallExpr->getImplicitObjectArgument());
+    if (isa<DeclRefExpr>(obj) || isa<MemberExpr>(obj))
+        return false;
+    // if the foo in foo().get() returns "rtl::Reference<T>&" then the variable
+    // we are assigning to does not __have__ to be Reference, since the method called
+    // must already be holding a reference.
+    if (auto callExpr = dyn_cast<CallExpr>(obj))
+    {
+        if (auto callMethod = callExpr->getDirectCallee())
+            if (callMethod->getReturnType()->isReferenceType())
+                return false;
     }
     return true;
 }
@@ -706,14 +757,14 @@ bool RefCounting::VisitBinaryOperator(const BinaryOperator * binaryOperator)
     if (!binaryOperator->getLHS()->getType()->isPointerType())
         return true;
 
-    // deliberately does not want to keep track at the allocation site
-    StringRef fileName = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(binaryOperator)));
-    if (loplugin::isSamePathname(fileName, SRCDIR "/vcl/unx/generic/dtrans/X11_selection.cxx"))
-        return true;
-
     auto newExpr = dyn_cast<CXXNewExpr>(compat::IgnoreImplicit(binaryOperator->getRHS()));
     if (newExpr)
     {
+        // deliberately does not want to keep track at the allocation site
+        StringRef fileName = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(binaryOperator)));
+        if (loplugin::isSamePathname(fileName, SRCDIR "/vcl/unx/generic/dtrans/X11_selection.cxx"))
+            return true;
+
         auto pointeeType = binaryOperator->getLHS()->getType()->getPointeeType();
         if (containsOWeakObjectSubclass(pointeeType))
         {
@@ -724,6 +775,17 @@ bool RefCounting::VisitBinaryOperator(const BinaryOperator * binaryOperator)
                 << pointeeType
                 << binaryOperator->getSourceRange();
         }
+    }
+    if (isCastingReference(binaryOperator->getRHS()))
+    {
+        auto pointeeType = binaryOperator->getLHS()->getType()->getPointeeType();
+        if (containsOWeakObjectSubclass(pointeeType))
+            report(
+                DiagnosticsEngine::Warning,
+                "cppu::OWeakObject subclass %0 being managed via raw pointer, should be managed via rtl::Reference",
+                compat::getBeginLoc(binaryOperator))
+                << pointeeType
+                << binaryOperator->getSourceRange();
     }
     return true;
 }

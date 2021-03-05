@@ -593,8 +593,8 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
             if ( pWin && pWin->GetParent() &&
                  pWin->GetParent()->GetType() == WindowType::TOOLBOX )
             {
-                VCLXAccessibleToolBox* pParent = static_cast< VCLXAccessibleToolBox* >(
-                    pWin->GetParent()->GetAccessible()->getAccessibleContext().get() );
+                auto pParentAccContext = pWin->GetParent()->GetAccessible()->getAccessibleContext();
+                VCLXAccessibleToolBox* pParent = static_cast< VCLXAccessibleToolBox* >( pParentAccContext.get() );
                 if ( pParent )
                     pParent->ReleaseSubToolBox(static_cast<ToolBox *>(pWin.get()));
             }

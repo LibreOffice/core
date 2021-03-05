@@ -27,6 +27,9 @@ public:
 struct UnoObject : public cppu::OWeakObject
 {
 };
+struct UnoSubObject : public UnoObject
+{
+};
 
 //
 // Note, getting duplicate warnings for some reason I cannot fathom
@@ -93,6 +96,25 @@ rtl::Reference<UnoObject> foo6()
 {
     // no warning expected
     return new UnoObject;
+}
+const rtl::Reference<UnoObject>& getConstRef();
+void foo7()
+{
+    // expected-error@+1 {{cppu::OWeakObject subclass 'UnoSubObject' being managed via raw pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+    UnoSubObject* p1 = static_cast<UnoSubObject*>(foo6().get());
+    (void)p1;
+    // expected-error@+1 {{cppu::OWeakObject subclass 'UnoSubObject' being managed via raw pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+    p1 = static_cast<UnoSubObject*>(foo6().get());
+
+    rtl::Reference<UnoObject> u2;
+    // no warning expected
+    UnoSubObject* p2 = static_cast<UnoSubObject*>(u2.get());
+    (void)p2;
+    p2 = static_cast<UnoSubObject*>(u2.get());
+    // no warning expected
+    UnoSubObject* p3 = static_cast<UnoSubObject*>(getConstRef().get());
+    (void)p3;
+    p3 = static_cast<UnoSubObject*>(getConstRef().get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

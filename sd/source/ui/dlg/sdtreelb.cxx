@@ -612,7 +612,8 @@ void SdPageObjsTLV::AddShapeToTransferable (
             if ( ! (xFrameAccess->getByIndex(nIndex) >>= xFrame))
                 continue;
 
-            ::sd::DrawController* pController = dynamic_cast<sd::DrawController*>(xFrame->getController().get());
+            auto xController = xFrame->getController();
+            ::sd::DrawController* pController = dynamic_cast<sd::DrawController*>(xController.get());
             if (pController == nullptr)
                 continue;
             ::sd::ViewShellBase* pBase = pController->GetViewShellBase();

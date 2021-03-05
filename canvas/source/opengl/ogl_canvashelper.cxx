@@ -679,7 +679,8 @@ namespace oglcanvas
             ScopedVclPtrInstance< VirtualDevice > pVDev;
             pVDev->EnableOutput(false);
 
-            CanvasFont* pFont=dynamic_cast<CanvasFont*>(xLayoutetText->getFont().get());
+            auto pLayoutFont = xLayoutetText->getFont();
+            CanvasFont* pFont=dynamic_cast<CanvasFont*>(pLayoutFont.get());
             const rendering::StringContext& rTxt=xLayoutetText->getText();
             if( pFont && rTxt.Length )
             {
