@@ -301,9 +301,9 @@ Reference< XGraphic > GraphicHelper::importEmbeddedGraphic( const OUString& rStr
         xGraphic = mxGraphicMapper->findGraphic(rStreamName);
         if (!xGraphic.is())
         {
-            // Lazy-loading doesn't work with TIFF or WMF at the moment.
+            // Lazy-loading doesn't work with TIFF at the moment.
             WmfExternal aHeader;
-            if ( (rStreamName.endsWith(".tiff") || rStreamName.endsWith(".wmf") ) && !pExtHeader)
+            if (rStreamName.endsWith(".tiff") && !pExtHeader)
                 pExtHeader = &aHeader;
 
             auto xStream = mxStorage->openInputStream(rStreamName);
