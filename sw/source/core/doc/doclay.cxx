@@ -714,12 +714,12 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 // #i115719#
                 // <title> and <description> attributes are lost when calling <DelFrames()>.
                 // Thus, keep them and restore them after the calling <MakeFrames()>
-                const bool bIsSwFlyFrameFormatInstance( dynamic_cast<SwFlyFrameFormat*>(pOldFormat) != nullptr );
-                const OUString sTitle( bIsSwFlyFrameFormatInstance
-                                     ? static_cast<SwFlyFrameFormat*>(pOldFormat)->GetObjTitle()
+                auto pOldFlyFrameFormat = dynamic_cast<SwFlyFrameFormat*>(pOldFormat);
+                const OUString sTitle( pOldFlyFrameFormat
+                                     ? pOldFlyFrameFormat->GetObjTitle()
                                      : OUString() );
-                const OUString sDescription( bIsSwFlyFrameFormatInstance
-                                           ? static_cast<SwFlyFrameFormat*>(pOldFormat)->GetObjDescription()
+                const OUString sDescription( pOldFlyFrameFormat
+                                           ? pOldFlyFrameFormat->GetObjDescription()
                                            : OUString() );
                 pOldFormat->DelFrames();
 
@@ -867,10 +867,10 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 // We leave this to established methods (especially for InCntFlys).
                 pNewFormat->MakeFrames();
                 // #i115719#
-                if ( bIsSwFlyFrameFormatInstance )
+                if ( pOldFlyFrameFormat )
                 {
-                    static_cast<SwFlyFrameFormat*>(pOldFormat)->SetObjTitle( sTitle );
-                    static_cast<SwFlyFrameFormat*>(pOldFormat)->SetObjDescription( sDescription );
+                    pOldFlyFrameFormat->SetObjTitle( sTitle );
+                    pOldFlyFrameFormat->SetObjDescription( sDescription );
                 }
             }
             break;

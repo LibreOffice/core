@@ -1164,8 +1164,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
     size_t nShapes = 0;
 
     const SwViewShell *pVSh = GetShell();
-    const SwFEShell *pFESh = dynamic_cast<const SwFEShell*>( pVSh) !=  nullptr ?
-                            static_cast< const SwFEShell * >( pVSh ) : nullptr;
+    const SwFEShell *pFESh = dynamic_cast<const SwFEShell*>(pVSh);
     SwPaM* pCursor = pFESh ? pFESh->GetCursor( false /* ??? */ ) : nullptr;
 
     //const size_t nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
@@ -1501,8 +1500,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
     size_t nShapes = 0;
 
     const SwViewShell *pVSh = GetShell();
-    const SwFEShell *pFESh = dynamic_cast<const SwFEShell*>( pVSh) !=  nullptr ?
-                            static_cast< const SwFEShell * >( pVSh ) : nullptr;
+    const SwFEShell *pFESh = dynamic_cast<const SwFEShell*>(pVSh);
     const size_t nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
 
     //when InvalidateFocus Call this function ,and the current selected shape count is not 1 ,

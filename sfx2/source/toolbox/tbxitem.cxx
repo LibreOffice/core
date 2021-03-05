@@ -507,8 +507,11 @@ void SfxToolBoxControl::StateChanged
                     nItemBits |= ToolBoxItemBits::CHECKABLE;
                 }
             }
-            else if ( pImpl->bShowString && dynamic_cast< const SfxStringItem *>( pState ) !=  nullptr )
-                pImpl->pBox->SetItemText(nId, static_cast<const SfxStringItem*>(pState)->GetValue() );
+            else if ( pImpl->bShowString )
+            {
+                if (auto pStringItem = dynamic_cast< const SfxStringItem *>( pState ) )
+                    pImpl->pBox->SetItemText(nId, pStringItem->GetValue() );
+            }
         }
         break;
 

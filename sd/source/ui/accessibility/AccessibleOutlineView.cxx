@@ -63,8 +63,7 @@ AccessibleOutlineView::AccessibleOutlineView (
         return;
 
     OutlinerView* pOutlineView = pShellView->GetViewByWindow( pSdWindow );
-    SdrOutliner& rOutliner =
-        static_cast< ::sd::OutlineView*>(pView)->GetOutliner();
+    SdrOutliner& rOutliner = pShellView->GetOutliner();
 
     if( pOutlineView )
     {

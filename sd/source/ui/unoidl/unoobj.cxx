@@ -898,8 +898,9 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
 
         // really delete SdrOutlinerObj at pObj
         pObj->NbcSetOutlinerParaObject(nullptr);
-        if( bVertical && dynamic_cast<SdrTextObj*>( pObj )  )
-            static_cast<SdrTextObj*>(pObj)->SetVerticalWriting( true );
+        if( bVertical )
+            if (auto pTextObj = dynamic_cast<SdrTextObj*>( pObj ) )
+                pTextObj->SetVerticalWriting( true );
 
         SdrGrafObj* pGraphicObj = dynamic_cast<SdrGrafObj*>( pObj  );
         if( pGraphicObj )
