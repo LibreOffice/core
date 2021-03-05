@@ -35,6 +35,7 @@
 class SmViewShell;
 class SmPrintUIOptions;
 class SmGraphicAccessible;
+class SmElementsDockingWindow;
 
 namespace svtools { class ColorConfig; }
 
@@ -273,6 +274,8 @@ public:
     {
         return *mpGraphic;
     }
+
+    SmElementsDockingWindow* GetDockingWindow();
 
     void        SetStatusText(const OUString& rText);
 
