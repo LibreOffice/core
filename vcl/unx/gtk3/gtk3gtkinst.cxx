@@ -4040,7 +4040,6 @@ class GtkInstanceWindow : public GtkInstanceContainer, public virtual weld::Wind
 private:
     GtkWindow* m_pWindow;
     rtl::Reference<SalGtkXWindow> m_xWindow; //uno api
-    gulong m_nToplevelFocusChangedSignalId;
 
     static gboolean help_pressed(GtkAccelGroup*, GObject*, guint, GdkModifierType, gpointer widget)
     {
@@ -4072,7 +4071,6 @@ public:
     GtkInstanceWindow(GtkWindow* pWindow, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pWindow), pBuilder, bTakeOwnership)
         , m_pWindow(pWindow)
-        , m_nToplevelFocusChangedSignalId(0)
     {
         const bool bIsFrameWeld = pBuilder == nullptr;
         if (!bIsFrameWeld)
@@ -4232,27 +4230,6 @@ public:
         return aData.ToStr();
     }
 
-    virtual void connect_toplevel_focus_changed(const Link<weld::Widget&, void>& rLink) override
-    {
-        assert(!m_nToplevelFocusChangedSignalId);
-        m_nToplevelFocusChangedSignalId = g_signal_connect(m_pWindow, "notify::has-toplevel-focus", G_CALLBACK(signalToplevelFocusChanged), this);
-        weld::Window::connect_toplevel_focus_changed(rLink);
-    }
-
-    virtual void disable_notify_events() override
-    {
-        if (m_nToplevelFocusChangedSignalId)
-            g_signal_handler_block(m_pWidget, m_nToplevelFocusChangedSignalId);
-        GtkInstanceContainer::disable_notify_events();
-    }
-
-    virtual void enable_notify_events() override
-    {
-        GtkInstanceContainer::enable_notify_events();
-        if (m_nToplevelFocusChangedSignalId)
-            g_signal_handler_unblock(m_pWidget, m_nToplevelFocusChangedSignalId);
-    }
-
     virtual VclPtr<VirtualDevice> screenshot() override
     {
         // detect if we have to manually setup its size
@@ -4306,8 +4283,6 @@ public:
 
     virtual ~GtkInstanceWindow() override
     {
-        if (m_nToplevelFocusChangedSignalId)
-            g_signal_handler_disconnect(m_pWindow, m_nToplevelFocusChangedSignalId);
         if (m_xWindow.is())
             m_xWindow->clear();
     }

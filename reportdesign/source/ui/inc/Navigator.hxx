@@ -31,7 +31,7 @@ namespace rptui
         ONavigator(const ONavigator&) = delete;
         void operator =(const ONavigator&) = delete;
 
-        DECL_LINK(FocusChangeHdl, weld::Widget&, void);
+        DECL_LINK(FocusChangeHdl, weld::Container&, void);
 
     public:
         ONavigator(weld::Window* pParent, OReportController& rController);

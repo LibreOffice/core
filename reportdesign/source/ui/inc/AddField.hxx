@@ -69,7 +69,7 @@ class  OAddFieldWindow : public weld::GenericDialogController
     DECL_LINK( OnSelectHdl, weld::TreeView&, void );
     DECL_LINK( DragBeginHdl, bool&, bool );
     DECL_LINK( OnSortAction, const OString&, void );
-    DECL_LINK( FocusChangeHdl, weld::Widget&, void );
+    DECL_LINK( FocusChangeHdl, weld::Container&, void );
 
     void addToList(const css::uno::Sequence<OUString>& rEntries);
     void addToList(const css::uno::Reference<css::container::XNameAccess>& i_xColumns);

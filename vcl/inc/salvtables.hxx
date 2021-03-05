@@ -470,10 +470,6 @@ public:
 
     virtual SystemEnvData get_system_data() const override;
 
-    virtual void connect_toplevel_focus_changed(const Link<weld::Widget&, void>& rLink) override;
-
-    virtual void HandleEventListener(VclWindowEvent& rEvent) override;
-
     virtual weld::ScreenShotCollection collect_screenshot_data() override;
 
     virtual VclPtr<VirtualDevice> screenshot() override;
