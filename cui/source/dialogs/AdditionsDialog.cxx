@@ -10,6 +10,8 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
+#include <cmath>
 #include <string_view>
 
 #include <config_folders.h>
@@ -638,7 +640,7 @@ AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDial
     m_xLabelName->set_label(sExtensionName);
 
     double aExtensionRating = additionInfo.sRating.toDouble();
-    switch (int(aExtensionRating))
+    switch (std::isnan(aExtensionRating) ? 0 : int(std::clamp(aExtensionRating, 0.0, 5.0)))
     {
         case 5:
             m_xImageVoting5->set_from_icon_name("cmd/sc_stars-full.png");
