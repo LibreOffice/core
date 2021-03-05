@@ -660,9 +660,10 @@ oslFileError SAL_CALL osl_openFile(
     DWORD dwAccess = GENERIC_READ, dwShare = FILE_SHARE_READ, dwCreation = 0;
 
     if (uFlags & osl_File_OpenFlag_Write)
+    {
         dwAccess |= GENERIC_WRITE;
-    else
         dwShare  |= FILE_SHARE_WRITE;
+    }
 
     if (uFlags & osl_File_OpenFlag_NoLock)
         dwShare  |= FILE_SHARE_WRITE | FILE_SHARE_DELETE;
