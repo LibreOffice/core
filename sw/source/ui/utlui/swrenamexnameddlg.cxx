@@ -23,10 +23,10 @@
 
 using namespace ::com::sun::star;
 
-SwRenameXNamedDlg::SwRenameXNamedDlg(weld::Window* pWin,
+SwRenameXNamedDlg::SwRenameXNamedDlg(weld::Widget* pParent,
             uno::Reference< container::XNamed > & xN,
             uno::Reference< container::XNameAccess > & xNA )
-    : GenericDialogController(pWin, "modules/swriter/ui/renameobjectdialog.ui", "RenameObjectDialog")
+    : GenericDialogController(pParent, "modules/swriter/ui/renameobjectdialog.ui", "RenameObjectDialog")
     , xNamed(xN)
     , xNameAccess(xNA)
     , m_xNewNameED(m_xBuilder->weld_entry("entry"))

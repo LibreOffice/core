@@ -987,7 +987,7 @@ VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwFieldEditDlg(SwV
     return VclPtr<SwAbstractSfxController_Impl>::Create(std::make_unique<SwFieldEditDlg>(rVw));
 }
 
-VclPtr<AbstractSwRenameXNamedDlg> SwAbstractDialogFactory_Impl::CreateSwRenameXNamedDlg(weld::Window* pParent,
+VclPtr<AbstractSwRenameXNamedDlg> SwAbstractDialogFactory_Impl::CreateSwRenameXNamedDlg(weld::Widget* pParent,
     css::uno::Reference< css::container::XNamed > & xNamed,
     css::uno::Reference< css::container::XNameAccess > & xNameAccess)
 {
