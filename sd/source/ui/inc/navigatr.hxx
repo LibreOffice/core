@@ -68,6 +68,8 @@ public:
     void    SetName( bool bOn ) { bName = bOn; }
     void    SetActive( bool bOn ) { bActive = bOn; }
 
+    ::sd::DrawDocShell* GetDrawDocShell() {return mpDocShell;}
+
 private:
     friend class SdNavigatorWin;
     bool            bName   : 1;
