@@ -20,7 +20,7 @@ Option Explicit
 &apos;&apos;&apos;			bas = CreateScriptService(&apos;Basic&apos;)
 &apos;&apos;&apos;
 &apos;&apos;&apos;		This service proposes a collection of methods to be executed in a Python context
-&apos;&apos;&apos;		to simulate the exact behaviour of the identical Basic buitin method.
+&apos;&apos;&apos;		to simulate the exact behaviour of the identical Basic builtin method.
 &apos;&apos;&apos;		Typical example:
 &apos;&apos;&apos;			bas.MsgBox(&apos;This has to be displayed in a message box&apos;)
 &apos;&apos;&apos;
@@ -161,7 +161,7 @@ Public Function PyDateAdd(ByVal Add As Variant _
 &apos;&apos;&apos;		Count: how many times to add (might be negative)
 &apos;&apos;&apos;		DateArg: a date as a string in iso format
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		The new date date as a string in iso format
+&apos;&apos;&apos;		The new date as a string in iso format
 &apos;&apos;&apos;	Example: (Python code)
 &apos;&apos;&apos;		a = bas.DateAdd(&apos;d&apos;, 1, bas.Now())		&apos;	Tomorrow
 
@@ -320,7 +320,7 @@ Public Function PyFormat(ByVal Value As Variant _
 Dim sFormat As String					&apos;	Return value
 Dim vValue As Variant				&apos;	Alias of Value
 Const cstThisSub = &quot;Basic.Format&quot;
-Const cstSubArgs = &quot;value, oattern&quot;
+Const cstSubArgs = &quot;value, pattern&quot;
 
 	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 	sFormat = &quot;&quot;
@@ -515,7 +515,7 @@ Public Function _PythonDispatcher(ByRef BasicObject As Variant _
 &apos;&apos;&apos;	with the given arguments
 &apos;&apos;&apos;	The invocation of the method can be a Property Get, Property Let or a usual call
 &apos;&apos;&apos;	NB: arguments and return values must not be 2D arrays
-&apos;&apos;&apos;	The implementation intends to be as AGNOSTIC as possible in termes of objects nature and methods called
+&apos;&apos;&apos;	The implementation intends to be as AGNOSTIC as possible in terms of objects nature and methods called
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		BasicObject: a module or a class instance - May also be the reserved string: &quot;SF_Services&quot;
 &apos;&apos;&apos;		CallType: one of the constants applicable to a CallByName statement + optional protocol flags
@@ -533,7 +533,7 @@ Public Function _PythonDispatcher(ByRef BasicObject As Variant _
 &apos;&apos;&apos;			[3]		The object&apos;s ObjectType
 &apos;&apos;&apos;			[4]		The object&apos;s service name
 &apos;&apos;&apos;			[5]		The object&apos;s name
-&apos;&apos;&apos;		When an error occurs Python receives None as a scalar. This determines the occurence of a failure
+&apos;&apos;&apos;		When an error occurs Python receives None as a scalar. This determines the occurrence of a failure
 
 Dim vReturn As Variant				&apos;	The value returned by the invoked property or method
 Dim vReturnArray As Variant			&apos;	Return value
@@ -570,7 +570,7 @@ Check:
 	&apos;	Ignore Null basic objects (Null = Null or Nothing)
 	If IsNull(BasicObject) Or IsEmpty(BasicObject) Then GoTo Catch
 
-	&apos;	Reinterprete arguments one by one into vArgs, examine iso-dates and conventional NoArgs/Empty/Null values
+	&apos;	Reinterpret arguments one by one into vArgs, examine iso-dates and conventional NoArgs/Empty/Null values
 	iNbArgs = -1
 	vArgs = Array()
 	If UBound(Args) &gt;= 0 Then
@@ -605,7 +605,7 @@ Try:
 	&apos;			(2) Python has tuples and tuple of tuples, not 2D arrays
 	&apos;			(3) Passing 2D arrays through a script provider always transform it into a sequence of sequences
 	&apos;	1.	Methods in usual modules are called by ExecuteBasicScript() except if they use a ParamArray
-	&apos;	2.	Properies in any service are got and set with obj.GetProperty/SetProperty(...)
+	&apos;	2.	Properties in any service are got and set with obj.GetProperty/SetProperty(...)
 	&apos;	3.	Methods in class modules are invoked with CallByName
 	&apos;	4.	Methods in class modules using a 2D array or returning arrays, or methods using ParamArray,
 &apos;&apos;&apos;			are hardcoded as exceptions or are not implemented
@@ -659,7 +659,7 @@ Try:
 					Case 7	:	vReturn = sess.ExecuteBasicScript(, sScript, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5), vArgs(6), vArgs(7))
 				End Select
 			
-			&apos;	Properies in any service are got and set with obj.GetProperty/SetProperty(...)
+			&apos;	Properties in any service are got and set with obj.GetProperty/SetProperty(...)
 			ElseIf (CallType And vbGet) = vbGet Then
 				&apos;	vReturn = sess.ExecuteBasicScript(, sLibrary &amp; &quot;.&quot; &amp; sObjectType &amp; &quot;.GetProperty&quot;, Script)
 				vReturn = vBasicObject.GetProperty(Script)
