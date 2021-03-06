@@ -4283,4 +4283,48 @@ endef
 
 endif # SYSTEM_BOX2D
 
+ifneq ($(SYSTEM_ZXING),)
+
+define gb_LinkTarget__use_zxing
+$(call gb_LinkTarget_set_include,$(1),\
+	-DSYSTEM_ZXING \
+	$$(INCLUDE) \
+	$(ZXING_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(ZXING_LIBS))
+
+endef
+
+gb_ExternalProject__use_zxing :=
+
+else # !SYSTEM_ZXING
+
+ifneq ($(ENABLE_ZXING),)
+
+define gb_LinkTarget__use_zxing
+$(call gb_LinkTarget_use_unpacked,$(1),zxing)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,zxing/core/src/)\
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	zxing \
+)
+
+endef
+
+define gb_ExternalProject__use_zxing
+$(call gb_ExternalProject_use_static_libraries,$(1),zxing)
+
+endef
+
+else # !ENABLE_ZXING
+
+define gb_LinkTarget__use_zxing
+endef
+
+endif # ENABLE_ZXING
+
+endif # SYSTEM_ZXING
+
 # vim: set noet sw=4 ts=4:

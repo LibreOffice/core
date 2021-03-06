@@ -2242,10 +2242,19 @@ libo_FUZZ_ARG_ENABLE(qrcodegen,
     AS_HELP_STRING([--disable-qrcodegen],
         [Disable use of qrcodegen external library.]))
 
+libo_FUZZ_ARG_ENABLE(zxing,
+    AS_HELP_STRING([--disable-zxing],
+       [Disable use of zxing external library.]))
+
 AC_ARG_WITH(system-qrcodegen,
     AS_HELP_STRING([--with-system-qrcodegen],
         [Use libqrcodegen already on system.]),,
     [with_system_qrcodegen="$with_system_libs"])
+
+AC_ARG_WITH(system-zxing,
+    AS_HELP_STRING([--with-system-zxing],
+        [Use libzxing already on system.]),,
+    [with_system_zxing="$with_system_libs"])
 
 AC_ARG_WITH(system-box2d,
     AS_HELP_STRING([--with-system-box2d],
@@ -10834,6 +10843,45 @@ AC_SUBST(QRCODEGEN_CFLAGS)
 AC_SUBST(QRCODEGEN_LIBS)
 
 dnl ===================================================================
+dnl Check for system zxing
+dnl ===================================================================
+AC_MSG_CHECKING([whether to use zxing])
+if test "$enable_zxing" = "no"; then
+    AC_MSG_RESULT([no])
+    ENABLE_ZXING=
+    SYSTEM_ZXING=
+else
+    AC_MSG_RESULT([yes])
+    ENABLE_ZXING=TRUE
+    AC_MSG_CHECKING([which libzxing to use])
+    if test "$with_system_zxing" = "yes"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_ZXING=TRUE
+        AC_LANG_PUSH([C++])
+        AC_CHECK_HEADER(ZXing/MultiFormatWriter.h, [],
+            [AC_MSG_ERROR(zxing headers not found.)], [#include <stdexcept>])
+        AC_CHECK_LIB([ZXing], [main], [ZXING_LIBS=-lZXing],
+            [ AC_CHECK_LIB([ZXingCore], [main], [ZXING_LIBS=-lZXingCore],
+            [ AC_MSG_ERROR(zxing C++ library not found.) ])], [])
+        AC_LANG_POP([C++])
+        ZXING_CFLAGS=$(printf '%s' "$ZXING_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+        FilterLibs "${ZXING_LIBS}"
+        ZXING_LIBS="${filteredlibs}"
+    else
+        AC_MSG_RESULT([internal])
+        SYSTEM_ZXING=
+        BUILD_TYPE="$BUILD_TYPE ZXING"
+    fi
+    if test "$ENABLE_ZXING" = TRUE; then
+        AC_DEFINE(ENABLE_ZXING)
+    fi
+fi
+AC_SUBST(SYSTEM_ZXING)
+AC_SUBST(ENABLE_ZXING)
+AC_SUBST(ZXING_CFLAGS)
+AC_SUBST(ZXING_LIBS)
+
+dnl ===================================================================
 dnl Check for system box2d
 dnl ===================================================================
 AC_MSG_CHECKING([which box2d to use])
@@ -14088,6 +14136,7 @@ AC_CONFIG_HEADERS([config_host/config_oox.h])
 AC_CONFIG_HEADERS([config_host/config_options.h])
 AC_CONFIG_HEADERS([config_host/config_options_calc.h])
 AC_CONFIG_HEADERS([config_host/config_qrcodegen.h])
+AC_CONFIG_HEADERS([config_host/config_zxing.h])
 AC_CONFIG_HEADERS([config_host/config_skia.h])
 AC_CONFIG_HEADERS([config_host/config_typesizes.h])
 AC_CONFIG_HEADERS([config_host/config_vendor.h])
