@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_XMLOFF_INC_XMLSHAPEPROPERTYSETCONTEXT_HXX
-#define INCLUDED_XMLOFF_INC_XMLSHAPEPROPERTYSETCONTEXT_HXX
+#pragma once
 
 
 #include <xmloff/xmlprcon.hxx>
@@ -47,7 +46,5 @@ public:
         ::std::vector< XMLPropertyState > &rProperties,
         const XMLPropertyState& rProp ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

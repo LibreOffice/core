@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_FILLSTYLECONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_STYLE_FILLSTYLECONTEXT_HXX
+#pragma once
 
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <xmloff/xmlstyle.hxx>
@@ -141,7 +140,5 @@ public:
 
     virtual bool IsTransient() const override;
 };
-
-#endif // INCLUDED_XMLOFF_SOURCE_STYLE_FILLSTYLECONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

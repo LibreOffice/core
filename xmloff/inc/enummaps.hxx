@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_XMLOFF_INC_ENUMMAPS_HXX
-#define INCLUDED_XMLOFF_INC_ENUMMAPS_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <com/sun/star/drawing/BitmapMode.hpp>
@@ -20,7 +19,5 @@ template <typename EnumT> struct SvXMLEnumMapEntry;
 extern SvXMLEnumMapEntry<css::drawing::FillStyle> const aXML_FillStyle_EnumMap[];
 extern SvXMLEnumMapEntry<css::drawing::RectanglePoint> const aXML_RefPoint_EnumMap[];
 extern SvXMLEnumMapEntry<css::drawing::BitmapMode> const aXML_BitmapMode_EnumMap[];
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_INC_XMLBACKGROUNDIMAGECONTEXT_HXX
-#define INCLUDED_XMLOFF_INC_XMLBACKGROUNDIMAGECONTEXT_HXX
+#pragma once
 
 #include <com/sun/star/style/GraphicLocation.hpp>
 #include "XMLElementPropertyContext.hxx"
@@ -66,7 +65,5 @@ public:
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

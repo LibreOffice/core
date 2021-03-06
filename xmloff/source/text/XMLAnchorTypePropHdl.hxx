@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLANCHORTYPEPROPHDL_HXX
-#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLANCHORTYPEPROPHDL_HXX
+#pragma once
 
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <xmloff/xmlprhdl.hxx>
@@ -40,7 +39,5 @@ public:
     static bool convert( std::string_view rStrImpValue,
                  css::text::TextContentAnchorType& rType );
 };
-
-#endif // INCLUDED_XMLOFF_SOURCE_TEXT_XMLANCHORTYPEPROPHDL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

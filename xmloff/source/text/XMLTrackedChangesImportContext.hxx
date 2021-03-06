@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLTRACKEDCHANGESIMPORTCONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLTRACKEDCHANGESIMPORTCONTEXT_HXX
+#pragma once
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -45,7 +44,5 @@ public:
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

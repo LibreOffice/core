@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_INC_FRAMEWORK_SIGNATURECREATORIMPL_HXX
-#define INCLUDED_XMLSECURITY_INC_FRAMEWORK_SIGNATURECREATORIMPL_HXX
+#pragma once
 
 #include <com/sun/star/xml/crypto/sax/XBlockerMonitor.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureCreationResultBroadcaster.hpp>
@@ -92,8 +91,6 @@ OUString SignatureCreatorImpl_getImplementationName();
 
 /// @throws css::uno::RuntimeException
 css::uno::Sequence< OUString > SignatureCreatorImpl_getSupportedServiceNames(  );
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

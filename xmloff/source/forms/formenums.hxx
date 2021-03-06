@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_FORMS_FORMENUMS_HXX
-#define INCLUDED_XMLOFF_SOURCE_FORMS_FORMENUMS_HXX
+#pragma once
 
 #include <xmloff/xmlement.hxx>
 #include <com/sun/star/form/FormButtonType.hpp>
@@ -51,7 +50,5 @@ extern const SvXMLEnumMapEntry<sal_uInt16> aImageAlignMap[];
 extern const SvXMLEnumMapEntry<sal_uInt16> aScaleModeMap[];
 
 } // namespace xmloff
-
-#endif // INCLUDED_XMLOFF_SOURCE_FORMS_FORMENUMS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

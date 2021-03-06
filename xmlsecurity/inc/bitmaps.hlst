@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_XMLSECURITY_INC_BITMAPS_HRC
-#define INCLUDED_XMLSECURITY_INC_BITMAPS_HRC
+#pragma once
 
 #define BMP_STATE_NOT_VALIDATED         "xmlecurity/res/notcertificate_40x56.png"
 
@@ -18,7 +17,5 @@
 #define BMP_SIG_VALID                   "xmlsecurity/res/signet_11x16.png"
 #define BMP_SIG_INVALID                 "svx/res/caution_11x16.png"
 #define BMP_SIG_NOT_VALIDATED           "xmlsecurity/res/notcertificate_16.png"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

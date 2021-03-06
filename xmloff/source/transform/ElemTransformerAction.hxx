@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_ELEMTRANSFORMERACTION_HXX
-#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_ELEMTRANSFORMERACTION_HXX
+#pragma once
 
 #include "TransformerAction.hxx"
 
@@ -84,7 +83,5 @@ enum XMLElemTransformerAction
                                         //           token of local name
     XML_ETACTION_USER_DEFINED=0x40000000// user defined actions start here
 };
-
-#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_ELEMTRANSFORMERACTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

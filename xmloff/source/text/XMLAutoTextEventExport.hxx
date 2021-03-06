@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLAUTOTEXTEVENTEXPORT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLAUTOTEXTEVENTEXPORT_HXX
+#pragma once
 
 #include <xmloff/xmlexp.hxx>
 
@@ -85,7 +84,5 @@ private:
     virtual void ExportMasterStyles_() override;
     virtual void ExportContent_() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

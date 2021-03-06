@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_INC_XEXPTRAN_HXX
-#define INCLUDED_XMLOFF_INC_XEXPTRAN_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
@@ -98,7 +97,5 @@ public:
     double GetHeight() const { return mfH; }
     const OUString& GetExportString();
 };
-
-#endif  //  _XEXPTRANSFORM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

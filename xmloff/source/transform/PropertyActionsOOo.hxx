@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_PROPERTYACTIONSOOO_HXX
-#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_PROPERTYACTIONSOOO_HXX
+#pragma once
 
 #include "TransformerActionInit.hxx"
 #include "AttrTransformerAction.hxx"
@@ -64,7 +63,5 @@ extern XMLTransformerActionInit const aTableCellPropertyOOoElemActionTable[];
 extern XMLTransformerActionInit const aListLevelPropertyOOoAttrActionTable[];
 extern XMLTransformerActionInit const aChartPropertyOOoAttrActionTable[];
 extern XMLTransformerActionInit const aChartPropertyOOoElemActionTable[];
-
-#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_PROPERTYACTIONSOOO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLHELP_SOURCE_CXXHELP_INC_TVREAD_HXX
-#define INCLUDED_XMLHELP_SOURCE_CXXHELP_INC_TVREAD_HXX
+#pragma once
 
 #include <vector>
 #include <rtl/ref.hxx>
@@ -289,7 +288,5 @@ namespace treeview {
     }; // end class TreeFileIterator
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

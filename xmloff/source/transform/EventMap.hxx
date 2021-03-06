@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_EVENTMAP_HXX
-#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_EVENTMAP_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -31,7 +30,5 @@ struct XMLTransformerEventMapEntry
 
 extern XMLTransformerEventMapEntry const aTransformerEventMap[];
 extern XMLTransformerEventMapEntry const aFormTransformerEventMap[];
-
-#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_EVENTMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

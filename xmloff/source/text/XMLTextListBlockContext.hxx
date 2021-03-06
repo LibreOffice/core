@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLTEXTLISTBLOCKCONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLTEXTLISTBLOCKCONTEXT_HXX
+#pragma once
 
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <xmloff/xmlictxt.hxx>
@@ -73,7 +72,5 @@ public:
     const OUString& GetContinueListId() const { return msContinueListId;}
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

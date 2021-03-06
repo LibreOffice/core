@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_PAGEMASTERPROPMAPPER_HXX
-#define INCLUDED_XMLOFF_SOURCE_STYLE_PAGEMASTERPROPMAPPER_HXX
+#pragma once
 
 #include <xmloff/xmlprmap.hxx>
 
@@ -30,7 +29,5 @@ public:
                                const rtl::Reference<XMLPropertyHandlerFactory>& rFactory);
     virtual ~XMLPageMasterPropSetMapper() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

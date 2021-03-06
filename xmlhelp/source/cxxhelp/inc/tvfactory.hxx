@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLHELP_SOURCE_CXXHELP_INC_TVFACTORY_HXX
-#define INCLUDED_XMLHELP_SOURCE_CXXHELP_INC_TVFACTORY_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -74,7 +73,5 @@ class TVFactory final : public cppu::WeakImplHelper <
 
 }
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

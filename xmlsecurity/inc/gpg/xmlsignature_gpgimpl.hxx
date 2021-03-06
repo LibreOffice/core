@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_GPG_XMLSIGNATURE_GPGIMPL_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_GPG_XMLSIGNATURE_GPGIMPL_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
@@ -74,7 +73,5 @@ class XSECXMLSEC_DLLPUBLIC XMLSignature_GpgImpl final : public ::cppu::WeakImplH
         /// @throws css::uno::RuntimeException
         static css::uno::Reference< css::uno::XInterface > impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
 } ;
-
-#endif // INCLUDED_XMLSECURITY_SOURCE_GPG_XMLSIGNATURE_GPGIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

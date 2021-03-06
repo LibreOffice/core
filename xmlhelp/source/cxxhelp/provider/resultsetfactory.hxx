@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_RESULTSETFACTORY_HXX
-#define INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_RESULTSETFACTORY_HXX
+#pragma once
 
 #include "resultsetbase.hxx"
 #include <rtl/ref.hxx>
@@ -39,7 +38,5 @@ namespace chelp {
 
 }
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

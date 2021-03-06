@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_XIMPCUSTOMSHAPE_HXX
-#define INCLUDED_XMLOFF_SOURCE_DRAW_XIMPCUSTOMSHAPE_HXX
+#pragma once
 
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -63,7 +62,5 @@ public:
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLINDEXSPANENTRYCONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLINDEXSPANENTRYCONTEXT_HXX
+#pragma once
 
 #include "XMLIndexSimpleEntryContext.hxx"
 #include <com/sun/star/uno/Sequence.h>
@@ -54,7 +53,5 @@ protected:
     virtual void FillPropertyValues(
         css::uno::Sequence<css::beans::PropertyValue> & rValues) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

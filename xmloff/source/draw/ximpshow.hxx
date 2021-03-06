@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_XIMPSHOW_HXX
-#define INCLUDED_XMLOFF_SOURCE_DRAW_XIMPSHOW_HXX
+#pragma once
 
 #include <xmloff/xmlictxt.hxx>
 #include "sdxmlimp_impl.hxx"
@@ -46,7 +45,5 @@ private:
     css::uno::Reference< css::container::XNameAccess > mxPages;
     OUString maCustomShowName;
 };
-
-#endif // INCLUDED_XMLOFF_SOURCE_DRAW_XIMPSHOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMERACTIONINIT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMERACTIONINIT_HXX
+#pragma once
 
 #include <xmloff/xmltoken.hxx>
 
@@ -39,7 +38,5 @@ struct XMLTransformerActionInit
                static_cast< sal_uInt32 >( eLocalName );
     }
 };
-
-#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMERACTIONINIT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

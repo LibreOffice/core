@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_XFORMS_SCHEMASIMPLETYPECONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_XFORMS_SCHEMASIMPLETYPECONTEXT_HXX
+#pragma once
 
 #include "TokenContext.hxx"
 #include <com/sun/star/uno/Reference.hxx>
@@ -51,7 +50,5 @@ protected:
         sal_Int32 nElementToken,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

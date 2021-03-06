@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_ERRORCALLBACK_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_ERRORCALLBACK_HXX
+#pragma once
 
 #include <xsecxmlsecdllapi.h>
 
@@ -27,7 +26,5 @@ void setErrorRecorder();
 //ToDo
 //void setErrorRecorder(const css::uno::Reference< css::xml::crypto::XXMLEncryptionTemplate >& xTemplate);
 void clearErrorRecorder();
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

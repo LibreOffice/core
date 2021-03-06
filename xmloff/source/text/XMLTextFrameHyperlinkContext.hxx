@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLTEXTFRAMEHYPERLINKCONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLTEXTFRAMEHYPERLINKCONTEXT_HXX
+#pragma once
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
@@ -58,7 +57,5 @@ public:
     css::uno::Reference < css::drawing::XShape > GetShape() const;
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

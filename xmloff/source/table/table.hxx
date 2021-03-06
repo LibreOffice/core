@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TABLE_TABLE_HXX
-#define INCLUDED_XMLOFF_SOURCE_TABLE_TABLE_HXX
+#pragma once
 
 #include <xmloff/xmltoken.hxx>
 
@@ -35,7 +34,5 @@ extern const TableStyleElement* getWriterSpecificTableStyleMap();
 extern const XMLPropertyMapEntry* getColumnPropertiesMap();
 extern const XMLPropertyMapEntry* getRowPropertiesMap();
 extern const XMLPropertyMapEntry* getCellPropertiesMap();
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

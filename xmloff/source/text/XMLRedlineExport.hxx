@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLREDLINEEXPORT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLREDLINEEXPORT_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
@@ -160,7 +159,5 @@ private:
     /// write a comment string as sequence of <text:p> elements
     void WriteComment(std::u16string_view rComment);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

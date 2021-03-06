@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_PAGEPROPERTYSETCONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_STYLE_PAGEPROPERTYSETCONTEXT_HXX
+#pragma once
 
 #include <xmloff/xmlprcon.hxx>
 
@@ -51,7 +50,5 @@ public:
         ::std::vector< XMLPropertyState > &rProperties,
         const XMLPropertyState& rProp ) override;
 };
-
-#endif // INCLUDED_XMLOFF_SOURCE_STYLE_PAGEPROPERTYSETCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

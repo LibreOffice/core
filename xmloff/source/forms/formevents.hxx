@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_FORMS_FORMEVENTS_HXX
-#define INCLUDED_XMLOFF_SOURCE_FORMS_FORMEVENTS_HXX
+#pragma once
 
 struct XMLEventNameTranslation;
 namespace xmloff
@@ -27,7 +26,5 @@ namespace xmloff
 extern const XMLEventNameTranslation* g_pFormsEventTranslation;
 
 } // namespace xmloff
-
-#endif // INCLUDED_XMLOFF_SOURCE_FORMS_FORMEVENTS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

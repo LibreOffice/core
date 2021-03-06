@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_XFORMS_TOKENCONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_XFORMS_TOKENCONTEXT_HXX
+#pragma once
 
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmltkmap.hxx>
@@ -71,7 +70,5 @@ protected:
         sal_Int32 nElementToken,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) = 0;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

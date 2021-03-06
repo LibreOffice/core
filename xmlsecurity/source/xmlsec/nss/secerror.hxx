@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_SECERROR_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_SECERROR_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -28,6 +27,5 @@
 const char* getCertError(PRErrorCode errNum);
 
 void printChainFailure(CERTVerifyLog* log);
-#endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_SECERROR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

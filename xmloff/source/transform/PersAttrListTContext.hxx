@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_PERSATTRLISTTCONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_PERSATTRLISTTCONTEXT_HXX
+#pragma once
 
 #include <xmloff/xmltoken.hxx>
 #include "TransformerContext.hxx"
@@ -100,7 +99,5 @@ public:
         GetAttrList() const { return m_xAttrList; }
 
 };
-
-#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_PERSATTRLISTTCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

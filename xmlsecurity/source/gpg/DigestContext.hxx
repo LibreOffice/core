@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_GPG_DIGESTCONTEXT_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_GPG_DIGESTCONTEXT_HXX
+#pragma once
 
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
 
@@ -21,7 +20,5 @@ public:
     virtual void SAL_CALL updateDigest(const css::uno::Sequence<::sal_Int8>& aData) override;
     virtual css::uno::Sequence<::sal_Int8> SAL_CALL finalizeDigestAndDispose() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

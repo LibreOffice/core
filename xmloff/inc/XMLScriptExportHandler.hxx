@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_INC_XMLSCRIPTEXPORTHANDLER_HXX
-#define INCLUDED_XMLOFF_INC_XMLSCRIPTEXPORTHANDLER_HXX
+#pragma once
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
@@ -41,7 +40,5 @@ public:
         const css::uno::Sequence<css::beans::PropertyValue> & rValues,
         bool bUseWhitespace) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

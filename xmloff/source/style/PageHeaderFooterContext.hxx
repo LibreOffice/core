@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_PAGEHEADERFOOTERCONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_STYLE_PAGEHEADERFOOTERCONTEXT_HXX
+#pragma once
 
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/maptype.hxx>
@@ -44,8 +43,6 @@ public:
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
 };
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

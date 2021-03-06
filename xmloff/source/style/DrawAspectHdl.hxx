@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_DRAWASPECTHDL_HXX
-#define INCLUDED_XMLOFF_SOURCE_STYLE_DRAWASPECTHDL_HXX
+#pragma once
 
 #include <xmloff/xmlprhdl.hxx>
 
@@ -33,7 +32,5 @@ public:
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
-
-#endif // INCLUDED_XMLOFF_SOURCE_STYLE_DRAWASPECTHDL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
