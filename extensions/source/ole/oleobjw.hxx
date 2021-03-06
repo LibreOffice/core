@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_OLE_OLEOBJW_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_OLE_OLEOBJW_HXX
+#pragma once
 
 #include "ole2uno.hxx"
 #include "wincrap.hxx"
@@ -242,7 +241,5 @@ protected:
     bool m_bHasDfltMethod;
     bool m_bHasDfltProperty;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

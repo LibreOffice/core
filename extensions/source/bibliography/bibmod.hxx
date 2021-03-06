@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBMOD_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBMOD_HXX
+#pragma once
 
 #include <locale>
 #include <rtl/ref.hxx>
@@ -47,7 +46,5 @@ typedef BibModul**    HdlBibModul;
 
 HdlBibModul     OpenBibModul();
 void            CloseBibModul(HdlBibModul ppBibModul);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

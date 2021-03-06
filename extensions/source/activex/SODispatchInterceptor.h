@@ -19,8 +19,7 @@
 
 // SODispatchInterceptor.h: Definition of the SODispatchInterceptor class
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_ACTIVEX_SODISPATCHINTERCEPTOR_H
-#define INCLUDED_EXTENSIONS_SOURCE_ACTIVEX_SODISPATCHINTERCEPTOR_H
+#pragma once
 
 #ifdef _MSC_VER
 #pragma once
@@ -172,7 +171,5 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SODISPATCHINTERCEPTOR)
             return S_OK;
         }
 };
-
-#endif // INCLUDED_EXTENSIONS_SOURCE_ACTIVEX_SODISPATCHINTERCEPTOR_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

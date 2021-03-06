@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_MASTERDETAILLINKDIALOG_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_MASTERDETAILLINKDIALOG_HXX
+#pragma once
 
 #include <comphelper/proparrhlp.hxx>
 #include <svtools/genericunodialog.hxx>
@@ -64,7 +63,5 @@ namespace pcr
 
 
 }   // namespace pcr
-
-#endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_MASTERDETAILLINKDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

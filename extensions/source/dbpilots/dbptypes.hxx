@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_DBPTYPES_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_DBPTYPES_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -33,7 +32,5 @@ typedef std::set<OUString> StringBag;
 typedef std::map<sal_uInt32, OUString> MapInt2String;
 
 } // namespace dbp
-
-#endif // INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_DBPTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

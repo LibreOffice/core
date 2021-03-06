@@ -19,8 +19,7 @@
 
 // SOComWindowPeer.h: Definition of the SOComWindowPeer class
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_ACTIVEX_SOCOMWINDOWPEER_H
-#define INCLUDED_EXTENSIONS_SOURCE_ACTIVEX_SOCOMWINDOWPEER_H
+#pragma once
 
 #ifdef _MSC_VER
 #pragma once
@@ -156,7 +155,5 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SOCOMWINDOWPEER)
 
         void SetHWNDInternally( HWND hwnd ) { m_hwnd = hwnd; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

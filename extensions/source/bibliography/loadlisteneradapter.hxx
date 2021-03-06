@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_LOADLISTENERADAPTER_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_LOADLISTENERADAPTER_HXX
+#pragma once
 
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -148,7 +147,5 @@ namespace bib
 
 }   // namespace bib
 
-
-#endif // INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_LOADLISTENERADAPTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

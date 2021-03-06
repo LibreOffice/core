@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_TOOLBAR_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_TOOLBAR_HXX
+#pragma once
 
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
@@ -214,7 +213,5 @@ class BibToolBar:   public ToolBox
         void    SendDispatch(ToolBoxItemId nId, const css::uno::Sequence< css::beans::PropertyValue >& rArgs);
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

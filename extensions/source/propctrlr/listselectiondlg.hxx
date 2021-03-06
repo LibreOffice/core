@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_LISTSELECTIONDLG_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_LISTSELECTIONDLG_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 
@@ -57,7 +56,5 @@ namespace pcr
 
 } // namespacepcr
 
-
-#endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_LISTSELECTIONDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

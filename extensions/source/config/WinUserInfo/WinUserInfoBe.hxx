@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_CONFIG_WINUSERINFO_WINUSERINFOBE_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_CONFIG_WINUSERINFO_WINUSERINFOBE_HXX
+#pragma once
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -98,7 +97,5 @@ private:
 }
 }
 }
-
-#endif // INCLUDED_EXTENSIONS_SOURCE_CONFIG_WINUSERINFO_WINUSERINFOBE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

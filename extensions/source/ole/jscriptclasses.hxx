@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_OLE_JSCRIPTCLASSES_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_OLE_JSCRIPTCLASSES_HXX
+#pragma once
 
 #include "wincrap.hxx"
 
@@ -144,7 +143,5 @@ public:
 private:
     CComVariant m_varValue;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

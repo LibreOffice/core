@@ -21,8 +21,7 @@
 //      or project specific include files that are used frequently,
 //      but are changed infrequently
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_ACTIVEX_STDAFX2_H
-#define INCLUDED_EXTENSIONS_SOURCE_ACTIVEX_STDAFX2_H
+#pragma once
 
 #define STRICT
 #define _ATL_APARTMENT_THREADED
@@ -65,7 +64,5 @@ extern CComModule _Module;
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
-
-#endif // !defined(INCLUDED_EXTENSIONS_SOURCE_ACTIVEX_STDAFX2_H)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

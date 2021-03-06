@@ -18,8 +18,7 @@
  */
 // EvtListener.h : Declaration of CEvtListener
 
-#ifndef INCLUDED_EXTENSIONS_TEST_OLE_EVENTLISTENERSAMPLE_EVENTLISTENER_EVTLISTENER_H
-#define INCLUDED_EXTENSIONS_TEST_OLE_EVENTLISTENERSAMPLE_EVENTLISTENER_EVTLISTENER_H
+#pragma once
 
 #include "resource.h"
 
@@ -49,7 +48,5 @@ END_COM_MAP()
 public:
     STDMETHOD(disposing)(IDispatch* source);
 };
-
-#endif // INCLUDED_EXTENSIONS_TEST_OLE_EVENTLISTENERSAMPLE_EVENTLISTENER_EVTLISTENER_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
