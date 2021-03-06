@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMS_SOURCE_XFORMS_CONVERT_HXX
-#define INCLUDED_FORMS_SOURCE_XFORMS_CONVERT_HXX
+#pragma once
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <map>
@@ -75,7 +74,5 @@ public:
 };
 
 } // namespace xforms
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_SOURCE_DISPATCH_ISSTARTMODULEDISPATCH_HXX
-#define INCLUDED_FRAMEWORK_SOURCE_DISPATCH_ISSTARTMODULEDISPATCH_HXX
+#pragma once
 
 #include <com/sun/star/util/URL.hpp>
 
@@ -29,7 +28,5 @@ inline bool isStartModuleDispatch(css::util::URL const& url)
     return url.Complete == ".uno:ShowStartModule";
 }
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

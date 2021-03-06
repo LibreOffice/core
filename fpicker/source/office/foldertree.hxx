@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVTOOLS_FOLDERTREE_HXX
-#define INCLUDED_SVTOOLS_FOLDERTREE_HXX
+#pragma once
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/weld.hxx>
@@ -45,7 +44,5 @@ public:
     void SetTreePath(OUString const & sUrl);
     void SetDenyList(const css::uno::Sequence< OUString >& rDenyList);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

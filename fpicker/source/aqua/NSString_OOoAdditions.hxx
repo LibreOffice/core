@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FPICKER_SOURCE_AQUA_NSSTRING_OOOADDITIONS_HXX
-#define INCLUDED_FPICKER_SOURCE_AQUA_NSSTRING_OOOADDITIONS_HXX
+#pragma once
 
 #include <premac.h>
 #import <Cocoa/Cocoa.h>
@@ -30,7 +29,5 @@
 + (id)stringWithOUString:(const OUString&)ouString;
 - (OUString)OUString;
 @end
-
-#endif // INCLUDED_FPICKER_SOURCE_AQUA_NSSTRING_OOOADDITIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

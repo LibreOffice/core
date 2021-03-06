@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_BITMAP_HXX
-#define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_BITMAP_HXX
+#pragma once
 
 #include "cgm.hxx"
 #include <vcl/bitmapex.hxx>
@@ -78,6 +77,5 @@ public:
     CGMBitmapDescriptor*    GetBitmap() { return pCGMBitmapDescriptor.get();}
     std::unique_ptr<CGMBitmap> GetNext();
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FORMS_SOURCE_COMPONENT_SCROLLBAR_HXX
-#define INCLUDED_FORMS_SOURCE_COMPONENT_SCROLLBAR_HXX
+#pragma once
 
 #include <FormComponent.hxx>
 
@@ -81,7 +80,5 @@ namespace frm
     css::uno::Any translateControlIntToExternalDoubleValue( const css::uno::Any& _rControlIntValue );
 
 } // namespacefrm
-
-#endif // INCLUDED_FORMS_SOURCE_COMPONENT_SCROLLBAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_PRESETHANDLER_HXX
-#define INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_PRESETHANDLER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -375,7 +374,5 @@ class PresetHandler
 };
 
 } // namespace framework
-
-#endif // INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_PRESETHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

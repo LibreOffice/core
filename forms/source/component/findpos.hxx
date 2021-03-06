@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMS_SOURCE_COMPONENT_FINDPOS_HXX
-#define INCLUDED_FORMS_SOURCE_COMPONENT_FINDPOS_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -28,7 +27,5 @@ namespace detail
 {
 sal_Int32 findPos(const OUString& aStr, const css::uno::Sequence<OUString>& rList);
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

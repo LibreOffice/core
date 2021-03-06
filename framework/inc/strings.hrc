@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_STRINGS_HRC
-#define INCLUDED_FRAMEWORK_INC_STRINGS_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -75,7 +74,5 @@
 #define RID_STR_PROPTITLE_SCROLLBAR                 NC_("RID_STR_PROPTITLE_SCROLLBAR", "Scrollbar")
 #define RID_STR_PROPTITLE_SPINBUTTON                NC_("RID_STR_PROPTITLE_SPINBUTTON", "Spin Button")
 #define RID_STR_PROPTITLE_NAVBAR                    NC_("RID_STR_PROPTITLE_NAVBAR", "Navigation Bar")
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

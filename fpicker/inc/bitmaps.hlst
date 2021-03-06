@@ -7,14 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_FPICKER_INC_BITMAPS_HRC
-#define INCLUDED_FPICKER_INC_BITMAPS_HRC
+#pragma once
 
 #define RID_BMP_FOLDER_OPEN         "res/folderop.png"
 #define BMP_FILEDLG_PLACE_LOCAL     "fpicker/res/fp015.png"
 #define BMP_FILEDLG_PLACE_REMOTE    "fpicker/res/fp016.png"
 #define RID_BMP_FOLDER              "svtools/res/folder.png"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

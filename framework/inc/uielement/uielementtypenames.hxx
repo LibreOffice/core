@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_UIELEMENTTYPENAMES_HXX
-#define INCLUDED_FRAMEWORK_INC_UIELEMENT_UIELEMENTTYPENAMES_HXX
+#pragma once
 
 #define UIELEMENTTYPE_MENUBAR_NAME          "menubar"
 #define UIELEMENTTYPE_POPUPMENU_NAME        "popupmenu"
@@ -27,7 +26,5 @@
 #define UIELEMENTTYPE_FLOATINGWINDOW_NAME   "floater"
 #define UIELEMENTTYPE_PROGRESSBAR_NAME      "progressbar"
 #define UIELEMENTTYPE_TOOLPANEL_NAME        "toolpanel"
-
-#endif // INCLUDED_FRAMEWORK_INC_UIELEMENT_UIELEMENTTYPENAMES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

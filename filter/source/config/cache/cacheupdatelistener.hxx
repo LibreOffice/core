@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CACHEUPDATELISTENER_HXX
-#define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CACHEUPDATELISTENER_HXX
+#pragma once
 
 #include "filtercache.hxx"
 #include <com/sun/star/util/XChangesListener.hpp>
@@ -108,7 +107,5 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
 };
 
 } // namespace filter::config
-
-#endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CACHEUPDATELISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_STRINGS_HRC
-#define INCLUDED_VCL_INC_STRINGS_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -81,7 +80,5 @@
 #define RID_STR_XFORMS_PATTERN_DOESNT_MATCH         NC_("RID_STR_XFORMS_PATTERN_DOESNT_MATCH", "The string '$1' does not match the required regular expression '$2'.")
 #define RID_STR_XFORMS_BINDING_UI_NAME              NC_("RID_STR_XFORMS_BINDING_UI_NAME", "Binding" )
 #define RID_STR_XFORMS_CANT_REMOVE_TYPE             NC_("RID_STR_XFORMS_CANT_REMOVE_TYPE", "This is a built-in type and cannot be removed." )
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

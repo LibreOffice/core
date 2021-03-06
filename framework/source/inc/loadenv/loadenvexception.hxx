@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_LOADENVEXCEPTION_HXX
-#define INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_LOADENVEXCEPTION_HXX
+#pragma once
 
 #include <com/sun/star/uno/Any.hxx>
 
@@ -83,7 +82,5 @@ class LoadEnvException
 };
 
 } // namespace framework
-
-#endif // INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_LOADENVEXCEPTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

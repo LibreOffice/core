@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_STATUSBARMERGER_HXX
-#define INCLUDED_FRAMEWORK_INC_UIELEMENT_STATUSBARMERGER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -72,7 +71,5 @@ namespace StatusbarMerger
 }
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

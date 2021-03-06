@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVTOOLS_AUTOCMPLEDIT_HXX
-#define INCLUDED_SVTOOLS_AUTOCMPLEDIT_HXX
+#pragma once
 
 #include <vcl/idle.hxx>
 #include <vcl/weld.hxx>
@@ -48,7 +47,5 @@ public:
     void AddEntry(const OUString& rEntry);
     void ClearEntries();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_BUTTONTOOLBARCONTROLLER_HXX
-#define INCLUDED_FRAMEWORK_INC_UIELEMENT_BUTTONTOOLBARCONTROLLER_HXX
+#pragma once
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
@@ -91,7 +90,5 @@ class ButtonToolbarController final : public css::frame::XStatusListener,
 };
 
 }
-
-#endif // INCLUDED_FRAMEWORK_INC_UIELEMENT_BUTTONTOOLBARCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

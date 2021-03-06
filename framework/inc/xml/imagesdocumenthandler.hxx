@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_XML_IMAGESDOCUMENTHANDLER_HXX
-#define INCLUDED_FRAMEWORK_INC_XML_IMAGESDOCUMENTHANDLER_HXX
+#pragma once
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
@@ -130,7 +129,5 @@ class OWriteImagesDocumentHandler final
 };
 
 } // namespace framework
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

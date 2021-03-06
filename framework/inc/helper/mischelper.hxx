@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_HELPER_MISCHELPER_HXX
-#define INCLUDED_FRAMEWORK_INC_HELPER_MISCHELPER_HXX
+#pragma once
 
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <com/sun/star/document/XDocumentEventListener.hpp>
@@ -257,7 +256,5 @@ extern auto (*g_pGetMultiplexerListener)(
     -> css::uno::Reference<css::ui::XContextChangeEventListener>;
 
 } // namespace framework
-
-#endif // INCLUDED_FRAMEWORK_INC_HELPER_MISCHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

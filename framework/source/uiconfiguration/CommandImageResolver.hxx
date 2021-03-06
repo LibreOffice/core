@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_COMMANDICONRESOLVER_HXX
-#define INCLUDED_VCL_COMMANDICONRESOLVER_HXX
+#pragma once
 
 #include <vcl/image.hxx>
 #include <o3tl/enumarray.hxx>
@@ -50,7 +49,5 @@ public:
 };
 
 } // end namespace vcl
-
-#endif // INCLUDED_VCL_COMMANDICONRESOLVER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

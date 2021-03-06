@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_PDF_IMPDIALOG_HXX
-#define INCLUDED_FILTER_SOURCE_PDF_IMPDIALOG_HXX
+#pragma once
 
 #include <sfx2/tabdlg.hxx>
 
@@ -413,7 +412,5 @@ public:
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
 };
-
-#endif // INCLUDED_FILTER_SOURCE_PDF_IMPDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

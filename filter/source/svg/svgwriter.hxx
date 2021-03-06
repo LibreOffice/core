@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_SVG_SVGWRITER_HXX
-#define INCLUDED_FILTER_SOURCE_SVG_SVGWRITER_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
@@ -401,7 +400,5 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
-
-#endif // INCLUDED_FILTER_SOURCE_SVG_SVGWRITER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

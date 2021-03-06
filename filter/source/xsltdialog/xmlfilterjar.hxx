@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERJAR_HXX
-#define INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERJAR_HXX
+#pragma once
 
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -48,7 +47,5 @@ private:
     OUString sTemplatePath;
     OUString sProgPath;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

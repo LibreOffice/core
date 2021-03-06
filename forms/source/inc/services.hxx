@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMS_SOURCE_INC_SERVICES_HXX
-#define INCLUDED_FORMS_SOURCE_INC_SERVICES_HXX
+#pragma once
 
 #define AWT_CONTROL_TEXTFIELD "com.sun.star.awt.TextField"
 
@@ -198,7 +197,5 @@
 
 #define SRV_SDB_ROWSET "com.sun.star.sdb.RowSet"
 #define SRV_SDB_CONNECTION "com.sun.star.sdb.Connection"
-
-#endif // INCLUDED_FORMS_SOURCE_INC_SERVICES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

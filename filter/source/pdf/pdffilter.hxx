@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_PDF_PDFFILTER_HXX
-#define INCLUDED_FILTER_SOURCE_PDF_PDFFILTER_HXX
+#pragma once
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
@@ -66,8 +65,6 @@ public:
     explicit    PDFFilter( const Reference< XComponentContext >& rxContext );
     virtual     ~PDFFilter() override;
 };
-
-#endif // INCLUDED_FILTER_SOURCE_PDF_PDFFILTER_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

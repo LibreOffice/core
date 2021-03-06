@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_TEXTFILTERDETECT_FILTERDETECT_HXX
-#define INCLUDED_FILTER_SOURCE_TEXTFILTERDETECT_FILTERDETECT_HXX
+#pragma once
 
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -56,7 +55,5 @@ public:
 OUString PlainTextFilterDetect_getImplementationName();
 
 css::uno::Sequence<OUString> PlainTextFilterDetect_getSupportedServiceNames();
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

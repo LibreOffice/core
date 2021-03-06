@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FPICKER_SOURCE_AQUA_SALAQUAPICKER_HXX
-#define INCLUDED_FPICKER_SOURCE_AQUA_SALAQUAPICKER_HXX
+#pragma once
 
 #include <osl/mutex.hxx>
 
@@ -78,7 +77,5 @@ protected:
 
     void implInitialize();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

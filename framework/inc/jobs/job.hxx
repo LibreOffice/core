@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_JOBS_JOB_HXX
-#define INCLUDED_FRAMEWORK_INC_JOBS_JOB_HXX
+#pragma once
 
 #include <jobs/jobdata.hxx>
 
@@ -199,7 +198,5 @@ class Job final : public  ::cppu::WeakImplHelper<
 };
 
 } // namespace framework
-
-#endif // INCLUDED_FRAMEWORK_INC_JOBS_JOB_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

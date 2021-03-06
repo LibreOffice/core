@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SERIALIZATION_APP_XML_HXX
-#define INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SERIALIZATION_APP_XML_HXX
+#pragma once
 
 #include <com/sun/star/io/XPipe.hpp>
 
@@ -37,7 +36,5 @@ public:
     virtual void serialize() override;
     virtual css::uno::Reference<css::io::XInputStream> getInputStream() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

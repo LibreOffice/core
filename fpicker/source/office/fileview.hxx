@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_VCL_FILEVIEW_HXX
-#define INCLUDED_VCL_FILEVIEW_HXX
+#pragma once
 
 #include <memory>
 #include <com/sun/star/uno/Sequence.h>
@@ -180,7 +179,5 @@ struct SvtContentEntry
     SvtContentEntry( const OUString& rURL, bool bIsFolder ) :
         mbIsFolder( bIsFolder ), maURL( rURL ) {}
 };
-
-#endif // INCLUDED_VCL_FILEVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

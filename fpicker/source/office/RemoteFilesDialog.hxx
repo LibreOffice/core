@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX
-#define INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX
+#pragma once
 
 #include "autocmpledit.hxx"
 #include <svtools/place.hxx>
@@ -184,5 +183,4 @@ private:
     DECL_LINK( CancelHdl, weld::Button&, void );
 };
 
-#endif // INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

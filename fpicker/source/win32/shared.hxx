@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_SHARED_HXX
-#define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_SHARED_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -27,5 +26,4 @@ const OUString FILTER_SEPARATOR("------------------------------------------");
 const OUString ALL_FILES_WILDCARD("*.*");
 const bool ALLOW_DUPLICATES = true;
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

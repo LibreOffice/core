@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_CLASSES_TASKCREATOR_HXX
-#define INCLUDED_FRAMEWORK_INC_CLASSES_TASKCREATOR_HXX
+#pragma once
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -57,7 +56,5 @@ class TaskCreator final
 }; // class TaskCreator
 
 } // namespace framework
-
-#endif // INCLUDED_FRAMEWORK_INC_CLASSES_TASKCREATOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

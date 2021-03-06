@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FPICKER_SOURCE_AQUA_CFSTRINGUTILITIES_HXX
-#define INCLUDED_FPICKER_SOURCE_AQUA_CFSTRINGUTILITIES_HXX
+#pragma once
 
 #include <premac.h>
 #include <Carbon/Carbon.h>
@@ -38,7 +37,5 @@ OUString CFStringToOUString(const CFStringRef sOrig);
 OUString FSRefToOUString(FSRef const& fsRef, InfoType info = FULLPATH);
 OUString CFURLRefToOUString(CFURLRef aUrlRef, InfoType info);
 CFStringRef CFStringCreateWithOUString(const OUString& aString);
-
-#endif // INCLUDED_FPICKER_SOURCE_AQUA_CFSTRINGUTILITIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

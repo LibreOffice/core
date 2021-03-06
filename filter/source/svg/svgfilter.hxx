@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_SVG_SVGFILTER_HXX
-#define INCLUDED_FILTER_SOURCE_SVG_SVGFILTER_HXX
+#pragma once
 
 #include <memory>
 
@@ -313,7 +312,5 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
-
-#endif // INCLUDED_FILTER_SOURCE_SVG_SVGFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
