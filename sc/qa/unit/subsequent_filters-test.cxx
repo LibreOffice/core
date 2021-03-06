@@ -5220,7 +5220,7 @@ void ScFiltersTest::testTdf72470()
     ScDocument& rDoc = xDocSh->GetDocument();
 
     CPPUNIT_ASSERT_EQUAL(OUString("name"), rDoc.GetString(ScAddress(0,0,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"أسمي walid"), rDoc.GetString(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"أسمي valid"), rDoc.GetString(ScAddress(0,1,0)));
 
     xDocSh->DoClose();
 }

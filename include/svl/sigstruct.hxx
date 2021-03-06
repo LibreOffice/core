@@ -98,7 +98,7 @@ struct SignatureInformation
         OUString X509Subject;
     };
     typedef std::vector<X509CertInfo> X509Data;
-    // note: at parse time, it's unkown which one is the signing certificate;
+    // note: at parse time, it's unknown which one is the signing certificate;
     // ImplVerifySignatures() figures it out and puts it at the back
     std::vector<X509Data> X509Datas;
 
