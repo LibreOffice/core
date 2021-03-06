@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLINDEXUSERSOURCECONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLINDEXUSERSOURCECONTEXT_HXX
+#pragma once
 
 #include "XMLIndexSourceBaseContext.hxx"
 #include <com/sun/star/uno/Reference.h>
@@ -62,7 +61,5 @@ protected:
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_GPG_SECURITYENVIRONMENT_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_GPG_SECURITYENVIRONMENT_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
@@ -66,7 +65,5 @@ public:
 private:
     css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > getCertificatesImpl( bool bPrivateOnly );
 } ;
-
-#endif // INCLUDED_XMLSECURITY_SOURCE_GPG_SECURITYENVIRONMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

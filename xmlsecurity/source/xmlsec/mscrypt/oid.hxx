@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_OID_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_MSCRYPT_OID_HXX
+#pragma once
 
 #include <sal/macros.h>
 
@@ -150,7 +149,5 @@ OIDItem OIDs[] = {
 };
 
 const int nOID = SAL_N_ELEMENTS(OIDs);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

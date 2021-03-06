@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_INC_STRINGS_HRC
-#define INCLUDED_XMLSECURITY_INC_STRINGS_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -64,7 +63,5 @@
 #define STR_ENCRYPT                                 NC_("selectcertificatedialog|str_encrypt", "Encrypt")
 
 #define STR_BROKEN_MACRO_CERTIFICATE_DATA           NC_("STR_BROKEN_MACRO_CERTIFICATE_DATA", "Macro security problem!\n\nBroken certificate data: %{data}")
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

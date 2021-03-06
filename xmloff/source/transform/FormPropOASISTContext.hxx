@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_FORMPROPOASISTCONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_FORMPROPOASISTCONTEXT_HXX
+#pragma once
 
 #include "RenameElemTContext.hxx"
 
@@ -40,7 +39,5 @@ public:
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 };
-
-#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_FORMPROPOASISTCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

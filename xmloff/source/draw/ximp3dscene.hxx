@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_XIMP3DSCENE_HXX
-#define INCLUDED_XMLOFF_SOURCE_DRAW_XIMP3DSCENE_HXX
+#pragma once
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -49,7 +48,5 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
-
-#endif // INCLUDED_XMLOFF_SOURCE_DRAW_XIMP3DSCENE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

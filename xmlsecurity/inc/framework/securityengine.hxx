@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_INC_FRAMEWORK_SECURITYENGINE_HXX
-#define INCLUDED_XMLSECURITY_INC_FRAMEWORK_SECURITYENGINE_HXX
+#pragma once
 
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedListener.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>
@@ -139,7 +138,5 @@ public:
         /* XMissionTaker */
         virtual sal_Bool SAL_CALL endMission(  ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

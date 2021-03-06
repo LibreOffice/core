@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TRANSFORM_OOO2OASIS_HXX
-#define INCLUDED_XMLOFF_SOURCE_TRANSFORM_OOO2OASIS_HXX
+#pragma once
 
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
@@ -99,7 +98,5 @@ public:
     virtual OUString GetEventName( const OUString& rName,
                                             bool bForm = false ) override;
 };
-
-#endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_OOO2OASIS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

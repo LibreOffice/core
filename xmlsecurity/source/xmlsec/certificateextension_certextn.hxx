@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_CERTIFICATEEXTENSION_CERTEXTN_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_CERTIFICATEEXTENSION_CERTEXTN_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -33,7 +32,5 @@ struct CertificateExtension_CertExtn
     void setCertExtn(unsigned char const* value, unsigned int vlen, unsigned char const* id,
                      unsigned int idlen, bool critical);
 };
-
-#endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_CERTIFICATEEXTENSION_CERTEXTN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

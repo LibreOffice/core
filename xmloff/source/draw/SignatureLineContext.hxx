@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_SIGNATURELINECONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_DRAW_SIGNATURELINECONTEXT_HXX
+#pragma once
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <xmloff/xmlictxt.hxx>
@@ -22,7 +21,5 @@ public:
                          const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                          const css::uno::Reference<css::drawing::XShape>& rxShape);
 };
-
-#endif // INCLUDED_XMLOFF_SOURCE_DRAW_SIGNATURELINECONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

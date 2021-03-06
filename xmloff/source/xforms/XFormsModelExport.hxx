@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_XFORMS_XFORMSMODELEXPORT_HXX
-#define INCLUDED_XMLOFF_SOURCE_XFORMS_XFORMSMODELEXPORT_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -30,7 +29,5 @@ namespace com::sun::star {
 
 void exportXFormsModel( SvXMLExport&,
                         const css::uno::Reference<css::beans::XPropertySet>& );
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_XMLOFF_INC_SCHXMLIMPORT_HXX
-#define INCLUDED_XMLOFF_INC_SCHXMLIMPORT_HXX
+#pragma once
 
 #include <xmloff/SchXMLImportHelper.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -44,7 +43,5 @@ public:
     virtual void SAL_CALL
     setTargetDocument(const css::uno::Reference<css::lang::XComponent>& xDoc) override;
 };
-
-#endif // INCLUDED_XMLOFF_INC_SCHXMLIMPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

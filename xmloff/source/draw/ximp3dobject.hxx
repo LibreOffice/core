@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_XIMP3DOBJECT_HXX
-#define INCLUDED_XMLOFF_SOURCE_DRAW_XIMP3DOBJECT_HXX
+#pragma once
 
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
@@ -133,7 +132,5 @@ public:
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
-
-#endif // INCLUDED_XMLOFF_SOURCE_DRAW_XIMP3DOBJECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

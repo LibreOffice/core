@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_SDPROPLS_HXX
-#define INCLUDED_XMLOFF_SOURCE_DRAW_SDPROPLS_HXX
+#pragma once
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/ConnectorType.hpp>
@@ -128,7 +127,5 @@ public:
                             sal_uInt32 nIdx
                             ) const override;
 };
-
-#endif // INCLUDED_XMLOFF_SOURCE_DRAW_SDPROPLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

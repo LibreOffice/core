@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLTEXTLISTITEMCONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLTEXTLISTITEMCONTEXT_HXX
+#pragma once
 
 #include <com/sun/star/container/XIndexReplace.hpp>
 
@@ -66,7 +65,5 @@ public:
     }
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_INC_XMLBASICEXPORTFILTER_HXX
-#define INCLUDED_XMLOFF_INC_XMLBASICEXPORTFILTER_HXX
+#pragma once
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -48,7 +47,5 @@ public:
     virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) override;
     virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 };
-
-#endif // INCLUDED_XMLOFF_INC_XMLBASICEXPORTFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

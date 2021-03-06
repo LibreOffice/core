@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_DRAW_XIMPSHAP_HXX
-#define INCLUDED_XMLOFF_SOURCE_DRAW_XIMPSHAP_HXX
+#pragma once
 
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
@@ -635,7 +634,5 @@ private:
 
 extern SvXMLEnumMapEntry<css::drawing::Alignment> const aXML_GlueAlignment_EnumMap[];
 extern SvXMLEnumMapEntry<css::drawing::EscapeDirection> const aXML_GlueEscapeDirection_EnumMap[];
-
-#endif // INCLUDED_XMLOFF_SOURCE_DRAW_XIMPSHAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

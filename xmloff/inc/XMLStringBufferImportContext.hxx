@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_XMLOFF_INC_XMLSTRINGBUFFERIMPORTCONTEXT_HXX
-#define INCLUDED_XMLOFF_INC_XMLSTRINGBUFFERIMPORTCONTEXT_HXX
+#pragma once
 
 
 #include <xmloff/xmlictxt.hxx>
@@ -47,7 +46,5 @@ public:
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
     virtual void SAL_CALL characters(const OUString& rChars) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_GPG_X509CERTIFICATE_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_GPG_X509CERTIFICATE_HXX
+#pragma once
 
 #include <certificate.hxx>
 
@@ -97,7 +96,5 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 } ;
-
-#endif // INCLUDED_XMLSECURITY_SOURCE_GPG_X509CERTIFICATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

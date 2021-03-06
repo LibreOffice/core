@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLTEXTMARKIMPORTCONTEXT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLTEXTMARKIMPORTCONTEXT_HXX
+#pragma once
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -100,7 +99,5 @@ public:
     bool FindName(
         const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

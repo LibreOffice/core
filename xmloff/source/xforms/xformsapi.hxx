@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_XMLOFF_SOURCE_XFORMS_XFORMSAPI_HXX
-#define INCLUDED_XMLOFF_SOURCE_XFORMS_XFORMSAPI_HXX
+#pragma once
 
 
 // this is a collection of several functions to make dealing with the XForms
@@ -80,7 +79,5 @@ OUString xforms_getBasicTypeName(
     const css::uno::Reference<css::xforms::XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
     const OUString& rXMLName );
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

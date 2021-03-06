@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_FRAMEWORK_ELEMENTMARK_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_FRAMEWORK_ELEMENTMARK_HXX
+#pragma once
 
 #include <com/sun/star/xml/crypto/sax/ElementMarkType.hpp>
 
@@ -64,7 +63,5 @@ public:
     css::xml::crypto::sax::ElementMarkType getType() const { return m_type; }
     sal_Int32 getBufferId() const { return m_nBufferId; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_STYLE_PAGEMASTERPROPHDLFACTORY_HXX
-#define INCLUDED_XMLOFF_SOURCE_STYLE_PAGEMASTERPROPHDLFACTORY_HXX
+#pragma once
 
 #include <xmloff/prhdlfac.hxx>
 
@@ -30,7 +29,5 @@ public:
 
     virtual const XMLPropertyHandler* GetPropertyHandler(sal_Int32 nType) const override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

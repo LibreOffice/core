@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_FRAMEWORK_ELEMENTCOLLECTOR_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_FRAMEWORK_ELEMENTCOLLECTOR_HXX
+#pragma once
 
 #include "elementmark.hxx"
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
@@ -77,7 +76,5 @@ public:
         const css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >& referenceResolvedListener);
     void doNotify();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,8 +22,7 @@
  *  XML import of all variable related text fields plus database display field
  */
 
-#ifndef INCLUDED_XMLOFF_INC_TXTVFLDI_HXX
-#define INCLUDED_XMLOFF_INC_TXTVFLDI_HXX
+#pragma once
 
 #include "txtfldi.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -449,7 +448,5 @@ private:
     /// create, prepare and insert database field master and database field
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

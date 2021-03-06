@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_INC_XMLSEC_SAXHELPER_HXX
-#define INCLUDED_XMLSECURITY_INC_XMLSEC_SAXHELPER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -82,7 +81,5 @@ class SAXHelper final
             std::u16string_view aData ) ;
 
 } ;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

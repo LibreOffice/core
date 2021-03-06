@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_XMLOFF_SOURCE_TEXT_XMLSECTIONFOOTNOTECONFIGEXPORT_HXX
-#define INCLUDED_XMLOFF_SOURCE_TEXT_XMLSECTIONFOOTNOTECONFIGEXPORT_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -49,7 +48,5 @@ public:
         sal_uInt32 nIdx,
         const rtl::Reference<XMLPropertySetMapper> & rMapper);    /// used only for debugging
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

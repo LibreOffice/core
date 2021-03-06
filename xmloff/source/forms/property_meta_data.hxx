@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_SOURCE_FORMS_PROPERTY_META_DATA_HXX
-#define INCLUDED_XMLOFF_SOURCE_FORMS_PROPERTY_META_DATA_HXX
+#pragma once
 
 #include "property_description.hxx"
 
@@ -39,7 +38,5 @@ namespace xmloff::metadata
     AttributeDescription getAttributeDescription( sal_Int32 nElement );
 
 } // namespace xmloff::metadata
-
-#endif // INCLUDED_XMLOFF_SOURCE_FORMS_PROPERTY_META_DATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_INC_XMLREPLACEMENTIMAGECONTEXT_HXX
-#define INCLUDED_XMLOFF_INC_XMLREPLACEMENTIMAGECONTEXT_HXX
+#pragma once
 
 #include <xmloff/xmlictxt.hxx>
 
@@ -51,7 +50,5 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
 };
-
-#endif // INCLUDED_XMLOFF_INC_XMLREPLACEMENTIMAGECONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
