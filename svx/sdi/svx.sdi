@@ -10998,7 +10998,7 @@ SfxVoidItem InsertZWSP SID_INSERT_ZWSP
     GroupId = SfxGroupId::Insert;
 ]
 
-SfxVoidItem InsertZWNBSP SID_INSERT_ZWNBSP
+SfxVoidItem InsertWJ SID_INSERT_WJ
 ()
 [
     AutoUpdate = FALSE,

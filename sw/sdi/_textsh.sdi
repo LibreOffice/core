@@ -247,7 +247,7 @@ interface BaseText
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
-    SID_INSERT_ZWNBSP
+    SID_INSERT_WJ
     [
         ExecMethod = ExecInsert ;
         StateMethod = GetState ;

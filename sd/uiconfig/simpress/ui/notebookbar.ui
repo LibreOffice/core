@@ -914,10 +914,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuHome-InsertZWNBSP">
+      <object class="GtkMenuItem" id="MenuHome-InsertWJ">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:InsertZWNBSP</property>
+        <property name="action_name">.uno:InsertWJ</property>
       </object>
     </child>
     <child>

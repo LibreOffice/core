@@ -169,7 +169,7 @@ constexpr bool SW_ISPRINTABLE(sal_Unicode c) { return c >= ' ' && 127 != c; }
 #define CHAR_RLM            u'\x200F'
 #define CHAR_LRM            u'\x200E'
 #define CHAR_ZWSP           u'\x200B'
-#define CHAR_ZWNBSP         u'\x2060'
+#define CHAR_WJ             u'\x2060'
 #define CHAR_NNBSP          u'\x202F' //NARROW NO-BREAK SPACE
 
 // Returns the APP - CharClass instance - used for all ToUpper/ToLower/...

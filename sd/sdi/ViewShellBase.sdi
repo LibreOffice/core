@@ -132,7 +132,7 @@ interface ViewShellBaseView
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    SID_INSERT_ZWNBSP
+    SID_INSERT_WJ
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;

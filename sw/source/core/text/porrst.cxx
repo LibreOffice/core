@@ -552,7 +552,7 @@ bool SwHiddenTextPortion::Format( SwTextFormatInfo &rInf )
 bool SwControlCharPortion::DoPaint(SwTextPaintInfo const&,
         OUString & rOutString, SwFont & rTmpFont, int &) const
 {
-    if (mcChar == CHAR_ZWNBSP || !SwViewOption::IsFieldShadings())
+    if (mcChar == CHAR_WJ || !SwViewOption::IsFieldShadings())
     {
         return false;
     }

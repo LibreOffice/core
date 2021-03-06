@@ -670,8 +670,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
         case SID_INSERT_ZWSP:
             lclInsertCharacter( pTableView, pTopView, CHAR_ZWSP );
         break;
-        case SID_INSERT_ZWNBSP:
-            lclInsertCharacter( pTableView, pTopView, CHAR_ZWNBSP );
+        case SID_INSERT_WJ:
+            lclInsertCharacter( pTableView, pTopView, CHAR_WJ );
         break;
         case SID_INSERT_FIELD_SHEET:
         {

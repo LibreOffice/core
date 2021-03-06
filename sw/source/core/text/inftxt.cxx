@@ -1664,7 +1664,7 @@ TextFrameIndex SwTextFormatInfo::ScanPortionEnd(TextFrameIndex const nStart,
         case CH_TAB:
         case CH_BREAK:
         case CHAR_ZWSP :
-        case CHAR_ZWNBSP :
+        case CHAR_WJ :
             m_cHookChar = cPos;
             return i;
 

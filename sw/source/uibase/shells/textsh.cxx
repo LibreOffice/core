@@ -177,7 +177,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case FN_INSERT_NNBSP: // shift+mod2/alt+space inserts some other character w/o going through SwEditWin::KeyInput(), at least on macOS
     case SID_INSERT_RLM :
     case SID_INSERT_LRM :
-    case SID_INSERT_ZWNBSP :
+    case SID_INSERT_WJ :
     case SID_INSERT_ZWSP:
     {
         sal_Unicode cIns = 0;
@@ -186,7 +186,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             case SID_INSERT_RLM : cIns = CHAR_RLM ; break;
             case SID_INSERT_LRM : cIns = CHAR_LRM ; break;
             case SID_INSERT_ZWSP : cIns = CHAR_ZWSP ; break;
-            case SID_INSERT_ZWNBSP: cIns = CHAR_ZWNBSP; break;
+            case SID_INSERT_WJ: cIns = CHAR_WJ; break;
             case FN_INSERT_NNBSP: cIns = CHAR_NNBSP; break;
         }
         rSh.Insert( OUString( cIns ) );

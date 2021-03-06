@@ -68,7 +68,7 @@ const sal_Unicode CHAR_ZWSP     = 0x200B;
 const sal_Unicode CHAR_LRM      = 0x200E;
 const sal_Unicode CHAR_RLM      = 0x200F;
 const sal_Unicode CHAR_NBHY     = 0x2011;
-const sal_Unicode CHAR_ZWNBSP   = 0x2060;
+const sal_Unicode CHAR_WJ       = 0x2060;
 const sal_Unicode CHAR_NNBSP    = 0x202F; //NARROW NO-BREAK SPACE
 
 #define MINDOUBLE   1.7e-307
