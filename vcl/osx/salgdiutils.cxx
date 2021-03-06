@@ -35,37 +35,35 @@
 #include <osx/salframe.h>
 #include <osx/saldata.hxx>
 
+// TODO: Scale will be set to 2.0f as default after implementation of full scaled display support . This will allow moving of
+// windows between non retina and retina displays without blurry text and graphics. Static variables have to be removed thereafter.
+
+// Currently scaled display support is not implemented for bitmaps. This will cause a slight performance degradation on displays
+// with single precision. To preserve performance for now, window scaling is only activated if at least one display with double
+// precision is present. Moving windows between displays is then possible without blurry text and graphics too. Adapting window
+// scaling when displays are added while application is running is not supported.
+
+static bool  bWindowScaling = false;
+static float fWindowScale = 1.0f;
+
 float AquaSalGraphics::GetWindowScaling()
 {
-    float fScale = 1.0f;
-
-#ifdef MACOSX
-
-    // Window scaling independent from main display may be forced by setting VCL_MACOS_FORCE_WINDOW_SCALING environment variable
-    // whose setting is stored in mbWindowScaling. After implementation of full support of scaled displays window scaling will be
-    // set to 2.0f for macOS as default. This will allow moving of windows between non retina and retina displays without blurry
-    // text and graphics.
-
-    // TODO: After implementation of full support of scaled displays code has to be modified to set a scaling of 2.0f as default.
-
-    if (mbWindowScaling)
+    if (!bWindowScaling)
     {
-        fScale = 2.0f;
-        return fScale;
+        NSArray *aScreens = [NSScreen screens];
+        if (aScreens != nullptr)
+        {
+            int nScreens = [aScreens count];
+            for (int i = 0; i < nScreens; i++)
+            {
+                float fScale = [[aScreens objectAtIndex:i] backingScaleFactor];
+                if (fScale > fWindowScale)
+                  fWindowScale = fScale;
+            }
+            bWindowScaling = true;
+        }
     }
-
-#endif
-
-    AquaSalFrame *pSalFrame = mpFrame;
-    if (!pSalFrame)
-        pSalFrame = static_cast<AquaSalFrame *>(GetSalData()->mpInstance->anyFrame());
-    if (pSalFrame)
-    {
-        NSWindow *pNSWindow = pSalFrame->getNSWindow();
-        if (pNSWindow)
-            fScale = [pNSWindow backingScaleFactor];
-    }
-    return fScale;
+    return fWindowScale;
 }
 
 void AquaSalGraphics::SetWindowGraphics( AquaSalFrame* pFrame )
