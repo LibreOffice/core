@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SCRIPTING_SOURCE_BASPROV_BASMODNODE_HXX
-#define INCLUDED_SCRIPTING_SOURCE_BASPROV_BASMODNODE_HXX
+#pragma once
 
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -61,7 +60,5 @@ namespace basprov
 
 }   // namespace basprov
 
-
-#endif // INCLUDED_SCRIPTING_SOURCE_BASPROV_BASMODNODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

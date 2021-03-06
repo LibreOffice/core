@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_CHARTARR_HXX
-#define INCLUDED_SC_INC_CHARTARR_HXX
+#pragma once
 
 #include "rangelst.hxx"
 #include "chartpos.hxx"
@@ -79,7 +78,5 @@ public:
 
     std::unique_ptr<ScMemChart> CreateMemChart();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

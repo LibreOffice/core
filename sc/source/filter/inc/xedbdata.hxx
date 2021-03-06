@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XEDBDATA_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XEDBDATA_HXX
+#pragma once
 
 #include "xeroot.hxx"
 #include "xerecord.hxx"
@@ -63,7 +62,5 @@ private:
     typedef ::std::map< SCTAB, rtl::Reference< XclExpTables > > TablesMapType;
     TablesMapType maTablesMap;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

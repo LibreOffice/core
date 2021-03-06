@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_FORMULAITER_HXX
-#define INCLUDED_SC_INC_FORMULAITER_HXX
+#pragma once
 
 #include <formula/tokenarray.hxx>
 
@@ -41,7 +40,5 @@ public:
     bool GetNextRef(ScRange& rRange);
     formula::FormulaToken* GetNextRefToken();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

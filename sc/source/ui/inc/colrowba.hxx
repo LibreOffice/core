@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_COLROWBA_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_COLROWBA_HXX
+#pragma once
 
 #include "hdrcont.hxx"
 #include "viewdata.hxx"
@@ -87,7 +86,5 @@ public:
 
     virtual OUString    GetDragHelp( tools::Long nVal ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

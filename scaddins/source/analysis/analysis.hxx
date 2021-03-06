@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SCADDINS_SOURCE_ANALYSIS_ANALYSIS_HXX
-#define INCLUDED_SCADDINS_SOURCE_ANALYSIS_ANALYSIS_HXX
+#pragma once
 
 
 #include <com/sun/star/sheet/XAddIn.hpp>
@@ -231,7 +230,5 @@ public:
     virtual double SAL_CALL     getCoupnum( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const css::uno::Any& rOptBase ) override;
     virtual double SAL_CALL     getFvschedule( double fPrinc, const css::uno::Sequence< css::uno::Sequence< double > >& rSchedule ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

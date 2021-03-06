@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_CONFLICTSDLG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_CONFLICTSDLG_HXX
+#pragma once
 
 #include <vcl/idle.hxx>
 #include <svx/ctredlin.hxx>
@@ -147,7 +146,5 @@ public:
 
     void                UpdateView();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

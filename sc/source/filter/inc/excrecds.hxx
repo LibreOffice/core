@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXCRECDS_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_EXCRECDS_HXX
+#pragma once
 
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
@@ -448,7 +447,5 @@ private:
 
     XclExpTabFilterMap  maFilterMap;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_COVARIANCEDIALOG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_COVARIANCEDIALOG_HXX
+#pragma once
 
 #include "MatrixComparisonGenerator.hxx"
 
@@ -27,7 +26,5 @@ protected:
     virtual OUString getTemplate() override;
     virtual const char* GetUndoNameId() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

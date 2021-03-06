@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_IMPEX_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_IMPEX_HXX
+#pragma once
 
 #include <o3tl/deleter.hxx>
 #include <sot/formats.hxx>
@@ -224,7 +223,5 @@ public:
   */
 SC_DLLPUBLIC OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
         OUString& rFieldSeparators, sal_Unicode cFieldQuote, sal_Unicode& rcDetectSep );
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

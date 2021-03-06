@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_TPDEFAULTS_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_TPDEFAULTS_HXX
+#pragma once
 
 #include <sfx2/tabdlg.hxx>
 
@@ -40,7 +39,5 @@ private:
     std::unique_ptr<weld::Entry> m_xEdSheetPrefix;
     std::unique_ptr<weld::CheckButton> m_xEdJumboSheets;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

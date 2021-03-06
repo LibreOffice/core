@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_VIEWOPTI_HXX
-#define INCLUDED_SC_INC_VIEWOPTI_HXX
+#pragma once
 
 #include <svx/optgrid.hxx>
 
@@ -152,7 +151,5 @@ public:
 
     void            SetOptions( const ScViewOptions& rNew );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

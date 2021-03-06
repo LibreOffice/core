@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_ACREDLIN_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_ACREDLIN_HXX
+#pragma once
 
 #include <svx/ctredlin.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -160,7 +159,5 @@ public:
     void            Initialize (SfxChildWinInfo* pInfo);
     virtual void    FillInfo(SfxChildWinInfo&) const override;
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_ACREDLIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

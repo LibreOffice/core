@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_CORE_INC_INTERPRE_HXX
-#define INCLUDED_SC_SOURCE_CORE_INC_INTERPRE_HXX
+#pragma once
 
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
@@ -1163,7 +1162,5 @@ inline sal_Int16 ScInterpreter::GetDayOfWeek( sal_Int32 n )
 {   // monday = 0, ..., sunday = 6
     return static_cast< sal_Int16 >( ( n - 1 ) % 7 );
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTTREELISTLABEL_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTTREELISTLABEL_HXX
+#pragma once
 
 #include "PivotLayoutTreeListBase.hxx"
 #include <vector>
@@ -33,5 +32,3 @@ public:
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-
-#endif

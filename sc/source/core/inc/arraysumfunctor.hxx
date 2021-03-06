@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SC_SOURCE_CORE_INC_ARRAYSUMFUNCTOR_HXX
-#define INCLUDED_SC_SOURCE_CORE_INC_ARRAYSUMFUNCTOR_HXX
+#pragma once
 
 #include <cstdint>
 #include <cmath>
@@ -115,7 +114,5 @@ private:
 };
 
 } // end namespace sc
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

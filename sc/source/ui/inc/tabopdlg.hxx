@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_TABOPDLG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_TABOPDLG_HXX
+#pragma once
 
 #include <address.hxx>
 #include "anyrefdg.hxx"
@@ -90,7 +89,5 @@ private:
     DECL_LINK( LoseButtonFocusHdl, formula::RefButton&, void );
 
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_TABOPDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_INPUTHDL_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_INPUTHDL_HXX
+#pragma once
 
 #include <global.hxx>
 #include <address.hxx>
@@ -326,7 +325,5 @@ private:
     OUString        aString;
     std::unique_ptr<EditTextObject> pEditData;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

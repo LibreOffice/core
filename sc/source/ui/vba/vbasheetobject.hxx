@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBASHEETOBJECT_HXX
-#define INCLUDED_SC_SOURCE_UI_VBA_VBASHEETOBJECT_HXX
+#pragma once
 
 #include <ooo/vba/excel/XButton.hpp>
 #include <ooo/vba/excel/XControlObject.hpp>
@@ -206,7 +205,5 @@ protected:
     virtual OUString implGetBaseName() const override;
     virtual void implSetDefaultProperties() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

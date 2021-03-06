@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_DPOUTPUTGEOMETRY_HXX
-#define INCLUDED_SC_INC_DPOUTPUTGEOMETRY_HXX
+#pragma once
 
 #include "address.hxx"
 #include <vector>
@@ -65,7 +64,5 @@ private:
     bool        mbHeaderLayout;
     bool        mbCompactMode; // MSO only setting
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

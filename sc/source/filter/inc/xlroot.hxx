@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLROOT_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XLROOT_HXX
+#pragma once
 
 #include <i18nlangtag/lang.h>
 #include <tools/ref.hxx>
@@ -263,7 +262,5 @@ public:
 private:
     XclRootData& mrData;        /// Reference to the global data struct.
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

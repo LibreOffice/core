@@ -5,8 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_DOCFUNCUTIL_HXX
-#define INCLUDED_SC_DOCFUNCUTIL_HXX
+#pragma once
 
 #include "undobase.hxx"
 
@@ -39,7 +38,5 @@ public:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_SHEETLIMITS_HXX
-#define INCLUDED_SC_INC_SHEETLIMITS_HXX
+#pragma once
 
 #include <salhelper/simplereferenceobject.hxx>
 #include "address.hxx"
@@ -63,7 +62,5 @@ struct ScSheetLimits final : public salhelper::SimpleReferenceObject
     // equivalent of MAXCOLCOUNT in address.hxx
     SCCOL GetMaxColCount() const { return mnMaxCol + 1; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

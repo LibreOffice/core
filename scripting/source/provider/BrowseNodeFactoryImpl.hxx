@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SCRIPTING_SOURCE_PROVIDER_BROWSENODEFACTORYIMPL_HXX
-#define INCLUDED_SCRIPTING_SOURCE_PROVIDER_BROWSENODEFACTORYIMPL_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -67,7 +66,5 @@ private:
 
 
 } // namespace browsenodefactory
-
-#endif // INCLUDED_SCRIPTING_SOURCE_PROVIDER_BROWSENODEFACTORYIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

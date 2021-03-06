@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_NOTEMARK_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_NOTEMARK_HXX
+#pragma once
 
 #include <vcl/mapmod.hxx>
 #include <vcl/timer.hxx>
@@ -66,7 +65,5 @@ public:
     const ScAddress& GetDocPos() const       { return m_aDocPos; }
     bool        IsByKeyboard() const    { return m_bByKeyboard; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

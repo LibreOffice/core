@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_TPFORMULA_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_TPFORMULA_HXX
+#pragma once
 
 #include <sfx2/tabdlg.hxx>
 
@@ -81,7 +80,5 @@ private:
     std::unique_ptr<weld::ComboBox> mxLbOOXMLRecalcOptions;
     std::unique_ptr<weld::ComboBox> mxLbODFRecalcOptions;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

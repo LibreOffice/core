@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_CORE_INC_ADDINLIS_HXX
-#define INCLUDED_SC_SOURCE_CORE_INC_ADDINLIS_HXX
+#pragma once
 
 #include <memory>
 #include "adiasync.hxx"
@@ -81,7 +80,5 @@ public:
 
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
-
-#endif // INCLUDED_SC_SOURCE_CORE_INC_ADDINLIS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

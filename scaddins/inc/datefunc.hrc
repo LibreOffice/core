@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SCADDINS_INC_PRICING_HRC
-#define INCLUDED_SCADDINS_INC_PRICING_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -89,7 +88,5 @@ const char* DATE_FUNCDESC_Rot13[] =
     NC_("DATE_FUNCDESC_Rot13", "Text"),
     NC_("DATE_FUNCDESC_Rot13", "Text to be encrypted or text already encrypted")
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

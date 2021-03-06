@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLCELLRANGESOURCECONTEXT_HXX
-#define INCLUDED_SC_SOURCE_FILTER_XML_XMLCELLRANGESOURCECONTEXT_HXX
+#pragma once
 
 #include "importcontext.hxx"
 
@@ -48,7 +47,5 @@ public:
                                     );
     virtual                     ~ScXMLCellRangeSourceContext() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

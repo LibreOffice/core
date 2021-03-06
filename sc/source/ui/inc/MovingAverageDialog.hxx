@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_MOVINGAVERAGEDIALOG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_MOVINGAVERAGEDIALOG_HXX
+#pragma once
 
 #include <address.hxx>
 #include "viewdata.hxx"
@@ -35,7 +34,5 @@ protected:
     virtual const char* GetUndoNameId() override;
     virtual ScRange ApplyOutput(ScDocShell* pDocShell) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAOLEOBJECT_HXX
-#define INCLUDED_SC_SOURCE_UI_VBA_VBAOLEOBJECT_HXX
+#pragma once
 
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <ooo/vba/excel/XOLEObject.hpp>
@@ -54,6 +53,5 @@ public:
     virtual OUString SAL_CALL getLinkedCell() override;
     virtual void SAL_CALL setLinkedCell( const OUString& _linkedcell ) override;
 };
-#endif // INCLUDED_SC_SOURCE_UI_VBA_VBAOLEOBJECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

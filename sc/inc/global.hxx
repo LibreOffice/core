@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_GLOBAL_HXX
-#define INCLUDED_SC_INC_GLOBAL_HXX
+#pragma once
 
 #include "address.hxx"
 #include <i18nlangtag/lang.h>
@@ -910,7 +909,5 @@ struct ScConsolidateParam
 extern SfxViewShell* pScActiveViewShell;
 extern sal_uInt16 nScClickMouseModifier;
 extern sal_uInt16 nScFillModeMouseModifier;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

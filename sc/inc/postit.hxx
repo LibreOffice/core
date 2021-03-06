@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_POSTIT_HXX
-#define INCLUDED_SC_INC_POSTIT_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include "address.hxx"
@@ -371,5 +370,4 @@ struct NoteEntry
 
 }
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLCONST_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XLCONST_HXX
+#pragma once
 
 #include <address.hxx>
 
@@ -256,7 +255,5 @@ const sal_uInt16 EXC_ISFPROTECTION = 0x0002;
 const sal_uInt16 EXC_ISFFEC2       = 0x0003;
 const sal_uInt16 EXC_ISFFACTOID    = 0x0004;
 const sal_uInt16 EXC_ISFLIST       = 0x0005;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_USERLIST_HXX
-#define INCLUDED_SC_INC_USERLIST_HXX
+#pragma once
 
 #include "scdllapi.h"
 
@@ -93,7 +92,5 @@ public:
     void push_back(ScUserListData* p);
     void erase(const iterator& itr);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

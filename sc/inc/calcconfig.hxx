@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_CALCCONFIG_HXX
-#define INCLUDED_SC_INC_CALCCONFIG_HXX
+#pragma once
 
 #include "scdllapi.h"
 
@@ -83,7 +82,5 @@ struct SC_DLLPUBLIC ScCalcConfig
 
 OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes);
 ScCalcConfig::OpCodeSet ScStringToOpCodeSet(std::u16string_view rOpCodes);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

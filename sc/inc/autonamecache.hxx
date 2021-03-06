@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_AUTONAMECACHE_HXX
-#define INCLUDED_SC_INC_AUTONAMECACHE_HXX
+#pragma once
 
 #include <unordered_map>
 #include <vector>
@@ -41,7 +40,5 @@ public:
 
     const ScAutoNameAddresses& GetNameOccurrences( const OUString& rName, SCTAB nTab );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

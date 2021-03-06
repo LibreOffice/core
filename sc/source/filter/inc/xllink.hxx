@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLLINK_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XLLINK_HXX
+#pragma once
 
 #include <ostream>
 
@@ -96,7 +95,5 @@ inline std::basic_ostream<charT, traits> & operator <<(
     default: return stream << static_cast<int>(type);
     }
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

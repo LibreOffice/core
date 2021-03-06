@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_SCUITPHFEDIT_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_SCUITPHFEDIT_HXX
+#pragma once
 
 #include "tphfedit.hxx"
 #include <sfx2/tabdlg.hxx>
@@ -141,7 +140,5 @@ public:
     static std::unique_ptr<SfxTabPage>  Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreSet );
     ScLeftFooterEditPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_REFUNDO_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_REFUNDO_HXX
+#pragma once
 
 #include <memory>
 
@@ -51,7 +50,5 @@ public:
     void        DeleteUnchanged( const ScDocument* pDoc );
     void        DoUndo( ScDocument* pDoc, bool bUndoRefFirst );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

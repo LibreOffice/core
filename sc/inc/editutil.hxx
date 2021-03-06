@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_EDITUTIL_HXX
-#define INCLUDED_SC_INC_EDITUTIL_HXX
+#pragma once
 
 #include <memory>
 #include "scdllapi.h"
@@ -241,7 +240,5 @@ public:
 };
 
 //  SvxFieldData derivations were moved to Svx (comment can be deleted?)
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_DPTABRES_HXX
-#define INCLUDED_SC_INC_DPTABRES_HXX
+#pragma once
 
 #include "global.hxx"
 #include "dpfilteredcache.hxx"
@@ -667,7 +666,5 @@ private:
 
     ScDPSource* mpSource;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

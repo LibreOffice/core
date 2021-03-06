@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_PAGESETTINGS_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_PAGESETTINGS_HXX
+#pragma once
 
 #include <memory>
 #include <string_view>
@@ -179,7 +178,5 @@ private:
 };
 
 } // namespace oox::xls
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

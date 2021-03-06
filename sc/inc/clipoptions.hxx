@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_CLIPOPTIONS_HXX
-#define INCLUDED_SC_INC_CLIPOPTIONS_HXX
+#pragma once
 
 #include "scdllapi.h"
 #include <com/sun/star/uno/Reference.h>
@@ -25,7 +24,5 @@ public:
     /// Document properties.
     css::uno::Reference<css::document::XDocumentProperties> m_xDocumentProperties;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

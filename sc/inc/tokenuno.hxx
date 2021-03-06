@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_TOKENUNO_HXX
-#define INCLUDED_SC_INC_TOKENUNO_HXX
+#pragma once
 
 #include <memory>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -105,7 +104,5 @@ class ScFormulaOpCodeMapperObj final : public formula::FormulaOpCodeMapperObj
 public:
     ScFormulaOpCodeMapperObj(::std::unique_ptr<formula::FormulaCompiler> && _pCompiler);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
