@@ -251,6 +251,118 @@ UInt32 AquaSalGraphics::getTrackState(ControlState nState)
     return kThemeTrackActive;
 }
 
+void drawRoundedRect1(CGContext* context, CGRect rrect, CGFloat radius)
+{
+    // NOTE: At this point you may want to verify that your radius is no more than half
+    // the width and height of your rectangle, as this technique degenerates for those cases.
+
+    // In order to draw a rounded rectangle, we will take advantage of the fact that
+    // CGContextAddArcToPoint will draw straight lines past the start and end of the arc
+    // in order to create the path from the current position and the destination position.
+
+    // In order to create the 4 arcs correctly, we need to know the min, mid and max positions
+    // on the x and y lengths of the given rectangle.
+    CGFloat minx = CGRectGetMinX(rrect), midx = CGRectGetMidX(rrect), maxx = CGRectGetMaxX(rrect);
+    CGFloat miny = CGRectGetMinY(rrect), midy = CGRectGetMidY(rrect), maxy = CGRectGetMaxY(rrect);
+
+    // Next, we will go around the rectangle in the order given by the figure below.
+    //       minx    midx    maxx
+    // miny    2       3       4
+    // midy    1       9       5
+    // maxy    8       7       6
+    // Which gives us a coincident start and end point, which is incidental to this technique, but still doesn't
+    // form a closed path, so we still need to close the path to connect the ends correctly.
+    // Thus we start by moving to point 1, then adding arcs through each pair of points that follows.
+    // You could use a similar tecgnique to create any shape with rounded corners.
+
+    // Start at 1
+    CGContextMoveToPoint(context, minx, midy);
+    // Add an arc through 2 to 3
+    CGContextAddArcToPoint(context, minx, miny, midx, miny, radius);
+    // Add an arc through 4 to 5
+    CGContextAddArcToPoint(context, maxx, miny, maxx, midy, radius);
+    // Add an arc through 6 to 7
+    CGContextAddArcToPoint(context, maxx, maxy, midx, maxy, radius);
+    // Add an arc through 8 to 9
+    CGContextAddArcToPoint(context, minx, maxy, minx, midy, radius);
+    // Close the path
+    CGContextClosePath(context);
+    // Fill & stroke the path
+    CGContextDrawPath(context, kCGPathFillStroke);
+
+}
+
+CGMutablePathRef createRoundedCornerPath(CGRect rect, CGFloat cornerRadius) {
+
+    // create a mutable path
+    CGMutablePathRef path = CGPathCreateMutable();
+
+    // get the 4 corners of the rect
+    CGPoint topLeft = CGPointMake(rect.origin.x, rect.origin.y);
+    CGPoint topRight = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y);
+    CGPoint bottomRight = CGPointMake(rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
+    CGPoint bottomLeft = CGPointMake(rect.origin.x, rect.origin.y + rect.size.height);
+
+    // move to top left
+    CGPathMoveToPoint(path, NULL, topLeft.x + cornerRadius, topLeft.y);
+
+    // add top line
+    CGPathAddLineToPoint(path, NULL, topRight.x - cornerRadius, topRight.y);
+
+    // add top right curve
+    CGPathAddQuadCurveToPoint(path, NULL, topRight.x, topRight.y, topRight.x, topRight.y + cornerRadius);
+
+    // add right line
+    CGPathAddLineToPoint(path, NULL, bottomRight.x, bottomRight.y - cornerRadius);
+
+    // add bottom right curve
+    CGPathAddQuadCurveToPoint(path, NULL, bottomRight.x, bottomRight.y, bottomRight.x - cornerRadius, bottomRight.y);
+
+    // add bottom line
+    CGPathAddLineToPoint(path, NULL, bottomLeft.x + cornerRadius, bottomLeft.y);
+
+    // add bottom left curve
+    CGPathAddQuadCurveToPoint(path, NULL, bottomLeft.x, bottomLeft.y, bottomLeft.x, bottomLeft.y - cornerRadius);
+
+    // add left line
+    CGPathAddLineToPoint(path, NULL, topLeft.x, topLeft.y + cornerRadius);
+
+    // add top left curve
+    CGPathAddQuadCurveToPoint(path, NULL, topLeft.x, topLeft.y, topLeft.x + cornerRadius, topLeft.y);
+
+    // return the path
+    return path;
+}
+
+void drawRoundedRect(CGContext* context, CGRect rect, CGFloat )
+{
+    // constants
+    const CGFloat outlineStrokeWidth = 2.0f;
+    const CGFloat outlineCornerRadius = 15.0f;
+
+//    const CGColorRef whiteColor = [[UIColor whiteColor] CGColor];
+//    const CGColorRef redColor = [[UIColor redColor] CGColor];
+
+    // inset the rect because half of the stroke applied to this path will be on the outside
+    CGRect insetRect = CGRectInset(rect, outlineStrokeWidth/2.0f, outlineStrokeWidth/2.0f);
+
+    // get our rounded rect as a path
+    CGMutablePathRef path = createRoundedCornerPath(insetRect, outlineCornerRadius);
+
+    // add the path to the context
+    CGContextAddPath(context, path);
+
+    // set the stroke params
+//    CGContextSetStrokeColorWithColor(context, redColor);
+//    CGContextSetLineWidth(context, outlineStrokeWidth);
+
+    // draw the path
+    CGContextDrawPath(context, kCGPathStroke);
+
+    // release the path
+    CGPathRelease(path);
+}
+
 bool AquaSalGraphics::drawNativeControl(ControlType nType,
                                         ControlPart nPart,
                                         const tools::Rectangle &rControlRegion,
@@ -739,7 +851,8 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                     rc.size.height += 2 * kThemeMetricListBoxFrameOutset - 2;
                     rc.origin.x -= kThemeMetricListBoxFrameOutset - 1;
                     rc.origin.y -= kThemeMetricListBoxFrameOutset - 1;
-                    HIThemeDrawFrame(&rc, &aTextDrawInfo, maContextHolder.get(), kHIThemeOrientationNormal);
+                    drawRoundedRect(maContextHolder.get(), rc, 10.0);
+                    //HIThemeDrawFrame(&rc, &aTextDrawInfo, maContextHolder.get(), kHIThemeOrientationNormal);
                     bOK = true;
                     break;
                 default:

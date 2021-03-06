@@ -2137,12 +2137,6 @@ StyleSettings::GetColorValueSetColumnCount() const
 }
 
 sal_uInt16
-StyleSettings::GetColorValueSetMaximumRowCount()
-{
-    return 10;
-}
-
-sal_uInt16
 StyleSettings::GetListBoxPreviewDefaultLineWidth()
 {
     return 1;
