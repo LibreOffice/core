@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLFILTI_HXX
-#define INCLUDED_SC_SOURCE_FILTER_XML_XMLFILTI_HXX
+#pragma once
 
 #include "importcontext.hxx"
 #include <queryentry.hxx>
@@ -262,7 +261,5 @@ public:
         std::u16string_view sTempOperator, ScQueryOp& aFilterOperator, utl::SearchParam::SearchType& rSearchType);
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_QA_UNIT_HELPER_DEBUGHELPER_HXX
-#define INCLUDED_SC_QA_UNIT_HELPER_DEBUGHELPER_HXX
+#pragma once
 
 #ifdef _WIN32
 #if !defined NOMINMAX
@@ -33,7 +32,5 @@ using ::std::cout;
 using ::std::cerr;
 using ::std::endl;
 using ::std::vector;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

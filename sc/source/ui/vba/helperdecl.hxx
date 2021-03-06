@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_VBA_HELPERDECL_HXX
-#define INCLUDED_SC_SOURCE_UI_VBA_HELPERDECL_HXX
+#pragma once
 
 #include <comphelper/servicedecl.hxx>
 
@@ -44,7 +43,5 @@ struct vba_service_class_ : public serviceimpl_base< detail::OwnServiceImpl<Impl
 
 } // namespace service_decl
 } // namespace comphelper
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

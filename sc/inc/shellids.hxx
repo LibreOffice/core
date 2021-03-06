@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_SHELLIDS_HXX
-#define INCLUDED_SC_INC_SHELLIDS_HXX
+#pragma once
 
 // Sfx Interface-IDs
 #define SCID_APP                (SFX_INTERFACE_SC_START+SfxInterfaceId(0))
@@ -40,7 +39,5 @@
 #define SCID_GRAPHIC_SHELL      (SFX_INTERFACE_SC_START+SfxInterfaceId(15))
 #define SCID_PAGEBREAK_SHELL    (SFX_INTERFACE_SC_START+SfxInterfaceId(16))
 #define SCID_MEDIA_SHELL        (SFX_INTERFACE_SC_START+SfxInterfaceId(17))
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

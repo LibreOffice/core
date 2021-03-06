@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_CHECKLISTMENU_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_CHECKLISTMENU_HXX
+#pragma once
 
 #include <vcl/dockwin.hxx>
 #include <vcl/timer.hxx>
@@ -317,7 +316,5 @@ private:
     VclPtr<ScCheckListMenuWindow> mxParentMenu;
     std::unique_ptr<ScCheckListMenuControl, o3tl::default_delete<ScCheckListMenuControl>> mxControl;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAWORKBOOK_HXX
-#define INCLUDED_SC_SOURCE_UI_VBA_VBAWORKBOOK_HXX
+#pragma once
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <ooo/vba/excel/XWorkbook.hpp>
@@ -71,7 +70,5 @@ public:
     // XUnoTunnel
     virtual ::sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8 >& rId ) override;
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_VBA_VBAWORKBOOK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

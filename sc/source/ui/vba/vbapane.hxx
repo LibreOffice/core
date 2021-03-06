@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAPANE_HXX
-#define INCLUDED_SC_SOURCE_UI_VBA_VBAPANE_HXX
+#pragma once
 
 #include <com/sun/star/sheet/XViewPane.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -52,7 +51,5 @@ private:
     css::uno::WeakReference< ov::XHelperInterface > m_xParent;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_VBA_VBAPANE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

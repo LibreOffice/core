@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_TOKSTACK_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_TOKSTACK_HXX
+#pragma once
 
 #include <tokenarray.hxx>
 #include <refdata.hxx>
@@ -423,7 +422,5 @@ inline std::unique_ptr<ScTokenArray> TokenPool::GetTokenArray( const ScDocument&
     return pScToken;
 }
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

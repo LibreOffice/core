@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_HTMLIMP_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_HTMLIMP_HXX
+#pragma once
 
 #include "eeimport.hxx"
 
@@ -35,7 +34,5 @@ public:
 
     static OUString     GetHTMLRangeNameList( const ScDocument& rDoc, const OUString& rOrigName );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

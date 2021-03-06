@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_CONDFORMATDLG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_CONDFORMATDLG_HXX
+#pragma once
 
 #include <rangelst.hxx>
 #include "condformatdlgitem.hxx"
@@ -126,7 +125,5 @@ public:
     DECL_LINK( BtnPressedHdl, weld::Button&, void );
     DECL_LINK( RangeGetFocusHdl, formula::RefEdit&, void );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

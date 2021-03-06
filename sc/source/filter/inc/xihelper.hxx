@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XIHELPER_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XIHELPER_HXX
+#pragma once
 
 #include <editeng/editdata.hxx>
 #include <types.hxx>
@@ -347,7 +346,5 @@ private:
     SCSIZE              mnScCols;       /// Number of cached columns.
     SCSIZE              mnScRows;       /// Number of cached rows.
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

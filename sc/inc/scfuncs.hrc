@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_INC_SCFUNCS_HRC
-#define INCLUDED_SC_INC_SCFUNCS_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -4149,7 +4148,5 @@ const char* SC_OPCODE_RANDBETWEEN_NV_ARY[] =
     NC_("SC_OPCODE_RANDBETWEEN_NV", "Top"),
     NC_("SC_OPCODE_RANDBETWEEN_NV", "The largest integer returned.")
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

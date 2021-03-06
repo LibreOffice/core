@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_STRINGUTIL_HXX
-#define INCLUDED_SC_INC_STRINGUTIL_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include "scdllapi.h"
@@ -159,7 +158,5 @@ public:
     static ScInputStringType parseInputString(
         SvNumberFormatter& rFormatter, const OUString& rStr, LanguageType eLang );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

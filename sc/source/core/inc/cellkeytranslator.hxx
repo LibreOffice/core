@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_CORE_INC_CELLKEYTRANSLATOR_HXX
-#define INCLUDED_SC_SOURCE_CORE_INC_CELLKEYTRANSLATOR_HXX
+#pragma once
 
 #include <formula/opcode.hxx>
 #include <unotools/transliterationwrapper.hxx>
@@ -80,7 +79,5 @@ private:
     ScCellKeywordHashMap maStringNameMap;
     ::utl::TransliterationWrapper maTransWrapper;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

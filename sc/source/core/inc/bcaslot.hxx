@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_CORE_INC_BCASLOT_HXX
-#define INCLUDED_SC_SOURCE_CORE_INC_BCASLOT_HXX
+#pragma once
 
 #include <memory>
 #include <map>
@@ -385,7 +384,5 @@ public:
             pBASM->LeaveBulkBroadcast( mnHintId );
     }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

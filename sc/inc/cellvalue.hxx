@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_CELLVALUE_HXX
-#define INCLUDED_SC_INC_CELLVALUE_HXX
+#pragma once
 
 #include "global.hxx"
 
@@ -178,7 +177,5 @@ struct SC_DLLPUBLIC ScRefCellValue
 
     bool equalsWithoutFormat( const ScRefCellValue& r ) const;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

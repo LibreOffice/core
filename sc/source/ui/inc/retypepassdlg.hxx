@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_RETYPEPASSDLG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_RETYPEPASSDLG_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 #include <tabprotection.hxx>
@@ -125,7 +124,5 @@ private:
     DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
     DECL_LINK(PasswordModifyHdl, weld::Entry&, void);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_DBDOCFUN_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_DBDOCFUN_HXX
+#pragma once
 
 #include <address.hxx>
 #include <vector>
@@ -98,7 +97,5 @@ public:
      */
     void RefreshPivotTableGroups(ScDPObject* pDPObj);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

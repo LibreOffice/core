@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_SCFOBJ_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_SCFOBJ_HXX
+#pragma once
 
 #include <types.hxx>
 
@@ -31,7 +30,5 @@ public:
     static void InsertChart( ScDocument* pDoc, SCTAB nDestTab, const tools::Rectangle& rRect,
                                 SCTAB nSrcTab, sal_uInt16 nX1, sal_uInt16 nY1, sal_uInt16 nX2, sal_uInt16 nY2 );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

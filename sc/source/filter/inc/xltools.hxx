@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLTOOLS_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XLTOOLS_HXX
+#pragma once
 
 #include <types.hxx>
 #include "ftools.hxx"
@@ -253,7 +252,5 @@ XclImpStream& operator>>( XclImpStream& rStrm, Color& rColor );
 /** Reads a color to the passed stream.
     @descr  The color has the format (all values 8-bit): Red, Green, Blue, 0. */
 XclExpStream& operator<<( XclExpStream& rStrm, const Color& rColor );
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

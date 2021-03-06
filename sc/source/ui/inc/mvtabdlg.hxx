@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_MVTABDLG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_MVTABDLG_HXX
+#pragma once
 
 #include <types.hxx>
 #include <vcl/weld.hxx>
@@ -80,7 +79,5 @@ private:
     DECL_LINK(CheckBtnHdl, weld::ToggleButton&, void);
     DECL_LINK(CheckNameHdl, weld::Entry&, void);
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_MVTABDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_UNITCONV_HXX
-#define INCLUDED_SC_INC_UNITCONV_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -54,7 +53,5 @@ public:
 
     bool GetValue(double& fValue, std::u16string_view rFromUnit, std::u16string_view rToUnit) const;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

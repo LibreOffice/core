@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_GRIDMERG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_GRIDMERG_HXX
+#pragma once
 
 #include <tools/long.hxx>
 #include <vcl/vclptr.hxx>
@@ -49,7 +48,5 @@ public:
     void        AddVerLine(bool bWorksInPixels, tools::Long nX, tools::Long nY1, tools::Long nY2, bool bDashed = false);
     void        Flush();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

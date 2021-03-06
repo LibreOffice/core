@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_CORE_INC_GROUPTOKENCONVERTER_HXX
-#define INCLUDED_SC_SOURCE_CORE_INC_GROUPTOKENCONVERTER_HXX
+#pragma once
 
 #include <types.hxx>
 #include <formulalogger.hxx>
@@ -35,7 +34,5 @@ public:
 
     bool convert( const ScTokenArray& rCode, sc::FormulaLogger::GroupScope& rScope );
 };
-
-#endif // INCLUDED_SC_SOURCE_CORE_INC_GROUPTOKENCONVERTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

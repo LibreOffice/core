@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_TABLEFILLINGANDNAVIGATIONTOOLS_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_TABLEFILLINGANDNAVIGATIONTOOLS_HXX
+#pragma once
 
 #include <address.hxx>
 #include <rangelst.hxx>
@@ -157,7 +156,5 @@ public:
     virtual void reset() override;
     virtual DataCellIterator iterateCells() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,8 +33,7 @@
     Make sure that either ColArr or RowArr contains a PivotDataField entry.
 */
 
-#ifndef INCLUDED_SC_INC_PIVOT_HXX
-#define INCLUDED_SC_INC_PIVOT_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <tools/long.hxx>
@@ -171,7 +170,5 @@ struct ScPivotFuncData
 };
 
 typedef std::vector<ScDPName> ScDPNameVec;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

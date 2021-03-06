@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_OLINEFUN_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_OLINEFUN_HXX
+#pragma once
 
 #include <types.hxx>
 
@@ -49,7 +48,5 @@ public:
     bool        HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
                                     bool bRecord, bool bPaint );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

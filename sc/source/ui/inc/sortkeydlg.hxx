@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_SORTKEYDLG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_SORTKEYDLG_HXX
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -48,7 +47,5 @@ public:
 
     void AddSortKey(sal_uInt16 nItem);
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_SORTKEYDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

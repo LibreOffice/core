@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_CHARTLIS_HXX
-#define INCLUDED_SC_INC_CHARTLIS_HXX
+#pragma once
 
 #include <vcl/idle.hxx>
 #include <svl/listener.hxx>
@@ -208,7 +207,5 @@ public:
      */
     void            EndListeningHiddenRange( ScChartHiddenRangeListener* pListener );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

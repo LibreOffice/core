@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_FORMULA_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_FORMULA_HXX
+#pragma once
 
 #include <memory>
 #include "anyrefdg.hxx"
@@ -101,7 +100,5 @@ private:
     static bool  IsInputHdl(const ScInputHandler* pHdl);
     static ScInputHandler* GetNextInputHandler(const ScDocShell* pDocShell, ScTabViewShell** ppViewSh);
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_FORMULA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

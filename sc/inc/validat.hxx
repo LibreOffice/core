@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_VALIDAT_HXX
-#define INCLUDED_SC_INC_VALIDAT_HXX
+#pragma once
 
 #include "conditio.hxx"
 #include "scdllapi.h"
@@ -232,7 +231,5 @@ public:
     void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
     void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

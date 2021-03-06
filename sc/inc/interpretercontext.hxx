@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_INTERPRETERCONTEXT_HXX
-#define INCLUDED_SC_INC_INTERPRETERCONTEXT_HXX
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -166,7 +165,5 @@ public:
     // Returns ScInterpreterContext* for non-threaded use.
     ScInterpreterContext* GetInterpreterContext() const;
 };
-
-#endif // INCLUDED_SC_INC_INTERPRETERCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

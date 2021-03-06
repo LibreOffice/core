@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_DPTABDAT_HXX
-#define INCLUDED_SC_INC_DPTABDAT_HXX
+#pragma once
 
 #include "dpfilteredcache.hxx"
 #include "calcmacros.hxx"
@@ -156,6 +155,5 @@ private:
     void            GetItemData(const ScDPFilteredCache& rCacheTable, sal_Int32 nRow,
                                           const ::std::vector<sal_Int32>& rDims, ::std::vector< SCROW >& rItemData);
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

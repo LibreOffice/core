@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_QUERYENTRY_HXX
-#define INCLUDED_SC_INC_QUERYENTRY_HXX
+#pragma once
 
 #include "global.hxx"
 #include <svl/sharedstring.hxx>
@@ -82,7 +81,5 @@ private:
      */
     mutable QueryItemsType maQueryItems;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

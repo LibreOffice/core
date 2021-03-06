@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_OPTAB_H
-#define INCLUDED_SC_SOURCE_FILTER_INC_OPTAB_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -45,7 +44,5 @@ typedef void (*OPCODE_FKT)(LotusContext& rContext, SvStream& rStream, sal_uInt16
 #define ROW_FORMAT_MARKER 0x106
 
 #define COL_FORMAT_MARKER 0x107
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_CONSDLG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_CONSDLG_HXX
+#pragma once
 
 #include <global.hxx>
 #include "anyrefdg.hxx"
@@ -96,7 +95,5 @@ private:
     static ScSubTotalFunc  LbPosToFunc( sal_Int32 nPos );
     static sal_Int32      FuncToLbPos( ScSubTotalFunc eFunc );
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_CONSDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

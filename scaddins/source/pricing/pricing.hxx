@@ -24,8 +24,7 @@
 // to avoid having to rename all classes to do with UNO
 // technicalities we use our own namespace
 
-#ifndef INCLUDED_SCADDINS_SOURCE_PRICING_PRICING_HXX
-#define INCLUDED_SCADDINS_SOURCE_PRICING_PRICING_HXX
+#pragma once
 
 
 #include <vector>
@@ -194,7 +193,5 @@ public:
 
 };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

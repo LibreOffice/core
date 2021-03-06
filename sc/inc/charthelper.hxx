@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_CHARTHELPER_HXX
-#define INCLUDED_SC_INC_CHARTHELPER_HXX
+#pragma once
 
 #include "rangelst.hxx"
 
@@ -51,7 +50,5 @@ public:
     static void CreateProtectedChartListenersAndNotify( ScDocument& rDoc, const SdrPage* pPage, ScModelObj* pModelObj, SCTAB nTab,
         const ScRangeListVector& rRangesVector, const ::std::vector< OUString >& rExcludedChartNames, bool bSameDoc = true );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

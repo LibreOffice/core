@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLESCHER_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XLESCHER_HXX
+#pragma once
 
 #include <tools/gen.hxx>
 #include <tools/mapunit.hxx>
@@ -431,7 +430,5 @@ public:
                             const css::script::ScriptEventDescriptor& rDescriptor,
                             XclTbxEventType eEventType );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

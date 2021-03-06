@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_EDITTEXTITERATOR_HXX
-#define INCLUDED_SC_INC_EDITTEXTITERATOR_HXX
+#pragma once
 
 #include "types.hxx"
 #include "mtvelements.hxx"
@@ -52,7 +51,5 @@ public:
     const EditTextObject* next();
 };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

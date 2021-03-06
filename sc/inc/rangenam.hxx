@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_RANGENAM_HXX
-#define INCLUDED_SC_INC_RANGENAM_HXX
+#pragma once
 
 #include "global.hxx"
 #include "address.hxx"
@@ -268,7 +267,5 @@ public:
     void clear();
     bool operator== (const ScRangeName& r) const;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

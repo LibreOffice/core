@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_CONDFORMATHELPER_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_CONDFORMATHELPER_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <address.hxx>
@@ -33,7 +32,5 @@ public:
     static SC_DLLPUBLIC OUString GetExpression( ScCondFormatEntryType eType, sal_Int32 nIndex,
             std::u16string_view aStr1 = std::u16string_view(), std::u16string_view aStr2 = std::u16string_view() );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

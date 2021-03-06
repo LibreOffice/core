@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_CLIPPARAM_HXX
-#define INCLUDED_SC_INC_CLIPPARAM_HXX
+#pragma once
 
 #include "rangelst.hxx"
 #include "charthelper.hxx"
@@ -65,7 +64,5 @@ struct SC_DLLPUBLIC ScClipParam
     sal_uInt32 getSourceDocID() const { return mnSourceDocID; }
     void setSourceDocID( sal_uInt32 nVal ) { mnSourceDocID = nVal; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAOLEOBJECTS_HXX
-#define INCLUDED_SC_SOURCE_UI_VBA_VBAOLEOBJECTS_HXX
+#pragma once
 
 #include <ooo/vba/excel/XOLEObjects.hpp>
 
@@ -44,6 +43,5 @@ public:
     // ScVbaCollectionBaseImpl
     virtual css::uno::Any createCollectionObject(const css::uno::Any& aSource) override;
 };
-#endif // INCLUDED_SC_SOURCE_UI_VBA_VBAOLEOBJECTS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

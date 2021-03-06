@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XIPIVOT_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XIPIVOT_HXX
+#pragma once
 
 #include "xlpivot.hxx"
 #include "xiroot.hxx"
@@ -424,7 +423,5 @@ private:
     std::vector< XclImpPivotCacheRef >  maPCaches; /// List of all pivot caches.
     std::vector< XclImpPivotTableRef >  maPTables; /// List of all pivot tables.
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

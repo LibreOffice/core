@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_BITMAPS_HRC
-#define INCLUDED_SC_INC_BITMAPS_HRC
+#pragma once
 
 #define RID_BMP_LEVEL1                          "sc/res/ou01.png"
 #define RID_BMP_LEVEL2                          "sc/res/ou02.png"
@@ -124,7 +123,5 @@
 #define RID_SVXBMP_SLIDERBUTTON                 "svx/res/slidezoombutton_10.png"
 #define RID_SVXBMP_SLIDERDECREASE               "svx/res/slidezoomout_10.png"
 #define RID_SVXBMP_SLIDERINCREASE               "svx/res/slidezoomin_10.png"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

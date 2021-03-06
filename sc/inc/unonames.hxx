@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_UNONAMES_HXX
-#define INCLUDED_SC_INC_UNONAMES_HXX
+#pragma once
 
 // service names
 #define SC_SERVICENAME_VALBIND          "com.sun.star.table.CellValueBinding"
@@ -699,7 +698,5 @@
 
 #define SC_UNO_ODS_LOCK_SOLAR_MUTEX "ODSLockSolarMutex"
 #define SC_UNO_ODS_IMPORT_STYLES    "ODSImportStyles"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

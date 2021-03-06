@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_DPGLOBAL_HXX
-#define INCLUDED_SC_INC_DPGLOBAL_HXX
+#pragma once
 
 #include <o3tl/typed_flags_set.hxx>
 
@@ -53,7 +52,5 @@ struct ScDPValue
 
     void Set( double fV, Type eT );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

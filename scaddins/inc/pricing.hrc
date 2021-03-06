@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SCADDINS_INC_PRICING_HRC
-#define INCLUDED_SCADDINS_INC_PRICING_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -118,7 +117,5 @@ const char* PRICING_FUNCDESC_OptProbInMoney[] =
     NC_("PRICING_FUNCDESC_OptProbInMoney", "Put/Call"),
     NC_("PRICING_FUNCDESC_OptProbInMoney", "Optional (p)ut/(c)all indicator")
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

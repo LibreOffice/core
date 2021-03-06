@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_CSVCONTROL_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_CSVCONTROL_HXX
+#pragma once
 
 #include <scdllapi.h>
 #include <address.hxx>
@@ -370,7 +369,5 @@ public:
         @param bHomeEnd  false = ignore HOME and END key. */
     static ScMoveMode           GetVertDirection( sal_uInt16 nCode, bool bHomeEnd );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

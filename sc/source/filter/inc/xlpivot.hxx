@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLPIVOT_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XLPIVOT_HXX
+#pragma once
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <tools/datetime.hxx>
@@ -771,7 +770,5 @@ struct XclPTAddl
 };
 
 XclImpStream& operator>>(XclImpStream& rStrm, XclPTAddl& rInfo);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
