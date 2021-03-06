@@ -30,32 +30,6 @@
 #include <outdev.h>
 #include <salgdi.hxx>
 
-OutDevState::OutDevState()
-    : mbMapActive(false)
-    , meTextAlign(ALIGN_TOP)
-    , meRasterOp(RasterOp::OverPaint)
-    , mnTextLayoutMode(ComplexTextLayoutFlags::Default)
-    , meTextLanguage(0)
-    , mnFlags(PushFlags::NONE)
-{
-}
-
-OutDevState::OutDevState(OutDevState&&) = default;
-
-OutDevState::~OutDevState()
-{
-    mpLineColor.reset();
-    mpFillColor.reset();
-    mpFont.reset();
-    mpTextColor.reset();
-    mpTextFillColor.reset();
-    mpTextLineColor.reset();
-    mpOverlineColor.reset();
-    mpMapMode.reset();
-    mpClipRegion.reset();
-    mpRefPoint.reset();
-}
-
 void OutputDevice::Push( PushFlags nFlags )
 {
 
