@@ -220,7 +220,7 @@ class ScriptForge(object, metaclass = _Singleton):
     @classmethod
     def InvokeBasicService(cls, basicobject, flags, method, *args):
         """
-            Execute a given Basic script and interprete its result
+            Execute a given Basic script and interpret its result
             This method has as counterpart the ScriptForge.SF_PythonHelper._PythonDispatcher() Basic method
             :param basicobject: a Service subclass
             :param flags: see the vb* and flg* constants below
@@ -237,7 +237,7 @@ class ScriptForge(object, metaclass = _Singleton):
                 [3]     The object's ObjectType
                 [4]     The object's ServiceName
                 [5]     The object's name
-                When an error occurs Python receives None as a scalar. This determines the occurence of a failure
+                When an error occurs Python receives None as a scalar. This determines the occurrence of a failure
                 The method returns either
                     - the 0th element of the tuple when scalar, tuple or UNO object
                     - a new Service() object or one of its subclasses otherwise
@@ -256,7 +256,7 @@ class ScriptForge(object, metaclass = _Singleton):
             args = (basicobject,) + (flags,) + (method,) + args
         returntuple = cls.InvokeSimpleScript(script, args)
         #
-        # Interprete the result
+        # Interpret the result
         # Did an error occur in the Basic world ?
         if not isinstance(returntuple, (tuple, list)):
             raise RuntimeError("The execution of the method '" + method + "' failed. Execution stops.")
@@ -355,7 +355,7 @@ class SFServices(object):
         """
             Trivial initialization of internal properties
             If the subclass has its own __init()__ method, a call to this one should be its first statement.
-            Afterwards localProperties should be filled with the list of its own propertties
+            Afterwards localProperties should be filled with the list of its own properties
             """
         self.objectreference = reference  # the index in the Python storage where the Basic object is stored
         self.objecttype = objtype  # ('SF_String', 'DICTIONARY', ...)
@@ -542,7 +542,7 @@ class SFScriptForge:
     # #########################################################################
     class SF_String(SFServices, metaclass = _Singleton):
         """
-            A collection of methods focussed on string manipulation, user input validation,
+            A collection of methods focused on string manipulation, user input validation,
             regular expressions, encodings, parsing and hashing algorithms.
             Many of them are less efficient than their Python equivalents.
             """
