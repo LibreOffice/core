@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_EXT_UCPEXT_CONTENT_HXX
-#define INCLUDED_UCB_SOURCE_UCP_EXT_UCPEXT_CONTENT_HXX
+#pragma once
 
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -131,7 +130,5 @@ namespace ucb::ucp::ext
 
 } // namespace ucb::ucp::ext
 
-
-#endif // INCLUDED_UCB_SOURCE_UCP_EXT_UCPEXT_CONTENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

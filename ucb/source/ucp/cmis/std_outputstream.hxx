@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_CMIS_STD_OUTPUTSTREAM_HXX
-#define INCLUDED_UCB_SOURCE_UCP_CMIS_STD_OUTPUTSTREAM_HXX
+#pragma once
 
 #include <boost/shared_ptr.hpp>
 #include <ostream>
@@ -50,7 +49,5 @@ namespace cmis
             boost::shared_ptr< std::ostream > m_pStream;
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

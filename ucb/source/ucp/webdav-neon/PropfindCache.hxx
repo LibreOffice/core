@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_PROPFINDCACHE_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_PROPFINDCACHE_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -74,7 +73,5 @@ namespace webdav_ucp
     };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

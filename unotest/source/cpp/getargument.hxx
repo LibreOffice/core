@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOTEST_SOURCE_CPP_GETARGUMENT_HXX
-#define INCLUDED_UNOTEST_SOURCE_CPP_GETARGUMENT_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -38,7 +37,5 @@ bool getArgument(
 }
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

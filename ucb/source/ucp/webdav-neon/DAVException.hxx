@@ -26,8 +26,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DAVEXCEPTION_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DAVEXCEPTION_HXX
+#pragma once
 
 #include <config_lgpl.h>
 #include <rtl/ustring.hxx>
@@ -171,7 +170,5 @@ class DAVException : public std::exception
 };
 
 } // namespace webdav_ucp
-
-#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_DAVEXCEPTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_WEBDAVCONTENT_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_WEBDAVCONTENT_HXX
+#pragma once
 
 #include <memory>
 #include <list>
@@ -263,7 +262,5 @@ public:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

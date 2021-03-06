@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVPROPERTIES_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVPROPERTIES_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -54,7 +53,5 @@ struct DAVProperties
 };
 
 } // namespace http_dav_ucp
-
-#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVPROPERTIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

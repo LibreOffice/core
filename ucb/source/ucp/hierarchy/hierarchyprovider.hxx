@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYPROVIDER_HXX
-#define INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYPROVIDER_HXX
+#pragma once
 
 #include <ucbhelper/providerhelper.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -110,7 +109,5 @@ public:
 };
 
 } // namespace hierarchy_ucp
-
-#endif // INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYPROVIDER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

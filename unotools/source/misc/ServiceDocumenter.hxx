@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_UNOTOOLS_INC_SERVICEDOCUMENTER_HXX
-#define INCLUDED_UNOTOOLS_INC_SERVICEDOCUMENTER_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/script/XServiceDocumenter.hpp>
@@ -54,5 +53,4 @@ class ServiceDocumenter : public ::cppu::WeakImplHelper<
 };
 
 }
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

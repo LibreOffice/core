@@ -22,8 +22,7 @@
  **************************************************************************
 
  *************************************************************************/
-#ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPDIRP_HXX
-#define INCLUDED_UCB_SOURCE_UCP_FTP_FTPDIRP_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/util/DateTime.hpp>
@@ -155,7 +154,5 @@ namespace ftp {
 
 }
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONCPP_HXX
-#define INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONCPP_HXX
+#pragma once
 
 #include <fstream>
 #include <string_view>
@@ -91,7 +90,5 @@ void generateXDispatchProvider(std::ostream& o,
                                const ProtocolCmdMap & protocolCmdMap);
 
 }
-
-#endif // INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONCPP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

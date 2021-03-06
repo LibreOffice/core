@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UCB_SOURCE_UCP_FILE_FILTASK_HXX
-#define INCLUDED_UCB_SOURCE_UCP_FILE_FILTASK_HXX
+#pragma once
 
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>
@@ -647,7 +646,5 @@ namespace fileaccess
     };
 
 } // end namespace TaskHandling
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

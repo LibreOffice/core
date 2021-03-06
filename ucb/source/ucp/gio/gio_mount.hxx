@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_GIO_GIO_MOUNT_HXX
-#define INCLUDED_UCB_SOURCE_UCP_GIO_GIO_MOUNT_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -85,6 +84,5 @@ GType            ooo_mount_operation_get_type();
 GMountOperation *ooo_mount_operation_new(ucb::ucp::gio::glib::MainContextRef && context, const css::uno::Reference< css::ucb::XCommandEnvironment >& rEnv);
 
 G_END_DECLS
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

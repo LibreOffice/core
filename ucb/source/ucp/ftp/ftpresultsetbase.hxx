@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPRESULTSETBASE_HXX
-#define INCLUDED_UCB_SOURCE_UCP_FTP_FTPRESULTSETBASE_HXX
+#pragma once
 
 #include <vector>
 #include <cppuhelper/weak.hxx>
@@ -407,7 +406,5 @@ namespace ftp {
 
 } // end namespace fileaccess
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

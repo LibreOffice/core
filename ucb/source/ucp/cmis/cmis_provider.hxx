@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_CMIS_CMIS_PROVIDER_HXX
-#define INCLUDED_UCB_SOURCE_UCP_CMIS_CMIS_PROVIDER_HXX
+#pragma once
 
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -53,7 +52,5 @@ public:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

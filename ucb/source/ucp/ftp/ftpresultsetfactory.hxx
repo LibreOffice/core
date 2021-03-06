@@ -22,8 +22,7 @@
  **************************************************************************
 
  *************************************************************************/
-#ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPRESULTSETFACTORY_HXX
-#define INCLUDED_UCB_SOURCE_UCP_FTP_FTPRESULTSETFACTORY_HXX
+#pragma once
 
 #include "ftpresultsetbase.hxx"
 #include "ftpdirp.hxx"
@@ -54,7 +53,5 @@ private:
 
 }
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

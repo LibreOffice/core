@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVREQUESTENVIRONMENT_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVREQUESTENVIRONMENT_HXX
+#pragma once
 
 #include <vector>
 #include <rtl/ref.hxx>
@@ -51,7 +50,5 @@ DAVRequestEnvironment( const OUString & rRequestURI,
 };
 
 } // namespace http_dav_ucp
-
-#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVREQUESTENVIRONMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

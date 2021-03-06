@@ -26,8 +26,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_WEBDAVPROVIDER_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_WEBDAVPROVIDER_HXX
+#pragma once
 
 #include <memory>
 #include <config_lgpl.h>
@@ -102,7 +101,5 @@ public:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

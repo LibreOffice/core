@@ -26,8 +26,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_LINKSEQUENCE_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_LINKSEQUENCE_HXX
+#pragma once
 
 #include <rtl/string.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -46,7 +45,5 @@ public:
 };
 
 }
-
-#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_LINKSEQUENCE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
