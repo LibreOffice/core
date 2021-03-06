@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_CONFIGURATION_CONFIGURATIONCLASSIFIER_HXX
-#define INCLUDED_SD_SOURCE_UI_FRAMEWORK_CONFIGURATION_CONFIGURATIONCLASSIFIER_HXX
+#pragma once
 
 #include "debugtrace.hxx"
 #include <com/sun/star/uno/Reference.hxx>
@@ -162,7 +161,5 @@ private:
 };
 
 } // end of namespace sd::framework
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

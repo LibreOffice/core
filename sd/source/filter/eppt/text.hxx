@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_FILTER_EPPT_TEXT_HXX
-#define INCLUDED_SD_SOURCE_FILTER_EPPT_TEXT_HXX
+#pragma once
 
 #include "epptbase.hxx"
 
@@ -251,7 +250,5 @@ public:
     int             GetInstance() const;
     bool            HasExtendedBullets() const;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

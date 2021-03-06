@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_WINDOW_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_WINDOW_HXX
+#pragma once
 
 #include <tools/gen.hxx>
 #include <tools/long.hxx>
@@ -210,7 +209,5 @@ protected:
 };
 
 } // end of namespace sd
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

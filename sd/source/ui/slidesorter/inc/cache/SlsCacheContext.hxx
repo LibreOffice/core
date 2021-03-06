@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CACHE_SLSCACHECONTEXT_HXX
-#define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CACHE_SLSCACHECONTEXT_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <com/sun/star/uno/Reference.hxx>
@@ -95,7 +94,5 @@ public:
 typedef std::shared_ptr<CacheContext> SharedCacheContext;
 
 } // end of namespace ::sd::slidesorter::cache
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

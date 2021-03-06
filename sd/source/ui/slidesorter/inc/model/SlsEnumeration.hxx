@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_MODEL_SLSENUMERATION_HXX
-#define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_MODEL_SLSENUMERATION_HXX
+#pragma once
 
 #include <memory>
 
@@ -41,7 +40,5 @@ public:
 };
 
 } // end of namespace ::sd::slidesorter::model
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

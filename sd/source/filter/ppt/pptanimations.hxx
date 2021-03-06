@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_FILTER_PPT_PPTANIMATIONS_HXX
-#define INCLUDED_SD_SOURCE_FILTER_PPT_PPTANIMATIONS_HXX
+#pragma once
 
 #include <com/sun/star/uno/Any.h>
 
@@ -206,7 +205,5 @@ public:
 };
 
 } // namespace ppt
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

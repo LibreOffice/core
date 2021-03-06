@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_FRAMEWORK_CONFIGURATION_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_FRAMEWORK_CONFIGURATION_HXX
+#pragma once
 
 #include <MutexOwner.hxx>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
@@ -180,7 +179,5 @@ bool AreConfigurationsEquivalent (
         const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration2);
 
 } // end of namespace sd::framework
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

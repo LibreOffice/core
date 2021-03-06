@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_CUSTOMANIMATIONEFFECT_HXX
-#define INCLUDED_SD_INC_CUSTOMANIMATIONEFFECT_HXX
+#pragma once
 
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/XTimeContainer.hpp>
@@ -451,7 +450,5 @@ private:
 };
 
 }
-
-#endif // INCLUDED_SD_INC_CUSTOMANIMATIONEFFECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

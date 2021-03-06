@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_SDGRFFILTER_HXX
-#define INCLUDED_SD_INC_SDGRFFILTER_HXX
+#pragma once
 
 #include "sdfilter.hxx"
 class ErrCode;
@@ -36,7 +35,5 @@ public:
 
     static void HandleGraphicFilterError(ErrCode nFilterError, ErrCode nStreamError);
 };
-
-#endif // INCLUDED_SD_INC_SDGRFFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

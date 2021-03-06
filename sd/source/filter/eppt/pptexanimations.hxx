@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_FILTER_EPPT_PPTEXANIMATIONS_HXX
-#define INCLUDED_SD_SOURCE_FILTER_EPPT_PPTEXANIMATIONS_HXX
+#pragma once
 
 #ifdef DBG_ANIM_LOG
 #include <stdio.h>
@@ -131,7 +130,5 @@ public:
     static css::uno::Reference< css::drawing::XShape > getTargetElementShape( const css::uno::Any& rAny, sal_Int32& rBegin, sal_Int32& rEnd, bool& rParagraphTarget );
 };
 } // namespace ppt
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

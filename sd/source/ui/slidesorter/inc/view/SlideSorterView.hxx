@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLIDESORTERVIEW_HXX
-#define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLIDESORTERVIEW_HXX
+#pragma once
 
 #include <model/SlsPageDescriptor.hxx>
 #include <model/SlsSharedPageDescriptor.hxx>
@@ -222,7 +221,5 @@ private:
 };
 
 } // end of namespace ::sd::slidesorter::view
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

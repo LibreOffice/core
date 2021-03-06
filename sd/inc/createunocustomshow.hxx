@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_CREATEUNOCUSTOMSHOW_HXX
-#define INCLUDED_SD_INC_CREATEUNOCUSTOMSHOW_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -27,7 +26,5 @@ class SdCustomShow;
 
 css::uno::Reference<css::uno::XInterface> createUnoCustomShow(
     SdCustomShow * pShow);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

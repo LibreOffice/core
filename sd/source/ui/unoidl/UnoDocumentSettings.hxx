@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_UNOIDL_UNODOCUMENTSETTINGS_HXX
-#define INCLUDED_SD_SOURCE_UI_UNOIDL_UNODOCUMENTSETTINGS_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -34,7 +33,5 @@ namespace sd
 css::uno::Reference<css::uno::XInterface>
 DocumentSettings_createInstance(SdXImpressDocument* pDoc) throw();
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

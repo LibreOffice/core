@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SD_INC_STRINGS_HXX
-#define INCLUDED_SD_INC_STRINGS_HXX
+#pragma once
 
 /* do not translate */
 #define STR_LAYOUT_TITLE                "Titel"
@@ -18,6 +17,5 @@
 #define STR_LAYOUT_NOTES                "Notizen"
 #define STR_LAYOUT_SUBTITLE             "Untertitel"
 #define STR_HTMLEXP_DEFAULT_EXTENSION   ".html"
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_ACCESSIBLEVIEWFORWARDER_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_ACCESSIBLEVIEWFORWARDER_HXX
+#pragma once
 
 #include <svx/IAccessibleViewForwarder.hxx>
 
@@ -89,7 +88,5 @@ private:
 };
 
 } // end of namespace accessibility
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

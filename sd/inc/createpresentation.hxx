@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_CREATEPRESENTATION_HXX
-#define INCLUDED_SD_INC_CREATEPRESENTATION_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -32,7 +31,5 @@ class SdDrawDocument;
 
 css::uno::Reference<css::presentation::XPresentation2>
 CreatePresentation(SdDrawDocument const& rDocument);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_SDDLL_HXX
-#define INCLUDED_SD_INC_SDDLL_HXX
+#pragma once
 
 #include "sddllapi.h"
 
@@ -51,7 +50,5 @@ public:
                     // DLL-init/exit-code must be linked to the DLL only
     static void     Init();     // called directly after loading the DLL
 };
-
-#endif // INCLUDED_SD_INC_SDDLL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

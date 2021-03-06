@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_TPACTION_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_TPACTION_HXX
+#pragma once
 
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <sfx2/tabdlg.hxx>
@@ -100,7 +99,5 @@ public:
 
     void    SetView( const ::sd::View* pSdView );
 };
-
-#endif // INCLUDED_SD_SOURCE_UI_INC_TPACTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

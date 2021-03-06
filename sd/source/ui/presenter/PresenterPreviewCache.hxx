@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_PRESENTER_PRESENTERPREVIEWCACHE_HXX
-#define INCLUDED_SD_SOURCE_UI_PRESENTER_PRESENTERPREVIEWCACHE_HXX
+#pragma once
 
 #include <com/sun/star/drawing/XSlidePreviewCache.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -96,7 +95,5 @@ private:
 };
 
 } // end of namespace ::sd::presenter
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

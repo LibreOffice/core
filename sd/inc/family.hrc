@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_FAMILY_HRC
-#define INCLUDED_SD_INC_FAMILY_HRC
+#pragma once
 
 #include <svl/style.hxx>
 
@@ -39,7 +38,5 @@ const std::pair<const char*, SfxStyleSearchBits> RID_PRESENTATIONSTYLEFAMILY[] =
     { NC_("RID_PRESENTATIONSTYLEFAMILY", "Hidden Styles") , SfxStyleSearchBits::Hidden },
     { nullptr, SfxStyleSearchBits::Auto }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

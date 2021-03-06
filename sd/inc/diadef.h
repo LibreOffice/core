@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_DIADEF_H
-#define INCLUDED_SD_INC_DIADEF_H
+#pragma once
 
 enum class PresChange
 {
@@ -27,7 +26,5 @@ enum class PresChange
     SemiAuto = 2,
     LAST = SemiAuto
 };
-
-#endif // INCLUDED_SD_INC_DIADEF_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

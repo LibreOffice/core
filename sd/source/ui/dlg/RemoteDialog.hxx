@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_SD_SOURCE_UI_DLG_REMOTEDIALOG_HXX
-#define INCLUDED_SD_SOURCE_UI_DLG_REMOTEDIALOG_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 
@@ -29,7 +28,5 @@ public:
     virtual ~RemoteDialog() override;
 };
 }
-
-#endif // INCLUDED_SD_SOURCE_UI_DLG_REMOTEDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

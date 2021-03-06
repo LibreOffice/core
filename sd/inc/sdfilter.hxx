@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_SDFILTER_HXX
-#define INCLUDED_SD_INC_SDFILTER_HXX
+#pragma once
 
 #include <osl/module.h>
 #include <rtl/ustring.hxx>
@@ -63,7 +62,5 @@ private:
     static OUString             ImplGetFullLibraryName( std::u16string_view rLibraryName );
 
 };
-
-#endif // INCLUDED_SD_INC_SDFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

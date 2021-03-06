@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_HELPIDS_H
-#define INCLUDED_SD_INC_HELPIDS_H
+#pragma once
 
 #define HID_SDDRAWVIEWSHELL                                     "SD_HID_SDDRAWVIEWSHELL"
 #define HID_SDGRAPHICVIEWSHELL                                  "SD_HID_SDGRAPHICVIEWSHELL"
@@ -57,7 +56,5 @@
 
 #define HID_SD_RULER_HORIZONTAL                                 "SD_HID_SD_RULER_HORIZONTAL"
 #define HID_SD_RULER_VERTICAL                                   "SD_HID_SD_RULER_VERTICAL"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

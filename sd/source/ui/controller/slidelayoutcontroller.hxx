@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_CONTROLLER_SLIDELAYOUTCONTROLLER_HXX
-#define INCLUDED_SD_SOURCE_UI_CONTROLLER_SLIDELAYOUTCONTROLLER_HXX
+#pragma once
 
 #include <svtools/popupwindowcontroller.hxx>
 
@@ -44,7 +43,5 @@ private:
     bool mbInsertPage;
 };
 }
-
-#endif // INCLUDED_SD_SOURCE_UI_CONTROLLER_SLIDELAYOUTCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

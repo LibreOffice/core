@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SD_INC_BITMAPS_HRC
-#define INCLUDED_SD_INC_BITMAPS_HRC
+#pragma once
 
 // preview bitmaps for layouts
 #define BMP_LAYOUT_EMPTY                                        "sd/res/layout_empty.png"
@@ -208,7 +207,5 @@
 #define BMP_MENU_PREV                                           "cmd/sc_prevrecord.png"
 #define BMP_MENU_FIRST                                          "cmd/sc_firstrecord.png"
 #define BMP_MENU_LAST                                           "cmd/sc_lastrecord.png"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

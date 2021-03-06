@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_REMOTECONTROL_OSXBLUETOOTHWRAPPER_HXX
-#define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_OSXBLUETOOTHWRAPPER_HXX
+#pragma once
 
 #include <rtl/string.hxx>
 #include <osl/conditn.hxx>
@@ -35,7 +34,5 @@ namespace sd
         void channelClosed();
     };
 }
-
-#endif // INCLUDED_SD_SOURCE_UI_REMOTECONTROL_OSXBLUETOOTHWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

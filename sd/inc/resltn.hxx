@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_RESLTN_HXX
-#define INCLUDED_SD_INC_RESLTN_HXX
+#pragma once
 
 enum PublishingFormat
 {
@@ -32,7 +31,5 @@ enum PublishingScript
     SCRIPT_ASP,
     SCRIPT_PERL
 };
-
-#endif // INCLUDED_SD_INC_RESLTN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

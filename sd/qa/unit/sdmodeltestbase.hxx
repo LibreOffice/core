@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SD_QA_UNIT_SDMODELTESTBASE_HXX
-#define INCLUDED_SD_QA_UNIT_SDMODELTESTBASE_HXX
+#pragma once
 
 #include <memory>
 #include <string_view>
@@ -502,7 +501,5 @@ template<> struct assertion_traits<tools::Rectangle>
 };
 
 CPPUNIT_NS_END
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
