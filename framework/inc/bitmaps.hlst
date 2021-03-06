@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_BITMAPS_HRC
-#define INCLUDED_FRAMEWORK_INC_BITMAPS_HRC
+#pragma once
 
 #define BMP_SAVEMODIFIED_SMALL      "res/savemodified_small.png"
 #define BMP_SAVEMODIFIED_LARGE      "res/savemodified_large.png"
@@ -34,7 +33,5 @@
 #define RID_SVXBMP_SCROLLBAR                        "res/sx10768.png"
 #define RID_SVXBMP_SPINBUTTON                       "res/sx10769.png"
 #define RID_SVXBMP_NAVIGATIONBAR                    "res/sx10607.png"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

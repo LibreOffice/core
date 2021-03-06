@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_GRAPHIC_GRAPHICEXPORTFILTER_HXX
-#define INCLUDED_FILTER_SOURCE_GRAPHIC_GRAPHICEXPORTFILTER_HXX
+#pragma once
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
@@ -76,7 +75,5 @@ public:
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any > & rArguments ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

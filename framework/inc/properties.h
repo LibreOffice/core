@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_PROPERTIES_H
-#define INCLUDED_FRAMEWORK_INC_PROPERTIES_H
+#pragma once
 
 #include <com/sun/star/uno/Any.hxx>
 
@@ -178,7 +177,5 @@ class PropHelper
 };
 
 } // namespace framework
-
-#endif // INCLUDED_FRAMEWORK_INC_PROPERTIES_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

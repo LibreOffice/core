@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FPICKER_SOURCE_WIN32_MISC_WINIMPLHELPER_HXX
-#define INCLUDED_FPICKER_SOURCE_WIN32_MISC_WINIMPLHELPER_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -46,7 +45,5 @@ OUString SOfficeToWindowsLabel(const OUString& aSOLabel);
 // '&&' -> '&'
 // '~'  -> '~~'
 OUString WindowsToSOfficeLabel(const OUString& aWinLabel);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

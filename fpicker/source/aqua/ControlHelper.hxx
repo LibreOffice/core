@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FPICKER_SOURCE_AQUA_CONTROLHELPER_HXX
-#define INCLUDED_FPICKER_SOURCE_AQUA_CONTROLHELPER_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -181,7 +180,5 @@ private:
 
     void         layoutControls();
 };
-
-#endif // INCLUDED_FPICKER_SOURCE_AQUA_CONTROLHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

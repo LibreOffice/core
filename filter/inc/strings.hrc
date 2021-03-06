@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_INC_STRINGS_HRC
-#define INCLUDED_FILTER_INC_STRINGS_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -73,7 +72,5 @@
 #define STR_WARN_TRANSP_CONVERTED_SHORT         NC_("STR_WARN_TRANSP_CONVERTED_SHORT", "Transparencies removed")
 #define STR_ERR_SIGNATURE_FAILED                NC_("STR_ERR_SIGNATURE_FAILED", "Signature generation failed")
 #define STR_ERR_PDF_EXPORT_ABORTED              NC_("STR_ERR_PDF_EXPORT_ABORTED", "PDF export aborted")
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

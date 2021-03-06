@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_SVG_SVGFONTEXPORT_HXX
-#define INCLUDED_FILTER_SOURCE_SVG_SVGFONTEXPORT_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -69,7 +68,5 @@ public:
     void                EmbedFonts();
     OUString            GetMappedFontName( const OUString& rFontName ) const;
 };
-
-#endif // INCLUDED_FILTER_SOURCE_SVG_SVGFONTEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

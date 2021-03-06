@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_VISTAFILEPICKEREVENTHANDLER_HXX
-#define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_VISTAFILEPICKEREVENTHANDLER_HXX
+#pragma once
 
 #include <shobjidl.h>
 
@@ -189,7 +188,5 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
 } // namespace vista
 } // namespace win32
 } // namespace fpicker
-
-#endif // INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_VISTAFILEPICKEREVENTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

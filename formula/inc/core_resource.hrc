@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMULA_INC_CORE_RESOURCE_HRC
-#define INCLUDED_FORMULA_INC_CORE_RESOURCE_HRC
+#pragma once
 
 #include <formula/compiler.hxx>
 #include <utility>
@@ -2745,7 +2744,5 @@ const std::pair<const char*, int> RID_STRLIST_FUNCTION_NAMES_SYMBOLS[] =
     { "-" , SC_OPCODE_NEG_SUB  },
     { nullptr, -1 }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

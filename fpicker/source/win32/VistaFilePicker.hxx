@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_VISTAFILEPICKER_HXX
-#define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_VISTAFILEPICKER_HXX
+#pragma once
 
 #include "asyncrequests.hxx"
 #include "VistaFilePickerImpl.hxx"
@@ -227,7 +226,5 @@ public:
 } // namespace vista
 } // namespace win32
 } // namespace fpicker
-
-#endif // INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_VISTAFILEPICKER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

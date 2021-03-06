@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_XML_ACCELERATORCONFIGURATIONWRITER_HXX
-#define INCLUDED_FRAMEWORK_INC_XML_ACCELERATORCONFIGURATIONWRITER_HXX
+#pragma once
 
 #include <accelerators/acceleratorcache.hxx>
 
@@ -75,7 +74,5 @@ class AcceleratorConfigurationWriter final
 };
 
 } // namespace framework
-
-#endif // INCLUDED_FRAMEWORK_INC_XML_ACCELERATORCONFIGURATIONWRITER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

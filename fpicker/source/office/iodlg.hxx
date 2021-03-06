@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FPICKER_SOURCE_OFFICE_IODLG_HXX
-#define INCLUDED_FPICKER_SOURCE_OFFICE_IODLG_HXX
+#pragma once
 
 #include <memory>
 #include <com/sun/star/beans/StringPair.hpp>
@@ -301,7 +300,5 @@ inline SvtFileView* SvtFileDialog::GetView()
 {
     return m_xFileView.get();
 }
-
-#endif // INCLUDED_FPICKER_SOURCE_OFFICE_IODLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_FONTMENUCONTROLLER_HXX
-#define INCLUDED_FRAMEWORK_INC_UIELEMENT_FONTMENUCONTROLLER_HXX
+#pragma once
 
 #include <com/sun/star/frame/XDispatch.hpp>
 
@@ -60,7 +59,5 @@ namespace framework
             css::uno::Reference< css::frame::XDispatch >    m_xFontListDispatch;
     };
 }
-
-#endif // INCLUDED_FRAMEWORK_INC_UIELEMENT_FONTMENUCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

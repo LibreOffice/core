@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CONSTANT_HXX
-#define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CONSTANT_HXX
+#pragma once
 
 /*  disable impl_loadOnDemand function of BaseContainer for certain
     functions, where it the feature "impl_loadItemOnDemand() of class FilterCache
@@ -149,7 +148,5 @@
 #define  QUERY_PARAM_MODULE                         "module"
 #define  QUERY_PARAM_DEFAULTFIRST                   "default_first"
 #define  QUERY_CONSTVALUE_ALL                       "all"
-
-#endif // INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CONSTANT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

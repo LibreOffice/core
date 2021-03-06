@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FILTER_SOURCE_MSFILTER_ESCHESDO_HXX
-#define INCLUDED_FILTER_SOURCE_MSFILTER_ESCHESDO_HXX
+#pragma once
 #include <filter/msfilter/escherex.hxx>
 #include <o3tl/any.hxx>
 #include <vcl/mapmod.hxx>
@@ -138,7 +137,5 @@ public:
     void                ImplExitPage();
 };
 
-
-#endif // INCLUDED_FILTER_SOURCE_MSFILTER_ESCHESDO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

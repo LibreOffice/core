@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FORMS_SOURCE_XFORMS_UNOHELPER_HXX
-#define INCLUDED_FORMS_SOURCE_XFORMS_UNOHELPER_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -38,7 +37,5 @@ namespace xforms
 void copy( const css::uno::Reference<css::beans::XPropertySet>& , css::uno::Reference<css::beans::XPropertySet> const & );
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
