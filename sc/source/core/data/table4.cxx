@@ -586,6 +586,13 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         rInc = nCmpInc;
                     }
                 }
+                else
+                {
+                    // tdf#89754 - don't increment non different consecutive date cells
+                    rCmd = FILL_DATE;
+                    rDateCmd = FILL_DAY;
+                    rInc = 0.0;
+                }
             }
             else                            // single date -> increment by days
             {
@@ -1750,6 +1757,7 @@ void ScTable::FillAutoSimple(
     bool bGetCell = true;
     bool bBooleanCell = false;
     bool bPercentCell = false;
+    bool bDateCell = false;
     sal_uInt16 nCellDigits = 0;
     short nHeadNoneTail = 0;
     sal_Int32 nStringValue = 0;
@@ -1785,6 +1793,7 @@ void ScTable::FillAutoSimple(
                                 aCol[rCol].GetNumberFormat( rDocument.GetNonThreadedContext(), nSource));
                     bBooleanCell = (nFormatType == SvNumFormatType::LOGICAL);
                     bPercentCell = (nFormatType == SvNumFormatType::PERCENT);
+                    bDateCell = (nFormatType == SvNumFormatType::DATE);
 
                 }
                 else                // rInner&:=nCol, rOuter&:=nRow
@@ -1794,6 +1803,7 @@ void ScTable::FillAutoSimple(
                                 aCol[nSource].GetNumberFormat( rDocument.GetNonThreadedContext(), rRow));
                     bBooleanCell = (nFormatType == SvNumFormatType::LOGICAL);
                     bPercentCell = (nFormatType == SvNumFormatType::PERCENT);
+                    bDateCell = (nFormatType == SvNumFormatType::DATE);
                 }
 
                 bGetCell = false;
@@ -1834,6 +1844,9 @@ void ScTable::FillAutoSimple(
                             aCol[rCol].SetValue(rRow, aSrcCell.mfValue);
                         else if(bPercentCell)
                             aCol[rCol].SetValue(rRow, aSrcCell.mfValue + nDelta * 0.01); // tdf#89998 increment by 1% at a time
+                        else if(bDateCell)
+                            // tdf#89754 - don't increment non different consecutive date cells
+                            aCol[rCol].SetValue(rRow, aSrcCell.mfValue);
                         else
                             aCol[rCol].SetValue(rRow, aSrcCell.mfValue + nDelta);
                     }
