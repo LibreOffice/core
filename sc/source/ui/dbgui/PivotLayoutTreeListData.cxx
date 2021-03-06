@@ -92,23 +92,24 @@ IMPL_LINK_NOARG(ScPivotLayoutTreeListData, DoubleClickHdl, weld::TreeView&, bool
 
     mpFunctionDlg = pFactory->CreateScDPFunctionDlg(mxControl.get(), mpParent->GetLabelDataVector(), rCurrentLabelData, rCurrentFunctionData);
 
-    mpFunctionDlg->StartExecuteAsync([this, pCurrentItemValue, rCurrentFunctionData,
+    mpFunctionDlg->StartExecuteAsync([this, pCurrentItemValue,
                                 rCurrentLabelData, nEntry](int nResult) mutable {
         if (nResult == RET_OK)
         {
-            rCurrentFunctionData.mnFuncMask = mpFunctionDlg->GetFuncMask();
+            ScPivotFuncData& rFunctionData = pCurrentItemValue->maFunctionData;
+            rFunctionData.mnFuncMask = mpFunctionDlg->GetFuncMask();
             rCurrentLabelData.mnFuncMask = mpFunctionDlg->GetFuncMask();
 
-            rCurrentFunctionData.maFieldRef = mpFunctionDlg->GetFieldRef();
+            rFunctionData.maFieldRef = mpFunctionDlg->GetFieldRef();
 
-            ScDPLabelData& rDFData = mpParent->GetLabelData(rCurrentFunctionData.mnCol);
+            ScDPLabelData& rDFData = mpParent->GetLabelData(rFunctionData.mnCol);
 
             AdjustDuplicateCount(pCurrentItemValue);
 
             OUString sDataItemName = lclCreateDataItemName(
-                                        rCurrentFunctionData.mnFuncMask,
+                                        rFunctionData.mnFuncMask,
                                         rDFData.maName,
-                                        rCurrentFunctionData.mnDupCount);
+                                        rFunctionData.mnDupCount);
 
             mxControl->set_text(nEntry, sDataItemName);
         }
