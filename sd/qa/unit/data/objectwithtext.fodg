@@ -159,11 +159,6 @@
       <loext:p text:style-name="P1">foobar</loext:p>
       <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
        <semantics>
-        <mrow>
-         <mn>1</mn>
-         <mo stretchy="false">+</mo>
-         <mn>1</mn>
-        </mrow>
         <annotation encoding="StarMath 5.0">1+1</annotation>
        </semantics>
       </math>
