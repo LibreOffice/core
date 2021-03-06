@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_FORMULA_INC_BITMAPS_HRC
-#define INCLUDED_FORMULA_INC_BITMAPS_HRC
+#pragma once
 
 #define BMP_STR_CLOSE   "formula/res/fapclose.png"
 #define BMP_STR_OPEN    "formula/res/fapopen.png"
@@ -17,7 +16,5 @@
 #define RID_BMP_REFBTN1 "formula/res/refinp1.png"
 #define RID_BMP_REFBTN2 "formula/res/refinp2.png"
 #define BMP_FX          "formula/res/fx.png"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

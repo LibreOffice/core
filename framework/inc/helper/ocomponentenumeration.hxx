@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_HELPER_OCOMPONENTENUMERATION_HXX
-#define INCLUDED_FRAMEWORK_INC_HELPER_OCOMPONENTENUMERATION_HXX
+#pragma once
 
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -157,7 +156,5 @@ class OComponentEnumeration final : public ::cppu::WeakImplHelper< css::containe
 };      //  class OComponentEnumeration
 
 }       //  namespace framework
-
-#endif // INCLUDED_FRAMEWORK_INC_HELPER_OCOMPONENTENUMERATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

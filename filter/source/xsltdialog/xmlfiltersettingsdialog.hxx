@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERSETTINGSDIALOG_HXX
-#define INCLUDED_FILTER_SOURCE_XSLTDIALOG_XMLFILTERSETTINGSDIALOG_HXX
+#pragma once
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -94,7 +93,5 @@ private:
     std::unique_ptr<weld::Button> m_xPBClose;
     std::unique_ptr<weld::TreeView> m_xFilterListBox;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

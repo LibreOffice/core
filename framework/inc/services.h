@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_SERVICES_H
-#define INCLUDED_FRAMEWORK_INC_SERVICES_H
+#pragma once
 
 namespace framework{
 
@@ -37,7 +36,5 @@ namespace framework{
 #define IMPLEMENTATIONNAME_FWK_TASKCREATOR                      "com.sun.star.comp.framework.TaskCreator"
 
 }       //  namespace framework
-
-#endif // INCLUDED_FRAMEWORK_INC_SERVICES_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

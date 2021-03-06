@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_CLASSES_ACTIONTRIGGERCONTAINER_HXX
-#define INCLUDED_FRAMEWORK_INC_CLASSES_ACTIONTRIGGERCONTAINER_HXX
+#pragma once
 
 #include <helper/propertysetcontainer.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -61,7 +60,5 @@ class ActionTriggerContainer final : public PropertySetContainer,
 };
 
 }
-
-#endif // INCLUDED_FRAMEWORK_INC_CLASSES_ACTIONTRIGGERCONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

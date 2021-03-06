@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVTOOLS_BREADCRUMB_HXX
-#define INCLUDED_SVTOOLS_BREADCRUMB_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 #include <map>
@@ -67,7 +66,5 @@ public:
     void SetURL(const OUString& rURL);
     void SetMode(SvtBreadcrumbMode eMode);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

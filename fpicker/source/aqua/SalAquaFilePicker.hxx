@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FPICKER_SOURCE_AQUA_SALAQUAFILEPICKER_HXX
-#define INCLUDED_FPICKER_SOURCE_AQUA_SALAQUAFILEPICKER_HXX
+#pragma once
 
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -157,7 +156,5 @@ public:
 
     void filterControlChanged();
 };
-
-#endif // INCLUDED_FPICKER_SOURCE_AQUA_SALAQUAFILEPICKER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

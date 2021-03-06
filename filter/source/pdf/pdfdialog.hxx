@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_PDF_PDFDIALOG_HXX
-#define INCLUDED_FILTER_SOURCE_PDF_PDFDIALOG_HXX
+#pragma once
 
 #include <svtools/genericunodialog.hxx>
 
@@ -71,7 +70,5 @@ public:
     explicit    PDFDialog( const Reference< XComponentContext >& rxContext );
     virtual     ~PDFDialog() override;
 };
-
-#endif // INCLUDED_FILTER_SOURCE_PDF_PDFDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

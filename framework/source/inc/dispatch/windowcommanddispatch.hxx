@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_SOURCE_INC_DISPATCH_WINDOWCOMMANDDISPATCH_HXX
-#define INCLUDED_FRAMEWORK_SOURCE_INC_DISPATCH_WINDOWCOMMANDDISPATCH_HXX
+#pragma once
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -105,7 +104,5 @@ class WindowCommandDispatch final
 }; // class WindowCommandDispatch
 
 } // namespace framework
-
-#endif // INCLUDED_FRAMEWORK_SOURCE_INC_DISPATCH_WINDOWCOMMANDDISPATCH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

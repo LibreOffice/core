@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SUBMISSION_HXX
-#define INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SUBMISSION_HXX
+#pragma once
 
 #include <tools/urlobj.hxx>
 #include <osl/conditn.hxx>
@@ -134,7 +133,5 @@ public:
     SubmissionResult replace(const OUString&, const css::uno::Reference< css::xml::dom::XDocument >&, const css::uno::Reference< css::frame::XFrame>&);
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

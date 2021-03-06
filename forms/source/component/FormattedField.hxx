@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMS_SOURCE_COMPONENT_FORMATTEDFIELD_HXX
-#define INCLUDED_FORMS_SOURCE_COMPONENT_FORMATTEDFIELD_HXX
+#pragma once
 
 #include "EditBase.hxx"
 #include <tools/link.hxx>
@@ -172,6 +171,5 @@ class OFormattedModel final
         DECL_LINK( OnKeyPressed, void*, void );
     };
 }
-#endif // INCLUDED_FORMS_SOURCE_COMPONENT_FORMATTEDFIELD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

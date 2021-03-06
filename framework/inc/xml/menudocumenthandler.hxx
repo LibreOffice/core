@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_XML_MENUDOCUMENTHANDLER_HXX
-#define INCLUDED_FRAMEWORK_INC_XML_MENUDOCUMENTHANDLER_HXX
+#pragma once
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -219,7 +218,5 @@ class OWriteMenuDocumentHandler final
 };
 
 } // namespace framework
-
-#endif // INCLUDED_FRAMEWORK_INC_XML_MENUDOCUMENTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

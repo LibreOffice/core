@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_PLATFORM_VISTA_H
-#define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_PLATFORM_VISTA_H
+#pragma once
 
 #undef _WTL_NO_CSTRING
 
@@ -39,8 +38,6 @@
 #else
   #pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #endif
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

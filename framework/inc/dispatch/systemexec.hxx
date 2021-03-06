@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_DISPATCH_SYSTEMEXEC_HXX
-#define INCLUDED_FRAMEWORK_INC_DISPATCH_SYSTEMEXEC_HXX
+#pragma once
 
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -96,7 +95,5 @@ class SystemExec final :  public  ::cppu::WeakImplHelper<
 };      //  class SystemExec
 
 }       //  namespace framework
-
-#endif // INCLUDED_FRAMEWORK_INC_DISPATCH_SYSTEMEXEC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_ACCELERATORCONST_H
-#define INCLUDED_FRAMEWORK_INC_ACCELERATORCONST_H
+#pragma once
 
 namespace framework{
 
@@ -29,7 +28,5 @@ namespace framework{
 #define AL_ELEMENT_ITEM                 "accel:item"
 
 } // namespace framework
-
-#endif // INCLUDED_FRAMEWORK_INC_ACCELERATORCONST_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

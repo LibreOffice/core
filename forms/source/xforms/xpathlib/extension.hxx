@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMS_SOURCE_XFORMS_XPATHLIB_EXTENSION_HXX
-#define INCLUDED_FORMS_SOURCE_XFORMS_XPATHLIB_EXTENSION_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -49,7 +48,5 @@ public:
     virtual css::xml::xpath::Libxml2ExtensionHandle SAL_CALL getLibxml2ExtensionHandle() override;
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& aSequence) override;
 };
-
-#endif // INCLUDED_FORMS_SOURCE_XFORMS_XPATHLIB_EXTENSION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
