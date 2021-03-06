@@ -18,8 +18,7 @@
  */
 // Basic.h : Declaration of the CBasic
 
-#ifndef INCLUDED_EXTENSIONS_TEST_OLE_AXTESTCOMPONENTS_FOO_H
-#define INCLUDED_EXTENSIONS_TEST_OLE_AXTESTCOMPONENTS_FOO_H
+#pragma once
 
 #include "resource.h"
 #import  "AxTestComponents.tlb" no_namespace no_implementation raw_interfaces_only named_guids
@@ -51,7 +50,5 @@ STDMETHOD(Foo)(IUnknown* val);
     // IFoo Methods
 public:
 };
-
-#endif //__BASIC_H_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

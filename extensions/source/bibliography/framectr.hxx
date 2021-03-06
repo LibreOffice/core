@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_FRAMECTR_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_FRAMECTR_HXX
+#pragma once
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -114,7 +113,5 @@ public:
     virtual css::uno::Sequence< ::sal_Int16 > SAL_CALL getSupportedCommandGroups(  ) override;
     virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( ::sal_Int16 CommandGroup ) override;
  };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

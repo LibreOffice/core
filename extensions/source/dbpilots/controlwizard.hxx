@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_CONTROLWIZARD_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_CONTROLWIZARD_HXX
+#pragma once
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
@@ -146,7 +145,5 @@ namespace dbp
 
 }   // namespace dbp
 
-
-#endif // INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_CONTROLWIZARD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

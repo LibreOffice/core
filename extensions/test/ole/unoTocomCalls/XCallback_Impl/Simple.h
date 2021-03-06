@@ -18,8 +18,7 @@
  */
 // Simple.h : Declaration of the CSimple
 
-#ifndef INCLUDED_EXTENSIONS_TEST_OLE_UNOTOCOMCALLS_XCALLBACK_IMPL_SIMPLE_H
-#define INCLUDED_EXTENSIONS_TEST_OLE_UNOTOCOMCALLS_XCALLBACK_IMPL_SIMPLE_H
+#pragma once
 
 #include "resource.h"
 
@@ -52,7 +51,5 @@ public:
     STDMETHOD(func2)(/*[in]*/ BSTR message);
     STDMETHOD(func)( BSTR message);
 };
-
-#endif // INCLUDED_EXTENSIONS_TEST_OLE_UNOTOCOMCALLS_XCALLBACK_IMPL_SIMPLE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

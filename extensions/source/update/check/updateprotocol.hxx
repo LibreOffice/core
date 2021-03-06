@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEPROTOCOL_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEPROTOCOL_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -65,7 +64,5 @@ bool storeExtensionUpdateInfos(
     const css::uno::Reference< css::uno::XComponentContext >& rxContext,
     const css::uno::Sequence< css::uno::Sequence< OUString > > &rUpdateInfos
 );
-
-#endif // INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEPROTOCOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

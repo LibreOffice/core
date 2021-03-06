@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBCONFIG_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBCONFIG_HXX
+#pragma once
 
 #include <unotools/configitem.hxx>
 #include <tools/long.hxx>
@@ -149,6 +148,5 @@ public:
     const css::uno::Sequence<OUString>& GetDataSourceNames();
 
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

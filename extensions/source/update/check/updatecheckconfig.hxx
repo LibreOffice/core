@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECKCONFIG_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECKCONFIG_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -204,7 +203,5 @@ T getValue( const css::uno::Sequence< css::beans::NamedValue >& rNamedValues, co
 
     return T();
 }
-
-#endif // INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECKCONFIG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

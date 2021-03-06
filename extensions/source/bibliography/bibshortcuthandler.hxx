@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBSHORTCUTHANDLER_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBSHORTCUTHANDLER_HXX
+#pragma once
 
 #include <vcl/window.hxx>
 #include <vcl/splitwin.hxx>
@@ -63,7 +62,5 @@ class BibSplitWindow : public SplitWindow, public BibShortCutHandler
 public:
                             BibSplitWindow( vcl::Window* pParent, WinBits nStyle);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
