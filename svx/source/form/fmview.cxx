@@ -76,9 +76,9 @@ void FmFormView::Init()
     SdrModel* pModel = GetModel();
 
     DBG_ASSERT( dynamic_cast<const FmFormModel*>( pModel) !=  nullptr, "Wrong model" );
-    if( dynamic_cast<const FmFormModel*>( pModel) ==  nullptr ) return;
-    FmFormModel* pFormModel = static_cast<FmFormModel*>(pModel);
-
+    FmFormModel* pFormModel = dynamic_cast<FmFormModel*>(pModel);
+    if( !pFormModel )
+        return;
 
     // get DesignMode from model
     bool bInitDesignMode = pFormModel->GetOpenInDesignMode();

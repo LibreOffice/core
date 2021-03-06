@@ -754,9 +754,8 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
             if ( !pContact )
             {
 #if OSL_DEBUG_LEVEL > 0
-                bool bNoUserCallExcepted =
-                        dynamic_cast<const SwDrawVirtObj*>( pObj) !=  nullptr &&
-                        !static_cast<SwDrawVirtObj*>(pObj)->IsConnected();
+                auto pSwDrawVirtObj = dynamic_cast<SwDrawVirtObj*>( pObj);
+                bool bNoUserCallExcepted = pSwDrawVirtObj && !pSwDrawVirtObj->IsConnected();
                 OSL_ENSURE( bNoUserCallExcepted, "SwDoc::ChgAnchor(..) - no contact at selected drawing object" );
 #endif
                 continue;
@@ -943,8 +942,8 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 {
                     // #i33313# - consider not connected 'virtual' drawing
                     // objects
-                    if ( dynamic_cast<const SwDrawVirtObj*>( pObj) !=  nullptr &&
-                         !static_cast<SwDrawVirtObj*>(pObj)->IsConnected() )
+                    auto pSwDrawVirtObj = dynamic_cast<SwDrawVirtObj*>( pObj);
+                    if ( pSwDrawVirtObj && !pSwDrawVirtObj->IsConnected() )
                     {
                         SwRect aNewObjRect( aObjRect );
                         static_cast<SwAnchoredDrawObject*>(pContact->GetAnchoredObj( nullptr ))

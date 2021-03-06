@@ -107,18 +107,18 @@ bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwContentFrame *p
 
     for ( size_t i = 0; i < rObjs.size() && !aTmp.empty(); ++i )
     {
-        SdrObject *pO = rObjs[i]->DrawObj();
-        if ( dynamic_cast< const SwVirtFlyDrawObj *>( pO ) ==  nullptr )
+        SwVirtFlyDrawObj *pVirtFly = dynamic_cast<SwVirtFlyDrawObj*>(rObjs[i]->DrawObj());
+        if ( !pVirtFly )
             continue;
 
         // do not consider invisible objects
         const IDocumentDrawModelAccess& rIDDMA = pPage->GetFormat()->getIDocumentDrawModelAccess();
-        if ( !rIDDMA.IsVisibleLayerId( pO->GetLayer() ) )
+        if ( !rIDDMA.IsVisibleLayerId( pVirtFly->GetLayer() ) )
         {
             continue;
         }
 
-        SwFlyFrame *pFly = static_cast<SwVirtFlyDrawObj*>(pO)->GetFlyFrame();
+        SwFlyFrame *pFly = pVirtFly->GetFlyFrame();
 
         if ( pFly == pSelfFly || !rRect.IsOver( pFly->getFrameArea() ) )
             continue;
@@ -132,9 +132,9 @@ bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwContentFrame *p
         if ( pSelfFly )
         {
             const SdrObject *pTmp = pSelfFly->GetVirtDrawObj();
-            if ( pO->GetLayer() == pTmp->GetLayer() )
+            if ( pVirtFly->GetLayer() == pTmp->GetLayer() )
             {
-                if ( pO->GetOrdNumDirect() < pTmp->GetOrdNumDirect() )
+                if ( pVirtFly->GetOrdNumDirect() < pTmp->GetOrdNumDirect() )
                     // Only look at things above us, if inside the same layer
                     continue;
             }

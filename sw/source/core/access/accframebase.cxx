@@ -257,8 +257,7 @@ SwPaM* SwAccessibleFrameBase::GetCursor()
     SwCursorShell* pCursorShell = GetCursorShell();
     if( pCursorShell != nullptr && !pCursorShell->IsTableMode() )
     {
-        SwFEShell *pFESh = dynamic_cast<const SwFEShell*>( pCursorShell) !=  nullptr
-                            ? static_cast< SwFEShell * >( pCursorShell ) : nullptr;
+        SwFEShell *pFESh = dynamic_cast<SwFEShell*>( pCursorShell);
         if( !pFESh ||
             !(pFESh->IsFrameSelected() || pFESh->IsObjSelected() > 0) )
         {

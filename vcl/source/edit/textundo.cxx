@@ -273,10 +273,9 @@ void TextUndoInsertChars::Redo()
 
 bool TextUndoInsertChars::Merge( SfxUndoAction* pNextAction )
 {
-    if ( nullptr == dynamic_cast< const TextUndoInsertChars*>( pNextAction ) )
-        return false;
-
     TextUndoInsertChars* pNext = static_cast<TextUndoInsertChars*>(pNextAction);
+    if ( !pNext )
+        return false;
 
     if ( maTextPaM.GetPara() != pNext->maTextPaM.GetPara() )
         return false;

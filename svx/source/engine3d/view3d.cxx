@@ -662,7 +662,8 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj)
 
 void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
 {
-    if(dynamic_cast<const SdrPathObj*>( pObj) ==  nullptr)
+    auto pPathObj = dynamic_cast<const SdrPathObj*>( pObj);
+    if(!pPathObj)
         return;
 
     const SfxItemSet& rSet = pObj->GetMergedItemSet();
@@ -670,7 +671,7 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
     drawing::LineStyle eLineStyle = rSet.Get(XATTR_LINESTYLE).GetValue();
     drawing::FillStyle eFillStyle = rSet.Get(XATTR_FILLSTYLE).GetValue();
 
-    if(static_cast<SdrPathObj*>(pObj)->IsClosed()
+    if(pPathObj->IsClosed()
         && eLineStyle == drawing::LineStyle_SOLID
         && !nLineWidth
         && eFillStyle != drawing::FillStyle_NONE)

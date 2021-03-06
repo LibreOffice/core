@@ -701,9 +701,10 @@ SwFlyNotify::~SwFlyNotify()
     // OD 2004-05-13 #i28701#
     // #i45180# - no adjustment of layout process flags and
     // further notifications/invalidations, if format is called by grow/shrink
-    if ( !(pFly->ConsiderObjWrapInfluenceOnObjPos() &&
-         ( dynamic_cast<const SwFlyFreeFrame*>( pFly) ==  nullptr ||
-           !static_cast<SwFlyFreeFrame*>(pFly)->IsNoMoveOnCheckClip() )) )
+    if ( !pFly->ConsiderObjWrapInfluenceOnObjPos() )
+        return;
+    auto pFlyFreeFrame = dynamic_cast<SwFlyFreeFrame*>(pFly);
+    if (pFlyFreeFrame && pFlyFreeFrame->IsNoMoveOnCheckClip())
         return;
 
     // #i54138# - suppress restart of the layout process

@@ -844,14 +844,14 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
             else if( rSettings.mbScrollText )
             {
                 SdrObject* pObj = aShapes.front();
-                if( dynamic_cast<const SdrTextObj*>( pObj)
-                    && static_cast<SdrTextObj*>(pObj)->HasText() )
+                auto pTextObj = dynamic_cast<SdrTextObj*>( pObj);
+                if( pTextObj && pTextObj->HasText() )
                 {
                     tools::Rectangle aScrollRectangle;
                     tools::Rectangle aPaintRectangle;
 
                     const std::unique_ptr< GDIMetaFile > pMtf(
-                        static_cast<SdrTextObj*>(pObj)->GetTextScrollMetaFileAndRectangle(
+                        pTextObj->GetTextScrollMetaFileAndRectangle(
                            aScrollRectangle, aPaintRectangle ) );
 
                     // take the larger one of the two rectangles (that

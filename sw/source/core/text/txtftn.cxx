@@ -240,8 +240,9 @@ static SwTwips lcl_GetFootnoteLower( const SwTextFrame* pFrame, SwTwips nLower )
             {
                 SwRect aRect( pAnchoredObj->GetObjRect() );
 
-                if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) ==  nullptr ||
-                     static_cast<SwFlyFrame*>(pAnchoredObj)->isFrameAreaDefinitionValid() )
+                auto pFlyFrame = dynamic_cast<SwFlyFrame*>( pAnchoredObj );
+                if ( !pFlyFrame ||
+                     pFlyFrame->isFrameAreaDefinitionValid() )
                 {
                     const SwTwips nBottom = aRectFnSet.GetBottom(aRect);
                     if ( aRectFnSet.YDiff( nBottom, nFlyLower ) > 0 )
