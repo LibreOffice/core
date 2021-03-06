@@ -455,7 +455,8 @@ void SmXMLExport::ExportContent_()
             new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_SEMANTICS, true, true));
     }
 
-    ExportNodes(pTree, 0);
+    if (!m_bExportODF)
+        ExportNodes(pTree, 0);
 
     if (aText.isEmpty())
         return;

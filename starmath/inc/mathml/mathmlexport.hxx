@@ -66,6 +66,9 @@ public:
         m_bUseHTMLMLEntities = bUseHTMLMLEntities;
     }
 
+    bool IsExportODF() const { return m_bExportODF; }
+    void SetExportODF(bool bExportODF) { m_bExportODF = bExportODF; }
+
     bool WriteThroughComponent(const css::uno::Reference<css::io::XOutputStream>& xOutputStream,
                                const css::uno::Reference<css::lang::XComponent>& xComponent,
                                css::uno::Reference<css::uno::XComponentContext> const& rxContext,
