@@ -80,6 +80,18 @@ bool StaticDynamic::TraverseCompoundStmt(CompoundStmt* compoundStmt)
     return ret;
 }
 
+const clang::Type* strip(QualType qt)
+{
+    const clang::Type* varType = qt->getUnqualifiedDesugaredType();
+    if (varType->isPointerType())
+        varType = varType->getPointeeType()->getUnqualifiedDesugaredType();
+    if (varType->isReferenceType())
+        varType = varType->getAs<clang::ReferenceType>()
+                      ->getPointeeType()
+                      ->getUnqualifiedDesugaredType();
+    return varType;
+}
+
 bool StaticDynamic::VisitCXXStaticCastExpr(CXXStaticCastExpr const* staticCastExpr)
 {
     if (ignoreLocation(staticCastExpr))
@@ -90,8 +102,8 @@ bool StaticDynamic::VisitCXXStaticCastExpr(CXXStaticCastExpr const* staticCastEx
     auto varDecl = dyn_cast_or_null<VarDecl>(subExprDecl->getDecl());
     if (!varDecl)
         return true;
-    auto it = blockState.dynamicCastVars.find(
-        { varDecl, staticCastExpr->getTypeAsWritten().getTypePtr() });
+    auto varType = strip(staticCastExpr->getType());
+    auto it = blockState.dynamicCastVars.find({ varDecl, varType });
     if (it != blockState.dynamicCastVars.end())
     {
         StringRef fn = getFilenameOfLocation(
@@ -110,8 +122,7 @@ bool StaticDynamic::VisitCXXStaticCastExpr(CXXStaticCastExpr const* staticCastEx
         report(DiagnosticsEngine::Note, "dynamic_cast here", it->second);
         return true;
     }
-    blockState.staticCastVars.insert({ { varDecl, staticCastExpr->getTypeAsWritten().getTypePtr() },
-                                       compat::getBeginLoc(staticCastExpr) });
+    blockState.staticCastVars.insert({ { varDecl, varType }, compat::getBeginLoc(staticCastExpr) });
     return true;
 }
 
@@ -126,8 +137,8 @@ bool StaticDynamic::VisitCXXDynamicCastExpr(CXXDynamicCastExpr const* dynamicCas
     auto varDecl = dyn_cast_or_null<VarDecl>(subExprDecl->getDecl());
     if (!varDecl)
         return true;
-    auto it = blockState.staticCastVars.find(
-        { varDecl, dynamicCastExpr->getTypeAsWritten().getTypePtr() });
+    auto varType = strip(dynamicCastExpr->getTypeAsWritten());
+    auto it = blockState.staticCastVars.find({ varDecl, varType });
     if (it != blockState.staticCastVars.end())
     {
         report(DiagnosticsEngine::Warning, "dynamic_cast after static_cast",
@@ -145,8 +156,7 @@ bool StaticDynamic::VisitCXXDynamicCastExpr(CXXDynamicCastExpr const* dynamicCas
         return true;
     }
     blockState.dynamicCastVars.insert(
-        { { varDecl, dynamicCastExpr->getTypeAsWritten().getTypePtr() },
-          compat::getBeginLoc(dynamicCastExpr) });
+        { { varDecl, varType }, compat::getBeginLoc(dynamicCastExpr) });
     return true;
 }
 

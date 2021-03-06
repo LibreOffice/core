@@ -1385,16 +1385,12 @@ bool SwAccessibleContext::Select( SwPaM *pPaM, SdrObject *pObj,
     if( !pCursorShell )
         return false;
 
-    SwFEShell* pFEShell = dynamic_cast<const SwFEShell*>( pCursorShell) !=  nullptr
-                                ? static_cast<SwFEShell*>( pCursorShell )
-                                : nullptr;
+    SwFEShell* pFEShell = dynamic_cast<SwFEShell*>(pCursorShell);
     // Get rid of activated OLE object
     if( pFEShell )
         pFEShell->FinishOLEObj();
 
-    SwWrtShell* pWrtShell = dynamic_cast<const SwWrtShell*>( pCursorShell) !=  nullptr
-                                ? static_cast<SwWrtShell*>( pCursorShell )
-                                : nullptr;
+    SwWrtShell* pWrtShell = dynamic_cast<SwWrtShell*>(pCursorShell);
 
     bool bRet = false;
     if( pObj )

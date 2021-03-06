@@ -520,9 +520,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
     if( !pCursorShell )
         return anyAttribute;
 
-    SwFEShell* pFEShell = dynamic_cast<const SwFEShell*>( pCursorShell) !=  nullptr
-                                ? static_cast<SwFEShell*>( pCursorShell )
-                            : nullptr;
+    SwFEShell* pFEShell = dynamic_cast<SwFEShell*>(pCursorShell);
     if( pFEShell )
     {
         OUString sDisplay;

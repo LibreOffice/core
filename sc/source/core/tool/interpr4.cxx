@@ -3225,14 +3225,19 @@ void ScInterpreter::ScMacro()
     }
 
     SbxVariable* pVar = pRoot ? pRoot->Find(aMacro, SbxClassType::Method) : nullptr;
-    if( !pVar || pVar->GetType() == SbxVOID || dynamic_cast<const SbMethod*>( pVar) ==  nullptr )
+    if( !pVar || pVar->GetType() == SbxVOID )
+    {
+        PushError( FormulaError::NoMacro );
+        return;
+    }
+    SbMethod* pMethod = dynamic_cast<SbMethod*>(pVar);
+    if( !pMethod )
     {
         PushError( FormulaError::NoMacro );
         return;
     }
 
     bool bVolatileMacro = false;
-    SbMethod* pMethod = static_cast<SbMethod*>(pVar);
 
     SbModule* pModule = pMethod->GetModule();
     bool bUseVBAObjects = pModule->IsVBACompat();

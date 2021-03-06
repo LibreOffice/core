@@ -1085,14 +1085,14 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     const ::sfx2::SvBaseLinks& rLnks = rDoc.getIDocumentLinksAdministration().GetLinkManager().GetLinks();
     for( auto n = rLnks.size(); n; )
     {
-        SwBaseLink* pBLink;
-
         ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
-        if( pLnk != &rUpdLnk &&
-            sfx2::SvBaseLinkObjectType::ClientFile == pLnk->GetObjType() &&
-            dynamic_cast< const SwBaseLink *>( pLnk ) !=  nullptr &&
-            ( pBLink = static_cast<SwBaseLink*>(pLnk) )->IsInRange( rSectNd.GetIndex(),
-                                                rSectNd.EndOfSectionIndex() ) )
+        if( pLnk == &rUpdLnk )
+            continue;
+        if( sfx2::SvBaseLinkObjectType::ClientFile != pLnk->GetObjType() )
+            continue;
+        SwBaseLink* pBLink = dynamic_cast<SwBaseLink*>( pLnk );
+        if( pBLink && pBLink->IsInRange( rSectNd.GetIndex(),
+                                        rSectNd.EndOfSectionIndex() ) )
         {
             // It's in the Section, so update. But only if it's not in the same File!
             OUString sFName;

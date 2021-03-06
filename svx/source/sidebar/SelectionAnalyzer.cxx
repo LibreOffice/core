@@ -41,8 +41,8 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SC(const SdrMarkL
         case 1:
         {
             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            if (dynamic_cast<const SdrTextObj*>(pObj) != nullptr
-                && static_cast<SdrTextObj*>(pObj)->IsInEditMode())
+            auto pTextObj = dynamic_cast<SdrTextObj*>(pObj);
+            if (pTextObj && pTextObj->IsInEditMode())
             {
                 eContext = EnumContext::Context::DrawText;
             }
@@ -120,8 +120,8 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD(const SdrMarkL
         case 1:
         {
             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            if (dynamic_cast<const SdrTextObj*>(pObj) != nullptr
-                && static_cast<SdrTextObj*>(pObj)->IsInEditMode())
+            auto pTextObj = dynamic_cast<SdrTextObj*>(pObj);
+            if (pTextObj && pTextObj->IsInEditMode())
             {
                 if (pObj->GetObjIdentifier() == OBJ_TABLE)
                 {

@@ -473,17 +473,18 @@ bool SwView::EnterDrawTextMode(const Point& aDocPos)
     if (pSdrView->IsMarkedHit(aDocPos) && !pSdrView->PickHandle(aDocPos) && IsTextTool())
         pObj = pSdrView->PickObj(aDocPos, pSdrView->getHitTolLog(), pPV, SdrSearchOptions::PICKTEXTEDIT);
 
-    if (pObj &&
-        // To allow SwDrawVirtObj text objects to be activated, allow their type, too.
-        ( dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr ||
-          ( dynamic_cast< const SwDrawVirtObj *>( pObj ) !=  nullptr &&
-            dynamic_cast< const SdrTextObj *>(&static_cast<SwDrawVirtObj*>(pObj)->GetReferencedObj() ) != nullptr ) ) &&
-
-        m_pWrtShell->IsSelObjProtected(FlyProtectFlags::Content) == FlyProtectFlags::NONE)
+    if (pObj)
     {
-        // Refuse to edit editeng text of the shape if it has textbox attached.
-        if (!lcl_isTextBox(pObj))
-            bReturn = BeginTextEdit( pObj, pPV, m_pEditWin );
+        // To allow SwDrawVirtObj text objects to be activated, allow their type, too.
+        auto pVirtObj =  dynamic_cast<SwDrawVirtObj*>( pObj );
+        if ( (pVirtObj && dynamic_cast< const SdrTextObj *>(&pVirtObj->GetReferencedObj() ) != nullptr &&
+               m_pWrtShell->IsSelObjProtected(FlyProtectFlags::Content) == FlyProtectFlags::NONE) ||
+             dynamic_cast< const SdrTextObj *>( pObj ) != nullptr )
+        {
+            // Refuse to edit editeng text of the shape if it has textbox attached.
+            if (!lcl_isTextBox(pObj))
+                bReturn = BeginTextEdit( pObj, pPV, m_pEditWin );
+        }
     }
 
     pSdrView->SetHitTolerancePixel( nOld );

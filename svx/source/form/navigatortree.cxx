@@ -1602,19 +1602,19 @@ namespace svxform
             FmEntryData* pCurrent = reinterpret_cast<FmEntryData*>(m_xTreeView->get_id(*rIter).toInt64());
 
             // a form ?
-            bool bIsForm = dynamic_cast<const FmFormData*>( pCurrent) !=  nullptr;
+            auto pFormData = dynamic_cast<FmFormData*>(pCurrent);
 
             // because deletion is done by the view, and i build on its MarkList,
             // but normally only direct controls, no indirect ones, are marked in a marked form,
             // I have to do it later
-            if (bIsForm)
-                MarkViewObj(static_cast<FmFormData*>(pCurrent), true/*deep*/);
+            if (pFormData)
+                MarkViewObj(pFormData, true/*deep*/);
 
             // a hidden control ?
             bool bIsHidden = IsHiddenControl(pCurrent);
 
             // keep forms and hidden controls, the rest not
-            if (!bIsForm && !bIsHidden)
+            if (!pFormData && !bIsHidden)
             {
                 // well, no form and no hidden control -> we can remove it from m_arrCurrentSelection, as it will
                 // be deleted automatically. This is because for every model (except forms and hidden control models)

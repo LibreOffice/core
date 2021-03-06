@@ -14,7 +14,7 @@ struct ClassA
 
 struct ClassB : public ClassA
 {
-    void foo() {}
+    void foo() const {}
 };
 
 void f1(ClassA* p1)
@@ -29,6 +29,14 @@ void f2(ClassA* p1)
 {
     // expected-note@+1 {{dynamic_cast here [loplugin:staticdynamic]}}
     dynamic_cast<ClassB*>(p1)->foo();
+    // expected-error@+1 {{static_cast after dynamic_cast [loplugin:staticdynamic]}}
+    static_cast<ClassB*>(p1)->foo();
+};
+
+void f3(ClassA* p1)
+{
+    // expected-note@+1 {{dynamic_cast here [loplugin:staticdynamic]}}
+    dynamic_cast<const ClassB*>(p1)->foo();
     // expected-error@+1 {{static_cast after dynamic_cast [loplugin:staticdynamic]}}
     static_cast<ClassB*>(p1)->foo();
 };
