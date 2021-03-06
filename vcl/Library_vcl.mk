@@ -116,6 +116,7 @@ endif
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/rendercontext/ImplMapRes \
+    vcl/source/rendercontext/OutDevState \
     vcl/source/rendercontext/drawmode \
     vcl/source/animate/Animation \
     vcl/source/animate/AnimationBitmap \
