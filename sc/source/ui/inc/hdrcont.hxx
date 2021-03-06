@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_HDRCONT_HXX
 
 #include <vcl/window.hxx>
+#include <vcl/timer.hxx>
 #include <types.hxx>
 
 #define HDR_SIZE_OPTIMUM    0xFFFF
@@ -35,6 +36,7 @@ class ScHeaderControl : public vcl::Window
 {
 private:
     SelectionEngine*    pSelEngine;
+    Timer               aShowHelpTimer;
     vcl::Font           aNormFont;
     vcl::Font           aBoldFont;
     bool                bBoldSet;
@@ -66,8 +68,11 @@ private:
     SCCOLROW        GetMousePos( const MouseEvent& rMEvt, bool& rBorder ) const;
     bool            IsSelectionAllowed(SCCOLROW nPos) const;
     void            ShowDragHelp();
+    void            HideDragHelp();
 
     void            DoPaint( SCCOLROW nStart, SCCOLROW nEnd );
+
+    DECL_LINK(ShowDragHelpHdl, Timer*, void);
 
 protected:
     ScTabView*      pTabView;
@@ -104,6 +109,7 @@ protected:
 
     virtual void    DrawInvert( tools::Long nDragPos );
     virtual void    Command( const CommandEvent& rCEvt ) override;
+    virtual void    dispose() override;
 
 public:
             ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelectionEngine,
