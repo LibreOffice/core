@@ -185,8 +185,7 @@ bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
 
             bRet = WriteThroughComponent(xStg, xModelComp, "meta.xml", xContext, xInfoSet,
                                          (bOASIS ? "com.sun.star.comp.Math.XMLOasisMetaExporter"
-                                                 : "com.sun.star.comp.Math.XMLMetaExporter"),
-                                         m_bUseHTMLMLEntities);
+                                                 : "com.sun.star.comp.Math.XMLMetaExporter"));
         }
         if (bRet)
         {
@@ -194,8 +193,7 @@ bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
                 xStatusIndicator->setValue(nSteps++);
 
             bRet = WriteThroughComponent(xStg, xModelComp, "content.xml", xContext, xInfoSet,
-                                         "com.sun.star.comp.Math.XMLContentExporter",
-                                         m_bUseHTMLMLEntities);
+                                         "com.sun.star.comp.Math.XMLContentExporter");
         }
 
         if (bRet)
@@ -205,8 +203,7 @@ bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
 
             bRet = WriteThroughComponent(xStg, xModelComp, "settings.xml", xContext, xInfoSet,
                                          (bOASIS ? "com.sun.star.comp.Math.XMLOasisSettingsExporter"
-                                                 : "com.sun.star.comp.Math.XMLSettingsExporter"),
-                                         m_bUseHTMLMLEntities);
+                                                 : "com.sun.star.comp.Math.XMLSettingsExporter"));
         }
     }
     else
@@ -218,8 +215,7 @@ bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
             xStatusIndicator->setValue(nSteps++);
 
         bRet = WriteThroughComponent(xOut, xModelComp, xContext, xInfoSet,
-                                     "com.sun.star.comp.Math.XMLContentExporter",
-                                     m_bUseHTMLMLEntities);
+                                     "com.sun.star.comp.Math.XMLContentExporter");
     }
 
     if (xStatusIndicator.is())
@@ -233,7 +229,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(const Reference<io::XOutputStream
                                                const Reference<XComponent>& xComponent,
                                                Reference<uno::XComponentContext> const& rxContext,
                                                Reference<beans::XPropertySet> const& rPropSet,
-                                               const char* pComponentName, bool bUseHTMLMLEntities)
+                                               const char* pComponentName)
 {
     OSL_ENSURE(xOutputStream.is(), "I really need an output stream!");
     OSL_ENSURE(xComponent.is(), "Need component!");
@@ -244,7 +240,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(const Reference<io::XOutputStream
 
     // connect XML writer to output stream
     xSaxWriter->setOutputStream(xOutputStream);
-    if (bUseHTMLMLEntities)
+    if (m_bUseHTMLMLEntities)
         xSaxWriter->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntitiesExport);
 
     // prepare arguments (prepend doc handler to given arguments)
@@ -279,7 +275,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(const Reference<embed::XStorage>&
                                                const char* pStreamName,
                                                Reference<uno::XComponentContext> const& rxContext,
                                                Reference<beans::XPropertySet> const& rPropSet,
-                                               const char* pComponentName, bool bUseHTMLMLEntities)
+                                               const char* pComponentName)
 {
     OSL_ENSURE(xStorage.is(), "Need storage!");
     OSL_ENSURE(nullptr != pStreamName, "Need stream name!");
@@ -312,7 +308,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(const Reference<embed::XStorage>&
 
     // write the stuff
     bool bRet = WriteThroughComponent(xStream->getOutputStream(), xComponent, rxContext, rPropSet,
-                                      pComponentName, bUseHTMLMLEntities);
+                                      pComponentName);
 
     return bRet;
 }
