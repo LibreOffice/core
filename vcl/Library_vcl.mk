@@ -94,6 +94,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/rendercontext/OutDevState \
     vcl/source/rendercontext/drawmode \
     vcl/skia/SkiaHelper \
     vcl/source/animate/Animation \
@@ -316,7 +317,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/graphic/UnoGraphicDescriptor \
     vcl/source/graphic/UnoGraphicObject \
     vcl/source/graphic/UnoGraphicProvider \
-    vcl/source/graphic/UnoGraphicTransformer \
     vcl/source/graphic/VectorGraphicSearch \
     vcl/source/graphic/VectorGraphicLoader \
     vcl/source/bitmap/impvect \
@@ -455,6 +455,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/jpeg/JpegReader \
     vcl/source/filter/jpeg/JpegWriter \
     vcl/source/filter/jpeg/JpegTransform \
+    vcl/source/filter/svm/SvmReader \
+    vcl/source/filter/svm/SvmWriter \
     vcl/source/filter/wmf/emfwr \
     vcl/source/filter/wmf/wmf \
     vcl/source/filter/wmf/wmfexternal \
@@ -501,6 +503,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/backendtest/outputdevice/polyline \
     vcl/backendtest/outputdevice/polyline_b2d \
     vcl/backendtest/outputdevice/rectangle \
+    vcl/backendtest/GraphicsRenderTests \
+    vcl/jsdialog/enabled \
     vcl/jsdialog/jsdialogbuilder \
     vcl/jsdialog/executor \
 ))
