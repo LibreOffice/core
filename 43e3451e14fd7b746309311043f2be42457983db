@@ -16,6 +16,24 @@
       "revId": "43e3451e14fd7b746309311043f2be42457983db",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e74fa47_fe783ba8",
+        "filename": "svx/inc/inspectorvalues.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1002359
+      },
+      "writtenOn": "2021-03-06T15:35:21Z",
+      "side": 1,
+      "message": "(Extremely sorry for the huge delay I did on this patch).\n\nHi Mike, The grouping of the items are better now. Can you please check",
+      "parentUuid": "81aaaceb_dba7093a",
+      "revId": "43e3451e14fd7b746309311043f2be42457983db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
