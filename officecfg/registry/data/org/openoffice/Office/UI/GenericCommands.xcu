@@ -6946,9 +6946,9 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:InsertZWNBSP" oor:op="replace">
+      <node oor:name=".uno:InsertWJ" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">No-width No ~Break</value>
+          <value xml:lang="en-US">Word ~Joiner</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

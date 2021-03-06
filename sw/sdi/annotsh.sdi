@@ -120,7 +120,7 @@ interface Annotation : _Annotation
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
-    SID_INSERT_ZWNBSP
+    SID_INSERT_WJ
     [
         ExecMethod = Exec ;
         StateMethod = GetState ;

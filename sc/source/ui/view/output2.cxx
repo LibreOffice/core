@@ -831,7 +831,7 @@ bool ScDrawStringsVars::HasEditCharacters() const
             case CHAR_LRM:
             case CHAR_RLM:
             case CHAR_NBHY:
-            case CHAR_ZWNBSP:
+            case CHAR_WJ:
                 return true;
             default:
                 break;

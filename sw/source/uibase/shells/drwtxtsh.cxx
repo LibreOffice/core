@@ -363,7 +363,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
         case FN_INSERT_NNBSP:
         case SID_INSERT_RLM :
         case SID_INSERT_LRM :
-        case SID_INSERT_ZWNBSP :
+        case SID_INSERT_WJ :
         case SID_INSERT_ZWSP:
         {
             sal_Unicode cIns = 0;
@@ -376,7 +376,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                 case SID_INSERT_RLM : cIns = CHAR_RLM ; break;
                 case SID_INSERT_LRM : cIns = CHAR_LRM ; break;
                 case SID_INSERT_ZWSP : cIns = CHAR_ZWSP ; break;
-                case SID_INSERT_ZWNBSP: cIns = CHAR_ZWNBSP; break;
+                case SID_INSERT_WJ: cIns = CHAR_WJ; break;
             }
             pOLV->InsertText( OUString(cIns));
             rReq.Done();

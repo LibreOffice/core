@@ -391,7 +391,7 @@ bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
                 case CHAR_SOFTHYPHEN:
                 case CHAR_HARDBLANK:
                 case CHAR_ZWSP :
-                case CHAR_ZWNBSP :
+                case CHAR_WJ :
                 case CH_TXTATR_BREAKWORD:
                 case CH_TXTATR_INWORD:
                 {

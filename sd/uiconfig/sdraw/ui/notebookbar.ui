@@ -1880,10 +1880,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuHome-InsertZWNBSP1">
+      <object class="GtkMenuItem" id="MenuHome-InsertWJ1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:InsertZWNBSP</property>
+        <property name="action_name">.uno:InsertWJ</property>
       </object>
     </child>
     <child>

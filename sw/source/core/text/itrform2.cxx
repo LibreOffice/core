@@ -1407,7 +1407,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                 pPor = new SwBlankPortion( '-' ); break;
 
             case CHAR_ZWSP:                     // zero width space
-            case CHAR_ZWNBSP :                  // word joiner
+            case CHAR_WJ :                      // word joiner
                 pPor = new SwControlCharPortion( cChar ); break;
 
             case CH_TXTATR_BREAKWORD:

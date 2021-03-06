@@ -97,7 +97,7 @@ interface TableText
     SID_INSERT_RLM              [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_INSERT_LRM              [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_INSERT_ZWSP             [ ExecMethod = Execute; StateMethod = GetState; ]
-    SID_INSERT_ZWNBSP           [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_INSERT_WJ               [ ExecMethod = Execute; StateMethod = GetState; ]
 
     SID_INSERT_FIELD_SHEET [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_INSERT_FIELD_TITLE [ ExecMethod = Execute; StateMethod = GetState; ]

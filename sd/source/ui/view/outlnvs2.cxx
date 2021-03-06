@@ -377,7 +377,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         case FN_INSERT_NNBSP:
         case SID_INSERT_RLM :
         case SID_INSERT_LRM :
-        case SID_INSERT_ZWNBSP :
+        case SID_INSERT_WJ :
         case SID_INSERT_ZWSP:
         case SID_CHARMAP:
         {

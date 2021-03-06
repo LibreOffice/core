@@ -342,7 +342,7 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SID_INSERT_ZWNBSP
+    SID_INSERT_WJ
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;

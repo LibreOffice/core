@@ -876,7 +876,7 @@ class SdrAngleItem;
 #define SID_INSERT_RLM                                  ( SID_SVX_START + 1056 )   /* insert RLM - right to left mark */
 #define SID_INSERT_LRM                                  ( SID_SVX_START + 1057 )   /* insert LRM - left to right mark */
 #define SID_INSERT_ZWSP                                 ( SID_SVX_START + 1058 )   /* insert ZWJ - invisible space, keep words together*/
-#define SID_INSERT_ZWNBSP                               ( SID_SVX_START + 1059 )   /* insert ZWNJ - invisible space, forces linebreak*/
+#define SID_INSERT_WJ                                   ( SID_SVX_START + 1059 )   /* insert WJ  - Word Joiner */
 #define SID_OPTIONS_DATABASES                           ( SID_SVX_START + 1060 )
 #define SID_OPEN_SMARTTAGMENU                           ( SID_SVX_START + 1061 )
 // (SID_SVX_START + 1062) is in include/sfx2/sfxsids.hrc
