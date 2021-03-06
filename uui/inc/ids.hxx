@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UUI_INC_IDS_HXX
-#define INCLUDED_UUI_INC_IDS_HXX
+#pragma once
 
 #include <vcl/errcode.hxx>
 
@@ -87,7 +86,5 @@
 #define ERRCODE_UUI_LOCKING_LOCK_EXPIRED                        ErrCode(ErrCodeArea::Uui, 62)
 #define ERRCODE_UUI_CANNOT_ACTIVATE_FACTORY                     ErrCode(ErrCodeArea::Uui, 63)
 #define ERRCODE_UUI_IO_EXOTICFILEFORMAT                         ErrCode(ErrCodeArea::Uui, 64)
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

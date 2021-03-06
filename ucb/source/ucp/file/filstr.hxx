@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UCB_SOURCE_UCP_FILE_FILSTR_HXX
-#define INCLUDED_UCB_SOURCE_UCP_FILE_FILSTR_HXX
+#pragma once
 
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
@@ -143,7 +142,5 @@ class XStream_impl :  public cppu::WeakImplHelper<
     };
 
 }  // end namespace XStream_impl
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

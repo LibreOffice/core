@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVSESSIONFACTORY_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVSESSIONFACTORY_HXX
+#pragma once
 
 #ifdef min
 #undef min // GNU libstdc++ <memory> includes <limit> which defines methods called min...
@@ -65,7 +64,5 @@ private:
 };
 
 } // namespace http_dav_ucp
-
-#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVSESSIONFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

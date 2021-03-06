@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_UCB_SOURCE_UCP_CMIS_AUTH_PROVIDER_HXX
-#define INCLUDED_UCB_SOURCE_UCP_CMIS_AUTH_PROVIDER_HXX
+#pragma once
 
 #if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic push
@@ -52,7 +51,5 @@ namespace cmis
 
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

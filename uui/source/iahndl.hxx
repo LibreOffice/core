@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UUI_SOURCE_IAHNDL_HXX
-#define INCLUDED_UUI_SOURCE_IAHNDL_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -256,7 +255,5 @@ public:
     }
     bool getString(ErrCode nErrorCode, OUString &rString) const;
 };
-
-#endif // INCLUDED_UUI_SOURCE_IAHNDL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

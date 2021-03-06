@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_DATETIMEHELPER_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_DATETIMEHELPER_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -52,7 +51,5 @@ public:
 };
 
 } // namespace http_dav_ucp
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_CONTENTPROPERTIES_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_CONTENTPROPERTIES_HXX
+#pragma once
 
 #include <memory>
 #include <unordered_map>
@@ -178,7 +177,5 @@ public:
 };
 
 } // namespace http_dav_ucp
-
-#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_CONTENTPROPERTIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

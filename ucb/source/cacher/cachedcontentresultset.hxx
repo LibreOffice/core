@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_CACHER_CACHEDCONTENTRESULTSET_HXX
-#define INCLUDED_UCB_SOURCE_CACHER_CACHEDCONTENTRESULTSET_HXX
+#pragma once
 
 #include "contentresultsetwrapper.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -385,7 +384,5 @@ public:
             const css::uno::Reference< css::sdbc::XResultSet > & xSource,
             const css::uno::Reference< css::ucb::XContentIdentifierMapping > & xMapping ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

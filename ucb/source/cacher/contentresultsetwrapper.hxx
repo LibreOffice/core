@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_CACHER_CONTENTRESULTSETWRAPPER_HXX
-#define INCLUDED_UCB_SOURCE_CACHER_CONTENTRESULTSETWRAPPER_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
@@ -378,7 +377,5 @@ public:
     // own methods:
     void impl_OwnerDies();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

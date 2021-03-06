@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_FILE_FILINSREQ_HXX
-#define INCLUDED_UCB_SOURCE_UCP_FILE_FILINSREQ_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -139,7 +138,5 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper<
 
 }
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

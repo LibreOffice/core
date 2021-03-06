@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOXML_SOURCE_DOM_ATTRIBUTESMAP_HXX
-#define INCLUDED_UNOXML_SOURCE_DOM_ATTRIBUTESMAP_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <rtl/ref.hxx>
@@ -92,7 +91,5 @@ namespace DOM
             setNamedItemNS(css::uno::Reference< css::xml::dom::XNode > const& arg) override;
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

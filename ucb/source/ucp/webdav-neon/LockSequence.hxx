@@ -26,8 +26,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_LOCKSEQUENCE_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_LOCKSEQUENCE_HXX
+#pragma once
 
 #include <config_lgpl.h>
 #include <rtl/string.hxx>
@@ -45,7 +44,5 @@ public:
 };
 
 }
-
-#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_LOCKSEQUENCE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
