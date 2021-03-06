@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FORMCONTROLHELPER_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FORMCONTROLHELPER_HXX
+#pragma once
 
 #include "FFDataHandler.hxx"
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -49,7 +48,5 @@ private:
                         const OUString& rControlName);
 };
 }
-
-#endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FORMCONTROLHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

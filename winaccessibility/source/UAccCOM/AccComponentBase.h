@@ -19,8 +19,7 @@
 
 // AccComponentBase.h: interface for the CAccComponentBase class.
 
-#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCCOMPONENTBASE_H
-#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCCOMPONENTBASE_H
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
@@ -60,7 +59,5 @@ protected:
 
     css::accessibility::XAccessibleComponent* GetXInterface() { return pRXComp.get(); }
 };
-
-#endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCCOMPONENTBASE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

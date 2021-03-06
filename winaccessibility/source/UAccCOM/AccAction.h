@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCACTION_H
-#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCACTION_H
+#pragma once
 
 #include "Resource.h"       // main symbols
 #include "AccActionBase.h"
@@ -99,7 +98,5 @@ public:
     STDMETHOD(put_XSubInterface)(hyper pXSubInterface) override;
 
 };
-
-#endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCACTION_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

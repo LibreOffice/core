@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_MODELEVENTLISTENER_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_MODELEVENTLISTENER_HXX
+#pragma once
 
 #include <com/sun/star/document/XEventListener.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -37,6 +36,5 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 };
 } //namespace writerfilter::dmapper
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

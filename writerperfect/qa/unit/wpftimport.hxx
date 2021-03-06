@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_QA_UNIT_WPFTIMPORT_HXX
-#define INCLUDED_WRITERPERFECT_QA_UNIT_WPFTIMPORT_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -27,7 +26,5 @@ class XInputStream;
 }
 
 css::uno::Reference<css::io::XInputStream> createDummyInput();
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

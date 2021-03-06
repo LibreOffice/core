@@ -21,8 +21,7 @@
 //      or project specific include files that are used frequently,
 //      but are changed infrequently
 
-#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_STDAFX_H
-#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_STDAFX_H
+#pragma once
 
 #pragma once
 
@@ -75,7 +74,5 @@ extern CComModule _Module;
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
-
-#endif // !defined(AFX_STDAFX_H__5E2F9072_190F_47C7_8003_4D44FD308CB9__INCLUDED)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

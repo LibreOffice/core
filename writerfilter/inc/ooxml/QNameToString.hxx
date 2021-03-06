@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_WRITERFILTER_INC_OOXML_QNAMETOSTRING_HXX
-#define INCLUDED_WRITERFILTER_INC_OOXML_QNAMETOSTRING_HXX
+#pragma once
 
 #include <string>
 #include <dmapper/resourcemodel.hxx>
@@ -28,7 +27,5 @@ namespace writerfilter
 std::string QNameToString(Id);
 #endif
 }
-
-#endif // INCLUDED_WRITERFILTER_INC_OOXML_QNAMETOSTRING_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

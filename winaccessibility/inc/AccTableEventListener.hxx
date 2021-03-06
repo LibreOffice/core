@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WINACCESSIBILITY_INC_ACCTABLEEVENTLISTENER_HXX
-#define INCLUDED_WINACCESSIBILITY_INC_ACCTABLEEVENTLISTENER_HXX
+#pragma once
 
 #include <stdio.h>
 #include "AccDescendantManagerEventListener.hxx"
@@ -46,7 +45,5 @@ public:
 
     void HandleTableModelChangeEvent(css::uno::Any newValue);
 };
-
-#endif // INCLUDED_WINACCESSIBILITY_INC_ACCTABLEEVENTLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

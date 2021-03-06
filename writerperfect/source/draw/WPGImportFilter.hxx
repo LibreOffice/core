@@ -10,8 +10,7 @@
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
-#ifndef INCLUDED_WRITERPERFECT_SOURCE_DRAW_WPGIMPORTFILTER_HXX
-#define INCLUDED_WRITERPERFECT_SOURCE_DRAW_WPGIMPORTFILTER_HXX
+#pragma once
 
 #include <ImportFilter.hxx>
 
@@ -38,7 +37,5 @@ private:
     virtual bool doImportDocument(weld::Window* pParent, librevenge::RVNGInputStream& rInput,
                                   OdgGenerator& rGenerator, utl::MediaDescriptor&) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

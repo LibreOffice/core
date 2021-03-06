@@ -6,8 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERFILTER_INC_RTFTOK_RTFDOCUMENT_HXX
-#define INCLUDED_WRITERFILTER_INC_RTFTOK_RTFDOCUMENT_HXX
+#pragma once
 
 #include <dmapper/resourcemodel.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -43,7 +42,5 @@ public:
                    const utl::MediaDescriptor& rMediaDescriptor);
 };
 } // namespace writerfilter::rtftok
-
-#endif // INCLUDED_WRITERFILTER_INC_RTFTOK_RTFDOCUMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

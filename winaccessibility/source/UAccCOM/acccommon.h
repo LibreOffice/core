@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCCOMMON_H
-#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCCOMMON_H
+#pragma once
 
 //for MAccessible.cxx
 struct ltComp
@@ -64,7 +63,5 @@ createInstance(REFIID iid, Ifc ** ppIfc)
 {
     return CComCreator< CComObject<T> >::CreateInstance(0, iid, reinterpret_cast<void**>(ppIfc));
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

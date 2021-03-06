@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_XMLBASE64IMPORTCONTEXT_HXX
-#define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_XMLBASE64IMPORTCONTEXT_HXX
+#pragma once
 
 #include <librevenge/RVNGBinaryData.h>
 
@@ -39,7 +38,5 @@ private:
 };
 
 } // namespace writerperfect::exp
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -5,8 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_INC_DOCUMENTHANDLERFORODP_HXX
-#define INCLUDED_WRITERPERFECT_INC_DOCUMENTHANDLERFORODP_HXX
+#pragma once
 
 #include <libodfgen/libodfgen.hxx>
 
@@ -21,7 +20,5 @@ template <> struct DocumentHandlerFor<OdpGenerator>
     static OUString name() { return "com.sun.star.comp.Impress.XMLOasisImporter"; }
 };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

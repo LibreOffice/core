@@ -5,8 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_INC_WRITERPERFECT_IMPORTFILTER_HXX
-#define INCLUDED_WRITERPERFECT_INC_WRITERPERFECT_IMPORTFILTER_HXX
+#pragma once
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -180,7 +179,5 @@ struct ImportFilter : public cppu::ImplInheritanceHelper<detail::ImportFilterImp
     }
 };
 }
-
-#endif // INCLUDED_WRITERPERFECT_INC_WRITERPERFECT_IMPORTFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

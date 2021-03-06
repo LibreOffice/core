@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_UTIL_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_UTIL_HXX
+#pragma once
 
 #include <com/sun/star/text/XTextRange.hpp>
 #include <string>
@@ -29,7 +28,5 @@ namespace writerfilter::dmapper
 std::string XTextRangeToString(css::uno::Reference<css::text::XTextRange> const& textRange);
 void resolveSprmProps(Properties& rHandler, Sprm& rSprm);
 }
-
-#endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_UTIL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
