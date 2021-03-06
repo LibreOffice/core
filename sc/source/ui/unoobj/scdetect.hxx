@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_UNOOBJ_SCDETECT_HXX
-#define INCLUDED_SC_SOURCE_UI_UNOOBJ_SCDETECT_HXX
+#pragma once
 
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -46,7 +45,5 @@ public:
 
     virtual OUString SAL_CALL detect( css::uno::Sequence<css::beans::PropertyValue>& lDescriptor ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

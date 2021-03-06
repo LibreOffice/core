@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_AUDITSH_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_AUDITSH_HXX
+#pragma once
 
 #include <sfx2/shell.hxx>
 
@@ -46,7 +45,5 @@ public:
     void Execute(const SfxRequest& rReq);
     void GetState(SfxItemSet& rSet);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

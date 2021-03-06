@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_SCDLL_HXX
-#define INCLUDED_SC_INC_SCDLL_HXX
+#pragma once
 
 #include "scdllapi.h"
 
@@ -39,7 +38,5 @@ public:
                     /// DLL-init/exit-code must be linked to the DLL only
     static SC_DLLPUBLIC void     Init();     ///< called directly after loading the DLL
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

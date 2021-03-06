@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLSTYLESEXPORTHELPER_HXX
-#define INCLUDED_SC_SOURCE_FILTER_XML_XMLSTYLESEXPORTHELPER_HXX
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -251,7 +250,5 @@ public:
     void AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nField, const sal_Int32 nStringIndex);
     void AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nStartField, const sal_Int32 nStringIndex, const sal_Int32 nEndField);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

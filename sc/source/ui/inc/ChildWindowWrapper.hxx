@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_CHILDWINDOWWRAPPER_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_CHILDWINDOWWRAPPER_HXX
+#pragma once
 
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -77,7 +76,5 @@ private:
         return dynamic_cast<ScTabViewShell*>( pViewShell );
     }
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_CHILDWINDOWWRAPPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

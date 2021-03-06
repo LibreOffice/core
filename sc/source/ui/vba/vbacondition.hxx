@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBACONDITION_HXX
-#define INCLUDED_SC_SOURCE_UI_VBA_VBACONDITION_HXX
+#pragma once
 
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/sheet/ConditionOperator.hpp>
@@ -45,6 +44,5 @@ public:
     virtual sal_Int32 SAL_CALL Operator() override = 0;
 
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

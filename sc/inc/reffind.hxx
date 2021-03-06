@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_REFFIND_HXX
-#define INCLUDED_SC_INC_REFFIND_HXX
+#pragma once
 
 #include "address.hxx"
 
@@ -47,7 +46,5 @@ public:
 
     void ToggleRel(sal_Int32 nStartPos, sal_Int32 nEndPos);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SCRIPTING_SOURCE_PROVIDER_MASTERSCRIPTPROVIDERFACTORY_HXX
-#define INCLUDED_SCRIPTING_SOURCE_PROVIDER_MASTERSCRIPTPROVIDERFACTORY_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
@@ -71,7 +70,5 @@ public:
 
 
 } // namespace func_provider
-
-#endif // INCLUDED_SCRIPTING_SOURCE_PROVIDER_MASTERSCRIPTPROVIDERFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

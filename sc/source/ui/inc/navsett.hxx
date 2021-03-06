@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_NAVSETT_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_NAVSETT_HXX
+#pragma once
 
 #include <tools/solar.h>
 
@@ -46,7 +45,5 @@ public:
     void                 SetChildSelected( sal_uLong nIndex ) { mnChildSelected = nIndex; }
     sal_uLong            GetChildSelected() const { return mnChildSelected; }
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_NAVSETT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

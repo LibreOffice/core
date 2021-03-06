@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_CORE_INC_JUMPMATRIX_HXX
-#define INCLUDED_SC_SOURCE_CORE_INC_JUMPMATRIX_HXX
+#pragma once
 
 #include <limits.h>
 #include <vector>
@@ -119,7 +118,5 @@ public:
     void PutResultEmpty( SCSIZE nC, SCSIZE nR );
     void PutResultEmptyPath( SCSIZE nC, SCSIZE nR );
 };
-
-#endif // INCLUDED_SC_SOURCE_CORE_INC_JUMPMATRIX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

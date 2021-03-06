@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_MARKARR_HXX
-#define INCLUDED_SC_INC_MARKARR_HXX
+#pragma once
 
 #include "address.hxx"
 #include <tools/long.hxx>
@@ -88,7 +87,5 @@ public:
     bool        Next( SCROW& rTop, SCROW& rBottom );
     void        reset( const ScMarkArray* pNewArray );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

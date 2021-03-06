@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_DRWLAYER_HXX
-#define INCLUDED_SC_INC_DRWLAYER_HXX
+#pragma once
 
 #include <svx/fmmodel.hxx>
 #include <svx/svdundo.hxx>
@@ -229,7 +228,5 @@ private:
 };
 
 extern bool bDrawIsInUndo; // somewhere as member!
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

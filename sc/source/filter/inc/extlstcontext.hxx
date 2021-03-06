@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXTLSTCONTEXT_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_EXTLSTCONTEXT_HXX
+#pragma once
 
 #include "excelhandlers.hxx"
 #include <oox/core/contexthandler.hxx>
@@ -143,7 +142,5 @@ protected:
 };
 
 } //namespace oox::xls
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

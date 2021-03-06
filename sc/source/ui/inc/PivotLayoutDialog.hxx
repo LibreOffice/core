@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTDIALOG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTDIALOG_HXX
+#pragma once
 
 #include "anyrefdg.hxx"
 #include <dpobject.hxx>
@@ -139,4 +138,3 @@ public:
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 
-#endif

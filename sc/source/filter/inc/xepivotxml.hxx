@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_FILTER_XEPIVOTXML_HXX
-#define INCLUDED_SC_FILTER_XEPIVOTXML_HXX
+#pragma once
 
 #include "xerecord.hxx"
 #include "xeroot.hxx"
@@ -87,7 +86,5 @@ private:
     TablesType m_Tables;
     CacheIdMapType maCacheIdMap;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

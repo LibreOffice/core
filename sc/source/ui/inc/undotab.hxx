@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_UNDOTAB_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_UNDOTAB_HXX
+#pragma once
 
 #include "undobase.hxx"
 #include <tools/color.hxx>
@@ -468,7 +467,5 @@ private:
 
     void DoChange( bool bNew );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

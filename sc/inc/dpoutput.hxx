@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_DPOUTPUT_HXX
-#define INCLUDED_SC_INC_DPOUTPUT_HXX
+#pragma once
 
 #include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -132,7 +131,5 @@ public:
         OUString& rSourceName, OUString& rGivenName,
         const css::uno::Reference< css::uno::XInterface>& xDim );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

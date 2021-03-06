@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLVIEW_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XLVIEW_HXX
+#pragma once
 
 #include <tools/color.hxx>
 #include "xladdress.hxx"
@@ -159,7 +158,5 @@ struct XclTabViewData
     /** Returns read/write access to the selection data of the specified pane. */
     XclSelectionData&   CreateSelectionData( sal_uInt8 nPane );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

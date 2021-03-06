@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_LINKUNO_HXX
-#define INCLUDED_SC_INC_LINKUNO_HXX
+#pragma once
 
 #include <svl/lstner.hxx>
 #include <svl/itemprop.hxx>
@@ -462,7 +461,5 @@ private:
     ScDocShell*                         mpDocShell;
     ScExternalRefManager*               mpRefMgr;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

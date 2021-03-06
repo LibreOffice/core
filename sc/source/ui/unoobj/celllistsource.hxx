@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_UNOOBJ_CELLLISTSOURCE_HXX
-#define INCLUDED_SC_SOURCE_UI_UNOOBJ_CELLLISTSOURCE_HXX
+#pragma once
 
 #include <com/sun/star/form/binding/XListEntryTypedSource.hpp>
 #include <cppuhelper/compbase4.hxx>
@@ -152,7 +151,5 @@ namespace calc
     };
 
 }   // namespace calc
-
-#endif // INCLUDED_SC_SOURCE_UI_UNOOBJ_CELLLISTSOURCE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

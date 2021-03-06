@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_STLPOOL_HXX
-#define INCLUDED_SC_INC_STLPOOL_HXX
+#pragma once
 
 #include <svl/style.hxx>
 #include "scdllapi.h"
@@ -72,7 +71,5 @@ private:
     ScDocument*         pDoc;
     bool                bHasStandardStyles;
 };
-
-#endif // INCLUDED_SC_INC_STLPOOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

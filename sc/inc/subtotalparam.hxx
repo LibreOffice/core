@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_SUBTOTALPARAM_HXX
-#define INCLUDED_SC_INC_SUBTOTALPARAM_HXX
+#pragma once
 
 #include "global.hxx"
 
@@ -44,7 +43,5 @@ struct SC_DLLPUBLIC ScSubTotalParam
                        const ScSubTotalFunc* ptrFunctions,
                        sal_uInt16 nCount );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

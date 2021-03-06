@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_SCERRORS_HXX
-#define INCLUDED_SC_INC_SCERRORS_HXX
+#pragma once
 
 #include <vcl/errcode.hxx>
 
@@ -77,7 +76,5 @@
 
 // ErrCodeClass::General
 #define SCWARN_CORE_HARD_RECALC     ErrCode( WarningFlag::Yes, ErrCodeArea::Sc, ErrCodeClass::General, 1 )
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

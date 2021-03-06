@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_INSTBDLG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_INSTBDLG_HXX
+#pragma once
 
 #include <sfx2/objsh.hxx>
 #include <vcl/timer.hxx>
@@ -91,7 +90,5 @@ private:
     DECL_LINK( BrowseTimeoutHdl, Timer *, void );
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper*, void );
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_INSTBDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

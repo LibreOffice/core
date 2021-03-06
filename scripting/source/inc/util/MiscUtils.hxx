@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SCRIPTING_SOURCE_INC_UTIL_MISCUTILS_HXX
-#define INCLUDED_SCRIPTING_SOURCE_INC_UTIL_MISCUTILS_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
@@ -135,6 +134,5 @@ static css::uno::Any getUCBProperty( ::ucbhelper::Content& content, OUString con
 
 };
 } // namespace sf_misc
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

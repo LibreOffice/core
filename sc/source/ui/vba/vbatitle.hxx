@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBATITLE_HXX
-#define INCLUDED_SC_SOURCE_UI_VBA_VBATITLE_HXX
+#pragma once
 
 #include <vbahelper/vbahelperinterface.hxx>
 #include "vbainterior.hxx"
@@ -143,6 +142,5 @@ public:
         return aServiceNames;
     }
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_ADDINCOL_HXX
-#define INCLUDED_SC_INC_ADDINCOL_HXX
+#pragma once
 
 #include <memory>
 #include <com/sun/star/uno/Any.h>
@@ -228,7 +227,5 @@ public:
     const css::uno::Reference<css::sheet::XVolatileResult>&
                         GetVarRes() const       { return xVarRes; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

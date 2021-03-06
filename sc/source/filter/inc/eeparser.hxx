@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_EEPARSER_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_EEPARSER_HXX
+#pragma once
 
 #include <tools/gen.hxx>
 #include <vcl/errcode.hxx>
@@ -128,7 +127,5 @@ public:
     ScEEParseEntry*         ListEntry( size_t index ) { return maList[index].get(); }
     const ScEEParseEntry*   ListEntry( size_t index ) const { return maList[index].get(); }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

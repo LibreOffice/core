@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_DRFORMSH_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_DRFORMSH_HXX
+#pragma once
 
 #include <sfx2/shell.hxx>
 #include <shellids.hxx>
@@ -41,7 +40,5 @@ public:
     ScDrawFormShell(ScViewData& rData);
     virtual ~ScDrawFormShell() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

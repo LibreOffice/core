@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_SCMOD_HXX
-#define INCLUDED_SC_INC_SCMOD_HXX
+#pragma once
 
 #include "scdllapi.h"
 #include <o3tl/deleter.hxx>
@@ -250,7 +249,5 @@ public:
 #define SC_MOD() ( static_cast<ScModule*>(SfxApplication::GetModule(SfxToolsModule::Calc)) )
 
 void global_InitAppOptions();
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

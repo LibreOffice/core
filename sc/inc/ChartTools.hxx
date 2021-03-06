@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SC_INC_CHARTTOOLS_HXX
-#define INCLUDED_SC_INC_CHARTTOOLS_HXX
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -51,7 +50,5 @@ SdrOle2Obj* getChartByIndex(ScDocShell* pDocShell, SCTAB nTab,
 std::vector<SdrOle2Obj*> getAllPivotChartsConnectedTo(std::u16string_view sPivotTableName, ScDocShell* pDocShell);
 
 } // end sc::tools
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

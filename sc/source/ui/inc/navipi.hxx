@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_NAVIPI_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_NAVIPI_HXX
+#pragma once
 
 #include <vector>
 #include <vcl/idle.hxx>
@@ -190,7 +189,5 @@ public:
                        SfxBindings* pBindings, SfxChildWinInfo* pInfo);
     SFX_DECL_CHILDWINDOW(ScNavigatorWrapper);
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_NAVIPI_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

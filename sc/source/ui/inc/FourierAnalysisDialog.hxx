@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_FOURIERANALYSISDIALOG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_FOURIERANALYSISDIALOG_HXX
+#pragma once
 
 #include "StatisticsInputOutputDialog.hxx"
 
@@ -53,7 +52,5 @@ private:
 
     DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

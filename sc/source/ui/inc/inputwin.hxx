@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_INPUTWIN_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_INPUTWIN_HXX
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -358,7 +357,5 @@ public:
 
     SFX_DECL_CHILDWINDOW_WITHID(ScInputWindowWrapper);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

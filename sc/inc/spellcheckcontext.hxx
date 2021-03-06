@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_SPELLCHECKCONTEXT_HXX
-#define INCLUDED_SC_INC_SPELLCHECKCONTEXT_HXX
+#pragma once
 
 #include <i18nlangtag/lang.h>
 #include <editeng/misspellrange.hxx>
@@ -60,7 +59,5 @@ private:
     void setup();
 };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

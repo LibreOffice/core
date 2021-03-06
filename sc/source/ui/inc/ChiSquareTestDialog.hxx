@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_CHISQUARETESTDIALOG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_CHISQUARETESTDIALOG_HXX
+#pragma once
 
 #include "StatisticsInputOutputDialog.hxx"
 
@@ -28,7 +27,5 @@ protected:
     virtual const char* GetUndoNameId() override;
     virtual ScRange ApplyOutput(ScDocShell* pDocShell) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

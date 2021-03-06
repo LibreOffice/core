@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAMENUS_HXX
-#define INCLUDED_SC_SOURCE_UI_VBA_VBAMENUS_HXX
+#pragma once
 
 #include <ooo/vba/excel/XMenus.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
@@ -39,7 +38,5 @@ public:
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_VBA_VBAMENUS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

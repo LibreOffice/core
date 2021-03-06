@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_FSTALGORITHM_HXX
-#define INCLUDED_SC_INC_FSTALGORITHM_HXX
+#pragma once
 
 #include <mdds/flat_segment_tree.hpp>
 #include <vector>
@@ -128,7 +127,5 @@ std::vector<Span> toSpanArray( const mdds::flat_segment_tree<Key,bool>& rTree, K
 }
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

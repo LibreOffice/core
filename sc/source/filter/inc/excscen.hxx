@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXCSCEN_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_EXCSCEN_HXX
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -67,7 +66,5 @@ struct ExcScenarioList
     sal_uInt16 nLastScenario;
     std::vector< std::unique_ptr<ExcScenario> > aEntries;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

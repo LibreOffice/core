@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_CORE_INC_WEBSERVICE_HXX
-#define INCLUDED_SC_SOURCE_CORE_INC_WEBSERVICE_HXX
+#pragma once
 
 #include <sfx2/lnkbase.hxx>
 #include <svl/broadcast.hxx>
@@ -46,7 +45,5 @@ public:
 
     const OUString& GetURL() const { return aURL; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

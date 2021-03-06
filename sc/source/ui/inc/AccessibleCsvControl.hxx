@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLECSVCONTROL_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_ACCESSIBLECSVCONTROL_HXX
+#pragma once
 
 #include <memory>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -508,7 +507,5 @@ private:
     /** Creates the edit source the text helper needs. */
     ::std::unique_ptr< SvxEditSource > implCreateEditSource();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

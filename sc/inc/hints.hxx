@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_HINTS_HXX
-#define INCLUDED_SC_INC_HINTS_HXX
+#pragma once
 
 #include "global.hxx"
 #include "address.hxx"
@@ -136,7 +135,5 @@ public:
 
     const OUString&   GetName() const { return maName; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

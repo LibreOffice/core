@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_SOURCE_UI_ATTRDLG_SCDLGFACT_HXX
-#define INCLUDED_SC_SOURCE_UI_ATTRDLG_SCDLGFACT_HXX
+#pragma once
 
 #include <scabstdlg.hxx>
 #include <sfx2/sfxdlg.hxx>
@@ -828,7 +827,5 @@ public:
     virtual CreateTabPage                GetTabPageCreatorFunc( sal_uInt16 nId ) override;
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

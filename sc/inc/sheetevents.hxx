@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_SHEETEVENTS_HXX
-#define INCLUDED_SC_INC_SHEETEVENTS_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <memory>
@@ -50,7 +49,5 @@ public:
     static sal_Int32        GetVbaSheetEventId(ScSheetEventId nEvent);
     static sal_Int32        GetVbaDocumentEventId(ScSheetEventId nEvent);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

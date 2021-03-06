@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_ORCUSINTERFACE_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_ORCUSINTERFACE_HXX
+#pragma once
 
 #include <address.hxx>
 #include <documentimport.hxx>
@@ -676,5 +675,4 @@ public:
     const ScOrcusGlobalSettings& getGlobalSettings() const;
 };
 
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

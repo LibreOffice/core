@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_QA_UNIT_UCALC_HXX
-#define INCLUDED_SC_QA_UNIT_UCALC_HXX
+#pragma once
 
 #include <test/bootstrapfixture.hxx>
 #include <docsh.hxx>
@@ -893,7 +892,5 @@ private:
     std::unique_ptr<TestImpl> m_pImpl;
     ScDocument* m_pDoc;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

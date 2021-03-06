@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_FILLINFO_HXX
-#define INCLUDED_SC_INC_FILLINFO_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -202,7 +201,5 @@ struct ScTableInfo
     ScTableInfo(const ScTableInfo&) = delete;
     const ScTableInfo& operator=(const ScTableInfo&) = delete;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

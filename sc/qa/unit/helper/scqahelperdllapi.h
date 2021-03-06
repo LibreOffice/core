@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_QA_UNIT_HELPER_DLLAPI_H
-#define INCLUDED_SC_QA_UNIT_HELPER_DLLAPI_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -16,8 +15,6 @@
 #define SCQAHELPER_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
 #else
 #define SCQAHELPER_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

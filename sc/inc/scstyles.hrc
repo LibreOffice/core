@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_SCSTYLES_HRC
-#define INCLUDED_SC_INC_SCSTYLES_HRC
+#pragma once
 
 #include <svl/style.hxx>
 
@@ -40,7 +39,5 @@ const std::pair<const char*, SfxStyleSearchBits> RID_PAGESTYLEFAMILY[] =
     { NC_("RID_PAGESTYLEFAMILY", "Custom Styles") , SfxStyleSearchBits::UserDefined },
     { nullptr, SfxStyleSearchBits::Auto }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_UNOOBJ_EXCELDETECT_HXX
-#define INCLUDED_SC_SOURCE_UI_UNOOBJ_EXCELDETECT_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 
@@ -31,7 +30,5 @@ public:
     virtual OUString SAL_CALL
     detect(css::uno::Sequence<css::beans::PropertyValue>& lDescriptor) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

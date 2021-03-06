@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_TOOL_H
-#define INCLUDED_SC_SOURCE_FILTER_INC_TOOL_H
+#pragma once
 
 #include <document.hxx>
 
@@ -130,7 +129,5 @@ inline const SfxUInt32Item* FormCache::GetAttr( sal_uInt8 nFormat, sal_uInt8 nSt
     }
     return pRet;
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_TOKEN_HXX
-#define INCLUDED_SC_INC_TOKEN_HXX
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -452,7 +451,5 @@ public:
                                 r.GetDoubleRef()->Ref2 : Ref1 )
                     {}
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
