@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCTEXT_H
-#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCTEXT_H
+#pragma once
 
 #include "Resource.h"       // main symbols
 
@@ -126,7 +125,5 @@ public:
 
     STDMETHOD(get_oldText)( IA2TextSegment *oldText) override;
 };
-
-#endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCTEXT_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

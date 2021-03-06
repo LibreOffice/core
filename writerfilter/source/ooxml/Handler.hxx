@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_WRITERFILTER_SOURCE_OOXML_HANDLER_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_OOXML_HANDLER_HXX
+#pragma once
 
 #include <dmapper/resourcemodel.hxx>
 #include "OOXMLFastContextHandler.hxx"
@@ -175,6 +174,5 @@ public:
     virtual void sprm(Sprm& sprm) override;
 };
 }
-#endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_HANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

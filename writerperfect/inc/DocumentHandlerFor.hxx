@@ -5,8 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_INC_WRITERPERFECT_DOCUMENTHANDLERFOR_HXX
-#define INCLUDED_WRITERPERFECT_INC_WRITERPERFECT_DOCUMENTHANDLERFOR_HXX
+#pragma once
 
 namespace writerperfect
 {
@@ -19,7 +18,5 @@ template <class Generator> struct DocumentHandlerFor
     // static OUString name();
 };
 }
-
-#endif // INCLUDED_WRITERPERFECT_INC_WRITERPERFECT_DOCUMENTHANDLERFOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

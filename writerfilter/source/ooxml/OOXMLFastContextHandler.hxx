@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTCONTEXTHANDLER_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTCONTEXTHANDLER_HXX
+#pragma once
 
 #include <set>
 #include <cppuhelper/implbase.hxx>
@@ -601,6 +600,5 @@ protected:
 };
 
 }
-#endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTCONTEXTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

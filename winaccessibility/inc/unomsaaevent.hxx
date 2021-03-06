@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WINACCESSIBILITY_INC_UNOMSAAEVENT_HXX
-#define INCLUDED_WINACCESSIBILITY_INC_UNOMSAAEVENT_HXX
+#pragma once
 
 //STATE_CHANGED with get FOCUSED -> EVENT_OBJECT_FOCUS
 const short UM_EVENT_STATE_FOCUSED = 0;
@@ -104,7 +103,5 @@ const short UM_EVENT_TEXT_SELECTION_CHANGED = 39;
 //for section change and column change event
 const short UM_EVENT_SECTION_CHANGED = 40;
 const short UM_EVENT_COLUMN_CHANGED = 41;
-
-#endif // INCLUDED_WINACCESSIBILITY_INC_UNOMSAAEVENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

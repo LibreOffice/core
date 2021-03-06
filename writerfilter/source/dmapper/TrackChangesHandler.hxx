@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TRACKCHANGESHANDLER_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TRACKCHANGESHANDLER_HXX
+#pragma once
 
 #include "LoggedResources.hxx"
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -37,7 +36,5 @@ public:
     css::uno::Sequence<css::beans::PropertyValue> getRedlineProperties() const;
 };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

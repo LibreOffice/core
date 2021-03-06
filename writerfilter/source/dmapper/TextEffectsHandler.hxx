@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TEXTEFFECTSHANDLER_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TEXTEFFECTSHANDLER_HXX
+#pragma once
 
 #include "LoggedResources.hxx"
 
@@ -66,7 +65,5 @@ public:
     static sal_uInt8 GetTextFillSolidFillAlpha(const css::beans::PropertyValue& rValue);
 };
 }
-
-#endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TEXTEFFECTSHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

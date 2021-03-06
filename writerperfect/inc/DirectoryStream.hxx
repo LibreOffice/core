@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_DIRECTORYSTREAM_HXX
-#define INCLUDED_WRITERPERFECT_DIRECTORYSTREAM_HXX
+#pragma once
 
 #include <librevenge-stream/librevenge-stream.h>
 #include <com/sun/star/uno/Reference.h>
@@ -53,7 +52,5 @@ private:
     std::unique_ptr<Impl> m_pImpl;
 };
 }
-
-#endif //  INCLUDED_WRITERPERFECT_DIRECTORYSTREAM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

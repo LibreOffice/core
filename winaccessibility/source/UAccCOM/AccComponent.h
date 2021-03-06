@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCCOMPONENT_H
-#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCCOMPONENT_H
+#pragma once
 
 #include "Resource.h"       // main symbols
 
@@ -84,7 +83,5 @@ public:
     // Returns the background color of this object.
     STDMETHOD(get_background)(IA2Color * background) override;
 };
-
-#endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCCOMPONENT_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

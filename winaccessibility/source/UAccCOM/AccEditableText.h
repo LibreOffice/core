@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCEDITABLETEXT_H
-#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCEDITABLETEXT_H
+#pragma once
 
 #include <sal/config.h>
 
@@ -115,7 +114,5 @@ private:
         return pRXEdtTxt.get();
     }
 };
-
-#endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCEDITABLETEXT_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

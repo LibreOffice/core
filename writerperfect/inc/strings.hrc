@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_INC_STRINGS_HRC
-#define INCLUDED_WRITERPERFECT_INC_STRINGS_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -20,7 +19,5 @@
 #define STR_ENCODING_DIALOG_TITLE_LOTUS         NC_("STR_ENCODING_DIALOG_TITLE_LOTUS", "Import Lotus file")
 #define STR_ENCODING_DIALOG_TITLE_SYMPHONY      NC_("STR_ENCODING_DIALOG_TITLE_SYMPHONY", "Import Symphony file")
 #define STR_ENCODING_DIALOG_TITLE_QUATTROPRO    NC_("STR_ENCODING_DIALOG_TITLE_QUATTROPRO", "Import Quattro Pro file")
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ENUMVARIANT_H
-#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ENUMVARIANT_H
+#pragma once
 
 #include "Resource.h"       // main symbols
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -106,7 +105,5 @@ private:
     css::uno::Reference<css::accessibility::XAccessibleSelection>
         m_pXAccessibleSelection;
 };
-
-#endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ENUMVARIANT_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

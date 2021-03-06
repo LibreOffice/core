@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_WRAPPOLYGONHANDLER_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_WRAPPOLYGONHANDLER_HXX
+#pragma once
 
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include "LoggedResources.hxx"
@@ -79,7 +78,5 @@ private:
     virtual void lcl_sprm(Sprm& sprm) override;
 };
 }
-
-#endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_WRAPPOLYGONHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

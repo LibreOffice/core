@@ -5,8 +5,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_SOURCE_DRAW_QXPIMPORTFILTER_HXX
-#define INCLUDED_WRITERPERFECT_SOURCE_DRAW_QXPIMPORTFILTER_HXX
+#pragma once
 
 #include <ImportFilter.hxx>
 
@@ -33,7 +32,5 @@ private:
     virtual bool doImportDocument(weld::Window* pParent, librevenge::RVNGInputStream& rInput,
                                   OdgGenerator& rGenerator, utl::MediaDescriptor&) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

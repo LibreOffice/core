@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WINACCESSIBILITY_INC_RESIDGENERATOR_HXX
-#define INCLUDED_WINACCESSIBILITY_INC_RESIDGENERATOR_HXX
+#pragma once
 
 #define PRIMARY_RESID 0x00000001
 #include <deque>
@@ -40,7 +39,5 @@ public:
     long GenerateNewResID();
     void SetSub(long number) { subList.push_back(number); };
 };
-
-#endif // INCLUDED_WINACCESSIBILITY_INC_RESIDGENERATOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WINACCESSIBILITY_INC_ACCOBJECTCONTAINEREVENTLISTENER_HXX
-#define INCLUDED_WINACCESSIBILITY_INC_ACCOBJECTCONTAINEREVENTLISTENER_HXX
+#pragma once
 
 #include <stdio.h>
 #include "AccContainerEventListener.hxx"
@@ -44,7 +43,5 @@ public:
     //for visible data changed event, for shapes, the visibledatachanged should be mapped to LOCATION_CHANGED
     virtual void HandleVisibleDataChangedEvent() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLBINARYOBJECTREFERENCE_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLBINARYOBJECTREFERENCE_HXX
+#pragma once
 
 #include <dmapper/resourcemodel.hxx>
 #include <ooxml/OOXMLDocument.hxx>
@@ -40,7 +39,5 @@ public:
     virtual void resolve(BinaryObj& rHandler) override;
 };
 }
-
-#endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLBINARYOBJECTREFERENCE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

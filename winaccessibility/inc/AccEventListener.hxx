@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WINACCESSIBILITY_INC_ACCEVENTLISTENER_HXX
-#define INCLUDED_WINACCESSIBILITY_INC_ACCEVENTLISTENER_HXX
+#pragma once
 
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -76,7 +75,5 @@ public:
 
     void RemoveMeFromBroadcaster();
 };
-
-#endif // INCLUDED_WINACCESSIBILITY_INC_ACCEVENTLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

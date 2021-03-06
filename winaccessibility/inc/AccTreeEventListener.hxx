@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WINACCESSIBILITY_INC_ACCTREEEVENTLISTENER_HXX
-#define INCLUDED_WINACCESSIBILITY_INC_ACCTREEEVENTLISTENER_HXX
+#pragma once
 
 #include <stdio.h>
 #include "AccDescendantManagerEventListener.hxx"
@@ -44,7 +43,5 @@ public:
     //for active descendant changed event
     virtual void HandleActiveDescendantChangedEvent(css::uno::Any oldValue, css::uno::Any newValue);
 };
-
-#endif // INCLUDED_WINACCESSIBILITY_INC_ACCTREEEVENTLISTENER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

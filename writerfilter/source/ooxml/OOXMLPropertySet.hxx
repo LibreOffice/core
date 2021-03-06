@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLPROPERTYSET_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLPROPERTYSET_HXX
+#pragma once
 
 #include <vector>
 #include "OOXMLBinaryObjectReference.hxx"
@@ -410,7 +409,5 @@ public:
     bool getValue() const { return mValue; }
 };
 }
-
-#endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLPROPERTYSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

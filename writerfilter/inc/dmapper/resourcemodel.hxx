@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WRITERFILTER_INC_DMAPPER_RESOURCEMODEL_HXX
-#define INCLUDED_WRITERFILTER_INC_DMAPPER_RESOURCEMODEL_HXX
+#pragma once
 
 #include <string>
 #include <sal/types.h>
@@ -394,7 +393,5 @@ protected:
 
 typedef sal_Int32 Token_t;
 }
-
-#endif // INCLUDED_WRITERFILTER_INC_DMAPPER_RESOURCEMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

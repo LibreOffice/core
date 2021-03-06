@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_BORDERHANDLER_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_BORDERHANDLER_HXX
+#pragma once
 
 #include <vector>
 #include "LoggedResources.hxx"
@@ -75,7 +74,5 @@ public:
     css::beans::PropertyValue getInteropGrabBag(const OUString& aName = OUString());
 };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

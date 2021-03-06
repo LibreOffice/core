@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYIDS_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYIDS_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -370,6 +369,5 @@ bool isCharacterProperty(const PropertyIds eId);
 bool isParagraphProperty(const PropertyIds eId);
 
 } // namespace writerfilter::dmapper
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

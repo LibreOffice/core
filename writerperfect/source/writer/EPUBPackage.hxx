@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_EPUBPACKAGE_HXX
-#define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EPUBPACKAGE_HXX
+#pragma once
 
 #include <libepubgen/EPUBPackage.h>
 
@@ -87,7 +86,5 @@ public:
 };
 
 } // namespace writerperfect
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFREFERENCETABLE_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFREFERENCETABLE_HXX
+#pragma once
 
 #include <map>
 #include <dmapper/resourcemodel.hxx>
@@ -29,7 +28,5 @@ private:
     Entries_t m_aEntries;
 };
 } // namespace writerfilter::rtftok
-
-#endif // INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFREFERENCETABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
