@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_CACHER_CACHEDDYNAMICRESULTSETSTUB_HXX
-#define INCLUDED_UCB_SOURCE_CACHER_CACHEDDYNAMICRESULTSETSTUB_HXX
+#pragma once
 
 #include "dynamicresultsetwrapper.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -100,7 +99,5 @@ public:
                 , const css::uno::Reference< css::ucb::XAnyCompareFactory > & CompareFactory
                 ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

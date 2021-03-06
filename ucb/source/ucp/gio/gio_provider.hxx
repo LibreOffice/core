@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_GIO_GIO_PROVIDER_HXX
-#define INCLUDED_UCB_SOURCE_UCP_GIO_GIO_PROVIDER_HXX
+#pragma once
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -51,7 +50,5 @@ public:
     queryContent(const css::uno::Reference<css::ucb::XContentIdentifier>& Identifier) override;
 };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

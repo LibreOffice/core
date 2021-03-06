@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVTYPES_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVTYPES_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -74,7 +73,5 @@ struct ProppatchValue
 };
 
 } // namespace http_dav_ucp
-
-#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVTYPES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

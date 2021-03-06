@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_UNOIDL_SOURCE_SOURCETREEPROVIDER_HXX
-#define INCLUDED_UNOIDL_SOURCE_SOURCETREEPROVIDER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -39,7 +38,5 @@ private:
     mutable std::map<OUString, rtl::Reference<Entity>> cache_; //TODO: at manager
 };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

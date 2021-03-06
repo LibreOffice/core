@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UUI_SOURCE_REQUESTSTRINGRESOLVER_HXX
-#define INCLUDED_UUI_SOURCE_REQUESTSTRINGRESOLVER_HXX
+#pragma once
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XInteractionRequestStringResolver.hpp>
@@ -57,7 +56,5 @@ private:
     getStringFromInformationalRequest(
         const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;
 };
-
-#endif // INCLUDED_UUI_SOURCE_REQUESTSTRINGRESOLVER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

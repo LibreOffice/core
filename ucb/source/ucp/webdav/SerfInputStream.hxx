@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFINPUTSTREAM_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFINPUTSTREAM_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <cppuhelper/weak.hxx>
@@ -87,7 +86,5 @@ class SerfInputStream : public css::io::XInputStream,
 };
 
 } // namespace http_dav_ucp
-
-#endif // INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFINPUTSTREAM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

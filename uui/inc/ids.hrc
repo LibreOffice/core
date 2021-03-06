@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UUI_INC_IDS_HRC
-#define INCLUDED_UUI_INC_IDS_HRC
+#pragma once
 
 #include <vcl/errcode.hxx>
 
@@ -170,7 +169,5 @@ const std::pair<const char*, ErrCode> RID_UUI_ERRHDL[] =
 #define STR_UUI_SSLWARN_DOMAINMISMATCH_TITLE NC_("STR_UUI_SSLWARN_DOMAINMISMATCH_TITLE", "Security Warning: Server Certificate Expired")
 #define STR_UUI_SSLWARN_INVALID              NC_("STR_UUI_SSLWARN_INVALID", "The certificate could not be validated. You should examine this site's certificate carefully.\n\nIf you suspect the certificate shown, please cancel the connection and notify the site administrator.")
 #define STR_UUI_SSLWARN_INVALID_TITLE        NC_("STR_UUI_SSLWARN_INVALID_TITLE", "Security Warning: Domain Name Mismatch")
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,8 +22,7 @@
  **************************************************************************
 
  *************************************************************************/
-#ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPCFUNC_HXX
-#define INCLUDED_UCB_SOURCE_UCP_FTP_FTPCFUNC_HXX
+#pragma once
 
 #include <stddef.h>
 
@@ -36,7 +35,5 @@ extern "C" {
 
 int file_write(void* buffer, size_t size, size_t nmemb, void* stream);
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

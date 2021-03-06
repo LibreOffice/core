@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOXML_SOURCE_DOM_COMMENT_HXX
-#define INCLUDED_UNOXML_SOURCE_DOM_COMMENT_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/dom/XComment.hpp>
@@ -180,7 +179,5 @@ namespace DOM
 
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_SORTER_SORTDYNRES_HXX
-#define INCLUDED_UCB_SOURCE_SORTER_SORTDYNRES_HXX
+#pragma once
 
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -164,7 +163,5 @@ public:
                 const css::uno::Sequence< css::ucb::NumberedSortingInfo > & Info,
                 const css::uno::Reference< css::ucb::XAnyCompareFactory > & CompareFactory ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

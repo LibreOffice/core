@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UUI_SOURCE_SECMACROWARNINGS_HXX
-#define INCLUDED_UUI_SOURCE_SECMACROWARNINGS_HXX
+#pragma once
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
@@ -64,7 +63,5 @@ public:
                         const css::uno::Sequence< css::security::DocumentSignatureInformation >& _rInfos );
     void    SetCertificate( const css::uno::Reference< css::security::XCertificate >& _rxCert );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

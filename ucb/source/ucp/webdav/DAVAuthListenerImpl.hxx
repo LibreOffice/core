@@ -18,8 +18,7 @@
  */
 
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVAUTHLISTENERIMPL_HXX
-#define INCLUDED_UCB_SOURCE_UCP_WEBDAV_DAVAUTHLISTENERIMPL_HXX
+#pragma once
 
 #include "DAVAuthListener.hxx"
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -58,7 +57,5 @@ namespace http_dav_ucp
     };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

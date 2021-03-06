@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UUI_SOURCE_MASTERPASSCRTDLG_HXX
-#define INCLUDED_UUI_SOURCE_MASTERPASSCRTDLG_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 
@@ -40,7 +39,5 @@ public:
 
     OUString GetMasterPassword() const { return m_xEDMasterPasswordCrt->get_text(); }
 };
-
-#endif // INCLUDED_UUI_SOURCE_MASTERPASSCRTDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

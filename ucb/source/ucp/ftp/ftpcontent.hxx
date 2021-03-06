@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPCONTENT_HXX
-#define INCLUDED_UCB_SOURCE_UCP_FTP_FTPCONTENT_HXX
+#pragma once
 
 #include <ucbhelper/contenthelper.hxx>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
@@ -143,7 +142,5 @@ private:
     };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
