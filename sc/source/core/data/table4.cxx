@@ -588,6 +588,13 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         rInc = nCmpInc;
                     }
                 }
+                else
+                {
+                    // tdf#89754 - don't increment non different consecutive date cells
+                    rCmd = FILL_DATE;
+                    rDateCmd = FILL_DAY;
+                    rInc = 0.0;
+                }
             }
             else                            // single date -> increment by days
             {
