@@ -36,11 +36,6 @@ FactoryFunction SvxColorValueSet::GetUITestFactory() const
     return SvxColorValueSetUIObject::create;
 }
 
-sal_uInt32 SvxColorValueSet::getMaxRowCount()
-{
-    return StyleSettings::GetColorValueSetMaximumRowCount();
-}
-
 sal_uInt32 SvxColorValueSet::getEntryEdgeLength()
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();

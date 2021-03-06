@@ -597,10 +597,6 @@ public:
     void                            SetColorValueSetColumnCount(sal_uInt16 nCount);
     sal_uInt16                      GetColorValueSetColumnCount() const;
 
-    // maximum row/line count for the ColorValueSet control. If more lines would be needed, a scrollbar will
-    // be used.
-    static sal_uInt16               GetColorValueSetMaximumRowCount();
-
     void                            SetListBoxPreviewDefaultLogicSize(Size const & rSize);
     const Size&                     GetListBoxPreviewDefaultPixelSize() const;
 
