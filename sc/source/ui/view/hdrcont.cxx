@@ -48,6 +48,7 @@ ScHeaderControl::ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelect
                                   SCCOLROW nNewSize, bool bNewVertical, ScTabView* pTab ) :
             Window      ( pParent ),
             pSelEngine  ( pSelectionEngine ),
+            aShowHelpTimer("sc HeaderControl Popover Timer"),
             bVertical   ( bNewVertical ),
             nSize       ( nNewSize ),
             nMarkStart  ( 0 ),
@@ -88,7 +89,16 @@ ScHeaderControl::ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelect
     nWidth = nSmallWidth = aSize.Width();
     nBigWidth = LogicToPixel( Size( GetTextWidth("8888888"), 0 ) ).Width() + 5;
 
+    aShowHelpTimer.SetInvokeHandler(LINK(this, ScHeaderControl, ShowDragHelpHdl));
+    aShowHelpTimer.SetTimeout(GetSettings().GetMouseSettings().GetDoubleClickTime());
+
     SetBackground();
+}
+
+void ScHeaderControl::dispose()
+{
+    aShowHelpTimer.Stop();
+    vcl::Window::dispose();
 }
 
 void ScHeaderControl::SetWidth( tools::Long nNew )
@@ -652,7 +662,11 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
             else
                 nDragStart = rMEvt.GetPosPixel().X();
             nDragPos = nDragStart;
-            ShowDragHelp();
+            // tdf#140833 launch help tip to show after the double click time has expired
+            // so under gtk the popover isn't active when the double click is processed
+            // by gtk because under load on wayland the double click is getting handled
+            // by something else and getting sent to the the window underneath our window
+            aShowHelpTimer.Start();
             DrawInvert( nDragPos );
 
             StartTracking();
@@ -713,11 +727,7 @@ void ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
     {
         DrawInvert( nDragPos );
         ReleaseMouse();
-        if (nTipVisible)
-        {
-            Help::HidePopover(this, nTipVisible);
-            nTipVisible = nullptr;
-        }
+        HideDragHelp();
         bDragging = false;
 
         tools::Long nScrPos    = GetScrPos( nDragNo );
@@ -885,11 +895,7 @@ void ScHeaderControl::StopMarking()
     if ( bDragging )
     {
         DrawInvert( nDragPos );
-        if (nTipVisible)
-        {
-            Help::HidePopover(this, nTipVisible);
-            nTipVisible = nullptr;
-        }
+        HideDragHelp();
         bDragging = false;
     }
 
@@ -902,8 +908,14 @@ void ScHeaderControl::StopMarking()
         ReleaseMouse();
 }
 
+IMPL_LINK_NOARG(ScHeaderControl, ShowDragHelpHdl, Timer*, void)
+{
+    ShowDragHelp();
+}
+
 void ScHeaderControl::ShowDragHelp()
 {
+    aShowHelpTimer.Stop();
     if (!Help::IsQuickHelpEnabled())
         return;
 
@@ -941,6 +953,16 @@ void ScHeaderControl::ShowDragHelp()
     if (nTipVisible)
         Help::HidePopover(this, nTipVisible);
     nTipVisible = Help::ShowPopover(this, aRect, aHelpStr, nAlign);
+}
+
+void ScHeaderControl::HideDragHelp()
+{
+    aShowHelpTimer.Stop();
+    if (nTipVisible)
+    {
+        Help::HidePopover(this, nTipVisible);
+        nTipVisible = nullptr;
+    }
 }
 
 void ScHeaderControl::RequestHelp( const HelpEvent& rHEvt )
