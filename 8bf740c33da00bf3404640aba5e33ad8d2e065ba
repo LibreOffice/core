@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "0e614ab5_80d2c48e",
+        "filename": "config_host.mk.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-03-06T17:59:29Z",
+      "side": 1,
+      "message": "uhm.\n\ns/ENABLE/ZXING/, also for _LIBS\n\nobviusly :-)",
+      "revId": "8bf740c33da00bf3404640aba5e33ad8d2e065ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8a951fda_4a59cfae",
         "filename": "configure.ac",
         "patchSetId": 1
