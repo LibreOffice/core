@@ -1,0 +1,3 @@
+Qr code generation library availaible from [https://github.com/nu-book/zxing-cpp]
+
+Qr code generator to make a QR code out of a provided link or text in LibreOffice.
