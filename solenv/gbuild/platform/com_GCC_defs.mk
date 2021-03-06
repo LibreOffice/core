@@ -50,7 +50,7 @@ gb_COMPILERDEFS := \
 	-DBOOST_SYSTEM_NO_DEPRECATED \
 	-DCPPU_ENV=$(gb_CPPU_ENV) \
 
-gb_CFLAGS_COMMON := \
+gb_CFLAGS_COMMON := $(CFLAGS) \
 	-Wall \
 	-Wendif-labels \
 	-Wextra \
@@ -66,7 +66,7 @@ gb_CFLAGS_COMMON := \
 	-fstack-protector-strong \
 	$(if $(gb_COLOR),-fdiagnostics-color=always) \
 
-gb_CXXFLAGS_COMMON := \
+gb_CXXFLAGS_COMMON := $(CXXFLAGS) \
 	-Wall \
 	-Wno-missing-braces \
 	-Wnon-virtual-dtor \
