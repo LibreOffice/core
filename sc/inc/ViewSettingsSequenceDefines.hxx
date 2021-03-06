@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_VIEWSETTINGSSEQUENCEDEFINES_HXX
-#define INCLUDED_SC_INC_VIEWSETTINGSSEQUENCEDEFINES_HXX
+#pragma once
 
 // this are the defines for the position of the settings in the
 // ViewSettingsSequence
@@ -96,7 +95,5 @@
 #define SC_SHOWPAGEBREAKPREVIEW             "ShowPageBreakPreview"
 #define SC_VIEWID                           "ViewId"
 #define SC_VIEW                             "view"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

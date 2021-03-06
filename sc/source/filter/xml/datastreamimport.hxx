@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_XML_DATASTREAMIMPORT_HXX
-#define INCLUDED_SC_SOURCE_FILTER_XML_DATASTREAMIMPORT_HXX
+#pragma once
 
 #include "importcontext.hxx"
 
@@ -33,7 +32,5 @@ public:
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

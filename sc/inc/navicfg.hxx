@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_NAVICFG_HXX
-#define INCLUDED_SC_INC_NAVICFG_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -43,7 +42,5 @@ public:
     void        SetRootType(ScContentId nNew);
     ScContentId GetRootType() const         { return nRootType; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_SHAREDFORMULAGROUPS_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_SHAREDFORMULAGROUPS_HXX
+#pragma once
 
 #include <address.hxx>
 #include <tokenarray.hxx>
@@ -48,7 +47,5 @@ public:
     const SharedFormulaGroupEntry* getEntry(size_t nSharedId) const;
 };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

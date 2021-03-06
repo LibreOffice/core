@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_TYPES_HXX
-#define INCLUDED_SC_INC_TYPES_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -133,7 +132,5 @@ enum StartListeningType
 namespace o3tl{
     template<> struct typed_flags<sc::MatrixEdge> : o3tl::is_typed_flags<sc::MatrixEdge, 63> {};
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

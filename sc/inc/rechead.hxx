@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_RECHEAD_HXX
-#define INCLUDED_SC_INC_RECHEAD_HXX
+#pragma once
 
 #include <tools/stream.hxx>
 #include <memory>
@@ -82,7 +81,5 @@ public:
     void    StartEntry();
     void    EndEntry();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

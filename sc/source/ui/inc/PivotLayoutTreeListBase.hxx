@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTTREELISTBASE_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTTREELISTBASE_HXX
+#pragma once
 
 #include <vcl/transfer.hxx>
 #include <vcl/weld.hxx>
@@ -69,5 +68,3 @@ public:
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-
-#endif

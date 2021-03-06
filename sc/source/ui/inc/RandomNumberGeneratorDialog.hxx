@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_RANDOMNUMBERGENERATORDIALOG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_RANDOMNUMBERGENERATORDIALOG_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -82,7 +81,5 @@ private:
     DECL_LINK( CheckChanged, weld::ToggleButton&, void );
 
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_RANDOMNUMBERGENERATORDIALOG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

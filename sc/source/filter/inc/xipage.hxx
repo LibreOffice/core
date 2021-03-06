@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XIPAGE_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XIPAGE_HXX
+#pragma once
 
 #include "xlpage.hxx"
 #include "xiroot.hxx"
@@ -67,7 +66,5 @@ private:
     XclPageData         maData;         /// Page settings data.
     bool                mbValidPaper;   /// true = Paper size and orientation valid.
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

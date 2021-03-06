@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_EXCDEFS_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_EXCDEFS_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -89,7 +88,5 @@ const sal_uInt8 EXC_AFOPER_GREATEREQUAL     = 0x06;
 #define EXC_CHTR_NOTHING            0x0000
 #define EXC_CHTR_ACCEPT             0x0001
 #define EXC_CHTR_REJECT             0x0003
-
-#endif // _EXCDEFS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

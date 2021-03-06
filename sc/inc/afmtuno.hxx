@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_AFMTUNO_HXX
-#define INCLUDED_SC_INC_AFMTUNO_HXX
+#pragma once
 
 #include <svl/itemprop.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -185,7 +184,5 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

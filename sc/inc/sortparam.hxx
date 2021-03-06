@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_SORTPARAM_HXX
-#define INCLUDED_SC_INC_SORTPARAM_HXX
+#pragma once
 
 #define DEFSORT 3
 
@@ -108,7 +107,5 @@ struct ReorderParam
 };
 
 }
-
-#endif // INCLUDED_SC_INC_SORTPARAM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

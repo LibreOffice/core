@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_UNITS_HRC
-#define INCLUDED_SC_INC_UNITS_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -38,7 +37,5 @@ const std::pair<const char*, FieldUnit> SCSTR_UNIT[] =
     { NC_("SCSTR_UNIT", "Pica") , FieldUnit::PICA },
     { NC_("SCSTR_UNIT", "Point") , FieldUnit::POINT }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

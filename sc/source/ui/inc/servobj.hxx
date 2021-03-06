@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_SERVOBJ_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_SERVOBJ_HXX
+#pragma once
 
 #include <svl/lstner.hxx>
 #include <svl/listener.hxx>
@@ -61,7 +60,5 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
             void    EndListeningAll();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

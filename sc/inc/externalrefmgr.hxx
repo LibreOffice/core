@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_EXTERNALREFMGR_HXX
-#define INCLUDED_SC_INC_EXTERNALREFMGR_HXX
+#pragma once
 
 #include "address.hxx"
 #include "document.hxx"
@@ -860,7 +859,5 @@ private:
     AutoTimer maSrcDocTimer;
     DECL_LINK(TimeOutHdl, Timer*, void);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_RICHSTRINGCONTEXT_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_RICHSTRINGCONTEXT_HXX
+#pragma once
 
 #include "excelhandlers.hxx"
 #include "richstring.hxx"
@@ -52,7 +51,5 @@ RichStringContext::RichStringContext( ParentType& rParent, RichStringRef xString
 }
 
 } // namespace oox::xls
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

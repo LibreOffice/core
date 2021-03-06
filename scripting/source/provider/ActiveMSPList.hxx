@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SCRIPTING_SOURCE_PROVIDER_ACTIVEMSPLIST_HXX
-#define INCLUDED_SCRIPTING_SOURCE_PROVIDER_ACTIVEMSPLIST_HXX
+#pragma once
 
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
@@ -91,6 +90,5 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 };
 } // func_provider
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

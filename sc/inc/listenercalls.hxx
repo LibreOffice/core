@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_LISTENERCALLS_HXX
-#define INCLUDED_SC_INC_LISTENERCALLS_HXX
+#pragma once
 
 #include <vector>
 #include <com/sun/star/uno/Reference.hxx>
@@ -59,7 +58,5 @@ public:
                      const css::lang::EventObject& rEvent );
     void        ExecuteAndClear();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

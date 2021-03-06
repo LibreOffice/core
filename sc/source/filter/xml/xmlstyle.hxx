@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLSTYLE_HXX
-#define INCLUDED_SC_SOURCE_FILTER_XML_XMLSTYLE_HXX
+#pragma once
 
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlaustp.hxx>
@@ -337,7 +336,5 @@ public:
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

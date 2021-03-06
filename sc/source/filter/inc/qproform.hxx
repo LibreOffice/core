@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_QPROFORM_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_QPROFORM_HXX
+#pragma once
 
 #include <sal/config.h>
 #include "formel.hxx"
@@ -68,6 +67,5 @@ public:
     static DefTokenId IndexToDLLId(sal_uInt16 nIndex);
     static const char* getString(sal_uInt8 nIndex);
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

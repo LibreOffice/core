@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_COLUMN_HXX
-#define INCLUDED_SC_INC_COLUMN_HXX
+#pragma once
 
 #include "global.hxx"
 #include "address.hxx"
@@ -778,7 +777,5 @@ private:
     void EndListeningGroup( sc::EndListeningContext& rCxt, SCROW nRow );
     void SetNeedsListeningGroup( SCROW nRow );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

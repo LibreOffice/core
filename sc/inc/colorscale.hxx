@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_COLORSCALE_HXX
-#define INCLUDED_SC_INC_COLORSCALE_HXX
+#pragma once
 
 #include <formula/grammar.hxx>
 #include <tools/color.hxx>
@@ -408,7 +407,5 @@ private:
 
     std::unique_ptr<ScIconSetFormatData> mpFormatData;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

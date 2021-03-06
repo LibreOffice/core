@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLTABLESHAPERESIZER_HXX
-#define INCLUDED_SC_SOURCE_FILTER_XML_XMLTABLESHAPERESIZER_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <vector>
@@ -53,7 +52,5 @@ public:
                    const OUString &rRangeList);
     void    FixupOLEs();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

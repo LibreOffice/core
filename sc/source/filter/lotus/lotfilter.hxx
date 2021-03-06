@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_LOTUS_FILTER_HXX
-#define INCLUDED_SC_SOURCE_FILTER_LOTUS_FILTER_HXX
+#pragma once
 
 #include <map>
 #include <decl.h>
@@ -60,7 +59,5 @@ struct LotusContext
     LotusContext(ScDocument& rDocP, rtl_TextEncoding eQ);
     ~LotusContext();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

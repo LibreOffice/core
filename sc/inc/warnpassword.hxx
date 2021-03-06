@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_WARNPASSWORD_HXX
-#define INCLUDED_SC_INC_WARNPASSWORD_HXX
+#pragma once
 
 class SfxMedium;
 /** Static API helper functions. */
@@ -32,7 +31,5 @@ public:
    */
     static bool WarningOnPassword(SfxMedium& rMedium);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

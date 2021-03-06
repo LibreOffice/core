@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_SORTDLG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_SORTDLG_HXX
+#pragma once
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/weld.hxx>
@@ -49,7 +48,5 @@ private:
     std::unique_ptr<weld::Button> m_xBtnExtSort;
     std::unique_ptr<weld::Button> m_xBtnCurSort;
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_SORTDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

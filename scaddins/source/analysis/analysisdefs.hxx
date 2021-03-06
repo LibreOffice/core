@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SCADDINS_SOURCE_ANALYSIS_ANALYSISDEFS_HXX
-#define INCLUDED_SCADDINS_SOURCE_ANALYSIS_ANALYSISDEFS_HXX
+#pragma once
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <cmath>
@@ -26,7 +25,5 @@
 #define CHK_Freq            ( nFreq != 1 && nFreq != 2 && nFreq != 4 )
 #define CHK_FINITE(d)       if( !std::isfinite( d ) ) throw css::lang::IllegalArgumentException()
 #define RETURN_FINITE(d)    if( !std::isfinite( d ) ) throw css::lang::IllegalArgumentException(); return d;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

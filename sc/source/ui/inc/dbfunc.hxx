@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_DBFUNC_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_DBFUNC_HXX
+#pragma once
 
 #include "viewfunc.hxx"
 #include <dptypes.hxx>
@@ -115,7 +114,5 @@ public:
 
     void            OnLOKShowHideColRow(bool bColumns, SCCOLROW nStartRow);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SCADDINS_INC_STRINGS_HRC
-#define INCLUDED_SCADDINS_INC_STRINGS_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -138,7 +137,5 @@
 #define ANALYSIS_FUNCNAME_Oct2Hex                       NC_("ANALYSIS_FUNCNAME_Oct2Hex", "OCT2HEX")
 #define ANALYSIS_FUNCNAME_Convert                       NC_("ANALYSIS_FUNCNAME_Convert", "CONVERT")
 #define ANALYSIS_FUNCNAME_Factdouble                    NC_("ANALYSIS_FUNCNAME_Factdouble", "FACTDOUBLE")
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

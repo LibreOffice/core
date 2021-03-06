@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SC_SOURCE_UI_INC_SPELLPARAM_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_SPELLPARAM_HXX
+#pragma once
 
 #include <vcl/font.hxx>
 
@@ -68,7 +67,5 @@ private:
     bool                mbUseTargetFont;    /// True = Use maTargetFont to change font during conversion.
     bool                mbIsInteractive;    /// True = Text conversion has (specific) dialog that may be raised.
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

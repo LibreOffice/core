@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_PVFUNDLG_HRC
-#define INCLUDED_SC_INC_PVFUNDLG_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -37,7 +36,5 @@ const char* SCSTR_DPFUNCLISTBOX[] =
     NC_("SCSTR_DPFUNCLISTBOX", "Var (Sample)"),
     NC_("SCSTR_DPFUNCLISTBOX", "VarP (Population)")
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_RTFIMP_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_RTFIMP_HXX
+#pragma once
 
 #include "eeimport.hxx"
 
@@ -27,7 +26,5 @@ class ScRTFImport : public ScEEImport
 public:
     ScRTFImport(ScDocument* pDoc, const ScRange& rRange);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

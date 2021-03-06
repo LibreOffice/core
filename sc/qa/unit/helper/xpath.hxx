@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_QA_UNIT_HELPER_XPATH_HXX
-#define INCLUDED_SC_QA_UNIT_HELPER_XPATH_HXX
+#pragma once
 
 #include <libxml/parser.h>
 
@@ -59,7 +58,5 @@ namespace XPathHelper
     SCQAHELPER_DLLPUBLIC xmlDocUniquePtr parseExport(std::shared_ptr<utl::TempFile> const & pTempFile, uno::Reference< lang::XMultiServiceFactory> const & xSFactory,
             const OUString& rFile);
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

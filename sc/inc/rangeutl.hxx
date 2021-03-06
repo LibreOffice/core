@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_RANGEUTL_HXX
-#define INCLUDED_SC_INC_RANGEUTL_HXX
+#pragma once
 
 #include "address.hxx"
 #include "rangenam.hxx"
@@ -271,7 +270,5 @@ struct SC_DLLPUBLIC ScRangeUpdater
     static void UpdateInsertTab(ScAddress& rAddr, const sc::RefUpdateInsertTabContext& rCxt);
     static void UpdateDeleteTab(ScAddress& rAddr, const sc::RefUpdateDeleteTabContext& rCxt);
 };
-
-#endif // INCLUDED_SC_INC_RANGEUTL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

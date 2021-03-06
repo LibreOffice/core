@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_CORE_OPENCL_OPINLINEFUN_MATH_HXX
-#define INCLUDED_SC_SOURCE_CORE_OPENCL_OPINLINEFUN_MATH_HXX
+#pragma once
 
 #include <string>
 
@@ -87,7 +86,5 @@ std::string atan2Content =
 "    a = a + (y >= 0.0 ? tmpPi : -tmpPi);\n"
 "    return a;\n"
 "}\n";
-
-#endif // INCLUDED_SC_SOURCE_CORE_OPENCL_OPINLINEFUN_MATH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_DBDOCUTL_HXX
-#define INCLUDED_SC_INC_DBDOCUTL_HXX
+#pragma once
 
 #include "types.hxx"
 #include <sal/types.h>
@@ -46,7 +45,5 @@ public:
                         sal_Int32 nRowPos,
                         tools::Long nType, bool bCurrency, StrData* pStrData = nullptr );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

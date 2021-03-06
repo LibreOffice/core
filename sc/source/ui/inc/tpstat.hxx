@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_TPSTAT_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_TPSTAT_HXX
+#pragma once
 
 #include <sfx2/tabdlg.hxx>
 
@@ -40,7 +39,5 @@ private:
     std::unique_ptr<weld::Label> m_xFtFormula;
     std::unique_ptr<weld::Frame> m_xFrame;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

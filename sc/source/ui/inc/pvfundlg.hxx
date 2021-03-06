@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_PVFUNDLG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_PVFUNDLG_HXX
+#pragma once
 
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -212,7 +211,5 @@ private:
 
     std::unique_ptr<weld::TreeView> mxLbDims;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

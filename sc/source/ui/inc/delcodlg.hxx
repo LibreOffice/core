@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_DELCODLG_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_DELCODLG_HXX
+#pragma once
 
 #include <vcl/weld.hxx>
 #include <global.hxx>
@@ -51,7 +50,5 @@ public:
 
     InsertDeleteFlags GetDelContentsCmdBits() const;
 };
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_DELCODLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

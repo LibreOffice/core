@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_UI_INC_SIZEDEV_HXX
-#define INCLUDED_SC_SOURCE_UI_INC_SIZEDEV_HXX
+#pragma once
 
 #include <vcl/mapmod.hxx>
 #include <vcl/vclptr.hxx>
@@ -43,7 +42,5 @@ public:
     double          GetPPTY() const     { return nPPTY; }
     bool            IsPrinter() const   { return !bOwner; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

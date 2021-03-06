@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_RANGELST_HXX
-#define INCLUDED_SC_INC_RANGELST_HXX
+#pragma once
 
 #include "global.hxx"
 #include "address.hxx"
@@ -160,7 +159,5 @@ typedef tools::SvRef<ScRangePairList> ScRangePairListRef;
 
 extern "C"
 int ScRangePairList_QsortNameCompare( const void*, const void* );
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

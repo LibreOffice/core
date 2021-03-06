@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_DAPIUNO_HXX
-#define INCLUDED_SC_INC_DAPIUNO_HXX
+#pragma once
 
 #include "cellsuno.hxx"
 #include "dpglobal.hxx"
@@ -719,7 +718,5 @@ private:
     SfxItemPropertySet  maPropSet;
     sal_Int32           mnIndex;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

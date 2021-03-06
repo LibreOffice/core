@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_INC_VIEWUNO_HXX
-#define INCLUDED_SC_INC_VIEWUNO_HXX
+#pragma once
 
 #include <sfx2/sfxbasecontroller.hxx>
 #include <svl/itemprop.hxx>
@@ -303,7 +302,5 @@ public:
     // XSelectedSheetsSupplier
     virtual css::uno::Sequence<sal_Int32> SAL_CALL getSelectedSheets() override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

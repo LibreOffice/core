@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_TYPEDSTRDATA_HXX
-#define INCLUDED_SC_INC_TYPEDSTRDATA_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 
@@ -72,7 +71,5 @@ public:
 };
 
 typedef std::set<ScTypedStrData, ScTypedStrData::LessCaseSensitive> ScTypedCaseStrSet;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

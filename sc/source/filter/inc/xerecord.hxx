@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_INC_XERECORD_HXX
-#define INCLUDED_SC_SOURCE_FILTER_INC_XERECORD_HXX
+#pragma once
 
 #include "xlconst.hxx"
 #include "xestream.hxx"
@@ -403,7 +402,5 @@ public:
 private:
     sal_uInt16          mnSubStrmType;  /// Substream type, stored in leading BOF record.
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
