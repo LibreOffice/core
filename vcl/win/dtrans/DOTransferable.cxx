@@ -575,23 +575,4 @@ bool CDOTransferable::compareDataFlavors(
     return bRet;
 }
 
-css::uno::Any SAL_CALL CDOTransferable::getData( const Sequence< sal_Int8>& aProcessId  )
-{
-    Any retVal;
-
-    sal_Int8 const * arProcCaller= aProcessId.getConstArray();
-    sal_uInt8 arId[16];
-    rtl_getGlobalProcessId(arId);
-    if( ! memcmp( arId, arProcCaller,16))
-    {
-        if (m_rDataObject.is())
-        {
-            IDataObject* pObj= m_rDataObject.get();
-            pObj->AddRef();
-            retVal.setValue( &pObj, cppu::UnoType<sal_uInt32>::get());
-        }
-    }
-    return retVal;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
