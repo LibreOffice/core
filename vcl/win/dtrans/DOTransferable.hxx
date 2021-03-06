@@ -37,8 +37,7 @@
 class CFormatEtc;
 
 class CDOTransferable : public ::cppu::WeakImplHelper<
-                            css::datatransfer::XTransferable,
-                            css::datatransfer::XSystemTransferable>
+                            css::datatransfer::XTransferable>
 {
 public:
     typedef css::uno::Sequence< sal_Int8 > ByteSequence_t;
@@ -50,10 +49,6 @@ public:
     virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) override;
 
     virtual sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
-
-    // XSystemTransferable
-
-    virtual css::uno::Any SAL_CALL getData( const css::uno::Sequence<sal_Int8>& aProcessId  ) override;
 
     explicit CDOTransferable(
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
