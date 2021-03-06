@@ -763,6 +763,7 @@ bool SmDocShell::Save()
         Reference<css::frame::XModel> xModel(GetModel());
         SmXMLExportWrapper aEquation(xModel);
         aEquation.SetFlat(false);
+        aEquation.SetExportODF(true);
         return aEquation.Export(*GetMedium());
     }
 
