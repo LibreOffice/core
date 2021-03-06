@@ -46,33 +46,36 @@ class SmXMLExportWrapper
 private:
     // Use customized entities
     bool m_bUseHTMLMLEntities;
+    bool m_bExportODF;
 
 public:
     explicit SmXMLExportWrapper(css::uno::Reference<css::frame::XModel> const& rRef)
         : xModel(rRef)
         , bFlat(true)
         , m_bUseHTMLMLEntities(false)
+        , m_bExportODF(false)
     {
     }
+
+    bool IsExportODF() const { return m_bExportODF; }
+    void SetExportODF(bool bExportODF) { m_bExportODF = bExportODF; }
 
     bool Export(SfxMedium& rMedium);
     void SetFlat(bool bIn) { bFlat = bIn; }
     void useHTMLMLEntities(bool bUseHTMLMLEntities) { m_bUseHTMLMLEntities = bUseHTMLMLEntities; }
 
-    static bool
-    WriteThroughComponent(const css::uno::Reference<css::io::XOutputStream>& xOutputStream,
-                          const css::uno::Reference<css::lang::XComponent>& xComponent,
-                          css::uno::Reference<css::uno::XComponentContext> const& rxContext,
-                          css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
-                          const char* pComponentName, bool bUseHTMLMLEntities);
+    bool WriteThroughComponent(const css::uno::Reference<css::io::XOutputStream>& xOutputStream,
+                               const css::uno::Reference<css::lang::XComponent>& xComponent,
+                               css::uno::Reference<css::uno::XComponentContext> const& rxContext,
+                               css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
+                               const char* pComponentName, bool bUseHTMLMLEntities);
 
-    static bool
-    WriteThroughComponent(const css::uno::Reference<css::embed::XStorage>& xStor,
-                          const css::uno::Reference<css::lang::XComponent>& xComponent,
-                          const char* pStreamName,
-                          css::uno::Reference<css::uno::XComponentContext> const& rxContext,
-                          css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
-                          const char* pComponentName, bool bUseHTMLMLEntities);
+    bool WriteThroughComponent(const css::uno::Reference<css::embed::XStorage>& xStor,
+                               const css::uno::Reference<css::lang::XComponent>& xComponent,
+                               const char* pStreamName,
+                               css::uno::Reference<css::uno::XComponentContext> const& rxContext,
+                               css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
+                               const char* pComponentName, bool bUseHTMLMLEntities);
 };
 
 class SmXMLExport final : public SvXMLExport
@@ -80,6 +83,7 @@ class SmXMLExport final : public SvXMLExport
     const SmNode* pTree;
     OUString aText;
     bool bSuccess;
+    bool m_bExportODF;
 
     void ExportNodes(const SmNode* pNode, int nLevel);
     void ExportTable(const SmNode* pNode, int nLevel);
@@ -118,6 +122,9 @@ public:
     virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
     virtual void
     GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
+
+    bool IsExportODF() const { return m_bExportODF; }
+    void SetExportODF(bool bExportODF) { m_bExportODF = bExportODF; }
 
     bool GetSuccess() const { return bSuccess; }
 };
