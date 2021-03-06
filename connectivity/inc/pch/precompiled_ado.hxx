@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-02 11:16:15 using:
+ Generated on 2021-03-06 18:49:18 using:
  ./bin/update_pch connectivity ado --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,9 +25,9 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdlib>
+#include <functional>
 #include <limits>
 #include <map>
-#include <memory>
 #include <oledb.h>
 #include <sstream>
 #include <string>
@@ -41,6 +41,7 @@
 #include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
@@ -76,6 +77,7 @@
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
+#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/XCancellable.hpp>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-02 11:16:19 using:
+ Generated on 2021-03-06 18:49:22 using:
  ./bin/update_pch dbaccess dba --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -70,7 +70,6 @@
 #include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/strbuf.h>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringconcat.hxx>
@@ -88,17 +87,35 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <vcl/IDialogRenderable.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
+#include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/fntstyle.hxx>
+#include <vcl/font.hxx>
+#include <vcl/idle.hxx>
+#include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
+#include <vcl/metaactiontypes.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/outdevmap.hxx>
+#include <vcl/outdevstate.hxx>
 #include <vcl/region.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
+#include <vcl/task.hxx>
+#include <vcl/timer.hxx>
+#include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/vclreferencebase.hxx>
+#include <vcl/wall.hxx>
+#include <vcl/window.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
@@ -111,6 +128,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
+#include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/utils/common.hxx>
@@ -121,6 +139,9 @@
 #include <basic/sbxcore.hxx>
 #include <basic/sbxdef.hxx>
 #include <basic/sbxvar.hxx>
+#include <com/sun/star/awt/DeviceInfo.hpp>
+#include <com/sun/star/awt/Key.hpp>
+#include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -139,6 +160,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
@@ -150,13 +172,11 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -183,14 +203,14 @@
 #include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <comphelper/IdPropArrayHelper.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/propagg.hxx>
-#include <comphelper/proparrhlp.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/propertycontainerhelper.hxx>
@@ -202,9 +222,12 @@
 #include <comphelper/uno3.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/IParseContext.hxx>
+#include <connectivity/TColumnsHelper.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
+#include <connectivity/sdbcx/IRefreshable.hxx>
+#include <connectivity/sdbcx/VCollection.hxx>
 #include <connectivity/sdbcx/VDescriptor.hxx>
 #include <connectivity/sqlerror.hxx>
 #include <cppu/cppudllapi.h>
@@ -241,27 +264,34 @@
 #include <svl/lstner.hxx>
 #include <svl/svldllapi.h>
 #include <tools/color.hxx>
+#include <tools/date.hxx>
 #include <tools/degree.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/long.hxx>
 #include <tools/mapunit.hxx>
+#include <tools/poly.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
+#include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
+#include <tools/wintypes.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
+#include <unotools/fontdefs.hxx>
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <ContainerMediator.hxx>
 #include <apitools.hxx>
 #include <column.hxx>
+#include <columnsettings.hxx>
 #include <core_resource.hxx>
 #include <sdbcoretools.hxx>
 #include <stringconstants.hxx>

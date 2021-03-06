@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-02 11:16:50 using:
+ Generated on 2021-03-06 18:49:48 using:
  ./bin/update_pch svl svl --cutoff=6 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -59,12 +59,14 @@
 #include <rtl/locale.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
 #include <sal/backtrace.hxx>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-02-05 16:12:54 using:
+ Generated on 2021-03-06 18:50:17 using:
  ./bin/update_pch xmlsecurity xmlsecurity --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -43,6 +43,7 @@
 #include <string>
 #include <string_view>
 #include <type_traits>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 #endif // PCH_LEVEL >= 1
@@ -140,10 +141,13 @@
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
+#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
@@ -159,6 +163,10 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <salhelper/salhelperdllapi.h>
+#include <salhelper/simplereferenceobject.hxx>
+#include <sax/fastattribs.hxx>
+#include <sax/saxdllapi.h>
 #include <svl/sigstruct.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
@@ -180,11 +188,12 @@
 #include <unotools/datetime.hxx>
 #include <unotools/options.hxx>
 #include <unotools/unotoolsdllapi.h>
+#include <xmloff/dllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <biginteger.hxx>
 #include <xmlsecuritydllapi.h>
 #include <xsecctl.hxx>
-#include <xsecxmlsecdllapi.h>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
