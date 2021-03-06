@@ -22,6 +22,30 @@
       "revId": "45cc63eb3ce1b96c442135caf7ada43d1ce2cc4f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec1ebffd_80503f58",
+        "filename": "wizards/source/scriptforge/SF_PythonHelper.xba",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2021-03-06T18:01:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "147beb27_f32fd5fd",
+      "range": {
+        "startLine": 323,
+        "startChar": 32,
+        "endLine": 323,
+        "endChar": 33
+      },
+      "revId": "45cc63eb3ce1b96c442135caf7ada43d1ce2cc4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
