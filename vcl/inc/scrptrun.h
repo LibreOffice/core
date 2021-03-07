@@ -39,6 +39,8 @@
 
 #include <sal/config.h>
 
+#include <vcl/dllapi.h>
+
 #include <unicode/uobject.h>
 #include <unicode/uscript.h>
 #include <vector>
@@ -56,7 +58,7 @@ struct ParenStackEntry
     }
 };
 
-class ScriptRun final : public icu::UObject
+class VCL_DLLPUBLIC ScriptRun final : public icu::UObject
 {
 public:
     ScriptRun(const UChar chars[], int32_t length);
