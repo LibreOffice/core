@@ -476,6 +476,8 @@ void SalInstanceWidget::freeze() { m_xWidget->SetUpdateMode(false); }
 
 void SalInstanceWidget::thaw() { m_xWidget->SetUpdateMode(true); }
 
+void SalInstanceWidget::queue_resize() { m_xWidget->queue_resize(); }
+
 SalInstanceWidget::~SalInstanceWidget()
 {
     if (m_aMnemonicActivateHdl.IsSet())
@@ -5843,8 +5845,6 @@ void SalInstanceDrawingArea::queue_draw_area(int x, int y, int width, int height
 {
     m_xDrawingArea->Invalidate(tools::Rectangle(Point(x, y), Size(width, height)));
 }
-
-void SalInstanceDrawingArea::queue_resize() { m_xDrawingArea->queue_resize(); }
 
 void SalInstanceDrawingArea::connect_size_allocate(const Link<const Size&, void>& rLink)
 {
