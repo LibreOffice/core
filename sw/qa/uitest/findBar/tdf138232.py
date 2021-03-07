@@ -29,7 +29,7 @@ class tdf138232(UITestCase):
         xfind_bar = xWriterDoc.getChild("FindBar")
 
         # Click on Find All
-        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "5"}))
+        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "4"}))
 
         self.assertEqual("HelloHello", get_state_as_dict(xWriterEdit)['SelectedText'])
 
@@ -39,7 +39,7 @@ class tdf138232(UITestCase):
         # AssertionError: 'HelloWorld' != 'World'
         self.assertEqual("HelloWorld", get_state_as_dict(xfind)['Text'])
 
-        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "5"}))
+        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "4"}))
 
         self.assertEqual("", get_state_as_dict(xWriterEdit)['SelectedText'])
 

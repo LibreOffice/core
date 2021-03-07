@@ -43,28 +43,28 @@ class FindBar(UITestCase):
         self.assertEqual(get_state_as_dict(xfind_bar)["ItemCount"], "14")
 
         # Press on FindAll in the Find Bar
-        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "5"}))  # 5 is FindAll id
-        self.assertEqual(get_state_as_dict(xfind_bar)["CurrSelectedItemID"], "5")
+        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "4"}))
+        self.assertEqual(get_state_as_dict(xfind_bar)["CurrSelectedItemID"], "5") # 5 is FindAll id for Pos 4
         self.assertEqual(get_state_as_dict(xfind_bar)["CurrSelectedItemText"], "Find All")
         self.assertEqual(get_state_as_dict(xfind_bar)["CurrSelectedItemCommand"], ".uno:FindAll")
         self.assertEqual(get_state_as_dict(xWriterEdit)["SelectedText"], "LibreLibreLibre")
 
         # Press on Find Next in the Find Bar
-        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "4"}))  # 4 is Find Next id
+        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "3"}))  # 3 is Find Next pos
         self.assertEqual(get_state_as_dict(xfind_bar)["CurrSelectedItemID"], "4")
         self.assertEqual(get_state_as_dict(xfind_bar)["CurrSelectedItemText"], "Find Next")
         self.assertEqual(get_state_as_dict(xfind_bar)["CurrSelectedItemCommand"], ".uno:DownSearch")
         self.assertEqual(get_state_as_dict(xWriterEdit)["SelectedText"], "Libre")
 
         # Press on Find Previous in the Find Bar
-        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "3"}))  # 3 is Find Previous id
+        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "2"}))  # 2 is Find Previous pos
         self.assertEqual(get_state_as_dict(xfind_bar)["CurrSelectedItemID"], "3")
         self.assertEqual(get_state_as_dict(xfind_bar)["CurrSelectedItemText"], "Find Previous")
         self.assertEqual(get_state_as_dict(xfind_bar)["CurrSelectedItemCommand"], ".uno:UpSearch")
         self.assertEqual(get_state_as_dict(xWriterEdit)["SelectedText"], "Libre")
 
         # Close the Find Bar
-        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "1"}))  # 1 is for close
+        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "0"}))  # 0 is pos for close
 
         self.ui_test.close_doc()
 
