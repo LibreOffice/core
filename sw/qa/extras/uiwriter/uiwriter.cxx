@@ -393,6 +393,7 @@ public:
     void testTdf128860();
     void testTdf123786();
     void testTdf133589();
+    void testTdf129924();
     void testInconsistentBookmark();
     void testInsertLongDateFormat();
     void testSpellOnlineParameter();
@@ -625,6 +626,7 @@ public:
     CPPUNIT_TEST(testTdf128860);
     CPPUNIT_TEST(testTdf123786);
     CPPUNIT_TEST(testTdf133589);
+    CPPUNIT_TEST(testTdf129924);
     CPPUNIT_TEST(testInsertLongDateFormat);
     CPPUNIT_TEST(testSpellOnlineParameter);
     CPPUNIT_TEST(testRedlineAutoCorrect);
@@ -8010,6 +8012,36 @@ void SwUiWriterTest::testTdf133589()
     pWrtShell->AutoCorrect(corr, ' ');
     sReplaced += u"𐳺𐳺𐳿𐳼𐳼 ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+}
+
+void SwUiWriterTest::testTdf129924()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Write some words for testing
+    pWrtShell->Insert(u"Hello LibreOffice");
+
+    SwScriptInfo* pScriptInfo = nullptr;
+    // Get access to the single paragraph in the document.
+    SwNodeIndex aNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1);
+    const OUString& rText = aNodeIndex.GetNode().GetTextNode()->GetText();
+    sal_Int32 nLength = rText.getLength();
+    SwDrawTextInfo aDrawTextInfo(pWrtShell, *pWrtShell->GetOut(), pScriptInfo, rText, TextFrameIndex(0), TextFrameIndex(nLength));
+
+    // Root -> page -> body -> text.
+    SwTextFrame* pTextFrame = static_cast<SwTextFrame*>(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower());
+    aDrawTextInfo.SetFrame(pTextFrame);
+
+    // Make sure that highlight color is black
+    vcl::CharBackColor aHighlight;
+    aDrawTextInfo.ApplyAutoColor(&aHighlight);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, aHighlight.GetColor());
+
+    // Without the fix in place, this test would have failed with
+    // with COL_WHITE != COL_BLACK
+    pTextFrame->getPropertyValue("FontColor") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, nValue);
 }
 
 void SwUiWriterTest::testInsertLongDateFormat()
