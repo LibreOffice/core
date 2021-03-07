@@ -17,26 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
-
-#include <hb-icu.h>
-#include <hb-ot.h>
-#include <hb-graphite2.h>
-
-#include <sallayout.hxx>
-
-#include <o3tl/temporary.hxx>
 #include <sal/log.hxx>
 #include <unotools/configmgr.hxx>
+#include <o3tl/temporary.hxx>
+
+#include <vcl/TextLayoutCache.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/font/Feature.hxx>
 #include <vcl/font/FeatureParser.hxx>
-#include <scrptrun.h>
-#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
-#include <salgdi.hxx>
-#include <unicode/uchar.h>
 
 #include <fontselect.hxx>
+#include <salgdi.hxx>
+#include <sallayout.hxx>
+
+#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
+
+#include <unicode/uchar.h>
+#include <hb-ot.h>
+#include <hb-graphite2.h>
+
+#include <memory>
 
 #if !HB_VERSION_ATLEAST(1, 1, 0)
 // Disabled Unicode compatibility decomposition, see fdo#66715
@@ -92,41 +92,6 @@ struct SubRun
 };
 
 }
-
-namespace vcl {
-    namespace {
-
-    struct Run
-    {
-        int32_t nStart;
-        int32_t nEnd;
-        UScriptCode nCode;
-        Run(int32_t nStart_, int32_t nEnd_, UScriptCode nCode_)
-            : nStart(nStart_)
-            , nEnd(nEnd_)
-            , nCode(nCode_)
-        {}
-    };
-
-    }
-
-    class TextLayoutCache
-    {
-    public:
-        std::vector<vcl::Run> runs;
-        TextLayoutCache(sal_Unicode const* pStr, sal_Int32 const nEnd)
-        {
-            vcl::ScriptRun aScriptRun(
-                reinterpret_cast<const UChar *>(pStr),
-                nEnd);
-            while (aScriptRun.next())
-            {
-                runs.emplace_back(aScriptRun.getScriptStart(),
-                    aScriptRun.getScriptEnd(), aScriptRun.getScriptCode());
-            }
-        }
-    };
-} // namespace vcl
 
 namespace {
 #if U_ICU_VERSION_MAJOR_NUM >= 63
