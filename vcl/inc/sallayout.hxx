@@ -73,56 +73,6 @@ public:
     bool    PosIsInAnyRun( int nCharPos ) const;
 };
 
-class VCL_DLLPUBLIC ImplLayoutArgs
-{
-public:
-    // string related inputs
-    LanguageTag         maLanguageTag;
-    SalLayoutFlags      mnFlags;
-    const OUString&     mrStr;
-    int                 mnMinCharPos;
-    int                 mnEndCharPos;
-
-    // performance hack
-    vcl::TextLayoutCache const* m_pTextLayoutCache;
-
-    // positioning related inputs
-    const DeviceCoordinate* mpDXArray;     // in pixel units
-    DeviceCoordinate    mnLayoutWidth;      // in pixel units
-    Degree10            mnOrientation;      // in 0-3600 system
-
-    // data for bidi and glyph+script fallback
-    ImplLayoutRuns      maRuns;
-    ImplLayoutRuns      maFallbackRuns;
-
-                ImplLayoutArgs( const OUString& rStr,
-                                int nMinCharPos, int nEndCharPos, SalLayoutFlags nFlags,
-                                const LanguageTag& rLanguageTag,
-                                vcl::TextLayoutCache const* pLayoutCache);
-
-    void        SetLayoutWidth( DeviceCoordinate nWidth )       { mnLayoutWidth = nWidth; }
-    void        SetDXArray( const DeviceCoordinate* pDXArray )  { mpDXArray = pDXArray; }
-    void        SetOrientation( Degree10 nOrientation )  { mnOrientation = nOrientation; }
-
-    void        ResetPos()
-                    { maRuns.ResetPos(); }
-    bool        GetNextPos( int* nCharPos, bool* bRTL )
-                    { return maRuns.GetNextPos( nCharPos, bRTL ); }
-    bool        GetNextRun( int* nMinRunPos, int* nEndRunPos, bool* bRTL );
-    void        NeedFallback( int nMinRunPos, int nEndRunPos, bool bRTL )
-                    { maFallbackRuns.AddRun( nMinRunPos, nEndRunPos, bRTL ); }
-    // methods used by BiDi and glyph fallback
-    bool        NeedFallback() const
-                    { return !maFallbackRuns.IsEmpty(); }
-    bool        PrepareFallback(const SalLayoutGlyphsImpl* pGlyphsImpl);
-
-private:
-    void        AddRun( int nMinCharPos, int nEndCharPos, bool bRTL );
-};
-
-// For nice SAL_INFO logging of ImplLayoutArgs values
-std::ostream &operator <<(std::ostream& s, ImplLayoutArgs const &rArgs);
-
 class MultiSalLayout final : public SalLayout
 {
 public:

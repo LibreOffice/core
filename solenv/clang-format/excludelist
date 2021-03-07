@@ -14960,6 +14960,7 @@ vcl/source/fontsubset/ttcr.cxx
 vcl/source/fontsubset/ttcr.hxx
 vcl/source/fontsubset/xlat.cxx
 vcl/source/gdi/CommonSalLayout.cxx
+vcl/source/gdi/ImplLayoutArgs.cxx
 vcl/source/gdi/VerticalOrientationData.cxx
 vcl/source/gdi/configsettings.cxx
 vcl/source/gdi/cvtgrf.cxx
