@@ -729,10 +729,11 @@ bool SwCursorShell::MoveFieldType(
     {
         const SwFieldTypes& rFieldTypes = *mxDoc->getIDocumentFieldsAccess().GetFieldTypes();
         const size_t nSize = rFieldTypes.size();
+        const bool bAllFieldTypes = nResType == SwFieldIds::Unknown;
         for( size_t i=0; i < nSize; ++i )
         {
             pFieldType = rFieldTypes[ i ].get();
-            if( nResType == pFieldType->Which() )
+            if (bAllFieldTypes || nResType == pFieldType->Which())
             {
                 ::lcl_MakeFieldLst( aSrtLst, *pFieldType, IsReadOnlyAvailable() );
             }

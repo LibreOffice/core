@@ -422,6 +422,32 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
             GetViewFrame()->GetDispatcher()->Execute(bNext ?
                                         FN_NEXT_BOOKMARK :
                                             FN_PREV_BOOKMARK);
+            break;
+        case NID_FIELD:
+            rSh.EnterStdMode();
+            rSh.MoveFieldType(nullptr, bNext, SwFieldIds::Unknown);
+        break;
+        case NID_FIELD_BYTYPE:
+        {
+            // see: SwFieldMgr::GoNextPrev
+            SwField* pCurField = rSh.GetCurField(true);
+            if (!pCurField)
+                break;
+            rSh.EnterStdMode();
+            SwFieldType* pTyp = nullptr;
+            const SwFieldTypesEnum nTypeId = pCurField->GetTypeId();
+            if (SwFieldTypesEnum::SetInput == nTypeId || SwFieldTypesEnum::UserInput == nTypeId)
+                pTyp = rSh.GetFieldType(0, SwFieldIds::Input);
+            else
+                pTyp = pCurField->GetTyp();
+            if (pTyp)
+            {
+                if (pTyp->Which() == SwFieldIds::Database)
+                    rSh.MoveFieldType(nullptr, bNext, SwFieldIds::Database);
+                else
+                    rSh.MoveFieldType(pTyp, bNext);
+            }
+        }
         break;
         case NID_OUTL:
             rSh.EnterStdMode();
