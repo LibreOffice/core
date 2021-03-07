@@ -29,7 +29,7 @@ class tdf88608(UITestCase):
         self.assertEqual('', get_state_as_dict(xfind_bar.getChild('label'))['Text'])
 
         # Search Next
-        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "4"}))
+        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "3"}))
 
         self.assertEqual('Search key not found', get_state_as_dict(xfind_bar.getChild('label'))['Text'])
 
@@ -44,7 +44,7 @@ class tdf88608(UITestCase):
         self.assertEqual('', get_state_as_dict(xfind_bar.getChild('label'))['Text'])
 
         # Search Next
-        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "4"}))
+        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "3"}))
 
         self.assertEqual('Reached the end of the document', get_state_as_dict(xfind_bar.getChild('label'))['Text'])
 
