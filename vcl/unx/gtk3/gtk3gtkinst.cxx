@@ -3021,6 +3021,11 @@ public:
         set_cursor(m_pWidget, bBusy ? "progress" : nullptr);
     }
 
+    virtual void queue_resize() override
+    {
+        gtk_widget_queue_resize(m_pWidget);
+    }
+
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() override
     {
         if (!m_xDropTarget)
@@ -13931,11 +13936,6 @@ public:
         tools::Rectangle aRect(Point(x, y), Size(width, height));
         aRect = m_xDevice->LogicToPixel(aRect);
         gtk_widget_queue_draw_area(GTK_WIDGET(m_pDrawingArea), aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight());
-    }
-
-    virtual void queue_resize() override
-    {
-        gtk_widget_queue_resize(GTK_WIDGET(m_pDrawingArea));
     }
 
     virtual a11yref get_accessible_parent() override
