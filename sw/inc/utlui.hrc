@@ -45,7 +45,8 @@ const char* RID_SHELLRES_AUTOFMTSTRS[] =
     NC_("RID_SHELLRES_AUTOFMTSTRS", "Set \"Heading $(ARG1)\" Style"),
     NC_("RID_SHELLRES_AUTOFMTSTRS", "Set \"Bullet\" or \"Numbering\" Style"),
     NC_("RID_SHELLRES_AUTOFMTSTRS", "Combine paragraphs"),
-    NC_("RID_SHELLRES_AUTOFMTSTRS", "Add non breaking space")
+    NC_("RID_SHELLRES_AUTOFMTSTRS", "Add non breaking space"),
+    NC_("RID_SHELLRES_AUTOFMTSTRS", "Transliterates RTL Hungarian text to Old Hungarian script")
 };
 
 #endif
