@@ -346,6 +346,8 @@ public:
 
     void enable_notify_events();
 
+    virtual void queue_resize() override;
+
     virtual void help_hierarchy_foreach(const std::function<bool(const OString&)>& func) override;
 
     virtual OUString strip_mnemonic(const OUString& rLabel) const override;
@@ -1132,8 +1134,6 @@ public:
     virtual void queue_draw() override;
 
     virtual void queue_draw_area(int x, int y, int width, int height) override;
-
-    virtual void queue_resize() override;
 
     virtual void connect_size_allocate(const Link<const Size&, void>& rLink) override;
 

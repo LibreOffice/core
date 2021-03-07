@@ -277,8 +277,9 @@ public:
     virtual void freeze() = 0;
     virtual void thaw() = 0;
 
-    virtual std::unique_ptr<Container> weld_parent() const = 0;
+    virtual void queue_resize() = 0;
 
+    virtual std::unique_ptr<Container> weld_parent() const = 0;
     //iterate upwards through the hierarchy starting at this widgets parent,
     //calling func with their helpid until func returns true or we run out of
     //parents
@@ -2152,7 +2153,6 @@ public:
     }
     virtual void queue_draw() = 0;
     virtual void queue_draw_area(int x, int y, int width, int height) = 0;
-    virtual void queue_resize() = 0;
 
     virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rTransferrable,
                                     sal_uInt8 eDNDConstants)
