@@ -512,6 +512,8 @@ def fixup(includes, module):
         except:
             fixes.append(inc)
 
+    append('sal/config.h')
+
     if module == 'basctl':
         if 'basslots.hxx' in includes:
             append('sfx2/msg.hxx')
@@ -535,6 +537,8 @@ def sort_by_category(list, root, module, filter_local):
 
     prefix = '<' + module + '/'
     for i in list:
+        if 'sal/config.h' in i:
+            continue # added unconditionally in fixup
         if is_c_runtime(i, root, module):
             sys.append(i)
         elif '<boost/' in i:

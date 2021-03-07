@@ -13,13 +13,14 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-12 11:04:29 using:
+ Generated on 2021-03-08 13:12:51 using:
  ./bin/update_pch connectivity mysql_jdbc --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_mysql_jdbc.hxx "make connectivity.build" --find-conflicts
 */
 
+#include <sal/config.h>
 #if PCH_LEVEL >= 1
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2

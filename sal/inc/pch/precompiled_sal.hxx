@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-02-01 10:57:46 using:
+ Generated on 2021-03-08 13:14:16 using:
  ./bin/update_pch sal sal --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -26,6 +26,7 @@
 #endif
 #endif
 
+#include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <assert.h>
@@ -102,7 +103,6 @@
 #include <rtl/uuid.h>
 #include <rtllifecycle.h>
 #include <sal/alloca.h>
-#include <sal/config.h>
 #include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
