@@ -462,6 +462,7 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
             }
             for(std::set<OUString>::const_iterator it = aNames.begin(); it != aNames.end(); ++it)
                 rBox.append_text(*it);
+            aNames.erase("No List");
         }
     }
     else if (rId == "customize")

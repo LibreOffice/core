@@ -217,6 +217,7 @@ void SwParaDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
         }
         for(const auto& rName : aNames)
             rBox.append_text(rName);
+        aNames.erase("No List");
     }
     // inits for Area and Transparency TabPages
     // The selection attribute lists (XPropertyList derivates, e.g. XColorList for
