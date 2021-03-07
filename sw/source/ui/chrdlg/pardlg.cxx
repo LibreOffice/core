@@ -160,6 +160,11 @@ void SwParaDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
         aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,static_cast<sal_uInt16>(SwBorderModes::PARA)));
         rPage.PageCreated(aSet);
     }
+    else if (rId == "No_List")
+    {
+        aSet.Put (SfxUInt16Item(FN_NUM_BULLET_OFF,static_cast<sal_uInt16>(SfxStyleFamily::Pseudo)));
+        rPage.PageCreated(aSet);
+    }
     else if (rId == "labelTP_PARA_STD")
     {
         aSet.Put(SfxUInt16Item(SID_SVXSTDPARAGRAPHTABPAGE_PAGEWIDTH,

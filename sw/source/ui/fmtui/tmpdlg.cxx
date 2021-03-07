@@ -273,9 +273,10 @@ void SwTemplateDlgController::RefreshInputSet()
 void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage )
 {
     // set style's and metric's names
-    OUString sNumCharFormat, sBulletCharFormat;
+    OUString sNumCharFormat, sBulletCharFormat, sDefaultFormat;
     SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFormat);
     SwStyleNameMapper::FillUIName( RES_POOLCHR_BULLET_LEVEL, sBulletCharFormat);
+    SwStyleNameMapper::FillUIName( RES_POOLNUMRULE_NOLIST, sDefaultFormat);
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
 
     if (rId == "font")
@@ -440,6 +441,7 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
         {
             aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFormat));
             aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
+            aSet.Put (SfxStringItem(FN_NUM_BULLET_OFF, sDefaultFormat));
             rPage.PageCreated(aSet);
         }
         else if (SfxStyleFamily::Para == nType)
