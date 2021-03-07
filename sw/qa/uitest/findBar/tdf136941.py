@@ -28,10 +28,10 @@ class tdf136941(UITestCase):
         xfind_bar = xWriterDoc.getChild("FindBar")
 
         # Search Next
-        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "4"}))
+        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "3"}))
 
         # Close button
-        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "1"}))
+        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "0"}))
 
         # Check the toolbar is closed
         self.assertTrue("find" not in xWriterDoc.getChildren())
@@ -49,10 +49,10 @@ class tdf136941(UITestCase):
         xfind_bar = xWriterDoc.getChild("FindBar")
 
         # Search Next
-        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "4"}))
+        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "3"}))
 
         # Close button
-        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "1"}))
+        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "0"}))
 
         # Check the toolbar is closed
         self.assertTrue("find" not in xWriterDoc.getChildren())
