@@ -57,22 +57,25 @@ public:
 
     bool Export(SfxMedium& rMedium);
     void SetFlat(bool bIn) { bFlat = bIn; }
-    void useHTMLMLEntities(bool bUseHTMLMLEntities) { m_bUseHTMLMLEntities = bUseHTMLMLEntities; }
 
-    static bool
-    WriteThroughComponent(const css::uno::Reference<css::io::XOutputStream>& xOutputStream,
-                          const css::uno::Reference<css::lang::XComponent>& xComponent,
-                          css::uno::Reference<css::uno::XComponentContext> const& rxContext,
-                          css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
-                          const char* pComponentName, bool bUseHTMLMLEntities);
+    bool IsUseHTMLMLEntities() const { return m_bUseHTMLMLEntities; }
+    void SetUseHTMLMLEntities(bool bUseHTMLMLEntities)
+    {
+        m_bUseHTMLMLEntities = bUseHTMLMLEntities;
+    }
 
-    static bool
-    WriteThroughComponent(const css::uno::Reference<css::embed::XStorage>& xStor,
-                          const css::uno::Reference<css::lang::XComponent>& xComponent,
-                          const char* pStreamName,
-                          css::uno::Reference<css::uno::XComponentContext> const& rxContext,
-                          css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
-                          const char* pComponentName, bool bUseHTMLMLEntities);
+    bool WriteThroughComponent(const css::uno::Reference<css::io::XOutputStream>& xOutputStream,
+                               const css::uno::Reference<css::lang::XComponent>& xComponent,
+                               css::uno::Reference<css::uno::XComponentContext> const& rxContext,
+                               css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
+                               const char* pComponentName);
+
+    bool WriteThroughComponent(const css::uno::Reference<css::embed::XStorage>& xStor,
+                               const css::uno::Reference<css::lang::XComponent>& xComponent,
+                               const char* pStreamName,
+                               css::uno::Reference<css::uno::XComponentContext> const& rxContext,
+                               css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
+                               const char* pComponentName);
 };
 
 class SmXMLExport final : public SvXMLExport

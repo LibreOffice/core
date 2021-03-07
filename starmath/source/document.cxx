@@ -862,7 +862,7 @@ bool SmDocShell::ConvertTo( SfxMedium &rMedium )
             Reference<css::frame::XModel> xModel(GetModel());
             SmXMLExportWrapper aEquation(xModel);
             aEquation.SetFlat(true);
-            aEquation.useHTMLMLEntities(true);
+            aEquation.SetUseHTMLMLEntities(true);
             bRet = aEquation.Export(rMedium);
         }
         else if (pFlt->GetFilterName() == "MathType 3.x")
