@@ -1181,6 +1181,8 @@
 #define ST_TABLE_FORMULA                        NC_("ST_TABLE_FORMULA", "Table formula")
 #define ST_TABLE_FORMULA_ERROR                  NC_("ST_TABLE_FORMULA_ERROR", "Wrong table formula")
 #define ST_RECENCY                              NC_("ST_RECENCY", "Recency")
+#define ST_FIELD                                NC_("ST_FIELD", "Field")
+#define ST_FIELD_BYTYPE                         NC_("ST_FIELD_BYTYPE", "Field by type")
 // Strings for the quickhelp of the View-PgUp/Down-Buttons
 #define STR_IMGBTN_TBL_DOWN                     NC_("STR_IMGBTN_TBL_DOWN", "Next table")
 #define STR_IMGBTN_FRM_DOWN                     NC_("STR_IMGBTN_FRM_DOWN", "Next frame")
@@ -1220,6 +1222,10 @@
 #define STR_IMGBTN_TBLFML_ERR_DOWN              NC_("STR_IMGBTN_TBLFML_ERR_DOWN", "Next faulty table formula")
 #define STR_IMGBTN_RECENCY_UP                   NC_("STR_IMGBTN_RECENCY_UP", "Go back")
 #define STR_IMGBTN_RECENCY_DOWN                 NC_("STR_IMGBTN_RECENCY_DOWN", "Go forward")
+#define STR_IMGBTN_FIELD_UP                     NC_("STR_IMGBTN_FIELD_UP", "Previous field")
+#define STR_IMGBTN_FIELD_DOWN                   NC_("STR_IMGBTN_FIELD_DOWN", "Next field")
+#define STR_IMGBTN_FIELD_BYTYPE_UP              NC_("STR_IMGBTN_FIELD_BYTYPE_UP", "Previous field with current field type")
+#define STR_IMGBTN_FIELD_BYTYPE_DOWN            NC_("STR_IMGBTN_FIELD_BYTYPE_DOWN", "Next field with current field type")
 
 #define STR_REDLINE_INSERT                      NC_("STR_REDLINE_INSERT", "Inserted")
 #define STR_REDLINE_DELETE                      NC_("STR_REDLINE_DELETE", "Deleted")
