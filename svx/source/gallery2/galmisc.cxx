@@ -118,30 +118,32 @@ bool GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel )
 
 bool CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap )
 {
+    if (! rModel.GetPageCount() )
+        return false;
+
+    const SdrPage*      pPage = rModel.GetPage( 0 );
+    const SdrObject*    pObj = pPage->GetObj( 0 );
+
+    if ( pPage->GetObjCount() != 1 )
+        return false;
+    auto pGrafObj = dynamic_cast<const SdrGrafObj*>( pObj);
+    if (!pGrafObj)
+        return false;
+
     bool bRet = false;
+    const sal_uInt16 nCount = pObj->GetUserDataCount();
 
-    if ( rModel.GetPageCount() )
+    // Exist in the user data an IMap information?
+    for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
-        const SdrPage*      pPage = rModel.GetPage( 0 );
-        const SdrObject*    pObj = pPage->GetObj( 0 );
+        const SdrObjUserData* pUserData = pObj->GetUserData( i );
 
-        if ( pPage->GetObjCount() == 1 && dynamic_cast<const SdrGrafObj*>( pObj) !=  nullptr )
+        if ( ( pUserData->GetInventor() == SdrInventor::SgaImap ) && ( pUserData->GetId() == ID_IMAPINFO ) )
         {
-            const sal_uInt16 nCount = pObj->GetUserDataCount();
-
-            // Exist in the user data an IMap information?
-            for ( sal_uInt16 i = 0; i < nCount; i++ )
-            {
-                const SdrObjUserData* pUserData = pObj->GetUserData( i );
-
-                if ( ( pUserData->GetInventor() == SdrInventor::SgaImap ) && ( pUserData->GetId() == ID_IMAPINFO ) )
-                {
-                    rGraphic = static_cast<const SdrGrafObj*>( pObj )->GetGraphic();
-                    rImageMap = static_cast<const SgaIMapInfo*>( pUserData )->GetImageMap();
-                    bRet = true;
-                    break;
-                }
-            }
+            rGraphic = pGrafObj->GetGraphic();
+            rImageMap = static_cast<const SgaIMapInfo*>( pUserData )->GetImageMap();
+            bRet = true;
+            break;
         }
     }
 

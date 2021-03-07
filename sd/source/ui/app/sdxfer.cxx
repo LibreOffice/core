@@ -158,7 +158,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
             uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
             if( xObj.is() && xPersist.is() && xPersist->hasEntry() )
             {
-                mpOLEDataHelper.reset( new TransferableDataHelper( new SvEmbedTransferHelper( xObj, static_cast< SdrOle2Obj* >( pObj )->GetGraphic(), static_cast< SdrOle2Obj* >( pObj )->GetAspect() ) ) );
+                mpOLEDataHelper.reset( new TransferableDataHelper( new SvEmbedTransferHelper( xObj, pOleObj->GetGraphic(), pOleObj->GetAspect() ) ) );
 
                 // TODO/LATER: the standalone handling of the graphic should not be used any more in future
                 // The EmbedDataHelper should bring the graphic in future

@@ -324,17 +324,18 @@ std::unique_ptr<SdrModel> E3dView::CreateMarkedObjModel() const
     {
         const SdrObject* pObj = GetMarkedObjectByIndex(nObjs);
 
-        if(!bSpecialHandling && dynamic_cast< const E3dCompoundObject*>(pObj))
-        {
-            // if the object is selected, but it's scene not,
-            // we need special handling
-            pScene = static_cast<const E3dCompoundObject*>(pObj)->getRootE3dSceneFromE3dObject();
-
-            if(nullptr != pScene && !IsObjMarked(pScene))
+        if(!bSpecialHandling)
+            if(auto pCompoundObj = dynamic_cast< const E3dCompoundObject*>(pObj))
             {
-                bSpecialHandling = true;
+                // if the object is selected, but it's scene not,
+                // we need special handling
+                pScene = pCompoundObj->getRootE3dSceneFromE3dObject();
+
+                if(nullptr != pScene && !IsObjMarked(pScene))
+                {
+                    bSpecialHandling = true;
+                }
             }
-        }
 
         if(auto p3dObject = dynamic_cast< const E3dObject*>(pObj))
         {

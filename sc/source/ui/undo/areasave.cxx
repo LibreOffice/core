@@ -156,12 +156,12 @@ std::unique_ptr<ScAreaLinkSaveCollection> ScAreaLinkSaveCollection::CreateFromDo
         for (sal_uInt16 i=0; i<nLinkCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = rLinks[i].get();
-            if (dynamic_cast<const ScAreaLink*>( pBase) != nullptr)
+            if (auto pAreaLink = dynamic_cast<ScAreaLink*>( pBase))
             {
                 if (!pColl)
                     pColl.reset(new ScAreaLinkSaveCollection);
 
-                pColl->push_back( ScAreaLinkSaver( *static_cast<ScAreaLink*>(pBase ) ) );
+                pColl->push_back( ScAreaLinkSaver( *pAreaLink ) );
             }
         }
     }

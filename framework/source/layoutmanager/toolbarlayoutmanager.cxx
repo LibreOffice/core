@@ -965,7 +965,7 @@ void ToolbarLayoutManager::childWindowEvent( VclSimpleEvent const * pEvent )
     {
         if ( !implts_isToolbarCreationActive() )
         {
-            ToolBox* pToolBox = getToolboxPtr( static_cast<VclWindowEvent const *>(pEvent)->GetWindow() );
+            ToolBox* pToolBox = getToolboxPtr( pWindowEvent->GetWindow() );
             if ( pToolBox )
             {
                 OUString aToolbarName = retrieveToolbarNameFromHelpURL( pToolBox );

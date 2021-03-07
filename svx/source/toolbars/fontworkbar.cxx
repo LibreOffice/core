@@ -436,7 +436,7 @@ void FontworkBar::execute( SdrView& rSdrView, SfxRequest const & rReq, SfxBindin
                 for( size_t i = 0; i < nCount; ++i )
                 {
                     SdrObject* pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
-                    if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
+                    if( auto pCustomShape = dynamic_cast<SdrObjCustomShape*>( pObj) )
                     {
                         const bool bUndo = rSdrView.IsUndoEnabled();
 
@@ -450,7 +450,7 @@ void FontworkBar::execute( SdrView& rSdrView, SfxRequest const & rReq, SfxBindin
                         GetGeometryForCustomShape( aGeometryItem, aCustomShape );
                         pObj->SetMergedItem( aGeometryItem );
 
-                        Reference< drawing::XShape > aXShape = GetXShapeForSdrObject( static_cast<SdrObjCustomShape*>(pObj) );
+                        Reference< drawing::XShape > aXShape = GetXShapeForSdrObject( pCustomShape );
                         if ( aXShape.is() )
                         {
                             Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( aXShape, UNO_QUERY );
