@@ -472,6 +472,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/wmf/wmfexternal \
     vcl/source/filter/wmf/wmfwr \
     vcl/source/filter/png/PngImageReader \
+    vcl/source/filter/png/PngImageWriter \
     vcl/source/filter/png/pngwrite \
     vcl/source/filter/webp/reader \
     vcl/source/filter/webp/writer \
