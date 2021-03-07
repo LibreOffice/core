@@ -211,6 +211,7 @@
 #define STR_POOLPAGE_ENDNOTE                    NC_("STR_POOLPAGE_ENDNOTE", "Endnote")
 #define STR_POOLPAGE_LANDSCAPE                  NC_("STR_POOLPAGE_LANDSCAPE", "Landscape")
 // Numbering rules
+#define STR_POOLNUMRULE_NOLIST                  NC_("STR_POOLNUMRULE_NOLIST", "No List")
 #define STR_POOLNUMRULE_NUM1                    NC_("STR_POOLNUMRULE_NUM1", "Numbering 123")
 #define STR_POOLNUMRULE_NUM2                    NC_("STR_POOLNUMRULE_NUM2", "Numbering ABC")
 #define STR_POOLNUMRULE_NUM3                    NC_("STR_POOLNUMRULE_NUM3", "Numbering abc")

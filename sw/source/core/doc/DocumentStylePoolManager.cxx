@@ -516,6 +516,7 @@ static const char* STR_POOLPAGE_ARY[] =
 static const char* STR_POOLNUMRULE_NUM_ARY[] =
 {
     // Numbering styles
+    STR_POOLNUMRULE_NOLIST,
     STR_POOLNUMRULE_NUM1,
     STR_POOLNUMRULE_NUM2,
     STR_POOLNUMRULE_NUM3,
@@ -1932,6 +1933,17 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
 
     switch( nId )
     {
+    case RES_POOLNUMRULE_NOLIST:
+        {
+        SwNumFormat aFormat;
+        aFormat.SetNumberingType(SVX_NUM_NUMBER_NONE);
+
+        for (sal_uInt16 n = 0; n < MAXLEVEL; ++n)
+        {
+            pNewRule->Set(n, aFormat);
+        }
+        }
+        break;
     case RES_POOLNUMRULE_NUM1:
         {
             SwNumFormat aFormat;
