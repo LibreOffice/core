@@ -28,7 +28,7 @@
 #include <vcl/dllapi.h>
 
 class LogicalFontInstance;
-class ImplLayoutArgs;
+namespace vcl::text { class ImplLayoutArgs; }
 class PhysicalFontFace;
 class SalGraphics;
 class GlyphItem;
@@ -74,8 +74,8 @@ public:
     const Point&    DrawOffset() const                      { return maDrawOffset; }
     Point           GetDrawPosition( const Point& rRelative = Point(0,0) ) const;
 
-    virtual bool    LayoutText( ImplLayoutArgs&, const SalLayoutGlyphsImpl* ) = 0;  // first step of layouting
-    virtual void    AdjustLayout( ImplLayoutArgs& );    // adjusting after fallback etc.
+    virtual bool    LayoutText( vcl::text::ImplLayoutArgs&, const SalLayoutGlyphsImpl* ) = 0;  // first step of layouting
+    virtual void    AdjustLayout( vcl::text::ImplLayoutArgs& );    // adjusting after fallback etc.
     virtual void    InitFont() const {}
     virtual void    DrawText( SalGraphics& ) const = 0;
 
