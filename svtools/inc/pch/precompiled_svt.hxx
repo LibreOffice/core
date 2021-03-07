@@ -13,13 +13,14 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-02-25 10:06:21 using:
+ Generated on 2021-03-08 13:18:38 using:
  ./bin/update_pch svtools svt --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./svtools/inc/pch/precompiled_svt.hxx "make svtools.build" --find-conflicts
 */
 
+#include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
@@ -82,7 +83,6 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
-#include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/saldllapi.h>

@@ -13,13 +13,14 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-06 18:49:48 using:
+ Generated on 2021-03-08 13:18:34 using:
  ./bin/update_pch svgio svgio --cutoff=8 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./svgio/inc/pch/precompiled_svgio.hxx "make svgio.build" --find-conflicts
 */
 
+#include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <memory>
 #include <optional>
@@ -37,7 +38,6 @@
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/types.h>
 #endif // PCH_LEVEL >= 2

@@ -13,20 +13,20 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-15 11:15:30 using:
+ Generated on 2021-03-08 13:13:00 using:
  ./bin/update_pch dbaccess dbahsql --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./dbaccess/inc/pch/precompiled_dbahsql.hxx "make dbaccess.build" --find-conflicts
 */
 
+#include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <string_view>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <rtl/ustrbuf.hxx>
-#include <sal/config.h>
 #include <sal/log.hxx>
 #include <vcl/weld.hxx>
 #endif // PCH_LEVEL >= 2

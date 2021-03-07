@@ -13,13 +13,14 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-12-04 09:59:34 using:
+ Generated on 2021-03-08 13:14:26 using:
  ./bin/update_pch sc scui --cutoff=1 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./sc/inc/pch/precompiled_scui.hxx "make sc.build" --find-conflicts
 */
 
+#include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <memory>
 #include <utility>
@@ -31,7 +32,6 @@
 #include <osl/time.h>
 #include <rtl/math.hxx>
 #include <rtl/tencinfo.h>
-#include <sal/config.h>
 #include <sal/types.h>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>

@@ -13,13 +13,14 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-02-25 10:08:39 using:
+ Generated on 2021-03-08 13:12:08 using:
  ./bin/update_pch chart2 chartcontroller --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./chart2/inc/pch/precompiled_chartcontroller.hxx "make chart2.build" --find-conflicts
 */
 
+#include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
@@ -80,7 +81,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
-#include <sal/config.h>
 #include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
