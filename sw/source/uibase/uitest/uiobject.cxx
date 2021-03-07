@@ -146,46 +146,6 @@ std::unique_ptr<UIObject> SwEditWinUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new SwEditWinUIObject(pEditWin));
 }
 
-SwNavigationPIUIObject::SwNavigationPIUIObject(const VclPtr<SwNavigationPI>& xSwNavigationPI):
-    WindowUIObject(xSwNavigationPI),
-    mxSwNavigationPI(xSwNavigationPI)
-{
-}
-
-StringMap SwNavigationPIUIObject::get_state()
-{
-    StringMap aMap = WindowUIObject::get_state();
-
-    aMap["selectioncount"] = OUString::number(mxSwNavigationPI->m_xContentTree->count_selected_rows());
-    aMap["selectedtext"] = mxSwNavigationPI->m_xContentTree->get_selected_text();
-
-    return aMap;
-}
-
-void SwNavigationPIUIObject::execute(const OUString& rAction,
-        const StringMap& rParameters)
-{
-    if (rAction == "ROOT")
-    {
-        mxSwNavigationPI->m_xContentTree->grab_focus();
-        mxSwNavigationPI->ToolBoxSelectHdl("root");
-    }
-    else
-        WindowUIObject::execute(rAction, rParameters);
-}
-
-std::unique_ptr<UIObject> SwNavigationPIUIObject::create(vcl::Window* pWindow)
-{
-    SwNavigationPI* pSwNavigationPI = dynamic_cast<SwNavigationPI*>(pWindow);
-    assert(pSwNavigationPI);
-    return std::unique_ptr<UIObject>(new SwNavigationPIUIObject(pSwNavigationPI));
-}
-
-OUString SwNavigationPIUIObject::get_name() const
-{
-    return "SwNavigationPIUIObject";
-}
-
 CommentUIObject::CommentUIObject(const VclPtr<sw::annotation::SwAnnotationWin>& xCommentUIObject):
     WindowUIObject(xCommentUIObject),
     mxCommentUIObject(xCommentUIObject)
