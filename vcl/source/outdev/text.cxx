@@ -41,6 +41,7 @@
 
 #include <config_fuzzers.h>
 #include <outdev.h>
+#include <ImplLayoutArgs.hxx>
 #include <drawmode.hxx>
 #include <salgdi.hxx>
 #include <svdata.hxx>
@@ -1097,7 +1098,7 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
         mpAlphaVDev->DrawStretchText( rStartPt, nWidth, rStr, nIndex, nLen );
 }
 
-ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
+vcl::text::ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
                                                     const sal_Int32 nMinIndex, const sal_Int32 nLen,
                                                     DeviceCoordinate nPixelWidth, const DeviceCoordinate* pDXArray,
                                                     SalLayoutFlags nLayoutFlags,
@@ -1186,7 +1187,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
         nLayoutFlags |= SalLayoutFlags::RightAlign;
 
     // set layout options
-    ImplLayoutArgs aLayoutArgs(rStr, nMinIndex, nEndIndex, nLayoutFlags, maFont.GetLanguageTag(), pLayoutCache);
+    vcl::text::ImplLayoutArgs aLayoutArgs(rStr, nMinIndex, nEndIndex, nLayoutFlags, maFont.GetLanguageTag(), pLayoutCache);
 
     Degree10 nOrientation = mpFontInstance ? mpFontInstance->mnOrientation : 0_deg10;
     aLayoutArgs.SetOrientation( nOrientation );
@@ -1269,7 +1270,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
         }
     }
 
-    ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nMinIndex, nLen,
+    vcl::text::ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStr, nMinIndex, nLen,
             nPixelWidth, pDXPixelArray, flags, pLayoutCache);
 
     // get matching layout object for base font
@@ -1322,7 +1323,7 @@ std::shared_ptr<vcl::text::TextLayoutCache> OutputDevice::CreateTextLayoutCache(
 bool OutputDevice::GetTextIsRTL( const OUString& rString, sal_Int32 nIndex, sal_Int32 nLen ) const
 {
     OUString aStr( rString );
-    ImplLayoutArgs aArgs = ImplPrepareLayoutArgs( aStr, nIndex, nLen, 0, nullptr );
+    vcl::text::ImplLayoutArgs aArgs = ImplPrepareLayoutArgs( aStr, nIndex, nLen, 0, nullptr );
     bool bRTL = false;
     int nCharPos = -1;
     if (!aArgs.GetNextPos(&nCharPos, &bRTL))
