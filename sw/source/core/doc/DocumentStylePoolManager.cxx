@@ -516,6 +516,7 @@ static const char* STR_POOLPAGE_ARY[] =
 static const char* STR_POOLNUMRULE_NUM_ARY[] =
 {
     // Numbering styles
+    STR_POOLNUMRULE_NOLIST,
     STR_POOLNUMRULE_NUM1,
     STR_POOLNUMRULE_NUM2,
     STR_POOLNUMRULE_NUM3,

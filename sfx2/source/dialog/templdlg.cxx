@@ -870,6 +870,10 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr, bool bIsCal
                     }
                     bEntry = mxTreeBox->iter_next(*xEntry);
                 }
+                if (rStr == "No List")
+                {
+                    mxTreeBox->append(xEntry.get(), rStr);
+                }
             }
             else
                 mxTreeBox->unselect_all();
@@ -946,6 +950,8 @@ static OUString lcl_GetStyleFamilyName( SfxStyleFamily nFamily )
         return "PageStyles";
     if(nFamily == SfxStyleFamily::Table)
         return "TableStyles";
+    if (nFamily == SfxStyleFamily::Pseudo)
+        return "NumberingStyles";
     return OUString();
 }
 
@@ -955,6 +961,8 @@ OUString SfxCommonTemplateDialog_Impl::getDefaultStyleName( const SfxStyleFamily
     OUString aFamilyName = lcl_GetStyleFamilyName(eFam);
     if( aFamilyName == "TableStyles" )
         sDefaultStyle = "Default Style";
+    else if(aFamilyName == "NumberingStyles")
+        sDefaultStyle = "No List";
     else
         sDefaultStyle = "Standard";
     uno::Reference< style::XStyleFamiliesSupplier > xModel(GetObjectShell()->GetModel(), uno::UNO_QUERY);
