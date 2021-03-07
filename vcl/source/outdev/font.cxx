@@ -40,6 +40,7 @@
 #include <outdev.h>
 #include <window.h>
 
+#include <ImplLayoutArgs.hxx>
 #include <PhysicalFontCollection.hxx>
 
 #include <strings.hrc>
