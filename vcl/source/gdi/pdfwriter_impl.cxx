@@ -68,6 +68,7 @@
 #include <vcl/filter/pdfdocument.hxx>
 #include <comphelper/hash.hxx>
 
+#include <svdata.hxx>
 #include <bitmap/BitmapWriteAccess.hxx>
 #include <fontsubset.hxx>
 #include <PhysicalFontFace.hxx>
@@ -1338,6 +1339,19 @@ void PDFWriterImpl::dispose()
         rtl_cipher_destroyARCFOUR( m_aCipher );
     m_aPages.clear();
     VirtualDevice::dispose();
+}
+
+bool PDFWriterImpl::ImplNewFont() const
+{
+    const ImplSVData* pSVData = ImplGetSVData();
+
+    if( mxFontCollection == pSVData->maGDIData.mxScreenFontList
+        ||  mxFontCache == pSVData->maGDIData.mxScreenFontCache )
+    {
+        const_cast<vcl::PDFWriterImpl&>(*this).ImplUpdateFontData();
+    }
+
+    return OutputDevice::ImplNewFont();
 }
 
 void PDFWriterImpl::setupDocInfo()

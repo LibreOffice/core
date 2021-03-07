@@ -914,15 +914,6 @@ bool OutputDevice::ImplNewFont() const
 {
     DBG_TESTSOLARMUTEX();
 
-    // get correct font list on the PDF writer if necessary
-    if (GetOutDevType() == OUTDEV_PDF)
-    {
-        const ImplSVData* pSVData = ImplGetSVData();
-        if( mxFontCollection == pSVData->maGDIData.mxScreenFontList
-        ||  mxFontCache == pSVData->maGDIData.mxScreenFontCache )
-            const_cast<OutputDevice&>(*this).ImplUpdateFontData();
-    }
-
     if ( !mbNewFont )
         return true;
 
