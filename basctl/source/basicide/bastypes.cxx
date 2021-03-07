@@ -55,13 +55,13 @@ using namespace ::com::sun::star;
 
 BaseWindow::BaseWindow( vcl::Window* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName )
     :Window( pParent, WinBits( WB_3DLOOK ) )
+    ,pShellHScrollBar( nullptr)
+    ,pShellVScrollBar( nullptr)
+    ,nStatus( 0)
     ,m_aDocument( rDocument )
     ,m_aLibName( aLibName )
     ,m_aName( aName )
 {
-    pShellHScrollBar = nullptr;
-    pShellVScrollBar = nullptr;
-    nStatus = 0;
 }
 
 BaseWindow::~BaseWindow()
