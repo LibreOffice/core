@@ -26,6 +26,7 @@
 #include <vcl/font/Feature.hxx>
 #include <vcl/font/FeatureParser.hxx>
 
+#include <ImplLayoutArgs.hxx>
 #include <fontselect.hxx>
 #include <salgdi.hxx>
 #include <sallayout.hxx>
