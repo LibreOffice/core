@@ -336,7 +336,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                 }
                                 else
                                 {
-                                    sText = static_cast<const SwGetRefField*>(pField)->GetSetRefName();
+                                    sText = pRefField->GetSetRefName();
                                 }
                             }
                             break;

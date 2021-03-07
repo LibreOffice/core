@@ -778,12 +778,12 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
 
                     case PPT_PST_RecolorInfoAtom :
                     {
-                        if ( auto pSdrGrafObj = dynamic_cast<const SdrGrafObj* >(pRet) )
+                        if ( auto pSdrGrafObj = dynamic_cast<SdrGrafObj* >(pRet) )
                             if ( pSdrGrafObj->HasGDIMetaFile() )
                             {
                                 Graphic aGraphic( pSdrGrafObj->GetGraphic() );
                                 RecolorGraphic( rSt, aClientDataHd.nRecLen, aGraphic );
-                                static_cast<SdrGrafObj*>(pRet)->SetGraphic( aGraphic );
+                                pSdrGrafObj->SetGraphic( aGraphic );
                             }
                     }
                     break;

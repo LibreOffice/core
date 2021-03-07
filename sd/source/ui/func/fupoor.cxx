@@ -194,7 +194,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         {
                             SdrObject* pObj = aIter.Next();
 
-                            if(dynamic_cast< const SdrTextObj *>( pObj ))
+                            if(auto pTextObj = dynamic_cast<SdrTextObj *>( pObj ))
                             {
                                 SdrInventor nInv(pObj->GetObjInventor());
                                 sal_uInt16 nKnd(pObj->GetObjIdentifier());
@@ -202,7 +202,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                                 if(SdrInventor::Default == nInv &&
                                     (OBJ_TITLETEXT == nKnd || OBJ_OUTLINETEXT == nKnd || OBJ_TEXT == nKnd))
                                 {
-                                    pCandidate = static_cast<SdrTextObj*>(pObj);
+                                    pCandidate = pTextObj;
                                 }
                             }
                         }
@@ -824,14 +824,14 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         {
                             SdrObject* pObj = aIter.Next();
 
-                            if(dynamic_cast< const SdrTextObj *>( pObj ))
+                            if(auto pTextObj = dynamic_cast< SdrTextObj *>( pObj ))
                             {
                                 SdrInventor nInv(pObj->GetObjInventor());
                                 sal_uInt16 nKnd(pObj->GetObjIdentifier());
 
                                 if(SdrInventor::Default == nInv && OBJ_TITLETEXT == nKnd)
                                 {
-                                    pCandidate = static_cast<SdrTextObj*>(pObj);
+                                    pCandidate = pTextObj;
                                 }
                             }
                         }

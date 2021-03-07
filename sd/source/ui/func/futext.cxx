@@ -264,11 +264,11 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 const SvxFieldData* pField = pFieldItem->GetField();
 
-                if (pField && dynamic_cast< const SvxURLField *>( pField ) !=  nullptr)
+                if (auto pURLField = dynamic_cast< const SvxURLField *>( pField ))
                 {
                     eHit = SdrHitKind::MarkedObject;
                     aVEvt.eEvent = SdrEventKind::ExecuteUrl;
-                    aVEvt.pURLField = static_cast<const SvxURLField*>(pField);
+                    aVEvt.pURLField = pURLField;
                 }
             }
         }

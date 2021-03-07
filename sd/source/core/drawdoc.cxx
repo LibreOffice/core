@@ -887,19 +887,20 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
                 }
             }
 
-            if( dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr && pObj->IsEmptyPresObj())
-            {
-                PresObjKind ePresObjKind = pPage->GetPresObjKind(pObj);
-                OUString aString( pPage->GetPresObjText(ePresObjKind) );
-
-                if (!aString.isEmpty())
+            if( auto pTextObj = dynamic_cast<SdrTextObj *>( pObj ) )
+                if (pTextObj->IsEmptyPresObj())
                 {
-                    SdOutliner* pInternalOutl = GetInternalOutliner();
-                    pPage->SetObjText( static_cast<SdrTextObj*>(pObj), pInternalOutl, ePresObjKind, aString );
-                    pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresObjKind ), true );
-                    pInternalOutl->Clear();
+                    PresObjKind ePresObjKind = pPage->GetPresObjKind(pObj);
+                    OUString aString( pPage->GetPresObjText(ePresObjKind) );
+
+                    if (!aString.isEmpty())
+                    {
+                        SdOutliner* pInternalOutl = GetInternalOutliner();
+                        pPage->SetObjText( pTextObj, pInternalOutl, ePresObjKind, aString );
+                        pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresObjKind ), true );
+                        pInternalOutl->Clear();
+                    }
                 }
-            }
         }
     }
 }

@@ -696,7 +696,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
     DBG_ASSERT(i != rItems.end(), "FmFilterModel::Remove(): unknown Item");
     // position within the parent
     sal_Int32 nPos = i - rItems.begin();
-    if (dynamic_cast<const FmFilterItems*>( pData) !=  nullptr)
+    if (auto pFilterItems = dynamic_cast<FmFilterItems*>( pData))
     {
         FmFormItem* pFormItem = static_cast<FmFormItem*>(pParent);
 
@@ -708,7 +708,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
             if ( bEmptyLastTerm )
             {
                 // remove all children (by setting an empty predicate expression)
-                ::std::vector< std::unique_ptr<FmFilterData> >& rChildren = static_cast<FmFilterItems*>(pData)->GetChildren();
+                ::std::vector< std::unique_ptr<FmFilterData> >& rChildren = pFilterItems->GetChildren();
                 while ( !rChildren.empty() )
                 {
                     auto removePos = rChildren.end() - 1;
@@ -1506,7 +1506,8 @@ IMPL_LINK(FmFilterNavigator, PopupMenuHdl, const CommandEvent&, rEvt, bool)
             }
 
             FmFilterData* pFilterEntry = reinterpret_cast<FmFilterData*>(m_xTreeView->get_id(*xClicked).toInt64());
-            bool bEdit = dynamic_cast<FmFilterItem*>(pFilterEntry) != nullptr &&
+            auto pFilterItem = dynamic_cast<FmFilterItem*>(pFilterEntry);
+            bool bEdit = pFilterItem &&
                 m_xTreeView->is_selected(*xClicked) && m_xTreeView->count_selected_rows() == 1;
 
             if (bNoDelete && !bEdit)
@@ -1531,18 +1532,16 @@ IMPL_LINK(FmFilterNavigator, PopupMenuHdl, const CommandEvent&, rEvt, bool)
             {
                 OUString aErrorMsg;
                 OUString aText = "IS NULL";
-                m_pModel->ValidateText(static_cast<FmFilterItem*>(pFilterEntry),
-                                        aText, aErrorMsg);
-                m_pModel->SetTextForItem(static_cast<FmFilterItem*>(pFilterEntry), aText);
+                m_pModel->ValidateText(pFilterItem, aText, aErrorMsg);
+                m_pModel->SetTextForItem(pFilterItem, aText);
             }
             else if (sIdent == "isnotnull")
             {
                 OUString aErrorMsg;
                 OUString aText = "IS NOT NULL";
 
-                m_pModel->ValidateText(static_cast<FmFilterItem*>(pFilterEntry),
-                                        aText, aErrorMsg);
-                m_pModel->SetTextForItem(static_cast<FmFilterItem*>(pFilterEntry), aText);
+                m_pModel->ValidateText(pFilterItem, aText, aErrorMsg);
+                m_pModel->SetTextForItem(pFilterItem, aText);
             }
             else if (sIdent == "delete")
             {

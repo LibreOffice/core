@@ -439,12 +439,12 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
         InsertObject(pSdrObj);
 
-        if ( dynamic_cast< const SdrTextObj *>( pSdrObj ) !=  nullptr )
+        if ( auto pTextObj = dynamic_cast<SdrTextObj *>( pSdrObj ) )
         {
             // Tell the object EARLY that it is vertical to have the
             // defaults for AutoGrowWidth/Height reversed
             if(bVertical)
-                static_cast<SdrTextObj*>(pSdrObj)->SetVerticalWriting(true);
+                pTextObj->SetVerticalWriting(true);
 
             SfxItemSet aTempAttr(static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetPool());
             if( bVertical )
@@ -1543,7 +1543,7 @@ static void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDe
                             if( pPersist )
                             {
                                 uno::Reference < embed::XEmbeddedObject > xObject = pPersist->getEmbeddedObjectContainer().
-                                        GetEmbeddedObject( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() );
+                                        GetEmbeddedObject( pOle2->GetPersistName() );
 
                                 // TODO CL->KA: Why is this not working anymore?
                                 if( xObject.is() )

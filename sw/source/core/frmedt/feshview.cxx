@@ -2980,7 +2980,7 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
             aAttr.Put(makeSdrCircEndAngleItem(0_deg100));
             pObj->SetMergedItemSet(aAttr);
         }
-        else if(dynamic_cast<const SdrPathObj*>( pObj) !=  nullptr)
+        else if(auto pPathObj = dynamic_cast<SdrPathObj*>( pObj))
         {
             basegfx::B2DPolyPolygon aPoly;
 
@@ -3076,7 +3076,7 @@ void SwFEShell::CreateDefaultShape( SdrObjKind eSdrObjectKind, const tools::Rect
                 break;
             }
 
-            static_cast<SdrPathObj*>(pObj)->SetPathPoly(aPoly);
+            pPathObj->SetPathPoly(aPoly);
         }
         else if(auto pMeasureObj = dynamic_cast<SdrMeasureObj*>( pObj))
         {
