@@ -25,6 +25,9 @@ static std::ostream& operator<<(std::ostream& rStream, const std::vector<tools::
 #include <sallayout.hxx>
 #include <salgdi.hxx>
 
+
+#include <ImplLayoutArgs.hxx>
+
 #if HAVE_MORE_FONTS
 static std::ostream& operator<<(std::ostream& rStream, const std::vector<tools::Long>& rVec)
 {

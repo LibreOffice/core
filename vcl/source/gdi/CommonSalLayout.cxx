@@ -25,6 +25,7 @@
 #include <vcl/font/Feature.hxx>
 #include <vcl/font/FeatureParser.hxx>
 
+#include <ImplLayoutArgs.hxx>
 #include <TextLayoutCache.hxx>
 #include <fontselect.hxx>
 #include <salgdi.hxx>
@@ -342,7 +343,7 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphsIm
         size_t k = 0;
         for (; k < pTextLayout->runs.size(); ++k)
         {
-            vcl::text::Run const& rRun(pTextLayout->runs[k]);
+            vcl::Run const& rRun(pTextLayout->runs[k]);
             if (rRun.nStart <= nCurrentPos && nCurrentPos < rRun.nEnd)
             {
                 break;
