@@ -516,6 +516,7 @@ static const char* STR_POOLPAGE_ARY[] =
 static const char* STR_POOLNUMRULE_NUM_ARY[] =
 {
     // Numbering styles
+    STR_POOLNUMRULE_NOLIST,
     STR_POOLNUMRULE_NUM1,
     STR_POOLNUMRULE_NUM2,
     STR_POOLNUMRULE_NUM3,
@@ -1932,6 +1933,43 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
 
     switch( nId )
     {
+    case RES_POOLNUMRULE_NOLIST:
+        {
+        SwNumFormat aFormat;
+        aFormat.SetNumberingType(SVX_NUM_NUMBER_NONE);
+        static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
+                {
+//              cm: 0,4  0,8  1,2  1,6  2,0   2,4   2,8   3,2   3,6   4,0
+                    227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
+                };
+            const sal_uInt16* pArr = aAbsSpace;
+
+            if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+            {
+                aFormat.SetFirstLineOffset( - (*pArr) );
+            }
+            else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
+            {
+                aFormat.SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
+                aFormat.SetFirstLineIndent( - (*pArr) );
+            }
+
+            for (sal_uInt16 n = 0; n < MAXLEVEL; ++n, ++pArr)
+            {
+                if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+                {
+                    aFormat.SetAbsLSpace( *pArr );
+                }
+                else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
+                {
+                    aFormat.SetListtabPos( *pArr );
+                    aFormat.SetIndentAt( *pArr );
+                }
+
+                pNewRule->Set( n, aFormat );
+            }
+        }
+        break;
     case RES_POOLNUMRULE_NUM1:
         {
             SwNumFormat aFormat;
