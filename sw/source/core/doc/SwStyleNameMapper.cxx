@@ -709,6 +709,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetPageDescProgNameArray()
 const std::vector<OUString>& SwStyleNameMapper::GetNumRuleProgNameArray()
 {
     static const std::vector<OUString> s_aNumRuleProgNameArray = {
+        "No List",
         "Numbering 123", // STR_POOLNUMRULE_PRGM_NUM1
         "Numbering ABC",
         "Numbering abc",

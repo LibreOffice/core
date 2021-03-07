@@ -185,7 +185,8 @@ RES_POOLPAGE_END
 enum RES_POOL_NUMRULE_TYPE
 {
 RES_POOLNUMRULE_BEGIN = POOLGRP_NUMRULE,
-RES_POOLNUMRULE_NUM1 = RES_POOLNUMRULE_BEGIN,       ///< NumRule Numbering 123.
+RES_POOLNUMRULE_NOLIST = RES_POOLNUMRULE_BEGIN,
+RES_POOLNUMRULE_NUM1,                               ///< NumRule Numbering 123.
 RES_POOLNUMRULE_NUM2,                               ///< NumRule Numbering ABC.
 RES_POOLNUMRULE_NUM3,                               ///< NumRule Numbering abc.
 RES_POOLNUMRULE_NUM4,                               ///< NumRule Numbering IVX.

@@ -946,6 +946,8 @@ static OUString lcl_GetStyleFamilyName( SfxStyleFamily nFamily )
         return "PageStyles";
     if(nFamily == SfxStyleFamily::Table)
         return "TableStyles";
+    if (nFamily == SfxStyleFamily::Pseudo)
+        return "NumberingStyles";
     return OUString();
 }
 
@@ -955,6 +957,8 @@ OUString SfxCommonTemplateDialog_Impl::getDefaultStyleName( const SfxStyleFamily
     OUString aFamilyName = lcl_GetStyleFamilyName(eFam);
     if( aFamilyName == "TableStyles" )
         sDefaultStyle = "Default Style";
+    else if(aFamilyName == "NumberingStyles")
+        sDefaultStyle = "No List";
     else
         sDefaultStyle = "Standard";
     uno::Reference< style::XStyleFamiliesSupplier > xModel(GetObjectShell()->GetModel(), uno::UNO_QUERY);
@@ -1031,6 +1035,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
     if(pState)  // Select current entry
         aStyle = pState->GetStyleName();
     SelectStyle(aStyle, false);
+    SelectStyle("No List", false);
     EnableDelete();
 }
 
