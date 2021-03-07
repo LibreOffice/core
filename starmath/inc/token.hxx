@@ -29,7 +29,6 @@
 #pragma once
 
 #include "types.hxx"
-#include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/color.hxx>
 #include <o3tl/typed_flags_set.hxx>
