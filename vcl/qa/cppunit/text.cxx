@@ -8,14 +8,16 @@
  */
 
 #include <test/bootstrapfixture.hxx>
+#include <sal/log.hxx>
 #include <tools/stream.hxx>
+
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <sal/log.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
 
+#include <TextLayoutCache.hxx>
 #include <salgdi.hxx>
 
 class VclTextTest : public test::BootstrapFixture
@@ -42,10 +44,12 @@ public:
 
     void testSimpleText();
     void testVerticalText();
+    void testTextLayoutCache();
 
     CPPUNIT_TEST_SUITE(VclTextTest);
     CPPUNIT_TEST(testSimpleText);
     CPPUNIT_TEST(testVerticalText);
+    CPPUNIT_TEST(testTextLayoutCache);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -373,6 +377,24 @@ void VclTextTest::testVerticalText()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(height36 / 2, height36pct50, 2);
     tools::Long width36pct50 = getCharacterTopWidth(device, Point(65, 0));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(width36, width36pct50, 2);
+}
+
+void VclTextTest::testTextLayoutCache()
+{
+    OUString sTestString = u"The quick brown fox\n jumped over the lazy dogالعاشر";
+    vcl::TextLayoutCache cache(sTestString.getStr(), sTestString.getLength());
+
+    vcl::Run run1 = cache.runs[0];
+    vcl::Run run2 = cache.runs[1];
+
+    bool bCorrectRuns = (cache.runs.size() == 2);
+    CPPUNIT_ASSERT_MESSAGE("Wrong number of runs", bCorrectRuns);
+    CPPUNIT_ASSERT_EQUAL(USCRIPT_LATIN, run1.nCode);
+    CPPUNIT_ASSERT_EQUAL(0, run1.nStart);
+    CPPUNIT_ASSERT_EQUAL(45, run1.nEnd);
+    CPPUNIT_ASSERT_EQUAL(USCRIPT_ARABIC, run2.nCode);
+    CPPUNIT_ASSERT_EQUAL(45, run2.nStart);
+    CPPUNIT_ASSERT_EQUAL(51, run2.nEnd);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclTextTest);
