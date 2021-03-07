@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c9d0caf8_5b2e0c9c",
+        "filename": "basic/source/classes/errobject.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-07T09:37:16Z",
+      "side": 1,
+      "message": "Let me play sberg a little ;-p\n\nThere is a convention that our C/CXX files start with\n\n  #include \u003csal/config.h\u003e\n\n... so whenever you touch a first include in such a file where this include is not present, it would be nice if you also added that include.\n\nSo in this file (but not in basrdll.cxx, where you don\u0027t touch the *first* include!), it would be nice to have it\n\n  + #include \u003csal/config.h\u003e\n  + \n  + #include \u003cmutex\u003e\n\n... but I don\u0027t think it\u0027s a blocker for the change :-)",
+      "revId": "f28b1763409737dfd946ecd7ac2203a2e9dab381",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
