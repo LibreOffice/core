@@ -55,7 +55,6 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMailMergeInEditeng)
     getComponent() = loadFromDesktop(aURL);
     // Without the accompanying fix in place, this test would have failed, as unexpected
     // <text:database-display> in editeng text aborted the whole import process.
-    CPPUNIT_ASSERT(getComponent().is());
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentResolved)
