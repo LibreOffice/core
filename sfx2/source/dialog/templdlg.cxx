@@ -864,7 +864,22 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr, bool bIsCal
                 }
             }
             else
-                mxTreeBox->unselect_all();
+            {
+                if (eFam == SfxStyleFamily::Pseudo)
+                {
+                    std::unique_ptr<weld::TreeIter> xEntry = mxTreeBox->make_iterator();
+                    bool bEntry = mxTreeBox->get_iter_first(*xEntry);
+                    while (bEntry)
+                    {
+                            mxTreeBox->scroll_to_row(*xEntry);
+                            mxTreeBox->select(*xEntry);
+                            break;
+                    }
+                    bEntry = mxTreeBox->iter_next(*xEntry);
+                }
+                else
+                    mxTreeBox->unselect_all();
+            }
         }
         else
         {
@@ -938,6 +953,8 @@ static OUString lcl_GetStyleFamilyName( SfxStyleFamily nFamily )
         return "PageStyles";
     if(nFamily == SfxStyleFamily::Table)
         return "TableStyles";
+    if (nFamily == SfxStyleFamily::Pseudo)
+        return "NumberingStyles";
     return OUString();
 }
 
@@ -947,6 +964,8 @@ OUString SfxCommonTemplateDialog_Impl::getDefaultStyleName( const SfxStyleFamily
     OUString aFamilyName = lcl_GetStyleFamilyName(eFam);
     if( aFamilyName == "TableStyles" )
         sDefaultStyle = "Default Style";
+    else if(aFamilyName == "NumberingStyles")
+        sDefaultStyle = "No List";
     else
         sDefaultStyle = "Standard";
     uno::Reference< style::XStyleFamiliesSupplier > xModel(GetObjectShell()->GetModel(), uno::UNO_QUERY);
