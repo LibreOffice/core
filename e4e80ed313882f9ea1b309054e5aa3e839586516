@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "417f2626_180b2dcf",
+        "filename": "vcl/source/edit/textundo.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2021-03-07T12:47:14Z",
+      "side": 1,
+      "message": "Hi Noel,\n\nI think this needs to be a dynamic_cast now.",
+      "range": {
+        "startLine": 276,
+        "startChar": 33,
+        "endLine": 276,
+        "endChar": 44
+      },
+      "revId": "e4e80ed313882f9ea1b309054e5aa3e839586516",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
