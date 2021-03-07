@@ -2185,7 +2185,7 @@ void SwAutoFormat::AutoCorrect(TextFrameIndex nPos)
                 continue;       // do not check further
             }
 
-            if ( m_aFlags.bAddNonBrkSpace )
+            if ( m_aFlags.bAddNonBrkSpace && nPos < TextFrameIndex(pText->getLength()) )
             {
                 SetRedlineText( STR_AUTOFMTREDL_NON_BREAK_SPACE );
                 pATst->FnAddNonBrkSpace(aACorrDoc, *pText, sal_Int32(nPos), eLang, bNbspRunNext);
