@@ -10,6 +10,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -17,6 +18,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 
+#include <ImplLayoutArgs.hxx>
 #include <TextLayoutCache.hxx>
 #include <salgdi.hxx>
 
@@ -45,11 +47,19 @@ public:
     void testSimpleText();
     void testVerticalText();
     void testTextLayoutCache();
+    void testImplLayoutArgsBiDiStrong();
+    void testImplLayoutArgsBiDiRtl();
+    void testImplLayoutArgsRightAlign();
+    void testImplLayoutArgs_PrepareFallback_precalculatedglyphs();
 
     CPPUNIT_TEST_SUITE(VclTextTest);
     CPPUNIT_TEST(testSimpleText);
     CPPUNIT_TEST(testVerticalText);
     CPPUNIT_TEST(testTextLayoutCache);
+    CPPUNIT_TEST(testImplLayoutArgsBiDiStrong);
+    CPPUNIT_TEST(testImplLayoutArgsBiDiRtl);
+    CPPUNIT_TEST(testImplLayoutArgsRightAlign);
+    CPPUNIT_TEST(testImplLayoutArgs_PrepareFallback_precalculatedglyphs);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -395,6 +405,138 @@ void VclTextTest::testTextLayoutCache()
     CPPUNIT_ASSERT_EQUAL(USCRIPT_ARABIC, run2.nCode);
     CPPUNIT_ASSERT_EQUAL(45, run2.nStart);
     CPPUNIT_ASSERT_EQUAL(51, run2.nEnd);
+}
+
+void VclTextTest::testImplLayoutArgsBiDiStrong()
+{
+    OUString sTestString = u"The quick brown fox\n jumped over the lazy dog"
+                           "العاشر";
+    vcl::text::ImplLayoutArgs aArgs(sTestString, 0, sTestString.getLength(),
+                                    SalLayoutFlags::BiDiStrong, LanguageTag(LANGUAGE_NONE),
+                                    nullptr);
+
+    int* nMinRunPos = new int(0);
+    int* nEndRunPos = new int(0);
+    bool* pRTL = new bool(false);
+
+    aArgs.GetNextRun(nMinRunPos, nEndRunPos, pRTL);
+    CPPUNIT_ASSERT_EQUAL(0, *nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(19, *nEndRunPos);
+    CPPUNIT_ASSERT(!*pRTL);
+
+    aArgs.GetNextRun(nMinRunPos, nEndRunPos, pRTL);
+    CPPUNIT_ASSERT_EQUAL(20, *nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(51, *nEndRunPos);
+    CPPUNIT_ASSERT(!*pRTL);
+
+    aArgs.GetNextRun(nMinRunPos, nEndRunPos, pRTL);
+    CPPUNIT_ASSERT_EQUAL(20, *nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(51, *nEndRunPos);
+}
+
+void VclTextTest::testImplLayoutArgsBiDiRtl()
+{
+    OUString sTestString = u"The quick brown fox\n jumped over the lazy dog"
+                           "العاشر";
+    vcl::text::ImplLayoutArgs aArgs(sTestString, 0, sTestString.getLength(),
+                                    SalLayoutFlags::BiDiRtl, LanguageTag(LANGUAGE_NONE), nullptr);
+
+    int* nMinRunPos = new int(0);
+    int* nEndRunPos = new int(0);
+    bool* pRTL = new bool(false);
+
+    aArgs.GetNextRun(nMinRunPos, nEndRunPos, pRTL);
+    CPPUNIT_ASSERT_EQUAL(45, *nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(51, *nEndRunPos);
+    CPPUNIT_ASSERT(*pRTL);
+
+    aArgs.GetNextRun(nMinRunPos, nEndRunPos, pRTL);
+    CPPUNIT_ASSERT_EQUAL(21, *nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(45, *nEndRunPos);
+    CPPUNIT_ASSERT(!*pRTL);
+
+    aArgs.GetNextRun(nMinRunPos, nEndRunPos, pRTL);
+    CPPUNIT_ASSERT_EQUAL(20, *nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(21, *nEndRunPos);
+    CPPUNIT_ASSERT(*pRTL);
+
+    aArgs.GetNextRun(nMinRunPos, nEndRunPos, pRTL);
+    CPPUNIT_ASSERT_EQUAL(0, *nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(19, *nEndRunPos);
+    CPPUNIT_ASSERT(!*pRTL);
+}
+
+void VclTextTest::testImplLayoutArgsRightAlign()
+{
+    OUString sTestString = u"The quick brown fox\n jumped over the lazy dog"
+                           "العاشر";
+    vcl::text::ImplLayoutArgs aArgs(sTestString, 0, sTestString.getLength(),
+                                    SalLayoutFlags::RightAlign, LanguageTag(LANGUAGE_NONE),
+                                    nullptr);
+
+    int* nMinRunPos = new int(0);
+    int* nEndRunPos = new int(0);
+    bool* pRTL = new bool(false);
+
+    aArgs.GetNextRun(nMinRunPos, nEndRunPos, pRTL);
+    CPPUNIT_ASSERT_EQUAL(0, *nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(19, *nEndRunPos);
+    CPPUNIT_ASSERT(!*pRTL);
+
+    aArgs.GetNextRun(nMinRunPos, nEndRunPos, pRTL);
+    CPPUNIT_ASSERT_EQUAL(20, *nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(45, *nEndRunPos);
+    CPPUNIT_ASSERT(!*pRTL);
+
+    aArgs.GetNextRun(nMinRunPos, nEndRunPos, pRTL);
+    CPPUNIT_ASSERT_EQUAL(45, *nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(51, *nEndRunPos);
+    CPPUNIT_ASSERT(*pRTL);
+}
+
+void VclTextTest::testImplLayoutArgs_PrepareFallback_precalculatedglyphs()
+{
+    // this font has no latin characters and thus needs fallback
+    const vcl::Font aFont("KacstBook", Size(0, 36));
+
+    ScopedVclPtrInstance<VirtualDevice> pVirDev;
+    pVirDev->SetFont(aFont);
+
+    const OUString sTestString = "The quick\n jumped over";
+    std::unique_ptr<SalLayout> pLayout
+        = pVirDev->ImplLayout(sTestString, 0, sTestString.getLength(), Point(0, 0), 0, nullptr,
+                              SalLayoutFlags::GlyphItemsOnly);
+    SalLayoutGlyphs aGlyphs = pLayout->GetGlyphs();
+    SalLayoutGlyphsImpl* pGlyphsImpl = aGlyphs.Impl(1);
+
+    vcl::text::ImplLayoutArgs aArgs(sTestString, 0, sTestString.getLength(),
+                                    SalLayoutFlags::BiDiRtl, LanguageTag(LANGUAGE_LATIN), nullptr);
+
+    aArgs.PrepareFallback(pGlyphsImpl);
+
+    int* nMinRunPos = new int(0);
+    int* nEndRunPos = new int(0);
+    bool* pRTL = new bool(false);
+
+    aArgs.GetNextRun(nMinRunPos, nEndRunPos, pRTL);
+    CPPUNIT_ASSERT_EQUAL(0, *nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(3, *nEndRunPos);
+    CPPUNIT_ASSERT(!*pRTL);
+
+    aArgs.GetNextRun(nMinRunPos, nEndRunPos, pRTL);
+    CPPUNIT_ASSERT_EQUAL(4, *nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(9, *nEndRunPos);
+    CPPUNIT_ASSERT(!*pRTL);
+
+    aArgs.GetNextRun(nMinRunPos, nEndRunPos, pRTL);
+    CPPUNIT_ASSERT_EQUAL(11, *nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(17, *nEndRunPos);
+    CPPUNIT_ASSERT(!*pRTL);
+
+    aArgs.GetNextRun(nMinRunPos, nEndRunPos, pRTL);
+    CPPUNIT_ASSERT_EQUAL(18, *nMinRunPos);
+    CPPUNIT_ASSERT_EQUAL(22, *nEndRunPos);
+    CPPUNIT_ASSERT(!*pRTL);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclTextTest);
