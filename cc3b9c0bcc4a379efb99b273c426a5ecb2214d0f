@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c92fc43c_7ed0b0f2",
+        "filename": "cppcanvas/inc/pch/precompiled_cppcanvas.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-07T10:00:30Z",
+      "side": 1,
+      "message": "Stephan: it looks odd that we have the \u0027#include \u003csal/config.h\u003e\u0027 not the first line of the generated pch. I don\u0027t know if it needs to be the first line of \u0027#if PCH_LEVEL \u003e\u003d 1\u0027 (no idea which headers go there, and looks like those are only standard C++ headers - maybe unaffected by the defines in config.h), but it seems that *at least* it should go before all other our headers?\n\nWhat needs to be changed in bin/update_pch?",
+      "revId": "cc3b9c0bcc4a379efb99b273c426a5ecb2214d0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
