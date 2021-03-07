@@ -1620,7 +1620,7 @@ void ToolBoxUIObject::execute(const OUString& rAction,
         {
             auto itr = rParameters.find("POS");
             sal_uInt16 nPos = itr->second.toUInt32();
-            mxToolBox->SetCurItemId(nPos);
+            mxToolBox->SetCurItemId(mxToolBox->GetItemId(nPos));
             mxToolBox->Click();
             mxToolBox->Select();
         }
