@@ -381,32 +381,4 @@ OUString ScGridWinUIObject::get_name() const
     return "ScGridWinUIObject";
 }
 
-ScNavigatorDlgUIObject::ScNavigatorDlgUIObject(const VclPtr<ScNavigatorDlg>& xScNavigatorDlg):
-    WindowUIObject(xScNavigatorDlg),
-    mxScNavigatorDlg(xScNavigatorDlg)
-{
-}
-
-void ScNavigatorDlgUIObject::execute(const OUString& rAction,
-        const StringMap& rParameters)
-{
-    if (rAction == "ROOT")
-    {
-        mxScNavigatorDlg->ToolBoxSelectHdl("toggle");
-    }
-    else
-        WindowUIObject::execute(rAction, rParameters);
-}
-
-std::unique_ptr<UIObject> ScNavigatorDlgUIObject::create(vcl::Window* pWindow)
-{
-    ScNavigatorDlg* pScNavigatorDlg = dynamic_cast<ScNavigatorDlg*>(pWindow);
-    assert(pScNavigatorDlg);
-    return std::unique_ptr<UIObject>(new ScNavigatorDlgUIObject(pScNavigatorDlg));
-}
-
-OUString ScNavigatorDlgUIObject::get_name() const
-{
-    return "ScNavigatorDlgUIObject";
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
