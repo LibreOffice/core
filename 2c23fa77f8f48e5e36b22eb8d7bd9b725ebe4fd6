@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae303134_974c082c",
+        "filename": "include/systools/win32/retry_if_failed.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-03-07T14:57:36Z",
+      "side": 1,
+      "message": "I\u0027m not a great fan of hiding multiple lines worth of logic inside a single if bracket",
+      "revId": "2c23fa77f8f48e5e36b22eb8d7bd9b725ebe4fd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
