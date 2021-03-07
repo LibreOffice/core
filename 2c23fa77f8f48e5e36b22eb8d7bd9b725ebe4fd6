@@ -16,6 +16,24 @@
       "revId": "2c23fa77f8f48e5e36b22eb8d7bd9b725ebe4fd6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "694e77ce_22594a95",
+        "filename": "include/systools/win32/retry_if_failed.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-07T18:21:30Z",
+      "side": 1,
+      "message": "Well, tastes differ ;-) but actually I agree that often the too much \"packed\" constructs may be incomprehensible.\n\nBut in this case, I believe that this change *improves* readability (in addition to a slight functional change). It removes the unrelated noise \"create a \u0027hr\u0027 variable and initialize it for situation when for some reason, the loop below hadn\u0027t executed at least once\"; \"perform a check to look if we need to call the Sleep - we need not if we already reached the retry limit\". We tell clearly: \"run the function, and immediately decide if we need to return the value that we get right here, or we need to proceed to the Sleep\".\n\nOf course, I can rework this to be more verbose (keeping the modified logic). Do you thing I should?",
+      "parentUuid": "ae303134_974c082c",
+      "revId": "2c23fa77f8f48e5e36b22eb8d7bd9b725ebe4fd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
