@@ -21,6 +21,7 @@ static std::ostream& operator<<(std::ostream& rStream, const std::vector<tools::
 
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/ImplLayoutArgs.hxx>
 // workaround MSVC2015 issue with std::unique_ptr
 #include <sallayout.hxx>
 #include <salgdi.hxx>
