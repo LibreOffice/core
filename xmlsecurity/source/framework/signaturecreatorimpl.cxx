@@ -153,8 +153,7 @@ OUString SignatureCreatorImpl_getImplementationName ()
 
 css::uno::Sequence< OUString > SignatureCreatorImpl_getSupportedServiceNames(  )
 {
-    css::uno::Sequence<OUString> aRet { "com.sun.star.xml.crypto.sax.SignatureCreator" };
-    return aRet;
+    return { "com.sun.star.xml.crypto.sax.SignatureCreator" };
 }
 
 /* XServiceInfo */
