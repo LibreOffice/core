@@ -655,6 +655,9 @@ bool SvxAutoCorrect::FnAddNonBrkSpace(
                                 sal_Int32 nEndPos,
                                 LanguageType eLang, bool& io_bNbspRunNext )
 {
+    if (nEndPos >= rTxt.getLength())
+        return false;
+
     bool bRet = false;
 
     CharClass& rCC = GetCharClass( eLang );
