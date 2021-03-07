@@ -422,6 +422,12 @@
           <menu:menuitem menu:id=".uno:CommonAlignBottom" menu:style="radio"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:FormatPaintbrush"/>
+      <menu:menuitem menu:id=".uno:ResetAttributes"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:FontDialog"/>
+      <menu:menuitem menu:id=".uno:ParagraphDialog"/>
       <menu:menu menu:id=".uno:FormatBulletsMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:RemoveBullets" menu:style="radio"/>
@@ -446,12 +452,6 @@
           <menu:menuitem menu:id=".uno:ContinueNumbering"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:FormatPaintbrush"/>
-      <menu:menuitem menu:id=".uno:ResetAttributes"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:FontDialog"/>
-      <menu:menuitem menu:id=".uno:ParagraphDialog"/>
       <menu:menuitem menu:id=".uno:OutlineBullet"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:PageDialog"/>
