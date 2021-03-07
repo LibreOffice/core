@@ -1160,7 +1160,7 @@ void SmElementsControl::setSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion)
         m_nSmSyntaxVersion = nSmSyntaxVersion;
         maParser.reset(starmathdatabase::GetVersionSmParser(nSmSyntaxVersion));
         maParser->SetImportSymbolNames(true);
-        // Be carefull, we need the parser in order to build !!!
+        // Be careful, we need the parser in order to build !!!
         build();
     }
 }

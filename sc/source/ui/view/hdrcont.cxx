@@ -754,7 +754,7 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
             // tdf#140833 launch help tip to show after the double click time has expired
             // so under gtk the popover isn't active when the double click is processed
             // by gtk because under load on wayland the double click is getting handled
-            // by something else and getting sent to the the window underneath our window
+            // by something else and getting sent to the window underneath our window
             aShowHelpTimer.Start();
             DrawInvert( nDragPos );
 
