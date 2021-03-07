@@ -91,7 +91,9 @@ class navigator(UITestCase):
 
         xCalcDoc = self.xUITest.getTopFocusWindow()
         xNavigatorPanel = xCalcDoc.getChild("NavigatorPanelParent")
-        xNavigatorPanel.executeAction("ROOT", tuple())
+        xToolBar = xNavigatorPanel.getChild("toolbox2")
+        xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "0"})) # 'toggle' button
+
         xContentBox = xNavigatorPanel.getChild('contentbox')
 
         # tdf#133079, without the fix in place, it would be 8
@@ -123,7 +125,8 @@ class navigator(UITestCase):
 
         xCalcDoc = self.xUITest.getTopFocusWindow()
         xNavigatorPanel = xCalcDoc.getChild("NavigatorPanelParent")
-        xNavigatorPanel.executeAction("ROOT", tuple())
+        xToolBar = xNavigatorPanel.getChild("toolbox2")
+        xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "0"})) # 'toggle' button
 
         xRow = xNavigatorPanel.getChild('row')
         xColumn = xNavigatorPanel.getChild('column')
