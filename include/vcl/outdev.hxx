@@ -89,7 +89,6 @@ class LineInfo;
 class AlphaMask;
 class FontCharMap;
 class SalLayout;
-class ImplLayoutArgs;
 class VirtualDevice;
 struct SalTwoRect;
 class Printer;
@@ -109,6 +108,7 @@ namespace vcl
     }
 
     namespace text {
+        class ImplLayoutArgs;
         class TextLayoutCache;
     }
 }
@@ -1226,18 +1226,18 @@ public:
                                             const tools::Long* pLogicDXArray=nullptr, SalLayoutFlags flags = SalLayoutFlags::NONE,
                                             vcl::text::TextLayoutCache const* = nullptr,
                                             const SalLayoutGlyphs* pGlyphs = nullptr) const;
-    SAL_DLLPRIVATE ImplLayoutArgs ImplPrepareLayoutArgs( OUString&, const sal_Int32 nIndex, const sal_Int32 nLen,
+    SAL_DLLPRIVATE vcl::text::ImplLayoutArgs ImplPrepareLayoutArgs( OUString&, const sal_Int32 nIndex, const sal_Int32 nLen,
                                                          DeviceCoordinate nPixelWidth, const DeviceCoordinate* pPixelDXArray,
                                                          SalLayoutFlags flags = SalLayoutFlags::NONE,
                                                          vcl::text::TextLayoutCache const* = nullptr) const;
     SAL_DLLPRIVATE std::unique_ptr<SalLayout>
                                 ImplGlyphFallbackLayout( std::unique_ptr<SalLayout>,
-                                                         ImplLayoutArgs&,
+                                                         vcl::text::ImplLayoutArgs&,
                                                          const SalLayoutGlyphs* ) const;
     SAL_DLLPRIVATE std::unique_ptr<SalLayout>
                                 getFallbackLayout(
                                     LogicalFontInstance* pLogicalFont, int nFallbackLevel,
-                                    ImplLayoutArgs& rLayoutArgs, const SalLayoutGlyphs* ) const;
+                                    vcl::text::ImplLayoutArgs& rLayoutArgs, const SalLayoutGlyphs* ) const;
 
 
     // Enabling/disabling RTL only makes sense for OutputDevices that use a mirroring SalGraphicsLayout
