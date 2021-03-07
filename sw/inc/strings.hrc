@@ -28,7 +28,7 @@
 #define STR_STANDARD_TOOLTIP                    NC_("STR_STANDARD_TOOLTIP", "")
 #define STR_STANDARD_EXTENDEDTIP                NC_("STR_STANDARD_EXTENDEDTIP", "")
 #define STR_RESET_LABEL                         NC_("STR_RESET_LABEL", "Reset")
-#define STR_RESET_TOOLTIP                       NC_("STR_RESET_TOOLTIP", "")
+#define STR_RESET_TOOLTIP                       NC_("STR_RESET_TOOLTIP", "Unsaved modifications to this tab are reverted.")
 #define STR_RESET_EXTENDEDTIP                   NC_("STR_RESET_EXTENDEDTIP", "")
 #define STR_APPLY_LABEL                         NC_("STR_APPLY_LABEL", "Apply")
 #define STR_APPLY_TOOLTIP                       NC_("STR_APPLY_TOOLTIP", "")
