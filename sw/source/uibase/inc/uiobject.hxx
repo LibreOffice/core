@@ -42,26 +42,6 @@ private:
 
 };
 
-class SwNavigationPIUIObject : public WindowUIObject
-{
-    VclPtr<SwNavigationPI> mxSwNavigationPI;
-
-public:
-
-    SwNavigationPIUIObject(const VclPtr<SwNavigationPI>& xSwNavigationPI);
-
-    virtual StringMap get_state() override;
-
-    virtual void execute(const OUString& rAction,
-            const StringMap& rParameters) override;
-
-    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
-
-protected:
-
-    OUString get_name() const override;
-};
-
 // This class handles the Comments as a UIObject to be used in UITest Framework
 class CommentUIObject : public WindowUIObject
 {
