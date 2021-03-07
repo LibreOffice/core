@@ -1159,6 +1159,11 @@ SfxStyleFamily SwDocShell::ApplyStyles(const OUString &rName, SfxStyleFamily nFa
             // reset indent attribute on applying list style
             // continue list of list style
             const SwNumRule* pNumRule = pStyle->GetNumRule();
+            if (pNumRule->GetName() == "No List")
+            {
+                SfxViewFrame::Current()->GetDispatcher()->Execute(FN_NUM_BULLET_OFF);
+                break;
+            }
             const OUString sListIdForStyle =pNumRule->GetDefaultListId();
             pSh->SetCurNumRule( *pNumRule, false, sListIdForStyle, true );
             break;

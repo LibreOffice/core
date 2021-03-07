@@ -863,6 +863,15 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr, bool bIsCal
                     bEntry = mxTreeBox->iter_next(*xEntry);
                 }
             }
+            else if (eFam == SfxStyleFamily::Pseudo)
+            {
+                std::unique_ptr<weld::TreeIter> xEntry = mxTreeBox->make_iterator();
+                if (mxTreeBox->get_iter_first(*xEntry))
+                {
+                    mxTreeBox->scroll_to_row(*xEntry);
+                    mxTreeBox->select(*xEntry);
+                }
+            }
             else
                 mxTreeBox->unselect_all();
         }
@@ -938,6 +947,8 @@ static OUString lcl_GetStyleFamilyName( SfxStyleFamily nFamily )
         return "PageStyles";
     if(nFamily == SfxStyleFamily::Table)
         return "TableStyles";
+    if (nFamily == SfxStyleFamily::Pseudo)
+        return "NumberingStyles";
     return OUString();
 }
 
@@ -947,6 +958,8 @@ OUString SfxCommonTemplateDialog_Impl::getDefaultStyleName( const SfxStyleFamily
     OUString aFamilyName = lcl_GetStyleFamilyName(eFam);
     if( aFamilyName == "TableStyles" )
         sDefaultStyle = "Default Style";
+    else if(aFamilyName == "NumberingStyles")
+        sDefaultStyle = "No List";
     else
         sDefaultStyle = "Standard";
     uno::Reference< style::XStyleFamiliesSupplier > xModel(GetObjectShell()->GetModel(), uno::UNO_QUERY);
@@ -2038,6 +2051,16 @@ void SfxCommonTemplateDialog_Impl::CreateContextMenu()
     {
         mxMenu->set_sensitive("edit", false);
         mxMenu->set_sensitive("new", false);
+    }
+    if (pItem && pItem->GetFamily() == SfxStyleFamily::Pseudo)
+    {
+        const OUString aTemplName(GetSelectedEntry());
+        if (aTemplName == "No List")
+        {
+            mxMenu->set_sensitive("edit", false);
+            mxMenu->set_sensitive("new", false);
+            mxMenu->set_sensitive("hide", false);
+        }
     }
 }
 
