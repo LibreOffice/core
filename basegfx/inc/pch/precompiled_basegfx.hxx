@@ -13,13 +13,14 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-02-05 16:09:24 using:
+ Generated on 2021-03-08 13:11:34 using:
  ./bin/update_pch basegfx basegfx --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./basegfx/inc/pch/precompiled_basegfx.hxx "make basegfx.build" --find-conflicts
 */
 
+#include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
@@ -41,7 +42,6 @@
 #include <rtl/stringconcat.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/types.h>
 #endif // PCH_LEVEL >= 2

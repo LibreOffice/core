@@ -13,13 +13,14 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-06 18:49:18 using:
+ Generated on 2021-03-08 13:11:50 using:
  ./bin/update_pch chart2 chartcore --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./chart2/inc/pch/precompiled_chartcore.hxx "make chart2.build" --find-conflicts
 */
 
+#include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
@@ -61,7 +62,6 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
-#include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/types.h>
@@ -116,7 +116,6 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XTransformation.hpp>
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
@@ -221,7 +220,6 @@
 #include <tools/long.hxx>
 #include <tools/ref.hxx>
 #include <tools/toolsdllapi.h>
-#include <tools/weakbase.h>
 #include <unotools/options.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/unotoolsdllapi.h>

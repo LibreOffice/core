@@ -13,13 +13,14 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-06 18:49:41 using:
+ Generated on 2021-03-08 13:17:15 using:
  ./bin/update_pch sc sc --cutoff=12 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./sc/inc/pch/precompiled_sc.hxx "make sc.build" --find-conflicts
 */
 
+#include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <atomic>
@@ -37,6 +38,7 @@
 #include <iterator>
 #include <limits.h>
 #include <limits>
+#include <locale>
 #include <map>
 #include <math.h>
 #include <memory>
@@ -45,6 +47,7 @@
 #include <ostream>
 #include <set>
 #include <sstream>
+#include <stack>
 #include <stddef.h>
 #include <string.h>
 #include <string>
@@ -79,6 +82,7 @@
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/character.hxx>
+#include <rtl/cipher.h>
 #include <rtl/crc.h>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
@@ -86,6 +90,7 @@
 #include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
@@ -98,7 +103,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
-#include <sal/config.h>
 #include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
@@ -123,6 +127,7 @@
 #include <vcl/customweld.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
+#include <vcl/errinf.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gfxlink.hxx>
@@ -232,6 +237,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/FormulaLanguage.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/uno/Any.h>
@@ -260,6 +266,7 @@
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/hash.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propagg.hxx>
@@ -325,6 +332,8 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/svxfont.hxx>
 #include <editeng/wghtitem.hxx>
+#include <filter/msfilter/mscodec.hxx>
+#include <filter/msfilter/msfilterdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/deleter.hxx>
@@ -346,6 +355,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/thread.hxx>
 #include <sax/fastattribs.hxx>
+#include <sax/fshelper.hxx>
 #include <sax/saxdllapi.h>
 #include <sax/tools/converter.hxx>
 #include <sfx2/app.hxx>
@@ -388,8 +398,10 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svtools/colorcfg.hxx>
+#include <svtools/ehdl.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/svtdllapi.h>
+#include <svtools/svtresid.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <svx/XPropertyEntry.hxx>
 #include <svx/algitem.hxx>
@@ -431,6 +443,7 @@
 #include <svx/svdundo.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/svxerr.hxx>
 #include <svx/xdash.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xgrad.hxx>
@@ -526,15 +539,18 @@
 #include <editutil.hxx>
 #include <externalrefmgr.hxx>
 #include <fillinfo.hxx>
+#include <filter.hxx>
 #include <formula/IControlReferenceHandler.hxx>
 #include <formula/compiler.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/formuladllapi.h>
 #include <formula/funcutl.hxx>
+#include <formula/grammar.hxx>
 #include <formula/opcode.hxx>
 #include <formula/token.hxx>
 #include <formula/vectortoken.hxx>
 #include <formulacell.hxx>
+#include <ftools.hxx>
 #include <funcdesc.hxx>
 #include <global.hxx>
 #include <globalnames.hxx>
@@ -591,9 +607,13 @@
 #include <userdat.hxx>
 #include <validat.hxx>
 #include <viewdata.hxx>
-#include <xiroot.hxx>
+#include <xerecord.hxx>
+#include <xeroot.hxx>
+#include <xestream.hxx>
+#include <xladdress.hxx>
 #include <xlconst.hxx>
 #include <xlroot.hxx>
+#include <xlstream.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
