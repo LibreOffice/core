@@ -318,6 +318,7 @@ SmXMLExport::SmXMLExport(const css::uno::Reference<css::uno::XComponentContext>&
     : SvXMLExport(rContext, implementationName, util::MeasureUnit::INCH, XML_MATH, nExportFlags)
     , pTree(nullptr)
     , bSuccess(false)
+    , m_bExportODF(false)
 {
 }
 
@@ -453,7 +454,8 @@ void SmXMLExport::ExportContent_()
             new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_SEMANTICS, true, true));
     }
 
-    ExportNodes(pTree, 0);
+    if (!m_bExportODF)
+        ExportNodes(pTree, 0);
 
     if (aText.isEmpty())
         return;
