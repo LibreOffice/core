@@ -4108,6 +4108,7 @@ void SbRtl_StrConv(StarBASIC *, SbxArray & rPar, bool)
 
     OUString aOldStr = rPar.Get32(1)->GetOUString();
     sal_Int32 nConversion = rPar.Get32(2)->GetLong();
+    OUString lcid = rPar.Get32(3)->GetOUString();
 
     sal_Int32 nOldLen = aOldStr.getLength();
     if( nOldLen == 0 )
@@ -4139,13 +4140,21 @@ void SbRtl_StrConv(StarBASIC *, SbxArray & rPar, bool)
     {
         nType |= TransliterationFlags::FULLWIDTH_HALFWIDTH;
     }
-    if ( (nConversion & 0x10) == 16) // vbKatakana
+    if ((nConversion & 0x10) == 16) // vbKatakana
     {
-        nType |= TransliterationFlags::HIRAGANA_KATAKANA;
+        if ((nArgCount == 2 && LANGUAGE_SYSTEM == LANGUAGE_JAPANESE)
+            || (nArgCount == 3 && lcid == "0x0411"))
+            nType |= TransliterationFlags::HIRAGANA_KATAKANA;
+        else
+            StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
     }
-    else if ( (nConversion & 0x20) == 32 ) // vbHiragana
+    else if ((nConversion & 0x20) == 32) // vbHiragana
     {
-        nType |= TransliterationFlags::KATAKANA_HIRAGANA;
+        if ((nArgCount == 2 && LANGUAGE_SYSTEM == LANGUAGE_JAPANESE)
+            || (nArgCount == 3 && lcid == "0x0411"))
+            nType |= TransliterationFlags::KATAKANA_HIRAGANA;
+        else
+            StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
     }
     OUString aNewStr( aOldStr );
     if( nType != TransliterationFlags::NONE )

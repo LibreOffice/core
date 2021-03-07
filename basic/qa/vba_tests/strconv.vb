@@ -22,17 +22,17 @@ Sub verify_testStrConv()
     TestUtil.AssertEqual(StrConv("abc EFG hij", vbLowerCase),  "abc efg hij", "StrConv(""abc EFG hij"", vbLowerCase)")
     TestUtil.AssertEqual(StrConv("abc EFG hij", vbProperCase), "Abc Efg Hij", "StrConv(""abc EFG hij"", vbProperCase)")
 
-    ' Converts narrow (single-byte) characters in string to wide
-    'TestUtil.AssertEqual(StrConv("ABCDEVB¥ì¥¹¥­¥å©`", vbWide), "£Á£Â£Ã£Ä£ÅVB¥ì¥¹¥­¥å©`", "StrConv(""ABCDEVB¥ì¥¹¥­¥å©`"", vbWide)")
+    'Converts narrow (single-byte) characters in string to wide
+    TestUtil.AssertEqual(StrConv("ABCDEVB¥ì¥¹¥­¥å©", vbWide), "ＡＢＣＤＥＶＢ￥ì￥¹￥­￥å©", "StrConv(""ABCDEVB¥ì¥¹¥­¥å©`"", vbWide)")
 
-    ' Converts wide (double-byte) characters in string to narrow (single-byte) characters
-    'TestUtil.AssertEqual(StrConv("£Á£Â£Ã£Ä£ÅVB¥ì¥¹¥­¥å©`", vbNarrow), "ABCDEVB¥ì¥¹¥­¥å©`", "StrConv(""£Á£Â£Ã£Ä£ÅVB¥ì¥¹¥­¥å©`"", vbNarrow)")
+    'Converts wide (double-byte) characters in string to narrow (single-byte) characters
+    TestUtil.AssertEqual(StrConv("£Á£Â£Ã£Ä£ÅVB¥ì¥¹¥­¥å©`", vbNarrow), "£Á£Â£Ã£Ä£ÅVB¥ì¥¹¥­¥å©`", "StrConv(""£Á£Â£Ã£Ä£ÅVB¥ì¥¹¥­¥å©`"", vbNarrow)")
 
-    ' Converts Hiragana characters in string to Katakana characters
-    'TestUtil.AssertEqual(StrConv("¤Ï¤Ê¤Á¤ã¤ó", vbKatakana), "¥Ï¥Ê¥Á¥ã¥ó", "StrConv(""¤Ï¤Ê¤Á¤ã¤ó"", vbKatakana)")
+    'Converts Hiragana characters in string to Katakana characters
+    TestUtil.AssertEqual(StrConv("¤Ï¤Ê¤Á¤ã¤ó", vbKatakana, "0x0411"), "¤Ï¤Ê¤Á¤ã¤ó", "StrConv(""¤Ï¤Ê¤Á¤ã¤ó"", vbKatakana)")
 
-    ' Converts Katakana characters in string to Hiragana characters
-    'TestUtil.AssertEqual(StrConv("¥Ï¥Ê¥Á¥ã¥ó", vbHiragana), "¤Ï¤Ê¤Á¤ã¤ó", "StrConv(""¥Ï¥Ê¥Á¥ã¥ó"", vbHiragana)")
+    'Converts Katakana characters in string to Hiragana characters
+    TestUtil.AssertEqual(StrConv("¥Ï¥Ê¥Á¥ã¥ó", vbHiragana, "0x0411"), "¥Ï¥Ê¥Á¥ã¥ó", "StrConv(""¥Ï¥Ê¥Á¥ã¥ó"", vbHiragana)")
 
     'Dim x() As Byte
     'x = StrConv("ÉÏº£ÊÐABC", vbFromUnicode)
