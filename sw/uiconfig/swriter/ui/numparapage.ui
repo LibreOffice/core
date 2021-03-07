@@ -144,7 +144,7 @@
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes" context="numparapage|comboLB_NUMBER_STYLE">Assigned List Style</property>
                         <items>
-                          <item translatable="yes" context="numparapage|comboLB_NUMBER_STYLE">None</item>
+                          <item translatable="yes" context="numparapage|comboLB_NUMBER_STYLE">No List</item>
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="comboLB_NUMBER_STYLE-atkobject">

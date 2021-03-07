@@ -159,7 +159,7 @@ class CheckStyle(unittest.TestCase):
     def test_NumberingFamily(self):
         xDoc = CheckStyle._uno.openEmptyWriterDoc()
         xNumberingStyles = xDoc.StyleFamilies["NumberingStyles"]
-        vEmptyDocStyles = ['List 1', 'List 2', 'List 3', 'List 4', 'List 5', 'Numbering 123', 'Numbering ABC', 'Numbering abc', 'Numbering IVX', 'Numbering ivx']
+        vEmptyDocStyles = ['No List','List 1', 'List 2', 'List 3', 'List 4', 'List 5', 'Numbering 123', 'Numbering ABC', 'Numbering abc', 'Numbering IVX', 'Numbering ivx']
         self.__test_StyleFamily(xNumberingStyles, vEmptyDocStyles, "SwXStyle")
         self.__test_StyleFamilyIndex(xNumberingStyles, vEmptyDocStyles, "SwXStyle")
         self.__test_StyleFamilyInsert(xDoc, xNumberingStyles, vEmptyDocStyles, "com.sun.star.style.NumberingStyle", "com.sun.star.style.CharacterStyle")
