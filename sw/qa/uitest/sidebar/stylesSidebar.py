@@ -62,7 +62,7 @@ class StylesSidebar(UITestCase):
             xLeft = xWriterEdit.getChild('left')
 
             #change to another style type
-            xLeft.executeAction("CLICK", mkPropertyValues({"POS": str( i + 1 )}))
+            xLeft.executeAction("CLICK", mkPropertyValues({"POS": str( i )}))
 
             xFlatView = xWriterEdit.getChild("flatview")
 

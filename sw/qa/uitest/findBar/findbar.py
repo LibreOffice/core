@@ -43,8 +43,8 @@ class FindBar(UITestCase):
         self.assertEqual(get_state_as_dict(xfind_bar)["ItemCount"], "14")
 
         # Press on FindAll in the Find Bar
-        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "5"}))  # 5 is FindAll id
-        self.assertEqual(get_state_as_dict(xfind_bar)["CurrSelectedItemID"], "5")
+        xfind_bar.executeAction("CLICK", mkPropertyValues({"POS": "4"}))
+        self.assertEqual(get_state_as_dict(xfind_bar)["CurrSelectedItemID"], "5") # 5 is FindAll id for Pos 4
         self.assertEqual(get_state_as_dict(xfind_bar)["CurrSelectedItemText"], "Find All")
         self.assertEqual(get_state_as_dict(xfind_bar)["CurrSelectedItemCommand"], ".uno:FindAll")
         self.assertEqual(get_state_as_dict(xWriterEdit)["SelectedText"], "LibreLibreLibre")
