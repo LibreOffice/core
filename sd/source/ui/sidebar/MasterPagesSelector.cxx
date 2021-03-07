@@ -76,7 +76,7 @@ MasterPagesSelector::MasterPagesSelector (
         LINK(this, MasterPagesSelector, ContextMenuHandler));
     mxPreviewValueSet->SetStyle(mxPreviewValueSet->GetStyle() | WB_NO_DIRECTSELECT);
 
-    if ( GetDPIScaleFactor() > 1 )
+    if (mxPreviewValueSet->GetDrawingArea()->get_ref_device().GetDPIScaleFactor() > 1)
         mpContainer->SetPreviewSize(MasterPageContainer::LARGE);
 
     mxPreviewValueSet->SetPreviewSize(mpContainer->GetPreviewSizePixel());
