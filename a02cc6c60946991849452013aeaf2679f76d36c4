@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae8433ef_27a6d8c8",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-07T21:23:48Z",
+      "side": 0,
+      "message": "Please don\u0027t introduce formatting edits unrelated to the change. This space after the quote should be reintroduced.",
+      "range": {
+        "startLine": 25,
+        "startChar": 5,
+        "endLine": 25,
+        "endChar": 6
+      },
+      "revId": "a02cc6c60946991849452013aeaf2679f76d36c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "357fcd1c_5872986c",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-07T21:23:48Z",
+      "side": 0,
+      "message": "And this",
+      "range": {
+        "startLine": 28,
+        "startChar": 5,
+        "endLine": 28,
+        "endChar": 6
+      },
+      "revId": "a02cc6c60946991849452013aeaf2679f76d36c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c8497b3_d31bbae6",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-07T21:23:48Z",
+      "side": 0,
+      "message": "And this",
+      "range": {
+        "startLine": 31,
+        "startChar": 5,
+        "endLine": 31,
+        "endChar": 6
+      },
+      "revId": "a02cc6c60946991849452013aeaf2679f76d36c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08fe4cbb_f6ac724d",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-07T21:23:48Z",
+      "side": 0,
+      "message": "And this",
+      "range": {
+        "startLine": 34,
+        "startChar": 5,
+        "endLine": 34,
+        "endChar": 6
+      },
+      "revId": "a02cc6c60946991849452013aeaf2679f76d36c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db740093_0ee7b380",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4142,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-07T21:23:48Z",
+      "side": 0,
+      "message": "And this",
+      "range": {
+        "startLine": 4142,
+        "startChar": 8,
+        "endLine": 4142,
+        "endChar": 9
+      },
+      "revId": "a02cc6c60946991849452013aeaf2679f76d36c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d0b58d5_9aad0683",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4146,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-07T21:23:48Z",
+      "side": 0,
+      "message": "And both on this line",
+      "range": {
+        "startLine": 4146,
+        "startChar": 13,
+        "endLine": 4146,
+        "endChar": 14
+      },
+      "revId": "a02cc6c60946991849452013aeaf2679f76d36c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
