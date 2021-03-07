@@ -385,11 +385,6 @@ IMPL_LINK(SwNavigationPI, ToolBox5DropdownClickHdl, const OString&, rCommand, vo
         m_xHeadingsMenu->set_active(OString::number(m_xContentTree->GetOutlineLevel()), true);
 }
 
-FactoryFunction SwNavigationPI::GetUITestFactory() const
-{
-    return SwNavigationPIUIObject::create;
-}
-
 // Action-Handler Edit:
 // Switches to the page if the structure view is not turned on.
 bool SwNavigationPI::EditAction()
