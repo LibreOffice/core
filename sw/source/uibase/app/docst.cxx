@@ -1151,6 +1151,8 @@ SfxStyleFamily SwDocShell::ApplyStyles(const OUString &rName, SfxStyleFamily nFa
             // continue list of list style
             const SwNumRule* pNumRule = pStyle->GetNumRule();
             const OUString sListIdForStyle =pNumRule->GetDefaultListId();
+            if (pNumRule->GetName() == "No List")
+                SfxViewFrame::Current()->GetDispatcher()->Execute(FN_NUM_BULLET_OFF);
             pSh->SetCurNumRule( *pNumRule, false, sListIdForStyle, true );
             break;
         }
