@@ -18,26 +18,29 @@ class tdf114724(UITestCase):
         xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "SwNavigatorPanel"}))
 
         xNavigatorPanel = xWriterEdit.getChild("NavigatorPanelParent")
-        xNavigatorPanel.executeAction("ROOT", tuple())
+        xToolBar = xNavigatorPanel.getChild("content5")
+        xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "0"})) # 'root' button
 
         xWriterEdit.executeAction("FOCUS", tuple())
 
-        self.ui_test.wait_until_property_is_updated(xNavigatorPanel, "selectedtext", "HEADING 1")
-        self.assertEqual(get_state_as_dict(xNavigatorPanel)["selectedtext"], "HEADING 1")
-        self.assertEqual(get_state_as_dict(xNavigatorPanel)["selectioncount"], "1")
+        xContentTree = xNavigatorPanel.getChild("contenttree")
+
+        self.ui_test.wait_until_property_is_updated(xContentTree, "SelectEntryText", "HEADING 1")
+        self.assertEqual(get_state_as_dict(xContentTree)["SelectEntryText"], "HEADING 1")
+        self.assertEqual(get_state_as_dict(xContentTree)["SelectionCount"], "1")
         for _ in range(0,3):
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
 
-        self.ui_test.wait_until_property_is_updated(xNavigatorPanel, "selectedtext", "HEADING 4")
-        self.assertEqual(get_state_as_dict(xNavigatorPanel)["selectedtext"], "HEADING 4")
-        self.assertEqual(get_state_as_dict(xNavigatorPanel)["selectioncount"], "1")
+        self.ui_test.wait_until_property_is_updated(xContentTree, "SelectEntryText", "HEADING 4")
+        self.assertEqual(get_state_as_dict(xContentTree)["SelectEntryText"], "HEADING 4")
+        self.assertEqual(get_state_as_dict(xContentTree)["SelectionCount"], "1")
 
         for _ in range(0,3):
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
 
-        self.ui_test.wait_until_property_is_updated(xNavigatorPanel, "selectedtext", "HEADING 1")
-        self.assertEqual(get_state_as_dict(xNavigatorPanel)["selectedtext"], "HEADING 1")
-        self.assertEqual(get_state_as_dict(xNavigatorPanel)["selectioncount"], "1")
+        self.ui_test.wait_until_property_is_updated(xContentTree, "SelectEntryText", "HEADING 1")
+        self.assertEqual(get_state_as_dict(xContentTree)["SelectEntryText"], "HEADING 1")
+        self.assertEqual(get_state_as_dict(xContentTree)["SelectionCount"], "1")
 
         self.xUITest.executeCommand(".uno:Sidebar")
         self.ui_test.close_doc()

@@ -46,7 +46,6 @@ class SwNavigationPI : public PanelLayout
     friend class SwNavigationChild;
     friend class SwContentTree;
     friend class SwGlobalTree;
-    friend class SwNavigationPIUIObject;
 
     ::sfx2::sidebar::ControllerItem m_aDocFullName;
     ::sfx2::sidebar::ControllerItem m_aPageStats;
@@ -156,8 +155,6 @@ public:
     bool            IsGlobalMode() const {return    m_bGlobalMode;}
 
     SwView*         GetCreateView() const;
-
-    FactoryFunction GetUITestFactory() const override;
 };
 
 class SwNavigationChild : public SfxChildWindowContext
