@@ -177,8 +177,6 @@ private:
     mutable VclPtr<OutputDevice>    mpNextGraphics;     ///< Next output device in list
     GDIMetaFile*                    mpMetaFile;
     mutable rtl::Reference<LogicalFontInstance> mpFontInstance;
-    mutable std::shared_ptr<ImplFontCache> mxFontCache;
-    mutable std::shared_ptr<PhysicalFontCollection> mxFontCollection;
     mutable std::unique_ptr<ImplDeviceFontList>     mpDeviceFontList;
     mutable std::unique_ptr<ImplDeviceFontSizeList> mpDeviceFontSizeList;
     std::vector<OutDevState>        maOutDevStateStack;
@@ -252,6 +250,10 @@ private:
     mutable bool                    mbTextSpecial : 1;
     mutable bool                    mbRefPoint : 1;
     mutable bool                    mbEnableRTL : 1;
+
+protected:
+    mutable std::shared_ptr<PhysicalFontCollection> mxFontCollection;
+    mutable std::shared_ptr<ImplFontCache> mxFontCache;
 
     /** @name Initialization and accessor functions
      */
@@ -1178,11 +1180,11 @@ protected:
     void SetFontCollectionFromSVData();
     void ResetNewFontCache();
 
+    SAL_DLLPRIVATE bool         ImplNewFont() const;
+
 private:
 
     typedef void ( OutputDevice::* FontUpdateHandler_t )( bool );
-
-    SAL_DLLPRIVATE bool         ImplNewFont() const;
 
     SAL_DLLPRIVATE static void  ImplUpdateFontDataForAllFrames( FontUpdateHandler_t pHdl, bool bNewFontLists );
 
