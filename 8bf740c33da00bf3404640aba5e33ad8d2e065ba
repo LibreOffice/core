@@ -67,6 +67,23 @@
       "revId": "8bf740c33da00bf3404640aba5e33ad8d2e065ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "001c66f7_c08bf009",
+        "filename": "external/zxing/StaticLibrary_zxing.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-07T17:35:13Z",
+      "side": 1,
+      "message": "Also I would like to ask that there were also files besides the core file namingly\nthe third party ones \u0026 wrappers. Should we include those as well?",
+      "revId": "8bf740c33da00bf3404640aba5e33ad8d2e065ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
