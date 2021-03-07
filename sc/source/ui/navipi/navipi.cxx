@@ -451,11 +451,6 @@ void ScNavigatorDlg::StateChanged(StateChangedType nStateChange)
     }
 }
 
-FactoryFunction ScNavigatorDlg::GetUITestFactory() const
-{
-    return ScNavigatorDlgUIObject::create;
-}
-
 ScNavigatorDlg::~ScNavigatorDlg()
 {
     disposeOnce();

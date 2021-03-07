@@ -89,7 +89,6 @@ class ScNavigatorDlg : public PanelLayout, public SfxListener
 friend class ScNavigatorWin;
 friend class ScNavigatorControllerItem;
 friend class ScContentTree;
-friend class ScNavigatorDlgUIObject;
 
 private:
     static constexpr int CTRL_ITEMS = 4;
@@ -180,8 +179,6 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     virtual void StateChanged(StateChangedType nStateChange) override;
-
-    FactoryFunction GetUITestFactory() const override;
 };
 
 class ScNavigatorWrapper final : public SfxNavigatorWrapper
