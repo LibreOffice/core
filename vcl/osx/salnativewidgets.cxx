@@ -735,10 +735,6 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                     aTextDrawInfo.kind = kHIThemeFrameListBox;
                     aTextDrawInfo.state = kThemeStateActive;
                     aTextDrawInfo.isFocused = false;
-                    rc.size.width += 2 * kThemeMetricListBoxFrameOutset - 2;
-                    rc.size.height += 2 * kThemeMetricListBoxFrameOutset - 2;
-                    rc.origin.x -= kThemeMetricListBoxFrameOutset - 1;
-                    rc.origin.y -= kThemeMetricListBoxFrameOutset - 1;
                     HIThemeDrawFrame(&rc, &aTextDrawInfo, maContextHolder.get(), kHIThemeOrientationNormal);
                     bOK = true;
                     break;
@@ -1046,10 +1042,10 @@ bool AquaSalGraphics::getNativeControlRegion(ControlType nType,
             }
             else if (nPart == ControlPart::ListboxWindow)
             {
-                w = aCtrlBoundRect.GetWidth() - 2 * kThemeMetricListBoxFrameOutset;
-                h = aCtrlBoundRect.GetHeight() - 2 * kThemeMetricListBoxFrameOutset;
-                x += kThemeMetricListBoxFrameOutset;
-                y += kThemeMetricListBoxFrameOutset;
+                w = aCtrlBoundRect.GetWidth() - 2;
+                h = aCtrlBoundRect.GetHeight() - 2;
+                x += 1;
+                y += 1;
                 rNativeBoundingRegion = aCtrlBoundRect;
                 rNativeContentRegion = tools::Rectangle(Point(x, y), Size(w, h));
                 toReturn = true;
