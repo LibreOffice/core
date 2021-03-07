@@ -165,7 +165,6 @@ LayoutMenu::LayoutMenu (
       mxSidebar(rxSidebar),
       mbIsDisposed(false)
 {
-    set_id("sd::LayoutMenu");
     implConstruct( *mrBase.GetDocument()->GetDocSh() );
     SAL_INFO("sd.ui", "created LayoutMenu at " << this);
 
