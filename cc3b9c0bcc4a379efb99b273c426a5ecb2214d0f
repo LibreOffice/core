@@ -34,6 +34,24 @@
       "revId": "cc3b9c0bcc4a379efb99b273c426a5ecb2214d0f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9def0306_387a15b4",
+        "filename": "cppcanvas/inc/pch/precompiled_cppcanvas.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-08T07:40:50Z",
+      "side": 1,
+      "message": "\u003e \u003e What needs to be changed in bin/update_pch?\n\u003e \n\u003e At least I have no idea.  Never actually looked at that file, I think.\n\nlooks like you already figured that out, \u003chttps://gerrit.libreoffice.org/c/core/+/112123\u003e \"Make sal/config.h the first in pch\"",
+      "parentUuid": "9f89fcba_00bf207b",
+      "revId": "cc3b9c0bcc4a379efb99b273c426a5ecb2214d0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
