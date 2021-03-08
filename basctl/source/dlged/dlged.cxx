@@ -278,8 +278,8 @@ void DlgEditor::InitScrollBars()
 
     pHScroll->SetRange( Range( 0, aPgSize.Width()  ));
     pVScroll->SetRange( Range( 0, aPgSize.Height() ));
-    pHScroll->SetVisibleSize( static_cast<sal_uLong>(aOutSize.Width()) );
-    pVScroll->SetVisibleSize( static_cast<sal_uLong>(aOutSize.Height()) );
+    pHScroll->SetVisibleSize( static_cast<sal_uInt64>(aOutSize.Width()) );
+    pVScroll->SetVisibleSize( static_cast<sal_uInt64>(aOutSize.Height()) );
 
     pHScroll->SetLineSize( aOutSize.Width() / 10 );
     pVScroll->SetLineSize( aOutSize.Height() / 10 );
