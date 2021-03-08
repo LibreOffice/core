@@ -49,6 +49,7 @@ namespace sdr::animation
             mnDeltaTime(0),
             mbIsPaused(false)
         {
+            SetDebugName("sdr::animation::Scheduler");
             SetPriority(TaskPriority::POST_PAINT);
         }
 
