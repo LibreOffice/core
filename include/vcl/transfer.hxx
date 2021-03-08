@@ -249,20 +249,20 @@ protected:
     virtual void        DragFinished( sal_Int8 nDropAction );
     virtual void        ObjectReleased();
 
+    void                CopyToSelection(const css::uno::Reference<css::datatransfer::clipboard::XClipboard> &rClipboard) const;
 public:
 
     void                PrepareOLE( const TransferableObjectDescriptor& rObjDesc );
 
     void                CopyToClipboard(const css::uno::Reference<css::datatransfer::clipboard::XClipboard> &rClipboard) const;
-    void                CopyToSelection(const css::uno::Reference<css::datatransfer::clipboard::XClipboard> &rClipboard) const;
 
     // convenience versions of the above which extract the XClipboard from the pWindow
     void                CopyToClipboard( vcl::Window *pWindow ) const;
-    void                CopyToSelection( vcl::Window *pWindow ) const;
+    void                CopyToPrimarySelection() const;
 
     void                StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions );
 
-    static void         ClearSelection( vcl::Window *pWindow );
+    static void         ClearPrimarySelection();
 
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
