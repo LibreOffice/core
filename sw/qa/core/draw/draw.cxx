@@ -10,11 +10,14 @@
 #include <swmodeltestbase.hxx>
 
 #include <svx/svdpage.hxx>
+#include <vcl/scheduler.hxx>
 
 #include <IDocumentDrawModelAccess.hxx>
 #include <docsh.hxx>
 #include <drawdoc.hxx>
 #include <wrtsh.hxx>
+#include <frameformats.hxx>
+#include <textboxhelper.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/draw/data/";
 
@@ -44,6 +47,56 @@ CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testTextboxDeleteAsChar)
     // - Actual  : 2
     // i.e. the fly frame of the shape and the inner Writer image was not deleted.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nActual);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testTextboxUndoOrdNum)
+{
+    // Given a document with 5 frame formats:
+    // - picture
+    // - draw format + fly format and a picture in it
+    // - picture
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "textbox-undo-ordnum.docx");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    const SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
+    // Test the state before del + undo.
+    for (const auto& pFormat : rFormats)
+    {
+        const SwFrameFormat* pFlyFormat
+            = SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT);
+        if (!pFlyFormat)
+        {
+            continue;
+        }
+
+        sal_Int32 nDrawOrdNum = pFormat->FindRealSdrObject()->GetOrdNum();
+        sal_Int32 nFlyOrdNum = pFlyFormat->FindRealSdrObject()->GetOrdNum();
+        CPPUNIT_ASSERT_EQUAL(nDrawOrdNum + 1, nFlyOrdNum);
+    }
+
+    // When selecting the first page, deleting the selection and undoing:
+    pWrtShell->Down(true, 3);
+    pWrtShell->DelLeft();
+    pWrtShell->Undo();
+
+    // Then the z-order of the fly format should be still the z-order of the draw format + 1, when
+    // the fly and draw formats form a textbox pair.
+    for (const auto& pFormat : rFormats)
+    {
+        const SwFrameFormat* pFlyFormat
+            = SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT);
+        if (!pFlyFormat)
+        {
+            continue;
+        }
+
+        sal_Int32 nDrawOrdNum = pFormat->FindRealSdrObject()->GetOrdNum();
+        sal_Int32 nFlyOrdNum = pFlyFormat->FindRealSdrObject()->GetOrdNum();
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: 4
+        // - Actual  : 2
+        // i.e. the fly format was behind the draw format, not visible.
+        CPPUNIT_ASSERT_EQUAL(nDrawOrdNum + 1, nFlyOrdNum);
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
