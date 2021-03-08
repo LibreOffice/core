@@ -46,6 +46,30 @@
       "revId": "04e7a34a19b3658de57c4f2b3b0fa8445b01f199",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08b40817_73dadabf",
+        "filename": "accessibility/source/standard/vclxaccessibletoolbox.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-08T08:02:09Z",
+      "side": 1,
+      "message": "\u003e static_cast preserves null pointer values\n\nOh - thank you, and I\u0027m happy I asked that, it gave me a new info I didn\u0027t know, thanks again!",
+      "parentUuid": "4dcdd4d8_08452b13",
+      "range": {
+        "startLine": 597,
+        "startChar": 49,
+        "endLine": 597,
+        "endChar": 86
+      },
+      "revId": "04e7a34a19b3658de57c4f2b3b0fa8445b01f199",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
