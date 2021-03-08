@@ -120,6 +120,8 @@ private:
     TFileDialog m_iDialog;
 };
 
+namespace {
+
 template <class ComPtrDialog, REFCLSID CLSID> class TDialogImpl : public TDialogImplBase
 {
 public:
@@ -141,6 +143,8 @@ public:
         return iItems;
     }
 };
+
+}
 
 using TSaveDialogImpl = TDialogImpl<TFileSaveDialog, CLSID_FileSaveDialog>;
 using TFolderPickerDialogImpl = TDialogImpl<TFileOpenDialog, CLSID_FileOpenDialog>;
