@@ -2613,8 +2613,8 @@ void ImpEditView::AddDragAndDropListeners()
     css::uno::Reference<css::datatransfer::dnd::XDropTarget> xDropTarget;
     if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
         xDropTarget = pCallbacks->GetDropTarget();
-    else if (GetWindow())
-        xDropTarget = GetWindow()->GetDropTarget();
+    else if (auto xWindow = GetWindow())
+        xDropTarget = xWindow->GetDropTarget();
 
     if (!xDropTarget.is())
         return;
@@ -2644,8 +2644,8 @@ void ImpEditView::RemoveDragAndDropListeners()
     css::uno::Reference<css::datatransfer::dnd::XDropTarget> xDropTarget;
     if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
         xDropTarget = pCallbacks->GetDropTarget();
-    else if (GetWindow())
-        xDropTarget = GetWindow()->GetDropTarget();
+    else if (auto xWindow = GetWindow())
+        xDropTarget = xWindow->GetDropTarget();
 
     if (!xDropTarget.is())
         return;
