@@ -923,8 +923,8 @@ void ToolbarLayoutManager::childWindowEvent( VclSimpleEvent const * pEvent )
         if ( pToolBox )
         {
             aToolbarName = retrieveToolbarNameFromHelpURL( pToolBox );
-            sal_uInt16 nId = pToolBox->GetCurItemId();
-            if ( nId > 0 )
+            ToolBoxItemId nId = pToolBox->GetCurItemId();
+            if ( nId > ToolBoxItemId(0) )
                 aCommand = pToolBox->GetItemCommand( nId );
         }
 

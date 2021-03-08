@@ -1112,9 +1112,9 @@ void ToolBox::ImplInitToolBoxData()
     mnRightBorder         = 0;
     mnBottomBorder        = 0;
     mnLastResizeDY        = 0;
-    mnHighItemId          = 0;
-    mnCurItemId           = 0;
-    mnDownItemId          = 0;
+    mnHighItemId          = ToolBoxItemId(0);
+    mnCurItemId           = ToolBoxItemId(0);
+    mnDownItemId          = ToolBoxItemId(0);
     mnCurPos              = ITEM_NOTFOUND;
     mnLines               = 1;
     mnCurLine             = 1;
@@ -1147,7 +1147,7 @@ void ToolBox::ImplInitToolBoxData()
     mnWinStyle            = 0;
     meLayoutMode          = ToolBoxLayoutMode::Normal;
     meTextPosition        = ToolBoxTextPosition::Right;
-    mnLastFocusItemId     = 0;
+    mnLastFocusItemId     = ToolBoxItemId(0);
     mnActivateCount       = 0;
     mnImagesRotationAngle = 0_deg10;
 
@@ -1327,7 +1327,7 @@ void ToolBox::dispose()
     DockingWindow::dispose();
 }
 
-ImplToolItem* ToolBox::ImplGetItem( sal_uInt16 nItemId ) const
+ImplToolItem* ToolBox::ImplGetItem( ToolBoxItemId nItemId ) const
 {
     if (!mpData)
         return nullptr;
@@ -2350,10 +2350,10 @@ IMPL_LINK_NOARG(ToolBox, ImplDropdownLongClickHdl, Timer *, void)
         InvalidateItem(mnCurPos);
 
         mnCurPos         = ITEM_NOTFOUND;
-        mnCurItemId      = 0;
-        mnDownItemId     = 0;
+        mnCurItemId      = ToolBoxItemId(0);
+        mnDownItemId     = ToolBoxItemId(0);
         mnMouseModifier  = 0;
-        mnHighItemId     = 0;
+        mnHighItemId     = ToolBoxItemId(0);
     }
 }
 
@@ -2846,10 +2846,10 @@ void ToolBox::ImplFloatControl( bool bStart, FloatingWindow* pFloatWindow )
         if( !bWasKeyboardActivate )
         {
             mnCurPos = ITEM_NOTFOUND;
-            mnCurItemId = 0;
-            mnHighItemId = 0;
+            mnCurItemId = ToolBoxItemId(0);
+            mnHighItemId = ToolBoxItemId(0);
         }
-        mnDownItemId = 0;
+        mnDownItemId = ToolBoxItemId(0);
 
     }
 }
@@ -2895,7 +2895,7 @@ bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat )
             if ( mnCurItemId )
             {
                 InvalidateItem(mnCurPos);
-                mnCurItemId = 0;
+                mnCurItemId = ToolBoxItemId(0);
                 InvalidateItem(mnCurPos);
                 Highlight();
             }
@@ -3010,8 +3010,8 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
         }
 
         mnCurPos         = ITEM_NOTFOUND;
-        mnCurItemId      = 0;
-        mnDownItemId     = 0;
+        mnCurItemId      = ToolBoxItemId(0);
+        mnDownItemId     = ToolBoxItemId(0);
         mnMouseModifier  = 0;
         return true;
     }
@@ -3160,7 +3160,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                         CallEventListeners( VclEventId::ToolboxHighlightOff, reinterpret_cast< void* >( nClearPos ) );
                 }
                 ImplHideFocus();
-                mnHighItemId = 0;
+                mnHighItemId = ToolBoxItemId(0);
             }
 
             if( bMenuButtonHit )
@@ -3272,10 +3272,10 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                         InvalidateItem(mnCurPos);
 
                         mnCurPos         = ITEM_NOTFOUND;
-                        mnCurItemId      = 0;
-                        mnDownItemId     = 0;
+                        mnCurItemId      = ToolBoxItemId(0);
+                        mnDownItemId     = ToolBoxItemId(0);
                         mnMouseModifier  = 0;
-                        mnHighItemId     = 0;
+                        mnHighItemId     = ToolBoxItemId(0);
                     }
                     return;
                 }
@@ -3596,7 +3596,7 @@ namespace
     }
 }
 
-const OUString& ToolBox::ImplGetHelpText( sal_uInt16 nItemId ) const
+const OUString& ToolBox::ImplGetHelpText( ToolBoxItemId nItemId ) const
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
@@ -3619,7 +3619,7 @@ const OUString& ToolBox::ImplGetHelpText( sal_uInt16 nItemId ) const
 
 void ToolBox::RequestHelp( const HelpEvent& rHEvt )
 {
-    sal_uInt16 nItemId;
+    ToolBoxItemId nItemId;
     Point aHelpPos;
 
     if( !rHEvt.KeyboardActivated() )
@@ -3708,7 +3708,7 @@ bool ToolBox::EventNotify( NotifyEvent& rNEvt )
         if( rNEvt.GetWindow() == this )
         {
             // the toolbar itself got the focus
-            if( mnLastFocusItemId != 0 || mpData->mbMenubuttonWasLastSelected )
+            if( mnLastFocusItemId != ToolBoxItemId(0) || mpData->mbMenubuttonWasLastSelected )
             {
                 // restore last item
                 if( mpData->mbMenubuttonWasLastSelected )
@@ -3720,7 +3720,7 @@ bool ToolBox::EventNotify( NotifyEvent& rNEvt )
                 else
                 {
                     ImplChangeHighlight( ImplGetItem( mnLastFocusItemId ) );
-                    mnLastFocusItemId = 0;
+                    mnLastFocusItemId = ToolBoxItemId(0);
                 }
             }
             else if( (GetGetFocusFlags() & (GetFocusFlags::Backward|GetFocusFlags::Tab) ) == (GetFocusFlags::Backward|GetFocusFlags::Tab))
@@ -3729,7 +3729,7 @@ bool ToolBox::EventNotify( NotifyEvent& rNEvt )
             else
                 ImplChangeHighlightUpDn( true );
 
-            mnLastFocusItemId = 0;
+            mnLastFocusItemId = ToolBoxItemId(0);
 
             return true;
         }
@@ -3756,7 +3756,7 @@ bool ToolBox::EventNotify( NotifyEvent& rNEvt )
         // deselect
         ImplHideFocus();
         mpData->mbMenubuttonWasLastSelected = false;
-        mnHighItemId = 0;
+        mnHighItemId = ToolBoxItemId(0);
         mnCurPos = ITEM_NOTFOUND;
     }
 
@@ -4176,7 +4176,7 @@ void ToolBox::LoseFocus()
 }
 
 // performs the action associated with an item, ie simulates clicking the item
-void ToolBox::TriggerItem( sal_uInt16 nItemId )
+void ToolBox::TriggerItem( ToolBoxItemId nItemId )
 {
     mnHighItemId = nItemId;
     vcl::KeyCode aKeyCode( 0, 0 );
@@ -4576,7 +4576,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem const * pItem, bool bNoGrabFocus
         // #i89962# ImplDrawItem can cause Invalidate/Update
         // which will in turn ImplShowFocus again
         // set mnHighItemId to 0 already to prevent this hen/egg problem
-        mnHighItemId = 0;
+        mnHighItemId = ToolBoxItemId(0);
         InvalidateItem(nPos);
         CallEventListeners( VclEventId::ToolboxHighlightOff, reinterpret_cast< void* >( nPos ) );
     }
@@ -4625,7 +4625,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem const * pItem, bool bNoGrabFocus
     else
     {
         ImplHideFocus();
-        mnHighItemId = 0;
+        mnHighItemId = ToolBoxItemId(0);
         mnCurPos = ITEM_NOTFOUND;
     }
 

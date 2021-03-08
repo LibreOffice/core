@@ -135,7 +135,7 @@ void SubToolBarController::statusChanged( const css::frame::FeatureStateEvent& E
         return;
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if ( !getToolboxId( nId, &pToolBox ) )
         return;
 
@@ -196,7 +196,7 @@ css::uno::Reference< css::awt::XWindow > SubToolBarController::createPopupWindow
     SolarMutexGuard aGuard;
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if ( getToolboxId( nId, &pToolBox ) )
     {
         css::uno::Reference< css::frame::XFrame > xFrame ( getFrameInterface() );
@@ -284,7 +284,7 @@ void SubToolBarController::updateImage()
     if ( !m_aLastCommand.isEmpty() )
     {
         ToolBox* pToolBox = nullptr;
-        sal_uInt16 nId = 0;
+        ToolBoxItemId nId;
         if ( getToolboxId( nId, &pToolBox ) )
         {
             vcl::ImageType eImageType = pToolBox->GetImageSize();
@@ -400,7 +400,7 @@ void SubToolBarController::initialize( const css::uno::Sequence< css::uno::Any >
     svt::ToolboxController::initialize( rxArgs );
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if ( getToolboxId( nId, &pToolBox ) )
     {
         if ( m_aLastCommand.isEmpty() )

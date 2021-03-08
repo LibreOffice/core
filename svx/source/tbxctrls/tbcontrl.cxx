@@ -2952,7 +2952,7 @@ void SvxStyleToolBoxControl::statusChanged( const css::frame::FeatureStateEvent&
     else
     {
         ToolBox* pToolBox = nullptr;
-        sal_uInt16 nId = 0;
+        ToolBoxItemId nId;
         if (!getToolboxId( nId, &pToolBox ) )
             return;
         pToolBox->EnableItem( nId, rEvent.IsEnabled );
@@ -3045,7 +3045,7 @@ void SvxFontNameToolBoxControl::statusChanged( const css::frame::FeatureStateEve
     else
     {
         ToolBox* pToolBox = nullptr;
-        sal_uInt16 nId = 0;
+        ToolBoxItemId nId;
         if (!getToolboxId( nId, &pToolBox ) )
             return;
         pToolBox->EnableItem( nId, rEvent.IsEnabled );
@@ -3185,7 +3185,7 @@ void SvxColorToolBoxControl::initialize( const css::uno::Sequence<css::uno::Any>
     }
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if (getToolboxId(nId, &pToolBox))
     {
         m_xBtnUpdater.reset( new svx::VclToolboxButtonColorUpdater( m_nSlotId, nId, pToolBox, !m_bSplitButton,  aCommandLabel, m_aCommandURL, m_xFrame ) );
@@ -3267,7 +3267,7 @@ std::unique_ptr<WeldToolbarPopup> SvxColorToolBoxControl::weldPopupWindow()
 VclPtr<vcl::Window> SvxColorToolBoxControl::createVclPopupWindow( vcl::Window* pParent )
 {
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if (!getToolboxId(nId, &pToolBox))
         return nullptr;
 
@@ -3306,7 +3306,7 @@ IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, const NamedColor&, rColor, void)
 void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if (!getToolboxId(nId, &pToolBox) && !m_pToolbar)
         return;
 
@@ -3446,7 +3446,7 @@ void SvxFrameToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any
     }
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if (getToolboxId(nId, &pToolBox))
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
 }
@@ -3641,7 +3641,7 @@ void SvxCurrencyToolBoxControl::initialize( const css::uno::Sequence< css::uno::
     }
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if (getToolboxId(nId, &pToolBox) && pToolBox->GetItemCommand(nId) == m_aCommandURL)
         pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWN | pToolBox->GetItemBits(nId));
 }
@@ -3983,7 +3983,7 @@ MenuOrToolMenuButton::MenuOrToolMenuButton(weld::Toolbar* pToolbar, const OStrin
 {
 }
 
-MenuOrToolMenuButton::MenuOrToolMenuButton(SvxColorToolBoxControl* pControl, ToolBox* pToolbar, sal_uInt16 nId)
+MenuOrToolMenuButton::MenuOrToolMenuButton(SvxColorToolBoxControl* pControl, ToolBox* pToolbar, ToolBoxItemId nId)
     : m_pMenuButton(nullptr)
     , m_pToolbar(nullptr)
     , m_pControl(pControl)

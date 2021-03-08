@@ -229,8 +229,8 @@ void ToolBarManager::Destroy()
     // Delete the additional add-ons data
     for ( ToolBox::ImplToolItems::size_type i = 0; i < m_pToolBar->GetItemCount(); i++ )
     {
-        sal_uInt16 nItemId = m_pToolBar->GetItemId( i );
-        if ( nItemId > 0 )
+        ToolBoxItemId nItemId = m_pToolBar->GetItemId( i );
+        if ( nItemId > ToolBoxItemId(0) )
             delete static_cast< AddonsParams* >( m_pToolBar->GetItemData( nItemId ));
     }
 
@@ -604,7 +604,7 @@ void ToolBarManager::impl_elementChanged(bool const isRemove,
 void ToolBarManager::setToolBarImage(const Image& rImage,
         const CommandToInfoMap::const_iterator& rIter)
 {
-    const ::std::vector<sal_uInt16>& rIDs = rIter->second.aIds;
+    const ::std::vector<ToolBoxItemId>& rIDs = rIter->second.aIds;
     m_pToolBar->SetItemImage( rIter->second.nId, rImage );
     for (auto const& it : rIDs)
     {
@@ -631,8 +631,8 @@ void ToolBarManager::RemoveControllers()
     // dtors where the item window is already invalid!
     for ( ToolBox::ImplToolItems::size_type i = 0; i < m_pToolBar->GetItemCount(); i++ )
     {
-        sal_uInt16 nItemId = m_pToolBar->GetItemId( i );
-        if ( nItemId > 0 )
+        ToolBoxItemId nItemId = m_pToolBar->GetItemId( i );
+        if ( nItemId > ToolBoxItemId(0) )
         {
             Reference< XComponent > xComponent( m_aControllerMap[ nItemId ], UNO_QUERY );
             if ( xComponent.is() )
@@ -661,8 +661,8 @@ void ToolBarManager::CreateControllers()
 
     for ( ToolBox::ImplToolItems::size_type i = 0; i < m_pToolBar->GetItemCount(); i++ )
     {
-        sal_uInt16 nId = m_pToolBar->GetItemId( i );
-        if ( nId == 0 )
+        ToolBoxItemId nId = m_pToolBar->GetItemId( i );
+        if ( nId == ToolBoxItemId(0) )
             continue;
 
         bool                     bInit( true );
@@ -710,7 +710,7 @@ void ToolBarManager::CreateControllers()
             aPropValue.Value    <<= xToolbarWindow;
             aPropertyVector.push_back( makeAny( aPropValue ));
             aPropValue.Name     = "Identifier";
-            aPropValue.Value    <<= nId;
+            aPropValue.Value    <<= sal_uInt16(nId);
             aPropertyVector.push_back( uno::makeAny( aPropValue ) );
 
             Sequence< Any > aArgs( comphelper::containerToSequence( aPropertyVector ));
@@ -822,7 +822,7 @@ void ToolBarManager::CreateControllers()
                 aPropValue.Value <<= m_aModuleIdentifier;
                 aPropertyVector.push_back( makeAny( aPropValue ));
                 aPropValue.Name     = "Identifier";
-                aPropValue.Value    <<= nId;
+                aPropValue.Value    <<= sal_uInt16(nId);
                 aPropertyVector.push_back( uno::makeAny( aPropValue ) );
 
                 Sequence< Any > aArgs( comphelper::containerToSequence( aPropertyVector ));
@@ -973,7 +973,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     m_aControllerMap.clear();
     m_aCommandMap.clear();
 
-    sal_uInt16 nId( 1 );
+    ToolBoxItemId nId( 1 );
     CommandInfo aCmdInfo;
     for ( sal_Int32 n = 0; n < rItemContainer->getCount(); n++ )
     {
@@ -1090,7 +1090,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
     if ( !aMergeInstructionContainer.empty() )
     {
-        sal_uInt16 nItemId( TOOLBAR_ITEM_STARTID );
+        ToolBoxItemId nItemId( TOOLBAR_ITEM_STARTID );
         const sal_uInt32 nCount = aMergeInstructionContainer.size();
         for ( sal_uInt32 i=0; i < nCount; i++ )
         {
@@ -1180,7 +1180,7 @@ void ToolBarManager::FillAddonToolbar( const Sequence< Sequence< PropertyValue >
     m_aControllerMap.clear();
     m_aCommandMap.clear();
 
-    sal_uInt16 nId( 1 );
+    ToolBoxItemId nId( 1 );
     CommandInfo aCmdInfo;
     for ( const Sequence< PropertyValue >& rSeq : rAddonToolbar )
     {
@@ -1248,7 +1248,7 @@ void ToolBarManager::FillOverflowToolbar( ToolBox const * pParent )
     bool bInsertSeparator = false;
     for ( ToolBox::ImplToolItems::size_type i = 0; i < pParent->GetItemCount(); ++i )
     {
-        sal_uInt16 nId = pParent->GetItemId( i );
+        ToolBoxItemId nId = pParent->GetItemId( i );
         if ( pParent->IsItemClipped( nId ) )
         {
             if ( bInsertSeparator )
@@ -1394,7 +1394,7 @@ void ToolBarManager::HandleClick(void ( SAL_CALL XToolbarController::*_pClick )(
     if ( m_bDisposed )
         return;
 
-    sal_uInt16 nId( m_pToolBar->GetCurItemId() );
+    ToolBoxItemId nId( m_pToolBar->GetCurItemId() );
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
     if ( pIter != m_aControllerMap.end() )
     {
@@ -1417,7 +1417,7 @@ IMPL_LINK_NOARG(ToolBarManager, DropdownClick, ToolBox *, void)
     if ( m_bDisposed )
         return;
 
-    sal_uInt16 nId( m_pToolBar->GetCurItemId() );
+    ToolBoxItemId nId( m_pToolBar->GetCurItemId() );
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
     if ( pIter != m_aControllerMap.end() )
     {
@@ -1569,7 +1569,7 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
             {
                 if ( m_pToolBar->GetItemType(nPos) == ToolBoxItemType::BUTTON )
                 {
-                    sal_uInt16 nId = m_pToolBar->GetItemId(nPos);
+                    ToolBoxItemId nId = m_pToolBar->GetItemId(nPos);
                     OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
                     xVisibleItemsPopupMenu->InsertItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->GetItemText( nId ), MenuItemBits::CHECKABLE );
                     xVisibleItemsPopupMenu->CheckItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->IsItemVisible( nId ) );
@@ -1853,7 +1853,7 @@ IMPL_LINK_NOARG(ToolBarManager, Select, ToolBox *, void)
         return;
 
     sal_Int16   nKeyModifier( static_cast<sal_Int16>(m_pToolBar->GetModifier()) );
-    sal_uInt16      nId( m_pToolBar->GetCurItemId() );
+    ToolBoxItemId nId( m_pToolBar->GetCurItemId() );
 
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
     if ( pIter != m_aControllerMap.end() )
@@ -1898,7 +1898,7 @@ IMPL_LINK( ToolBarManager, DataChanged, DataChangedEvent const *, pDataChangedEv
 
     for ( ToolBox::ImplToolItems::size_type nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
     {
-        const sal_uInt16 nId = m_pToolBar->GetItemId(nPos);
+        const ToolBoxItemId nId = m_pToolBar->GetItemId(nPos);
         vcl::Window* pWindow = m_pToolBar->GetItemWindow( nId );
         if ( pWindow )
         {

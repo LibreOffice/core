@@ -34,7 +34,7 @@ using namespace ::com::sun::star::beans;
 
 SFX_IMPL_TOOLBOX_CONTROL( FormatPaintBrushToolBoxControl, SfxBoolItem );
 
-FormatPaintBrushToolBoxControl::FormatPaintBrushToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
+FormatPaintBrushToolBoxControl::FormatPaintBrushToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx )
     : SfxToolBoxControl( nSlotId, nId, rTbx )
     , m_bPersistentCopy(false)
     , m_aDoubleClickTimer()

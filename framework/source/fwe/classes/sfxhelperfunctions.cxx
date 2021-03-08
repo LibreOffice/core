@@ -43,7 +43,7 @@ pfunc_setToolBoxControllerCreator SetToolBoxControllerCreator( pfunc_setToolBoxC
     return pOldSetToolBoxControllerCreator;
 }
 
-rtl::Reference<svt::ToolboxController> CreateToolBoxController( const Reference< XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const OUString& aCommandURL )
+rtl::Reference<svt::ToolboxController> CreateToolBoxController( const Reference< XFrame >& rFrame, ToolBox* pToolbox, ToolBoxItemId nID, const OUString& aCommandURL )
 {
     pfunc_setToolBoxControllerCreator pFactory = nullptr;
     {

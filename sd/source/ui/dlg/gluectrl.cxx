@@ -134,7 +134,7 @@ void GlueEscDirLB::Fill()
  * Constructor for glue point escape direction toolbox control
  */
 SdTbxCtlGlueEscDir::SdTbxCtlGlueEscDir(
-    sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+    sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx ) :
         SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }

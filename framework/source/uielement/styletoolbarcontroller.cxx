@@ -220,7 +220,7 @@ void StyleToolbarController::statusChanged( const css::frame::FeatureStateEvent&
         throw css::lang::DisposedException();
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nItemId = 0;
+    ToolBoxItemId nItemId;
     if ( getToolboxId( nItemId, &pToolBox ) )
     {
         bool bChecked = false;

@@ -56,7 +56,7 @@ public:
     void InitToolBox(VclBuilder::stringmap& rMap);
 
 protected:
-    typedef std::map<sal_uInt16, css::uno::Reference<css::frame::XToolbarController>> ControllerContainer;
+    typedef std::map<ToolBoxItemId, css::uno::Reference<css::frame::XToolbarController>> ControllerContainer;
     ControllerContainer maControllers;
     bool mbAreHandlersRegistered;
     bool mbUseDefaultButtonSize;
@@ -68,9 +68,9 @@ protected:
     DECL_LINK(SelectHandler, ToolBox*, void);
     DECL_LINK(ChangedIconSizeHandler, LinkParamNone*, void );
 
-    css::uno::Reference<css::frame::XToolbarController> GetControllerForItemId(const sal_uInt16 nItemId) const;
+    css::uno::Reference<css::frame::XToolbarController> GetControllerForItemId(const ToolBoxItemId nItemId) const;
 
-    void CreateController(const sal_uInt16 nItemId,
+    void CreateController(const ToolBoxItemId nItemId,
                           const css::uno::Reference<css::frame::XFrame>& rxFrame,
                           const sal_Int32 nItemWidth, bool bSideBar);
     void RegisterHandlers();

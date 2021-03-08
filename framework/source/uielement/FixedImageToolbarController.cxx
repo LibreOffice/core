@@ -80,7 +80,7 @@ void FixedImageControl::dispose()
 
 FixedImageToolbarController::FixedImageToolbarController(
     const Reference<XComponentContext>& rxContext, const Reference<XFrame>& rFrame,
-    ToolBox* pToolbar, sal_uInt16 nID, const OUString& rCommand)
+    ToolBox* pToolbar, ToolBoxItemId nID, const OUString& rCommand)
     : ComplexToolbarController(rxContext, rFrame, pToolbar, nID, rCommand)
     , m_eSymbolSize(SvtMiscOptions().GetCurrentSymbolsSize())
 {

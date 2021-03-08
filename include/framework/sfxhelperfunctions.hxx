@@ -23,6 +23,7 @@
 #include <framework/fwkdllapi.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
+#include <vcl/toolbox.hxx>
 
 namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::uno { template <typename > class Reference; }
@@ -35,7 +36,7 @@ class ToolBox;
 typedef rtl::Reference<svt::ToolboxController> ( *pfunc_setToolBoxControllerCreator)(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     ToolBox* pToolbox,
-    unsigned short nID,
+    ToolBoxItemId nID,
     const OUString& aCommandURL );
 
 typedef rtl::Reference<svt::StatusbarController> ( *pfunc_setStatusBarControllerCreator)(
@@ -62,7 +63,7 @@ FWK_DLLPUBLIC pfunc_setToolBoxControllerCreator SetToolBoxControllerCreator( pfu
 FWK_DLLPUBLIC rtl::Reference<svt::ToolboxController> CreateToolBoxController(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     ToolBox* pToolbox,
-    unsigned short nID,
+    ToolBoxItemId nID,
     const OUString& aCommandURL );
 
 FWK_DLLPUBLIC pfunc_setStatusBarControllerCreator SetStatusBarControllerCreator( pfunc_setStatusBarControllerCreator pSetStatusBarControllerCreator );

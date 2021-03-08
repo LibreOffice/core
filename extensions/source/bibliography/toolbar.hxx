@@ -36,7 +36,7 @@ class BibToolBarListener: public cppu::WeakImplHelper < css::frame::XStatusListe
 {
 private:
 
-    sal_uInt16         nIndex;
+    ToolBoxItemId      nIndex;
     OUString           aCommand;
 
 protected:
@@ -45,7 +45,7 @@ protected:
 
 public:
 
-    BibToolBarListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
+    BibToolBarListener(BibToolBar *pTB, const OUString& aStr, ToolBoxItemId nId);
     virtual ~BibToolBarListener() override;
 
     const OUString&          GetCommand() const { return aCommand;}
@@ -63,7 +63,7 @@ class BibTBListBoxListener: public BibToolBarListener
 {
 public:
 
-    BibTBListBoxListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
+    BibTBListBoxListener(BibToolBar *pTB, const OUString& aStr, ToolBoxItemId nId);
     virtual ~BibTBListBoxListener() override;
 
     virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event) override;
@@ -74,7 +74,7 @@ class BibTBEditListener: public BibToolBarListener
 {
 public:
 
-    BibTBEditListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
+    BibTBEditListener(BibToolBar *pTB, const OUString& aStr, ToolBoxItemId nId);
     virtual ~BibTBEditListener() override;
 
     virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event) override;
@@ -85,7 +85,7 @@ class BibTBQueryMenuListener:   public BibToolBarListener
 {
 public:
 
-    BibTBQueryMenuListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
+    BibTBQueryMenuListener(BibToolBar *pTB, const OUString& aStr, ToolBoxItemId nId);
     virtual ~BibTBQueryMenuListener() override;
 
     virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event) override;
@@ -156,13 +156,13 @@ class BibToolBar:   public ToolBox
         Link<void*,void>        aLayoutManager;
         sal_Int16               nSymbolsSize;
 
-        sal_uInt16              nTBC_SOURCE;
-        sal_uInt16              nTBC_QUERY;
-        sal_uInt16              nTBC_BT_AUTOFILTER;
-        sal_uInt16              nTBC_BT_COL_ASSIGN;
-        sal_uInt16              nTBC_BT_CHANGESOURCE;
-        sal_uInt16              nTBC_BT_FILTERCRIT;
-        sal_uInt16              nTBC_BT_REMOVEFILTER;
+        ToolBoxItemId           nTBC_SOURCE;
+        ToolBoxItemId           nTBC_QUERY;
+        ToolBoxItemId           nTBC_BT_AUTOFILTER;
+        ToolBoxItemId           nTBC_BT_COL_ASSIGN;
+        ToolBoxItemId           nTBC_BT_CHANGESOURCE;
+        ToolBoxItemId           nTBC_BT_FILTERCRIT;
+        ToolBoxItemId           nTBC_BT_REMOVEFILTER;
 
         BibDataManager*         pDatMan;
         DECL_LINK( SelHdl, weld::ComboBox&, void );
@@ -189,7 +189,7 @@ class BibToolBar:   public ToolBox
         virtual ~BibToolBar() override;
         virtual void dispose() override;
 
-        sal_uInt16  GetChangeSourceId() const { return nTBC_BT_CHANGESOURCE; }
+        ToolBoxItemId  GetChangeSourceId() const { return nTBC_BT_CHANGESOURCE; }
 
         void    SetXController(const css::uno::Reference< css::frame::XController > &);
 
@@ -211,7 +211,7 @@ class BibToolBar:   public ToolBox
         void    statusChanged(const css::frame::FeatureStateEvent& Event);
 
         void    SetDatMan(BibDataManager& rDatMan) {pDatMan = &rDatMan;}
-        void    SendDispatch(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue >& rArgs);
+        void    SendDispatch(ToolBoxItemId nId, const css::uno::Sequence< css::beans::PropertyValue >& rArgs);
 };
 
 

@@ -70,7 +70,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SwTbxAutoTextCtrl, SfxVoidItem );
 
 SwTbxAutoTextCtrl::SwTbxAutoTextCtrl(
     sal_uInt16 nSlotId,
-    sal_uInt16 nId,
+    ToolBoxItemId nId,
     ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
@@ -116,7 +116,7 @@ void SwTbxAutoTextCtrl::CreatePopupWindow()
         }
 
         ToolBox* pToolBox = &GetToolBox();
-        sal_uInt16 nId = GetId();
+        ToolBoxItemId nId = GetId();
         pToolBox->SetItemDown( nId, true );
 
         pPopup->Execute( pToolBox, pToolBox->GetItemRect( nId ),
@@ -462,7 +462,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SwPreviewZoomControl, SfxUInt16Item);
 
 SwPreviewZoomControl::SwPreviewZoomControl(
     sal_uInt16 nSlotId,
-    sal_uInt16 nId,
+    ToolBoxItemId nId,
     ToolBox& rTbx) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
@@ -476,7 +476,7 @@ void SwPreviewZoomControl::StateChanged( sal_uInt16 /*nSID*/,
                                          SfxItemState eState,
                                          const SfxPoolItem* pState )
 {
-    sal_uInt16 nId = GetId();
+    ToolBoxItemId nId = GetId();
     GetToolBox().EnableItem( nId, (GetItemState(pState) != SfxItemState::DISABLED) );
     SwZoomBox_Impl* pBox = static_cast<SwZoomBox_Impl*>(GetToolBox().GetItemWindow( GetId() ));
     if(SfxItemState::DEFAULT <= eState)
@@ -552,7 +552,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SwJumpToSpecificPageControl, SfxUInt16Item);
 
 SwJumpToSpecificPageControl::SwJumpToSpecificPageControl(
     sal_uInt16 nSlotId,
-    sal_uInt16 nId,
+    ToolBoxItemId nId,
     ToolBox& rTbx) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {}
@@ -1041,7 +1041,7 @@ void SAL_CALL PrevNextScrollToolboxController::statusChanged( const css::frame::
         else
         {
             ToolBox* pToolBox = nullptr;
-            sal_uInt16 nId = 0;
+            ToolBoxItemId nId;
             if (getToolboxId(nId, &pToolBox))
                 pToolBox->SetQuickHelpText(nId, lcl_GetScrollToolTip(meType != PrevNextScrollToolboxController::PREVIOUS));
         }
@@ -1053,7 +1053,7 @@ void SAL_CALL PrevNextScrollToolboxController::statusChanged( const css::frame::
         else
         {
             ToolBox* pToolBox = nullptr;
-            sal_uInt16 nId = 0;
+            ToolBoxItemId nId;
             if (getToolboxId(nId, &pToolBox))
                 pToolBox->EnableItem(nId, rEvent.IsEnabled);
         }

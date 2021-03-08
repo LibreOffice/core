@@ -68,6 +68,16 @@ enum class ToolBoxLayoutMode
 // Position of the text when icon and text are painted
 enum class ToolBoxTextPosition { Right, Bottom };
 
+typedef o3tl::strong_int<sal_uInt16, struct ToolBoxItemIdTag> ToolBoxItemId;
+namespace std {
+    template<>
+    struct hash<ToolBoxItemId>
+    {
+        std::size_t operator()(ToolBoxItemId const & s) const
+        { return std::size_t(sal_uInt16(s)); }
+    };
+}
+
 class Idle;
 class VCL_DLLPUBLIC ToolBox : public DockingWindow
 {
@@ -79,7 +89,7 @@ public:
 
     virtual FactoryFunction GetUITestFactory() const override;
 
-    void SetCurItemId( sal_uInt16 CurID )   { mnCurItemId=CurID; }
+    void SetCurItemId( ToolBoxItemId CurID )   { mnCurItemId=CurID; }
 
     static constexpr auto APPEND
         = std::numeric_limits<ImplToolItems::size_type>::max();
@@ -114,10 +124,10 @@ private:
     tools::Long                mnLastResizeDY;
     tools::Long                mnActivateCount;
     Degree10            mnImagesRotationAngle;
-    sal_uInt16          mnLastFocusItemId;
-    sal_uInt16          mnHighItemId;
-    sal_uInt16          mnCurItemId;
-    sal_uInt16          mnDownItemId;
+    ToolBoxItemId       mnLastFocusItemId;
+    ToolBoxItemId       mnHighItemId;
+    ToolBoxItemId       mnCurItemId;
+    ToolBoxItemId       mnDownItemId;
     ImplToolItems::size_type mnCurPos;
     ImplToolItems::size_type mnLines;   // total number of toolbox lines
     ImplToolItems::size_type mnCurLine; // the currently visible line
@@ -173,7 +183,7 @@ private:
     SAL_DLLPRIVATE void            ImplInit( vcl::Window* pParent, WinBits nStyle );
     using DockingWindow::ImplInitSettings;
     SAL_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-    SAL_DLLPRIVATE ImplToolItem*   ImplGetItem( sal_uInt16 nId ) const;
+    SAL_DLLPRIVATE ImplToolItem*   ImplGetItem( ToolBoxItemId nId ) const;
     SAL_DLLPRIVATE bool            ImplCalcItem();
     SAL_DLLPRIVATE ImplToolItems::size_type ImplCalcBreaks( tools::Long nWidth, tools::Long* pMaxLineWidth, bool bCalcHorz ) const;
     SAL_DLLPRIVATE void            ImplFormat( bool bResize = false );
@@ -199,7 +209,7 @@ private:
     SAL_DLLPRIVATE Point           ImplGetPopupPosition( const tools::Rectangle& rRect ) const;
     SAL_DLLPRIVATE bool            ImplIsFloatingMode() const;
     SAL_DLLPRIVATE bool            ImplIsInPopupMode() const;
-    SAL_DLLPRIVATE const OUString& ImplGetHelpText( sal_uInt16 nItemId ) const;
+    SAL_DLLPRIVATE const OUString& ImplGetHelpText( ToolBoxItemId nItemId ) const;
     SAL_DLLPRIVATE Size            ImplGetOptimalFloatingSize();
     SAL_DLLPRIVATE bool            ImplHasExternalMenubutton();
     SAL_DLLPRIVATE void            ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToolItem const * pItem );
@@ -300,24 +310,24 @@ public:
                                     ToolBoxItemBits nBits,
                                     const Size& rRequestedSize,
                                     ImplToolItems::size_type nPos = APPEND );
-    void                InsertItem( sal_uInt16 nItemId, const Image& rImage,
+    void                InsertItem( ToolBoxItemId nItemId, const Image& rImage,
                                     ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
                                     ImplToolItems::size_type nPos = APPEND );
-    void                InsertItem( sal_uInt16 nItemId, const Image& rImage,
+    void                InsertItem( ToolBoxItemId nItemId, const Image& rImage,
                                     const OUString& rText,
                                     ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
                                     ImplToolItems::size_type nPos = APPEND );
-    void                InsertItem( sal_uInt16 nItemId, const OUString& rText,
+    void                InsertItem( ToolBoxItemId nItemId, const OUString& rText,
                                     ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
                                     ImplToolItems::size_type nPos = APPEND );
-    void                InsertWindow( sal_uInt16 nItemId, vcl::Window* pWindow,
+    void                InsertWindow( ToolBoxItemId nItemId, vcl::Window* pWindow,
                                       ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
                                       ImplToolItems::size_type nPos = APPEND );
     void                InsertSpace();
     void                InsertSeparator( ImplToolItems::size_type nPos = APPEND, sal_uInt16 nPixSize = 0 );
     void                InsertBreak( ImplToolItems::size_type nPos = APPEND );
     void                RemoveItem( ImplToolItems::size_type nPos );
-    void                CopyItem( const ToolBox& rToolBox, sal_uInt16 nItemId );
+    void                CopyItem( const ToolBox& rToolBox, ToolBoxItemId nItemId );
     void                Clear();
 
     void                SetButtonType( ButtonType eNewType );
@@ -337,80 +347,80 @@ public:
 
     ImplToolItems::size_type GetItemCount() const;
     ToolBoxItemType     GetItemType( ImplToolItems::size_type nPos ) const;
-    ImplToolItems::size_type GetItemPos( sal_uInt16 nItemId ) const;
+    ImplToolItems::size_type GetItemPos( ToolBoxItemId nItemId ) const;
     ImplToolItems::size_type GetItemPos( const Point& rPos ) const;
-    sal_uInt16          GetItemId( ImplToolItems::size_type nPos ) const;
-    sal_uInt16          GetItemId( const Point& rPos ) const;
+    ToolBoxItemId       GetItemId( ImplToolItems::size_type nPos ) const;
+    ToolBoxItemId       GetItemId( const Point& rPos ) const;
     /// Map the command name (like .uno:Save) back to item id.
-    sal_uInt16          GetItemId( const OUString& rCommand ) const;
-    tools::Rectangle           GetItemRect( sal_uInt16 nItemId );
+    ToolBoxItemId       GetItemId( const OUString& rCommand ) const;
+    tools::Rectangle           GetItemRect( ToolBoxItemId nItemId );
     tools::Rectangle           GetItemPosRect( ImplToolItems::size_type nPos );
     tools::Rectangle const &   GetOverflowRect() const;
 
     /// Returns size of the bitmap / text that is inside this toolbox item.
-    Size                GetItemContentSize( sal_uInt16 nItemId );
+    Size                GetItemContentSize( ToolBoxItemId nItemId );
 
-    sal_uInt16          GetCurItemId() const { return mnCurItemId; }
-    sal_uInt16          GetDownItemId() const { return mnDownItemId; }
+    ToolBoxItemId       GetCurItemId() const { return mnCurItemId; }
+    ToolBoxItemId       GetDownItemId() const { return mnDownItemId; }
     sal_uInt16          GetModifier() const { return mnMouseModifier; }
 
-    void                SetItemBits( sal_uInt16 nItemId, ToolBoxItemBits nBits );
-    ToolBoxItemBits     GetItemBits( sal_uInt16 nItemId ) const;
+    void                SetItemBits( ToolBoxItemId nItemId, ToolBoxItemBits nBits );
+    ToolBoxItemBits     GetItemBits( ToolBoxItemId nItemId ) const;
 
-    void                SetItemExpand( sal_uInt16 nItemId, bool bExpand );
+    void                SetItemExpand( ToolBoxItemId nItemId, bool bExpand );
     // e.g. a label used as an itemwindow
-    void                SetItemWindowNonInteractive(sal_uInt16 nItemId, bool bNonInteractive);
+    void                SetItemWindowNonInteractive(ToolBoxItemId nItemId, bool bNonInteractive);
 
 
-    void                SetItemData( sal_uInt16 nItemId, void* pNewData );
-    void*               GetItemData( sal_uInt16 nItemId ) const;
-    void                SetItemImage( sal_uInt16 nItemId, const Image& rImage );
-    Image               GetItemImage( sal_uInt16 nItemId ) const;
-    void                SetItemImageAngle( sal_uInt16 nItemId, Degree10 nAngle10 );
-    void                SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror );
-    void                SetItemText( sal_uInt16 nItemId, const OUString& rText );
-    const OUString&     GetItemText( sal_uInt16 nItemId ) const;
-    void                SetItemWindow( sal_uInt16 nItemId, vcl::Window* pNewWindow );
-    vcl::Window*        GetItemWindow( sal_uInt16 nItemId ) const;
-    sal_uInt16          GetHighlightItemId() const { return mnHighItemId; }
+    void                SetItemData( ToolBoxItemId nItemId, void* pNewData );
+    void*               GetItemData( ToolBoxItemId nItemId ) const;
+    void                SetItemImage( ToolBoxItemId nItemId, const Image& rImage );
+    Image               GetItemImage( ToolBoxItemId nItemId ) const;
+    void                SetItemImageAngle( ToolBoxItemId nItemId, Degree10 nAngle10 );
+    void                SetItemImageMirrorMode( ToolBoxItemId nItemId, bool bMirror );
+    void                SetItemText( ToolBoxItemId nItemId, const OUString& rText );
+    const OUString&     GetItemText( ToolBoxItemId nItemId ) const;
+    void                SetItemWindow( ToolBoxItemId nItemId, vcl::Window* pNewWindow );
+    vcl::Window*        GetItemWindow( ToolBoxItemId nItemId ) const;
+    ToolBoxItemId       GetHighlightItemId() const { return mnHighItemId; }
 
     void                EndSelection();
 
-    void                SetItemDown( sal_uInt16 nItemId, bool bDown );
+    void                SetItemDown( ToolBoxItemId nItemId, bool bDown );
 
-    void                SetItemState( sal_uInt16 nItemId, TriState eState );
-    TriState            GetItemState( sal_uInt16 nItemId ) const;
+    void                SetItemState( ToolBoxItemId nItemId, TriState eState );
+    TriState            GetItemState( ToolBoxItemId nItemId ) const;
 
-    void                CheckItem( sal_uInt16 nItemId, bool bCheck = true );
-    bool                IsItemChecked( sal_uInt16 nItemId ) const;
+    void                CheckItem( ToolBoxItemId nItemId, bool bCheck = true );
+    bool                IsItemChecked( ToolBoxItemId nItemId ) const;
 
-    void                EnableItem( sal_uInt16 nItemId, bool bEnable = true );
-    bool                IsItemEnabled( sal_uInt16 nItemId ) const;
+    void                EnableItem( ToolBoxItemId nItemId, bool bEnable = true );
+    bool                IsItemEnabled( ToolBoxItemId nItemId ) const;
 
-    void                TriggerItem( sal_uInt16 nItemId );
+    void                TriggerItem( ToolBoxItemId nItemId );
 
     /// Shows or hides items.
-    void                ShowItem(sal_uInt16 nItemId, bool bVisible = true);
+    void                ShowItem(ToolBoxItemId nItemId, bool bVisible = true);
 
     /// Convenience method to hide items (via ShowItem).
-    void                HideItem(sal_uInt16 nItemId) { ShowItem( nItemId, false ); }
+    void                HideItem(ToolBoxItemId nItemId) { ShowItem( nItemId, false ); }
 
-    bool                IsItemClipped( sal_uInt16 nItemId ) const;
-    bool                IsItemVisible( sal_uInt16 nItemId ) const;
-    bool                IsItemReallyVisible( sal_uInt16 nItemId ) const;
+    bool                IsItemClipped( ToolBoxItemId nItemId ) const;
+    bool                IsItemVisible( ToolBoxItemId nItemId ) const;
+    bool                IsItemReallyVisible( ToolBoxItemId nItemId ) const;
 
-    void                SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand );
-    OUString            GetItemCommand( sal_uInt16 nItemId ) const;
+    void                SetItemCommand( ToolBoxItemId nItemId, const OUString& rCommand );
+    OUString            GetItemCommand( ToolBoxItemId nItemId ) const;
 
     using Window::SetQuickHelpText;
-    void                SetQuickHelpText( sal_uInt16 nItemId, const OUString& rText );
+    void                SetQuickHelpText( ToolBoxItemId nItemId, const OUString& rText );
     using Window::GetQuickHelpText;
-    OUString            GetQuickHelpText( sal_uInt16 nItemId ) const;
+    OUString            GetQuickHelpText( ToolBoxItemId nItemId ) const;
 
-    void                SetHelpText( sal_uInt16 nItemId, const OUString& rText );
-    const OUString&     GetHelpText( sal_uInt16 nItemId ) const;
+    void                SetHelpText( ToolBoxItemId nItemId, const OUString& rText );
+    const OUString&     GetHelpText( ToolBoxItemId nItemId ) const;
 
-    void                SetHelpId( sal_uInt16 nItemId, const OString& rHelpId );
+    void                SetHelpId( ToolBoxItemId nItemId, const OString& rHelpId );
 
     //  window size according to current alignment, floating state and number of lines
     Size                CalcWindowSizePixel();
@@ -487,10 +497,10 @@ public:
     // returns the bounding box for the character at index nIndex
     // where nIndex is relative to the starting index of the item
     // with id nItemId (in coordinates of the displaying window)
-    tools::Rectangle GetCharacterBounds( sal_uInt16 nItemId, tools::Long nIndex );
+    tools::Rectangle GetCharacterBounds( ToolBoxItemId nItemId, tools::Long nIndex );
     // -1 is returned if no character is at that point
     // if an index is found the corresponding item id is filled in (else 0)
-    tools::Long GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID );
+    tools::Long GetIndexForPoint( const Point& rPoint, ToolBoxItemId& rItemID );
 
     static Size         GetDefaultImageSize(ToolBoxButtonSize eToolBoxButtonSize);
     Size                GetDefaultImageSize() const;
@@ -507,12 +517,12 @@ public:
     virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 };
 
-inline void ToolBox::CheckItem( sal_uInt16 nItemId, bool bCheck )
+inline void ToolBox::CheckItem( ToolBoxItemId nItemId, bool bCheck )
 {
     SetItemState( nItemId, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE );
 }
 
-inline bool ToolBox::IsItemChecked( sal_uInt16 nItemId ) const
+inline bool ToolBox::IsItemChecked( ToolBoxItemId nItemId ) const
 {
     return (GetItemState( nItemId ) == TRISTATE_TRUE);
 }

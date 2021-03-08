@@ -834,7 +834,7 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags )
     mpImplData->mpBox = pBox;
 
     // get selected button
-    sal_uInt16 nItemId = pBox->GetDownItemId();
+    ToolBoxItemId nItemId = pBox->GetDownItemId();
 
     if ( nItemId )
         pBox->ImplFloatControl( true, this );

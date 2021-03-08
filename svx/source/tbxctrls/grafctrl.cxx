@@ -374,7 +374,7 @@ void ImplGrafModeControl::Update( const SfxPoolItem* pItem )
         m_xWidget->set_active(-1);
 }
 
-SvxGrafToolBoxControl::SvxGrafToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx) :
+SvxGrafToolBoxControl::SvxGrafToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits( nId ) );
@@ -413,56 +413,56 @@ VclPtr<InterimItemWindow> SvxGrafToolBoxControl::CreateItemWindow( vcl::Window *
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxGrafRedToolBoxControl, SfxInt16Item );
 
-SvxGrafRedToolBoxControl::SvxGrafRedToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+SvxGrafRedToolBoxControl::SvxGrafRedToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxGrafGreenToolBoxControl, SfxInt16Item );
 
-SvxGrafGreenToolBoxControl::SvxGrafGreenToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+SvxGrafGreenToolBoxControl::SvxGrafGreenToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxGrafBlueToolBoxControl, SfxInt16Item );
 
-SvxGrafBlueToolBoxControl::SvxGrafBlueToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+SvxGrafBlueToolBoxControl::SvxGrafBlueToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxGrafLuminanceToolBoxControl, SfxInt16Item );
 
-SvxGrafLuminanceToolBoxControl::SvxGrafLuminanceToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+SvxGrafLuminanceToolBoxControl::SvxGrafLuminanceToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxGrafContrastToolBoxControl, SfxInt16Item );
 
-SvxGrafContrastToolBoxControl::SvxGrafContrastToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+SvxGrafContrastToolBoxControl::SvxGrafContrastToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxGrafGammaToolBoxControl, SfxUInt32Item );
 
-SvxGrafGammaToolBoxControl::SvxGrafGammaToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+SvxGrafGammaToolBoxControl::SvxGrafGammaToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxGrafTransparenceToolBoxControl, SfxUInt16Item );
 
-SvxGrafTransparenceToolBoxControl::SvxGrafTransparenceToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+SvxGrafTransparenceToolBoxControl::SvxGrafTransparenceToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxGrafModeToolBoxControl, SfxUInt16Item );
 
-SvxGrafModeToolBoxControl::SvxGrafModeToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+SvxGrafModeToolBoxControl::SvxGrafModeToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }

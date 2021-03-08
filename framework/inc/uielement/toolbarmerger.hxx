@@ -81,7 +81,7 @@ class ToolBarMerger
 
         static bool       ProcessMergeOperation( ToolBox*                  pToolbar,
                                                  ToolBox::ImplToolItems::size_type nPos,
-                                                 sal_uInt16&               rItemId,
+                                                 ToolBoxItemId&            rItemId,
                                                  CommandToInfoMap&         rCommandMap,
                                                  std::u16string_view       rModuleIdentifier,
                                                  std::u16string_view       rMergeCommand,
@@ -89,7 +89,7 @@ class ToolBarMerger
                                                  const AddonToolbarItemContainer& rItems );
 
         static bool       ProcessMergeFallback( ToolBox*                         pToolbar,
-                                                sal_uInt16&                      rItemId,
+                                                ToolBoxItemId&                   rItemId,
                                                 CommandToInfoMap&                rCommandMap,
                                                 std::u16string_view       rModuleIdentifier,
                                                 std::u16string_view       rMergeCommand,
@@ -99,14 +99,14 @@ class ToolBarMerger
         static void       MergeItems( ToolBox*                  pToolbar,
                                       ToolBox::ImplToolItems::size_type nPos,
                                       sal_uInt16                nModIndex,
-                                      sal_uInt16&               rItemId,
+                                      ToolBoxItemId&            rItemId,
                                       CommandToInfoMap&         rCommandMap,
                                       std::u16string_view       rModuleIdentifier,
                                       const AddonToolbarItemContainer& rAddonToolbarItems );
 
         static void       ReplaceItem( ToolBox*                  pToolbar,
                                        ToolBox::ImplToolItems::size_type nPos,
-                                       sal_uInt16&               rItemId,
+                                       ToolBoxItemId&            rItemId,
                                        CommandToInfoMap&         rCommandMap,
                                        std::u16string_view       rModuleIdentifier,
                                        const AddonToolbarItemContainer& rAddonToolbarItems );
@@ -120,13 +120,13 @@ class ToolBarMerger
             const css::uno::Reference< css::frame::XFrame > & xFrame,
             ToolBox*        pToolbar,
             const OUString& rCommandURL,
-            sal_uInt16      nId,
+            ToolBoxItemId   nId,
             sal_uInt16      nWidth,
             std::u16string_view rControlType );
 
         static void CreateToolbarItem( ToolBox* pToolbox,
                                        ToolBox::ImplToolItems::size_type nPos,
-                                       sal_uInt16 nItemId,
+                                       ToolBoxItemId nItemId,
                                        const AddonToolbarItem& rAddonToolbarItem );
 
     private:

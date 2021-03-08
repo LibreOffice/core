@@ -97,7 +97,7 @@ namespace sfx2
     {
         m_bLayoutPending = false;
 
-        m_aToolbox->ShowItem( 1, !IsFloatingMode() );
+        m_aToolbox->ShowItem( ToolBoxItemId(1), !IsFloatingMode() );
 
         const Size aToolBoxSize( m_aToolbox->CalcWindowSizePixel() );
         Size aWindowSize( GetOutputSizePixel() );
@@ -210,17 +210,17 @@ namespace sfx2
         m_aToolbox->Clear();
 
         // Get the closer bitmap and set it as right most button.
-        m_aToolbox->InsertItem(1, Image(StockImage::Yes, SFX_BMP_CLOSE_DOC));
-        m_aToolbox->SetQuickHelpText(1, SfxResId(STR_CLOSE_PANE));
-        m_aToolbox->ShowItem( 1 );
+        m_aToolbox->InsertItem(ToolBoxItemId(1), Image(StockImage::Yes, SFX_BMP_CLOSE_DOC));
+        m_aToolbox->SetQuickHelpText(ToolBoxItemId(1), SfxResId(STR_CLOSE_PANE));
+        m_aToolbox->ShowItem( ToolBoxItemId(1) );
     }
 
 
     IMPL_LINK( TitledDockingWindow, OnToolboxItemSelected, ToolBox*, pToolBox, void )
     {
-        const sal_uInt16 nId = pToolBox->GetCurItemId();
+        const ToolBoxItemId nId = pToolBox->GetCurItemId();
 
-        if ( nId == 1 )
+        if ( nId == ToolBoxItemId(1) )
         {
             // the closer
             EndTracking();

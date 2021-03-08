@@ -37,7 +37,7 @@ class ImageButtonToolbarController final : public ComplexToolbarController
         ImageButtonToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                       const css::uno::Reference< css::frame::XFrame >& rFrame,
                                       ToolBox* pToolBar,
-                                      sal_uInt16 nID,
+                                      ToolBoxItemId nID,
                                       const OUString& aCommand );
         virtual ~ImageButtonToolbarController() override;
 

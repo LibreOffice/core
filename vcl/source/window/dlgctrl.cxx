@@ -191,10 +191,9 @@ static bool lcl_ToolBoxTabStop( Window* pWindow )
 {
     ToolBox* pToolBoxWindow = static_cast<ToolBox*>( pWindow );
 
-    sal_uInt16 nId;
     for ( ToolBox::ImplToolItems::size_type nPos = 0; nPos < pToolBoxWindow->GetItemCount(); nPos++ )
     {
-        nId = pToolBoxWindow->GetItemId( nPos );
+        ToolBoxItemId nId = pToolBoxWindow->GetItemId( nPos );
         if ( pToolBoxWindow->IsItemVisible( nId ) && pToolBoxWindow->IsItemEnabled( nId ) )
             return true;
     }

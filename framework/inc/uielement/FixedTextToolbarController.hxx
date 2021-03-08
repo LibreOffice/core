@@ -36,7 +36,7 @@ class FixedTextToolbarController final : public ComplexToolbarController
 public:
     FixedTextToolbarController(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
                                const css::uno::Reference<css::frame::XFrame>& rFrame,
-                               ToolBox* pToolBar, sal_uInt16 nID, const OUString& aCommand);
+                               ToolBox* pToolBar, ToolBoxItemId nID, const OUString& aCommand);
 
     // XComponent
     virtual void SAL_CALL dispose() override;

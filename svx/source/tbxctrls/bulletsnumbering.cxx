@@ -213,7 +213,7 @@ void SAL_CALL NumberingToolBoxControl::initialize( const css::uno::Sequence< css
     }
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if (getToolboxId(nId, &pToolBox))
     {
         ToolBoxItemBits nBits = ( mePageType == NumberingPageType::OUTLINE ) ? ToolBoxItemBits::DROPDOWNONLY : ToolBoxItemBits::DROPDOWN;

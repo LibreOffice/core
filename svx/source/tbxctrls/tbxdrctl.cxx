@@ -31,7 +31,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
 
-SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, ToolBoxItemBits::CHECKABLE | rTbx.GetItemBits( nId ) );

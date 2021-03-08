@@ -20,6 +20,7 @@
 
 #include <sfx2/dllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
+#include <vcl/toolbox.hxx>
 
 namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::frame { class XController; }
@@ -42,7 +43,7 @@ class ControllerFactory
 public:
     static css::uno::Reference<css::frame::XToolbarController> CreateToolBoxController(
         ToolBox* pToolBox,
-        const sal_uInt16 nItemId,
+        const ToolBoxItemId nItemId,
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         const css::uno::Reference<css::frame::XController>& rxController,

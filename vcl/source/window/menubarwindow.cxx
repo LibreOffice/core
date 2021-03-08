@@ -61,14 +61,14 @@ void DecoToolBox::calcMinSize()
     ScopedVclPtrInstance<ToolBox> aTbx( GetParent() );
     if( GetItemCount() == 0 )
     {
-        aTbx->InsertItem(IID_DOCUMENTCLOSE, Image(StockImage::Yes, SV_RESID_BITMAP_CLOSEDOC));
+        aTbx->InsertItem(ToolBoxItemId(IID_DOCUMENTCLOSE), Image(StockImage::Yes, SV_RESID_BITMAP_CLOSEDOC));
     }
     else
     {
         ImplToolItems::size_type nItems = GetItemCount();
         for( ImplToolItems::size_type i = 0; i < nItems; i++ )
         {
-            sal_uInt16 nId = GetItemId( i );
+            ToolBoxItemId nId = GetItemId( i );
             aTbx->InsertItem( nId, GetItemImage( nId ) );
         }
     }
@@ -106,7 +106,7 @@ void DecoToolBox::SetImages( tools::Long nMaxHeight, bool bForce )
                         maImage.GetSizePixel() );
 
     aBmpExDst.CopyPixel( aDestRect, aSrcRect, &aBmpExSrc );
-    SetItemImage( IID_DOCUMENTCLOSE, Image( aBmpExDst ) );
+    SetItemImage( ToolBoxItemId(IID_DOCUMENTCLOSE), Image( aBmpExDst ) );
 
 }
 
@@ -132,10 +132,10 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
     m_aCloseBtn->SetPaintTransparent(true);
     m_aCloseBtn->SetParentClipMode(ParentClipMode::NoClip);
 
-    m_aCloseBtn->InsertItem(IID_DOCUMENTCLOSE, m_aCloseBtn->maImage);
+    m_aCloseBtn->InsertItem(ToolBoxItemId(IID_DOCUMENTCLOSE), m_aCloseBtn->maImage);
     m_aCloseBtn->SetSelectHdl(LINK(this, MenuBarWindow, CloseHdl));
     m_aCloseBtn->AddEventListener(LINK(this, MenuBarWindow, ToolboxEventHdl));
-    m_aCloseBtn->SetQuickHelpText(IID_DOCUMENTCLOSE, VclResId(SV_HELPTEXT_CLOSEDOCUMENT));
+    m_aCloseBtn->SetQuickHelpText(ToolBoxItemId(IID_DOCUMENTCLOSE), VclResId(SV_HELPTEXT_CLOSEDOCUMENT));
 
     m_aFloatBtn->SetSymbol( SymbolType::FLOAT );
     m_aFloatBtn->SetQuickHelpText(VclResId(SV_HELPTEXT_RESTORE));
@@ -176,7 +176,7 @@ void MenuBarWindow::SetMenu( MenuBar* pMen )
     m_nHighlightedItem = ITEMPOS_INVALID;
     if (pMen)
     {
-        m_aCloseBtn->ShowItem(IID_DOCUMENTCLOSE, pMen->HasCloseButton());
+        m_aCloseBtn->ShowItem(ToolBoxItemId(IID_DOCUMENTCLOSE), pMen->HasCloseButton());
         m_aCloseBtn->Show(pMen->HasCloseButton() || !m_aAddButtons.empty());
         m_aFloatBtn->Show(pMen->HasFloatButton());
         m_aHideBtn->Show(pMen->HasHideButton());
@@ -200,7 +200,7 @@ void MenuBarWindow::SetHeight(tools::Long nHeight)
 
 void MenuBarWindow::ShowButtons( bool bClose, bool bFloat, bool bHide )
 {
-    m_aCloseBtn->ShowItem(IID_DOCUMENTCLOSE, bClose);
+    m_aCloseBtn->ShowItem(ToolBoxItemId(IID_DOCUMENTCLOSE), bClose);
     m_aCloseBtn->Show(bClose || !m_aAddButtons.empty());
     if (m_pMenu->mpSalMenu)
         m_pMenu->mpSalMenu->ShowCloseButton(bClose);
@@ -219,7 +219,7 @@ IMPL_LINK_NOARG(MenuBarWindow, CloseHdl, ToolBox *, void)
     if( ! m_pMenu )
         return;
 
-    if( m_aCloseBtn->GetCurItemId() == IID_DOCUMENTCLOSE )
+    if( m_aCloseBtn->GetCurItemId() == ToolBoxItemId(IID_DOCUMENTCLOSE) )
     {
         // #i106052# call close hdl asynchronously to ease handler implementation
         // this avoids still being in the handler while the DecoToolBox already
@@ -228,12 +228,12 @@ IMPL_LINK_NOARG(MenuBarWindow, CloseHdl, ToolBox *, void)
     }
     else
     {
-        std::map<sal_uInt16,AddButtonEntry>::iterator it = m_aAddButtons.find(m_aCloseBtn->GetCurItemId());
+        std::map<sal_uInt16,AddButtonEntry>::iterator it = m_aAddButtons.find(sal_uInt16(m_aCloseBtn->GetCurItemId()));
         if( it != m_aAddButtons.end() )
         {
             MenuBar::MenuBarButtonCallbackArg aArg;
             aArg.nId = it->first;
-            aArg.bHighlight = (m_aCloseBtn->GetHighlightItemId() == it->first);
+            aArg.bHighlight = (sal_uInt16(m_aCloseBtn->GetHighlightItemId()) == it->first);
             it->second.m_aSelectLink.Call( aArg );
         }
     }
@@ -248,11 +248,11 @@ IMPL_LINK( MenuBarWindow, ToolboxEventHdl, VclWindowEvent&, rEvent, void )
     aArg.nId = 0xffff;
     aArg.bHighlight = (rEvent.GetId() == VclEventId::ToolboxHighlight);
     if( rEvent.GetId() == VclEventId::ToolboxHighlight )
-        aArg.nId = m_aCloseBtn->GetHighlightItemId();
+        aArg.nId =sal_uInt16(m_aCloseBtn->GetHighlightItemId());
     else if( rEvent.GetId() == VclEventId::ToolboxHighlightOff )
     {
         auto nPos = static_cast<ToolBox::ImplToolItems::size_type>(reinterpret_cast<sal_IntPtr>(rEvent.GetData()));
-        aArg.nId = m_aCloseBtn->GetItemId(nPos);
+        aArg.nId = sal_uInt16(m_aCloseBtn->GetItemId(nPos));
     }
     std::map< sal_uInt16, AddButtonEntry >::iterator it = m_aAddButtons.find( aArg.nId );
     if( it != m_aAddButtons.end() )
@@ -1167,9 +1167,9 @@ sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link<Me
     SAL_WARN_IF( nId >= 128, "vcl", "too many addbuttons in menubar" );
     AddButtonEntry& rNewEntry = m_aAddButtons[nId];
     rNewEntry.m_aSelectLink = i_rLink;
-    m_aCloseBtn->InsertItem(nId, i_rImage, ToolBoxItemBits::NONE, 0);
+    m_aCloseBtn->InsertItem(ToolBoxItemId(nId), i_rImage, ToolBoxItemBits::NONE, 0);
     m_aCloseBtn->calcMinSize();
-    ShowButtons(m_aCloseBtn->IsItemVisible(IID_DOCUMENTCLOSE), m_aFloatBtn->IsVisible(), m_aHideBtn->IsVisible());
+    ShowButtons(m_aCloseBtn->IsItemVisible(ToolBoxItemId(IID_DOCUMENTCLOSE)), m_aFloatBtn->IsVisible(), m_aHideBtn->IsVisible());
     LayoutChanged();
 
     if( m_pMenu->mpSalMenu )
@@ -1202,7 +1202,7 @@ tools::Rectangle MenuBarWindow::GetMenuBarButtonRectPixel( sal_uInt16 nId )
 
         if( aRect.IsEmpty() )
         {
-            aRect = m_aCloseBtn->GetItemRect(nId);
+            aRect = m_aCloseBtn->GetItemRect(ToolBoxItemId(nId));
             Point aOffset = m_aCloseBtn->OutputToScreenPixel(Point());
             aRect.Move( aOffset.X(), aOffset.Y() );
         }
@@ -1212,7 +1212,7 @@ tools::Rectangle MenuBarWindow::GetMenuBarButtonRectPixel( sal_uInt16 nId )
 
 void MenuBarWindow::RemoveMenuBarButton( sal_uInt16 nId )
 {
-    ToolBox::ImplToolItems::size_type nPos = m_aCloseBtn->GetItemPos(nId);
+    ToolBox::ImplToolItems::size_type nPos = m_aCloseBtn->GetItemPos(ToolBoxItemId(nId));
     m_aCloseBtn->RemoveItem(nPos);
     m_aAddButtons.erase( nId );
     m_aCloseBtn->calcMinSize();

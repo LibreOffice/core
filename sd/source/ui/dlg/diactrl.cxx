@@ -139,7 +139,7 @@ IMPL_LINK_NOARG(SdPagesField, ModifyHdl, weld::SpinButton&, void)
                                  aArgs );
 }
 
-SdTbxCtlDiaPages::SdTbxCtlDiaPages( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+SdTbxCtlDiaPages::SdTbxCtlDiaPages( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }

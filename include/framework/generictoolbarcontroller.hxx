@@ -34,7 +34,7 @@ class FWK_DLLPUBLIC GenericToolbarController final : public svt::ToolboxControll
         GenericToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                   const css::uno::Reference< css::frame::XFrame >& rFrame,
                                   ToolBox* pToolBar,
-                                  sal_uInt16 nID,
+                                  ToolBoxItemId nID,
                                   const OUString& aCommand );
         GenericToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                   const css::uno::Reference< css::frame::XFrame >& rFrame,
@@ -62,7 +62,7 @@ class FWK_DLLPUBLIC GenericToolbarController final : public svt::ToolboxControll
 
     private:
         VclPtr<ToolBox>     m_xToolbar;
-        sal_uInt16          m_nID;
+        ToolBoxItemId       m_nID;
         bool                m_bEnumCommand : 1,
                             m_bMadeInvisible : 1;
         OUString            m_aEnumCommand;

@@ -94,11 +94,7 @@
 #define SID_NUMBER_PERCENT      (SC_VIEW_START + 46)
 
 // "slot" IDs for input images:
-#define SID_INPUT_FUNCTION      (SC_VIEW_START + 47)
-#define SID_INPUT_SUM           (SC_VIEW_START + 48)
-#define SID_INPUT_EQUAL         (SC_VIEW_START + 49)
-#define SID_INPUT_CANCEL        (SC_VIEW_START + 50)
-#define SID_INPUT_OK            (SC_VIEW_START + 51)
+// 47..51 are used for toolbox ids
 
 #define SID_NUMBER_STANDARD     (SC_VIEW_START + 52)
 #define SID_NUMBER_DATE         (SC_VIEW_START + 53)

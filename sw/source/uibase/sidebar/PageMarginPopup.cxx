@@ -30,7 +30,7 @@ void PageMarginPopup::initialize( const css::uno::Sequence< css::uno::Any >& rAr
     PopupWindowController::initialize(rArguments);
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if (getToolboxId(nId, &pToolBox))
         pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | pToolBox->GetItemBits(nId));
 }

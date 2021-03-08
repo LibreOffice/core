@@ -123,12 +123,13 @@ namespace frm
     {
         if ( m_pDispatcher )
         {
-            if ( !m_pDispatcher->isEnabled( GetCurItemId() ) )
+            sal_Int16 nFeatureId = sal_uInt16(GetCurItemId());
+            if ( !m_pDispatcher->isEnabled( nFeatureId ) )
                 // the toolbox is a little bit buggy: With ToolBoxItemBits::REPEAT, it sometimes
                 // happens that a select is reported, even though the respective
                 // item has just been disabled.
                 return;
-            m_pDispatcher->dispatch( GetCurItemId() );
+            m_pDispatcher->dispatch( nFeatureId );
         }
     }
 
@@ -165,7 +166,7 @@ namespace frm
 
         m_pToolbar->setDispatcher( _pDispatcher );
 
-        RecordPositionInput* pPositionWindow = static_cast< RecordPositionInput* >( m_pToolbar->GetItemWindow( FormFeature::MoveAbsolute ) );
+        RecordPositionInput* pPositionWindow = static_cast< RecordPositionInput* >( m_pToolbar->GetItemWindow( ToolBoxItemId(FormFeature::MoveAbsolute) ) );
         OSL_ENSURE( pPositionWindow, "NavigationToolBar::setDispatcher: can't forward the dispatcher to the position window!" );
         if ( pPositionWindow )
             pPositionWindow->setDispatcher( _pDispatcher );
@@ -173,7 +174,7 @@ namespace frm
         // update feature states
         for ( ToolBox::ImplToolItems::size_type nPos = 0; nPos < m_pToolbar->GetItemCount(); ++nPos )
         {
-            sal_uInt16 nItemId = m_pToolbar->GetItemId( nPos );
+            sal_uInt16 nItemId = sal_uInt16(m_pToolbar->GetItemId( nPos ));
 
             if ( ( nItemId == LID_RECORD_LABEL ) || ( nItemId == LID_RECORD_FILLER ) )
                 continue;
@@ -186,18 +187,18 @@ namespace frm
 
     void NavigationToolBar::implEnableItem( sal_uInt16 _nItemId, bool _bEnabled )
     {
-        m_pToolbar->EnableItem( _nItemId, _bEnabled );
+        m_pToolbar->EnableItem( ToolBoxItemId(_nItemId), _bEnabled );
 
         if ( _nItemId == FormFeature::MoveAbsolute )
-            m_pToolbar->EnableItem( LID_RECORD_LABEL, _bEnabled );
+            m_pToolbar->EnableItem( ToolBoxItemId(LID_RECORD_LABEL), _bEnabled );
 
         if ( _nItemId == FormFeature::TotalRecords )
-            m_pToolbar->EnableItem( LID_RECORD_FILLER, _bEnabled );
+            m_pToolbar->EnableItem( ToolBoxItemId(LID_RECORD_FILLER), _bEnabled );
     }
 
     void NavigationToolBar::enableFeature( sal_Int16 _nFeatureId, bool _bEnabled )
     {
-        DBG_ASSERT( m_pToolbar->GetItemPos( static_cast<sal_uInt16>(_nFeatureId) ) != ToolBox::ITEM_NOTFOUND,
+        DBG_ASSERT( m_pToolbar->GetItemPos( ToolBoxItemId(_nFeatureId) ) != ToolBox::ITEM_NOTFOUND,
             "NavigationToolBar::enableFeature: invalid id!" );
 
         implEnableItem( static_cast<sal_uInt16>(_nFeatureId), _bEnabled );
@@ -205,18 +206,18 @@ namespace frm
 
     void NavigationToolBar::checkFeature( sal_Int16 _nFeatureId, bool _bEnabled )
     {
-        DBG_ASSERT( m_pToolbar->GetItemPos( static_cast<sal_uInt16>(_nFeatureId) ) != ToolBox::ITEM_NOTFOUND,
+        DBG_ASSERT( m_pToolbar->GetItemPos( ToolBoxItemId(_nFeatureId) ) != ToolBox::ITEM_NOTFOUND,
             "NavigationToolBar::checkFeature: invalid id!" );
 
-        m_pToolbar->CheckItem( static_cast<sal_uInt16>(_nFeatureId), _bEnabled );
+        m_pToolbar->CheckItem( ToolBoxItemId(_nFeatureId), _bEnabled );
     }
 
     void NavigationToolBar::setFeatureText( sal_Int16 _nFeatureId, const OUString& _rText )
     {
-        DBG_ASSERT( m_pToolbar->GetItemPos( static_cast<sal_uInt16>(_nFeatureId) ) != ToolBox::ITEM_NOTFOUND,
+        DBG_ASSERT( m_pToolbar->GetItemPos( ToolBoxItemId(_nFeatureId) ) != ToolBox::ITEM_NOTFOUND,
             "NavigationToolBar::checkFeature: invalid id!" );
 
-        vcl::Window* pItemWindow = m_pToolbar->GetItemWindow( static_cast<sal_uInt16>(_nFeatureId) );
+        vcl::Window* pItemWindow = m_pToolbar->GetItemWindow( ToolBoxItemId(_nFeatureId) );
         if ( pItemWindow )
         {
             if (_nFeatureId == FormFeature::TotalRecords)
@@ -225,7 +226,7 @@ namespace frm
                 static_cast<RecordPositionInput*>(pItemWindow)->set_text(_rText);
         }
         else
-            m_pToolbar->SetItemText( static_cast<sal_uInt16>(_nFeatureId), _rText );
+            m_pToolbar->SetItemText( ToolBoxItemId(_nFeatureId), _rText );
     }
 
     void NavigationToolBar::implInit( )
@@ -277,15 +278,15 @@ namespace frm
             {   // it's _not_ a separator
 
                 // insert the entry
-                m_pToolbar->InsertItem( pSupportedFeatures->nId, OUString(), pSupportedFeatures->bRepeat ? ToolBoxItemBits::REPEAT : ToolBoxItemBits::NONE );
-                m_pToolbar->SetQuickHelpText( pSupportedFeatures->nId, OUString() );  // TODO
+                m_pToolbar->InsertItem( ToolBoxItemId(pSupportedFeatures->nId), OUString(), pSupportedFeatures->bRepeat ? ToolBoxItemBits::REPEAT : ToolBoxItemBits::NONE );
+                m_pToolbar->SetQuickHelpText( ToolBoxItemId(pSupportedFeatures->nId), OUString() );  // TODO
 
                 if ( !isArtificialItem( pSupportedFeatures->nId ) )
                 {
                     OUString sCommandURL( lcl_getCommandURL( pSupportedFeatures->nId ) );
-                    m_pToolbar->SetItemCommand( pSupportedFeatures->nId, sCommandURL );
+                    m_pToolbar->SetItemCommand( ToolBoxItemId(pSupportedFeatures->nId), sCommandURL );
                     auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sCommandURL, m_sModuleId);
-                    m_pToolbar->SetQuickHelpText(pSupportedFeatures->nId,
+                    m_pToolbar->SetQuickHelpText(ToolBoxItemId(pSupportedFeatures->nId),
                             vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
                 }
 
@@ -305,7 +306,7 @@ namespace frm
                         pItemWindow = VclPtr<LabelItemWindow>::Create(m_pToolbar, "");
 
                     m_aChildWins.emplace_back(pItemWindow );
-                    m_pToolbar->SetItemWindow( pSupportedFeatures->nId, pItemWindow );
+                    m_pToolbar->SetItemWindow( ToolBoxItemId(pSupportedFeatures->nId), pItemWindow );
                 }
             }
             else
@@ -334,9 +335,9 @@ namespace frm
 
         for ( ToolBox::ImplToolItems::size_type i=0; i<nItemCount; ++i )
         {
-            sal_uInt16 nId = m_pToolbar->GetItemId( i );
-            if ( ( ToolBoxItemType::BUTTON == m_pToolbar->GetItemType( i ) ) && !isArtificialItem( nId ) )
-                aFormFeatures.push_back( nId );
+            ToolBoxItemId nId = m_pToolbar->GetItemId( i );
+            if ( ( ToolBoxItemType::BUTTON == m_pToolbar->GetItemType( i ) ) && !isArtificialItem( sal_uInt16(nId) ) )
+                aFormFeatures.push_back( sal_uInt16(nId) );
         }
 
         // translate them into command URLs
@@ -352,9 +353,9 @@ namespace frm
 
         // and set them at the toolbar
         auto commandImage = aCommandImages.begin();
-        for (auto const& formFeature : aFormFeatures)
+        for (sal_Int16 formFeature : aFormFeatures)
         {
-            m_pToolbar->SetItemImage( formFeature, *commandImage );
+            m_pToolbar->SetItemImage( ToolBoxItemId(formFeature), *commandImage );
             ++commandImage;
         }
 
@@ -423,7 +424,7 @@ namespace frm
 
         if ( pGroupIds )
             while ( *pGroupIds )
-                m_pToolbar->ShowItem( *pGroupIds++, _bShow );
+                m_pToolbar->ShowItem( ToolBoxItemId(*pGroupIds++), _bShow );
     }
 
 
@@ -440,7 +441,7 @@ namespace frm
             OSL_FAIL( "NavigationToolBar::IsFunctionGroupVisible: invalid group id!" );
         }
 
-        return m_pToolbar->IsItemVisible( nIndicatorItem );
+        return m_pToolbar->IsItemVisible( ToolBoxItemId(nIndicatorItem) );
     }
 
 
@@ -526,10 +527,10 @@ namespace frm
     {
         for ( ToolBox::ImplToolItems::size_type item = 0; item < m_pToolbar->GetItemCount(); ++item )
         {
-            sal_uInt16 nItemId = m_pToolbar->GetItemId( item );
+            ToolBoxItemId nItemId = m_pToolbar->GetItemId( item );
             vcl::Window* pItemWindow = m_pToolbar->GetItemWindow( nItemId );
             if ( pItemWindow )
-                (this->*_handler)( nItemId, pItemWindow );
+                (this->*_handler)( sal_uInt16(nItemId), pItemWindow );
         }
     }
 
@@ -537,10 +538,10 @@ namespace frm
     {
         for ( ToolBox::ImplToolItems::size_type item = 0; item < m_pToolbar->GetItemCount(); ++item )
         {
-            sal_uInt16 nItemId = m_pToolbar->GetItemId( item );
+            ToolBoxItemId nItemId = m_pToolbar->GetItemId( item );
             vcl::Window* pItemWindow = m_pToolbar->GetItemWindow( nItemId );
             if ( pItemWindow )
-                (*_handler)( nItemId, pItemWindow, _pParam );
+                (*_handler)( sal_uInt16(nItemId), pItemWindow, _pParam );
         }
     }
 
@@ -609,7 +610,7 @@ namespace frm
         aSize.AdjustWidth(6 );
         _pItemWindow->SetSizePixel( aSize );
 
-        m_pToolbar->SetItemWindow( _nItemId, _pItemWindow );
+        m_pToolbar->SetItemWindow( ToolBoxItemId(_nItemId), _pItemWindow );
     }
 
     void NavigationToolBar::enableItemRTL( sal_uInt16 /*_nItemId*/, vcl::Window* _pItemWindow, const void* _pIsRTLEnabled )

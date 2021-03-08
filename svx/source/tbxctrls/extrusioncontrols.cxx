@@ -278,7 +278,7 @@ void SAL_CALL ExtrusionDirectionControl::initialize( const css::uno::Sequence< c
     svt::PopupWindowController::initialize( aArguments );
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if ( getToolboxId( nId, &pToolBox ) )
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
 }
@@ -534,7 +534,7 @@ void SAL_CALL ExtrusionDepthController::initialize( const css::uno::Sequence< cs
     svt::PopupWindowController::initialize( aArguments );
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if ( getToolboxId( nId, &pToolBox ) )
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
 }
@@ -766,7 +766,7 @@ void SAL_CALL ExtrusionLightingControl::initialize( const css::uno::Sequence< cs
     svt::PopupWindowController::initialize( aArguments );
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if ( getToolboxId( nId, &pToolBox ) )
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
 }
@@ -904,7 +904,7 @@ void SAL_CALL ExtrusionSurfaceControl::initialize( const css::uno::Sequence< css
     svt::PopupWindowController::initialize( aArguments );
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if ( getToolboxId( nId, &pToolBox ) )
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
 }

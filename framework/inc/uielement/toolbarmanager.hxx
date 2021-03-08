@@ -41,6 +41,7 @@
 #include <tools/link.hxx>
 #include <vcl/window.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/toolbox.hxx>
 
 #include <unordered_map>
 
@@ -141,7 +142,7 @@ class ToolBarManager final : public ToolbarManager_Base
         void setToolBarImage(const Image& _aImage,const CommandToInfoMap::const_iterator& _pIter);
         void impl_elementChanged(bool _bRemove,const css::ui::ConfigurationEvent& Event );
 
-        typedef std::unordered_map< sal_uInt16, css::uno::Reference< css::frame::XStatusListener > >  ToolBarControllerMap;
+        typedef std::unordered_map< ToolBoxItemId, css::uno::Reference< css::frame::XStatusListener > >  ToolBarControllerMap;
         typedef ::std::vector< css::uno::Reference< css::frame::XSubToolbarController > >             SubToolBarControllerVector;
         typedef std::unordered_map<OUString, SubToolBarControllerVector>                                                SubToolBarToSubToolBarControllerMap;
 

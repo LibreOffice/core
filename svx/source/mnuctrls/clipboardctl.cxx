@@ -36,7 +36,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxClipBoardControl, SfxVoidItem /*SfxUInt16Item*/ );
 
 
 SvxClipBoardControl::SvxClipBoardControl(
-        sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+        sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx ) :
 
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     bDisabled( false )
@@ -70,7 +70,7 @@ void SvxClipBoardControl::CreatePopupWindow()
         }
 
         ToolBox& rBox = GetToolBox();
-        sal_uInt16 nId = GetId();
+        ToolBoxItemId nId = GetId();
         rBox.SetItemDown( nId, true );
 
         ::tools::Rectangle aRect(rBox.GetItemRect(nId));

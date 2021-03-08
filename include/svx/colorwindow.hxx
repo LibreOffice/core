@@ -61,11 +61,11 @@ private:
     // or
     SvxColorToolBoxControl* m_pControl;
     VclPtr<ToolBox> m_xToolBox;
-    sal_uInt16 m_nId;
+    ToolBoxItemId m_nId;
 public:
     MenuOrToolMenuButton(weld::MenuButton* pMenuButton);
     MenuOrToolMenuButton(weld::Toolbar* pToolbar, const OString& rIdent);
-    MenuOrToolMenuButton(SvxColorToolBoxControl* pControl, ToolBox* pToolbar, sal_uInt16 nId);
+    MenuOrToolMenuButton(SvxColorToolBoxControl* pControl, ToolBox* pToolbar, ToolBoxItemId nId);
     ~MenuOrToolMenuButton();
 
     MenuOrToolMenuButton(MenuOrToolMenuButton const &) = default;

@@ -38,7 +38,7 @@ class SvxFmTbxCtlAbsRec : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxFmTbxCtlAbsRec(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    SvxFmTbxCtlAbsRec(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx);
     virtual ~SvxFmTbxCtlAbsRec() override;
 
     virtual VclPtr<InterimItemWindow> CreateItemWindow(vcl::Window* pParent) override;
@@ -52,7 +52,7 @@ class SvxFmTbxCtlRecText : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxFmTbxCtlRecText(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    SvxFmTbxCtlRecText(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx);
     virtual ~SvxFmTbxCtlRecText() override;
 
     virtual VclPtr<InterimItemWindow> CreateItemWindow(vcl::Window* pParent) override;
@@ -63,7 +63,7 @@ class SvxFmTbxCtlRecFromText : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxFmTbxCtlRecFromText(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    SvxFmTbxCtlRecFromText(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx);
     virtual ~SvxFmTbxCtlRecFromText() override;
 
     virtual VclPtr<InterimItemWindow> CreateItemWindow(vcl::Window* pParent) override;
@@ -78,7 +78,7 @@ class SvxFmTbxCtlRecTotal : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxFmTbxCtlRecTotal(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    SvxFmTbxCtlRecTotal(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx);
     virtual ~SvxFmTbxCtlRecTotal() override;
 
     virtual VclPtr<InterimItemWindow> CreateItemWindow(vcl::Window* pParent) override;
@@ -90,14 +90,14 @@ class SvxFmTbxNextRec : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxFmTbxNextRec(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    SvxFmTbxNextRec(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx);
 };
 
 class SvxFmTbxPrevRec : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxFmTbxPrevRec(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    SvxFmTbxPrevRec(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx);
 };
 
 #endif

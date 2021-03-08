@@ -52,7 +52,7 @@ public:
 
                             SFX_DECL_TOOLBOX_CONTROL();
 
-                            SfxURLToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
+                            SfxURLToolBoxControl_Impl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rBox );
     virtual                 ~SfxURLToolBoxControl_Impl() override;
 
     virtual VclPtr<InterimItemWindow> CreateItemWindow(vcl::Window* pParent) override;

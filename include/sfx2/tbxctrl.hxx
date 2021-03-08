@@ -35,9 +35,9 @@ class InterimItemWindow;
 class SfxToolBoxControl;
 class SfxModule;
 
-rtl::Reference<svt::ToolboxController> SfxToolBoxControllerFactory( const css::uno::Reference< css::frame::XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const OUString& aCommandURL );
+rtl::Reference<svt::ToolboxController> SfxToolBoxControllerFactory( const css::uno::Reference< css::frame::XFrame >& rFrame, ToolBox* pToolbox, ToolBoxItemId nID, const OUString& aCommandURL );
 
-typedef rtl::Reference<SfxToolBoxControl> (*SfxToolBoxControlCtor)( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
+typedef rtl::Reference<SfxToolBoxControl> (*SfxToolBoxControlCtor)( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rBox );
 
 struct SfxTbxCtrlFactory
 {
@@ -55,7 +55,7 @@ struct SfxTbxCtrlFactory
 
 
 #define SFX_DECL_TOOLBOX_CONTROL() \
-        static rtl::Reference<SfxToolBoxControl> CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ); \
+        static rtl::Reference<SfxToolBoxControl> CreateImpl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox &rTbx ); \
         static void RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=nullptr)
 
 /*  For special ToolBox controls, such as a font selection box or toolbox
@@ -102,11 +102,11 @@ public:
 public:
                                SFX_DECL_TOOLBOX_CONTROL();
 
-                               SfxToolBoxControl( sal_uInt16 nSlotID, sal_uInt16 nId, ToolBox& rBox, bool bShowStrings = false );
+                               SfxToolBoxControl( sal_uInt16 nSlotID, ToolBoxItemId nId, ToolBox& rBox, bool bShowStrings = false );
     virtual                    ~SfxToolBoxControl() override;
 
     ToolBox&                   GetToolBox() const;
-    unsigned short             GetId() const;
+    ToolBoxItemId              GetId() const;
     unsigned short             GetSlotId() const;
 
     void                       Dispatch( const OUString& aCommand,
@@ -116,19 +116,19 @@ public:
                                          css::uno::Sequence< css::beans::PropertyValue > const & aArgs );
 
     static SfxItemState        GetItemState( const SfxPoolItem* pState );
-    static rtl::Reference<SfxToolBoxControl> CreateControl( sal_uInt16 nSlotId, sal_uInt16 nTbxId, ToolBox *pBox, SfxModule const *pMod );
+    static rtl::Reference<SfxToolBoxControl> CreateControl( sal_uInt16 nSlotId, ToolBoxItemId nTbxId, ToolBox *pBox, SfxModule const *pMod );
     static void                RegisterToolBoxControl( SfxModule*, const SfxTbxCtrlFactory&);
 };
 
 #define SFX_IMPL_TOOLBOX_CONTROL(Class, nItemClass) \
-        rtl::Reference<SfxToolBoxControl> Class::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ) \
+        rtl::Reference<SfxToolBoxControl> Class::CreateImpl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox &rTbx ) \
                { return new Class( nSlotId, nId, rTbx ); } \
         void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
                { SfxToolBoxControl::RegisterToolBoxControl( pMod, SfxTbxCtrlFactory( \
                     Class::CreateImpl, typeid(nItemClass), nSlotId ) ); }
 
 #define SFX_IMPL_TOOLBOX_CONTROL_ARG(Class, nItemClass, Arg) \
-        rtl::Reference<SfxToolBoxControl> Class::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ) \
+        rtl::Reference<SfxToolBoxControl> Class::CreateImpl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox &rTbx ) \
                { return new Class( nSlotId, nId, rTbx, Arg); } \
         void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
                { SfxToolBoxControl::RegisterToolBoxControl( pMod, SfxTbxCtrlFactory( \

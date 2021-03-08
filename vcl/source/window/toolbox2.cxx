@@ -80,7 +80,7 @@ ImplToolBoxPrivateData::~ImplToolBoxPrivateData()
     mpMenu.disposeAndClear();
 }
 
-void ImplToolItem::init(sal_uInt16 nItemId, ToolBoxItemBits nItemBits,
+void ImplToolItem::init(ToolBoxItemId nItemId, ToolBoxItemBits nItemBits,
                         bool bEmptyBtn)
 {
     mnId            = nItemId;
@@ -105,24 +105,24 @@ void ImplToolItem::init(sal_uInt16 nItemId, ToolBoxItemBits nItemBits,
 
 ImplToolItem::ImplToolItem()
 {
-    init(0, ToolBoxItemBits::NONE, true);
+    init(ToolBoxItemId(0), ToolBoxItemBits::NONE, true);
 }
 
-ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
+ImplToolItem::ImplToolItem( ToolBoxItemId nItemId, const Image& rImage,
                             ToolBoxItemBits nItemBits ) :
     maImage( rImage )
 {
     init(nItemId, nItemBits, false);
 }
 
-ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const OUString& rText,
+ImplToolItem::ImplToolItem( ToolBoxItemId nItemId, const OUString& rText,
                             ToolBoxItemBits nItemBits ) :
     maText( rText )
 {
     init(nItemId, nItemBits, false);
 }
 
-ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
+ImplToolItem::ImplToolItem( ToolBoxItemId nItemId, const Image& rImage,
                             const OUString& rText, ToolBoxItemBits nItemBits ) :
     maImage( rImage ),
     maText( rText )
@@ -377,7 +377,7 @@ void ToolBox::Select()
         static_cast<FloatingWindow*>(pWrapper->GetFloatingWindow())->EndPopupMode();
 }
 
-void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage, ToolBoxItemBits nBits, ImplToolItems::size_type nPos )
+void ToolBox::InsertItem( ToolBoxItemId nItemId, const Image& rImage, ToolBoxItemBits nBits, ImplToolItems::size_type nPos )
 {
     SAL_WARN_IF( !nItemId, "vcl", "ToolBox::InsertItem(): ItemId == 0" );
     SAL_WARN_IF( GetItemPos( nItemId ) != ITEM_NOTFOUND, "vcl",
@@ -395,7 +395,7 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage, ToolBoxItemBi
     CallEventListeners( VclEventId::ToolboxItemAdded, reinterpret_cast< void* >(nNewPos ) );
 }
 
-void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage, const OUString& rText, ToolBoxItemBits nBits,
+void ToolBox::InsertItem( ToolBoxItemId nItemId, const Image& rImage, const OUString& rText, ToolBoxItemBits nBits,
                           ImplToolItems::size_type nPos )
 {
     SAL_WARN_IF( !nItemId, "vcl", "ToolBox::InsertItem(): ItemId == 0" );
@@ -414,7 +414,7 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage, const OUStrin
     CallEventListeners( VclEventId::ToolboxItemAdded, reinterpret_cast< void* >( nNewPos ) );
 }
 
-void ToolBox::InsertItem( sal_uInt16 nItemId, const OUString& rText, ToolBoxItemBits nBits, ImplToolItems::size_type nPos )
+void ToolBox::InsertItem( ToolBoxItemId nItemId, const OUString& rText, ToolBoxItemBits nBits, ImplToolItems::size_type nPos )
 {
     SAL_WARN_IF( !nItemId, "vcl", "ToolBox::InsertItem(): ItemId == 0" );
     SAL_WARN_IF( GetItemPos( nItemId ) != ITEM_NOTFOUND, "vcl",
@@ -441,7 +441,7 @@ void ToolBox::InsertItem(const OUString& rCommand, const css::uno::Reference<css
     OUString aTooltip(vcl::CommandInfoProvider::GetTooltipForCommand(rCommand, aProperties, rFrame));
     Image aImage(CommandInfoProvider::GetImageForCommand(rCommand, rFrame, GetImageSize()));
 
-    sal_uInt16 nItemId = GetItemCount() + 1;
+    ToolBoxItemId nItemId(GetItemCount() + 1);
         //TODO: ImplToolItems::size_type -> sal_uInt16!
     InsertItem(nItemId, aImage, aLabel, nBits, nPos);
     SetItemCommand(nItemId, rCommand);
@@ -453,7 +453,7 @@ void ToolBox::InsertItem(const OUString& rCommand, const css::uno::Reference<css
         pItem->maMinimalItemSize = rRequestedSize;
 }
 
-void ToolBox::InsertWindow( sal_uInt16 nItemId, vcl::Window* pWindow,
+void ToolBox::InsertWindow( ToolBoxItemId nItemId, vcl::Window* pWindow,
                             ToolBoxItemBits nBits, ImplToolItems::size_type nPos )
 {
     SAL_WARN_IF( !nItemId, "vcl", "ToolBox::InsertWindow(): ItemId == 0" );
@@ -545,9 +545,9 @@ void ToolBox::RemoveItem( ImplToolItems::size_type nPos )
 
     // ensure not to delete in the Select-Handler
     if ( mpData->m_aItems[nPos].mnId == mnCurItemId )
-        mnCurItemId = 0;
+        mnCurItemId = ToolBoxItemId(0);
     if ( mpData->m_aItems[nPos].mnId == mnHighItemId )
-        mnHighItemId = 0;
+        mnHighItemId = ToolBoxItemId(0);
 
     ImplInvalidate( bMustCalc );
 
@@ -558,7 +558,7 @@ void ToolBox::RemoveItem( ImplToolItems::size_type nPos )
     CallEventListeners( VclEventId::ToolboxItemRemoved, reinterpret_cast< void* >( nPos ) );
 }
 
-void ToolBox::CopyItem( const ToolBox& rToolBox, sal_uInt16 nItemId )
+void ToolBox::CopyItem( const ToolBox& rToolBox, ToolBoxItemId nItemId )
 {
     SAL_WARN_IF( GetItemPos( nItemId ) != ITEM_NOTFOUND, "vcl",
                 "ToolBox::CopyItem(): ItemId already exists" );
@@ -591,8 +591,8 @@ void ToolBox::Clear()
     mpData->ImplClearLayoutData();
 
     // ensure not to delete in the Select-Handler
-    mnCurItemId = 0;
-    mnHighItemId = 0;
+    mnCurItemId = ToolBoxItemId(0);
+    mnHighItemId = ToolBoxItemId(0);
 
     ImplInvalidate( true, true );
 
@@ -714,7 +714,7 @@ ToolBoxItemType ToolBox::GetItemType( ImplToolItems::size_type nPos ) const
     return (nPos < mpData->m_aItems.size()) ? mpData->m_aItems[nPos].meType : ToolBoxItemType::DONTKNOW;
 }
 
-ToolBox::ImplToolItems::size_type ToolBox::GetItemPos( sal_uInt16 nItemId ) const
+ToolBox::ImplToolItems::size_type ToolBox::GetItemPos( ToolBoxItemId nItemId ) const
 {
     if (mpData)
     {
@@ -738,12 +738,12 @@ ToolBox::ImplToolItems::size_type ToolBox::GetItemPos( const Point& rPos ) const
     return ITEM_NOTFOUND;
 }
 
-sal_uInt16 ToolBox::GetItemId( ImplToolItems::size_type nPos ) const
+ToolBoxItemId ToolBox::GetItemId( ImplToolItems::size_type nPos ) const
 {
-    return (nPos < mpData->m_aItems.size()) ? mpData->m_aItems[nPos].mnId : 0;
+    return (nPos < mpData->m_aItems.size()) ? mpData->m_aItems[nPos].mnId : ToolBoxItemId(0);
 }
 
-sal_uInt16 ToolBox::GetItemId( const Point& rPos ) const
+ToolBoxItemId ToolBox::GetItemId( const Point& rPos ) const
 {
     // find item that was clicked
     auto it = std::find_if(mpData->m_aItems.begin(), mpData->m_aItems.end(),
@@ -752,10 +752,10 @@ sal_uInt16 ToolBox::GetItemId( const Point& rPos ) const
     if( (it != mpData->m_aItems.end()) && (it->meType == ToolBoxItemType::BUTTON) )
         return it->mnId;
 
-    return 0;
+    return ToolBoxItemId(0);
 }
 
-Size ToolBox::GetItemContentSize( sal_uInt16 nItemId )
+Size ToolBox::GetItemContentSize( ToolBoxItemId nItemId )
 {
     if ( mbCalc || mbFormat )
         ImplFormat();
@@ -767,17 +767,17 @@ Size ToolBox::GetItemContentSize( sal_uInt16 nItemId )
         return Size();
 }
 
-sal_uInt16 ToolBox::GetItemId(const OUString &rCommand) const
+ToolBoxItemId ToolBox::GetItemId(const OUString &rCommand) const
 {
     if (!mpData)
-        return 0;
+        return ToolBoxItemId(0);
 
     auto it = std::find_if(mpData->m_aItems.begin(), mpData->m_aItems.end(),
         [&rCommand](const ImplToolItem& rItem) { return rItem.maCommandStr == rCommand; });
     if (it != mpData->m_aItems.end())
         return it->mnId;
 
-    return 0;
+    return ToolBoxItemId(0);
 }
 
 Point ToolBox::ImplGetPopupPosition( const tools::Rectangle& rRect ) const
@@ -830,7 +830,7 @@ Point ToolBox::ImplGetPopupPosition( const tools::Rectangle& rRect ) const
     return aPos;
 }
 
-tools::Rectangle ToolBox::GetItemRect( sal_uInt16 nItemId )
+tools::Rectangle ToolBox::GetItemRect( ToolBoxItemId nItemId )
 {
     if ( mbCalc || mbFormat )
         ImplFormat();
@@ -869,7 +869,7 @@ bool ToolBox::ImplHasExternalMenubutton()
     return bRet;
 }
 
-void ToolBox::SetItemBits( sal_uInt16 nItemId, ToolBoxItemBits nBits )
+void ToolBox::SetItemBits( ToolBoxItemId nItemId, ToolBoxItemBits nBits )
 {
     ImplToolItems::size_type nPos = GetItemPos( nItemId );
 
@@ -886,7 +886,7 @@ void ToolBox::SetItemBits( sal_uInt16 nItemId, ToolBoxItemBits nBits )
     }
 }
 
-void ToolBox::SetItemWindowNonInteractive(sal_uInt16 nItemId, bool bNonInteractive)
+void ToolBox::SetItemWindowNonInteractive(ToolBoxItemId nItemId, bool bNonInteractive)
 {
     ImplToolItems::size_type nPos = GetItemPos( nItemId );
 
@@ -896,7 +896,7 @@ void ToolBox::SetItemWindowNonInteractive(sal_uInt16 nItemId, bool bNonInteracti
     }
 }
 
-ToolBoxItemBits ToolBox::GetItemBits( sal_uInt16 nItemId ) const
+ToolBoxItemBits ToolBox::GetItemBits( ToolBoxItemId nItemId ) const
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
@@ -906,7 +906,7 @@ ToolBoxItemBits ToolBox::GetItemBits( sal_uInt16 nItemId ) const
         return ToolBoxItemBits::NONE;
 }
 
-void ToolBox::SetItemExpand( sal_uInt16 nItemId, bool bExpand )
+void ToolBox::SetItemExpand( ToolBoxItemId nItemId, bool bExpand )
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
     if (!pItem)
@@ -919,7 +919,7 @@ void ToolBox::SetItemExpand( sal_uInt16 nItemId, bool bExpand )
     }
 }
 
-void ToolBox::SetItemData( sal_uInt16 nItemId, void* pNewData )
+void ToolBox::SetItemData( ToolBoxItemId nItemId, void* pNewData )
 {
     ImplToolItems::size_type nPos = GetItemPos( nItemId );
 
@@ -930,7 +930,7 @@ void ToolBox::SetItemData( sal_uInt16 nItemId, void* pNewData )
     }
 }
 
-void* ToolBox::GetItemData( sal_uInt16 nItemId ) const
+void* ToolBox::GetItemData( ToolBoxItemId nItemId ) const
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
@@ -940,7 +940,7 @@ void* ToolBox::GetItemData( sal_uInt16 nItemId ) const
         return nullptr;
 }
 
-void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
+void ToolBox::SetItemImage( ToolBoxItemId nItemId, const Image& rImage )
 {
     ImplToolItems::size_type nPos = GetItemPos( nItemId );
 
@@ -971,7 +971,7 @@ static Image ImplRotImage( const Image& rImage, Degree10 nAngle10 )
     return Image( aRotBitmapEx );
 }
 
-void ToolBox::SetItemImageAngle( sal_uInt16 nItemId, Degree10 nAngle10 )
+void ToolBox::SetItemImageAngle( ToolBoxItemId nItemId, Degree10 nAngle10 )
 {
     ImplToolItems::size_type nPos = GetItemPos( nItemId );
 
@@ -1009,7 +1009,7 @@ static Image ImplMirrorImage( const Image& rImage )
     return Image( aMirrBitmapEx );
 }
 
-void ToolBox::SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror )
+void ToolBox::SetItemImageMirrorMode( ToolBoxItemId nItemId, bool bMirror )
 {
     ImplToolItems::size_type nPos = GetItemPos( nItemId );
 
@@ -1031,13 +1031,13 @@ void ToolBox::SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror )
     }
 }
 
-Image ToolBox::GetItemImage(sal_uInt16 nItemId) const
+Image ToolBox::GetItemImage(ToolBoxItemId nItemId) const
 {
     ImplToolItem* pItem = ImplGetItem(nItemId);
     return pItem ? pItem->maImage : Image();
 }
 
-void ToolBox::SetItemText( sal_uInt16 nItemId, const OUString& rText )
+void ToolBox::SetItemText( ToolBoxItemId nItemId, const OUString& rText )
 {
     ImplToolItems::size_type nPos = GetItemPos( nItemId );
 
@@ -1067,7 +1067,7 @@ void ToolBox::SetItemText( sal_uInt16 nItemId, const OUString& rText )
     CallEventListeners( VclEventId::ToolboxItemTextChanged, reinterpret_cast< void* >( nPos ) );
 }
 
-const OUString& ToolBox::GetItemText( sal_uInt16 nItemId ) const
+const OUString& ToolBox::GetItemText( ToolBoxItemId nItemId ) const
 {
 
     ImplToolItem* pItem = ImplGetItem( nItemId );
@@ -1077,7 +1077,7 @@ const OUString& ToolBox::GetItemText( sal_uInt16 nItemId ) const
     return pItem->maText;
 }
 
-void ToolBox::SetItemWindow( sal_uInt16 nItemId, vcl::Window* pNewWindow )
+void ToolBox::SetItemWindow( ToolBoxItemId nItemId, vcl::Window* pNewWindow )
 {
     ImplToolItems::size_type nPos = GetItemPos( nItemId );
 
@@ -1092,7 +1092,7 @@ void ToolBox::SetItemWindow( sal_uInt16 nItemId, vcl::Window* pNewWindow )
     }
 }
 
-vcl::Window* ToolBox::GetItemWindow( sal_uInt16 nItemId ) const
+vcl::Window* ToolBox::GetItemWindow( ToolBoxItemId nItemId ) const
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
@@ -1117,12 +1117,12 @@ void ToolBox::EndSelection()
     }
 
     mnCurPos        = ITEM_NOTFOUND;
-    mnCurItemId     = 0;
-    mnDownItemId    = 0;
+    mnCurItemId     = ToolBoxItemId(0);
+    mnDownItemId    = ToolBoxItemId(0);
     mnMouseModifier = 0;
 }
 
-void ToolBox::SetItemDown( sal_uInt16 nItemId, bool bDown )
+void ToolBox::SetItemDown( ToolBoxItemId nItemId, bool bDown )
 {
     ImplToolItems::size_type nPos = GetItemPos( nItemId );
 
@@ -1157,12 +1157,12 @@ void ToolBox::SetItemDown( sal_uInt16 nItemId, bool bDown )
         Deactivate();
     }
 
-    mnCurItemId     = 0;
-    mnDownItemId    = 0;
+    mnCurItemId     = ToolBoxItemId(0);
+    mnDownItemId    = ToolBoxItemId(0);
     mnMouseModifier = 0;
 }
 
-void ToolBox::SetItemState( sal_uInt16 nItemId, TriState eState )
+void ToolBox::SetItemState( ToolBoxItemId nItemId, TriState eState )
 {
     ImplToolItems::size_type nPos = GetItemPos( nItemId );
 
@@ -1222,7 +1222,7 @@ void ToolBox::SetItemState( sal_uInt16 nItemId, TriState eState )
     CallEventListeners( VclEventId::ToolboxItemUpdated, reinterpret_cast< void* >(nPos) );
 }
 
-TriState ToolBox::GetItemState( sal_uInt16 nItemId ) const
+TriState ToolBox::GetItemState( ToolBoxItemId nItemId ) const
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
@@ -1232,7 +1232,7 @@ TriState ToolBox::GetItemState( sal_uInt16 nItemId ) const
         return TRISTATE_FALSE;
 }
 
-void ToolBox::EnableItem( sal_uInt16 nItemId, bool bEnable )
+void ToolBox::EnableItem( ToolBoxItemId nItemId, bool bEnable )
 {
     ImplToolItems::size_type nPos = GetItemPos( nItemId );
 
@@ -1260,7 +1260,7 @@ void ToolBox::EnableItem( sal_uInt16 nItemId, bool bEnable )
     CallEventListeners( bEnable ? VclEventId::ToolboxItemEnabled : VclEventId::ToolboxItemDisabled, reinterpret_cast< void* >( nPos ) );
 }
 
-bool ToolBox::IsItemEnabled( sal_uInt16 nItemId ) const
+bool ToolBox::IsItemEnabled( ToolBoxItemId nItemId ) const
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
@@ -1270,7 +1270,7 @@ bool ToolBox::IsItemEnabled( sal_uInt16 nItemId ) const
         return false;
 }
 
-void ToolBox::ShowItem( sal_uInt16 nItemId, bool bVisible )
+void ToolBox::ShowItem( ToolBoxItemId nItemId, bool bVisible )
 {
     ImplToolItems::size_type nPos = GetItemPos( nItemId );
     mpData->ImplClearLayoutData();
@@ -1286,7 +1286,7 @@ void ToolBox::ShowItem( sal_uInt16 nItemId, bool bVisible )
     }
 }
 
-bool ToolBox::IsItemClipped( sal_uInt16 nItemId ) const
+bool ToolBox::IsItemClipped( ToolBoxItemId nItemId ) const
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
@@ -1296,7 +1296,7 @@ bool ToolBox::IsItemClipped( sal_uInt16 nItemId ) const
         return false;
 }
 
-bool ToolBox::IsItemVisible( sal_uInt16 nItemId ) const
+bool ToolBox::IsItemVisible( ToolBoxItemId nItemId ) const
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
@@ -1306,7 +1306,7 @@ bool ToolBox::IsItemVisible( sal_uInt16 nItemId ) const
         return false;
 }
 
-bool ToolBox::IsItemReallyVisible( sal_uInt16 nItemId ) const
+bool ToolBox::IsItemReallyVisible( ToolBoxItemId nItemId ) const
 {
     // is the item on the visible area of the toolbox?
     bool bRet = false;
@@ -1322,7 +1322,7 @@ bool ToolBox::IsItemReallyVisible( sal_uInt16 nItemId ) const
     return bRet;
 }
 
-void ToolBox::SetItemCommand(sal_uInt16 nItemId, const OUString& rCommand)
+void ToolBox::SetItemCommand(ToolBoxItemId nItemId, const OUString& rCommand)
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
@@ -1330,7 +1330,7 @@ void ToolBox::SetItemCommand(sal_uInt16 nItemId, const OUString& rCommand)
         pItem->maCommandStr = rCommand;
 }
 
-OUString ToolBox::GetItemCommand( sal_uInt16 nItemId ) const
+OUString ToolBox::GetItemCommand( ToolBoxItemId nItemId ) const
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
@@ -1340,7 +1340,7 @@ OUString ToolBox::GetItemCommand( sal_uInt16 nItemId ) const
     return OUString();
 }
 
-void ToolBox::SetQuickHelpText( sal_uInt16 nItemId, const OUString& rText )
+void ToolBox::SetQuickHelpText( ToolBoxItemId nItemId, const OUString& rText )
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
@@ -1348,7 +1348,7 @@ void ToolBox::SetQuickHelpText( sal_uInt16 nItemId, const OUString& rText )
         pItem->maQuickHelpText = rText;
 }
 
-OUString ToolBox::GetQuickHelpText( sal_uInt16 nItemId ) const
+OUString ToolBox::GetQuickHelpText( ToolBoxItemId nItemId ) const
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
@@ -1358,7 +1358,7 @@ OUString ToolBox::GetQuickHelpText( sal_uInt16 nItemId ) const
         return OUString();
 }
 
-void ToolBox::SetHelpText( sal_uInt16 nItemId, const OUString& rText )
+void ToolBox::SetHelpText( ToolBoxItemId nItemId, const OUString& rText )
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
@@ -1366,12 +1366,12 @@ void ToolBox::SetHelpText( sal_uInt16 nItemId, const OUString& rText )
         pItem->maHelpText = rText;
 }
 
-const OUString& ToolBox::GetHelpText( sal_uInt16 nItemId ) const
+const OUString& ToolBox::GetHelpText( ToolBoxItemId nItemId ) const
 {
     return ImplGetHelpText( nItemId );
 }
 
-void ToolBox::SetHelpId( sal_uInt16 nItemId, const OString& rHelpId )
+void ToolBox::SetHelpId( ToolBoxItemId nItemId, const OString& rHelpId )
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
@@ -1411,7 +1411,7 @@ OUString ToolBox::GetDisplayText() const
     return mpData->m_pLayoutData ? mpData->m_pLayoutData->m_aDisplayText : OUString();
 }
 
-tools::Rectangle ToolBox::GetCharacterBounds( sal_uInt16 nItemID, tools::Long nIndex )
+tools::Rectangle ToolBox::GetCharacterBounds( ToolBoxItemId nItemID, tools::Long nIndex )
 {
     tools::Long nItemIndex = -1;
     if( ! mpData->m_pLayoutData )
@@ -1430,10 +1430,10 @@ tools::Rectangle ToolBox::GetCharacterBounds( sal_uInt16 nItemID, tools::Long nI
     return (mpData->m_pLayoutData && nItemIndex != -1) ? mpData->m_pLayoutData->GetCharacterBounds( nItemIndex+nIndex ) : tools::Rectangle();
 }
 
-tools::Long ToolBox::GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID )
+tools::Long ToolBox::GetIndexForPoint( const Point& rPoint, ToolBoxItemId& rItemID )
 {
     tools::Long nIndex = -1;
-    rItemID = 0;
+    rItemID = ToolBoxItemId(0);
     if( ! mpData->m_pLayoutData )
         ImplFillLayoutData();
     if( mpData->m_pLayoutData )
@@ -1545,7 +1545,7 @@ void ToolBox::UpdateCustomMenu()
     {
         if( rItem.IsClipped() )
         {
-            sal_uInt16 id = rItem.mnId + TOOLBOX_MENUITEM_START;
+            sal_uInt16 id = sal_uInt16(rItem.mnId) + TOOLBOX_MENUITEM_START;
             MenuItemBits nMenuItemBits = ConvertBitsFromToolBoxToMenu(rItem.mnBits);
             pMenu->InsertItem( id, rItem.maText, rItem.maImage, nMenuItemBits);
             pMenu->SetItemCommand( id, rItem.maCommandStr );
@@ -1562,7 +1562,7 @@ void ToolBox::UpdateCustomMenu()
     {
         if( rItem.IsItemHidden() )
         {
-            sal_uInt16 id = rItem.mnId + TOOLBOX_MENUITEM_START;
+            sal_uInt16 id = sal_uInt16(rItem.mnId) + TOOLBOX_MENUITEM_START;
             MenuItemBits nMenuItemBits = ConvertBitsFromToolBoxToMenu(rItem.mnBits);
             pMenu->InsertItem( id, rItem.maText, rItem.maImage, nMenuItemBits );
             pMenu->SetItemCommand( id, rItem.maCommandStr );
@@ -1578,7 +1578,7 @@ IMPL_LINK( ToolBox, ImplCustomMenuListener, VclMenuEvent&, rEvent, void )
     {
         sal_uInt16 id = GetMenu()->GetItemId( rEvent.GetItemPos() );
         if( id >= TOOLBOX_MENUITEM_START )
-            TriggerItem( id - TOOLBOX_MENUITEM_START );
+            TriggerItem( ToolBoxItemId(id - TOOLBOX_MENUITEM_START) );
     }
 }
 
@@ -1743,7 +1743,7 @@ void ToolBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
             if (type == ToolBoxItemType::BUTTON)
             {
                 auto childNode = rJsonWriter.startStruct();
-                int nId = GetItemId(i);
+                ToolBoxItemId nId = GetItemId(i);
                 if (!IsItemVisible(nId))
                     continue;
                 rJsonWriter.put("type", "toolitem");

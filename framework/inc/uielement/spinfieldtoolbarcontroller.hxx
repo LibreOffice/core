@@ -39,7 +39,7 @@ class SpinfieldToolbarController final : public ComplexToolbarController
         SpinfieldToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                     const css::uno::Reference< css::frame::XFrame >& rFrame,
                                     ToolBox* pToolBar,
-                                    sal_uInt16 nID,
+                                    ToolBoxItemId nID,
                                     sal_Int32 nWidth,
                                     const OUString& aCommand );
         virtual ~SpinfieldToolbarController() override;
