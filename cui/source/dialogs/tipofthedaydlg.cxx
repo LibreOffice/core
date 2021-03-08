@@ -42,6 +42,9 @@
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+//size of preview
+const Size ThumbSize(100, 120);
+
 TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/tipofthedaydialog.ui", "TipOfTheDayDialog")
     , m_pText(m_xBuilder->weld_label("lbText"))
@@ -52,8 +55,8 @@ TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
 {
     m_pShowTip->set_active(officecfg::Office::Common::Misc::ShowTipOfTheDay::get());
     m_pNext->connect_clicked(LINK(this, TipOfTheDayDialog, OnNextClick));
-
     m_nCurrentTip = officecfg::Office::Common::Misc::LastTipOfTheDayID::get();
+    m_pPreview->set_size_request(ThumbSize.Width(), ThumbSize.Height());
 
     const auto t0 = std::chrono::system_clock::now().time_since_epoch();
     m_nDay = std::chrono::duration_cast<std::chrono::hours>(t0).count() / 24;
@@ -176,6 +179,13 @@ void TipOfTheDayDialog::UpdateTip()
         aImageName = "tipoftheday.png";
     Graphic aGraphic;
     GraphicFilter::LoadGraphic(aURL + aImageName, OUString(), aGraphic);
+
+    if (!aGraphic.IsAnimated())
+    {
+        BitmapEx aBmpEx(aGraphic.GetBitmapEx());
+        if (aBmpEx.Scale(ThumbSize))
+            aGraphic = aBmpEx;
+    }
     m_aPreview.SetPreview(aGraphic);
 }
 
