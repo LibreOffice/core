@@ -52,6 +52,24 @@
       "revId": "b86d881540a7574f8eb0ebe80a12e52159e43fc1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e570ee7e_d2824cff",
+        "filename": "vcl/jsdialog/jsdialogbuilder.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1000865
+      },
+      "writtenOn": "2021-03-08T21:07:26Z",
+      "side": 1,
+      "message": "Here you have my changes, maybe did I miss something?\n\n+void JSInstanceBuilder::RememberWidget1(sal_uInt64 nWindowId, const OString\u0026 id, weld::Widget* pWidget)                    \n+{                                                                                                                          \n+    auto it \u003d GetLOKWeldWidgetsMap().find(nWindowId);                                                                      \n+    if (it !\u003d GetLOKWeldWidgetsMap().end())                                                                                \n+    {                                                                                                                      \n+        it-\u003esecond.erase(id);                                                                                              \n+        it-\u003esecond.insert(WidgetMap::value_type(id, pWidget));                                                             \n+    }                                                                                                                      \n+}   \n\n+                                                                                                                   [15/741]\n void JSInstanceBuilder::AddChildWidget(sal_uInt64 nWindowId, const OString\u0026 id, weld::Widget* pWidget)                     \n {                                                                                                                          \n     auto it \u003d GetLOKWeldWidgetsMap().find(nWindowId);                                                                      \n@@ -812,6 +822,7 @@ weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParen                        \n                                                             VclButtonsType eButtonType,                                    \n                                                             const OUString\u0026 rPrimaryMessage)                               \n {                                                                                                                          \n+    weld::MessageDialog* pRet;                                                                                             \n     SalInstanceWidget* pParentInstance \u003d dynamic_cast\u003cSalInstanceWidget*\u003e(pParent);                                        \n     SystemWindow* pParentWidget \u003d pParentInstance ? pParentInstance-\u003egetSystemWindow() : nullptr;                          \n     VclPtrInstance\u003c::MessageDialog\u003e xMessageDialog(pParentWidget, rPrimaryMessage, eMessageType,                           \n@@ -831,7 +842,12 @@ weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParen\n\n     xMessageDialog-\u003eSetLOKTunnelingState(false);\n     InsertWindowToMap(xMessageDialog-\u003eGetLOKWindowId());\n-    return new JSMessageDialog(xMessageDialog, nullptr, true);\n+\n+    pRet \u003d new JSMessageDialog(xMessageDialog, nullptr, true);\n+    if (pRet)\n+        RememberWidget1(xMessageDialog-\u003eGetLOKWindowId(), \"__DIALOG__\", pRet);\n+\n+    return pRet;\n }",
+      "parentUuid": "2062a9be_13b9b2ce",
+      "revId": "b86d881540a7574f8eb0ebe80a12e52159e43fc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
