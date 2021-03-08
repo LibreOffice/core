@@ -518,13 +518,16 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
     if( mpViewShell )
         mpOldActiveWindow = mpViewShell->GetActiveWindow();
 
+    maUpdateTimer.SetDebugName("SlideShowImpl maUpdateTimer");
     maUpdateTimer.SetInvokeHandler(LINK(this, SlideshowImpl, updateHdl));
     // Priority must not be too high or we'll starve input handling etc.
     maUpdateTimer.SetPriority(TaskPriority::REPAINT);
 
+    maDeactivateTimer.SetDebugName("SlideShowImpl maDeactivateTimer");
     maDeactivateTimer.SetInvokeHandler(LINK(this, SlideshowImpl, deactivateHdl));
     maDeactivateTimer.SetTimeout( 20 );
 
+    maInputFreezeTimer.SetDebugName("SlideShowImpl maInputFreezeTimer");
     maInputFreezeTimer.SetInvokeHandler( LINK( this, SlideshowImpl, ReadyForNextInputHdl ) );
     maInputFreezeTimer.SetTimeout( 20 );
 

@@ -39,8 +39,10 @@ ToolTip::ToolTip (SlideSorter& rSlideSorter)
       maShowTimer(),
       maHiddenTimer()
 {
+    maShowTimer.SetDebugName("sd::slidesorter::view::ToolTip maShowTimer");
     maShowTimer.SetTimeout(HelpSettings::GetTipDelay());
     maShowTimer.SetInvokeHandler(LINK(this, ToolTip, DelayTrigger));
+    maHiddenTimer.SetDebugName("sd::slidesorter::view::ToolTip maHiddenTimer");
     maHiddenTimer.SetTimeout(HelpSettings::GetTipDelay());
 }
 
