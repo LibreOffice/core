@@ -40,7 +40,8 @@ enum class ContentTypeId
     INDEX          = 9,
     POSTIT         = 10,
     DRAWOBJECT     = 11,
-    LAST           = DRAWOBJECT,
+    TEXTFIELD          = 12,
+    LAST           = TEXTFIELD,
     UNKNOWN        = -1
 };
 

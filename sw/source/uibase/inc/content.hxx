@@ -88,6 +88,22 @@ public:
     const SwTextINetFormat* GetINetAttr() const { return pINetAttr; }
 };
 
+class SwTextFieldContent final : public SwContent
+{
+    const SwFormatField* m_pFormatField;
+public:
+    SwTextFieldContent(const SwContentType* pCnt,
+                       const OUString& rName,
+                       const SwFormatField* pFormatField,
+                       tools::Long nYPos)
+        : SwContent(pCnt, rName, nYPos),
+          m_pFormatField(pFormatField)
+    {}
+
+    const SwFormatField* GetFormatField() const {return m_pFormatField;}
+    virtual bool IsProtect() const override;
+};
+
 class SwPostItContent final : public SwContent
 {
     const SwFormatField*     pField;
