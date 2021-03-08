@@ -289,7 +289,7 @@ OUString MacabCommonStatement::getTableName() const
 void MacabCommonStatement::setMacabFields(MacabResultSet *pResult) const
 {
     ::rtl::Reference<connectivity::OSQLColumns> xColumns;   // selected columns
-    MacabResultSetMetaData *pMeta;              // meta information - holds the list of AddressBook fields
+    rtl::Reference<MacabResultSetMetaData> pMeta;           // meta information - holds the list of AddressBook fields
 
     xColumns = m_aSQLIterator.getSelectColumns();
     if (!xColumns.is())

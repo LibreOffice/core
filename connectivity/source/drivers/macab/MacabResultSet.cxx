@@ -33,6 +33,7 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include <resource/sharedresources.hxx>
+#include <rtl/ref.hxx>
 #include <strings.hrc>
 
 using namespace connectivity::macab;
@@ -64,14 +65,14 @@ MacabResultSet::~MacabResultSet()
 
 void MacabResultSet::allMacabRecords()
 {
-    MacabConnection* pConnection = static_cast< MacabConnection *>(m_xStatement->getConnection().get());
+    rtl::Reference<MacabConnection> pConnection = static_cast< MacabConnection *>(m_xStatement->getConnection().get());
 
     m_aMacabRecords = pConnection->getAddressBook()->getMacabRecords(m_sTableName);
 }
 
 void MacabResultSet::someMacabRecords(const MacabCondition *pCondition)
 {
-    MacabConnection* pConnection = static_cast< MacabConnection *>(m_xStatement->getConnection().get());
+    rtl::Reference<MacabConnection> pConnection = static_cast< MacabConnection *>(m_xStatement->getConnection().get());
     MacabRecords* allRecords;
 
     allRecords = pConnection->getAddressBook()->getMacabRecords(m_sTableName);
