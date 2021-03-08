@@ -2484,6 +2484,11 @@ bool ScTable::HandleRefArrayForParallelism( SCCOL nCol, SCROW nRow1, SCROW nRow2
     if ( !IsColValid( nCol ) || !ValidRow( nRow1 ) || !ValidRow( nRow2 ) )
         return false;
 
+    mpHiddenCols->makeReady();
+    mpHiddenRows->makeReady();
+    mpFilteredCols->makeReady();
+    mpFilteredRows->makeReady();
+
     return aCol[nCol].HandleRefArrayForParallelism(nRow1, nRow2, mxGroup);
 }
 
