@@ -213,6 +213,8 @@ class SVXCORE_DLLPUBLIC SvxColorToolBoxControl final : public cppu::ImplInherita
     ColorSelectFunction m_aColorSelectFunction;
     DECL_LINK(SelectedHdl, const NamedColor&, void);
 
+    weld::Window* GetParentFrame() const;
+
 public:
     explicit SvxColorToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
     virtual ~SvxColorToolBoxControl() override;

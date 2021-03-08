@@ -36,7 +36,8 @@ ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogContr
     : SfxTabPage(pPage, pController, "modules/scalc/ui/tpviewpage.ui", "TpViewPage", &rArgSet)
     , m_xGridLB(m_xBuilder->weld_combo_box("grid"))
     , m_xColorFT(m_xBuilder->weld_label("color_label"))
-    , m_xColorLB(new ColorListBox(m_xBuilder->weld_menu_button("color"), pController->getDialog()))
+    , m_xColorLB(new ColorListBox(m_xBuilder->weld_menu_button("color"),
+                [this]{ return GetDialogController()->getDialog(); }))
     , m_xBreakCB(m_xBuilder->weld_check_button("break"))
     , m_xGuideLineCB(m_xBuilder->weld_check_button("guideline"))
     , m_xFormulaCB(m_xBuilder->weld_check_button("formula"))

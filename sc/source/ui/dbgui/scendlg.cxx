@@ -41,7 +41,7 @@ ScNewScenarioDlg::ScNewScenarioDlg(weld::Window* pParent, const OUString& rName,
     , m_xEdName(m_xBuilder->weld_entry("name"))
     , m_xEdComment(m_xBuilder->weld_text_view("comment"))
     , m_xCbShowFrame(m_xBuilder->weld_check_button("showframe"))
-    , m_xLbColor(new ColorListBox(m_xBuilder->weld_menu_button("bordercolor"), pParent))
+    , m_xLbColor(new ColorListBox(m_xBuilder->weld_menu_button("bordercolor"), [this] { return m_xDialog.get(); }))
     , m_xCbTwoWay(m_xBuilder->weld_check_button("copyback"))
     , m_xCbCopyAll(m_xBuilder->weld_check_button("copysheet"))
     , m_xCbProtect(m_xBuilder->weld_check_button("preventchanges"))

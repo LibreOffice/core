@@ -32,7 +32,8 @@ EffectPropertyPanel::EffectPropertyPanel(vcl::Window* pParent,
     , maSoftEdgeRadiusController(SID_ATTR_SOFTEDGE_RADIUS, *pBindings, *this)
     , mpBindings(pBindings)
     , mxGlowRadius(m_xBuilder->weld_metric_spin_button("LB_GLOW_RADIUS", FieldUnit::POINT))
-    , mxLBGlowColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_GLOW_COLOR"), GetFrameWeld()))
+    , mxLBGlowColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_GLOW_COLOR"),
+                                     [this] { return GetFrameWeld(); }))
     , mxGlowTransparency(
           m_xBuilder->weld_metric_spin_button("LB_GLOW_TRANSPARENCY", FieldUnit::PERCENT))
     , mxFTRadiusSoftEdge(m_xBuilder->weld_label("radiussoftedge"))

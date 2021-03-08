@@ -1568,19 +1568,23 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage(weld::Container* pPage, weld::D
                                                  const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "modules/swriter/ui/optredlinepage.ui", "OptRedLinePage", &rSet)
     , m_xInsertLB(m_xBuilder->weld_combo_box("insert"))
-    , m_xInsertColorLB(new ColorListBox(m_xBuilder->weld_menu_button("insertcolor"), pController->getDialog()))
+    , m_xInsertColorLB(new ColorListBox(m_xBuilder->weld_menu_button("insertcolor"),
+                [this]{ return GetDialogController()->getDialog(); }))
     , m_xInsertedPreviewWN(new SvxFontPrevWindow)
     , m_xInsertedPreview(new weld::CustomWeld(*m_xBuilder, "insertedpreview", *m_xInsertedPreviewWN))
     , m_xDeletedLB(m_xBuilder->weld_combo_box("deleted"))
-    , m_xDeletedColorLB(new ColorListBox(m_xBuilder->weld_menu_button("deletedcolor"), pController->getDialog()))
+    , m_xDeletedColorLB(new ColorListBox(m_xBuilder->weld_menu_button("deletedcolor"),
+                [this]{ return GetDialogController()->getDialog(); }))
     , m_xDeletedPreviewWN(new SvxFontPrevWindow)
     , m_xDeletedPreview(new weld::CustomWeld(*m_xBuilder, "deletedpreview", *m_xDeletedPreviewWN))
     , m_xChangedLB(m_xBuilder->weld_combo_box("changed"))
-    , m_xChangedColorLB(new ColorListBox(m_xBuilder->weld_menu_button("changedcolor"), pController->getDialog()))
+    , m_xChangedColorLB(new ColorListBox(m_xBuilder->weld_menu_button("changedcolor"),
+                [this]{ return GetDialogController()->getDialog(); }))
     , m_xChangedPreviewWN(new SvxFontPrevWindow)
     , m_xChangedPreview(new weld::CustomWeld(*m_xBuilder, "changedpreview", *m_xChangedPreviewWN))
     , m_xMarkPosLB(m_xBuilder->weld_combo_box("markpos"))
-    , m_xMarkColorLB(new ColorListBox(m_xBuilder->weld_menu_button("markcolor"), pController->getDialog()))
+    , m_xMarkColorLB(new ColorListBox(m_xBuilder->weld_menu_button("markcolor"),
+                [this]{ return GetDialogController()->getDialog(); }))
     , m_xMarkPreviewWN(new SwMarkPreview)
     , m_xMarkPreview(new weld::CustomWeld(*m_xBuilder, "markpreview", *m_xMarkPreviewWN))
 {

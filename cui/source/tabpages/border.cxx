@@ -292,7 +292,8 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     , m_xUserDefFT(m_xBuilder->weld_label("userdefft"))
     , m_xFrameSelWin(new weld::CustomWeld(*m_xBuilder, "framesel", m_aFrameSel))
     , m_xLbLineStyle(new SvtLineListBox(m_xBuilder->weld_menu_button("linestylelb")))
-    , m_xLbLineColor(new ColorListBox(m_xBuilder->weld_menu_button("linecolorlb"), pController->getDialog()))
+    , m_xLbLineColor(new ColorListBox(m_xBuilder->weld_menu_button("linecolorlb"),
+                [this]{ return GetDialogController()->getDialog(); }))
     , m_xLineWidthMF(m_xBuilder->weld_metric_spin_button("linewidthmf", FieldUnit::POINT))
     , m_xSpacingFrame(m_xBuilder->weld_container("spacing"))
     , m_xLeftFT(m_xBuilder->weld_label("leftft"))
@@ -310,7 +311,8 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     , m_xFtShadowSize(m_xBuilder->weld_label("distanceft"))
     , m_xEdShadowSize(m_xBuilder->weld_metric_spin_button("distancemf", FieldUnit::MM))
     , m_xFtShadowColor(m_xBuilder->weld_label("shadowcolorft"))
-    , m_xLbShadowColor(new ColorListBox(m_xBuilder->weld_menu_button("shadowcolorlb"), pController->getDialog()))
+    , m_xLbShadowColor(new ColorListBox(m_xBuilder->weld_menu_button("shadowcolorlb"),
+                [this]{ return GetDialogController()->getDialog(); }))
     , m_xPropertiesFrame(m_xBuilder->weld_container("properties"))
     , m_xMergeWithNextCB(m_xBuilder->weld_check_button("mergewithnext"))
     , m_xMergeAdjacentBordersCB(m_xBuilder->weld_check_button("mergeadjacent"))

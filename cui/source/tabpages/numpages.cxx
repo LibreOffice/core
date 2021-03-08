@@ -1032,7 +1032,8 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(weld::Container* pPage, weld::DialogC
     , m_xCharFmtFT(m_xBuilder->weld_label("charstyleft"))
     , m_xCharFmtLB(m_xBuilder->weld_combo_box("charstyle"))
     , m_xBulColorFT(m_xBuilder->weld_label("colorft"))
-    , m_xBulColLB(new ColorListBox(m_xBuilder->weld_menu_button("color"), pController->getDialog()))
+    , m_xBulColLB(new ColorListBox(m_xBuilder->weld_menu_button("color"),
+                [this]{ return GetDialogController()->getDialog(); }))
     , m_xBulRelSizeFT(m_xBuilder->weld_label("relsizeft"))
     , m_xBulRelSizeMF(m_xBuilder->weld_metric_spin_button("relsize", FieldUnit::PERCENT))
     , m_xAllLevelFT(m_xBuilder->weld_label("sublevelsft"))

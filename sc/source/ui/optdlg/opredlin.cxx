@@ -30,10 +30,14 @@
 
 ScRedlineOptionsTabPage::ScRedlineOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "modules/scalc/ui/optchangespage.ui", "OptChangesPage", &rSet)
-    , m_xContentColorLB(new ColorListBox(m_xBuilder->weld_menu_button("changes"), pController->getDialog()))
-    , m_xRemoveColorLB(new ColorListBox(m_xBuilder->weld_menu_button("deletions"), pController->getDialog()))
-    , m_xInsertColorLB(new ColorListBox(m_xBuilder->weld_menu_button("entries"), pController->getDialog()))
-    , m_xMoveColorLB(new ColorListBox(m_xBuilder->weld_menu_button("insertions"), pController->getDialog()))
+    , m_xContentColorLB(new ColorListBox(m_xBuilder->weld_menu_button("changes"),
+                [this]{ return GetDialogController()->getDialog(); }))
+    , m_xRemoveColorLB(new ColorListBox(m_xBuilder->weld_menu_button("deletions"),
+                [this]{ return GetDialogController()->getDialog(); }))
+    , m_xInsertColorLB(new ColorListBox(m_xBuilder->weld_menu_button("entries"),
+                [this]{ return GetDialogController()->getDialog(); }))
+    , m_xMoveColorLB(new ColorListBox(m_xBuilder->weld_menu_button("insertions"),
+                [this]{ return GetDialogController()->getDialog(); }))
 {
     m_xContentColorLB->SetSlotId(SID_AUTHOR_COLOR);
     m_xRemoveColorLB->SetSlotId(SID_AUTHOR_COLOR);

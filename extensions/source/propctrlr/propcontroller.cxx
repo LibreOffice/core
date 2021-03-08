@@ -774,10 +774,10 @@ namespace pcr
 
             case PropertyControlType::ColorListBox:
             {
-                weld::Window* pTopLevel = PropertyHandlerHelper::getDialogParentFrame(m_xContext);
+                auto lambda = [this]{ return PropertyHandlerHelper::getDialogParentFrame(m_xContext); };
                 std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/colorlistbox.ui", m_xContext));
                 auto pMenuButton = xBuilder->weld_menu_button("colorlistbox");
-                rtl::Reference<OColorControl> pControl = new OColorControl(std::make_unique<ColorListBox>(std::move(pMenuButton), pTopLevel), std::move(xBuilder), bCreateReadOnly);
+                rtl::Reference<OColorControl> pControl = new OColorControl(std::make_unique<ColorListBox>(std::move(pMenuButton), lambda), std::move(xBuilder), bCreateReadOnly);
                 pControl->SetModifyHandler();
                 xControl = pControl;
                 break;

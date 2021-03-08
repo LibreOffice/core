@@ -201,7 +201,7 @@ private:
 SdColorPropertyBox::SdColorPropertyBox(weld::Label* pLabel, weld::Container* pParent, weld::Window* pTopLevel, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
     : SdPropertySubControl(pParent)
     , maModifyLink(rModifyHdl)
-    , mxControl(new ColorListBox(mxBuilder->weld_menu_button("color"), pTopLevel))
+    , mxControl(new ColorListBox(mxBuilder->weld_menu_button("color"), [pTopLevel]{ return pTopLevel; }))
 {
     mxControl->SetSelectHdl(LINK(this, SdColorPropertyBox, OnSelect));
     mxControl->set_help_id(HID_SD_CUSTOMANIMATIONPANE_COLORPROPERTYBOX);
@@ -913,7 +913,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage(weld::Container* pPar
     , mxFTAfterEffect(mxBuilder->weld_label("aeffect_label"))
     , mxLBAfterEffect(mxBuilder->weld_combo_box("aeffect_list"))
     , mxFTDimColor(mxBuilder->weld_label("dim_color_label"))
-    , mxCLBDimColor(new ColorListBox(mxBuilder->weld_menu_button("dim_color_list"), pDialog))
+    , mxCLBDimColor(new ColorListBox(mxBuilder->weld_menu_button("dim_color_list"), [pDialog]{ return pDialog; }))
     , mxFTTextAnim(mxBuilder->weld_label("text_animation_label"))
     , mxLBTextAnim(mxBuilder->weld_combo_box("text_animation_list"))
     , mxMFTextDelay(mxBuilder->weld_metric_spin_button("text_delay", FieldUnit::PERCENT))

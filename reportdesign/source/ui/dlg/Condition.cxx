@@ -157,8 +157,8 @@ void Condition::SetBackgroundDropdownClick()
                             m_aColorStatus,
                             SID_BACKGROUND_COLOR,
                             nullptr,
-                            m_pDialog,
                             MenuOrToolMenuButton(m_xActions.get(), "background"),
+                            [this]{ return m_pDialog; },
                             m_aBackColorWrapper));
 
     m_xActions->set_item_popover("background", m_xBackColorFloat->getTopLevel());
@@ -172,8 +172,8 @@ void Condition::SetForegroundDropdownClick()
                             m_aColorStatus,
                             SID_ATTR_CHAR_COLOR2,
                             nullptr,
-                            m_pDialog,
                             MenuOrToolMenuButton(m_xActions.get(), "foreground"),
+                            [this]{ return m_pDialog; },
                             m_aForeColorWrapper));
 
     m_xActions->set_item_popover("foreground", m_xForeColorFloat->getTopLevel());

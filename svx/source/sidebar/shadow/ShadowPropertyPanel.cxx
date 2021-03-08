@@ -45,7 +45,7 @@ ShadowPropertyPanel::ShadowPropertyPanel(
     nXY(0),
     mxShowShadow(m_xBuilder->weld_check_button("SHOW_SHADOW")),
     mxShadowDistance(m_xBuilder->weld_metric_spin_button("LB_DISTANCE", FieldUnit::POINT)),
-    mxLBShadowColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_SHADOW_COLOR"), GetFrameWeld())),
+    mxLBShadowColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_SHADOW_COLOR"), [this]{ return GetFrameWeld(); })),
     mxShadowAngle(m_xBuilder->weld_combo_box("LB_ANGLE")),
     mxFTAngle(m_xBuilder->weld_label("angle")),
     mxFTDistance(m_xBuilder->weld_label("distance")),
