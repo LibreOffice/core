@@ -372,7 +372,7 @@ static bool lcl_IsNotWholeNumber16(const OUString& rText)
 }
 
 //Text replace onto m_aBufferString
-void SmParser::Replace(sal_Int32 nPos, sal_Int32 nLen, const OUString& rText)
+void SmParser5::Replace(sal_Int32 nPos, sal_Int32 nLen, const OUString& rText)
 {
     assert(nPos + nLen <= m_aBufferString.getLength()); //checks if length allows text replace
 
@@ -382,7 +382,7 @@ void SmParser::Replace(sal_Int32 nPos, sal_Int32 nLen, const OUString& rText)
     m_nTokenIndex = m_nTokenIndex + nChg;
 }
 
-void SmParser::NextToken() //Central part of the parser
+void SmParser5::NextToken() //Central part of the parser
 {
     sal_Int32 nBufLen = m_aBufferString.getLength();
     ParseResult aRes;
@@ -942,7 +942,7 @@ void SmParser::NextToken() //Central part of the parser
         m_nBufferIndex = aRes.EndPos;
 }
 
-void SmParser::NextTokenColor(SmTokenType dvipload)
+void SmParser5::NextTokenColor(SmTokenType dvipload)
 {
     sal_Int32 nBufLen = m_aBufferString.getLength();
     ParseResult aRes;
@@ -1021,7 +1021,7 @@ void SmParser::NextTokenColor(SmTokenType dvipload)
         m_nBufferIndex = aRes.EndPos;
 }
 
-void SmParser::NextTokenFontSize()
+void SmParser5::NextTokenFontSize()
 {
     sal_Int32 nBufLen = m_aBufferString.getLength();
     ParseResult aRes;
@@ -1147,7 +1147,7 @@ SmNodeArray buildNodeArray(std::vector<std::unique_ptr<SmNode>>& rSubNodes)
 // grammar
 /*************************************************************************************************/
 
-std::unique_ptr<SmTableNode> SmParser::DoTable()
+std::unique_ptr<SmTableNode> SmParser5::DoTable()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -1164,7 +1164,7 @@ std::unique_ptr<SmTableNode> SmParser::DoTable()
     return xSNode;
 }
 
-std::unique_ptr<SmNode> SmParser::DoAlign(bool bUseExtraSpaces)
+std::unique_ptr<SmNode> SmParser5::DoAlign(bool bUseExtraSpaces)
 // parse alignment info (if any), then go on with rest of expression
 {
     DepthProtect aDepthGuard(m_nParseDepth);
@@ -1193,7 +1193,7 @@ std::unique_ptr<SmNode> SmParser::DoAlign(bool bUseExtraSpaces)
 }
 
 // Postcondition: m_aCurToken.eType == TEND || m_aCurToken.eType == TNEWLINE
-std::unique_ptr<SmNode> SmParser::DoLine()
+std::unique_ptr<SmNode> SmParser5::DoLine()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -1223,7 +1223,7 @@ std::unique_ptr<SmNode> SmParser::DoLine()
     return xSNode;
 }
 
-std::unique_ptr<SmNode> SmParser::DoExpression(bool bUseExtraSpaces)
+std::unique_ptr<SmNode> SmParser5::DoExpression(bool bUseExtraSpaces)
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -1246,7 +1246,7 @@ std::unique_ptr<SmNode> SmParser::DoExpression(bool bUseExtraSpaces)
     }
 }
 
-std::unique_ptr<SmNode> SmParser::DoRelation()
+std::unique_ptr<SmNode> SmParser5::DoRelation()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -1270,7 +1270,7 @@ std::unique_ptr<SmNode> SmParser::DoRelation()
     return xFirst;
 }
 
-std::unique_ptr<SmNode> SmParser::DoSum()
+std::unique_ptr<SmNode> SmParser5::DoSum()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -1294,7 +1294,7 @@ std::unique_ptr<SmNode> SmParser::DoSum()
     return xFirst;
 }
 
-std::unique_ptr<SmNode> SmParser::DoProduct()
+std::unique_ptr<SmNode> SmParser5::DoProduct()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -1368,7 +1368,7 @@ std::unique_ptr<SmNode> SmParser::DoProduct()
     return xFirst;
 }
 
-std::unique_ptr<SmNode> SmParser::DoSubSup(TG nActiveGroup, std::unique_ptr<SmNode> xGivenNode)
+std::unique_ptr<SmNode> SmParser5::DoSubSup(TG nActiveGroup, std::unique_ptr<SmNode> xGivenNode)
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -1453,7 +1453,7 @@ std::unique_ptr<SmNode> SmParser::DoSubSup(TG nActiveGroup, std::unique_ptr<SmNo
     return pNode;
 }
 
-std::unique_ptr<SmNode> SmParser::DoSubSupEvaluate(std::unique_ptr<SmNode> xGivenNode)
+std::unique_ptr<SmNode> SmParser5::DoSubSupEvaluate(std::unique_ptr<SmNode> xGivenNode)
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -1505,7 +1505,7 @@ std::unique_ptr<SmNode> SmParser::DoSubSupEvaluate(std::unique_ptr<SmNode> xGive
     return pNode;
 }
 
-std::unique_ptr<SmNode> SmParser::DoOpSubSup()
+std::unique_ptr<SmNode> SmParser5::DoOpSubSup()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -1519,7 +1519,7 @@ std::unique_ptr<SmNode> SmParser::DoOpSubSup()
     return xNode;
 }
 
-std::unique_ptr<SmNode> SmParser::DoPower()
+std::unique_ptr<SmNode> SmParser5::DoPower()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -1531,7 +1531,7 @@ std::unique_ptr<SmNode> SmParser::DoPower()
     return xNode;
 }
 
-std::unique_ptr<SmBlankNode> SmParser::DoBlank()
+std::unique_ptr<SmBlankNode> SmParser5::DoBlank()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -1554,7 +1554,7 @@ std::unique_ptr<SmBlankNode> SmParser::DoBlank()
     return pBlankNode;
 }
 
-std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
+std::unique_ptr<SmNode> SmParser5::DoTerm(bool bGroupNumberIdent)
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -1781,7 +1781,7 @@ std::unique_ptr<SmNode> SmParser::DoTerm(bool bGroupNumberIdent)
     }
 }
 
-std::unique_ptr<SmNode> SmParser::DoEscape()
+std::unique_ptr<SmNode> SmParser5::DoEscape()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -1819,7 +1819,7 @@ std::unique_ptr<SmNode> SmParser::DoEscape()
     }
 }
 
-std::unique_ptr<SmOperNode> SmParser::DoOperator()
+std::unique_ptr<SmOperNode> SmParser5::DoOperator()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -1840,7 +1840,7 @@ std::unique_ptr<SmOperNode> SmParser::DoOperator()
     return xSNode;
 }
 
-std::unique_ptr<SmNode> SmParser::DoOper()
+std::unique_ptr<SmNode> SmParser5::DoOper()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -1885,7 +1885,7 @@ std::unique_ptr<SmNode> SmParser::DoOper()
     return pNode;
 }
 
-std::unique_ptr<SmStructureNode> SmParser::DoUnOper()
+std::unique_ptr<SmStructureNode> SmParser5::DoUnOper()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -1972,7 +1972,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoUnOper()
     return xSNode;
 }
 
-std::unique_ptr<SmStructureNode> SmParser::DoAttribute()
+std::unique_ptr<SmStructureNode> SmParser5::DoAttribute()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -2011,7 +2011,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoAttribute()
     return xSNode;
 }
 
-std::unique_ptr<SmStructureNode> SmParser::DoFontAttribute()
+std::unique_ptr<SmStructureNode> SmParser5::DoFontAttribute()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -2045,7 +2045,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoFontAttribute()
     }
 }
 
-std::unique_ptr<SmStructureNode> SmParser::DoColor()
+std::unique_ptr<SmStructureNode> SmParser5::DoColor()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -2135,7 +2135,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoColor()
     return xNode;
 }
 
-std::unique_ptr<SmStructureNode> SmParser::DoFont()
+std::unique_ptr<SmStructureNode> SmParser5::DoFont()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -2163,7 +2163,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoFont()
     return xNode;
 }
 
-std::unique_ptr<SmStructureNode> SmParser::DoFontSize()
+std::unique_ptr<SmStructureNode> SmParser5::DoFontSize()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
     std::unique_ptr<SmFontNode> pFontNode(new SmFontNode(m_aCurToken));
@@ -2225,7 +2225,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoFontSize()
     return pFontNode;
 }
 
-std::unique_ptr<SmStructureNode> SmParser::DoBrace()
+std::unique_ptr<SmStructureNode> SmParser5::DoBrace()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -2338,7 +2338,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoBrace()
     return DoError(eError);
 }
 
-std::unique_ptr<SmBracebodyNode> SmParser::DoBracebody(bool bIsLeftRight)
+std::unique_ptr<SmBracebodyNode> SmParser5::DoBracebody(bool bIsLeftRight)
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -2386,7 +2386,7 @@ std::unique_ptr<SmBracebodyNode> SmParser::DoBracebody(bool bIsLeftRight)
     return pBody;
 }
 
-std::unique_ptr<SmNode> SmParser::DoEvaluate()
+std::unique_ptr<SmNode> SmParser5::DoEvaluate()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -2421,7 +2421,7 @@ std::unique_ptr<SmNode> SmParser::DoEvaluate()
     return xSNode;
 }
 
-std::unique_ptr<SmTextNode> SmParser::DoFunction()
+std::unique_ptr<SmTextNode> SmParser5::DoFunction()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -2436,7 +2436,7 @@ std::unique_ptr<SmTextNode> SmParser::DoFunction()
     return pNode;
 }
 
-std::unique_ptr<SmTableNode> SmParser::DoBinom()
+std::unique_ptr<SmTableNode> SmParser5::DoBinom()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -2450,7 +2450,7 @@ std::unique_ptr<SmTableNode> SmParser::DoBinom()
     return xSNode;
 }
 
-std::unique_ptr<SmBinVerNode> SmParser::DoFrac()
+std::unique_ptr<SmBinVerNode> SmParser5::DoFrac()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -2465,7 +2465,7 @@ std::unique_ptr<SmBinVerNode> SmParser::DoFrac()
     return xSNode;
 }
 
-std::unique_ptr<SmStructureNode> SmParser::DoStack()
+std::unique_ptr<SmStructureNode> SmParser5::DoStack()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -2489,7 +2489,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoStack()
     return xSNode;
 }
 
-std::unique_ptr<SmStructureNode> SmParser::DoMatrix()
+std::unique_ptr<SmStructureNode> SmParser5::DoMatrix()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -2542,7 +2542,7 @@ std::unique_ptr<SmStructureNode> SmParser::DoMatrix()
     return std::unique_ptr<SmStructureNode>(xMNode.release());
 }
 
-std::unique_ptr<SmSpecialNode> SmParser::DoSpecial()
+std::unique_ptr<SmSpecialNode> SmParser5::DoSpecial()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -2585,7 +2585,7 @@ std::unique_ptr<SmSpecialNode> SmParser::DoSpecial()
     return pNode;
 }
 
-std::unique_ptr<SmGlyphSpecialNode> SmParser::DoGlyphSpecial()
+std::unique_ptr<SmGlyphSpecialNode> SmParser5::DoGlyphSpecial()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -2594,7 +2594,7 @@ std::unique_ptr<SmGlyphSpecialNode> SmParser::DoGlyphSpecial()
     return pNode;
 }
 
-std::unique_ptr<SmExpressionNode> SmParser::DoError(SmParseError eError)
+std::unique_ptr<SmExpressionNode> SmParser5::DoError(SmParseError eError)
 {
     DepthProtect aDepthGuard(m_nParseDepth);
 
@@ -2621,7 +2621,7 @@ std::unique_ptr<SmExpressionNode> SmParser::DoError(SmParseError eError)
 
 // end grammar
 
-SmParser::SmParser()
+SmParser5::SmParser5()
     : AbstractSmParser()
     , m_nCurError(0)
     , m_nBufferIndex(0)
@@ -2636,9 +2636,9 @@ SmParser::SmParser()
 {
 }
 
-SmParser::~SmParser() {}
+SmParser5::~SmParser5() {}
 
-std::unique_ptr<SmTableNode> SmParser::Parse(const OUString& rBuffer)
+std::unique_ptr<SmTableNode> SmParser5::Parse(const OUString& rBuffer)
 {
     m_aUsedSymbols.clear();
 
@@ -2655,7 +2655,7 @@ std::unique_ptr<SmTableNode> SmParser::Parse(const OUString& rBuffer)
     return DoTable();
 }
 
-std::unique_ptr<SmNode> SmParser::ParseExpression(const OUString& rBuffer)
+std::unique_ptr<SmNode> SmParser5::ParseExpression(const OUString& rBuffer)
 {
     m_aBufferString = convertLineEnd(rBuffer, LINEEND_LF);
     m_nBufferIndex = 0;
@@ -2670,7 +2670,7 @@ std::unique_ptr<SmNode> SmParser::ParseExpression(const OUString& rBuffer)
     return DoExpression();
 }
 
-const SmErrorDesc* SmParser::NextError()
+const SmErrorDesc* SmParser5::NextError()
 {
     if (!m_aErrDescList.empty())
         if (m_nCurError > 0)
@@ -2684,7 +2684,7 @@ const SmErrorDesc* SmParser::NextError()
         return nullptr;
 }
 
-const SmErrorDesc* SmParser::PrevError()
+const SmErrorDesc* SmParser5::PrevError()
 {
     if (!m_aErrDescList.empty())
         if (m_nCurError < static_cast<int>(m_aErrDescList.size() - 1))
@@ -2698,7 +2698,7 @@ const SmErrorDesc* SmParser::PrevError()
         return nullptr;
 }
 
-const SmErrorDesc* SmParser::GetError() const
+const SmErrorDesc* SmParser5::GetError() const
 {
     if (m_aErrDescList.empty())
         return nullptr;

@@ -25,7 +25,7 @@
 
 #include "parsebase.hxx"
 
-class SmParser : public AbstractSmParser
+class SmParser5 : public AbstractSmParser
 {
     OUString m_aBufferString;
     SmToken m_aCurToken;
@@ -45,8 +45,8 @@ class SmParser : public AbstractSmParser
     // pointer to System locale's CharClass, which is alive inside SM_MOD()
     const CharClass* m_pSysCC;
 
-    SmParser(const SmParser&) = delete;
-    SmParser& operator=(const SmParser&) = delete;
+    SmParser5(const SmParser5&) = delete;
+    SmParser5& operator=(const SmParser5&) = delete;
 
     // Moves between tokens inside starmath code.
     void NextToken();
@@ -94,8 +94,8 @@ class SmParser : public AbstractSmParser
     // end of grammar
 
 public:
-    SmParser();
-    virtual ~SmParser();
+    SmParser5();
+    virtual ~SmParser5();
 
     /** Parse rBuffer to formula tree */
     std::unique_ptr<SmTableNode> Parse(const OUString& rBuffer);
@@ -115,6 +115,6 @@ public:
     const std::set<OUString>& GetUsedSymbols() const { return m_aUsedSymbols; }
 };
 
-inline bool SmParser::TokenInGroup(TG nGroup) { return bool(m_aCurToken.nGroup & nGroup); }
+inline bool SmParser5::TokenInGroup(TG nGroup) { return bool(m_aCurToken.nGroup & nGroup); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

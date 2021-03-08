@@ -65,7 +65,7 @@ void ParseTest::tearDown()
  */
 void ParseTest::testMinus()
 {
-    auto pNode = SmParser().Parse("-1.2");
+    auto pNode = SmParser5().Parse("-1.2");
     CPPUNIT_ASSERT_EQUAL(size_t(1), pNode->GetNumSubNodes());
     const SmNode *pNode0 = pNode->GetSubNode(0);
     CPPUNIT_ASSERT(pNode0);
@@ -98,7 +98,7 @@ void ParseTest::testMinus()
  */
 void ParseTest::testNospace()
 {
-    auto pNode = SmParser().Parse("nospace{ nitalic d {F(x) G(x)} }");
+    auto pNode = SmParser5().Parse("nospace{ nitalic d {F(x) G(x)} }");
     CPPUNIT_ASSERT_EQUAL(size_t(1), pNode->GetNumSubNodes());
     const SmNode *pNode0 = pNode->GetSubNode(0);
     CPPUNIT_ASSERT(pNode0);
