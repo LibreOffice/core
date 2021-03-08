@@ -2327,7 +2327,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                  " storage!"));
             if ( !xLibrariesStor.is() )
             {
-                throw uno::RuntimeException("null returned from openStorageElement");
+                throw uno::RuntimeException("null returned from openStorageElement",static_cast< cppu::OWeakObject * >(this));
             }
 
             xLibraryStor = xLibrariesStor->openStorageElement( Name, embed::ElementModes::READ );
@@ -2337,7 +2337,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                  " storage!"));
             if ( !xLibrariesStor.is() )
             {
-                throw uno::RuntimeException("null returned from openStorageElement");
+                throw uno::RuntimeException("null returned from openStorageElement",static_cast< cppu::OWeakObject * >(this));
             }
 #if OSL_DEBUG_LEVEL > 0
         }
