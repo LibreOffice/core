@@ -1561,14 +1561,14 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             SbxArrayRef xArgs = new SbxArray;
             SbxVariableRef xVar = new SbxVariable;
             xVar->PutString( pFlyFormat->GetName() );
-            xArgs->Put32( xVar.get(), 1 );
+            xArgs->Put(xVar.get(), 1);
 
             xVar = new SbxVariable;
             if( SvMacroItemId::SwFrmKeyInputAlpha == nEvent )
                 xVar->PutChar( aCh );
             else
                 xVar->PutUShort( rKeyCode.GetModifier() | rKeyCode.GetCode() );
-            xArgs->Put32( xVar.get(), 2 );
+            xArgs->Put(xVar.get(), 2);
 
             OUString sRet;
             rSh.ExecMacro( *pMacro, &sRet, xArgs.get() );
@@ -4208,21 +4208,21 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                             SbxArrayRef xArgs = new SbxArray;
                             SbxVariableRef xVar = new SbxVariable;
                             xVar->PutString( pFlyFormat->GetName() );
-                            xArgs->Put32( xVar.get(), ++nPos );
+                            xArgs->Put(xVar.get(), ++nPos);
 
                             if( SvMacroItemId::SwFrmResize == nEvent )
                             {
                                 xVar = new SbxVariable;
                                 xVar->PutUShort( static_cast< sal_uInt16 >(g_eSdrMoveHdl) );
-                                xArgs->Put32( xVar.get(), ++nPos );
+                                xArgs->Put(xVar.get(), ++nPos);
                             }
 
                             xVar = new SbxVariable;
                             xVar->PutLong( aDocPt.X() - aSttPt.X() );
-                            xArgs->Put32( xVar.get(), ++nPos );
+                            xArgs->Put(xVar.get(), ++nPos);
                             xVar = new SbxVariable;
                             xVar->PutLong( aDocPt.Y() - aSttPt.Y() );
-                            xArgs->Put32( xVar.get(), ++nPos );
+                            xArgs->Put(xVar.get(), ++nPos);
 
                             OUString sRet;
 
@@ -4668,25 +4668,25 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             SbxArrayRef xArgs = new SbxArray;
                             SbxVariableRef xVar = new SbxVariable;
                             xVar->PutString( pFlyFormat->GetName() );
-                            xArgs->Put32( xVar.get(), ++nPos );
+                            xArgs->Put(xVar.get(), ++nPos);
 
                             if( SvMacroItemId::SwFrmResize == nEvent )
                             {
                                 xVar = new SbxVariable;
                                 xVar->PutUShort( static_cast< sal_uInt16 >(eOldSdrMoveHdl) );
-                                xArgs->Put32( xVar.get(), ++nPos );
+                                xArgs->Put(xVar.get(), ++nPos);
                             }
 
                             xVar = new SbxVariable;
                             xVar->PutLong( aDocPt.X() - aSttPt.X() );
-                            xArgs->Put32( xVar.get(), ++nPos );
+                            xArgs->Put(xVar.get(), ++nPos);
                             xVar = new SbxVariable;
                             xVar->PutLong( aDocPt.Y() - aSttPt.Y() );
-                            xArgs->Put32( xVar.get(), ++nPos );
+                            xArgs->Put(xVar.get(), ++nPos);
 
                             xVar = new SbxVariable;
                             xVar->PutUShort( 1 );
-                            xArgs->Put32( xVar.get(), ++nPos );
+                            xArgs->Put(xVar.get(), ++nPos);
 
                             ReleaseMouse();
 

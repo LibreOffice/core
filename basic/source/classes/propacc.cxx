@@ -149,7 +149,7 @@ void RTL_Impl_CreatePropertySet( SbxArray& rPar )
 {
     // We need at least one parameter
     // TODO: In this case < 2 is not correct ;-)
-    if ( rPar.Count32() < 2 )
+    if (rPar.Count() < 2)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
@@ -159,11 +159,11 @@ void RTL_Impl_CreatePropertySet( SbxArray& rPar )
 
     Reference< XInterface > xInterface = static_cast<OWeakObject*>(new SbPropertyValues());
 
-    SbxVariableRef refVar = rPar.Get32(0);
+    SbxVariableRef refVar = rPar.Get(0);
     if( xInterface.is() )
     {
         // Set PropertyValues
-        Any aArgAsAny = sbxToUnoValue( rPar.Get32(1),
+        Any aArgAsAny = sbxToUnoValue(rPar.Get(1),
                 cppu::UnoType<Sequence<PropertyValue>>::get() );
         auto pArg = o3tl::doAccess<Sequence<PropertyValue>>(aArgAsAny);
         Reference< XPropertyAccess > xPropAcc( xInterface, UNO_QUERY );

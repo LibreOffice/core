@@ -379,11 +379,11 @@ Sequence< OUString > GetMethodNames( const ScriptDocument& rDocument, const OUSt
             pMod = xModule.get();
         }
 
-        sal_uInt32 nCount = pMod->GetMethods()->Count32();
+        sal_uInt32 nCount = pMod->GetMethods()->Count();
         sal_uInt32 nRealCount = nCount;
         for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
-            SbMethod* pMethod = static_cast<SbMethod*>(pMod->GetMethods()->Get32( i ));
+            SbMethod* pMethod = static_cast<SbMethod*>(pMod->GetMethods()->Get(i));
             if( pMethod->IsHidden() )
                 --nRealCount;
         }
@@ -392,7 +392,7 @@ Sequence< OUString > GetMethodNames( const ScriptDocument& rDocument, const OUSt
         sal_uInt32 iTarget = 0;
         for ( sal_uInt32 i = 0 ; i < nCount; ++i )
         {
-            SbMethod* pMethod = static_cast<SbMethod*>(pMod->GetMethods()->Get32( i ));
+            SbMethod* pMethod = static_cast<SbMethod*>(pMod->GetMethods()->Get(i));
             if( pMethod->IsHidden() )
                 continue;
             SAL_WARN_IF( !pMethod, "basctl.basicide","Method not found! (NULL)" );

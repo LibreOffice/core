@@ -247,7 +247,7 @@ SbxValue* SbxValue::TheRealValue( bool bObjInObjError ) const
                     if( pDimArray )
                         p = pDimArray->Get( pPar );
                     else
-                        p = pArray->Get32( pPar->Get32( 1 )->GetInteger() );
+                        p = pArray->Get(pPar->Get(1)->GetInteger());
                     break;
                 }
             }

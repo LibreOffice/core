@@ -104,7 +104,7 @@ void SbRtl_CallByName(StarBASIC *, SbxArray & rPar, bool)
     const sal_Int16 vbSet       = 8;
 
     // At least 3 parameter needed plus function itself -> 4
-    sal_uInt32 nParCount = rPar.Count32();
+    sal_uInt32 nParCount = rPar.Count();
     if ( nParCount < 4 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -112,7 +112,7 @@ void SbRtl_CallByName(StarBASIC *, SbxArray & rPar, bool)
     }
 
     // 1. parameter is object
-    SbxBase* pObjVar = rPar.Get32(1)->GetObject();
+    SbxBase* pObjVar = rPar.Get(1)->GetObject();
     SbxObject* pObj = nullptr;
     if( pObjVar )
         pObj = dynamic_cast<SbxObject*>( pObjVar );
@@ -126,10 +126,10 @@ void SbRtl_CallByName(StarBASIC *, SbxArray & rPar, bool)
     }
 
     // 2. parameter is ProcedureName
-    OUString aNameStr = rPar.Get32(2)->GetOUString();
+    OUString aNameStr = rPar.Get(2)->GetOUString();
 
     // 3. parameter is CallType
-    sal_Int16 nCallType = rPar.Get32(3)->GetInteger();
+    sal_Int16 nCallType = rPar.Get(3)->GetInteger();
 
     //SbxObject* pFindObj = NULL;
     SbxVariable* pFindVar = pObj->Find( aNameStr, SbxClassType::DontCare );
@@ -147,7 +147,7 @@ void SbRtl_CallByName(StarBASIC *, SbxArray & rPar, bool)
             aVals.eType = SbxVARIANT;
             pFindVar->Get( aVals );
 
-            SbxVariableRef refVar = rPar.Get32(0);
+            SbxVariableRef refVar = rPar.Get(0);
             refVar->Put( aVals );
         }
         break;
@@ -159,7 +159,7 @@ void SbRtl_CallByName(StarBASIC *, SbxArray & rPar, bool)
                 StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
                 return;
             }
-            SbxVariableRef pValVar = rPar.Get32(4);
+            SbxVariableRef pValVar = rPar.Get(4);
             if( nCallType == vbLet )
             {
                 SbxValues aVals;
@@ -196,13 +196,13 @@ void SbRtl_CallByName(StarBASIC *, SbxArray & rPar, bool)
                 xArray = new SbxArray;
                 for( sal_uInt32 i = 0 ; i < nMethParamCount ; i++ )
                 {
-                    SbxVariable* pPar = rPar.Get32( i + 4 );
-                    xArray->Put32( pPar, i + 1 );
+                    SbxVariable* pPar = rPar.Get(i + 4);
+                    xArray->Put(pPar, i + 1);
                 }
             }
 
             // Call method
-            SbxVariableRef refVar = rPar.Get32(0);
+            SbxVariableRef refVar = rPar.Get(0);
             if( xArray.is() )
                 pMeth->SetParameters( xArray.get() );
             pMeth->Call( refVar.get() );
@@ -217,46 +217,46 @@ void SbRtl_CallByName(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_CBool(StarBASIC *, SbxArray & rPar, bool) // JSM
 {
     bool bVal = false;
-    if ( rPar.Count32() == 2 )
+    if (rPar.Count() == 2)
     {
-        SbxVariable *pSbxVariable = rPar.Get32(1);
+        SbxVariable* pSbxVariable = rPar.Get(1);
         bVal = pSbxVariable->GetBool();
     }
     else
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    rPar.Get32(0)->PutBool(bVal);
+    rPar.Get(0)->PutBool(bVal);
 }
 
 void SbRtl_CByte(StarBASIC *, SbxArray & rPar, bool) // JSM
 {
     sal_uInt8 nByte = 0;
-    if ( rPar.Count32() == 2 )
+    if (rPar.Count() == 2)
     {
-        SbxVariable *pSbxVariable = rPar.Get32(1);
+        SbxVariable* pSbxVariable = rPar.Get(1);
         nByte = pSbxVariable->GetByte();
     }
     else
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    rPar.Get32(0)->PutByte(nByte);
+    rPar.Get(0)->PutByte(nByte);
 }
 
 void SbRtl_CCur(StarBASIC *, SbxArray & rPar, bool)
 {
     sal_Int64 nCur = 0;
-    if ( rPar.Count32() == 2 )
+    if (rPar.Count() == 2)
     {
-        SbxVariable *pSbxVariable = rPar.Get32(1);
+        SbxVariable* pSbxVariable = rPar.Get(1);
         nCur = pSbxVariable->GetCurrency();
     }
     else
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    rPar.Get32(0)->PutCurrency( nCur );
+    rPar.Get(0)->PutCurrency(nCur);
 }
 
 void SbRtl_CDec(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
@@ -266,18 +266,18 @@ void SbRtl_CDec(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
 
 #ifdef _WIN32
     SbxDecimal* pDec = nullptr;
-    if ( rPar.Count32() == 2 )
+    if (rPar.Count() == 2)
     {
-        SbxVariable *pSbxVariable = rPar.Get32(1);
+        SbxVariable* pSbxVariable = rPar.Get(1);
         pDec = pSbxVariable->GetDecimal();
     }
     else
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    rPar.Get32(0)->PutDecimal( pDec );
+    rPar.Get(0)->PutDecimal(pDec);
 #else
-    rPar.Get32(0)->PutEmpty();
+    rPar.Get(0)->PutEmpty();
     StarBASIC::Error(ERRCODE_BASIC_NOT_IMPLEMENTED);
 #endif
 }
@@ -285,24 +285,24 @@ void SbRtl_CDec(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
 void SbRtl_CDate(StarBASIC *, SbxArray & rPar, bool) // JSM
 {
     double nVal = 0.0;
-    if ( rPar.Count32() == 2 )
+    if (rPar.Count() == 2)
     {
-        SbxVariable *pSbxVariable = rPar.Get32(1);
+        SbxVariable* pSbxVariable = rPar.Get(1);
         nVal = pSbxVariable->GetDate();
     }
     else
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    rPar.Get32(0)->PutDate(nVal);
+    rPar.Get(0)->PutDate(nVal);
 }
 
 void SbRtl_CDbl(StarBASIC *, SbxArray & rPar, bool)  // JSM
 {
     double nVal = 0.0;
-    if ( rPar.Count32() == 2 )
+    if (rPar.Count() == 2)
     {
-        SbxVariable *pSbxVariable = rPar.Get32(1);
+        SbxVariable* pSbxVariable = rPar.Get(1);
         if( pSbxVariable->GetType() == SbxSTRING )
         {
             // #41690
@@ -323,45 +323,45 @@ void SbRtl_CDbl(StarBASIC *, SbxArray & rPar, bool)  // JSM
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
 
-    rPar.Get32(0)->PutDouble(nVal);
+    rPar.Get(0)->PutDouble(nVal);
 }
 
 void SbRtl_CInt(StarBASIC *, SbxArray & rPar, bool)  // JSM
 {
     sal_Int16 nVal = 0;
-    if ( rPar.Count32() == 2 )
+    if (rPar.Count() == 2)
     {
-        SbxVariable *pSbxVariable = rPar.Get32(1);
+        SbxVariable* pSbxVariable = rPar.Get(1);
         nVal = pSbxVariable->GetInteger();
     }
     else
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    rPar.Get32(0)->PutInteger(nVal);
+    rPar.Get(0)->PutInteger(nVal);
 }
 
 void SbRtl_CLng(StarBASIC *, SbxArray & rPar, bool)  // JSM
 {
     sal_Int32 nVal = 0;
-    if ( rPar.Count32() == 2 )
+    if (rPar.Count() == 2)
     {
-        SbxVariable *pSbxVariable = rPar.Get32(1);
+        SbxVariable* pSbxVariable = rPar.Get(1);
         nVal = pSbxVariable->GetLong();
     }
     else
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    rPar.Get32(0)->PutLong(nVal);
+    rPar.Get(0)->PutLong(nVal);
 }
 
 void SbRtl_CSng(StarBASIC *, SbxArray & rPar, bool)  // JSM
 {
     float nVal = float(0.0);
-    if ( rPar.Count32() == 2 )
+    if (rPar.Count() == 2)
     {
-        SbxVariable *pSbxVariable = rPar.Get32(1);
+        SbxVariable* pSbxVariable = rPar.Get(1);
         if( pSbxVariable->GetType() == SbxSTRING )
         {
             // #41690
@@ -383,65 +383,65 @@ void SbRtl_CSng(StarBASIC *, SbxArray & rPar, bool)  // JSM
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    rPar.Get32(0)->PutSingle(nVal);
+    rPar.Get(0)->PutSingle(nVal);
 }
 
 void SbRtl_CStr(StarBASIC *, SbxArray & rPar, bool)  // JSM
 {
     OUString aString;
-    if ( rPar.Count32() == 2 )
+    if (rPar.Count() == 2)
     {
-        SbxVariable *pSbxVariable = rPar.Get32(1);
+        SbxVariable* pSbxVariable = rPar.Get(1);
         aString = pSbxVariable->GetOUString();
     }
     else
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    rPar.Get32(0)->PutString(aString);
+    rPar.Get(0)->PutString(aString);
 }
 
 void SbRtl_CVar(StarBASIC *, SbxArray & rPar, bool)  // JSM
 {
     SbxValues aVals( SbxVARIANT );
-    if ( rPar.Count32() == 2 )
+    if (rPar.Count() == 2)
     {
-        SbxVariable *pSbxVariable = rPar.Get32(1);
+        SbxVariable* pSbxVariable = rPar.Get(1);
         pSbxVariable->Get( aVals );
     }
     else
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    rPar.Get32(0)->Put( aVals );
+    rPar.Get(0)->Put(aVals);
 }
 
 void SbRtl_CVErr(StarBASIC *, SbxArray & rPar, bool)
 {
     sal_Int16 nErrCode = 0;
-    if ( rPar.Count32() == 2 )
+    if (rPar.Count() == 2)
     {
-        SbxVariable *pSbxVariable = rPar.Get32(1);
+        SbxVariable* pSbxVariable = rPar.Get(1);
         nErrCode = pSbxVariable->GetInteger();
     }
     else
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    rPar.Get32(0)->PutErr( nErrCode );
+    rPar.Get(0)->PutErr(nErrCode);
 }
 
 void SbRtl_Iif(StarBASIC *, SbxArray & rPar, bool) // JSM
 {
-    if ( rPar.Count32() == 4 )
+    if (rPar.Count() == 4)
     {
-        if (rPar.Get32(1)->GetBool())
+        if (rPar.Get(1)->GetBool())
         {
-            *rPar.Get32(0) = *rPar.Get32(2);
+            *rPar.Get(0) = *rPar.Get(2);
         }
         else
         {
-            *rPar.Get32(0) = *rPar.Get32(3);
+            *rPar.Get(0) = *rPar.Get(3);
         }
     }
     else
@@ -452,14 +452,14 @@ void SbRtl_Iif(StarBASIC *, SbxArray & rPar, bool) // JSM
 
 void SbRtl_GetSystemType(StarBASIC *, SbxArray & rPar, bool)
 {
-    if ( rPar.Count32() != 1 )
+    if (rPar.Count() != 1)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
     else
     {
         // Removed for SRC595
-        rPar.Get32(0)->PutInteger( -1 );
+        rPar.Get(0)->PutInteger(-1);
     }
 }
 
@@ -468,7 +468,7 @@ void SbRtl_GetGUIType(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
     (void)pBasic;
     (void)bWrite;
 
-    if ( rPar.Count32() != 1 )
+    if (rPar.Count() != 1)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
@@ -476,63 +476,63 @@ void SbRtl_GetGUIType(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
     {
         // 17.7.2000 Make simple solution for testtool / fat office
 #if   defined(_WIN32)
-        rPar.Get32(0)->PutInteger( 1 );
+        rPar.Get(0)->PutInteger(1);
 #elif defined(UNX)
-        rPar.Get32(0)->PutInteger( 4 );
+        rPar.Get(0)->PutInteger(4);
 #else
-        rPar.Get32(0)->PutInteger( -1 );
+        rPar.Get(0)->PutInteger(-1);
 #endif
     }
 }
 
 void SbRtl_Red(StarBASIC *, SbxArray & rPar, bool)
 {
-    if ( rPar.Count32() != 2 )
+    if (rPar.Count() != 2)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
     else
     {
-        sal_Int32 nRGB = rPar.Get32(1)->GetLong();
+        sal_Int32 nRGB = rPar.Get(1)->GetLong();
         nRGB &= 0x00FF0000;
         nRGB >>= 16;
-        rPar.Get32(0)->PutInteger( static_cast<sal_Int16>(nRGB) );
+        rPar.Get(0)->PutInteger(static_cast<sal_Int16>(nRGB));
     }
 }
 
 void SbRtl_Green(StarBASIC *, SbxArray & rPar, bool)
 {
-    if ( rPar.Count32() != 2 )
+    if (rPar.Count() != 2)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
     else
     {
-        sal_Int32 nRGB = rPar.Get32(1)->GetLong();
+        sal_Int32 nRGB = rPar.Get(1)->GetLong();
         nRGB &= 0x0000FF00;
         nRGB >>= 8;
-        rPar.Get32(0)->PutInteger( static_cast<sal_Int16>(nRGB) );
+        rPar.Get(0)->PutInteger(static_cast<sal_Int16>(nRGB));
     }
 }
 
 void SbRtl_Blue(StarBASIC *, SbxArray & rPar, bool)
 {
-    if ( rPar.Count32() != 2 )
+    if (rPar.Count() != 2)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
     else
     {
-        sal_Int32 nRGB = rPar.Get32(1)->GetLong();
+        sal_Int32 nRGB = rPar.Get(1)->GetLong();
         nRGB &= 0x000000FF;
-        rPar.Get32(0)->PutInteger( static_cast<sal_Int16>(nRGB) );
+        rPar.Get(0)->PutInteger(static_cast<sal_Int16>(nRGB));
     }
 }
 
 
 void SbRtl_Switch(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nCount = rPar.Count32();
+    sal_uInt32 nCount = rPar.Count();
     if( !(nCount & 0x0001 ))
     {
         // number of arguments must be odd
@@ -541,21 +541,21 @@ void SbRtl_Switch(StarBASIC *, SbxArray & rPar, bool)
     sal_uInt32 nCurExpr = 1;
     while( nCurExpr < (nCount-1) )
     {
-        if( rPar.Get32( nCurExpr )->GetBool())
+        if (rPar.Get(nCurExpr)->GetBool())
         {
-            (*rPar.Get32(0)) = *(rPar.Get32(nCurExpr+1));
+            (*rPar.Get(0)) = *(rPar.Get(nCurExpr + 1));
             return;
         }
         nCurExpr += 2;
     }
-    rPar.Get32(0)->PutNull();
+    rPar.Get(0)->PutNull();
 }
 
 //i#64882# Common wait impl for existing Wait and new WaitUntil
 // rtl functions
 void Wait_Impl( bool bDurationBased, SbxArray& rPar )
 {
-    if( rPar.Count32() != 2 )
+    if (rPar.Count() != 2)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
@@ -563,14 +563,14 @@ void Wait_Impl( bool bDurationBased, SbxArray& rPar )
     tools::Long nWait = 0;
     if ( bDurationBased )
     {
-        double dWait = rPar.Get32(1)->GetDouble();
+        double dWait = rPar.Get(1)->GetDouble();
         double dNow = Now_Impl();
         double dSecs = ( dWait - dNow ) * 24.0 * 3600.0;
         nWait = static_cast<tools::Long>( dSecs * 1000 ); // wait in thousands of sec
     }
     else
     {
-        nWait = rPar.Get32(1)->GetLong();
+        nWait = rPar.Get(1)->GetLong();
     }
     if( nWait < 0 )
     {
@@ -606,57 +606,58 @@ void SbRtl_DoEvents(StarBASIC *, SbxArray & rPar, bool)
 // we already process application events etc. in between
 // basic runtime pcode ( on a timed basis )
     // always return 0
-    rPar.Get32(0)->PutInteger( 0 );
+    rPar.Get(0)->PutInteger(0);
     Application::Reschedule( true );
 }
 
 void SbRtl_GetGUIVersion(StarBASIC *, SbxArray & rPar, bool)
 {
-    if ( rPar.Count32() != 1 )
+    if (rPar.Count() != 1)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
     else
     {
         // Removed for SRC595
-        rPar.Get32(0)->PutLong( -1 );
+        rPar.Get(0)->PutLong(-1);
     }
 }
 
 void SbRtl_Choose(StarBASIC *, SbxArray & rPar, bool)
 {
-    if ( rPar.Count32() < 2 )
+    if (rPar.Count() < 2)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    sal_Int16 nIndex = rPar.Get32(1)->GetInteger();
-    sal_uInt32 nCount = rPar.Count32();
+    sal_Int16 nIndex = rPar.Get(1)->GetInteger();
+    sal_uInt32 nCount = rPar.Count();
     nCount--;
     if( nCount == 1 || nIndex > sal::static_int_cast<sal_Int16>(nCount-1) || nIndex < 1 )
     {
-        rPar.Get32(0)->PutNull();
+        rPar.Get(0)->PutNull();
         return;
     }
-    (*rPar.Get32(0)) = *(rPar.Get32(nIndex+1));
+    (*rPar.Get(0)) = *(rPar.Get(nIndex + 1));
 }
 
 
 void SbRtl_Trim(StarBASIC *, SbxArray & rPar, bool)
 {
-    if ( rPar.Count32() < 2 )
+    if (rPar.Count() < 2)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
     else
     {
-        OUString aStr(comphelper::string::strip(rPar.Get32(1)->GetOUString(), ' '));
-        rPar.Get32(0)->PutString(aStr);
+        OUString aStr(comphelper::string::strip(rPar.Get(1)->GetOUString(), ' '));
+        rPar.Get(0)->PutString(aStr);
     }
 }
 
 void SbRtl_GetSolarVersion(StarBASIC *, SbxArray & rPar, bool)
 {
-    rPar.Get32(0)->PutLong( LIBO_VERSION_MAJOR * 10000 + LIBO_VERSION_MINOR * 100 + LIBO_VERSION_MICRO * 1);
+    rPar.Get(0)->PutLong(LIBO_VERSION_MAJOR * 10000 + LIBO_VERSION_MINOR * 100
+                         + LIBO_VERSION_MICRO * 1);
 }
 
 void SbRtl_TwipsPerPixelX(StarBASIC *, SbxArray & rPar, bool)
@@ -670,7 +671,7 @@ void SbRtl_TwipsPerPixelX(StarBASIC *, SbxArray & rPar, bool)
         aSize = pDevice->PixelToLogic( aSize, aMap );
         nResult = aSize.Width() / 100;
     }
-    rPar.Get32(0)->PutLong( nResult );
+    rPar.Get(0)->PutLong(nResult);
 }
 
 void SbRtl_TwipsPerPixelY(StarBASIC *, SbxArray & rPar, bool)
@@ -684,17 +685,17 @@ void SbRtl_TwipsPerPixelY(StarBASIC *, SbxArray & rPar, bool)
         aSize = pDevice->PixelToLogic( aSize, aMap );
         nResult = aSize.Height() / 100;
     }
-    rPar.Get32(0)->PutLong( nResult );
+    rPar.Get(0)->PutLong(nResult);
 }
 
 
 void SbRtl_FreeLibrary(StarBASIC *, SbxArray & rPar, bool)
 {
-    if ( rPar.Count32() != 2 )
+    if (rPar.Count() != 2)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    GetSbData()->pInst->GetDllMgr()->FreeDll( rPar.Get32(1)->GetOUString() );
+    GetSbData()->pInst->GetDllMgr()->FreeDll(rPar.Get(1)->GetOUString());
 }
 bool IsBaseIndexOne()
 {
@@ -713,28 +714,28 @@ bool IsBaseIndexOne()
 void SbRtl_Array(StarBASIC *, SbxArray & rPar, bool)
 {
     SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
-    sal_uInt32 nArraySize = rPar.Count32() - 1;
+    sal_uInt32 nArraySize = rPar.Count() - 1;
     bool bIncIndex = IsBaseIndexOne();
     if( nArraySize )
     {
         if ( bIncIndex )
         {
-            pArray->AddDim32( 1, sal::static_int_cast<sal_Int32>(nArraySize) );
+            pArray->AddDim(1, sal::static_int_cast<sal_Int32>(nArraySize));
         }
         else
         {
-            pArray->AddDim32( 0, sal::static_int_cast<sal_Int32>(nArraySize) - 1 );
+            pArray->AddDim(0, sal::static_int_cast<sal_Int32>(nArraySize) - 1);
         }
     }
     else
     {
-        pArray->unoAddDim32( 0, -1 );
+        pArray->unoAddDim(0, -1);
     }
 
     // insert parameters into the array
     for( sal_uInt32 i = 0 ; i < nArraySize ; i++ )
     {
-        SbxVariable* pVar = rPar.Get32(i+1);
+        SbxVariable* pVar = rPar.Get(i + 1);
         SbxVariable* pNew = new SbxEnsureParentVariable(*pVar);
         pNew->SetFlag( SbxFlagBits::Write );
         sal_Int32 aIdx[1];
@@ -743,11 +744,11 @@ void SbRtl_Array(StarBASIC *, SbxArray & rPar, bool)
         {
             ++aIdx[0];
         }
-        pArray->Put32(pNew, aIdx);
+        pArray->Put(pNew, aIdx);
     }
 
     // return array
-    SbxVariableRef refVar = rPar.Get32(0);
+    SbxVariableRef refVar = rPar.Get(0);
     SbxFlagBits nFlags = refVar->GetFlags();
     refVar->ResetFlag( SbxFlagBits::Fixed );
     refVar->PutObject( pArray );
@@ -766,25 +767,25 @@ void SbRtl_Array(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_DimArray(StarBASIC *, SbxArray & rPar, bool)
 {
     SbxDimArray * pArray = new SbxDimArray( SbxVARIANT );
-    sal_uInt32 nArrayDims = rPar.Count32() - 1;
+    sal_uInt32 nArrayDims = rPar.Count() - 1;
     if( nArrayDims > 0 )
     {
         for( sal_uInt32 i = 0; i < nArrayDims ; i++ )
         {
-            sal_Int32 ub = rPar.Get32(i+1)->GetLong();
+            sal_Int32 ub = rPar.Get(i + 1)->GetLong();
             if( ub < 0 )
             {
                 StarBASIC::Error( ERRCODE_BASIC_OUT_OF_RANGE );
                 ub = 0;
             }
-            pArray->AddDim32( 0, ub );
+            pArray->AddDim(0, ub);
         }
     }
     else
     {
-        pArray->unoAddDim32( 0, -1 );
+        pArray->unoAddDim(0, -1);
     }
-    SbxVariableRef refVar = rPar.Get32(0);
+    SbxVariableRef refVar = rPar.Get(0);
     SbxFlagBits nFlags = refVar->GetFlags();
     refVar->ResetFlag( SbxFlagBits::Fixed );
     refVar->PutObject( pArray );
@@ -818,13 +819,13 @@ void SbRtl_DimArray(StarBASIC *, SbxArray & rPar, bool)
 // 1st parameter = the object's name as string
 void SbRtl_FindObject(StarBASIC *, SbxArray & rPar, bool)
 {
-    if ( rPar.Count32() < 2 )
+    if (rPar.Count() < 2)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
-    OUString aNameStr = rPar.Get32(1)->GetOUString();
+    OUString aNameStr = rPar.Get(1)->GetOUString();
 
     SbxBase* pFind =  StarBASIC::FindSBXInCurrentScope( aNameStr );
     SbxObject* pFindObj = nullptr;
@@ -832,7 +833,7 @@ void SbRtl_FindObject(StarBASIC *, SbxArray & rPar, bool)
     {
         pFindObj = dynamic_cast<SbxObject*>( pFind );
     }
-    SbxVariableRef refVar = rPar.Get32(0);
+    SbxVariableRef refVar = rPar.Get(0);
     refVar->PutObject( pFindObj );
 }
 
@@ -841,13 +842,13 @@ void SbRtl_FindObject(StarBASIC *, SbxArray & rPar, bool)
 // 2nd parameter = the property's name as string
 void SbRtl_FindPropertyObject(StarBASIC *, SbxArray & rPar, bool)
 {
-    if ( rPar.Count32() < 3 )
+    if (rPar.Count() < 3)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
-    SbxBase* pObjVar = rPar.Get32(1)->GetObject();
+    SbxBase* pObjVar = rPar.Get(1)->GetObject();
     SbxObject* pObj = nullptr;
     if( pObjVar )
     {
@@ -857,7 +858,7 @@ void SbRtl_FindPropertyObject(StarBASIC *, SbxArray & rPar, bool)
         if (auto pSbxVar = dynamic_cast<const SbxVariable*>( pObjVar))
             pObj = dynamic_cast<SbxObject*>( pSbxVar->GetObject() );
 
-    OUString aNameStr = rPar.Get32(2)->GetOUString();
+    OUString aNameStr = rPar.Get(2)->GetOUString();
 
     SbxObject* pFindObj = nullptr;
     if( pObj )
@@ -870,7 +871,7 @@ void SbRtl_FindPropertyObject(StarBASIC *, SbxArray & rPar, bool)
         StarBASIC::Error( ERRCODE_BASIC_BAD_PARAMETER );
     }
 
-    SbxVariableRef refVar = rPar.Get32(0);
+    SbxVariableRef refVar = rPar.Get(0);
     refVar->PutObject( pFindObj );
 }
 
@@ -1092,7 +1093,7 @@ static bool lcl_WriteReadSbxArray( SbxDimArray& rArr, SvStream* pStrm,
 {
     SAL_WARN_IF( nCurDim <= 0,"basic", "Bad Dim");
     sal_Int32 nLower, nUpper;
-    if( !rArr.GetDim32( nCurDim, nLower, nUpper ) )
+    if (!rArr.GetDim(nCurDim, nLower, nUpper))
         return false;
     for(sal_Int32 nCur = nLower; nCur <= nUpper; nCur++ )
     {
@@ -1101,7 +1102,7 @@ static bool lcl_WriteReadSbxArray( SbxDimArray& rArr, SvStream* pStrm,
             lcl_WriteReadSbxArray(rArr, pStrm, bBinary, nCurDim-1, pOtherDims, bWrite);
         else
         {
-            SbxVariable* pVar = rArr.Get32( pOtherDims );
+            SbxVariable* pVar = rArr.Get(pOtherDims);
             bool bRet;
             if( bWrite )
                 bRet = lcl_WriteSbxVariable(*pVar, pStrm, bBinary, 0, true );
@@ -1116,13 +1117,13 @@ static bool lcl_WriteReadSbxArray( SbxDimArray& rArr, SvStream* pStrm,
 
 static void PutGet( SbxArray& rPar, bool bPut )
 {
-    if ( rPar.Count32() != 4 )
+    if (rPar.Count() != 4)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
-    sal_Int16 nFileNo = rPar.Get32(1)->GetInteger();
-    SbxVariable* pVar2 = rPar.Get32(2);
+    sal_Int16 nFileNo = rPar.Get(1)->GetInteger();
+    SbxVariable* pVar2 = rPar.Get(2);
     SbxDataType eType2 = pVar2->GetType();
     bool bHasRecordNo = (eType2 != SbxEMPTY && eType2 != SbxERROR);
     tools::Long nRecordNo = pVar2->GetLong();
@@ -1159,7 +1160,7 @@ static void PutGet( SbxArray& rPar, bool bPut )
     }
 
     SbxDimArray* pArr = nullptr;
-    SbxVariable* pVar = rPar.Get32(3);
+    SbxVariable* pVar = rPar.Get(3);
     if( pVar->GetType() & SbxARRAY )
     {
         SbxBase* pParObj = pVar->GetObject();
@@ -1171,7 +1172,7 @@ static void PutGet( SbxArray& rPar, bool bPut )
     if( pArr )
     {
         sal_uInt64 const nFPos = pStrm->Tell();
-        sal_Int32 nDims = pArr->GetDims32();
+        sal_Int32 nDims = pArr->GetDims();
         std::unique_ptr<sal_Int32[]> pDims(new sal_Int32[ nDims ]);
         bRet = lcl_WriteReadSbxArray(*pArr,pStrm,!bRandom,nDims,pDims.get(),bPut);
         pDims.reset();
@@ -1201,21 +1202,21 @@ void SbRtl_Get(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_Environ(StarBASIC *, SbxArray & rPar, bool)
 {
-    if ( rPar.Count32() != 2 )
+    if (rPar.Count() != 2)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
     OUString aResult;
     // should be ANSI but that's not possible under Win16 in the DLL
-    OString aByteStr(OUStringToOString(rPar.Get32(1)->GetOUString(),
+    OString aByteStr(OUStringToOString(rPar.Get(1)->GetOUString(),
                                                  osl_getThreadTextEncoding()));
     const char* pEnvStr = getenv(aByteStr.getStr());
     if ( pEnvStr )
     {
         aResult = OUString(pEnvStr, strlen(pEnvStr), osl_getThreadTextEncoding());
     }
-    rPar.Get32(0)->PutString( aResult );
+    rPar.Get(0)->PutString(aResult);
 }
 
 static double GetDialogZoomFactor( bool bX, tools::Long nValue )
@@ -1250,60 +1251,60 @@ static double GetDialogZoomFactor( bool bX, tools::Long nValue )
 
 void SbRtl_GetDialogZoomFactorX(StarBASIC *, SbxArray & rPar, bool)
 {
-    if ( rPar.Count32() != 2 )
+    if (rPar.Count() != 2)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
-    rPar.Get32(0)->PutDouble( GetDialogZoomFactor( true, rPar.Get32(1)->GetLong() ));
+    rPar.Get(0)->PutDouble(GetDialogZoomFactor(true, rPar.Get(1)->GetLong()));
 }
 
 void SbRtl_GetDialogZoomFactorY(StarBASIC *, SbxArray & rPar, bool)
 {
-    if ( rPar.Count32() != 2 )
+    if (rPar.Count() != 2)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
-    rPar.Get32(0)->PutDouble( GetDialogZoomFactor( false, rPar.Get32(1)->GetLong()));
+    rPar.Get(0)->PutDouble(GetDialogZoomFactor(false, rPar.Get(1)->GetLong()));
 }
 
 
 void SbRtl_EnableReschedule(StarBASIC *, SbxArray & rPar, bool)
 {
-    rPar.Get32(0)->PutEmpty();
-    if ( rPar.Count32() != 2 )
+    rPar.Get(0)->PutEmpty();
+    if (rPar.Count() != 2)
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     if( GetSbData()->pInst )
-        GetSbData()->pInst->EnableReschedule( rPar.Get32(1)->GetBool() );
+        GetSbData()->pInst->EnableReschedule(rPar.Get(1)->GetBool());
 }
 
 void SbRtl_GetSystemTicks(StarBASIC *, SbxArray & rPar, bool)
 {
-    if ( rPar.Count32() != 1 )
+    if (rPar.Count() != 1)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
-    rPar.Get32(0)->PutLong( tools::Time::GetSystemTicks() );
+    rPar.Get(0)->PutLong(tools::Time::GetSystemTicks());
 }
 
 void SbRtl_GetPathSeparator(StarBASIC *, SbxArray & rPar, bool)
 {
-    if ( rPar.Count32() != 1 )
+    if (rPar.Count() != 1)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
-    rPar.Get32(0)->PutString( OUString( SAL_PATHDELIMITER ) );
+    rPar.Get(0)->PutString(OUString(SAL_PATHDELIMITER));
 }
 
 void SbRtl_ResolvePath(StarBASIC *, SbxArray & rPar, bool)
 {
-    if ( rPar.Count32() == 2 )
+    if (rPar.Count() == 2)
     {
-        OUString aStr = rPar.Get32(1)->GetOUString();
-        rPar.Get32(0)->PutString( aStr );
+        OUString aStr = rPar.Get(1)->GetOUString();
+        rPar.Get(0)->PutString(aStr);
     }
     else
     {
@@ -1313,13 +1314,13 @@ void SbRtl_ResolvePath(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_TypeLen(StarBASIC *, SbxArray & rPar, bool)
 {
-    if ( rPar.Count32() != 2 )
+    if (rPar.Count() != 2)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
     else
     {
-        SbxDataType eType = rPar.Get32(1)->GetType();
+        SbxDataType eType = rPar.Get(1)->GetType();
         sal_Int16 nLen = 0;
         switch( eType )
         {
@@ -1375,14 +1376,14 @@ void SbRtl_TypeLen(StarBASIC *, SbxArray & rPar, bool)
         case SbxLPWSTR:
         case SbxCoreSTRING:
         case SbxSTRING:
-            nLen = static_cast<sal_Int16>(rPar.Get32(1)->GetOUString().getLength());
+            nLen = static_cast<sal_Int16>(rPar.Get(1)->GetOUString().getLength());
             break;
 
         default:
             nLen = 0;
             break;
         }
-        rPar.Get32(0)->PutInteger( nLen );
+        rPar.Get(0)->PutInteger(nLen);
     }
 }
 
@@ -1457,16 +1458,16 @@ void SbRtl_GlobalScope(StarBASIC * pBasic, SbxArray & rPar, bool)
     {
         p = p->GetParent();
     }
-    SbxVariableRef refVar = rPar.Get32(0);
+    SbxVariableRef refVar = rPar.Get(0);
     refVar->PutObject( p );
 }
 
 // Helper functions to convert Url from/to system paths
 void SbRtl_ConvertToUrl(StarBASIC *, SbxArray & rPar, bool)
 {
-    if ( rPar.Count32() == 2 )
+    if (rPar.Count() == 2)
     {
-        OUString aStr = rPar.Get32(1)->GetOUString();
+        OUString aStr = rPar.Get(1)->GetOUString();
         INetURLObject aURLObj( aStr, INetProtocol::File );
         OUString aFileURL = aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         if( aFileURL.isEmpty() )
@@ -1477,7 +1478,7 @@ void SbRtl_ConvertToUrl(StarBASIC *, SbxArray & rPar, bool)
         {
             aFileURL = aStr;
         }
-        rPar.Get32(0)->PutString(aFileURL);
+        rPar.Get(0)->PutString(aFileURL);
     }
     else
     {
@@ -1487,16 +1488,16 @@ void SbRtl_ConvertToUrl(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_ConvertFromUrl(StarBASIC *, SbxArray & rPar, bool)
 {
-    if ( rPar.Count32() == 2 )
+    if (rPar.Count() == 2)
     {
-        OUString aStr = rPar.Get32(1)->GetOUString();
+        OUString aStr = rPar.Get(1)->GetOUString();
         OUString aSysPath;
         ::osl::File::getSystemPathFromFileURL( aStr, aSysPath );
         if( aSysPath.isEmpty() )
         {
             aSysPath = aStr;
         }
-        rPar.Get32(0)->PutString(aSysPath);
+        rPar.Get(0)->PutString(aSysPath);
     }
     else
     {
@@ -1513,17 +1514,17 @@ void SbRtl_GetDefaultContext(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_Join(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nParCount = rPar.Count32();
+    sal_uInt32 nParCount = rPar.Count();
     if ( nParCount != 3 && nParCount != 2 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
-    SbxBase* pParObj = rPar.Get32(1)->GetObject();
+    SbxBase* pParObj = rPar.Get(1)->GetObject();
     SbxDimArray* pArr = dynamic_cast<SbxDimArray*>( pParObj );
     if( pArr )
     {
-        if( pArr->GetDims32() != 1 )
+        if (pArr->GetDims() != 1)
         {
             StarBASIC::Error( ERRCODE_BASIC_WRONG_DIMS );   // Syntax Error?!
             return;
@@ -1531,7 +1532,7 @@ void SbRtl_Join(StarBASIC *, SbxArray & rPar, bool)
         OUString aDelim;
         if( nParCount == 3 )
         {
-            aDelim = rPar.Get32(2)->GetOUString();
+            aDelim = rPar.Get(2)->GetOUString();
         }
         else
         {
@@ -1539,18 +1540,18 @@ void SbRtl_Join(StarBASIC *, SbxArray & rPar, bool)
         }
         OUStringBuffer aRetStr(32);
         sal_Int32 nLower, nUpper;
-        pArr->GetDim32( 1, nLower, nUpper );
+        pArr->GetDim(1, nLower, nUpper);
         sal_Int32 aIdx[1];
         for (aIdx[0] = nLower; aIdx[0] <= nUpper; ++aIdx[0])
         {
-            OUString aStr = pArr->Get32(aIdx)->GetOUString();
+            OUString aStr = pArr->Get(aIdx)->GetOUString();
             aRetStr.append(aStr);
             if (aIdx[0] != nUpper)
             {
                 aRetStr.append(aDelim);
             }
         }
-        rPar.Get32(0)->PutString( aRetStr.makeStringAndClear() );
+        rPar.Get(0)->PutString(aRetStr.makeStringAndClear());
     }
     else
     {
@@ -1561,14 +1562,14 @@ void SbRtl_Join(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_Split(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nParCount = rPar.Count32();
+    sal_uInt32 nParCount = rPar.Count();
     if ( nParCount < 2 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
-    OUString aExpression = rPar.Get32(1)->GetOUString();
+    OUString aExpression = rPar.Get(1)->GetOUString();
     sal_Int32 nArraySize = 0;
     std::vector< OUString > vRet;
     if( !aExpression.isEmpty() )
@@ -1576,7 +1577,7 @@ void SbRtl_Split(StarBASIC *, SbxArray & rPar, bool)
         OUString aDelim;
         if( nParCount >= 3 )
         {
-            aDelim = rPar.Get32(2)->GetOUString();
+            aDelim = rPar.Get(2)->GetOUString();
         }
         else
         {
@@ -1586,7 +1587,7 @@ void SbRtl_Split(StarBASIC *, SbxArray & rPar, bool)
         sal_Int32 nCount = -1;
         if( nParCount == 4 )
         {
-            nCount = rPar.Get32(3)->GetLong();
+            nCount = rPar.Get(3)->GetLong();
         }
         sal_Int32 nDelimLen = aDelim.getLength();
         if( nDelimLen )
@@ -1630,7 +1631,7 @@ void SbRtl_Split(StarBASIC *, SbxArray & rPar, bool)
 
     // tdf#123025 - split returns an array of substrings
     SbxDimArray* pArray = new SbxDimArray( SbxSTRING );
-    pArray->unoAddDim32( 0, nArraySize-1 );
+    pArray->unoAddDim(0, nArraySize - 1);
 
     // insert parameter(s) into the array
     for(sal_Int32 i = 0 ; i < nArraySize ; i++ )
@@ -1638,11 +1639,11 @@ void SbRtl_Split(StarBASIC *, SbxArray & rPar, bool)
         // tdf#123025 - split returns an array of substrings
         SbxVariableRef xVar = new SbxVariable( SbxSTRING );
         xVar->PutString( vRet[i] );
-        pArray->Put32( xVar.get(), &i );
+        pArray->Put(xVar.get(), &i);
     }
 
     // return array
-    SbxVariableRef refVar = rPar.Get32(0);
+    SbxVariableRef refVar = rPar.Get(0);
     SbxFlagBits nFlags = refVar->GetFlags();
     refVar->ResetFlag( SbxFlagBits::Fixed );
     refVar->PutObject( pArray );
@@ -1653,7 +1654,7 @@ void SbRtl_Split(StarBASIC *, SbxArray & rPar, bool)
 // MonthName(month[, abbreviate])
 void SbRtl_MonthName(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nParCount = rPar.Count32();
+    sal_uInt32 nParCount = rPar.Count();
     if( nParCount != 2 && nParCount != 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -1669,7 +1670,7 @@ void SbRtl_MonthName(StarBASIC *, SbxArray & rPar, bool)
     Sequence< CalendarItem2 > aMonthSeq = xCalendar->getMonths2();
     sal_Int32 nMonthCount = aMonthSeq.getLength();
 
-    sal_Int16 nVal = rPar.Get32(1)->GetInteger();
+    sal_Int16 nVal = rPar.Get(1)->GetInteger();
     if( nVal < 1 || nVal > nMonthCount )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -1678,19 +1679,19 @@ void SbRtl_MonthName(StarBASIC *, SbxArray & rPar, bool)
 
     bool bAbbreviate = false;
     if( nParCount == 3 )
-        bAbbreviate = rPar.Get32(2)->GetBool();
+        bAbbreviate = rPar.Get(2)->GetBool();
 
     const CalendarItem2* pCalendarItems = aMonthSeq.getConstArray();
     const CalendarItem2& rItem = pCalendarItems[nVal - 1];
 
     OUString aRetStr = ( bAbbreviate ? rItem.AbbrevName : rItem.FullName );
-    rPar.Get32(0)->PutString(aRetStr);
+    rPar.Get(0)->PutString(aRetStr);
 }
 
 // WeekdayName(weekday, abbreviate, firstdayofweek)
 void SbRtl_WeekdayName(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nParCount = rPar.Count32();
+    sal_uInt32 nParCount = rPar.Count();
     if( nParCount < 2 || nParCount > 4 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -1706,11 +1707,11 @@ void SbRtl_WeekdayName(StarBASIC *, SbxArray & rPar, bool)
 
     Sequence< CalendarItem2 > aDaySeq = xCalendar->getDays2();
     sal_Int16 nDayCount = static_cast<sal_Int16>(aDaySeq.getLength());
-    sal_Int16 nDay = rPar.Get32(1)->GetInteger();
+    sal_Int16 nDay = rPar.Get(1)->GetInteger();
     sal_Int16 nFirstDay = 0;
     if( nParCount == 4 )
     {
-        nFirstDay = rPar.Get32(3)->GetInteger();
+        nFirstDay = rPar.Get(3)->GetInteger();
         if( nFirstDay < 0 || nFirstDay > 7 )
         {
             StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -1731,7 +1732,7 @@ void SbRtl_WeekdayName(StarBASIC *, SbxArray & rPar, bool)
     bool bAbbreviate = false;
     if( nParCount >= 3 )
     {
-        SbxVariable* pPar2 = rPar.Get32(2);
+        SbxVariable* pPar2 = rPar.Get(2);
         if( !pPar2->IsErr() )
         {
             bAbbreviate = pPar2->GetBool();
@@ -1742,29 +1743,29 @@ void SbRtl_WeekdayName(StarBASIC *, SbxArray & rPar, bool)
     const CalendarItem2& rItem = pCalendarItems[nDay - 1];
 
     OUString aRetStr = ( bAbbreviate ? rItem.AbbrevName : rItem.FullName );
-    rPar.Get32(0)->PutString( aRetStr );
+    rPar.Get(0)->PutString(aRetStr);
 }
 
 void SbRtl_Weekday(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nParCount = rPar.Count32();
+    sal_uInt32 nParCount = rPar.Count();
     if ( nParCount < 2 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
     else
     {
-        double aDate = rPar.Get32(1)->GetDate();
+        double aDate = rPar.Get(1)->GetDate();
 
         bool bFirstDay = false;
         sal_Int16 nFirstDay = 0;
         if ( nParCount > 2 )
         {
-            nFirstDay = rPar.Get32(2)->GetInteger();
+            nFirstDay = rPar.Get(2)->GetInteger();
             bFirstDay = true;
         }
         sal_Int16 nDay = implGetWeekDay( aDate, bFirstDay, nFirstDay );
-        rPar.Get32(0)->PutInteger( nDay );
+        rPar.Get(0)->PutInteger(nDay);
     }
 }
 
@@ -1851,14 +1852,14 @@ static sal_Int16 limitDate( sal_Int32 n32Year, sal_Int16& rMonth, sal_Int16& rDa
 
 void SbRtl_DateAdd(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nParCount = rPar.Count32();
+    sal_uInt32 nParCount = rPar.Count();
     if( nParCount != 4 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
-    OUString aStringCode = rPar.Get32(1)->GetOUString();
+    OUString aStringCode = rPar.Get(1)->GetOUString();
     IntervalInfo const * pInfo = getIntervalInfo( aStringCode );
     if( !pInfo )
     {
@@ -1866,8 +1867,8 @@ void SbRtl_DateAdd(StarBASIC *, SbxArray & rPar, bool)
         return;
     }
 
-    sal_Int32 lNumber = rPar.Get32(2)->GetLong();
-    double dDate = rPar.Get32(3)->GetDate();
+    sal_Int32 lNumber = rPar.Get(2)->GetLong();
+    double dDate = rPar.Get(3)->GetDate();
     double dNewDate = 0;
     if( pInfo->mbSimple )
     {
@@ -1946,7 +1947,7 @@ void SbRtl_DateAdd(StarBASIC *, SbxArray & rPar, bool)
             dNewDate += dHoursMinutesSeconds;
     }
 
-    rPar.Get32(0)->PutDate( dNewDate );
+    rPar.Get(0)->PutDate(dNewDate);
 }
 
 static double RoundImpl( double d )
@@ -1958,14 +1959,14 @@ void SbRtl_DateDiff(StarBASIC *, SbxArray & rPar, bool)
 {
     // DateDiff(interval, date1, date2[, firstdayofweek[, firstweekofyear]])
 
-    sal_uInt32 nParCount = rPar.Count32();
+    sal_uInt32 nParCount = rPar.Count();
     if( nParCount < 4 || nParCount > 6 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
-    OUString aStringCode = rPar.Get32(1)->GetOUString();
+    OUString aStringCode = rPar.Get(1)->GetOUString();
     IntervalInfo const * pInfo = getIntervalInfo( aStringCode );
     if( !pInfo )
     {
@@ -1973,8 +1974,8 @@ void SbRtl_DateDiff(StarBASIC *, SbxArray & rPar, bool)
         return;
     }
 
-    double dDate1 = rPar.Get32(2)->GetDate();
-    double dDate2 = rPar.Get32(3)->GetDate();
+    double dDate1 = rPar.Get(2)->GetDate();
+    double dDate2 = rPar.Get(3)->GetDate();
 
     double dRet = 0.0;
     switch( pInfo->meInterval )
@@ -2026,7 +2027,7 @@ void SbRtl_DateDiff(StarBASIC *, SbxArray & rPar, bool)
                 sal_Int16 nFirstDay = 1;    // Default
                 if( nParCount >= 5 )
                 {
-                    nFirstDay = rPar.Get32(4)->GetInteger();
+                    nFirstDay = rPar.Get(4)->GetInteger();
                     if( nFirstDay < 0 || nFirstDay > 7 )
                     {
                         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -2076,7 +2077,7 @@ void SbRtl_DateDiff(StarBASIC *, SbxArray & rPar, bool)
             break;
         }
     }
-    rPar.Get32(0)->PutDouble( dRet );
+    rPar.Get(0)->PutDouble(dRet);
 }
 
 static double implGetDateOfFirstDayInFirstWeek
@@ -2149,14 +2150,14 @@ void SbRtl_DatePart(StarBASIC *, SbxArray & rPar, bool)
 {
     // DatePart(interval, date[,firstdayofweek[, firstweekofyear]])
 
-    sal_uInt32 nParCount = rPar.Count32();
+    sal_uInt32 nParCount = rPar.Count();
     if( nParCount < 3 || nParCount > 5 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
-    OUString aStringCode = rPar.Get32(1)->GetOUString();
+    OUString aStringCode = rPar.Get(1)->GetOUString();
     IntervalInfo const * pInfo = getIntervalInfo( aStringCode );
     if( !pInfo )
     {
@@ -2164,7 +2165,7 @@ void SbRtl_DatePart(StarBASIC *, SbxArray & rPar, bool)
         return;
     }
 
-    double dDate = rPar.Get32(2)->GetDate();
+    double dDate = rPar.Get(2)->GetDate();
 
     sal_Int32 nRet = 0;
     switch( pInfo->meInterval )
@@ -2203,7 +2204,7 @@ void SbRtl_DatePart(StarBASIC *, SbxArray & rPar, bool)
             sal_Int16 nFirstDay = 1;    // Default
             if( nParCount >= 4 )
             {
-                nFirstDay = rPar.Get32(3)->GetInteger();
+                nFirstDay = rPar.Get(3)->GetInteger();
                 bFirstDay = true;
             }
             nRet = implGetWeekDay( dDate, bFirstDay, nFirstDay );
@@ -2213,11 +2214,11 @@ void SbRtl_DatePart(StarBASIC *, SbxArray & rPar, bool)
         {
             sal_Int16 nFirstDay = 1;    // Default
             if( nParCount >= 4 )
-                nFirstDay = rPar.Get32(3)->GetInteger();
+                nFirstDay = rPar.Get(3)->GetInteger();
 
             sal_Int16 nFirstWeek = 1;   // Default
             if( nParCount == 5 )
-                nFirstWeek = rPar.Get32(4)->GetInteger();
+                nFirstWeek = rPar.Get(4)->GetInteger();
 
             sal_Int16 nYear = implGetDateYear( dDate );
             bool bError = false;
@@ -2259,24 +2260,24 @@ void SbRtl_DatePart(StarBASIC *, SbxArray & rPar, bool)
             break;
         }
     }
-    rPar.Get32(0)->PutLong( nRet );
+    rPar.Get(0)->PutLong(nRet);
 }
 
 // FormatDateTime(Date[,NamedFormat])
 void SbRtl_FormatDateTime(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nParCount = rPar.Count32();
+    sal_uInt32 nParCount = rPar.Count();
     if( nParCount < 2 || nParCount > 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
-    double dDate = rPar.Get32(1)->GetDate();
+    double dDate = rPar.Get(1)->GetDate();
     sal_Int16 nNamedFormat = 0;
     if( nParCount > 2 )
     {
-        nNamedFormat = rPar.Get32(2)->GetInteger();
+        nNamedFormat = rPar.Get(2)->GetInteger();
         if( nNamedFormat < 0 || nNamedFormat > 4 )
         {
             StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -2360,36 +2361,36 @@ void SbRtl_FormatDateTime(StarBASIC *, SbxArray & rPar, bool)
         break;
     }
 
-    rPar.Get32(0)->PutString( aRetStr );
+    rPar.Get(0)->PutString(aRetStr);
 }
 
 void SbRtl_Frac(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nParCount = rPar.Count32();
+    sal_uInt32 nParCount = rPar.Count();
     if( nParCount != 2)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
-    SbxVariable *pSbxVariable = rPar.Get32(1);
+    SbxVariable* pSbxVariable = rPar.Get(1);
     double dVal = pSbxVariable->GetDouble();
     if(dVal >= 0)
-        rPar.Get32(0)->PutDouble(dVal - ::rtl::math::approxFloor(dVal));
+        rPar.Get(0)->PutDouble(dVal - ::rtl::math::approxFloor(dVal));
     else
-        rPar.Get32(0)->PutDouble(dVal - ::rtl::math::approxCeil(dVal));
+        rPar.Get(0)->PutDouble(dVal - ::rtl::math::approxCeil(dVal));
 }
 
 void SbRtl_Round(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nParCount = rPar.Count32();
+    sal_uInt32 nParCount = rPar.Count();
     if( nParCount != 2 && nParCount != 3 )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
-    SbxVariable *pSbxVariable = rPar.Get32(1);
+    SbxVariable* pSbxVariable = rPar.Get(1);
     double dVal = pSbxVariable->GetDouble();
     double dRes = 0.0;
     if( dVal != 0.0 )
@@ -2404,7 +2405,7 @@ void SbRtl_Round(StarBASIC *, SbxArray & rPar, bool)
         sal_Int16 numdecimalplaces = 0;
         if( nParCount == 3 )
         {
-            numdecimalplaces = rPar.Get32(2)->GetInteger();
+            numdecimalplaces = rPar.Get(2)->GetInteger();
             if( numdecimalplaces < 0 || numdecimalplaces > 22 )
             {
                 StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -2427,7 +2428,7 @@ void SbRtl_Round(StarBASIC *, SbxArray & rPar, bool)
         if( bNeg )
             dRes = -dRes;
     }
-    rPar.Get32(0)->PutDouble( dRes );
+    rPar.Get(0)->PutDouble(dRes);
 }
 
 static void CallFunctionAccessFunction( const Sequence< Any >& aArgs, const OUString& sFuncName, SbxVariable* pRet )
@@ -2456,7 +2457,7 @@ static void CallFunctionAccessFunction( const Sequence< Any >& aArgs, const OUSt
 
 void SbRtl_SYD(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nArgCount = rPar.Count32()-1;
+    sal_uInt32 nArgCount = rPar.Count() - 1;
 
     if ( nArgCount < 4 )
     {
@@ -2467,17 +2468,17 @@ void SbRtl_SYD(StarBASIC *, SbxArray & rPar, bool)
     // retrieve non-optional params
 
     Sequence< Any > aParams( 4 );
-    aParams[ 0 ] <<= rPar.Get32(1)->GetDouble();
-    aParams[ 1 ] <<= rPar.Get32(2)->GetDouble();
-    aParams[ 2 ] <<= rPar.Get32(3)->GetDouble();
-    aParams[ 3 ] <<= rPar.Get32(4)->GetDouble();
+    aParams[0] <<= rPar.Get(1)->GetDouble();
+    aParams[1] <<= rPar.Get(2)->GetDouble();
+    aParams[2] <<= rPar.Get(3)->GetDouble();
+    aParams[3] <<= rPar.Get(4)->GetDouble();
 
-    CallFunctionAccessFunction( aParams, "SYD", rPar.Get32( 0 ) );
+    CallFunctionAccessFunction(aParams, "SYD", rPar.Get(0));
 }
 
 void SbRtl_SLN(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nArgCount = rPar.Count32()-1;
+    sal_uInt32 nArgCount = rPar.Count() - 1;
 
     if ( nArgCount < 3 )
     {
@@ -2488,16 +2489,16 @@ void SbRtl_SLN(StarBASIC *, SbxArray & rPar, bool)
     // retrieve non-optional params
 
     Sequence< Any > aParams( 3 );
-    aParams[ 0 ] <<= rPar.Get32(1)->GetDouble();
-    aParams[ 1 ] <<= rPar.Get32(2)->GetDouble();
-    aParams[ 2 ] <<= rPar.Get32(3)->GetDouble();
+    aParams[0] <<= rPar.Get(1)->GetDouble();
+    aParams[1] <<= rPar.Get(2)->GetDouble();
+    aParams[2] <<= rPar.Get(3)->GetDouble();
 
-    CallFunctionAccessFunction( aParams, "SLN", rPar.Get32( 0 ) );
+    CallFunctionAccessFunction(aParams, "SLN", rPar.Get(0));
 }
 
 void SbRtl_Pmt(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nArgCount = rPar.Count32()-1;
+    sal_uInt32 nArgCount = rPar.Count() - 1;
 
     if ( nArgCount < 3 || nArgCount > 5 )
     {
@@ -2506,9 +2507,9 @@ void SbRtl_Pmt(StarBASIC *, SbxArray & rPar, bool)
     }
     // retrieve non-optional params
 
-    double rate = rPar.Get32(1)->GetDouble();
-    double nper = rPar.Get32(2)->GetDouble();
-    double pmt = rPar.Get32(3)->GetDouble();
+    double rate = rPar.Get(1)->GetDouble();
+    double nper = rPar.Get(2)->GetDouble();
+    double pmt = rPar.Get(3)->GetDouble();
 
     // set default values for Optional args
     double fv = 0;
@@ -2517,14 +2518,14 @@ void SbRtl_Pmt(StarBASIC *, SbxArray & rPar, bool)
     // fv
     if ( nArgCount >= 4 )
     {
-        if( rPar.Get32(4)->GetType() != SbxEMPTY )
-            fv = rPar.Get32(4)->GetDouble();
+        if (rPar.Get(4)->GetType() != SbxEMPTY)
+            fv = rPar.Get(4)->GetDouble();
     }
     // type
     if ( nArgCount >= 5 )
     {
-        if( rPar.Get32(5)->GetType() != SbxEMPTY )
-            type = rPar.Get32(5)->GetDouble();
+        if (rPar.Get(5)->GetType() != SbxEMPTY)
+            type = rPar.Get(5)->GetDouble();
     }
 
     Sequence< Any > aParams( 5 );
@@ -2534,12 +2535,12 @@ void SbRtl_Pmt(StarBASIC *, SbxArray & rPar, bool)
     aParams[ 3 ] <<= fv;
     aParams[ 4 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, "Pmt", rPar.Get32( 0 ) );
+    CallFunctionAccessFunction(aParams, "Pmt", rPar.Get(0));
 }
 
 void SbRtl_PPmt(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nArgCount = rPar.Count32()-1;
+    sal_uInt32 nArgCount = rPar.Count() - 1;
 
     if ( nArgCount < 4 || nArgCount > 6 )
     {
@@ -2548,10 +2549,10 @@ void SbRtl_PPmt(StarBASIC *, SbxArray & rPar, bool)
     }
     // retrieve non-optional params
 
-    double rate = rPar.Get32(1)->GetDouble();
-    double per = rPar.Get32(2)->GetDouble();
-    double nper = rPar.Get32(3)->GetDouble();
-    double pv = rPar.Get32(4)->GetDouble();
+    double rate = rPar.Get(1)->GetDouble();
+    double per = rPar.Get(2)->GetDouble();
+    double nper = rPar.Get(3)->GetDouble();
+    double pv = rPar.Get(4)->GetDouble();
 
     // set default values for Optional args
     double fv = 0;
@@ -2560,14 +2561,14 @@ void SbRtl_PPmt(StarBASIC *, SbxArray & rPar, bool)
     // fv
     if ( nArgCount >= 5 )
     {
-        if( rPar.Get32(5)->GetType() != SbxEMPTY )
-            fv = rPar.Get32(5)->GetDouble();
+        if (rPar.Get(5)->GetType() != SbxEMPTY)
+            fv = rPar.Get(5)->GetDouble();
     }
     // type
     if ( nArgCount >= 6 )
     {
-        if( rPar.Get32(6)->GetType() != SbxEMPTY )
-            type = rPar.Get32(6)->GetDouble();
+        if (rPar.Get(6)->GetType() != SbxEMPTY)
+            type = rPar.Get(6)->GetDouble();
     }
 
     Sequence< Any > aParams( 6 );
@@ -2578,12 +2579,12 @@ void SbRtl_PPmt(StarBASIC *, SbxArray & rPar, bool)
     aParams[ 4 ] <<= fv;
     aParams[ 5 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, "PPmt", rPar.Get32( 0 ) );
+    CallFunctionAccessFunction(aParams, "PPmt", rPar.Get(0));
 }
 
 void SbRtl_PV(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nArgCount = rPar.Count32()-1;
+    sal_uInt32 nArgCount = rPar.Count() - 1;
 
     if ( nArgCount < 3 || nArgCount > 5 )
     {
@@ -2592,9 +2593,9 @@ void SbRtl_PV(StarBASIC *, SbxArray & rPar, bool)
     }
     // retrieve non-optional params
 
-    double rate = rPar.Get32(1)->GetDouble();
-    double nper = rPar.Get32(2)->GetDouble();
-    double pmt = rPar.Get32(3)->GetDouble();
+    double rate = rPar.Get(1)->GetDouble();
+    double nper = rPar.Get(2)->GetDouble();
+    double pmt = rPar.Get(3)->GetDouble();
 
     // set default values for Optional args
     double fv = 0;
@@ -2603,14 +2604,14 @@ void SbRtl_PV(StarBASIC *, SbxArray & rPar, bool)
     // fv
     if ( nArgCount >= 4 )
     {
-        if( rPar.Get32(4)->GetType() != SbxEMPTY )
-            fv = rPar.Get32(4)->GetDouble();
+        if (rPar.Get(4)->GetType() != SbxEMPTY)
+            fv = rPar.Get(4)->GetDouble();
     }
     // type
     if ( nArgCount >= 5 )
     {
-        if( rPar.Get32(5)->GetType() != SbxEMPTY )
-            type = rPar.Get32(5)->GetDouble();
+        if (rPar.Get(5)->GetType() != SbxEMPTY)
+            type = rPar.Get(5)->GetDouble();
     }
 
     Sequence< Any > aParams( 5 );
@@ -2620,12 +2621,12 @@ void SbRtl_PV(StarBASIC *, SbxArray & rPar, bool)
     aParams[ 3 ] <<= fv;
     aParams[ 4 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, "PV", rPar.Get32( 0 ) );
+    CallFunctionAccessFunction(aParams, "PV", rPar.Get(0));
 }
 
 void SbRtl_NPV(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nArgCount = rPar.Count32()-1;
+    sal_uInt32 nArgCount = rPar.Count() - 1;
 
     if ( nArgCount < 1 || nArgCount > 2 )
     {
@@ -2634,8 +2635,8 @@ void SbRtl_NPV(StarBASIC *, SbxArray & rPar, bool)
     }
 
     Sequence< Any > aParams( 2 );
-    aParams[ 0 ] <<= rPar.Get32(1)->GetDouble();
-    Any aValues = sbxToUnoValue( rPar.Get32(2),
+    aParams[0] <<= rPar.Get(1)->GetDouble();
+    Any aValues = sbxToUnoValue(rPar.Get(2),
                 cppu::UnoType<Sequence<double>>::get() );
 
     // convert for calc functions
@@ -2645,12 +2646,12 @@ void SbRtl_NPV(StarBASIC *, SbxArray & rPar, bool)
 
     aParams[ 1 ] = aValues;
 
-    CallFunctionAccessFunction( aParams, "NPV", rPar.Get32( 0 ) );
+    CallFunctionAccessFunction(aParams, "NPV", rPar.Get(0));
 }
 
 void SbRtl_NPer(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nArgCount = rPar.Count32()-1;
+    sal_uInt32 nArgCount = rPar.Count() - 1;
 
     if ( nArgCount < 3 || nArgCount > 5 )
     {
@@ -2659,9 +2660,9 @@ void SbRtl_NPer(StarBASIC *, SbxArray & rPar, bool)
     }
     // retrieve non-optional params
 
-    double rate = rPar.Get32(1)->GetDouble();
-    double pmt = rPar.Get32(2)->GetDouble();
-    double pv = rPar.Get32(3)->GetDouble();
+    double rate = rPar.Get(1)->GetDouble();
+    double pmt = rPar.Get(2)->GetDouble();
+    double pv = rPar.Get(3)->GetDouble();
 
     // set default values for Optional args
     double fv = 0;
@@ -2670,14 +2671,14 @@ void SbRtl_NPer(StarBASIC *, SbxArray & rPar, bool)
     // fv
     if ( nArgCount >= 4 )
     {
-        if( rPar.Get32(4)->GetType() != SbxEMPTY )
-            fv = rPar.Get32(4)->GetDouble();
+        if (rPar.Get(4)->GetType() != SbxEMPTY)
+            fv = rPar.Get(4)->GetDouble();
     }
     // type
     if ( nArgCount >= 5 )
     {
-        if( rPar.Get32(5)->GetType() != SbxEMPTY )
-            type = rPar.Get32(5)->GetDouble();
+        if (rPar.Get(5)->GetType() != SbxEMPTY)
+            type = rPar.Get(5)->GetDouble();
     }
 
     Sequence< Any > aParams( 5 );
@@ -2687,12 +2688,12 @@ void SbRtl_NPer(StarBASIC *, SbxArray & rPar, bool)
     aParams[ 3 ] <<= fv;
     aParams[ 4 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, "NPer", rPar.Get32( 0 ) );
+    CallFunctionAccessFunction(aParams, "NPer", rPar.Get(0));
 }
 
 void SbRtl_MIRR(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nArgCount = rPar.Count32()-1;
+    sal_uInt32 nArgCount = rPar.Count() - 1;
 
     if ( nArgCount < 3 )
     {
@@ -2703,7 +2704,7 @@ void SbRtl_MIRR(StarBASIC *, SbxArray & rPar, bool)
     // retrieve non-optional params
 
     Sequence< Any > aParams( 3 );
-    Any aValues = sbxToUnoValue( rPar.Get32(1),
+    Any aValues = sbxToUnoValue(rPar.Get(1),
                 cppu::UnoType<Sequence<double>>::get() );
 
     // convert for calc functions
@@ -2712,15 +2713,15 @@ void SbRtl_MIRR(StarBASIC *, SbxArray & rPar, bool)
     aValues <<= sValues;
 
     aParams[ 0 ] = aValues;
-    aParams[ 1 ] <<= rPar.Get32(2)->GetDouble();
-    aParams[ 2 ] <<= rPar.Get32(3)->GetDouble();
+    aParams[1] <<= rPar.Get(2)->GetDouble();
+    aParams[2] <<= rPar.Get(3)->GetDouble();
 
-    CallFunctionAccessFunction( aParams, "MIRR", rPar.Get32( 0 ) );
+    CallFunctionAccessFunction(aParams, "MIRR", rPar.Get(0));
 }
 
 void SbRtl_IRR(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nArgCount = rPar.Count32()-1;
+    sal_uInt32 nArgCount = rPar.Count() - 1;
 
     if ( nArgCount < 1 || nArgCount > 2 )
     {
@@ -2728,7 +2729,7 @@ void SbRtl_IRR(StarBASIC *, SbxArray & rPar, bool)
         return;
     }
     // retrieve non-optional params
-    Any aValues = sbxToUnoValue( rPar.Get32(1),
+    Any aValues = sbxToUnoValue(rPar.Get(1),
                 cppu::UnoType<Sequence<double>>::get() );
 
     // convert for calc functions
@@ -2741,20 +2742,20 @@ void SbRtl_IRR(StarBASIC *, SbxArray & rPar, bool)
     // guess
     if ( nArgCount >= 2 )
     {
-        if( rPar.Get32(2)->GetType() != SbxEMPTY )
-            guess = rPar.Get32(2)->GetDouble();
+        if (rPar.Get(2)->GetType() != SbxEMPTY)
+            guess = rPar.Get(2)->GetDouble();
     }
 
     Sequence< Any > aParams( 2 );
     aParams[ 0 ] = aValues;
     aParams[ 1 ] <<= guess;
 
-    CallFunctionAccessFunction( aParams, "IRR", rPar.Get32( 0 ) );
+    CallFunctionAccessFunction(aParams, "IRR", rPar.Get(0));
 }
 
 void SbRtl_IPmt(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nArgCount = rPar.Count32()-1;
+    sal_uInt32 nArgCount = rPar.Count() - 1;
 
     if ( nArgCount < 4 || nArgCount > 6 )
     {
@@ -2763,10 +2764,10 @@ void SbRtl_IPmt(StarBASIC *, SbxArray & rPar, bool)
     }
     // retrieve non-optional params
 
-    double rate = rPar.Get32(1)->GetDouble();
-    double per = rPar.Get32(2)->GetInteger();
-    double nper = rPar.Get32(3)->GetDouble();
-    double pv = rPar.Get32(4)->GetDouble();
+    double rate = rPar.Get(1)->GetDouble();
+    double per = rPar.Get(2)->GetInteger();
+    double nper = rPar.Get(3)->GetDouble();
+    double pv = rPar.Get(4)->GetDouble();
 
     // set default values for Optional args
     double fv = 0;
@@ -2775,14 +2776,14 @@ void SbRtl_IPmt(StarBASIC *, SbxArray & rPar, bool)
     // fv
     if ( nArgCount >= 5 )
     {
-        if( rPar.Get32(5)->GetType() != SbxEMPTY )
-            fv = rPar.Get32(5)->GetDouble();
+        if (rPar.Get(5)->GetType() != SbxEMPTY)
+            fv = rPar.Get(5)->GetDouble();
     }
     // type
     if ( nArgCount >= 6 )
     {
-        if( rPar.Get32(6)->GetType() != SbxEMPTY )
-            type = rPar.Get32(6)->GetDouble();
+        if (rPar.Get(6)->GetType() != SbxEMPTY)
+            type = rPar.Get(6)->GetDouble();
     }
 
     Sequence< Any > aParams( 6 );
@@ -2793,12 +2794,12 @@ void SbRtl_IPmt(StarBASIC *, SbxArray & rPar, bool)
     aParams[ 4 ] <<= fv;
     aParams[ 5 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, "IPmt", rPar.Get32( 0 ) );
+    CallFunctionAccessFunction(aParams, "IPmt", rPar.Get(0));
 }
 
 void SbRtl_FV(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nArgCount = rPar.Count32()-1;
+    sal_uInt32 nArgCount = rPar.Count() - 1;
 
     if ( nArgCount < 3 || nArgCount > 5 )
     {
@@ -2807,9 +2808,9 @@ void SbRtl_FV(StarBASIC *, SbxArray & rPar, bool)
     }
     // retrieve non-optional params
 
-    double rate = rPar.Get32(1)->GetDouble();
-    double nper = rPar.Get32(2)->GetDouble();
-    double pmt = rPar.Get32(3)->GetDouble();
+    double rate = rPar.Get(1)->GetDouble();
+    double nper = rPar.Get(2)->GetDouble();
+    double pmt = rPar.Get(3)->GetDouble();
 
     // set default values for Optional args
     double pv = 0;
@@ -2818,14 +2819,14 @@ void SbRtl_FV(StarBASIC *, SbxArray & rPar, bool)
     // pv
     if ( nArgCount >= 4 )
     {
-        if( rPar.Get32(4)->GetType() != SbxEMPTY )
-            pv = rPar.Get32(4)->GetDouble();
+        if (rPar.Get(4)->GetType() != SbxEMPTY)
+            pv = rPar.Get(4)->GetDouble();
     }
     // type
     if ( nArgCount >= 5 )
     {
-        if( rPar.Get32(5)->GetType() != SbxEMPTY )
-            type = rPar.Get32(5)->GetDouble();
+        if (rPar.Get(5)->GetType() != SbxEMPTY)
+            type = rPar.Get(5)->GetDouble();
     }
 
     Sequence< Any > aParams( 5 );
@@ -2835,12 +2836,12 @@ void SbRtl_FV(StarBASIC *, SbxArray & rPar, bool)
     aParams[ 3 ] <<= pv;
     aParams[ 4 ] <<= type;
 
-    CallFunctionAccessFunction( aParams, "FV", rPar.Get32( 0 ) );
+    CallFunctionAccessFunction(aParams, "FV", rPar.Get(0));
 }
 
 void SbRtl_DDB(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nArgCount = rPar.Count32()-1;
+    sal_uInt32 nArgCount = rPar.Count() - 1;
 
     if ( nArgCount < 4 || nArgCount > 5 )
     {
@@ -2849,10 +2850,10 @@ void SbRtl_DDB(StarBASIC *, SbxArray & rPar, bool)
     }
     // retrieve non-optional params
 
-    double cost = rPar.Get32(1)->GetDouble();
-    double salvage = rPar.Get32(2)->GetDouble();
-    double life = rPar.Get32(3)->GetDouble();
-    double period = rPar.Get32(4)->GetDouble();
+    double cost = rPar.Get(1)->GetDouble();
+    double salvage = rPar.Get(2)->GetDouble();
+    double life = rPar.Get(3)->GetDouble();
+    double period = rPar.Get(4)->GetDouble();
 
     // set default values for Optional args
     double factor = 2;
@@ -2860,8 +2861,8 @@ void SbRtl_DDB(StarBASIC *, SbxArray & rPar, bool)
     // factor
     if ( nArgCount >= 5 )
     {
-        if( rPar.Get32(5)->GetType() != SbxEMPTY )
-            factor = rPar.Get32(5)->GetDouble();
+        if (rPar.Get(5)->GetType() != SbxEMPTY)
+            factor = rPar.Get(5)->GetDouble();
     }
 
     Sequence< Any > aParams( 5 );
@@ -2871,12 +2872,12 @@ void SbRtl_DDB(StarBASIC *, SbxArray & rPar, bool)
     aParams[ 3 ] <<= period;
     aParams[ 4 ] <<= factor;
 
-    CallFunctionAccessFunction( aParams, "DDB", rPar.Get32( 0 ) );
+    CallFunctionAccessFunction(aParams, "DDB", rPar.Get(0));
 }
 
 void SbRtl_Rate(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nArgCount = rPar.Count32()-1;
+    sal_uInt32 nArgCount = rPar.Count() - 1;
 
     if ( nArgCount < 3 || nArgCount > 6 )
     {
@@ -2889,9 +2890,9 @@ void SbRtl_Rate(StarBASIC *, SbxArray & rPar, bool)
     double pmt = 0;
     double pv = 0;
 
-    nper = rPar.Get32(1)->GetDouble();
-    pmt = rPar.Get32(2)->GetDouble();
-    pv = rPar.Get32(3)->GetDouble();
+    nper = rPar.Get(1)->GetDouble();
+    pmt = rPar.Get(2)->GetDouble();
+    pv = rPar.Get(3)->GetDouble();
 
     // set default values for Optional args
     double fv = 0;
@@ -2901,22 +2902,22 @@ void SbRtl_Rate(StarBASIC *, SbxArray & rPar, bool)
     // fv
     if ( nArgCount >= 4 )
     {
-        if( rPar.Get32(4)->GetType() != SbxEMPTY )
-            fv = rPar.Get32(4)->GetDouble();
+        if (rPar.Get(4)->GetType() != SbxEMPTY)
+            fv = rPar.Get(4)->GetDouble();
     }
 
     // type
     if ( nArgCount >= 5 )
     {
-        if( rPar.Get32(5)->GetType() != SbxEMPTY )
-            type = rPar.Get32(5)->GetDouble();
+        if (rPar.Get(5)->GetType() != SbxEMPTY)
+            type = rPar.Get(5)->GetDouble();
     }
 
     // guess
     if ( nArgCount >= 6 )
     {
-        if( rPar.Get32(6)->GetType() != SbxEMPTY )
-            guess = rPar.Get32(6)->GetDouble();
+        if (rPar.Get(6)->GetType() != SbxEMPTY)
+            guess = rPar.Get(6)->GetDouble();
     }
 
     Sequence< Any > aParams( 6 );
@@ -2927,18 +2928,18 @@ void SbRtl_Rate(StarBASIC *, SbxArray & rPar, bool)
     aParams[ 4 ] <<= type;
     aParams[ 5 ] <<= guess;
 
-    CallFunctionAccessFunction( aParams, "Rate", rPar.Get32( 0 ) );
+    CallFunctionAccessFunction(aParams, "Rate", rPar.Get(0));
 }
 
 void SbRtl_StrReverse(StarBASIC *, SbxArray & rPar, bool)
 {
-    if ( rPar.Count32() != 2 )
+    if (rPar.Count() != 2)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
-    SbxVariable *pSbxVariable = rPar.Get32(1);
+    SbxVariable* pSbxVariable = rPar.Get(1);
     if( pSbxVariable->IsNull() )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -2946,13 +2947,13 @@ void SbRtl_StrReverse(StarBASIC *, SbxArray & rPar, bool)
     }
 
     OUString aStr = comphelper::string::reverseString(pSbxVariable->GetOUString());
-    rPar.Get32(0)->PutString( aStr );
+    rPar.Get(0)->PutString(aStr);
 }
 
 void SbRtl_CompatibilityMode(StarBASIC *, SbxArray & rPar, bool)
 {
     bool bEnabled = false;
-    sal_uInt32 nCount = rPar.Count32();
+    sal_uInt32 nCount = rPar.Count();
     if ( nCount != 1 && nCount != 2 )
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
@@ -2961,24 +2962,24 @@ void SbRtl_CompatibilityMode(StarBASIC *, SbxArray & rPar, bool)
     {
         if ( nCount == 2 )
         {
-            pInst->EnableCompatibility( rPar.Get32(1)->GetBool() );
+            pInst->EnableCompatibility(rPar.Get(1)->GetBool());
         }
         bEnabled = pInst->IsCompatibility();
     }
-    rPar.Get32(0)->PutBool( bEnabled );
+    rPar.Get(0)->PutBool(bEnabled);
 }
 
 void SbRtl_Input(StarBASIC *, SbxArray & rPar, bool)
 {
     // 2 parameters needed
-    if ( rPar.Count32() < 3 )
+    if (rPar.Count() < 3)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
-    sal_uInt16 nByteCount  = rPar.Get32(1)->GetUShort();
-    sal_Int16  nFileNumber = rPar.Get32(2)->GetInteger();
+    sal_uInt16 nByteCount = rPar.Get(1)->GetUShort();
+    sal_Int16 nFileNumber = rPar.Get(2)->GetInteger();
 
     SbiIoSystem* pIosys = GetSbData()->pInst->GetIoSystem();
     SbiStream* pSbStrm = pIosys->GetStream( nFileNumber );
@@ -2998,14 +2999,14 @@ void SbRtl_Input(StarBASIC *, SbxArray & rPar, bool)
         StarBASIC::Error( err );
         return;
     }
-    rPar.Get32(0)->PutString(OStringToOUString(aByteBuffer, osl_getThreadTextEncoding()));
+    rPar.Get(0)->PutString(OStringToOUString(aByteBuffer, osl_getThreadTextEncoding()));
 }
 
 void SbRtl_Me(StarBASIC *, SbxArray & rPar, bool)
 {
     SbModule* pActiveModule = GetSbData()->pInst->GetActiveModule();
     SbClassModuleObject* pClassModuleObject = dynamic_cast<SbClassModuleObject*>( pActiveModule );
-    SbxVariableRef refVar = rPar.Get32(0);
+    SbxVariableRef refVar = rPar.Get(0);
     if( pClassModuleObject == nullptr )
     {
         SbObjModule* pMod = dynamic_cast<SbObjModule*>( pActiveModule );

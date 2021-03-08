@@ -80,11 +80,11 @@ namespace basprov
             SbxArray* pMethods = m_pModule->GetMethods().get();
             if ( pMethods )
             {
-                sal_uInt32 nCount = pMethods->Count32();
+                sal_uInt32 nCount = pMethods->Count();
                 sal_Int32 nRealCount = 0;
                 for ( sal_uInt32 i = 0; i < nCount; ++i )
                 {
-                    SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Get32( i ) );
+                    SbMethod* pMethod = static_cast<SbMethod*>(pMethods->Get(i));
                     if ( pMethod && !pMethod->IsHidden() )
                         ++nRealCount;
                 }
@@ -94,7 +94,7 @@ namespace basprov
                 sal_Int32 iTarget = 0;
                 for ( sal_uInt32 i = 0; i < nCount; ++i )
                 {
-                    SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Get32( i ) );
+                    SbMethod* pMethod = static_cast<SbMethod*>(pMethods->Get(i));
                     if ( pMethod && !pMethod->IsHidden() )
                         pChildNodes[iTarget++] = new BasicMethodNodeImpl(
                             m_xContext, m_sScriptingContext, pMethod, m_bIsAppScript);
@@ -114,7 +114,7 @@ namespace basprov
         if ( m_pModule )
         {
             SbxArray* pMethods = m_pModule->GetMethods().get();
-            if ( pMethods && pMethods->Count32() > 0 )
+            if (pMethods && pMethods->Count() > 0)
                 bReturn = true;
         }
 

@@ -1053,7 +1053,7 @@ void SbiStdObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 if( !pPar_ )
                 {
                     rPar = pPar_ = new SbxArray;
-                    pPar_->Put32( pVar, 0 );
+                    pPar_->Put(pVar, 0);
                 }
                 p( static_cast<StarBASIC*>(GetParent()), *pPar_, bWrite );
                 return;

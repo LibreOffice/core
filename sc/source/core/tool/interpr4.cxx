@@ -3264,7 +3264,7 @@ void ScInterpreter::ScMacro()
     bool bOk = true;
     for( sal_uInt32 i = nParamCount; i && bOk ; i-- )
     {
-        SbxVariable* pPar = refPar->Get32(i);
+        SbxVariable* pPar = refPar->Get(i);
         switch( GetStackType() )
         {
             case svDouble:
@@ -3332,8 +3332,8 @@ void ScInterpreter::ScMacro()
                     else
                     {
                         SbxDimArrayRef refArray = new SbxDimArray;
-                        refArray->AddDim32( 1, nRow2 - nRow1 + 1 );
-                        refArray->AddDim32( 1, nCol2 - nCol1 + 1 );
+                        refArray->AddDim(1, nRow2 - nRow1 + 1);
+                        refArray->AddDim(1, nCol2 - nCol1 + 1);
                         ScAddress aAdr( nCol1, nRow1, nTab1 );
                         for( SCROW nRow = nRow1; bOk && nRow <= nRow2; nRow++ )
                         {
@@ -3344,7 +3344,7 @@ void ScInterpreter::ScMacro()
                             {
                                 aAdr.SetCol( nCol );
                                 nIdx[ 1 ] = nCol-nCol1+1;
-                                SbxVariable* p = refArray->Get32( nIdx );
+                                SbxVariable* p = refArray->Get(nIdx);
                                 bOk = SetSbxVariable( p, aAdr );
                             }
                         }
@@ -3362,8 +3362,8 @@ void ScInterpreter::ScMacro()
                 {
                     pMat->GetDimensions(nC, nR);
                     SbxDimArrayRef refArray = new SbxDimArray;
-                    refArray->AddDim32( 1, static_cast<sal_Int32>(nR) );
-                    refArray->AddDim32( 1, static_cast<sal_Int32>(nC) );
+                    refArray->AddDim(1, static_cast<sal_Int32>(nR));
+                    refArray->AddDim(1, static_cast<sal_Int32>(nC));
                     for( SCSIZE nMatRow = 0; nMatRow < nR; nMatRow++ )
                     {
                         sal_Int32 nIdx[ 2 ];
@@ -3371,7 +3371,7 @@ void ScInterpreter::ScMacro()
                         for( SCSIZE nMatCol = 0; nMatCol < nC; nMatCol++ )
                         {
                             nIdx[ 1 ] = static_cast<sal_Int32>(nMatCol+1);
-                            SbxVariable* p = refArray->Get32( nIdx );
+                            SbxVariable* p = refArray->Get(nIdx);
                             if (pMat->IsStringOrEmpty(nMatCol, nMatRow))
                             {
                                 p->PutString( pMat->GetString(nMatCol, nMatRow).getString() );
@@ -3441,7 +3441,7 @@ void ScInterpreter::ScMacro()
         {
             SbxBase* pElemObj = refRes->GetObject();
             SbxDimArray* pDimArray = dynamic_cast<SbxDimArray*>(pElemObj);
-            sal_Int32 nDim = pDimArray ? pDimArray->GetDims32() : 0;
+            sal_Int32 nDim = pDimArray ? pDimArray->GetDims() : 0;
             if ( 1 <= nDim && nDim <= 2 )
             {
                 sal_Int32 nCs, nCe, nRs;
@@ -3450,7 +3450,7 @@ void ScInterpreter::ScMacro()
                 SCROW nRowIdx;
                 if ( nDim == 1 )
                 {   // array( cols )  one line, several columns
-                    pDimArray->GetDim32( 1, nCs, nCe );
+                    pDimArray->GetDim(1, nCs, nCe);
                     nC = static_cast<SCSIZE>(nCe - nCs + 1);
                     nRs = 0;
                     nR = 1;
@@ -3460,9 +3460,9 @@ void ScInterpreter::ScMacro()
                 else
                 {   // array( rows, cols )
                     sal_Int32 nRe;
-                    pDimArray->GetDim32( 1, nRs, nRe );
+                    pDimArray->GetDim(1, nRs, nRe);
                     nR = static_cast<SCSIZE>(nRe - nRs + 1);
-                    pDimArray->GetDim32( 2, nCs, nCe );
+                    pDimArray->GetDim(2, nCs, nCe);
                     nC = static_cast<SCSIZE>(nCe - nCs + 1);
                     nColIdx = 1;
                     nRowIdx = 0;
@@ -3480,7 +3480,7 @@ void ScInterpreter::ScMacro()
                         for ( SCSIZE i=0; i < nC; i++ )
                         {
                             nIdx[ nColIdx ] = nCs + static_cast<sal_Int32>(i);
-                            pV = pDimArray->Get32( nIdx );
+                            pV = pDimArray->Get(nIdx);
                             if ( lcl_isNumericResult( fVal, pV) )
                             {
                                 pMat->PutDouble( fVal, i, j );

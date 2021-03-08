@@ -62,9 +62,9 @@ bool SbModule::Compile()
             pBasic->ClearAllModuleVars();
         RemoveVars(); // remove 'this' Modules variables
         // clear all method statics
-        for( sal_uInt32 i = 0; i < pMethods->Count32(); i++ )
+        for (sal_uInt32 i = 0; i < pMethods->Count(); i++)
         {
-            SbMethod* p = dynamic_cast<SbMethod*>( pMethods->Get32( i )  );
+            SbMethod* p = dynamic_cast<SbMethod*>(pMethods->Get(i));
             if( p )
                 p->ClearStatics();
         }
