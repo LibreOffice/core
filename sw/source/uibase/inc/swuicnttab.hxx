@@ -87,7 +87,7 @@ class SwMultiTOXTabDialog : public SfxTabDialogController
     DECL_LINK(ShowPreviewHdl, weld::ToggleButton&, void);
 
 public:
-    SwMultiTOXTabDialog(weld::Window* pParent, const SfxItemSet& rSet,
+    SwMultiTOXTabDialog(weld::Widget* pParent, const SfxItemSet& rSet,
                         SwWrtShell &rShell,
                         SwTOXBase* pCurTOX, sal_uInt16 nToxType,
                         bool bGlobal);

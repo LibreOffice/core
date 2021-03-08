@@ -1103,7 +1103,7 @@ VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateOutlineTabDialo
     return VclPtr<AbstractTabController_Impl>::Create(std::make_shared<SwOutlineTabDialog>(pParent, pSwItemSet, rWrtSh));
 }
 
-VclPtr<AbstractMultiTOXTabDialog> SwAbstractDialogFactory_Impl::CreateMultiTOXTabDialog(weld::Window* pParent, const SfxItemSet& rSet,
+VclPtr<AbstractMultiTOXTabDialog> SwAbstractDialogFactory_Impl::CreateMultiTOXTabDialog(weld::Widget* pParent, const SfxItemSet& rSet,
                                                                                         SwWrtShell &rShell, SwTOXBase* pCurTOX, bool bGlobal)
 {
     return VclPtr<AbstractMultiTOXTabDialog_Impl>::Create(std::make_shared<SwMultiTOXTabDialog>(pParent, rSet, rShell, pCurTOX, USHRT_MAX, bGlobal));
