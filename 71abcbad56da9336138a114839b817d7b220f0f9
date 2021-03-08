@@ -45,6 +45,30 @@
       "revId": "71abcbad56da9336138a114839b817d7b220f0f9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6e892fa_d3922896",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4153,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-03-08T08:11:01Z",
+      "side": 1,
+      "message": "\u003e But actually I doubt that we need *system* language. LibreOffice usually tries to not depend on system, but rather on its configured locale; so you might want to use Application::GetSettings().GetLanguageTag().getLanguageType().\n\nYeah this was what i was looking for.Thanks.\nI will also follow the nitpicks given by you above.\nI am currently working on vbFromUnicode and will submit the new patch once i will be able to solve it and also making the mentioned changes.",
+      "parentUuid": "789e5734_ee4c855b",
+      "range": {
+        "startLine": 4153,
+        "startChar": 31,
+        "endLine": 4153,
+        "endChar": 67
+      },
+      "revId": "71abcbad56da9336138a114839b817d7b220f0f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
