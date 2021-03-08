@@ -79,7 +79,7 @@ class SVX_DLLPUBLIC SvxLineWidthToolBoxControl final : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxLineWidthToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    SvxLineWidthToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx );
     virtual ~SvxLineWidthToolBoxControl() override;
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,

@@ -21,6 +21,7 @@
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_COMMANDINFO_HXX
 
 #include <rtl/ustring.hxx>
+#include <vcl/toolbox.hxx>
 
 #include <unordered_map>
 #include <vector>
@@ -33,8 +34,8 @@ struct CommandInfo
     CommandInfo() : nId( 0 ),
                     nImageInfo( 0 ) {}
 
-    sal_uInt16                  nId;
-    ::std::vector< sal_uInt16 > aIds;
+    ToolBoxItemId               nId;
+    ::std::vector< ToolBoxItemId > aIds;
     sal_Int16                   nImageInfo;
 };
 

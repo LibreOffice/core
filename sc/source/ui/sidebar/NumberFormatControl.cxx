@@ -26,7 +26,7 @@ using namespace sc;
 
 SFX_IMPL_TOOLBOX_CONTROL(ScNumberFormatControl, SfxUInt16Item);
 
-ScNumberFormatControl::ScNumberFormatControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
+ScNumberFormatControl::ScNumberFormatControl(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx)
     : SfxToolBoxControl(nSlotId, nId, rTbx)
 {
 }
@@ -38,7 +38,7 @@ ScNumberFormatControl::~ScNumberFormatControl()
 void ScNumberFormatControl::StateChanged(sal_uInt16, SfxItemState eState,
                                          const SfxPoolItem* pState)
 {
-    sal_uInt16 nId = GetId();
+    ToolBoxItemId nId = GetId();
     ToolBox& rTbx = GetToolBox();
     ScNumberFormat* pComboBox = static_cast<ScNumberFormat*>(rTbx.GetItemWindow(nId));
 

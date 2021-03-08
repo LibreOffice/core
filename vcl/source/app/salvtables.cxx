@@ -860,7 +860,7 @@ bool SalInstanceToolbar::get_item_visible(const OString& rIdent) const
 
 void SalInstanceToolbar::set_item_active(const OString& rIdent, bool bActive)
 {
-    sal_uInt16 nItemId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
+    ToolBoxItemId nItemId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
     m_xToolBox->CheckItem(nItemId, bActive);
 }
 
@@ -871,7 +871,7 @@ bool SalInstanceToolbar::get_item_active(const OString& rIdent) const
 
 void SalInstanceToolbar::set_menu_item_active(const OString& rIdent, bool bActive)
 {
-    sal_uInt16 nItemId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
+    ToolBoxItemId nItemId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
     assert(m_xToolBox->GetItemBits(nItemId) & ToolBoxItemBits::DROPDOWN);
 
     if (bActive)
@@ -906,7 +906,7 @@ void SalInstanceToolbar::set_menu_item_active(const OString& rIdent, bool bActiv
 
 bool SalInstanceToolbar::get_menu_item_active(const OString& rIdent) const
 {
-    sal_uInt16 nItemId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
+    ToolBoxItemId nItemId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
     assert(m_xToolBox->GetItemBits(nItemId) & ToolBoxItemBits::DROPDOWN);
 
     if (rIdent == m_sStartShowIdent)
@@ -938,7 +938,7 @@ void SalInstanceToolbar::set_item_popover(const OString& rIdent, weld::Widget* p
         pFloat->EnableDocking();
     }
 
-    sal_uInt16 nId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
+    ToolBoxItemId nId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
     auto xOldFloat = m_aFloats[nId];
     if (xOldFloat)
     {
@@ -954,7 +954,7 @@ void SalInstanceToolbar::set_item_menu(const OString& rIdent, weld::Menu* pMenu)
 
     PopupMenu* pPopup = pInstanceMenu ? pInstanceMenu->getMenu() : nullptr;
 
-    sal_uInt16 nId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
+    ToolBoxItemId nId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
     m_aMenus[nId] = pPopup;
     m_aFloats[nId] = nullptr;
 }
@@ -1076,13 +1076,13 @@ SalInstanceToolbar::~SalInstanceToolbar()
 
 IMPL_LINK_NOARG(SalInstanceToolbar, ClickHdl, ToolBox*, void)
 {
-    sal_uInt16 nItemId = m_xToolBox->GetCurItemId();
+    ToolBoxItemId nItemId = m_xToolBox->GetCurItemId();
     signal_clicked(m_xToolBox->GetItemCommand(nItemId).toUtf8());
 }
 
 IMPL_LINK_NOARG(SalInstanceToolbar, DropdownClick, ToolBox*, void)
 {
-    sal_uInt16 nItemId = m_xToolBox->GetCurItemId();
+    ToolBoxItemId nItemId = m_xToolBox->GetCurItemId();
     set_menu_item_active(m_xToolBox->GetItemCommand(nItemId).toUtf8(), true);
 }
 
@@ -1094,7 +1094,7 @@ IMPL_LINK(SalInstanceToolbar, MenuToggleListener, VclWindowEvent&, rEvent, void)
         {
             if (rEvent.GetWindow() == rFloat.second)
             {
-                sal_uInt16 nItemId = rFloat.first;
+                ToolBoxItemId nItemId = rFloat.first;
                 signal_toggle_menu(m_xToolBox->GetItemCommand(nItemId).toUtf8());
                 break;
             }

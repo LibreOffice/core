@@ -118,7 +118,7 @@ OUString VCLXAccessibleToolBoxItem::GetText()
 {
     OUString sRet;
     // no text for separators and spaces
-    if ( m_pToolBox && m_nItemId > 0 )
+    if ( m_pToolBox && m_nItemId > ToolBoxItemId(0) )
     {
         sRet = m_pToolBox->GetItemText( m_nItemId );
         if (sRet.isEmpty())
@@ -498,7 +498,7 @@ sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getIndexAtPoint( const awt::Point&
     sal_Int32 nIndex = -1;
     if ( m_pToolBox && m_pToolBox->GetButtonType() != ButtonType::SYMBOLONLY ) // symbol buttons have no character bounds
     {
-        sal_uInt16 nItemId = 0;
+        ToolBoxItemId nItemId;
         tools::Rectangle aItemRect = m_pToolBox->GetItemRect( m_nItemId );
         Point aPnt( VCLPoint( aPoint ) );
         aPnt += aItemRect.TopLeft();

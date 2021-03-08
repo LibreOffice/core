@@ -54,7 +54,7 @@ void SvxFmAbsRecWin::PositionFired(sal_Int64 nRecord)
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlAbsRec, SfxInt32Item );
 
-SvxFmTbxCtlAbsRec::SvxFmTbxCtlAbsRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
+SvxFmTbxCtlAbsRec::SvxFmTbxCtlAbsRec( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }
@@ -66,7 +66,7 @@ SvxFmTbxCtlAbsRec::~SvxFmTbxCtlAbsRec()
 
 void SvxFmTbxCtlAbsRec::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    sal_uInt16              nId = GetId();
+    ToolBoxItemId       nId = GetId();
     ToolBox*            pToolBox = &GetToolBox();
     SvxFmAbsRecWin*     pWin = static_cast<SvxFmAbsRecWin*>( pToolBox->GetItemWindow(nId) );
 
@@ -96,7 +96,7 @@ VclPtr<InterimItemWindow> SvxFmTbxCtlAbsRec::CreateItemWindow( vcl::Window* pPar
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlRecText, SfxBoolItem );
 
-SvxFmTbxCtlRecText::SvxFmTbxCtlRecText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
+SvxFmTbxCtlRecText::SvxFmTbxCtlRecText( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemWindowNonInteractive(nId, true);
@@ -118,7 +118,7 @@ VclPtr<InterimItemWindow> SvxFmTbxCtlRecText::CreateItemWindow( vcl::Window* pPa
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlRecFromText, SfxBoolItem );
 
-SvxFmTbxCtlRecFromText::SvxFmTbxCtlRecFromText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
+SvxFmTbxCtlRecFromText::SvxFmTbxCtlRecFromText( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemWindowNonInteractive(nId, true);
@@ -140,7 +140,7 @@ VclPtr<InterimItemWindow> SvxFmTbxCtlRecFromText::CreateItemWindow( vcl::Window*
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlRecTotal, SfxStringItem );
 
-SvxFmTbxCtlRecTotal::SvxFmTbxCtlRecTotal( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
+SvxFmTbxCtlRecTotal::SvxFmTbxCtlRecTotal( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx )
     : SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemWindowNonInteractive(nId, true);
@@ -180,7 +180,7 @@ void SvxFmTbxCtlRecTotal::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxNextRec, SfxBoolItem );
 
 
-SvxFmTbxNextRec::SvxFmTbxNextRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
+SvxFmTbxNextRec::SvxFmTbxNextRec( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits(nId, rTbx.GetItemBits(nId) | ToolBoxItemBits::REPEAT);
@@ -195,7 +195,7 @@ SvxFmTbxNextRec::SvxFmTbxNextRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& r
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxPrevRec, SfxBoolItem );
 
 
-SvxFmTbxPrevRec::SvxFmTbxPrevRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
+SvxFmTbxPrevRec::SvxFmTbxPrevRec( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits(nId, rTbx.GetItemBits(nId) | ToolBoxItemBits::REPEAT);

@@ -394,10 +394,8 @@
 #define FN_TABLE_HEADLINE_COUNT     (FN_FORMAT + 147) /* number of repeated headlines of tables */
 
 // Region: Ribbon
-#define FN_FORMULA_CALC             (FN_FORMAT + 156)  /* select formula */
-#define FN_FORMULA_CANCEL           (FN_FORMAT + 157)  /* don't apply formula */
-#define FN_FORMULA_APPLY            (FN_FORMAT + 158)  /* apply formula */
 #define FN_TABLE_UNSET_READ_ONLY    (FN_FORMAT + 159)  /* undo cell protection for table */
+// 156..158 are toolbox item ids
 
 #define FN_FRAME_WRAP_IDEAL         (FN_FORMAT + 162)  /* frame ideal wrapping */
 #define FN_FRAME_WRAPTHRU_TOGGLE    (FN_FORMAT + 163)  /* toggle frame transparent wrapping */

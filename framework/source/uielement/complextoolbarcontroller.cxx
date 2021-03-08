@@ -49,7 +49,7 @@ ComplexToolbarController::ComplexToolbarController(
     const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >&            rFrame,
     ToolBox*                              pToolbar,
-    sal_uInt16                            nID,
+    ToolBoxItemId                         nID,
     const OUString&                       aCommand ) :
     svt::ToolboxController( rxContext, rFrame, aCommand )
     ,   m_xToolbar( pToolbar )
@@ -72,7 +72,7 @@ void SAL_CALL ComplexToolbarController::dispose()
 
     m_xURLTransformer.clear();
     m_xToolbar.clear();
-    m_nID = 0;
+    m_nID = ToolBoxItemId(0);
 }
 
 Sequence<PropertyValue> ComplexToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const

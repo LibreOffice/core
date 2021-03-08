@@ -62,7 +62,7 @@ public:
 
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SdTbxCtlDiaPages(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    SdTbxCtlDiaPages(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx);
     virtual ~SdTbxCtlDiaPages() override;
 };
 

@@ -49,7 +49,7 @@ using namespace ::com::sun::star::task;
 
 SFX_IMPL_TOOLBOX_CONTROL(SfxURLToolBoxControl_Impl,SfxStringItem)
 
-SfxURLToolBoxControl_Impl::SfxURLToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox )
+SfxURLToolBoxControl_Impl::SfxURLToolBoxControl_Impl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rBox )
     : SfxToolBoxControl( nSlotId, nId, rBox )
     , m_bModified(false)
 {
@@ -218,7 +218,7 @@ IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, OpenHdl, weld::ComboBox&, bool)
 
 void SfxURLToolBoxControl_Impl::StateChanged
 (
-    sal_uInt16              nSID,
+    sal_uInt16          nSID,
     SfxItemState        eState,
     const SfxPoolItem*  pState
 )

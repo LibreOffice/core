@@ -79,7 +79,7 @@ namespace svx
     }
 
     VclToolboxButtonColorUpdater::VclToolboxButtonColorUpdater(
-            sal_uInt16 nSlotId, sal_uInt16 nTbxBtnId, ToolBox* pToolBox, bool bWideButton,
+            sal_uInt16 nSlotId, ToolBoxItemId nTbxBtnId, ToolBox* pToolBox, bool bWideButton,
             const OUString& rCommandLabel, const OUString& rCommandURL,
             const css::uno::Reference<css::frame::XFrame>& rFrame)
         : ToolboxButtonColorUpdaterBase(bWideButton, rCommandLabel, rCommandURL, rFrame)

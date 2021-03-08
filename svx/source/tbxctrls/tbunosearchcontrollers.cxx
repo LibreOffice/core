@@ -135,7 +135,7 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
         ToolBox::ImplToolItems::size_type nItemCount = pToolBox->GetItemCount();
         for ( ToolBox::ImplToolItems::size_type i=0; i<nItemCount; ++i )
         {
-            sal_uInt16 id = pToolBox->GetItemId(i);
+            ToolBoxItemId id = pToolBox->GetItemId(i);
             OUString sItemCommand = pToolBox->GetItemCommand(id);
             if ( sItemCommand == COMMAND_FINDTEXT )
             {
@@ -563,9 +563,9 @@ private:
 
     VclPtr<FindTextFieldControl> m_pFindTextFieldControl;
 
-    sal_uInt16 m_nDownSearchId;
-    sal_uInt16 m_nUpSearchId;
-    sal_uInt16 m_nFindAllId;
+    ToolBoxItemId m_nDownSearchId;
+    ToolBoxItemId m_nUpSearchId;
+    ToolBoxItemId m_nFindAllId;
 
 };
 
@@ -1391,7 +1391,7 @@ void SAL_CALL SearchLabelToolboxController::statusChanged( const css::frame::Fea
 css::uno::Reference< css::awt::XWindow > SAL_CALL SearchLabelToolboxController::createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent )
 {
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if (getToolboxId(nId, &pToolBox))
         pToolBox->SetItemWindowNonInteractive(nId, true);
 
@@ -1560,7 +1560,7 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
     ToolBox::ImplToolItems::size_type nItemCount = pToolBox->GetItemCount();
     for ( ToolBox::ImplToolItems::size_type i=0; i<nItemCount; ++i )
     {
-        sal_uInt16 id = pToolBox->GetItemId(i);
+        ToolBoxItemId id = pToolBox->GetItemId(i);
         OUString sItemCommand = pToolBox->GetItemCommand(id);
         if ( sItemCommand == COMMAND_FINDTEXT )
         {

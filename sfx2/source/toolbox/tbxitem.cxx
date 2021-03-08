@@ -69,7 +69,7 @@ using namespace ::com::sun::star::ui;
 
 SFX_IMPL_TOOLBOX_CONTROL_ARG(SfxToolBoxControl, SfxStringItem, true);
 
-rtl::Reference<svt::ToolboxController> SfxToolBoxControllerFactory( const Reference< XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const OUString& aCommandURL )
+rtl::Reference<svt::ToolboxController> SfxToolBoxControllerFactory( const Reference< XFrame >& rFrame, ToolBox* pToolbox, ToolBoxItemId nID, const OUString& aCommandURL )
 {
     SolarMutexGuard aGuard;
 
@@ -113,13 +113,13 @@ struct SfxToolBoxControl_Impl
 {
     VclPtr<ToolBox>         pBox;
     bool                    bShowString;
-    sal_uInt16              nTbxId;
+    ToolBoxItemId           nTbxId;
     sal_uInt16              nSlotId;
 };
 
 SfxToolBoxControl::SfxToolBoxControl(
     sal_uInt16      nSlotID,
-    sal_uInt16      nID,
+    ToolBoxItemId   nID,
     ToolBox&        rBox,
     bool            bShowStringItems     )
     : pImpl( new SfxToolBoxControl_Impl )
@@ -140,7 +140,7 @@ ToolBox& SfxToolBoxControl::GetToolBox() const
 {
     return *pImpl->pBox;
 }
-unsigned short SfxToolBoxControl::GetId() const
+ToolBoxItemId SfxToolBoxControl::GetId() const
 {
     return pImpl->nTbxId;
 }
@@ -170,7 +170,7 @@ void SfxToolBoxControl::RegisterToolBoxControl( SfxModule* pMod, const SfxTbxCtr
     SfxGetpApp()->RegisterToolBoxControl_Impl( pMod, rFact );
 }
 
-rtl::Reference<SfxToolBoxControl> SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, sal_uInt16 nTbxId, ToolBox *pBox, SfxModule const * pMod  )
+rtl::Reference<SfxToolBoxControl> SfxToolBoxControl::CreateControl( sal_uInt16 nSlotId, ToolBoxItemId nTbxId, ToolBox *pBox, SfxModule const * pMod  )
 {
     SolarMutexGuard aGuard;
 
@@ -472,7 +472,7 @@ Reference< css::awt::XWindow > SAL_CALL SfxToolBoxControl::createItemWindow( con
 
 void SfxToolBoxControl::StateChanged
 (
-    sal_uInt16              nId,
+    sal_uInt16          /*nSlotId*/,
     SfxItemState        eState,
     const SfxPoolItem*  pState
 )
@@ -510,7 +510,7 @@ void SfxToolBoxControl::StateChanged
             else if ( pImpl->bShowString )
             {
                 if (auto pStringItem = dynamic_cast< const SfxStringItem *>( pState ) )
-                    pImpl->pBox->SetItemText(nId, pStringItem->GetValue() );
+                    pImpl->pBox->SetItemText(GetId(), pStringItem->GetValue() );
             }
         }
         break;

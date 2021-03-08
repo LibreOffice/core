@@ -38,7 +38,7 @@ ToggleButtonToolbarController::ToggleButtonToolbarController(
     const Reference< XComponentContext >&    rxContext,
     const Reference< XFrame >&               rFrame,
     ToolBox*                                 pToolbar,
-    sal_uInt16                                   nID,
+    ToolBoxItemId                            nID,
     Style                                    eStyle,
     const OUString&                          aCommand ) :
     ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )

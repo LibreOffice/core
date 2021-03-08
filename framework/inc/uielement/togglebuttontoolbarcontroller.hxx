@@ -51,7 +51,7 @@ class ToggleButtonToolbarController final : public ComplexToolbarController
         ToggleButtonToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                        const css::uno::Reference< css::frame::XFrame >& rFrame,
                                        ToolBox* pToolBar,
-                                       sal_uInt16 nID,
+                                       ToolBoxItemId nID,
                                        Style eStyle,
                                        const OUString& aCommand );
         virtual ~ToggleButtonToolbarController() override;

@@ -36,7 +36,7 @@ SFX_IMPL_TOOLBOX_CONTROL( ScZoomSliderControl, SvxZoomSliderItem );
 
 ScZoomSliderControl::ScZoomSliderControl(
     sal_uInt16     nSlotId,
-    sal_uInt16     nId,
+    ToolBoxItemId  nId,
     ToolBox&   rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
 {
@@ -51,7 +51,7 @@ ScZoomSliderControl::~ScZoomSliderControl()
 void ScZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState,
                                        const SfxPoolItem* pState )
 {
-    sal_uInt16                  nId  = GetId();
+    ToolBoxItemId           nId  = GetId();
     ToolBox&                rTbx = GetToolBox();
     ScZoomSliderWnd*        pBox = static_cast<ScZoomSliderWnd*>(rTbx.GetItemWindow( nId ));
     OSL_ENSURE( pBox ,"Control not found!" );

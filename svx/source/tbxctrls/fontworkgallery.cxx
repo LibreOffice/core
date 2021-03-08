@@ -396,7 +396,7 @@ void SAL_CALL FontworkAlignmentControl::initialize( const css::uno::Sequence< cs
     svt::PopupWindowController::initialize( aArguments );
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if ( getToolboxId( nId, &pToolBox ) )
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
 }
@@ -670,7 +670,7 @@ void SAL_CALL FontworkCharacterSpacingControl::initialize( const css::uno::Seque
     svt::PopupWindowController::initialize( aArguments );
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if ( getToolboxId( nId, &pToolBox ) )
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
 }

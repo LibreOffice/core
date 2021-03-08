@@ -40,7 +40,7 @@ namespace sfx2::sidebar {
 
 Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
     ToolBox* pToolBox,
-    const sal_uInt16 nItemId,
+    const ToolBoxItemId nItemId,
     const OUString& rsCommandName,
     const Reference<frame::XFrame>& rxFrame,
     const Reference<frame::XController>& rxController,

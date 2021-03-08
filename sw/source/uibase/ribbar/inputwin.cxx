@@ -54,8 +54,11 @@
 
 #include <IDocumentContentOperations.hxx>
 
-#define ED_POS              2
-#define ED_FORMULA          3
+constexpr ToolBoxItemId ED_POS(2);
+constexpr ToolBoxItemId ED_FORMULA(3);
+constexpr ToolBoxItemId FN_FORMULA_CALC(FN_FORMAT + 156);  /* select formula */
+constexpr ToolBoxItemId FN_FORMULA_CANCEL(FN_FORMAT + 157);  /* don't apply formula */
+constexpr ToolBoxItemId FN_FORMULA_APPLY(FN_FORMAT + 158); /* apply formula */
 
 SFX_IMPL_POS_CHILDWINDOW_WITHID( SwInputChild, FN_EDIT_FORMULA, SFX_OBJECTBAR_OBJECT )
 
@@ -297,7 +300,7 @@ void SwInputWindow::MenuHdl(std::string_view command)
 
 IMPL_LINK_NOARG(SwInputWindow, DropdownClickHdl, ToolBox *, void)
 {
-    sal_uInt16 nCurID = GetCurItemId();
+    ToolBoxItemId nCurID = GetCurItemId();
     EndSelection(); // reset back CurItemId !
     if (nCurID == FN_FORMULA_CALC)
     {
@@ -311,21 +314,16 @@ IMPL_LINK_NOARG(SwInputWindow, DropdownClickHdl, ToolBox *, void)
 
 void SwInputWindow::Click( )
 {
-    sal_uInt16 nCurID = GetCurItemId();
+    ToolBoxItemId nCurID = GetCurItemId();
     EndSelection(); // reset back CurItemId !
-    switch ( nCurID )
+    if ( nCurID == FN_FORMULA_CANCEL )
     {
-        case FN_FORMULA_CANCEL:
-        {
-            CancelFormula();
-        }
-        break;
-        case FN_FORMULA_APPLY:
-        {
-            ApplyFormula();
-        }
-        break;
-   }
+        CancelFormula();
+    }
+    else if (nCurID == FN_FORMULA_APPLY)
+    {
+        ApplyFormula();
+    }
 }
 
 void  SwInputWindow::ApplyFormula()

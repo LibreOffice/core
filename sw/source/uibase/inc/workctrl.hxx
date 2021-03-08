@@ -54,7 +54,7 @@ class SwTbxAutoTextCtrl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SwTbxAutoTextCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    SwTbxAutoTextCtrl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx );
     virtual ~SwTbxAutoTextCtrl() override;
 
     virtual void CreatePopupWindow() override;
@@ -70,7 +70,7 @@ class SwPreviewZoomControl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SwPreviewZoomControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    SwPreviewZoomControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx );
     virtual ~SwPreviewZoomControl() override;
 
     virtual void            StateChanged( sal_uInt16 nSID,
@@ -85,7 +85,7 @@ class SwJumpToSpecificPageControl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SwJumpToSpecificPageControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    SwJumpToSpecificPageControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx );
     virtual ~SwJumpToSpecificPageControl() override;
 
     virtual VclPtr<InterimItemWindow> CreateItemWindow( vcl::Window *pParent ) override;

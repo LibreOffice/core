@@ -43,7 +43,7 @@ class ComplexToolbarController : public svt::ToolboxController
         ComplexToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                   const css::uno::Reference< css::frame::XFrame >& rFrame,
                                   ToolBox* pToolBar,
-                                  sal_uInt16       nID,
+                                  ToolBoxItemId   nID,
                                   const OUString& aCommand );
         virtual ~ComplexToolbarController() override;
 
@@ -88,7 +88,7 @@ class ComplexToolbarController : public svt::ToolboxController
         void notifyTextChanged( const OUString& aText );
 
         VclPtr<ToolBox>                                      m_xToolbar;
-        sal_uInt16                                           m_nID;
+        ToolBoxItemId                                        m_nID;
         bool                                                 m_bMadeInvisible;
         mutable css::util::URL                               m_aURL;
         css::uno::Reference< css::util::XURLTransformer >    m_xURLTransformer;

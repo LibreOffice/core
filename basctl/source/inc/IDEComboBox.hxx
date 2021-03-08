@@ -52,7 +52,7 @@ public:
      * @param nId -- this item's unique id in ToolBox
      * @param rTbx -- the ToolBox which contains this ComboBox
      */
-    LibBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    LibBoxControl(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx);
 
     /*!
      * Triggered if state was changed
@@ -198,7 +198,7 @@ public:
      * @param nId -- this item's unique id in ToolBox
      * @param rTbx -- the ToolBox which contains this ComboBox
      */
-    LanguageBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    LanguageBoxControl(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx);
 
     /*!
      * Triggered if state was changed

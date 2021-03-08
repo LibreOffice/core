@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 SFX_IMPL_TOOLBOX_CONTROL( SvxLineWidthToolBoxControl, XLineWidthItem );
 
 SvxLineWidthToolBoxControl::SvxLineWidthToolBoxControl(
-    sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
+    sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     addStatusListener( ".uno:MetricUnit");

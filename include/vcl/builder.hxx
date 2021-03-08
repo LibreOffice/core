@@ -17,6 +17,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/toolbox.hxx>
 #include <tools/wintypes.hxx>
 #include <vcl/EnumContext.hxx>
 
@@ -282,7 +283,7 @@ private:
 
         std::vector< VclPtr<MessageDialog> > m_aMessageDialogs;
 
-        sal_uInt16 m_nLastToolbarId;
+        ToolBoxItemId m_nLastToolbarId;
 
         sal_uInt16 m_nLastMenuItemId;
 

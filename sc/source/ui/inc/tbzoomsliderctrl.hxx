@@ -33,7 +33,7 @@ class ScZoomSliderControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    ScZoomSliderControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    ScZoomSliderControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx );
     virtual ~ScZoomSliderControl() override;
 
     virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;

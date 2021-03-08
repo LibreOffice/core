@@ -58,7 +58,7 @@ struct ImplToolItem
     ToolBoxItemType     meType;
     ToolBoxItemBits     mnBits;
     TriState            meState;
-    sal_uInt16          mnId;
+    ToolBoxItemId       mnId;
     bool                mbEnabled:1,
                         mbVisible:1,
                         mbEmptyBtn:1,
@@ -68,11 +68,11 @@ struct ImplToolItem
                         mbExpand:1;
 
                         ImplToolItem();
-                        ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
+                        ImplToolItem( ToolBoxItemId nItemId, const Image& rImage,
                                       ToolBoxItemBits nItemBits );
-                        ImplToolItem( sal_uInt16 nItemId, const OUString& rTxt,
+                        ImplToolItem( ToolBoxItemId nItemId, const OUString& rTxt,
                                       ToolBoxItemBits nItemBits );
-                        ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
+                        ImplToolItem( ToolBoxItemId nItemId, const Image& rImage,
                                       const OUString& rTxt,
                                       ToolBoxItemBits nItemBits );
 
@@ -97,7 +97,7 @@ struct ImplToolItem
     bool IsItemHidden() const;
 
 private:
-    void init(sal_uInt16 nItemId, ToolBoxItemBits nItemBits, bool bEmptyBtn);
+    void init(ToolBoxItemId nItemId, ToolBoxItemBits nItemBits, bool bEmptyBtn);
 };
 
 namespace vcl
@@ -105,7 +105,7 @@ namespace vcl
 
 struct ToolBoxLayoutData : public ControlLayoutData
 {
-    std::vector< sal_uInt16 >               m_aLineItemIds;
+    std::vector< ToolBoxItemId >               m_aLineItemIds;
 };
 
 } /* namespace vcl */

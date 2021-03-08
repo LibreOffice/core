@@ -197,7 +197,7 @@ void SAL_CALL PopupWindowController::statusChanged( const frame::FeatureStateEve
     }
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nItemId = 0;
+    ToolBoxItemId nItemId;
     if ( getToolboxId( nItemId, &pToolBox ) )
     {
         pToolBox->CheckItem( nItemId, bValue );

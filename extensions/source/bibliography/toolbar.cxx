@@ -49,7 +49,7 @@ using namespace ::com::sun::star::beans;
 // Constants --------------------------------------------------------------
 
 
-BibToolBarListener::BibToolBarListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId):
+BibToolBarListener::BibToolBarListener(BibToolBar *pTB, const OUString& aStr, ToolBoxItemId nId):
         nIndex(nId),
         aCommand(aStr),
         pToolBar(pTB)
@@ -77,7 +77,7 @@ void BibToolBarListener::statusChanged(const css::frame::FeatureStateEvent& rEvt
 };
 
 
-BibTBListBoxListener::BibTBListBoxListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId):
+BibTBListBoxListener::BibTBListBoxListener(BibToolBar *pTB, const OUString& aStr, ToolBoxItemId nId):
     BibToolBarListener(pTB,aStr,nId)
 {
 }
@@ -115,7 +115,7 @@ void BibTBListBoxListener::statusChanged(const css::frame::FeatureStateEvent& rE
     pToolBar->SelectSourceEntry(rEvt.FeatureDescriptor);
 };
 
-BibTBQueryMenuListener::BibTBQueryMenuListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId):
+BibTBQueryMenuListener::BibTBQueryMenuListener(BibToolBar *pTB, const OUString& aStr, ToolBoxItemId nId):
     BibToolBarListener(pTB,aStr,nId)
 {
 }
@@ -152,7 +152,7 @@ void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)
     }
 };
 
-BibTBEditListener::BibTBEditListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId):
+BibTBEditListener::BibTBEditListener(BibToolBar *pTB, const OUString& aStr, ToolBoxItemId nId):
     BibToolBarListener(pTB,aStr,nId)
 {
 }
@@ -302,7 +302,7 @@ void BibToolBar::InitListener()
 
     for(ToolBox::ImplToolItems::size_type nPos=0;nPos<nCount;nPos++)
     {
-        sal_uInt16 nId=GetItemId(nPos);
+        ToolBoxItemId nId=GetItemId(nPos);
         if (!nId)
             continue;
 
@@ -341,7 +341,7 @@ void BibToolBar::SetXController(const uno::Reference< frame::XController > & xCt
 
 void BibToolBar::Select()
 {
-    sal_uInt16  nId=GetCurItemId();
+    ToolBoxItemId  nId=GetCurItemId();
 
     if (nId != nTBC_BT_AUTOFILTER)
     {
@@ -361,7 +361,7 @@ void BibToolBar::Select()
     }
 }
 
-void BibToolBar::SendDispatch(sal_uInt16 nId, const Sequence< PropertyValue >& rArgs)
+void BibToolBar::SendDispatch(ToolBoxItemId nId, const Sequence< PropertyValue >& rArgs)
 {
     OUString aCommand = GetItemCommand(nId);
 
@@ -389,7 +389,7 @@ void BibToolBar::SendDispatch(sal_uInt16 nId, const Sequence< PropertyValue >& r
 
 void BibToolBar::Click()
 {
-    sal_uInt16 nId = GetCurItemId();
+    ToolBoxItemId nId = GetCurItemId();
 
     vcl::Window* pWin = GetParent();
 
@@ -516,7 +516,7 @@ IMPL_LINK_NOARG( BibToolBar, SendSelHdl, Timer*, void )
 
 IMPL_LINK_NOARG(BibToolBar, MenuHdl, ToolBox*, void)
 {
-    sal_uInt16 nId = GetCurItemId();
+    ToolBoxItemId nId = GetCurItemId();
     if (nId != nTBC_BT_AUTOFILTER)
         return;
 

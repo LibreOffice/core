@@ -148,7 +148,7 @@ void SidebarToolBox::KeyInput(const KeyEvent& rKEvt)
 }
 
 void SidebarToolBox::CreateController (
-    const sal_uInt16 nItemId,
+    const ToolBoxItemId nItemId,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     const sal_Int32 nItemWidth, bool bSideBar)
 {
@@ -162,7 +162,7 @@ void SidebarToolBox::CreateController (
         maControllers.insert(std::make_pair(nItemId, xController));
 }
 
-Reference<frame::XToolbarController> SidebarToolBox::GetControllerForItemId (const sal_uInt16 nItemId) const
+Reference<frame::XToolbarController> SidebarToolBox::GetControllerForItemId (const ToolBoxItemId nItemId) const
 {
     ControllerContainer::const_iterator iController (maControllers.find(nItemId));
     if (iController != maControllers.end())
