@@ -61,6 +61,7 @@
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
 #include <com/sun/star/drawing/QRCode.hpp>
 #include <com/sun/star/drawing/QRCodeErrorCorrection.hpp>
+#include <com/sun/star/drawing/XShapes3.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -980,6 +981,52 @@ void XMLShapeExport::exportShapes( const uno::Reference < drawing::XShapes >& xS
 
     maCurrentShapesIter = aOldCurrentShapesIter;
 }
+
+namespace xmloff {
+
+void FixZOrder(uno::Reference<drawing::XShapes> const& xShapes,
+    std::function<bool(uno::Reference<beans::XPropertySet> const&)> const& rIsInBackground)
+{
+    uno::Reference<drawing::XShapes3> const xShapes3(xShapes, uno::UNO_QUERY);
+    assert(xShapes3.is());
+    if (!xShapes3.is())
+    {
+        return; // only SvxDrawPage implements this
+    }
+    std::vector<sal_Int32> background;
+    std::vector<sal_Int32> foreground;
+    // shapes are sorted by ZOrder
+    sal_Int32 const nCount(xShapes->getCount());
+    for (sal_Int32 i = 0; i < nCount; ++i)
+    {
+        uno::Reference<beans::XPropertySet> const xShape(xShapes->getByIndex(i), uno::UNO_QUERY);
+        if (rIsInBackground(xShape))
+        {
+            background.emplace_back(i);
+        }
+        else
+        {
+            foreground.emplace_back(i);
+        }
+    }
+    if (background.empty() || foreground.empty())
+    {
+        return; // nothing to do
+    }
+    uno::Sequence<sal_Int32> aNewOrder(nCount);
+    std::copy(background.begin(), background.end(), aNewOrder.begin());
+    std::copy(foreground.begin(), foreground.end(), aNewOrder.begin() + background.size());
+    try
+    {
+        xShapes3->sort(aNewOrder);
+    }
+    catch (uno::Exception const&)
+    {
+        SAL_WARN("xmloff", "FixZOrder: exception");
+    }
+}
+
+} // namespace xmloff
 
 void XMLShapeExport::seekShapes( const uno::Reference< drawing::XShapes >& xShapes ) throw()
 {

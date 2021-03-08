@@ -232,6 +232,20 @@ DECLARE_ODFEXPORT_TEST(testTdf130314, "tdf130314.docx")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_ODFEXPORT_EXPORTONLY_TEST(testTdf133487, "MadeByLO7.odt")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    // shape in background has lowest index
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p[2]/draw:custom-shape", "z-index", "0");
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name = /office:document-content/office:body/office:text/text:p[2]/draw:custom-shape[@draw:z-index = '0']/attribute::draw:style-name]/style:graphic-properties", "run-through", "background");
+    // shape in foreground, previously index 1
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p[1]/draw:custom-shape", "z-index", "2");
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name = /office:document-content/office:body/office:text/text:p[1]/draw:custom-shape[@draw:z-index = '2']/attribute::draw:style-name]/style:graphic-properties", "run-through", "foreground");
+    // shape in foreground, previously index 0
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p[3]/draw:custom-shape", "z-index", "1");
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name = /office:document-content/office:body/office:text/text:p[3]/draw:custom-shape[@draw:z-index = '1']/attribute::draw:style-name]/style:graphic-properties", "run-through", "foreground");
+}
+
 DECLARE_ODFEXPORT_TEST(testTdf139126, "tdf139126.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
