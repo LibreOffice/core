@@ -57,7 +57,7 @@ private:
                                         const OUString& rOptions );
 
 public:
-    ScLinkedAreaDlg(weld::Window* pParent);
+    ScLinkedAreaDlg(weld::Widget* pParent);
     virtual ~ScLinkedAreaDlg() override;
 
     void            InitFromOldLink( const OUString& rFile, const OUString& rFilter,
