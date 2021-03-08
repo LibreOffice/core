@@ -76,6 +76,9 @@ public:
 
     SCROW findLastTrue() const;
 
+    // Builds internal data (so that it doesn't build them while used in threads).
+    void makeReady();
+
 private:
     ::std::unique_ptr<ScFlatBoolSegmentsImpl> mpImpl;
 };
@@ -98,6 +101,9 @@ public:
     bool getRangeData(SCCOL nCol, RangeData& rData);
     void removeSegment(SCCOL nCol1, SCCOL nCol2);
     void insertSegment(SCCOL nCol, SCCOL nSize);
+
+    // Builds internal data (so that it doesn't build them while used in threads).
+    void makeReady();
 
 private:
     ::std::unique_ptr<ScFlatBoolSegmentsImpl> mpImpl;
@@ -146,6 +152,9 @@ public:
     SCROW findLastTrue(sal_uInt16 nValue) const;
 
     void enableTreeSearch(bool bEnable);
+
+    // Builds internal data (so that it doesn't build them while used in threads).
+    void makeReady();
 
 private:
     ::std::unique_ptr<ScFlatUInt16SegmentsImpl> mpImpl;
