@@ -114,17 +114,17 @@ public:
     SbxArray( const SbxArray& ) = delete;
     SbxArray& operator=( const SbxArray& );
     virtual void Clear() override;
-    sal_uInt32           Count32() const;
+    sal_uInt32 Count() const;
     virtual SbxDataType  GetType() const override;
-    SbxVariableRef&      GetRef32( sal_uInt32 );
-    SbxVariable*         Get32( sal_uInt32 );
-    void                 Put32( SbxVariable*, sal_uInt32 );
-    void                 Insert32( SbxVariable*, sal_uInt32 );
+    SbxVariableRef& GetRef(sal_uInt32);
+    SbxVariable* Get(sal_uInt32);
+    void Put(SbxVariable*, sal_uInt32);
+    void Insert(SbxVariable*, sal_uInt32);
     void                 Remove( sal_uInt32 );
     void                 Remove( SbxVariable const * );
     void                 Merge( SbxArray* );
-    OUString             GetAlias32( sal_uInt32 );
-    void                 PutAlias32( const OUString&, sal_uInt32 );
+    OUString GetAlias(sal_uInt32);
+    void PutAlias(const OUString&, sal_uInt32);
     SbxVariable* Find( const OUString&, SbxClassType );
 };
 
@@ -137,11 +137,11 @@ struct SbxDim {                 // an array-dimension:
 class BASIC_DLLPUBLIC SbxDimArray final : public SbxArray
 {
     std::vector<SbxDim> m_vDimensions;     // Dimension table
-    BASIC_DLLPRIVATE void AddDimImpl32( sal_Int32, sal_Int32, bool bAllowSize0 );
+    BASIC_DLLPRIVATE void AddDimImpl(sal_Int32, sal_Int32, bool bAllowSize0);
     bool mbHasFixedSize;
 
-    sal_uInt32  Offset32( const sal_Int32* );
-    sal_uInt32  Offset32( SbxArray* );
+    sal_uInt32 Offset(const sal_Int32*);
+    sal_uInt32 Offset(SbxArray*);
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
     virtual bool StoreData( SvStream& ) const override;
     virtual ~SbxDimArray() override;
@@ -153,15 +153,15 @@ public:
     virtual void Clear() override;
     SbxVariable* Get( SbxArray* );
 
-    using SbxArray::GetRef32;
-    using SbxArray::Get32;
-    SbxVariable* Get32( const sal_Int32* );
-    using SbxArray::Put32;
-    void Put32( SbxVariable*, const sal_Int32* );
-    sal_Int32 GetDims32() const { return m_vDimensions.size(); }
-    void   AddDim32( sal_Int32, sal_Int32 );
-    void   unoAddDim32( sal_Int32, sal_Int32 );
-    bool   GetDim32( sal_Int32, sal_Int32&, sal_Int32& ) const;
+    using SbxArray::GetRef;
+    using SbxArray::Get;
+    SbxVariable* Get(const sal_Int32*);
+    using SbxArray::Put;
+    void Put(SbxVariable*, const sal_Int32*);
+    sal_Int32 GetDims() const { return m_vDimensions.size(); }
+    void AddDim(sal_Int32, sal_Int32);
+    void unoAddDim(sal_Int32, sal_Int32);
+    bool GetDim(sal_Int32, sal_Int32&, sal_Int32&) const;
     bool hasFixedSize() const { return mbHasFixedSize; };
     void setHasFixedSize( bool bHasFixedSize ) {mbHasFixedSize = bHasFixedSize; };
 };

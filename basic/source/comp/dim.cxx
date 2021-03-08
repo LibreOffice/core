@@ -641,12 +641,12 @@ void SbiParser::DefType()
                             }
                             else if ( !bCompatible )
                                 ub += nBase;
-                            pArray->AddDim32( lb, ub );
+                            pArray->AddDim(lb, ub);
                         }
                         pArray->setHasFixedSize( true );
                     }
                     else
-                        pArray->unoAddDim32( 0, -1 ); // variant array
+                        pArray->unoAddDim(0, -1); // variant array
                     SbxFlagBits nSavFlags = pTypeElem->GetFlags();
                     // need to reset the FIXED flag
                     // when calling PutObject ( because the type will not match Object )
@@ -669,7 +669,7 @@ void SbiParser::DefType()
                         }
                     }
                 }
-                pTypeMembers->Insert32( pTypeElem, pTypeMembers->Count32() );
+                pTypeMembers->Insert(pTypeElem, pTypeMembers->Count());
             }
         }
     }
@@ -677,7 +677,7 @@ void SbiParser::DefType()
     pType->Remove( "Name", SbxClassType::DontCare );
     pType->Remove( "Parent", SbxClassType::DontCare );
 
-    rTypeArray->Insert32 (pType,rTypeArray->Count32());
+    rTypeArray->Insert(pType, rTypeArray->Count());
 }
 
 
@@ -801,14 +801,14 @@ void SbiParser::DefEnum( bool bPrivate )
             pEnumElem->PutLong( nCurrentEnumValue );
             pEnumElem->ResetFlag( SbxFlagBits::Write );
             pEnumElem->SetFlag( SbxFlagBits::Const );
-            pEnumMembers->Insert32( pEnumElem, pEnumMembers->Count32() );
+            pEnumMembers->Insert(pEnumElem, pEnumMembers->Count());
         }
     }
 
     pEnum->Remove( "Name", SbxClassType::DontCare );
     pEnum->Remove( "Parent", SbxClassType::DontCare );
 
-    rEnumArray->Insert32( pEnum, rEnumArray->Count32() );
+    rEnumArray->Insert(pEnum, rEnumArray->Count());
 }
 
 

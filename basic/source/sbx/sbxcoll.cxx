@@ -120,7 +120,7 @@ void SbxCollection::Notify( SfxBroadcaster& rCst, const SfxHint& rHint )
             else if( pVar->GetHashCode() == nCountHash
                   && aVarName.equalsIgnoreAsciiCase( pCount ) )
             {
-                pVar->PutLong( sal::static_int_cast<sal_Int32>(pObjs->Count32()) );
+                pVar->PutLong(sal::static_int_cast<sal_Int32>(pObjs->Count()));
             }
             else if( pVar->GetHashCode() == nAddHash
                   && aVarName.equalsIgnoreAsciiCase( pAdd ) )
@@ -151,13 +151,13 @@ void SbxCollection::Notify( SfxBroadcaster& rCst, const SfxHint& rHint )
 
 void SbxCollection::CollAdd( SbxArray* pPar_ )
 {
-    if( pPar_->Count32() != 2 )
+    if (pPar_->Count() != 2)
     {
         SetError( ERRCODE_BASIC_WRONG_ARGS );
     }
     else
     {
-        SbxBase* pObj = pPar_->Get32( 1 )->GetObject();
+        SbxBase* pObj = pPar_->Get(1)->GetObject();
         if( !pObj || dynamic_cast<const SbxObject*>(pObj) == nullptr )
         {
             SetError( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -173,14 +173,14 @@ void SbxCollection::CollAdd( SbxArray* pPar_ )
 
 void SbxCollection::CollItem( SbxArray* pPar_ )
 {
-    if( pPar_->Count32() != 2 )
+    if (pPar_->Count() != 2)
     {
         SetError( ERRCODE_BASIC_WRONG_ARGS );
     }
     else
     {
         SbxVariable* pRes = nullptr;
-        SbxVariable* p = pPar_->Get32( 1 );
+        SbxVariable* p = pPar_->Get(1);
         if( p->GetType() == SbxSTRING )
         {
             pRes = Find( p->GetOUString(), SbxClassType::Object );
@@ -188,16 +188,16 @@ void SbxCollection::CollItem( SbxArray* pPar_ )
         else
         {
             short n = p->GetInteger();
-            if( n >= 1 && n <= static_cast<sal_Int32>(pObjs->Count32()) )
+            if (n >= 1 && n <= static_cast<sal_Int32>(pObjs->Count()))
             {
-                pRes = pObjs->Get32( static_cast<sal_uInt32>(n) - 1 );
+                pRes = pObjs->Get(static_cast<sal_uInt32>(n) - 1);
             }
         }
         if( !pRes )
         {
             SetError( ERRCODE_BASIC_BAD_INDEX );
         }
-        pPar_->Get32( 0 )->PutObject( pRes );
+        pPar_->Get(0)->PutObject(pRes);
     }
 }
 
@@ -205,15 +205,15 @@ void SbxCollection::CollItem( SbxArray* pPar_ )
 
 void SbxCollection::CollRemove( SbxArray* pPar_ )
 {
-    if( pPar_->Count32() != 2 )
+    if (pPar_->Count() != 2)
         SetError( ERRCODE_BASIC_WRONG_ARGS );
     else
     {
-        short n = pPar_->Get32( 1 )->GetInteger();
-        if( n < 1 || n > static_cast<sal_Int32>(pObjs->Count32()) )
+        short n = pPar_->Get(1)->GetInteger();
+        if (n < 1 || n > static_cast<sal_Int32>(pObjs->Count()))
             SetError( ERRCODE_BASIC_BAD_INDEX );
         else
-            Remove( pObjs->Get32( static_cast<sal_uInt32>(n) - 1 ) );
+            Remove(pObjs->Get(static_cast<sal_uInt32>(n) - 1));
     }
 }
 

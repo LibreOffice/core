@@ -84,7 +84,7 @@ SbxVariableRef MacroSnippet::Run( const css::uno::Sequence< css::uno::Any >& rAr
             {
                 SbxVariable* pVar = new SbxVariable();
                 unoToSbxValue( pVar, rArgs[ i ] );
-                aArgs->Put32(  pVar, i + 1 );
+                aArgs->Put(pVar, i + 1);
             }
             pMeth->SetParameters( aArgs.get() );
         }

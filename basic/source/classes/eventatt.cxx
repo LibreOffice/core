@@ -241,7 +241,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         // Be still tolerant and make default search if no search basic exists
         if( bSearchLib && xLibSearchBasic.is() )
         {
-            sal_Int32 nCount = xLibSearchBasic->GetObjects()->Count32();
+            sal_Int32 nCount = xLibSearchBasic->GetObjects()->Count();
             for( sal_Int32 nObj = -1; nObj < nCount ; nObj++ )
             {
                 StarBASIC* pBasic;
@@ -251,7 +251,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
                 }
                 else
                 {
-                    SbxVariable* pVar = xLibSearchBasic->GetObjects()->Get32( nObj );
+                    SbxVariable* pVar = xLibSearchBasic->GetObjects()->Get(nObj);
                     pBasic = dynamic_cast<StarBASIC*>( pVar );
                 }
                 if( pBasic )
@@ -291,7 +291,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
             {
                 SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
                 unoToSbxValue( xVar.get(), pArgs[i] );
-                xArray->Put32( xVar.get(), sal::static_int_cast< sal_uInt32 >(i+1) );
+                xArray->Put(xVar.get(), sal::static_int_cast<sal_uInt32>(i + 1));
             }
         }
 
@@ -409,14 +409,14 @@ void RTL_Impl_CreateUnoDialog( SbxArray& rPar )
     Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
     // We need at least 1 parameter
-    if ( rPar.Count32() < 2 )
+    if (rPar.Count() < 2)
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
 
     // Get dialog
-    SbxBaseRef pObj = rPar.Get32( 1 )->GetObject();
+    SbxBaseRef pObj = rPar.Get(1)->GetObject();
     if( !(pObj.is() && dynamic_cast<const SbUnoObject*>( pObj.get() ) != nullptr) )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -540,7 +540,7 @@ void RTL_Impl_CreateUnoDialog( SbxArray& rPar )
     // Return dialog
     Any aRetVal;
     aRetVal <<= xCntrl;
-    SbxVariableRef refVar = rPar.Get32(0);
+    SbxVariableRef refVar = rPar.Get(0);
     unoToSbxValue( refVar.get(), aRetVal );
 }
 

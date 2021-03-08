@@ -40,7 +40,7 @@ static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
 {
     Sequence<Any> *pRet = nullptr;
 
-    sal_uInt32 nCount = rArgs.Count32();
+    sal_uInt32 nCount = rArgs.Count();
     if( nCount > 1 )
     {
         nCount--;
@@ -48,7 +48,7 @@ static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
         Any *pUnoArgs = pRet->getArray();
         for( sal_uInt32 i=0; i<nCount; i++ )
         {
-            SbxVariable *pVar = rArgs.Get32( i+1 );
+            SbxVariable* pVar = rArgs.Get(i + 1);
             switch( pVar->GetType() )
             {
             case SbxSTRING:

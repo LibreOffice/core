@@ -326,13 +326,13 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
                 aValStr = pCell->GetString().getString();
         }
         if ( bIsValue )
-            refPar->Get32(1)->PutDouble( nValue );
+            refPar->Get(1)->PutDouble(nValue);
         else
-            refPar->Get32(1)->PutString( aValStr );
+            refPar->Get(1)->PutString(aValStr);
 
         //  2) Position of the cell
         OUString aPosStr(rPos.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, pDocument, pDocument->GetAddressConvention()));
-        refPar->Get32(2)->PutString( aPosStr );
+        refPar->Get(2)->PutString(aPosStr);
 
         //  use link-update flag to prevent closing the document
         //  while the macro is running

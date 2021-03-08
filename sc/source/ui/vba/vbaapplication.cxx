@@ -519,7 +519,7 @@ ScVbaApplication::wait( double time )
     SbxArrayRef aArgs = new SbxArray;
     SbxVariableRef aRef = new SbxVariable;
     aRef->PutDouble( time );
-    aArgs->Put32(  aRef.get(), 1 );
+    aArgs->Put(aRef.get(), 1);
     SbMethod* pMeth = static_cast<SbMethod*>(pBasic->GetRtl()->Find( "WaitUntil", SbxClassType::Method ));
 
     if ( pMeth )

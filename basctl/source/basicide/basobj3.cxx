@@ -74,7 +74,7 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
     OUString aMacroName( rMacroName );
     if ( aMacroName.isEmpty() )
     {
-        if ( !pModule->GetMethods()->Count32() )
+        if (!pModule->GetMethods()->Count())
             aMacroName = "Main" ;
         else
         {

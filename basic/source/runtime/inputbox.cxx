@@ -110,7 +110,7 @@ IMPL_LINK_NOARG( SvRTLInputBox, CancelHdl, weld::Button&, void )
 
 void SbRtl_InputBox(StarBASIC *, SbxArray & rPar, bool)
 {
-    sal_uInt32 nArgCount = rPar.Count32();
+    sal_uInt32 nArgCount = rPar.Count();
     if ( nArgCount < 2 )
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     else
@@ -118,11 +118,11 @@ void SbRtl_InputBox(StarBASIC *, SbxArray & rPar, bool)
         OUString aTitle;
         OUString aDefault;
         sal_Int32 nX = -1, nY = -1;  // center
-        const OUString& rPrompt = rPar.Get32(1)->GetOUString();
-        if ( nArgCount > 2 && !rPar.Get32(2)->IsErr() )
-            aTitle = rPar.Get32(2)->GetOUString();
-        if ( nArgCount > 3 && !rPar.Get32(3)->IsErr() )
-            aDefault = rPar.Get32(3)->GetOUString();
+        const OUString& rPrompt = rPar.Get(1)->GetOUString();
+        if (nArgCount > 2 && !rPar.Get(2)->IsErr())
+            aTitle = rPar.Get(2)->GetOUString();
+        if (nArgCount > 3 && !rPar.Get(3)->IsErr())
+            aDefault = rPar.Get(3)->GetOUString();
         if ( nArgCount > 4 )
         {
             if ( nArgCount != 6 )
@@ -130,13 +130,13 @@ void SbRtl_InputBox(StarBASIC *, SbxArray & rPar, bool)
                 StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
                 return;
             }
-            nX = rPar.Get32(4)->GetLong();
-            nY = rPar.Get32(5)->GetLong();
+            nX = rPar.Get(4)->GetLong();
+            nY = rPar.Get(5)->GetLong();
         }
         vcl::Window* pParent = Application::GetDefDialogParent();
         SvRTLInputBox aDlg(pParent ? pParent->GetFrameWeld() : nullptr,rPrompt,aTitle,aDefault,nX,nY);
         aDlg.run();
-        rPar.Get32(0)->PutString(aDlg.GetText());
+        rPar.Get(0)->PutString(aDlg.GetText());
     }
 }
 

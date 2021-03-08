@@ -146,7 +146,7 @@ void SbxVariable::Broadcast( SfxHintId nHintId )
     if( mpPar.is() )
     {
         // Register this as element 0, but don't change over the parent!
-        mpPar->GetRef32( 0 ) = this;
+        mpPar->GetRef(0) = this;
     }
     pSave->Broadcast( SbxHint( nHintId, this ) );
     mpBroadcaster = std::move(pSave);
@@ -340,9 +340,9 @@ void SbxVariable::SetParent( SbxObject* p )
         SbxArray *pChildren = p->GetObjects();
         if ( pChildren )
         {
-            for ( sal_uInt32 nIdx = 0; !bFound && nIdx < pChildren->Count32(); ++nIdx )
+            for (sal_uInt32 nIdx = 0; !bFound && nIdx < pChildren->Count(); ++nIdx)
             {
-                bFound = ( this == pChildren->Get32(nIdx) );
+                bFound = (this == pChildren->Get(nIdx));
             }
         }
         SAL_INFO_IF(
