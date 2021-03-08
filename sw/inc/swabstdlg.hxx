@@ -481,7 +481,7 @@ public:
                                                 const SfxItemSet* pSwItemSet,
                                                 SwWrtShell &) = 0;
     virtual VclPtr<AbstractMultiTOXTabDialog>  CreateMultiTOXTabDialog(
-                                                weld::Window* pParent, const SfxItemSet& rSet,
+                                                weld::Widget* pParent, const SfxItemSet& rSet,
                                                 SwWrtShell &rShell,
                                                 SwTOXBase* pCurTOX,
                                                 bool bGlobal) = 0;

@@ -193,7 +193,7 @@ sal_uInt16 CurTOXType::GetFlatIndex() const
         ? TOX_AUTHORITIES + nIndex : eType );
 }
 
-SwMultiTOXTabDialog::SwMultiTOXTabDialog(weld::Window* pParent, const SfxItemSet& rSet,
+SwMultiTOXTabDialog::SwMultiTOXTabDialog(weld::Widget* pParent, const SfxItemSet& rSet,
                                          SwWrtShell &rShell, SwTOXBase* pCurTOX,
                                          sal_uInt16 nToxType, bool bGlobal)
     : SfxTabDialogController(pParent, "modules/swriter/ui/tocdialog.ui", "TocDialog", &rSet)
