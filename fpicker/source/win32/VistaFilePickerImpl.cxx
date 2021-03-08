@@ -106,6 +106,8 @@ public:
     {
     }
 
+    virtual ~TDialogImplBase() = default;
+
     TFileDialog getComPtr() { return m_iDialog; }
     virtual sal::systools::COMReference<IShellItemArray> getResult(bool bInExecute)
     {
