@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b6c60b6_fee47268",
+        "filename": "solenv/gbuild/platform/com_GCC_defs.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-03-08T09:47:05Z",
+      "side": 1,
+      "message": "the CXXFLAGS variable is handled here:\n\nsolenv/gbuild/LinkTarget.mk:gb_LinkTarget__get_cxxflags\u003d$(if $(CXXFLAGS),$(CXXFLAGS),$(call gb_LinkTarget__get_debugflags,$(1)))\n\nthis is following \nhttps://www.gnu.org/prep/standards/standards.html#Command-Variables",
+      "revId": "9d987fb2f50a6e58faadc7a47b020809023160e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
