@@ -1780,6 +1780,8 @@ void ShapeExport::WriteTable( const Reference< XShape >& rXShape  )
 void ShapeExport::WriteTableCellProperties(const Reference< XPropertySet>& xCellPropSet)
 {
     sal_Int32 nLeftMargin(0), nRightMargin(0);
+    TextVerticalAdjust eVerticalAlignment;
+    const char* sVerticalAlignment;
 
     Any aLeftMargin = xCellPropSet->getPropertyValue("TextLeftDistance");
     aLeftMargin >>= nLeftMargin;
@@ -1787,7 +1789,11 @@ void ShapeExport::WriteTableCellProperties(const Reference< XPropertySet>& xCell
     Any aRightMargin = xCellPropSet->getPropertyValue("TextRightDistance");
     aRightMargin >>= nRightMargin;
 
-    mpFS->startElementNS(XML_a, XML_tcPr,
+    Any aVerticalAlignment = xCellPropSet->getPropertyValue("TextVerticalAdjust");
+    aVerticalAlignment >>= eVerticalAlignment;
+    sVerticalAlignment = GetTextVerticalAdjust(eVerticalAlignment);
+
+    mpFS->startElementNS(XML_a, XML_tcPr, XML_anchor, sVerticalAlignment,
     XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeftMargin)), nLeftMargin > 0),
     XML_marR, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nRightMargin)), nRightMargin > 0));
 
