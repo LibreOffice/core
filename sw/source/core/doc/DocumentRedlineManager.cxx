@@ -2523,7 +2523,7 @@ SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& r
     // #TODO - add 'SwExtraRedlineTable' also ?
 }
 
-bool DocumentRedlineManager::HasRedline( const SwPaM& rPam, RedlineType nType, bool bStartOrEndInRange ) const // xxx
+bool DocumentRedlineManager::HasRedline( const SwPaM& rPam, RedlineType nType, bool bStartOrEndInRange ) const
 {
     SwPosition currentStart(*rPam.Start());
     SwPosition currentEnd(*rPam.End());
@@ -2544,7 +2544,7 @@ bool DocumentRedlineManager::HasRedline( const SwPaM& rPam, RedlineType nType, b
         if ( currentStart < *pTmp->End() && *pTmp->Start() <= currentEnd &&
              // starting or ending within the range
              ( !bStartOrEndInRange ||
-                 ( currentStart <= *pTmp->Start() || *pTmp->End() <= currentEnd ) ) )
+                 ( currentStart < *pTmp->Start() || *pTmp->End() < currentEnd ) ) )
         {
             return true;
         }
