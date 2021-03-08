@@ -35,7 +35,7 @@
 #include <scresid.hxx>
 #include <strings.hrc>
 
-ScLinkedAreaDlg::ScLinkedAreaDlg(weld::Window* pParent)
+ScLinkedAreaDlg::ScLinkedAreaDlg(weld::Widget* pParent)
     : GenericDialogController(pParent, "modules/scalc/ui/externaldata.ui", "ExternalDataDialog")
     , m_pSourceShell(nullptr)
     , m_xCbUrl(new SvtURLBox(m_xBuilder->weld_combo_box("url")))
