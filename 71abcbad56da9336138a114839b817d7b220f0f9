@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b88b5e01_f0e9ed77",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4146,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-08T04:51:53Z",
+      "side": 1,
+      "message": "lcid is an integer. VBA StrConv takes both \u0027\u0026H0411\u0027 and \u00271041\u0027, but not string \"0x0411\".",
+      "range": {
+        "startLine": 4146,
+        "startChar": 42,
+        "endLine": 4146,
+        "endChar": 50
+      },
+      "revId": "71abcbad56da9336138a114839b817d7b220f0f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "789e5734_ee4c855b",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4153,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-08T04:51:53Z",
+      "side": 1,
+      "message": "LANGUAGE_SYSTEM \u003d\u003d LANGUAGE_JAPANESE is always false.\n\nIn include/i18nlangtag/lang.h, LANGUAGE_SYSTEM is defined as LanguageType(0x0000), while LANGUAGE_JAPANESE is LanguageType(0x0411). So you actually check if 0 \u003d\u003d 0x0411.\n\nYou may use MsLangId::getSystemLanguage().\n\nBut actually I doubt that we need *system* language. LibreOffice usually tries to not depend on system, but rather on its configured locale; so you might want to use Application::GetSettings().GetLanguageTag().getLanguageType().",
+      "range": {
+        "startLine": 4153,
+        "startChar": 31,
+        "endLine": 4153,
+        "endChar": 67
+      },
+      "revId": "71abcbad56da9336138a114839b817d7b220f0f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
