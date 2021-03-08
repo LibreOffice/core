@@ -34,6 +34,24 @@
       "revId": "2c23fa77f8f48e5e36b22eb8d7bd9b725ebe4fd6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9835d5bd_d8234df9",
+        "filename": "include/systools/win32/retry_if_failed.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-03-08T12:01:50Z",
+      "side": 1,
+      "message": "That\u0027s my opinion - I prefer declarations e.g.\n  HRESULT hr \u003d func()\non a different line to operations e.g.\n  if (SUCCEEDED(hr) || i \u003e\u003d times)\n\nJust a matter of taste - if you;re happy with this code, then leave it :-)",
+      "parentUuid": "694e77ce_22594a95",
+      "revId": "2c23fa77f8f48e5e36b22eb8d7bd9b725ebe4fd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
