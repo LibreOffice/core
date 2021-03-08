@@ -70,6 +70,30 @@
       "revId": "3bc8f90e9693f710f12632f69b9348c1c833c906",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "76f26083_30b1406c",
+        "filename": "starmath/inc/token.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-03-08T13:36:36Z",
+      "side": 0,
+      "message": "But ustrbuf.hxx is the string buffer for ustring.hxx. So it has to be included in there.\nHowever, if you think it should be restored, revert it ( I believe you have permissions for that kind of operation ). Nothing has been added over this so far.",
+      "parentUuid": "d754ebb7_28d2f2e5",
+      "range": {
+        "startLine": 219,
+        "startChar": 4,
+        "endLine": 219,
+        "endChar": 12
+      },
+      "revId": "3bc8f90e9693f710f12632f69b9348c1c833c906",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
