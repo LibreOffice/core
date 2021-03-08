@@ -41,7 +41,6 @@ public:
     void testRTLGuard();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
-
     CPPUNIT_TEST(testVirtualDevice);
     CPPUNIT_TEST(testUseAfterDispose);
     CPPUNIT_TEST(testPrinterBackgroundColor);

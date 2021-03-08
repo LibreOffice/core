@@ -49,7 +49,6 @@ public:
     CPPUNIT_TEST_SUITE(BitmapRenderTest);
     CPPUNIT_TEST(testTdf104141);
     CPPUNIT_TEST(testTdf113918);
-
     CPPUNIT_TEST(testDrawAlphaBitmapEx);
     CPPUNIT_TEST(testAlphaVirtualDevice);
     CPPUNIT_TEST(testTdf116888);
