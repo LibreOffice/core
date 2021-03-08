@@ -251,8 +251,7 @@ Reference< XGraphic > GraphicHelper::importGraphic( const Reference< XInputStrea
         aArgs[ 0 ].Name = "InputStream";
         aArgs[ 0 ].Value <<= rxInStrm;
         aArgs[ 1 ].Name = "LazyRead";
-        bool bLazyRead = !pExtHeader;
-        aArgs[ 1 ].Value <<= bLazyRead;
+        aArgs[ 1 ].Value <<= true;
 
         if ( pExtHeader && pExtHeader->mapMode > 0 )
         {
@@ -301,11 +300,6 @@ Reference< XGraphic > GraphicHelper::importEmbeddedGraphic( const OUString& rStr
         xGraphic = mxGraphicMapper->findGraphic(rStreamName);
         if (!xGraphic.is())
         {
-            // Lazy-loading doesn't work with TIFF at the moment.
-            WmfExternal aHeader;
-            if (rStreamName.endsWith(".tiff") && !pExtHeader)
-                pExtHeader = &aHeader;
-
             auto xStream = mxStorage->openInputStream(rStreamName);
             xGraphic = importGraphic(xStream, pExtHeader);
             if (xGraphic.is())
