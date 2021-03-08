@@ -381,6 +381,11 @@ public:
     void testInconsistentBookmark();
     void testInsertLongDateFormat();
     void testRedlineAutoCorrect();
+<<<<<<< HEAD   (a4be4d tdf#139928 XLSX import: fix conditional formatting in same c)
+=======
+    void testRedlineAutoCorrect2();
+    void testEmojiAutoCorrect();
+>>>>>>> CHANGE (fa90d6 tdf#140674 sw change tracking: fix :emoji: replacement)
 #if HAVE_FEATURE_PDFIUM
     void testInsertPdf();
 #endif
@@ -605,6 +610,11 @@ public:
 #endif
     CPPUNIT_TEST(testInsertLongDateFormat);
     CPPUNIT_TEST(testRedlineAutoCorrect);
+<<<<<<< HEAD   (a4be4d tdf#139928 XLSX import: fix conditional formatting in same c)
+=======
+    CPPUNIT_TEST(testRedlineAutoCorrect2);
+    CPPUNIT_TEST(testEmojiAutoCorrect);
+>>>>>>> CHANGE (fa90d6 tdf#140674 sw change tracking: fix :emoji: replacement)
 #if HAVE_FEATURE_PDFIUM
     CPPUNIT_TEST(testInsertPdf);
 #endif
@@ -7553,6 +7563,74 @@ void SwUiWriterTest::testRedlineAutoCorrect()
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
+<<<<<<< HEAD   (a4be4d tdf#139928 XLSX import: fix conditional formatting in same c)
+=======
+void SwUiWriterTest::testRedlineAutoCorrect2()
+{
+    SwDoc* pDoc = createDoc("redline-autocorrect2.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    dispatchCommand(mxComponent, ".uno:GoToEndOfDoc", {});
+
+    // show tracked deletion
+    RedlineFlags const nMode(pWrtShell->GetRedlineFlags() | RedlineFlags::On);
+    CPPUNIT_ASSERT(nMode & (RedlineFlags::ShowDelete | RedlineFlags::ShowInsert));
+    pWrtShell->SetRedlineFlags(nMode);
+    CPPUNIT_ASSERT(nMode & RedlineFlags::ShowDelete);
+
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+    pWrtShell->Insert("...");
+    pWrtShell->AutoCorrect(corr, ' ');
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+
+    // This was "LoremLorem,…," (duplicating the deleted comma, but without deletion)
+    // Don't replace, if a redline starts or ends within the text.
+    OUString sReplaced = "Lorem,... ";
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+
+    // Continue it:
+    pWrtShell->Insert("Lorem,...");
+    pWrtShell->AutoCorrect(corr, ' ');
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    sReplaced = u"Lorem,... Lorem,… ";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+}
+
+void SwUiWriterTest::testEmojiAutoCorrect()
+{
+    SwDoc* pDoc = createDoc("redline-autocorrect2.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Emoji replacement (:snowman: -> ☃)
+
+    // without change tracking
+    CPPUNIT_ASSERT(!(pWrtShell->GetRedlineFlags() & RedlineFlags::On));
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+    pWrtShell->Insert(":snowman");
+    pWrtShell->AutoCorrect(corr, ':');
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    OUString sReplaced = u"☃Lorem,";
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+
+    // with change tracking (showing redlines)
+    RedlineFlags const nMode(pWrtShell->GetRedlineFlags() | RedlineFlags::On);
+    CPPUNIT_ASSERT(nMode & (RedlineFlags::ShowDelete | RedlineFlags::ShowInsert));
+    pWrtShell->SetRedlineFlags(nMode);
+    CPPUNIT_ASSERT(nMode & RedlineFlags::On);
+    CPPUNIT_ASSERT(nMode & RedlineFlags::ShowDelete);
+
+    pWrtShell->Insert(":snowman");
+    pWrtShell->AutoCorrect(corr, ':');
+    sReplaced = u"☃☃Lorem,";
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+
+    // tdf#140674 This was ":snowman:" instead of autocorrect
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+}
+
+>>>>>>> CHANGE (fa90d6 tdf#140674 sw change tracking: fix :emoji: replacement)
 void SwUiWriterTest::testTdf108423()
 {
     SwDoc* pDoc = createDoc();

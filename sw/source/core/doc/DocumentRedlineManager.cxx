@@ -2523,6 +2523,38 @@ SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& r
     // #TODO - add 'SwExtraRedlineTable' also ?
 }
 
+<<<<<<< HEAD   (a4be4d tdf#139928 XLSX import: fix conditional formatting in same c)
+=======
+bool DocumentRedlineManager::HasRedline( const SwPaM& rPam, RedlineType nType, bool bStartOrEndInRange ) const
+{
+    SwPosition currentStart(*rPam.Start());
+    SwPosition currentEnd(*rPam.End());
+    SwNodeIndex pEndNodeIndex(currentEnd.nNode.GetNode());
+
+    for( SwRedlineTable::size_type n = GetRedlinePos( rPam.Start()->nNode.GetNode(), nType );
+                    n < mpRedlineTable->size(); ++n )
+    {
+        const SwRangeRedline* pTmp = (*mpRedlineTable)[ n ];
+
+        if ( pTmp->Start()->nNode > pEndNodeIndex )
+            break;
+
+        if( RedlineType::Any != nType && nType != pTmp->GetType() )
+            continue;
+
+        // redline over the range
+        if ( currentStart < *pTmp->End() && *pTmp->Start() <= currentEnd &&
+             // starting or ending within the range
+             ( !bStartOrEndInRange ||
+                 ( currentStart < *pTmp->Start() || *pTmp->End() < currentEnd ) ) )
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+>>>>>>> CHANGE (fa90d6 tdf#140674 sw change tracking: fix :emoji: replacement)
 const SwRangeRedline* DocumentRedlineManager::GetRedline( const SwPosition& rPos,
                                     SwRedlineTable::size_type* pFndPos ) const
 {
