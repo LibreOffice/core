@@ -10,8 +10,6 @@ from uitest.framework import UITestCase
 
 class tdf123378(UITestCase):
    def test_tdf123378_print_sets_modified(self):
-        # FIXME unstable test
-        return
         self.ui_test.create_doc_in_start_center("writer")
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
