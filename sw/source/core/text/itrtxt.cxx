@@ -203,8 +203,8 @@ const SwLineLayout *SwTextCursor::CharCursorToLine(TextFrameIndex const nPositio
 {
     CharToLine( nPosition );
     if( nPosition != m_nStart )
-        bRightMargin = false;
-    bool bPrevious = bRightMargin && m_pCurr->GetLen() && GetPrev() &&
+        s_bRightMargin = false;
+    bool bPrevious = s_bRightMargin && m_pCurr->GetLen() && GetPrev() &&
         GetPrev()->GetLen();
     if (bPrevious && nPosition && CH_BREAK == GetInfo().GetChar(nPosition - TextFrameIndex(1)))
         bPrevious = false;

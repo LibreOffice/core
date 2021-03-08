@@ -45,7 +45,7 @@
 
 // Not reentrant !!!
 // is set in GetCharRect and is interpreted in UnitUp/Down.
-bool SwTextCursor::bRightMargin = false;
+bool SwTextCursor::s_bRightMargin = false;
 
 // After calculating the position of a character during GetCharRect
 // this function allows to find the coordinates of a position (defined
@@ -401,7 +401,7 @@ void SwTextCursor::GetEndCharRect(SwRect* pOrig, const TextFrameIndex nOfst,
                                   SwCursorMoveState* pCMS, const tools::Long nMax )
 {
     // 1170: Ambiguity of document positions
-    bRightMargin = true;
+    s_bRightMargin = true;
     CharCursorToLine(nOfst);
 
     // Somehow twisted: nOfst names the position behind the last
@@ -411,7 +411,7 @@ void SwTextCursor::GetEndCharRect(SwRect* pOrig, const TextFrameIndex nOfst,
     {
         // 8810: Master line RightMargin, after that LeftMargin
         GetCharRect( pOrig, nOfst, pCMS, nMax );
-        bRightMargin = nOfst >= GetEnd() && nOfst < TextFrameIndex(GetInfo().GetText().getLength());
+        s_bRightMargin = nOfst >= GetEnd() && nOfst < TextFrameIndex(GetInfo().GetText().getLength());
         return;
     }
 
