@@ -442,12 +442,12 @@ void Test::parseandparseagain(const char* formula, const char* test_name)
 
     // parse 1
     OUString input = OUString::createFromAscii(formula);
-    auto pNode1 = SmParser().ParseExpression(input);
+    auto pNode1 = SmParser5().ParseExpression(input);
     pNode1->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
     SmNodeToTextVisitor(pNode1.get(), output1);
 
     // parse 2
-    auto pNode2 = SmParser().ParseExpression(output1);
+    auto pNode2 = SmParser5().ParseExpression(output1);
     pNode2->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
     SmNodeToTextVisitor(pNode2.get(), output2);
 
@@ -466,7 +466,7 @@ void Test::ParseAndCheck(const char* formula, const char* expected, const char* 
 
     // parse
     OUString sInput = OUString::createFromAscii(formula);
-    auto pNode = SmParser().ParseExpression(sInput);
+    auto pNode = SmParser5().ParseExpression(sInput);
     pNode->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
     SmNodeToTextVisitor(pNode.get(), sOutput);
 
@@ -486,13 +486,13 @@ void Test::ParseAndCompare(const char* formula1, const char* formula2, const cha
 
     // parse formula1
     OUString sInput1(formula1, strlen(formula1), RTL_TEXTENCODING_UTF8);
-    auto pNode1 = SmParser().ParseExpression(sInput1);
+    auto pNode1 = SmParser5().ParseExpression(sInput1);
     pNode1->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
     SmNodeToTextVisitor(pNode1.get(), sOutput1);
 
     // parse formula2
     OUString sInput2(formula2, strlen(formula2), RTL_TEXTENCODING_UTF8);
-    auto pNode2 = SmParser().ParseExpression(sInput2);
+    auto pNode2 = SmParser5().ParseExpression(sInput2);
     pNode2->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
     SmNodeToTextVisitor(pNode2.get(), sOutput2);
 
@@ -510,7 +510,7 @@ void Test::testBinomInBinHor()
 
     // set up a binom (table) node
     sInput += "binom a b + c";
-    auto pTree = SmParser().Parse(sInput);
+    auto pTree = SmParser5().Parse(sInput);
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
     SmCursor aCursor(pTree.get(), xDocShRef.get());
@@ -535,7 +535,7 @@ void Test::testBinVerInUnary()
 
     // set up a unary operator with operand
     sInput += "- 1";
-    auto pTree = SmParser().Parse(sInput);
+    auto pTree = SmParser5().Parse(sInput);
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
     SmCursor aCursor(pTree.get(), xDocShRef.get());
@@ -561,7 +561,7 @@ void Test::testBinVerInUnary()
 void Test::testBinHorInSubSup()
 {
     // set up a blank formula
-    auto pTree = SmParser().Parse(OUString());
+    auto pTree = SmParser5().Parse(OUString());
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
     SmCursor aCursor(pTree.get(), xDocShRef.get());
@@ -586,7 +586,7 @@ void Test::testBinHorInSubSup()
 void Test::testUnaryInMixedNumberAsNumerator()
 {
     // set up a unary operator
-    auto pTree = SmParser().Parse("- 1");
+    auto pTree = SmParser5().Parse("- 1");
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
     SmCursor aCursor(pTree.get(), xDocShRef.get());
@@ -652,7 +652,7 @@ void Test::testMiscEquivalent()
 void Test::testParser()
 {
     OUString sOutput;
-    auto pNode = SmParser().ParseExpression(u"{ \U0001D44E }"); // non-BMP Unicode
+    auto pNode = SmParser5().ParseExpression(u"{ \U0001D44E }"); // non-BMP Unicode
     pNode->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
     SmNodeToTextVisitor(pNode.get(), sOutput);
     CPPUNIT_ASSERT_EQUAL(OUString(u"\U0001D44E"), sOutput);

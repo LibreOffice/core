@@ -67,7 +67,7 @@ void Test::tearDown()
 
 void Test::testCopyPaste()
 {
-    auto xTree = SmParser().Parse("a * b + c");
+    auto xTree = SmParser5().Parse("a * b + c");
     xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
     SmCursor aCursor(xTree.get(), xDocShRef.get());
@@ -89,7 +89,7 @@ void Test::testCopyPaste()
 
 void Test::testCopySelectPaste()
 {
-    auto xTree = SmParser().Parse("a * b + c");
+    auto xTree = SmParser5().Parse("a * b + c");
     xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
     SmCursor aCursor(xTree.get(), xDocShRef.get());
@@ -115,7 +115,7 @@ void Test::testCopySelectPaste()
 
 void Test::testCutPaste()
 {
-    auto xTree = SmParser().Parse("a * b + c");
+    auto xTree = SmParser5().Parse("a * b + c");
     xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
     SmCursor aCursor(xTree.get(), xDocShRef.get());
@@ -137,7 +137,7 @@ void Test::testCutPaste()
 
 void Test::testCutSelectPaste()
 {
-    auto xTree = SmParser().Parse("a * b + c");
+    auto xTree = SmParser5().Parse("a * b + c");
     xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
     SmCursor aCursor(xTree.get(), xDocShRef.get());
