@@ -458,7 +458,7 @@ public:
         SCTAB nTabCount, bool bFromFile) = 0;
 
     virtual VclPtr<AbstractScSelEntryDlg > CreateScSelEntryDlg(weld::Window* pParent, const std::vector<OUString> &rEntryList) = 0;
-    virtual VclPtr<AbstractScLinkedAreaDlg> CreateScLinkedAreaDlg(weld::Window* pParent) = 0;
+    virtual VclPtr<AbstractScLinkedAreaDlg> CreateScLinkedAreaDlg(weld::Widget* pParent) = 0;
 
     virtual VclPtr<AbstractScMetricInputDlg> CreateScMetricInputDlg(weld::Window* pParent,
                                                                 const OString&  sDialogName,
