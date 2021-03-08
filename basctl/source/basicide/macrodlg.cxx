@@ -479,10 +479,10 @@ IMPL_LINK_NOARG(MacroChooser, BasicSelectHdl, weld::TreeView&, void)
 
         m_xMacroBox->freeze();
 
-        sal_uInt32 nMacroCount = pModule->GetMethods()->Count32();
+        sal_uInt32 nMacroCount = pModule->GetMethods()->Count();
         for ( sal_uInt32 iMeth = 0; iMeth  < nMacroCount; iMeth++ )
         {
-            SbMethod* pMethod = static_cast<SbMethod*>(pModule->GetMethods()->Get32( iMeth ));
+            SbMethod* pMethod = static_cast<SbMethod*>(pModule->GetMethods()->Get(iMeth));
             assert(pMethod && "Method not found!");
             if (pMethod->IsHidden())
                 continue;

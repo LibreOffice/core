@@ -330,7 +330,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                                     sal_Int32 lBound;
                                     sal_Int32 uBound;
                                     r.ReadInt32(lBound).ReadInt32(uBound);
-                                    pArray->unoAddDim32(lBound, uBound);
+                                    pArray->unoAddDim(lBound, uBound);
                                 }
 
                                 const SbxFlagBits nSavFlags = pTypeElem->GetFlags();
@@ -342,7 +342,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                             }
                         }
 
-                        pTypeMembers->Insert32( pTypeElem, pTypeMembers->Count32() );
+                        pTypeMembers->Insert(pTypeElem, pTypeMembers->Count());
 
                     }
 
@@ -478,7 +478,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     // User defined types
     if ( rTypes.is() )
     {
-        sal_uInt32 nTypes = rTypes->Count32();
+        sal_uInt32 nTypes = rTypes->Count();
         assert(nTypes <= std::numeric_limits<sal_uInt16>::max());
         if (nTypes > 0 )
         {
@@ -486,13 +486,13 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
 
             for (sal_uInt32 i = 0; i < nTypes; i++)
             {
-                SbxObject* pType = static_cast< SbxObject* > ( rTypes->Get32(i) );
+                SbxObject* pType = static_cast<SbxObject*>(rTypes->Get(i));
                 OUString aTypeName = pType->GetClassName();
 
                 r.WriteUniOrByteString( aTypeName, eCharSet );
 
                 SbxArray  *pTypeMembers = pType->GetProperties();
-                sal_uInt32 nTypeMembers = pTypeMembers->Count32();
+                sal_uInt32 nTypeMembers = pTypeMembers->Count();
                 assert(nTypeMembers <= std::numeric_limits<sal_uInt16>::max());
 
                 r.WriteInt16(sal::static_int_cast<sal_uInt16>(nTypeMembers));
@@ -500,7 +500,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
                 for (sal_uInt32 j = 0; j < nTypeMembers; j++)
                 {
 
-                    SbxProperty* pTypeElem = static_cast< SbxProperty* > ( pTypeMembers->Get32(j) );
+                    SbxProperty* pTypeElem = static_cast<SbxProperty*>(pTypeMembers->Get(j));
 
                     const OUString& aElemName = pTypeElem->GetName();
                     r.WriteUniOrByteString( aElemName, eCharSet );
@@ -535,14 +535,14 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
                             else
                                 r.WriteInt16(0);
 
-                            sal_Int32 nDims = pArray->GetDims32();
+                            sal_Int32 nDims = pArray->GetDims();
                             r.WriteInt32(nDims);
 
                             for (sal_Int32 d = 1; d <= nDims; d++)
                             {
                                 sal_Int32 lBound;
                                 sal_Int32 uBound;
-                                pArray->GetDim32(d, lBound, uBound);
+                                pArray->GetDim(d, lBound, uBound);
                                 r.WriteInt32(lBound).WriteInt32(uBound);
                             }
                         }
@@ -633,7 +633,7 @@ void SbiImage::AddType(SbxObject const * pObject)
         rTypes = new SbxArray;
     }
     SbxObject *pCopyObject = new SbxObject(*pObject);
-    rTypes->Insert32 (pCopyObject,rTypes->Count32());
+    rTypes->Insert(pCopyObject, rTypes->Count());
 }
 
 void SbiImage::AddEnum(SbxObject* pObject) // Register enum type
@@ -642,7 +642,7 @@ void SbiImage::AddEnum(SbxObject* pObject) // Register enum type
     {
         rEnums = new SbxArray;
     }
-    rEnums->Insert32( pObject, rEnums->Count32() );
+    rEnums->Insert(pObject, rEnums->Count());
 }
 
 // Note: IDs start with 1

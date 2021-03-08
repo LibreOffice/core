@@ -676,11 +676,11 @@ void EditorWindow::HandleAutoCorrect()
     {
         //autocorrect procedures
         SbxArray* pArr = rModulWindow.GetSbModule()->GetMethods().get();
-        for( sal_uInt32 i=0; i < pArr->Count32(); ++i )
+        for (sal_uInt32 i = 0; i < pArr->Count(); ++i)
         {
-            if( pArr->Get32(i)->GetName().equalsIgnoreAsciiCase( sStr ) )
+            if (pArr->Get(i)->GetName().equalsIgnoreAsciiCase(sStr))
             {
-                sStr = pArr->Get32(i)->GetName(); //if found, get the correct case
+                sStr = pArr->Get(i)->GetName(); //if found, get the correct case
                 pEditEngine->ReplaceText( sTextSelection, sStr );
                 pEditView->SetSelection( aSel );
                 return;
@@ -1144,9 +1144,9 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 OUString EditorWindow::GetActualSubName( sal_uLong nLine )
 {
     SbxArrayRef pMethods = rModulWindow.GetSbModule()->GetMethods();
-    for( sal_uInt32 i=0; i < pMethods->Count32(); i++ )
+    for (sal_uInt32 i = 0; i < pMethods->Count(); i++)
     {
-        SbMethod* pMeth = dynamic_cast<SbMethod*>( pMethods->Get32( i )  );
+        SbMethod* pMeth = dynamic_cast<SbMethod*>(pMethods->Get(i));
         if( pMeth )
         {
             sal_uInt16 l1,l2;
@@ -1892,9 +1892,9 @@ void StackWindow::UpdateCalls()
             {
                 aEntry.append("(");
                 // 0 is the sub's name...
-                for ( sal_uInt32 nParam = 1; nParam < pParams->Count32(); nParam++ )
+                for (sal_uInt32 nParam = 1; nParam < pParams->Count(); nParam++)
                 {
-                    SbxVariable* pVar = pParams->Get32( nParam );
+                    SbxVariable* pVar = pParams->Get(nParam);
                     assert(pVar && "Parameter?!");
                     if ( !pVar->GetName().isEmpty() )
                     {
@@ -1919,7 +1919,7 @@ void StackWindow::UpdateCalls()
                     {
                         aEntry.append(pVar->GetOUString());
                     }
-                    if ( nParam < ( pParams->Count32() - 1 ) )
+                    if (nParam < (pParams->Count() - 1))
                     {
                         aEntry.append(", ");
                     }
@@ -2059,11 +2059,10 @@ EditorWindow::GetComponentInterface(bool bCreate)
 
 static sal_uInt32 getCorrectedPropCount(SbxArray* p)
 {
-    sal_uInt32 nPropCount = p->Count32();
-    if (nPropCount >= 3
-        && p->Get32(nPropCount - 1)->GetName().equalsIgnoreAsciiCase("Dbg_Methods")
-        && p->Get32(nPropCount - 2)->GetName().equalsIgnoreAsciiCase("Dbg_Properties")
-        && p->Get32(nPropCount - 3)->GetName().equalsIgnoreAsciiCase("Dbg_SupportedInterfaces"))
+    sal_uInt32 nPropCount = p->Count();
+    if (nPropCount >= 3 && p->Get(nPropCount - 1)->GetName().equalsIgnoreAsciiCase("Dbg_Methods")
+        && p->Get(nPropCount - 2)->GetName().equalsIgnoreAsciiCase("Dbg_Properties")
+        && p->Get(nPropCount - 3)->GetName().equalsIgnoreAsciiCase("Dbg_SupportedInterfaces"))
     {
         nPropCount -= 3;
     }
@@ -2100,7 +2099,7 @@ IMPL_LINK(WatchWindow, RequestingChildrenHdl, const weld::TreeIter&, rParent, bo
 
         for( sal_uInt32 i = 0 ; i < nPropCount ; ++i )
         {
-            SbxVariable* pVar = pProps->Get32( i );
+            SbxVariable* pVar = pProps->Get(i);
 
             pItem->maMemberList.push_back(pVar->GetName());
             OUString const& rName = pItem->maMemberList.back();
@@ -2126,7 +2125,7 @@ IMPL_LINK(WatchWindow, RequestingChildrenHdl, const weld::TreeIter&, rParent, bo
         int nParentLevel = bArrayIsRootArray ? pItem->nDimLevel : 0;
         int nThisLevel = nParentLevel + 1;
         sal_Int32 nMin, nMax;
-        if (pArray->GetDim32(nThisLevel, nMin, nMax))
+        if (pArray->GetDim(nThisLevel, nMin, nMax))
         {
             for (sal_Int32 i = nMin; i <= nMax; i++)
             {
@@ -2213,7 +2212,7 @@ SbxBase* WatchWindow::ImplGetSBXForEntry(const weld::TreeIter& rEntry, bool& rbA
         {
             rbArrayElement = true;
             if( pParentItem->nDimLevel + 1 == pParentItem->nDimCount )
-                pSBX = pArray->Get32(pItem->vIndices.empty() ? nullptr : &*pItem->vIndices.begin());
+                pSBX = pArray->Get(pItem->vIndices.empty() ? nullptr : &*pItem->vIndices.begin());
         }
     }
     else
@@ -2326,7 +2325,7 @@ OUString implCreateTypeStringForDimArray( WatchItem* pItem, SbxDataType eType )
             for( int i = nDimLevel ; i < nDims ; i++ )
             {
                 sal_Int32 nMin, nMax;
-                pArray->GetDim32( sal::static_int_cast<sal_Int32>( i+1 ), nMin, nMax );
+                pArray->GetDim(sal::static_int_cast<sal_Int32>(i + 1), nMin, nMax);
                 aRetStr += OUString::number(nMin) + " to "  + OUString::number(nMax);
                 if( i < nDims - 1 )
                     aRetStr += ", ";
@@ -2398,8 +2397,8 @@ void WatchWindow::UpdateWatches(bool bBasicStopped)
                         {
                             // Compare Array dimensions to see if array has changed
                             // Can be a copy, so comparing pointers does not work
-                            sal_Int32 nOldDims = pOldArray->GetDims32();
-                            sal_Int32 nNewDims = pNewArray->GetDims32();
+                            sal_Int32 nOldDims = pOldArray->GetDims();
+                            sal_Int32 nNewDims = pNewArray->GetDims();
                             if( nOldDims != nNewDims )
                             {
                                 bArrayChanged = true;
@@ -2411,8 +2410,8 @@ void WatchWindow::UpdateWatches(bool bBasicStopped)
                                     sal_Int32 nOldMin, nOldMax;
                                     sal_Int32 nNewMin, nNewMax;
 
-                                    pOldArray->GetDim32( i+1, nOldMin, nOldMax );
-                                    pNewArray->GetDim32( i+1, nNewMin, nNewMax );
+                                    pOldArray->GetDim(i + 1, nOldMin, nOldMax);
+                                    pNewArray->GetDim(i + 1, nNewMin, nNewMax);
                                     if( nOldMin != nNewMin || nOldMax != nNewMax )
                                     {
                                         bArrayChanged = true;
@@ -2433,7 +2432,7 @@ void WatchWindow::UpdateWatches(bool bBasicStopped)
                             eEnableChildren = TRISTATE_TRUE;
 
                             pItem->mpArray = pNewArray;
-                            sal_Int32 nDims = pNewArray->GetDims32();
+                            sal_Int32 nDims = pNewArray->GetDims();
                             pItem->nDimLevel = 0;
                             pItem->nDimCount = nDims;
                         }
@@ -2461,7 +2460,7 @@ void WatchWindow::UpdateWatches(bool bBasicStopped)
                             bCollapse = pItem->maMemberList.size() != nPropCount;
                             for( sal_uInt32 i = 0 ; !bCollapse && i < nPropCount ; i++ )
                             {
-                                SbxVariable* pVar_ = pProps->Get32( i );
+                                SbxVariable* pVar_ = pProps->Get(i);
                                 if( pItem->maMemberList[i] != pVar_->GetName() )
                                     bCollapse = true;
                             }

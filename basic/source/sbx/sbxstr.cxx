@@ -276,13 +276,13 @@ SbxArray* StringToByteArray(const OUString& rStr)
         bool bIncIndex = IsBaseIndexOne();
 #endif
         if( bIncIndex )
-            pArray->AddDim32( 1, nArraySize );
+            pArray->AddDim(1, nArraySize);
         else
-            pArray->AddDim32( 0, nArraySize-1 );
+            pArray->AddDim(0, nArraySize - 1);
     }
     else
     {
-        pArray->unoAddDim32( 0, -1 );
+        pArray->unoAddDim(0, -1);
     }
 
     for( sal_Int32 i=0; i< nArraySize; i++)
@@ -291,7 +291,7 @@ SbxArray* StringToByteArray(const OUString& rStr)
         sal_uInt8 aByte = static_cast< sal_uInt8 >( (i%2) ? ((*pSrc) >> 8) & 0xff : (*pSrc) & 0xff );
         pNew->PutByte( aByte );
         pNew->SetFlag( SbxFlagBits::Write );
-        pArray->Put32( pNew, i );
+        pArray->Put(pNew, i);
         if( i%2 )
             pSrc++;
     }
@@ -301,12 +301,12 @@ SbxArray* StringToByteArray(const OUString& rStr)
 // Convert an array of bytes to string (2bytes per character)
 OUString ByteArrayToString(SbxArray* pArr)
 {
-    sal_uInt32 nCount = pArr->Count32();
+    sal_uInt32 nCount = pArr->Count();
     OUStringBuffer aStrBuf;
     sal_Unicode aChar = 0;
     for( sal_uInt32 i = 0 ; i < nCount ; i++ )
     {
-        sal_Unicode aTempChar = pArr->Get32(i)->GetByte();
+        sal_Unicode aTempChar = pArr->Get(i)->GetByte();
         if( i%2 )
         {
             aChar = (aTempChar << 8 ) | aChar;

@@ -521,10 +521,10 @@ SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
 
     // Copy the properties, not only the reference to them
     SbxArray* pProps = pRet->GetProperties();
-    sal_uInt32 nCount = pProps->Count32();
+    sal_uInt32 nCount = pProps->Count();
     for( sal_uInt32 i = 0 ; i < nCount ; i++ )
     {
-        SbxVariable* pVar = pProps->Get32( i );
+        SbxVariable* pVar = pProps->Get(i);
         SbxProperty* pProp = dynamic_cast<SbxProperty*>( pVar  );
         if( pProp )
         {
@@ -537,19 +537,19 @@ SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
                 SbxDimArray* pDest = new SbxDimArray( pVar->GetType() );
 
                 pDest->setHasFixedSize( pSource && pSource->hasFixedSize() );
-                if ( pSource && pSource->GetDims32() && pSource->hasFixedSize() )
+                if (pSource && pSource->GetDims() && pSource->hasFixedSize())
                 {
                     sal_Int32 lb = 0;
                     sal_Int32 ub = 0;
-                    for ( sal_Int32 j = 1 ; j <= pSource->GetDims32(); ++j )
+                    for (sal_Int32 j = 1; j <= pSource->GetDims(); ++j)
                     {
-                        pSource->GetDim32( j, lb, ub );
-                        pDest->AddDim32( lb, ub );
+                        pSource->GetDim(j, lb, ub);
+                        pDest->AddDim(lb, ub);
                     }
                 }
                 else
                 {
-                    pDest->unoAddDim32( 0, -1 ); // variant array
+                    pDest->unoAddDim(0, -1); // variant array
                 }
                 SbxFlagBits nSavFlags = pVar->GetFlags();
                 pNewProp->ResetFlag( SbxFlagBits::Fixed );
@@ -619,11 +619,11 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
 
     // Copy the methods from original class module
     SbxArray* pClassMethods = pClassModule->GetMethods().get();
-    sal_uInt32 nMethodCount = pClassMethods->Count32();
+    sal_uInt32 nMethodCount = pClassMethods->Count();
     sal_uInt32 i;
     for( i = 0 ; i < nMethodCount ; i++ )
     {
-        SbxVariable* pVar = pClassMethods->Get32( i );
+        SbxVariable* pVar = pClassMethods->Get(i);
 
         // Exclude SbIfaceMapperMethod to copy them in a second step
         SbIfaceMapperMethod* pIfaceMethod = dynamic_cast<SbIfaceMapperMethod*>( pVar  );
@@ -649,7 +649,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
     // the corresponding base methods have already been copied
     for( i = 0 ; i < nMethodCount ; i++ )
     {
-        SbxVariable* pVar = pClassMethods->Get32( i );
+        SbxVariable* pVar = pClassMethods->Get(i);
 
         SbIfaceMapperMethod* pIfaceMethod = dynamic_cast<SbIfaceMapperMethod*>( pVar  );
         if( pIfaceMethod )
@@ -677,10 +677,10 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
 
     // Copy the properties from original class module
     SbxArray* pClassProps = pClassModule->GetProperties();
-    sal_uInt32 nPropertyCount = pClassProps->Count32();
+    sal_uInt32 nPropertyCount = pClassProps->Count();
     for( i = 0 ; i < nPropertyCount ; i++ )
     {
-        SbxVariable* pVar = pClassProps->Get32( i );
+        SbxVariable* pVar = pClassProps->Get(i);
         SbProcedureProperty* pProcedureProp = dynamic_cast<SbProcedureProperty*>( pVar  );
         if( pProcedureProp )
         {
@@ -972,10 +972,10 @@ StarBASIC::~StarBASIC()
     // #100326 Set Parent NULL in registered listeners
     if( xUnoListeners.is() )
     {
-        sal_uInt32 uCount = xUnoListeners->Count32();
+        sal_uInt32 uCount = xUnoListeners->Count();
         for( sal_uInt32 i = 0 ; i < uCount ; i++ )
         {
-            SbxVariable* pListenerObj = xUnoListeners->Get32( i );
+            SbxVariable* pListenerObj = xUnoListeners->Get(i);
             pListenerObj->SetParent( nullptr );
         }
         xUnoListeners = nullptr;
@@ -994,9 +994,9 @@ void StarBASIC::implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic )
         }
     }
 
-    for( sal_uInt32 nObj = 0; nObj < pObjs->Count32(); nObj++ )
+    for (sal_uInt32 nObj = 0; nObj < pObjs->Count(); nObj++)
     {
-        SbxVariable* pVar = pObjs->Get32( nObj );
+        SbxVariable* pVar = pObjs->Get(nObj);
         StarBASIC* pBasic = dynamic_cast<StarBASIC*>( pVar );
         if( pBasic && pBasic != pDeletedBasic )
         {
@@ -1201,9 +1201,9 @@ void StarBASIC::InitAllModules( StarBASIC const * pBasicNotToInit )
 
     // Check all objects if they are BASIC,
     // if yes initialize
-    for ( sal_uInt32 nObj = 0; nObj < pObjs->Count32(); nObj++ )
+    for (sal_uInt32 nObj = 0; nObj < pObjs->Count(); nObj++)
     {
-        SbxVariable* pVar = pObjs->Get32( nObj );
+        SbxVariable* pVar = pObjs->Get(nObj);
         StarBASIC* pBasic = dynamic_cast<StarBASIC*>( pVar );
         if( pBasic && pBasic != pBasicNotToInit )
         {
@@ -1225,9 +1225,9 @@ void StarBASIC::DeInitAllModules()
         }
     }
 
-    for ( sal_uInt32 nObj = 0; nObj < pObjs->Count32(); nObj++ )
+    for (sal_uInt32 nObj = 0; nObj < pObjs->Count(); nObj++)
     {
-        SbxVariable* pVar = pObjs->Get32( nObj );
+        SbxVariable* pVar = pObjs->Get(nObj);
         StarBASIC* pBasic = dynamic_cast<StarBASIC*>( pVar );
         if( pBasic )
         {
@@ -1769,13 +1769,13 @@ bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
     }
     // #95459 Delete dialogs, otherwise endless recursion
     // in SbxVariable::GetType() if dialogs are accessed
-    sal_uInt32 nObjCount = pObjs->Count32();
+    sal_uInt32 nObjCount = pObjs->Count();
     std::unique_ptr<SbxVariable*[]> ppDeleteTab(new SbxVariable*[ nObjCount ]);
     sal_uInt32 nObj;
 
     for( nObj = 0 ; nObj < nObjCount ; nObj++ )
     {
-        SbxVariable* pVar = pObjs->Get32( nObj );
+        SbxVariable* pVar = pObjs->Get(nObj);
         StarBASIC* pBasic = dynamic_cast<StarBASIC*>( pVar  );
         ppDeleteTab[nObj] = pBasic ? nullptr : pVar;
     }
@@ -2000,7 +2000,7 @@ void BasicCollection::Notify( SfxBroadcaster& rCst, const SfxHint& rHint )
             if( pVar->GetHashCode() == nCountHash
                   && aVarName.equalsIgnoreAsciiCase( pCountStr ) )
             {
-                pVar->PutLong( xItemArray->Count32() );
+                pVar->PutLong(xItemArray->Count());
             }
             else if( pVar->GetHashCode() == nAddHash
                   && aVarName.equalsIgnoreAsciiCase( pAddStr ) )
@@ -2057,11 +2057,11 @@ sal_Int32 BasicCollection::implGetIndex( SbxVariable const * pIndexVar )
 sal_Int32 BasicCollection::implGetIndexForName(std::u16string_view rName)
 {
     sal_Int32 nIndex = -1;
-    sal_Int32 nCount = xItemArray->Count32();
+    sal_Int32 nCount = xItemArray->Count();
     sal_Int32 nNameHash = MakeHashCode( rName );
     for( sal_Int32 i = 0 ; i < nCount ; i++ )
     {
-        SbxVariable* pVar = xItemArray->Get32( i );
+        SbxVariable* pVar = xItemArray->Get(i);
         if( pVar->GetHashCode() == nNameHash &&
             pVar->GetName().equalsIgnoreAsciiCase( rName ) )
         {
@@ -2074,24 +2074,24 @@ sal_Int32 BasicCollection::implGetIndexForName(std::u16string_view rName)
 
 void BasicCollection::CollAdd( SbxArray* pPar_ )
 {
-    sal_uInt32 nCount = pPar_->Count32();
+    sal_uInt32 nCount = pPar_->Count();
     if( nCount < 2 || nCount > 5 )
     {
         SetError( ERRCODE_BASIC_WRONG_ARGS );
         return;
     }
 
-    SbxVariable* pItem = pPar_->Get32(1);
+    SbxVariable* pItem = pPar_->Get(1);
     if( pItem )
     {
         sal_uInt32 nNextIndex;
         if( nCount < 4 )
         {
-            nNextIndex = xItemArray->Count32();
+            nNextIndex = xItemArray->Count();
         }
         else
         {
-            SbxVariable* pBefore = pPar_->Get32(3);
+            SbxVariable* pBefore = pPar_->Get(3);
             if( nCount == 5 )
             {
                 if( !( pBefore->IsErr() || ( pBefore->GetType() == SbxEMPTY ) ) )
@@ -2099,7 +2099,7 @@ void BasicCollection::CollAdd( SbxArray* pPar_ )
                     SetError( ERRCODE_BASIC_BAD_ARGUMENT );
                     return;
                 }
-                SbxVariable* pAfter = pPar_->Get32(4);
+                SbxVariable* pAfter = pPar_->Get(4);
                 sal_Int32 nAfterIndex = implGetIndex( pAfter );
                 if( nAfterIndex == -1 )
                 {
@@ -2123,7 +2123,7 @@ void BasicCollection::CollAdd( SbxArray* pPar_ )
         auto pNewItem = tools::make_ref<SbxVariable>( *pItem );
         if( nCount >= 3 )
         {
-            SbxVariable* pKey = pPar_->Get32(2);
+            SbxVariable* pKey = pPar_->Get(2);
             if( !( pKey->IsErr() || ( pKey->GetType() == SbxEMPTY ) ) )
             {
                 if( pKey->GetType() != SbxSTRING )
@@ -2141,7 +2141,7 @@ void BasicCollection::CollAdd( SbxArray* pPar_ )
             }
         }
         pNewItem->SetFlag( SbxFlagBits::ReadWrite );
-        xItemArray->Insert32( pNewItem.get(), nNextIndex );
+        xItemArray->Insert(pNewItem.get(), nNextIndex);
     }
     else
     {
@@ -2152,17 +2152,17 @@ void BasicCollection::CollAdd( SbxArray* pPar_ )
 
 void BasicCollection::CollItem( SbxArray* pPar_ )
 {
-    if( pPar_->Count32() != 2 )
+    if (pPar_->Count() != 2)
     {
         SetError( ERRCODE_BASIC_WRONG_ARGS );
         return;
     }
     SbxVariable* pRes = nullptr;
-    SbxVariable* p = pPar_->Get32( 1 );
+    SbxVariable* p = pPar_->Get(1);
     sal_Int32 nIndex = implGetIndex( p );
-    if( nIndex >= 0 && nIndex < static_cast<sal_Int32>(xItemArray->Count32()) )
+    if (nIndex >= 0 && nIndex < static_cast<sal_Int32>(xItemArray->Count()))
     {
-        pRes = xItemArray->Get32( nIndex );
+        pRes = xItemArray->Get(nIndex);
     }
     if( !pRes )
     {
@@ -2170,21 +2170,21 @@ void BasicCollection::CollItem( SbxArray* pPar_ )
     }
     else
     {
-        *(pPar_->Get32(0)) = *pRes;
+        *(pPar_->Get(0)) = *pRes;
     }
 }
 
 void BasicCollection::CollRemove( SbxArray* pPar_ )
 {
-    if( pPar_ == nullptr || pPar_->Count32() != 2 )
+    if (pPar_ == nullptr || pPar_->Count() != 2)
     {
         SetError( ERRCODE_BASIC_WRONG_ARGS );
         return;
     }
 
-    SbxVariable* p = pPar_->Get32( 1 );
+    SbxVariable* p = pPar_->Get(1);
     sal_Int32 nIndex = implGetIndex( p );
-    if( nIndex >= 0 && nIndex < static_cast<sal_Int32>(xItemArray->Count32()) )
+    if (nIndex >= 0 && nIndex < static_cast<sal_Int32>(xItemArray->Count()))
     {
         xItemArray->Remove( nIndex );
 

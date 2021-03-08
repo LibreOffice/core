@@ -310,7 +310,7 @@ static SbxVariableRef Element
                         // One copies the parameter, so that
                         // one have the current status (triggers also
                         // the call per access)
-                        refPar->Put32( new SbxVariable( *refArg ), ++nArg );
+                        refPar->Put(new SbxVariable(*refArg), ++nArg);
                     }
                     p = SkipWhitespace( p );
                     if( *p == ',' )

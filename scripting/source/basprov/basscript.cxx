@@ -203,7 +203,7 @@ namespace basprov
                 {
                     SbxVariableRef xSbxVar = new SbxVariable( SbxVARIANT );
                     unoToSbxValue( xSbxVar.get(), pParams[i] );
-                    xSbxParams->Put32( xSbxVar.get(), static_cast< sal_uInt32 >( i ) + 1 );
+                    xSbxParams->Put(xSbxVar.get(), static_cast<sal_uInt32>(i) + 1);
 
                     if (pInfo)
                     {
@@ -268,13 +268,13 @@ namespace basprov
                 if ( pInfo_ )
                 {
                     OutParamMap aOutParamMap;
-                    for ( sal_uInt32 n = 1, nCount = xSbxParams->Count32(); n < nCount; ++n )
+                    for (sal_uInt32 n = 1, nCount = xSbxParams->Count(); n < nCount; ++n)
                     {
                         assert(nCount <= std::numeric_limits<sal_uInt16>::max());
                         const SbxParamInfo* pParamInfo = pInfo_->GetParam( sal::static_int_cast<sal_uInt16>(n) );
                         if ( pParamInfo && ( pParamInfo->eType & SbxBYREF ) != 0 )
                         {
-                            SbxVariable* pVar = xSbxParams->Get32( n );
+                            SbxVariable* pVar = xSbxParams->Get(n);
                             if ( pVar )
                             {
                                 SbxVariableRef xVar = pVar;

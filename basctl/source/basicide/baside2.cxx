@@ -341,9 +341,9 @@ void ModulWindow::BasicExecute()
         const sal_uInt32 nCurMethodStart = aSel.GetStart().GetPara() + 1;
         SbMethod* pMethod = nullptr;
         // first Macro, else blind "Main" (ExtSearch?)
-        for ( sal_uInt32 nMacro = 0; nMacro < m_xModule->GetMethods()->Count32(); nMacro++ )
+        for (sal_uInt32 nMacro = 0; nMacro < m_xModule->GetMethods()->Count(); nMacro++)
         {
-            SbMethod* pM = static_cast<SbMethod*>(m_xModule->GetMethods()->Get32( nMacro ));
+            SbMethod* pM = static_cast<SbMethod*>(m_xModule->GetMethods()->Get(nMacro));
             assert(pM && "Method?");
             pM->GetLineRange( nStart, nEnd );
             if (  nCurMethodStart >= nStart && nCurMethodStart <= nEnd )
@@ -531,9 +531,10 @@ void ModulWindow::ToggleBreakPoint( sal_uInt16 nLine )
             GetBreakPoints().InsertSorted( BreakPoint( nLine ) );
             if ( StarBASIC::IsRunning() )
             {
-                for ( sal_uInt32 nMethod = 0; nMethod < m_xModule->GetMethods()->Count32(); nMethod++ )
+                for (sal_uInt32 nMethod = 0; nMethod < m_xModule->GetMethods()->Count(); nMethod++)
                 {
-                    SbMethod* pMethod = static_cast<SbMethod*>(m_xModule->GetMethods()->Get32( nMethod ));
+                    SbMethod* pMethod
+                        = static_cast<SbMethod*>(m_xModule->GetMethods()->Get(nMethod));
                     assert(pMethod && "Method not found! (NULL)");
                     pMethod->SetDebugFlags( pMethod->GetDebugFlags() | BasicDebugFlags::Break );
                 }
@@ -1300,9 +1301,9 @@ void ModulWindow::BasicStarted()
     {
         rList.ResetHitCount();
         rList.SetBreakPointsInBasic( m_xModule.get() );
-        for ( sal_uInt32 nMethod = 0; nMethod < m_xModule->GetMethods()->Count32(); nMethod++ )
+        for (sal_uInt32 nMethod = 0; nMethod < m_xModule->GetMethods()->Count(); nMethod++)
         {
-            SbMethod* pMethod = static_cast<SbMethod*>(m_xModule->GetMethods()->Get32( nMethod ));
+            SbMethod* pMethod = static_cast<SbMethod*>(m_xModule->GetMethods()->Get(nMethod));
             assert(pMethod && "Method not found! (NULL)");
             pMethod->SetDebugFlags( pMethod->GetDebugFlags() | BasicDebugFlags::Break );
         }

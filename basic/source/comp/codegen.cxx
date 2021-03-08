@@ -165,7 +165,7 @@ void SbiCodeGen::Save()
                 SbxVariable* pIfaceVar = new SbxVariable( SbxVARIANT );
                 pIfaceVar->SetName( rIfaceName );
                 SbxArray* pIfaces = rMod.pClassData->mxIfaces.get();
-                pIfaces->Insert32( pIfaceVar, pIfaces->Count32() );
+                pIfaces->Insert( pIfaceVar, pIfaces->Count() );
             }
         }
 
@@ -372,16 +372,16 @@ void SbiCodeGen::Save()
         p->AddString( pPool->Find( i ) );
     }
     // Insert types
-    sal_uInt32 nCount = pParser->rTypeArray->Count32();
+    sal_uInt32 nCount = pParser->rTypeArray->Count();
     for (i = 0; i < nCount; i++)
     {
-         p->AddType(static_cast<SbxObject *>(pParser->rTypeArray->Get32(i)));
+         p->AddType(static_cast<SbxObject *>(pParser->rTypeArray->Get(i)));
     }
     // Insert enum objects
-    nCount = pParser->rEnumArray->Count32();
+    nCount = pParser->rEnumArray->Count();
     for (i = 0; i < nCount; i++)
     {
-         p->AddEnum(static_cast<SbxObject *>(pParser->rEnumArray->Get32(i)));
+         p->AddEnum(static_cast<SbxObject *>(pParser->rEnumArray->Get(i)));
     }
     if( !p->IsError() )
     {

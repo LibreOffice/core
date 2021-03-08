@@ -169,8 +169,9 @@ std::size_t alignment(SbxVariable * variable) {
                 SbxObject* pobj = dynamic_cast<SbxObject*>(variable->GetObject());
                 assert(pobj);
                 SbxArray* props = pobj->GetProperties();
-                for (sal_uInt32 i = 0; i < props->Count32(); ++i) {
-                    n = std::max(n, alignment(props->Get32(i)));
+                for (sal_uInt32 i = 0; i < props->Count(); ++i)
+                {
+                    n = std::max(n, alignment(props->Get(i)));
                 }
                 return n;
             }
@@ -184,13 +185,13 @@ std::size_t alignment(SbxVariable * variable) {
     } else {
         SbxDimArray * arr = dynamic_cast<SbxDimArray*>( variable->GetObject() );
         assert(arr);
-        sal_Int32 dims = arr->GetDims32();
+        sal_Int32 dims = arr->GetDims();
         std::vector< sal_Int32 > low(dims);
         for (sal_Int32 i = 0; i < dims; ++i) {
             sal_Int32 up;
-            arr->GetDim32(i + 1, low[i], up);
+            arr->GetDim(i + 1, low[i], up);
         }
-        return alignment(arr->Get32(&low[0]));
+        return alignment(arr->Get(&low[0]));
     }
 }
 
@@ -223,8 +224,9 @@ ErrCode marshalStruct(
     SbxObject* pobj = dynamic_cast<SbxObject*>(variable->GetObject());
     assert(pobj);
     SbxArray* props = pobj->GetProperties();
-    for (sal_uInt32 i = 0; i < props->Count32(); ++i) {
-        ErrCode e = marshal(false, props->Get32(i), false, blob, offset, data);
+    for (sal_uInt32 i = 0; i < props->Count(); ++i)
+    {
+        ErrCode e = marshal(false, props->Get(i), false, blob, offset, data);
         if (e != ERRCODE_NONE) {
             return e;
         }
@@ -239,15 +241,14 @@ ErrCode marshalArray(
     assert(variable != 0);
     SbxDimArray * arr = dynamic_cast<SbxDimArray*>( variable->GetObject() );
     assert(arr);
-    sal_Int32 dims = arr->GetDims32();
+    sal_Int32 dims = arr->GetDims();
     std::vector< sal_Int32 > low(dims);
     std::vector< sal_Int32 > up(dims);
     for (sal_Int32 i = 0; i < dims; ++i) {
-        arr->GetDim32(i + 1, low[i], up[i]);
+        arr->GetDim(i + 1, low[i], up[i]);
     }
     for (std::vector< sal_Int32 > idx = low;;) {
-        ErrCode e = marshal(
-            false, arr->Get32(&idx[0]), false, blob, offset, data);
+        ErrCode e = marshal(false, arr->Get(&idx[0]), false, blob, offset, data);
         if (e != ERRCODE_NONE) {
             return e;
         }
@@ -417,8 +418,9 @@ void const * unmarshal(SbxVariable * variable, void const * data) {
                 SbxObject* pobj = dynamic_cast<SbxObject*>(variable->GetObject());
                 assert(pobj);
                 SbxArray* props = pobj->GetProperties();
-                for (sal_uInt32 i = 0; i < props->Count32(); ++i) {
-                    data = unmarshal(props->Get32(i), data);
+                for (sal_uInt32 i = 0; i < props->Count(); ++i)
+                {
+                    data = unmarshal(props->Get(i), data);
                 }
                 break;
             }
@@ -435,14 +437,14 @@ void const * unmarshal(SbxVariable * variable, void const * data) {
     } else {
         SbxDimArray * arr = dynamic_cast<SbxDimArray*>( variable->GetObject() );
         assert(arr);
-        sal_Int32 dims = arr->GetDims32();
+        sal_Int32 dims = arr->GetDims();
         std::vector< sal_Int32 > low(dims);
         std::vector< sal_Int32 > up(dims);
         for (sal_Int32 i = 0; i < dims; ++i) {
-            arr->GetDim32(i + 1, low[i], up[i]);
+            arr->GetDim(i + 1, low[i], up[i]);
         }
         for (std::vector< sal_Int32 > idx = low;;) {
-            data = unmarshal(arr->Get32(&idx[0]), data);
+            data = unmarshal(arr->Get(&idx[0]), data);
             sal_Int32 i = dims - 1;
             while (idx[i] == up[i]) {
                 idx[i] = low[i];
@@ -498,9 +500,9 @@ ErrCode call(
     // require similar treatment, too:
     bool special = dll.equalsIgnoreAsciiCase("KERNEL32.DLL") &&
                    (proc.name == OString("GetLogicalDriveStringsA"));
-    for (sal_uInt32 i = 1; i < (arguments == 0 ? 0 : arguments->Count32()); ++i) {
-        ErrCode e = marshal(
-            true, arguments->Get32(i), special && i == 2, stack, stack.size(),
+    for (sal_uInt32 i = 1; i < (arguments == 0 ? 0 : arguments->Count()); ++i)
+    {
+        ErrCode e = marshal(true, arguments->Get(i), special && i == 2, stack, stack.size(),
             data);
         if (e != ERRCODE_NONE) {
             return e;
@@ -559,8 +561,9 @@ ErrCode call(
         assert(false);
         break;
     }
-    for (sal_uInt32 i = 1; i < (arguments == 0 ? 0 : arguments->Count32()); ++i) {
-        arguments->Get32(i)->ResetFlag(SbxFlagBits::Reference);
+    for (sal_uInt32 i = 1; i < (arguments == 0 ? 0 : arguments->Count()); ++i)
+    {
+        arguments->Get(i)->ResetFlag(SbxFlagBits::Reference);
             //TODO: skipped for errors?!?
     }
     for (auto& rUnmarshalData : data.unmarshal)
