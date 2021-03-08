@@ -25,6 +25,7 @@
 #include <vcl/settings.hxx>
 #include "textdoc.hxx"
 #include <vcl/textdata.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/xtextedt.hxx>
 #include "textdat2.hxx"
 #include <vcl/commandevent.hxx>
@@ -442,7 +443,7 @@ bool TextView::KeyInput( const KeyEvent& rKeyEvent )
                 {
                     aCurSel = ImpMoveCursor( rKeyEvent );
                     if ( aCurSel.HasRange() ) {
-                        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection());
+                        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetSystemPrimarySelection());
                         Copy( aSelection );
                     }
                     bMoved = true;
@@ -599,14 +600,14 @@ void TextView::MouseButtonUp( const MouseEvent& rMouseEvent )
     if ( rMouseEvent.IsMiddle() && !IsReadOnly() &&
          ( GetWindow()->GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection ) )
     {
-        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection());
+        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetSystemPrimarySelection());
         Paste( aSelection );
         if ( mpImpl->mpTextEngine->IsModified() )
             mpImpl->mpTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
     }
     else if ( rMouseEvent.IsLeft() && GetSelection().HasRange() )
     {
-        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection());
+        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetSystemPrimarySelection());
         Copy( aSelection );
     }
 }
