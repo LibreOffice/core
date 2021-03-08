@@ -102,6 +102,7 @@ public:
     void testTdf136911();
     void testArcTo();
     void testNarrationMimeType();
+    void testTdf140865Wordart3D();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -153,6 +154,7 @@ public:
     CPPUNIT_TEST(testTdf136911);
     CPPUNIT_TEST(testArcTo);
     CPPUNIT_TEST(testNarrationMimeType);
+    CPPUNIT_TEST(testTdf140865Wordart3D);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1322,6 +1324,28 @@ void SdOOXMLExportTest1::testNarrationMimeType()
     assertXPath(pXmlDoc,
                 "/ContentType:Types/ContentType:Override[@PartName='/ppt/media/media1.m4a']",
                 "ContentType", "audio/mp4");
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest1::testTdf140865Wordart3D()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf140865Wordart3D.pptx"), PPTX);
+    utl::TempFile aTempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &aTempFile);
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "ppt/slides/slide1.xml");
+
+    // without the fix in place a:sp3d was lost on round trip, and so extrusion was lost.
+    constexpr OStringLiteral sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr");
+    assertXPath(pXmlDoc, sPathStart + "/a:sp3d", "extrusionH", "342900");
+    assertXPath(pXmlDoc, sPathStart + "/a:sp3d", "contourW", "12700");
+    assertXPath(pXmlDoc, sPathStart + "/a:sp3d/a:bevelT", "w", "114300");
+    assertXPath(pXmlDoc, sPathStart + "/a:sp3d/a:bevelT", "h", "38100");
+    assertXPath(pXmlDoc, sPathStart + "/a:sp3d/a:bevelT", "prst", "softRound");
+    assertXPath(pXmlDoc, sPathStart + "/a:sp3d/a:bevelB", "h", "152400");
+    assertXPath(pXmlDoc, sPathStart + "/a:sp3d/a:extrusionClr/a:srgbClr", "val", "990000");
+    assertXPath(pXmlDoc, sPathStart + "/a:sp3d/a:contourClr/a:srgbClr", "val", "009876");
+
     xDocShRef->DoClose();
 }
 
