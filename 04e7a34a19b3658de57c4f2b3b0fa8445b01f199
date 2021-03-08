@@ -22,6 +22,30 @@
       "revId": "04e7a34a19b3658de57c4f2b3b0fa8445b01f199",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4dcdd4d8_08452b13",
+        "filename": "accessibility/source/standard/vclxaccessibletoolbox.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-03-08T07:17:50Z",
+      "side": 1,
+      "message": "static_cast preserves null pointer values, so it is safe, but I agree that it would be better to check for null first, it is a bit of a code smell",
+      "parentUuid": "35fb6af6_e57a40de",
+      "range": {
+        "startLine": 597,
+        "startChar": 49,
+        "endLine": 597,
+        "endChar": 86
+      },
+      "revId": "04e7a34a19b3658de57c4f2b3b0fa8445b01f199",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
