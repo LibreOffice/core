@@ -62,7 +62,7 @@ public:
 protected:
     virtual void createWindowContext(bool forceRaster = false) override;
     virtual void performFlush() override;
-    sk_sp<SkTypeface> createDirectWriteTypeface(HDC hdc, HFONT hfont);
+    static sk_sp<SkTypeface> createDirectWriteTypeface(HDC hdc, HFONT hfont);
     static void initFontInfo();
     inline static sal::systools::COMReference<IDWriteFactory> dwriteFactory;
     inline static sal::systools::COMReference<IDWriteGdiInterop> dwriteGdiInterop;
