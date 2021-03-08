@@ -89,6 +89,15 @@
 
 #include <viewopt.hxx>
 
+#include <IDocumentFieldsAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <ndtxt.hxx>
+#include <docfld.hxx>
+#include <txtfld.hxx>
+#include <expfld.hxx>
+#include <fldmgr.hxx>
+#include <docufld.hxx>
+
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
 
@@ -202,6 +211,11 @@ bool SwContent::IsProtect() const
     return false;
 }
 
+bool SwTextFieldContent::IsProtect() const
+{
+    return m_pFormatField->IsProtect();
+}
+
 bool SwPostItContent::IsProtect() const
 {
     return pField->IsProtect();
@@ -233,7 +247,8 @@ static const char* STR_CONTENT_TYPE_ARY[] =
     STR_CONTENT_TYPE_REFERENCE,
     STR_CONTENT_TYPE_INDEX,
     STR_CONTENT_TYPE_POSTIT,
-    STR_CONTENT_TYPE_DRAWOBJECT
+    STR_CONTENT_TYPE_DRAWOBJECT,
+    STR_CONTENT_TYPE_TEXTFIELD
 };
 
 static const char* STR_CONTENT_TYPE_SINGLE_ARY[] =
@@ -249,7 +264,8 @@ static const char* STR_CONTENT_TYPE_SINGLE_ARY[] =
     STR_CONTENT_TYPE_SINGLE_REFERENCE,
     STR_CONTENT_TYPE_SINGLE_INDEX,
     STR_CONTENT_TYPE_SINGLE_POSTIT,
-    STR_CONTENT_TYPE_SINGLE_DRAWOBJECT
+    STR_CONTENT_TYPE_SINGLE_DRAWOBJECT,
+    STR_CONTENT_TYPE_SINGLE_TEXTFIELD
 };
 
 namespace
@@ -362,6 +378,33 @@ void SwContentType::Init(bool* pbInvalidateWindow)
             m_bEdit = true;
         }
         break;
+        case ContentTypeId::TEXTFIELD:
+        {
+            m_nMemberCount = 0;
+            m_sTypeToken.clear();
+            m_bEdit = true;
+            m_bDelete = true;
+            const SwFieldTypes& rFieldTypes = *m_pWrtShell->GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
+            const size_t nSize = rFieldTypes.size();
+            for (size_t i = 0; i < nSize; ++i)
+            {
+                const SwFieldType* pFieldType = rFieldTypes[i].get();
+                std::vector<SwFormatField*> vFields;
+                pFieldType->GatherFields(vFields);
+                for (SwFormatField* pFormatField: vFields)
+                {
+                    if (SwTextField* pTextField = pFormatField->GetTextField())
+                    {
+                        const SwTextNode& rTextNode = pTextField->GetTextNode();
+                        const SwContentFrame* pCFrame =
+                                rTextNode.getLayoutFrame(rTextNode.GetDoc().getIDocumentLayoutAccess().GetCurrentLayout());
+                        if (pCFrame)
+                            m_nMemberCount++;
+                    }
+                }
+            }
+    }
+        break;
         case ContentTypeId::BOOKMARK:
         {
             IDocumentMarkAccess* const pMarkAccess = m_pWrtShell->getIDocumentMarkAccess();
@@ -446,7 +489,8 @@ void SwContentType::Init(bool* pbInvalidateWindow)
         case ContentTypeId::REFERENCE:
         {
             m_nMemberCount = m_pWrtShell->GetRefMarks();
-            m_bDelete = false;
+            m_bEdit = true;
+            m_bDelete = true;
         }
         break;
         case ContentTypeId::URLFIELD:
@@ -706,6 +750,62 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             }
         }
         break;
+        case ContentTypeId::TEXTFIELD:
+        {
+            // sorted list of all fields - meaning in the order they are in the document model
+            SetGetExpFields aSrtLst;
+            const SwFieldTypes& rFieldTypes = *m_pWrtShell->GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
+            const size_t nSize = rFieldTypes.size();
+            for (size_t i = 0; i < nSize; ++i)
+            {
+                const SwFieldType* pFieldType = rFieldTypes[i].get();
+                std::vector<SwFormatField*> vFields;
+                pFieldType->GatherFields(vFields);
+                for (SwFormatField* pFormatField: vFields)
+                {
+                    if (SwTextField* pTextField = pFormatField->GetTextField())
+                    {
+                        const SwTextNode& rTextNode = pTextField->GetTextNode();
+                        const SwContentFrame* pCFrame =
+                                rTextNode.getLayoutFrame(rTextNode.GetDoc().getIDocumentLayoutAccess().GetCurrentLayout());
+                        if (pCFrame)
+                        {
+                            std::unique_ptr<SetGetExpField> pNew(new SetGetExpField(SwNodeIndex(rTextNode), pTextField));
+                            aSrtLst.insert(std::move(pNew));
+                        }
+                    }
+                }
+            }
+            for (size_t i = 0; i < aSrtLst.size(); ++i)
+            {
+                const SwTextField* pTextField = aSrtLst[i]->GetTextField();
+                const SwFormatField& rFormatField = pTextField->GetFormatField();
+                const SwField* pField = rFormatField.GetField();
+                OUString sFieldName = pField->GetFieldName();
+                if (pField->GetTypeId() == SwFieldTypesEnum::Postit)
+                {
+                    OUString sEntry(static_cast<const SwPostItField*>(pField)->GetText());
+                    sEntry = RemoveNewline(sEntry);
+                    sFieldName = sFieldName + " - " + sEntry;
+                }
+                else if (pField->GetTypeId() == SwFieldTypesEnum::DocumentStatistics)
+                {
+                    SwFieldMgr aFieldMgr(m_pWrtShell);
+                    std::vector<OUString> aLst;
+                    aFieldMgr.GetSubTypes(SwFieldTypesEnum::DocumentStatistics, aLst);
+                    const SwDocStatField* pDocStatField = static_cast<const SwDocStatField*>(pField);
+                    OUString sSubType;
+                    if (pDocStatField->GetSubType() < aLst.size())
+                        sSubType = aLst[pDocStatField->GetSubType()] + " - ";
+                    sFieldName = sFieldName + " - " +  sSubType  + pDocStatField->ExpandField(true, nullptr);
+                }
+                std::unique_ptr<SwTextFieldContent> pCnt(new SwTextFieldContent(this, sFieldName, &rFormatField, i));
+                m_pMember->insert(std::move(pCnt));
+            }
+            m_nMemberCount = m_pMember->size();
+        }
+        break;
+
         case ContentTypeId::REGION    :
         {
             m_nMemberCount = m_pWrtShell->GetSectionFormatCount();
@@ -1444,7 +1544,12 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 ContentTypeId::INDEX == nContentType ||
                 ContentTypeId::DRAWOBJECT == nContentType);
 
-        if(ContentTypeId::OUTLINE == nContentType)
+        if (ContentTypeId::TEXTFIELD == nContentType || ContentTypeId::REFERENCE == nContentType)
+        {
+            bRemoveEditEntry = false;
+            bRemoveDeleteEntry = false;
+        }
+        else if(ContentTypeId::OUTLINE == nContentType)
         {
             bOutline = true;
             lcl_SetOutlineContentEntriesSensitivities(this, *m_xTreeView, *xEntry, *xSubPopOutlineContent);
@@ -1975,6 +2080,9 @@ namespace
             case ContentTypeId::DRAWOBJECT:
                 sResId = RID_BMP_NAVI_DRAWOBJECT;
                 break;
+            case ContentTypeId::TEXTFIELD:
+                sResId = RID_BMP_NAVI_TEXTFIELD;
+                break;
             case ContentTypeId::UNKNOWN:
                 SAL_WARN("sw.ui", "ContentTypeId::UNKNOWN has no bitmap preview");
                 break;
@@ -2324,6 +2432,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
         case ContentTypeId::POSTIT:
         case ContentTypeId::INDEX:
         case ContentTypeId::REFERENCE :
+        case ContentTypeId::TEXTFIELD:
             // cannot be inserted, neither as URL nor as section
         break;
         case ContentTypeId::URLFIELD:
@@ -3257,6 +3366,43 @@ void SwContentTree::UpdateTracking()
         return;
     }
 
+    // fields
+    if (SwField* pField = m_pActiveShell->GetCurField())
+    {
+        OUString sContentType(SwResId(STR_CONTENT_TYPE_TEXTFIELD));
+        if (pField->GetTypeId() == SwFieldTypesEnum::Postit)
+            sContentType = SwResId(STR_CONTENT_TYPE_POSTIT);
+        // find content type entry
+        std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
+        bool bFoundEntry = m_xTreeView->get_iter_first(*xIter);
+        while (bFoundEntry && sContentType != m_xTreeView->get_text(*xIter))
+            bFoundEntry = m_xTreeView->iter_next_sibling(*xIter);
+        // find content type content entry and select it
+        if (bFoundEntry)
+        {
+            m_xTreeView->expand_row(*xIter); // assure content type entry is expanded
+            while (m_xTreeView->iter_next(*xIter) && lcl_IsContent(*xIter, *m_xTreeView))
+            {
+                SwTextFieldContent* pCnt = reinterpret_cast<SwTextFieldContent*>(m_xTreeView->get_id(*xIter).toInt64());
+                if (pCnt && pField == pCnt->GetFormatField()->GetField())
+                {
+                    // get first selected for comparison
+                    std::unique_ptr<weld::TreeIter> xFirstSelected(m_xTreeView->make_iterator());
+                    if (!m_xTreeView->get_selected(xFirstSelected.get()))
+                        xFirstSelected.reset();
+                    if (m_xTreeView->count_selected_rows() != 1 ||
+                            m_xTreeView->iter_compare(*xIter, *xFirstSelected) != 0)
+                    {
+                        // unselect all entries and make passed entry visible and selected
+                        m_xTreeView->set_cursor(*xIter);
+                        Select();
+                    }
+                    break;
+                }
+            }
+        }
+        return;
+    }
     // drawing
     if ((m_pActiveShell->GetSelectionType() & (SelectionType::DrawObject |
                                                SelectionType::DrawObjectEditMode |
@@ -4285,10 +4431,25 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
             else
                 nSlot = SID_EDIT_HYPERLINK;
         break;
+        case ContentTypeId::TEXTFIELD:
         case ContentTypeId::REFERENCE:
-            nSlot = FN_EDIT_FIELD;
-        break;
-
+        {
+            const SwTextFieldContent* pTextFieldCnt = static_cast<const SwTextFieldContent*>(pCnt);
+            if (nMode == EditEntryMode::DELETE)
+            {
+                const SwTextField* pTextField = pTextFieldCnt->GetFormatField()->GetTextField();
+                SwTextField::DeleteTextField(*pTextField);
+            }
+            else
+            {
+                if (pTextFieldCnt->GetFormatField()->GetField()->GetTypeId() != SwFieldTypesEnum::Postit)
+                {
+                    nSlot = FN_EDIT_FIELD;
+                    break;
+                }
+            }
+            [[fallthrough]]; // execute FN_POSTIT assuring standard mode first
+        }
         case ContentTypeId::POSTIT:
             m_pActiveShell->GetView().GetPostItMgr()->AssureStdModeAtShell();
             if(nMode == EditEntryMode::DELETE)
@@ -4418,6 +4579,12 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
     lcl_AssureStdModeAtShell(m_pActiveShell);
     switch(pCnt->GetParent()->GetType())
     {
+        case ContentTypeId::TEXTFIELD:
+        {
+            m_pActiveShell->GotoFormatField(
+                        *static_cast<const SwTextFieldContent*>(pCnt)->GetFormatField());
+        }
+        break;
         case ContentTypeId::OUTLINE   :
         {
             m_pActiveShell->GotoOutline(static_cast<const SwOutlineContent*>(pCnt)->GetOutlinePos());

@@ -87,6 +87,7 @@
 #define RID_BMP_NAVI_INDEX                      "sw/res/nc20009.png"
 #define RID_BMP_NAVI_POSTIT                     "sw/res/nc20010.png"
 #define RID_BMP_NAVI_DRAWOBJECT                 "sw/res/nc20011.png"
+#define RID_BMP_NAVI_TEXTFIELD                  "sw/res/nc20005.png"
 #define RID_BMP_DROP_REGION                     "sw/res/sc20235.png"
 #define RID_BMP_DROP_LINK                       "sw/res/sc20238.png"
 #define RID_BMP_DROP_COPY                       "sw/res/sc20239.png"
