@@ -52,6 +52,24 @@
       "revId": "2c23fa77f8f48e5e36b22eb8d7bd9b725ebe4fd6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b8adc8a_02959db3",
+        "filename": "include/systools/win32/retry_if_failed.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-08T12:09:18Z",
+      "side": 1,
+      "message": "Ah, I see.\n\nSo while absolutely irrelevant in this specific case, I advocate to use the new C++ \"declaration in if\" construct, because it limits the scope of a variable only used inside the if. It is just like\n\n  if (foo* p \u003d bar())\n    ...\n\nbut with possibility to have objects that do not implicitly convert to boolean, but have other useful \"is valid\" tests, like\n\n  if (const OUString a \u003d foo(); !a.isEmpty())\n    ...\n\nThat is, if I understand your concern correctly :-)",
+      "parentUuid": "9835d5bd_d8234df9",
+      "revId": "2c23fa77f8f48e5e36b22eb8d7bd9b725ebe4fd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
