@@ -16,6 +16,24 @@
       "revId": "b86d881540a7574f8eb0ebe80a12e52159e43fc1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bd0ef22_4a3565aa",
+        "filename": "vcl/jsdialog/jsdialogbuilder.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1000865
+      },
+      "writtenOn": "2021-03-08T12:38:50Z",
+      "side": 1,
+      "message": "After creating RememberWidget1 defined static, wit some tweaks\n\nIt crashes:\n\ndistro/collabora/cp-6.4/instdir/program/libvcllo.so(_ZN6Dialog6ResizeEv+0x53)[0x7fd13cd3\n6a1f]                                                                                                                       \ndistro/collabora/cp-6.4/instdir/program/libsofficeapp.so(+0xfcf45)[0x7fd1442e4f45]      \ndistro/collabora/cp-6.4/instdir/program/libsofficeapp.so(+0xfd334)[0x7fd1442e5334]      \ndistro/collabora/co-6-4/loolforkit(_ZN3lok8Document15sendDialogEventEyPKc+0x39)[0x559cd0c7cca\n1]\n\nSorry, It does not work",
+      "parentUuid": "7c147eb2_73b5d2cc",
+      "revId": "b86d881540a7574f8eb0ebe80a12e52159e43fc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
