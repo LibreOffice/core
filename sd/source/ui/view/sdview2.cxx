@@ -206,7 +206,7 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateSelectionDat
 
     pTransferable->SetStartPos( aMarkRect.TopLeft() );
     pTransferable->SetObjectDescriptor( std::move(pObjDesc) );
-    pTransferable->CopyToSelection( &rWindow );
+    pTransferable->CopyToPrimarySelection();
 
     return pTransferable;
 }
@@ -219,7 +219,7 @@ void View::UpdateSelectionClipboard( bool bForceDeselect )
             CreateSelectionDataObject( this, *mpViewSh->GetActiveWindow() );
         else if( SD_MOD()->pTransferSelection && ( SD_MOD()->pTransferSelection->GetView() == this ) )
         {
-            TransferableHelper::ClearSelection( mpViewSh->GetActiveWindow() );
+            TransferableHelper::ClearPrimarySelection();
             SD_MOD()->pTransferSelection = nullptr;
         }
     }

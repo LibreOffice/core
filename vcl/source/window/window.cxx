@@ -3424,15 +3424,6 @@ Reference< XClipboard > Window::GetClipboard()
     return mpWindowImpl->mpFrameData->mxClipboard;
 }
 
-Reference< XClipboard > Window::GetPrimarySelection()
-{
-    if (!mpWindowImpl->mpFrameData)
-        return static_cast<XClipboard*>(nullptr);
-    if (!mpWindowImpl->mpFrameData->mxSelection.is())
-        mpWindowImpl->mpFrameData->mxSelection = GetSystemPrimarySelection();
-    return mpWindowImpl->mpFrameData->mxSelection;
-}
-
 void Window::RecordLayoutData( vcl::ControlLayoutData* pLayout, const tools::Rectangle& rRect )
 {
     assert(mpOutDevData);

@@ -1608,13 +1608,6 @@ Reference<css::datatransfer::clipboard::XClipboard> ImpEditView::GetClipboard() 
     return GetSystemClipboard();
 }
 
-Reference<css::datatransfer::clipboard::XClipboard> ImpEditView::GetSelection() const
-{
-    if (vcl::Window* pWindow = GetWindow())
-        return pWindow->GetPrimarySelection();
-    return GetSystemPrimarySelection();
-}
-
 bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * pFrameWin )
 {
     bool bDone = false;
@@ -1674,12 +1667,12 @@ bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
     if ( rMouseEvent.IsMiddle() && !bReadOnly &&
          Application::GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection )
     {
-        Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetSelection());
+        Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetSystemPrimarySelection());
         Paste( aClipBoard );
     }
     else if ( rMouseEvent.IsLeft() && GetEditSelection().HasRange() )
     {
-        Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetSelection());
+        Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetSystemPrimarySelection());
         CutCopy( aClipBoard, false );
     }
 

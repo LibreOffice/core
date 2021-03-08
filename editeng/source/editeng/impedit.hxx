@@ -315,7 +315,6 @@ private:
     void InvalidateAtWindow(const tools::Rectangle& rRect);
 
     css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard() const;
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetSelection() const;
 
     void SetBroadcastLOKViewCursor(bool bSet)
     {

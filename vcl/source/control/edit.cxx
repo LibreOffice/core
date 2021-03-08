@@ -26,6 +26,7 @@
 #include <vcl/specialchars.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/ptrstyle.hxx>
 
@@ -1265,7 +1266,7 @@ void Edit::ImplCopyToSelectionClipboard()
 {
     if ( GetSelection().Len() )
     {
-        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetPrimarySelection());
+        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetSystemPrimarySelection());
         ImplCopy( aSelection );
     }
 }
@@ -1366,7 +1367,7 @@ void Edit::MouseButtonUp( const MouseEvent& rMEvt )
     else if ( rMEvt.IsMiddle() && !mbReadOnly &&
               ( GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection ) )
     {
-        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(Window::GetPrimarySelection());
+        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetSystemPrimarySelection());
         ImplPaste( aSelection );
         Modify();
     }

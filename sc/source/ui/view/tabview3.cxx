@@ -490,7 +490,7 @@ void ScTabView::CheckSelectionTransfer()
     // selection of an open RefDlg dialog, so don't inform the
     // desktop clipboard of the changed selection if that dialog is open
     if (!lcl_IsRefDlgActive(aViewData.GetViewShell()->GetViewFrame()))
-        pNew->CopyToSelection( GetActiveWin() );                    // may delete pOld
+        pNew->CopyToPrimarySelection();                    // may delete pOld
 
     // Log the selection change
     ScMarkData& rMark = aViewData.GetMarkData();
