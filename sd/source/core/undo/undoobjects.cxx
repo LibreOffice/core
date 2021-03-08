@@ -100,8 +100,8 @@ UndoRemoveObject::UndoRemoveObject( SdrObject& rObject )
 
 void UndoRemoveObject::Undo()
 {
-    DBG_ASSERT( mxSdrObject.is(), "sd::UndoRemoveObject::Undo(), object already dead!" );
-    if( mxSdrObject.is() )
+    DBG_ASSERT( mxSdrObject.get().is(), "sd::UndoRemoveObject::Undo(), object already dead!" );
+    if( mxSdrObject.get().is() )
     {
         SdrUndoRemoveObj::Undo();
         UndoRemovePresObjectImpl::Undo();
@@ -110,8 +110,8 @@ void UndoRemoveObject::Undo()
 
 void UndoRemoveObject::Redo()
 {
-    DBG_ASSERT( mxSdrObject.is(), "sd::UndoRemoveObject::Redo(), object already dead!" );
-    if( mxSdrObject.is() )
+    DBG_ASSERT( mxSdrObject.get().is(), "sd::UndoRemoveObject::Redo(), object already dead!" );
+    if( mxSdrObject.get().is() )
     {
         UndoRemovePresObjectImpl::Redo();
         SdrUndoRemoveObj::Redo();
@@ -127,8 +127,8 @@ UndoDeleteObject::UndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect )
 
 void UndoDeleteObject::Undo()
 {
-    DBG_ASSERT( mxSdrObject.is(), "sd::UndoDeleteObject::Undo(), object already dead!" );
-    if( mxSdrObject.is() )
+    DBG_ASSERT( mxSdrObject.get().is(), "sd::UndoDeleteObject::Undo(), object already dead!" );
+    if( mxSdrObject.get().is() )
     {
         SdrUndoDelObj::Undo();
         UndoRemovePresObjectImpl::Undo();
@@ -137,8 +137,8 @@ void UndoDeleteObject::Undo()
 
 void UndoDeleteObject::Redo()
 {
-    DBG_ASSERT( mxSdrObject.is(), "sd::UndoDeleteObject::Redo(), object already dead!" );
-    if( mxSdrObject.is() )
+    DBG_ASSERT( mxSdrObject.get().is(), "sd::UndoDeleteObject::Redo(), object already dead!" );
+    if( mxSdrObject.get().is() )
     {
         UndoRemovePresObjectImpl::Redo();
         SdrUndoDelObj::Redo();
@@ -154,8 +154,8 @@ UndoReplaceObject::UndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObje
 
 void UndoReplaceObject::Undo()
 {
-    DBG_ASSERT( mxSdrObject.is(), "sd::UndoReplaceObject::Undo(), object already dead!" );
-    if( mxSdrObject.is() )
+    DBG_ASSERT( mxSdrObject.get().is(), "sd::UndoReplaceObject::Undo(), object already dead!" );
+    if( mxSdrObject.get().is() )
     {
         SdrUndoReplaceObj::Undo();
         UndoRemovePresObjectImpl::Undo();
@@ -164,8 +164,8 @@ void UndoReplaceObject::Undo()
 
 void UndoReplaceObject::Redo()
 {
-    DBG_ASSERT( mxSdrObject.is(), "sd::UndoReplaceObject::Redo(), object already dead!" );
-    if( mxSdrObject.is() )
+    DBG_ASSERT( mxSdrObject.get().is(), "sd::UndoReplaceObject::Redo(), object already dead!" );
+    if( mxSdrObject.get().is() )
     {
         UndoRemovePresObjectImpl::Redo();
         SdrUndoReplaceObj::Redo();
@@ -197,10 +197,10 @@ UndoObjectSetText::~UndoObjectSetText()
 
 void UndoObjectSetText::Undo()
 {
-    DBG_ASSERT( mxSdrObject.is(), "sd::UndoObjectSetText::Undo(), object already dead!" );
-    if( mxSdrObject.is() )
+    DBG_ASSERT( mxSdrObject.get().is(), "sd::UndoObjectSetText::Undo(), object already dead!" );
+    if( auto pSdrObject = mxSdrObject.get() )
     {
-        mbNewEmptyPresObj = mxSdrObject->IsEmptyPresObj();
+        mbNewEmptyPresObj = pSdrObject->IsEmptyPresObj();
         SdrUndoObjSetText::Undo();
         if( mpUndoAnimation )
             mpUndoAnimation->Undo();
@@ -209,13 +209,13 @@ void UndoObjectSetText::Undo()
 
 void UndoObjectSetText::Redo()
 {
-    DBG_ASSERT( mxSdrObject.is(), "sd::UndoObjectSetText::Redo(), object already dead!" );
-    if( mxSdrObject.is() )
+    DBG_ASSERT( mxSdrObject.get().is(), "sd::UndoObjectSetText::Redo(), object already dead!" );
+    if( auto pSdrObject = mxSdrObject.get() )
     {
         if( mpUndoAnimation )
             mpUndoAnimation->Redo();
         SdrUndoObjSetText::Redo();
-        mxSdrObject->SetEmptyPresObj(mbNewEmptyPresObj);
+        pSdrObject->SetEmptyPresObj(mbNewEmptyPresObj);
     }
 }
 
@@ -231,20 +231,20 @@ UndoObjectUserCall::UndoObjectUserCall(SdrObject& rObject)
 
 void UndoObjectUserCall::Undo()
 {
-    DBG_ASSERT( mxSdrObject.is(), "sd::UndoObjectUserCall::Undo(), object already dead!" );
-    if( mxSdrObject.is() )
+    DBG_ASSERT( mxSdrObject.get().is(), "sd::UndoObjectUserCall::Undo(), object already dead!" );
+    if( auto pSdrObject = mxSdrObject.get() )
     {
-        mpNewUserCall = mxSdrObject->GetUserCall();
-        mxSdrObject->SetUserCall(mpOldUserCall);
+        mpNewUserCall = pSdrObject->GetUserCall();
+        pSdrObject->SetUserCall(mpOldUserCall);
     }
 }
 
 void UndoObjectUserCall::Redo()
 {
-    DBG_ASSERT( mxSdrObject.is(), "sd::UndoObjectUserCall::Redo(), object already dead!" );
-    if( mxSdrObject.is() )
+    DBG_ASSERT( mxSdrObject.get().is(), "sd::UndoObjectUserCall::Redo(), object already dead!" );
+    if( auto pSdrObject = mxSdrObject.get() )
     {
-        mxSdrObject->SetUserCall(mpNewUserCall);
+        pSdrObject->SetUserCall(mpNewUserCall);
     }
 }
 
@@ -265,28 +265,30 @@ UndoObjectPresentationKind::UndoObjectPresentationKind(SdrObject& rObject)
 
 void UndoObjectPresentationKind::Undo()
 {
-    if( !mxSdrObject.is() )
-        return;
-    if( rtl::Reference<SdPage> pPage = mxPage.get() )
+    if( auto pSdrObject = mxSdrObject.get() )
     {
-        meNewKind =  pPage->GetPresObjKind( mxSdrObject.get() );
-        if( meNewKind != PresObjKind::NONE )
-            pPage->RemovePresObj( mxSdrObject.get() );
-        if( meOldKind != PresObjKind::NONE )
-            pPage->InsertPresObj( mxSdrObject.get(), meOldKind );
+        if( rtl::Reference<SdPage> pPage = mxPage.get() )
+        {
+            meNewKind =  pPage->GetPresObjKind( pSdrObject.get() );
+            if( meNewKind != PresObjKind::NONE )
+                pPage->RemovePresObj( pSdrObject.get() );
+            if( meOldKind != PresObjKind::NONE )
+                pPage->InsertPresObj( pSdrObject.get(), meOldKind );
+        }
     }
 }
 
 void UndoObjectPresentationKind::Redo()
 {
-    if( !mxSdrObject.is() )
-        return;
-    if( rtl::Reference<SdPage> pPage = mxPage.get() )
+    if( auto pSdrObject = mxSdrObject.get() )
     {
-        if( meOldKind != PresObjKind::NONE )
-            pPage->RemovePresObj( mxSdrObject.get() );
-        if( meNewKind != PresObjKind::NONE )
-            pPage->InsertPresObj( mxSdrObject.get(), meNewKind );
+        if( rtl::Reference<SdPage> pPage = mxPage.get() )
+        {
+            if( meOldKind != PresObjKind::NONE )
+                pPage->RemovePresObj( pSdrObject.get() );
+            if( meNewKind != PresObjKind::NONE )
+                pPage->InsertPresObj( pSdrObject.get(), meNewKind );
+        }
     }
 }
 
@@ -316,8 +318,8 @@ UndoGeoObject::UndoGeoObject( SdrObject& rNewObj )
 
 void UndoGeoObject::Undo()
 {
-    DBG_ASSERT( mxSdrObject.is(), "sd::UndoGeoObject::Undo(), object already dead!" );
-    if( mxSdrObject.is() )
+    DBG_ASSERT( mxSdrObject.get().is(), "sd::UndoGeoObject::Undo(), object already dead!" );
+    if( auto pSdrObject = mxSdrObject.get() )
     {
         if( auto pPage = mxPage.get() )
         {
@@ -333,8 +335,8 @@ void UndoGeoObject::Undo()
 
 void UndoGeoObject::Redo()
 {
-    DBG_ASSERT( mxSdrObject.is(), "sd::UndoGeoObject::Redo(), object already dead!" );
-    if( mxSdrObject.is() )
+    DBG_ASSERT( mxSdrObject.get().is(), "sd::UndoGeoObject::Redo(), object already dead!" );
+    if( auto pSdrObject = mxSdrObject.get() )
     {
         if( auto pPage = mxPage.get() )
         {
@@ -357,8 +359,8 @@ UndoAttrObject::UndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSav
 
 void UndoAttrObject::Undo()
 {
-    DBG_ASSERT( mxSdrObject.is(), "sd::UndoAttrObject::Undo(), object already dead!" );
-    if( mxSdrObject.is() )
+    DBG_ASSERT( mxSdrObject.get().is(), "sd::UndoAttrObject::Undo(), object already dead!" );
+    if( auto pSdrObject = mxSdrObject.get() )
     {
         if( auto pPage = mxPage.get() )
         {
@@ -374,8 +376,8 @@ void UndoAttrObject::Undo()
 
 void UndoAttrObject::Redo()
 {
-    DBG_ASSERT( mxSdrObject.is(), "sd::UndoAttrObject::Redo(), object already dead!" );
-    if( mxSdrObject.is() )
+    DBG_ASSERT( mxSdrObject.get().is(), "sd::UndoAttrObject::Redo(), object already dead!" );
+    if( auto pSdrObject = mxSdrObject.get() )
     {
         if( auto pPage = mxPage.get() )
         {

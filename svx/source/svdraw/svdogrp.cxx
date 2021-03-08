@@ -218,7 +218,7 @@ const tools::Rectangle& SdrObjGroup::GetSnapRect() const
     }
 }
 
-SdrObjGroup* SdrObjGroup::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrObjGroup::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrObjGroup(rTargetModel, *this);
 }
@@ -755,19 +755,19 @@ void SdrObjGroup::NbcReformatText()
     NbcReformatAllTextObjects();
 }
 
-SdrObjectUniquePtr SdrObjGroup::DoConvertToPolyObj(bool bBezier, bool bAddText) const
+rtl::Reference<SdrObject> SdrObjGroup::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
-    SdrObjectUniquePtr pGroup( new SdrObjGroup(getSdrModelFromSdrObject()) );
+    rtl::Reference<SdrObject> pGroup( new SdrObjGroup(getSdrModelFromSdrObject()) );
     const size_t nObjCount(GetObjCount());
 
     for(size_t a=0; a < nObjCount; ++a)
     {
         SdrObject* pIterObj(GetObj(a));
-        SdrObjectUniquePtr pResult(pIterObj->DoConvertToPolyObj(bBezier, bAddText));
+        rtl::Reference<SdrObject> pResult(pIterObj->DoConvertToPolyObj(bBezier, bAddText));
 
         // pResult can be NULL e.g. for empty objects
         if( pResult )
-            pGroup->GetSubList()->NbcInsertObject(pResult.release());
+            pGroup->GetSubList()->NbcInsertObject(pResult.get());
     }
 
     return pGroup;

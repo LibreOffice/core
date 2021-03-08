@@ -1904,15 +1904,15 @@ void Test::testSortImages()
 
     // Insert graphic in cell B2.
     const tools::Rectangle aOrigRect(1000, 1000, 1200, 1200);
-    SdrCircObj* pObj = new SdrCircObj(*pDrawLayer, SdrCircKind::Full, aOrigRect);
+    rtl::Reference<SdrCircObj> pObj = new SdrCircObj(*pDrawLayer, SdrCircKind::Full, aOrigRect);
     SdrPage* pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT(pPage);
-    pPage->InsertObject(pObj);
+    pPage->InsertObject(pObj.get());
     // Anchor to cell
     ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0, false);
     // Move to cell B2
     ScAddress aCellPos(1, 1, 0);
-    pDrawLayer->MoveObject(pObj, aCellPos);
+    pDrawLayer->MoveObject(pObj.get(), aCellPos);
 
     std::map<SCROW, std::vector<SdrObject*>> pRowObjects
         = pDrawLayer->GetObjectsAnchoredToRange(aCellPos.Tab(), aCellPos.Col(), aCellPos.Row(), aCellPos.Row());

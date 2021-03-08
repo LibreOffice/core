@@ -66,7 +66,6 @@ protected:
     mutable rtl::Reference<OPropertyMediator>                         m_xMediator;
     mutable css::uno::Reference< css::beans::XPropertyChangeListener> m_xPropertyChangeListener;
     mutable css::uno::Reference< css::report::XReportComponent>       m_xReportComponent;
-    css::uno::Reference< css::uno::XInterface >                       m_xKeepShapeAlive;
     OUString m_sComponentName;
     bool        m_bIsListening;
 
@@ -83,12 +82,8 @@ protected:
 
     /** called by instances of derived classes to implement their overriding of getUnoShape
     */
-    css::uno::Reference< css::uno::XInterface >
+    static css::uno::Reference< css::uno::XInterface >
             getUnoShapeOf( SdrObject& _rSdrObject );
-
-private:
-    static void    ensureSdrObjectOwnership(
-                    const css::uno::Reference< css::uno::XInterface >& _rxShape );
 
 public:
     OObjectBase(const OObjectBase&) = delete;
@@ -107,11 +102,7 @@ public:
     css::uno::Reference< css::report::XSection> getSection() const;
     const OUString& getServiceName() const { return m_sComponentName; }
 
-    /** releases the reference to our UNO shape (m_xKeepShapeAlive)
-    */
-    void    releaseUnoShape() { m_xKeepShapeAlive.clear(); }
-
-    static SdrObject* createObject(
+    static rtl::Reference<SdrObject> createObject(
         SdrModel& rTargetModel,
         const css::uno::Reference< css::report::XReportComponent>& _xComponent);
     static SdrObjKind getObjectType(const css::uno::Reference< css::report::XReportComponent>& _xComponent);
@@ -129,7 +120,7 @@ private:
     virtual ~OCustomShape() override;
 
 public:
-    static OCustomShape* Create(
+    static rtl::Reference<OCustomShape> Create(
         SdrModel& rSdrModel,
         const css::uno::Reference< css::report::XReportComponent>& _xComponent)
     {
@@ -173,7 +164,7 @@ private:
     virtual ~OOle2Obj() override;
 
 public:
-    static OOle2Obj* Create(
+    static rtl::Reference<OOle2Obj> Create(
         SdrModel& rSdrModel,
         const css::uno::Reference< css::report::XReportComponent>& _xComponent,
         SdrObjKind _nType)
@@ -187,7 +178,7 @@ public:
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual SdrInventor GetObjInventor() const override;
     // Clone() should make a complete copy of the object.
-    virtual OOle2Obj* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
     virtual void initializeOle() override;
 
     void initializeChart( const css::uno::Reference< css::frame::XModel>& _xModel);
@@ -270,10 +261,9 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > getUnoShape() override;
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual SdrInventor GetObjInventor() const override;
-    virtual OUnoObject* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
 private:
-    virtual void impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& rxUnoShape ) override;
     void    impl_initializeModel_nothrow();
 };
 

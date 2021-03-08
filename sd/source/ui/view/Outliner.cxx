@@ -1144,13 +1144,13 @@ namespace
 
 bool lclIsValidTextObject(const sd::outliner::IteratorPosition& rPosition)
 {
-    auto* pObject = dynamic_cast< SdrTextObj* >( rPosition.mxObject.get() );
+    auto* pObject = dynamic_cast< SdrTextObj* >( rPosition.mxObject.get().get() );
     return (pObject != nullptr) && pObject->HasText() && ! pObject->IsEmptyPresObj();
 }
 
 bool isValidVectorGraphicObject(const sd::outliner::IteratorPosition& rPosition)
 {
-    auto* pGraphicObject = dynamic_cast<SdrGrafObj*>(rPosition.mxObject.get());
+    auto* pGraphicObject = dynamic_cast<SdrGrafObj*>(rPosition.mxObject.get().get());
     if (pGraphicObject)
     {
         auto const& pVectorGraphicData = pGraphicObject->GetGraphic().getVectorGraphicData();
@@ -1224,12 +1224,12 @@ void SdOutliner::ProvideNextTextObject()
                     if (meMode != SEARCH)
                         mpObj = SetObject(maCurrentPosition);
                     else
-                        mpObj = maCurrentPosition.mxObject.get();
+                        mpObj = maCurrentPosition.mxObject.get().get();
                 }
                 // Or if the object is a valid graphic object which contains vector graphic
                 else if (meMode == SEARCH && isValidVectorGraphicObject(maCurrentPosition))
                 {
-                    mpObj = maCurrentPosition.mxObject.get();
+                    mpObj = maCurrentPosition.mxObject.get().get();
                     rVectorGraphicSearchContext.mbCurrentIsVectorGraphic = true;
                 }
             }
@@ -1710,7 +1710,7 @@ SdrObject* SdOutliner::SetObject (
     SetViewMode (rPosition.mePageKind);
     SetPage (rPosition.meEditMode, static_cast<sal_uInt16>(rPosition.mnPageIndex));
     mnText = rPosition.mnText;
-    return rPosition.mxObject.get();
+    return rPosition.mxObject.get().get();
 }
 
 void SdOutliner::SetViewShell (const std::shared_ptr<sd::ViewShell>& rpViewShell)

@@ -58,7 +58,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
 
     const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
     const SdrObject* pNewObj;
-    SdrObjectUniquePtr pConvPolyObj;
+    rtl::Reference<SdrObject> pConvPolyObj;
 
     if( dynamic_cast< const SdrPathObj *>( pObj ) !=  nullptr )
     {
@@ -88,7 +88,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
     const ::basegfx::B2DPolyPolygon aPolyPolygon = static_cast<const SdrPathObj*>(pNewObj)->GetPathPoly();
 
     // Delete the created poly-object
-    pConvPolyObj.reset();
+    pConvPolyObj.clear();
 
     XLineEndListRef pLineEndList = mpDoc->GetLineEndList();
 

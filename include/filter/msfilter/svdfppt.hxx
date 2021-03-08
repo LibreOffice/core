@@ -362,7 +362,7 @@ struct PptSlidePersistEntry
     std::unique_ptr<sal_uInt32[]>
                         pPresentationObjects;   // if valid, this is a pointer to an array that includes the offsets to the presentation objects
                                                 // on this masterpage for each instance (0 - 8);
-    SdrObject*          pBObj;
+    rtl::Reference<SdrObject> pBObj;
 
     PptPageKind         ePageKind;
 
@@ -479,7 +479,7 @@ public:
     PptFontEntityAtom*  GetFontEnityAtom( sal_uInt32 nNum ) const;
     void                RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic& rGraph );
     virtual SdrObject*  ReadObjText( PPTTextObj* pTextObj, SdrObject* pObj, SdPageCapsule pPage ) const;
-    virtual SdrObject*  ProcessObj( SvStream& rSt, DffObjData& rData, SvxMSDffClientData& rClientData, tools::Rectangle& rTextRect, SdrObject* pObj ) override;
+    virtual rtl::Reference<SdrObject> ProcessObj( SvStream& rSt, DffObjData& rData, SvxMSDffClientData& rClientData, tools::Rectangle& rTextRect, SdrObject* pObj ) override;
     virtual void        ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, DffObjData& rObj ) override;
     void                ImportHeaderFooterContainer( DffRecordHeader const & rHeader, HeaderFooterEntry& rEntry );
 };
@@ -593,7 +593,7 @@ protected:
     virtual SdrObject*      ReadObjText( PPTTextObj* pTextObj, SdrObject* pObj, SdPageCapsule pPage ) const override;
     // #i32596# - new parameter <_nCalledByGroup>, which
     // indicates, if the OLE object is imported inside a group object.
-    virtual SdrObject*      ImportOLE(
+    virtual rtl::Reference<SdrObject> ImportOLE(
                                 sal_uInt32 nOLEId,
                                 const Graphic& rGraf,
                                 const tools::Rectangle& rBoundRect,
@@ -619,7 +619,7 @@ public:
     sal_uInt16              GetPageCount( PptPageKind eKind = PPT_SLIDEPAGE ) const;
     void                    SetPageNum( sal_uInt16 nPageNum, PptPageKind = PPT_SLIDEPAGE );
     Size                    GetPageSize() const;
-    SdrObject*              ImportPageBackgroundObject(
+    rtl::Reference<SdrObject> ImportPageBackgroundObject(
                                 const SdrPage& rPage,
                                 sal_uInt32& nBgFileOffset
                             );
@@ -637,7 +637,7 @@ public:
     virtual bool            GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const override;
     virtual bool            SeekToShape( SvStream& rSt, SvxMSDffClientData* pClientData, sal_uInt32 nId ) const override;
     virtual const PptSlideLayoutAtom*   GetSlideLayoutAtom() const override;
-    SdrObject*              CreateTable(
+    rtl::Reference<SdrObject> CreateTable(
                                 SdrObject* pGroupObject,
                                 const sal_uInt32* pTableArry,
                                 SvxMSDffSolverContainer*

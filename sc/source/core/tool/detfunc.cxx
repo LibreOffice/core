@@ -457,17 +457,17 @@ void ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
         // insert the rectangle before the arrow - this is relied on in FindFrameForObject
 
         tools::Rectangle aRect = GetDrawRect( nRefStartCol, nRefStartRow, nRefEndCol, nRefEndRow );
-        SdrRectObj* pBox = new SdrRectObj(
+        rtl::Reference<SdrRectObj> pBox = new SdrRectObj(
             *pModel,
             aRect);
 
         pBox->SetMergedItemSetAndBroadcast(rData.GetBoxSet());
 
         pBox->SetLayer( SC_LAYER_INTERN );
-        pPage->InsertObject( pBox );
+        pPage->InsertObject( pBox.get() );
         pModel->AddCalcUndo( std::make_unique<SdrUndoInsertObj>( *pBox ) );
 
-        ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox, true );
+        ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox.get(), true );
         pData->maStart.Set( nRefStartCol, nRefStartRow, nTab);
         pData->maEnd.Set( nRefEndCol, nRefEndRow, nTab);
     }
@@ -500,7 +500,7 @@ void ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
     basegfx::B2DPolygon aTempPoly;
     aTempPoly.append(basegfx::B2DPoint(aStartPos.X(), aStartPos.Y()));
     aTempPoly.append(basegfx::B2DPoint(aEndPos.X(), aEndPos.Y()));
-    SdrPathObj* pArrow = new SdrPathObj(
+    rtl::Reference<SdrPathObj> pArrow = new SdrPathObj(
         *pModel,
         OBJ_LINE,
         basegfx::B2DPolyPolygon(aTempPoly));
@@ -508,10 +508,10 @@ void ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
     pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
 
     pArrow->SetLayer( SC_LAYER_INTERN );
-    pPage->InsertObject( pArrow );
+    pPage->InsertObject( pArrow.get() );
     pModel->AddCalcUndo( std::make_unique<SdrUndoInsertObj>( *pArrow ) );
 
-    ScDrawObjData* pData = ScDrawLayer::GetObjData(pArrow, true);
+    ScDrawObjData* pData = ScDrawLayer::GetObjData(pArrow.get(), true);
     if (bFromOtherTab)
         pData->maStart.SetInvalid();
     else
@@ -534,17 +534,17 @@ void ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     if (bArea)
     {
         tools::Rectangle aRect = GetDrawRect( nStartCol, nStartRow, nEndCol, nEndRow );
-        SdrRectObj* pBox = new SdrRectObj(
+        rtl::Reference<SdrRectObj> pBox = new SdrRectObj(
             *pModel,
             aRect);
 
         pBox->SetMergedItemSetAndBroadcast(rData.GetBoxSet());
 
         pBox->SetLayer( SC_LAYER_INTERN );
-        pPage->InsertObject( pBox );
+        pPage->InsertObject( pBox.get() );
         pModel->AddCalcUndo( std::make_unique<SdrUndoInsertObj>( *pBox ) );
 
-        ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox, true );
+        ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox.get(), true );
         pData->maStart.Set( nStartCol, nStartRow, nTab);
         pData->maEnd.Set( nEndCol, nEndRow, nTab);
     }
@@ -569,7 +569,7 @@ void ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     basegfx::B2DPolygon aTempPoly;
     aTempPoly.append(basegfx::B2DPoint(aStartPos.X(), aStartPos.Y()));
     aTempPoly.append(basegfx::B2DPoint(aEndPos.X(), aEndPos.Y()));
-    SdrPathObj* pArrow = new SdrPathObj(
+    rtl::Reference<SdrPathObj> pArrow = new SdrPathObj(
         *pModel,
         OBJ_LINE,
         basegfx::B2DPolyPolygon(aTempPoly));
@@ -578,10 +578,10 @@ void ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
 
     pArrow->SetLayer( SC_LAYER_INTERN );
-    pPage->InsertObject( pArrow );
+    pPage->InsertObject( pArrow.get() );
     pModel->AddCalcUndo( std::make_unique<SdrUndoInsertObj>( *pArrow ) );
 
-    ScDrawObjData* pData = ScDrawLayer::GetObjData( pArrow, true );
+    ScDrawObjData* pData = ScDrawLayer::GetObjData( pArrow.get(), true );
     pData->maStart.Set( nStartCol, nStartRow, nTab);
     pData->maEnd.SetInvalid();
 
@@ -639,7 +639,7 @@ void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData
     aRect.AdjustTop( -70 );
     aRect.AdjustBottom(70 );
 
-    SdrCircObj* pCircle = new SdrCircObj(
+    rtl::Reference<SdrCircObj> pCircle = new SdrCircObj(
         *pModel,
         SdrCircKind::Full,
         aRect);
@@ -648,10 +648,10 @@ void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData
     pCircle->SetMergedItemSetAndBroadcast(rAttrSet);
 
     pCircle->SetLayer( SC_LAYER_INTERN );
-    pPage->InsertObject( pCircle );
+    pPage->InsertObject( pCircle.get() );
     pModel->AddCalcUndo( std::make_unique<SdrUndoInsertObj>( *pCircle ) );
 
-    ScDrawObjData* pData = ScDrawLayer::GetObjData( pCircle, true );
+    ScDrawObjData* pData = ScDrawLayer::GetObjData( pCircle.get(), true );
     pData->maStart.Set( nCol, nRow, nTab);
     pData->maEnd.SetInvalid();
     pData->meType = ScDrawObjData::ValidationCircle;
@@ -701,9 +701,7 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, bool bDestPnt )
     for (size_t i=1; i<=nDelCount; ++i)
     {
         // remove the object from the drawing page, delete if undo is disabled
-        SdrObject* pObj = pPage->RemoveObject(ppObj[nDelCount-i]->GetOrdNum());
-        if( !bRecording )
-            SdrObject::Free( pObj );
+        pPage->RemoveObject(ppObj[nDelCount-i]->GetOrdNum());
     }
 
     ppObj.reset();

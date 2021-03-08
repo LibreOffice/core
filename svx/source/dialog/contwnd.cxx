@@ -59,7 +59,7 @@ void ContourWindow::SetPolyPolygon(const tools::PolyPolygon& rPolyPoly)
     {
         basegfx::B2DPolyPolygon aPolyPolygon;
         aPolyPolygon.append(aPolyPoly[ i ].getB2DPolygon());
-        SdrPathObj* pPathObj = new SdrPathObj(
+        rtl::Reference<SdrPathObj> pPathObj = new SdrPathObj(
             *pModel,
             OBJ_PATHFILL,
             aPolyPolygon);
@@ -72,7 +72,7 @@ void ContourWindow::SetPolyPolygon(const tools::PolyPolygon& rPolyPoly)
 
         pPathObj->SetMergedItemSetAndBroadcast(aSet);
 
-        pPage->InsertObject( pPathObj );
+        pPage->InsertObject( pPathObj.get() );
     }
 
     if (nPolyCount)

@@ -50,7 +50,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC FontWorkGalleryDialog final : public wel
     SdrView&            mrSdrView;
 
     bool                mbInsertIntoPage;
-    SdrObject*          mppSdrObject;
+    rtl::Reference<SdrObject> mppSdrObject;
     SdrModel*           mpDestModel;
 
     std::vector<VclPtr< VirtualDevice >> maFavoritesHorizontal;
@@ -71,7 +71,7 @@ public:
 
     // SJ: if the SdrObject** is set, the SdrObject is not inserted into the page when executing the dialog
     void SetSdrObjectRef( SdrModel* pModel );
-    SdrObject* GetSdrObjectRef() { return mppSdrObject; }
+    SdrObject* GetSdrObjectRef() { return mppSdrObject.get(); }
 };
 
 }

@@ -19,6 +19,7 @@
 
 
 #include <svx/selectioncontroller.hxx>
+#include <svx/svdobj.hxx>
 
 namespace sdr
 {
@@ -80,7 +81,7 @@ bool SelectionController::SetStyleSheet( SfxStyleSheet* /*pStyleSheet*/, bool /*
     return false;
 }
 
-SdrObject* SelectionController::GetMarkedSdrObjClone( SdrModel& /*rTargetModel*/ )
+rtl::Reference<SdrObject> SelectionController::GetMarkedSdrObjClone( SdrModel& /*rTargetModel*/ )
 {
     return nullptr;
 }

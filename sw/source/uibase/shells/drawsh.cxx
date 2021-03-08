@@ -132,20 +132,20 @@ void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
 
     if (SdrGrafObj* pSdrGrafObj = dynamic_cast<SdrGrafObj*>(&rObject))
     {
-        SdrGrafObj* pNewGrafObj(pSdrGrafObj->CloneSdrObject(pSdrGrafObj->getSdrModelFromSdrObject()));
+        rtl::Reference<SdrGrafObj> pNewGrafObj = SdrObject::Clone(*pSdrGrafObj, pSdrGrafObj->getSdrModelFromSdrObject());
 
         pNewGrafObj->SetGraphic(aGraphic);
 
         // #i123922#  for handling MasterObject and virtual ones correctly, SW
         // wants us to call ReplaceObject at the page, but that also
         // triggers the same assertion (I tried it), so stay at the view method
-        pSdrView->ReplaceObjectAtView(&rObject, *pSdrView->GetSdrPageView(), pNewGrafObj);
+        pSdrView->ReplaceObjectAtView(&rObject, *pSdrView->GetSdrPageView(), pNewGrafObj.get());
 
         // set in all cases - the Clone() will have copied an existing link (!)
         pNewGrafObj->SetGraphicLink(
             bAsLink ? aDlg.GetPath() : OUString());
 
-        pResult = pNewGrafObj;
+        pResult = pNewGrafObj.get();
     }
     else // if(rObject.IsClosedObj() && !dynamic_cast< SdrOle2Obj* >(&rObject))
     {

@@ -487,7 +487,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         }
         else
         {
-            SdrRectObj* pTO = new SdrRectObj(
+            rtl::Reference<SdrRectObj> pTO = new SdrRectObj(
                 mpView->getSdrModelFromSdrView(),
                 OBJ_TEXT);
             pTO->SetOutlinerParaObject(std::move(pOPO));
@@ -495,7 +495,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
             const bool bUndo = mpView->IsUndoEnabled();
             if( bUndo )
                 mpView->BegUndo(SdResId(STR_UNDO_INSERT_TEXTFRAME));
-            pPage->InsertObject(pTO);
+            pPage->InsertObject(pTO.get());
 
             /* can be bigger as the maximal allowed size:
                limit object size if necessary */

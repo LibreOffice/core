@@ -279,7 +279,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
     SfxUndoManager* pUndoManager(static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetUndoManager());
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
 
-    SdrObject* pSdrObj = nullptr;
+    rtl::Reference<SdrObject> pSdrObj;
 
     bool bForceText = false;    // forces the shape text to be set even if it's empty
     bool bEmptyPresObj = true;
@@ -350,27 +350,27 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
             pSdrObj = new SdrOle2Obj(getSdrModelFromSdrPage());
             BitmapEx aBmpEx(BMP_PRESOBJ_OBJECT);
             Graphic aGraphic( aBmpEx );
-            static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(aGraphic);
+            static_cast<SdrOle2Obj*>(pSdrObj.get())->SetGraphic(aGraphic);
         }
         break;
 
         case PresObjKind::Chart:
         {
             pSdrObj = new SdrOle2Obj(getSdrModelFromSdrPage());
-            static_cast<SdrOle2Obj*>(pSdrObj)->SetProgName( "StarChart" );
+            static_cast<SdrOle2Obj*>(pSdrObj.get())->SetProgName( "StarChart" );
             BitmapEx aBmpEx(BMP_PRESOBJ_CHART);
             Graphic aGraphic( aBmpEx );
-            static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(aGraphic);
+            static_cast<SdrOle2Obj*>(pSdrObj.get())->SetGraphic(aGraphic);
         }
         break;
 
         case PresObjKind::OrgChart:
         {
             pSdrObj = new SdrOle2Obj(getSdrModelFromSdrPage());
-            static_cast<SdrOle2Obj*>(pSdrObj)->SetProgName( "StarOrg" );
+            static_cast<SdrOle2Obj*>(pSdrObj.get())->SetProgName( "StarOrg" );
             BitmapEx aBmpEx(BMP_PRESOBJ_ORGCHART);
             Graphic aGraphic( aBmpEx );
-            static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(aGraphic);
+            static_cast<SdrOle2Obj*>(pSdrObj.get())->SetGraphic(aGraphic);
         }
         break;
 
@@ -378,10 +378,10 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         case PresObjKind::Calc:
         {
             pSdrObj = new SdrOle2Obj(getSdrModelFromSdrPage());
-            static_cast<SdrOle2Obj*>(pSdrObj)->SetProgName( "StarCalc" );
+            static_cast<SdrOle2Obj*>(pSdrObj.get())->SetProgName( "StarCalc" );
             BitmapEx aBmpEx(BMP_PRESOBJ_TABLE);
             Graphic aGraphic( aBmpEx );
-            static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(aGraphic);
+            static_cast<SdrOle2Obj*>(pSdrObj.get())->SetGraphic(aGraphic);
         }
         break;
 
@@ -437,9 +437,9 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         pSdrObj->SetEmptyPresObj(bEmptyPresObj);
         pSdrObj->SetLogicRect(rRect);
 
-        InsertObject(pSdrObj);
+        InsertObject(pSdrObj.get());
 
-        if ( auto pTextObj = dynamic_cast<SdrTextObj *>( pSdrObj ) )
+        if ( auto pTextObj = dynamic_cast<SdrTextObj *>( pSdrObj.get() ) )
         {
             // Tell the object EARLY that it is vertical to have the
             // defaults for AutoGrowWidth/Height reversed
@@ -487,7 +487,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
         OUString aString = GetPresObjText(eObjKind);
         if(!aString.isEmpty() || bForceText)
-            if (auto pTextObj = dynamic_cast<SdrTextObj *>( pSdrObj ) )
+            if (auto pTextObj = dynamic_cast<SdrTextObj *>( pSdrObj.get() ) )
             {
                 SdrOutliner* pOutliner = static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetInternalOutliner();
 
@@ -580,13 +580,13 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
             pUndoManager->AddUndoAction( std::make_unique<UndoObjectUserCall>(*pSdrObj) );
         }
 
-        InsertPresObj(pSdrObj, eObjKind);
+        InsertPresObj(pSdrObj.get(), eObjKind);
         pSdrObj->SetUserCall(this);
 
         pSdrObj->RecalcBoundRect();
     }
 
-    return pSdrObj;
+    return pSdrObj.get();
 }
 
 /*************************************************************************
@@ -825,10 +825,6 @@ void SdPage::CreateTitleAndLayout(bool bInit, bool bCreate )
             {
                 pUndoManager->AddUndoAction(getSdrModelFromSdrPage().GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
             }
-            else
-            {
-                SdrObject::Free( pObj );
-            }
         }
 
         std::vector< ::tools::Rectangle > aAreas;
@@ -963,7 +959,7 @@ void getPresObjProp( const SdPage& rPage, const char* sObjKind, const char* sPag
 
 }
 
-SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind)
+rtl::Reference<SdrObject> SdPage::CreateDefaultPresObj(PresObjKind eObjKind)
 {
     if( eObjKind == PresObjKind::Title )
     {
@@ -1060,9 +1056,6 @@ void SdPage::DestroyDefaultPresObj(PresObjKind eObjKind)
             pDoc->AddUndo(pDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pObject));
         SdrObjList* pOL = pObject->getParentSdrObjListFromSdrObject();
         pOL->RemoveObject(pObject->GetOrdNumDirect());
-
-        if( !bUndo )
-            SdrObject::Free(pObject);
     }
 }
 
@@ -1664,9 +1657,6 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, bool bInit, bool bCreate )
                     pUndoManager->AddUndoAction(getSdrModelFromSdrPage().GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
 
                 RemoveObject( pObj->GetOrdNum() );
-
-                if( !bUndo )
-                    SdrObject::Free( pObj );
             }
 /* #i108541# keep non empty pres obj as pres obj even if they are not part of the current layout */
         }
@@ -1704,7 +1694,7 @@ void SdPage::NbcInsertObject(SdrObject* pObj, size_t nPos)
 |*
 \************************************************************************/
 
-SdrObject* SdPage::RemoveObject(size_t nObjNum)
+rtl::Reference<SdrObject> SdPage::RemoveObject(size_t nObjNum)
 {
     onRemoveObject(GetObj( nObjNum ));
     return FmFormPage::RemoveObject(nObjNum);
@@ -1716,7 +1706,7 @@ SdrObject* SdPage::RemoveObject(size_t nObjNum)
 |*
 \************************************************************************/
 
-SdrObject* SdPage::NbcRemoveObject(size_t nObjNum)
+rtl::Reference<SdrObject> SdPage::NbcRemoveObject(size_t nObjNum)
 {
     onRemoveObject(GetObj( nObjNum ));
     return FmFormPage::NbcRemoveObject(nObjNum);
@@ -1724,7 +1714,7 @@ SdrObject* SdPage::NbcRemoveObject(size_t nObjNum)
 
 // Also override ReplaceObject methods to realize when
 // objects are removed with this mechanism instead of RemoveObject
-SdrObject* SdPage::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
+rtl::Reference<SdrObject> SdPage::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
 {
     onRemoveObject(GetObj( nObjNum ));
     return FmFormPage::ReplaceObject(pNewObj, nObjNum);
@@ -2075,7 +2065,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
     }
 }
 
-static SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourceObj, PresObjKind& eObjKind, bool bVertical, const ::tools::Rectangle& rRect)
+static rtl::Reference<SdrObject> convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourceObj, PresObjKind& eObjKind, bool bVertical, const ::tools::Rectangle& rRect)
 {
     SdDrawDocument& rModel(static_cast< SdDrawDocument& >(rPage.getSdrModelFromSdrPage()));
     if( !pSourceObj )
@@ -2084,7 +2074,7 @@ static SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourc
     SfxUndoManager* pUndoManager = rModel.GetUndoManager();
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && rPage.IsInserted();
 
-    SdrObject* pNewObj = pSourceObj;
+    rtl::Reference<SdrObject> pNewObj = pSourceObj;
     if((eObjKind == PresObjKind::Outline) && (pSourceObj->GetObjIdentifier() == OBJ_TEXT) )
     {
         pNewObj = rPage.CreatePresObj(PresObjKind::Outline, bVertical, rRect);
@@ -2133,9 +2123,6 @@ static SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourc
 
             // Remove outline shape from page
             rPage.RemoveObject( pSourceObj->GetOrdNum() );
-
-            if( !bUndo )
-                SdrObject::Free( pSourceObj );
         }
     }
     else if((eObjKind == PresObjKind::Text) && (pSourceObj->GetObjIdentifier() == OBJ_OUTLINETEXT) )
@@ -2177,9 +2164,6 @@ static SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourc
                 pUndoManager->AddUndoAction(rModel.GetSdrUndoFactory().CreateUndoDeleteObject(*pSourceObj));
 
             rPage.RemoveObject( pSourceObj->GetOrdNum() );
-
-            if( !bUndo )
-                SdrObject::Free( pSourceObj );
         }
     }
     else if((eObjKind == PresObjKind::Outline) && (pSourceObj->GetObjIdentifier() != OBJ_OUTLINETEXT) )
@@ -2213,8 +2197,9 @@ static SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourc
     @returns
         A presentation shape that was either found or created with the given parameters
 */
-SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, bool bInit)
+SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj1, PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, bool bInit)
 {
+    rtl::Reference<SdrObject> pObj = pObj1;
     SfxUndoManager* pUndoManager(static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetUndoManager());
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
 
@@ -2226,7 +2211,7 @@ SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, 
     {
         // convert object if shape type does not match kind (f.e. converting outline text to subtitle text)
         if( bInit )
-            pObj = convertPresentationObjectImpl(*this, pObj, eObjKind, bVertical, rRect);
+            pObj = convertPresentationObjectImpl(*this, pObj.get(), eObjKind, bVertical, rRect);
 
         if( bUndo )
         {
@@ -2239,7 +2224,7 @@ SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, 
 
         pObj->SetUserCall(this);
 
-        SdrTextObj* pTextObject = dynamic_cast< SdrTextObj* >(pObj);
+        SdrTextObj* pTextObject = dynamic_cast< SdrTextObj* >(pObj.get());
         if( pTextObject )
         {
             if( pTextObject->IsVerticalWriting() != bVertical )
@@ -2292,12 +2277,12 @@ SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, 
 
     if(pObj && bInit )
     {
-        if( !IsPresObj( pObj ) )
+        if( !IsPresObj( pObj.get() ) )
         {
             if( bUndo )
                 pUndoManager->AddUndoAction( std::make_unique<UndoObjectPresentationKind>( *pObj ) );
 
-            InsertPresObj( pObj, eObjKind );
+            InsertPresObj( pObj.get(), eObjKind );
         }
 
         // make adjustments for vertical title and outline shapes
@@ -2315,10 +2300,10 @@ SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, 
         }
     }
 
-    if ( pObj && (pObj->GetUserCall() || bInit) && ( pObj->IsEmptyPresObj() || dynamic_cast< const SdrGrafObj *>( pObj ) ==  nullptr ) )
+    if ( pObj && (pObj->GetUserCall() || bInit) && ( pObj->IsEmptyPresObj() || dynamic_cast< const SdrGrafObj *>( pObj.get() ) ==  nullptr ) )
         pObj->AdjustToMaxRect(rRect);
 
-    return pObj;
+    return pObj.get();
 }
 
 /*************************************************************************

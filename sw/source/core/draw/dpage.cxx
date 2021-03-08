@@ -77,7 +77,7 @@ rtl::Reference<SdrPage> SwDPage::CloneSdrPage(SdrModel& rTargetModel) const
     return pClonedSwDPage;
 }
 
-SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, size_t nObjNum )
+rtl::Reference<SdrObject> SwDPage::ReplaceObject( SdrObject* pNewObj, size_t nObjNum )
 {
     SdrObject *pOld = GetObj( nObjNum );
     OSL_ENSURE( pOld, "Oups, Object not replaced" );

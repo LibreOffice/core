@@ -164,12 +164,12 @@ public:
     /** Create a new caption. The caption will not be inserted into the document. */
     explicit            ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, bool bTailFront );
     /** Manipulate an existing caption. */
-    explicit            ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, const ScCaptionPtr& xCaption );
+    explicit            ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, const rtl::Reference<SdrCaptionObj>& xCaption );
 
     /** Returns the drawing layer page of the sheet contained in maPos. */
     SdrPage*            GetDrawPage();
     /** Returns the caption drawing object. */
-    ScCaptionPtr &      GetCaption() { return mxCaption; }
+    rtl::Reference<SdrCaptionObj> &      GetCaption() { return mxCaption; }
 
     /** Moves the caption inside the passed rectangle. Uses page area if 0 is passed. */
     void                FitCaptionToRect( const tools::Rectangle* pVisRect = nullptr );
@@ -196,7 +196,7 @@ private:
 private:
     ScDocument&         mrDoc;
     ScAddress           maPos;
-    ScCaptionPtr        mxCaption;
+    rtl::Reference<SdrCaptionObj> mxCaption;
     tools::Rectangle           maPageRect;
     tools::Rectangle           maCellRect;
     bool                mbNegPage;
@@ -210,7 +210,7 @@ ScCaptionCreator::ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, boo
     CreateCaption( true/*bShown*/, bTailFront );
 }
 
-ScCaptionCreator::ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, const ScCaptionPtr& xCaption ) :
+ScCaptionCreator::ScCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, const rtl::Reference<SdrCaptionObj>& xCaption ) :
     mrDoc( rDoc ),
     maPos( rPos ),
     mxCaption( xCaption )
@@ -377,11 +377,11 @@ void ScCaptionCreator::CreateCaption( bool bShown, bool bTailFront )
     // create the caption drawing object
     tools::Rectangle aTextRect( Point( 0 , 0 ), Size( SC_NOTECAPTION_WIDTH, SC_NOTECAPTION_HEIGHT ) );
     Point aTailPos = CalcTailPos( bTailFront );
-    mxCaption.reset(
+    mxCaption =
         new SdrCaptionObj(
             *mrDoc.GetDrawLayer(), // TTTT should ret a ref?
             aTextRect,
-            aTailPos));
+            aTailPos);
     // basic caption settings
     ScCaptionUtil::SetBasicCaptionSettings( *mxCaption, bShown );
 }
@@ -407,7 +407,7 @@ public:
     /** Create a new caption object and inserts it into the document. */
     explicit            ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, ScNoteData& rNoteData );
     /** Manipulate an existing caption. */
-    explicit            ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, ScCaptionPtr& xCaption, bool bShown );
+    explicit            ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, rtl::Reference<SdrCaptionObj>& xCaption, bool bShown );
 };
 
 ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, ScNoteData& rNoteData ) :
@@ -431,7 +431,7 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
     }
 }
 
-ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, ScCaptionPtr& xCaption, bool bShown ) :
+ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& rPos, rtl::Reference<SdrCaptionObj>& xCaption, bool bShown ) :
     ScCaptionCreator( rDoc, rPos, xCaption )
 {
     SdrPage* pDrawPage = GetDrawPage();
@@ -450,372 +450,12 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
 
 } // namespace
 
-ScCaptionPtr::ScCaptionPtr() :
-    mpHead(nullptr), mpNext(nullptr), mpCaption(nullptr), mbNotOwner(false)
-{
-}
 
-ScCaptionPtr::ScCaptionPtr( SdrCaptionObj* p ) :
-    mpHead(nullptr), mpNext(nullptr), mpCaption(p), mbNotOwner(false)
-{
-    if (p)
-    {
-        newHead();
-     }
-}
 
-ScCaptionPtr::ScCaptionPtr( const ScCaptionPtr& r ) :
-    mpHead(r.mpHead), mpCaption(r.mpCaption), mbNotOwner(false)
-{
-    if (r.mpCaption)
-    {
-        assert(r.mpHead);
-        r.incRef();
-        // Insert into list.
-        mpNext = r.mpNext;
-        r.mpNext = this;
-    }
-    else
-    {
-        assert(!r.mpHead);
-        mpNext = nullptr;
-    }
-}
 
-ScCaptionPtr::ScCaptionPtr(ScCaptionPtr&& r) noexcept
-    : mpHead(r.mpHead), mpNext(r.mpNext), mpCaption(r.mpCaption), mbNotOwner(false)
-{
-    r.replaceInList( this );
-    r.mpCaption = nullptr;
-    r.mbNotOwner = false;
-}
 
-ScCaptionPtr& ScCaptionPtr::operator=(ScCaptionPtr&& r) noexcept
-{
-    assert(this != &r);
 
-    mpHead = r.mpHead;
-    mpNext = r.mpNext;
-    mpCaption = r.mpCaption;
-    mbNotOwner = r.mbNotOwner;
 
-    r.replaceInList( this );
-    r.mpCaption = nullptr;
-    r.mbNotOwner = false;
-
-    return *this;
-}
-
-ScCaptionPtr& ScCaptionPtr::operator=( const ScCaptionPtr& r )
-{
-    if (this == &r)
-        return *this;
-
-    if (mpCaption == r.mpCaption)
-    {
-        // Two lists for the same caption is bad.
-        assert(!mpCaption || mpHead == r.mpHead);
-        assert(!mpCaption);     // assigning same caption pointer within same list is weird
-        // Nullptr captions are not inserted to the list, so nothing to do here
-        // if both are.
-        return *this;
-    }
-
-    // Let's find some weird usage.
-    // Assigning without head doesn't make sense unless it is a nullptr caption.
-    assert(r.mpHead || !r.mpCaption);
-    // A nullptr caption must not be in a list and thus not have a head.
-    assert(!r.mpHead || r.mpCaption);
-    // Same captions were caught above, so here different heads must be present.
-    assert(r.mpHead != mpHead);
-
-    r.incRef();
-    decRefAndDestroy();
-    removeFromList();
-
-    mpCaption = r.mpCaption;
-    mbNotOwner = r.mbNotOwner;
-    // That head is this' master.
-    mpHead = r.mpHead;
-    // Insert into list.
-    mpNext = r.mpNext;
-    r.mpNext = this;
-
-    return *this;
-}
-
-void ScCaptionPtr::setNotOwner()
-{
-    mbNotOwner = true;
-}
-
-ScCaptionPtr::Head::Head( ScCaptionPtr* p ) :
-    mpFirst(p), mnRefs(1)
-{
-}
-
-void ScCaptionPtr::newHead()
-{
-    assert(!mpHead);
-    mpHead = new Head(this);
-}
-
-void ScCaptionPtr::replaceInList(ScCaptionPtr* pNew) noexcept
-{
-    if (!mpHead && !mpNext)
-        return;
-
-    assert(mpHead);
-    assert(mpCaption == pNew->mpCaption);
-
-    ScCaptionPtr* pThat = mpHead->mpFirst;
-    while (pThat && pThat != this && pThat->mpNext != this)
-    {
-        pThat = pThat->mpNext;
-    }
-    if (pThat && pThat != this)
-    {
-        assert(pThat->mpNext == this);
-        pThat->mpNext = pNew;
-    }
-    pNew->mpNext = mpNext;
-    if (mpHead->mpFirst == this)
-        mpHead->mpFirst = pNew;
-
-    mpHead = nullptr;
-    mpNext = nullptr;
-}
-
-void ScCaptionPtr::removeFromList()
-{
-    if (!mpHead && !mpNext && !mpCaption)
-        return;
-
-#if OSL_DEBUG_LEVEL > 0
-    oslInterlockedCount nCount = 0;
-#endif
-    ScCaptionPtr* pThat = (mpHead ? mpHead->mpFirst : nullptr);
-    while (pThat && pThat != this && pThat->mpNext != this)
-    {
-        // Use the walk to check consistency on the fly.
-        assert(pThat->mpHead == mpHead);            // all belong to the same
-        assert(pThat->mpHead || !pThat->mpNext);    // next without head is bad
-        assert(pThat->mpCaption == mpCaption);
-        pThat = pThat->mpNext;
-#if OSL_DEBUG_LEVEL > 0
-        ++nCount;
-#endif
-    }
-    assert(pThat || !mpHead);   // not found only if this was standalone
-    if (pThat)
-    {
-        if (pThat != this)
-        {
-#if OSL_DEBUG_LEVEL > 0
-            // The while loop above was not executed, and for this
-            // (pThat->mpNext) the loop below won't either.
-            ++nCount;
-#endif
-            pThat->mpNext = mpNext;
-        }
-#if OSL_DEBUG_LEVEL > 0
-        do
-        {
-            assert(pThat->mpHead == mpHead);            // all belong to the same
-            assert(pThat->mpHead || !pThat->mpNext);    // next without head is bad
-            assert(pThat->mpCaption == mpCaption);
-            ++nCount;
-        }
-        while ((pThat = pThat->mpNext) != nullptr);
-#endif
-    }
-#if OSL_DEBUG_LEVEL > 0
-    // If part of a list then refs were already decremented.
-    assert(nCount == (mpHead ? mpHead->mnRefs + 1 : 0));
-#endif
-    if (mpHead && mpHead->mpFirst == this)
-    {
-        if (mpNext)
-            mpHead->mpFirst = mpNext;
-        else
-        {
-            // The only one destroys also head.
-            assert(mpHead->mnRefs == 0);    // cough
-            delete mpHead;                  // DEAD now
-        }
-    }
-    mpHead = nullptr;
-    mpNext = nullptr;
-}
-
-void ScCaptionPtr::reset( SdrCaptionObj* p )
-{
-    assert(!p || p != mpCaption);
-#if OSL_DEBUG_LEVEL > 0
-    if (p)
-    {
-        // Check if we end up with a duplicated management in this list.
-        ScCaptionPtr* pThat = (mpHead ? mpHead->mpFirst : nullptr);
-        while (pThat)
-        {
-            assert(pThat->mpCaption != p);
-            pThat = pThat->mpNext;
-        }
-    }
-#endif
-    decRefAndDestroy();
-    removeFromList();
-    mpCaption = p;
-    mbNotOwner = false;
-    if (p)
-    {
-        newHead();
-    }
-}
-
-ScCaptionPtr::~ScCaptionPtr()
-{
-    decRefAndDestroy();
-    removeFromList();
-}
-
-oslInterlockedCount ScCaptionPtr::getRefs() const
-{
-    return mpHead ? mpHead->mnRefs : 0;
-}
-
-void ScCaptionPtr::incRef() const
-{
-    if (mpHead)
-        osl_atomic_increment(&mpHead->mnRefs);
-}
-
-bool ScCaptionPtr::decRef() const
-{
-    return mpHead && mpHead->mnRefs > 0 && !osl_atomic_decrement(&mpHead->mnRefs);
-}
-
-void ScCaptionPtr::decRefAndDestroy()
-{
-    if (!decRef())
-        return;
-
-    assert(mpHead->mpFirst == this);    // this must be one and only one
-    assert(!mpNext);                    // this must be one and only one
-    assert(mpCaption);
-
-#if 0
-    // Quick workaround for when there are still cases where the caption
-    // pointer is dangling
-    mpCaption = nullptr;
-    mbNotOwner = false;
-#else
-    // Destroying Draw Undo and some other delete the SdrObject, don't
-    // attempt that twice.
-    if (mbNotOwner)
-    {
-        mpCaption = nullptr;
-        mbNotOwner = false;
-    }
-    else
-    {
-        removeFromDrawPageAndFree( true );  // ignoring Undo
-        if (mpCaption)
-        {
-            // There's no draw page associated so removeFromDrawPageAndFree()
-            // didn't do anything, but still we want to delete the caption
-            // object. release()/dissolve() also resets mpCaption.
-            SdrObject* pObj = release();
-            SdrObject::Free( pObj );
-        }
-    }
-#endif
-    delete mpHead;
-    mpHead = nullptr;
-}
-
-void ScCaptionPtr::insertToDrawPage( SdrPage& rDrawPage )
-{
-    assert(mpHead && mpCaption);
-
-    rDrawPage.InsertObject( mpCaption );
-}
-
-void ScCaptionPtr::removeFromDrawPage( SdrPage& rDrawPage )
-{
-    assert(mpHead && mpCaption);
-    SdrObject* pObj = rDrawPage.RemoveObject( mpCaption->GetOrdNum() );
-    assert(pObj == mpCaption); (void)pObj;
-}
-
-void ScCaptionPtr::removeFromDrawPageAndFree( bool bIgnoreUndo )
-{
-    assert(mpHead && mpCaption);
-    SdrPage* pDrawPage(mpCaption->getSdrPageFromSdrObject());
-    SAL_WARN_IF( !pDrawPage, "sc.core", "ScCaptionPtr::removeFromDrawPageAndFree - object without drawing page");
-    if (!pDrawPage)
-        return;
-
-    pDrawPage->RecalcObjOrdNums();
-    bool bRecording = false;
-    if(!bIgnoreUndo)
-    {
-        ScDrawLayer* pDrawLayer(dynamic_cast< ScDrawLayer* >(&mpCaption->getSdrModelFromSdrObject()));
-        SAL_WARN_IF( !pDrawLayer, "sc.core", "ScCaptionPtr::removeFromDrawPageAndFree - object without drawing layer");
-        // create drawing undo action (before removing the object to have valid draw page in undo action)
-        bRecording = (pDrawLayer && pDrawLayer->IsRecording());
-        if (bRecording)
-            pDrawLayer->AddCalcUndo( std::make_unique<SdrUndoDelObj>( *mpCaption ));
-    }
-    // remove the object from the drawing page, delete if undo is disabled
-    removeFromDrawPage( *pDrawPage );
-    // If called from outside mnRefs must be 1 to delete. If called from
-    // decRefAndDestroy() mnRefs is already 0.
-    if (!bRecording && getRefs() <= 1)
-    {
-        SdrObject* pObj = release();
-        SdrObject::Free( pObj );
-    }
-}
-
-SdrCaptionObj* ScCaptionPtr::release()
-{
-    SdrCaptionObj* pTmp = mpCaption;
-    dissolve();
-    return pTmp;
-}
-
-void ScCaptionPtr::forget()
-{
-    decRef();
-    removeFromList();
-    mpCaption = nullptr;
-    mbNotOwner = false;
-}
-
-void ScCaptionPtr::dissolve()
-{
-    ScCaptionPtr::Head* pHead = mpHead;
-    ScCaptionPtr* pThat = (mpHead ? mpHead->mpFirst : this);
-    while (pThat)
-    {
-        assert(!pThat->mpNext || pThat->mpHead);    // next without head is bad
-        assert(pThat->mpHead == pHead);             // same head required within one list
-        ScCaptionPtr* p = pThat->mpNext;
-        pThat->clear();
-        pThat = p;
-     }
-    assert(!mpHead && !mpNext && !mpCaption);       // should had been cleared during list walk
-    delete pHead;
-}
-
-void ScCaptionPtr::clear()
-{
-    mpHead = nullptr;
-    mpNext = nullptr;
-    mpCaption = nullptr;
-    mbNotOwner = false;
-}
 
 struct ScCaptionInitData
 {
@@ -855,7 +495,7 @@ ScPostIt::ScPostIt( ScDocument& rDoc, const ScAddress& rPos, const ScPostIt& rNo
     maNoteData( rNote.maNoteData )
 {
     mnPostItId = nPostItId == 0 ? mnLastPostItId++ : nPostItId;
-    maNoteData.mxCaption.reset(nullptr);
+    maNoteData.mxCaption.clear();
     CreateCaption( rPos, rNote.maNoteData.mxCaption.get() );
 }
 
@@ -970,13 +610,13 @@ void ScPostIt::ForgetCaption( bool bPreserveData )
         pInitData->maSimpleText = GetText();
 
         maNoteData.mxInitData.reset(pInitData);
-        maNoteData.mxCaption.forget();
+        maNoteData.mxCaption.clear();
     }
     else
     {
         /*  This function is used in undo actions to give up the responsibility for
             the caption object which is handled by separate drawing undo actions. */
-        maNoteData.mxCaption.forget();
+        maNoteData.mxCaption.clear();
         maNoteData.mxInitData.reset();
     }
 }
@@ -1087,7 +727,7 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
 void ScPostIt::CreateCaption( const ScAddress& rPos, const SdrCaptionObj* pCaption )
 {
     OSL_ENSURE( !maNoteData.mxCaption, "ScPostIt::CreateCaption - unexpected caption object found" );
-    maNoteData.mxCaption.reset(nullptr);
+    maNoteData.mxCaption.clear();
 
     /*  #i104915# Never try to create notes in Undo document, leads to
         crash due to missing document members (e.g. row height array). */
@@ -1143,9 +783,23 @@ void ScPostIt::RemoveCaption()
     // TTTT maybe no longer needed - can that still happen?
     ScDrawLayer* pDrawLayer = mrDoc.GetDrawLayer();
     if (pDrawLayer == &maNoteData.mxCaption->getSdrModelFromSdrObject())
-        maNoteData.mxCaption.removeFromDrawPageAndFree();
+    {
+        SdrPage* pDrawPage(maNoteData.mxCaption->getSdrPageFromSdrObject());
+        SAL_WARN_IF( !pDrawPage, "sc.core", "ScCaptionPtr::removeFromDrawPageAndFree - object without drawing page");
+        if (pDrawPage)
+        {
+            pDrawPage->RecalcObjOrdNums();
+            // create drawing undo action (before removing the object to have valid draw page in undo action)
+            bool bRecording = (pDrawLayer && pDrawLayer->IsRecording());
+            if (bRecording)
+                pDrawLayer->AddCalcUndo( std::make_unique<SdrUndoDelObj>( *maNoteData.mxCaption ));
+            // remove the object from the drawing page
+            rtl::Reference<SdrObject> pRemovedObj = pDrawPage->RemoveObject( maNoteData.mxCaption->GetOrdNum() );
+            assert(pRemovedObj.get() == maNoteData.mxCaption.get()); (void)pRemovedObj;
+        }
+    }
 
-    SAL_INFO("sc.core","ScPostIt::RemoveCaption - refs: " << maNoteData.mxCaption.getRefs() <<
+    SAL_INFO("sc.core","ScPostIt::RemoveCaption -"
             "  IsUndo: " << mrDoc.IsUndo() << "  IsClip: " << mrDoc.IsClipboard() <<
             "  Dtor: " << mrDoc.IsInDtorClear());
 
@@ -1153,11 +807,11 @@ void ScPostIt::RemoveCaption()
     if (maNoteData.mxCaption)
     {
         SAL_INFO("sc.core","ScPostIt::RemoveCaption - forgetting one ref");
-        maNoteData.mxCaption.forget();
+        maNoteData.mxCaption.clear();
     }
 }
 
-ScCaptionPtr ScNoteUtil::CreateTempCaption(
+rtl::Reference<SdrCaptionObj> ScNoteUtil::CreateTempCaption(
         ScDocument& rDoc, const ScAddress& rPos, SdrPage& rDrawPage,
         const OUString& rUserText, const tools::Rectangle& rVisRect, bool bTailFront )
 {
@@ -1174,7 +828,7 @@ ScCaptionPtr ScNoteUtil::CreateTempCaption(
 
     // create a caption if any text exists
     if( !pNoteCaption && aBuffer.isEmpty() )
-        return ScCaptionPtr();
+        return rtl::Reference<SdrCaptionObj>();
 
     // prepare visible rectangle (add default distance to all borders)
     tools::Rectangle aVisRect(
@@ -1187,9 +841,9 @@ ScCaptionPtr ScNoteUtil::CreateTempCaption(
     ScCaptionCreator aCreator( rDoc, rPos, bTailFront );
 
     // insert caption into page (needed to set caption text)
-    aCreator.GetCaption().insertToDrawPage( rDrawPage );
+    rtl::Reference<SdrCaptionObj> pCaption = aCreator.GetCaption();  // just for ease of use
+    rDrawPage.InsertObject( pCaption.get() );
 
-    SdrCaptionObj* pCaption = aCreator.GetCaption().get();  // just for ease of use
 
     // clone the edit text object, unless user text is present, then set this text
     if( pNoteCaption && rUserText.isEmpty() )
@@ -1226,7 +880,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
         ScDocument& rDoc, const ScAddress& rPos, SdrCaptionObj* pCaption )
 {
     ScNoteData aNoteData( true/*bShown*/ );
-    aNoteData.mxCaption.reset( pCaption );
+    aNoteData.mxCaption = pCaption;
     ScPostIt* pNote = new ScPostIt( rDoc, rPos, aNoteData, false );
     pNote->AutoStamp();
 

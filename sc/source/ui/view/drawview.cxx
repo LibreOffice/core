@@ -1117,19 +1117,19 @@ SdrObject* ScDrawView::ApplyGraphicToObject(
     const OUString& rBeginUndoText,
     const OUString& rFile)
 {
-    if(dynamic_cast< SdrGrafObj* >(&rHitObject))
+    if(auto pGrafHitObj = dynamic_cast< SdrGrafObj* >(&rHitObject))
     {
-        SdrGrafObj* pNewGrafObj(static_cast<SdrGrafObj*>(rHitObject.CloneSdrObject(rHitObject.getSdrModelFromSdrObject())));
+        rtl::Reference<SdrGrafObj> pNewGrafObj = SdrObject::Clone(*pGrafHitObj, rHitObject.getSdrModelFromSdrObject());
 
         pNewGrafObj->SetGraphic(rGraphic);
         BegUndo(rBeginUndoText);
-        ReplaceObjectAtView(&rHitObject, *GetSdrPageView(), pNewGrafObj);
+        ReplaceObjectAtView(&rHitObject, *GetSdrPageView(), pNewGrafObj.get());
 
         // set in all cases - the Clone() will have copied an existing link (!)
         pNewGrafObj->SetGraphicLink( rFile );
 
         EndUndo();
-        return pNewGrafObj;
+        return pNewGrafObj.get();
     }
     else if(rHitObject.IsClosedObj() && !dynamic_cast< SdrOle2Obj* >(&rHitObject))
     {

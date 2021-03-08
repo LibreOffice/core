@@ -37,7 +37,7 @@ public:
 protected:
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
-    SdrObject& rRefObj; // Referenced drawing object
+    rtl::Reference<SdrObject> mxRefObj; // Referenced drawing object
     tools::Rectangle aSnapRect;
 
 protected:
@@ -67,7 +67,7 @@ public:
     virtual const tools::Rectangle& GetCurrentBoundRect() const override;
     virtual const tools::Rectangle& GetLastBoundRect() const override;
     virtual void RecalcBoundRect() override;
-    virtual SdrVirtObj* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
@@ -89,7 +89,7 @@ public:
 
     // FullDrag support
     virtual bool supportsFullDrag() const override;
-    virtual SdrObjectUniquePtr getFullDragClone() const override;
+    virtual rtl::Reference<SdrObject> getFullDragClone() const override;
 
     virtual bool BegCreate(SdrDragStat& rStat) override;
     virtual bool MovCreate(SdrDragStat& rStat) override;

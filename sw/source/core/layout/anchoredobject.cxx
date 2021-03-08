@@ -67,7 +67,6 @@ SwObjPositioningInProgress::~SwObjPositioningInProgress()
 
 
 SwAnchoredObject::SwAnchoredObject() :
-    mpDrawObj( nullptr ),
     mpAnchorFrame( nullptr ),
     // --> #i28701#
     mpPageFrame( nullptr ),

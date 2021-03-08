@@ -22,6 +22,7 @@
 #include <scitems.hxx>
 #include <editeng/editobj.hxx>
 #include <sfx2/app.hxx>
+#include <svx/svdocapt.hxx>
 #include <comphelper/lok.hxx>
 
 #include <document.hxx>
@@ -729,12 +730,10 @@ ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rP
     if (bInsert)
     {
         maNewData = rNoteData;
-        maNewData.mxCaption.setNotOwner();
     }
     else
     {
         maOldData = rNoteData;
-        maOldData.mxCaption.setNotOwner();
     }
 }
 
@@ -748,8 +747,6 @@ ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rP
 {
     OSL_ENSURE( maOldData.mxCaption || maNewData.mxCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note captions" );
     OSL_ENSURE( !maOldData.mxInitData && !maNewData.mxInitData, "ScUndoReplaceNote::ScUndoReplaceNote - unexpected uninitialized note" );
-    maOldData.mxCaption.setNotOwner();
-    maNewData.mxCaption.setNotOwner();
 }
 
 ScUndoReplaceNote::~ScUndoReplaceNote()

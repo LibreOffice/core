@@ -167,7 +167,7 @@ Iterator OutlinerContainer::CreateIterator (IteratorLocation aLocation)
 }
 
 Iterator OutlinerContainer::CreateSelectionIterator (
-    const ::std::vector<::tools::WeakReference<SdrObject>>& rObjectList,
+    const ::std::vector<::unotools::WeakReference<SdrObject>>& rObjectList,
     SdDrawDocument* pDocument,
     const std::shared_ptr<ViewShell>& rpViewShell,
     bool bDirectionIsForward,
@@ -411,7 +411,7 @@ void IteratorImplBase::Reverse()
 //===== SelectionIteratorImpl ===========================================
 
 SelectionIteratorImpl::SelectionIteratorImpl (
-    const ::std::vector<::tools::WeakReference<SdrObject>>& rObjectList,
+    const ::std::vector<::unotools::WeakReference<SdrObject>>& rObjectList,
     sal_Int32 nObjectIndex,
     SdDrawDocument* pDocument,
     const std::weak_ptr<ViewShell>& rpViewShellWeak,
@@ -436,7 +436,7 @@ IteratorImplBase* SelectionIteratorImpl::Clone (IteratorImplBase* pObject) const
 
 void SelectionIteratorImpl::GotoNextText()
 {
-    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mrObjectList.at(mnObjectIndex).get() );
+    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mrObjectList.at(mnObjectIndex).get().get() );
     if (mbDirectionIsForward)
     {
         if( pTextObj )
@@ -472,7 +472,7 @@ void SelectionIteratorImpl::GotoNextText()
 
         if( (maPosition.mnText == -1) && (mnObjectIndex >= 0) )
         {
-            pTextObj = dynamic_cast< SdrTextObj* >( mrObjectList.at(mnObjectIndex).get() );
+            pTextObj = dynamic_cast< SdrTextObj* >( mrObjectList.at(mnObjectIndex).get().get() );
             if( pTextObj )
                 maPosition.mnText = pTextObj->getTextCount() - 1;
         }
@@ -549,9 +549,9 @@ IteratorImplBase* ViewIteratorImpl::Clone (IteratorImplBase* pObject) const
         pIterator->mpObjectIterator.reset( new SdrObjListIter(mpPage, SdrIterMode::DeepNoGroups, !mbDirectionIsForward) );
 
         // No direct way to set the object iterator to the current object.
-        pIterator->maPosition.mxObject.reset(nullptr);
-        while (pIterator->mpObjectIterator->IsMore() && pIterator->maPosition.mxObject!=maPosition.mxObject)
-            pIterator->maPosition.mxObject.reset(pIterator->mpObjectIterator->Next());
+        pIterator->maPosition.mxObject = nullptr;
+        while (pIterator->mpObjectIterator->IsMore() && pIterator->maPosition.mxObject.get()!=maPosition.mxObject.get())
+            pIterator->maPosition.mxObject = pIterator->mpObjectIterator->Next();
     }
     else
         pIterator->mpObjectIterator.reset();
@@ -561,7 +561,7 @@ IteratorImplBase* ViewIteratorImpl::Clone (IteratorImplBase* pObject) const
 
 void ViewIteratorImpl::GotoNextText()
 {
-    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( maPosition.mxObject.get() );
+    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( maPosition.mxObject.get().get() );
     if( pTextObj )
     {
         if (mbDirectionIsForward)
@@ -579,11 +579,11 @@ void ViewIteratorImpl::GotoNextText()
     }
 
     if (mpObjectIterator != nullptr && mpObjectIterator->IsMore())
-        maPosition.mxObject.reset(mpObjectIterator->Next());
+        maPosition.mxObject = mpObjectIterator->Next();
     else
-        maPosition.mxObject.reset(nullptr);
+        maPosition.mxObject = nullptr;
 
-    if (!maPosition.mxObject.is() )
+    if (!maPosition.mxObject.get().is() )
     {
         if (mbDirectionIsForward)
             SetPage (maPosition.mnPageIndex+1);
@@ -593,15 +593,15 @@ void ViewIteratorImpl::GotoNextText()
         if (mpPage != nullptr)
             mpObjectIterator.reset( new SdrObjListIter(mpPage, SdrIterMode::DeepNoGroups, !mbDirectionIsForward) );
         if (mpObjectIterator!=nullptr && mpObjectIterator->IsMore())
-            maPosition.mxObject.reset(mpObjectIterator->Next());
+            maPosition.mxObject = mpObjectIterator->Next();
         else
-            maPosition.mxObject.reset(nullptr);
+            maPosition.mxObject = nullptr;
     }
 
     maPosition.mnText = 0;
-    if( !mbDirectionIsForward && maPosition.mxObject.is() )
+    if( !mbDirectionIsForward && maPosition.mxObject.get().is() )
     {
-        pTextObj = dynamic_cast< SdrTextObj* >( maPosition.mxObject.get() );
+        pTextObj = dynamic_cast< SdrTextObj* >( maPosition.mxObject.get().get() );
         if( pTextObj )
             maPosition.mnText = pTextObj->getTextCount() - 1;
     }
@@ -649,14 +649,14 @@ void ViewIteratorImpl::SetPage (sal_Int32 nPageIndex)
 
     // Get object pointer.
     if (mpObjectIterator!=nullptr && mpObjectIterator->IsMore())
-        maPosition.mxObject.reset( mpObjectIterator->Next() );
+        maPosition.mxObject = mpObjectIterator->Next();
     else
-        maPosition.mxObject.reset(nullptr);
+        maPosition.mxObject = nullptr;
 
     maPosition.mnText = 0;
-    if( !mbDirectionIsForward && maPosition.mxObject.is() )
+    if( !mbDirectionIsForward && maPosition.mxObject.get().is() )
     {
-        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( maPosition.mxObject.get() );
+        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( maPosition.mxObject.get().get() );
         if( pTextObj )
             maPosition.mnText = pTextObj->getTextCount() - 1;
     }
@@ -674,13 +674,13 @@ void ViewIteratorImpl::Reverse()
         mpObjectIterator.reset();
 
     // Move iterator to the current object.
-    ::tools::WeakReference<SdrObject> xObject = std::move(maPosition.mxObject);
+    ::unotools::WeakReference<SdrObject> xObject = std::move(maPosition.mxObject);
 
     if (!mpObjectIterator)
         return;
 
-    while (mpObjectIterator->IsMore() && maPosition.mxObject != xObject)
-        maPosition.mxObject.reset(mpObjectIterator->Next());
+    while (mpObjectIterator->IsMore() && maPosition.mxObject.get() != xObject.get())
+        maPosition.mxObject = mpObjectIterator->Next();
 }
 
 //===== DocumentIteratorImpl ============================================

@@ -55,7 +55,7 @@ public:
         virtual OUString            TakeObjNameSingul() const override;
         virtual OUString            TakeObjNamePlural() const override;
 
-        virtual SdrMediaObj*        CloneSdrObject(SdrModel& rTargetModel) const override;
+        virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
         virtual void                AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrinkOnly = false ) override;
 

@@ -29,12 +29,8 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/weakref.hxx>
+#include <cppuhelper/weak.hxx>
 #include <rtl/ref.hxx>
-
-namespace cppu
-{
-class OWeakObject;
-}
 
 namespace unotools
 {

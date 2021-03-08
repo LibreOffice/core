@@ -1199,14 +1199,14 @@ void SdrOle2Obj::Disconnect_Impl()
     mpImpl->mbConnected = false;
 }
 
-SdrObjectUniquePtr SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText) const
+rtl::Reference<SdrObject> SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText) const
 {
     const Graphic* pOLEGraphic = GetGraphic();
 
     if(pOLEGraphic)
     {
         // #i118485# allow creating a SdrGrafObj representation
-        SdrGrafObj* pClone = new SdrGrafObj(
+        rtl::Reference<SdrGrafObj> pClone = new SdrGrafObj(
             getSdrModelFromSdrObject(),
             *pOLEGraphic);
 
@@ -1232,13 +1232,13 @@ SdrObjectUniquePtr SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText) const
             }
         }
 
-        return SdrObjectUniquePtr(pClone);
+        return rtl::Reference<SdrObject>(pClone);
     }
     else
     {
         // #i100710# pOLEGraphic may be zero (no visualisation available),
         // so we need to use the OLE replacement graphic
-        SdrRectObj* pClone = new SdrRectObj(
+        rtl::Reference<SdrRectObj> pClone = new SdrRectObj(
             getSdrModelFromSdrObject(),
             GetSnapRect());
 
@@ -1254,14 +1254,14 @@ SdrObjectUniquePtr SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText) const
         pClone->SetMergedItem(XFillBmpTileItem(false));
         pClone->SetMergedItem(XFillBmpStretchItem(false));
 
-        return SdrObjectUniquePtr(pClone);
+        return rtl::Reference<SdrObject>(pClone);
     }
 }
 
-SdrObjectUniquePtr SdrOle2Obj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
+rtl::Reference<SdrObject> SdrOle2Obj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     // #i118485# missing converter added
-    SdrObjectUniquePtr pRetval = createSdrGrafObjReplacement(true);
+    rtl::Reference<SdrObject> pRetval = createSdrGrafObjReplacement(true);
 
     if(pRetval)
     {
@@ -1335,7 +1335,7 @@ void SdrOle2Obj::SetClosedObj( bool bIsClosed )
     bClosedObj = bIsClosed;
 }
 
-SdrObjectUniquePtr SdrOle2Obj::getFullDragClone() const
+rtl::Reference<SdrObject> SdrOle2Obj::getFullDragClone() const
 {
     // #i118485# use central replacement generator
     return createSdrGrafObjReplacement(false);
@@ -1409,7 +1409,7 @@ OUString SdrOle2Obj::TakeObjNamePlural() const
     return SvxResId(mpImpl->mbFrame ? STR_ObjNamePluralFrame : STR_ObjNamePluralOLE2);
 }
 
-SdrOle2Obj* SdrOle2Obj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrOle2Obj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrOle2Obj(rTargetModel, *this);
 }

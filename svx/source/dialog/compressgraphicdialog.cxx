@@ -373,11 +373,11 @@ Graphic CompressGraphicsDialog::GetCompressedGraphic()
     return Graphic();
 }
 
-SdrGrafObj* CompressGraphicsDialog::GetCompressedSdrGrafObj()
+rtl::Reference<SdrGrafObj> CompressGraphicsDialog::GetCompressedSdrGrafObj()
 {
     if ( m_dResolution > 0.0  )
     {
-        SdrGrafObj* pNewObject(m_xGraphicObj->CloneSdrObject(m_xGraphicObj->getSdrModelFromSdrObject()));
+        rtl::Reference<SdrGrafObj> pNewObject = SdrObject::Clone(*m_xGraphicObj, m_xGraphicObj->getSdrModelFromSdrObject());
 
         if ( m_xReduceResolutionCB->get_active() )
         {

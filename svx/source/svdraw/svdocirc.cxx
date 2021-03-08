@@ -375,7 +375,7 @@ OUString SdrCircObj::TakeObjNamePlural() const
     return SvxResId(pID);
 }
 
-SdrCircObj* SdrCircObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrCircObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrCircObj(rTargetModel, *this);
 }
@@ -1139,11 +1139,11 @@ void SdrCircObj::ImpSetCircInfoToAttr()
     ImpSetAttrToCircInfo();
 }
 
-SdrObjectUniquePtr SdrCircObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
+rtl::Reference<SdrObject> SdrCircObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     const bool bFill(meCircleKind != SdrCircKind::Arc);
     const basegfx::B2DPolygon aCircPolygon(ImpCalcXPolyCirc(meCircleKind, maRect, nStartAngle, nEndAngle));
-    SdrObjectUniquePtr pRet = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aCircPolygon), bFill, bBezier);
+    rtl::Reference<SdrObject> pRet = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aCircPolygon), bFill, bBezier);
 
     if(bAddText)
     {

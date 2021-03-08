@@ -23,7 +23,7 @@
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
-
+#include <rtl/ref.hxx>
 #include <tools/gen.hxx>
 
 class SdrObject;
@@ -64,7 +64,7 @@ class EnhancedCustomShape3d final
         const double* pMap);
 
 public:
-    static SdrObject* Create3DObject(
+    static rtl::Reference<SdrObject> Create3DObject(
         const SdrObject* pShape2d,
         const SdrObjCustomShape& rSdrObjCustomShape);
 };

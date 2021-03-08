@@ -43,7 +43,6 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <sal/types.h>
-#include <tools/weakbase.hxx>
 #include <svl/lstner.hxx>
 #include <editeng/unoipset.hxx>
 #include <osl/mutex.hxx>
@@ -129,7 +128,7 @@ protected:
     const SfxItemPropertyMapEntry* maPropMapEntries;
 
 private:
-    ::tools::WeakReference< SdrObject > mpSdrObjectWeakReference;
+    ::rtl::Reference< SdrObject > mxSdrObject;
 
 protected:
     // translations for writer, which works in TWIPS
@@ -194,20 +193,10 @@ public:
     // Internals
     void ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet);
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage );
-    /** takes the ownership of the SdrObject.
-
-        When the shape is disposed, and it has the ownership of its associated SdrObject, then
-        it will delete this object.
-    */
-    void TakeSdrObjectOwnership();
-    bool HasSdrObjectOwnership() const;
-
-    // used exclusively by SdrObject
-    void InvalidateSdrObject();
 
     // Encapsulated access to SdrObject
-    SdrObject* GetSdrObject() const { return mpSdrObjectWeakReference.get(); }
-    bool HasSdrObject() const { return mpSdrObjectWeakReference.is(); }
+    SdrObject* GetSdrObject() const { return mxSdrObject.get(); }
+    bool HasSdrObject() const { return mxSdrObject.is(); }
 
     void SetShapeType( const OUString& ShapeType ) { maShapeType = ShapeType; }
     /// @throws css::uno::RuntimeException

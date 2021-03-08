@@ -82,9 +82,9 @@ void OReportPage::removeSdrObject(const uno::Reference< report::XReportComponent
     }
 }
 
-SdrObject* OReportPage::RemoveObject(size_t nObjNum)
+rtl::Reference<SdrObject> OReportPage::RemoveObject(size_t nObjNum)
 {
-    SdrObject* pObj = SdrPage::RemoveObject(nObjNum);
+    rtl::Reference<SdrObject> pObj = SdrPage::RemoveObject(nObjNum);
     if (getSpecialMode())
     {
         return pObj;
@@ -94,7 +94,7 @@ SdrObject* OReportPage::RemoveObject(size_t nObjNum)
     reportdesign::OSection* pSection = comphelper::getUnoTunnelImplementation<reportdesign::OSection>(m_xSection);
     uno::Reference< drawing::XShape> xShape(pObj->getUnoShape(),uno::UNO_QUERY);
     pSection->notifyElementRemoved(xShape);
-    if (dynamic_cast< const OUnoObject *>( pObj ) !=  nullptr)
+    if (dynamic_cast< const OUnoObject *>( pObj.get() ) !=  nullptr)
     {
         OUnoObject& rUnoObj = dynamic_cast<OUnoObject&>(*pObj);
         uno::Reference< container::XChild> xChild(rUnoObj.GetUnoControlModel(),uno::UNO_QUERY);
@@ -178,13 +178,6 @@ void OReportPage::NbcInsertObject(SdrObject* pObj, size_t nPos)
     reportdesign::OSection* pSection = comphelper::getUnoTunnelImplementation<reportdesign::OSection>(m_xSection);
     uno::Reference< drawing::XShape> xShape(pObj->getUnoShape(),uno::UNO_QUERY);
     pSection->notifyElementAdded(xShape);
-
-    // now that the shape is inserted into its structures, we can allow the OObjectBase
-    // to release the reference to it
-    OObjectBase* pObjectBase = dynamic_cast< OObjectBase* >( pObj );
-    OSL_ENSURE( pObjectBase, "OReportPage::NbcInsertObject: what is being inserted here?" );
-    if ( pObjectBase )
-        pObjectBase->releaseUnoShape();
 }
 
 } // rptui

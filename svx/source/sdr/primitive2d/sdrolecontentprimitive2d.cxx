@@ -33,7 +33,7 @@ namespace drawinglayer::primitive2d
 {
         void SdrOleContentPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
-            const SdrOle2Obj* pSource = mpSdrOle2Obj.get();
+            rtl::Reference<SdrOle2Obj> pSource = mpSdrOle2Obj.get();
             bool bScaleContent(false);
             Graphic aGraphic;
 
@@ -145,9 +145,11 @@ namespace drawinglayer::primitive2d
             if( BufferedDecompositionPrimitive2D::operator==(rPrimitive) )
             {
                 const SdrOleContentPrimitive2D& rCompare = static_cast<const SdrOleContentPrimitive2D&>(rPrimitive);
-                const bool bBothNot(!mpSdrOle2Obj.is() && !rCompare.mpSdrOle2Obj.is());
-                const bool bBothAndEqual(mpSdrOle2Obj.is() && rCompare.mpSdrOle2Obj.is()
-                    && mpSdrOle2Obj.get() == rCompare.mpSdrOle2Obj.get());
+                auto xSdrThis = mpSdrOle2Obj.get();
+                auto xSdrThat = rCompare.mpSdrOle2Obj.get();
+                const bool bBothNot(!xSdrThis && !xSdrThat);
+                const bool bBothAndEqual(xSdrThis && xSdrThat
+                    && xSdrThis.get() == xSdrThat.get());
 
                 return ((bBothNot || bBothAndEqual)
                     && getObjectTransform() == rCompare.getObjectTransform()

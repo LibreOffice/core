@@ -242,8 +242,8 @@ private:
     void Activate(bool bSync = false);
     void Deactivate(bool bDeactivateController = true);
 
-    SdrObjectUniquePtr implCreateFieldControl( const svx::ODataAccessDescriptor& _rColumnDescriptor );
-    SdrObjectUniquePtr implCreateXFormsControl( const svx::OXFormsDescriptor &_rDesc );
+    rtl::Reference<SdrObject> implCreateFieldControl( const svx::ODataAccessDescriptor& _rColumnDescriptor );
+    rtl::Reference<SdrObject> implCreateXFormsControl( const svx::OXFormsDescriptor &_rDesc );
 
     static bool createControlLabelPair(
         OutputDevice const & _rOutDev,
@@ -260,8 +260,8 @@ private:
         // demand clear, hand over a SdrMldel&
         SdrModel& _rModel,
 
-        std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpLabel,
-        std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpControl
+        rtl::Reference<SdrUnoObj>& _rpLabel,
+        rtl::Reference<SdrUnoObj>& _rpControl
     );
 
     bool    createControlLabelPair(
@@ -272,8 +272,8 @@ private:
         const css::uno::Reference< css::util::XNumberFormats >& _rxNumberFormats,
         SdrObjKind _nControlObjectID,
         std::u16string_view _rFieldPostfix,
-        std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpLabel,
-        std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpControl,
+        rtl::Reference<SdrUnoObj>& _rpLabel,
+        rtl::Reference<SdrUnoObj>& _rpControl,
         const css::uno::Reference< css::sdbc::XDataSource >& _rxDataSource,
         const OUString& _rDataSourceName,
         const OUString& _rCommand,

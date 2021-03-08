@@ -399,7 +399,7 @@ void SdGenericDrawPage::UpdateModel()
 }
 
 // this is called whenever a SdrObject must be created for an empty api shape wrapper
-SdrObject * SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShape >& xShape )
+rtl::Reference<SdrObject> SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShape >& xShape )
 {
     if( nullptr == SvxFmDrawPage::mpPage || !xShape.is() )
         return nullptr;
@@ -408,8 +408,7 @@ SdrObject * SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShap
     const OUString aPrefix( "com.sun.star.presentation." );
     if( !aType.startsWith( aPrefix ) )
     {
-        SdrObject* pObj = SvxFmDrawPage::CreateSdrObject_( xShape );
-        return pObj;
+        return SvxFmDrawPage::CreateSdrObject_( xShape );
     }
 
     aType = aType.copy( aPrefix.getLength() );
@@ -496,7 +495,7 @@ SdrObject * SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShap
     const awt::Size aSize( aRect.GetWidth(), aRect.GetHeight() );
     xShape->setSize( aSize );
 
-    SdrObject *pPresObj = nullptr;
+    rtl::Reference<SdrObject> pPresObj;
     if( (eObjKind == PresObjKind::Table) || (eObjKind == PresObjKind::Media) )
     {
         pPresObj = SvxFmDrawPage::CreateSdrObject_( xShape );
@@ -504,7 +503,7 @@ SdrObject * SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShap
         {
             SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(GetPage()->getSdrModelFromSdrPage()));
             pPresObj->NbcSetStyleSheet(rDoc.GetDefaultStyleSheet(), true);
-            GetPage()->InsertPresObj( pPresObj, eObjKind );
+            GetPage()->InsertPresObj( pPresObj.get(), eObjKind );
         }
     }
     else

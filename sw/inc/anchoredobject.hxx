@@ -45,7 +45,7 @@ class SW_DLLPUBLIC SwAnchoredObject
 {
     private:
         // drawing object representing the anchored object in the drawing layer
-        SdrObject* mpDrawObj;
+        rtl::Reference<SdrObject> mpDrawObj;
         // frame the object is anchored at
         SwFrame* mpAnchorFrame;
         // #i28701 - page frame the object is registered at
@@ -196,8 +196,8 @@ class SW_DLLPUBLIC SwAnchoredObject
 
         // accessors to member <mpDrawObj>
         void SetDrawObj( SdrObject& _rDrawObj );
-        const SdrObject* GetDrawObj() const { return mpDrawObj; }
-        SdrObject* DrawObj() { return mpDrawObj; }
+        const SdrObject* GetDrawObj() const { return mpDrawObj.get(); }
+        SdrObject* DrawObj() { return mpDrawObj.get(); }
 
         // accessors to member <mpAnchorFrame>
         const SwFrame* GetAnchorFrame() const { return mpAnchorFrame; }

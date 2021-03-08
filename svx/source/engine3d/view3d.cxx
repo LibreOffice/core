@@ -498,7 +498,7 @@ bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene const * pSrcScene, E3dSce
 
             if(pCompoundObj)
             {
-                E3dCompoundObject* pNewCompoundObj(pCompoundObj->CloneSdrObject(pDstScene->getSdrModelFromSdrObject()));
+                rtl::Reference<E3dCompoundObject> pNewCompoundObj = SdrObject::Clone(*pCompoundObj, pDstScene->getSdrModelFromSdrObject());
 
                 if(pNewCompoundObj)
                 {
@@ -574,7 +574,7 @@ bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene const * pSrcScene, E3dSce
                     // fill and insert new object
                     pNewCompoundObj->NbcSetLayer(pCompoundObj->GetLayer());
                     pNewCompoundObj->NbcSetStyleSheet(pCompoundObj->GetStyleSheet(), true);
-                    pDstScene->InsertObject(pNewCompoundObj);
+                    pDstScene->InsertObject(pNewCompoundObj.get());
                     bRetval = true;
 
                     // Create undo
@@ -734,7 +734,7 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
     }
 
     // Create a new extrude object
-    E3dObject* p3DObj = nullptr;
+    rtl::Reference<E3dObject> p3DObj;
     if(bExtrude)
     {
         p3DObj = new E3dExtrudeObj(pObj->getSdrModelFromSdrObject(), aDefault, pPath->GetPathPoly(), fDepth);
@@ -759,7 +759,7 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
     p3DObj->NbcSetStyleSheet(pObj->GetStyleSheet(), true);
 
     // Insert a new extrude object
-    pScene->InsertObject(p3DObj);
+    pScene->InsertObject(p3DObj.get());
 }
 
 void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude, double fDepth, basegfx::B2DHomMatrix const & rLatheMat)
@@ -781,7 +781,7 @@ void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude
         ImpChangeSomeAttributesFor3DConversion(pObj);
 
     // convert completely to path objects
-    SdrObject* pNewObj1 = pObj->ConvertToPolyObj(false, false).release();
+    rtl::Reference<SdrObject> pNewObj1 = pObj->ConvertToPolyObj(false, false);
 
     if(!pNewObj1)
         return;
@@ -797,10 +797,10 @@ void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude
         }
     }
     else
-        ImpChangeSomeAttributesFor3DConversion2(pNewObj1);
+        ImpChangeSomeAttributesFor3DConversion2(pNewObj1.get());
 
     // convert completely to path objects
-    SdrObject* pNewObj2 = pObj->ConvertToContourObj(pNewObj1, true);
+    rtl::Reference<SdrObject> pNewObj2 = pObj->ConvertToContourObj(pNewObj1.get(), true);
 
     if(pNewObj2)
     {
@@ -815,16 +815,8 @@ void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude
             }
         }
         else
-            ImpCreateSingle3DObjectFlat(pScene, pNewObj2, bExtrude, fDepth, rLatheMat);
-
-        // delete object in between
-        if (pNewObj2 != pObj && pNewObj2 != pNewObj1)
-            SdrObject::Free( pNewObj2 );
+            ImpCreateSingle3DObjectFlat(pScene, pNewObj2.get(), bExtrude, fDepth, rLatheMat);
     }
-
-    // delete object in between
-    if (pNewObj1 != pObj)
-        SdrObject::Free( pNewObj1 );
 }
 
 void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1, const basegfx::B2DPoint& rPnt2)
@@ -841,7 +833,7 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
     SdrModel& rSdrModel(GetSdrMarkByIndex(0)->GetMarkedSdrObj()->getSdrModelFromSdrObject());
 
     // Create a new scene for the created 3D object
-    E3dScene* pScene = new E3dScene(rSdrModel);
+    rtl::Reference<E3dScene> pScene = new E3dScene(rSdrModel);
 
     // Determine rectangle and possibly correct it
     tools::Rectangle aRect = GetAllMarkedRect();
@@ -941,14 +933,14 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
         SdrMark* pMark = GetSdrMarkByIndex(a);
         SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-        ImpCreate3DObject(pScene, pObj, bExtrude, fDepth, aLatheMat);
+        ImpCreate3DObject(pScene.get(), pObj, bExtrude, fDepth, aLatheMat);
     }
 
     if(pScene->GetSubList() && pScene->GetSubList()->GetObjCount() != 0)
     {
         // Arrange all created objects by depth
         if(bExtrude)
-            DoDepthArrange(pScene, fDepth);
+            DoDepthArrange(pScene.get(), fDepth);
 
         // Center 3D objects in the middle of the overall rectangle
         basegfx::B3DPoint aCenter(pScene->GetBoundVolume().getCenter());
@@ -960,16 +952,16 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
         // Initialize scene
         pScene->NbcSetSnapRect(aRect);
         basegfx::B3DRange aBoundVol = pScene->GetBoundVolume();
-        InitScene(pScene, static_cast<double>(aRect.GetWidth()), static_cast<double>(aRect.GetHeight()), aBoundVol.getDepth());
+        InitScene(pScene.get(), static_cast<double>(aRect.GetWidth()), static_cast<double>(aRect.GetHeight()), aBoundVol.getDepth());
 
         // Insert scene instead of the first selected object and throw away
         // all the old objects
         SdrObject* pRepObj = GetMarkedObjectByIndex(0);
         SdrPageView* pPV = GetSdrPageViewOfMarkedByIndex(0);
         MarkObj(pRepObj, pPV, true);
-        ReplaceObjectAtView(pRepObj, *pPV, pScene, false);
+        ReplaceObjectAtView(pRepObj, *pPV, pScene.get(), false);
         DeleteMarked();
-        MarkObj(pScene, pPV);
+        MarkObj(pScene.get(), pPV);
 
         // Rotate Rotation body around the axis of rotation
         if(!bExtrude && fRot3D != 0.0)
@@ -988,13 +980,6 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
             E3DModifySceneSnapRectUpdater aUpdater(pScene->getSdrObjectFromSdrObjList());
             pScene->SetTransform(aRotate * pScene->GetTransform());
         }
-    }
-    else
-    {
-        // No 3D object was created, throw away everything
-        // always use SdrObject::Free(...) for SdrObjects (!)
-        SdrObject* pTemp(pScene);
-        SdrObject::Free(pTemp);
     }
 
     EndUndo();
@@ -1268,7 +1253,7 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
 }
 
 // Set current 3D drawing object, create the scene for this
-E3dScene* E3dView::SetCurrent3DObj(E3dObject* p3DObj)
+rtl::Reference<E3dScene> E3dView::SetCurrent3DObj(E3dObject* p3DObj)
 {
     DBG_ASSERT(p3DObj != nullptr, "Who puts in a NULL-pointer here");
 
@@ -1280,9 +1265,9 @@ E3dScene* E3dView::SetCurrent3DObj(E3dObject* p3DObj)
 
     tools::Rectangle aRect(0,0, static_cast<tools::Long>(fW), static_cast<tools::Long>(fH));
 
-    E3dScene* pScene = new E3dScene(p3DObj->getSdrModelFromSdrObject());
+    rtl::Reference<E3dScene> pScene = new E3dScene(p3DObj->getSdrModelFromSdrObject());
 
-    InitScene(pScene, fW, fH, aVolume.getMaxZ() + ((fW + fH) / 4.0));
+    InitScene(pScene.get(), fW, fH, aVolume.getMaxZ() + ((fW + fH) / 4.0));
 
     pScene->InsertObject(p3DObj);
     pScene->NbcSetSnapRect(aRect);
@@ -1552,10 +1537,10 @@ void E3dView::BreakSingle3DObj(E3dObject* pObj)
     }
     else
     {
-        SdrAttrObj* pNewObj = pObj->GetBreakObj().release();
+        rtl::Reference<SdrAttrObj> pNewObj = pObj->GetBreakObj();
         if (pNewObj)
         {
-            if (InsertObjectAtView(pNewObj, *GetSdrPageView(), SdrInsertFlags::DONTMARK))
+            if (InsertObjectAtView(pNewObj.get(), *GetSdrPageView(), SdrInsertFlags::DONTMARK))
             {
                 pNewObj->SetChanged();
                 pNewObj->BroadcastObjectChange();

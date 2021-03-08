@@ -363,11 +363,11 @@ void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< bea
     if ( eDrawMode != CHARTDRAW_INSERT )
         return;
 
-    SdrObject* pObj = createDefaultObject( nFeatureId );
+    rtl::Reference<SdrObject> pObj = createDefaultObject( nFeatureId );
     if ( pObj )
     {
         SdrPageView* pPageView = pDrawViewWrapper->GetSdrPageView();
-        if (pDrawViewWrapper->InsertObjectAtView(pObj, *pPageView))
+        if (pDrawViewWrapper->InsertObjectAtView(pObj.get(), *pPageView))
             m_pChartController->SetAndApplySelection(Reference<drawing::XShape>(pObj->getUnoShape(), uno::UNO_QUERY));
         if ( nFeatureId == COMMAND_ID_DRAW_TEXT )
         {
@@ -403,9 +403,9 @@ void DrawCommandDispatch::setInsertObj(SdrObjKind eObj)
     }
 }
 
-SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
+rtl::Reference<SdrObject> DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
 {
-    SdrObject* pObj = nullptr;
+    rtl::Reference<SdrObject> pObj;
     DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : nullptr );
     DrawModelWrapper* pDrawModelWrapper = ( m_pChartController ? m_pChartController->GetDrawModelWrapper() : nullptr );
 
@@ -436,7 +436,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                     case COMMAND_ID_DRAW_LINE:
                     case COMMAND_ID_LINE_ARROW_END:
                         {
-                            if ( auto const pathObj = dynamic_cast<SdrPathObj*>( pObj) )
+                            if ( auto const pathObj = dynamic_cast<SdrPathObj*>( pObj.get()) )
                             {
                                 Point aStart = aRect.TopLeft();
                                 Point aEnd = aRect.BottomRight();
@@ -453,7 +453,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                         break;
                     case COMMAND_ID_DRAW_FREELINE_NOFILL:
                         {
-                            if ( auto const pathObj = dynamic_cast<SdrPathObj*>( pObj) )
+                            if ( auto const pathObj = dynamic_cast<SdrPathObj*>( pObj.get()) )
                             {
                                 basegfx::B2DPolygon aInnerPoly;
                                 aInnerPoly.append( basegfx::B2DPoint( aRect.Left(), aRect.Bottom() ) );
@@ -474,7 +474,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                     case COMMAND_ID_DRAW_TEXT:
                     case COMMAND_ID_DRAW_TEXT_VERTICAL:
                         {
-                            if ( SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( pObj) )
+                            if ( SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( pObj.get()) )
                             {
                                 pTextObj->SetLogicRect( aRect );
                                 bool bVertical = ( nID == COMMAND_ID_DRAW_TEXT_VERTICAL );
@@ -494,7 +494,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                     case COMMAND_ID_DRAW_CAPTION:
                     case COMMAND_ID_DRAW_CAPTION_VERTICAL:
                         {
-                            if ( SdrCaptionObj* pCaptionObj = dynamic_cast<SdrCaptionObj*>( pObj) )
+                            if ( SdrCaptionObj* pCaptionObj = dynamic_cast<SdrCaptionObj*>( pObj.get()) )
                             {
                                 bool bIsVertical( nID == COMMAND_ID_DRAW_CAPTION_VERTICAL );
                                 pCaptionObj->SetVerticalWriting( bIsVertical );
@@ -515,7 +515,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                         {
                             pObj->SetLogicRect( aRect );
                             SfxItemSet aSet( pDrawModelWrapper->GetItemPool() );
-                            setAttributes( pObj );
+                            setAttributes( pObj.get() );
                             pObj->SetMergedItemSet( aSet );
                         }
                         break;

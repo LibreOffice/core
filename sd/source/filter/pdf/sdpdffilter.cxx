@@ -80,12 +80,12 @@ bool SdPdfFilter::Import()
         // Make the page size match the rendered image.
         pPage->SetSize(aSizeHMM);
 
-        SdrGrafObj* pSdrGrafObj = new SdrGrafObj(pPage->getSdrModelFromSdrPage(), rGraphic,
-                                                 tools::Rectangle(Point(), aSizeHMM));
+        rtl::Reference<SdrGrafObj> pSdrGrafObj = new SdrGrafObj(
+            pPage->getSdrModelFromSdrPage(), rGraphic, tools::Rectangle(Point(), aSizeHMM));
         pSdrGrafObj->SetResizeProtect(true);
         pSdrGrafObj->SetMoveProtect(true);
 
-        pPage->InsertObject(pSdrGrafObj);
+        pPage->InsertObject(pSdrGrafObj.get());
 
         for (auto const& rPDFAnnotation : rPDFGraphicResult.GetAnnotations())
         {

@@ -861,7 +861,9 @@ std::unique_ptr<sdr::contact::ViewContact> SdrTableObj::CreateObjectSpecificView
 SdrTableObj::SdrTableObj(SdrModel& rSdrModel)
 :   SdrTextObj(rSdrModel)
 {
+    osl_atomic_increment(&m_refCount); // other I get deleted during construction
     init( 1, 1 );
+    osl_atomic_decrement(&m_refCount);
 }
 
 SdrTableObj::SdrTableObj(SdrModel& rSdrModel, SdrTableObj const & rSource)
@@ -1777,7 +1779,7 @@ OUString SdrTableObj::TakeObjNamePlural() const
 }
 
 
-SdrTableObj* SdrTableObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrTableObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrTableObj(rTargetModel, *this);
 }

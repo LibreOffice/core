@@ -342,13 +342,13 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
             if ( rData.GetDocument().IsNegativePage( rData.GetTabNo() ) )
                 aPnt.AdjustX( -(aSize.Width()) );      // move position to left edge
             tools::Rectangle aRect (aPnt, aSize);
-            SdrOle2Obj* pObj = new SdrOle2Obj(
+            rtl::Reference<SdrOle2Obj> pObj = new SdrOle2Obj(
                 *pDoc, // TTTT should be reference
                 aObjRef,
                 aName,
                 aRect);
             SdrPageView* pPV = pView->GetSdrPageView();
-            bool bSuccess = pView->InsertObjectAtView(pObj, *pPV);
+            bool bSuccess = pView->InsertObjectAtView(pObj.get(), *pPV);
 
             if (bSuccess && nAspect != embed::Aspects::MSOLE_ICON)
             {
@@ -383,7 +383,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
                 }
                 else if (bSuccess)
                 {
-                    rViewShell.ActivateObject(pObj, embed::EmbedVerbs::MS_OLEVERB_SHOW);
+                    rViewShell.ActivateObject(pObj.get(), embed::EmbedVerbs::MS_OLEVERB_SHOW);
                 }
             }
 
@@ -583,7 +583,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
     Point aStart = rViewSh.GetChartInsertPos( aSize, aPositionRange );
 
     tools::Rectangle aRect (aStart, aSize);
-    SdrOle2Obj* pObj = new SdrOle2Obj(
+    rtl::Reference<SdrOle2Obj> pObj = new SdrOle2Obj(
         *pDoc, // TTTT should be reference
         svt::EmbeddedObjectRef(xObj, nAspect),
         aName,
@@ -598,9 +598,9 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
 
     // use the page instead of the view to insert, so no undo action is created yet
     SdrPage* pPage = pPV->GetPage();
-    pPage->InsertObject( pObj );
+    pPage->InsertObject( pObj.get() );
     pView->UnmarkAllObj();
-    pView->MarkObj( pObj, pPV );
+    pView->MarkObj( pObj.get(), pPV );
 
     if (rReq.IsAPI())
     {
@@ -613,7 +613,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
 
         // only activate object if not called via API (e.g. macro)
         if (!comphelper::LibreOfficeKit::isActive())
-            rViewShell.ActivateObject(pObj, embed::EmbedVerbs::MS_OLEVERB_SHOW);
+            rViewShell.ActivateObject(pObj.get(), embed::EmbedVerbs::MS_OLEVERB_SHOW);
 
         //open wizard
         //@todo get context from calc if that has one

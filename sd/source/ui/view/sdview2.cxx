@@ -401,8 +401,8 @@ void View::DragFinished( sal_Int8 nDropAction )
             if( pObj && pObj->getSdrPageFromSdrObject() )
             {
                 const size_t nOrdNum = pObj->GetOrdNumDirect();
-                SdrObject* pChkObj = pObj->getSdrPageFromSdrObject()->RemoveObject(nOrdNum);
-                DBG_ASSERT(pChkObj==pObj,"pChkObj!=pObj in RemoveObject()");
+                rtl::Reference<SdrObject> pChkObj = pObj->getSdrPageFromSdrObject()->RemoveObject(nOrdNum);
+                DBG_ASSERT(pChkObj.get()==pObj,"pChkObj!=pObj in RemoveObject()");
             }
         }
 

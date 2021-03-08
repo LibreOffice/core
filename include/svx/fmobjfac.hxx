@@ -22,6 +22,7 @@
 
 #include <tools/link.hxx>
 #include <svx/svxdllapi.h>
+#include <rtl/ref.hxx>
 
 class SdrObject;
 struct SdrObjCreatorParams;
@@ -32,7 +33,7 @@ public:
     FmFormObjFactory();
     ~FmFormObjFactory();
 
-    DECL_STATIC_LINK(FmFormObjFactory, MakeObject, SdrObjCreatorParams, SdrObject*);
+    DECL_STATIC_LINK(FmFormObjFactory, MakeObject, SdrObjCreatorParams, rtl::Reference<SdrObject>);
 };
 
 #endif // _FM_FMOBJFAC_HXX

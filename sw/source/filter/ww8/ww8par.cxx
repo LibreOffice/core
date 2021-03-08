@@ -509,7 +509,7 @@ sal_uInt32 SwMSDffManager::GetFilterFlags()
  * native nonOLE Form Control Objects.
  */
 // #i32596# - consider new parameter <_nCalledByGroup>
-SdrObject* SwMSDffManager::ImportOLE( sal_uInt32 nOLEId,
+rtl::Reference<SdrObject> SwMSDffManager::ImportOLE( sal_uInt32 nOLEId,
                                       const Graphic& rGrf,
                                       const tools::Rectangle& rBoundRect,
                                       const tools::Rectangle& rVisArea,
@@ -523,7 +523,7 @@ SdrObject* SwMSDffManager::ImportOLE( sal_uInt32 nOLEId,
         return nullptr;
     }
 
-    SdrObject* pRet = nullptr;
+    rtl::Reference<SdrObject> pRet;
     OUString sStorageName;
     tools::SvRef<SotStorage> xSrcStg;
     uno::Reference < embed::XStorage > xDstStg;
@@ -598,13 +598,14 @@ void SwWW8ImplReader::SetToggleBiDiAttrFlags(sal_uInt16 nFlags)
         m_xCtrlStck->SetToggleBiDiAttrFlags(nFlags);
 }
 
-SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
+rtl::Reference<SdrObject> SwMSDffManager::ProcessObj(SvStream& rSt,
                                        DffObjData& rObjData,
                                        SvxMSDffClientData& rData,
                                        tools::Rectangle& rTextRect,
-                                       SdrObject* pObj
+                                       SdrObject* pObj1
                                        )
 {
+    rtl::Reference<SdrObject> pObj = pObj1;
     if( !rTextRect.IsEmpty() )
     {
         SvxMSDffImportData& rImportData = static_cast<SvxMSDffImportData&>(rData);
@@ -785,7 +786,6 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
 
             if (bIsSimpleDrawingTextBox)
             {
-                SdrObject::Free( pObj );
                 pObj = new SdrRectObj(
                     *pSdrModel,
                     OBJ_TEXT,
@@ -915,7 +915,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
 
                 if (bVerticalText)
                 {
-                    SdrTextObj *pTextObj = dynamic_cast< SdrTextObj* >(pObj);
+                    SdrTextObj *pTextObj = dynamic_cast< SdrTextObj* >(pObj.get());
                     if (pTextObj)
                         pTextObj->SetVerticalWriting(true);
                 }
@@ -934,9 +934,9 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                     }
                 }
 
-                if ( ( ( rObjData.nSpFlags & ShapeFlag::FlipV ) || mnFix16Angle || nTextRotationAngle ) && dynamic_cast< SdrObjCustomShape* >( pObj ) )
+                if ( ( ( rObjData.nSpFlags & ShapeFlag::FlipV ) || mnFix16Angle || nTextRotationAngle ) && dynamic_cast< SdrObjCustomShape* >( pObj.get() ) )
                 {
-                    SdrObjCustomShape* pCustomShape = dynamic_cast< SdrObjCustomShape* >( pObj );
+                    SdrObjCustomShape* pCustomShape = dynamic_cast< SdrObjCustomShape* >( pObj.get() );
                     if (pCustomShape)
                     {
                         double fExtraTextRotation = 0.0;
@@ -1091,7 +1091,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                  && (rObjData.nCalledByGroup < 2) )
               )
             {
-                StoreShapeOrder(nShapeId, nShapeOrder, pObj);
+                StoreShapeOrder(nShapeId, nShapeOrder, pObj.get());
             }
         }
         else
@@ -1125,7 +1125,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
 
         if (pObj && !hlStr.hLinkAddr.isEmpty())
         {
-            SwMacroInfo* pInfo = GetMacroInfo( pObj );
+            SwMacroInfo* pInfo = GetMacroInfo( pObj.get() );
             if( pInfo )
             {
                 pInfo->SetShapeId( rObjData.nShapeId );
@@ -4402,7 +4402,7 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
     {
         tools::Rectangle aRect(0, 0, 100, 100); // A dummy, we don't care about the size
         SvxMSDffImportData aData(aRect);
-        SdrObject* pObject = nullptr;
+        rtl::Reference<SdrObject> pObject;
         if (mrReader.m_xMSDffManager->GetShape(0x401, pObject, aData) && !aData.empty())
         {
             // Only handle shape if it is a background shape
@@ -4410,7 +4410,7 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
             {
                 SfxItemSet aSet(rFormat.GetDoc()->GetAttrPool(),
                                 svl::Items<RES_BACKGROUND, RES_BACKGROUND,XATTR_START, XATTR_END>{});
-                mrReader.MatchSdrItemsIntoFlySet(pObject, aSet, mso_lineSimple,
+                mrReader.MatchSdrItemsIntoFlySet(pObject.get(), aSet, mso_lineSimple,
                                                  mso_lineSolid, mso_sptRectangle, aRect);
                 if ( aSet.HasItem(RES_BACKGROUND) )
                     rFormat.SetFormatAttr(aSet.Get(RES_BACKGROUND));
@@ -4418,7 +4418,6 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
                     rFormat.SetFormatAttr(aSet);
             }
         }
-        SdrObject::Free(pObject);
     }
     wwULSpaceData aULData;
     GetPageULData(rSection, aULData);

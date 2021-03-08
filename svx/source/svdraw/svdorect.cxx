@@ -253,7 +253,7 @@ OUString SdrRectObj::TakeObjNamePlural() const
     return SvxResId(pResId);
 }
 
-SdrRectObj* SdrRectObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrRectObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrRectObj(rTargetModel, *this);
 }
@@ -535,7 +535,7 @@ SdrGluePoint SdrRectObj::GetCornerGluePoint(sal_uInt16 nPosNum) const
     return aGP;
 }
 
-SdrObjectUniquePtr SdrRectObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
+rtl::Reference<SdrObject> SdrRectObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     XPolygon aXP(ImpCalcXPoly(maRect,GetEckenradius()));
     { // TODO: this is only for the moment, until we have the new TakeContour()
@@ -545,7 +545,7 @@ SdrObjectUniquePtr SdrRectObj::DoConvertToPolyObj(bool bBezier, bool bAddText) c
 
     basegfx::B2DPolyPolygon aPolyPolygon(aXP.getB2DPolygon());
     aPolyPolygon.removeDoublePoints();
-    SdrObjectUniquePtr pRet;
+    rtl::Reference<SdrObject> pRet;
 
     // small correction: Do not create something when no fill and no line. To
     // be sure to not damage something with non-text frames, do this only

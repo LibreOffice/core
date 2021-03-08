@@ -40,9 +40,9 @@ DlgEdFactory::~DlgEdFactory() COVERITY_NOEXCEPT_FALSE
 
 
 IMPL_STATIC_LINK(
-    DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
+    DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, rtl::Reference<SdrObject> )
 {
-    SdrObject* pNewObj = nullptr;
+    rtl::Reference<SdrObject> pNewObj;
 
     if ( aParams.nInventor == SdrInventor::ReportDesign )
     {
@@ -66,7 +66,7 @@ IMPL_STATIC_LINK(
             case OBJ_RD_VFIXEDLINE:
             case OBJ_RD_HFIXEDLINE:
                 {
-                    OUnoObject* pObj = new OUnoObject(aParams.rSdrModel, SERVICE_FIXEDLINE
+                    rtl::Reference<OUnoObject> pObj = new OUnoObject(aParams.rSdrModel, SERVICE_FIXEDLINE
                                                         ,OUString("com.sun.star.awt.UnoControlFixedLineModel")
                                                         ,aParams.nObjIdentifier);
                     pNewObj = pObj;

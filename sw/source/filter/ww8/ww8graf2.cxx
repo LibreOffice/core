@@ -510,7 +510,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
         else if((0x64 == aPic.MFP.mm) || (0x66 == aPic.MFP.mm))
         {
             // linked graphic in ESCHER-Object
-            SdrObject* pObject = nullptr;
+            rtl::Reference<SdrObject> pObject;
 
             WW8PicDesc aPD( aPic );
             if (!m_xMSDffManager)
@@ -595,7 +595,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
                     // Modified for i120716,for graf importing from MS Word 2003
                     // binary format, there is no border distance.
                     tools::Rectangle aInnerDist(0,0,0,0);
-                    MatchSdrItemsIntoFlySet( pObject, aAttrSet,
+                    MatchSdrItemsIntoFlySet( pObject.get(), aAttrSet,
                         pRecord->eLineStyle, pRecord->eLineDashing,
                         pRecord->eShapeType, aInnerDist );
 
@@ -642,11 +642,11 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
                     if (sal_uInt16(OBJ_OLE2) == pObject->GetObjIdentifier())
                     {
                         // the size from BLIP, if there is any, should be already set
-                        pRet = InsertOle(*static_cast<SdrOle2Obj*>(pObject), aAttrSet, &aGrSet);
+                        pRet = InsertOle(*static_cast<SdrOle2Obj*>(pObject.get()), aAttrSet, &aGrSet);
                     }
                     else
                     {
-                        if (SdrGrafObj* pGraphObject = dynamic_cast<SdrGrafObj*>( pObject) )
+                        if (SdrGrafObj* pGraphObject = dynamic_cast<SdrGrafObj*>( pObject.get()) )
                         {
                             // Now add the link or rather the graphic to the doc
                             const Graphic& rGraph = pGraphObject->GetGraphic();
@@ -682,22 +682,22 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
                     // Z-order-list accordingly (or delete entry)
                     if (SdrObject* pOurNewObject = CreateContactObject(pRet))
                     {
-                        if (pOurNewObject != pObject)
+                        if (pOurNewObject != pObject.get())
                         {
-                            m_xMSDffManager->ExchangeInShapeOrder( pObject, 0,
+                            m_xMSDffManager->ExchangeInShapeOrder( pObject.get(), 0,
                                 pOurNewObject );
 
                             // delete and destroy old SdrGrafObj from page
                             if (pObject->getSdrPageFromSdrObject())
                                 m_pDrawPg->RemoveObject(pObject->GetOrdNum());
-                            SdrObject::Free( pObject );
+                            pObject.clear();
                         }
                     }
                     else
-                        m_xMSDffManager->RemoveFromShapeOrder( pObject );
+                        m_xMSDffManager->RemoveFromShapeOrder( pObject.get() );
                 }
                 else
-                    m_xMSDffManager->RemoveFromShapeOrder( pObject );
+                    m_xMSDffManager->RemoveFromShapeOrder( pObject.get() );
 
                 // also delete this from the page if not grouped
                 if (pTextObj && !bTextObjWasGrouped && pTextObj->getSdrPageFromSdrObject())

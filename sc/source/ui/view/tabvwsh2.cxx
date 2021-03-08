@@ -358,13 +358,13 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         return;
 
     // create the default object
-    SdrObjectUniquePtr pObj = pFuActual->CreateDefaultObject(nNewId, aNewObjectRectangle);
+    rtl::Reference<SdrObject> pObj = pFuActual->CreateDefaultObject(nNewId, aNewObjectRectangle);
 
     if(!pObj)
         return;
 
     // insert into page
-    pView->InsertObjectAtView(pObj.release(), *pPageView);
+    pView->InsertObjectAtView(pObj.get(), *pPageView);
 
     if ( nNewId == SID_DRAW_CAPTION || nNewId == SID_DRAW_CAPTION_VERTICAL )
     {

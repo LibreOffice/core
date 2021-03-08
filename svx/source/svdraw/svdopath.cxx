@@ -1824,7 +1824,7 @@ SdrObjKind SdrPathObj::GetObjIdentifier() const
     return meKind;
 }
 
-SdrPathObj* SdrPathObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrPathObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrPathObj(rTargetModel, *this);
 }
@@ -2616,9 +2616,9 @@ sal_uInt32 SdrPathObj::NbcInsPoint(const Point& rPos, bool bNewObj)
     return nNewHdl;
 }
 
-SdrObject* SdrPathObj::RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index)
+rtl::Reference<SdrPathObj> SdrPathObj::RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index)
 {
-    SdrPathObj* pNewObj = nullptr;
+    rtl::Reference<SdrPathObj> pNewObj;
     const basegfx::B2DPolyPolygon aLocalPolyPolygon(GetPathPoly());
     sal_uInt32 nPoly, nPnt;
 
@@ -2650,7 +2650,7 @@ SdrObject* SdrPathObj::RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index)
                         basegfx::B2DPolygon aSplitPolyA(aCandidate, 0, nPnt + 1);
                         SetPathPoly(basegfx::B2DPolyPolygon(aSplitPolyA));
 
-                        pNewObj = CloneSdrObject(getSdrModelFromSdrObject());
+                        pNewObj = SdrObject::Clone(*this, getSdrModelFromSdrObject());
                         basegfx::B2DPolygon aSplitPolyB(aCandidate, nPnt, nPointCount - nPnt);
                         pNewObj->SetPathPoly(basegfx::B2DPolyPolygon(aSplitPolyB));
                     }
@@ -2662,7 +2662,7 @@ SdrObject* SdrPathObj::RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index)
     return pNewObj;
 }
 
-SdrObjectUniquePtr SdrPathObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
+rtl::Reference<SdrObject> SdrPathObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     // #i89784# check for FontWork with activated HideContour
     const drawinglayer::attribute::SdrTextAttribute aText(
@@ -2670,11 +2670,11 @@ SdrObjectUniquePtr SdrPathObj::DoConvertToPolyObj(bool bBezier, bool bAddText) c
     const bool bHideContour(
         !aText.isDefault() && !aText.getSdrFormTextAttribute().isDefault() && aText.isHideContour());
 
-    SdrObjectUniquePtr pRet;
+    rtl::Reference<SdrObject> pRet;
 
     if(!bHideContour)
     {
-        SdrPathObjUniquePtr pPath = ImpConvertMakeObj(GetPathPoly(), IsClosed(), bBezier);
+        rtl::Reference<SdrPathObj> pPath = ImpConvertMakeObj(GetPathPoly(), IsClosed(), bBezier);
 
         if(pPath->GetPathPoly().areControlPointsUsed())
         {

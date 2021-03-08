@@ -33,8 +33,8 @@
 #include <svx/svxdllapi.h>
 #include <svx/shapeproperty.hxx>
 #include <tools/link.hxx>
-#include <tools/weakbase.h>
 #include <tools/gen.hxx>
+#include <unotools/weakref.hxx>
 #include <osl/diagnose.h>
 #include <typeinfo>
 
@@ -90,12 +90,6 @@ namespace sdr::contact { class ViewContact; }
 
 namespace svx { class PropertyChangeNotifier; }
 
-
-struct SVXCORE_DLLPUBLIC SdrObjectFreeOp;
-
-// helper for constructing std::unique_ptr for SdrObjects where a
-// deleter is needed - here, SdrObject::Free needs to be used.
-typedef std::unique_ptr< SdrObject, SdrObjectFreeOp > SdrObjectUniquePtr;
 
 enum class SdrInventor : sal_uInt32 {
     Unknown          = 0,
@@ -257,7 +251,7 @@ public:
 //      SwFlyDrawObj
 
 /// Abstract DrawObject
-class SVXCORE_DLLPUBLIC SdrObject : public SfxListener, public tools::WeakBase
+class SVXCORE_DLLPUBLIC SdrObject : public SfxListener, public cppu::OWeakObject
 {
 private:
     friend class                SdrObjListIter;
@@ -294,6 +288,21 @@ public:
     SdrObject(SdrModel& rSdrModel);
     // Copy constructor
     SdrObject(SdrModel& rSdrModel, SdrObject const & rSource);
+
+    virtual void SAL_CALL acquire() throw() override final
+    {
+        assert(m_refCount != -99);
+        OWeakObject::acquire();
+    }
+    virtual void SAL_CALL release() throw() override final
+    {
+        if (osl_atomic_decrement( &m_refCount ) == 0)
+        {
+            disposeWeakConnectionPoint();
+            m_refCount = -99;
+            delete this;
+        }
+    }
 
     // SdrModel/SdrPage access on SdrObject level
     SdrPage* getSdrPageFromSdrObject() const;
@@ -341,11 +350,6 @@ public:
     /// This is needed for instance for NbcMove, because usually one moves SnapRect and aOutRect
     /// at the same time to avoid recomputation.
     virtual void SetRectsDirty(bool bNotMyself = false, bool bRecursive = true);
-
-    // frees the SdrObject pointed to by the argument
-    // In case the object has an SvxShape, which has the ownership of the object, it
-    // is actually *not* deleted.
-    static  void    Free( SdrObject*& _rpObject );
 
     // this method is only for access from Property objects
     virtual void SetBoundRectDirty();
@@ -443,7 +447,14 @@ public:
     virtual bool HasLimitedRotation() const;
 
     // Returns a copy of the object. Every inherited class must reimplement this.
-    virtual SdrObject* CloneSdrObject(SdrModel& rTargetModel) const;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const;
+    // helper, since Clone always return the type of the current subclass
+    template<class T>
+    static rtl::Reference<T> Clone(T const & rObj, SdrModel& rTargetModel)
+    {
+        rtl::Reference<SdrObject> newObj = rObj.CloneSdrObject(rTargetModel);
+        return static_cast<T*>(newObj.get());
+    }
 
     // Overwriting this object makes no sense, it is too complicated for that
     SdrObject& operator=(const SdrObject& rObj) = delete;
@@ -501,7 +512,7 @@ public:
     // part of the model, thus not changing anything since it's only a temporary
     // helper object for interaction
     virtual bool supportsFullDrag() const;
-    virtual SdrObjectUniquePtr getFullDragClone() const;
+    virtual rtl::Reference<SdrObject> getFullDragClone() const;
 
     /// Every object must be able to create itself interactively.
     /// On MouseDown first an object is created, and its BegCreate() method
@@ -718,15 +729,15 @@ public:
     // In the case of the conversion from TextObj to PathObj,
     // both modi (bLineToArea=true/false) would be identical.
     // The methods' default implementations report "I'm unable to do this" (false/null).
-    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const;
-    SdrObjectUniquePtr ConvertToPolyObj(bool bBezier, bool bLineToArea) const;
+    virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const;
+    rtl::Reference<SdrObject> ConvertToPolyObj(bool bBezier, bool bLineToArea) const;
 
     // convert this path object to contour object; bForceLineDash converts even
     // when there is no filled new polygon created from line-to-polygon conversion,
     // specially used for XLINE_DASH and 3D conversion
-    SdrObject* ConvertToContourObj(SdrObject* pRet, bool bForceLineDash = false) const;
+    rtl::Reference<SdrObject> ConvertToContourObj(SdrObject* pRet, bool bForceLineDash = false) const;
 private:
-    SdrObject* ImpConvertToContourObj(bool bForceLineDash);
+    rtl::Reference<SdrObject> ImpConvertToContourObj(bool bForceLineDash);
 public:
 
     // if true, reference onto an object
@@ -969,10 +980,12 @@ private:
     // global static ItemPool for not-yet-inserted items
     static SdrItemPool*         mpGlobalItemPool;
 
-    // do not use directly, always use getSvxShape() if you have to!
+    // do not use directly, always use getSvxShape() if you have to, because not all
+    // SdrObjects have an associated SvxShape subclass (e.g. reportdesign)
     SvxShape*                   mpSvxShape;
     css::uno::WeakReference< css::uno::XInterface >
                                 maWeakUnoShape;
+
     // HACK: Do not automatically insert newly created object into a page.
     // The user needs to do it manually later.
     bool                        mbDoNotInsertIntoPageAutomatically;
@@ -981,14 +994,6 @@ private:
     SvxShape* getSvxShape();
 
     SdrObject( const SdrObject& ) = delete;
-};
-
-struct SVXCORE_DLLPUBLIC SdrObjectFreeOp
-{
-    void operator()(SdrObject* obj)
-    {
-        SdrObject::Free(obj);
-    }
 };
 
 struct SdrObjCreatorParams
@@ -1009,17 +1014,17 @@ struct SdrObjCreatorParams
 class SVXCORE_DLLPUBLIC SdrObjFactory
 {
 public:
-    static SdrObject* MakeNewObject(
+    static rtl::Reference<SdrObject> MakeNewObject(
         SdrModel& rSdrModel,
         SdrInventor nInventor,
         SdrObjKind nObjIdentifier,
         const tools::Rectangle* pSnapRect = nullptr);
 
-    static void InsertMakeObjectHdl(Link<SdrObjCreatorParams, SdrObject*> const & rLink);
-    static void RemoveMakeObjectHdl(Link<SdrObjCreatorParams, SdrObject*> const & rLink);
+    static void InsertMakeObjectHdl(Link<SdrObjCreatorParams, rtl::Reference<SdrObject>> const & rLink);
+    static void RemoveMakeObjectHdl(Link<SdrObjCreatorParams, rtl::Reference<SdrObject>> const & rLink);
 
 private:
-    static SVX_DLLPRIVATE SdrObject* CreateObjectFromFactory(
+    static SVX_DLLPRIVATE rtl::Reference<SdrObject> CreateObjectFromFactory(
         SdrModel& rSdrModel,
         SdrInventor nInventor,
         SdrObjKind nIdentifier);

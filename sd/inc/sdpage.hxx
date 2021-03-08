@@ -167,8 +167,8 @@ public:
     sd::ShapeList&  GetPresentationShapeList() { return maPresentationShapeList; }
 
     void EnsureMasterPageDefaultBackground();
-    SdrObject*      CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect);
-    SdrObject*      CreateDefaultPresObj(PresObjKind eObjKind);
+    SdrObject* CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect);
+    rtl::Reference<SdrObject> CreateDefaultPresObj(PresObjKind eObjKind);
     void            DestroyDefaultPresObj(PresObjKind eObjKind);
     SdrObject*      GetPresObj(PresObjKind eObjKind, int nIndex = 1, bool bFuzzySearch = false );
     PresObjKind     GetPresObjKind(SdrObject* pObj) const;
@@ -193,12 +193,12 @@ public:
     SdrObject*      InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, bool bInit);
 
     virtual void       NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
-    virtual SdrObject* NbcRemoveObject(size_t nObjNum) override;
-    virtual SdrObject* RemoveObject(size_t nObjNum) override;
+    virtual rtl::Reference<SdrObject> NbcRemoveObject(size_t nObjNum) override;
+    virtual rtl::Reference<SdrObject> RemoveObject(size_t nObjNum) override;
 
     /** Also override ReplaceObject methods to realize when
     objects are removed with this mechanism instead of RemoveObject*/
-    virtual SdrObject* ReplaceObject(SdrObject* pNewObj, size_t nObjNum) override;
+    virtual rtl::Reference<SdrObject> ReplaceObject(SdrObject* pNewObj, size_t nObjNum) override;
 
     void        SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eObjKind, std::u16string_view rStr );
 

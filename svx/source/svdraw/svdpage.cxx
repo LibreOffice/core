@@ -81,7 +81,7 @@ void SdrObjList::impClearSdrObjList(bool bBroadcast)
     while(!maList.empty())
     {
         // remove last object from list
-        SdrObject* pObj(maList.back());
+        rtl::Reference<SdrObject> pObj(maList.back());
         RemoveObjectFromContainer(maList.size()-1);
 
         // flushViewObjectContacts() is done since SdrObject::Free is not guaranteed
@@ -100,9 +100,6 @@ void SdrObjList::impClearSdrObjList(bool bBroadcast)
             SdrHint aHint(SdrHintKind::ObjectRemoved, *pObj, getSdrPageFromSdrObjList());
             pObj->getSdrModelFromSdrObject().Broadcast(aHint);
         }
-
-        // delete the object itself
-        SdrObject::Free( pObj );
     }
 
     if(bBroadcast && nullptr != pSdrModelFromRemovedSdrObject)
@@ -120,7 +117,16 @@ void SdrObjList::ClearSdrObjList()
 SdrObjList::~SdrObjList()
 {
     // clear SdrObjects without broadcasting
-    impClearSdrObjList(false);
+    while(!maList.empty())
+    {
+        // remove last object from list
+        SdrObject& rObj = *maList.back();
+        // flushViewObjectContacts() is done since SdrObject::Free is not guaranteed
+        // to delete the object and thus refresh visualisations
+        rObj.GetViewContact().flushViewObjectContacts();
+        rObj.setParentOfSdrObject(nullptr);
+        maList.pop_back();
+    }
 }
 
 SdrPage* SdrObjList::getSdrPageFromSdrObjList() const
@@ -158,11 +164,11 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
     for (size_t no(0); no < nCount; ++no)
     {
         SdrObject* pSO(rSrcList.GetObj(no));
-        SdrObject* pDO(pSO->CloneSdrObject(rTargetSdrModel));
+        rtl::Reference<SdrObject> pDO(pSO->CloneSdrObject(rTargetSdrModel));
 
-        if(nullptr != pDO)
+        if(pDO)
         {
-            NbcInsertObject(pDO, SAL_MAX_SIZE);
+            NbcInsertObject(pDO.get(), SAL_MAX_SIZE);
         }
         else
         {
@@ -374,7 +380,7 @@ void SdrObjList::InsertObject(SdrObject* pObj, size_t nPos)
     pObj->getSdrModelFromSdrObject().SetChanged();
 }
 
-SdrObject* SdrObjList::NbcRemoveObject(size_t nObjNum)
+rtl::Reference<SdrObject> SdrObjList::NbcRemoveObject(size_t nObjNum)
 {
     if (nObjNum >= maList.size())
     {
@@ -383,7 +389,7 @@ SdrObject* SdrObjList::NbcRemoveObject(size_t nObjNum)
     }
 
     const size_t nCount = GetObjCount();
-    SdrObject* pObj=maList[nObjNum];
+    rtl::Reference<SdrObject> pObj=maList[nObjNum];
     RemoveObjectFromContainer(nObjNum);
 
     DBG_ASSERT(pObj!=nullptr,"Could not find object to remove.");
@@ -413,7 +419,7 @@ SdrObject* SdrObjList::NbcRemoveObject(size_t nObjNum)
     return pObj;
 }
 
-SdrObject* SdrObjList::RemoveObject(size_t nObjNum)
+rtl::Reference<SdrObject> SdrObjList::RemoveObject(size_t nObjNum)
 {
     if (nObjNum >= maList.size())
     {
@@ -422,7 +428,7 @@ SdrObject* SdrObjList::RemoveObject(size_t nObjNum)
     }
 
     const size_t nCount = GetObjCount();
-    SdrObject* pObj=maList[nObjNum];
+    rtl::Reference<SdrObject> pObj=maList[nObjNum];
     RemoveObjectFromContainer(nObjNum);
 
     DBG_ASSERT(pObj!=nullptr,"Object to remove not found.");
@@ -469,7 +475,7 @@ SdrObject* SdrObjList::RemoveObject(size_t nObjNum)
     return pObj;
 }
 
-SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
+rtl::Reference<SdrObject> SdrObjList::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
 {
     if (nObjNum >= maList.size())
     {
@@ -482,7 +488,7 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
         return nullptr;
     }
 
-    SdrObject* pObj=maList[nObjNum];
+    rtl::Reference<SdrObject> pObj=maList[nObjNum];
     DBG_ASSERT(pObj!=nullptr,"SdrObjList::ReplaceObject: Could not find object to remove.");
     if (pObj!=nullptr) {
         DBG_ASSERT(pObj->IsInserted(),"SdrObjList::ReplaceObject: the object does not have status Inserted.");
@@ -542,8 +548,8 @@ SdrObject* SdrObjList::SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum)
         return nullptr;
     }
 
-    SdrObject* pObj=maList[nOldObjNum];
-    if (nOldObjNum==nNewObjNum) return pObj;
+    rtl::Reference<SdrObject> pObj=maList[nOldObjNum];
+    if (nOldObjNum==nNewObjNum) return pObj.get();
     DBG_ASSERT(pObj!=nullptr,"SdrObjList::SetObjectOrdNum: Object not found.");
     if (pObj!=nullptr) {
         DBG_ASSERT(pObj->IsInserted(),"SdrObjList::SetObjectOrdNum: the object does not have status Inserted.");
@@ -562,7 +568,7 @@ SdrObject* SdrObjList::SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum)
             pObj->getSdrModelFromSdrObject().Broadcast(SdrHint(SdrHintKind::ObjectChange, *pObj));
         pObj->getSdrModelFromSdrObject().SetChanged();
     }
-    return pObj;
+    return pObj.get();
 }
 
 void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
@@ -589,7 +595,7 @@ void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
     // example maList [T T S T T] ( T T = shape with textbox, S = just a shape )
     // (shapes at positions 0 and 2 have a textbox)
 
-    std::vector<SdrObject*> aNewList(maList.size());
+    std::vector<rtl::Reference<SdrObject>> aNewList(maList.size());
     std::set<sal_Int32> aShapesWithTextbox;
     std::vector<sal_Int32> aIncrements;
     std::vector<sal_Int32> aDuplicates;
@@ -769,7 +775,7 @@ size_t SdrObjList::GetObjCount() const
 
 SdrObject* SdrObjList::GetObj(size_t nNum) const
 {
-    return maList[nNum];
+    return maList[nNum].get();
 }
 
 
@@ -819,8 +825,8 @@ void SdrObjList::UnGroupObj( size_t nObjNum )
                 const size_t nCount = pSrcLst->GetObjCount();
                 for( size_t i=0; i<nCount; ++i )
                 {
-                    SdrObject* pObj = pSrcLst->RemoveObject(0);
-                    InsertObject(pObj, nInsertPos);
+                    rtl::Reference<SdrObject> pObj = pSrcLst->RemoveObject(0);
+                    InsertObject(pObj.get(), nInsertPos);
                     ++nInsertPos;
                 }
 
@@ -844,13 +850,13 @@ void SdrObjList::SetObjectNavigationPosition (
     // maList.
     if (mxNavigationOrder == nullptr)
     {
-        mxNavigationOrder.reset(new std::vector<tools::WeakReference<SdrObject>>(maList.begin(),
+        mxNavigationOrder.reset(new std::vector<unotools::WeakReference<SdrObject>>(maList.begin(),
             maList.end()));
     }
     OSL_ASSERT(mxNavigationOrder != nullptr);
     OSL_ASSERT( mxNavigationOrder->size() == maList.size());
 
-    tools::WeakReference<SdrObject> aReference (&rObject);
+    unotools::WeakReference<SdrObject> aReference (&rObject);
 
     // Look up the object whose navigation position is to be changed.
     auto iObject = ::std::find(
@@ -896,7 +902,7 @@ SdrObject* SdrObjList::GetObjectForNavigationPosition (const sal_uInt32 nNavigat
             OSL_ASSERT(nNavigationPosition < mxNavigationOrder->size());
         }
         else
-            return (*mxNavigationOrder)[nNavigationPosition].get();
+            return (*mxNavigationOrder)[nNavigationPosition].get().get();
     }
     else
     {
@@ -907,7 +913,7 @@ SdrObject* SdrObjList::GetObjectForNavigationPosition (const sal_uInt32 nNavigat
             OSL_ASSERT(nNavigationPosition < maList.size());
         }
         else
-            return maList[nNavigationPosition];
+            return maList[nNavigationPosition].get();
     }
     return nullptr;
 }
@@ -931,7 +937,7 @@ bool SdrObjList::RecalcNavigationPositions()
             sal_uInt32 nIndex (0);
             for (auto& rpObject : *mxNavigationOrder)
             {
-                rpObject->SetNavigationPosition(nIndex);
+                rpObject.get()->SetNavigationPosition(nIndex);
                 ++nIndex;
             }
         }
@@ -950,7 +956,7 @@ void SdrObjList::SetNavigationOrder (const uno::Reference<container::XIndexAcces
             return;
 
         if (mxNavigationOrder == nullptr)
-            mxNavigationOrder.reset(new std::vector<tools::WeakReference<SdrObject>>(nCount));
+            mxNavigationOrder.reset(new std::vector<unotools::WeakReference<SdrObject>>(nCount));
 
         for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
         {
@@ -1013,7 +1019,7 @@ void SdrObjList::ReplaceObjectInContainer (
         // not transferred to the new object so erase the former and append
         // the later object from/to the navigation order.
         OSL_ASSERT(nObjectPosition < maList.size());
-        tools::WeakReference<SdrObject> aReference (maList[nObjectPosition]);
+        unotools::WeakReference<SdrObject> aReference (maList[nObjectPosition]);
         auto iObject = ::std::find(
             mxNavigationOrder->begin(),
             mxNavigationOrder->end(),
@@ -1043,7 +1049,7 @@ void SdrObjList::RemoveObjectFromContainer (
     // Update the navigation positions.
     if (HasObjectNavigationOrder())
     {
-        tools::WeakReference<SdrObject> aReference (maList[nObjectPosition]);
+        unotools::WeakReference<SdrObject> aReference (maList[nObjectPosition]);
         auto iObject = ::std::find(
             mxNavigationOrder->begin(),
             mxNavigationOrder->end(),

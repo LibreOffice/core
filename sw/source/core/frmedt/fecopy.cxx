@@ -1315,7 +1315,7 @@ static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SdrModel& _rModel )
                 pOle2Obj->Disconnect();
 
                 // create new graphic shape with the ole graphic and shape size
-                SdrGrafObj* pGraphicObj = new SdrGrafObj(
+                rtl::Reference<SdrGrafObj> pGraphicObj = new SdrGrafObj(
                     _rModel,
                     aGraphic,
                     pOle2Obj->GetCurrentBoundRect());
@@ -1323,8 +1323,7 @@ static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SdrModel& _rModel )
                 pGraphicObj->SetLayer( pOle2Obj->GetLayer() );
 
                 // replace ole2 shape with the new graphic object and delete the ol2 shape
-                SdrObject* pRemovedObject = pObjList->ReplaceObject( pGraphicObj, pOle2Obj->GetOrdNum() );
-                SdrObject::Free( pRemovedObject );
+                pObjList->ReplaceObject( pGraphicObj.get(), pOle2Obj->GetOrdNum() );
             }
         }
     }
@@ -1392,7 +1391,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
                     }
                 }
 
-                SdrObject* pNewObj(pClpObj->CloneSdrObject(pOldObj->getSdrModelFromSdrObject()));
+                rtl::Reference<SdrObject> pNewObj(pClpObj->CloneSdrObject(pOldObj->getSdrModelFromSdrObject()));
                 tools::Rectangle aOldObjRect( pOldObj->GetCurrentBoundRect() );
                 Size aOldObjSize( aOldObjRect.GetSize() );
                 tools::Rectangle aNewRect( pNewObj->GetCurrentBoundRect() );
@@ -1405,7 +1404,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
                 Point aVec = aOldObjRect.TopLeft() - aNewRect.TopLeft();
                 pNewObj->NbcMove(Size(aVec.getX(), aVec.getY()));
 
-                if( dynamic_cast<const SdrUnoObj*>( pNewObj) !=  nullptr )
+                if( dynamic_cast<const SdrUnoObj*>( pNewObj.get()) !=  nullptr )
                     pNewObj->SetLayer( GetDoc()->getIDocumentDrawModelAccess().GetControlsId() );
                 else if( dynamic_cast<const SdrUnoObj*>( pOldObj) !=  nullptr )
                     pNewObj->SetLayer( GetDoc()->getIDocumentDrawModelAccess().GetHeavenId() );
@@ -1451,7 +1450,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
                     // #i123922#  for handling MasterObject and virtual ones correctly, SW
                     // wants us to call ReplaceObject at the page, but that also
                     // triggers the same assertion (I tried it), so stay at the view method
-                    pView->ReplaceObjectAtView(pOldObj, *Imp()->GetPageView(), pNewObj);
+                    pView->ReplaceObjectAtView(pOldObj, *Imp()->GetPageView(), pNewObj.get());
                 }
             }
             break;
@@ -1573,21 +1572,21 @@ bool SwFEShell::Paste(const Graphic &rGrf, const OUString& rURL)
         // OLE object in focus
         SdrObject* pResult = pObj;
 
-        if(dynamic_cast< SdrGrafObj* >(pObj))
+        if(auto pGrafObj = dynamic_cast< SdrGrafObj* >(pObj))
         {
-            SdrGrafObj* pNewGrafObj(static_cast<SdrGrafObj*>(pObj->CloneSdrObject(pObj->getSdrModelFromSdrObject())));
+            rtl::Reference<SdrGrafObj> pNewGrafObj = SdrObject::Clone(*pGrafObj, pGrafObj->getSdrModelFromSdrObject());
 
             pNewGrafObj->SetGraphic(rGrf);
 
             // #i123922#  for handling MasterObject and virtual ones correctly, SW
             // wants us to call ReplaceObject at the page, but that also
             // triggers the same assertion (I tried it), so stay at the view method
-            pView->ReplaceObjectAtView(pObj, *pView->GetSdrPageView(), pNewGrafObj);
+            pView->ReplaceObjectAtView(pObj, *pView->GetSdrPageView(), pNewGrafObj.get());
 
             // set in all cases - the Clone() will have copied an existing link (!)
             pNewGrafObj->SetGraphicLink(rURL);
 
-            pResult = pNewGrafObj;
+            pResult = pNewGrafObj.get();
         }
         else
         {

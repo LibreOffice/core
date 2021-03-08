@@ -241,7 +241,7 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
     rDoc.GetChartListenerCollection()->insert( pChartListener );
     pChartListener->StartListeningTo();
 
-    SdrOle2Obj* pObj = new SdrOle2Obj(
+    rtl::Reference<SdrOle2Obj> pObj = new SdrOle2Obj(
             *pModel,
             ::svt::EmbeddedObjectRef(xObj, embed::Aspects::MSOLE_CONTENT),
             aName,
@@ -255,7 +255,7 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
     // Add here again if this is wanted (see task description for details)
     // ChartHelper::AdaptDefaultsForChart( xObj );
 
-    pPage->InsertObject( pObj );
+    pPage->InsertObject( pObj.get() );
     pModel->AddUndo( std::make_unique<SdrUndoInsertObj>( *pObj ) );
 }
 

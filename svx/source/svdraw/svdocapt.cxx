@@ -240,7 +240,7 @@ SdrObjKind SdrCaptionObj::GetObjIdentifier() const
     return OBJ_CAPTION;
 }
 
-SdrCaptionObj* SdrCaptionObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrCaptionObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrCaptionObj(rTargetModel, *this);
 }
@@ -674,11 +674,11 @@ void SdrCaptionObj::RestoreGeoData(const SdrObjGeoData& rGeo)
     aTailPoly=rCGeo.aTailPoly;
 }
 
-SdrObjectUniquePtr SdrCaptionObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
+rtl::Reference<SdrObject> SdrCaptionObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
-    SdrObjectUniquePtr pRect = SdrRectObj::DoConvertToPolyObj(bBezier, bAddText);
-    SdrObjectUniquePtr pTail = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aTailPoly.getB2DPolygon()), false, bBezier);
-    SdrObjectUniquePtr pRet;
+    rtl::Reference<SdrObject> pRect = SdrRectObj::DoConvertToPolyObj(bBezier, bAddText);
+    rtl::Reference<SdrObject> pTail = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aTailPoly.getB2DPolygon()), false, bBezier);
+    rtl::Reference<SdrObject> pRet;
     if (pTail && !pRect)
         pRet = std::move(pTail);
     else if (pRect && !pTail)
@@ -687,20 +687,20 @@ SdrObjectUniquePtr SdrCaptionObj::DoConvertToPolyObj(bool bBezier, bool bAddText
     {
         if (pTail->GetSubList())
         {
-            pTail->GetSubList()->NbcInsertObject(pRect.release());
+            pTail->GetSubList()->NbcInsertObject(pRect.get());
             pRet = std::move(pTail);
         }
         else if (pRect->GetSubList())
         {
-            pRect->GetSubList()->NbcInsertObject(pTail.release(),0);
+            pRect->GetSubList()->NbcInsertObject(pTail.get(),0);
             pRet = std::move(pRect);
         }
         else
         {
-            SdrObjGroup* pGrp = new SdrObjGroup(getSdrModelFromSdrObject());
-            pGrp->GetSubList()->NbcInsertObject(pRect.release());
-            pGrp->GetSubList()->NbcInsertObject(pTail.release(),0);
-            pRet.reset(pGrp);
+            rtl::Reference<SdrObjGroup> pGrp = new SdrObjGroup(getSdrModelFromSdrObject());
+            pGrp->GetSubList()->NbcInsertObject(pRect.get());
+            pGrp->GetSubList()->NbcInsertObject(pTail.get(),0);
+            pRet = pGrp;
         }
     }
     return pRet;

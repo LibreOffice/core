@@ -173,7 +173,7 @@ void FuConstPolygon::Deactivate()
 }
 
 // Create default drawing objects via keyboard
-SdrObjectUniquePtr FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle)
+rtl::Reference<SdrObject> FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle)
 {
     // case SID_DRAW_XPOLYGON:
     // case SID_DRAW_XPOLYGON_NOFILL:
@@ -184,7 +184,7 @@ SdrObjectUniquePtr FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, con
     // case SID_DRAW_FREELINE:
     // case SID_DRAW_FREELINE_NOFILL:
 
-    SdrObjectUniquePtr pObj(SdrObjFactory::MakeNewObject(
+    rtl::Reference<SdrObject> pObj(SdrObjFactory::MakeNewObject(
         *pDrDoc,
         pView->GetCurrentObjInventor(),
         pView->GetCurrentObjIdentifier()));

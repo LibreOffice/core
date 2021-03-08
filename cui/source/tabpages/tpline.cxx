@@ -834,7 +834,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
             if(m_pSymbolList->GetObjCount())
             {
                 nSymTmp %= m_pSymbolList->GetObjCount(); // Treat list as cyclic!
-                SdrObject *pObj=m_pSymbolList->GetObj(nSymTmp);
+                rtl::Reference<SdrObject> pObj=m_pSymbolList->GetObj(nSymTmp);
                 if(pObj)
                 {
                     // directly clone to target SdrModel
@@ -849,16 +849,16 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
                         pObj->SetMergedItemSet(m_rOutAttrs);
                     }
 
-                    pPage->NbcInsertObject(pObj);
+                    pPage->NbcInsertObject(pObj.get());
 
                     // Generate invisible square to give all symbol types a
                     // bitmap size, which is independent from specific glyph
-                    SdrObject* pInvisibleSquare(m_pSymbolList->GetObj(0));
+                    rtl::Reference<SdrObject> pInvisibleSquare(m_pSymbolList->GetObj(0));
 
                     // directly clone to target SdrModel
                     pInvisibleSquare = pInvisibleSquare->CloneSdrObject(*pModel);
 
-                    pPage->NbcInsertObject(pInvisibleSquare);
+                    pPage->NbcInsertObject(pInvisibleSquare.get());
                     pInvisibleSquare->SetMergedItem(XFillTransparenceItem(100));
                     pInvisibleSquare->SetMergedItem(XLineTransparenceItem(100));
 
@@ -874,10 +874,8 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
                     bIgnoreGraphic=true;
 
                     pView->UnmarkAll();
-                    pInvisibleSquare=pPage->RemoveObject(1);
-                    SdrObject::Free( pInvisibleSquare);
-                    pObj=pPage->RemoveObject(0);
-                    SdrObject::Free( pObj );
+                    pPage->RemoveObject(1);
+                    pPage->RemoveObject(0);
                 }
             }
         }
@@ -1449,25 +1447,25 @@ IMPL_LINK_NOARG(SvxLineTabPage, MenuCreateHdl_Impl, weld::ToggleButton&, void)
 
         // Generate invisible square to give all symbols a
         // bitmap size, which is independent from specific glyph
-        SdrObject *pInvisibleSquare=m_pSymbolList->GetObj(0);
+        rtl::Reference<SdrObject> pInvisibleSquare=m_pSymbolList->GetObj(0);
 
         // directly clone to target SdrModel
         pInvisibleSquare = pInvisibleSquare->CloneSdrObject(*pModel);
 
-        pPage->NbcInsertObject(pInvisibleSquare);
+        pPage->NbcInsertObject(pInvisibleSquare.get());
         pInvisibleSquare->SetMergedItem(XFillTransparenceItem(100));
         pInvisibleSquare->SetMergedItem(XLineTransparenceItem(100));
 
         for(size_t i=0; i < m_pSymbolList->GetObjCount(); ++i)
         {
-            SdrObject *pObj=m_pSymbolList->GetObj(i);
+            rtl::Reference<SdrObject> pObj=m_pSymbolList->GetObj(i);
             assert(pObj);
 
             // directly clone to target SdrModel
             pObj = pObj->CloneSdrObject(*pModel);
 
             m_aGrfNames.emplace_back("");
-            pPage->NbcInsertObject(pObj);
+            pPage->NbcInsertObject(pObj.get());
             if(m_pSymbolAttr)
             {
                 pObj->SetMergedItemSet(*m_pSymbolAttr);
@@ -1480,8 +1478,7 @@ IMPL_LINK_NOARG(SvxLineTabPage, MenuCreateHdl_Impl, weld::ToggleButton&, void)
             BitmapEx aBitmapEx(pView->GetMarkedObjBitmapEx());
             GDIMetaFile aMeta(pView->GetMarkedObjMetaFile());
             pView->UnmarkAll();
-            pObj=pPage->RemoveObject(1);
-            SdrObject::Free(pObj);
+            pPage->RemoveObject(1);
 
             SvxBmpItemInfo* pInfo = new SvxBmpItemInfo;
             pInfo->pBrushItem.reset(new SvxBrushItem(Graphic(aMeta), GPOS_AREA, SID_ATTR_BRUSH));
@@ -1501,8 +1498,7 @@ IMPL_LINK_NOARG(SvxLineTabPage, MenuCreateHdl_Impl, weld::ToggleButton&, void)
             pVD->DrawBitmapEx(Point(), aBitmapEx);
             m_xSymbolsMenu->append(pInfo->sItemId, "", *pVD);
         }
-        pInvisibleSquare=pPage->RemoveObject(0);
-        SdrObject::Free(pInvisibleSquare);
+        pPage->RemoveObject(0);
 
         if (m_aGrfNames.empty())
             m_xSymbolMB->set_item_sensitive("symbols", false);

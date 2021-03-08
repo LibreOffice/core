@@ -152,18 +152,18 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                 const SdrObject* pObj=pM->GetMarkedSdrObj();
 
                 // Directly Clone to target SdrModel
-                SdrObject* pNewObj(pObj->CloneSdrObject(*pDrawModel));
+                rtl::Reference<SdrObject> pNewObj(pObj->CloneSdrObject(*pDrawModel));
 
                 if (pNewObj!=nullptr)
                 {
                     //  copy graphics within the same model - always needs new name
-                    if ( dynamic_cast<const SdrGrafObj*>( pNewObj) !=  nullptr && !bPasteIsMove )
+                    if ( dynamic_cast<const SdrGrafObj*>( pNewObj.get()) !=  nullptr && !bPasteIsMove )
                         pNewObj->SetName(static_cast<ScDrawLayer*>(pDrawModel)->GetNewGraphicName());
 
                     if (nDiffX!=0 || nDiffY!=0)
                         pNewObj->NbcMove(Size(nDiffX,nDiffY));
                     if (pDestPage)
-                        pDestPage->InsertObject( pNewObj );
+                        pDestPage->InsertObject( pNewObj.get() );
                     pScDrawView->AddUndo(std::make_unique<SdrUndoInsertObj>( *pNewObj ));
 
                     if (ScDrawLayer::IsCellAnchored(*pNewObj))
@@ -347,14 +347,14 @@ bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
         tools::Rectangle aRect( aInsPos, aSize );
 
         ScDrawView* pDrView = GetScDrawView();
-        SdrOle2Obj* pSdrObj = new SdrOle2Obj(
+        rtl::Reference<SdrOle2Obj> pSdrObj = new SdrOle2Obj(
             pDrView->getSdrModelFromSdrView(),
             aObjRef,
             aName,
             aRect);
 
         SdrPageView* pPV = pDrView->GetSdrPageView();
-        pDrView->InsertObjectSafe( pSdrObj, *pPV );             // don't mark if OLE
+        pDrView->InsertObjectSafe( pSdrObj.get(), *pPV );             // don't mark if OLE
         GetViewData().GetViewShell()->SetDrawShell( true );
         return true;
     }
@@ -429,7 +429,7 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
 
     GetViewData().GetViewShell()->SetDrawShell( true );
     tools::Rectangle aRect(aPos, aSize);
-    SdrGrafObj* pGrafObj = new SdrGrafObj(
+    rtl::Reference<SdrGrafObj> pGrafObj = new SdrGrafObj(
         pScDrawView->getSdrModelFromSdrView(),
         rGraphic,
         aRect);
@@ -441,7 +441,7 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     pGrafObj->SetName(aName);
 
     // don't mark if OLE
-    bool bSuccess = pScDrawView->InsertObjectSafe(pGrafObj, *pScDrawView->GetSdrPageView());
+    bool bSuccess = pScDrawView->InsertObjectSafe(pGrafObj.get(), *pScDrawView->GetSdrPageView());
 
     // SetGraphicLink has to be used after inserting the object,
     // otherwise an empty graphic is swapped in and the contact stuff crashes.

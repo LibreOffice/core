@@ -22,6 +22,7 @@
 
 #include <svx/svxdllapi.h>
 #include <cppuhelper/weak.hxx>
+#include <rtl/ref.hxx>
 
 class KeyEvent;
 class MouseEvent;
@@ -60,7 +61,7 @@ public:
     virtual bool GetStyleSheet( SfxStyleSheet* &rpStyleSheet ) const;
     virtual bool SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr );
 
-    virtual SdrObject* GetMarkedSdrObjClone( SdrModel& rTargetModel );
+    virtual rtl::Reference<SdrObject> GetMarkedSdrObjClone( SdrModel& rTargetModel );
     virtual bool PasteObjModel( const SdrModel& rModel );
 
     /** applies a format paint brush set from the current selection.

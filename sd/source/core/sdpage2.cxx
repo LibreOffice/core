@@ -492,7 +492,6 @@ void SdPage::RemoveEmptyPresentationObjects()
         if (pShape->IsEmptyPresObj())
         {
             RemoveObject( pShape->GetOrdNum() );
-            SdrObject::Free( pShape );
         }
     }
 }

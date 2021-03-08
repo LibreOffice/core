@@ -210,9 +210,9 @@ const OUString& FuConstructCustomShape::GetShapeType() const
     return aCustomShape;
 }
 
-SdrObjectUniquePtr FuConstructCustomShape::CreateDefaultObject(const sal_uInt16, const ::tools::Rectangle& rRectangle)
+rtl::Reference<SdrObject> FuConstructCustomShape::CreateDefaultObject(const sal_uInt16, const ::tools::Rectangle& rRectangle)
 {
-    SdrObjectUniquePtr pObj(SdrObjFactory::MakeNewObject(
+    rtl::Reference<SdrObject> pObj(SdrObjFactory::MakeNewObject(
         mpView->getSdrModelFromSdrView(),
         mpView->GetCurrentObjInventor(),
         mpView->GetCurrentObjIdentifier()));

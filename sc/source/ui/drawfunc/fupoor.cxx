@@ -214,7 +214,7 @@ void FuPoor::StopDragTimer()
 }
 
 // Create default drawing objects via keyboard
-SdrObjectUniquePtr FuPoor::CreateDefaultObject(const sal_uInt16 /* nID */, const tools::Rectangle& /* rRectangle */)
+rtl::Reference<SdrObject> FuPoor::CreateDefaultObject(const sal_uInt16 /* nID */, const tools::Rectangle& /* rRectangle */)
 {
     // empty base implementation
     return nullptr;

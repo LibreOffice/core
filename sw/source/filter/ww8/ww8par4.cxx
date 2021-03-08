@@ -246,7 +246,7 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
     GraphicCtor();
 
     Graphic aGraph;
-    SdrObject* pRet = ImportOleBase(aGraph, pGrf, pFlySet, aVisArea );
+    rtl::Reference<SdrObject> pRet = ImportOleBase(aGraph, pGrf, pFlySet, aVisArea );
 
     // create flyset
     std::unique_ptr<SfxItemSet> pTempSet;
@@ -281,10 +281,10 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
 
     if (pRet)       // OLE object was inserted
     {
-        if (SdrOle2Obj *pOleObj = dynamic_cast<SdrOle2Obj*>(pRet))
+        if (SdrOle2Obj *pOleObj = dynamic_cast<SdrOle2Obj*>(pRet.get()))
         {
             pFormat = InsertOle(*pOleObj, *pFlySet, pGrfSet);
-            SdrObject::Free(pRet);     // we don't need this anymore
+            pRet.clear();     // we don't need this anymore
         }
         else
             pFormat = m_rDoc.getIDocumentContentOperations().InsertDrawObj(*m_pPaM, *pRet, *pFlySet );
@@ -324,7 +324,7 @@ bool SwWW8ImplReader::ImportOleWMF(const tools::SvRef<SotStorage>& xSrc1, GDIMet
     return bOk;
 }
 
-SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
+rtl::Reference<SdrObject> SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     const Graphic* pGrf, const SfxItemSet* pFlySet, const tools::Rectangle& aVisArea )
 {
     if (!m_pStg)
@@ -380,7 +380,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
         }
     }
 
-    SdrObject* pRet = nullptr;
+    rtl::Reference<SdrObject> pRet;
 
     if (!(m_bIsHeader || m_bIsFooter))
     {

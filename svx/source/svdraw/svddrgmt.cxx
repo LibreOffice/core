@@ -152,7 +152,7 @@ void SdrDragEntrySdrObject::prepareCurrentState(SdrDragMethod& rDragMethod)
     // out when clone and original have the same class, so that i can use operator=
     // in those cases
 
-    mxClone.reset();
+    mxClone.clear();
 
     if(mbModify)
     {
@@ -1315,7 +1315,7 @@ void SdrDragObjOwn::MoveSdrDrag(const Point& rNoSnapPnt)
     clearSdrDragEntries();
 
     // delete current clone (after the last reference to it is deleted above)
-    mxClone.reset();
+    mxClone.clear();
 
     // create a new clone and modify to current drag state
     mxClone = pObj->getFullDragClone();
@@ -3587,7 +3587,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
     // there are currently no easy mechanisms to plug an alternative interaction
     // from there
     SdrObject* pSdrObject = rMarkList.GetMark(0)->GetMarkedSdrObj();
-    SdrObjectUniquePtr pFullDragClone;
+    rtl::Reference<SdrObject> pFullDragClone;
     bool bExternal(false);
     SdrObject* pExternalSdrObject(nullptr);
 

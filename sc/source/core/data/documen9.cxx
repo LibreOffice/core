@@ -76,9 +76,9 @@ void ScDocument::TransferDrawPage(const ScDocument& rSrcDoc, SCTAB nSrcPos, SCTA
             while (pOldObject)
             {
                 // Clone to target SdrModel
-                SdrObject* pNewObject(pOldObject->CloneSdrObject(*mpDrawLayer));
+                rtl::Reference<SdrObject> pNewObject(pOldObject->CloneSdrObject(*mpDrawLayer));
                 pNewObject->NbcMove(Size(0,0));
-                pNewPage->InsertObject( pNewObject );
+                pNewPage->InsertObject( pNewObject.get() );
 
                 if (mpDrawLayer->IsRecording())
                     mpDrawLayer->AddCalcUndo( std::make_unique<SdrUndoInsertObj>( *pNewObject ) );

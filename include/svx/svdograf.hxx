@@ -178,7 +178,7 @@ public:
     virtual OUString        TakeObjNameSingul() const override;
     virtual OUString        TakeObjNamePlural() const override;
 
-    virtual SdrGrafObj* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual sal_uInt32 GetHdlCount() const override;
     virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
@@ -197,7 +197,7 @@ public:
     bool isEmbeddedVectorGraphicData() const;
     GDIMetaFile getMetafileFromEmbeddedVectorGraphicData() const;
 
-    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     virtual void            AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrinkOnly = false ) override;
 
@@ -214,7 +214,7 @@ public:
     css::uno::Reference< css::io::XInputStream > getInputStream() const;
 
     // #i103116# FullDrag support
-    virtual SdrObjectUniquePtr getFullDragClone() const override;
+    virtual rtl::Reference<SdrObject> getFullDragClone() const override;
 
     // add handles for crop mode when selected
     virtual void addCropHandles(SdrHdlList& rTarget) const override;

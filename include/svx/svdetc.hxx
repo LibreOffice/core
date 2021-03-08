@@ -151,7 +151,7 @@ public:
 };
 
 
-std::vector<Link<SdrObjCreatorParams, SdrObject*>>& ImpGetUserMakeObjHdl();
+std::vector<Link<SdrObjCreatorParams, rtl::Reference<SdrObject>>>& ImpGetUserMakeObjHdl();
 
 class SdrOle2Obj;
 class AutoTimer;
@@ -184,7 +184,7 @@ class SVXCORE_DLLPUBLIC SdrGlobalData
     const SvtSysLocale*         pSysLocale;     // follows always locale settings
     const LocaleDataWrapper*    pLocaleData;    // follows always SysLocale
 public:
-    std::vector<Link<SdrObjCreatorParams, SdrObject*>>
+    std::vector<Link<SdrObjCreatorParams, rtl::Reference<SdrObject>>>
                         aUserMakeObjHdl;
     OLEObjCache         aOLEObjCache;
 

@@ -736,15 +736,15 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
 {
     maMasterViewFilter.End();
 
-    ::tools::WeakReference<SdrTextObj> xObj( GetTextEditObject() );
+    SdrTextObj* xObj = GetTextEditObject();
 
-    bool bDefaultTextRestored = RestoreDefaultText( xObj.get() );
+    bool bDefaultTextRestored = RestoreDefaultText( xObj );
 
     SdrEndTextEditKind eKind = FmFormView::SdrEndTextEdit(bDontDeleteReally);
 
     if( bDefaultTextRestored )
     {
-        if( xObj.is() && !xObj->IsEmptyPresObj() )
+        if( xObj && !xObj->IsEmptyPresObj() )
         {
             xObj->SetEmptyPresObj( true );
         }
@@ -753,22 +753,21 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
             eKind = SdrEndTextEditKind::Unchanged;
         }
     }
-    else if( xObj.is() && xObj->IsEmptyPresObj() )
+    else if( xObj && xObj->IsEmptyPresObj() )
     {
-        SdrTextObj* pObj = xObj.get();
-        if( pObj && pObj->HasText() )
+        if( xObj && xObj->HasText() )
         {
-            SdrPage* pPage = pObj->getSdrPageFromSdrObject();
+            SdrPage* pPage = xObj->getSdrPageFromSdrObject();
             if( !pPage || !pPage->IsMasterPage() )
-                pObj->SetEmptyPresObj( false );
+                xObj->SetEmptyPresObj( false );
         }
     }
 
     GetViewShell()->GetViewShellBase().GetEventMultiplexer()->MultiplexEvent(
         EventMultiplexerEventId::EndTextEdit,
-        static_cast<void*>(xObj.get()) );
+        static_cast<void*>(xObj) );
 
-    if( xObj.is() )
+    if( xObj )
     {
         if ( mpViewSh )
         {
@@ -781,7 +780,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
 
         SdPage* pPage = dynamic_cast< SdPage* >( xObj->getSdrPageFromSdrObject() );
         if( pPage )
-            pPage->onEndTextEdit( xObj.get() );
+            pPage->onEndTextEdit( xObj );
     }
 
     return eKind;

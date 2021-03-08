@@ -132,8 +132,6 @@ namespace sdr
 
 //   SdrTextObj
 
-typedef std::unique_ptr<SdrPathObj, SdrObjectFreeOp> SdrPathObjUniquePtr;
-
 class SVXCORE_DLLPUBLIC SdrTextObj : public SdrAttrObj, public svx::ITextProvider
 {
 private:
@@ -209,7 +207,7 @@ protected:
     // and maintaining the OutlinerView.
     Point                       maTextEditOffset;
 
-    virtual SdrObjectUniquePtr getFullDragClone() const override;
+    virtual rtl::Reference<SdrObject> getFullDragClone() const override;
 
 
 public:
@@ -264,7 +262,7 @@ private:
                                        Fraction&        aFitXCorrection ) const;
     void ImpAutoFitText( SdrOutliner& rOutliner ) const;
     void ImpAutoFitText( SdrOutliner& rOutliner, const Size& rShapeSize, bool bIsVerticalWriting ) const;
-    SVX_DLLPRIVATE SdrObjectUniquePtr ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const;
+    SVX_DLLPRIVATE rtl::Reference<SdrObject> ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const;
     SVX_DLLPRIVATE void ImpRegisterLink();
     SVX_DLLPRIVATE void ImpDeregisterLink();
     SVX_DLLPRIVATE ImpSdrObjTextLinkUserData* GetLinkUserData() const;
@@ -277,8 +275,8 @@ private:
 
 protected:
     bool ImpCanConvTextToCurve() const;
-    SdrPathObjUniquePtr ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, bool bClosed, bool bBezier) const;
-    SdrObjectUniquePtr ImpConvertAddText(SdrObjectUniquePtr pObj, bool bBezier) const;
+    rtl::Reference<SdrPathObj> ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, bool bClosed, bool bBezier) const;
+    rtl::Reference<SdrObject> ImpConvertAddText(rtl::Reference<SdrObject> pObj, bool bBezier) const;
     void ImpSetTextStyleSheetListeners();
     static void ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextSize, const Size& rShapeSize, Fraction& rFitXCorrection);
     static void ImpJustifyRect(tools::Rectangle& rRect);
@@ -449,7 +447,7 @@ public:
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const;
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
-    virtual SdrTextObj* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
     virtual basegfx::B2DPolyPolygon TakeContour() const override;
     virtual void RecalcSnapRect() override;
@@ -502,7 +500,7 @@ public:
     virtual bool CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos,
         bool bEdit, std::optional<Color>& rpTxtColor, std::optional<Color>& rpFldColor, OUString& rRet) const;
 
-    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     void SetTextEditOutliner(SdrOutliner* pOutl) { pEdtOutl=pOutl; }
 

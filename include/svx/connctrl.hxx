@@ -41,7 +41,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXConnectionPreview final : public weld::C
 
 private:
     MapMode aNewMapMode;
-    SdrEdgeObj*         pEdgeObj;
+    rtl::Reference<SdrEdgeObj>  pEdgeObj;
     rtl::Reference<SdrPage> mxSdrPage;
     const SdrView*      pView;
 

@@ -89,7 +89,7 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
                                pCenterY->GetValue () + pAxisY->GetValue () / 2);
 
     Activate();  // sets aObjKind
-    SdrCircObj* pNewCircle =
+    rtl::Reference<SdrCircObj> pNewCircle =
         new SdrCircObj(
             mpView->getSdrModelFromSdrView(),
             ToSdrCircKind(mpView->GetCurrentObjIdentifier()),
@@ -98,7 +98,7 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
             Degree100(pPhiEnd->GetValue() * 10));
     SdrPageView *pPV = mpView->GetSdrPageView();
 
-    mpView->InsertObjectAtView(pNewCircle, *pPV, SdrInsertFlags::SETDEFLAYER);
+    mpView->InsertObjectAtView(pNewCircle.get(), *pPV, SdrInsertFlags::SETDEFLAYER);
 }
 
 bool FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
@@ -198,10 +198,10 @@ void FuConstructArc::Activate()
     FuConstruct::Activate();
 }
 
-SdrObjectUniquePtr FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle)
+rtl::Reference<SdrObject> FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle)
 {
 
-    SdrObjectUniquePtr pObj(SdrObjFactory::MakeNewObject(
+    rtl::Reference<SdrObject> pObj(SdrObjFactory::MakeNewObject(
         mpView->getSdrModelFromSdrView(),
         mpView->GetCurrentObjInventor(),
         mpView->GetCurrentObjIdentifier()));

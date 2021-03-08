@@ -54,7 +54,7 @@ public:
     virtual void Redo() override;
 
 private:
-    ::tools::WeakReference<SdrObject> mxSdrObject;
+    ::unotools::WeakReference<SdrObject> mxSdrObject;
 };
 
 class UndoDeleteObject final : public SdrUndoDelObj, public UndoRemovePresObjectImpl
@@ -66,7 +66,7 @@ public:
     virtual void Redo() override;
 
 private:
-    ::tools::WeakReference<SdrObject> mxSdrObject;
+    ::unotools::WeakReference<SdrObject> mxSdrObject;
 };
 
 class UndoReplaceObject final : public SdrUndoReplaceObj, public UndoRemovePresObjectImpl
@@ -78,7 +78,7 @@ public:
     virtual void Redo() override;
 
 private:
-    ::tools::WeakReference<SdrObject> mxSdrObject;
+    ::unotools::WeakReference<SdrObject> mxSdrObject;
 };
 
 class UndoObjectSetText final : public SdrUndoObjSetText
@@ -93,7 +93,7 @@ public:
 private:
     std::unique_ptr<SfxUndoAction> mpUndoAnimation;
     bool mbNewEmptyPresObj;
-    ::tools::WeakReference<SdrObject> mxSdrObject;
+    ::unotools::WeakReference<SdrObject> mxSdrObject;
 };
 
 // Undo for SdrObject::SetUserCall()
@@ -109,7 +109,7 @@ public:
 private:
     SdrObjUserCall* mpOldUserCall;
     SdrObjUserCall* mpNewUserCall;
-    ::tools::WeakReference<SdrObject> mxSdrObject;
+    ::unotools::WeakReference<SdrObject> mxSdrObject;
 };
 
 // Undo for SdPage::InsertPresObj() and SdPage::RemovePresObj()
@@ -126,7 +126,7 @@ private:
     PresObjKind meOldKind;
     PresObjKind meNewKind;
     ::unotools::WeakReference<SdPage> mxPage;
-    ::tools::WeakReference<SdrObject> mxSdrObject;
+    ::unotools::WeakReference<SdrObject> mxSdrObject;
 };
 
 // Restores correct position and size for presentation shapes with user call
@@ -154,7 +154,7 @@ public:
 
 private:
     ::unotools::WeakReference<SdPage> mxPage;
-    ::tools::WeakReference<SdrObject> mxSdrObject;
+    ::unotools::WeakReference<SdrObject> mxSdrObject;
 };
 
 class UndoAttrObject final : public SdrUndoAttrObj
@@ -167,7 +167,7 @@ public:
 
 private:
     ::unotools::WeakReference<SdPage> mxPage;
-    ::tools::WeakReference<SdrObject> mxSdrObject;
+    ::unotools::WeakReference<SdrObject> mxSdrObject;
 };
 
 } // namespace sd

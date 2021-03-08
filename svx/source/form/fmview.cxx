@@ -372,19 +372,19 @@ void FmFormView::DeactivateControls(SdrPageView const * pPageView)
 }
 
 
-SdrObjectUniquePtr FmFormView::CreateFieldControl( const ODataAccessDescriptor& _rColumnDescriptor )
+rtl::Reference<SdrObject> FmFormView::CreateFieldControl( const ODataAccessDescriptor& _rColumnDescriptor )
 {
     return pImpl->implCreateFieldControl( _rColumnDescriptor );
 }
 
 
-SdrObjectUniquePtr FmFormView::CreateXFormsControl( const OXFormsDescriptor &_rDesc )
+rtl::Reference<SdrObject> FmFormView::CreateXFormsControl( const OXFormsDescriptor &_rDesc )
 {
     return pImpl->implCreateXFormsControl(_rDesc);
 }
 
 
-SdrObjectUniquePtr FmFormView::CreateFieldControl(const OUString& rFieldDesc) const
+rtl::Reference<SdrObject> FmFormView::CreateFieldControl(const OUString& rFieldDesc) const
 {
     sal_Int32 nIdx{ 0 };
     OUString sDataSource     = rFieldDesc.getToken(0, u'\x000B', nIdx);
@@ -579,8 +579,8 @@ void FmFormView::createControlLabelPair( OutputDevice const * _pOutDev, sal_Int3
     const Reference< XPropertySet >& _rxField, const Reference< XNumberFormats >& _rxNumberFormats,
     SdrObjKind _nControlObjectID, SdrInventor _nInventor, SdrObjKind _nLabelObjectID,
     SdrModel& _rModel,
-    std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpLabel,
-    std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpControl )
+    rtl::Reference<SdrUnoObj>& _rpLabel,
+    rtl::Reference<SdrUnoObj>& _rpControl )
 {
     FmXFormView::createControlLabelPair(
         *_pOutDev, _nXOffsetMM, _nYOffsetMM,

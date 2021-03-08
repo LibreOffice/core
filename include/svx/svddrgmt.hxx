@@ -65,7 +65,7 @@ class SdrDragEntrySdrObject final : public SdrDragEntry
 {
 private:
     const SdrObject&                                maOriginal;
-    SdrObjectUniquePtr                              mxClone;
+    rtl::Reference<SdrObject>                              mxClone;
     bool                                            mbModify;
 
 public:
@@ -284,7 +284,7 @@ private:
     // mechanism to modify wireframe visualisations, but uses the
     // SdrObject::applySpecialDrag() method to change a clone of the
     // SdrObject
-    SdrObjectUniquePtr               mxClone;
+    rtl::Reference<SdrObject>               mxClone;
 
 protected:
     virtual void createSdrDragEntries() override;

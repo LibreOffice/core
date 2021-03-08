@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <tools/weakbase.hxx>
+#include <unotools/weakref.hxx>
 
 #include <svx/svdobj.hxx>
 #include <svx/svdglue.hxx>
@@ -42,7 +42,7 @@ namespace {
 class SvxUnoGluePointAccess : public WeakImplHelper< container::XIndexContainer, container::XIdentifierContainer >
 {
 private:
-    tools::WeakReference<SdrObject>    mpObject;
+    unotools::WeakReference<SdrObject>    mpObject;
 
 public:
     explicit SvxUnoGluePointAccess( SdrObject* pObject ) throw();
@@ -204,9 +204,9 @@ SvxUnoGluePointAccess::SvxUnoGluePointAccess( SdrObject* pObject ) throw()
 // XIdentifierContainer
 sal_Int32 SAL_CALL SvxUnoGluePointAccess::insert( const uno::Any& aElement )
 {
-    if( mpObject.is() )
+    if( auto pObject = mpObject.get() )
     {
-        SdrGluePointList* pList = mpObject->ForceGluePointList();
+        SdrGluePointList* pList = pObject->ForceGluePointList();
         if( pList )
         {
             // second, insert the new glue point
@@ -219,8 +219,8 @@ sal_Int32 SAL_CALL SvxUnoGluePointAccess::insert( const uno::Any& aElement )
                 sal_uInt16 nId = pList->Insert( aSdrGlue );
 
                 // only repaint, no objectchange
-                mpObject->ActionChanged();
-                // mpObject->BroadcastObjectChange();
+                pObject->ActionChanged();
+                // pObject->BroadcastObjectChange();
 
                 return static_cast<sal_Int32>((*pList)[nId].GetId() + NON_USER_DEFINED_GLUE_POINTS) - 1;
             }
@@ -234,28 +234,29 @@ sal_Int32 SAL_CALL SvxUnoGluePointAccess::insert( const uno::Any& aElement )
 
 void SAL_CALL SvxUnoGluePointAccess::removeByIdentifier( sal_Int32 Identifier )
 {
-    if( mpObject.is() && ( Identifier >= NON_USER_DEFINED_GLUE_POINTS ))
-    {
-        const sal_uInt16 nId = static_cast<sal_uInt16>(Identifier - NON_USER_DEFINED_GLUE_POINTS) + 1;
-
-        SdrGluePointList* pList = const_cast<SdrGluePointList*>(mpObject->GetGluePointList());
-        const sal_uInt16 nCount = pList ? pList->GetCount() : 0;
-        sal_uInt16 i;
-
-        for( i = 0; i < nCount; i++ )
+    if( Identifier >= NON_USER_DEFINED_GLUE_POINTS )
+        if( auto pObject = mpObject.get() )
         {
-            if( (*pList)[i].GetId() == nId )
+            const sal_uInt16 nId = static_cast<sal_uInt16>(Identifier - NON_USER_DEFINED_GLUE_POINTS) + 1;
+
+            SdrGluePointList* pList = const_cast<SdrGluePointList*>(pObject->GetGluePointList());
+            const sal_uInt16 nCount = pList ? pList->GetCount() : 0;
+            sal_uInt16 i;
+
+            for( i = 0; i < nCount; i++ )
             {
-                pList->Delete( i );
+                if( (*pList)[i].GetId() == nId )
+                {
+                    pList->Delete( i );
 
-                // only repaint, no objectchange
-                mpObject->ActionChanged();
-                // mpObject->BroadcastObjectChange();
+                    // only repaint, no objectchange
+                    pObject->ActionChanged();
+                    // pObject->BroadcastObjectChange();
 
-                return;
+                    return;
+                }
             }
         }
-    }
 
     throw container::NoSuchElementException();
 }
@@ -263,7 +264,8 @@ void SAL_CALL SvxUnoGluePointAccess::removeByIdentifier( sal_Int32 Identifier )
 // XIdentifierReplace
 void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, const uno::Any& aElement )
 {
-    if( !mpObject.is() )
+    auto pObject = mpObject.get();
+    if( !pObject.is() )
         return;
 
     struct drawing::GluePoint2 aGluePoint;
@@ -272,7 +274,7 @@ void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, c
 
     const sal_uInt16 nId = static_cast<sal_uInt16>( Identifier - NON_USER_DEFINED_GLUE_POINTS ) + 1;
 
-    SdrGluePointList* pList = const_cast< SdrGluePointList* >( mpObject->GetGluePointList() );
+    SdrGluePointList* pList = const_cast< SdrGluePointList* >( pObject->GetGluePointList() );
     const sal_uInt16 nCount = pList ? pList->GetCount() : 0;
     sal_uInt16 i;
     for( i = 0; i < nCount; i++ )
@@ -284,8 +286,8 @@ void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, c
             convert( aGluePoint, rTempPoint );
 
             // only repaint, no objectchange
-            mpObject->ActionChanged();
-            // mpObject->BroadcastObjectChange();
+            pObject->ActionChanged();
+            // pObject->BroadcastObjectChange();
 
             return;
         }
@@ -297,13 +299,13 @@ void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, c
 // XIdentifierAccess
 uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
 {
-    if( mpObject.is() )
+    if( auto pObject = mpObject.get() )
     {
         struct drawing::GluePoint2 aGluePoint;
 
         if( Identifier < NON_USER_DEFINED_GLUE_POINTS ) // default glue point?
         {
-            SdrGluePoint aTempPoint = mpObject->GetVertexGluePoint( static_cast<sal_uInt16>(Identifier) );
+            SdrGluePoint aTempPoint = pObject->GetVertexGluePoint( static_cast<sal_uInt16>(Identifier) );
             aGluePoint.IsUserDefined = false;
             convert( aTempPoint, aGluePoint );
             return uno::makeAny( aGluePoint );
@@ -312,7 +314,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
         {
             const sal_uInt16 nId = static_cast<sal_uInt16>( Identifier - NON_USER_DEFINED_GLUE_POINTS ) + 1;
 
-            const SdrGluePointList* pList = mpObject->GetGluePointList();
+            const SdrGluePointList* pList = pObject->GetGluePointList();
             const sal_uInt16 nCount = pList ? pList->GetCount() : 0;
             for( sal_uInt16 i = 0; i < nCount; i++ )
             {
@@ -337,9 +339,9 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
 
 uno::Sequence< sal_Int32 > SAL_CALL SvxUnoGluePointAccess::getIdentifiers()
 {
-    if( mpObject.is() )
+    if( auto pObject = mpObject.get() )
     {
-        const SdrGluePointList* pList = mpObject->GetGluePointList();
+        const SdrGluePointList* pList = pObject->GetGluePointList();
         const sal_uInt16 nCount = pList ? pList->GetCount() : 0;
 
         sal_uInt16 i;
@@ -367,9 +369,9 @@ uno::Sequence< sal_Int32 > SAL_CALL SvxUnoGluePointAccess::getIdentifiers()
 // XIndexContainer
 void SAL_CALL SvxUnoGluePointAccess::insertByIndex( sal_Int32, const uno::Any& Element )
 {
-    if( mpObject.is() )
+    if( auto pObject = mpObject.get() )
     {
-        SdrGluePointList* pList = mpObject->ForceGluePointList();
+        SdrGluePointList* pList = pObject->ForceGluePointList();
         if( pList )
         {
             drawing::GluePoint2 aUnoGlue;
@@ -381,8 +383,8 @@ void SAL_CALL SvxUnoGluePointAccess::insertByIndex( sal_Int32, const uno::Any& E
                 pList->Insert( aSdrGlue );
 
                 // only repaint, no objectchange
-                mpObject->ActionChanged();
-                // mpObject->BroadcastObjectChange();
+                pObject->ActionChanged();
+                // pObject->BroadcastObjectChange();
 
                 return;
             }
@@ -396,9 +398,9 @@ void SAL_CALL SvxUnoGluePointAccess::insertByIndex( sal_Int32, const uno::Any& E
 
 void SAL_CALL SvxUnoGluePointAccess::removeByIndex( sal_Int32 Index )
 {
-    if( mpObject.is() )
+    if( auto pObject = mpObject.get() )
     {
-        SdrGluePointList* pList = mpObject->ForceGluePointList();
+        SdrGluePointList* pList = pObject->ForceGluePointList();
         if( pList )
         {
             Index -= 4;
@@ -407,8 +409,8 @@ void SAL_CALL SvxUnoGluePointAccess::removeByIndex( sal_Int32 Index )
                 pList->Delete( static_cast<sal_uInt16>(Index) );
 
                 // only repaint, no objectchange
-                mpObject->ActionChanged();
-                // mpObject->BroadcastObjectChange();
+                pObject->ActionChanged();
+                // pObject->BroadcastObjectChange();
 
                 return;
             }
@@ -426,17 +428,18 @@ void SAL_CALL SvxUnoGluePointAccess::replaceByIndex( sal_Int32 Index, const uno:
         throw lang::IllegalArgumentException();
 
     Index -= 4;
-    if( mpObject.is() && Index >= 0 )
+    auto pObject = mpObject.get();
+    if( pObject.is() && Index >= 0 )
     {
-        SdrGluePointList* pList = const_cast< SdrGluePointList* >( mpObject->GetGluePointList() );
+        SdrGluePointList* pList = const_cast< SdrGluePointList* >( pObject->GetGluePointList() );
         if( pList && Index < pList->GetCount() )
         {
             SdrGluePoint& rGlue = (*pList)[static_cast<sal_uInt16>(Index)];
             convert( aUnoGlue, rGlue );
 
             // only repaint, no objectchange
-            mpObject->ActionChanged();
-            // mpObject->BroadcastObjectChange();
+            pObject->ActionChanged();
+            // pObject->BroadcastObjectChange();
         }
     }
 
@@ -447,13 +450,13 @@ void SAL_CALL SvxUnoGluePointAccess::replaceByIndex( sal_Int32 Index, const uno:
 sal_Int32 SAL_CALL SvxUnoGluePointAccess::getCount()
 {
     sal_Int32 nCount = 0;
-    if( mpObject.is() )
+    if( auto pObject = mpObject.get() )
     {
         // each node has a default of 4 glue points
         // and any number of user defined glue points
         nCount += 4;
 
-        const SdrGluePointList* pList = mpObject->GetGluePointList();
+        const SdrGluePointList* pList = pObject->GetGluePointList();
         if( pList )
             nCount += pList->GetCount();
     }
@@ -463,30 +466,31 @@ sal_Int32 SAL_CALL SvxUnoGluePointAccess::getCount()
 
 uno::Any SAL_CALL SvxUnoGluePointAccess::getByIndex( sal_Int32 Index )
 {
-    if( Index >= 0 && mpObject.is() )
-    {
-        struct drawing::GluePoint2 aGluePoint;
+    if( Index >= 0 )
+        if (auto pObject = mpObject.get() )
+        {
+            struct drawing::GluePoint2 aGluePoint;
 
-        if( Index < 4 ) // default glue point?
-        {
-            SdrGluePoint aTempPoint = mpObject->GetVertexGluePoint( static_cast<sal_uInt16>(Index) );
-            aGluePoint.IsUserDefined = false;
-            convert( aTempPoint, aGluePoint );
-            return uno::Any(aGluePoint);
-        }
-        else
-        {
-            Index -= 4;
-            const SdrGluePointList* pList = mpObject->GetGluePointList();
-            if( pList && Index < pList->GetCount() )
+            if( Index < 4 ) // default glue point?
             {
-                const SdrGluePoint& rTempPoint = (*pList)[static_cast<sal_uInt16>(Index)];
-                aGluePoint.IsUserDefined = true;
-                convert( rTempPoint, aGluePoint );
+                SdrGluePoint aTempPoint = pObject->GetVertexGluePoint( static_cast<sal_uInt16>(Index) );
+                aGluePoint.IsUserDefined = false;
+                convert( aTempPoint, aGluePoint );
                 return uno::Any(aGluePoint);
             }
+            else
+            {
+                Index -= 4;
+                const SdrGluePointList* pList = pObject->GetGluePointList();
+                if( pList && Index < pList->GetCount() )
+                {
+                    const SdrGluePoint& rTempPoint = (*pList)[static_cast<sal_uInt16>(Index)];
+                    aGluePoint.IsUserDefined = true;
+                    convert( rTempPoint, aGluePoint );
+                    return uno::Any(aGluePoint);
+                }
+            }
         }
-    }
 
     throw lang::IndexOutOfBoundsException();
 }
@@ -499,7 +503,7 @@ uno::Type SAL_CALL SvxUnoGluePointAccess::getElementType()
 
 sal_Bool SAL_CALL SvxUnoGluePointAccess::hasElements()
 {
-    return mpObject.is();
+    return mpObject.get().is();
 }
 
 /**

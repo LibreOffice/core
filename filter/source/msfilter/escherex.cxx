@@ -4558,7 +4558,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                 else if ( nGluePointType == drawing::EnhancedCustomShapeGluePointType::SEGMENTS )
                 {
                     tools::PolyPolygon aPolyPoly;
-                    SdrObjectUniquePtr pTemporaryConvertResultObject(pSdrObjCustomShape->DoConvertToPolyObj(true, true));
+                    rtl::Reference<SdrObject> pTemporaryConvertResultObject(pSdrObjCustomShape->DoConvertToPolyObj(true, true));
                     SdrPathObj* pSdrPathObj(dynamic_cast< SdrPathObj* >(pTemporaryConvertResultObject.get()));
 
                     if(pSdrPathObj)
@@ -4569,7 +4569,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                     }
 
                     // do *not* forget to delete the temporary used SdrObject - possible memory leak (!)
-                    pTemporaryConvertResultObject.reset();
+                    pTemporaryConvertResultObject.clear();
                     pSdrPathObj = nullptr;
 
                     if(0 != aPolyPoly.Count())

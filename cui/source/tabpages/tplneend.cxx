@@ -108,7 +108,7 @@ void SvxLineEndDefTabPage::Construct()
     {
         SdrObjTransformInfoRec aInfoRec;
         pPolyObj->TakeObjInfo( aInfoRec );
-        SdrObjectUniquePtr pNewObj;
+        rtl::Reference<SdrObject> pNewObj;
         if( aInfoRec.bCanConvToPath )
             pNewObj = pPolyObj->ConvertToPolyObj( true, false );
 
@@ -340,7 +340,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
     if( pPolyObj )
     {
         const SdrObject* pNewObj;
-        SdrObjectUniquePtr pConvPolyObj;
+        rtl::Reference<SdrObject> pConvPolyObj;
 
         if( nullptr != dynamic_cast<const SdrPathObj*>( pPolyObj) )
         {
@@ -369,7 +369,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
         // normalize
         aNewPolyPolygon.transform(basegfx::utils::createTranslateB2DHomMatrix( -aNewRange.getMinX(), -aNewRange.getMinY()));
 
-        pConvPolyObj.reset();
+        pConvPolyObj.clear();
 
         OUString aNewName(SvxResId(RID_SVXSTR_LINEEND));
         OUString aDesc(CuiResId(RID_SVXSTR_DESC_LINEEND));

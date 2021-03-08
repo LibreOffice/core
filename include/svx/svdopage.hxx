@@ -61,7 +61,7 @@ public:
 
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
-    virtual SdrPageObj* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;

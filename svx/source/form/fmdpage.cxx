@@ -59,7 +59,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL SvxFmDrawPage::getTypes(  )
         css::uno::Sequence { cppu::UnoType<css::form::XFormsSupplier>::get() });
 }
 
-SdrObject *SvxFmDrawPage::CreateSdrObject_( const css::uno::Reference< css::drawing::XShape > & xDescr )
+rtl::Reference<SdrObject> SvxFmDrawPage::CreateSdrObject_( const css::uno::Reference< css::drawing::XShape > & xDescr )
 {
     OUString aShapeType( xDescr->getShapeType() );
 

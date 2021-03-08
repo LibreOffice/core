@@ -627,6 +627,7 @@ void SAL_CALL SvxUnoDrawPagesAccess::remove( const uno::Reference< drawing::XDra
 
     // get pPage from xPage and get Id (nPos)
     SvxDrawPage* pSvxPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>( xPage );
+    assert(pSvxPage && "non SvxDrawPage?");
     if( pSvxPage )
     {
         SdrPage* pPage = pSvxPage->GetSdrPage();

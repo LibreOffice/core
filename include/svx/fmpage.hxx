@@ -54,7 +54,7 @@ public:
 
     virtual void    InsertObject(SdrObject* pObj, size_t nPos = SAL_MAX_SIZE) override;
 
-    virtual SdrObject* RemoveObject(size_t nObjNum) override;
+    virtual rtl::Reference<SdrObject> RemoveObject(size_t nObjNum) override;
 
     // access to all forms
     const css::uno::Reference< css::form::XForms>& GetForms( bool _bForceCreate = true ) const;

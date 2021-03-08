@@ -1663,7 +1663,7 @@ void SdrEdgeObj::Reformat()
     }
 }
 
-SdrEdgeObj* SdrEdgeObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrEdgeObj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrEdgeObj(rTargetModel, *this);
 }
@@ -1852,16 +1852,16 @@ bool SdrEdgeObj::hasSpecialDrag() const
     return true;
 }
 
-SdrObjectUniquePtr SdrEdgeObj::getFullDragClone() const
+rtl::Reference<SdrObject> SdrEdgeObj::getFullDragClone() const
 {
     // use Clone operator
-    SdrEdgeObj* pRetval(CloneSdrObject(getSdrModelFromSdrObject()));
+    rtl::Reference<SdrEdgeObj> pRetval = SdrObject::Clone(*this, getSdrModelFromSdrObject());
 
     // copy connections for clone, SdrEdgeObj::operator= does not do this
     pRetval->ConnectToNode(true, GetConnectedNode(true));
     pRetval->ConnectToNode(false, GetConnectedNode(false));
 
-    return SdrObjectUniquePtr(pRetval);
+    return pRetval;
 }
 
 bool SdrEdgeObj::beginSpecialDrag(SdrDragStat& rDrag) const
@@ -2394,11 +2394,11 @@ void SdrEdgeObj::NbcShear(const Point& rRef, Degree100 nAngle, double tn, bool b
     }
 }
 
-SdrObjectUniquePtr SdrEdgeObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
+rtl::Reference<SdrObject> SdrEdgeObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     basegfx::B2DPolyPolygon aPolyPolygon;
     aPolyPolygon.append(pEdgeTrack->getB2DPolygon());
-    SdrObjectUniquePtr pRet = ImpConvertMakeObj(aPolyPolygon, false, bBezier);
+    rtl::Reference<SdrObject> pRet = ImpConvertMakeObj(aPolyPolygon, false, bBezier);
 
     if(bAddText)
     {

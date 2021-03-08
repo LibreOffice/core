@@ -343,9 +343,9 @@ void FuConstRectangle::Deactivate()
 }
 
 // Create default drawing objects via keyboard
-SdrObjectUniquePtr FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle)
+rtl::Reference<SdrObject> FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle)
 {
-    SdrObjectUniquePtr pObj(SdrObjFactory::MakeNewObject(
+    rtl::Reference<SdrObject> pObj(SdrObjFactory::MakeNewObject(
         *pDrDoc,
         pView->GetCurrentObjInventor(),
         pView->GetCurrentObjIdentifier()));

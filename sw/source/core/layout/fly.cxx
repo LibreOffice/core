@@ -436,11 +436,6 @@ void SwFlyFrame::FinitDrawObj()
 
     // Else calls delete of the ContactObj
     GetVirtDrawObj()->SetUserCall(nullptr);
-
-    // Deregisters itself at the Master
-    // always use SdrObject::Free(...) for SdrObjects (!)
-    SdrObject* pTemp(GetVirtDrawObj());
-    SdrObject::Free(pTemp);
 }
 
 void SwFlyFrame::ChainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )

@@ -178,18 +178,18 @@ void SvxShapeGroup::addUnoShape( const uno::Reference< drawing::XShape >& xShape
     SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( xShape );
     if (!pShape)
     {
-        OSL_FAIL("could not add XShape to group shape!");
+        assert(false && "could not add XShape to group shape!");
         return;
     }
 
-    SdrObject* pSdrShape = pShape->GetSdrObject();
+    rtl::Reference<SdrObject> pSdrShape = pShape->GetSdrObject();
     if( pSdrShape == nullptr )
         pSdrShape = mxPage->CreateSdrObject_( xShape );
 
     if( pSdrShape->IsInserted() )
         pSdrShape->getParentSdrObjListFromSdrObject()->RemoveObject( pSdrShape->GetOrdNum() );
 
-    GetSdrObject()->GetSubList()->InsertObject(pSdrShape, nPos);
+    GetSdrObject()->GetSubList()->InsertObject(pSdrShape.get(), nPos);
     // TTTT Was created using mpModel in CreateSdrObject_ above
     // TTTT may be good to add an assertion here for the future
     // pSdrShape->SetModel(GetSdrObject()->GetModel());
@@ -205,7 +205,7 @@ void SvxShapeGroup::addUnoShape( const uno::Reference< drawing::XShape >& xShape
     // Establish connection between new SdrObject and its wrapper before
     // inserting the new shape into the group.  There a new wrapper
     // would be created when this connection would not already exist.
-    pShape->Create( pSdrShape, mxPage.get() );
+    pShape->Create( pSdrShape.get(), mxPage.get() );
 
     GetSdrObject()->getSdrModelFromSdrObject().SetChanged();
 }
@@ -255,8 +255,7 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
             }
         }
 
-        SdrObject* pObject = rList.NbcRemoveObject( nObjNum );
-        SdrObject::Free( pObject );
+        rList.NbcRemoveObject( nObjNum );
     }
     else
     {

@@ -93,7 +93,7 @@ public:
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
 
-    virtual SdrRectObj* CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
     virtual void RecalcSnapRect() override;
     virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
     virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
@@ -120,7 +120,7 @@ public:
     virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const override;
     virtual SdrGluePoint GetCornerGluePoint(sal_uInt16 nNum) const override;
 
-    virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
+    virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 };

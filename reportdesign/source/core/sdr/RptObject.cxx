@@ -86,17 +86,17 @@ SdrObjKind OObjectBase::getObjectType(const uno::Reference< report::XReportCompo
     return OBJ_NONE;
 }
 
-SdrObject* OObjectBase::createObject(
+rtl::Reference<SdrObject> OObjectBase::createObject(
     SdrModel& rTargetModel,
     const uno::Reference< report::XReportComponent>& _xComponent)
 {
-    SdrObject* pNewObj = nullptr;
+    rtl::Reference<SdrObject> pNewObj;
     SdrObjKind nType = OObjectBase::getObjectType(_xComponent);
     switch( nType )
     {
         case OBJ_RD_FIXEDTEXT:
             {
-                OUnoObject* pUnoObj = new OUnoObject(
+                rtl::Reference<OUnoObject> pUnoObj = new OUnoObject(
                     rTargetModel,
                     _xComponent,
                     OUString("com.sun.star.form.component.FixedText"),
@@ -159,8 +159,6 @@ SdrObject* OObjectBase::createObject(
 
     if ( pNewObj )
         pNewObj->SetDoNotInsertIntoPageAutomatically( true );
-
-    ensureSdrObjectOwnership( _xComponent );
 
     return pNewObj;
 }
@@ -415,27 +413,6 @@ bool OObjectBase::supportsService( const OUString& _sServiceName ) const
 }
 
 
-void OObjectBase::ensureSdrObjectOwnership( const uno::Reference< uno::XInterface >& _rxShape )
-{
-    // UNDO in the report designer is implemented at the level of the XShapes, not
-    // at the level of SdrObjects. That is, if an object is removed from the report
-    // design, then this happens by removing the XShape from the UNO DrawPage, and
-    // putting this XShape (resp. the ReportComponent which wraps it) into an UNDO
-    // action.
-    // Unfortunately, the SvxDrawPage implementation usually deletes SdrObjects
-    // which are removed from it, which is deadly for us. To prevent this,
-    // we give the XShape implementation the ownership of the SdrObject, which
-    // ensures the SvxDrawPage won't delete it.
-    SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>( _rxShape );
-    OSL_ENSURE( pShape, "OObjectBase::ensureSdrObjectOwnership: can't access the SvxShape!" );
-    if ( pShape )
-    {
-        OSL_ENSURE( !pShape->HasSdrObjectOwnership(), "OObjectBase::ensureSdrObjectOwnership: called twice?" );
-        pShape->TakeSdrObjectOwnership();
-    }
-}
-
-
 uno::Reference< uno::XInterface > OObjectBase::getUnoShapeOf( SdrObject& _rSdrObject )
 {
     uno::Reference< uno::XInterface > xShape( _rSdrObject.getWeakUnoShape() );
@@ -443,12 +420,7 @@ uno::Reference< uno::XInterface > OObjectBase::getUnoShapeOf( SdrObject& _rSdrOb
         return xShape;
 
     xShape = _rSdrObject.SdrObject::getUnoShape();
-    if ( !xShape.is() )
-        return xShape;
 
-    ensureSdrObjectOwnership( xShape );
-
-    m_xKeepShapeAlive = xShape;
     return xShape;
 }
 
@@ -563,10 +535,9 @@ uno::Reference< uno::XInterface > OCustomShape::getUnoShape()
     return xShape;
 }
 
-void OCustomShape::impl_setUnoShape( const uno::Reference< uno::XInterface >& rxUnoShape )
+void OCustomShape::impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& rxUnoShape )
 {
     SdrObjCustomShape::impl_setUnoShape( rxUnoShape );
-    releaseUnoShape();
     m_xReportComponent.clear();
 }
 
@@ -894,13 +865,7 @@ uno::Reference< uno::XInterface > OUnoObject::getUnoShape()
     return OObjectBase::getUnoShapeOf( *this );
 }
 
-void OUnoObject::impl_setUnoShape( const uno::Reference< uno::XInterface >& rxUnoShape )
-{
-    SdrUnoObj::impl_setUnoShape( rxUnoShape );
-    releaseUnoShape();
-}
-
-OUnoObject* OUnoObject::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> OUnoObject::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new OUnoObject(rTargetModel, *this);
 }
@@ -1090,10 +1055,9 @@ uno::Reference< uno::XInterface > OOle2Obj::getUnoShape()
     return xShape;
 }
 
-void OOle2Obj::impl_setUnoShape( const uno::Reference< uno::XInterface >& rxUnoShape )
+void OOle2Obj::impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& rxUnoShape )
 {
     SdrOle2Obj::impl_setUnoShape( rxUnoShape );
-    releaseUnoShape();
     m_xReportComponent.clear();
 }
 
@@ -1114,7 +1078,7 @@ static uno::Reference< chart2::data::XDatabaseDataProvider > lcl_getDataProvider
 }
 
 // Clone() should make a complete copy of the object.
-OOle2Obj* OOle2Obj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> OOle2Obj::CloneSdrObject(SdrModel& rTargetModel) const
 {
     return new OOle2Obj(rTargetModel, *this);
 }

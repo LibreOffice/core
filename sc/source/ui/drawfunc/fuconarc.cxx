@@ -110,13 +110,13 @@ void FuConstArc::Deactivate()
 }
 
 // Create default drawing objects via keyboard
-SdrObjectUniquePtr FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle)
+rtl::Reference<SdrObject> FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle)
 {
     // case SID_DRAW_ARC:
     // case SID_DRAW_PIE:
     // case SID_DRAW_CIRCLECUT:
 
-    SdrObjectUniquePtr pObj(SdrObjFactory::MakeNewObject(
+    rtl::Reference<SdrObject> pObj(SdrObjFactory::MakeNewObject(
         *pDrDoc,
         pView->GetCurrentObjInventor(),
         pView->GetCurrentObjIdentifier()));

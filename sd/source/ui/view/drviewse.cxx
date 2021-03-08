@@ -273,7 +273,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                 if(pPageView)
                 {
                     svx::ODataAccessDescriptor aDescriptor(pDescriptorItem->GetValue());
-                    SdrObjectUniquePtr pNewDBField = pFormView->CreateFieldControl(aDescriptor);
+                    rtl::Reference<SdrObject> pNewDBField = pFormView->CreateFieldControl(aDescriptor);
 
                     if(pNewDBField)
                     {
@@ -286,7 +286,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
                         pNewDBField->SetLogicRect(aNewObjectRectangle);
 
-                        GetView()->InsertObjectAtView(pNewDBField.release(), *pPageView);
+                        GetView()->InsertObjectAtView(pNewDBField.get(), *pPageView);
                     }
                 }
             }
@@ -628,14 +628,14 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         return;
 
     // create the default object
-    SdrObjectUniquePtr pObj = GetCurrentFunction()->CreateDefaultObject(nSId, aNewObjectRectangle);
+    rtl::Reference<SdrObject> pObj = GetCurrentFunction()->CreateDefaultObject(nSId, aNewObjectRectangle);
 
     if(!pObj)
         return;
 
     auto pObjTmp = pObj.get();
     // insert into page
-    GetView()->InsertObjectAtView(pObj.release(), *pPageView);
+    GetView()->InsertObjectAtView(pObj.get(), *pPageView);
 
     // Now that pFuActual has done what it was created for we
     // can switch on the edit mode for callout objects.
@@ -1486,7 +1486,7 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
         pOutl->QuickInsertField( aURLItem, ESelection() );
         std::unique_ptr<OutlinerParaObject> pOutlParaObject = pOutl->CreateParaObject();
 
-        SdrRectObj* pRectObj = new SdrRectObj(
+        rtl::Reference<SdrRectObj> pRectObj = new SdrRectObj(
             GetView()->getSdrModelFromSdrView(),
             OBJ_TEXT);
 
@@ -1508,7 +1508,7 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
         ::tools::Rectangle aLogicRect(aPos, aSize);
         pRectObj->SetLogicRect(aLogicRect);
         pRectObj->SetOutlinerParaObject( std::move(pOutlParaObject) );
-        mpDrawView->InsertObjectAtView(pRectObj, *mpDrawView->GetSdrPageView());
+        mpDrawView->InsertObjectAtView(pRectObj.get(), *mpDrawView->GetSdrPageView());
         pOutl->Init( nOutlMode );
     }
 }
@@ -1570,11 +1570,11 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
 
     try
     {
-        SdrUnoObj* pUnoCtrl = static_cast< SdrUnoObj* >(
+        rtl::Reference<SdrUnoObj> pUnoCtrl = static_cast< SdrUnoObj* >(
             SdrObjFactory::MakeNewObject(
                 GetView()->getSdrModelFromSdrView(),
                 SdrInventor::FmForm,
-                OBJ_FM_BUTTON)); //,
+                OBJ_FM_BUTTON).get() ); //,
                 //mpDrawView->GetSdrPageView()->GetPage()));
 
         Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel(), uno::UNO_SET_THROW );
@@ -1618,7 +1618,7 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
             nOptions |= SdrInsertFlags::DONTMARK;
         }
 
-        mpDrawView->InsertObjectAtView(pUnoCtrl, *mpDrawView->GetSdrPageView(), nOptions);
+        mpDrawView->InsertObjectAtView(pUnoCtrl.get(), *mpDrawView->GetSdrPageView(), nOptions);
     }
     catch( Exception& )
     {
