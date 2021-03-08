@@ -1671,19 +1671,16 @@ bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
     nExtraCursorFlags = GetCursorFlags::NONE;
     bClickedInSelection = false;
 
-    if (vcl::Window* pWindow = GetWindow())
+    if ( rMouseEvent.IsMiddle() && !bReadOnly &&
+         Application::GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection )
     {
-        if ( rMouseEvent.IsMiddle() && !bReadOnly &&
-             ( pWindow->GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection ) )
-        {
-            Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetSelection());
-            Paste( aClipBoard );
-        }
-        else if ( rMouseEvent.IsLeft() && GetEditSelection().HasRange() )
-        {
-            Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetSelection());
-            CutCopy( aClipBoard, false );
-        }
+        Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetSelection());
+        Paste( aClipBoard );
+    }
+    else if ( rMouseEvent.IsLeft() && GetEditSelection().HasRange() )
+    {
+        Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetSelection());
+        CutCopy( aClipBoard, false );
     }
 
     return pEditEngine->pImpEditEngine->MouseButtonUp( rMouseEvent, GetEditViewPtr() );
