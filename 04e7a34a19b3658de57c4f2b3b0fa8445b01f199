@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35fb6af6_e57a40de",
+        "filename": "accessibility/source/standard/vclxaccessibletoolbox.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-08T07:09:16Z",
+      "side": 1,
+      "message": "Not related to your patch, just some observation: I always feel uneasy when something gets checked for nullptr aster a *static_cast*. It may well be non-null after static_casting a nullptr, right? so in this case, it\u0027s likely better to change the following \"if ( pParent )\" into \"if (pParentAccContext)\"?",
+      "range": {
+        "startLine": 597,
+        "startChar": 49,
+        "endLine": 597,
+        "endChar": 86
+      },
+      "revId": "04e7a34a19b3658de57c4f2b3b0fa8445b01f199",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
