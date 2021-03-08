@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a30068f3_b81fb46b",
+        "filename": "starmath/inc/token.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-08T12:11:44Z",
+      "side": 0,
+      "message": "Excuse me, but how was it unused?",
+      "range": {
+        "startLine": 219,
+        "startChar": 4,
+        "endLine": 219,
+        "endChar": 12
+      },
+      "revId": "3bc8f90e9693f710f12632f69b9348c1c833c906",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
