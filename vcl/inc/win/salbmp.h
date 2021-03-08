@@ -42,8 +42,8 @@ private:
 
     sal_uInt16          mnBitCount;
 
-    std::unique_ptr<Gdiplus::Bitmap>    ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlphaSource);
-    std::unique_ptr<Gdiplus::Bitmap> ImplCreateGdiPlusBitmap();
+    std::shared_ptr<Gdiplus::Bitmap>    ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlphaSource);
+    std::shared_ptr<Gdiplus::Bitmap> ImplCreateGdiPlusBitmap();
 
 public:
 
