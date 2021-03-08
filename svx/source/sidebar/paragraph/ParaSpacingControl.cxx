@@ -42,7 +42,7 @@ SFX_IMPL_TOOLBOX_CONTROL(ParaLeftSpacingControl, SvxLRSpaceItem);
 SFX_IMPL_TOOLBOX_CONTROL(ParaRightSpacingControl, SvxLRSpaceItem);
 SFX_IMPL_TOOLBOX_CONTROL(ParaFirstLineSpacingControl, SvxLRSpaceItem);
 
-ParaULSpacingControl::ParaULSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
+ParaULSpacingControl::ParaULSpacingControl(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx)
     : SfxToolBoxControl(nSlotId, nId, rTbx)
 {
     addStatusListener(".uno:MetricUnit");
@@ -55,7 +55,7 @@ ParaULSpacingControl::~ParaULSpacingControl()
 void ParaULSpacingControl::StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState)
 {
-    sal_uInt16 nId = GetId();
+    ToolBoxItemId nId = GetId();
     ToolBox& rTbx = GetToolBox();
     ParaULSpacingWindow* pWindow = static_cast<ParaULSpacingWindow*>(rTbx.GetItemWindow(nId));
 
@@ -82,7 +82,7 @@ void ParaULSpacingControl::StateChanged(sal_uInt16 nSID, SfxItemState eState,
 
 // ParaAboveSpacingControl
 
-ParaAboveSpacingControl::ParaAboveSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
+ParaAboveSpacingControl::ParaAboveSpacingControl(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx)
     : ParaULSpacingControl(nSlotId, nId, rTbx)
 {
 }
@@ -97,7 +97,7 @@ VclPtr<InterimItemWindow> ParaAboveSpacingControl::CreateItemWindow(vcl::Window*
 
 // ParaBelowSpacingControl
 
-ParaBelowSpacingControl::ParaBelowSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
+ParaBelowSpacingControl::ParaBelowSpacingControl(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx)
     : ParaULSpacingControl(nSlotId, nId, rTbx)
 {
 }
@@ -112,7 +112,7 @@ VclPtr<InterimItemWindow> ParaBelowSpacingControl::CreateItemWindow(vcl::Window*
 
 // ParaLRSpacingControl
 
-ParaLRSpacingControl::ParaLRSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
+ParaLRSpacingControl::ParaLRSpacingControl(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx)
     : SfxToolBoxControl(nSlotId, nId, rTbx)
 {
     addStatusListener(".uno:MetricUnit");
@@ -136,7 +136,7 @@ void SAL_CALL ParaLRSpacingControl::dispose()
 void ParaLRSpacingControl::StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState)
 {
-    sal_uInt16 nId = GetId();
+    ToolBoxItemId nId = GetId();
     ToolBox& rTbx = GetToolBox();
     ParaLRSpacingWindow* pWindow = static_cast<ParaLRSpacingWindow*>(rTbx.GetItemWindow(nId));
 
@@ -172,7 +172,7 @@ void ParaLRSpacingControl::StateChanged(sal_uInt16 nSID, SfxItemState eState,
 
 void SAL_CALL ParaLRSpacingControl::notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent)
 {
-    sal_uInt16 nId = GetId();
+    ToolBoxItemId nId = GetId();
     ToolBox& rTbx = GetToolBox();
     ParaLRSpacingWindow* pWindow = static_cast<ParaLRSpacingWindow*>(rTbx.GetItemWindow(nId));
 
@@ -211,7 +211,7 @@ void SAL_CALL ParaLRSpacingControl::release() throw ()
 
 // ParaLeftSpacingControl
 
-ParaLeftSpacingControl::ParaLeftSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
+ParaLeftSpacingControl::ParaLeftSpacingControl(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx)
 : ParaLRSpacingControl(nSlotId, nId, rTbx)
 {
 }
@@ -226,7 +226,7 @@ VclPtr<InterimItemWindow> ParaLeftSpacingControl::CreateItemWindow(vcl::Window* 
 
 // ParaRightSpacingControl
 
-ParaRightSpacingControl::ParaRightSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
+ParaRightSpacingControl::ParaRightSpacingControl(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx)
 : ParaLRSpacingControl(nSlotId, nId, rTbx)
 {
 }
@@ -241,7 +241,7 @@ VclPtr<InterimItemWindow> ParaRightSpacingControl::CreateItemWindow(vcl::Window*
 
 // ParaFirstLineSpacingControl
 
-ParaFirstLineSpacingControl::ParaFirstLineSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
+ParaFirstLineSpacingControl::ParaFirstLineSpacingControl(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx)
 : ParaLRSpacingControl(nSlotId, nId, rTbx)
 {
 }

@@ -43,7 +43,7 @@ void SvxLineSpacingToolBoxControl::initialize(const css::uno::Sequence<css::uno:
     }
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if (getToolboxId(nId, &pToolBox))
         pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | pToolBox->GetItemBits(nId));
 }

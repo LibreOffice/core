@@ -236,7 +236,7 @@ void SvxUndoRedoControl::initialize( const css::uno::Sequence< css::uno::Any >& 
     PopupWindowController::initialize(rArguments);
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if (!getToolboxId(nId, &pToolBox) && !m_pToolbar)
         return;
 
@@ -274,7 +274,7 @@ void SAL_CALL SvxUndoRedoControl::statusChanged(const css::frame::FeatureStateEv
     PopupWindowController::statusChanged(rEvent);
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if (!getToolboxId(nId, &pToolBox) && !m_pToolbar)
         return;
 

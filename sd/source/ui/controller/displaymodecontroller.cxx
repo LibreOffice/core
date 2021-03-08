@@ -199,7 +199,7 @@ void SAL_CALL DisplayModeController::initialize( const css::uno::Sequence< css::
 {
     svt::PopupWindowController::initialize( aArguments );
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if ( getToolboxId( nId, &pToolBox ) )
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
     setToolboxItemImage(BMP_DISPLAYMODE_SLIDE);
@@ -222,7 +222,7 @@ VclPtr<vcl::Window> DisplayModeController::createVclPopupWindow( vcl::Window* pP
 
 void DisplayModeController::setToolboxItemImage(const OUString& rImage)
 {
-    sal_uInt16 nId;
+    ToolBoxItemId nId;
     ToolBox* pToolBox = nullptr;
     if (!getToolboxId( nId, &pToolBox ))
         return;

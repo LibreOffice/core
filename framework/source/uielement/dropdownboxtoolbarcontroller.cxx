@@ -122,7 +122,7 @@ DropdownToolbarController::DropdownToolbarController(
     const Reference< XComponentContext >&    rxContext,
     const Reference< XFrame >&               rFrame,
     ToolBox*                                 pToolbar,
-    sal_uInt16                                   nID,
+    ToolBoxItemId                            nID,
     sal_Int32                                nWidth,
     const OUString&                          aCommand ) :
     ComplexToolbarController( rxContext, rFrame, pToolbar, nID, aCommand )

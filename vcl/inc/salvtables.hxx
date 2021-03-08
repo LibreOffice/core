@@ -1175,8 +1175,8 @@ class SalInstanceToolbar : public SalInstanceWidget, public virtual weld::Toolba
 {
 private:
     VclPtr<ToolBox> m_xToolBox;
-    std::map<sal_uInt16, VclPtr<vcl::Window>> m_aFloats;
-    std::map<sal_uInt16, VclPtr<PopupMenu>> m_aMenus;
+    std::map<ToolBoxItemId, VclPtr<vcl::Window>> m_aFloats;
+    std::map<ToolBoxItemId, VclPtr<PopupMenu>> m_aMenus;
 
     OString m_sStartShowIdent;
 

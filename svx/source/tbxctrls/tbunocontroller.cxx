@@ -448,7 +448,7 @@ void SAL_CALL FontHeightToolBoxControl::statusChanged(
         else
         {
             ToolBox* pToolBox = nullptr;
-            sal_uInt16 nId = 0;
+            ToolBoxItemId nId;
             if (getToolboxId(nId, &pToolBox))
                 pToolBox->EnableItem(nId, rEvent.IsEnabled);
         }

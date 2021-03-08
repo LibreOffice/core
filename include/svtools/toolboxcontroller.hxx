@@ -33,6 +33,7 @@
 #include <comphelper/propertycontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <tools/link.hxx>
+#include <vcl/toolbox.hxx>
 
 #include <unordered_map>
 
@@ -131,7 +132,7 @@ class SVT_DLLPUBLIC ToolboxController :
         bool IsInSidebar() const { return m_bSidebar; }
 
     protected:
-        bool getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox );
+        bool getToolboxId( ToolBoxItemId& rItemId, ToolBox** ppToolBox );
         struct Listener
         {
             Listener( const css::util::URL& rURL, const css::uno::Reference< css::frame::XDispatch >& rDispatch ) :
@@ -175,7 +176,7 @@ class SVT_DLLPUBLIC ToolboxController :
         bool                                                      m_bInitialized,
                                                                   m_bDisposed,
                                                                   m_bSidebar;
-        sal_uInt16                                                m_nToolBoxId;
+        ToolBoxItemId                                             m_nToolBoxId;
         css::uno::Reference< css::frame::XFrame >                 m_xFrame;
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
         OUString                                                  m_aCommandURL;

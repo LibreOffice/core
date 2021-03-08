@@ -70,7 +70,7 @@ SvxLineStyleToolBoxControl::~SvxLineStyleToolBoxControl()
 void SAL_CALL SvxLineStyleToolBoxControl::statusChanged( const frame::FeatureStateEvent& rEvent )
 {
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if (!getToolboxId(nId, &pToolBox) && !m_pToolbar)
         return;
 
@@ -163,7 +163,7 @@ void SvxLineStyleToolBoxControl::initialize( const css::uno::Sequence<css::uno::
     }
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if ( getToolboxId( nId, &pToolBox ) )
     {
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
@@ -470,7 +470,7 @@ void SvxLineEndToolBoxControl::initialize( const css::uno::Sequence<css::uno::An
     }
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if ( getToolboxId( nId, &pToolBox ) )
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
 }

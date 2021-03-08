@@ -84,7 +84,7 @@ void SAL_CALL SvxVertCTLTextTbxCtrl::initialize(const css::uno::Sequence<css::un
     }
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nItemId = 0;
+    ToolBoxItemId nItemId;
     if (getToolboxId(nItemId, &pToolBox))
         m_bVisible = pToolBox->IsItemVisible(nItemId);
 }
@@ -92,7 +92,7 @@ void SAL_CALL SvxVertCTLTextTbxCtrl::initialize(const css::uno::Sequence<css::un
 void SAL_CALL SvxVertCTLTextTbxCtrl::statusChanged(const css::frame::FeatureStateEvent& rEvent)
 {
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nItemId = 0;
+    ToolBoxItemId nItemId;
     bool bVclToolBox = getToolboxId(nItemId, &pToolBox);
 
     bool bEnabled = false;

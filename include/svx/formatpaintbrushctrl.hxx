@@ -33,7 +33,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FormatPaintBrushToolBoxControl final : publi
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    FormatPaintBrushToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    FormatPaintBrushToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx );
     virtual ~FormatPaintBrushToolBoxControl() override;
 
     virtual void    DoubleClick() override;

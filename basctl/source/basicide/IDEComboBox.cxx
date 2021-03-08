@@ -59,7 +59,7 @@ using namespace ::com::sun::star::uno;
  */
 SFX_IMPL_TOOLBOX_CONTROL(LibBoxControl, SfxStringItem);
 
-LibBoxControl::LibBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
+LibBoxControl::LibBoxControl(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx)
     : SfxToolBoxControl(nSlotId, nId, rTbx)
 {
 }
@@ -359,7 +359,7 @@ void LibBox::ClearBox()
  */
 SFX_IMPL_TOOLBOX_CONTROL(LanguageBoxControl, SfxStringItem);
 
-LanguageBoxControl::LanguageBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
+LanguageBoxControl::LanguageBoxControl(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx)
     : SfxToolBoxControl(nSlotId, nId, rTbx)
 {
 }

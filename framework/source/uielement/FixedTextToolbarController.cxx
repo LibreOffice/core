@@ -71,7 +71,7 @@ void FixedTextControl::dispose()
 
 FixedTextToolbarController::FixedTextToolbarController(
     const Reference<XComponentContext>& rxContext, const Reference<XFrame>& rFrame,
-    ToolBox* pToolbar, sal_uInt16 nID, const OUString& aCommand)
+    ToolBox* pToolbar, ToolBoxItemId nID, const OUString& aCommand)
     : ComplexToolbarController(rxContext, rFrame, pToolbar, nID, aCommand)
 {
     m_pFixedTextControl = VclPtr<FixedTextControl>::Create(m_xToolbar);

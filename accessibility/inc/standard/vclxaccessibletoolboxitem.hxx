@@ -45,7 +45,7 @@ private:
     VclPtr<ToolBox>         m_pToolBox;
     sal_Int32               m_nIndexInParent;
     sal_Int16               m_nRole;
-    sal_uInt16              m_nItemId;
+    ToolBoxItemId           m_nItemId;
     bool                    m_bHasFocus;
     bool                    m_bIsChecked;
     bool                    m_bIndeterminate;

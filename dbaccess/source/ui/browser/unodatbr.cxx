@@ -1290,8 +1290,8 @@ void SbaTableQueryBrowser::implCheckExternalSlot( sal_uInt16 _nId )
     if ( pToolbox )
     {
         bool bHaveDispatcher = m_aExternalFeatures[ _nId ].xDispatcher.is();
-        if ( bHaveDispatcher != pToolbox->IsItemVisible( _nId ) )
-            bHaveDispatcher ? pToolbox->ShowItem( _nId ) : pToolbox->HideItem( _nId );
+        if ( bHaveDispatcher != pToolbox->IsItemVisible( ToolBoxItemId(_nId) ) )
+            bHaveDispatcher ? pToolbox->ShowItem( ToolBoxItemId(_nId) ) : pToolbox->HideItem( ToolBoxItemId(_nId) );
     }
 
     // and invalidate this feature in general

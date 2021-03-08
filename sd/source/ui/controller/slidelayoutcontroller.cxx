@@ -317,7 +317,7 @@ void SAL_CALL SlideLayoutController::initialize( const css::uno::Sequence< css::
     svt::PopupWindowController::initialize( aArguments );
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if ( getToolboxId( nId, &pToolBox ) )
     {
         if ( mbInsertPage )

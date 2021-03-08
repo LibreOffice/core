@@ -91,6 +91,12 @@ using com::sun::star::beans::XPropertySet;
 
 namespace {
 
+constexpr ToolBoxItemId SID_INPUT_FUNCTION (SC_VIEW_START + 47);
+constexpr ToolBoxItemId SID_INPUT_SUM     (SC_VIEW_START + 48);
+constexpr ToolBoxItemId SID_INPUT_EQUAL   (SC_VIEW_START + 49);
+constexpr ToolBoxItemId SID_INPUT_CANCEL  (SC_VIEW_START + 50);
+constexpr ToolBoxItemId SID_INPUT_OK      (SC_VIEW_START + 51);
+
 enum ScNameInputType
 {
     SC_NAME_INPUT_CELL,
@@ -178,7 +184,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
     // Position window, 3 buttons, input window
     if (!comphelper::LibreOfficeKit::isActive())
     {
-        InsertWindow    (1, aWndPos.get(), ToolBoxItemBits::NONE, 0);
+        InsertWindow    (ToolBoxItemId(1), aWndPos.get(), ToolBoxItemBits::NONE, 0);
         InsertSeparator (1);
         InsertItem      (SID_INPUT_FUNCTION, Image(StockImage::Yes, RID_BMP_INPUT_FUNCTION), ToolBoxItemBits::NONE, 2);
     }
@@ -194,7 +200,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
         InsertItem      (SID_INPUT_OK,       Image(StockImage::Yes, RID_BMP_INPUT_OK), ToolBoxItemBits::NONE, 6);
     }
 
-    InsertWindow    (7, mxTextWindow.get(), ToolBoxItemBits::NONE, 7);
+    InsertWindow    (ToolBoxItemId(7), mxTextWindow.get(), ToolBoxItemBits::NONE, 7);
     SetDropdownClickHdl( LINK( this, ScInputWindow, DropdownClickHdl ));
 
     if (!comphelper::LibreOfficeKit::isActive())
@@ -332,87 +338,82 @@ void ScInputWindow::Select()
     ScModule* pScMod = SC_MOD();
     ToolBox::Select();
 
-    switch ( GetCurItemId() )
+    ToolBoxItemId curItemId = GetCurItemId();
+    if (curItemId == SID_INPUT_FUNCTION)
     {
-        case SID_INPUT_FUNCTION:
-            {
-                //! new method at ScModule to query if function autopilot is open
-                SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                if ( pViewFrm && ( comphelper::LibreOfficeKit::isActive() || !pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) ) )
-                {
-                    pViewFrm->GetDispatcher()->Execute( SID_OPENDLG_FUNCTION,
-                                              SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
+        //! new method at ScModule to query if function autopilot is open
+        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+        if ( pViewFrm && ( comphelper::LibreOfficeKit::isActive() || !pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) ) )
+        {
+            pViewFrm->GetDispatcher()->Execute( SID_OPENDLG_FUNCTION,
+                                        SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
 
-                    // The Toolbox will be disabled anyways, so we don't need to switch here,
-                    // regardless whether it succeeded or not!
+            // The Toolbox will be disabled anyways, so we don't need to switch here,
+            // regardless whether it succeeded or not!
 //                  SetOkCancelMode();
-                }
-            }
-            break;
-
-        case SID_INPUT_CANCEL:
-            pScMod->InputCancelHandler();
-            SetSumAssignMode();
-            break;
-
-        case SID_INPUT_OK:
-            pScMod->InputEnterHandler();
-            SetSumAssignMode();
-            mxTextWindow->Invalidate(); // Or else the Selection remains
-            break;
-
-        case SID_INPUT_EQUAL:
+        }
+    }
+    else if (curItemId == SID_INPUT_CANCEL)
+    {
+        pScMod->InputCancelHandler();
+        SetSumAssignMode();
+    }
+    else if (curItemId == SID_INPUT_OK)
+    {
+        pScMod->InputEnterHandler();
+        SetSumAssignMode();
+        mxTextWindow->Invalidate(); // Or else the Selection remains
+    }
+    else if (curItemId == SID_INPUT_EQUAL)
+    {
+        mxTextWindow->StartEditEngine();
+        if ( pScMod->IsEditMode() ) // Isn't if e.g. protected
         {
             mxTextWindow->StartEditEngine();
-            if ( pScMod->IsEditMode() ) // Isn't if e.g. protected
+
+            sal_Int32 nStartPos = 1;
+            sal_Int32 nEndPos = 1;
+
+            ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
+            if ( pViewSh )
             {
-                mxTextWindow->StartEditEngine();
+                const OUString& rString = mxTextWindow->GetTextString();
+                const sal_Int32 nLen = rString.getLength();
 
-                sal_Int32 nStartPos = 1;
-                sal_Int32 nEndPos = 1;
-
-                ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
-                if ( pViewSh )
+                ScDocument& rDoc = pViewSh->GetViewData().GetDocument();
+                CellType eCellType = rDoc.GetCellType( pViewSh->GetViewData().GetCurPos() );
+                switch ( eCellType )
                 {
-                    const OUString& rString = mxTextWindow->GetTextString();
-                    const sal_Int32 nLen = rString.getLength();
-
-                    ScDocument& rDoc = pViewSh->GetViewData().GetDocument();
-                    CellType eCellType = rDoc.GetCellType( pViewSh->GetViewData().GetCurPos() );
-                    switch ( eCellType )
+                    case CELLTYPE_VALUE:
                     {
-                        case CELLTYPE_VALUE:
-                        {
-                            nEndPos = nLen + 1;
-                            mxTextWindow->SetTextString("=" +  rString);
-                            break;
-                        }
-                        case CELLTYPE_STRING:
-                        case CELLTYPE_EDIT:
-                            nStartPos = 0;
-                            nEndPos = nLen;
-                            break;
-                        case CELLTYPE_FORMULA:
-                            nEndPos = nLen;
-                            break;
-                        default:
-                            mxTextWindow->SetTextString("=");
-                            break;
+                        nEndPos = nLen + 1;
+                        mxTextWindow->SetTextString("=" +  rString);
+                        break;
                     }
-                }
-
-                EditView* pView = mxTextWindow->GetEditView();
-                if (pView)
-                {
-                    if (comphelper::LibreOfficeKit::isActive())
-                        TextGrabFocus();
-                    pView->SetSelection( ESelection(0, nStartPos, 0, nEndPos) );
-                    pScMod->InputChanged(pView);
-                    SetOkCancelMode();
-                    pView->SetEditEngineUpdateMode(true);
+                    case CELLTYPE_STRING:
+                    case CELLTYPE_EDIT:
+                        nStartPos = 0;
+                        nEndPos = nLen;
+                        break;
+                    case CELLTYPE_FORMULA:
+                        nEndPos = nLen;
+                        break;
+                    default:
+                        mxTextWindow->SetTextString("=");
+                        break;
                 }
             }
-            break;
+
+            EditView* pView = mxTextWindow->GetEditView();
+            if (pView)
+            {
+                if (comphelper::LibreOfficeKit::isActive())
+                    TextGrabFocus();
+                pView->SetSelection( ESelection(0, nStartPos, 0, nEndPos) );
+                pScMod->InputChanged(pView);
+                SetOkCancelMode();
+                pView->SetEditEngineUpdateMode(true);
+            }
         }
     }
 }
@@ -1026,7 +1027,7 @@ void ScInputWindow::MenuHdl(std::string_view command)
 
 IMPL_LINK_NOARG(ScInputWindow, DropdownClickHdl, ToolBox *, void)
 {
-    sal_uInt16 nCurID = GetCurItemId();
+    ToolBoxItemId nCurID = GetCurItemId();
     EndSelection();
     if (nCurID == SID_INPUT_SUM)
     {

@@ -197,7 +197,11 @@ void SAL_CALL ToolboxController::initialize( const Sequence< Any >& aArguments )
             else if ( aPropValue.Name == "ModuleIdentifier" )
                 aPropValue.Value >>= m_sModuleName;
             else if ( aPropValue.Name == "Identifier" )
-                aPropValue.Value >>= m_nToolBoxId;
+            {
+                sal_uInt16 nTmp;
+                if (aPropValue.Value >>= nTmp)
+                    m_nToolBoxId = ToolBoxItemId(nTmp);
+            }
             else if ( aPropValue.Name == "IsSidebar" )
                 aPropValue.Value >>= m_bSidebar;
         }
@@ -732,26 +736,26 @@ IMPL_STATIC_LINK( ToolboxController, ExecuteHdl_Impl, void*, p, void )
 void ToolboxController::enable( bool bEnable )
 {
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nItemId = 0;
+    ToolBoxItemId nItemId;
     if( getToolboxId( nItemId, &pToolBox ) )
     {
         pToolBox->EnableItem( nItemId, bEnable );
     }
 }
 
-bool ToolboxController::getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox )
+bool ToolboxController::getToolboxId( ToolBoxItemId& rItemId, ToolBox** ppToolBox )
 {
-    if( (m_nToolBoxId != SAL_MAX_UINT16) && (ppToolBox == nullptr) )
-        return m_nToolBoxId;
+    if( (m_nToolBoxId != ToolBoxItemId(SAL_MAX_UINT16)) && (ppToolBox == nullptr) )
+        return false;
 
     ToolBox* pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );
 
-    if( (m_nToolBoxId == SAL_MAX_UINT16) && pToolBox )
+    if( (m_nToolBoxId == ToolBoxItemId(SAL_MAX_UINT16)) && pToolBox )
     {
         const ToolBox::ImplToolItems::size_type nCount = pToolBox->GetItemCount();
         for ( ToolBox::ImplToolItems::size_type nPos = 0; nPos < nCount; ++nPos )
         {
-            const sal_uInt16 nItemId = pToolBox->GetItemId( nPos );
+            const ToolBoxItemId nItemId = pToolBox->GetItemId( nPos );
             if ( pToolBox->GetItemCommand( nItemId ) == m_aCommandURL )
             {
                 m_nToolBoxId = nItemId;
@@ -765,7 +769,7 @@ bool ToolboxController::getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox )
 
     rItemId = m_nToolBoxId;
 
-    return (rItemId != SAL_MAX_UINT16) && (( ppToolBox == nullptr) || (*ppToolBox != nullptr) );
+    return (rItemId != ToolBoxItemId(SAL_MAX_UINT16)) && (( ppToolBox == nullptr) || (*ppToolBox != nullptr) );
 }
 //end
 

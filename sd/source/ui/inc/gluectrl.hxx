@@ -63,7 +63,7 @@ public:
 
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SdTbxCtlGlueEscDir(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    SdTbxCtlGlueEscDir(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx);
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_GLUECTRL_HXX

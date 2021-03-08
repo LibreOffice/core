@@ -417,7 +417,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                                 ToolBox::ImplToolItems::size_type nItemCount = pTextToolbox->GetItemCount();
                                 for( ToolBox::ImplToolItems::size_type nItem = 0; nItem < nItemCount; ++nItem )
                                 {
-                                    sal_uInt16 nItemId = pTextToolbox->GetItemId( nItem );
+                                    ToolBoxItemId nItemId = pTextToolbox->GetItemId( nItem );
                                     const OUString& rCommand = pTextToolbox->GetItemCommand( nItemId );
                                     if (rCommand == ".uno:StyleApply")
                                     {

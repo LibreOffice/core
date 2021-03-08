@@ -89,13 +89,13 @@ namespace svx
     class VclToolboxButtonColorUpdater : public ToolboxButtonColorUpdaterBase
     {
     public:
-        VclToolboxButtonColorUpdater(sal_uInt16 nSlotId, sal_uInt16 nTbxBtnId, ToolBox* ptrTbx, bool bWideButton,
+        VclToolboxButtonColorUpdater(sal_uInt16 nSlotId, ToolBoxItemId nTbxBtnId, ToolBox* ptrTbx, bool bWideButton,
                                      const OUString& rCommandLabel, const OUString& rCommandURL,
                                      const css::uno::Reference<css::frame::XFrame>& rFrame);
 
 
     private:
-        sal_uInt16      mnBtnId;
+        ToolBoxItemId   mnBtnId;
         VclPtr<ToolBox> mpTbx;
 
         virtual void SetQuickHelpText(const OUString& rText) override;

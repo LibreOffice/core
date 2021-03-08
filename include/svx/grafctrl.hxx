@@ -28,7 +28,7 @@
 class SvxGrafToolBoxControl : public SfxToolBoxControl
 {
 public:
-    SvxGrafToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    SvxGrafToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx );
     virtual ~SvxGrafToolBoxControl() override;
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
@@ -40,7 +40,7 @@ class SVX_DLLPUBLIC SvxGrafRedToolBoxControl final : public SvxGrafToolBoxContro
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
-                        SvxGrafRedToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+                        SvxGrafRedToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx );
 };
 
 
@@ -48,7 +48,7 @@ class SVX_DLLPUBLIC SvxGrafGreenToolBoxControl final : public SvxGrafToolBoxCont
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
-                        SvxGrafGreenToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+                        SvxGrafGreenToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx );
 };
 
 
@@ -56,7 +56,7 @@ class SVX_DLLPUBLIC SvxGrafBlueToolBoxControl final : public SvxGrafToolBoxContr
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
-                        SvxGrafBlueToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+                        SvxGrafBlueToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx );
 };
 
 
@@ -64,7 +64,7 @@ class SVX_DLLPUBLIC SvxGrafLuminanceToolBoxControl final : public SvxGrafToolBox
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
-                        SvxGrafLuminanceToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+                        SvxGrafLuminanceToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx );
 };
 
 
@@ -72,7 +72,7 @@ class SVX_DLLPUBLIC SvxGrafContrastToolBoxControl final : public SvxGrafToolBoxC
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
-                        SvxGrafContrastToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+                        SvxGrafContrastToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx );
 };
 
 
@@ -80,7 +80,7 @@ class SVX_DLLPUBLIC SvxGrafGammaToolBoxControl final : public SvxGrafToolBoxCont
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
-                        SvxGrafGammaToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+                        SvxGrafGammaToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx );
 };
 
 
@@ -88,7 +88,7 @@ class SVX_DLLPUBLIC SvxGrafTransparenceToolBoxControl final : public SvxGrafTool
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
-                        SvxGrafTransparenceToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+                        SvxGrafTransparenceToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx );
 };
 
 
@@ -96,7 +96,7 @@ class SVX_DLLPUBLIC SvxGrafModeToolBoxControl final : public SfxToolBoxControl, 
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
-                        SvxGrafModeToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+                        SvxGrafModeToolBoxControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx );
                         virtual ~SvxGrafModeToolBoxControl() override;
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;

@@ -150,7 +150,7 @@ void SAL_CALL PopupMenuToolbarController::initialize(
 
     SolarMutexGuard aSolarLock;
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nItemId = 0;
+    ToolBoxItemId nItemId;
     if ( getToolboxId( nItemId, &pToolBox ) )
     {
         ToolBoxItemBits nCurStyle( pToolBox->GetItemBits( nItemId ) );
@@ -169,7 +169,7 @@ void SAL_CALL PopupMenuToolbarController::statusChanged( const css::frame::Featu
         return;
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nItemId = 0;
+    ToolBoxItemId nItemId;
     if ( getToolboxId( nItemId, &pToolBox ) )
     {
         SolarMutexGuard aSolarLock;
@@ -355,7 +355,7 @@ void GenericPopupToolbarController::statusChanged( const css::frame::FeatureStat
         Menu* pVclMenu = comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu )->GetMenu();
 
         ToolBox* pToolBox = nullptr;
-        sal_uInt16 nId = 0;
+        ToolBoxItemId nId;
         if ( getToolboxId( nId, &pToolBox ) && pToolBox->IsItemEnabled( nId ) )
         {
             pVclMenu->Activate();
@@ -389,7 +389,7 @@ void GenericPopupToolbarController::functionExecuted( const OUString& rCommand )
     addStatusListener( m_aCommandURL );
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if ( getToolboxId( nId, &pToolBox ) )
     {
         pToolBox->SetItemCommand( nId, rCommand );
@@ -461,7 +461,7 @@ void SaveToolbarController::initialize( const css::uno::Sequence< css::uno::Any 
     PopupMenuToolbarController::initialize( aArguments );
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if ( !getToolboxId( nId, &pToolBox ) )
         return;
 
@@ -504,7 +504,7 @@ void SaveToolbarController::updateImage()
 {
     SolarMutexGuard aGuard;
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if ( !getToolboxId( nId, &pToolBox ) )
         return;
 
@@ -536,7 +536,7 @@ void SaveToolbarController::updateImage()
 void SaveToolbarController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if ( !getToolboxId( nId, &pToolBox ) )
         return;
 

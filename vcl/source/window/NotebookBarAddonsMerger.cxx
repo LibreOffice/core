@@ -67,7 +67,7 @@ static void CreateNotebookBarToolBox(vcl::Window* pNotebookbarToolBox,
                                      const AddonNotebookBarItem& aAddonNotebookBarItem,
                                      const std::vector<Image>& aImageVec, const tools::ULong nIter)
 {
-    sal_uInt16 nItemId = 0;
+    ToolBoxItemId nItemId(0);
     ToolBox* pToolbox = dynamic_cast<ToolBox*>(pNotebookbarToolBox);
     if (!pToolbox)
         return;

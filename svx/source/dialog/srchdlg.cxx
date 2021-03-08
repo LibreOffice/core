@@ -2367,7 +2367,7 @@ static void lcl_SetSearchLabelWindow(const OUString& rStr)
     VclPtr< ToolBox > pToolBox = static_cast<ToolBox*>( VCLUnoHelper::GetWindow(xWindow) );
     for (ToolBox::ImplToolItems::size_type i = 0; pToolBox && i < pToolBox->GetItemCount(); ++i)
     {
-        sal_uInt16 id = pToolBox->GetItemId(i);
+        ToolBoxItemId id = pToolBox->GetItemId(i);
         if (pToolBox->GetItemCommand(id) == ".uno:SearchLabel")
         {
             LabelItemWindow* pSearchLabel = dynamic_cast<LabelItemWindow*>(pToolBox->GetItemWindow(id));
@@ -2414,7 +2414,7 @@ OUString SvxSearchDialogWrapper::GetSearchLabel()
     VclPtr< ToolBox > pToolBox = static_cast<ToolBox*>( VCLUnoHelper::GetWindow(xWindow) );
     for (ToolBox::ImplToolItems::size_type i = 0; pToolBox && i < pToolBox->GetItemCount(); ++i)
     {
-        sal_uInt16 id = pToolBox->GetItemId(i);
+        ToolBoxItemId id = pToolBox->GetItemId(i);
         if (pToolBox->GetItemCommand(id) == ".uno:SearchLabel")
         {
             LabelItemWindow* pSearchLabel = dynamic_cast<LabelItemWindow*>(pToolBox->GetItemWindow(id));

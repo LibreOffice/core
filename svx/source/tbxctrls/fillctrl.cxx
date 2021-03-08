@@ -53,7 +53,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxFillToolBoxControl, XFillStyleItem );
 
 SvxFillToolBoxControl::SvxFillToolBoxControl(
     sal_uInt16 nSlotId,
-    sal_uInt16 nId,
+    ToolBoxItemId nId,
     ToolBox& rTbx )
     : SfxToolBoxControl( nSlotId, nId, rTbx )
     , mpStyleItem()

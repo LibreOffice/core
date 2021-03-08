@@ -82,7 +82,7 @@ static OUString getMasterCommand( const OUString& rCommand )
 GenericToolbarController::GenericToolbarController( const Reference< XComponentContext >&    rxContext,
                                                     const Reference< XFrame >&               rFrame,
                                                     ToolBox*                                 pToolbar,
-                                                    sal_uInt16                               nID,
+                                                    ToolBoxItemId                            nID,
                                                     const OUString&                          aCommand ) :
     svt::ToolboxController( rxContext, rFrame, aCommand )
     ,   m_xToolbar( pToolbar )
@@ -104,7 +104,7 @@ GenericToolbarController::GenericToolbarController( const Reference< XComponentC
                                                     const Reference< XFrame >&               rFrame,
                                                     weld::Toolbar&                           rToolbar,
                                                     const OUString&                          aCommand ) :
-    GenericToolbarController( rxContext, rFrame, nullptr, 0, aCommand )
+    GenericToolbarController( rxContext, rFrame, nullptr, ToolBoxItemId(0), aCommand )
 {
     m_pToolbar = &rToolbar;
 }
@@ -121,7 +121,7 @@ void SAL_CALL GenericToolbarController::dispose()
 
     m_pToolbar = nullptr;
     m_xToolbar.clear();
-    m_nID = 0;
+    m_nID = ToolBoxItemId(0);
 }
 
 void SAL_CALL GenericToolbarController::execute( sal_Int16 KeyModifier )

@@ -2111,7 +2111,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         {
             OUString aCommand(extractActionName(rMap));
 
-            sal_uInt16 nItemId = 0;
+            ToolBoxItemId nItemId(0);
             ToolBoxItemBits nBits = ToolBoxItemBits::NONE;
             if (name == "GtkMenuToolButton")
                 nBits |= ToolBoxItemBits::DROPDOWN;
@@ -2127,7 +2127,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             }
             else
             {
-                nItemId = pToolBox->GetItemCount() + 1;
+                nItemId = ToolBoxItemId(pToolBox->GetItemCount() + 1);
                     //TODO: ImplToolItems::size_type -> sal_uInt16!
                 pToolBox->InsertItem(nItemId, extractLabel(rMap), nBits);
                 if (aCommand.isEmpty() && !m_bLegacy)

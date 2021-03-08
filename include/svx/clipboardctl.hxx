@@ -37,7 +37,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxClipBoardControl final : public SfxToolBo
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxClipBoardControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    SvxClipBoardControl( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx );
     virtual ~SvxClipBoardControl() override;
 
     void CreatePopupWindow() override;

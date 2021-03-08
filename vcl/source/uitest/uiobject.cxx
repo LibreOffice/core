@@ -1633,7 +1633,7 @@ OUString ToolBoxUIObject::get_action(VclEventId nEvent) const
 {
     if (nEvent == VclEventId::ToolboxClick)
     {
-        return "Click on item number " + OUString::number(mxToolBox->GetCurItemId()) +
+        return "Click on item number " + OUString::number(sal_uInt16(mxToolBox->GetCurItemId())) +
                 " in " + mxToolBox->get_id();
     }
     else
@@ -1643,7 +1643,7 @@ OUString ToolBoxUIObject::get_action(VclEventId nEvent) const
 StringMap ToolBoxUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
-    aMap["CurrSelectedItemID"] = OUString::number(mxToolBox->GetCurItemId());
+    aMap["CurrSelectedItemID"] = OUString::number(sal_uInt16(mxToolBox->GetCurItemId()));
     aMap["CurrSelectedItemText"] = mxToolBox->GetItemText(mxToolBox->GetCurItemId());
     aMap["CurrSelectedItemCommand"] = mxToolBox->GetItemCommand(mxToolBox->GetCurItemId());
     aMap["ItemCount"] = OUString::number(mxToolBox->GetItemCount());

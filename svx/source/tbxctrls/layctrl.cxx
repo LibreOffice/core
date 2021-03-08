@@ -694,7 +694,7 @@ void SvxTableToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any
     PopupWindowController::initialize(rArguments);
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if (getToolboxId(nId, &pToolBox))
         pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | pToolBox->GetItemBits(nId));
 }
@@ -711,7 +711,7 @@ std::unique_ptr<WeldToolbarPopup> SvxTableToolBoxControl::weldPopupWindow()
 VclPtr<vcl::Window> SvxTableToolBoxControl::createVclPopupWindow( vcl::Window* pParent )
 {
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     bool bToolBox = getToolboxId(nId, &pToolBox);
 
     mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
@@ -752,7 +752,7 @@ void SvxColumnsToolBoxControl::initialize( const css::uno::Sequence< css::uno::A
     PopupWindowController::initialize(rArguments);
 
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     if (getToolboxId(nId, &pToolBox))
         pToolBox->SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | pToolBox->GetItemBits(nId));
 }
@@ -769,7 +769,7 @@ std::unique_ptr<WeldToolbarPopup> SvxColumnsToolBoxControl::weldPopupWindow()
 VclPtr<vcl::Window> SvxColumnsToolBoxControl::createVclPopupWindow(vcl::Window* pParent)
 {
     ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
+    ToolBoxItemId nId;
     bool bToolBox = getToolboxId(nId, &pToolBox);
 
     mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
