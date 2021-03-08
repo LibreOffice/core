@@ -981,15 +981,9 @@ void TransferableHelper::CopyToSelection(const Reference<XClipboard>& rSelection
     }
 }
 
-void TransferableHelper::CopyToSelection( vcl::Window *pWindow ) const
+void TransferableHelper::CopyToPrimarySelection() const
 {
-    DBG_ASSERT( pWindow, "Window pointer is NULL" );
-    Reference< XClipboard > xSelection;
-
-    if( pWindow )
-        xSelection = pWindow->GetPrimarySelection();
-
-    CopyToSelection(xSelection);
+    CopyToSelection(GetSystemPrimarySelection());
 }
 
 void TransferableHelper::StartDrag( vcl::Window* pWindow, sal_Int8 nDnDSourceActions )
@@ -1033,10 +1027,9 @@ void TransferableHelper::StartDrag( vcl::Window* pWindow, sal_Int8 nDnDSourceAct
     }
 }
 
-void TransferableHelper::ClearSelection( vcl::Window *pWindow )
+void TransferableHelper::ClearPrimarySelection()
 {
-    DBG_ASSERT( pWindow, "Window pointer is NULL" );
-    Reference< XClipboard > xSelection( pWindow->GetPrimarySelection() );
+    Reference< XClipboard > xSelection(GetSystemPrimarySelection());
 
     if( xSelection.is() )
         xSelection->setContents( nullptr, nullptr );
@@ -2182,11 +2175,8 @@ TransferableDataHelper TransferableDataHelper::CreateFromSelection( vcl::Window*
 {
     DBG_ASSERT( pWindow, "Window pointer is NULL" );
 
-    Reference< XClipboard > xSelection;
+    Reference< XClipboard > xSelection(GetSystemPrimarySelection());
     TransferableDataHelper   aRet;
-
-    if( pWindow )
-        xSelection = pWindow->GetPrimarySelection();
 
     if( xSelection.is() )
        {

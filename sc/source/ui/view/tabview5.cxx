@@ -147,7 +147,7 @@ ScTabView::~ScTabView()
     {
         pOld->ForgetView();
         pScMod->SetSelectionTransfer( nullptr );
-        TransferableHelper::ClearSelection( GetActiveWin() );       // may delete pOld
+        TransferableHelper::ClearPrimarySelection();       // may delete pOld
     }
 
     pBrushDocument.reset();

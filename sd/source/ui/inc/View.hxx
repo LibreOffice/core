@@ -130,7 +130,7 @@ public:
         CreateDragDataObject (::sd::View*, vcl::Window& rWindow,
             const Point& rDragPos);
     css::uno::Reference<css::datatransfer::XTransferable>
-        CreateSelectionDataObject (::sd::View*, vcl::Window& rWindow);
+        CreateSelectionDataObject (::sd::View*);
 
     void                    UpdateSelectionClipboard( bool bForceDeselect );
 

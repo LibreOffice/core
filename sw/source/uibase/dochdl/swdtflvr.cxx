@@ -4182,7 +4182,7 @@ void SwTransferable::CreateSelection( SwWrtShell& rSh,
     pNew->m_pCreatorView = _pCreatorView;
 
     pMod->m_pXSelection = pNew.get();
-    pNew->CopyToSelection( rSh.GetWin() );
+    pNew->CopyToPrimarySelection();
 }
 
 void SwTransferable::ClearSelection( SwWrtShell& rSh,
@@ -4193,7 +4193,7 @@ void SwTransferable::ClearSelection( SwWrtShell& rSh,
         ((!pMod->m_pXSelection->m_pWrtShell) || (pMod->m_pXSelection->m_pWrtShell == &rSh)) &&
         (!_pCreatorView || (pMod->m_pXSelection->m_pCreatorView == _pCreatorView)) )
     {
-        TransferableHelper::ClearSelection( rSh.GetWin() );
+        TransferableHelper::ClearPrimarySelection();
     }
 }
 
