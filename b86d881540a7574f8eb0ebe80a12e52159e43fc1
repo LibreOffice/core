@@ -34,6 +34,24 @@
       "revId": "b86d881540a7574f8eb0ebe80a12e52159e43fc1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2062a9be_13b9b2ce",
+        "filename": "vcl/jsdialog/jsdialogbuilder.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2021-03-08T14:54:31Z",
+      "side": 1,
+      "message": "ah it hits the \"mobile sidebar\" code path with Resize call... that means it didn\u0027t found the welded window id or widget \u0027__DIALOG__\u0027 inside map. are you sure message dialog was successfully added to the map under id \u0027__DIALOG__\u0027?\n\nor can you paste how the arguments passed to sendDialogEvent were look?",
+      "parentUuid": "9bd0ef22_4a3565aa",
+      "revId": "b86d881540a7574f8eb0ebe80a12e52159e43fc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
