@@ -83,6 +83,10 @@ void JSDialogNotifyIdle::send(tools::JsonWriter& aJsonWriter)
             free(aJsonWriter.extractData());
         }
     }
+    else
+    {
+        free(aJsonWriter.extractData());
+    }
 }
 
 namespace
