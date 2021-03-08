@@ -96,7 +96,7 @@ bool SvMetaAttribute::ReadSvIdl( SvIdlDataBase & rBase,
     return bOk;
 }
 
-sal_uLong SvMetaAttribute::MakeSfx( OStringBuffer& rAttrArray ) const
+size_t SvMetaAttribute::MakeSfx( OStringBuffer& rAttrArray ) const
 {
     SvMetaType * pType = GetType();
     DBG_ASSERT( pType, "no type for attribute" );
@@ -199,15 +199,15 @@ void SvMetaType::ReadContextSvIdl( SvIdlDataBase & rBase,
     }
 }
 
-sal_uLong SvMetaType::MakeSfx( OStringBuffer& rAttrArray )
+size_t SvMetaType::MakeSfx( OStringBuffer& rAttrArray )
 {
-    sal_uLong nC = 0;
+    size_t nC = 0;
 
     if( GetBaseType()->GetMetaTypeType() == MetaTypeType::Struct )
     {
-        sal_uLong nAttrCount = GetAttrCount();
+        size_t nAttrCount = GetAttrCount();
         // write the single attributes
-        for( sal_uLong n = 0; n < nAttrCount; n++ )
+        for( size_t n = 0; n < nAttrCount; n++ )
         {
             nC += aAttrList[n]->MakeSfx( rAttrArray );
             if( n +1 < nAttrCount )
@@ -224,7 +224,7 @@ void SvMetaType::WriteSfxItem(
     OString aVarName = " a" + rItemName + "_Impl";
 
     OStringBuffer aAttrArray(1024);
-    sal_uLong   nAttrCount = MakeSfx( aAttrArray );
+    size_t   nAttrCount = MakeSfx( aAttrArray );
     OString aAttrCount( OString::number(nAttrCount));
     OString aTypeName = "SfxType" + aAttrCount;
 
