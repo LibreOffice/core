@@ -44,7 +44,7 @@ public:
 
     virtual bool        Test( SvTokenStream & rInStm );
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
-    sal_uLong           MakeSfx( OStringBuffer& rAtrrArray ) const;
+    size_t           MakeSfx( OStringBuffer& rAtrrArray ) const;
     virtual void        Insert( SvSlotElementList& );
 };
 
@@ -70,7 +70,7 @@ public:
 
     SvRefMemberList<SvMetaAttribute *>&
                         GetAttrList() { return aAttrList; }
-    sal_uLong           GetAttrCount() const { return aAttrList.size(); }
+    size_t           GetAttrCount() const { return aAttrList.size(); }
 
     void                SetType( MetaTypeType nT );
     MetaTypeType        GetMetaTypeType() const { return nType; }
@@ -81,7 +81,7 @@ public:
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
 
-    sal_uLong           MakeSfx( OStringBuffer& rAtrrArray );
+    size_t           MakeSfx( OStringBuffer& rAtrrArray );
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
     bool                ReadMethodArgs( SvIdlDataBase & rBase,
                                         SvTokenStream & rInStm );
