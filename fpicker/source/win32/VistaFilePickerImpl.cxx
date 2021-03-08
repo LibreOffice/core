@@ -527,7 +527,7 @@ void VistaFilePickerImpl::impl_sta_InitDialog(const RequestRef& rRequest, DWORD 
             aAny >>= tmp;
             if(tmp != 0)
             {
-                osl::MutexGuard aLock(m_aMutex);
+                osl::MutexGuard aLock2(m_aMutex);
                 m_hParentWindow = reinterpret_cast<HWND>(tmp);
             }
         }
@@ -1008,7 +1008,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
     HRESULT hResult = E_FAIL;
     HWND hParentWindow;
     {
-        osl::MutexGuard aLock(m_aMutex);
+        osl::MutexGuard aLock2(m_aMutex);
         // Note that there is a potential race between retrieving and
         // using parent window (window might get destroyed)
         hParentWindow = m_hParentWindow ? m_hParentWindow : choose_parent_window();
