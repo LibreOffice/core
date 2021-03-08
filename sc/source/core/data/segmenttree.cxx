@@ -23,7 +23,11 @@
 #include <sal/log.hxx>
 #include <algorithm>
 #include <limits>
+<<<<<<< HEAD   (a5cecd tdf#127471 improve SVM FontScaling im/export)
 #include <address.hxx>
+=======
+#include <global.hxx>
+>>>>>>> CHANGE (2fb274 fix ScFlatBoolSegmentsImpl delayed setup with threads (tdf#1)
 
 using ::std::numeric_limits;
 
@@ -65,6 +69,8 @@ public:
     {
         mbTreeSearchEnabled = b;
     }
+
+    void makeReady();
 
 private:
     typedef ::mdds::flat_segment_tree<SCCOLROW, ValueType> fst_type;
@@ -131,7 +137,10 @@ typename ScFlatSegmentsImpl<ValueType_, ExtValueType_>::ValueType ScFlatSegments
     }
 
     if (!maSegments.is_tree_valid())
+    {
+        assert(!ScGlobal::bThreadedGroupCalcInProgress);
         maSegments.build_tree();
+    }
 
     maSegments.search_tree(nPos, nValue);
     return nValue;
@@ -185,7 +194,10 @@ bool ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getRangeData(SCCOLROW nPos, 
         return getRangeDataLeaf(nPos, rData);
 
     if (!maSegments.is_tree_valid())
+    {
+        assert(!ScGlobal::bThreadedGroupCalcInProgress);
         maSegments.build_tree();
+    }
 
     if (!maSegments.search_tree(nPos, rData.mnValue, &rData.mnPos1, &rData.mnPos2).second)
         return false;
@@ -265,6 +277,14 @@ bool ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getNext(RangeData& rData)
 
     rData.mnPos2 = maItr->first - 1;
     return true;
+}
+
+template<typename ValueType_, typename ExtValueType_>
+void ScFlatSegmentsImpl<ValueType_, ExtValueType_>::makeReady()
+{
+    assert(!ScGlobal::bThreadedGroupCalcInProgress);
+    if (!maSegments.is_tree_valid())
+        maSegments.build_tree();
 }
 
 class ScFlatUInt16SegmentsImpl : public ScFlatSegmentsImpl<sal_uInt16, sal_uInt32>
@@ -416,6 +436,11 @@ SCROW ScFlatBoolRowSegments::findLastTrue() const
     return mpImpl->findLastTrue(false);
 }
 
+void ScFlatBoolRowSegments::makeReady()
+{
+    mpImpl->makeReady();
+}
+
 OString ScFlatBoolRowSegments::dumpAsString()
 {
     OString aOutput;
@@ -481,6 +506,11 @@ void ScFlatBoolColSegments::removeSegment(SCCOL nCol1, SCCOL nCol2)
 void ScFlatBoolColSegments::insertSegment(SCCOL nCol, SCCOL nSize)
 {
     mpImpl->insertSegment(static_cast<SCCOLROW>(nCol), static_cast<SCCOLROW>(nSize), true/*bSkipStartBoundary*/);
+}
+
+void ScFlatBoolColSegments::makeReady()
+{
+    mpImpl->makeReady();
 }
 
 OString ScFlatBoolColSegments::dumpAsString()
@@ -594,6 +624,11 @@ void ScFlatUInt16RowSegments::enableTreeSearch(bool bEnable)
 void ScFlatUInt16RowSegments::setValueIf(SCROW nRow1, SCROW nRow2, sal_uInt16 nValue, const std::function<bool(sal_uInt16)>& rPredicate)
 {
     mpImpl->setValueIf(static_cast<SCCOLROW>(nRow1), static_cast<SCCOLROW>(nRow2), nValue, rPredicate);
+}
+
+void ScFlatUInt16RowSegments::makeReady()
+{
+    mpImpl->makeReady();
 }
 
 OString ScFlatUInt16RowSegments::dumpAsString()
