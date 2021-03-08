@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include "VistaFilePickerImpl.hxx"
 
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
@@ -494,7 +498,7 @@ template <class TDialogImplClass> void VistaFilePickerImpl::impl_sta_CreateDialo
 {
     // SYNCHRONIZED->
     osl::ClearableMutexGuard aLock(m_aMutex);
-    m_pDialog.reset(new TDialogImplClass);
+    m_pDialog = std::make_shared<TDialogImplClass>();
 }
 
 
