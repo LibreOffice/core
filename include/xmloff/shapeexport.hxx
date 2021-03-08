@@ -28,6 +28,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
+#include <functional>
 #include <map>
 #include <xmloff/animexp.hxx>
 #include <xmloff/families.hxx>
@@ -296,6 +297,14 @@ public:
 
     const rtl::Reference< XMLTableExport >&     GetShapeTableExport();
 };
+
+namespace xmloff {
+
+XMLOFF_DLLPUBLIC void FixZOrder(
+    css::uno::Reference<css::drawing::XShapes> const& xShapes,
+    std::function<bool(css::uno::Reference<css::beans::XPropertySet> const&)> const& rIsInBackground);
+
+} // namespace xmloff
 
 #endif
 

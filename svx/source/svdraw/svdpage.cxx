@@ -40,6 +40,9 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/svdundo.hxx>
+#include <svx/strings.hrc>
+#include <svx/dialmgr.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/fmdpage.hxx>
 
@@ -667,10 +670,27 @@ void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
     }
 #endif
 
+    SdrModel & rModel(getSdrPageFromSdrObjList()->getSdrModelFromSdrPage());
+    bool const isUndo(rModel.IsUndoEnabled());
+    if (isUndo)
+    {
+        rModel.BegUndo(SvxResId(STR_SortShapes));
+    }
+
     for (size_t i = 0; i < aNewSortOrder.size(); ++i)
     {
         aNewList[i] = maList[ aNewSortOrder[i] ];
+        if (isUndo && i != sal::static_int_cast<size_t>(aNewSortOrder[i]))
+        {
+            rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoObjectOrdNum(
+                        *aNewList[i], aNewSortOrder[i], i));
+        }
         aNewList[i]->SetOrdNum(i);
+    }
+
+    if (isUndo)
+    {
+        rModel.EndUndo();
     }
 
     std::swap(aNewList, maList);

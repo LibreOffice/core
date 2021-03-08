@@ -269,6 +269,15 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     m_bSavedShowChanges = pLayout == nullptr || !pLayout->IsHideRedlines();
     if( bSaveRedline )
     {
+        // tdf#133487 call this once in flat-ODF case
+        uno::Reference<drawing::XDrawPageSupplier> const xDPS(GetModel(), uno::UNO_QUERY);
+        assert(xDPS.is());
+        xmloff::FixZOrder(xDPS->getDrawPage(),
+            [](uno::Reference<beans::XPropertySet> const& xShape)
+            {
+                return !*o3tl::doAccess<bool>(xShape->getPropertyValue("Opaque"));
+            });
+
         // now save and switch redline mode
         nRedlineFlags = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
         pDoc->getIDocumentRedlineAccess().SetRedlineFlags(

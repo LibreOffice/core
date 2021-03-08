@@ -155,6 +155,7 @@
 #define STR_EditPutToTop                                    NC_("STR_EditPutToTop", "Move %1 to front")
 #define STR_EditPutToBtm                                    NC_("STR_EditPutToBtm", "Move %1 to back")
 #define STR_EditRevOrder                                    NC_("STR_EditRevOrder", "Reverse order of %1")
+#define STR_SortShapes                                      NC_("STR_SortShapes", "Sort shapes")
 #define STR_EditMove                                        NC_("STR_EditMove", "Move %1")
 #define STR_EditResize                                      NC_("STR_EditResize", "Resize %1")
 #define STR_EditRotate                                      NC_("STR_EditRotate", "Rotate %1")

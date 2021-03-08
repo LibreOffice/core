@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/frame/XModule.hpp>
@@ -34,6 +35,7 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <vcl/errinf.hxx>
 #include <sal/log.hxx>
+#include <o3tl/any.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
 #include <unotools/saveopt.hxx>
@@ -52,6 +54,7 @@
 #include <docstat.hxx>
 #include <docsh.hxx>
 
+#include <xmloff/shapeexport.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <swerror.h>
 #include "wrtxml.hxx"
@@ -180,6 +183,15 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     SvtSaveOptions aSaveOpt;
     xInfoSet->setPropertyValue( "UsePrettyPrinting", makeAny(aSaveOpt.IsPrettyPrinting()) );
 
+    uno::Reference<lang::XComponent> const xModelComp(m_pDoc->GetDocShell()->GetModel());
+    uno::Reference<drawing::XDrawPageSupplier> const xDPS(xModelComp, uno::UNO_QUERY);
+    assert(xDPS.is());
+    xmloff::FixZOrder(xDPS->getDrawPage(),
+        [](uno::Reference<beans::XPropertySet> const& xShape)
+        {
+            return !*o3tl::doAccess<bool>(xShape->getPropertyValue("Opaque"));
+        });
+
     // save show redline mode ...
     RedlineFlags const nOrigRedlineFlags = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
     RedlineFlags nRedlineFlags(nOrigRedlineFlags);
@@ -247,12 +259,6 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
         *pArgs++ <<= xObjectResolver;
     if( xStatusIndicator.is() )
         *pArgs++ <<= xStatusIndicator;
-
-    //Get model
-    uno::Reference< lang::XComponent > xModelComp = m_pDoc->GetDocShell()->GetModel();
-    OSL_ENSURE( xModelComp.is(), "XMLWriter::Write: got no model" );
-    if( !xModelComp.is() )
-        return ERR_SWG_WRITE_ERROR;
 
     PutNumFormatFontsInAttrPool();
     PutEditEngFontsInAttrPool();
