@@ -46,6 +46,30 @@
       "revId": "3bc8f90e9693f710f12632f69b9348c1c833c906",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d754ebb7_28d2f2e5",
+        "filename": "starmath/inc/token.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-08T13:03:03Z",
+      "side": 0,
+      "message": "This is just an implementation detail, that ustrbuf.hxx includes ustring.hxx. This is not something that a user file should rely upon. The things declared in that header are directly used here. So no, this was *not* unused, and should stay, despite being included indirectly elsewhere.",
+      "parentUuid": "79664c11_4b0d99e1",
+      "range": {
+        "startLine": 219,
+        "startChar": 4,
+        "endLine": 219,
+        "endChar": 12
+      },
+      "revId": "3bc8f90e9693f710f12632f69b9348c1c833c906",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
