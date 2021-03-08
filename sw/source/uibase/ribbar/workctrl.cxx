@@ -59,7 +59,7 @@
 #include <sfx2/viewfrm.hxx>
 
 // Size check
-#define NAVI_ENTRIES 19
+#define NAVI_ENTRIES 21
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
