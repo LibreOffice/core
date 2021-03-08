@@ -27,7 +27,7 @@ AbstractSmParser* starmathdatabase::GetDefaultSmParser()
     {
     case 5:
     {
-        AbstractSmParser* aParser = new SmParser();
+        AbstractSmParser* aParser = new SmParser5();
         return aParser;
     }
     default:
@@ -41,7 +41,7 @@ AbstractSmParser* starmathdatabase::GetVersionSmParser(sal_uInt16 nVersion)
     {
     case 5:
     {
-        AbstractSmParser* aParser = new SmParser();
+        AbstractSmParser* aParser = new SmParser5();
         return aParser;
     }
     default:
