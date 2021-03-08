@@ -192,7 +192,7 @@ SvxFontWorkDialog::SvxFontWorkDialog(SfxBindings *pBindinx,
     , m_xMtrFldShadowX(m_xBuilder->weld_metric_spin_button("distancex", FieldUnit::CM))
     , m_xFbShadowY(m_xBuilder->weld_image("shadowy"))
     , m_xMtrFldShadowY(m_xBuilder->weld_metric_spin_button("distancey", FieldUnit::CM))
-    , m_xShadowColorLB(new ColorListBox(m_xBuilder->weld_menu_button("color"), GetFrameWeld()))
+    , m_xShadowColorLB(new ColorListBox(m_xBuilder->weld_menu_button("color"), [this]{ return GetFrameWeld(); } ))
 {
     SetText(SvxResId(RID_SVXSTR_FONTWORK));
 

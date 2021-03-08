@@ -51,8 +51,8 @@ CopyDlg::CopyDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* 
     , m_xMtrFldHeight(m_xBuilder->weld_metric_spin_button("height", FieldUnit::CM))
     , m_xFtEndColor(m_xBuilder->weld_label("endlabel"))
     , m_xBtnSetDefault(m_xBuilder->weld_button("default"))
-    , m_xLbStartColor(new ColorListBox(m_xBuilder->weld_menu_button("start"), pWindow))
-    , m_xLbEndColor(new ColorListBox(m_xBuilder->weld_menu_button("end"), pWindow))
+    , m_xLbStartColor(new ColorListBox(m_xBuilder->weld_menu_button("start"), [this]{ return m_xDialog.get(); } ))
+    , m_xLbEndColor(new ColorListBox(m_xBuilder->weld_menu_button("end"), [this]{ return m_xDialog.get(); } ))
 {
     m_xLbStartColor->SetSelectHdl( LINK( this, CopyDlg, SelectColorHdl ) );
     m_xBtnSetViewData->connect_clicked( LINK( this, CopyDlg, SetViewData ) );

@@ -106,7 +106,8 @@ SwFootNotePage::SwFootNotePage(weld::Container* pPage, weld::DialogController* p
     , m_xLinePosBox(m_xBuilder->weld_combo_box("position"))
     , m_xLineTypeBox(new SvtLineListBox(m_xBuilder->weld_menu_button("style")))
     , m_xLineWidthEdit(m_xBuilder->weld_metric_spin_button("thickness", FieldUnit::POINT))
-    , m_xLineColorBox(new ColorListBox(m_xBuilder->weld_menu_button("color"), pController->getDialog()))
+    , m_xLineColorBox(new ColorListBox(m_xBuilder->weld_menu_button("color"),
+                [this]{ return GetDialogController()->getDialog(); }))
     , m_xLineLengthEdit(m_xBuilder->weld_metric_spin_button("length", FieldUnit::PERCENT))
     , m_xLineDistEdit(m_xBuilder->weld_metric_spin_button("spacingtocontents", FieldUnit::CM))
 {

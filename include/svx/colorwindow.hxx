@@ -26,6 +26,8 @@
 #include <svx/Palette.hxx>
 #include <vcl/toolbox.hxx>
 
+typedef std::function<weld::Window*()> TopLevelParentFunction;
+
 namespace com::sun::star::frame { class XFrame; }
 
 class PaletteManager;
@@ -81,11 +83,11 @@ class SVXCORE_DLLPUBLIC ColorWindow final : public WeldToolbarPopup
 private:
     const sal_uInt16    theSlotId;
     OUString            maCommand;
-    weld::Window*       mpParentWindow;
     MenuOrToolMenuButton maMenuButton;
     std::shared_ptr<PaletteManager> mxPaletteManager;
-    ColorStatus&  mrColorStatus;
-    ColorSelectFunction  maColorSelectFunction;
+    ColorStatus& mrColorStatus;
+    TopLevelParentFunction maTopLevelParentFunction;
+    ColorSelectFunction maColorSelectFunction;
 
     std::unique_ptr<SvxColorValueSet> mxColorSet;
     std::unique_ptr<SvxColorValueSet> mxRecentColorSet;
@@ -113,8 +115,9 @@ public:
                 std::shared_ptr<PaletteManager> const & rPaletteManager,
                 ColorStatus& rColorStatus,
                 sal_uInt16 nSlotId,
-                const css::uno::Reference< css::frame::XFrame >& rFrame,
-                weld::Window* pParentWindow, const MenuOrToolMenuButton &rMenuButton,
+                const css::uno::Reference<css::frame::XFrame>& rFrame,
+                const MenuOrToolMenuButton &rMenuButton,
+                TopLevelParentFunction const& rTopLevelParentFunction,
                 ColorSelectFunction const& rColorSelectFunction);
     virtual ~ColorWindow() override;
     void                ShowNoneButton();

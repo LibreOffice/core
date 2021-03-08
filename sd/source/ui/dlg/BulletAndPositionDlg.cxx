@@ -95,7 +95,8 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     , m_xSuffixED(m_xBuilder->weld_entry("suffix"))
     , m_xBeforeAfter(m_xBuilder->weld_frame("beforeafter"))
     , m_xBulColorFT(m_xBuilder->weld_label("colorft"))
-    , m_xBulColLB(new ColorListBox(m_xBuilder->weld_menu_button("color"), pWindow))
+    , m_xBulColLB(new ColorListBox(m_xBuilder->weld_menu_button("color"),
+                                   [this] { return m_xDialog.get(); }))
     , m_xBulRelSizeFT(m_xBuilder->weld_label("relsizeft"))
     , m_xBulRelSizeMF(m_xBuilder->weld_metric_spin_button("relsize", FieldUnit::PERCENT))
     , m_xStartFT(m_xBuilder->weld_label("startatft"))

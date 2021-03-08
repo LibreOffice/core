@@ -64,7 +64,8 @@ SwTextGridPage::SwTextGridPage(weld::Container* pPage, weld::DialogController* p
     , m_xDisplayFL(m_xBuilder->weld_widget("frameFL_DISPLAY"))
     , m_xDisplayCB(m_xBuilder->weld_check_button("checkCB_DISPLAY"))
     , m_xPrintCB(m_xBuilder->weld_check_button("checkCB_PRINT"))
-    , m_xColorLB(new ColorListBox(m_xBuilder->weld_menu_button("listLB_COLOR"), pController->getDialog()))
+    , m_xColorLB(new ColorListBox(m_xBuilder->weld_menu_button("listLB_COLOR"),
+                [this]{ return GetDialogController()->getDialog(); }))
 {
     Link<weld::SpinButton&,void> aLink = LINK(this, SwTextGridPage, CharorLineChangedHdl);
     m_xCharsPerLineNF->connect_value_changed(aLink);

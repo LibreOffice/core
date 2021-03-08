@@ -1308,7 +1308,8 @@ SvxCharEffectsPage::SvxCharEffectsPage(weld::Container* pPage, weld::DialogContr
     , m_bNewFontColor(false)
     , m_bEnableNoneFontColor(false)
     , m_xFontColorFT(m_xBuilder->weld_label("fontcolorft"))
-    , m_xFontColorLB(new ColorListBox(m_xBuilder->weld_menu_button("fontcolorlb"), pController->getDialog()))
+    , m_xFontColorLB(new ColorListBox(m_xBuilder->weld_menu_button("fontcolorlb"),
+        [this]{ return GetDialogController()->getDialog(); }))
     , m_xFontTransparencyFT(m_xBuilder->weld_label("fonttransparencyft"))
     , m_xFontTransparencyMtr(
           m_xBuilder->weld_metric_spin_button("fonttransparencymtr", FieldUnit::PERCENT))
@@ -1321,11 +1322,13 @@ SvxCharEffectsPage::SvxCharEffectsPage(weld::Container* pPage, weld::DialogContr
     , m_xHiddenBtn(m_xBuilder->weld_check_button("hiddencb"))
     , m_xOverlineLB(m_xBuilder->weld_combo_box("overlinelb"))
     , m_xOverlineColorFT(m_xBuilder->weld_label("overlinecolorft"))
-    , m_xOverlineColorLB(new ColorListBox(m_xBuilder->weld_menu_button("overlinecolorlb"), pController->getDialog()))
+    , m_xOverlineColorLB(new ColorListBox(m_xBuilder->weld_menu_button("overlinecolorlb"),
+        [this]{ return GetDialogController()->getDialog(); }))
     , m_xStrikeoutLB(m_xBuilder->weld_combo_box("strikeoutlb"))
     , m_xUnderlineLB(m_xBuilder->weld_combo_box("underlinelb"))
     , m_xUnderlineColorFT(m_xBuilder->weld_label("underlinecolorft"))
-    , m_xUnderlineColorLB(new ColorListBox(m_xBuilder->weld_menu_button("underlinecolorlb"), pController->getDialog()))
+    , m_xUnderlineColorLB(new ColorListBox(m_xBuilder->weld_menu_button("underlinecolorlb"),
+        [this]{ return GetDialogController()->getDialog(); }))
     , m_xIndividualWordsBtn(m_xBuilder->weld_check_button("individualwordscb"))
     , m_xEmphasisFT(m_xBuilder->weld_label("emphasisft"))
     , m_xEmphasisLB(m_xBuilder->weld_combo_box("emphasislb"))

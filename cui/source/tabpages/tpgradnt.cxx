@@ -56,9 +56,11 @@ SvxGradientTabPage::SvxGradientTabPage(weld::Container* pPage, weld::DialogContr
     , m_xSliderAngle(m_xBuilder->weld_scale("angleslider"))
     , m_xMtrBorder(m_xBuilder->weld_metric_spin_button("bordermtr", FieldUnit::PERCENT))
     , m_xSliderBorder(m_xBuilder->weld_scale("borderslider"))
-    , m_xLbColorFrom(new ColorListBox(m_xBuilder->weld_menu_button("colorfromlb"), pController->getDialog()))
+    , m_xLbColorFrom(new ColorListBox(m_xBuilder->weld_menu_button("colorfromlb"),
+                [this]{ return GetDialogController()->getDialog(); }))
     , m_xMtrColorFrom(m_xBuilder->weld_metric_spin_button("colorfrommtr", FieldUnit::PERCENT))
-    , m_xLbColorTo(new ColorListBox(m_xBuilder->weld_menu_button("colortolb"), pController->getDialog()))
+    , m_xLbColorTo(new ColorListBox(m_xBuilder->weld_menu_button("colortolb"),
+                [this]{ return GetDialogController()->getDialog(); }))
     , m_xMtrColorTo(m_xBuilder->weld_metric_spin_button("colortomtr", FieldUnit::PERCENT))
     , m_xGradientLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("gradientpresetlistwin", true)))
     , m_xMtrIncrement(m_xBuilder->weld_spin_button("incrementmtr"))

@@ -722,8 +722,8 @@ ScColorScale2FrmtEntry::ScColorScale2FrmtEntry(ScCondFormatList* pParent, ScDocu
     , mxLbEntryTypeMax(mxBuilder->weld_combo_box("colscalemax"))
     , mxEdMin(mxBuilder->weld_entry("edcolscalemin"))
     , mxEdMax(mxBuilder->weld_entry("edcolscalemax"))
-    , mxLbColMin(new ColorListBox(mxBuilder->weld_menu_button("lbcolmin"), pParent->GetFrameWeld()))
-    , mxLbColMax(new ColorListBox(mxBuilder->weld_menu_button("lbcolmax"), pParent->GetFrameWeld()))
+    , mxLbColMin(new ColorListBox(mxBuilder->weld_menu_button("lbcolmin"), [this]{ return mpParent->GetFrameWeld(); }))
+    , mxLbColMax(new ColorListBox(mxBuilder->weld_menu_button("lbcolmax"), [this]{ return mpParent->GetFrameWeld(); }))
     , mxFtMin(mxBuilder->weld_label("Label_minimum"))
     , mxFtMax(mxBuilder->weld_label("Label_maximum"))
 {
@@ -859,9 +859,9 @@ ScColorScale3FrmtEntry::ScColorScale3FrmtEntry(ScCondFormatList* pParent, ScDocu
     , mxEdMin(mxBuilder->weld_entry("edcolscalemin"))
     , mxEdMiddle(mxBuilder->weld_entry("edcolscalemiddle"))
     , mxEdMax(mxBuilder->weld_entry("edcolscalemax"))
-    , mxLbColMin(new ColorListBox(mxBuilder->weld_menu_button("lbcolmin"), pParent->GetFrameWeld()))
-    , mxLbColMiddle(new ColorListBox(mxBuilder->weld_menu_button("lbcolmiddle"), pParent->GetFrameWeld()))
-    , mxLbColMax(new ColorListBox(mxBuilder->weld_menu_button("lbcolmax"), pParent->GetFrameWeld()))
+    , mxLbColMin(new ColorListBox(mxBuilder->weld_menu_button("lbcolmin"), [this]{ return mpParent->GetFrameWeld(); }))
+    , mxLbColMiddle(new ColorListBox(mxBuilder->weld_menu_button("lbcolmiddle"), [this]{ return mpParent->GetFrameWeld(); }))
+    , mxLbColMax(new ColorListBox(mxBuilder->weld_menu_button("lbcolmax"), [this]{ return mpParent->GetFrameWeld(); }))
     , mxFtMin(mxBuilder->weld_label("Label_minimum"))
     , mxFtMax(mxBuilder->weld_label("Label_maximum"))
 {

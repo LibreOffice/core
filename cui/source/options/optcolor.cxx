@@ -281,7 +281,7 @@ ColorConfigWindow_Impl::Entry::Entry(weld::Window* pTopLevel, weld::Builder& rBu
                                      const char* pTextWidget, const char* pColorWidget,
                                      const Color& rColor,
                                      tools::Long nCheckBoxLabelOffset, bool bCheckBox, bool bShow)
-    : m_xColorList(new ColorListBox(rBuilder.weld_menu_button(pColorWidget), pTopLevel))
+    : m_xColorList(new ColorListBox(rBuilder.weld_menu_button(pColorWidget), [pTopLevel]{ return pTopLevel; }))
     , m_aDefaultColor(rColor)
 {
     if (bCheckBox)

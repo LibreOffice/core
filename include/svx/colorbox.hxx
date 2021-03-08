@@ -32,7 +32,6 @@ private:
     friend class ListBoxColorWrapper;
     std::unique_ptr<ColorWindow> m_xColorWindow;
     std::unique_ptr<weld::MenuButton> m_xButton;
-    weld::Window* m_pTopLevel;
     Link<ColorListBox&, void> m_aSelectedLink;
     ListBoxColorWrapper m_aColorWrapper;
     Color m_aAutoDisplayColor;
@@ -41,6 +40,7 @@ private:
     sal_uInt16 m_nSlotId;
     bool m_bShowNoneButton;
     std::shared_ptr<PaletteManager> m_xPaletteManager;
+    TopLevelParentFunction m_aTopLevelParentFunction;
     ColorStatus m_aColorStatus;
 
     void Selected(const NamedColor& rNamedColor);
@@ -51,8 +51,9 @@ private:
     DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
 
 public:
-    // pTopLevelWindow will be used as parent for any color picker dialog created
-    ColorListBox(std::unique_ptr<weld::MenuButton> pControl, weld::Window* pTopLevelWindow);
+    // rTopLevelParentFunction will be used to get parent for any color picker dialog created
+    ColorListBox(std::unique_ptr<weld::MenuButton> pControl,
+                 TopLevelParentFunction const& rTopLevelParentFunction);
     ~ColorListBox();
 
     void SetSelectHdl(const Link<ColorListBox&, void>& rLink) { m_aSelectedLink = rLink; }

@@ -1760,17 +1760,17 @@ ColorWindow::ColorWindow(const OUString& rCommand,
                          ColorStatus&               rColorStatus,
                          sal_uInt16                 nSlotId,
                          const Reference< XFrame >& rFrame,
-                         weld::Window*              pParentWindow,
                          const MenuOrToolMenuButton& rMenuButton,
-                         ColorSelectFunction const & aFunction)
+                         TopLevelParentFunction const& rTopLevelParentFunction,
+                         ColorSelectFunction const & rColorSelectFunction)
     : WeldToolbarPopup(rFrame, rMenuButton.get_widget(), "svx/ui/colorwindow.ui", "palette_popup_window")
     , theSlotId(nSlotId)
     , maCommand(rCommand)
-    , mpParentWindow(pParentWindow)
     , maMenuButton(rMenuButton)
     , mxPaletteManager(rPaletteManager)
     , mrColorStatus(rColorStatus)
-    , maColorSelectFunction(aFunction)
+    , maTopLevelParentFunction(rTopLevelParentFunction)
+    , maColorSelectFunction(rColorSelectFunction)
     , mxColorSet(new SvxColorValueSet(m_xBuilder->weld_scrolled_window("colorsetwin", true)))
     , mxRecentColorSet(new SvxColorValueSet(nullptr))
     , mxPaletteListBox(m_xBuilder->weld_combo_box("palette_listbox"))
@@ -2005,7 +2005,7 @@ IMPL_LINK_NOARG(ColorWindow, OpenPickerClickHdl, weld::Button&, void)
 {
     // copy before set_inactive
     auto nColor = GetSelectEntryColor().first;
-    auto pParentWindow = mpParentWindow;
+    auto pParentWindow = maTopLevelParentFunction();
     OUString sCommand = maCommand;
     std::shared_ptr<PaletteManager> xPaletteManager(mxPaletteManager);
 
@@ -3236,12 +3236,15 @@ void SvxColorToolBoxControl::setColorSelectFunction(const ColorSelectFunction& a
         m_xPaletteManager->SetColorSelectFunction(aColorSelectFunction);
 }
 
+weld::Window* SvxColorToolBoxControl::GetParentFrame() const
+{
+    const css::uno::Reference<css::awt::XWindow> xParent = m_xFrame->getContainerWindow();
+    return Application::GetFrameWeld(xParent);
+}
+
 std::unique_ptr<WeldToolbarPopup> SvxColorToolBoxControl::weldPopupWindow()
 {
     EnsurePaletteManager();
-
-    const css::uno::Reference<css::awt::XWindow> xParent = m_xFrame->getContainerWindow();
-    weld::Window* pParentFrame = Application::GetFrameWeld(xParent);
 
     const OString aId(m_aCommandURL.toUtf8());
 
@@ -3251,8 +3254,8 @@ std::unique_ptr<WeldToolbarPopup> SvxColorToolBoxControl::weldPopupWindow()
                         m_aColorStatus,
                         m_nSlotId,
                         m_xFrame,
-                        pParentFrame,
                         MenuOrToolMenuButton(m_pToolbar, aId),
+                        [this] { return GetParentFrame(); },
                         m_aColorSelectFunction);
 
     if ( m_bSplitButton )
@@ -3268,9 +3271,6 @@ VclPtr<vcl::Window> SvxColorToolBoxControl::createVclPopupWindow( vcl::Window* p
     if (!getToolboxId(nId, &pToolBox))
         return nullptr;
 
-    const css::uno::Reference<css::awt::XWindow> xParent = m_xFrame->getContainerWindow();
-    weld::Window* pParentFrame = Application::GetFrameWeld(xParent);
-
     EnsurePaletteManager();
 
     auto xPopover = std::make_unique<ColorWindow>(
@@ -3279,8 +3279,8 @@ VclPtr<vcl::Window> SvxColorToolBoxControl::createVclPopupWindow( vcl::Window* p
                         m_aColorStatus,
                         m_nSlotId,
                         m_xFrame,
-                        pParentFrame,
                         MenuOrToolMenuButton(this, pToolBox, nId),
+                        [this] { return GetParentFrame(); },
                         m_aColorSelectFunction);
 
     if ( m_bSplitButton )
@@ -3829,13 +3829,13 @@ void ColorListBox::SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton)
     createColorWindow();
 }
 
-ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl, weld::Window* pTopLevel)
+ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl, TopLevelParentFunction const& rTopLevelParentFunction)
     : m_xButton(std::move(pControl))
-    , m_pTopLevel(pTopLevel)
     , m_aColorWrapper(this)
     , m_aAutoDisplayColor(Application::GetSettings().GetStyleSettings().GetDialogColor())
     , m_nSlotId(0)
     , m_bShowNoneButton(false)
+    , m_aTopLevelParentFunction(rTopLevelParentFunction)
 {
     m_xButton->connect_toggled(LINK(this, ColorListBox, ToggleHdl));
     m_aSelectedColor = GetAutoColor(m_nSlotId);
@@ -3874,8 +3874,8 @@ void ColorListBox::createColorWindow()
                             m_aColorStatus,
                             m_nSlotId,
                             xFrame,
-                            m_pTopLevel,
                             m_xButton.get(),
+                            m_aTopLevelParentFunction,
                             m_aColorWrapper));
 
     SetNoSelection();

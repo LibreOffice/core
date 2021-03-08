@@ -102,7 +102,8 @@ SvxLineTabPage::SvxLineTabPage(weld::Container* pPage, weld::DialogController* p
     , m_pPosLineEndLb(nullptr)
     , m_xBoxColor(m_xBuilder->weld_widget("boxCOLOR"))
     , m_xLbLineStyle(new SvxLineLB(m_xBuilder->weld_combo_box("LB_LINE_STYLE")))
-    , m_xLbColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_COLOR"), pController->getDialog()))
+    , m_xLbColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_COLOR"),
+                [this]{ return GetDialogController()->getDialog(); }))
     , m_xBoxWidth(m_xBuilder->weld_widget("boxWIDTH"))
     , m_xMtrLineWidth(m_xBuilder->weld_metric_spin_button("MTR_FLD_LINE_WIDTH", FieldUnit::CM))
     , m_xBoxTransparency(m_xBuilder->weld_widget("boxTRANSPARENCY"))

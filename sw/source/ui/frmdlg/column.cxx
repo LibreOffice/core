@@ -398,7 +398,8 @@ SwColumnPage::SwColumnPage(weld::Container* pPage, weld::DialogController* pCont
     , m_xLinePosDLB(m_xBuilder->weld_combo_box("lineposlb"))
     , m_xTextDirectionFT(m_xBuilder->weld_label("textdirectionft"))
     , m_xTextDirectionLB(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box("textdirectionlb")))
-    , m_xLineColorDLB(new ColorListBox(m_xBuilder->weld_menu_button("colorlb"), pController->getDialog()))
+    , m_xLineColorDLB(new ColorListBox(m_xBuilder->weld_menu_button("colorlb"),
+                [this]{ return GetDialogController()->getDialog(); }))
     , m_xLineTypeDLB(new SvtLineListBox(m_xBuilder->weld_menu_button("linestylelb")))
     , m_xEd1(new SwPercentField(m_xBuilder->weld_metric_spin_button("width1mf", FieldUnit::CM)))
     , m_xEd2(new SwPercentField(m_xBuilder->weld_metric_spin_button("width2mf", FieldUnit::CM)))
