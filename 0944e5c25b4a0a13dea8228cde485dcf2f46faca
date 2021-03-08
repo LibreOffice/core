@@ -16,6 +16,24 @@
       "revId": "0944e5c25b4a0a13dea8228cde485dcf2f46faca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fb59c1f_91253e11",
+        "filename": "sd/source/ui/func/futransf.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1001306
+      },
+      "writtenOn": "2021-03-08T11:55:09Z",
+      "side": 1,
+      "message": "I can\u0027t be sure of that. Unless it comes from the \"Position And Size\" dialog, it has the arguments for the LOK case. I will add additional LOK control just to be safe. Thank you",
+      "parentUuid": "36353dcb_c6673426",
+      "revId": "0944e5c25b4a0a13dea8228cde485dcf2f46faca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
