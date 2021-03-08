@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4939cc21_31f287b3",
+        "filename": "sd/source/ui/animations/CustomAnimationDialog.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1003033
+      },
+      "writtenOn": "2021-03-08T15:12:14Z",
+      "side": 1,
+      "message": "It\u0027s good to identify this error condition and comment on it, but it would be even better to create a ticket in Bugzilla to deal with it so that it\u0027s not forgotten.",
+      "revId": "1080f76b85f17ed51b6afbf703aa7cc20a0503d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ad474ac_8a07b410",
+        "filename": "sd/source/ui/animations/CustomAnimationDialog.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1003033
+      },
+      "writtenOn": "2021-03-08T15:12:14Z",
+      "side": 1,
+      "message": "I love all the comments. Yes there\u0027s a typo here, but at least now the typo is in a comment and not code.\n\nI don\u0027t love the magic numbers for mnDirection. It would be nice if it were a std::bitset\u003c2\u003e or an enum class, or at least using named constants. But I understand this may be beyond the scope of this change, and so yes thanks for adding these comments to reduce confusion.",
+      "revId": "1080f76b85f17ed51b6afbf703aa7cc20a0503d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
