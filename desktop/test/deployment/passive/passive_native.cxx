@@ -104,7 +104,8 @@ rtl::OUString Provider::static_getImplementationName() {
 
 css::uno::Sequence< rtl::OUString > Provider::static_getSupportedServiceNames()
 {
-    return css::uno::Sequence< rtl::OUString >{"com.sun.star.test.deployment.passive_native"};
+    rtl::OUString name("com.sun.star.test.deployment.passive_native");
+    return css::uno::Sequence< rtl::OUString >(&name, 1);
 }
 
 css::uno::Reference< css::frame::XDispatch > Provider::queryDispatch(
@@ -132,7 +133,7 @@ Provider::queryDispatches(
 {
     css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > s(
         Requests.getLength());
-    for (sal_Int32 i = 0; i < s.(); ++i) {
+    for (sal_Int32 i = 0; i < s.getLength(); ++i) {
         s[i] = queryDispatch(
             Requests[i].FeatureURL, Requests[i].FrameName,
             Requests[i].SearchFlags);
@@ -218,7 +219,7 @@ void Dispatch::dispatch(
     xComponent->dispose();
 }
 
-static cppu::ImplementationEntry const services[] = {
+cppu::ImplementationEntry const services[] = {
     { &Provider::static_create, &Provider::static_getImplementationName,
       &Provider::static_getSupportedServiceNames,
       &cppu::createSingleComponentFactory, nullptr, 0 },
