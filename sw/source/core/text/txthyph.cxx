@@ -377,13 +377,13 @@ bool SwHyphPortion::Format( SwTextFormatInfo &rInf )
 
 bool SwHyphStrPortion::GetExpText( const SwTextSizeInfo &, OUString &rText ) const
 {
-    rText = aExpand;
+    rText = m_aExpand;
     return true;
 }
 
 void SwHyphStrPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    rPH.Special( GetLen(), aExpand, GetWhichPor() );
+    rPH.Special( GetLen(), m_aExpand, GetWhichPor() );
 }
 
 SwLinePortion *SwSoftHyphPortion::Compress() { return this; }

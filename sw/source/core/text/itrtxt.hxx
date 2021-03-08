@@ -265,7 +265,7 @@ class SwTextCursor : public SwTextAdjuster
     friend class SwTextCursorSave;
 
     // Ambiguities
-    static bool bRightMargin;
+    static bool s_bRightMargin;
     void GetCharRect_(SwRect *, TextFrameIndex, SwCursorMoveState *);
 protected:
     void CtorInitTextCursor( SwTextFrame *pFrame, SwTextSizeInfo *pInf );
@@ -291,8 +291,8 @@ public:
                            sal_uInt16 nPorHeight = 0, sal_uInt16 nAscent = 0,
                            const bool bAutoToCentered = false ) const;
 
-    static void SetRightMargin( const bool bNew ){ bRightMargin = bNew; }
-    static bool IsRightMargin() { return bRightMargin; }
+    static void SetRightMargin( const bool bNew ){ s_bRightMargin = bNew; }
+    static bool IsRightMargin() { return s_bRightMargin; }
 };
 
 // Change current output device to printer, this has to be done before

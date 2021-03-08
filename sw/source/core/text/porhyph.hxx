@@ -41,10 +41,10 @@ public:
 
 class SwHyphStrPortion : public SwHyphPortion
 {
-    OUString aExpand;
+    OUString m_aExpand;
 public:
     explicit SwHyphStrPortion(std::u16string_view rStr)
-        : aExpand(OUString::Concat(rStr) + "-")
+        : m_aExpand(OUString::Concat(rStr) + "-")
     {
         SetWhichPor( PortionType::HyphenStr );
     }
