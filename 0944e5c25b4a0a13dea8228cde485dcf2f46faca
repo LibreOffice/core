@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36353dcb_c6673426",
+        "filename": "sd/source/ui/func/futransf.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-03-08T10:06:19Z",
+      "side": 1,
+      "message": "Do we know that this branch can only be reached in the LOK case? If this \"execute without parameters\" code was introduced for LOK purposes in the first place, then this is fine. Otherwise you would break other clients dispatching UNO commands.",
+      "revId": "0944e5c25b4a0a13dea8228cde485dcf2f46faca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
