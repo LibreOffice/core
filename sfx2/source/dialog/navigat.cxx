@@ -24,20 +24,20 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
+#include <vcl/layout.hxx>
 #include <helpids.h>
 #include <tools/debug.hxx>
 
-SFX_IMPL_DOCKINGWINDOW( SfxNavigatorWrapper , SID_NAVIGATOR );
-
 SfxNavigatorWrapper::SfxNavigatorWrapper( vcl::Window* pParentWnd ,
                                                 sal_uInt16 nId ,
-                                                SfxBindings* pBindings ,
-                                                SfxChildWinInfo* pInfo )
+                                                SfxBindings* /*pBindings*/ ,
+                                                SfxChildWinInfo* /*pInfo*/ )
                     : SfxChildWindow( pParentWnd , nId )
 {
-    SetWindow( VclPtr<SfxNavigator>::Create( pBindings, this, pParentWnd,
-        WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK ) );
+}
 
+void SfxNavigatorWrapper::Initialize(SfxChildWinInfo* pInfo)
+{
     GetWindow()->SetHelpId ( HID_NAVIGATOR_WINDOW );
     GetWindow()->SetOutputSizePixel( Size( 270, 240 ) );
 
@@ -47,13 +47,11 @@ SfxNavigatorWrapper::SfxNavigatorWrapper( vcl::Window* pParentWnd ,
 
 SfxNavigator::SfxNavigator( SfxBindings* pBind ,
                             SfxChildWindow* pChildWin ,
-                            vcl::Window* pParent ,
-                            WinBits nBits )
+                            vcl::Window* pParent )
                         : SfxDockingWindow( pBind ,
                                             pChildWin ,
                                             pParent ,
-                                            nBits )
-                        , pWrapper( pChildWin )
+                                            WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK )
 {
     SetText(SfxResId(STR_SID_NAVIGATOR));
 }
@@ -61,14 +59,8 @@ SfxNavigator::SfxNavigator( SfxBindings* pBind ,
 void SfxNavigator::Resize()
 {
     SfxDockingWindow::Resize();
-    if ( pWrapper->GetContextWindow() )
-        pWrapper->GetContextWindow()->SetSizePixel( GetOutputSizePixel() );
-}
-
-bool SfxNavigator::Close()
-{
-    DBG_ASSERT( GetChildWindow_Impl()->GetContext_Impl(), "No Context!" );
-    return SfxDockingWindow::Close();
+    if (vcl::Window *pChild = GetWindow(GetWindowType::FirstChild))
+        VclContainer::setLayoutAllocation(*pChild, Point(0, 0), GetSizePixel());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
