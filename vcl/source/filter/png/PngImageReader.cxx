@@ -15,6 +15,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <unotools/configmgr.hxx>
 
 #include <bitmap/BitmapWriteAccess.hxx>
 #include <svdata.hxx>
@@ -101,7 +102,10 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
 
     png_set_read_fn(pPng, &rStream, lclReadStream);
 
-    png_set_crc_action(pPng, PNG_CRC_ERROR_QUIT, PNG_CRC_WARN_DISCARD);
+    if (!utl::ConfigManager::IsFuzzing())
+        png_set_crc_action(pPng, PNG_CRC_ERROR_QUIT, PNG_CRC_WARN_DISCARD);
+    else
+        png_set_crc_action(pPng, PNG_CRC_QUIET_USE, PNG_CRC_QUIET_USE);
 
     png_set_sig_bytes(pPng, PNG_SIGNATURE_SIZE);
 
@@ -360,6 +364,7 @@ std::unique_ptr<sal_uInt8[]> getMsGifChunk(SvStream& rStream, sal_Int32* chunkSi
     // try to get it using libpng.
     // https://en.wikipedia.org/wiki/Portable_Network_Graphics#File_format
     // Each chunk is: 4 bytes length, 4 bytes type, <length> bytes, 4 bytes crc
+    bool ignoreCrc = utl::ConfigManager::IsFuzzing();
     for (;;)
     {
         sal_uInt32 length, type, crc;
@@ -392,7 +397,7 @@ std::unique_ptr<sal_uInt8[]> getMsGifChunk(SvStream& rStream, sal_Int32* chunkSi
                 return nullptr;
             computedCrc = rtl_crc32(computedCrc, chunk.get(), length);
             rStream.ReadUInt32(crc);
-            if (crc != computedCrc)
+            if (!ignoreCrc && crc != computedCrc)
                 continue; // invalid chunk, ignore
             if (chunkSize)
                 *chunkSize = length;
