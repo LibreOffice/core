@@ -1318,9 +1318,6 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
                             // The window ia within a SplitWindow
                             static_cast<SfxDockingWindow*>(pChildWin->GetWindow())->Reappear_Impl();
                     }
-
-                    if ( pCW->nInterfaceId != pChildWin->GetContextId() )
-                        pChildWin->CreateContext( pCW->nInterfaceId, GetBindings() );
                 }
             }
         }
@@ -1400,9 +1397,6 @@ void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW, bool bSetFocus )
         // in a SplitWindow and thus not be explicitly registered.
         // This happens already in the initialization of SfxDockingWindows!
     }
-
-    if ( pCW->nInterfaceId != pChildWin->GetContextId() )
-        pChildWin->CreateContext( pCW->nInterfaceId, GetBindings() );
 
     // Save the information in the INI file
     SaveStatus_Impl(pChildWin, pCW->aInfo);
