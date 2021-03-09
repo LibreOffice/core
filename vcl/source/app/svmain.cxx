@@ -489,7 +489,7 @@ void DeInitVCL()
             pSVData->m_xSystemClipboard, css::uno::UNO_QUERY))
     {
         SolarMutexReleaser r; // unblock pending "clipboard content changed" notifications
-        comp->dispose(); // will use CWinClipbImpl::s_aMutex
+        comp->dispose(); // will use s_aClipboardSingletonMutex for CWinClipboard
     }
     pSVData->m_xSystemClipboard.clear();
 #endif

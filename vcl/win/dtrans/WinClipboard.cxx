@@ -49,29 +49,34 @@
 
 using namespace com::sun::star;
 
-// definition of static members
-CWinClipboard* CWinClipboard::s_pCWinClipbImpl = nullptr;
-osl::Mutex CWinClipboard::s_aMutex;
+namespace
+{
+CWinClipboard* s_pCWinClipbImpl = nullptr;
+osl::Mutex s_aClipboardSingletonMutex;
+}
 
 /*XEventListener,*/
 CWinClipboard::CWinClipboard(const uno::Reference<uno::XComponentContext>& rxContext,
                              const OUString& aClipboardName)
-    : WeakComponentImplHelper<XSystemClipboard, XFlushableClipboard, XServiceInfo>(
-          m_aCbListenerMutex)
+    : WeakComponentImplHelper<XSystemClipboard, XFlushableClipboard, XServiceInfo>(m_aMutex)
     , m_xContext(rxContext)
     , m_itsName(aClipboardName)
     , m_pCurrentClipContent(nullptr)
 {
     // necessary to reassociate from
     // the static callback function
-    s_pCWinClipbImpl = this;
+    {
+        osl::MutexGuard aGuard(s_aClipboardSingletonMutex);
+        s_pCWinClipbImpl = this;
+    }
+
     registerClipboardViewer();
 }
 
 CWinClipboard::~CWinClipboard()
 {
     {
-        osl::MutexGuard aGuard(s_aMutex);
+        osl::MutexGuard aGuard(s_aClipboardSingletonMutex);
         s_pCWinClipbImpl = nullptr;
     }
 
@@ -88,7 +93,7 @@ CWinClipboard::~CWinClipboard()
 
 uno::Reference<datatransfer::XTransferable> SAL_CALL CWinClipboard::getContents()
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aContentMutex);
 
     if (rBHelper.bDisposed)
         throw lang::DisposedException("object is already disposed",
@@ -97,7 +102,7 @@ uno::Reference<datatransfer::XTransferable> SAL_CALL CWinClipboard::getContents(
     // use the shortcut or create a transferable from
     // system clipboard
     {
-        osl::MutexGuard aGuard2(m_ClipContentMutex);
+        osl::MutexGuard aGuard2(m_aContentCacheMutex);
 
         if (nullptr != m_pCurrentClipContent)
             return m_pCurrentClipContent->m_XTransferable;
@@ -122,7 +127,7 @@ uno::Reference<datatransfer::XTransferable> SAL_CALL CWinClipboard::getContents(
             std::vector<sal_uInt32> aFormats(aUINTFormats.begin(), aUINTFormats.end());
             rClipContent = new CDOTransferable(m_xContext, this, aFormats);
 
-            osl::MutexGuard aGuard2(m_ClipContentMutex);
+            osl::MutexGuard aGuard2(m_aContentCacheMutex);
             m_foreignContent = rClipContent;
         }
     }
@@ -132,7 +137,7 @@ uno::Reference<datatransfer::XTransferable> SAL_CALL CWinClipboard::getContents(
 
 IDataObjectPtr CWinClipboard::getIDataObject()
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aContentMutex);
 
     if (rBHelper.bDisposed)
         throw lang::DisposedException("object is already disposed",
@@ -156,7 +161,7 @@ void SAL_CALL CWinClipboard::setContents(
     const uno::Reference<datatransfer::XTransferable>& xTransferable,
     const uno::Reference<datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aContentMutex);
 
     if (rBHelper.bDisposed)
         throw lang::DisposedException("object is already disposed",
@@ -167,7 +172,7 @@ void SAL_CALL CWinClipboard::setContents(
     if (xTransferable.is())
     {
         {
-            osl::MutexGuard aGuard2(m_ClipContentMutex);
+            osl::MutexGuard aGuard2(m_aContentCacheMutex);
 
             m_foreignContent.clear();
 
@@ -195,7 +200,7 @@ OUString SAL_CALL CWinClipboard::getName()
 
 void SAL_CALL CWinClipboard::flushClipboard()
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    osl::MutexGuard aGuard(m_aContentMutex);
 
     if (rBHelper.bDisposed)
         throw lang::DisposedException("object is already disposed",
@@ -353,7 +358,7 @@ void CWinClipboard::onReleaseDataObject(CXNotifyingDataObject* theCaller)
 
     // if the current caller is the one we currently hold, then set it to NULL
     // because an external source must be the clipboardowner now
-    osl::MutexGuard aGuard(m_ClipContentMutex);
+    osl::MutexGuard aGuard(m_aContentCacheMutex);
 
     if (m_pCurrentClipContent == theCaller)
         m_pCurrentClipContent = nullptr;
@@ -368,7 +373,7 @@ void CWinClipboard::unregisterClipboardViewer() { m_MtaOleClipboard.registerClip
 
 void WINAPI CWinClipboard::onClipboardContentChanged()
 {
-    osl::MutexGuard aGuard(s_aMutex);
+    osl::MutexGuard aGuard(s_aClipboardSingletonMutex);
 
     // reassociation to instance through static member
     if (nullptr != s_pCWinClipbImpl)
