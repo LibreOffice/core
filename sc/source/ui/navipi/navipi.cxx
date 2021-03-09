@@ -309,18 +309,29 @@ ScNavigatorSettings::ScNavigatorSettings()
     maExpandedVec.fill(false);
 }
 
-SFX_IMPL_CHILDWINDOWCONTEXT( ScNavigatorDialogWrapper, SID_NAVIGATOR )
-
-ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(vcl::Window* pParent,
-                                                   sal_uInt16 nId,
-                                                   SfxBindings* pBind,
-                                                   SAL_UNUSED_PARAMETER SfxChildWinInfo* /* pInfo */)
-    : SfxChildWindowContext(nId)
+class ScNavigatorWin : public SfxNavigator
 {
-    pNavigator = VclPtr<ScNavigatorDlg>::Create(pBind, pParent);
-    if (SfxNavigator* pNav = dynamic_cast<SfxNavigator*>(pParent))
-        pNav->SetMinOutputSizePixel(pNavigator->GetOptimalSize());
-    SetWindow(pNavigator);
+private:
+    VclPtr<ScNavigatorDlg> pNavigator;
+public:
+    ScNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* pMgr, vcl::Window* pParent);
+    virtual void dispose() override
+    {
+        pNavigator.disposeAndClear();
+        SfxNavigator::dispose();
+    }
+    virtual ~ScNavigatorWin() override
+    {
+        disposeOnce();
+    }
+};
+
+ScNavigatorWin::ScNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, vcl::Window* _pParent)
+    : SfxNavigator(_pBindings, _pMgr, _pParent)
+{
+    pNavigator = VclPtr<ScNavigatorDlg>::Create(_pBindings, this);
+    pNavigator->Show();
+    SetMinOutputSizePixel(pNavigator->GetOptimalSize());
 }
 
 ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
@@ -934,6 +945,16 @@ void ScNavigatorDlg::EndOfDataArea()
         if ( (nCol+1 != m_xEdCol->get_value()) || (nRow+1 != m_xEdRow->get_value()) )
             SetCurrentCell( nCol, nRow );
     }
+}
+
+SFX_IMPL_DOCKINGWINDOW(ScNavigatorWrapper, SID_NAVIGATOR);
+
+ScNavigatorWrapper::ScNavigatorWrapper(vcl::Window *_pParent, sal_uInt16 nId,
+                                       SfxBindings* pBindings, SfxChildWinInfo* pInfo)
+    : SfxNavigatorWrapper(_pParent, nId, pBindings, pInfo)
+{
+    SetWindow(VclPtr<ScNavigatorWin>::Create(pBindings, this, _pParent));
+    Initialize(pInfo);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
