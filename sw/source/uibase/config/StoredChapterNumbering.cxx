@@ -320,7 +320,7 @@ public:
 
     virtual void SAL_CALL endFastElement(sal_Int32 /*Element*/) override
     {
-        assert(m_Contexts.size() < SwChapterNumRules::nMaxRules);
+        assert(m_Contexts.size() <= SwChapterNumRules::nMaxRules);
         for (auto iter = m_Contexts.begin(); iter != m_Contexts.end(); ++iter)
         {
             uno::Reference<container::XIndexReplace> const xRule(
