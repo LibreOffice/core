@@ -40,6 +40,7 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -53,12 +54,12 @@ namespace {
 
 // generic implementation to satisfy SalInstance
 class GenericClipboard :
+        public cppu::BaseMutex,
         public cppu::WeakComponentImplHelper<
         datatransfer::clipboard::XSystemClipboard,
         XServiceInfo
         >
 {
-    osl::Mutex                                                              m_aMutex;
     Reference< css::datatransfer::XTransferable >                           m_aContents;
     Reference< css::datatransfer::clipboard::XClipboardOwner >              m_aOwner;
     std::vector< Reference< css::datatransfer::clipboard::XClipboardListener > > m_aListeners;
