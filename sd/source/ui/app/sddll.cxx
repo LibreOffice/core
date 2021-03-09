@@ -156,8 +156,6 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     SdTbxCtlGlueEscDir::RegisterControl( SID_GLUE_ESCDIR, pMod );
 
     ::sd::AnimationChildWindow::RegisterChildWindow(false, pMod);
-    ::sd::NavigatorChildWindow::RegisterChildWindowContext( static_cast<sal_uInt16>(::sd::DrawViewShell::GetInterfaceId()), pMod );
-    ::sd::NavigatorChildWindow::RegisterChildWindowContext( static_cast<sal_uInt16>(::sd::GraphicViewShell::GetInterfaceId()), pMod );
 
     Svx3DChildWindow::RegisterChildWindow(false, pMod);
     SvxFontWorkChildWindow::RegisterChildWindow(false, pMod);
@@ -175,6 +173,8 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     ::sd::LeftPaneImpressChildWindow::RegisterChildWindow(false, pMod);
     ::sd::LeftPaneDrawChildWindow::RegisterChildWindow(false, pMod);
     ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(false, pMod);
+
+    ::sd::SdNavigatorWrapper::RegisterChildWindow(false, pMod, SfxChildWindowFlags::NEVERHIDE);
 
     SvxFillToolBoxControl::RegisterControl(0, pMod);
     SvxLineWidthToolBoxControl::RegisterControl(0, pMod);

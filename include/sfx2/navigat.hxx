@@ -23,30 +23,24 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/dockwin.hxx>
 
-class SfxNavigatorWrapper final : public SfxChildWindow
+class SFX2_DLLPUBLIC SfxNavigatorWrapper : public SfxChildWindow
 {
-
+protected:
+    void Initialize(SfxChildWinInfo* pInfo);
 public:
-                        SfxNavigatorWrapper( vcl::Window* pParent ,
-                                                sal_uInt16 nId ,
-                                                SfxBindings* pBindings ,
-                                                SfxChildWinInfo* pInfo );
-
-                        SFX_DECL_CHILDWINDOW(SfxNavigatorWrapper);
+    SfxNavigatorWrapper( vcl::Window* pParent ,
+                            sal_uInt16 nId ,
+                            SfxBindings* pBindings ,
+                            SfxChildWinInfo* pInfo );
 };
 
-class SFX2_DLLPUBLIC SfxNavigator final : public SfxDockingWindow
+class SFX2_DLLPUBLIC SfxNavigator : public SfxDockingWindow
 {
-    SfxChildWindow*     pWrapper;
-
 public:
-                        SfxNavigator( SfxBindings* pBindings ,
-                            SfxChildWindow* pChildWin ,
-                            vcl::Window* pParent ,
-                            WinBits nBits );
+    SfxNavigator(SfxBindings* pBindings, SfxChildWindow* pChildWin,
+                 vcl::Window* pParent);
 
-    virtual void        Resize() override;
-    virtual bool        Close() override;
+    virtual void Resize() override;
 };
 
 #endif
