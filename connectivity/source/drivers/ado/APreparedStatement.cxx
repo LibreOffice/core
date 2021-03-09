@@ -31,6 +31,7 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
+#include <rtl/ref.hxx>
 #include <strings.hrc>
 
 #include <limits>
@@ -264,13 +265,12 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  )
     CHECK_RETURN(m_RecordSet.get_CursorType(m_eCursorType))
     CHECK_RETURN(m_RecordSet.get_LockType(m_eLockType))
 
-    OResultSet* pSet = new OResultSet(m_RecordSet,this);
-    Reference< XResultSet > xRs = pSet;
+    rtl::Reference<OResultSet> pSet = new OResultSet(m_RecordSet,this);
     pSet->construct();
     pSet->setMetaData(getMetaData());
-    m_xResultSet = WeakReference<XResultSet>(xRs);
+    m_xResultSet = WeakReference<XResultSet>(pSet);
 
-    return xRs;
+    return pSet;
 }
 
 void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x )

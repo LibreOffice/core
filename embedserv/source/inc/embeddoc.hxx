@@ -26,6 +26,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
+#include <rtl/ref.hxx>
 #include <unordered_map>
 
 #include "embeddocaccess.hxx"
@@ -152,7 +153,7 @@ protected:
 
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
 
-    DocumentHolder*                     m_pDocHolder;
+    rtl::Reference<DocumentHolder>      m_pDocHolder;
     OUString                     m_aFileName;
 
     CComPtr< IStorage >                 m_pMasterStorage;

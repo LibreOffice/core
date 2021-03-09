@@ -63,6 +63,7 @@
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <rtl/process.h>
+#include <rtl/ref.hxx>
 
 using namespace ::com::sun::star;
 
@@ -78,7 +79,6 @@ DocumentHolder::DocumentHolder(
     m_pIOleIPUIWindow(nullptr),
     m_pCHatchWin(nullptr),
     m_xOleAccess( xOleAccess ),
-    m_pInterceptor(nullptr),
     m_xFactory( xFactory ),
     m_bOnDeactivate(false),
     m_hWndxWinParent(nullptr),
@@ -798,14 +798,14 @@ void DocumentHolder::ClearInterceptorInternally()
         m_pInterceptor->DisconnectDocHolder();
 
     m_xInterceptorLocker.clear();
-    m_pInterceptor = nullptr;
+    m_pInterceptor.clear();
 }
 
 void DocumentHolder::ClearInterceptor()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     m_xInterceptorLocker.clear();
-    m_pInterceptor = nullptr;
+    m_pInterceptor.clear();
 }
 
 
@@ -967,7 +967,7 @@ void DocumentHolder::setTitle(const OUString& aDocumentName)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-        Interceptor* pTmpInter = nullptr;
+        rtl::Reference<Interceptor> pTmpInter;
         uno::Reference< frame::XDispatchProviderInterceptor > xLock( m_xInterceptorLocker );
         if ( xLock.is() && m_pInterceptor )
             pTmpInter = m_pInterceptor;

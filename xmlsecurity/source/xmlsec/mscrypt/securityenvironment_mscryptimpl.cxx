@@ -44,6 +44,7 @@
 #include <comphelper/windowserrorstring.hxx>
 #include <sal/log.hxx>
 #include <rtl/locale.h>
+#include <rtl/ref.hxx>
 #include <osl/nlsupport.h>
 #include <osl/process.h>
 #include <o3tl/char16_t2wchar_t.hxx>
@@ -57,7 +58,7 @@ using ::com::sun::star::lang::XSingleServiceFactory ;
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::security::XCertificate ;
 
-static X509Certificate_MSCryptImpl* MswcryCertContextToXCert( PCCERT_CONTEXT cert ) ;
+static rtl::Reference<X509Certificate_MSCryptImpl> MswcryCertContextToXCert( PCCERT_CONTEXT cert ) ;
 
 namespace {
 
@@ -299,8 +300,8 @@ static BOOL WINAPI cert_enum_system_store_callback(const void *pvSystemStore,
 uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::getPersonalCertificates()
 {
     sal_Int32 length ;
-    X509Certificate_MSCryptImpl* xcert ;
-    std::vector< X509Certificate_MSCryptImpl* > certsList ;
+    rtl::Reference<X509Certificate_MSCryptImpl> xcert ;
+    std::vector< rtl::Reference<X509Certificate_MSCryptImpl> > certsList ;
     PCCERT_CONTEXT pCertContext = nullptr;
 
     //firstly, we try to find private keys in given key store.
@@ -309,7 +310,7 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
         while (pCertContext)
         {
             xcert = MswcryCertContextToXCert( pCertContext ) ;
-            if( xcert != nullptr )
+            if( xcert.is() )
                 certsList.push_back( xcert ) ;
             pCertContext = CertEnumCertificatesInStore( m_hKeyStore, pCertContext );
         }
@@ -347,7 +348,7 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
                 // then TODO : Check the personal cert is valid or not.
 
                 xcert = MswcryCertContextToXCert( pCertContext ) ;
-                if( xcert != nullptr )
+                if( xcert.is() )
                     certsList.push_back( xcert ) ;
                 pCertContext = CertEnumCertificatesInStore( hSystemKeyStore, pCertContext );
             }
@@ -375,7 +376,7 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
 
 uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( const OUString& issuerName, const uno::Sequence< sal_Int8 >& serialNumber ) {
     unsigned int i ;
-    X509Certificate_MSCryptImpl *xcert = nullptr ;
+    rtl::Reference<X509Certificate_MSCryptImpl> xcert ;
     PCCERT_CONTEXT pCertContext = nullptr ;
     HCERTSTORE hCertStore = nullptr ;
     CRYPT_INTEGER_BLOB cryptSerialNumber ;
@@ -561,8 +562,6 @@ uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( 
     if( pCertContext != nullptr ) {
         xcert = MswcryCertContextToXCert(pCertContext);
         CertFreeCertificateContext(pCertContext);
-    } else {
-        xcert = nullptr ;
     }
 
     return xcert ;
@@ -660,7 +659,7 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
     {
         PCCERT_CONTEXT pCertInChain ;
         PCERT_SIMPLE_CHAIN pCertChain ;
-        X509Certificate_MSCryptImpl* pCert ;
+        rtl::Reference<X509Certificate_MSCryptImpl> pCert ;
 
         pCertChain = pChainContext->rgpChain[0] ;
         if( pCertChain->cElement ) {
@@ -674,7 +673,7 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
 
                 if( pCertInChain != nullptr ) {
                     pCert = MswcryCertContextToXCert( pCertInChain ) ;
-                    if( pCert != nullptr )
+                    if( pCert.is() )
                         xCertChain[i] = pCert ;
                 }
             }
@@ -692,13 +691,11 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
 }
 
 uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificateFromRaw( const uno::Sequence< sal_Int8 >& rawCertificate ) {
-    X509Certificate_MSCryptImpl* xcert ;
+    rtl::Reference<X509Certificate_MSCryptImpl> xcert ;
 
     if( rawCertificate.getLength() > 0 ) {
         xcert = new X509Certificate_MSCryptImpl() ;
         xcert->setRawCert( rawCertificate ) ;
-    } else {
-        xcert = nullptr ;
     }
 
     return xcert ;
@@ -970,15 +967,13 @@ bool SecurityEnvironment_MSCryptImpl::defaultEnabled() {
     return m_bEnableDefault ;
 }
 
-static X509Certificate_MSCryptImpl* MswcryCertContextToXCert( PCCERT_CONTEXT cert )
+static rtl::Reference<X509Certificate_MSCryptImpl> MswcryCertContextToXCert( PCCERT_CONTEXT cert )
 {
-    X509Certificate_MSCryptImpl* xcert ;
+    rtl::Reference<X509Certificate_MSCryptImpl> xcert ;
 
     if( cert != nullptr ) {
         xcert = new X509Certificate_MSCryptImpl() ;
         xcert->setMswcryCert( cert ) ;
-    } else {
-        xcert = nullptr ;
     }
 
     return xcert ;

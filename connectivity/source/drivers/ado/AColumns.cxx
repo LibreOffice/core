@@ -29,6 +29,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
+#include <rtl/ref.hxx>
 #include <algorithm>
 #include <string_view>
 #include <strings.hrc>
@@ -61,9 +62,9 @@ Reference< XPropertySet > OColumns::createDescriptor()
 // XAppend
 sdbcx::ObjectType OColumns::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
 {
-    OAdoColumn* pColumn = getUnoTunnelImplementation<OAdoColumn>( descriptor );
+    rtl::Reference<OAdoColumn> pColumn = getUnoTunnelImplementation<OAdoColumn>( descriptor );
     Reference< XPropertySet > xColumn;
-    if ( pColumn == nullptr )
+    if ( !pColumn.is() )
     {
         // m_pConnection->throwGenericSQLException( STR_INVALID_COLUMN_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
         pColumn = new OAdoColumn(isCaseSensitive(),m_pConnection);
