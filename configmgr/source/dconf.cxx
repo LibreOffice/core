@@ -17,8 +17,11 @@
 #include <vector>
 
 extern "C" {
-    // <https://bugzilla.gnome.org/show_bug.cgi?id=754245>
-    // "common/dconf-changeset.h etc. lack extern "C" wrapper for C++"
+    //TODO: <https://bugzilla.gnome.org/show_bug.cgi?id=754245>
+    // "common/dconf-changeset.h etc. lack extern "C" wrapper for C++", fixed on current dconf
+    // master (towards 0.40?) now with
+    // <https://gitlab.gnome.org/GNOME/dconf/-/commit/db3d4df6d1a763698f27b013dc42da8d4ae02639>
+    // "Merge branch 'wip/issue-23' into 'master'"
 #include <dconf/dconf.h>
 }
 
