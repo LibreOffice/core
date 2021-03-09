@@ -1220,6 +1220,13 @@ OUString SAL_CALL InternalDataProvider::convertRangeToXML( const OUString& aRang
 
 OUString SAL_CALL InternalDataProvider::convertRangeFromXML( const OUString& aXMLRange )
 {
+    // Handle non-standards-conforming table:cell-range-address="PivotChart", see
+    // <https://bugs.documentfoundation.org/show_bug.cgi?id=112783> "PIVOT CHARTS: Save produces
+    // invalid file because of invalid cell address":
+    if (aXMLRange == "PivotChart") {
+        return "";
+    }
+
     const OUString aPivotTableID("PT@");
     if (aXMLRange.startsWith(aPivotTableID))
         return aXMLRange.copy(aPivotTableID.getLength());
