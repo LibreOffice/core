@@ -26,6 +26,7 @@
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/alpha.hxx>
+#include <vcl/graphicfilter.hxx>
 
 using namespace css;
 
@@ -46,9 +47,11 @@ public:
     }
 
     void testPng();
+    void testMsGifInPng();
 
     CPPUNIT_TEST_SUITE(PngFilterTest);
     CPPUNIT_TEST(testPng);
+    CPPUNIT_TEST(testMsGifInPng);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -220,6 +223,20 @@ void PngFilterTest::testPng()
             }
         }
     }
+}
+
+void PngFilterTest::testMsGifInPng()
+{
+    Graphic aGraphic;
+    const OUString aURL(getFullUrl(u"ms-gif.png"));
+    SvFileStream aFileStream(aURL, StreamMode::READ);
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+    ErrCode aResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, aResult);
+    CPPUNIT_ASSERT(aGraphic.IsGfxLink());
+    // The image is technically a PNG, but it has an animated Gif as a chunk (Microsoft extension).
+    CPPUNIT_ASSERT_EQUAL(GfxLinkType::NativeGif, aGraphic.GetSharedGfxLink()->GetType());
+    CPPUNIT_ASSERT(aGraphic.IsAnimated());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PngFilterTest);
