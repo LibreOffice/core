@@ -20,13 +20,13 @@
 #pragma once
 
 #include <vcl/dllapi.h>
+#include <vcl/floatwin.hxx>
 #include <vcl/syswin.hxx>
 #include <o3tl/deleter.hxx>
 #include <memory>
 #include <vector>
 
 class ToolBox;
-class FloatingWindow;
 enum class FloatWinPopupFlags;
 
 // data to be sent with docking events

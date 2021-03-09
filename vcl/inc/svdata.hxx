@@ -26,6 +26,7 @@
 #include <tools/fldunit.hxx>
 #include <unotools/options.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/floatwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/task.hxx>
@@ -60,7 +61,6 @@ class ImplFontCache;
 class HelpTextWindow;
 class ImplTBDragMgr;
 class ImplIdleMgr;
-class FloatingWindow;
 class AllSettings;
 class NotifyEvent;
 class Timer;
