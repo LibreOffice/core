@@ -741,8 +741,9 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                         OUString aImageId = m_pTextExport->FindRelId(nChecksum);
                         if (aImageId.isEmpty())
                         {
-                            aImageId = m_pTextExport->GetDrawingML().WriteImage(aGraphic);
-                            m_pTextExport->CacheRelId(nChecksum, aImageId);
+                            OUString aFileName;
+                            aImageId = m_pTextExport->GetDrawingML().WriteImage(aGraphic, false, &aFileName);
+                            m_pTextExport->CacheRelId(nChecksum, aImageId, aFileName);
                         }
                         pAttrList->add(FSNS(XML_r, XML_id),
                                        OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8));
@@ -763,8 +764,9 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                         OUString aImageId = m_pTextExport->FindRelId(nChecksum);
                         if (aImageId.isEmpty())
                         {
-                            aImageId = m_pTextExport->GetDrawingML().WriteImage(aGraphic);
-                            m_pTextExport->CacheRelId(nChecksum, aImageId);
+                            OUString aFileName;
+                            aImageId = m_pTextExport->GetDrawingML().WriteImage(aGraphic, false, &aFileName);
+                            m_pTextExport->CacheRelId(nChecksum, aImageId, aFileName);
                         }
                         pAttrList->add(FSNS(XML_r, XML_id),
                                        OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8));
