@@ -114,7 +114,14 @@ class TableManager : public virtual SvRefBase
 
         void resetCellProps()
         {
-            mpCellProps = getTableExceptionProps();
+            // copy tblPrEx table exception properties, if they exist
+            if (getTableExceptionProps().is())
+            {
+                mpCellProps = new TablePropertyMap;
+                mpCellProps->InsertProps(getTableExceptionProps().get());
+            }
+            else
+                mpCellProps.clear();
         }
 
         void setCellProps(TablePropertyMapPtr pProps)
@@ -149,6 +156,8 @@ class TableManager : public virtual SvRefBase
         void setTableExceptionProps(TablePropertyMapPtr pProps)
         {
             mpTableExceptionProps = pProps;
+            // set table exception properties of the first cell
+            resetCellProps();
         }
 
         const TablePropertyMapPtr& getTableExceptionProps() const
