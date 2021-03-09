@@ -65,6 +65,7 @@
 #include "token.hxx"
 #include "rect.hxx"
 #include "format.hxx"
+#include "nodetype.hxx"
 
 enum class FontAttribute {
     None   = 0x0000,
@@ -116,21 +117,6 @@ enum class SmScaleMode
     Width,
     Height
 };
-
-enum class SmNodeType
-{
-/* 0*/ Table,       Brace,         Bracebody,     Oper,        Align,
-/* 5*/ Attribute,   Font,          UnHor,         BinHor,      BinVer,
-/*10*/ BinDiagonal, SubSup,        Matrix,        Place,       Text,
-/*15*/ Special,     GlyphSpecial,  Math,          Blank,       Error,
-/*20*/ Line,        Expression,    PolyLine,      Root,        RootSymbol,
-/*25*/ Rectangle,   VerticalBrace, MathIdent
-};
-
-namespace starmathdatabase
-{
-bool isStructuralNode(SmNodeType ntype);
-}
 
 class SmNode : public SmRect
 {
