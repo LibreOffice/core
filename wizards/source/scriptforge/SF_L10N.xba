@@ -661,7 +661,7 @@ Dim cstSubArgs As String
 				If Len(_POFolder) &gt; 0 Then _PropertyGet = ._ConvertFromUrl(_POFolder) Else _PropertyGet = &quot;&quot;
 			Case &quot;Languages&quot;
 				If Len(_POFolder) &gt; 0 Then
-					vFiles = .Files(._ConvertFromUrl(_POFolder), &quot;??-??.po&quot;)
+					vFiles = .Files(._ConvertFromUrl(_POFolder), &quot;*.po&quot;)
 					For i = 0 To UBound(vFiles)
 						vFiles(i) = SF_FileSystem.GetBaseName(vFiles(i))
 					Next i
