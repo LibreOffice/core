@@ -165,8 +165,6 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
     if (xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_WRITINGMODE) >>= eMode)
         syncProperty(pShape, RES_FRAMEDIR, 0, uno::makeAny(sal_Int16(eMode)));
 
-    // TODO: Text dialog attr setting to frame
-
     // Check if the shape had text before and move it to the new textframe
     if (!bCopyText || sCopyableText.isEmpty())
         return;
@@ -747,6 +745,9 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                     }
                     else // Otherwise copy the anchor type of the shape
                     {
+                        // tdf#140828: Do not keep CHAR rel-orientation:
+                        xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION,
+                                                       uno::Any(text::RelOrientation::FRAME));
                         xPropertySet->setPropertyValue(UNO_NAME_ANCHOR_TYPE, aValue);
                     }
                     // After anchoring the position must be set as well:
