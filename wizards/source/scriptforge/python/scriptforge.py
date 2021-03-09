@@ -682,6 +682,33 @@ class SFScriptForge:
             return self.SIMPLEEXEC('ScriptForge.SF_FileSystem._ConvertFromUrl', filename)
 
     # #########################################################################
+    # SF_L10N CLASS
+    # #########################################################################
+    class SF_L10N(SFServices):
+        """
+            This service provides a number of methods related to the translation of strings
+            with minimal impact on the program's source code.
+            The methods provided by the L10N service can be used mainly to:
+                Create POT files that can be used as templates for translation of all strings in the program.
+                Get translated strings at runtime for the language defined in the Locale property.
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'ScriptForge.L10N'
+        serviceProperties = dict(Folder = False, Languages = False, Locale = False)
+
+        def AddText(self, context = '', msgid = '', comment = ''):
+            return self.Execute(self.vbMethod, 'AddText', context, msgid, context)
+
+        def ExportToPOTFile(self, filename, header = '', encoding= 'UTF-8'):
+            return self.Execute(self.vbMethod, 'ExportToPOTFile', filename, header, encoding)
+
+        def GetText(self, msgid, *args):
+            return self.Execute(self.vbMethod, 'GetText', msgid, *args)
+
+        _ = GetText
+
+    # #########################################################################
     # SF_TextStream CLASS
     # #########################################################################
     class SF_TextStream(SFServices):
@@ -727,7 +754,7 @@ class SFScriptForge:
     # #########################################################################
     class SF_Timer(SFServices):
         """
-            The "Timer" service measures the amount of time it takes to run user scripts..
+            The "Timer" service measures the amount of time it takes to run user scripts.
             """
         # Mandatory class properties for service registration
         serviceimplementation = 'basic'
