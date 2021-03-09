@@ -24,7 +24,11 @@ submit() {
         fi
 
         if [ "$BRANCH" = "master" ]; then
-            WEEKOLDDATE=$(date --date="7 days ago" +%s)
+            if [ "$unamestr" = 'Linux' ]; then
+                WEEKOLDDATE=$(date --date="7 days ago" +%s)
+            else
+                WEEKOLDDATE=$(date -v7d +%s) # BSD equivalent
+            fi
             PARENTDATE=$(git show -s --format=%ct HEAD~1)
             if [[ $PARENTDATE -lt $WEEKOLDDATE ]]; then
                 echo "Your branch is older than a week, do './g pull -r' and retry"
