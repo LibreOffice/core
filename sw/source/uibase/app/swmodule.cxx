@@ -295,7 +295,6 @@ void SwDLL::RegisterControls()
     SwFieldDlgWrapper::RegisterChildWindow( false, pMod );
     SwFieldDataOnlyDlgWrapper::RegisterChildWindow( false, pMod );
     SvxContourDlgChildWindow::RegisterChildWindow( false, pMod );
-    SwNavigationChild::RegisterChildWindowContext( pMod );
     SwInputChild::RegisterChildWindow( false, pMod, SfxChildWindowFlags::FORCEDOCK );
     SwRedlineAcceptChild::RegisterChildWindow( false, pMod );
     SwSyncChildWin::RegisterChildWindow( true, pMod );
@@ -323,6 +322,8 @@ void SwDLL::RegisterControls()
 #endif
 
     ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(false, pMod);
+
+    SwNavigatorWrapper::RegisterChildWindow(false, pMod, SfxChildWindowFlags::NEVERHIDE);
 
     SwJumpToSpecificPageControl::RegisterControl(SID_JUMP_TO_SPECIFIC_PAGE, pMod);
 }
