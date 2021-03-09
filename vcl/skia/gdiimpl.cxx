@@ -1543,14 +1543,12 @@ bool SkiaSalGraphicsImpl::drawEPS(tools::Long, tools::Long, tools::Long, tools::
 
 // Create SkImage from a bitmap and possibly an alpha mask (the usual VCL one-minus-alpha),
 // with the given target size. Result will be possibly cached, unless disabled.
+// Especially in raster mode scaling and alpha blending may be expensive if done repeatedly.
 sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitmap,
                                                       const SkiaSalBitmap* alphaBitmap,
                                                       const Size targetSize)
 {
     sk_sp<SkImage> image;
-    // GPU-accelerated drawing with SkShader should be fast enough to not need caching.
-    if (isGPU())
-        return image;
     if (targetSize.IsEmpty())
         return image;
     if (alphaBitmap && alphaBitmap->IsFullyOpaqueAsAlpha())
@@ -1561,6 +1559,16 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
     // Image too small to be worth caching if not scaling.
     if (targetSize == bitmap.GetSize() && targetSize.Width() < 100 && targetSize.Height() < 100)
         return image;
+    // GPU-accelerated drawing with SkShader should be fast enough to not need caching.
+    if (isGPU())
+    {
+        // tdf#140925: But if this is such an extensive downscaling that caching the result
+        // would noticeably reduce amount of data processed by the GPU on repeated usage, do it.
+        int reduceRatio = bitmap.GetSize().Width() * bitmap.GetSize().Height() / targetSize.Width()
+                          / targetSize.Height();
+        if (reduceRatio < 10)
+            return image;
+    }
     // In some cases (tdf#134237) the target size may be very large. In that case it's
     // better to rely on Skia to clip and draw only the necessary, rather than prepare
     // a very large image only to not use most of it.
@@ -1637,6 +1645,9 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
     }
     else
         canvas->drawImage(bitmap.GetSkImage(), 0, 0, samplingOptions, &paint);
+    if (isGPU())
+        SAL_INFO("vcl.skia.trace", "mergecachebitmaps(" << this << "): caching GPU downscaling:"
+                                                        << bitmap.GetSize() << "->" << targetSize);
     image = makeCheckedImageSnapshot(tmpSurface);
     addCachedImage(key, image);
     return image;
@@ -1649,8 +1660,8 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
     assert(dynamic_cast<const SkiaSalBitmap*>(&rAlphaBitmap));
     const SkiaSalBitmap& rSkiaSourceBitmap = static_cast<const SkiaSalBitmap&>(rSourceBitmap);
     const SkiaSalBitmap& rSkiaAlphaBitmap = static_cast<const SkiaSalBitmap&>(rAlphaBitmap);
-    // In raster mode use mergeCacheBitmaps(), which will cache the result, avoiding repeated
-    // alpha blending or scaling. In GPU mode it is simpler to just use SkShader.
+    // Use mergeCacheBitmaps(), which may decide to cache the result, avoiding repeated
+    // alpha blending or scaling.
     SalTwoRect imagePosAry(rPosAry);
     Size imageSize = rSourceBitmap.GetSize();
     // If the bitmap will be scaled, prefer to do it in mergeCacheBitmaps(), if possible.
@@ -1685,8 +1696,8 @@ void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SkiaSalBit
         drawShader(rPosAry, bitmap.GetSkShader(makeSamplingOptions(rPosAry)), blendMode);
         return;
     }
-    // In raster mode use mergeCacheBitmaps(), which will cache the result, avoiding repeated
-    // scaling. In GPU mode it is simpler to just use SkShader.
+    // Use mergeCacheBitmaps(), which may decide to cache the result, avoiding repeated
+    // scaling.
     SalTwoRect imagePosAry(rPosAry);
     Size imageSize = bitmap.GetSize();
     // If the bitmap will be scaled, prefer to do it in mergeCacheBitmaps(), if possible.
@@ -1826,10 +1837,8 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
                                                         << " " << rNull << ":" << rX << ":" << rY);
 
     addUpdateRegion(SkRect::MakeWH(GetWidth(), GetHeight())); // can't tell, use whole area
-    // In raster mode scaling and alpha blending is still somewhat expensive if done repeatedly,
-    // so use mergeCacheBitmaps(), which will cache the result if useful.
-    // It is better to use SkShader if in GPU mode, if the operation is simple or if the temporary
-    // image would be very large.
+    // Use mergeCacheBitmaps(), which may decide to cache the result, avoiding repeated
+    // alpha blending or scaling.
     // The extra fAlpha blending is not cached, with the assumption that it usually gradually changes
     // for each invocation.
     sk_sp<SkImage> imageToDraw = mergeCacheBitmaps(
