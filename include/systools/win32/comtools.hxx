@@ -69,7 +69,7 @@ namespace sal::systools
         // Query from IUnknown*, using COM_QUERY or COM_QUERY_THROW tags
         template <typename T2, typename TAG>
         COMReference(const COMReference<T2>& p, TAG t)
-            : COMReference(p.QueryInterface<T>(t))
+            : COMReference(p.template QueryInterface<T>(t))
         {
         }
 
