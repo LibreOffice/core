@@ -231,6 +231,7 @@ public:
     void testTdf106638();
     void testTdf113198();
     void testTdf49856();
+    void testMsGifInPng();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -341,6 +342,7 @@ public:
     CPPUNIT_TEST(testTdf128684);
     CPPUNIT_TEST(testTdf113198);
     CPPUNIT_TEST(testTdf49856);
+    CPPUNIT_TEST(testMsGifInPng);
     CPPUNIT_TEST(testShapeGlowEffectPPTXImpoer);
     CPPUNIT_TEST(testShapeBlurPPTXImport);
     CPPUNIT_TEST(testMirroredGraphic);
@@ -3273,6 +3275,22 @@ void SdImportTest::testTdf49856()
     const sal_UCS4 aBullet = pNumFmt->GetNumRule()->GetLevel(0).GetBulletChar();
     CPPUNIT_ASSERT_EQUAL(OUString("More level 2"), aEdit.GetText(2));
     CPPUNIT_ASSERT_EQUAL(sal_UCS4(0x2022), aBullet);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testMsGifInPng()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/ms-gif-in-png.odp"), ODP);
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_SET_THROW);
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xShape->getPropertyValue("Graphic") >>= xGraphic;
+    CPPUNIT_ASSERT(xGraphic.is());
+    Graphic vclGraphic(xGraphic);
+    CPPUNIT_ASSERT(vclGraphic.IsGfxLink());
+    // The image is technically a PNG, but it has an animated Gif as a chunk (Microsoft extension).
+    CPPUNIT_ASSERT_EQUAL(GfxLinkType::NativeGif, vclGraphic.GetSharedGfxLink()->GetType());
+    CPPUNIT_ASSERT(vclGraphic.IsAnimated());
 
     xDocShRef->DoClose();
 }
