@@ -1054,13 +1054,19 @@ void SkiaSalBitmap::EnsureBitmapData()
         assert(mAlphaImage->colorType() == kAlpha_8_SkColorType);
         SkiaZone zone;
         SkBitmap bitmap;
-        if (!bitmap.tryAllocPixels(SkImageInfo::MakeA8(mSize.Width(), mSize.Height())))
-            abort();
-        SkCanvas canvas(bitmap);
-        SkPaint paint;
-        paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
-        canvas.drawImage(mAlphaImage, 0, 0, SkSamplingOptions(), &paint);
-        canvas.flush();
+        SkPixmap pixmap;
+        if (mAlphaImage->peekPixels(&pixmap))
+            bitmap.installPixels(pixmap);
+        else
+        {
+            if (!bitmap.tryAllocPixels(SkImageInfo::MakeA8(mSize.Width(), mSize.Height())))
+                abort();
+            SkCanvas canvas(bitmap);
+            SkPaint paint;
+            paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+            canvas.drawImage(mAlphaImage, 0, 0, SkSamplingOptions(), &paint);
+            canvas.flush();
+        }
         bitmap.setImmutable();
         CreateBitmapData();
         assert(mBuffer != nullptr);
@@ -1111,30 +1117,36 @@ void SkiaSalBitmap::EnsureBitmapData()
         alphaType = kPremul_SkAlphaType;
 #endif
     SkBitmap bitmap;
-    if (!bitmap.tryAllocPixels(SkImageInfo::MakeS32(mSize.Width(), mSize.Height(), alphaType)))
-        abort();
-    SkCanvas canvas(bitmap);
-    SkPaint paint;
-    paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
-    if (mSize != mPixelsSize) // pending scaling?
-    {
-        assert(mImage->width() == mPixelsSize.getWidth()
-               && mImage->height() == mPixelsSize.getHeight());
-        canvas.drawImageRect(mImage, SkRect::MakeWH(mSize.getWidth(), mSize.getHeight()),
-                             makeSamplingOptions(mScaleQuality), &paint);
-        SAL_INFO("vcl.skia.trace", "ensurebitmapdata(" << this << "): image scaled " << mPixelsSize
-                                                       << "->" << mSize << ":"
-                                                       << static_cast<int>(mScaleQuality));
-        mPixelsSize = mSize;
-        ComputeScanlineSize();
-        mScaleQuality = BmpScaleFlag::BestQuality;
-        // Information about the pending scaling has been discarded, so make sure we do not
-        // keep around any cached images that would still need scaling.
-        ResetCachedDataBySize();
-    }
+    SkPixmap pixmap;
+    if (mSize == mPixelsSize && mImage->peekPixels(&pixmap))
+        bitmap.installPixels(pixmap);
     else
-        canvas.drawImage(mImage, 0, 0, SkSamplingOptions(), &paint);
-    canvas.flush();
+    {
+        if (!bitmap.tryAllocPixels(SkImageInfo::MakeS32(mSize.Width(), mSize.Height(), alphaType)))
+            abort();
+        SkCanvas canvas(bitmap);
+        SkPaint paint;
+        paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
+        if (mSize != mPixelsSize) // pending scaling?
+        {
+            assert(mImage->width() == mPixelsSize.getWidth()
+                   && mImage->height() == mPixelsSize.getHeight());
+            canvas.drawImageRect(mImage, SkRect::MakeWH(mSize.getWidth(), mSize.getHeight()),
+                                 makeSamplingOptions(mScaleQuality), &paint);
+            SAL_INFO("vcl.skia.trace", "ensurebitmapdata(" << this << "): image scaled "
+                                                           << mPixelsSize << "->" << mSize << ":"
+                                                           << static_cast<int>(mScaleQuality));
+            mPixelsSize = mSize;
+            ComputeScanlineSize();
+            mScaleQuality = BmpScaleFlag::BestQuality;
+            // Information about the pending scaling has been discarded, so make sure we do not
+            // keep around any cached images that would still need scaling.
+            ResetCachedDataBySize();
+        }
+        else
+            canvas.drawImage(mImage, 0, 0, SkSamplingOptions(), &paint);
+        canvas.flush();
+    }
     bitmap.setImmutable();
     CreateBitmapData();
     assert(mBuffer != nullptr);
