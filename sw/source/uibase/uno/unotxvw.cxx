@@ -64,6 +64,8 @@
 #include <unotextrange.hxx>
 #include <sfx2/docfile.hxx>
 #include <swdtflvr.hxx>
+#include <rootfrm.hxx>
+#include <edtwin.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/profilezone.hxx>
@@ -132,6 +134,7 @@ Sequence< uno::Type > SAL_CALL SwXTextView::getTypes(  )
             cppu::UnoType<XServiceInfo>::get(),
             cppu::UnoType<XFormLayerAccess>::get(),
             cppu::UnoType<XTextViewCursorSupplier>::get(),
+            cppu::UnoType<XTextViewTextRangeSupplier>::get(),
             cppu::UnoType<XViewSettingsSupplier>::get(),
             cppu::UnoType<XRubySelection>::get(),
             cppu::UnoType<XPropertySet>::get(),
@@ -181,6 +184,11 @@ uno::Any SAL_CALL SwXTextView::queryInterface( const uno::Type& aType )
     else if(aType == cppu::UnoType<text::XTextViewCursorSupplier>::get())
     {
         uno::Reference<text::XTextViewCursorSupplier> xRet = this;
+        aRet <<= xRet;
+    }
+    else if (aType == cppu::UnoType<text::XTextViewTextRangeSupplier>::get())
+    {
+        uno::Reference<text::XTextViewTextRangeSupplier> xRet = this;
         aRet <<= xRet;
     }
     else if(aType == cppu::UnoType<view::XViewSettingsSupplier>::get())
@@ -505,6 +513,25 @@ uno::Reference< text::XTextViewCursor >  SwXTextView::getViewCursor()
         mxTextViewCursor = new SwXTextViewCursor(GetView());
     }
     return mxTextViewCursor;
+}
+
+uno::Reference<text::XTextRange>
+SwXTextView::createTextRangeByPixelPosition(const awt::Point& rPixelPosition)
+{
+    SolarMutexGuard aGuard;
+
+    Point aPixelPoint(rPixelPosition.X, rPixelPosition.Y);
+    if (!m_pView)
+        throw RuntimeException();
+
+    Point aLogicPoint = m_pView->GetEditWin().PixelToLogic(aPixelPoint);
+    SwWrtShell& rSh = m_pView->GetWrtShell();
+    SwPosition aPosition(*rSh.GetCurrentShellCursor().GetPoint());
+    rSh.GetLayout()->GetModelPositionForViewPoint(&aPosition, aLogicPoint);
+    uno::Reference<text::XTextRange> xRet
+        = SwXTextRange::CreateXTextRange(*rSh.GetDoc(), aPosition, /*pMark=*/nullptr);
+
+    return xRet;
 }
 
 uno::Reference< beans::XPropertySet >  SwXTextView::getViewSettings()

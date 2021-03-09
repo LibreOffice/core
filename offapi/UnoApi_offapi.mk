@@ -3835,6 +3835,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/text,\
 	XTextViewCursor \
 	XTextViewCursorSupplier \
 	XWordCursor \
+	XTextViewTextRangeSupplier \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ucb,\
 	AlreadyInitializedException \

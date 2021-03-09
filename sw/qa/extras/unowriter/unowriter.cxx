@@ -17,6 +17,7 @@
 #include <com/sun/star/text/XTextPortionAppend.hpp>
 #include <com/sun/star/text/XTextContentAppend.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
+#include <com/sun/star/text/XTextViewTextRangeSupplier.hpp>
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/URIs.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
@@ -36,6 +37,8 @@
 #include <AnnotationWin.hxx>
 #include <flyfrm.hxx>
 #include <fmtanchr.hxx>
+#include <edtwin.hxx>
+#include <unotextrange.hxx>
 
 using namespace ::com::sun::star;
 
@@ -945,6 +948,44 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf129841)
     xCellRange->setPropertyValue(sBackColor, aRefColor);
     aColor = xTableCursor->getPropertyValue(sBackColor);
     CPPUNIT_ASSERT_EQUAL(aRefColor, aColor);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testCreateTextRangeByPixelPosition)
+{
+    // Given a document with 2 characters, and the pixel position of the point between them:
+    loadURL("private:factory/swriter", nullptr);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert2("AZ");
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    Point aLogic = pWrtShell->GetCharRect().Center();
+    SwView* pView = pDocShell->GetView();
+    SwEditWin& rEditWin = pView->GetEditWin();
+    Point aPixel = rEditWin.LogicToPixel(aLogic);
+
+    // When converting that pixel position to a document model position (text range):
+    uno::Reference<frame::XModel2> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xControllers = xModel->getControllers();
+    uno::Reference<text::XTextViewTextRangeSupplier> xController(xControllers->nextElement(),
+                                                                 uno::UNO_QUERY);
+    awt::Point aPoint(aPixel.getX(), aPixel.getY());
+    uno::Reference<text::XTextRange> xTextRange
+        = xController->createTextRangeByPixelPosition(aPoint);
+
+    // Then make sure that text range points after the first character:
+    auto pTextRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
+    SwPaM aPaM(pDoc->GetNodes());
+    pTextRange->GetPositions(aPaM);
+    sal_Int32 nActual = aPaM.GetPoint()->nContent.GetIndex();
+    // Without the needed PixelToLogic() call in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the returned text range pointed before the first character, not between the first and
+    // the second character.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nActual);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
