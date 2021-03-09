@@ -447,7 +447,7 @@ void ScNavigatorDlg::StateChanged(StateChangedType nStateChange)
         // When the navigator is displayed in the sidebar, or is otherwise
         // docked, it has the whole deck to fill. Therefore hide the button that
         // hides all controls below the top two rows of buttons.
-        m_xTbxCmd1->set_item_visible("contents", SfxChildWindowContext::GetFloatingWindow(GetParent()) != nullptr);
+        m_xTbxCmd1->set_item_visible("contents", ParentIsFloatingWindow(GetParent()));
     }
 }
 
@@ -764,7 +764,7 @@ void ScNavigatorDlg::SetListMode(NavListMode eMode)
 {
     if (eMode != eListMode)
     {
-        bool bForceParentResize = SfxChildWindowContext::GetFloatingWindow(GetParent()) &&
+        bool bForceParentResize = ParentIsFloatingWindow(GetParent()) &&
                                   (eMode == NAV_LMODE_NONE || eListMode == NAV_LMODE_NONE);
         SfxNavigator* pNav = bForceParentResize ? dynamic_cast<SfxNavigator*>(GetParent()) : nullptr;
         if (pNav && eMode == NAV_LMODE_NONE) //save last normal size on minimizing
