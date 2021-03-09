@@ -273,6 +273,26 @@ namespace
 
         return false;
     }
+
+// Gets "YPos" for SwRegionContent, i.e. a number used to sort sections in Navigator's list
+tools::Long getYPosForSection(const SwNodeIndex& rNodeIndex)
+{
+    sal_uLong nIndex = rNodeIndex.GetIndex();
+    if (rNodeIndex.GetNodes().GetEndOfExtras().GetIndex() >= nIndex)
+    {
+        // Not a node of BodyText
+        // Are we in a fly?
+        if (const auto pFlyFormat = rNodeIndex.GetNode().GetFlyFormat())
+        {
+            // Get node index of anchor
+            if (auto pSwPosition = pFlyFormat->GetAnchor().GetContentAnchor())
+            {
+                nIndex = getYPosForSection(pSwPosition->nNode);
+            }
+        }
+    }
+    return static_cast<tools::Long>(nIndex);
+}
 } // end of anonymous namespace
 
 SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 nLevel) :
@@ -365,18 +385,20 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                 pOldMember = std::move(m_pMember);
                 m_pMember.reset( new SwContentArr );
             }
-            const Point aNullPt;
             m_nMemberCount = m_pWrtShell->GetSectionFormatCount();
             for(size_t i = 0; i < m_nMemberCount; ++i)
             {
-                const SwSectionFormat* pFormat;
-                SectionType eTmpType;
-                if( (pFormat = &m_pWrtShell->GetSectionFormat(i))->IsInNodesArr() &&
-                (eTmpType = pFormat->GetSection()->GetType()) != SectionType::ToxContent
-                && SectionType::ToxHeader != eTmpType )
+                const SwSectionFormat* pFormat = &m_pWrtShell->GetSectionFormat(i);
+                if (!pFormat->IsInNodesArr())
+                    continue;
+                const SwSection* pSection = pFormat->GetSection();
+                if (SectionType eTmpType = pSection->GetType();
+                    eTmpType == SectionType::ToxContent || eTmpType == SectionType::ToxHeader)
+                    continue;
+                const SwNodeIndex* pNodeIndex = pFormat->GetContent().GetContentIdx();
+                if (pNodeIndex)
                 {
-                    const OUString& rSectionName =
-                        pFormat->GetSection()->GetSectionName();
+                    const OUString& rSectionName = pSection->GetSectionName();
                     sal_uInt8 nLevel = 0;
                     SwSectionFormat* pParentFormat = pFormat->GetParent();
                     while(pParentFormat)
@@ -386,8 +408,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                     }
 
                     std::unique_ptr<SwContent> pCnt(new SwRegionContent(this, rSectionName,
-                            nLevel,
-                            pFormat->FindLayoutRect( false, &aNullPt ).Top()));
+                            nLevel, getYPosForSection(*pNodeIndex)));
 
                     SwPtrMsgPoolItem aAskItem( RES_CONTENT_VISIBLE, nullptr );
                     if( !pFormat->GetInfo( aAskItem ) &&
@@ -687,17 +708,20 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         break;
         case ContentTypeId::REGION    :
         {
-            const Point aNullPt;
             m_nMemberCount = m_pWrtShell->GetSectionFormatCount();
             for(size_t i = 0; i < m_nMemberCount; ++i)
             {
-                const SwSectionFormat* pFormat;
-                SectionType eTmpType;
-                if( (pFormat = &m_pWrtShell->GetSectionFormat(i))->IsInNodesArr() &&
-                (eTmpType = pFormat->GetSection()->GetType()) != SectionType::ToxContent
-                && SectionType::ToxHeader != eTmpType )
+                const SwSectionFormat* pFormat = &m_pWrtShell->GetSectionFormat(i);
+                if (!pFormat->IsInNodesArr())
+                    continue;
+                const SwSection* pSection = pFormat->GetSection();
+                if (SectionType eTmpType = pSection->GetType();
+                    eTmpType == SectionType::ToxContent || eTmpType == SectionType::ToxHeader)
+                    continue;
+                const SwNodeIndex* pNodeIndex = pFormat->GetContent().GetContentIdx();
+                if (pNodeIndex)
                 {
-                    OUString sSectionName = pFormat->GetSection()->GetSectionName();
+                    const OUString& sSectionName = pSection->GetSectionName();
 
                     sal_uInt8 nLevel = 0;
                     SwSectionFormat* pParentFormat = pFormat->GetParent();
@@ -708,8 +732,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     }
 
                     std::unique_ptr<SwContent> pCnt(new SwRegionContent(this, sSectionName,
-                            nLevel,
-                            pFormat->FindLayoutRect( false, &aNullPt ).Top()));
+                            nLevel, getYPosForSection(*pNodeIndex)));
                     if( !pFormat->GetInfo( aAskItem ) &&
                         !aAskItem.pObject )     // not visible
                         pCnt->SetInvisible();
