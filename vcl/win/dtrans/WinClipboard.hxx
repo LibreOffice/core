@@ -21,6 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
@@ -46,18 +47,8 @@
 // this will be assured by a OneInstanceFactory of the service and not
 // by this class!
 
-// helper class, so that the mutex is constructed
-// before the constructor of WeakComponentImplHelper
-// will be called and initialized with this mutex
-class CWinClipboardDummy
-{
-protected:
-    osl::Mutex m_aMutex;
-    osl::Mutex m_aCbListenerMutex;
-};
-
 class CWinClipboard final
-    : public CWinClipboardDummy,
+    : public cppu::BaseMutex,
       public cppu::WeakComponentImplHelper<css::datatransfer::clipboard::XSystemClipboard,
                                            css::datatransfer::clipboard::XFlushableClipboard,
                                            css::lang::XServiceInfo>
@@ -69,10 +60,8 @@ class CWinClipboard final
     CMtaOleClipboard m_MtaOleClipboard;
     CXNotifyingDataObject* m_pCurrentClipContent;
     com::sun::star::uno::Reference<com::sun::star::datatransfer::XTransferable> m_foreignContent;
-    osl::Mutex m_ClipContentMutex;
-
-    static osl::Mutex s_aMutex;
-    static CWinClipboard* s_pCWinClipbImpl;
+    osl::Mutex m_aContentMutex;
+    osl::Mutex m_aContentCacheMutex;
 
     void notifyAllClipboardListener();
     void onReleaseDataObject(CXNotifyingDataObject* theCaller);
