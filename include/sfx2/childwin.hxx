@@ -132,10 +132,10 @@ public:
     sal_uInt16          GetContextId() const
                         { return nContextId; }
 
-    static SystemWindow* GetFloatingWindow(vcl::Window *pParent);
-
     static void         RegisterChildWindowContext(SfxModule*, sal_uInt16, std::unique_ptr<SfxChildWinContextFactory>);
 };
+
+extern SFX2_DLLPUBLIC bool ParentIsFloatingWindow(vcl::Window *pParent);
 
 class SFX2_DLLPUBLIC SfxChildWindow
 {

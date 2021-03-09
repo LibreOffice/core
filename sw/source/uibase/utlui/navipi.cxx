@@ -193,7 +193,7 @@ IMPL_LINK(SwNavigationPI, ToolBoxSelectHdl, const OString&, rCommand, void)
     }
     else if (rCommand == "listbox")
     {
-        if (SfxChildWindowContext::GetFloatingWindow(GetParent()))
+        if (ParentIsFloatingWindow(GetParent()))
         {
             if (IsZoomedIn())
             {
@@ -562,7 +562,7 @@ SwNavigationPI::SwNavigationPI(vcl::Window* pParent,
 
     m_aStatusArr[3] = SwResId(STR_ACTIVE_VIEW);
 
-    bool bFloatingNavigator = SfxChildWindowContext::GetFloatingWindow(GetParent()) != nullptr;
+    bool bFloatingNavigator = ParentIsFloatingWindow(GetParent());
 
     m_xContentTree->set_selection_mode(SelectionMode::Single);
     m_xContentTree->ShowTree();
@@ -726,9 +726,9 @@ void SwNavigationPI::StateChanged(StateChangedType nStateChange)
         // the sidebar or is otherwise docked. While the navigator could change
         // its size, the sidebar can not, and the navigator would just waste
         // space. Therefore disable this button.
-        m_xContent6ToolBox->set_item_sensitive("listbox", SfxChildWindowContext::GetFloatingWindow(GetParent()) != nullptr);
+        m_xContent6ToolBox->set_item_sensitive("listbox", ParentIsFloatingWindow(GetParent()));
         // show content if docked
-        if (SfxChildWindowContext::GetFloatingWindow(GetParent()) == nullptr && IsZoomedIn())
+        if (!ParentIsFloatingWindow(GetParent()) && IsZoomedIn())
             ZoomOut();
         if (m_xContentTree)
         {
