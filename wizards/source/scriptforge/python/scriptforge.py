@@ -56,7 +56,6 @@
 
 import uno
 
-from platform import system as _opsys
 import datetime
 import os
 
@@ -106,6 +105,8 @@ class ScriptForge(object, metaclass = _Singleton):
     #
     # Basic dispatcher for Python scripts
     basicdispatcher = 'ScriptForge.SF_PythonHelper._PythonDispatcher'
+    # Python helper functions module
+    pythonhelpermodule = 'ScriptForgeHelper.py'
     #
     # VarType() constants
     V_EMPTY, V_NULL, V_INTEGER, V_LONG, V_SINGLE, V_DOUBLE = 0, 1, 2, 3, 4, 5
@@ -115,6 +116,15 @@ class ScriptForge(object, metaclass = _Singleton):
     objMODULE, objCLASS, objUNO = 1, 2, 3
     # Special argument symbols
     cstSymEmpty, cstSymNull, cstSymMissing = '+++EMPTY+++', '+++NULL+++', '+++MISSING+++'
+    # Predefined references for services implemented as standard Basic modules
+    servicesmodules = dict([('ScriptForge.Array', 0),
+                            ('ScriptForge.Exception', 1),
+                            ('ScriptForge.FileSystem', 2),
+                            ('ScriptForge.Platform', 3),
+                            ('ScriptForge.Services', 4),
+                            ('ScriptForge.Session', 5),
+                            ('ScriptForge.String', 6),
+                            ('ScriptForge.UI', 7)])
 
     def __init__(self, hostname = '', port = 0):
         """
@@ -266,17 +276,19 @@ class ScriptForge(object, metaclass = _Singleton):
             if returntuple[cstClass] == ScriptForge.objUNO:
                 pass
             else:
-                # Create the new class instance of the right subclass of Service()
+                # Create the new class instance of the right subclass of SFServices()
                 servname = returntuple[cstService]
-                for subcls in SFServices.__subclasses__():
-                    if servname == subcls.servicename:
-                       return subcls(returntuple[cstValue], returntuple[cstType], returntuple[cstClass],
-                                      returntuple[cstName])
+                subcls = cls.serviceslist[servname]
+                if subcls is not None:
+                    return subcls(returntuple[cstValue], returntuple[cstType], returntuple[cstClass],
+                                  returntuple[cstName])
                 # When service not found
                 raise RuntimeError("The service '" + servname + "' is not available in Python. Execution stops.")
         elif returntuple[cstVarType] >= ScriptForge.V_ARRAY:
             pass
-        else:         # All scalar values
+        elif returntuple[cstVarType] == ScriptForge.V_DATE:
+            return datetime.datetime.fromisoformat(returntuple[cstValue])
+        else:         # All other scalar values
             pass
         return returntuple[cstValue]
 
@@ -340,6 +352,7 @@ class SFServices(object):
         """
     # Python-Basic protocol constants and flags
     vbGet, vbLet, vbMethod, vbSet = 2, 4, 1, 8  # CallByName constants
+    flgDateRet = 128  # Invoked service method can return a date
     flgArrayArg = 512  # 1st argument can be a 2D array
     flgArrayRet = 1024  # Invoked service method can return an array
     flgUno = 256  # Invoked service method/property can return a UNO object
@@ -409,7 +422,7 @@ class SFServices(object):
 
     def Dispose(self):
         if self.serviceimplementation == 'basic':
-            if self.classmodule == self.moduleClass and self.objectreference >= 0:
+            if self.objectreference >= 0:
                 self.Execute(self.vbMethod, 'Dispose')
                 self.objectreference = -1
 
@@ -424,6 +437,9 @@ class SFServices(object):
             Get the given property from the Basic world
             """
         return self.EXEC(self.objectreference, self.vbGet, propertyname)
+
+    def Properties(self):
+        return list(self.serviceProperties)
 
     def SetProperty(self, propertyname, value):
         """
@@ -442,7 +458,7 @@ class SFScriptForge:
     class SF_Basic(SFServices, metaclass = _Singleton):
         """
             This service proposes a collection of Basic methods to be executed in a Python context
-            to simulate the exact syntax and behaviour of the identical Basic builtin method.
+            simulating the exact syntax and behaviour of the identical Basic builtin method.
             Typical example:
                 SF_Basic.MsgBox('This has to be displayed in a message box')
             """
@@ -495,15 +511,15 @@ class SFScriptForge:
                 value = value.isoformat()
             return self.SIMPLEEXEC(self.module + '.PyFormat', value, pattern)
 
+        @staticmethod
+        def GetDefaultContext():
+            return ScriptForge.componentcontext
+
         def GetGuiType(self):
             return self.SIMPLEEXEC(self.module + '.PyGetGuiType')
 
         def GetSystemTicks(self):
             return self.SIMPLEEXEC(self.module + '.PyGetSystemTicks')
-
-        @staticmethod
-        def GetDefaultContext():
-            return ScriptForge.componentcontext
 
         @staticmethod
         def GetPathSeparator():
@@ -512,11 +528,11 @@ class SFScriptForge:
         class GlobalScope(object, metaclass = _Singleton):
             @classmethod  # Mandatory because the GlobalScope class is normally not instantiated
             def BasicLibraries(cls):
-                return SFScriptForge.SF_Basic().SIMPLEEXEC(SFScriptForge.SF_Basic.module + '.PyGlobalScope', 'Basic')
+                return ScriptForge.InvokeSimpleScript(SFScriptForge.SF_Basic.module + '.PyGlobalScope', 'Basic')
 
             @classmethod
             def DialogLibraries(cls):
-                return SFScriptForge.SF_Basic().SIMPLEEXEC(SFScriptForge.SF_Basic.module + '.PyGlobalScope', 'Dialog')
+                return ScriptForge.InvokeSimpleScript(SFScriptForge.SF_Basic.module + '.PyGlobalScope', 'Dialog')
 
         def InputBox(self, msg, title = '', default = '', xpos = -1, ypos = -1):
             if xpos < 0 or ypos < 0:
@@ -563,6 +579,8 @@ class SFScriptForge:
         serviceProperties = dict(FileNaming = True, ConfigFolder = False, ExtensionsFolder = False, HomeFolder = False,
                                  InstallFolder = False, TemplatesFolder = False, TemporaryFolder = False,
                                  UserTemplatesFolder = False)
+        # Open TextStream constants
+        ForReading, ForWriting, ForAppending = 1, 2, 8
 
         @property
         def ConfigFolder(self):
@@ -571,8 +589,138 @@ class SFScriptForge:
         def BuildPath(self, foldername, name):
             return self.Execute(self.vbMethod, 'BuildPath', foldername, name)
 
+        def CompareFiles(self, filename1, filename2, comparecontents = False):
+            py = ScriptForge.pythonhelpermodule + '$' + '_SF_FileSystem__CompareFiles'
+            if self.FileExists(filename1) and self.FileExists(filename2):
+                file1 = self._ConvertFromUrl(filename1)
+                file2 = self._ConvertFromUrl(filename2)
+                return self.SIMPLEEXEC(py, file1, file2, comparecontents)
+            else:
+                return False
+
+        def CopyFile(self, source, destination, overwrite = True):
+            return self.Execute(self.vbMethod, 'CopyFile', source, destination, overwrite)
+
+        def CopyFolder(self, source, destination, overwrite = True):
+            return self.Execute(self.vbMethod, 'CopyFolder', source, destination, overwrite)
+
+        def CreateFolder(self, foldername):
+            return self.Execute(self.vbMethod, 'CreateFolder', foldername)
+
+        def CreateTextFile(self, filename, overwrite = True, encoding = 'UTF-8'):
+            return self.Execute(self.vbMethod, 'CreateTextFile', filename, overwrite, encoding)
+
+        def DeleteFile(self, filename):
+            return self.Execute(self.vbMethod, 'DeleteFile', filename)
+
+        def DeleteFolder(self, foldername):
+            return self.Execute(self.vbMethod, 'DeleteFolder', foldername)
+
+        def FileExists(self, filename):
+            return self.Execute(self.vbMethod, 'FileExists', filename)
+
+        def Files(self, foldername, filter = ''):
+            return self.Execute(self.vbMethod + self.flgArrayRet, 'Files', foldername, filter)
+
         def FolderExists(self, foldername):
             return self.Execute(self.vbMethod, 'FolderExists', foldername)
+
+        def GetBaseName(self, filename):
+            return self.Execute(self.vbMethod, 'GetBaseName', filename)
+
+        def GetExtension(self, filename):
+            return self.Execute(self.vbMethod, 'GetExtension', filename)
+
+        def GetFileLen(self, filename):
+            py = ScriptForge.pythonhelpermodule + '$' + '_SF_FileSystem__GetFilelen'
+            if self.FileExists(filename):
+                file = self._ConvertFromUrl(filename)
+                return int(self.SIMPLEEXEC(py, file))
+            else:
+                return 0
+
+        def GetFileModified(self, filename):
+            return self.Execute(self.vbMethod + self.flgDateRet, 'GetFileModified', filename)
+
+        def GetName(self, filename):
+            return self.Execute(self.vbMethod, 'GetName', filename)
+
+        def GetParentFolderName(self, filename):
+            return self.Execute(self.vbMethod, 'GetParentFolderName', filename)
+
+        def GetTempName(self):
+            return self.Execute(self.vbMethod, 'GetTempName')
+
+        def HashFile(self, filename, algorithm):
+            py = ScriptForge.pythonhelpermodule + '$' + '_SF_FileSystem__HashFile'
+            if self.FileExists(filename):
+                file = self._ConvertFromUrl(filename)
+                return self.SIMPLEEXEC(py, file, algorithm.lower())
+            else:
+                return ''
+
+        def MoveFile(self, source, destination):
+            return self.Execute(self.vbMethod, 'MoveFile', source, destination)
+
+        def MoveFolder(self, source, destination):
+            return self.Execute(self.vbMethod, 'MoveFolder', source, destination)
+
+        def OpenTextFile(self, filename, iomode = 1, create = False, encoding = 'UTF-8'):
+            return self.Execute(self.vbMethod, 'OpenTextFile', filename, iomode, create, encoding)
+
+        def PickFile(self, defaultfile = ScriptForge.cstSymEmpty, mode = 'OPEN', filter = ''):
+            return self.Execute(self.vbMethod, 'PickFile', defaultfile, mode, filter)
+
+        def PickFolder(self, defaultfolder = ScriptForge.cstSymEmpty, freetext = ''):
+            return self.Execute(self.vbMethod, 'PickFolder', defaultfolder, freetext)
+
+        def SubFolders(self, foldername, filter = ''):
+            return self.Execute(self.vbMethod + self.flgArrayRet, 'SubFolders', foldername, filter)
+
+        def _ConvertFromUrl(self, filename):
+            # Alias for same function in FileSystem Basic module
+            return self.SIMPLEEXEC('ScriptForge.SF_FileSystem._ConvertFromUrl', filename)
+
+    # #########################################################################
+    # SF_TextStream CLASS
+    # #########################################################################
+    class SF_TextStream(SFServices):
+        """
+            The TextStream service is used to sequentially read from and write to files opened or created
+            using the ScriptForge.FileSystem service..
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'ScriptForge.TextStream'
+        serviceProperties = dict(AtEndOfStream = False, Encoding = False, FileName = False,
+                                 IOMode = False, Line = False, NewLine = True)
+
+        @property
+        def AtEndOfStream(self):
+            return self.GetProperty('AtEndOfStream')
+
+        @property
+        def Line(self):
+            return self.GetProperty('Line')
+
+        def CloseFile(self):
+            return self.Execute(self.vbMethod, 'CloseFile')
+
+        def ReadAll(self):
+            return self.Execute(self.vbMethod, 'ReadAll')
+
+        def ReadLine(self):
+            return self.Execute(self.vbMethod, 'ReadLine')
+
+        def SkipLine(self):
+            return self.Execute(self.vbMethod, 'SkipLine')
+
+        def WriteBlankLines(self, lines):
+            return self.Execute(self.vbMethod, 'WriteBlankLines', lines)
+
+        def WriteLine(self, line):
+            return self.Execute(self.vbMethod, 'WriteLine', line)
+
 
     # #########################################################################
     # SF_Timer CLASS
@@ -640,21 +788,27 @@ def CreateScriptService(service, *args):
 
     def ResolveSynonyms(servicename):
         """
-            Synonyms within service names implemented in Python are resolved here
+            Synonyms within service names implemented in Python or predefined are resolved here
             :param servicename: The short name of the service
             :return: The official service name
             """
         if servicename.lower() in ('basic', 'scriptforge.basic'):
             return 'ScriptForge.Basic'
+        if servicename.lower() in ('filesystem', 'scriptforge.filesystem'):
+            return 'ScriptForge.FileSystem'
         return servicename
 
     #
-    # Check the list of available services to examine if the requested service is within the Python world
+    # Check the list of available services
     scriptservice = ResolveSynonyms(service)
     if scriptservice in ScriptForge.serviceslist:
         serv = ScriptForge.serviceslist[scriptservice]
+        # Check if the requested service is within the Python world
         if serv.serviceimplementation == 'python':
             return serv()
+        # Check if the service is a predefined standard Basic service
+        elif scriptservice in ScriptForge.servicesmodules:
+            return serv(ScriptForge.servicesmodules[scriptservice], classmodule = SFServices.moduleStandard)
     # The requested service is to be found in the Basic world
     if len(args) == 0:
         serv = ScriptForge.InvokeBasicService('SF_Services', SFServices.vbMethod, 'CreateScriptService', service)
@@ -662,15 +816,16 @@ def CreateScriptService(service, *args):
         serv = ScriptForge.InvokeBasicService('SF_Services', SFServices.vbMethod, 'CreateScriptService', service, *args)
     return serv
 
+
 # #####################################################################################################################
 #                           Services shortcuts                                                                      ###
 # #####################################################################################################################
-# SF_Basic = CreateScriptService('SFPython.Basic')
-# SF_String = _ScriptForge.SF_String
+SF_Basic = SFScriptForge.SF_Basic()
+# SF_String = None
 
 
 # ######################################################################
-# lists the scripts, that shall be visible inside the Basic/Python IDE
+# Lists the scripts, that shall be visible inside the Basic/Python IDE
 # ######################################################################
 
 g_exportedScripts = ()

@@ -74,6 +74,7 @@ Private OSName				As String	&apos; WIN, LINUX, MACOS
 Private SFDialogs			As Variant	&apos; Persistent storage for the SFDialogs library
 Private SFForms				As Variant	&apos; Persistent storage for the SF_Form class in the SFDocuments library
 Private PythonStorage		As Variant	&apos; Persistent storage for the objects created and processed in Python
+Private PythonPermanent		As Long		&apos; Number of permanent entries in PythonStorage containing standard module objects
 
 REM ====================================================== CONSTRUCTOR/DESTRUCTOR
 
@@ -122,6 +123,7 @@ Private Sub Class_Initialize()
 	SFDialogs = Empty
 	SFForms = Empty
 	PythonStorage = Empty
+	PythonPermanent = -1
 End Sub		&apos;	ScriptForge.SF_Root Constructor
 
 REM -----------------------------------------------------------------------------
@@ -186,12 +188,11 @@ Check:
 	lIndex = -1
 	If IsNull(poObject) Then Exit Function
 	On Local Error GoTo Finally
-	If IsEmpty(PythonStorage) Then PythonStorage = Array()
 	lSize = UBound(PythonStorage)
 
 Try:
 	&apos;	Can an empty entry be reused ?
-	For i = 0 To lSize
+	For i = PythonPermanent + 1 To lSize
 		If IsNull(PythonStorage(i)) Then
 			lIndex = i
 			Exit For
@@ -212,6 +213,32 @@ Finally:
 	_AddToPythonStorage = lIndex
 	Exit Function
 End Function	&apos;	ScriptForge.SF_Root._AddToPythonStorage
+
+REM -----------------------------------------------------------------------------
+Public Sub _InitPythonStorage()
+&apos;&apos;&apos;	Make PythonStorage an array
+&apos;&apos;&apos;	In prevision to an abundant use of those objects in Python, hardcode to optimize the performance and memory :
+&apos;&apos;&apos;	Initialize the first entries with the standard module objects located in the ScriptForge library
+
+Try:
+	If Not IsArray(PythonStorage) Then
+		PythonPermanent = 7
+		PythonStorage = Array()
+		ReDim PythonStorage(0 To PythonPermanent)
+		&apos;	Initialize each entry
+		PythonStorage(0) = ScriptForge.SF_Array
+		PythonStorage(1) = ScriptForge.SF_Exception
+		PythonStorage(2) = ScriptForge.SF_FileSystem
+		PythonStorage(3) = ScriptForge.SF_Platform
+		PythonStorage(4) = ScriptForge.SF_Services
+		PythonStorage(5) = ScriptForge.SF_Session
+		PythonStorage(6) = ScriptForge.SF_String
+		PythonStorage(7) = ScriptForge.SF_UI
+	End If
+
+Finally:
+	Exit Sub
+End Sub		&apos;	ScriptForge.SF_Root._InitPythonStorage
 
 REM -----------------------------------------------------------------------------
 Public Sub _LoadLocalizedInterface(Optional ByVal psMode As String)

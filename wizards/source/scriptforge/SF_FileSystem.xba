@@ -188,7 +188,7 @@ Const cstThisSub = &quot;FileSystem.getTemplatesFolder&quot;
 
 	SF_Utils._EnterFunction(cstThisSub)
 	sPath = SF_Utils._GetUNOService(&quot;PathSettings&quot;).Template
-	TemplatesFolder = SF_FileSystem._ConvertFromUrl(Split(sPath, &quot;;&quot;)(0))
+	TemplatesFolder = SF_FileSystem._ConvertFromUrl(Split(sPath, &quot;;&quot;)(0) &amp; &quot;/&quot;)
 	SF_Utils._ExitFunction(cstThisSub)
 
 End Property	&apos;	ScriptForge.SF_FileSystem.TemplatesFolder
@@ -214,7 +214,7 @@ Const cstThisSub = &quot;FileSystem.getUserTemplatesFolder&quot;
 
 	SF_Utils._EnterFunction(cstThisSub)
 	sPath = SF_Utils._GetUNOService(&quot;PathSettings&quot;).Template_writable
-	UserTemplatesFolder = SF_FileSystem._ConvertFromUrl(sPath)
+	UserTemplatesFolder = SF_FileSystem._ConvertFromUrl(sPath &amp; &quot;/&quot;)
 	SF_Utils._ExitFunction(cstThisSub)
 
 End Property	&apos;	ScriptForge.SF_FileSystem.UserTemplatesFolder
@@ -934,7 +934,7 @@ CatchNotExists:
 End Function    &apos;   ScriptForge.SF_FileSystem.GetFileLen
 
 REM -----------------------------------------------------------------------------
-Public Function GetFileModified(Optional ByVal FileName As Variant) As Date
+Public Function GetFileModified(Optional ByVal FileName As Variant) As Variant
 &apos;&apos;&apos;	Returns the last modified date for the given file
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FileName: a string representing an existing file

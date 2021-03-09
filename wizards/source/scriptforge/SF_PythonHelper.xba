@@ -557,6 +557,7 @@ Const cstNoArgs = &quot;+++NOARGS+++&quot;, cstSymEmpty = &quot;+++EMPTY+++&quot
 &apos;	Determines the CallType
 Const vbGet = 2, vbLet = 4, vbMethod = 1, vbSet = 8
 &apos;	Protocol flags
+Const cstDateRet = 128		&apos;	Return value can be a date
 Const cstArgArray = 512		&apos;	1st argument can be a 2D array
 Const cstRetArray = 1024	&apos;	Return value can be an array
 Const cstUno = 256			&apos;	Return value can be a UNO object
@@ -580,7 +581,8 @@ Check:
 				If vArg = cstNoArgs Then Exit For
 			End If
 			If VarType(vArg) = V_STRING Then
-				If vArg = cstSymEmpty Then
+				If Len(vArg) = 0 Then
+				ElseIf vArg = cstSymEmpty Then
 					vArg = Empty
 				ElseIf vArg = cstSymNull Then
 					vArg = Null
@@ -613,6 +615,11 @@ Try:
 	&apos;		may be considered as properties when no argument
 &apos;			Requires Python and Basic update in the concerned library but is transparent for this dispatcher
 
+	&apos;	Initialize Python persistent storage at 1st call
+	If IsEmpty(_SF_.PythonStorage) Then _SF_._InitPythonStorage()
+	&apos;	Reset any error
+	_SF_._Stackreset()
+
 	Select case VarType(BasicObject)
 		Case V_STRING
 			&apos;	Special entry for CreateScriptService()
@@ -644,9 +651,18 @@ Try:
 			bBasicClass = ( Left(sObjectType, 3) &lt;&gt; &quot;SF_&quot; )
 			sLibrary = Split(vBasicObject.ServiceName, &quot;.&quot;)(0)
 			
+			&apos;	Methods in standard modules returning a date are hardcoded as exceptions
+			If Not bBasicClass And ((CallType And vbMethod) = vbMethod) And ((CallType And cstDateRet) = cstDateRet) Then
+				Select Case sLibrary
+					Case &quot;ScriptForge&quot;
+						If sObjectType = &quot;SF_FileSystem&quot; And Script = &quot;GetFileModified&quot; Then vReturn = SF_FileSystem.GetFileModified(vArgs(0))
+				End Select
+
 			&apos;	Methods in usual modules are called by ExecuteBasicScript() except if they use a ParamArray
-			If Not bBasicClass And (CallType And vbMethod) = vbMethod Then
+			ElseIf Not bBasicClass And (CallType And vbMethod) = vbMethod Then
 				sScript = sLibrary &amp; &quot;.&quot; &amp; sObjectType &amp; &quot;.&quot; &amp; Script
+				&apos;	Force validation in targeted function, not in ExecuteBasicScript()
+				_SF_.StackLevel = -1
 				Select Case UBound(vArgs)
 					Case -1	:	vReturn = sess.ExecuteBasicScript(, sScript)
 					Case 0	:	vReturn = sess.ExecuteBasicScript(, sScript, vArgs(0))
@@ -658,6 +674,7 @@ Try:
 					Case 6	:	vReturn = sess.ExecuteBasicScript(, sScript, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5), vArgs(6))
 					Case 7	:	vReturn = sess.ExecuteBasicScript(, sScript, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5), vArgs(6), vArgs(7))
 				End Select
+				_SF_.StackLevel = 0
 			
 			&apos;	Properties in any service are got and set with obj.GetProperty/SetProperty(...)
 			ElseIf (CallType And vbGet) = vbGet Then
@@ -677,8 +694,6 @@ Try:
 			ElseIf bBasicClass And ((CallType And vbMethod) = vbMethod) Then
 				Select Case UBound(vArgs)
 					Case -1	:	vReturn = CallByName(vBasicObject, Script, vbMethod)
-						&apos;	Special case: Dispose() must update the cache for class objects created in Python scripts
-						If Script = &quot;Dispose&quot; Then Set _SF_.PythonStorage(BasicObject) = Nothing
 					Case 0	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0))
 					Case 1	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0), vArgs(1))
 					Case 2	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0), vArgs(1), vArgs(2))
@@ -688,6 +703,12 @@ Try:
 					Case 6	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5), vArgs(6))
 					Case 7	:	vReturn = CallByName(vBasicObject, Script, vbMethod, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5), vArgs(6), vArgs(7))
 				End Select
+			End If
+
+			&apos;	Post processing
+			If Script = &quot;Dispose&quot; Then
+				&apos;	Special case: Dispose() must update the cache for class objects created in Python scripts
+				Set _SF_.PythonStorage(BasicObject) = Nothing
 			End If
 		Case Else
 	End Select
@@ -725,7 +746,7 @@ Try:
 		End If
 	Else	&apos;	Scalar or Nothing
 		ReDim vReturnArray(0 To 1)
-		vReturnArray(0) = vReturn
+		If VarType(vReturn) = V_DATE Then vReturnArray(0) = SF_Utils._CDateToIso(vReturn) Else vReturnArray(0) = vReturn
 		vReturnArray(1) = VarType(vReturn)
 	End If
 
