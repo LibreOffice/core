@@ -53,45 +53,71 @@ void SAL_CALL MovingAverageRegressionCurveCalculator::recalculateRegression(
     aYList.clear();
     aXList.clear();
 
+    // For formulas, see
+    // https://docs.oasis-open.org/office/OpenDocument/v1.3/cs02/part3-schema/OpenDocument-v1.3-cs02-part3-schema.html#property-chart_regression-moving-type
+
     switch (mnMovingType)
     {
         case MovingAverageType::Central:
         {
-            sal_Int32 nCentralPeriod = (mPeriod % 2 == 0) ? (mPeriod / 2) : ((mPeriod - 1) / 2);
-            calculateValues(aValues, nCentralPeriod, false);
+
+            calculateValuesCentral(aValues);
             break;
         }
 
         case MovingAverageType::AveragedAbscissa:
         {
-            calculateValues(aValues, mPeriod, true);
+            calculateValues(aValues, true);
             break;
         }
         case MovingAverageType::Prior:
         default:
         {
-            calculateValues(aValues, mPeriod, false);
+            calculateValues(aValues, false);
             break;
         }
     }
 }
 
-void MovingAverageRegressionCurveCalculator::calculateValues(
-    RegressionCalculationHelper::tDoubleVectorPair aValues, sal_Int32 nPeriod, bool bUseXAvg)
+void MovingAverageRegressionCurveCalculator::calculateValuesCentral(
+    RegressionCalculationHelper::tDoubleVectorPair aValues)
 {
     const size_t aSize = aValues.first.size();
-    for (size_t i = nPeriod - 1; i < aSize; ++i)
+    for (size_t i = mPeriod - 1; i < aSize; ++i)
+    {
+        double yAvg = 0.0;
+
+        for (sal_Int32 j = 0; j < mPeriod; j++)
+        {
+            yAvg += aValues.second[i - j];
+        }
+        yAvg /= mPeriod;
+        aYList.push_back(yAvg);
+    }
+    sal_Int32 nPeriodLocal = (mPeriod % 2 == 0) ? (mPeriod / 2) : ((mPeriod - 1) / 2);
+    for (size_t i = nPeriodLocal; i < aSize - 1; ++i)
+    {
+        double x = aValues.first[i];
+        aXList.push_back(x);
+    }
+}
+
+void MovingAverageRegressionCurveCalculator::calculateValues(
+    RegressionCalculationHelper::tDoubleVectorPair aValues, bool bUseXAvg)
+{
+    const size_t aSize = aValues.first.size();
+    for (size_t i = mPeriod - 1; i < aSize; ++i)
     {
         double xAvg = 0.0;
         double yAvg = 0.0;
 
-        for (sal_Int32 j = 0; j < nPeriod; j++)
+        for (sal_Int32 j = 0; j < mPeriod; j++)
         {
             xAvg += aValues.first[i - j];
             yAvg += aValues.second[i - j];
         }
-        yAvg /= nPeriod;
-        xAvg /= nPeriod;
+        yAvg /= mPeriod;
+        xAvg /= mPeriod;
 
         aYList.push_back(yAvg);
         if (bUseXAvg)
