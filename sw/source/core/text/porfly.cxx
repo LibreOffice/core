@@ -351,9 +351,11 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
             // Both rectangles are absolute, SwFormatHori/VertOrient's position
             // is relative to the print area of the anchor text frame.
             tools::Rectangle aTextRectangle = SwTextBoxHelper::getTextRectangle(pShape);
+            tools::Long nXoffs  = SwTextBoxHelper::getTextRectangle(pShape, false).getX();
 
             const auto aPos(pShape->GetAnchor().GetContentAnchor());
             SwFormatVertOrient aVert(pTextBox->GetVertOrient());
+            SwFormatHoriOrient aHori(pTextBox->GetHoriOrient());
 
             // tdf#138598 Replace vertical alignment of As_char textboxes in footer
             // tdf#140158 Remove horizontal positioning of As_char textboxes, because
@@ -373,10 +375,12 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
 
             SwFormatAnchor aNewTxBxAnchor(pTextBox->GetAnchor());
             aNewTxBxAnchor.SetAnchor(aPos);
+            aHori.SetPos(nXoffs);
 
             pTextBox->LockModify();
             pTextBox->SetFormatAttr(aNewTxBxAnchor);
             pTextBox->SetFormatAttr(aVert);
+            pTextBox->SetFormatAttr(aHori);
             pTextBox->UnlockModify();
         }
     }
