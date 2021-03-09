@@ -191,7 +191,7 @@ bool SwNumRuleItem::GetPresentation
 {
     if( !GetValue().isEmpty() )
         rText = SwResId( STR_NUMRULE_ON ) +
-            "(" + GetValue() + ")";
+            " (" + GetValue() + ")";
     else
         rText = SwResId( STR_NUMRULE_OFF );
     return true;
