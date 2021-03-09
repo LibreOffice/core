@@ -410,11 +410,11 @@ void impBufferDevice::paint(double fTrans)
     }
     else if (0.0 != fTrans)
     {
-        sal_uInt8 nMaskValue(static_cast<sal_uInt8>(basegfx::fround(fTrans * 255.0)));
-        AlphaMask aAlphaMask(aSizePixel, &nMaskValue);
-        BitmapEx aContent(mpContent->GetBitmapEx(aEmptyPoint, aSizePixel));
-        aAlphaMask.BlendWith(aContent.GetAlpha());
-        mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent.GetBitmap(), aAlphaMask));
+        basegfx::B2DHomMatrix trans, scale;
+        trans.translate(maDestPixel.TopLeft().X(), maDestPixel.TopLeft().Y());
+        scale.scale(aSizePixel.Width(), aSizePixel.Height());
+        mrOutDev.DrawTransformedBitmapEx(
+            trans * scale, mpContent->GetBitmapEx(aEmptyPoint, aSizePixel), 1 - fTrans);
     }
     else
     {
