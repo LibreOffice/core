@@ -206,7 +206,7 @@ void SAL_CALL CWinClipboard::flushClipboard()
         throw lang::DisposedException("object is already disposed",
                                       static_cast<XClipboardEx*>(this));
 
-    // actually it should be ClearableMutexGuard aGuard( m_ClipContentMutex );
+    // actually it should be ClearableMutexGuard aGuard( m_aContentCacheMutex );
     // but it does not work since FlushClipboard does a callback and frees DataObject
     // which results in a deadlock in onReleaseDataObject.
     // FlushClipboard had to be synchron in order to prevent shutdown until all
