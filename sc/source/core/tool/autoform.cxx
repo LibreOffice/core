@@ -338,35 +338,35 @@ void ScAutoFormatData::PutItem( sal_uInt16 nIndex, const SfxPoolItem& rItem )
     ScAutoFormatDataField& rField = GetField( nIndex );
     switch( rItem.Which() )
     {
-        case ATTR_FONT:             rField.SetFont( static_cast<const SvxFontItem&>(rItem) );              break;
-        case ATTR_FONT_HEIGHT:      rField.SetHeight( static_cast<const SvxFontHeightItem&>(rItem) );      break;
-        case ATTR_FONT_WEIGHT:      rField.SetWeight( static_cast<const SvxWeightItem&>(rItem) );          break;
-        case ATTR_FONT_POSTURE:     rField.SetPosture( static_cast<const SvxPostureItem&>(rItem) );        break;
-        case ATTR_CJK_FONT:         rField.SetCJKFont( static_cast<const SvxFontItem&>(rItem) );           break;
-        case ATTR_CJK_FONT_HEIGHT:  rField.SetCJKHeight( static_cast<const SvxFontHeightItem&>(rItem) );   break;
-        case ATTR_CJK_FONT_WEIGHT:  rField.SetCJKWeight( static_cast<const SvxWeightItem&>(rItem) );       break;
-        case ATTR_CJK_FONT_POSTURE: rField.SetCJKPosture( static_cast<const SvxPostureItem&>(rItem) );     break;
-        case ATTR_CTL_FONT:         rField.SetCTLFont( static_cast<const SvxFontItem&>(rItem) );           break;
-        case ATTR_CTL_FONT_HEIGHT:  rField.SetCTLHeight( static_cast<const SvxFontHeightItem&>(rItem) );   break;
-        case ATTR_CTL_FONT_WEIGHT:  rField.SetCTLWeight( static_cast<const SvxWeightItem&>(rItem) );       break;
-        case ATTR_CTL_FONT_POSTURE: rField.SetCTLPosture( static_cast<const SvxPostureItem&>(rItem) );     break;
-        case ATTR_FONT_UNDERLINE:   rField.SetUnderline( static_cast<const SvxUnderlineItem&>(rItem) );    break;
-        case ATTR_FONT_OVERLINE:    rField.SetOverline( static_cast<const SvxOverlineItem&>(rItem) );      break;
-        case ATTR_FONT_CROSSEDOUT:  rField.SetCrossedOut( static_cast<const SvxCrossedOutItem&>(rItem) );  break;
-        case ATTR_FONT_CONTOUR:     rField.SetContour( static_cast<const SvxContourItem&>(rItem) );        break;
-        case ATTR_FONT_SHADOWED:    rField.SetShadowed( static_cast<const SvxShadowedItem&>(rItem) );      break;
-        case ATTR_FONT_COLOR:       rField.SetColor( static_cast<const SvxColorItem&>(rItem) );            break;
-        case ATTR_BORDER:           rField.SetBox( static_cast<const SvxBoxItem&>(rItem) );                break;
-        case ATTR_BORDER_TLBR:      rField.SetTLBR( static_cast<const SvxLineItem&>(rItem) );              break;
-        case ATTR_BORDER_BLTR:      rField.SetBLTR( static_cast<const SvxLineItem&>(rItem) );              break;
-        case ATTR_BACKGROUND:       rField.SetBackground( static_cast<const SvxBrushItem&>(rItem) );       break;
-        case ATTR_HOR_JUSTIFY:      rField.SetHorJustify( static_cast<const SvxHorJustifyItem&>(rItem) );  break;
-        case ATTR_VER_JUSTIFY:      rField.SetVerJustify( static_cast<const SvxVerJustifyItem&>(rItem) );  break;
-        case ATTR_STACKED:          rField.SetStacked( static_cast<const ScVerticalStackCell&>(rItem) );   break;
-        case ATTR_MARGIN:           rField.SetMargin( static_cast<const SvxMarginItem&>(rItem) );          break;
-        case ATTR_LINEBREAK:        rField.SetLinebreak( static_cast<const ScLineBreakCell&>(rItem) );         break;
-        case ATTR_ROTATE_VALUE:     rField.SetRotateAngle( static_cast<const ScRotateValueItem&>(rItem) ); break;
-        case ATTR_ROTATE_MODE:      rField.SetRotateMode( static_cast<const SvxRotateModeItem&>(rItem) );  break;
+        case ATTR_FONT:             rField.SetFont( rItem.StaticWhichCast(ATTR_FONT) );                    break;
+        case ATTR_FONT_HEIGHT:      rField.SetHeight( rItem.StaticWhichCast(ATTR_FONT_HEIGHT) );           break;
+        case ATTR_FONT_WEIGHT:      rField.SetWeight( rItem.StaticWhichCast(ATTR_FONT_WEIGHT) );           break;
+        case ATTR_FONT_POSTURE:     rField.SetPosture( rItem.StaticWhichCast(ATTR_FONT_POSTURE) );         break;
+        case ATTR_CJK_FONT:         rField.SetCJKFont( rItem.StaticWhichCast(ATTR_CJK_FONT) );             break;
+        case ATTR_CJK_FONT_HEIGHT:  rField.SetCJKHeight( rItem.StaticWhichCast(ATTR_CJK_FONT_HEIGHT) );    break;
+        case ATTR_CJK_FONT_WEIGHT:  rField.SetCJKWeight( rItem.StaticWhichCast(ATTR_CJK_FONT_WEIGHT) );    break;
+        case ATTR_CJK_FONT_POSTURE: rField.SetCJKPosture( rItem.StaticWhichCast(ATTR_CJK_FONT_POSTURE) );  break;
+        case ATTR_CTL_FONT:         rField.SetCTLFont( rItem.StaticWhichCast(ATTR_CTL_FONT) );             break;
+        case ATTR_CTL_FONT_HEIGHT:  rField.SetCTLHeight( rItem.StaticWhichCast(ATTR_CTL_FONT_HEIGHT) );    break;
+        case ATTR_CTL_FONT_WEIGHT:  rField.SetCTLWeight( rItem.StaticWhichCast(ATTR_CTL_FONT_WEIGHT) );    break;
+        case ATTR_CTL_FONT_POSTURE: rField.SetCTLPosture( rItem.StaticWhichCast(ATTR_CTL_FONT_POSTURE) );  break;
+        case ATTR_FONT_UNDERLINE:   rField.SetUnderline( rItem.StaticWhichCast(ATTR_FONT_UNDERLINE) );     break;
+        case ATTR_FONT_OVERLINE:    rField.SetOverline( rItem.StaticWhichCast(ATTR_FONT_OVERLINE) );       break;
+        case ATTR_FONT_CROSSEDOUT:  rField.SetCrossedOut( rItem.StaticWhichCast(ATTR_FONT_CROSSEDOUT) );   break;
+        case ATTR_FONT_CONTOUR:     rField.SetContour( rItem.StaticWhichCast(ATTR_FONT_CONTOUR) );         break;
+        case ATTR_FONT_SHADOWED:    rField.SetShadowed( rItem.StaticWhichCast(ATTR_FONT_SHADOWED) );       break;
+        case ATTR_FONT_COLOR:       rField.SetColor( rItem.StaticWhichCast(ATTR_FONT_COLOR) );             break;
+        case ATTR_BORDER:           rField.SetBox( rItem.StaticWhichCast(ATTR_BORDER) );                   break;
+        case ATTR_BORDER_TLBR:      rField.SetTLBR( rItem.StaticWhichCast(ATTR_BORDER_TLBR) );             break;
+        case ATTR_BORDER_BLTR:      rField.SetBLTR( rItem.StaticWhichCast(ATTR_BORDER_BLTR) );             break;
+        case ATTR_BACKGROUND:       rField.SetBackground( rItem.StaticWhichCast(ATTR_BACKGROUND) );        break;
+        case ATTR_HOR_JUSTIFY:      rField.SetHorJustify( rItem.StaticWhichCast(ATTR_HOR_JUSTIFY) );       break;
+        case ATTR_VER_JUSTIFY:      rField.SetVerJustify( rItem.StaticWhichCast(ATTR_VER_JUSTIFY) );       break;
+        case ATTR_STACKED:          rField.SetStacked( rItem.StaticWhichCast(ATTR_STACKED) );              break;
+        case ATTR_MARGIN:           rField.SetMargin( rItem.StaticWhichCast(ATTR_MARGIN) );                break;
+        case ATTR_LINEBREAK:        rField.SetLinebreak( rItem.StaticWhichCast(ATTR_LINEBREAK) );          break;
+        case ATTR_ROTATE_VALUE:     rField.SetRotateAngle( rItem.StaticWhichCast(ATTR_ROTATE_VALUE) );     break;
+        case ATTR_ROTATE_MODE:      rField.SetRotateMode( rItem.StaticWhichCast(ATTR_ROTATE_MODE) );       break;
     }
 }
 
