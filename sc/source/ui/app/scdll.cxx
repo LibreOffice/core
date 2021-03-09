@@ -177,7 +177,6 @@ void ScDLL::Init()
     // Child Windows
 
     ScInputWindowWrapper        ::RegisterChildWindow(true, pMod, SfxChildWindowFlags::TASK|SfxChildWindowFlags::FORCEDOCK);
-    ScNavigatorDialogWrapper    ::RegisterChildWindowContext(static_cast<sal_uInt16>(ScTabViewShell::GetInterfaceId()), pMod);
     ScSolverDlgWrapper          ::RegisterChildWindow(false, pMod);
     ScOptSolverDlgWrapper       ::RegisterChildWindow(false, pMod);
     ScXMLSourceDlgWrapper       ::RegisterChildWindow(false, pMod);
@@ -224,6 +223,8 @@ void ScDLL::Init()
     ScValidityRefChildWin::RegisterChildWindow(false, pMod);
     sc::SearchResultsDlgWrapper::RegisterChildWindow(false, pMod);
     ScCondFormatDlgWrapper::RegisterChildWindow(false, pMod);
+
+    ScNavigatorWrapper::RegisterChildWindow(false, pMod, SfxChildWindowFlags::NEVERHIDE);
 
     // Add 3DObject Factory
     E3dObjFactory();
