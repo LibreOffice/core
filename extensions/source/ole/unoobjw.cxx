@@ -143,8 +143,7 @@ private:
 public:
     static rtl::Reference< TerminationVetoer > get()
     {
-        static TerminationVetoer* pInstance = new TerminationVetoer;
-        static rtl::Reference< TerminationVetoer > aInstance( pInstance );
+        static rtl::Reference< TerminationVetoer > aInstance( new TerminationVetoer );
 
         return aInstance;
     }

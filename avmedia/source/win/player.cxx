@@ -29,6 +29,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <osl/file.hxx>
+#include <rtl/ref.hxx>
 
 #define AVMEDIA_WIN_PLAYER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Player_DirectX"
 #define AVMEDIA_WIN_PLAYER_SERVICENAME "com.sun.star.media.Player_DirectX"
@@ -407,7 +408,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 
     if( mpVW && aSize.Width > 0 && aSize.Height > 0 )
     {
-        ::avmedia::win::Window* pWindow = new ::avmedia::win::Window( *this );
+        rtl::Reference<::avmedia::win::Window> pWindow = new ::avmedia::win::Window( *this );
 
         xRet = pWindow;
 
@@ -425,7 +426,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
 
     if( !maURL.isEmpty() )
     {
-        FrameGrabber* pGrabber = new FrameGrabber();
+        rtl::Reference<FrameGrabber> pGrabber = new FrameGrabber();
 
         xRet = pGrabber;
 

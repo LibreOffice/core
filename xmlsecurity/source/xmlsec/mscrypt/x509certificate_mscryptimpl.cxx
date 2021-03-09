@@ -32,6 +32,7 @@
 #include "oid.hxx"
 
 #include <rtl/locale.h>
+#include <rtl/ref.hxx>
 #include <osl/nlsupport.h>
 #include <osl/process.h>
 #include <o3tl/char16_t2wchar_t.hxx>
@@ -359,7 +360,7 @@ css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSubjectU
 
 css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > > SAL_CALL X509Certificate_MSCryptImpl::getExtensions() {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr && m_pCertContext->pCertInfo->cExtension != 0 ) {
-        CertificateExtension_XmlSecImpl* xExtn ;
+        rtl::Reference<CertificateExtension_XmlSecImpl> xExtn ;
         Sequence< Reference< XCertificateExtension > > xExtns( m_pCertContext->pCertInfo->cExtension ) ;
 
         for( unsigned int i = 0; i < m_pCertContext->pCertInfo->cExtension; i++ ) {
@@ -386,9 +387,8 @@ css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > 
 
 css::uno::Reference< css::security::XCertificateExtension > SAL_CALL X509Certificate_MSCryptImpl::findCertificateExtension( const css::uno::Sequence< sal_Int8 >& /*oid*/ ) {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr && m_pCertContext->pCertInfo->cExtension != 0 ) {
-        CertificateExtension_XmlSecImpl* xExtn ;
+        rtl::Reference<CertificateExtension_XmlSecImpl> xExtn ;
 
-        xExtn = nullptr ;
         for( unsigned int i = 0; i < m_pCertContext->pCertInfo->cExtension; i++ ) {
             CERT_EXTENSION* pExtn = &( m_pCertContext->pCertInfo->rgExtension[i] ) ;
 

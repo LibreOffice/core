@@ -175,7 +175,6 @@ EmbedDocument_Impl::EmbedDocument_Impl( const uno::Reference< lang::XMultiServic
 {
     m_xOwnAccess = new EmbeddedDocumentInstanceAccess_Impl( this );
     m_pDocHolder = new DocumentHolder( xFactory, m_xOwnAccess );
-    m_pDocHolder->acquire();
 }
 
 EmbedDocument_Impl::~EmbedDocument_Impl()
@@ -192,8 +191,6 @@ EmbedDocument_Impl::~EmbedDocument_Impl()
         m_pDocHolder->CloseDocument();
         m_pDocHolder->CloseFrame();
     }
-
-    m_pDocHolder->release();
 }
 
 uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Impl( uno::Reference< io::XInputStream > const & xStream, DWORD /*nStreamMode*/, LPCOLESTR pFilePath )

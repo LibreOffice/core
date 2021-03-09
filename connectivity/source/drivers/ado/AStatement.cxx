@@ -30,6 +30,7 @@
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/types.hxx>
+#include <rtl/ref.hxx>
 
 #undef max
 
@@ -305,13 +306,12 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const OUString& 
     CHECK_RETURN(aSet.get_CursorType(m_eCursorType))
     CHECK_RETURN(aSet.get_LockType(m_eLockType))
 
-    OResultSet* pSet = new OResultSet(aSet,this);
-    Reference< XResultSet > xRs = pSet;
+    rtl::Reference<OResultSet> pSet = new OResultSet(aSet,this);
     pSet->construct();
 
-    m_xResultSet = WeakReference<XResultSet>(xRs);
+    m_xResultSet = WeakReference<XResultSet>(pSet);
 
-    return xRs;
+    return pSet;
 }
 
 

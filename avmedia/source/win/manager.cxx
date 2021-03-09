@@ -21,6 +21,7 @@
 #include "player.hxx"
 
 #include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
 #include <tools/urlobj.hxx>
 
 using namespace ::com::sun::star;
@@ -39,14 +40,13 @@ Manager::~Manager()
 
 uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString& rURL )
 {
-    Player*                             pPlayer( new Player() );
-    uno::Reference< media::XPlayer >    xRet( pPlayer );
+    rtl::Reference<Player>              pPlayer( new Player() );
     const INetURLObject                 aURL( rURL );
 
     if( !pPlayer->create( aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ) )  )
-        xRet.clear();
+        pPlayer.clear();
 
-    return xRet;
+    return pPlayer;
 }
 
 

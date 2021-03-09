@@ -163,10 +163,9 @@ Reference< XStatement > SAL_CALL OConnection::createStatement(  )
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    OStatement* pStmt = new OStatement(this);
-    Reference< XStatement > xStmt = pStmt;
-    m_aStatements.push_back(WeakReferenceHelper(*pStmt));
-    return pStmt;
+    Reference< XStatement > xStmt = new OStatement(this);
+    m_aStatements.push_back(WeakReferenceHelper(xStmt));
+    return xStmt;
 }
 
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OUString& sql )
@@ -175,9 +174,8 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OU
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    OPreparedStatement* pStmt = new OPreparedStatement(this, sql);
-    Reference< XPreparedStatement > xPStmt = pStmt;
-    m_aStatements.push_back(WeakReferenceHelper(*pStmt));
+    Reference< XPreparedStatement > xPStmt = new OPreparedStatement(this, sql);
+    m_aStatements.push_back(WeakReferenceHelper(xPStmt));
     return xPStmt;
 }
 
@@ -187,9 +185,8 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUStrin
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    OCallableStatement* pStmt = new OCallableStatement(this, sql);
-    Reference< XPreparedStatement > xPStmt = pStmt;
-    m_aStatements.push_back(WeakReferenceHelper(*pStmt));
+    Reference< XPreparedStatement > xPStmt = new OCallableStatement(this, sql);
+    m_aStatements.push_back(WeakReferenceHelper(xPStmt));
     return xPStmt;
 }
 

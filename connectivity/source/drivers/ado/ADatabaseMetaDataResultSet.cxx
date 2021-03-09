@@ -34,7 +34,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/seqstream.hxx>
 #include <connectivity/dbexception.hxx>
-
+#include <rtl/ref.hxx>
 
 #include <oledb.h>
 
@@ -795,7 +795,7 @@ void ODatabaseMetaDataResultSet::setProceduresMap()
     aMap[DB_PT_FUNCTION]    = ProcedureResult::RETURN;
     m_aValueRange[4] = aMap;
 
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
     pMetaData->setProceduresMap();
     m_xMetaData = pMetaData;
 }
@@ -825,7 +825,7 @@ void ODatabaseMetaDataResultSet::setColumnPrivilegesMap()
     m_aColMapping.push_back(9);
     m_aColMapping.push_back(10);
 
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
     pMetaData->setColumnPrivilegesMap();
     m_xMetaData = pMetaData;
 }
@@ -902,7 +902,7 @@ void ODatabaseMetaDataResultSet::setColumnsMap()
     aMap2[1] = "NO";
     m_aIntValueRange[18] = aMap2;
 
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
     pMetaData->setColumnsMap();
     m_xMetaData = pMetaData;
 }
@@ -914,7 +914,7 @@ void ODatabaseMetaDataResultSet::setTablesMap()
         m_aColMapping.push_back(i);
     m_aColMapping.push_back(6);
 
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
     pMetaData->setTablesMap();
     m_xMetaData = pMetaData;
 }
@@ -981,7 +981,7 @@ void ODatabaseMetaDataResultSet::setProcedureColumnsMap()
 
     m_aValueRange[10] = aMap;
 
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
     pMetaData->setProcedureColumnsMap();
     m_xMetaData = pMetaData;
 }
@@ -995,7 +995,7 @@ void ODatabaseMetaDataResultSet::setPrimaryKeysMap()
     m_aColMapping.push_back(7);
     m_aColMapping.push_back(8);
 
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
     pMetaData->setProcedureColumnsMap();
     m_xMetaData = pMetaData;
 }
@@ -1037,7 +1037,7 @@ void ODatabaseMetaDataResultSet::setIndexInfoMap()
 
     m_aIntValueRange[21] = aMap3;
 
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
     pMetaData->setIndexInfoMap();
     m_xMetaData = pMetaData;
 }
@@ -1059,7 +1059,7 @@ void ODatabaseMetaDataResultSet::setTablePrivilegesMap()
     m_aIntValueRange[7] = aMap;
 
 
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
     pMetaData->setTablePrivilegesMap();
     m_xMetaData = pMetaData;
 }
@@ -1090,7 +1090,7 @@ void ODatabaseMetaDataResultSet::setCrossReferenceMap()
     m_aStrValueRange[14] = aMap;
     m_aStrValueRange[15] = aMap;
 
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
     pMetaData->setCrossReferenceMap();
     m_xMetaData = pMetaData;
 }
@@ -1168,7 +1168,7 @@ void ODatabaseMetaDataResultSet::setTypeInfoMap(bool _bJetEngine)
     ::std::map<sal_Int32,sal_Int32> aCurrencyMapping;
     m_aValueRange[11] = aCurrencyMapping;
 
-    ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
+    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
     pMetaData->setTypeInfoMap();
     m_xMetaData = pMetaData;
 }

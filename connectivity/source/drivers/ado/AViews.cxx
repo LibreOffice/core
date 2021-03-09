@@ -27,6 +27,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
+#include <rtl/ref.hxx>
 #include <strings.hrc>
 
 using namespace ::comphelper;
@@ -41,7 +42,7 @@ using namespace com::sun::star::container;
 
 sdbcx::ObjectType OViews::createObject(const OUString& _rName)
 {
-    OAdoView* pView = new OAdoView(isCaseSensitive(),m_aCollection.GetItem(_rName));
+    rtl::Reference<OAdoView> pView = new OAdoView(isCaseSensitive(),m_aCollection.GetItem(_rName));
     pView->setNew(false);
     return pView;
 }

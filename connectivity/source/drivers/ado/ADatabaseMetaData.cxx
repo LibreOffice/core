@@ -28,6 +28,7 @@
 #include <FDatabaseMetaDataResultSet.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
+#include <rtl/ref.hxx>
 
 using namespace ::comphelper;
 
@@ -86,10 +87,9 @@ Reference< XResultSet > ODatabaseMetaData::impl_getTypeInfo_throw(  )
 {
     ADORecordset *pRecordset = m_pADOConnection->getTypeInfo();
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(pRecordset);
     pResult->setTypeInfoMap(ADOS::isJetEngine(m_pConnection->getEngineType()));
-    Reference< XResultSet > xRef = pResult;
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  )
@@ -101,13 +101,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  )
     m_pADOConnection->OpenSchema(adSchemaCatalogs,vtEmpty,vtEmpty,&pRecordset);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
-    Reference< XResultSet > xRef;
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(pRecordset);
     pResult->setCatalogsMap();
-    xRef = pResult;
 
-    return xRef;
+    return pResult;
 }
 
 OUString ODatabaseMetaData::impl_getCatalogSeparator_throw(  )
@@ -124,12 +121,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas(  )
     m_pADOConnection->OpenSchema(adSchemaSchemata,vtEmpty,vtEmpty,&pRecordset);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
-    Reference< XResultSet > xRef;
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(pRecordset);
     pResult->setSchemasMap();
-    xRef = pResult;
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
@@ -139,12 +133,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
     ADORecordset *pRecordset = m_pADOConnection->getColumnPrivileges(catalog,schema,table,columnNamePattern);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
-    Reference< XResultSet > xRef;
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(pRecordset);
     pResult->setColumnPrivilegesMap();
-    xRef = pResult;
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
@@ -154,13 +145,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     ADORecordset *pRecordset = m_pADOConnection->getColumns(catalog,schemaPattern,tableNamePattern,columnNamePattern);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
-    Reference< XResultSet > xRef;
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(pRecordset);
     pResult->setColumnsMap();
-    xRef = pResult;
 
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
@@ -170,13 +158,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     ADORecordset *pRecordset = m_pADOConnection->getTables(catalog,schemaPattern,tableNamePattern,types);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
-    Reference< XResultSet > xRef;
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(pRecordset);
     pResult->setTablesMap();
-    xRef = pResult;
 
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
@@ -186,13 +171,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
     ADORecordset *pRecordset = m_pADOConnection->getProcedureColumns(catalog,schemaPattern,procedureNamePattern,columnNamePattern);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
-    Reference< XResultSet > xRef;
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(pRecordset);
     pResult->setProcedureColumnsMap();
-    xRef = pResult;
 
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
@@ -203,13 +185,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
     ADORecordset *pRecordset = m_pADOConnection->getProcedures(catalog,schemaPattern,procedureNamePattern);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
-    Reference< XResultSet > xRef;
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(pRecordset);
     pResult->setProceduresMap();
-    xRef = pResult;
 
-    return xRef;
+    return pResult;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxBinaryLiteralLength(  )
@@ -278,12 +257,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
     ADORecordset *pRecordset = m_pADOConnection->getExportedKeys(catalog,schema,table);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
-    Reference< XResultSet > xRef;
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(pRecordset);
     pResult->setCrossReferenceMap();
-    xRef = pResult;
 
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
@@ -292,13 +269,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     ADORecordset *pRecordset = m_pADOConnection->getImportedKeys(catalog,schema,table);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
-    Reference< XResultSet > xRef;
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(pRecordset);
     pResult->setCrossReferenceMap();
-    xRef = pResult;
 
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
@@ -307,13 +281,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
     ADORecordset *pRecordset = m_pADOConnection->getPrimaryKeys(catalog,schema,table);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
-    Reference< XResultSet > xRef;
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(pRecordset);
     pResult->setPrimaryKeysMap();
-    xRef = pResult;
 
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
@@ -323,13 +294,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
     ADORecordset *pRecordset = m_pADOConnection->getIndexInfo(catalog,schema,table,unique,approximate);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
-    Reference< XResultSet > xRef;
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(pRecordset);
     pResult->setIndexInfoMap();
-    xRef = pResult;
 
-    return xRef;
+    return pResult;
 }
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
@@ -343,13 +311,13 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
         ADORecordset *pRecordset = m_pADOConnection->getTablePrivileges(catalog,schemaPattern,tableNamePattern);
         ADOS::ThrowException(*m_pADOConnection,*this);
 
-        ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
+        rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(pRecordset);
         pResult->setTablePrivilegesMap();
         xRef = pResult;
     }
     else
     {
-        ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTablePrivileges);
+        rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTablePrivileges);
         xRef = pResult;
         ::connectivity::ODatabaseMetaDataResultSet::ORows aRows;
         ::connectivity::ODatabaseMetaDataResultSet::ORow aRow(8);
@@ -393,13 +361,10 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
     ADORecordset *pRecordset = m_pADOConnection->getCrossReference(primaryCatalog,primarySchema,primaryTable,foreignCatalog,foreignSchema,foreignTable);
     ADOS::ThrowException(*m_pADOConnection,*this);
 
-    Reference< XResultSet > xRef;
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(pRecordset);
     pResult->setCrossReferenceMap();
-    xRef = pResult;
 
-    return xRef;
+    return pResult;
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::doesMaxRowSizeIncludeBlobs(  )

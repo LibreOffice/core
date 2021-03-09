@@ -191,10 +191,10 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
         if(aCatalog.IsValid())
         {
             aCatalog.putref_ActiveConnection(*pConnection->getConnection());
-            OCatalog* pCatalog = new OCatalog(aCatalog,pConnection);
+            rtl::Reference<OCatalog> pCatalog = new OCatalog(aCatalog,pConnection);
             xTab = pCatalog;
             pConnection->setCatalog(xTab);
-            pConnection->setCatalog(pCatalog);
+            pConnection->setCatalog(pCatalog.get());
         }
     }
     return xTab;
