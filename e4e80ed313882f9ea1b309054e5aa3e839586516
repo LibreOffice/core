@@ -22,6 +22,30 @@
       "revId": "e4e80ed313882f9ea1b309054e5aa3e839586516",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1ed896f_7040ffac",
+        "filename": "vcl/source/edit/textundo.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-03-09T10:09:43Z",
+      "side": 1,
+      "message": "thanks! fix in progress with\n  https://gerrit.libreoffice.org/c/core/+/112198",
+      "parentUuid": "417f2626_180b2dcf",
+      "range": {
+        "startLine": 276,
+        "startChar": 33,
+        "endLine": 276,
+        "endChar": 44
+      },
+      "revId": "e4e80ed313882f9ea1b309054e5aa3e839586516",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
