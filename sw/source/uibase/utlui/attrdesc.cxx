@@ -190,8 +190,7 @@ bool SwNumRuleItem::GetPresentation
 )   const
 {
     if( !GetValue().isEmpty() )
-        rText = SwResId( STR_NUMRULE_ON ) +
-            "(" + GetValue() + ")";
+        rText = SwResId( STR_NUMRULE_ON ).replaceFirst("%LISTSTYLENAME", GetValue());
     else
         rText = SwResId( STR_NUMRULE_OFF );
     return true;
