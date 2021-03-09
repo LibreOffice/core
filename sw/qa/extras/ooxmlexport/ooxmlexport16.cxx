@@ -18,6 +18,8 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <comphelper/configuration.hxx>
 #include <editeng/escapementitem.hxx>
 #include <unotools/fltrcfg.hxx>
 
@@ -222,6 +224,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138953, "croppedAndRotated.odt")
     // and the resulting object size was much larger than should be.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(12961), frameRect.Height);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8664), frameRect.Width);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf118535, "tdf118535.odt")
+{
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
+    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("word/media/image1.jpeg")));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: false
+    // - Actual  : true
+    // i.e. the embedded picture would have been saved twice.
+    CPPUNIT_ASSERT_EQUAL(false, bool(xNameAccess->hasByName("word/media/image2.jpeg")));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf133473_shadowSize, "tdf133473.docx")
