@@ -147,7 +147,6 @@ bool GetSplitSizeFromString( const OUString& rStr, Size& rSize )
     return false;
 }
 
-
 SfxChildWindow::SfxChildWindow(vcl::Window *pParentWindow, sal_uInt16 nId)
     : pParent(pParentWindow)
     , nType(nId)
@@ -160,8 +159,6 @@ SfxChildWindow::SfxChildWindow(vcl::Window *pParentWindow, sal_uInt16 nId)
     pImpl->bVisible = true;
     pImpl->pContextModule = nullptr;
     pImpl->pWorkWin = nullptr;
-
-    pContext = nullptr;
 }
 
 void SfxChildWindow::Destroy()
@@ -197,7 +194,6 @@ void SfxChildWindow::ClearWorkwin()
 
 SfxChildWindow::~SfxChildWindow()
 {
-    pContext.reset();
     ClearWorkwin();
     if (xController)
     {
@@ -437,98 +433,6 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
         rInfo.nFlags = static_cast<SfxChildWindowFlags>(static_cast<sal_uInt16>(aWinData.copy( nPos+1 ).toInt32()));
 }
 
-void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBindings )
-{
-    std::unique_ptr<SfxChildWindowContext> pCon;
-    SfxChildWinFactory* pFact=nullptr;
-    SfxApplication *pApp = SfxGetpApp();
-    SfxDispatcher *pDisp = rBindings.GetDispatcher_Impl();
-    SfxModule *pMod = pDisp ? SfxModule::GetActiveModule( pDisp->GetFrame() ) :nullptr;
-    if ( pMod )
-    {
-        SfxChildWinFactArr_Impl *pFactories = pMod->GetChildWinFactories_Impl();
-        if ( pFactories )
-        {
-            SfxChildWinFactArr_Impl &rFactories = *pFactories;
-            for ( size_t nFactory = 0; nFactory < rFactories.size(); ++nFactory )
-            {
-                pFact = &rFactories[nFactory];
-                if ( pFact->nId == GetType() )
-                {
-                    DBG_ASSERT( pFact->pArr, "No context registered!" );
-                    if ( !pFact->pArr )
-                        break;
-
-                    for ( size_t n=0; n<pFact->pArr->size(); ++n )
-                    {
-                        SfxChildWinContextFactory *pConFact = &(*pFact->pArr)[n];
-                        rBindings.ENTERREGISTRATIONS();
-                        if ( pConFact->nContextId == nContextId )
-                        {
-                            SfxChildWinInfo aInfo = pFact->aInfo;
-                            pCon = pConFact->pCtor( GetWindow(), &rBindings, &aInfo );
-                            pCon->nContextId = pConFact->nContextId;
-                            pImpl->pContextModule = pMod;
-                        }
-                        rBindings.LEAVEREGISTRATIONS();
-                    }
-                    break;
-                }
-            }
-        }
-    }
-
-    if ( !pCon )
-    {
-        SfxChildWinFactArr_Impl &rFactories = pApp->GetChildWinFactories_Impl();
-        for ( size_t nFactory = 0; nFactory < rFactories.size(); ++nFactory )
-        {
-            pFact = &rFactories[nFactory];
-            if ( pFact->nId == GetType() )
-            {
-                DBG_ASSERT( pFact->pArr, "No context registered!" );
-                if ( !pFact->pArr )
-                    break;
-
-                for ( size_t n=0; n<pFact->pArr->size(); ++n )
-                {
-                    SfxChildWinContextFactory *pConFact = &(*pFact->pArr)[n];
-                    rBindings.ENTERREGISTRATIONS();
-                    if ( pConFact->nContextId == nContextId )
-                    {
-                        SfxChildWinInfo aInfo = pFact->aInfo;
-                        pCon = pConFact->pCtor( GetWindow(), &rBindings, &aInfo );
-                        pCon->nContextId = pConFact->nContextId;
-                        pImpl->pContextModule = nullptr;
-                    }
-                    rBindings.LEAVEREGISTRATIONS();
-                }
-                break;
-            }
-        }
-    }
-
-    if ( !pCon )
-    {
-        OSL_FAIL( "No suitable context found! ");
-        return;
-    }
-
-    pContext = std::move(pCon);
-    pContext->GetWindow()->SetSizePixel( pWindow->GetOutputSizePixel() );
-    pContext->GetWindow()->Show();
-}
-
-SfxChildWindowContext::SfxChildWindowContext( sal_uInt16 nId )
-    : nContextId( nId )
-{
-}
-
-SfxChildWindowContext::~SfxChildWindowContext()
-{
-    pWindow.disposeAndClear();
-}
-
 bool ParentIsFloatingWindow(vcl::Window *pParent)
 {
     if (pParent->GetType() == WindowType::DOCKINGWINDOW || pParent->GetType() == WindowType::TOOLBOX)
@@ -649,11 +553,6 @@ void SfxChildWindow::Show( ShowFlags nFlags )
         pWindow->Show(true, nFlags);
 }
 
-vcl::Window* SfxChildWindow::GetContextWindow( SfxModule const *pModule ) const
-{
-    return pModule == pImpl->pContextModule && pContext ? pContext->GetWindow(): nullptr;
-}
-
 void SfxChildWindow::SetWorkWindow_Impl( SfxWorkWindow* pWin )
 {
     pImpl->pWorkWin = pWin;
@@ -724,11 +623,6 @@ void SfxChildWindow::SetFrame( const css::uno::Reference< css::frame::XFrame > &
     pImpl->xFrame = rFrame;
     if( pImpl->xFrame.is() )
         pImpl->xFrame->addEventListener( pImpl->xListener );
-}
-
-void SfxChildWindowContext::RegisterChildWindowContext(SfxModule* pMod, sal_uInt16 nId, std::unique_ptr<SfxChildWinContextFactory> pFact)
-{
-    SfxGetpApp()->RegisterChildWindowContext_Impl( pMod, nId, std::move(pFact) );
 }
 
 void SfxChildWindow::RegisterChildWindow(SfxModule* pMod, std::unique_ptr<SfxChildWinFactory> pFact)
