@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "cef935ba_42b64151",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2825,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-09T21:27:43Z",
+      "side": 0,
+      "message": "We don\u0027t need to test this in non text nodes, i.e. when IsTextNode() is false",
+      "revId": "c89f5fa26a8ec6e36ddd5562a5c3c276f9e4ff80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d4df2b39_55a8e84f",
         "filename": "sw/source/core/txtnode/txtedt.cxx",
         "patchSetId": 1

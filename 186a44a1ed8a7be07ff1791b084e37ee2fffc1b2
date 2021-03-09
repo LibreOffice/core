@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c19dc57a_379f6c94",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2832,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-09T21:27:43Z",
+      "side": 1,
+      "message": "There is an IsTextNode() for this.",
+      "range": {
+        "startLine": 2832,
+        "startChar": 28,
+        "endLine": 2832,
+        "endChar": 52
+      },
+      "revId": "186a44a1ed8a7be07ff1791b084e37ee2fffc1b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d47ab5c_9ff29427",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2846,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-09T21:27:43Z",
+      "side": 1,
+      "message": "Block-starting brackets must be in a new line, as here",
+      "range": {
+        "startLine": 2846,
+        "startChar": 4,
+        "endLine": 2846,
+        "endChar": 5
+      },
+      "revId": "186a44a1ed8a7be07ff1791b084e37ee2fffc1b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
