@@ -529,17 +529,17 @@ SfxChildWindowContext::~SfxChildWindowContext()
     pWindow.disposeAndClear();
 }
 
-SystemWindow* SfxChildWindowContext::GetFloatingWindow(vcl::Window *pParent)
+bool ParentIsFloatingWindow(vcl::Window *pParent)
 {
     if (pParent->GetType() == WindowType::DOCKINGWINDOW || pParent->GetType() == WindowType::TOOLBOX)
     {
-        return static_cast<DockingWindow*>(pParent)->GetFloatingWindow();
+        return true;
     }
     if (pParent->GetType() == WindowType::FLOATINGWINDOW)
     {
-        return static_cast<SystemWindow*>(pParent);
+        return true;
     }
-    return nullptr;
+    return false;
 }
 
 void SfxChildWindow::SetFactory_Impl( SfxChildWinFactory *pF )
