@@ -3931,7 +3931,7 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
         case 804:
             ExecCommand("demote", true);
             break;
-        case 805:
+        case 805: // select document content
         {
             m_pActiveShell->KillPams();
             m_pActiveShell->ClearMark();
@@ -3951,7 +3951,7 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
             else if (eTypeId == ContentTypeId::TABLE)
             {
                 m_pActiveShell->GotoTable(pCnt->GetName());
-                m_pActiveShell->SelAll();
+                m_pActiveShell->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_TABLE_SELECT_ALL);
             }
             else if (eTypeId == ContentTypeId::REGION)
             {
