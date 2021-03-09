@@ -22,13 +22,10 @@
 #include <app.hrc>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/navigat.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/eitem.hxx>
 
 namespace sd {
-
-SFX_IMPL_CHILDWINDOWCONTEXT(NavigatorChildWindow, SID_NAVIGATOR)
 
 static void RequestNavigatorUpdate (SfxBindings const * pBindings)
 {
@@ -43,23 +40,47 @@ static void RequestNavigatorUpdate (SfxBindings const * pBindings)
     }
 }
 
-NavigatorChildWindow::NavigatorChildWindow (
-    vcl::Window* pParent,
-    sal_uInt16 nId,
-    SfxBindings* pBindings,
-    SfxChildWinInfo* )
-    : SfxChildWindowContext( nId )
+SdNavigatorFloat::SdNavigatorFloat(SfxBindings* _pBindings, SfxChildWindow* _pMgr, vcl::Window* _pParent)
+    : SfxNavigator(_pBindings, _pMgr, _pParent)
 {
-    VclPtr<SdNavigatorWin> pNavWin = VclPtr<SdNavigatorWin>::Create(
-        pParent, pBindings);
+    pNavWin = VclPtr<SdNavigatorWin>::Create(this, _pBindings);
+    pNavWin->Show();
 
     pNavWin->SetUpdateRequestFunctor(
-        [pBindings] () { return RequestNavigatorUpdate(pBindings); });
+        [_pBindings] () { return RequestNavigatorUpdate(_pBindings); });
 
-    if (SfxNavigator* pNav = dynamic_cast<SfxNavigator*>(pParent))
-        pNav->SetMinOutputSizePixel(pNavWin->GetOptimalSize());
+    SetMinOutputSizePixel(pNavWin->GetOptimalSize());
+}
 
-    SetWindow( pNavWin );
+void SdNavigatorFloat::InitTreeLB(const SdDrawDocument* pDoc)
+{
+    pNavWin->InitTreeLB(pDoc);
+}
+
+void SdNavigatorFloat::FreshTree(const SdDrawDocument* pDoc)
+{
+    pNavWin->FreshTree(pDoc);
+}
+
+void SdNavigatorFloat::dispose()
+{
+    pNavWin.disposeAndClear();
+    SfxNavigator::dispose();
+}
+
+SdNavigatorFloat::~SdNavigatorFloat()
+{
+    disposeOnce();
+}
+
+SFX_IMPL_DOCKINGWINDOW(SdNavigatorWrapper, SID_NAVIGATOR);
+
+SdNavigatorWrapper::SdNavigatorWrapper(vcl::Window *_pParent, sal_uInt16 nId,
+                                       SfxBindings* pBindings, SfxChildWinInfo* pInfo)
+    : SfxNavigatorWrapper(_pParent, nId, pBindings, pInfo)
+{
+    SetWindow(VclPtr<SdNavigatorFloat>::Create(pBindings, this, _pParent));
+    Initialize(pInfo);
 }
 
 } // end of namespace sd

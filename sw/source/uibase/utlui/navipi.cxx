@@ -25,7 +25,6 @@
 #include <sot/filelist.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/navigat.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <tools/urlobj.hxx>
 #include <swtypes.hxx>
@@ -50,25 +49,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
-//! soon obsolete !
-std::unique_ptr<SfxChildWindowContext> SwNavigationChild::CreateImpl( vcl::Window *pParent,
-        SfxBindings *pBindings, SfxChildWinInfo* /*pInfo*/ )
-{
-    return std::make_unique<SwNavigationChild>(pParent,
-            /* cast is safe here! */static_cast< sal_uInt16 >(SwView::GetInterfaceId()),
-            pBindings);
-}
-void    SwNavigationChild::RegisterChildWindowContext(SfxModule* pMod)
-{
-    auto pFact = std::make_unique<SfxChildWinContextFactory>(
-       SwNavigationChild::CreateImpl,
-       /* cast is safe here! */static_cast< sal_uInt16 >(SwView::GetInterfaceId()) );
-    SfxChildWindowContext::RegisterChildWindowContext(pMod, SID_NAVIGATOR, std::move(pFact));
-}
-
-
 // Filter the control characters out of the Outline-Entry
-
 OUString SwNavigationPI::CleanEntry(const OUString& rEntry)
 {
     if (rEntry.isEmpty())
@@ -1108,13 +1089,28 @@ SwView*  SwNavigationPI::GetCreateView() const
     return m_pCreateView;
 }
 
-SwNavigationChild::SwNavigationChild( vcl::Window* pParent,
-                        sal_uInt16 nId,
-                        SfxBindings* _pBindings )
-    : SfxChildWindowContext( nId )
+class SwNavigatorWin : public SfxNavigator
+{
+private:
+    VclPtr<SwNavigationPI> pNavi;
+public:
+    SwNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, vcl::Window* pParent);
+    virtual void dispose() override
+    {
+        pNavi.disposeAndClear();
+        SfxNavigator::dispose();
+    }
+    virtual ~SwNavigatorWin() override
+    {
+        disposeOnce();
+    }
+};
+
+SwNavigatorWin::SwNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, vcl::Window* pParent)
+    : SfxNavigator(_pBindings, _pMgr, pParent)
 {
     Reference< XFrame > xFrame = _pBindings->GetActiveFrame();
-    VclPtr< SwNavigationPI > pNavi = VclPtr< SwNavigationPI >::Create( pParent, xFrame, _pBindings );
+    pNavi = VclPtr< SwNavigationPI >::Create( this, xFrame, _pBindings );
     _pBindings->Invalidate(SID_NAVIGATOR);
 
     SwNavigationConfig* pNaviConfig = SW_MOD()->GetNavigationConfig();
@@ -1131,15 +1127,21 @@ SwNavigationChild::SwNavigationChild( vcl::Window* pParent,
     }
     pNavi->m_xContentTree->SetOutlineLevel( static_cast< sal_uInt8 >( pNaviConfig->GetOutlineLevel() ) );
     pNavi->SetRegionDropMode( pNaviConfig->GetRegionMode() );
+    pNavi->Show();
 
-    if (SfxNavigator* pNav = dynamic_cast<SfxNavigator*>(pParent))
-    {
-        pNav->SetMinOutputSizePixel(pNavi->GetOptimalSize());
-        if (pNaviConfig->IsSmall())
-            pNavi->ZoomIn();
-    }
+    SetMinOutputSizePixel(pNavi->GetOptimalSize());
+    if (pNaviConfig->IsSmall())
+        pNavi->ZoomIn();
+}
 
-    SetWindow(pNavi);
+SFX_IMPL_DOCKINGWINDOW(SwNavigatorWrapper, SID_NAVIGATOR);
+
+SwNavigatorWrapper::SwNavigatorWrapper(vcl::Window *_pParent, sal_uInt16 nId,
+                                       SfxBindings* pBindings, SfxChildWinInfo* pInfo)
+    : SfxNavigatorWrapper(_pParent, nId, pBindings, pInfo)
+{
+    SetWindow(VclPtr<SwNavigatorWin>::Create(pBindings, this, _pParent));
+    Initialize(pInfo);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
