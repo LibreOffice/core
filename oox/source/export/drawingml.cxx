@@ -1163,7 +1163,7 @@ const char* DrawingML::GetRelationCompPrefix() const
     return "unknown";
 }
 
-OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
+OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia, OUString* pFileName )
 {
     GfxLink aLink = rGraphic.GetGfxLink ();
     OUString sMediaType;
@@ -1267,15 +1267,18 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
         sRelationCompPrefix = "../";
     else
         sRelationCompPrefix = GetRelationCompPrefix();
+    OUString sPath = OUStringBuffer()
+                     .appendAscii( sRelationCompPrefix.getStr() )
+                     .appendAscii( sRelPathToMedia.getStr() )
+                     .append( static_cast<sal_Int32>(mnImageCounter ++) )
+                     .appendAscii( pExtension )
+                     .makeStringAndClear();
     sRelId = mpFB->addRelation( mpFS->getOutputStream(),
                                 oox::getRelationship(Relationship::IMAGE),
-                                OUStringBuffer()
-                                .appendAscii( sRelationCompPrefix.getStr() )
-                                .appendAscii( sRelPathToMedia.getStr() )
-                                .append( static_cast<sal_Int32>(mnImageCounter ++) )
-                                .appendAscii( pExtension )
-                                .makeStringAndClear() );
+                                sPath );
 
+    if (pFileName)
+        *pFileName = sPath;
     return sRelId;
 }
 
@@ -1435,6 +1438,7 @@ OUString DrawingML::WriteXGraphicBlip(uno::Reference<beans::XPropertySet> const 
                                       bool bRelPathToMedia)
 {
     OUString sRelId;
+    OUString sFileName;
 
     if (!rxGraphic.is())
         return sRelId;
@@ -1444,15 +1448,24 @@ OUString DrawingML::WriteXGraphicBlip(uno::Reference<beans::XPropertySet> const 
     {
         BitmapChecksum nChecksum = aGraphic.GetChecksum();
         sRelId = mpTextExport->FindRelId(nChecksum);
+        sFileName = mpTextExport->FindFileName(nChecksum);
     }
     if (sRelId.isEmpty())
     {
-        sRelId = WriteImage(aGraphic, bRelPathToMedia);
+        sRelId = WriteImage(aGraphic, bRelPathToMedia, &sFileName);
         if (mpTextExport)
         {
             BitmapChecksum nChecksum = aGraphic.GetChecksum();
-            mpTextExport->CacheRelId(nChecksum, sRelId);
+            mpTextExport->CacheRelId(nChecksum, sRelId, sFileName);
         }
+    }
+    else
+    {
+        // Include the same relation again. This makes it possible to
+        // reuse an image across different headers.
+        sRelId = mpFB->addRelation( mpFS->getOutputStream(),
+                                    oox::getRelationship(Relationship::IMAGE),
+                                    sFileName );
     }
 
     mpFS->startElementNS(XML_a, XML_blip, FSNS(XML_r, XML_embed), sRelId);
