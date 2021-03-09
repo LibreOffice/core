@@ -346,8 +346,6 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
 {
     set_id("NavigatorPanelParent"); // for uitests
 
-    m_xTbxCmd1->set_item_visible("contents", false); // start off hidden, show if made floating
-
     UpdateSheetLimits();
     m_xEdRow->set_width_chars(5);
     //max rows is 1,000,000, which is too long for typical use
