@@ -52,78 +52,10 @@ void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, std::unique_ptr<
     pImpl->pFactArr->push_back( std::move(pFact) );
 }
 
-void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt16 nId,
-        std::unique_ptr<SfxChildWinContextFactory> pFact)
-{
-    SfxChildWinFactArr_Impl *pFactories;
-    SfxChildWinFactory *pF = nullptr;
-    if ( pMod )
-    {
-        // Abandon Module, search there for ChildwindowFactory
-        pFactories = pMod->GetChildWinFactories_Impl();
-        if ( pFactories )
-        {
-            sal_uInt16 nCount = pFactories->size();
-            for (sal_uInt16 nFactory=0; nFactory<nCount; ++nFactory)
-            {
-                SfxChildWinFactory *pFac = &(*pFactories)[nFactory];
-                if ( nId == pFac->nId )
-                {
-                    // Factory found, register Context here.
-                    pF = pFac;
-                    break;
-                }
-            }
-        }
-    }
-
-    if ( !pF )
-    {
-        // Search for Factory in the Application
-        DBG_ASSERT( pImpl, "No AppData!" );
-        DBG_ASSERT( pImpl->pFactArr, "No Factories!" );
-
-        pFactories = pImpl->pFactArr.get();
-        sal_uInt16 nCount = pFactories->size();
-        for (sal_uInt16 nFactory=0; nFactory<nCount; ++nFactory)
-        {
-            SfxChildWinFactory *pFac = &(*pFactories)[nFactory];
-            if ( nId == pFac->nId )
-            {
-                if ( pMod )
-                {
-                    // If the context of a module has been registered, then the
-                    // ChildWindowFactory must also be available there,
-                    // else the ContextFactory would have be unsubscribed on
-                    // DLL-exit
-                    pF = new SfxChildWinFactory( pFac->pCtor, pFac->nId,
-                            pFac->nPos );
-                    pMod->RegisterChildWindow( std::unique_ptr<SfxChildWinFactory>(pF) );
-                }
-                else
-                    pF = pFac;
-                break;
-            }
-        }
-    }
-
-    if ( pF )
-    {
-        if ( !pF->pArr )
-            pF->pArr.reset( new SfxChildWinContextArr_Impl );
-        pF->pArr->push_back( std::move(pFact) );
-        return;
-    }
-
-    OSL_FAIL( "No ChildWindow for this Context!" );
-}
-
-
 SfxChildWinFactArr_Impl& SfxApplication::GetChildWinFactories_Impl() const
 {
     return ( *(pImpl->pFactArr));
 }
-
 
 SfxWorkWindow* SfxApplication::GetWorkWindow_Impl(const SfxViewFrame *pFrame) const
 {

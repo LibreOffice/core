@@ -20,26 +20,6 @@
 #include <memory>
 #include <childwinimpl.hxx>
 
-size_t SfxChildWinContextArr_Impl::size() const
-{
-    return maData.size();
-}
-
-const SfxChildWinContextFactory& SfxChildWinContextArr_Impl::operator []( size_t i ) const
-{
-    return *maData[i];
-}
-
-SfxChildWinContextFactory& SfxChildWinContextArr_Impl::operator []( size_t i )
-{
-    return *maData[i];
-}
-
-void SfxChildWinContextArr_Impl::push_back( std::unique_ptr<SfxChildWinContextFactory> p )
-{
-    maData.push_back(std::move(p));
-}
-
 size_t SfxChildWinFactArr_Impl::size() const
 {
     return maData.size();
