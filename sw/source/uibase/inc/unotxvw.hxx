@@ -23,6 +23,7 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/text/XTextViewTextRangeSupplier.hpp>
 #include <com/sun/star/text/XRubySelection.hpp>
 #include <com/sun/star/view/XFormLayerAccess.hpp>
 #include <com/sun/star/view/XScreenCursor.hpp>
@@ -52,6 +53,7 @@ class SwXTextView final :
     public css::lang::XServiceInfo,
     public css::view::XFormLayerAccess,
     public css::text::XTextViewCursorSupplier,
+    public css::text::XTextViewTextRangeSupplier,
     public css::text::XRubySelection,
     public css::view::XViewSettingsSupplier,
     public css::beans::XPropertySet,
@@ -100,6 +102,10 @@ public:
 
     //XTextViewCursorSupplier
     virtual css::uno::Reference< css::text::XTextViewCursor >  SAL_CALL getViewCursor() override;
+
+    // XTextViewTextRangeSupplier
+    virtual css::uno::Reference<css::text::XTextRange>
+        SAL_CALL createTextRangeByPixelPosition(const css::awt::Point& rPixelPosition) override;
 
     //XViewSettings
     virtual css::uno::Reference< css::beans::XPropertySet >  SAL_CALL getViewSettings() override;
