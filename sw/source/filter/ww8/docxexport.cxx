@@ -818,15 +818,11 @@ void DocxExport::WriteHeaderFooter( const SwFormat* pFormat, bool bHeader, const
     SetFS( pFS );
     {
         DocxTableExportContext aTableExportContext(*m_pAttrOutput);
-        //When the stream changes the cache which is maintained for the graphics in case of alternate content is not cleared.
-        //So clearing the alternate content graphic cache.
-        m_pAttrOutput->PushRelIdCache();
         // do the work
         if (pFormat == nullptr)
             AttrOutput().EmptyParagraph();
         else
             WriteHeaderFooterText(*pFormat, bHeader);
-        m_pAttrOutput->PopRelIdCache();
         m_pAttrOutput->EndParaSdtBlock();
     }
 
