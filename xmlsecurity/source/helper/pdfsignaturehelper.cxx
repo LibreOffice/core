@@ -33,11 +33,7 @@
 #include <vcl/checksum.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svl/cryptosign.hxx>
-#include <config_features.h>
 #include <vcl/filter/PDFiumLibrary.hxx>
-#if HAVE_FEATURE_PDFIUM
-#include <fpdf_signature.h>
-#endif
 
 using namespace ::com::sun::star;
 
@@ -119,7 +115,6 @@ void GetSignatureLineShape(const uno::Reference<frame::XModel>& xModel, sal_Int3
     aStream.ReadBytes(rSignatureLineShape.data(), rSignatureLineShape.size());
 }
 
-#if HAVE_FEATURE_PDFIUM
 /// Represents a parsed signature.
 struct Signature
 {
@@ -405,7 +400,6 @@ bool ValidateSignature(SvStream& rStream, const Signature& rSignature,
     return svl::crypto::Signing::Verify(rStream, rSignature.m_aByteRanges, bNonDetached, aContents,
                                         rInformation);
 }
-#endif
 }
 
 PDFSignatureHelper::PDFSignatureHelper() = default;
@@ -425,8 +419,12 @@ bool PDFSignatureHelper::ReadAndVerifySignature(
 
 bool PDFSignatureHelper::ReadAndVerifySignatureSvStream(SvStream& rStream)
 {
-#if HAVE_FEATURE_PDFIUM
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+    {
+        return true;
+    }
+
     SvMemoryStream aStream;
     sal_uInt64 nPos = rStream.Tell();
     rStream.Seek(0);
@@ -482,9 +480,6 @@ bool PDFSignatureHelper::ReadAndVerifySignatureSvStream(SvStream& rStream)
 
         m_aSignatureInfos.push_back(aInfo);
     }
-#else
-    (void)rStream;
-#endif
 
     return true;
 }
