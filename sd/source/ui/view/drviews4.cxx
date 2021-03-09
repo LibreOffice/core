@@ -271,7 +271,7 @@ void DrawViewShell::FreshNavigatrTree()
     SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( SID_NAVIGATOR );
     if( pWindow )
     {
-        SdNavigatorWin* pNavWin = static_cast<SdNavigatorWin*>( pWindow->GetContextWindow( SD_MOD() ) );
+        SdNavigatorFloat* pNavWin = static_cast<SdNavigatorFloat*>( pWindow->GetWindow() );
         if( pNavWin )
             pNavWin->FreshTree( GetDoc() );
     }
