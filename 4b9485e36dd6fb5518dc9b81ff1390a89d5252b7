@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "701f03e6_d85ccd34",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1849,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-03-09T23:21:36Z",
+      "side": 1,
+      "message": "This looks wrong. FillAutoSimple() is not even called when pulling down two selected date cells because eFillCmd\u003dFILL_DATE and not FILL_SIMPLE then, but also not for other cell types because it is not a simple fill that *always* in-/decrements by exactly one. For single date cells selected being pulled down it is also not called because eFillCmd\u003dFILL_DATE, only for other numeric cells. So what is the scenario you are trying to address here?",
+      "revId": "4b9485e36dd6fb5518dc9b81ff1390a89d5252b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
