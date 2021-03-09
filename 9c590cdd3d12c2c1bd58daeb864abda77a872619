@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8765d4dd_73a84020",
+        "filename": "shell/source/unix/exec/shellexec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1003033
+      },
+      "writtenOn": "2021-03-09T19:24:30Z",
+      "side": 1,
+      "message": "This is probably fair. If someone writes their own custom xdg-open and puts it in their custom PATH then that user probably wants us to use that, I would imagine.\n\nOf course that\u0027s not the case you\u0027re aiming to support, I was just trying to think of what risks may exist. And on some level we have to trust our users with regard to their own desktops.",
+      "revId": "9c590cdd3d12c2c1bd58daeb864abda77a872619",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcd1dbcd_fe20042f",
+        "filename": "shell/source/unix/misc/senddoc.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1003033
+      },
+      "writtenOn": "2021-03-09T19:24:30Z",
+      "side": 1,
+      "message": "Does it make sense to prefer kde-open over xdg-open?",
+      "revId": "9c590cdd3d12c2c1bd58daeb864abda77a872619",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
