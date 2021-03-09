@@ -156,6 +156,8 @@ public:
     void testTrackChangesSimpleXLSX();
     void testSheetTabColorsXLSX();
 
+    void testTdf133487();
+
     void testSharedFormulaExportXLS();
     void testSharedFormulaExportXLSX();
     void testSharedFormulaStringResultExportXLSX();
@@ -348,6 +350,7 @@ public:
     CPPUNIT_TEST(testBordersExchangeXLSX);
     CPPUNIT_TEST(testTrackChangesSimpleXLSX);
     CPPUNIT_TEST(testSheetTabColorsXLSX);
+    CPPUNIT_TEST(testTdf133487);
     CPPUNIT_TEST(testSharedFormulaExportXLS);
     CPPUNIT_TEST(testSharedFormulaExportXLSX);
     CPPUNIT_TEST(testSharedFormulaStringResultExportXLSX);
@@ -3086,6 +3089,38 @@ void ScExportTest::testSheetTabColorsXLSX()
     CPPUNIT_ASSERT_MESSAGE("Failed on the content check after reload.", bRes);
 
     xDocSh2->DoClose();
+}
+
+void ScExportTest::testTdf133487()
+{
+    ScDocShellRef xShell = loadDoc(u"shapes_foreground_background.", FORMAT_FODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_ODS);
+    xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // shape in background has lowest index
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:spreadsheet/table:table[1]/table:table-row[1]/table:table-cell[1]/draw:custom-shape",
+            "z-index", "0");
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:spreadsheet/table:table[1]/table:table-row[1]/table:table-cell[1]/draw:custom-shape"
+            "/attribute::table:table-background", 1);
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:spreadsheet/table:table[1]/table:table-row[1]/table:table-cell[1]/draw:custom-shape",
+            "table-background", "true");
+    // shape in foreground, previously index 1
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:spreadsheet/table:table[1]/table:table-row[1]/table:table-cell[2]/draw:custom-shape",
+            "z-index", "2");
+    // attribute is only written for value "true"
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:spreadsheet/table:table[1]/table:table-row[1]/table:table-cell[2]/draw:custom-shape"
+            "/attribute::table:table-background", 0);
+    // shape in foreground, previously index 0
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:spreadsheet/table:table[1]/table:table-row[3]/table:table-cell[1]/draw:custom-shape",
+            "z-index", "1");
+    // attribute is only written for value "true"
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:spreadsheet/table:table[1]/table:table-row[3]/table:table-cell[1]/draw:custom-shape"
+            "/attribute::table:table-background", 0);
+
+    xShell->DoClose();
 }
 
 void ScExportTest::testSharedFormulaExportXLS()

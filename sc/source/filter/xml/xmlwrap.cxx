@@ -54,6 +54,7 @@
 
 #include <sfx2/DocumentMetadataAccess.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <xmloff/shapeexport.hxx>
 #include <svx/xmleohlp.hxx>
 #include <sal/log.hxx>
 #include <unotools/saveopt.hxx>
@@ -767,6 +768,25 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
     if ( pObjSh && xStorage.is() )
     {
         uno::Reference<frame::XModel> xModel(pObjSh->GetModel());
+        // sorting wants to create undo actions
+        assert(SfxObjectCreateMode::STANDARD != pObjSh->GetCreateMode() || rDoc.GetDrawLayer()->IsUndoEnabled());
+        uno::Reference<drawing::XDrawPagesSupplier> const xDPS(xModel, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> const xDPs(xDPS->getDrawPages());
+        assert(xDPs.is());
+        for (auto i = xDPs->getCount(); 0 < i; )
+        {
+            --i;
+            uno::Reference<drawing::XShapes> const xDP(xDPs->getByIndex(i), uno::UNO_QUERY);
+            assert(xDP.is());
+            xmloff::FixZOrder(xDP,
+                [](uno::Reference<beans::XPropertySet> const& xShape)
+                {
+                    sal_Int16 nLayerID(0);
+                    xShape->getPropertyValue("LayerID") >>= nLayerID;
+                    return SdrLayerID(nLayerID) == SC_LAYER_BACK;
+                });
+        }
+
         uno::Reference<task::XStatusIndicator> xStatusIndicator(GetStatusIndicator());
         sal_Int32 nProgressRange(1000000);
         if(xStatusIndicator.is())
