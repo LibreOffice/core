@@ -21,6 +21,10 @@
         make
         cp workdir/LinkTarget/Executable/fftester instdir/program
         LD_LIBRARY_PATH=`pwd`/instdir/program instdir/program/fftester <foo> png
+    or on macOS
+        make
+        cp workdir/LinkTarget/Executable/fftester instdir/LibreOfficeDev.app/Contents/MacOS/
+        DYLD_LIBRARY_PATH=`pwd`/instdir/LibreOfficeDev.app/Contents/Frameworks instdir/LibreOfficeDev.app/Contents/MacOS/fftester <foo> png
   */
 
 #include <sal/main.h>
