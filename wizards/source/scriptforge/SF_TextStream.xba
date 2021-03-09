@@ -499,7 +499,7 @@ Public Sub WriteBlankLines(Optional ByVal Lines As Variant)
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		FILENOTOPENERROR		File not open or already closed
-&apos;&apos;&apos;		FILEOPENMODEERROR		File opened in in read mode
+&apos;&apos;&apos;		FILEOPENMODEERROR		File opened in read mode
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;			myFile.WriteBlankLines(10)
 Dim i As Long
@@ -657,7 +657,7 @@ Dim cstSubArgs As String
 		Case UCase(&quot;AtEndOfStream&quot;)
 			Select Case _IOMode
 				Case SF_FileSystem.ForReading
-					If IsNull(_InputStream) Then _PropertyGet = True Else _PropertyGet = _InputStream.isEOF() And Not _ForceBlankLine
+					If IsNull(_InputStream) Then _PropertyGet = True Else _PropertyGet = CBool(_InputStream.isEOF() And Not _ForceBlankLine)
 				Case Else	:	_PropertyGet = True
 			End Select
 		Case UCase(&quot;Encoding&quot;)
