@@ -24,6 +24,7 @@
 #include <vcl/transfer.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
+#include <sfx2/navigat.hxx>
 #include <sfx2/weldutils.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include "conttree.hxx"
@@ -31,7 +32,6 @@
 #include <memory>
 
 class SwWrtShell;
-class SwNavigationChild;
 class SfxBindings;
 class SwNavigationConfig;
 class SwView;
@@ -43,7 +43,7 @@ class SwNavigationPI : public PanelLayout
                      , public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
                      , public SfxListener
 {
-    friend class SwNavigationChild;
+    friend class SwNavigatorWin;
     friend class SwContentTree;
     friend class SwGlobalTree;
 
@@ -157,17 +157,12 @@ public:
     SwView*         GetCreateView() const;
 };
 
-class SwNavigationChild : public SfxChildWindowContext
+class SwNavigatorWrapper final : public SfxNavigatorWrapper
 {
 public:
-    SwNavigationChild( vcl::Window* ,
-                        sal_uInt16 nId,
-                        SfxBindings*  );
-
-    //! soon obsolete !
-    static  std::unique_ptr<SfxChildWindowContext> CreateImpl(vcl::Window *pParent,
-                SfxBindings *pBindings, SfxChildWinInfo* pInfo );
-    static  void RegisterChildWindowContext(SfxModule *pMod);
+    SwNavigatorWrapper(vcl::Window *pParent, sal_uInt16 nId,
+                       SfxBindings* pBindings, SfxChildWinInfo* pInfo);
+    SFX_DECL_CHILDWINDOW(SwNavigatorWrapper);
 };
 
 #endif

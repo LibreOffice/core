@@ -24,6 +24,7 @@
 #include <vcl/idle.hxx>
 #include <svl/lstner.hxx>
 #include <sfx2/childwin.hxx>
+#include <sfx2/navigat.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include "content.hxx"
 
@@ -85,8 +86,8 @@ private:
 
 class ScNavigatorDlg : public PanelLayout, public SfxListener
 {
+friend class ScNavigatorWin;
 friend class ScNavigatorControllerItem;
-friend class ScNavigatorDialogWrapper;
 friend class ScContentTree;
 
 private:
@@ -179,18 +180,12 @@ public:
     virtual void StateChanged(StateChangedType nStateChange) override;
 };
 
-class ScNavigatorDialogWrapper: public SfxChildWindowContext
+class ScNavigatorWrapper final : public SfxNavigatorWrapper
 {
 public:
-            ScNavigatorDialogWrapper( vcl::Window*           pParent,
-                                      sal_uInt16            nId,
-                                      SfxBindings*      pBindings,
-                                      SfxChildWinInfo*  pInfo );
-
-    SFX_DECL_CHILDWINDOWCONTEXT(ScNavigatorDialogWrapper)
-
-private:
-    VclPtr<ScNavigatorDlg> pNavigator;
+    ScNavigatorWrapper(vcl::Window *pParent, sal_uInt16 nId,
+                       SfxBindings* pBindings, SfxChildWinInfo* pInfo);
+    SFX_DECL_CHILDWINDOW(ScNavigatorWrapper);
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_NAVIPI_HXX
