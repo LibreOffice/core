@@ -23,6 +23,7 @@
 #include <vcl/toolbox.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
+#include <sfx2/navigat.hxx>
 #include "sdtreelb.hxx"
 #include <pres.hxx>
 
@@ -31,7 +32,7 @@ namespace vcl { class Window; }
 
 namespace sd {
 class DrawDocShell;
-class NavigatorChildWindow;
+class SdNavigatorFloat;
 }
 class Menu;
 class SdNavigatorControllerItem;
@@ -76,6 +77,22 @@ private:
     ::sd::DrawDocShell* mpDocShell;
 };
 
+namespace sd {
+
+class SdNavigatorFloat : public SfxNavigator
+{
+private:
+    VclPtr<SdNavigatorWin> pNavWin;
+public:
+    SdNavigatorFloat(SfxBindings* _pBindings, SfxChildWindow* pMgr, vcl::Window* pParent);
+    void InitTreeLB(const SdDrawDocument* pDoc);
+    void FreshTree(const SdDrawDocument* pDoc);
+    virtual void dispose() override;
+    virtual ~SdNavigatorFloat() override;
+};
+
+}
+
 class SD_DLLPUBLIC SdNavigatorWin : public PanelLayout
 {
 public:
@@ -107,7 +124,7 @@ protected:
     virtual bool                EventNotify(NotifyEvent& rNEvt) override;
 
 private:
-    friend class ::sd::NavigatorChildWindow;
+    friend class SdNavigatorFloat;
     friend class SdNavigatorControllerItem;
     friend class SdPageNameControllerItem;
 

@@ -20,26 +20,19 @@
 #pragma once
 
 #include <sfx2/childwin.hxx>
+#include <sfx2/navigat.hxx>
 
 namespace vcl { class Window; }
 class SfxBindings;
 
 namespace sd {
 
-/**
- * Derivative of SfxChildWindowContext as "container" for navigator
- */
-class NavigatorChildWindow
-    : public SfxChildWindowContext
+class SdNavigatorWrapper final : public SfxNavigatorWrapper
 {
 public:
-    NavigatorChildWindow (
-        vcl::Window*,
-        sal_uInt16,
-        SfxBindings*,
-        SfxChildWinInfo*);
-
-    SFX_DECL_CHILDWINDOWCONTEXT(NavigatorChildWindow)
+    SdNavigatorWrapper(vcl::Window *pParent, sal_uInt16 nId,
+                       SfxBindings* pBindings, SfxChildWinInfo* pInfo);
+    SFX_DECL_CHILDWINDOW(SdNavigatorWrapper);
 };
 
 } // end of namespace sd
