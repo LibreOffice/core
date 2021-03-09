@@ -330,7 +330,7 @@ gb_PythonTest_PRECOMMAND := $(gb_CppunitTest_CPPTESTPRECOMMAND)
 define gb_Module_DEBUGRUNCOMMAND
 OFFICESCRIPT=`mktemp` && \
 printf 'if [ -e $(INSTROOT)/program/ooenv ]; then . $(INSTROOT)/program/ooenv; fi\n' > $${OFFICESCRIPT} && \
-printf "gdb $(INSTROOT)/$(LIBO_BIN_FOLDER)/soffice.bin" >> $${OFFICESCRIPT} && \
+printf "PYTHONWARNINGS=default gdb $(INSTROOT)/$(LIBO_BIN_FOLDER)/soffice.bin" >> $${OFFICESCRIPT} && \
 printf " -ex \"set args --norestore --nologo '--accept=pipe,name=$(USER);urp;' %s\"" \
 	"$(subst ","\\\"",$(value gb_DBGARGS))" >> $${OFFICESCRIPT} && \
 $(SHELL) $${OFFICESCRIPT} && \
