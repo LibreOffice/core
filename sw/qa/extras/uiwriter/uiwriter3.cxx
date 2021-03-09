@@ -14,6 +14,7 @@
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <IDocumentDrawModelAccess.hxx>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
@@ -1087,6 +1088,37 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636_2)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTextTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTextTable->getColumns()->getCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140828)
+{
+    load(DATA_DIRECTORY, "tdf140828.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    uno::Reference<drawing::XShape> xShp = getShape(1);
+    CPPUNIT_ASSERT(xShp);
+
+    uno::Reference<beans::XPropertySet> ShpProps(xShp, uno::UNO_QUERY_THROW);
+    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:SetAnchorAtChar", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(ShpProps->getPropertyValue("AnchorType").get<text::TextContentAnchorType>()
+                   != text::TextContentAnchorType::TextContentAnchorType_AS_CHARACTER);
+
+    uno::Reference<text::XTextFrame> xTxBx(SwTextBoxHelper::getUnoTextFrame(xShp));
+    CPPUNIT_ASSERT(xTxBx);
+
+    uno::Reference<beans::XPropertySet> TxBxProps(xTxBx, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("top left image"), xTxBx->getText()->getString());
+
+    CPPUNIT_ASSERT_MESSAGE("Bad Relative Orientation and Position!",
+                           TxBxProps->getPropertyValue("HoriOrientRelation").get<sal_Int16>()
+                               != text::RelOrientation::CHAR);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132725)
