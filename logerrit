@@ -24,7 +24,7 @@ submit() {
         fi
 
         if [ "$BRANCH" = "master" ]; then
-            if [ "$unamestr" = 'Linux' ]; then
+            if [[ "$(uname)" == *Linux* ]]; then
                 WEEKOLDDATE=$(date --date="7 days ago" +%s)
             else
                 WEEKOLDDATE=$(date -v7d +%s) # BSD equivalent
