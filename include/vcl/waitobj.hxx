@@ -33,13 +33,8 @@ class VCL_DLLPUBLIC WaitObject
 private:
     VclPtr<vcl::Window>  mpWindow;
 public:
-                WaitObject( vcl::Window* pWindow )
-                {
-                    mpWindow = pWindow;
-                    if ( mpWindow )
-                        mpWindow->EnterWait();
-                }
-                ~WaitObject();
+    WaitObject(vcl::Window* pWindow);
+    ~WaitObject();
 };
 
 class VCL_DLLPUBLIC TopLevelWindowLocker

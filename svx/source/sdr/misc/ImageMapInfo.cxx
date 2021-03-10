@@ -24,7 +24,7 @@
 #include <svx/svdoole2.hxx>
 #include <vcl/imapobj.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
+#include <vcl/outdev.hxx>
 
 SvxIMapInfo* SvxIMapInfo::GetIMapInfo(SdrObject const* pObject)
 {
@@ -47,7 +47,7 @@ SvxIMapInfo* SvxIMapInfo::GetIMapInfo(SdrObject const* pObject)
 }
 
 IMapObject* SvxIMapInfo::GetHitIMapObject(const SdrObject* pObj, const Point& rWinPoint,
-                                          const vcl::Window* rCmpWnd)
+                                          const OutputDevice* pCmpWnd)
 {
     SvxIMapInfo* pIMapInfo = GetIMapInfo(pObj);
     IMapObject* pIMapObj = nullptr;
@@ -60,11 +60,11 @@ IMapObject* SvxIMapInfo::GetHitIMapObject(const SdrObject* pObj, const Point& rW
         ImageMap& rImageMap = const_cast<ImageMap&>(pIMapInfo->GetImageMap());
         tools::Rectangle& rRect = const_cast<tools::Rectangle&>(pObj->GetLogicRect());
 
-        if (rCmpWnd)
+        if (pCmpWnd)
         {
-            MapMode aWndMode = rCmpWnd->GetMapMode();
-            aRelPoint = rCmpWnd->LogicToLogic(rWinPoint, &aWndMode, &aMap100);
-            rRect = rCmpWnd->LogicToLogic(pObj->GetLogicRect(), &aWndMode, &aMap100);
+            MapMode aWndMode = pCmpWnd->GetMapMode();
+            aRelPoint = pCmpWnd->LogicToLogic(rWinPoint, &aWndMode, &aMap100);
+            rRect = pCmpWnd->LogicToLogic(pObj->GetLogicRect(), &aWndMode, &aMap100);
         }
 
         bool bObjSupported = false;

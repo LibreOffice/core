@@ -26,11 +26,12 @@
 
 #include <tools/gen.hxx>
 
-#include <vcl/window.hxx>
 #include <vcl/errcode.hxx>
+#include <vcl/vclptr.hxx>
 
 namespace com::sun::star::embed { class XEmbeddedObject; }
 namespace com::sun::star::uno { template <typename > class Reference; }
+namespace vcl { class Window; }
 
 class SfxInPlaceClient_Impl;
 class SfxViewShell;
