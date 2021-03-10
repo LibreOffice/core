@@ -256,6 +256,12 @@ bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
     if (!rMEvt.IsRight())
         ReleaseMouse();
 
+#if defined IOS || defined ANDROID
+    const bool bDoMessWithSelection = !rMEvt.IsRight();
+#else
+    constexpr bool bDoMessWithSelection = true;
+#endif
+
     if( (nFlags & SelectionEngineFlags::WAIT_UPEVT) && !(nFlags & SelectionEngineFlags::CMDEVT) &&
         eSelMode != SelectionMode::Single)
     {
@@ -271,13 +277,16 @@ bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
             }
             pFunctionSet->DeselectAtPoint( aLastMove.GetPosPixel() );
             nFlags &= ~SelectionEngineFlags::HAS_ANCH; // uncheck anchor
-            pFunctionSet->SetCursorAtPoint( aLastMove.GetPosPixel(), true );
+            if (bDoMessWithSelection)
+                pFunctionSet->SetCursorAtPoint( aLastMove.GetPosPixel(), true );
         }
         else
         {
-            pFunctionSet->DeselectAll();
+            if (bDoMessWithSelection)
+                pFunctionSet->DeselectAll();
             nFlags &= ~SelectionEngineFlags::HAS_ANCH; // uncheck anchor
-            pFunctionSet->SetCursorAtPoint( aLastMove.GetPosPixel() );
+            if (bDoMessWithSelection)
+                pFunctionSet->SetCursorAtPoint( aLastMove.GetPosPixel() );
         }
     }
 
