@@ -368,7 +368,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 embeddedobj_OOoEmbeddedObjectFactory_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new OOoEmbeddedObjectFactory(context)));
+    return cppu::acquire(new OOoEmbeddedObjectFactory(context));
 }
 
 
@@ -412,6 +412,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 embeddedobj_OOoSpecialEmbeddedObjectFactory_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new OOoSpecialEmbeddedObjectFactory(context)));
+    return cppu::acquire(new OOoSpecialEmbeddedObjectFactory(context));
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

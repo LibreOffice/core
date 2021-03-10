@@ -636,7 +636,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 lingucomponent_SpellChecker_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new SpellChecker()));
+    return cppu::acquire(new SpellChecker());
 }
 
 

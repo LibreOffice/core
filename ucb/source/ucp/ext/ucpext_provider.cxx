@@ -165,7 +165,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_ext_ContentProvider_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new ucb::ucp::ext::ContentProvider(context)));
+    return cppu::acquire(new ucb::ucp::ext::ContentProvider(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -540,6 +540,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 dtrans_CDataFormatTranslatorUNO_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new CDataFormatTranslatorUNO(context)));
+    return cppu::acquire(new CDataFormatTranslatorUNO(context));
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -109,7 +109,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_tdoc_DocumentContentFactory_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new DocumentContentFactory(context)));
+    return cppu::acquire(new DocumentContentFactory(context));
 }
 
 

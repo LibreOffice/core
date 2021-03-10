@@ -840,7 +840,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 eventattacher_EventAttacher(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new comp_EventAttacher::EventAttacherImpl(context)));
+    return cppu::acquire(new comp_EventAttacher::EventAttacherImpl(context));
 }
 
 

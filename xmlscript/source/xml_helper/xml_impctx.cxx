@@ -711,8 +711,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_xml_input_SaxDocumentHandler_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const& )
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new xmlscript::DocumentHandlerImpl(
-            Reference< xml::input::XRoot >(), false /* mt use */ )));
+    return cppu::acquire(new xmlscript::DocumentHandlerImpl({}, false /* mt use */));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

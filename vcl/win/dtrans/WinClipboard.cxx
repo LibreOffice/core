@@ -345,7 +345,7 @@ dtrans_CWinClipboard_get_implementation(css::uno::XComponentContext* context,
     }
     else
     {
-        return cppu::acquire(static_cast<cppu::OWeakObject*>(new CWinClipboard(context, "")));
+        return cppu::acquire(new CWinClipboard(context, ""));
     }
 }
 

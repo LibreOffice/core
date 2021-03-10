@@ -116,47 +116,47 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisImporter_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(
+    return cppu::acquire(
         new ScXMLImport(
             context,
             "com.sun.star.comp.Calc.XMLOasisImporter",
             SvXMLImportFlags::ALL,
-            { "com.sun.star.comp.Calc.XMLOasisImporter" } )));
+            { "com.sun.star.comp.Calc.XMLOasisImporter" } ));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisMetaImporter_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(
+    return cppu::acquire(
         new ScXMLImport(
             context,
             "com.sun.star.comp.Calc.XMLOasisMetaImporter",
             SvXMLImportFlags::META,
-            { "com.sun.star.comp.Calc.XMLOasisMetaImporter" }  )));
+            { "com.sun.star.comp.Calc.XMLOasisMetaImporter" }  ));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisStylesImporter_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(
+    return cppu::acquire(
         new ScXMLImport(
             context,
             "com.sun.star.comp.Calc.XMLOasisStylesImporter",
             SvXMLImportFlags::STYLES|SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::MASTERSTYLES|SvXMLImportFlags::FONTDECLS,
-            { "com.sun.star.comp.Calc.XMLOasisStylesImporter" } )));
+            { "com.sun.star.comp.Calc.XMLOasisStylesImporter" } ));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisContentImporter_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new ScXMLImport(
+    return cppu::acquire(new ScXMLImport(
         context,
         "com.sun.star.comp.Calc.XMLOasisContentImporter",
         SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::CONTENT|SvXMLImportFlags::SCRIPTS|SvXMLImportFlags::FONTDECLS,
-        uno::Sequence< OUString > { "com.sun.star.comp.Calc.XMLOasisContentImporter" })));
+        uno::Sequence< OUString > { "com.sun.star.comp.Calc.XMLOasisContentImporter" }));
 }
 
 
@@ -164,12 +164,12 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisSettingsImporter_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(
+    return cppu::acquire(
         new ScXMLImport(
             context,
             "com.sun.star.comp.Calc.XMLOasisSettingsImporter",
             SvXMLImportFlags::SETTINGS,
-            { "com.sun.star.comp.Calc.XMLOasisSettingsImporter" } )));
+            { "com.sun.star.comp.Calc.XMLOasisSettingsImporter" } ));
 }
 
 namespace {

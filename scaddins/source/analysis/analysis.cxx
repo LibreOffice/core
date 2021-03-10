@@ -1054,7 +1054,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scaddins_AnalysisAddIn_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new AnalysisAddIn(context)));
+    return cppu::acquire(new AnalysisAddIn(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

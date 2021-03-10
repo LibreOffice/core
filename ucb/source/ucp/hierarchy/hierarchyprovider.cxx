@@ -116,7 +116,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_HierarchyContentProvider_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new HierarchyContentProvider(context)));
+    return cppu::acquire(new HierarchyContentProvider(context));
 }
 
 // XContentProvider methods.

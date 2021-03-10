@@ -751,7 +751,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_dba_ODatabaseContext_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new dbaccess::ODatabaseContext(context)));
+    return cppu::acquire(new dbaccess::ODatabaseContext(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

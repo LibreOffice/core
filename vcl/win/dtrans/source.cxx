@@ -297,7 +297,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 dtrans_DragSource_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new DragSource(context)));
+    return cppu::acquire(new DragSource(context));
 }
 
 /** This function is called as extra thread from
