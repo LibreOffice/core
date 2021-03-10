@@ -49,7 +49,7 @@ public:
 
     static SvxIMapInfo* GetIMapInfo(const SdrObject* pObject);
     static IMapObject* GetHitIMapObject(const SdrObject* pObj, const Point& rWinPoint,
-                                        const vcl::Window* rCmpWnd = nullptr);
+                                        const OutputDevice* pCmpWnd = nullptr);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

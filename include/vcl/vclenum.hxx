@@ -387,6 +387,19 @@ namespace o3tl
     template<> struct typed_flags<FloatWinPopupFlags> : is_typed_flags<FloatWinPopupFlags, 0x0fff> {};
 }
 
+// Flags for Window::Show()
+enum class ShowFlags
+{
+    NONE                       = 0x0000,
+    NoFocusChange              = 0x0002,
+    NoActivate                 = 0x0004,
+    ForegroundTask             = 0x0008,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ShowFlags> : is_typed_flags<ShowFlags, 0x000e> {};
+}
+
 #endif // INCLUDED_VCL_VCLENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

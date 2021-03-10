@@ -25,11 +25,12 @@
 #include <sal/types.h>
 #include <svl/poolitem.hxx>
 #include <svtools/toolboxcontroller.hxx>
-#include <vcl/window.hxx>
 #include <rtl/ref.hxx>
+#include <vcl/vclptr.hxx>
 
 namespace com::sun::star::frame { class XDispatchProvider; }
 namespace com::sun::star::frame { class XFrame; }
+namespace vcl { class Window; }
 
 class InterimItemWindow;
 class SfxToolBoxControl;
