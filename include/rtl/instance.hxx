@@ -30,6 +30,9 @@
 
 #include "osl/doublecheckedlocking.h"
 #include "osl/getglobalmutex.hxx"
+#if defined LIBO_INTERNAL_ONLY
+#include "rtl/ref.hxx"
+#endif
 
 namespace {
 
@@ -386,6 +389,22 @@ namespace rtl {
               (the one that derives from this base class)
 */
 #if defined LIBO_INTERNAL_ONLY
+// A helper class to implement default-initialized static instance
+template <typename T> class StaticInstance
+{
+public:
+    explicit StaticInstance()
+        : instance(new T())
+    {
+    }
+    template <typename Data>
+    explicit StaticInstance(const Data& rData)
+        : instance(new T(rData))
+    {
+    }
+
+    rtl::Reference<T> instance;
+};
 template<typename T, typename Unique>
 class Static {
 public:

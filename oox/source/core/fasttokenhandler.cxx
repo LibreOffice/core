@@ -76,7 +76,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_oox_core_FastTokenHandler_get_implementation(
     uno::XComponentContext* /*pCtx*/, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return cppu::acquire(static_cast<sax_fastparser::FastTokenHandlerBase*>(new oox::core::FastTokenHandler()));
+    return cppu::acquire(new oox::core::FastTokenHandler());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
