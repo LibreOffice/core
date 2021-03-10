@@ -53,6 +53,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/app.hxx>
+#include <sidebar/ControllerFactory.hxx>
 #include <unoctitm.hxx>
 #include <ctrlfactoryimpl.hxx>
 

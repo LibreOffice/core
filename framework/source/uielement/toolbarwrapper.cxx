@@ -28,6 +28,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weldutils.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -49,6 +50,9 @@ ToolBarWrapper::ToolBarWrapper( const Reference< XComponentContext >& rxContext 
 
 ToolBarWrapper::~ToolBarWrapper()
 {
+    m_xWeldedToolbar.reset(nullptr);
+    m_xTopLevel.reset(nullptr);
+    m_xBuilder.reset(nullptr);
 }
 
 // XInterface
@@ -148,20 +152,34 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
             m_xToolBarManager = pToolBarManager;
             pToolBar->WillUsePopupMode( bPopupMode );
         }
+        else if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xParentWindow.get()))
+        {
+            m_xBuilder.reset(Application::CreateBuilder(pTunnel->getWidget(), "modules/StartModule/ui/managedtoolbar.ui"));
+            m_xTopLevel = m_xBuilder->weld_container("toolbarcontainer");
+            m_xWeldedToolbar = m_xBuilder->weld_toolbar("managedtoolbar");
+            if ( m_xWeldedToolbar )
+            {
+                pToolBarManager = new ToolBarManager( m_xContext, xFrame, m_aResourceURL, m_xWeldedToolbar.get(), m_xBuilder.get() );
+                m_xToolBarManager = pToolBarManager;
+            }
+        }
     }
 
     try
     {
         m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
-        if ( m_xConfigData.is() && pToolBar && pToolBarManager )
+        if ( m_xConfigData.is() && (pToolBar || m_xWeldedToolbar) && pToolBarManager )
         {
             // Fill toolbar with container contents
             pToolBarManager->FillToolbar( m_xConfigData );
-            pToolBar->EnableCustomize();
-            ::Size aActSize( pToolBar->GetSizePixel() );
-            ::Size aSize( pToolBar->CalcWindowSizePixel() );
-            aSize.setWidth( aActSize.Width() );
-            pToolBar->SetOutputSizePixel( aSize );
+            if (pToolBar)
+            {
+                pToolBar->EnableCustomize();
+                ::Size aActSize( pToolBar->GetSizePixel() );
+                ::Size aSize( pToolBar->CalcWindowSizePixel() );
+                aSize.setWidth( aActSize.Width() );
+                pToolBar->SetOutputSizePixel( aSize );
+            }
         }
     }
     catch ( const NoSuchElementException& )

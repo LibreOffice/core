@@ -24,6 +24,7 @@
 #include <svtools/statusbarcontroller.hxx>
 
 static pfunc_setToolBoxControllerCreator   pToolBoxControllerCreator   = nullptr;
+static pfunc_setWeldToolBoxControllerCreator pWeldToolBoxControllerCreator = nullptr;
 static pfunc_setStatusBarControllerCreator pStatusBarControllerCreator = nullptr;
 static pfunc_getRefreshToolbars            pRefreshToolbars            = nullptr;
 static pfunc_createDockingWindow           pCreateDockingWindow        = nullptr;
@@ -53,6 +54,28 @@ rtl::Reference<svt::ToolboxController> CreateToolBoxController( const Reference<
 
     if ( pFactory )
         return (*pFactory)( rFrame, pToolbox, nID, aCommandURL );
+    else
+        return nullptr;
+}
+
+pfunc_setWeldToolBoxControllerCreator SetWeldToolBoxControllerCreator( pfunc_setWeldToolBoxControllerCreator pSetWeldToolBoxControllerCreator )
+{
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    pfunc_setWeldToolBoxControllerCreator pOldSetToolBoxControllerCreator = pWeldToolBoxControllerCreator;
+    pWeldToolBoxControllerCreator = pSetWeldToolBoxControllerCreator;
+    return pOldSetToolBoxControllerCreator;
+}
+
+css::uno::Reference<css::frame::XToolbarController> CreateWeldToolBoxController( const Reference< XFrame >& rFrame, weld::Toolbar* pToolbar, weld::Builder* pBuilder, const OUString& aCommandURL )
+{
+    pfunc_setWeldToolBoxControllerCreator pFactory = nullptr;
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        pFactory = pWeldToolBoxControllerCreator;
+    }
+
+    if ( pFactory )
+        return (*pFactory)( rFrame, pToolbar, pBuilder, aCommandURL );
     else
         return nullptr;
 }
