@@ -247,7 +247,7 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
                         *pType = SfxResId(
                                     ( SvBaseLinkObjectType::ClientFile == nObjType || SvBaseLinkObjectType::ClientOle == nObjType )
                                             ? RID_SVXSTR_FILELINK
-                                            : RID_SVXSTR_GRAFIKLINK);
+                                            : RID_SVXSTR_GRAPHICLINK);
                     }
                     bRet = true;
                 }

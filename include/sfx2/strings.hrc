@@ -154,7 +154,7 @@
 #define RID_SVXSTR_FILELINK                     NC_("RID_SVXSTR_FILELINK", "Document")
 #define STR_NONE                                NC_("STR_NONE", "- None -")
 #define STR_CATEGORY_NONE                       NC_("saveastemplatedlg|categorylist", "None")
-#define RID_SVXSTR_GRAFIKLINK                   NC_("RID_SVXSTR_GRAFIKLINK", "Image")
+#define RID_SVXSTR_GRAPHICLINK                  NC_("RID_SVXSTR_GRAPHICLINK", "Image")
 #define STR_SFX_FILTERNAME_ALL                  NC_("STR_SFX_FILTERNAME_ALL", "All files")
 #define STR_SFX_FILTERNAME_PDF                  NC_("STR_SFX_FILTERNAME_PDF", "PDF files")
 #define RID_SVXSTR_EDITGRFLINK                  NC_("RID_SVXSTR_EDITGRFLINK", "Link Image")
