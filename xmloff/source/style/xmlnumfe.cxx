@@ -1268,6 +1268,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         sal_Int32 nMinDecimals = nPrecision;
         OUString sCurrExt;
         OUString aCalendar;
+        bool bImplicitOtherCalendar = false;
+        bool bExplicitCalendar = false;
         sal_uInt16 nPos = 0;
         bool bEnd = false;
         while (!bEnd)
@@ -1336,7 +1338,10 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                 case NF_KEY_R:
                 case NF_KEY_RR:
                     if (aCalendar.isEmpty())
+                    {
                         aCalendar = lcl_GetDefaultCalendar( pFormatter, nLang );
+                        bImplicitOtherCalendar = true;
+                    }
                     break;
             }
             ++nPos;
@@ -1579,7 +1584,10 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
 
                 case NF_SYMBOLTYPE_CALENDAR:
                     if ( pElemStr )
+                    {
                         aCalendar = *pElemStr;
+                        bExplicitCalendar = true;
+                    }
                     break;
 
                 // date elements:
@@ -1640,10 +1648,16 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                 case NF_KEY_R:      //! R acts as EE, no attribute available
                     {
                         //! distinguish EE and R
-                        //  calendar attribute for E and EE and R is set in first loop
+                        // Calendar attribute for E and EE and R is set in
+                        // first loop. If set and not an explicit calendar and
+                        // YY or YYYY is encountered, switch temporarily to
+                        // Gregorian, i.e. empty calendar name.
                         bool bLong = ( nElemType == NF_KEY_YYYY || nElemType == NF_KEY_EEC ||
                                             nElemType == NF_KEY_R );
-                        WriteYearElement_Impl( aCalendar, ( bSystemDate ? bLongSysDate : bLong ) );
+                        WriteYearElement_Impl(
+                                ((bImplicitOtherCalendar && !bExplicitCalendar
+                                  && (nElemType == NF_KEY_YY || nElemType == NF_KEY_YYYY)) ? OUString() : aCalendar),
+                                (bSystemDate ? bLongSysDate : bLong));
                         bAnyContent = true;
                     }
                     break;
