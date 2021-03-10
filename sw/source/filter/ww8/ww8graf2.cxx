@@ -467,7 +467,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
 
     ::SetProgressState(m_nProgress, m_pDocShell);         // Update
 
-    GrafikCtor();
+    GraphicCtor();
 
     /*
      * Little joke from Microsoft: sometimes a stream named DATA exists. This

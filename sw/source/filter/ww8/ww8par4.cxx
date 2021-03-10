@@ -243,7 +243,7 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
     ::SetProgressState(m_nProgress, m_pDocShell);     // Update
     SwFrameFormat* pFormat = nullptr;
 
-    GrafikCtor();
+    GraphicCtor();
 
     Graphic aGraph;
     SdrObject* pRet = ImportOleBase(aGraph, pGrf, pFlySet, aVisArea );
@@ -428,7 +428,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
             }
 
             ErrCode nError = ERRCODE_NONE;
-            GrafikCtor();
+            GraphicCtor();
 
             pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
                 *m_pDrawModel,

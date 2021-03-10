@@ -1111,7 +1111,7 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                                     static_cast<SdrGrafObj*>(pNew)->SetGraphic(aGraph);
                                 }
 
-                                GrafikCtor();
+                                GraphicCtor();
 
                                 pNew->SetLogicRect( pTextObj->GetCurrentBoundRect() );
                                 pNew->SetLayer( pTextObj->GetLayer() );
@@ -1661,7 +1661,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
     */
 
     // 1. GraphicObject of documents?
-    GrafikCtor();
+    GraphicCtor();
 
     const SfxItemSet& rOldSet = pSdrObj->GetMergedItemSet();
 
@@ -2512,7 +2512,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
     m_nDrawCpO = 0;
     m_bDrawCpOValid = m_xWwFib->GetBaseCp(m_xPlcxMan->GetManType() == MAN_HDFT ? MAN_TXBX_HDFT : MAN_TXBX, &m_nDrawCpO);
 
-    GrafikCtor();
+    GraphicCtor();
 
     WW8PLCFspecial* pPF = m_xPlcxMan->GetFdoa();
     if( !pPF )
@@ -3186,7 +3186,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
     return pRetFrameFormat;
 }
 
-void SwWW8ImplReader::GrafikCtor()  // For SVDraw and VCControls and Escher
+void SwWW8ImplReader::GraphicCtor()  // For SVDraw and VCControls and Escher
 {
     if (m_pDrawModel)
         return;
@@ -3208,7 +3208,7 @@ void SwWW8ImplReader::GrafikCtor()  // For SVDraw and VCControls and Escher
         m_xMSDffManager->GetShapeOrders()));
 }
 
-void SwWW8ImplReader::GrafikDtor()
+void SwWW8ImplReader::GraphicDtor()
 {
     m_pDrawEditEngine.reset(); // maybe created by graphic
     m_xWWZOrder.reset();       // same
