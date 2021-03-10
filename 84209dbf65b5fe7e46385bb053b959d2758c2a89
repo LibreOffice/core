@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1bb754a_74c0273e",
+        "filename": "include/rtl/instance.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-10T10:11:03Z",
+      "side": 1,
+      "message": "do not place this between the definition of class Static and its documentation comment",
+      "revId": "84209dbf65b5fe7e46385bb053b959d2758c2a89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
