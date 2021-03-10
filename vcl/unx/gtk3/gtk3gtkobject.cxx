@@ -206,8 +206,18 @@ Size GtkSalObjectBase::GetOptimalSize() const
         bool bVisible = gtk_widget_get_visible(m_pSocket);
         if (!bVisible)
             gtk_widget_set_visible(m_pSocket, true);
+
+        // Undo SetPosSize before getting its preferred size
+        gint width(-1), height(-1);
+        gtk_widget_get_size_request(m_pSocket, &width, &height);
+        gtk_widget_set_size_request(m_pSocket, -1, -1);
+
         GtkRequisition size;
         gtk_widget_get_preferred_size(m_pSocket, nullptr, &size);
+
+        // Restore SetPosSize size
+        gtk_widget_set_size_request(m_pSocket, width, height);
+
         if (!bVisible)
             gtk_widget_set_visible(m_pSocket, false);
         return Size(size.width, size.height);
