@@ -98,7 +98,7 @@ SwASCIIParser::SwASCIIParser(SwDoc& rD, const SwPaM& rCursor, SvStream& rIn,
     , bNewDoc(bReadNewDoc)
 {
     pPam.reset( new SwPaM( *rCursor.GetPoint() ) );
-    pArr.reset( new char [ ASC_BUFFLEN + 2 ] );
+    pArr.reset();
 
     pItemSet = std::make_unique<SfxItemSet>( rDoc.GetAttrPool(),
                 svl::Items<RES_CHRATR_FONT,        RES_CHRATR_LANGUAGE,
