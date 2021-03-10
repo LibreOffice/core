@@ -441,6 +441,33 @@ static Color ColorFromAlphaColor(const sal_uInt8 aTransparency, const Color& aFr
                  sal_uInt8(aFront.GetBlue()  * aTransparency / 255.0 + aBack.GetBlue()  * (1 - aTransparency / 255.0)));
 }
 
+void SwAnnotationWin::SetMenuButtonColors()
+{
+    if (!mxMenuButton)
+        return;
+
+    mxMenuButton->set_background(mColorDark);
+
+    const Fraction& rFraction = mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY();
+
+    ScopedVclPtrInstance<VirtualDevice> xVirDev;
+    Size aSize(tools::Long(METABUTTON_WIDTH * rFraction),
+               tools::Long(METABUTTON_HEIGHT * rFraction));
+    tools::Rectangle aRect(Point(0, 0), aSize);
+    xVirDev->SetOutputSizePixel(aSize);
+
+    Gradient aGradient(GradientStyle::Linear,
+                             ColorFromAlphaColor(15, mColorAnchor, mColorDark),
+                             ColorFromAlphaColor(80, mColorAnchor, mColorDark));
+    xVirDev->DrawGradient(aRect, aGradient);
+
+    DecorationView aDecoView(xVirDev.get());
+    aDecoView.DrawSymbol(aRect, SymbolType::SPIN_DOWN, GetTextColor(),
+                         DrawSymbolFlags::NONE);
+    mxMenuButton->set_image(xVirDev);
+    mxMenuButton->set_size_request(aSize.Width() + 4, aSize.Height());
+}
+
 void SwAnnotationWin::Rescale()
 {
     // On Android, this method leads to invoke ImpEditEngine::UpdateViews
@@ -468,25 +495,7 @@ void SwAnnotationWin::Rescale()
         mxMetadataDate->set_font(aFont);
     if (mxMetadataResolved)
         mxMetadataResolved->set_font(aFont);
-    if (mxMenuButton)
-    {
-        ScopedVclPtrInstance<VirtualDevice> xVirDev;
-        Size aSize(tools::Long(METABUTTON_WIDTH * rFraction),
-                   tools::Long(METABUTTON_HEIGHT * rFraction));
-        tools::Rectangle aRect(Point(0, 0), aSize);
-        xVirDev->SetOutputSizePixel(aSize);
-
-        Gradient aGradient(GradientStyle::Linear,
-                                 ColorFromAlphaColor(15, mColorAnchor, mColorDark),
-                                 ColorFromAlphaColor(80, mColorAnchor, mColorDark));
-        xVirDev->DrawGradient(aRect, aGradient);
-
-        DecorationView aDecoView(xVirDev.get());
-        aDecoView.DrawSymbol(aRect, SymbolType::SPIN_DOWN, GetTextColor(),
-                             DrawSymbolFlags::NONE);
-        mxMenuButton->set_image(xVirDev);
-        mxMenuButton->set_size_request(aSize.Width() + 4, aSize.Height());
-    }
+    SetMenuButtonColors();
     if (mxVScrollbar)
         mxVScrollbar->set_scroll_thickness(GetPrefScrollbarWidth());
 }
@@ -835,7 +844,7 @@ void SwAnnotationWin::SetColor(Color aColorDark,Color aColorLight, Color aColorA
         return;
 
     m_xContainer->set_background(mColorDark);
-    mxMenuButton->set_background(mColorDark);
+    SetMenuButtonColors();
 
     mxMetadataAuthor->set_font_color(aColorAnchor);
 
