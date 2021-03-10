@@ -157,6 +157,23 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf140572_docDefault_superscript, "tdf14
     CPPUNIT_ASSERT_EQUAL( sal_Int16(0), getProperty<sal_Int16>(getRun(getParagraph(1), 1), "CharEscapement") );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf136841, "tdf136841.docx")
+{
+    uno::Reference<drawing::XShape> image = getShape(1);
+    uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
+    uno::Reference<graphic::XGraphic> graphic;
+    imageProperties->getPropertyValue( "Graphic" ) >>= graphic;
+    Graphic vclGraphic(graphic);
+    BitmapEx bitmap(vclGraphic.GetBitmapEx());
+    CPPUNIT_ASSERT_EQUAL( tools::Long(76), bitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL( tools::Long(76), bitmap.GetSizePixel().Height());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Color: R:228 G:71 B:69 A:0
+    // - Actual  : Color: R:0 G:0 B:0 A:0
+    CPPUNIT_ASSERT_EQUAL( Color(228,71,69), bitmap.GetPixelColor(38,38));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf138953, "croppedAndRotated.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
