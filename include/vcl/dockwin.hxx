@@ -248,6 +248,7 @@ protected:
 public:
     ResizableDockingWindow(vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
+    void InvalidateChildSizeCache();
     ResizableDockingWindow(vcl::Window* pParent, WinBits nStyle);
     virtual ~ResizableDockingWindow() override;
     virtual void dispose() override;
