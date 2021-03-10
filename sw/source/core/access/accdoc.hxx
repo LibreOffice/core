@@ -23,6 +23,7 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include "accselectionhelper.hxx"
+#include <vcl/window.hxx>
 
 // base class for SwAccessibleDocument (in this same header file) and
 // SwAccessiblePreview

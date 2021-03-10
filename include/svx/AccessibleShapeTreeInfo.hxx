@@ -22,13 +22,14 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <svx/svxdllapi.h>
-#include <vcl/window.hxx>
+#include <vcl/vclptr.hxx>
 
 namespace com::sun::star {
     namespace accessibility { class XAccessibleComponent; }
     namespace document { class XShapeEventBroadcaster; }
     namespace frame { class XController; }
 }
+namespace vcl { class Window; }
 
 class SdrView;
 
