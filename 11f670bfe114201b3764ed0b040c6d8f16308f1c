@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ce0c223_6d51bcd1",
+        "filename": "basctl/source/dlged/dlged.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-03-10T09:51:25Z",
+      "side": 1,
+      "message": "so Width returns tools::Long and SetVisibleSize parameter is tools::Long - why do you think a cast to sal_uInt64 makes sense here?\n\nthe cast is pointless, just remove it.",
+      "revId": "11f670bfe114201b3764ed0b040c6d8f16308f1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
