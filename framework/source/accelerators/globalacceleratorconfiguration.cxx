@@ -120,11 +120,8 @@ struct Instance
     rtl::Reference<GlobalAcceleratorConfiguration> instance;
 };
 
-struct Singleton:
-    public rtl::StaticWithArg<
-        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
-{};
-
+using Singleton = rtl::StaticWithArg<Instance,
+                                     css::uno::Reference<css::uno::XComponentContext>, Singleton>;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -132,7 +129,7 @@ com_sun_star_comp_framework_GlobalAcceleratorConfiguration_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(Singleton::get(context).instance.get()));
+    return cppu::acquire(Singleton::get(context).instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
