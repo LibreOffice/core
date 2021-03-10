@@ -446,12 +446,12 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
             // (non-existent) extra character at end of the text node, but there can be
             // other hints too (ending at nTextLen), so look for all matching hints.
             // Still the (non-existent) extra character at the end is preferred if it exists.
-            if (pHint->Which() == RES_TXTATR_AUTOFMT
-                && pHint->GetStart() == *pHint->End())
+            if (pHint->Which() == RES_TXTATR_AUTOFMT)
             {
                 pSet = pHint->GetAutoFormat().GetStyleHandle();
                 // When we find an empty hint (start == end) we got what we are looking for.
-                break;
+                if (pHint->GetStart() == *pHint->End())
+                    break;
             }
         }
     }
