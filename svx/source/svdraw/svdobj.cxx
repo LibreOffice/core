@@ -2833,82 +2833,82 @@ css::uno::Reference< css::uno::XInterface > SdrObject::getUnoShape()
 {
     // try weak reference first
     uno::Reference< uno::XInterface > xShape( getWeakUnoShape() );
-    if( !xShape.is() )
+    if( xShape )
+        return xShape;
+
+    OSL_ENSURE( mpSvxShape == nullptr, "SdrObject::getUnoShape: XShape already dead, but still an IMPL pointer!" );
+
+    // try to access SdrPage from this SdrObject. This will only exist if the SdrObject is
+    // inserted in a SdrObjList (page/group/3dScene)
+    SdrPage* pPageCandidate(getSdrPageFromSdrObject());
+
+    // tdf#12152, tdf#120728
+    //
+    // With the paradigm change to only get a SdrPage for a SdrObject when the SdrObject
+    // is *inserted*, the functionality for creating 1:1 associated UNO API implementation
+    // SvxShapes was partially broken: The used ::CreateShape relies on the SvxPage being
+    // derived and the CreateShape method overloaded, implementing additional SdrInventor
+    // types as needed.
+    //
+    // The fallback to use SvxDrawPage::CreateShapeByTypeAndInventor is a trap: It's only
+    // a static fallback that handles the SdrInventor types SdrInventor::E3d and
+    // SdrInventor::Default. Due to that, e.g. the ReportDesigner broke in various conditions.
+    //
+    // That again has to do with the ReportDesigner being implemented using the UNO API
+    // aspects of SdrObjects early during their construction, not just after these are
+    // inserted to a SdrPage - but that is not illegal or wrong, the SdrObject exists already.
+    //
+    // As a current solution, use the (now always available) SdrModel and any of the
+    // existing SdrPages. The only important thing is to get a SdrPage where ::CreateShape is
+    // overloaded and implemented as needed.
+    //
+    // Note for the future:
+    // In a more ideal world there would be only one factory method for creating SdrObjects (not
+    // ::CreateShape and ::CreateShapeByTypeAndInventor). This also would not be placed at
+    // SdrPage/SvxPage at all, but at the Model where it belongs - where else would you expect
+    // objects for the current Model to be constructed? To have this at the Page only would make
+    // sense if different shapes would need to be constructed for different Pages in the same Model
+    // - this is never the case.
+    // At that Model extended functionality for that factory (or overloads and implementations)
+    // should be placed. But to be realistic, migrating the factories to Model now is too much
+    // work - maybe over time when melting SdrObject/SvxObject one day...
+    if(nullptr == pPageCandidate)
     {
-        OSL_ENSURE( mpSvxShape == nullptr, "SdrObject::getUnoShape: XShape already dead, but still an IMPL pointer!" );
-
-        // try to access SdrPage from this SdrObject. This will only exist if the SdrObject is
-        // inserted in a SdrObjList (page/group/3dScene)
-        SdrPage* pPageCandidate(getSdrPageFromSdrObject());
-
-        // tdf#12152, tdf#120728
-        //
-        // With the paradigm change to only get a SdrPage for a SdrObject when the SdrObject
-        // is *inserted*, the functionality for creating 1:1 associated UNO API implementation
-        // SvxShapes was partially broken: The used ::CreateShape relies on the SvxPage being
-        // derived and the CreateShape method overloaded, implementing additional SdrInventor
-        // types as needed.
-        //
-        // The fallback to use SvxDrawPage::CreateShapeByTypeAndInventor is a trap: It's only
-        // a static fallback that handles the SdrInventor types SdrInventor::E3d and
-        // SdrInventor::Default. Due to that, e.g. the ReportDesigner broke in various conditions.
-        //
-        // That again has to do with the ReportDesigner being implemented using the UNO API
-        // aspects of SdrObjects early during their construction, not just after these are
-        // inserted to a SdrPage - but that is not illegal or wrong, the SdrObject exists already.
-        //
-        // As a current solution, use the (now always available) SdrModel and any of the
-        // existing SdrPages. The only important thing is to get a SdrPage where ::CreateShape is
-        // overloaded and implemented as needed.
-        //
-        // Note for the future:
-        // In a more ideal world there would be only one factory method for creating SdrObjects (not
-        // ::CreateShape and ::CreateShapeByTypeAndInventor). This also would not be placed at
-        // SdrPage/SvxPage at all, but at the Model where it belongs - where else would you expect
-        // objects for the current Model to be constructed? To have this at the Page only would make
-        // sense if different shapes would need to be constructed for different Pages in the same Model
-        // - this is never the case.
-        // At that Model extended functionality for that factory (or overloads and implementations)
-        // should be placed. But to be realistic, migrating the factories to Model now is too much
-        // work - maybe over time when melting SdrObject/SvxObject one day...
-        if(nullptr == pPageCandidate)
+        // If not inserted, alternatively access a SdrPage using the SdrModel. There is
+        // no reason not to create and return a UNO API XShape when the SdrObject is not
+        // inserted - it may be in construction. Main paradigm is that it exists.
+        if(0 != getSdrModelFromSdrObject().GetPageCount())
         {
-            // If not inserted, alternatively access a SdrPage using the SdrModel. There is
-            // no reason not to create and return a UNO API XShape when the SdrObject is not
-            // inserted - it may be in construction. Main paradigm is that it exists.
-            if(0 != getSdrModelFromSdrObject().GetPageCount())
+            // Take 1st SdrPage. That may be e.g. a special page (in SD), but the
+            // to-be-used method ::CreateShape will be correctly overloaded in
+            // all cases
+            pPageCandidate = getSdrModelFromSdrObject().GetPage(0);
+        }
+    }
+
+    if(nullptr != pPageCandidate)
+    {
+        uno::Reference< uno::XInterface > xPage(pPageCandidate->getUnoPage());
+        if( xPage.is() )
+        {
+            SvxDrawPage* pDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>(xPage);
+            if( pDrawPage )
             {
-                // Take 1st SdrPage. That may be e.g. a special page (in SD), but the
-                // to-be-used method ::CreateShape will be correctly overloaded in
-                // all cases
-                pPageCandidate = getSdrModelFromSdrObject().GetPage(0);
+                // create one
+                xShape = pDrawPage->CreateShape( this );
+                impl_setUnoShape( xShape );
             }
         }
-
-        if(nullptr != pPageCandidate)
-        {
-            uno::Reference< uno::XInterface > xPage(pPageCandidate->getUnoPage());
-            if( xPage.is() )
-            {
-                SvxDrawPage* pDrawPage = comphelper::getUnoTunnelImplementation<SvxDrawPage>(xPage);
-                if( pDrawPage )
-                {
-                    // create one
-                    xShape = pDrawPage->CreateShape( this );
-                    impl_setUnoShape( xShape );
-                }
-            }
-        }
-        else
-        {
-            // Fallback to static base functionality. CAUTION: This will only support
-            // the most basic stuff like SdrInventor::E3d and SdrInventor::Default. All
-            // the other SdrInventor enum entries are from overloads and are *not accessible*
-            // using this fallback (!) - what a bad trap
-            rtl::Reference<SvxShape> xNewShape = SvxDrawPage::CreateShapeByTypeAndInventor( GetObjIdentifier(), GetObjInventor(), this );
-            mpSvxShape = xNewShape.get();
-            maWeakUnoShape = xShape = static_cast< ::cppu::OWeakObject* >( mpSvxShape );
-        }
+    }
+    else
+    {
+        // Fallback to static base functionality. CAUTION: This will only support
+        // the most basic stuff like SdrInventor::E3d and SdrInventor::Default. All
+        // the other SdrInventor enum entries are from overloads and are *not accessible*
+        // using this fallback (!) - what a bad trap
+        rtl::Reference<SvxShape> xNewShape = SvxDrawPage::CreateShapeByTypeAndInventor( GetObjIdentifier(), GetObjInventor(), this );
+        mpSvxShape = xNewShape.get();
+        maWeakUnoShape = xShape = static_cast< ::cppu::OWeakObject* >( mpSvxShape );
     }
 
     return xShape;
