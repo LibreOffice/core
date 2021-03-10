@@ -326,12 +326,11 @@ void SAL_CALL ContextChangeEventMultiplexer::disposing ( const css::lang::EventO
 
 struct Instance {
     explicit Instance():
-        instance(static_cast<cppu::OWeakObject *>(
-                    new ContextChangeEventMultiplexer()))
+        instance(new ContextChangeEventMultiplexer())
     {
     }
 
-    css::uno::Reference<css::uno::XInterface> instance;
+    css::uno::Reference<cppu::OWeakObject> instance;
 };
 
 struct Singleton:
@@ -389,8 +388,7 @@ org_apache_openoffice_comp_framework_ContextChangeEventMultiplexer_get_implement
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject *>(
-                Singleton::get().instance.get()));
+    return cppu::acquire(Singleton::get().instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
