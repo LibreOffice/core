@@ -1608,8 +1608,8 @@ private:
     SwFrameFormat* MungeTextIntoDrawBox(SvxMSDffImportRec *pRecord,
         tools::Long nGrafAnchorCp, SwFrameFormat *pRetFrameFormat);
 
-    void GrafikCtor();
-    void GrafikDtor();
+    void GraphicCtor();
+    void GraphicDtor();
 
 // other stuff
     OUString GetFieldResult( WW8FieldDesc const * pF );
