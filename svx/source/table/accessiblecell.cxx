@@ -31,6 +31,7 @@
 
 #include <editeng/unoedsrc.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/string.hxx>

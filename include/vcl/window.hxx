@@ -155,19 +155,6 @@ namespace o3tl
     template<> struct typed_flags<PosSizeFlags> : is_typed_flags<PosSizeFlags, 0x000f> {};
 }
 
-// Flags for Show()
-enum class ShowFlags
-{
-    NONE                       = 0x0000,
-    NoFocusChange              = 0x0002,
-    NoActivate                 = 0x0004,
-    ForegroundTask             = 0x0008,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<ShowFlags> : is_typed_flags<ShowFlags, 0x000e> {};
-}
-
 // Flags for SetZOrder()
 enum class ZOrderFlags
 {

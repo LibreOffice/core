@@ -23,9 +23,7 @@
 #include <table/tablesort.hxx>
 
 #include <tools/diagnose_ex.h>
-#include <vcl/window.hxx>
 #include <vcl/ptrstyle.hxx>
-
 
 namespace svt::table
 {
