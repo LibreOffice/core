@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75b31675_81519085",
+        "filename": "reportdesign/source/ui/report/dlgedfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-03-10T10:03:02Z",
+      "side": 1,
+      "message": "hmm, why not change \"i\" in the next line too?",
+      "revId": "2fc45e5ed53ff6654833f0cd19edeb41609487b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc85fe86_19cf2424",
+        "filename": "sc/source/core/tool/chartpos.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-03-10T10:03:02Z",
+      "side": 1,
+      "message": "so n here should be size_t too.\n\nbut this is very silly.\n\nthe n and nCount are superfluous and it can just use the iterator, or even better a for (... : rFIrstCol) loop",
+      "range": {
+        "startLine": 427,
+        "startChar": 12,
+        "endLine": 427,
+        "endChar": 59
+      },
+      "revId": "2fc45e5ed53ff6654833f0cd19edeb41609487b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
