@@ -171,20 +171,10 @@ Reference< XUIConfigurationManager > SAL_CALL ModuleUIConfigurationManagerSuppli
     return pIter->second;
 }
 
-struct Instance {
-    explicit Instance(
-        css::uno::Reference<css::uno::XComponentContext> const & context):
-        instance(static_cast<cppu::OWeakObject *>(
-                    new ModuleUIConfigurationManagerSupplier(context)))
-    {
-    }
-
-    css::uno::Reference<css::uno::XInterface> instance;
-};
-
 struct Singleton:
     public rtl::StaticWithArg<
-        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
+        rtl::StaticInstance<ModuleUIConfigurationManagerSupplier>,
+        css::uno::Reference<css::uno::XComponentContext>, Singleton>
 {};
 
 }
@@ -194,8 +184,7 @@ com_sun_star_comp_framework_ModuleUIConfigurationManagerSupplier_get_implementat
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject *>(
-                Singleton::get(context).instance.get()));
+    return cppu::acquire(Singleton::get(context).instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

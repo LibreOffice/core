@@ -261,20 +261,9 @@ PopupMenuControllerFactory::PopupMenuControllerFactory( const Reference< XCompon
 {
 }
 
-struct PopupMenuControllerFactoryInstance {
-    explicit PopupMenuControllerFactoryInstance(
-        css::uno::Reference<css::uno::XComponentContext> const & context):
-        instance(static_cast<cppu::OWeakObject *>(
-                    new PopupMenuControllerFactory(context)))
-    {
-    }
-
-    css::uno::Reference<css::uno::XInterface> instance;
-};
-
 struct PopupMenuControllerFactorySingleton:
     public rtl::StaticWithArg<
-        PopupMenuControllerFactoryInstance,
+        rtl::StaticInstance<PopupMenuControllerFactory>,
         css::uno::Reference<css::uno::XComponentContext>,
         PopupMenuControllerFactorySingleton>
 {};
@@ -306,20 +295,9 @@ ToolbarControllerFactory::ToolbarControllerFactory( const Reference< XComponentC
 {
 }
 
-struct ToolbarControllerFactoryInstance {
-    explicit ToolbarControllerFactoryInstance(
-        css::uno::Reference<css::uno::XComponentContext> const & context):
-        instance(static_cast<cppu::OWeakObject *>(
-                    new ToolbarControllerFactory(context)))
-    {
-    }
-
-    css::uno::Reference<css::uno::XInterface> instance;
-};
-
 struct ToolbarControllerFactorySingleton:
     public rtl::StaticWithArg<
-        ToolbarControllerFactoryInstance,
+        rtl::StaticInstance<ToolbarControllerFactory>,
         css::uno::Reference<css::uno::XComponentContext>,
         ToolbarControllerFactorySingleton>
 {};
@@ -351,20 +329,9 @@ StatusbarControllerFactory::StatusbarControllerFactory( const Reference< XCompon
 {
 }
 
-struct StatusbarControllerFactoryInstance {
-    explicit StatusbarControllerFactoryInstance(
-        css::uno::Reference<css::uno::XComponentContext> const & context):
-        instance(static_cast<cppu::OWeakObject *>(
-                    new StatusbarControllerFactory(context)))
-    {
-    }
-
-    css::uno::Reference<css::uno::XInterface> instance;
-};
-
 struct StatusbarControllerFactorySingleton:
     public rtl::StaticWithArg<
-        StatusbarControllerFactoryInstance,
+        rtl::StaticInstance<StatusbarControllerFactory>,
         css::uno::Reference<css::uno::XComponentContext>,
         StatusbarControllerFactorySingleton>
 {};
@@ -376,8 +343,7 @@ com_sun_star_comp_framework_PopupMenuControllerFactory_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject *>(
-            PopupMenuControllerFactorySingleton::get(context).instance.get()));
+    return cppu::acquire(PopupMenuControllerFactorySingleton::get(context).instance.get());
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -385,8 +351,7 @@ com_sun_star_comp_framework_ToolBarControllerFactory_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject *>(
-            ToolbarControllerFactorySingleton::get(context).instance.get()));
+    return cppu::acquire(ToolbarControllerFactorySingleton::get(context).instance.get());
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -394,8 +359,7 @@ com_sun_star_comp_framework_StatusBarControllerFactory_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject *>(
-            StatusbarControllerFactorySingleton::get(context).instance.get()));
+    return cppu::acquire(StatusbarControllerFactorySingleton::get(context).instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -238,19 +238,10 @@ void OfficeInstallationDirectories::initDirs()
 
 namespace {
 
-struct Instance {
-    explicit Instance(
-        css::uno::Reference<css::uno::XComponentContext> const & context):
-        instance(static_cast<cppu::OWeakObject *>(
-            new comphelper::OfficeInstallationDirectories(context)))
-    {}
-
-    rtl::Reference<css::uno::XInterface> instance;
-};
-
 struct Singleton:
     public rtl::StaticWithArg<
-        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
+        rtl::StaticInstance<comphelper::OfficeInstallationDirectories>,
+        css::uno::Reference<css::uno::XComponentContext>, Singleton>
 {};
 
 }
@@ -260,8 +251,7 @@ com_sun_star_comp_util_OfficeInstallationDirectories(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject *>(
-                Singleton::get(context).instance.get()));
+    return cppu::acquire(Singleton::get(context).instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
