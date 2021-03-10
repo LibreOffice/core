@@ -19,12 +19,6 @@
 
 #include <svdpdf.hxx>
 
-#include <config_features.h>
-
-#if HAVE_FEATURE_PDFIUM
-#include <fpdfview.h>
-#include <fpdf_edit.h>
-
 #include <tools/UnitConversion.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/vectorgraphicdata.hxx>
@@ -1059,7 +1053,5 @@ tools::Rectangle ImpSdrPdfImport::PointsToLogic(double left, double right, doubl
 
     return tools::Rectangle(aPos, aSize);
 }
-
-#endif // HAVE_FEATURE_PDFIUM
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

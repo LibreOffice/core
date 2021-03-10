@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_features.h>
-
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -22,6 +20,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svx/xoutbmp.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
 
 class XOutdevTest : public CppUnit::TestFixture
 {
@@ -35,7 +34,12 @@ public:
 
 CPPUNIT_TEST_FIXTURE(XOutdevTest, testPdfGraphicExport)
 {
-#if HAVE_FEATURE_PDFIUM
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+    {
+        return;
+    }
+
     // Import the graphic.
     Graphic aGraphic;
     test::Directories aDirectories;
@@ -62,7 +66,6 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testPdfGraphicExport)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>('D'), sFirstBytes[2]);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>('F'), sFirstBytes[3]);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>('-'), sFirstBytes[4]);
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
