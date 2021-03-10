@@ -163,6 +163,7 @@ enum to state the present state of the fly
 */
 enum FlyProcessingState
 {
+    FLY_NONE,
     FLY_PROCESSED,
     FLY_POSTPONED,
     FLY_NOT_PROCESSED

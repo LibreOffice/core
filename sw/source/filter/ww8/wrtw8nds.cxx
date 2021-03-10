@@ -710,6 +710,11 @@ FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
         ++linkedTextboxesIter;
     }
 
+    if (maFlyIter == maFlyFrames.end())
+    {
+        return FLY_NONE;
+    }
+
     /*
      #i2916#
      May have an anchored graphic to be placed, loop through sorted array
@@ -2339,7 +2344,6 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         do {
 
             const SwRedlineData* pRedlineData = aAttrIter.GetRunLevelRedline( nCurrentPos );
-            FlyProcessingState nStateOfFlyFrame = FLY_PROCESSED;
             bool bPostponeWritingText    = false ;
             OUString aSavedSnippet ;
 
@@ -2385,7 +2389,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 bPostponeWritingText = true ;
             }
 
-            nStateOfFlyFrame = aAttrIter.OutFlys( nCurrentPos );
+            FlyProcessingState nStateOfFlyFrame = aAttrIter.OutFlys( nCurrentPos );
             AttrOutput().SetStateOfFlyFrame( nStateOfFlyFrame );
             AttrOutput().SetAnchorIsLinkedToNode( bPostponeWritingText && (FLY_POSTPONED != nStateOfFlyFrame) );
             // Append bookmarks in this range after flys, exclusive of final
@@ -2413,6 +2417,15 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                                     || ch == CH_TXT_ATR_FIELDEND
                                     || ch == CH_TXT_ATR_FORMELEMENT)
                                 ? 1 : 0;
+                if (ofs == 1
+                    && GetExportFormat() == MSWordExportBase::ExportFormat::DOCX
+                    // FLY_PROCESSED: there's at least 1 fly already written
+                    && nStateOfFlyFrame == FLY_PROCESSED)
+                {
+                    // write flys in a separate run before field character
+                    AttrOutput().EndRun(&rNode, nCurrentPos, nNextAttr == nEnd);
+                    AttrOutput().StartRun(pRedlineData, nCurrentPos, bSingleEmptyRun);
+                }
 
                 IDocumentMarkAccess* const pMarkAccess = m_rDoc.getIDocumentMarkAccess();
                 if ( ch == CH_TXT_ATR_FIELDSTART )
@@ -2595,7 +2608,8 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 AttrOutput().FormatDrop( rNode, aAttrIter.GetSwFormatDrop(), nStyle, pTextNodeInfo, pTextNodeInfoInner );
 
             // Only output character attributes if this is not a postponed text run.
-            if (0 != nEnd && !(bPostponeWritingText && FLY_PROCESSED == nStateOfFlyFrame))
+            if (0 != nEnd && !(bPostponeWritingText
+                    && (FLY_PROCESSED == nStateOfFlyFrame || FLY_NONE == nStateOfFlyFrame)))
             {
                 // Output the character attributes
                 // #i51277# do this before writing flys at end of paragraph
@@ -2702,7 +2716,8 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
             AttrOutput().WritePostitFieldReference();
 
-            if( bPostponeWritingText && FLY_PROCESSED == nStateOfFlyFrame )
+            if (bPostponeWritingText
+                && (FLY_PROCESSED == nStateOfFlyFrame || FLY_NONE == nStateOfFlyFrame))
             {
                 AttrOutput().EndRun(&rNode, nCurrentPos, nNextAttr == nEnd);
                 //write the postponed text run
