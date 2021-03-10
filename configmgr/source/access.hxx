@@ -23,7 +23,6 @@
 
 #include <set>
 #include <vector>
-#include "config_map.hxx"
 
 #include <com/sun/star/beans/XExactName.hpp>
 #include <com/sun/star/beans/XHierarchicalPropertySet.hpp>
@@ -358,7 +357,7 @@ private:
             bool theDirectlyModified);
     };
 
-    typedef config_map< ModifiedChild > ModifiedChildren;
+    typedef std::unordered_map< OUString, ModifiedChild > ModifiedChildren;
 
     rtl::Reference< ChildAccess > getModifiedChild(
         ModifiedChildren::iterator const & childIterator);
@@ -386,7 +385,7 @@ private:
 
     rtl::Reference< Access > getNotificationRoot();
 
-    typedef config_map< ChildAccess * > WeakChildMap;
+    typedef std::unordered_map< OUString, ChildAccess * > WeakChildMap;
 
     typedef
         std::multiset<
@@ -406,7 +405,7 @@ private:
                 css::beans::XPropertyChangeListener > >
         PropertyChangeListenersElement;
 
-    typedef config_map< PropertyChangeListenersElement >
+    typedef std::unordered_map< OUString, PropertyChangeListenersElement >
         PropertyChangeListeners;
 
     typedef
@@ -415,7 +414,7 @@ private:
                 css::beans::XVetoableChangeListener > >
         VetoableChangeListenersElement;
 
-    typedef config_map< VetoableChangeListenersElement >
+    typedef std::unordered_map< OUString, VetoableChangeListenersElement >
         VetoableChangeListeners;
 
     typedef

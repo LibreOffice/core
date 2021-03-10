@@ -139,7 +139,8 @@ private:
     int getExtensionLayer(bool shared) const;
 
     typedef
-        config_map<
+        std::unordered_map<
+            OUString,
             css::uno::Reference<
                 css::beans::XPropertySet > >
         ExternalServices;

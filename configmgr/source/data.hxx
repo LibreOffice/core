@@ -22,7 +22,6 @@
 #include <sal/config.h>
 
 #include <climits>
-#include "config_map.hxx"
 #include <vector>
 
 #include <rtl/ref.hxx>
@@ -86,7 +85,7 @@ private:
     Data(const Data&) = delete;
     Data& operator=(const Data&) = delete;
 
-    typedef config_map< rtl::Reference< ExtensionXcu > >
+    typedef std::unordered_map< OUString, rtl::Reference< ExtensionXcu > >
         ExtensionXcuAdditions;
 
     rtl::Reference< Node > root_;
