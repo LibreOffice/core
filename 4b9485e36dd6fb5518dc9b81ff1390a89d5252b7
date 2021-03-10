@@ -16,6 +16,24 @@
       "revId": "4b9485e36dd6fb5518dc9b81ff1390a89d5252b7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4eb3cd8_96c4aba4",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1849,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-03-10T07:04:44Z",
+      "side": 1,
+      "message": "This is for the tooltip besides the cells (https://ibb.co/PmpRXvX), otherwise it would increase 2021-03-08 every second cell to 2021-03-09 and so on.",
+      "parentUuid": "701f03e6_d85ccd34",
+      "revId": "4b9485e36dd6fb5518dc9b81ff1390a89d5252b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
