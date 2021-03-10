@@ -221,6 +221,8 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public InterimItemWindow
 
         SvxLanguageItem GetLanguage() const;
 
+        void SetMenuButtonColors();
+
         SwPostItMgr&    mrMgr;
         SwView&         mrView;
 
