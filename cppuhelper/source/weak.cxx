@@ -100,6 +100,10 @@ Any SAL_CALL OWeakConnectionPoint::queryInterface( const Type & rType )
 // XInterface
 void SAL_CALL OWeakConnectionPoint::acquire() throw()
 {
+#ifdef DBG_UTIL
+    // catch things early which have been deleted and then re-acquired
+    assert(m_aRefCount != -1);
+#endif
     osl_atomic_increment( &m_aRefCount );
 }
 
@@ -107,7 +111,12 @@ void SAL_CALL OWeakConnectionPoint::acquire() throw()
 void SAL_CALL OWeakConnectionPoint::release() throw()
 {
     if (! osl_atomic_decrement( &m_aRefCount ))
+    {
+#ifdef DBG_UTIL
+        m_aRefCount = -1;
+#endif
         delete this;
+    }
 }
 
 void OWeakConnectionPoint::dispose()
