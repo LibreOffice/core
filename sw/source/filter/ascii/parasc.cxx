@@ -98,7 +98,7 @@ SwASCIIParser::SwASCIIParser(SwDoc& rD, const SwPaM& rCursor, SvStream& rIn,
     , bNewDoc(bReadNewDoc)
 {
     pPam.reset( new SwPaM( *rCursor.GetPoint() ) );
-    pArr.reset( new char [ ASC_BUFFLEN + 2 ] );
+    pArr.reset( new char[ASC_BUFFLEN + 2] );
 
     pItemSet = std::make_unique<SfxItemSet>( rDoc.GetAttrPool(),
                 svl::Items<RES_CHRATR_FONT,        RES_CHRATR_LANGUAGE,
@@ -456,8 +456,7 @@ ErrCode SwASCIIParser::ReadChars()
 
         if( bIns )
         {
-            if( ( nLineLen >= MAX_ASCII_PARA - 100 ) &&
-                ( ( *pStt == ' ' ) || ( nLineLen >= MAX_ASCII_PARA - 1 ) ) )
+            if( ( nLineLen >= MAX_ASCII_PARA ) && ( *pStt == ' ' ) )
             {
                 sal_Unicode c = *pStt;
                 *pStt = 0;

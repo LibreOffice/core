@@ -53,7 +53,7 @@ namespace com::sun::star::embed { class XStorage; }
 
 // Defines the count of chars at which a paragraph read via ASCII/W4W-Reader
 // is forced to wrap. It has to be always greater than 200!!!
-#define MAX_ASCII_PARA 10000
+#define MAX_ASCII_PARA 0        //defined to 0 as Writer is able to handle 2-G long paras.
 
 class SW_DLLPUBLIC SwAsciiOptions
 {
