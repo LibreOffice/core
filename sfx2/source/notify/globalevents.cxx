@@ -519,21 +519,8 @@ TModelList::iterator SfxGlobalEvents_Impl::impl_searchDoc(const uno::Reference< 
         });
 }
 
-struct Instance {
-    explicit Instance(
-        css::uno::Reference<css::uno::XComponentContext> const & context):
-        instance(
-            static_cast<cppu::OWeakObject *>(new SfxGlobalEvents_Impl(context)))
-    {}
-
-    rtl::Reference<css::uno::XInterface> instance;
-};
-
-struct Singleton:
-    public rtl::StaticWithArg<
-        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
-{};
-
+using Singleton = rtl::StaticWithArg<rtl::StaticInstance<SfxGlobalEvents_Impl>,
+                                     css::uno::Reference<css::uno::XComponentContext>, Singleton>;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -541,8 +528,7 @@ com_sun_star_comp_sfx2_GlobalEventBroadcaster_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject *>(
-                Singleton::get(context).instance.get()));
+    return cppu::acquire(Singleton::get(context).instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

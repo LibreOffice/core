@@ -324,20 +324,7 @@ void SAL_CALL ContextChangeEventMultiplexer::disposing ( const css::lang::EventO
     maListeners.erase(iDescriptor);
 }
 
-struct Instance {
-    explicit Instance():
-        instance(static_cast<cppu::OWeakObject *>(
-                    new ContextChangeEventMultiplexer()))
-    {
-    }
-
-    css::uno::Reference<css::uno::XInterface> instance;
-};
-
-struct Singleton:
-    public rtl::Static<Instance, Singleton>
-{};
-
+using Singleton = rtl::Static<rtl::StaticInstance<ContextChangeEventMultiplexer>, Singleton>;
 }
 
 namespace framework {
@@ -389,8 +376,7 @@ org_apache_openoffice_comp_framework_ContextChangeEventMultiplexer_get_implement
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject *>(
-                Singleton::get().instance.get()));
+    return cppu::acquire(Singleton::get().instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

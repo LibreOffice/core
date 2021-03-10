@@ -132,8 +132,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 connectivity_moz_MozillaBootstrap_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(
-        static_cast<cppu::OWeakObject*>(new connectivity::mozab::MozillaBootstrap()));
+    return cppu::acquire(new connectivity::mozab::MozillaBootstrap());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
