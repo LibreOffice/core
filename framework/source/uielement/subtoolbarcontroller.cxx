@@ -21,12 +21,14 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <svtools/toolboxcontroller.hxx>
+#include <svtools/popupwindowcontroller.hxx>
+#include <svtools/toolbarmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/gen.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/weldutils.hxx>
 
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -36,10 +38,9 @@
 #include <com/sun/star/ui/theUIElementFactoryManager.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 
-typedef cppu::ImplInheritanceHelper< svt::ToolboxController,
+typedef cppu::ImplInheritanceHelper< svt::PopupWindowController,
                                      css::frame::XSubToolbarController,
-                                     css::awt::XDockableWindowListener,
-                                     css::lang::XServiceInfo > ToolBarBase;
+                                     css::awt::XDockableWindowListener> ToolBarBase;
 
 namespace {
 
@@ -50,7 +51,8 @@ class SubToolBarController : public ToolBarBase
     css::uno::Reference< css::ui::XUIElement > m_xUIElement;
     void disposeUIElement();
 public:
-    explicit SubToolBarController( const css::uno::Sequence< css::uno::Any >& rxArgs );
+    explicit SubToolBarController( const rtl::Reference< com::sun::star::uno::XComponentContext >& rxContext,
+                                   const css::uno::Sequence< css::uno::Any >& rxArgs );
     virtual ~SubToolBarController() override;
 
     // XInitialization
@@ -61,7 +63,10 @@ public:
 
     // XToolbarController
     virtual void SAL_CALL execute( sal_Int16 nKeyModifier ) override;
-    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() override;
+
+    // PopupWindowController
+    virtual VclPtr<vcl::Window> createVclPopupWindow(vcl::Window* pParent) override;
+    virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
 
     // XSubToolbarController
     virtual sal_Bool SAL_CALL opensSubToolbar() override;
@@ -92,7 +97,14 @@ public:
 
 }
 
-SubToolBarController::SubToolBarController( const css::uno::Sequence< css::uno::Any >& rxArgs )
+SubToolBarController::SubToolBarController(
+    const rtl::Reference< com::sun::star::uno::XComponentContext >& rxContext,
+    const css::uno::Sequence< css::uno::Any >& rxArgs
+)   : ToolBarBase(
+        rxContext,
+        rtl::Reference< css::frame::XFrame >(),
+        ""
+    )
 {
     for ( css::uno::Any const & arg : rxArgs )
     {
@@ -104,6 +116,7 @@ SubToolBarController::SubToolBarController( const css::uno::Sequence< css::uno::
             OUString aValue;
             aPropValue.Value >>= aValue;
             m_aSubTbName = aValue.getToken(0, ';', nIdx);
+            m_aCommandURL = m_aSubTbName;
             m_aLastCommand = aValue.getToken(0, ';', nIdx);
             break;
         }
@@ -191,7 +204,74 @@ void SubToolBarController::execute( sal_Int16 nKeyModifier )
     }
 }
 
-css::uno::Reference< css::awt::XWindow > SubToolBarController::createPopupWindow()
+namespace {
+class SubToolbarControl final : public WeldToolbarPopup
+{
+public:
+    explicit SubToolbarControl(css::uno::Reference< css::frame::XFrame > xFrame,
+                               weld::Widget* pParent);
+
+    virtual void GrabFocus() override;
+
+    weld::Container* GetContainer() { return m_xTargetContainer.get(); }
+
+private:
+    std::unique_ptr<weld::Container> m_xTargetContainer;
+};
+}
+
+SubToolbarControl::SubToolbarControl(css::uno::Reference< css::frame::XFrame > xFrame,
+                                     weld::Widget* pParent)
+: WeldToolbarPopup(xFrame, pParent, "modules/StartModule/ui/subtoolbar.ui", "subtoolbar")
+, m_xTargetContainer(m_xBuilder->weld_container("container"))
+{
+}
+
+void SubToolbarControl::GrabFocus()
+{
+    // TODO
+}
+
+std::unique_ptr<WeldToolbarPopup> SubToolBarController::weldPopupWindow()
+{
+    SolarMutexGuard aGuard;
+
+    auto pPopup = std::make_unique<SubToolbarControl>(getFrameInterface(), m_pToolbar);
+
+    css::uno::Reference< css::frame::XFrame > xFrame ( getFrameInterface() );
+
+    // create element with factory
+    static css::uno::WeakReference< css::ui::XUIElementFactoryManager > xWeakUIElementFactory;
+    css::uno::Reference< css::ui::XUIElement > xUIElement;
+    css::uno::Reference< css::ui::XUIElementFactoryManager > xUIElementFactory = xWeakUIElementFactory;
+    if ( !xUIElementFactory.is() )
+    {
+        xUIElementFactory = css::ui::theUIElementFactoryManager::get( m_xContext );
+        xWeakUIElementFactory = xUIElementFactory;
+    }
+
+    css::uno::Reference< css::awt::XWindow > xParent = new weld::TransportAsXWindow(pPopup->GetContainer());
+
+    auto aPropSeq( comphelper::InitPropertySequence( {
+        { "Frame", css::uno::makeAny( xFrame ) },
+        { "ParentWindow", css::uno::makeAny( xParent ) },
+        { "Persistent", css::uno::makeAny( false ) },
+        { "PopupMode", css::uno::makeAny( true ) }
+    } ) );
+
+    try
+    {
+        xUIElement = xUIElementFactory->createUIElement( "private:resource/toolbar/" + m_aSubTbName, aPropSeq );
+    }
+    catch ( css::container::NoSuchElementException& )
+    {}
+    catch ( css::lang::IllegalArgumentException& )
+    {}
+
+    return pPopup;
+}
+
+VclPtr<vcl::Window> SubToolBarController::createVclPopupWindow(vcl::Window* /*pParent*/)
 {
     SolarMutexGuard aGuard;
 
@@ -254,7 +334,7 @@ css::uno::Reference< css::awt::XWindow > SubToolBarController::createPopupWindow
             }
         }
     }
-    return css::uno::Reference< css::awt::XWindow >();
+    return nullptr;
 }
 
 sal_Bool SubToolBarController::opensSubToolbar()
@@ -397,7 +477,7 @@ void SubToolBarController::disposing( const css::lang::EventObject& e )
 
 void SubToolBarController::initialize( const css::uno::Sequence< css::uno::Any >& rxArgs )
 {
-    svt::ToolboxController::initialize( rxArgs );
+    svt::PopupWindowController::initialize( rxArgs );
 
     ToolBox* pToolBox = nullptr;
     ToolBoxItemId nId;
@@ -408,6 +488,13 @@ void SubToolBarController::initialize( const css::uno::Sequence< css::uno::Any >
         else
             pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWN );
     }
+
+    if (m_pToolbar)
+    {
+        mxPopoverContainer.reset(new ToolbarPopupContainer(m_pToolbar));
+        m_pToolbar->set_item_popover(m_aCommandURL.toUtf8(), mxPopoverContainer->getTopLevel());
+    }
+
     updateImage();
 }
 
@@ -416,7 +503,7 @@ void SubToolBarController::dispose()
     if ( m_bDisposed )
         return;
 
-    svt::ToolboxController::dispose();
+    svt::PopupWindowController::dispose();
     disposeUIElement();
     m_xUIElement = nullptr;
 }
@@ -438,10 +525,10 @@ css::uno::Sequence< OUString > SubToolBarController::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_SubToolBarController_get_implementation(
-    css::uno::XComponentContext*,
+    css::uno::XComponentContext* rxContext,
     css::uno::Sequence<css::uno::Any> const & rxArgs )
 {
-    return cppu::acquire( new SubToolBarController( rxArgs ) );
+    return cppu::acquire( new SubToolBarController( rxContext, rxArgs ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
