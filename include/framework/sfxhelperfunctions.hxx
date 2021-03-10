@@ -25,18 +25,28 @@
 #include <rtl/ref.hxx>
 #include <vcl/toolbox.hxx>
 
-namespace com::sun::star::frame { class XFrame; }
+namespace com::sun::star::frame { class XFrame; class XToolbarController; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 namespace svt { class StatusbarController; }
 namespace svt { class ToolboxController; }
 
 class StatusBar;
 class ToolBox;
+namespace weld {
+    class Toolbar;
+    class Builder;
+};
 
 typedef rtl::Reference<svt::ToolboxController> ( *pfunc_setToolBoxControllerCreator)(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     ToolBox* pToolbox,
     ToolBoxItemId nID,
+    const OUString& aCommandURL );
+
+typedef css::uno::Reference<css::frame::XToolbarController> ( *pfunc_setWeldToolBoxControllerCreator)(
+    const css::uno::Reference< css::frame::XFrame >& rFrame,
+    weld::Toolbar* pToolbar,
+    weld::Builder* pBuilder,
     const OUString& aCommandURL );
 
 typedef rtl::Reference<svt::StatusbarController> ( *pfunc_setStatusBarControllerCreator)(
@@ -64,6 +74,13 @@ FWK_DLLPUBLIC rtl::Reference<svt::ToolboxController> CreateToolBoxController(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     ToolBox* pToolbox,
     ToolBoxItemId nID,
+    const OUString& aCommandURL );
+
+FWK_DLLPUBLIC pfunc_setWeldToolBoxControllerCreator SetWeldToolBoxControllerCreator( pfunc_setWeldToolBoxControllerCreator pSetToolBoxControllerCreator );
+FWK_DLLPUBLIC css::uno::Reference<css::frame::XToolbarController> CreateWeldToolBoxController(
+    const css::uno::Reference< css::frame::XFrame >& rFrame,
+    weld::Toolbar* pToolbar,
+    weld::Builder* pBuilder,
     const OUString& aCommandURL );
 
 FWK_DLLPUBLIC pfunc_setStatusBarControllerCreator SetStatusBarControllerCreator( pfunc_setStatusBarControllerCreator pSetStatusBarControllerCreator );

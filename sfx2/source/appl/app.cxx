@@ -49,6 +49,7 @@
 #include <sfx2/stbitem.hxx>
 #include <sfx2/dockwin.hxx>
 #include <shellimpl.hxx>
+#include <sidebar/ControllerFactory.hxx>
 
 #include <svtools/helpopt.hxx>
 #include <unotools/viewoptions.hxx>
@@ -93,6 +94,16 @@ SfxModule* SfxApplication::GetModule(SfxToolsModule nSharedLib)
     return g_pSfxApplication->pImpl->aModules[nSharedLib].get();
 }
 
+namespace {
+    css::uno::Reference<css::frame::XToolbarController> SfxWeldToolBoxControllerFactory( const css::uno::Reference< css::frame::XFrame >& rFrame, weld::Toolbar* pToolbar, weld::Builder* pBuilder, const OUString& aCommandURL )
+    {
+        SolarMutexGuard aGuard;
+
+        return sfx2::sidebar::ControllerFactory::CreateToolBoxController(
+                *pToolbar, *pBuilder, aCommandURL, rFrame, rFrame->getController(), false);
+    }
+}
+
 SfxApplication* SfxApplication::GetOrCreate()
 {
     // SFX on demand
@@ -110,6 +121,7 @@ SfxApplication* SfxApplication::GetOrCreate()
 
         ::framework::SetRefreshToolbars( RefreshToolbars );
         ::framework::SetToolBoxControllerCreator( SfxToolBoxControllerFactory );
+        ::framework::SetWeldToolBoxControllerCreator( SfxWeldToolBoxControllerFactory );
         ::framework::SetStatusBarControllerCreator( SfxStatusBarControllerFactory );
         ::framework::SetDockingWindowCreator( SfxDockingWindowFactory );
         ::framework::SetIsDockingWindowVisible( IsDockingWindowVisible );

@@ -33,11 +33,14 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
+#include <framework/addonsoptions.hxx>
+
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
 #include <tools/link.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
@@ -50,6 +53,55 @@ class Menu;
 
 namespace framework
 {
+
+class ToolBarManager;
+
+class ToolBarManagerImpl
+{
+public:
+    virtual ~ToolBarManagerImpl() = default;
+    virtual void Init() = 0;
+    virtual void Destroy() = 0;
+    virtual css::uno::Reference<css::awt::XWindow> GetInterface() = 0;
+    virtual css::uno::Reference<css::frame::XStatusListener> CreateToolBoxController(
+                            const css::uno::Reference<css::frame::XFrame>& rFrame,
+                            ToolBoxItemId nId,
+                            const OUString& aCommandURL ) = 0;
+    virtual void InsertItem(ToolBoxItemId nId,
+                            const OUString& rString,
+                            const OUString& rCommandURL,
+                            const OUString& rTooltip,
+                            const OUString& rLabel,
+                            ToolBoxItemBits nItemBits) = 0;
+    virtual void InsertSeparator() = 0;
+    virtual void InsertSpace() = 0;
+    virtual void InsertBreak() = 0;
+    virtual ToolBoxItemId GetItemId(sal_uInt16 nPos) = 0;
+    virtual ToolBoxItemId GetCurItemId() = 0;
+    virtual OUString GetItemCommand(ToolBoxItemId nId) = 0;
+    virtual sal_uInt16 GetItemCount() = 0;
+    virtual void SetItemCheckable(ToolBoxItemId nId) = 0;
+    virtual void HideItem(ToolBoxItemId nId, const OUString& rCommandURL) = 0;
+    virtual bool IsItemVisible(ToolBoxItemId nId, const OUString& rCommandURL) = 0;
+    virtual void Clear() = 0;
+    virtual void SetName(const OUString& rName) = 0;
+    virtual void SetHelpId(const OString& rHelpId) = 0;
+    virtual bool WillUsePopupMode() = 0;
+    virtual bool IsReallyVisible() = 0;
+    virtual void SetIconSize(ToolBoxButtonSize eSize) = 0;
+    virtual vcl::ImageType GetImageSize() = 0;
+    virtual void ConnectCallbacks(ToolBarManager* pManager) = 0;
+    virtual void SetMenuType(ToolBoxMenuType eType) = 0;
+    virtual void MergeToolbar(ToolBoxItemId nItemId,
+                              const OUString& rModuleIdentifier,
+                              CommandToInfoMap& rCommandMap,
+                              MergeToolbarInstruction& rInstruction) = 0;
+    virtual void SetItemImage(ToolBoxItemId nId,
+                              const OUString& rCommandURL,
+                              const Image& rImage) = 0;
+    virtual void UpdateSize() = 0;
+    virtual void SetItemWindow(ToolBoxItemId nItemId, vcl::Window* pNewWindow) = 0;
+};
 
 typedef ::cppu::WeakImplHelper<
            css::frame::XFrameActionListener,
@@ -64,6 +116,11 @@ class ToolBarManager final : public ToolbarManager_Base
                         const css::uno::Reference< css::frame::XFrame >& rFrame,
                         const OUString& rResourceName,
                         ToolBox* pToolBar );
+        ToolBarManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                        const css::uno::Reference< css::frame::XFrame >& rFrame,
+                        const OUString& rResourceName,
+                        weld::Toolbar* pToolBar,
+                        weld::Builder* pBuilder );
         virtual ~ToolBarManager() override;
 
         ToolBox* GetToolBar() const;
@@ -100,6 +157,13 @@ class ToolBarManager final : public ToolbarManager_Base
             EXEC_CMD_DOCKALLTOOLBARS
         };
 
+        enum ClickAction
+        {
+            Click,
+            DblClick,
+            Execute
+        };
+
         struct ExecuteInfo
         {
             OUString                                            aToolbarResName;
@@ -108,8 +172,10 @@ class ToolBarManager final : public ToolbarManager_Base
             css::uno::Reference< css::awt::XWindow >            xWindow;
         };
 
-    private:
-        DECL_LINK(Click, ToolBox *, void);
+    public:
+        void OnClick(bool bUseExecute = false);
+        void OnDropdownClick(bool bCreatePopupWindow = true);
+
         DECL_LINK(DropdownClick, ToolBox *, void);
         DECL_LINK(DoubleClick, ToolBox *, void);
         DECL_LINK(Select, ToolBox *, void);
@@ -124,6 +190,8 @@ class ToolBarManager final : public ToolbarManager_Base
         DECL_LINK( OverflowEventListener, VclWindowEvent&, void );
         DECL_STATIC_LINK( ToolBarManager, ExecuteHdl_Impl, void*, void );
 
+    private:
+        void Init();
         void AddCustomizeMenuItems(ToolBox const * pToolBar);
         void InitImageManager();
         void RemoveControllers();
@@ -137,7 +205,7 @@ class ToolBarManager final : public ToolbarManager_Base
         ToolBoxItemBits ConvertStyleToToolboxItemBits( sal_Int32 nStyle );
         css::uno::Reference< css::frame::XModel > GetModelFromFrame() const;
         bool IsPluginMode() const;
-        void HandleClick(void ( SAL_CALL css::frame::XToolbarController::*_pClick )(  ));
+        void HandleClick(ClickAction eAction);
         void setToolBarImage(const Image& _aImage,const CommandToInfoMap::const_iterator& _pIter);
         void impl_elementChanged(bool _bRemove,const css::ui::ConfigurationEvent& Event );
 
@@ -146,12 +214,12 @@ class ToolBarManager final : public ToolbarManager_Base
         typedef std::unordered_map<OUString, SubToolBarControllerVector>                                                SubToolBarToSubToolBarControllerMap;
 
         bool m_bDisposed : 1,
-             m_bAddedToTaskPaneList : 1,
              m_bFrameActionRegistered : 1,
              m_bUpdateControllers : 1;
 
         sal_Int16 m_eSymbolSize;
 
+        std::unique_ptr<ToolBarManagerImpl>                          m_pImpl;
         VclPtr<ToolBox>                                              m_pToolBar;
 
         OUString                                                     m_aModuleIdentifier;

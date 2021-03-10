@@ -28,6 +28,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/weldutils.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -132,6 +133,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
 
     // Create VCL based toolbar which will be filled with settings data
     VclPtr<ToolBox> pToolBar;
+    weld::Toolbar* pWeldedToolbar = nullptr;
     rtl::Reference<ToolBarManager> pToolBarManager;
     {
         SolarMutexGuard aSolarMutexGuard;
@@ -148,20 +150,32 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
             m_xToolBarManager = pToolBarManager;
             pToolBar->WillUsePopupMode( bPopupMode );
         }
+        else if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xParentWindow.get()))
+        {
+            pWeldedToolbar = dynamic_cast<weld::Toolbar*>(pTunnel->getWidget());
+            if ( pWeldedToolbar )
+            {
+                pToolBarManager = new ToolBarManager( m_xContext, xFrame, m_aResourceURL, pWeldedToolbar, pTunnel->getBuilder() );
+                m_xToolBarManager = pToolBarManager;
+            }
+        }
     }
 
     try
     {
         m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
-        if ( m_xConfigData.is() && pToolBar && pToolBarManager )
+        if ( m_xConfigData.is() && (pToolBar || pWeldedToolbar) && pToolBarManager )
         {
             // Fill toolbar with container contents
             pToolBarManager->FillToolbar( m_xConfigData );
-            pToolBar->EnableCustomize();
-            ::Size aActSize( pToolBar->GetSizePixel() );
-            ::Size aSize( pToolBar->CalcWindowSizePixel() );
-            aSize.setWidth( aActSize.Width() );
-            pToolBar->SetOutputSizePixel( aSize );
+            if (pToolBar)
+            {
+                pToolBar->EnableCustomize();
+                ::Size aActSize( pToolBar->GetSizePixel() );
+                ::Size aSize( pToolBar->CalcWindowSizePixel() );
+                aSize.setWidth( aActSize.Width() );
+                pToolBar->SetOutputSizePixel( aSize );
+            }
         }
     }
     catch ( const NoSuchElementException& )
