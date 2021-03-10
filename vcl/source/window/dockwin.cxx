@@ -1115,6 +1115,22 @@ ResizableDockingWindow::ResizableDockingWindow(vcl::Window* pParent, WinBits nSt
 {
 }
 
+// needed to blow away the cached size of the boundary between vcl and hosted child widget
+void ResizableDockingWindow::InvalidateChildSizeCache()
+{
+    // find the bottom vcl::Window of the hierarchy and queue_resize on that
+    // one will invalidate all the size caches upwards
+    vcl::Window* pChild = GetWindow(GetWindowType::FirstChild);
+    while (true)
+    {
+        vcl::Window* pSubChild = pChild->GetWindow(GetWindowType::FirstChild);
+        if (!pSubChild)
+            break;
+        pChild = pSubChild;
+    }
+    pChild->queue_resize();
+}
+
 ResizableDockingWindow::~ResizableDockingWindow()
 {
     disposeOnce();
