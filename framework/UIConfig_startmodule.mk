@@ -14,6 +14,7 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/StartModule,\
 ))
 
 $(eval $(call gb_UIConfig_add_uifiles,modules/StartModule,\
+	framework/uiconfig/startmodule/ui/managedtoolbar \
 	framework/uiconfig/startmodule/ui/subtoolbar \
 ))
 
