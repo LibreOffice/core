@@ -46,6 +46,7 @@ namespace {
 
 class SubToolBarController : public ToolBarBase
 {
+    DECL_LINK(OnPopoverClose, weld::Popover&, void);
     OUString m_aSubTbName;
     OUString m_aLastCommand;
     css::uno::Reference< css::ui::XUIElement > m_xUIElement;
@@ -242,7 +243,6 @@ std::unique_ptr<WeldToolbarPopup> SubToolBarController::weldPopupWindow()
 
     // create element with factory
     static css::uno::WeakReference< css::ui::XUIElementFactoryManager > xWeakUIElementFactory;
-    css::uno::Reference< css::ui::XUIElement > xUIElement;
     css::uno::Reference< css::ui::XUIElementFactoryManager > xUIElementFactory = xWeakUIElementFactory;
     if ( !xUIElementFactory.is() )
     {
@@ -261,12 +261,16 @@ std::unique_ptr<WeldToolbarPopup> SubToolBarController::weldPopupWindow()
 
     try
     {
-        xUIElement = xUIElementFactory->createUIElement( "private:resource/toolbar/" + m_aSubTbName, aPropSeq );
+        m_xUIElement = xUIElementFactory->createUIElement( "private:resource/toolbar/" + m_aSubTbName, aPropSeq );
     }
     catch ( css::container::NoSuchElementException& )
     {}
     catch ( css::lang::IllegalArgumentException& )
     {}
+
+    weld::Popover* pPopover = dynamic_cast<weld::Popover*>(pPopup->getTopLevel());
+    if (pPopover)
+        pPopover->connect_closed(LINK(this, SubToolBarController, OnPopoverClose));
 
     return pPopup;
 }
@@ -496,6 +500,12 @@ void SubToolBarController::initialize( const css::uno::Sequence< css::uno::Any >
     }
 
     updateImage();
+}
+
+IMPL_LINK_NOARG(SubToolBarController, OnPopoverClose, weld::Popover&, void)
+{
+    disposeUIElement();
+    m_xUIElement = nullptr;
 }
 
 void SubToolBarController::dispose()
