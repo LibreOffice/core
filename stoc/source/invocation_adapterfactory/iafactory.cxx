@@ -874,7 +874,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 stoc_invocation_adapter_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new stoc_invadp::FactoryImpl(context)));
+    return cppu::acquire(new stoc_invadp::FactoryImpl(context));
 }
 
 

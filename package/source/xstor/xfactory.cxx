@@ -288,7 +288,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 package_OStorageFactory_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new OStorageFactory(context)));
+    return cppu::acquire(new OStorageFactory(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

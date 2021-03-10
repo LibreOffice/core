@@ -114,7 +114,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_configuration_ReadOnlyAccess_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(static_cast< cppu::OWeakObject * >(new configmgr::read_only_access::Service(context)));
+    return cppu::acquire(new configmgr::read_only_access::Service(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

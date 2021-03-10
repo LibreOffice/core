@@ -640,7 +640,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 dtrans_DropTarget_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new DropTarget(context)));
+    return cppu::acquire(new DropTarget(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

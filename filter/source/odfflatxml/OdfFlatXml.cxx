@@ -254,7 +254,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_OdfFlatXml_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new OdfFlatXml(context)));
+    return cppu::acquire(new OdfFlatXml(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

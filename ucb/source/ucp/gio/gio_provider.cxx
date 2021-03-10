@@ -133,7 +133,7 @@ ucb_gio_ContentProvider_get_implementation(
 #if !GLIB_CHECK_VERSION(2,36,0)
     g_type_init();
 #endif
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new gio::ContentProvider(context)));
+    return cppu::acquire(new gio::ContentProvider(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

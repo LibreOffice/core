@@ -104,6 +104,5 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 unotools_ServiceDocument_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject *>(
-                Singleton::get(context).instance.get()));
+    return cppu::acquire(Singleton::get(context).instance.get());
 }

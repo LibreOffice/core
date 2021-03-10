@@ -212,7 +212,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_HierarchyDataSource_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new HierarchyDataSource(context)));
+    return cppu::acquire(new HierarchyDataSource(context));
 }
 
 

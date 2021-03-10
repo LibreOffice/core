@@ -385,7 +385,7 @@ com_sun_star_comp_configuration_ConfigurationProvider_get_implementation(
                     nullptr);
             }
         }
-        return cppu::acquire(static_cast< cppu::OWeakObject * >(new Service(Context, locale)));
+        return cppu::acquire(new Service(Context, locale));
     }
 }
 

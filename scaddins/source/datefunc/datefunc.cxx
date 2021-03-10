@@ -90,7 +90,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scaddins_ScaDateAddIn_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new ScaDateAddIn()));
+    return cppu::acquire(new ScaDateAddIn());
 }
 
 

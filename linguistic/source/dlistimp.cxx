@@ -783,7 +783,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 linguistic_DicList_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new DicList()));
+    return cppu::acquire(new DicList());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

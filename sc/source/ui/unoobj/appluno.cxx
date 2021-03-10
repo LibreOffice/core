@@ -102,7 +102,7 @@ Calc_ScSpreadsheetSettings_get_implementation(
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
-    return cppu::acquire(static_cast<cppu::OWeakObject*>(new ScSpreadsheetSettings()));
+    return cppu::acquire(new ScSpreadsheetSettings());
 }
 
 
