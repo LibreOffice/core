@@ -720,7 +720,7 @@ IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEve
             break;
 
         case EventMultiplexerEventId::MainViewRemoved:
-            HideFocus();
+            mxLayoutValueSet->Invalidate(); // redraw without focus
             break;
 
         case EventMultiplexerEventId::ConfigurationUpdated:
