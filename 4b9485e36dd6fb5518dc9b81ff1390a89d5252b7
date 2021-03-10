@@ -34,6 +34,24 @@
       "revId": "4b9485e36dd6fb5518dc9b81ff1390a89d5252b7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83a48324_bf0ac0fa",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1849,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-03-10T15:22:35Z",
+      "side": 1,
+      "message": "Can\u0027t be. The code is not hit then (and should not because it writes to cells).",
+      "parentUuid": "e4eb3cd8_96c4aba4",
+      "revId": "4b9485e36dd6fb5518dc9b81ff1390a89d5252b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
