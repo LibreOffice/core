@@ -70,7 +70,7 @@ public:
 
 private:
     VclPtr<DeckTitleBar> mpDeckTitleBar;
-    std::vector<VclPtr<Panel> > maPanels;
+    SharedPanelContainer maPanels;
     std::vector<weld::Widget*> maButtons;
     const std::function<void(const Panel&)> maShowPanelFunctor;
 
