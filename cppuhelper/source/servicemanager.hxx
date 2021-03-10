@@ -12,7 +12,7 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <map>
+#include <unordered_map>
 #include <memory>
 #include <string_view>
 #include <vector>
@@ -164,17 +164,17 @@ public:
                 css::uno::Reference<css::uno::XInterface> const & instance);
         };
 
-        typedef std::map< OUString, std::shared_ptr< Implementation > >
+        typedef std::unordered_map< OUString, std::shared_ptr< Implementation > >
             NamedImplementations;
 
         typedef
-            std::map<
+            std::unordered_map<
                 css::uno::Reference< css::lang::XServiceInfo >,
                 std::shared_ptr< Implementation > >
             DynamicImplementations;
 
         typedef
-            std::map<
+            std::unordered_map<
                 OUString,
                 std::vector< std::shared_ptr< Implementation > > >
             ImplementationMap;
