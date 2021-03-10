@@ -555,6 +555,18 @@ DECLARE_OOXMLEXPORT_TEST(testEditTime, "fdo81341.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFlyFieldmark, "fly_fieldmark.fodt")
+{
+    // the problem was that the flys were written after the field start
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    // run 1 contains 2 shapes, one was at-page, one was at-char
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent", 2);
+    // run 2 contains the field start
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:fldChar", "fldCharType", "begin");
+    // run 3 contains the field instruction text
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:instrText", " FORMTEXT ");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFdo81945, "fdo81945.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
