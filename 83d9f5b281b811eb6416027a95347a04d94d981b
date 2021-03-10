@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fea9c1e5_e1dc13cc",
+        "filename": "cppuhelper/source/servicemanager.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-03-10T19:04:57Z",
+      "side": 1,
+      "message": "I wonder if this shared_ptr is ripe for improvement, shared_ptr is sloooow compared to our rtl::Reference/salhelper::SimpleReferenceObject code",
+      "revId": "83d9f5b281b811eb6416027a95347a04d94d981b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
