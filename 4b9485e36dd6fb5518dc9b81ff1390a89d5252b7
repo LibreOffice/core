@@ -52,6 +52,24 @@
       "revId": "4b9485e36dd6fb5518dc9b81ff1390a89d5252b7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9cd86f5_c3dfb632",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1849,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-03-10T15:34:24Z",
+      "side": 1,
+      "message": "Fwiw, reverting all the bDateCell changes here and keeping only the rInc\u003d0.0 block above works fine for me. Am I missing anything?",
+      "parentUuid": "83a48324_bf0ac0fa",
+      "revId": "4b9485e36dd6fb5518dc9b81ff1390a89d5252b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
