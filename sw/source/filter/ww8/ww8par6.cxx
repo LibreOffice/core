@@ -2474,7 +2474,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
         if (m_xSFlyPara->pFlyFormat)
         {
             if (!m_pDrawModel)
-                GrafikCtor();
+                GraphicCtor();
 
             SdrObject* pOurNewObject = CreateContactObject(m_xSFlyPara->pFlyFormat);
             m_xWWZOrder->InsertTextLayerObject(pOurNewObject);

@@ -4396,7 +4396,7 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
     SwFrameFormat &rFormat = rPage.GetMaster();
 
     if(mrReader.m_xWDop->fUseBackGroundInAllmodes) // #i56806# Make sure mrReader is initialized
-        mrReader.GrafikCtor();
+        mrReader.GraphicCtor();
 
     if (mrReader.m_xWDop->fUseBackGroundInAllmodes && mrReader.m_xMSDffManager)
     {
@@ -5357,7 +5357,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     m_xStyles.reset();
 
     m_xFormImpl.reset();
-    GrafikDtor();
+    GraphicDtor();
     m_xMSDffManager.reset();
     m_xHdFt.reset();
     m_xSBase.reset();
