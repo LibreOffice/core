@@ -107,8 +107,8 @@ void VCLXTopWindow::toFront(  )
     SolarMutexGuard aGuard;
 
     vcl::Window* pWindow = VCLXContainer::GetWindow();
-    if ( pWindow )
-        static_cast<WorkWindow*>(pWindow)->ToTop( ToTopFlags::RestoreWhenMin );
+    if (pWindow)
+        pWindow->ToTop( ToTopFlags::RestoreWhenMin );
 }
 
 void VCLXTopWindow::toBack(  )
