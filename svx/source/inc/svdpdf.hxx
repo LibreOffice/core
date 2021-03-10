@@ -20,9 +20,6 @@
 #ifndef INCLUDED_SVX_SOURCE_SVDRAW_SVDPDF_HXX
 #define INCLUDED_SVX_SOURCE_SVDRAW_SVDPDF_HXX
 
-#include <config_features.h>
-
-#if HAVE_FEATURE_PDFIUM
 #include <sal/config.h>
 
 #include <memory>
@@ -140,8 +137,6 @@ public:
                     SvdProgressInfo* pProgrInfo = nullptr);
 };
 
-#endif // HAVE_FEATURE_PDFIUM
-
-#endif // INCLUDED_SVX_SOURCE_SVDRAW_SVDFMTF_HXX
+#endif // INCLUDED_SVX_SOURCE_SVDRAW_SVDPDF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

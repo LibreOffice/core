@@ -2108,14 +2108,16 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
 
             if (pVectorGraphicData && pVectorGraphicData->getType() == VectorGraphicDataType::Pdf)
             {
-#if HAVE_FEATURE_PDFIUM
-                aLogicRect = pGraf->GetLogicRect();
-                ImpSdrPdfImport aFilter(*mpModel, pObj->GetLayer(), aLogicRect, aGraphic);
-                if (aGraphic.getPageNumber() < aFilter.GetPageCount())
+                auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+                if (pPdfium)
                 {
-                    nInsCnt = aFilter.DoImport(*pOL, nInsPos, aGraphic.getPageNumber(), pProgrInfo);
+                    aLogicRect = pGraf->GetLogicRect();
+                    ImpSdrPdfImport aFilter(*mpModel, pObj->GetLayer(), aLogicRect, aGraphic);
+                    if (aGraphic.getPageNumber() < aFilter.GetPageCount())
+                    {
+                        nInsCnt = aFilter.DoImport(*pOL, nInsPos, aGraphic.getPageNumber(), pProgrInfo);
+                    }
                 }
-#endif // HAVE_FEATURE_PDFIUM
             }
             else if (pGraf->HasGDIMetaFile() || pGraf->isEmbeddedVectorGraphicData() )
             {
