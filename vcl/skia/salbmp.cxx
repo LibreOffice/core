@@ -388,6 +388,7 @@ bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScale
     if (mEraseColorSet)
     { // Simple.
         mSize = mPixelsSize = newSize;
+        ComputeScanlineSize();
         EraseInternal(mEraseColor);
         return true;
     }
