@@ -1214,6 +1214,8 @@ public:
 
     virtual void set_item_menu(const OString& rIdent, weld::Menu* pMenu) override;
 
+    virtual void insert_item(int pos, const OUString& rId) override;
+
     virtual void insert_separator(int pos, const OUString& /*rId*/) override;
 
     virtual int get_n_items() const override;

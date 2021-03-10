@@ -8783,10 +8783,21 @@ public:
         return aFind->second->get_active();
     }
 
+    virtual void insert_item(int pos, const OUString& rId) override
+    {
+        OString sId = OUStringToOString(rId, RTL_TEXTENCODING_UTF8);
+        GtkToolItem* pItem = gtk_tool_button_new(nullptr, sId.getStr());
+        gtk_buildable_set_name(GTK_BUILDABLE(pItem), sId.getStr());
+        gtk_toolbar_insert(m_pToolbar, pItem, pos);
+        gtk_widget_show(GTK_WIDGET(pItem));
+        add_to_map(pItem, nullptr);
+    }
+
     virtual void insert_separator(int pos, const OUString& rId) override
     {
+        OString sId = OUStringToOString(rId, RTL_TEXTENCODING_UTF8);
         GtkToolItem* pItem = gtk_separator_tool_item_new();
-        gtk_buildable_set_name(GTK_BUILDABLE(pItem), OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr());
+        gtk_buildable_set_name(GTK_BUILDABLE(pItem), sId.getStr());
         gtk_toolbar_insert(m_pToolbar, pItem, pos);
         gtk_widget_show(GTK_WIDGET(pItem));
     }
@@ -16715,6 +16726,7 @@ public:
         if (m_pClosedEvent)
             Application::RemoveUserEvent(m_pClosedEvent);
         g_signal_handler_disconnect(m_pPopover, m_nSignalId);
+        signal_closed();
     }
 };
 

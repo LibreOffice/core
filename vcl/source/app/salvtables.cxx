@@ -971,6 +971,13 @@ void SalInstanceToolbar::set_item_menu(const OString& rIdent, weld::Menu* pMenu)
     m_aFloats[nId] = nullptr;
 }
 
+void SalInstanceToolbar::insert_item(int pos, const OUString& rId)
+{
+    ToolBoxItemId nId(pos);
+    m_xToolBox->InsertItem(nId, rId, ToolBoxItemBits::ICON_ONLY);
+    m_xToolBox->SetItemCommand(nId, rId);
+}
+
 void SalInstanceToolbar::insert_separator(int pos, const OUString& /*rId*/)
 {
     auto nInsertPos = pos == -1 ? ToolBox::APPEND : pos;
@@ -6643,6 +6650,8 @@ public:
         , m_xPopover(pPopover)
     {
     }
+
+    ~SalInstancePopover() { signal_closed(); }
 
     virtual void popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) override
     {

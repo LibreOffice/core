@@ -31,7 +31,6 @@
 #include <classes/fwkresid.hxx>
 #include <classes/resource.hxx>
 #include <strings.hrc>
-#include <framework/addonsoptions.hxx>
 #include <uielement/toolbarmerger.hxx>
 
 #include <com/sun/star/ui/ItemType.hpp>
@@ -63,6 +62,7 @@
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
 #include <vcl/event.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/syswin.hxx>
@@ -70,6 +70,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/weldutils.hxx>
 #include <tools/debug.hxx>
 
 #include <svtools/menuoptions.hxx>
@@ -132,6 +133,436 @@ sal_Int16 getCurrentImageType()
     return nImageType;
 }
 
+class VclToolBarManager : public ToolBarManagerImpl
+{
+    DECL_LINK(Click, ToolBox*, void);
+
+public:
+    VclToolBarManager(VclPtr<ToolBox> pToolbar)
+    : m_pToolBar(pToolbar)
+    , m_bAddedToTaskPaneList(true)
+    , m_pManager(nullptr)
+    {}
+
+    ~VclToolBarManager()
+    {
+        OSL_ASSERT( !m_bAddedToTaskPaneList );
+    }
+
+    virtual void Init() override
+    {
+        vcl::Window* pWindow = m_pToolBar;
+        while ( pWindow && !pWindow->IsSystemWindow() )
+            pWindow = pWindow->GetParent();
+
+        if ( pWindow )
+            static_cast<SystemWindow *>(pWindow)->GetTaskPaneList()->AddWindow( m_pToolBar );
+    }
+
+    virtual void Destroy() override
+    {
+        OSL_ASSERT( m_pToolBar != nullptr );
+        SolarMutexGuard g;
+        if ( m_bAddedToTaskPaneList )
+        {
+            vcl::Window* pWindow = m_pToolBar;
+            while ( pWindow && !pWindow->IsSystemWindow() )
+                pWindow = pWindow->GetParent();
+
+            if ( pWindow )
+                static_cast<SystemWindow *>(pWindow)->GetTaskPaneList()->RemoveWindow( m_pToolBar );
+            m_bAddedToTaskPaneList = false;
+        }
+
+        // Delete the additional add-ons data
+        for ( ToolBox::ImplToolItems::size_type i = 0; i < m_pToolBar->GetItemCount(); i++ )
+        {
+            ToolBoxItemId nItemId = m_pToolBar->GetItemId( i );
+            if ( nItemId > ToolBoxItemId(0) )
+                delete static_cast< AddonsParams* >( m_pToolBar->GetItemData( nItemId ));
+        }
+
+        // tdf#119390 this will reparent the toolbar, so focus is restored from a
+        // floating toolbar to the last focused control of the application window.
+        m_pToolBar->SetParentToDefaultWindow();
+        // #i93173# note we can still be in one of the toolbar's handlers
+        m_pToolBar->SetSelectHdl( Link<ToolBox *, void>() );
+        m_pToolBar->SetActivateHdl( Link<ToolBox *, void>() );
+        m_pToolBar->SetDeactivateHdl( Link<ToolBox *, void>() );
+        m_pToolBar->SetClickHdl( Link<ToolBox *, void>() );
+        m_pToolBar->SetDropdownClickHdl( Link<ToolBox *, void>() );
+        m_pToolBar->SetDoubleClickHdl( Link<ToolBox *, void>() );
+        m_pToolBar->SetStateChangedHdl( Link<StateChangedType const *, void>() );
+        m_pToolBar->SetDataChangedHdl( Link<DataChangedEvent const *, void>() );
+
+        m_pToolBar.disposeAndClear();
+    }
+
+    virtual css::uno::Reference<css::awt::XWindow> GetInterface() override
+    {
+        return VCLUnoHelper::GetInterface(m_pToolBar);
+    }
+
+    virtual css::uno::Reference<css::frame::XStatusListener> CreateToolBoxController(
+        const css::uno::Reference<css::frame::XFrame>& rFrame,
+        ToolBoxItemId nId,
+        const OUString& rCommandURL ) override
+    {
+        rtl::Reference<svt::ToolboxController> pController
+            = ::framework::CreateToolBoxController( rFrame, m_pToolBar, nId, rCommandURL );
+        css::uno::Reference<css::frame::XStatusListener> xListener;
+        if (pController)
+            xListener = pController;
+        return xListener;
+    }
+
+    virtual void ConnectCallbacks(ToolBarManager* pManager) override
+    {
+        m_pManager = pManager;
+        m_pToolBar->SetSelectHdl( LINK( pManager, ToolBarManager, Select) );
+        m_pToolBar->SetClickHdl( LINK( this, VclToolBarManager, Click ) );
+        m_pToolBar->SetDropdownClickHdl( LINK( pManager, ToolBarManager, DropdownClick ) );
+        m_pToolBar->SetDoubleClickHdl( LINK( pManager, ToolBarManager, DoubleClick ) );
+        m_pToolBar->SetStateChangedHdl( LINK( pManager, ToolBarManager, StateChanged ) );
+        m_pToolBar->SetDataChangedHdl( LINK( pManager, ToolBarManager, DataChanged ) );
+
+        m_pToolBar->SetMenuButtonHdl( LINK( pManager, ToolBarManager, MenuButton ) );
+        m_pToolBar->SetMenuExecuteHdl( LINK( pManager, ToolBarManager, MenuPreExecute ) );
+        m_pToolBar->GetMenu()->SetSelectHdl( LINK( pManager, ToolBarManager, MenuSelect ) );
+    }
+
+    virtual void InsertItem(ToolBoxItemId nId,
+                            const OUString& rString,
+                            const OUString& rCommandURL,
+                            const OUString& rTooltip,
+                            const OUString& rLabel,
+                            ToolBoxItemBits nItemBits) override
+    {
+        m_pToolBar->InsertItem( nId, rString, nItemBits );
+        m_pToolBar->SetItemCommand( nId, rCommandURL );
+        m_pToolBar->SetQuickHelpText(nId, rTooltip);
+        m_pToolBar->SetItemText( nId, rLabel );
+        m_pToolBar->EnableItem( nId );
+        m_pToolBar->SetItemState( nId, TRISTATE_FALSE );
+    }
+
+    virtual void InsertSeparator() override
+    {
+        m_pToolBar->InsertSeparator();
+    }
+
+    virtual void InsertSpace() override
+    {
+        m_pToolBar->InsertSpace();
+    }
+
+    virtual void InsertBreak() override
+    {
+        m_pToolBar->InsertBreak();
+    }
+
+    virtual ToolBoxItemId GetItemId(sal_uInt16 nPos) override
+    {
+        return m_pToolBar->GetItemId(nPos);
+    }
+
+    virtual ToolBoxItemId GetCurItemId() override
+    {
+        return m_pToolBar->GetCurItemId();
+    }
+
+    virtual OUString GetItemCommand(ToolBoxItemId nId) override
+    {
+        return m_pToolBar->GetItemCommand(nId);
+    }
+
+    virtual sal_uInt16 GetItemCount() override
+    {
+        return m_pToolBar->GetItemCount();
+    }
+
+    virtual void SetItemCheckable(ToolBoxItemId nId) override
+    {
+        m_pToolBar->SetItemBits( nId, m_pToolBar->GetItemBits( nId ) | ToolBoxItemBits::CHECKABLE );
+    }
+
+    virtual void HideItem(ToolBoxItemId nId, const OUString& /*rCommandURL*/) override
+    {
+        m_pToolBar->HideItem( nId );
+    }
+
+    virtual bool IsItemVisible(ToolBoxItemId nId, const OUString& /*rCommandURL*/) override
+    {
+        return m_pToolBar->IsItemVisible(nId);
+    }
+
+    virtual void Clear() override
+    {
+        m_pToolBar->Clear();
+    }
+
+    virtual void SetName(const OUString& rName) override
+    {
+        m_pToolBar->SetText( rName );
+    }
+
+    virtual void SetHelpId(const OString& rHelpId) override
+    {
+        m_pToolBar->SetHelpId( rHelpId );
+    }
+
+    virtual bool WillUsePopupMode() override
+    {
+        return m_pToolBar->WillUsePopupMode();
+    }
+
+    virtual bool IsReallyVisible() override
+    {
+        return m_pToolBar->IsReallyVisible();
+    }
+
+    virtual void SetIconSize(ToolBoxButtonSize eSize) override
+    {
+        m_pToolBar->SetToolboxButtonSize(eSize);
+    }
+
+    virtual vcl::ImageType GetImageSize() override
+    {
+        return m_pToolBar->GetImageSize();
+    }
+
+    virtual void SetMenuType(ToolBoxMenuType eType) override
+    {
+        m_pToolBar->SetMenuType( eType );
+    }
+
+    virtual void MergeToolbar(ToolBoxItemId nItemId,
+                              const OUString& rModuleIdentifier,
+                              CommandToInfoMap& rCommandMap,
+                              MergeToolbarInstruction& rInstruction) override
+    {
+        ReferenceToolbarPathInfo aRefPoint = ToolBarMerger::FindReferencePoint( m_pToolBar, rInstruction.aMergePoint );
+
+        // convert the sequence< sequence< propertyvalue > > structure to
+        // something we can better handle. A vector with item data
+        AddonToolbarItemContainer aItems;
+        ToolBarMerger::ConvertSeqSeqToVector( rInstruction.aMergeToolbarItems, aItems );
+
+        if ( aRefPoint.bResult )
+        {
+            ToolBarMerger::ProcessMergeOperation( m_pToolBar,
+                                                    aRefPoint.nPos,
+                                                    nItemId,
+                                                    rCommandMap,
+                                                    rModuleIdentifier,
+                                                    rInstruction.aMergeCommand,
+                                                    rInstruction.aMergeCommandParameter,
+                                                    aItems );
+        }
+        else
+        {
+            ToolBarMerger::ProcessMergeFallback( m_pToolBar,
+                                                    nItemId,
+                                                    rCommandMap,
+                                                    rModuleIdentifier,
+                                                    rInstruction.aMergeCommand,
+                                                    rInstruction.aMergeFallback,
+                                                    aItems );
+        }
+    }
+
+    virtual void SetItemImage(ToolBoxItemId nId,
+                              const OUString& /*rCommandURL*/,
+                              const Image& rImage) override
+    {
+        m_pToolBar->SetItemImage(nId, rImage);
+    }
+
+    virtual void UpdateSize() override
+    {
+        ::Size aSize = m_pToolBar->CalcWindowSizePixel();
+        m_pToolBar->SetOutputSizePixel( aSize );
+    }
+
+    virtual void SetItemWindow(ToolBoxItemId nItemId, vcl::Window* pNewWindow) override
+    {
+        m_pToolBar->SetItemWindow( nItemId, pNewWindow );
+    }
+
+private:
+    VclPtr<ToolBox> m_pToolBar;
+    bool m_bAddedToTaskPaneList;
+    ToolBarManager* m_pManager;
+};
+
+IMPL_LINK_NOARG(VclToolBarManager, Click, ToolBox*, void)
+{
+    m_pManager->OnClick();
+}
+
+class WeldToolBarManager : public ToolBarManagerImpl
+{
+    DECL_LINK(Click, const OString&, void);
+    DECL_LINK(ToggleMenuHdl, const OString&, void);
+
+public:
+    WeldToolBarManager(weld::Toolbar* pToolbar,
+                       weld::Builder* pBuilder)
+    : m_pWeldedToolBar(pToolbar)
+    , m_pBuilder(pBuilder)
+    , m_pManager(nullptr)
+    , m_nCurrentId(0)
+    {}
+
+    virtual void Init() override {}
+
+    virtual void Destroy() override {}
+
+    virtual css::uno::Reference<css::awt::XWindow> GetInterface() override
+    {
+        return new weld::TransportAsXWindow(m_pWeldedToolBar);
+    }
+
+    virtual css::uno::Reference<css::frame::XStatusListener> CreateToolBoxController(
+        const css::uno::Reference<css::frame::XFrame>& rFrame,
+        ToolBoxItemId /*nId*/,
+        const OUString& rCommandURL ) override
+    {
+        css::uno::Reference<css::frame::XToolbarController> xController
+            = ::framework::CreateWeldToolBoxController(rFrame, m_pWeldedToolBar, m_pBuilder, rCommandURL);
+        css::uno::Reference<css::frame::XStatusListener> xListener;
+        if (xController.is())
+            xListener = css::uno::Reference<css::frame::XStatusListener>( xController, UNO_QUERY );
+        return xListener;
+    }
+
+    virtual void ConnectCallbacks(ToolBarManager* pManager) override
+    {
+        m_pManager = pManager;
+        m_pWeldedToolBar->connect_clicked(LINK(this, WeldToolBarManager, Click));
+        m_pWeldedToolBar->connect_menu_toggled(LINK(this, WeldToolBarManager, ToggleMenuHdl));
+    }
+
+    virtual void InsertItem(ToolBoxItemId nId,
+                            const OUString& /*rString*/,
+                            const OUString& rCommandURL,
+                            const OUString& rTooltip,
+                            const OUString& rLabel,
+                            ToolBoxItemBits /*nItemBits*/) override
+    {
+        OString sId = OUStringToOString(rCommandURL, RTL_TEXTENCODING_UTF8);
+        m_aCommandToId[sId] = nId;
+        m_aIdToCommand[nId] = sId;
+        m_aCommandOrder.push_back(sId);
+
+        m_pWeldedToolBar->insert_item(m_aCommandOrder.size(), rCommandURL);
+        m_pWeldedToolBar->set_item_tooltip_text(sId, rTooltip);
+        m_pWeldedToolBar->set_item_label( sId, rLabel );
+        m_pWeldedToolBar->set_item_sensitive( sId, true );
+        m_pWeldedToolBar->set_item_active( sId, false );
+    }
+
+    virtual void InsertSeparator() override
+    {
+        m_pWeldedToolBar->append_separator("");
+    }
+
+    virtual void InsertSpace() override {}
+
+    virtual void InsertBreak() override {}
+
+    virtual ToolBoxItemId GetItemId(sal_uInt16 nPos) override
+    {
+        return m_aCommandToId[m_aCommandOrder[nPos]];
+    }
+
+    virtual ToolBoxItemId GetCurItemId() override
+    {
+        return m_nCurrentId;
+    }
+
+    virtual OUString GetItemCommand(ToolBoxItemId nId) override
+    {
+        return OStringToOUString(m_aIdToCommand[nId], RTL_TEXTENCODING_UTF8);
+    }
+
+    virtual sal_uInt16 GetItemCount() override
+    {
+        return m_aCommandOrder.size();
+    }
+
+    virtual void SetItemCheckable(ToolBoxItemId /*nId*/) override {}
+
+    virtual void HideItem(ToolBoxItemId /*nId*/, const OUString& rCommandURL) override
+    {
+        OString sId = OUStringToOString(rCommandURL, RTL_TEXTENCODING_UTF8);
+        m_pWeldedToolBar->set_item_visible(sId, false);
+    }
+
+    virtual bool IsItemVisible(ToolBoxItemId /*nId*/, const OUString& rCommandURL) override
+    {
+        OString sId = OUStringToOString(rCommandURL, RTL_TEXTENCODING_UTF8);
+        return m_pWeldedToolBar->get_item_visible(sId);
+    }
+
+    virtual void Clear() override {}
+
+    virtual void SetName(const OUString& /*rName*/) override {}
+
+    virtual void SetHelpId(const OString& /*rHelpId*/) override {}
+
+    virtual bool WillUsePopupMode() override { return true; }
+
+    virtual bool IsReallyVisible() override { return true; }
+
+    virtual void SetIconSize(ToolBoxButtonSize /*eSize*/) override {}
+
+    virtual vcl::ImageType GetImageSize() override
+    {
+        return vcl::ImageType::Size32;
+    }
+
+    virtual void SetMenuType(ToolBoxMenuType /*eType*/) override {}
+
+    virtual void MergeToolbar(ToolBoxItemId /*nItemId*/,
+                              const OUString& /*rModuleIdentifier*/,
+                              CommandToInfoMap& /*rCommandMap*/,
+                              MergeToolbarInstruction& /*rInstruction*/) override {}
+
+    virtual void SetItemImage(ToolBoxItemId /*nId*/,
+                              const OUString& rCommandURL,
+                              const Image& rImage) override
+    {
+        OString sId = OUStringToOString(rCommandURL, RTL_TEXTENCODING_UTF8);
+        m_pWeldedToolBar->set_item_image(sId, Graphic(rImage).GetXGraphic());
+    }
+
+    virtual void UpdateSize() override {}
+
+    virtual void SetItemWindow(ToolBoxItemId /*nItemId*/, vcl::Window* /*pNewWindow*/) override {}
+
+private:
+    weld::Toolbar* m_pWeldedToolBar;
+    weld::Builder* m_pBuilder;
+    ToolBarManager* m_pManager;
+    ToolBoxItemId m_nCurrentId;
+    std::map<const OString, ToolBoxItemId> m_aCommandToId;
+    std::map<ToolBoxItemId, OString> m_aIdToCommand;
+    std::vector<OString> m_aCommandOrder;
+};
+
+IMPL_LINK(WeldToolBarManager, Click, const OString&, rCommand, void)
+{
+    m_nCurrentId = m_aCommandToId[rCommand];
+    m_pManager->OnClick(true);
+}
+
+IMPL_LINK(WeldToolBarManager, ToggleMenuHdl, const OString&, rCommand, void)
+{
+    m_nCurrentId = m_aCommandToId[rCommand];
+    m_pManager->OnDropdownClick(false);
+}
+
 } // end anonymous namespace
 
 //  XInterface, XTypeProvider, XServiceInfo
@@ -141,10 +572,10 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
                                 const OUString& rResourceName,
                                 ToolBox* pToolBar ) :
     m_bDisposed( false ),
-    m_bAddedToTaskPaneList( true ),
     m_bFrameActionRegistered( false ),
     m_bUpdateControllers( false ),
     m_eSymbolSize(SvtMiscOptions().GetCurrentSymbolsSize()),
+    m_pImpl( new VclToolBarManager( pToolBar ) ),
     m_pToolBar( pToolBar ),
     m_aResourceName( rResourceName ),
     m_xFrame( rFrame ),
@@ -152,31 +583,44 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_xContext( rxContext ),
     m_sIconTheme( SvtMiscOptions().GetIconTheme() )
 {
+    Init();
+}
+
+ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
+                                const Reference< XFrame >& rFrame,
+                                const OUString& rResourceName,
+                                weld::Toolbar* pToolBar,
+                                weld::Builder* pBuilder ) :
+    m_bDisposed( false ),
+    m_bFrameActionRegistered( false ),
+    m_bUpdateControllers( false ),
+    m_eSymbolSize( SvtMiscOptions().GetCurrentSymbolsSize() ),
+    m_pImpl( new WeldToolBarManager( pToolBar, pBuilder ) ),
+    m_pToolBar( nullptr ),
+    m_aResourceName( rResourceName ),
+    m_xFrame( rFrame ),
+    m_aListenerContainer( m_mutex ),
+    m_xContext( rxContext ),
+    m_sIconTheme( SvtMiscOptions().GetIconTheme() )
+{
+    Init();
+}
+
+void ToolBarManager::Init()
+{
     OSL_ASSERT( m_xContext.is() );
-
-    vcl::Window* pWindow = m_pToolBar;
-    while ( pWindow && !pWindow->IsSystemWindow() )
-        pWindow = pWindow->GetParent();
-
-    if ( pWindow )
-        static_cast<SystemWindow *>(pWindow)->GetTaskPaneList()->AddWindow( m_pToolBar );
 
     m_xToolbarControllerFactory = frame::theToolbarControllerFactory::get( m_xContext );
     m_xURLTransformer = URLTransformer::create( m_xContext );
 
-    m_pToolBar->SetSelectHdl( LINK( this, ToolBarManager, Select) );
-    m_pToolBar->SetClickHdl( LINK( this, ToolBarManager, Click ) );
-    m_pToolBar->SetDropdownClickHdl( LINK( this, ToolBarManager, DropdownClick ) );
-    m_pToolBar->SetDoubleClickHdl( LINK( this, ToolBarManager, DoubleClick ) );
-    m_pToolBar->SetStateChangedHdl( LINK( this, ToolBarManager, StateChanged ) );
-    m_pToolBar->SetDataChangedHdl( LINK( this, ToolBarManager, DataChanged ) );
+    m_pImpl->ConnectCallbacks(this);
 
     if (m_eSymbolSize == SFX_SYMBOLS_SIZE_LARGE)
-        m_pToolBar->SetToolboxButtonSize(ToolBoxButtonSize::Large);
+        m_pImpl->SetIconSize(ToolBoxButtonSize::Large);
     else if (m_eSymbolSize == SFX_SYMBOLS_SIZE_32)
-        m_pToolBar->SetToolboxButtonSize(ToolBoxButtonSize::Size32);
+        m_pImpl->SetIconSize(ToolBoxButtonSize::Size32);
     else
-        m_pToolBar->SetToolboxButtonSize(ToolBoxButtonSize::Small);
+        m_pImpl->SetIconSize(ToolBoxButtonSize::Small);
 
     // enables a menu for clipped items and customization
     SvtCommandOptions aCmdOptions;
@@ -184,18 +628,15 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, "CreateDialog"))
          nMenuType |= ToolBoxMenuType::Customize;
 
-    m_pToolBar->SetMenuType( nMenuType );
-    m_pToolBar->SetMenuButtonHdl( LINK( this, ToolBarManager, MenuButton ) );
-    m_pToolBar->SetMenuExecuteHdl( LINK( this, ToolBarManager, MenuPreExecute ) );
-    m_pToolBar->GetMenu()->SetSelectHdl( LINK( this, ToolBarManager, MenuSelect ) );
+    m_pImpl->SetMenuType( nMenuType );
 
     // set name for testtool, the useful part is after the last '/'
-    sal_Int32 idx = rResourceName.lastIndexOf('/');
+    sal_Int32 idx = m_aResourceName.lastIndexOf('/');
     idx++; // will become 0 if '/' not found: use full string
     OString  aHelpIdAsString( ".HelpId:" );
-    OUString  aToolbarName = rResourceName.copy( idx );
+    OUString  aToolbarName = m_aResourceName.copy( idx );
     aHelpIdAsString += OUStringToOString( aToolbarName, RTL_TEXTENCODING_UTF8 );
-    m_pToolBar->SetHelpId( aHelpIdAsString );
+    m_pImpl->SetHelpId( aHelpIdAsString );
 
     m_aAsyncUpdateControllersTimer.SetTimeout( 50 );
     m_aAsyncUpdateControllersTimer.SetInvokeHandler( LINK( this, ToolBarManager, AsyncUpdateControllersHdl ) );
@@ -208,46 +649,11 @@ ToolBarManager::~ToolBarManager()
 {
     assert(!m_aAsyncUpdateControllersTimer.IsActive());
     assert(!m_pToolBar); // must be disposed by ToolbarLayoutManager
-    OSL_ASSERT( !m_bAddedToTaskPaneList );
 }
 
 void ToolBarManager::Destroy()
 {
-    OSL_ASSERT( m_pToolBar != nullptr );
-    SolarMutexGuard g;
-    if ( m_bAddedToTaskPaneList )
-    {
-        vcl::Window* pWindow = m_pToolBar;
-        while ( pWindow && !pWindow->IsSystemWindow() )
-            pWindow = pWindow->GetParent();
-
-        if ( pWindow )
-            static_cast<SystemWindow *>(pWindow)->GetTaskPaneList()->RemoveWindow( m_pToolBar );
-        m_bAddedToTaskPaneList = false;
-    }
-
-    // Delete the additional add-ons data
-    for ( ToolBox::ImplToolItems::size_type i = 0; i < m_pToolBar->GetItemCount(); i++ )
-    {
-        ToolBoxItemId nItemId = m_pToolBar->GetItemId( i );
-        if ( nItemId > ToolBoxItemId(0) )
-            delete static_cast< AddonsParams* >( m_pToolBar->GetItemData( nItemId ));
-    }
-
-    // tdf#119390 this will reparent the toolbar, so focus is restored from a
-    // floating toolbar to the last focused control of the application window.
-    m_pToolBar->SetParentToDefaultWindow();
-    // #i93173# note we can still be in one of the toolbar's handlers
-    m_pToolBar->SetSelectHdl( Link<ToolBox *, void>() );
-    m_pToolBar->SetActivateHdl( Link<ToolBox *, void>() );
-    m_pToolBar->SetDeactivateHdl( Link<ToolBox *, void>() );
-    m_pToolBar->SetClickHdl( Link<ToolBox *, void>() );
-    m_pToolBar->SetDropdownClickHdl( Link<ToolBox *, void>() );
-    m_pToolBar->SetDoubleClickHdl( Link<ToolBox *, void>() );
-    m_pToolBar->SetStateChangedHdl( Link<StateChangedType const *, void>() );
-    m_pToolBar->SetDataChangedHdl( Link<DataChangedEvent const *, void>() );
-
-    m_pToolBar.disposeAndClear();
+    m_pImpl->Destroy();
 
     SvtMiscOptions().RemoveListenerLink( LINK( this, ToolBarManager, MiscOptionsChanged ) );
 }
@@ -289,11 +695,11 @@ void ToolBarManager::RefreshImages()
     SolarMutexGuard g;
 
     if (m_eSymbolSize == SFX_SYMBOLS_SIZE_LARGE)
-        m_pToolBar->SetToolboxButtonSize(ToolBoxButtonSize::Large);
+        m_pImpl->SetIconSize(ToolBoxButtonSize::Large);
     else if (m_eSymbolSize == SFX_SYMBOLS_SIZE_32)
-        m_pToolBar->SetToolboxButtonSize(ToolBoxButtonSize::Size32);
+        m_pImpl->SetIconSize(ToolBoxButtonSize::Size32);
     else
-        m_pToolBar->SetToolboxButtonSize(ToolBoxButtonSize::Small);
+        m_pImpl->SetIconSize(ToolBoxButtonSize::Small);
 
     for ( auto const& it : m_aControllerMap )
     {
@@ -306,20 +712,19 @@ void ToolBarManager::RefreshImages()
         }
         else
         {
-            OUString aCommandURL = m_pToolBar->GetItemCommand( it.first );
-            vcl::ImageType eImageType = m_pToolBar->GetImageSize();
+            OUString aCommandURL = m_pImpl->GetItemCommand( it.first );
+            vcl::ImageType eImageType = m_pImpl->GetImageSize();
             Image aImage = vcl::CommandInfoProvider::GetImageForCommand(aCommandURL, m_xFrame, eImageType);
             // Try also to query for add-on images before giving up and use an
             // empty image.
             bool bBigImages = eImageType != vcl::ImageType::Size16;
             if ( !aImage )
                 aImage = Image(framework::AddonsOptions().GetImageFromURL(aCommandURL, bBigImages));
-            m_pToolBar->SetItemImage( it.first, aImage );
+            m_pImpl->SetItemImage( it.first, aCommandURL, aImage );
         }
     }
 
-    ::Size aSize = m_pToolBar->CalcWindowSizePixel();
-    m_pToolBar->SetOutputSizePixel( aSize );
+    m_pImpl->UpdateSize();
 }
 
 void ToolBarManager::UpdateControllers()
@@ -333,7 +738,7 @@ void ToolBarManager::UpdateControllers()
         if ( xFramePropSet.is() )
             a = xFramePropSet->getPropertyValue("LayoutManager");
         a >>= xLayoutManager;
-        Reference< XDockableWindow > xDockable( VCLUnoHelper::GetInterface( m_pToolBar ), UNO_QUERY );
+        Reference< XDockableWindow > xDockable( m_pImpl->GetInterface(), UNO_QUERY );
         if ( xLayoutManager.is() && xDockable.is() )
         {
             css::awt::Point aPoint;
@@ -605,10 +1010,10 @@ void ToolBarManager::setToolBarImage(const Image& rImage,
         const CommandToInfoMap::const_iterator& rIter)
 {
     const ::std::vector<ToolBoxItemId>& rIDs = rIter->second.aIds;
-    m_pToolBar->SetItemImage( rIter->second.nId, rImage );
+    m_pImpl->SetItemImage( rIter->second.nId, rIter->first, rImage );
     for (auto const& it : rIDs)
     {
-        m_pToolBar->SetItemImage(it, rImage);
+        m_pImpl->SetItemImage(it, rIter->first, rImage);
     }
 }
 
@@ -629,9 +1034,9 @@ void ToolBarManager::RemoveControllers()
     // destroyed by the dispose() at the XComponent. This is needed
     // as VCL code later tries to access the item window data in certain
     // dtors where the item window is already invalid!
-    for ( ToolBox::ImplToolItems::size_type i = 0; i < m_pToolBar->GetItemCount(); i++ )
+    for ( ToolBox::ImplToolItems::size_type i = 0; i < m_pImpl->GetItemCount(); i++ )
     {
-        ToolBoxItemId nItemId = m_pToolBar->GetItemId( i );
+        ToolBoxItemId nItemId = m_pImpl->GetItemId( i );
         if ( nItemId > ToolBoxItemId(0) )
         {
             Reference< XComponent > xComponent( m_aControllerMap[ nItemId ], UNO_QUERY );
@@ -645,7 +1050,7 @@ void ToolBarManager::RemoveControllers()
                 {
                 }
             }
-            m_pToolBar->SetItemWindow(nItemId, nullptr);
+            m_pImpl->SetItemWindow(nItemId, nullptr);
         }
     }
     m_aControllerMap.clear();
@@ -653,15 +1058,15 @@ void ToolBarManager::RemoveControllers()
 
 void ToolBarManager::CreateControllers()
 {
-    Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
+    Reference< XWindow > xToolbarWindow = m_pImpl->GetInterface();
 
     css::util::URL      aURL;
     bool                bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
     SvtCommandOptions   aCmdOptions;
 
-    for ( ToolBox::ImplToolItems::size_type i = 0; i < m_pToolBar->GetItemCount(); i++ )
+    for ( ToolBox::ImplToolItems::size_type i = 0; i < m_pImpl->GetItemCount(); i++ )
     {
-        ToolBoxItemId nId = m_pToolBar->GetItemId( i );
+        ToolBoxItemId nId = m_pImpl->GetItemId( i );
         if ( nId == ToolBoxItemId(0) )
             continue;
 
@@ -671,7 +1076,7 @@ void ToolBarManager::CreateControllers()
 
         rtl::Reference<svt::ToolboxController> pController;
 
-        OUString aCommandURL( m_pToolBar->GetItemCommand( nId ) );
+        OUString aCommandURL( m_pImpl->GetItemCommand( nId ) );
         // Command can be just an alias to another command.
         auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommandURL, m_aModuleIdentifier);
         OUString aRealCommandURL( vcl::CommandInfoProvider::GetRealCommandForCommand(aProperties) );
@@ -685,7 +1090,7 @@ void ToolBarManager::CreateControllers()
             if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aURL.Path ))
             {
                 m_aControllerMap[ nId ] = xController;
-                m_pToolBar->HideItem( nId );
+                m_pImpl->HideItem( nId, aCommandURL );
                 continue;
             }
         }
@@ -719,26 +1124,25 @@ void ToolBarManager::CreateControllers()
             bInit = false; // Initialization is done through the factory service
         }
 
-        if (( aCommandURL == ".uno:OpenUrl" ) && ( !m_pToolBar->IsItemVisible(nId)))
+        if (( aCommandURL == ".uno:OpenUrl" ) && ( !m_pImpl->IsItemVisible(nId, aCommandURL)))
             bCreate = false;
 
         if ( !xController.is() && bCreate )
         {
-            pController = CreateToolBoxController( m_xFrame, m_pToolBar, nId, aCommandURL );
-            if ( !pController )
+            xController = m_pImpl->CreateToolBoxController( m_xFrame, nId, aCommandURL );
+            if ( !xController )
             {
-
                 if ( aCommandURL.startsWith( ".uno:StyleApply?" ) )
                 {
                     xController.set( new StyleToolbarController( m_xContext, m_xFrame, aCommandURL ));
-                    m_pToolBar->SetItemBits( nId, m_pToolBar->GetItemBits( nId ) | ToolBoxItemBits::CHECKABLE );
+                    m_pImpl->SetItemCheckable( nId );
                 }
                 else if ( aCommandURL.startsWith( "private:resource/" ) )
                 {
                     xController.set( m_xContext->getServiceManager()->createInstanceWithContext(
                         "com.sun.star.comp.framework.GenericPopupToolbarController", m_xContext ), UNO_QUERY );
                 }
-                else if ( m_pToolBar->GetItemData( nId ) != nullptr )
+                else if ( m_pToolBar && m_pToolBar->GetItemData( nId ) != nullptr )
                 {
                     // retrieve additional parameters
                     OUString aControlType = static_cast< AddonsParams* >( m_pToolBar->GetItemData( nId ))->aControlType;
@@ -755,7 +1159,7 @@ void ToolBarManager::CreateControllers()
 
                     xController = xStatusListener;
                 }
-                else
+                else if (m_pToolBar)
                 {
                     xController.set(
                         new GenericToolbarController( m_xContext, m_xFrame, m_pToolBar, nId, aCommandURL ));
@@ -763,12 +1167,8 @@ void ToolBarManager::CreateControllers()
                     // Accessibility support: Set toggle button role for specific commands
                     sal_Int32 nProps = vcl::CommandInfoProvider::GetPropertiesForCommand(aCommandURL, m_aModuleIdentifier);
                     if ( nProps & UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON )
-                        m_pToolBar->SetItemBits( nId, m_pToolBar->GetItemBits( nId ) | ToolBoxItemBits::CHECKABLE );
+                        m_pImpl->SetItemCheckable( nId );
                 }
-            }
-            else if ( pController )
-            {
-                xController = pController;
             }
         }
 
@@ -846,9 +1246,9 @@ void ToolBarManager::CreateControllers()
                     if ( pItemWin )
                     {
                         WindowType nType = pItemWin->GetType();
-                        if ( nType == WindowType::LISTBOX || nType == WindowType::MULTILISTBOX || nType == WindowType::COMBOBOX )
+                        if ( m_pToolBar && (nType == WindowType::LISTBOX || nType == WindowType::MULTILISTBOX || nType == WindowType::COMBOBOX) )
                             pItemWin->SetAccessibleName( m_pToolBar->GetItemText( nId ) );
-                        m_pToolBar->SetItemWindow( nId, pItemWin );
+                        m_pImpl->SetItemWindow( nId, pItemWin );
                     }
                 }
             }
@@ -969,7 +1369,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     RemoveControllers();
 
     // reset and fill command map
-    m_pToolBar->Clear();
+    m_pImpl->Clear();
     m_aControllerMap.clear();
     m_aCommandMap.clear();
 
@@ -1017,23 +1417,14 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     OUString aString(vcl::CommandInfoProvider::GetLabelForCommand(aProperties));
 
                     ToolBoxItemBits nItemBits = ConvertStyleToToolboxItemBits( nStyle );
-                    m_pToolBar->InsertItem( nId, aString, nItemBits );
-                    m_pToolBar->SetItemCommand( nId, aCommandURL );
-                    if ( !aTooltip.isEmpty() )
-                        m_pToolBar->SetQuickHelpText(nId, aTooltip);
-                    else
-                        m_pToolBar->SetQuickHelpText(nId, vcl::CommandInfoProvider::GetTooltipForCommand(aCommandURL, aProperties, m_xFrame));
 
-                    if ( !aLabel.isEmpty() )
-                    {
-                        m_pToolBar->SetItemText( nId, aLabel );
-                    }
-                    else
-                    {
-                        m_pToolBar->SetItemText( nId, aString );
-                    }
-                    m_pToolBar->EnableItem( nId );
-                    m_pToolBar->SetItemState( nId, TRISTATE_FALSE );
+                    if ( aTooltip.isEmpty() )
+                        aTooltip = vcl::CommandInfoProvider::GetTooltipForCommand(aCommandURL, aProperties, m_xFrame);
+
+                    if ( aLabel.isEmpty() )
+                        aLabel = aString;
+
+                    m_pImpl->InsertItem(nId, aString, aCommandURL, aTooltip, aLabel, nItemBits);
 
                     // Fill command map. It stores all our commands and from what
                     // image manager we got our image. So we can decide if we have to use an
@@ -1050,21 +1441,21 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     }
 
                     if ( !bIsVisible )
-                        m_pToolBar->HideItem( nId );
+                        m_pImpl->HideItem( nId, aCommandURL );
 
                     ++nId;
                 }
                 else if ( nType == css::ui::ItemType::SEPARATOR_LINE )
                 {
-                    m_pToolBar->InsertSeparator();
+                    m_pImpl->InsertSeparator();
                 }
                 else if ( nType == css::ui::ItemType::SEPARATOR_SPACE )
                 {
-                    m_pToolBar->InsertSpace();
+                    m_pImpl->InsertSpace();
                 }
                 else if ( nType == css::ui::ItemType::SEPARATOR_LINEBREAK )
                 {
-                    m_pToolBar->InsertBreak();
+                    m_pImpl->InsertBreak();
                 }
             }
         }
@@ -1097,34 +1488,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
             MergeToolbarInstruction& rInstruction = aMergeInstructionContainer[i];
             if ( ToolBarMerger::IsCorrectContext( rInstruction.aMergeContext, m_aModuleIdentifier ))
             {
-                ReferenceToolbarPathInfo aRefPoint = ToolBarMerger::FindReferencePoint( m_pToolBar, rInstruction.aMergePoint );
-
-                // convert the sequence< sequence< propertyvalue > > structure to
-                // something we can better handle. A vector with item data
-                AddonToolbarItemContainer aItems;
-                ToolBarMerger::ConvertSeqSeqToVector( rInstruction.aMergeToolbarItems, aItems );
-
-                if ( aRefPoint.bResult )
-                {
-                    ToolBarMerger::ProcessMergeOperation( m_pToolBar,
-                                                          aRefPoint.nPos,
-                                                          nItemId,
-                                                          m_aCommandMap,
-                                                          m_aModuleIdentifier,
-                                                          rInstruction.aMergeCommand,
-                                                          rInstruction.aMergeCommandParameter,
-                                                          aItems );
-                }
-                else
-                {
-                    ToolBarMerger::ProcessMergeFallback( m_pToolBar,
-                                                         nItemId,
-                                                         m_aCommandMap,
-                                                         m_aModuleIdentifier,
-                                                         rInstruction.aMergeCommand,
-                                                         rInstruction.aMergeFallback,
-                                                         aItems );
-                }
+                m_pImpl->MergeToolbar(nItemId, m_aModuleIdentifier, m_aCommandMap, rInstruction);
             }
         }
     }
@@ -1139,9 +1503,9 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
     // Notify controllers that they are now correctly initialized and can start listening
     // toolbars that will open in popup mode will be updated immediately to avoid flickering
-    if( m_pToolBar->WillUsePopupMode() )
+    if( m_pImpl->WillUsePopupMode() )
         UpdateControllers();
-    else if ( m_pToolBar->IsReallyVisible() )
+    else if ( m_pImpl->IsReallyVisible() )
     {
         m_aAsyncUpdateControllersTimer.Start();
     }
@@ -1157,7 +1521,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         OUString aUIName;
         xPropSet->getPropertyValue("UIName") >>= aUIName;
         if ( !aUIName.isEmpty() )
-            m_pToolBar->SetText( aUIName );
+            m_pImpl->SetName( aUIName );
     }
     catch (const Exception&)
     {
@@ -1166,6 +1530,9 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
 void ToolBarManager::FillAddonToolbar( const Sequence< Sequence< PropertyValue > >& rAddonToolbar )
 {
+    if (!m_pToolBar)
+        return;
+
     SolarMutexGuard g;
 
     if ( m_bDisposed )
@@ -1244,6 +1611,9 @@ void ToolBarManager::FillAddonToolbar( const Sequence< Sequence< PropertyValue >
 
 void ToolBarManager::FillOverflowToolbar( ToolBox const * pParent )
 {
+    if (!m_pToolBar)
+        return;
+
     CommandInfo aCmdInfo;
     bool bInsertSeparator = false;
     for ( ToolBox::ImplToolItems::size_type i = 0; i < pParent->GetItemCount(); ++i )
@@ -1387,37 +1757,14 @@ void ToolBarManager::notifyRegisteredControllers( const OUString& aUIElementName
     }
 }
 
-void ToolBarManager::HandleClick(void ( SAL_CALL XToolbarController::*_pClick )())
+void ToolBarManager::HandleClick(ClickAction eClickAction)
 {
     SolarMutexGuard g;
 
     if ( m_bDisposed )
         return;
 
-    ToolBoxItemId nId( m_pToolBar->GetCurItemId() );
-    ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
-    if ( pIter != m_aControllerMap.end() )
-    {
-        Reference< XToolbarController > xController( pIter->second, UNO_QUERY );
-
-        if ( xController.is() )
-            (xController.get()->*_pClick)( );
-    }
-}
-
-IMPL_LINK_NOARG(ToolBarManager, Click, ToolBox *, void)
-{
-    HandleClick(&XToolbarController::click);
-}
-
-IMPL_LINK_NOARG(ToolBarManager, DropdownClick, ToolBox *, void)
-{
-    SolarMutexGuard g;
-
-    if ( m_bDisposed )
-        return;
-
-    ToolBoxItemId nId( m_pToolBar->GetCurItemId() );
+    ToolBoxItemId nId( m_pImpl->GetCurItemId() );
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
     if ( pIter != m_aControllerMap.end() )
     {
@@ -1425,16 +1772,69 @@ IMPL_LINK_NOARG(ToolBarManager, DropdownClick, ToolBox *, void)
 
         if ( xController.is() )
         {
-            Reference< XWindow > xWin = xController->createPopupWindow();
-            if ( xWin.is() )
-                xWin->setFocus();
+            switch (eClickAction)
+            {
+                case ClickAction::Click:
+                    xController->click();
+                    break;
+
+                case ClickAction::DblClick:
+                    xController->doubleClick();
+                    break;
+
+                case ClickAction::Execute:
+                    xController->execute(0);
+                    break;
+            }
+        }
+    }
+}
+
+void ToolBarManager::OnClick(bool bUseExecute)
+{
+    if (bUseExecute)
+        HandleClick(ClickAction::Execute);
+    else
+        HandleClick(ClickAction::Click);
+}
+
+IMPL_LINK_NOARG(ToolBarManager, DropdownClick, ToolBox *, void)
+{
+    OnDropdownClick(true);
+}
+
+void ToolBarManager::OnDropdownClick(bool bCreatePopupWindow)
+{
+    SolarMutexGuard g;
+
+    if ( m_bDisposed )
+        return;
+
+    ToolBoxItemId nId( m_pImpl->GetCurItemId() );
+    ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
+    if ( pIter != m_aControllerMap.end() )
+    {
+        Reference< XToolbarController > xController( pIter->second, UNO_QUERY );
+
+        if ( xController.is() )
+        {
+            if (bCreatePopupWindow)
+            {
+                Reference< XWindow > xWin = xController->createPopupWindow();
+                if ( xWin.is() )
+                    xWin->setFocus();
+            }
+            else
+            {
+                xController->click();
+            }
         }
     }
 }
 
 IMPL_LINK_NOARG(ToolBarManager, DoubleClick, ToolBox *, void)
 {
-    HandleClick(&XToolbarController::doubleClick);
+    HandleClick(ClickAction::DblClick);
 }
 
 Reference< XModel > ToolBarManager::GetModelFromFrame() const
@@ -1467,6 +1867,9 @@ bool ToolBarManager::IsPluginMode() const
 
 void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
 {
+    if (!m_pToolBar)
+        return;
+
     // No config menu entries if command ".uno:ConfigureDialog" is not enabled
     Reference< XDispatch > xDisp;
     css::util::URL aURL;

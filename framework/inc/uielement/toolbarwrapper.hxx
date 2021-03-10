@@ -25,6 +25,13 @@
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+namespace weld
+{
+    class Builder;
+    class Container;
+    class Toolbar;
+}
+
 namespace framework
 {
 
@@ -69,6 +76,10 @@ class ToolBarWrapper final : public css::ui::XUIFunctionListener,
 
         css::uno::Reference< css::lang::XComponent >            m_xToolBarManager;
         css::uno::Reference< css::uno::XComponentContext >      m_xContext;
+
+        std::unique_ptr<weld::Builder>                          m_xBuilder;
+        std::unique_ptr<weld::Container>                        m_xTopLevel;
+        std::unique_ptr<weld::Toolbar>                          m_xWeldedToolbar;
 };
 
 }

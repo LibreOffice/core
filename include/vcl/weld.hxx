@@ -2323,6 +2323,7 @@ public:
         = 0;
     virtual void set_item_image(const OString& rIdent, VirtualDevice* pDevice) = 0;
 
+    virtual void insert_item(int pos, const OUString& rId) = 0;
     virtual void insert_separator(int pos, const OUString& rId) = 0;
     void append_separator(const OUString& rId) { insert_separator(-1, rId); }
 

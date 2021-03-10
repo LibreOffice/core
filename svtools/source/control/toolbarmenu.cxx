@@ -115,7 +115,7 @@ WeldToolbarPopup::WeldToolbarPopup(const css::uno::Reference<css::frame::XFrame>
                                    weld::Widget* pParent, const OUString& rUIFile,
                                    const OString& rId)
     : m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
-    , m_xTopLevel(m_xBuilder->weld_container(rId))
+    , m_xTopLevel(m_xBuilder->weld_popover(rId))
     , m_xContainer(m_xBuilder->weld_container("container"))
     , m_xFrame(rFrame)
 {
