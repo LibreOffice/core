@@ -780,6 +780,11 @@ bool SdrPaintView::KeyInput(const KeyEvent& /*rKEvt*/, vcl::Window* /*pWin*/)
 
 void SdrPaintView::GlueInvalidate() const
 {
+    // Do not invalidate GluePoints in Online
+    // They are handled on front-end
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     const sal_uInt32 nWindowCount(PaintWindowCount());
 
     for(sal_uInt32 nWinNum(0); nWinNum < nWindowCount; nWinNum++)
