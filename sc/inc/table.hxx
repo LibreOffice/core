@@ -953,7 +953,7 @@ public:
     bool        CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
 
     void GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, ScFilterEntries& rFilterEntries );
-    void GetFilteredFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, ScFilterEntries& rFilterEntries );
+    void GetFilteredFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, ScFilterEntries& rFilterEntries, bool bFiltering );
     [[nodiscard]]
     bool GetDataEntries(SCCOL nCol, SCROW nRow, std::set<ScTypedStrData>& rStrings, bool bLimit);
 

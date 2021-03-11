@@ -44,7 +44,7 @@ public:
 
     static void GetInputString(
         const ScRefCellValue& rCell, sal_uInt32 nFormat, OUString& rString, SvNumberFormatter& rFormatter,
-        const ScDocument& rDoc );
+        const ScDocument& rDoc, bool bFiltering = false );
 
     static OUString GetOutputString(
         ScDocument& rDoc, const ScAddress& rPos, const ScRefCellValue& rCell );
