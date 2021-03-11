@@ -46,6 +46,30 @@
       "revId": "79d33cf8ced78f3d528804e5426482dbe7993ac1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "311047eb_ace78202",
+        "filename": "sw/source/uibase/utlui/attrdesc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-11T06:54:25Z",
+      "side": 1,
+      "message": "\u003e %STYLEFAMILY does not exist at present\n\nWhat you mean?\n\n\u003e shouldn\u0027t we do it optimally?\n\nI\u0027d say, let\u0027s do it; it will avoid extra needless translators\u0027 work, because they won\u0027t translate half-made intermediate change just to re-translate after it is done correctly.",
+      "parentUuid": "380c3829_a5216dfe",
+      "range": {
+        "startLine": 194,
+        "startChar": 13,
+        "endLine": 194,
+        "endChar": 14
+      },
+      "revId": "79d33cf8ced78f3d528804e5426482dbe7993ac1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
