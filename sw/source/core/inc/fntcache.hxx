@@ -60,19 +60,9 @@ void SwClearFntCacheTextGlyphs();
 extern SwFntCache *pFntCache;
 extern SwFntObj *pLastFont;
 
-/**
- * Defines a substring on a given output device, to be used as an std::map<>
- * key.
- */
-struct SwTextGlyphsKey
-{
-    VclPtr<OutputDevice> m_pOutputDevice;
-    OUString m_aText;
-    sal_Int32 m_nIndex;
-    sal_Int32 m_nLength;
-
-};
+struct SwTextGlyphsKey;
 bool operator<(const SwTextGlyphsKey& l, const SwTextGlyphsKey& r);
+struct SwTextGlyphsData;
 
 class SwFntObj : public SwCacheObj
 {
@@ -95,8 +85,8 @@ class SwFntObj : public SwCacheObj
     bool m_bSymbol : 1;
     bool m_bPaintBlank : 1;
 
-    /// Cache of already calculated layout glyphs.
-    std::map<SwTextGlyphsKey, SalLayoutGlyphs> m_aTextGlyphs;
+    /// Cache of already calculated layout glyphs and text widths.
+    std::map<SwTextGlyphsKey, SwTextGlyphsData> m_aTextGlyphs;
 
     static tools::Long nPixWidth;
     static MapMode *pPixMap;
@@ -125,7 +115,10 @@ public:
     sal_uInt16   GetZoom() const { return m_nZoom; }
     sal_uInt16   GetPropWidth() const { return m_nPropWidth; }
     bool     IsSymbol() const { return m_bSymbol; }
-    std::map<SwTextGlyphsKey, SalLayoutGlyphs>& GetTextGlyphs() { return m_aTextGlyphs; }
+
+    tools::Long GetCachedTextWidth(const SwTextGlyphsKey& key, const vcl::TextLayoutCache* vclCache);
+    SalLayoutGlyphs* GetCachedSalLayoutGlyphs(const SwTextGlyphsKey& key);
+    void ClearCachedTextGlyphs();
 
     void   DrawText( SwDrawTextInfo &rInf );
     /// determine the TextSize (of the printer)
