@@ -460,7 +460,7 @@ void SvxMacroTabPage_::GenericHandler_Impl(SvxMacroTabPage_* pThis, const weld::
     else if( bAssEnabled )
     {
         // assign pressed
-        SvxScriptSelectorDialog aDlg(pThis->GetFrameWeld(), false, pThis->GetFrame());
+        SvxScriptSelectorDialog aDlg(pThis->GetFrameWeld(), pThis->GetFrame());
         short ret = aDlg.run();
         if ( ret )
         {
