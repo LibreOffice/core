@@ -3265,7 +3265,7 @@ void FormController::startFiltering()
                     // create a filter control
                     Reference< XControl > xFilterControl = form::control::FilterControl::createWithFormat(
                         m_xComponentContext,
-                        VCLUnoHelper::GetInterface( getDialogParentWindow() ),
+                        VCLUnoHelper::GetInterface( getDialogParentWindow(this) ),
                         xFormatter,
                         xModel);
 
@@ -3435,7 +3435,6 @@ Sequence< OUString > SAL_CALL FormController::getSupportedModes()
     return aModes;
 }
 
-
 sal_Bool SAL_CALL FormController::supportsMode(const OUString& Mode)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -3445,14 +3444,12 @@ sal_Bool SAL_CALL FormController::supportsMode(const OUString& Mode)
     return comphelper::findValue(aModes, Mode) != -1;
 }
 
-
-vcl::Window* FormController::getDialogParentWindow()
+vcl::Window* FormController::getDialogParentWindow(css::uno::Reference<css::form::runtime::XFormController> xFormController)
 {
-    OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
     vcl::Window* pParentWindow = nullptr;
     try
     {
-        Reference< XControl > xContainerControl( getContainer(), UNO_QUERY_THROW );
+        Reference< XControl > xContainerControl( xFormController->getContainer(), UNO_QUERY_THROW );
         Reference< XWindowPeer > xContainerPeer( xContainerControl->getPeer(), UNO_SET_THROW );
         pParentWindow = VCLUnoHelper::GetWindow( xContainerPeer );
     }
@@ -3621,7 +3618,7 @@ sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent
     {
         Reference< XControl > xControl( locateControl( xInvalidModel ) );
         aGuard.clear();
-        displayErrorSetFocus( sInvalidityExplanation, xControl, getDialogParentWindow() );
+        displayErrorSetFocus( sInvalidityExplanation, xControl, getDialogParentWindow(this) );
         return false;
     }
 
@@ -3667,7 +3664,7 @@ sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent
                 xControl.set( rColInfo.xFirstGridWithInputRequiredColumn, UNO_QUERY );
 
             aGuard.clear();
-            displayErrorSetFocus( sMessage, rColInfo.xFirstControlWithInputRequired, getDialogParentWindow() );
+            displayErrorSetFocus( sMessage, rColInfo.xFirstControlWithInputRequired, getDialogParentWindow(this) );
             return false;
         }
     }
@@ -3749,7 +3746,7 @@ void SAL_CALL FormController::errorOccured(const SQLErrorEvent& aEvent)
     else
     {
         aGuard.clear();
-        displayException(aEvent, getDialogParentWindow());
+        displayException(aEvent, getDialogParentWindow(this));
     }
 }
 
@@ -4121,7 +4118,7 @@ bool FormController::ensureInteractionHandler()
     m_bAttemptedHandlerCreation = true;
 
     m_xInteractionHandler = InteractionHandler::createWithParent(m_xComponentContext,
-                                                                 VCLUnoHelper::GetInterface(getDialogParentWindow()));
+                                                                 VCLUnoHelper::GetInterface(getDialogParentWindow(this)));
     return m_xInteractionHandler.is();
 }
 
