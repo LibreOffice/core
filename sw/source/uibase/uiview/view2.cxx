@@ -1989,24 +1989,6 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     }
                 }
             }
-            else
-            {
-
-                if( !rSh.IsAddMode() && !rSh.IsExtMode() && !rSh.IsBlockMode() )
-                    rSh.ToggleExtMode();
-                else if ( rSh.IsExtMode() )
-                {
-                    rSh.ToggleExtMode();
-                    rSh.ToggleAddMode();
-                }
-                else if ( rSh.IsAddMode() )
-                {
-                    rSh.ToggleAddMode();
-                    rSh.ToggleBlockMode();
-                }
-                else
-                    rSh.ToggleBlockMode();
-            }
             bUp = true;
             break;
         }
