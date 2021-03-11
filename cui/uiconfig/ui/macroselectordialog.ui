@@ -38,23 +38,9 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="add">
-                <property name="label" translatable="yes" context="macroselectordialog|add">Add</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="no_show_all">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkButton" id="ok">
                 <property name="label" translatable="yes" context="stock">_OK</property>
+                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
@@ -71,6 +57,7 @@
             <child>
               <object class="GtkButton" id="cancel">
                 <property name="label" translatable="yes" context="stock">_Cancel</property>
+                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
@@ -80,20 +67,6 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="close">
-                <property name="label" translatable="yes" context="stock">_Close</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="no_show_all">True</property>
-                <property name="use-underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -141,22 +114,6 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="helptoolbar">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="hexpand">True</property>
-                <property name="label" translatable="yes" context="macroselectordialog|helptoolbar">To add a command to a toolbar, select the category and then the command. Then drag the command to the Commands list of the Toolbars tab page in the Customize dialog.</property>
-                <property name="wrap">True</property>
-                <property name="max_width_chars">60</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -219,39 +176,13 @@
                       </object>
                     </child>
                     <child type="label">
-                      <object class="GtkBox" id="box3">
+                      <object class="GtkLabel" id="libraryft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <child>
-                          <object class="GtkLabel" id="libraryft">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="macroselectordialog|libraryft">Library</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"/>
-                            </attributes>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="categoryft">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="macroselectordialog|categoryft">Category</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"/>
-                            </attributes>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
+                        <property name="label" translatable="yes" context="macroselectordialog|libraryft">Library</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                     </child>
                   </object>
@@ -306,41 +237,14 @@
                       </object>
                     </child>
                     <child type="label">
-                      <object class="GtkBox" id="box4">
+                      <object class="GtkLabel" id="macronameft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <child>
-                          <object class="GtkLabel" id="macronameft">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="macroselectordialog|macronameft">Macro Name</property>
-                            <property name="track_visited_links">False</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"/>
-                            </attributes>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="commandsft">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="macroselectordialog|commandsft">Commands</property>
-                            <property name="track_visited_links">False</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"/>
-                            </attributes>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
+                        <property name="label" translatable="yes" context="macroselectordialog|macronameft">Macro Name</property>
+                        <property name="track_visited_links">False</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                     </child>
                   </object>
@@ -413,10 +317,8 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="101">add</action-widget>
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
-      <action-widget response="-7">close</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
     <child type="titlebar">

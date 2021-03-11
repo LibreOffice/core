@@ -238,9 +238,7 @@ class SvxScriptSelectorDialog : public weld::GenericDialogController
     std::unique_ptr<CuiConfigGroupListBox> m_xCategories;
     std::unique_ptr<CuiConfigFunctionListBox> m_xCommands;
     std::unique_ptr<weld::Label> m_xLibraryFT;
-    std::unique_ptr<weld::Label> m_xCategoryFT;
     std::unique_ptr<weld::Label> m_xMacronameFT;
-    std::unique_ptr<weld::Label> m_xCommandsFT;
     std::unique_ptr<weld::Button> m_xOKButton;
     std::unique_ptr<weld::Button> m_xCancelButton;
     std::unique_ptr<weld::TextView> m_xDescriptionText;

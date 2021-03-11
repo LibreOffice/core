@@ -1077,9 +1077,7 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     , m_xCategories(new CuiConfigGroupListBox(m_xBuilder->weld_tree_view("categories")))
     , m_xCommands(new CuiConfigFunctionListBox(m_xBuilder->weld_tree_view("commands")))
     , m_xLibraryFT(m_xBuilder->weld_label("libraryft"))
-    , m_xCategoryFT(m_xBuilder->weld_label("categoryft"))
     , m_xMacronameFT(m_xBuilder->weld_label("macronameft"))
-    , m_xCommandsFT(m_xBuilder->weld_label("commandsft"))
     , m_xOKButton(m_xBuilder->weld_button("ok"))
     , m_xCancelButton(m_xBuilder->weld_button("cancel"))
     , m_xDescriptionText(m_xBuilder->weld_text_view("description"))
@@ -1089,9 +1087,7 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     m_xOKButton->show();
 
     m_xLibraryFT->set_visible(true);
-    m_xCategoryFT->set_visible(false);
     m_xMacronameFT->set_visible(true);
-    m_xCommandsFT->set_visible(false);
 
     const OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
     m_xCategories->SetFunctionListBox(m_xCommands.get());
@@ -1120,6 +1116,9 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     m_xCategories->SetStylesInfo(&m_aStylesInfo);
 
     UpdateUI();
+
+    if (comphelper::LibreOfficeKit::isActive())
+        m_xDescriptionText->hide();
 }
 
 SvxScriptSelectorDialog::~SvxScriptSelectorDialog()
