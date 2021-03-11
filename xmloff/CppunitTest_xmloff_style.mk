@@ -13,6 +13,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,xmloff_style))
 
 $(eval $(call gb_CppunitTest_use_externals,xmloff_style,\
 	boost_headers \
+	libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,xmloff_style, \
@@ -26,6 +27,7 @@ $(eval $(call gb_CppunitTest_use_libraries,xmloff_style, \
     sal \
     test \
     unotest \
+    utl \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,xmloff_style))
