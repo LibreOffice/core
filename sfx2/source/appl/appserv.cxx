@@ -52,7 +52,6 @@
 
 #include <unotools/configmgr.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
@@ -572,7 +571,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
-                pHelp->Start(".uno:HelpIndex", Application::GetDefDialogParent()); // show start page
+                pHelp->Start(".uno:HelpIndex", rReq.GetFrameWeld()); // show start page
                 bDone = true;
             }
             break;
