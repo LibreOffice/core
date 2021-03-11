@@ -112,6 +112,10 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/controls/unocontrolcontainermodel \
     toolkit/source/controls/unocontrolmodel \
     toolkit/source/controls/unocontrols \
+    toolkit/source/hatchwindow/documentcloser \
+    toolkit/source/hatchwindow/hatchwindow \
+    toolkit/source/hatchwindow/hatchwindowfactory \
+    toolkit/source/hatchwindow/ipwin \
     toolkit/source/helper/accessibilityclient \
     toolkit/source/helper/btndlg \
     toolkit/source/helper/formpdfexport \
