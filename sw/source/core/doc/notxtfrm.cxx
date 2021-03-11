@@ -973,60 +973,10 @@ void paintGraphicUsingPrimitivesHelper(
 
         if(0 != aClip.count())
         {
-            // tdf#114076: Expand ClipRange to next PixelBound
-            // Do this by going to basegfx::B2DRange, adding a
-            // single pixel size and using floor/ceil to go to
-            // full integer (as needed for pixels). Also need
-            // to go back to basegfx::B2DPolyPolygon for the
-            // creation of the needed MaskPrimitive2D.
-            // The general problem is that Writer is scrolling
-            // using blitting the unchanged parts, this forces
-            // this part of the scroll to pixel coordinate steps,
-            // while the ViewTransformation for paint nowadays has
-            // a sub-pixel precision. This results in an offset
-            // up to one pixel in radius. To solve this for now,
-            // we need to expand to the next outer pixel bound.
-            // Hopefully in the future we will someday be able to
-            // stay on the full available precision, but this
-            // will need a change in the repaint/scroll paradigm.
-            const basegfx::B2DRange aClipRange(aClip.getB2DRange());
-            const basegfx::B2DVector aSinglePixelXY(rOutputDevice.GetInverseViewTransformation() * basegfx::B2DVector(1.0, 1.0));
-            const basegfx::B2DRange aExpandedClipRange(
-                floor(aClipRange.getMinX() - aSinglePixelXY.getX()),
-                floor(aClipRange.getMinY() - aSinglePixelXY.getY()),
-                ceil(aClipRange.getMaxX() + aSinglePixelXY.getX()),
-                ceil(aClipRange.getMaxY() + aSinglePixelXY.getY()));
-
-            // create the enclosing rectangle as polygon
-            basegfx::B2DPolyPolygon aTarget(basegfx::utils::createPolygonFromRect(aExpandedClipRange));
-
-            // tdf#124272 the fix above (tdf#114076) was too rough - the
-            // clip region used may be a PolyPolygon. In that case that
-            // PolyPolygon would have to be scaled to mentioned PixelBounds.
-            // Since that is not really possible geometrically (would need
-            // more some 'grow in outside direction' but with unequal grow
-            // values in all directions - just maaany problems
-            // involved), use a graphical trick: The topology of the
-            // PolyPolygon uses the standard FillRule, so adding the now
-            // guaranteed to be bigger or equal bounding (enclosing)
-            // rectangle twice as polygon will expand the BoundRange, but
-            // not change the geometry visualization at all
-            if(!rOutputDevice.GetClipRegion().IsRectangle())
-            {
-                // double the outer rectangle range polygon to have it
-                // included twice
-                aTarget.append(aTarget.getB2DPolygon(0));
-
-                // add the original clip 'inside' (due to being smaller
-                // or equal). That PolyPolygon may have an unknown number
-                // of polygons (>=1)
-                aTarget.append(aClip);
-            }
-
             rContent.resize(1);
             rContent[0] =
                 new drawinglayer::primitive2d::MaskPrimitive2D(
-                    aTarget,
+                    aClip,
                     rContent);
         }
     }
