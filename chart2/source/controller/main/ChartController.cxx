@@ -48,7 +48,9 @@
 #include <ViewElementListProvider.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/servicehelper.hxx>
 
+#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/frame/XController2.hpp>
@@ -66,7 +68,6 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <svx/sidebar/SelectionChangeHandler.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -424,12 +425,9 @@ void SAL_CALL ChartController::attachFrame(
     //get the window parent from the frame to use as parent for our new window
     if(xFrame.is())
     {
-        uno::Reference< awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
-        VCLXWindow* pParentComponent = comphelper::getUnoTunnelImplementation<VCLXWindow>(xContainerWindow);
-        assert(pParentComponent);
-        if (pParentComponent)
-            pParentComponent->setVisible(true);
-
+        uno::Reference<awt::XWindow> xContainerWindow = xFrame->getContainerWindow();
+        if (xContainerWindow)
+            xContainerWindow->setVisible(true);
         pParent = VCLUnoHelper::GetWindow( xContainerWindow );
     }
 
