@@ -22,6 +22,30 @@
       "revId": "578b1b2ac5154eb5bfde17bcadc355125d34f937",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c21dbcca_0c9753c8",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-03-11T10:13:05Z",
+      "side": 1,
+      "message": "Thanks. Started with ALLCAPS, then changed for readability. \nSTYLENAME is more readable; LISTSTYLENAME removes ambiguity.",
+      "parentUuid": "a6877a1e_3d4bedb9",
+      "range": {
+        "startLine": 1129,
+        "startChar": 85,
+        "endLine": 1129,
+        "endChar": 98
+      },
+      "revId": "578b1b2ac5154eb5bfde17bcadc355125d34f937",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
