@@ -577,7 +577,7 @@ void FmXFormView::displayAsyncErrorMessage( const SQLErrorEvent& _rEvent )
 IMPL_LINK_NOARG(FmXFormView, OnDelayedErrorMessage, void*, void)
 {
     m_nErrorMessageEvent = nullptr;
-    displayException(m_aAsyncError, VCLUnoHelper::GetWindow(GetParentWindow()));
+    displayException(m_aAsyncError, GetParentWindow());
 }
 
 void FmXFormView::onFirstViewActivation( const FmFormModel* _pDocModel )

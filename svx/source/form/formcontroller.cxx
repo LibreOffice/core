@@ -82,7 +82,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/window.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
@@ -3265,7 +3264,7 @@ void FormController::startFiltering()
                     // create a filter control
                     Reference< XControl > xFilterControl = form::control::FilterControl::createWithFormat(
                         m_xComponentContext,
-                        VCLUnoHelper::GetInterface( getDialogParentWindow(this) ),
+                        getDialogParentWindow(this),
                         xFormatter,
                         xModel);
 
@@ -3444,20 +3443,19 @@ sal_Bool SAL_CALL FormController::supportsMode(const OUString& Mode)
     return comphelper::findValue(aModes, Mode) != -1;
 }
 
-vcl::Window* FormController::getDialogParentWindow(css::uno::Reference<css::form::runtime::XFormController> xFormController)
+css::uno::Reference<css::awt::XWindow> FormController::getDialogParentWindow(css::uno::Reference<css::form::runtime::XFormController> xFormController)
 {
-    vcl::Window* pParentWindow = nullptr;
     try
     {
         Reference< XControl > xContainerControl( xFormController->getContainer(), UNO_QUERY_THROW );
-        Reference< XWindowPeer > xContainerPeer( xContainerControl->getPeer(), UNO_SET_THROW );
-        pParentWindow = VCLUnoHelper::GetWindow( xContainerPeer );
+        Reference<XWindow> xContainerWindow(xContainerControl->getPeer(), UNO_QUERY_THROW);
+        return xContainerWindow;
     }
     catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("svx");
     }
-    return pParentWindow;
+    return nullptr;
 }
 
 bool FormController::checkFormComponentValidity( OUString& /* [out] */ _rFirstInvalidityExplanation, Reference< XControlModel >& /* [out] */ _rxFirstInvalidModel )
@@ -3529,12 +3527,13 @@ Reference< XControl > FormController::locateControl( const Reference< XControlMo
 
 namespace
 {
-    void displayErrorSetFocus( const OUString& _rMessage, const Reference< XControl >& _rxFocusControl, vcl::Window* _pDialogParent )
+    void displayErrorSetFocus(const OUString& _rMessage, const Reference<XControl>& _rxFocusControl,
+                              const css::uno::Reference<css::awt::XWindow>& rDialogParent)
     {
         SQLContext aError;
         aError.Message = SvxResId(RID_STR_WRITEERROR);
         aError.Details = _rMessage;
-        displayException( aError, _pDialogParent );
+        displayException(aError, rDialogParent);
 
         if ( _rxFocusControl.is() )
         {
@@ -4118,7 +4117,7 @@ bool FormController::ensureInteractionHandler()
     m_bAttemptedHandlerCreation = true;
 
     m_xInteractionHandler = InteractionHandler::createWithParent(m_xComponentContext,
-                                                                 VCLUnoHelper::GetInterface(getDialogParentWindow(this)));
+                                                                 getDialogParentWindow(this));
     return m_xInteractionHandler.is();
 }
 

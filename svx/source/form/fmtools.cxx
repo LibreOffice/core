@@ -83,8 +83,7 @@ namespace
     }
 }
 
-
-void displayException(const Any& _rExcept, vcl::Window* _pParent)
+void displayException(const Any& _rExcept, const css::uno::Reference<css::awt::XWindow>& rParent)
 {
     // check whether we need to display it
     if ( !lcl_shouldDisplayError( _rExcept ) )
@@ -92,11 +91,7 @@ void displayException(const Any& _rExcept, vcl::Window* _pParent)
 
     try
     {
-        // the parent window
-        vcl::Window* pParentWindow = _pParent ? _pParent : Application::GetDefDialogParent();
-        Reference< XWindow > xParentWindow = VCLUnoHelper::GetInterface(pParentWindow);
-
-        Reference< XExecutableDialog > xErrorDialog = ErrorMessageDialog::create(::comphelper::getProcessComponentContext(), "", xParentWindow, _rExcept);
+        Reference< XExecutableDialog > xErrorDialog = ErrorMessageDialog::create(::comphelper::getProcessComponentContext(), "", rParent, _rExcept);
         xErrorDialog->execute();
     }
     catch(const Exception&)
@@ -105,24 +100,20 @@ void displayException(const Any& _rExcept, vcl::Window* _pParent)
     }
 }
 
-
-void displayException(const css::sdbc::SQLException& _rExcept, vcl::Window* _pParent)
+void displayException(const css::sdbc::SQLException& _rExcept, const css::uno::Reference<css::awt::XWindow>& rParent)
 {
-    displayException(makeAny(_rExcept), _pParent);
+    displayException(makeAny(_rExcept), rParent);
 }
 
-
-void displayException(const css::sdb::SQLContext& _rExcept, vcl::Window* _pParent)
+void displayException(const css::sdb::SQLContext& _rExcept, const css::uno::Reference<css::awt::XWindow>& rParent)
 {
-    displayException(makeAny(_rExcept), _pParent);
+    displayException(makeAny(_rExcept), rParent);
 }
 
-
-void displayException(const css::sdb::SQLErrorEvent& _rEvent, vcl::Window* _pParent)
+void displayException(const css::sdb::SQLErrorEvent& _rEvent, const css::uno::Reference<css::awt::XWindow>& rParent)
 {
-    displayException(_rEvent.Reason, _pParent);
+    displayException(_rEvent.Reason, rParent);
 }
-
 
 sal_Int32 getElementPos(const Reference< css::container::XIndexAccess>& xCont, const Reference< XInterface >& xElement)
 {
