@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "415ac1a8_03bcab73",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2987,
+      "author": {
+        "id": 1003033
+      },
+      "writtenOn": "2021-03-11T15:46:43Z",
+      "side": 1,
+      "message": "In case you are concerned that this changes behavior of macros (e.g. evaluating a null object as false instead of true) note that you can\u0027t just insert a conditional jump into your macro - there\u0027s no equivalent of asm(). The BASIC contexts where it actually would evaluate as a Boolean, e.g. an IF statement, will have an error if you put an object variable there, both before and after this change. \"Incorrect property value.\"",
+      "revId": "6edba8f295c07e0854689919a9e36449c9d314a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
