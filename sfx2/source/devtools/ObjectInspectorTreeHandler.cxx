@@ -736,6 +736,11 @@ ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
     mpPropertiesTreeView->connect_changed(LINK(this, ObjectInspectorTreeHandler, SelectionChanged));
     mpMethodsTreeView->connect_changed(LINK(this, ObjectInspectorTreeHandler, SelectionChanged));
 
+    mpInterfacesTreeView->make_sorted();
+    mpServicesTreeView->make_sorted();
+    mpPropertiesTreeView->make_sorted();
+    mpMethodsTreeView->make_sorted();
+
     mpObjectInspectorToolbar->connect_clicked(
         LINK(this, ObjectInspectorTreeHandler, ToolbarButtonClicked));
     mpObjectInspectorToolbar->set_item_sensitive("inspect", false);
