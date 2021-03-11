@@ -406,7 +406,19 @@ void XMLFontAutoStylePool::exportXML()
     if (m_bEmbedUsedOnly)
         aUsedFontNames = getUsedFontList();
 
+    // Sort <style:font-face> elements based on their style:name attribute.
+    std::vector<XMLFontAutoStylePoolEntry_Impl*> aFontAutoStyles;
     for (const auto& pEntry : *m_pFontAutoStylePool)
+    {
+        aFontAutoStyles.push_back(pEntry.get());
+    }
+    std::sort(
+        aFontAutoStyles.begin(), aFontAutoStyles.end(),
+        [](const XMLFontAutoStylePoolEntry_Impl* pA, XMLFontAutoStylePoolEntry_Impl* pB) -> bool {
+            return pA->GetName() < pB->GetName();
+        });
+
+    for (const auto& pEntry : aFontAutoStyles)
     {
         GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_NAME, pEntry->GetName());
 
