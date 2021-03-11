@@ -177,7 +177,6 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
             size_t aRowSizeBytes = png_get_rowbytes(pPng, pInfo);
 
             aBitmap = Bitmap(Size(width, height), 24);
-            aBitmap.Erase(COL_WHITE);
             {
                 pWriteAccess = BitmapScopedWriteAccess(aBitmap);
                 ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
@@ -215,7 +214,6 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
             if (bUseBitmap32)
             {
                 aBitmap = Bitmap(Size(width, height), 32);
-                aBitmap.Erase(COL_WHITE);
                 {
                     pWriteAccess = BitmapScopedWriteAccess(aBitmap);
                     ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
@@ -264,8 +262,6 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
             {
                 aBitmap = Bitmap(Size(width, height), 24);
                 aBitmapAlpha = AlphaMask(Size(width, height), nullptr);
-                aBitmap.Erase(COL_WHITE);
-                aBitmapAlpha.Erase(0xff); // transparent
                 {
                     pWriteAccess = BitmapScopedWriteAccess(aBitmap);
                     ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
