@@ -18,6 +18,7 @@
  */
 
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/XControl.hpp>
@@ -34,7 +35,6 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/window.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -144,25 +144,16 @@ namespace drawinglayer::primitive2d
 
                                 if(xControl.is())
                                 {
-                                    uno::Reference< awt::XWindowPeer > xWindowPeer(xControl->getPeer());
+                                    uno::Reference<awt::XWindowPeer> xWindowPeer(xControl->getPeer());
 
-                                    if(xWindowPeer.is())
+                                    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindowPeer);
+                                    if (pWindow)
                                     {
-                                        VCLXWindow* pVCLXWindow = comphelper::getUnoTunnelImplementation<VCLXWindow>(xWindowPeer);
+                                        pWindow = pWindow->GetParent();
 
-                                        if(pVCLXWindow)
+                                        if(pWindow && MapUnit::Map100thMM == pWindow->GetMapMode().GetMapUnit())
                                         {
-                                            VclPtr<vcl::Window> pWindow = pVCLXWindow->GetWindow();
-
-                                            if(pWindow)
-                                            {
-                                                pWindow = pWindow->GetParent();
-
-                                                if(pWindow && MapUnit::Map100thMM == pWindow->GetMapMode().GetMapUnit())
-                                                {
-                                                    bUserIs100thmm = true;
-                                                }
-                                            }
+                                            bUserIs100thmm = true;
                                         }
                                     }
                                 }
