@@ -409,6 +409,7 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorageStream(const css::uno::Ref
     catch(const uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION("xmlsecurity.helper");
+        mbError = true;
     }
 
     mpXSecController->releaseSignatureReader();
