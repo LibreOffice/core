@@ -22,6 +22,30 @@
       "revId": "87e478300c5a4365bdf534070e476a94da144fc5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2da5131f_f6408cb1",
+        "filename": "include/sfx2/docfile.hxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-11T00:30:07Z",
+      "side": 1,
+      "message": "Removed the addref/releases because they aren\u0027t really used (the SfxMedium is deleted without checking refs)",
+      "parentUuid": "b17093dd_40abe4ef",
+      "range": {
+        "startLine": 329,
+        "startChar": 12,
+        "endLine": 329,
+        "endChar": 19
+      },
+      "revId": "87e478300c5a4365bdf534070e476a94da144fc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
