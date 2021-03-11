@@ -4920,6 +4920,21 @@ void Test::testAutoFill()
         CPPUNIT_ASSERT_EQUAL(aExpected, aFormula);
     }
 
+    // Clear column A for a new test.
+    clearRange(m_pDoc, ScRange(0,0,0,0,MAXROW,0));
+    m_pDoc->SetRowHidden(0, MAXROW, 0, false); // Show all rows.
+
+    m_pDoc->SetString( 0, 100, 0, "2012-10-31" );
+    m_pDoc->SetString( 0, 101, 0, "2012-10-31" );
+    m_pDoc->Fill( 0, 100, 0, 101, nullptr, aMarkData, 3, FILL_TO_BOTTOM, FILL_AUTO );
+
+    // tdf#89754, Without the fix in place, this test would have failed with
+    // - Expected: 2012-10-31
+    // - Actual  : 2012-11-01
+    CPPUNIT_ASSERT_EQUAL( OUString("2012-10-31"), m_pDoc->GetString( 0, 102, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("2012-10-31"), m_pDoc->GetString( 0, 103, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("2012-10-31"), m_pDoc->GetString( 0, 104, 0 ) );
+
     m_pDoc->DeleteTab(0);
 }
 
