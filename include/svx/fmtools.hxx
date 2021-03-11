@@ -33,6 +33,7 @@
 #include <o3tl/sorted_vector.hxx>
 #include <set>
 
+namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::container { class XIndexAccess; }
 namespace com::sun::star::container { class XNameAccess; }
@@ -42,17 +43,16 @@ namespace com::sun::star::sdbc { class SQLException; }
 namespace com::sun::star::sdbc { class XRowSet; }
 namespace com::sun::star::sdb { class SQLContext; }
 namespace com::sun::star::sdb { struct SQLErrorEvent; }
-namespace vcl { class Window; }
 
 
 // common types
 
 // displaying a database exception for the user
 // display info about a simple css::sdbc::SQLException
-void displayException(const css::sdbc::SQLException&, vcl::Window* _pParent);
-SVXCORE_DLLPUBLIC void displayException(const css::sdb::SQLContext&, vcl::Window* _pParent);
-void displayException(const css::sdb::SQLErrorEvent&, vcl::Window* _pParent);
-void displayException(const css::uno::Any&, vcl::Window* _pParent);
+void displayException(const css::sdbc::SQLException&, const css::uno::Reference<css::awt::XWindow>& rParent);
+SVXCORE_DLLPUBLIC void displayException(const css::sdb::SQLContext&, const css::uno::Reference<css::awt::XWindow>& rParent);
+void displayException(const css::sdb::SQLErrorEvent&, const css::uno::Reference<css::awt::XWindow>& rParent);
+void displayException(const css::uno::Any&, const css::uno::Reference<css::awt::XWindow>& rParent);
 
 sal_Int32 getElementPos(const css::uno::Reference< css::container::XIndexAccess>& xCont, const css::uno::Reference< css::uno::XInterface>& xElement);
 
