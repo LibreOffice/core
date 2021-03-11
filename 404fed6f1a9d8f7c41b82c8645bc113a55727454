@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0dc60abe_236a1c7d",
+        "filename": "svx/source/form/fmview.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-03-11T15:57:27Z",
+      "side": 1,
+      "message": "though I suppose now that I think about it that it could also be possible to have a local solution here instead of a global one in vcl. Something like OApplicationIconControl::DoKeyShortCut does, loop over the form controls here and use vcl::I18nHelper::MatchMnemonic to see which one should be activated, just a thought in passing.",
+      "revId": "404fed6f1a9d8f7c41b82c8645bc113a55727454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
