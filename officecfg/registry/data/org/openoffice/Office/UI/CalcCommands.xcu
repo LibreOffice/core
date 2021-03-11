@@ -1704,7 +1704,7 @@
           <value xml:lang="en-US">Format ~Page...</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Page...</value>
+          <value xml:lang="en-US">~Page Style...</value>
         </prop>
         <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">Format Pa~ge...</value>
