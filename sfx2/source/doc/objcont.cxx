@@ -26,7 +26,6 @@
 #include <comphelper/fileurl.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/window.hxx>
 #include <svl/style.hxx>
 
 #include <svl/intitem.hxx>
@@ -523,8 +522,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
             else if ( bCanUpdateFromTemplate == document::UpdateDocMode::ACCORDING_TO_CONFIG )
             {
                 const OUString sMessage( SfxResId(STR_QRYTEMPL_MESSAGE).replaceAll( "$(ARG1)", aTemplName ) );
-                vcl::Window *pWin = GetDialogParent();
-                QueryTemplateBox aBox(pWin ? pWin->GetFrameWeld() : nullptr, sMessage);
+                QueryTemplateBox aBox(Application::GetFrameWeld(GetDialogParent()), sMessage);
                 if (RET_YES == aBox.run())
                     bLoad = true;
             }
