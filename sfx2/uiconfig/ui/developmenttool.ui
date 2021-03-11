@@ -168,7 +168,6 @@
                         <property name="vexpand">True</property>
                         <property name="model">object_inspector_interfaces_liststore</property>
                         <property name="search-column">0</property>
-                        <property name="show-expanders">False</property>
                         <property name="enable-tree-lines">True</property>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
