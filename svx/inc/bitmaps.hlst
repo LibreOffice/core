@@ -145,7 +145,10 @@
 #define BMP_SQUARE                                  "svx/res/symphony/Square.png"
 #define BMP_LINEAR                                  "svx/res/symphony/linear.png"
 
-#define RID_SVXBMP_SELECTION                        "svx/res/selection_10x22.png"
+#define RID_SVXBMP_STANDARD_SELECTION               "svx/res/standard-selection_10x22.png"
+#define RID_SVXBMP_EXTENDING_SELECTION              "svx/res/extending-selection_10x22.png"
+#define RID_SVXBMP_ADDING_SELECTION                 "svx/res/adding-selection_10x22.png"
+#define RID_SVXBMP_BLOCK_SELECTION                  "svx/res/block-selection_10x22.png"
 #define RID_SVXBMP_POSITION                         "res/sc10223.png"
 #define RID_SVXBMP_SIZE                             "res/sc10224.png"
 #define RID_SVXBMP_SIGNET                           "svx/res/signet_11x16.png"
