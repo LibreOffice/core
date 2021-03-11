@@ -149,6 +149,7 @@ private:
     void UndirtyMrkPnt() const;
 
     void SetMarkHandlesForLOKit(tools::Rectangle const & rRect, SfxViewShell* pOtherShell);
+    bool dumpGluePointsToJSON(boost::property_tree::ptree& rTree);
 
 protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
