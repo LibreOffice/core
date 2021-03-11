@@ -1924,7 +1924,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     // pNewTextAttr comes back with the real format
     SwTextAttr *pNewTextAttr = nullptr;
     rDoc.getIDocumentContentOperations().InsertPoolItem(rPam, rMark, nInsertFlags,
-            /*pLayout*/nullptr, /*bExpandCharToPara*/false, &pNewTextAttr);
+            /*pLayout*/nullptr, &pNewTextAttr);
     if (bMark && *rPam.GetPoint() > *rPam.GetMark())
     {
         rPam.Exchange();

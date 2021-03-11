@@ -1039,21 +1039,6 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
 
         aNumFormat.SetCharFormat( pFormat );
     }
-    //Ensure the default char fmt is initialized for any level of num ruler if no customized attr
-    else
-    {
-        SwCharFormat* pFormat = aNumFormat.GetCharFormat();
-        if ( !pFormat)
-        {
-            const OUString aName( (!sPrefix.isEmpty() ? sPrefix : rNumRule.GetName())
-                                  + "z" + OUString::number( nLevel ) );
-
-            pFormat = rDoc.MakeCharFormat(aName, rDoc.GetDfltCharFormat());
-            bNewCharFormatCreated = true;
-            rCharFormat[ nLevel ] = pFormat;
-            aNumFormat.SetCharFormat( pFormat );
-        }
-    }
 
     // if necessary: Append Bullet Font to NumFormat
 

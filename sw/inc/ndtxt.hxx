@@ -203,7 +203,6 @@ public:
     std::unique_ptr<SwWrongList> ReleaseSmartTags();
     SwWrongList* GetSmartTags();
     SwWrongList const* GetSmartTags() const;
-    void TryCharSetExpandToNum(const SfxItemSet& pCharSet);
 
     /// End: Data collected during idle time
 

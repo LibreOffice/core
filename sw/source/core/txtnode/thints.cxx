@@ -1821,67 +1821,6 @@ bool SwTextNode::IsIgnoredCharFormatForNumbering(const sal_uInt16 nWhich, bool b
             || nWhich == RES_CHRATR_ESCAPEMENT);
 }
 
-//In MS Word, following properties of the paragraph end position won't affect the formatting of bullets, so we ignore them:
-//Font underline;
-//Font Italic of Western, CJK and CTL;
-//Font Bold of Wertern, CJK and CTL;
-static bool lcl_IsIgnoredCharFormatForBullets(const sal_uInt16 nWhich)
-{
-    return (nWhich == RES_CHRATR_UNDERLINE || nWhich == RES_CHRATR_POSTURE || nWhich == RES_CHRATR_WEIGHT
-        || nWhich == RES_CHRATR_CJK_POSTURE || nWhich == RES_CHRATR_CJK_WEIGHT
-        || nWhich == RES_CHRATR_CTL_POSTURE || nWhich == RES_CHRATR_CTL_WEIGHT);
-}
-
-//Condition for expanding char set to character style of specified number rule level:
-//The item inside the set should not conflict to any exist and non-default item inside paragraph properties set (SwContentNode::SwPAttrSet);
-//The node should have applied a number rule;
-//The node should be counted in a list, if not, make it to be;
-//The item should not conflict to any exist and non-default item inside the character of specified number rule level;
-//The item should not be ignored depend on the exact number rule type;
-void SwTextNode::TryCharSetExpandToNum(const SfxItemSet& aCharSet)
-{
-    SfxItemIter aIter( aCharSet );
-    const SfxPoolItem* pItem = aIter.GetCurItem();
-    if (!pItem)
-        return;
-    const sal_uInt16 nWhich = pItem->Which();
-
-    const SfxPoolItem& rInnerItem = GetAttr(nWhich,false);
-
-    if (!IsDefaultItem(&rInnerItem) &&  !IsInvalidItem(&rInnerItem))
-        return;
-
-    if (!IsInList() && GetNumRule() && !GetListId().isEmpty())
-    {
-        return;
-    }
-
-    SwNumRule* pCurrNum = GetNumRule(false);
-
-    int nLevel = GetActualListLevel();
-
-    if (!(nLevel != -1 && pCurrNum))
-        return;
-
-    const SwNumFormat* pCurrNumFormat = pCurrNum->GetNumFormat(o3tl::narrowing<sal_uInt16>(nLevel));
-    if (!pCurrNumFormat)
-        return;
-
-    if (pCurrNumFormat->IsItemize() && lcl_IsIgnoredCharFormatForBullets(nWhich))
-        return;
-    if (pCurrNumFormat->IsEnumeration() && SwTextNode::IsIgnoredCharFormatForNumbering(nWhich))
-        return;
-    SwCharFormat* pCurrCharFormat =pCurrNumFormat->GetCharFormat();
-
-    if (pCurrCharFormat && pCurrCharFormat->GetItemState(nWhich,false) != SfxItemState::SET)
-    {
-        pCurrCharFormat->SetFormatAttr(*pItem);
-        SwNumFormat aNewNumFormat(*pCurrNumFormat);
-        aNewNumFormat.SetCharFormat(pCurrCharFormat);
-        pCurrNum->Set(nLevel,aNewNumFormat);
-    }
-}
-
 // Set these attributes on SwTextNode.  If they apply to the entire paragraph
 // text, set them in the SwTextNode's item set (SwContentNode::SetAttr).
 bool SwTextNode::SetAttr(
