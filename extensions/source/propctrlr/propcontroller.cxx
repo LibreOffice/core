@@ -38,7 +38,7 @@
 #include <com/sun/star/util/VetoException.hpp>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <toolkit/awt/vclxwindow.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
@@ -344,8 +344,7 @@ namespace pcr
         }
         else
         {
-            VCLXWindow* pContainerWindow = comphelper::getUnoTunnelImplementation<VCLXWindow>(xContainerWindow);
-            VclPtr<vcl::Window> pParentWin = pContainerWindow ? pContainerWindow->GetWindow() : nullptr;
+            VclPtr<vcl::Window> pParentWin = VCLUnoHelper::GetWindow(xContainerWindow);
             if (!pParentWin)
                 throw RuntimeException("The frame is invalid. Unable to extract the container window.",*this);
             xBuilder.reset(Application::CreateInterimBuilder(pParentWin, sUIFile, true));
