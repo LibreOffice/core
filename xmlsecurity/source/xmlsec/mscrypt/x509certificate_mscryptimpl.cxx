@@ -661,7 +661,7 @@ static bool EncodeDistinguishedName(std::u16string_view const rName, CERT_NAME_B
             reinterpret_cast<LPCWSTR>(rName.data()), CERT_X500_NAME_STR,
             nullptr, nullptr, &rBlob.cbData, &pszError))
     {
-        SAL_INFO("xmlsecurity.xmlsec", "CertStrToNameW failed: " << WindowsErrorString(GetLastError()) << "; " << reinterpret_cast<char16_t const*>(pszError));
+        SAL_INFO("xmlsecurity.xmlsec", "CertStrToNameW failed: " << WindowsErrorString(GetLastError()) << "; " << OUString(o3tl::toU(pszError)));
         return false;
     }
     rBlob.pbData = new BYTE[rBlob.cbData];
@@ -669,7 +669,7 @@ static bool EncodeDistinguishedName(std::u16string_view const rName, CERT_NAME_B
             reinterpret_cast<LPCWSTR>(rName.data()), CERT_X500_NAME_STR,
             nullptr, rBlob.pbData, &rBlob.cbData, &pszError))
     {
-        SAL_INFO("xmlsecurity.xmlsec", "CertStrToNameW failed: " << WindowsErrorString(GetLastError()) << "; " << reinterpret_cast<char16_t const*>(pszError));
+        SAL_INFO("xmlsecurity.xmlsec", "CertStrToNameW failed: " << WindowsErrorString(GetLastError()) << "; " << OUString(o3tl::toU(pszError)));
         return false;
     }
     return true;
