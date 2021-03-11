@@ -234,15 +234,12 @@ class SvxScriptSelectorDialog : public weld::GenericDialogController
 {
     OUString                               m_sDefaultDesc;
     SfxStylesInfo_Impl                     m_aStylesInfo;
-    bool                                   m_bShowSlots;
 
     std::unique_ptr<weld::Label> m_xDialogDescription;
     std::unique_ptr<CuiConfigGroupListBox> m_xCategories;
     std::unique_ptr<CuiConfigFunctionListBox> m_xCommands;
     std::unique_ptr<weld::Label> m_xLibraryFT;
-    std::unique_ptr<weld::Label> m_xCategoryFT;
     std::unique_ptr<weld::Label> m_xMacronameFT;
-    std::unique_ptr<weld::Label> m_xCommandsFT;
     std::unique_ptr<weld::Button> m_xOKButton;
     std::unique_ptr<weld::Button> m_xCancelButton;
     std::unique_ptr<weld::TextView> m_xDescriptionText;
@@ -254,7 +251,7 @@ class SvxScriptSelectorDialog : public weld::GenericDialogController
     void                            UpdateUI();
 
 public:
-    SvxScriptSelectorDialog(weld::Window* pParent, bool bShowSlots,
+    SvxScriptSelectorDialog(weld::Window* pParent,
                             const css::uno::Reference< css::frame::XFrame >& xFrame);
     virtual ~SvxScriptSelectorDialog() override;
 

@@ -1050,37 +1050,27 @@ void CuiConfigGroupListBox::SelectMacro( const OUString& rBasic,
  */
 
 SvxScriptSelectorDialog::SvxScriptSelectorDialog(
-    weld::Window* pParent, bool bShowSlots, const css::uno::Reference< css::frame::XFrame >& xFrame)
+    weld::Window* pParent, const css::uno::Reference< css::frame::XFrame >& xFrame)
     : GenericDialogController(pParent, "cui/ui/macroselectordialog.ui", "MacroSelectorDialog")
-    , m_bShowSlots(bShowSlots)
-    , m_xDialogDescription(m_xBuilder->weld_label(bShowSlots ? "helptoolbar" : "helpmacro"))
+    , m_xDialogDescription(m_xBuilder->weld_label("helpmacro"))
     , m_xCategories(new CuiConfigGroupListBox(m_xBuilder->weld_tree_view("categories")))
     , m_xCommands(new CuiConfigFunctionListBox(m_xBuilder->weld_tree_view("commands")))
     , m_xLibraryFT(m_xBuilder->weld_label("libraryft"))
-    , m_xCategoryFT(m_xBuilder->weld_label("categoryft"))
     , m_xMacronameFT(m_xBuilder->weld_label("macronameft"))
-    , m_xCommandsFT(m_xBuilder->weld_label("commandsft"))
-    , m_xOKButton(m_xBuilder->weld_button(bShowSlots ? "add" : "ok"))
-    , m_xCancelButton(m_xBuilder->weld_button(bShowSlots ? "close" : "cancel"))
+    , m_xOKButton(m_xBuilder->weld_button("ok"))
+    , m_xCancelButton(m_xBuilder->weld_button("cancel"))
     , m_xDescriptionText(m_xBuilder->weld_text_view("description"))
 {
-    if (m_bShowSlots)
-    {
-        // If we are showing Slot API commands update labels in the UI
-        m_xDialog->set_title(CuiResId(RID_SVXSTR_SELECTOR_ADD_COMMANDS));
-    }
     m_xCancelButton->show();
     m_xDialogDescription->show();
     m_xOKButton->show();
 
-    m_xLibraryFT->set_visible(!m_bShowSlots);
-    m_xCategoryFT->set_visible(m_bShowSlots);
-    m_xMacronameFT->set_visible(!m_bShowSlots);
-    m_xCommandsFT->set_visible(m_bShowSlots);
+    m_xLibraryFT->set_visible(true);
+    m_xMacronameFT->set_visible(true);
 
     const OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
     m_xCategories->SetFunctionListBox(m_xCommands.get());
-    m_xCategories->Init(comphelper::getProcessComponentContext(), xFrame, aModuleName, bShowSlots);
+    m_xCategories->Init(comphelper::getProcessComponentContext(), xFrame, aModuleName, /*bShowSlots*/false);
 
     m_xCategories->connect_changed(
             LINK( this, SvxScriptSelectorDialog, SelectHdl ) );
@@ -1104,6 +1094,9 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     m_xCategories->SetStylesInfo(&m_aStylesInfo);
 
     UpdateUI();
+
+    if (comphelper::LibreOfficeKit::isActive())
+        m_xDescriptionText->hide();
 }
 
 SvxScriptSelectorDialog::~SvxScriptSelectorDialog()
@@ -1154,19 +1147,7 @@ IMPL_LINK(SvxScriptSelectorDialog, ClickHdl, weld::Button&, rButton, void)
     }
     else if (&rButton == m_xOKButton.get())
     {
-        // If we are displaying Slot API commands then this the dialog is being
-        // run from Tools/Configure and we should not close it
-        if ( !m_bShowSlots )
-        {
-            m_xDialog->response(RET_OK);
-        }
-        else
-        {
-            // Select the next entry in the list if possible
-            std::unique_ptr<weld::TreeIter> xIter = m_xCommands->make_iterator();
-            if (m_xCommands->get_selected(xIter.get()) && m_xCommands->iter_next_sibling(*xIter))
-                m_xCommands->select(*xIter);
-        }
+        m_xDialog->response(RET_OK);
     }
 }
 
