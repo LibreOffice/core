@@ -12,9 +12,6 @@
 
 #include <sfx2/devtools/ObjectInspectorTreeHandler.hxx>
 
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/Reference.hxx>
-
 #include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
@@ -190,6 +187,14 @@ OUString getAnyType(const uno::Any& aValue)
     return aTypeName.replaceAll("com.sun.star", "css");
 }
 
+uno::Reference<reflection::XIdlClass>
+convertTypeToIdlClass(const uno::Type& rType,
+                      const uno::Reference<uno::XComponentContext>& xContext)
+{
+    auto xReflection = reflection::theCoreReflection::get(xContext);
+    return xReflection->forName(rType.getTypeName());
+}
+
 // Object inspector nodes
 
 class ObjectInspectorNodeInterface
@@ -346,6 +351,43 @@ public:
     }
 };
 
+class ClassNode : public ObjectInspectorNodeInterface
+{
+private:
+    uno::Reference<reflection::XIdlClass> mxClass;
+
+    static bool isXInterface(uno::Reference<reflection::XIdlClass> const& xClass)
+    {
+        return xClass->getName() == "com.sun.star.uno.XInterface";
+    }
+
+public:
+    ClassNode(uno::Reference<reflection::XIdlClass> const& xClass)
+        : mxClass(xClass)
+    {
+    }
+
+    bool shouldShowExpander() override
+    {
+        auto const& xSuperClasses = mxClass->getSuperclasses();
+        return xSuperClasses.getLength() > 2
+               || (xSuperClasses.getLength() == 1 && !isXInterface(xSuperClasses[0]));
+    }
+
+    OUString getObjectName() override { return mxClass->getName(); }
+
+    void fillChildren(std::unique_ptr<weld::TreeView>& rTree,
+                      const weld::TreeIter* pParent) override
+    {
+        auto const& xSuperClasses = mxClass->getSuperclasses();
+        for (auto const& xSuper : xSuperClasses)
+        {
+            if (!isXInterface(xSuper))
+                lclAppendNodeToParent(rTree, pParent, new ClassNode(xSuper));
+        }
+    }
+};
+
 class BasicValueNode : public SimpleStringNode
 {
 protected:
@@ -434,9 +476,7 @@ public:
                  uno::Reference<uno::XComponentContext> const& xContext)
         : BasicValueNode(rName, rAny, rInfo, xContext)
     {
-        auto xReflection = reflection::theCoreReflection::get(mxContext);
-        OUString aTypeName = maAny.getValueType().getTypeName();
-        auto xClass = xReflection->forName(aTypeName);
+        auto xClass = convertTypeToIdlClass(maAny.getValueType(), mxContext);
         mxIdlArray = xClass->getArray();
     }
 
@@ -717,6 +757,7 @@ ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
     , mpClassNameLabel(pClassNameLabel)
     , mpObjectInspectorToolbar(pObjectInspectorToolbar)
     , mpObjectInspectorNotebook(pObjectInspectorNotebook)
+    , mxContext(comphelper::getProcessComponentContext())
 {
     mpInterfacesTreeView->connect_expanding(
         LINK(this, ObjectInspectorTreeHandler, ExpandingHandlerInterfaces));
@@ -965,14 +1006,15 @@ void ObjectInspectorTreeHandler::appendInterfaces(uno::Reference<uno::XInterface
 {
     if (!xInterface.is())
         return;
+
     uno::Reference<lang::XTypeProvider> xTypeProvider(xInterface, uno::UNO_QUERY);
     if (xTypeProvider.is())
     {
         const auto xSequenceTypes = xTypeProvider->getTypes();
         for (auto const& xType : xSequenceTypes)
         {
-            OUString aName = xType.getTypeName();
-            lclAppendNode(mpInterfacesTreeView, new SimpleStringNode(aName));
+            auto xClass = convertTypeToIdlClass(xType, mxContext);
+            lclAppendNode(mpInterfacesTreeView, new ClassNode(xClass));
         }
     }
 }
@@ -994,8 +1036,7 @@ void ObjectInspectorTreeHandler::appendProperties(uno::Reference<uno::XInterface
 {
     if (!xInterface.is())
         return;
-    GenericPropertiesNode aNode("", uno::Any(xInterface), "",
-                                comphelper::getProcessComponentContext());
+    GenericPropertiesNode aNode("", uno::Any(xInterface), "", mxContext);
     aNode.fillChildren(mpPropertiesTreeView, nullptr);
 }
 
@@ -1004,8 +1045,7 @@ void ObjectInspectorTreeHandler::appendMethods(uno::Reference<uno::XInterface> c
     if (!xInterface.is())
         return;
 
-    uno::Reference<beans::XIntrospection> xIntrospection
-        = beans::theIntrospection::get(comphelper::getProcessComponentContext());
+    uno::Reference<beans::XIntrospection> xIntrospection = beans::theIntrospection::get(mxContext);
     auto xIntrospectionAccess = xIntrospection->inspect(uno::Any(xInterface));
 
     const auto xMethods = xIntrospectionAccess->getMethods(beans::MethodConcept::ALL);
@@ -1043,10 +1083,6 @@ css::uno::Any ObjectInspectorTreeHandler::popFromStack()
 void ObjectInspectorTreeHandler::inspectObject(uno::Reference<uno::XInterface> const& xInterface)
 {
     if (!xInterface.is())
-        return;
-
-    uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
-    if (!xContext.is())
         return;
 
     // Set implementation name
