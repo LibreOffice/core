@@ -581,6 +581,13 @@ DECLARE_WW8EXPORT_TEST(testTdf94009_zeroPgMargin, "tdf94009_zeroPgMargin.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(defaultStyle, "TopMargin"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf108518_CRnumformatting, "tdf108518_CRnumformatting.doc")
+{
+    CPPUNIT_ASSERT_EQUAL(OUString("6.2.3."), parseDump("//body/txt[4]/Special[@nType='PortionType::Number']", "rText"));
+    //Without this fix in place, it would become 200 (and non-bold).
+    CPPUNIT_ASSERT_EQUAL(OUString("220"), parseDump("//body/txt[4]/Special[@nType='PortionType::Number']", "nHeight"));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf120711_joinedParagraphWithChangeTracking, "tdf120711.doc")
 {
     sal_Int16   numFormat = getNumberingTypeOfParagraph(5);

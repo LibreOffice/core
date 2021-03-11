@@ -1220,7 +1220,6 @@ namespace //local functions originally from docfmt.cxx
         const SetAttrMode nFlags,
         SwUndoAttr *const pUndo,
         SwRootFrame const*const pLayout,
-        const bool bExpandCharToPara,
         SwTextAttr **ppNewTextAttr)
     {
         // Divide the Sets (for selections in Nodes)
@@ -1684,24 +1683,6 @@ namespace //local functions originally from docfmt.cxx
                 // Only selection in a Node.
                 if( pStt->nNode == pEnd->nNode )
                 {
-                //The data parameter flag: bExpandCharToPara, comes from the data member of SwDoc,
-                //which is set in SW MS Word Binary filter WW8ImplRreader. With this flag on, means that
-                //current setting attribute set is a character range properties set and comes from a MS Word
-                //binary file, and the setting range include a paragraph end position (0X0D);
-                //more specifications, as such property inside the character range properties set recorded in
-                //MS Word binary file are dealt and inserted into data model (SwDoc) one by one, so we
-                //only dealing the scenario that the char properties set with 1 item inside;
-
-                    if (bExpandCharToPara && pCharSet && pCharSet->Count() ==1 )
-                    {
-                        SwTextNode* pCurrentNd = pStt->nNode.GetNode().GetTextNode();
-
-                        if (pCurrentNd)
-                        {
-                             pCurrentNd->TryCharSetExpandToNum(*pCharSet);
-
-                        }
-                    }
                     DELETECHARSETS
                     return bRet;
                 }
@@ -1813,33 +1794,6 @@ namespace //local functions originally from docfmt.cxx
 
                 lcl_ApplyOtherSet(*pNode, pHistory, *pOtherSet, firstSet, propsSet, pLayout, &aSt);
                 ++nNodes;
-            }
-        }
-
-        //The data parameter flag: bExpandCharToPara, comes from the data member of SwDoc,
-        //which is set in SW MS Word Binary filter WW8ImplRreader. With this flag on, means that
-        //current setting attribute set is a character range properties set and comes from a MS Word
-        //binary file, and the setting range include a paragraph end position (0X0D);
-        //more specifications, as such property inside the character range properties set recorded in
-        //MS Word binary file are dealt and inserted into data model (SwDoc) one by one, so we
-        //only dealing the scenario that the char properties set with 1 item inside;
-        if (bExpandCharToPara && pCharSet && pCharSet->Count() ==1)
-        {
-            SwPosition aStartPos (*rRg.Start());
-            SwPosition aEndPos (*rRg.End());
-
-            if (aEndPos.nNode.GetNode().GetTextNode() && aEndPos.nContent != aEndPos.nNode.GetNode().GetTextNode()->Len())
-                aEndPos.nNode--;
-
-            sal_uLong nStart = aStartPos.nNode.GetIndex();
-            sal_uLong nEnd = aEndPos.nNode.GetIndex();
-            for(; nStart <= nEnd; ++nStart)
-            {
-                SwNode* pNd = rDoc.GetNodes()[ nStart ];
-                if (!pNd || !pNd->IsTextNode())
-                    continue;
-                SwTextNode *pCurrentNd = pNd->GetTextNode();
-                pCurrentNd->TryCharSetExpandToNum(*pCharSet);
             }
         }
 
@@ -3374,13 +3328,11 @@ bool DocumentContentOperationsManager::ReplaceRange( SwPaM& rPam, const OUString
     return bRet;
 }
 
-///Add a para for the char attribute exp...
 bool DocumentContentOperationsManager::InsertPoolItem(
     const SwPaM &rRg,
     const SfxPoolItem &rHt,
     const SetAttrMode nFlags,
     SwRootFrame const*const pLayout,
-    const bool bExpandCharToPara,
     SwTextAttr **ppNewTextAttr)
 {
     if (utl::ConfigManager::IsFuzzing())
@@ -3396,7 +3348,7 @@ bool DocumentContentOperationsManager::InsertPoolItem(
 
     SfxItemSet aSet( m_rDoc.GetAttrPool(), {{rHt.Which(), rHt.Which()}} );
     aSet.Put( rHt );
-    const bool bRet = lcl_InsAttr(m_rDoc, rRg, aSet, nFlags, pUndoAttr.get(), pLayout, bExpandCharToPara, ppNewTextAttr);
+    const bool bRet = lcl_InsAttr(m_rDoc, rRg, aSet, nFlags, pUndoAttr.get(), pLayout, ppNewTextAttr);
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
@@ -3421,7 +3373,7 @@ void DocumentContentOperationsManager::InsertItemSet ( const SwPaM &rRg, const S
         pUndoAttr.reset(new SwUndoAttr( rRg, rSet, nFlags ));
     }
 
-    bool bRet = lcl_InsAttr(m_rDoc, rRg, rSet, nFlags, pUndoAttr.get(), pLayout, /*bExpandCharToPara*/false, /*ppNewTextAttr*/nullptr );
+    bool bRet = lcl_InsAttr(m_rDoc, rRg, rSet, nFlags, pUndoAttr.get(), pLayout, /*ppNewTextAttr*/nullptr );
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
