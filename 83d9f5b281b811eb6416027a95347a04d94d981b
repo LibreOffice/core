@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "de795251_f26b4408",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-03-11T11:15:57Z",
+      "side": 1,
+      "message": "I have one document where text layout results in calls to GenericSalLayout::SetNeedFallback(), which triggers this while creating a BreakIterator. Doing the change reduced the cost while laying out the document from 3% to \u003c1%. Admittedly this is also because layout caching fails in this case, so the layout is called way too often, and it won\u0027t be as much after I fix that, but it still seemed like a good change to do.",
+      "parentUuid": "30534b30_48c2d35c",
+      "revId": "83d9f5b281b811eb6416027a95347a04d94d981b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c26a0223_fd1a12a5",
         "filename": "cppuhelper/source/servicemanager.hxx",
         "patchSetId": 1
