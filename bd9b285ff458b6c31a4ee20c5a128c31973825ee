@@ -16,6 +16,24 @@
       "revId": "bd9b285ff458b6c31a4ee20c5a128c31973825ee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d727363_f924772b",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-11T10:50:19Z",
+      "side": 1,
+      "message": "No, but I would assume them be in front of all body sections then, having node indices (possibly of their anchors if they are in a fly) less than indices of body text nodes... I suppose it\u0027s reasonable for now.",
+      "parentUuid": "9e16a859_9c2cd0bf",
+      "revId": "bd9b285ff458b6c31a4ee20c5a128c31973825ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
