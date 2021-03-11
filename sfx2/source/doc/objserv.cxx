@@ -1733,6 +1733,7 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::GetDocum
         }
         catch( css::uno::Exception& )
         {
+            TOOLS_WARN_EXCEPTION("sfx.doc", "Failed to get document signature information");
         }
     }
 
