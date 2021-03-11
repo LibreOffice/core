@@ -94,6 +94,30 @@
       "revId": "79d33cf8ced78f3d528804e5426482dbe7993ac1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "355f9b81_2e610db1",
+        "filename": "sw/source/uibase/utlui/attrdesc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-11T08:49:32Z",
+      "side": 1,
+      "message": "\u003e I understand generally what you are proposing, do not have sufficient control over the relevant details to implement it independently.\n\nSo the change should be like this:\n\nSTR_NUMRULE_ON should be \"List Style: (%STYLEFAMILY)\". And here in attrdesc.cxx, we need to replace\n\n        rText \u003d SwResId( STR_NUMRULE_ON ) +\n            \" (\" + GetValue() + \")\";\n\nwith\n\n        rText \u003d SwResId(STR_NUMRULE_ON).replaceFirst(\"%STYLEFAMILY\", GetValue());",
+      "parentUuid": "64d641d9_598088c6",
+      "range": {
+        "startLine": 194,
+        "startChar": 13,
+        "endLine": 194,
+        "endChar": 14
+      },
+      "revId": "79d33cf8ced78f3d528804e5426482dbe7993ac1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
