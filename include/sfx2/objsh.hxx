@@ -88,7 +88,7 @@ namespace sfx2
     class StyleManager;
 }
 
-namespace vcl { class Window; }
+namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::document { struct CmisVersion; }
 namespace com::sun::star::document { class XDocumentProperties; }
@@ -574,7 +574,7 @@ public:
 
     virtual css::uno::Sequence< OUString > GetEventNames();
 
-    vcl::Window*                GetDialogParent( SfxMedium const * pMedium=nullptr );
+    css::uno::Reference<css::awt::XWindow> GetDialogParent(SfxMedium const* pMedium = nullptr);
     static SfxObjectShell*      CreateObject( const OUString& rServiceName, SfxObjectCreateMode = SfxObjectCreateMode::STANDARD );
     static SfxObjectShell*      CreateObjectByFactoryName( const OUString& rURL, SfxObjectCreateMode = SfxObjectCreateMode::STANDARD );
     static css::uno::Reference< css::lang::XComponent >

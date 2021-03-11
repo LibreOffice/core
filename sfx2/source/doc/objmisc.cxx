@@ -28,6 +28,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <sal/log.hxx>
 
+#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -1602,18 +1603,18 @@ bool SfxObjectShell::AdjustMacroMode()
     return pImpl->aMacroMode.adjustMacroMode( xInteraction );
 }
 
-vcl::Window* SfxObjectShell::GetDialogParent( SfxMedium const * pLoadingMedium )
+css::uno::Reference<css::awt::XWindow> SfxObjectShell::GetDialogParent( SfxMedium const * pLoadingMedium )
 {
-    VclPtr<vcl::Window> pWindow;
+    css::uno::Reference<css::awt::XWindow> xWindow;
     SfxItemSet* pSet = pLoadingMedium ? pLoadingMedium->GetItemSet() : GetMedium()->GetItemSet();
     const SfxUnoFrameItem* pUnoItem = SfxItemSet::GetItem<SfxUnoFrameItem>(pSet, SID_FILLFRAME, false);
     if ( pUnoItem )
     {
         const uno::Reference < frame::XFrame >& xFrame( pUnoItem->GetFrame() );
-        pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+        xWindow = xFrame->getContainerWindow();
     }
 
-    if ( !pWindow )
+    if (!xWindow)
     {
         SfxFrame* pFrame = nullptr;
         const SfxFrameItem* pFrameItem = SfxItemSet::GetItem<SfxFrameItem>(pSet, SID_DOCFRAME, false);
@@ -1632,22 +1633,27 @@ vcl::Window* SfxObjectShell::GetDialogParent( SfxMedium const * pLoadingMedium )
         }
 
         if ( pFrame )
+        {
             // get topmost window
-            pWindow = VCLUnoHelper::GetWindow( pFrame->GetFrameInterface()->getContainerWindow() );
+            xWindow = pFrame->GetFrameInterface()->getContainerWindow();
+        }
     }
 
-    if ( pWindow )
+    if (xWindow)
     {
         // this frame may be invisible, show it if it is allowed
         const SfxBoolItem* pHiddenItem = SfxItemSet::GetItem<SfxBoolItem>(pSet, SID_HIDDEN, false);
         if ( !pHiddenItem || !pHiddenItem->GetValue() )
         {
-            pWindow->Show();
-            pWindow->ToTop();
+            xWindow->setVisible(true);
+            css::uno::Reference<css::awt::XTopWindow> xTopWindow(xWindow, uno::UNO_QUERY);
+            SAL_WARN_IF(!xTopWindow, "sfx.appl", "XTopWindow not available from XWindow");
+            if (xTopWindow)
+                xTopWindow->toFront();
         }
     }
 
-    return pWindow;
+    return xWindow;
 }
 
 void SfxObjectShell::SetCreateMode_Impl( SfxObjectCreateMode nMode )
