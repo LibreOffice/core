@@ -348,7 +348,8 @@ namespace sdr
         // Get info about the need to visualize GluePoints
         bool ObjectContactOfPageView::AreGluePointsVisible() const
         {
-            return GetPageWindow().GetPageView().GetView().ImpIsGlueVisible();
+            bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
+            return !bTiledRendering && GetPageWindow().GetPageView().GetView().ImpIsGlueVisible();
         }
 
         // check if text animation is allowed.
