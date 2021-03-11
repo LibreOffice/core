@@ -1936,7 +1936,7 @@ void Desktop::OpenClients()
 #elif defined _WIN32
             aHelpURL += "&System=WIN";
 #endif
-            Application::GetHelp()->Start(aHelpURL, static_cast<const vcl::Window*>(nullptr));
+            Application::GetHelp()->Start(aHelpURL);
             return;
         }
     }
@@ -2292,7 +2292,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         break;
     case ApplicationEvent::Type::OpenHelpUrl:
         // start help for a specific URL
-        Application::GetHelp()->Start(rAppEvent.GetStringData(), static_cast<vcl::Window*>(nullptr));
+        Application::GetHelp()->Start(rAppEvent.GetStringData());
         break;
     case ApplicationEvent::Type::Print:
         {

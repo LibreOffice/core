@@ -124,7 +124,7 @@ css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::bea
             // Note: The help window brings itself to front ...
             Help* pHelp = Application::GetHelp();
             if (pHelp)
-                pHelp->Start(sModuleDependentHelpURL, static_cast<vcl::Window*>(nullptr));
+                pHelp->Start(sModuleDependentHelpURL);
         }
     }
 
