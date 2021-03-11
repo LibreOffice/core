@@ -32,7 +32,7 @@
 
 bool ScQueryEntry::Item::operator== (const Item& r) const
 {
-    return meType == r.meType && mfVal == r.mfVal && maString == r.maString && mbMatchEmpty == r.mbMatchEmpty;
+    return meType == r.meType && mfVal == r.mfVal && maString == r.maString && mbMatchEmpty == r.mbMatchEmpty && mbFormattedValue == r.mbFormattedValue;
 }
 
 ScQueryEntry::ScQueryEntry() :

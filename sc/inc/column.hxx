@@ -135,6 +135,8 @@ class ScColumn
     SCCOL           nCol;
     SCTAB           nTab;
 
+    bool mbFiltering; // for filtered column
+
 friend class ScDocument;                    // for FillInfo
 friend class ScTable;
 friend class ScValueIterator;
@@ -182,6 +184,7 @@ public:
     ScDocument& GetDoc() const { return pAttrArray->GetDoc(); }
     SCTAB GetTab() const { return nTab; }
     SCCOL GetCol() const { return nCol; }
+    bool GetbFiltering() const { return mbFiltering; }
     sc::CellStoreType& GetCellStore() { return maCells; }
     const sc::CellStoreType& GetCellStore() const { return maCells; }
     sc::CellTextAttrStoreType& GetCellAttrStore() { return maCellTextAttrs; }
@@ -535,7 +538,7 @@ public:
 
     void GetFilterEntries(
         sc::ColumnBlockConstPosition& rBlockPos, SCROW nStartRow, SCROW nEndRow,
-        ScFilterEntries& rFilterEntries );
+        ScFilterEntries& rFilterEntries, bool bFiltering );
 
     bool GetDataEntries( SCROW nRow, std::set<ScTypedStrData>& rStrings, bool bLimit ) const;
 
