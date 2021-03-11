@@ -14,7 +14,6 @@
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <test/bootstrapfixture.hxx>

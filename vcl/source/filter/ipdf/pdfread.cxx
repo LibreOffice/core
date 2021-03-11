@@ -12,8 +12,6 @@
 #include <config_features.h>
 
 #if HAVE_FEATURE_PDFIUM
-#include <fpdfview.h>
-#include <fpdf_edit.h>
 #include <tools/UnitConversion.hxx>
 #endif
 
