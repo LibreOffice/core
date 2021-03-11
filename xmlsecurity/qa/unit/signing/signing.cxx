@@ -918,6 +918,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSignatureLineOOXML)
         = xSignatures->verifyScriptingContentSignatures(xStorage,
                                                         uno::Reference<io::XInputStream>());
 
+    CPPUNIT_ASSERT(xSignatureInfo.getLength());
+
     // The signature should have a valid signature, and signature line with two valid images
     CPPUNIT_ASSERT(xSignatureInfo[0].SignatureIsValid);
     CPPUNIT_ASSERT_EQUAL(OUString("{DEE0514B-13E8-4674-A831-46E3CDB18BB4}"),
@@ -936,6 +938,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSignatureLineODF)
 
     uno::Sequence<security::DocumentSignatureInformation> xSignatureInfo
         = pObjectShell->GetDocumentSignatureInformation(false);
+
+    CPPUNIT_ASSERT(xSignatureInfo.getLength());
 
     CPPUNIT_ASSERT(xSignatureInfo[0].SignatureIsValid);
     CPPUNIT_ASSERT_EQUAL(OUString("{41CF56EE-331B-4125-97D8-2F5669DD3AAC}"),
