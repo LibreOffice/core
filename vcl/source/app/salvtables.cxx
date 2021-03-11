@@ -4502,12 +4502,8 @@ int SalInstanceTreeView::get_iter_depth(const weld::TreeIter& rIter) const
 
 bool SalInstanceTreeView::iter_has_child(const weld::TreeIter& rIter) const
 {
-    weld::TreeIter& rNonConstIter = const_cast<weld::TreeIter&>(rIter);
-    SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rNonConstIter);
-    SvTreeListEntry* restore(rVclIter.iter);
-    bool ret = iter_children(rNonConstIter);
-    rVclIter.iter = restore;
-    return ret;
+    SalInstanceTreeIter aTempCopy(static_cast<const SalInstanceTreeIter*>(&rIter));
+    return iter_children(aTempCopy);
 }
 
 bool SalInstanceTreeView::get_row_expanded(const weld::TreeIter& rIter) const
