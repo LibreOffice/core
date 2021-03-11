@@ -507,8 +507,8 @@ namespace svxform
         bool isLocked() const {return m_bLocked;}
         bool determineLockState() const;
 
-        vcl::Window* getDialogParentWindow();
-            // returns the window which should be used as parent window for dialogs
+        // returns the window which should be used as parent window for dialogs
+        static vcl::Window* getDialogParentWindow(css::uno::Reference<css::form::runtime::XFormController> xFormController);
 
         css::uno::Reference< css::frame::XDispatchProviderInterceptor>    createInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterception>& _xInterception);
             // create a new interceptor, register it on the given object
