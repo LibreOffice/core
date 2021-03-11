@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "013d2864_0207dfa8",
+        "filename": "sw/source/core/doc/notxtfrm.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-03-11T17:26:46Z",
+      "side": 0,
+      "message": "@Xisco: This *will* be needed, else setting rContent[0] in the next line may access a non-existing data entry.\nSaw that \u0027original problem is not appearing again\u0027 - so let\u0027s give it a try. Else, I would try to simplify the ClipRegion created on coming weekend",
+      "range": {
+        "startLine": 1026,
+        "startChar": 12,
+        "endLine": 1026,
+        "endChar": 31
+      },
+      "revId": "1238ca8d100c107656b707ed3a6b662f0a1867fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
