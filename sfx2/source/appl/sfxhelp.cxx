@@ -686,7 +686,7 @@ OUString SfxHelp::GetURLHelpText(std::u16string_view aURL)
 
 void SfxHelp::SearchKeyword( const OUString& rKeyword )
 {
-    Start_Impl(OUString(), static_cast<vcl::Window*>(nullptr), rKeyword);
+    Start_Impl(OUString(), static_cast<weld::Widget*>(nullptr), rKeyword);
 }
 
 bool SfxHelp::Start( const OUString& rURL, const vcl::Window* pWindow )
