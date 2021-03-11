@@ -2418,7 +2418,7 @@ class FilterEntriesHandler
         SvNumberFormatter* pFormatter = mrColumn.GetDoc()->GetFormatTable();
         OUString aStr;
         sal_uLong nFormat = mrColumn.GetNumberFormat(mrColumn.GetDoc()->GetNonThreadedContext(), nRow);
-        ScCellFormat::GetInputString(rCell, nFormat, aStr, *pFormatter, mrColumn.GetDoc());
+        ScCellFormat::GetInputString(rCell, nFormat, aStr, *pFormatter, mrColumn.GetDoc(), mrColumn.HasFiltering());
 
         if (rCell.hasString())
         {
@@ -2530,8 +2530,9 @@ public:
 
 void ScColumn::GetFilterEntries(
     sc::ColumnBlockConstPosition& rBlockPos, SCROW nStartRow, SCROW nEndRow,
-    ScFilterEntries& rFilterEntries )
+    ScFilterEntries& rFilterEntries, bool bFiltering )
 {
+    mbFiltering = bFiltering;
     FilterEntriesHandler aFunc(*this, rFilterEntries);
     rBlockPos.miCellPos =
         sc::ParseAll(rBlockPos.miCellPos, maCells, nStartRow, nEndRow, aFunc, aFunc);
