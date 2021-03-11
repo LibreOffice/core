@@ -102,10 +102,6 @@ public:
     bool bConsumedByField;
     bool m_isAnnotationOnEnd; ///< annotation already moved onto its end pos.
 
-    sal_Int32 mnStartCP;
-    sal_Int32 mnEndCP;
-    bool bIsParaEnd;
-
     SW_DLLPUBLIC SwFltStackEntry(const SwPosition & rStartPos, std::unique_ptr<SfxPoolItem> pHt );
     SW_DLLPUBLIC ~SwFltStackEntry();
 
@@ -113,15 +109,8 @@ public:
     SW_DLLPUBLIC void SetEndPos(  const SwPosition & rEndPos);
     SW_DLLPUBLIC bool MakeRegion(SwDoc& rDoc, SwPaM& rRegion, RegionMode eCheck) const;
     SW_DLLPUBLIC static bool MakeRegion(SwDoc& rDoc, SwPaM& rRegion,
-        RegionMode eCheck, const SwFltPosition &rMkPos, const SwFltPosition &rPtPos, bool bIsParaEnd=false,
+        RegionMode eCheck, const SwFltPosition &rMkPos, const SwFltPosition &rPtPos,
         sal_uInt16 nWhich=0);
-
-    void SetStartCP(sal_Int32 nCP) {mnStartCP = nCP;}
-    void SetEndCP(sal_Int32 nCP) {mnEndCP = nCP;}
-    sal_Int32 GetStartCP() const {return mnStartCP;}
-    sal_Int32 GetEndCP() const {return mnEndCP;}
-    bool IsParaEnd() const { return bIsParaEnd;}
-    void SetIsParaEnd(bool bArg){ bIsParaEnd = bArg;}
 };
 
 template<> struct o3tl::typed_flags<SwFltStackEntry::RegionMode>: o3tl::is_typed_flags<SwFltStackEntry::RegionMode, 0x03> {};
@@ -137,21 +126,11 @@ private:
 
     sal_uLong nFieldFlags;
 
-    bool bHasSdOD;
-    bool bSdODChecked;
-
 protected:
     SwDoc& rDoc;
     bool bIsEndStack;
 
     virtual void SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry& rEntry);
-    virtual sal_Int32 GetCurrAttrCP() const {return -1;}
-    virtual bool IsParaEndInCPs(sal_Int32 nStart,sal_Int32 nEnd,bool bSdOD) const;
-
-    //Clear the para end position recorded in reader intermittently for the least impact on loading performance
-    virtual void ClearParaEndPosition(){};
-    virtual bool CheckSdOD(sal_Int32 nStart,sal_Int32 nEnd);
-    bool HasSdOD();
 
 public:
     enum class MoveAttrsMode { DEFAULT, POSTIT_INSERTED };

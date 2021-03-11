@@ -230,7 +230,6 @@ public:
     virtual bool InsertPoolItem(const SwPaM &rRg, const SfxPoolItem&,
                                 const SetAttrMode nFlags = SetAttrMode::DEFAULT,
                                 SwRootFrame const* pLayout = nullptr,
-                                bool bExpandCharToPara = false,
                                 SwTextAttr **ppNewTextAttr = nullptr) = 0;
 
     virtual void InsertItemSet (const SwPaM &rRg, const SfxItemSet&,

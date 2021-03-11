@@ -197,7 +197,6 @@ public:
     void SetSmartTags( SwWrongList* pNew, bool bDelete = true );
     SwWrongList* GetSmartTags();
     SwWrongList const* GetSmartTags() const;
-    void TryCharSetExpandToNum(const SfxItemSet& pCharSet);
 
     /// End: Data collected during idle time
 
