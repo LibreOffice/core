@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6877a1e_3d4bedb9",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-11T10:04:47Z",
+      "side": 1,
+      "message": "By convention, we use ALL CAPS in the placeholder strings.",
+      "range": {
+        "startLine": 1129,
+        "startChar": 85,
+        "endLine": 1129,
+        "endChar": 98
+      },
+      "revId": "578b1b2ac5154eb5bfde17bcadc355125d34f937",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
