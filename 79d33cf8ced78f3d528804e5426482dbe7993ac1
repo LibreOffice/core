@@ -70,6 +70,30 @@
       "revId": "79d33cf8ced78f3d528804e5426482dbe7993ac1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64d641d9_598088c6",
+        "filename": "sw/source/uibase/utlui/attrdesc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-03-11T07:33:12Z",
+      "side": 1,
+      "message": "About %STYLEFAMILY - it was more of a question than an assertion (because it does not appear in uibase/utlui/attrdesc.cxx).\n\nI understand generally what you are proposing, do not have sufficient control over the relevant details to implement it independently.",
+      "parentUuid": "311047eb_ace78202",
+      "range": {
+        "startLine": 194,
+        "startChar": 13,
+        "endLine": 194,
+        "endChar": 14
+      },
+      "revId": "79d33cf8ced78f3d528804e5426482dbe7993ac1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
