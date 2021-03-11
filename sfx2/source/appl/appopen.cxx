@@ -206,9 +206,9 @@ ErrCode CheckPasswd_Impl
 
                 if ( bIsEncrypted )
                 {
-                    vcl::Window* pWin = pDoc ? pDoc->GetDialogParent( pFile ) : nullptr;
-                    if ( pWin )
-                        pWin->Show();
+                    css::uno::Reference<css::awt::XWindow> xWin(pDoc ? pDoc->GetDialogParent(pFile) : nullptr);
+                    if (xWin)
+                        xWin->setVisible(true);
 
                     nRet = ERRCODE_SFX_CANTGETPASSWD;
 
