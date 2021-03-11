@@ -36,7 +36,6 @@
 #include <com/sun/star/form/runtime/FeatureState.hpp>
 #include <tools/diagnose_ex.h>
 #include <vcl/timer.hxx>
-#include <vcl/window.hxx>
 #include <sfx2/shell.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/fmsearch.hxx>
@@ -54,6 +53,8 @@
 #include <string_view>
 #include <vector>
 #include <memory>
+
+struct ImplSVEvent;
 
 typedef std::vector< css::uno::Reference< css::form::XForm > > FmFormArray;
 

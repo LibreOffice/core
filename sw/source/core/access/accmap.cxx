@@ -1656,53 +1656,6 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
     }
 }
 
-//Merge with DoInvalidateShapeSelection
-/*
-void SwAccessibleMap::DoInvalidateShapeFocus()
-{
-    const SwViewShell *pVSh = GetShell();
-    const SwFEShell *pFESh = dynamic_cast<const SwFEShell*>( pVSh) !=  nullptr ?
-                            static_cast< const SwFEShell * >( pVSh ) : nullptr;
-    const size_t nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
-
-    if( nSelShapes != 1 )
-        return;
-
-    SwAccessibleObjShape_Impl *pShapes = nullptr;
-    SwAccessibleObjShape_Impl *pSelShape = nullptr;
-    size_t nShapes = 0;
-
-    {
-        osl::MutexGuard aGuard( maMutex );
-        if( mpShapeMap )
-            pShapes = mpShapeMap->Copy( nShapes, pFESh, &pSelShape );
-    }
-
-    if( pShapes )
-    {
-        vcl::Window *pWin = GetShell()->GetWin();
-        bool bFocused = pWin && pWin->HasFocus();
-        SwAccessibleObjShape_Impl  *pShape = pShapes;
-        while( nShapes )
-        {
-            if( pShape->second.is() )
-            {
-                if( bFocused && pShape >= pSelShape )
-                    pShape->second->SetState( AccessibleStateType::FOCUSED );
-                else
-                    pShape->second->ResetState( AccessibleStateType::FOCUSED );
-            }
-
-            --nShapes;
-            ++pShape;
-        }
-
-        delete[] pShapes;
-    }
-}
-
-*/
-
 SwAccessibleMap::SwAccessibleMap( SwViewShell *pSh ) :
     mpVSh( pSh ),
     mbShapeSelected( false ),
