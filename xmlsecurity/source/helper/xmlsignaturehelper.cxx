@@ -403,6 +403,7 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorageStream(const css::uno::Ref
     catch(const uno::Exception& rException)
     {
         SAL_WARN("xmlsecurity.helper", "XMLSignatureHelper::ReadAndVerifySignatureStorageStream: " << rException);
+        mbError = true;
     }
 
     mpXSecController->releaseSignatureReader();
