@@ -74,14 +74,6 @@ public:
         m_nNode = rPos.nNode.GetIndex()-1;
         m_nContent = rPos.nContent.GetIndex();
     }
-
-    SwPosition ToSwPosition() const
-    {
-        SwNodeIndex m_nCorrectNode(m_nNode, +1);
-        SwPosition aRet(m_nCorrectNode);
-        aRet.nContent.Assign(m_nCorrectNode.GetNode().GetContentNode(), m_nContent);
-        return aRet;
-    }
 };
 
 // Stack entry for the attributes. It is always pointers to new attributes that are passed.
