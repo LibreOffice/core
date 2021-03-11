@@ -72,6 +72,7 @@
 
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/optional/optional.hpp>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 
@@ -751,12 +752,42 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, SfxView
         OString sSelectionText;
         OString sSelectionTextView;
         boost::property_tree::ptree aTableJsonTree;
+        boost::property_tree::ptree aGluePointsTree;
+        size_t dGluePointCnt = 0;
         bool bTableSelection = false;
 
         if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == OBJ_TABLE)
         {
             auto& rTableObject = dynamic_cast<sdr::table::SdrTableObj&>(*mpMarkedObj);
             bTableSelection = rTableObject.createTableEdgesJson(aTableJsonTree);
+        }
+        if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == OBJ_EDGE)
+        {
+            if (OutputDevice* rOutDev = mpMarkedPV->GetView().GetFirstOutputDevice())
+            {
+                bool bConvertUnit = false;
+                if (rOutDev->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
+                    bConvertUnit = true;
+                const SdrObjList* pOL = mpMarkedPV->GetObjList();
+                const size_t nObjCount = pOL->GetObjCount();
+                for (size_t nObjNum=0; nObjNum<nObjCount; ++nObjNum)
+                {
+                    const SdrObject* pObj=pOL->GetObj(nObjNum);
+                    const SdrGluePointList* pGPL=pObj->GetGluePointList();
+                    if (pGPL!=nullptr && pGPL->GetCount()!=0)
+                    {
+                        for (size_t i = 0; i < pGPL->GetCount(); ++i)
+                        {
+                            const SdrGluePoint& rGP = (*pGPL)[i];
+                            // coordinates are relative to the OBJ snap rect center
+                            Point rPoint = pObj->GetSnapRect().Center();
+                            rPoint.Move(rGP.GetPos().getX(), rGP.GetPos().getY());
+                            if (bConvertUnit)
+                                rPoint = OutputDevice::LogicToLogic(rPoint, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                        }
+                    }
+                }
+            }
         }
         if (GetMarkedObjectCount())
         {
