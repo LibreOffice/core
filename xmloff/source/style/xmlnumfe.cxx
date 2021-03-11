@@ -1651,12 +1651,12 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         // Calendar attribute for E and EE and R is set in
                         // first loop. If set and not an explicit calendar and
                         // YY or YYYY is encountered, switch temporarily to
-                        // Gregorian, i.e. empty calendar name.
+                        // Gregorian.
                         bool bLong = ( nElemType == NF_KEY_YYYY || nElemType == NF_KEY_EEC ||
                                             nElemType == NF_KEY_R );
                         WriteYearElement_Impl(
                                 ((bImplicitOtherCalendar && !bExplicitCalendar
-                                  && (nElemType == NF_KEY_YY || nElemType == NF_KEY_YYYY)) ? OUString() : aCalendar),
+                                  && (nElemType == NF_KEY_YY || nElemType == NF_KEY_YYYY)) ? "gregorian" : aCalendar),
                                 (bSystemDate ? bLongSysDate : bLong));
                         bAnyContent = true;
                     }
