@@ -685,6 +685,52 @@ OUString lcl_getDragParameterString( const OUString& rCID )
 }
 } // anonymous namespace
 
+bool SdrMarkView::dumpGluePointsToJSON(boost::property_tree::ptree& rTree)
+{
+    bool result = false;
+    if (OutputDevice* rOutDev = mpMarkedPV->GetView().GetFirstOutputDevice())
+    {
+        bool bConvertUnit = false;
+        if (rOutDev->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
+            bConvertUnit = true;
+        const SdrObjList* pOL = mpMarkedPV->GetObjList();
+        const size_t nObjCount = pOL->GetObjCount();
+        boost::property_tree::ptree elements;
+        for (size_t nObjNum = 0; nObjNum < nObjCount; ++nObjNum)
+        {
+            const SdrObject* pObj = pOL->GetObj(nObjNum);
+            const SdrGluePointList* pGPL = pObj->GetGluePointList();
+            if (pGPL != nullptr && pGPL->GetCount())
+            {
+                boost::property_tree::ptree object;
+                boost::property_tree::ptree points;
+                for (size_t i = 0; i < pGPL->GetCount(); ++i)
+                {
+                    boost::property_tree::ptree node;
+                    boost::property_tree::ptree point;
+                    const SdrGluePoint& rGP = (*pGPL)[i];
+                    // coordinates are relative to the OBJ snap rect
+                    Point rPoint = pObj->GetSnapRect().TopLeft();
+                    rPoint.Move(rGP.GetPos().getX(), rGP.GetPos().getY());
+                    if (bConvertUnit)
+                        rPoint = OutputDevice::LogicToLogic(rPoint, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                    point.put("x", rPoint.getX());
+                    point.put("y", rPoint.getY());
+                    node.put("glueId", rGP.GetId());
+                    node.add_child("point", point);
+                    points.push_back(std::make_pair("", node));
+                }
+                object.put("id", reinterpret_cast<sal_IntPtr>(pObj));
+                object.add_child("gluepoints", points);
+                elements.push_back(std::make_pair("", object));
+                result = true;
+            }
+        }
+        rTree.add_child("shapes", elements);
+    }
+    return result;
+}
+
 void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const SfxViewShell* pOtherShell)
 {
     SfxViewShell* pViewShell = GetSfxViewShell();
@@ -737,12 +783,18 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
         OString sSelectionText;
         OString sSelectionTextView;
         boost::property_tree::ptree aTableJsonTree;
+        boost::property_tree::ptree aGluePointsTree;
         bool bTableSelection = false;
+        bool bConnectorSelection = false;
 
         if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == OBJ_TABLE)
         {
             auto& rTableObject = dynamic_cast<sdr::table::SdrTableObj&>(*mpMarkedObj);
             bTableSelection = rTableObject.createTableEdgesJson(aTableJsonTree);
+        }
+        if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == OBJ_EDGE)
+        {
+            bConnectorSelection = dumpGluePointsToJSON(aGluePointsTree);
         }
         if (GetMarkedObjectCount())
         {
@@ -971,6 +1023,13 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                 boost::property_tree::write_json(aStream, responseJSON, /*pretty=*/ false);
                 handleArrayStr = ", \"handles\":";
                 handleArrayStr = handleArrayStr + aStream.str().c_str();
+                if (bConnectorSelection)
+                {
+                    aStream.str("");
+                    boost::property_tree::write_json(aStream, aGluePointsTree, /*pretty=*/ false);
+                    handleArrayStr = handleArrayStr + ", \"GluePoints\":";
+                    handleArrayStr = handleArrayStr + aStream.str().c_str();
+                }
             }
             sSelectionText = aSelection.toString() +
                 ", " + OString::number(nRotAngle.get());
