@@ -35,10 +35,11 @@ public:
                               const SfxPoolItem* pState) override;
     virtual bool MouseButtonDown(const MouseEvent& rEvt) override;
     virtual void Paint(const UserDrawEvent& rEvt) override;
+    virtual void Click() override;
 
 private:
     sal_uInt16 mnState;
-    Image maImage;
+    Image maImages[4];
     bool mbFeatureEnabled;
 };
 
