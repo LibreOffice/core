@@ -43,10 +43,11 @@
 #include <svx/fmshell.hxx>
 #include <svx/fmtools.hxx>
 #include <svx/svxids.hrc>
-#include <vcl/settings.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
 #include <bitmaps.hlst>
@@ -1154,7 +1155,7 @@ IMPL_LINK(FmFilterNavigator, EditedEntryHdl, const IterString&, rIterString, boo
             SQLContext aError;
             aError.Message = SvxResId(RID_STR_SYNTAXERROR);
             aError.Details = aErrorMsg;
-            displayException(aError, m_xTopLevel);
+            displayException(aError, VCLUnoHelper::GetInterface(m_xTopLevel));
 
             return false;
         }
