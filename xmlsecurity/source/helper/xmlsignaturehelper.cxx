@@ -270,13 +270,14 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const css::uno::Reference< css:
     // Parser -> SignatureReader
     xParser->setDocumentHandler( xHandler );
 
-    // parser the stream
+    // Parse the stream.
     try
     {
         xParser->parseStream( aParserInput );
     }
     catch( uno::Exception& )
     {
+        DBG_UNHANDLED_EXCEPTION("xmlsecurity.helper");
         mbError = true;
     }
 
@@ -407,6 +408,7 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorageStream(const css::uno::Ref
         DBG_UNHANDLED_EXCEPTION("xmlsecurity.helper");
     }
 
+    // release the signature reader
     mpXSecController->releaseSignatureReader();
 
     return !mbError;
