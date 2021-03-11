@@ -18,8 +18,11 @@ $(eval $(call gb_Module_add_targets,xmlsecurity,\
 ))
 
 $(eval $(call gb_Module_add_slowcheck_targets,xmlsecurity,\
-    CppunitTest_xmlsecurity_signing \
     CppunitTest_xmlsecurity_pdfsigning \
+))
+
+$(eval $(call gb_Module_add_subsequentcheck_targets,xmlsecurity,\
+    CppunitTest_xmlsecurity_signing \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,xmlsecurity,\
