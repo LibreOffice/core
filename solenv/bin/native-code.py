@@ -334,8 +334,6 @@ core_constructor_list = [
     "com_sun_star_comp_Math_MathTypeFilter_get_implementation",
 # svl/source/fsstor/fsstorage.component
     "svl_FSStorageFactory_get_implementation",
-# svtools/util/svt.component
-    "com_sun_star_comp_embed_HatchWindowFactory_get_implementation",
 # vcl/vcl.android.component
     "com_sun_star_graphic_GraphicObject_get_implementation",
     "com_sun_star_comp_graphic_GraphicMapper_get_implementation",
@@ -361,6 +359,7 @@ core_constructor_list = [
     "com_sun_star_comp_svx_StyleToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_StylesPreviewToolBoxControl_get_implementation",
 # toolkit/util/tk.component
+    "com_sun_star_comp_embed_HatchWindowFactory_get_implementation",
     "stardiv_Toolkit_StdTabController_get_implementation",
     "stardiv_Toolkit_UnoButtonControl_get_implementation",
     "stardiv_Toolkit_UnoCheckBoxControl_get_implementation",

@@ -25,7 +25,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 
-#include <hatchwindow.hxx>
+#include "hatchwindow.hxx"
 
 using namespace ::com::sun::star;
 
