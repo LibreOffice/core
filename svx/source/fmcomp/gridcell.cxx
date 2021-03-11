@@ -2872,7 +2872,7 @@ bool DbFilterField::commitControl()
 
                 SQLException aError;
                 aError.Message = aErrorMsg;
-                displayException(aError, m_pWindow->GetParent());
+                displayException(aError, VCLUnoHelper::GetInterface(m_pWindow->GetParent()));
                     // TODO: transport the title
 
                 return false;

@@ -36,6 +36,7 @@
 #include <com/sun/star/awt/XMouseListener.hpp>
 #include <com/sun/star/awt/XTabController.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/form/DatabaseParameterEvent.hpp>
 #include <com/sun/star/form/validation/XFormComponentValidityListener.hpp>
@@ -198,7 +199,7 @@ namespace svxform
         FormController( const css::uno::Reference< css::uno::XComponentContext > & _rxORB );
 
         // returns the window which should be used as parent window for dialogs
-        static vcl::Window* getDialogParentWindow(css::uno::Reference<css::form::runtime::XFormController> xFormController);
+        static css::uno::Reference<css::awt::XWindow> getDialogParentWindow(css::uno::Reference<css::form::runtime::XFormController> xFormController);
 
     private:
         virtual ~FormController() override;
