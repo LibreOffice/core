@@ -36,6 +36,9 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <svx/strings.hrc>
+#include <svx/dialmgr.hxx>
+
 SFX_IMPL_STATUSBAR_CONTROL(SvxSelectionModeControl, SfxUInt16Item);
 
 namespace {
@@ -100,7 +103,6 @@ SvxSelectionModeControl::SvxSelectionModeControl( sal_uInt16 _nSlotId,
                                                   StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
     mnState( 0 ),
-    maImage(StockImage::Yes, RID_SVXBMP_SELECTION),
     mbFeatureEnabled(false)
 {
     GetStatusBar().SetItemText( GetId(), "" );
@@ -116,15 +118,15 @@ void SvxSelectionModeControl::StateChanged( sal_uInt16, SfxItemState eState,
         DBG_ASSERT( dynamic_cast< const SfxUInt16Item* >(pState) !=  nullptr, "invalid item type" );
         const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pState);
         mnState = pItem->GetValue();
-
         SelectionTypePopup aPop(GetStatusBar().GetFrameWeld(), mnState);
-        GetStatusBar().SetQuickHelpText(GetId(), aPop.GetItemTextForState(mnState));
+        GetStatusBar().SetItemText(GetId(), aPop.GetItemTextForState(mnState));
+        GetStatusBar().SetQuickHelpText(GetId(), SvxResId(RID_SVXSTR_SELECTIONMODE_HELPTEXT));
     }
 }
 
 bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
 {
-    if (!mbFeatureEnabled || !rEvt.IsMiddle())
+    if (!mbFeatureEnabled)
         return true;
 
     ::tools::Rectangle aRect(rEvt.GetPosPixel(), Size(1, 1));
@@ -165,19 +167,12 @@ bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
     return true;
 }
 
-
-void SvxSelectionModeControl::Paint( const UserDrawEvent& rUsrEvt )
+void SvxSelectionModeControl::Paint(const UserDrawEvent&)
 {
-    const tools::Rectangle aControlRect = getControlRect();
-    vcl::RenderContext* pDev = rUsrEvt.GetRenderContext();
-    tools::Rectangle aRect = rUsrEvt.GetRect();
+}
 
-    Size aImgSize( maImage.GetSizePixel() );
-
-    Point aPos( aRect.Left() + ( aControlRect.GetWidth() - aImgSize.Width() ) / 2,
-            aRect.Top() + ( aControlRect.GetHeight() - aImgSize.Height() ) / 2 );
-
-    pDev->DrawImage(aPos, maImage, mbFeatureEnabled ? DrawImageFlags::NONE : DrawImageFlags::Disable);
+void SvxSelectionModeControl::Click()
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
