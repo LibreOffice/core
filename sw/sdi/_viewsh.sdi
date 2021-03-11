@@ -45,6 +45,10 @@ interface BaseTextEditView
     [
         ExecMethod = Execute ;
     ]
+    FN_SELECTION_CYCLE
+    [
+        ExecMethod = Execute ;
+    ]
     FN_PAGEUP // status(final|play)
     [
         ExecMethod = Execute ;
