@@ -376,12 +376,6 @@ protected:
     virtual void SetAttrInDoc(const SwPosition& rTmpPos,
         SwFltStackEntry& rEntry) override;
 
-    virtual sal_Int32 GetCurrAttrCP() const override;
-    virtual bool IsParaEndInCPs(sal_Int32 nStart, sal_Int32 nEnd, bool bSdOD) const override;
-    //Clear the para end position recorded in reader intermittently for the least impact on loading performance
-    virtual void ClearParaEndPosition() override;
-    virtual bool CheckSdOD(sal_Int32 nStart,sal_Int32 nEnd) override;
-
 public:
     SwWW8FltControlStack(SwDoc& rDo, sal_uLong nFieldFl, SwWW8ImplReader& rReader_ )
         : SwFltControlStack( rDo, nFieldFl ), rReader( rReader_ ),
@@ -1382,9 +1376,6 @@ private:
     bool m_bCareLastParaEndInToc;
     cp_set m_aTOXEndCps;
 
-    std::vector<WW8_CP> m_aEndParaPos;
-    WW8_CP m_aCurrAttrCP;
-    bool m_bOnLoadingMain:1;
     bool m_bNotifyMacroEventRead:1;
 
     const SprmReadInfo& GetSprmReadInfo(sal_uInt16 nId) const;
@@ -1707,10 +1698,6 @@ public:     // really private, but can only be done public
     sal_uInt16 GetToggleBiDiAttrFlags() const;
     void SetToggleAttrFlags(sal_uInt16 nFlags);
     void SetToggleBiDiAttrFlags(sal_uInt16 nFlags);
-    WW8_CP GetCurrAttrCP() const {return m_aCurrAttrCP;}
-    bool IsParaEndInCPs(sal_Int32 , sal_Int32,bool bSdOD=true) const;
-    //Clear the para end position recorded in reader intermittently for the least impact on loading performance
-    void ClearParaEndPosition();
 
     tools::Long Read_Footnote(WW8PLCFManResult* pRes);
     sal_uInt16 End_Footnote();
