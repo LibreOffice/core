@@ -1126,6 +1126,12 @@ void fillQueryParam(
                 ScQueryEntry::Item aItem;
                 aItem.meType   = rVal.IsNumeric ? ScQueryEntry::ByValue : (rVal.IsDateValue ? ScQueryEntry::ByDate : ScQueryEntry::ByString);
                 aItem.mfVal    = rVal.NumericValue;
+
+                if (aItem.meType == ScQueryEntry::ByString)
+                {
+                    aItem.mbFormattedValue = true;
+                    pDoc->GetFormatTable()->getTimeFormatIfTimeFormat(const_cast<OUString&>(rVal.StringValue), aItem.mfVal);
+                }
                 aItem.maString = rPool.intern(rVal.StringValue);
 
                 if (aItem.meType == ScQueryEntry::ByValue)
