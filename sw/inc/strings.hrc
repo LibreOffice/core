@@ -24,8 +24,8 @@
 #define NNC_(Context, StringSingular, StringPlural) reinterpret_cast<char const *>(Context "\004" u8##StringSingular "\004" u8##StringPlural)
 
 // Dialog buttons
-#define STR_STANDARD_LABEL                      NC_("STR_STANDARD_LABEL", "Set to ~Parent")
-#define STR_STANDARD_TOOLTIP                    NC_("STR_STANDARD_TOOLTIP", "")
+#define STR_STANDARD_LABEL                      NC_("STR_STANDARD_LABEL", "Reset to ~Parent")
+#define STR_STANDARD_TOOLTIP                    NC_("STR_STANDARD_TOOLTIP", "Values on this tab specified in “Contains” in Organizer are removed.")
 #define STR_STANDARD_EXTENDEDTIP                NC_("STR_STANDARD_EXTENDEDTIP", "")
 #define STR_RESET_LABEL                         NC_("STR_RESET_LABEL", "Reset")
 #define STR_RESET_TOOLTIP                       NC_("STR_RESET_TOOLTIP", "Unsaved modifications to this tab are reverted.")
