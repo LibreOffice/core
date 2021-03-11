@@ -32,7 +32,6 @@
 #include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/window.hxx>
 
 #include <canvas/canvastools.hxx>
 
