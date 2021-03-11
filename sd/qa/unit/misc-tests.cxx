@@ -27,6 +27,8 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
+#include <com/sun/star/table/XTable.hpp>
+#include <com/sun/star/table/XMergeableCellRange.hpp>
 
 #include <vcl/scheduler.hxx>
 #include <osl/thread.hxx>
@@ -82,6 +84,7 @@ public:
     void testTdf130988();
     void testTdf131033();
     void testTdf129898LayerDrawnInSlideshow();
+    void testTdf136956();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf96206);
@@ -103,6 +106,7 @@ public:
     CPPUNIT_TEST(testTdf130988);
     CPPUNIT_TEST(testTdf131033);
     CPPUNIT_TEST(testTdf129898LayerDrawnInSlideshow);
+    CPPUNIT_TEST(testTdf136956);
     CPPUNIT_TEST_SUITE_END();
 
 virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -870,6 +874,37 @@ void SdMiscTest::testTdf129898LayerDrawnInSlideshow()
     SdrPageView* pPageView = pViewShell->GetView()->GetSdrPageView();
     CPPUNIT_ASSERT(pPageView->IsLayerVisible(sName));
     CPPUNIT_ASSERT(pPageView->IsLayerPrintable(sName));
+
+    xDocShRef->DoClose();
+}
+
+void SdMiscTest::testTdf136956()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/cellspan.odp"), ODP);
+
+    const SdrPage *pPage = GetPage( 1, xDocShRef );
+    sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT( pTableObj );
+    uno::Reference< table::XTable > xTable(pTableObj->getTable(), uno::UNO_SET_THROW);
+
+    uno::Reference< css::table::XMergeableCellRange > xRange(
+            xTable->createCursorByRange( xTable->getCellRangeByPosition( 0, 0, 3, 2 ) ), uno::UNO_QUERY_THROW );
+
+    // 4x3 Table before merge.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable->getColumnCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getRowCount());
+
+    xRange->merge();
+
+    // 1x1 Table after merge.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getColumnCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRowCount());
+
+    xDocShRef->GetUndoManager()->Undo();
+
+    // 4x3 Table after undo. Undo crashed before.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable->getColumnCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getRowCount());
 
     xDocShRef->DoClose();
 }
