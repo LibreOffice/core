@@ -543,6 +543,21 @@ struct HyperLinksTable
 
 namespace sw
 {
+    namespace hack
+    {
+        class Position
+        {
+        private:
+            SwNodeIndex maPtNode;
+            sal_Int32 mnPtContent;
+        public:
+            explicit Position(const SwPosition &rPos);
+            operator SwPosition() const;
+            const SwNodeIndex& GetPtNode() const { return maPtNode; };
+            sal_Int32 GetPtContent() const { return mnPtContent; };
+        };
+    }
+
     auto FilterControlChars(OUString const& rString) -> OUString;
 }
 
@@ -555,13 +570,16 @@ class WW8FieldEntry
         ::sw::mark::IFieldmark::parameter_map_t maParams;
 
     public:
-        SwFltPosition maStartPos;
+        sw::hack::Position maStartPos;
         sal_uInt16 mnFieldId;
         sal_uLong mnObjLocFc;
         WW8FieldEntry(SwPosition const &rPos, sal_uInt16 nFieldId) throw();
         WW8FieldEntry(const WW8FieldEntry &rOther) throw();
         WW8FieldEntry &operator=(const WW8FieldEntry &rOther) throw();
         void Swap(WW8FieldEntry &rOther) throw();
+
+        SwNodeIndex GetPtNode() const { return maStartPos.GetPtNode(); };
+        sal_Int32 GetPtContent() const { return maStartPos.GetPtContent(); };
 
         const OUString& GetBookmarkName() const { return msBookmarkName;}
         const OUString& GetBookmarkCode() const { return msMarkCode;}
