@@ -38,7 +38,6 @@
 #include <com/sun/star/text/BibliographyDataField.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 
@@ -211,9 +210,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame,
 
     m_xDatMan->createDatabaseForm( aBibDesc );
 
-    Reference< awt::XWindow >  aWindow = rFrame->getContainerWindow();
-    VCLXWindow* pParentComponent = comphelper::getUnoTunnelImplementation<VCLXWindow>(aWindow);
-    assert(pParentComponent);
+    Reference<awt::XWindow> aWindow = rFrame->getContainerWindow();
 
     VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( aWindow );
 
@@ -238,10 +235,10 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame,
     rFrame->setComponent( xWin, xCtrRef);
     pBeamer->SetXController(xCtrRef);
 
-    if (pParentComponent)
+    if (aWindow)
     {
         // not earlier because SetFocus() is triggered in setVisible()
-        pParentComponent->setVisible(true);
+        aWindow->setVisible(true);
     }
 
     Reference<XLoadable>(m_xDatMan)->load();
