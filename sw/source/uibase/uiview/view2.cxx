@@ -632,6 +632,44 @@ void SwView::Execute(SfxRequest &rReq)
             }
         }
         break;
+        case FN_SELECTION_CYCLE:
+        {
+            if (m_pWrtShell->IsSelFrameMode())
+                break;
+            if (!m_pWrtShell->IsStdMode())
+                m_pWrtShell->EnterStdMode();
+            SwShellCursor *pCursor = m_pWrtShell->SwCursorShell::GetCursor_();
+            Point CurrMarkPt = pCursor->GetMkPos();
+            Point CurrPointPt = pCursor->GetPtPos();
+            sal_uInt16 nStep = m_aSelectCycle.nStep;
+            if (nStep && (CurrMarkPt != m_aSelectCycle.m_MarkPt || CurrPointPt != m_aSelectCycle.m_PointPt))
+                nStep = 0;
+            switch(nStep)
+            {
+                case 0:
+                    m_aSelectCycle.m_pInitialCursor = CurrPointPt;
+                    m_pWrtShell->SwCursorShell::ClearMark();
+                    m_pWrtShell->SelWrd(&CurrPointPt);
+                    break;
+                case 1:
+                    m_pWrtShell->SelSentence(&CurrPointPt);
+                    break;
+                case 2:
+                    m_pWrtShell->SelPara(&CurrPointPt);
+                    break;
+                case 3:
+                    m_pWrtShell->SwCursorShell::ClearMark();
+                    m_pWrtShell->SwCursorShell::SetCursor(m_aSelectCycle.m_pInitialCursor);
+                    break;
+            }
+            nStep++;
+            nStep %= 4;
+            pCursor = m_pWrtShell->SwCursorShell::GetCursor_();
+            m_aSelectCycle.m_MarkPt = pCursor->GetMkPos();
+            m_aSelectCycle.m_PointPt = pCursor->GetPtPos();
+            m_aSelectCycle.nStep = nStep;
+        }
+        break;
         case FN_REDLINE_ON:
         {
             if( pArgs &&
