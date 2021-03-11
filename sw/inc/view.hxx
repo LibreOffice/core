@@ -148,6 +148,18 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     friend class SwView_Impl;
     friend class SwClipboardChangeListener;
 
+    // selection cycle
+    struct SelectCycle
+    {
+        Point m_pInitialCursor;
+        Point m_MarkPt;
+        Point m_PointPt;
+        sal_uInt16 nStep;
+
+        SelectCycle() :
+            nStep(0) {}
+    };
+
     // search & replace
     static SvxSearchItem           *s_pSrchItem;
 
@@ -253,6 +265,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     /// functionality based on the user's view, instead of using the m_aVisArea.
     SwTwips         m_nLOKPageUpDownOffset;
 
+    SelectCycle m_aSelectCycle;
     // methods for searching
     // set search context
     SAL_DLLPRIVATE bool          SearchAndWrap(bool bApi);

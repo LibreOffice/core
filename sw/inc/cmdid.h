@@ -726,6 +726,7 @@
 
 #define FN_TO_NEXT_PAGE             (FN_SELECTION + 95)
 #define FN_TO_PREV_PAGE             (FN_SELECTION + 96)
+#define FN_SELECTION_CYCLE          (FN_SELECTION + 97)
 
 // QUERY-Block
 #define FN_TXTATR_INET              (FN_QUERY +29)      /* INet-Attribute */

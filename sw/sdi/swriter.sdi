@@ -4692,6 +4692,22 @@ SfxVoidItem GoToNextPage FN_TO_NEXT_PAGE
     GroupId = SfxGroupId::Navigator;
 ]
 
+SfxVoidItem SelectionCycle FN_SELECTION_CYCLE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Navigator;
+]
 SfxUInt16Item PageOffsetDialog FN_CHANGE_PAGENUM
 (SfxUInt16Item nOffset FN_CHANGE_PAGENUM)
 [

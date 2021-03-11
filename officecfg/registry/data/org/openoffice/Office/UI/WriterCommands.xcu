@@ -2586,6 +2586,14 @@
           <value xml:lang="en-US">Select Paragraph</value>
         </prop>
       </node>
+      <node oor:name=".uno:SelectionCycle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Select Cycle</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:GoToNextPara" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">To Next Paragraph</value>
