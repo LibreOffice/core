@@ -25,14 +25,14 @@
 #include <svl/undo.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svdlayer.hxx>
-#include <vcl/window.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svl/itemset.hxx>
-#include <vcl/timer.hxx>
 #include <svx/svxdllapi.h>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <unotools/options.hxx>
+#include <vcl/event.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/timer.hxx>
 #include <memory>
 
 
@@ -57,7 +57,6 @@ namespace sdr::contact {
     class ViewObjectContactRedirector;
 }
 
-
 // Defines for AnimationMode
 enum class SdrAnimationMode
 {
@@ -65,10 +64,12 @@ enum class SdrAnimationMode
     Disable
 };
 
-
 class SdrPaintView;
 namespace sdr::contact { class ViewObjectContactRedirector; }
 
+namespace vcl {
+    class Window;
+}
 
 
 class SvxViewChangedHint final : public SfxHint
