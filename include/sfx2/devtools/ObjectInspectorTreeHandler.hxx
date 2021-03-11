@@ -15,8 +15,9 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 
-#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <memory>
 #include <deque>
@@ -33,6 +34,8 @@ private:
     std::unique_ptr<weld::Notebook>& mpObjectInspectorNotebook;
 
     std::deque<css::uno::Any> maInspectionStack;
+
+    css::uno::Reference<css::uno::XComponentContext> mxContext;
 
     static void clearObjectInspectorChildren(std::unique_ptr<weld::TreeView>& pTreeView,
                                              weld::TreeIter const& rParent);
