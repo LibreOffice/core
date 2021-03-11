@@ -23,6 +23,7 @@
 #include <svx/svdglue.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdtrans.hxx>
+#include <comphelper/lok.hxx>
 
 const Size aGlueHalfSize(4,4);
 
@@ -253,6 +254,8 @@ void SdrGluePoint::Shear(const Point& rRef, double tn, bool bVShear, const SdrOb
 
 void SdrGluePoint::Invalidate(vcl::Window& rWin, const SdrObject* pObj) const
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
     bool bMapMode=rWin.IsMapModeEnabled();
     Point aPt(pObj!=nullptr ? GetAbsolutePos(*pObj) : GetPos());
     aPt=rWin.LogicToPixel(aPt);
@@ -324,6 +327,8 @@ sal_uInt16 SdrGluePointList::Insert(const SdrGluePoint& rGP)
 
 void SdrGluePointList::Invalidate(vcl::Window& rWin, const SdrObject* pObj) const
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
     for (auto& xGP : aList)
         xGP->Invalidate(rWin,pObj);
 }
