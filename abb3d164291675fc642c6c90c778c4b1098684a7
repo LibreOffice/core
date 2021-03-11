@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d2f8ab6a_e28f7975",
+        "filename": "vcl/source/filter/png/PngImageReader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-03-11T01:22:39Z",
+      "side": 1,
+      "message": "Hm.. the problem I see with erasing is that we will now do this every time just to make a corrupted image (edge case that happens almost never) to look less corrupted (have white in the unread areas instead of garbage). I don\u0027t think we need to do this non-trivial extra work in this case.",
+      "revId": "abb3d164291675fc642c6c90c778c4b1098684a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
