@@ -620,21 +620,6 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
             {
                 rModel.BegUndo( SvxResId(STR_TABLE_INSCOL) );
                 rModel.AddUndo( rModel.GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
-
-                TableModelRef xThis( this );
-
-                nRows = getRowCountImpl();
-                CellVector aNewCells( nCount * nRows );
-                CellVector::iterator aCellIter( aNewCells.begin() );
-
-                nRows = getRowCountImpl();
-                for( sal_Int32 nRow = 0; nRow < nRows; ++nRow )
-                {
-                    for( sal_Int32 nOffset = 0; nOffset < nCount; ++nOffset )
-                        (*aCellIter++) = getCell( nIndex + nOffset, nRow );
-                }
-
-                rModel.AddUndo( std::make_unique<InsertColUndo>( xThis, nIndex, aNewColumns, aNewCells ) );
             }
 
             const sal_Int32 nRowCount = getRowCountImpl();
@@ -756,6 +741,26 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
                 }
             }
 
+            // We must not add RemoveColUndo before we make cell spans correct, otherwise we
+            // get invalid cell span after undo.
+            if( bUndo  )
+            {
+                TableModelRef xThis( this );
+
+                nRows = getRowCountImpl();
+                CellVector aNewCells( nCount * nRows );
+                CellVector::iterator aCellIter( aNewCells.begin() );
+
+                nRows = getRowCountImpl();
+                for( sal_Int32 nRow = 0; nRow < nRows; ++nRow )
+                {
+                    for( sal_Int32 nOffset = 0; nOffset < nCount; ++nOffset )
+                        (*aCellIter++) = getCell( nIndex + nOffset, nRow );
+                }
+
+                rModel.AddUndo( std::make_unique<InsertColUndo>( xThis, nIndex, aNewColumns, aNewCells ) );
+            }
+
             // now remove the columns
             remove_range<ColumnVector,ColumnVector::iterator>( maColumns, nIndex, nCount );
             while( nRows-- )
@@ -860,14 +865,6 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
             {
                 rModel.BegUndo( SvxResId(STR_UNDO_ROW_DELETE) );
                 rModel.AddUndo( rModel.GetSdrUndoFactory().CreateUndoGeoObject(*mpTableObj) );
-
-                TableModelRef xThis( this );
-
-                RowVector aRemovedRows( nCount );
-                for( sal_Int32 nOffset = 0; nOffset < nCount; ++nOffset )
-                    aRemovedRows[nOffset] = maRows[nIndex+nOffset];
-
-                rModel.AddUndo( std::make_unique<RemoveRowUndo>( xThis, nIndex, aRemovedRows ) );
             }
 
             // only rows before and inside the removed rows are considered
@@ -912,6 +909,19 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
                         xCell->merge( xCell->getColumnSpan(), nRowSpan - nRemove );
                     }
                 }
+            }
+
+            if( bUndo )
+            {
+                TableModelRef xThis( this );
+
+                RowVector aRemovedRows( nCount );
+                for( sal_Int32 nOffset = 0; nOffset < nCount; ++nOffset )
+                    aRemovedRows[nOffset] = maRows[nIndex+nOffset];
+
+                // We must not RemoveRowUndo before we make cell spans correct, otherwise we
+                // get invalid cell span after undo.
+                rModel.AddUndo( std::make_unique<RemoveRowUndo>( xThis, nIndex, aRemovedRows ) );
             }
 
             // now remove the rows
