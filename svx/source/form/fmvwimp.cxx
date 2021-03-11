@@ -1014,6 +1014,12 @@ void FmXFormView::breakCreateFormObject()
     m_xLastCreatedControlModel.clear();
 }
 
+Reference<XWindow> FmXFormView::GetParentWindow()
+{
+    const vcl::Window* pCurrentWindow = m_pView ? dynamic_cast<const vcl::Window*>(m_pView->GetActualOutDev()) : nullptr;
+    return VCLUnoHelper::GetInterface(const_cast<vcl::Window*>(pCurrentWindow));
+}
+
 IMPL_LINK_NOARG( FmXFormView, OnStartControlWizard, void*, void )
 {
     m_nControlWizardEvent = nullptr;
@@ -1051,8 +1057,7 @@ IMPL_LINK_NOARG( FmXFormView, OnStartControlWizard, void*, void )
         // build the argument list
         ::comphelper::NamedValueCollection aWizardArgs;
         aWizardArgs.put("ObjectModel", m_xLastCreatedControlModel);
-        const vcl::Window* pCurrentWindow = m_pView ? dynamic_cast<const vcl::Window*>(m_pView->GetActualOutDev()) : nullptr;
-        aWizardArgs.put("ParentWindow", VCLUnoHelper::GetInterface(const_cast<vcl::Window*>(pCurrentWindow)));
+        aWizardArgs.put("ParentWindow", GetParentWindow());
 
         // create the wizard object
         Reference< XExecutableDialog > xWizard;
