@@ -493,7 +493,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
     if( rCEvt.GetCommand() == CommandEventId::PasteSelection && !bNativeShow )
     {
-        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSelection( GetActiveWindow() ) );
+        TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromPrimarySelection());
 
         if( aDataHelper.GetTransferable().is() )
         {

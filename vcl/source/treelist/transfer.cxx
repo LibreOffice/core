@@ -2170,11 +2170,8 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( vcl::W
     return CreateFromClipboard(xClipboard);
 }
 
-
-TransferableDataHelper TransferableDataHelper::CreateFromSelection( vcl::Window* pWindow )
+TransferableDataHelper TransferableDataHelper::CreateFromPrimarySelection()
 {
-    DBG_ASSERT( pWindow, "Window pointer is NULL" );
-
     Reference< XClipboard > xSelection(GetSystemPrimarySelection());
     TransferableDataHelper   aRet;
 
@@ -2199,7 +2196,6 @@ TransferableDataHelper TransferableDataHelper::CreateFromSelection( vcl::Window*
 
     return aRet;
 }
-
 
 bool TransferableDataHelper::IsEqual( const css::datatransfer::DataFlavor& rInternalFlavor,
                                       const css::datatransfer::DataFlavor& rRequestFlavor )
