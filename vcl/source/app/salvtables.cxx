@@ -4144,8 +4144,7 @@ void SalInstanceTreeView::set_clicks_to_toggle(int nToggleBehavior)
 
 void SalInstanceTreeView::set_extra_row_indent(const weld::TreeIter& rIter, int nIndentLevel)
 {
-    weld::TreeIter& rNonConstIter = const_cast<weld::TreeIter&>(rIter);
-    SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rNonConstIter);
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     rVclIter.iter->SetExtraIndent(nIndentLevel);
 }
 
