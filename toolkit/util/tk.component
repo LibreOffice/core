@@ -23,6 +23,11 @@
       constructor="com_sun_star_awt_comp_AsyncCallback_get_implementation">
     <service name="com.sun.star.awt.AsyncCallback"/>
   </implementation>
+  <implementation name="com.sun.star.comp.embed.HatchWindowFactory"
+      constructor="com_sun_star_comp_embed_HatchWindowFactory_get_implementation">
+    <service name="com.sun.star.comp.embed.HatchWindowFactory"/>
+    <service name="com.sun.star.embed.HatchWindowFactory"/>
+  </implementation>
   <implementation name="stardiv.Toolkit.UnoControlTabPage"
       constructor="stardiv_Toolkit_UnoControlTabPage_get_implementation">
     <service name="com.sun.star.awt.tab.UnoControlTabPage"/>

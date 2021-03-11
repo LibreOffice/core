@@ -11323,12 +11323,6 @@ svtools/source/filter/SvFilterOptionsDialog.cxx
 svtools/source/filter/exportdialog.cxx
 svtools/source/filter/exportdialog.hxx
 svtools/source/graphic/renderer.cxx
-svtools/source/hatchwindow/documentcloser.cxx
-svtools/source/hatchwindow/hatchwindow.cxx
-svtools/source/hatchwindow/hatchwindowfactory.cxx
-svtools/source/hatchwindow/ipwin.cxx
-svtools/source/hatchwindow/ipwin.hxx
-svtools/source/inc/hatchwindow.hxx
 svtools/source/java/javacontext.cxx
 svtools/source/java/javainteractionhandler.cxx
 svtools/source/misc/acceleratorexecute.cxx
@@ -13776,6 +13770,12 @@ toolkit/source/controls/unocontrolcontainer.cxx
 toolkit/source/controls/unocontrolcontainermodel.cxx
 toolkit/source/controls/unocontrolmodel.cxx
 toolkit/source/controls/unocontrols.cxx
+toolkit/source/hatchwindow/documentcloser.cxx
+toolkit/source/hatchwindow/hatchwindow.cxx
+toolkit/source/hatchwindow/hatchwindow.hxx
+toolkit/source/hatchwindow/hatchwindowfactory.cxx
+toolkit/source/hatchwindow/ipwin.cxx
+toolkit/source/hatchwindow/ipwin.hxx
 toolkit/source/helper/accessibilityclient.cxx
 toolkit/source/helper/btndlg.cxx
 toolkit/source/helper/formpdfexport.cxx

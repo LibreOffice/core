@@ -113,10 +113,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/filter/DocumentToGraphicRenderer \
     svtools/source/filter/exportdialog \
     svtools/source/graphic/renderer \
-    svtools/source/hatchwindow/documentcloser \
-    svtools/source/hatchwindow/hatchwindow \
-    svtools/source/hatchwindow/hatchwindowfactory \
-    svtools/source/hatchwindow/ipwin \
     $(if $(ENABLE_JAVA), \
         svtools/source/java/javacontext \
         svtools/source/java/javainteractionhandler) \
