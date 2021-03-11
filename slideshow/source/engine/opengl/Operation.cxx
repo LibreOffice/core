@@ -28,12 +28,12 @@
 
 #include <sal/config.h>
 
+#include "Operation.hxx"
+
 #include <basegfx/numeric/ftools.hxx>
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
-#include "Operation.hxx"
 
 SRotate::SRotate(const glm::vec3& Axis, const glm::vec3& Origin,
         double Angle, bool bInter, double T0, double T1):
