@@ -1128,6 +1128,19 @@ void fillQueryParam(
                 aItem.mfVal    = rVal.NumericValue;
                 aItem.maString = rPool.intern(rVal.StringValue);
 
+                if (aItem.meType == ScQueryEntry::ByString)
+                {
+                    sal_uInt32 nIndex = 0;
+                    OUString aStr;
+                    aItem.mbFormattedValue = true;
+                    bool bNumber = pDoc->GetFormatTable()->IsNumberFormat(rVal.StringValue, nIndex, aItem.mfVal);
+                    if (bNumber)
+                    {
+                        pDoc->GetFormatTable()->GetInputLineString(aItem.mfVal, nIndex, aStr);
+                        aItem.maString = rPool.intern(aStr);
+                    }
+                }
+
                 if (aItem.meType == ScQueryEntry::ByValue)
                 {
                     OUString aStr;

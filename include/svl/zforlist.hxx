@@ -562,7 +562,7 @@ public:
     /** Format a number according to the standard default format matching
         the given format index */
     void GetInputLineString( const double& fOutNumber,
-                             sal_uInt32 nFIndex, OUString& rOutString );
+                             sal_uInt32 nFIndex, OUString& rOutString, bool bFiltering = false );
 
     /** Format a number according to a format code string to be scanned.
         @return
