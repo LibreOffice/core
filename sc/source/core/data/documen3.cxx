@@ -1591,6 +1591,20 @@ void ScDocument::GetFilterEntries(
             sortAndRemoveDuplicates( rFilterEntries.maStrData, aParam.bCaseSens);
         }
     }
+<<<<<<< HEAD   (ce0fc9 tdf#36383 sc AutoFilter: fix changing row height)
+=======
+
+    if ( bFilter )
+    {
+        maTabs[nTab]->GetFilteredFilterEntries( nCol, nStartRow, nEndRow, aParam, rFilterEntries, bFilter );
+    }
+    else
+    {
+        maTabs[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rFilterEntries );
+    }
+
+    sortAndRemoveDuplicates( rFilterEntries.maStrData, aParam.bCaseSens);
+>>>>>>> CHANGE (4fd133 tdf#140968 tdf#140978 XLSX import: fix lost rounded filters)
 }
 
 /**

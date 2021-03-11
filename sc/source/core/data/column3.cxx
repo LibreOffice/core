@@ -2417,8 +2417,13 @@ class FilterEntriesHandler
     {
         SvNumberFormatter* pFormatter = mrColumn.GetDoc()->GetFormatTable();
         OUString aStr;
+<<<<<<< HEAD   (ce0fc9 tdf#36383 sc AutoFilter: fix changing row height)
         sal_uLong nFormat = mrColumn.GetNumberFormat(mrColumn.GetDoc()->GetNonThreadedContext(), nRow);
         ScCellFormat::GetInputString(rCell, nFormat, aStr, *pFormatter, mrColumn.GetDoc());
+=======
+        sal_uLong nFormat = mrColumn.GetNumberFormat(mrColumn.GetDoc().GetNonThreadedContext(), nRow);
+        ScCellFormat::GetInputString(rCell, nFormat, aStr, *pFormatter, mrColumn.GetDoc(), mrColumn.HasFiltering());
+>>>>>>> CHANGE (4fd133 tdf#140968 tdf#140978 XLSX import: fix lost rounded filters)
 
         if (rCell.hasString())
         {
@@ -2530,8 +2535,9 @@ public:
 
 void ScColumn::GetFilterEntries(
     sc::ColumnBlockConstPosition& rBlockPos, SCROW nStartRow, SCROW nEndRow,
-    ScFilterEntries& rFilterEntries )
+    ScFilterEntries& rFilterEntries, bool bFiltering )
 {
+    mbFiltering = bFiltering;
     FilterEntriesHandler aFunc(*this, rFilterEntries);
     rBlockPos.miCellPos =
         sc::ParseAll(rBlockPos.miCellPos, maCells, nStartRow, nEndRow, aFunc, aFunc);

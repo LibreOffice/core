@@ -118,7 +118,11 @@ OUString ScCellFormat::GetString(
 }
 
 void ScCellFormat::GetInputString(
+<<<<<<< HEAD   (ce0fc9 tdf#36383 sc AutoFilter: fix changing row height)
     const ScRefCellValue& rCell, sal_uInt32 nFormat, OUString& rString, SvNumberFormatter& rFormatter, const ScDocument* pDoc )
+=======
+    const ScRefCellValue& rCell, sal_uInt32 nFormat, OUString& rString, SvNumberFormatter& rFormatter, const ScDocument& rDoc, bool bFiltering )
+>>>>>>> CHANGE (4fd133 tdf#140968 tdf#140978 XLSX import: fix lost rounded filters)
 {
     switch (rCell.meType)
     {
@@ -127,7 +131,7 @@ void ScCellFormat::GetInputString(
             rString = rCell.getString(pDoc);
         break;
         case CELLTYPE_VALUE:
-            rFormatter.GetInputLineString(rCell.mfValue, nFormat, rString );
+            rFormatter.GetInputLineString(rCell.mfValue, nFormat, rString, bFiltering);
         break;
         case CELLTYPE_FORMULA:
         {

@@ -1591,7 +1591,8 @@ sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
 
 void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
                                            sal_uInt32 nFIndex,
-                                           OUString& sOutString)
+                                           OUString& sOutString,
+                                           bool bFiltering)
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
     Color* pColor;
@@ -1632,7 +1633,8 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
     }
 
     sal_uInt32 nKey = GetEditFormat( fOutNumber, nRealKey, eType, eLang, pFormat);
-    if ( nKey != nRealKey )
+    // if bFiltering true keep the nRealKey format
+    if ( nKey != nRealKey && !bFiltering )
     {
         pFormat = GetFormatEntry( nKey );
     }

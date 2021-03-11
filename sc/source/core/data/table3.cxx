@@ -2418,7 +2418,7 @@ public:
     }
 
    std::pair<bool,bool> compareByString(
-        ScRefCellValue& rCell, SCROW nRow, const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
+        const ScRefCellValue& rCell, SCROW nRow, const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
         const ScInterpreterContext* pContext)
     {
         if (!rCell.isEmpty())
@@ -2439,7 +2439,11 @@ public:
                     mrTab.GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
                 OUString aStr;
                 SvNumberFormatter* pFormatter = pContext ? pContext->GetFormatTable() : mrDoc.GetFormatTable();
+<<<<<<< HEAD   (ce0fc9 tdf#36383 sc AutoFilter: fix changing row height)
                 ScCellFormat::GetInputString(rCell, nFormat, aStr, *pFormatter, &mrDoc);
+=======
+                ScCellFormat::GetInputString(rCell, nFormat, aStr, *pFormatter, mrDoc, rEntry.bDoQuery);
+>>>>>>> CHANGE (4fd133 tdf#140968 tdf#140978 XLSX import: fix lost rounded filters)
                 return compareByStringComparator(rEntry, rItem, nullptr, &aStr);
             }
         }
@@ -3016,6 +3020,9 @@ public:
         if (rItem.meType != ScQueryEntry::ByString && rItem.meType != ScQueryEntry::ByDate)
             return;
 
+        if (rItem.mbFormattedValue)
+            return;
+
         sal_uInt32 nIndex = 0;
         bool bNumber = mrDoc.GetFormatTable()->
             IsNumberFormat(rItem.maString.getString(), nIndex, rItem.mfVal);
@@ -3507,11 +3514,11 @@ void ScTable::GetFilterEntries( SCCOL nCol, SCROW nRow1, SCROW nRow2, ScFilterEn
 {
     sc::ColumnBlockConstPosition aBlockPos;
     aCol[nCol].InitBlockPosition(aBlockPos);
-    aCol[nCol].GetFilterEntries(aBlockPos, nRow1, nRow2, rFilterEntries);
+    aCol[nCol].GetFilterEntries(aBlockPos, nRow1, nRow2, rFilterEntries, false);
 }
 
 void ScTable::GetFilteredFilterEntries(
-    SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, ScFilterEntries& rFilterEntries )
+    SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, ScFilterEntries& rFilterEntries, bool bFiltering )
 {
     sc::ColumnBlockConstPosition aBlockPos;
     aCol[nCol].InitBlockPosition(aBlockPos);
@@ -3525,7 +3532,7 @@ void ScTable::GetFilteredFilterEntries(
     {
         if (ValidQuery(j, aParam))
         {
-            aCol[nCol].GetFilterEntries(aBlockPos, j, j, rFilterEntries);
+            aCol[nCol].GetFilterEntries(aBlockPos, j, j, rFilterEntries, bFiltering);
         }
     }
 }

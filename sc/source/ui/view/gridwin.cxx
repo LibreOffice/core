@@ -606,14 +606,18 @@ public:
 
 class AddSelectedItemString
 {
-    std::unordered_set<OUString>& mrSet;
+    std::unordered_set<OUString>& mrSetString;
+    std::unordered_set<double>& mrSetValue;
 public:
-    explicit AddSelectedItemString(std::unordered_set<OUString>& r) :
-        mrSet(r) {}
+    explicit AddSelectedItemString(std::unordered_set<OUString>& rString, std::unordered_set<double>& rValue) :
+        mrSetString(rString), mrSetValue(rValue) {}
 
     void operator() (const ScQueryEntry::Item& rItem)
     {
-        mrSet.insert(rItem.maString.getString());
+        if( rItem.meType == ScQueryEntry::QueryType::ByValue )
+            mrSetValue.insert(rItem.mfVal);
+        else
+            mrSetString.insert(rItem.maString.getString());
     }
 };
 
@@ -670,13 +674,14 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     ScQueryParam aParam;
     pDBData->GetQueryParam(aParam);
     std::vector<ScQueryEntry*> aEntries = aParam.FindAllEntriesByField(nCol);
-    std::unordered_set<OUString> aSelected;
+    std::unordered_set<OUString> aSelectedString;
+    std::unordered_set<double> aSelectedValue;
     for (ScQueryEntry* pEntry : aEntries)
     {
         if (pEntry && pEntry->bDoQuery && pEntry->eOp == SC_EQUAL)
         {
             ScQueryEntry::QueryItemsType& rItems = pEntry->GetQueryItems();
-            std::for_each(rItems.begin(), rItems.end(), AddSelectedItemString(aSelected));
+            std::for_each(rItems.begin(), rItems.end(), AddSelectedItemString(aSelectedString, aSelectedValue));
         }
     }
 
@@ -688,14 +693,23 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     mpAutoFilterPopup->setMemberSize(aFilterEntries.size());
     for (const auto& rEntry : aFilterEntries)
     {
-        const OUString& aVal = rEntry.GetString();
+        const OUString& aStringVal = rEntry.GetString();
+        const double aDoubleVal = rEntry.GetValue();
         bool bSelected = true;
-        if (!aSelected.empty())
-            bSelected = aSelected.count(aVal) > 0;
+        if (!aSelectedValue.empty() || !aSelectedString.empty())
+            bSelected = aSelectedValue.count(aDoubleVal) > 0 || aSelectedString.count(aStringVal) > 0;
         if ( rEntry.IsDate() )
+<<<<<<< HEAD   (ce0fc9 tdf#36383 sc AutoFilter: fix changing row height)
             mpAutoFilterPopup->addDateMember( aVal, rEntry.GetValue(), bSelected );
+=======
+            rControl.addDateMember( aStringVal, rEntry.GetValue(), bSelected );
+>>>>>>> CHANGE (4fd133 tdf#140968 tdf#140978 XLSX import: fix lost rounded filters)
         else
+<<<<<<< HEAD   (ce0fc9 tdf#36383 sc AutoFilter: fix changing row height)
             mpAutoFilterPopup->addMember(aVal, bSelected);
+=======
+            rControl.addMember(aStringVal, bSelected);
+>>>>>>> CHANGE (4fd133 tdf#140968 tdf#140978 XLSX import: fix lost rounded filters)
     }
     mpAutoFilterPopup->initMembers();
 

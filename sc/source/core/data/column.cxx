@@ -85,7 +85,8 @@ ScColumn::ScColumn() :
     maCells(maCellsEvent),
     mnBlkCountFormula(0),
     nCol( 0 ),
-    nTab( 0 )
+    nTab( 0 ),
+    mbFiltering( false )
 {
     maCells.resize(MAXROWCOUNT);
 }

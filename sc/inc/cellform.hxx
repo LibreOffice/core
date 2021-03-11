@@ -45,7 +45,11 @@ public:
 
     static void GetInputString(
         const ScRefCellValue& rCell, sal_uInt32 nFormat, OUString& rString, SvNumberFormatter& rFormatter,
+<<<<<<< HEAD   (ce0fc9 tdf#36383 sc AutoFilter: fix changing row height)
         const ScDocument* pDoc );
+=======
+        const ScDocument& rDoc, bool bFiltering = false );
+>>>>>>> CHANGE (4fd133 tdf#140968 tdf#140978 XLSX import: fix lost rounded filters)
 
     static OUString GetOutputString(
         ScDocument& rDoc, const ScAddress& rPos, const ScRefCellValue& rCell );
