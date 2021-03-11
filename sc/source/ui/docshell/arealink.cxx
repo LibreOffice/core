@@ -463,8 +463,8 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
 
         //! Link dialog must set default parent
         //  "cannot insert rows"
-        vcl::Window* pWin = Application::GetDefDialogParent();
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+        weld::Window* pWin = Application::GetFrameWeld(m_pDocSh->GetDialogParent());
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin,
                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                       ScResId(STR_MSSG_DOSUBTOTALS_2)));
         xInfoBox->run();
