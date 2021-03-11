@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5088805f_cdfe55d2",
+        "filename": "sw/source/uibase/utlui/attrdesc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-11T06:40:28Z",
+      "side": 1,
+      "message": "This change is not needed. Please add a space after the \"List Style:\" in STR_NUMRULE_ON instead, and keep the change simpler. Additionally, this potentially allows translators to change the placement of the style name inside the string, because actually STR_NUMRULE_ON *should* be \"List Style: %STYLENAME\", and here it should replace %STYLENAME with \"(\" + GetValue() + \")\", so that some translator could do \"someNativeLanguagePrefix %STYLENAME someNativeLanguageSuffix\", and it be positioned correctly according to language rules.",
+      "range": {
+        "startLine": 194,
+        "startChar": 13,
+        "endLine": 194,
+        "endChar": 14
+      },
+      "revId": "79d33cf8ced78f3d528804e5426482dbe7993ac1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
