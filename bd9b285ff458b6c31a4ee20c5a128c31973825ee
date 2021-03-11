@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e16a859_9c2cd0bf",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-03-11T10:47:29Z",
+      "side": 1,
+      "message": "did you try putting sections in footnotes? that probably has the same problem",
+      "revId": "bd9b285ff458b6c31a4ee20c5a128c31973825ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
