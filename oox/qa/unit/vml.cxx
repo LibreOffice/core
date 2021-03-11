@@ -19,7 +19,6 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/text/WritingMode2.hpp>
 
 using namespace ::com::sun::star;
 

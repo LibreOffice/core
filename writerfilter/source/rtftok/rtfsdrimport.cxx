@@ -36,7 +36,6 @@
 #include <sal/log.hxx>
 #include <svx/svdtrans.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
 #include "rtfreferenceproperties.hxx"
 #include <oox/vml/vmlformatting.hxx>

@@ -31,7 +31,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <vcl/checksum.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <svl/cryptosign.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 

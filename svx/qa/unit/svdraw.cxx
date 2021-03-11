@@ -33,7 +33,6 @@
 #include <sfx2/viewsh.hxx>
 #include <svx/svdview.hxx>
 #include <svx/unoapi.hxx>
-#include <sal/log.hxx>
 
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>
 

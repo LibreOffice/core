@@ -26,7 +26,6 @@
 #include <comphelper/sequence.hxx>
 
 #include <fmtfsize.hxx>
-#include <fmtornt.hxx>
 #include <wrtsh.hxx>
 #include <edtwin.hxx>
 #include <view.hxx>

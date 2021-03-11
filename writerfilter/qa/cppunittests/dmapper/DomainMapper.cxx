@@ -13,9 +13,6 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/style/BreakType.hpp>
-#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/text/WritingMode2.hpp>
 
 #include <tools/UnitConversion.hxx>
 

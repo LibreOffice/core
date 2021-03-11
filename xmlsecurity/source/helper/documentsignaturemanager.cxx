@@ -32,7 +32,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/packages/manifest/ManifestReader.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XWriter.hpp>
 #include <com/sun/star/frame/XModel.hpp>
