@@ -1582,7 +1582,7 @@ void ScDocument::GetFilterEntries(
 
     if ( bFilter )
     {
-        maTabs[nTab]->GetFilteredFilterEntries( nCol, nStartRow, nEndRow, aParam, rFilterEntries );
+        maTabs[nTab]->GetFilteredFilterEntries( nCol, nStartRow, nEndRow, aParam, rFilterEntries, bFilter );
     }
     else
     {
