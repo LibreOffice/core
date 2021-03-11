@@ -174,9 +174,12 @@
                           <object class="GtkTreeSelection"/>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn4">
+                          <object class="GtkTreeViewColumn" id="interfaces_treeviewcolumn1">
                             <property name="resizable">True</property>
                             <property name="title" translatable="yes" context="developmenttool|name">Name</property>
+                            <property name="clickable">True</property>
+                            <property name="sort-indicator">True</property>
+                            <property name="sort-column-id">0</property>
                             <child>
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext4"/>
                               <attributes>
@@ -223,6 +226,9 @@
                           <object class="GtkTreeViewColumn" id="services_treeviewcolumn1">
                             <property name="resizable">True</property>
                             <property name="title" translatable="yes" context="developmenttool|name">Name</property>
+                            <property name="clickable">True</property>
+                            <property name="sort-indicator">True</property>
+                            <property name="sort-column-id">0</property>
                             <child>
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext7"/>
                               <attributes>
@@ -273,6 +279,9 @@
                           <object class="GtkTreeViewColumn" id="properties_treeviewcolumn1">
                             <property name="resizable">True</property>
                             <property name="title" translatable="yes" context="developmenttool|object">Object</property>
+                            <property name="clickable">True</property>
+                            <property name="sort-indicator">True</property>
+                            <property name="sort-column-id">0</property>
                             <child>
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext1"/>
                               <attributes>
@@ -285,6 +294,9 @@
                           <object class="GtkTreeViewColumn" id="properties_treeviewcolumn2">
                             <property name="resizable">True</property>
                             <property name="title" translatable="yes" context="developmenttool|value">Value</property>
+                            <property name="clickable">True</property>
+                            <property name="sort-indicator">True</property>
+                            <property name="sort-column-id">1</property>
                             <child>
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext2"/>
                               <attributes>
@@ -297,6 +309,9 @@
                           <object class="GtkTreeViewColumn" id="properties_treeviewcolumn3">
                             <property name="resizable">True</property>
                             <property name="title" translatable="yes" context="developmenttool|type">Type</property>
+                            <property name="clickable">True</property>
+                            <property name="sort-indicator">True</property>
+                            <property name="sort-column-id">2</property>
                             <child>
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext3"/>
                               <attributes>
@@ -309,6 +324,9 @@
                           <object class="GtkTreeViewColumn" id="properties_treeviewcolumn4">
                             <property name="resizable">True</property>
                             <property name="title" translatable="yes" context="developmenttool|info">Info</property>
+                            <property name="clickable">True</property>
+                            <property name="sort-indicator">True</property>
+                            <property name="sort-column-id">3</property>
                             <child>
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext5"/>
                               <attributes>
@@ -356,9 +374,12 @@
                           <object class="GtkTreeSelection"/>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn10">
+                          <object class="GtkTreeViewColumn" id="methods_treeviewcolumn1">
                             <property name="resizable">True</property>
                             <property name="title" translatable="yes" context="developmenttool|method">Method</property>
+                            <property name="clickable">True</property>
+                            <property name="sort-indicator">True</property>
+                            <property name="sort-column-id">0</property>
                             <child>
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext10"/>
                               <attributes>
@@ -368,9 +389,12 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn11">
+                          <object class="GtkTreeViewColumn" id="methods_treeviewcolumn2">
                             <property name="resizable">True</property>
                             <property name="title" translatable="yes" context="developmenttool|returntype">Return Type</property>
+                            <property name="clickable">True</property>
+                            <property name="sort-indicator">True</property>
+                            <property name="sort-column-id">1</property>
                             <child>
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext11"/>
                               <attributes>
@@ -380,9 +404,12 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn12">
+                          <object class="GtkTreeViewColumn" id="methods_treeviewcolumn3">
                             <property name="resizable">True</property>
                             <property name="title" translatable="yes" context="developmenttool|parameters">Parameters</property>
+                            <property name="clickable">True</property>
+                            <property name="sort-indicator">True</property>
+                            <property name="sort-column-id">2</property>
                             <child>
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext12"/>
                               <attributes>
@@ -392,9 +419,12 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn" id="treeviewcolumn13">
+                          <object class="GtkTreeViewColumn" id="methods_treeviewcolumn4">
                             <property name="resizable">True</property>
                             <property name="title" translatable="yes" context="developmenttool|implementation_class">Implementation Class</property>
+                            <property name="clickable">True</property>
+                            <property name="sort-indicator">True</property>
+                            <property name="sort-column-id">3</property>
                             <child>
                               <object class="GtkCellRendererText" id="obj_insp_cellrenderertext13"/>
                               <attributes>
