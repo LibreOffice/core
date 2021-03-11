@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "30534b30_48c2d35c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-11T10:33:36Z",
+      "side": 1,
+      "message": "So, in practice, using unordered_map would only be relevant for cppuhelper::ServiceManager::Data::services?  And do you happen to have any performance numbers?  (But yeah, this mostly comes from a time when std::map was just the standard thing to use in C++, and the code likely does not actually rely on std::map vs. std::unordered_map.)",
+      "revId": "83d9f5b281b811eb6416027a95347a04d94d981b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c26a0223_fd1a12a5",
+        "filename": "cppuhelper/source/servicemanager.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-11T10:33:36Z",
+      "side": 1,
+      "message": "this needs to be replaced with \u003cunordered_map\u003e now",
+      "revId": "83d9f5b281b811eb6416027a95347a04d94d981b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fea9c1e5_e1dc13cc",
         "filename": "cppuhelper/source/servicemanager.hxx",
         "patchSetId": 1
