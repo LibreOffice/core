@@ -16,6 +16,24 @@
       "revId": "9ff37cb094d2c20c2fc591d8e7e06c462aa2d88f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c75ac35_485d4c89",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-03-11T12:51:44Z",
+      "side": 1,
+      "message": "Yes, it looks like the same problem",
+      "parentUuid": "571ceacd_ae861bc0",
+      "revId": "9ff37cb094d2c20c2fc591d8e7e06c462aa2d88f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
