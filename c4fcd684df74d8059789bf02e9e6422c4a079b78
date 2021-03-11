@@ -16,6 +16,24 @@
       "revId": "c4fcd684df74d8059789bf02e9e6422c4a079b78",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "905551c9_83928074",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-11T08:41:54Z",
+      "side": 1,
+      "message": "\u003e In some cases, extra whitespace (spaces, line-breaks, tabs, etc.) may\n\u003e have to be added to break a long URI across lines.  The whitespace\n\u003e should be ignored when the URI is extracted.\n\n\u003chttps://tools.ietf.org/html/rfc3986#appendix-C\u003e \"Uniform Resource Identifier (URI): Generic Syntax: Delimiting a URI in Context\".\n\nBut yeah, I get your point :)",
+      "parentUuid": "a85c2bfc_7f48e735",
+      "revId": "c4fcd684df74d8059789bf02e9e6422c4a079b78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
