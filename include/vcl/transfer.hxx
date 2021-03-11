@@ -366,7 +366,7 @@ public:
 
     static TransferableDataHelper   CreateFromClipboard(const css::uno::Reference<css::datatransfer::clipboard::XClipboard>& rClipboard);
     static TransferableDataHelper   CreateFromSystemClipboard( vcl::Window * pWindow );
-    static TransferableDataHelper   CreateFromSelection( vcl::Window * pWindow );
+    static TransferableDataHelper   CreateFromPrimarySelection();
     static bool                     IsEqual( const css::datatransfer::DataFlavor& rInternalFlavor,
                                              const css::datatransfer::DataFlavor& rRequestFlavor );
 };

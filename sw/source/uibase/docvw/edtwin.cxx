@@ -5605,7 +5605,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         if( !m_rView.GetDocShell()->IsReadOnly() )
         {
             TransferableDataHelper aDataHelper(
-                        TransferableDataHelper::CreateFromSelection( this ));
+                        TransferableDataHelper::CreateFromPrimarySelection());
             if( !aDataHelper.GetXTransferable().is() )
                 break;
 
