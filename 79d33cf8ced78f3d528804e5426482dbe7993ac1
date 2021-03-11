@@ -22,6 +22,30 @@
       "revId": "79d33cf8ced78f3d528804e5426482dbe7993ac1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "380c3829_a5216dfe",
+        "filename": "sw/source/uibase/utlui/attrdesc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-03-11T06:51:44Z",
+      "side": 1,
+      "message": "List Style with space is Patch Set 2, but was changed to prevent translators from dropping the space.  No problem to go back.\n\n\u003e actually STR_NUMRULE_ON *should* be \"List Style: %STYLENAME\"\niiuc, %STYLEFAMILY does not exist at present. But as long as changes are being made, then shouldn\u0027t we do it optimally?",
+      "parentUuid": "5088805f_cdfe55d2",
+      "range": {
+        "startLine": 194,
+        "startChar": 13,
+        "endLine": 194,
+        "endChar": 14
+      },
+      "revId": "79d33cf8ced78f3d528804e5426482dbe7993ac1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
