@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "571ceacd_ae861bc0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-11T12:44:04Z",
+      "side": 1,
+      "message": "You mean, \"still hangs\" as in\n\n  kill-wrapper,8441 /home/tdf/lode/bin/tb_slave_wrapper --real --mode\u003dconfig --clean 1200\n  [...]\n        |                   |   |-soffice.bin,31368 -env:UserInstallation\u003dfile:///home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/workdir/UITest/writer_tests5/user --accept\u003dpipe,name\u003dpytestae9c7bac-81c8-11eb-a6af-a8a159366a28;urp --quickstart\u003dno --nofirststartwizard --norestore --nologo\n  [...]\n  Thread 1 (Thread 0x2b1b1c202600 (LWP 31368)):\n  [...]\n  #8  0x00002b1b0c0f46a4 in Application::Yield() () at /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/vcl/source/app/svapp.cxx:532\n  #9  0x00002b1b0b6e584b in Dialog::Execute() (this\u003d0x3ef2860) at /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/vcl/source/window/dialog.cxx:1057\n  #10 0x00002b1b0c03011e in SalInstanceDialog::run() (this\u003d0x3ef0c20) at /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/vcl/source/app/salvtables.cxx:1609\n  #11 0x00002b1b0b7e1126 in weld::DialogController::run() (this\u003d0x7ffdf4c92460) at /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/include/vcl/weld.hxx:2430\n  #12 0x00002b1b0be2a3f4 in Printer::PreparePrintJob(std::shared_ptr\u003cvcl::PrinterController\u003e, JobSetup const\u0026) (xController\u003d..., i_rInitSetup\u003d...) at /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/vcl/source/gdi/print3.cxx:494\n  #13 0x00002b1b0be2898e in Printer::ImplPrintJob(std::shared_ptr\u003cvcl::PrinterController\u003e const\u0026, JobSetup const\u0026) (xController\u003d..., i_rInitSetup\u003d...) at /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/vcl/source/gdi/print3.cxx:543\n  #14 0x00002b1b0be373a2 in (anonymous namespace)::PrintJobAsync::ExecJob(void*) (this\u003d0x3edb120) at /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/vcl/source/gdi/print3.cxx:296\n  #15 0x00002b1b0be28ab8 in (anonymous namespace)::PrintJobAsync::LinkStubExecJob(void*, void*) (instance\u003d0x3edb120, data\u003d0x0) at /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/vcl/source/gdi/print3.cxx:294\n  [...]\n\n?  (Asking because \u003chttps://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/82317/\u003e failed that way too, based on master in between \u003chttps://git.libreoffice.org/core/+/3d2ed830d63f0d1adcb0404ad979d5fcf9706ca2%5E!/\u003e \"uitest: sw: re-enable test to see if it still fails\" and this change\u0027s \u003chttps://git.libreoffice.org/core/+/9ff37cb094d2c20c2fc591d8e7e06c462aa2d88f%5E!/\u003e \"Revert \u0027uitest: sw: re-enable test to see if it still fails\u0027\".)",
+      "revId": "9ff37cb094d2c20c2fc591d8e7e06c462aa2d88f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
