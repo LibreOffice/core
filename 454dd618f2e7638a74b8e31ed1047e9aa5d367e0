@@ -16,6 +16,24 @@
       "revId": "454dd618f2e7638a74b8e31ed1047e9aa5d367e0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1d58507_5929be2f",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport10.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-03-11T11:06:27Z",
+      "side": 1,
+      "message": "\u003e That\u0027s odd... gamma or ICC problem?\n\nI don\u0027t know exactly, I didn\u0027t look into that. But as the commit message says, I verified in Gimp that the libpng-based loader loads what Gimp shows, unlike the old loader.",
+      "parentUuid": "f0a5ea17_9494d14f",
+      "revId": "454dd618f2e7638a74b8e31ed1047e9aa5d367e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
