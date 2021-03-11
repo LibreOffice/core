@@ -4519,8 +4519,7 @@ void ScGridWindow::PasteSelection( const Point& rPosPixel )
     else
     {
         //  get selection from system
-
-        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSelection( this ) );
+        TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromPrimarySelection());
         const uno::Reference<datatransfer::XTransferable>& xTransferable = aDataHelper.GetTransferable();
         if ( xTransferable.is() )
         {
