@@ -242,6 +242,7 @@ class SvxScriptSelectorDialog : public weld::GenericDialogController
     std::unique_ptr<weld::Button> m_xOKButton;
     std::unique_ptr<weld::Button> m_xCancelButton;
     std::unique_ptr<weld::TextView> m_xDescriptionText;
+    std::unique_ptr<weld::Frame> m_xDescriptionFrame;
 
     DECL_LINK(ClickHdl, weld::Button&, void);
     DECL_LINK(SelectHdl, weld::TreeView&, void);
