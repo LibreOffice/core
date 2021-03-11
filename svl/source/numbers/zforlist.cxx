@@ -1225,6 +1225,43 @@ bool SvNumberFormatter::IsNumberFormat(const OUString& sString,
     return res;
 }
 
+void SvNumberFormatter::getTimeFormatIfTimeFormat(OUString& sString, double& fOutNumber, SvNumInputOptions eInputOptions)
+{
+    ::osl::MutexGuard aGuard(GetInstanceMutex());
+
+    ChangeIntl(IniLnge);
+    SvNumFormatType FType = SvNumFormatType::NUMBER;
+
+    SvNumFormatType RType = FType;
+    bool res = pStringScanner->IsNumberFormat(sString, RType, fOutNumber, nullptr, eInputOptions);
+
+    if( res && !IsCompatible(FType, RType) && RType == SvNumFormatType::TIME )     // non-matching type
+    {
+        sal_uInt32 F_Index = 0;
+        if (pStringScanner->GetDecPos())
+        {
+            // 100th seconds
+            if (pStringScanner->GetNumericsCount() > 3 || fOutNumber < 0.0)
+            {
+                F_Index = GetFormatIndex(NF_TIME_HH_MMSS00, ActLnge);
+            }
+            else
+            {
+                F_Index = GetFormatIndex(NF_TIME_MMSS00, ActLnge);
+            }
+        }
+        else if (fOutNumber >= 1.0 || fOutNumber < 0.0)
+        {
+            F_Index = GetFormatIndex(NF_TIME_HH_MMSS, ActLnge);
+        }
+        else
+        {
+            F_Index = GetStandardFormat(RType, ActLnge);
+        }
+        GetInputLineString(fOutNumber, F_Index, sString);
+    }
+}
+
 LanguageType SvNumberFormatter::GetLanguage() const
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
@@ -1589,7 +1626,8 @@ sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
 
 void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
                                            sal_uInt32 nFIndex,
-                                           OUString& sOutString)
+                                           OUString& sOutString,
+                                           bool bFiltering)
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
     const Color* pColor;
@@ -1630,7 +1668,7 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
     }
 
     sal_uInt32 nKey = GetEditFormat( fOutNumber, nRealKey, eType, eLang, pFormat);
-    if ( nKey != nRealKey )
+    if ( nKey != nRealKey && !bFiltering )
     {
         pFormat = GetFormatEntry( nKey );
     }

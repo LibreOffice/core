@@ -549,6 +549,10 @@ public:
     bool IsNumberFormat( const OUString& sString, sal_uInt32& F_Index, double& fOutNumber,
                          SvNumInputOptions eInputOptions = SvNumInputOptions::NONE );
 
+    /// Format a string according to ISO 8601 time format if the sting is a time format string
+    void getTimeFormatIfTimeFormat( OUString& sString, double& fOutNumber,
+                                    SvNumInputOptions eInputOptions = SvNumInputOptions::NONE );
+
     /// Format a number according to a format index, return string and color
     void GetOutputString( const double& fOutNumber, sal_uInt32 nFIndex,
                           OUString& sOutString, const Color** ppColor, bool bUseStarFormat = false );
@@ -562,7 +566,7 @@ public:
     /** Format a number according to the standard default format matching
         the given format index */
     void GetInputLineString( const double& fOutNumber,
-                             sal_uInt32 nFIndex, OUString& rOutString );
+                             sal_uInt32 nFIndex, OUString& rOutString, bool bFiltering = false );
 
     /** Format a number according to a format code string to be scanned.
         @return
