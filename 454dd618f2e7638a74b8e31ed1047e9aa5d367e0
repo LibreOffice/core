@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0a5ea17_9494d14f",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport10.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-03-11T01:46:57Z",
+      "side": 1,
+      "message": "That\u0027s odd... gamma or ICC problem?",
+      "revId": "454dd618f2e7638a74b8e31ed1047e9aa5d367e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
