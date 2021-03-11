@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6a0611d3_724db274",
+        "filename": "sfx2/source/doc/checkreadonlytask.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-11T22:13:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54295602_a44612e4",
+      "range": {
+        "startLine": 10,
+        "startChar": 8,
+        "endLine": 11,
+        "endChar": 43
+      },
+      "revId": "56b8c53b5bd01568d401a6e8094b6e2cfaaa2578",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "13c04522_95d73535",
         "filename": "sfx2/source/doc/checkreadonlytask.hxx",
         "patchSetId": 16
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "e93ab4a6_3ea4642b",
+        "filename": "sfx2/source/doc/checkreadonlytask.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-11T22:13:12Z",
+      "side": 1,
+      "message": "Using the raw pointer isn\u0027t dangerous because it\u0027s protected by a shared_ptr to the mutex which stays around until the last thread stops using it, and the SfxMedium destructor blocks on the mutex and then sets the shared_ptr to _pIsDestructed which is checked in the thread loop before accessing the SfxMedium.\n\nChanging usage of SfxMedium to shared_ptr looks like it might not be the right thing because SfxMedium pointers are used and directly deleted all over the place without ref counts, for example SfxObjectShell::~SfxObjectShell, SfxBaseModel::load, and SfxObjectShell::Save_Impl.",
+      "parentUuid": "13c04522_95d73535",
+      "range": {
+        "startLine": 19,
+        "startChar": 22,
+        "endLine": 19,
+        "endChar": 37
+      },
+      "revId": "56b8c53b5bd01568d401a6e8094b6e2cfaaa2578",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0559f3b6_d0c65c9d",
         "filename": "sfx2/source/doc/checkreadonlytask.hxx",
         "patchSetId": 16
@@ -65,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "20f40bea_a40ebf41",
+        "filename": "sfx2/source/doc/checkreadonlytask.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-11T22:13:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0559f3b6_d0c65c9d",
+      "revId": "56b8c53b5bd01568d401a6e8094b6e2cfaaa2578",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aec9d26_aa697465",
         "filename": "sfx2/source/doc/checkreadonlytask.hxx",
         "patchSetId": 16
@@ -79,6 +145,24 @@
       "revId": "56b8c53b5bd01568d401a6e8094b6e2cfaaa2578",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "696d8eb5_f64a21ad",
+        "filename": "sfx2/source/doc/checkreadonlytask.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-11T22:13:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1aec9d26_aa697465",
+      "revId": "56b8c53b5bd01568d401a6e8094b6e2cfaaa2578",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
