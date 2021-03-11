@@ -27,7 +27,6 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/sysdata.hxx>
-#include <vcl/window.hxx>
 
 #include <canvas/canvastools.hxx>
 
