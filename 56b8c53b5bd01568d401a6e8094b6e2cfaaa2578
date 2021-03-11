@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "54295602_a44612e4",
+        "filename": "sfx2/source/doc/checkreadonlytask.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-11T05:39:50Z",
+      "side": 1,
+      "message": "A nitpick: we move away from inclusion guards to #pragma once (except in public API headers, which this one is not). Please use #pragma once instead.",
+      "range": {
+        "startLine": 10,
+        "startChar": 8,
+        "endLine": 11,
+        "endChar": 43
+      },
+      "revId": "56b8c53b5bd01568d401a6e8094b6e2cfaaa2578",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13c04522_95d73535",
+        "filename": "sfx2/source/doc/checkreadonlytask.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-11T05:39:50Z",
+      "side": 1,
+      "message": "Passing a raw pointer seems dangerous. Maybe it makes sense to manage it using shared_ptr at the main  owner, and weak_ptr in this class.\n\nAdditionally, I\u0027d move the ctor implementation into .CXX (it\u0027s not such a critical code path to require inlining, and the header will be neater that way, only expressing the interface without implementation details).",
+      "range": {
+        "startLine": 19,
+        "startChar": 22,
+        "endLine": 19,
+        "endChar": 37
+      },
+      "revId": "56b8c53b5bd01568d401a6e8094b6e2cfaaa2578",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0559f3b6_d0c65c9d",
+        "filename": "sfx2/source/doc/checkreadonlytask.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-11T05:39:50Z",
+      "side": 1,
+      "message": "You only use a pointer to SfxMedium, so instead of inclusion of sfx2/docfile.hxx, you may just forward-declare class SfxMedium.",
+      "revId": "56b8c53b5bd01568d401a6e8094b6e2cfaaa2578",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1aec9d26_aa697465",
+        "filename": "sfx2/source/doc/checkreadonlytask.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-11T05:39:50Z",
+      "side": 1,
+      "message": "You use std::shared_ptr, std::recursive_mutex, std::condition_variable_any here - please add required includes.",
+      "revId": "56b8c53b5bd01568d401a6e8094b6e2cfaaa2578",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
