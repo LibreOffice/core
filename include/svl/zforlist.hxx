@@ -560,9 +560,10 @@ public:
                           OUString& sOutString, const Color** ppColor, bool bUseStarFormat = false );
 
     /** Format a number according to the standard default format matching
-        the given format index */
+        the given format index. If the bFiltering is true the rOutString get
+        the real cell string instead of cell the editformat string.*/
     void GetInputLineString( const double& fOutNumber,
-                             sal_uInt32 nFIndex, OUString& rOutString );
+                             sal_uInt32 nFIndex, OUString& rOutString, bool bFiltering = false );
 
     /** Format a number according to a format code string to be scanned.
         @return
