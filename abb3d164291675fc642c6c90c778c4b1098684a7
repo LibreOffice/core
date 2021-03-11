@@ -16,6 +16,24 @@
       "revId": "abb3d164291675fc642c6c90c778c4b1098684a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7be49c1_34388abd",
+        "filename": "vcl/source/filter/png/PngImageReader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-03-11T10:30:43Z",
+      "side": 1,
+      "message": "This will result in memset(), so it actually is trivial (and costs even less than the std::vector setup for rows). But ok, I can undo this in a follow-up commit (I don\u0027t want to redo this one because of all the Jenkins failures).",
+      "parentUuid": "d2f8ab6a_e28f7975",
+      "revId": "abb3d164291675fc642c6c90c778c4b1098684a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
