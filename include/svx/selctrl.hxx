@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SVX_SELCTRL_HXX
 #define INCLUDED_SVX_SELCTRL_HXX
 
-#include <vcl/image.hxx>
 #include <sfx2/stbitem.hxx>
 #include <svx/svxdllapi.h>
 
@@ -35,10 +34,10 @@ public:
                               const SfxPoolItem* pState) override;
     virtual bool MouseButtonDown(const MouseEvent& rEvt) override;
     virtual void Paint(const UserDrawEvent& rEvt) override;
+    virtual void Click() override;
 
 private:
     sal_uInt16 mnState;
-    Image maImage;
     bool mbFeatureEnabled;
 };
 
