@@ -565,7 +565,6 @@ void FmXFormView::removeWindow( const Reference< XControlContainer >& _rxCC )
     }
 }
 
-
 void FmXFormView::displayAsyncErrorMessage( const SQLErrorEvent& _rEvent )
 {
     DBG_ASSERT( nullptr == m_nErrorMessageEvent, "FmXFormView::displayAsyncErrorMessage: not too fast, please!" );
@@ -575,13 +574,11 @@ void FmXFormView::displayAsyncErrorMessage( const SQLErrorEvent& _rEvent )
     m_nErrorMessageEvent = Application::PostUserEvent( LINK( this, FmXFormView, OnDelayedErrorMessage ) );
 }
 
-
 IMPL_LINK_NOARG(FmXFormView, OnDelayedErrorMessage, void*, void)
 {
     m_nErrorMessageEvent = nullptr;
-    displayException( m_aAsyncError );
+    displayException(m_aAsyncError, VCLUnoHelper::GetWindow(GetParentWindow()));
 }
-
 
 void FmXFormView::onFirstViewActivation( const FmFormModel* _pDocModel )
 {
@@ -589,13 +586,11 @@ void FmXFormView::onFirstViewActivation( const FmFormModel* _pDocModel )
         m_nAutoFocusEvent = Application::PostUserEvent( LINK( this, FmXFormView, OnAutoFocus ) );
 }
 
-
 void FmXFormView::suspendTabOrderUpdate()
 {
     OSL_ENSURE( !m_isTabOrderUpdateSuspended, "FmXFormView::suspendTabOrderUpdate: nesting not allowed!" );
     m_isTabOrderUpdateSuspended = true;
 }
-
 
 void FmXFormView::resumeTabOrderUpdate()
 {
