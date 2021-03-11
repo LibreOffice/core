@@ -18,7 +18,6 @@
  */
 
 #include <dbaccess/genericcontroller.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <browserids.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -219,7 +218,6 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
-    Reference< XWindow >        xParent;
     Reference< XFrame > xFrame;
 
     PropertyValue aValue;
@@ -243,9 +241,8 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
         if ( !xFrame.is() )
             throw IllegalArgumentException("need a frame", *this, 1 );
 
-        xParent = xFrame->getContainerWindow();
-        VCLXWindow* pParentComponent = comphelper::getUnoTunnelImplementation<VCLXWindow>(xParent);
-        VclPtr< vcl::Window > pParentWin = pParentComponent ? pParentComponent->GetWindow() : nullptr;
+        Reference<XWindow> xParent = xFrame->getContainerWindow();
+        VclPtr<vcl::Window> pParentWin = VCLUnoHelper::GetWindow(xParent);
         if (!pParentWin)
         {
             throw IllegalArgumentException("Parent window is null", *this, 1 );
