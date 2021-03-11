@@ -116,7 +116,7 @@ OUString ScCellFormat::GetString(
 }
 
 void ScCellFormat::GetInputString(
-    const ScRefCellValue& rCell, sal_uInt32 nFormat, OUString& rString, SvNumberFormatter& rFormatter, const ScDocument& rDoc )
+    const ScRefCellValue& rCell, sal_uInt32 nFormat, OUString& rString, SvNumberFormatter& rFormatter, const ScDocument& rDoc, bool bFiltering )
 {
     switch (rCell.meType)
     {
@@ -125,7 +125,7 @@ void ScCellFormat::GetInputString(
             rString = rCell.getString(&rDoc);
         break;
         case CELLTYPE_VALUE:
-            rFormatter.GetInputLineString(rCell.mfValue, nFormat, rString );
+            rFormatter.GetInputLineString(rCell.mfValue, nFormat, rString, bFiltering);
         break;
         case CELLTYPE_FORMULA:
         {
