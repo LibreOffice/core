@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a85c2bfc_7f48e735",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-11T08:29:05Z",
+      "side": 1,
+      "message": "Here and below, you split links to lines, apparently because of making lines fit the standard length limit. This breaks linkifying - could you please make links an exception from line split rule, just as with e.g. listings? :-)",
+      "revId": "c4fcd684df74d8059789bf02e9e6422c4a079b78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
