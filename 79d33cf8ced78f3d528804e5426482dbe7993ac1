@@ -118,6 +118,30 @@
       "revId": "79d33cf8ced78f3d528804e5426482dbe7993ac1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4922c94_b6c283ba",
+        "filename": "sw/source/uibase/utlui/attrdesc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-11T08:57:53Z",
+      "side": 1,
+      "message": "Personally I don\u0027t care how you name that (STYLENAME or STYLEFAMILY); this doesn\u0027t have to be something specific, and is only needed to allow unambiguous detection and replacement of the substring here; \"%ABRACADABRA\" would work just as well. However, it should also be human-understandable; and as such, it is confusing (at least for me) to use \"STYLEFAMILY\" here - I\u0027d expect \"style *family*\" to mean names of *families* of styles - like \"paragraph style\", or \"frame style\"; I\u0027d expect \"STYLENAME\" to fit more what is inserted here.",
+      "parentUuid": "355f9b81_2e610db1",
+      "range": {
+        "startLine": 194,
+        "startChar": 13,
+        "endLine": 194,
+        "endChar": 14
+      },
+      "revId": "79d33cf8ced78f3d528804e5426482dbe7993ac1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
