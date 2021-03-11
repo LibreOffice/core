@@ -438,7 +438,7 @@ bool ParentIsFloatingWindow(vcl::Window *pParent)
     if (!pParent)
         return false;
     if (pParent->GetType() == WindowType::DOCKINGWINDOW || pParent->GetType() == WindowType::TOOLBOX)
-        return true;
+        return static_cast<DockingWindow*>(pParent)->GetFloatingWindow() != nullptr;
     if (pParent->GetType() == WindowType::FLOATINGWINDOW)
         return true;
     return false;
