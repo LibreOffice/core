@@ -85,7 +85,8 @@ ScColumn::ScColumn(ScSheetLimits const & rSheetLimits) :
     maCells(maCellsEvent),
     mnBlkCountFormula(0),
     nCol( 0 ),
-    nTab( 0 )
+    nTab( 0 ),
+    mbFiltering( false )
 {
     maCells.resize(rSheetLimits.GetMaxRowCount());
 }
