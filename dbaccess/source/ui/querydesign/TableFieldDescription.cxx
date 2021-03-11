@@ -22,7 +22,6 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <comphelper/namedvaluecollection.hxx>
-#include <vcl/window.hxx>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
