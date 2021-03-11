@@ -197,6 +197,9 @@ namespace svxform
     public:
         FormController( const css::uno::Reference< css::uno::XComponentContext > & _rxORB );
 
+        // returns the window which should be used as parent window for dialogs
+        static vcl::Window* getDialogParentWindow(css::uno::Reference<css::form::runtime::XFormController> xFormController);
+
     private:
         virtual ~FormController() override;
 
@@ -506,9 +509,6 @@ namespace svxform
 
         bool isLocked() const {return m_bLocked;}
         bool determineLockState() const;
-
-        // returns the window which should be used as parent window for dialogs
-        static vcl::Window* getDialogParentWindow(css::uno::Reference<css::form::runtime::XFormController> xFormController);
 
         css::uno::Reference< css::frame::XDispatchProviderInterceptor>    createInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterception>& _xInterception);
             // create a new interceptor, register it on the given object

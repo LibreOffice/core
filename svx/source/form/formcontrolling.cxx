@@ -23,6 +23,7 @@
 #include <fmurl.hxx>
 #include <svx/svxids.hrc>
 #include <fmprop.hxx>
+#include <formcontroller.hxx>
 #include <svx/fmtools.hxx>
 
 #include <com/sun/star/form/runtime/FormOperations.hpp>
@@ -353,9 +354,9 @@ namespace svx
 
         // display the error. Prefer the one reported in errorOccurred over the one caught.
         if ( m_aOperationError.hasValue() )
-            displayException( m_aOperationError );
+            displayException(m_aOperationError, svxform::FormController::getDialogParentWindow(m_xFormOperations->getController()));
         else if ( aError.hasValue() )
-            displayException( aError );
+            displayException(aError, svxform::FormController::getDialogParentWindow(m_xFormOperations->getController()));
         else
             OSL_FAIL( "FormControllerHelper::impl_operateForm_nothrow: no success, but no error?" );
 
