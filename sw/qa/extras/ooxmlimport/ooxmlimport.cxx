@@ -564,10 +564,10 @@ DECLARE_OOXMLIMPORT_TEST(testN779627, "n779627.docx")
             sal_Int32(9), nLeftMargin);
 
     /*
-     * Another problem tested with this document is the unnecessary loading of the shapes
-     * anchored to a discarded header or footer
+     * Another problem tested with this document is the loading of the shapes
+     * anchored to a hidden header or footer
      */
-    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
 }
 
 DECLARE_OOXMLIMPORT_TEST(testN779627b, "n779627b.docx")

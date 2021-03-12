@@ -400,11 +400,11 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
         const bool bStashLeftHead = !rDesc.IsHeaderShared() && rChged.IsHeaderShared();
         const bool bStashFirstMasterHead = !rDesc.IsFirstShared() && rChged.IsFirstShared();
         const bool bStashFirstLeftHead = (!rDesc.IsHeaderShared() && rChged.IsHeaderShared()) || (!rDesc.IsFirstShared() && rChged.IsFirstShared());
-        if (bStashLeftHead && rLeftHead.GetRegisteredIn())
+        if (bStashLeftHead && rLeftHead.GetRegisteredIn() && !rDesc.HasStashedFormat(true, true, false))
             rDesc.StashFrameFormat(rChged.GetLeft(), true, true, false);
-        if (bStashFirstMasterHead && rFirstMasterHead.GetRegisteredIn())
+        if (bStashFirstMasterHead && rFirstMasterHead.GetRegisteredIn() && !rDesc.HasStashedFormat(true, false, true))
             rDesc.StashFrameFormat(rChged.GetFirstMaster(), true, false, true);
-        if (bStashFirstLeftHead && rFirstLeftHead.GetRegisteredIn())
+        if (bStashFirstLeftHead && rFirstLeftHead.GetRegisteredIn() && !rDesc.HasStashedFormat(true, true, true))
             rDesc.StashFrameFormat(rChged.GetFirstLeft(), true, true, true);
 
         // Stash footer formats as needed.
@@ -414,11 +414,11 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
         const bool bStashLeftFoot = !rDesc.IsFooterShared() && rChged.IsFooterShared();
         const bool bStashFirstMasterFoot = !rDesc.IsFirstShared() && rChged.IsFirstShared();
         const bool bStashFirstLeftFoot = (!rDesc.IsFooterShared() && rChged.IsFooterShared()) || (!rDesc.IsFirstShared() && rChged.IsFirstShared());
-        if (bStashLeftFoot && rLeftFoot.GetRegisteredIn())
+        if (bStashLeftFoot && rLeftFoot.GetRegisteredIn() && !rDesc.HasStashedFormat(false, true, false))
             rDesc.StashFrameFormat(rChged.GetLeft(), false, true, false);
-        if (bStashFirstMasterFoot && rFirstMasterFoot.GetRegisteredIn())
+        if (bStashFirstMasterFoot && rFirstMasterFoot.GetRegisteredIn()  && !rDesc.HasStashedFormat(false, false, true))
             rDesc.StashFrameFormat(rChged.GetFirstMaster(), false, false, true);
-        if (bStashFirstLeftFoot && rFirstLeftFoot.GetRegisteredIn())
+        if (bStashFirstLeftFoot && rFirstLeftFoot.GetRegisteredIn()  && !rDesc.HasStashedFormat(false, true, true))
             rDesc.StashFrameFormat(rChged.GetFirstLeft(), false, true, true);
 
         GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoPageDesc>(rDesc, rChged, this));
@@ -474,6 +474,15 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     CopyMasterHeader(rChged, pStashedFirstMasterFormat ? pStashedFirstMasterFormat->GetHeader() : rMasterHead, rDesc, false, true); // Copy first master
     CopyMasterHeader(rChged, pStashedFirstLeftFormat ? pStashedFirstLeftFormat->GetHeader() : rMasterHead, rDesc, true, true); // Copy first left
 
+    if (pStashedLeftFormat)
+        rDesc.RemoveStashedFormat(true, true, false);
+
+    if (pStashedFirstMasterFormat)
+        rDesc.RemoveStashedFormat(true, false, true);
+
+    if (pStashedFirstLeftFormat)
+        rDesc.RemoveStashedFormat(true, true, true);
+
     rDesc.ChgHeaderShare( rChged.IsHeaderShared() );
 
     // Synch Footer.
@@ -488,6 +497,15 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     CopyMasterFooter(rChged, pStashedLeftFoot ? pStashedLeftFoot->GetFooter() : rMasterFoot, rDesc, true, false); // Copy left footer
     CopyMasterFooter(rChged, pStashedFirstMasterFoot ? pStashedFirstMasterFoot->GetFooter() : rMasterFoot, rDesc, false, true); // Copy first master
     CopyMasterFooter(rChged, pStashedFirstLeftFoot ? pStashedFirstLeftFoot->GetFooter() : rMasterFoot, rDesc, true, true); // Copy first left
+
+    if (pStashedLeftFormat)
+        rDesc.RemoveStashedFormat(false, true, false);
+
+    if (pStashedFirstMasterFoot)
+        rDesc.RemoveStashedFormat(false, false, true);
+
+    if (pStashedFirstLeftFoot)
+        rDesc.RemoveStashedFormat(false, true, true);
 
     rDesc.ChgFooterShare( rChged.IsFooterShared() );
     // there is just one first shared flag for both header and footer?

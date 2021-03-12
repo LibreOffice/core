@@ -2587,6 +2587,30 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
                     : xText->createTextCursorByRange(xText->getStart())));
             m_bDiscardHeaderFooter = false; // set only on success!
         }
+        // If we have *hidden* header footer
+        else if (bLeft && !GetSettingsTable()->GetEvenAndOddHeaders())
+        {
+            bool bIsShared;
+            // Turn on the headers
+            xPageStyle->setPropertyValue(getPropertyName(ePropIsOn), uno::makeAny(true));
+            // Store the state of the previous state of shared prop
+            xPageStyle->getPropertyValue(getPropertyName(ePropShared)) >>= bIsShared;
+            // Turn on the shared prop in order to save the headers/footers in time
+            xPageStyle->setPropertyValue(getPropertyName(ePropShared), uno::makeAny(false));
+            // Add the content of the headers footers to the doc
+            uno::Reference<text::XText> xText;
+            xPageStyle->getPropertyValue(getPropertyName(bLeft ? ePropTextLeft : ePropText))
+                >>= xText;
+
+            m_aTextAppendStack.push(
+                TextAppendContext(uno::Reference<text::XTextAppend>(xText, uno::UNO_QUERY_THROW),
+                                  m_bIsNewDoc ? uno::Reference<text::XTextCursor>()
+                                              : xText->createTextCursorByRange(xText->getStart())));
+            m_bDiscardHeaderFooter = false; // set only on success!
+            // Restore the original state of the shared prop after we stored the neccessary values.
+            xPageStyle->setPropertyValue(getPropertyName(ePropShared), uno::makeAny(bIsShared));
+        }
+
     }
     catch( const uno::Exception& )
     {

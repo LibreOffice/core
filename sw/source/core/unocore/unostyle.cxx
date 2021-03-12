@@ -3300,6 +3300,38 @@ void SwXPageStyle::setPropertyValue(const OUString& rPropertyName, const uno::An
     SolarMutexGuard aGuard;
     const uno::Sequence<OUString> aProperties(&rPropertyName, 1);
     const uno::Sequence<uno::Any> aValues(&rValue, 1);
+
+    // Trick: if the Domain Mapper changes the props of shared header/footer,
+    // store the old ones in time for later use.
+    const bool bIsHeader = rPropertyName == UNO_NAME_HEADER_IS_SHARED;
+    const bool bIsFooter = rPropertyName == UNO_NAME_FOOTER_IS_SHARED;
+    if ((bIsFooter || bIsHeader) && rValue == uno::Any(true))
+    {
+        // Find the matching page descriptor
+        for (size_t i = 0; i < GetDoc()->GetPageDescCnt(); i++)
+        {
+            auto pPageDesc = &GetDoc()->GetPageDesc(i);
+            // If we have the right page descriptor stash the neccessary formats in import time.
+            if (pPageDesc->GetName() == GetStyleName())
+            {
+                auto pLeftHeader = pPageDesc->GetLeft().GetHeader().GetHeaderFormat();
+                if (bIsHeader && pLeftHeader)
+                {
+                    pPageDesc->StashFrameFormat(pPageDesc->GetLeft(), true, true, false);
+                    pPageDesc->StashFrameFormat(pPageDesc->GetFirstMaster(), true, false, true);
+                    pPageDesc->StashFrameFormat(pPageDesc->GetFirstLeft(), true, true, true);
+                }
+                auto pLeftFooter = pPageDesc->GetLeft().GetFooter().GetFooterFormat();
+                if (bIsFooter && pLeftFooter)
+                {
+                    pPageDesc->StashFrameFormat(pPageDesc->GetLeft(), false, true, false);
+                    pPageDesc->StashFrameFormat(pPageDesc->GetFirstMaster(), false, false, true);
+                    pPageDesc->StashFrameFormat(pPageDesc->GetFirstLeft(), false, true, true);
+                }
+            }
+        }
+    }
+    // And set the props... as we did it before.
     SetPropertyValues_Impl(aProperties, aValues);
 }
 
