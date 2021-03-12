@@ -5055,7 +5055,9 @@ void SwUiWriterTest::testTdf92648()
     SwDoc* pDoc = createDoc("tdf92648.docx");
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     // Make sure we have ten draw shapes.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), SwTextBoxHelper::getCount(pPage));
+    // Yes, we have if the left/right pages have different header/footer,
+    // but if not we have only nine of them:
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), SwTextBoxHelper::getCount(pPage));
     // and the text boxes haven't got zero height
     sal_Int32 nCount = 0;
     for (const SwFrameFormat* pFormat : *pDoc->GetSpzFrameFormats())
