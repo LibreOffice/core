@@ -550,6 +550,16 @@ class SFScriptForge:
         def RGB(red, green, blue):
             return int('%02x%02x%02x' % (red, green, blue), 16)
 
+        @staticmethod
+        def StarDesktop():
+            ctx = ScriptForge.componentcontext
+            if ctx is None:
+                return None
+            smgr = ctx.getServiceManager()  # com.sun.star.lang.XMultiComponentFactory
+            DESK = 'com.sun.star.frame.Desktop'
+            desktop = smgr.createInstanceWithContext(DESK, ctx)
+            return desktop
+
         def Xray(self, unoobject = None):
             return self.SIMPLEEXEC('XrayTool._main.xray', unoobject)
 
@@ -698,7 +708,7 @@ class SFScriptForge:
         serviceProperties = dict(Folder = False, Languages = False, Locale = False)
 
         def AddText(self, context = '', msgid = '', comment = ''):
-            return self.Execute(self.vbMethod, 'AddText', context, msgid, context)
+            return self.Execute(self.vbMethod, 'AddText', context, msgid, comment)
 
         def ExportToPOTFile(self, filename, header = '', encoding= 'UTF-8'):
             return self.Execute(self.vbMethod, 'ExportToPOTFile', filename, header, encoding)
@@ -707,6 +717,69 @@ class SFScriptForge:
             return self.Execute(self.vbMethod, 'GetText', msgid, *args)
 
         _ = GetText
+
+    # #########################################################################
+    # SF_Platform CLASS
+    # #########################################################################
+    class SF_Platform(SFServices, metaclass = _Singleton):
+        """
+            The 'Platform' service implements a collection of properties about the actual execution environment
+            and context :
+                the hardware platform
+                the operating system
+                the LibreOffice version
+                the current user
+            All those properties are read-only.
+            The implementation is mainly based on the 'platform' module of the Python standard library
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'ScriptForge.Platform'
+        serviceProperties = dict(Architecture = False, ComputerName = False, CPUCount = False, CurrentUser = False,
+                                 Locale = False, Machine = False, OfficeVersion = False, OSName = False,
+                                 OSPlatform = False, OSRelease = False, OSVersion = False, Processor = False)
+        # Python helper functions
+        py = ScriptForge.pythonhelpermodule + '$' + '_SF_Platform'
+
+        @property
+        def Architecture(self):
+            return self.SIMPLEEXEC(self.py, 'Architecture')
+
+        @property
+        def ComputerName(self):
+            return self.SIMPLEEXEC(self.py, 'ComputerName')
+
+        @property
+        def CPUCount(self):
+            return self.SIMPLEEXEC(self.py, 'CPUCount')
+
+        @property
+        def CurrentUser(self):
+            return self.SIMPLEEXEC(self.py, 'CurrentUser')
+
+        @property
+        def Machine(self):
+            return self.SIMPLEEXEC(self.py, 'Machine')
+
+        @property
+        def OSName(self):
+            return self.SIMPLEEXEC(self.py, 'OSName')
+
+        @property
+        def OSPlatform(self):
+            return self.SIMPLEEXEC(self.py, 'OSPlatform')
+
+        @property
+        def OSRelease(self):
+            return self.SIMPLEEXEC(self.py, 'OSRelease')
+
+        @property
+        def OSVersion(self):
+            return self.SIMPLEEXEC(self.py, 'OSVersion')
+
+        @property
+        def Processor(self):
+            return self.SIMPLEEXEC(self.py, 'Processor')
 
     # #########################################################################
     # SF_TextStream CLASS
@@ -747,7 +820,6 @@ class SFScriptForge:
 
         def WriteLine(self, line):
             return self.Execute(self.vbMethod, 'WriteLine', line)
-
 
     # #########################################################################
     # SF_Timer CLASS
