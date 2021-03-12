@@ -174,7 +174,7 @@ namespace rptui
         @param  _aZoom      the zoom scale
         @param  _rWindow    where to set the map mode
     */
-    void setZoomFactor(const Fraction& _aZoom, vcl::Window& _rWindow);
+    void setZoomFactor(const Fraction& _aZoom, OutputDevice& _rWindow);
 }
 #endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_UITOOLS_HXX
 
