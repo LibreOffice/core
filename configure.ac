@@ -7055,7 +7055,7 @@ if test "$COM" = MSC -a "$COM_IS_CLANG" != TRUE; then
 elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     my_flags='-std=c++17 -std=c++1z'
     if test "$with_latest_c__" = yes; then
-        my_flags="-std=c++2b -std=c++20 -std=c++2a $my_flags"
+        my_flags="-std=c++23 -std=c++2b -std=c++20 -std=c++2a $my_flags"
     fi
     for flag in $my_flags; do
         if test "$COM" = MSC; then
