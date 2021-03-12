@@ -657,7 +657,7 @@ oslFileError SAL_CALL osl_openFile(
     if (result != osl_File_E_None)
         return result;
 
-    // tdf126742 use FILE_SHARE_WRITE to get closer to non-Windows plattform behavoiur,
+    // tdf126742 use FILE_SHARE_WRITE to get closer to non-Windows platform behaviour,
     // for details and discussion see task please
     DWORD dwAccess = GENERIC_READ, dwShare = FILE_SHARE_READ | FILE_SHARE_WRITE, dwCreation = 0;
 

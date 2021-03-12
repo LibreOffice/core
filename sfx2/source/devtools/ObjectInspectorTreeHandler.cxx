@@ -442,7 +442,7 @@ public:
 
     bool shouldShowExpander() override
     {
-        // Show expnder only if the sequence has elements
+        // Show expander only if the sequence has elements
         int nLength = mxIdlArray->getLen(maAny);
         return nLength > 0;
     }
