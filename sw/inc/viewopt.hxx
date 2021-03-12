@@ -30,7 +30,6 @@
 #include "swdllapi.h"
 
 class SwRect;
-namespace vcl { class Window; }
 class OutputDevice;
 class SwDocShell;
 namespace svtools{ class ColorConfig;}
@@ -201,7 +200,7 @@ public:
             SwViewOption(const SwViewOption&);
             ~SwViewOption();
 
-    static void Init( vcl::Window const *pWin );        // Initializing of static data.
+    static void Init(const OutputDevice* pWin);        // Initializing of static data.
 
     ViewOptFlags1   GetCoreOptions() const {return m_nCoreOptions;}
     inline void     SetUIOptions( const SwViewOption& );
