@@ -54,7 +54,7 @@ OUString SAL_CALL  SfxUnoDeck::getTitle()
         pDeck = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId)->mpDeck;
     }
 
-    VclPtr<DeckTitleBar> pTitleBar = pDeck->GetTitleBar();
+    DeckTitleBar* pTitleBar = pDeck->GetTitleBar();
     return pTitleBar->GetTitle();
 }
 
@@ -70,7 +70,7 @@ void SAL_CALL SfxUnoDeck::setTitle( const OUString& newTitle )
     if (xDeckDescriptor)
     {
         Deck* pDeck = xDeckDescriptor->mpDeck;
-        const VclPtr<DeckTitleBar>& pTitleBar = pDeck->GetTitleBar();
+        DeckTitleBar* pTitleBar = pDeck->GetTitleBar();
         pTitleBar->SetTitle(newTitle);
 
         xDeckDescriptor->msTitle = newTitle;

@@ -44,33 +44,34 @@ namespace sfx2::sidebar {
 
 Deck::Deck(const DeckDescriptor& rDeckDescriptor, vcl::Window* pParentWindow,
            const std::function<void()>& rCloserAction)
-    : Window(pParentWindow, 0)
+    : InterimItemWindow(pParentWindow, "sfx/ui/deck.ui", "Deck")
     , msId(rDeckDescriptor.msId)
     , mnMinimalWidth(0)
     , mnMinimalHeight(0)
     , maPanels()
-    , mpTitleBar(VclPtr<DeckTitleBar>::Create(rDeckDescriptor.msTitle, this, rCloserAction))
+    , mxTitleBar(new DeckTitleBar(rDeckDescriptor.msTitle, *m_xBuilder, rCloserAction))
+#if 0
     , mpScrollClipWindow(VclPtr<vcl::Window>::Create(this))
     , mpScrollContainer(VclPtr<ScrollContainerWindow>::Create(mpScrollClipWindow.get()))
     , mpFiller(VclPtr<vcl::Window>::Create(this))
     , mpVerticalScrollBar(VclPtr<ScrollBar>::Create(this))
+#endif
+    , mxVerticalScrollBar(m_xBuilder->weld_scrolled_window("scrolledwindow"))
+    , mxContents(m_xBuilder->weld_container("contents"))
 {
+#if 0
     mpScrollClipWindow->SetBackground(Wallpaper());
     mpScrollClipWindow->Show();
 
     mpScrollContainer->SetStyle(mpScrollContainer->GetStyle() | WB_DIALOGCONTROL);
     mpScrollContainer->SetBackground(Wallpaper());
     mpScrollContainer->Show();
+#endif
 
+#if 0
     mpVerticalScrollBar->SetScrollHdl(LINK(this, Deck, HandleVerticalScrollBarChange));
     mpVerticalScrollBar->SetLineSize(10);
     mpVerticalScrollBar->SetPageSize(100);
-
-#ifdef DEBUG
-    SetText(OUString("Deck"));
-    mpScrollClipWindow->SetText(OUString("ScrollClipWindow"));
-    mpFiller->SetText(OUString("Filler"));
-    mpVerticalScrollBar->SetText(OUString("VerticalScrollBar"));
 #endif
 }
 
@@ -87,22 +88,26 @@ void Deck::dispose()
     // We have to explicitly trigger the destruction of panels.
     // Otherwise that is done by one of our base class destructors
     // without updating maPanels.
-    for (VclPtr<Panel> & rpPanel : aPanels)
-        rpPanel.disposeAndClear();
+    for (auto& rpPanel : aPanels)
+        rpPanel.reset();
 
     maPanels.clear(); // just to keep the loplugin:vclwidgets happy
-    mpTitleBar.disposeAndClear();
+    mxTitleBar.reset();
+    mxContents.reset();
+    mxVerticalScrollBar.reset();
+
+#if 0
     mpFiller.disposeAndClear();
     mpVerticalScrollBar.disposeAndClear();
     mpScrollContainer.disposeAndClear();
     mpScrollClipWindow.disposeAndClear();
-
-    vcl::Window::dispose();
+#endif
+    InterimItemWindow::dispose();
 }
 
-VclPtr<DeckTitleBar> const & Deck::GetTitleBar() const
+DeckTitleBar* Deck::GetTitleBar() const
 {
-    return mpTitleBar;
+    return mxTitleBar.get();
 }
 
 tools::Rectangle Deck::GetContentArea() const
@@ -119,6 +124,7 @@ tools::Rectangle Deck::GetContentArea() const
         aWindowSize.Height() - 1 - Theme::GetInteger(Theme::Int_DeckBottomPadding) - nBorderSize);
 }
 
+#if 0
 void Deck::ApplySettings(vcl::RenderContext& rRenderContext)
 {
     rRenderContext.SetBackground(Wallpaper());
@@ -217,8 +223,10 @@ void Deck::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         auto childNode = rJsonWriter.startStruct();
         rJsonWriter.put("id", it->GetId());
         rJsonWriter.put("type", "panel");
+#if 0
         rJsonWriter.put("text", it->GetText());
         rJsonWriter.put("enabled", it->IsEnabled());
+#endif
 
         {
             auto children2Node = rJsonWriter.startArray("children");
@@ -252,6 +260,7 @@ bool Deck::ProcessWheelEvent(CommandEvent const * pCommandEvent)
         mpVerticalScrollBar->GetThumbPos() - nDelta);
     return true;
 }
+#endif
 
 /**
  * This container may contain existing panels that are
@@ -262,7 +271,7 @@ void Deck::ResetPanels(const SharedPanelContainer& rPanelContainer)
     SharedPanelContainer aHiddens;
 
     // First hide old panels we don't need just now.
-    for (VclPtr<Panel> & rpPanel : maPanels)
+    for (auto& rpPanel : maPanels)
     {
         bool bFound = false;
         for (const auto & i : rPanelContainer)
@@ -287,8 +296,7 @@ void Deck::RequestLayoutInternal()
     mnMinimalHeight = 0;
 
     DeckLayouter::LayoutDeck(GetContentArea(), mnMinimalWidth, mnMinimalHeight, maPanels,
-                             *GetTitleBar(), *mpScrollClipWindow, *mpScrollContainer,
-                             *mpFiller, *mpVerticalScrollBar);
+                             *GetTitleBar(), *mxVerticalScrollBar);
 }
 
 void Deck::RequestLayout()
@@ -323,26 +331,27 @@ void Deck::RequestLayout()
         setPosSizePixel(0, 0, aParentSize.Width(), aParentSize.Height());
 }
 
-vcl::Window* Deck::GetPanelParentWindow()
+weld::Widget* Deck::GetPanelParentWindow()
 {
-    return mpScrollContainer.get();
+    return mxContents.get();
 }
 
-Panel* Deck::GetPanel(std::u16string_view panelId)
+std::shared_ptr<Panel> Deck::GetPanel(std::u16string_view panelId)
 {
-    for (const VclPtr<Panel> & pPanel : maPanels)
+    for (const auto& pPanel : maPanels)
     {
         if(pPanel->GetId() == panelId)
         {
-            return pPanel.get();
+            return pPanel;
         }
     }
     return nullptr;
 
 }
 
-void Deck::ShowPanel(const Panel& rPanel)
+void Deck::ShowPanel(const Panel& /*rPanel*/)
 {
+#if 0
     if (!mpVerticalScrollBar || !mpVerticalScrollBar->IsVisible())
         return;
 
@@ -364,8 +373,10 @@ void Deck::ShowPanel(const Panel& rPanel)
         Point(
             mpScrollContainer->GetPosPixel().X(),
             -nNewThumbPos));
+#endif
 }
 
+#if 0
 static OUString GetWindowClassification(const vcl::Window* pWindow)
 {
     const OUString& rsName (pWindow->GetText());
@@ -438,6 +449,7 @@ void Deck::ScrollContainerWindow::SetSeparators (const ::std::vector<sal_Int32>&
         Invalidate();
     }
 }
+#endif
 
 } // end of namespace sfx2::sidebar
 

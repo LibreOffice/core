@@ -1,49 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.38.2 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.20"/>
   <!-- n-columns=1 n-rows=1 -->
   <object class="GtkGrid" id="SidebarStylesPanel">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="hexpand">True</property>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
-        <property name="border_width">6</property>
+        <property name="border-width">6</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkBox" id="box2">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkToolbar" id="fontstyletoolbox">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="toolbar_style">icons</property>
-                <property name="show_arrow">False</property>
+                <property name="toolbar-style">icons</property>
+                <property name="show-arrow">False</property>
                 <child>
                   <object class="GtkToolItem" id=".uno:StyleApply">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <child>
                       <object class="GtkComboBoxText" id="applystyle">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="has_entry">True</property>
-                        <property name="popup_fixed_width">False</property>
+                        <property name="has-entry">True</property>
+                        <property name="popup-fixed-width">False</property>
                         <child internal-child="entry">
                           <object class="GtkEntry">
+                            <property name="can-focus">True</property>
                             <property name="truncate-multiline">True</property>
-                            <property name="can_focus">True</property>
                           </object>
                         </child>
                       </object>
@@ -71,19 +70,19 @@
         <child>
           <object class="GtkBox" id="box3">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <child>
               <object class="GtkToolbar" id="style">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="margin-start">3</property>
-                <property name="toolbar_style">icons</property>
-                <property name="show_arrow">False</property>
+                <property name="toolbar-style">icons</property>
+                <property name="show-arrow">False</property>
                 <property name="icon_size">2</property>
                 <child>
                   <object class="GtkToolButton" id=".uno:FormatPaintbrush">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -93,7 +92,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:StyleUpdateByExample">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -103,7 +102,7 @@
                 <child>
                   <object class="GtkToolButton" id=".uno:StyleNewByExample">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -126,8 +125,8 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">0</property>
       </packing>
     </child>
   </object>

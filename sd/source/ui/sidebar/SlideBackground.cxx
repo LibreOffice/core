@@ -341,8 +341,8 @@ void SlideBackground::HandleContextChange(
             mxInsertImage->hide();
 
         // Need to do a relayouting, otherwise the panel size is not updated after show / hide controls
-        if (m_xPanel)
-            m_xPanel->TriggerDeckLayouting();
+        if (m_pPanel)
+            m_pPanel->TriggerDeckLayouting();
 
     }
     else if ( IsDraw() )

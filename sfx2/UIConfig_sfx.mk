@@ -22,7 +22,7 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/cmisinfopage \
 	sfx2/uiconfig/ui/cmisline \
 	sfx2/uiconfig/ui/custominfopage \
-	sfx2/uiconfig/ui/decktitlebar \
+	sfx2/uiconfig/ui/deck \
 	sfx2/uiconfig/ui/descriptioninfopage \
 	sfx2/uiconfig/ui/developmenttool \
 	sfx2/uiconfig/ui/devtoolsmenu \

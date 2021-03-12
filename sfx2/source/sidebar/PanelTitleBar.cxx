@@ -33,15 +33,12 @@ namespace sfx2::sidebar {
 PanelTitleBar::PanelTitleBar(const OUString& rsTitle,
                              weld::Builder& rBuilder,
                              Panel* pPanel)
-    : TitleBarBase(rBuilder, Theme::Color_PanelTitleBarBackground),
-      mxTitlebar(rBuilder.weld_container("titlebar")),
+    : TitleBar(rBuilder, Theme::Color_PanelTitleBarBackground),
       mxExpander(rBuilder.weld_expander("expander")),
       mpPanel(pPanel),
       msIdent("button"),
       msMoreOptionsCommand()
 {
-    mxTitlebar->set_background(Theme::GetColor(meThemeItem));
-
     mxExpander->set_label(rsTitle);
     mxExpander->connect_expanded(LINK(this, PanelTitleBar, ExpandHdl));
 
@@ -52,11 +49,6 @@ PanelTitleBar::PanelTitleBar(const OUString& rsTitle,
 #ifdef DEBUG
     SetText(OUString("PanelTitleBar"));
 #endif
-}
-
-bool PanelTitleBar::GetVisible() const
-{
-    return mxTitlebar->get_visible();
 }
 
 void PanelTitleBar::SetTitle(const OUString& rsTitle)
@@ -80,10 +72,8 @@ PanelTitleBar::~PanelTitleBar()
     if (xComponent.is())
         xComponent->dispose();
     mxController.clear();
-    mpPanel.clear();
+    mpPanel = nullptr;
     mxExpander.reset();
-    mxTitlebar.reset();
-    reset();
 }
 
 void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
