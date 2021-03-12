@@ -57,8 +57,6 @@ public:
 
         Image_Color_,
 
-        Color_DeckTitleFont,
-        Color_PanelTitleFont,
         Color_Highlight,
         Color_HighlightText,
         Color_DeckBackground,
@@ -66,16 +64,11 @@ public:
         Color_PanelBackground,
         Color_PanelTitleBarBackground,
         Color_TabBarBackground,
-        Color_HorizontalBorder,
-        Color_VerticalBorder,
-        Color_DropDownBackground,
 
         Color_Int_,
 
-        Int_DeckTitleBarHeight,
         Int_DeckBorderSize,
         Int_DeckSeparatorHeight,
-        Int_PanelTitleBarHeight,
         Int_DeckLeftPadding,
         Int_DeckTopPadding,
         Int_DeckRightPadding,

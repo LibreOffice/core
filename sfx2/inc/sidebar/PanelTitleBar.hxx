@@ -28,8 +28,7 @@ namespace sfx2::sidebar {
 
 class Panel;
 
-class PanelTitleBar final
-    : public TitleBarBase
+class PanelTitleBar final : public TitleBar
 {
 public:
     PanelTitleBar(const OUString& rsTitle, weld::Builder& rBuilder, Panel* pPanel);
@@ -37,17 +36,12 @@ public:
 
     virtual void SetTitle (const OUString& rsTitle) override;
     virtual OUString GetTitle() const override;
-    virtual bool GetVisible() const override;
 
     void SetMoreOptionsCommand(const OUString& rsCommandName,
                                const css::uno::Reference<css::frame::XFrame>& rxFrame,
                                const css::uno::Reference<css::frame::XController>& rxController);
 
     void UpdateExpandedState();
-    void Show(bool bShow)
-    {
-        mxTitlebar->set_visible(bShow);
-    }
 
     weld::Expander& GetExpander()
     {
@@ -59,12 +53,11 @@ private:
 
     DECL_LINK(ExpandHdl, weld::Expander&, void);
 
-    std::unique_ptr<weld::Container> mxTitlebar;
     std::unique_ptr<weld::Expander> mxExpander;
 
     css::uno::Reference<css::frame::XToolbarController> mxController;
 
-    VclPtr<Panel> mpPanel;
+    Panel* mpPanel;
     OString msIdent;
     OUString msMoreOptionsCommand;
 };
