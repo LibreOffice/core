@@ -688,7 +688,9 @@ DECLARE_OOXMLEXPORT_TEST(testBnc875718, "bnc875718.docx")
     // is not SwXBodyText but rather SwXHeadFootText
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
-    for( int i = 0;
+    // The sample bugdoc has 3 footer.xml and has a textframe in each. The first one is hidden
+    // and it has no text in its anchored text range: it is anchored to body text. Ignoring...
+    for( int i = 1;
          i < xIndexAccess->getCount();
          ++i )
     {
@@ -700,6 +702,7 @@ DECLARE_OOXMLEXPORT_TEST(testBnc875718, "bnc875718.docx")
     // Also check that the footer contents are not in the body text.
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> text = textDocument->getText();
+    CPPUNIT_ASSERT(text); //Do not crash on empty content
     CPPUNIT_ASSERT_EQUAL( OUString( "Text" ), text->getString());
 }
 
