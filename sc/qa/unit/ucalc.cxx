@@ -4989,6 +4989,20 @@ void Test::testAutoFill()
     CPPUNIT_ASSERT_EQUAL( OUString("4.5"), m_pDoc->GetString( 0, 65, 0 ) );
     CPPUNIT_ASSERT_EQUAL( OUString("4.6"), m_pDoc->GetString( 0, 66, 0 ) );
 
+    // Clear column A for a new test.
+    clearRange(m_pDoc, ScRange(0,0,0,0,MAXROW,0));
+    m_pDoc->SetRowHidden(0, MAXROW, 0, false); // Show all rows.
+
+    m_pDoc->SetString( 0, 70, 0, "001-001-001" );
+    m_pDoc->Fill( 0, 70, 0, 70, nullptr, aMarkData, 3, FILL_TO_BOTTOM, FILL_AUTO );
+
+    // tdf#105268: Without the fix in place, this test would have failed with
+    // - Expected: 001-001-002
+    // - Actual  : 001-001000
+    CPPUNIT_ASSERT_EQUAL( OUString("001-001-002"), m_pDoc->GetString( 0, 71, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("001-001-003"), m_pDoc->GetString( 0, 72, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("001-001-004"), m_pDoc->GetString( 0, 73, 0 ) );
+
     m_pDoc->DeleteTab(0);
 }
 
