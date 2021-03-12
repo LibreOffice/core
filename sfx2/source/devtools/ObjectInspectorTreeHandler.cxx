@@ -49,6 +49,7 @@ namespace
 constexpr OUStringLiteral constTypeDescriptionManagerSingletonName
     = u"/singletons/com.sun.star.reflection.theTypeDescriptionManager";
 
+/** converts any value to a string */
 OUString AnyToString(const uno::Any& aValue, const uno::Reference<uno::XComponentContext>& xContext)
 {
     OUString aRetStr;
@@ -181,12 +182,14 @@ OUString AnyToString(const uno::Any& aValue, const uno::Reference<uno::XComponen
     return aRetStr;
 }
 
+/** converts an any's type to a string (in a short form) */
 OUString getAnyType(const uno::Any& aValue)
 {
     OUString aTypeName = aValue.getValueType().getTypeName();
     return aTypeName.replaceAll("com.sun.star", "css");
 }
 
+/** converts a Type to a XIdlClass */
 uno::Reference<reflection::XIdlClass>
 convertTypeToIdlClass(const uno::Type& rType,
                       const uno::Reference<uno::XComponentContext>& xContext)
@@ -197,6 +200,15 @@ convertTypeToIdlClass(const uno::Type& rType,
 
 // Object inspector nodes
 
+/** Object inspector node's main interface
+ *
+ * The interface for the "attached" object to a tree view nodes that
+ * are added to the tree views of the object inspector part. The node
+ * can return the main value of the node (object name) and if present
+ * also the values for additional columns. It signals if a tree needs
+ * an expander and fills the children of the tree is any exists.
+ *
+ */
 class ObjectInspectorNodeInterface
 {
 public:
@@ -204,19 +216,24 @@ public:
 
     virtual ~ObjectInspectorNodeInterface() {}
 
+    // main value (object name) of the tree view node
     virtual OUString getObjectName() = 0;
 
+    // should show the expander for the tree view node
     virtual bool shouldShowExpander() { return false; }
 
+    // fill the children for the current tree view node
     virtual void fillChildren(std::unique_ptr<weld::TreeView>& rTree, const weld::TreeIter* pParent)
         = 0;
 
+    // fill any additional column values for the current tree view node
     virtual std::vector<std::pair<sal_Int32, OUString>> getColumnValues()
     {
         return std::vector<std::pair<sal_Int32, OUString>>();
     }
 };
 
+// appends the node to the root of the tree view
 OUString lclAppendNode(std::unique_ptr<weld::TreeView>& pTree, ObjectInspectorNodeInterface* pEntry)
 {
     OUString sName = pEntry->getObjectName();
@@ -234,6 +251,7 @@ OUString lclAppendNode(std::unique_ptr<weld::TreeView>& pTree, ObjectInspectorNo
     return sId;
 }
 
+// appends the node to the parent
 OUString lclAppendNodeToParent(std::unique_ptr<weld::TreeView>& pTree,
                                const weld::TreeIter* pParent, ObjectInspectorNodeInterface* pEntry)
 {
@@ -252,6 +270,7 @@ OUString lclAppendNodeToParent(std::unique_ptr<weld::TreeView>& pTree,
     return sId;
 }
 
+/** Node that represent just a simple string with no children or columns */
 class SimpleStringNode : public ObjectInspectorNodeInterface
 {
 protected:
@@ -271,6 +290,7 @@ public:
     OUString getObjectName() override { return msName; }
 };
 
+/** Node represents a method of an object */
 class MethodNode : public ObjectInspectorNodeInterface
 {
 private:
@@ -351,6 +371,12 @@ public:
     }
 };
 
+/** Node represents a class (XIdlClass) of an object.
+ *
+ * Children are superclasses of the current class. XInterface superclass
+ * is ignored.
+ *
+ */
 class ClassNode : public ObjectInspectorNodeInterface
 {
 private:
@@ -376,6 +402,7 @@ public:
 
     OUString getObjectName() override { return mxClass->getName(); }
 
+    // Fill superclasses
     void fillChildren(std::unique_ptr<weld::TreeView>& rTree,
                       const weld::TreeIter* pParent) override
     {
@@ -388,6 +415,7 @@ public:
     }
 };
 
+/** Node represents a basic value, that can be any object, sequece, struct */
 class BasicValueNode : public SimpleStringNode
 {
 protected:
@@ -439,6 +467,7 @@ public:
     }
 };
 
+/** Node represents a property */
 class GenericPropertiesNode : public BasicValueNode
 {
 public:
@@ -452,6 +481,7 @@ public:
                       const weld::TreeIter* pParent) override;
 };
 
+/** Node represents a struct */
 class StructNode : public BasicValueNode
 {
 public:
@@ -467,6 +497,7 @@ public:
                       const weld::TreeIter* pParent) override;
 };
 
+/** Node represents a sequence */
 class SequenceNode : public BasicValueNode
 {
     uno::Reference<reflection::XIdlArray> mxIdlArray;
@@ -710,8 +741,11 @@ BasicValueNode::createNodeObjectForAny(OUString const& rName, uno::Any& rAny, OU
     return new BasicValueNode(rName, rAny, rInfo, mxContext);
 }
 
-// helper functions
+} // end anonymous namespace
 
+// Object inspector tree view helper functions
+namespace
+{
 ObjectInspectorNodeInterface* getSelectedNode(weld::TreeView const& rTreeView)
 {
     OUString sID = rTreeView.get_selected_id();
@@ -990,6 +1024,7 @@ void ObjectInspectorTreeHandler::clearObjectInspectorChildren(
     } while (bChild);
 }
 
+/** Deletes all the node objects in a tree view */
 void ObjectInspectorTreeHandler::clearAll(std::unique_ptr<weld::TreeView>& pTreeView)
 {
     // destroy all ObjectInspectorNodes from the tree
@@ -1002,6 +1037,7 @@ void ObjectInspectorTreeHandler::clearAll(std::unique_ptr<weld::TreeView>& pTree
     pTreeView->clear();
 }
 
+/** Append interfaces to the "interfaces" tree view */
 void ObjectInspectorTreeHandler::appendInterfaces(uno::Reference<uno::XInterface> const& xInterface)
 {
     if (!xInterface.is())
@@ -1019,6 +1055,7 @@ void ObjectInspectorTreeHandler::appendInterfaces(uno::Reference<uno::XInterface
     }
 }
 
+/** Append services to the "services" tree view */
 void ObjectInspectorTreeHandler::appendServices(uno::Reference<uno::XInterface> const& xInterface)
 {
     if (!xInterface.is())
@@ -1032,6 +1069,7 @@ void ObjectInspectorTreeHandler::appendServices(uno::Reference<uno::XInterface> 
     }
 }
 
+/** Append properties to the "properties" tree view */
 void ObjectInspectorTreeHandler::appendProperties(uno::Reference<uno::XInterface> const& xInterface)
 {
     if (!xInterface.is())
@@ -1040,6 +1078,7 @@ void ObjectInspectorTreeHandler::appendProperties(uno::Reference<uno::XInterface
     aNode.fillChildren(mpPropertiesTreeView, nullptr);
 }
 
+/** Append methods to the "methods" tree view */
 void ObjectInspectorTreeHandler::appendMethods(uno::Reference<uno::XInterface> const& xInterface)
 {
     if (!xInterface.is())
@@ -1060,18 +1099,21 @@ void ObjectInspectorTreeHandler::updateBackButtonState()
     mpObjectInspectorToolbar->set_item_sensitive("back", maInspectionStack.size() > 1);
 }
 
+// Clears all the objects from the stack
 void ObjectInspectorTreeHandler::clearStack()
 {
     maInspectionStack.clear();
     updateBackButtonState();
 }
 
+// Adds an object to the stack
 void ObjectInspectorTreeHandler::addToStack(css::uno::Any const& rAny)
 {
     maInspectionStack.push_back(rAny);
     updateBackButtonState();
 }
 
+// Removes an object from the back of the stack and return it
 css::uno::Any ObjectInspectorTreeHandler::popFromStack()
 {
     maInspectionStack.pop_back();
@@ -1080,6 +1122,7 @@ css::uno::Any ObjectInspectorTreeHandler::popFromStack()
     return aAny;
 }
 
+// Inspect the input object in the object inspector
 void ObjectInspectorTreeHandler::inspectObject(uno::Reference<uno::XInterface> const& xInterface)
 {
     if (!xInterface.is())
@@ -1090,10 +1133,14 @@ void ObjectInspectorTreeHandler::inspectObject(uno::Reference<uno::XInterface> c
     OUString aImplementationName = xServiceInfo->getImplementationName();
     mpClassNameLabel->set_label(aImplementationName);
 
+    // Fire entering the current opened page manually
     auto rPageId = mpObjectInspectorNotebook->get_current_page_ident();
     NotebookEnterPage(rPageId);
 }
 
+// Inspect the input object in the object inspector.
+// Make the input object the root of the stack (clear all other
+// objects from the stack).
 void ObjectInspectorTreeHandler::introspect(uno::Reference<uno::XInterface> const& xInterface)
 {
     clearStack();
@@ -1103,6 +1150,7 @@ void ObjectInspectorTreeHandler::introspect(uno::Reference<uno::XInterface> cons
 
 void ObjectInspectorTreeHandler::dispose()
 {
+    // We need to clear all the nodes
     clearAll(mpInterfacesTreeView);
     clearAll(mpServicesTreeView);
     clearAll(mpPropertiesTreeView);

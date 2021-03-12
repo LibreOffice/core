@@ -23,6 +23,11 @@
 typedef cppu::WeakComponentImplHelper<css::view::XSelectionChangeListener>
     SelectionChangeHandlerInterfaceBase;
 
+/** Selection change handler to listen to document selection changes.
+ *
+ * Listens to the changes and notifies the docking window with a new
+ * selected object, when a change happens.
+ */
 class SelectionChangeHandler final : private ::cppu::BaseMutex,
                                      public SelectionChangeHandlerInterfaceBase
 {
