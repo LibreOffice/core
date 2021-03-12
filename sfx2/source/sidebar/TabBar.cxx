@@ -59,6 +59,8 @@ TabBar::TabBar(vcl::Window* pParentWindow,
     , maPopupMenuProvider(rPopupMenuProvider)
     , pParentSidebarController(rParentSidebarController)
 {
+    InitControlBase(mxMenuButton.get());
+
     mxTempToplevel->move(mxContents.get(), m_xContainer.get());
 
     gDefaultWidth = m_xContainer->get_preferred_size().Width();

@@ -19,9 +19,7 @@
 #pragma once
 
 #include <sfx2/dllapi.h>
-
-#include <vcl/InterimItemWindow.hxx>
-
+#include <vcl/weld.hxx>
 #include <vector>
 
 namespace com::sun::star::frame
@@ -43,27 +41,28 @@ class XWindow;
 
 namespace sfx2::sidebar
 {
+class Context;
+class Deck;
 class PanelDescriptor;
 class PanelTitleBar;
-class Context;
 
 /**
  * Multiple panels form a single deck.
  * E.g. the Properties deck has panels like Styles, Character, paragraph.
  */
-class SFX2_DLLPUBLIC Panel final : public InterimItemWindow
+class SFX2_DLLPUBLIC Panel final
 {
 public:
-    Panel(const PanelDescriptor& rPanelDescriptor, vcl::Window* pParentWindow,
-          const bool bIsInitiallyExpanded, const std::function<void()>& rDeckLayoutTrigger,
+    Panel(const PanelDescriptor& rPanelDescriptor, weld::Widget* pParentWindow,
+          const bool bIsInitiallyExpanded, Deck* pDeck,
           const std::function<Context()>& rContextAccess,
           const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    virtual ~Panel() override;
-    virtual void dispose() override;
+    ~Panel();
 
     PanelTitleBar* GetTitleBar() const;
-    void ShowTitlebar(bool bShowTitlebar);
+    weld::Container* GetContents() const;
+    void Show(bool bShow);
     bool IsTitleBarOptional() const { return mbIsTitleBarOptional; }
     void SetUIElement(const css::uno::Reference<css::ui::XUIElement>& rxElement);
     const css::uno::Reference<css::ui::XSidebarPanel>& GetPanelComponent() const
@@ -76,32 +75,48 @@ public:
     bool IsExpanded() const { return mbIsExpanded; }
     bool HasIdPredicate(std::u16string_view rsId) const;
     const OUString& GetId() const { return msPanelId; }
-    void TriggerDeckLayouting() { maDeckLayoutTrigger(); }
+    const OUString& GetTitle() const { return msTitle; }
+    void TriggerDeckLayouting();
+
+    void SetHeightPixel(int nHeight);
+
+    bool get_extents(tools::Rectangle& rExtents) const;
 
     /// Set whether a panel should be present but invisible / inactive
     void SetLurkMode(bool bLurk);
     bool IsLurking() const { return mbLurking; }
 
-    virtual void DataChanged(const DataChangedEvent& rEvent) override;
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
-    virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
+    void set_margin_top(int nMargin);
+    void set_margin_bottom(int nMargin);
+    void set_vexpand(bool bExpand);
+
+    weld::Window* GetFrameWeld();
+
+    void DataChanged();
 
 private:
+    std::unique_ptr<weld::Builder> mxBuilder;
     const OUString msPanelId;
+    const OUString msTitle;
     const bool mbIsTitleBarOptional;
     const bool mbWantsAWT;
     css::uno::Reference<css::ui::XUIElement> mxElement;
     css::uno::Reference<css::ui::XSidebarPanel> mxPanelComponent;
     bool mbIsExpanded;
     bool mbLurking;
-    const std::function<void()> maDeckLayoutTrigger;
     const std::function<Context()> maContextAccess;
     const css::uno::Reference<css::frame::XFrame>& mxFrame;
+    weld::Widget* mpParentWindow;
+    VclPtr<Deck> mxDeck;
+    std::unique_ptr<weld::Container> mxContainer;
     std::unique_ptr<PanelTitleBar> mxTitleBar;
     std::unique_ptr<weld::Container> mxContents;
     css::uno::Reference<css::awt::XWindow> mxXWindow;
+
+    DECL_LINK(DumpAsPropertyTreeHdl, tools::JsonWriter&, void);
 };
-typedef std::vector<VclPtr<Panel>> SharedPanelContainer;
+
+typedef std::vector<std::shared_ptr<Panel>> SharedPanelContainer;
 
 } // end of namespace sfx2::sidebar
 
