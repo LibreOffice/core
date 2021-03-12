@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f376ac3_f5a45e06",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 2593,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-03-12T01:12:11Z",
+      "side": 1,
+      "message": "If TooltipLabel property is not declared the tool tip will default to the Label property. Here it isn\u0027t really needed.",
+      "revId": "b8d309528235c199dbd76d3ea945af8df4c8b44b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d04149cf_eb7af537",
+        "filename": "sw/inc/view.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-03-12T01:12:11Z",
+      "side": 1,
+      "message": "It may be better to place the SelectCycle struct in SwView as it is the only used by it.",
+      "revId": "b8d309528235c199dbd76d3ea945af8df4c8b44b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
