@@ -227,9 +227,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testInsideOutsideVertAlignBott
         = getXPath(pXmlDoc, "//SwAnchoredDrawObject[2]/bounds", "top").toInt32(); //15694
 
     // Verify that the distance between the bottom of page and bottom of first shape is around 0cm. (align=outside)
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(23), nPageBottom - nFirstShapeOutside);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), nPageBottom - nFirstShapeOutside);
     // Verify that the distance between the bottom of body and top of second shape is around 0cm. (align=inside)
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10), nBodyBottom - nSecondShapeInside);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nBodyBottom - nSecondShapeInside);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVMLVertAlignBottomMargin)
