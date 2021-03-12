@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d42dac3f_94530729",
+        "filename": "sc/source/filter/oox/autofilterbuffer.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-12T11:20:35Z",
+      "side": 1,
+      "message": "It\u0027s worth to use OUStringBuffer, because multiple OUString instantiation is much more expensive for a huge number of datetime values. See OUStringBuffer usage in this file.",
+      "range": {
+        "startLine": 239,
+        "startChar": 12,
+        "endLine": 239,
+        "endChar": 31
+      },
+      "revId": "96b6438affb375372c7f3f0861e2ee4495dd3e7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
