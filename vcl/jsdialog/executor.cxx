@@ -220,7 +220,10 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                 {
                     OString nRowString
                         = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
-                    pTreeView->unselect(pTreeView->get_selected_index());
+
+                    std::unique_ptr<weld::TreeIter> itSelected(pTreeView->make_iterator());
+                    pTreeView->get_selected(itSelected.get());
+                    pTreeView->unselect(*itSelected);
 
                     int nAbsPos = std::atoi(nRowString.getStr());
 
