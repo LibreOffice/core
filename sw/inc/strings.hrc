@@ -35,7 +35,7 @@
 #define STR_APPLY_EXTENDEDTIP                   NC_("STR_APPLY_EXTENDEDTIP", "Applies all modifications without closing dialog. Values are saved and cannot be reverted with Reset.")
 
 // Format names
-#define STR_POOLCHR_STANDARD                    NC_("STR_POOLCHR_STANDARD", "Default Character Style")
+#define STR_POOLCHR_STANDARD                    NC_("STR_POOLCHR_STANDARD", "No Character Style")
 #define STR_POOLCHR_FOOTNOTE                    NC_("STR_POOLCHR_FOOTNOTE", "Footnote Characters")
 #define STR_POOLCHR_PAGENO                      NC_("STR_POOLCHR_PAGENO", "Page Number")
 #define STR_POOLCHR_LABEL                       NC_("STR_POOLCHR_LABEL", "Caption Characters")
