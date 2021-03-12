@@ -21,20 +21,24 @@
 #include <sidebar/SidebarToolBox.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/weldutils.hxx>
-#include <vcl/InterimItemWindow.hxx>
 
 namespace sfx2::sidebar {
 
-class TitleBarBase
+class TitleBar
 {
 public:
-    TitleBarBase(weld::Builder& rBuilder, Theme::ThemeItem eThemeItem);
-    void reset();
-    virtual ~TitleBarBase();
+    TitleBar(weld::Builder& rBuilder, Theme::ThemeItem eThemeItem);
+    virtual ~TitleBar();
 
     virtual void SetTitle (const OUString& rsTitle) = 0;
     virtual OUString GetTitle() const = 0;
-    virtual bool GetVisible() const = 0;
+
+    virtual void DataChanged();
+
+    void Show(bool bShow);
+    bool GetVisible() const;
+
+    Size get_preferred_size() const;
 
     void SetIcon(const css::uno::Reference<css::graphic::XGraphic>& rIcon);
 
@@ -49,6 +53,7 @@ public:
 
 protected:
     weld::Builder& mrBuilder;
+    std::unique_ptr<weld::Container> mxTitlebar;
     std::unique_ptr<weld::Image> mxAddonImage;
     std::unique_ptr<weld::Toolbar> mxToolBox;
     std::unique_ptr<ToolbarUnoDispatcher> mxToolBoxController;
@@ -57,20 +62,9 @@ protected:
     virtual void HandleToolBoxItemClick() = 0;
 
     DECL_LINK(SelectionHandler, const OString&, void);
-};
 
-class TitleBar : public InterimItemWindow
-               , public TitleBarBase
-{
-public:
-    TitleBar(vcl::Window* pParentWindow,
-             const OUString& rUIXMLDescription, const OString& rID,
-             Theme::ThemeItem eThemeItem);
-    virtual void dispose() override;
-    virtual bool GetVisible() const override { return IsVisible(); }
-    virtual ~TitleBar() override;
-
-    virtual void DataChanged (const DataChangedEvent& rEvent) override;
+private:
+    void SetBackground();
 };
 
 } // end of namespace sfx2::sidebar

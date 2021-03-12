@@ -20,6 +20,7 @@
 
 #include <sfx2/sidebar/Panel.hxx>
 #include <tools/link.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/keycod.hxx>
 
 namespace weld {
@@ -64,12 +65,13 @@ public:
     void GrabFocus();
     void GrabFocusPanel();
 
-    void SetDeckTitle(DeckTitleBar* pDeckTitleBar);
+    void SetDeck(Deck* pDeck);
     void SetPanels(const SharedPanelContainer& rPanels);
     void SetButtons(const std::vector<weld::Widget*>& rButtons);
 
 private:
-    VclPtr<DeckTitleBar> mpDeckTitleBar;
+    VclPtr<Deck> mxDeck;
+    DeckTitleBar* mpDeckTitleBar;
     SharedPanelContainer maPanels;
     std::vector<weld::Widget*> maButtons;
     const std::function<void(const Panel&)> maShowPanelFunctor;
@@ -94,7 +96,6 @@ private:
     /** Listen for key events for panels and buttons.
     */
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
-    DECL_LINK(ChildEventListener, VclWindowEvent&, void);
 
     void ClearPanels();
     void ClearButtons();
@@ -131,7 +132,6 @@ private:
     bool HandleKeyEvent(const vcl::KeyCode& rKeyCode,
                         const FocusLocation& rLocation);
 
-    FocusLocation GetFocusLocation(const vcl::Window& rWindow) const;
     FocusLocation GetFocusLocation() const;
 
 };

@@ -19,15 +19,14 @@
 #pragma once
 
 #include <sfx2/sidebar/Panel.hxx>
-
-#include <vcl/window.hxx>
-
-class ScrollBar;
+#include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld.hxx>
 
 namespace sfx2::sidebar
 {
 class DeckDescriptor;
 class DeckTitleBar;
+class SidebarDockingWindow;
 
 /** This is the parent window of the panels.
     It displays the deck title.
@@ -35,25 +34,25 @@ class DeckTitleBar;
     A deck consists of multiple panels.
     E.g. Properties, Styles, Navigator.
 */
-class Deck final : public vcl::Window
+class Deck final : public InterimItemWindow
 {
 public:
-    Deck(const DeckDescriptor& rDeckDescriptor, vcl::Window* pParentWindow,
+    Deck(const DeckDescriptor& rDeckDescriptor, SidebarDockingWindow* pParentWindow,
          const std::function<void()>& rCloserAction);
     virtual ~Deck() override;
     virtual void dispose() override;
 
     const OUString& GetId() const { return msId; }
 
-    VclPtr<DeckTitleBar> const& GetTitleBar() const;
+    DeckTitleBar* GetTitleBar() const;
     tools::Rectangle GetContentArea() const;
     void ResetPanels(const SharedPanelContainer& rPanels);
     const SharedPanelContainer& GetPanels() const { return maPanels; }
 
-    Panel* GetPanel(std::u16string_view panelId);
+    std::shared_ptr<Panel> GetPanel(std::u16string_view panelId);
 
     void RequestLayout();
-    vcl::Window* GetPanelParentWindow();
+    weld::Widget* GetPanelParentWindow();
 
     /** Try to make the panel completely visible.
         When the whole panel does not fit then make its top visible
@@ -61,28 +60,15 @@ public:
     */
     void ShowPanel(const Panel& rPanel);
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
-    virtual void Paint(vcl::RenderContext& rRenderContext,
-                       const tools::Rectangle& rUpdateArea) override;
     virtual void DataChanged(const DataChangedEvent& rEvent) override;
-    virtual bool EventNotify(NotifyEvent& rEvent) override;
+
     virtual void Resize() override;
 
     virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 
     sal_Int32 GetMinimalWidth() const { return mnMinimalWidth; }
 
-    class ScrollContainerWindow final : public vcl::Window
-    {
-    public:
-        ScrollContainerWindow(vcl::Window* pParentWindow);
-        virtual void Paint(vcl::RenderContext& rRenderContext,
-                           const tools::Rectangle& rUpdateArea) override;
-        void SetSeparators(const ::std::vector<sal_Int32>& rSeparators);
-
-    private:
-        std::vector<sal_Int32> maSeparators;
-    };
+    SidebarDockingWindow* GetDockingWindow() const { return mxParentWindow; }
 
 private:
     void RequestLayoutInternal();
@@ -92,14 +78,11 @@ private:
     sal_Int32 mnMinimalWidth;
     sal_Int32 mnMinimalHeight;
     SharedPanelContainer maPanels;
-    VclPtr<DeckTitleBar> mpTitleBar;
-    VclPtr<vcl::Window> mpScrollClipWindow;
-    VclPtr<ScrollContainerWindow> mpScrollContainer;
-    VclPtr<vcl::Window> mpFiller;
-    VclPtr<ScrollBar> mpVerticalScrollBar;
 
-    DECL_LINK(HandleVerticalScrollBarChange, ScrollBar*, void);
-    bool ProcessWheelEvent(CommandEvent const* pCommandEvent);
+    VclPtr<SidebarDockingWindow> mxParentWindow;
+    std::unique_ptr<DeckTitleBar> mxTitleBar;
+    std::unique_ptr<weld::ScrolledWindow> mxVerticalScrollBar;
+    std::unique_ptr<weld::Container> mxContents;
 };
 
 } // end of namespace sfx2::sidebar

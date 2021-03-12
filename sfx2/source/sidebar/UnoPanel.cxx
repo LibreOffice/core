@@ -29,13 +29,13 @@ xFrame(rFrame),
 mPanelId(panelId),
 mDeckId(deckId),
 mpDeck(),
-mpPanel()
+mxPanel()
 {
     SidebarController* pSidebarController = getSidebarController();
 
     pSidebarController->CreateDeck(mDeckId); // creates deck object is not already
     mpDeck = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId)->mpDeck;
-    mpPanel = mpDeck->GetPanel(mPanelId);
+    mxPanel = mpDeck->GetPanel(mPanelId);
 }
 
 SidebarController* SfxUnoPanel::getSidebarController()
@@ -54,7 +54,7 @@ OUString SAL_CALL SfxUnoPanel::getTitle()
 {
     SolarMutexGuard aGuard;
 
-    PanelTitleBar* pTitleBar = mpPanel->GetTitleBar();
+    PanelTitleBar* pTitleBar = mxPanel->GetTitleBar();
     if (pTitleBar)
         return pTitleBar->GetTitle();
     else
@@ -71,7 +71,7 @@ void SAL_CALL SfxUnoPanel::setTitle( const OUString& newTitle )
     if (xPanelDescriptor)
     {
         xPanelDescriptor->msTitle = newTitle;
-        PanelTitleBar* pTitleBar = mpPanel->GetTitleBar();
+        PanelTitleBar* pTitleBar = mxPanel->GetTitleBar();
         if (pTitleBar)
             pTitleBar->SetTitle(newTitle);
     }
@@ -81,7 +81,7 @@ sal_Bool SAL_CALL SfxUnoPanel::isExpanded()
 {
     SolarMutexGuard aGuard;
 
-    return mpPanel->IsExpanded();
+    return mxPanel->IsExpanded();
 }
 
 
@@ -90,7 +90,7 @@ void SAL_CALL SfxUnoPanel::expand( const sal_Bool bCollapseOther )
 
     SolarMutexGuard aGuard;
 
-    mpPanel->SetExpanded(true);
+    mxPanel->SetExpanded(true);
 
     if (bCollapseOther)
     {
@@ -111,7 +111,7 @@ void SAL_CALL SfxUnoPanel::collapse()
 {
     SolarMutexGuard aGuard;
 
-    mpPanel->SetExpanded(false);
+    mxPanel->SetExpanded(false);
     SidebarController* pSidebarController = getSidebarController();
     pSidebarController->NotifyResize();
 }
@@ -120,7 +120,7 @@ uno::Reference<awt::XWindow> SAL_CALL SfxUnoPanel::getDialog()
 {
     SolarMutexGuard aGuard;
 
-    return mpPanel->GetElementWindow();
+    return mxPanel->GetElementWindow();
 }
 
 
