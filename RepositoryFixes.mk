@@ -69,11 +69,6 @@ else
 # libpyuno_wrapper.so => pyuno.so
 gb_Library_FILENAMES := $(patsubst pyuno_wrapper:libpyuno_wrapper.so,pyuno_wrapper:pyuno.so,$(gb_Library_FILENAMES))
 endif
-
-ifneq ($(OS),ANDROID)
-gb_Library_FILENAMES := $(patsubst unobootstrapprotector:libuno%,unobootstrapprotector:uno%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst unoexceptionprotector:libuno%,unoexceptionprotector:uno%,$(gb_Library_FILENAMES))
-endif
 endif
 
 ifeq ($(OS),WNT)

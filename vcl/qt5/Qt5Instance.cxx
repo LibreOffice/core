@@ -424,7 +424,7 @@ OUString Qt5Instance::GetConnectionIdentifier() { return OUString(); }
 
 void Qt5Instance::AddToRecentDocumentList(const OUString&, const OUString&, const OUString&) {}
 
-OpenGLContext* Qt5Instance::CreateOpenGLContext() { return new Qt5OpenGLContext; }
+OpenGLContext* Qt5Instance::CreateOpenGLContext() { return nullptr; }
 
 bool Qt5Instance::IsMainThread() const
 {

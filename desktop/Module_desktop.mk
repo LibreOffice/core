@@ -33,7 +33,6 @@ $(eval $(call gb_Module_add_l10n_targets,desktop,\
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,desktop,\
     Executable_soffice_bin \
-    Executable_unopkg_bin \
     $(if $(ENABLE_BREAKPAD),Executable_minidump_upload) \
     Library_migrationoo2 \
     Library_migrationoo3 \
@@ -44,10 +43,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
 ifneq ($(OS),MACOSX)
 ifneq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,desktop,\
-    Pagein_calc \
     Pagein_common \
-    Pagein_draw \
-    Pagein_impress \
     Pagein_writer \
     CustomTarget_soffice \
 ))
@@ -142,7 +138,6 @@ $(eval $(call gb_Module_add_check_targets,desktop, \
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Module_add_check_targets,desktop, \
-    CppunitTest_desktop_lib \
     CppunitTest_desktop_lokinit \
 ))
 endif

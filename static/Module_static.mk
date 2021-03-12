@@ -6,11 +6,11 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-$(eval $(call gb_Module_Module,wasm))
+$(eval $(call gb_Module_Module,static))
 
-ifeq ($(OS),EMSCRIPTEN)
+ifeq ($(DISABLE_DYNLOADING),TRUE)
 
-$(eval $(call gb_Module_add_targets,wasm,\
+$(eval $(call gb_Module_add_targets,static,\
     CustomTarget_components \
     Library_components \
 ))

@@ -56,6 +56,8 @@ endif
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Executable_add_libs,oosplash,\
     -lm \
+    -lstdc++ \
+    -pthread \
 ))
 endif
 

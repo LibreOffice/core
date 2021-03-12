@@ -580,7 +580,7 @@ vcl_headless_freetype_code=\
 
 ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/app/salplug \
+    $(if $(DISABLE_DYNLOADING),,vcl/source/app/salplug) \
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
     vcl/unx/generic/window/screensaverinhibitor \
@@ -622,6 +622,12 @@ $(eval $(call gb_Library_use_externals,vcl,\
     fontconfig \
     freetype \
 ))
+else
+ifneq (,$(DISABLE_DYNLOADING))
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/wasm/salplug \
+))
+endif
 endif
 
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))

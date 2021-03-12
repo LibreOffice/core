@@ -8,30 +8,32 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_StaticLibrary_StaticLibrary,cppunitmain))
+$(eval $(call gb_Library_Library,cppunitmain))
 
-$(eval $(call gb_StaticLibrary_set_include,cppunitmain,\
+$(eval $(call gb_Library_set_include,cppunitmain,\
     $$(INCLUDE) \
     -I$(SRCDIR)/sal/inc \
 ))
 
-$(eval $(call gb_StaticLibrary_use_libraries,cppunitmain,\
+$(eval $(call gb_Library_use_libraries,cppunitmain,\
     sal \
     unoexceptionprotector \
+    unobootstrapprotector \
+    vclbootstrapprotector \
 ))
 
-$(eval $(call gb_StaticLibrary_use_externals,cppunitmain,\
+$(eval $(call gb_Library_use_externals,cppunitmain,\
     boost_headers \
     cppunit \
 ))
 
-$(eval $(call gb_StaticLibrary_add_exception_objects,cppunitmain,\
+$(eval $(call gb_Library_add_exception_objects,cppunitmain,\
     sal/cppunittester/cppunittester \
 ))
 
 ifeq ($(COM),MSC)
 
-$(eval $(call gb_StaticLibrary_add_ldflags,cppunitmain,\
+$(eval $(call gb_Library_add_ldflags,cppunitmain,\
     /STACK:10000000 \
 ))
 
