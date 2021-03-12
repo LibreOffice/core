@@ -19,10 +19,8 @@
 #pragma once
 
 #include <sfx2/sidebar/Panel.hxx>
-
-#include <vcl/window.hxx>
-
-class ScrollBar;
+#include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld.hxx>
 
 namespace sfx2::sidebar
 {
@@ -35,7 +33,7 @@ class DeckTitleBar;
     A deck consists of multiple panels.
     E.g. Properties, Styles, Navigator.
 */
-class Deck final : public vcl::Window
+class Deck final : public InterimItemWindow
 {
 public:
     Deck(const DeckDescriptor& rDeckDescriptor, vcl::Window* pParentWindow,
@@ -45,7 +43,7 @@ public:
 
     const OUString& GetId() const { return msId; }
 
-    VclPtr<DeckTitleBar> const& GetTitleBar() const;
+    DeckTitleBar* GetTitleBar() const;
     tools::Rectangle GetContentArea() const;
     void ResetPanels(const SharedPanelContainer& rPanels);
     const SharedPanelContainer& GetPanels() const { return maPanels; }
@@ -53,7 +51,7 @@ public:
     Panel* GetPanel(std::u16string_view panelId);
 
     void RequestLayout();
-    vcl::Window* GetPanelParentWindow();
+    weld::Widget* GetPanelParentWindow();
 
     /** Try to make the panel completely visible.
         When the whole panel does not fit then make its top visible
@@ -61,6 +59,7 @@ public:
     */
     void ShowPanel(const Panel& rPanel);
 
+#if 0
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
     virtual void Paint(vcl::RenderContext& rRenderContext,
                        const tools::Rectangle& rUpdateArea) override;
@@ -71,9 +70,11 @@ public:
     virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 
     static void PrintWindowSubTree(vcl::Window* pRoot, int nIndentation);
+#endif
 
     sal_Int32 GetMinimalWidth() const { return mnMinimalWidth; }
 
+#if 0
     class ScrollContainerWindow final : public vcl::Window
     {
     public:
@@ -85,6 +86,7 @@ public:
     private:
         std::vector<sal_Int32> maSeparators;
     };
+#endif
 
 private:
     void RequestLayoutInternal();
@@ -94,11 +96,16 @@ private:
     sal_Int32 mnMinimalWidth;
     sal_Int32 mnMinimalHeight;
     SharedPanelContainer maPanels;
-    VclPtr<DeckTitleBar> mpTitleBar;
+
+    std::unique_ptr<DeckTitleBar> mxTitleBar;
+#if 0
     VclPtr<vcl::Window> mpScrollClipWindow;
     VclPtr<ScrollContainerWindow> mpScrollContainer;
     VclPtr<vcl::Window> mpFiller;
     VclPtr<ScrollBar> mpVerticalScrollBar;
+#endif
+    std::unique_ptr<weld::ScrolledWindow> mxVerticalScrollBar;
+    std::unique_ptr<weld::Container> mxContents;
 
     DECL_LINK(HandleVerticalScrollBarChange, ScrollBar*, void);
     bool ProcessWheelEvent(CommandEvent const* pCommandEvent);

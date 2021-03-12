@@ -21,9 +21,9 @@ namespace tools { class JsonWriter; }
 class SFX2_DLLPUBLIC PanelLayout
 {
 protected:
-    VclPtr<sfx2::sidebar::Panel> m_xPanel;
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xContainer;
+    sfx2::sidebar::Panel* m_pPanel;
 
     virtual void DataChanged(const DataChangedEvent& rEvent);
     virtual void DumpAsPropertyTree(tools::JsonWriter&);
