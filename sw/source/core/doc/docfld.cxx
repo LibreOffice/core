@@ -351,13 +351,12 @@ const SwDBData& SwDoc::GetDBDesc()
 #if HAVE_FEATURE_DBCONNECTIVITY
     if(maDBData.sDataSource.isEmpty())
     {
-        const SwFieldTypes::size_type nSize = getIDocumentFieldsAccess().GetFieldTypes()->size();
-        for(SwFieldTypes::size_type i = 0; i < nSize && maDBData.sDataSource.isEmpty(); ++i)
+        // Similar to: SwEditShell::IsAnyDatabaseFieldInDoc
+        for (const auto& pFieldType : *getIDocumentFieldsAccess().GetFieldTypes())
         {
-            SwFieldType& rFieldType = *((*getIDocumentFieldsAccess().GetFieldTypes())[i]);
-            SwFieldIds nWhich = rFieldType.Which();
-            if(IsUsed(rFieldType))
+            if (IsUsed(*pFieldType))
             {
+                SwFieldIds nWhich = pFieldType->Which();
                 switch(nWhich)
                 {
                     case SwFieldIds::Database:
@@ -366,7 +365,7 @@ const SwDBData& SwDoc::GetDBDesc()
                     case SwFieldIds::DbSetNumber:
                     {
                         std::vector<SwFormatField*> vFields;
-                        rFieldType.GatherFields(vFields);
+                        pFieldType->GatherFields(vFields);
                         if(vFields.size())
                         {
                             if(SwFieldIds::Database == nWhich)
