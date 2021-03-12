@@ -21,61 +21,58 @@
 
 namespace sfx2::sidebar {
 
-TitleBarBase::TitleBarBase(weld::Builder& rBuilder, Theme::ThemeItem eThemeItem)
+TitleBar::TitleBar(weld::Builder& rBuilder, Theme::ThemeItem eThemeItem)
     : mrBuilder(rBuilder)
+    , mxTitlebar(rBuilder.weld_container("titlebar"))
     , mxAddonImage(rBuilder.weld_image("addonimage"))
     , mxToolBox(rBuilder.weld_toolbar("toolbar"))
     , meThemeItem(eThemeItem)
 {
-    mxToolBox->set_background(Theme::GetColor(meThemeItem));
+    SetBackground();
 
-    mxToolBox->connect_clicked(LINK(this, TitleBarBase, SelectionHandler));
+    mxToolBox->connect_clicked(LINK(this, TitleBar, SelectionHandler));
 }
 
-TitleBarBase::~TitleBarBase()
+void TitleBar::SetBackground()
+{
+    Color aColor(Theme::GetColor(meThemeItem));
+    mxTitlebar->set_background(aColor);
+    mxToolBox->set_background(aColor);
+}
+
+void TitleBar::DataChanged()
+{
+    SetBackground();
+}
+
+TitleBar::~TitleBar()
 {
 }
 
-void TitleBarBase::reset()
+Size TitleBar::get_preferred_size() const
 {
-    mxToolBox.reset();
-    mxAddonImage.reset();
+    return mxTitlebar->get_preferred_size();
 }
 
-void TitleBarBase::SetIcon(const css::uno::Reference<css::graphic::XGraphic>& rIcon)
+void TitleBar::Show(bool bShow)
+{
+    mxTitlebar->set_visible(bShow);
+}
+
+bool TitleBar::GetVisible() const
+{
+    return mxTitlebar->get_visible();
+}
+
+void TitleBar::SetIcon(const css::uno::Reference<css::graphic::XGraphic>& rIcon)
 {
     mxAddonImage->set_image(rIcon);
     mxAddonImage->set_visible(rIcon.is());
 }
 
-IMPL_LINK_NOARG(TitleBarBase, SelectionHandler, const OString&, void)
+IMPL_LINK_NOARG(TitleBar, SelectionHandler, const OString&, void)
 {
     HandleToolBoxItemClick();
-}
-
-TitleBar::TitleBar(vcl::Window* pParentWindow,
-                   const OUString& rUIXMLDescription, const OString& rID,
-                   Theme::ThemeItem eThemeItem)
-    : InterimItemWindow(pParentWindow, rUIXMLDescription, rID)
-    , TitleBarBase(*m_xBuilder, eThemeItem)
-{
-    m_xContainer->set_background(Theme::GetColor(meThemeItem));
-}
-
-TitleBar::~TitleBar()
-{
-    disposeOnce();
-}
-
-void TitleBar::dispose()
-{
-    reset();
-    InterimItemWindow::dispose();
-}
-
-void TitleBar::DataChanged (const DataChangedEvent& /*rEvent*/)
-{
-    m_xContainer->set_background(Theme::GetColor(meThemeItem));
 }
 
 } // end of namespace sfx2::sidebar

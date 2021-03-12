@@ -23,14 +23,14 @@
 
 namespace sfx2::sidebar
 {
+class Deck;
 class GripWidget;
 
 class DeckTitleBar final : public TitleBar
 {
 public:
-    DeckTitleBar(const OUString& rsTitle, vcl::Window* pParentWindow,
+    DeckTitleBar(const OUString& rsTitle, weld::Builder& rBuilder,
                  const std::function<void()>& rCloserAction);
-    virtual void dispose() override;
     virtual ~DeckTitleBar() override;
 
     virtual void SetTitle(const OUString& rsTitle) override;
@@ -39,7 +39,7 @@ public:
     void SetCloserVisible(const bool bIsCloserVisible);
     tools::Rectangle GetDragArea();
 
-    virtual void DataChanged(const DataChangedEvent& rEvent) override;
+    virtual void DataChanged() override;
 
 private:
     virtual void HandleToolBoxItemClick() override;
