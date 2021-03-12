@@ -436,7 +436,9 @@ void SwPageDesc::StashFrameFormat(const SwFrameFormat& rFormat, bool bHeader, bo
     }
     else
     {
-        SAL_WARN("sw", "Stashing the right page header/footer is pointless.");
+        SAL_WARN(
+            "sw",
+            "SwPageDesc::StashFrameFormat: Stashing the right page header/footer is pointless.");
     }
 }
 
@@ -459,14 +461,98 @@ const SwFrameFormat* SwPageDesc::GetStashedFrameFormat(bool bHeader, bool bLeft,
 
     if (pFormat)
     {
-        const SwFrameFormat* retVal = pFormat->get();
-        pFormat->reset();
-        return retVal;
+        return pFormat->get();
     }
     else
     {
-        SAL_WARN("sw", "Right page format is never stashed.");
+        SAL_WARN("sw", "SwPageDesc::GetStashedFrameFormat: Right page format is never stashed.");
         return nullptr;
+    }
+}
+
+bool SwPageDesc::HasStashedFormat(bool bHeader, bool bLeft, bool bFirst)
+{
+    if (bHeader)
+    {
+        if (bLeft && !bFirst)
+        {
+            return m_aStashedHeader.m_pStashedLeft != nullptr;
+        }
+        else if (!bLeft && bFirst)
+        {
+            return m_aStashedHeader.m_pStashedFirst != nullptr;
+        }
+        else if (bLeft && bFirst)
+        {
+            return m_aStashedHeader.m_pStashedFirstLeft != nullptr;
+        }
+        else
+        {
+            SAL_WARN("sw", "SwPageDesc::HasStashedFormat: Right page format is never stashed.");
+            return false;
+        }
+    }
+    else
+    {
+        if (bLeft && !bFirst)
+        {
+            return m_aStashedFooter.m_pStashedLeft != nullptr;
+        }
+        else if (!bLeft && bFirst)
+        {
+            return m_aStashedFooter.m_pStashedFirst != nullptr;
+        }
+        else if (bLeft && bFirst)
+        {
+            return m_aStashedFooter.m_pStashedFirstLeft != nullptr;
+        }
+        else
+        {
+            SAL_WARN("sw", "SwPageDesc::HasStashedFormat: Right page format is never stashed.");
+            return false;
+        }
+    }
+}
+
+void SwPageDesc::RemoveStashedFormat(bool bHeader, bool bLeft, bool bFirst)
+{
+    if (bHeader)
+    {
+        if (bLeft && !bFirst)
+        {
+            m_aStashedHeader.m_pStashedLeft.reset();
+        }
+        else if (!bLeft && bFirst)
+        {
+            m_aStashedHeader.m_pStashedFirst.reset();
+        }
+        else if (bLeft && bFirst)
+        {
+            m_aStashedHeader.m_pStashedFirstLeft.reset();
+        }
+        else
+        {
+            SAL_WARN("sw", "SwPageDesc::RemoveStashedFormat: Right page format is never stashed.");
+        }
+    }
+    else
+    {
+        if (bLeft && !bFirst)
+        {
+            m_aStashedFooter.m_pStashedLeft.reset();
+        }
+        else if (!bLeft && bFirst)
+        {
+            m_aStashedFooter.m_pStashedFirst.reset();
+        }
+        else if (bLeft && bFirst)
+        {
+            m_aStashedFooter.m_pStashedFirstLeft.reset();
+        }
+        else
+        {
+            SAL_WARN("sw", "SwPageDesc::RemoveStashedFormat: Right page format is never stashed.");
+        }
     }
 }
 
