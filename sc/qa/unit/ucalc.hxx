@@ -461,6 +461,7 @@ public:
     void testSetBackgroundColor();
     void testRenameTable();
 
+    void testTdf64001();
     void testAutoFill();
     void testAutoFillSimple();
     void testCopyPasteFormulas();
@@ -796,6 +797,7 @@ public:
     CPPUNIT_TEST(testJumpToPrecedentsDependents);
     CPPUNIT_TEST(testSetBackgroundColor);
     CPPUNIT_TEST(testRenameTable);
+    CPPUNIT_TEST(testTdf64001);
     CPPUNIT_TEST(testAutoFill);
     CPPUNIT_TEST(testAutoFillSimple);
     CPPUNIT_TEST(testCopyPasteFormulas);

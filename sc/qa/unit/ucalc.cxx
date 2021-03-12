@@ -4804,6 +4804,33 @@ void Test::testJumpToPrecedentsDependents()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testTdf64001()
+{
+    m_pDoc->InsertTab(0, "test");
+
+    ScMarkData aMarkData(m_pDoc->GetSheetLimits());
+    aMarkData.SelectTable(0, true);
+
+    m_pDoc->SetString( 0, 0, 0, "TRUE" );
+    m_pDoc->Fill( 0, 0, 0, 0, nullptr, aMarkData, 9, FILL_TO_BOTTOM, FILL_AUTO );
+
+    for (SCCOL i = 0; i < 10; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL( OUString("TRUE"), m_pDoc->GetString( 0, i, 0 ) );
+    }
+
+    m_pDoc->SetString( 0, 10, 0, "FALSE" );
+
+    m_pDoc->SetString( 1, 0, 0, "=COUNTIF(A1:A11;TRUE)" );
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 10
+    // - Actual  : 1
+    CPPUNIT_ASSERT_EQUAL( 10.0, m_pDoc->GetValue( 1, 0, 0 ) );
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testAutoFill()
 {
     m_pDoc->InsertTab(0, "test");
