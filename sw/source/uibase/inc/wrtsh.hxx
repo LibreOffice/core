@@ -437,7 +437,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
 
     // a click at the given field. the cursor is on it.
     // execute the predefined actions.
-    void ClickToField( const SwField& rField );
+    void ClickToField( const SwField& rField, bool bExecHyperlinks );
     void ClickToINetAttr( const SwFormatINetFormat& rItem, LoadUrlFlags nFilter = LoadUrlFlags::NONE );
     bool ClickToINetGrf( const Point& rDocPt, LoadUrlFlags nFilter );
     inline bool IsInClickToEdit() const ;

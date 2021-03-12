@@ -16,6 +16,9 @@
 
 #include <comphelper/propertyvalue.hxx>
 
+#include <IDocumentFieldsAccess.hxx>
+#include <fmtfld.hxx>
+
 namespace
 {
 /// Covers sw/source/core/tox/ fixes.
@@ -106,6 +109,49 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryURL)
     // - Actual  : http://www.example.com/test.pdf#page=1
     // i.e. the page number was still part of the bibliography table.
     CPPUNIT_ASSERT_EQUAL(OUString("http://www.example.com/test.pdf"), aActual);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryClick)
+{
+    // Given an empty document:
+    SwDoc* pDoc = createSwDoc();
+
+    // When inserting a biblio entry field with an URL:
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xField(
+        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aFields = {
+        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue("Identifier", OUString("AT")),
+        comphelper::makePropertyValue("Author", OUString("Author")),
+        comphelper::makePropertyValue("Title", OUString("Title")),
+        comphelper::makePropertyValue("URL", OUString("http://www.example.com/test.pdf#page=1")),
+    };
+    xField->setPropertyValue("Fields", uno::makeAny(aFields));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
+
+    // Then make sure that the field is clickable, since the page part will not be part of the
+    // bibliography table:
+    const SwFieldTypes* pTypes = pDoc->getIDocumentFieldsAccess().GetFieldTypes();
+    auto it = std::find_if(pTypes->begin(), pTypes->end(),
+                           [](const std::unique_ptr<SwFieldType>& pType) {
+                               return pType->Which() == SwFieldIds::TableOfAuthorities;
+                           });
+    CPPUNIT_ASSERT(it != pTypes->end());
+    const SwFieldType* pType = it->get();
+    std::vector<SwFormatField*> aFormatFields;
+    pType->GatherFields(aFormatFields);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aFormatFields.size());
+    SwField* pField = aFormatFields[0]->GetField();
+    // Without the accompanying fix in place, this test would have failed, as the field was not
+    // clickable.
+    CPPUNIT_ASSERT(pField->IsClickable());
+    // This is needed, so the mouse has the correct RefHand pointer style.
+    CPPUNIT_ASSERT(pField->HasClickHdl());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableURLDeduplication)

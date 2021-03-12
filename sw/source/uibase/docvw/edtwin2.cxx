@@ -347,6 +347,13 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                 = static_cast<const SwAuthorityField*>(pField);
                             sText = pAuthorityField->GetAuthority(aContentAtPos.pFndTextAttr,
                                                                   rSh.GetLayout());
+                            if (pAuthorityField->HasURL())
+                            {
+                                const OUString& rURL
+                                    = pAuthorityField->GetAuthEntry()->GetAuthorField(
+                                        AUTH_FIELD_URL);
+                                sText += "\n" + SfxHelp::GetURLHelpText(rURL);
+                            }
                             break;
                         }
 

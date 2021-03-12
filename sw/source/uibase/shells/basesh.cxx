@@ -773,7 +773,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 bool bRet = rSh.MoveFieldType( pFieldType, nSlot == FN_GOTO_NEXT_MARK );
                 SwField* pCurField = bRet ? rSh.GetCurField() : nullptr;
                 if (pCurField)
-                    rSh.ClickToField(*pCurField);
+                    rSh.ClickToField(*pCurField, /*bExecHyperlinks=*/false);
                 rReq.SetReturnValue(SfxBoolItem( nSlot, bRet));
             }
         }

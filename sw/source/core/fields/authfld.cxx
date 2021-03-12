@@ -99,8 +99,7 @@ void SwAuthorityFieldType::RemoveField(const SwAuthEntry* pEntry)
             return;
         }
     }
-    assert(false);
-    OSL_FAIL("Field unknown" );
+    SAL_WARN("sw.core", "SwAuthorityFieldType::RemoveField: pEntry is not my field");
 }
 
 SwAuthEntry* SwAuthorityFieldType::AddField(const OUString& rFieldContents)
@@ -603,6 +602,12 @@ OUString SwAuthorityField::GetAuthority(const SwTextAttr* pTextAttr,
     }
 
     return aText;
+}
+
+bool SwAuthorityField::HasURL() const
+{
+    const OUString& rURL = GetAuthEntry()->GetAuthorField(AUTH_FIELD_URL);
+    return !rURL.isEmpty();
 }
 
 void SwAuthorityField::dumpAsXml(xmlTextWriterPtr pWriter) const
