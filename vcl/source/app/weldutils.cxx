@@ -614,6 +614,12 @@ weld::Window* GetPopupParent(vcl::Window& rOutWin, tools::Rectangle& rRect)
 
     return rOutWin.GetFrameWeld();
 }
+
+void SetPointFont(OutputDevice& rDevice, const vcl::Font& rFont)
+{
+    if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
+        pDefaultDevice->SetPointFont(rDevice, rFont);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

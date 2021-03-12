@@ -30,6 +30,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weldutils.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>
@@ -216,8 +217,7 @@ namespace svx
         , m_xControl(std::move(xControl))
     {
         // expand the point size of the desired font to the equivalent pixel size
-        if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
-            pDefaultDevice->SetPointFont(*m_xVirDev, m_xControl->get_font());
+        weld::SetPointFont(*m_xVirDev, m_xControl->get_font());
     }
 
     void RubyRadioButton::init( const OUString& rPrimaryText, const OUString& rSecondaryText, const PseudoRubyText::RubyPosition& rPosition )
