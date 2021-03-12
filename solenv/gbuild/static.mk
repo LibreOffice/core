@@ -83,9 +83,9 @@ $(if $(strip $(filter-out GBUILD_TOUCHED, \
 
 ifeq (,$(gb_PARTIAL_BUILD))
 
-ifeq ($(OS),EMSCRIPTEN)
+#ifeq ($(OS),EMSCRIPTEN)
 $(foreach lib,$(gb_Library_KNOWNLIBS),$(if $(call gb_Library__get_component,$(lib)),$(eval $(call gb_Library_use_libraries,components,$(lib)))))
-endif
+#endif
 
 define gb_LinkTarget__add_x_template
 
@@ -147,6 +147,7 @@ endef
 define gb_LinkTarget__remove_touch
 $(call gb_LinkTarget__get_all_libraries_var,$(1)) := $(filter-out GBUILD_TOUCHED,$(call gb_LinkTarget__get_all_libraries,$(1)))
 $(call gb_LinkTarget__get_all_externals_var,$(1)) := $(filter-out GBUILD_TOUCHED,$(call gb_LinkTarget__get_all_externals,$(1)))
+$(call gb_LinkTarget__get_all_statics_var,$(1)) := $(filter-out GBUILD_TOUCHED,$(call gb_LinkTarget__get_all_statics,$(1)))
 
 endef
 
@@ -160,9 +161,10 @@ endef
 define gb_LinkTarget__fill_all_x_template
 
 define gb_LinkTarget__fill_all_$(if $(5),$(5),$(1))
-$$(if $$(filter GBUILD_TOUCHED,$$(call gb_$(2)__get_all_$(1),$$(1))),,
+$$(if $$(filter GBUILD_TOUCHED,$$(call gb_$(if $(6),$(6),$(2))__get_all_$(1),$$(1))),,
 	$(if $(gb_DEBUG_STATIC),$$(info gb_LinkTarget__fill_all_$(if $(5),$(5),$(1)) $(1) for $$(1) in: $$(call gb_$(if $(6),$(6),$(2))__get_all_$(1),$$(1))))
 	$(if $(gb_DEBUG_STATIC),$$(info gb_LinkTarget__fill_all_$(if $(5),$(5),$(1)) $(3) for $$(1) in: $$(call gb_$(if $(6),$(6),$(2))__get_all_$(3),$$(1))))
+	$$(eval $$(call gb_LinkTarget__add_touch,$$(call gb_$(if $(6),$(6),$(2))__get_workdir_linktargetname,$$(1))))
 	$$(foreach item,$$(call gb_$(if $(6),$(6),$(2))__get_all_$(1),$$(1)),
 		$$(call gb_LinkTarget__fill_all_$(1),$$(item))
 		$$(foreach dep,$$(call gb_$(2)__get_all_$(1),$$(item)),
@@ -179,7 +181,6 @@ $$(if $$(filter GBUILD_TOUCHED,$$(call gb_$(2)__get_all_$(1),$$(1))),,
 		$$(foreach dep,$$(call gb_$(4)__get_all_$(3),$$(item)),
 			$$(if $$(filter $$(dep),GBUILD_TOUCHED $$(call gb_$(if $(6),$(6),$(2))__get_all_$(3),$$(1))),,
 				$$(eval $$(call gb_LinkTarget__add_$(3),$$(call gb_$(if $(6),$(6),$(2))__get_workdir_linktargetname,$$(1)),$$(dep))))))
-	$$(eval $$(call gb_LinkTarget__add_touch,$$(call gb_$(if $(6),$(6),$(2))__get_workdir_linktargetname,$$(1))))
 	$(if $(gb_DEBUG_STATIC),$$(info gb_LinkTarget__fill_all_$(if $(5),$(5),$(1)) $(1) for $$(1) out: $$(call gb_$(if $(6),$(6),$(2))__get_all_$(1),$$(1))))
 	$(if $(gb_DEBUG_STATIC),$$(info gb_LinkTarget__fill_all_$(if $(5),$(5),$(1)) $(3) for $$(1) out: $$(call gb_$(if $(6),$(6),$(2))__get_all_$(3),$$(1)))))
 
@@ -203,13 +204,17 @@ $(eval $(call gb_LinkTarget__fill_all_x_template,libraries,Library,externals,Ext
 gb_Executable__LAST_KNOWN =
 gb_CppunitTest__LAST_KNOWN =
 
+#$(eval $(call gb_Library_use_libraries,cppuhelper,components))
+
 # The comment exists To help decipering / verifying the following block. Most later items depends on previous one(s).
 #
 # * Expand all libraries. It's not strictly needed, as we only need the info for the executables,
 #   but this way we can implement updating single gbuild-module dependencies as needed.
 # * For all executables (incl. CppunitTest(s)):
-#   * For EMSCRIPTEN, add components library to any cppuhelper user, as it contains the call to the mapper functions
-#   * Find any loader libraries and add the needed plugin dependences
+#   * Expand all normal dependencies
+#   * Check if cppuhelper loader for components is requested and add the needed plugin dependences
+#     This is a *HACK*, so we don't have to recursively check loader libraries - at least currently
+#   * Find any other loader libraries and add the needed plugin dependences
 #   * Add all statics to the executables
 #   * Add icudata as needed (it should be a plugin somehow declared in RepositoryExternal.mk, but that didn't work)
 #   * Serialize the linking of executables for EMSCRIPTEN, because wasm-opt is multi-threaded using all cores.
@@ -217,10 +222,11 @@ gb_CppunitTest__LAST_KNOWN =
 $(foreach lib,$(gb_Library_KNOWNLIBS),$(eval $(call gb_LinkTarget__fill_all_libraries,$(lib))))
 
 define gb_LinkTarget__expand_executable
-$$(if $$(and $$(filter EMSCRIPTEN,$$(OS)),$$(filter cppuhelper,$$(call gb_$(2)__get_all_libraries,$(3)))), \
-	$$(eval $$(call gb_$(2)_use_libraries,$(3),components))) \
 $$(eval $$(call gb_LinkTarget__fill_all_$(1),$(3))) \
-$$(foreach loader,$$(filter $$(gb_Library_KNOWNLOADERS),$$(call gb_$(2)__get_all_libraries,$(3))), \
+$$(if $$(filter cppuhelper,$$(filter $$(gb_Library_KNOWNLOADERS),$$(call gb_$(2)__get_all_libraries,$(3)))), \
+	$$(eval $$(call gb_$(2)_use_libraries,$(3),$$(call gb_Library__get_plugins,cppuhelper))) \
+	$$(eval $$(call gb_$(2)__add_libraries,$(3),$$(call gb_Library__get_plugins,cppuhelper)))) \
+$$(foreach loader,$$(filter $$(filter-out cppuhelper,$$(gb_Library_KNOWNLOADERS)),$$(call gb_$(2)__get_all_libraries,$(3))), \
 	$$(eval $$(call gb_$(2)_use_libraries,$(3),$$(call gb_Library__get_plugins,$$(loader)))) \
 	$$(eval $$(call gb_$(2)__add_libraries,$(3),$$(call gb_Library__get_plugins,$$(loader))))) \
 $$(if $$(filter-out GBUILD_TOUCHED,$$(call gb_$(2)__get_all_libraries,$(3))), \

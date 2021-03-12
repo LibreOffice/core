@@ -71,6 +71,7 @@ fi
 # echo "setting search path to: ${SEARCH_PATH}"
 # echo "execing: ${exedir}/$1"
 
+env | sort
 exec ${LO_TRACE} "${exedir}/$@"
 
 # vi:set shiftwidth=4 expandtab:

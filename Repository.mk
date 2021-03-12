@@ -201,9 +201,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	gengal \
 	$(if $(filter WNT,$(OS)),,uri-encode) \
 	$(if $(ENABLE_MACOSX_SANDBOX),, \
-		$(if $(DISABLE_GUI),, \
 			ui-previewer \
-		) \
 	) \
 	$(if $(filter WNT,$(OS)), \
 		senddoc \
@@ -326,7 +324,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ogltrans, \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
-	acc \
 	$(call gb_Helper_optional,AVMEDIA,avmedia) \
 	$(if $(filter MACOSX,$(OS)),\
 		avmediaMacAVF \
@@ -345,10 +342,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(call gb_Helper_optional,OPENCL,clew) \
 	$(if $(filter $(OS),WNT),,cmdmail) \
 	cppcanvas \
-	$(if $(filter $(OS),EMSCRIPTEN),components) \
 	configmgr \
 	ctl \
-	cui \
 	dba \
 	dbahsql \
 	$(call gb_Helper_optional,DBCONNECTIVITY, \
@@ -480,12 +475,15 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 ))
 
 $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,ooo, \
+    acc \
+    $(if $(DISABLE_DYNLOADING),components) \
+    cui \
     gie \
     sdui \
     $(if $(USING_X11),vclplug_gen) \
     $(if $(filter $(OS),WNT),vclplug_win) \
     $(if $(filter $(OS),MACOSX),vclplug_osx) \
-    $(if $(filter EMSCRIPTEN,$(OS)),vclplug_qt5) \
+    vclplug_qt5 \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,postgresqlsdbc, \

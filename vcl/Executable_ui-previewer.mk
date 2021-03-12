@@ -41,6 +41,7 @@ $(eval $(call gb_Executable_add_defs,ui-previewer,\
 ))
 
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
+ifneq (,$(USING_X11))
 $(eval $(call gb_Executable_add_libs,ui-previewer,\
     -lm $(DLOPEN_LIBS) \
     -lX11 \
@@ -49,6 +50,7 @@ $(eval $(call gb_Executable_add_libs,ui-previewer,\
 $(eval $(call gb_Executable_use_static_libraries,ui-previewer,\
     glxtest \
 ))
+endif
 endif
 
 $(eval $(call gb_Executable_add_default_nativeres,ui-previewer))

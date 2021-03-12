@@ -196,9 +196,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 		extensions/source/update/check/updchk.uno \
 		extensions/source/update/ui/updchk \
 	) \
-	$(if $(ENABLE_OPENGL_TRANSITIONS), \
-		slideshow/source/engine/opengl/ogltrans \
-	) \
 	$(if $(ENABLE_JAVA), \
 		xmerge/source/bridge/XMergeBridge \
 		scripting/java/ScriptFramework \
@@ -275,15 +272,11 @@ $(eval $(call gb_Rdb_add_components,services,\
 	desktop/source/migration/services/migrationoo3 \
 	desktop/source/offacc/offacc \
 	$(if $(DISABLE_GUI),,desktop/source/splash/spl) \
-	extensions/source/abpilot/abp \
 	$(if $(ENABLE_LDAP),extensions/source/config/ldap/ldapbe2) \
 	$(if $(filter WNT,$(OS)),\
 		extensions/source/config/WinUserInfo/WinUserInfoBe \
 	) \
 	extensions/source/logging/log \
-	extensions/source/scanner/scn \
-	extensions/source/update/feed/updatefeed \
-	xmlhelp/util/ucpchelp1 \
 	$(if $(filter-out WNT,$(OS)),\
 		shell/source/cmdmail/cmdmail \
 	) \
