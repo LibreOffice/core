@@ -13,6 +13,9 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/childwin.hxx>
 
+/**
+ * Necessary child window for the development tools docking window
+ */
 class SAL_WARN_UNUSED SFX2_DLLPUBLIC DevelopmentToolChildWindow final : public SfxChildWindow
 {
     SFX_DECL_CHILDWINDOW_WITHID(DevelopmentToolChildWindow);

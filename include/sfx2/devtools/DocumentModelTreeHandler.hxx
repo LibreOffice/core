@@ -18,12 +18,19 @@
 
 #include <unordered_map>
 
+/** Document model tree handler
+ *
+ * Handles the DOM tree part of DevTools, which includes interaction with
+ * the DOM tree view UI elements and the DOM model.
+ */
 class DocumentModelTreeHandler
 {
 private:
     std::unique_ptr<weld::TreeView>& mpDocumentModelTree;
     css::uno::Reference<css::uno::XInterface> mxDocument;
 
+    // Clears all children of a tree node, where the parent is
+    // identified by the input tree iter.
     void clearChildren(weld::TreeIter const& rParent);
 
 public:
@@ -37,6 +44,8 @@ public:
     static css::uno::Reference<css::uno::XInterface> getObjectByID(OUString const& rID);
 
     void dispose();
+
+    // selects the input object if it exists in the DOM tree view
     void selectObject(css::uno::Reference<css::uno::XInterface> const& xInterface);
 };
 
