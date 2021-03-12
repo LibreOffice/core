@@ -130,14 +130,10 @@ void Theme::UpdateTheme()
     try
     {
         const StyleSettings& rStyle (Application::GetSettings().GetStyleSettings());
-        const bool bUseSystemColors (GetBoolean(Bool_UseSystemColors));
-
-#define Alternatives(n,hc,sys) (mbIsHighContrastMode ? hc : (bUseSystemColors ? sys : n))
 
         Color aBaseBackgroundColor (rStyle.GetDialogColor());
         // UX says this should be a little brighter, but that looks off when compared to the other windows.
         //aBaseBackgroundColor.IncreaseLuminance(7);
-        Color aBorderColor (aBaseBackgroundColor);
         Color aSecondColor (aBaseBackgroundColor);
         aSecondColor.DecreaseLuminance(15);
 
@@ -152,15 +148,6 @@ void Theme::UpdateTheme()
             maPropertyIdToNameMap[Int_DeckSeparatorHeight],
             Any(sal_Int32(1)));
         setPropertyValue(
-            maPropertyIdToNameMap[Color_DeckTitleFont],
-            Any(sal_Int32(rStyle.GetFontColor().GetRGBColor())));
-        setPropertyValue(
-            maPropertyIdToNameMap[Int_DeckTitleBarHeight],
-            Any(sal_Int32(Alternatives(
-                        26,
-                        26,
-                        rStyle.GetFloatTitleHeight()))));
-        setPropertyValue(
             maPropertyIdToNameMap[Color_PanelBackground],
             Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
 
@@ -168,20 +155,7 @@ void Theme::UpdateTheme()
             maPropertyIdToNameMap[Color_PanelTitleBarBackground],
             Any(sal_Int32(aSecondColor.GetRGBColor())));
         setPropertyValue(
-            maPropertyIdToNameMap[Color_PanelTitleFont],
-            Any(sal_Int32(mbIsHighContrastMode ? 0x00ff00 : 0x262626)));
-        setPropertyValue(
-            maPropertyIdToNameMap[Int_PanelTitleBarHeight],
-            Any(sal_Int32(Alternatives(
-                        26,
-                        26,
-                        rStyle.GetTitleHeight()))));
-        setPropertyValue(
             maPropertyIdToNameMap[Color_TabBarBackground],
-            Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
-
-        setPropertyValue(
-            maPropertyIdToNameMap[Color_DropDownBackground],
             Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
 
         setPropertyValue(
@@ -190,17 +164,6 @@ void Theme::UpdateTheme()
         setPropertyValue(
             maPropertyIdToNameMap[Color_HighlightText],
             Any(sal_Int32(rStyle.GetHighlightTextColor().GetRGBColor())));
-
-        setPropertyValue(
-            maPropertyIdToNameMap[Color_HorizontalBorder],
-            Any(sal_Int32(aBorderColor.GetRGBColor())));
-
-        setPropertyValue(
-            maPropertyIdToNameMap[Color_VerticalBorder],
-            Any(sal_Int32(aBorderColor.GetRGBColor())));
-        setPropertyValue(
-            maPropertyIdToNameMap[Image_CloseIndicator],
-            Any(OUString("private:graphicrepository/cmd/lc_decrementlevel.png")));
     }
     catch(beans::UnknownPropertyException const &)
     {
@@ -492,16 +455,6 @@ void Theme::SetupPropertyMaps()
     maIntegers.resize(Int_Bool_ - Color_Int_ - 1);
     maBooleans.resize(Post_Bool_ - Int_Bool_ - 1);
 
-    maPropertyNameToIdMap["Image_CloseIndicator"]=Image_CloseIndicator;
-    maPropertyIdToNameMap[Image_CloseIndicator]="Image_CloseIndicator";
-
-
-    maPropertyNameToIdMap["Color_DeckTitleFont"]=Color_DeckTitleFont;
-    maPropertyIdToNameMap[Color_DeckTitleFont]="Color_DeckTitleFont";
-
-    maPropertyNameToIdMap["Color_PanelTitleFont"]=Color_PanelTitleFont;
-    maPropertyIdToNameMap[Color_PanelTitleFont]="Color_PanelTitleFont";
-
     maPropertyNameToIdMap["Color_Highlight"]=Color_Highlight;
     maPropertyIdToNameMap[Color_Highlight]="Color_Highlight";
 
@@ -524,27 +477,12 @@ void Theme::SetupPropertyMaps()
     maPropertyNameToIdMap["Color_TabBarBackground"]=Color_TabBarBackground;
     maPropertyIdToNameMap[Color_TabBarBackground]="Color_TabBarBackground";
 
-    maPropertyNameToIdMap["Color_HorizontalBorder"]=Color_HorizontalBorder;
-    maPropertyIdToNameMap[Color_HorizontalBorder]="Color_HorizontalBorder";
-
-    maPropertyNameToIdMap["Color_VerticalBorder"]=Color_VerticalBorder;
-    maPropertyIdToNameMap[Color_VerticalBorder]="Color_VerticalBorder";
-
-    maPropertyNameToIdMap["Color_DropDownBackground"]=Color_DropDownBackground;
-    maPropertyIdToNameMap[Color_DropDownBackground]="Color_DropDownBackground";
-
-
-    maPropertyNameToIdMap["Int_DeckTitleBarHeight"]=Int_DeckTitleBarHeight;
-    maPropertyIdToNameMap[Int_DeckTitleBarHeight]="Int_DeckTitleBarHeight";
 
     maPropertyNameToIdMap["Int_DeckBorderSize"]=Int_DeckBorderSize;
     maPropertyIdToNameMap[Int_DeckBorderSize]="Int_DeckBorderSize";
 
     maPropertyNameToIdMap["Int_DeckSeparatorHeight"]=Int_DeckSeparatorHeight;
     maPropertyIdToNameMap[Int_DeckSeparatorHeight]="Int_DeckSeparatorHeight";
-
-    maPropertyNameToIdMap["Int_PanelTitleBarHeight"]=Int_PanelTitleBarHeight;
-    maPropertyIdToNameMap[Int_PanelTitleBarHeight]="Int_PanelTitleBarHeight";
 
     maPropertyNameToIdMap["Int_DeckLeftPadding"]=Int_DeckLeftPadding;
     maPropertyIdToNameMap[Int_DeckLeftPadding]="Int_DeckLeftPadding";
@@ -572,11 +510,6 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
 {
     switch(eItem)
     {
-        case Image_CloseIndicator:
-            return PT_Image;
-
-        case Color_DeckTitleFont:
-        case Color_PanelTitleFont:
         case Color_Highlight:
         case Color_HighlightText:
         case Color_DeckBackground:
@@ -584,15 +517,10 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
         case Color_PanelBackground:
         case Color_PanelTitleBarBackground:
         case Color_TabBarBackground:
-        case Color_HorizontalBorder:
-        case Color_VerticalBorder:
-        case Color_DropDownBackground:
             return PT_Color;
 
-        case Int_DeckTitleBarHeight:
         case Int_DeckBorderSize:
         case Int_DeckSeparatorHeight:
-        case Int_PanelTitleBarHeight:
         case Int_DeckLeftPadding:
         case Int_DeckTopPadding:
         case Int_DeckRightPadding:

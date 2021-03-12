@@ -239,9 +239,9 @@ private:
     void CreatePanels(
         const OUString& rDeckId,
         const Context& rContext);
-    VclPtr<Panel> CreatePanel (
-        const OUString& rsPanelId,
-        vcl::Window* pParentWindow,
+    std::shared_ptr<Panel> CreatePanel (
+        std::u16string_view rsPanelId,
+        weld::Widget* pParentWindow,
         const bool bIsInitiallyExpanded,
         const Context& rContext,
         const VclPtr<Deck>& pDeck);
