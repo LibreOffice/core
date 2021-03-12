@@ -16,6 +16,7 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weldutils.hxx>
 
 #include <orcus/json_document_tree.hpp>
 #include <orcus/config.hpp>
@@ -82,15 +83,12 @@ void EmojiView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     ThumbnailView::SetDrawingArea(pDrawingArea);
 
-    if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
-    {
-        uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-        OUString sFontName(officecfg::Office::Common::Misc::EmojiFont::get(xContext));
-        vcl::Font aFont = pDrawingArea->get_font();
-        aFont.SetFamilyName(sFontName);
-        OutputDevice& rDevice = pDrawingArea->get_ref_device();
-        pDefaultDevice->SetPointFont(rDevice, aFont);
-    }
+    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    OUString sFontName(officecfg::Office::Common::Misc::EmojiFont::get(xContext));
+    vcl::Font aFont = pDrawingArea->get_font();
+    aFont.SetFamilyName(sFontName);
+    OutputDevice& rDevice = pDrawingArea->get_ref_device();
+    weld::SetPointFont(rDevice, aFont);
 
     mpItemAttrs->aFontSize.setX(ITEM_MAX_WIDTH - 2*ITEM_PADDING);
     mpItemAttrs->aFontSize.setY(ITEM_MAX_HEIGHT - 2*ITEM_PADDING);

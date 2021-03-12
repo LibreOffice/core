@@ -36,6 +36,7 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weldutils.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <sfx2/passwd.hxx>
@@ -378,8 +379,7 @@ void SwAddressPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
     Color aPaintColor(IsEnabled() ? rSettings.GetWindowTextColor() : rSettings.GetDisableColor());
     rRenderContext.SetLineColor(aPaintColor);
 
-    if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
-        pDefaultDevice->SetPointFont(rRenderContext, GetDrawingArea()->get_font());
+    weld::SetPointFont(rRenderContext, GetDrawingArea()->get_font());
     vcl::Font aFont(rRenderContext.GetFont());
     aFont.SetColor(aPaintColor);
     rRenderContext.SetFont(aFont);

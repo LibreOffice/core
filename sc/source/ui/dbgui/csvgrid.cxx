@@ -38,6 +38,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weldutils.hxx>
 
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -96,11 +97,8 @@ void ScCsvGrid::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     maHeaderFont = Application::GetSettings().GetStyleSettings().GetAppFont();
 
     // expand the point size of the desired font to the equivalent pixel size
-    if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
-    {
-        pDefaultDevice->SetPointFont(rRefDevice, maHeaderFont);
-        maHeaderFont = rRefDevice.GetFont();
-    }
+    weld::SetPointFont(rRefDevice, maHeaderFont);
+    maHeaderFont = rRefDevice.GetFont();
 
     // Because this is an always LeftToRight layout widget the initial size of
     // this widget needs to be smaller than the size of the parent scrolling

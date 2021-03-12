@@ -30,6 +30,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weldutils.hxx>
 #include <rtl/math.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>
@@ -772,8 +773,7 @@ OutputDevice& FontNameBox::CachePreview(size_t nIndex, Point* pTopLeft)
             gFontPreviewVirDevs.emplace_back(m_xComboBox->create_render_virtual_device());
             VirtualDevice& rDevice = *gFontPreviewVirDevs.back();
             rDevice.SetOutputSizePixel(Size(gUserItemSz.Width(), gUserItemSz.Height() * gPreviewsPerDevice));
-            if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
-                pDefaultDevice->SetPointFont(rDevice, m_xComboBox->get_font());
+            weld::SetPointFont(rDevice, m_xComboBox->get_font());
             assert(gFontPreviewVirDevs.size() == nPage + 1);
         }
 

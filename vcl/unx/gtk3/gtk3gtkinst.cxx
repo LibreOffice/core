@@ -12449,8 +12449,7 @@ void ensure_device(CustomCellRendererSurface *cellsurface, weld::Widget* pWidget
         cellsurface->device = VclPtr<VirtualDevice>::Create();
         cellsurface->device->SetBackground(COL_TRANSPARENT);
         // expand the point size of the desired font to the equivalent pixel size
-        if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
-            pDefaultDevice->SetPointFont(*cellsurface->device, pWidget->get_font());
+        weld::SetPointFont(*cellsurface->device, pWidget->get_font());
     }
 }
 
