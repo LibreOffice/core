@@ -175,12 +175,14 @@ void ScDPFieldButton::drawPopupButton()
 
     // Background & outer black border
     mpOutDev->SetLineColor(COL_BLACK);
-    Color aBackgroundColor = mbPopupPressed ? mpStyle->GetShadowColor() : mpStyle->GetFaceColor();
+    Color aBackgroundColor
+        = mbHasHiddenMember ? mpStyle->GetHighlightColor()
+                            : mbPopupPressed ? mpStyle->GetShadowColor() : mpStyle->GetFaceColor();
     mpOutDev->SetFillColor(aBackgroundColor);
     mpOutDev->DrawRect(tools::Rectangle(aPos, aSize));
 
     // the arrowhead
-    Color aArrowColor = mbHasHiddenMember ? mpStyle->GetHighlightLinkColor() : mpStyle->GetButtonTextColor();
+    Color aArrowColor = mbHasHiddenMember ? mpStyle->GetHighlightTextColor() : mpStyle->GetButtonTextColor();
     mpOutDev->SetLineColor(aArrowColor);
     mpOutDev->SetFillColor(aArrowColor);
 
