@@ -468,12 +468,11 @@ public:
     {
         int nLength = mxIdlArray->getLen(maAny);
 
-        OUString aValue = "<Sequence>";
         OUString aType = getAnyType(maAny).replaceAll(u"[]", u"");
         aType += u"[" + OUString::number(nLength) + u"]";
 
         return {
-            { 1, aValue },
+            { 1, "<Sequence>" },
             { 2, aType },
         };
     }
