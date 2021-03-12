@@ -4809,7 +4809,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                 }
                                 else
                                 {
-                                    rSh.ClickToField( *aContentAtPos.aFnd.pField );
+                                    rSh.ClickToField(*aContentAtPos.aFnd.pField, bExecHyperlinks);
                                     // a bit of a mystery what this is good for?
                                     // in this case we assume it's valid since we
                                     // just selected a field

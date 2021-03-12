@@ -46,6 +46,7 @@
 #include <cmdid.h>
 #include <swabstdlg.hxx>
 #include <SwRewriter.hxx>
+#include <authfld.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -334,7 +335,7 @@ void SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 // handler for click on the field given as parameter.
 // the cursor is positioned on the field.
 
-void SwWrtShell::ClickToField( const SwField& rField )
+void SwWrtShell::ClickToField(const SwField& rField, bool bExecHyperlinks)
 {
     // cross reference field must not be selected because it moves the cursor
     if (SwFieldIds::GetRef != rField.GetTyp()->Which())
@@ -393,6 +394,24 @@ void SwWrtShell::ClickToField( const SwField& rField )
                 rField.GetTyp()->UpdateFields();
                 EndAllAction();
             }
+        }
+        break;
+
+    case SwFieldIds::TableOfAuthorities:
+        {
+            if (!bExecHyperlinks)
+            {
+                break;
+            }
+
+            auto pField = static_cast<const SwAuthorityField*>(&rField);
+            if (!pField->HasURL())
+            {
+                break;
+            }
+
+            const OUString& rURL = pField->GetAuthEntry()->GetAuthorField(AUTH_FIELD_URL);
+            ::LoadURL(*this, rURL, LoadUrlFlags::NewView, /*rTargetFrameName=*/OUString());
         }
         break;
 
