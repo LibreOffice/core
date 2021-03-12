@@ -459,6 +459,59 @@ const SwFrameFormat* SwPageDesc::GetStashedFrameFormat(bool bHeader, bool bLeft,
     return nullptr;
 }
 
+const bool SwPageDesc::HasStashedFormat(bool bHeader, bool bLeft, bool bFirst)
+{
+    if (bHeader)
+    {
+        if (bLeft)
+        {
+            return m_aStashedHeader.m_pStashedLeft != nullptr;
+        }
+        if (bFirst)
+        {
+            return m_aStashedHeader.m_pStashedFirst != nullptr;
+        }
+    }
+    else
+    {
+        if (bLeft)
+        {
+            return m_aStashedFooter.m_pStashedLeft != nullptr;
+        }
+        if (bFirst)
+        {
+            return m_aStashedFooter.m_pStashedFirst != nullptr;
+        }
+    }
+    return false;
+}
+
+void SwPageDesc::RemoveStashedFormat(bool bHeader, bool bLeft, bool bFirst)
+{
+    if (bHeader)
+    {
+        if (bLeft)
+        {
+            m_aStashedHeader.m_pStashedLeft.reset();
+        }
+        if (bFirst)
+        {
+            m_aStashedHeader.m_pStashedFirst.reset();
+        }
+    }
+    else
+    {
+        if (bLeft)
+        {
+            m_aStashedFooter.m_pStashedLeft.reset();
+        }
+        if (bFirst)
+        {
+            m_aStashedFooter.m_pStashedFirst.reset();
+        }
+    }
+}
+
 // Page styles
 static const char* STR_POOLPAGE[] =
 {
