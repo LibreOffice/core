@@ -567,7 +567,7 @@ DECLARE_OOXMLIMPORT_TEST(testN779627, "n779627.docx")
      * Another problem tested with this document is the unnecessary loading of the shapes
      * anchored to a discarded header or footer
      */
-    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+    //CPPUNIT_ASSERT_EQUAL(0, getShapes()); discarded header/footer became hidden one.
 }
 
 DECLARE_OOXMLIMPORT_TEST(testN779627b, "n779627b.docx")
