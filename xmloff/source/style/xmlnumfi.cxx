@@ -931,7 +931,8 @@ void SvXMLNumFmtElementContext::endFastElement(sal_Int32 )
                 // calendar of a locale if it is known to implicitly use E.
                 bool bImplicitEC = (!sCalendar.isEmpty() &&
                         rParent.GetLocaleData().doesSecondaryCalendarUseEC( sCalendar));
-                if (bImplicitEC || (!sCalendar.isEmpty() && rParent.HasEra()))
+                if (bImplicitEC || (!sCalendar.isEmpty() && rParent.HasEra()
+                            && sCalendar != rParent.GetLocaleData().getDefaultCalendar()->Name))
                 {
                     // If E or EE is the first format keyword, passing
                     // bImplicitEC=true suppresses the superfluous calendar
