@@ -1523,6 +1523,15 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
         rDstDesc.GetFirstMaster().CallSwClientNotify(aHint);
         rDstDesc.GetFirstLeft().CallSwClientNotify(aHint);
     }
+
+    // Copy the stashed formats as well between the page descriptors...
+    for (bool bFirst : {true, false})
+        for (bool bLeft : {true, false})
+            for (bool bHeader : {true, false})
+                if (rSrcDesc.GetStashedFrameFormat(bHeader, bLeft, bFirst))
+                rDstDesc.StashFrameFormat(
+                    *rSrcDesc.GetStashedFrameFormat(bHeader, bLeft, bFirst),
+                    bHeader, bLeft, bFirst);
 }
 
 void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
