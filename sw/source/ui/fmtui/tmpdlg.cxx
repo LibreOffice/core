@@ -85,9 +85,17 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
     GetApplyButton()->set_tooltip_text(SwResId(STR_APPLY_TOOLTIP));
     GetApplyButton()->set_accessible_description(SwResId(STR_APPLY_EXTENDEDTIP));
 
-    GeResetButton()->set_label(SwResId(STR_RESET_LABEL));
-    GeResetButton()->set_tooltip_text(SwResId(STR_RESET_TOOLTIP));
-    GeResetButton()->set_accessible_description(SwResId(STR_RESET_EXTENDEDTIP));
+    GetResetButton()->set_label(SwResId(STR_RESET_LABEL));
+    GetResetButton()->set_tooltip_text(SwResId(STR_RESET_TOOLTIP));
+    GetResetButton()->set_accessible_description(SwResId(STR_RESET_EXTENDEDTIP));
+    
+    GetOKButton()->set_label(SwResId(STR_OK_LABEL));
+    GetOKButton()->set_tooltip_text(SwResId(STR_OK_TOOLTIP));
+    GetOKButton()->set_accessible_description(SwResId(STR_OK_EXTENDEDTIP));
+      
+    GetCancelButton()->set_label(SwResId(STR_CANCEL_LABEL));
+    GetCancelButton()->set_tooltip_text(SwResId(STR_CANCEL_TOOLTIP));
+    GetCancelButton()->set_accessible_description(SwResId(STR_CANCEL_EXTENDEDTIP));
 
     // stitch TabPages together
     switch( nRegion )
