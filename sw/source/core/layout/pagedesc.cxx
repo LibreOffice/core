@@ -460,13 +460,66 @@ const SwFrameFormat* SwPageDesc::GetStashedFrameFormat(bool bHeader, bool bLeft,
     if (pFormat)
     {
         const SwFrameFormat* retVal = pFormat->get();
-        pFormat->reset();
+        //pFormat->reset(); // Is it a good idea???
         return retVal;
     }
     else
     {
         SAL_WARN("sw", "Right page format is never stashed.");
         return nullptr;
+    }
+}
+
+bool SwPageDesc::HasStashedFormat(bool bHeader, bool bLeft, bool bFirst)
+{
+    if (bHeader)
+    {
+        if (bLeft)
+        {
+            return m_aStashedHeader.m_pStashedLeft != nullptr;
+        }
+        if (bFirst)
+        {
+            return m_aStashedHeader.m_pStashedFirst != nullptr;
+        }
+    }
+    else
+    {
+        if (bLeft)
+        {
+            return m_aStashedFooter.m_pStashedLeft != nullptr;
+        }
+        if (bFirst)
+        {
+            return m_aStashedFooter.m_pStashedFirst != nullptr;
+        }
+    }
+    return false;
+}
+
+void SwPageDesc::RemoveStashedFormat(bool bHeader, bool bLeft, bool bFirst)
+{
+    if (bHeader)
+    {
+        if (bLeft)
+        {
+            m_aStashedHeader.m_pStashedLeft.reset();
+        }
+        if (bFirst)
+        {
+            m_aStashedHeader.m_pStashedFirst.reset();
+        }
+    }
+    else
+    {
+        if (bLeft)
+        {
+            m_aStashedFooter.m_pStashedLeft.reset();
+        }
+        if (bFirst)
+        {
+            m_aStashedFooter.m_pStashedFirst.reset();
+        }
     }
 }
 

@@ -223,6 +223,12 @@ public:
     /// Used to restore hidden header/footer formats.
     const SwFrameFormat* GetStashedFrameFormat(bool bHeader, bool bLeft, bool bFirst) const;
 
+    /// Checks if the pagedescriptor has a stashed format according to the parameters or not.
+    bool HasStashedFormat(bool bHeader, bool bLeft, bool bFirst);
+
+    /// Gives the feature of removing the stashed format by hand if it is neccessarry.
+    void RemoveStashedFormat(bool bHeader, bool bLeft, bool bFirst);
+
     /// Same as WriteUseOn(), but the >= HeaderShare part of the bitfield is not modified.
     inline void      SetUseOn( UseOnPage eNew );
     inline UseOnPage GetUseOn() const;
