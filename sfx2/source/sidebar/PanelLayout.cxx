@@ -19,6 +19,7 @@ using namespace sfx2::sidebar;
 PanelLayout::PanelLayout(weld::Widget* pParent, const OString& rID, const OUString& rUIXMLDescription)
     : m_xBuilder(Application::CreateBuilder(pParent, rUIXMLDescription))
     , m_xContainer(m_xBuilder->weld_container(rID))
+    , m_pPanel(nullptr)
 {
     m_xContainer->set_background(Theme::GetColor(Theme::Color_PanelBackground));
     m_xContainer->connect_get_property_tree(LINK(this, PanelLayout, DumpAsPropertyTreeHdl));
@@ -53,17 +54,17 @@ void PanelLayout::DataChanged(const DataChangedEvent& rEvent)
 
 void PanelLayout::SetPanel(sfx2::sidebar::Panel* pPanel)
 {
-    m_xPanel = pPanel;
+    m_pPanel = pPanel;
 }
 
 weld::Window* PanelLayout::GetFrameWeld() const
 {
-    if (!m_xPanel)
+    if (!m_pPanel)
     {
         SAL_WARN("sfx.sidebar", "Expected a toplevel Panel to exist");
         return nullptr;
     }
-    return m_xPanel->GetFrameWeld();
+    return m_pPanel->GetFrameWeld();
 }
 
 PanelLayout::~PanelLayout()

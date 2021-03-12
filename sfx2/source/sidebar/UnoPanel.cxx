@@ -29,13 +29,13 @@ xFrame(rFrame),
 mPanelId(panelId),
 mDeckId(deckId),
 mpDeck(),
-mpPanel()
+mxPanel()
 {
     SidebarController* pSidebarController = getSidebarController();
 
     pSidebarController->CreateDeck(mDeckId); // creates deck object is not already
     mpDeck = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId)->mpDeck;
-    mpPanel = mpDeck->GetPanel(mPanelId);
+    mxPanel = mpDeck->GetPanel(mPanelId);
 }
 
 SidebarController* SfxUnoPanel::getSidebarController()
@@ -54,7 +54,8 @@ OUString SAL_CALL SfxUnoPanel::getTitle()
 {
     SolarMutexGuard aGuard;
 
-    PanelTitleBar* pTitleBar = mpPanel->GetTitleBar();
+    auto xPanel = mxPanel.lock();
+    PanelTitleBar* pTitleBar = xPanel ? xPanel->GetTitleBar() : nullptr;
     if (pTitleBar)
         return pTitleBar->GetTitle();
     else
@@ -71,7 +72,8 @@ void SAL_CALL SfxUnoPanel::setTitle( const OUString& newTitle )
     if (xPanelDescriptor)
     {
         xPanelDescriptor->msTitle = newTitle;
-        PanelTitleBar* pTitleBar = mpPanel->GetTitleBar();
+        auto xPanel = mxPanel.lock();
+        PanelTitleBar* pTitleBar = xPanel ? xPanel->GetTitleBar() : nullptr;
         if (pTitleBar)
             pTitleBar->SetTitle(newTitle);
     }
@@ -81,7 +83,8 @@ sal_Bool SAL_CALL SfxUnoPanel::isExpanded()
 {
     SolarMutexGuard aGuard;
 
-    return mpPanel->IsExpanded();
+    auto xPanel = mxPanel.lock();
+    return xPanel && xPanel->IsExpanded();
 }
 
 
@@ -90,7 +93,9 @@ void SAL_CALL SfxUnoPanel::expand( const sal_Bool bCollapseOther )
 
     SolarMutexGuard aGuard;
 
-    mpPanel->SetExpanded(true);
+    auto xPanel = mxPanel.lock();
+    if (xPanel)
+        xPanel->SetExpanded(true);
 
     if (bCollapseOther)
     {
@@ -111,7 +116,9 @@ void SAL_CALL SfxUnoPanel::collapse()
 {
     SolarMutexGuard aGuard;
 
-    mpPanel->SetExpanded(false);
+    auto xPanel = mxPanel.lock();
+    if (xPanel)
+        xPanel->SetExpanded(false);
     SidebarController* pSidebarController = getSidebarController();
     pSidebarController->NotifyResize();
 }
@@ -120,9 +127,9 @@ uno::Reference<awt::XWindow> SAL_CALL SfxUnoPanel::getDialog()
 {
     SolarMutexGuard aGuard;
 
-    return mpPanel->GetElementWindow();
+    auto xPanel = mxPanel.lock();
+    return xPanel ? xPanel->GetElementWindow() : nullptr;
 }
-
 
 sal_Int32 SAL_CALL SfxUnoPanel::getOrderIndex()
 {
