@@ -50,7 +50,6 @@
 #include <comphelper/base64.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <LayerTabBar.hxx>
-#include <vcl/window.hxx>
 #include <vcl/event.hxx>
 #include <vcl/keycodes.hxx>
 #include <svx/svdoashp.hxx>
@@ -148,9 +147,7 @@ sd::DrawDocShellRef SdMiscTest::Load(const OUString& rURL, sal_Int32 nFormat)
     uno::Reference<awt::XWindow> xContainerWindow = xTargetFrame->getContainerWindow();
     CPPUNIT_ASSERT(xContainerWindow.is());
     xContainerWindow->setPosSize(0, 0, 1024, 768, awt::PosSize::SIZE);
-    VclPtr<vcl::Window> pContainerWindow = VCLUnoHelper::GetWindow(xContainerWindow);
-    CPPUNIT_ASSERT(pContainerWindow);
-    pContainerWindow->Show(true);
+    xContainerWindow->setVisible(true);
 
     // 1. Open the document
     sd::DrawDocShellRef xDocSh = loadURL(rURL, nFormat);
