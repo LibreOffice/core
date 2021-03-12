@@ -41,6 +41,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/weldutils.hxx>
 #include <algorithm>
 
 #define USER_PACKAGE_MANAGER    "user"
@@ -422,8 +423,7 @@ void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const tools:
 
     // Setup fonts
     // expand the point size of the desired font to the equivalent pixel size
-    if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
-        pDefaultDevice->SetPointFont(rRenderContext, GetDrawingArea()->get_font());
+    weld::SetPointFont(rRenderContext, GetDrawingArea()->get_font());
     vcl::Font aStdFont(rRenderContext.GetFont());
     vcl::Font aBoldFont(aStdFont);
     aBoldFont.SetWeight(WEIGHT_BOLD);

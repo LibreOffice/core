@@ -35,6 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/weldutils.hxx>
 
 #include <unotools/localedatawrapper.hxx>
 
@@ -122,11 +123,7 @@ void PrintDialog::PrintPreviewWindow::Resize()
 void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.Push();
-    if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
-    {
-        Font aFont(rRenderContext.GetSettings().GetStyleSettings().GetLabelFont());
-        pDefaultDevice->SetPointFont(rRenderContext, aFont);
-    }
+    weld::SetPointFont(rRenderContext, rRenderContext.GetSettings().GetStyleSettings().GetLabelFont());
 
     rRenderContext.SetBackground(Wallpaper(Application::GetSettings().GetStyleSettings().GetDialogColor()));
     rRenderContext.Erase();

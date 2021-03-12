@@ -26,7 +26,7 @@
 #include <vcl/idle.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/window.hxx>
+#include <vcl/weldutils.hxx>
 
 #include <strings.hrc>
 #include <sfx2/linkmgr.hxx>
@@ -95,8 +95,7 @@ SvBaseLinksDlg::SvBaseLinksDlg(weld::Window * pParent, LinkManager* pMgr, bool b
     , m_xVirDev(VclPtr<VirtualDevice>::Create())
 {
     // expand the point size of the desired font to the equivalent pixel size
-    if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
-        pDefaultDevice->SetPointFont(*m_xVirDev, m_xTbLinks->get_font());
+    weld::SetPointFont(*m_xVirDev, m_xTbLinks->get_font());
     m_xTbLinks->set_size_request(m_xTbLinks->get_approximate_digit_width() * 90,
                                  m_xTbLinks->get_height_rows(12));
 
