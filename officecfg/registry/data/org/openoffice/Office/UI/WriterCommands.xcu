@@ -3149,9 +3149,12 @@
       </node>
       <node oor:name=".uno:ContinueNumbering" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Continue previous numbering</value>
+          <value xml:lang="en-US">~Add to List</value>
         </prop>
-         <prop oor:name="Properties" oor:type="xs:int">
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">“Add to List” adds selected paragraphs to an immediately preceding list.</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>
       </node>
