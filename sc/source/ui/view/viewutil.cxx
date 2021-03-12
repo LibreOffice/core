@@ -30,7 +30,6 @@
 #include <svl/ctloptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/window.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/eitem.hxx>
@@ -41,6 +40,7 @@
 #include <chgviset.hxx>
 #include <markdata.hxx>
 #include <document.hxx>
+#include <tabvwsh.hxx>
 
 #include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
@@ -317,15 +317,16 @@ void ScViewUtil::HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, sal
         rSet.DisableItem( nSlotId );
 }
 
-void ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
-                                 SfxViewFrame& rFrame )
+void ScViewUtil::ExecuteCharMap(const SvxFontItem& rOldFont,
+                                ScTabViewShell& rShell)
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    SfxViewFrame& rFrame = *rShell.GetViewFrame();
     SfxAllItemSet aSet( rFrame.GetObjectShell()->GetPool() );
     aSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
     aSet.Put( SvxFontItem( rOldFont.GetFamily(), rOldFont.GetFamilyName(), rOldFont.GetStyleName(), rOldFont.GetPitch(), rOldFont.GetCharSet(), aSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT ) ) );
     auto xFrame = rFrame.GetFrame().GetFrameInterface();
-    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(rFrame.GetWindow().GetFrameWeld(), aSet, xFrame));
+    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateCharMapDialog(rShell.GetFrameWeld(), aSet, xFrame));
     pDlg->Execute();
 }
 
