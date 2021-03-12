@@ -625,6 +625,9 @@ TabBarAllowRenamingReturnCode ScTabControl::AllowRenaming()
         {
             //  don't show error message above any modal dialog
             //  instead cancel renaming without error message
+            //  e.g. start with default Sheet1, add another sheet
+            //  alt+left click on Sheet2 tab, edit to say Sheet1
+            //  ctrl+S to trigger modal file save dialog
             nRet = TABBAR_RENAMING_CANCEL;
         }
         else
