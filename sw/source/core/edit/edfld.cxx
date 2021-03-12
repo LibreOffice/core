@@ -385,6 +385,7 @@ void SwEditShell::ChangeAuthorityData(const SwAuthEntry* pNewData)
 
 bool SwEditShell::IsAnyDatabaseFieldInDoc()const
 {
+    // Similar to: SwDoc::GetDBDesc
     const SwFieldTypes * pFieldTypes = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
     for(const auto & pFieldType : *pFieldTypes)
     {
