@@ -621,7 +621,7 @@ TabBarAllowRenamingReturnCode ScTabControl::AllowRenaming()
             OSL_FAIL("ScTabControl::AllowRenaming: nested calls");
             nRet = TABBAR_RENAMING_NO;
         }
-        else if ( Application::IsInModalMode() )
+        else if (pViewData->GetDocShell()->IsInModalMode())
         {
             //  don't show error message above any modal dialog
             //  instead cancel renaming without error message
