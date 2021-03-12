@@ -4935,6 +4935,33 @@ void Test::testAutoFill()
     CPPUNIT_ASSERT_EQUAL( OUString("2012-10-31"), m_pDoc->GetString( 0, 103, 0 ) );
     CPPUNIT_ASSERT_EQUAL( OUString("2012-10-31"), m_pDoc->GetString( 0, 104, 0 ) );
 
+    // Clear column A for a new test.
+    clearRange(m_pDoc, ScRange(0,0,0,0,MAXROW,0));
+    m_pDoc->SetRowHidden(0, MAXROW, 0, false); // Show all rows.
+
+    m_pDoc->SetString( 0, 50, 0, "1.0" );
+    m_pDoc->SetString( 0, 51, 0, "1.1" );
+    m_pDoc->SetString( 0, 52, 0, "1.2" );
+    m_pDoc->SetString( 0, 53, 0, "1.3" );
+    m_pDoc->Fill( 0, 50, 0, 53, nullptr, aMarkData, 3, FILL_TO_BOTTOM, FILL_AUTO );
+
+    CPPUNIT_ASSERT_EQUAL( OUString("1.4"), m_pDoc->GetString( 0, 54, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("1.5"), m_pDoc->GetString( 0, 55, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("1.6"), m_pDoc->GetString( 0, 56, 0 ) );
+
+    m_pDoc->SetString( 0, 60, 0, "4.0" );
+    m_pDoc->SetString( 0, 61, 0, "4.1" );
+    m_pDoc->SetString( 0, 62, 0, "4.2" );
+    m_pDoc->SetString( 0, 63, 0, "4.3" );
+    m_pDoc->Fill( 0, 60, 0, 63, nullptr, aMarkData, 3, FILL_TO_BOTTOM, FILL_AUTO );
+
+    // tdf#37424: Without the fix in place, this test would have failed with
+    // - Expected: 4.4
+    // - Actual  : 5
+    CPPUNIT_ASSERT_EQUAL( OUString("4.4"), m_pDoc->GetString( 0, 64, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("4.5"), m_pDoc->GetString( 0, 65, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("4.6"), m_pDoc->GetString( 0, 66, 0 ) );
+
     m_pDoc->DeleteTab(0);
 }
 
