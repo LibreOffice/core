@@ -1,0 +1,2 @@
+Static components library, containing a map from all component names
+to their constructor function calls.

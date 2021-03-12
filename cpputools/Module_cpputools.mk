@@ -14,7 +14,6 @@ ifneq ($(OS),EMSCRIPTEN)
 
 $(eval $(call gb_Module_add_targets,cpputools,\
     Executable_sp2bv \
-    Executable_uno \
 ))
 
 endif

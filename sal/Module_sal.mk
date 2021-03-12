@@ -10,7 +10,7 @@
 $(eval $(call gb_Module_Module,sal))
 
 $(eval $(call gb_Module_add_targets,sal,\
-	$(if $(or $(CROSS_COMPILING),$(DISABLE_DYNLOADING)),StaticLibrary_cppunitmain,Executable_cppunittester) \
+	$(if $(or $(CROSS_COMPILING),$(DISABLE_DYNLOADING)),Library_cppunitmain,Executable_cppunittester) \
 	$(if $(filter $(OS),ANDROID), \
 		Library_lo-bootstrap) \
 	Library_sal \

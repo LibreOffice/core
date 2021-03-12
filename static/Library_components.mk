@@ -9,8 +9,14 @@
 
 $(eval $(call gb_Library_Library,components))
 
+$(eval $(call gb_Library_set_plugin_for,components,cppuhelper))
+
 $(eval $(call gb_Library_add_generated_exception_objects,components,\
-    CustomTarget/wasm/component_maps \
+    CustomTarget/static/component_maps \
+))
+
+$(eval $(call gb_Library_use_libraries,acc,\
+    $(gb_CPPU_ENV)_uno \
 ))
 
 # vim: set noet sw=4 ts=4:

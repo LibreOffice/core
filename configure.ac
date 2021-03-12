@@ -1884,6 +1884,16 @@ libo_FUZZ_ARG_ENABLE(librelogo,
         [Do not build LibreLogo.]),
 ,enable_librelogo=yes)
 
+AC_ARG_ENABLE(cmis,
+    AS_HELP_STRING([--disable-cmis],
+        [Disable CMIS support.]),
+,enable_cmis=yes)
+
+AC_ARG_ENABLE(curl,
+    AS_HELP_STRING([--disable-curl],
+        [Disable CURL support.]),
+,enable_curl=yes)
+
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -3697,7 +3707,7 @@ if test -n "$WIN_MULTI_ARCH" -a -n "$WIN_OTHER_ARCH"; then
 fi
 
 
-if test "$_os" = "iOS" -o "$build_cpu" != "$host_cpu"; then
+if test "$_os" = "iOS" -o "$build_cpu" != "$host_cpu" -o -n "$DISABLE_DYNLOADING"; then
     # To allow building Windows multi-arch releases without cross-tooling
     if test -z "$WIN_MULTI_ARCH" -a -z "$WIN_OTHER_ARCH"; then
         cross_compiling="yes"
@@ -5544,9 +5554,9 @@ if test "$USING_X11" != TRUE; then
     test_dbus=no
     build_gstreamer_1_0=no
     test_kf5=no
-    test_qt5=no
+    test_qt5=yes
     test_gtk3_kde5=no
-    enable_cairo_canvas=no
+    enable_cairo_canvas=yes
 fi
 
 if test "$OS" = "EMSCRIPTEN"; then
@@ -7138,7 +7148,7 @@ dnl ===================================================================
 dnl Check for system libcmis
 dnl ===================================================================
 # libcmis requires curl and we can't build curl for iOS
-if test "$test_cmis" = "yes"; then
+if test "$test_cmis" = "yes" -a "$enable_cmis" = "yes"; then
     libo_CHECK_SYSTEM_MODULE([libcmis],[LIBCMIS],[libcmis-0.5 >= 0.5.2])
     ENABLE_LIBCMIS=TRUE
 else
@@ -10113,7 +10123,7 @@ if test "$with_system_curl" = "auto"; then
     with_system_curl="$with_system_libs"
 fi
 
-if test "$test_curl" = "yes" -a "$with_system_curl" = "yes"; then
+if test "$test_curl" = "yes" -a "$enable_curl" = "yes" -a "$with_system_curl" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_CURL=TRUE
 
