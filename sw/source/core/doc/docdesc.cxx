@@ -458,11 +458,17 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     CopyMasterHeader(rChged, pStashedFirstMasterFormat ? pStashedFirstMasterFormat->GetHeader() : rMasterHead, rDesc, false, true); // Copy first master
     CopyMasterHeader(rChged, pStashedFirstLeftFormat ? pStashedFirstLeftFormat->GetHeader() : rMasterHead, rDesc, true, true); // Copy first left
 
+    // Remove stashed format of the left header so next time the current content will be stashed.
+    if (pStashedLeftFormat)
+        rDesc.RemoveStashedFormat(true, true, false);
+
     // Stash header formats as needed.
     const bool bStashLeftHead = !rDesc.IsHeaderShared() && rChged.IsHeaderShared();
     const bool bStashFirstMasterHead = !rDesc.IsFirstShared() && rChged.IsFirstShared();
     const bool bStashFirstLeftHead = (!rDesc.IsHeaderShared() && rChged.IsHeaderShared()) || (!rDesc.IsFirstShared() && rChged.IsFirstShared());
-    if (bStashLeftHead && rLeftHead.GetRegisteredIn())
+
+    // Stash the left format ONLY that case when nothing is stashed
+    if (bStashLeftHead && rLeftHead.GetRegisteredIn() && !rDesc.HasStashedFormat(true, true, false))
         rDesc.StashFrameFormat(rChged.GetLeft(), true, true, false);
     if (bStashFirstMasterHead && rFirstMasterHead.GetRegisteredIn())
         rDesc.StashFrameFormat(rChged.GetFirstMaster(), true, false, true);
@@ -496,11 +502,17 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     CopyMasterFooter(rChged, pStashedFirstMasterFoot ? pStashedFirstMasterFoot->GetFooter() : rMasterFoot, rDesc, false, true); // Copy first master
     CopyMasterFooter(rChged, pStashedFirstLeftFoot ? pStashedFirstLeftFoot->GetFooter() : rMasterFoot, rDesc, true, true); // Copy first left
 
+    // Remove stashed format of the left footer so next time the current content will be stashed.
+    if (pStashedLeftFoot)
+        rDesc.RemoveStashedFormat(false, true, false);
+
     // Stash footer formats as needed.
     const bool bStashLeftFoot = !rDesc.IsFooterShared() && rChged.IsFooterShared();
     const bool bStashFirstMasterFoot = !rDesc.IsFirstShared() && rChged.IsFirstShared();
     const bool bStashFirstLeftFoot = (!rDesc.IsFooterShared() && rChged.IsFooterShared()) || (!rDesc.IsFirstShared() && rChged.IsFirstShared());
-    if (bStashLeftFoot && rLeftFoot.GetRegisteredIn())
+
+    // Stash the left format ONLY that case when nothing is stashed
+    if (bStashLeftFoot && rLeftFoot.GetRegisteredIn() && !rDesc.HasStashedFormat(false, true, false))
         rDesc.StashFrameFormat(rChged.GetLeft(), false, true, false);
     if (bStashFirstMasterFoot && rFirstMasterFoot.GetRegisteredIn())
         rDesc.StashFrameFormat(rChged.GetFirstMaster(), false, false, true);
