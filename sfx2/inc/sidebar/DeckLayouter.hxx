@@ -20,11 +20,11 @@
 
 #include <sfx2/sidebar/Panel.hxx>
 
-class ScrollBar;
-namespace vcl { class Window; }
 namespace tools { class Rectangle; }
 
 namespace sfx2::sidebar {
+
+class DeckTitleBar;
 
 /** Helper for layouting the direct and indirect children of a
     deck like title bars, panels, and scroll bars.
@@ -36,11 +36,8 @@ namespace DeckLayouter
         sal_Int32& rMinimalWidth,
         sal_Int32& rMinimalHeight,
         SharedPanelContainer& rPanels,
-        vcl::Window& pDeckTitleBar,
-        vcl::Window& pScrollClipWindow,
-        vcl::Window& pScrollContainer,
-        vcl::Window& pFiller,
-        ScrollBar& pVerticalScrollBar);
+        DeckTitleBar& pDeckTitleBar,
+        weld::ScrolledWindow& pVerticalScrollBar);
 }
 
 } // end of namespace sfx2::sidebar

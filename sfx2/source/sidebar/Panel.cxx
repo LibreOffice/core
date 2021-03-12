@@ -45,12 +45,12 @@ using namespace css::uno;
 namespace sfx2::sidebar {
 
 Panel::Panel(const PanelDescriptor& rPanelDescriptor,
-             vcl::Window* pParentWindow,
+             weld::Widget* pParentWindow,
              const bool bIsInitiallyExpanded,
              const std::function<void()>& rDeckLayoutTrigger,
              const std::function<Context()>& rContextAccess,
              const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : InterimItemWindow(pParentWindow, "sfx/ui/panel.ui", "Panel")
+    : mxBuilder(Application::CreateBuilder(pParentWindow, "sfx/ui/panel.ui"))
     , msPanelId(rPanelDescriptor.msId)
     , mbIsTitleBarOptional(rPanelDescriptor.mbIsTitleBarOptional)
     , mbWantsAWT(rPanelDescriptor.mbWantsAWT)
@@ -61,17 +61,22 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
     , maDeckLayoutTrigger(rDeckLayoutTrigger)
     , maContextAccess(rContextAccess)
     , mxFrame(rxFrame)
-    , mxTitleBar(new PanelTitleBar(rPanelDescriptor.msTitle, *m_xBuilder, this))
-    , mxContents(m_xBuilder->weld_container("contents"))
+    , mxContainer(mxBuilder->weld_container("Panel"))
+    , mxTitleBar(new PanelTitleBar(rPanelDescriptor.msTitle, *mxBuilder, this))
+    , mxContents(mxBuilder->weld_container("contents"))
 {
-    SetText(rPanelDescriptor.msTitle);
+//TODO    SetText(rPanelDescriptor.msTitle);
     mxContents->set_visible(mbIsExpanded);
 }
 
-Panel::~Panel()
+void Panel::set_margin_top(int nMargin)
 {
-    disposeOnce();
-    assert(!mxTitleBar);
+    mxContainer->set_margin_top(nMargin);
+}
+
+void Panel::set_margin_bottom(int nMargin)
+{
+    mxContainer->set_margin_bottom(nMargin);
 }
 
 void Panel::SetLurkMode(bool bLurk)
@@ -80,6 +85,7 @@ void Panel::SetLurkMode(bool bLurk)
     mbLurking = bLurk;
 }
 
+#if 0
 void Panel::ApplySettings(vcl::RenderContext& rRenderContext)
 {
     rRenderContext.SetBackground(Theme::GetColor(Theme::Color_PanelBackground));
@@ -93,8 +99,9 @@ void Panel::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         rJsonWriter.put("type", "panel");
     }
 }
+#endif
 
-void Panel::dispose()
+Panel::~Panel()
 {
     mxPanelComponent = nullptr;
 
@@ -120,7 +127,7 @@ void Panel::dispose()
     }
     mxContents.reset();
 
-    InterimItemWindow::dispose();
+    assert(!mxTitleBar);
 }
 
 PanelTitleBar* Panel::GetTitleBar() const
@@ -131,6 +138,11 @@ PanelTitleBar* Panel::GetTitleBar() const
 void Panel::ShowTitlebar(bool bShowTitlebar)
 {
     mxTitleBar->Show(bShowTitlebar);
+}
+
+void Panel::Show(bool bShow)
+{
+    mxContainer->set_visible(bShow);
 }
 
 void Panel::SetUIElement (const Reference<ui::XUIElement>& rxElement)
@@ -173,10 +185,12 @@ bool Panel::HasIdPredicate (std::u16string_view rsId) const
     return msPanelId == rsId;
 }
 
+#if 0
 void Panel::DataChanged (const DataChangedEvent&)
 {
     Invalidate();
 }
+#endif
 
 Reference<awt::XWindow> Panel::GetElementWindow()
 {

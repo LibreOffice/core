@@ -35,7 +35,7 @@ FocusManager::FocusLocation::FocusLocation (const PanelComponent eComponent, con
 }
 
 FocusManager::FocusManager(const std::function<void(const Panel&)>& rShowPanelFunctor)
-    : mpDeckTitleBar(),
+    : mpDeckTitleBar(nullptr),
       maPanels(),
       maButtons(),
       maShowPanelFunctor(rShowPanelFunctor)
@@ -66,7 +66,7 @@ void FocusManager::Clear()
 
 void FocusManager::ClearPanels()
 {
-    std::vector<VclPtr<Panel> > aPanels;
+    SharedPanelContainer aPanels;
     aPanels.swap(maPanels);
     for (auto const& panel : aPanels)
     {
@@ -76,7 +76,7 @@ void FocusManager::ClearPanels()
             UnregisterWindow(panel->GetTitleBar()->GetExpander());
         }
 
-        panel->RemoveChildEventListener(LINK(this, FocusManager, ChildEventListener));
+//TODO        panel->RemoveChildEventListener(LINK(this, FocusManager, ChildEventListener));
     }
 }
 
@@ -112,9 +112,9 @@ void FocusManager::SetPanels (const SharedPanelContainer& rPanels)
         }
 
         // Register also as child event listener at the panel.
-        panel->AddChildEventListener(LINK(this, FocusManager, ChildEventListener));
+//TODO        panel->AddChildEventListener(LINK(this, FocusManager, ChildEventListener));
 
-        maPanels.emplace_back(panel.get());
+        maPanels.emplace_back(panel);
     }
 }
 
@@ -139,6 +139,7 @@ void FocusManager::UnregisterWindow(weld::Widget& rWidget)
     rWidget.connect_key_press(Link<const KeyEvent&, bool>());
 }
 
+#if 0
 FocusManager::FocusLocation FocusManager::GetFocusLocation (const vcl::Window& rWindow) const
 {
     // Search the panels.
@@ -150,6 +151,7 @@ FocusManager::FocusLocation FocusManager::GetFocusLocation (const vcl::Window& r
 
     return FocusLocation(PC_None, -1);
 }
+#endif
 
 FocusManager::FocusLocation FocusManager::GetFocusLocation() const
 {
@@ -204,7 +206,7 @@ bool FocusManager::IsPanelTitleVisible (const sal_Int32 nPanelIndex) const
     if (nPanelIndex<0 || nPanelIndex>=static_cast<sal_Int32>(maPanels.size()))
         return false;
 
-    TitleBarBase* pTitleBar = maPanels[nPanelIndex]->GetTitleBar();
+    TitleBar* pTitleBar = maPanels[nPanelIndex]->GetTitleBar();
     if (!pTitleBar)
         return false;
     return pTitleBar->GetVisible();
@@ -488,6 +490,7 @@ IMPL_LINK(FocusManager, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
     return HandleKeyEvent(rKeyEvent.GetKeyCode(), GetFocusLocation());
 }
 
+#if 0
 IMPL_LINK(FocusManager, ChildEventListener, VclWindowEvent&, rEvent, void)
 {
     vcl::Window* pSource = rEvent.GetWindow();
@@ -537,6 +540,7 @@ IMPL_LINK(FocusManager, ChildEventListener, VclWindowEvent&, rEvent, void)
             break;
     }
 }
+#endif
 
 } // end of namespace sfx2::sidebar
 

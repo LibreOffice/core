@@ -19,9 +19,7 @@
 #pragma once
 
 #include <sfx2/dllapi.h>
-
-#include <vcl/InterimItemWindow.hxx>
-
+#include <vcl/weld.hxx>
 #include <vector>
 
 namespace com::sun::star::frame
@@ -51,18 +49,18 @@ class Context;
  * Multiple panels form a single deck.
  * E.g. the Properties deck has panels like Styles, Character, paragraph.
  */
-class SFX2_DLLPUBLIC Panel final : public InterimItemWindow
+class SFX2_DLLPUBLIC Panel final
 {
 public:
-    Panel(const PanelDescriptor& rPanelDescriptor, vcl::Window* pParentWindow,
+    Panel(const PanelDescriptor& rPanelDescriptor, weld::Widget* pParentWindow,
           const bool bIsInitiallyExpanded, const std::function<void()>& rDeckLayoutTrigger,
           const std::function<Context()>& rContextAccess,
           const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    virtual ~Panel() override;
-    virtual void dispose() override;
+    ~Panel();
 
     PanelTitleBar* GetTitleBar() const;
+    void Show(bool bShow);
     void ShowTitlebar(bool bShowTitlebar);
     bool IsTitleBarOptional() const { return mbIsTitleBarOptional; }
     void SetUIElement(const css::uno::Reference<css::ui::XUIElement>& rxElement);
@@ -82,11 +80,17 @@ public:
     void SetLurkMode(bool bLurk);
     bool IsLurking() const { return mbLurking; }
 
+    void set_margin_top(int nMargin);
+    void set_margin_bottom(int nMargin);
+
+#if 0
     virtual void DataChanged(const DataChangedEvent& rEvent) override;
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
     virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
+#endif
 
 private:
+    std::unique_ptr<weld::Builder> mxBuilder;
     const OUString msPanelId;
     const bool mbIsTitleBarOptional;
     const bool mbWantsAWT;
@@ -97,11 +101,13 @@ private:
     const std::function<void()> maDeckLayoutTrigger;
     const std::function<Context()> maContextAccess;
     const css::uno::Reference<css::frame::XFrame>& mxFrame;
+    std::unique_ptr<weld::Container> mxContainer;
     std::unique_ptr<PanelTitleBar> mxTitleBar;
     std::unique_ptr<weld::Container> mxContents;
     css::uno::Reference<css::awt::XWindow> mxXWindow;
 };
-typedef std::vector<VclPtr<Panel>> SharedPanelContainer;
+
+typedef std::vector<std::shared_ptr<Panel>> SharedPanelContainer;
 
 } // end of namespace sfx2::sidebar
 

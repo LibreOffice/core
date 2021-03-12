@@ -20,6 +20,7 @@
 
 #include <sfx2/sidebar/Panel.hxx>
 #include <tools/link.hxx>
+#include <vcl/vclevent.hxx>
 #include <vcl/keycod.hxx>
 
 namespace weld {
@@ -69,7 +70,7 @@ public:
     void SetButtons(const std::vector<weld::Widget*>& rButtons);
 
 private:
-    VclPtr<DeckTitleBar> mpDeckTitleBar;
+    DeckTitleBar* mpDeckTitleBar;
     SharedPanelContainer maPanels;
     std::vector<weld::Widget*> maButtons;
     const std::function<void(const Panel&)> maShowPanelFunctor;

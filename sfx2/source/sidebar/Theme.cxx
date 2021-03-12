@@ -118,9 +118,6 @@ void Theme::UpdateTheme()
     try
     {
         const StyleSettings& rStyle (Application::GetSettings().GetStyleSettings());
-        const bool bUseSystemColors (GetBoolean(Bool_UseSystemColors));
-
-#define Alternatives(n,hc,sys) (mbIsHighContrastMode ? hc : (bUseSystemColors ? sys : n))
 
         Color aBaseBackgroundColor (rStyle.GetDialogColor());
         // UX says this should be a little brighter, but that looks off when compared to the other windows.
@@ -140,30 +137,12 @@ void Theme::UpdateTheme()
             maPropertyIdToNameMap[Int_DeckSeparatorHeight],
             Any(sal_Int32(1)));
         setPropertyValue(
-            maPropertyIdToNameMap[Color_DeckTitleFont],
-            Any(sal_Int32(rStyle.GetFontColor().GetRGBColor())));
-        setPropertyValue(
-            maPropertyIdToNameMap[Int_DeckTitleBarHeight],
-            Any(sal_Int32(Alternatives(
-                        26,
-                        26,
-                        rStyle.GetFloatTitleHeight()))));
-        setPropertyValue(
             maPropertyIdToNameMap[Color_PanelBackground],
             Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
 
         setPropertyValue(
             maPropertyIdToNameMap[Color_PanelTitleBarBackground],
             Any(sal_Int32(aSecondColor.GetRGBColor())));
-        setPropertyValue(
-            maPropertyIdToNameMap[Color_PanelTitleFont],
-            Any(sal_Int32(mbIsHighContrastMode ? 0x00ff00 : 0x262626)));
-        setPropertyValue(
-            maPropertyIdToNameMap[Int_PanelTitleBarHeight],
-            Any(sal_Int32(Alternatives(
-                        26,
-                        26,
-                        rStyle.GetTitleHeight()))));
         setPropertyValue(
             maPropertyIdToNameMap[Color_TabBarBackground],
             Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
@@ -476,12 +455,6 @@ void Theme::SetupPropertyMaps()
     maIntegers.resize(Int_Bool_ - Color_Int_ - 1);
     maBooleans.resize(Post_Bool_ - Int_Bool_ - 1);
 
-    maPropertyNameToIdMap["Color_DeckTitleFont"]=Color_DeckTitleFont;
-    maPropertyIdToNameMap[Color_DeckTitleFont]="Color_DeckTitleFont";
-
-    maPropertyNameToIdMap["Color_PanelTitleFont"]=Color_PanelTitleFont;
-    maPropertyIdToNameMap[Color_PanelTitleFont]="Color_PanelTitleFont";
-
     maPropertyNameToIdMap["Color_Highlight"]=Color_Highlight;
     maPropertyIdToNameMap[Color_Highlight]="Color_Highlight";
 
@@ -514,17 +487,11 @@ void Theme::SetupPropertyMaps()
     maPropertyIdToNameMap[Color_DropDownBackground]="Color_DropDownBackground";
 
 
-    maPropertyNameToIdMap["Int_DeckTitleBarHeight"]=Int_DeckTitleBarHeight;
-    maPropertyIdToNameMap[Int_DeckTitleBarHeight]="Int_DeckTitleBarHeight";
-
     maPropertyNameToIdMap["Int_DeckBorderSize"]=Int_DeckBorderSize;
     maPropertyIdToNameMap[Int_DeckBorderSize]="Int_DeckBorderSize";
 
     maPropertyNameToIdMap["Int_DeckSeparatorHeight"]=Int_DeckSeparatorHeight;
     maPropertyIdToNameMap[Int_DeckSeparatorHeight]="Int_DeckSeparatorHeight";
-
-    maPropertyNameToIdMap["Int_PanelTitleBarHeight"]=Int_PanelTitleBarHeight;
-    maPropertyIdToNameMap[Int_PanelTitleBarHeight]="Int_PanelTitleBarHeight";
 
     maPropertyNameToIdMap["Int_DeckLeftPadding"]=Int_DeckLeftPadding;
     maPropertyIdToNameMap[Int_DeckLeftPadding]="Int_DeckLeftPadding";
@@ -552,8 +519,6 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
 {
     switch(eItem)
     {
-        case Color_DeckTitleFont:
-        case Color_PanelTitleFont:
         case Color_Highlight:
         case Color_HighlightText:
         case Color_DeckBackground:
@@ -566,10 +531,8 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
         case Color_DropDownBackground:
             return PT_Color;
 
-        case Int_DeckTitleBarHeight:
         case Int_DeckBorderSize:
         case Int_DeckSeparatorHeight:
-        case Int_PanelTitleBarHeight:
         case Int_DeckLeftPadding:
         case Int_DeckTopPadding:
         case Int_DeckRightPadding:
