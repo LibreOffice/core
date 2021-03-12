@@ -600,6 +600,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 pDlg->StartExecuteAsync([pDlg, pRequest, pTableRep, &rBindings, &rSh, vCursors](sal_Int32 nResult){
                     if (RET_OK == nResult)
                     {
+                        if (rSh.IsTableMode()) // tdf#140977 drop possible table-cursor before setting the new one
+                            rSh.TableCursorToCursor();
+
                         rSh.SetSelection(*vCursors->front()); // tdf#135636 set the table selected at dialog launch as current selection
 
                         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
