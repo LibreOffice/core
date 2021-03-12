@@ -491,8 +491,8 @@ void SidebarController::NotifyResize()
     sal_Int32 nMinimalWidth = 0;
     if (mpCurrentDeck && !mpCurrentDeck->isDisposed())
     {
-        VclPtr<DeckTitleBar> pTitleBar = mpCurrentDeck->GetTitleBar();
-        if (pTitleBar && pTitleBar->IsVisible())
+        DeckTitleBar* pTitleBar = mpCurrentDeck->GetTitleBar();
+        if (pTitleBar && pTitleBar->GetVisible())
             pTitleBar->SetCloserVisible(CanModifyChildWindowWidth());
         nMinimalWidth = mpCurrentDeck->GetMinimalWidth();
     }
@@ -752,37 +752,36 @@ void SidebarController::CreatePanels(std::u16string_view rDeckId, const Context&
         if ( ! bIsPanelVisible)
             continue;
 
-        Panel *const pPanel(pDeck->GetPanel(rPanelContexDescriptor.msId));
-        if (pPanel != nullptr)
+        auto xOldPanel(pDeck->GetPanel(rPanelContexDescriptor.msId));
+        if (xOldPanel)
         {
-            pPanel->SetLurkMode(false);
-            aNewPanels[nWriteIndex] = pPanel;
-            pPanel->SetExpanded( rPanelContexDescriptor.mbIsInitiallyVisible );
+            xOldPanel->SetLurkMode(false);
+            aNewPanels[nWriteIndex] = xOldPanel;
+            xOldPanel->SetExpanded(rPanelContexDescriptor.mbIsInitiallyVisible);
             ++nWriteIndex;
         }
         else
         {
-                VclPtr<Panel>  aPanel = CreatePanel(
-                                            rPanelContexDescriptor.msId,
-                                            pDeck->GetPanelParentWindow(),
-                                            rPanelContexDescriptor.mbIsInitiallyVisible,
-                                            rContext,
-                                            pDeck);
-                if (aPanel )
-                {
-                    aNewPanels[nWriteIndex] = aPanel;
+            auto aPanel = CreatePanel(rPanelContexDescriptor.msId,
+                                      pDeck->GetPanelParentWindow(),
+                                      rPanelContexDescriptor.mbIsInitiallyVisible,
+                                      rContext,
+                                      pDeck);
+            if (aPanel)
+            {
+                aNewPanels[nWriteIndex] = std::move(aPanel);
 
-                    // Depending on the context we have to change the command
-                    // for the "more options" dialog.
-                    PanelTitleBar* pTitleBar = aNewPanels[nWriteIndex]->GetTitleBar();
-                    if (pTitleBar)
-                    {
-                        pTitleBar->SetMoreOptionsCommand(
-                            rPanelContexDescriptor.msMenuCommand,
-                            mxFrame, xController);
-                    }
-                    ++nWriteIndex;
+                // Depending on the context we have to change the command
+                // for the "more options" dialog.
+                PanelTitleBar* pTitleBar = aNewPanels[nWriteIndex]->GetTitleBar();
+                if (pTitleBar)
+                {
+                    pTitleBar->SetMoreOptionsCommand(
+                        rPanelContexDescriptor.msMenuCommand,
+                        mxFrame, xController);
                 }
+                ++nWriteIndex;
+            }
         }
     }
 
@@ -915,7 +914,7 @@ void SidebarController::SwitchToDeck (
 
     // Tell the focus manager about the new panels and tab bar
     // buttons.
-    maFocusManager.SetDeckTitle(mpCurrentDeck->GetTitleBar());
+    maFocusManager.SetDeck(mpCurrentDeck);
     maFocusManager.SetPanels(mpCurrentDeck->GetPanels());
 
     mpTabBar->UpdateFocusManager(maFocusManager);
@@ -926,15 +925,15 @@ void SidebarController::notifyDeckTitle(std::u16string_view targetDeckId)
 {
     if (msCurrentDeckId == targetDeckId)
     {
-        maFocusManager.SetDeckTitle(mpCurrentDeck->GetTitleBar());
+        maFocusManager.SetDeck(mpCurrentDeck);
         mpTabBar->UpdateFocusManager(maFocusManager);
         UpdateTitleBarIcons();
     }
 }
 
-VclPtr<Panel> SidebarController::CreatePanel (
+std::shared_ptr<Panel> SidebarController::CreatePanel (
     std::u16string_view rsPanelId,
-    vcl::Window* pParentWindow,
+    weld::Widget* pParentWindow,
     const bool bIsInitiallyExpanded,
     const Context& rContext,
     const VclPtr<Deck>& pDeck)
@@ -945,31 +944,31 @@ VclPtr<Panel> SidebarController::CreatePanel (
         return nullptr;
 
     // Create the panel which is the parent window of the UIElement.
-    VclPtr<Panel> pPanel = VclPtr<Panel>::Create(
+    auto xPanel = std::make_shared<Panel>(
         *xPanelDescriptor,
         pParentWindow,
         bIsInitiallyExpanded,
-        [pDeck]() { return pDeck->RequestLayout(); },
+        pDeck,
         [this]() { return this->GetCurrentContext(); },
         mxFrame);
 
     // Create the XUIElement.
     Reference<ui::XUIElement> xUIElement (CreateUIElement(
-            pPanel->GetElementParentWindow(),
+            xPanel->GetElementParentWindow(),
             xPanelDescriptor->msImplementationURL,
             xPanelDescriptor->mbWantsCanvas,
             rContext));
     if (xUIElement.is())
     {
         // Initialize the panel and add it to the active deck.
-        pPanel->SetUIElement(xUIElement);
+        xPanel->SetUIElement(xUIElement);
     }
     else
     {
-        pPanel.disposeAndClear();
+        xPanel.reset();
     }
 
-    return pPanel;
+    return xPanel;
 }
 
 Reference<ui::XUIElement> SidebarController::CreateUIElement (
@@ -1583,9 +1582,7 @@ tools::Rectangle SidebarController::GetDeckDragArea() const
     tools::Rectangle aRect;
     if (mpCurrentDeck)
     {
-        VclPtr<DeckTitleBar> pTitleBar(mpCurrentDeck->GetTitleBar());
-
-        if (pTitleBar)
+        if (DeckTitleBar* pTitleBar = mpCurrentDeck->GetTitleBar())
         {
             aRect = pTitleBar->GetDragArea();
         }
