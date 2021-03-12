@@ -59,7 +59,7 @@ Helper class for converting a given type to a string representation.
 template< typename T >
 struct ToStringHelper
     {
-    /// Return length of the string representation of the given object (if not known exactly, it needs to be the maximum).
+    /// Return length of the string representation of the given object.
     static std::size_t length( const T& );
     /// Add 8-bit representation of the given object to the given buffer and return position right after the added data.
     static char* addData( char* buffer, const T& ) SAL_RETURNS_NONNULL;
