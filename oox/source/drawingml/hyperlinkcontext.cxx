@@ -150,7 +150,8 @@ ContextHandlerRef HyperLinkContext::onCreateContext(
     switch( aElement )
     {
     case A_TOKEN( extLst ):
-        return nullptr;
+        maProperties.setProperty(PROP_CharColor, XML_fillcolor);
+        break;
     case A_TOKEN( snd ):
         // TODO use getEmbeddedWAVAudioFile() here
         break;
