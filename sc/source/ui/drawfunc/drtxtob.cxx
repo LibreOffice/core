@@ -233,7 +233,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     }
                 }
                 else
-                    ScViewUtil::ExecuteCharMap( rItem, *mrViewData.GetViewShell()->GetViewFrame() );
+                    ScViewUtil::ExecuteCharMap(rItem, *mrViewData.GetViewShell());
 
                 if ( !aString.isEmpty() )
                 {

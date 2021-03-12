@@ -420,7 +420,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 }
                 else
                 {
-                    ScViewUtil::ExecuteCharMap( rItem, *rViewData.GetViewShell()->GetViewFrame() );
+                    ScViewUtil::ExecuteCharMap(rItem, *rViewData.GetViewShell());
 
                     // while the dialog was open, edit mode may have been stopped
                     if (!SC_MOD()->IsInputMode())
