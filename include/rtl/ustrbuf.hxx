@@ -239,7 +239,6 @@ public:
         sal_Unicode* end = c.addData( pData->buffer );
         *end = '\0';
         pData->length = l;
-        // TODO realloc in case pData->>length is noticeably smaller than l ?
     }
 
     /**
