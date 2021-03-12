@@ -18,10 +18,12 @@
  */
 
 #include <sidebar/DeckLayouter.hxx>
-#include <sfx2/sidebar/Theme.hxx>
-#include <sfx2/sidebar/Panel.hxx>
+#include <sidebar/DeckTitleBar.hxx>
 #include <sidebar/PanelTitleBar.hxx>
 #include <sfx2/sidebar/Deck.hxx>
+#include <sfx2/sidebar/Panel.hxx>
+#include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <comphelper/lok.hxx>
 
@@ -52,14 +54,14 @@ namespace {
     class LayoutItem
     {
     public:
-        VclPtr<Panel> mpPanel;
+        std::shared_ptr<Panel> mpPanel;
         css::ui::LayoutSize maLayoutSize;
         sal_Int32 mnDistributedHeight;
         sal_Int32 mnWeight;
         bool mbShowTitleBar;
 
-        LayoutItem(const VclPtr<Panel>& rPanel)
-            : mpPanel(rPanel)
+        LayoutItem(std::shared_ptr<Panel>& pPanel)
+            : mpPanel(pPanel)
             , maLayoutSize(0, 0, 0)
             , mnDistributedHeight(0)
             , mnWeight(0)
@@ -67,14 +69,12 @@ namespace {
         {
         }
     };
-    tools::Rectangle LayoutPanels (
+    void LayoutPanels (
         const tools::Rectangle& rContentArea,
         sal_Int32& rMinimalWidth,
         sal_Int32& rMinimalHeight,
         ::std::vector<LayoutItem>& rLayoutItems,
-        vcl::Window& rScrollClipWindow,
-        vcl::Window& rScrollContainer,
-        ScrollBar& pVerticalScrollBar,
+        weld::ScrolledWindow& pVerticalScrollBar,
         const bool bShowVerticalScrollBar);
     void GetRequestedSizes (
         ::std::vector<LayoutItem>& rLayoutItem,
@@ -86,80 +86,65 @@ namespace {
         const sal_Int32 nHeightToDistribute,
         const sal_Int32 nContainerHeight,
         const bool bMinimumHeightIsBase);
-    bool MoveResizePixel(const VclPtr<vcl::Window> &pWindow,
-                         const Point &rNewPos, const Size &rNewSize);
     sal_Int32 PlacePanels (
         ::std::vector<LayoutItem>& rLayoutItems,
-        const sal_Int32 nWidth,
-        const LayoutMode eMode,
-        vcl::Window& rScrollContainer);
+        const LayoutMode eMode_);
     tools::Rectangle PlaceDeckTitle (
-        vcl::Window& rTitleBar,
+        SidebarDockingWindow* pDockingWindow,
+        DeckTitleBar& rTitleBar,
         const tools::Rectangle& rAvailableSpace);
     tools::Rectangle PlaceVerticalScrollBar (
-        ScrollBar& rVerticalScrollBar,
+        weld::ScrolledWindow& rVerticalScrollBar,
         const tools::Rectangle& rAvailableSpace,
         const bool bShowVerticalScrollBar);
     void SetupVerticalScrollBar(
-        ScrollBar& rVerticalScrollBar,
+        weld::ScrolledWindow& rVerticalScrollBar,
         const sal_Int32 nContentHeight,
         const sal_Int32 nVisibleHeight);
-    void UpdateFiller (
-        vcl::Window& rFiller,
-        const tools::Rectangle& rBox);
 }
 
 void DeckLayouter::LayoutDeck (
+    SidebarDockingWindow* pDockingWindow,
     const tools::Rectangle& rContentArea,
     sal_Int32& rMinimalWidth,
     sal_Int32& rMinimalHeight,
     SharedPanelContainer& rPanels,
-    vcl::Window& rDeckTitleBar,
-    vcl::Window& rScrollClipWindow,
-    vcl::Window& rScrollContainer,
-    vcl::Window& rFiller,
-    ScrollBar& rVerticalScrollBar)
+    DeckTitleBar& rDeckTitleBar,
+    weld::ScrolledWindow& rVerticalScrollBar)
 {
     if (rContentArea.GetWidth()<=0 || rContentArea.GetHeight()<=0)
         return;
-    tools::Rectangle aBox (PlaceDeckTitle(rDeckTitleBar, rContentArea));
+    tools::Rectangle aBox(PlaceDeckTitle(pDockingWindow, rDeckTitleBar, rContentArea));
 
     if ( ! rPanels.empty())
     {
         // Prepare the layout item container.
         ::std::vector<LayoutItem> aLayoutItems;
         aLayoutItems.reserve(rPanels.size());
-        for (const auto& rPanel : rPanels)
+        for (auto& rPanel : rPanels)
             aLayoutItems.emplace_back(rPanel);
 
-        aBox = LayoutPanels(
+        LayoutPanels(
             aBox,
             rMinimalWidth,
             rMinimalHeight,
             aLayoutItems,
-            rScrollClipWindow,
-            rScrollContainer,
             rVerticalScrollBar,
             false);
     }
-    UpdateFiller(rFiller, aBox);
 }
 
 namespace {
 
-tools::Rectangle LayoutPanels (
+void LayoutPanels (
     const tools::Rectangle& rContentArea,
     sal_Int32& rMinimalWidth,
     sal_Int32& rMinimalHeight,
     ::std::vector<LayoutItem>& rLayoutItems,
-    vcl::Window& rScrollClipWindow,
-    vcl::Window& rScrollContainer,
-    ScrollBar& rVerticalScrollBar,
+    weld::ScrolledWindow& rVerticalScrollBar,
     const bool bShowVerticalScrollBar)
 {
     tools::Rectangle aBox (PlaceVerticalScrollBar(rVerticalScrollBar, rContentArea, bShowVerticalScrollBar));
-
-    const sal_Int32 nWidth (aBox.GetWidth());
 
     // Get the requested heights of the panels and the available
     // height that is left when all panel titles and separators are
@@ -186,15 +171,14 @@ tools::Rectangle LayoutPanels (
         // Not enough space, even when all panels are shrunk to their
         // minimum height.
         // Show a vertical scrollbar.
-        return LayoutPanels(
+        LayoutPanels(
             rContentArea,
             rMinimalWidth,
             rMinimalHeight,
             rLayoutItems,
-            rScrollClipWindow,
-            rScrollContainer,
             rVerticalScrollBar,
             true);
+        return;
     }
 
     // We are now in one of three modes.
@@ -227,57 +211,25 @@ tools::Rectangle LayoutPanels (
             eMode==MinimumOrLarger);
     }
 
-    // Set position and size of the mpScrollClipWindow to the available
-    // size.  Its child, the mpScrollContainer, may have a bigger
-    // height.
-    rScrollClipWindow.setPosSizePixel(aBox.Left(), aBox.Top(), aBox.GetWidth(), aBox.GetHeight());
-
-    const sal_Int32 nContentHeight (
-        eMode==Preferred
-            ? nTotalPreferredHeight + nTotalDecorationHeight
-            : aBox.GetHeight());
-    sal_Int32 nY = rVerticalScrollBar.GetThumbPos();
-    if (nContentHeight-nY < aBox.GetHeight())
-        nY = nContentHeight-aBox.GetHeight();
-    if (nY < 0)
-        nY = 0;
-    rScrollContainer.setPosSizePixel(
-        0,
-        -nY,
-        nWidth,
-        nContentHeight);
-
     if (bShowVerticalScrollBar)
+    {
+        const sal_Int32 nContentHeight(
+            eMode==Preferred
+                ? nTotalPreferredHeight + nTotalDecorationHeight
+                : aBox.GetHeight());
         SetupVerticalScrollBar(rVerticalScrollBar, nContentHeight, aBox.GetHeight());
+    }
 
-    const sal_Int32 nUsedHeight (PlacePanels(rLayoutItems, nWidth, eMode, rScrollContainer));
-    aBox.AdjustTop(nUsedHeight );
+    const sal_Int32 nUsedHeight(PlacePanels(rLayoutItems, eMode));
     rMinimalHeight = nUsedHeight;
-    return aBox;
-}
-
-bool MoveResizePixel(const VclPtr<vcl::Window> &pWindow,
-                     const Point &rNewPos, const Size &rNewSize)
-{
-    Point aCurPos = pWindow->GetPosPixel();
-    Size aCurSize = pWindow->GetSizePixel();
-    if (rNewPos == aCurPos && aCurSize == rNewSize)
-        return false;
-    pWindow->setPosSizePixel(rNewPos.X(), rNewPos.Y(), rNewSize.Width(), rNewSize.Height());
-    return true;
 }
 
 sal_Int32 PlacePanels (
     ::std::vector<LayoutItem>& rLayoutItems,
-    const sal_Int32 nWidth,
-    const LayoutMode eMode,
-    vcl::Window& rScrollContainer)
+    const LayoutMode eMode)
 {
-    ::std::vector<sal_Int32> aSeparators;
     const sal_Int32 nDeckSeparatorHeight (Theme::GetInteger(Theme::Int_DeckSeparatorHeight));
     sal_Int32 nY (0);
-
-    vcl::Region aInvalidRegions;
 
     // Assign heights and places.
     for(::std::vector<LayoutItem>::const_iterator iItem(rLayoutItems.begin()),
@@ -290,22 +242,26 @@ sal_Int32 PlacePanels (
 
         Panel& rPanel (*iItem->mpPanel);
 
+        rPanel.set_margin_top(nDeckSeparatorHeight);
+        rPanel.set_margin_bottom(0);
+
         // Separator above the panel title bar.
         if (!rPanel.IsLurking())
         {
-            aSeparators.push_back(nY);
             nY += nDeckSeparatorHeight;
         }
 
-        const sal_Int32 nPanelTitleBarHeight(Theme::GetInteger(Theme::Int_PanelTitleBarHeight) * rPanel.GetDPIScaleFactor());
-
         bool bShowTitlebar = iItem->mbShowTitleBar;
-        rPanel.ShowTitlebar(bShowTitlebar);
+        PanelTitleBar* pTitleBar = rPanel.GetTitleBar();
+        pTitleBar->Show(bShowTitlebar);
+        rPanel.set_vexpand(!bShowTitlebar);
+        weld::Container* pContents = rPanel.GetContents();
+        pContents->set_vexpand(true);
 
         bool bExpanded = rPanel.IsExpanded() && !rPanel.IsLurking();
         if (bShowTitlebar || bExpanded)
         {
-            rPanel.Show();
+            rPanel.Show(true);
 
             sal_Int32 nPanelHeight(0);
             if (bExpanded)
@@ -329,24 +285,15 @@ sal_Int32 PlacePanels (
                 }
             }
             if (bShowTitlebar)
-                nPanelHeight += nPanelTitleBarHeight;
+                nPanelHeight += pTitleBar->get_preferred_size().Height();
 
-            // Place the panel.
-            Point aNewPos(0, nY);
-            Size  aNewSize(nWidth, nPanelHeight);
-
-            // Only invalidate if we moved
-            if (MoveResizePixel(&rPanel, aNewPos, aNewSize))
-            {
-                tools::Rectangle aRect(aNewPos, aNewSize);
-                aInvalidRegions.Union(rPanel.PixelToLogic(aRect));
-            }
+            rPanel.SetHeightPixel(nPanelHeight);
 
             nY += nPanelHeight;
         }
         else
         {
-            rPanel.Hide();
+            rPanel.Show(false);
         }
 
         if (!bExpanded)
@@ -356,18 +303,11 @@ sal_Int32 PlacePanels (
             if (iItem == rLayoutItems.end()-1)
             {
                 // Separator below the panel title bar.
-                aSeparators.push_back(nY);
+                rPanel.set_margin_bottom(nDeckSeparatorHeight);
                 nY += nDeckSeparatorHeight;
             }
         }
     }
-
-    Deck::ScrollContainerWindow* pScrollContainerWindow
-        = dynamic_cast<Deck::ScrollContainerWindow*>(&rScrollContainer);
-    if (pScrollContainerWindow != nullptr)
-        pScrollContainerWindow->SetSeparators(aSeparators);
-
-    rScrollContainer.Invalidate(aInvalidRegions);
 
     return nY;
 }
@@ -407,7 +347,8 @@ void GetRequestedSizes (
         {
             // Show the title bar and a separator above and below
             // the title bar.
-            const sal_Int32 nPanelTitleBarHeight (Theme::GetInteger(Theme::Int_PanelTitleBarHeight) * rItem.mpPanel->GetDPIScaleFactor());
+            PanelTitleBar* pTitleBar = rItem.mpPanel->GetTitleBar();
+            const sal_Int32 nPanelTitleBarHeight = pTitleBar->get_preferred_size().Height();
 
             rAvailableHeight -= nPanelTitleBarHeight;
             rAvailableHeight -= nDeckSeparatorHeight;
@@ -548,25 +489,21 @@ void DistributeHeights (
     OSL_ASSERT(nRemainingHeightToDistribute==0);
 }
 
-tools::Rectangle PlaceDeckTitle (
-    vcl::Window& rDeckTitleBar,
+tools::Rectangle PlaceDeckTitle(
+    SidebarDockingWindow* pDockingWindow,
+    DeckTitleBar& rDeckTitleBar,
     const tools::Rectangle& rAvailableSpace)
 {
-    if (static_cast<DockingWindow*>(rDeckTitleBar.GetParent()->GetParent())->IsFloatingMode())
+    if (pDockingWindow->IsFloatingMode())
     {
         // When the side bar is undocked then the outer system window displays the deck title.
-        rDeckTitleBar.Hide();
+        rDeckTitleBar.Show(false);
         return rAvailableSpace;
     }
     else
     {
-        const sal_Int32 nDeckTitleBarHeight (Theme::GetInteger(Theme::Int_DeckTitleBarHeight) * rDeckTitleBar.GetDPIScaleFactor());
-        rDeckTitleBar.setPosSizePixel(
-            rAvailableSpace.Left(),
-            rAvailableSpace.Top(),
-            rAvailableSpace.GetWidth(),
-            nDeckTitleBarHeight);
-        rDeckTitleBar.Show();
+        rDeckTitleBar.Show(true);
+        const sal_Int32 nDeckTitleBarHeight(rDeckTitleBar.get_preferred_size().Height());
         return tools::Rectangle(
             rAvailableSpace.Left(),
             rAvailableSpace.Top() + nDeckTitleBarHeight,
@@ -576,19 +513,14 @@ tools::Rectangle PlaceDeckTitle (
 }
 
 tools::Rectangle PlaceVerticalScrollBar (
-    ScrollBar& rVerticalScrollBar,
+    weld::ScrolledWindow& rVerticalScrollBar,
     const tools::Rectangle& rAvailableSpace,
     const bool bShowVerticalScrollBar)
 {
     if (bShowVerticalScrollBar)
     {
-        const sal_Int32 nScrollBarWidth (rVerticalScrollBar.GetSizePixel().Width());
-        rVerticalScrollBar.setPosSizePixel(
-            rAvailableSpace.Right() - nScrollBarWidth + 1,
-            rAvailableSpace.Top(),
-            nScrollBarWidth,
-            rAvailableSpace.GetHeight());
-        rVerticalScrollBar.Show();
+        const sal_Int32 nScrollBarWidth(rVerticalScrollBar.get_scroll_thickness());
+        rVerticalScrollBar.set_vpolicy(VclPolicyType::ALWAYS);
         return tools::Rectangle(
             rAvailableSpace.Left(),
             rAvailableSpace.Top(),
@@ -597,44 +529,20 @@ tools::Rectangle PlaceVerticalScrollBar (
     }
     else
     {
-        rVerticalScrollBar.Hide();
+        rVerticalScrollBar.set_vpolicy(VclPolicyType::NEVER);
         return rAvailableSpace;
     }
 }
 
 void SetupVerticalScrollBar(
-    ScrollBar& rVerticalScrollBar,
+    weld::ScrolledWindow& rVerticalScrollBar,
     const sal_Int32 nContentHeight,
     const sal_Int32 nVisibleHeight)
 {
     OSL_ASSERT(nContentHeight > nVisibleHeight);
 
-    rVerticalScrollBar.SetRangeMin(0);
-    rVerticalScrollBar.SetRangeMax(nContentHeight-1);
-    rVerticalScrollBar.SetVisibleSize(nVisibleHeight);
-}
-
-void UpdateFiller (
-    vcl::Window& rFiller,
-    const tools::Rectangle& rBox)
-{
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        // Not shown on LOK, and causes invalidation thrash
-        rFiller.Hide();
-    }
-    else if (rBox.GetHeight() > 0)
-    {
-        // Show the filler.
-        rFiller.SetBackground(Theme::GetColor(Theme::Color_PanelBackground));
-        rFiller.SetPosSizePixel(rBox.TopLeft(), rBox.GetSize());
-        rFiller.Show();
-    }
-    else
-    {
-        // Hide the filler.
-        rFiller.Hide();
-    }
+    rVerticalScrollBar.vadjustment_set_upper(nContentHeight-1);
+    rVerticalScrollBar.vadjustment_set_page_size(nVisibleHeight);
 }
 
 }

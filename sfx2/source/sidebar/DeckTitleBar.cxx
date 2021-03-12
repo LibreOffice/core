@@ -58,46 +58,30 @@ public:
 };
 
 DeckTitleBar::DeckTitleBar (const OUString& rsTitle,
-                            vcl::Window* pParentWindow,
+                            weld::Builder& rBuilder,
                             const std::function<void()>& rCloserAction)
-    : TitleBar(pParentWindow, "sfx/ui/decktitlebar.ui", "DeckTitleBar",
-               Theme::Color_DeckTitleBarBackground)
+    : TitleBar(rBuilder, Theme::Color_DeckTitleBarBackground)
     , mxGripWidget(new GripWidget)
-    , mxGripWeld(new weld::CustomWeld(*m_xBuilder, "grip", *mxGripWidget))
-    , mxLabel(m_xBuilder->weld_label("label"))
+    , mxGripWeld(new weld::CustomWeld(rBuilder, "grip", *mxGripWidget))
+    , mxLabel(rBuilder.weld_label("label"))
     , maCloserAction(rCloserAction)
     , mbIsCloserVisible(false)
 {
     mxLabel->set_label(rsTitle);
     mxGripWidget->SetPointer(PointerStyle::Move);
 
-    OSL_ASSERT(pParentWindow != nullptr);
-
     if (maCloserAction)
         SetCloserVisible(true);
-
-#ifdef DEBUG
-    SetText(OUString("DeckTitleBar"));
-#endif
 }
 
 DeckTitleBar::~DeckTitleBar()
 {
-    disposeOnce();
-}
-
-void DeckTitleBar::dispose()
-{
-    mxLabel.reset();
-    mxGripWeld.reset();
-    mxGripWidget.reset();
-    TitleBar::dispose();
 }
 
 tools::Rectangle DeckTitleBar::GetDragArea()
 {
     int x, y, width, height;
-    if (mxGripWidget->GetDrawingArea()->get_extents_relative_to(*m_xContainer, x, y, width, height))
+    if (mxGripWidget->GetDrawingArea()->get_extents_relative_to(*mxTitlebar, x, y, width, height))
         return tools::Rectangle(Point(x, y), Size(width, height));
     return tools::Rectangle();
 }
@@ -128,10 +112,10 @@ void DeckTitleBar::HandleToolBoxItemClick()
         maCloserAction();
 }
 
-void DeckTitleBar::DataChanged (const DataChangedEvent& rEvent)
+void DeckTitleBar::DataChanged()
 {
     mxToolBox->set_item_icon_name("button", "sfx2/res/closedoc.png");
-    TitleBar::DataChanged(rEvent);
+    TitleBar::DataChanged();
 }
 
 } // end of namespace sfx2::sidebar

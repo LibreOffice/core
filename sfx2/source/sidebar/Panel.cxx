@@ -45,33 +45,62 @@ using namespace css::uno;
 namespace sfx2::sidebar {
 
 Panel::Panel(const PanelDescriptor& rPanelDescriptor,
-             vcl::Window* pParentWindow,
+             weld::Widget* pParentWindow,
              const bool bIsInitiallyExpanded,
-             const std::function<void()>& rDeckLayoutTrigger,
+             Deck* pDeck,
              const std::function<Context()>& rContextAccess,
              const css::uno::Reference<css::frame::XFrame>& rxFrame)
-    : InterimItemWindow(pParentWindow, "sfx/ui/panel.ui", "Panel")
+    : mxBuilder(Application::CreateBuilder(pParentWindow, "sfx/ui/panel.ui"))
     , msPanelId(rPanelDescriptor.msId)
+    , msTitle(rPanelDescriptor.msTitle)
     , mbIsTitleBarOptional(rPanelDescriptor.mbIsTitleBarOptional)
     , mbWantsAWT(rPanelDescriptor.mbWantsAWT)
     , mxElement()
     , mxPanelComponent()
     , mbIsExpanded(bIsInitiallyExpanded)
     , mbLurking(false)
-    , maDeckLayoutTrigger(rDeckLayoutTrigger)
     , maContextAccess(rContextAccess)
     , mxFrame(rxFrame)
-    , mxTitleBar(new PanelTitleBar(rPanelDescriptor.msTitle, *m_xBuilder, this))
-    , mxContents(m_xBuilder->weld_container("contents"))
+    , mpParentWindow(pParentWindow)
+    , mxDeck(pDeck)
+    , mxContainer(mxBuilder->weld_container("Panel"))
+    , mxTitleBar(new PanelTitleBar(rPanelDescriptor.msTitle, *mxBuilder, this))
+    , mxContents(mxBuilder->weld_container("contents"))
 {
-    SetText(rPanelDescriptor.msTitle);
     mxContents->set_visible(mbIsExpanded);
+    mxContainer->connect_get_property_tree(LINK(this, Panel, DumpAsPropertyTreeHdl));
 }
 
-Panel::~Panel()
+bool Panel::get_extents(tools::Rectangle &rExtents) const
 {
-    disposeOnce();
-    assert(!mxTitleBar);
+    // Get vertical extent of the panel.
+    int x, y, width, height;
+    if (mxContainer->get_extents_relative_to(*mpParentWindow, x, y, width, height))
+    {
+        rExtents = tools::Rectangle(Point(x, y), Size(width, height));
+        return true;
+    }
+    return false;
+}
+
+void Panel::SetHeightPixel(int nHeight)
+{
+    mxContainer->set_size_request(-1, nHeight);
+}
+
+void Panel::set_margin_top(int nMargin)
+{
+    mxContainer->set_margin_top(nMargin);
+}
+
+void Panel::set_margin_bottom(int nMargin)
+{
+    mxContainer->set_margin_bottom(nMargin);
+}
+
+void Panel::set_vexpand(bool bExpand)
+{
+    mxContainer->set_vexpand(bExpand);
 }
 
 void Panel::SetLurkMode(bool bLurk)
@@ -80,21 +109,13 @@ void Panel::SetLurkMode(bool bLurk)
     mbLurking = bLurk;
 }
 
-void Panel::ApplySettings(vcl::RenderContext& rRenderContext)
-{
-    rRenderContext.SetBackground(Theme::GetColor(Theme::Color_PanelBackground));
-}
-
-void Panel::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+IMPL_LINK(Panel, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonWriter, void)
 {
     if (!IsLurking())
-    {
-        InterimItemWindow::DumpAsPropertyTree(rJsonWriter);
         rJsonWriter.put("type", "panel");
-    }
 }
 
-void Panel::dispose()
+Panel::~Panel()
 {
     mxPanelComponent = nullptr;
 
@@ -120,7 +141,7 @@ void Panel::dispose()
     }
     mxContents.reset();
 
-    InterimItemWindow::dispose();
+    assert(!mxTitleBar);
 }
 
 PanelTitleBar* Panel::GetTitleBar() const
@@ -128,9 +149,14 @@ PanelTitleBar* Panel::GetTitleBar() const
     return mxTitleBar.get();
 }
 
-void Panel::ShowTitlebar(bool bShowTitlebar)
+weld::Container* Panel::GetContents() const
 {
-    mxTitleBar->Show(bShowTitlebar);
+    return mxContents.get();
+}
+
+void Panel::Show(bool bShow)
+{
+    mxContainer->set_visible(bShow);
 }
 
 void Panel::SetUIElement (const Reference<ui::XUIElement>& rxElement)
@@ -146,6 +172,16 @@ void Panel::SetUIElement (const Reference<ui::XUIElement>& rxElement)
     pPanelBase->SetParentPanel(this);
 }
 
+void Panel::TriggerDeckLayouting()
+{
+    mxDeck->RequestLayout();
+}
+
+weld::Window* Panel::GetFrameWeld()
+{
+    return mxDeck->GetFrameWeld();
+}
+
 void Panel::SetExpanded (const bool bIsExpanded)
 {
     SidebarController* pSidebarController = SidebarController::GetSidebarControllerForFrame(mxFrame);
@@ -155,7 +191,7 @@ void Panel::SetExpanded (const bool bIsExpanded)
 
     mbIsExpanded = bIsExpanded;
     mxTitleBar->UpdateExpandedState();
-    maDeckLayoutTrigger();
+    TriggerDeckLayouting();
 
     if (maContextAccess && pSidebarController)
     {
@@ -173,9 +209,9 @@ bool Panel::HasIdPredicate (std::u16string_view rsId) const
     return msPanelId == rsId;
 }
 
-void Panel::DataChanged (const DataChangedEvent&)
+void Panel::DataChanged()
 {
-    Invalidate();
+    mxTitleBar->DataChanged();
 }
 
 Reference<awt::XWindow> Panel::GetElementWindow()
