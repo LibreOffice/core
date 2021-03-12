@@ -1118,8 +1118,11 @@ void SkiaSalBitmap::EnsureBitmapData()
 #endif
     SkBitmap bitmap;
     SkPixmap pixmap;
-    if (mSize == mPixelsSize && mImage->peekPixels(&pixmap))
+    if (mSize == mPixelsSize && mImage->imageInfo().alphaType() == alphaType
+        && mImage->peekPixels(&pixmap))
+    {
         bitmap.installPixels(pixmap);
+    }
     else
     {
         if (!bitmap.tryAllocPixels(SkImageInfo::MakeS32(mSize.Width(), mSize.Height(), alphaType)))
