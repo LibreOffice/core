@@ -591,24 +591,6 @@ void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
         m_pScrFont = m_pPrtFont;
     }
 
-    // check zoom factor, e.g. because of PrtOle2 during export
-    {
-        // In case the zoom factor of the output device differs from the
-        // one in the ViewOptions, this Font must not be cached,
-        // hence set zoom factor to an invalid value
-        tools::Long nTmp;
-        if( pOut->GetMapMode().GetScaleX().IsValid() &&
-            pOut->GetMapMode().GetScaleY().IsValid() &&
-            pOut->GetMapMode().GetScaleX() == pOut->GetMapMode().GetScaleY() )
-        {
-            nTmp = tools::Long(100 * pOut->GetMapMode().GetScaleX());
-        }
-        else
-            nTmp = 0;
-        if( nTmp != m_nZoom )
-            m_nZoom = USHRT_MAX - 1;
-    }
-
     m_nScrAscent = static_cast<sal_uInt16>(pOut->GetFontMetric().GetAscent());
     if ( USHRT_MAX == m_nScrHeight )
         m_nScrHeight = static_cast<sal_uInt16>(pOut->GetTextHeight());
