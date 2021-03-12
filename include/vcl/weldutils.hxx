@@ -434,6 +434,9 @@ VCL_DLLPUBLIC int GetMinimumEditHeight();
 // from relative to rOutWin to relative to that weld::Window suitable for use
 // with popup_at_rect
 VCL_DLLPUBLIC weld::Window* GetPopupParent(vcl::Window& rOutWin, tools::Rectangle& rRect);
+
+// Use Application::GetDefaultDevice to set the PointFont rFont to the OutputDevice
+VCL_DLLPUBLIC void SetPointFont(OutputDevice& rDevice, const vcl::Font& rFont);
 }
 
 #endif

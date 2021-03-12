@@ -23,6 +23,7 @@
 #include <IDocumentOutlineNodes.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weldutils.hxx>
 
 using namespace std;
 
@@ -334,8 +335,7 @@ void SwFrameMenuButtonBase::SetVirDevFont()
 {
     // Get the font and configure it
     vcl::Font aFont = Application::GetSettings().GetStyleSettings().GetToolFont();
-    if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
-        pDefaultDevice->SetPointFont(*m_xVirDev, aFont);
+    weld::SetPointFont(*m_xVirDev, aFont);
 }
 
 SwFrameControl::SwFrameControl( const VclPtr<vcl::Window> &pWindow )

@@ -31,6 +31,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
 #include <vcl/filter/PngImageReader.hxx>
+#include <vcl/weldutils.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -890,12 +891,9 @@ void ThumbnailView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     CustomWidgetController::SetDrawingArea(pDrawingArea);
 
-    if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
-    {
-        OutputDevice& rDevice = pDrawingArea->get_ref_device();
-        pDefaultDevice->SetPointFont(rDevice, pDrawingArea->get_font());
-        mpItemAttrs->aFontAttr = getFontAttributeFromVclFont(mpItemAttrs->aFontSize, rDevice.GetFont(), false, true);
-    }
+    OutputDevice& rDevice = pDrawingArea->get_ref_device();
+    weld::SetPointFont(rDevice, pDrawingArea->get_font());
+    mpItemAttrs->aFontAttr = getFontAttributeFromVclFont(mpItemAttrs->aFontSize, rDevice.GetFont(), false, true);
 
     SetOutputSizePixel(pDrawingArea->get_preferred_size());
 }

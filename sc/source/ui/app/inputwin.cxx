@@ -2051,8 +2051,7 @@ void ScTextWnd::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
     // always use application font, so a font with cjk chars can be installed
     vcl::Font aAppFont = Application::GetSettings().GetStyleSettings().GetAppFont();
-    if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
-        pDefaultDevice->SetPointFont(rDevice, aAppFont);
+    weld::SetPointFont(rDevice, aAppFont);
 
     aTextFont = rDevice.GetFont();
     Size aFontSize = aTextFont.GetFontSize();
