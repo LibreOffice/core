@@ -136,12 +136,12 @@ public:
     void                SetInputSet( const SfxItemSet* pInSet );
     const SfxItemSet*   GetOutputItemSet() const { return m_pOutSet.get(); }
 
-    virtual weld::Button& GetOKButton() const override { return *m_xOKBtn; }
-    weld::Button&       GetCancelButton() const { return *m_xCancelBtn; }
+    virtual weld::Button* GetOKButton() const override { return m_xOKBtn.get(); }
+    weld::Button*       GetCancelButton() const { return m_xCancelBtn.get(); }
     weld::Button*       GetUserButton() const { return m_xUserBtn.get(); }
     weld::Button*       GetStandardButton() const { return m_xBaseFmtBtn.get(); }
     weld::Button*       GetApplyButton() const { return m_xApplyBtn.get(); }
-    weld::Button*       GeResetButton() const { return m_xResetBtn.get(); }
+    weld::Button*       GetResetButton() const { return m_xResetBtn.get(); }
     void                RemoveResetButton();
     void                RemoveStandardButton();
 

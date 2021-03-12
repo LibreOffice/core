@@ -33,6 +33,12 @@
 #define STR_APPLY_LABEL                         NC_("STR_APPLY_LABEL", "Apply")
 #define STR_APPLY_TOOLTIP                       NC_("STR_APPLY_TOOLTIP", "Save all modifications without closing dialog. Cannot be reverted with Reset.")
 #define STR_APPLY_EXTENDEDTIP                   NC_("STR_APPLY_EXTENDEDTIP", "")
+#define STR_OK_LABEL                            NC_("STR_OK_LABEL", "~OK")
+#define STR_OK_TOOLTIP                          NC_("STR_OK_TOOLTIP", "")
+#define STR_OK_EXTENDEDTIP                      NC_("STR_OK_EXTENDEDTIP", "")
+#define STR_CANCEL_LABEL                        NC_("STR_CANCEL_LABEL", "~Cancel")
+#define STR_CANCEL_TOOLTIP                      NC_("STR_CANCEL_TOOLTIP", "")
+#define STR_CANCEL_EXTENDEDTIP                  NC_("STR_CANCEL_EXTENDEDTIP", "")
 
 // Format names
 #define STR_POOLCHR_STANDARD                    NC_("STR_POOLCHR_STANDARD", "Default Character Style")
