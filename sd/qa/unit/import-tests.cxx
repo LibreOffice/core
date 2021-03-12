@@ -118,6 +118,7 @@ public:
     virtual void setUp() override;
 
     void testDocumentLayout();
+    void testHyperlinkColor();
     void testSmoketest();
     void testTdf131269();
     void testN759180();
@@ -236,6 +237,7 @@ public:
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testHyperlinkColor);
     CPPUNIT_TEST(testSmoketest);
     CPPUNIT_TEST(testTdf131269);
     CPPUNIT_TEST(testN759180);
@@ -428,6 +430,45 @@ void SdImportTest::testDocumentLayout()
                 OUString(m_directories.getPathFromSrc( u"/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pDump )),
                 i == nUpdateMe );
     }
+}
+
+void SdImportTest::testHyperlinkColor()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf137367.pptx"), PPTX);
+
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+
+    // Get first paragraph of the text
+    uno::Reference<text::XTextRange> const xParagraph1( getParagraphFromShape( 0, xShape ) );
+    // Get second paragraph of the text
+    uno::Reference<text::XTextRange> const xParagraph2( getParagraphFromShape( 1, xShape ) );
+    // Get third paragraph of the text
+    uno::Reference<text::XTextRange> const xParagraph3( getParagraphFromShape( 2, xShape ) );
+
+    // Get run of the first paragraph
+    uno::Reference<text::XTextRange> xRun1( getRunFromParagraph (0, xParagraph1 ) );
+    uno::Reference< beans::XPropertySet > xPropSet1( xRun1, uno::UNO_QUERY_THROW );
+    sal_Int32 nCharColorBlue;
+    xPropSet1->getPropertyValue( "CharColor" ) >>= nCharColorBlue;
+
+    // Get run of the second paragraph
+    uno::Reference<text::XTextRange> xRun2( getRunFromParagraph (1, xParagraph2 ) );
+    uno::Reference< beans::XPropertySet > xPropSet2( xRun2, uno::UNO_QUERY_THROW );
+    sal_Int32 nCharColorRed;
+    xPropSet2->getPropertyValue( "CharColor" ) >>= nCharColorRed;
+
+    // Get run of the third paragraph
+    uno::Reference<text::XTextRange> xRun3( getRunFromParagraph (2, xParagraph3 ) );
+    uno::Reference< beans::XPropertySet > xPropSet3( xRun3, uno::UNO_QUERY_THROW );
+    sal_Int32 nCharColorGreen;
+    xPropSet3->getPropertyValue( "CharColor" ) >>= nCharColorGreen;
+
+    // Hyperlink colors should be blue, red, green.
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(4485828), nCharColorBlue );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(16711680), nCharColorRed );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(5538357), nCharColorGreen );
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testSmoketest()
