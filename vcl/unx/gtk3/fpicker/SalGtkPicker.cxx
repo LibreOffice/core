@@ -187,7 +187,25 @@ gint RunDialog::run()
         mxToolkit->addTopWindowListener(this);
 
     mxDesktop->addTerminateListener(this);
+
+    // [Inc/Dec]ModalCount on parent frame so it knows it is in modal mode
+    GtkWindow* pParent = gtk_window_get_transient_for(GTK_WINDOW(mpDialog));
+    GtkSalFrame* pFrame = pParent ? GtkSalFrame::getFromWindow(GTK_WIDGET(pParent)) : nullptr;
+    VclPtr<vcl::Window> xFrameWindow = pFrame ? pFrame->GetWindow() : nullptr;
+    if (xFrameWindow)
+    {
+        xFrameWindow->IncModalCount();
+        xFrameWindow->ImplGetFrame()->NotifyModalHierarchy(true);
+    }
+
     gint nStatus = gtk_dialog_run(GTK_DIALOG(mpDialog));
+
+    if (xFrameWindow)
+    {
+        xFrameWindow->DecModalCount();
+        xFrameWindow->ImplGetFrame()->NotifyModalHierarchy(false);
+    }
+
     mxDesktop->removeTerminateListener(this);
 
     if (mxToolkit.is())
