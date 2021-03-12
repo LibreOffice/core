@@ -60,26 +60,6 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
     maObjectInspectorTreeHandler.introspect(mxRoot);
 }
 
-void DevelopmentToolDockingWindow::inspectSelectionOrRoot()
-{
-    if (mxSelectionSupplier.is())
-    {
-        css::uno::Any aAny = mxSelectionSupplier->getSelection();
-        if (aAny.hasValue())
-        {
-            auto xInterface = aAny.get<css::uno::Reference<css::uno::XInterface>>();
-            if (xInterface.is())
-            {
-                maObjectInspectorTreeHandler.introspect(xInterface);
-                mpSelectionToggle->set_state(TRISTATE_TRUE);
-                return;
-            }
-        }
-    }
-    mpSelectionToggle->set_state(TRISTATE_FALSE);
-    maObjectInspectorTreeHandler.introspect(mxRoot);
-}
-
 IMPL_LINK(DevelopmentToolDockingWindow, DocumentModelTreeViewSelectionHandler, weld::TreeView&,
           rView, void)
 {
@@ -155,6 +135,24 @@ void DevelopmentToolDockingWindow::selectionChanged(
     updateSelection();
 }
 
-void DevelopmentToolDockingWindow::changeToCurrentSelection() { inspectSelectionOrRoot(); }
+void DevelopmentToolDockingWindow::changeToCurrentSelection()
+{
+    if (mxSelectionSupplier.is())
+    {
+        css::uno::Any aAny = mxSelectionSupplier->getSelection();
+        if (aAny.hasValue())
+        {
+            auto xInterface = aAny.get<css::uno::Reference<css::uno::XInterface>>();
+            if (xInterface.is())
+            {
+                maObjectInspectorTreeHandler.introspect(xInterface);
+                mpSelectionToggle->set_state(TRISTATE_TRUE);
+                return;
+            }
+        }
+    }
+    mpSelectionToggle->set_state(TRISTATE_FALSE);
+    maObjectInspectorTreeHandler.introspect(mxRoot);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

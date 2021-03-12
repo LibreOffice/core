@@ -57,6 +57,7 @@ OUString lclAppend(std::unique_ptr<weld::TreeView>& rTree, OUString const& rStri
     return sId;
 }
 
+// returns a name of the object, if available
 OUString lclGetNamed(uno::Reference<uno::XInterface> const& xObject)
 {
     uno::Reference<container::XNamed> xNamed(xObject, uno::UNO_QUERY);
@@ -65,11 +66,11 @@ OUString lclGetNamed(uno::Reference<uno::XInterface> const& xObject)
     return xNamed->getName();
 }
 
-/**
- * DocumentModelTreeEntry represents an object that is "attached" to
- * the tree view an is responsible to provide the UNO object associated
- * with the current node and on demand create and fill the children of
- * the said node.
+/** DocumentModelTreeEntry is an object "attached" to a tree node.
+ *
+ * It represents an object that is "attached" to the tree view an is
+ * responsible to provide the UNO object associated with the current
+ * node and on demand create and fill the children of the said node.
  */
 class DocumentModelTreeEntry
 {
@@ -113,6 +114,7 @@ protected:
     }
 };
 
+/** Entry that represents the document root object */
 class DocumentRootEntry : public DocumentModelTreeEntry
 {
 public:
@@ -122,6 +124,7 @@ public:
     }
 };
 
+/** Represents a paragraph object (XParagraph) */
 class ParagraphEntry : public DocumentModelTreeEntry
 {
 public:
@@ -156,6 +159,7 @@ public:
     }
 };
 
+/** Represents a list of paragraphs */
 class ParagraphsEntry : public DocumentModelTreeEntry
 {
 public:
@@ -200,6 +204,7 @@ public:
     }
 };
 
+/** Represents a list of shapes */
 class ShapesEntry : public DocumentModelTreeEntry
 {
 public:
@@ -236,6 +241,7 @@ public:
     }
 };
 
+/** Represents a list of tables */
 class TablesEntry : public DocumentModelTreeEntry
 {
 public:
@@ -259,6 +265,7 @@ public:
     }
 };
 
+/** Represents a list of frames */
 class FramesEntry : public DocumentModelTreeEntry
 {
 public:
@@ -282,6 +289,7 @@ public:
     }
 };
 
+/** Represents a list of writer graphic objects */
 class WriterGraphicObjectsEntry : public DocumentModelTreeEntry
 {
 public:
@@ -305,6 +313,7 @@ public:
     }
 };
 
+/** Represents a list of writer embedded (OLE) objects */
 class EmbeddedObjectsEntry : public DocumentModelTreeEntry
 {
 public:
@@ -328,6 +337,7 @@ public:
     }
 };
 
+/** Represents a style family, whcih contains a list of styles */
 class StylesFamilyEntry : public DocumentModelTreeEntry
 {
 public:
@@ -343,6 +353,7 @@ public:
     }
 };
 
+/** Represents a list of style families */
 class StylesFamiliesEntry : public DocumentModelTreeEntry
 {
 public:
@@ -379,6 +390,7 @@ public:
     }
 };
 
+/** Represents a list of pages */
 class PagesEntry : public DocumentModelTreeEntry
 {
 public:
@@ -416,6 +428,7 @@ public:
     }
 };
 
+/** Represents a list of (Impress) slides */
 class SlidesEntry : public DocumentModelTreeEntry
 {
 public:
@@ -453,6 +466,7 @@ public:
     }
 };
 
+/** Represents a list of (Impress) master slides */
 class MasterSlidesEntry : public DocumentModelTreeEntry
 {
 public:
@@ -490,6 +504,7 @@ public:
     }
 };
 
+/** Represents a list of charts */
 class ChartsEntry : public DocumentModelTreeEntry
 {
 public:
@@ -516,6 +531,7 @@ public:
     }
 };
 
+/** Represents a list of pivot tables */
 class PivotTablesEntry : public DocumentModelTreeEntry
 {
 public:
@@ -542,6 +558,7 @@ public:
     }
 };
 
+/** Represents a (Calc) sheet */
 class SheetEntry : public DocumentModelTreeEntry
 {
 public:
@@ -565,6 +582,7 @@ public:
     }
 };
 
+/** Represents a list of (Calc) sheet */
 class SheetsEntry : public DocumentModelTreeEntry
 {
 public:
@@ -685,37 +703,37 @@ void DocumentModelTreeHandler::inspectDocument()
 {
     uno::Reference<lang::XServiceInfo> xDocumentServiceInfo(mxDocument, uno::UNO_QUERY_THROW);
 
-    lclAppend(mpDocumentModelTree, "Document", new DocumentRootEntry(mxDocument), false);
+    lclAppend(mpDocumentModelTree, u"Document", new DocumentRootEntry(mxDocument), false);
 
     if (xDocumentServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
     {
-        lclAppend(mpDocumentModelTree, "Sheets", new SheetsEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, "Styles", new StylesFamiliesEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, u"Sheets", new SheetsEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, u"Styles", new StylesFamiliesEntry(mxDocument), true);
     }
     else if (xDocumentServiceInfo->supportsService(
                  "com.sun.star.presentation.PresentationDocument"))
     {
-        lclAppend(mpDocumentModelTree, "Slides", new SlidesEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, "Master Slides", new MasterSlidesEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, "Styles", new StylesFamiliesEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, u"Slides", new SlidesEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, u"Master Slides", new MasterSlidesEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, u"Styles", new StylesFamiliesEntry(mxDocument), true);
     }
     else if (xDocumentServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument"))
     {
-        lclAppend(mpDocumentModelTree, "Pages", new PagesEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, "Styles", new StylesFamiliesEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, u"Pages", new PagesEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, u"Styles", new StylesFamiliesEntry(mxDocument), true);
     }
     else if (xDocumentServiceInfo->supportsService("com.sun.star.text.TextDocument")
              || xDocumentServiceInfo->supportsService("com.sun.star.text.WebDocument"))
     {
-        lclAppend(mpDocumentModelTree, "Paragraphs", new ParagraphsEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, "Shapes", new ShapesEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, "Tables", new TablesEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, "Frames", new FramesEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, "Graphic Objects", new WriterGraphicObjectsEntry(mxDocument),
+        lclAppend(mpDocumentModelTree, u"Paragraphs", new ParagraphsEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, u"Shapes", new ShapesEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, u"Tables", new TablesEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, u"Frames", new FramesEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, u"Graphic Objects",
+                  new WriterGraphicObjectsEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, u"Embedded Objects", new EmbeddedObjectsEntry(mxDocument),
                   true);
-        lclAppend(mpDocumentModelTree, "Embedded Objects", new EmbeddedObjectsEntry(mxDocument),
-                  true);
-        lclAppend(mpDocumentModelTree, "Styles", new StylesFamiliesEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, u"Styles", new StylesFamiliesEntry(mxDocument), true);
     }
 }
 
