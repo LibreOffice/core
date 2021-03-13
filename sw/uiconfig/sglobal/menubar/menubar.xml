@@ -430,10 +430,10 @@
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:InsertNeutralParagraph"/>
           <menu:menuitem menu:id=".uno:NumberingStart"/>
+          <menu:menuitem menu:id=".uno:ContinueNumbering"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:JumpDownThisLevel"/>
           <menu:menuitem menu:id=".uno:JumpUpThisLevel"/>
-          <menu:menuitem menu:id=".uno:ContinueNumbering"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
