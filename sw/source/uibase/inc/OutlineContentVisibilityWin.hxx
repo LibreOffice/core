@@ -12,11 +12,18 @@
 #include "edtwin.hxx"
 #include "FrameControl.hxx"
 
+enum class ButtonSymbol
+{
+    SHOW,
+    HIDE,
+    NONE
+};
+
 class SwOutlineContentVisibilityWin : public InterimItemWindow, public ISwFrameControl
 {
 private:
-    std::unique_ptr<weld::Button> m_xRightBtn;
-    std::unique_ptr<weld::Button> m_xDownBtn;
+    std::unique_ptr<weld::Button> m_xShowBtn;
+    std::unique_ptr<weld::Button> m_xHideBtn;
 
     VclPtr<SwEditWin> m_pEditWin;
     const SwFrame* m_pFrame;
@@ -41,8 +48,8 @@ public:
 
     void Set();
 
-    void SetSymbol(SymbolType eTyle);
-    SymbolType GetSymbol() const;
+    void SetSymbol(ButtonSymbol eTyle);
+    ButtonSymbol GetSymbol() const;
 
 private:
     DECL_LINK(DelayAppearHandler, Timer*, void);

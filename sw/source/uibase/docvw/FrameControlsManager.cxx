@@ -268,7 +268,7 @@ void SwFrameControlsManager::SetOutlineContentVisibilityButton(const SwTextNode*
     assert(pWin != nullptr) ;
     pWin->Set();
 
-    if (pWin->GetSymbol() == SymbolType::ARROW_RIGHT)
+    if (pWin->GetSymbol() == ButtonSymbol::SHOW)
     {
         // show expand button immediately
         pWin->Show();
@@ -307,7 +307,7 @@ void SwFrameControlsManager::SetOutlineContentVisibilityButton(const SwTextNode*
             }
         }
     }
-    else if (!pWin->IsVisible() && pWin->GetSymbol() == SymbolType::ARROW_DOWN)
+    else if (!pWin->IsVisible() && pWin->GetSymbol() == ButtonSymbol::HIDE)
         pWin->ShowAll(true);
 }
 
