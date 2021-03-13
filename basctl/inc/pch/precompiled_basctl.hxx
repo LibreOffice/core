@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:11:33 using:
+ Generated on 2021-03-13 10:17:42 using:
  ./bin/update_pch basctl basctl --cutoff=3 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -113,6 +113,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/dockwin.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fntstyle.hxx>
@@ -121,6 +122,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/image.hxx>
 #include <vcl/jobset.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
@@ -143,6 +145,7 @@
 #include <vcl/texteng.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/toolbox.hxx>
 #include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:18:18 using:
+ Generated on 2021-03-13 10:18:30 using:
  ./bin/update_pch sd sd --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -80,6 +80,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/dockwin.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/event.hxx>
@@ -376,6 +377,7 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
+#include <svtools/toolbarmenu.hxx>
 #include <svx/AccessibleShapeTreeInfo.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/IAccessibleViewForwarderListener.hxx>

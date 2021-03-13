@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:18:57 using:
+ Generated on 2021-03-13 10:18:38 using:
  ./bin/update_pch svx svxcore --cutoff=7 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -120,6 +120,7 @@
 #include <vcl/headbar.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
+#include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/outdev.hxx>
@@ -131,6 +132,7 @@
 #include <vcl/syswin.hxx>
 #include <vcl/task.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/toolbox.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
@@ -175,6 +177,7 @@
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -316,15 +319,19 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/eedata.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <editeng/flditem.hxx>
+#include <editeng/fontitem.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/svxenum.hxx>
+#include <editeng/udlnitem.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <libxml/xmlwriter.h>
