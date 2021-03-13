@@ -171,7 +171,6 @@ struct ImplFrameData
     css::uno::Reference< css::datatransfer::dnd::XDropTarget > mxDropTarget;
     css::uno::Reference< css::datatransfer::dnd::XDropTargetListener > mxDropTargetListener;
     css::uno::Reference< css::datatransfer::clipboard::XClipboard > mxClipboard;
-    css::uno::Reference< css::datatransfer::clipboard::XClipboard > mxSelection;
 
     bool                mbInternalDragGestureRecognizer;
     VclPtr<VirtualDevice> mpBuffer; ///< Buffer for the double-buffering

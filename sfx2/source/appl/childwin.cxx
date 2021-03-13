@@ -60,7 +60,6 @@ struct SfxChildWindow_Impl
     bool                bHideNotDelete;
     bool                bVisible;
     bool                bWantsFocus;
-    SfxModule*          pContextModule;
     SfxWorkWindow*      pWorkWin;
 };
 
@@ -157,7 +156,6 @@ SfxChildWindow::SfxChildWindow(vcl::Window *pParentWindow, sal_uInt16 nId)
     pImpl->bHideNotDelete = false;
     pImpl->bWantsFocus = true;
     pImpl->bVisible = true;
-    pImpl->pContextModule = nullptr;
     pImpl->pWorkWin = nullptr;
 }
 

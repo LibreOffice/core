@@ -108,7 +108,6 @@ struct SfxChild_Impl
 struct SfxChildWin_Impl
 {
     sal_uInt16                      nSaveId;       // the ChildWindow-Id
-    sal_uInt16                      nInterfaceId;  // the current context
     sal_uInt16                      nId;           // current Id
     SfxChildWindow*                 pWin;
     bool                            bCreate;
@@ -119,7 +118,6 @@ struct SfxChildWin_Impl
 
     SfxChildWin_Impl( sal_uInt32 nID ) :
         nSaveId(static_cast<sal_uInt16>(nID & 0xFFFF) ),
-        nInterfaceId(static_cast<sal_uInt16>(nID >> 16)),
         nId(nSaveId),
         pWin(nullptr),
         bCreate(false),

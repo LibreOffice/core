@@ -14,8 +14,6 @@ comphelper/source/container/enumerablemap.cxx:297
     comphelper::(anonymous namespace)::MapEnumeration m_xKeepMapAlive Reference<class com::sun::star::uno::XInterface>
 cppu/source/threadpool/threadpool.cxx:365
     _uno_ThreadPool dummy sal_Int32
-cppu/source/typelib/typelib.cxx:59
-    (anonymous namespace)::AlignSize_Impl nInt16 sal_Int16
 cui/source/inc/AdditionsDialog.hxx:47
     AdditionInfo sReleaseVersion class rtl::OUString
 dbaccess/source/core/inc/databasecontext.hxx:84
@@ -24,6 +22,34 @@ dbaccess/source/sdbtools/inc/connectiondependent.hxx:115
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
 desktop/qa/desktop_lib/test_desktop_lib.cxx:2883
       class AllSettings &
+embeddedobj/source/msole/olecomponent.hxx:50
+    OleComponent m_aMutex ::osl::Mutex
+embeddedobj/source/msole/olecomponent.hxx:51
+    OleComponent m_pInterfaceContainer ::cppu::OMultiTypeInterfaceContainerHelper *
+embeddedobj/source/msole/olecomponent.hxx:53
+    OleComponent m_bDisposed _Bool
+embeddedobj/source/msole/olecomponent.hxx:54
+    OleComponent m_bModified _Bool
+embeddedobj/source/msole/olecomponent.hxx:55
+    OleComponent m_pNativeImpl struct OleComponentNative_Impl *
+embeddedobj/source/msole/olecomponent.hxx:57
+    OleComponent m_pUnoOleObject class OleEmbeddedObject *
+embeddedobj/source/msole/olecomponent.hxx:58
+    OleComponent m_pOleWrapClientSite class OleWrapperClientSite *
+embeddedobj/source/msole/olecomponent.hxx:59
+    OleComponent m_pImplAdviseSink class OleWrapperAdviseSink *
+embeddedobj/source/msole/olecomponent.hxx:61
+    OleComponent m_nOLEMiscFlags sal_Int32
+embeddedobj/source/msole/olecomponent.hxx:62
+    OleComponent m_nAdvConn sal_Int32
+embeddedobj/source/msole/olecomponent.hxx:64
+    OleComponent m_aVerbList css::uno::Sequence<css::embed::VerbDescriptor>
+embeddedobj/source/msole/olecomponent.hxx:65
+    OleComponent m_aDataFlavors css::uno::Sequence<css::datatransfer::DataFlavor>
+embeddedobj/source/msole/olecomponent.hxx:67
+    OleComponent m_xContext css::uno::Reference<css::uno::XComponentContext>
+embeddedobj/source/msole/olecomponent.hxx:69
+    OleComponent m_bOleInitialized _Bool
 emfio/source/emfuno/xemfparser.cxx:50
     emfio::emfreader::(anonymous namespace)::XEmfParser context_ uno::Reference<uno::XComponentContext>
 extensions/source/scanner/scanner.hxx:43
@@ -168,6 +194,8 @@ include/sfx2/msg.hxx:147
     SfxType23 nAttribs sal_uInt16
 include/sfx2/msg.hxx:147
     SfxType23 pType const std::type_info *
+include/sfx2/templdlg.hxx:41
+    SfxTemplatePanelControl pImpl std::unique_ptr<SfxTemplateDialog_Impl>
 include/svtools/genericunodialog.hxx:154
     svt::UnoDialogEntryGuard m_aGuard ::osl::MutexGuard
 include/svtools/unoevent.hxx:162
@@ -298,10 +326,12 @@ sc/source/ui/inc/docsh.hxx:455
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
 sc/source/ui/inc/PivotLayoutTreeListBase.hxx:48
     ScPivotLayoutTreeListBase maDropTargetHelper class ScPivotLayoutTreeDropTarget
-sd/source/ui/animations/CustomAnimationList.hxx:124
+sd/source/ui/inc/CustomAnimationList.hxx:128
     sd::CustomAnimationList maDropTargetHelper class sd::CustomAnimationListDropTarget
 sd/source/ui/inc/sdtreelb.hxx:73
     SdPageObjsTLV m_xDropTargetHelper std::unique_ptr<SdPageObjsTLVDropTarget>
+sd/source/ui/inc/TableDesignPane.hxx:109
+    sd::TableDesignPane m_xImpl std::unique_ptr<TableDesignWidget>
 sd/source/ui/remotecontrol/ZeroconfService.hxx:32
     sd::ZeroconfService port uint
 sd/source/ui/slidesorter/view/SlsLayouter.cxx:62
@@ -324,8 +354,8 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:266
     (anonymous namespace)::PDFGrammar::definition value rule<ScannerT>
 sfx2/inc/autoredactdialog.hxx:94
     SfxAutoRedactDialog m_xDocShell class SfxObjectShellLock
-sfx2/inc/sidebar/TitleBar.hxx:56
-    sfx2::sidebar::TitleBar mxToolBoxController std::unique_ptr<ToolbarUnoDispatcher>
+sfx2/inc/sidebar/TitleBar.hxx:54
+    sfx2::sidebar::TitleBarBase mxToolBoxController std::unique_ptr<ToolbarUnoDispatcher>
 sfx2/source/dialog/basedlgs.cxx:46
     SfxModelessDialog_Impl aMoveIdle class Idle
 sfx2/source/doc/doctempl.cxx:104
@@ -338,23 +368,23 @@ slideshow/source/engine/opengl/TransitionImpl.cxx:1992
     (anonymous namespace)::ThreeFloats y GLfloat
 slideshow/source/engine/opengl/TransitionImpl.cxx:1992
     (anonymous namespace)::ThreeFloats z GLfloat
-starmath/inc/mathml/mathmlMo.hxx:64
+starmath/inc/mathml/mathmlMo.hxx:63
     moOperatorData m_motxt class rtl::OUString
-starmath/inc/mathml/mathmlMo.hxx:65
+starmath/inc/mathml/mathmlMo.hxx:64
     moOperatorData m_form enum moOpDF
-starmath/inc/mathml/mathmlMo.hxx:66
+starmath/inc/mathml/mathmlMo.hxx:65
     moOperatorData m_priority sal_uInt16
-starmath/inc/mathml/mathmlMo.hxx:67
+starmath/inc/mathml/mathmlMo.hxx:66
     moOperatorData m_lspace sal_uInt16
-starmath/inc/mathml/mathmlMo.hxx:68
+starmath/inc/mathml/mathmlMo.hxx:67
     moOperatorData m_rspace sal_uInt16
-starmath/inc/mathml/mathmlMo.hxx:69
+starmath/inc/mathml/mathmlMo.hxx:68
     moOperatorData m_properties enum moOpDP
-starmath/inc/smmod.hxx:70
+starmath/inc/smmod.hxx:67
     SmModule mpLocSymbolData std::unique_ptr<SmLocalizedSymbolData>
-starmath/inc/view.hxx:216
+starmath/inc/view.hxx:213
     SmViewShell maGraphicController class SmGraphicController
-starmath/source/accessibility.hxx:270
+starmath/source/accessibility.hxx:268
     SmEditSource rEditAcc class SmEditAccessible &
 svl/source/crypto/cryptosign.cxx:122
     (anonymous namespace)::Extension extnID SECItem
@@ -412,6 +442,8 @@ vcl/inc/WidgetThemeLibrary.hxx:103
     vcl::ControlDrawParameters eState enum ControlState
 vcl/inc/WidgetThemeLibrary.hxx:119
     vcl::WidgetThemeLibrary_t nSize uint32_t
+vcl/inc/window.h:174
+    ImplFrameData mxSelection css::uno::Reference<css::datatransfer::clipboard::XClipboard>
 vcl/source/gdi/jobset.cxx:37
     (anonymous namespace)::ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:38
@@ -428,11 +460,11 @@ vcl/unx/gtk3/a11y/gtk3atkhypertext.cxx:31
     (anonymous namespace)::HyperLink atk_hyper_link const AtkHyperlink
 vcl/unx/gtk3/gtk3gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
-vcl/unx/gtk3/gtk3gtkinst.cxx:5264
+vcl/unx/gtk3/gtk3gtkinst.cxx:5313
     (anonymous namespace)::CrippledViewport viewport GtkViewport
-vcl/unx/gtk3/gtk3gtkinst.cxx:5408
+vcl/unx/gtk3/gtk3gtkinst.cxx:5457
     (anonymous namespace)::CustomCellRendererSurface parent GtkCellRendererText
-vcl/unx/gtk3/gtk3gtkinst.cxx:5416
+vcl/unx/gtk3/gtk3gtkinst.cxx:5465
     (anonymous namespace)::CustomCellRendererSurfaceClass parent_class GtkCellRendererTextClass
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:42
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>
