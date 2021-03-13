@@ -26,8 +26,8 @@
 SwOutlineContentVisibilityWin::SwOutlineContentVisibilityWin(SwEditWin* pEditWin,
                                                              const SwFrame* pFrame)
     : InterimItemWindow(pEditWin, "modules/swriter/ui/outlinebutton.ui", "OutlineButton")
-    , m_xRightBtn(m_xBuilder->weld_button("right"))
-    , m_xDownBtn(m_xBuilder->weld_button("down"))
+    , m_xShowBtn(m_xBuilder->weld_button("show"))
+    , m_xHideBtn(m_xBuilder->weld_button("hide"))
     , m_pEditWin(pEditWin)
     , m_pFrame(pFrame)
     , m_nDelayAppearing(0)
@@ -38,19 +38,19 @@ SwOutlineContentVisibilityWin::SwOutlineContentVisibilityWin(SwEditWin* pEditWin
     SetPaintTransparent(false);
     SetBackground(rStyleSettings.GetFaceColor());
 
-    Size aBtnsSize(m_xRightBtn->get_preferred_size());
+    Size aBtnsSize(m_xShowBtn->get_preferred_size());
     auto nDim = std::max(aBtnsSize.Width(), aBtnsSize.Height());
-    m_xRightBtn->set_size_request(nDim, nDim);
-    m_xDownBtn->set_size_request(nDim, nDim);
+    m_xShowBtn->set_size_request(nDim, nDim);
+    m_xHideBtn->set_size_request(nDim, nDim);
 
     SetSizePixel(get_preferred_size());
-    SetSymbol(SymbolType::DONTKNOW);
+    SetSymbol(ButtonSymbol::NONE);
 
-    m_xRightBtn->connect_mouse_press(LINK(this, SwOutlineContentVisibilityWin, MousePressHdl));
-    m_xDownBtn->connect_mouse_press(LINK(this, SwOutlineContentVisibilityWin, MousePressHdl));
+    m_xShowBtn->connect_mouse_press(LINK(this, SwOutlineContentVisibilityWin, MousePressHdl));
+    m_xHideBtn->connect_mouse_press(LINK(this, SwOutlineContentVisibilityWin, MousePressHdl));
 
-    m_xRightBtn->connect_key_press(LINK(this, SwOutlineContentVisibilityWin, KeyInputHdl));
-    m_xDownBtn->connect_key_press(LINK(this, SwOutlineContentVisibilityWin, KeyInputHdl));
+    m_xShowBtn->connect_key_press(LINK(this, SwOutlineContentVisibilityWin, KeyInputHdl));
+    m_xHideBtn->connect_key_press(LINK(this, SwOutlineContentVisibilityWin, KeyInputHdl));
 
     m_aDelayTimer.SetTimeout(25);
     m_aDelayTimer.SetInvokeHandler(LINK(this, SwOutlineContentVisibilityWin, DelayAppearHandler));
@@ -64,44 +64,44 @@ void SwOutlineContentVisibilityWin::dispose()
     m_pEditWin.clear();
     m_pFrame = nullptr;
 
-    m_xDownBtn.reset();
-    m_xRightBtn.reset();
+    m_xHideBtn.reset();
+    m_xShowBtn.reset();
 
     InterimItemWindow::dispose();
 }
 
-SymbolType SwOutlineContentVisibilityWin::GetSymbol() const
+ButtonSymbol SwOutlineContentVisibilityWin::GetSymbol() const
 {
-    if (m_xRightBtn->get_visible())
-        return SymbolType::ARROW_RIGHT;
-    if (m_xDownBtn->get_visible())
-        return SymbolType::ARROW_DOWN;
-    return SymbolType::DONTKNOW;
+    if (m_xShowBtn->get_visible())
+        return ButtonSymbol::SHOW;
+    if (m_xHideBtn->get_visible())
+        return ButtonSymbol::HIDE;
+    return ButtonSymbol::NONE;
 }
 
-void SwOutlineContentVisibilityWin::SetSymbol(SymbolType eStyle)
+void SwOutlineContentVisibilityWin::SetSymbol(ButtonSymbol eStyle)
 {
     if (GetSymbol() == eStyle)
         return;
 
-    bool bRight = eStyle == SymbolType::ARROW_RIGHT;
-    bool bDown = eStyle == SymbolType::ARROW_DOWN;
+    bool bShow = eStyle == ButtonSymbol::SHOW;
+    bool bHide = eStyle == ButtonSymbol::HIDE;
 
     bool bControlHasFocus = ControlHasFocus();
 
     // disable mouse move for the hidden button so we don't get mouse
     // leave events we don't care about when we swap buttons
-    m_xRightBtn->connect_mouse_move(Link<const MouseEvent&, bool>());
-    m_xDownBtn->connect_mouse_move(Link<const MouseEvent&, bool>());
+    m_xShowBtn->connect_mouse_move(Link<const MouseEvent&, bool>());
+    m_xHideBtn->connect_mouse_move(Link<const MouseEvent&, bool>());
 
-    m_xRightBtn->set_visible(bRight);
-    m_xDownBtn->set_visible(bDown);
+    m_xShowBtn->set_visible(bShow);
+    m_xHideBtn->set_visible(bHide);
 
     weld::Button* pButton = nullptr;
-    if (bRight)
-        pButton = m_xRightBtn.get();
-    else if (bDown)
-        pButton = m_xDownBtn.get();
+    if (bShow)
+        pButton = m_xShowBtn.get();
+    else if (bHide)
+        pButton = m_xHideBtn.get();
     InitControlBase(pButton);
     if (pButton)
     {
@@ -118,7 +118,7 @@ void SwOutlineContentVisibilityWin::Set()
     // outline node frame containing folded outline node content might be folded so need to hide it
     if (!pTextFrame || pTextFrame->IsInDtor())
     {
-        SetSymbol(SymbolType::DONTKNOW);
+        SetSymbol(ButtonSymbol::NONE);
         Hide();
         return;
     }
@@ -135,8 +135,7 @@ void SwOutlineContentVisibilityWin::Set()
     }
 
     // set symbol displayed on button
-    SetSymbol(rSh.IsOutlineContentVisible(m_nOutlinePos) ? SymbolType::ARROW_DOWN
-                                                         : SymbolType::ARROW_RIGHT);
+    SetSymbol(rSh.IsOutlineContentVisible(m_nOutlinePos) ? ButtonSymbol::HIDE : ButtonSymbol::SHOW);
 
     // set quick help
     SwOutlineNodes::size_type nOutlineNodesCount
@@ -150,12 +149,16 @@ void SwOutlineContentVisibilityWin::Set()
     SetQuickHelpText(sQuickHelp);
 
     // Set the position of the window
-    SwRect aSwRect = GetFrame()->getFrameArea(); // not far in margin
-    //SwRect aSwRect = GetFrame()->GetPaintArea(); // far in margin
-    aSwRect.AddTop(GetFrame()->GetTopMargin());
+    SwRect aFrameAreaRect = GetFrame()->getFrameArea();
+    aFrameAreaRect.AddTop(GetFrame()->GetTopMargin());
+    SwRect aCharRect;
+    GetFrame()->GetCharRect(aCharRect, SwPosition(*pTextNode));
     Point aPxPt(GetEditWin()->GetOutDev()->LogicToPixel(
-        aSwRect.TopLeft() - (aSwRect.TopLeft() - aSwRect.BottomLeft()) / 2));
-    aPxPt.AdjustX(-GetSizePixel().getWidth() + 1);
+        Point(aCharRect.Right(), aFrameAreaRect.Center().getY())));
+    if (GetFrame()->IsRightToLeft())
+        aPxPt.AdjustX(5);
+    else
+        aPxPt.AdjustX(-(GetSizePixel().getWidth() + 5));
     aPxPt.AdjustY(-GetSizePixel().getHeight() / 2);
     SetPosPixel(aPxPt);
 }
@@ -215,8 +218,8 @@ void SwOutlineContentVisibilityWin::ToggleOutlineContentVisibility(const bool bS
         rSh.ToggleOutlineContentVisibility(m_nOutlinePos);
     if (!m_bDestroyed)
     {
-        SetSymbol(rSh.IsOutlineContentVisible(m_nOutlinePos) ? SymbolType::ARROW_DOWN
-                                                             : SymbolType::ARROW_RIGHT);
+        SetSymbol(rSh.IsOutlineContentVisible(m_nOutlinePos) ? ButtonSymbol::HIDE
+                                                             : ButtonSymbol::SHOW);
     }
     rSh.LockView(false);
 }
@@ -248,7 +251,7 @@ IMPL_LINK(SwOutlineContentVisibilityWin, MouseMoveHdl, const MouseEvent&, rMEvt,
     {
         // MouseMove event may not be seen by edit window
         // hide collapse button and grab focus to document
-        if (GetSymbol() != SymbolType::ARROW_RIGHT)
+        if (GetSymbol() != ButtonSymbol::SHOW)
             Hide();
         GrabFocusToDocument();
     }
