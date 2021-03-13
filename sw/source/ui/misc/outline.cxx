@@ -92,7 +92,7 @@ void SwNumNamesDlg::SetUserNames(const OUString *pList[])
                 nSelect++;
         }
     }
-    m_xFormBox->select(nSelect);
+    m_xFormBox->select(std::min(nSelect, static_cast<sal_uInt16>(m_xFormBox->n_children() - 1)));
     SelectHdl(*m_xFormBox);
 }
 
