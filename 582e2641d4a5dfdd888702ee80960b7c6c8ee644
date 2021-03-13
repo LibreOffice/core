@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "092c7bd4_28e6ebb4",
+        "filename": "sw/qa/extras/uiwriter/uiwriter3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2618,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-13T08:49:23Z",
+      "side": 1,
+      "message": "This comment states that something happens at present?\nIt would be fine like this:\n\n  // tdf#NNNN: print preview of signed document must not crash\n\n... so that it indicates the bug, and expresses the intended result; or it might be\n\n  // Without the fix to tdf#NNNN, print preview of signed document would crash\n\n... expressing the outcome without the fix (and also explicitly mentioning the bug).\n\nNo need to mention the UITest history - it would be kept in git log if someone ever needs that.",
+      "range": {
+        "startLine": 2618,
+        "startChar": 4,
+        "endLine": 2618,
+        "endChar": 47
+      },
+      "revId": "582e2641d4a5dfdd888702ee80960b7c6c8ee644",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
