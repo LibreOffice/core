@@ -1048,7 +1048,7 @@ namespace
             if (m_bDelInst)
             {
                 // Compare here with 1 instead of 0, because before nCallLvl--
-                while (m_pSbData->pInst->nCallLvl != 1)
+                while (m_pSbData->pInst->nCallLvl != 1 && !Application::IsQuit())
                     Application::Yield();
             }
 

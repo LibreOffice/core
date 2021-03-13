@@ -679,7 +679,7 @@ BasicDebugFlags ModulWindow::BasicBreakHdl()
 
     InvalidateDebuggerSlots();
 
-    while( m_aStatus.bIsRunning )
+    while( m_aStatus.bIsRunning && !Application::IsQuit())
         Application::Yield();
 
     m_aStatus.bIsInReschedule = false;

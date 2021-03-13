@@ -182,7 +182,7 @@ void ProgressBar::SetValue( sal_uInt16 nNewPercent )
         Idle aIdle("ProgressBar::SetValue aIdle");
         aIdle.SetPriority(TaskPriority::POST_PAINT);
         aIdle.Start();
-        while (aIdle.IsActive())
+        while (aIdle.IsActive() && !Application::IsQuit())
         {
             Application::Yield();
         }

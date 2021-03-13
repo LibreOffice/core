@@ -328,7 +328,7 @@ void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVect
     }
 
     // coverity[loop_top] - this isn't an infinite loop where nSheetsLeft gets decremented by the above threads
-    while( nSheetsLeft > 0)
+    while( nSheetsLeft > 0 && !Application::IsQuit())
     {
         // This is a much more controlled re-enterancy hazard than
         // allowing a yield deeper inside the filter code for progress

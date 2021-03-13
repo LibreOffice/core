@@ -455,7 +455,7 @@ void MenuFloatingWindow::Execute()
 
     Start();
 
-    while (bInExecute)
+    while (bInExecute && !Application::IsQuit())
         Application::Yield();
 
     pSVData->maAppData.mpActivePopupMenu = nullptr;

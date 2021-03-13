@@ -50,7 +50,7 @@ void Request::wait( ::sal_Int32 nMilliSeconds )
 void Request::waitProcessMessages()
 {
     SolarMutexGuard aGuard;
-    while ( !m_aJoiner.check() )
+    while ( !m_aJoiner.check() && !Application::IsQuit())
         Application::Yield();
 }
 

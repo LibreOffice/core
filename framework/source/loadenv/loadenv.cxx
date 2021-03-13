@@ -413,7 +413,7 @@ bool LoadEnv::waitWhileLoading(sal_uInt32 nTimeout)
     // in an intelligent manner :-)
 
     sal_Int32 nTime = nTimeout;
-    while(true)
+    while(!Application::IsQuit())
     {
         // SAFE -> ------------------------------
         {
