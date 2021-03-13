@@ -711,7 +711,7 @@ short RecoveryDialog::execute()
                 m_pCore->doRecovery();
 
                 m_bWaitForCore = true;
-                while(m_bWaitForCore)
+                while(m_bWaitForCore && !Application::IsQuit())
                     Application::Yield();
 
                 m_pCore->setUpdateListener(nullptr);

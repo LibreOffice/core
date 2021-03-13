@@ -1053,7 +1053,7 @@ short Dialog::Execute()
 
     // Yield util EndDialog is called or dialog gets destroyed
     // (the latter should not happen, but better safe than sorry
-    while ( !xWindow->IsDisposed() && mbInExecute )
+    while ( !xWindow->IsDisposed() && mbInExecute && !Application::IsQuit() )
         Application::Yield();
 
     ImplEndExecuteModal();

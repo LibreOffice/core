@@ -428,7 +428,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
 
     //wait until printing is done
     SfxPrinter* pDocPrinter = pViewSh->GetPrinter();
-    while ( pDocPrinter->IsPrinting() )
+    while ( pDocPrinter->IsPrinting() && !Application::IsQuit())
         Application::Yield();
 }
 
@@ -484,7 +484,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
             /* SAFE { */
             {
                 SolarMutexGuard aGuard;
-                while( m_pPrinter->IsPrinting() )
+                while( m_pPrinter->IsPrinting() && !Application::IsQuit())
                     Application::Yield();
                 m_pPrinter.clear(); // don't delete it! It's borrowed only :-)
             }

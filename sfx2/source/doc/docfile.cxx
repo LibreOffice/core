@@ -2737,7 +2737,7 @@ void SfxMedium::Download( const Link<void*,void>& aLink )
     GetInStream();
     if ( pImpl->m_pInStream && !aLink.IsSet() )
     {
-        while( !pImpl->bDownloadDone )
+        while( !pImpl->bDownloadDone && !Application::IsQuit())
             Application::Yield();
     }
 }
