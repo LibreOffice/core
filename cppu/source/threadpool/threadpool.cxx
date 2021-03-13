@@ -99,7 +99,7 @@ namespace cppu_threadpool
     {
         m_DisposedCallerAdmin->dispose( nDisposeId );
 
-        MutexGuard guard( m_mutex );
+        std::scoped_lock guard( m_mutex );
         for (auto const& item :  m_mapQueue)
         {
             if( item.second.first )
@@ -127,7 +127,7 @@ namespace cppu_threadpool
     {
         WaitingThread waitingThread(pThread);
         {
-            MutexGuard guard( m_mutexWaitingThreadList );
+            std::scoped_lock guard( m_mutexWaitingThreadList );
             m_dequeThreads.push_front( &waitingThread );
         }
 
@@ -135,7 +135,7 @@ namespace cppu_threadpool
         waitingThread.condition.wait( std::chrono::seconds(2) );
 
         {
-            MutexGuard guard ( m_mutexWaitingThreadList );
+            std::scoped_lock guard ( m_mutexWaitingThreadList );
             if( waitingThread.thread.is() )
             {
                 // thread wasn't reused, remove it from the list
@@ -150,7 +150,7 @@ namespace cppu_threadpool
     void ThreadPool::joinWorkers()
     {
         {
-            MutexGuard guard( m_mutexWaitingThreadList );
+            std::scoped_lock guard( m_mutexWaitingThreadList );
             for (auto const& thread : m_dequeThreads)
             {
                 // wake the threads up
@@ -166,7 +166,7 @@ namespace cppu_threadpool
     {
         {
             // Can a thread be reused ?
-            MutexGuard guard( m_mutexWaitingThreadList );
+            std::scoped_lock guard( m_mutexWaitingThreadList );
             if( ! m_dequeThreads.empty() )
             {
                 // inform the thread and let it go
@@ -190,7 +190,7 @@ namespace cppu_threadpool
 
     bool ThreadPool::revokeQueue( const ByteSequence &aThreadId, bool bAsynchron )
     {
-        MutexGuard guard( m_mutex );
+        std::scoped_lock guard( m_mutex );
 
         ThreadIdHashMap::iterator ii = m_mapQueue.find( aThreadId );
         OSL_ASSERT( ii != m_mapQueue.end() );
@@ -240,7 +240,7 @@ namespace cppu_threadpool
         bool bCreateThread = false;
         JobQueue *pQueue = nullptr;
         {
-            MutexGuard guard( m_mutex );
+            std::scoped_lock guard( m_mutex );
             if (m_DisposedCallerAdmin->isDisposed(disposeId)) {
                 return true;
             }
@@ -285,7 +285,7 @@ namespace cppu_threadpool
 
     void ThreadPool::prepare( const ByteSequence &aThreadId )
     {
-        MutexGuard guard( m_mutex );
+        std::scoped_lock guard( m_mutex );
 
         ThreadIdHashMap::iterator ii = m_mapQueue.find( aThreadId );
 
@@ -304,7 +304,7 @@ namespace cppu_threadpool
     {
         JobQueue *pQueue = nullptr;
         {
-            MutexGuard guard( m_mutex );
+            std::scoped_lock guard( m_mutex );
 
             ThreadIdHashMap::iterator ii = m_mapQueue.find( aThreadId );
 
