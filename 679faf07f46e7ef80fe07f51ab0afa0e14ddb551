@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "44ac4eb8_9c8a162c",
+        "filename": "sw/source/uibase/app/docst.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1154,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-03-13T06:33:01Z",
+      "side": 1,
+      "message": "It might be better to place this before the sListIdForStyle assignment and break out of the case statement when it occurs?",
+      "revId": "679faf07f46e7ef80fe07f51ab0afa0e14ddb551",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
