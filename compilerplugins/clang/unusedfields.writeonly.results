@@ -166,6 +166,8 @@ cppu/source/uno/check.cxx:107
     (anonymous namespace)::P p2 double
 cppu/source/uno/check.cxx:115
     (anonymous namespace)::second a int
+cppu/source/uno/check.cxx:120
+    (anonymous namespace)::AlignSize_Impl nInt16 sal_Int16
 cppu/source/uno/check.cxx:126
     (anonymous namespace)::Char1 c1 char
 cppu/source/uno/check.cxx:130
@@ -348,6 +350,8 @@ include/opencl/platforminfo.hxx:31
     OpenCLDeviceInfo mnFrequency size_t
 include/sfx2/minfitem.hxx:35
     SfxMacroInfoItem aCommentText class rtl::OUString
+include/svl/sigstruct.hxx:127
+    SignatureInformation hasInconsistentSigningTime _Bool
 include/svtools/brwbox.hxx:326
     BrowseBox::CursorMoveAttempt m_nCol sal_Int32
 include/svtools/brwbox.hxx:327
@@ -390,8 +394,6 @@ include/test/beans/xpropertyset.hxx:56
     apitest::XPropertySet::PropsToTest constrained std::vector<OUString>
 include/unotools/fontcfg.hxx:159
     utl::FontSubstConfiguration maSubstHash utl::FontSubstConfiguration::UniqueSubstHash
-include/vcl/menu.hxx:472
-    MenuBar::MenuBarButtonCallbackArg bHighlight _Bool
 include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:43
     AddonNotebookBarItem sTarget class rtl::OUString
 include/vcl/notebookbar/NotebookBarAddonsMerger.hxx:44
@@ -412,8 +414,6 @@ include/vcl/salnativewidgets.hxx:534
     PushButtonValue mbSingleLine _Bool
 include/vcl/sysdata.hxx:68
     SystemEnvData pSalFrame class SalFrame *
-include/vcl/syswin.hxx:102
-    SystemWindow maOrgSize class Size
 include/vcl/textrectinfo.hxx:35
     TextRectInfo mnLineCount sal_uInt16
 include/vcl/vclenum.hxx:200
@@ -558,6 +558,8 @@ sc/source/ui/inc/drawview.hxx:42
     ScDrawView pDropMarker std::unique_ptr<SdrDropMarkerOverlay>
 sc/source/ui/inc/drwtrans.hxx:45
     ScDrawTransferObj m_aDrawPersistRef SfxObjectShellRef
+sc/source/ui/inc/dwfunctr.hxx:53
+    ScFunctionWin xConfigChange std::unique_ptr<EnglishFunctionNameChange>
 sc/source/ui/inc/filtdlg.hxx:186
     ScSpecialFilterDlg pOptionsMgr std::unique_ptr<ScFilterOptionsMgr>
 sc/source/ui/inc/instbdlg.hxx:58
@@ -580,19 +582,19 @@ sc/source/ui/inc/uiitems.hxx:47
     ScInputStatusItem aStartPos class ScAddress
 sc/source/ui/inc/uiitems.hxx:48
     ScInputStatusItem aEndPos class ScAddress
-sc/source/ui/sidebar/AlignmentPropertyPanel.hxx:81
+sc/source/ui/sidebar/AlignmentPropertyPanel.hxx:77
     sc::sidebar::AlignmentPropertyPanel mxHorizontalAlignDispatch std::unique_ptr<ToolbarUnoDispatcher>
-sc/source/ui/sidebar/AlignmentPropertyPanel.hxx:84
+sc/source/ui/sidebar/AlignmentPropertyPanel.hxx:80
     sc::sidebar::AlignmentPropertyPanel mxVertAlignDispatch std::unique_ptr<ToolbarUnoDispatcher>
-sc/source/ui/sidebar/AlignmentPropertyPanel.hxx:87
+sc/source/ui/sidebar/AlignmentPropertyPanel.hxx:83
     sc::sidebar::AlignmentPropertyPanel mxWriteDirectionDispatch std::unique_ptr<ToolbarUnoDispatcher>
-sc/source/ui/sidebar/AlignmentPropertyPanel.hxx:90
+sc/source/ui/sidebar/AlignmentPropertyPanel.hxx:86
     sc::sidebar::AlignmentPropertyPanel mxIndentButtonsDispatch std::unique_ptr<ToolbarUnoDispatcher>
-sc/source/ui/sidebar/CellAppearancePropertyPanel.hxx:79
+sc/source/ui/sidebar/CellAppearancePropertyPanel.hxx:76
     sc::sidebar::CellAppearancePropertyPanel mxBackColorDispatch std::unique_ptr<ToolbarUnoDispatcher>
-sc/source/ui/sidebar/CellAppearancePropertyPanel.hxx:83
+sc/source/ui/sidebar/CellAppearancePropertyPanel.hxx:80
     sc::sidebar::CellAppearancePropertyPanel mxLineColorDispatch std::unique_ptr<ToolbarUnoDispatcher>
-sc/source/ui/sidebar/NumberFormatPropertyPanel.hxx:70
+sc/source/ui/sidebar/NumberFormatPropertyPanel.hxx:66
     sc::sidebar::NumberFormatPropertyPanel mxCategoryDispatch std::unique_ptr<ToolbarUnoDispatcher>
 sc/source/ui/vba/vbachartobject.hxx:44
     ScVbaChartObject oShapeHelper std::unique_ptr<ov::ShapeHelper>
@@ -618,9 +620,9 @@ sd/source/ui/inc/animobjs.hxx:123
     sd::AnimationWindow pControllerItem std::unique_ptr<AnimationControllerItem>
 sd/source/ui/inc/fudspord.hxx:51
     sd::FuDisplayOrder mpOverlay std::unique_ptr<SdrDropMarkerOverlay>
-sd/source/ui/inc/navigatr.hxx:124
+sd/source/ui/inc/navigatr.hxx:139
     SdNavigatorWin mpNavigatorCtrlItem std::unique_ptr<SdNavigatorControllerItem>
-sd/source/ui/inc/navigatr.hxx:125
+sd/source/ui/inc/navigatr.hxx:140
     SdNavigatorWin mpPageNameCtrlItem std::unique_ptr<SdPageNameControllerItem>
 sd/source/ui/inc/tools/TimerBasedTaskExecution.hxx:73
     sd::tools::TimerBasedTaskExecution mpSelf std::shared_ptr<TimerBasedTaskExecution>
@@ -648,6 +650,8 @@ sdext/source/presenter/PresenterTimer.cxx:103
     sdext::presenter::(anonymous namespace)::TimerScheduler mpLateDestroy std::shared_ptr<TimerScheduler>
 sfx2/inc/notebookbar/NotebookbarTabControl.hxx:41
     NotebookbarTabControl m_pListener css::uno::Reference<css::ui::XUIConfigurationListener>
+sfx2/source/appl/childwin.cxx:63
+    SfxChildWindow_Impl pContextModule class SfxModule *
 sfx2/source/appl/fileobj.hxx:40
     SvFileObject mxDelMed tools::SvRef<SfxMedium>
 sfx2/source/doc/sfxbasemodel.cxx:448
@@ -668,12 +672,14 @@ sfx2/source/inc/appdata.hxx:88
     SfxAppData_Impl mxAppPickList std::unique_ptr<SfxPickList>
 sfx2/source/inc/splitwin.hxx:52
     SfxSplitWindow pActive VclPtr<class SfxDockingWindow>
-sfx2/source/inc/templdgi.hxx:102
+sfx2/source/inc/templdgi.hxx:104
     SfxCommonTemplateDialog_Impl m_xTreeView1DropTargetHelper std::unique_ptr<TreeViewDropTarget>
-sfx2/source/inc/templdgi.hxx:103
+sfx2/source/inc/templdgi.hxx:105
     SfxCommonTemplateDialog_Impl m_xTreeView2DropTargetHelper std::unique_ptr<TreeViewDropTarget>
-sfx2/source/inc/templdgi.hxx:264
+sfx2/source/inc/templdgi.hxx:266
     SfxTemplateDialog_Impl m_xToolbarDropTargetHelper std::unique_ptr<ToolbarDropTarget>
+sfx2/source/inc/workwin.hxx:111
+    SfxChildWin_Impl nInterfaceId sal_uInt16
 sfx2/source/view/classificationcontroller.cxx:73
     sfx2::(anonymous namespace)::ClassificationCategoriesController m_aPropertyListener class sfx2::(anonymous namespace)::ClassificationPropertyListener
 slideshow/source/engine/opengl/TransitionImpl.hxx:301
@@ -688,9 +694,9 @@ slideshow/test/testview.cxx:53
     (anonymous namespace)::ImplTestView maPriority basegfx::B1DRange
 soltools/cpp/cpp.h:143
     macroValidator pMacro Nlist *
-starmath/inc/mathml/mathmlimport.hxx:47
+starmath/inc/mathml/mathmlimport.hxx:45
     SmXMLImportWrapper m_bUseHTMLMLEntities _Bool
-starmath/inc/view.hxx:157
+starmath/inc/view.hxx:154
     SmCmdBoxWindow aController class SmEditController
 stoc/source/servicemanager/servicemanager.cxx:392
     (anonymous namespace)::OServiceManager m_SetLoadedFactories (anonymous namespace)::HashSet_Ref
@@ -746,7 +752,7 @@ svx/inc/sdr/primitive2d/sdrolecontentprimitive2d.hxx:44
     drawinglayer::primitive2d::SdrOleContentPrimitive2D mnGraphicVersion sal_uInt32
 svx/source/form/dataaccessdescriptor.cxx:39
     svx::ODADescriptorImpl m_bSetOutOfDate _Bool
-svx/source/form/formcontroller.cxx:209
+svx/source/form/formcontroller.cxx:208
     svxform::(anonymous namespace)::ColumnInfo nNullable sal_Int32
 svx/source/inc/datanavi.hxx:319
     svxform::DataNavigator m_xDataWin std::unique_ptr<DataNavigatorWindow>
@@ -754,85 +760,87 @@ svx/source/inc/docrecovery.hxx:131
     svx::DocRecovery::TURLInfo Module class rtl::OUString
 svx/source/inc/StylesPreviewToolBoxControl.hxx:33
     StylesPreviewToolBoxControl m_xWeldBox std::unique_ptr<StylesPreviewWindow_Base>
+svx/source/inc/StylesPreviewWindow.hxx:87
+    StylesPreviewWindow_Base m_pStylePoolChangeListener std::unique_ptr<StylePoolChangeListener>
 svx/source/sdr/attribute/sdrformtextattribute.cxx:153
     drawinglayer::attribute::ImpSdrFormTextAttribute mnFormTextShdwTransp sal_uInt16
 svx/source/sdr/attribute/sdrtextattribute.cxx:49
     drawinglayer::attribute::ImpSdrTextAttribute maPropertiesVersion sal_uInt32
 svx/source/sdr/attribute/sdrtextattribute.cxx:63
     drawinglayer::attribute::ImpSdrTextAttribute mbWrongSpell _Bool
-svx/source/sidebar/effect/EffectPropertyPanel.hxx:41
+svx/source/sidebar/effect/EffectPropertyPanel.hxx:35
     svx::sidebar::EffectPropertyPanel maGlowColorController sfx2::sidebar::ControllerItem
-svx/source/sidebar/effect/EffectPropertyPanel.hxx:42
+svx/source/sidebar/effect/EffectPropertyPanel.hxx:36
     svx::sidebar::EffectPropertyPanel maGlowRadiusController sfx2::sidebar::ControllerItem
-svx/source/sidebar/effect/EffectPropertyPanel.hxx:43
+svx/source/sidebar/effect/EffectPropertyPanel.hxx:37
     svx::sidebar::EffectPropertyPanel maGlowTransparencyController sfx2::sidebar::ControllerItem
-svx/source/sidebar/effect/EffectPropertyPanel.hxx:45
+svx/source/sidebar/effect/EffectPropertyPanel.hxx:39
     svx::sidebar::EffectPropertyPanel maSoftEdgeRadiusController sfx2::sidebar::ControllerItem
-svx/source/sidebar/line/LinePropertyPanel.hxx:83
+svx/source/sidebar/line/LinePropertyPanel.hxx:81
     svx::sidebar::LinePropertyPanel maStyleControl sfx2::sidebar::ControllerItem
-svx/source/sidebar/line/LinePropertyPanel.hxx:84
+svx/source/sidebar/line/LinePropertyPanel.hxx:82
     svx::sidebar::LinePropertyPanel maDashControl sfx2::sidebar::ControllerItem
-svx/source/sidebar/line/LinePropertyPanel.hxx:86
+svx/source/sidebar/line/LinePropertyPanel.hxx:84
     svx::sidebar::LinePropertyPanel maTransControl sfx2::sidebar::ControllerItem
-svx/source/sidebar/line/LinePropertyPanel.hxx:87
+svx/source/sidebar/line/LinePropertyPanel.hxx:85
     svx::sidebar::LinePropertyPanel maEdgeStyle sfx2::sidebar::ControllerItem
-svx/source/sidebar/line/LinePropertyPanel.hxx:88
+svx/source/sidebar/line/LinePropertyPanel.hxx:86
     svx::sidebar::LinePropertyPanel maCapStyle sfx2::sidebar::ControllerItem
-svx/source/sidebar/lists/ListsPropertyPanel.hxx:42
+svx/source/sidebar/lists/ListsPropertyPanel.hxx:41
     svx::sidebar::ListsPropertyPanel mxNumBulletDispatcher std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/lists/ListsPropertyPanel.hxx:44
+svx/source/sidebar/lists/ListsPropertyPanel.hxx:43
     svx::sidebar::ListsPropertyPanel mxOutlineDispatcher std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:79
+svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:77
     svx::sidebar::ParaPropertyPanel mxHorzAlignDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:81
+svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:79
     svx::sidebar::ParaPropertyPanel mxVertAlignDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:84
+svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:82
     svx::sidebar::ParaPropertyPanel mxNumBulletDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:86
+svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:84
     svx::sidebar::ParaPropertyPanel mxBackColorDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:89
+svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:87
     svx::sidebar::ParaPropertyPanel mxWriteDirectionDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:91
+svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:89
     svx::sidebar::ParaPropertyPanel mxParaSpacingDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:93
+svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:91
     svx::sidebar::ParaPropertyPanel mxLineSpacingDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:95
+svx/source/sidebar/paragraph/ParaPropertyPanel.hxx:93
     svx::sidebar::ParaPropertyPanel mxIndentDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/possize/PosSizePropertyPanel.hxx:109
+svx/source/sidebar/possize/PosSizePropertyPanel.hxx:105
     svx::sidebar::PosSizePropertyPanel mxFlipDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/possize/PosSizePropertyPanel.hxx:112
+svx/source/sidebar/possize/PosSizePropertyPanel.hxx:108
     svx::sidebar::PosSizePropertyPanel mxArrangeDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/possize/PosSizePropertyPanel.hxx:114
+svx/source/sidebar/possize/PosSizePropertyPanel.hxx:110
     svx::sidebar::PosSizePropertyPanel mxArrangeDispatch2 std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/possize/PosSizePropertyPanel.hxx:117
+svx/source/sidebar/possize/PosSizePropertyPanel.hxx:113
     svx::sidebar::PosSizePropertyPanel mxAlignDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/possize/PosSizePropertyPanel.hxx:119
+svx/source/sidebar/possize/PosSizePropertyPanel.hxx:115
     svx::sidebar::PosSizePropertyPanel mxAlignDispatch2 std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/styles/StylesPropertyPanel.hxx:21
+svx/source/sidebar/styles/StylesPropertyPanel.hxx:20
     svx::sidebar::StylesPropertyPanel m_xFontStyleDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/styles/StylesPropertyPanel.hxx:24
+svx/source/sidebar/styles/StylesPropertyPanel.hxx:23
     svx::sidebar::StylesPropertyPanel m_xStyleDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/text/TextPropertyPanel.hxx:50
+svx/source/sidebar/text/TextPropertyPanel.hxx:49
     svx::sidebar::TextPropertyPanel mxFontDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/text/TextPropertyPanel.hxx:52
+svx/source/sidebar/text/TextPropertyPanel.hxx:51
     svx::sidebar::TextPropertyPanel mxFontHeightDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/text/TextPropertyPanel.hxx:54
+svx/source/sidebar/text/TextPropertyPanel.hxx:53
     svx::sidebar::TextPropertyPanel mxFontEffectsDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/text/TextPropertyPanel.hxx:56
+svx/source/sidebar/text/TextPropertyPanel.hxx:55
     svx::sidebar::TextPropertyPanel mxFontAdjustDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/text/TextPropertyPanel.hxx:58
+svx/source/sidebar/text/TextPropertyPanel.hxx:57
     svx::sidebar::TextPropertyPanel mxToolBoxFontColorSwDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/text/TextPropertyPanel.hxx:60
+svx/source/sidebar/text/TextPropertyPanel.hxx:59
     svx::sidebar::TextPropertyPanel mxToolBoxFontColorDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/text/TextPropertyPanel.hxx:62
+svx/source/sidebar/text/TextPropertyPanel.hxx:61
     svx::sidebar::TextPropertyPanel mxToolBoxBackgroundColorDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/text/TextPropertyPanel.hxx:64
+svx/source/sidebar/text/TextPropertyPanel.hxx:63
     svx::sidebar::TextPropertyPanel mxResetBarDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/text/TextPropertyPanel.hxx:66
+svx/source/sidebar/text/TextPropertyPanel.hxx:65
     svx::sidebar::TextPropertyPanel mxDefaultBarDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/text/TextPropertyPanel.hxx:68
+svx/source/sidebar/text/TextPropertyPanel.hxx:67
     svx::sidebar::TextPropertyPanel mxPositionBarDispatch std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/text/TextPropertyPanel.hxx:70
+svx/source/sidebar/text/TextPropertyPanel.hxx:69
     svx::sidebar::TextPropertyPanel mxSpacingBarDispatch std::unique_ptr<ToolbarUnoDispatcher>
 svx/source/tbxctrls/tbcontrl.cxx:311
     (anonymous namespace)::SvxFontNameBox_Base m_aOwnFontList ::std::unique_ptr<FontList>
@@ -875,34 +883,34 @@ sw/source/filter/inc/rtf.hxx:30
 sw/source/filter/inc/rtf.hxx:31
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:32
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo/sw/source/filter/inc/rtf.hxx:27:9)
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo2/sw/source/filter/inc/rtf.hxx:27:9)
 sw/source/uibase/inc/glossary.hxx:63
     SwGlossaryDlg m_xGroupData std::vector<std::unique_ptr<GroupUserData> >
 sw/source/uibase/inc/maildispatcher.hxx:144
     MailDispatcher m_aListenerVector std::vector< ::rtl::Reference<IMailDispatcherListener> >
 sw/source/uibase/inc/maildispatcher.hxx:150
     MailDispatcher m_xSelfReference ::rtl::Reference<MailDispatcher>
-sw/source/uibase/inc/navipi.hxx:60
+sw/source/uibase/inc/navipi.hxx:59
     SwNavigationPI m_xContent2Dispatch std::unique_ptr<ToolbarUnoDispatcher>
-sw/source/uibase/inc/navipi.hxx:61
+sw/source/uibase/inc/navipi.hxx:60
     SwNavigationPI m_xContent3Dispatch std::unique_ptr<ToolbarUnoDispatcher>
 sw/source/uibase/inc/redlndlg.hxx:62
     SwRedlineAcceptDlg m_aUsedSeqNo class SwRedlineDataParentSortArr
-sw/source/uibase/sidebar/TableEditPanel.hxx:51
+sw/source/uibase/sidebar/TableEditPanel.hxx:48
     sw::sidebar::TableEditPanel m_xInsertDispatch std::unique_ptr<ToolbarUnoDispatcher>
-sw/source/uibase/sidebar/TableEditPanel.hxx:53
+sw/source/uibase/sidebar/TableEditPanel.hxx:50
     sw::sidebar::TableEditPanel m_xSelectDispatch std::unique_ptr<ToolbarUnoDispatcher>
-sw/source/uibase/sidebar/TableEditPanel.hxx:55
+sw/source/uibase/sidebar/TableEditPanel.hxx:52
     sw::sidebar::TableEditPanel m_xRowSizingDispatch std::unique_ptr<ToolbarUnoDispatcher>
-sw/source/uibase/sidebar/TableEditPanel.hxx:57
+sw/source/uibase/sidebar/TableEditPanel.hxx:54
     sw::sidebar::TableEditPanel m_xColumnSizingDispatch std::unique_ptr<ToolbarUnoDispatcher>
-sw/source/uibase/sidebar/TableEditPanel.hxx:59
+sw/source/uibase/sidebar/TableEditPanel.hxx:56
     sw::sidebar::TableEditPanel m_xDeleteDispatch std::unique_ptr<ToolbarUnoDispatcher>
-sw/source/uibase/sidebar/TableEditPanel.hxx:61
+sw/source/uibase/sidebar/TableEditPanel.hxx:58
     sw::sidebar::TableEditPanel m_xSplitMergeDispatch std::unique_ptr<ToolbarUnoDispatcher>
-sw/source/uibase/sidebar/TableEditPanel.hxx:63
+sw/source/uibase/sidebar/TableEditPanel.hxx:60
     sw::sidebar::TableEditPanel m_xMiscDispatch std::unique_ptr<ToolbarUnoDispatcher>
-sw/source/uibase/sidebar/WrapPropertyPanel.hxx:74
+sw/source/uibase/sidebar/WrapPropertyPanel.hxx:73
     sw::sidebar::WrapPropertyPanel mxWrapOptionsDispatch std::unique_ptr<ToolbarUnoDispatcher>
 testtools/source/bridgetest/cppobj.cxx:153
     bridge_object::(anonymous namespace)::Test_Impl _arStruct Sequence<struct test::testtools::bridgetest::TestElement>
@@ -1066,15 +1074,15 @@ vcl/unx/gtk3/a11y/atkwrapper.hxx:79
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:1644
+vcl/unx/gtk3/gtk3gtkinst.cxx:1657
      in char *
-vcl/unx/gtk3/gtk3gtkinst.cxx:14288
+vcl/unx/gtk3/gtk3gtkinst.cxx:14310
     (anonymous namespace)::GtkInstanceComboBox m_xCustomMenuButtonHelper std::unique_ptr<CustomRenderMenuButtonHelper>
 vcl/unx/gtk3/gtk3hudawareness.cxx:18
     (anonymous namespace)::HudAwarenessHandle connection GDBusConnection *
 vcl/unx/gtk3/gtk3hudawareness.cxx:21
     (anonymous namespace)::HudAwarenessHandle notify GDestroyNotify
-vcl/workben/vcldemo.cxx:1737
+vcl/workben/vcldemo.cxx:1736
     (anonymous namespace)::DemoWin mxThread rtl::Reference<RenderThread>
 writerfilter/source/dmapper/DomainMapperTableHandler.cxx:239
     writerfilter::dmapper::TableInfo aTablePropertyIds std::vector<PropertyIds>
@@ -1108,7 +1116,7 @@ xmlsecurity/inc/certificateviewer.hxx:50
     CertificateViewer mxGeneralPage std::unique_ptr<CertificateViewerGeneralTP>
 xmlsecurity/inc/certificateviewer.hxx:51
     CertificateViewer mxDetailsPage std::unique_ptr<CertificateViewerDetailsTP>
-xmlsecurity/source/helper/pdfsignaturehelper.cxx:243
+xmlsecurity/source/helper/pdfsignaturehelper.cxx:237
     (anonymous namespace)::PageChecksum m_nPageContent BitmapChecksum
-xmlsecurity/source/helper/pdfsignaturehelper.cxx:244
+xmlsecurity/source/helper/pdfsignaturehelper.cxx:238
     (anonymous namespace)::PageChecksum m_aAnnotations std::vector<basegfx::B2DRectangle>

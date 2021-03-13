@@ -138,6 +138,8 @@ cppu/source/uno/check.cxx:107
     (anonymous namespace)::P p2 double
 cppu/source/uno/check.cxx:115
     (anonymous namespace)::second a int
+cppu/source/uno/check.cxx:120
+    (anonymous namespace)::AlignSize_Impl nInt16 sal_Int16
 cppu/source/uno/check.cxx:126
     (anonymous namespace)::Char1 c1 char
 cppu/source/uno/check.cxx:130
@@ -172,12 +174,12 @@ drawinglayer/inc/processor3d/defaultprocessor3d.hxx:87
     drawinglayer::processor3d::DefaultProcessor3D maDrawinglayerOpt const class SvtOptionsDrawinglayer
 drawinglayer/source/processor2d/vclprocessor2d.hxx:77
     drawinglayer::processor2d::VclProcessor2D maDrawinglayerOpt const class SvtOptionsDrawinglayer
-editeng/source/editeng/impedit.hxx:509
+editeng/source/editeng/impedit.hxx:508
     ImpEditEngine maColorConfig svtools::ColorConfig
 embeddedobj/source/inc/commonembobj.hxx:103
     OCommonEmbeddedObject m_aClassName class rtl::OUString
 embeddedobj/source/inc/oleembobj.hxx:123
-    OleEmbeddedObject m_pOleComponent class OleComponent *
+    OleEmbeddedObject m_pOleComponent rtl::Reference<OleComponent>
 embeddedobj/source/inc/oleembobj.hxx:143
     OleEmbeddedObject m_xClosePreventer css::uno::Reference<css::util::XCloseListener>
 embeddedobj/source/inc/oleembobj.hxx:165
@@ -196,6 +198,8 @@ embeddedobj/source/inc/oleembobj.hxx:182
     OleEmbeddedObject m_aLinkURL class rtl::OUString
 embeddedobj/source/inc/oleembobj.hxx:188
     OleEmbeddedObject m_bFromClipboard _Bool
+embeddedobj/source/msole/olecomponent.hxx:73
+    OleComponent m_bWorkaroundActive _Bool
 extensions/source/propctrlr/eformshelper.hxx:61
     pcr::EFormsHelper m_aSubmissionUINames pcr::MapStringToPropertySet
 extensions/source/propctrlr/eformshelper.hxx:63
@@ -304,10 +308,10 @@ include/svx/svdmark.hxx:142
     SdrMarkList maGluePointName class rtl::OUString
 include/svx/svdoedge.hxx:160
     SdrEdgeObj mbBoundRectCalculationRunning _Bool
-include/svx/svdpntv.hxx:154
+include/svx/svdpntv.hxx:155
     SdrPaintView maDrawinglayerOpt class SvtOptionsDrawinglayer
 include/unoidl/unoidl.hxx:443
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo/include/unoidl/unoidl.hxx:443:5)
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo2/include/unoidl/unoidl.hxx:443:5)
 include/unoidl/unoidl.hxx:444
     unoidl::ConstantValue::(anonymous) booleanValue _Bool
 include/unoidl/unoidl.hxx:445
@@ -383,7 +387,7 @@ sc/inc/attarray.hxx:68
 sc/inc/compiler.hxx:129
     ScRawToken::(anonymous union)::(anonymous) eItem class ScTableRefToken::Item
 sc/inc/compiler.hxx:130
-    ScRawToken::(anonymous) table struct (anonymous struct at /home/noel/libo/sc/inc/compiler.hxx:127:9)
+    ScRawToken::(anonymous) table struct (anonymous struct at /home/noel/libo2/sc/inc/compiler.hxx:127:9)
 sc/inc/compiler.hxx:135
     ScRawToken::(anonymous) pMat class ScMatrix *
 sc/inc/formulagroup.hxx:39
@@ -538,7 +542,7 @@ svx/source/inc/gridcell.hxx:527
     DbPatternField m_pValueFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
 svx/source/inc/gridcell.hxx:528
     DbPatternField m_pPaintFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
-svx/source/inc/svdpdf.hxx:64
+svx/source/inc/svdpdf.hxx:61
     ImpSdrPdfImport maDash class XDash
 sw/inc/acmplwrd.hxx:42
     SwAutoCompleteWord m_LookupTree editeng::Trie
@@ -689,7 +693,7 @@ vcl/inc/salwtype.hxx:218
 vcl/inc/svdata.hxx:316
     ImplSVNWFData mbMenuBarDockingAreaCommonBG _Bool
 vcl/inc/toolbox.h:108
-    vcl::ToolBoxLayoutData m_aLineItemIds std::vector<sal_uInt16>
+    vcl::ToolBoxLayoutData m_aLineItemIds std::vector<ToolBoxItemId>
 vcl/inc/unx/saldisp.hxx:281
     SalDisplay m_aInvalidScreenData struct SalDisplay::ScreenData
 vcl/inc/widgetdraw/WidgetDefinition.hxx:226
@@ -968,7 +972,7 @@ vcl/unx/gtk3/a11y/atkwrapper.hxx:79
     AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk3/gtk3glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtk3gtkinst.cxx:1644
+vcl/unx/gtk3/gtk3gtkinst.cxx:1657
      out gpointer *
 writerfilter/source/ooxml/OOXMLFactory.hxx:57
     writerfilter::ooxml::AttributeInfo m_nToken writerfilter::Token_t
