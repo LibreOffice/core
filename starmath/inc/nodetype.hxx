@@ -25,8 +25,8 @@
 enum class SmNodeType : int_fast16_t
 {
     Table, // tree header
-    Brace, // (SmNodeType aNodeTypeName) [] {}
-    Bracebody, // content of (SmNodeType aNodeTypeName) [] {}
+    Brace, // () [] {}
+    Bracebody, // content of () [] {}
     Oper, // largeop
     Align, // alignment
     Attribute, // attributes

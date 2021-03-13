@@ -372,6 +372,12 @@ public:
      */
     SmNodeType GetType() const  { return meType; }
 
+     /**
+     * Gets the node type information.
+     * @return node type information
+     */
+    SmNodeTypeInfo GetTypeInfo() const  { return SmNodeTypeInfo(meType); }
+
     /**
      * Gets the token.
      * The token contains the data extracted from the text mode.
