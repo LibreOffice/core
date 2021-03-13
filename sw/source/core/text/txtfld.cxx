@@ -525,11 +525,15 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
     // SetDiffFnt resets the background color (why?), so capture it and re-apply if it had a value,
     // because an existing value should override anything inherited from the paragraph marker.
     const std::optional<Color> oFontBackColor = pNumFnt->GetBackColor();
+    // The same is true for the highlight color.
+    const Color aHighlight = pNumFnt->GetHighlightColor();
 
     pNumFnt->SetDiffFnt(pCleanedSet.get(), pIDSA);
 
     if (oFontBackColor)
         pNumFnt->SetBackColor(oFontBackColor);
+    if (aHighlight != COL_TRANSPARENT)
+        pNumFnt->SetHighlightColor(aHighlight);
 }
 
 static const SwRangeRedline* lcl_GetRedlineAtNodeInsertionOrDeletion( const SwTextNode& rTextNode )
