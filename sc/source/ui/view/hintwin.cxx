@@ -31,6 +31,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/metric.hxx>
+#include <sal/log.hxx>
 
 #define HINT_LINESPACE  2
 #define HINT_INDENT     3
@@ -102,9 +103,16 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
 
     sal_Int32 nIndex = 0;
     Point aLineStart = aTextStart;
+    sal_Int32 nLineCount = 0;
     while (nIndex != -1)
     {
         OUString aLine = m_aMessage.getToken( 0, '\r', nIndex );
+        if (aLine.getLength() > 255)
+        {
+            // prevent silliness higher up from hanging up the program
+            SAL_WARN("sc", "ridiculously long line, truncating, len=" << aLine.getLength());
+            aLine = aLine.copy(0,255);
+        }
 
         aTextMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(
                                 aFontSize.getX(), aFontSize.getY(),
@@ -122,6 +130,13 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
         aSeq.push_back(pMessage);
 
         aLineStart.AdjustY(nLineHeight );
+        nLineCount++;
+        if (nLineCount > 50)
+        {
+            // prevent silliness higher up from hanging up the program
+            SAL_WARN("sc", "ridiculously long message, bailing out");
+            break;
+        }
     }
 
     rRange.expand(basegfx::B2DTuple(rRange.getMaxX() + aHintMargin.Width(),
