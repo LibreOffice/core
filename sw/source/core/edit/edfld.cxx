@@ -291,11 +291,6 @@ SwDBData const & SwEditShell::GetDBData() const
     return GetDoc()->GetDBData();
 }
 
-const SwDBData& SwEditShell::GetDBDesc() const
-{
-    return GetDoc()->GetDBDesc();
-}
-
 void SwEditShell::ChgDBData(const SwDBData& rNewData)
 {
     GetDoc()->ChgDBData(rNewData);

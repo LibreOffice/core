@@ -343,11 +343,6 @@ OUString LookString( SwHashTable<HashStr> const & rTable, const OUString& rName 
 
 SwDBData const & SwDoc::GetDBData()
 {
-    return GetDBDesc();
-}
-
-const SwDBData& SwDoc::GetDBDesc()
-{
 #if HAVE_FEATURE_DBCONNECTIVITY
     if(maDBData.sDataSource.isEmpty())
     {

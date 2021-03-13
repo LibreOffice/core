@@ -677,7 +677,6 @@ public:
 
     void ChgDBData( const SwDBData& rNewData );
     SwDBData const & GetDBData();
-    const SwDBData& GetDBDesc();
 
     // Some helper functions
     OUString GetUniqueGrfName() const;

@@ -1149,19 +1149,19 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_CURRENT_DATABASE_DATA_SOURCE:
         {
-            const SwDBData& rData = mpDoc->GetDBDesc();
+            const SwDBData& rData = mpDoc->GetDBData();
             rValue <<= rData.sDataSource;
         }
         break;
         case HANDLE_CURRENT_DATABASE_COMMAND:
         {
-            const SwDBData& rData = mpDoc->GetDBDesc();
+            const SwDBData& rData = mpDoc->GetDBData();
             rValue <<= rData.sCommand;
         }
         break;
         case HANDLE_CURRENT_DATABASE_COMMAND_TYPE:
         {
-            const SwDBData& rData = mpDoc->GetDBDesc();
+            const SwDBData& rData = mpDoc->GetDBData();
             rValue <<= rData.nCommandType;
         }
         break;

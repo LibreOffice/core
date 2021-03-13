@@ -1193,7 +1193,7 @@ void SwView::Execute(SfxRequest &rReq)
             pVFrame->ChildWindowExecute(rReq);
             if(pVFrame->HasChildWindow(SID_BROWSER))
             {
-                const SwDBData& rData = GetWrtShell().GetDBDesc();
+                const SwDBData& rData = GetWrtShell().GetDBData();
                 SwModule::ShowDBObj(*this, rData);
             }
         }

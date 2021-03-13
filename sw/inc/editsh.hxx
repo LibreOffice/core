@@ -415,7 +415,6 @@ public:
 
     /// Database information.
     SwDBData const & GetDBData() const;
-    const SwDBData& GetDBDesc() const;
     void ChgDBData(const SwDBData& SwDBData);
     void ChangeDBFields( const std::vector<OUString>& rOldNames,
                          const OUString& rNewName );
