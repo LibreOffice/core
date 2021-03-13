@@ -81,18 +81,15 @@ IMPL_LINK( SwNumNamesDlg, SelectHdl, weld::TreeView&, rBox, void )
  */
 void SwNumNamesDlg::SetUserNames(const OUString *pList[])
 {
-    sal_uInt16 nSelect = 0;
     for (sal_uInt16 i = 0; i < SwChapterNumRules::nMaxRules; ++i)
     {
         if(pList[i])
         {
             m_xFormBox->remove(i);
             m_xFormBox->insert_text(i, *pList[i]);
-            if (i == nSelect)
-                nSelect++;
         }
     }
-    m_xFormBox->select(nSelect);
+    m_xFormBox->select(m_xFormBox->n_children() - 1);
     SelectHdl(*m_xFormBox);
 }
 
