@@ -255,16 +255,6 @@ public:
         FocusInHdl(*m_xTreeView);
     }
 
-    OUString get_selected_text() const
-    {
-        return m_xTreeView->get_selected_text();
-    }
-
-    int count_selected_rows() const
-    {
-        return m_xTreeView->count_selected_rows();
-    }
-
     void set_selection_mode(SelectionMode eMode)
     {
         m_xTreeView->set_selection_mode(eMode);

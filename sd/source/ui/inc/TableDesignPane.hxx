@@ -84,13 +84,6 @@ private:
     DECL_LINK(implValueSetHdl, ValueSet*, void);
     DECL_LINK(implCheckBoxHdl, weld::ToggleButton&, void);
 
-public:
-    weld::Widget* GetInitialFocusWidget()
-    {
-        return m_xValueSet->GetDrawingArea();
-    }
-
-private:
     ViewShellBase& mrBase;
 
     std::unique_ptr<TableValueSet> m_xValueSet;

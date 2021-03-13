@@ -272,7 +272,6 @@ VDevBuffer& getVDevBuffer()
 impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange& rRange)
     : mrOutDev(rOutDev)
     , mpContent(nullptr)
-    , mpMask(nullptr)
     , mpAlpha(nullptr)
 {
     basegfx::B2DRange aRangePixel(rRange);
@@ -314,11 +313,6 @@ impBufferDevice::~impBufferDevice()
     if (mpContent)
     {
         getVDevBuffer().free(*mpContent);
-    }
-
-    if (mpMask)
-    {
-        getVDevBuffer().free(*mpMask);
     }
 
     if (mpAlpha)
@@ -384,30 +378,6 @@ void impBufferDevice::paint(double fTrans)
         aAlphaMask.BlendWith(aContent.GetAlpha());
         mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent.GetBitmap(), aAlphaMask));
     }
-    else if (mpMask)
-    {
-        mpMask->EnableMapMode(false);
-        const Bitmap aMask(mpMask->GetBitmap(aEmptyPoint, aSizePixel));
-
-#ifdef DBG_UTIL
-        if (bDoSaveForVisualControl)
-        {
-            SvFileStream aNew(
-#ifdef _WIN32
-                "c:\\mask.bmp",
-#else
-                "~/mask.bmp",
-#endif
-                StreamMode::WRITE | StreamMode::TRUNC);
-            WriteDIB(aMask, aNew, false, true);
-        }
-#endif
-
-        BitmapEx aContent(mpContent->GetBitmapEx(aEmptyPoint, aSizePixel));
-        AlphaMask aAlpha(aContent.GetAlpha());
-        aAlpha.BlendWith(aMask);
-        mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent.GetBitmap(), aAlpha));
-    }
     else if (0.0 != fTrans)
     {
         basegfx::B2DHomMatrix trans, scale;
@@ -430,21 +400,6 @@ VirtualDevice& impBufferDevice::getContent()
     SAL_WARN_IF(!mpContent, "drawinglayer",
                 "impBufferDevice: No content, check isVisible() before accessing (!)");
     return *mpContent;
-}
-
-VirtualDevice& impBufferDevice::getMask()
-{
-    SAL_WARN_IF(!mpContent, "drawinglayer",
-                "impBufferDevice: No content, check isVisible() before accessing (!)");
-    if (!mpMask)
-    {
-        mpMask = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, false);
-        mpMask->SetMapMode(mpContent->GetMapMode());
-
-        // do NOT copy AA flag for mask!
-    }
-
-    return *mpMask;
 }
 
 VirtualDevice& impBufferDevice::getTransparence()

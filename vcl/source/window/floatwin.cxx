@@ -228,11 +228,6 @@ void FloatingWindow::dispose()
     SystemWindow::dispose();
 }
 
-Point FloatingWindow::CalcFloatingPosition( vcl::Window* pWindow, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags, sal_uInt16& rArrangeIndex )
-{
-    return ImplCalcPos( pWindow, rRect, nFlags, rArrangeIndex );
-}
-
 Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
                                   const tools::Rectangle& rRect, FloatWinPopupFlags nFlags,
                                   sal_uInt16& rArrangeIndex, Point* pLOKTwipsPos)

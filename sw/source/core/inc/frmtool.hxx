@@ -383,7 +383,6 @@ public:
 
     const SwAttrSet      &GetAttrSet() const { return m_rAttrSet;  }
     const SvxULSpaceItem &GetULSpace() const { return m_rUL;       }
-    const std::shared_ptr<SvxLRSpaceItem>& GetLRSpace() const { return m_rLR; }
     const SvxBoxItem     &GetBox()     const { return m_rBox;      }
     const SvxShadowItem  &GetShadow()  const { return m_rShadow;   }
 

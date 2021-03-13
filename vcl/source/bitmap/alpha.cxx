@@ -80,29 +80,6 @@ void AlphaMask::Erase( sal_uInt8 cTransparency )
     Bitmap::Erase( Color( cTransparency, cTransparency, cTransparency ) );
 }
 
-void AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
-{
-    Bitmap::ScopedReadAccess pMaskAcc( const_cast<Bitmap&>(rMask) );
-    AlphaScopedWriteAccess pAcc(*this);
-
-    if( !(pMaskAcc && pAcc) )
-        return;
-
-    const BitmapColor   aReplace( cReplaceTransparency );
-    const tools::Long          nWidth = std::min( pMaskAcc->Width(), pAcc->Width() );
-    const tools::Long          nHeight = std::min( pMaskAcc->Height(), pAcc->Height() );
-    const BitmapColor   aMaskWhite( pMaskAcc->GetBestMatchingColor( COL_WHITE ) );
-
-    for( tools::Long nY = 0; nY < nHeight; nY++ )
-    {
-        Scanline pScanline = pAcc->GetScanline(nY);
-        Scanline pScanlineMask = pMaskAcc->GetScanline(nY);
-        for( tools::Long nX = 0; nX < nWidth; nX++ )
-            if( pMaskAcc->GetPixelFromData( pScanlineMask, nX ) == aMaskWhite )
-                pAcc->SetPixelOnData( pScanline, nX, aReplace );
-    }
-}
-
 void AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency )
 {
     AlphaScopedWriteAccess pAcc(*this);
