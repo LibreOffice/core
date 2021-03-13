@@ -3928,6 +3928,7 @@ void SalInstanceTreeView::select(int pos)
     else
     {
         SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+        assert(pEntry && "bad pos?");
         m_xTreeView->Select(pEntry, true);
         m_xTreeView->MakeVisible(pEntry);
     }
