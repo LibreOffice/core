@@ -16,6 +16,24 @@
       "revId": "9c94514f4fcc600623e19ecb092d6d1da08a7303",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "571c3a07_95be2ab8",
+        "filename": "starmath/inc/nodetype.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-03-13T18:24:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6330ab39_ead29fd3",
+      "revId": "9c94514f4fcc600623e19ecb092d6d1da08a7303",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
