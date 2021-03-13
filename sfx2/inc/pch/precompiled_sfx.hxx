@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:18:28 using:
+ Generated on 2021-03-13 10:18:34 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -96,7 +96,6 @@
 #include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/ctrl.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/dllapi.h>
@@ -139,6 +138,7 @@
 #include <basic/sberrors.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbxdef.hxx>
+#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:12:08 using:
+ Generated on 2021-03-13 10:17:45 using:
  ./bin/update_pch chart2 chartcontroller --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -91,6 +91,8 @@
 #include <vcl/GraphicAttributes.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <vcl/IDialogRenderable.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate/Animation.hxx>
@@ -100,11 +102,13 @@
 #include <vcl/builderpage.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
+#include <vcl/ctrl.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dockwin.hxx>
 #include <vcl/errcode.hxx>
+#include <vcl/event.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
@@ -127,6 +131,8 @@
 #include <vcl/syswin.hxx>
 #include <vcl/task.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/toolbox.hxx>
+#include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
@@ -163,7 +169,6 @@
 #include <chartview/ChartSfxItemIds.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
-#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
@@ -179,7 +184,6 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertySetOption.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
@@ -255,6 +259,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>

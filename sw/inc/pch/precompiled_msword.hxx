@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:19:31 using:
+ Generated on 2021-03-13 10:18:49 using:
  ./bin/update_pch sw msword --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -125,21 +125,25 @@
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
+#include <vcl/event.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/task.hxx>
 #include <vcl/timer.hxx>
@@ -193,12 +197,12 @@
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/document/EventObject.hpp>
@@ -234,6 +238,7 @@
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -246,6 +251,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
@@ -259,6 +265,7 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
 #include <com/sun/star/uno/XAggregation.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
@@ -352,7 +359,9 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <o3tl/unit_conversion.hxx>
-#include <ooo/vba/word/WdSaveFormat.hpp>
+#include <ooo/vba/XHelperInterface.hpp>
+#include <ooo/vba/word/XListFormat.hpp>
+#include <ooo/vba/word/XListTemplate.hpp>
 #include <oox/dllapi.h>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/export/utils.hxx>
@@ -502,6 +511,9 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
+#include <vbahelper/vbadllapi.h>
+#include <vbahelper/vbahelper.hxx>
+#include <vbahelper/vbahelperinterface.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <BorderCacheOwner.hxx>

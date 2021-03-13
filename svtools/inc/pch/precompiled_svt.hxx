@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:18:38 using:
+ Generated on 2021-03-13 10:18:35 using:
  ./bin/update_pch svtools svt --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -101,6 +101,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/dockwin.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fntstyle.hxx>
@@ -156,8 +157,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
-#include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/awt/XUnitConversion.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -167,7 +166,6 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertySetOption.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
@@ -236,7 +234,6 @@
 #include <comphelper/propertycontainerhelper.hxx>
 #include <comphelper/propstate.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppu/cppudllapi.h>
@@ -249,7 +246,6 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
@@ -274,7 +270,6 @@
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
-#include <toolkit/dllapi.h>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
