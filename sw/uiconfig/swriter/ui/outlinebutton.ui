@@ -5,13 +5,13 @@
   <object class="GtkImage" id="image3">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="icon-name">go-next</property>
+    <property name="icon-name">go-down</property>
     <property name="icon_size">1</property>
   </object>
   <object class="GtkImage" id="image5">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="icon-name">go-down</property>
+    <property name="icon-name">go-up</property>
     <property name="icon_size">1</property>
   </object>
   <object class="GtkBox" id="OutlineButton">
@@ -20,7 +20,7 @@
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <child>
-      <object class="GtkButton" id="right">
+      <object class="GtkButton" id="show">
         <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
@@ -38,7 +38,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkButton" id="down">
+      <object class="GtkButton" id="hide">
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
