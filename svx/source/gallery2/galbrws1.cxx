@@ -312,11 +312,6 @@ weld::Widget* GalleryBrowser1::GetInitialFocusWidget()
         return mxThemes.get();
 }
 
-void GalleryBrowser1::GrabFocus()
-{
-    GetInitialFocusWidget()->grab_focus();
-}
-
 void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const GalleryHint& rGalleryHint = static_cast<const GalleryHint&>(rHint);

@@ -34,7 +34,6 @@ class impBufferDevice
 {
     OutputDevice& mrOutDev;
     VclPtr<VirtualDevice> mpContent;
-    VclPtr<VirtualDevice> mpMask;
     VclPtr<VirtualDevice> mpAlpha;
     tools::Rectangle maDestPixel;
 
@@ -45,7 +44,6 @@ public:
     void paint(double fTrans = 0.0);
     bool isVisible() const { return !maDestPixel.IsEmpty(); }
     VirtualDevice& getContent();
-    VirtualDevice& getMask();
     VirtualDevice& getTransparence();
 };
 } // end of namespace drawinglayer

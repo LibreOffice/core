@@ -239,56 +239,6 @@ tools::Long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize )
     return (mbStatus ? static_cast<tools::Long>(nSize - pStream->avail_out) : -1);
 }
 
-tools::Long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize )
-{
-    int err = 0;
-    size_t nInToRead;
-
-    if ( mbFinish )
-        return 0;           // pStream->total_out;
-
-    if (meState == STATE_INIT)
-    {
-        InitDecompress(rIStm);
-    }
-    auto pStream = static_cast<z_stream*>(mpsC_Stream);
-    pStream->avail_out = nSize;
-    pStream->next_out = pData;
-    do
-    {
-        if ( pStream->avail_in == 0 && mnInToRead )
-        {
-            nInToRead = std::min(mnInBufSize, mnInToRead);
-
-            sal_uInt32 const nRemaining = rIStm.remainingSize();
-            if (nRemaining < nInToRead)
-            {
-                rIStm.SetError( ERRCODE_IO_PENDING );
-                err= int(!Z_STREAM_END); // TODO What is appropriate code for this?
-                break;
-            }
-
-            pStream->next_in = mpInBuf;
-            pStream->avail_in = rIStm.ReadBytes(mpInBuf, nInToRead);
-            mnInToRead -= nInToRead;
-        }
-        err = mbStatus ? inflate(pStream, Z_NO_FLUSH) : Z_ERRNO;
-        if ( err < 0 )
-        {
-            // Accept Z_BUF_ERROR as EAGAIN or EWOULDBLOCK.
-            mbStatus = (err == Z_BUF_ERROR);
-            break;
-        }
-    }
-    while ( (err == Z_OK) &&
-            (pStream->avail_out != 0) &&
-            (pStream->avail_in || mnInToRead) );
-    if ( err == Z_STREAM_END )
-        mbFinish = true;
-
-    return (mbStatus ? static_cast<tools::Long>(nSize - pStream->avail_out) : -1);
-}
-
 void ZCodec::ImplWriteBack()
 {
     auto pStream = static_cast<z_stream*>(mpsC_Stream);
@@ -300,17 +250,6 @@ void ZCodec::ImplWriteBack()
         mpOStm->WriteBytes( mpOutBuf, nAvail );
         pStream->avail_out = mnOutBufSize;
     }
-}
-
-void ZCodec::SetBreak( size_t nInToRead )
-{
-    mnInToRead = nInToRead;
-}
-
-size_t ZCodec::GetBreak() const
-{
-    auto pStream = static_cast<z_stream*>(mpsC_Stream);
-    return ( mnInToRead + pStream->avail_in );
 }
 
 void ZCodec::InitCompress()

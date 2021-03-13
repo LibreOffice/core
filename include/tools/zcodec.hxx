@@ -68,10 +68,6 @@ public:
 
     void            Write( SvStream& rOStm, const sal_uInt8* pData, sal_uInt32 nSize );
     tools::Long            Read( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize );
-    tools::Long            ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize );
-
-    void            SetBreak( size_t );
-    size_t          GetBreak() const;
 };
 
 #endif
