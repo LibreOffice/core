@@ -705,7 +705,7 @@ void SwMailMergeConfigItem::stopDBChangeListening()
 
 void SwMailMergeConfigItem::updateCurrentDBDataFromDocument()
 {
-    const SwDBData& rDBData = m_pSourceView->GetWrtShell().GetDBDesc();
+    const SwDBData& rDBData = m_pSourceView->GetWrtShell().GetDBData();
     SetCurrentDBData(rDBData);
 }
 

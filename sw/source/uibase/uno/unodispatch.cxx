@@ -242,7 +242,7 @@ void SwXDispatch::dispatch(const util::URL& aURL,
         frame::FeatureStateEvent aEvent;
         aEvent.Source = *static_cast<cppu::OWeakObject*>(this);
 
-        const SwDBData& rData = m_pView->GetWrtShell().GetDBDesc();
+        const SwDBData& rData = m_pView->GetWrtShell().GetDBData();
         svx::ODataAccessDescriptor aDescriptor;
         aDescriptor.setDataSource(rData.sDataSource);
         aDescriptor[svx::DataAccessDescriptorProperty::Command]       <<= rData.sCommand;
@@ -288,7 +288,7 @@ void SwXDispatch::addStatusListener(
     // one of the URLs requires a special state...
     if (aURL.Complete == cURLDocumentDataSource)
     {
-        const SwDBData& rData = m_pView->GetWrtShell().GetDBDesc();
+        const SwDBData& rData = m_pView->GetWrtShell().GetDBData();
 
         svx::ODataAccessDescriptor aDescriptor;
         aDescriptor.setDataSource(rData.sDataSource);
