@@ -30,10 +30,10 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertNeutralParagraph"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberingStart"/>
+ <toolbar:toolbaritem xlink:href=".uno:ContinueNumbering"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:JumpDownThisLevel" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:JumpUpThisLevel" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:ContinueNumbering" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultBullet" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering" toolbar:visible="false"/>
