@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <mutex>
 #include <vector>
 #include <unordered_map>
 
@@ -103,7 +104,7 @@ namespace cppu_threadpool {
         void join();
 
         void remove_locked( rtl::Reference< ORequestThread > const & );
-        ::osl::Mutex m_mutex;
+        ::std::mutex m_mutex;
 
     private:
         std::deque< rtl::Reference< ORequestThread > > m_deque;
@@ -147,9 +148,9 @@ namespace cppu_threadpool {
 
 
         ThreadIdHashMap m_mapQueue;
-        ::osl::Mutex m_mutex;
+        ::std::mutex m_mutex;
 
-        ::osl::Mutex m_mutexWaitingThreadList;
+        ::std::mutex m_mutexWaitingThreadList;
         WaitingThreadDeque m_dequeThreads;
 
         DisposedCallerAdminHolder m_DisposedCallerAdmin;
