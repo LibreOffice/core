@@ -125,7 +125,7 @@ public:
     Mutex maMutex;
 };
 
-class AnimationNode : public AnimationNodeBase
+class AnimationNode final : public AnimationNodeBase
 {
 public:
     explicit AnimationNode(sal_Int16 nNodeType);
