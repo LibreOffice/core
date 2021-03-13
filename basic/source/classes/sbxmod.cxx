@@ -1122,7 +1122,7 @@ void SbModule::Run( SbMethod* pMeth )
             if( bDelInst )
             {
                 // Compare here with 1 instead of 0, because before nCallLvl--
-                while (pSbData->pInst->nCallLvl != 1)
+                while (pSbData->pInst->nCallLvl != 1 && !Application::IsQuit())
                     Application::Yield();
             }
 
