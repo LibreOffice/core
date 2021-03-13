@@ -1188,7 +1188,7 @@ void SystemWindow::ensureRepaint()
     Invalidate();
     mbPaintComplete = false;
 
-    while (!mbPaintComplete)
+    while (!mbPaintComplete && !Application::IsQuit())
     {
         Application::Yield();
     }
