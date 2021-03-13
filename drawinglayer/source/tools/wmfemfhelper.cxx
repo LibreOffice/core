@@ -676,7 +676,7 @@ namespace wmfemfhelper
         aBiLevelPalette[1] = rMaskColor;
 
         Bitmap aMask(rBitmap.CreateMask(aWhite));
-        Bitmap aSolid(rBitmap.GetSizePixel(), 1, &aBiLevelPalette);
+        Bitmap aSolid(rBitmap.GetSizePixel(), vcl::PixelFormat::N1_BPP, &aBiLevelPalette);
 
         aSolid.Erase(rMaskColor);
 

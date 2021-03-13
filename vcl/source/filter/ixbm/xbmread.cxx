@@ -330,7 +330,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
 
                         if ( bStatus && nWidth && nHeight )
                         {
-                            aBmp1 = Bitmap( Size( nWidth, nHeight ), 1 );
+                            aBmp1 = Bitmap(Size(nWidth, nHeight), vcl::PixelFormat::N1_BPP);
                             pAcc1 = BitmapScopedWriteAccess(aBmp1);
 
                             if( pAcc1 )
@@ -349,7 +349,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
 
         if (bStatus && pAcc1)
         {
-            Bitmap aBlackBmp( Size( pAcc1->Width(), pAcc1->Height() ), 1 );
+            Bitmap aBlackBmp(Size(pAcc1->Width(), pAcc1->Height()), vcl::PixelFormat::N1_BPP);
 
             pAcc1.reset();
             aBlackBmp.Erase( COL_BLACK );

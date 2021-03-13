@@ -304,7 +304,7 @@ SgaObjectSound::SgaObjectSound( const INetURLObject& rURL ) :
     if( FileExists( rURL ) )
     {
         aURL = rURL;
-        aThumbBmp = Bitmap( Size( 1, 1 ), 1 );
+        aThumbBmp = Bitmap(Size(1, 1), vcl::PixelFormat::N1_BPP);
         bIsValid = true;
     }
     else

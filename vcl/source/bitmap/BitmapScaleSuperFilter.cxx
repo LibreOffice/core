@@ -882,11 +882,15 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
     {
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
 
-        sal_uInt16 nSourceBitcount = aBitmap.GetBitCount();
+        // If source format is less than 24BPP, use 24BPP
+        auto eSourcePixelFormat = aBitmap.getPixelFormat();
+        auto ePixelFormat = eSourcePixelFormat;
+        if (sal_uInt16(eSourcePixelFormat) < 24)
+            ePixelFormat = vcl::PixelFormat::N24_BPP;
 
-        Bitmap aOutBmp(Size(nDstW, nDstH), std::max(nSourceBitcount, sal_uInt16(24)));
+        Bitmap aOutBmp(Size(nDstW, nDstH), ePixelFormat);
         Size aOutSize = aOutBmp.GetSizePixel();
-        sal_uInt16 nTargetBitcount = aOutBmp.GetBitCount();
+        auto eTargetPixelFormat = aOutBmp.getPixelFormat();
 
         if (!aOutSize.Width() || !aOutSize.Height())
         {
@@ -932,7 +936,7 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
             // the capabilities of the backend. If for some reason the destination
             // is not the same bit-depth as the source, then we can't use
             // a fast path, so we always need to process with a general scaler.
-            else if (nSourceBitcount != nTargetBitcount)
+            else if (eSourcePixelFormat != eTargetPixelFormat)
             {
                 pScaleRangeFn = bScaleUp ? scaleUpNonPaletteGeneral : scaleDownNonPaletteGeneral;
             }

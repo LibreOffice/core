@@ -473,7 +473,7 @@ public:
         device->SetOutputSizePixel(Size(16, 16));
         device->SetBackground(Wallpaper(COL_WHITE));
         device->Erase();
-        Bitmap aBitmap(Size(16, 16), 24);
+        Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
         {
             // Fill the top left quarter with black.
             BitmapScopedWriteAccess pWriteAccess(aBitmap);
@@ -719,7 +719,7 @@ public:
         device->SetOutputSizePixel(Size(10, 10));
         device->SetBackground(Wallpaper(COL_WHITE));
         device->Erase();
-        Bitmap bitmap(Size(5, 5), 24);
+        Bitmap bitmap(Size(5, 5), vcl::PixelFormat::N24_BPP);
         bitmap.Erase(COL_BLUE);
         // No alpha, this will actually call SalGraphics::DrawBitmap(), but still check
         // the alpha of the device is handled correctly.
@@ -776,7 +776,7 @@ public:
         alphaDevice->SetOutputSizePixel(Size(20, 20));
         alphaDevice->SetBackground(Wallpaper(COL_BLACK));
         alphaDevice->Erase();
-        Bitmap bitmap(Size(4, 4), 24);
+        Bitmap bitmap(Size(4, 4), vcl::PixelFormat::N24_BPP);
         AlphaMask alpha(Size(4, 4));
         bitmap.Erase(COL_LIGHTBLUE);
         {
@@ -867,7 +867,7 @@ public:
         device->SetOutputSizePixel(Size(10, 10));
         device->SetBackground(Wallpaper(COL_WHITE));
         device->Erase();
-        Bitmap bitmap(Size(10, 10), 24);
+        Bitmap bitmap(Size(10, 10), vcl::PixelFormat::N24_BPP);
         bitmap.Erase(COL_BLUE);
         basegfx::B2DHomMatrix matrix;
         matrix.scale(bitmap.GetSizePixel().Width(),

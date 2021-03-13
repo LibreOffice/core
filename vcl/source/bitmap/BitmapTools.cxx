@@ -121,11 +121,14 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
     @param nStride
     The number of bytes in a scanline, must >= (width * nBitCount / 8)
 */
-BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int32 nStride, sal_uInt16 nBitCount )
+BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int32 nStride, vcl::PixelFormat ePixelFormat)
 {
+    auto nBitCount = sal_uInt16(ePixelFormat);
+
     assert(nStride >= (nWidth * nBitCount / 8));
-    assert( nBitCount == 1 || nBitCount == 24 || nBitCount == 32);
-    Bitmap aBmp( Size( nWidth, nHeight ), nBitCount );
+    assert(nBitCount == 1 || nBitCount == 24 || nBitCount == 32);
+
+    Bitmap aBmp(Size(nWidth, nHeight), ePixelFormat);
 
     BitmapScopedWriteAccess pWrite(aBmp);
     assert(pWrite.get());
@@ -188,7 +191,17 @@ BitmapEx CreateFromData( RawBitmap&& rawBitmap )
 {
     auto nBitCount = rawBitmap.GetBitCount();
     assert( nBitCount == 24 || nBitCount == 32);
-    Bitmap aBmp( rawBitmap.maSize, nBitCount );
+
+    auto ePixelFormat = vcl::PixelFormat::INVALID;
+
+    if (nBitCount == 24)
+        ePixelFormat = vcl::PixelFormat::N24_BPP;
+    else if (nBitCount == 32)
+        ePixelFormat = vcl::PixelFormat::N32_BPP;
+
+    assert(ePixelFormat != vcl::PixelFormat::INVALID);
+
+    Bitmap aBmp(rawBitmap.maSize, ePixelFormat);
 
     BitmapScopedWriteAccess pWrite(aBmp);
     assert(pWrite.get());
@@ -255,7 +268,7 @@ BitmapEx* CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)
     cairo_set_operator( pCairo, CAIRO_OPERATOR_SOURCE );
     cairo_paint( pCairo );
 
-    ::Bitmap aRGB( aSize, 24 );
+    Bitmap aRGB(aSize, vcl::PixelFormat::N24_BPP);
     ::AlphaMask aMask( aSize );
 
     BitmapScopedWriteAccess pRGBWrite(aRGB);
@@ -382,7 +395,7 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
     if( aDestBmpSize.IsEmpty() )
         return BitmapEx();
 
-    Bitmap aDstBitmap( aDestBmpSize, aSrcBitmap.GetBitCount(), &pReadAccess->GetPalette() );
+    Bitmap aDstBitmap(aDestBmpSize, aSrcBitmap.getPixelFormat(), &pReadAccess->GetPalette());
     Bitmap aDstAlpha( AlphaMask( aDestBmpSize ).GetBitmap() );
 
     {
@@ -964,7 +977,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
         aPalette[0] = BitmapColor(aColorBack);
         aPalette[1] = BitmapColor(aColorPix);
 
-        Bitmap aBitmap(Size(8, 8), 1, &aPalette);
+        Bitmap aBitmap(Size(8, 8), vcl::PixelFormat::N1_BPP, &aPalette);
         BitmapScopedWriteAccess pContent(aBitmap);
 
         for(sal_uInt16 a(0); a < 8; a++)
@@ -1071,7 +1084,7 @@ bool convertBitmap32To24Plus8(BitmapEx const & rInput, BitmapEx & rResult)
         return false;
 
     Size aSize = aBitmap.GetSizePixel();
-    Bitmap aResultBitmap(aSize, 24);
+    Bitmap aResultBitmap(aSize, vcl::PixelFormat::N24_BPP);
     AlphaMask aResultAlpha(aSize);
     {
         BitmapScopedWriteAccess pResultBitmapAccess(aResultBitmap);

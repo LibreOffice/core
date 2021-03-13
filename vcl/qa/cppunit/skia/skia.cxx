@@ -73,7 +73,7 @@ void SkiaTest::testBitmapErase()
 {
     if (!SkiaHelper::isVCLSkiaEnabled())
         return;
-    Bitmap bitmap(Size(10, 10), 24);
+    Bitmap bitmap(Size(10, 10), vcl::PixelFormat::N24_BPP);
     SkiaSalBitmap* skiaBitmap = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
     CPPUNIT_ASSERT(skiaBitmap);
     // Uninitialized bitmap.
@@ -106,7 +106,7 @@ void SkiaTest::testDrawShaders()
     device->SetOutputSizePixel(Size(20, 20));
     device->SetBackground(Wallpaper(COL_WHITE));
     device->Erase();
-    Bitmap bitmap(Size(10, 10), 24);
+    Bitmap bitmap(Size(10, 10), vcl::PixelFormat::N24_BPP);
     bitmap.Erase(COL_RED);
     SkiaSalBitmap* skiaBitmap = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
     CPPUNIT_ASSERT(skiaBitmap->PreferSkShader());
@@ -149,7 +149,7 @@ void SkiaTest::testDrawShaders()
     deviceLarge->SetOutputSizePixel(Size(200, 200));
     deviceLarge->SetBackground(Wallpaper(COL_WHITE));
     deviceLarge->Erase();
-    Bitmap bitmapLarge(Size(100, 100), 24);
+    Bitmap bitmapLarge(Size(100, 100), vcl::PixelFormat::N24_BPP);
     bitmapLarge.Erase(COL_RED);
     SkiaSalBitmap* skiaBitmapLarge
         = dynamic_cast<SkiaSalBitmap*>(bitmapLarge.ImplGetSalBitmap().get());
@@ -184,7 +184,7 @@ void SkiaTest::testInterpretAs8Bit()
 {
     if (!SkiaHelper::isVCLSkiaEnabled())
         return;
-    Bitmap bitmap(Size(10, 10), 24);
+    Bitmap bitmap(Size(10, 10), vcl::PixelFormat::N24_BPP);
     // Test with erase color.
     bitmap.Erase(Color(33, 33, 33));
     SkiaSalBitmap* skiaBitmap = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
@@ -197,7 +197,7 @@ void SkiaTest::testInterpretAs8Bit()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(33), BitmapReadAccess(bitmap).GetPixelIndex(0, 0));
 
     // Test with image.
-    bitmap = Bitmap(Size(10, 10), 24);
+    bitmap = Bitmap(Size(10, 10), vcl::PixelFormat::N24_BPP);
     bitmap.Erase(Color(34, 34, 34));
     BitmapReadAccess(bitmap).GetColor(0, 0); // Create pixel data, reset erase color.
     skiaBitmap = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
@@ -217,7 +217,7 @@ void SkiaTest::testAlphaBlendWith()
     if (!SkiaHelper::isVCLSkiaEnabled())
         return;
     AlphaMask alpha(Size(10, 10));
-    Bitmap bitmap(Size(10, 10), 24);
+    Bitmap bitmap(Size(10, 10), vcl::PixelFormat::N24_BPP);
     // Test with erase colors set.
     alpha.Erase(64);
     SkiaSalBitmap* skiaAlpha = dynamic_cast<SkiaSalBitmap*>(alpha.ImplGetSalBitmap().get());

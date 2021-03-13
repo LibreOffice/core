@@ -22,7 +22,7 @@ BitmapEx BitmapMonochromeFilter::execute(BitmapEx const& aBitmapEx) const
 
     if (pReadAcc)
     {
-        Bitmap aNewBmp(aBitmap.GetSizePixel(), 1);
+        Bitmap aNewBmp(aBitmap.GetSizePixel(), vcl::PixelFormat::N1_BPP);
         BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
         if (pWriteAcc)

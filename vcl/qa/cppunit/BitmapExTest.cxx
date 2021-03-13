@@ -34,7 +34,7 @@ class BitmapExTest : public CppUnit::TestFixture
 
 void BitmapExTest::testGetPixelColor24_8()
 {
-    Bitmap aBitmap(Size(3, 3), 24);
+    Bitmap aBitmap(Size(3, 3), vcl::PixelFormat::N24_BPP);
     {
         BitmapScopedWriteAccess pWriteAccess(aBitmap);
         pWriteAccess->Erase(Color(ColorTransparency, 0x00, 0x00, 0xFF, 0x00));
@@ -59,7 +59,7 @@ void BitmapExTest::testGetPixelColor32()
     if (!pBackendCapabilities->mbSupportsBitmap32)
         return;
 
-    Bitmap aBitmap(Size(3, 3), 32);
+    Bitmap aBitmap(Size(3, 3), vcl::PixelFormat::N32_BPP);
     {
         BitmapScopedWriteAccess pWriteAccess(aBitmap);
         pWriteAccess->Erase(Color(ColorTransparency, 0xAA, 0x00, 0xFF, 0x00));
@@ -73,7 +73,7 @@ void BitmapExTest::testGetPixelColor32()
 
 void BitmapExTest::testTransformBitmapEx()
 {
-    Bitmap aBitmap(Size(16, 16), 24);
+    Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
     {
         BitmapScopedWriteAccess pWriteAccess(aBitmap);
         pWriteAccess->Erase(COL_WHITE);

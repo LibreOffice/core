@@ -114,7 +114,7 @@ std::unique_ptr<XFBGImage> LwpBackgroundStuff::GetFillPattern()
     GetPattern(m_nID, aPttnArray);
 
     // create bitmap object from the pattern array
-    BitmapEx aBmp = vcl::bitmap::CreateFromData(aPttnArray, 8, 8, 1, 1);
+    BitmapEx aBmp = vcl::bitmap::CreateFromData(aPttnArray, 8, 8, 1, vcl::PixelFormat::N1_BPP);
 
     // create XOBitmap object from bitmap object
     XOBitmap aXOBitmap(aBmp);

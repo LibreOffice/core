@@ -44,7 +44,7 @@ BitmapEx BitmapFastScaleFilter::execute(BitmapEx const& rBitmapEx) const
 
         if (pReadAcc)
         {
-            Bitmap aNewBmp(Size(nNewWidth, nNewHeight), aBitmap.GetBitCount(),
+            Bitmap aNewBmp(Size(nNewWidth, nNewHeight), aBitmap.getPixelFormat(),
                            &pReadAcc->GetPalette());
             BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 

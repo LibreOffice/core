@@ -946,7 +946,7 @@ BitmapChecksum PDFiumPageImpl::getChecksum(int nMDPPerm)
     FPDF_RenderPageBitmap(pPdfBitmap->getPointer(), mpPage, /*start_x=*/0, /*start_y=*/0,
                           nPageWidth, nPageHeight,
                           /*rotate=*/0, nFlags);
-    Bitmap aBitmap(Size(nPageWidth, nPageHeight), 24);
+    Bitmap aBitmap(Size(nPageWidth, nPageHeight), vcl::PixelFormat::N24_BPP);
     {
         BitmapScopedWriteAccess pWriteAccess(aBitmap);
         const auto pPdfBuffer

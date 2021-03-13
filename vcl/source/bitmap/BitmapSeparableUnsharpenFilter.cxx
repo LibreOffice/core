@@ -33,7 +33,7 @@ BitmapEx BitmapSeparableUnsharpenFilter::execute(BitmapEx const& rBitmapEx) cons
     // Amount of unsharpening effect on image - currently set to a fixed value
     double aAmount = 2.0;
 
-    Bitmap aResultBitmap(Size(nWidth, nHeight), 24);
+    Bitmap aResultBitmap(Size(nWidth, nHeight), vcl::PixelFormat::N24_BPP);
 
     Bitmap::ScopedReadAccess pReadAccBlur(aBlur);
     Bitmap::ScopedReadAccess pReadAcc(aBitmap);

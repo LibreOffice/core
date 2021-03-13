@@ -147,7 +147,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
         pData = aMapInfo.data;
 
         int nStride = GST_ROUND_UP_4( nWidth * 3 );
-        BitmapEx aBmp = vcl::bitmap::CreateFromData(pData, nWidth, nHeight, nStride, 24 );
+        BitmapEx aBmp = vcl::bitmap::CreateFromData(pData, nWidth, nHeight, nStride, vcl::PixelFormat::N24_BPP);
 
         gst_buffer_unmap( pBuf, &aMapInfo );
         xRet = Graphic( aBmp ).GetXGraphic();

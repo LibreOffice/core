@@ -18,7 +18,7 @@ namespace vcl::test {
 Bitmap OutputDeviceTestBitmap::setupDrawTransformedBitmap()
 {
     Size aBitmapSize(9, 9);
-    Bitmap aBitmap(aBitmapSize, 24);
+    Bitmap aBitmap(aBitmapSize, vcl::PixelFormat::N24_BPP);
     {
         BitmapScopedWriteAccess aWriteAccess(aBitmap);
         aWriteAccess->Erase(constFillColor);
@@ -43,7 +43,7 @@ Bitmap OutputDeviceTestBitmap::setupDrawTransformedBitmap()
 Bitmap OutputDeviceTestBitmap::setupDrawBitmap()
 {
     Size aBitmapSize(9, 9);
-    Bitmap aBitmap(aBitmapSize, 24);
+    Bitmap aBitmap(aBitmapSize, vcl::PixelFormat::N24_BPP);
     {
         BitmapScopedWriteAccess aWriteAccess(aBitmap);
         aWriteAccess->Erase(constFillColor);
@@ -65,7 +65,7 @@ Bitmap OutputDeviceTestBitmap::setupDrawBitmap()
 Bitmap OutputDeviceTestBitmap::setupDrawBitmapExWithAlpha()
 {
     Size aBitmapSize(9, 9);
-    Bitmap aBitmap(aBitmapSize, 24);
+    Bitmap aBitmap(aBitmapSize, vcl::PixelFormat::N24_BPP);
     {
         BitmapScopedWriteAccess aWriteAccess(aBitmap);
         aWriteAccess->Erase(COL_WHITE);
@@ -95,7 +95,7 @@ Bitmap OutputDeviceTestBitmap::setupDrawBitmapExWithAlpha()
 Bitmap OutputDeviceTestBitmap::setupDrawMask()
 {
     Size aBitmapSize(9, 9);
-    Bitmap aBitmap(aBitmapSize, 24);
+    Bitmap aBitmap(aBitmapSize, vcl::PixelFormat::N24_BPP);
     {
         BitmapScopedWriteAccess aWriteAccess(aBitmap);
         aWriteAccess->Erase(COL_WHITE);
@@ -114,7 +114,7 @@ Bitmap OutputDeviceTestBitmap::setupDrawMask()
 BitmapEx OutputDeviceTestBitmap::setupDrawBlend()
 {
     Size aBitmapSize(9, 9);
-    Bitmap aBitmap(aBitmapSize, 24);
+    Bitmap aBitmap(aBitmapSize, vcl::PixelFormat::N24_BPP);
     {
         BitmapScopedWriteAccess aWriteAccess(aBitmap);
         aWriteAccess->Erase(COL_WHITE);

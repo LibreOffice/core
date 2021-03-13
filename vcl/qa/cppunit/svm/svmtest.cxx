@@ -939,17 +939,17 @@ void SvmTest::testBitmaps()
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
     setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
-    Bitmap aBitmap1(Size(4,4), 24);
+    Bitmap aBitmap1(Size(4,4), vcl::PixelFormat::N24_BPP);
     {
         BitmapScopedWriteAccess pAccess(aBitmap1);
         pAccess->Erase(COL_RED);
     }
-    Bitmap aBitmap2(Size(4,4), 24);
+    Bitmap aBitmap2(Size(4,4), vcl::PixelFormat::N24_BPP);
     {
         BitmapScopedWriteAccess pAccess(aBitmap2);
         pAccess->Erase(COL_GREEN);
     }
-    Bitmap aBitmap3(Size(4,4), 24);
+    Bitmap aBitmap3(Size(4,4), vcl::PixelFormat::N24_BPP);
     {
         BitmapScopedWriteAccess pAccess(aBitmap3);
         pAccess->Erase(COL_BLUE);
@@ -1030,7 +1030,7 @@ void SvmTest::testBitmapExs()
 
     // DrawBitmapEx
     {
-        Bitmap aBitmap(Size(4,4), 24);
+        Bitmap aBitmap(Size(4,4), vcl::PixelFormat::N24_BPP);
         {
             BitmapScopedWriteAccess pAccess(aBitmap);
             pAccess->Erase(COL_YELLOW);
@@ -1041,7 +1041,7 @@ void SvmTest::testBitmapExs()
 
     // DrawBitmapEx - Scale
     {
-        Bitmap aBitmap(Size(4,4), 24);
+        Bitmap aBitmap(Size(4,4), vcl::PixelFormat::N24_BPP);
         {
             BitmapScopedWriteAccess pAccess(aBitmap);
             pAccess->Erase(COL_GREEN);
@@ -1051,7 +1051,7 @@ void SvmTest::testBitmapExs()
 
     // DrawBitmapEx - Scale - Part
     {
-        Bitmap aBitmap(Size(4,4), 24);
+        Bitmap aBitmap(Size(4,4), vcl::PixelFormat::N24_BPP);
         {
             BitmapScopedWriteAccess pAccess(aBitmap);
             pAccess->Erase(COL_BLUE);
@@ -1061,7 +1061,7 @@ void SvmTest::testBitmapExs()
 
     // DrawBitmapEx - 50% transparent
     {
-        Bitmap aBitmap(Size(4, 4), 24);
+        Bitmap aBitmap(Size(4, 4), vcl::PixelFormat::N24_BPP);
         AlphaMask aAlpha(Size(4, 4));
         {
             BitmapScopedWriteAccess pAccess(aBitmap);
@@ -1075,7 +1075,7 @@ void SvmTest::testBitmapExs()
 
     // DrawBitmapEx - 1-bit
     {
-        Bitmap aBitmap(Size(2, 2), 24);
+        Bitmap aBitmap(Size(2, 2), vcl::PixelFormat::N24_BPP);
         {
             BitmapScopedWriteAccess pAccess(aBitmap);
             pAccess->Erase(COL_MAGENTA);
@@ -1086,7 +1086,7 @@ void SvmTest::testBitmapExs()
 
     // DrawBitmapEx - 4-bit
     {
-        Bitmap aBitmap(Size(2, 2), 24);
+        Bitmap aBitmap(Size(2, 2), vcl::PixelFormat::N24_BPP);
         {
             BitmapScopedWriteAccess pAccess(aBitmap);
             pAccess->Erase(COL_MAGENTA);
@@ -1097,7 +1097,7 @@ void SvmTest::testBitmapExs()
 
     // DrawBitmapEx - 8-bit Color
     {
-        Bitmap aBitmap(Size(2, 2), 24);
+        Bitmap aBitmap(Size(2, 2), vcl::PixelFormat::N24_BPP);
         {
             BitmapScopedWriteAccess pAccess(aBitmap);
             pAccess->Erase(COL_MAGENTA);
@@ -1108,7 +1108,7 @@ void SvmTest::testBitmapExs()
 
     // DrawBitmapEx - 8-bit Grey
     {
-        Bitmap aBitmap(Size(2, 2), 24);
+        Bitmap aBitmap(Size(2, 2), vcl::PixelFormat::N24_BPP);
         {
             BitmapScopedWriteAccess pAccess(aBitmap);
             pAccess->Erase(COL_MAGENTA);
@@ -1157,17 +1157,17 @@ void SvmTest::testMasks()
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
     setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
-    Bitmap aBitmap1(Size(4,4), 24);
+    Bitmap aBitmap1(Size(4,4), vcl::PixelFormat::N24_BPP);
     {
         BitmapScopedWriteAccess pAccess(aBitmap1);
         pAccess->Erase(COL_RED);
     }
-    Bitmap aBitmap2(Size(4,4), 24);
+    Bitmap aBitmap2(Size(4,4), vcl::PixelFormat::N24_BPP);
     {
         BitmapScopedWriteAccess pAccess(aBitmap2);
         pAccess->Erase(COL_GREEN);
     }
-    Bitmap aBitmap3(Size(4,4), 24);
+    Bitmap aBitmap3(Size(4,4), vcl::PixelFormat::N24_BPP);
     {
         BitmapScopedWriteAccess pAccess(aBitmap3);
         pAccess->Erase(COL_BLUE);

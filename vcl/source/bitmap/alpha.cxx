@@ -39,8 +39,8 @@ AlphaMask::AlphaMask( const AlphaMask& ) = default;
 
 AlphaMask::AlphaMask( AlphaMask&& ) = default;
 
-AlphaMask::AlphaMask( const Size& rSizePixel, const sal_uInt8* pEraseTransparency ) :
-    Bitmap( rSizePixel, 8, &Bitmap::GetGreyPalette( 256 ) )
+AlphaMask::AlphaMask( const Size& rSizePixel, const sal_uInt8* pEraseTransparency )
+    : Bitmap(rSizePixel, vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256))
 {
     if( pEraseTransparency )
         Bitmap::Erase( Color( *pEraseTransparency, *pEraseTransparency, *pEraseTransparency ) );

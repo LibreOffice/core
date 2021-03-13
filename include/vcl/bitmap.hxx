@@ -27,6 +27,7 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/region.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
+#include <vcl/bitmap/BitmapTypes.hxx>
 
 #include <o3tl/typed_flags_set.hxx>
 
@@ -114,7 +115,7 @@ public:
 
                             Bitmap();
                             Bitmap( const Bitmap& rBitmap );
-                            Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalette* pPal = nullptr );
+                            Bitmap( const Size& rSizePixel, vcl::PixelFormat ePixelFormat, const BitmapPalette* pPal = nullptr );
     explicit                Bitmap( std::shared_ptr<SalBitmap> const & xSalBitmap );
     virtual                 ~Bitmap();
 
@@ -135,6 +136,7 @@ public:
 
     Size                    GetSizePixel() const;
 
+    vcl::PixelFormat getPixelFormat() const;
     sal_uInt16              GetBitCount() const;
     inline sal_Int64        GetColorCount() const;
     inline sal_uLong        GetSizeBytes() const;
@@ -538,8 +540,8 @@ public:
     typedef vcl::ScopedBitmapAccess<BitmapInfoAccess, Bitmap, &Bitmap::AcquireInfoAccess> ScopedInfoAccess;
 
 private:
-    SAL_DLLPRIVATE bool ImplConvertUp(sal_uInt16 nBitCount, Color const* pExtColor = nullptr);
-    SAL_DLLPRIVATE bool ImplConvertDown(sal_uInt16 nBitCount, Color const* pExtColor = nullptr);
+    SAL_DLLPRIVATE bool ImplConvertUp(vcl::PixelFormat ePixelFormat, Color const* pExtColor = nullptr);
+    SAL_DLLPRIVATE bool ImplConvertDown(vcl::PixelFormat ePixelFormat, Color const* pExtColor = nullptr);
 
 private:
     std::shared_ptr<SalBitmap> mxSalBmp;

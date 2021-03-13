@@ -182,7 +182,7 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
                                      /*start_y=*/0, nPageWidth, nPageHeight);
 
         // Save the buffer as a bitmap.
-        Bitmap aBitmap(Size(nPageWidth, nPageHeight), 24);
+        Bitmap aBitmap(Size(nPageWidth, nPageHeight), vcl::PixelFormat::N24_BPP);
         AlphaMask aMask(Size(nPageWidth, nPageHeight));
         {
             BitmapScopedWriteAccess pWriteAccess(aBitmap);

@@ -193,23 +193,23 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                 if ( mbStatus )
                 {
                     // create a 24bit graphic when more as 256 colours present
-                    sal_uInt16  nBits = 1;
+                    auto ePixelFormat = vcl::PixelFormat::INVALID;
                     if ( mnColors > 256 )
-                        nBits = 24;
+                        ePixelFormat = vcl::PixelFormat::N24_BPP;
                     else if ( mnColors > 16 )
-                        nBits = 8;
+                        ePixelFormat = vcl::PixelFormat::N8_BPP;
                     else if ( mnColors > 2 )
-                        nBits = 4;
+                        ePixelFormat = vcl::PixelFormat::N4_BPP;
                     else
-                        nBits = 1;
+                        ePixelFormat = vcl::PixelFormat::N1_BPP;
 
-                    maBmp = Bitmap( Size( mnWidth, mnHeight ), nBits );
+                    maBmp = Bitmap(Size(mnWidth, mnHeight), ePixelFormat);
                     mpAcc = BitmapScopedWriteAccess(maBmp);
 
                     // mbTransparent is TRUE if at least one colour is transparent
                     if ( mbTransparent )
                     {
-                        maMaskBmp = Bitmap( Size( mnWidth, mnHeight ), 1 );
+                        maMaskBmp = Bitmap(Size(mnWidth, mnHeight), vcl::PixelFormat::N1_BPP);
                         mpMaskAcc = BitmapScopedWriteAccess(maMaskBmp);
                         if ( !mpMaskAcc )
                             mbStatus = false;

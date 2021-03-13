@@ -855,7 +855,7 @@ public:
             aRight.Crop(tools::Rectangle(Point((nSlice * 3) + 3, (nSlice * 2) + 1),
                                   Size(nSlice, 1)));
             AlphaMask aAlphaMask(aRight.GetBitmap());
-            Bitmap aBlockColor(aAlphaMask.GetSizePixel(), 24);
+            Bitmap aBlockColor(aAlphaMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
             aBlockColor.Erase(COL_RED);
             BitmapEx aShadowStretch(aBlockColor, aAlphaMask);
 
@@ -874,7 +874,7 @@ public:
             }
 
             AlphaMask aWholeMask(aPageShadowMask.GetBitmap());
-            aBlockColor = Bitmap(aPageShadowMask.GetSizePixel(), 24);
+            aBlockColor = Bitmap(aPageShadowMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
             aBlockColor.Erase(COL_GREEN);
             BitmapEx aWhole(aBlockColor, aWholeMask);
 
@@ -1300,7 +1300,7 @@ public:
             Bitmap aWhiteBmp = aWhite->GetBitmap(Point(),aSrc.GetSizePixel());
             Bitmap aBlackBmp = aBlack->GetBitmap(Point(),aSrc.GetSizePixel());
             AlphaMask aMask(aSrc.GetSizePixel());
-            Bitmap aRecovered(aSrc.GetSizePixel(), 24);
+            Bitmap aRecovered(aSrc.GetSizePixel(), vcl::PixelFormat::N24_BPP);
             {
                 AlphaScopedWriteAccess pMaskAcc(aMask);
                 BitmapScopedWriteAccess pRecAcc(aRecovered);

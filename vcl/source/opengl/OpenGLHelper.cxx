@@ -563,8 +563,8 @@ GLenum OpenGLHelper::OptimalBufferFormat()
 BitmapEx OpenGLHelper::ConvertBufferToBitmapEx(const sal_uInt8* const pBuffer, tools::Long nWidth, tools::Long nHeight)
 {
     assert(pBuffer);
-    Bitmap aBitmap( Size(nWidth, nHeight), 24 );
-    AlphaMask aAlpha( Size(nWidth, nHeight) );
+    Bitmap aBitmap(Size(nWidth, nHeight), vcl::PixelFormat::N24_BPP);
+    AlphaMask aAlpha(Size(nWidth, nHeight));
 
     {
         BitmapScopedWriteAccess pWriteAccess( aBitmap );

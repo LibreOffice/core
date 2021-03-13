@@ -49,7 +49,7 @@ public:
     explicit            BitmapEx( const OUString& rIconName );
                         BitmapEx( const BitmapEx& rBitmapEx );
                         BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize );
-                        BitmapEx( Size aSize, sal_uInt16 nBitCount );
+                        BitmapEx(Size aSize, vcl::PixelFormat ePixelFormat);
     explicit            BitmapEx( const Bitmap& rBmp );
                         BitmapEx( const Bitmap& rBmp, const Bitmap& rMask );
                         BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask );
@@ -90,7 +90,16 @@ public:
     const MapMode&      GetPrefMapMode() const { return maBitmap.GetPrefMapMode(); }
     void                SetPrefMapMode( const MapMode& rPrefMapMode ) { maBitmap.SetPrefMapMode( rPrefMapMode ); }
 
-    sal_uInt16          GetBitCount() const { return maBitmap.GetBitCount(); }
+    sal_uInt16          GetBitCount() const
+    {
+        return maBitmap.GetBitCount();
+    }
+
+    vcl::PixelFormat getPixelFormat() const
+    {
+        return maBitmap.getPixelFormat();
+    }
+
     sal_uLong           GetSizeBytes() const;
     BitmapChecksum      GetChecksum() const;
 

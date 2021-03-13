@@ -32,7 +32,7 @@ class BitmapProcessorTest : public CppUnit::TestFixture
 void BitmapProcessorTest::testDisabledImage()
 {
     {
-        Bitmap aBitmap(Size(3, 3), 24);
+        Bitmap aBitmap(Size(3, 3), vcl::PixelFormat::N24_BPP);
         {
             BitmapScopedWriteAccess pWriteAccess(aBitmap);
             pWriteAccess->Erase(Color(ColorTransparency, 0x00, 0x00, 0xFF, 0x00));
@@ -49,7 +49,7 @@ void BitmapProcessorTest::testDisabledImage()
     }
 
     {
-        Bitmap aBitmap(Size(3, 3), 24);
+        Bitmap aBitmap(Size(3, 3), vcl::PixelFormat::N24_BPP);
         {
             BitmapScopedWriteAccess pWriteAccess(aBitmap);
             pWriteAccess->Erase(Color(ColorTransparency, 0x00, 0x00, 0xFF, 0x00));

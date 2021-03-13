@@ -121,7 +121,7 @@ void BitmapScaleTest::testScale()
                               + scaleSize.destSize.toString() + "), method "
                               + OString::number(static_cast<int>(scaleMethod));
             fprintf(stderr, "%s\n", testStr.getStr());
-            Bitmap bitmap(scaleSize.srcSize, 24);
+            Bitmap bitmap(scaleSize.srcSize, vcl::PixelFormat::N24_BPP);
             {
                 // Fill each quarter of the source bitmap with a different color,
                 // and center with yet another color.
@@ -202,7 +202,7 @@ void BitmapScaleTest::testScale2()
 {
     const bool bExportBitmap(false);
 
-    Bitmap aBitmap24Bit(Size(4096, 4096), 24);
+    Bitmap aBitmap24Bit(Size(4096, 4096), vcl::PixelFormat::N24_BPP);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), aBitmap24Bit.GetBitCount());
     Color aBitmapColor = COL_YELLOW;
     {
@@ -273,7 +273,7 @@ void BitmapScaleTest::testScaleSymmetry()
 {
     const bool bExportBitmap(false);
 
-    Bitmap aBitmap24Bit(Size(10, 10), 24);
+    Bitmap aBitmap24Bit(Size(10, 10), vcl::PixelFormat::N24_BPP);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), aBitmap24Bit.GetBitCount());
 
     {

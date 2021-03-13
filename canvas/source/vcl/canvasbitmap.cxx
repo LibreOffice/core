@@ -39,10 +39,7 @@ namespace vclcanvas
     {
         // create bitmap for given reference device
         // ========================================
-        const sal_uInt16 nBitCount( sal_uInt16(24U) );
-        const BitmapPalette*    pPalette = nullptr;
-
-        Bitmap aBitmap( rSize, nBitCount, pPalette );
+        Bitmap aBitmap(rSize, vcl::PixelFormat::N24_BPP);
 
         // only create alpha channel bitmap, if factory requested
         // that. Providing alpha-channeled bitmaps by default has,

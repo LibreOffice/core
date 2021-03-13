@@ -322,7 +322,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
         {
             if ( mnDrawMode & ( DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap ) )
             {
-                Bitmap  aColorBmp( aBmpEx.GetSizePixel(), 1 );
+                Bitmap aColorBmp(aBmpEx.GetSizePixel(), vcl::PixelFormat::N1_BPP);
                 sal_uInt8   cCmpVal;
 
                 if ( mnDrawMode & DrawModeFlags::BlackBitmap )
@@ -1568,7 +1568,7 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
 
     if( GetBitCount() <= 8 )
     {
-        Bitmap              aDither( aBmp.GetSizePixel(), 8 );
+        Bitmap aDither(aBmp.GetSizePixel(), vcl::PixelFormat::N8_BPP);
         BitmapColor         aIndex( 0 );
         Bitmap::ScopedReadAccess pB(aBmp);
         BitmapScopedWriteAccess pW(aDither);
@@ -1661,7 +1661,7 @@ Bitmap OutputDevice::BlendBitmap(
 
     if( GetBitCount() <= 8 )
     {
-        Bitmap              aDither( aBmp.GetSizePixel(), 8 );
+        Bitmap aDither(aBmp.GetSizePixel(), vcl::PixelFormat::N8_BPP);
         BitmapColor         aIndex( 0 );
         Bitmap::ScopedReadAccess pB(aBmp);
         BitmapScopedWriteAccess pW(aDither);

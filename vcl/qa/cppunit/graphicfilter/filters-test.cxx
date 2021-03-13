@@ -92,7 +92,7 @@ void VclFiltersTest::testScaling()
 {
     for (BmpScaleFlag i = BmpScaleFlag::Default; i <= BmpScaleFlag::BiLinear; i = static_cast<BmpScaleFlag>(static_cast<int>(i) + 1))
     {
-        Bitmap aBitmap( Size( 413, 409 ), 24 );
+        Bitmap aBitmap(Size(413, 409), vcl::PixelFormat::N24_BPP);
         BitmapEx aBitmapEx( aBitmap );
 
         fprintf( stderr, "scale with type %d\n", int( i ) );
@@ -105,7 +105,7 @@ void VclFiltersTest::testScaling()
 
 void VclFiltersTest::checkExportImport(std::u16string_view aFilterShortName)
 {
-    Bitmap aBitmap( Size( 100, 100 ), 24 );
+    Bitmap aBitmap(Size(100, 100), vcl::PixelFormat::N24_BPP);
     aBitmap.Erase(COL_WHITE);
 
     SvMemoryStream aStream;

@@ -62,7 +62,7 @@ BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize )
     if( rBitmapEx.IsEmpty() )
         return;
 
-    maBitmap = Bitmap( aSize, rBitmapEx.maBitmap.GetBitCount() );
+    maBitmap = Bitmap(aSize, rBitmapEx.maBitmap.getPixelFormat());
     SetSizePixel(aSize);
     if( rBitmapEx.IsAlpha() )
     {
@@ -70,18 +70,18 @@ BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize )
         maMask = AlphaMask( aSize ).ImplGetBitmap();
     }
     else if( rBitmapEx.IsTransparent() )
-        maMask = Bitmap( aSize, rBitmapEx.maMask.GetBitCount() );
+        maMask = Bitmap(aSize, rBitmapEx.maMask.getPixelFormat());
 
     tools::Rectangle aDestRect( Point( 0, 0 ), aSize );
     tools::Rectangle aSrcRect( aSrc, aSize );
     CopyPixel( aDestRect, aSrcRect, &rBitmapEx );
 }
 
-BitmapEx::BitmapEx( Size aSize, sal_uInt16 nBitCount )
+BitmapEx::BitmapEx(Size aSize, vcl::PixelFormat ePixelFormat)
     : meTransparent(TransparentType::NONE)
     , mbAlpha(false)
 {
-    maBitmap = Bitmap( aSize, nBitCount );
+    maBitmap = Bitmap(aSize, ePixelFormat);
     SetSizePixel(aSize);
 }
 
@@ -383,7 +383,7 @@ bool BitmapEx::Rotate( Degree10 nAngle10, const Color& rFillColor )
 
             if( meTransparent == TransparentType::NONE )
             {
-                maMask = Bitmap(GetSizePixel(), 1);
+                maMask = Bitmap(GetSizePixel(), vcl::PixelFormat::N1_BPP);
                 maMask.Erase( COL_BLACK );
                 meTransparent = TransparentType::Bitmap;
             }
@@ -516,7 +516,7 @@ bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectang
                     }
                     else
                     {
-                        maMask = Bitmap(GetSizePixel(), 1);
+                        maMask = Bitmap(GetSizePixel(), vcl::PixelFormat::N1_BPP);
                         maMask.Erase(COL_BLACK);
                         meTransparent = TransparentType::Bitmap;
                         maMask.CopyPixel( rRectDst, rRectSrc, &pBmpExSrc->maMask );
@@ -531,7 +531,7 @@ bool BitmapEx::CopyPixel( const tools::Rectangle& rRectDst, const tools::Rectang
                 }
                 else if (IsTransparent())
                 {
-                    Bitmap aMaskSrc(pBmpExSrc->GetSizePixel(), 1);
+                    Bitmap aMaskSrc(pBmpExSrc->GetSizePixel(), vcl::PixelFormat::N1_BPP);
 
                     aMaskSrc.Erase( COL_BLACK );
                     maMask.CopyPixel( rRectDst, rRectSrc, &aMaskSrc );
@@ -779,7 +779,7 @@ namespace
         const basegfx::B2DHomMatrix& rTransform,
         bool bSmooth)
     {
-        Bitmap aDestination(rDestinationSize, 24);
+        Bitmap aDestination(rDestinationSize, vcl::PixelFormat::N24_BPP);
         BitmapScopedWriteAccess xWrite(aDestination);
 
         if(xWrite)
@@ -1006,7 +1006,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                         aNewPalette[0] = BitmapColor(Color(pReplace->getBColor()));
                         aChangedBitmap = Bitmap(
                             aChangedBitmap.GetSizePixel(),
-                            aChangedBitmap.GetBitCount(),
+                            aChangedBitmap.getPixelFormat(),
                             &aNewPalette);
                     }
                 }
@@ -1185,7 +1185,7 @@ BitmapEx createBlendFrame(
     if(nW > 1 && nH > 1)
     {
         sal_uInt8 aEraseTrans(0xff);
-        Bitmap aContent(rSize, 24);
+        Bitmap aContent(rSize, vcl::PixelFormat::N24_BPP);
         AlphaMask aAlpha(rSize, &aEraseTrans);
 
         aContent.Erase(COL_BLACK);

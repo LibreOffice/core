@@ -465,7 +465,7 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
             else
             {
                 // #104115# Generate mask bitmap and init to zero
-                Bitmap aMask( aBmpSize, 1 );
+                Bitmap aMask(aBmpSize, vcl::PixelFormat::N1_BPP);
                 aMask.Erase( Color(0,0,0) );
 
                 // #104115# Always generate transparent bitmap, we need the border transparent

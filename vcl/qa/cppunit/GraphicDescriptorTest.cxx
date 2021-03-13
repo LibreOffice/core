@@ -46,7 +46,7 @@ class GraphicDescriptorTest : public test::BootstrapFixtureBase
 
 BitmapEx createBitmap()
 {
-    Bitmap aBitmap(Size(100, 100), 24);
+    Bitmap aBitmap(Size(100, 100), vcl::PixelFormat::N24_BPP);
     aBitmap.Erase(COL_LIGHTRED);
 
     return BitmapEx(aBitmap);

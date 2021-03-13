@@ -108,7 +108,7 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
 
         const tools::Long nHeight(rSource.GetSizePixel().Height());
         ImplCalculateContributions(nWidth, nNewWidth, aNumberOfContributions, aWeights, aPixels, aCounts, aKernel);
-        rTarget = Bitmap(Size(nNewWidth, nHeight), 24);
+        rTarget = Bitmap(Size(nNewWidth, nHeight), vcl::PixelFormat::N24_BPP);
         BitmapScopedWriteAccess pWriteAcc(rTarget);
         bool bResult(pWriteAcc);
 
@@ -198,7 +198,7 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
 
         const tools::Long nWidth(rSource.GetSizePixel().Width());
         ImplCalculateContributions(nHeight, nNewHeight, aNumberOfContributions, aWeights, aPixels, aCounts, aKernel);
-        rTarget = Bitmap(Size(nWidth, nNewHeight), 24);
+        rTarget = Bitmap(Size(nWidth, nNewHeight), vcl::PixelFormat::N24_BPP);
         BitmapScopedWriteAccess pWriteAcc(rTarget);
         bool bResult(pWriteAcc);
 

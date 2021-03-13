@@ -34,7 +34,8 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
 
         if (pReadAcc)
         {
-            Bitmap aNewBmp(aBitmap.GetSizePixel(), 8, &pReadAcc->GetPalette());
+            Bitmap aNewBmp(aBitmap.GetSizePixel(), vcl::PixelFormat::N8_BPP,
+                           &pReadAcc->GetPalette());
             BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
             if (pWriteAcc)
