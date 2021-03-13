@@ -265,19 +265,24 @@ namespace vcl::unotools
                     sizeFromIntegerSize2D(xInputBitmap->getSize()));
 
                 // normalize bitcount
-                nDepth =
-                    ( nDepth <= 1 ) ? 1 :
-                    ( nDepth <= 4 ) ? 4 :
-                    ( nDepth <= 8 ) ? 8 : 24;
+                auto ePixelFormat =
+                    ( nDepth <= 1 ) ? vcl::PixelFormat::N1_BPP :
+                    ( nDepth <= 4 ) ? vcl::PixelFormat::N4_BPP :
+                    ( nDepth <= 8 ) ? vcl::PixelFormat::N8_BPP :
+                                      vcl::PixelFormat::N24_BPP;
+                auto eAlphaPixelFormat =
+                    ( nAlphaDepth <= 1 ) ? vcl::PixelFormat::N1_BPP :
+                    ( nAlphaDepth <= 4 ) ? vcl::PixelFormat::N4_BPP :
+                                           vcl::PixelFormat::N8_BPP;
 
                 ::Bitmap aBitmap( aPixelSize,
-                                  sal::static_int_cast<sal_uInt16>(nDepth),
+                                  ePixelFormat,
                                   aLayout.Palette.is() ? &aPalette : nullptr );
                 ::Bitmap aAlpha;
                 if( nAlphaDepth )
-                    aAlpha = ::Bitmap( aPixelSize,
-                                       sal::static_int_cast<sal_uInt16>(nAlphaDepth),
-                                       &::Bitmap::GetGreyPalette(
+                    aAlpha = Bitmap(aPixelSize,
+                                      eAlphaPixelFormat,
+                                       &Bitmap::GetGreyPalette(
                                            sal::static_int_cast<sal_uInt16>(1 << nAlphaDepth)) );
 
                 { // limit scoped access

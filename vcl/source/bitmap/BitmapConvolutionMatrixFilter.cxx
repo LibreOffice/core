@@ -29,7 +29,7 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
 
     if (pReadAcc)
     {
-        Bitmap aNewBmp(aBitmap.GetSizePixel(), 24);
+        Bitmap aNewBmp(aBitmap.GetSizePixel(), vcl::PixelFormat::N24_BPP);
         BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
         if (pWriteAcc)

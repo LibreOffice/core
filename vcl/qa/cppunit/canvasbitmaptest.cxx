@@ -633,14 +633,20 @@ public:
 
 void CanvasBitmapTest::runTest()
 {
-    static const sal_Int8 lcl_depths[]={1,4,8,24};
+    static vcl::PixelFormat ePixelFormatArray[] =
+    {
+        vcl::PixelFormat::N1_BPP,
+        vcl::PixelFormat::N4_BPP,
+        vcl::PixelFormat::N8_BPP,
+        vcl::PixelFormat::N24_BPP
+    };
 
     // Testing VclCanvasBitmap wrapper
 
-    for( size_t i=0; i<SAL_N_ELEMENTS(lcl_depths); ++i )
+    for (auto const pixelFormat : ePixelFormatArray)
     {
-        const sal_Int8 nDepth( lcl_depths[i] );
-        Bitmap aBitmap(Size(200,200),nDepth);
+        const sal_uInt16 nDepth = sal_uInt16(pixelFormat);
+        Bitmap aBitmap(Size(200,200), pixelFormat);
         aBitmap.Erase(COL_WHITE);
         {
             BitmapScopedWriteAccess pAcc(aBitmap);
@@ -670,7 +676,7 @@ void CanvasBitmapTest::runTest()
 
         checkCanvasBitmap( xBmp, "single bitmap", nDepth );
 
-        Bitmap aMask(Size(200,200),1);
+        Bitmap aMask(Size(200,200), vcl::PixelFormat::N1_BPP);
         aMask.Erase(COL_WHITE);
         {
             BitmapScopedWriteAccess pAcc(aMask);

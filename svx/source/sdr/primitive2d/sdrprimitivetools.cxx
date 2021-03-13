@@ -51,7 +51,7 @@ namespace drawinglayer::primitive2d
                    r, g, b, 0,   r, g, b, 0,   r, g, b, 0,
                    0, 0, 0, a,   r, g, b, 0,   0, 0, 0, a
                 };
-                BitmapEx aBitmap = vcl::bitmap::CreateFromData(cross, 3, 3, 12, 32);
+                BitmapEx aBitmap = vcl::bitmap::CreateFromData(cross, 3, 3, 12, vcl::PixelFormat::N32_BPP);
 
                 // create and exchange at aRetVal
                 aRetVal.set(std::make_unique<BitmapEx>(aBitmap));

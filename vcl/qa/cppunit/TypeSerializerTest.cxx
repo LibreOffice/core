@@ -189,7 +189,7 @@ void TypeSerializerTest::testGraphic_Vector()
 
 void TypeSerializerTest::testGraphic_Bitmap_NoGfxLink()
 {
-    Bitmap aBitmap(Size(10, 10), 24);
+    Bitmap aBitmap(Size(10, 10), vcl::PixelFormat::N24_BPP);
     aBitmap.Erase(COL_LIGHTGRAYBLUE);
     BitmapEx aBitmapEx(aBitmap);
     Graphic aGraphic(aBitmapEx);

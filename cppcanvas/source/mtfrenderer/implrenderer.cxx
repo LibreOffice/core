@@ -208,7 +208,7 @@ namespace
 
         Bitmap aMask( rBitmap.CreateMask( aWhite ));
         Bitmap aSolid( rBitmap.GetSizePixel(),
-                       1,
+                       vcl::PixelFormat::N1_BPP,
                        &aBiLevelPalette );
         aSolid.Erase( rMaskColor );
 

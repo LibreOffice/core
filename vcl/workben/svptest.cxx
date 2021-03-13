@@ -105,7 +105,7 @@ void Main()
 
 MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle ),
-    m_aBitmap( Size( 256, 256 ), 32 )
+    m_aBitmap(Size(256, 256), vcl::PixelFormat::N32_BPP)
 {
     // prepare an alpha mask
     BitmapWriteAccess* pAcc = m_aBitmap.AcquireWriteAccess();

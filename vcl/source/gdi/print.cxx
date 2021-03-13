@@ -233,7 +233,7 @@ void Printer::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask,
     // we always want to have a mask
     if( aMask.IsEmpty() )
     {
-        aMask = Bitmap( aSrcRect.GetSize(), 1 );
+        aMask = Bitmap(aSrcRect.GetSize(), vcl::PixelFormat::N1_BPP);
         aMask.Erase( COL_BLACK );
     }
 

@@ -136,11 +136,12 @@ struct DIBV5Header : public DIBInfoHeader
     {}
 };
 
-sal_uInt16 discretizeBitcount( sal_uInt16 nInputCount )
+vcl::PixelFormat convertToBPP(sal_uInt16 nCount)
 {
-    return ( nInputCount <= 1 ) ? 1 :
-           ( nInputCount <= 4 ) ? 4 :
-           ( nInputCount <= 8 ) ? 8 : 24;
+    return (nCount <= 1) ? vcl::PixelFormat::N1_BPP :
+           (nCount <= 4) ? vcl::PixelFormat::N4_BPP :
+           (nCount <= 8) ? vcl::PixelFormat::N8_BPP :
+                           vcl::PixelFormat::N24_BPP;
 }
 
 bool isBitfieldCompression( ScanlineFormat nScanlineFormat )
@@ -998,20 +999,21 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
         pAccAlpha = AlphaScopedWriteAccess(aNewBmpAlpha);
     }
 
-    sal_uInt16 nBitCount(discretizeBitcount(aHeader.nBitCount));
+    vcl::PixelFormat ePixelFormat(convertToBPP(aHeader.nBitCount));
     const BitmapPalette* pPal = &aPalette;
     //ofz#948 match the surrounding logic of case TransparentType::Bitmap of
     //ReadDIBBitmapEx but do it while reading for performance
-    const bool bIsAlpha = (nBitCount == 8 && !!aPalette && aPalette.IsGreyPalette8Bit());
-    const bool bForceToMonoWhileReading = (bIsMask && !bIsAlpha && nBitCount != 1);
+    const bool bIsAlpha = (ePixelFormat == vcl::PixelFormat::N8_BPP &&
+                          !!aPalette && aPalette.IsGreyPalette8Bit());
+    const bool bForceToMonoWhileReading = (bIsMask && !bIsAlpha && ePixelFormat != vcl::PixelFormat::N1_BPP);
     if (bForceToMonoWhileReading)
     {
         pPal = nullptr;
-        nBitCount = 1;
+        ePixelFormat = vcl::PixelFormat::N1_BPP;
         SAL_WARN( "vcl", "forcing mask to monochrome");
     }
 
-    Bitmap aNewBmp(aSizePixel, nBitCount, pPal);
+    Bitmap aNewBmp(aSizePixel, ePixelFormat, pPal);
     BitmapScopedWriteAccess pAcc(aNewBmp);
     if (!pAcc)
         return false;
@@ -1283,8 +1285,8 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
         // bitmaps is relatively recent.
         // #i59239# discretize bitcount for aligned width to 1,4,8,24
         // (other cases are not written below)
-        const sal_uInt16 nBitCount(pAccAlpha ? 32 : discretizeBitcount(rAcc.GetBitCount()));
-        const sal_uLong nAlignedWidth(AlignedWidth4Bytes(rAcc.Width() * nBitCount));
+        const auto ePixelFormat(pAccAlpha ? vcl::PixelFormat::N32_BPP : convertToBPP(rAcc.GetBitCount()));
+        const sal_uLong nAlignedWidth(AlignedWidth4Bytes(rAcc.Width() * sal_Int32(ePixelFormat)));
         bool bNative(false);
 
         switch(rAcc.GetScanlineFormat())
@@ -1319,9 +1321,9 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
             const tools::Long nWidth(rAcc.Width());
             const tools::Long nHeight(rAcc.Height());
             std::vector<sal_uInt8> aBuf(nAlignedWidth);
-            switch( nBitCount )
+            switch(ePixelFormat)
             {
-                case 1:
+                case vcl::PixelFormat::N1_BPP:
                 {
                     //valgrind, zero out the trailing unused alignment bytes
                     size_t nUnusedBytes = nAlignedWidth - ((nWidth+7) / 8);
@@ -1351,7 +1353,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
                 }
                 break;
 
-                case 4:
+                case vcl::PixelFormat::N4_BPP:
                 {
                     //valgrind, zero out the trailing unused alignment bytes
                     size_t nUnusedBytes = nAlignedWidth - ((nWidth+1) / 2);
@@ -1380,7 +1382,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
                 }
                 break;
 
-                case 8:
+                case vcl::PixelFormat::N8_BPP:
                 {
                     for( tools::Long nY = nHeight - 1; nY >= 0; nY-- )
                     {
@@ -1395,7 +1397,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
                 }
                 break;
 
-                case 24:
+                case vcl::PixelFormat::N24_BPP:
                 {
                     //valgrind, zero out the trailing unused alignment bytes
                     size_t nUnusedBytes = nAlignedWidth - nWidth * 3;
@@ -1406,7 +1408,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
                 default:
                 {
                     BitmapColor aPixelColor;
-                    const bool bWriteAlpha(32 == nBitCount && pAccAlpha);
+                    const bool bWriteAlpha(ePixelFormat == vcl::PixelFormat::N32_BPP && pAccAlpha);
 
                     for( tools::Long nY = nHeight - 1; nY >= 0; nY-- )
                     {
@@ -1473,20 +1475,16 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess c
         // recent.
         // #i59239# discretize bitcount to 1,4,8,24 (other cases
         // are not written below)
-        const sal_uInt16 nBitCount(pAccAlpha ? 32 : discretizeBitcount(rAcc.GetBitCount()));
-        aHeader.nBitCount = nBitCount;
+        const auto ePixelFormat(pAccAlpha ? vcl::PixelFormat::N32_BPP : convertToBPP(rAcc.GetBitCount()));
+        aHeader.nBitCount = sal_uInt16(ePixelFormat);
         aHeader.nSizeImage = rAcc.Height() * AlignedWidth4Bytes(rAcc.Width() * aHeader.nBitCount);
 
         if(bCompressed)
         {
-            if(4 == nBitCount)
-            {
+            if (ePixelFormat == vcl::PixelFormat::N4_BPP)
                 nCompression = RLE_4;
-            }
-            else if(8 == nBitCount)
-            {
+            else if (ePixelFormat == vcl::PixelFormat::N8_BPP)
                 nCompression = RLE_8;
-            }
         }
     }
 

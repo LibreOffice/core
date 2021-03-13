@@ -126,7 +126,7 @@ GraphicTest::~GraphicTest()
 
 BitmapEx createBitmap(bool alpha = false)
 {
-    Bitmap aBitmap(Size(120, 100), 24);
+    Bitmap aBitmap(Size(120, 100), vcl::PixelFormat::N24_BPP);
     aBitmap.Erase(COL_LIGHTRED);
 
     aBitmap.SetPrefSize(Size(6000, 5000));

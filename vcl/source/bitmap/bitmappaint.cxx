@@ -308,7 +308,7 @@ bool Bitmap::Rotate(Degree10 nAngle10, const Color& rFillColor)
             if (nAngle10 == 900_deg10 || nAngle10 == 2700_deg10)
             {
                 const Size aNewSizePix(aSizePix.Height(), aSizePix.Width());
-                Bitmap aNewBmp(aNewSizePix, GetBitCount(), &pReadAcc->GetPalette());
+                Bitmap aNewBmp(aNewSizePix, getPixelFormat(), &pReadAcc->GetPalette());
                 BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
                 if (pWriteAcc)
@@ -360,7 +360,7 @@ bool Bitmap::Rotate(Degree10 nAngle10, const Color& rFillColor)
 
                 tools::Rectangle aNewBound(aPoly.GetBoundRect());
                 const Size aNewSizePix(aNewBound.GetSize());
-                Bitmap aNewBmp(aNewSizePix, GetBitCount(), &pReadAcc->GetPalette());
+                Bitmap aNewBmp(aNewSizePix, getPixelFormat(), &pReadAcc->GetPalette());
                 BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
                 if (pWriteAcc)
@@ -460,7 +460,8 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor, sal_uInt8 nTol) const
         return *this;
     }
 
-    Bitmap aNewBmp(GetSizePixel(), use8BitMask ? 8 : 1,
+    auto ePixelFormat = use8BitMask ? vcl::PixelFormat::N8_BPP : vcl::PixelFormat::N1_BPP;
+    Bitmap aNewBmp(GetSizePixel(), ePixelFormat,
                    use8BitMask ? &Bitmap::GetGreyPalette(256) : nullptr);
     BitmapScopedWriteAccess pWriteAcc(aNewBmp);
     bool bRet = false;
@@ -869,7 +870,7 @@ bool Bitmap::Replace(const Bitmap& rMask, const Color& rReplaceColor)
 
 bool Bitmap::Replace(const AlphaMask& rAlpha, const Color& rMergeColor)
 {
-    Bitmap aNewBmp(GetSizePixel(), 24);
+    Bitmap aNewBmp(GetSizePixel(), vcl::PixelFormat::N24_BPP);
     ScopedReadAccess pAcc(*this);
     AlphaMask::ScopedReadAccess pAlphaAcc(const_cast<AlphaMask&>(rAlpha));
     BitmapScopedWriteAccess pNewAcc(aNewBmp);

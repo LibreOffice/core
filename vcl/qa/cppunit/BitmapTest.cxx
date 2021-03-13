@@ -99,7 +99,7 @@ void BitmapTest::testCreation()
     }
 
     {
-        Bitmap aBmp(Size(10, 10), 1);
+        Bitmap aBmp(Size(10, 10), vcl::PixelFormat::N1_BPP);
         Size aSize = aBmp.GetSizePixel();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<tools::Long>(10), aSize.Width());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<tools::Long>(10), aSize.Height());
@@ -113,7 +113,7 @@ void BitmapTest::testCreation()
     }
 
     {
-        Bitmap aBmp(Size(10, 10), 4);
+        Bitmap aBmp(Size(10, 10), vcl::PixelFormat::N4_BPP);
         Size aSize = aBmp.GetSizePixel();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<tools::Long>(10), aSize.Width());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<tools::Long>(10), aSize.Height());
@@ -127,7 +127,7 @@ void BitmapTest::testCreation()
     }
 
     {
-        Bitmap aBmp(Size(10, 10), 8);
+        Bitmap aBmp(Size(10, 10), vcl::PixelFormat::N8_BPP);
         Size aSize = aBmp.GetSizePixel();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<tools::Long>(10), aSize.Width());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<tools::Long>(10), aSize.Height());
@@ -141,7 +141,7 @@ void BitmapTest::testCreation()
     }
 
     {
-        Bitmap aBmp(Size(10, 10), 24);
+        Bitmap aBmp(Size(10, 10), vcl::PixelFormat::N24_BPP);
         Size aSize = aBmp.GetSizePixel();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<tools::Long>(10), aSize.Width());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<tools::Long>(10), aSize.Height());
@@ -160,7 +160,7 @@ void BitmapTest::testCreation()
     auto pBackendCapabilities = ImplGetSVData()->mpDefInst->GetBackendCapabilities();
     if (pBackendCapabilities->mbSupportsBitmap32)
     {
-        Bitmap aBmp(Size(10, 10), 32);
+        Bitmap aBmp(Size(10, 10), vcl::PixelFormat::N32_BPP);
         Size aSize = aBmp.GetSizePixel();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<tools::Long>(10), aSize.Width());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<tools::Long>(10), aSize.Height());
@@ -176,7 +176,7 @@ void BitmapTest::testCreation()
 
 void BitmapTest::testEmpty()
 {
-    Bitmap aBitmap(Size(10, 10), 8);
+    Bitmap aBitmap(Size(10, 10), vcl::PixelFormat::N8_BPP);
     aBitmap.Erase(COL_LIGHTGRAYBLUE);
 
     CPPUNIT_ASSERT(!aBitmap.IsEmpty());
@@ -187,7 +187,7 @@ void BitmapTest::testEmpty()
 
 Bitmap createTestBitmap()
 {
-    Bitmap aBmp(Size(4, 4), 24);
+    Bitmap aBmp(Size(4, 4), vcl::PixelFormat::N24_BPP);
     BitmapWriteAccess aBmpAccess(aBmp);
 
     // row 1
@@ -346,7 +346,7 @@ void BitmapTest::testN8Greyscale()
 
 void BitmapTest::testConvert()
 {
-    Bitmap aBitmap(Size(10, 10), 8);
+    Bitmap aBitmap(Size(10, 10), vcl::PixelFormat::N8_BPP);
 
     aBitmap.Erase(COL_LIGHTGRAYBLUE);
 
@@ -434,7 +434,7 @@ void BitmapTest::testCRC()
 {
     CRCHash aCRCs;
 
-    Bitmap aBitmap(Size(1023, 759), 24, nullptr);
+    Bitmap aBitmap(Size(1023, 759), vcl::PixelFormat::N24_BPP);
     aBitmap.Erase(COL_BLACK);
     checkAndInsert(aCRCs, aBitmap, "black bitmap");
     aBitmap.Invert();
@@ -519,7 +519,7 @@ void BitmapTest::testCustom8BitPalette()
     {
         aCustomPalette[i] = BitmapColor(sal_uInt8(i), sal_uInt8(0xCC), sal_uInt8(0x22));
     }
-    Bitmap aBitmap(Size(3, 2), 8, &aCustomPalette);
+    Bitmap aBitmap(Size(3, 2), vcl::PixelFormat::N8_BPP, &aCustomPalette);
 
     {
         BitmapScopedWriteAccess pAccess(aBitmap);
@@ -556,7 +556,7 @@ void BitmapTest::testCustom8BitPalette()
 
 void BitmapTest::testErase()
 {
-    Bitmap aBitmap(Size(3, 3), 24);
+    Bitmap aBitmap(Size(3, 3), vcl::PixelFormat::N24_BPP);
     {
         BitmapScopedWriteAccess pWriteAccess(aBitmap);
         pWriteAccess->Erase(Color(0x11, 0x22, 0x33));
@@ -576,7 +576,7 @@ void BitmapTest::testBitmap32()
     if (!pBackendCapabilities->mbSupportsBitmap32)
         return;
 
-    Bitmap aBitmap(Size(3, 3), 32);
+    Bitmap aBitmap(Size(3, 3), vcl::PixelFormat::N32_BPP);
     {
         BitmapScopedWriteAccess pWriteAccess(aBitmap);
         pWriteAccess->Erase(Color(ColorTransparency, 0xFF, 0x11, 0x22, 0x33));
@@ -599,7 +599,7 @@ void BitmapTest::testBitmap32()
 void BitmapTest::testOctree()
 {
     Size aSize(1000, 100);
-    Bitmap aBitmap(aSize, 24);
+    Bitmap aBitmap(aSize, vcl::PixelFormat::N24_BPP);
     {
         BitmapScopedWriteAccess pWriteAccess(aBitmap);
         for (tools::Long y = 0; y < aSize.Height(); ++y)
@@ -656,37 +656,40 @@ void BitmapTest::testDitherSize()
 {
     // no need to do anything for a 1x1 pixel bitmap
     {
-        Bitmap aBitmap(Size(1, 1), 24);
+        Bitmap aBitmap(Size(1, 1), vcl::PixelFormat::N24_BPP);
         CPPUNIT_ASSERT(aBitmap.Dither());
     }
 
     // cannot dither a bitmap with a width of 2 or 3 pixels
     {
-        Bitmap aBitmap(Size(2, 4), 24);
+        Bitmap aBitmap(Size(2, 4), vcl::PixelFormat::N24_BPP);
         CPPUNIT_ASSERT(!aBitmap.Dither());
     }
 
     {
-        Bitmap aBitmap(Size(3, 4), 24);
+        Bitmap aBitmap(Size(3, 4), vcl::PixelFormat::N24_BPP);
         CPPUNIT_ASSERT(!aBitmap.Dither());
     }
 
     // cannot dither a bitmap with a height of 2 pixels
     {
-        Bitmap aBitmap(Size(4, 2), 24);
+        Bitmap aBitmap(Size(4, 2), vcl::PixelFormat::N24_BPP);
         CPPUNIT_ASSERT(!aBitmap.Dither());
     }
 
     // only dither bitmaps with a width > 3 pixels and height > 2 pixels
     {
-        Bitmap aBitmap(Size(4, 3), 24);
+        Bitmap aBitmap(Size(4, 3), vcl::PixelFormat::N24_BPP);
         CPPUNIT_ASSERT(aBitmap.Dither());
     }
 }
 
 void BitmapTest::testMirror()
 {
-    for (int bpp : { 4, 8, 24, 32 })
+    vcl::PixelFormat bppArray[] = { vcl::PixelFormat::N4_BPP, vcl::PixelFormat::N8_BPP,
+                                    vcl::PixelFormat::N24_BPP, vcl::PixelFormat::N32_BPP };
+
+    for (vcl::PixelFormat bpp : bppArray)
     {
         Bitmap bitmap(Size(11, 11), bpp);
         {

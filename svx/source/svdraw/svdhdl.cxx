@@ -895,7 +895,7 @@ std::unique_ptr<sdr::overlay::OverlayObject> SdrHdl::CreateOverlayObject(
         // so that the hit test works for this case.
         if (aBmpEx.IsEmpty())
         {
-            aBmpEx = BitmapEx(Size(13, 13), 24);
+            aBmpEx = BitmapEx(Size(13, 13), vcl::PixelFormat::N24_BPP);
             aBmpEx.Erase(COL_BLACK);
         }
 

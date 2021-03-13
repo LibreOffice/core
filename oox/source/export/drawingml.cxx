@@ -2503,7 +2503,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
             BitmapEx aSourceBitmap(aGraphic.GetBitmapEx());
             aSourceBitmap.Scale(aDestRect.GetSize());
             tools::Rectangle aSourceRect(Point(0, 0), aDestRect.GetSize());
-            BitmapEx aDestBitmap(Bitmap(aDestSize, 24), aMask);
+            BitmapEx aDestBitmap(Bitmap(aDestSize, vcl::PixelFormat::N24_BPP), aMask);
             aDestBitmap.CopyPixel(aDestRect, aSourceRect, &aSourceBitmap);
             Graphic aDestGraphic(aDestBitmap);
             sRelationId = WriteImage(aDestGraphic);

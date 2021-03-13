@@ -126,7 +126,7 @@ void TiffFilterTest::testTdf138818()
 
 void TiffFilterTest::testRoundtrip()
 {
-    Bitmap aBitmap(Size(2, 2), 24);
+    Bitmap aBitmap(Size(2, 2), vcl::PixelFormat::N24_BPP);
     {
         BitmapScopedWriteAccess pAccess(aBitmap);
         pAccess->SetPixel(0, 0, COL_WHITE);

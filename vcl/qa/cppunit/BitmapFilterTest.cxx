@@ -77,7 +77,7 @@ void BitmapFilterTest::testBlurCorrectness()
 {
     // Setup test bitmap
     Size aSize(41, 31);
-    Bitmap aBitmap24Bit(aSize, 24);
+    Bitmap aBitmap24Bit(aSize, vcl::PixelFormat::N24_BPP);
 
     ScanlineFormat scanlineFormat = ScanlineFormat::NONE;
     sal_uInt16 nBPP = aBitmap24Bit.GetBitCount();
@@ -174,7 +174,7 @@ void BitmapFilterTest::testPerformance()
     Size aSize(4000, 3000); // A rather common picture size
 
     // Prepare bitmap
-    Bitmap aBigBitmap(aSize, 24);
+    Bitmap aBigBitmap(aSize, vcl::PixelFormat::N24_BPP);
     {
         tools::Long aMargin = 500;
         BitmapScopedWriteAccess aWriteAccess(aBigBitmap);

@@ -219,7 +219,7 @@ void GIFReader::CreateBitmaps(tools::Long nWidth, tools::Long nHeight, BitmapPal
     {
         const Color aWhite(COL_WHITE);
 
-        aBmp1 = Bitmap(aSize, 1);
+        aBmp1 = Bitmap(aSize, vcl::PixelFormat::N1_BPP);
 
         if (!aAnimation.Count())
             aBmp1.Erase(aWhite);
@@ -239,7 +239,7 @@ void GIFReader::CreateBitmaps(tools::Long nWidth, tools::Long nHeight, BitmapPal
 
     if (bStatus)
     {
-        aBmp8 = Bitmap(aSize, 8, pPal);
+        aBmp8 = Bitmap(aSize, vcl::PixelFormat::N8_BPP, pPal);
 
         if (!!aBmp8 && bWatchForBackgroundColor && aAnimation.Count())
             aBmp8.Erase((*pPal)[nBackgroundColor]);

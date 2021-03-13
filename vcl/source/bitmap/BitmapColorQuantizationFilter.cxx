@@ -32,14 +32,14 @@ BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const
     else
     {
         Bitmap::ScopedReadAccess pRAcc(aBitmap);
-        sal_uInt16 nBitCount;
+        vcl::PixelFormat ePixelFormat;
 
         auto const cappedNewColorCount = std::min(mnNewColorCount, sal_uInt16(256));
 
         if (cappedNewColorCount < 17)
-            nBitCount = 4;
+            ePixelFormat = vcl::PixelFormat::N4_BPP;
         else
-            nBitCount = 8;
+            ePixelFormat = vcl::PixelFormat::N8_BPP;
 
         if (pRAcc)
         {
@@ -135,7 +135,7 @@ BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const
                                            << nRightShiftBits));
             }
 
-            Bitmap aNewBmp(aBitmap.GetSizePixel(), nBitCount, &aNewPal);
+            Bitmap aNewBmp(aBitmap.GetSizePixel(), ePixelFormat, &aNewPal);
             BitmapScopedWriteAccess pWAcc(aNewBmp);
 
             if (pWAcc)

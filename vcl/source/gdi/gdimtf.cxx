@@ -1776,7 +1776,7 @@ BitmapEx GDIMetaFile::ImplBmpMonoFnc( const BitmapEx& rBmpEx, const void* pBmpPa
     aPal[ 1 ] = COL_WHITE;
     aPal[ 2 ] = static_cast<const ImplBmpMonoParam*>(pBmpParam)->aColor;
 
-    Bitmap aBmp( rBmpEx.GetSizePixel(), 4, &aPal );
+    Bitmap aBmp(rBmpEx.GetSizePixel(), vcl::PixelFormat::N4_BPP, &aPal);
     aBmp.Erase( static_cast<const ImplBmpMonoParam*>(pBmpParam)->aColor );
 
     if( rBmpEx.IsAlpha() )
