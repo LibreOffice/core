@@ -1675,7 +1675,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 {
                     BitmapEx aImage = vcl::bitmap::CreateFromData(maBitmap.data(), nImageWidth, nImageLength,
                             nImageWidth * (HasAlphaChannel() ? 4 : 3), // scanline bytes
-                            HasAlphaChannel() ? 32 : 24);
+                            HasAlphaChannel() ? vcl::PixelFormat::N32_BPP : vcl::PixelFormat::N24_BPP);
                     aImage.SetPrefMapMode(maBitmapPrefMapMode);
                     aImage.SetPrefSize(maBitmapPrefSize);
 

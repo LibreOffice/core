@@ -167,7 +167,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put( XFillGradientItem( aNullGrad) );
     rISet.Put(XFillHatchItem(aNullHatch));
     Size    aNullSize( 32, 32 );
-    Bitmap  aNullBmp( aNullSize, 8 );
+    Bitmap aNullBmp(aNullSize, vcl::PixelFormat::N8_BPP);
     aNullBmp.Erase( COL_WHITE );
     rISet.Put(XFillBitmapItem(Graphic(BitmapEx(aNullBmp))));
 

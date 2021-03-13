@@ -216,11 +216,11 @@ bool JPEGReader::CreateBitmap(JPEGCreateBitmapParam const & rParam)
             aGrayPal[ n ] = BitmapColor( cGray, cGray, cGray );
         }
 
-        mpBitmap.reset(new Bitmap(aSize, 8, &aGrayPal));
+        mpBitmap.reset(new Bitmap(aSize, vcl::PixelFormat::N8_BPP, &aGrayPal));
     }
     else
     {
-        mpBitmap.reset(new Bitmap(aSize, 24));
+        mpBitmap.reset(new Bitmap(aSize, vcl::PixelFormat::N24_BPP));
     }
 
     if (mbSetLogSize)
@@ -249,7 +249,7 @@ Graphic JPEGReader::CreateIntermediateGraphic(tools::Long nLines)
 
     if (!mnLastLines)
     {
-        mpIncompleteAlpha.reset(new Bitmap(aSizePixel, 1));
+        mpIncompleteAlpha.reset(new Bitmap(aSizePixel, vcl::PixelFormat::N1_BPP));
         mpIncompleteAlpha->Erase(COL_WHITE);
     }
 

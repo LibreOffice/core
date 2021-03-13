@@ -882,7 +882,7 @@ void ImpSdrPdfImport::ImportImage(std::unique_ptr<vcl::pdf::PDFiumPageObject> co
     const int nWidth = bitmap->getWidth();
     const int nHeight = bitmap->getHeight();
     const int nStride = bitmap->getStride();
-    BitmapEx aBitmap(Size(nWidth, nHeight), 24);
+    BitmapEx aBitmap(Size(nWidth, nHeight), vcl::PixelFormat::N24_BPP);
 
     switch (format)
     {

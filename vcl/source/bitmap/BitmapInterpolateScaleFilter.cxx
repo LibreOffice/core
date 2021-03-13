@@ -42,7 +42,7 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
         {
             tools::Long nWidth = pReadAcc->Width();
             tools::Long nHeight = pReadAcc->Height();
-            Bitmap aNewBmp(Size(nNewWidth, nHeight), 24);
+            Bitmap aNewBmp(Size(nNewWidth, nHeight), vcl::PixelFormat::N24_BPP);
             BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
             if (pWriteAcc)
@@ -137,7 +137,7 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
                 bRet = false;
                 const Bitmap aOriginal(aBitmap);
                 aBitmap = aNewBmp;
-                aNewBmp = Bitmap(Size(nNewWidth, nNewHeight), 24);
+                aNewBmp = Bitmap(Size(nNewWidth, nNewHeight), vcl::PixelFormat::N24_BPP);
                 pReadAcc = Bitmap::ScopedReadAccess(aBitmap);
                 pWriteAcc = BitmapScopedWriteAccess(aNewBmp);
 

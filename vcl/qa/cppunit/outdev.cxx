@@ -156,7 +156,7 @@ void VclOutdevTest::testDrawTransformedBitmapEx()
     // Create a virtual device, and connect a metafile to it.
     // Also create a 16x16 bitmap.
     ScopedVclPtrInstance<VirtualDevice> pVDev;
-    Bitmap aBitmap(Size(16, 16), 24);
+    Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
     {
         // Fill the top left quarter with black.
         BitmapScopedWriteAccess pWriteAccess(aBitmap);
@@ -220,7 +220,7 @@ void VclOutdevTest::testDrawTransformedBitmapExFlip()
     // Create a virtual device, and connect a metafile to it.
     // Also create a 16x16 bitmap.
     ScopedVclPtrInstance<VirtualDevice> pVDev;
-    Bitmap aBitmap(Size(16, 16), 24);
+    Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
     {
         // Fill the top left quarter with black.
         BitmapScopedWriteAccess pWriteAccess(aBitmap);

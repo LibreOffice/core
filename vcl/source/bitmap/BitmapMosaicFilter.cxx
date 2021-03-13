@@ -32,7 +32,7 @@ BitmapEx BitmapMosaicFilter::execute(BitmapEx const& rBitmapEx) const
         }
         else
         {
-            pNewBmp.reset(new Bitmap(aBitmap.GetSizePixel(), 24));
+            pNewBmp.reset(new Bitmap(aBitmap.GetSizePixel(), vcl::PixelFormat::N24_BPP));
             pReadAcc = aBitmap.AcquireReadAccess();
             pWriteAcc = pNewBmp->AcquireWriteAccess();
         }

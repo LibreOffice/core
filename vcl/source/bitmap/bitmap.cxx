@@ -74,7 +74,7 @@ Bitmap::Bitmap(std::shared_ptr<SalBitmap> const & pSalBitmap)
 {
 }
 
-Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalette* pPal )
+Bitmap::Bitmap( const Size& rSizePixel, vcl::PixelFormat ePixelFormat, const BitmapPalette* pPal )
 {
     if (!(rSizePixel.Width() && rSizePixel.Height()))
         return;
@@ -82,19 +82,20 @@ Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalett
     BitmapPalette   aPal;
     BitmapPalette*  pRealPal = nullptr;
 
-    if( nBitCount <= 8 )
+    if (vcl::isPalettePixelFormat(ePixelFormat))
     {
         if( !pPal )
         {
-            if( 1 == nBitCount )
+            if (ePixelFormat == vcl::PixelFormat::N1_BPP)
             {
                 aPal.SetEntryCount( 2 );
                 aPal[ 0 ] = COL_BLACK;
                 aPal[ 1 ] = COL_WHITE;
             }
-            else if( ( 4 == nBitCount ) || ( 8 == nBitCount ) )
+            else if (ePixelFormat == vcl::PixelFormat::N4_BPP ||
+                     ePixelFormat == vcl::PixelFormat::N8_BPP)
             {
-                aPal.SetEntryCount( 1 << nBitCount );
+                aPal.SetEntryCount(1 << sal_uInt16(ePixelFormat));
                 aPal[ 0 ] = COL_BLACK;
                 aPal[ 1 ] = COL_BLUE;
                 aPal[ 2 ] = COL_GREEN;
@@ -113,7 +114,7 @@ Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalett
                 aPal[ 15 ] = COL_WHITE;
 
                 // Create dither palette
-                if( 8 == nBitCount )
+                if (ePixelFormat == vcl::PixelFormat::N8_BPP)
                 {
                     sal_uInt16 nActCol = 16;
 
@@ -132,7 +133,7 @@ Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalett
     }
 
     mxSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
-    mxSalBmp->Create( rSizePixel, nBitCount, pRealPal ? *pRealPal : aPal );
+    mxSalBmp->Create( rSizePixel, sal_uInt16(ePixelFormat), pRealPal ? *pRealPal : aPal );
 }
 
 #ifdef DBG_UTIL
@@ -320,6 +321,21 @@ Size Bitmap::GetSizePixel() const
     return( mxSalBmp ? mxSalBmp->GetSize() : Size() );
 }
 
+vcl::PixelFormat Bitmap::getPixelFormat() const
+{
+    switch (GetBitCount())
+    {
+        case 1: return vcl::PixelFormat::N1_BPP;
+        case 4: return vcl::PixelFormat::N4_BPP;
+        case 8: return vcl::PixelFormat::N8_BPP;
+        case 24: return vcl::PixelFormat::N24_BPP;
+        case 32: return vcl::PixelFormat::N32_BPP;
+        default:
+            break;
+    }
+    return vcl::PixelFormat::INVALID;
+}
+
 sal_uInt16 Bitmap::GetBitCount() const
 {
     if (!mxSalBmp)
@@ -427,7 +443,6 @@ void Bitmap::ReassignWithSize(const Bitmap& rBitmap)
     maPrefMapMode = aOldMapMode;
 }
 
-
 void Bitmap::ImplSetSalBitmap(const std::shared_ptr<SalBitmap>& xImpBmp)
 {
     mxSalBmp = xImpBmp;
@@ -489,7 +504,7 @@ bool Bitmap::Crop( const tools::Rectangle& rRectPixel )
         if( pReadAcc )
         {
             const tools::Rectangle     aNewRect( Point(), aRect.GetSize() );
-            Bitmap              aNewBmp( aNewRect.GetSize(), GetBitCount(), &pReadAcc->GetPalette() );
+            Bitmap aNewBmp(aNewRect.GetSize(), getPixelFormat(), &pReadAcc->GetPalette());
             BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
             if( pWriteAcc )
@@ -869,7 +884,7 @@ bool Bitmap::Expand( sal_uLong nDX, sal_uLong nDY, const Color* pInitColor )
         if( pReadAcc )
         {
             BitmapPalette       aBmpPal( pReadAcc->GetPalette() );
-            Bitmap              aNewBmp( aNewSize, GetBitCount(), &aBmpPal );
+            Bitmap aNewBmp(aNewSize, getPixelFormat(), &aBmpPal);
             BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
             if( pWriteAcc )
@@ -990,9 +1005,9 @@ bool Bitmap::Convert( BmpConversion eConversion )
         case BmpConversion::N4BitColors:
         {
             if( nBitCount < 4 )
-                bRet = ImplConvertUp( 4 );
+                bRet = ImplConvertUp(vcl::PixelFormat::N4_BPP);
             else if( nBitCount > 4 )
-                bRet = ImplConvertDown( 4 );
+                bRet = ImplConvertDown(vcl::PixelFormat::N4_BPP);
             else
                 bRet = true;
         }
@@ -1006,9 +1021,9 @@ bool Bitmap::Convert( BmpConversion eConversion )
         case BmpConversion::N8BitColors:
         {
             if( nBitCount < 8 )
-                bRet = ImplConvertUp( 8 );
+                bRet = ImplConvertUp(vcl::PixelFormat::N8_BPP);
             else if( nBitCount > 8 )
-                bRet = ImplConvertDown( 8 );
+                bRet = ImplConvertDown(vcl::PixelFormat::N8_BPP);
             else
                 bRet = true;
         }
@@ -1019,16 +1034,16 @@ bool Bitmap::Convert( BmpConversion eConversion )
             Color aTrans( BMP_COL_TRANS );
 
             if( nBitCount < 8 )
-                bRet = ImplConvertUp( 8, &aTrans );
+                bRet = ImplConvertUp(vcl::PixelFormat::N8_BPP, &aTrans );
             else
-                bRet = ImplConvertDown( 8, &aTrans );
+                bRet = ImplConvertDown(vcl::PixelFormat::N8_BPP, &aTrans );
         }
         break;
 
         case BmpConversion::N24Bit:
         {
             if( nBitCount < 24 )
-                bRet = ImplConvertUp( 24 );
+                bRet = ImplConvertUp(vcl::PixelFormat::N24_BPP);
             else
                 bRet = true;
         }
@@ -1037,7 +1052,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
         case BmpConversion::N32Bit:
         {
             if( nBitCount < 32 )
-                bRet = ImplConvertUp( 32 );
+                bRet = ImplConvertUp(vcl::PixelFormat::N32_BPP);
             else
                 bRet = true;
         }
@@ -1069,7 +1084,9 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
 
         if( bPalDiffers )
         {
-            Bitmap aNewBmp( GetSizePixel(), ( nGreys == 16 ) ? 4 : 8, &rPal );
+            auto ePixelFormat = nGreys == 16 ? vcl::PixelFormat::N4_BPP
+                                             : vcl::PixelFormat::N8_BPP;
+            Bitmap aNewBmp(GetSizePixel(), ePixelFormat, &rPal );
             BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
             if( pWriteAcc )
@@ -1169,9 +1186,9 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
     return bRet;
 }
 
-bool Bitmap::ImplConvertUp(sal_uInt16 nBitCount, Color const * pExtColor)
+bool Bitmap::ImplConvertUp(vcl::PixelFormat ePixelFormat, Color const * pExtColor)
 {
-    SAL_WARN_IF( nBitCount <= GetBitCount(), "vcl", "New BitCount must be greater!" );
+    SAL_WARN_IF(sal_Int32(ePixelFormat) <= GetBitCount(), "vcl", "New BitCount must be greater!" );
 
     Bitmap::ScopedReadAccess pReadAcc(*this);
     bool bRet = false;
@@ -1179,7 +1196,7 @@ bool Bitmap::ImplConvertUp(sal_uInt16 nBitCount, Color const * pExtColor)
     if (pReadAcc)
     {
         BitmapPalette aPalette;
-        Bitmap aNewBmp(GetSizePixel(), nBitCount, pReadAcc->HasPalette() ? &pReadAcc->GetPalette() : &aPalette);
+        Bitmap aNewBmp(GetSizePixel(), ePixelFormat, pReadAcc->HasPalette() ? &pReadAcc->GetPalette() : &aPalette);
         BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
         if (pWriteAcc)
@@ -1192,8 +1209,8 @@ bool Bitmap::ImplConvertUp(sal_uInt16 nBitCount, Color const * pExtColor)
                 const BitmapPalette& rOldPalette = pReadAcc->GetPalette();
                 const sal_uInt16 nOldCount = rOldPalette.GetEntryCount();
                 assert(nOldCount <= (1 << GetBitCount()));
-
-                aPalette.SetEntryCount(1 << nBitCount);
+                sal_Int16 nNewBitCount = sal_Int16(ePixelFormat);
+                aPalette.SetEntryCount(1 << nNewBitCount);
 
                 for (sal_uInt16 i = 0; i < nOldCount; i++)
                     aPalette[i] = rOldPalette[i];
@@ -1258,9 +1275,9 @@ bool Bitmap::ImplConvertUp(sal_uInt16 nBitCount, Color const * pExtColor)
     return bRet;
 }
 
-bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color const * pExtColor)
+bool Bitmap::ImplConvertDown(vcl::PixelFormat ePixelFormat, Color const * pExtColor)
 {
-    SAL_WARN_IF(nBitCount > GetBitCount(), "vcl", "New BitCount must be lower ( or equal when pExtColor is set )!");
+    SAL_WARN_IF(sal_Int32(ePixelFormat) > GetBitCount(), "vcl", "New BitCount must be lower ( or equal when pExtColor is set )!");
 
     Bitmap::ScopedReadAccess pReadAcc(*this);
     bool bRet = false;
@@ -1268,12 +1285,13 @@ bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color const * pExtColor)
     if (pReadAcc)
     {
         BitmapPalette aPalette;
-        Bitmap aNewBmp(GetSizePixel(), nBitCount, &aPalette);
+        Bitmap aNewBmp(GetSizePixel(), ePixelFormat, &aPalette);
         BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
         if (pWriteAcc)
         {
-            const sal_uInt16 nCount = 1 << nBitCount;
+            sal_Int16 nNewBitCount = sal_Int16(ePixelFormat);
+            const sal_uInt16 nCount = 1 << nNewBitCount;
             const tools::Long nWidth = pWriteAcc->Width();
             const tools::Long nWidth1 = nWidth - 1;
             const tools::Long nHeight = pWriteAcc->Height();
@@ -1581,7 +1599,7 @@ bool Bitmap::Dither()
     if( ( aSize.Width() > 3 ) && ( aSize.Height() > 2 ) )
     {
         ScopedReadAccess pReadAcc(*this);
-        Bitmap aNewBmp( GetSizePixel(), 8 );
+        Bitmap aNewBmp(GetSizePixel(), vcl::PixelFormat::N8_BPP);
         BitmapScopedWriteAccess pWriteAcc(aNewBmp);
         if( pReadAcc && pWriteAcc )
         {

@@ -45,7 +45,7 @@ CPPUNIT_TEST_FIXTURE(XTableImportExportTest, testImportExport)
         uno::Reference<container::XNameContainer> xNameContainer(xBitmapList->createInstance());
         CPPUNIT_ASSERT(xNameContainer.is());
 
-        Bitmap aBitmap(Size(5, 5), 24);
+        Bitmap aBitmap(Size(5, 5), vcl::PixelFormat::N24_BPP);
         aBitmap.Erase(COL_RED);
         BitmapEx aBitmapEx(aBitmap);
         Graphic aGraphic(aBitmapEx);

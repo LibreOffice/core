@@ -40,7 +40,7 @@ BitmapEx BitmapSepiaFilter::execute(BitmapEx const& rBitmapEx) const
             rCol.SetBlue(cSepiaValue);
         }
 
-        Bitmap aNewBmp(aBitmap.GetSizePixel(), 8, &aSepiaPal);
+        Bitmap aNewBmp(aBitmap.GetSizePixel(), vcl::PixelFormat::N8_BPP, &aSepiaPal);
         BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
         if (pWriteAcc)

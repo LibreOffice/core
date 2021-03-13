@@ -376,7 +376,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
 
     if( !pMskAcc )
     {
-        aMask = Bitmap( aBmp.GetSizePixel(), 1 );
+        aMask = Bitmap(aBmp.GetSizePixel(), vcl::PixelFormat::N1_BPP);
         aMask.Erase( COL_BLACK );
         pMskAcc = aMask.AcquireReadAccess();
     }

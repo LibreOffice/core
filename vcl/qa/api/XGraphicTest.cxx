@@ -54,7 +54,7 @@ public:
 
 BitmapEx createBitmap()
 {
-    Bitmap aBitmap(Size(100, 50), 24);
+    Bitmap aBitmap(Size(100, 50), vcl::PixelFormat::N24_BPP);
     aBitmap.Erase(COL_LIGHTRED);
 
     return BitmapEx(aBitmap);

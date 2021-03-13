@@ -36,7 +36,7 @@ BitmapEx BitmapGaussianSeparableBlurFilter::execute(BitmapEx const& rBitmapEx) c
     Bitmap::ScopedReadAccess pReadAcc(aBitmap);
 
     // switch coordinates as convolution pass transposes result
-    Bitmap aNewBitmap(Size(nHeight, nWidth), 24);
+    Bitmap aNewBitmap(Size(nHeight, nWidth), vcl::PixelFormat::N24_BPP);
 
     bool bResult = convolutionPass(aBitmap, aNewBitmap, pReadAcc.get(), aNumberOfContributions,
                                    aWeights.data(), aPixels.data(), aCounts.data());
@@ -60,7 +60,7 @@ BitmapEx BitmapGaussianSeparableBlurFilter::execute(BitmapEx const& rBitmapEx) c
         blurContributions(nHeight, aNumberOfContributions, aBlurVector, aWeights, aPixels, aCounts);
 
         pReadAcc = Bitmap::ScopedReadAccess(aBitmap);
-        aNewBitmap = Bitmap(Size(nWidth, nHeight), 24);
+        aNewBitmap = Bitmap(Size(nWidth, nHeight), vcl::PixelFormat::N24_BPP);
         bResult = convolutionPass(aBitmap, aNewBitmap, pReadAcc.get(), aNumberOfContributions,
                                   aWeights.data(), aPixels.data(), aCounts.data());
 
