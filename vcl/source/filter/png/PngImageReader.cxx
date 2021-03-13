@@ -190,6 +190,11 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
             aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N24_BPP);
             {
                 pWriteAccess = BitmapScopedWriteAccess(aBitmap);
+                if (!pWriteAccess)
+                {
+                    png_destroy_read_struct(&pPng, &pInfo, nullptr);
+                    return false;
+                }
                 ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
                 if (eFormat == ScanlineFormat::N24BitTcBgr)
                     png_set_bgr(pPng);
@@ -227,6 +232,11 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                 aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N32_BPP);
                 {
                     pWriteAccess = BitmapScopedWriteAccess(aBitmap);
+                    if (!pWriteAccess)
+                    {
+                        png_destroy_read_struct(&pPng, &pInfo, nullptr);
+                        return false;
+                    }
                     ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
                     if (eFormat == ScanlineFormat::N32BitTcAbgr
                         || eFormat == ScanlineFormat::N32BitTcBgra)
@@ -275,6 +285,11 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                 aBitmapAlpha = AlphaMask(Size(width, height), nullptr);
                 {
                     pWriteAccess = BitmapScopedWriteAccess(aBitmap);
+                    if (!pWriteAccess)
+                    {
+                        png_destroy_read_struct(&pPng, &pInfo, nullptr);
+                        return false;
+                    }
                     ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
                     if (eFormat == ScanlineFormat::N24BitTcBgr)
                         png_set_bgr(pPng);
@@ -319,7 +334,11 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
             aBitmap.Erase(COL_WHITE);
             {
                 pWriteAccess = BitmapScopedWriteAccess(aBitmap);
-
+                if (!pWriteAccess)
+                {
+                    png_destroy_read_struct(&pPng, &pInfo, nullptr);
+                    return false;
+                }
                 aRows = std::vector<std::vector<png_byte>>(height);
                 for (auto& rRow : aRows)
                     rRow.resize(aRowSizeBytes, 0);
