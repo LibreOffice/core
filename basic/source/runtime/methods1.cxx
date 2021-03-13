@@ -581,7 +581,7 @@ void Wait_Impl( bool bDurationBased, SbxArray& rPar )
     Timer aTimer;
     aTimer.SetTimeout( nWait );
     aTimer.Start();
-    while ( aTimer.IsActive() )
+    while ( aTimer.IsActive() && !Application::IsQuit())
     {
         Application::Yield();
     }
