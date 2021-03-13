@@ -2609,6 +2609,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf138897)
     Scheduler::ProcessEventsToIdle();
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf117039)
+{
+    load(DATA_DIRECTORY, "tdf117039.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // Without the fix to tdf#117039, print preview of signed document would crash
+
+    dispatchCommand(mxComponent, ".uno:PrintPreview", {});
+    dispatchCommand(mxComponent, ".uno:ClosePreview", {});
+    CPPUNIT_ASSERT_EQUAL(OUString("Test digital signature"), getParagraph(1)->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
