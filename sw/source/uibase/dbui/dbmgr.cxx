@@ -1612,7 +1612,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     "sw::SwDBManager aEmailDispatcherPollTimer" );
                 aEmailDispatcherPollTimer.SetTimeout( 500 );
                 aEmailDispatcherPollTimer.Start();
-                while( IsMergeOk() && m_pImpl->m_xLastMessage.is() )
+                while( IsMergeOk() && m_pImpl->m_xLastMessage.is() && !Application::IsQuit())
                     Application::Yield();
                 aEmailDispatcherPollTimer.Stop();
             }

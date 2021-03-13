@@ -435,7 +435,7 @@ void PrintPreviewHelper( const css::uno::Any& /*EnableChanges*/, SfxViewShell co
 
 void WaitUntilPreviewIsClosed( SfxViewFrame* pViewFrame )
 {
-    while ( pViewFrame && isInPrintPreview( pViewFrame ) )
+    while ( pViewFrame && isInPrintPreview( pViewFrame ) && !Application::IsQuit())
         Application::Yield();
 }
 

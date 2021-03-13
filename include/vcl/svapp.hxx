@@ -456,6 +456,10 @@ public:
     */
     static void                 Quit();
 
+    /** Has Quit() been called?
+    */
+    static bool                 IsQuit();
+
     /** Attempt to process current pending event(s)
 
      It doesn't sleep if no events are available for processing.
