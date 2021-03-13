@@ -42,9 +42,8 @@ namespace cppu_threadpool {
         SAL_WARN_IF(m_deque.size(), "cppu.threadpool", m_deque.size() << "Threads left");
     }
 
-    bool ThreadAdmin::add( rtl::Reference< ORequestThread > const & p )
+    bool ThreadAdmin::add_locked( rtl::Reference< ORequestThread > const & p )
     {
-        MutexGuard aGuard( m_mutex );
         if( m_disposed )
         {
             return false;
@@ -60,21 +59,21 @@ namespace cppu_threadpool {
 
     void ThreadAdmin::remove( rtl::Reference< ORequestThread > const & p )
     {
-        MutexGuard aGuard( m_mutex );
+        std::scoped_lock aGuard( m_mutex );
         remove_locked( p );
     }
 
     void ThreadAdmin::join()
     {
         {
-            MutexGuard aGuard( m_mutex );
+            std::scoped_lock aGuard( m_mutex );
             m_disposed = true;
         }
         for (;;)
         {
             rtl::Reference< ORequestThread > pCurrent;
             {
-                MutexGuard aGuard( m_mutex );
+                std::scoped_lock aGuard( m_mutex );
                 if( m_deque.empty() )
                 {
                     break;
@@ -118,8 +117,8 @@ namespace cppu_threadpool {
         // return value iff it causes osl::Thread::run to start executing:
         acquire();
         ThreadAdmin & rThreadAdmin = m_aThreadPool->getThreadAdmin();
-        osl::ClearableMutexGuard g(rThreadAdmin.m_mutex);
-        if (!rThreadAdmin.add( this )) {
+        std::unique_lock g(rThreadAdmin.m_mutex);
+        if (!rThreadAdmin.add_locked( this )) {
             return false;
         }
         try {
@@ -128,7 +127,7 @@ namespace cppu_threadpool {
             }
         } catch (...) {
             rThreadAdmin.remove_locked( this );
-            g.clear();
+            g.release();
             release();
             throw;
         }
