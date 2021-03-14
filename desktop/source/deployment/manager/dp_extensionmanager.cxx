@@ -722,6 +722,39 @@ Reference<css::deployment::XPackage> ExtensionManager::addExtension(
                         sNewExtensionIdentifier, sNewExtensionFileName,
                         bUserDisabled2, false, xAbortChannel,
                         Reference<ucb::XCommandEnvironment>());
+
+                    // if reached this section,
+                    // this means that either the licensedialog.ui didn't popup,
+                    // or user accepted the license agreement. otherwise
+                    // no need to call fireModified() because user declined
+                    // the license agreement therefore no change made.
+                    try
+                    {
+                        fireModified();
+
+                    }catch ( const css::deployment::DeploymentException& ) {
+                        throw;
+                    } catch ( const ucb::CommandFailedException & ) {
+                        throw;
+                    } catch ( const ucb::CommandAbortedException & ) {
+                        throw;
+                    } catch (const lang::IllegalArgumentException &) {
+                        throw;
+                    } catch (const uno::RuntimeException &) {
+                        throw;
+                    } catch (const uno::Exception &) {
+                        uno::Any excOccurred = ::cppu::getCaughtException();
+                        css::deployment::DeploymentException exc(
+                            "Extension Manager: Exception on fireModified() "
+                            "in the scope of 'if (failedPrereq == 0)'",
+                            static_cast<OWeakObject*>(this), excOccurred);
+                        throw exc;
+                    } catch (...) {
+                        throw uno::RuntimeException(
+                            "Extension Manager: RuntimeException on fireModified() "
+                            "in the scope of 'if (failedPrereq == 0)'",
+                            static_cast<OWeakObject*>(this));
+                    }
                 }
                 else
                 {
@@ -779,32 +812,6 @@ Reference<css::deployment::XPackage> ExtensionManager::addExtension(
             ::cppu::throwException(excOccurred2);
         }
     } // leaving the guarded section (getMutex())
-
-    try
-    {
-        fireModified();
-
-    }catch ( const css::deployment::DeploymentException& ) {
-        throw;
-    } catch ( const ucb::CommandFailedException & ) {
-        throw;
-    } catch ( const ucb::CommandAbortedException & ) {
-        throw;
-    } catch (const lang::IllegalArgumentException &) {
-        throw;
-    } catch (const uno::RuntimeException &) {
-        throw;
-    } catch (const uno::Exception &) {
-        uno::Any excOccurred = ::cppu::getCaughtException();
-        css::deployment::DeploymentException exc(
-            "Extension Manager: exception in doChecksForAddExtension",
-            static_cast<OWeakObject*>(this), excOccurred);
-        throw exc;
-    } catch (...) {
-        throw uno::RuntimeException(
-            "Extension Manager: unexpected exception in doChecksForAddExtension",
-            static_cast<OWeakObject*>(this));
-    }
 
     return xNewExtension;
 }
