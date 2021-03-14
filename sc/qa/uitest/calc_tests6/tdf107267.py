@@ -41,7 +41,7 @@ class Subtotals(UITestCase):
 #        xFirstEntry.executeAction("CLICK", tuple())
         #use the Max function
         xfunctions = xDialog.getChild("functions")
-        propsF = {"TEXT": "Max"}
+        propsF = {"POS": "2"} # "Max"
         actionPropsF = mkPropertyValues(propsF)
         xfunctions.executeAction("SELECT", actionPropsF)
 
@@ -58,7 +58,7 @@ class Subtotals(UITestCase):
 #        xFirstEntry.executeAction("CLICK", tuple())
         #use the Min function
         xfunctions = xDialog.getChild("functions")
-        propsF2 = {"TEXT": "Min"}
+        propsF2 = {"POS": "3"} # "Min"
         actionPropsF2 = mkPropertyValues(propsF2)
         xfunctions.executeAction("SELECT", actionPropsF2)
 
@@ -75,7 +75,7 @@ class Subtotals(UITestCase):
 #        xFirstEntry.executeAction("CLICK", tuple())
         #use the Average function
         xfunctions = xDialog.getChild("functions")
-        propsF3 = {"TEXT": "Average"}
+        propsF3 = {"POS": "1"} # "Average"
         actionPropsF3 = mkPropertyValues(propsF3)
         xfunctions.executeAction("SELECT", actionPropsF3)
 
