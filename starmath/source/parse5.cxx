@@ -435,9 +435,7 @@ void SmParser5::NextToken() //Central part of the parser
 
     // set index of current token
     m_nTokenIndex = m_nBufferIndex;
-
-    m_aCurToken.nRow = m_nRow;
-    m_aCurToken.nCol = nRealStart - m_nColOff + 1;
+    sal_uInt32 nCol = nRealStart - m_nColOff;
 
     bool bHandled = true;
     if (nRealStart >= nBufLen)
@@ -475,8 +473,7 @@ void SmParser5::NextToken() //Central part of the parser
         m_aCurToken.nGroup = TG::NONE;
         m_aCurToken.nLevel = 5;
         m_aCurToken.aText = aRes.DequotedNameOrString;
-        m_aCurToken.nRow = m_nRow;
-        m_aCurToken.nCol = nRealStart - m_nColOff + 2;
+        nCol++;
     }
     else if (aRes.TokenType & KParseType::IDENTNAME)
     {
@@ -652,8 +649,6 @@ void SmParser5::NextToken() //Central part of the parser
                     m_aCurToken.nGroup = TG::NONE;
                     m_aCurToken.nLevel = 5;
                     m_aCurToken.aText = "%";
-                    m_aCurToken.nRow = m_nRow;
-                    m_aCurToken.nCol = nTmpStart - m_nColOff;
 
                     if (aTmpRes.TokenType & KParseType::IDENTNAME)
                     {
@@ -937,6 +932,7 @@ void SmParser5::NextToken() //Central part of the parser
 
         aRes.EndPos = nRealStart + nOffset;
     }
+    m_aCurESelection = ESelection(m_nRow, nCol, m_nRow, nCol + m_aCurToken.aText.getLength());
 
     if (TEND != m_aCurToken.eType)
         m_nBufferIndex = aRes.EndPos;
@@ -982,8 +978,8 @@ void SmParser5::NextTokenColor(SmTokenType dvipload)
 
     // set index of current token
     m_nTokenIndex = m_nBufferIndex;
-    m_aCurToken.nRow = m_nRow;
-    m_aCurToken.nCol = nRealStart - m_nColOff + 1;
+    sal_uInt32 nCol = nRealStart - m_nColOff;
+
     if (nRealStart >= nBufLen)
         m_aCurToken.eType = TEND;
     else if (aRes.TokenType & KParseType::IDENTNAME)
@@ -1017,6 +1013,8 @@ void SmParser5::NextTokenColor(SmTokenType dvipload)
     }
     else
         m_aCurToken.eType = TNONE;
+
+    m_aCurESelection = ESelection(m_nRow, nCol, m_nRow, nCol + m_aCurToken.aText.getLength());
     if (TEND != m_aCurToken.eType)
         m_nBufferIndex = aRes.EndPos;
 }
@@ -1070,8 +1068,8 @@ void SmParser5::NextTokenFontSize()
 
     // set index of current token
     m_nTokenIndex = m_nBufferIndex;
-    m_aCurToken.nRow = m_nRow;
-    m_aCurToken.nCol = nRealStart - m_nColOff + 1;
+    sal_uInt32 nCol = nRealStart - m_nColOff;
+
     if (nRealStart >= nBufLen)
         m_aCurToken.eType = TEND;
     else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
@@ -1129,6 +1127,8 @@ void SmParser5::NextTokenFontSize()
     }
     else
         m_aCurToken.eType = TNONE;
+
+    m_aCurESelection = ESelection(m_nRow, nCol, m_nRow, nCol + m_aCurToken.aText.getLength());
     if (TEND != m_aCurToken.eType)
         m_nBufferIndex = aRes.EndPos;
 }
@@ -1160,6 +1160,7 @@ std::unique_ptr<SmTableNode> SmParser5::DoTable()
     }
     assert(m_aCurToken.eType == TEND);
     std::unique_ptr<SmTableNode> xSNode(new SmTableNode(m_aCurToken));
+    xSNode->SetSelection(m_aCurESelection);
     xSNode->SetSubNodes(buildNodeArray(aLineArray));
     return xSNode;
 }
@@ -1174,6 +1175,7 @@ std::unique_ptr<SmNode> SmParser5::DoAlign(bool bUseExtraSpaces)
     if (TokenInGroup(TG::Align))
     {
         xSNode.reset(new SmAlignNode(m_aCurToken));
+        xSNode->SetSelection(m_aCurESelection);
 
         NextToken();
 
@@ -1219,6 +1221,7 @@ std::unique_ptr<SmNode> SmParser5::DoLine()
     }
 
     auto xSNode = std::make_unique<SmLineNode>(m_aCurToken);
+    xSNode->SetSelection(m_aCurESelection);
     xSNode->SetSubNodes(buildNodeArray(ExpressionArray));
     return xSNode;
 }
@@ -1256,6 +1259,7 @@ std::unique_ptr<SmNode> SmParser5::DoRelation()
     while (TokenInGroup(TG::Relation))
     {
         std::unique_ptr<SmStructureNode> xSNode(new SmBinHorNode(m_aCurToken));
+        xSNode->SetSelection(m_aCurESelection);
         auto xSecond = DoOpSubSup();
         auto xThird = DoSum();
         xSNode->SetSubNodes(std::move(xFirst), std::move(xSecond), std::move(xThird));
@@ -1280,6 +1284,7 @@ std::unique_ptr<SmNode> SmParser5::DoSum()
     while (TokenInGroup(TG::Sum))
     {
         std::unique_ptr<SmStructureNode> xSNode(new SmBinHorNode(m_aCurToken));
+        xSNode->SetSelection(m_aCurESelection);
         auto xSecond = DoOpSubSup();
         auto xThird = DoProduct();
         xSNode->SetSubNodes(std::move(xFirst), std::move(xSecond), std::move(xThird));
@@ -1318,7 +1323,9 @@ std::unique_ptr<SmNode> SmParser5::DoProduct()
         {
             case TOVER:
                 xSNode.reset(new SmBinVerNode(m_aCurToken));
+                xSNode->SetSelection(m_aCurESelection);
                 xOper.reset(new SmRectangleNode(m_aCurToken));
+                xOper->SetSelection(m_aCurESelection);
                 NextToken();
                 break;
 
@@ -1336,7 +1343,9 @@ std::unique_ptr<SmNode> SmParser5::DoProduct()
             case TOVERBRACE:
             case TUNDERBRACE:
                 xSNode.reset(new SmVerticalBraceNode(m_aCurToken));
+                xSNode->SetSelection(m_aCurESelection);
                 xOper.reset(new SmMathSymbolNode(m_aCurToken));
+                xOper->SetSelection(m_aCurESelection);
 
                 NextToken();
                 break;
@@ -1349,6 +1358,7 @@ std::unique_ptr<SmNode> SmParser5::DoProduct()
                 xSNode.reset(pSTmp);
 
                 xOper.reset(new SmPolyLineNode(m_aCurToken));
+                xOper->SetSelection(m_aCurESelection);
                 NextToken();
 
                 break;
@@ -1356,6 +1366,7 @@ std::unique_ptr<SmNode> SmParser5::DoProduct()
 
             default:
                 xSNode.reset(new SmBinHorNode(m_aCurToken));
+                xSNode->SetSelection(m_aCurESelection);
 
                 xOper = DoOpSubSup();
         }
@@ -1376,6 +1387,7 @@ std::unique_ptr<SmNode> SmParser5::DoSubSup(TG nActiveGroup, std::unique_ptr<SmN
     assert(m_aCurToken.nGroup == nActiveGroup);
 
     std::unique_ptr<SmSubSupNode> pNode(new SmSubSupNode(m_aCurToken));
+    pNode->SetSelection(m_aCurESelection);
     //! Of course 'm_aCurToken' is just the first sub-/supscript token.
     //! It should be of no further interest. The positions of the
     //! sub-/supscripts will be identified by the corresponding subnodes
@@ -1458,6 +1470,7 @@ std::unique_ptr<SmNode> SmParser5::DoSubSupEvaluate(std::unique_ptr<SmNode> xGiv
     DepthProtect aDepthGuard(m_nParseDepth);
 
     std::unique_ptr<SmSubSupNode> pNode(new SmSubSupNode(m_aCurToken));
+    pNode->SetSelection(m_aCurESelection);
     pNode->SetUseLimits(true);
 
     // initialize subnodes array
@@ -1511,6 +1524,7 @@ std::unique_ptr<SmNode> SmParser5::DoOpSubSup()
 
     // get operator symbol
     auto xNode = std::make_unique<SmMathSymbolNode>(m_aCurToken);
+    xNode->SetSelection(m_aCurESelection);
     // skip operator token
     NextToken();
     // get sub- supscripts if any
@@ -1537,6 +1551,7 @@ std::unique_ptr<SmBlankNode> SmParser5::DoBlank()
 
     assert(TokenInGroup(TG::Blank));
     std::unique_ptr<SmBlankNode> pBlankNode(new SmBlankNode(m_aCurToken));
+    pBlankNode->SetSelection(m_aCurESelection);
 
     do
     {
@@ -1578,6 +1593,7 @@ std::unique_ptr<SmNode> SmParser5::DoTerm(bool bGroupNumberIdent)
             if (m_aCurToken.eType == TRGROUP)
             {
                 std::unique_ptr<SmStructureNode> xSNode(new SmExpressionNode(m_aCurToken));
+                xSNode->SetSelection(m_aCurESelection);
                 xSNode->SetSubNodes(nullptr, nullptr);
 
                 NextToken();
@@ -1591,6 +1607,7 @@ std::unique_ptr<SmNode> SmParser5::DoTerm(bool bGroupNumberIdent)
                 return pNode;
             }
             auto xSNode = std::make_unique<SmExpressionNode>(m_aCurToken);
+            xSNode->SetSelection(m_aCurESelection);
             std::unique_ptr<SmNode> xError(DoError(SmParseError::RgroupExpected));
             xSNode->SetSubNodes(std::move(pNode), std::move(xError));
             return std::unique_ptr<SmNode>(xSNode.release());
@@ -1608,12 +1625,14 @@ std::unique_ptr<SmNode> SmParser5::DoTerm(bool bGroupNumberIdent)
         case TTEXT:
         {
             auto pNode = std::make_unique<SmTextNode>(m_aCurToken, FNT_TEXT);
+            pNode->SetSelection(m_aCurESelection);
             NextToken();
             return std::unique_ptr<SmNode>(pNode.release());
         }
         case TCHARACTER:
         {
             auto pNode = std::make_unique<SmTextNode>(m_aCurToken, FNT_VARIABLE);
+            pNode->SetSelection(m_aCurESelection);
             NextToken();
             return std::unique_ptr<SmNode>(pNode.release());
         }
@@ -1622,6 +1641,7 @@ std::unique_ptr<SmNode> SmParser5::DoTerm(bool bGroupNumberIdent)
         {
             auto pTextNode = std::make_unique<SmTextNode>(
                 m_aCurToken, m_aCurToken.eType == TNUMBER ? FNT_NUMBER : FNT_VARIABLE);
+            pTextNode->SetSelection(m_aCurESelection);
             if (!bGroupNumberIdent)
             {
                 NextToken();
@@ -1690,6 +1710,7 @@ std::unique_ptr<SmNode> SmParser5::DoTerm(bool bGroupNumberIdent)
         case TDOTSVERT:
         {
             auto pNode = std::make_unique<SmMathSymbolNode>(m_aCurToken);
+            pNode->SetSelection(m_aCurESelection);
             NextToken();
             return std::unique_ptr<SmNode>(pNode.release());
         }
@@ -1710,6 +1731,7 @@ std::unique_ptr<SmNode> SmParser5::DoTerm(bool bGroupNumberIdent)
         case TINFINITY:
         {
             auto pNode = std::make_unique<SmMathIdentifierNode>(m_aCurToken);
+            pNode->SetSelection(m_aCurESelection);
             NextToken();
             return std::unique_ptr<SmNode>(pNode.release());
         }
@@ -1717,6 +1739,7 @@ std::unique_ptr<SmNode> SmParser5::DoTerm(bool bGroupNumberIdent)
         case TPLACE:
         {
             auto pNode = std::make_unique<SmPlaceNode>(m_aCurToken);
+            pNode->SetSelection(m_aCurESelection);
             NextToken();
             return std::unique_ptr<SmNode>(pNode.release());
         }
@@ -1741,6 +1764,7 @@ std::unique_ptr<SmNode> SmParser5::DoTerm(bool bGroupNumberIdent)
             if (m_aCurToken.eType == THEX)
             {
                 auto pTextNode = std::make_unique<SmTextNode>(m_aCurToken, FNT_NUMBER);
+                pTextNode->SetSelection(m_aCurESelection);
                 NextToken();
                 return pTextNode;
             }
@@ -1811,6 +1835,7 @@ std::unique_ptr<SmNode> SmParser5::DoEscape()
         case TRDLINE:
         {
             auto pNode = std::make_unique<SmMathSymbolNode>(m_aCurToken);
+            pNode->SetSelection(m_aCurESelection);
             NextToken();
             return std::unique_ptr<SmNode>(pNode.release());
         }
@@ -1826,6 +1851,7 @@ std::unique_ptr<SmOperNode> SmParser5::DoOperator()
     assert(TokenInGroup(TG::Oper));
 
     auto xSNode = std::make_unique<SmOperNode>(m_aCurToken);
+    xSNode->SetSelection(m_aCurESelection);
 
     // get operator
     auto xOperator = DoOper();
@@ -1860,6 +1886,7 @@ std::unique_ptr<SmNode> SmParser5::DoOper()
         case TLLINT:
         case TLLLINT:
             pNode.reset(new SmMathSymbolNode(m_aCurToken));
+            pNode->SetSelection(m_aCurESelection);
             break;
 
         case TLIM:
@@ -1868,6 +1895,7 @@ std::unique_ptr<SmNode> SmParser5::DoOper()
             m_aCurToken.aText
                 = eType == TLIMSUP ? u"lim sup" : eType == TLIMINF ? u"lim inf" : u"lim";
             pNode.reset(new SmTextNode(m_aCurToken, FNT_TEXT));
+            pNode->SetSelection(m_aCurESelection);
             break;
 
         case TOPER:
@@ -1875,6 +1903,7 @@ std::unique_ptr<SmNode> SmParser5::DoOper()
             OSL_ENSURE(m_aCurToken.eType == TSPECIAL, "Sm: wrong token");
             m_aCurToken.eType = TOPER;
             pNode.reset(new SmGlyphSpecialNode(m_aCurToken));
+            pNode->SetSelection(m_aCurESelection);
             break;
 
         default:
@@ -1892,6 +1921,7 @@ std::unique_ptr<SmStructureNode> SmParser5::DoUnOper()
     assert(TokenInGroup(TG::UnOper));
 
     SmToken aNodeToken = m_aCurToken;
+    ESelection aESelection = m_aCurESelection;
     SmTokenType eType = m_aCurToken.eType;
     bool bIsPostfix = eType == TFACT;
 
@@ -1939,6 +1969,7 @@ std::unique_ptr<SmStructureNode> SmParser5::DoUnOper()
     if (eType == TABS)
     {
         xSNode.reset(new SmBraceNode(aNodeToken));
+        xSNode->SetSelection(aESelection);
         xSNode->SetScaleMode(SmScaleMode::Height);
 
         // build nodes for left & right lines
@@ -1948,19 +1979,24 @@ std::unique_ptr<SmStructureNode> SmParser5::DoUnOper()
 
         aNodeToken.setChar(MS_VERTLINE);
         std::unique_ptr<SmNode> xLeft(new SmMathSymbolNode(aNodeToken));
+        xLeft->SetSelection(aESelection);
         std::unique_ptr<SmNode> xRight(new SmMathSymbolNode(aNodeToken));
+        xRight->SetSelection(aESelection);
 
         xSNode->SetSubNodes(std::move(xLeft), std::move(xArg), std::move(xRight));
     }
     else if (eType == TSQRT || eType == TNROOT)
     {
         xSNode.reset(new SmRootNode(aNodeToken));
+        xSNode->SetSelection(aESelection);
         xOper.reset(new SmRootSymbolNode(aNodeToken));
+        xOper->SetSelection(aESelection);
         xSNode->SetSubNodes(std::move(xExtra), std::move(xOper), std::move(xArg));
     }
     else
     {
         xSNode.reset(new SmUnHorNode(aNodeToken));
+        xSNode->SetSelection(aESelection);
         if (bIsPostfix)
             xSNode->SetSubNodes(std::move(xArg), std::move(xOper));
         else
@@ -1979,6 +2015,7 @@ std::unique_ptr<SmStructureNode> SmParser5::DoAttribute()
     assert(TokenInGroup(TG::Attribute));
 
     auto xSNode = std::make_unique<SmAttributeNode>(m_aCurToken);
+    xSNode->SetSelection(m_aCurESelection);
     std::unique_ptr<SmNode> xAttr;
     SmScaleMode eScaleMode = SmScaleMode::None;
 
@@ -1989,6 +2026,7 @@ std::unique_ptr<SmStructureNode> SmParser5::DoAttribute()
         case TOVERLINE:
         case TOVERSTRIKE:
             xAttr.reset(new SmRectangleNode(m_aCurToken));
+            xAttr->SetSelection(m_aCurESelection);
             eScaleMode = SmScaleMode::Width;
             break;
 
@@ -1997,11 +2035,13 @@ std::unique_ptr<SmStructureNode> SmParser5::DoAttribute()
         case TWIDEHAT:
         case TWIDETILDE:
             xAttr.reset(new SmMathSymbolNode(m_aCurToken));
+            xAttr->SetSelection(m_aCurESelection);
             eScaleMode = SmScaleMode::Width;
             break;
 
         default:
             xAttr.reset(new SmMathSymbolNode(m_aCurToken));
+            xAttr->SetSelection(m_aCurESelection);
     }
 
     NextToken();
@@ -2026,6 +2066,7 @@ std::unique_ptr<SmStructureNode> SmParser5::DoFontAttribute()
         case TPHANTOM:
         {
             auto pNode = std::make_unique<SmFontNode>(m_aCurToken);
+            pNode->SetSelection(m_aCurESelection);
             NextToken();
             return pNode;
         }
@@ -2053,6 +2094,7 @@ std::unique_ptr<SmStructureNode> SmParser5::DoColor()
     sal_Int32 nBufferIndex = m_nBufferIndex;
     NextTokenColor(TCOLOR);
     SmToken aToken;
+    ESelection aESelection;
 
     if (m_aCurToken.eType == TDVIPSNAMESCOL)
         NextTokenColor(TDVIPSNAMESCOL);
@@ -2061,6 +2103,7 @@ std::unique_ptr<SmStructureNode> SmParser5::DoColor()
     if (TokenInGroup(TG::Color))
     {
         aToken = m_aCurToken;
+        aESelection = m_aCurESelection;
         if (m_aCurToken.eType == TRGB) //loads r, g and b
         {
             sal_uInt32 nr, ng, nb, nc;
@@ -2132,6 +2175,7 @@ std::unique_ptr<SmStructureNode> SmParser5::DoColor()
 
     std::unique_ptr<SmStructureNode> xNode;
     xNode.reset(new SmFontNode(aToken));
+    xNode->SetSelection(aESelection);
     return xNode;
 }
 
@@ -2144,6 +2188,7 @@ std::unique_ptr<SmStructureNode> SmParser5::DoFont()
     std::unique_ptr<SmStructureNode> xNode;
     // last font rules, get that one
     SmToken aToken;
+    ESelection aESelection = m_aCurESelection;
     do
     {
         NextToken();
@@ -2160,6 +2205,7 @@ std::unique_ptr<SmStructureNode> SmParser5::DoFont()
     } while (m_aCurToken.eType == TFONT);
 
     xNode.reset(new SmFontNode(aToken));
+    xNode->SetSelection(aESelection);
     return xNode;
 }
 
@@ -2167,6 +2213,7 @@ std::unique_ptr<SmStructureNode> SmParser5::DoFontSize()
 {
     DepthProtect aDepthGuard(m_nParseDepth);
     std::unique_ptr<SmFontNode> pFontNode(new SmFontNode(m_aCurToken));
+    pFontNode->SetSelection(m_aCurESelection);
     NextTokenFontSize();
     FontSizeType Type;
 
@@ -2232,6 +2279,7 @@ std::unique_ptr<SmStructureNode> SmParser5::DoBrace()
     assert(m_aCurToken.eType == TLEFT || TokenInGroup(TG::LBrace));
 
     std::unique_ptr<SmStructureNode> xSNode(new SmBraceNode(m_aCurToken));
+    xSNode->SetSelection(m_aCurESelection);
     std::unique_ptr<SmNode> pBody, pLeft, pRight;
     SmScaleMode eScaleMode = SmScaleMode::None;
     SmParseError eError = SmParseError::None;
@@ -2246,6 +2294,7 @@ std::unique_ptr<SmStructureNode> SmParser5::DoBrace()
         if (TokenInGroup(TG::LBrace) || TokenInGroup(TG::RBrace))
         {
             pLeft.reset(new SmMathSymbolNode(m_aCurToken));
+            pLeft->SetSelection(m_aCurESelection);
 
             NextToken();
             pBody = DoBracebody(true);
@@ -2258,6 +2307,7 @@ std::unique_ptr<SmStructureNode> SmParser5::DoBrace()
                 if (TokenInGroup(TG::LBrace) || TokenInGroup(TG::RBrace))
                 {
                     pRight.reset(new SmMathSymbolNode(m_aCurToken));
+                    pRight->SetSelection(m_aCurESelection);
                     NextToken();
                 }
                 else
@@ -2274,6 +2324,7 @@ std::unique_ptr<SmStructureNode> SmParser5::DoBrace()
         assert(TokenInGroup(TG::LBrace));
 
         pLeft.reset(new SmMathSymbolNode(m_aCurToken));
+        pLeft->SetSelection(m_aCurESelection);
 
         NextToken();
         pBody = DoBracebody(false);
@@ -2321,6 +2372,7 @@ std::unique_ptr<SmStructureNode> SmParser5::DoBrace()
         if (m_aCurToken.eType == eExpectedType)
         {
             pRight.reset(new SmMathSymbolNode(m_aCurToken));
+            pRight->SetSelection(m_aCurESelection);
             NextToken();
         }
         else
@@ -2343,6 +2395,7 @@ std::unique_ptr<SmBracebodyNode> SmParser5::DoBracebody(bool bIsLeftRight)
     DepthProtect aDepthGuard(m_nParseDepth);
 
     auto pBody = std::make_unique<SmBracebodyNode>(m_aCurToken);
+    pBody->SetSelection(m_aCurESelection);
 
     std::vector<std::unique_ptr<SmNode>> aNodes;
     // get body if any
@@ -2352,7 +2405,9 @@ std::unique_ptr<SmBracebodyNode> SmParser5::DoBracebody(bool bIsLeftRight)
         {
             if (m_aCurToken.eType == TMLINE)
             {
-                aNodes.emplace_back(std::make_unique<SmMathSymbolNode>(m_aCurToken));
+                SmMathSymbolNode* pTempNode = new SmMathSymbolNode(m_aCurToken);
+                pTempNode->SetSelection(m_aCurESelection);
+                aNodes.emplace_back(std::unique_ptr<SmMathSymbolNode>(pTempNode));
                 NextToken();
             }
             else if (m_aCurToken.eType != TRIGHT)
@@ -2369,7 +2424,9 @@ std::unique_ptr<SmBracebodyNode> SmParser5::DoBracebody(bool bIsLeftRight)
         {
             if (m_aCurToken.eType == TMLINE)
             {
-                aNodes.emplace_back(std::make_unique<SmMathSymbolNode>(m_aCurToken));
+                SmMathSymbolNode* pTempNode = new SmMathSymbolNode(m_aCurToken);
+                pTempNode->SetSelection(m_aCurESelection);
+                aNodes.emplace_back(std::unique_ptr<SmMathSymbolNode>(pTempNode));
                 NextToken();
             }
             else if (!TokenInGroup(TG::RBrace))
@@ -2392,9 +2449,8 @@ std::unique_ptr<SmNode> SmParser5::DoEvaluate()
 
     // Create node
     std::unique_ptr<SmStructureNode> xSNode(new SmBraceNode(m_aCurToken));
+    xSNode->SetSelection(m_aCurESelection);
     SmToken aToken(TRLINE, MS_VERTLINE, "evaluate", TG::RBrace, 5);
-    aToken.nRow = m_aCurToken.nRow;
-    aToken.nCol = m_aCurToken.nCol;
 
     // Parse body && left none
     NextToken();
@@ -2432,6 +2488,7 @@ std::unique_ptr<SmTextNode> SmParser5::DoFunction()
         m_aCurToken.nGroup = TG::Function;
     }
     auto pNode = std::make_unique<SmTextNode>(m_aCurToken, FNT_FUNCTION);
+    pNode->SetSelection(m_aCurESelection);
     NextToken();
     return pNode;
 }
@@ -2441,6 +2498,7 @@ std::unique_ptr<SmTableNode> SmParser5::DoBinom()
     DepthProtect aDepthGuard(m_nParseDepth);
 
     auto xSNode = std::make_unique<SmTableNode>(m_aCurToken);
+    xSNode->SetSelection(m_aCurESelection);
 
     NextToken();
 
@@ -2455,7 +2513,9 @@ std::unique_ptr<SmBinVerNode> SmParser5::DoFrac()
     DepthProtect aDepthGuard(m_nParseDepth);
 
     std::unique_ptr<SmBinVerNode> xSNode = std::make_unique<SmBinVerNode>(m_aCurToken);
+    xSNode->SetSelection(m_aCurESelection);
     std::unique_ptr<SmNode> xOper = std::make_unique<SmRectangleNode>(m_aCurToken);
+    xOper->SetSelection(m_aCurESelection);
 
     NextToken();
 
@@ -2470,6 +2530,7 @@ std::unique_ptr<SmStructureNode> SmParser5::DoStack()
     DepthProtect aDepthGuard(m_nParseDepth);
 
     std::unique_ptr<SmStructureNode> xSNode(new SmTableNode(m_aCurToken));
+    xSNode->SetSelection(m_aCurESelection);
     NextToken();
     if (m_aCurToken.eType != TLGROUP)
         return DoError(SmParseError::LgroupExpected);
@@ -2494,6 +2555,7 @@ std::unique_ptr<SmStructureNode> SmParser5::DoMatrix()
     DepthProtect aDepthGuard(m_nParseDepth);
 
     std::unique_ptr<SmMatrixNode> xMNode(new SmMatrixNode(m_aCurToken));
+    xMNode->SetSelection(m_aCurESelection);
     NextToken();
     if (m_aCurToken.eType != TLGROUP)
         return DoError(SmParseError::LgroupExpected);
@@ -2581,6 +2643,7 @@ std::unique_ptr<SmSpecialNode> SmParser5::DoSpecial()
         m_aUsedSymbols.insert(aSymbolName);
 
     auto pNode = std::make_unique<SmSpecialNode>(m_aCurToken);
+    pNode->SetSelection(m_aCurESelection);
     NextToken();
     return pNode;
 }
@@ -2608,6 +2671,7 @@ std::unique_ptr<SmExpressionNode> SmParser5::DoError(SmParseError eError)
     m_aCurToken.cMathChar = sStrBuf.makeStringAndClear();
     auto xSNode = std::make_unique<SmExpressionNode>(m_aCurToken);
     SmErrorNode* pErr(new SmErrorNode(m_aCurToken));
+    pErr->SetSelection(m_aCurESelection);
     xSNode->SetSubNode(0, pErr);
 
     // Append error to the error list
@@ -2645,7 +2709,7 @@ std::unique_ptr<SmTableNode> SmParser5::Parse(const OUString& rBuffer)
     m_aBufferString = convertLineEnd(rBuffer, LINEEND_LF);
     m_nBufferIndex = 0;
     m_nTokenIndex = 0;
-    m_nRow = 1;
+    m_nRow = 0;
     m_nColOff = 0;
     m_nCurError = -1;
 
@@ -2660,7 +2724,7 @@ std::unique_ptr<SmNode> SmParser5::ParseExpression(const OUString& rBuffer)
     m_aBufferString = convertLineEnd(rBuffer, LINEEND_LF);
     m_nBufferIndex = 0;
     m_nTokenIndex = 0;
-    m_nRow = 1;
+    m_nRow = 0;
     m_nColOff = 0;
     m_nCurError = -1;
 
