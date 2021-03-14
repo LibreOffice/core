@@ -337,7 +337,6 @@ StringMap WindowUIObject::get_state()
 void WindowUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
-    bool bHandled = true;
     if (rAction == "SET")
     {
         for (auto const& parameter : rParameters)
@@ -369,8 +368,12 @@ void WindowUIObject::execute(const OUString& rAction,
         }
         else
         {
-            SAL_WARN("vcl.uitest", "missing parameter TEXT to action TYPE");
-            return;
+            OStringBuffer buf;
+            for (auto const & rPair : rParameters)
+                buf.append(",").append(rPair.first.toUtf8()).append("=").append(rPair.second.toUtf8());
+            SAL_WARN("vcl.uitest", "missing parameter TEXT to action TYPE "
+                << buf.makeStringAndClear());
+            throw std::logic_error("missing parameter TEXT to action TYPE");
         }
     }
     else if (rAction == "FOCUS")
@@ -379,12 +382,12 @@ void WindowUIObject::execute(const OUString& rAction,
     }
     else
     {
-        bHandled = false;
-    }
-
-    if (!bHandled)
-    {
-        SAL_WARN("vcl.uitest", "unknown action or parameter for " << get_name() << ". Action: " << rAction);
+        OStringBuffer buf;
+        for (auto const & rPair : rParameters)
+            buf.append(",").append(rPair.first.toUtf8()).append("=").append(rPair.second.toUtf8());
+        SAL_WARN("vcl.uitest", "unknown action for " << get_name()
+            << ". Action: " << rAction << buf.makeStringAndClear());
+        throw std::logic_error("unknown action");
     }
 }
 
