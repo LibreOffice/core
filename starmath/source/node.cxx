@@ -266,8 +266,8 @@ const SmNode * SmNode::FindTokenAt(sal_uInt16 nRow, sal_uInt16 nCol) const
     //! (there should be exactly one such node if any)
 {
     if (    IsVisible()
-        &&  nRow == GetToken().nRow
-        &&  nCol >= GetToken().nCol  &&  nCol < GetToken().nCol + GetToken().aText.getLength())
+        &&  nRow == GetSelection().nStartPara -1
+        &&  nCol >= GetSelection().nStartPos -1  &&  nCol < GetSelection().nEndPos -1 )
         return this;
     else
     {

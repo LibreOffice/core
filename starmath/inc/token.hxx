@@ -223,17 +223,11 @@ struct SmToken
     TG nGroup;
     sal_uInt16 nLevel;
 
-    // token position
-    sal_Int32 nRow; // 1-based
-    sal_Int32 nCol; // 1-based
-
     SmToken()
         : eType(TUNKNOWN)
         , cMathChar('\0')
         , nGroup(TG::NONE)
         , nLevel(0)
-        , nRow(0)
-        , nCol(0)
     {
     }
 
@@ -244,8 +238,6 @@ struct SmToken
         , cMathChar(cMath)
         , nGroup(nTokenGroup)
         , nLevel(nTokenLevel)
-        , nRow(0)
-        , nCol(0)
     {
     }
 
@@ -256,8 +248,6 @@ struct SmToken
         cMathChar = OUString(&aTokenTableEntry.cMathChar, 1);
         nGroup = aTokenTableEntry.nGroup;
         nLevel = aTokenTableEntry.nLevel;
-        nRow = 0;
-        nCol = 0;
     }
 
     void operator=(const SmTokenTableEntry* aTokenTableEntry)
@@ -267,8 +257,6 @@ struct SmToken
         cMathChar = OUString(&aTokenTableEntry->cMathChar, 1);
         nGroup = aTokenTableEntry->nGroup;
         nLevel = aTokenTableEntry->nLevel;
-        nRow = 0;
-        nCol = 0;
     }
 
     void operator=(const SmColorTokenTableEntry& aTokenTableEntry)
@@ -278,8 +266,6 @@ struct SmToken
         cMathChar = OUString::number(static_cast<sal_uInt32>(aTokenTableEntry.cColor), 16);
         nGroup = TG::Color;
         nLevel = 0;
-        nRow = 0;
-        nCol = 0;
     }
 
     void operator=(const SmColorTokenTableEntry* aTokenTableEntry)
@@ -289,8 +275,6 @@ struct SmToken
         cMathChar = OUString::number(static_cast<sal_uInt32>(aTokenTableEntry->cColor), 16);
         nGroup = TG::Color;
         nLevel = 0;
-        nRow = 0;
-        nCol = 0;
     }
 
     void operator=(const std::unique_ptr<SmColorTokenTableEntry>& aTokenTableEntry)
@@ -300,8 +284,6 @@ struct SmToken
         cMathChar = OUString::number(static_cast<sal_uInt32>(aTokenTableEntry->cColor), 16);
         nGroup = TG::Color;
         nLevel = 0;
-        nRow = 0;
-        nCol = 0;
     }
 
     void setChar(sal_Unicode cChar) { cMathChar = OUString(&cChar, 1); }
