@@ -337,7 +337,6 @@ StringMap WindowUIObject::get_state()
 void WindowUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
-    bool bHandled = true;
     if (rAction == "SET")
     {
         for (auto const& parameter : rParameters)
@@ -369,8 +368,12 @@ void WindowUIObject::execute(const OUString& rAction,
         }
         else
         {
-            SAL_WARN("vcl.uitest", "missing parameter TEXT to action TYPE");
-            return;
+            OStringBuffer buf;
+            for (auto const & rPair : rParameters)
+                buf.append(",").append(rPair.first.toUtf8()).append("=").append(rPair.second.toUtf8());
+            SAL_WARN("vcl.uitest", "missing parameter TEXT to action TYPE "
+                << buf.makeStringAndClear());
+            throw std::logic_error("missing parameter TEXT to action TYPE");
         }
     }
     else if (rAction == "FOCUS")
@@ -379,12 +382,12 @@ void WindowUIObject::execute(const OUString& rAction,
     }
     else
     {
-        bHandled = false;
-    }
-
-    if (!bHandled)
-    {
-        SAL_WARN("vcl.uitest", "unknown action or parameter for " << get_name() << ". Action: " << rAction);
+        OStringBuffer buf;
+        for (auto const & rPair : rParameters)
+            buf.append(",").append(rPair.first.toUtf8()).append("=").append(rPair.second.toUtf8());
+        SAL_WARN("vcl.uitest", "unknown action for " << get_name()
+            << ". Action: " << rAction << buf.makeStringAndClear());
+        throw std::logic_error("unknown action");
     }
 }
 
@@ -726,15 +729,9 @@ void EditUIObject::execute(const OUString& rAction,
     bool bHandled = true;
     if (rAction == "TYPE")
     {
-        if (rParameters.find("TEXT") != rParameters.end())
+        auto it = rParameters.find("TEXT");
+        if (it != rParameters.end())
         {
-            auto it = rParameters.find("TEXT");
-            if (it == rParameters.end())
-            {
-                SAL_WARN("vcl.uitest", "missing parameter TEXT to action SET");
-                return;
-            }
-
             const OUString& rText = it->second;
             auto aKeyEvents = generate_key_events_from_text(rText);
             for (auto const& keyEvent : aKeyEvents)
@@ -904,13 +901,15 @@ CheckBoxUIObject::~CheckBoxUIObject()
 }
 
 void CheckBoxUIObject::execute(const OUString& rAction,
-        const StringMap& /*rParameters*/)
+        const StringMap& rParameters)
 {
     if (rAction == "CLICK")
     {
         // don't use toggle directly, it does not set the value
         mxCheckBox->ImplCheck();
     }
+    else
+        WindowUIObject::execute(rAction, rParameters);
 }
 
 StringMap CheckBoxUIObject::get_state()
@@ -959,12 +958,14 @@ RadioButtonUIObject::~RadioButtonUIObject()
 }
 
 void RadioButtonUIObject::execute(const OUString& rAction,
-        const StringMap& /*rParameters*/)
+        const StringMap& rParameters)
 {
     if (rAction == "CLICK")
     {
         mxRadioButton->ImplCallClick();
     }
+    else
+        WindowUIObject::execute(rAction, rParameters);
 }
 
 StringMap RadioButtonUIObject::get_state()
@@ -1013,12 +1014,9 @@ TabPageUIObject::~TabPageUIObject()
 }
 
 void TabPageUIObject::execute(const OUString& rAction,
-        const StringMap& /*rParameters*/)
+        const StringMap& rParameters)
 {
-    if (rAction == "SELECT")
-    {
-        /* code */
-    }
+    WindowUIObject::execute(rAction, rParameters);
 }
 
 StringMap TabPageUIObject::get_state()
@@ -1218,7 +1216,7 @@ SpinUIObject::~SpinUIObject()
 }
 
 void SpinUIObject::execute(const OUString& rAction,
-        const StringMap& /*rParameters*/)
+        const StringMap& rParameters)
 {
     if (rAction == "UP")
     {
@@ -1228,6 +1226,8 @@ void SpinUIObject::execute(const OUString& rAction,
     {
         mxSpinButton->Down();
     }
+    else
+        WindowUIObject::execute(rAction, rParameters);
 }
 
 StringMap SpinUIObject::get_state()
