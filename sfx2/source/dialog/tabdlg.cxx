@@ -168,6 +168,8 @@ void SfxTabPage::Reset( const SfxItemSet* )
 {
 }
 
+bool SfxTabPage::DeferResetToFirstActivation() { return false; }
+
 void SfxTabPage::ActivatePage( const SfxItemSet& )
 /*  [Description]
 
@@ -919,7 +921,10 @@ void SfxTabDialogController::CreatePages()
         pDataObject->xTabPage->SetUserData(sUserData);
 
         PageCreated(pDataObject->sId, *pDataObject->xTabPage);
-        pDataObject->xTabPage->Reset(m_pSet.get());
+        if (pDataObject->xTabPage->DeferResetToFirstActivation())
+            pDataObject->bRefresh = true; // Reset will be called in ActivatePageHdl
+        else
+            pDataObject->xTabPage->Reset(m_pSet.get());
     }
 }
 
