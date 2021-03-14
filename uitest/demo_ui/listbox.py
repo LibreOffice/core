@@ -19,9 +19,6 @@ class ListBoxTest(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
         xCellsDlg = self.xUITest.getTopFocusWindow()
 
-        categoryLB = xCellsDlg.getChild("categorylb")
-        select_pos(categoryLB, "4")
-
         xOkBtn = xCellsDlg.getChild("ok")
         self.ui_test.close_dialog_through_button(xOkBtn)
 
@@ -33,12 +30,6 @@ class ListBoxTest(UITestCase):
 
         self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
         xCellsDlg = self.xUITest.getTopFocusWindow()
-
-        categoryLB = xCellsDlg.getChild("categorylb")
-        props = {"TEXT": "Time"}
-
-        actionProps = mkPropertyValues(props)
-        categoryLB.executeAction("SELECT", actionProps)
 
         xOkBtn = xCellsDlg.getChild("ok")
         self.ui_test.close_dialog_through_button(xOkBtn)

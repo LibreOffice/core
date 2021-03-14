@@ -41,14 +41,6 @@ class formatCell(UITestCase):
         props3 = {"TEXT": "English (USA)"}
         actionProps3 = mkPropertyValues(props3)
         xlanguagelb.executeAction("SELECT", actionProps3)
-        #set Number
-        props = {"TEXT": "Number"}
-        actionProps = mkPropertyValues(props)
-        xliststore1.executeAction("SELECT", actionProps)
-        #set Standard
-        props2 = {"TEXT": "Standard"}
-        actionProps2 = mkPropertyValues(props2)
-        xliststore2.executeAction("SELECT", actionProps2)
         #other properties
         xdecimalsed.executeAction("UP", tuple())
         xleadzerosed.executeAction("UP", tuple())
