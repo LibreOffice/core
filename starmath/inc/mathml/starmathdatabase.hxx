@@ -196,6 +196,14 @@ constexpr Color COL_SM_DEBIAN_MAGENTA(0xA80030);
 // https://libreoffice.org/
 constexpr Color COL_SM_LO_GREEN(0x00A500);
 
+enum class SmBracketPlace : int_fast8_t
+{
+    Prefix = 0,
+    Infix = 1,
+    Postfix = 2,
+    Unknow = -1
+};
+
 namespace starmathdatabase
 {
 // Variables containing color information.
@@ -204,6 +212,19 @@ extern const SmColorTokenTableEntry aColorTokenTableHTML[148];
 extern const SmColorTokenTableEntry aColorTokenTableMATHML[16];
 extern const SmColorTokenTableEntry aColorTokenTableDVIPS[5];
 extern const SmColorTokenTableEntry aColorTokenTableERROR[1];
+
+/**
+  * Identifies operator chars commands for importing mathml.
+  * Identifies from char cChar
+  *
+  * While loading MO or MI elements might find an unicode32 symbol.
+  * This code allows to generate appropriate token for them.
+  *
+  * @param cChar
+  * @return cChar associated command
+  */
+OUString Identify_SymbolCommand(OUString aSmText, bool bIsStretchy, bool isMoNotMi,
+                                SmBracketPlace mPlace);
 
 /**
   * Identifies operator chars tokens for importing mathml.

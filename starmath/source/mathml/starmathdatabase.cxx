@@ -19,6 +19,180 @@
 
 #include <starmathdatabase.hxx>
 
+#define SmFastCompare(compare) aSmText.compareTo(compare) == 0
+
+OUString starmathdatabase::Identify_SymbolCommand(OUString aSmText, bool bIsStretchy,
+                                                  bool isMoNotMi, SmBracketPlace mPlace)
+{
+    // clang-format off
+    if(SmFastCompare(u"")) return OUString(u"none");
+    else if(SmFastCompare(u"\u220F")) return OUString(u"prod");
+    else if(SmFastCompare(u"\u2210")) return OUString(u"coprod");
+    else if(SmFastCompare(u"\u2211")) return OUString(u"sum");
+    else if(SmFastCompare(u"\u222B")) return OUString(bIsStretchy ? u"intd" : u"int");
+    else if(SmFastCompare(u"\u222C")) return OUString(u"iint");
+    else if(SmFastCompare(u"\u222D")) return OUString(u"iiint");
+    else if(SmFastCompare(u"\u222E")) return OUString(u"lint");
+    else if(SmFastCompare(u"\u222F")) return OUString(u"llint");
+    else if(SmFastCompare(u"\u2230")) return OUString(u"lllint");
+    else if(SmFastCompare(u"\u0021")) return OUString(u"!");
+    else if(SmFastCompare(u"\u00AC")) return OUString(u"neg");
+    else if(SmFastCompare(u"\u2295")) return OUString(u"oplus");
+    else if(SmFastCompare(u"\u2296")) return OUString(u"ominus");
+    else if(SmFastCompare(u"\u2297")) return OUString(u"otimes");
+    else if(SmFastCompare(u"\u2298")) return OUString(u"odivide");
+    else if(SmFastCompare(u"\u2299")) return OUString(u"odot");
+    else if(SmFastCompare(u"\u222A")) return OUString(u"union");
+    else if(SmFastCompare(u"\u2229")) return OUString(u"intersection");
+    else if(SmFastCompare(u"\u2228")) return OUString(u"|");
+    else if(SmFastCompare(u"\u2227")) return OUString(u"&");
+    else if(SmFastCompare(u"\u220B")) return OUString(u"owns");
+    else if(SmFastCompare(u"\u00B1")) return OUString(u"+-");
+    else if(SmFastCompare(u"\u2213")) return OUString(u"-+");
+    else if(SmFastCompare(u"\uE083")) return OUString(u"+");
+    else if(SmFastCompare(u"\u2212")) return OUString(u"-");
+    else if(SmFastCompare(u"\u22C5")) return OUString(u"cdot");
+    else if(SmFastCompare(u"\u2022")) return OUString(u"cdot");
+    else if(SmFastCompare(u"\u00D7")) return OUString(u"times");
+    else if(SmFastCompare(u"\u2217")) return OUString(u"*");
+    else if(SmFastCompare(u"\u00F7")) return OUString(u"div");
+    else if(SmFastCompare(u"\u225D")) return OUString(u"def");
+    else if(SmFastCompare(u"\u002F")) return OUString(bIsStretchy ?  u"wideslash" :  u"slash");
+    else if(SmFastCompare(u"\u2216")) return OUString(bIsStretchy ?  u"widebslash" : u"bsalsh");
+    else if(SmFastCompare(u"\u2223")) return OUString(u"divides");
+    else if(SmFastCompare(u"\u2224")) return OUString(u"ndivides");
+    else if(SmFastCompare(u"\u2261")) return OUString(u"equiv");
+    else if(SmFastCompare(u"\u003C")) return OUString(u"<");
+    else if(SmFastCompare(u"\u003E")) return OUString(u">");
+    else if(SmFastCompare(u"\u2264")) return OUString(u"<=");
+    else if(SmFastCompare(u"\u2265")) return OUString(u">=");
+    else if(SmFastCompare(u"\u226A")) return OUString(u"<<");
+    else if(SmFastCompare(u"\u226B")) return OUString(u">>");
+    else if(SmFastCompare(u"\u2A7D")) return OUString(u"leslant");
+    else if(SmFastCompare(u"\u2A7E")) return OUString(u"geslant");
+    else if(SmFastCompare(u"\u223C")) return OUString(u"sim");
+    else if(SmFastCompare(u"\u2243")) return OUString(u"simeq");
+    else if(SmFastCompare(u"\u2245")) return OUString(u"simeq");
+    else if(SmFastCompare(u"\u2248")) return OUString(u"approx");
+    else if(SmFastCompare(u"\u2261")) return OUString(u"equiv");
+    else if(SmFastCompare(u"\u221D")) return OUString(u"prop");
+    else if(SmFastCompare(u"\u2202")) return OUString(u"partial");
+    else if(SmFastCompare(u"\u2112")) return OUString(u"laplace");
+    else if(SmFastCompare(u"\u2131")) return OUString(u"fourier");
+    else if(SmFastCompare(u"\u2260")) return OUString(u"<>");
+    else if(SmFastCompare(u"\u2208")) return OUString(u"in");
+    else if(SmFastCompare(u"\u2209")) return OUString(u"notin");
+    else if(SmFastCompare(u"\u227A")) return OUString(u"prec");
+    else if(SmFastCompare(u"\u227C")) return OUString(u"preccurlyeq");
+    else if(SmFastCompare(u"\u227E")) return OUString(u"precsim");
+    else if(SmFastCompare(u"\u227B")) return OUString(u"succ");
+    else if(SmFastCompare(u"\u227D")) return OUString(u"succcurlyeq");
+    else if(SmFastCompare(u"\u227F")) return OUString(u"succsim");
+    else if(SmFastCompare(u"\u2280")) return OUString(u"nprec");
+    else if(SmFastCompare(u"\u2281")) return OUString(u"nsucc");
+    else if(SmFastCompare(u"\u2282")) return OUString(u"subset");
+    else if(SmFastCompare(u"\u2283")) return OUString(u"supset");
+    else if(SmFastCompare(u"\u2286")) return OUString(u"subseteq");
+    else if(SmFastCompare(u"\u2287")) return OUString(u"supseteq");
+    else if(SmFastCompare(u"\u2284")) return OUString(u"nsubset");
+    else if(SmFastCompare(u"\u2285")) return OUString(u"nsupset");
+    else if(SmFastCompare(u"\u2288")) return OUString(u"nsubseteq");
+    else if(SmFastCompare(u"\u2289")) return OUString(u"nsupseteq");
+    else if(SmFastCompare(u"\u22A5")) return OUString(u"ortho");
+    else if(SmFastCompare(u"\u2225")) return OUString(u"parallel");
+    else if(SmFastCompare(u"\u22B6")) return OUString(u"transr");
+    else if(SmFastCompare(u"\u22B7")) return OUString(u"transl");
+    else if(SmFastCompare(u"\u003D")) return OUString(u"=");
+    else if(SmFastCompare(u"\u0028")) return OUString(u"(");
+    else if(SmFastCompare(u"\u0029")) return OUString(u")");
+    else if(SmFastCompare(u"\u005B")) return OUString(u"[");
+    else if(SmFastCompare(u"\u005D")) return OUString(u"]");
+    else if(SmFastCompare(u"\u007B")) return OUString(u"lbrace");
+    else if(SmFastCompare(u"\u007D")) return OUString(u"rbrace");
+    else if(SmFastCompare(u"\u2308")) return OUString(u"lceil");
+    else if(SmFastCompare(u"\u2309")) return OUString(u"rceil");
+    else if(SmFastCompare(u"\u230A")) return OUString(u"lfloor");
+    else if(SmFastCompare(u"\u230B")) return OUString(u"rfloor");
+    else if(SmFastCompare(u"\u2329")) return OUString(u"langle");
+    else if(SmFastCompare(u"\u232A")) return OUString(u"rangle");
+    else if(SmFastCompare(u"\u27E6")) return OUString(u"ldbracket");
+    else if(SmFastCompare(u"\u27E7")) return OUString(u"rdbracket");
+    else if(SmFastCompare(u"\u27E8")) return OUString(u"langle");
+    else if(SmFastCompare(u"\u27E9")) return OUString(u"rangle");
+    else if(SmFastCompare(u"\u007E")) return OUString(u"\"~\"");
+    else if(SmFastCompare(u"\u2192")) return OUString(isMoNotMi ? u"toward" : u"rightarrow");
+    else if(SmFastCompare(u"\u2190")) return OUString(u"leftarrow");
+    else if(SmFastCompare(u"\u2191")) return OUString(u"uparrow");
+    else if(SmFastCompare(u"\u2193")) return OUString(u"downarrow");
+    else if(SmFastCompare(u"\u2115")) return OUString(u"setN");
+    else if(SmFastCompare(u"\u2124")) return OUString(u"setZ");
+    else if(SmFastCompare(u"\u211A")) return OUString(u"setQ");
+    else if(SmFastCompare(u"\u211D")) return OUString(u"setR");
+    else if(SmFastCompare(u"\u2102")) return OUString(u"setC");
+    else if(SmFastCompare(u"\ueb01")) return OUString(u"");
+    else if(SmFastCompare(u"\ueb08")) return OUString(u"");
+    else if(SmFastCompare(u"\uef04")) return OUString(u"`");
+    else if(SmFastCompare(u"\uef05")) return OUString(u"`");
+    else if(SmFastCompare(u"\ueb02")) return OUString(u"`");
+    else if(SmFastCompare(u"\uEB04")) return OUString(u"`");
+    else if(SmFastCompare(u"\uEB05")) return OUString(u"~");
+    else if(SmFastCompare(u"\u2026")) return OUString(u"dotslow");
+    else if(SmFastCompare(u"\u22EF")) return OUString(u"dotsaxis");
+    else if(SmFastCompare(u"\u22EE")) return OUString(u"dotsvert");
+    else if(SmFastCompare(u"\u22F0")) return OUString(u"dotsup");
+    else if(SmFastCompare(u"\u22F1")) return OUString(u"dotsdown");
+    else if(SmFastCompare(u"\u019B")) return OUString(u"lambdabar");
+    else if(SmFastCompare(u"\u210F")) return OUString(u"hbar");
+    else if(SmFastCompare(u"\u2111")) return OUString(u"im");
+    else if(SmFastCompare(u"\u211C")) return OUString(u"re");
+    else if(SmFastCompare(u"\u2118")) return OUString(u"wp");
+    else if(SmFastCompare(u"\u2135")) return OUString(u"aleph");
+    else if(SmFastCompare(u"\u0362")) return OUString(u"widevec");
+    else if(SmFastCompare(u"\u21D0")) return OUString(u"dlarrow");
+    else if(SmFastCompare(u"\u21D2")) return OUString(u"drarrow");
+    else if(SmFastCompare(u"\u21D4")) return OUString(u"dlrarrow");
+    else if(SmFastCompare(u"\u2200")) return OUString(u"forall");
+    else if(SmFastCompare(u"\u2207")) return OUString(u"nabla");
+    else if(SmFastCompare(u"\u2203")) return OUString(u"exists");
+    else if(SmFastCompare(u"\u2204")) return OUString(u"notexists");
+    else if(SmFastCompare(u"\u220D")) return OUString(u"backepsilon");
+    else if(SmFastCompare(u"\u2205")) return OUString(u"emptyset");
+    else if(SmFastCompare(u"\u2218")) return OUString(u"circ");
+    else if(SmFastCompare(u"\u221E")) return OUString(u"infinity");
+    else if(SmFastCompare(u"\u005E")) return OUString(u"^");
+    else if(SmFastCompare(u"\ue091")) return OUString(u"widehat");
+    else if(SmFastCompare(u"\ue096")) return OUString(u"widetilde");
+    else if(SmFastCompare(u"\ue098")) return OUString(u"widevec");
+    else if(SmFastCompare(u"\u03A9")) return OUString(u"%OMEGA");
+    else if(SmFastCompare(u"\u0021")) return OUString(u"fact");
+    else if(SmFastCompare(u"\u007C"))
+    {
+        switch(mPlace)
+        {
+            case SmBracketPlace::Prefix:  return OUString(u"lline");
+            case SmBracketPlace::Infix:   return OUString(u"mline");
+            case SmBracketPlace::Postfix: return OUString(u"rline");
+            case SmBracketPlace::Unknow:  return OUString(u"lrline");
+        }
+        return aSmText;
+    }
+    else if(SmFastCompare(u"\u2016"))
+    {
+        switch(mPlace)
+        {
+            case SmBracketPlace::Prefix:  return OUString(u"ldline");
+            case SmBracketPlace::Infix:   return OUString(u"rdline");
+            case SmBracketPlace::Postfix: return OUString(u"mdline");
+            case SmBracketPlace::Unknow:  return OUString(u"lrdline");
+        }
+        return aSmText;
+    }
+    else return aSmText;
+    // clang-format on
+}
+
+#undef SmFastCompare
+
 SmToken starmathdatabase::Identify_SmXMLOperatorContext_Impl(sal_Unicode cChar, bool bIsStretchy)
 {
     switch (cChar)
@@ -91,9 +265,9 @@ SmToken starmathdatabase::Identify_SmXMLOperatorContext_Impl(sal_Unicode cChar, 
                 return SmToken(TSLASH, MS_SLASH, "slash", TG::Product, 0);
         case MS_BACKSLASH:
             if (bIsStretchy)
-                return SmToken(TWIDEBACKSLASH, MS_BACKSLASH, "bslash", TG::Product, 0);
+                return SmToken(TWIDEBACKSLASH, MS_BACKSLASH, "widebslash", TG::Product, 0);
             else
-                return SmToken(TBACKSLASH, MS_BACKSLASH, "slash", TG::Product, 0);
+                return SmToken(TBACKSLASH, MS_BACKSLASH, "bslash", TG::Product, 0);
         case MS_DEF:
             return SmToken(TDEF, MS_DEF, "def", TG::Relation, 0);
         case MS_LINE:

@@ -123,21 +123,21 @@ void Test::testColor()
 void Test::testSimple()
 {
     loadURL(m_directories.getURLFromSrc(u"starmath/qa/extras/data/simple.mml"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("left ( { a + b } right ) ^ 2"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("left ( { { a + b } } right ) ^ 2"),
                                  mxDocShell->GetText());
 }
 
 void Test::testNsPrefixMath()
 {
     loadURL(m_directories.getURLFromSrc(u"starmath/qa/extras/data/ns-prefix-math.mml"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("left ( { a + b } right ) ^ 2"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("left ( { { a + b } } right ) ^ 2"),
                                  mxDocShell->GetText());
 }
 
 void Test::testMaction()
 {
     loadURL(m_directories.getURLFromSrc(u"starmath/qa/extras/data/maction.mml"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("matrix{ 1 ## 2 ## 3 }"),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", OUString("{ matrix{ 1 ## 2 ## 3 } }"),
                                  mxDocShell->GetText());
 }
 

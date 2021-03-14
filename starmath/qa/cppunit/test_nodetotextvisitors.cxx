@@ -553,7 +553,7 @@ void Test::testBinVerInUnary()
     aCursor.Move(pOutputDevice, MoveDown);
     aCursor.InsertText("2");
 
-    sExpected += "- { 1 over 2 }";
+    sExpected += "{ - { { 1 } over { 2 } } }";
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Binary Vertical in Unary Operator", sExpected,
                                  xDocShRef->GetText());
 }
@@ -620,7 +620,8 @@ void Test::testUnaryInMixedNumberAsNumerator()
     aCursor.InsertText("4");
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unary in mixed number as Numerator",
-                                 OUString("{ 2 { - 1 over 2 } + 4 }"), xDocShRef->GetText());
+                                 OUString("{ 2 { { - 1 } over { 2 } } + 4 }"),
+                                 xDocShRef->GetText());
 }
 
 void Test::testMiscEquivalent()
