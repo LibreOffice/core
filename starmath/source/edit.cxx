@@ -276,8 +276,6 @@ IMPL_LINK_NOARG(SmEditWindow, CursorMoveTimerHdl, Timer *, void)
             sal_Int32  nRow;
             sal_uInt16 nCol;
             SmGetLeftSelectionPart(aNewSelection, nRow, nCol);
-            nRow++;
-            nCol++;
             pView->GetGraphicWindow().SetCursorPos(static_cast<sal_uInt16>(nRow), nCol);
             aOldSelection = aNewSelection;
         }

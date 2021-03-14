@@ -173,12 +173,7 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
     const SmToken  aToken (pNode->GetToken());
 
     // set selection to the beginning of the token
-    ESelection  aSel (aToken.nRow - 1, aToken.nCol - 1);
-
-    if (rMEvt.GetClicks() != 1 || aToken.eType == TPLACE)
-        aSel.nEndPos = aSel.nEndPos + sal::static_int_cast< sal_uInt16 >(aToken.aText.getLength());
-
-    pEdit->SetSelection(aSel);
+    pEdit->SetSelection(pNode->GetSelection());
     SetCursor(pNode);
 
     // allow for immediate editing and
@@ -387,8 +382,6 @@ void SmGraphicWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
             sal_Int32  nRow;
             sal_uInt16 nCol;
             SmGetLeftSelectionPart(pEdit->GetSelection(), nRow, nCol);
-            nRow++;
-            nCol++;
             const SmNode *pFound = SetCursorPos(static_cast<sal_uInt16>(nRow), nCol);
 
             SmModule *pp = SM_MOD();

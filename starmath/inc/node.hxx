@@ -67,6 +67,8 @@
 #include "format.hxx"
 #include "nodetype.hxx"
 
+#include <editeng/editdata.hxx>
+
 enum class FontAttribute {
     None   = 0x0000,
     Bold   = 0x0001,
@@ -120,9 +122,12 @@ enum class SmScaleMode
 
 class SmNode : public SmRect
 {
-
+    // Rendering info for SmRect
     SmFace          maFace;
+    // Anclage to the code
     SmToken         maNodeToken;
+    ESelection      m_aESelection;
+    // Node information
     SmNodeType      meType;
     SmScaleMode     meScaleMode;
     RectHorAlign    meRectHorAlign;
@@ -340,14 +345,14 @@ public:
      * It is used to do the visual <-> text correspondence.
      * @return line
      */
-    sal_uInt16 GetRow() const { return sal::static_int_cast<sal_uInt16>(maNodeToken.nRow); }
+    sal_uInt16 GetRow() const { return sal::static_int_cast<sal_uInt16>(m_aESelection.nStartPara); }
 
     /**
      * Gets the column of the line in the text where the node is located.
      * It is used to do the visual <-> text correspondence.
      * @return column
      */
-    sal_uInt16 GetColumn() const { return sal::static_int_cast<sal_uInt16>(maNodeToken.nCol); }
+    sal_uInt16 GetColumn() const { return sal::static_int_cast<sal_uInt16>(m_aESelection.nStartPos); }
 
     /**
      * Gets the scale mode.
@@ -380,6 +385,18 @@ public:
      */
     const SmToken & GetToken() const { return maNodeToken; }
           SmToken & GetToken()       { return maNodeToken; }
+
+    /**
+     * Gets node position in input text.
+     * @return node position in input text
+     */
+    ESelection GetSelection() const { return m_aESelection; }
+
+    /**
+     * Gets node position in input text.
+     * @param aESelection
+     */
+    void SetSelection(ESelection aESelection) { m_aESelection = aESelection; }
 
     /**
      * Finds the node from the position in the text.
