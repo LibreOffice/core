@@ -1,0 +1,53 @@
+diff -ur postgresql.org/src/tools/msvc/Mkvcbuild.pm postgresql/src/tools/msvc/Mkvcbuild.pm
+--- postgresql.org/src/tools/msvc/Mkvcbuild.pm	2021-03-14 02:09:15.288060770 +0100
++++ postgresql/src/tools/msvc/Mkvcbuild.pm	2021-03-14 02:12:22.351726582 +0100
+@@ -107,13 +107,6 @@
+ 
+ 	push(@pgportfiles, 'strtof.c') if ($vsVersion < '14.00');
+ 
+-	if ($vsVersion >= '9.00')
+-	{
+-		push(@pgportfiles, 'pg_crc32c_sse42_choose.c');
+-		push(@pgportfiles, 'pg_crc32c_sse42.c');
+-		push(@pgportfiles, 'pg_crc32c_sb8.c');
+-	}
+-	else
+ 	{
+ 		push(@pgportfiles, 'pg_crc32c_sb8.c');
+ 	}
+diff -ur postgresql.org/src/tools/msvc/MSBuildProject.pm postgresql/src/tools/msvc/MSBuildProject.pm
+--- postgresql.org/src/tools/msvc/MSBuildProject.pm	2021-03-14 02:09:15.288060770 +0100
++++ postgresql/src/tools/msvc/MSBuildProject.pm	2021-03-14 02:12:22.351726582 +0100
+@@ -307,8 +307,7 @@
+ 	  : ($self->{type} eq "dll" ? 'DynamicLibrary' : 'StaticLibrary');
+ 	my $libs = $self->GetAdditionalLinkerDependencies($cfgname, ';');
+ 
+-	my $targetmachine =
+-	  $self->{platform} eq 'Win32' ? 'MachineX86' : 'MachineX64';
++	my $targetmachine = "MachineARM64";
+ 
+ 	my $includes = $self->{includes};
+ 	unless ($includes eq '' or $includes =~ /;$/)
+@@ -347,7 +347,6 @@
+       <ProgramDatabaseFile>.\\$cfgname\\$self->{name}\\$self->{name}.pdb</ProgramDatabaseFile>
+       <GenerateMapFile>false</GenerateMapFile>
+       <MapFileName>.\\$cfgname\\$self->{name}\\$self->{name}.map</MapFileName>
+-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+       <!-- Permit links to MinGW-built, 32-bit DLLs (default before VS2012). -->
+       <ImageHasSafeExceptionHandlers/>
+       <SubSystem>Console</SubSystem>
+diff -ur postgresql.org/src/tools/msvc/Solution.pm postgresql/src/tools/msvc/Solution.pm
+--- postgresql.org/src/tools/msvc/Solution.pm	2021-03-14 02:09:15.288060770 +0100
++++ postgresql/src/tools/msvc/Solution.pm	2021-03-14 02:12:22.351726582 +0100
+@@ -62,10 +62,7 @@
+ 	if (1) #($^O eq "MSWin32")
+ 	{
+ 		# Examine CL help output to determine if we are in 32 or 64-bit mode.
+-		my $output = `cl /? 2>&1`;
+-		$? >> 8 == 0 or die "cl command not found";
+-		$self->{platform} =
+-		  ($output =~ /^\/favor:<.+AMD64/m) ? 'x64' : 'Win32';
++		$self->{platform} = 'ARM64';
+ 	}
+ 	else
+ 	{
