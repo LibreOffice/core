@@ -251,6 +251,12 @@ StringRef Plugin::getFilenameOfLocation(SourceLocation spellingLocation) const
     }
     else
     {
+        char const*const pCXX = getenv("CXX");
+        if (pCXX && strstr(pCXX, "sccache"))
+        {   // heuristic; sccache passes file with -frewrite-directives by name
+            s_Mode = STDIN;
+            return getFilenameOfLocation(spellingLocation);
+        }
         auto const fn(compiler.getSourceManager().getFilename(spellingLocation));
         if (!fn.data()) // wtf? happens in sot/source/sdstor/stg.cxx
         {
