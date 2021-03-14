@@ -70,6 +70,7 @@ public:
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
+    virtual bool        DeferResetToFirstActivation() override;
 
     virtual void        FillUserData() override;
     void                ActivateMailMergeAddress();
