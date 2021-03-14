@@ -121,6 +121,36 @@ The lode setup expects, inside the lode/docker subdir, the following directories
 - tarballs (external project tarballs gets written and cached there)
 
 
+== Using Docker to cross-build with emscripten ==
+
+If you prefer a controlled environment (sadly emsdk install/activate
+is _not_ stable over time, as e.g. nodejs versions evolve), that is
+easy to replicate across different machines - consider the docker
+images we're providing.
+
+Config/setup file see
+https://git.libreoffice.org/lode/+/ccb36979563635b51215477455953252c99ec013
+
+Run
+
+ docker-compose build
+
+in the lode/docker dir to get the container prepared. Run
+
+ PARALLELISM=4 BUILD_OPTIONS= BUILD_TARGET=build docker-compose run --rm -e PARALLELISM -e BUILD_TARGET -e BUILD_OPTIONS builder
+
+to perform an actual srcdir != buildir build; the container mounts
+checked-out git repo and output dir via docker-compose.yml (so make
+sure the path names there match your setup):
+
+The lode setup expects, inside the lode/docker subdir, the following directories:
+
+- core (git checkout)
+- workdir (the output dir - gets written into)
+- cache (ccache tree)
+- tarballs (external project tarballs gets written and cached there)
+
+
 = Ideas for an UNO bridge implementation =
 
 My post to Discord #emscripten: "I'm looking for a way to do an abstract call
