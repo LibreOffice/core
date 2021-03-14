@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6283f728_450166d5",
+        "filename": "sw/source/ui/fmtui/tmpdlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-03-14T07:21:56Z",
+      "side": 1,
+      "message": "Hii\n\nI think I should add an if statement here as \n\nif(*it !\u003d \"No List\")\nrBox.append_text(*it);\n\nSimilarly I should do it for pardlg.cxx \n\nPlease correct me if I am wrong",
+      "range": {
+        "startLine": 466,
+        "startChar": 16,
+        "endLine": 466,
+        "endChar": 38
+      },
+      "revId": "f493aea14c185548884075d8d8d24c7c112c719f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
