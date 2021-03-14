@@ -41,7 +41,7 @@ class customSlideShow(UITestCase):
         edit = CustomSlideShows.getChild("edit")
         customshowlist = CustomSlideShows.getChild("customshowlist")
         self.assertEqual(get_state_as_dict(customshowlist)["SelectionCount"], "1")
-        select_pos(customshowlist, "1")
+        select_pos(customshowlist, "0")
         ok = CustomSlideShows.getChild("ok")
 
         def handle_edit_dlg(DefineCustomSlideShow):
