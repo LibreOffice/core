@@ -25,7 +25,6 @@ class DeleteAllComments(UITestCase):
         selection = self.xUITest.executeCommand(".uno:SelectAll")
         self.xUITest.executeCommand(".uno:InsertAnnotation")
         cursor = document.getCurrentController().getViewCursor()
-        xWriterDoc.executeAction("LEFT", tuple())
         type_text(xWriterEdit, "EEEEE")
         self.xUITest.executeCommand(".uno:InsertAnnotation")
         self.xUITest.executeCommand(".uno:DeleteAllNotes")
