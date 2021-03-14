@@ -333,14 +333,25 @@ void SwDBTreeList::Select(const OUString& rDBName, const OUString& rTableName, c
     {
         if (rDBName == m_xTreeView->get_text(*xParent))
         {
+            if (rTableName.isEmpty() && rColumnName.isEmpty())
+            {
+                // Just select the database node, do not expand
+                m_xTreeView->scroll_to_row(*xParent);
+                m_xTreeView->select(*xParent);
+                return;
+            }
             if (!m_xTreeView->iter_has_child(*xParent))
             {
                 RequestingChildrenHdl(*xParent);
-                m_xTreeView->expand_row(*xParent);
+                // If successful, it will be expanded in a call to scroll_to_row for its children
             }
             std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator(xParent.get()));
             if (!m_xTreeView->iter_children(*xChild))
+            {
+                m_xTreeView->scroll_to_row(*xParent);
+                m_xTreeView->select(*xParent);
                 continue;
+            }
             do
             {
                 if (rTableName == m_xTreeView->get_text(*xChild))
