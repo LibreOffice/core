@@ -46,10 +46,23 @@ StringMap TreeListUIObject::get_state()
 void TreeListUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
+    bool bHandled = true;
     if (rAction.isEmpty())
     {
     }
-    else
+    else if (rAction == "SELECT")
+    {
+        auto posIt = rParameters.find("POS");
+        if (posIt != rParameters.end())
+        {
+            sal_uInt32 nPos = posIt->second.toUInt32();
+            mxTreeList->Select(mxTreeList->GetEntry(nPos), true);
+        }
+        else
+            bHandled = false;
+    }
+
+    if (!bHandled)
         WindowUIObject::execute(rAction, rParameters);
 }
 

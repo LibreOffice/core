@@ -42,7 +42,7 @@ class formatCell(UITestCase):
         actionProps3 = mkPropertyValues(props3)
         xlanguagelb.executeAction("SELECT", actionProps3)
         #set Number
-        props = {"TEXT": "Number"}
+        props = {"POS", "1"}: # ""Number"
         actionProps = mkPropertyValues(props)
         xliststore1.executeAction("SELECT", actionProps)
         #set Standard
