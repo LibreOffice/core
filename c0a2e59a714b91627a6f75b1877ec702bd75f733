@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d2b1afb2_258b8f03",
+        "filename": "external/postgresql/UnpackedTarball_postgresql.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-03-14T04:52:29Z",
+      "side": 1,
+      "message": "But this needs protection like (untested)\n\n$(if $(filter WNT_ARM64,$(OS)_$(CPUNAME)), external/postgresql/arm64.patch.1) \\",
+      "revId": "c0a2e59a714b91627a6f75b1877ec702bd75f733",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "824b9d02_e49a6284",
+        "filename": "external/postgresql/UnpackedTarball_postgresql.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-03-14T04:52:29Z",
+      "side": 1,
+      "message": "Probably the same here, like:\n\nifneq ($(OS)_$(CPUNAME),WNT_ARM64)\n\nAFAIK it has nothing to do with cross compiling in general.",
+      "revId": "c0a2e59a714b91627a6f75b1877ec702bd75f733",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
