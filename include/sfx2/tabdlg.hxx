@@ -213,6 +213,8 @@ public:
 
     virtual bool        FillItemSet( SfxItemSet* );
     virtual void        Reset( const SfxItemSet* );
+    // Allows to postpone some initialization to the first activation
+    virtual bool        DeferResetToFirstActivation();
 
     bool                HasExchangeSupport() const
                             { return bHasExchangeSupport; }

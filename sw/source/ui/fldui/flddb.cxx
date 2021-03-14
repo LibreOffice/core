@@ -178,6 +178,10 @@ void SwFieldDBPage::Reset(const SfxItemSet*)
     }
 }
 
+// SwFieldDBPage may ask for password to select current document's data source,
+// so only do that when activating the page, not when dialog is creating all pages
+bool SwFieldDBPage::DeferResetToFirstActivation() { return true; }
+
 bool SwFieldDBPage::FillItemSet(SfxItemSet* )
 {
     OUString sTableName;
