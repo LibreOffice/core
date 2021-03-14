@@ -337,7 +337,6 @@ StringMap WindowUIObject::get_state()
 void WindowUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
-    bool bHandled = true;
     if (rAction == "SET")
     {
         for (auto const& parameter : rParameters)
@@ -379,12 +378,8 @@ void WindowUIObject::execute(const OUString& rAction,
     }
     else
     {
-        bHandled = false;
-    }
-
-    if (!bHandled)
-    {
         SAL_WARN("vcl.uitest", "unknown action or parameter for " << get_name() << ". Action: " << rAction);
+        throw std::logic_error("unknown action");
     }
 }
 
