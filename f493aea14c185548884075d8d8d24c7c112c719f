@@ -22,6 +22,30 @@
       "revId": "f493aea14c185548884075d8d8d24c7c112c719f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f80671e1_25d0d862",
+        "filename": "sw/source/ui/fmtui/tmpdlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-03-14T18:32:27Z",
+      "side": 1,
+      "message": "Or not allow insert of \"No List\" into the aNames set. Another way is to remove \"No List\" from the set before appending the set items to the combobox.\nPlease investigate the std::set. It may be more efficient than testing inside a loop.",
+      "parentUuid": "6283f728_450166d5",
+      "range": {
+        "startLine": 466,
+        "startChar": 16,
+        "endLine": 466,
+        "endChar": 38
+      },
+      "revId": "f493aea14c185548884075d8d8d24c7c112c719f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
