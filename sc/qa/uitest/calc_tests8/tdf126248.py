@@ -59,7 +59,6 @@ class tdf126248(UITestCase):
 
         self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
         xCellsDlg = self.xUITest.getTopFocusWindow()
-        select_pos(xCellsDlg, "2")
 
         # Get current font names from the Format Cell dialog
         westFontName = get_state_as_dict(xCellsDlg.getChild("westfontnamelb-cjk"))['Text']
