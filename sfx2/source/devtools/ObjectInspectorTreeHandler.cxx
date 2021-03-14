@@ -415,7 +415,7 @@ public:
     }
 };
 
-/** Node represents a basic value, that can be any object, sequece, struct */
+/** Node represents a basic value, that can be any object, sequence, struct */
 class BasicValueNode : public SimpleStringNode
 {
 protected:
