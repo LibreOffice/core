@@ -79,7 +79,6 @@ class findReplace(UITestCase):
             select_pos(xTabs, "0")
             xSizeFont = dialog.getChild("westsizelb-cjk")
             xSizeFont.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xSizeFont.executeAction("BACKSPACE", tuple())
             xSizeFont.executeAction("TYPE", mkPropertyValues({"TEXT":"16"}))    #set font size 16
             xOkBtn = dialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOkBtn)
