@@ -91,9 +91,9 @@ SmToken starmathdatabase::Identify_SmXMLOperatorContext_Impl(sal_Unicode cChar, 
                 return SmToken(TSLASH, MS_SLASH, "slash", TG::Product, 0);
         case MS_BACKSLASH:
             if (bIsStretchy)
-                return SmToken(TWIDEBACKSLASH, MS_BACKSLASH, "bslash", TG::Product, 0);
+                return SmToken(TWIDEBACKSLASH, MS_BACKSLASH, "widebslash", TG::Product, 0);
             else
-                return SmToken(TBACKSLASH, MS_BACKSLASH, "slash", TG::Product, 0);
+                return SmToken(TBACKSLASH, MS_BACKSLASH, "bslash", TG::Product, 0);
         case MS_DEF:
             return SmToken(TDEF, MS_DEF, "def", TG::Relation, 0);
         case MS_LINE:
