@@ -134,9 +134,11 @@ bool isStructuralNode(SmNodeType ntype);
 
 class SmNode : public SmRect
 {
-
+    // Rendering info for SmRect
     SmFace          maFace;
+    // Anclage to the code
     SmToken         maNodeToken;
+    // Node information
     SmNodeType      meType;
     SmScaleMode     meScaleMode;
     RectHorAlign    meRectHorAlign;

@@ -1975,9 +1975,9 @@ void SmNodeToTextVisitor::Visit( SmBraceNode* pNode )
         Append(u"} ");
     }
     else{
-        SmNode *pLeftBrace  = pNode->OpeningBrace(),
-               *pBody       = pNode->Body(),
-               *pRightBrace = pNode->ClosingBrace();
+        SmMathSymbolNode *pLeftBrace  = pNode->OpeningBrace();
+        SmNode *pBody = pNode->Body();
+        SmMathSymbolNode *pRightBrace = pNode->ClosingBrace();
         //Handle special case where it's absolute function
         if( pNode->GetToken( ).eType == TABS ) {
             Append(u"abs");
@@ -1985,13 +1985,23 @@ void SmNodeToTextVisitor::Visit( SmBraceNode* pNode )
         } else {
             if( pNode->GetScaleMode( ) == SmScaleMode::Height )
                 Append(u"left ");
-            pLeftBrace->Accept( this );
+            if(pLeftBrace->GetText().compareTo(u"\u007C")==0)
+                Append(u"lline");
+            else if(pLeftBrace->GetText().compareTo(u"\u2016")==0)
+                Append(u"ldline");
+            else
+                pLeftBrace->Accept( this );
             Separate( );
             pBody->Accept( this );
             Separate( );
             if( pNode->GetScaleMode( ) == SmScaleMode::Height )
                 Append(u"right ");
-            pRightBrace->Accept( this );
+            if(pRightBrace->GetText().compareTo(u"\u007C")==0)
+                Append(u"rline");
+            else if(pRightBrace->GetText().compareTo(u"\u2016")==0)
+                Append(u"rdline");
+            else
+                pRightBrace->Accept( this );
         }
     }
 }
@@ -2433,6 +2443,16 @@ void SmNodeToTextVisitor::Visit( SmGlyphSpecialNode* pNode )
 //TODO to improve this it is required to improve mathmlimport.
 void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
 {
+
+    if(pNode->GetToken().eType == SmTokenType::TSETMINUS)
+    {
+        Append("setminus");
+        return;
+    }
+
+    Append ( starmathdatabase::Identify_SymbolCommand( pNode->GetText(), pNode->GetScaleMode() != SmScaleMode::None, pNode->GetType() != SmNodeType::MathIdent, SmBracketPlace::Unknow ) );
+    return;
+
     if (    ( pNode->GetToken().nGroup & TG::LBrace )
          || ( pNode->GetToken().nGroup & TG::RBrace )
          || ( pNode->GetToken().nGroup & TG::Sum )
@@ -2638,20 +2658,7 @@ void SmNodeToTextVisitor::Visit( SmLineNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmExpressionNode* pNode )
 {
-    bool bracketsNeeded = pNode->GetNumSubNodes() != 1 || pNode->GetSubNode(0)->GetType() == SmNodeType::BinHor;
-    if (!bracketsNeeded)
-    {
-        const SmNode *pParent = pNode->GetParent();
-        // nested subsups
-        bracketsNeeded =
-            pParent && pParent->GetType() == SmNodeType::SubSup &&
-            pNode->GetNumSubNodes() == 1 &&
-            pNode->GetSubNode(0)->GetType() == SmNodeType::SubSup;
-    }
-
-    if (bracketsNeeded) {
-        Append(u"{ ");
-    }
+    Append(u"{ ");
     for( auto pChild : *pNode )
     {
         if(!pChild)
@@ -2659,9 +2666,7 @@ void SmNodeToTextVisitor::Visit( SmExpressionNode* pNode )
         pChild->Accept( this );
         Separate( );
     }
-    if (bracketsNeeded) {
-        Append(u"} ");
-    }
+    Append(u"} ");
 }
 
 void SmNodeToTextVisitor::Visit( SmPolyLineNode* )
