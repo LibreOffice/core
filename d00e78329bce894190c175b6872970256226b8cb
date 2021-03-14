@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e726c55e_7bebbfa8",
+        "filename": "sw/uiconfig/swriter/ui/numparapage.ui",
+        "patchSetId": 7
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-03-14T20:58:18Z",
+      "side": 1,
+      "message": "This change was not part of tdf#101965.  For sake of documentation and transparency, it might be appropriate to post a comment in that bug to announce the planned change.",
+      "range": {
+        "startLine": 147,
+        "startChar": 94,
+        "endLine": 147,
+        "endChar": 101
+      },
+      "revId": "d00e78329bce894190c175b6872970256226b8cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
