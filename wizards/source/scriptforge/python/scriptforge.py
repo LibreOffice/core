@@ -304,42 +304,49 @@ class SFServices(object):
         A service instance is created by the CreateScriptService method
         It can have a mirror in the Basic world or be totally defined in Python
 
-        Every subclass must initialize 2 class properties:
-            servicename (e.g. ScriptForge.FileSystem, ScriptForge.Basic)
+        Every subclass must initialize 3 class properties:
+            servicename (e.g. 'ScriptForge.FileSystem', 'ScriptForge.Basic')
+            servicesynonyms (e.g. 'FileSystem', 'Basic')
             serviceimplementation: either 'python' or 'basic'
-        This is sufficient to register the set of services in the Python world
+        This is sufficient to register the service in the Python world
 
         The communication with Basic is managed by 2 ScriptForge() methods:
             InvokeSimpleScript(): low level invocation of a Basic script. This script must be located
                 in a usual Basic module. The result is passed as-is
-            InvokeSBasicService(): the result comes back encapsulated with additional info
+            InvokeBasicService(): the result comes back encapsulated with additional info
                 The result is interpreted in the method
-                The invoked script can be a property or a method of a Basic class module
+                The invoked script can be a property or a method of a Basic class or usual module
         It is up to every service method to determine which method to use
 
         For Basic services only:
             Each instance is identified by its
                 - object reference: the real Basic object embedded as a UNO wrapper object
-                - objecttype ('SF_String', 'DICTIONARY', ...)
+                - object type ('SF_String', 'DICTIONARY', ...)
+                - class module: 1 for usual modules, 2 for class modules
                 - name (form, control, ... name) - may be blank
 
             The role of the Service() superclass is mainly to propose a generic properties management
             Properties are got and set following next strategy:
-                1. Property names are controlled strictly ('Value' and not 'value')
+                1. Property names are controlled strictly ('Value' or 'value', not 'VALUE')
                 2. Getting a property value for the first time is always done via a Basic call
                 3. Next occurrences are fetched from the Python dictionary of the instance if the property
-                    is read-only, otherwise via a Basic call
+                   is read-only, otherwise via a Basic call
                 4. Read-only properties may be modified or deleted exceptionally by the class
                    when self.internal == True. The latter must immediately be reset after use
 
             Each subclass must define its interface with the user scripts:
             1.  The properties
-                     a dictionary named 'serviceProperties' with keys = (camel-cased) property names and value = boolean
+                Property names are proper-cased
+                Conventionally, camel-cased and lower-cased synonyms are supported where relevant
+                    a dictionary named 'serviceproperties' with keys = (proper-cased) property names and value = boolean
                         True = editable, False = read-only
-                     a list named 'localProperties' reserved to properties for internal use
+                    a list named 'localProperties' reserved to properties for internal use
                         e.g. oDlg.Controls() is a method that uses '_Controls' to hold the list of available controls
-                serviceProperties are buffered in Python after their 1st get request to Basic
-                Only if there is a need to go to Basic at each get, then declare the property explicitly:
+                When
+                    forceGetProperty = False    # Standard bahaviour
+                read-only serviceproperties are buffered in Python after their 1st get request to Basic
+                Otherwise set it to True to force a recomputation at each property getter invocation
+                If there is a need to handle a specific property in a specific manner:
                     @property
                     def myProperty(self):
                         return self.GetProperty('myProperty')
@@ -347,7 +354,8 @@ class SFServices(object):
                 a usual def: statement
                     def myMethod(self, arg1, arg2 = ''):
                         return self.Execute(self.vbMethod, 'myMethod', arg1, arg2)
-                Method names are camel-cased, arguments are lower-cased
+                Method names are proper-cased, arguments are lower-cased
+                Conventionally, camel-cased and lower-cased homonyms are supported where relevant
                 All arguments must be present and initialized before the call to Basic, if any
         """
     # Python-Basic protocol constants and flags
@@ -359,6 +367,10 @@ class SFServices(object):
     # Basic class type
     moduleClass, moduleStandard = 2, 1
     #
+    # Define the default behaviour for read-only properties: buffer their values in Python
+    forceGetProperty = False
+    # Empty dictionary for lower/camelcased homonyms or properties
+    propertysynonyms = {}
     # To operate dynamic property getting/setting it is necessary to
     # enumerate all types of properties and adapt __getattr__() and __setattr__() according to their type
     internal_attributes = ('objectreference', 'objecttype', 'name', 'internal', 'servicename',
@@ -383,30 +395,46 @@ class SFServices(object):
         """
             Executed for EVERY property reference if name not yet in the instance dict
             At the 1st get, the property value is always got from Basic
+            Due to the use of lower/camelcase synonyms, it is called for each variant of the same property
+            The method manages itself the buffering in __dict__ based on the official ProperCase property name
             """
+        if name in self.propertysynonyms:  # Reset real name if argument provided in lower or camel case
+            name = self.propertysynonyms[name]
         if self.serviceimplementation == 'basic':
-            if name in ('serviceProperties', 'localProperties', 'internal_attributes'):
+            if name in ('serviceproperties', 'localProperties', 'internal_attributes', 'propertysynonyms',
+                        'forceGetProperty'):
                 pass
-            elif name in self.serviceProperties:
-                # Get Property from Basic
-                return self.GetProperty(name)
+            elif name in self.serviceproperties:
+                if self.forceGetProperty is False and self.serviceproperties[name] is False: # False = read-only
+                    if name in self.__dict__:
+                        return self.__dict__[name]
+                    else:
+                        # Get Property from Basic
+                        prop = self.GetProperty(name)
+                        self.__dict__[name] = prop
+                        return prop
+                else:
+                    return self.GetProperty(name)
         # Execute the usual attributes getter
         return super(SFServices, self).__getattribute__(name)
 
     def __setattr__(self, name, value):
         """
             Executed for EVERY property assignment, including in __init__() !!
-            Setting a property requires for serviceProperties() to be executed in Basic
+            Setting a property requires for serviceproperties() to be executed in Basic
+            Management of __dict__ is automatically done in the final usual object.__setattr__ method
             """
         if self.serviceimplementation == 'basic':
-            if name in ('serviceProperties', 'localProperties', 'internal_attributes'):
+            if name in ('serviceproperties', 'localProperties', 'internal_attributes', 'propertysynonyms'):
                 pass
             elif name[0:2] == '__' or name in self.internal_attributes or name in self.localProperties:
                 pass
-            elif name in self.serviceProperties:
+            elif name in self.serviceproperties or name in self.propertysynonyms:
+                if name in self.propertysynonyms: # Reset real name if argument provided in lower or camel case
+                    name = self.propertysynonyms[name]
                 if self.internal:  # internal = True forces property local setting even if property is read-only
                     pass
-                elif self.serviceProperties[name] is True:  # True == Editable
+                elif self.serviceproperties[name] is True:  # True == Editable
                     self.SetProperty(name, value)
                 else:
                     raise AttributeError(
@@ -420,11 +448,30 @@ class SFServices(object):
         return self.serviceimplementation + '/' + self.servicename + '/' + str(self.objectreference) + '/' + \
                super(SFServices, self).__repr__()
 
+    @staticmethod
+    def _getAttributeSynonyms(dico):
+        """
+            Returns a dictionary with key = name in lower case and in camelCase, value = real ProperCased name
+            Example:
+                 d = dict(ConfigFolder = False, InstallFolder = False)
+                 dh = _getHomonyms(d)
+                    # dh == dict(configfolder = 'ConfigFolder', installfolder = 'InstallFolder',
+                                 configFolder = 'ConfigFolder', installFolder = 'InstallFolder')
+            """
+        def camelCase(key):
+            return key[0].lower() + key[1:]
+
+        lc = dict(zip(map(str.casefold, dico.keys()), dico.keys()))
+        cc = dict(zip(map(camelCase, dico.keys()), dico.keys()))
+        lc.update(cc)
+        return lc
+
     def Dispose(self):
         if self.serviceimplementation == 'basic':
-            if self.objectreference >= 0:
+            if self.objectreference >= len(ScriptForge.servicesmodules):    # Do not dispose predefined module objects
                 self.Execute(self.vbMethod, 'Dispose')
                 self.objectreference = -1
+    dispose = Dispose
 
     def Execute(self, flags = 0, methodname = '', *args):
         if flags == 0:
@@ -436,16 +483,21 @@ class SFServices(object):
         """
             Get the given property from the Basic world
             """
-        return self.EXEC(self.objectreference, self.vbGet, propertyname)
+        if self.serviceimplementation == 'basic':
+            return self.EXEC(self.objectreference, self.vbGet, propertyname)
+    getProperty, getproperty = GetProperty, GetProperty
 
     def Properties(self):
-        return list(self.serviceProperties)
+        return list(self.serviceproperties)
+    properties = Properties
 
     def SetProperty(self, propertyname, value):
         """
             Set the given property to a new value in the Basic world
             """
-        return self.EXEC(self.objectreference, self.vbLet, propertyname, value)
+        if self.serviceimplementation == 'basic':
+            return self.EXEC(self.objectreference, self.vbLet, propertyname, value)
+    setProperty, setproperty = SetProperty, SetProperty
 
 
 # #####################################################################################################################
@@ -465,6 +517,7 @@ class SFScriptForge:
         # Mandatory class properties for service registration
         serviceimplementation = 'python'
         servicename = 'ScriptForge.Basic'
+        servicesynonyms = ('basic', 'scriptforge.basic')
         # Basic helper functions invocation
         module = 'SF_PythonHelper'
         # Message box constants
@@ -475,18 +528,22 @@ class SFScriptForge:
 
         def ConvertFromUrl(self, filename):
             return self.SIMPLEEXEC(self.module + '.PyConvertFromUrl', filename)
+        convertFromUrl, convertfromurl = ConvertFromUrl, ConvertFromUrl
 
         def ConvertToUrl(self, filename):
             return self.SIMPLEEXEC(self.module + '.PyConvertToUrl', filename)
+        convertToUrl, converttourl = ConvertToUrl, ConvertToUrl
 
         def CreateUnoService(self, unoservice):
             return self.SIMPLEEXEC(self.module + '.PyCreateUnoService', unoservice)
+        createUnoService, createunoservice = CreateUnoService, CreateUnoService
 
         def DateAdd(self, add, count, datearg):
             if isinstance(datearg, datetime.datetime):
                 datearg = datearg.isoformat()
             dateadd = self.SIMPLEEXEC(self.module + '.PyDateAdd', add, count, datearg)
             return datetime.datetime.fromisoformat(dateadd)
+        dateAdd, dateadd = DateAdd, DateAdd
 
         def DateDiff(self, add, date1, date2, weekstart = 1, yearstart = 1):
             if isinstance(date1, datetime.datetime):
@@ -494,36 +551,44 @@ class SFScriptForge:
             if isinstance(date2, datetime.datetime):
                 date2 = date2.isoformat()
             return self.SIMPLEEXEC(self.module + '.PyDateDiff', add, date1, date2, weekstart, yearstart)
+        dateDiff, datediff = DateDiff, DateDiff
 
         def DatePart(self, add, datearg, weekstart = 1, yearstart = 1):
             if isinstance(datearg, datetime.datetime):
                 datearg = datearg.isoformat()
             return self.SIMPLEEXEC(self.module + '.PyDatePart', add, datearg, weekstart, yearstart)
+        datePart, datepart = DatePart, DatePart
 
         def DateValue(self, datearg):
             if isinstance(datearg, datetime.datetime):
                 datearg = datearg.isoformat()
             datevalue = self.SIMPLEEXEC(self.module + '.PyDateValue', datearg)
             return datetime.datetime.fromisoformat(datevalue)
+        dateValue, datevalue = DateValue, DateValue
 
         def Format(self, value, pattern = ''):
             if isinstance(value, datetime.datetime):
                 value = value.isoformat()
             return self.SIMPLEEXEC(self.module + '.PyFormat', value, pattern)
+        format = Format
 
         @staticmethod
         def GetDefaultContext():
             return ScriptForge.componentcontext
+        getDefaultContext, getdefaultcontext = GetDefaultContext, GetDefaultContext
 
         def GetGuiType(self):
             return self.SIMPLEEXEC(self.module + '.PyGetGuiType')
+        getGuiType, getguitype = GetGuiType, GetGuiType
 
         def GetSystemTicks(self):
             return self.SIMPLEEXEC(self.module + '.PyGetSystemTicks')
+        getSystemTicks, getsystemticks = GetSystemTicks, GetSystemTicks
 
         @staticmethod
         def GetPathSeparator():
             return os.sep
+        getPathSeparator, getpathseparator = GetPathSeparator, GetPathSeparator
 
         class GlobalScope(object, metaclass = _Singleton):
             @classmethod  # Mandatory because the GlobalScope class is normally not instantiated
@@ -538,17 +603,21 @@ class SFScriptForge:
             if xpos < 0 or ypos < 0:
                 return self.SIMPLEEXEC(self.module + '.PyInputBox', msg, title, default)
             return self.SIMPLEEXEC(self.module + '.PyInputBox', msg, title, default, xpos, ypos)
+        inputBox, inputbox = InputBox, InputBox
 
         def MsgBox(self, text, dialogtype = 0, dialogtitle = ''):
             return self.SIMPLEEXEC(self.module + '.PyMsgBox', text, dialogtype, dialogtitle)
+        msgBox, msgbox = MsgBox, MsgBox
 
         @staticmethod
         def Now():
             return datetime.datetime.now()
+        now = Now
 
         @staticmethod
         def RGB(red, green, blue):
             return int('%02x%02x%02x' % (red, green, blue), 16)
+        rgb = RGB
 
         @staticmethod
         def StarDesktop():
@@ -559,9 +628,11 @@ class SFScriptForge:
             DESK = 'com.sun.star.frame.Desktop'
             desktop = smgr.createInstanceWithContext(DESK, ctx)
             return desktop
+        starDesktop, stardesktop = StarDesktop, StarDesktop
 
         def Xray(self, unoobject = None):
             return self.SIMPLEEXEC('XrayTool._main.xray', unoobject)
+        xray = Xray
 
     # #########################################################################
     # SF_String CLASS
@@ -575,6 +646,7 @@ class SFScriptForge:
         # Mandatory class properties for service registration
         serviceimplementation = 'basic'
         servicename = 'ScriptForge.String'
+        servicesynonyms = ()
 
     # #########################################################################
     # SF_FileSystem CLASS
@@ -586,15 +658,15 @@ class SFScriptForge:
         # Mandatory class properties for service registration
         serviceimplementation = 'basic'
         servicename = 'ScriptForge.FileSystem'
-        serviceProperties = dict(FileNaming = True, ConfigFolder = False, ExtensionsFolder = False, HomeFolder = False,
+        servicesynonyms = ('filesystem', 'scriptforge.filesystem')
+        serviceproperties = dict(FileNaming = True, ConfigFolder = False, ExtensionsFolder = False, HomeFolder = False,
                                  InstallFolder = False, TemplatesFolder = False, TemporaryFolder = False,
                                  UserTemplatesFolder = False)
+        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
+        # Force for each property to get its value from Basic - due to FileNaming updatability
+        forceGetProperty = True
         # Open TextStream constants
         ForReading, ForWriting, ForAppending = 1, 2, 8
-
-        @property
-        def ConfigFolder(self):
-            return self.GetProperty('ConfigFolder')
 
         def BuildPath(self, foldername, name):
             return self.Execute(self.vbMethod, 'BuildPath', foldername, name)
@@ -628,6 +700,7 @@ class SFScriptForge:
 
         def FileExists(self, filename):
             return self.Execute(self.vbMethod, 'FileExists', filename)
+        fileexists, fileExists = FileExists, FileExists
 
         def Files(self, foldername, filter = ''):
             return self.Execute(self.vbMethod + self.flgArrayRet, 'Files', foldername, filter)
@@ -705,18 +778,21 @@ class SFScriptForge:
         # Mandatory class properties for service registration
         serviceimplementation = 'basic'
         servicename = 'ScriptForge.L10N'
-        serviceProperties = dict(Folder = False, Languages = False, Locale = False)
+        servicesynonyms = ()
+        serviceproperties = dict(Folder = False, Languages = False, Locale = False)
+        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
 
         def AddText(self, context = '', msgid = '', comment = ''):
             return self.Execute(self.vbMethod, 'AddText', context, msgid, comment)
+        addText, addtext = AddText, AddText
 
         def ExportToPOTFile(self, filename, header = '', encoding= 'UTF-8'):
             return self.Execute(self.vbMethod, 'ExportToPOTFile', filename, header, encoding)
+        exportToPOTFile, exporttopotfile = ExportToPOTFile, ExportToPOTFile
 
         def GetText(self, msgid, *args):
             return self.Execute(self.vbMethod, 'GetText', msgid, *args)
-
-        _ = GetText
+        _, gettext, getText = GetText, GetText, GetText
 
     # #########################################################################
     # SF_Platform CLASS
@@ -735,51 +811,63 @@ class SFScriptForge:
         # Mandatory class properties for service registration
         serviceimplementation = 'basic'
         servicename = 'ScriptForge.Platform'
-        serviceProperties = dict(Architecture = False, ComputerName = False, CPUCount = False, CurrentUser = False,
+        servicesynonyms = ()
+        serviceproperties = dict(Architecture = False, ComputerName = False, CPUCount = False, CurrentUser = False,
                                  Locale = False, Machine = False, OfficeVersion = False, OSName = False,
                                  OSPlatform = False, OSRelease = False, OSVersion = False, Processor = False)
+        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
         # Python helper functions
         py = ScriptForge.pythonhelpermodule + '$' + '_SF_Platform'
 
         @property
         def Architecture(self):
             return self.SIMPLEEXEC(self.py, 'Architecture')
+        architecture = Architecture
 
         @property
         def ComputerName(self):
             return self.SIMPLEEXEC(self.py, 'ComputerName')
+        computerName, computername = ComputerName, ComputerName
 
         @property
         def CPUCount(self):
             return self.SIMPLEEXEC(self.py, 'CPUCount')
+        cpuCount, cpucount = CPUCount, CPUCount
 
         @property
         def CurrentUser(self):
             return self.SIMPLEEXEC(self.py, 'CurrentUser')
+        currentUser, currentuser = CurrentUser, CurrentUser
 
         @property
         def Machine(self):
             return self.SIMPLEEXEC(self.py, 'Machine')
+        machine = Machine
 
         @property
         def OSName(self):
             return self.SIMPLEEXEC(self.py, 'OSName')
+        osName, osname = OSName, OSName
 
         @property
         def OSPlatform(self):
             return self.SIMPLEEXEC(self.py, 'OSPlatform')
+        osPlatform, osplatform = OSPlatform, OSPlatform
 
         @property
         def OSRelease(self):
             return self.SIMPLEEXEC(self.py, 'OSRelease')
+        osRelease, osrelease = OSRelease, OSRelease
 
         @property
         def OSVersion(self):
             return self.SIMPLEEXEC(self.py, 'OSVersion')
+        osVersion, osversion = OSVersion, OSVersion
 
         @property
         def Processor(self):
             return self.SIMPLEEXEC(self.py, 'Processor')
+        processor = Processor
 
     # #########################################################################
     # SF_TextStream CLASS
@@ -792,34 +880,44 @@ class SFScriptForge:
         # Mandatory class properties for service registration
         serviceimplementation = 'basic'
         servicename = 'ScriptForge.TextStream'
-        serviceProperties = dict(AtEndOfStream = False, Encoding = False, FileName = False,
-                                 IOMode = False, Line = False, NewLine = True)
+        servicesynonyms = ()
+        serviceproperties = dict(AtEndOfStream = False, Encoding = False, FileName = False, IOMode = False,
+                                 Line = False, NewLine = True)
+        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
 
         @property
         def AtEndOfStream(self):
             return self.GetProperty('AtEndOfStream')
+        atEndOfStream, atendofstream = AtEndOfStream, AtEndOfStream
 
         @property
         def Line(self):
             return self.GetProperty('Line')
+        line = Line
 
         def CloseFile(self):
             return self.Execute(self.vbMethod, 'CloseFile')
+        closeFile, closefile = CloseFile, CloseFile
 
         def ReadAll(self):
             return self.Execute(self.vbMethod, 'ReadAll')
+        readAll, readall = ReadAll, ReadAll
 
         def ReadLine(self):
             return self.Execute(self.vbMethod, 'ReadLine')
+        readLine, readline = ReadLine, ReadLine
 
         def SkipLine(self):
             return self.Execute(self.vbMethod, 'SkipLine')
+        skipLine, skipline = SkipLine, SkipLine
 
         def WriteBlankLines(self, lines):
             return self.Execute(self.vbMethod, 'WriteBlankLines', lines)
+        writeBlankLines, writeblanklines = WriteBlankLines, WriteBlankLines
 
         def WriteLine(self, line):
             return self.Execute(self.vbMethod, 'WriteLine', line)
+        writeLine, writeline = WriteLine, WriteLine
 
     # #########################################################################
     # SF_Timer CLASS
@@ -831,39 +929,31 @@ class SFScriptForge:
         # Mandatory class properties for service registration
         serviceimplementation = 'basic'
         servicename = 'ScriptForge.Timer'
-        serviceProperties = dict(Duration = False, IsStarted = False, IsSuspended = False,
+        servicesynonyms = ()
+        serviceproperties = dict(Duration = False, IsStarted = False, IsSuspended = False,
                                  SuspendDuration = False, TotalDuration = False)
-
-        @property
-        def Duration(self):
-            return self.GetProperty('Duration')
-
-        @property
-        def IsStarted(self):
-            return self.GetProperty('IsStarted')
-
-        @property
-        def SuspendDuration(self):
-            return self.GetProperty('SuspendDuration')
-
-        @property
-        def TotalDuration(self):
-            return self.GetProperty('TotalDuration')
+        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
+        # Force for each property to get its value from Basic
+        forceGetProperty = True
 
         def Continue(self):
             return self.Execute(self.vbMethod, 'Continue')
 
         def Restart(self):
             return self.Execute(self.vbMethod, 'Restart')
+        restart = Restart
 
         def Start(self):
             return self.Execute(self.vbMethod, 'Start')
+        start = Start
 
         def Suspend(self):
             return self.Execute(self.vbMethod, 'Suspend')
+        suspend = Suspend
 
         def Terminate(self):
             return self.Execute(self.vbMethod, 'Terminate')
+        terminate = Terminate
 
 
 # ##############################################False#######################################################################
@@ -872,11 +962,17 @@ class SFScriptForge:
 def CreateScriptService(service, *args):
     """
         A service being the name of a collection of properties and methods,
-        this method returns the Python object mirror of the Basic object implementing
-        the requested service
-        As an exception to above, 'Basic' is accepted as a shortcut to the Basic service
-        which is implemented in Python
+        this method returns either
+            - the Python object mirror of the Basic object implementing the requested service
+            - the Python object implementing the service itself
+
+        A service may be designated by its official name, stored in its class.servicename
+        or by one of its synonyms stored in its class.servicesynonyms list
+        If the service is not identified, the service creation is delegated to Basic, that might raise an error
+        if still not identified there
+
         :param service: the name of the service as a string 'library.service' - cased exactly
+                or one of its synonyms
         :param args: the arguments to pass to the service constructor
         :return: the service as a Python object
         """
@@ -889,12 +985,11 @@ def CreateScriptService(service, *args):
         """
             Synonyms within service names implemented in Python or predefined are resolved here
             :param servicename: The short name of the service
-            :return: The official service name
+            :return: The official service name if found, the argument otherwise
             """
-        if servicename.lower() in ('basic', 'scriptforge.basic'):
-            return 'ScriptForge.Basic'
-        if servicename.lower() in ('filesystem', 'scriptforge.filesystem'):
-            return 'ScriptForge.FileSystem'
+        for cls in SFServices.__subclasses__():
+            if servicename.lower() in cls.servicesynonyms:
+                return cls.servicename
         return servicename
 
     #
@@ -914,6 +1009,8 @@ def CreateScriptService(service, *args):
     else:
         serv = ScriptForge.InvokeBasicService('SF_Services', SFServices.vbMethod, 'CreateScriptService', service, *args)
     return serv
+
+createScriptSerive, createscriptservive = CreateScriptService, CreateScriptService
 
 
 # #####################################################################################################################
