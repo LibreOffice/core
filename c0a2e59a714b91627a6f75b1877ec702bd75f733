@@ -69,6 +69,24 @@
       "revId": "c0a2e59a714b91627a6f75b1877ec702bd75f733",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "302b1ba6_db343952",
+        "filename": "external/postgresql/UnpackedTarball_postgresql.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-03-14T21:16:25Z",
+      "side": 1,
+      "message": "Interesting. I just blindly assumed, postgres would link to openssl, not using the binary program, because that config.pl points to $ENV{WORKDIR}/UnpackedTarball/openssl...",
+      "parentUuid": "1dd7ed88_b0e39fe3",
+      "revId": "c0a2e59a714b91627a6f75b1877ec702bd75f733",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
