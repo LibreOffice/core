@@ -516,7 +516,6 @@ class formatParagraph(UITestCase):
         xBottom = xDialog.getChild("bottommf")
         xMerge = xDialog.getChild("mergewithnext")
 
-        select_pos(xStyle, "1")
         xwidth.executeAction("UP", tuple())
         xSync.executeAction("CLICK", tuple())
         xLeft.executeAction("UP", tuple())

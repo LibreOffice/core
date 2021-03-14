@@ -19,9 +19,6 @@ class SpinFieldTest(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
         xCellsDlg = self.xUITest.getTopFocusWindow()
 
-        # select the numbers tab page
-        select_pos(xCellsDlg, "0")
-        
         xDecimalPlaces = xCellsDlg.getChild("leadzerosed")
         xDecimalPlaces.executeAction("UP", tuple())
 
@@ -40,9 +37,6 @@ class SpinFieldTest(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
         xCellsDlg = self.xUITest.getTopFocusWindow()
 
-        # select the numbers tab page
-        select_pos(xCellsDlg, "0")
-        
         xDecimalPlaces = xCellsDlg.getChild("leadzerosed")
         xDecimalPlaces.executeAction("UP", tuple())
         xDecimalPlaces.executeAction("UP", tuple())

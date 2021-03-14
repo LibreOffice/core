@@ -19,8 +19,6 @@ class TabDialogTest(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
         xCellsDlg = self.xUITest.getTopFocusWindow()
 
-        select_pos(xCellsDlg, "1")
-
         xOkBtn = xCellsDlg.getChild("ok")
         self.ui_test.close_dialog_through_button(xOkBtn)
 
@@ -32,10 +30,6 @@ class TabDialogTest(UITestCase):
 
         self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
         xCellsDlg = self.xUITest.getTopFocusWindow()
-
-        props = {"NAME": "Borders"}
-        propsUNO = mkPropertyValues(props)
-        xCellsDlg.executeAction("SELECT", propsUNO)
 
         xOkBtn = xCellsDlg.getChild("ok")
         self.ui_test.close_dialog_through_button(xOkBtn)
