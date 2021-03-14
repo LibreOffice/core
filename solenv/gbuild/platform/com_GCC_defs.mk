@@ -254,7 +254,7 @@ gb_COMPILER_PLUGINS += -Xclang -plugin-arg-loplugin -Xclang --debug
 endif
 # set CCACHE_CPP2=1 to prevent clang generating spurious warnings
 gb_COMPILER_SETUP += CCACHE_CPP2=1
-gb_COMPILER_PLUGINS_SETUP := ICECC_EXTRAFILES=$(SRCDIR)/include/sal/log-areas.dox CCACHE_EXTRAFILES=$(SRCDIR)/include/sal/log-areas.dox
+gb_COMPILER_PLUGINS_SETUP := ICECC_EXTRAFILES=$(SRCDIR)/include/sal/log-areas.dox CCACHE_EXTRAFILES=$(SRCDIR)/include/sal/log-areas.dox SCCACHE_EXTRAFILES=$(SRCDIR)/include/sal/log-areas.dox
 gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS := \
     -Xclang -plugin-arg-loplugin -Xclang --warnings-as-errors
 else
