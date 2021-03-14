@@ -39,6 +39,7 @@ $(eval $(call gb_CppunitTest_use_libraries,svx_unit, \
 	editeng \
 	sal \
 	sfx \
+    svl \
 	svxcore \
 	svx \
 	tl \

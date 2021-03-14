@@ -18,9 +18,16 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/viewsh.hxx>
+#include <svl/intitem.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
+#include <svx/extrusionbar.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdopath.hxx>
+#include <svx/svdview.hxx>
+#include <svx/svxids.hrc>
 #include <svx/unoapi.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
@@ -118,6 +125,36 @@ void lcl_AssertRectEqualWithTolerance(std::string_view sInfo, const tools::Recta
            + OString::number(nTolerance);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(),
                            std::abs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
+}
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf141021ExtrusionNorth)
+{
+    // tdf#141021 Setting extrusion direction in projection method 'perspective' to
+    // 'Extrusion North' had used a wrong origin for the ViewPoint and thus the
+    // side faces were wrong calculated.
+
+    // Load document and get shape. It is a custom shape in 3D mode.
+    OUString aURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf141021_ExtrusionNorth.odp";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.comp.presentation.PresentationDocument");
+    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    SdrObjCustomShape& rSdrCustomShape(
+        static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+
+    // Mark Object
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SdrView* pSdrView = pViewShell->GetDrawView();
+    pSdrView->MarkObj(&rSdrCustomShape, pSdrView->GetSdrPageView());
+
+    // Set direction
+    SfxRequest aReq(pViewShell->GetViewFrame(), SID_EXTRUSION_DIRECTION);
+    SfxInt32Item aItem(SID_EXTRUSION_DIRECTION, 90);
+    aReq.AppendItem(aItem);
+    svx::ExtrusionBar::execute(pSdrView, aReq, SfxViewFrame::Current()->GetBindings());
+
+    // Verify height. Without the fix in place the height would 4001.
+    tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(5895), aBoundRect.GetHeight());
 }
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testResizeRotatedShape)
