@@ -40,10 +40,6 @@ class Subtotals(UITestCase):
 #        x6Entry = xTreeList.getChild("5")
 #        xFirstEntry.executeAction("CLICK", tuple())
         #use the Max function
-        xfunctions = xDialog.getChild("functions")
-        propsF = {"TEXT": "Max"}
-        actionPropsF = mkPropertyValues(propsF)
-        xfunctions.executeAction("SELECT", actionPropsF)
 
         #= 2nd group =5. Group by "Person Number", select "shipping time" and use the Min function.
         select_pos(xTabs, "1")
@@ -57,10 +53,6 @@ class Subtotals(UITestCase):
 #        x6Entry = xTreeList.getChild("5")
 #        xFirstEntry.executeAction("CLICK", tuple())
         #use the Min function
-        xfunctions = xDialog.getChild("functions")
-        propsF2 = {"TEXT": "Min"}
-        actionPropsF2 = mkPropertyValues(propsF2)
-        xfunctions.executeAction("SELECT", actionPropsF2)
 
         #= 3rd group = Group by "Person Number", select "shipping time" and use the Average function.
         select_pos(xTabs, "2")
@@ -74,10 +66,6 @@ class Subtotals(UITestCase):
 #        x6Entry = xTreeList.getChild("5")
 #        xFirstEntry.executeAction("CLICK", tuple())
         #use the Average function
-        xfunctions = xDialog.getChild("functions")
-        propsF3 = {"TEXT": "Average"}
-        actionPropsF3 = mkPropertyValues(propsF3)
-        xfunctions.executeAction("SELECT", actionPropsF3)
 
         # 5. Click OK
         xOKBtn = xDialog.getChild("ok")

@@ -12,6 +12,7 @@
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
+#include <sal/log.hxx>
 
 TreeListUIObject::TreeListUIObject(const VclPtr<SvTreeListBox>& xTreeList):
     WindowUIObject(xTreeList),
@@ -46,10 +47,29 @@ StringMap TreeListUIObject::get_state()
 void TreeListUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
+    bool bHandled = true;
     if (rAction.isEmpty())
     {
     }
-    else
+    else if (rAction == "SELECT")
+    {
+        auto posIt = rParameters.find("POS");
+        if (posIt != rParameters.end())
+        {
+            sal_uInt32 nPos = posIt->second.toUInt32();
+            auto pEntry = mxTreeList->GetEntry(nPos);
+            if (!pEntry)
+            {
+                SAL_WARN("vcl.uitest", "entry " << nPos << "does not exist");
+                throw std::logic_error("entry does not exist");
+            }            
+            mxTreeList->Select(pEntry, true);
+        }
+        else
+            bHandled = false;
+    }
+
+    if (!bHandled)
         WindowUIObject::execute(rAction, rParameters);
 }
 
