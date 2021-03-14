@@ -343,7 +343,7 @@ class SFServices(object):
                     a list named 'localProperties' reserved to properties for internal use
                         e.g. oDlg.Controls() is a method that uses '_Controls' to hold the list of available controls
                 When
-                    forceGetProperty = False    # Standard bahaviour
+                    forceGetProperty = False    # Standard behaviour
                 read-only serviceproperties are buffered in Python after their 1st get request to Basic
                 Otherwise set it to True to force a recomputation at each property getter invocation
                 If there is a need to handle a specific property in a specific manner:

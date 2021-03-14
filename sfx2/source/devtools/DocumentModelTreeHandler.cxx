@@ -337,7 +337,7 @@ public:
     }
 };
 
-/** Represents a style family, whcih contains a list of styles */
+/** Represents a style family, which contains a list of styles */
 class StylesFamilyEntry : public DocumentModelTreeEntry
 {
 public:
