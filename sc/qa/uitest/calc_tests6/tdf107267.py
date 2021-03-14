@@ -41,7 +41,7 @@ class Subtotals(UITestCase):
 #        xFirstEntry.executeAction("CLICK", tuple())
         #use the Max function
         xfunctions = xDialog.getChild("functions")
-        propsF = {"TEXT": "Max"}
+        propsF = {"POS": "2"} # "Max"
         actionPropsF = mkPropertyValues(propsF)
         xfunctions.executeAction("SELECT", actionPropsF)
 
