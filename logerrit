@@ -24,9 +24,8 @@ submit() {
         fi
 
         if [ "$BRANCH" = "master" ]; then
-            if [[ "$(uname)" == *Linux* ]]; then
-                WEEKOLDDATE=$(date --date="7 days ago" +%s)
-            else
+            WEEKOLDDATE=$(date --date="7 days ago" +%s 2> /dev/null)
+            if [ "$WEEKOLDDATE" = "" ]; then
                 WEEKOLDDATE=$(date -v7d +%s) # BSD equivalent
             fi
             PARENTDATE=$(git show -s --format=%ct HEAD~1)
