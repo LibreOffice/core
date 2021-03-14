@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dbb33b89_12e0367d",
+        "filename": "external/postgresql/UnpackedTarball_postgresql.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-03-14T16:14:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d2b1afb2_258b8f03",
+      "revId": "c0a2e59a714b91627a6f75b1877ec702bd75f733",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "824b9d02_e49a6284",
         "filename": "external/postgresql/UnpackedTarball_postgresql.mk",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "c0a2e59a714b91627a6f75b1877ec702bd75f733",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dd7ed88_b0e39fe3",
+        "filename": "external/postgresql/UnpackedTarball_postgresql.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-03-14T16:14:54Z",
+      "side": 1,
+      "message": "Not really - in the cross build case, there\u0027s not going to be any openssl binary in workdir that we can run (perhaps there\u0027s one in workdir_for_build, but that needs changes elsewhere). In any case, I believe the local change here is valid.",
+      "parentUuid": "824b9d02_e49a6284",
+      "revId": "c0a2e59a714b91627a6f75b1877ec702bd75f733",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
