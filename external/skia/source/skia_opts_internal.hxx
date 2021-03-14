@@ -52,15 +52,13 @@ inline void RGB1_to_R(uint8_t dst[], const uint32_t* src, int count) {
         const uint8_t X = 0xFF; // Used a placeholder.  The value of X is irrelevant.
         __m128i pack = _mm_setr_epi8(0,4,8,12, X,X,X,X,X,X,X,X,X,X,X,X);
 
-// Storing 4 pixels should store 4 bytes, but here it stores 16, so test count >= 16
-// in order to not overrun the output buffer.
-        while (count >= 16) {
+        while (count >= 4) {
             __m128i rgba = _mm_loadu_si128((const __m128i*) src);
 
             __m128i rgb = _mm_shuffle_epi8(rgba, pack);
 
             // Store 4 pixels.
-            _mm_storeu_si128((__m128i*) dst, rgb);
+            *((uint32_t*)dst) = _mm_cvtsi128_si32(rgb);
 
             src += 4;
             dst += 4;
