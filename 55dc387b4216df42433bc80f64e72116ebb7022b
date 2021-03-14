@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58e4dc65_15522d8f",
+        "filename": "logerrit",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-03-14T10:05:11Z",
+      "side": 1,
+      "message": "nice",
+      "revId": "55dc387b4216df42433bc80f64e72116ebb7022b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
