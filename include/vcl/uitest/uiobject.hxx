@@ -40,7 +40,7 @@ class MenuButton;
 class ToolBox;
 namespace weld { class CustomWidgetController; }
 
-typedef std::map<const OUString, OUString> StringMap;
+typedef std::map<OUString, OUString> StringMap;
 
 /**
  * This class wraps a UI object like vcl::Window and provides
