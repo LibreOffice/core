@@ -46,7 +46,7 @@ class VCL_DLLPUBLIC ITiledRenderable
 {
 public:
 
-    typedef std::map<const OUString, OUString>  StringMap;
+    typedef std::map<OUString, OUString>  StringMap;
 
     virtual ~ITiledRenderable();
 
