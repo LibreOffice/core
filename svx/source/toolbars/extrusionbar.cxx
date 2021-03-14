@@ -197,7 +197,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
                 aViewPoint.PositionX = 0;
                 aViewPoint.PositionY = 3472;
                 fOriginX = 0;
-                fOriginY = -0.50;
+                fOriginY = 0.50;
                 break;
             case 45:
                 aViewPoint.PositionX = -3472;
