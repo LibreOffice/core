@@ -29,6 +29,7 @@ class SmParser5 : public AbstractSmParser
 {
     OUString m_aBufferString;
     SmToken m_aCurToken;
+    ESelection m_aCurESelection;
     std::vector<SmErrorDesc> m_aErrDescList;
     int m_nCurError;
     sal_Int32 m_nBufferIndex, m_nTokenIndex;
