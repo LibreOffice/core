@@ -10,5 +10,3 @@ sax/source/tools/fastserializer.hxx:184
 SvTreeListEntry * SvTabListBox::InsertEntryToColumn(const rtl::OUString &,unsigned long,unsigned short,void *)
 include/vcl/svtabbx.hxx:86
 
-void sfx2::sidebar::Deck::PrintWindowSubTree(vcl::Window *,int)
-include/sfx2/sidebar/Deck.hxx:69
