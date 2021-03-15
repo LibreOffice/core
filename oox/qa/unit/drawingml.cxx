@@ -326,6 +326,27 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTableShadow)
     verify(getComponent());
 }
 
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf129143)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf129143.ppt";
+    loadAndReload(aURL, "Impress Office Open XML");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    for (int i = 2; i < 4; i++)
+    {
+        uno::Reference<beans::XPropertySet> XPropSet(xDrawPage->getByIndex(i), uno::UNO_QUERY);
+        drawing::FillStyle eFillStyle = drawing::FillStyle_NONE;
+        XPropSet->getPropertyValue("FillStyle") >>= eFillStyle;
+
+        // Without the fix in place, this test would have failed with
+        // with drawing::FillStyle_NONE != drawing::FillStyle_SOLID
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, eFillStyle);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
