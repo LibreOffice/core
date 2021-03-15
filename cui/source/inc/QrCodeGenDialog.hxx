@@ -8,9 +8,12 @@
  */
 #pragma once
 
-#include <config_qrcodegen.h>
+#include <config_zxing.h>
+
+#include <ZXing/BitMatrix.h>
 
 #include <vcl/weld.hxx>
+#include <tools/stream.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -33,13 +36,16 @@ private:
     std::unique_ptr<weld::Entry> m_xEdittext;
     std::unique_ptr<weld::RadioButton> m_xECC[4];
     std::unique_ptr<weld::SpinButton> m_xSpinBorder;
-#if ENABLE_QRCODEGEN
+#if ENABLE_ZXING
     weld::Widget* mpParent;
 #endif
 
     css::uno::Reference<css::beans::XPropertySet> m_xExistingShapeProperties;
 
     void GetErrorCorrection(tools::Long);
+
+    //Helper function to generate SVG image
+    static std::string ConvertToSVGFormat(ZXing::BitMatrix bitmatrix);
     //Function contains QR Code Generating Library Calls
     static OUString GenerateQRCode(OUString aQrText, tools::Long aQrECC, int aQrBorder);
 };
