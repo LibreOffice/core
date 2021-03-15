@@ -780,6 +780,7 @@ ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
     std::unique_ptr<ObjectInspectorWidgets>& pObjectInspectorWidgets)
     : mpObjectInspectorWidgets(pObjectInspectorWidgets)
     , mxContext(comphelper::getProcessComponentContext())
+    , mbPanedResetSize(true)
 {
     mpObjectInspectorWidgets->mpInterfacesTreeView->connect_expanding(
         LINK(this, ObjectInspectorTreeHandler, ExpandingHandlerInterfaces));
@@ -812,10 +813,15 @@ ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
     mpObjectInspectorWidgets->mpToolbar->set_item_sensitive("inspect", false);
     mpObjectInspectorWidgets->mpToolbar->set_item_sensitive("back", false);
 
+    mpObjectInspectorWidgets->mpTextView->hide();
+
     mpObjectInspectorWidgets->mpNotebook->connect_leave_page(
         LINK(this, ObjectInspectorTreeHandler, NotebookLeavePage));
     mpObjectInspectorWidgets->mpNotebook->connect_enter_page(
         LINK(this, ObjectInspectorTreeHandler, NotebookEnterPage));
+
+    mpObjectInspectorWidgets->mpPaned->connect_size_allocate(
+        LINK(this, ObjectInspectorTreeHandler, PanedSizeChange));
 }
 
 void ObjectInspectorTreeHandler::handleExpanding(std::unique_ptr<weld::TreeView>& pTreeView,
@@ -860,7 +866,7 @@ IMPL_LINK(ObjectInspectorTreeHandler, ExpandingHandlerMethods, weld::TreeIter co
 IMPL_LINK(ObjectInspectorTreeHandler, SelectionChanged, weld::TreeView&, rTreeView, void)
 {
     bool bHaveNodeWithObject = false;
-
+    mpObjectInspectorWidgets->mpTextView->set_text("");
     if (mpObjectInspectorWidgets->mpPropertiesTreeView.get() == &rTreeView)
     {
         auto* pNode = getSelectedNode(rTreeView);
@@ -869,6 +875,7 @@ IMPL_LINK(ObjectInspectorTreeHandler, SelectionChanged, weld::TreeView&, rTreeVi
             uno::Any aAny = pBasicValueNode->getAny();
             uno::Reference<uno::XInterface> xInterface(aAny, uno::UNO_QUERY);
             bHaveNodeWithObject = xInterface.is();
+            mpObjectInspectorWidgets->mpTextView->set_text(AnyToString(aAny, mxContext));
         }
     }
 
@@ -929,6 +936,8 @@ IMPL_LINK(ObjectInspectorTreeHandler, ToolbarButtonClicked, const OString&, rSel
 
 IMPL_LINK(ObjectInspectorTreeHandler, NotebookEnterPage, const OString&, rPageId, void)
 {
+    mpObjectInspectorWidgets->mpTextView->hide();
+
     uno::Any aAny = maInspectionStack.back();
     if (aAny.hasValue())
     {
@@ -949,10 +958,12 @@ IMPL_LINK(ObjectInspectorTreeHandler, NotebookEnterPage, const OString&, rPageId
         }
         else if (rPageId == "object_inspector_properties_tab")
         {
+            mbPanedResetSize = true;
             mpObjectInspectorWidgets->mpPropertiesTreeView->freeze();
             clearAll(mpObjectInspectorWidgets->mpPropertiesTreeView);
             appendProperties(xInterface);
             mpObjectInspectorWidgets->mpPropertiesTreeView->thaw();
+            mpObjectInspectorWidgets->mpTextView->show();
         }
         else if (rPageId == "object_inspector_methods_tab")
         {
@@ -991,6 +1002,17 @@ IMPL_LINK(ObjectInspectorTreeHandler, NotebookLeavePage, const OString&, rPageId
         mpObjectInspectorWidgets->mpMethodsTreeView->thaw();
     }
     return true;
+}
+
+IMPL_LINK(ObjectInspectorTreeHandler, PanedSizeChange, const Size&, rSize, void)
+{
+    if (mbPanedResetSize)
+    {
+        // Set position at 90% of the height
+        tools::Long nHeight = rSize.Height();
+        mpObjectInspectorWidgets->mpPaned->set_position(nHeight * 0.9);
+        mbPanedResetSize = false;
+    }
 }
 
 void ObjectInspectorTreeHandler::clearObjectInspectorChildren(
