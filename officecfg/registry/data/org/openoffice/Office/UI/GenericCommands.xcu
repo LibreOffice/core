@@ -6536,7 +6536,7 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
       </node>
       <node oor:name=".uno:DevelopmentToolsDockingWindow" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Development Tool</value>
+          <value xml:lang="en-US">Development Tools</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
