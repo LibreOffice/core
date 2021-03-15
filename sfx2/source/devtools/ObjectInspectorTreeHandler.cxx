@@ -777,52 +777,44 @@ uno::Reference<uno::XInterface> getSelectedXInterface(weld::TreeView const& rTre
 } // end anonymous namespace
 
 ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
-    std::unique_ptr<weld::TreeView>& pInterfacesTreeView,
-    std::unique_ptr<weld::TreeView>& pServicesTreeView,
-    std::unique_ptr<weld::TreeView>& pPropertiesTreeView,
-    std::unique_ptr<weld::TreeView>& pMethodsTreeView,
-    std::unique_ptr<weld::Label>& pClassNameLabel,
-    std::unique_ptr<weld::Toolbar>& pObjectInspectorToolbar,
-    std::unique_ptr<weld::Notebook>& pObjectInspectorNotebook)
-    : mpInterfacesTreeView(pInterfacesTreeView)
-    , mpServicesTreeView(pServicesTreeView)
-    , mpPropertiesTreeView(pPropertiesTreeView)
-    , mpMethodsTreeView(pMethodsTreeView)
-    , mpClassNameLabel(pClassNameLabel)
-    , mpObjectInspectorToolbar(pObjectInspectorToolbar)
-    , mpObjectInspectorNotebook(pObjectInspectorNotebook)
+    std::unique_ptr<ObjectInspectorWidgets>& pObjectInspectorWidgets)
+    : mpObjectInspectorWidgets(pObjectInspectorWidgets)
     , mxContext(comphelper::getProcessComponentContext())
 {
-    mpInterfacesTreeView->connect_expanding(
+    mpObjectInspectorWidgets->mpInterfacesTreeView->connect_expanding(
         LINK(this, ObjectInspectorTreeHandler, ExpandingHandlerInterfaces));
-    mpServicesTreeView->connect_expanding(
+    mpObjectInspectorWidgets->mpServicesTreeView->connect_expanding(
         LINK(this, ObjectInspectorTreeHandler, ExpandingHandlerServices));
-    mpPropertiesTreeView->connect_expanding(
+    mpObjectInspectorWidgets->mpPropertiesTreeView->connect_expanding(
         LINK(this, ObjectInspectorTreeHandler, ExpandingHandlerProperties));
-    mpMethodsTreeView->connect_expanding(
+    mpObjectInspectorWidgets->mpMethodsTreeView->connect_expanding(
         LINK(this, ObjectInspectorTreeHandler, ExpandingHandlerMethods));
 
-    mpPropertiesTreeView->connect_popup_menu(
+    mpObjectInspectorWidgets->mpPropertiesTreeView->connect_popup_menu(
         LINK(this, ObjectInspectorTreeHandler, PopupMenuHandler));
 
-    mpInterfacesTreeView->connect_changed(LINK(this, ObjectInspectorTreeHandler, SelectionChanged));
-    mpServicesTreeView->connect_changed(LINK(this, ObjectInspectorTreeHandler, SelectionChanged));
-    mpPropertiesTreeView->connect_changed(LINK(this, ObjectInspectorTreeHandler, SelectionChanged));
-    mpMethodsTreeView->connect_changed(LINK(this, ObjectInspectorTreeHandler, SelectionChanged));
+    mpObjectInspectorWidgets->mpInterfacesTreeView->connect_changed(
+        LINK(this, ObjectInspectorTreeHandler, SelectionChanged));
+    mpObjectInspectorWidgets->mpServicesTreeView->connect_changed(
+        LINK(this, ObjectInspectorTreeHandler, SelectionChanged));
+    mpObjectInspectorWidgets->mpPropertiesTreeView->connect_changed(
+        LINK(this, ObjectInspectorTreeHandler, SelectionChanged));
+    mpObjectInspectorWidgets->mpMethodsTreeView->connect_changed(
+        LINK(this, ObjectInspectorTreeHandler, SelectionChanged));
 
-    mpInterfacesTreeView->make_sorted();
-    mpServicesTreeView->make_sorted();
-    mpPropertiesTreeView->make_sorted();
-    mpMethodsTreeView->make_sorted();
+    mpObjectInspectorWidgets->mpInterfacesTreeView->make_sorted();
+    mpObjectInspectorWidgets->mpServicesTreeView->make_sorted();
+    mpObjectInspectorWidgets->mpPropertiesTreeView->make_sorted();
+    mpObjectInspectorWidgets->mpMethodsTreeView->make_sorted();
 
-    mpObjectInspectorToolbar->connect_clicked(
+    mpObjectInspectorWidgets->mpToolbar->connect_clicked(
         LINK(this, ObjectInspectorTreeHandler, ToolbarButtonClicked));
-    mpObjectInspectorToolbar->set_item_sensitive("inspect", false);
-    mpObjectInspectorToolbar->set_item_sensitive("back", false);
+    mpObjectInspectorWidgets->mpToolbar->set_item_sensitive("inspect", false);
+    mpObjectInspectorWidgets->mpToolbar->set_item_sensitive("back", false);
 
-    mpObjectInspectorNotebook->connect_leave_page(
+    mpObjectInspectorWidgets->mpNotebook->connect_leave_page(
         LINK(this, ObjectInspectorTreeHandler, NotebookLeavePage));
-    mpObjectInspectorNotebook->connect_enter_page(
+    mpObjectInspectorWidgets->mpNotebook->connect_enter_page(
         LINK(this, ObjectInspectorTreeHandler, NotebookEnterPage));
 }
 
@@ -841,27 +833,27 @@ void ObjectInspectorTreeHandler::handleExpanding(std::unique_ptr<weld::TreeView>
 IMPL_LINK(ObjectInspectorTreeHandler, ExpandingHandlerInterfaces, weld::TreeIter const&, rParent,
           bool)
 {
-    handleExpanding(mpInterfacesTreeView, rParent);
+    handleExpanding(mpObjectInspectorWidgets->mpInterfacesTreeView, rParent);
     return true;
 }
 
 IMPL_LINK(ObjectInspectorTreeHandler, ExpandingHandlerServices, weld::TreeIter const&, rParent,
           bool)
 {
-    handleExpanding(mpServicesTreeView, rParent);
+    handleExpanding(mpObjectInspectorWidgets->mpServicesTreeView, rParent);
     return true;
 }
 
 IMPL_LINK(ObjectInspectorTreeHandler, ExpandingHandlerProperties, weld::TreeIter const&, rParent,
           bool)
 {
-    handleExpanding(mpPropertiesTreeView, rParent);
+    handleExpanding(mpObjectInspectorWidgets->mpPropertiesTreeView, rParent);
     return true;
 }
 
 IMPL_LINK(ObjectInspectorTreeHandler, ExpandingHandlerMethods, weld::TreeIter const&, rParent, bool)
 {
-    handleExpanding(mpMethodsTreeView, rParent);
+    handleExpanding(mpObjectInspectorWidgets->mpMethodsTreeView, rParent);
     return true;
 }
 
@@ -869,7 +861,7 @@ IMPL_LINK(ObjectInspectorTreeHandler, SelectionChanged, weld::TreeView&, rTreeVi
 {
     bool bHaveNodeWithObject = false;
 
-    if (mpPropertiesTreeView.get() == &rTreeView)
+    if (mpObjectInspectorWidgets->mpPropertiesTreeView.get() == &rTreeView)
     {
         auto* pNode = getSelectedNode(rTreeView);
         if (auto* pBasicValueNode = dynamic_cast<BasicValueNode*>(pNode))
@@ -880,7 +872,7 @@ IMPL_LINK(ObjectInspectorTreeHandler, SelectionChanged, weld::TreeView&, rTreeVi
         }
     }
 
-    mpObjectInspectorToolbar->set_item_sensitive("inspect", bHaveNodeWithObject);
+    mpObjectInspectorWidgets->mpToolbar->set_item_sensitive("inspect", bHaveNodeWithObject);
 }
 
 IMPL_LINK(ObjectInspectorTreeHandler, PopupMenuHandler, const CommandEvent&, rCommandEvent, bool)
@@ -888,15 +880,15 @@ IMPL_LINK(ObjectInspectorTreeHandler, PopupMenuHandler, const CommandEvent&, rCo
     if (rCommandEvent.GetCommand() != CommandEventId::ContextMenu)
         return false;
 
-    auto xInterface = getSelectedXInterface(*mpPropertiesTreeView);
+    auto xInterface = getSelectedXInterface(*mpObjectInspectorWidgets->mpPropertiesTreeView);
     if (xInterface.is())
     {
-        std::unique_ptr<weld::Builder> xBuilder(
-            Application::CreateBuilder(mpPropertiesTreeView.get(), "sfx/ui/devtoolsmenu.ui"));
+        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(
+            mpObjectInspectorWidgets->mpPropertiesTreeView.get(), "sfx/ui/devtoolsmenu.ui"));
         std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu("inspect_menu"));
 
         OString sCommand(
-            xMenu->popup_at_rect(mpPropertiesTreeView.get(),
+            xMenu->popup_at_rect(mpObjectInspectorWidgets->mpPropertiesTreeView.get(),
                                  tools::Rectangle(rCommandEvent.GetMousePosPixel(), Size(1, 1))));
 
         if (sCommand == "inspect")
@@ -912,7 +904,7 @@ IMPL_LINK(ObjectInspectorTreeHandler, ToolbarButtonClicked, const OString&, rSel
 {
     if (rSelectionId == "inspect")
     {
-        auto xInterface = getSelectedXInterface(*mpPropertiesTreeView);
+        auto xInterface = getSelectedXInterface(*mpObjectInspectorWidgets->mpPropertiesTreeView);
         if (xInterface.is())
         {
             addToStack(uno::Any(xInterface));
@@ -930,7 +922,7 @@ IMPL_LINK(ObjectInspectorTreeHandler, ToolbarButtonClicked, const OString&, rSel
     }
     else if (rSelectionId == "refresh")
     {
-        auto rPageId = mpObjectInspectorNotebook->get_current_page_ident();
+        auto rPageId = mpObjectInspectorWidgets->mpNotebook->get_current_page_ident();
         NotebookEnterPage(rPageId);
     }
 }
@@ -943,31 +935,31 @@ IMPL_LINK(ObjectInspectorTreeHandler, NotebookEnterPage, const OString&, rPageId
         uno::Reference<uno::XInterface> xInterface(aAny, uno::UNO_QUERY);
         if (rPageId == "object_inspector_interfaces_tab")
         {
-            mpInterfacesTreeView->freeze();
-            clearAll(mpInterfacesTreeView);
+            mpObjectInspectorWidgets->mpInterfacesTreeView->freeze();
+            clearAll(mpObjectInspectorWidgets->mpInterfacesTreeView);
             appendInterfaces(xInterface);
-            mpInterfacesTreeView->thaw();
+            mpObjectInspectorWidgets->mpInterfacesTreeView->thaw();
         }
         else if (rPageId == "object_inspector_services_tab")
         {
-            mpServicesTreeView->freeze();
-            clearAll(mpServicesTreeView);
+            mpObjectInspectorWidgets->mpServicesTreeView->freeze();
+            clearAll(mpObjectInspectorWidgets->mpServicesTreeView);
             appendServices(xInterface);
-            mpServicesTreeView->thaw();
+            mpObjectInspectorWidgets->mpServicesTreeView->thaw();
         }
         else if (rPageId == "object_inspector_properties_tab")
         {
-            mpPropertiesTreeView->freeze();
-            clearAll(mpPropertiesTreeView);
+            mpObjectInspectorWidgets->mpPropertiesTreeView->freeze();
+            clearAll(mpObjectInspectorWidgets->mpPropertiesTreeView);
             appendProperties(xInterface);
-            mpPropertiesTreeView->thaw();
+            mpObjectInspectorWidgets->mpPropertiesTreeView->thaw();
         }
         else if (rPageId == "object_inspector_methods_tab")
         {
-            mpMethodsTreeView->freeze();
-            clearAll(mpMethodsTreeView);
+            mpObjectInspectorWidgets->mpMethodsTreeView->freeze();
+            clearAll(mpObjectInspectorWidgets->mpMethodsTreeView);
             appendMethods(xInterface);
-            mpMethodsTreeView->thaw();
+            mpObjectInspectorWidgets->mpMethodsTreeView->thaw();
         }
     }
 }
@@ -976,27 +968,27 @@ IMPL_LINK(ObjectInspectorTreeHandler, NotebookLeavePage, const OString&, rPageId
 {
     if (rPageId == "object_inspector_interfaces_tab")
     {
-        mpInterfacesTreeView->freeze();
-        clearAll(mpInterfacesTreeView);
-        mpInterfacesTreeView->thaw();
+        mpObjectInspectorWidgets->mpInterfacesTreeView->freeze();
+        clearAll(mpObjectInspectorWidgets->mpInterfacesTreeView);
+        mpObjectInspectorWidgets->mpInterfacesTreeView->thaw();
     }
     else if (rPageId == "object_inspector_services_tab")
     {
-        mpServicesTreeView->freeze();
-        clearAll(mpServicesTreeView);
-        mpServicesTreeView->thaw();
+        mpObjectInspectorWidgets->mpServicesTreeView->freeze();
+        clearAll(mpObjectInspectorWidgets->mpServicesTreeView);
+        mpObjectInspectorWidgets->mpServicesTreeView->thaw();
     }
     else if (rPageId == "object_inspector_properties_tab")
     {
-        mpPropertiesTreeView->freeze();
-        clearAll(mpPropertiesTreeView);
-        mpPropertiesTreeView->thaw();
+        mpObjectInspectorWidgets->mpPropertiesTreeView->freeze();
+        clearAll(mpObjectInspectorWidgets->mpPropertiesTreeView);
+        mpObjectInspectorWidgets->mpPropertiesTreeView->thaw();
     }
     else if (rPageId == "object_inspector_methods_tab")
     {
-        mpMethodsTreeView->freeze();
-        clearAll(mpMethodsTreeView);
-        mpMethodsTreeView->thaw();
+        mpObjectInspectorWidgets->mpMethodsTreeView->freeze();
+        clearAll(mpObjectInspectorWidgets->mpMethodsTreeView);
+        mpObjectInspectorWidgets->mpMethodsTreeView->thaw();
     }
     return true;
 }
@@ -1050,7 +1042,7 @@ void ObjectInspectorTreeHandler::appendInterfaces(uno::Reference<uno::XInterface
         for (auto const& xType : xSequenceTypes)
         {
             auto xClass = convertTypeToIdlClass(xType, mxContext);
-            lclAppendNode(mpInterfacesTreeView, new ClassNode(xClass));
+            lclAppendNode(mpObjectInspectorWidgets->mpInterfacesTreeView, new ClassNode(xClass));
         }
     }
 }
@@ -1065,7 +1057,8 @@ void ObjectInspectorTreeHandler::appendServices(uno::Reference<uno::XInterface> 
     const uno::Sequence<OUString> aServiceNames(xServiceInfo->getSupportedServiceNames());
     for (auto const& aServiceName : aServiceNames)
     {
-        lclAppendNode(mpServicesTreeView, new SimpleStringNode(aServiceName));
+        lclAppendNode(mpObjectInspectorWidgets->mpServicesTreeView,
+                      new SimpleStringNode(aServiceName));
     }
 }
 
@@ -1075,7 +1068,7 @@ void ObjectInspectorTreeHandler::appendProperties(uno::Reference<uno::XInterface
     if (!xInterface.is())
         return;
     GenericPropertiesNode aNode("", uno::Any(xInterface), "", mxContext);
-    aNode.fillChildren(mpPropertiesTreeView, nullptr);
+    aNode.fillChildren(mpObjectInspectorWidgets->mpPropertiesTreeView, nullptr);
 }
 
 /** Append methods to the "methods" tree view */
@@ -1090,13 +1083,13 @@ void ObjectInspectorTreeHandler::appendMethods(uno::Reference<uno::XInterface> c
     const auto xMethods = xIntrospectionAccess->getMethods(beans::MethodConcept::ALL);
     for (auto const& xMethod : xMethods)
     {
-        lclAppendNode(mpMethodsTreeView, new MethodNode(xMethod));
+        lclAppendNode(mpObjectInspectorWidgets->mpMethodsTreeView, new MethodNode(xMethod));
     }
 }
 
 void ObjectInspectorTreeHandler::updateBackButtonState()
 {
-    mpObjectInspectorToolbar->set_item_sensitive("back", maInspectionStack.size() > 1);
+    mpObjectInspectorWidgets->mpToolbar->set_item_sensitive("back", maInspectionStack.size() > 1);
 }
 
 // Clears all the objects from the stack
@@ -1131,10 +1124,10 @@ void ObjectInspectorTreeHandler::inspectObject(uno::Reference<uno::XInterface> c
     // Set implementation name
     auto xServiceInfo = uno::Reference<lang::XServiceInfo>(xInterface, uno::UNO_QUERY);
     OUString aImplementationName = xServiceInfo->getImplementationName();
-    mpClassNameLabel->set_label(aImplementationName);
+    mpObjectInspectorWidgets->mpClassNameLabel->set_label(aImplementationName);
 
     // Fire entering the current opened page manually
-    auto rPageId = mpObjectInspectorNotebook->get_current_page_ident();
+    auto rPageId = mpObjectInspectorWidgets->mpNotebook->get_current_page_ident();
     NotebookEnterPage(rPageId);
 }
 
@@ -1151,10 +1144,10 @@ void ObjectInspectorTreeHandler::introspect(uno::Reference<uno::XInterface> cons
 void ObjectInspectorTreeHandler::dispose()
 {
     // We need to clear all the nodes
-    clearAll(mpInterfacesTreeView);
-    clearAll(mpServicesTreeView);
-    clearAll(mpPropertiesTreeView);
-    clearAll(mpMethodsTreeView);
+    clearAll(mpObjectInspectorWidgets->mpInterfacesTreeView);
+    clearAll(mpObjectInspectorWidgets->mpServicesTreeView);
+    clearAll(mpObjectInspectorWidgets->mpPropertiesTreeView);
+    clearAll(mpObjectInspectorWidgets->mpMethodsTreeView);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,21 +27,13 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
                                                            vcl::Window* pParent)
     : SfxDockingWindow(pInputBindings, pChildWindow, pParent, "DevelopmentTool",
                        "sfx/ui/developmenttool.ui")
-    , mpClassNameLabel(m_xBuilder->weld_label("class_name_value_id"))
-    , mpInterfacesTreeView(m_xBuilder->weld_tree_view("interfaces_treeview_id"))
-    , mpServicesTreeView(m_xBuilder->weld_tree_view("services_treeview_id"))
-    , mpPropertiesTreeView(m_xBuilder->weld_tree_view("properties_treeview_id"))
-    , mpMethodsTreeView(m_xBuilder->weld_tree_view("methods_treeview_id"))
+    , mpObjectInspectorWidgets(new ObjectInspectorWidgets(m_xBuilder))
     , mpDocumentModelTreeView(m_xBuilder->weld_tree_view("leftside_treeview_id"))
     , mpSelectionToggle(m_xBuilder->weld_toggle_button("selection_toggle"))
-    , mpObjectInspectorToolbar(m_xBuilder->weld_toolbar("object_inspector_toolbar"))
-    , mpObjectInspectorNotebook(m_xBuilder->weld_notebook("object_inspector_notebookbar"))
     , maDocumentModelTreeHandler(
           mpDocumentModelTreeView,
           pInputBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetBaseModel())
-    , maObjectInspectorTreeHandler(mpInterfacesTreeView, mpServicesTreeView, mpPropertiesTreeView,
-                                   mpMethodsTreeView, mpClassNameLabel, mpObjectInspectorToolbar,
-                                   mpObjectInspectorNotebook)
+    , maObjectInspectorTreeHandler(mpObjectInspectorWidgets)
 {
     mpDocumentModelTreeView->connect_changed(
         LINK(this, DevelopmentToolDockingWindow, DocumentModelTreeViewSelectionHandler));
@@ -92,14 +84,9 @@ void DevelopmentToolDockingWindow::dispose()
     maObjectInspectorTreeHandler.dispose();
 
     // dispose welded objects
-    mpClassNameLabel.reset();
-    mpInterfacesTreeView.reset();
-    mpServicesTreeView.reset();
-    mpPropertiesTreeView.reset();
-    mpMethodsTreeView.reset();
+    mpObjectInspectorWidgets.reset();
     mpSelectionToggle.reset();
     mpDocumentModelTreeView.reset();
-    mpObjectInspectorToolbar.reset();
 
     SfxDockingWindow::dispose();
 }
