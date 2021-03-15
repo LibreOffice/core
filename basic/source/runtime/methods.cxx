@@ -1289,7 +1289,7 @@ void SbRtl_Replace(StarBASIC *, SbxArray & rPar, bool)
         const css::lang::Locale& rLocale = Application::GetSettings().GetUILanguageTag().getLocale();
         css::uno::Reference < i18n::XCharacterClassification > xCharClass = vcl::unohelper::CreateCharacterClassification();
         aSrcStr = xCharClass->toUpper(aSrcStr, 0, aSrcStr.getLength(), rLocale);
-        aFindStr = xCharClass->toUpper(aFindStr, 0, aSrcStr.getLength(), rLocale);
+        aFindStr = xCharClass->toUpper(aFindStr, 0, aFindStr.getLength(), rLocale);
     }
 
     // Note: the result starts from lStartPos, removing everything to the left. See i#94895.
