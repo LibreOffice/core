@@ -1024,15 +1024,10 @@ void SkiaSalBitmap::EnsureBitmapData()
     if (mEraseColorSet)
     {
         SkiaZone zone;
-        if (mPixelsSize != mSize)
-        {
-            mPixelsSize = mSize;
-            ComputeScanlineSize();
-            mBuffer.reset();
-        }
+        assert(mPixelsSize == mSize);
+        assert(!mBuffer);
         mScaleQuality = BmpScaleFlag::BestQuality;
-        if (!mBuffer)
-            CreateBitmapData();
+        CreateBitmapData();
         // Unset now, so that repeated call will return mBuffer.
         mEraseColorSet = false;
         PerformErase();
