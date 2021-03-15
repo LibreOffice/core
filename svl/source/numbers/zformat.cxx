@@ -442,8 +442,10 @@ OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, 
     switch ( aTmpLocale.mnCalendarType & 0x7F )
     {
         case 0x03 : // Gengou calendar
-            sCalendar = "[~gengou]";
-            // Only Japanese language support Gengou calendar
+            // Only Japanese language support Gengou calendar.
+            // It is an implicit "other" calendar where E, EE an R
+            // automatically switch to and YY and YYYY switch to Gregorian. Do
+            // not add the "[~gengou]" modifier.
             if ( nLocaleLang != LANGUAGE_JAPANESE )
             {
                 nLang = maLocale.meLanguage = LANGUAGE_JAPANESE;
