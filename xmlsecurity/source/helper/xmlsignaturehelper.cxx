@@ -642,7 +642,7 @@ static auto CheckX509Data(
                 if (xmlsecurity::EqualDistinguishedNames(
                         certs[chain[i]]->getSubjectName(), certs[j]->getIssuerName()))
                 {
-                    if (chain.size() != i + 1) // already found issuee?
+                    if (chain.size() != i + 1) // already found issue?
                     {
                         SAL_WARN("xmlsecurity.comp", "X509Data do not form a chain: certificate issued 2 others: " << certs[chain[i]]->getSubjectName());
                         return false;
