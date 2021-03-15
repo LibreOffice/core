@@ -28,6 +28,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <limits>
+#include <string_view>
 #include <type_traits>
 
 #include <cstring>
@@ -738,7 +739,7 @@ template <typename IMPL_RTL_STRCODE> sal_Int32 trim( IMPL_RTL_STRCODE* pStr )
 /* ----------------------------------------------------------------------- */
 
 template <typename IMPL_RTL_STRCODE>
-sal_Int32 trim_WithLength( IMPL_RTL_STRCODE* pStr, sal_Int32 nLen )
+std::basic_string_view<IMPL_RTL_STRCODE> trimView( IMPL_RTL_STRCODE* pStr, sal_Int32 nLen )
 {
     assert(nLen >= 0);
     sal_Int32 nPreSpaces    = 0;
@@ -754,18 +755,22 @@ sal_Int32 trim_WithLength( IMPL_RTL_STRCODE* pStr, sal_Int32 nLen )
         nIndex--;
     }
 
-    if ( nPostSpaces )
-    {
-        nLen -= nPostSpaces;
-        *(pStr+nLen) = 0;
-    }
+    return { pStr + nPreSpaces, static_cast<size_t>(nLen - nPostSpaces - nPreSpaces) };
+}
 
-    if ( nPreSpaces )
+/* ----------------------------------------------------------------------- */
+
+template <typename IMPL_RTL_STRCODE>
+sal_Int32 trim_WithLength( IMPL_RTL_STRCODE* pStr, sal_Int32 nLen )
+{
+    const auto view = trimView(pStr, nLen);
+
+    if (static_cast<sal_Int32>(view.size()) != nLen)
     {
-        nLen -= nPreSpaces;
-        memmove(pStr, pStr + nPreSpaces, nLen * sizeof(IMPL_RTL_STRCODE));
-        pStr += nLen;
-        *pStr = 0;
+        nLen = static_cast<sal_Int32>(view.size());
+        if (view.data() != pStr)
+            memmove(pStr, view.data(), nLen * sizeof(IMPL_RTL_STRCODE));
+        *(pStr+nLen) = 0;
     }
 
     return nLen;
@@ -1825,32 +1830,19 @@ void newTrim                                ( IMPL_RTL_STRINGDATA** ppThis,
     assert(ppThis);
     assert(pStr);
     IMPL_RTL_STRINGDATA*    pOrg        = *ppThis;
-    const auto*             pCharStr    = pStr->buffer;
-    sal_Int32               nPreSpaces  = 0;
-    sal_Int32               nPostSpaces = 0;
-    sal_Int32               nLen        = pStr->length;
-    sal_Int32               nIndex      = nLen-1;
+    const auto view = trimView(pStr->buffer, pStr->length);
 
-    while ( (nPreSpaces < nLen) && rtl_ImplIsWhitespace( USTRCODE<IMPL_RTL_STRINGDATA>(*(pCharStr+nPreSpaces)) ) )
-        nPreSpaces++;
-
-    while ( (nIndex > nPreSpaces) && rtl_ImplIsWhitespace( USTRCODE<IMPL_RTL_STRINGDATA>(*(pCharStr+nIndex)) ) )
-    {
-        nPostSpaces++;
-        nIndex--;
-    }
-
-    if ( !nPreSpaces && !nPostSpaces )
+    if (static_cast<sal_Int32>(view.size()) == pStr->length)
     {
         *ppThis = pStr;
         acquire( pStr );
     }
     else
     {
-        nLen -= nPostSpaces+nPreSpaces;
+        sal_Int32 nLen = static_cast<sal_Int32>(view.size());
         *ppThis = Alloc<IMPL_RTL_STRINGDATA>( nLen );
         assert(*ppThis);
-        Copy( (*ppThis)->buffer, pStr->buffer+nPreSpaces, nLen );
+        Copy( (*ppThis)->buffer, view.data(), nLen );
     }
 
     RTL_LOG_STRING_NEW( *ppThis );
