@@ -23,6 +23,12 @@ Function verify_stringReplace() As String
     retStr = Replace("АБВабв", "б", "*")
     TestLog_ASSERT retStr, "А*Ва*в", "case-insensitive non-ASCII: " & retStr
 
+    ' tdf#141045 - different length of search and replace string. It is important
+    ' that the search string starts with the original string in order to test the error.
+    ' Without the fix in place, the string index calculations result in a crash.
+    retStr = Replace("a", "abc", "ab")
+    TestLog_ASSERT retStr, "a", "different length of search and replace string: " & retStr
+
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
     verify_stringReplace = result
 End Function
