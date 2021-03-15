@@ -91,15 +91,6 @@ namespace basegfx
      */
     inline double pruneScaleValue( double fVal )
     {
-        // old version used ::std::min/max, but this collides if min is defined as preprocessor
-        // macro which is the case e.g with windows.h headers. The simplest way to avoid this is to
-        // just use the full comparison. I keep the original here, maybe there will be a better
-        // solution some day.
-
-        //return fVal < 0.0 ?
-        //    (::std::min(fVal,-0.00001)) :
-        //    (::std::max(fVal,0.00001));
-
         if(fVal < 0.0)
             return std::min(fVal, -0.00001);
         else
