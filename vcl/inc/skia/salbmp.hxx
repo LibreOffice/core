@@ -105,8 +105,6 @@ private:
     void ResetToBuffer();
     // Sets the data only as SkImage (will be converted as needed).
     void ResetToSkImage(sk_sp<SkImage> image);
-    // Resets all data that does not match mSize.
-    void ResetCachedDataBySize();
     // Resets all data (buffer and images).
     void ResetAllData();
     // Call to ensure mBuffer has data (will convert from mImage if necessary).
@@ -119,6 +117,8 @@ private:
     void CreateBitmapData();
     // Should be called whenever mPixelsSize or mBitCount is set/changed.
     bool ComputeScanlineSize();
+    // Resets information about pending scaling. To be called when mBuffer is resized or created.
+    void ResetPendingScaling();
     // Sets bitmap to be erased on demand.
     void EraseInternal(const Color& color);
     // Sets pixels to the erase color.

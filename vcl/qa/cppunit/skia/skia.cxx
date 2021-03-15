@@ -20,6 +20,8 @@
 #include <skia/utils.hxx>
 #include <bitmap/BitmapWriteAccess.hxx>
 
+using namespace SkiaHelper;
+
 // This tests backends that use Skia (i.e. intentionally not the svp one, which is the default.)
 // Note that you still may need to actually set for Skia to be used (see vcl/README.vars).
 // If Skia is not enabled, all tests will be silently skipped.
@@ -39,6 +41,7 @@ public:
     void testAlphaBlendWith();
     void testBitmapCopyOnWrite();
     void testMatrixQuality();
+    void testDelayedScale();
     void testTdf137329();
 
     CPPUNIT_TEST_SUITE(SkiaTest);
@@ -48,6 +51,7 @@ public:
     CPPUNIT_TEST(testAlphaBlendWith);
     CPPUNIT_TEST(testBitmapCopyOnWrite);
     CPPUNIT_TEST(testMatrixQuality);
+    CPPUNIT_TEST(testDelayedScale);
     CPPUNIT_TEST(testTdf137329);
     CPPUNIT_TEST_SUITE_END();
 
@@ -327,6 +331,45 @@ void SkiaTest::testMatrixQuality()
     CPPUNIT_ASSERT(SkiaTests::matrixNeedsHighQuality(SkMatrix::Scale(2, 1)));
     CPPUNIT_ASSERT(SkiaTests::matrixNeedsHighQuality(SkMatrix::RotateDeg(89)));
 #endif
+}
+
+void SkiaTest::testDelayedScale()
+{
+    if (!SkiaHelper::isVCLSkiaEnabled())
+        return;
+    Bitmap bitmap1(Size(10, 10), vcl::PixelFormat::N24_BPP);
+    SkiaSalBitmap* skiaBitmap1 = dynamic_cast<SkiaSalBitmap*>(bitmap1.ImplGetSalBitmap().get());
+    CPPUNIT_ASSERT(skiaBitmap1);
+    // Do scaling based on mBuffer.
+    (void)BitmapReadAccess(bitmap1); // allocates mBuffer
+    CPPUNIT_ASSERT(skiaBitmap1->unittestHasBuffer());
+    CPPUNIT_ASSERT(!skiaBitmap1->unittestHasImage());
+    CPPUNIT_ASSERT(bitmap1.Scale(2, 2, BmpScaleFlag::Default));
+    skiaBitmap1 = dynamic_cast<SkiaSalBitmap*>(bitmap1.ImplGetSalBitmap().get());
+    CPPUNIT_ASSERT(skiaBitmap1);
+    CPPUNIT_ASSERT(skiaBitmap1->unittestHasBuffer());
+    CPPUNIT_ASSERT(!skiaBitmap1->unittestHasImage());
+    CPPUNIT_ASSERT_EQUAL(Size(20, 20), bitmap1.GetSizePixel());
+    CPPUNIT_ASSERT_EQUAL(Size(20, 20), imageSize(skiaBitmap1->GetSkImage()));
+    BitmapBuffer* buffer1 = skiaBitmap1->AcquireBuffer(BitmapAccessMode::Read);
+    CPPUNIT_ASSERT(buffer1);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(20), buffer1->mnWidth);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(20), buffer1->mnHeight);
+    skiaBitmap1->ReleaseBuffer(buffer1, BitmapAccessMode::Read);
+    // Do scaling based on mImage.
+    SkiaSalBitmap skiaBitmap2(skiaBitmap1->GetSkImage());
+    CPPUNIT_ASSERT(!skiaBitmap2.unittestHasBuffer());
+    CPPUNIT_ASSERT(skiaBitmap2.unittestHasImage());
+    CPPUNIT_ASSERT(skiaBitmap2.Scale(2, 3, BmpScaleFlag::Default));
+    CPPUNIT_ASSERT(!skiaBitmap2.unittestHasBuffer());
+    CPPUNIT_ASSERT(skiaBitmap2.unittestHasImage());
+    CPPUNIT_ASSERT_EQUAL(Size(40, 60), skiaBitmap2.GetSize());
+    CPPUNIT_ASSERT_EQUAL(Size(40, 60), imageSize(skiaBitmap2.GetSkImage()));
+    BitmapBuffer* buffer2 = skiaBitmap2.AcquireBuffer(BitmapAccessMode::Read);
+    CPPUNIT_ASSERT(buffer2);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(40), buffer2->mnWidth);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(60), buffer2->mnHeight);
+    skiaBitmap2.ReleaseBuffer(buffer2, BitmapAccessMode::Read);
 }
 
 void SkiaTest::testTdf137329()

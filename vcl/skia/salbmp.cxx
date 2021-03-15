@@ -85,7 +85,8 @@ bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const Bitmap
         return false;
     mPalette = rPal;
     mBitCount = nBitCount;
-    mSize = mPixelsSize = rSize;
+    mSize = rSize;
+    ResetPendingScaling();
     if (!ComputeScanlineSize())
     {
         mBitCount = 0;
@@ -387,8 +388,8 @@ bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScale
 
     if (mEraseColorSet)
     { // Simple.
-        mSize = mPixelsSize = newSize;
-        ComputeScanlineSize();
+        mSize = newSize;
+        ResetPendingScaling();
         EraseInternal(mEraseColor);
         return true;
     }
@@ -408,7 +409,14 @@ bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScale
     // That means it can be GPU-accelerated, while done here directly it would need
     // to be either done by CPU, or with the CPU->GPU->CPU roundtrip required
     // by GPU-accelerated scaling.
-    // Pending scaling is detected by 'mSize != mPixelsSize'.
+    // Pending scaling is detected by 'mSize != mPixelsSize' for mBuffer,
+    // and 'imageSize(mImage) != mSize' for mImage. It is not intended to have 3 different
+    // sizes though, code below keeps only mBuffer or mImage. Note that imageSize(mImage)
+    // may or may not be equal to mPixelsSize, depending on whether mImage is set here
+    // (sizes will be equal) or whether it's set in GetSkImage() (will not be equal).
+    // Pending scaling is considered "done" by the time mBuffer is resized (or created).
+    // Resizing of mImage is somewhat independent of this, since mImage is primarily
+    // considered to be a cached object (although sometimes it's the only data available).
 
     // If there is already one scale() pending, use the lowest quality of all requested.
     switch (nScaleFlag)
@@ -427,10 +435,11 @@ bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScale
             SAL_INFO("vcl.skia.trace", "scale(" << this << "): unsupported scale algorithm");
             return false;
     }
-    // scaling will be actually done on-demand when needed, the need will be recognized
-    // by mSize != mPixelsSize
     mSize = newSize;
-    // Do not reset cached data if mImage is possibly the only data we have.
+    // If we have both mBuffer and mImage, prefer mImage, since it likely will be drawn later.
+    // We could possibly try to keep the buffer as well, but that would complicate things
+    // with two different data structures to be scaled on-demand, and it's a question
+    // if that'd realistically help with anything.
     if (mImage)
         ResetToSkImage(mImage);
     else
@@ -456,11 +465,12 @@ bool SkiaSalBitmap::ConvertToGreyscale()
     // Normally this would need to convert contents of mBuffer for all possible formats,
     // so just let the VCL algorithm do it.
     // Avoid the costly SkImage->buffer->SkImage conversion.
-    if (!mBuffer && mImage)
+    if (!mBuffer && mImage && !mEraseColorSet)
     {
         if (mBitCount == 8 && mPalette.IsGreyPalette8Bit())
             return true;
-        sk_sp<SkSurface> surface = createSkSurface(mPixelsSize, mImage->imageInfo().alphaType());
+        sk_sp<SkSurface> surface
+            = createSkSurface(imageSize(mImage), mImage->imageInfo().alphaType());
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
         // VCL uses different coefficients for conversion to gray than Skia, so use the VCL
@@ -763,7 +773,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
     }
     if (mImage)
     {
-        if (mImage->width() != mSize.Width() || mImage->height() != mSize.Height())
+        if (imageSize(mImage) != mSize)
         {
             assert(!mBuffer); // This code should be only called if only mImage holds data.
             SkiaZone zone;
@@ -829,7 +839,7 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
     if (mImage)
     {
         SkiaZone zone;
-        bool scaling = mImage->width() != mSize.Width() || mImage->height() != mSize.Height();
+        const bool scaling = imageSize(mImage) != mSize;
         SkPixmap pixmap;
         // Note: We cannot do this when 'scaling' because SkCanvas::drawImageRect()
         // with kAlpha_8_SkColorType as source and destination would act as SkBlendMode::kSrcOver
@@ -1026,7 +1036,6 @@ void SkiaSalBitmap::EnsureBitmapData()
         SkiaZone zone;
         assert(mPixelsSize == mSize);
         assert(!mBuffer);
-        mScaleQuality = BmpScaleFlag::BestQuality;
         CreateBitmapData();
         // Unset now, so that repeated call will return mBuffer.
         mEraseColorSet = false;
@@ -1054,7 +1063,8 @@ void SkiaSalBitmap::EnsureBitmapData()
     }
 
     // Convert from alpha image, if the conversion is simple.
-    if (mAlphaImage && mSize == mPixelsSize && mBitCount == 8 && mPalette.IsGreyPalette8Bit())
+    if (mAlphaImage && imageSize(mAlphaImage) == mSize && mBitCount == 8
+        && mPalette.IsGreyPalette8Bit())
     {
         assert(mAlphaImage->colorType() == kAlpha_8_SkColorType);
         SkiaZone zone;
@@ -1073,6 +1083,7 @@ void SkiaSalBitmap::EnsureBitmapData()
             canvas.flush();
         }
         bitmap.setImmutable();
+        ResetPendingScaling();
         CreateBitmapData();
         assert(mBuffer != nullptr);
         assert(mPixelsSize == mSize);
@@ -1123,7 +1134,7 @@ void SkiaSalBitmap::EnsureBitmapData()
 #endif
     SkBitmap bitmap;
     SkPixmap pixmap;
-    if (mSize == mPixelsSize && mImage->imageInfo().alphaType() == alphaType
+    if (imageSize(mImage) == mSize && mImage->imageInfo().alphaType() == alphaType
         && mImage->peekPixels(&pixmap))
     {
         bitmap.installPixels(pixmap);
@@ -1135,27 +1146,20 @@ void SkiaSalBitmap::EnsureBitmapData()
         SkCanvas canvas(bitmap);
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
-        if (mSize != mPixelsSize) // pending scaling?
+        if (imageSize(mImage) != mSize) // pending scaling?
         {
-            assert(mImage->width() == mPixelsSize.getWidth()
-                   && mImage->height() == mPixelsSize.getHeight());
             canvas.drawImageRect(mImage, SkRect::MakeWH(mSize.getWidth(), mSize.getHeight()),
                                  makeSamplingOptions(mScaleQuality), &paint);
-            SAL_INFO("vcl.skia.trace", "ensurebitmapdata(" << this << "): image scaled "
-                                                           << mPixelsSize << "->" << mSize << ":"
-                                                           << static_cast<int>(mScaleQuality));
-            mPixelsSize = mSize;
-            ComputeScanlineSize();
-            mScaleQuality = BmpScaleFlag::BestQuality;
-            // Information about the pending scaling has been discarded, so make sure we do not
-            // keep around any cached images that would still need scaling.
-            ResetCachedDataBySize();
+            SAL_INFO("vcl.skia.trace",
+                     "ensurebitmapdata(" << this << "): image scaled " << imageSize(mImage) << "->"
+                                         << mSize << ":" << static_cast<int>(mScaleQuality));
         }
         else
             canvas.drawImage(mImage, 0, 0, SkSamplingOptions(), &paint);
         canvas.flush();
     }
     bitmap.setImmutable();
+    ResetPendingScaling();
     CreateBitmapData();
     assert(mBuffer != nullptr);
     assert(mPixelsSize == mSize);
@@ -1286,15 +1290,19 @@ void SkiaSalBitmap::ResetAllData()
     mEraseColorSet = false;
 }
 
-void SkiaSalBitmap::ResetCachedDataBySize()
+void SkiaSalBitmap::ResetPendingScaling()
 {
+    if (mPixelsSize == mSize)
+        return;
     SkiaZone zone;
-    assert(mSize == mPixelsSize);
-    assert(!mEraseColorSet);
-    if (mImage && (mImage->width() != mSize.getWidth() || mImage->height() != mSize.getHeight()))
+    mScaleQuality = BmpScaleFlag::BestQuality;
+    mPixelsSize = mSize;
+    ComputeScanlineSize();
+    // Information about the pending scaling has been discarded, so make sure we do not
+    // keep around any cached images that would still need scaling.
+    if (mImage && imageSize(mImage) != mSize)
         mImage.reset();
-    if (mAlphaImage
-        && (mAlphaImage->width() != mSize.getWidth() || mAlphaImage->height() != mSize.getHeight()))
+    if (mAlphaImage && imageSize(mAlphaImage) != mSize)
         mAlphaImage.reset();
 }
 
