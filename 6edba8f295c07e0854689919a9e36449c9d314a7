@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "c3adcd14_4736565a",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2983,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-15T15:29:56Z",
+      "side": 1,
+      "message": "See comment about clang-format below.",
+      "revId": "6edba8f295c07e0854689919a9e36449c9d314a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "415ac1a8_03bcab73",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 4
@@ -13,6 +30,75 @@
       "writtenOn": "2021-03-11T15:46:43Z",
       "side": 1,
       "message": "In case you are concerned that this changes behavior of macros (e.g. evaluating a null object as false instead of true) note that you can\u0027t just insert a conditional jump into your macro - there\u0027s no equivalent of asm(). The BASIC contexts where it actually would evaluate as a Boolean, e.g. an IF statement, will have an error if you put an object variable there, both before and after this change. \"Incorrect property value.\"",
+      "revId": "6edba8f295c07e0854689919a9e36449c9d314a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f92a2b6_2f2f7ff8",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2987,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-15T15:29:56Z",
+      "side": 1,
+      "message": "The change will rather come from the call to Broadcast( SfxHintId::BasicDataWanted ) in the Get, but I don\u0027t yet see how will it affect anything.",
+      "parentUuid": "415ac1a8_03bcab73",
+      "revId": "6edba8f295c07e0854689919a9e36449c9d314a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc7e4295_0e93a3f8",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3000,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-15T15:29:56Z",
+      "side": 1,
+      "message": "See comment about clang-format below.",
+      "revId": "6edba8f295c07e0854689919a9e36449c9d314a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6d9c0ed_e8fe3546",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3005,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-15T15:29:56Z",
+      "side": 1,
+      "message": "Why an empty line between the comment and the following function got lost? Please reintroduce.",
+      "revId": "6edba8f295c07e0854689919a9e36449c9d314a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6b5200b_a7627dec",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3008,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-15T15:29:56Z",
+      "side": 1,
+      "message": "Either do not use braces, or please follow out clang-format rules (even in files that are excluded from the clang-format checks) - namely, the opening brace should be on own line.",
       "revId": "6edba8f295c07e0854689919a9e36449c9d314a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
