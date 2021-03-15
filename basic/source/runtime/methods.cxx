@@ -39,6 +39,7 @@
 #include <osl/time.h>
 #include <unotools/charclass.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/wincodepage.hxx>
 #include <tools/wldcrd.hxx>
 #include <i18nlangtag/lang.h>
 #include <rtl/string.hxx>
@@ -4106,6 +4107,14 @@ void SbRtl_StrConv(StarBASIC *, SbxArray & rPar, bool)
 
     OUString aOldStr = rPar.Get(1)->GetOUString();
     sal_Int32 nConversion = rPar.Get(2)->GetLong();
+    LanguageType nLanguage = LANGUAGE_SYSTEM;
+    if (nArgCount == 3)
+    {
+        sal_Int32 lcid = rPar.Get(3)->GetLong();
+        nLanguage = LanguageType(lcid);
+    }
+    OUString sLanguage = LanguageTag(nLanguage).getLanguage();
+    rtl_TextEncoding encodingVal = utl_getWinTextEncodingFromLangStr(sLanguage);
 
     sal_Int32 nOldLen = aOldStr.getLength();
     if( nOldLen == 0 )
@@ -4151,7 +4160,6 @@ void SbRtl_StrConv(StarBASIC *, SbxArray & rPar, bool)
         uno::Reference< uno::XComponentContext > xContext = getProcessComponentContext();
         ::utl::TransliterationWrapper aTransliterationWrapper( xContext, nType );
         uno::Sequence<sal_Int32> aOffsets;
-        LanguageType nLanguage = LANGUAGE_SYSTEM;
         aTransliterationWrapper.loadModuleIfNeeded( nLanguage );
         aNewStr = aTransliterationWrapper.transliterate( aOldStr, nLanguage, 0, nOldLen, &aOffsets );
     }
@@ -4174,14 +4182,14 @@ void SbRtl_StrConv(StarBASIC *, SbxArray & rPar, bool)
         OString aOStr(pChar.get());
 
         // there is no concept about default codepage in unix. so it is incorrectly in unix
-        OUString aOUStr = OStringToOUString(aOStr, osl_getThreadTextEncoding());
+        OUString aOUStr = OStringToOUString(aOStr, encodingVal);
         rPar.Get(0)->PutString(aOUStr);
         return;
     }
     else if ( (nConversion & 0x80) == 128 ) // vbFromUnicode
     {
         // there is no concept about default codepage in unix. so it is incorrectly in unix
-        OString aOStr = OUStringToOString(aNewStr,osl_getThreadTextEncoding());
+        OString aOStr = OUStringToOString(aNewStr, encodingVal);
         const char* pChar = aOStr.getStr();
         sal_Int32 nArraySize = aOStr.getLength();
         SbxDimArray* pArray = new SbxDimArray(SbxBYTE);

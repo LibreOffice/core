@@ -23,21 +23,31 @@ Sub verify_testStrConv()
     TestUtil.AssertEqual(StrConv("abc EFG hij", vbProperCase), "Abc Efg Hij", "StrConv(""abc EFG hij"", vbProperCase)")
 
     ' Converts narrow (single-byte) characters in string to wide
-    'TestUtil.AssertEqual(StrConv("ABCDEVB¥ì¥¹¥­¥å©`", vbWide), "£Á£Â£Ã£Ä£ÅVB¥ì¥¹¥­¥å©`", "StrConv(""ABCDEVB¥ì¥¹¥­¥å©`"", vbWide)")
+    TestUtil.AssertEqual(StrConv("ABCDEVB¥ì¥¹¥­¥å©", vbWide), "ＡＢＣＤＥＶＢ￥ì￥¹￥­￥å©", "StrConv(""ABCDEVB¥ì¥¹¥­¥å©"", vbWide)")
 
     ' Converts wide (double-byte) characters in string to narrow (single-byte) characters
-    'TestUtil.AssertEqual(StrConv("£Á£Â£Ã£Ä£ÅVB¥ì¥¹¥­¥å©`", vbNarrow), "ABCDEVB¥ì¥¹¥­¥å©`", "StrConv(""£Á£Â£Ã£Ä£ÅVB¥ì¥¹¥­¥å©`"", vbNarrow)")
+    TestUtil.AssertEqual(StrConv("ＡＢＣＤ＠＄％２３＇？ＥＧ", vbNarrow), "ABCD@$%23'?EG", "StrConv(""ＡＢＣＤ＠＄％２３＇？ＥＧ"", vbNarrow)")
 
     ' Converts Hiragana characters in string to Katakana characters
-    'TestUtil.AssertEqual(StrConv("¤Ï¤Ê¤Á¤ã¤ó", vbKatakana), "¥Ï¥Ê¥Á¥ã¥ó", "StrConv(""¤Ï¤Ê¤Á¤ã¤ó"", vbKatakana)")
+    TestUtil.AssertEqual(StrConv("かたかな", vbKatakana), "カタカナ", "StrConv(""かたかな"", vbKatakana)")
 
     ' Converts Katakana characters in string to Hiragana characters
-    'TestUtil.AssertEqual(StrConv("¥Ï¥Ê¥Á¥ã¥ó", vbHiragana), "¤Ï¤Ê¤Á¤ã¤ó", "StrConv(""¥Ï¥Ê¥Á¥ã¥ó"", vbHiragana)")
+    TestUtil.AssertEqual(StrConv("カタカナ", vbHiragana), "かたかな", "StrConv(""カタカナ"", vbHiragana)")
 
-    'Dim x() As Byte
-    'x = StrConv("ÉÏº£ÊÐABC", vbFromUnicode)
-    'TestUtil.AssertEqual(UBound(x), 8, "UBound(x)")
-    'TestUtil.AssertEqual(StrConv(x, vbUnicode), "ÉÏº£ÊÐABC", "StrConv(x, vbUnicode)")
+    ' Assumes CP-1252 encoding associated with en-US locale used in unit tests.
+    Dim x() As Byte
+    x = StrConv("ÉÏº£ÊÐABC", vbFromUnicode)
+    TestUtil.AssertEqual(UBound(x), 8, "UBound(x)")
+    TestUtil.AssertEqual(x(0), 201, "x(0)")
+    TestUtil.AssertEqual(x(1), 207, "x(1)")
+    TestUtil.AssertEqual(x(2), 186, "x(2)")
+    TestUtil.AssertEqual(x(3), 163, "x(3)")
+    TestUtil.AssertEqual(x(4), 202, "x(4)")
+    TestUtil.AssertEqual(x(5), 208, "x(5)")
+    TestUtil.AssertEqual(x(6), 65, "x(6)")
+    TestUtil.AssertEqual(x(7), 66, "x(7)")
+    TestUtil.AssertEqual(x(8), 67, "x(8)")
+    TestUtil.AssertEqual(StrConv(x, vbUnicode), "ÉÏº£ÊÐABC", "StrConv(x, vbUnicode)")
 
     Exit Sub
 errorHandler:
