@@ -16,6 +16,24 @@
       "revId": "404fed6f1a9d8f7c41b82c8645bc113a55727454",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f37d080_9e13af50",
+        "filename": "svx/source/form/fmview.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-03-15T08:26:50Z",
+      "side": 1,
+      "message": "Thanks, this looks like a better approach (and it allows this method to actually return true when a widget was found).\nI changed this a bit, so that the widget only gets the focus, and is not actually triggered, with the mnemonic.\nI guess security wise this might be the better option.",
+      "parentUuid": "0dc60abe_236a1c7d",
+      "revId": "404fed6f1a9d8f7c41b82c8645bc113a55727454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
