@@ -27,11 +27,10 @@ published struct QRCode
     */
     long ErrorCorrection;
 
-    /** Border surrounding the Qr Code
+    /** Margin surrounding the Qr Code
         It is a non-negative value.
-        One Border unit is equal to one dot in the generated QR code.
     */
-    long Border;
+    long Margin;
 };
 
 

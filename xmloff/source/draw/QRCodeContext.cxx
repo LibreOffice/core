@@ -62,11 +62,11 @@ QRCodeContext::QRCodeContext(SvXMLImport& rImport, sal_Int32 /*nElement*/,
                     aQRCode.ErrorCorrection = css::drawing::QRCodeErrorCorrection::HIGH;
                 break;
             }
-            case XML_ELEMENT(LO_EXT, XML_QRCODE_BORDER):
+            case XML_ELEMENT(LO_EXT, XML_QRCODE_MARGIN):
             {
                 sal_Int32 nAttrVal;
                 if (sax::Converter::convertNumber(nAttrVal, aIter.toView(), 0))
-                    aQRCode.Border = nAttrVal;
+                    aQRCode.Margin = nAttrVal;
                 break;
             }
             case XML_ELEMENT(OFFICE, XML_STRING_VALUE):
