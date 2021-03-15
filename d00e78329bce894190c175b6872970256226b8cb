@@ -22,6 +22,30 @@
       "revId": "d00e78329bce894190c175b6872970256226b8cb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d0573d3_0ae9fa3b",
+        "filename": "sw/uiconfig/swriter/ui/numparapage.ui",
+        "patchSetId": 7
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-03-15T01:51:07Z",
+      "side": 1,
+      "message": "Sure :)",
+      "parentUuid": "e726c55e_7bebbfa8",
+      "range": {
+        "startLine": 147,
+        "startChar": 94,
+        "endLine": 147,
+        "endChar": 101
+      },
+      "revId": "d00e78329bce894190c175b6872970256226b8cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
