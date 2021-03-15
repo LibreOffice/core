@@ -44,12 +44,12 @@ enum class SmNodeType : int_fast16_t
     Math, // operator value
     Blank, // ~
     Error, // Syntax error
-    Line, // a line of math untill newline
+    Line, // a line of math until newline
     Expression, // { content in here }
     PolyLine, // ^
     Root, // root node
     RootSymbol, // 3 of cubic root
-    Rectangle, //just structual
+    Rectangle, //just structural
     VerticalBrace, // vertical {}
     MathIdent // identities and variables
 };
