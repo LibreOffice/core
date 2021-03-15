@@ -442,8 +442,10 @@ OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, 
     switch ( aTmpLocale.mnCalendarType & 0x7F )
     {
         case 0x03 : // Gengou calendar
-            sCalendar = "[~gengou]";
-            // Only Japanese language support Gengou calendar
+            // Only Japanese language support Gengou calendar.
+            // It is an implicit "other" calendar where E, EE, R and RR
+            // automatically switch to and YY and YYYY switch to Gregorian. Do
+            // not add the "[~gengou]" modifier.
             if ( nLocaleLang != LANGUAGE_JAPANESE )
             {
                 nLang = maLocale.meLanguage = LANGUAGE_JAPANESE;
@@ -5252,6 +5254,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
         sal_Int32 nPosHaveLCID = -1;
         sal_Int32 nPosInsertLCID = aStr.getLength();
         sal_uInt32 nCalendarID = 0x0000000; // Excel ID of calendar used in sub-format see tdf#36038
+        constexpr sal_uInt32 kCalGengou = 0x0030000;
         if ( nCnt )
         {
             auto& rTypeArray = NumFor[n].Info().nTypeArray;
@@ -5264,6 +5267,27 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                     if( NF_KEY_NNNN == rTypeArray[j] )
                     {
                         aStr.append( rLocWrp.getLongDateDayOfWeekSep() );
+                    }
+                    switch (rTypeArray[j])
+                    {
+                        case NF_KEY_EC:
+                        case NF_KEY_EEC:
+                        case NF_KEY_R:
+                        case NF_KEY_RR:
+                            // Implicit secondary (non-gregorian) calendar.
+                            // Currently only for ja-JP.
+                            /* TODO: same for all locales in
+                             * LocaleDataWrapper::doesSecondaryCalendarUseEC() ?
+                             * Should split the locales off that then. */
+                            if (!nCalendarID)
+                            {
+                                const LanguageType nLang = MsLangId::getRealLanguage( nOriginalLang);
+                                if (nLang == LANGUAGE_JAPANESE)
+                                    nCalendarID = kCalGengou;
+                            }
+                        break;
+                        default:
+                            ;   // nothing
                     }
                 }
                 else
@@ -5313,7 +5337,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                             break;
                         if ( rStrArray[j+1] == "gengou" )
                         {
-                            nCalendarID = 0x0030000;
+                            nCalendarID = kCalGengou;
                         }
                         else if ( rStrArray[j+1] == "hijri" )
                         {
