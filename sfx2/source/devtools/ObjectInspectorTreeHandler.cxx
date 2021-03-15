@@ -49,6 +49,27 @@ namespace
 constexpr OUStringLiteral constTypeDescriptionManagerSingletonName
     = u"/singletons/com.sun.star.reflection.theTypeDescriptionManager";
 
+OUString enumValueToEnumName(uno::Any const& aValue,
+                             uno::Reference<uno::XComponentContext> const& xContext)
+{
+    sal_Int32 nIntValue = 0;
+    if (!cppu::enum2int(nIntValue, aValue))
+        return OUString();
+
+    uno::Reference<container::XHierarchicalNameAccess> xManager;
+    xManager.set(xContext->getValueByName(constTypeDescriptionManagerSingletonName),
+                 uno::UNO_QUERY);
+
+    uno::Reference<reflection::XEnumTypeDescription> xTypeDescription;
+    xTypeDescription.set(xManager->getByHierarchicalName(aValue.getValueType().getTypeName()),
+                         uno::UNO_QUERY);
+
+    uno::Sequence<sal_Int32> aValues = xTypeDescription->getEnumValues();
+    sal_Int32 nValuesIndex = std::find(aValues.begin(), aValues.end(), nIntValue) - aValues.begin();
+    uno::Sequence<OUString> aNames = xTypeDescription->getEnumNames();
+    return aNames[nValuesIndex];
+}
+
 /** converts any value to a string */
 OUString AnyToString(const uno::Any& aValue, const uno::Reference<uno::XComponentContext>& xContext)
 {
@@ -56,7 +77,7 @@ OUString AnyToString(const uno::Any& aValue, const uno::Reference<uno::XComponen
 
     // return early if we don't have any value
     if (!aValue.hasValue())
-        return "NULL";
+        return u"NULL";
 
     uno::Type aValType = aValue.getValueType();
     uno::TypeClass eType = aValType.getTypeClass();
@@ -67,14 +88,14 @@ OUString AnyToString(const uno::Any& aValue, const uno::Reference<uno::XComponen
         {
             uno::Reference<uno::XInterface> xInterface(aValue, uno::UNO_QUERY);
             if (!xInterface.is())
-                aRetStr = "NULL";
+                aRetStr = u"NULL";
             else
-                aRetStr = "<Object>";
+                aRetStr = u"<Object>";
             break;
         }
         case uno::TypeClass_STRUCT:
         {
-            aRetStr = "<Struct>";
+            aRetStr = u"<Struct>";
             break;
         }
         case uno::TypeClass_BOOLEAN:
@@ -91,7 +112,7 @@ OUString AnyToString(const uno::Any& aValue, const uno::Reference<uno::XComponen
         }
         case uno::TypeClass_STRING:
         {
-            aRetStr = "\"" + aValue.get<OUString>() + "\"";
+            aRetStr = u"\"" + aValue.get<OUString>() + u"\"";
             break;
         }
         case uno::TypeClass_FLOAT:
@@ -156,23 +177,7 @@ OUString AnyToString(const uno::Any& aValue, const uno::Reference<uno::XComponen
         }
         case uno::TypeClass_ENUM:
         {
-            sal_Int32 nIntValue = 0;
-            if (cppu::enum2int(nIntValue, aValue))
-            {
-                uno::Reference<container::XHierarchicalNameAccess> xManager;
-                xManager.set(xContext->getValueByName(constTypeDescriptionManagerSingletonName),
-                             uno::UNO_QUERY);
-
-                uno::Reference<reflection::XEnumTypeDescription> xTypeDescription;
-                xTypeDescription.set(xManager->getByHierarchicalName(aValType.getTypeName()),
-                                     uno::UNO_QUERY);
-
-                uno::Sequence<sal_Int32> aValues = xTypeDescription->getEnumValues();
-                sal_Int32 nValuesIndex
-                    = std::find(aValues.begin(), aValues.end(), nIntValue) - aValues.begin();
-                uno::Sequence<OUString> aNames = xTypeDescription->getEnumNames();
-                aRetStr = aNames[nValuesIndex];
-            }
+            aRetStr = enumValueToEnumName(aValue, xContext);
             break;
         }
 
