@@ -33,6 +33,23 @@
       "revId": "bd3387b8f6d8fb065ccbc79ca5808336fd6db47d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf09b86d_4cb71c31",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-15T18:03:54Z",
+      "side": 1,
+      "message": "How should this file be included in my program given that it hasn\u0027t been added in Static_Library file?",
+      "revId": "bd3387b8f6d8fb065ccbc79ca5808336fd6db47d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
