@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f44dd47_4e8f8876",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-15T12:09:24Z",
+      "side": 1,
+      "message": "This copypasta causes 141045 ;-)",
+      "range": {
+        "startLine": 1288,
+        "startChar": 52,
+        "endLine": 1288,
+        "endChar": 59
+      },
+      "revId": "3ff159d35770ac3454ee909b348cb4f4ca8b0b9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
