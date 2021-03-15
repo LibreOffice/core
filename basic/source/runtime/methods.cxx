@@ -44,6 +44,8 @@
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
 #include <comphelper/DirectoryHelper.hxx>
+#include <svtools/langtab.hxx>
+#include <unotools/wincodepage.hxx>
 
 #include <runtime.hxx>
 #include <sbunoobj.hxx>
@@ -4106,6 +4108,13 @@ void SbRtl_StrConv(StarBASIC *, SbxArray & rPar, bool)
 
     OUString aOldStr = rPar.Get(1)->GetOUString();
     sal_Int32 nConversion = rPar.Get(2)->GetLong();
+    sal_Int32 lcid = rPar.Get(3)->GetLong();
+    sal_uInt16 encodingVal = 9; //Text Encoding of System
+    if (nArgCount == 3)
+    {
+        OUString sLanguage = SvtLanguageTable::GetLanguageString(LanguageType(lcid));
+        encodingVal = utl_getWinTextEncodingFromLangStr(sLanguage);
+    }
 
     sal_Int32 nOldLen = aOldStr.getLength();
     if( nOldLen == 0 )
@@ -4152,6 +4161,8 @@ void SbRtl_StrConv(StarBASIC *, SbxArray & rPar, bool)
         ::utl::TransliterationWrapper aTransliterationWrapper( xContext, nType );
         uno::Sequence<sal_Int32> aOffsets;
         LanguageType nLanguage = LANGUAGE_SYSTEM;
+        if (nArgCount == 3)
+            nLanguage = LanguageType(lcid);
         aTransliterationWrapper.loadModuleIfNeeded( nLanguage );
         aNewStr = aTransliterationWrapper.transliterate( aOldStr, nLanguage, 0, nOldLen, &aOffsets );
     }
@@ -4174,14 +4185,14 @@ void SbRtl_StrConv(StarBASIC *, SbxArray & rPar, bool)
         OString aOStr(pChar.get());
 
         // there is no concept about default codepage in unix. so it is incorrectly in unix
-        OUString aOUStr = OStringToOUString(aOStr, osl_getThreadTextEncoding());
+        OUString aOUStr = OStringToOUString(aOStr, encodingVal);
         rPar.Get(0)->PutString(aOUStr);
         return;
     }
     else if ( (nConversion & 0x80) == 128 ) // vbFromUnicode
     {
         // there is no concept about default codepage in unix. so it is incorrectly in unix
-        OString aOStr = OUStringToOString(aNewStr,osl_getThreadTextEncoding());
+        OString aOStr = OUStringToOString(aNewStr, encodingVal);
         const char* pChar = aOStr.getStr();
         sal_Int32 nArraySize = aOStr.getLength();
         SbxDimArray* pArray = new SbxDimArray(SbxBYTE);
