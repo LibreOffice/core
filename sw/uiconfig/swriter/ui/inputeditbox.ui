@@ -13,6 +13,7 @@
         <property name="can_focus">True</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
+        <property name="truncate-multiline">True</property>
         <property name="width_chars">0</property>
       </object>
       <packing>

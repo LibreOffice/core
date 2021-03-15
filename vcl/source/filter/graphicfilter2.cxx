@@ -156,19 +156,36 @@ bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
             // logical width
             rStm.SeekRel( 4 );
             rStm.ReadUInt32( nTemp32 );
+            sal_uInt32 nXPelsPerMeter = 0;
             if ( nTemp32 )
+            {
                 aLogSize.setWidth( ( aPixSize.Width() * 100000 ) / nTemp32 );
+                nXPelsPerMeter = nTemp32;
+            }
 
             // logical height
             rStm.ReadUInt32( nTemp32 );
+            sal_uInt32 nYPelsPerMeter = 0;
             if ( nTemp32 )
+            {
                 aLogSize.setHeight( ( aPixSize.Height() * 100000 ) / nTemp32 );
+                nYPelsPerMeter = nTemp32;
+            }
 
             // further validation, check for rational values
             if ( ( nBitsPerPixel > 24 ) || ( nCompression > 3 ) )
             {
                 nFormat = GraphicFileFormat::NOT;
                 bRet = false;
+            }
+
+            if (bRet && nXPelsPerMeter && nYPelsPerMeter)
+            {
+                maPreferredMapMode
+                    = MapMode(MapUnit::MapMM, Point(), Fraction(1000, nXPelsPerMeter),
+                              Fraction(1000, nYPelsPerMeter));
+
+                maPreferredLogSize = Size(aPixSize.getWidth(), aPixSize.getHeight());
             }
         }
     }

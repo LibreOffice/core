@@ -34,6 +34,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_ooxmlimport2, \
     tl \
     vcl \
     svxcore \
+    svl\
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_ooxmlimport2,\

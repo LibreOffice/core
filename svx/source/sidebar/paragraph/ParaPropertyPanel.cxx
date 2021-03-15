@@ -449,6 +449,7 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
 
     initial();
     m_aMetricCtl.RequestUpdate();
+    m_pInitialFocusWidget = mxTBxHorzAlign.get();
 }
 
 void ParaPropertyPanel::limitMetricWidths()

@@ -32,7 +32,7 @@ public:
     virtual void ClearDevFontCache() override;
 
 private:
-    sk_sp<SkFontMgr> fontManager;
+    static inline sk_sp<SkFontMgr> fontManager;
 };
 
 #endif

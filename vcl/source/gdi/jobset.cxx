@@ -266,6 +266,13 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
             if ( nSystem == JOBSET_FILE364_SYSTEM ||
                  nSystem == JOBSET_FILE605_SYSTEM )
             {
+                if (nRead < sizeof(ImplOldJobSetupData) + sizeof(Impl364JobSetupData))
+                {
+                    SAL_WARN("vcl", "Parsing error: " << sizeof(ImplOldJobSetupData) + sizeof(Impl364JobSetupData) <<
+                             " required, but " << nRead << " available");
+                    return rIStream;
+                }
+
                 Impl364JobSetupData* pOldJobData    = reinterpret_cast<Impl364JobSetupData*>(pTempBuf.get() + sizeof( ImplOldJobSetupData ));
                 sal_uInt16 nOldJobDataSize          = SVBT16ToUInt16( pOldJobData->nSize );
                 rJobData.SetSystem( SVBT16ToUInt16( pOldJobData->nSystem ) );

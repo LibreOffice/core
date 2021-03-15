@@ -204,6 +204,7 @@ public:
     void testTdf138148();
     void testTdf114488();
     void testTdf134174();
+    void testTdf134210();
     void testTdf114913();
     void testTdf114821();
     void testTdf115394();
@@ -215,6 +216,9 @@ public:
     void testTdf128684();
     void testShapeGlowEffectPPTXImpoer();
     void testShapeBlurPPTXImport();
+    void testMirroredGraphic();
+    void testGreysScaleGraphic();
+    void testTdf134210CropPosition();
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -318,6 +322,7 @@ public:
     CPPUNIT_TEST(testTdf138148);
     CPPUNIT_TEST(testTdf114488);
     CPPUNIT_TEST(testTdf134174);
+    CPPUNIT_TEST(testTdf134210);
     CPPUNIT_TEST(testTdf114913);
     CPPUNIT_TEST(testTdf114821);
     CPPUNIT_TEST(testTdf115394);
@@ -342,6 +347,9 @@ public:
     CPPUNIT_TEST(testTdf49856);
     CPPUNIT_TEST(testShapeGlowEffectPPTXImpoer);
     CPPUNIT_TEST(testShapeBlurPPTXImport);
+    CPPUNIT_TEST(testMirroredGraphic);
+    CPPUNIT_TEST(testGreysScaleGraphic);
+    CPPUNIT_TEST(testTdf134210CropPosition);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2752,6 +2760,23 @@ void SdImportTest::testTdf134174()
     xDocShRef->DoClose();
 }
 
+void SdImportTest::testTdf134210()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf134210.pptx"), PPTX);
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT(xShape.is());
+
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xShape->getPropertyValue("FillBitmap") >>= xGraphic;
+    CPPUNIT_ASSERT(xGraphic.is());
+
+    Graphic aGraphic(xGraphic);
+    BitmapEx aBitmap(aGraphic.GetBitmapEx());
+    CPPUNIT_ASSERT_EQUAL( Color(6708292), aBitmap.GetPixelColor( 0, 0 ));
+
+    xDocShRef->DoClose();
+}
+
 void SdImportTest::testTdf114913()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf114913.pptx"), PPTX);
@@ -3287,6 +3312,49 @@ void SdImportTest::testShapeBlurPPTXImport()
     xShape->getPropertyValue("ShadowBlur") >>= nRadius;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(388), nRadius); // 584200EMU=46pt - 139700EMU = 388Hmm = 11pt
 
+}
+
+void SdImportTest::testMirroredGraphic()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/mirrored-graphic.pptx"), PPTX);
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT(xShape.is());
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xShape->getPropertyValue("FillBitmap") >>= xGraphic;
+    CPPUNIT_ASSERT(xGraphic.is());
+    Graphic aGraphic(xGraphic);
+    BitmapEx aBitmap(aGraphic.GetBitmapEx());
+    CPPUNIT_ASSERT_EQUAL( Color(5196117), aBitmap.GetPixelColor( 0, 0 ));
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf134210CropPosition()
+{
+    // We are testing crop position of bitmap in custom shapes. We should see only green with proper fix.
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/crop-position.pptx"), PPTX);
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT(xShape.is());
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xShape->getPropertyValue("FillBitmap") >>= xGraphic;
+    CPPUNIT_ASSERT(xGraphic.is());
+    Graphic aGraphic(xGraphic);
+    BitmapEx aBitmap(aGraphic.GetBitmapEx());
+    CPPUNIT_ASSERT_EQUAL( Color(8508442), aBitmap.GetPixelColor( 0, 0 ));
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testGreysScaleGraphic()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/greysscale-graphic.pptx"), PPTX);
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT(xShape.is());
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xShape->getPropertyValue("FillBitmap") >>= xGraphic;
+    CPPUNIT_ASSERT(xGraphic.is());
+    Graphic aGraphic(xGraphic);
+    BitmapEx aBitmap(aGraphic.GetBitmapEx());
+    CPPUNIT_ASSERT_EQUAL( Color(3947580), aBitmap.GetPixelColor( 0, 0 ));
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);

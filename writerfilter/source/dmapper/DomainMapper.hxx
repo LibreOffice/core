@@ -112,6 +112,7 @@ public:
 
     bool IsInHeaderFooter() const;
     bool IsInTable() const;
+    void SetDocDefaultsImport(bool bSet);
     bool IsStyleSheetImport() const;
     bool IsInShape() const;
 

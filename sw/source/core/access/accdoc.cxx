@@ -583,7 +583,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         {
             if (!(pCurrTextFrame->IsInTab() || pCurrTextFrame->IsInFootnote()))
             {
-                while( pTextFrame != pCurrTextFrame )
+                while( pTextFrame && pTextFrame != pCurrTextFrame )
                 {
                     //check header/footer
                     pFrame = pTextFrame;

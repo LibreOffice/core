@@ -303,6 +303,7 @@ void SlideBackground::HandleContextChange(
             mxCloseMaster->show();
             mxEditMaster->hide();
             mxMasterSlide->set_sensitive(false);
+            mxMasterSlide->clear();
             mxDspMasterBackground->set_sensitive(false);
             mxDspMasterObjects->set_sensitive(false);
             mxFillStyle->hide();
@@ -314,6 +315,7 @@ void SlideBackground::HandleContextChange(
             mxCloseMaster->hide();
             mxEditMaster->hide();
             mxMasterSlide->set_sensitive(false);
+            mxMasterSlide->clear();
             mxDspMasterBackground->set_sensitive(false);
             mxDspMasterObjects->set_sensitive(false);
             mxFillStyle->hide();
@@ -325,6 +327,7 @@ void SlideBackground::HandleContextChange(
             mxCloseMaster->hide();
             mxEditMaster->show();
             mxMasterSlide->set_sensitive(true);
+            populateMasterSlideDropdown();
             mxDspMasterBackground->set_sensitive(true);
             mxDspMasterObjects->set_sensitive(true);
             mxFillStyle->show();

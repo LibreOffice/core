@@ -53,6 +53,7 @@
 #include <vector>
 
 #include "markdata.hxx"
+#include "drwlayer.hxx"
 
 namespace com::sun::star::chart2 { class XChartDocument; }
 
@@ -963,7 +964,7 @@ public:
     bool                        IsStreamValidLocked() const { return mbStreamValidLocked; }
     bool                        IsPendingRowHeights( SCTAB nTab ) const;
     void                        SetPendingRowHeights( SCTAB nTab, bool bSet );
-    SC_DLLPUBLIC void           SetLayoutRTL( SCTAB nTab, bool bRTL );
+    SC_DLLPUBLIC void           SetLayoutRTL( SCTAB nTab, bool bRTL, ScObjectHandling eObjectHandling = ScObjectHandling::RecalcPosMode);
     SC_DLLPUBLIC bool           IsLayoutRTL( SCTAB nTab ) const;
     SC_DLLPUBLIC bool           IsNegativePage( SCTAB nTab ) const;
     SC_DLLPUBLIC void           SetScenario( SCTAB nTab, bool bFlag );

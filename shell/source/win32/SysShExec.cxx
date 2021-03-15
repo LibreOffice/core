@@ -326,21 +326,28 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                 }
             }
             pathname = o3tl::toU(path);
+            // ShellExecuteExW appears to ignore trailing dots, so remove them:
+            while (pathname.endsWith(".", &pathname)) {}
             auto const n = pathname.lastIndexOf('.');
             if (n > pathname.lastIndexOf('\\')) {
                 auto const ext = pathname.copy(n + 1);
-                OUString env;
-                if (osl_getEnvironment(OUString("PATHEXT").pData, &env.pData) != osl_Process_E_None)
-                {
-                    SAL_INFO("shell", "osl_getEnvironment(PATHEXT) failed");
-                }
-                if (!(checkExtension(ext, env)
-                      && checkExtension(
-                          ext,
-                          ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.CLASS;.JAR")))
-                {
-                    throw css::lang::IllegalArgumentException(
-                        "XSystemShellExecute.execute, cannot process <" + aCommand + ">", {}, 0);
+                if (!ext.isEmpty()) {
+                    OUString env;
+                    if (osl_getEnvironment(OUString("PATHEXT").pData, &env.pData)
+                        != osl_Process_E_None)
+                    {
+                        SAL_INFO("shell", "osl_getEnvironment(PATHEXT) failed");
+                    }
+                    if (!(checkExtension(ext, env)
+                          && checkExtension(
+                              ext,
+                              ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.CLASS;"
+                                  ".JAR;.APPLICATION;.LNK;.SCR")))
+                    {
+                        throw css::lang::IllegalArgumentException(
+                            "XSystemShellExecute.execute, cannot process <" + aCommand + ">", {},
+                            0);
+                    }
                 }
             }
         }

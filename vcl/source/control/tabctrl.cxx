@@ -1787,9 +1787,10 @@ sal_uInt16 TabControl::GetPagePos( sal_uInt16 nPageId ) const
 
 sal_uInt16 TabControl::GetPageId( const Point& rPos ) const
 {
+    Size winSize = Control::GetOutputSizePixel();
     const auto &rList = mpTabCtrlData->maItemList;
-    const auto it = std::find_if(rList.begin(), rList.end(), [&rPos, this](const auto &item) {
-        return const_cast<TabControl*>(this)->ImplGetTabRect(&item).IsInside(rPos); });
+    const auto it = std::find_if(rList.begin(), rList.end(), [&rPos, &winSize, this](const auto &item) {
+        return const_cast<TabControl*>(this)->ImplGetTabRect(&item, winSize.Width(), winSize.Height()).IsInside(rPos); });
     return (it != rList.end()) ? it->id() : 0;
 }
 

@@ -655,6 +655,13 @@ void SdrObjEditView::EditViewSelectionChange()
 
 OutputDevice& SdrObjEditView::EditViewOutputDevice() const { return *pTextEditWin; }
 
+css::uno::Reference<css::datatransfer::dnd::XDropTarget> SdrObjEditView::GetDropTarget()
+{
+    if (!pTextEditWin)
+        return nullptr;
+    return pTextEditWin->GetDropTarget();
+}
+
 void SdrObjEditView::EditViewInputContext(const InputContext& rInputContext)
 {
     if (!pTextEditWin)

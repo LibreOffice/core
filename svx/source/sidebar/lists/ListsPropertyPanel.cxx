@@ -46,6 +46,7 @@ ListsPropertyPanel::ListsPropertyPanel(vcl::Window* pParent,
     , mxTBxOutline(m_xBuilder->weld_toolbar("outline"))
     , mxOutlineDispatcher(new ToolbarUnoDispatcher(*mxTBxOutline, *m_xBuilder, rxFrame))
 {
+    m_pInitialFocusWidget = mxTBxNumBullet.get();
 }
 
 ListsPropertyPanel::~ListsPropertyPanel() { disposeOnce(); }

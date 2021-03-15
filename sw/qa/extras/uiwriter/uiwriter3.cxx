@@ -725,6 +725,58 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134253)
     CPPUNIT_ASSERT_EQUAL(6, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, TestAsCharTextBox)
+{
+    // Releated tickets:
+    // tdf#138598 Replace vertical alignment of As_char textboxes in footer
+    // tdf#140158 Remove horizontal positioning of As_char textboxes, because
+    // the anchor moving does the same for it.
+
+    load(DATA_DIRECTORY, "AsCharTxBxTest.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // Add 3x tab to the doc
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    Scheduler::ProcessEventsToIdle();
+
+    auto pExportDump = parseLayoutDump();
+    CPPUNIT_ASSERT(pExportDump);
+
+    // Check if the texbox fallen apart due to the tabs
+    const double nLeftSideOfShape1
+        = getXPath(pExportDump, "/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds", "left")
+              .toDouble();
+    const double nLeftSideOfTxBx1
+        = getXPath(pExportDump, "/root/page/body/txt/anchored/fly/infos/bounds", "left").toDouble();
+
+    CPPUNIT_ASSERT(nLeftSideOfShape1 < nLeftSideOfTxBx1);
+
+    // Another test is for the tdf#138598: Check footer textbox
+    const double nLeftSideOfShape2
+        = getXPath(pExportDump, "/root/page[2]/footer/txt/anchored/SwAnchoredDrawObject/bounds",
+                   "left")
+              .toDouble();
+    const double nLeftSideOfTxBx2
+        = getXPath(pExportDump, "/root/page[2]/footer/txt/anchored/fly/infos/bounds", "left")
+              .toDouble();
+
+    CPPUNIT_ASSERT(nLeftSideOfShape2 < nLeftSideOfTxBx2);
+
+    const double nTopSideOfShape2
+        = getXPath(pExportDump, "/root/page[2]/footer/txt/anchored/SwAnchoredDrawObject/bounds",
+                   "top")
+              .toDouble();
+    const double nTopSideOfTxBx2
+        = getXPath(pExportDump, "/root/page[2]/footer/txt/anchored/fly/infos/bounds", "top")
+              .toDouble();
+
+    CPPUNIT_ASSERT(nTopSideOfShape2 < nTopSideOfTxBx2);
+    // Without the fix in place the two texboxes has been fallen apart, and  asserts will broken.
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636)
 {
     load(DATA_DIRECTORY, "tdf76636.doc");
@@ -2034,10 +2086,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133477)
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
 
     // Read it back and check the color of the first pixel.
+    // (Actually check at one-pixel offset, because imprecise shape positioning may
+    // result in blending with background for the first pixel).
     Graphic aGraphic;
     ReadGraphic(aStream, aGraphic);
     BitmapEx aBitmap = aGraphic.GetBitmapEx();
-    CPPUNIT_ASSERT_EQUAL(Color(0, 102, 204), aBitmap.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(0, 102, 204), aBitmap.GetPixelColor(1, 1));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf137964)
@@ -2067,6 +2121,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf137964)
     // Without the fix in place, the shape would have stayed where it was
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2579), xShape->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3090), xShape->getPosition().Y);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf138897)
+{
+    load(DATA_DIRECTORY, "tdf100018-1.odt");
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    // this was crashing
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

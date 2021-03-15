@@ -1043,25 +1043,17 @@ void SwViewShell::SizeChgNotify()
 
         if ( !Imp()->IsCalcLayoutProgress() && dynamic_cast<const SwCursorShell*>( this ) !=  nullptr )
         {
-            const SwFrame *pCnt = static_cast<SwCursorShell*>(this)->GetCurrFrame( false );
-            const SwPageFrame *pPage;
-            if ( pCnt && nullptr != (pPage = pCnt->FindPageFrame()) )
+            PageNumNotify(this);
+
+            if (comphelper::LibreOfficeKit::isActive())
             {
-                const sal_uInt16 nVirtNum = pPage->GetVirtPageNum();
-                const SvxNumberType& rNum = pPage->GetPageDesc()->GetNumType();
-                OUString sDisplay = rNum.GetNumStr( nVirtNum );
-                PageNumNotify( this, pCnt->GetPhyPageNum(), nVirtNum, sDisplay );
+                Size aDocSize = GetDocSize();
+                std::stringstream ss;
+                ss << aDocSize.Width() + 2 * DOCUMENTBORDER << ", " << aDocSize.Height() + 2 * DOCUMENTBORDER;
+                OString sSize = ss.str().c_str();
 
-                if (comphelper::LibreOfficeKit::isActive())
-                {
-                    Size aDocSize = GetDocSize();
-                    std::stringstream ss;
-                    ss << aDocSize.Width() + 2 * DOCUMENTBORDER << ", " << aDocSize.Height() + 2 * DOCUMENTBORDER;
-                    OString sSize = ss.str().c_str();
-
-                    SwXTextDocument* pModel = comphelper::getUnoTunnelImplementation<SwXTextDocument>(GetSfxViewShell()->GetCurrentDocument());
-                    SfxLokHelper::notifyDocumentSizeChanged(GetSfxViewShell(), sSize, pModel);
-                }
+                SwXTextDocument* pModel = comphelper::getUnoTunnelImplementation<SwXTextDocument>(GetSfxViewShell()->GetCurrentDocument());
+                SfxLokHelper::notifyDocumentSizeChanged(GetSfxViewShell(), sSize, pModel);
             }
         }
     }
@@ -2222,15 +2214,8 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     // - fieldnames apply or not ...
     // ( - SwEndPortion must _no_ longer be generated. )
     // - Of course, the screen is something completely different than the printer ...
+    bReformat = bReformat || mpOpt->IsFieldName() != rOpt.IsFieldName();
     bool const isToggleFieldNames(mpOpt->IsFieldName() != rOpt.IsFieldName());
-
-    if (mpOpt->IsFieldName() != rOpt.IsFieldName())
-    {
-        GetLayout()->SetFieldmarkMode( rOpt.IsFieldName()
-                    ? sw::FieldmarkMode::ShowCommand
-                    : sw::FieldmarkMode::ShowResult );
-        bReformat = true;
-    }
 
     // The map mode is changed, minima/maxima will be attended by UI
     if( mpOpt->GetZoom() != rOpt.GetZoom() && !IsPreview() )

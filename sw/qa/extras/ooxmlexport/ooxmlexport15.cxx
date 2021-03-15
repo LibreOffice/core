@@ -240,6 +240,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf136404, "tdf136404.fodt")
     CPPUNIT_ASSERT_EQUAL(OUString("8"), xEnumerationAccess7->getPresentation(false).trim());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf138739, "tdf138739.docx")
+{
+    uno::Reference<beans::XPropertySet> xParaProps(getParagraph(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Font type name does not match!", OUString("Comic Sans MS"),
+                                 xParaProps->getPropertyValue("CharFontName").get<OUString>());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf123390, "tdf123390.fodt")
 {
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
@@ -551,6 +558,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135343_columnSectionBreak_c15, "tdf135343_column
     uno::Reference<text::XTextColumns> xTextColumns = getProperty<uno::Reference<text::XTextColumns>>(xTextSection, "TextColumns");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Section four's columns", sal_Int16(3), xTextColumns->getColumnCount());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Fits on two pages", 2, getPages());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf121669_equalColumns, "tdf121669_equalColumns.docx")
+{
+    uno::Reference<beans::XPropertySet> xTextSection = getProperty< uno::Reference<beans::XPropertySet> >(getParagraph(1), "TextSection");
+    CPPUNIT_ASSERT(xTextSection.is());
+    uno::Reference<text::XTextColumns> xTextColumns = getProperty< uno::Reference<text::XTextColumns> >(xTextSection, "TextColumns");
+    // The property was ignored when deciding at export whether the columns were equal or not. Layout isn't reliable.
+    CPPUNIT_ASSERT(getProperty<bool>(xTextColumns, "IsAutomatic"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreak, "tdf132149_pgBreak.odt")

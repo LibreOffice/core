@@ -143,19 +143,18 @@ SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName &rCop
     return *this;
 }
 
-std::unique_ptr<SwNumRule> SwNumRulesWithName::MakeNumRule(SwWrtShell& rSh) const
+void SwNumRulesWithName::ResetNumRule(SwWrtShell& rSh, SwNumRule& rNumRule) const
 {
     // #i89178#
-    std::unique_ptr<SwNumRule> pChg(new SwNumRule(maName, numfunc::GetDefaultPositionAndSpaceMode()));
-    pChg->SetAutoRule( false );
+    rNumRule.Reset(maName);
+    rNumRule.SetAutoRule( false );
     for (sal_uInt16 n = 0; n < MAXLEVEL; ++n)
     {
         SwNumFormatGlobal* pFormat = aFormats[ n ].get();
         if (!pFormat)
             continue;
-        pChg->Set(n, pFormat->MakeNumFormat(rSh));
+        rNumRule.Set(n, pFormat->MakeNumFormat(rSh));
     }
-    return pChg;
 }
 
 void SwNumRulesWithName::GetNumFormat(

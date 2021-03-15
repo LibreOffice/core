@@ -297,6 +297,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_pLastCharacterContext(),
         m_sCurrentParaStyleName(),
         m_sDefaultParaStyleName(),
+        m_bInDocDefaultsImport(false),
         m_bInStyleSheetImport( false ),
         m_bInAnyTableImport( false ),
         m_eInHeaderFooterImport( HeaderFooterImportState::none ),
@@ -2076,20 +2077,20 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     else
         SetIsPreviousParagraphFramed(false);
 
-    m_bParaChanged = false;
     m_bRemoveThisParagraph = false;
     if( !IsInHeaderFooter() && !IsInShape() && (!pParaContext || !pParaContext->IsFrameMode()) )
     { // If the paragraph is in a frame, shape or header/footer, it's not a paragraph of the section itself.
         SetIsFirstParagraphInSection(false);
-        // count first not deleted paragraph as first paragraph in section to avoid of
-        // its deletion later, resulting loss of the associated page break
-        if (!m_previousRedline)
+        // don't count an empty deleted paragraph as first paragraph in section to avoid of
+        // the deletion of the next empty paragraph later, resulting loss of the associated page break
+        if (!m_previousRedline || m_bParaChanged)
         {
             SetIsFirstParagraphInSectionAfterRedline(false);
             SetIsLastParagraphInSection(false);
         }
     }
     m_previousRedline.clear();
+    m_bParaChanged = false;
 
     if (m_bIsFirstParaInShape)
         m_bIsFirstParaInShape = false;
@@ -2302,11 +2303,13 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
             xReplacementProperties->getPropertyValue("LineWidth") >>= aBorderProps.LineWidth;
             xReplacementProperties->getPropertyValue("LineStyle") >>= aBorderProps.LineStyle;
 
-            xOLEProperties->setPropertyValue("RightBorder", uno::Any(aBorderProps));
-            xOLEProperties->setPropertyValue("TopBorder", uno::Any(aBorderProps));
-            xOLEProperties->setPropertyValue("LeftBorder", uno::Any(aBorderProps));
-            xOLEProperties->setPropertyValue("BottomBorder", uno::Any(aBorderProps));
-
+            if (aBorderProps.LineStyle) // Set line props only if LineStyle is set
+            {
+                xOLEProperties->setPropertyValue("RightBorder", uno::Any(aBorderProps));
+                xOLEProperties->setPropertyValue("TopBorder", uno::Any(aBorderProps));
+                xOLEProperties->setPropertyValue("LeftBorder", uno::Any(aBorderProps));
+                xOLEProperties->setPropertyValue("BottomBorder", uno::Any(aBorderProps));
+            }
             OUString pProperties[] = {
                 "AnchorType",
                 "Surround",
@@ -2320,16 +2323,23 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
                 "LeftMargin",
                 "RightMargin",
                 "TopMargin",
-                "BottomMargin",
-                "FillStyle",
-                "FillColor",
-                "FillColor2",
-                "LineStyle",
+                "BottomMargin"
             };
             for (const OUString& s : pProperties)
             {
                 const uno::Any aVal = xReplacementProperties->getPropertyValue(s);
                 xOLEProperties->setPropertyValue(s, aVal);
+            }
+
+            if (xReplacementProperties->getPropertyValue("FillStyle").get<css::drawing::FillStyle>()
+                != css::drawing::FillStyle::FillStyle_NONE) // Apply fill props if style is set
+            {
+                xOLEProperties->setPropertyValue(
+                    "FillStyle", xReplacementProperties->getPropertyValue("FillStyle"));
+                xOLEProperties->setPropertyValue(
+                    "FillColor", xReplacementProperties->getPropertyValue("FillColor"));
+                xOLEProperties->setPropertyValue(
+                    "FillColor2", xReplacementProperties->getPropertyValue("FillColor2"));
             }
         }
         else
@@ -3533,6 +3543,8 @@ static OUString lcl_ExtractToken(OUString const& rCommand,
                     ++rIndex;
                     return "FORMULA";
                 }
+                else
+                    token.append('=');
             break;
             default:
                 token.append(currentChar);
@@ -6243,6 +6255,13 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                     xFieldProperties->setPropertyValue(
                             getPropertyName(bHasContent && sValue.isEmpty()? PROP_CONTENT : PROP_CURRENT_PRESENTATION),
                          uno::makeAny( rResult ));
+
+                    if (xServiceInfo->supportsService(
+                            "com.sun.star.text.TextField.DocInfo.CreateDateTime"))
+                    {
+                        // Creation time is const, don't try to update it.
+                        xFieldProperties->setPropertyValue("IsFixed", uno::makeAny(true));
+                    }
                 }
             }
             catch( const beans::UnknownPropertyException& )

@@ -164,7 +164,7 @@ const size_t nTabSize = SAL_N_ELEMENTS(aDinTab);
 
 #define MAXSLOPPY 21
 
-void PaperInfo::doSloppyFit()
+void PaperInfo::doSloppyFit(bool bAlsoTryRotated)
 {
     if (m_eType != PAPER_USER)
         return;
@@ -175,17 +175,21 @@ void PaperInfo::doSloppyFit()
 
         tools::Long lDiffW = std::abs(aDinTab[i].m_nWidth - m_nPaperWidth);
         tools::Long lDiffH = std::abs(aDinTab[i].m_nHeight - m_nPaperHeight);
-        tools::Long lFlipDiffW = std::abs(aDinTab[i].m_nHeight - m_nPaperWidth);
-        tools::Long lFlipDiffH = std::abs(aDinTab[i].m_nWidth - m_nPaperHeight);
 
-        if ( (lDiffW < MAXSLOPPY && lDiffH < MAXSLOPPY) ||
-            (lFlipDiffW < MAXSLOPPY && lFlipDiffH < MAXSLOPPY) )
+        if (lDiffW < MAXSLOPPY && lDiffH < MAXSLOPPY)
         {
             m_nPaperWidth = aDinTab[i].m_nWidth;
             m_nPaperHeight = aDinTab[i].m_nHeight;
             m_eType = static_cast<Paper>(i);
             return;
         }
+    }
+
+    if (bAlsoTryRotated)
+    {
+        std::swap(m_nPaperWidth, m_nPaperHeight);
+        doSloppyFit();
+        std::swap(m_nPaperWidth, m_nPaperHeight);
     }
 }
 

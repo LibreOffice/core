@@ -179,13 +179,13 @@ private:
 
     SwFlyDrawObjPtr mpMasterObj;
     void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
-    sal_uInt32 GetOrdNumForNewRef(const SwFlyFrame* pFly);
+    sal_uInt32 GetOrdNumForNewRef(const SwFlyFrame* pFly, SwFrame const& rAnchorFrame);
 
 public:
 
     /// Creates DrawObject and registers it with the Model.
     SwFlyDrawContact(SwFlyFrameFormat* pToRegisterIn, SdrModel& rTargetModel);
-    static SwVirtFlyDrawObj* CreateNewRef(SwFlyFrame* pFly, SwFlyFrameFormat* pFormat);
+    static SwVirtFlyDrawObj* CreateNewRef(SwFlyFrame* pFly, SwFlyFrameFormat* pFormat, SwFrame const& rAnchorFrame);
     virtual ~SwFlyDrawContact() override;
 
     virtual const SwAnchoredObject* GetAnchoredObj( const SdrObject* _pSdrObj ) const override;

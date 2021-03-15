@@ -149,7 +149,7 @@ ScSelectionTransferObj::ScSelectionTransferObj( ScTabView* pSource, ScSelectionT
 ScSelectionTransferObj::~ScSelectionTransferObj()
 {
     ScModule* pScMod = SC_MOD();
-    if ( pScMod->GetSelectionTransfer() == this )
+    if (pScMod && pScMod->GetSelectionTransfer() == this)
     {
         //  this is reached when the object wasn't really copied to the selection
         //  (CopyToSelection has no effect under Windows)

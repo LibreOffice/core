@@ -87,6 +87,103 @@ Reference< XGraphic > lclRotateGraphic(uno::Reference<graphic::XGraphic> const &
     return aReturnGraphic.GetXGraphic();
 }
 
+void lclCalculateCropPercentage(uno::Reference<graphic::XGraphic> const & xGraphic, geometry::IntegerRectangle2D &aFillRect)
+{
+    ::Graphic aGraphic(xGraphic);
+    assert (aGraphic.GetType() == GraphicType::Bitmap);
+
+    BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
+
+    sal_Int32 nScaledWidth = aBitmapEx.GetSizePixel().Width();
+    sal_Int32 nScaledHeight = aBitmapEx.GetSizePixel().Height();
+
+    sal_Int32 nOrigWidth = (nScaledWidth * (100000 - aFillRect.X1 - aFillRect.X2)) / 100000;
+    sal_Int32 nOrigHeight = (nScaledHeight * (100000 - aFillRect.Y1 - aFillRect.Y2)) / 100000;
+
+    sal_Int32 nLeftPercentage = nScaledWidth * aFillRect.X1 / nOrigWidth;
+    sal_Int32 nRightPercentage = nScaledWidth * aFillRect.X2 / nOrigWidth;
+    sal_Int32 nTopPercentage = nScaledHeight * aFillRect.Y1 / nOrigHeight;
+    sal_Int32 nBottomPercentage = nScaledHeight * aFillRect.Y2 / nOrigHeight;
+
+    aFillRect.X1 = -nLeftPercentage;
+    aFillRect.X2 = -nRightPercentage;
+    aFillRect.Y1 = -nTopPercentage;
+    aFillRect.Y2 = -nBottomPercentage;
+}
+
+// Crops a piece of the bitmap. Takes negative aFillRect values. Negative values means "crop",
+// positive values means "grow" bitmap with empty spaces. lclCropGraphic doesn't handle growing.
+Reference< XGraphic > lclCropGraphic(uno::Reference<graphic::XGraphic> const & xGraphic, geometry::IntegerRectangle2D aFillRect)
+{
+    ::Graphic aGraphic(xGraphic);
+    ::Graphic aReturnGraphic;
+
+    assert (aGraphic.GetType() == GraphicType::Bitmap);
+
+    BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
+
+    sal_Int32 nOrigHeight = aBitmapEx.GetSizePixel().Height();
+    sal_Int32 nHeight = nOrigHeight;
+    sal_Int32 nTopCorr  = nOrigHeight * -1 * static_cast<double>(aFillRect.Y1) / 100000;
+    nHeight += nTopCorr;
+    sal_Int32 nBottomCorr = nOrigHeight * -1 * static_cast<double>(aFillRect.Y2) / 100000;
+    nHeight += nBottomCorr;
+
+    sal_Int32 nOrigWidth = aBitmapEx.GetSizePixel().Width();
+    sal_Int32 nWidth = nOrigWidth;
+    sal_Int32 nLeftCorr  = nOrigWidth * -1 * static_cast<double>(aFillRect.X1) / 100000;
+    nWidth += nLeftCorr;
+    sal_Int32 nRightCorr = nOrigWidth * -1 * static_cast<double>(aFillRect.X2) / 100000;
+    nWidth += nRightCorr;
+
+    aBitmapEx.Scale(Size(nWidth, nHeight));
+    aBitmapEx.Crop(tools::Rectangle(Point(nLeftCorr, nTopCorr), Size(nOrigWidth, nOrigHeight)));
+
+    aReturnGraphic = ::Graphic(aBitmapEx);
+    aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
+
+    return aReturnGraphic.GetXGraphic();
+}
+
+Reference< XGraphic > lclMirrorGraphic(uno::Reference<graphic::XGraphic> const & xGraphic, bool bFlipH, bool bFlipV)
+{
+    ::Graphic aGraphic(xGraphic);
+    ::Graphic aReturnGraphic;
+
+    assert (aGraphic.GetType() == GraphicType::Bitmap);
+
+    BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
+    BmpMirrorFlags nMirrorFlags = BmpMirrorFlags::NONE;
+
+    if(bFlipH)
+        nMirrorFlags |= BmpMirrorFlags::Horizontal;
+    if(bFlipV)
+        nMirrorFlags |= BmpMirrorFlags::Vertical;
+
+    aBitmapEx.Mirror(nMirrorFlags);
+
+    aReturnGraphic = ::Graphic(aBitmapEx);
+    aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
+
+    return aReturnGraphic.GetXGraphic();
+}
+
+Reference< XGraphic > lclGreysScaleGraphic(uno::Reference<graphic::XGraphic> const & xGraphic)
+{
+    ::Graphic aGraphic(xGraphic);
+    ::Graphic aReturnGraphic;
+
+    assert (aGraphic.GetType() == GraphicType::Bitmap);
+
+    BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
+    aBitmapEx.Convert(BmpConversion::N8BitGreys);
+
+    aReturnGraphic = ::Graphic(aBitmapEx);
+    aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
+
+    return aReturnGraphic.GetXGraphic();
+}
+
 Reference< XGraphic > lclCheckAndApplyChangeColorTransform(const BlipFillProperties &aBlipProps, uno::Reference<graphic::XGraphic> const & xGraphic,
                                                            const GraphicHelper& rGraphicHelper, const ::Color nPhClr)
 {
@@ -272,7 +369,7 @@ Color FillProperties::getBestSolidColor() const
 
 void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
         const GraphicHelper& rGraphicHelper, sal_Int32 nShapeRotation, ::Color nPhClr,
-        bool bFlipH, bool bFlipV ) const
+        bool bFlipH, bool bFlipV, bool bIsCustomShape) const
 {
     if( !moFillType.has() )
         return;
@@ -529,6 +626,9 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     aGradient.Angle = static_cast< sal_Int16 >( (8100 - (nDmlAngle / (PER_DEGREE / 10))) % 3600 );
                     Color aStartColor, aEndColor;
 
+                    // Make a note where the widest segment stops, because we will try to grow it next.
+                    auto aWidestSegmentEnd = std::next(aWidestSegmentStart);
+
                     // Try to grow the widest segment backwards: if a previous segment has the same
                     // color, just different transparency, include it.
                     while (aWidestSegmentStart != aGradientStops.begin())
@@ -543,7 +643,6 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         aWidestSegmentStart = it;
                     }
 
-                    auto aWidestSegmentEnd = std::next(aWidestSegmentStart);
                     // Try to grow the widest segment forward: if a next segment has the same
                     // color, just different transparency, include it.
                     while (aWidestSegmentEnd != std::prev(aGradientStops.end()))
@@ -675,6 +774,19 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                             if ( aFillRect.Y2 )
                                 aGraphCrop.Bottom = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Height ) * aFillRect.Y2 ) / 100000 );
                             rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
+
+                            bool bHasCropValues = aGraphCrop.Left != 0 || aGraphCrop.Right !=0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0;
+                            // Negative GraphicCrop values means "crop" here.
+                            bool bNeedCrop = aGraphCrop.Left <= 0 && aGraphCrop.Right <= 0 && aGraphCrop.Top <= 0 && aGraphCrop.Bottom <= 0;
+
+                            if(bIsCustomShape && bHasCropValues && bNeedCrop)
+                            {
+                                xGraphic = lclCropGraphic(xGraphic, aFillRect);
+                                if (rPropMap.supportsProperty(ShapeProperty::FillBitmapName))
+                                    rPropMap.setProperty(ShapeProperty::FillBitmapName, xGraphic);
+                                else
+                                    rPropMap.setProperty(ShapeProperty::FillBitmap, xGraphic);
+                            }
                         }
                     }
                 }
@@ -723,7 +835,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
     rPropMap.setProperty( ShapeProperty::FillStyle, eFillStyle );
 }
 
-void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelper& rGraphicHelper) const
+void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelper& rGraphicHelper, bool bFlipH, bool bFlipV) const
 {
     sal_Int16 nBrightness = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moBrightness.get( 0 ) / PER_PERCENT, -100, 100 );
     sal_Int16 nContrast = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moContrast.get( 0 ) / PER_PERCENT, -100, 100 );
@@ -759,25 +871,6 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
             nContrast = 0;
         }
 
-        if(mbIsCustomShape)
-        {
-            // it is a cropped graphic.
-            rPropMap.setProperty(PROP_FillStyle, FillStyle_BITMAP);
-            rPropMap.setProperty(PROP_FillBitmapMode, BitmapMode_STRETCH);
-
-            // It is a bitmap filled and rotated graphic.
-            // When custom shape is rotated, bitmap have to be rotated too.
-            if(rPropMap.hasProperty(PROP_RotateAngle))
-            {
-                tools::Long nAngle = rPropMap.getProperty(PROP_RotateAngle).get<tools::Long>();
-                xGraphic = lclRotateGraphic(xGraphic, Degree10(nAngle/10) );
-            }
-
-            rPropMap.setProperty(PROP_FillBitmap, xGraphic);
-        }
-        else
-            rPropMap.setProperty(PROP_Graphic, xGraphic);
-
         // cropping
         if ( maBlipProps.moClipRect.has() )
         {
@@ -795,8 +888,47 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
                 if ( oClipRect.Y2 )
                     aGraphCrop.Bottom = rtl::math::round( ( static_cast< double >( aOriginalSize.Height ) * oClipRect.Y2 ) / 100000 );
                 rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
+
+                bool bHasCropValues = aGraphCrop.Left != 0 || aGraphCrop.Right !=0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0;
+                // Positive GraphicCrop values means "crop" here.
+                bool bNeedCrop = aGraphCrop.Left >= 0 && aGraphCrop.Right >= 0 && aGraphCrop.Top >= 0 && aGraphCrop.Bottom >= 0;
+
+                if(mbIsCustomShape && bHasCropValues && bNeedCrop)
+                {
+                    geometry::IntegerRectangle2D aCropRect = oClipRect;
+                    lclCalculateCropPercentage(xGraphic, aCropRect);
+                    xGraphic = lclCropGraphic(xGraphic, aCropRect);
+                }
             }
         }
+
+        if(mbIsCustomShape)
+        {
+            // it is a cropped graphic.
+            rPropMap.setProperty(PROP_FillStyle, FillStyle_BITMAP);
+            rPropMap.setProperty(PROP_FillBitmapMode, BitmapMode_STRETCH);
+
+            // It is a bitmap filled and rotated graphic.
+            // When custom shape is rotated, bitmap have to be rotated too.
+            if(rPropMap.hasProperty(PROP_RotateAngle))
+            {
+                tools::Long nAngle = rPropMap.getProperty(PROP_RotateAngle).get<tools::Long>();
+                xGraphic = lclRotateGraphic(xGraphic, Degree10(nAngle/10) );
+            }
+
+            // We have not core feature that flips graphic in the shape.
+            // Here we are applying flip property to bitmap directly.
+            if(bFlipH || bFlipV)
+                xGraphic = lclMirrorGraphic(xGraphic, bFlipH, bFlipV );
+
+            if(eColorMode == ColorMode_GREYS)
+                xGraphic = lclGreysScaleGraphic( xGraphic );
+
+            rPropMap.setProperty(PROP_FillBitmap, xGraphic);
+        }
+        else
+            rPropMap.setProperty(PROP_Graphic, xGraphic);
+
 
         if ( maBlipProps.moAlphaModFix.has() )
         {

@@ -120,7 +120,9 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_osx,\
     vcl/osx/documentfocuslistener \
     vcl/osx/saldata \
     vcl/osx/salframe \
+    vcl/osx/salgdiutils \
     vcl/osx/salinst \
+    vcl/osx/salmacos \
     vcl/osx/salmenu \
     vcl/osx/salnativewidgets \
     vcl/osx/salobj \
@@ -132,7 +134,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_osx,\
     vcl/quartz/salbmp \
     vcl/quartz/salgdi \
     vcl/quartz/salgdicommon \
-    vcl/quartz/salgdiutils \
     vcl/quartz/salvd \
     vcl/quartz/utils \
 ))

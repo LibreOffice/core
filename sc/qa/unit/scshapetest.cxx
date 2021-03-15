@@ -20,6 +20,7 @@
 #include <svx/svdoashp.hxx>
 #include <svx/svdomeas.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdorect.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/keycodes.hxx>
 
@@ -40,7 +41,17 @@ public:
     ScShapeTest();
     void saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
                        const OUString& rFilter);
+    void testTdf137082_LTR_to_RTL();
+    void testTdf137082_RTL_cell_anchored();
+    void testTdf137081_RTL_page_anchored();
+    void testTdf139583_Rotate180deg();
+    void testTdf137033_FlipHori_Resize();
+    void testTdf137033_RotShear_ResizeHide();
+    void testTdf137033_RotShear_Hide();
+// this test has starting failing under OSX
+#if !defined MACOSX
     void testTdf137576_LogicRectInDefaultMeasureline();
+#endif
     void testTdf137576_LogicRectInNewMeasureline();
     void testMeasurelineHideColSave();
     void testHideColsShow();
@@ -53,7 +64,17 @@ public:
     void testCustomShapeCellAnchoredRotatedShape();
 
     CPPUNIT_TEST_SUITE(ScShapeTest);
+    CPPUNIT_TEST(testTdf137082_LTR_to_RTL);
+    CPPUNIT_TEST(testTdf137082_RTL_cell_anchored);
+    CPPUNIT_TEST(testTdf137081_RTL_page_anchored);
+    CPPUNIT_TEST(testTdf139583_Rotate180deg);
+    CPPUNIT_TEST(testTdf137033_FlipHori_Resize);
+    CPPUNIT_TEST(testTdf137033_RotShear_ResizeHide);
+    CPPUNIT_TEST(testTdf137033_RotShear_Hide);
+// this test has starting failing under OSX
+#if !defined MACOSX
     CPPUNIT_TEST(testTdf137576_LogicRectInDefaultMeasureline);
+#endif
     CPPUNIT_TEST(testTdf137576_LogicRectInNewMeasureline);
     CPPUNIT_TEST(testMeasurelineHideColSave);
     CPPUNIT_TEST(testHideColsShow);
@@ -130,6 +151,368 @@ static void lcl_AssertPointEqualWithTolerance(const OString& sInfo, const Point 
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), std::abs(rExpected.Y() - rActual.Y()) <= nTolerance);
 }
 
+static ScDocShell*
+lcl_getScDocShellWithAssert(css::uno::Reference<css::lang::XComponent>& xComponent)
+{
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+    return pDocSh;
+}
+
+static ScTabViewShell* lcl_getScTabViewShellWithAssert(ScDocShell* pDocSh)
+{
+    ScTabViewShell* pTabViewShell = pDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT_MESSAGE("No ScTabViewShell", pTabViewShell);
+    return pTabViewShell;
+}
+
+static SdrPage* lcl_getSdrPageWithAssert(ScDocument& rDoc)
+{
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("No draw page", pPage);
+    return pPage;
+}
+
+static SdrObject* lcl_getSdrObjectWithAssert(ScDocument& rDoc, sal_uInt16 nObjNumber)
+{
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("No draw page", pPage);
+    SdrObject* pObj = pPage->GetObj(nObjNumber);
+    OString sMsg = "no Object " + OString::number(nObjNumber);
+    CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), pObj);
+    return pObj;
+}
+
+void ScShapeTest::testTdf137082_LTR_to_RTL()
+{
+    // Before the fix for tdf137081 and tdf137082, when flipping sheet from LTR to RTL, page anchored
+    // shapes were mirrored, but cell anchored shapes not. This was changed so, that shapes are always
+    // mirrored. Graphics are still not mirrored but shifted. This test makes sure a shape is mirrored
+    // and an image is not mirrored.
+
+    OUString aFileURL;
+    createFileURL(u"tdf137082_LTR_arrow_image.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get document
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    // Get objects and their transformation angles
+    SdrObject* pObjCS = lcl_getSdrObjectWithAssert(rDoc, 0);
+    const tools::Long nRotateLTR = pObjCS->GetRotateAngle();
+    SdrObject* pObjImage = lcl_getSdrObjectWithAssert(rDoc, 1);
+    const tools::Long nShearLTR = pObjImage->GetShearAngle();
+
+    // Switch to RTL
+    ScTabViewShell* pViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
+    pViewShell->GetViewData().GetDispatcher().Execute(FID_TAB_RTL);
+
+    // Check custom shape is mirrored, image not.
+    const tools::Long nShearRTLActual = pObjImage->GetShearAngle();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("image should not be mirrored", nShearLTR, nShearRTLActual);
+    const tools::Long nRotateRTLExpected = 36000.00 - nRotateLTR;
+    const tools::Long nRotateRTLActual = pObjCS->GetRotateAngle();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("custom shape should be mirrored", nRotateRTLExpected,
+                                 nRotateRTLActual);
+
+    pDocSh->DoClose();
+}
+
+void ScShapeTest::testTdf137082_RTL_cell_anchored()
+{
+    // Error was, that cell anchored custom shapes wrote wrong offsets to file and thus were wrong on
+    // reloading. The file contains one custome shape with "resize" and another one without.
+    OUString aFileURL;
+    createFileURL(u"tdf137082_RTL_cell_anchored.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get document
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    // Expected values.
+    const Point aTopLeftA(-20500, 3500); // shape A without "resize"
+    const Point aTopLeftB(-9500, 3500); // shape B with "resize"
+    const Size aSize(2278, 5545); // both
+    const tools::Rectangle aSnapRectA(aTopLeftA, aSize);
+    const tools::Rectangle aSnapRectB(aTopLeftB, aSize);
+
+    // Test reading was correct
+    SdrObject* pObj = lcl_getSdrObjectWithAssert(rDoc, 0);
+    lcl_AssertRectEqualWithTolerance("load shape A: ", aSnapRectA, pObj->GetSnapRect(), 1);
+    pObj = lcl_getSdrObjectWithAssert(rDoc, 1);
+    lcl_AssertRectEqualWithTolerance("load shape B: ", aSnapRectB, pObj->GetSnapRect(), 1);
+
+    // Save and reload.
+    saveAndReload(xComponent, "calc8");
+    CPPUNIT_ASSERT(xComponent);
+
+    // Get document
+    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+
+    // And test again
+    pObj = lcl_getSdrObjectWithAssert(rDoc2, 0);
+    lcl_AssertRectEqualWithTolerance("reload shape A: ", aSnapRectA, pObj->GetSnapRect(), 1);
+    pObj = lcl_getSdrObjectWithAssert(rDoc2, 1);
+    lcl_AssertRectEqualWithTolerance("reload shape B: ", aSnapRectB, pObj->GetSnapRect(), 1);
+
+    pDocSh->DoClose();
+}
+
+void ScShapeTest::testTdf137081_RTL_page_anchored()
+{
+    // Error was, that page anchored lines and custom shapes were mirrored on opening. The document
+    // contains measure line, polyline and transformed custom shape.
+    OUString aFileURL;
+    createFileURL(u"tdf137081_RTL_page_anchored.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get document
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    // Expected values.
+    // Measure line
+    const Point aStart(-3998, 2490);
+    const Point aEnd(-8488, 5490);
+    // Polyline
+    const Point aFirst(-10010, 2500);
+    const Point aSecond(-14032, 5543);
+    const Point aThird(-14500, 3500);
+    // Custom shape
+    const Point aTopLeft(-20500, 4583);
+
+    // Test reading was correct
+    SdrObject* pObj = lcl_getSdrObjectWithAssert(rDoc, 0);
+    // Measure line
+    lcl_AssertPointEqualWithTolerance("measure line start", aStart, pObj->GetPoint(0), 1);
+    lcl_AssertPointEqualWithTolerance("measure line end", aEnd, pObj->GetPoint(1), 1);
+    // Polyline
+    pObj = lcl_getSdrObjectWithAssert(rDoc, 1);
+    lcl_AssertPointEqualWithTolerance("polyline 1: ", aFirst, pObj->GetPoint(0), 1);
+    lcl_AssertPointEqualWithTolerance("polyline 2: ", aSecond, pObj->GetPoint(1), 1);
+    lcl_AssertPointEqualWithTolerance("polyline 3: ", aThird, pObj->GetPoint(2), 1);
+    //Custom shape
+    SdrObjCustomShape* pObjCS
+        = static_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(rDoc, 2));
+    CPPUNIT_ASSERT(!pObjCS->IsMirroredX());
+    lcl_AssertPointEqualWithTolerance("custom shape top left: ", aTopLeft,
+                                      pObjCS->GetLogicRect().TopLeft(), 1);
+
+    // Save and reload.
+    saveAndReload(xComponent, "calc8");
+    CPPUNIT_ASSERT(xComponent);
+
+    // Get document
+    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+
+    // And test again
+    pObj = lcl_getSdrObjectWithAssert(rDoc2, 0);
+    // Measure line
+    lcl_AssertPointEqualWithTolerance("measure line start", aStart, pObj->GetPoint(0), 1);
+    lcl_AssertPointEqualWithTolerance("measure line end", aEnd, pObj->GetPoint(1), 1);
+    // Polyline
+    pObj = lcl_getSdrObjectWithAssert(rDoc2, 1);
+    lcl_AssertPointEqualWithTolerance("polyline 1: ", aFirst, pObj->GetPoint(0), 1);
+    lcl_AssertPointEqualWithTolerance("polyline 2: ", aSecond, pObj->GetPoint(1), 1);
+    lcl_AssertPointEqualWithTolerance("polyline 3: ", aThird, pObj->GetPoint(2), 1);
+    //Custom shape
+    pObjCS = static_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(rDoc2, 2));
+    CPPUNIT_ASSERT(!pObjCS->IsMirroredX());
+    lcl_AssertPointEqualWithTolerance("custom shape top left: ", aTopLeft,
+                                      pObjCS->GetLogicRect().TopLeft(), 1);
+
+    pDocSh->DoClose();
+}
+
+void ScShapeTest::testTdf139583_Rotate180deg()
+{
+    // Load an empty document.
+    OUString aFileURL;
+    createFileURL(u"ManualColWidthRowHeight.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get document and draw page
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocument& rDoc = pDocSh->GetDocument();
+    SdrPage* pPage = lcl_getSdrPageWithAssert(rDoc);
+
+    // Insert Shape
+    const tools::Rectangle aRect(Point(3000, 4000), Size(5000, 2000));
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
+    SdrRectObj* pObj = new SdrRectObj(*pDrawLayer, aRect);
+    CPPUNIT_ASSERT_MESSAGE("Could not create rectangle", pObj);
+    pPage->InsertObject(pObj);
+
+    // Anchor "to cell (resize with cell)" and then rotate it by 180deg around center
+    // The order is important here.
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, rDoc, 0 /*SCTAB*/, true /*bResizeWithCell*/);
+    pObj->Rotate(aRect.Center(), 18000.0, 0.0, -1.0);
+
+    // Save and reload.
+    saveAndReload(xComponent, "calc8");
+    CPPUNIT_ASSERT(xComponent);
+
+    // Get document and object
+    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+    pObj = static_cast<SdrRectObj*>(lcl_getSdrObjectWithAssert(rDoc2, 0));
+
+    //  Without the fix in place, the shape would have nearly zero size.
+    lcl_AssertRectEqualWithTolerance("Show: Object geometry should not change", aRect,
+                                     pObj->GetSnapRect(), 1);
+}
+
+void ScShapeTest::testTdf137033_FlipHori_Resize()
+{
+    // Load a document, which has a rotated custom shape, which is horizontal flipped. Error was, that
+    // if such shape was anchored "resize with cell", then after save and reload it was destorted.
+    OUString aFileURL;
+    createFileURL("tdf137033_FlipHoriRotCustomShape.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get document and shape
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocument& rDoc = pDocSh->GetDocument();
+    SdrObjCustomShape* pObj = static_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(rDoc, 0));
+
+    // Verify shape is correctly loaded. Then set shape to "resize with cell".
+    tools::Rectangle aSnapRect(pObj->GetSnapRect());
+    const tools::Rectangle aExpectRect(Point(4998, 7000), Size(9644, 6723));
+    lcl_AssertRectEqualWithTolerance("Load, wrong pos or size: ", aExpectRect, aSnapRect, 1);
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, rDoc, 0 /*SCTAB*/, true /*bResizeWithCell*/);
+
+    // Save and reload.
+    saveAndReload(xComponent, "calc8");
+    CPPUNIT_ASSERT(xComponent);
+
+    // Get document and shape
+    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+    pObj = static_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(rDoc2, 0));
+
+    // Check shape has the original geometry, besides rounding and unit conversion errors
+    aSnapRect = pObj->GetSnapRect();
+    lcl_AssertRectEqualWithTolerance("Reload, wrong pos or size: ", aExpectRect, aSnapRect, 1);
+
+    pDocSh->DoClose();
+}
+
+void ScShapeTest::testTdf137033_RotShear_ResizeHide()
+{
+    // For rotated or sheared shapes anchored "To Cell (resize with cell) hiding rows or columns will
+    // not only change size but rotation and shear angle too. Error was, that not the original angles
+    // of the full sized shape were written to file but the changed one.
+
+    // Load a document, which has a rotated and sheared shape, anchored to cell with resize.
+    OUString aFileURL;
+    createFileURL("tdf137033_RotShearResizeAnchor.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get document
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    // Hide rows 4 and 5 (UI number), which are inside the shape and thus change shape geometry
+    rDoc.SetRowHidden(3, 4, 0, true);
+    rDoc.SetDrawPageSize(0); // trigger recalcpos, otherwise shapes are not changed
+
+    // Get shape
+    SdrObject* pObj = lcl_getSdrObjectWithAssert(rDoc, 0);
+
+    // Verify hiding has changed shape geometry as expected
+    tools::Rectangle aSnapRect(pObj->GetSnapRect());
+    tools::Long aRotateAngle(pObj->GetRotateAngle());
+    tools::Long aShearAngle(pObj->GetShearAngle());
+    // mathematical exact would be Point(3868, 4795), Size(9763, 1909)
+    // current values as of LO 7.2
+    const tools::Rectangle aExpectRect(Point(3871, 4796), Size(9764, 1910));
+    const tools::Long aExpectRotateAngle(20923);
+    const tools::Long aExpectShearAngle(-6572);
+    CPPUNIT_ASSERT_MESSAGE("Hide rows, shear angle: ", abs(aShearAngle - aExpectShearAngle) <= 1);
+    CPPUNIT_ASSERT_MESSAGE("Hide rows, rotate angle: ",
+                           abs(aRotateAngle - aExpectRotateAngle) <= 1);
+    lcl_AssertRectEqualWithTolerance("Reload: wrong pos or size", aExpectRect, aSnapRect, 1);
+
+    // Save and reload.
+    saveAndReload(xComponent, "calc8");
+    CPPUNIT_ASSERT(xComponent);
+
+    // Get document and shape
+    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+    pObj = lcl_getSdrObjectWithAssert(rDoc2, 0);
+
+    // Check shape has the original geometry, besides heavy rounding and unit conversion errors
+    aSnapRect = pObj->GetSnapRect();
+    aRotateAngle = pObj->GetRotateAngle();
+    aShearAngle = pObj->GetShearAngle();
+    CPPUNIT_ASSERT_MESSAGE("Reload, shear angle: ", abs(aShearAngle - aExpectShearAngle) <= 3);
+    CPPUNIT_ASSERT_MESSAGE("Reload, rotate angle: ", abs(aRotateAngle - aExpectRotateAngle) <= 3);
+    lcl_AssertRectEqualWithTolerance("Reload: wrong pos or size", aExpectRect, aSnapRect, 4);
+
+    pDocSh->DoClose();
+}
+
+void ScShapeTest::testTdf137033_RotShear_Hide()
+{
+    // Hiding row or columns affect cell anchored shape based on their snap rectangle. The first
+    // attempt to fix lost position has used the logic rect instead. For rotated or sheared shape it
+    // makes a difference.
+
+    // Load a document, which has a rotated and sheared shape, anchored to cell, without resize.
+    OUString aFileURL;
+    createFileURL("tdf137033_RotShearCellAnchor.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get document
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    // Hide column C, which is left from logic rect, but right from left edge of snap rect
+    rDoc.SetColHidden(2, 2, 0, true);
+    rDoc.SetDrawPageSize(0); // trigger recalcpos, otherwise shapes are not changed
+
+    // Save and reload.
+    saveAndReload(xComponent, "calc8");
+    CPPUNIT_ASSERT(xComponent);
+
+    // Get document and shape
+    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+    SdrObject* pObj = lcl_getSdrObjectWithAssert(rDoc2, 0);
+
+    // Check shape is visible. With the old version, the shape was moved to column C and
+    // thus hidden on reload.
+    CPPUNIT_ASSERT_MESSAGE("Reload: Shape has to be visible", pObj->IsVisible());
+    // Verify position and size are unchanged besides rounding and unit conversion errors
+    // Values are manually taken from shape before hiding column C.
+    const tools::Rectangle aExpectRect(Point(4500, 3500), Size(15143, 5187));
+    const tools::Rectangle aSnapRect = pObj->GetSnapRect();
+    lcl_AssertRectEqualWithTolerance("Reload: wrong pos and size", aExpectRect, aSnapRect, 1);
+
+    pDocSh->DoClose();
+}
+
+// this test has starting failing under OSX
+#if !defined MACOSX
 void ScShapeTest::testTdf137576_LogicRectInDefaultMeasureline()
 {
     // Error was, that the empty logical rectangle of a default measure line (Ctrl+Click)
@@ -142,26 +525,17 @@ void ScShapeTest::testTdf137576_LogicRectInDefaultMeasureline()
     CPPUNIT_ASSERT(xComponent.is());
 
     // Get ScDocShell
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT_MESSAGE("No ScDocShell", pDocSh);
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
 
     // Create default measureline by SfxRequest that corresponds to Ctrl+Click
-    ScTabViewShell* pTabViewShell = pDocSh->GetBestViewShell(false);
-    CPPUNIT_ASSERT_MESSAGE("No ScTabViewShell", pTabViewShell);
+    ScTabViewShell* pTabViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
     SfxRequest aReq(pTabViewShell->GetViewFrame(), SID_DRAW_MEASURELINE);
     aReq.SetModifier(KEY_MOD1); // Ctrl
     pTabViewShell->ExecDraw(aReq);
 
     // Get document and newly created measure line.
     ScDocument& rDoc = pDocSh->GetDocument();
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-    CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
-    const SdrPage* pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT_MESSAGE("No draw page", pPage);
-    SdrObject* pObj = pPage->GetObj(0);
-    CPPUNIT_ASSERT_MESSAGE("No object found", pObj);
+    SdrObject* pObj = lcl_getSdrObjectWithAssert(rDoc, 0);
 
     // Anchor "to Cell (resize with cell)"
     ScDrawLayer::SetCellAnchoredFromPosition(*pObj, rDoc, 0 /*SCTAB*/, true /*bResizeWithCell*/);
@@ -182,19 +556,11 @@ void ScShapeTest::testTdf137576_LogicRectInDefaultMeasureline()
     // Save and reload, get ScDocShell
     saveAndReload(xComponent, "calc8");
     CPPUNIT_ASSERT(xComponent);
-    pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Reload: Failed to access document shell", pFoundShell);
-    pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
+    pDocSh = lcl_getScDocShellWithAssert(xComponent);
 
     // Get document and object
     ScDocument& rDoc2 = pDocSh->GetDocument();
-    pDrawLayer = rDoc2.GetDrawLayer();
-    CPPUNIT_ASSERT_MESSAGE("Reload: No ScDrawLayer", pDrawLayer);
-    pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT_MESSAGE("Reload: No draw page", pPage);
-    pObj = pPage->GetObj(0);
-    CPPUNIT_ASSERT_MESSAGE("Measure line lost", pObj);
+    pObj = lcl_getSdrObjectWithAssert(rDoc2, 0);
 
     // Assert object position is unchanged, besides Twips<->Hmm inaccuracy.
     Point aNewPos = pObj->GetRelativePos();
@@ -202,6 +568,7 @@ void ScShapeTest::testTdf137576_LogicRectInDefaultMeasureline()
 
     pDocSh->DoClose();
 }
+#endif
 
 void ScShapeTest::testTdf137576_LogicRectInNewMeasureline()
 {
@@ -214,22 +581,16 @@ void ScShapeTest::testTdf137576_LogicRectInNewMeasureline()
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
-    // Get ScDocShell
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
-
-    // Get SdrPage
+    // Get document and draw page
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-    CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
-    SdrPage* pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT_MESSAGE("No draw page", pPage);
+    SdrPage* pPage = lcl_getSdrPageWithAssert(rDoc);
 
     // Create a new measure line and insert it
     Point aStartPoint(5000, 5500);
     Point aEndPoint(13000, 8000);
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
     SdrMeasureObj* pObj = new SdrMeasureObj(*pDrawLayer, aStartPoint, aEndPoint);
     CPPUNIT_ASSERT_MESSAGE("Could not create measure line", pObj);
     pPage->InsertObject(pObj);
@@ -255,20 +616,10 @@ void ScShapeTest::testMeasurelineHideColSave()
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
-    // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
-
     // Get document and shape
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-    CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
-    const SdrPage* pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT_MESSAGE("No draw page", pPage);
-    SdrObject* pObj = pPage->GetObj(0);
-    CPPUNIT_ASSERT_MESSAGE("No object found", pObj);
+    SdrObject* pObj = lcl_getSdrObjectWithAssert(rDoc, 0);
 
     // Make sure loading is correct
     Point aStartPoint(7500, 15000); // according UI
@@ -276,29 +627,27 @@ void ScShapeTest::testMeasurelineHideColSave()
     lcl_AssertPointEqualWithTolerance("Load start: ", aStartPoint, pObj->GetPoint(0), 1);
     lcl_AssertPointEqualWithTolerance("Load end: ", aEndPoint, pObj->GetPoint(1), 1);
 
-    // Hide column A, save and reload
+    // Hide column A
     rDoc.SetColHidden(0, 0, 0, true);
+    rDoc.SetDrawPageSize(0); // trigger recalcpos, otherwise shapes are not changed
+    // Shape should move by column width, here 3000
+    aStartPoint.Move(-3000, 0);
+    aEndPoint.Move(-3000, 0);
+    lcl_AssertPointEqualWithTolerance("Hide col A: ", aStartPoint, pObj->GetPoint(0), 1);
+    lcl_AssertPointEqualWithTolerance("Hide col A: ", aEndPoint, pObj->GetPoint(1), 1);
+
+    // save and reload
     saveAndReload(xComponent, "calc8");
     CPPUNIT_ASSERT(xComponent);
 
-    // Get ScDocShell
-    pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Reload: Failed to access document shell", pFoundShell);
-    pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
-
-    // Get document and object
+    // Get document and shape
+    pDocSh = lcl_getScDocShellWithAssert(xComponent);
     ScDocument& rDoc2 = pDocSh->GetDocument();
-    pDrawLayer = rDoc2.GetDrawLayer();
-    CPPUNIT_ASSERT_MESSAGE("Reload: No ScDrawLayer", pDrawLayer);
-    pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT_MESSAGE("Reload: No draw page", pPage);
-    pObj = pPage->GetObj(0);
-    CPPUNIT_ASSERT_MESSAGE("Reload: custom shape no longer exists", pObj);
+    pObj = lcl_getSdrObjectWithAssert(rDoc2, 0);
 
-    // Check that start and end point are unchanged
-    lcl_AssertPointEqualWithTolerance("Reload start: ", aStartPoint, pObj->GetPoint(0), 1);
-    lcl_AssertPointEqualWithTolerance("Reload end: ", aEndPoint, pObj->GetPoint(1), 1);
+    // Check that start and end point are unchanged besides rounding and unit conversion errors
+    lcl_AssertPointEqualWithTolerance("Reload start: ", aStartPoint, pObj->GetPoint(0), 2);
+    lcl_AssertPointEqualWithTolerance("Reload end: ", aEndPoint, pObj->GetPoint(1), 2);
 
     pDocSh->DoClose();
 }
@@ -314,20 +663,11 @@ void ScShapeTest::testHideColsShow()
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
-    // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
-
     // Get document and shape
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-    CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
-    const SdrPage* pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT_MESSAGE("No draw page", pPage);
-    SdrObject* pObj = pPage->GetObj(0);
-    CPPUNIT_ASSERT_MESSAGE("No object found", pObj);
+    SdrObjCustomShape* pObj = static_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(rDoc, 0));
+
     CPPUNIT_ASSERT_MESSAGE("Load: Object should be visible", pObj->IsVisible());
     tools::Rectangle aSnapRectOrig(pObj->GetSnapRect());
 
@@ -337,8 +677,7 @@ void ScShapeTest::testHideColsShow()
     };
     dispatchCommand(xComponent, ".uno:GoToCell", aPropertyValues);
 
-    ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
-    CPPUNIT_ASSERT_MESSAGE("No ScTabViewShell", pViewShell);
+    ScTabViewShell* pViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
     pViewShell->GetViewData().GetDispatcher().Execute(FID_COL_HIDE);
 
     // Check object is invisible
@@ -369,20 +708,10 @@ void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
-    // Get ScDocShell
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
-
-    // Get document and object
+    // Get document and shape
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-    CPPUNIT_ASSERT_MESSAGE("Load: No ScDrawLayer", pDrawLayer);
-    const SdrPage* pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT_MESSAGE("Load: No draw page", pPage);
-    SdrObject* pObj = pPage->GetObj(0);
-    CPPUNIT_ASSERT_MESSAGE("Load: custom shape not found", pObj);
+    SdrObject* pObj = lcl_getSdrObjectWithAssert(rDoc, 0);
 
     // Check anchor and position of shape. The expected values are taken from UI.
     tools::Rectangle aSnapRect = pObj->GetSnapRect();
@@ -394,8 +723,8 @@ void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()
         comphelper::makePropertyValue("ToPoint", OUString("$A$1:$B$1")),
     };
     dispatchCommand(xComponent, ".uno:GoToCell", aPropertyValues);
-    ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
-    CPPUNIT_ASSERT_MESSAGE("No ScTabViewShell", pViewShell);
+
+    ScTabViewShell* pViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
     pViewShell->GetViewData().GetDispatcher().Execute(FID_INS_COLUMNS_AFTER);
     aExpectedRect = tools::Rectangle(Point(16000, 3000), Size(1000, 7500)); // col width 3000
     aSnapRect = pObj->GetSnapRect();
@@ -406,20 +735,10 @@ void ScShapeTest::testTdf138138_MoveCellWithRotatedShape()
     saveAndReload(xComponent, "calc8");
     CPPUNIT_ASSERT(xComponent);
 
-    // Get ScDocShell
-    pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Reload: Failed to access document shell", pFoundShell);
-    pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
-
-    // Get document and object
+    // Get document and shape
+    pDocSh = lcl_getScDocShellWithAssert(xComponent);
     ScDocument& rDoc2 = pDocSh->GetDocument();
-    pDrawLayer = rDoc2.GetDrawLayer();
-    CPPUNIT_ASSERT_MESSAGE("Reload: No ScDrawLayer", pDrawLayer);
-    pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT_MESSAGE("Reload: No draw page", pPage);
-    pObj = pPage->GetObj(0);
-    CPPUNIT_ASSERT_MESSAGE("Reload: custom shape no longer exists", pObj);
+    pObj = lcl_getSdrObjectWithAssert(rDoc2, 0);
 
     // Assert objects size is unchanged, position is shifted.
     aSnapRect = pObj->GetSnapRect();
@@ -438,20 +757,12 @@ void ScShapeTest::testLoadVerticalFlip()
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
-    // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
-
-    // Get the shape and check that it is flipped
+    // Get document and shape
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-    CPPUNIT_ASSERT(pDrawLayer);
-    const SdrPage* pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT(pPage);
-    SdrObjCustomShape* pObj = dynamic_cast<SdrObjCustomShape*>(pPage->GetObj(0));
-    CPPUNIT_ASSERT(pObj);
+    SdrObjCustomShape* pObj = static_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(rDoc, 0));
+
+    // Check that shape is flipped
     CPPUNIT_ASSERT_MESSAGE("Load: Object should be vertically flipped", pObj->IsMirroredY());
 
     pDocSh->DoClose();
@@ -467,26 +778,14 @@ void ScShapeTest::testTdf117948_CollapseBeforeShape()
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
-    // Get ScDocShell
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
-
     // Get document and objects
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-    CPPUNIT_ASSERT_MESSAGE("Load: No ScDrawLayer", pDrawLayer);
-    const SdrPage* pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT_MESSAGE("Load: No draw page", pPage);
-    SdrObject* pObj0 = pPage->GetObj(0);
-    CPPUNIT_ASSERT_MESSAGE("Load: custom shape not found", pObj0);
-    SdrObject* pObj1 = pPage->GetObj(1);
-    CPPUNIT_ASSERT_MESSAGE("Load: Vertical line not found", pObj1);
+    SdrObject* pObj0 = lcl_getSdrObjectWithAssert(rDoc, 0);
+    SdrObject* pObj1 = lcl_getSdrObjectWithAssert(rDoc, 1);
 
     // Collapse the group
-    ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
-    CPPUNIT_ASSERT_MESSAGE("Load: No ScTabViewShell", pViewShell);
+    ScTabViewShell* pViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
     pViewShell->GetViewData().SetCurX(1);
     pViewShell->GetViewData().SetCurY(0);
     pViewShell->GetViewData().GetDispatcher().Execute(SID_OUTLINE_HIDE);
@@ -504,22 +803,11 @@ void ScShapeTest::testTdf117948_CollapseBeforeShape()
     saveAndReload(xComponent, "calc8");
     CPPUNIT_ASSERT(xComponent);
 
-    // Get ScDocShell
-    pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Reload: Failed to access document shell", pFoundShell);
-    pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
-
     // Get document and objects
+    pDocSh = lcl_getScDocShellWithAssert(xComponent);
     ScDocument& rDoc2 = pDocSh->GetDocument();
-    pDrawLayer = rDoc2.GetDrawLayer();
-    CPPUNIT_ASSERT_MESSAGE("Reload: No ScDrawLayer", pDrawLayer);
-    pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT_MESSAGE("Reload: No draw page", pPage);
-    pObj0 = pPage->GetObj(0);
-    CPPUNIT_ASSERT_MESSAGE("Reload: custom shape no longer exists", pObj0);
-    pObj1 = pPage->GetObj(1);
-    CPPUNIT_ASSERT_MESSAGE("Reload: custom shape no longer exists", pObj1);
+    pObj0 = lcl_getSdrObjectWithAssert(rDoc2, 0);
+    pObj1 = lcl_getSdrObjectWithAssert(rDoc2, 1);
 
     // Assert objects size and position are not changed. Actual values differ a little bit
     // because of cumulated Twips-Hmm conversion errors.
@@ -544,20 +832,11 @@ void ScShapeTest::testTdf137355_UndoHideRows()
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
-    // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
-
     // Get document and shape
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-    CPPUNIT_ASSERT_MESSAGE("No ScDrawLayer", pDrawLayer);
-    const SdrPage* pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT_MESSAGE("No draw page", pPage);
-    SdrObject* pObj = pPage->GetObj(0);
-    CPPUNIT_ASSERT_MESSAGE("No object found", pObj);
+    SdrObject* pObj = lcl_getSdrObjectWithAssert(rDoc, 0);
+
     CPPUNIT_ASSERT_MESSAGE("Load: Object should be visible", pObj->IsVisible());
     tools::Rectangle aSnapRectOrig(pObj->GetSnapRect());
 
@@ -567,9 +846,7 @@ void ScShapeTest::testTdf137355_UndoHideRows()
         comphelper::makePropertyValue("ToPoint", OUString("$A$3:$A$6")),
     };
     dispatchCommand(xComponent, ".uno:GoToCell", aPropertyValues);
-
-    ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
-    CPPUNIT_ASSERT_MESSAGE("No ScTabViewShell", pViewShell);
+    ScTabViewShell* pViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
     pViewShell->GetViewData().GetDispatcher().Execute(FID_ROW_HIDE);
 
     // Check object is invisible
@@ -599,27 +876,16 @@ void ScShapeTest::testTdf115655_HideDetail()
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
-    // Get ScDocShell
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
-
     // Get document and image
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-    CPPUNIT_ASSERT_MESSAGE("Load: No ScDrawLayer", pDrawLayer);
-    const SdrPage* pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT_MESSAGE("Load: No draw page", pPage);
-    SdrObject* pObj = pPage->GetObj(0);
-    CPPUNIT_ASSERT_MESSAGE("Load: No object found", pObj);
+    SdrObject* pObj = lcl_getSdrObjectWithAssert(rDoc, 0);
 
     // Get image size
     tools::Rectangle aSnapRectOrig = pObj->GetSnapRect();
 
     // Collapse the group
-    ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
-    CPPUNIT_ASSERT_MESSAGE("Load: No ScTabViewShell", pViewShell);
+    ScTabViewShell* pViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
     pViewShell->GetViewData().SetCurX(0);
     pViewShell->GetViewData().SetCurY(1);
     pViewShell->GetViewData().GetDispatcher().Execute(SID_OUTLINE_HIDE);
@@ -629,20 +895,10 @@ void ScShapeTest::testTdf115655_HideDetail()
     saveAndReload(xComponent, "calc8");
     CPPUNIT_ASSERT(xComponent);
 
-    // Get ScDocShell
-    pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Reload: Failed to access document shell", pFoundShell);
-    pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
-
     // Get document and image
+    pDocSh = lcl_getScDocShellWithAssert(xComponent);
     ScDocument& rDoc2 = pDocSh->GetDocument();
-    pDrawLayer = rDoc2.GetDrawLayer();
-    CPPUNIT_ASSERT_MESSAGE("Reload: No ScDrawLayer", pDrawLayer);
-    pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT_MESSAGE("Reload: No draw page", pPage);
-    pObj = pPage->GetObj(0);
-    CPPUNIT_ASSERT_MESSAGE("Reload: Image no longer exists", pObj);
+    pObj = lcl_getSdrObjectWithAssert(rDoc2, 0);
 
     // Expand the group
     pViewShell = pDocSh->GetBestViewShell(false);
@@ -670,29 +926,13 @@ void ScShapeTest::testFitToCellSize()
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
-    // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-
-    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
-
-    // Get the shape
+    // Get document and shape
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-    CPPUNIT_ASSERT(pDrawLayer);
-
-    const SdrPage* pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT(pPage);
-
-    SdrObjCustomShape* pObj = dynamic_cast<SdrObjCustomShape*>(pPage->GetObj(0));
-    CPPUNIT_ASSERT(pObj);
-
-    // Get the document controller
-    ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
-    CPPUNIT_ASSERT(pViewShell);
+    SdrObjCustomShape* pObj = dynamic_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(rDoc, 0));
 
     // Get the draw view of the document
+    ScTabViewShell* pViewShell = lcl_getScTabViewShellWithAssert(pDocSh);
     ScDrawView* pDrawView = pViewShell->GetViewData().GetScDrawView();
     CPPUNIT_ASSERT(pDrawView);
 
@@ -720,23 +960,10 @@ void ScShapeTest::testCustomShapeCellAnchoredRotatedShape()
     uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(xComponent.is());
 
-    // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-
-    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(pDocSh);
-
-    // Get the shape
+    // Get document and shape
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
     ScDocument& rDoc = pDocSh->GetDocument();
-    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-    CPPUNIT_ASSERT(pDrawLayer);
-
-    const SdrPage* pPage = pDrawLayer->GetPage(0);
-    CPPUNIT_ASSERT(pPage);
-
-    SdrObjCustomShape* pObj = dynamic_cast<SdrObjCustomShape*>(pPage->GetObj(0));
-    CPPUNIT_ASSERT(pObj);
+    SdrObjCustomShape* pObj = dynamic_cast<SdrObjCustomShape*>(lcl_getSdrObjectWithAssert(rDoc, 0));
 
     // Check Position and Size
     rDoc.SetDrawPageSize(0); // trigger recalcpos

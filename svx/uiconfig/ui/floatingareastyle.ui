@@ -77,6 +77,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes" context="floatingareastyle|angle|tooltip_text">Specify the angle of rotation for the gradient shading style.</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="adjustment">adjustment1</property>
                   </object>
                   <packing>
@@ -197,6 +198,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="floatingareastyle|start|tooltip_text">Enter a transparency value for the beginning point of the gradient, where 0% is fully opaque and 100% is fully transparent.</property>
+                <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment4</property>
               </object>
               <packing>
@@ -209,6 +211,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="floatingareastyle|end|tooltip_text">Enter a transparency value for the endpoint of the gradient, where 0% is fully opaque and 100% is fully transparent.</property>
+                <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment5</property>
               </object>
               <packing>
@@ -247,6 +250,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="floatingareastyle|border|tooltip_text">Specify the border value of gradient transparency.</property>
+                <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment6</property>
               </object>
               <packing>
@@ -300,6 +304,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="floatingareastyle|centerx|tooltip_text">Specify the horizontal offset percentage from the center for the gradient shading style. 50% is the horizontal center.</property>
+                <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment2</property>
               </object>
               <packing>
@@ -312,6 +317,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes" context="floatingareastyle|centery|tooltip_text">Specify the vertical offset percentage from the center for the gradient shading style.  50% is the vertical center.</property>
+                <property name="truncate-multiline">True</property>
                 <property name="adjustment">adjustment3</property>
               </object>
               <packing>

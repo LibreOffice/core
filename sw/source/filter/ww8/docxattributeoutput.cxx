@@ -4837,13 +4837,12 @@ void DocxAttributeOutput::DefaultStyle()
 /* Writes <a:srcRect> tag back to document.xml if a file contains a cropped image.
 *  NOTE : Tested on images of type JPEG,EMF/WMF,BMP, PNG and GIF.
 */
-void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj, const SwFrameFormat* pFrameFormat )
+void DocxAttributeOutput::WriteSrcRect(
+    const css::uno::Reference<css::beans::XPropertySet>& xShapePropSet,
+    const SwFrameFormat* pFrameFormat)
 {
-    uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY );
-    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-
     uno::Reference<graphic::XGraphic> xGraphic;
-    xPropSet->getPropertyValue("Graphic") >>= xGraphic;
+    xShapePropSet->getPropertyValue("Graphic") >>= xGraphic;
     const Graphic aGraphic(xGraphic);
 
     Size aOriginalSize(aGraphic.GetPrefSize());
@@ -4856,7 +4855,7 @@ void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj, const SwFrameFo
     }
 
     css::text::GraphicCrop aGraphicCropStruct;
-    xPropSet->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
+    xShapePropSet->getPropertyValue("GraphicCrop") >>= aGraphicCropStruct;
     sal_Int32 nCropL = aGraphicCropStruct.Left;
     sal_Int32 nCropR = aGraphicCropStruct.Right;
     sal_Int32 nCropT = aGraphicCropStruct.Top;
@@ -5023,7 +5022,6 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
 
     rtl::Reference<sax_fastparser::FastAttributeList> xFrameAttributes(
         FastSerializerHelper::createAttrList());
-    Size aSize = rSize;
     if (pGrfNode)
     {
         const SwAttrSet& rSet = pGrfNode->GetSwAttrSet();
@@ -5037,8 +5035,25 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
             // RES_GRFATR_ROTATION is in 10ths of degree; convert to 100ths for macro
             sal_uInt32 mOOXMLRot = oox::drawingml::ExportRotateClockwisify(nRot*10);
             xFrameAttributes->add(XML_rot, OString::number(mOOXMLRot));
-            aSize = pGrfNode->GetTwipSize();
         }
+    }
+
+    css::uno::Reference<css::beans::XPropertySet> xShapePropSet;
+    if (pSdrObj)
+    {
+        css::uno::Reference<css::drawing::XShape> xShape(
+            const_cast<SdrObject*>(pSdrObj)->getUnoShape(), css::uno::UNO_QUERY);
+        xShapePropSet.set(xShape, css::uno::UNO_QUERY);
+        assert(xShapePropSet);
+    }
+
+    Size aSize = rSize;
+    // We need the original (cropped, but unrotated) size of object. So prefer the object data,
+    // and only use passed frame size as fallback.
+    if (xShapePropSet)
+    {
+        if (css::awt::Size val; xShapePropSet->getPropertyValue("Size") >>= val)
+            aSize = Size(convertMm100ToTwip(val.Width), convertMm100ToTwip(val.Height));
     }
 
     m_rExport.SdrExporter().startDMLAnchorInline(pFrameFormat, aSize);
@@ -5054,11 +5069,9 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     m_pSerializer->startElementNS( XML_wp, XML_docPr, docPrAttrListRef );
 
     OUString sURL, sRelId;
-    if(pSdrObj)
+    if (xShapePropSet)
     {
-        uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY );
-        uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-        xPropSet->getPropertyValue("HyperLinkURL") >>= sURL;
+        xShapePropSet->getPropertyValue("HyperLinkURL") >>= sURL;
         if(!sURL.isEmpty())
         {
             if (sURL.startsWith("#") && sURL.indexOf(' ') != -1 && !sURL.endsWith("|outline") && !sURL.endsWith("|table") &&
@@ -5137,9 +5150,8 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     }
     m_pSerializer->endElementNS( XML_a, XML_blip );
 
-    if (pSdrObj){
-        WriteSrcRect(pSdrObj, pFrameFormat);
-    }
+    if (xShapePropSet)
+        WriteSrcRect(xShapePropSet, pFrameFormat);
 
     m_pSerializer->startElementNS(XML_a, XML_stretch);
     m_pSerializer->singleElementNS(XML_a, XML_fillRect);
@@ -7379,6 +7391,7 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
     {
         m_pSerializer->startElementNS(XML_w, XML_rPr);
 
+        SfxItemSet aTempSet(*pOutSet);
         if ( pFont )
         {
             GetExport().GetId( *pFont ); // ensure font info is written to fontTable.xml
@@ -7388,11 +7401,10 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
                     FSNS( XML_w, XML_hAnsi ), aFamilyName,
                     FSNS( XML_w, XML_cs ), aFamilyName,
                     FSNS( XML_w, XML_hint ), "default" );
+            aTempSet.ClearItem(RES_CHRATR_FONT);
+            aTempSet.ClearItem(RES_CHRATR_CTL_FONT);
         }
-        else
-        {
-            m_rExport.OutputItemSet(*pOutSet, false, true, i18n::ScriptType::LATIN, m_rExport.m_bExportModeRTF);
-        }
+        m_rExport.OutputItemSet(aTempSet, false, true, i18n::ScriptType::LATIN, m_rExport.m_bExportModeRTF);
 
         WriteCollectedRunProperties();
 
@@ -7505,9 +7517,9 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
     if ( !sIss.isEmpty() )
         m_pSerializer->singleElementNS(XML_w, XML_vertAlign, FSNS(XML_w, XML_val), sIss);
 
-    const SvxFontHeightItem& rItem = m_rExport.GetItem(RES_CHRATR_FONTSIZE);
     if (sIss.isEmpty() || sIss.match("baseline"))
     {
+        const SvxFontHeightItem& rItem = m_rExport.GetItem(RES_CHRATR_FONTSIZE);
         float fHeight = rItem.GetHeight();
         OString sPos = OString::number( round(( fHeight * nEsc ) / 1000) );
         m_pSerializer->singleElementNS(XML_w, XML_position, FSNS(XML_w, XML_val), sPos);
@@ -8598,7 +8610,7 @@ void DocxAttributeOutput::ParaHyphenZone( const SvxHyphenZoneItem& rHyphenZone )
             FSNS( XML_w, XML_val ), OString::boolean( !rHyphenZone.IsHyphen() ) );
 }
 
-void DocxAttributeOutput::ParaNumRule_Impl(const SwTextNode*, sal_Int32 nLvl, sal_Int32 nNumId)
+void DocxAttributeOutput::ParaNumRule_Impl( const SwTextNode* pTextNd, sal_Int32 nLvl, sal_Int32 nNumId )
 {
     if ( USHRT_MAX == nNumId )
         return;
@@ -8607,9 +8619,8 @@ void DocxAttributeOutput::ParaNumRule_Impl(const SwTextNode*, sal_Int32 nLvl, sa
     const SwNumRule* pRule = nNumId > 0 && nNumId <= nTableSize ? (*m_rExport.m_pUsedNumTable)[nNumId-1] : nullptr;
     const bool bOutlineRule = pRule && pRule->IsOutlineRule();
 
-    // Do not export outline rules (Chapter Numbering) as paragraph properties,
-    // neither as style properties - there's w:outlineLvl for that.
-    if (!bOutlineRule)
+    // Do not export outline rules (Chapter Numbering) as paragraph properties, only as style properties.
+    if ( !pTextNd || !bOutlineRule )
     {
         m_pSerializer->startElementNS(XML_w, XML_numPr);
         m_pSerializer->singleElementNS(XML_w, XML_ilvl,
@@ -8821,6 +8832,17 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
         sal_Int32 nFooter = 0;
         if ( aDistances.HasFooter() )
             nFooter = sal_Int32( aDistances.dyaHdrBottom );
+        else if (m_rExport.m_pFirstPageFormat)
+        {
+            HdFtDistanceGlue aFirstPageDistances(m_rExport.m_pFirstPageFormat->GetAttrSet());
+            if (aFirstPageDistances.HasFooter())
+            {
+                // The follow page style has no footer, but the first page style has. In Word terms,
+                // this means that the footer margin of "the" section is coming from the first page
+                // style.
+                nFooter = sal_Int32(aFirstPageDistances.dyaHdrBottom);
+            }
+        }
 
         // Page Bottom
         m_pageMargins.nBottom = aDistances.dyaBottom;

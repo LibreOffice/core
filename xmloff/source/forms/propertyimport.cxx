@@ -285,7 +285,7 @@ void OPropertyImport::startFastElement(sal_Int32 /*nElement*/, const Reference< 
         handleAttribute(aIter.getToken(), aIter.toString());
 
         if (m_bTrackAttributes)
-            m_aEncounteredAttributes.insert(aIter.getToken());
+            m_aEncounteredAttributes.insert(aIter.getToken() & TOKEN_MASK);
     }
 
     // TODO: create PropertyValues for all the attributes which were not present, because they were implied
@@ -296,7 +296,7 @@ void OPropertyImport::startFastElement(sal_Int32 /*nElement*/, const Reference< 
 bool OPropertyImport::encounteredAttribute(sal_Int32 nAttributeToken) const
 {
     OSL_ENSURE(m_bTrackAttributes, "OPropertyImport::encounteredAttribute: attribute tracking not enabled!");
-    return m_aEncounteredAttributes.end() != m_aEncounteredAttributes.find(nAttributeToken);
+    return m_aEncounteredAttributes.end() != m_aEncounteredAttributes.find(nAttributeToken & TOKEN_MASK);
 }
 
 void OPropertyImport::characters(const OUString& _rChars )

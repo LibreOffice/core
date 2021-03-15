@@ -148,7 +148,12 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
     }
 
     if( mpAlphaVDev )
+    {
+        const Color aFillCol( mpAlphaVDev->GetFillColor() );
+        mpAlphaVDev->SetFillColor( COL_BLACK );
         mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
+        mpAlphaVDev->SetFillColor( aFillCol );
+    }
 }
 
 void OutputDevice::ClipAndDrawGradientMetafile ( const Gradient &rGradient, const tools::PolyPolygon &rPolyPoly )

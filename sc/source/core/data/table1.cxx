@@ -1164,7 +1164,10 @@ void ScTable::LimitChartArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol
     SCROW lastDataPos = 0;
     for (SCCOL i=rStartCol; i<=rEndCol; i++)
         lastDataPos = std::max(lastDataPos, aCol[i].GetLastDataPos());
-    rEndRow = std::clamp( rEndRow, rStartRow, lastDataPos );
+    // reduce EndRow to the last row with data
+    rEndRow = std::min(rEndRow, lastDataPos);
+    // but make sure EndRow is >= StartRow
+    rEndRow = std::max(rStartRow, rEndRow);
 }
 
 SCCOL ScTable::FindNextVisibleCol( SCCOL nCol, bool bRight ) const
@@ -2456,6 +2459,11 @@ bool ScTable::HandleRefArrayForParallelism( SCCOL nCol, SCROW nRow1, SCROW nRow2
 
     if ( !IsColValid( nCol ) || !ValidRow( nRow1 ) || !ValidRow( nRow2 ) )
         return false;
+
+    mpHiddenCols->makeReady();
+    mpHiddenRows->makeReady();
+    mpFilteredCols->makeReady();
+    mpFilteredRows->makeReady();
 
     return aCol[nCol].HandleRefArrayForParallelism(nRow1, nRow2, mxGroup);
 }

@@ -339,6 +339,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="mapping-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="chinesedictionary|extended_tip|mapping">Enter the text that you want to replace the Term with.</property>
@@ -356,6 +357,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="term-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="chinesedictionary|extended_tip|term">Enter the text that you want to replace with the Mapping term.</property>

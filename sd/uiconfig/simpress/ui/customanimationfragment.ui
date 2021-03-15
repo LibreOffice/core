@@ -260,6 +260,7 @@
         <property name="has_entry">True</property>
         <child internal-child="entry">
           <object class="GtkEntry">
+            <property name="truncate-multiline">True</property>
             <property name="can_focus">True</property>
           </object>
         </child>
@@ -275,6 +276,7 @@
         <property name="can_focus">True</property>
         <property name="no_show_all">True</property>
         <property name="hexpand">True</property>
+        <property name="truncate-multiline">True</property>
         <property name="adjustment">adjustment1</property>
       </object>
       <packing>
@@ -307,6 +309,7 @@
         <property name="can_focus">True</property>
         <property name="no_show_all">True</property>
         <property name="hexpand">True</property>
+        <property name="truncate-multiline">True</property>
         <property name="adjustment">adjustment2</property>
       </object>
       <packing>
@@ -339,6 +342,7 @@
         <property name="can_focus">True</property>
         <property name="no_show_all">True</property>
         <property name="hexpand">True</property>
+        <property name="truncate-multiline">True</property>
         <property name="adjustment">adjustment3</property>
       </object>
       <packing>
@@ -371,6 +375,7 @@
         <property name="can_focus">True</property>
         <property name="no_show_all">True</property>
         <property name="hexpand">True</property>
+        <property name="truncate-multiline">True</property>
         <property name="adjustment">adjustment4</property>
       </object>
       <packing>
@@ -403,6 +408,7 @@
         <property name="can_focus">True</property>
         <property name="no_show_all">True</property>
         <property name="hexpand">True</property>
+        <property name="truncate-multiline">True</property>
         <property name="editable">False</property>
       </object>
       <packing>

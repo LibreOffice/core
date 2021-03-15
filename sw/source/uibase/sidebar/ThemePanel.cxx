@@ -447,6 +447,8 @@ ThemePanel::ThemePanel(vcl::Window* pParent,
 
     if (!aColorSets.empty())
         mxValueSetColors->SelectItem(1); // ItemId 1, position 0
+
+    m_pInitialFocusWidget = mxListBoxFonts.get();
 }
 
 ThemePanel::~ThemePanel()

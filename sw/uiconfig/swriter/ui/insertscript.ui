@@ -158,6 +158,7 @@
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="text" translatable="yes" context="insertscript|scripttype">JavaScript</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="scripttype-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="insertscript|extended_tip|scripttype">Enter the type of script that you want to insert.</property>
@@ -198,6 +199,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="urlentry-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="insertscript|extended_tip|urlentry">Adds a link to a script file. Click the URL radio button, and then enter the link in the box. You can also click the Browse button, locate the file, and then click Insert.</property>

@@ -72,7 +72,7 @@ public:
     SwNumRulesWithName &operator=(const SwNumRulesWithName &);
 
     const OUString& GetName() const               { return maName; }
-    std::unique_ptr<SwNumRule> MakeNumRule(SwWrtShell& rSh) const;
+    void ResetNumRule(SwWrtShell& rSh, SwNumRule& ) const;
 
     void GetNumFormat(size_t, SwNumFormat const*&, OUString const*&) const;
 };

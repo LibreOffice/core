@@ -168,6 +168,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                     </child>
@@ -187,6 +188,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                     </child>
@@ -219,6 +221,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                     </child>
@@ -238,6 +241,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                     </child>
@@ -270,6 +274,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                     </child>
@@ -289,6 +294,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                     </child>
@@ -321,6 +327,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                     </child>
@@ -340,6 +347,7 @@
                     <child internal-child="entry">
                       <object class="GtkEntry">
                         <property name="can_focus">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                     </child>

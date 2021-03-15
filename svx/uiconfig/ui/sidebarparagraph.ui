@@ -287,6 +287,7 @@
                     <property name="hexpand">True</property>
                     <property name="text">0</property>
                     <property name="adjustment">adjustment1</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="aboveparaspacing-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|aboveparaspacing-atkobject">Above Paragraph Spacing</property>
@@ -335,6 +336,7 @@
                     <property name="hexpand">True</property>
                     <property name="text">0</property>
                     <property name="adjustment">adjustment2</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="belowparaspacing-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|belowparaspacing-atkobject">Below Paragraph Spacing</property>
@@ -489,6 +491,7 @@
                     <property name="hexpand">True</property>
                     <property name="text">0</property>
                     <property name="adjustment">adjustment3</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="beforetextindent-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|beforetextindent-atkobject">Before Text Indent</property>
@@ -537,6 +540,7 @@
                     <property name="hexpand">True</property>
                     <property name="text">0</property>
                     <property name="adjustment">adjustment4</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="aftertextindent-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|aftertextindent-atkobject">After Text Indent</property>
@@ -585,6 +589,7 @@
                     <property name="hexpand">True</property>
                     <property name="text">0</property>
                     <property name="adjustment">adjustment5</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="firstlineindent-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="sidebarparagraph|firstlineindent-atkobject">First Line Indent</property>

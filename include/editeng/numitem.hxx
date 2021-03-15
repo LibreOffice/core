@@ -172,7 +172,7 @@ public:
     const OUString& GetPrefix() const { return sPrefix;}
     void            SetSuffix(const OUString& rSet) { sSuffix = rSet;}
     const OUString& GetSuffix() const { return sSuffix;}
-    void            SetListFormat(const OUString& rSet) { sListFormat = rSet; }
+    void            SetListFormat(std::optional<OUString> oSet = std::nullopt) { sListFormat = oSet; }
     bool            HasListFormat() const { return sListFormat.has_value(); }
     const OUString& GetListFormat() const { return *sListFormat; }
 

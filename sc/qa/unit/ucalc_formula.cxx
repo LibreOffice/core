@@ -1432,6 +1432,115 @@ void Test::testFormulaCompilerImplicitIntersectionOperators()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaAnnotateTrimOnDoubleRefs()
+{
+    m_pDoc->InsertTab(0, "Test");
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    constexpr sal_Int32 nCols = 2;
+    constexpr sal_Int32 nRows = 5;
+
+    // Values in A1:B5
+    constexpr sal_Int32 aMat[nRows][nCols] = {
+        {4, 50},
+        {5, 30},
+        {4, 40},
+        {0, 70},
+        {5, 90}
+    };
+
+    for (sal_Int32 nCol = 0; nCol < nCols; ++nCol)
+    {
+        for (sal_Int32 nRow = 0; nRow < nRows; ++nRow)
+            m_pDoc->SetValue(nCol, nRow, 0, aMat[nRow][nCol]);
+    }
+
+    m_pDoc->SetValue(2, 0, 0, 4); // C1 = 4
+    m_pDoc->SetValue(3, 0, 0, 5); // D1 = 5
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    struct TestCase
+    {
+        OUString aFormula;
+        ScRange aTrimmableRange;
+        double fResult;
+        bool bMatrixFormula;
+    };
+
+    constexpr sal_Int32 nTestCases = 5;
+    TestCase aTestCases[nTestCases] = {
+        {
+            "=SUM(IF($C$1=A:A;B:B)/10*D1)",
+            ScRange(0, 0, 0, 0, 1048575, 0),
+            45.0,
+            true
+        },
+
+        {
+            "=SUM(IF(A:A=5;B:B)/10*D1)",
+            ScRange(0, 0, 0, 0, 1048575, 0),
+            60.0,
+            true
+        },
+
+        {
+            "=SUM(IF($C$1=A:A;B:B;B:B)/10*D1)",  // IF has else clause
+            ScRange(-1, -1, -1, -1, -1, -1),     // Has no trimmable double-ref.
+            140.0,
+            true
+        },
+
+        {
+            "=SUM(IF($C$1=A:A;B:B)/10*D1)",
+            ScRange(-1, -1, -1, -1, -1, -1),     // Has no trimmable double-ref.
+            25,
+            false                                // Not in matrix mode.
+        },
+
+        {
+            "=SUMPRODUCT(A:A=$C$1; 1-(A:A=$C$1))",
+            ScRange(-1, -1, -1, -1, -1, -1),     // Has no trimmable double-ref.
+            0.0,
+            false                                // Not in matrix mode.
+        },
+    };
+
+    for (sal_Int32 nTestIdx = 0; nTestIdx < nTestCases; ++nTestIdx)
+    {
+        TestCase& rTestCase = aTestCases[nTestIdx];
+        if (rTestCase.bMatrixFormula)
+            m_pDoc->InsertMatrixFormula(4, 0, 4, 0, aMark, rTestCase.aFormula); // Formula in E1
+        else
+            m_pDoc->SetString(ScAddress(4, 0, 0), rTestCase.aFormula);          // Formula in E1
+
+        std::string aMsgStart = "TestCase#" + std::to_string(nTestIdx + 1) + " : ";
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsgStart + "Incorrect formula result", rTestCase.fResult, m_pDoc->GetValue(ScAddress(4, 0, 0)));
+
+        ScTokenArray* pCode = getTokens(*m_pDoc, ScAddress(4, 0, 0));
+        sal_Int32 nLen = pCode->GetCodeLen();
+        FormulaToken** pRPNArray = pCode->GetCode();
+
+        for (sal_Int32 nIdx = 0; nIdx < nLen; ++nIdx)
+        {
+            FormulaToken* pTok = pRPNArray[nIdx];
+            if (pTok && pTok->GetType() == svDoubleRef)
+            {
+                ScRange aRange = pTok->GetDoubleRef()->toAbs(*m_pDoc, ScAddress(4, 0, 0));
+                if (aRange == rTestCase.aTrimmableRange)
+                    CPPUNIT_ASSERT_MESSAGE(aMsgStart + "Double ref is incorrectly flagged as not trimmable to data",
+                        pTok->GetDoubleRef()->IsTrimToData());
+                else
+                    CPPUNIT_ASSERT_MESSAGE(aMsgStart + "Double ref is incorrectly flagged as trimmable to data",
+                        !pTok->GetDoubleRef()->IsTrimToData());
+            }
+        }
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaRefUpdate()
 {
     m_pDoc->InsertTab(0, "Formula");

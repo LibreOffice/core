@@ -136,7 +136,7 @@ private:
     bool mbCountPhantoms;
     bool mbUsedByRedline;    /// it needs to export as part of tracked numbering change
 
-    const SvxNumberFormat::SvxNumPositionAndSpaceMode meDefaultNumberFormatPositionAndSpaceMode;
+    SvxNumberFormat::SvxNumPositionAndSpaceMode meDefaultNumberFormatPositionAndSpaceMode;
     OUString msDefaultListId;
     std::shared_ptr<SfxGrabBagItem> mpGrabBagItem; ///< Style InteropGrabBag.
 
@@ -152,6 +152,8 @@ public:
     SwNumRule& operator=( const SwNumRule& );
     bool operator==( const SwNumRule& ) const;
     bool operator!=( const SwNumRule& r ) const { return !(*this == r); }
+
+    void Reset( const OUString& rName );
 
     const SwNumFormat* GetNumFormat( sal_uInt16 i ) const;
     const SwNumFormat& Get( sal_uInt16 i ) const;

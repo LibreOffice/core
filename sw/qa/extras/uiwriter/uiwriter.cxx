@@ -392,6 +392,7 @@ public:
     void testSpellOnlineParameter();
     void testRedlineAutoCorrect();
     void testRedlineAutoCorrect2();
+    void testEmojiAutoCorrect();
 #if HAVE_FEATURE_PDFIUM
     void testInsertPdf();
 #endif
@@ -620,6 +621,7 @@ public:
     CPPUNIT_TEST(testSpellOnlineParameter);
     CPPUNIT_TEST(testRedlineAutoCorrect);
     CPPUNIT_TEST(testRedlineAutoCorrect2);
+    CPPUNIT_TEST(testEmojiAutoCorrect);
 #if HAVE_FEATURE_PDFIUM
     CPPUNIT_TEST(testInsertPdf);
 #endif
@@ -7598,11 +7600,14 @@ void SwUiWriterTest::testRedlineAutoCorrect()
 
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
-    // show tracked deletion
+    // show tracked deletion with enabled change tracking
     RedlineFlags const nMode(pWrtShell->GetRedlineFlags() | RedlineFlags::On);
     CPPUNIT_ASSERT(nMode & (RedlineFlags::ShowDelete | RedlineFlags::ShowInsert));
     pWrtShell->SetRedlineFlags(nMode);
     CPPUNIT_ASSERT(nMode & RedlineFlags::ShowDelete);
+
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
 
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
     pWrtShell->AutoCorrect(corr, ' ');
@@ -7630,7 +7635,8 @@ void SwUiWriterTest::testRedlineAutoCorrect()
     nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
 
     // This still keep the tracked deletion, capitalize only the visible text "s"
-    sReplaced = "tS ";
+    // with tracked deletion of the original character
+    sReplaced = "tsS ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 
     // repeat it with visible redlining and word auto replacement of "tset"
@@ -7697,6 +7703,39 @@ void SwUiWriterTest::testRedlineAutoCorrect2()
     pWrtShell->AutoCorrect(corr, ' ');
     nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     sReplaced = u"Lorem,... Lorem,… ";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+}
+
+void SwUiWriterTest::testEmojiAutoCorrect()
+{
+    SwDoc* pDoc = createDoc("redline-autocorrect2.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Emoji replacement (:snowman: -> ☃)
+
+    // without change tracking
+    CPPUNIT_ASSERT(!(pWrtShell->GetRedlineFlags() & RedlineFlags::On));
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+    pWrtShell->Insert(":snowman");
+    pWrtShell->AutoCorrect(corr, ':');
+    sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    OUString sReplaced = u"☃Lorem,";
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+
+    // with change tracking (showing redlines)
+    RedlineFlags const nMode(pWrtShell->GetRedlineFlags() | RedlineFlags::On);
+    CPPUNIT_ASSERT(nMode & (RedlineFlags::ShowDelete | RedlineFlags::ShowInsert));
+    pWrtShell->SetRedlineFlags(nMode);
+    CPPUNIT_ASSERT(nMode & RedlineFlags::On);
+    CPPUNIT_ASSERT(nMode & RedlineFlags::ShowDelete);
+
+    pWrtShell->Insert(":snowman");
+    pWrtShell->AutoCorrect(corr, ':');
+    sReplaced = u"☃☃Lorem,";
+    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+
+    // tdf#140674 This was ":snowman:" instead of autocorrect
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
@@ -7829,6 +7868,16 @@ void SwUiWriterTest::testTdf133524()
     pWrtShell->Insert(u".");
     pWrtShell->AutoCorrect(corr, '"');
     sReplaced += u".”";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // tdf#134940 avoid premature replacement of "--" in "-->"
+    pWrtShell->Insert(u" --");
+    pWrtShell->AutoCorrect(corr, '>');
+    OUString sReplaced2(sReplaced + u" -->");
+    // This was "–>" instead of "-->"
+    CPPUNIT_ASSERT_EQUAL(sReplaced2, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    pWrtShell->AutoCorrect(corr, ' ');
+    sReplaced += u" → ";
+    // This was "–>" instead of "→"
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 

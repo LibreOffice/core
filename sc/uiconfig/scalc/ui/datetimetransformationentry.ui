@@ -99,6 +99,7 @@
               <object class="GtkEntry" id="ed_columns">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="truncate-multiline">True</property>
                 <accessibility>
                   <relation type="labelled-by" target="label2"/>
                 </accessibility>

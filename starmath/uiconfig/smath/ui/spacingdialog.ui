@@ -278,6 +278,7 @@
                                     <property name="events">GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
                                     <property name="no_show_all">True</property>
                                     <property name="activates_default">True</property>
+                                    <property name="truncate-multiline">True</property>
                                     <property name="adjustment">adjustment2</property>
                                   </object>
                                   <packing>
@@ -292,6 +293,7 @@
                                     <property name="events">GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
                                     <property name="no_show_all">True</property>
                                     <property name="activates_default">True</property>
+                                    <property name="truncate-multiline">True</property>
                                     <property name="adjustment">adjustment3</property>
                                   </object>
                                   <packing>
@@ -351,6 +353,7 @@
                                     <property name="events">GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
                                     <property name="no_show_all">True</property>
                                     <property name="activates_default">True</property>
+                                    <property name="truncate-multiline">True</property>
                                     <property name="adjustment">adjustment4</property>
                                   </object>
                                   <packing>
@@ -396,6 +399,7 @@
                                     <property name="events">GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
                                     <property name="no_show_all">True</property>
                                     <property name="activates_default">True</property>
+                                    <property name="truncate-multiline">True</property>
                                     <property name="adjustment">adjustment1</property>
                                   </object>
                                   <packing>

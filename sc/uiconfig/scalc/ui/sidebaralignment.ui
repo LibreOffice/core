@@ -209,6 +209,7 @@
             <property name="halign">end</property>
             <property name="adjustment">adjustmentSpinDegrees</property>
             <property name="wrap">True</property>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="orientationdegrees-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes" context="sidebaralignment|orientationdegrees-atkobject">Text Orientation</property>
@@ -228,6 +229,7 @@
             <property name="halign">end</property>
             <property name="valign">center</property>
             <property name="adjustment">adjustmentIndent</property>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="leftindent-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes" context="sidebaralignment|leftindent-atkobject">Left Indent</property>

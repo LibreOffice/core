@@ -2084,6 +2084,60 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137771)
     CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139120)
+{
+    SwDoc* pDoc = createDoc("tdf54819.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // switch on "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+
+    SwWrtShell* const pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+
+    // turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert
+                                                      | RedlineFlags::ShowDelete);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // delete paragraph break
+    dispatchCommand(mxComponent, ".uno:GotoEndOfPara", {});
+    for (int i = 0; i < 6; ++i)
+    {
+        dispatchCommand(mxComponent, ".uno:Delete", {});
+    }
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum sit amet."), pTextDoc->getText()->getString());
+
+    for (int i = 0; i < 6; ++i)
+    {
+        dispatchCommand(mxComponent, ".uno:Undo", {});
+    }
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("dolor sit amet."), getParagraph(2)->getString());
+
+    // Dump the rendering of the first page as an XML file.
+    SwDocShell* pShell = pTextDoc->GetDocShell();
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // This was the 3, containing the text "$2" instead of nothing
+    assertXPath(pXmlDoc, "/metafile/push/push/push/textarray", 2);
+
+    // switch off "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testJoinParaChangesInMargin)
 {
     load(DATA_DIRECTORY, "tdf54819.fodt");
@@ -2119,6 +2173,52 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testJoinParaChangesInMargin)
     // this would crash due to bad redline range
     dispatchCommand(mxComponent, ".uno:Undo", {});
     CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum"), getParagraph(1)->getString());
+
+    // switch off "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139127)
+{
+    load(DATA_DIRECTORY, "tdf139127.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // switch on "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+
+    SwWrtShell* const pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+
+    // turn on red-lining and show changes
+    SwDoc* pDoc = pWrtShell->GetDoc();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert
+                                                      | RedlineFlags::ShowDelete);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // two pages
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    // delete the last two characters with a page break at the end of the document
+    dispatchCommand(mxComponent, ".uno:GoToEndOfDoc", {});
+    dispatchCommand(mxComponent, ".uno:SwBackspace", {});
+    dispatchCommand(mxComponent, ".uno:SwBackspace", {});
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT_EQUAL(OUString("First page"), pTextDoc->getText()->getString());
+
+    // Undo
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    // this would crash due to bad redline range
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    CPPUNIT_ASSERT_EQUAL(OUString("First page"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("B"), getParagraph(2)->getString());
 
     // switch off "Show changes in margin" mode
     dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});

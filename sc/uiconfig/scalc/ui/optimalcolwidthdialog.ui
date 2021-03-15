@@ -105,6 +105,7 @@
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="digits">2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="value-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="optimalcolwidthdialog|extended_tip|value">Defines additional spacing between the longest entry in a column and the vertical column borders.</property>

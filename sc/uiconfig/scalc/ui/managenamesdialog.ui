@@ -265,6 +265,7 @@
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
                         <property name="width_chars">42</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="range-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="managenamesdialog|extended_tip|range">The reference of the selected area name is shown here as an absolute value.</property>
@@ -321,6 +322,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="name-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="managenamesdialog|extended_tip|name">Enter the name of the area for which you want to define a reference or a formula expression.</property>

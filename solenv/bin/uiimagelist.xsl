@@ -17,7 +17,7 @@
 
     <xsl:template match="@*|text()|processing-instruction()|comment()"/>
 
-    <xsl:template match="property[@name='icon_name'] | property[@name='pixbuf']">
+    <xsl:template match="property[@name='icon_name'] | property[@name='icon-name'] | property[@name='pixbuf']">
         <xsl:variable name="inpath" select="normalize-space(.)"/>
         <xsl:variable name="outpath">
             <xsl:choose>

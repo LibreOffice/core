@@ -83,6 +83,12 @@ private:
     DECL_LINK(implValueSetHdl, ValueSet*, void);
     DECL_LINK(implCheckBoxHdl, weld::ToggleButton&, void);
 
+public:
+    weld::Widget* GetInitialFocusWidget()
+    {
+        return m_xValueSet->GetDrawingArea();
+    }
+
 private:
     ViewShellBase& mrBase;
 
@@ -105,6 +111,7 @@ public:
             "modules/simpress/ui/tabledesignpanel.ui", css::uno::Reference<css::frame::XFrame>())
         , m_xImpl(new TableDesignWidget(*m_xBuilder, rBase))
     {
+        m_pInitialFocusWidget = m_xImpl->GetInitialFocusWidget();
     }
     virtual void dispose() override
     {

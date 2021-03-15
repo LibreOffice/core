@@ -1092,14 +1092,14 @@ std::unique_ptr<weld::TreeIter> SbaTableQueryBrowser::getObjectEntry(const OUStr
 
         weld::TreeView& rTreeView = m_pTreeView->GetWidget();
 
-        if (ppDataSourceEntry)
-        {
-            // (caller wants to have it...)
-            *ppDataSourceEntry = rTreeView.make_iterator(xDataSource.get());
-        }
-
         if (xDataSource)
         {
+            if (ppDataSourceEntry)
+            {
+                // (caller wants to have it...)
+                *ppDataSourceEntry = rTreeView.make_iterator(xDataSource.get());
+            }
+
             // expand if required so
             if (bExpandAncestors)
                 rTreeView.expand_row(*xDataSource);
@@ -1121,14 +1121,14 @@ std::unique_ptr<weld::TreeIter> SbaTableQueryBrowser::getObjectEntry(const OUStr
                 }
             }
 
-            if (ppContainerEntry)
-            {
-                // (caller wants to have it...)
-                *ppContainerEntry = rTreeView.make_iterator(xCommandType.get());
-            }
-
             if (xCommandType)
             {
+                if (ppContainerEntry)
+                {
+                    // (caller wants to have it...)
+                    *ppContainerEntry = rTreeView.make_iterator(xCommandType.get());
+                }
+
                 rTreeView.make_unsorted();
 
                 // expand if required so

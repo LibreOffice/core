@@ -91,6 +91,8 @@ SdNavigatorWin::SdNavigatorWin(vcl::Window* pParent, SfxBindings* pInBindings)
     mxLbDocs->connect_changed(LINK(this, SdNavigatorWin, SelectDocumentHdl));
 
     SetDragImage();
+
+    m_pInitialFocusWidget = mxToolbox.get();
 }
 
 void SdNavigatorWin::SetUpdateRequestFunctor(const UpdateRequestFunctor& rUpdateRequest)

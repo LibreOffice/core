@@ -76,6 +76,7 @@ public:
     void testRotation();
     void testTextAutoRotation();
     void testPyramid();
+    void testPyramidOneChild();
     void testChevron();
     void testCycle();
     void testvenndiagram();
@@ -115,6 +116,7 @@ public:
     void testLinearRuleVert();
     void testAutofitSync();
     void testSnakeRows();
+    void testCompositeInferRight();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -127,6 +129,7 @@ public:
     CPPUNIT_TEST(testRotation);
     CPPUNIT_TEST(testTextAutoRotation);
     CPPUNIT_TEST(testPyramid);
+    CPPUNIT_TEST(testPyramidOneChild);
     CPPUNIT_TEST(testChevron);
     CPPUNIT_TEST(testCycle);
     CPPUNIT_TEST(testHierarchy);
@@ -166,6 +169,7 @@ public:
     CPPUNIT_TEST(testLinearRuleVert);
     CPPUNIT_TEST(testAutofitSync);
     CPPUNIT_TEST(testSnakeRows);
+    CPPUNIT_TEST(testCompositeInferRight);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -449,6 +453,19 @@ void SdImportTestSmartArt::testBasicProcess()
 void SdImportTestSmartArt::testPyramid()
 {
     //FIXME : so far this only introduce the test document, but the actual importer was not fixed yet.
+}
+
+void SdImportTestSmartArt::testPyramidOneChild()
+{
+    // Load a document with a pyra algorithm in it.
+    // Without the accompanying fix in place, this test would have crashed.
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/smartart-pyramid-1child.pptx"), PPTX);
+    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText(getChildShape(getChildShape(xGroup, 1), 1),
+                                           uno::UNO_QUERY);
+    // Verify that the text of the only child is imported correctly.
+    CPPUNIT_ASSERT_EQUAL(OUString("A"), xText->getString());
 }
 
 void SdImportTestSmartArt::testChevron()
@@ -1705,6 +1722,30 @@ void SdImportTestSmartArt::testSnakeRows()
     // - Actual  : 3
     // i.e. an unwanted row appeared.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aYPositions.size());
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testCompositeInferRight()
+{
+    // Load a smartart which contains a composite algorithm.
+    // One contraint says that the left of the text should be the right of the image.
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/smartart-composite-infer-right.pptx"),
+        PPTX);
+
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xMiddle = getChildShape(xDiagram, 1);
+    uno::Reference<drawing::XShape> xImage = getChildShape(xMiddle, 1);
+    uno::Reference<drawing::XShape> xText = getChildShape(xMiddle, 2);
+    sal_Int32 nRightOfImage = xImage->getPosition().X + xImage->getSize().Width;
+    sal_Int32 nLeftOfText = xText->getPosition().X;
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 7925
+    // - Actual  : 2430
+    // i.e. the text was overlapping with the image.
+    CPPUNIT_ASSERT_GREATER(nRightOfImage, nLeftOfText);
 
     xDocShRef->DoClose();
 }

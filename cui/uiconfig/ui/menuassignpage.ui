@@ -421,6 +421,7 @@
             <property name="can_focus">True</property>
             <property name="margin_bottom">4</property>
             <property name="placeholder_text" translatable="yes" context="menuassignpage|searchEntry">Type to search</property>
+            <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="searchEntry-atkobject">
                 <property name="AtkObject::accessible-description" translatable="yes" context="menuassignpage|extended_tip|searchEntry">Enter a string in the text box to narrow the search of commands.</property>

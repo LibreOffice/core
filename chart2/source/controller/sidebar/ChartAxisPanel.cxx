@@ -219,6 +219,8 @@ ChartAxisPanel::ChartAxisPanel(
     , mbModelValid(true)
 {
     Initialize();
+
+    m_pInitialFocusWidget = mxCBShowLabel.get();
 }
 
 ChartAxisPanel::~ChartAxisPanel()

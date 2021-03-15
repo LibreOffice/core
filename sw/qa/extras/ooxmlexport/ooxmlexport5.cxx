@@ -749,6 +749,19 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf138612, "tdf138612.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[6]/w:tc[2]/w:tcPr/w:vMerge", 0);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf140597, "tdf140597.docx")
+{
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+
+    // There were missing tblPrEx table exception borders
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:tcBorders/w:top");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:tcBorders/w:start");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[1]/w:tcPr/w:tcBorders/w:top");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[1]/w:tcPr/w:tcBorders/w:start");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:tcPr/w:tcBorders/w:top");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:tcPr/w:tcBorders/w:start");
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128646, "tdf128646.docx")
 {
     // The problem was that not hidden shapes anchored to empty hidden paragraphs were imported as hidden.

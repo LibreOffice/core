@@ -251,6 +251,7 @@
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">50</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="eddataarea-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="consolidatedialog|extended_tip|eddataarea">Specifies the cell range that you want to consolidate with the cell ranges listed in the Consolidation ranges box. Select a cell range in a sheet, and then click Add. You can also select the name of a predefined cell from the Source data range list.</property>
@@ -318,6 +319,7 @@
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">50</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="eddestarea-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="consolidatedialog|extended_tip|eddestarea">Displays the first cell in the range where the consolidation results will be displayed.</property>

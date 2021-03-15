@@ -169,6 +169,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="editable">False</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="xalign">0.5</property>
                       </object>
                       <packing>

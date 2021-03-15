@@ -741,7 +741,16 @@ namespace pcr
 
     IMPL_LINK_NOARG(OMultilineEditControl, TextViewModifiedHdl, weld::TextView&, void)
     {
-        m_xEntry->set_text(m_xTextView->get_text());
+        // tdf#139070 during editing update the entry to look like how it will
+        // look once editing is finished so that the default behaviour of vcl
+        // to strip newlines and the default behaviour of gtk to show a newline
+        // symbol is suppressed
+        OUString sText = m_xTextView->get_text();
+        auto aSeq = lcl_convertMultiLineToList(sText);
+        if (aSeq.getLength() > 1)
+            m_xEntry->set_text(lcl_convertListToDisplayText(aSeq));
+        else
+            m_xEntry->set_text(sText);
         CheckEntryTextViewMisMatch();
         setModified();
     }

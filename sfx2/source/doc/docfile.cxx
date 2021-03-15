@@ -3620,7 +3620,7 @@ bool SfxMedium::SetWritableForUserOnly( const OUString& aURL )
 namespace
 {
 /// Get the parent directory of a temporary file for output purposes.
-OUString GetLogicBase(std::unique_ptr<SfxMedium_Impl> const & pImpl)
+OUString GetLogicBase(const INetURLObject& rURL, std::unique_ptr<SfxMedium_Impl> const & pImpl)
 {
     OUString aLogicBase;
 
@@ -3631,15 +3631,12 @@ OUString GetLogicBase(std::unique_ptr<SfxMedium_Impl> const & pImpl)
     (void) pImpl;
 #else
 
-    if (comphelper::isFileUrl(pImpl->m_aLogicName) && !pImpl->m_pInStream)
+    if (rURL.GetProtocol() == INetProtocol::File && !pImpl->m_pInStream)
     {
         // Try to create the temp file in the same directory when storing.
-        sal_Int32 nOffset = pImpl->m_aLogicName.lastIndexOf("/");
-        if (nOffset != -1)
-            aLogicBase = pImpl->m_aLogicName.copy(0, nOffset);
-        if (aLogicBase == "file://")
-            // Doesn't make sense.
-            aLogicBase.clear();
+        INetURLObject aURL(rURL);
+        aURL.removeSegment();
+        aLogicBase = aURL.GetMainURL(INetURLObject::DecodeMechanism::WithCharset);
     }
 
     if (pImpl->m_bHasEmbeddedObjects)
@@ -3663,7 +3660,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
         pImpl->m_aName.clear();
     }
 
-    OUString aLogicBase = GetLogicBase(pImpl);
+    OUString aLogicBase = GetLogicBase(GetURLObject(), pImpl);
     pImpl->pTempFile.reset( new ::utl::TempFile(aLogicBase.isEmpty() ? nullptr : &aLogicBase) );
     pImpl->pTempFile->EnableKillingFile();
     pImpl->m_aName = pImpl->pTempFile->GetFileName();
@@ -3759,7 +3756,7 @@ void SfxMedium::CreateTempFileNoCopy()
     // this call always replaces the existing temporary file
     pImpl->pTempFile.reset();
 
-    OUString aLogicBase = GetLogicBase(pImpl);
+    OUString aLogicBase = GetLogicBase(GetURLObject(), pImpl);
     pImpl->pTempFile.reset( new ::utl::TempFile(aLogicBase.isEmpty() ? nullptr : &aLogicBase) );
     pImpl->pTempFile->EnableKillingFile();
     pImpl->m_aName = pImpl->pTempFile->GetFileName();

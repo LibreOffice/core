@@ -308,12 +308,17 @@ void GalleryBrowser1::ImplExecute(const OString &rIdent)
     }
 }
 
-void GalleryBrowser1::GrabFocus()
+weld::Widget* GalleryBrowser1::GetInitialFocusWidget()
 {
     if (mxNewTheme->get_sensitive())
-        mxNewTheme->grab_focus();
+        return mxNewTheme.get();
     else
-        mxThemes->grab_focus();
+        return mxThemes.get();
+}
+
+void GalleryBrowser1::GrabFocus()
+{
+    GetInitialFocusWidget()->grab_focus();
 }
 
 void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )

@@ -91,6 +91,8 @@ sal_uInt16 MSWordExportBase::OverrideNumRule(
     const sal_uInt16 absnumdef = rListId == rAbstractRule.GetDefaultListId()
         ? GetNumberingId(rAbstractRule)
         : DuplicateAbsNum(rListId, rAbstractRule);
+    assert(numdef != USHRT_MAX);
+    assert(absnumdef != USHRT_MAX);
     auto const mapping = std::make_pair(numdef, absnumdef);
 
     auto it = m_OverridingNums.insert(std::make_pair(m_pUsedNumTable->size(), mapping));
@@ -120,7 +122,7 @@ sal_uInt16 MSWordExportBase::GetNumberingId( const SwNumRule& rNumRule )
         for ( sal_uInt16 n = m_pUsedNumTable->size(); n; )
         {
             const SwNumRule& rRule = *(*m_pUsedNumTable)[ --n ];
-            if ( !SwDoc::IsUsed( rRule ) )
+            if (!m_rDoc.IsUsed(rRule))
             {
                 m_pUsedNumTable->erase( m_pUsedNumTable->begin() + n );
             }

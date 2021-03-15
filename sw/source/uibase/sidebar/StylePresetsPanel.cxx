@@ -152,6 +152,8 @@ StylePresetsPanel::StylePresetsPanel(vcl::Window* pParent,
     mxValueSet->SetDoubleClickHdl(LINK(this, StylePresetsPanel, DoubleClickHdl));
 
     RefreshList();
+
+    m_pInitialFocusWidget = mxValueSet->GetDrawingArea();
 }
 
 void StylePresetsPanel::RefreshList()

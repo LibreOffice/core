@@ -528,7 +528,7 @@ namespace
         if( !pSysData )
             return cairo::X11SysData();
         else
-            return cairo::X11SysData(*pSysData);
+            return cairo::X11SysData(*pSysData, rWindow.ImplGetFrame());
     }
 
     cairo::X11SysData getSysData( const VirtualDevice& rVirDev )

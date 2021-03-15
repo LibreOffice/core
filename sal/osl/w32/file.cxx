@@ -657,15 +657,15 @@ oslFileError SAL_CALL osl_openFile(
     if (result != osl_File_E_None)
         return result;
 
-    DWORD dwAccess = GENERIC_READ, dwShare = FILE_SHARE_READ, dwCreation = 0;
+    // tdf126742 use FILE_SHARE_WRITE to get closer to non-Windows plattform behavoiur,
+    // for details and discussion see task please
+    DWORD dwAccess = GENERIC_READ, dwShare = FILE_SHARE_READ | FILE_SHARE_WRITE, dwCreation = 0;
 
     if (uFlags & osl_File_OpenFlag_Write)
         dwAccess |= GENERIC_WRITE;
-    else
-        dwShare  |= FILE_SHARE_WRITE;
 
     if (uFlags & osl_File_OpenFlag_NoLock)
-        dwShare  |= FILE_SHARE_WRITE | FILE_SHARE_DELETE;
+        dwShare  |= FILE_SHARE_DELETE;
 
     if (uFlags & osl_File_OpenFlag_Create)
         dwCreation |= CREATE_NEW;

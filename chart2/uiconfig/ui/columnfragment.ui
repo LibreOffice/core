@@ -22,6 +22,7 @@
         <property name="width_request">5</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
+        <property name="truncate-multiline">True</property>
         <property name="width_chars">1</property>
       </object>
       <packing>

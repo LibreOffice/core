@@ -780,18 +780,6 @@ void SvxTextEditSourceImpl::UpdateData()
             {
                 if( mpOutliner->GetParagraphCount() != 1 || mpOutliner->GetEditEngine().GetTextLen( 0 ) )
                 {
-                    if( mpOutliner->GetParagraphCount() > 1 )
-                    {
-                        if (pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_TITLETEXT)
-                        {
-                            while( mpOutliner->GetParagraphCount() > 1 )
-                            {
-                                ESelection aSel( 0,mpOutliner->GetEditEngine().GetTextLen( 0 ), 1,0 );
-                                mpOutliner->QuickInsertLineBreak( aSel );
-                            }
-                        }
-                    }
-
                     pTextObj->NbcSetOutlinerParaObjectForText( mpOutliner->CreateParaObject(), mpText );
                 }
                 else

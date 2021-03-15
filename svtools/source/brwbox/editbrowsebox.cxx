@@ -192,7 +192,7 @@ namespace svt
         if (IsEditing() && Controller()->GetWindow().IsVisible())
             Controller()->GetWindow().GrabFocus();
 
-        DetermineFocus( getRealGetFocusFlags( this ) );
+        DetermineFocus(getRealGetFocusFlags(this));
     }
 
 
@@ -413,6 +413,10 @@ namespace svt
         }
     }
 
+    void EditBrowseBox::ChildFocusIn()
+    {
+        DetermineFocus(getRealGetFocusFlags(this));
+    }
 
     void EditBrowseBox::MouseButtonDown(const BrowserMouseEvent& rEvt)
     {
@@ -645,7 +649,7 @@ namespace svt
         switch (rEvt.GetType())
         {
             case MouseNotifyEvent::GETFOCUS:
-                DetermineFocus( getRealGetFocusFlags( this ) );
+                DetermineFocus(getRealGetFocusFlags(this));
                 break;
 
             case MouseNotifyEvent::LOSEFOCUS:

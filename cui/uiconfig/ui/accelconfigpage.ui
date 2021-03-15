@@ -364,6 +364,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="margin_bottom">5</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="placeholder_text" translatable="yes" context="accelconfigpage|searchEntry">Type to search</property>
                   </object>
                   <packing>

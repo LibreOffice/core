@@ -18,6 +18,7 @@
         <property name="can_focus">True</property>
         <property name="hexpand">True</property>
         <property name="adjustment">adjustment1</property>
+        <property name="truncate-multiline">True</property>
         <property name="digits">2</property>
       </object>
       <packing>

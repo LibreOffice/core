@@ -68,6 +68,7 @@ class SVXCORE_DLLPUBLIC SdrObjEditView : public SdrGlueEditView, public EditView
     virtual void EditViewInvalidate(const tools::Rectangle& rRect) override;
     virtual void EditViewSelectionChange() override;
     virtual OutputDevice& EditViewOutputDevice() const override;
+    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget() override;
     virtual void EditViewInputContext(const InputContext& rInputContext) override;
     virtual void EditViewCursorRect(const tools::Rectangle& rRect, int nExtTextInputWidth) override;
 

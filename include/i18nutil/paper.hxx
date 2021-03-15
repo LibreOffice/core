@@ -134,7 +134,7 @@ public:
     tools::Long getWidth() const { return m_nPaperWidth; }
     tools::Long getHeight() const { return m_nPaperHeight; }
     bool sloppyEqual(const PaperInfo& rOther) const;
-    void doSloppyFit();
+    void doSloppyFit(bool bAlsoTryRotated = false);
 
     static PaperInfo getSystemDefaultPaper();
     static PaperInfo getDefaultPaperForLocale(const css::lang::Locale& rLocale);

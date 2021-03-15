@@ -260,6 +260,7 @@
                         <property name="toolbar_style">icons</property>
                         <child>
                           <object class="GtkToggleToolButton" id="contenttoggle">
+                            <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="tooltip_text" translatable="yes" context="navigatorpanel|contenttoggle|tooltip_text">Toggle Master View</property>
                             <property name="icon_name">sw/res/sc20244.png</property>
@@ -375,6 +376,7 @@
                                 <property name="hexpand">True</property>
                                 <property name="adjustment">adjustment1</property>
                                 <property name="value">1</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="spinbutton-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|spinbutton">Enter page number and press Enter. Use arrows to move to next page forward or backward.</property>

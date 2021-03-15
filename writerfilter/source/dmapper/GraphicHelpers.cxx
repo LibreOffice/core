@@ -295,6 +295,20 @@ sal_Int32 GraphicZOrderHelper::findZOrder( sal_Int32 relativeHeight, bool bOldSt
             return 0;
         --it;
         itemZOrderOffset = 1; // after the topmost
+
+        // Check if this shape has a textbox. If so, the textbox will have its own ZOrder, so
+        // suggest a larger offset.
+        bool bTextBox = false;
+        uno::Reference<beans::XPropertySet> xShape = it->second;
+        uno::Reference<beans::XPropertySetInfo> xInfo = xShape->getPropertySetInfo();
+        if (xInfo->hasPropertyByName("TextBox"))
+        {
+            xShape->getPropertyValue("TextBox") >>= bTextBox;
+        }
+        if (bTextBox)
+        {
+            ++itemZOrderOffset;
+        }
     }
     // SwXFrame::getPropertyValue throws uno::RuntimeException
     // when its GetFrameFormat() returns nullptr

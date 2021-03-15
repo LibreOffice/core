@@ -111,6 +111,7 @@
                     <property name="editable">False</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">32</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="oldname-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="renameautotextdialog|extended_tip|oldname">Displays the current name of the selected AutoText item.</property>
@@ -130,6 +131,7 @@
                     <property name="max_length">60</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">32</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="newname-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="renameautotextdialog|extended_tip|newname">Type the new name for the selected AutoText component.</property>
@@ -191,6 +193,7 @@
                     <property name="editable">False</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">6</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="oldsc-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="renameautotextdialog|extended_tip|oldsc">Assigns a shortcut to the selected AutoText entry.</property>
@@ -208,6 +211,7 @@
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">6</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="newsc-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="renameautotextdialog|extended_tip|newsc">Assigns a shortcut to the selected AutoText entry.</property>

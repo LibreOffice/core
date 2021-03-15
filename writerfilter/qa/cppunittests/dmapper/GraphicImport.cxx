@@ -165,6 +165,27 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapPolyCrop)
     // were wrapping around the image, not only 2 as Word does it.
     CPPUNIT_ASSERT_EQUAL(2368., aPolygon.getB2DPoint(0).getY());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTextboxTextline)
+{
+    // Load a document with a shape with a textbox.
+    // The shape's vertical relation is <wp:positionV relativeFrom="line">.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "textbox-textline.docx";
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    sal_Int16 nActual{};
+    CPPUNIT_ASSERT(xShape->getPropertyValue("VertOrientRelation") >>= nActual);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0 (text::RelOrientation::FRAME)
+    // - Actual  : 9 (text::RelOrientation::TEXT_LINE)
+    // i.e. the relation had a value which doesn't make sense for to-para anchoring (only for
+    // to-char anchoring).
+    sal_Int16 nExpected = text::RelOrientation::FRAME;
+    CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

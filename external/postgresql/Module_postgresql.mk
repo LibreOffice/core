@@ -14,4 +14,10 @@ $(eval $(call gb_Module_add_targets,postgresql,\
 	UnpackedTarball_postgresql \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Module_add_targets,postgresql,\
+	ExternalPackage_postgresql \
+))
+endif # WNT
+
 # vim: set noet sw=4 ts=4:

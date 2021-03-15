@@ -122,6 +122,7 @@
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="digits">1</property>
                   </object>
                   <packing>
@@ -138,6 +139,7 @@
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
                     <property name="adjustment">adjustment2</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>

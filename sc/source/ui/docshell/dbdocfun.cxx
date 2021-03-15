@@ -574,6 +574,8 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         ScInputOptions aInputOption = SC_MOD()->GetInputOptions();
         bool bUpdateRefs = aInputOption.GetSortRefUpdate();
         ScProgress aProgress(&rDocShell, ScResId(STR_PROGRESS_SORTING), 0, true);
+        if (!bRepeatQuery)
+            bRepeatQuery = rDoc.HasHiddenRows(aLocalParam.nRow1, aLocalParam.nRow2, nTab);
         rDoc.Sort(nTab, aLocalParam, bRepeatQuery, bUpdateRefs, &aProgress, &aUndoParam);
     }
 

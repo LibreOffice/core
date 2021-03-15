@@ -439,10 +439,20 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
     tools::Long nWrX=0;
     tools::Long nWrY=0;
     Point aOrg(aPgOrg);
-    tools::Long x1=GetPage()->GetLeftBorder()+1+nWrX;
-    tools::Long x2=GetPage()->GetWidth()-GetPage()->GetRightBorder()-1+nWrY;
-    tools::Long y1=GetPage()->GetUpperBorder()+1+nWrX;
-    tools::Long y2=GetPage()->GetHeight()-GetPage()->GetLowerBorder()-1+nWrY;
+    tools::Long x1 = 0;
+    tools::Long x2 = 0;
+    if (GetPage()->GetWidth() < 0) // ScDrawPage of RTL sheet
+    {
+        x1 = GetPage()->GetWidth() + GetPage()->GetLeftBorder() + 1;
+        x2 = - GetPage()->GetRightBorder() - 1;
+    }
+    else
+    {
+        x1 = GetPage()->GetLeftBorder() + 1;
+        x2 = GetPage()->GetWidth() - GetPage()->GetRightBorder() - 1;
+    }
+    tools::Long y1 = GetPage()->GetUpperBorder() + 1;
+    tools::Long y2 = GetPage()->GetHeight() - GetPage()->GetLowerBorder() - 1;
     const SdrPageGridFrameList* pFrames=GetPage()->GetGridFrameList(this,nullptr);
 
     sal_uInt16 nGridPaintCnt=1;

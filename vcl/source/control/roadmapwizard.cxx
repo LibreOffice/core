@@ -827,9 +827,9 @@ namespace vcl
         m_xRoadmapImpl->pRoadmap->InsertRoadmapItem(nItemIndex, rText, nItemId, bEnable);
     }
 
-    void RoadmapWizard::SelectRoadmapItemByID(int nItemId)
+    void RoadmapWizard::SelectRoadmapItemByID(int nItemId, bool bGrabFocus)
     {
-        m_xRoadmapImpl->pRoadmap->SelectRoadmapItemByID(nItemId);
+        m_xRoadmapImpl->pRoadmap->SelectRoadmapItemByID(nItemId, bGrabFocus);
     }
 
     void RoadmapWizard::DeleteRoadmapItems()

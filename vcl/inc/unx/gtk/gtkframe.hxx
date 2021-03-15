@@ -462,6 +462,8 @@ public:
     // returns system data (most prominent: window handle)
     virtual const SystemEnvData*    GetSystemData() const override;
 
+    virtual void                ResolveWindowHandle(SystemEnvData& rData) const override;
+
     // get current modifier and button mask
     virtual SalPointerState     GetPointerState() override;
 
@@ -503,7 +505,7 @@ public:
 
     static GtkSalFrame         *getFromWindow( GtkWidget *pWindow );
 
-    sal_uIntPtr                 GetNativeWindowHandle(GtkWidget *pWidget);
+    sal_uIntPtr                 GetNativeWindowHandle(GtkWidget *pWidget) const;
     virtual sal_uIntPtr         GetNativeWindowHandle() override;
 
     //Call the usual SalFrame Callback, but catch uno exceptions and delegate

@@ -139,6 +139,7 @@ void PageFormatPanel::dispose()
 void PageFormatPanel::Initialize()
 {
     mxPaperSizeBox->FillPaperSizeEntries( PaperSizeApp::Std );
+    maPaperSizeController.SetFallbackCoreMetric(MapUnit::MapTwip);
     meUnit = maPaperSizeController.GetCoreMetric();
     mxPaperWidth->SetFieldUnit(meFUnit);
     mxPaperHeight->SetFieldUnit(meFUnit);

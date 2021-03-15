@@ -1314,6 +1314,11 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
             aMimeType = "audio/x-wav";
             eMediaType = Relationship::AUDIO;
         }
+        else if (aExtension.equalsIgnoreAsciiCase(".m4a"))
+        {
+            aMimeType = "audio/mp4";
+            eMediaType = Relationship::AUDIO;
+        }
     }
 
     OUString aVideoFileRelId;
@@ -1593,27 +1598,40 @@ void DrawingML::WritePattFill(const Reference<XPropertySet>& rXPropSet, const cs
         mpFS->endElementNS( XML_a , XML_pattFill );
 }
 
-void DrawingML::WriteGraphicCropProperties(uno::Reference<beans::XPropertySet> const & rXPropSet, Size const & rOriginalSize, MapMode const & rMapMode)
+void DrawingML::WriteGraphicCropProperties(uno::Reference<beans::XPropertySet> const & rXPropSet,
+                                           Size const & rOriginalSize,
+                                           MapMode const & rMapMode)
 {
     if (!GetProperty(rXPropSet, "GraphicCrop"))
         return;
 
-    Size aOriginalSize(rOriginalSize);
-
-    // GraphicCrop is in mm100, so in case the original size is in pixels, convert it over.
-    if (rMapMode.GetMapUnit() == MapUnit::MapPixel)
-        aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize, MapMode(MapUnit::Map100thMM));
-
     css::text::GraphicCrop aGraphicCropStruct;
     mAny >>= aGraphicCropStruct;
 
-    if ( (0 != aGraphicCropStruct.Left) || (0 != aGraphicCropStruct.Top) || (0 != aGraphicCropStruct.Right) || (0 != aGraphicCropStruct.Bottom) )
+    if(GetProperty(rXPropSet, "CustomShapeGeometry"))
     {
-        mpFS->singleElementNS( XML_a, XML_srcRect,
-            XML_l, OString::number(rtl::math::round(aGraphicCropStruct.Left * 100000.0 / aOriginalSize.Width())),
-            XML_t, OString::number(rtl::math::round(aGraphicCropStruct.Top * 100000.0 / aOriginalSize.Height())),
-            XML_r, OString::number(rtl::math::round(aGraphicCropStruct.Right * 100000.0 / aOriginalSize.Width())),
-            XML_b, OString::number(rtl::math::round(aGraphicCropStruct.Bottom * 100000.0 / aOriginalSize.Height())) );
+    // tdf#134210 GraphicCrop property is handled in import filter because of LibreOffice has not core
+    // feature. We croped the bitmap physically and MSO shouldn't crop bitmap one more time. When we
+    // have core feature for graphic cropping in custom shapes, we should uncomment the code anymore.
+
+        mpFS->singleElementNS( XML_a, XML_srcRect);
+    }
+    else
+    {
+        Size aOriginalSize(rOriginalSize);
+
+        // GraphicCrop is in mm100, so in case the original size is in pixels, convert it over.
+        if (rMapMode.GetMapUnit() == MapUnit::MapPixel)
+            aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize, MapMode(MapUnit::Map100thMM));
+
+        if ( (0 != aGraphicCropStruct.Left) || (0 != aGraphicCropStruct.Top) || (0 != aGraphicCropStruct.Right) || (0 != aGraphicCropStruct.Bottom) )
+        {
+            mpFS->singleElementNS( XML_a, XML_srcRect,
+                XML_l, OString::number(rtl::math::round(aGraphicCropStruct.Left * 100000.0 / aOriginalSize.Width())),
+                XML_t, OString::number(rtl::math::round(aGraphicCropStruct.Top * 100000.0 / aOriginalSize.Height())),
+                XML_r, OString::number(rtl::math::round(aGraphicCropStruct.Right * 100000.0 / aOriginalSize.Width())),
+                XML_b, OString::number(rtl::math::round(aGraphicCropStruct.Bottom * 100000.0 / aOriginalSize.Height())) );
+        }
     }
 }
 
@@ -3576,7 +3594,33 @@ bool DrawingML::WriteCustomGeometry(
                             }
                             case drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO :
                             {
-                                nPairIndex += 2;
+                                if (nPairIndex + 1 >= aPairs.getLength())
+                                    bOK = false;
+                                else
+                                {
+                                    const EnhancedCustomShape2d aCustoShape2d(
+                                        const_cast<SdrObjCustomShape&>(rSdrObjCustomShape));
+                                    double fWR = 0.0;
+                                    aCustoShape2d.GetParameter(fWR, aPairs[nPairIndex].First, false,
+                                                               false);
+                                    double fHR = 0.0;
+                                    aCustoShape2d.GetParameter(fHR, aPairs[nPairIndex].Second,
+                                                               false, false);
+                                    double fStartAngle = 0.0;
+                                    aCustoShape2d.GetParameter(
+                                        fStartAngle, aPairs[nPairIndex + 1].First, false, false);
+                                    sal_Int32 nStartAng(std::lround(fStartAngle * 60000));
+                                    double fSwingAng = 0.0;
+                                    aCustoShape2d.GetParameter(
+                                        fSwingAng, aPairs[nPairIndex + 1].Second, false, false);
+                                    sal_Int32 nSwingAng(std::lround(fSwingAng * 60000));
+                                    mpFS->singleElement(FSNS(XML_a, XML_arcTo),
+                                                        XML_wR, OString::number(fWR),
+                                                        XML_hR, OString::number(fHR),
+                                                        XML_stAng, OString::number(nStartAng),
+                                                        XML_swAng, OString::number(nSwingAng));
+                                    nPairIndex += 2;
+                                }
                                 break;
                             }
                             default:

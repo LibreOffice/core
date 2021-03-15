@@ -178,6 +178,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="replace-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="replace">This input field is only available if you are editing an exception dictionary or a language-dependent custom dictionary. In exception dictionaries, the field shows the alternative suggestion for the current word in the "Word" text box. In language-dependent custom dictionaries, the field contains a known root word, as a model of affixation of the new word or its usage in compound words. For example, in a German custom dictionary, the new word “Litschi” (lychee) with the model word “Gummi” (gum) will result recognition of “Litschis” (lychees), “Litschibaum” (lychee tree), “Litschifrucht” (lychee fruit) etc.</property>
@@ -195,6 +196,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="word-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="word">You can type a new word for inclusion in the dictionary. In the list below you will see the contents of the current custom dictionary.</property>

@@ -18,6 +18,7 @@
         <property name="has_frame">False</property>
         <property name="activates_default">True</property>
         <property name="width_chars">1</property>
+        <property name="truncate-multiline">True</property>
         <property name="xalign">0.5</property>
       </object>
       <packing>

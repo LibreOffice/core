@@ -4724,7 +4724,6 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     if (rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         pUndo = new SwUndoCpyDoc(*pCopyPam);
-        rDoc.GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
         pFlysAtInsPos = pUndo->GetFlysAnchoredAt();
     }
     else
@@ -4888,7 +4887,8 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                 {
                     if (bCopyCollFormat)
                     {
-                        pSttTextNd->CopyCollFormat( *pDestTextNd );
+                        // tdf#138897 no Undo for applying style, SwUndoInserts does it
+                        pSttTextNd->CopyCollFormat(*pDestTextNd, false);
                         POP_NUMRULE_STATE
                     }
 
@@ -4987,7 +4987,8 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
             // Also copy all format templates
             if( bCopyCollFormat && ( bOneNode || bEmptyDestNd ))
             {
-                pEndTextNd->CopyCollFormat( *pDestTextNd );
+                // tdf#138897 no Undo for applying style, SwUndoInserts does it
+                pEndTextNd->CopyCollFormat(*pDestTextNd, false);
                 if ( bOneNode )
                 {
                     POP_NUMRULE_STATE
@@ -5151,6 +5152,8 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     // If Undo is enabled, store the inserted area
     if (rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
+        // append it after styles have been copied when copying nodes
+        rDoc.GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
         pUndo->SetInsertRange(*pCopyPam, true, nDeleteTextNodes);
     }
 

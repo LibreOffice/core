@@ -16,10 +16,14 @@ $(eval $(call gb_Package_add_file,desktop_scripts_install,$(LIBO_BIN_FOLDER)/uno
 
 endif
 
-ifneq ($(OS),WNT)
-
-$(eval $(call gb_Package_add_file,desktop_scripts_install,$(LIBO_BIN_FOLDER)/unoinfo,$(if $(filter MACOSX,$(OS)),unoinfo-mac.sh,unoinfo.sh)))
-
+ifeq ($(OS), MACOSX)
+# only mach-o binaries allowed in bin folder (signing scripts would require extended attributes)
+# so install it into Resources folder and use a symlink instead
+# see https://developer.apple.com/library/archive/technotes/tn2206/_index.html
+$(eval $(call gb_Package_add_file,desktop_scripts_install,$(LIBO_SHARE_FOLDER)/unoinfo,unoinfo-mac.sh))
+$(eval $(call gb_Package_add_symbolic_link,desktop_scripts_install,$(LIBO_BIN_FOLDER)/unoinfo,../$(LIBO_SHARE_FOLDER)/unoinfo))
+else ifneq ($(OS),WNT)
+$(eval $(call gb_Package_add_file,desktop_scripts_install,$(LIBO_BIN_FOLDER)/unoinfo,unoinfo.sh))
 endif
 
 # vim: set ts=4 sw=4 noet:

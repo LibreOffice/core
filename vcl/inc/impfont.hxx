@@ -62,7 +62,16 @@ public:
     void                SetWidthType( const FontWidth eWidthType )      { meWidthType = eWidthType; }
     void                SetAlignment( const TextAlign eAlignment )      { meAlign = eAlignment; }
     void                SetCharSet( const rtl_TextEncoding eCharSet )   { meCharSet = eCharSet; }
-    void                SetFontSize( const Size& rSize )         { maAverageFontSize = rSize; }
+    void                SetFontSize( const Size& rSize )
+    {
+        if(rSize.Height() != maAverageFontSize.Height())
+        {
+            // reset evtl. buffered calculated AverageFontSize, it depends
+            // on Font::Height
+            mnCalculatedAverageFontWidth = 0;
+        }
+        maAverageFontSize = rSize;
+    }
 
     void                SetSymbolFlag( const bool bSymbolFlag )         { mbSymbolFlag = bSymbolFlag; }
 
@@ -80,12 +89,15 @@ public:
     void                IncreaseQualityBy( int nQualityAmount )         { mnQuality += nQualityAmount; }
     void                DecreaseQualityBy( int nQualityAmount )         { mnQuality -= nQualityAmount; }
 
+    tools::Long         GetCalculatedAverageFontWidth() const           { return mnCalculatedAverageFontWidth; }
+    void                SetCalculatedAverageFontWidth(tools::Long nNew) { mnCalculatedAverageFontWidth = nNew; }
+
     bool                operator==( const ImplFont& ) const;
 
 private:
     friend class vcl::Font;
-    friend SvStream&    ReadImplFont( SvStream& rIStm, ImplFont& );
-    friend SvStream&    WriteImplFont( SvStream& rOStm, const ImplFont& );
+    friend SvStream&    ReadImplFont( SvStream& rIStm, ImplFont&, tools::Long& );
+    friend SvStream&    WriteImplFont( SvStream& rOStm, const ImplFont&, const tools::Long& );
 
     void                AskConfig();
 
@@ -130,6 +142,7 @@ private:
 
     int                 mnQuality;
 
+    tools::Long         mnCalculatedAverageFontWidth;
 };
 
 #endif // INCLUDED_VCL_INC_IMPFONT_HXX

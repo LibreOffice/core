@@ -245,7 +245,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                     m_bInDtor : 1, //detect destructor to prevent creating of sub shells while closing
                     m_bOldShellWasPagePreview : 1,
                     m_bIsPreviewDoubleClick : 1, // #i114045#
-                    m_bMakeSelectionVisible : 1; // transport the bookmark selection
+                    m_bMakeSelectionVisible : 1, // transport the bookmark selection
+                    m_bForceChangesToolbar : 1;  // on load of documents with change tracking
     bool m_bInitOnceCompleted = false;
 
     /// LibreOfficeKit has to force the page size for PgUp/PgDown
@@ -547,7 +548,7 @@ public:
     void            InsertCaption(const InsCaptionOpt *pOpt);
 
     // Async call by Core
-    void        UpdatePageNums(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUString& rPgStr);
+    void UpdatePageNums();
 
     OUString    GetPageStr(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUString& rPgStr);
 

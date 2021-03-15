@@ -951,7 +951,7 @@ void GtkSalFrame::InitCommon()
     gtk_widget_realize( m_pWindow );
 
     //system data
-    m_aSystemData.aWindow       = GetNativeWindowHandle(m_pWindow);
+    m_aSystemData.SetWindowHandle(GetNativeWindowHandle(m_pWindow));
     m_aSystemData.aShellWindow  = reinterpret_cast<sal_IntPtr>(this);
     m_aSystemData.pSalFrame     = this;
     m_aSystemData.pWidget       = m_pWindow;
@@ -2011,10 +2011,16 @@ void GtkSalFrame::ToTop( SalFrameToTop nFlags )
         GrabFocus();
     else if( gtk_widget_get_mapped( m_pWindow ) )
     {
+        auto nTimestamp = GetLastInputEventTime();
+#ifdef GDK_WINDOWING_X11
+        GdkDisplay *pDisplay = GtkSalFrame::getGdkDisplay();
+        if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
+            nTimestamp = gdk_x11_display_get_user_time(pDisplay);
+#endif
         if (!(nFlags & SalFrameToTop::GrabFocusOnly))
-            gtk_window_present_with_time(GTK_WINDOW(m_pWindow), GetLastInputEventTime());
+            gtk_window_present_with_time(GTK_WINDOW(m_pWindow), nTimestamp);
         else
-            gdk_window_focus(gtk_widget_get_window(m_pWindow), GetLastInputEventTime());
+            gdk_window_focus(gtk_widget_get_window(m_pWindow), nTimestamp);
         GrabFocus();
     }
     else
@@ -2305,6 +2311,14 @@ void GtkSalFrame::Beep()
 const SystemEnvData* GtkSalFrame::GetSystemData() const
 {
     return &m_aSystemData;
+}
+
+void GtkSalFrame::ResolveWindowHandle(SystemEnvData& rData) const
+{
+    if (!rData.pWidget)
+        return;
+    SAL_WARN("vcl.gtk3", "its undesirable to need the NativeWindowHandle, see tdf#139609");
+    rData.SetWindowHandle(GetNativeWindowHandle(static_cast<GtkWidget*>(rData.pWidget)));
 }
 
 void GtkSalFrame::SetParent( SalFrame* pNewParent )
@@ -4469,7 +4483,7 @@ Size GtkSalDisplay::GetScreenSize( int nDisplayScreen )
     return Size( aRect.GetWidth(), aRect.GetHeight() );
 }
 
-sal_uIntPtr GtkSalFrame::GetNativeWindowHandle(GtkWidget *pWidget)
+sal_uIntPtr GtkSalFrame::GetNativeWindowHandle(GtkWidget *pWidget) const
 {
     (void) this;                // Silence loplugin:staticmethods
     GdkDisplay *pDisplay = getGdkDisplay();

@@ -122,6 +122,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="customname-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="definecustomslideshow|extended_tip|customname">Displays the name of the custom slide show. If you want, you can enter a new name.</property>

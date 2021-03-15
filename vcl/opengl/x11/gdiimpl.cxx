@@ -249,7 +249,7 @@ SystemWindowData X11OpenGLContext::generateWinData(vcl::Window* pParent, bool /*
     const SystemEnvData* sysData(pParent->GetSystemData());
 
     Display *dpy = static_cast<Display*>(sysData->pDisplay);
-    Window win = sysData->aWindow;
+    Window win = sysData->GetWindowHandle(pParent->ImplGetFrame());
 
     if( dpy == nullptr || !glXQueryExtension( dpy, nullptr, nullptr ) )
         return aWinData;
@@ -515,7 +515,7 @@ void X11OpenGLContext::initWindow()
     InitChildWindow(m_pChildWindow.get());
 
     m_aGLWin.dpy = static_cast<Display*>(pChildSysData->pDisplay);
-    m_aGLWin.win = pChildSysData->aWindow;
+    m_aGLWin.win = pChildSysData->GetWindowHandle(m_pChildWindow->ImplGetFrame());
     m_aGLWin.screen = pChildSysData->nScreen;
 
     Visual* pVisual = static_cast<Visual*>(pChildSysData->pVisual);

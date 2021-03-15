@@ -66,6 +66,7 @@
                 <property name="tooltip_text" translatable="yes" context="sidebargraphic|setbrightness|tooltip_text">Specify the luminance of the graphic.</property>
                 <property name="hexpand">True</property>
                 <property name="adjustment">plusminus100adjustment</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="setbrightness-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setbrightness-atkobject">Brightness</property>
@@ -98,6 +99,7 @@
                 <property name="tooltip_text" translatable="yes" context="sidebargraphic|setcontrast|tooltip_text">Specify the degree of difference between the lightest and darkest parts of the graphic.</property>
                 <property name="hexpand">True</property>
                 <property name="adjustment">plusminus100adjustment1</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="setcontrast-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setcontrast-atkobject">Contrast</property>
@@ -160,6 +162,7 @@
                 <property name="tooltip_text" translatable="yes" context="sidebargraphic|setgraphtransparency|tooltip_text">Specify the percentage of transparency; 0% is fully opaque and 100% is fully transparent.</property>
                 <property name="hexpand">True</property>
                 <property name="adjustment">0to100adjustment</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="setgraphtransparency-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="sidebargraphic|setgraphtransparency-atkobject">Transparency</property>

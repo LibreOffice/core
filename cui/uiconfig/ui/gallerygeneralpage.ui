@@ -173,6 +173,7 @@
             <property name="valign">center</property>
             <property name="hexpand">True</property>
             <property name="activates_default">True</property>
+            <property name="truncate-multiline">True</property>
             <accessibility>
               <relation type="labelled-by" target="image"/>
             </accessibility>

@@ -698,15 +698,14 @@ void Shell::UpdateWindows()
                             for ( sal_Int32 j = 0 ; j < nDlgCount ; j++ )
                             {
                                 OUString aDlgName = pDlgNames[ j ];
+                                // this find only looks for non-suspended windows;
+                                // suspended windows are handled in CreateDlgWin
+                                VclPtr<DialogWindow> pWin = FindDlgWin( doc, aLibName, aDlgName );
+                                if ( !pWin )
+                                    pWin = CreateDlgWin( doc, aLibName, aDlgName );
                                 if ( !pNextActiveWindow && pLibInfoItem && pLibInfoItem->GetCurrentName() == aDlgName &&
                                      pLibInfoItem->GetCurrentType() == TYPE_DIALOG )
                                 {
-                                    // this find only looks for non-suspended windows;
-                                    // suspended windows are handled in CreateDlgWin
-                                    VclPtr<DialogWindow> pWin = FindDlgWin( doc, aLibName, aDlgName );
-                                    if ( !pWin )
-                                        pWin = CreateDlgWin( doc, aLibName, aDlgName );
-
                                     pNextActiveWindow = pWin;
                                 }
                             }

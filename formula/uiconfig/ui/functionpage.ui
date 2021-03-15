@@ -39,6 +39,7 @@
         <property name="can_focus">True</property>
         <property name="hexpand">True</property>
         <property name="activates_default">True</property>
+        <property name="truncate-multiline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="search-atkobject">
             <property name="AtkObject::accessible-description" translatable="yes" context="functionpage|extended_tip|search">Search for a part of the function name.</property>

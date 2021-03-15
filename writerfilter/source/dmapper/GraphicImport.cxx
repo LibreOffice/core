@@ -872,6 +872,14 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             eAnchorType = text::TextContentAnchorType_AT_CHARACTER;
 
                         xShapeProps->setPropertyValue("AnchorType", uno::makeAny(eAnchorType));
+
+                        if (m_pImpl->nVertRelation == text::RelOrientation::TEXT_LINE && bTextBox)
+                        {
+                            // TEXT_LINE to specific to to-char anchoring, we have to-para, so reset
+                            // to default.
+                            m_pImpl->nVertRelation = text::RelOrientation::FRAME;
+                        }
+
                         if (m_pImpl->bLayoutInCell && bTextBox && m_pImpl->rDomainMapper.IsInTable()
                             && m_pImpl->nHoriRelation == text::RelOrientation::PAGE_FRAME)
                             m_pImpl->nHoriRelation = text::RelOrientation::FRAME;

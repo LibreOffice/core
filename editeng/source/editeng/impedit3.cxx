@@ -1900,10 +1900,9 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
                 OSL_FAIL( "I18N: XBreakIterator::getLineBreak returns position > Max" );
                 nBreakPos = nMaxBreakPos;
             }
-
-            // nBreakPos can never be outside the portion, even not with hanging punctuation
-            if ( nBreakPos > nMaxBreakPos )
-                nBreakPos = nMaxBreakPos;
+            // Hanging punctuation is the only case that increases nBreakPos and makes
+            // nBreakPos > nMaxBreakPos. It's expected that the hanging punctuation goes over
+            // the border of the object.
         }
 
         // BUG in I18N - the japanese dot is in the next line!

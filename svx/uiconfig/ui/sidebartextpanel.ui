@@ -43,6 +43,7 @@
                         <property name="popup_fixed_width">False</property>
                         <child internal-child="entry">
                           <object class="GtkEntry">
+                            <property name="truncate-multiline">True</property>
                             <property name="can_focus">True</property>
                           </object>
                         </child>
@@ -79,6 +80,7 @@
                         <property name="has_entry">True</property>
                         <child internal-child="entry">
                           <object class="GtkEntry">
+                            <property name="truncate-multiline">True</property>
                             <property name="can_focus">True</property>
                           </object>
                         </child>

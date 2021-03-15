@@ -356,15 +356,18 @@ void Writer::PutNumFormatFontsInAttrPool()
     // it can be removed - it is already in the Pool
     SfxItemPool& rPool = m_pDoc->GetAttrPool();
     const SwNumRuleTable& rListTable = m_pDoc->GetNumRuleTable();
-    const SwNumRule* pRule;
     const SwNumFormat* pFormat;
     const vcl::Font* pFont;
     const vcl::Font* pDefFont = &numfunc::GetDefBulletFont();
     bool bCheck = false;
 
     for( size_t nGet = rListTable.size(); nGet; )
-        if( SwDoc::IsUsed( *(pRule = rListTable[ --nGet ] )))
+    {
+        SwNumRule const*const pRule = rListTable[ --nGet ];
+        if (m_pDoc->IsUsed(*pRule))
+        {
             for( sal_uInt8 nLvl = 0; nLvl < MAXLEVEL; ++nLvl )
+            {
                 if( SVX_NUM_CHAR_SPECIAL == (pFormat = &pRule->Get( nLvl ))->GetNumberingType() ||
                     SVX_NUM_BITMAP == pFormat->GetNumberingType() )
                 {
@@ -384,6 +387,9 @@ void Writer::PutNumFormatFontsInAttrPool()
                                 pFont->GetFamilyName(), pFont->GetStyleName(),
                                 pFont->GetPitch(), pFont->GetCharSet(), RES_CHRATR_FONT ));
                 }
+            }
+        }
+    }
 }
 
 void Writer::PutEditEngFontsInAttrPool()

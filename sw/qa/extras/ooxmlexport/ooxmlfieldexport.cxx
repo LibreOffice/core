@@ -255,7 +255,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAlphabeticalIndex_MultipleColumns,"alpha
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:sectPr/w:type","val","continuous");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:pPr/w:sectPr/w:type","val","continuous");
     // check for "w:space" attribute for the columns in Section Properties
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:pPr/w:sectPr/w:cols/w:col[1]","space","720");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:pPr/w:sectPr/w:cols","space","720");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPageref, "testPageref.docx")
@@ -482,6 +482,18 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testEditTime, "fdo81341.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[3]/w:fldChar", "fldCharType", "separate");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:t", "00:05");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:fldChar", "fldCharType", "end");
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFlyFieldmark, "fly_fieldmark.fodt")
+{
+    // the problem was that the flys were written after the field start
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // run 1 contains 2 shapes, one was at-page, one was at-char
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent", 2);
+    // run 2 contains the field start
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:fldChar", "fldCharType", "begin");
+    // run 3 contains the field instruction text
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:instrText", " FORMTEXT ");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo81945, "fdo81945.docx")

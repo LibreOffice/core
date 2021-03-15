@@ -100,6 +100,9 @@ public:
     void testTdf128345GradientAxial();
     void testTdf134969TransparencyOnColorGradient();
     void testTdf136911();
+    void testArcTo();
+    void testNarrationMimeType();
+    void testTdf140865Wordart3D();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -149,6 +152,9 @@ public:
     CPPUNIT_TEST(testTdf128345GradientAxial);
     CPPUNIT_TEST(testTdf134969TransparencyOnColorGradient);
     CPPUNIT_TEST(testTdf136911);
+    CPPUNIT_TEST(testArcTo);
+    CPPUNIT_TEST(testNarrationMimeType);
+    CPPUNIT_TEST(testTdf140865Wordart3D);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1141,18 +1147,32 @@ void SdOOXMLExportTest1::testCustomshapeBitmapfillSrcrect()
     xDocShRef->DoClose();
 
     xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
-    const OString sXmlPath = "//a:blipFill/a:srcRect";
+
+    // tdf#132680
+    // We are preventing the side effect of DOCX improvement to PPTX case.
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
-    // - XPath '//a:blipFill/a:srcRect' number of nodes is incorrect
+    // - XPath '/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:blipFill/a:srcRect' number of nodes is incorrect
     // i.e. <a:srcRect> was exported as <a:fillRect> in <a:stretch>, which made part of the image
     // invisible.
-    double fLeftPercent = std::round(getXPath(pXmlDoc, sXmlPath, "l").toDouble() / 1000);
-    CPPUNIT_ASSERT_EQUAL(4.0, fLeftPercent);
-    double fRightPercent = std::round(getXPath(pXmlDoc, sXmlPath, "r").toDouble() / 1000);
-    CPPUNIT_ASSERT_EQUAL(4.0, fRightPercent);
+
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:blipFill/a:srcRect");
+
+    // tdf#134210
+    // Original values of attribute of l and r in xml files: <a:srcRect l="4393" r="4393"/>
+    // No core feature for handling this. We add suuport to import filter. We crop the bitmap
+    // physically during import and shouldn't export the l r t b attributes anymore. In the
+    // future if we add core feature to LibreOffice, we should change the control value with
+    // 4393.
+
+    assertXPathNoAttribute(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:blipFill/a:srcRect", "l");
+    assertXPathNoAttribute(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:blipFill/a:srcRect", "r");
+    assertXPathNoAttribute(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:blipFill/a:srcRect", "t");
+    assertXPathNoAttribute(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:blipFill/a:srcRect", "b");
 }
+
+
 
 void SdOOXMLExportTest1::testTdf100348FontworkBitmapFill()
 {
@@ -1272,6 +1292,61 @@ void SdOOXMLExportTest1::testTdf134969TransparencyOnColorGradient()
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs",2);
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[1]/a:srgbClr/a:alpha", "val", "60000");
     assertXPath(pXmlDoc, sPathStart + "/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val", "60000");
+}
+
+void SdOOXMLExportTest1::testArcTo()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/arc-validiert.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    const OString sPath("//a:custGeom/a:pathLst/a:path/a:arcTo");
+    assertXPath(pXmlDoc, sPath, "wR", "3");
+    assertXPath(pXmlDoc, sPath, "hR", "3");
+    assertXPath(pXmlDoc, sPath, "stAng", "1800000");
+    assertXPath(pXmlDoc, sPath, "swAng", "2700000");
+}
+
+void SdOOXMLExportTest1::testNarrationMimeType()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/narration.pptx"), PPTX);
+    utl::TempFile aTempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &aTempFile);
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "[Content_Types].xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: audio/mp4
+    // - Actual  : application/vnd.sun.star.media
+    // i.e. the mime type of the narration was incorrect.
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@PartName='/ppt/media/media1.m4a']",
+                "ContentType", "audio/mp4");
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest1::testTdf140865Wordart3D()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf140865Wordart3D.pptx"), PPTX);
+    utl::TempFile aTempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &aTempFile);
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "ppt/slides/slide1.xml");
+
+    // without the fix in place a:sp3d was lost on round trip, and so extrusion was lost.
+    constexpr OStringLiteral sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr");
+    assertXPath(pXmlDoc, sPathStart + "/a:sp3d", "extrusionH", "342900");
+    assertXPath(pXmlDoc, sPathStart + "/a:sp3d", "contourW", "12700");
+    assertXPath(pXmlDoc, sPathStart + "/a:sp3d/a:bevelT", "w", "114300");
+    assertXPath(pXmlDoc, sPathStart + "/a:sp3d/a:bevelT", "h", "38100");
+    assertXPath(pXmlDoc, sPathStart + "/a:sp3d/a:bevelT", "prst", "softRound");
+    assertXPath(pXmlDoc, sPathStart + "/a:sp3d/a:bevelB", "h", "152400");
+    assertXPath(pXmlDoc, sPathStart + "/a:sp3d/a:extrusionClr/a:srgbClr", "val", "990000");
+    assertXPath(pXmlDoc, sPathStart + "/a:sp3d/a:contourClr/a:srgbClr", "val", "009876");
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest1);

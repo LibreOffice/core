@@ -286,6 +286,10 @@ RTSDevicePage::RTSDevicePage(weld::Widget* pPage, RTSDialog* pParent)
     m_xPPDKeyBox->connect_changed( LINK( this, RTSDevicePage, SelectHdl ) );
     m_xPPDValueBox->connect_changed( LINK( this, RTSDevicePage, SelectHdl ) );
 
+    m_xLevelBox->connect_changed(LINK(this, RTSDevicePage, ComboChangedHdl));
+    m_xSpaceBox->connect_changed(LINK(this, RTSDevicePage, ComboChangedHdl));
+    m_xDepthBox->connect_changed(LINK(this, RTSDevicePage, ComboChangedHdl));
+
     switch( m_pParent->m_aJobData.m_nColorDevice )
     {
         case 0:
@@ -434,6 +438,11 @@ IMPL_LINK( RTSDevicePage, SelectHdl, weld::TreeView&, rBox, void )
             ValueBoxChanged(pKey);
         }
     }
+    m_pParent->SetDataModified( true );
+}
+
+IMPL_LINK_NOARG( RTSDevicePage, ComboChangedHdl, weld::ComboBox&, void )
+{
     m_pParent->SetDataModified( true );
 }
 

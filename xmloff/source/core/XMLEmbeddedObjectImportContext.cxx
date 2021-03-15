@@ -82,8 +82,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLEmbeddedObjectImpor
     sal_Int32 ,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    // we carry no state, so just re-use the same instance
-    return this;
+    return new XMLEmbeddedObjectImportContext_Impl(GetImport(), mxFastHandler);
 }
 
 void XMLEmbeddedObjectImportContext_Impl::startFastElement(

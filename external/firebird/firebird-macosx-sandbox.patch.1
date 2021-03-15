@@ -1,0 +1,13 @@
+-*- Mode: Diff -*-
+
+--- firebird/src/common/isc_s_proto.h
++++ firebird/src/common/isc_s_proto.h
+@@ -37,6 +37,8 @@
+ // Firebird platform-specific synchronization data structures
+ 
+ #if defined(DARWIN)
++#define USE_POSIX_SEMAPHORE
++#define USE_SHARED_FUTEX
+ #define USE_FILELOCKS
+ #endif
+ 

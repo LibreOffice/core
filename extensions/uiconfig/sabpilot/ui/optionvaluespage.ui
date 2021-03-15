@@ -75,6 +75,7 @@
             <property name="can_focus">True</property>
             <property name="valign">start</property>
             <property name="hexpand">True</property>
+            <property name="truncate-multiline">True</property>
             <property name="activates_default">True</property>
           </object>
           <packing>

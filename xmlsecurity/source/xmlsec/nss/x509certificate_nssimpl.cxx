@@ -31,6 +31,7 @@
 #include <rtl/ref.hxx>
 #include "x509certificate_nssimpl.hxx"
 
+#include <biginteger.hxx>
 #include <certificateextension_xmlsecimpl.hxx>
 
 #include "sanextension_nssimpl.hxx"
@@ -532,5 +533,29 @@ sal_Bool SAL_CALL X509Certificate_NssImpl::supportsService(const OUString& servi
 
 /* XServiceInfo */
 Sequence<OUString> SAL_CALL X509Certificate_NssImpl::getSupportedServiceNames() { return { OUString() }; }
+
+namespace xmlsecurity {
+
+bool EqualDistinguishedNames(
+        std::u16string_view const rName1, std::u16string_view const rName2)
+{
+    CERTName *const pName1(CERT_AsciiToName(OUStringToOString(rName1, RTL_TEXTENCODING_UTF8).getStr()));
+    if (pName1 == nullptr)
+    {
+        return false;
+    }
+    CERTName *const pName2(CERT_AsciiToName(OUStringToOString(rName2, RTL_TEXTENCODING_UTF8).getStr()));
+    if (pName2 == nullptr)
+    {
+        CERT_DestroyName(pName1);
+        return false;
+    }
+    bool const ret(CERT_CompareName(pName1, pName2) == SECEqual);
+    CERT_DestroyName(pName2);
+    CERT_DestroyName(pName1);
+    return ret;
+}
+
+} // namespace xmlsecurity
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

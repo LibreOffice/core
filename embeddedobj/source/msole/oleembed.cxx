@@ -1004,7 +1004,12 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedV
     else
 #endif
     {
-        return uno::Sequence< embed::VerbDescriptor >();
+        // tdf#140079 Claim support for the OleEmbeddedObject::doVerb -9 fallback.
+        // So in SfxViewFrame::GetState_Impl in case SID_OBJECT hasVerbs is not
+        // empty, so that the doVerb attempt with -9 fallback is attempted
+        uno::Sequence<embed::VerbDescriptor> aRet(1);
+        aRet[0].VerbID = -9;
+        return aRet;
     }
 }
 

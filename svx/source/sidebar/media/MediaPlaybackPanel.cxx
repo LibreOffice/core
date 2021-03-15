@@ -46,6 +46,8 @@ MediaPlaybackPanel::MediaPlaybackPanel (
     mxZoomListBox = m_xBuilder->weld_combo_box("zoombox");
 
     Initialize();
+
+    m_pInitialFocusWidget = mxTimeEdit.get();
 }
 
 VclPtr< vcl::Window > MediaPlaybackPanel::Create(

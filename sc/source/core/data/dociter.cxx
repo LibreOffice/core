@@ -1079,8 +1079,8 @@ void ScQueryCellIterator::InitPos()
     nRow = maParam.nRow1;
     if (maParam.bHasHeader && maParam.bByRow)
         ++nRow;
-    ScColumn* pCol = &(rDoc.maTabs[nTab])->aCol[nCol];
-    maCurPos = pCol->maCells.position(nRow);
+    const ScColumn& rCol = rDoc.maTabs[nTab]->CreateColumnIfNotExists(nCol);
+    maCurPos = rCol.maCells.position(nRow);
 }
 
 void ScQueryCellIterator::IncPos()
@@ -1460,6 +1460,8 @@ ScCountIfCellIterator::ScCountIfCellIterator(ScDocument& rDocument, const ScInte
     mrContext( rContext ),
     nTab( nTable)
 {
+    maParam.nCol1 = rDoc.maTabs[nTable]->ClampToAllocatedColumns(maParam.nCol1);
+    maParam.nCol2 = rDoc.maTabs[nTable]->ClampToAllocatedColumns(maParam.nCol2);
     nCol = maParam.nCol1;
     nRow = maParam.nRow1;
 }
@@ -1798,6 +1800,10 @@ bool ScQueryCellIterator::BinarySearch()
 
     assert(nTab < rDoc.GetTableCount() && "index out of bounds, FIX IT");
     nCol = maParam.nCol1;
+
+    if (nCol >= rDoc.maTabs[nTab]->GetAllocatedColumnsCount())
+        return false;
+
     ScColumn* pCol = &(rDoc.maTabs[nTab])->aCol[nCol];
     if (pCol->IsEmptyData())
         return false;

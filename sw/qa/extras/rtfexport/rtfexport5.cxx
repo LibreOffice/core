@@ -1276,6 +1276,12 @@ DECLARE_RTFEXPORT_TEST(testTdf137894, "tdf137894.odt")
     CPPUNIT_ASSERT_EQUAL(32.f, getProperty<float>(getRun(getParagraph(2), 1), "CharHeightComplex"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf138779, "tdf138779.docx")
+{
+    // The text "2. Kozuka Mincho Pro, 8 pt Ruby ..." has font size 11pt ( was 20pt ).
+    CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(getRun(getParagraph(2), 14), "CharHeight"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

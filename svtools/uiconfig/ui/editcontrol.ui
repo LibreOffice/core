@@ -14,6 +14,7 @@
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="activates_default">True</property>
+        <property name="truncate-multiline">True</property>
         <property name="width_chars">1</property>
       </object>
       <packing>

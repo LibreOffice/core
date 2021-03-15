@@ -116,6 +116,7 @@
                     <property name="halign">start</property>
                     <property name="text" translatable="yes" context="sidebarerrorbar|spinbutton_pos">0.00</property>
                     <property name="adjustment">adjustmentPOS</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
@@ -131,6 +132,7 @@
                     <property name="text" translatable="yes" context="sidebarerrorbar|spinbutton_neg">0.00</property>
                     <property name="input_purpose">alpha</property>
                     <property name="adjustment">adjustmentNEG</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>

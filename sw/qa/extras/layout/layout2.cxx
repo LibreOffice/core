@@ -488,6 +488,22 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf126425)
     assertXPath(pXmlDoc, "//textarray", 14);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUnusedOLEprops)
+{
+    CPPUNIT_ASSERT(createDoc("tdf138465min.docx"));
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: >300
+    // - Actual  : 142
+    // i.e. the formula squashed
+    CPPUNIT_ASSERT_GREATEREQUAL(
+        double(300),
+        getXPath(pXmlDoc, "/root/page/body/txt[2]/anchored/fly/notxt/infos/bounds", "height")
+            .toDouble());
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf123268)
 {
     SwDoc* pDoc = createDoc("tdf123268.odt");
@@ -733,6 +749,24 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138194)
     // - Actual  : 7
     // i.e. the X axis label flowed out of chart area.
     assertXPath(pXmlDoc, "//textarray", 8);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138773)
+{
+    SwDoc* pDoc = createDoc("tdf138773.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    const sal_Int32 nFirstLabelLines
+        = getXPathContent(pXmlDoc, "count(//text[contains(text(),\"2000-01\")])").toInt32();
+
+    // This failed, if the first X axis label broke to multiple lines.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nFirstLabelLines);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf124796)

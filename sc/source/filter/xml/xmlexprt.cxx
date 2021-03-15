@@ -114,6 +114,7 @@
 #include <svx/unoshape.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/extract.hxx>
+#include <svx/svdoashp.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdocapt.hxx>
 #include <vcl/svapp.hxx>
@@ -3476,43 +3477,106 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
     if( !(rMyCell.bHasShape && !rMyCell.aShapeList.empty() && pDoc) )
         return;
 
-    tools::Rectangle aRectFull = pDoc->GetMMRect(
+    // Reference point to turn absolute coordinates in reference point + offset. That happens in most
+    // cases in XMLShapeExport::ImpExportNewTrans_DecomposeAndRefPoint, which gets the absolute
+    // coordinates as translation from matrix in property "Transformation". For cell anchored shapes
+    // the reference point is left-top (in LTR mode) of that cell, which contains the shape.
+    tools::Rectangle aCellRectFull = pDoc->GetMMRect(
         rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(), rMyCell.maCellAddress.Col(),
         rMyCell.maCellAddress.Row(), rMyCell.maCellAddress.Tab(), false /*bHiddenAsZero*/);
-    tools::Rectangle aRectReduced = pDoc->GetMMRect(
-        rMyCell.maCellAddress.Col(), rMyCell.maCellAddress.Row(), rMyCell.maCellAddress.Col(),
-        rMyCell.maCellAddress.Row(), rMyCell.maCellAddress.Tab(), true /*bHiddenAsZero*/);
-
-    // Reference point
     awt::Point aPoint;
     bool bNegativePage = pDoc->IsNegativePage(rMyCell.maCellAddress.Tab());
     if (bNegativePage)
-        aPoint.X = aRectFull.Right();
+        aPoint.X = aCellRectFull.Right();
     else
-        aPoint.X = aRectFull.Left();
-    aPoint.Y = aRectFull.Top();
+        aPoint.X = aCellRectFull.Left();
+    aPoint.Y = aCellRectFull.Top();
 
     for (const auto& rShape : rMyCell.aShapeList)
     {
         if (rShape.xShape.is())
         {
+            // The current object geometry is based on bHiddenAsZero=true, but ODF file format
+            // needs it as if there were no hidden rows or columns. We manipulate the geometry
+            // accordingly for writing xml markup and restore geometry later.
             bool bNeedsRestore = false;
             SdrObject* pObj = GetSdrObjectFromXShape(rShape.xShape);
+            // Remember original geometry
             SdrObjGeoData* pGeoData = nullptr;
             if (pObj)
                 pGeoData = pObj->GetGeoData();
 
-            if (pObj && aRectFull != aRectReduced)
+            // Hiding row or column affects the shape based on its snap rect. So we need start and
+            // end cell address of snap rect. In case of a transformed shape, it is not in rMyCell.
+            ScAddress aSnapStartAddress = rMyCell.maCellAddress;
+            ScDrawObjData* pObjData = nullptr;
+            bool bIsShapeTransformed = false;
+            if (pObj)
             {
-                // There are hidden rows or columns above or before the start cell.
-                // The current object geometry is based on bHiddenAsZero=true, but ODF file format
-                // needs it as if there were no hidden rows or columns.
-                // We shift the object and restore it later.
-                bNeedsRestore = true;
-                pObj->NbcMove(Size(aRectFull.Left() - aRectReduced.Left(),
-                                   aRectFull.Top() - aRectReduced.Top()));
+                pObjData = ScDrawLayer::GetObjData(pObj);
+                bIsShapeTransformed = pObj->GetRotateAngle() != 0 || pObj->GetShearAngle() != 0;
             }
-            // ToDo: Adapt object skew and rotation to bHiddenAsZero=false, tdf#137033
+            if (bIsShapeTransformed && pObjData)
+                aSnapStartAddress = pObjData->maStart;
+
+            // In case rows or columns are hidden above or before the snap rect, move the shape to the
+            // position it would have, if these rows and columns are visible.
+            tools::Rectangle aRectFull = pDoc->GetMMRect(
+                aSnapStartAddress.Col(), aSnapStartAddress.Row(), aSnapStartAddress.Col(),
+                aSnapStartAddress.Row(), aSnapStartAddress.Tab(), false /*bHiddenAsZero*/);
+            tools::Rectangle aRectReduced = pDoc->GetMMRect(
+                aSnapStartAddress.Col(), aSnapStartAddress.Row(), aSnapStartAddress.Col(),
+                aSnapStartAddress.Row(), aSnapStartAddress.Tab(), true /*bHiddenAsZero*/);
+            const tools::Long nLeftDiff(aRectFull.Left() - aRectReduced.Left());
+            const tools::Long nTopDiff(aRectFull.Top() - aRectReduced.Top());
+            if (pObj && (abs(nLeftDiff) > 1 || abs(nTopDiff) > 1))
+            {
+                bNeedsRestore = true;
+                pObj->NbcMove(Size(nLeftDiff, nTopDiff));
+            }
+
+            // tdf#137033 In case the shape is anchored "To Cell (resize with cell)" hiding rows or
+            // columns inside the snap rect has not only changed size of the shape but rotate and shear
+            // angle too. We resize the shape to full size. That will recover the original angles too.
+            if (rShape.bResizeWithCell && pObjData && pObj)
+            {
+                // Get original size from anchor
+                const Point aSnapStartOffset = pObjData->maStartOffset;
+                // In case of 'resize with cell' maEnd and maEndOffset should be valid.
+                const ScAddress aSnapEndAddress(pObjData->maEnd);
+                const Point aSnapEndOffset = pObjData->maEndOffset;
+                const tools::Rectangle aStartCellRect = pDoc->GetMMRect(
+                    aSnapStartAddress.Col(), aSnapStartAddress.Row(), aSnapStartAddress.Col(),
+                    aSnapStartAddress.Row(), aSnapStartAddress.Tab(), false /*bHiddenAsZero*/);
+                const tools::Rectangle aEndCellRect = pDoc->GetMMRect(
+                    aSnapEndAddress.Col(), aSnapEndAddress.Row(), aSnapEndAddress.Col(),
+                    aSnapEndAddress.Row(), aSnapEndAddress.Tab(), false /*bHiddenAsZero*/);
+                if (bNegativePage)
+                {
+                    aRectFull.SetLeft(aEndCellRect.Right() - aSnapEndOffset.X());
+                    aRectFull.SetRight(aStartCellRect.Right() - aSnapStartOffset.X());
+                }
+                else
+                {
+                    aRectFull.SetLeft(aStartCellRect.Left() + aSnapStartOffset.X());
+                    aRectFull.SetRight(aEndCellRect.Left() + aSnapEndOffset.X());
+                }
+                aRectFull.SetTop(aStartCellRect.Top() + aSnapStartOffset.Y());
+                aRectFull.SetBottom(aEndCellRect.Top() + aSnapEndOffset.Y());
+                aRectReduced = pObjData->getShapeRect();
+                if(abs(aRectFull.getWidth() - aRectReduced.getWidth()) > 1
+                   || abs(aRectFull.getHeight() - aRectReduced.getHeight()) > 1)
+                {
+                    bNeedsRestore = true;
+                    Fraction aScaleWidth(aRectFull.getWidth(), aRectReduced.getWidth());
+                    if (!aScaleWidth.IsValid())
+                        aScaleWidth = Fraction(1.0);
+                    Fraction aScaleHeight(aRectFull.getHeight(), aRectReduced.getHeight());
+                    if (!aScaleHeight.IsValid())
+                        aScaleHeight = Fraction(1.0);
+                    pObj->NbcResize(pObj->GetRelativePos(), aScaleWidth, aScaleHeight);
+                }
+            }
 
             // We only write the end address if we want the shape to resize with the cell
             if ( rShape.bResizeWithCell &&
@@ -3530,9 +3594,31 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                 AddAttribute(XML_NAMESPACE_TABLE, XML_END_Y, sBuffer.makeStringAndClear());
             }
 
-            if (bNegativePage)
-                aPoint.X = 2 * rShape.xShape->getPosition().X + rShape.xShape->getSize().Width
-                           - aPoint.X;
+            // Correct above calculated reference point for some cases:
+            // a) For a RTL-sheet translate from matrix is not suitable, because the shape
+            // from xml (which is always LTR) is not mirrored to negative page but shifted.
+            // b) In case of horizontal mirrored, 'resize with cell' anchored custom shape, translate
+            // has wrong values. FixMe: Why is translate wrong?
+            // c) Measure lines do not use transformation matrix but use start and end point directly.
+            ScDrawObjData* pNRObjData = nullptr;
+            if (pObj && bNegativePage
+                && rShape.xShape->getShapeType() == "com.sun.star.drawing.MeasureShape")
+            {
+                // invers of shift when import
+                tools::Rectangle aSnapRect = pObj->GetSnapRect();
+                aPoint.X = aSnapRect.Left() + aSnapRect.Right() - aPoint.X;
+            }
+            else if (pObj && (pNRObjData = ScDrawLayer::GetNonRotatedObjData(pObj))
+                     && ((rShape.bResizeWithCell && pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE
+                          && static_cast<SdrObjCustomShape*>(pObj)->IsMirroredX())
+                         || bNegativePage))
+            {
+                //In these cases we set reference Point = matrix translate - startOffset.
+                awt::Point aMatrixTranslate = rShape.xShape->getPosition();
+                aPoint.X = aMatrixTranslate.X - pNRObjData->maStartOffset.X();
+                aPoint.Y = aMatrixTranslate.Y - pNRObjData->maStartOffset.Y();
+            }
+
             ExportShape(rShape.xShape, &aPoint);
 
             // Restore object geometry
@@ -3556,11 +3642,23 @@ void ScXMLExport::WriteTableShapes()
         {
             if (pDoc->IsNegativePage(static_cast<SCTAB>(nCurrentTable)))
             {
-                awt::Point aPoint(rxShape->getPosition());
-                awt::Size aSize(rxShape->getSize());
-                aPoint.X += aPoint.X + aSize.Width;
-                aPoint.Y = 0;
-                ExportShape(rxShape, &aPoint);
+                // RTL-mirroring refers to snap rectangle, not to logic rectangle, therefore cannot use
+                // getPosition() and getSize(), but need property "FrameRect" from rxShape or
+                // GetSnapRect() from associated SdrObject.
+                uno::Reference<beans::XPropertySet> xShapeProp(rxShape, uno::UNO_QUERY);
+                awt::Rectangle aFrameRect;
+                if (xShapeProp.is() && (xShapeProp->getPropertyValue("FrameRect") >>= aFrameRect))
+                {
+                    // file format uses shape in LTR mode. newLeft = - oldRight = - (oldLeft + width).
+                    // newTranslate = oldTranslate - refPoint, oldTranslate from transformation matrix,
+                    // calculated in XMLShapeExport::exportShape common for all modules.
+                    // oldTranslate.X = oldLeft ==> refPoint.X = 2 * oldLeft + width
+                    awt::Point aRefPoint;
+                    aRefPoint.X = 2 * aFrameRect.X + aFrameRect.Width - 1;
+                    aRefPoint.Y = 0;
+                    ExportShape(rxShape, &aRefPoint);
+                }
+                // else should not happen
             }
             else
                 ExportShape(rxShape, nullptr);

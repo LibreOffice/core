@@ -51,7 +51,7 @@ Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
     if (!bWayland)
     {
         m_aSystemData.platform = SystemEnvData::Platform::Xcb;
-        m_aSystemData.aWindow = m_pQWindow->winId(); // ID of the embedded window
+        m_aSystemData.SetWindowHandle(m_pQWindow->winId()); // ID of the embedded window
     }
     else
     {

@@ -53,6 +53,8 @@ DefaultShapesPanel::DefaultShapesPanel (
     , mxFrame(rxFrame)
 {
     Initialize();
+
+    m_pInitialFocusWidget = mxLineArrowSet->GetDrawingArea();
 }
 
 VclPtr< vcl::Window > DefaultShapesPanel::Create(

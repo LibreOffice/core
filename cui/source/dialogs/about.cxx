@@ -28,6 +28,7 @@
 #include <unotools/resmgr.hxx> //Translate
 
 #include <config_buildid.h> //EXTRA_BUILDID
+#include <config_features.h>
 #include <dialmgr.hxx>      //CuiResId
 #include <i18nlangtag/languagetag.hxx>
 #include <sfx2/app.hxx> //SfxApplication::loadBrandSvg
@@ -122,9 +123,10 @@ AboutDialog::AboutDialog(weld::Window *pParent)
   localizeWebserviceURI(sURL);
   m_pWebsiteButton->set_uri(sURL);
 
+  // See also SID_WHATSNEW in sfx2/source/appl/appserv.cxx
   sURL = officecfg::Office::Common::Menus::ReleaseNotesURL::get() +
          "?LOvers=" + utl::ConfigManager::getProductVersion() + "&LOlocale=" +
-         LanguageTag(utl::ConfigManager::getUILocale()).getLanguage();
+         LanguageTag(utl::ConfigManager::getUILocale()).getBcp47();
   m_pReleaseNotesButton->set_uri(sURL);
 
   // Handler
@@ -151,6 +153,11 @@ OUString AboutDialog::GetVersionString() {
 #elif defined(_WIN32)
   sVersion += " (x86)";
 #endif
+
+#if HAVE_FEATURE_COMMUNITY_FLAVOR
+  sVersion += " / LibreOffice Community";
+#endif
+
   return sVersion;
 }
 

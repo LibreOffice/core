@@ -106,6 +106,9 @@ public:
     virtual void tearDown() override;
 
     //ods, xls, xlsx filter tests
+    void testCondFormatOperatorsSameRangeXLSX();
+    void testCondFormatFormulaIsXLSX();
+    void testCondFormatBeginsAndEndsWithXLSX();
     void testExtCondFormatXLSX();
     void testUpdateCircleInMergedCellODS();
     void testDeleteCircleInMergedCellODS();
@@ -295,8 +298,13 @@ public:
     void testDeleteCircles();
     void testDrawCircleInMergeCells();
     void testDeleteCirclesInRowAndCol();
+    void testTdf129940();
+    void testTdf139763ShapeAnchor();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
+    CPPUNIT_TEST(testCondFormatOperatorsSameRangeXLSX);
+    CPPUNIT_TEST(testCondFormatFormulaIsXLSX);
+    CPPUNIT_TEST(testCondFormatBeginsAndEndsWithXLSX);
     CPPUNIT_TEST(testExtCondFormatXLSX);
     CPPUNIT_TEST(testUpdateCircleInMergedCellODS);
     CPPUNIT_TEST(testDeleteCircleInMergedCellODS);
@@ -475,6 +483,8 @@ public:
     CPPUNIT_TEST(testDeleteCircles);
     CPPUNIT_TEST(testDrawCircleInMergeCells);
     CPPUNIT_TEST(testDeleteCirclesInRowAndCol);
+    CPPUNIT_TEST(testTdf129940);
+    CPPUNIT_TEST(testTdf139763ShapeAnchor);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -530,6 +540,100 @@ void testRangeNameImpl(const ScDocument& rDoc)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("formula Global5 should reference Global6 ( which is evaluated as local1 )", 5.0, aValue);
 }
 
+}
+
+void ScFiltersTest::testCondFormatOperatorsSameRangeXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf139928.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf139928.xlsx", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    ScConditionalFormat* pFormat = rDoc.GetCondFormat(0, 0, 0);
+    CPPUNIT_ASSERT(pFormat);
+
+    const ScFormatEntry* pEntry = pFormat->GetEntry(0);
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::ExtCondition, pEntry->GetType());
+
+    const ScCondFormatEntry* pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
+    CPPUNIT_ASSERT_EQUAL( ScConditionMode::ContainsText,  pCondition->GetOperation());
+
+    pEntry = pFormat->GetEntry(1);
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::ExtCondition, pEntry->GetType());
+
+    pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
+    CPPUNIT_ASSERT_EQUAL( ScConditionMode::BeginsWith,  pCondition->GetOperation());
+
+    pEntry = pFormat->GetEntry(2);
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::ExtCondition, pEntry->GetType());
+
+    pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
+    CPPUNIT_ASSERT_EQUAL( ScConditionMode::EndsWith,  pCondition->GetOperation());
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testCondFormatFormulaIsXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf113013.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf113013.xlsx", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // "Formula is" condition
+    ScConditionalFormat* pFormatB1 = rDoc.GetCondFormat(1, 0, 0);
+    CPPUNIT_ASSERT(pFormatB1);
+    ScConditionalFormat* pFormatA2 = rDoc.GetCondFormat(0, 1, 0);
+    CPPUNIT_ASSERT(pFormatA2);
+
+    ScRefCellValue aCellB1(rDoc, ScAddress(1, 0, 0));
+    OUString aCellStyleB1 = pFormatB1->GetCellStyle(aCellB1, ScAddress(1, 0, 0));
+    CPPUNIT_ASSERT(!aCellStyleB1.isEmpty());
+
+    ScRefCellValue aCellA2(rDoc, ScAddress(0, 1, 0));
+    OUString aCellStyleA2 = pFormatA2->GetCellStyle(aCellA2, ScAddress(0, 1, 0));
+    CPPUNIT_ASSERT(!aCellStyleA2.isEmpty());
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testCondFormatBeginsAndEndsWithXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf120749.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf120749.xlsx", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // begins with and ends with conditions
+    ScConditionalFormat* pFormatA1 = rDoc.GetCondFormat(0, 0, 0);
+    CPPUNIT_ASSERT(pFormatA1);
+    ScConditionalFormat* pFormatA2 = rDoc.GetCondFormat(0, 1, 0);
+    CPPUNIT_ASSERT(pFormatA2);
+    ScConditionalFormat* pFormatA3 = rDoc.GetCondFormat(0, 2, 0);
+    CPPUNIT_ASSERT(pFormatA3);
+    ScConditionalFormat* pFormatA4 = rDoc.GetCondFormat(0, 3, 0);
+    CPPUNIT_ASSERT(pFormatA4);
+
+    ScRefCellValue aCellA1(rDoc, ScAddress(0, 0, 0));
+    OUString aCellStyleA1 = pFormatA1->GetCellStyle(aCellA1, ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(!aCellStyleA1.isEmpty());
+
+    ScRefCellValue aCellA2(rDoc, ScAddress(0, 1, 0));
+    OUString aCellStyleA2 = pFormatA2->GetCellStyle(aCellA2, ScAddress(0, 1, 0));
+    CPPUNIT_ASSERT(!aCellStyleA2.isEmpty());
+
+    ScRefCellValue aCellA3(rDoc, ScAddress(0, 2, 0));
+    OUString aCellStyleA3 = pFormatA3->GetCellStyle(aCellA3, ScAddress(0, 2, 0));
+    CPPUNIT_ASSERT(!aCellStyleA3.isEmpty());
+
+    ScRefCellValue aCellA4(rDoc, ScAddress(0, 3, 0));
+    OUString aCellStyleA4 = pFormatA4->GetCellStyle(aCellA4, ScAddress(0, 3, 0));
+    CPPUNIT_ASSERT(!aCellStyleA4.isEmpty());
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testExtCondFormatXLSX()
@@ -2465,7 +2569,7 @@ void ScFiltersTest::testCondFormatImportCellIs()
     CPPUNIT_ASSERT_EQUAL( ScConditionMode::Equal,  pCondition->GetOperation());
 
     OUString aStr = pCondition->GetExpression(ScAddress(0, 0, 0), 0);
-    CPPUNIT_ASSERT_EQUAL( OUString("$Sheet2.$A$1"), aStr );
+    CPPUNIT_ASSERT_EQUAL( OUString("$Sheet2.$A$2"), aStr );
 
     pEntry = pFormat->GetEntry(1);
     CPPUNIT_ASSERT(pEntry);
@@ -2475,7 +2579,7 @@ void ScFiltersTest::testCondFormatImportCellIs()
     CPPUNIT_ASSERT_EQUAL( ScConditionMode::Equal,  pCondition->GetOperation());
 
     aStr = pCondition->GetExpression(ScAddress(0, 0, 0), 0);
-    CPPUNIT_ASSERT_EQUAL( OUString("$Sheet2.$A$2"), aStr );
+    CPPUNIT_ASSERT_EQUAL( OUString("$Sheet2.$A$1"), aStr );
 
     xDocSh->DoClose();
 }
@@ -5299,6 +5403,55 @@ void ScFiltersTest::testDeleteCirclesInRowAndCol()
 
     // There should not be a circle object!
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf129940()
+{
+    // Test pure span elements inside text:ruby-base
+    ScDocShellRef xDocSh = loadDoc(u"tdf129940.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf129940.ods", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    // Pure text within text:ruby-base
+    OUString aStr = rDoc.GetString(ScAddress(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"小笠原"), aStr);
+    aStr = rDoc.GetString(ScAddress(1,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"徳彦"), aStr);
+
+    // Multiple text:span within text:ruby-base
+    aStr = rDoc.GetString(ScAddress(2,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString(u"注音符號"), aStr);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf139763ShapeAnchor()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf139763ShapeAnchor.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load cell-anchored-shapes.xlsx", xDocSh.is());
+
+    // There are two objects on the first sheet, anchored to page by element xdr:absoluteAnchor
+    // and anchored to cell by element xdr:oneCellAnchor. Error was, that they were imported as
+    // "anchor to cell (resize with cell".
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_MESSAGE("There should be at least one sheet.", rDoc.GetTableCount() > 0);
+
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
+    // There should be 2 shapes
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pPage->GetObjCount());
+
+    SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get page anchored object.", pObj);
+    CPPUNIT_ASSERT_MESSAGE("Shape must be page anchored", !ScDrawLayer::IsCellAnchored(*pObj));
+
+    pObj = pPage->GetObj(1);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get cell anchored object.", pObj);
+    CPPUNIT_ASSERT_MESSAGE("Shape must be anchored to cell.", ScDrawLayer::IsCellAnchored(*pObj));
+    CPPUNIT_ASSERT_MESSAGE("Shape must not resize with cell.", !ScDrawLayer::IsResizeWithCell(*pObj));
 
     xDocSh->DoClose();
 }

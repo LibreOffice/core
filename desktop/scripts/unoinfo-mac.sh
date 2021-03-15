@@ -38,7 +38,7 @@ c++)
 java)
     printf '0%s\0%s' \
         "$sd_prog/../Resources/java/libreoffice.jar" \
-        "$sd_prog"
+        "$sd_prog/../MacOS"
     ;;
 *)
     exit 1

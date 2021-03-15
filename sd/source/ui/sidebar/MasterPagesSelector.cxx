@@ -86,6 +86,8 @@ MasterPagesSelector::MasterPagesSelector (
 
     Link<MasterPageContainerChangeEvent&,void> aChangeListener (LINK(this,MasterPagesSelector,ContainerChangeListener));
     mpContainer->AddChangeListener(aChangeListener);
+
+    m_pInitialFocusWidget = mxPreviewValueSet->GetDrawingArea();
 }
 
 MasterPagesSelector::~MasterPagesSelector()

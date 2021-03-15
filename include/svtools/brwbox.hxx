@@ -587,6 +587,7 @@ public:
     bool            ReserveControlArea(sal_uInt16 nWidth = USHRT_MAX);
     tools::Rectangle       GetControlArea() const;
     virtual bool    ProcessKey(const KeyEvent& rEvt);
+    virtual void    ChildFocusIn();
     void            Dispatch( sal_uInt16 nId );
     void            SetMode( BrowserMode nMode );
     BrowserMode     GetMode( ) const { return m_nCurrentMode; }

@@ -96,7 +96,24 @@ ParaLineSpacingControl::ParaLineSpacingControl(SvxLineSpacingToolBoxControl* pCo
 
 void ParaLineSpacingControl::GrabFocus()
 {
-    mxSpacing1Button->grab_focus();
+    switch (mxLineDist->get_active())
+    {
+        case LLINESPACE_1:
+            mxSpacing1Button->grab_focus();
+            break;
+        case LLINESPACE_115:
+            mxSpacing115Button->grab_focus();
+            break;
+        case LLINESPACE_15:
+            mxSpacing15Button->grab_focus();
+            break;
+        case LLINESPACE_2:
+            mxSpacing2Button->grab_focus();
+            break;
+        default:
+            mxLineDist->grab_focus();
+            break;
+    }
 }
 
 ParaLineSpacingControl::~ParaLineSpacingControl()
@@ -115,7 +132,7 @@ void ParaLineSpacingControl::Initialize()
 
     if( eState >= SfxItemState::DEFAULT )
     {
-        MapUnit eUnit = SfxViewFrame::Current()->GetPool().GetMetric( currSPItem->Which() );
+        MapUnit eUnit = pCurrent->GetPool().GetMetric(currSPItem->Which());
         meLNSpaceUnit = eUnit;
 
         switch( currSPItem->GetLineSpaceRule() )

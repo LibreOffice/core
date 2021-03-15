@@ -9,7 +9,7 @@ dnl in order to create a configure script.
 # several non-alphanumeric characters, those are split off and used only for the
 # ABOUTBOXPRODUCTVERSIONSUFFIX in openoffice.lst. Why that is necessary, no idea.
 
-AC_INIT([LibreOffice],[7.1.0.1.0+],[],[],[http://documentfoundation.org/])
+AC_INIT([LibreOffice],[7.1.3.0.0+],[],[],[http://documentfoundation.org/])
 
 dnl libnumbertext needs autoconf 2.68, but that can pick up autoconf268 just fine if it is installed
 dnl whereas aclocal (as run by autogen.sh) insists on using autoconf and fails hard
@@ -1763,6 +1763,11 @@ AC_ARG_WITH(product-name,
         [Define the product name. Default is AC_PACKAGE_NAME.]),
 ,with_product_name=$PRODUCTNAME)
 
+libo_FUZZ_ARG_ENABLE(community-flavor,
+    AS_HELP_STRING([--disable-community-flavor],
+        [Disable the Community branding.]),
+,)
+
 AC_ARG_WITH(package-version,
     AS_HELP_STRING([--with-package-version='3.1.4.5'],
         [Define the package version. Default is AC_PACKAGE_VERSION. Use only if you distribute an own build for macOS.]),
@@ -2643,6 +2648,14 @@ else
 fi
 AC_SUBST(ENABLE_RELEASE_BUILD)
 AC_SUBST(GET_TASK_ALLOW_ENTITLEMENT)
+
+AC_MSG_CHECKING([whether to build a Community flavor])
+if test -z "$enable_community_flavor" -o "$enable_community_flavor" == "yes"; then
+    AC_DEFINE(HAVE_FEATURE_COMMUNITY_FLAVOR)
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+fi
 
 dnl ===================================================================
 dnl Test whether to sign Windows Build
@@ -6001,7 +6014,7 @@ fi
 if test "$with_system_hsqldb" = "yes"; then
     perl_use_string="$perl_use_string ; use Archive::Zip"
 fi
-if test "$with_system_openssl" != "yes"; then
+if test "$enable_openssl" = "yes" -a "$with_system_openssl" != "yes"; then
     # OpenSSL needs that to build
     perl_use_string="$perl_use_string ; use FindBin"
 fi
@@ -8262,13 +8275,6 @@ _ACEOF
 
     # now check if $JAVA_HOME is really valid
     if test "$_os" = "Darwin" -o "$OS_FOR_BUILD" = MACOSX; then
-        case "${JAVA_HOME}" in
-            /Library/Java/JavaVirtualMachines/*)
-                ;;
-            *)
-                AC_MSG_ERROR([JDK in $JAVA_HOME cannot be used in CppUnit tests - install Oracle JDK])
-                ;;
-        esac
         if test ! -f "$JAVA_HOME/lib/jvm.cfg" -a "x$with_jdk_home" = "x"; then
             AC_MSG_WARN([JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script])
             AC_MSG_WARN([attempted to find JAVA_HOME automatically, but apparently it failed])
@@ -8347,7 +8353,7 @@ if test -n "$ENABLE_JAVA" -a -z "$JAVAINC"; then
         JAVAINC="$JAVAINC -I$JAVA_HOME/include"
         ;;
 
-    darwin*)
+    darwin*|macos*)
         if test -d "$JAVA_HOME/include/darwin"; then
             JAVAINC="-I$JAVA_HOME/include  -I$JAVA_HOME/include/darwin"
         else
@@ -9502,7 +9508,7 @@ internal)
     SYSTEM_PYTHON=
     PYTHON_VERSION_MAJOR=3
     PYTHON_VERSION_MINOR=8
-    PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.4
+    PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.8
     if ! grep -q -i python.*${PYTHON_VERSION} ${SRC_ROOT}/download.lst; then
         AC_MSG_ERROR([PYTHON_VERSION ${PYTHON_VERSION} but no matching file in download.lst])
     fi
@@ -11165,7 +11171,7 @@ elif $GNUCP --version 2>/dev/null | grep "GNU fileutils" >/dev/null 2>/dev/null;
     AC_MSG_RESULT([yes])
 else
     case "$build_os" in
-    darwin*|netbsd*|openbsd*|freebsd*|dragonfly*|aix*)
+    darwin*|macos*|netbsd*|openbsd*|freebsd*|dragonfly*|aix*)
         x_GNUCP=[\#]
         GNUCP=''
         AC_MSG_RESULT([no gnucp found - using the system's cp command])
@@ -13434,7 +13440,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([for alternative branding images directory])
 # initialize mapped arrays
 BRAND_INTRO_IMAGES="intro.png intro-highres.png"
-brand_files="$BRAND_INTRO_IMAGES logo.svg logo_inverted.svg about.svg"
+brand_files="$BRAND_INTRO_IMAGES logo.svg logo_inverted.svg logo-sc.svg logo-sc_inverted.svg about.svg"
 
 if test -z "$with_branding" -o "$with_branding" = "no"; then
     AC_MSG_RESULT([none])

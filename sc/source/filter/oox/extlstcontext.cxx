@@ -80,8 +80,26 @@ void ExtCfRuleContext::onStartElement( const AttributeList& rAttribs )
     }
 }
 
+namespace {
+    bool IsSpecificTextCondMode(ScConditionMode eMode)
+    {
+        switch (eMode)
+        {
+        case ScConditionMode::BeginsWith:
+        case ScConditionMode::EndsWith:
+        case ScConditionMode::ContainsText:
+        case ScConditionMode::NotContainsText:
+            return true;
+        default:
+            break;
+        }
+        return false;
+    }
+}
+
 ExtConditionalFormattingContext::ExtConditionalFormattingContext(WorksheetContextBase& rFragment)
     : WorksheetContextBase(rFragment)
+    , nFormulaCount(0)
     , nPriority(-1)
     , eOperator(ScConditionMode::NONE)
     , isPreviousElementF(false)
@@ -107,6 +125,7 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
         OUString aId = rAttribs.getString(XML_id, OUString());
         nPriority = rAttribs.getInteger( XML_priority, -1 );
         maPriorities.push_back(nPriority);
+        maModel.nPriority = nPriority;
 
         if (aType == "dataBar")
         {
@@ -133,16 +152,37 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
         {
             sal_Int32 aToken = rAttribs.getToken( XML_operator, XML_TOKEN_INVALID );
             eOperator =  CondFormatBuffer::convertToInternalOperator(aToken);
+            maModel.eOperator = eOperator;
             return this;
         }
-        else if(aType == "containsText")
+        else if (aType == "containsText")
         {
             eOperator = ScConditionMode::ContainsText;
+            maModel.eOperator = eOperator;
             return this;
         }
-        else if(aType == "notContainsText")
+        else if (aType == "notContainsText")
         {
             eOperator = ScConditionMode::NotContainsText;
+            maModel.eOperator = eOperator;
+            return this;
+        }
+        else if (aType == "beginsWith")
+        {
+            eOperator = ScConditionMode::BeginsWith;
+            maModel.eOperator = eOperator;
+            return this;
+        }
+        else if (aType == "endsWith")
+        {
+            eOperator = ScConditionMode::EndsWith;
+            maModel.eOperator = eOperator;
+            return this;
+        }
+        else if (aType == "expression")
+        {
+            eOperator = ScConditionMode::Direct;
+            maModel.eOperator = eOperator;
             return this;
         }
         else
@@ -156,6 +196,8 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
     }
     else if (nElement == XM_TOKEN( sqref ) || nElement == XM_TOKEN( f ))
     {
+        if(nElement == XM_TOKEN( f ))
+           nFormulaCount++;
         return this;
     }
 
@@ -191,13 +233,17 @@ void ExtConditionalFormattingContext::onEndElement()
     {
         case XM_TOKEN(f):
         {
-            if(!aChars.startsWith("ISERROR(SEARCH(") && !aChars.startsWith("NOT(ISERROR(SEARCH("))
-               rFormulas.push_back(aChars);
+            if(!IsSpecificTextCondMode(eOperator) || nFormulaCount == 2)
+               maModel.aFormula = aChars;
         }
         break;
         case XLS14_TOKEN( cfRule ):
         {
             getStyles().getExtDxfs().forEachMem( &Dxf::finalizeImport );
+            maModel.aStyle = getStyles().createExtDxfStyle(rStyleIdx);
+            rStyleIdx++;
+            nFormulaCount = 0;
+            maModels.push_back(maModel);
         }
         break;
         case XM_TOKEN(sqref):
@@ -215,23 +261,29 @@ void ExtConditionalFormattingContext::onEndElement()
                 aRange[i].aEnd.SetTab(nTab);
             }
 
+            if (maModels.size() > 1)
+            {
+                std::sort(maModels.begin(), maModels.end(),
+                          [](const ExtCondFormatRuleModel& lhs, const ExtCondFormatRuleModel& rhs) {
+                              return lhs.nPriority < rhs.nPriority;
+                          });
+            }
+
             if (isPreviousElementF) // sqref can be alone in some cases.
             {
-                for (const OUString& rFormula : rFormulas)
+                for (size_t i = 0; i < maModels.size(); ++i)
                 {
                     ScAddress rPos = aRange.GetTopLeftCorner();
-                    rStyle = getStyles().createExtDxfStyle(rStyleIdx);
-                    ScCondFormatEntry* pEntry = new ScCondFormatEntry(eOperator, rFormula, "", rDoc,
-                                                                      rPos, rStyle, "", "",
+                    ScCondFormatEntry* pEntry = new ScCondFormatEntry(maModels[i].eOperator, maModels[i].aFormula, "", rDoc,
+                                                                      rPos, maModels[i].aStyle, "", "",
                                                                       formula::FormulaGrammar::GRAM_OOXML ,
                                                                       formula::FormulaGrammar::GRAM_OOXML,
                                                                       ScFormatEntry::Type::ExtCondition );
                     maEntries.push_back(std::unique_ptr<ScFormatEntry>(pEntry));
-                    rStyleIdx++;
                 }
 
-                assert(rFormulas.size() == maPriorities.size());
-                rFormulas.clear();
+                assert(maModels.size() == maPriorities.size());
+                maModels.clear();
             }
 
             std::vector< std::unique_ptr<ExtCfCondFormat> >& rExtFormats =  getCondFormats().importExtCondFormat();

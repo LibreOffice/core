@@ -19,6 +19,8 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
+#include <vcl/scheduler.hxx>
+
 using namespace ::com::sun::star;
 
 namespace
@@ -188,6 +190,27 @@ CPPUNIT_TEST_FIXTURE(Test, testFieldIfInsideIf)
     // - Actual  : 025
     // i.e. some of the inner fields escaped outside the outer field.
     CPPUNIT_ASSERT_EQUAL(OUString("25"), xCell->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testCreateDatePreserve)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "create-date-preserve.docx";
+    getComponent() = loadFromDesktop(aURL);
+    // Trigger idle layout.
+    Scheduler::ProcessEventsToIdle();
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xPortionEnumAccess(xParaEnum->nextElement(),
+                                                                     uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortionEnum = xPortionEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xPortion(xPortionEnum->nextElement(), uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 7/7/2020 10:11:00 AM
+    // - Actual  : 07/07/2020
+    // i.e. the formatting of the create date field was lost.
+    CPPUNIT_ASSERT_EQUAL(OUString("7/7/2020 10:11:00 AM"), xPortion->getString());
 }
 }
 

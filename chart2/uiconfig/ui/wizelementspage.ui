@@ -86,6 +86,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="primaryXaxis-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="wizelementspage|extended_tip|primaryXaxis">Enter a label for the x-axis (horizontal).</property>
@@ -103,6 +104,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="primaryYaxis-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="wizelementspage|extended_tip|primaryYaxis">Enter a label for the y-axis (vertical).</property>
@@ -120,6 +122,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="primaryZaxis-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="wizelementspage|extended_tip|primaryZaxis">Enter a label for the z-axis. This option is only available for three-dimensional charts.</property>
@@ -165,6 +168,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="maintitle-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="wizelementspage|extended_tip|maintitle">Enter a title for your chart.</property>
@@ -182,6 +186,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="subtitle-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="wizelementspage|extended_tip|subtitle">Enter a subtitle for your chart.</property>
@@ -227,6 +232,7 @@
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
                         <property name="activates_default">True</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="secondaryXaxis-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="wizelementspage|extended_tip|secondaryXaxis">Enter a label for the secondary x-axis. This option is only available for charts that support a secondary x-axis.</property>
@@ -243,6 +249,7 @@
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="activates_default">True</property>
                       </object>
                       <packing>

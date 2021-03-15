@@ -77,6 +77,9 @@ public:
 
     SCROW findLastTrue() const;
 
+    // Builds internal data (so that it doesn't build them while used in threads).
+    void makeReady();
+
     OString dumpAsString();
 
 private:
@@ -101,6 +104,9 @@ public:
     bool getRangeData(SCCOL nCol, RangeData& rData);
     void removeSegment(SCCOL nCol1, SCCOL nCol2);
     void insertSegment(SCCOL nCol, SCCOL nSize);
+
+    // Builds internal data (so that it doesn't build them while used in threads).
+    void makeReady();
 
     OString dumpAsString();
 
@@ -152,6 +158,9 @@ public:
     SCROW findLastTrue(sal_uInt16 nValue) const;
 
     void enableTreeSearch(bool bEnable);
+
+    // Builds internal data (so that it doesn't build them while used in threads).
+    void makeReady();
 
     OString dumpAsString();
 

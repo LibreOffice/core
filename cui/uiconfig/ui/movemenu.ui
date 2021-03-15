@@ -124,6 +124,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="menuname-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="movemenu|extended_tip|menuname">Enter a name for the menu. To specify a letter in the name as an accelerator key, enter a tilde (~) before the letter.</property>

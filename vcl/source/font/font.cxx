@@ -33,6 +33,13 @@
 
 #include <rtl/instance.hxx>
 #include <TypeSerializer.hxx>
+#include <vcl/svapp.hxx>
+
+#ifdef _WIN32
+#include <vcl/metric.hxx>
+#else
+#include <vcl/virdev.hxx>
+#endif
 
 using namespace vcl;
 
@@ -357,7 +364,55 @@ void Font::GetFontAttributes( FontAttributes& rAttrs ) const
     rAttrs.SetSymbolFlag( mpImplFont->GetCharSet() == RTL_TEXTENCODING_SYMBOL );
 }
 
-SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont )
+// tdf#127471 for corrections on EMF/WMF we need the AvgFontWidth in Windows-specific notation
+tools::Long Font::GetOrCalculateAverageFontWidth() const
+{
+    if(0 == mpImplFont->GetCalculatedAverageFontWidth())
+    {
+        // VirtualDevice is not thread safe
+        SolarMutexGuard aGuard;
+
+        // create unscaled copy of font (this), a VirtualDevice and set it there
+        vcl::Font aUnscaledFont(*this);
+        ScopedVclPtr<VirtualDevice> pTempVirtualDevice(VclPtr<VirtualDevice>::Create());
+        aUnscaledFont.SetAverageFontWidth(0);
+        pTempVirtualDevice->SetFont(aUnscaledFont);
+
+#ifdef _WIN32
+        // on Windows systems use FontMetric to get/create AverageFontWidth from system
+        const FontMetric aMetric(pTempVirtualDevice->GetFontMetric());
+        const_cast<Font*>(this)->mpImplFont->SetCalculatedAverageFontWidth(aMetric.GetAverageFontWidth());
+#else
+        // On non-Windows systems we need to calculate AvgFontWidth
+        // as close as possible (discussion see documentation in task),
+        // so calculate it. For discussion of method used, see task
+        // buffer measure string creation, will always use the same
+        static OUString aMeasureString;
+
+        if(!aMeasureString.getLength())
+        {
+            const std::size_t nSize(127 - 32);
+            std::array<sal_Unicode, nSize> aArray;
+
+            for(sal_Unicode a(0); a < nSize; a++)
+            {
+                aArray[a] = a + 32;
+            }
+
+            aMeasureString = OUString(aArray.data());
+        }
+
+        const double fAverageFontWidth(
+            pTempVirtualDevice->GetTextWidth(aMeasureString, 0, aMeasureString.getLength()) /
+            static_cast<double>(aMeasureString.getLength()));
+        const_cast<Font*>(this)->mpImplFont->SetCalculatedAverageFontWidth(basegfx::fround(fAverageFontWidth));
+#endif
+    }
+
+    return mpImplFont->GetCalculatedAverageFontWidth();
+}
+
+SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont, tools::Long& rnNormedFontScaling )
 {
     VersionCompat   aCompat( rIStm, StreamMode::READ );
     sal_uInt16      nTmp16(0);
@@ -400,15 +455,25 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont )
         rIStm.ReadUInt16( nTmp16 ); rImplFont.meOverline = static_cast<FontLineStyle>(nTmp16);
     }
 
+    // tdf#127471 read NormedFontScaling
+    if( aCompat.GetVersion() >= 4 )
+    {
+        sal_Int32 nNormedFontScaling(0);
+        rIStm.ReadInt32(nNormedFontScaling);
+        rnNormedFontScaling = nNormedFontScaling;
+    }
+
     // Relief
     // CJKContextLanguage
 
     return rIStm;
 }
 
-SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont )
+SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont, const tools::Long& rnNormedFontScaling )
 {
-    VersionCompat aCompat( rOStm, StreamMode::WRITE, 3 );
+    // tdf#127471 increase to version 4
+    VersionCompat aCompat( rOStm, StreamMode::WRITE, 4 );
+
     TypeSerializer aSerializer(rOStm);
     rOStm.WriteUniOrByteString( rImplFont.GetFamilyName(), rOStm.GetStreamCharSet() );
     rOStm.WriteUniOrByteString( rImplFont.GetStyleName(), rOStm.GetStreamCharSet() );
@@ -440,17 +505,108 @@ SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont )
     // new in version 3
     rOStm.WriteUInt16( rImplFont.meOverline );
 
+    // new in version 4, NormedFontScaling
+    rOStm.WriteInt32(rnNormedFontScaling);
+
     return rOStm;
 }
 
 SvStream& ReadFont( SvStream& rIStm, vcl::Font& rFont )
 {
-    return ReadImplFont( rIStm, *rFont.mpImplFont );
+    // tdf#127471 try to read NormedFontScaling
+    tools::Long nNormedFontScaling(0);
+    SvStream& rRetval(ReadImplFont( rIStm, *rFont.mpImplFont, nNormedFontScaling ));
+
+    if (nNormedFontScaling > 0)
+    {
+#ifdef _WIN32
+        // we run on windows and a NormedFontScaling was written
+        if(rFont.GetFontSize().getWidth() == nNormedFontScaling)
+        {
+            // the writing producer was running on a non-windows system, adapt to needed windows
+            // system-specific pre-multiply
+            const tools::Long nHeight(std::max<tools::Long>(rFont.GetFontSize().getHeight(), 0));
+            sal_uInt32 nScaledWidth(0);
+
+            if(nHeight > 0)
+            {
+                vcl::Font aUnscaledFont(rFont);
+                aUnscaledFont.SetAverageFontWidth(0);
+                const FontMetric aUnscaledFontMetric(Application::GetDefaultDevice()->GetFontMetric(aUnscaledFont));
+
+                if (nHeight > 0)
+                {
+                    const double fScaleFactor(static_cast<double>(nNormedFontScaling) / static_cast<double>(nHeight));
+                    nScaledWidth = basegfx::fround(static_cast<double>(aUnscaledFontMetric.GetAverageFontWidth()) * fScaleFactor);
+                }
+            }
+
+            rFont.SetAverageFontWidth(nScaledWidth);
+        }
+        else
+        {
+            // the writing producer was on a windows system, correct pre-multiplied value
+            // is already set, nothing to do. Ignore 2nd value. Here a check
+            // could be done if adapting the 2nd, NormedFontScaling value would be similar to
+            // the set value for plausability reasons
+        }
+#else
+        // we do not run on windows and a NormedFontScaling was written
+        if(rFont.GetFontSize().getWidth() == nNormedFontScaling)
+        {
+            // the writing producer was not on a windows system, correct value
+            // already set, nothing to do
+        }
+        else
+        {
+            // the writing producer was on a windows system, correct FontScvaling.
+            // The correct non-pre-multiplied value is the 2nd one, use it
+            rFont.SetAverageFontWidth(nNormedFontScaling);
+        }
+#endif
+    }
+
+    return rRetval;
 }
 
 SvStream& WriteFont( SvStream& rOStm, const vcl::Font& rFont )
 {
-    return WriteImplFont( rOStm, *rFont.mpImplFont );
+    // tdf#127471 prepare NormedFontScaling for additional export
+    tools::Long nNormedFontScaling(rFont.GetFontSize().getWidth());
+
+    // FontScaling usage at vcl-Font is detected by checking that FontWidth != 0
+    if (nNormedFontScaling > 0)
+    {
+        const tools::Long nHeight(std::max<tools::Long>(rFont.GetFontSize().getHeight(), 0));
+
+        // check for negative height
+        if(0 == nHeight)
+        {
+            nNormedFontScaling = 0;
+        }
+        else
+        {
+#ifdef _WIN32
+            // for WIN32 the value is pre-multiplied with AverageFontWidth
+            // which makes it system-dependent. Turn that back to have the
+            // normed non-windows form of it for export as 2nd value
+            vcl::Font aUnscaledFont(rFont);
+            aUnscaledFont.SetAverageFontWidth(0);
+            const FontMetric aUnscaledFontMetric(
+                Application::GetDefaultDevice()->GetFontMetric(aUnscaledFont));
+
+            if (aUnscaledFontMetric.GetAverageFontWidth() > 0)
+            {
+                const double fScaleFactor(
+                    static_cast<double>(nNormedFontScaling)
+                    / static_cast<double>(aUnscaledFontMetric.GetAverageFontWidth()));
+                nNormedFontScaling = static_cast<tools::Long>(fScaleFactor * nHeight);
+            }
+#endif
+        }
+    }
+
+    return WriteImplFont( rOStm, *rFont.mpImplFont, nNormedFontScaling );
 }
 
 namespace
@@ -742,7 +898,8 @@ ImplFont::ImplFont() :
     maFillColor( COL_TRANSPARENT ),
     mbWordLine( false ),
     mnOrientation( 0 ),
-    mnQuality( 0 )
+    mnQuality( 0 ),
+    mnCalculatedAverageFontWidth( 0 )
 {}
 
 ImplFont::ImplFont( const ImplFont& rImplFont ) :
@@ -774,7 +931,8 @@ ImplFont::ImplFont( const ImplFont& rImplFont ) :
     maFillColor( rImplFont.maFillColor ),
     mbWordLine( rImplFont.mbWordLine ),
     mnOrientation( rImplFont.mnOrientation ),
-    mnQuality( rImplFont.mnQuality )
+    mnQuality( rImplFont.mnQuality ),
+    mnCalculatedAverageFontWidth( rImplFont.mnCalculatedAverageFontWidth )
 {}
 
 bool ImplFont::operator==( const ImplFont& rOther ) const

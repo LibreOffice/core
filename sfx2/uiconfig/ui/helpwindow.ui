@@ -20,7 +20,7 @@
         </child>
       </object>
       <packing>
-        <property name="resize">True</property>
+        <property name="resize">False</property>
         <property name="shrink">False</property>
       </packing>
     </child>
@@ -43,7 +43,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="toolbar_style">icons</property>
-                <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="index">
                     <property name="visible">True</property>
@@ -196,7 +195,7 @@
       </object>
       <packing>
         <property name="resize">True</property>
-        <property name="shrink">True</property>
+        <property name="shrink">False</property>
       </packing>
     </child>
   </object>

@@ -27,6 +27,7 @@
             <property name="no_show_all">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
+            <property name="truncate-multiline">True</property>
             <property name="has_frame">False</property>
           </object>
           <packing>
@@ -43,7 +44,11 @@
             <property name="vexpand">True</property>
             <property name="has_frame">False</property>
             <property name="activates_default">True</property>
+            <property name="truncate-multiline">True</property>
             <property name="width_chars">1</property>
+            <style>
+              <class name="small-button"/>
+            </style>
           </object>
           <packing>
             <property name="left_attach">0</property>

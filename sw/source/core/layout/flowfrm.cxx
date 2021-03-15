@@ -176,6 +176,61 @@ void SwFlowFrame::CheckKeep()
         pPre->InvalidatePos();
 }
 
+namespace
+{
+/**
+ * Determines if the next content frame after rThis will require the full area of the parent body
+ * frame.
+ */
+bool IsNextContentFullPage(const SwFrame& rThis)
+{
+    const SwFrame* pNext = rThis.FindNextCnt();
+    if (!pNext)
+    {
+        return false;
+    }
+
+    const SwSortedObjs* pNextDrawObjs = pNext->GetDrawObjs();
+    if (!pNextDrawObjs || !pNextDrawObjs->size())
+    {
+        return false;
+    }
+
+    for (const auto& pDrawObj : *pNextDrawObjs)
+    {
+        if (!pDrawObj)
+        {
+            continue;
+        }
+
+        SwTwips nDrawObjHeight = pDrawObj->GetObjRectWithSpaces().Height();
+        const SwPageFrame* pPageFrame = pDrawObj->GetPageFrame();
+        if (!pPageFrame)
+        {
+            continue;
+        }
+
+        SwTwips nBodyHeight = pPageFrame->GetLower()->getFrameArea().Height();
+        if (nDrawObjHeight < nBodyHeight)
+        {
+            continue;
+        }
+
+        const SwFormatSurround& rSurround = pDrawObj->GetFrameFormat().GetSurround();
+        if (rSurround.GetSurround() != text::WrapTextMode_NONE)
+        {
+            continue;
+        }
+
+        // At this point the height of the draw object will use all the vertical available space,
+        // and also no wrapping will be performed, so all horizontal space will be taken as well.
+        return true;
+    }
+
+    return false;
+}
+}
+
 bool SwFlowFrame::IsKeep(SvxFormatKeepItem const& rKeep,
         SvxFormatBreakItem const& rBreak,
         bool const bCheckIfLastRowShouldKeep) const
@@ -186,10 +241,11 @@ bool SwFlowFrame::IsKeep(SvxFormatKeepItem const& rKeep,
     // 3. If bBreakCheck is set to true, this function only checks
     //    if there are any break after attributes set at rAttrs
     //    or break before attributes set for the next content (or next table)
+    // 4. Keep is ignored if the next frame will require its own page.
     bool bKeep = bCheckIfLastRowShouldKeep ||
                  (  !m_rThis.IsInFootnote() &&
                     ( !m_rThis.IsInTab() || m_rThis.IsTabFrame() ) &&
-                    rKeep.GetValue() );
+                    rKeep.GetValue() && !IsNextContentFullPage(m_rThis));
 
     OSL_ENSURE( !bCheckIfLastRowShouldKeep || m_rThis.IsTabFrame(),
             "IsKeep with bCheckIfLastRowShouldKeep should only be used for tabfrms" );

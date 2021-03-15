@@ -1804,8 +1804,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         {
             if ( !IsStyleSheetImport() )
                 m_pImpl->deferCharacterProperty( nSprmId, uno::makeAny( nIntValue ));
-            else
+            else if (!m_pImpl->IsDocDefaultsImport())
             {
+                // For some undocumented reason, MS Word seems to ignore this in docDefaults
+
                 // DON'T FIXME: Truly calculating this for Character Styles will be tricky,
                 // because it depends on the final fontsize - regardless of
                 // where it is set. So at the style level,
@@ -3512,7 +3514,8 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         if (bNewLine)
         {
             const bool bSingleParagraph = m_pImpl->GetIsFirstParagraphInSection() && m_pImpl->GetIsLastParagraphInSection();
-            const bool bSingleParagraphAfterRedline = m_pImpl->GetIsFirstParagraphInSection(true) && m_pImpl->GetIsLastParagraphInSection();
+            const bool bSingleParagraphAfterRedline = m_pImpl->GetIsFirstParagraphInSection(/*bAfterRedline=*/true) &&
+                    m_pImpl->GetIsLastParagraphInSection();
             PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
             if (!m_pImpl->GetFootnoteContext())
             {
@@ -3986,6 +3989,11 @@ bool DomainMapper::IsInTable() const
 OUString DomainMapper::GetListStyleName(sal_Int32 nListId) const
 {
     return m_pImpl->GetListStyleName( nListId );
+}
+
+void DomainMapper::SetDocDefaultsImport(bool bSet)
+{
+    m_pImpl->SetDocDefaultsImport(bSet);
 }
 
 bool DomainMapper::IsStyleSheetImport() const

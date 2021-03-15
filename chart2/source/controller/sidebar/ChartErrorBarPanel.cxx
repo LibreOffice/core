@@ -249,6 +249,8 @@ ChartErrorBarPanel::ChartErrorBarPanel(
     , mbModelValid(true)
 {
     Initialize();
+
+    m_pInitialFocusWidget = mxRBPosAndNeg.get();
 }
 
 ChartErrorBarPanel::~ChartErrorBarPanel()

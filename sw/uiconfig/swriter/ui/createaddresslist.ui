@@ -281,6 +281,7 @@
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment1</property>
                                 <property name="numeric">True</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="SETNOSB-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="createaddresslist|extended_tip|SETNOSB">Click the buttons to navigate through the records or enter a record number to display a record.</property>
@@ -298,6 +299,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="activates_default">True</property>
                                 <property name="width_chars">4</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="SETNOED-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="createaddresslist|extended_tip|SETNOED">Click the buttons to navigate through the records or enter a record number to display a record.</property>

@@ -99,17 +99,17 @@ def nsinstall(argv):
   if options.D:
     if len(args) != 1:
       return 1
-    if os.path.exists(args[0]):
+    try:
+      if options.m:
+        os.makedirs(args[0], options.m)
+      else:
+        os.makedirs(args[0])
+    except FileExistsError:
       if not os.path.isdir(args[0]):
         sys.stderr.write('nsinstall: ' + args[0] + ' is not a directory\n')
         sys.exit(1)
       if options.m:
         os.chmod(args[0], options.m)
-      sys.exit()
-    if options.m:
-      os.makedirs(args[0], options.m)
-    else:
-      os.makedirs(args[0])
     return 0
 
   # nsinstall arg1 [...] directory

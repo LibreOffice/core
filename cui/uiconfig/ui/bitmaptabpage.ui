@@ -211,6 +211,7 @@
                           <object class="GtkSpinButton" id="width">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="hexpand">True</property>
                           </object>
                           <packing>
@@ -249,6 +250,7 @@
                           <object class="GtkSpinButton" id="height">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="hexpand">True</property>
                           </object>
                           <packing>
@@ -379,6 +381,7 @@
                         <child>
                           <object class="GtkSpinButton" id="posoffx">
                             <property name="visible">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="can_focus">True</property>
                           </object>
                           <packing>
@@ -417,6 +420,7 @@
                         <child>
                           <object class="GtkSpinButton" id="posoffy">
                             <property name="visible">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="can_focus">True</property>
                           </object>
                           <packing>
@@ -487,6 +491,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustment1</property>
                           </object>
                           <packing>

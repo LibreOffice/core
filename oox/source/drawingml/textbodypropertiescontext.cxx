@@ -177,6 +177,22 @@ ContextHandlerRef TextBodyPropertiesContext::onCreateContext( sal_Int32 aElement
 
             // EG_Text3D
             case A_TOKEN( sp3d ):           // CT_Shape3D
+            {
+                if (mpShapePtr && mpShapePtr->getServiceName() == "com.sun.star.drawing.CustomShape")
+                {
+                    if (rAttribs.hasAttribute(XML_extrusionH))
+                        mpShapePtr->getTextBody()->get3DProperties().mnExtrusionH = rAttribs.getInteger(XML_extrusionH, 0);
+                    if (rAttribs.hasAttribute(XML_contourW))
+                        mpShapePtr->getTextBody()->get3DProperties().mnContourW = rAttribs.getInteger(XML_contourW, 0);
+                    if (rAttribs.hasAttribute(XML_z))
+                        mpShapePtr->getTextBody()->get3DProperties().mnShapeZ = rAttribs.getInteger(XML_z, 0);
+                    if (rAttribs.hasAttribute(XML_prstMaterial))
+                        mpShapePtr->getTextBody()->get3DProperties().mnMaterial = rAttribs.getToken(XML_prstMaterial, XML_none);
+                    return new SceneText3DPropertiesContext(*this, mpShapePtr->getTextBody()->get3DProperties());
+                }
+                break;
+            }
+
             case A_TOKEN( flatTx ):         // CT_FlatText
 
                 break;

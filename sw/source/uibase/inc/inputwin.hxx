@@ -74,7 +74,15 @@ public:
 
     void replace_selection(const OUString& rText)
     {
+        int nStartPos, nEndPos;
+        m_xWidget->get_selection_bounds(nStartPos, nEndPos);
+        if (nStartPos > nEndPos)
+            std::swap(nStartPos, nEndPos);
+
         m_xWidget->replace_selection(rText);
+
+        nStartPos = nStartPos + rText.getLength();
+        m_xWidget->select_region(nStartPos, nStartPos);
     }
 
     void select_region(int nStartPos, int nEndPos)

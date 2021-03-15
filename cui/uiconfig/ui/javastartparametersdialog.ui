@@ -118,6 +118,7 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="parameterfield-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|parameterfield">Enter a start parameter for a JRE as you would on a command line. Click Assign to add the parameter to the list of available start parameters.</property>

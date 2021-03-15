@@ -132,6 +132,7 @@
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment1</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="rows-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="previewzoomdialog|extended_tip|rows">Defines the number of rows of pages.</property>
@@ -150,6 +151,7 @@
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">adjustment2</property>
+                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="cols-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="previewzoomdialog|extended_tip|cols">Defines the number of pages shown in columns.</property>

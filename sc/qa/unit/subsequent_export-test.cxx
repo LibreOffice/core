@@ -89,6 +89,9 @@ public:
     virtual void tearDown() override;
 
     void test();
+    void testTdf139167();
+    void testTdf139394();
+    void testExtCondFormatXLSX();
     void testTdf90104();
     void testTdf111876();
     void testPasswordExportODS();
@@ -271,13 +274,19 @@ public:
     void testTdf126305_DataValidatyErrorAlert();
     void testTdf76047_externalLink();
     void testTdf87973_externalLinkSkipUnuseds();
+    void testTdf51022_lostPrintRange();
     void testTdf138741_externalLinkSkipUnusedsCrash();
+    void testTdf138824_linkToParentDirectory();
     void testTdf129969();
     void testTdf84874();
     void testTdf136721_paper_size();
+    void testTdf139258_rotated_image();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
+    CPPUNIT_TEST(testTdf139167);
+    CPPUNIT_TEST(testTdf139394);
+    CPPUNIT_TEST(testExtCondFormatXLSX);
     CPPUNIT_TEST(testTdf90104);
     CPPUNIT_TEST(testTdf111876);
     CPPUNIT_TEST(testPasswordExportODS);
@@ -444,10 +453,13 @@ public:
     CPPUNIT_TEST(testTdf126305_DataValidatyErrorAlert);
     CPPUNIT_TEST(testTdf76047_externalLink);
     CPPUNIT_TEST(testTdf87973_externalLinkSkipUnuseds);
+    CPPUNIT_TEST(testTdf51022_lostPrintRange);
     CPPUNIT_TEST(testTdf138741_externalLinkSkipUnusedsCrash);
+    CPPUNIT_TEST(testTdf138824_linkToParentDirectory);
     CPPUNIT_TEST(testTdf129969);
     CPPUNIT_TEST(testTdf84874);
     CPPUNIT_TEST(testTdf136721_paper_size);
+    CPPUNIT_TEST(testTdf139258_rotated_image);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -512,6 +524,84 @@ void ScExportTest::test()
     ScDocument& rLoadedDoc = xDocSh->GetDocument();
     double aVal = rLoadedDoc.GetValue(0,0,0);
     ASSERT_DOUBLES_EQUAL(aVal, 1.0);
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf139167()
+{
+    ScDocShellRef xShell = loadDoc(u"tdf139167.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/styles.xml");
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:styleSheet/x:cellStyles", "count", "6");
+    assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf/x:fill/x:patternFill/x:bgColor", "rgb",
+                "FFFFFF00");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf139394()
+{
+    ScDocShellRef xShell = loadDoc(u"tdf139394.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPathContent(pDoc,
+                "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[1]/"
+                "x14:cfRule/xm:f", "LEFT(A1,LEN(\"+\"))=\"+\"");
+    assertXPathContent(pDoc,
+                "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[2]/"
+                "x14:cfRule/xm:f", "RIGHT(A2,LEN(\"-\"))=\"-\"");
+    assertXPathContent(pDoc,
+                "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[3]/"
+                "x14:cfRule/xm:f", "LEFT(A3,LEN($B$3))=$B$3");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testExtCondFormatXLSX()
+{
+    ScDocShellRef xShell = loadDoc("tdf139021.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc,
+                "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[1]/"
+                "x14:cfRule", "type", "containsText");
+    assertXPathContent(pDoc,
+                "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[1]/"
+                "x14:cfRule/xm:f[1]", "NOT(ISERROR(SEARCH($B$1,A1)))");
+    assertXPathContent(pDoc,
+                "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[1]/"
+                "x14:cfRule/xm:f[2]", "$B$1");
+    assertXPath(pDoc,
+                "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[2]/"
+                "x14:cfRule", "type", "notContainsText");
+    assertXPathContent(pDoc,
+                "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[2]/"
+                "x14:cfRule/xm:f[1]", "ISERROR(SEARCH($B$2,A2))");
+    assertXPathContent(pDoc,
+                "/x:worksheet/x:extLst/x:ext/x14:conditionalFormattings/x14:conditionalFormatting[2]/"
+                "x14:cfRule/xm:f[2]", "$B$2");
+
     xDocSh->DoClose();
 }
 
@@ -637,7 +727,7 @@ void ScExportTest::testCondFormatExportCellIs()
     CPPUNIT_ASSERT_EQUAL( ScConditionMode::Equal,  pCondition->GetOperation());
 
     OUString aStr = pCondition->GetExpression(ScAddress(0, 0, 0), 0);
-    CPPUNIT_ASSERT_EQUAL( OUString("$Sheet2.$A$1"), aStr );
+    CPPUNIT_ASSERT_EQUAL( OUString("$Sheet2.$A$2"), aStr );
 
     pEntry = pFormat->GetEntry(1);
     CPPUNIT_ASSERT(pEntry);
@@ -647,7 +737,7 @@ void ScExportTest::testCondFormatExportCellIs()
     CPPUNIT_ASSERT_EQUAL( ScConditionMode::Equal,  pCondition->GetOperation());
 
     aStr = pCondition->GetExpression(ScAddress(0, 0, 0), 0);
-    CPPUNIT_ASSERT_EQUAL( OUString("$Sheet2.$A$2"), aStr );
+    CPPUNIT_ASSERT_EQUAL( OUString("$Sheet2.$A$1"), aStr );
 
     xDocSh->DoClose();
 }
@@ -5561,7 +5651,7 @@ void ScExportTest::testTdf87973_externalLinkSkipUnuseds()
     ScDocument& rDoc = pShell->GetDocument();
 
     // change external link to: 87973_externalSource.ods
-    OUString aFormula, bFormula;
+    OUString aFormula, aFormula2;
     rDoc.GetFormula(3, 1, 0, aFormula);
     auto nIdxOfFilename = aFormula.indexOf("tdf132105_external.ods");
     aFormula = aFormula.replaceAt(nIdxOfFilename, 22, "87973_externalSource.ods");
@@ -5577,15 +5667,54 @@ void ScExportTest::testTdf87973_externalLinkSkipUnuseds()
     aFormula = aFormula.replaceAt(nIdxOfFile, nIdxOfFilename - nIdxOfFile, aTempFilename);
     rDoc.SetFormula(ScAddress(3, 1, 0), aFormula, formula::FormulaGrammar::GRAM_NATIVE_UI);
 
+    // tdf#138832: test the same thing with singleref link
+    rDoc.GetFormula(3, 2, 0, aFormula);
+    nIdxOfFilename = aFormula.indexOf("tdf132105_external.ods");
+    aFormula = aFormula.replaceAt(nIdxOfFilename, 22, "87973_externalSource.ods");
+    nIdxOfFile = aFormula.indexOf("file");
+
+    aFormula = aFormula.replaceAt(nIdxOfFile, nIdxOfFilename - nIdxOfFile, aTempFilename);
+    rDoc.SetFormula(ScAddress(3, 2, 0), aFormula, formula::FormulaGrammar::GRAM_NATIVE_UI);
+
     // save and load back
     ScDocShellRef pDocSh = saveAndReload(&(*pShell), FORMAT_XLSX);
     CPPUNIT_ASSERT(pDocSh.is());
 
     // check if the the new filename is present in the link (and not replaced by '[2]')
     ScDocument& rDoc2 = pDocSh->GetDocument();
-    rDoc2.GetFormula(3, 1, 0, bFormula);
-    CPPUNIT_ASSERT(bFormula.indexOf("tdf132105_external.ods") < 0);
-    CPPUNIT_ASSERT(bFormula.indexOf("87973_externalSource.ods") > 0);
+    rDoc2.GetFormula(3, 1, 0, aFormula2);
+    CPPUNIT_ASSERT(aFormula2.indexOf("tdf132105_external.ods") < 0);
+    CPPUNIT_ASSERT(aFormula2.indexOf("87973_externalSource.ods") >= 0);
+    rDoc2.GetFormula(3, 2, 0, aFormula2);
+    CPPUNIT_ASSERT(aFormula2.indexOf("tdf132105_external.ods") < 0);
+    CPPUNIT_ASSERT(aFormula2.indexOf("87973_externalSource.ods") >= 0);
+
+    pDocSh->DoClose();
+}
+
+void ScExportTest::testTdf51022_lostPrintRange()
+{
+    ScDocShellRef pShell = loadDoc(u"tdf87973_externalLinkSkipUnuseds.", FORMAT_ODS);
+    CPPUNIT_ASSERT(pShell.is());
+
+    pShell->ReloadAllLinks();
+    ScDocument& rDoc = pShell->GetDocument();
+
+    //Add print ranges
+    ScRange aRange1(1, 2, 0, 3, 4, 0);
+    ScRange aRange2(1, 6, 0, 3, 7, 0);
+    rDoc.AddPrintRange(0, aRange1);
+    rDoc.AddPrintRange(0, aRange2);
+
+    // save and load back
+    ScDocShellRef pDocSh = saveAndReload(&(*pShell), FORMAT_ODS);
+    CPPUNIT_ASSERT(pDocSh.is());
+
+    // check if the same print ranges are present
+    ScDocument& rDoc2 = pDocSh->GetDocument();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(2), rDoc2.GetPrintRangeCount(0));
+    CPPUNIT_ASSERT_EQUAL(aRange1, *rDoc2.GetPrintRange(0, 0));
+    CPPUNIT_ASSERT_EQUAL(aRange2, *rDoc2.GetPrintRange(0, 1));
 
     pDocSh->DoClose();
 }
@@ -5599,6 +5728,46 @@ void ScExportTest::testTdf138741_externalLinkSkipUnusedsCrash()
     ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
 
     xShell->DoClose();
+}
+
+void ScExportTest::testTdf138824_linkToParentDirectory()
+{
+    ScDocShellRef xShell = loadDoc("childDir/tdf138824_linkToParentDirectory.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocument& rDoc = xShell->GetDocument();
+
+    // saveAndReload save the file to a temporary directory
+    // the link must be changed to point to that parent directory
+    utl::TempFile aTempFile;
+    auto aTempFilename = aTempFile.GetURL();
+    auto nIdxOfTmpFile = aTempFilename.lastIndexOf('/');
+    nIdxOfTmpFile = aTempFilename.lastIndexOf('/', nIdxOfTmpFile);
+    aTempFilename = aTempFilename.copy(0, nIdxOfTmpFile + 1);
+
+    // change external link to tmp directory
+    OUString aFormula;
+    rDoc.GetFormula(3, 1, 0, aFormula);
+    auto nIdxOfFilename = aFormula.indexOf("tdf138824_externalSource.ods");
+    auto nIdxOfFile = aFormula.indexOf("file");
+
+    aFormula = aFormula.replaceAt(nIdxOfFile, nIdxOfFilename - nIdxOfFile, aTempFilename);
+    rDoc.SetFormula(ScAddress(3, 1, 0), aFormula, formula::FormulaGrammar::GRAM_NATIVE_UI);
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(
+        pXPathFile, m_xSFactory, "xl/externalLinks/_rels/externalLink1.xml.rels");
+    CPPUNIT_ASSERT(pDoc);
+
+    // test also the Linux specific bug tdf#121472
+    assertXPath(pDoc, "/r:Relationships/r:Relationship", "Target",
+                "../tdf138824_externalSource.ods");
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest::testTdf129969()
@@ -5659,6 +5828,25 @@ void ScExportTest::testTdf136721_paper_size()
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/x:worksheet/x:pageSetup", "paperSize", "70");
+}
+
+void ScExportTest::testTdf139258_rotated_image()
+{
+    // Check that the topleft position of the image is correct.
+    ScDocShellRef xShell = loadDoc(u"tdf139258_rotated_image.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+
+    xmlDocUniquePtr pDrawing
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
+    CPPUNIT_ASSERT(pDrawing);
+
+    assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:from/xdr:col", "1");
+    assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:from/xdr:row", "12");
+    assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:to/xdr:col", "6");
+    assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:to/xdr:row", "25");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);

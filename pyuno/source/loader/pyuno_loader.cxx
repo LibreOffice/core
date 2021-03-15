@@ -216,7 +216,9 @@ void pythonInit() {
 
     // initialize python
     Py_Initialize();
+#if PY_VERSION_HEX < 0x03090000
     PyEval_InitThreads();
+#endif
 
     PyThreadState *tstate = PyThreadState_Get();
     PyEval_ReleaseThread( tstate );

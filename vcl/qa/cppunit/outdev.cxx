@@ -41,6 +41,7 @@ public:
     void testRTLGuard();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
+
     CPPUNIT_TEST(testVirtualDevice);
     CPPUNIT_TEST(testUseAfterDispose);
     CPPUNIT_TEST(testPrinterBackgroundColor);
@@ -83,6 +84,8 @@ void VclOutdevTest::testWindowBackgroundColor()
 
 void VclOutdevTest::testVirtualDevice()
 {
+// TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
+#ifndef MACOSX
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     pVDev->SetOutputSizePixel(Size(32, 32));
     pVDev->SetBackground(Wallpaper(COL_WHITE));
@@ -130,6 +133,7 @@ void VclOutdevTest::testVirtualDevice()
     VclPtr<vcl::Window> pWin = VclPtr<WorkWindow>::Create( (vcl::Window *)nullptr );
     CPPUNIT_ASSERT( pWin );
     OutputDevice *pOutDev = pWin.get();
+#endif
 #endif
 }
 

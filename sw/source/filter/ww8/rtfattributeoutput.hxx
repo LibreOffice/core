@@ -610,6 +610,8 @@ private:
 
     bool m_bInRun;
 
+    bool m_bInRuby;
+
     /// Maps ID's to postit fields, used in atrfstart/end and atnref.
     std::map<sal_uInt16, const SwPostItField*> m_aPostitFields;
 
@@ -621,7 +623,7 @@ private:
     std::optional<css::drawing::FillStyle> m_oFillStyle;
 
     /// If we're in the process of exporting a hyperlink, then its URL.
-    OUString m_sURL;
+    std::stack<OUString> m_aURLs;
 
     /// If original file had \sbauto.
     bool m_bParaBeforeAutoSpacing;

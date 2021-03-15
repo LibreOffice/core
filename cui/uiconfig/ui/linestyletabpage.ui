@@ -189,6 +189,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustmentNUM</property>
                           </object>
                           <packing>
@@ -201,6 +202,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustmentNUM1</property>
                           </object>
                           <packing>
@@ -214,6 +216,7 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustmentDIST</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="digits">2</property>
                           </object>
                           <packing>
@@ -227,6 +230,7 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustmentDIST1</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="digits">2</property>
                           </object>
                           <packing>
@@ -240,6 +244,7 @@
                             <property name="can_focus">True</property>
                             <property name="activates_default">True</property>
                             <property name="adjustment">adjustmentDIST2</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="digits">2</property>
                           </object>
                           <packing>

@@ -92,6 +92,30 @@ ContextHandlerRef SceneText3DPropertiesContext::onCreateContext( sal_Int32 aElem
     case A_TOKEN( backdrop ):
     case A_TOKEN( extLst ):
         return nullptr; // TODO: later (backdrop is not supported by core anyway)
+
+    case A_TOKEN( bevelT ):
+    case A_TOKEN( bevelB ):
+    {
+        BevelProperties aProps;
+        if( rAttribs.hasAttribute( XML_w ) )
+            aProps.mnWidth = rAttribs.getInteger( XML_w, 0 );
+        if( rAttribs.hasAttribute( XML_h ) )
+            aProps.mnHeight = rAttribs.getInteger( XML_h, 0 );
+        if( rAttribs.hasAttribute( XML_prst ) )
+            aProps.mnPreset = rAttribs.getToken( XML_prst, XML_none );
+
+        if( aElementToken == A_TOKEN( bevelT ) )
+            mr3DProperties.maTopBevelProperties.set( aProps );
+        else
+            mr3DProperties.maBottomBevelProperties.set( aProps );
+        break;
+    }
+
+    case A_TOKEN( extrusionClr ):
+        return new ColorContext( *this, mr3DProperties.maExtrusionColor );
+
+    case A_TOKEN( contourClr ):
+        return new ColorContext( *this, mr3DProperties.maContourColor );
     }
     return nullptr;
 }

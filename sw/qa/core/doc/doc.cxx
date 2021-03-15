@@ -113,6 +113,22 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testLocaleIndependentTemplate)
     ErrorRegistry::Reset();
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextBoxZOrder)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "textbox-zorder.docx");
+    SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rFormats.size());
+    const SwFrameFormat* pEllipse = rFormats[2];
+    const SdrObject* pEllipseShape = pEllipse->FindRealSdrObject();
+    // Make sure we test the right shape.
+    CPPUNIT_ASSERT_EQUAL(OUString("Shape3"), pEllipseShape->GetName());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 1
+    // i.e. the ellipse was under the frame of the shape-frame pair, not on top of it.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(2), pEllipseShape->GetOrdNum());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

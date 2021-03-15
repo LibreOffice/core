@@ -14882,6 +14882,7 @@ vcl/inc/window.h
 vcl/inc/wizdlg.hxx
 vcl/ios/dummies.cxx
 vcl/ios/iosinst.cxx
+vcl/ios/salios.cxx
 vcl/null/printerinfomanager.cxx
 vcl/opengl/FixedTextureAtlas.cxx
 vcl/opengl/LineRenderUtils.cxx
@@ -14923,7 +14924,9 @@ vcl/osx/documentfocuslistener.cxx
 vcl/osx/documentfocuslistener.hxx
 vcl/osx/saldata.cxx
 vcl/osx/salframe.cxx
+vcl/osx/salgdiutils.cxx
 vcl/osx/salinst.cxx
+vcl/osx/salmacos.cxx
 vcl/osx/salmenu.cxx
 vcl/osx/salnativewidgets.cxx
 vcl/osx/salobj.cxx
@@ -14949,7 +14952,6 @@ vcl/quartz/ctfonts.cxx
 vcl/quartz/salbmp.cxx
 vcl/quartz/salgdi.cxx
 vcl/quartz/salgdicommon.cxx
-vcl/quartz/salgdiutils.cxx
 vcl/quartz/salvd.cxx
 vcl/quartz/utils.cxx
 vcl/source/app/IconThemeInfo.cxx

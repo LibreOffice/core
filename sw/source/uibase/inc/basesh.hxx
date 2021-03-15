@@ -24,10 +24,12 @@
 #include <tools/link.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/shell.hxx>
-
 #include <mdiexp.hxx>
+#include <memory>
 #include <set>
+#include <vector>
 
+class SwPaM;
 class SwWrtShell;
 class SwView;
 class SfxItemSet;
@@ -110,6 +112,10 @@ public:
     static void    SetFrameMode( FlyMode eMode, SwWrtShell *pShell );  // with update!
     static void   SetFrameMode_( FlyMode eMode )   { eFrameMode = eMode; }
     static FlyMode  GetFrameMode()                 { return eFrameMode;  }
+
+    // duplicate rOrig and rOrig's multi-selection Ring so the first element of the returned
+    // vector can be used equivalently to rOrig to affect the same selections
+    static std::shared_ptr<std::vector<std::unique_ptr<SwPaM>>> CopyPaMRing(SwPaM& rOrig);
 };
 
 #endif

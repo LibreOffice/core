@@ -46,6 +46,7 @@
             <child>
               <object class="GtkEntry" id="ed_columns">
                 <property name="visible">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="can_focus">True</property>
               </object>
               <packing>

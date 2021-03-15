@@ -135,6 +135,19 @@ namespace xmloff::token {
         XML_NP_GRDDL,
         XML_N_GRDDL,
 
+        // OOo extension digital signatures, used in ODF 1.1
+        XML_NP_DSIG_OOO,
+        XML_N_DSIG_OOO,
+        // ODF 1.2 digital signatures
+        XML_NP_DSIG,
+        XML_N_DSIG,
+        XML_NP_DS,
+        XML_N_DS,
+        XML_NP_XADES132,
+        XML_N_XADES132,
+        XML_NP_XADES141,
+        XML_N_XADES141,
+
         // ODF Enhanced namespaces
         XML_NP_OFFICE_EXT,
         XML_N_OFFICE_EXT,
@@ -2304,7 +2317,8 @@ namespace xmloff::token {
         XML_SORTED_ASCENDING,
 
         XML_DATABASE,
-        XML_DATASOURCE,
+        XML_DATASOURCE, // forms "datasource"
+        XML_DATA_SOURCE, // db "data-source"
         XML_QUERIES,
         XML_REPORTS,
         XML_REPORT,

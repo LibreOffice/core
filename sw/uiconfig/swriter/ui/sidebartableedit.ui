@@ -34,6 +34,7 @@
             <property name="tooltip_text" translatable="yes" context="sidebatableedit|rowheight|tooltip_text">Row Height</property>
             <property name="hexpand">True</property>
             <property name="text">0</property>
+            <property name="truncate-multiline">True</property>
             <property name="adjustment">adjustment1</property>
           </object>
           <packing>
@@ -201,6 +202,7 @@
             <property name="tooltip_text" translatable="yes" context="sidebatableedit|columnwidth|tooltip_text">Column Width</property>
             <property name="hexpand">True</property>
             <property name="text">0</property>
+            <property name="truncate-multiline">True</property>
             <property name="adjustment">adjustment2</property>
           </object>
           <packing>

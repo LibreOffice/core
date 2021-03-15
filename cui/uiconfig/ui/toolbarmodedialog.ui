@@ -311,21 +311,23 @@
                         <property name="baseline-position">top</property>
                         <child>
                           <object class="GtkImage" id="imImage">
-                            <property name="width-request">436</property>
+                            <property name="height-request">125</property>
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
+                            <property name="halign">center</property>
                             <property name="valign">start</property>
                             <property name="vexpand">True</property>
                             <property name="stock">gtk-missing-image</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="fill">True</property>
+                            <property name="fill">False</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkScrolledWindow">
+                            <property name="width-request">436</property>
                             <property name="height-request">100</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>

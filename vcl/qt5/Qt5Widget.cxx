@@ -681,10 +681,11 @@ QVariant Qt5Widget::inputMethodQuery(Qt::InputMethodQuery property) const
         }
         case Qt::ImCursorRectangle:
         {
+            const qreal fRatio = m_rFrame.devicePixelRatioF();
             SalExtTextInputPosEvent aPosEvent;
             m_rFrame.CallCallback(SalEvent::ExtTextInputPos, &aPosEvent);
-            return QVariant(
-                QRect(aPosEvent.mnX, aPosEvent.mnY, aPosEvent.mnWidth, aPosEvent.mnHeight));
+            return QVariant(QRect(aPosEvent.mnX / fRatio, aPosEvent.mnY / fRatio,
+                                  aPosEvent.mnWidth / fRatio, aPosEvent.mnHeight / fRatio));
         }
         case Qt::ImAnchorPosition:
         {

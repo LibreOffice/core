@@ -112,6 +112,7 @@
                   <object class="GtkEntry" id="edcolscalemin">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="activates_default">True</property>
                   </object>
                   <packing>
@@ -123,6 +124,7 @@
                   <object class="GtkEntry" id="edcolscalemiddle">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="activates_default">True</property>
                   </object>
                   <packing>
@@ -134,6 +136,7 @@
                   <object class="GtkEntry" id="edcolscalemax">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="activates_default">True</property>
                   </object>
                   <packing>
@@ -450,6 +453,7 @@
                   <object class="GtkEntry" id="formula">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="truncate-multiline">True</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -487,6 +491,7 @@
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="width_chars">5</property>
                       </object>
                       <packing>
@@ -499,6 +504,7 @@
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="width_chars">5</property>
                       </object>
                       <packing>

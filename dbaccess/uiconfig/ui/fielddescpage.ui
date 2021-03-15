@@ -73,6 +73,7 @@
                       <object class="GtkEntry" id="ColumnName">
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="hexpand">True</property>
                       </object>
                       <packing>
@@ -99,6 +100,7 @@
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment2</property>
                       </object>
                       <packing>
@@ -124,6 +126,7 @@
                       <object class="GtkEntry" id="DefaultValue">
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="hexpand">True</property>
                       </object>
                       <packing>
@@ -155,6 +158,7 @@
                           <object class="GtkEntry" id="FormatText">
                             <property name="can_focus">True</property>
                             <property name="no_show_all">True</property>
+                            <property name="truncate-multiline">True</property>
                             <property name="hexpand">True</property>
                           </object>
                           <packing>
@@ -202,6 +206,7 @@
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
@@ -228,6 +233,7 @@
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment3</property>
                       </object>
                       <packing>
@@ -254,6 +260,7 @@
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
+                        <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment4</property>
                       </object>
                       <packing>

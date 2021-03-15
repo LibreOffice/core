@@ -286,10 +286,15 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
             }
             if (frames.empty())
             {
-                auto const& layouts(rDoc.GetAllLayouts());
-                assert(std::none_of(layouts.begin(), layouts.end(),
-                    [](SwRootFrame const*const pLayout) { return pLayout->IsHideRedlines(); }));
-                (void) layouts;
+                // in SwUndoSaveSection::SaveSection(), DelFrames() preceded this call
+                if (!pNode->FindTableBoxStartNode() && !pNode->FindFlyStartNode())
+                {
+                    auto const& layouts(rDoc.GetAllLayouts());
+                    assert(std::none_of(layouts.begin(), layouts.end(),
+                        [](SwRootFrame const*const pLayout) { return pLayout->IsHideRedlines(); }));
+                    (void) layouts;
+                }
+                isAppendObjsCalled = true; // skip that!
                 break;
             }
 
@@ -311,6 +316,8 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
                     pFrame->SetMergedPara(sw::CheckParaRedlineMerge(
                         *pFrame, rFirstNode, eMode));
                     eMode = sw::FrameMode::New; // Existing is not idempotent!
+                    // update pNode so MakeFrames starts on 2nd node
+                    pNode = &rFirstNode;
                 }
             }
             if (pLast != pNode)
@@ -2488,6 +2495,17 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
             break;
 
         case SwComparePosition::CollideEnd:
+            // remove (not hidden) empty redlines created for fixing tdf#119571
+            // (Note: hidden redlines are all empty, i.e. start and end are equal.)
+            if ( pRedl->HasMark() && *pRedl->GetMark() == *pRedl->GetPoint() )
+            {
+                pRedl->InvalidateRange(SwRangeRedline::Invalidation::Remove);
+                mpRedlineTable->DeleteAndDestroy( n-- );
+                bChg = true;
+                break;
+            }
+            [[fallthrough]];
+
         case SwComparePosition::Before:
             n = mpRedlineTable->size();
             break;
@@ -2533,7 +2551,7 @@ SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& r
     // #TODO - add 'SwExtraRedlineTable' also ?
 }
 
-bool DocumentRedlineManager::HasRedline( const SwPaM& rPam, RedlineType nType, bool bStartOrEndInRange ) const // xxx
+bool DocumentRedlineManager::HasRedline( const SwPaM& rPam, RedlineType nType, bool bStartOrEndInRange ) const
 {
     SwPosition currentStart(*rPam.Start());
     SwPosition currentEnd(*rPam.End());
@@ -2554,7 +2572,7 @@ bool DocumentRedlineManager::HasRedline( const SwPaM& rPam, RedlineType nType, b
         if ( currentStart < *pTmp->End() && *pTmp->Start() <= currentEnd &&
              // starting or ending within the range
              ( !bStartOrEndInRange ||
-                 ( currentStart <= *pTmp->Start() || *pTmp->End() <= currentEnd ) ) )
+                 ( currentStart < *pTmp->Start() || *pTmp->End() < currentEnd ) ) )
         {
             return true;
         }

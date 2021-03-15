@@ -414,9 +414,7 @@ SwRootFrame::SwRootFrame( SwFrameFormat *pFormat, SwViewShell * pSh ) :
     mbCallbackActionEnabled ( false ),
     mbLayoutFreezed ( false ),
     mbHideRedlines(pFormat->GetDoc()->GetDocumentRedlineManager().IsHideRedlines()),
-    m_FieldmarkMode(pSh->GetViewOptions()->IsFieldName()
-            ? sw::FieldmarkMode::ShowCommand
-            : sw::FieldmarkMode::ShowResult),
+    m_FieldmarkMode(sw::FieldmarkMode::ShowBoth),
     mnBrowseWidth(MIN_BROWSE_WIDTH),
     mpTurbo( nullptr ),
     mpLastPage( nullptr ),

@@ -127,6 +127,7 @@
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment1</property>
                                 <property name="digits">2</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="leftaddr-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="envformatpage|extended_tip|leftaddr">Enter the amount of space that you want to leave between the left edge of the envelope and the addressee field.</property>
@@ -145,6 +146,7 @@
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment3</property>
                                 <property name="digits">2</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="topaddr-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="envformatpage|extended_tip|topaddr">Enter the amount of space that you want to leave between the top edge of the envelope and the addressee field.</property>
@@ -343,6 +345,7 @@
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment4</property>
                                 <property name="digits">2</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="leftsender-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="envformatpage|extended_tip|leftsender">Enter the amount of space that you want to leave between the left edge of the envelope and the sender field.</property>
@@ -361,6 +364,7 @@
                                 <property name="activates_default">True</property>
                                 <property name="adjustment">adjustment5</property>
                                 <property name="digits">2</property>
+                                <property name="truncate-multiline">True</property>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="topsender-atkobject">
                                     <property name="AtkObject::accessible-description" translatable="yes" context="envformatpage|extended_tip|topsender">Enter the amount of space that you want to leave between the top edge of the envelope and the sender field.</property>
@@ -591,6 +595,7 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment2</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="width-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="envformatpage|extended_tip|width">Enter the width of the envelope.</property>
@@ -610,6 +615,7 @@
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment6</property>
                         <property name="digits">2</property>
+                        <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="height-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="envformatpage|extended_tip|height">Enter the height of the envelope.</property>
