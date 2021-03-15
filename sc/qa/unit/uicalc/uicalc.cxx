@@ -179,14 +179,11 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100582)
 
     goToCell("C10");
 
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
     goToCell("C10:H14");
 
-    ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     pModelObj = saveAndReload(mxComponent, "MS Excel 97");
     pDoc = pModelObj->GetDocument();
@@ -264,15 +261,11 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf92963)
 
     goToCell("A3:C4");
 
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
     goToCell("A1:C1");
 
-    // Without the fix in place, this test would have crashed here
-    ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), pList->size());
 
@@ -385,14 +378,11 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf120660)
 
     goToCell("A8:E8");
 
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
     goToCell("A4:E4");
 
-    ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     CPPUNIT_ASSERT_EQUAL(1200.0, pDoc->GetValue(ScAddress(4, 3, 0)));
     CPPUNIT_ASSERT_EQUAL(-100.0, pDoc->GetValue(ScAddress(4, 7, 0)));
@@ -404,13 +394,11 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf120660)
 
     goToCell("A8:D8");
 
-    ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
     goToCell("A4:D4");
 
-    ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     CPPUNIT_ASSERT_EQUAL(1200.0, pDoc->GetValue(ScAddress(4, 3, 0)));
 
@@ -455,7 +443,6 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117706)
     dispatchCommand(mxComponent, ".uno:SelectRow", {});
     Scheduler::ProcessEventsToIdle();
 
-    // FIXME: The rows are not copied/pasted if using CopyToClip/PasteToClip
     dispatchCommand(mxComponent, ".uno:Copy", {});
 
     mxComponent->dispose();
@@ -598,16 +585,11 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf108654)
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    // .uno:Copy without touching shared clipboard
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
     insertNewSheet(*pDoc);
 
-    // .uno:Paste without touching shared clipboard
-    ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     OUString aFormula;
     pDoc->GetFormula(3, 126, 1, aFormula);
@@ -634,10 +616,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133326)
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
-    // .uno:Copy without touching shared clipboard
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
     insertNewSheet(*pDoc);
 
@@ -645,9 +624,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133326)
     pDoc->GetFormula(0, 0, 1, aFormula);
     CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
 
-    // .uno:Paste without touching shared clipboard
-    ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     pDoc->GetFormula(0, 0, 1, aFormula);
     CPPUNIT_ASSERT_EQUAL(OUString("=RAND()*1000000"), aFormula);
@@ -863,7 +840,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124822)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     Scheduler::ProcessEventsToIdle();
 
-    ScDocShell::GetViewData()->GetView()->CutToClip();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 0, 2)));
 
@@ -883,8 +860,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118189)
     // Select column A
     goToCell("A:A");
 
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
     mxComponent->dispose();
 
@@ -895,14 +871,13 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118189)
     pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     OUString aFormula;
     pDoc->GetFormula(0, 77, 0, aFormula);
     CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
 
-    ScDocShell::GetViewData()->GetView()->CutToClip();
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     pDoc->GetFormula(0, 77, 0, aFormula);
     CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
@@ -936,8 +911,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118207)
     pDoc->GetFormula(0, 77, 0, aFormula);
     CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
 
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    ScDocShell::GetViewData()->GetView()->CutToClip(&aClipDoc);
+    dispatchCommand(mxComponent, ".uno:Cut", {});
 
     pDoc->GetFormula(0, 77, 0, aFormula);
     CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
@@ -945,14 +919,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118207)
     // Select column B
     goToCell("B:B");
 
-    ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     pDoc->GetFormula(1, 77, 0, aFormula);
     CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
 
-    ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     pDoc->GetFormula(1, 77, 0, aFormula);
     CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
@@ -1029,17 +1001,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138428)
     CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be a note on B1", !pDoc->HasNote(ScAddress(1, 0, 0)));
 
-    // .uno:Copy without touching shared clipboard
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
 
     dispatchCommand(mxComponent, ".uno:GoRight", {});
     lcl_AssertCurrentCursorPosition(1, 0);
 
-    // .uno:Paste without touching shared clipboard
-    ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
-    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
 
     CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_MESSAGE("There should be a note on B1", pDoc->HasNote(ScAddress(1, 0, 0)));
@@ -1106,7 +1073,6 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf130614)
 
     lcl_SelectObjectByName(u"Object 1");
 
-    // FIXME: The OLE object is not copied/pasted if using CopyToClip/PasteToClip
     dispatchCommand(mxComponent, ".uno:Copy", {});
     Scheduler::ProcessEventsToIdle();
 
@@ -1121,7 +1087,6 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf130614)
 
     // Without the fix in place, this test would have crashed here
     dispatchCommand(mxComponent, ".uno:Paste", {});
-    Scheduler::ProcessEventsToIdle();
 
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     SdrPage* pPage = pDrawLayer->GetPage(0);
