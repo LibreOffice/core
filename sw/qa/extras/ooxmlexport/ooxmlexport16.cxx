@@ -159,6 +159,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf140572_docDefault_superscript, "tdf14
 
 DECLARE_OOXMLEXPORT_TEST(testTdf136841, "tdf136841.docx")
 {
+    if (!IsDefaultDPI())
+        return;
     uno::Reference<drawing::XShape> image = getShape(1);
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> graphic;
