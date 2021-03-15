@@ -5309,6 +5309,8 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                         }
                         break;
                     case NF_SYMBOLTYPE_CALDEL :
+                        if (j + 1 >= nCnt)
+                            break;
                         if ( rStrArray[j+1] == "gengou" )
                         {
                             nCalendarID = 0x0030000;
@@ -5325,9 +5327,10 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                         {
                             nCalendarID = 0x0080000;
                         }
-                        // other calendars (see tdf#36038) not corresponding between LibO and XL
-                        if ( nCalendarID > 0 )
-                            j = j+2;
+                        // Other calendars (see tdf#36038) not corresponding between LibO and XL.
+                        // However, skip any calendar modifier and don't write
+                        // as format code (if not as literal string).
+                        j += 2;
                         break;
                     case NF_SYMBOLTYPE_CURREXT :
                         nPosHaveLCID = aStr.getLength();
