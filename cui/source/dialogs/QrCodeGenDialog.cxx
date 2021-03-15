@@ -17,12 +17,15 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 
-#if ENABLE_QRCODEGEN
-#if defined(SYSTEM_QRCODEGEN)
-#include <qrcodegen/QrCode.hpp>
-#else
-#include <QrCode.hpp>
-#endif
+#if ENABLE_ZXING
+#include <rtl/ustrbuf.hxx>
+#include <BarcodeFormat.h>
+#include <BitArray.h>
+#include <BitMatrix.h>
+#include <ByteMatrix.h>
+#include <MultiFormatWriter.h>
+#include <TextUtfEncoding.h>
+#include <ZXStrConvWorkaround.h>
 #endif
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -57,9 +60,6 @@ using namespace css::sheet;
 using namespace css::text;
 using namespace css::drawing;
 using namespace css::graphic;
-#if ENABLE_QRCODEGEN
-using namespace qrcodegen;
-#endif
 
 QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel,
                                  bool bEditExisting)
@@ -71,7 +71,7 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
               m_xBuilder->weld_radio_button("button_quartile"),
               m_xBuilder->weld_radio_button("button_high") }
     , m_xSpinBorder(m_xBuilder->weld_spin_button("edit_border"))
-#if ENABLE_QRCODEGEN
+#if ENABLE_ZXING
     , mpParent(pParent)
 #endif
 {
@@ -109,7 +109,7 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
 
 short QrCodeGenDialog::run()
 {
-#if ENABLE_QRCODEGEN
+#if ENABLE_ZXING
     short nRet;
     while (true)
     {
@@ -121,7 +121,7 @@ short QrCodeGenDialog::run()
                 Apply();
                 break;
             }
-            catch (const qrcodegen::data_too_long&)
+            catch (const std::exception&)
             {
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
                     mpParent, VclMessageType::Warning, VclButtonsType::Ok,
@@ -140,7 +140,7 @@ short QrCodeGenDialog::run()
 
 void QrCodeGenDialog::Apply()
 {
-#if ENABLE_QRCODEGEN
+#if ENABLE_ZXING
     css::drawing::QRCode aQRCode;
     aQRCode.Payload = m_xEdittext->get_text();
 
@@ -263,45 +263,68 @@ void QrCodeGenDialog::Apply()
 #endif
 }
 
+// Implementation adapted from the answer: https://stackoverflow.com/questions/10789059/create-qr-code-in-vector-image/60638350#60638350
+OUString QrCodeGenDialog::ConvertToSVGFormat(ZXing::BitMatrix &bitmatrix)
+{
+    OUStringBuffer sb;
+    const int width = bitmatrix.width();
+    const int height = bitmatrix.height();
+    ZXing::BitArray row(width);
+    sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 "
+                  + OUString::number(width) + " " + OUString::number(height)
+                  + "\" stroke=\"none\">\n"
+              "<path class=\"black\"  d=\""); for (int i = 0; i < height; ++i) {
+                bitmatrix.getRow(i, row);
+                for (int j = 0; j < width; ++j)
+                {
+                    if (row.get(j))
+                    {
+                    sb.append("M" + OUString::number(j) + "," + OUString::number(i) +
+                              "h1v1h-1z");
+                    }
+                }
+              }
+    sb.append("\"/>\n</svg>");
+    return sb.toString();
+}
+
 OUString QrCodeGenDialog::GenerateQRCode(OUString aQRText, tools::Long aQRECC, int aQRBorder)
 {
-#if ENABLE_QRCODEGEN
-    //Select ECC:: value from aQrECC
-    qrcodegen::QrCode::Ecc bqrEcc = qrcodegen::QrCode::Ecc::LOW;
+#if ENABLE_ZXING
+    // Associated ZXing error correction levels (0-8) to our constants arbitrarily.
+    int bqrEcc = 1;
 
     switch (aQRECC)
     {
-        case 1:
+        case css::drawing::QRCodeErrorCorrection::LOW:
         {
-            bqrEcc = qrcodegen::QrCode::Ecc::LOW;
+            bqrEcc = 1;
             break;
         }
-        case 2:
+        case css::drawing::QRCodeErrorCorrection::MEDIUM:
         {
-            bqrEcc = qrcodegen::QrCode::Ecc::MEDIUM;
+            bqrEcc = 3;
             break;
         }
-        case 3:
+        case css::drawing::QRCodeErrorCorrection::QUARTILE:
         {
-            bqrEcc = qrcodegen::QrCode::Ecc::QUARTILE;
+            bqrEcc = 5;
             break;
         }
-        case 4:
+        case css::drawing::QRCodeErrorCorrection::HIGH:
         {
-            bqrEcc = qrcodegen::QrCode::Ecc::HIGH;
+            bqrEcc = 7;
             break;
         }
     }
 
-    //OuString to char* qrtext
     OString o = OUStringToOString(aQRText, RTL_TEXTENCODING_UTF8);
-    const char* qrtext = o.pData->buffer;
-
-    // From QR Code library
-    qrcodegen::QrCode qr0 = qrcodegen::QrCode::encodeText(qrtext, bqrEcc);
-    std::string svg = qr0.toSvgString(aQRBorder);
-    //cstring to OUString
-    return OUString::createFromAscii(svg.c_str());
+    std::string QRText(o.getStr(), o.getLength());
+    ZXing::BarcodeFormat format = ZXing::BarcodeFormatFromString("QR_CODE");
+    auto writer = ZXing::MultiFormatWriter(format).setMargin(aQRBorder).setEccLevel(bqrEcc);
+    ZXing::BitMatrix bitmatrix = writer.encode(ZXing::TextUtfEncoding::FromUtf8(QRText), 0, 0);
+    return ConvertToSVGFormat(bitmatrix);
 #else
     (void)aQRText;
     (void)aQRECC;
