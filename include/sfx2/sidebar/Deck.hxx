@@ -70,8 +70,6 @@ public:
 
     virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 
-    static void PrintWindowSubTree(vcl::Window* pRoot, int nIndentation);
-
     sal_Int32 GetMinimalWidth() const { return mnMinimalWidth; }
 
     class ScrollContainerWindow final : public vcl::Window

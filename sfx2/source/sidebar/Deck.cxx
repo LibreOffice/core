@@ -366,37 +366,6 @@ void Deck::ShowPanel(const Panel& rPanel)
             -nNewThumbPos));
 }
 
-static OUString GetWindowClassification(const vcl::Window* pWindow)
-{
-    const OUString& rsName (pWindow->GetText());
-    if (!rsName.isEmpty())
-    {
-        return rsName;
-    }
-    else
-    {
-        return "window";
-    }
-}
-
-void Deck::PrintWindowSubTree(vcl::Window* pRoot, int nIndentation)
-{
-    static const char* const sIndentation = "                                                                  ";
-    const Point aLocation (pRoot->GetPosPixel());
-    const Size aSize (pRoot->GetSizePixel());
-    SAL_INFO(
-        "sfx.sidebar",
-        sIndentation + strlen(sIndentation) - nIndentation * 4 << pRoot << " "
-            << GetWindowClassification(pRoot) << " "
-            << (pRoot->IsVisible() ? "visible" : "hidden") << " +"
-            << aLocation.X() << "+" << aLocation.Y() << " x" << aSize.Width()
-            << "x" << aSize.Height());
-
-    const sal_uInt16 nChildCount(pRoot->GetChildCount());
-    for (sal_uInt16 nIndex = 0; nIndex < nChildCount; ++nIndex)
-        PrintWindowSubTree(pRoot->GetChild(nIndex), nIndentation + 1);
-}
-
 IMPL_LINK_NOARG(Deck, HandleVerticalScrollBarChange, ScrollBar*, void)
 {
     const sal_Int32 nYOffset (-mpVerticalScrollBar->GetThumbPos());
