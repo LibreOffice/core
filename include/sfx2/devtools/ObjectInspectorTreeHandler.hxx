@@ -19,6 +19,8 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <sfx2/devtools/ObjectInspectorWidgets.hxx>
+
 #include <memory>
 #include <deque>
 
@@ -31,13 +33,7 @@
 class ObjectInspectorTreeHandler
 {
 private:
-    std::unique_ptr<weld::TreeView>& mpInterfacesTreeView;
-    std::unique_ptr<weld::TreeView>& mpServicesTreeView;
-    std::unique_ptr<weld::TreeView>& mpPropertiesTreeView;
-    std::unique_ptr<weld::TreeView>& mpMethodsTreeView;
-    std::unique_ptr<weld::Label>& mpClassNameLabel;
-    std::unique_ptr<weld::Toolbar>& mpObjectInspectorToolbar;
-    std::unique_ptr<weld::Notebook>& mpObjectInspectorNotebook;
+    std::unique_ptr<ObjectInspectorWidgets>& mpObjectInspectorWidgets;
 
     // object stack to remember previously inspected objects so it is
     // possible to return back to them
@@ -67,13 +63,7 @@ private:
     void updateBackButtonState();
 
 public:
-    ObjectInspectorTreeHandler(std::unique_ptr<weld::TreeView>& pInterfacesTreeView,
-                               std::unique_ptr<weld::TreeView>& pServicesTreeView,
-                               std::unique_ptr<weld::TreeView>& pPropertiesTreeView,
-                               std::unique_ptr<weld::TreeView>& pMethodsTreeView,
-                               std::unique_ptr<weld::Label>& pClassNameLabel,
-                               std::unique_ptr<weld::Toolbar>& pObjectInspectorToolbar,
-                               std::unique_ptr<weld::Notebook>& pObjectInspectorNotebook);
+    ObjectInspectorTreeHandler(std::unique_ptr<ObjectInspectorWidgets>& pObjectInspectorWidgets);
 
     // callbacks when a node in the tree view is expanded
     DECL_LINK(ExpandingHandlerInterfaces, const weld::TreeIter&, bool);

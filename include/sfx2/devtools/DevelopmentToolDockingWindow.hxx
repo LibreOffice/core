@@ -15,6 +15,7 @@
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 
+#include <sfx2/devtools/ObjectInspectorWidgets.hxx>
 #include <sfx2/devtools/DocumentModelTreeHandler.hxx>
 #include <sfx2/devtools/ObjectInspectorTreeHandler.hxx>
 
@@ -34,15 +35,9 @@
 class SFX2_DLLPUBLIC DevelopmentToolDockingWindow final : public SfxDockingWindow
 {
 private:
-    std::unique_ptr<weld::Label> mpClassNameLabel;
-    std::unique_ptr<weld::TreeView> mpInterfacesTreeView;
-    std::unique_ptr<weld::TreeView> mpServicesTreeView;
-    std::unique_ptr<weld::TreeView> mpPropertiesTreeView;
-    std::unique_ptr<weld::TreeView> mpMethodsTreeView;
+    std::unique_ptr<ObjectInspectorWidgets> mpObjectInspectorWidgets;
     std::unique_ptr<weld::TreeView> mpDocumentModelTreeView;
     std::unique_ptr<weld::ToggleButton> mpSelectionToggle;
-    std::unique_ptr<weld::Toolbar> mpObjectInspectorToolbar;
-    std::unique_ptr<weld::Notebook> mpObjectInspectorNotebook;
 
     // Reference to the root object for the current document
     css::uno::Reference<css::uno::XInterface> mxRoot;
