@@ -325,7 +325,7 @@ class SFServices(object):
                 - class module: 1 for usual modules, 2 for class modules
                 - name (form, control, ... name) - may be blank
 
-            The role of the Service() superclass is mainly to propose a generic properties management
+            The role of the SFServices() superclass is mainly to propose a generic properties management
             Properties are got and set following next strategy:
                 1. Property names are controlled strictly ('Value' or 'value', not 'VALUE')
                 2. Getting a property value for the first time is always done via a Basic call
@@ -387,7 +387,7 @@ class SFServices(object):
         self.classmodule = classmodule  # Module (1), Class instance (2)
         self.name = name  # '' when no name
         self.internal = False  # True to exceptionally allow assigning a new value to a read-only property
-        self.localProperties = ()  # the properties reserved for internal use (often empty)
+        self.localProperties = []  # the properties reserved for internal use (often empty)
         self.SIMPLEEXEC = ScriptForge.InvokeSimpleScript  # Shortcuts to script provider interfaces
         self.EXEC = ScriptForge.InvokeBasicService
 
@@ -405,7 +405,7 @@ class SFServices(object):
                         'forceGetProperty'):
                 pass
             elif name in self.serviceproperties:
-                if self.forceGetProperty is False and self.serviceproperties[name] is False: # False = read-only
+                if self.forceGetProperty is False and self.serviceproperties[name] is False:  # False = read-only
                     if name in self.__dict__:
                         return self.__dict__[name]
                     else:
@@ -430,7 +430,7 @@ class SFServices(object):
             elif name[0:2] == '__' or name in self.internal_attributes or name in self.localProperties:
                 pass
             elif name in self.serviceproperties or name in self.propertysynonyms:
-                if name in self.propertysynonyms: # Reset real name if argument provided in lower or camel case
+                if name in self.propertysynonyms:  # Reset real name if argument provided in lower or camel case
                     name = self.propertysynonyms[name]
                 if self.internal:  # internal = True forces property local setting even if property is read-only
                     pass
@@ -635,18 +635,120 @@ class SFScriptForge:
         xray = Xray
 
     # #########################################################################
-    # SF_String CLASS
+    # SF_Dictionary CLASS
     # #########################################################################
-    class SF_String(SFServices, metaclass = _Singleton):
+    class SF_Dictionary(SFServices, dict):
         """
-            A collection of methods focused on string manipulation, user input validation,
-            regular expressions, encodings, parsing and hashing algorithms.
-            Many of them are less efficient than their Python equivalents.
+            The service adds to a Python dict instance the interfaces for conversion to and from
+            a list of UNO PropertyValues
+
+            Usage:
+                dico = dict(A = 1, B = 2, C = 3)
+                myDict = CreateScriptService('Dictionary', dico)    # Initialize myDict with the content of dico
+                myDict['D'] = 4
+                print(myDict)   # {'A': 1, 'B': 2, 'C': 3, 'D': 4}
+                propval = myDict.ConvertToPropertyValues()
+            or
+                dico = dict(A = 1, B = 2, C = 3)
+                myDict = CreateScriptService('Dictionary')          # Initialize myDict as an empty dict object
+                myDict.update(dico) # Load the values of dico into myDict
+                myDict['D'] = 4
+                print(myDict)   # {'A': 1, 'B': 2, 'C': 3, 'D': 4}
+                propval = myDict.ConvertToPropertyValues()
             """
         # Mandatory class properties for service registration
-        serviceimplementation = 'basic'
-        servicename = 'ScriptForge.String'
-        servicesynonyms = ()
+        serviceimplementation = 'python'
+        servicename = 'ScriptForge.Dictionary'
+        servicesynonyms = ('dictionary', 'scriptforge.dictionary')
+
+        def __init__(self, dic = None):
+            SFServices.__init__(self)
+            dict.__init__(self)
+            if dic is not None:
+                self.update(dic)
+
+        def ConvertToPropertyValues(self):
+            """
+                Store the content of the dictionary in an array of PropertyValues.
+                Each entry in the array is a com.sun.star.beans.PropertyValue.
+                he key is stored in Name, the value is stored in Value.
+
+                If one of the items has a type datetime, it is converted to a com.sun.star.util.DateTime structure.
+                If one of the items is an empty list, it is converted to None.
+
+                The resulting array is empty when the dictionary is empty.
+                """
+            def CDateToUno(date):
+                """
+                Converts a datetime object into the corresponding com.sun.star.util.x date format
+                :param date: datetime.datetime, date or time
+                :return: a com.sun.star.util.DateTime, Date or Time
+                """
+                pvdate = None
+                if isinstance(date, datetime.datetime):
+                    pvdate = uno.createUnoStruct('com.sun.star.util.DateTime')
+                elif isinstance(date, datetime.date):
+                    pvdate = uno.createUnoStruct('com.sun.star.util.Date')
+                elif isinstance(date, datetime.time):
+                    pvdate = uno.createUnoStruct('com.sun.star.util.Time')
+                if isinstance(date, (datetime.datetime, datetime.date)):
+                    pvdate.Year = date.year
+                    pvdate.Month = date.month
+                    pvdate.Day = date.day
+                if isinstance(date, (datetime.datetime, datetime.time)):
+                    pvdate.Hours = date.hour
+                    pvdate.Minutes = date.minute
+                    pvdate.Seconds = date.second
+                    pvdate.NanoSeconds = date.microsecond
+                return pvdate
+
+            result = []
+            for key in iter(self):
+                value = self[key]
+                item = value
+                if isinstance(value, dict):  # check that first level is not itself a (sub)dict
+                    item = None
+                elif isinstance(value, (tuple, list)):  # check every member of the list is not a (sub)dict
+                    if len(value) == 0:  # Property values do not like empty lists
+                        value = None
+                    else:
+                        for i in range(len(value)):
+                            if isinstance(value[i], dict):
+                                value[i] = None
+                elif isinstance(value, (datetime.datetime, datetime.date, datetime.time)):
+                    item = CDateToUno(value)
+                pv = uno.createUnoStruct('com.sun.star.beans.PropertyValue')
+                pv.Name = key
+                pv.Value = item
+                result.append(pv)
+            return result
+        convertToPropertyValues, converttopropertyvalues = ConvertToPropertyValues, ConvertToPropertyValues
+
+        def ImportFromPropertyValues(self, propertyvalues, overwrite = False):
+            """
+                nserts the contents of an array of PropertyValue objects into the current dictionary.
+                PropertyValue Names are used as keys in the dictionary, whereas Values contain the corresponding values.
+                :param propertyvalues: a list.tuple containing com.sun.star.beans.PropertyValue objects
+                :param overwrite: When True, entries with same name may exist in the dictionary and their values
+                    are overwritten. When False (default), repeated keys are not overwritten.
+                :return: True when successful
+                """
+            result = []
+            for pv in iter(propertyvalues):
+                key = pv.Name
+                if key not in self:
+                    item = pv.Value
+                    if 'com.sun.star.util.DateTime' in repr(type(item)):
+                        item = datetime.datetime(item.Year, item.Month, item.Day,
+                                                 item.Hours, item.Minutes, item.Seconds, item.NanoSeconds)
+                    elif 'com.sun.star.util.Date' in repr(type(item)):
+                        item = datetime.datetime(item.Year, item.Month, item.Day)
+                    elif 'com.sun.star.util.Time' in repr(type(item)):
+                        item = datetime.datetime(item.Hours, item.Minutes, item.Seconds, item.NanoSeconds)
+                    result.append((key, item))
+            self.update(result)
+            return True
+        importFromPropertyValues, importfrompropertyvalues = ImportFromPropertyValues, ImportFromPropertyValues
 
     # #########################################################################
     # SF_FileSystem CLASS
@@ -999,7 +1101,7 @@ def CreateScriptService(service, *args):
         serv = ScriptForge.serviceslist[scriptservice]
         # Check if the requested service is within the Python world
         if serv.serviceimplementation == 'python':
-            return serv()
+            return serv(*args)
         # Check if the service is a predefined standard Basic service
         elif scriptservice in ScriptForge.servicesmodules:
             return serv(ScriptForge.servicesmodules[scriptservice], classmodule = SFServices.moduleStandard)
@@ -1010,7 +1112,7 @@ def CreateScriptService(service, *args):
         serv = ScriptForge.InvokeBasicService('SF_Services', SFServices.vbMethod, 'CreateScriptService', service, *args)
     return serv
 
-createScriptSerive, createscriptservive = CreateScriptService, CreateScriptService
+createScriptService, createscriptservice = CreateScriptService, CreateScriptService
 
 
 # #####################################################################################################################
