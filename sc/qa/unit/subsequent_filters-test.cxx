@@ -296,6 +296,7 @@ public:
     void testTdf137091();
     void testTdf62268();
     void testTdf137453();
+    void testTdf112780();
     void testTdf72470();
     void testTdf35636();
     void testVBAMacroFunctionODS();
@@ -490,6 +491,7 @@ public:
     CPPUNIT_TEST(testTdf137091);
     CPPUNIT_TEST(testTdf62268);
     CPPUNIT_TEST(testTdf137453);
+    CPPUNIT_TEST(testTdf112780);
     CPPUNIT_TEST(testTdf72470);
     CPPUNIT_TEST(testTdf35636);
     CPPUNIT_TEST(testVBAMacroFunctionODS);
@@ -5206,6 +5208,25 @@ void ScFiltersTest::testTdf137453()
     // - Expected: 3333333333/100
     // - Actual  : -961633963/100
     CPPUNIT_ASSERT_EQUAL(OUString("3333333333/100"), rDoc.GetString(ScAddress(0,0,0)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf112780()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf112780.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Without the fix in place, this test would haved failed with
+    // - Expected:
+    // - Actual  : #VALUE!
+    CPPUNIT_ASSERT_EQUAL(OUString(""), rDoc.GetString(ScAddress(3,5,0)));
+
+    OUString aFormula;
+    rDoc.GetFormula(3, 5, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=G6+J6+M6"), aFormula);
 
     xDocSh->DoClose();
 }
