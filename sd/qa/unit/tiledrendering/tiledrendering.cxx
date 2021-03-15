@@ -1002,6 +1002,7 @@ void SdTiledRenderingTest::testViewCursorParts()
     SfxLokHelper::createView();
     pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ViewCallback aView2;
+    int nView2 = SfxLokHelper::getView();
 
     // Select the shape in the second view.
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -1015,6 +1016,7 @@ void SdTiledRenderingTest::testViewCursorParts()
     pView->UnmarkAllObj(pView->GetSdrPageView());
 
     // Now switch to the second part in the second view.
+    SfxLokHelper::setView(nView2);
     pXImpressDocument->setPart(1);
     aView2.m_nPart = 1;
     aView1.m_bGraphicViewSelectionInvalidated = false;
