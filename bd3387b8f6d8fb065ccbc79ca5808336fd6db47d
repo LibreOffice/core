@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "54bfae3b_d872379f",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-03-15T17:30:53Z",
+      "side": 1,
+      "message": "minor point: here you remove QRCODEGEN etc. already.\n\nThat makes sense, but if nothing uses it anymore one also can just remove it from configure.ac, Repository*.mk, config_host.mk.in already.\nOr you need a third patch in this series",
+      "revId": "bd3387b8f6d8fb065ccbc79ca5808336fd6db47d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c4dc231d_13a15d14",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 1
