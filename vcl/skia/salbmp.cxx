@@ -730,6 +730,11 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
 #endif
     if (mEraseColorSet)
     {
+        if (mImage)
+        {
+            assert(imageSize(mImage) == mSize);
+            return mImage;
+        }
         SkiaZone zone;
         sk_sp<SkSurface> surface = createSkSurface(
             mSize, mEraseColor.IsTransparent() ? kPremul_SkAlphaType : kOpaque_SkAlphaType);
@@ -801,6 +806,11 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage() const
 #endif
     if (mEraseColorSet)
     {
+        if (mAlphaImage)
+        {
+            assert(imageSize(mAlphaImage) == mSize);
+            return mAlphaImage;
+        }
         SkiaZone zone;
         sk_sp<SkSurface> surface = createSkSurface(mSize, kAlpha_8_SkColorType);
         assert(surface);

@@ -67,6 +67,8 @@ VCL_DLLPUBLIC sk_sp<SkImage> makeCheckedImageSnapshot(sk_sp<SkSurface> surface);
 VCL_DLLPUBLIC sk_sp<SkImage> makeCheckedImageSnapshot(sk_sp<SkSurface> surface,
                                                       const SkIRect& bounds);
 
+inline Size imageSize(const sk_sp<SkImage>& image) { return Size(image->width(), image->height()); }
+
 // Must be called in any VCL backend before any Skia functionality is used.
 // If not set, Skia will be disabled.
 VCL_DLLPUBLIC void
