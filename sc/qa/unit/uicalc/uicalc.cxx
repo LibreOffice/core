@@ -1070,6 +1070,34 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138428)
     CPPUNIT_ASSERT_MESSAGE("There should be a note on B1", pDoc->HasNote(ScAddress(1, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf136113)
+{
+    ScModelObj* pModelObj = createDoc("tdf136113.xlsx");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    SdrObject* pObj = pPage->GetObj(0);
+
+    CPPUNIT_ASSERT_EQUAL(tools::Long(18159), pObj->GetSnapRect().Left());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1709), pObj->GetSnapRect().Top());
+
+    lcl_SelectObjectByName(u"Arrow");
+
+    // Move the shape up
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::UP);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::UP);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(tools::Long(18159), pObj->GetSnapRect().Left());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1609), pObj->GetSnapRect().Top());
+
+    // Without the fix in place, this test would have failed here
+    ScDocShell* pDocSh = ScDocShell::GetViewData()->GetDocShell();
+    CPPUNIT_ASSERT(pDocSh->IsModified());
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf130614)
 {
     ScModelObj* pModelObj = createDoc("tdf130614.ods");
