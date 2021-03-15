@@ -22,6 +22,8 @@ struct ObjectInspectorWidgets
         , mpMethodsTreeView(rxBuilder->weld_tree_view("methods_treeview_id"))
         , mpToolbar(rxBuilder->weld_toolbar("object_inspector_toolbar"))
         , mpNotebook(rxBuilder->weld_notebook("object_inspector_notebookbar"))
+        , mpTextView(rxBuilder->weld_text_view("object_inspector_text_view"))
+        , mpPaned(rxBuilder->weld_paned("object_inspector_paned"))
     {
     }
 
@@ -35,6 +37,8 @@ struct ObjectInspectorWidgets
         mpMethodsTreeView.reset();
         mpToolbar.reset();
         mpNotebook.reset();
+        mpTextView.reset();
+        mpPaned.reset();
     }
 
     std::unique_ptr<weld::Label> mpClassNameLabel;
@@ -44,6 +48,8 @@ struct ObjectInspectorWidgets
     std::unique_ptr<weld::TreeView> mpMethodsTreeView;
     std::unique_ptr<weld::Toolbar> mpToolbar;
     std::unique_ptr<weld::Notebook> mpNotebook;
+    std::unique_ptr<weld::TextView> mpTextView;
+    std::unique_ptr<weld::Paned> mpPaned;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

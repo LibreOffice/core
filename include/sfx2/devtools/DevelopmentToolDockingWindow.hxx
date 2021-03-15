@@ -62,9 +62,9 @@ public:
 
     virtual ~DevelopmentToolDockingWindow() override;
 
-    virtual void dispose() override;
+    void dispose() override;
 
-    virtual void ToggleFloatingMode() override;
+    void ToggleFloatingMode() override;
 
     // Inspect the input object in the object inspector
     void introspect(css::uno::Reference<css::uno::XInterface> const& xInterface);
