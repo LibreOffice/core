@@ -1,0 +1,37 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+
+#pragma once
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+
+#define STR_TEXT_PORTION NC_("STR_TEXT_PORTION", "Text Portion %1")
+#define STR_PARAGRAPH NC_("STR_PARAGRAPH", "Paragraph %1")
+#define STR_SHAPE NC_("STR_SHAPE", "Shape %1")
+#define STR_PAGE NC_("STR_PAGE", "Page %1")
+#define STR_SLIDE NC_("STR_SLIDE", "Slide %1")
+#define STR_MASTER_SLIDE NC_("STR_MASTER_SLIDE", "Master Slide %1")
+#define STR_SHEETS NC_("STR_SHEETS", "Sheets %1")
+
+#define STR_SHAPES_ENTRY NC_("STR_SHAPES_NODE", "Shapes")
+#define STR_CHARTS_ENTRY NC_("STR_CHARTS_ENTRY", "Charts")
+#define STR_PIVOT_TABLES_ENTRY NC_("STR_PIVOT_TABLES_ENTRY", "Pivot Tables")
+#define STR_DOCUMENT_ENTRY NC_("STR_DOCUMENT_ENTRY", "Document")
+#define STR_SHEETS_ENTRY NC_("STR_SHEETS_ENTRY", "Sheets")
+#define STR_STYLES_ENTRY NC_("STR_STYLES_ENTRY", "Styles")
+#define STR_SLIDES_ENTRY NC_("STR_SLIDES_ENTRY", "Slides")
+#define STR_MASTER_SLIDES_ENTRY NC_("STR_MASTER_SLIDES_ENTRY", "Master Slides")
+#define STR_PAGES_ENTRY NC_("STR_PAGES_ENTRY", "Pages")
+#define STR_PARAGRAPHS_ENTRY NC_("STR_PARAGRAPHS_ENTRY", "Paragraphs")
+#define STR_TABLES_ENTRY NC_("STR_TABLES_ENTRY", "Tables")
+#define STR_FRAMES_ENTRY NC_("STR_FRAMES_ENTRY", "Frames")
+#define STR_GRAPHIC_OBJECTS_ENTRY NC_("STR_GRAPHIC_OBJECTS_ENTRY", "Graphic Objects")
+#define STR_EMBEDDED_OBJECTS_ENTRY NC_("STR_EMBEDDED_OBJECTS_ENTRY", "Embedded Objects")
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -12,6 +12,9 @@
 
 #include <sfx2/devtools/DocumentModelTreeHandler.hxx>
 
+#include <sfx2/sfxresid.hxx>
+#include "DevToolsStrings.hrc"
+
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -150,7 +153,8 @@ public:
                                                                     uno::UNO_QUERY);
                 OUString aString = lclGetNamed(xTextPortion);
                 if (aString.isEmpty())
-                    aString = "Text Portion " + OUString::number(i + 1);
+                    aString
+                        = SfxResId(STR_TEXT_PORTION).replaceFirst("%1", OUString::number(i + 1));
 
                 auto pEntry = std::make_unique<DocumentModelTreeEntry>(xTextPortion);
                 lclAppendToParentEntry(pDocumentModelTree, rParent, aString, pEntry.release());
@@ -194,7 +198,9 @@ public:
                                                                     uno::UNO_QUERY);
                 OUString aString = lclGetNamed(xParagraph);
                 if (aString.isEmpty())
-                    aString = "Paragraph " + OUString::number(i + 1);
+                {
+                    aString = SfxResId(STR_PARAGRAPH).replaceFirst("%1", OUString::number(i + 1));
+                }
 
                 auto pEntry = std::make_unique<ParagraphEntry>(xParagraph);
                 lclAppendToParentEntry(pDocumentModelTree, rParent, aString, pEntry.release(),
@@ -233,7 +239,8 @@ public:
                                                    uno::UNO_QUERY);
             OUString aShapeName = lclGetNamed(xShape);
             if (aShapeName.isEmpty())
-                aShapeName = "Shape " + OUString::number(nIndexShapes + 1);
+                aShapeName
+                    = SfxResId(STR_SHAPE).replaceFirst("%1", OUString::number(nIndexShapes + 1));
 
             auto pEntry = std::make_unique<DocumentModelTreeEntry>(xShape);
             lclAppendToParentEntry(pDocumentModelTree, rParent, aShapeName, pEntry.release());
@@ -419,7 +426,7 @@ public:
 
             OUString aPageString = lclGetNamed(xPage);
             if (aPageString.isEmpty())
-                aPageString = "Page " + OUString::number(i + 1);
+                aPageString = SfxResId(STR_PAGE).replaceFirst("%1", OUString::number(i + 1));
 
             auto pShapesEntry = std::make_unique<ShapesEntry>(xPage);
             lclAppendToParentEntry(pDocumentModelTree, rParent, aPageString, pShapesEntry.release(),
@@ -457,7 +464,7 @@ public:
 
             OUString aPageString = lclGetNamed(xPage);
             if (aPageString.isEmpty())
-                aPageString = "Slide " + OUString::number(i + 1);
+                aPageString = SfxResId(STR_SLIDE).replaceFirst("%1", OUString::number(i + 1));
 
             auto pShapesEntry = std::make_unique<ShapesEntry>(xPage);
             lclAppendToParentEntry(pDocumentModelTree, rParent, aPageString, pShapesEntry.release(),
@@ -495,7 +502,8 @@ public:
 
             OUString aPageString = lclGetNamed(xPage);
             if (aPageString.isEmpty())
-                aPageString = "Master Slide " + OUString::number(i + 1);
+                aPageString
+                    = SfxResId(STR_MASTER_SLIDE).replaceFirst("%1", OUString::number(i + 1));
 
             auto pShapesEntry = std::make_unique<ShapesEntry>(xPage);
             lclAppendToParentEntry(pDocumentModelTree, rParent, aPageString, pShapesEntry.release(),
@@ -571,13 +579,15 @@ public:
               weld::TreeIter const& rParent) override
     {
         auto pShapesEntry = std::make_unique<ShapesEntry>(getMainObject());
-        lclAppendToParentEntry(pDocumentModelTree, rParent, "Shapes", pShapesEntry.release(), true);
+        lclAppendToParentEntry(pDocumentModelTree, rParent, SfxResId(STR_SHAPES_ENTRY),
+                               pShapesEntry.release(), true);
 
         auto pChartsEntry = std::make_unique<ChartsEntry>(getMainObject());
-        lclAppendToParentEntry(pDocumentModelTree, rParent, "Charts", pChartsEntry.release(), true);
+        lclAppendToParentEntry(pDocumentModelTree, rParent, SfxResId(STR_CHARTS_ENTRY),
+                               pChartsEntry.release(), true);
 
         auto pPivotTablesEntry = std::make_unique<PivotTablesEntry>(getMainObject());
-        lclAppendToParentEntry(pDocumentModelTree, rParent, "Pivot Tables",
+        lclAppendToParentEntry(pDocumentModelTree, rParent, SfxResId(STR_PIVOT_TABLES_ENTRY),
                                pPivotTablesEntry.release(), true);
     }
 };
@@ -610,7 +620,7 @@ public:
             uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(i), uno::UNO_QUERY);
             OUString aString = lclGetNamed(xSheet);
             if (aString.isEmpty())
-                aString = "Sheet " + OUString::number(i + 1);
+                aString = SfxResId(STR_SHEETS).replaceFirst("%1", OUString::number(i + 1));
             auto pEntry = std::make_unique<SheetEntry>(xSheet);
             lclAppendToParentEntry(pDocumentModelTree, rParent, aString, pEntry.release(), true);
         }
@@ -703,37 +713,49 @@ void DocumentModelTreeHandler::inspectDocument()
 {
     uno::Reference<lang::XServiceInfo> xDocumentServiceInfo(mxDocument, uno::UNO_QUERY_THROW);
 
-    lclAppend(mpDocumentModelTree, u"Document", new DocumentRootEntry(mxDocument), false);
+    lclAppend(mpDocumentModelTree, SfxResId(STR_DOCUMENT_ENTRY), new DocumentRootEntry(mxDocument),
+              false);
 
     if (xDocumentServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
     {
-        lclAppend(mpDocumentModelTree, u"Sheets", new SheetsEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, u"Styles", new StylesFamiliesEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, SfxResId(STR_SHEETS_ENTRY), new SheetsEntry(mxDocument),
+                  true);
+        lclAppend(mpDocumentModelTree, SfxResId(STR_STYLES_ENTRY),
+                  new StylesFamiliesEntry(mxDocument), true);
     }
     else if (xDocumentServiceInfo->supportsService(
                  "com.sun.star.presentation.PresentationDocument"))
     {
-        lclAppend(mpDocumentModelTree, u"Slides", new SlidesEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, u"Master Slides", new MasterSlidesEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, u"Styles", new StylesFamiliesEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, SfxResId(STR_SLIDES_ENTRY), new SlidesEntry(mxDocument),
+                  true);
+        lclAppend(mpDocumentModelTree, SfxResId(STR_MASTER_SLIDES_ENTRY),
+                  new MasterSlidesEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, SfxResId(STR_STYLES_ENTRY),
+                  new StylesFamiliesEntry(mxDocument), true);
     }
     else if (xDocumentServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument"))
     {
-        lclAppend(mpDocumentModelTree, u"Pages", new PagesEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, u"Styles", new StylesFamiliesEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, SfxResId(STR_PAGES_ENTRY), new PagesEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, SfxResId(STR_STYLES_ENTRY),
+                  new StylesFamiliesEntry(mxDocument), true);
     }
     else if (xDocumentServiceInfo->supportsService("com.sun.star.text.TextDocument")
              || xDocumentServiceInfo->supportsService("com.sun.star.text.WebDocument"))
     {
-        lclAppend(mpDocumentModelTree, u"Paragraphs", new ParagraphsEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, u"Shapes", new ShapesEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, u"Tables", new TablesEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, u"Frames", new FramesEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, u"Graphic Objects",
-                  new WriterGraphicObjectsEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, u"Embedded Objects", new EmbeddedObjectsEntry(mxDocument),
+        lclAppend(mpDocumentModelTree, SfxResId(STR_PARAGRAPHS_ENTRY),
+                  new ParagraphsEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, SfxResId(STR_SHAPES_ENTRY), new ShapesEntry(mxDocument),
                   true);
-        lclAppend(mpDocumentModelTree, u"Styles", new StylesFamiliesEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, SfxResId(STR_TABLES_ENTRY), new TablesEntry(mxDocument),
+                  true);
+        lclAppend(mpDocumentModelTree, SfxResId(STR_FRAMES_ENTRY), new FramesEntry(mxDocument),
+                  true);
+        lclAppend(mpDocumentModelTree, SfxResId(STR_GRAPHIC_OBJECTS_ENTRY),
+                  new WriterGraphicObjectsEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, SfxResId(STR_EMBEDDED_OBJECTS_ENTRY),
+                  new EmbeddedObjectsEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, SfxResId(STR_STYLES_ENTRY),
+                  new StylesFamiliesEntry(mxDocument), true);
     }
 }
 
