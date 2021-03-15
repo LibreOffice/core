@@ -85,7 +85,7 @@ void collectUIInformation(const std::map<OUString, OUString>& aParameters, const
 
 //      C U T
 
-void ScViewFunc::CutToClip(ScDocument* pClipDoc)
+void ScViewFunc::CutToClip()
 {
     UpdateInputLine();
 
@@ -114,7 +114,7 @@ void ScViewFunc::CutToClip(ScDocument* pClipDoc)
             MarkDataChanged();
         }
 
-        CopyToClip( pClipDoc, true, false, true/*bIncludeObjects*/ );           // copy to clipboard
+        CopyToClip( nullptr, true, false, true/*bIncludeObjects*/ );           // copy to clipboard
 
         ScAddress aOldEnd( aRange.aEnd );       //  combined cells in this range?
         rDoc.ExtendMerge( aRange, true );
