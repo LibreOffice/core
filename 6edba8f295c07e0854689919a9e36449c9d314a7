@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "549621ab_710f3d65",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2983,
+      "author": {
+        "id": 1003033
+      },
+      "writtenOn": "2021-03-15T15:36:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c3adcd14_4736565a",
+      "revId": "6edba8f295c07e0854689919a9e36449c9d314a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "415ac1a8_03bcab73",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 4
@@ -54,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "7168ebe0_9c9f6673",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2987,
+      "author": {
+        "id": 1003033
+      },
+      "writtenOn": "2021-03-15T15:36:29Z",
+      "side": 1,
+      "message": "The additional jumpt op code inserted when referencing the get on a \n\nGLOBAL.. As New... \n\nvariable exercises this to determine whether it should create the object. Without this change a null object (the case where it *should* be created) is true.",
+      "parentUuid": "3f92a2b6_2f2f7ff8",
+      "revId": "6edba8f295c07e0854689919a9e36449c9d314a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fc7e4295_0e93a3f8",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 4
@@ -68,6 +104,24 @@
       "revId": "6edba8f295c07e0854689919a9e36449c9d314a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2836b654_7cb4be31",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3000,
+      "author": {
+        "id": 1003033
+      },
+      "writtenOn": "2021-03-15T15:36:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fc7e4295_0e93a3f8",
+      "revId": "6edba8f295c07e0854689919a9e36449c9d314a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -102,6 +156,24 @@
       "revId": "6edba8f295c07e0854689919a9e36449c9d314a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ec05c3f_58c900f0",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3008,
+      "author": {
+        "id": 1003033
+      },
+      "writtenOn": "2021-03-15T15:36:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b6b5200b_a7627dec",
+      "revId": "6edba8f295c07e0854689919a9e36449c9d314a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
