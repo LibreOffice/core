@@ -218,7 +218,7 @@ void Deck::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         rJsonWriter.put("id", it->GetId());
         rJsonWriter.put("type", "panel");
         rJsonWriter.put("text", it->GetText());
-        rJsonWriter.put("enabled", it->IsEnabled());
+        rJsonWriter.put("enabled", true);
 
         {
             auto children2Node = rJsonWriter.startArray("children");
