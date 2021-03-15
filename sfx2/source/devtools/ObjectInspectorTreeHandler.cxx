@@ -11,6 +11,8 @@
 #include <memory>
 
 #include <sfx2/devtools/ObjectInspectorTreeHandler.hxx>
+#include <sfx2/sfxresid.hxx>
+#include "DevToolsStrings.hrc"
 
 #include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/beans/XIntrospection.hpp>
@@ -27,6 +29,7 @@
 #include <com/sun/star/reflection/XIdlArray.hpp>
 #include <com/sun/star/reflection/XEnumTypeDescription.hpp>
 
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -70,38 +73,33 @@ OUString enumValueToEnumName(uno::Any const& aValue,
     return aNames[nValuesIndex];
 }
 
-/** converts any value to a string */
-OUString AnyToString(const uno::Any& aValue, const uno::Reference<uno::XComponentContext>& xContext)
+OUString getInterfaceImplementationClass(uno::Reference<uno::XInterface> const& xInterface)
+{
+    auto xServiceInfo = uno::Reference<lang::XServiceInfo>(xInterface, uno::UNO_QUERY);
+    if (xServiceInfo.is())
+        return xServiceInfo->getImplementationName();
+    return OUString();
+}
+
+/** converts basic any value to a string */
+OUString convertBasicValueToString(const uno::Any& aValue,
+                                   const uno::Reference<uno::XComponentContext>& xContext)
 {
     OUString aRetStr;
 
     // return early if we don't have any value
     if (!aValue.hasValue())
-        return u"NULL";
+        return SfxResId(STR_ANY_VALUE_NULL);
 
     uno::Type aValType = aValue.getValueType();
     uno::TypeClass eType = aValType.getTypeClass();
 
     switch (eType)
     {
-        case uno::TypeClass_INTERFACE:
-        {
-            uno::Reference<uno::XInterface> xInterface(aValue, uno::UNO_QUERY);
-            if (!xInterface.is())
-                aRetStr = u"NULL";
-            else
-                aRetStr = u"<Object>";
-            break;
-        }
-        case uno::TypeClass_STRUCT:
-        {
-            aRetStr = u"<Struct>";
-            break;
-        }
         case uno::TypeClass_BOOLEAN:
         {
             bool bBool = aValue.get<bool>();
-            aRetStr = bBool ? u"True" : u"False";
+            aRetStr = bBool ? SfxResId(STR_ANY_VALUE_TRUE) : SfxResId(STR_ANY_VALUE_FALSE);
             break;
         }
         case uno::TypeClass_CHAR:
@@ -183,6 +181,128 @@ OUString AnyToString(const uno::Any& aValue, const uno::Reference<uno::XComponen
 
         default:
             break;
+    }
+    return aRetStr;
+}
+
+// returns a name of the object, if available
+OUString getInterfaceName(uno::Reference<uno::XInterface> const& xInterface,
+                          const uno::Reference<uno::XComponentContext>& xContext)
+{
+    uno::Reference<container::XNamed> xNamed(xInterface, uno::UNO_QUERY);
+    if (xNamed.is())
+        return xNamed->getName();
+
+    auto xInvocationFactory = css::script::Invocation::create(xContext);
+    uno::Sequence<uno::Any> aParameters = { uno::Any(xInterface) };
+    auto xInvocationInterface = xInvocationFactory->createInstanceWithArguments(aParameters);
+    if (xInvocationInterface.is())
+    {
+        uno::Reference<script::XInvocation2> xInvocation(xInvocationInterface, uno::UNO_QUERY);
+        if (xInvocation.is() && xInvocation->hasProperty("Name"))
+        {
+            uno::Any aAny = xInvocation->getValue("Name");
+            if (aAny.hasValue() && aAny.getValueTypeClass() == uno::TypeClass_STRING)
+                return aAny.get<OUString>();
+        }
+    }
+    return OUString();
+}
+
+OUString convertAnyToString(const uno::Any& aValue,
+                            const uno::Reference<uno::XComponentContext>& xContext)
+{
+    // return early if we don't have any value
+    if (!aValue.hasValue())
+        return SfxResId(STR_ANY_VALUE_NULL);
+
+    OUString aRetStr;
+
+    uno::TypeClass eType = aValue.getValueTypeClass();
+
+    switch (eType)
+    {
+        case uno::TypeClass_INTERFACE:
+        {
+            uno::Reference<uno::XInterface> xInterface(aValue, uno::UNO_QUERY);
+            if (!xInterface.is())
+                aRetStr = SfxResId(STR_ANY_VALUE_NULL);
+            else
+            {
+                OUString aString = getInterfaceName(xInterface, xContext);
+                if (!aString.isEmpty())
+                    aRetStr = "{" + aString + "} ";
+
+                OUString aImplementationClass = getInterfaceImplementationClass(xInterface);
+                if (aImplementationClass.isEmpty())
+                    aImplementationClass = SfxResId(STR_CLASS_UNKNOWN);
+                aRetStr
+                    += SfxResId(STR_PROPERTY_VALUE_OBJECT).replaceFirst("%1", aImplementationClass);
+            }
+            break;
+        }
+        case uno::TypeClass_STRUCT:
+        {
+            aRetStr = SfxResId(STR_PROPERTY_VALUE_STRUCT);
+            break;
+        }
+        default:
+        {
+            aRetStr = convertBasicValueToString(aValue, xContext);
+            break;
+        }
+    }
+    return aRetStr;
+}
+
+OUString convertAnyToShortenedString(const uno::Any& aValue,
+                                     const uno::Reference<uno::XComponentContext>& xContext)
+{
+    // return early if we don't have any value
+    if (!aValue.hasValue())
+        return SfxResId(STR_ANY_VALUE_NULL);
+
+    OUString aRetStr;
+
+    uno::TypeClass eType = aValue.getValueTypeClass();
+
+    switch (eType)
+    {
+        case uno::TypeClass_INTERFACE:
+        {
+            uno::Reference<uno::XInterface> xInterface(aValue, uno::UNO_QUERY);
+            if (!xInterface.is())
+                aRetStr = SfxResId(STR_ANY_VALUE_NULL);
+            else
+            {
+                OUString aString = getInterfaceName(xInterface, xContext);
+                if (!aString.isEmpty())
+                    aRetStr = "{" + aString + "} ";
+
+                OUString aImplementationClass = getInterfaceImplementationClass(xInterface);
+                if (aImplementationClass.isEmpty())
+                    aImplementationClass = SfxResId(STR_CLASS_UNKNOWN);
+                aRetStr
+                    += SfxResId(STR_PROPERTY_VALUE_OBJECT).replaceFirst("%1", aImplementationClass);
+
+                if (aRetStr.getLength() > 43)
+                    aRetStr = OUString::Concat(aRetStr.subView(0, 40)) + u"...";
+            }
+            break;
+        }
+        case uno::TypeClass_STRING:
+        {
+            OUString aStringValue = u"\"" + aValue.get<OUString>() + u"\"";
+            if (aStringValue.getLength() > 44)
+                aStringValue = OUString::Concat(aStringValue.subView(0, 40)) + u"\"...";
+            aRetStr = aStringValue;
+            break;
+        }
+        default:
+        {
+            aRetStr = convertAnyToString(aValue, xContext);
+            break;
+        }
     }
     return aRetStr;
 }
@@ -314,13 +434,13 @@ public:
         switch (xClass->getTypeClass())
         {
             case uno::TypeClass_INTERFACE:
-                return "object";
+                return SfxResId(STR_METHOD_TYPE_OBJECT);
             case uno::TypeClass_STRUCT:
-                return "struct";
+                return SfxResId(STR_METHOD_TYPE_STRUCT);
             case uno::TypeClass_ENUM:
-                return "enum";
+                return SfxResId(STR_METHOD_TYPE_ENUM);
             case uno::TypeClass_SEQUENCE:
-                return "sequence";
+                return SfxResId(STR_METHOD_TYPE_SEQUENCE);
             default:
                 break;
         }
@@ -346,13 +466,13 @@ public:
             switch (rParameterInfo.aMode)
             {
                 case reflection::ParamMode_IN:
-                    aInString += "[in] ";
+                    aInString += SfxResId(STR_PARMETER_MODE_IN) + " ";
                     break;
                 case reflection::ParamMode_OUT:
-                    aInString += "[out] ";
+                    aInString += SfxResId(STR_PARMETER_MODE_OUT) + " ";
                     break;
                 case reflection::ParamMode_INOUT:
-                    aInString += "[in&out] ";
+                    aInString += SfxResId(STR_PARMETER_MODE_IN_AND_OUT) + " ";
                     break;
                 default:
                     break;
@@ -465,7 +585,7 @@ public:
 
     std::vector<std::pair<sal_Int32, OUString>> getColumnValues() override
     {
-        OUString aValue = AnyToString(maAny, mxContext);
+        OUString aValue = convertAnyToShortenedString(maAny, mxContext);
         OUString aType = getAnyType(maAny);
 
         return { { 1, aValue }, { 2, aType }, { 3, mrInfo } };
@@ -547,8 +667,11 @@ public:
         OUString aType = getAnyType(maAny).replaceAll(u"[]", u"");
         aType += u"[" + OUString::number(nLength) + u"]";
 
+        OUString aValue
+            = SfxResId(STR_PROPERTY_VALUE_SEQUENCE).replaceFirst("%1", OUString::number(nLength));
+
         return {
-            { 1, "<Sequence>" },
+            { 1, aValue },
             { 2, aType },
         };
     }
@@ -567,8 +690,8 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
         for (OUString const& rName : aNames)
         {
             uno::Any aAny = xNameAccess->getByName(rName);
-            auto* pObjectInspectorNode
-                = createNodeObjectForAny(u"@" + rName, aAny, u"name container");
+            auto* pObjectInspectorNode = createNodeObjectForAny(
+                u"@" + rName, aAny, SfxResId(STR_PROPERTY_TYPE_IS_NAMED_CONTAINER));
             lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
         }
     }
@@ -580,7 +703,8 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
         {
             uno::Any aAny = xIndexAccess->getByIndex(nIndex);
             auto* pObjectInspectorNode
-                = createNodeObjectForAny(u"@" + OUString::number(nIndex), aAny, u"index container");
+                = createNodeObjectForAny(u"@" + OUString::number(nIndex), aAny,
+                                         SfxResId(STR_PROPERTY_TYPE_IS_INDEX_CONTAINER));
             lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
         }
     }
@@ -595,7 +719,8 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
             {
                 uno::Any aAny = xEnumeration->nextElement();
                 auto* pObjectInspectorNode
-                    = createNodeObjectForAny(u"@" + OUString::number(nIndex), aAny, u"enumeration");
+                    = createNodeObjectForAny(u"@" + OUString::number(nIndex), aAny,
+                                             SfxResId(STR_PROPERTY_TYPE_IS_ENUMERATION));
                 lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
             }
         }
@@ -649,40 +774,42 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
 
             std::vector<OUString> aInfoCollection;
             if (bIsAttribute)
-                aInfoCollection.push_back(u"attribute");
+                aInfoCollection.push_back(SfxResId(STR_PROPERTY_ATTRIBUTE_IS_ATTRIBUTE));
             if (bIsGetSetMethod)
             {
-                bool bSet = false;
+                bool bHasGet = false;
                 OUString aString;
                 if (bMethodGet || bMethodIs)
                 {
-                    aString += u"get";
-                    bSet = true;
+                    aString += SfxResId(STR_PROPERTY_ATTRIBUTE_GET);
+                    bHasGet = true;
                 }
                 if (bMethodSet)
                 {
-                    if (bSet)
-                        aString += u", ";
-                    aString += u"set";
+                    if (bHasGet)
+                        aString += u"+";
+                    aString += SfxResId(STR_PROPERTY_ATTRIBUTE_SET);
                 }
-                aInfoCollection.push_back(u"(" + aString + u")");
+                aInfoCollection.push_back(aString);
+                if (bMethodSet && !bHasGet)
+                    aInfoCollection.push_back(SfxResId(STR_PROPERTY_ATTRIBUTE_WRITEONLY));
             }
             if (aInvocationInfo.PropertyAttribute & beans::PropertyAttribute::MAYBEVOID)
-                aInfoCollection.push_back(u"may be void");
+                aInfoCollection.push_back(SfxResId(STR_PROPERTY_ATTRIBUTE_MAYBEVOID));
             if (aInvocationInfo.PropertyAttribute & beans::PropertyAttribute::READONLY)
-                aInfoCollection.push_back(u"read-only");
+                aInfoCollection.push_back(SfxResId(STR_PROPERTY_ATTRIBUTE_READONLY));
             if (aInvocationInfo.PropertyAttribute & beans::PropertyAttribute::REMOVABLE)
-                aInfoCollection.push_back(u"removeable");
+                aInfoCollection.push_back(SfxResId(STR_PROPERTY_ATTRIBUTE_REMOVABLE));
             if (aInvocationInfo.PropertyAttribute & beans::PropertyAttribute::BOUND)
-                aInfoCollection.push_back(u"bound");
+                aInfoCollection.push_back(SfxResId(STR_PROPERTY_ATTRIBUTE_BOUND));
             if (aInvocationInfo.PropertyAttribute & beans::PropertyAttribute::CONSTRAINED)
-                aInfoCollection.push_back(u"constrained");
+                aInfoCollection.push_back(SfxResId(STR_PROPERTY_ATTRIBUTE_CONSTRAINED));
             if (aInvocationInfo.PropertyAttribute & beans::PropertyAttribute::TRANSIENT)
-                aInfoCollection.push_back(u"transient");
+                aInfoCollection.push_back(SfxResId(STR_PROPERTY_ATTRIBUTE_TRANSIENT));
             if (aInvocationInfo.PropertyAttribute & beans::PropertyAttribute::MAYBEAMBIGUOUS)
-                aInfoCollection.push_back(u"may be ambiguous");
+                aInfoCollection.push_back(SfxResId(STR_PROPERTY_ATTRIBUTE_MAYBEAMBIGUOUS));
             if (aInvocationInfo.PropertyAttribute & beans::PropertyAttribute::MAYBEDEFAULT)
-                aInfoCollection.push_back(u"may be default");
+                aInfoCollection.push_back(SfxResId(STR_PROPERTY_ATTRIBUTE_MAYBEDEFAULT));
 
             bool bSet = false;
             OUString aInfoString;
@@ -880,7 +1007,7 @@ IMPL_LINK(ObjectInspectorTreeHandler, SelectionChanged, weld::TreeView&, rTreeVi
             uno::Any aAny = pBasicValueNode->getAny();
             uno::Reference<uno::XInterface> xInterface(aAny, uno::UNO_QUERY);
             bHaveNodeWithObject = xInterface.is();
-            mpObjectInspectorWidgets->mpTextView->set_text(AnyToString(aAny, mxContext));
+            mpObjectInspectorWidgets->mpTextView->set_text(convertAnyToString(aAny, mxContext));
         }
     }
 
@@ -1149,8 +1276,7 @@ void ObjectInspectorTreeHandler::inspectObject(uno::Reference<uno::XInterface> c
         return;
 
     // Set implementation name
-    auto xServiceInfo = uno::Reference<lang::XServiceInfo>(xInterface, uno::UNO_QUERY);
-    OUString aImplementationName = xServiceInfo->getImplementationName();
+    OUString aImplementationName = getInterfaceImplementationClass(xInterface);
     mpObjectInspectorWidgets->mpClassNameLabel->set_label(aImplementationName);
 
     // Fire entering the current opened page manually
