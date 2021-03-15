@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a3e1220c_140c0abe",
+        "filename": "basic/qa/basic_coverage/test_string_replace.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-15T13:14:46Z",
+      "side": 1,
+      "message": "Please note that it\u0027s important that search string \"abc\" starts with original string \"a\".",
+      "revId": "1052c7db143cae6cbb51b0dadcb777667c881fcf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
