@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "92e0850b_2751d927",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2832,
+      "author": {
+        "id": 1002855
+      },
+      "writtenOn": "2021-03-15T07:53:45Z",
+      "side": 1,
+      "message": "Thank you for pointing this out!",
+      "parentUuid": "c19dc57a_379f6c94",
+      "range": {
+        "startLine": 2832,
+        "startChar": 28,
+        "endLine": 2832,
+        "endChar": 52
+      },
+      "revId": "186a44a1ed8a7be07ff1791b084e37ee2fffc1b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6d47ab5c_9ff29427",
         "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "186a44a1ed8a7be07ff1791b084e37ee2fffc1b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c6626ef_c7c2855f",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2846,
+      "author": {
+        "id": 1002855
+      },
+      "writtenOn": "2021-03-15T07:53:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d47ab5c_9ff29427",
+      "range": {
+        "startLine": 2846,
+        "startChar": 4,
+        "endLine": 2846,
+        "endChar": 5
+      },
+      "revId": "186a44a1ed8a7be07ff1791b084e37ee2fffc1b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7dae6243_6ba81c7b",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2825,
+      "author": {
+        "id": 1002855
+      },
+      "writtenOn": "2021-03-15T07:53:45Z",
+      "side": 0,
+      "message": "What happens if there are both text nodes, and non text nodes in the selection?",
+      "parentUuid": "cef935ba_42b64151",
+      "revId": "c89f5fa26a8ec6e36ddd5562a5c3c276f9e4ff80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d4df2b39_55a8e84f",
         "filename": "sw/source/core/txtnode/txtedt.cxx",
         "patchSetId": 1
