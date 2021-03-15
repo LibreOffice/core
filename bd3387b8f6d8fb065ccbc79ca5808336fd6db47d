@@ -68,6 +68,24 @@
       "revId": "bd3387b8f6d8fb065ccbc79ca5808336fd6db47d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b32670fb_07f1e073",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-15T18:28:46Z",
+      "side": 1,
+      "message": "I might or might not use this lib all depends on whether my approach is feasible or not. If it is feasible then including it would be a necessity \u0026 I\u0027ll do the stuff you mentioned.",
+      "parentUuid": "3a24b14b_62475f5d",
+      "revId": "bd3387b8f6d8fb065ccbc79ca5808336fd6db47d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
