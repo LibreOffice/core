@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b3a35c3_8c26843b",
+        "filename": "oox/qa/unit/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-03-15T08:59:49Z",
+      "side": 1,
+      "message": "Why are you checking the FillStyle here? Looking at 5c54778aad677d6bb6e6687f0f43dffad1aefa1e, it seems the fix is about the alphamask, not about the fillstyle property",
+      "revId": "a3569000f36e72e610d945b5797ef31eaa322e4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
