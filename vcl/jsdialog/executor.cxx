@@ -221,9 +221,7 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                     OString nRowString
                         = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
 
-                    std::unique_ptr<weld::TreeIter> itSelected(pTreeView->make_iterator());
-                    pTreeView->get_selected(itSelected.get());
-                    pTreeView->unselect(*itSelected);
+                    pTreeView->unselect_all();
 
                     int nAbsPos = std::atoi(nRowString.getStr());
 
@@ -240,7 +238,7 @@ bool ExecuteAction(sal_uInt64 nWindowId, const OString& rWidget, StringMap& rDat
                         = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
                     int nRow = std::atoi(nRowString.getStr());
 
-                    pTreeView->unselect(pTreeView->get_selected_index());
+                    pTreeView->unselect_all();
                     pTreeView->select(nRow);
                     pTreeView->set_cursor(nRow);
                     LOKTrigger::trigger_changed(*pTreeView);
