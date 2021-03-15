@@ -73,7 +73,7 @@ $(eval $(call gb_Library_use_externals,cui,\
     libxml2 \
     orcus-parser \
     orcus \
-    qrcodegen \
+    zxing \
 ))
 ifeq ($(DISABLE_GUI),)
 $(eval $(call gb_Library_use_externals,cui,\
