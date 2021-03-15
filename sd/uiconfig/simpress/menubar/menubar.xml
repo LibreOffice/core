@@ -654,6 +654,7 @@
           <menu:menuitem menu:id=".uno:OpenXMLFilterSettings"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menuitem menu:id=".uno:DevelopmentToolsDockingWindow"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ConfigureDialog" menu:style="text"/>
@@ -669,7 +670,6 @@
   </menu:menu>
   <menu:menu menu:id=".uno:HelpMenu">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:DevelopmentToolsDockingWindow"/>
       <menu:menuitem menu:id=".uno:HelpIndex"/>
       <menu:menuitem menu:id=".uno:ExtendedHelp"/>
       <menu:menuitem menu:id=".uno:Documentation"/>
