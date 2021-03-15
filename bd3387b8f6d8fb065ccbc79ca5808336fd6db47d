@@ -50,6 +50,24 @@
       "revId": "bd3387b8f6d8fb065ccbc79ca5808336fd6db47d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a24b14b_62475f5d",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-03-15T18:14:59Z",
+      "side": 1,
+      "message": "so far this is only a header. Headers are not compiled and thus don\u0027t need to be mentioned....\n\nAnd I said in your last patch that you should know what you need from the lib ;-)\n\nIf you *really* need that stb thingy, the cleanest way would be to add a\n- new stb external including all the stuff\n- use that one\n\nA build with system-zxing would not work standalone anyway given libzxingcore-dev doesn\u0027t contain that header anyway, only libstb-dev does )see https://packages.debian.org/search?earchon\u003dcontents\u0026keywords\u003dstb_image_write.h\u0026mode\u003dexactfilename\u0026suite\u003dunstable\u0026arch\u003dany) and thus it needs to be checked for in addition.",
+      "parentUuid": "bf09b86d_4cb71c31",
+      "revId": "bd3387b8f6d8fb065ccbc79ca5808336fd6db47d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
