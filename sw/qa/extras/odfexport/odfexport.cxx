@@ -2414,7 +2414,7 @@ DECLARE_ODFEXPORT_TEST(testQrCodeGenProperties, "qrcode-properties.odt")
     CPPUNIT_ASSERT_EQUAL(css::drawing::QRCodeErrorCorrection::LOW,
                          aQRCode.ErrorCorrection);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5),
-                         aQRCode.Border);
+                         aQRCode.Margin);
 }
 
 DECLARE_ODFEXPORT_TEST(testChapterNumberingNewLine, "chapter-number-new-line.odt")

@@ -1535,7 +1535,7 @@ namespace xmloff::token {
         TOKEN( "purple",                          XML_PURPLE ),
         TOKEN( "pyramid",                         XML_PYRAMID ),
         TOKEN( "qrcode",                          XML_QRCODE ),
-        TOKEN( "qrcode-border",                   XML_QRCODE_BORDER ),
+        TOKEN( "qrcode-maegin",                   XML_QRCODE_MARGIN ),
         TOKEN( "qrcode-errorcorrection",          XML_QRCODE_ERROR_CORRECTION ),
         TOKEN( "quarter",                         XML_QUARTER ),
         TOKEN( "query-name",                      XML_QUERY_NAME ),

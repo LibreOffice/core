@@ -4304,7 +4304,7 @@ ifneq ($(ENABLE_ZXING),)
 define gb_LinkTarget__use_zxing
 $(call gb_LinkTarget_use_unpacked,$(1),zxing)
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,zxing/core/)\
+	-I$(call gb_UnpackedTarball_get_dir,zxing/)\
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),\
