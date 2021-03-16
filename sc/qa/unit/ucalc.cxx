@@ -5017,6 +5017,19 @@ void Test::testAutoFill()
     CPPUNIT_ASSERT_EQUAL( OUString("3.00%"), m_pDoc->GetString( 0, 82, 0 ) );
     CPPUNIT_ASSERT_EQUAL( OUString("4.00%"), m_pDoc->GetString( 0, 83, 0 ) );
 
+    // Clear column A for a new test.
+    clearRange(m_pDoc, ScRange(0,0,0,0,MAXROW,0));
+    m_pDoc->SetRowHidden(0, MAXROW, 0, false); // Show all rows.
+
+    m_pDoc->SetString( 0, 0, 0, "1" );
+    m_pDoc->SetString( 0, 1, 0, "1.1" );
+    m_pDoc->Fill( 0, 0, 0, 1, nullptr, aMarkData, 60, FILL_TO_BOTTOM, FILL_AUTO );
+
+    // tdf#129606: Without the fix in place, this test would have failed with
+    // - Expected: 6
+    // - Actual  : 6.00000000000001
+    CPPUNIT_ASSERT_EQUAL( OUString("6"), m_pDoc->GetString( 0, 50, 0 ) );
+
     m_pDoc->DeleteTab(0);
 }
 
