@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41994b1a_8f25591b",
+        "filename": "sw/source/core/txtnode/fntcache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-03-16T17:39:34Z",
+      "side": 1,
+      "message": "at a guess from the comment, the cause is \"printing of OLE2\" which might mean printing with an embedded OLE2 object, or being printed when LO is embedded via OLE2.\n\nBut that is something that virtually never happens these days, so I wouldn\u0027t worry about it :-)",
+      "revId": "ebe75c23333e18585024be886948925b60e40535",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
