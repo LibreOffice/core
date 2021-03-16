@@ -365,6 +365,8 @@ public:
 
     virtual void connect_get_property_tree(const Link<tools::JsonWriter&, void>& rLink) override;
 
+    virtual void get_property_tree(tools::JsonWriter& rJsonWriter) override;
+
     virtual void set_stack_background() override;
 
     virtual void set_title_background() override;
