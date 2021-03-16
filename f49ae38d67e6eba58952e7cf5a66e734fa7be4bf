@@ -299,6 +299,24 @@
       "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "238d52be_5fc2b36d",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-03-16T14:28:14Z",
+      "side": 1,
+      "message": "Ah great, so please do that then.\nUsing PNG would be a regression IMO (you can\u0027t scale the generated qr code properly anymore).",
+      "parentUuid": "97304acb_6046dc1c",
+      "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
