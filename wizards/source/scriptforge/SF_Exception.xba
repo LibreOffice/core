@@ -392,6 +392,49 @@ Catch:
 End Function    &apos;   ScriptForge.SF_Exception.ConsoleToFile
 
 REM -----------------------------------------------------------------------------
+Public Sub DebugDisplay(ParamArray pvArgs() As Variant)
+&apos;&apos;&apos;	Display the list of arguments in a readable form in a message box
+&apos;&apos;&apos;	Arguments are separated by a LINEFEED character
+&apos;&apos;&apos;	The maximum length of each individual argument = 1024 characters
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Any number of arguments of any type
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		SF_Exception.DebugDisplay(a, Array(1, 2, 3), , &quot;line1&quot; &amp; Chr(10) &amp; &quot;Line2&quot;, DateSerial(2020, 04, 09))
+
+Dim sOutputMsg As String	&apos;	Line to display
+Dim sOutputCon As String	&apos;	Line to write in console
+Dim sArgMsg As String		&apos;	Single argument
+Dim sArgCon As String		&apos;	Single argument
+Dim i As Integer
+Const cstTab = 4
+Const cstMaxLength = 1024
+Const cstThisSub = &quot;Exception.DebugDisplay&quot;
+Const cstSubArgs = &quot;Arg0, [Arg1, ...]&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error Goto Finally	&apos;	Never interrupt processing
+	SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
+Try:
+	&apos;	Build new console line
+	sOutputMsg = &quot;&quot;		:	sOutputCon = &quot;&quot;
+	For i = 0 To UBound(pvArgs)
+		If IsError(pvArgs(i)) Then pvArgs(i) = &quot;&quot;
+		sArgMsg = Iif(i = 0, &quot;&quot;, SF_String.sfNEWLINE) &amp; SF_Utils._Repr(pvArgs(i), cstMaxLength)	&apos;Do not use SF_String.Represent()
+		sArgCon = Iif(i = 0, &quot;&quot;, SF_String.sfTAB) &amp; SF_Utils._Repr(pvArgs(i), cstMaxLength)
+		sOutputMsg = sOutputMsg &amp; sArgMsg
+		sOutputCon = sOutputCon &amp; sArgCon
+	Next i
+	
+	&apos;	Add to actual console
+	_SF_._AddToConsole(SF_String.ExpandTabs(sOutputCon, cstTab))
+	&apos;	Display the message
+	MsgBox(sOutputMsg, MB_OK + MB_ICONINFORMATION, &quot;DebugDisplay&quot;)
+	
+Finally:
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Sub
+End Sub			&apos;	ScriptForge.SF_Exception.DebugDisplay
+
+REM -----------------------------------------------------------------------------
 Public Sub DebugPrint(ParamArray pvArgs() As Variant)
 &apos;&apos;&apos;	Print the list of arguments in a readable form in the console
 &apos;&apos;&apos;	Arguments are separated by a TAB character (simulated by spaces)
@@ -403,7 +446,6 @@ Public Sub DebugPrint(ParamArray pvArgs() As Variant)
 
 Dim sOutput As String		&apos;	Line to write in console
 Dim sArg As String			&apos;	Single argument
-Dim sMainSub As String		&apos;	Temporary storage for main function
 Dim i As Integer
 Const cstTab = 4
 Const cstMaxLength = 1024

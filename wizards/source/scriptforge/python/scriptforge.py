@@ -751,6 +751,63 @@ class SFScriptForge:
         importFromPropertyValues, importfrompropertyvalues = ImportFromPropertyValues, ImportFromPropertyValues
 
     # #########################################################################
+    # SF_Exception CLASS
+    # #########################################################################
+    class SF_Exception(SFServices, metaclass = _Singleton):
+        """
+            The Exception service is a collection of methods for code debugging and error handling.
+
+            The Exception service console stores events, variable values and information about errors.
+            Use the console when the Python shell is not available, for example in Calc user defined functions (UDF)
+            or during events processing.
+            Use DebugPrint() method to aggregate additional user data of any type.
+
+            Console entries can be dumped to a text file or visualized in a dialogue.
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'ScriptForge.Exception'
+        servicesynonyms = ('exception', 'scriptforge.exception')
+        serviceproperties = dict()
+        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
+
+        def Console(self, modal = True):
+            # Modal is always True in Python: Basic execution lasts only the time to display the box
+            return self.Execute(self.vbMethod, 'Console', True)
+        console = Console
+
+        def ConsoleClear(self, keep = 0):
+            return self.Execute(self.vbMethod, 'ConsoleClear', keep)
+        consoleClear, consoleclear = ConsoleClear, ConsoleClear
+
+        def ConsoleToFile(self, filename):
+            return self.Execute(self.vbMethod, 'ConsoleToFile', filename)
+        consoleToFile, consoletofile = ConsoleToFile, ConsoleToFile
+
+        def DebugDisplay(self, *args):
+            # Arguments are concatenated in a single string similar to what the Python print() function would produce
+            self.DebugPrint(*args)
+            param = '\n'.join(list(map(lambda a : a.strip("'") if isinstance(a, str) else repr(a), args)))
+            bas = CreateScriptService('ScriptForge.Basic')
+            return bas.MsgBox(param, bas.MB_OK + bas.MB_ICONINFORMATION, 'DebugDisplay')
+        debugDisplay, debugdisplay = DebugDisplay, DebugDisplay
+
+        def DebugPrint(self, *args):
+            # Arguments are concatenated in a single string similar to what the Python print() function would produce
+            param = '\t'.join(list(map(repr, args))).expandtabs(tabsize = 4)
+            return self.Execute(self.vbMethod, 'DebugPrint', param)
+        debugPrint, debugprint = DebugPrint, DebugPrint
+
+        def RaiseFatal(self, errorcode, *args):
+            """
+                Generate a run-time error caused by an anomaly in a user script detected by ScriptForge
+                The message is logged in the console. The execution is STOPPED
+                For INTERNAL USE only
+                """
+            # Direct call because RaiseFatal forces an execution stop in Basic
+            return self.SIMPLEEXEC('SF_Exception.RaiseFatal', errorcode, *args)
+
+    # #########################################################################
     # SF_FileSystem CLASS
     # #########################################################################
     class SF_FileSystem(SFServices, metaclass = _Singleton):
