@@ -61,6 +61,11 @@ sal_uInt16 SwLineInfo::NumberOfTabStops() const
 
 SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto ) const
 {
+    // Update search location - since Center/Decimal tabstops' width is dependent on the following text.
+    SwTabPortion* pTmpLastTab = rInf.GetLastTab();
+    if (pTmpLastTab && (pTmpLastTab->IsTabCenterPortion() || pTmpLastTab->IsTabDecimalPortion()))
+        pTmpLastTab->PostFormat(rInf);
+
     sal_Unicode cFill = 0;
     sal_Unicode cDec = 0;
     SvxTabAdjust eAdj;
