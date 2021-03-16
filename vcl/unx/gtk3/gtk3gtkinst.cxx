@@ -3083,6 +3083,11 @@ public:
         //not implemented for the gtk variant
     }
 
+    virtual void get_property_tree(tools::JsonWriter& /*rJsonWriter*/) override
+    {
+        //not implemented for the gtk variant
+    }
+
     virtual void set_stack_background() override
     {
         do_set_background(Application::GetSettings().GetStyleSettings().GetWindowColor());
