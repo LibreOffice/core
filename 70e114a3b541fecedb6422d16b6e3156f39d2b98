@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d8914ee_5fe1c324",
+        "filename": "sw/source/core/doc/docdesc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2021-03-16T15:00:13Z",
+      "side": 1,
+      "message": "You need to check HasStashedFormat in all three cases, right?",
+      "revId": "70e114a3b541fecedb6422d16b6e3156f39d2b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da79f620_23c482c6",
+        "filename": "sw/source/core/doc/docdesc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2021-03-16T15:00:13Z",
+      "side": 1,
+      "message": "You need to check HasStashedFormat in all three cases, right?",
+      "revId": "70e114a3b541fecedb6422d16b6e3156f39d2b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e5846f9_c31132e7",
+        "filename": "sw/source/core/doc/docfmt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1530,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2021-03-16T15:00:13Z",
+      "side": 1,
+      "message": "The case when both bFirst and bLeft are false can be skipped.",
+      "revId": "70e114a3b541fecedb6422d16b6e3156f39d2b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c63f5c2_1b41aa08",
+        "filename": "sw/source/core/doc/docfmt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1532,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2021-03-16T15:00:13Z",
+      "side": 1,
+      "message": "I think this line should be indented one deeper, no?",
+      "revId": "70e114a3b541fecedb6422d16b6e3156f39d2b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "781fbe56_706d365a",
+        "filename": "sw/source/core/layout/pagedesc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2021-03-16T15:00:13Z",
+      "side": 1,
+      "message": "This statement is unreachable.",
+      "revId": "70e114a3b541fecedb6422d16b6e3156f39d2b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "950e777e_308afb2b",
+        "filename": "sw/source/core/layout/pagedesc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2021-03-16T15:00:13Z",
+      "side": 1,
+      "message": "This statement is unreachable.",
+      "revId": "70e114a3b541fecedb6422d16b6e3156f39d2b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65794e35_80c1bf8b",
+        "filename": "sw/source/core/layout/pagedesc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2021-03-16T15:00:13Z",
+      "side": 1,
+      "message": "This statement is unreachable.",
+      "revId": "70e114a3b541fecedb6422d16b6e3156f39d2b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ae6507e_405a488e",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2560,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2021-03-16T15:00:13Z",
+      "side": 1,
+      "message": "Extra empty line? :)",
+      "revId": "70e114a3b541fecedb6422d16b6e3156f39d2b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
