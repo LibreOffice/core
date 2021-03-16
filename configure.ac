@@ -8945,7 +8945,7 @@ internal)
     if ! grep -q -i python.*${PYTHON_VERSION} ${SRC_ROOT}/download.lst; then
         AC_MSG_ERROR([PYTHON_VERSION ${PYTHON_VERSION} but no matching file in download.lst])
     fi
-    AC_DEFINE_UNQUOTED([PYTHON_VERSION_STRING], [L"${PYTHON_VERSION}"])
+    AC_DEFINE_UNQUOTED([PYTHON_VERSION_STRING], [L"3.7.7"])
     BUILD_TYPE="$BUILD_TYPE PYTHON"
     if test "$OS" = LINUX; then
         BUILD_TYPE="$BUILD_TYPE LIBFFI"

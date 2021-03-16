@@ -31,7 +31,7 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/python,\
 ))
 
 $(eval $(call gb_InstallModule_add_defs,scp2/python,\
-	-DPYVERSION=$(PYTHON_VERSION) \
+	-DPYVERSION=3.7.7 \
 ))
 endif
 
