@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a354d30_7987de1f",
+        "filename": "sc/source/ui/vba/vbarange.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1181,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T10:46:51Z",
+      "side": 1,
+      "message": "I\u0027d be concerned here about multiple things.\nFirst, the formula::FormulaGrammar::AddressConvention variable above should be considered, and there may be different separator, not \u0027!\u0027 (ODF/Calc grammar uses \u0027.\u0027).\nThen, the separator may be part of the file or sheet name (and then it would be in quotes) - so it\u0027s unsafe to just search the string.\nAnd then I\u0027d think that only if the file name is the same, and path is the same or absent, then we should drop it, right?\n\nThis is without actually diving into the problem, so I might be mistaken...",
+      "revId": "256e713c15e18a8e90a1d0d4fb417657f102ff95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
