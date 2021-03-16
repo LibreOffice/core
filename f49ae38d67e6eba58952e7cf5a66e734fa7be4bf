@@ -317,6 +317,24 @@
       "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c6e6205_82955216",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2021-03-16T14:36:43Z",
+      "side": 1,
+      "message": "Nice find, Mike. Hopefully the Java example can be adapted to the C++ version easily.",
+      "parentUuid": "238d52be_5fc2b36d",
+      "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
