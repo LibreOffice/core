@@ -165,6 +165,11 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMirrorMargin)
     CPPUNIT_ASSERT_EQUAL(nGutterTwips, nOldRight - nNewRight);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testCrashRemoveFromLayout)
+{
+    load(DATA_DIRECTORY, "tdf122894-4.doc");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
