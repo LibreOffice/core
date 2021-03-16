@@ -39,6 +39,7 @@ public:
     void testTdf116989();
     void testAbi11870();
     void testStableAtPageAnchoredFlyPosition();
+    void testCrashRemoveFromLayout();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
@@ -59,6 +60,7 @@ public:
     CPPUNIT_TEST(testTdf116989);
     CPPUNIT_TEST(testAbi11870);
     CPPUNIT_TEST(testStableAtPageAnchoredFlyPosition);
+    CPPUNIT_TEST(testCrashRemoveFromLayout);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -364,6 +366,11 @@ void SwLayoutWriter::testStableAtPageAnchoredFlyPosition()
 
     // the anchored frame should not have moved
     CPPUNIT_ASSERT_EQUAL(aOrigRect, aRelayoutRect);
+}
+
+void SwLayoutWriter::testCrashRemoveFromLayout()
+{
+    createDoc("tdf122894-4.doc");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
