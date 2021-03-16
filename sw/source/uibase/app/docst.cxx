@@ -902,11 +902,20 @@ void SwDocShell::Edit(
         rSet.Put(SvxBitmapListItem(pDrawModel->GetBitmapList(), SID_BITMAP_LIST));
         rSet.Put(SvxPatternListItem(pDrawModel->GetPatternList(), SID_PATTERN_LIST));
 
-        SfxGrabBagItem aGrabBag(SID_ATTR_CHAR_GRABBAG);
+        std::optional<SfxGrabBagItem> oGrabBag;
+        SfxPoolItem const* pItem(nullptr);
+        if (SfxItemState::SET == rSet.GetItemState(SID_ATTR_CHAR_GRABBAG, true, &pItem))
+        {
+            oGrabBag.emplace(*static_cast<SfxGrabBagItem const*>(pItem));
+        }
+        else
+        {
+            oGrabBag.emplace(SID_ATTR_CHAR_GRABBAG);
+        }
         bool bGutterAtTop
             = GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::GUTTER_AT_TOP);
-        aGrabBag.GetGrabBag()["GutterAtTop"] <<= bGutterAtTop;
-        rSet.Put(aGrabBag);
+        oGrabBag->GetGrabBag()["GutterAtTop"] <<= bGutterAtTop;
+        rSet.Put(*oGrabBag);
     }
 
     if (!bBasic)

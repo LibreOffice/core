@@ -331,8 +331,10 @@ void XMLPageMasterExportPropMapper::ContextFilter(
     XMLPropertyState* pFooterRepeatOffsetX = nullptr;
     XMLPropertyState* pFooterRepeatOffsetY = nullptr;
 
+#if 0
     XMLPropertyState* pFill = nullptr;
     XMLPropertyState* pFillBitmapMode = nullptr;
+#endif
 
     rtl::Reference < XMLPropertySetMapper > aPropMapper(getPropertySetMapper());
 
@@ -372,6 +374,7 @@ void XMLPageMasterExportPropMapper::ContextFilter(
 
         switch( nSimpleId )
         {
+#if 0
             case CTF_PM_FILL: // tdf#103602: add background-size attribute to ODT
                 if (nFlag != CTF_PM_HEADERFLAG && nFlag != CTF_PM_FOOTERFLAG
                     && rProp.maValue.hasValue())
@@ -386,6 +389,7 @@ void XMLPageMasterExportPropMapper::ContextFilter(
                     pFillBitmapMode = &rProp;
                 }
                 break;
+#endif
             case CTF_PM_MARGINALL:          pBuffer->pPMMarginAll           = pProp;    break;
             case CTF_PM_BORDERALL:          pBuffer->pPMBorderAll           = pProp;    break;
             case CTF_PM_BORDERTOP:          pBuffer->pPMBorderTop           = pProp;    break;
@@ -582,6 +586,7 @@ void XMLPageMasterExportPropMapper::ContextFilter(
         lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_ZEROVALUES), "PrintZeroValues", rPropSet);
     }
 
+#if 0
     if (pFill)
     {   // note: only drawing-page export should write this, because CTF_PM_FILL
         uno::Any backgroundSize;
@@ -623,6 +628,7 @@ void XMLPageMasterExportPropMapper::ContextFilter(
             rPropState.emplace_back(nIndex, backgroundSize);
         }
     }
+#endif
 
     SvXMLExportPropertyMapper::ContextFilter(bEnableFoFontFamily, rPropState, rPropSet);
 }
