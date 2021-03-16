@@ -281,6 +281,24 @@
       "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97304acb_6046dc1c",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T14:25:39Z",
+      "side": 1,
+      "message": "FTR: https://stackoverflow.com/questions/10789059/create-qr-code-in-vector-image (there\u0027s a \"You can even do it only with zxing withou additional libraries:\" answer there).",
+      "parentUuid": "6f33ff02_8b21b055",
+      "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
