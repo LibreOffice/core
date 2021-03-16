@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adabd5a_fabf5f69",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T12:26:58Z",
+      "side": 1,
+      "message": "Please address my concern about usage of the \u0027using namespace\u0027.",
+      "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6dab4e73_a5d0bd74",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T12:26:58Z",
+      "side": 1,
+      "message": "We generally do not use c-style casts. Please use static_cast.",
+      "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbbf7b7c_7c9348f3",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T12:26:58Z",
+      "side": 1,
+      "message": "This comment looks obsoleted?",
+      "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5111395_398728e9",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T12:26:58Z",
+      "side": 1,
+      "message": "It would be nice to document where these constants are defined (if not possible to use mnemonic names).",
+      "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bee517e4_6cbb41b0",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T12:26:58Z",
+      "side": 1,
+      "message": "So this again makes QR code en-US-only? This should not happen. See tdf#127233 and https://gerrit.libreoffice.org/c/core/+/78304/.",
+      "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
