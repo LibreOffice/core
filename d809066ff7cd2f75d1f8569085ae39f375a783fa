@@ -16,6 +16,23 @@
       "revId": "d809066ff7cd2f75d1f8569085ae39f375a783fa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15779ed8_1e012382",
+        "filename": "sw/source/ui/chrdlg/pardlg.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-03-16T03:54:12Z",
+      "side": 1,
+      "message": "I think it is best not to make code formatting changes unless it is the purpose of the patch or the patch changes touch the lines of code. Here there are no changes made to the for loop other than code formatting.",
+      "revId": "d809066ff7cd2f75d1f8569085ae39f375a783fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
