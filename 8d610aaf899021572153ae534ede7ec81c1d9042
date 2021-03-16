@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "7666383b_b658e0ba",
+        "filename": "cui/uiconfig/ui/qrcodegen.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-03-16T06:32:34Z",
+      "side": 1,
+      "message": "@Heiko: Any preference regarding terminology here?",
+      "range": {
+        "startLine": 147,
+        "startChar": 131,
+        "endLine": 147,
+        "endChar": 137
+      },
+      "revId": "8d610aaf899021572153ae534ede7ec81c1d9042",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fcaf30cb_6b228e80",
         "filename": "offapi/com/sun/star/drawing/QRCode.idl",
         "patchSetId": 2
