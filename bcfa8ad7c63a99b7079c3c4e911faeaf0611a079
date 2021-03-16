@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "164cb4c4_f029321a",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T10:38:59Z",
+      "side": 1,
+      "message": "Why a new variable, instead of just using \u0027\u0026aStream\u0027 in the call below?",
+      "revId": "bcfa8ad7c63a99b7079c3c4e911faeaf0611a079",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
