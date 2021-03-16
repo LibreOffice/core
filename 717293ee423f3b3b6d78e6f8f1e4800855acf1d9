@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "7df95719_1b718eb1",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-16T10:06:30Z",
+      "side": 1,
+      "message": "So, what exception should be caught here as in the previous case \"qrcodegen::data_too_long\u0026\" wasn\u0027t used as well?",
+      "parentUuid": "df1ca51a_356929a8",
+      "revId": "717293ee423f3b3b6d78e6f8f1e4800855acf1d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e9c3266f_cab30da4",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 3
