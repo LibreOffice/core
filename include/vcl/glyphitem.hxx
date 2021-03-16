@@ -31,7 +31,11 @@ class SalLayoutGlyphsImpl;
 
 class VCL_DLLPUBLIC SalLayoutGlyphs final
 {
-    std::vector<SalLayoutGlyphsImpl*> m_pImpls;
+    SalLayoutGlyphsImpl* m_pImpl = nullptr;
+    // Extra items are in a dynamically allocated vector in order to save memory.
+    // The usual case should be that this stays unused (it should be only used
+    // when font fallback takes place).
+    std::vector<SalLayoutGlyphsImpl*>* m_pExtraImpls = nullptr;
 
 public:
     SalLayoutGlyphs() = default;
@@ -42,11 +46,8 @@ public:
     SalLayoutGlyphs& operator=(const SalLayoutGlyphs&) = delete;
     SalLayoutGlyphs& operator=(SalLayoutGlyphs&&);
 
-    SalLayoutGlyphsImpl* Impl(unsigned int nLevel) const
-    {
-        return nLevel < m_pImpls.size() ? m_pImpls[nLevel] : nullptr;
-    }
-    void AppendImpl(SalLayoutGlyphsImpl* pImpl) { m_pImpls.push_back(pImpl); }
+    SalLayoutGlyphsImpl* Impl(unsigned int nLevel) const;
+    void AppendImpl(SalLayoutGlyphsImpl* pImpl);
 
     bool IsValid() const;
     void Invalidate();
