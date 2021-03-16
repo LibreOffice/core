@@ -592,12 +592,8 @@ SalLayoutGlyphs* ImplEntryType::GetTextGlyphs(const OutputDevice* pOutputDevice)
     if (!pLayout)
         return nullptr;
 
-    const SalLayoutGlyphs* pGlyphs = pLayout->GetGlyphs();
-    if (!pGlyphs)
-        return nullptr;
-
     // Remember the calculation result.
-    maStrGlyphs = *pGlyphs;
+    maStrGlyphs = pLayout->GetGlyphs();
 
     return &maStrGlyphs;
 }

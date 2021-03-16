@@ -52,12 +52,8 @@ SalLayoutGlyphs* MenuItemData::GetTextGlyphs(const OutputDevice* pOutputDevice)
     if (!pLayout)
         return nullptr;
 
-    const SalLayoutGlyphs* pGlyphs = pLayout->GetGlyphs();
-    if (!pGlyphs)
-        return nullptr;
-
     // Remember the calculation result.
-    aTextGlyphs = *pGlyphs;
+    aTextGlyphs = pLayout->GetGlyphs();
 
     return &aTextGlyphs;
 }

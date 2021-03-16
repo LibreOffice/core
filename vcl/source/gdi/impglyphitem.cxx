@@ -23,42 +23,40 @@
 #include <unx/freetype_glyphcache.hxx>
 #endif
 
-SalLayoutGlyphs::SalLayoutGlyphs()
-    : m_pImpl(nullptr)
+SalLayoutGlyphs::~SalLayoutGlyphs()
 {
+    for (SalLayoutGlyphsImpl* impl : m_pImpls)
+        delete impl;
 }
 
-SalLayoutGlyphs::~SalLayoutGlyphs() { delete m_pImpl; }
+SalLayoutGlyphs::SalLayoutGlyphs(SalLayoutGlyphs&& rOther) { std::swap(m_pImpls, rOther.m_pImpls); }
 
-SalLayoutGlyphs::SalLayoutGlyphs(const SalLayoutGlyphs& rOther)
-{
-    m_pImpl = rOther.m_pImpl ? rOther.m_pImpl->clone(*this) : nullptr;
-}
-
-SalLayoutGlyphs& SalLayoutGlyphs::operator=(const SalLayoutGlyphs& rOther)
+SalLayoutGlyphs& SalLayoutGlyphs::operator=(SalLayoutGlyphs&& rOther)
 {
     if (this != &rOther)
-    {
-        delete m_pImpl;
-        m_pImpl = rOther.m_pImpl ? rOther.m_pImpl->clone(*this) : nullptr;
-    }
+        std::swap(m_pImpls, rOther.m_pImpls);
     return *this;
 }
 
-bool SalLayoutGlyphs::IsValid() const { return m_pImpl && m_pImpl->IsValid(); }
+bool SalLayoutGlyphs::IsValid() const
+{
+    if (m_pImpls.empty())
+        return false;
+    for (SalLayoutGlyphsImpl* impl : m_pImpls)
+        if (!impl->IsValid())
+            return false;
+    return true;
+}
 
 void SalLayoutGlyphs::Invalidate()
 {
-    if (m_pImpl)
-        m_pImpl->Invalidate();
+    // Invalidating is in fact simply clearing.
+    for (SalLayoutGlyphsImpl* impl : m_pImpls)
+        delete impl;
+    m_pImpls.clear();
 }
 
-SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::clone(SalLayoutGlyphs& rGlyphs) const
-{
-    SalLayoutGlyphsImpl* pNew = new SalLayoutGlyphsImpl(rGlyphs, *m_rFontInstance);
-    *pNew = *this;
-    return pNew;
-}
+SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::clone() const { return new SalLayoutGlyphsImpl(*this); }
 
 bool SalLayoutGlyphsImpl::IsValid() const
 {

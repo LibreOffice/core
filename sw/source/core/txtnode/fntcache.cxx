@@ -234,12 +234,8 @@ static SalLayoutGlyphs* lcl_CreateLayout(const SwTextGlyphsKey& rKey, std::map<S
     if (!pLayout)
         return nullptr;
 
-    const SalLayoutGlyphs* pGlyphs = pLayout->GetGlyphs();
-    if (!pGlyphs)
-        return nullptr;
-
     // Remember the calculation result.
-    it->second.m_aTextGlyphs = *pGlyphs;
+    it->second.m_aTextGlyphs = pLayout->GetGlyphs();
 
     return &it->second.m_aTextGlyphs;
 }

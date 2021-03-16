@@ -84,12 +84,8 @@ SalLayoutGlyphs* lcl_GetRulerTextGlyphs(const vcl::RenderContext& rRenderContext
     if (!pLayout)
         return nullptr;
 
-    const SalLayoutGlyphs* pGlyphs = pLayout->GetGlyphs();
-    if (!pGlyphs)
-        return nullptr;
-
     // Remember the calculation result.
-    rTextGlyphs = *pGlyphs;
+    rTextGlyphs = pLayout->GetGlyphs();
 
     return &rTextGlyphs;
 }

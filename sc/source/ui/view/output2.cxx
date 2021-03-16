@@ -779,9 +779,9 @@ const SalLayoutGlyphs* ScDrawStringsVars::GetLayoutGlyphs(const OUString& rStrin
         return &it->second;
     std::unique_ptr<SalLayout> layout = pOutput->pFmtDevice->ImplLayout( rString, 0, rString.getLength(),
         Point( 0, 0 ), 0, nullptr, SalLayoutFlags::GlyphItemsOnly );
-    if( layout && layout->GetGlyphs())
+    if( layout )
     {
-        mCachedGlyphs.insert( std::make_pair( rString, *layout->GetGlyphs()));
+        mCachedGlyphs.insert( std::make_pair( rString, layout->GetGlyphs()));
         assert(mCachedGlyphs.find( rString ) == mCachedGlyphs.begin()); // newly inserted item is first
         return &mCachedGlyphs.begin()->second;
     }

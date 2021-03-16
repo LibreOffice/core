@@ -121,11 +121,7 @@ void VclComplexTextTest::testKashida()
         = OUString(u"ﻊﻨﺻﺭ ﺎﻠﻓﻮﺴﻓﻭﺭ ﻊﻨﺻﺭ ﻒﻟﺰﻳ ﺺﻠﺑ. ﺖﺘﻛﻮﻧ ﺎﻟﺩﻭﺭﺓ ﺎﻟﺭﺎﺒﻋﺓ ﻢﻧ ١٥ ﻊﻨﺻﺭﺍ.");
     std::unique_ptr<SalLayout> pLayout = pOutputDevice->ImplLayout(
         aText, 0, aText.getLength(), Point(0, 0), 0, nullptr, SalLayoutFlags::GlyphItemsOnly);
-    const SalLayoutGlyphs* pGlyphs = pLayout->GetGlyphs();
-    if (!pGlyphs)
-        // Failed in some non-interesting ways.
-        return;
-    SalLayoutGlyphs aGlyphs = *pGlyphs;
+    SalLayoutGlyphs aGlyphs = pLayout->GetGlyphs();
 
     // Now lay it out using the cached glyph list.
     ImplLayoutArgs aLayoutArgs(aText, 0, aText.getLength(), SalLayoutFlags::NONE,
