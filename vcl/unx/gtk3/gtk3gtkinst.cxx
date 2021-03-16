@@ -3817,6 +3817,27 @@ public:
 
     GtkContainer* getContainer() { return m_pContainer; }
 
+    virtual void child_grab_focus() override
+    {
+        disable_notify_events();
+        gtk_widget_grab_focus(m_pWidget);
+        bool bHasFocusChild = gtk_container_get_focus_child(m_pContainer);
+        if (!bHasFocusChild)
+        {
+            GList* pChildren = gtk_container_get_children(m_pContainer);
+            for (GList* pChild = g_list_first(pChildren); pChild; pChild = g_list_next(pChild))
+            {
+                gtk_container_set_focus_child(m_pContainer, static_cast<GtkWidget*>(pChild->data));
+                bHasFocusChild = true;
+                break;
+            }
+            g_list_free(pChildren);
+        }
+        if (bHasFocusChild)
+            gtk_widget_child_focus(gtk_container_get_focus_child(GTK_CONTAINER(m_pWidget)), GTK_DIR_TAB_FORWARD);
+        enable_notify_events();
+    }
+
     virtual void move(weld::Widget* pWidget, weld::Container* pNewParent) override
     {
         GtkInstanceWidget* pGtkWidget = dynamic_cast<GtkInstanceWidget*>(pWidget);
@@ -8897,12 +8918,17 @@ public:
     {
         disable_notify_events();
         gtk_widget_grab_focus(m_pWidget);
-        if (!gtk_container_get_focus_child(GTK_CONTAINER(m_pWidget)))
+        bool bHasFocusChild = gtk_container_get_focus_child(GTK_CONTAINER(m_pWidget));
+        if (!bHasFocusChild)
         {
-            GtkToolItem* pItem = gtk_toolbar_get_nth_item(m_pToolbar, 0);
-            gtk_container_set_focus_child(GTK_CONTAINER(m_pWidget), GTK_WIDGET(pItem));
+            if (GtkToolItem* pItem = gtk_toolbar_get_nth_item(m_pToolbar, 0))
+            {
+                gtk_container_set_focus_child(GTK_CONTAINER(m_pWidget), GTK_WIDGET(pItem));
+                bHasFocusChild = true;
+            }
         }
-        gtk_widget_child_focus(gtk_container_get_focus_child(GTK_CONTAINER(m_pWidget)), GTK_DIR_TAB_FORWARD);
+        if (bHasFocusChild)
+            gtk_widget_child_focus(gtk_container_get_focus_child(GTK_CONTAINER(m_pWidget)), GTK_DIR_TAB_FORWARD);
         enable_notify_events();
     }
 

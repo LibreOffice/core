@@ -346,6 +346,8 @@ public:
     {
         m_aContainerFocusChangedHdl = rLink;
     }
+    // causes a child of the container to have the keyboard focus
+    virtual void child_grab_focus() = 0;
 };
 
 class VCL_DLLPUBLIC Box : virtual public Container
