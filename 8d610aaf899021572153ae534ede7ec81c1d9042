@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "42750f45_76d29d42",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T07:58:47Z",
+      "side": 1,
+      "message": "Any actual reason to have this \"using\" instead of using fully qualified name for clarity?\n\nGenerally we try to get rig of those \u0027using namespace\u0027 things...",
+      "revId": "8d610aaf899021572153ae534ede7ec81c1d9042",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7666383b_b658e0ba",
         "filename": "cui/uiconfig/ui/qrcodegen.ui",
         "patchSetId": 2
@@ -107,6 +124,30 @@
       "side": 1,
       "message": "You need to revert all changes related to border in the directories I mentioned.\nFor the UI rename, I would prefer to have it in a separate patch, as it has nothing to do with zxing.\nSo maybe best is to revert all border-\u003emargin changes, and do the UI term change in a separate patch.",
       "parentUuid": "305b21e6_ff7bc107",
+      "range": {
+        "startLine": 33,
+        "startChar": 9,
+        "endLine": 33,
+        "endChar": 15
+      },
+      "revId": "8d610aaf899021572153ae534ede7ec81c1d9042",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e604717_66564b77",
+        "filename": "offapi/com/sun/star/drawing/QRCode.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T07:58:47Z",
+      "side": 1,
+      "message": "IMO, the less you change, the better, so that the change is the minimal that makes it work just as before, with the new library.",
+      "parentUuid": "171ed0a9_ed579e2c",
       "range": {
         "startLine": 33,
         "startChar": 9,
