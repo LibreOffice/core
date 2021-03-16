@@ -747,7 +747,8 @@ void SwObjectFormatterTextFrame::FormatAnchorFrameAndItsPrevs( SwTextFrame& _rAn
         // format the content of the previous columns.
         // Note: It's a very simple format without formatting objects.
         SwFrame* pColFrameOfAnchor = _rAnchorTextFrame.FindColFrame();
-        if ( pColFrameOfAnchor )
+        SAL_WARN_IF(pColFrameOfAnchor && _rAnchorTextFrame.IsInFootnote(), "sw.layout", "tdf#122894 skipping anchor in column in footnote");
+        if (pColFrameOfAnchor && !_rAnchorTextFrame.IsInFootnote())
         {
             // #i44049#
             _rAnchorTextFrame.LockJoin();
