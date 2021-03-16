@@ -46,6 +46,30 @@
       "revId": "d00e78329bce894190c175b6872970256226b8cb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa398f2f_7ad58a42",
+        "filename": "sw/uiconfig/swriter/ui/numparapage.ui",
+        "patchSetId": 7
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-03-16T02:05:52Z",
+      "side": 1,
+      "message": "Anshu, it is fine that you have added this to the commit message, but I was suggesting that you also make an announcement in the BZ for tdf#101965 about this planned change -- in case there are other opinions about changing \"None\" to \"No List\" in the paragraph and paragraph style dialog.",
+      "parentUuid": "9d0573d3_0ae9fa3b",
+      "range": {
+        "startLine": 147,
+        "startChar": 94,
+        "endLine": 147,
+        "endChar": 101
+      },
+      "revId": "d00e78329bce894190c175b6872970256226b8cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
