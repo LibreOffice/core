@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a4b0838_d832610e",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 2786,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-16T15:37:06Z",
+      "side": 1,
+      "message": "One issue with the oor:*-list \u003cprop\u003e types vs. e.g. a \u003cset\u003e, which may or may not be relevant here, is that such a prop can only be changed in whole; e.g. an extension could not easily provide an .xcu snippet that adds one URL to the list.",
+      "revId": "e60a359356745ffe91c643703c3bcd772353985e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
