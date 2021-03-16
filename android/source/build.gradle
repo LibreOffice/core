@@ -193,7 +193,8 @@ task copyAssets(type: Copy) {
     // 'headerfootermenu.ui' when clicking inside header/footer of document
     into('config') {
         from "${liboInstdir}/share/config"
-        include '**/pagebreakmenu.ui', '**/annotationmenu.ui', '**/headerfootermenu.ui'
+        include '**/pagebreakmenu.ui', '**/annotationmenu.ui', '**/headerfootermenu.ui',
+                '**/tabviewbar.ui'
     }
 }
 
