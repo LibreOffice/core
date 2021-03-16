@@ -14,4 +14,8 @@ $(eval $(call gb_Module_add_targets,xmlscript,\
     Package_dtd \
 ))
 
+$(eval $(call gb_Module_add_check_targets,xmlscript,\
+    CppunitTest_xmlscript_cppunit \
+))
+
 # vim: set noet sw=4 ts=4:
