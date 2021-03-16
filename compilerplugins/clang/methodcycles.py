@@ -106,7 +106,6 @@ for caller in definitionSet:
       or "include/rtl/" in location \
       or "include/sal/" in location \
       or "include/salhelper/" in location \
-      or "include/systools/" in location \
       or "include/typelib/" in location \
       or "include/uno/" in location \
       or "workdir/UnpackedTarball/" in location \
