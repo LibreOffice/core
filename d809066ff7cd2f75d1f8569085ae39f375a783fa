@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85d9cc7a_6277d433",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 876,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-03-16T03:42:31Z",
+      "side": 1,
+      "message": "I am guessing this is an attempt to select the \"No List\" entry when the paragraph has no numbering style? \n\nIn that case \"No List\" is wanted to be selected (highlighted).\n\nWhat is currently selected in the tree box for a paragraph with no numbering style?\nThe answer is near.",
+      "revId": "d809066ff7cd2f75d1f8569085ae39f375a783fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
