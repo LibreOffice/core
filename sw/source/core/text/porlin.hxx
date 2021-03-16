@@ -116,6 +116,8 @@ public:
     bool IsQuoVadisPortion() const { return nWhichPor == PortionType::QuoVadis; }
     bool IsTabLeftPortion() const { return nWhichPor == PortionType::TabLeft; }
     bool IsTabRightPortion() const { return nWhichPor == PortionType::TabRight; }
+    bool IsTabCenterPortion() const { return mnWhichPor == PortionType::TabCenter; }
+    bool IsTabDecimalPortion() const { return mnWhichPor == PortionType::TabDecimal; }
     bool IsFootnoteNumPortion() const { return nWhichPor == PortionType::FootnoteNum; }
     bool IsFootnotePortion() const { return nWhichPor == PortionType::Footnote; }
     bool IsDropPortion() const { return nWhichPor == PortionType::Drop; }
