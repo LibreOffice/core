@@ -389,6 +389,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMarginPageBorder)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTdf45908_invoice)
+{
+    // without the fix, this was hanging (and slowly consuming memory) on fileopen.
+    load(DATA_DIRECTORY, "tdf45908_invoice.odt");
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testVerticallyMergedCellBorder)
 {
     // Given a document with a table: 2 columns, 5 rows. B2 -> B5 is merged:
