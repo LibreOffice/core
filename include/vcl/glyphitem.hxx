@@ -23,23 +23,30 @@
 #include <sal/types.h>
 #include <vcl/dllapi.h>
 
+#include <vector>
+
 typedef sal_uInt16 sal_GlyphId;
 
 class SalLayoutGlyphsImpl;
 
 class VCL_DLLPUBLIC SalLayoutGlyphs final
 {
-    friend class SalLayoutGlyphsImpl;
-    SalLayoutGlyphsImpl* m_pImpl;
+    std::vector<SalLayoutGlyphsImpl*> m_pImpls;
 
 public:
-    SalLayoutGlyphs();
-    SalLayoutGlyphs(const SalLayoutGlyphs&);
+    SalLayoutGlyphs() = default;
+    SalLayoutGlyphs(const SalLayoutGlyphs&) = delete;
+    SalLayoutGlyphs(SalLayoutGlyphs&&);
     ~SalLayoutGlyphs();
 
-    SalLayoutGlyphs& operator=(const SalLayoutGlyphs&);
+    SalLayoutGlyphs& operator=(const SalLayoutGlyphs&) = delete;
+    SalLayoutGlyphs& operator=(SalLayoutGlyphs&&);
 
-    SalLayoutGlyphsImpl* Impl() const { return m_pImpl; }
+    SalLayoutGlyphsImpl* Impl(unsigned int nLevel) const
+    {
+        return nLevel < m_pImpls.size() ? m_pImpls[nLevel] : nullptr;
+    }
+    void AppendImpl(SalLayoutGlyphsImpl* pImpl) { m_pImpls.push_back(pImpl); }
 
     bool IsValid() const;
     void Invalidate();

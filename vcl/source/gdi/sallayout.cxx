@@ -647,6 +647,11 @@ bool SalLayout::GetBoundRect(tools::Rectangle& rRect) const
     return bRet;
 }
 
+SalLayoutGlyphs SalLayout::GetGlyphs() const
+{
+    return SalLayoutGlyphs(); // invalid
+}
+
 DeviceCoordinate GenericSalLayout::FillDXArray( DeviceCoordinate* pCharWidths ) const
 {
     if (pCharWidths)
@@ -665,7 +670,7 @@ DeviceCoordinate GenericSalLayout::GetTextWidth() const
     DeviceCoordinate nMinPos = 0;
     DeviceCoordinate nMaxPos = 0;
 
-    for (auto const& aGlyphItem : *m_GlyphItems.Impl())
+    for (auto const& aGlyphItem : m_GlyphItems)
     {
         // update the text extent with the glyph extent
         DeviceCoordinate nXPos = aGlyphItem.m_aLinearPos.getX();
@@ -692,13 +697,13 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
         return;
     }
     // find rightmost glyph, it won't get stretched
-    std::vector<GlyphItem>::iterator pGlyphIterRight = m_GlyphItems.Impl()->begin();
-    pGlyphIterRight += m_GlyphItems.Impl()->size() - 1;
+    std::vector<GlyphItem>::iterator pGlyphIterRight = m_GlyphItems.begin();
+    pGlyphIterRight += m_GlyphItems.size() - 1;
     std::vector<GlyphItem>::iterator pGlyphIter;
     // count stretchable glyphs
     int nStretchable = 0;
     int nMaxGlyphWidth = 0;
-    for(pGlyphIter = m_GlyphItems.Impl()->begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter)
+    for(pGlyphIter = m_GlyphItems.begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter)
     {
         if( !pGlyphIter->IsDiacritic() )
             ++nStretchable;
@@ -721,7 +726,7 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
     {
         // expand width by distributing space between glyphs evenly
         int nDeltaSum = 0;
-        for( pGlyphIter = m_GlyphItems.Impl()->begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter )
+        for( pGlyphIter = m_GlyphItems.begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter )
         {
             // move glyph to justified position
             pGlyphIter->m_aLinearPos.AdjustX(nDeltaSum );
@@ -741,9 +746,9 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
     {
         // squeeze width by moving glyphs proportionally
         double fSqueeze = static_cast<double>(nNewWidth) / nOldWidth;
-        if(m_GlyphItems.Impl()->size() > 1)
+        if(m_GlyphItems.size() > 1)
         {
-            for( pGlyphIter = m_GlyphItems.Impl()->begin(); ++pGlyphIter != pGlyphIterRight;)
+            for( pGlyphIter = m_GlyphItems.begin(); ++pGlyphIter != pGlyphIterRight;)
             {
                 int nX = pGlyphIter->m_aLinearPos.getX();
                 nX = static_cast<int>(nX * fSqueeze);
@@ -751,7 +756,7 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
             }
         }
         // adjust glyph widths to new positions
-        for( pGlyphIter = m_GlyphItems.Impl()->begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter )
+        for( pGlyphIter = m_GlyphItems.begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter )
             pGlyphIter->m_nNewWidth = pGlyphIter[1].m_aLinearPos.getX() - pGlyphIter[0].m_aLinearPos.getX();
     }
 }
@@ -804,8 +809,8 @@ void GenericSalLayout::ApplyAsianKerning(const OUString& rStr)
     const int nLength = rStr.getLength();
     tools::Long nOffset = 0;
 
-    for (std::vector<GlyphItem>::iterator pGlyphIter = m_GlyphItems.Impl()->begin(),
-                                          pGlyphIterEnd = m_GlyphItems.Impl()->end();
+    for (std::vector<GlyphItem>::iterator pGlyphIter = m_GlyphItems.begin(),
+                                          pGlyphIterEnd = m_GlyphItems.end();
          pGlyphIter != pGlyphIterEnd; ++pGlyphIter)
     {
         const int n = pGlyphIter->charPos();
@@ -851,7 +856,7 @@ void GenericSalLayout::GetCaretPositions( int nMaxIndex, tools::Long* pCaretXArr
         pCaretXArray[i] = -1;
 
     // calculate caret positions using glyph array
-    for (auto const& aGlyphItem : *m_GlyphItems.Impl())
+    for (auto const& aGlyphItem : m_GlyphItems)
     {
         tools::Long nXPos = aGlyphItem.m_aLinearPos.getX();
         tools::Long nXRight = nXPos + aGlyphItem.origWidth();
@@ -897,8 +902,8 @@ bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
                                     Point& rPos, int& nStart,
                                     const PhysicalFontFace**) const
 {
-    std::vector<GlyphItem>::const_iterator pGlyphIter = m_GlyphItems.Impl()->begin();
-    std::vector<GlyphItem>::const_iterator pGlyphIterEnd = m_GlyphItems.Impl()->end();
+    std::vector<GlyphItem>::const_iterator pGlyphIter = m_GlyphItems.begin();
+    std::vector<GlyphItem>::const_iterator pGlyphIterEnd = m_GlyphItems.end();
     pGlyphIter += nStart;
 
     // find next glyph in substring
@@ -910,7 +915,7 @@ bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
     }
 
     // return zero if no more glyph found
-    if( nStart >= static_cast<int>(m_GlyphItems.Impl()->size()) )
+    if( nStart >= static_cast<int>(m_GlyphItems.size()) )
         return false;
 
     if( pGlyphIter == pGlyphIterEnd )
@@ -932,10 +937,10 @@ bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
 
 void GenericSalLayout::MoveGlyph( int nStart, tools::Long nNewXPos )
 {
-    if( nStart >= static_cast<int>(m_GlyphItems.Impl()->size()) )
+    if( nStart >= static_cast<int>(m_GlyphItems.size()) )
         return;
 
-    std::vector<GlyphItem>::iterator pGlyphIter = m_GlyphItems.Impl()->begin();
+    std::vector<GlyphItem>::iterator pGlyphIter = m_GlyphItems.begin();
     pGlyphIter += nStart;
 
     // the nNewXPos argument determines the new cell position
@@ -948,7 +953,7 @@ void GenericSalLayout::MoveGlyph( int nStart, tools::Long nNewXPos )
     // adjust all following glyph positions if needed
     if( nXDelta != 0 )
     {
-        for( std::vector<GlyphItem>::iterator pGlyphIterEnd = m_GlyphItems.Impl()->end(); pGlyphIter != pGlyphIterEnd; ++pGlyphIter )
+        for( std::vector<GlyphItem>::iterator pGlyphIterEnd = m_GlyphItems.end(); pGlyphIter != pGlyphIterEnd; ++pGlyphIter )
         {
             pGlyphIter->m_aLinearPos.AdjustX(nXDelta );
         }
@@ -957,10 +962,10 @@ void GenericSalLayout::MoveGlyph( int nStart, tools::Long nNewXPos )
 
 void GenericSalLayout::DropGlyph( int nStart )
 {
-    if( nStart >= static_cast<int>(m_GlyphItems.Impl()->size()))
+    if( nStart >= static_cast<int>(m_GlyphItems.size()))
         return;
 
-    std::vector<GlyphItem>::iterator pGlyphIter = m_GlyphItems.Impl()->begin();
+    std::vector<GlyphItem>::iterator pGlyphIter = m_GlyphItems.begin();
     pGlyphIter += nStart;
     pGlyphIter->dropGlyph();
 }
@@ -969,20 +974,20 @@ void GenericSalLayout::Simplify( bool bIsBase )
 {
     // remove dropped glyphs inplace
     size_t j = 0;
-    for(size_t i = 0; i < m_GlyphItems.Impl()->size(); i++ )
+    for(size_t i = 0; i < m_GlyphItems.size(); i++ )
     {
-        if (bIsBase && (*m_GlyphItems.Impl())[i].IsDropped())
+        if (bIsBase && m_GlyphItems[i].IsDropped())
             continue;
-        if (!bIsBase && (*m_GlyphItems.Impl())[i].glyphId() == 0)
+        if (!bIsBase && m_GlyphItems[i].glyphId() == 0)
             continue;
 
         if( i != j )
         {
-            (*m_GlyphItems.Impl())[j] = (*m_GlyphItems.Impl())[i];
+            m_GlyphItems[j] = m_GlyphItems[i];
         }
         j += 1;
     }
-    m_GlyphItems.Impl()->erase(m_GlyphItems.Impl()->begin() + j, m_GlyphItems.Impl()->end());
+    m_GlyphItems.erase(m_GlyphItems.begin() + j, m_GlyphItems.end());
 }
 
 MultiSalLayout::MultiSalLayout( std::unique_ptr<SalLayout> pBaseLayout )
@@ -1023,7 +1028,7 @@ void MultiSalLayout::AddFallback( std::unique_ptr<SalLayout> pFallback,
     ++mnLevel;
 }
 
-bool MultiSalLayout::LayoutText( ImplLayoutArgs& rArgs, const SalLayoutGlyphs* )
+bool MultiSalLayout::LayoutText( ImplLayoutArgs& rArgs, const SalLayoutGlyphsImpl* )
 {
     if( mnLevel <= 1 )
         return false;
@@ -1576,10 +1581,13 @@ bool MultiSalLayout::IsKashidaPosValid(int nCharPos) const
     return bValid;
 }
 
-const SalLayoutGlyphs* SalLayout::GetGlyphs() const
+SalLayoutGlyphs MultiSalLayout::GetGlyphs() const
 {
-    // No access to the glyphs by default.
-    return nullptr;
+    SalLayoutGlyphs glyphs;
+    for( int n = 0; n < mnLevel; ++n )
+        glyphs.AppendImpl(mpLayouts[n]->GlyphsImpl().clone());
+    return glyphs;
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

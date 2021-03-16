@@ -24,13 +24,13 @@
 #include <tools/gen.hxx>
 #include <tools/degree.hxx>
 #include <vcl/devicecoordinate.hxx>
+#include <vcl/glyphitem.hxx>
 #include <vcl/dllapi.h>
 
 class ImplLayoutArgs;
 class PhysicalFontFace;
 class SalGraphics;
 class GlyphItem;
-class SalLayoutGlyphs;
 
 // all positions/widths are in font units
 // one exception: drawposition is in pixel units
@@ -73,7 +73,7 @@ public:
     const Point&    DrawOffset() const                      { return maDrawOffset; }
     Point           GetDrawPosition( const Point& rRelative = Point(0,0) ) const;
 
-    virtual bool    LayoutText( ImplLayoutArgs&, const SalLayoutGlyphs* ) = 0;  // first step of layouting
+    virtual bool    LayoutText( ImplLayoutArgs&, const SalLayoutGlyphsImpl* ) = 0;  // first step of layouting
     virtual void    AdjustLayout( ImplLayoutArgs& );    // adjusting after fallback etc.
     virtual void    InitFont() const {}
     virtual void    DrawText( SalGraphics& ) const = 0;
@@ -94,7 +94,7 @@ public:
     virtual bool GetOutline(basegfx::B2DPolyPolygonVector&) const;
     bool GetBoundRect(tools::Rectangle&) const;
 
-    virtual const SalLayoutGlyphs* GetGlyphs() const;
+    virtual SalLayoutGlyphs GetGlyphs() const;
 
 protected:
     // used by layout engines

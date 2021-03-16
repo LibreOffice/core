@@ -121,17 +121,15 @@ void VclComplexTextTest::testKashida()
         = OUString(u"ﻊﻨﺻﺭ ﺎﻠﻓﻮﺴﻓﻭﺭ ﻊﻨﺻﺭ ﻒﻟﺰﻳ ﺺﻠﺑ. ﺖﺘﻛﻮﻧ ﺎﻟﺩﻭﺭﺓ ﺎﻟﺭﺎﺒﻋﺓ ﻢﻧ ١٥ ﻊﻨﺻﺭﺍ.");
     std::unique_ptr<SalLayout> pLayout = pOutputDevice->ImplLayout(
         aText, 0, aText.getLength(), Point(0, 0), 0, nullptr, SalLayoutFlags::GlyphItemsOnly);
-    const SalLayoutGlyphs* pGlyphs = pLayout->GetGlyphs();
-    if (!pGlyphs)
-        // Failed in some non-interesting ways.
-        return;
-    SalLayoutGlyphs aGlyphs = *pGlyphs;
+    SalLayoutGlyphs aGlyphs = pLayout->GetGlyphs();
+    CPPUNIT_ASSERT(aGlyphs.IsValid());
+    CPPUNIT_ASSERT(aGlyphs.Impl(0) != nullptr);
 
     // Now lay it out using the cached glyph list.
     ImplLayoutArgs aLayoutArgs(aText, 0, aText.getLength(), SalLayoutFlags::NONE,
                                pOutputDevice->GetFont().GetLanguageTag(), nullptr);
     pLayout = pOutputDevice->GetGraphics()->GetTextLayout(0);
-    CPPUNIT_ASSERT(pLayout->LayoutText(aLayoutArgs, &aGlyphs));
+    CPPUNIT_ASSERT(pLayout->LayoutText(aLayoutArgs, aGlyphs.Impl(0)));
 
     // Without the accompanying fix in place, this test would have failed with 'assertion failed'.
     // The kashida justification flag was lost when going via the glyph cache.

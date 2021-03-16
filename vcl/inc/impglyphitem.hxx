@@ -119,19 +119,18 @@ class SalLayoutGlyphsImpl : public std::vector<GlyphItem>
     friend class GenericSalLayout;
 
 public:
-    SalLayoutGlyphsImpl* clone(SalLayoutGlyphs& rGlyphs) const;
+    SalLayoutGlyphsImpl* clone() const;
     LogicalFontInstance& GetFont() const { return *m_rFontInstance; }
     bool IsValid() const;
     void Invalidate();
 
 private:
-    mutable rtl::Reference<LogicalFontInstance> m_rFontInstance;
+    rtl::Reference<LogicalFontInstance> m_rFontInstance;
     SalLayoutFlags mnFlags = SalLayoutFlags::NONE;
 
-    SalLayoutGlyphsImpl(SalLayoutGlyphs& rGlyphs, LogicalFontInstance& rFontInstance)
+    SalLayoutGlyphsImpl(LogicalFontInstance& rFontInstance)
         : m_rFontInstance(&rFontInstance)
     {
-        rGlyphs.m_pImpl = this;
     }
 };
 
