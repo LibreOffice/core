@@ -263,6 +263,24 @@
       "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f33ff02_8b21b055",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-16T14:12:16Z",
+      "side": 1,
+      "message": "@Samuel As far as I know unfortunately that\u0027s not possible with zxing they\u0027ve used a third-party image writing library which doesn\u0027t write svg format. Also, about the size what should be the ideal width \u0026 height so that it would be in accordance to the XShape object at line 205 as it is already defining the width \u0026 height of the image.",
+      "parentUuid": "88d81a44_17d232d3",
+      "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
