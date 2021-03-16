@@ -706,6 +706,26 @@
                 <child>
                   <placeholder/>
                 </child>
+                <child>
+                  <object class="GtkCheckButton" id="checkBackgroundFullSize">
+                    <property name="label" translatable="yes" context="pageformatpage|checkBackgroundFullSize">Background covers margins</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="tooltip_text" translatable="yes" context="pageformatpage|checkBackgroundFullSize" comments="xdds">Any background will cover margins of the page as well</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkBackgroundFullSize-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|checkBackgroundFullSize">If enabled, then any background will cover the entire page, including margins. If disabled, any background will cover the page only inside the margins.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">8</property>
+                  </packing>
+                </child>
               </object>
             </child>
             <child type="label">

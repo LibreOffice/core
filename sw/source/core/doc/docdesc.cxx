@@ -141,6 +141,7 @@ static void lcl_DescSetAttr( const SwFrameFormat &rSource, SwFrameFormat &rDest,
         RES_TEXTGRID,                   RES_TEXTGRID,                   // [109
         RES_FRAMEDIR,                   RES_FRAMEDIR,                   // [114
         RES_HEADER_FOOTER_EAT_SPACING,  RES_HEADER_FOOTER_EAT_SPACING,  // [115
+        RES_BACKGROUND_FULL_SIZE,       RES_BACKGROUND_FULL_SIZE,       // [131
         RES_UNKNOWNATR_CONTAINER,       RES_UNKNOWNATR_CONTAINER,       // [143
 
         // take over DrawingLayer FillStyles
@@ -181,9 +182,10 @@ static void lcl_DescSetAttr( const SwFrameFormat &rSource, SwFrameFormat &rDest,
                 // When not Page
                 switch(nId)
                 {
-                    // When not Page: All in aIdArr except from RES_COL and RES_PAPER_BIN:
+                    // When not Page: All in aIdArr except these:
                     case RES_COL:
                     case RES_PAPER_BIN:
+                    case RES_BACKGROUND_FULL_SIZE:
                         bExecuteId = false;
                         break;
                     default:

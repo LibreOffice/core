@@ -271,6 +271,19 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     SwFrameFormat& rMaster = rPageDesc.GetMaster();
     bool bFirstShare = false;
 
+    // before SetFormatAttr() in case it contains RES_BACKGROUND_FULL_SIZE
+    // itself, as it does when called from SwXPageStyle
+    SfxPoolItem const* pItem(nullptr);
+    if (SfxItemState::SET == rSet.GetItemState(SID_ATTR_CHAR_GRABBAG, true, &pItem))
+    {
+        SfxGrabBagItem const*const pGrabBag(static_cast<SfxGrabBagItem const*>(pItem));
+        bool bValue;
+        if (pGrabBag->GetGrabBag().find("BackgroundFullSize")->second >>= bValue)
+        {
+            rMaster.SetFormatAttr(SfxBoolItem(RES_BACKGROUND_FULL_SIZE, bValue));
+        }
+    }
+
     // Transfer all general frame attributes
     rMaster.SetFormatAttr(rSet);
 
@@ -296,7 +309,6 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
         rMaster.SetFormatAttr(aSize);
     }
     // Evaluate header attributes
-    const SfxPoolItem* pItem;
     if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_PAGE_HEADERSET,
             false, &pItem ) )
     {
@@ -569,6 +581,19 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     if(pCol)
         rSet.Put(SfxStringItem(SID_SWREGISTER_COLLECTION, pCol->GetName()));
 
+    std::optional<SfxGrabBagItem> oGrabBag;
+    SfxPoolItem const* pItem(nullptr);
+    if (SfxItemState::SET == rSet.GetItemState(SID_ATTR_CHAR_GRABBAG, true, &pItem))
+    {
+        oGrabBag.emplace(*static_cast<SfxGrabBagItem const*>(pItem));
+    }
+    else
+    {
+        oGrabBag.emplace(SID_ATTR_CHAR_GRABBAG);
+    }
+    oGrabBag->GetGrabBag()["BackgroundFullSize"] <<=
+        rMaster.GetAttrSet().GetItem<SfxBoolItem>(RES_BACKGROUND_FULL_SIZE)->GetValue();
+    rSet.Put(*oGrabBag);
 }
 
 // Set DefaultTabs

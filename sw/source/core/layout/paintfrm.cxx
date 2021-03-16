@@ -6340,9 +6340,10 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
             }
             else
             {
-                if ( bPageFrame )
+                if (bPageFrame && GetAttrSet()->GetItem<SfxBoolItem>(RES_BACKGROUND_FULL_SIZE)->GetValue())
                 {
                     aRect = getFrameArea();
+                    ::SwAlignRect(aRect, gProp.pSGlobalShell, gProp.pSGlobalShell->GetOut());
                 }
                 else
                 {
@@ -7372,10 +7373,16 @@ bool SwFrame::GetBackgroundBrush(
             if ( pFrame->IsPageFrame() && pSh->GetViewOptions()->getBrowseMode() )
             {
                 rOrigRect = pFrame->getFrameArea();
+                ::SwAlignRect(rOrigRect, pSh, pSh->GetOut());
             }
             else
             {
-                if ( pFrame->getFrameArea().SSize() != pFrame->getFramePrintArea().SSize() )
+                if (pFrame->IsPageFrame()
+                    && pFrame->GetAttrSet()->GetItem<SfxBoolItem>(RES_BACKGROUND_FULL_SIZE)->GetValue())
+                {
+                    rOrigRect = pFrame->getFrameArea();
+                }
+                else if (pFrame->getFrameArea().SSize() != pFrame->getFramePrintArea().SSize())
                 {
                     SwBorderAttrAccess aAccess( SwFrame::GetCache(), pFrame );
                     const SwBorderAttrs &rAttrs = *aAccess.Get();

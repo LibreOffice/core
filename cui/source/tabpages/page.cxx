@@ -179,6 +179,7 @@ SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController*
     , m_xRegisterLB(m_xBuilder->weld_combo_box("comboRegisterStyle"))
     , m_xGutterPositionFT(m_xBuilder->weld_label("labelGutterPosition"))
     , m_xGutterPositionLB(m_xBuilder->weld_combo_box("comboGutterPosition"))
+    , m_xBackgroundFullSizeCB(m_xBuilder->weld_check_button("checkBackgroundFullSize"))
     // Strings stored in UI
     , m_xInsideLbl(m_xBuilder->weld_label("labelInner"))
     , m_xOutsideLbl(m_xBuilder->weld_label("labelOuter"))
@@ -382,6 +383,14 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
             // Left.
             m_xGutterPositionLB->set_active(0);
         }
+        it = rGrabBagItem.GetGrabBag().find("BackgroundFullSize");
+        bool isBackgroundFullSize{};
+        if (it != rGrabBagItem.GetGrabBag().end())
+        {
+            it->second >>= isBackgroundFullSize;
+            m_xBackgroundFullSizeCB->set_active(isBackgroundFullSize);
+            m_xBackgroundFullSizeCB->show();
+        }
     }
 
     // general page data
@@ -563,6 +572,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     m_xHorzBox->save_state();
     m_xAdaptBox->save_state();
     m_xGutterPositionLB->save_value();
+    m_xBackgroundFullSizeCB->save_state();
 
     CheckMarginEdits( true );
 
@@ -657,6 +667,12 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
         {
             bool bGutterAtTop = m_xGutterPositionLB->get_active() == 1;
             aGrabBagItem.GetGrabBag()["GutterAtTop"] <<= bGutterAtTop;
+            bModified = true;
+        }
+        if (m_xBackgroundFullSizeCB->get_state_changed_from_saved())
+        {
+            bool const isBackgroundFullSize(m_xBackgroundFullSizeCB->get_active());
+            aGrabBagItem.GetGrabBag()["BackgroundFullSize"] <<= isBackgroundFullSize;
             bModified = true;
         }
 

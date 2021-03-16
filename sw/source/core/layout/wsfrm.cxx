@@ -544,6 +544,7 @@ void SwFrame::UpdateAttrFrame( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             break;
 
         case RES_BACKGROUND:
+        case RES_BACKGROUND_FULL_SIZE:
             rInvFlags |= 0x28;
             break;
 
