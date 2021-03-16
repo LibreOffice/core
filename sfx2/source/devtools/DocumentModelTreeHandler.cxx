@@ -42,24 +42,6 @@ using namespace css;
 
 namespace
 {
-class DocumentModelTreeEntry;
-
-void lclAppendToParentEntry(std::unique_ptr<weld::TreeView>& rTree, weld::TreeIter const& rParent,
-                            OUString const& rString, DocumentModelTreeEntry* pEntry,
-                            bool bChildrenOnDemand = false)
-{
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
-    rTree->insert(&rParent, -1, &rString, &sId, nullptr, nullptr, bChildrenOnDemand, nullptr);
-}
-
-OUString lclAppend(std::unique_ptr<weld::TreeView>& rTree, OUString const& rString,
-                   DocumentModelTreeEntry* pEntry, bool bChildrenOnDemand = false)
-{
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
-    rTree->insert(nullptr, -1, &rString, &sId, nullptr, nullptr, bChildrenOnDemand, nullptr);
-    return sId;
-}
-
 // returns a name of the object, if available
 OUString lclGetNamed(uno::Reference<uno::XInterface> const& xObject)
 {
@@ -77,17 +59,27 @@ OUString lclGetNamed(uno::Reference<uno::XInterface> const& xObject)
  */
 class DocumentModelTreeEntry
 {
-public:
+protected:
+    OUString maString;
     css::uno::Reference<css::uno::XInterface> mxObject;
 
+public:
     DocumentModelTreeEntry() = default;
 
-    DocumentModelTreeEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
-        : mxObject(xObject)
+    DocumentModelTreeEntry(OUString const& rString,
+                           css::uno::Reference<css::uno::XInterface> const& xObject)
+        : maString(rString)
+        , mxObject(xObject)
     {
     }
 
     virtual ~DocumentModelTreeEntry() {}
+
+    /// the node string shown in the tree view
+    virtual OUString& getString() { return maString; }
+
+    /// should show the expander for the tree view node
+    virtual bool shouldShowExpander() { return false; }
 
     /// The main UNO object for this entry
     virtual css::uno::Reference<css::uno::XInterface> getMainObject() { return mxObject; }
@@ -97,13 +89,46 @@ public:
                       weld::TreeIter const& /*rParent*/)
     {
     }
+};
 
+void lclAppendToParentEntry(std::unique_ptr<weld::TreeView>& rTree, weld::TreeIter const& rParent,
+                            DocumentModelTreeEntry* pEntry)
+{
+    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
+    OUString const& rString = pEntry->getString();
+    rTree->insert(&rParent, -1, &rString, &sId, nullptr, nullptr, pEntry->shouldShowExpander(),
+                  nullptr);
+}
+
+OUString lclAppend(std::unique_ptr<weld::TreeView>& rTree, DocumentModelTreeEntry* pEntry)
+{
+    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
+    OUString const& rString = pEntry->getString();
+    rTree->insert(nullptr, -1, &rString, &sId, nullptr, nullptr, pEntry->shouldShowExpander(),
+                  nullptr);
+    return sId;
+}
+
+class NameAccessTreeEntry : public DocumentModelTreeEntry
+{
 protected:
-    /// A generic fill when the UNO object implements XNameAccess interface
-    void fillNameAccess(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
-                        weld::TreeIter const& rParent)
+    NameAccessTreeEntry(OUString const& rString, uno::Reference<uno::XInterface> const& xObject)
+        : DocumentModelTreeEntry(rString, xObject)
+    {
+    }
+
+    bool shouldShowExpander() override
     {
         uno::Reference<container::XNameAccess> xNameAccess(getMainObject(), uno::UNO_QUERY);
+        return xNameAccess.is() && xNameAccess->getElementNames().getLength() > 0;
+    }
+
+    /// A generic fill when the UNO object implements XNameAccess interface
+    void fill(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
+              weld::TreeIter const& rParent) override
+    {
+        uno::Reference<container::XNameAccess> xNameAccess(getMainObject(), uno::UNO_QUERY);
+        xNameAccess.set(getMainObject(), uno::UNO_QUERY);
         if (!xNameAccess.is())
             return;
 
@@ -111,8 +136,8 @@ protected:
         for (auto const& rName : aNames)
         {
             uno::Reference<uno::XInterface> xObject(xNameAccess->getByName(rName), uno::UNO_QUERY);
-            auto pEntry = std::make_unique<DocumentModelTreeEntry>(xObject);
-            lclAppendToParentEntry(pDocumentModelTree, rParent, rName, pEntry.release());
+            auto pEntry = std::make_unique<DocumentModelTreeEntry>(rName, xObject);
+            lclAppendToParentEntry(pDocumentModelTree, rParent, pEntry.release());
         }
     }
 };
@@ -121,19 +146,33 @@ protected:
 class DocumentRootEntry : public DocumentModelTreeEntry
 {
 public:
-    DocumentRootEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
-        : DocumentModelTreeEntry(xObject)
+    DocumentRootEntry(OUString const& rString, uno::Reference<uno::XInterface> const& xObject)
+        : DocumentModelTreeEntry(rString, xObject)
     {
     }
+
+    bool shouldShowExpander() override { return false; }
 };
 
 /** Represents a paragraph object (XParagraph) */
 class ParagraphEntry : public DocumentModelTreeEntry
 {
 public:
-    ParagraphEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
-        : DocumentModelTreeEntry(xObject)
+    ParagraphEntry(OUString const& rString,
+                   css::uno::Reference<css::uno::XInterface> const& xObject)
+        : DocumentModelTreeEntry(rString, xObject)
     {
+    }
+
+    bool shouldShowExpander() override
+    {
+        uno::Reference<container::XEnumerationAccess> xEnumAccess(getMainObject(), uno::UNO_QUERY);
+        if (!xEnumAccess.is())
+            return false;
+        auto xTextPortions = xEnumAccess->createEnumeration();
+        if (!xTextPortions.is())
+            return false;
+        return xTextPortions->hasMoreElements();
     }
 
     void fill(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
@@ -144,21 +183,22 @@ public:
             return;
 
         uno::Reference<container::XEnumeration> xTextPortions = xEnumAccess->createEnumeration();
+        if (!xTextPortions.is())
+            return;
 
-        if (xTextPortions.is())
+        for (sal_Int32 i = 0; xTextPortions->hasMoreElements(); i++)
         {
-            for (sal_Int32 i = 0; xTextPortions->hasMoreElements(); i++)
+            uno::Reference<text::XTextRange> const xTextPortion(xTextPortions->nextElement(),
+                                                                uno::UNO_QUERY);
+            OUString aString = lclGetNamed(xTextPortion);
+            if (aString.isEmpty())
             {
-                uno::Reference<text::XTextRange> const xTextPortion(xTextPortions->nextElement(),
-                                                                    uno::UNO_QUERY);
-                OUString aString = lclGetNamed(xTextPortion);
-                if (aString.isEmpty())
-                    aString
-                        = SfxResId(STR_TEXT_PORTION).replaceFirst("%1", OUString::number(i + 1));
-
-                auto pEntry = std::make_unique<DocumentModelTreeEntry>(xTextPortion);
-                lclAppendToParentEntry(pDocumentModelTree, rParent, aString, pEntry.release());
+                OUString aNumber = OUString::number(i + 1);
+                aString = SfxResId(STR_TEXT_PORTION).replaceFirst("%1", aNumber);
             }
+
+            auto pEntry = std::make_unique<DocumentModelTreeEntry>(aString, xTextPortion);
+            lclAppendToParentEntry(pDocumentModelTree, rParent, pEntry.release());
         }
     }
 };
@@ -167,8 +207,9 @@ public:
 class ParagraphsEntry : public DocumentModelTreeEntry
 {
 public:
-    ParagraphsEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
-        : DocumentModelTreeEntry(xObject)
+    ParagraphsEntry(OUString const& rString,
+                    css::uno::Reference<css::uno::XInterface> const& xObject)
+        : DocumentModelTreeEntry(rString, xObject)
     {
     }
 
@@ -181,6 +222,17 @@ public:
         return xDocument->getText()->getText();
     }
 
+    bool shouldShowExpander() override
+    {
+        uno::Reference<container::XEnumerationAccess> xEnumAccess(getMainObject(), uno::UNO_QUERY);
+        if (!xEnumAccess.is())
+            return false;
+        auto xParagraphEnum = xEnumAccess->createEnumeration();
+        if (!xParagraphEnum.is())
+            return false;
+        return xParagraphEnum->hasMoreElements();
+    }
+
     void fill(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
               weld::TreeIter const& rParent) override
     {
@@ -190,22 +242,21 @@ public:
 
         uno::Reference<container::XEnumeration> xParagraphEnum = xEnumAccess->createEnumeration();
 
-        if (xParagraphEnum.is())
-        {
-            for (sal_Int32 i = 0; xParagraphEnum->hasMoreElements(); i++)
-            {
-                uno::Reference<text::XTextContent> const xParagraph(xParagraphEnum->nextElement(),
-                                                                    uno::UNO_QUERY);
-                OUString aString = lclGetNamed(xParagraph);
-                if (aString.isEmpty())
-                {
-                    aString = SfxResId(STR_PARAGRAPH).replaceFirst("%1", OUString::number(i + 1));
-                }
+        if (!xParagraphEnum.is())
+            return;
 
-                auto pEntry = std::make_unique<ParagraphEntry>(xParagraph);
-                lclAppendToParentEntry(pDocumentModelTree, rParent, aString, pEntry.release(),
-                                       true);
+        for (sal_Int32 i = 0; xParagraphEnum->hasMoreElements(); i++)
+        {
+            uno::Reference<text::XTextContent> const xParagraph(xParagraphEnum->nextElement(),
+                                                                uno::UNO_QUERY);
+            OUString aString = lclGetNamed(xParagraph);
+            if (aString.isEmpty())
+            {
+                aString = SfxResId(STR_PARAGRAPH).replaceFirst("%1", OUString::number(i + 1));
             }
+
+            auto pEntry = std::make_unique<ParagraphEntry>(aString, xParagraph);
+            lclAppendToParentEntry(pDocumentModelTree, rParent, pEntry.release());
         }
     }
 };
@@ -214,8 +265,8 @@ public:
 class ShapesEntry : public DocumentModelTreeEntry
 {
 public:
-    ShapesEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
-        : DocumentModelTreeEntry(xObject)
+    ShapesEntry(OUString const& rString, css::uno::Reference<css::uno::XInterface> const& xObject)
+        : DocumentModelTreeEntry(rString, xObject)
     {
     }
 
@@ -225,6 +276,12 @@ public:
         if (!xSupplier.is())
             return mxObject;
         return xSupplier->getDrawPage();
+    }
+
+    bool shouldShowExpander() override
+    {
+        uno::Reference<container::XIndexAccess> xShapes(getMainObject(), uno::UNO_QUERY);
+        return xShapes.is() && xShapes->getCount() > 0;
     }
 
     void fill(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
@@ -239,21 +296,23 @@ public:
                                                    uno::UNO_QUERY);
             OUString aShapeName = lclGetNamed(xShape);
             if (aShapeName.isEmpty())
+            {
                 aShapeName
                     = SfxResId(STR_SHAPE).replaceFirst("%1", OUString::number(nIndexShapes + 1));
+            }
 
-            auto pEntry = std::make_unique<DocumentModelTreeEntry>(xShape);
-            lclAppendToParentEntry(pDocumentModelTree, rParent, aShapeName, pEntry.release());
+            auto pEntry = std::make_unique<DocumentModelTreeEntry>(aShapeName, xShape);
+            lclAppendToParentEntry(pDocumentModelTree, rParent, pEntry.release());
         }
     }
 };
 
 /** Represents a list of tables */
-class TablesEntry : public DocumentModelTreeEntry
+class TablesEntry : public NameAccessTreeEntry
 {
 public:
-    TablesEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
-        : DocumentModelTreeEntry(xObject)
+    TablesEntry(OUString const& rString, css::uno::Reference<css::uno::XInterface> const& xObject)
+        : NameAccessTreeEntry(rString, xObject)
     {
     }
 
@@ -264,20 +323,14 @@ public:
             return mxObject;
         return xSupplier->getTextTables();
     }
-
-    void fill(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
-              weld::TreeIter const& rParent) override
-    {
-        fillNameAccess(pDocumentModelTree, rParent);
-    }
 };
 
 /** Represents a list of frames */
-class FramesEntry : public DocumentModelTreeEntry
+class FramesEntry : public NameAccessTreeEntry
 {
 public:
-    FramesEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
-        : DocumentModelTreeEntry(xObject)
+    FramesEntry(OUString const& rString, css::uno::Reference<css::uno::XInterface> const& xObject)
+        : NameAccessTreeEntry(rString, xObject)
     {
     }
 
@@ -288,20 +341,15 @@ public:
             return mxObject;
         return xSupplier->getTextFrames();
     }
-
-    void fill(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
-              weld::TreeIter const& rParent) override
-    {
-        fillNameAccess(pDocumentModelTree, rParent);
-    }
 };
 
 /** Represents a list of writer graphic objects */
-class WriterGraphicObjectsEntry : public DocumentModelTreeEntry
+class WriterGraphicObjectsEntry : public NameAccessTreeEntry
 {
 public:
-    WriterGraphicObjectsEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
-        : DocumentModelTreeEntry(xObject)
+    WriterGraphicObjectsEntry(OUString const& rString,
+                              css::uno::Reference<css::uno::XInterface> const& xObject)
+        : NameAccessTreeEntry(rString, xObject)
     {
     }
 
@@ -312,20 +360,15 @@ public:
             return mxObject;
         return xSupplier->getGraphicObjects();
     }
-
-    void fill(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
-              weld::TreeIter const& rParent) override
-    {
-        fillNameAccess(pDocumentModelTree, rParent);
-    }
 };
 
 /** Represents a list of writer embedded (OLE) objects */
-class EmbeddedObjectsEntry : public DocumentModelTreeEntry
+class EmbeddedObjectsEntry : public NameAccessTreeEntry
 {
 public:
-    EmbeddedObjectsEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
-        : DocumentModelTreeEntry(xObject)
+    EmbeddedObjectsEntry(OUString const& rString,
+                         css::uno::Reference<css::uno::XInterface> const& xObject)
+        : NameAccessTreeEntry(rString, xObject)
     {
     }
 
@@ -336,27 +379,16 @@ public:
             return mxObject;
         return xSupplier->getEmbeddedObjects();
     }
-
-    void fill(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
-              weld::TreeIter const& rParent) override
-    {
-        fillNameAccess(pDocumentModelTree, rParent);
-    }
 };
 
 /** Represents a style family, which contains a list of styles */
-class StylesFamilyEntry : public DocumentModelTreeEntry
+class StylesFamilyEntry : public NameAccessTreeEntry
 {
 public:
-    StylesFamilyEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
-        : DocumentModelTreeEntry(xObject)
+    StylesFamilyEntry(OUString const& rString,
+                      css::uno::Reference<css::uno::XInterface> const& xObject)
+        : NameAccessTreeEntry(rString, xObject)
     {
-    }
-
-    void fill(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
-              weld::TreeIter const& rParent) override
-    {
-        fillNameAccess(pDocumentModelTree, rParent);
     }
 };
 
@@ -364,8 +396,9 @@ public:
 class StylesFamiliesEntry : public DocumentModelTreeEntry
 {
 public:
-    StylesFamiliesEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
-        : DocumentModelTreeEntry(xObject)
+    StylesFamiliesEntry(OUString const& rString,
+                        css::uno::Reference<css::uno::XInterface> const& xObject)
+        : DocumentModelTreeEntry(rString, xObject)
     {
     }
 
@@ -375,6 +408,12 @@ public:
         if (!xSupplier.is())
             return mxObject;
         return xSupplier->getStyleFamilies();
+    }
+
+    bool shouldShowExpander() override
+    {
+        uno::Reference<container::XNameAccess> xStyleFamilies(getMainObject(), uno::UNO_QUERY);
+        return xStyleFamilies.is() && xStyleFamilies->getElementNames().getLength() > 0;
     }
 
     void fill(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
@@ -390,9 +429,9 @@ public:
             uno::Reference<uno::XInterface> xStyleFamily(xStyleFamilies->getByName(rFamilyName),
                                                          uno::UNO_QUERY);
 
-            auto pStylesFamilyEntry = std::make_unique<StylesFamilyEntry>(xStyleFamily);
-            lclAppendToParentEntry(pDocumentModelTree, rParent, rFamilyName,
-                                   pStylesFamilyEntry.release(), true);
+            auto pStylesFamilyEntry
+                = std::make_unique<StylesFamilyEntry>(rFamilyName, xStyleFamily);
+            lclAppendToParentEntry(pDocumentModelTree, rParent, pStylesFamilyEntry.release());
         }
     }
 };
@@ -401,8 +440,8 @@ public:
 class PagesEntry : public DocumentModelTreeEntry
 {
 public:
-    PagesEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
-        : DocumentModelTreeEntry(xObject)
+    PagesEntry(OUString const& rString, css::uno::Reference<css::uno::XInterface> const& xObject)
+        : DocumentModelTreeEntry(rString, xObject)
     {
     }
 
@@ -412,6 +451,12 @@ public:
         if (!xSupplier.is())
             return mxObject;
         return xSupplier->getDrawPages();
+    }
+
+    bool shouldShowExpander() override
+    {
+        uno::Reference<drawing::XDrawPages> xDrawPages(getMainObject(), uno::UNO_QUERY);
+        return xDrawPages.is() && xDrawPages->getCount() > 0;
     }
 
     void fill(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
@@ -428,9 +473,8 @@ public:
             if (aPageString.isEmpty())
                 aPageString = SfxResId(STR_PAGE).replaceFirst("%1", OUString::number(i + 1));
 
-            auto pShapesEntry = std::make_unique<ShapesEntry>(xPage);
-            lclAppendToParentEntry(pDocumentModelTree, rParent, aPageString, pShapesEntry.release(),
-                                   true);
+            auto pShapesEntry = std::make_unique<ShapesEntry>(aPageString, xPage);
+            lclAppendToParentEntry(pDocumentModelTree, rParent, pShapesEntry.release());
         }
     }
 };
@@ -439,8 +483,8 @@ public:
 class SlidesEntry : public DocumentModelTreeEntry
 {
 public:
-    SlidesEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
-        : DocumentModelTreeEntry(xObject)
+    SlidesEntry(OUString const& rString, css::uno::Reference<css::uno::XInterface> const& xObject)
+        : DocumentModelTreeEntry(rString, xObject)
     {
     }
 
@@ -450,6 +494,12 @@ public:
         if (!xSupplier.is())
             return mxObject;
         return xSupplier->getDrawPages();
+    }
+
+    bool shouldShowExpander() override
+    {
+        uno::Reference<drawing::XDrawPages> xDrawPages(getMainObject(), uno::UNO_QUERY);
+        return xDrawPages.is() && xDrawPages->getCount() > 0;
     }
 
     void fill(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
@@ -466,9 +516,8 @@ public:
             if (aPageString.isEmpty())
                 aPageString = SfxResId(STR_SLIDE).replaceFirst("%1", OUString::number(i + 1));
 
-            auto pShapesEntry = std::make_unique<ShapesEntry>(xPage);
-            lclAppendToParentEntry(pDocumentModelTree, rParent, aPageString, pShapesEntry.release(),
-                                   true);
+            auto pShapesEntry = std::make_unique<ShapesEntry>(aPageString, xPage);
+            lclAppendToParentEntry(pDocumentModelTree, rParent, pShapesEntry.release());
         }
     }
 };
@@ -477,8 +526,9 @@ public:
 class MasterSlidesEntry : public DocumentModelTreeEntry
 {
 public:
-    MasterSlidesEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
-        : DocumentModelTreeEntry(xObject)
+    MasterSlidesEntry(OUString const& rString,
+                      css::uno::Reference<css::uno::XInterface> const& xObject)
+        : DocumentModelTreeEntry(rString, xObject)
     {
     }
 
@@ -488,6 +538,12 @@ public:
         if (!xSupplier.is())
             return mxObject;
         return xSupplier->getMasterPages();
+    }
+
+    bool shouldShowExpander() override
+    {
+        uno::Reference<drawing::XDrawPages> xDrawPages(getMainObject(), uno::UNO_QUERY);
+        return xDrawPages.is() && xDrawPages->getCount() > 0;
     }
 
     void fill(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
@@ -502,22 +558,23 @@ public:
 
             OUString aPageString = lclGetNamed(xPage);
             if (aPageString.isEmpty())
+            {
                 aPageString
                     = SfxResId(STR_MASTER_SLIDE).replaceFirst("%1", OUString::number(i + 1));
+            }
 
-            auto pShapesEntry = std::make_unique<ShapesEntry>(xPage);
-            lclAppendToParentEntry(pDocumentModelTree, rParent, aPageString, pShapesEntry.release(),
-                                   true);
+            auto pShapesEntry = std::make_unique<ShapesEntry>(aPageString, xPage);
+            lclAppendToParentEntry(pDocumentModelTree, rParent, pShapesEntry.release());
         }
     }
 };
 
 /** Represents a list of charts */
-class ChartsEntry : public DocumentModelTreeEntry
+class ChartsEntry : public NameAccessTreeEntry
 {
 public:
-    ChartsEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
-        : DocumentModelTreeEntry(xObject)
+    ChartsEntry(OUString const& rString, css::uno::Reference<css::uno::XInterface> const& xObject)
+        : NameAccessTreeEntry(rString, xObject)
     {
     }
 
@@ -535,18 +592,21 @@ public:
         uno::Reference<table::XTableCharts> xCharts(getMainObject(), uno::UNO_QUERY);
         if (!xCharts.is())
             return;
-        fillNameAccess(pDocumentModelTree, rParent);
+        NameAccessTreeEntry::fill(pDocumentModelTree, rParent);
     }
 };
 
 /** Represents a list of pivot tables */
-class PivotTablesEntry : public DocumentModelTreeEntry
+class PivotTablesEntry : public NameAccessTreeEntry
 {
 public:
-    PivotTablesEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
-        : DocumentModelTreeEntry(xObject)
+    PivotTablesEntry(OUString const& rString,
+                     css::uno::Reference<css::uno::XInterface> const& xObject)
+        : NameAccessTreeEntry(rString, xObject)
     {
     }
+
+    bool shouldShowExpander() override { return true; }
 
     css::uno::Reference<css::uno::XInterface> getMainObject() override
     {
@@ -562,7 +622,7 @@ public:
         uno::Reference<sheet::XDataPilotTables> xPivotTables(getMainObject(), uno::UNO_QUERY);
         if (!xPivotTables.is())
             return;
-        fillNameAccess(pDocumentModelTree, rParent);
+        NameAccessTreeEntry::fill(pDocumentModelTree, rParent);
     }
 };
 
@@ -570,34 +630,40 @@ public:
 class SheetEntry : public DocumentModelTreeEntry
 {
 public:
-    SheetEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
-        : DocumentModelTreeEntry(xObject)
+    SheetEntry(OUString const& rString, css::uno::Reference<css::uno::XInterface> const& xObject)
+        : DocumentModelTreeEntry(rString, xObject)
     {
     }
+
+    bool shouldShowExpander() override { return true; }
 
     void fill(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
               weld::TreeIter const& rParent) override
     {
-        auto pShapesEntry = std::make_unique<ShapesEntry>(getMainObject());
-        lclAppendToParentEntry(pDocumentModelTree, rParent, SfxResId(STR_SHAPES_ENTRY),
-                               pShapesEntry.release(), true);
+        auto pShapesEntry
+            = std::make_unique<ShapesEntry>(SfxResId(STR_SHAPES_ENTRY), getMainObject());
+        lclAppendToParentEntry(pDocumentModelTree, rParent, pShapesEntry.release());
 
-        auto pChartsEntry = std::make_unique<ChartsEntry>(getMainObject());
-        lclAppendToParentEntry(pDocumentModelTree, rParent, SfxResId(STR_CHARTS_ENTRY),
-                               pChartsEntry.release(), true);
+        auto pChartsEntry
+            = std::make_unique<ChartsEntry>(SfxResId(STR_CHARTS_ENTRY), getMainObject());
+        lclAppendToParentEntry(pDocumentModelTree, rParent, pChartsEntry.release());
 
-        auto pPivotTablesEntry = std::make_unique<PivotTablesEntry>(getMainObject());
-        lclAppendToParentEntry(pDocumentModelTree, rParent, SfxResId(STR_PIVOT_TABLES_ENTRY),
-                               pPivotTablesEntry.release(), true);
+        auto pPivotTablesEntry
+            = std::make_unique<PivotTablesEntry>(SfxResId(STR_PIVOT_TABLES_ENTRY), getMainObject());
+        lclAppendToParentEntry(pDocumentModelTree, rParent, pPivotTablesEntry.release());
     }
 };
 
 /** Represents a list of (Calc) sheet */
 class SheetsEntry : public DocumentModelTreeEntry
 {
+private:
+    uno::Reference<container::XIndexAccess> mxIndexAccess;
+
 public:
-    SheetsEntry(css::uno::Reference<css::uno::XInterface> const& xObject)
-        : DocumentModelTreeEntry(xObject)
+    SheetsEntry(OUString const& rString, css::uno::Reference<css::uno::XInterface> const& xObject)
+        : DocumentModelTreeEntry(rString, xObject)
+        , mxIndexAccess(xObject, uno::UNO_QUERY)
     {
     }
 
@@ -609,20 +675,26 @@ public:
         return xSheetDocument->getSheets();
     }
 
+    bool shouldShowExpander() override
+    {
+        return mxIndexAccess.is() && mxIndexAccess->getCount() > 0;
+    }
+
     void fill(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
               weld::TreeIter const& rParent) override
     {
-        uno::Reference<container::XIndexAccess> xIndex(getMainObject(), uno::UNO_QUERY);
-        if (!xIndex.is())
+        if (!mxIndexAccess.is())
             return;
-        for (sal_Int32 i = 0; i < xIndex->getCount(); ++i)
+
+        for (sal_Int32 i = 0; i < mxIndexAccess->getCount(); ++i)
         {
-            uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(i), uno::UNO_QUERY);
+            uno::Reference<sheet::XSpreadsheet> xSheet(mxIndexAccess->getByIndex(i),
+                                                       uno::UNO_QUERY);
             OUString aString = lclGetNamed(xSheet);
             if (aString.isEmpty())
                 aString = SfxResId(STR_SHEETS).replaceFirst("%1", OUString::number(i + 1));
-            auto pEntry = std::make_unique<SheetEntry>(xSheet);
-            lclAppendToParentEntry(pDocumentModelTree, rParent, aString, pEntry.release(), true);
+            auto pEntry = std::make_unique<SheetEntry>(aString, xSheet);
+            lclAppendToParentEntry(pDocumentModelTree, rParent, pEntry.release());
         }
     }
 };
@@ -713,49 +785,43 @@ void DocumentModelTreeHandler::inspectDocument()
 {
     uno::Reference<lang::XServiceInfo> xDocumentServiceInfo(mxDocument, uno::UNO_QUERY_THROW);
 
-    lclAppend(mpDocumentModelTree, SfxResId(STR_DOCUMENT_ENTRY), new DocumentRootEntry(mxDocument),
-              false);
+    lclAppend(mpDocumentModelTree, new DocumentRootEntry(SfxResId(STR_DOCUMENT_ENTRY), mxDocument));
 
     if (xDocumentServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
     {
-        lclAppend(mpDocumentModelTree, SfxResId(STR_SHEETS_ENTRY), new SheetsEntry(mxDocument),
-                  true);
-        lclAppend(mpDocumentModelTree, SfxResId(STR_STYLES_ENTRY),
-                  new StylesFamiliesEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, new SheetsEntry(SfxResId(STR_SHEETS_ENTRY), mxDocument));
+        lclAppend(mpDocumentModelTree,
+                  new StylesFamiliesEntry(SfxResId(STR_STYLES_ENTRY), mxDocument));
     }
     else if (xDocumentServiceInfo->supportsService(
                  "com.sun.star.presentation.PresentationDocument"))
     {
-        lclAppend(mpDocumentModelTree, SfxResId(STR_SLIDES_ENTRY), new SlidesEntry(mxDocument),
-                  true);
-        lclAppend(mpDocumentModelTree, SfxResId(STR_MASTER_SLIDES_ENTRY),
-                  new MasterSlidesEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, SfxResId(STR_STYLES_ENTRY),
-                  new StylesFamiliesEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, new SlidesEntry(SfxResId(STR_SLIDES_ENTRY), mxDocument));
+        lclAppend(mpDocumentModelTree,
+                  new MasterSlidesEntry(SfxResId(STR_MASTER_SLIDES_ENTRY), mxDocument));
+        lclAppend(mpDocumentModelTree,
+                  new StylesFamiliesEntry(SfxResId(STR_STYLES_ENTRY), mxDocument));
     }
     else if (xDocumentServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument"))
     {
-        lclAppend(mpDocumentModelTree, SfxResId(STR_PAGES_ENTRY), new PagesEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, SfxResId(STR_STYLES_ENTRY),
-                  new StylesFamiliesEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree, new PagesEntry(SfxResId(STR_PAGES_ENTRY), mxDocument));
+        lclAppend(mpDocumentModelTree,
+                  new StylesFamiliesEntry(SfxResId(STR_STYLES_ENTRY), mxDocument));
     }
     else if (xDocumentServiceInfo->supportsService("com.sun.star.text.TextDocument")
              || xDocumentServiceInfo->supportsService("com.sun.star.text.WebDocument"))
     {
-        lclAppend(mpDocumentModelTree, SfxResId(STR_PARAGRAPHS_ENTRY),
-                  new ParagraphsEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, SfxResId(STR_SHAPES_ENTRY), new ShapesEntry(mxDocument),
-                  true);
-        lclAppend(mpDocumentModelTree, SfxResId(STR_TABLES_ENTRY), new TablesEntry(mxDocument),
-                  true);
-        lclAppend(mpDocumentModelTree, SfxResId(STR_FRAMES_ENTRY), new FramesEntry(mxDocument),
-                  true);
-        lclAppend(mpDocumentModelTree, SfxResId(STR_GRAPHIC_OBJECTS_ENTRY),
-                  new WriterGraphicObjectsEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, SfxResId(STR_EMBEDDED_OBJECTS_ENTRY),
-                  new EmbeddedObjectsEntry(mxDocument), true);
-        lclAppend(mpDocumentModelTree, SfxResId(STR_STYLES_ENTRY),
-                  new StylesFamiliesEntry(mxDocument), true);
+        lclAppend(mpDocumentModelTree,
+                  new ParagraphsEntry(SfxResId(STR_PARAGRAPHS_ENTRY), mxDocument));
+        lclAppend(mpDocumentModelTree, new ShapesEntry(SfxResId(STR_SHAPES_ENTRY), mxDocument));
+        lclAppend(mpDocumentModelTree, new TablesEntry(SfxResId(STR_TABLES_ENTRY), mxDocument));
+        lclAppend(mpDocumentModelTree, new FramesEntry(SfxResId(STR_FRAMES_ENTRY), mxDocument));
+        lclAppend(mpDocumentModelTree,
+                  new WriterGraphicObjectsEntry(SfxResId(STR_GRAPHIC_OBJECTS_ENTRY), mxDocument));
+        lclAppend(mpDocumentModelTree,
+                  new EmbeddedObjectsEntry(SfxResId(STR_EMBEDDED_OBJECTS_ENTRY), mxDocument));
+        lclAppend(mpDocumentModelTree,
+                  new StylesFamiliesEntry(SfxResId(STR_STYLES_ENTRY), mxDocument));
     }
 }
 
