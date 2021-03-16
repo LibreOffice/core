@@ -719,6 +719,18 @@ uno::Reference<uno::XInterface> DocumentModelTreeHandler::getObjectByID(OUString
     return pEntry->getMainObject();
 }
 
+void DocumentModelTreeHandler::clearAll()
+{
+    // destroy all DocumetModelTreeEntries from the tree
+    mpDocumentModelTree->all_foreach([this](weld::TreeIter& rEntry) {
+        OUString sID = mpDocumentModelTree->get_id(rEntry);
+        auto* pEntry = reinterpret_cast<DocumentModelTreeEntry*>(sID.toInt64());
+        delete pEntry;
+        return false;
+    });
+    mpDocumentModelTree->clear();
+}
+
 void DocumentModelTreeHandler::clearChildren(weld::TreeIter const& rParent)
 {
     bool bChild = false;
@@ -783,6 +795,8 @@ void DocumentModelTreeHandler::selectObject(
 
 void DocumentModelTreeHandler::inspectDocument()
 {
+    clearAll();
+
     uno::Reference<lang::XServiceInfo> xDocumentServiceInfo(mxDocument, uno::UNO_QUERY_THROW);
 
     lclAppend(mpDocumentModelTree, new DocumentRootEntry(SfxResId(STR_DOCUMENT_ENTRY), mxDocument));

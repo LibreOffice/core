@@ -38,6 +38,7 @@ private:
     std::unique_ptr<ObjectInspectorWidgets> mpObjectInspectorWidgets;
     std::unique_ptr<weld::TreeView> mpDocumentModelTreeView;
     std::unique_ptr<weld::ToggleButton> mpSelectionToggle;
+    std::unique_ptr<weld::Toolbar> mpDomToolbar;
 
     // Reference to the root object for the current document
     css::uno::Reference<css::uno::XInterface> mxRoot;
@@ -53,6 +54,7 @@ private:
 
     DECL_LINK(DocumentModelTreeViewSelectionHandler, weld::TreeView&, void);
     DECL_LINK(SelectionToggled, weld::ToggleButton&, void);
+    DECL_LINK(DomToolbarButtonClicked, const OString&, void);
 
     void updateSelection();
 

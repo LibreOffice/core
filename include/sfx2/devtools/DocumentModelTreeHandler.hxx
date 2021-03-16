@@ -33,6 +33,9 @@ private:
     // identified by the input tree iter.
     void clearChildren(weld::TreeIter const& rParent);
 
+    // Clear all tree view nodes.
+    void clearAll();
+
 public:
     DocumentModelTreeHandler(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
                              css::uno::Reference<css::uno::XInterface> const& xDocument);
