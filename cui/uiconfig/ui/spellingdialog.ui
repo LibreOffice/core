@@ -655,4 +655,16 @@
       </object>
     </child>
   </object>
+  <object class="GtkSizeGroup">
+    <widgets>
+      <widget name="change"/>
+      <widget name="changeall"/>
+      <widget name="autocorrect"/>
+      <widget name="ignore"/>
+      <widget name="ignoreall"/>
+      <widget name="ignorerule"/>
+      <widget name="add"/>
+      <widget name="addmb"/>
+    </widgets>
+  </object>
 </interface>
