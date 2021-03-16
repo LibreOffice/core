@@ -26,6 +26,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <comphelper/types.hxx>
 
 #include <algorithm>
 
@@ -41,8 +42,7 @@ StorageHolder::StorageHolder()
 
 StorageHolder::~StorageHolder()
 {
-    // TODO implement me
-    // dispose/clear etcpp.
+    comphelper::disposeComponent(m_xRoot);
 }
 
 void StorageHolder::forgetCachedStorages()
@@ -51,6 +51,7 @@ void StorageHolder::forgetCachedStorages()
     for (auto & lStorage : m_lStorages)
     {
         TStorageInfo& rInfo = lStorage.second;
+        comphelper::disposeComponent(rInfo.Storage);
         // TODO think about listener !
         rInfo.Storage.clear();
     }

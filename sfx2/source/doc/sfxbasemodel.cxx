@@ -64,6 +64,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/types.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
@@ -240,6 +241,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
 
     virtual ~IMPL_SfxBaseModel_DataContainer()
     {
+        comphelper::disposeComponent(m_xUIConfigurationManager);
     }
 
     // ::sfx2::IModifiableDocument

@@ -41,6 +41,7 @@
 #include <o3tl/enumrange.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/types.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/pngwrite.hxx>
@@ -500,6 +501,7 @@ ImageManagerImpl::ImageManagerImpl( const uno::Reference< uno::XComponentContext
 
 ImageManagerImpl::~ImageManagerImpl()
 {
+    assert(m_bDisposed);
     clear();
 }
 
@@ -512,6 +514,7 @@ void ImageManagerImpl::dispose()
     {
         SolarMutexGuard g;
         m_xUserConfigStorage.clear();
+        comphelper::disposeComponent(m_xUserImageStorage);
         m_xUserImageStorage.clear();
         m_xUserRootCommit.clear();
         m_bModified = false;

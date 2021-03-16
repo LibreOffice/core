@@ -21,6 +21,8 @@
 
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <tools/urlobj.hxx>
@@ -94,6 +96,7 @@ OUString SAL_CALL StorageFilterDetect::detect(uno::Sequence<beans::PropertyValue
         uno::Reference< embed::XStorage > xStorage = ::comphelper::OStorageHelper::GetStorageFromInputStream( xInStream, mxCxt );
         if ( !xStorage.is() )
             return OUString();
+        comphelper::ScopeGuard cleanup([&xStorage] () { comphelper::disposeComponent(xStorage); });
 
         uno::Reference< beans::XPropertySet > xStorageProperties( xStorage, uno::UNO_QUERY );
         if ( !xStorageProperties.is() )

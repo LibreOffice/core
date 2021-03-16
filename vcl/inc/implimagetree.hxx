@@ -32,6 +32,7 @@
 #include <vcl/bitmapex.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/ImageTree.hxx>
+#include <comphelper/types.hxx>
 
 namespace com::sun::star::container {
     class XNameAccess;
@@ -108,6 +109,14 @@ private:
         IconSet(const OUString & rURL)
             : maURL(rURL)
         {}
+
+        IconSet& operator=(IconSet const &) = default;
+        IconSet& operator=(IconSet&&) = default;
+
+        ~IconSet()
+        {
+            comphelper::disposeComponent(maNameAccess);
+        }
     };
 
     /// Remember all the (used) icon styles and individual icons in them.

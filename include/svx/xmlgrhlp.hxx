@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_XMLGRHLP_HXX
 
 #include <cppuhelper/compbase.hxx>
+#include <comphelper/types.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/graph.hxx>
 #include <rtl/ref.hxx>
@@ -44,6 +45,16 @@ struct SvxGraphicHelperStream_Impl
 {
     css::uno::Reference < css::embed::XStorage > xStorage;
     css::uno::Reference < css::io::XStream > xStream;
+
+    SvxGraphicHelperStream_Impl() = default;
+    // can be moved but not copied
+    SvxGraphicHelperStream_Impl(SvxGraphicHelperStream_Impl&&) = default;
+
+    ~SvxGraphicHelperStream_Impl()
+    {
+        comphelper::disposeComponent(xStorage);
+        comphelper::disposeComponent(xStream);
+    }
 };
 
 class SVXCORE_DLLPUBLIC SvXMLGraphicHelper final : public cppu::WeakComponentImplHelper<css::document::XGraphicObjectResolver,
