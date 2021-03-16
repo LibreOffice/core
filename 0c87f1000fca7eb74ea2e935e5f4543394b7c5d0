@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7e398d18_9744ebc6",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-16T21:08:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0da2962_a9af0797",
+      "revId": "0c87f1000fca7eb74ea2e935e5f4543394b7c5d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "668594ab_e13b891b",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 11
@@ -30,6 +48,24 @@
       "writtenOn": "2021-03-16T20:55:58Z",
       "side": 1,
       "message": "You likely didn\u0027t try to build?",
+      "revId": "0c87f1000fca7eb74ea2e935e5f4543394b7c5d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fd77740_4f84b414",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-16T21:08:24Z",
+      "side": 1,
+      "message": "Actually my build is failing with message no such file or directory ZXing/BarcodeFormat.h and so is breaking everytime I run it.",
+      "parentUuid": "668594ab_e13b891b",
       "revId": "0c87f1000fca7eb74ea2e935e5f4543394b7c5d0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -56,6 +92,30 @@
       "revId": "0c87f1000fca7eb74ea2e935e5f4543394b7c5d0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e98c6501_8a7b783e",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-16T21:08:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad4cbc64_6a69e519",
+      "range": {
+        "startLine": 281,
+        "startChar": 4,
+        "endLine": 286,
+        "endChar": 26
+      },
+      "revId": "0c87f1000fca7eb74ea2e935e5f4543394b7c5d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
