@@ -125,6 +125,30 @@
     },
     {
       "key": {
+        "uuid": "a801c875_45a6eb8d",
+        "filename": "cui/uiconfig/ui/qrcodegen.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T14:04:58Z",
+      "side": 1,
+      "message": "... but please make the change of the label a separate commit, this one being entirely dedicated to switching to new engine, which ideally should have no user-visible change.",
+      "parentUuid": "f40c1dba_80e91849",
+      "range": {
+        "startLine": 147,
+        "startChar": 131,
+        "endLine": 147,
+        "endChar": 137
+      },
+      "revId": "8d610aaf899021572153ae534ede7ec81c1d9042",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fcaf30cb_6b228e80",
         "filename": "offapi/com/sun/star/drawing/QRCode.idl",
         "patchSetId": 2
