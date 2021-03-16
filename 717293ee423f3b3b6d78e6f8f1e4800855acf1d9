@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e9c3266f_cab30da4",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T08:51:46Z",
+      "side": 1,
+      "message": "You will never pass a nullptr here. So please use a reference, and take its address only inside to pass to the callback.",
+      "range": {
+        "startLine": 273,
+        "startChar": 105,
+        "endLine": 273,
+        "endChar": 106
+      },
+      "revId": "717293ee423f3b3b6d78e6f8f1e4800855acf1d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
