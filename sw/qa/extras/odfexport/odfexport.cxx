@@ -1887,6 +1887,113 @@ DECLARE_ODFEXPORT_TEST(testMasterPageWithDrawingPage, "sw_hatch.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xStyle, "FillTransparence"));
 }
 
+DECLARE_ODFEXPORT_EXPORTONLY_TEST(testPageStyleBackgroundFullSizeLO70, "pagestyle_background_lo70.odt")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
+    // Standard
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Standard']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "background-size", "full");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Standard']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "fill", "solid");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Standard']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "fill-color", "#99ccff");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Standard']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "opacity", "100%");
+    // Endnote
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Endnote']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "background-size", "full");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Endnote']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "fill", "bitmap");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Endnote']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "repeat", "repeat");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Endnote']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "fill-image-ref-point", "top-left");
+    // Footnote
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Footnote']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "background-size", "border");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Footnote']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "fill", "bitmap");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Footnote']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "repeat", "stretch");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Footnote']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "fill-image-ref-point", "top-left");
+    // Landscape
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Landscape']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "background-size", "border");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Landscape']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "fill", "bitmap");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Landscape']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "repeat", "no-repeat");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Landscape']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "fill-image-ref-point", "top-left");
+    // Index
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Index']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "background-size", "full");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Index']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "fill", "gradient");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Index']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "gradient-step-count", "0");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Index']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "opacity", "100%");
+    // First Page
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='First_20_Page']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "background-size", "full");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='First_20_Page']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "fill", "hatch");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='First_20_Page']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "fill-hatch-solid", "false");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='First_20_Page']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "opacity", "100%");
+}
+
 DECLARE_ODFEXPORT_TEST(testCellUserDefineAttr, "userdefattr-tablecell.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());

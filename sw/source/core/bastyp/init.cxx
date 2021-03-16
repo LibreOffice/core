@@ -409,6 +409,7 @@ SfxItemInfo aSlotTab[] =
     { 0, true },                           // RES_FRMATR_CONDITIONAL_STYLE_NAME
     { 0, true },                           // RES_FRMATR_GRABBAG
     { 0, true },                           // RES_TEXT_VERT_ADJUST
+    { 0, true },                           // RES_BACKGROUND_FULL_SIZE
 
     { 0, true },                           // RES_GRFATR_MIRRORGRF
     { SID_ATTR_GRAF_CROP, true },          // RES_GRFATR_CROPGRF
@@ -612,6 +613,7 @@ void InitCore()
     aAttrTab[ RES_FRMATR_CONDITIONAL_STYLE_NAME - POOLATTR_BEGIN ] = new SfxStringItem( RES_FRMATR_CONDITIONAL_STYLE_NAME, OUString() );
     aAttrTab[ RES_FRMATR_GRABBAG - POOLATTR_BEGIN ] = new SfxGrabBagItem(RES_FRMATR_GRABBAG);
     aAttrTab[ RES_TEXT_VERT_ADJUST - POOLATTR_BEGIN ] = new SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP,RES_TEXT_VERT_ADJUST);
+    aAttrTab[ RES_BACKGROUND_FULL_SIZE - POOLATTR_BEGIN ] = new SfxBoolItem(RES_BACKGROUND_FULL_SIZE, true);
 
     aAttrTab[ RES_GRFATR_MIRRORGRF- POOLATTR_BEGIN ] =      new SwMirrorGrf;
     aAttrTab[ RES_GRFATR_CROPGRF- POOLATTR_BEGIN ] =        new SwCropGrf;

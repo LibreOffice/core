@@ -9655,13 +9655,14 @@
             <rng:value>right</rng:value>
             <rng:value>top</rng:value>
             <rng:value>bottom</rng:value>
+            <!-- FIXME msv ignores the 2nd list? -->
             <rng:list>
-              <rng:ref name="horiBackPos"/>
               <rng:ref name="vertBackPos"/>
+              <rng:ref name="horiBackPos"/>
             </rng:list>
             <rng:list>
-              <rng:ref name="vertBackPos"/>
               <rng:ref name="horiBackPos"/>
+              <rng:ref name="vertBackPos"/>
             </rng:list>
           </rng:choice>
         </rng:attribute>

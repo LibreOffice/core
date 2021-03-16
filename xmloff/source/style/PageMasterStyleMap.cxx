@@ -277,8 +277,7 @@ XMLPropertyMapEntry const g_XMLPageMasterDrawingPageStyleMap[] =
     // ODF 1.3 OFFICE-3937 style of family "drawing-page" referenced from style:master-page
     // duplication of relevant part of aXMLPageMasterStyleMap but as DP type
     DPMAP("FillStyle",                    XML_NAMESPACE_DRAW,     XML_FILL,                   XML_SW_TYPE_FILLSTYLE,                                CTF_PM_FILL),
-    // this does not exist yet!
-    DPMAP("BackgroundFullSize",           XML_NAMESPACE_DRAW,     XML_BACKGROUND_SIZE,        XML_SW_TYPE_PRESPAGE_BACKSIZE|MID_FLAG_NO_PROPERTY,   CTF_PM_BACKGROUNDSIZE),
+    DPMAP("BackgroundFullSize",           XML_NAMESPACE_DRAW,     XML_BACKGROUND_SIZE,        XML_SW_TYPE_PRESPAGE_BACKSIZE,                        CTF_PM_BACKGROUNDSIZE),
     DPMAP("FillColor",                    XML_NAMESPACE_DRAW,     XML_FILL_COLOR,             XML_TYPE_COLOR,                                       0),
     DPMAP("FillColor2",                   XML_NAMESPACE_DRAW,     XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR,                                       0),
     DPMAP("FillGradientName",             XML_NAMESPACE_DRAW,     XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,       CTF_PM_FILLGRADIENTNAME),
