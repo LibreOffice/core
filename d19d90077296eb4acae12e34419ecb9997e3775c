@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1bb4562_e4e1e925",
+        "filename": "vcl/win/app/fileextcheck.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T09:22:43Z",
+      "side": 1,
+      "message": "Generally I doubt you need these guards. This is expected to be conditionally built only on Windows?",
+      "revId": "d19d90077296eb4acae12e34419ecb9997e3775c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba64c698_448d4237",
+        "filename": "vcl/win/app/fileextcheck.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T09:22:43Z",
+      "side": 1,
+      "message": "Why do you need this? https://docs.microsoft.com/en-us/windows/win32/api/versionhelpers/nf-versionhelpers-iswindowsversionorgreater",
+      "revId": "d19d90077296eb4acae12e34419ecb9997e3775c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
