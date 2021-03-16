@@ -662,6 +662,20 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,pdfium,\
 ))
 endif
 
+ifeq ($(OS),iOS)
+# fxge
+$(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
+    UnpackedTarball/pdfium/core/fxge/apple/fx_apple_platform \
+    UnpackedTarball/pdfium/core/fxge/apple/fx_mac_impl \
+    UnpackedTarball/pdfium/core/fxge/apple/fx_quartz_device \
+))
+
+$(eval $(call gb_Library_use_system_darwin_frameworks,pdfium,\
+    CoreGraphics \
+    CoreFoundation \
+))
+endif
+
 ifeq ($(OS),ANDROID)
 # fxge
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\

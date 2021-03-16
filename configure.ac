@@ -11609,7 +11609,7 @@ AC_SUBST([ENABLE_DCONF])
 # pdf import?
 AC_MSG_CHECKING([whether to build the PDF import feature])
 ENABLE_PDFIMPORT=
-if test $_os != iOS -a \( -z "$enable_pdfimport" -o "$enable_pdfimport" = yes \); then
+if test -z "$enable_pdfimport" -o "$enable_pdfimport" = yes; then
     AC_MSG_RESULT([yes])
     ENABLE_PDFIMPORT=TRUE
     AC_DEFINE(HAVE_FEATURE_PDFIMPORT)
