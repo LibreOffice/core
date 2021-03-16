@@ -101,6 +101,30 @@
     },
     {
       "key": {
+        "uuid": "f40c1dba_80e91849",
+        "filename": "cui/uiconfig/ui/qrcodegen.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-16T14:02:43Z",
+      "side": 1,
+      "message": "Definitely without the space before the colon. The HIG is here https://wiki.documentfoundation.org/Design/Guidelines/UIWriting, and margin sounds better to me non-native speaker than border or spacing. So yes.",
+      "parentUuid": "7666383b_b658e0ba",
+      "range": {
+        "startLine": 147,
+        "startChar": 131,
+        "endLine": 147,
+        "endChar": 137
+      },
+      "revId": "8d610aaf899021572153ae534ede7ec81c1d9042",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fcaf30cb_6b228e80",
         "filename": "offapi/com/sun/star/drawing/QRCode.idl",
         "patchSetId": 2
