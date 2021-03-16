@@ -22,6 +22,30 @@
       "revId": "309422d41734b428e9bf8d183fcc659523752c57",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0173bbca_28155164",
+        "filename": "sw/qa/core/data/README",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-03-16T10:11:02Z",
+      "side": 1,
+      "message": "In these pass/fail dirs we often are interested in only making sure the document doesn\u0027t crash or hang on load. If it loads successfully or fails without a crash it goes into one or the other pass/fail dir. The idea there is that if a doc suddenly changes from one state to another it indicates a need to review to check if that\u0027s an expected outcome of the change that triggered it.\n\nI don\u0027t think it needs to be specifically checked by me, the dev that caused it to go from one to the other is sufficient review IMO. *removing* a check because it has started to crash would be a bad thing of course.\n\nI use the \"indeterminate\" dir for when, which has happened a few times, someone reports a huge collection of crashing files and I can drop the whole lot into \"indeterminate\" where it doesn\u0027t matter if it passes/fails and after fixing the crashes the documents can be sorted into pass/fail and added as new testcases.",
+      "parentUuid": "a17a1aff_ed135a86",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 46
+      },
+      "revId": "309422d41734b428e9bf8d183fcc659523752c57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
