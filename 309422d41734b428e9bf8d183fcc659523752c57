@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a17a1aff_ed135a86",
+        "filename": "sw/qa/core/data/README",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-03-16T09:48:21Z",
+      "side": 1,
+      "message": "Caolán - I assume that consider yourself the \"owner\" of these folders, and want to be informed about any \"suspicious\" kind of use.\n\n(Does the indeterminate folder play a role in scripts like crashtest to ignore certain documents that are known, but unfixable?)",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 46
+      },
+      "revId": "309422d41734b428e9bf8d183fcc659523752c57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
