@@ -9,7 +9,6 @@ from uitest.framework import UITestCase
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_cell_by_position
-from uitest.debug import sleep
 
 class tdf106667(UITestCase):
 

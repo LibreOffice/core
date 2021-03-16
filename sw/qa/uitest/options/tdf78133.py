@@ -6,8 +6,6 @@
 #
 
 from uitest.framework import UITestCase
-from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.debug import sleep
 from uitest.uihelper.common import get_state_as_dict
 
 #Bug 78133 - LibO crashes when in options dialog

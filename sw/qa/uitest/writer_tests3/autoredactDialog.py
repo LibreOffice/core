@@ -5,14 +5,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from uitest.framework import UITestCase
-from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import type_text
 from uitest.uihelper.common import select_pos
-from uitest.uihelper.common import select_text
-import time
 import re
-from uitest.debug import sleep
 
 class AutoRedactDialog(UITestCase):
 

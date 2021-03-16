@@ -6,11 +6,8 @@
 #
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import type_text
-import importlib
-import time
 import org.libreoffice.unotest
 import pathlib
 

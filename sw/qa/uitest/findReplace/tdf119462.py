@@ -5,13 +5,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
-from uitest.uihelper.calc import enter_text_to_cell
-from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, type_text
-from uitest.debug import sleep
+from uitest.uihelper.common import get_state_as_dict
 
 #Bug 119462 - Find with formatting adds 0pt text size
 

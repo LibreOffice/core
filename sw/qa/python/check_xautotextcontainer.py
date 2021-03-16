@@ -11,7 +11,6 @@ import unittest
 from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.container import NoSuchElementException
 from com.sun.star.lang import IllegalArgumentException
-from com.sun.star.uno import RuntimeException
 
 class XAutoTextContainer(unittest.TestCase):
     # 0 indicates the path of the Office Basis layer

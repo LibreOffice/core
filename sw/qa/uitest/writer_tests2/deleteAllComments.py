@@ -5,8 +5,7 @@
 #
 
 from uitest.framework import UITestCase
-import time
-from uitest.uihelper.common import get_state_as_dict, type_text
+from uitest.uihelper.common import type_text
 
 class DeleteAllComments(UITestCase):
 
@@ -16,7 +15,7 @@ class DeleteAllComments(UITestCase):
 
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")
-        
+
 
         type_text(xWriterEdit, "Test LibreOffice")
 

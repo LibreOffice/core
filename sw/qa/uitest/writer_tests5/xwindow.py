@@ -5,11 +5,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-import unittest
 import unohelper
-from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.awt import XMouseListener
-from com.sun.star.awt import XToolkitRobot
 from com.sun.star.awt import MouseButton
 from com.sun.star.awt import MouseEvent
 from com.sun.star.awt import KeyEvent

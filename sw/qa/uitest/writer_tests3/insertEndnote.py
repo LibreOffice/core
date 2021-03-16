@@ -5,10 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from uitest.framework import UITestCase
-from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, type_text
-import time
-from uitest.debug import sleep
+from uitest.uihelper.common import type_text
 
 class insertEndnote(UITestCase):
 

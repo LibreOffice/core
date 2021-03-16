@@ -5,9 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from uitest.framework import UITestCase
-from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
-from libreoffice.uno.propertyvalue import mkPropertyValues
+from uitest.uihelper.common import get_url_for_data_file
 from uitest.uihelper.common import select_pos
 
 #Bug 123547 - Systematic crash after opening Tools > Chapter Numbering

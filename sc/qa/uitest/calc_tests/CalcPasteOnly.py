@@ -7,7 +7,6 @@
 
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.framework import UITestCase
-from libreoffice.calc.document import get_column
 from libreoffice.calc.document import get_cell_by_position
 from uitest.uihelper.calc import enter_text_to_cell
 

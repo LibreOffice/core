@@ -11,7 +11,6 @@ import unittest
 from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.container import ElementExistException
 from com.sun.star.container import NoSuchElementException
-from com.sun.star.uno import RuntimeException
 
 
 class XAutoTextGroup(unittest.TestCase):

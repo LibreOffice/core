@@ -7,13 +7,6 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos, get_state_as_dict
 from uitest.uihelper.common import change_measurement_unit
-from com.sun.star.uno import RuntimeException
-from com.sun.star.awt.GradientStyle import LINEAR
-from com.sun.star.drawing.HatchStyle import SINGLE
-from com.sun.star.drawing.BitmapMode import REPEAT
-from com.sun.star.drawing.RectanglePoint import MIDDLE_MIDDLE
-
-from libreoffice.uno.propertyvalue import mkPropertyValues
 #Bug 128431 - Synchronize padding in header borders it is not working
 
 class tdf128431(UITestCase):
