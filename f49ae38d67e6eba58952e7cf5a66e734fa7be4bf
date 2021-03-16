@@ -245,6 +245,24 @@
       "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88d81a44_17d232d3",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T13:35:36Z",
+      "side": 1,
+      "message": "Just make it the same size as was generated using old code. But if that was an SVG, was it vector format previously, and scaled later? We might have to actually pass needed size here from where we create/resize the object...",
+      "parentUuid": "0c7163d7_1eed28d2",
+      "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
