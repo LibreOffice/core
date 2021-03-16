@@ -5219,7 +5219,7 @@ void ScFiltersTest::testTdf112780()
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
-    // Without the fix in place, this test would haved failed with
+    // Without the fix in place, this test would have failed with
     // - Expected:
     // - Actual  : #VALUE!
     CPPUNIT_ASSERT_EQUAL(OUString(""), rDoc.GetString(ScAddress(3,5,0)));
