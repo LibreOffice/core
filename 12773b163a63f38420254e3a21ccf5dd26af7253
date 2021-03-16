@@ -22,6 +22,30 @@
       "revId": "12773b163a63f38420254e3a21ccf5dd26af7253",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f6b64ca_ca3aa1e4",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 3144,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-03-16T15:03:00Z",
+      "side": 1,
+      "message": "Sure, I still have an extra box from Pandora that I can open here. (-: \nSlightly more seriously. Iiuc, this means the command name would not appear in the toolbar (no objection from me). Or should I do something like: “Add to Previous List: \u003ctooltip here\u003e” ?  Happy to follow your preference - given that I have not formed my own.",
+      "parentUuid": "c994b06e_a9a02100",
+      "range": {
+        "startLine": 3144,
+        "startChar": 10,
+        "endLine": 3144,
+        "endChar": 63
+      },
+      "revId": "12773b163a63f38420254e3a21ccf5dd26af7253",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
