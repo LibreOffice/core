@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "938a0845_5a84b305",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-16T13:23:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6dab4e73_a5d0bd74",
+      "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cbbf7b7c_7c9348f3",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 5
@@ -50,6 +68,24 @@
       "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "281f8f75_a2c22fd7",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-16T13:23:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cbbf7b7c_7c9348f3",
+      "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -70,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "2b4ea39b_121389ae",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-16T13:23:43Z",
+      "side": 1,
+      "message": "Actually the constants have been declared by me arbitrarily as Zxing accepts a range of number from 0 to 8 in their error correction values \u0026 so I gave them some random values \u0026 so please let me know where should I document this.",
+      "parentUuid": "b5111395_398728e9",
+      "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bee517e4_6cbb41b0",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 5
@@ -84,6 +138,24 @@
       "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4361d79c_70bd051a",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-16T13:23:43Z",
+      "side": 1,
+      "message": "Oops! I\u0027ll fix it right away! Actually I was refering to the very first patch of QrCodegenDialog which had ASCII_US that\u0027s why I used this. Nevermind I\u0027ll add the _UTF8 here. Thanks!",
+      "parentUuid": "bee517e4_6cbb41b0",
+      "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
