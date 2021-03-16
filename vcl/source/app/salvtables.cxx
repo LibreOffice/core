@@ -539,6 +539,11 @@ void SalInstanceWidget::connect_get_property_tree(const Link<tools::JsonWriter&,
     m_xWidget->SetDumpAsPropertyTreeHdl(rLink);
 }
 
+void SalInstanceWidget::get_property_tree(tools::JsonWriter& rJsonWriter)
+{
+    m_xWidget->DumpAsPropertyTree(rJsonWriter);
+}
+
 void SalInstanceWidget::set_stack_background()
 {
     set_background(m_xWidget->GetSettings().GetStyleSettings().GetWindowColor());
