@@ -335,6 +335,24 @@
       "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "833789ac_a9d35661",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-16T14:38:18Z",
+      "side": 1,
+      "message": "This would be awesome! I\u0027ll see how to configure this accordingly and send a new patch for it. Thanks!",
+      "parentUuid": "238d52be_5fc2b36d",
+      "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
