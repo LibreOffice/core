@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "deb25295_d0259996",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T21:12:47Z",
+      "side": 1,
+      "message": "\u003e Actually my build is failing with message no such file or directory ZXing/BarcodeFormat.h\n\nExactly - that is what I wrote in https://gerrit.libreoffice.org/c/core/+/112534/11#message-c2655725ba058b94d1ae65bc27107ff201b2fa09. So I suppose you needed to #include \u003csrc/BarcodeFormat.h\u003e, according to the inclusion path.\n\nAnd of course, note my comment about sorting includes in each block, which means that you should also sort these ZXing includes.",
+      "parentUuid": "7fd77740_4f84b414",
+      "revId": "0c87f1000fca7eb74ea2e935e5f4543394b7c5d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ad4cbc64_6a69e519",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 11
