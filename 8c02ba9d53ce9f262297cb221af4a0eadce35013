@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "c96f3423_220f2d90",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T16:45:49Z",
+      "side": 1,
+      "message": "I suggest to not use std::ostringstream here, and avoid converting the string. Use OUStringBuffer, and return OUString right away.",
+      "revId": "8c02ba9d53ce9f262297cb221af4a0eadce35013",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bdadea52_ce49d4bb",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 7
@@ -18,6 +35,29 @@
         "startChar": 30,
         "endLine": 280,
         "endChar": 31
+      },
+      "revId": "8c02ba9d53ce9f262297cb221af4a0eadce35013",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd37efb3_5b5e0ab2",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T16:45:49Z",
+      "side": 1,
+      "message": "Please use 0 here: then the matrix would be exactly the size that is needed for the QR code plus quiet zone - see Writer::encode in core/src/qrcode/QRWriter.cpp, and inflate in core/src/BitMatrix.cpp.",
+      "range": {
+        "startLine": 330,
+        "startChar": 89,
+        "endLine": 330,
+        "endChar": 92
       },
       "revId": "8c02ba9d53ce9f262297cb221af4a0eadce35013",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
