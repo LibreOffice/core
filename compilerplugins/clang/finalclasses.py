@@ -54,7 +54,6 @@ for clazz in sorted(definitionSet - inheritFromSet):
     if file.startswith("include/rtl/"): continue
     if file.startswith("include/sal/"): continue
     if file.startswith("include/salhelper/"): continue
-    if file.startswith("include/systools/"): continue
     if file.startswith("include/typelib/"): continue
     if file.startswith("include/uno/"): continue
     # some kind of template noise

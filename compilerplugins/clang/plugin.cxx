@@ -278,7 +278,6 @@ bool Plugin::isInUnoIncludeFile(SourceLocation spellingLocation) const
            || hasPathnamePrefix(name, SRCDIR "/include/rtl/")
            || hasPathnamePrefix(name, SRCDIR "/include/sal/")
            || hasPathnamePrefix(name, SRCDIR "/include/salhelper/")
-           || hasPathnamePrefix(name, SRCDIR "/include/systools/")
            || hasPathnamePrefix(name, SRCDIR "/include/typelib/")
            || hasPathnamePrefix(name, SRCDIR "/include/uno/"));
 }

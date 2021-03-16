@@ -20,14 +20,14 @@
 #ifndef INCLUDED_SYSTOOLS_WIN32_UWINAPI_H
 #define INCLUDED_SYSTOOLS_WIN32_UWINAPI_H
 
-#include "prewin.h"
-#include "postwin.h"
+#include <prewin.h>
+#include <postwin.h>
 
 #ifdef __cplusplus
 
 inline bool IsValidHandle(HANDLE handle)
 {
-    return handle != INVALID_HANDLE_VALUE && handle != NULL;
+    return handle != INVALID_HANDLE_VALUE && handle != nullptr;
 }
 
 #else /* __cplusplus */
