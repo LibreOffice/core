@@ -60,6 +60,24 @@
     },
     {
       "key": {
+        "uuid": "665e1d62_dddfa79e",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T08:47:49Z",
+      "side": 1,
+      "message": "IMO, definitely yes! 😊",
+      "parentUuid": "371107da_312b70c7",
+      "revId": "8d610aaf899021572153ae534ede7ec81c1d9042",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7666383b_b658e0ba",
         "filename": "cui/uiconfig/ui/qrcodegen.ui",
         "patchSetId": 2
