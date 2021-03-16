@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "b441b51c_dc05dbaf",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T20:46:37Z",
+      "side": 1,
+      "message": "This include is only needed #if ENABLE_ZXING. Otherwise, its place would be above, in the block of our library includes - lines 12-18 (the includes inside each block are ideally sorted lexicographically - just mentioning for your later patches)",
+      "revId": "3938547b699f8a45d0f7d4a3c0dfc4b9a7d0522c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6fdec71a_0cf25d79",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 9
