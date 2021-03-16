@@ -6,9 +6,7 @@
 #
 
 from uitest.framework import UITestCase
-from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict, type_text
-from uitest.debug import sleep
 
 class WriterInsertHorizontalLine(UITestCase):
 

@@ -8,7 +8,7 @@
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, type_text
+from uitest.uihelper.common import get_state_as_dict
 
 class SimpleWriterTest(UITestCase):
 

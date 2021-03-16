@@ -8,10 +8,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 import unittest
-import unohelper
 from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.beans import UnknownPropertyException
-import uno
 
 
 class TestXControlShape(unittest.TestCase):
