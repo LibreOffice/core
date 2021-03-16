@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "efb04b3a_15fb0c7b",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T10:36:17Z",
+      "side": 1,
+      "message": "Of course, you should catch the type of exception that you expect (I don\u0027t know if there\u0027s a specific type used by ZXing, or if std::exception is OK).\n\nJust don\u0027t give it a name, if you don\u0027t intend to use it. (Maybe it makes sense yo use it in a SAL_WARN (**if** that makes sense) - but that\u0027s for a different patch.)",
+      "parentUuid": "7df95719_1b718eb1",
+      "revId": "717293ee423f3b3b6d78e6f8f1e4800855acf1d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e9c3266f_cab30da4",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 3
