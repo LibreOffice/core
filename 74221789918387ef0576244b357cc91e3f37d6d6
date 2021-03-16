@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d3ae0ca0_c8964ec2",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2829,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-16T08:31:06Z",
+      "side": 1,
+      "message": "nEndCnt is the character position of the last selected character in the *last* paragraph, nSttCnt is the character position of the first selected character in the *first* paragraph, so their difference works only if the selection is within a single paragraph, i.e. the first and the last paragraphs are the same.",
+      "range": {
+        "startLine": 2829,
+        "startChar": 31,
+        "endLine": 2829,
+        "endChar": 46
+      },
+      "revId": "74221789918387ef0576244b357cc91e3f37d6d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
