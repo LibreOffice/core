@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7cba81d1_8104e3b7",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-16T15:44:31Z",
+      "side": 1,
+      "message": "What a pity",
+      "range": {
+        "startLine": 77,
+        "startChar": 251,
+        "endLine": 77,
+        "endChar": 271
+      },
+      "revId": "6283eed446e6030a9ca17b5787997ca9e1785673",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aad54c93_7ca91b03",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-16T15:44:31Z",
+      "side": 1,
+      "message": "This string is used in lcl_GetStyleFamilyEntries() and I\u0027m not sure that we don\u0027t use it just for the UI. Review needs more expertise.",
+      "range": {
+        "startLine": 596,
+        "startChar": 8,
+        "endLine": 596,
+        "endChar": 34
+      },
+      "revId": "6283eed446e6030a9ca17b5787997ca9e1785673",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
