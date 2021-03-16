@@ -260,6 +260,11 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testKeepwithnextFullheight)
     assertXPath(pXmlDoc, "//page[2]/body/txt/anchored/fly", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testCrashRemoveFromLayout)
+{
+    load(DATA_DIRECTORY, "tdf122894-4.doc");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
