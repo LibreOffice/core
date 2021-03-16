@@ -76,6 +76,12 @@
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/lok.hxx>
+#include <comphelper/dispatchcommand.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <unotest/macros_test.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -244,6 +250,7 @@ public:
     void testTdf128976();
     void testTdf120502();
     void testTdf83779();
+    void FreezePaneExport();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -382,6 +389,7 @@ public:
     CPPUNIT_TEST(testTdf128976);
     CPPUNIT_TEST(testTdf120502);
     CPPUNIT_TEST(testTdf83779);
+    CPPUNIT_TEST(FreezePaneExport);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4880,6 +4888,50 @@ void ScExportTest::testTdf83779()
     assertXPathContent(pVmlDrawing, "/x:worksheet/x:sheetData/x:row[2]/x:c/x:f", "TRUE()");
 
     xShell->DoClose();
+}
+
+void ScExportTest::FreezePaneExport()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScDocShellRef xShell = loadDoc("freeze-panes.", FORMAT_ODS);
+    ScDocument& pDoc = xShell->GetDocument();
+
+    // Problem with this mathod can't dispatch uno commannds
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues =
+    {
+        comphelper::makePropertyValue("ToPoint", OUString("$H$6")),
+    };
+    comphelper::dispatchCommand(".uno:GoToCell", aPropertyValues);
+    comphelper::dispatchCommand(".uno:FreezePanes", {});
+
+    // pDoc.GetLOKFreezeRow();
+    // pDoc.GetLOKFreezeCol();
+
+
+    // utl::TempFile aTempFile;
+    // aTempFile.SetTempNameBaseDirectory("/home/pranam/Desktop");
+    // SfxMedium aStoreMedium( aTempFile.GetURL(), StreamMode::STD_WRITE );
+
+    // xShell->DoSaveAs(aStoreMedium);
+
+    // ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_ODS);
+
+
+    // CPPUNIT_ASSERT_MESSAGE("Failed to reload doc", xDocSh.is());
+
+    // ScDocument& rDoc = xDocSh->GetDocument();
+    // const ScValidationData* pData = rDoc.GetValidationEntry(2);
+    // CPPUNIT_ASSERT(pData);
+
+
+    // uno::Sequence <beans::PropertyValue> aTableViewSettings;
+    // beans::PropertyValue* pSettings = aTableViewSettings.getArray();
+    // CPPUNIT_ASSERT_EQUAL(pSettings[SC_POSITION_RIGHT].Value, 7);
+    // CPPUNIT_ASSERT_EQUAL(pSettings[SC_POSITION_BOTTOM].Value, 6);
+
+    // xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
