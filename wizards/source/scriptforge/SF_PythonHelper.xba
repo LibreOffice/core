@@ -481,21 +481,21 @@ Public Function PyMsgBox(ByVal Text As Variant _
 &apos;&apos;&apos;	Example: (Python code)
 &apos;&apos;&apos;	    a = bas.MsgBox (&apos;Please press a button:&apos;, bas.MB_EXCLAMATION, &apos;Dear User&apos;)
 
-Dim sMsg As String		&apos;	Return value
+Dim iMsg As Integer		&apos;	Return value
 Const cstThisSub = &quot;Basic.MsgBox&quot;
 Const cstSubArgs = &quot;text, [dialogtype=0], [dialogtitle]&quot;
 
 	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
-	sMsg = &quot;&quot;
+	iMsg = -1
 
 Check:
 	SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
 
 Try:
-	sMsg = MsgBox(Text, DialogType, DialogTitle)
+	iMsg = MsgBox(Text, DialogType, DialogTitle)
 
 Finally:
-	PyMsgBox = sMsg
+	PyMsgBox = iMsg
 	SF_Utils._ExitFunction(cstThisSub)
 	Exit Function
 Catch:
