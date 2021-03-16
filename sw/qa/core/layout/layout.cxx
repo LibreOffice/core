@@ -242,6 +242,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBtlrNestedCell)
     CPPUNIT_ASSERT_GREATEREQUAL(nFrameBottom, aPaintArea.Bottom());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTdf45908_invoice)
+{
+    // without the fix, this was hanging (and slowly consuming memory) on fileopen.
+    load(DATA_DIRECTORY, "tdf45908_invoice.odt");
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testKeepwithnextFullheight)
 {
     // The document has a heading (keep with next) and a full-page image in the next paragraph, i.e.

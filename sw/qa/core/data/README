@@ -5,3 +5,19 @@ mdecrypt --bare -a arcfour -o hex -k 435645 -s 3 foo.doc # to unencrypt
 mcrypt --bare -a arcfour -o hex -k 435645 -s 3   foo.doc # to create new tests
 
 to get access to the plain files for manual testing.
+
+
+The files in these subdirectories are tested to
+ensure that they import without crashing or hanging.
+Files that crash during export should go into exportdata.
+
+Both data and exportdata are tested with
+make CppunitTest_sw_filters_test      or
+make CppunitTest_sw_filters_test2     for ww6.
+
+Files that hang interactively, but pass filters_test
+might be failing because of layout issues. See core/layout.
+
+pass: these files now load - without the fix they crashed or hung.
+fail: these files still fail to load, but not because of crashing or hanging.
+indeterminate: untested temporary holding area - to be sorted as pass/fail.
