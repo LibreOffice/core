@@ -89,8 +89,7 @@ OResultSet::OResultSet(const css::uno::Reference< css::sdbc::XResultSet >& _xRes
 
 OResultSet::~OResultSet()
 {
-    m_pColumns->acquire();
-    m_pColumns->disposing();
+    assert(!m_pColumns && "should have been disposed");
 }
 
 // css::lang::XTypeProvider
@@ -139,6 +138,7 @@ void OResultSet::disposing()
 
     // free the columns
     m_pColumns->disposing();
+    m_pColumns.reset();
 
     // close the pending result set
     Reference< XCloseable > (m_xDelegatorResultSet, UNO_QUERY_THROW)->close();

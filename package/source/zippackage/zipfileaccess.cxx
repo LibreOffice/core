@@ -57,16 +57,7 @@ OZipFileAccess::OZipFileAccess( const uno::Reference< uno::XComponentContext >& 
 
 OZipFileAccess::~OZipFileAccess()
 {
-    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
-    if ( !m_bDisposed )
-    {
-        try {
-             // dispose will use refcounting so the further destruction must be avoided
-            osl_atomic_increment(&m_refCount);
-            dispose();
-        } catch( uno::Exception& )
-        {}
-    }
+    assert(m_bDisposed);
 }
 
 uno::Sequence< OUString > OZipFileAccess::GetPatternsFromString_Impl( const OUString& aString )
@@ -178,73 +169,79 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
 
     OSL_ENSURE( aArguments.getLength() == 1, "Too many arguments are provided, only the first one will be used!" );
 
-    OUString aParamURL;
-    uno::Reference< io::XStream > xStream;
-    uno::Reference< io::XSeekable > xSeekable;
-    uno::Sequence<beans::NamedValue> aArgs;
+    try {
+        OUString aParamURL;
+        uno::Reference< io::XStream > xStream;
+        uno::Reference< io::XSeekable > xSeekable;
+        uno::Sequence<beans::NamedValue> aArgs;
 
-    auto openInputStream = [&]()
-    {
-        ::ucbhelper::Content aContent(
-            aParamURL,
-            uno::Reference< css::ucb::XCommandEnvironment >(),
-            m_xContext );
-        uno::Reference < io::XActiveDataSink > xSink = new ZipPackageSink;
-        if ( aContent.openStream ( xSink ) )
+        auto openInputStream = [&]()
         {
-            m_xContentStream = xSink->getInputStream();
-            m_bOwnContent = true;
+            ::ucbhelper::Content aContent(
+                aParamURL,
+                uno::Reference< css::ucb::XCommandEnvironment >(),
+                m_xContext );
+            uno::Reference < io::XActiveDataSink > xSink = new ZipPackageSink;
+            if ( aContent.openStream ( xSink ) )
+            {
+                m_xContentStream = xSink->getInputStream();
+                m_bOwnContent = true;
+                xSeekable.set( m_xContentStream, uno::UNO_QUERY );
+            }
+        };
+
+        if ( aArguments[0] >>= aParamURL )
+        {
+            openInputStream();
+        }
+        else if ( aArguments[0] >>= xStream )
+        {
+            // a writable stream can implement both XStream & XInputStream
+            m_xContentStream = xStream->getInputStream();
+            xSeekable.set( xStream, uno::UNO_QUERY );
+        }
+        else if ( aArguments[0] >>= m_xContentStream )
+        {
             xSeekable.set( m_xContentStream, uno::UNO_QUERY );
         }
-    };
-
-    if ( aArguments[0] >>= aParamURL )
-    {
-        openInputStream();
-    }
-    else if ( aArguments[0] >>= xStream )
-    {
-        // a writable stream can implement both XStream & XInputStream
-        m_xContentStream = xStream->getInputStream();
-        xSeekable.set( xStream, uno::UNO_QUERY );
-    }
-    else if ( aArguments[0] >>= m_xContentStream )
-    {
-        xSeekable.set( m_xContentStream, uno::UNO_QUERY );
-    }
-    else if (aArguments[0] >>= aArgs)
-    {
-        for (const beans::NamedValue& rArg : std::as_const(aArgs))
+        else if (aArguments[0] >>= aArgs)
         {
-            if (rArg.Name == "URL")
-                rArg.Value >>= aParamURL;
+            for (const beans::NamedValue& rArg : std::as_const(aArgs))
+            {
+                if (rArg.Name == "URL")
+                    rArg.Value >>= aParamURL;
+            }
+
+            if (aParamURL.isEmpty())
+                throw lang::IllegalArgumentException(
+                    THROW_WHERE"required argument 'URL' is not given or invalid.",
+                    uno::Reference<uno::XInterface>(), 1);
+
+            openInputStream();
+        }
+        else
+            throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
+
+        if ( !m_xContentStream.is() )
+            throw io::IOException(THROW_WHERE );
+
+        if ( !xSeekable.is() )
+        {
+            // TODO: after fwkbugfix02 is integrated a helper class can be used to make the stream seekable
+            throw io::IOException(THROW_WHERE );
         }
 
-        if (aParamURL.isEmpty())
-            throw lang::IllegalArgumentException(
-                THROW_WHERE"required argument 'URL' is not given or invalid.",
-                uno::Reference<uno::XInterface>(), 1);
-
-        openInputStream();
-    }
-    else
-        throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
-
-    if ( !m_xContentStream.is() )
-        throw io::IOException(THROW_WHERE );
-
-    if ( !xSeekable.is() )
+        // TODO: in case xSeekable is implemented on separated XStream implementation a wrapper is required
+        m_pZipFile = std::make_unique<ZipFile>(
+                    m_aMutexHolder,
+                    m_xContentStream,
+                    m_xContext,
+                    true );
+    } catch (uno::Exception&)
     {
-        // TODO: after fwkbugfix02 is integrated a helper class can be used to make the stream seekable
-        throw io::IOException(THROW_WHERE );
+        // something went wrong, which means we will be immediately destructed, so clean up
+        dispose();
     }
-
-    // TODO: in case xSeekable is implemented on separated XStream implementation a wrapper is required
-    m_pZipFile = std::make_unique<ZipFile>(
-                m_aMutexHolder,
-                m_xContentStream,
-                m_xContext,
-                true );
 }
 
 // XNameAccess

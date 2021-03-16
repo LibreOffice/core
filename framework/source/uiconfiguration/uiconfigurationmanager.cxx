@@ -50,6 +50,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/types.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 
@@ -159,6 +160,13 @@ private:
         UIElementType() : bModified( false ),
                           bLoaded( false ),
                           nElementType( css::ui::UIElementType::UNKNOWN ) {}
+        // can be moved, but not copied
+        UIElementType(UIElementType&&) = default;
+
+        ~UIElementType()
+        {
+            comphelper::disposeComponent(xStorage);
+        }
 
         bool                                                              bModified;
         bool                                                              bLoaded;

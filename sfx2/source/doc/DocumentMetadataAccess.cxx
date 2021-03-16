@@ -43,8 +43,10 @@
 
 #include <comphelper/interaction.hxx>
 #include <unotools/mediadescriptor.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <sfx2/docfile.hxx>
@@ -589,9 +591,10 @@ readStream(struct DocumentMetadataAccess_Impl & i_rImpl,
                     "readStream: is not a stream",
                     ucb::IOErrorCode_NO_FILE, i_rBaseURI + i_rPath, i_rPath);
             }
-            const uno::Reference<io::XStream> xStream(
+            uno::Reference<io::XStream> xStream(
                 i_xStorage->openStreamElement(i_rPath,
                     embed::ElementModes::READ), uno::UNO_SET_THROW);
+            comphelper::ScopeGuard cleanup([&xStream] () { comphelper::disposeComponent(xStream); });
             const uno::Reference<io::XInputStream> xInStream(
                 xStream->getInputStream(), uno::UNO_SET_THROW );
             const uno::Reference<rdf::XURI> xBaseURI(

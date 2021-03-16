@@ -1798,18 +1798,7 @@ OStorage::OStorage( OStorage_Impl* pImpl, bool bReadOnlyWrap )
 
 OStorage::~OStorage()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
-    if ( m_pImpl )
-    {
-        osl_atomic_increment(&m_refCount); // to call dispose
-        try {
-            dispose();
-        }
-        catch( const uno::RuntimeException& )
-        {
-            TOOLS_INFO_EXCEPTION("package.xstor", "Handled exception");
-        }
-    }
+    assert(!m_pImpl);
 }
 
 void OStorage::InternalDispose( bool bNotifyImpl )

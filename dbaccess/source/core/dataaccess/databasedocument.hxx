@@ -172,7 +172,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     ::comphelper::OInterfaceContainerHelper2                                                    m_aCloseListener;
     ::comphelper::OInterfaceContainerHelper2                                                    m_aStorageListeners;
 
-    std::unique_ptr<DocumentEvents>                                                             m_pEventContainer;
+    ::rtl::Reference<DocumentEvents>                                                            m_pEventContainer;
     ::rtl::Reference< DocumentEventExecutor >                                                   m_pEventExecutor;
     DocumentEventNotifier                                                                       m_aEventNotifier;
 

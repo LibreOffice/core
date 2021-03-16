@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <vcl/errinf.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
@@ -132,42 +133,40 @@ static ErrCode ReadThroughComponent(
     OSL_ENSURE( xStorage.is(), "Need storage!");
     OSL_ENSURE(nullptr != pStreamName, "Please, please, give me a name!");
 
-    if ( xStorage.is() )
+    if ( !xStorage )
+        return ErrCode(1);  // TODO/LATER: better error handling
+
+    uno::Reference< io::XStream > xDocStream;
+    comphelper::ScopeGuard aGuard( [&xDocStream]() { comphelper::disposeComponent(xDocStream); } );
+
+    try
     {
-        uno::Reference< io::XStream > xDocStream;
-
-        try
+        // open stream (and set parser input)
+        OUString sStreamName = OUString::createFromAscii(pStreamName);
+        if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
         {
-            // open stream (and set parser input)
-            OUString sStreamName = OUString::createFromAscii(pStreamName);
-            if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
-            {
-                // stream name not found! return immediately with OK signal
-                return ERRCODE_NONE;
-            }
-
-            // get input stream
-            xDocStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
-        }
-        catch (const packages::WrongPasswordException&)
-        {
-            return ERRCODE_SFX_WRONGPASSWORD;
-        }
-        catch (const uno::Exception&)
-        {
-            return ErrCode(1); // TODO/LATER: error handling
+            // stream name not found! return immediately with OK signal
+            return ERRCODE_NONE;
         }
 
-        uno::Reference< XInputStream > xInputStream = xDocStream->getInputStream();
-        // read from the stream
-        return ReadThroughComponent( xInputStream
-                                    ,xModelComponent
-                                    ,rxContext
-                                    ,_rFilter );
+        // get input stream
+        xDocStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
+    }
+    catch (const packages::WrongPasswordException&)
+    {
+        return ERRCODE_SFX_WRONGPASSWORD;
+    }
+    catch (const uno::Exception&)
+    {
+        return ErrCode(1); // TODO/LATER: error handling
     }
 
-    // TODO/LATER: better error handling
-    return ErrCode(1);
+    uno::Reference< XInputStream > xInputStream = xDocStream->getInputStream();
+    // read from the stream
+    return ReadThroughComponent( xInputStream
+                                ,xModelComponent
+                                ,rxContext
+                                ,_rFilter );
 }
 
 
@@ -242,6 +241,7 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     ::comphelper::NamedValueCollection aMediaDescriptor( rDescriptor );
 
     uno::Reference<embed::XStorage> xStorage = GetSourceStorage();
+    comphelper::ScopeGuard aGuard( [&xStorage]() { comphelper::disposeComponent(xStorage); } );
 
     bool bRet = true;
     if (!xStorage.is())

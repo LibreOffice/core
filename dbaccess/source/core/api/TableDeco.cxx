@@ -29,6 +29,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/types.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -87,6 +88,7 @@ void SAL_CALL ODBTableDecorator::disposing()
     m_xNumberFormats = nullptr;
     if ( m_pColumns )
         m_pColumns->disposing();
+    m_xColumnMediator->deregister();
     m_xColumnMediator = nullptr;
 }
 
