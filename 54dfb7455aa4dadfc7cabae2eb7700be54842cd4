@@ -85,6 +85,24 @@
       "revId": "54dfb7455aa4dadfc7cabae2eb7700be54842cd4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35539903_d287da3b",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4144,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-03-16T18:59:02Z",
+      "side": 1,
+      "message": "\u003e \u003e I\u0027m starting to think that we might even not want to consider the system locale/language here. Why? We use Unicode everywhere, so \"codepages\" do not affect us. Would allowing the flags irrespective of the locale break something?\n\u003e \n\u003e No it will not break and execute all tests successfully.\n\u003e The point is then whats the use of optional parameter  - lcid.\n\u003e We use unicode in our code everywhere it makes StrConv independent of codepages.\n\u003e \n\u003e So is it really necessary to have optional parameter lcid ?\n\u003e I think \"No\" due to use of unicode in our code.\n\u003e In the VBA documentation https://docs.microsoft.com/en-us/office/vba/language/reference/user-interface-help/strconv-function you can see use of lcid.\n\u003e From this documentation I think maybe they have not used unicode and used codepages which will be default if optional parameter(lcid) is not provided.If it is provided codepage will be that of provided locale.\n\u003e \n\u003e But in LO things have been coded differently.\n\u003e What do you think about this ?\n\nIt also means we don\u0027t need third argument in StrConv function.\nThanks.",
+      "parentUuid": "89f301de_b7f622a5",
+      "revId": "54dfb7455aa4dadfc7cabae2eb7700be54842cd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
