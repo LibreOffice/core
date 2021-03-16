@@ -149,10 +149,10 @@ bool ImplDdeService::MakeTopic( const OUString& rNm )
                     SfxCallMode::SYNCHRON,
                     { &aName, &aNewView, &aSilent });
 
-            if( dynamic_cast< const SfxViewFrameItem *>( pRet ) &&
-                static_cast<SfxViewFrameItem const *>(pRet)->GetFrame() &&
-                nullptr != ( pShell = static_cast<SfxViewFrameItem const *>(pRet)
-                    ->GetFrame()->GetObjectShell() ) )
+            if( auto const item = dynamic_cast< const SfxViewFrameItem *>( pRet );
+                item &&
+                item->GetFrame() &&
+                nullptr != ( pShell = item->GetFrame()->GetObjectShell() ) )
             {
                 SfxGetpApp()->AddDdeTopic( pShell );
                 bRet = true;
