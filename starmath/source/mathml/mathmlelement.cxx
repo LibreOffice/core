@@ -1,0 +1,59 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <mathml/mathmlelement.hxx>
+
+void SmMlElement::SmImplAttributeType()
+{
+    witch(m_aElementType)
+    {
+        case NMlEmpty:
+            break;
+        case NMlStructural:
+            break;
+        case MlMath:
+            break;
+        case MlMi:
+            break;
+        case MlMerror:
+            break;
+        case MlMn:
+            break;
+        case MlMo:
+            break;
+        case MlMrow:
+            break;
+        case MlMtext:
+            break;
+        default:
+            break;
+    }
+}
+
+SmMlAttribute SmMlElement::getAttribute(SmMlAttributeValueType aElementType) const
+{
+    for (uint_fast8_t i = 0; i < aAttributePosList.size(); ++i)
+    {
+        if (aAttributePosList[i].m_aAttributeValueType == aElementType)
+            return aAttributeList[aAttributePosList[i].m_nPos];
+    }
+    return SmMlAttribute();
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
