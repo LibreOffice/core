@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d2ce3f1b_76c18630",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4140,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T08:34:28Z",
+      "side": 0,
+      "message": "Please no unrelated whitespace changes in lines that you do not modify functionally. Thanks!",
+      "range": {
+        "startLine": 4140,
+        "startChar": 8,
+        "endLine": 4140,
+        "endChar": 9
+      },
+      "revId": "75e9b6bcfb515f7b03a357c077b6fa144f7669c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40f4a5a9_18c73565",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4144,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T08:34:28Z",
+      "side": 0,
+      "message": "Same whitespace concern here.",
+      "revId": "75e9b6bcfb515f7b03a357c077b6fa144f7669c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96732e70_6eb39dfd",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4148,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T08:34:28Z",
+      "side": 0,
+      "message": "... and here.",
+      "revId": "75e9b6bcfb515f7b03a357c077b6fa144f7669c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
