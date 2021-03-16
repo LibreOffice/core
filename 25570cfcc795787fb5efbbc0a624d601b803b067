@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5fcc324_29926672",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 4307,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T21:24:57Z",
+      "side": 1,
+      "message": "Here you add zxing/core",
+      "revId": "25570cfcc795787fb5efbbc0a624d601b803b067",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "285aa0c7_758c306c",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 2246,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T21:24:57Z",
+      "side": 1,
+      "message": "Please avoid inconsistency. The file uses spaces; please also use spaces to indent (as you do a few lines below).",
+      "range": {
+        "startLine": 2246,
+        "startChar": 0,
+        "endLine": 2246,
+        "endChar": 1
+      },
+      "revId": "25570cfcc795787fb5efbbc0a624d601b803b067",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af5e52f0_e7d5bbac",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 10806,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T21:24:57Z",
+      "side": 1,
+      "message": "Same comment about tabs/spaces here",
+      "range": {
+        "startLine": 10806,
+        "startChar": 0,
+        "endLine": 10806,
+        "endChar": 1
+      },
+      "revId": "25570cfcc795787fb5efbbc0a624d601b803b067",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad91953e_b1d3b348",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 10809,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T21:24:57Z",
+      "side": 1,
+      "message": "This directory is doubtable. The package does not contain a ZXing directory. But I don\u0027t know about system lib case; are these cases different? should we make something with that?",
+      "range": {
+        "startLine": 10809,
+        "startChar": 21,
+        "endLine": 10809,
+        "endChar": 26
+      },
+      "revId": "25570cfcc795787fb5efbbc0a624d601b803b067",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d48469d9_80b43dd0",
+        "filename": "external/zxing/StaticLibrary_zxing.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T21:24:57Z",
+      "side": 1,
+      "message": "Here you add zxing/core/src",
+      "revId": "25570cfcc795787fb5efbbc0a624d601b803b067",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdff00fb_6ac9b999",
+        "filename": "external/zxing/StaticLibrary_zxing.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T21:24:57Z",
+      "side": 1,
+      "message": "Do we really need all that?",
+      "revId": "25570cfcc795787fb5efbbc0a624d601b803b067",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
