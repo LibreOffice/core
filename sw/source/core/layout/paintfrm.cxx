@@ -6274,7 +6274,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
             }
             else
             {
-                if ( bPageFrame )
+                if (bPageFrame && GetAttrSet()->GetItem<SfxBoolItem>(RES_BACKGROUND_FULL_SIZE)->GetValue())
                 {
                     aRect = getFrameArea();
                 }

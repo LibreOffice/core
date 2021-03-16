@@ -376,6 +376,17 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             false, &pItem ) )
         rPageDesc.SetFootnoteInfo( static_cast<const SwPageFootnoteInfoItem*>(pItem)->GetPageFootnoteInfo() );
 
+
+    if (SfxItemState::SET == rSet.GetItemState(SID_ATTR_CHAR_GRABBAG, true, &pItem))
+    {
+        SfxGrabBagItem const*const pGrabBag(static_cast<SfxGrabBagItem const*>(pItem));
+        bool bValue;
+        if (pGrabBag->GetGrabBag().find("BackgroundFullSize")->second >>= bValue)
+        {
+            rMaster.SetFormatAttr(SfxBoolItem(RES_BACKGROUND_FULL_SIZE, bValue));
+        }
+    }
+
     // Columns
 
     // Register compliant
@@ -569,6 +580,19 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     if(pCol)
         rSet.Put(SfxStringItem(SID_SWREGISTER_COLLECTION, pCol->GetName()));
 
+    std::optional<SfxGrabBagItem> oGrabBag;
+    SfxPoolItem const* pItem(nullptr);
+    if (SfxItemState::SET == rSet.GetItemState(SID_ATTR_CHAR_GRABBAG, true, &pItem))
+    {
+        oGrabBag.emplace(*static_cast<SfxGrabBagItem const*>(pItem));
+    }
+    else
+    {
+        oGrabBag.emplace(SID_ATTR_CHAR_GRABBAG);
+    }
+    oGrabBag->GetGrabBag()["BackgroundFullSize"] <<=
+        rMaster.GetAttrSet().GetItem<SfxBoolItem>(RES_BACKGROUND_FULL_SIZE)->GetValue();
+    rSet.Put(*oGrabBag);
 }
 
 // Set DefaultTabs
