@@ -1210,7 +1210,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
 
 std::unique_ptr<SalLayout> OutputDevice::getFallbackLayout(
     LogicalFontInstance* pLogicalFont, int nFallbackLevel,
-    ImplLayoutArgs& rLayoutArgs) const
+    ImplLayoutArgs& rLayoutArgs, const SalLayoutGlyphs* pGlyphs) const
 {
     // we need a graphics
     if (!mpGraphics && !AcquireGraphics())
@@ -1225,7 +1225,7 @@ std::unique_ptr<SalLayout> OutputDevice::getFallbackLayout(
     if (!pFallback)
         return nullptr;
 
-    if (!pFallback->LayoutText(rLayoutArgs, nullptr))
+    if (!pFallback->LayoutText(rLayoutArgs, pGlyphs ? pGlyphs->Impl(nFallbackLevel) : nullptr))
     {
         // there is no need for a font that couldn't resolve anything
         return nullptr;
@@ -1234,7 +1234,8 @@ std::unique_ptr<SalLayout> OutputDevice::getFallbackLayout(
     return pFallback;
 }
 
-std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_ptr<SalLayout> pSalLayout, ImplLayoutArgs& rLayoutArgs ) const
+std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_ptr<SalLayout> pSalLayout,
+    ImplLayoutArgs& rLayoutArgs, const SalLayoutGlyphs* pGlyphs ) const
 {
     // This function relies on a valid mpFontInstance, if it doesn't exist bail out
     // - we'd have crashed later on anyway. At least here we can catch the error in debug
@@ -1288,7 +1289,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
 
         // create and add glyph fallback layout to multilayout
         std::unique_ptr<SalLayout> pFallback = getFallbackLayout(pFallbackFont.get(),
-            nFallbackLevel, rLayoutArgs);
+            nFallbackLevel, rLayoutArgs, pGlyphs);
         if (pFallback)
         {
             if( !pMultiSalLayout )

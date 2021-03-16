@@ -398,8 +398,8 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
             pLayoutCache = pItem->mxLayoutCache.get();
         }
 
-        const SalLayoutGlyphs* pGlyphs = pLayoutCache ? pLayoutCache->GetGlyphs() : nullptr;
-        Size aTextSize(rRenderContext.GetTextWidth(pItem->maText,0,-1,nullptr,pGlyphs), rRenderContext.GetTextHeight());
+        const SalLayoutGlyphs glyphs = pLayoutCache ? pLayoutCache->GetGlyphs() : SalLayoutGlyphs();
+        Size aTextSize(rRenderContext.GetTextWidth(pItem->maText,0,-1,nullptr,&glyphs), rRenderContext.GetTextHeight());
         Point aTextPos = ImplGetItemTextPos(aTextRectSize, aTextSize, pItem->mnBits);
 
         if (bOffScreen)
@@ -408,7 +408,7 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
                         aTextPos,
                         pItem->maText,
                         0, -1, nullptr, nullptr,
-                        pGlyphs );
+                        &glyphs );
         }
         else
         {
@@ -418,7 +418,7 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
                         aTextPos,
                         pItem->maText,
                         0, -1, nullptr, nullptr,
-                        pGlyphs );
+                        &glyphs );
         }
     }
 
@@ -1139,15 +1139,15 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText, int nCha
     if (nCharsWidth != -1)
     {
         std::unique_ptr<SalLayout> pSalLayout = ImplLayout("0",0,-1);
-        const SalLayoutGlyphs* pGlyphs = pSalLayout ? pSalLayout->GetGlyphs() : nullptr;
-        nWidth = GetTextWidth("0",0,-1,nullptr,pGlyphs );
+        const SalLayoutGlyphs glyphs = pSalLayout ? pSalLayout->GetGlyphs() : SalLayoutGlyphs();
+        nWidth = GetTextWidth("0",0,-1,nullptr,&glyphs);
         nWidth = nWidth * nCharsWidth + nFudge;
     }
     else
     {
         std::unique_ptr<SalLayout> pSalLayout = ImplLayout(pItem->maText,0,-1);
-        const SalLayoutGlyphs* pGlyphs = pSalLayout ? pSalLayout->GetGlyphs() : nullptr;
-        nWidth = GetTextWidth( pItem->maText,0,-1,nullptr,pGlyphs ) + nFudge;
+        const SalLayoutGlyphs glyphs = pSalLayout ? pSalLayout->GetGlyphs() : SalLayoutGlyphs();
+        nWidth = GetTextWidth( pItem->maText,0,-1,nullptr,&glyphs) + nFudge;
         // Store the calculated layout.
         pItem->mxLayoutCache = std::move(pSalLayout);
     }
