@@ -67,6 +67,24 @@
       "revId": "d19d90077296eb4acae12e34419ecb9997e3775c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0a6c94e_9dea414b",
+        "filename": "vcl/win/app/fileextcheck.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T10:05:49Z",
+      "side": 1,
+      "message": "\u003e i think we need to check that the running process is from the installation that is in the registry (there can be only one), but i don\u0027t know how to do that.\n\nSee HKEY_LOCAL_MACHINE\\SOFTWARE\\LibreOffice\\UNO\\InstallPath, where the default value lists the installed location.\n\nThere\u0027s also HKEY_LOCAL_MACHINE\\SOFTWARE\\LibreOffice\\Layers\\LibreOffice\\\u003cMAJOR\u003e.\u003cMINOR\u003e, but that\u0027s version-dependent...",
+      "parentUuid": "2cc27ba7_1904dd01",
+      "revId": "d19d90077296eb4acae12e34419ecb9997e3775c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
