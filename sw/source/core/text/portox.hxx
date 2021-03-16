@@ -31,7 +31,7 @@ public:
 
 class SwIsoToxPortion : public SwToxPortion
 {
-    sal_uInt16 nViewWidth;
+    sal_uInt16 m_nViewWidth;
 
 public:
     SwIsoToxPortion();
