@@ -1317,7 +1317,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     std::unique_ptr<SalLayout> pSalLayout = mpGraphics->GetTextLayout(0);
 
     // layout text
-    if( pSalLayout && !pSalLayout->LayoutText( aLayoutArgs, pGlyphs ) )
+    if( pSalLayout && !pSalLayout->LayoutText( aLayoutArgs, pGlyphs ? pGlyphs->Impl(0) : nullptr ) )
     {
         pSalLayout.reset();
     }
@@ -1328,7 +1328,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     // do glyph fallback if needed
     // #105768# avoid fallback for very small font sizes
     if (aLayoutArgs.NeedFallback() && mpFontInstance->GetFontSelectPattern().mnHeight >= 3)
-        pSalLayout = ImplGlyphFallbackLayout(std::move(pSalLayout), aLayoutArgs);
+        pSalLayout = ImplGlyphFallbackLayout(std::move(pSalLayout), aLayoutArgs, pGlyphs);
 
     if (flags & SalLayoutFlags::GlyphItemsOnly)
         // Return glyph items only after fallback handling. Otherwise they may

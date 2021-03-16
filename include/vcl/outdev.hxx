@@ -1352,11 +1352,13 @@ public:
                                                          SalLayoutFlags flags = SalLayoutFlags::NONE,
                                                          vcl::TextLayoutCache const* = nullptr) const;
     SAL_DLLPRIVATE std::unique_ptr<SalLayout>
-                                ImplGlyphFallbackLayout( std::unique_ptr<SalLayout>, ImplLayoutArgs& ) const;
+                                ImplGlyphFallbackLayout( std::unique_ptr<SalLayout>,
+                                                         ImplLayoutArgs&,
+                                                         const SalLayoutGlyphs* ) const;
     SAL_DLLPRIVATE std::unique_ptr<SalLayout>
                                 getFallbackLayout(
                                     LogicalFontInstance* pLogicalFont, int nFallbackLevel,
-                                    ImplLayoutArgs& rLayoutArgs) const;
+                                    ImplLayoutArgs& rLayoutArgs, const SalLayoutGlyphs* ) const;
 
 
     // Enabling/disabling RTL only makes sense for OutputDevices that use a mirroring SalGraphicsLayout

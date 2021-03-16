@@ -134,13 +134,14 @@ public:
                                  const PhysicalFontFace** pFallbackFont = nullptr) const override;
     bool            GetOutline(basegfx::B2DPolyPolygonVector&) const override;
     bool            IsKashidaPosValid(int nCharPos) const override;
+    SalLayoutGlyphs GetGlyphs() const final override;
 
     // used only by OutputDevice::ImplLayout, TODO: make friend
     explicit        MultiSalLayout( std::unique_ptr<SalLayout> pBaseLayout );
     void            AddFallback(std::unique_ptr<SalLayout> pFallbackLayout, ImplLayoutRuns const &);
     // give up ownership of the initial pBaseLayout taken by the ctor
     std::unique_ptr<SalLayout>  ReleaseBaseLayout();
-    bool            LayoutText(ImplLayoutArgs&, const SalLayoutGlyphs*) override;
+    bool            LayoutText(ImplLayoutArgs&, const SalLayoutGlyphsImpl*) override;
     void            AdjustLayout(ImplLayoutArgs&) override;
     void            InitFont() const override;
 
@@ -168,10 +169,10 @@ public:
                     ~GenericSalLayout() override;
 
     void            AdjustLayout(ImplLayoutArgs&) final override;
-    bool            LayoutText(ImplLayoutArgs&, const SalLayoutGlyphs*) final override;
+    bool            LayoutText(ImplLayoutArgs&, const SalLayoutGlyphsImpl*) final override;
     void            DrawText(SalGraphics&) const final override;
     static std::shared_ptr<vcl::TextLayoutCache> CreateTextLayoutCache(OUString const&);
-    const SalLayoutGlyphs* GetGlyphs() const final override;
+    SalLayoutGlyphs GetGlyphs() const final override;
 
     bool            IsKashidaPosValid(int nCharPos) const final override;
 
@@ -183,10 +184,12 @@ public:
 
     // used by display layers
     LogicalFontInstance& GetFont() const
-        { return m_GlyphItems.Impl()->GetFont(); }
+        { return m_GlyphItems.GetFont(); }
 
     bool            GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
                                  const PhysicalFontFace** pFallbackFont = nullptr) const override;
+
+    const SalLayoutGlyphsImpl& GlyphsImpl() const { return m_GlyphItems; }
 
 private:
     // for glyph+font+script fallback
@@ -211,7 +214,7 @@ private:
 
     css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
 
-    SalLayoutGlyphs m_GlyphItems;
+    SalLayoutGlyphsImpl m_GlyphItems;
 
     OString         msLanguage;
     std::vector<hb_feature_t> maFeatures;
