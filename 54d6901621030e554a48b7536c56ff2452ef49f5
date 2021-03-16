@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1953f4e_a5c2c4a7",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T16:39:02Z",
+      "side": 1,
+      "message": "Having both this and the one below at line 177 seems odd...",
+      "revId": "54d6901621030e554a48b7536c56ff2452ef49f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
