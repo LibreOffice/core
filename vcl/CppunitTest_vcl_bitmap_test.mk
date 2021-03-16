@@ -16,6 +16,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_bitmap_test, \
     vcl/qa/cppunit/ScanlineToolsTest \
     vcl/qa/cppunit/BitmapScaleTest \
     vcl/qa/cppunit/BitmapFilterTest \
+    vcl/qa/cppunit/BmpFilterTest \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_bitmap_test,\
@@ -52,12 +53,7 @@ $(eval $(call gb_CppunitTest_use_sdk_api,vcl_bitmap_test))
 $(eval $(call gb_CppunitTest_use_ure,vcl_bitmap_test))
 $(eval $(call gb_CppunitTest_use_vcl,vcl_bitmap_test))
 
-$(eval $(call gb_CppunitTest_use_components,vcl_bitmap_test,\
-    configmgr/source/configmgr \
-    i18npool/util/i18npool \
-    ucb/source/core/ucb1 \
-    unotools/util/utl \
-))
+$(eval $(call gb_CppunitTest_use_rdb,vcl_bitmap_test,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_bitmap_test))
 

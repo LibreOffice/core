@@ -29,7 +29,6 @@
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/zcodec.hxx>
-#include <vcl/dibtools.hxx>
 #include <fltcall.hxx>
 #include <vcl/salctype.hxx>
 #include <vcl/filter/PngImageReader.hxx>
@@ -61,6 +60,8 @@
 #include <filter/PbmReader.hxx>
 #include <filter/DxfReader.hxx>
 #include <filter/GifWriter.hxx>
+#include <filter/BmpReader.hxx>
+#include <filter/BmpWriter.hxx>
 #include <osl/module.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/Size.hpp>
@@ -1147,11 +1148,7 @@ ErrCode GraphicFilter::readWithTypeSerializer(SvStream & rStream, Graphic & rGra
 
     if (!rStream.GetError())
     {
-        if (aFilterName.equalsIgnoreAsciiCase(IMP_BMP))
-        {
-            rLinkType = GfxLinkType::NativeBmp;
-        }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_MOV))
+        if (aFilterName.equalsIgnoreAsciiCase(IMP_MOV))
         {
             rGraphic.SetDefaultType();
             rStream.Seek(STREAM_SEEK_TO_END);
@@ -1160,6 +1157,17 @@ ErrCode GraphicFilter::readWithTypeSerializer(SvStream & rStream, Graphic & rGra
         aReturnCode = ERRCODE_NONE;
     }
     return aReturnCode;
+}
+
+ErrCode GraphicFilter::readBMP(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType)
+{
+    if (BmpReader(rStream, rGraphic))
+    {
+        rLinkType = GfxLinkType::NativeBmp;
+        return ERRCODE_NONE;
+    }
+    else
+        return ERRCODE_GRFILTER_FILTERERROR;
 }
 
 ErrCode GraphicFilter::readTGA(SvStream & rStream, Graphic & rGraphic)
@@ -1339,7 +1347,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         }
         else if (aFilterName.equalsIgnoreAsciiCase(IMP_BMP))
         {
-            nStatus = readWithTypeSerializer(rIStream, rGraphic, eLinkType, aFilterName);
+            nStatus = readBMP(rIStream, rGraphic, eLinkType);
         }
         else if (aFilterName.equalsIgnoreAsciiCase(IMP_SVMETAFILE))
         {
@@ -1545,18 +1553,9 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
     {
             if( aFilterName.equalsIgnoreAsciiCase( EXP_BMP ) )
             {
-                BitmapEx aBmp( aGraphic.GetBitmapEx() );
-                BmpConversion nColorRes = static_cast<BmpConversion>(aConfigItem.ReadInt32( "Color", 0 ));
-                if ( nColorRes != BmpConversion::NNONE && ( nColorRes <= BmpConversion::N24Bit) )
-                {
-                    if( !aBmp.Convert( nColorRes ) )
-                        aBmp = aGraphic.GetBitmapEx();
-                }
-                bool    bRleCoding = aConfigItem.ReadBool( "RLE_Coding", true );
-                // save RLE encoded?
-                WriteDIB(aBmp, rOStm, bRleCoding);
-
-                if( rOStm.GetError() )
+                if (!BmpWriter(rOStm, aGraphic, &aConfigItem))
+                    nStatus = ERRCODE_GRFILTER_FORMATERROR;
+                if (rOStm.GetError())
                     nStatus = ERRCODE_GRFILTER_IOERROR;
             }
             else if (aFilterName.equalsIgnoreAsciiCase(EXP_TIFF))
