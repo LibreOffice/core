@@ -110,28 +110,14 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
             *   which is do-able, but requires writing some assembly.
             * See also Scheduler::ProcessTaskScheduling
             */
-#ifndef IOS
-            try
-#endif
-            {
-                ProcessEvent( aEvent );
-            }
-#ifndef IOS
-            catch (css::uno::Exception&)
-            {
-                TOOLS_WARN_EXCEPTION("vcl", "Uncaught");
-                std::abort();
-            }
-            catch (std::exception& e)
-            {
-                SAL_WARN("vcl", "Uncaught " << typeid(e).name() << " " << e.what());
-                std::abort();
-            }
-            catch (...)
-            {
-                SAL_WARN("vcl", "Uncaught exception during DispatchUserEvents!");
-                std::abort();
-            }
+#ifdef IOS
+            ProcessEvent( aEvent );
+#else
+            // the noexcept here means that (a) we abort and (b) debuggers will
+            // likely trigger at the throw site instead of here, making the debugging
+            // experience better when something goes wrong.
+            auto process = [&aEvent, this] () noexcept { ProcessEvent(aEvent); };
+            process();
 #endif
             aResettableListGuard.reset();
             if (!bHandleAllCurrentEvents)
