@@ -37,6 +37,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 
 #include <tools/diagnose_ex.h>
+#include <svx/xlnwtit.hxx>
 
 using namespace com::sun::star;
 using namespace oox;
@@ -452,22 +453,32 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             }
         }
         attrList->add(XML_behindDoc, bOpaque ? "0" : "1");
+        sal_Int32 nLineWidth = 0;
+        if (const SdrObject* pObject = pFrameFormat->FindRealSdrObject())
+        {
+            nLineWidth = pObject->GetMergedItem(XATTR_LINEWIDTH).GetValue();
+        }
+
         // Extend distance with the effect extent if the shape is not rotated, which is the opposite
         // of the mapping done at import time.
         // The type of dist* attributes is unsigned, so make sure no negative value is written.
         sal_Int64 nTopExtDist = nRotation ? 0 : nTopExt;
+        nTopExtDist -= TwipsToEMU(nLineWidth / 2);
         sal_Int64 nDistT = std::max(static_cast<sal_Int64>(0),
                                     TwipsToEMU(aULSpaceItem.GetUpper()) - nTopExtDist);
         attrList->add(XML_distT, OString::number(nDistT).getStr());
         sal_Int64 nBottomExtDist = nRotation ? 0 : nBottomExt;
+        nBottomExtDist -= TwipsToEMU(nLineWidth / 2);
         sal_Int64 nDistB = std::max(static_cast<sal_Int64>(0),
                                     TwipsToEMU(aULSpaceItem.GetLower()) - nBottomExtDist);
         attrList->add(XML_distB, OString::number(nDistB).getStr());
         sal_Int64 nLeftExtDist = nRotation ? 0 : nLeftExt;
+        nLeftExtDist -= TwipsToEMU(nLineWidth / 2);
         sal_Int64 nDistL = std::max(static_cast<sal_Int64>(0),
                                     TwipsToEMU(aLRSpaceItem.GetLeft()) - nLeftExtDist);
         attrList->add(XML_distL, OString::number(nDistL).getStr());
         sal_Int64 nRightExtDist = nRotation ? 0 : nRightExt;
+        nRightExtDist -= TwipsToEMU(nLineWidth / 2);
         sal_Int64 nDistR = std::max(static_cast<sal_Int64>(0),
                                     TwipsToEMU(aLRSpaceItem.GetRight()) - nRightExtDist);
         attrList->add(XML_distR, OString::number(nDistR).getStr());

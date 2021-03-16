@@ -149,6 +149,27 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFooterMarginLost, "footer-margin-lost.do
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgMar", "footer", "709");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testEffectExtentLineWidth)
+{
+    auto verify = [this]() {
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(508),
+                             getProperty<sal_Int32>(getShape(1), "TopMargin"));
+    };
+
+    // Given a document with a shape that has a non-zero line width and effect extent:
+    // When loading the document:
+    load(mpTestDocumentPath, "effect-extent-line-width.docx");
+    // Then make sure that the line width is not taken twice (once as part of the margin, and then
+    // also as the line width):
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 508
+    // - Actual  : 561
+    // i.e. the upper spacing was too large, the last line of the text moved below the shape.
+    verify();
+    reload(mpFilter, "effect-extent-line-width.docx");
+    verify();
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf140572_docDefault_superscript, "tdf140572_docDefault_superscript.docx")
 {
     // A round-trip was crashing.
