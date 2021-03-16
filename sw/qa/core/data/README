@@ -5,3 +5,20 @@ mdecrypt --bare -a arcfour -o hex -k 435645 -s 3 foo.doc # to unencrypt
 mcrypt --bare -a arcfour -o hex -k 435645 -s 3   foo.doc # to create new tests
 
 to get access to the plain files for manual testing.
+
+pass: these files now load - without the fix they didn't
+
+indeterminate: ???
+    -if used, ask caolanm@redhat.com to review
+
+fail: these files used to load - with the fix they don't.
+    -i.e. corrupt documents that should warn the user.
+    -if used, ask caolanm@redhat.com to review
+
+The files in the pass subdirectories are tested to
+ensure that they import without crashing or hanging.
+Files that crash during export should go into exportdata.
+
+Both data and exportdata are tested with
+make CppunitTest_sw_filters_test      or
+make CppunitTest_sw_filters_test2     for ww6.
