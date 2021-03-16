@@ -410,7 +410,7 @@ public:
      * Gets node position in input text.
      * @param aESelection
      */
-    ESelection SetSelection(ESelection aESelection) { return m_aESelection = aESelection; }
+    void SetSelection(ESelection aESelection) { m_aESelection = aESelection; }
 
     /**
      * Finds the node from the position in the text.
