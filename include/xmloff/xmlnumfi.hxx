@@ -115,6 +115,18 @@ struct MyCondition
 
 class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
 {
+public:
+    enum ImplicitCalendar
+    {
+        DEFAULT,
+        SECONDARY,
+        OTHER,
+        DEFAULT_FROM_OTHER,
+        SECONDARY_FROM_OTHER
+    };
+
+private:
+
     SvXMLNumImpData*    pData;
     SvXMLStylesContext*             pStyles;
     std::vector <MyCondition>   aMyConditions;
@@ -124,6 +136,8 @@ class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
     OUString       sFormatTitle;
 //  OUString       sMapName;
     OUString       sCalendar;
+    OUString       aImplicitCalendar[2];
+    ImplicitCalendar eImplicitCalendar;
     LanguageType   nFormatLang;
     bool            bAutoOrder;
     bool            bFromSystem;
@@ -178,7 +192,8 @@ public:
     void SetHasLongDoW(bool bSet)               { bHasLongDoW = bSet; }
     bool HasEra() const                         { return bHasEra; }
 
-    void UpdateCalendar( const OUString& rNewCalendar, bool bImplicitSecondaryCalendarEC = false );
+    void UpdateCalendar( const OUString& rNewCalendar );
+    ImplicitCalendar GetImplicitCalendarState() const { return eImplicitCalendar; }
 
     const LocaleDataWrapper& GetLocaleData() const;
 
