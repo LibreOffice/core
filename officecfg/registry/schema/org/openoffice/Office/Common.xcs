@@ -2708,6 +2708,28 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="CheckDocumentEvents" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Warn on load when a document binds an event to a macro</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="AllowedDocumentEventURLs" oor:type="oor:string-list">
+          <info>
+            <desc>List of script URLS which are allowed to be called by document events.
+            Look into content.xml of the odf file to find the URL.
+            You can either write the full URL, a part of it (starting from the beginning),
+            or use regular expressions.
+            Examples:
+              * vnd.sun.star.script:Standard.Module1.Main?language=Basic&amp;location=user
+              * vnd.sun.star.script:Standard.Module1
+              * vnd.sun.star.script:YourScript.*location=share
+              * .*location=application.*
+
+            When this list is empty, all document event URLs are allowed.
+            </desc>
+          </info>
+        </prop>
         <set oor:name="TrustedAuthors" oor:node-type="TrustedAuthor">
           <info>
             <desc>List with trusted authors.</desc>
