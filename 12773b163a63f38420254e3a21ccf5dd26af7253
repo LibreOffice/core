@@ -70,6 +70,30 @@
       "revId": "12773b163a63f38420254e3a21ccf5dd26af7253",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88cdb358_054145e9",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 3144,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-03-16T16:18:04Z",
+      "side": 1,
+      "message": "Easy enough to add tooltip, and it would appear in description box in the Customize dialog.\nBut iiuc, it will also appear as a tooltip for the icon in the toolbar. \nJust checking if that consequence is acceptable. \n\nOtherwise, like the recent Character Highlighting Color case, a code change would be needed to force .uno:ContinueNumbering to use \"Label\" instead of \"Tooltip\" (could not see a way to solve this using existing possibilities in WriterCommands.xcu)",
+      "parentUuid": "6d0ffc40_c51185ad",
+      "range": {
+        "startLine": 3144,
+        "startChar": 10,
+        "endLine": 3144,
+        "endChar": 63
+      },
+      "revId": "12773b163a63f38420254e3a21ccf5dd26af7253",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
