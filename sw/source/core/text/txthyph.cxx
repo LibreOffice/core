@@ -389,7 +389,7 @@ void SwHyphStrPortion::HandlePortion( SwPortionHandler& rPH ) const
 SwLinePortion *SwSoftHyphPortion::Compress() { return this; }
 
 SwSoftHyphPortion::SwSoftHyphPortion() :
-    bExpand(false), nViewWidth(0)
+    m_bExpand(false), m_nViewWidth(0)
 {
     SetLen(TextFrameIndex(1));
     SetWhichPor( PortionType::SoftHyphen );
@@ -401,13 +401,13 @@ sal_uInt16 SwSoftHyphPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
     // the last possible moment
     if( !Width() && rInf.OnWin() && rInf.GetOpt().IsSoftHyph() && !IsExpand() )
     {
-        if( !nViewWidth )
-            const_cast<SwSoftHyphPortion*>(this)->nViewWidth
+        if( !m_nViewWidth )
+            const_cast<SwSoftHyphPortion*>(this)->m_nViewWidth
                 = rInf.GetTextSize(OUString('-')).Width();
     }
     else
-        const_cast<SwSoftHyphPortion*>(this)->nViewWidth = 0;
-    return nViewWidth;
+        const_cast<SwSoftHyphPortion*>(this)->m_nViewWidth = 0;
+    return m_nViewWidth;
 }
 
 /**

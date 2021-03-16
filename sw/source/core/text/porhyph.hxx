@@ -57,8 +57,8 @@ public:
 
 class SwSoftHyphPortion : public SwHyphPortion
 {
-    bool    bExpand;
-    sal_uInt16  nViewWidth;
+    bool    m_bExpand;
+    sal_uInt16  m_nViewWidth;
 
 public:
     SwSoftHyphPortion();
@@ -67,8 +67,8 @@ public:
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual void FormatEOL( SwTextFormatInfo &rInf ) override;
-    void SetExpand( const bool bNew ) { bExpand = bNew; }
-    bool IsExpand() const { return bExpand; }
+    void SetExpand( const bool bNew ) { m_bExpand = bNew; }
+    bool IsExpand() const { return m_bExpand; }
 
     virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const override;
 

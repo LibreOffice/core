@@ -29,7 +29,7 @@ public:
 
 class SwIsoRefPortion : public SwRefPortion
 {
-    sal_uInt16 nViewWidth;
+    sal_uInt16 m_nViewWidth;
 
 public:
     SwIsoRefPortion();

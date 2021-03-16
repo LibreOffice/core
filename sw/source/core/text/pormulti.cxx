@@ -1409,86 +1409,85 @@ namespace {
 // The destructor restores the values of the last manipulation.
 class SwSpaceManipulator
 {
-    SwTextPaintInfo& rInfo;
-    SwMultiPortion& rMulti;
-    std::vector<tools::Long>* pOldSpaceAdd;
-    sal_uInt16 nOldSpIdx;
-    tools::Long nSpaceAdd;
-    bool bSpaceChg;
-    sal_uInt8 nOldDir;
+    SwTextPaintInfo& m_rInfo;
+    SwMultiPortion& m_rMulti;
+    std::vector<tools::Long>* m_pOldSpaceAdd;
+    sal_uInt16 m_nOldSpaceIndex;
+    tools::Long m_nSpaceAdd;
+    bool m_bSpaceChg;
+    sal_uInt8 m_nOldDir;
+
 public:
     SwSpaceManipulator( SwTextPaintInfo& rInf, SwMultiPortion& rMult );
     ~SwSpaceManipulator();
     void SecondLine();
-    tools::Long GetSpaceAdd() const { return nSpaceAdd; }
+    tools::Long GetSpaceAdd() const { return m_nSpaceAdd; }
 };
 
 }
 
-SwSpaceManipulator::SwSpaceManipulator( SwTextPaintInfo& rInf,
-                                        SwMultiPortion& rMult )
-    : rInfo(rInf)
-    , rMulti(rMult)
-    , nSpaceAdd(0)
+SwSpaceManipulator::SwSpaceManipulator(SwTextPaintInfo& rInf, SwMultiPortion& rMult)
+    : m_rInfo(rInf)
+    , m_rMulti(rMult)
+    , m_nSpaceAdd(0)
 {
-    pOldSpaceAdd = rInfo.GetpSpaceAdd();
-    nOldSpIdx = rInfo.GetSpaceIdx();
-    nOldDir = rInfo.GetDirection();
-    rInfo.SetDirection( rMulti.GetDirection() );
-    bSpaceChg = false;
+    m_pOldSpaceAdd = m_rInfo.GetpSpaceAdd();
+    m_nOldSpaceIndex = m_rInfo.GetSpaceIdx();
+    m_nOldDir = m_rInfo.GetDirection();
+    m_rInfo.SetDirection(m_rMulti.GetDirection());
+    m_bSpaceChg = false;
 
-    if( rMulti.IsDouble() )
+    if (m_rMulti.IsDouble())
     {
-        nSpaceAdd = ( pOldSpaceAdd && !rMulti.HasTabulator() ) ?
-                      rInfo.GetSpaceAdd() : 0;
-        if( rMulti.GetRoot().IsSpaceAdd() )
+        m_nSpaceAdd = (m_pOldSpaceAdd && !m_rMulti.HasTabulator()) ? m_rInfo.GetSpaceAdd() : 0;
+        if (m_rMulti.GetRoot().IsSpaceAdd())
         {
-            rInfo.SetpSpaceAdd( rMulti.GetRoot().GetpLLSpaceAdd() );
-            rInfo.ResetSpaceIdx();
-            bSpaceChg = rMulti.ChgSpaceAdd( &rMulti.GetRoot(), nSpaceAdd );
+            m_rInfo.SetpSpaceAdd(m_rMulti.GetRoot().GetpLLSpaceAdd());
+            m_rInfo.ResetSpaceIdx();
+            m_bSpaceChg = m_rMulti.ChgSpaceAdd(&m_rMulti.GetRoot(), m_nSpaceAdd);
         }
-        else if( rMulti.HasTabulator() )
-            rInfo.SetpSpaceAdd( nullptr );
+        else if (m_rMulti.HasTabulator())
+            m_rInfo.SetpSpaceAdd(nullptr);
     }
-    else if ( ! rMulti.IsBidi() )
+    else if (!m_rMulti.IsBidi())
     {
-        rInfo.SetpSpaceAdd( rMulti.GetRoot().GetpLLSpaceAdd() );
-        rInfo.ResetSpaceIdx();
+        m_rInfo.SetpSpaceAdd(m_rMulti.GetRoot().GetpLLSpaceAdd());
+        m_rInfo.ResetSpaceIdx();
     }
 }
 
 void SwSpaceManipulator::SecondLine()
 {
-    if( bSpaceChg )
+    if (m_bSpaceChg)
     {
-        rInfo.RemoveFirstSpaceAdd();
-        bSpaceChg = false;
+        m_rInfo.RemoveFirstSpaceAdd();
+        m_bSpaceChg = false;
     }
-    SwLineLayout *pLay = rMulti.GetRoot().GetNext();
+    SwLineLayout* pLay = m_rMulti.GetRoot().GetNext();
     if( pLay->IsSpaceAdd() )
     {
-        rInfo.SetpSpaceAdd( pLay->GetpLLSpaceAdd() );
-        rInfo.ResetSpaceIdx();
-        bSpaceChg = rMulti.ChgSpaceAdd( pLay, nSpaceAdd );
+        m_rInfo.SetpSpaceAdd(pLay->GetpLLSpaceAdd());
+        m_rInfo.ResetSpaceIdx();
+        m_bSpaceChg = m_rMulti.ChgSpaceAdd(pLay, m_nSpaceAdd);
     }
     else
     {
-        rInfo.SetpSpaceAdd( (!rMulti.IsDouble() || rMulti.HasTabulator() ) ?
-                                nullptr : pOldSpaceAdd );
-        rInfo.SetSpaceIdx( nOldSpIdx);
+        m_rInfo.SetpSpaceAdd((!m_rMulti.IsDouble() || m_rMulti.HasTabulator()) ? nullptr
+                                                                               : m_pOldSpaceAdd);
+        m_rInfo.SetSpaceIdx(m_nOldSpaceIndex);
     }
 }
 
 SwSpaceManipulator::~SwSpaceManipulator()
 {
-    if( bSpaceChg )
+    if (m_bSpaceChg)
     {
-        rInfo.RemoveFirstSpaceAdd();
-        bSpaceChg = false;
+        m_rInfo.RemoveFirstSpaceAdd();
+        m_bSpaceChg = false;
     }
-    rInfo.SetpSpaceAdd( pOldSpaceAdd );
-    rInfo.SetSpaceIdx( nOldSpIdx);
-    rInfo.SetDirection( nOldDir );
+    m_rInfo.SetpSpaceAdd(m_pOldSpaceAdd);
+    m_rInfo.SetSpaceIdx(m_nOldSpaceIndex);
+    m_rInfo.SetDirection(m_nOldDir);
 }
 
 // Manages the paint for a SwMultiPortion.
