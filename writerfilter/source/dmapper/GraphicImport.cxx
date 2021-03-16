@@ -810,25 +810,51 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                 // Include effect extent in the margin to bring Writer layout closer
                                 // to Word. But do this for non-rotated shapes only, where effect
                                 // extents map to increased margins as-is.
+
+                                sal_Int32 nLineWidth{};
+                                if (xShapeProps->getPropertySetInfo()->hasPropertyByName("LineWidth"))
+                                {
+                                    xShapeProps->getPropertyValue("LineWidth") >>= nLineWidth;
+                                }
+
                                 if (m_pImpl->m_oEffectExtentLeft)
                                 {
-                                    m_pImpl->nLeftMargin += oox::drawingml::convertEmuToHmm(
+                                    sal_Int32 nLeft = oox::drawingml::convertEmuToHmm(
                                         *m_pImpl->m_oEffectExtentLeft);
+                                    if (nLeft >= nLineWidth / 2)
+                                    {
+                                        nLeft -= nLineWidth / 2;
+                                    }
+                                    m_pImpl->nLeftMargin += nLeft;
                                 }
                                 if (m_pImpl->m_oEffectExtentTop)
                                 {
-                                    m_pImpl->nTopMargin += oox::drawingml::convertEmuToHmm(
-                                        *m_pImpl->m_oEffectExtentTop);
+                                    sal_Int32 nTop = oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentTop);
+                                    if (nTop >= nLineWidth / 2)
+                                    {
+                                        nTop -= nLineWidth / 2;
+                                    }
+                                    m_pImpl->nTopMargin += nTop;
                                 }
                                 if (m_pImpl->m_oEffectExtentRight)
                                 {
-                                    m_pImpl->nRightMargin += oox::drawingml::convertEmuToHmm(
+                                    sal_Int32 nRight = oox::drawingml::convertEmuToHmm(
                                         *m_pImpl->m_oEffectExtentRight);
+                                    if (nRight >= nLineWidth / 2)
+                                    {
+                                        nRight -= nLineWidth / 2;
+                                    }
+                                    m_pImpl->nRightMargin += nRight;
                                 }
                                 if (m_pImpl->m_oEffectExtentBottom)
                                 {
-                                    m_pImpl->nBottomMargin += oox::drawingml::convertEmuToHmm(
+                                    sal_Int32 nBottom = oox::drawingml::convertEmuToHmm(
                                         *m_pImpl->m_oEffectExtentBottom);
+                                    if (nBottom >= nLineWidth / 2)
+                                    {
+                                        nBottom -= nLineWidth / 2;
+                                    }
+                                    m_pImpl->nBottomMargin += nBottom;
                                 }
                             }
                         }
