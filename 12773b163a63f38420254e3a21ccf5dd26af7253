@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c994b06e_a9a02100",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 3144,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-16T14:25:54Z",
+      "side": 1,
+      "message": "Mind to add a tooltip directly with renaming?",
+      "range": {
+        "startLine": 3144,
+        "startChar": 10,
+        "endLine": 3144,
+        "endChar": 63
+      },
+      "revId": "12773b163a63f38420254e3a21ccf5dd26af7253",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
