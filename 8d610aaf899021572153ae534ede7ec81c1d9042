@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "371107da_312b70c7",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-16T08:40:07Z",
+      "side": 1,
+      "message": "So, should I explicitly use the namespace of zxing for zxing\u0027s functions as ZXing::BarcodeFormat(...)?",
+      "parentUuid": "42750f45_76d29d42",
+      "revId": "8d610aaf899021572153ae534ede7ec81c1d9042",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7666383b_b658e0ba",
         "filename": "cui/uiconfig/ui/qrcodegen.ui",
         "patchSetId": 2
