@@ -6,11 +6,10 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
-from uitest.uihelper.common import select_pos
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.debug import sleep
+
 #Bug 79983 - Calc sort lists aren't case sensitive
 
 class tdf79983(UITestCase):
@@ -38,6 +37,9 @@ class tdf79983(UITestCase):
         #copy new list from selected cells
         xcopy = xDialogOpt.getChild("copy")
         xcopy.executeAction("CLICK", tuple())
+
+        self.assertEqual("AAA\nBBB\nCCC\nDDD", get_state_as_dict(xDialogOpt.getChild("entries"))['Text'])
+
         xOKBtn = xDialogOpt.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
 
