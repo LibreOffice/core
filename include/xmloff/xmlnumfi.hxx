@@ -124,6 +124,7 @@ class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
     OUString       sFormatTitle;
 //  OUString       sMapName;
     OUString       sCalendar;
+    sal_Int32      nLastCalendarPos;
     LanguageType   nFormatLang;
     bool            bAutoOrder;
     bool            bFromSystem;
@@ -179,6 +180,8 @@ public:
     bool HasEra() const                         { return bHasEra; }
 
     void UpdateCalendar( const OUString& rNewCalendar, bool bImplicitSecondaryCalendarEC = false );
+    void RemoveLastCalendar( const OUString& rCalendar, bool bOnlyIfFollowedByEra );
+    const OUString& GetCalendar()               { return sCalendar; }
 
     const LocaleDataWrapper& GetLocaleData() const;
 

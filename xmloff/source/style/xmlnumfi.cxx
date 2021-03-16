@@ -935,11 +935,16 @@ void SvXMLNumFmtElementContext::endFastElement(sal_Int32 )
                             && sCalendar != rParent.GetLocaleData().getDefaultCalendar()->Name))
                 {
                     // If E or EE is the first format keyword, passing
-                    // bImplicitEC=true suppresses the superfluous calendar
-                    // modifier for this format. This does not help for
-                    // something like [~cal]DD/MM/EE but so far only YMD order
-                    // is used with such calendars. Live with the modifier if
-                    // other keywords precede this.
+                    // bImplicitEC=true to UpdateCalendar() suppresses the
+                    // superfluous calendar modifier for this format. This does
+                    // not help for something like [~cal]DD/MM/EE but so far
+                    // only YMD order is used with such calendars. Live with
+                    // the modifier if other keywords precede this.
+                    // Or try to remove the already existing last calendar
+                    // modifier; if here isn't bImplicitEC=true then the G era
+                    // code must follow the calendar modifier for the calendar
+                    // modifier to be removed.
+                    rParent.RemoveLastCalendar( sCalendar, !bImplicitEC);
                     rParent.UpdateCalendar( sCalendar, bImplicitEC);
                     rParent.AddNfKeyword(
                             sal::static_int_cast< sal_uInt16 >(
@@ -947,7 +952,13 @@ void SvXMLNumFmtElementContext::endFastElement(sal_Int32 )
                 }
                 else
                 {
-                    rParent.UpdateCalendar( sCalendar );
+                    // If the current calendar uses implicit E instead of Y the
+                    // calendar doesn't need to be explicitly switched (with
+                    // modifier) for Y if switching to the default calendar.
+                    const bool bImplicit = (!sCalendar.isEmpty() && sCalendar != rParent.GetCalendar()
+                            && sCalendar == rParent.GetLocaleData().getDefaultCalendar()->Name
+                            && rParent.GetLocaleData().doesSecondaryCalendarUseEC( rParent.GetCalendar()));
+                    rParent.UpdateCalendar( sCalendar, bImplicit);
                     rParent.AddNfKeyword(
                             sal::static_int_cast< sal_uInt16 >(
                                 bEffLong ? NF_KEY_YYYY : NF_KEY_YY ) );
@@ -1118,6 +1129,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     aMyConditions(),
     nType( nNewType ),
     nKey(-1),
+    nLastCalendarPos(-1),
     nFormatLang( LANGUAGE_SYSTEM ),
     bAutoOrder( false ),
     bFromSystem( false ),
@@ -1254,6 +1266,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     aMyConditions(),
     nType( SvXMLStylesTokens::NUMBER_STYLE ),
     nKey(nTempKey),
+    nLastCalendarPos(-1),
     nFormatLang( nLang ),
     bAutoOrder( false ),
     bFromSystem( false ),
@@ -2051,14 +2064,65 @@ void SvXMLNumFormatContext::UpdateCalendar( const OUString& rNewCalendar, bool b
 {
     if ( rNewCalendar != sCalendar )
     {
-        sCalendar = rNewCalendar;
-        if ( !sCalendar.isEmpty() && !bImplicitSecondaryCalendarEC )
+        if (!bImplicitSecondaryCalendarEC)
         {
-            aFormatCode.append( "[~" );            // intro for calendar code
-            aFormatCode.append( sCalendar );
-            aFormatCode.append( ']' );    // end of calendar code
+            // A switch from empty default calendar to named default calendar or
+            // vice versa is not a switch.
+            bool bSameDefault = false;
+            if (sCalendar.isEmpty() || rNewCalendar.isEmpty())
+            {
+                // As both are not equal, only one can be empty here, the other
+                // can not.
+                const OUString& rDefaultCalendar = GetLocaleData().getDefaultCalendar()->Name;
+                // So if one is the named default calendar the other is the
+                // empty default calendar.
+                bSameDefault = (rNewCalendar == rDefaultCalendar || sCalendar == rDefaultCalendar);
+            }
+            if (!bSameDefault)
+            {
+                nLastCalendarPos = aFormatCode.getLength();
+                aFormatCode.append( "[~" );   // intro for calendar code
+                if (rNewCalendar.isEmpty())
+                {
+                    // Empty calendar name here means switching to default calendar
+                    // from a different calendar. Needs to be explicitly stated in
+                    // format code.
+                    aFormatCode.append( GetLocaleData().getDefaultCalendar()->Name );
+                }
+                else
+                {
+                    aFormatCode.append( rNewCalendar );
+                }
+                aFormatCode.append( ']' );    // end of calendar code
+            }
         }
+        sCalendar = rNewCalendar;
     }
+}
+
+void SvXMLNumFormatContext::RemoveLastCalendar( const OUString& rCalendar, bool bOnlyIfFollowedByEra )
+{
+    if (nLastCalendarPos < 0 || sCalendar != rCalendar)
+        return;
+
+    if (aFormatCode.indexOf( "[~" + rCalendar + "]", nLastCalendarPos) != nLastCalendarPos)
+        return;
+
+    const sal_Int32 nModifierLen = rCalendar.getLength() + 3;
+    if (bOnlyIfFollowedByEra)
+    {
+        if (aFormatCode.getLength() <= nLastCalendarPos + nModifierLen)
+            return;
+        SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
+        if (!pFormatter)
+            return;
+        OUString sKeyword = pFormatter->GetKeyword( nFormatLang, NF_KEY_G);
+        if (aFormatCode[nModifierLen] != sKeyword[0])
+            return;
+    }
+
+    aFormatCode.remove( nLastCalendarPos, nModifierLen);
+    nLastCalendarPos = -1;
 }
 
 bool SvXMLNumFormatContext::IsSystemLanguage() const
