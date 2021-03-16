@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58099df0_2775bbe9",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T19:06:21Z",
+      "side": 1,
+      "message": "OUStringBuffer",
+      "range": {
+        "startLine": 270,
+        "startChar": 4,
+        "endLine": 270,
+        "endChar": 22
+      },
+      "revId": "05e0e85bd941ad2f04cdfaed16e0041cdc57019c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71411daf_2b67a0f5",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T19:06:21Z",
+      "side": 1,
+      "message": "\u003d\u003e\n\n  sbPath.append(\" M\" + OUString::number(j) + \",\" + OUString::number(i) + \"h1v1h-1z\");",
+      "range": {
+        "startLine": 282,
+        "startChar": 16,
+        "endLine": 282,
+        "endChar": 82
+      },
+      "revId": "05e0e85bd941ad2f04cdfaed16e0041cdc57019c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "254cf364_0f67f630",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T19:06:21Z",
+      "side": 1,
+      "message": "\u003d\u003e\n\n    sb.append(\"\u003c?xml version\u003d\\\"1.0\\\" encoding\u003d\\\"UTF-8\\\"?\u003e\\n\"\n              \"\u003csvg xmlns\u003d\\\"http://www.w3.org/2000/svg\\\" version\u003d\\\"1.1\\\" viewBox\u003d\\\"0 0 \"\n              + OUString::number(width) + \" \" + OUString::number(height) + \"\\\" stroke\u003d\\\"none\\\"\u003e\\n\"\n              \"\u003cstyle type\u003d\\\"text/css\\\"\u003e\\n\"\n              \".black {fill:#000000;}\\n\"\n              \"\u003c/style\u003e\\n\"\n              \"\u003cpath class\u003d\\\"black\\\"  d\u003d\\\"\" + sbPath.str() + \"\\\"/\u003e\\n\"\n              \"\u003c/svg\u003e\\n\");",
+      "range": {
+        "startLine": 286,
+        "startChar": 4,
+        "endLine": 293,
+        "endChar": 26
+      },
+      "revId": "05e0e85bd941ad2f04cdfaed16e0041cdc57019c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
