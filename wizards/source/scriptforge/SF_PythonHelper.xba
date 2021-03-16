@@ -547,8 +547,9 @@ Dim sObjectType As String			&apos;	Alias of object.ObjectType
 Dim bBasicClass As Boolean			&apos;	True when BasicObject is a class
 Dim sLibrary As String				&apos;	Library where the object belongs to
 Dim bUno As Boolean					&apos;	Return value is a UNO object
+Dim iDims As Integer				&apos;	# of dims of vReturn
 Dim sess As Object					:	Set sess = ScriptForge.SF_Session
-Dim i As Long
+Dim i As Long, j As Long
 
 &apos;	Conventional special input or output values
 Const cstNoArgs = &quot;+++NOARGS+++&quot;, cstSymEmpty = &quot;+++EMPTY+++&quot;, cstSymNull = &quot;+++NULL+++&quot;, cstSymMissing = &quot;+++MISSING+++&quot;
@@ -658,6 +659,15 @@ Try:
 						If sObjectType = &quot;SF_FileSystem&quot; And Script = &quot;GetFileModified&quot; Then vReturn = SF_FileSystem.GetFileModified(vArgs(0))
 				End Select
 
+			&apos;	Methods in usual modules using a 2D array or returning arrays are hardcoded as exceptions
+			ElseIf Not bBasicClass And _
+						(((CallType And vbMethod) + (CallType And cstArgArray)) = vbMethod + cstArgArray Or _
+				   		((CallType And vbMethod) + (CallType And cstRetArray)) = vbMethod + cstRetArray) Then
+				Select Case sLibrary
+					Case &quot;ScriptForge&quot;
+						If sObjectType = &quot;SF_Array&quot; And Script = &quot;ImportFromCSVFile&quot; Then vReturn = SF_Array.ImportFromCSVFile(vArgs(0), vArgs(1), vArgs(2))
+				End Select
+
 			&apos;	Methods in usual modules are called by ExecuteBasicScript() except if they use a ParamArray
 			ElseIf Not bBasicClass And (CallType And vbMethod) = vbMethod Then
 				sScript = sLibrary &amp; &quot;.&quot; &amp; sObjectType &amp; &quot;.&quot; &amp; Script
@@ -721,9 +731,22 @@ Try:
 	&apos;					Scalar
 	If IsArray(vReturn) Then
 		ReDim vReturnArray(0 To 2)
+		iDims = SF_Array.CountDims(vReturn)
+		&apos;	Replace dates by ISO notation
+		If iDims = 1 Then
+			For i = LBound(vReturn) To UBound(vReturn)
+				If VarType(vReturn(i)) = V_DATE Then vReturn(i) = SF_Utils._CDateToIso(vReturn(i))
+			Next i
+		ElseIf iDims = 2 Then
+			For i = LBound(vReturn, 1) To UBound(vReturn, 1)
+				For j = LBound(vReturn, 2) To UBound(vReturn, 2)
+					If VarType(vReturn(i, j)) = V_DATE Then vReturn(i, j) = SF_Utils._CDateToIso(vReturn(i, j))
+				Next j
+			Next i
+		End If
 		vReturnArray(0) = vReturn		&apos;	2D arrays are flattened by the script provider when returning to Python
 		vReturnArray(1) = VarType(vReturn)
-		vReturnArray(2) = SF_Array.CountDims(vReturn)
+		vReturnArray(2) = iDims
 	ElseIf VarType(vReturn) = V_OBJECT And Not IsNull(vReturn) Then
 		&apos;	Uno or not Uno ?BuildPath
 		bUno = False
