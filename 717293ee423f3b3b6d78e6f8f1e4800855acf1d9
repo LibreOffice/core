@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "df1ca51a_356929a8",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T09:13:06Z",
+      "side": 1,
+      "message": "Note also that this \u0027e\u0027 is unused, and will trigger a warning (and error out).",
+      "revId": "717293ee423f3b3b6d78e6f8f1e4800855acf1d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e9c3266f_cab30da4",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 3
