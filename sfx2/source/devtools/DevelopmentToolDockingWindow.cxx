@@ -29,7 +29,8 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
                        "sfx/ui/developmenttool.ui")
     , mpObjectInspectorWidgets(new ObjectInspectorWidgets(m_xBuilder))
     , mpDocumentModelTreeView(m_xBuilder->weld_tree_view("leftside_treeview_id"))
-    , mpSelectionToggle(m_xBuilder->weld_toggle_button("selection_toggle"))
+    , mpSelectionToggle(m_xBuilder->weld_toggle_button("dom_selection_toggle"))
+    , mpDomToolbar(m_xBuilder->weld_toolbar("dom_toolbar"))
     , maDocumentModelTreeHandler(
           mpDocumentModelTreeView,
           pInputBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetBaseModel())
@@ -38,6 +39,8 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
     mpDocumentModelTreeView->connect_changed(
         LINK(this, DevelopmentToolDockingWindow, DocumentModelTreeViewSelectionHandler));
     mpSelectionToggle->connect_toggled(LINK(this, DevelopmentToolDockingWindow, SelectionToggled));
+    mpDomToolbar->connect_clicked(
+        LINK(this, DevelopmentToolDockingWindow, DomToolbarButtonClicked));
 
     auto* pViewFrame = pInputBindings->GetDispatcher()->GetFrame();
 
@@ -69,6 +72,14 @@ IMPL_LINK_NOARG(DevelopmentToolDockingWindow, SelectionToggled, weld::ToggleButt
     updateSelection();
 }
 
+IMPL_LINK(DevelopmentToolDockingWindow, DomToolbarButtonClicked, const OString&, rSelectionId, void)
+{
+    if (rSelectionId == "dom_refresh_button")
+    {
+        maDocumentModelTreeHandler.inspectDocument();
+    }
+}
+
 DevelopmentToolDockingWindow::~DevelopmentToolDockingWindow() { disposeOnce(); }
 
 void DevelopmentToolDockingWindow::dispose()
@@ -86,6 +97,7 @@ void DevelopmentToolDockingWindow::dispose()
     // dispose welded objects
     mpObjectInspectorWidgets.reset();
     mpSelectionToggle.reset();
+    mpDomToolbar.reset();
     mpDocumentModelTreeView.reset();
 
     SfxDockingWindow::dispose();
