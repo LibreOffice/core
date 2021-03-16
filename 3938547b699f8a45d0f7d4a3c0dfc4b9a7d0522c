@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "060318fa_321dea49",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T20:41:26Z",
+      "side": 1,
+      "message": "I don\u0027t see \"ZXing\" directory with these headers inside the package?",
+      "revId": "3938547b699f8a45d0f7d4a3c0dfc4b9a7d0522c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fdec71a_0cf25d79",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T20:41:26Z",
+      "side": 1,
+      "message": "Please *PLEASE* consider clang-format rules!",
+      "revId": "3938547b699f8a45d0f7d4a3c0dfc4b9a7d0522c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54298e21_2dd28ff3",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T20:41:26Z",
+      "side": 1,
+      "message": "And you even may just use \u0027sbPath\u0027 here instead of \u0027sbPath.toString()\u0027.\n\nBut overall, I fail to see why use two buffers, instead of first writing lines 283-289 to the final buffer, then iterating over the matrix adding lines 272-282, and then finally add lines 289-290?",
+      "range": {
+        "startLine": 289,
+        "startChar": 42,
+        "endLine": 289,
+        "endChar": 53
+      },
+      "revId": "3938547b699f8a45d0f7d4a3c0dfc4b9a7d0522c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
