@@ -68,6 +68,30 @@
       "revId": "8d610aaf899021572153ae534ede7ec81c1d9042",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "305b21e6_ff7bc107",
+        "filename": "offapi/com/sun/star/drawing/QRCode.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-16T07:54:43Z",
+      "side": 1,
+      "message": "So, should I revert all the changes related to border or just this one?",
+      "parentUuid": "fcaf30cb_6b228e80",
+      "range": {
+        "startLine": 33,
+        "startChar": 9,
+        "endLine": 33,
+        "endChar": 15
+      },
+      "revId": "8d610aaf899021572153ae534ede7ec81c1d9042",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
