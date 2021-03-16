@@ -1189,6 +1189,15 @@ void SalInstanceContainer::move(weld::Widget* pWidget, weld::Container* pNewPare
         pVclWidget->getWidget()->SetParentToDefaultWindow();
 }
 
+void SalInstanceContainer::child_grab_focus()
+{
+    disable_notify_events();
+    m_xContainer->GrabFocus();
+    if (vcl::Window* pFirstChild = m_xContainer->ImplGetDlgWindow(0, GetDlgWindowType::First))
+        pFirstChild->ImplControlFocus();
+    enable_notify_events();
+}
+
 void SalInstanceContainer::recursively_unset_default_buttons()
 {
     implResetDefault(m_xContainer.get());
