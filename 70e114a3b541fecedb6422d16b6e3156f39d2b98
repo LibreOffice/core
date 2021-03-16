@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "efb3e9f2_bed4d449",
+        "filename": "sw/source/core/doc/docdesc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-03-16T15:17:42Z",
+      "side": 1,
+      "message": "don not know exactly... in the real situation we have to stash only the left hand-side page header/footer because the first one has different style, but i will check it with more sections and pages and if neccessary i fix it.",
+      "parentUuid": "0d8914ee_5fe1c324",
+      "revId": "70e114a3b541fecedb6422d16b6e3156f39d2b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da79f620_23c482c6",
         "filename": "sw/source/core/doc/docdesc.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2021-03-16T15:00:13Z",
       "side": 1,
       "message": "You need to check HasStashedFormat in all three cases, right?",
+      "revId": "70e114a3b541fecedb6422d16b6e3156f39d2b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "545dbd26_d51d77ca",
+        "filename": "sw/source/core/doc/docdesc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-03-16T15:17:42Z",
+      "side": 1,
+      "message": "don not know exactly... in the real situation we have to stash only the left hand-side page header/footer because the first one has different style, but i will check it with more sections and pages and if neccessary i fix it.",
+      "parentUuid": "da79f620_23c482c6",
       "revId": "70e114a3b541fecedb6422d16b6e3156f39d2b98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "185eb435_4dda6b39",
+        "filename": "sw/source/core/doc/docfmt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1530,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-03-16T15:17:42Z",
+      "side": 1,
+      "message": "yeah.",
+      "parentUuid": "6e5846f9_c31132e7",
+      "revId": "70e114a3b541fecedb6422d16b6e3156f39d2b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7c63f5c2_1b41aa08",
         "filename": "sw/source/core/doc/docfmt.cxx",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2021-03-16T15:00:13Z",
       "side": 1,
       "message": "I think this line should be indented one deeper, no?",
+      "revId": "70e114a3b541fecedb6422d16b6e3156f39d2b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5696ae55_c7090ad1",
+        "filename": "sw/source/core/doc/docfmt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1532,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-03-16T15:17:42Z",
+      "side": 1,
+      "message": "you are right this part i forget to reformat with clang...",
+      "parentUuid": "7c63f5c2_1b41aa08",
       "revId": "70e114a3b541fecedb6422d16b6e3156f39d2b98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "153df6f4_fa5a090e",
+        "filename": "sw/source/core/layout/pagedesc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-03-16T15:17:42Z",
+      "side": 1,
+      "message": "i will remove it too",
+      "parentUuid": "781fbe56_706d365a",
+      "revId": "70e114a3b541fecedb6422d16b6e3156f39d2b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "950e777e_308afb2b",
         "filename": "sw/source/core/layout/pagedesc.cxx",
         "patchSetId": 1
@@ -98,6 +188,24 @@
       "writtenOn": "2021-03-16T15:00:13Z",
       "side": 1,
       "message": "This statement is unreachable.",
+      "revId": "70e114a3b541fecedb6422d16b6e3156f39d2b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e385d62c_c5f5e5df",
+        "filename": "sw/source/core/layout/pagedesc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-03-16T15:17:42Z",
+      "side": 1,
+      "message": "yea, i will remove...",
+      "parentUuid": "950e777e_308afb2b",
       "revId": "70e114a3b541fecedb6422d16b6e3156f39d2b98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "f26c6ba9_d7ceaf8c",
+        "filename": "sw/source/core/layout/pagedesc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-03-16T15:17:42Z",
+      "side": 1,
+      "message": "The compiler will not shout for this if i remove?",
+      "parentUuid": "65794e35_80c1bf8b",
+      "revId": "70e114a3b541fecedb6422d16b6e3156f39d2b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9ae6507e_405a488e",
         "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
         "patchSetId": 1
@@ -132,6 +258,24 @@
       "writtenOn": "2021-03-16T15:00:13Z",
       "side": 1,
       "message": "Extra empty line? :)",
+      "revId": "70e114a3b541fecedb6422d16b6e3156f39d2b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35a5259d_7658bb0f",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2560,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-03-16T15:17:42Z",
+      "side": 1,
+      "message": "I do not want to seem jealous, so i give this extra line too... Of course, i will remove it ;)",
+      "parentUuid": "9ae6507e_405a488e",
       "revId": "70e114a3b541fecedb6422d16b6e3156f39d2b98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
