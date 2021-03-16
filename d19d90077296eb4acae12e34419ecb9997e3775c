@@ -33,6 +33,40 @@
       "revId": "d19d90077296eb4acae12e34419ecb9997e3775c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3d988d1_472deaa4",
+        "filename": "vcl/win/app/fileextcheck.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-03-16T10:01:37Z",
+      "side": 1,
+      "message": "hmm... that works for the most common case...",
+      "revId": "d19d90077296eb4acae12e34419ecb9997e3775c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cc27ba7_1904dd01",
+        "filename": "vcl/win/app/fileextcheck.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-03-16T10:01:37Z",
+      "side": 1,
+      "message": "so this effectively checks that there is some LibreOffice installed, but it doesn\u0027t check that this process is from the installed one?\n\nthe scenario i have in mind is that you have multiple different LO versions installed (or rather, unpacked) via \"msiexec /A\" or by building with --packageformat\u003darchive and possibly one installed normally in the system too; this is probably very common for QA people?\n\ni think we need to check that the running process is from the installation that is in the registry (there can be only one), but i don\u0027t know how to do that.\n\nwith that the Instdir check becomes superfluous too.",
+      "revId": "d19d90077296eb4acae12e34419ecb9997e3775c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
