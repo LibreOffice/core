@@ -25,35 +25,74 @@
 
 SalLayoutGlyphs::~SalLayoutGlyphs()
 {
-    for (SalLayoutGlyphsImpl* impl : m_pImpls)
-        delete impl;
+    delete m_pImpl;
+    if (m_pExtraImpls)
+        for (SalLayoutGlyphsImpl* impl : *m_pExtraImpls)
+            delete impl;
 }
 
-SalLayoutGlyphs::SalLayoutGlyphs(SalLayoutGlyphs&& rOther) { std::swap(m_pImpls, rOther.m_pImpls); }
+SalLayoutGlyphs::SalLayoutGlyphs(SalLayoutGlyphs&& rOther)
+{
+    std::swap(m_pImpl, rOther.m_pImpl);
+    std::swap(m_pExtraImpls, rOther.m_pExtraImpls);
+}
 
 SalLayoutGlyphs& SalLayoutGlyphs::operator=(SalLayoutGlyphs&& rOther)
 {
     if (this != &rOther)
-        std::swap(m_pImpls, rOther.m_pImpls);
+    {
+        std::swap(m_pImpl, rOther.m_pImpl);
+        std::swap(m_pExtraImpls, rOther.m_pExtraImpls);
+    }
     return *this;
 }
 
 bool SalLayoutGlyphs::IsValid() const
 {
-    if (m_pImpls.empty())
+    if (m_pImpl == nullptr)
         return false;
-    for (SalLayoutGlyphsImpl* impl : m_pImpls)
-        if (!impl->IsValid())
-            return false;
+    if (!m_pImpl->IsValid())
+        return false;
+    if (m_pExtraImpls)
+        for (SalLayoutGlyphsImpl* impl : *m_pExtraImpls)
+            if (!impl->IsValid())
+                return false;
     return true;
 }
 
 void SalLayoutGlyphs::Invalidate()
 {
     // Invalidating is in fact simply clearing.
-    for (SalLayoutGlyphsImpl* impl : m_pImpls)
-        delete impl;
-    m_pImpls.clear();
+    delete m_pImpl;
+    m_pImpl = nullptr;
+    if (m_pExtraImpls)
+    {
+        for (SalLayoutGlyphsImpl* impl : *m_pExtraImpls)
+            delete impl;
+        delete m_pExtraImpls;
+        m_pExtraImpls = nullptr;
+    }
+}
+
+SalLayoutGlyphsImpl* SalLayoutGlyphs::Impl(unsigned int nLevel) const
+{
+    if (nLevel == 0)
+        return m_pImpl;
+    if (m_pExtraImpls != nullptr && nLevel - 1 < m_pExtraImpls->size())
+        return (*m_pExtraImpls)[nLevel - 1];
+    return nullptr;
+}
+
+void SalLayoutGlyphs::AppendImpl(SalLayoutGlyphsImpl* pImpl)
+{
+    if (m_pImpl == nullptr)
+        m_pImpl = pImpl;
+    else
+    {
+        if (m_pExtraImpls == nullptr)
+            m_pExtraImpls = new std::vector<SalLayoutGlyphsImpl*>;
+        m_pExtraImpls->push_back(pImpl);
+    }
 }
 
 SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::clone() const { return new SalLayoutGlyphsImpl(*this); }
