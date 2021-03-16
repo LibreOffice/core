@@ -1177,6 +1177,11 @@ bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, const 
         formula::FormulaGrammar::AddressConvention eConv = aConv;
         // spaces are illegal ( but the user of course can enter them )
         OUString sAddress = rName.trim();
+        // tdf#134714 - ignore sheet name of the named range
+        if (sal_Int32 nPos = sAddress.indexOf('!'); nPos >= 0)
+        {
+            sAddress = sAddress.copy(nPos + 1);
+        }
         // if a local name ( on the active sheet ) exists this will
         // take precedence over a global with the same name
         if ( !xNameAccess->hasByName( sAddress ) )
