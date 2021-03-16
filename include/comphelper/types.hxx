@@ -44,10 +44,8 @@ namespace comphelper
     {
         css::uno::Reference<css::lang::XComponent> xComp(_rxComp, css::uno::UNO_QUERY);
         if (xComp.is())
-        {
             xComp->dispose();
-            _rxComp = nullptr;
-        }
+        _rxComp = nullptr;
     }
 
 

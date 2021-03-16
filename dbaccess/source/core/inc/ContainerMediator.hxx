@@ -60,12 +60,11 @@ namespace dbaccess
         void notifyElementCreated(const OUString& _sElementName
                                 ,const css::uno::Reference< css::beans::XPropertySet>& _xElement);
 
-    private:
         /** cleans up the instance, by deregistering as listener at the containers,
             and resetting them to <NULL/>
         */
-        void    impl_cleanup_nothrow();
-
+        void    deregister();
+    private:
         /** initializes the properties of the given object from its counterpart in our settings container
         */
         void    impl_initSettings_nothrow(

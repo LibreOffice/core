@@ -64,13 +64,7 @@ OInputCompStream::OInputCompStream( uno::Reference < io::XInputStream > const & 
 
 OInputCompStream::~OInputCompStream()
 {
-    ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
-
-    if ( !m_bDisposed )
-    {
-        osl_atomic_increment(&m_refCount);
-        dispose();
-    }
+    assert(m_bDisposed);
 }
 
 uno::Any SAL_CALL OInputCompStream::queryInterface( const uno::Type& rType )
@@ -212,10 +206,7 @@ void SAL_CALL OInputCompStream::dispose(  )
 {
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
     if ( m_bDisposed )
-    {
-        SAL_INFO("package.xstor", "Disposed!");
-        throw lang::DisposedException();
-    }
+        return;
 
     if ( m_pInterfaceContainer )
     {

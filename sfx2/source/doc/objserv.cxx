@@ -34,6 +34,8 @@
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <comphelper/types.hxx>
 #include <com/sun/star/drawing/XDrawView.hpp>
 
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
@@ -1660,6 +1662,7 @@ static bool HasSignatureStream(const uno::Reference<embed::XStorage>& xStorage)
         {
             uno::Reference<embed::XStorage> xMetaInf
                 = xStorage->openStorageElement("META-INF", embed::ElementModes::READ);
+            comphelper::ScopeGuard cleanup( [&xMetaInf] () { comphelper::disposeComponent(xMetaInf); } );
             if (xMetaInf.is())
             {
                 return xMetaInf->hasByName("documentsignatures.xml")

@@ -133,8 +133,6 @@ MenuBarManager::~MenuBarManager()
     // stop asynchronous settings timer
     m_xDeferredItemContainer.clear();
     m_aAsyncSettingsTimer.Stop();
-
-    SAL_WARN_IF( OWeakObject::m_refCount != 0, "fwk.uielement", "Who wants to delete an object with refcount > 0!" );
 }
 
 void MenuBarManager::Destroy()

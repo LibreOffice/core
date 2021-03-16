@@ -174,11 +174,7 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
 
 ODatabaseDocument::~ODatabaseDocument()
 {
-    if ( !ODatabaseDocument_OfficeDocument::rBHelper.bInDispose && !ODatabaseDocument_OfficeDocument::rBHelper.bDisposed )
-    {
-        acquire();
-        dispose();
-    }
+    assert ( ODatabaseDocument_OfficeDocument::rBHelper.bDisposed );
 }
 
 Any SAL_CALL ODatabaseDocument::queryInterface( const Type& _rType )
@@ -1852,6 +1848,8 @@ void ODatabaseDocument::disposing()
     }
     // <- SYNCHRONIZED
 
+    for(auto& rInterface : aKeepAlive)
+        comphelper::disposeComponent(rInterface);
     aKeepAlive.clear();
 }
 

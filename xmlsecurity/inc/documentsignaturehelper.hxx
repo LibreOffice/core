@@ -20,9 +20,11 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <rtl/ustring.hxx>
 #include <svl/sigstruct.hxx>
-
+#include <comphelper/types.hxx>
 #include <vector>
 
 namespace com::sun::star {
@@ -56,6 +58,14 @@ struct SignatureStreamHelper
     SignatureStreamHelper()
         : nStorageFormat(0)
     {
+    }
+    // this is a move-only type
+    SignatureStreamHelper(SignatureStreamHelper&&) = default;
+    SignatureStreamHelper& operator=(SignatureStreamHelper&&) = default;
+    ~SignatureStreamHelper()
+    {
+        comphelper::disposeComponent(xSignatureStorage);
+        comphelper::disposeComponent(xSignatureStream);
     }
 };
 
