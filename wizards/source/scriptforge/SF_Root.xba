@@ -160,7 +160,7 @@ Dim sLine As String			&apos;	Alias of psLine
 
 	&apos;	Add a timestamp to the line and insert it (without date)
 	sLine = Mid(SF_Utils._Repr(Now()), 12) &amp; &quot; -&gt; &quot; &amp; psLine
-	ConsoleLines(lConsole + 1) = Mid(SF_Utils._Repr(Now()), 12) &amp; &quot; -&gt; &quot; &amp; psLine
+	ConsoleLines(lConsole + 1) = sLine
 
 	&apos;	Add the new line to the actual (probably non-modal) console, if active
 	If Not IsNull(ConsoleDialog) Then
