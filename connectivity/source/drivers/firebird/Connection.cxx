@@ -45,6 +45,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -104,6 +105,7 @@ Connection::~Connection()
 {
     if(!isClosed())
         close();
+    comphelper::disposeComponent(m_xParentDocument);
 }
 
 namespace {
@@ -536,6 +538,7 @@ void Connection::loadDatabaseFile(const OUString& srcLocation, const OUString& t
         ::dbtools::throwGenericSQLException(sMessage ,*this);
     }
     xFileAccess->writeFile(tmpLocation,xDBStream->getInputStream());
+    comphelper::disposeComponent(xDBStream);
 }
 
 isc_svc_handle Connection::attachServiceManager()

@@ -29,6 +29,7 @@
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/types.hxx>
 
 namespace oox {
 
@@ -96,6 +97,7 @@ ZipStorage::ZipStorage( const ZipStorage& rParentStorage, const Reference< XStor
 
 ZipStorage::~ZipStorage()
 {
+    comphelper::disposeComponent(mxStorage);
 }
 
 bool ZipStorage::implIsStorage() const

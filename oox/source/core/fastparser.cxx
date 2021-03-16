@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <comphelper/types.hxx>
 #include <oox/core/fastparser.hxx>
 
 #include <oox/core/fasttokenhandler.hxx>
@@ -131,7 +132,9 @@ void FastParser::parseStream( const Reference< XInputStream >& rxInStream, const
 
 void FastParser::parseStream( StorageBase& rStorage, const OUString& rStreamName )
 {
-    parseStream( rStorage.openInputStream( rStreamName ), rStreamName );
+    Reference<XInputStream> in = rStorage.openInputStream(rStreamName);
+    comphelper::DisposeComponentGuard cleanup(in);
+    parseStream( in, rStreamName );
 }
 
 } // namespace oox::core

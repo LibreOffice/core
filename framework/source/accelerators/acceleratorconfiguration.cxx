@@ -46,6 +46,8 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <comphelper/types.hxx>
 #include <officecfg/Setup.hxx>
 #include <unotools/configpaths.hxx>
 #include <svtools/acceleratorexecute.hxx>
@@ -215,6 +217,8 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::reload()
 {
     css::uno::Reference< css::io::XStream > xStream;
     css::uno::Reference< css::io::XStream > xStreamNoLang;
+    comphelper::ScopeGuard aGuard( [&xStream]() { comphelper::disposeComponent(xStream); } );
+
     {
         SolarMutexGuard g;
         xStream = m_aPresetHandler.openTarget(u"" TARGET_CURRENT,

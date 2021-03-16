@@ -49,7 +49,9 @@
 
 #include <PackageConstants.hxx>
 
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/types.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -525,6 +527,7 @@ void OStorage_Impl::ReadRelInfoIfNecessary()
         // Init from original stream
         uno::Reference< io::XInputStream > xRelInfoStream
             = GetRelInfoStreamForName( std::u16string_view() );
+        comphelper::DisposeComponentGuard cleanup(xRelInfoStream);
         try
         {
             if ( xRelInfoStream.is() )
@@ -828,6 +831,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 uno::Reference< io::XStream > xSubStr =
                                             xDest->openStreamElement( aName,
                                             embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+                comphelper::ScopeGuard cleanup( [&xSubStr] () { comphelper::disposeComponent(xSubStr); } );
                 SAL_WARN_IF( !xSubStr.is(), "package.xstor", "No destination substream!" );
 
                 pElement->m_xStream->CopyInternallyTo_Impl(xSubStr);
@@ -1798,18 +1802,7 @@ OStorage::OStorage( OStorage_Impl* pImpl, bool bReadOnlyWrap )
 
 OStorage::~OStorage()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
-    if ( m_pImpl )
-    {
-        osl_atomic_increment(&m_refCount); // to call dispose
-        try {
-            dispose();
-        }
-        catch( const uno::RuntimeException& )
-        {
-            TOOLS_INFO_EXCEPTION("package.xstor", "Handled exception");
-        }
-    }
+    assert(!m_pImpl);
 }
 
 void OStorage::InternalDispose( bool bNotifyImpl )
@@ -3957,10 +3950,7 @@ void SAL_CALL OStorage::dispose()
     ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
-    {
-        SAL_INFO("package.xstor", THROW_WHERE "Disposed!");
-        throw lang::DisposedException( THROW_WHERE );
-    }
+        return;
 
     try
     {

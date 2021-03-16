@@ -186,26 +186,10 @@ DocumentHolder::DocumentHolder( const uno::Reference< uno::XComponentContext >& 
 
 DocumentHolder::~DocumentHolder()
 {
-    osl_atomic_increment(&m_refCount); // to allow deregistration as a listener
-
-    if( m_xFrame.is() )
-        CloseFrame();
-
-    if ( m_xComponent.is() )
-    {
-        try {
-            CloseDocument( true, false );
-        } catch( const uno::Exception& ) {}
-    }
-
-    if ( m_xInterceptor.is() )
-    {
-        m_xInterceptor->DisconnectDocHolder();
-        m_xInterceptor.clear();
-    }
-
-    if ( !m_bDesktopTerminated )
-        FreeOffice();
+    assert( !m_xFrame );
+    assert( !m_xComponent );
+    assert( !m_xInterceptor );
+    assert ( m_bDesktopTerminated );
 }
 
 
@@ -241,6 +225,7 @@ void DocumentHolder::FreeOffice()
 {
     uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
     xDesktop->removeTerminateListener( this );
+    m_bDesktopTerminated = true;
 
     // the following code is commented out since for now there is still no completely correct way to detect
     // whether the office can be terminated, so it is better to have unnecessary process running than

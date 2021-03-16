@@ -64,6 +64,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/types.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
@@ -240,6 +241,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
 
     virtual ~IMPL_SfxBaseModel_DataContainer()
     {
+        comphelper::disposeComponent(m_xUIConfigurationManager);
     }
 
     // ::sfx2::IModifiableDocument
@@ -705,6 +707,8 @@ void SAL_CALL SfxBaseModel::setParent(const Reference< XInterface >& Parent)
 
 void SAL_CALL SfxBaseModel::dispose()
 {
+    if (impl_isDisposed())
+        return;
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
 
     if  ( !m_pData->m_bClosed )

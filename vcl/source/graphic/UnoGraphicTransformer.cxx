@@ -36,6 +36,11 @@ GraphicTransformer::GraphicTransformer()
 
 GraphicTransformer::~GraphicTransformer()
 {
+#ifdef DBG_UTIL
+    // we are inherited by unographic::Graphic which inherits two things which implement OWeakAggObject, which
+    // makes the ref-counting checking in cppu/ unhappy.
+    m_refCount = -99;
+#endif
 }
 
 

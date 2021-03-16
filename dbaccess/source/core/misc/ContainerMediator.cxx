@@ -65,11 +65,10 @@ OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContain
 
 OContainerMediator::~OContainerMediator()
 {
-    acquire();
-    impl_cleanup_nothrow();
+    assert(!m_xSettings && !m_xContainer);
 }
 
-void OContainerMediator::impl_cleanup_nothrow()
+void OContainerMediator::deregister()
 {
     try
     {
@@ -165,7 +164,7 @@ void SAL_CALL OContainerMediator::disposing( const EventObject& /*Source*/ )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    impl_cleanup_nothrow();
+    deregister();
 }
 
 void OContainerMediator::impl_initSettings_nothrow( const OUString& _rName, const Reference< XPropertySet >& _rxDestination )

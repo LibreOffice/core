@@ -25,6 +25,7 @@
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <editeng/outlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -349,6 +350,7 @@ ErrCode ReadThroughComponent(
         // get input stream
         Reference <io::XStream> xStream =
                 xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
+        comphelper::ScopeGuard cleanup( [&xStream] () { comphelper::disposeComponent(xStream); } );
         Reference <beans::XPropertySet > xProps( xStream, uno::UNO_QUERY );
         if ( !xStream.is() || ! xProps.is() )
             return SD_XML_READERROR;

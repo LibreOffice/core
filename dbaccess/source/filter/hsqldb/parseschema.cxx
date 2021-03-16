@@ -31,6 +31,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/types.hxx>
 #include <sal/log.hxx>
 #include <connectivity/dbexception.hxx>
 
@@ -123,6 +124,7 @@ void SchemaParser::parseSchema()
     }
 
     Reference<XStream> xStream(m_rStorage->openStreamElement(SCHEMA_FILENAME, ElementModes::READ));
+    comphelper::DisposeComponentGuard cleanup(xStream);
 
     Reference<XComponentContext> rContext = comphelper::getProcessComponentContext();
     Reference<XTextInputStream2> xTextInput = TextInputStream::create(rContext);

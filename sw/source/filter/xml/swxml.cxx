@@ -20,6 +20,8 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <comphelper/types.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
@@ -310,6 +312,7 @@ ErrCode ReadThroughComponent(
     {
         // get input stream
         uno::Reference <io::XStream> xStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
+        comphelper::ScopeGuard cleanup( [&xStream] () { comphelper::disposeComponent(xStream); });
         uno::Reference <beans::XPropertySet > xProps( xStream, uno::UNO_QUERY );
 
         Any aAny = xProps->getPropertyValue("Encrypted");

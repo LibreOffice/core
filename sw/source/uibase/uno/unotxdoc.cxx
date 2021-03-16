@@ -419,6 +419,9 @@ SdrModel& SwXTextDocument::getSdrModelFromUnoModel() const
 
 SwXTextDocument::~SwXTextDocument()
 {
+#ifdef DBG_UTIL
+    SwXTextDocumentBaseClass::m_refCount = -99;
+#endif
     InitNewDoc();
     if(m_xNumFormatAgg.is())
     {

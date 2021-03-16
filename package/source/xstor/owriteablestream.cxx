@@ -46,6 +46,8 @@
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/refcountedmutex.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <comphelper/types.hxx>
 
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
@@ -1121,6 +1123,7 @@ void OWriteStream_Impl::CopyInternallyTo_Impl( const uno::Reference< io::XStream
     else
     {
         uno::Reference< io::XStream > xOwnStream = GetStream( embed::ElementModes::READ, false );
+        comphelper::ScopeGuard cleanup( [&xOwnStream] () { comphelper::disposeComponent(xOwnStream); } );
         if ( !xOwnStream.is() )
             throw io::IOException(); // TODO
 
@@ -1630,17 +1633,7 @@ OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, uno::Reference< io::XStrea
 OWriteStream::~OWriteStream()
 {
     ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
-    if ( m_pImpl )
-    {
-        osl_atomic_increment(&m_refCount);
-        try {
-            dispose();
-        }
-        catch( const uno::RuntimeException& )
-        {
-            TOOLS_INFO_EXCEPTION("package.xstor", "Quiet exception");
-        }
-    }
+    assert(!m_pImpl);
 }
 
 void OWriteStream::DeInit()

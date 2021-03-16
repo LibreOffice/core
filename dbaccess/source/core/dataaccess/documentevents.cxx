@@ -111,6 +111,11 @@ namespace dbaccess
 
     DocumentEvents::~DocumentEvents()
     {
+#ifdef DBG_UTIL
+        // DocumentsEvents is held by std::unique_ptr and it's children play ref-counting games
+        // which messes with the debug logic in cppuhelper/
+        m_refCount = -99;
+#endif
     }
 
     void SAL_CALL DocumentEvents::acquire() throw()

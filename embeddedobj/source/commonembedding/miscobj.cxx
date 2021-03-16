@@ -236,31 +236,7 @@ void OCommonEmbeddedObject::LinkInit_Impl(
 
 OCommonEmbeddedObject::~OCommonEmbeddedObject()
 {
-    if ( !(m_pInterfaceContainer || m_xDocHolder.is()) )
-        return;
-
-    osl_atomic_increment(&m_refCount);
-    if ( m_pInterfaceContainer )
-    {
-        try {
-            lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
-            m_pInterfaceContainer->disposeAndClear( aSource );
-        } catch( const uno::Exception& ) {}
-        m_pInterfaceContainer.reset();
-    }
-
-    try {
-        if ( m_xDocHolder.is() )
-        {
-            m_xDocHolder->CloseFrame();
-            try {
-                m_xDocHolder->CloseDocument( true, true );
-            } catch ( const uno::Exception& ) {}
-            m_xDocHolder->FreeOffice();
-
-            m_xDocHolder.clear();
-        }
-    } catch( const uno::Exception& ) {}
+    assert ( m_bDisposed );
 }
 
 

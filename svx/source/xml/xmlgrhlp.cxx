@@ -377,6 +377,7 @@ SvXMLGraphicHelper::SvXMLGraphicHelper()
 
 SvXMLGraphicHelper::~SvXMLGraphicHelper()
 {
+    comphelper::disposeComponent(mxRootStorage);
 }
 
 void SAL_CALL SvXMLGraphicHelper::disposing()

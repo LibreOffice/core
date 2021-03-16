@@ -62,7 +62,7 @@ namespace dbaccess
     {
         void fillPrivileges() const;
     protected:
-        css::uno::Reference< css::container::XContainerListener > m_xColumnMediator;
+        rtl::Reference< ::dbaccess::OContainerMediator >          m_xColumnMediator;
         css::uno::Reference< css::sdbcx::XColumnsSupplier >       m_xTable;
         css::uno::Reference< css::container::XNameAccess >        m_xColumnDefinitions;
         css::uno::Reference< css::sdbc::XConnection >             m_xConnection;

@@ -31,6 +31,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <comphelper/seqstream.hxx>
+#include <comphelper/types.hxx>
 #include <vcl/wmfexternal.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
@@ -301,6 +302,7 @@ Reference< XGraphic > GraphicHelper::importEmbeddedGraphic( const OUString& rStr
         if (!xGraphic.is())
         {
             auto xStream = mxStorage->openInputStream(rStreamName);
+            comphelper::DisposeComponentGuard cleanup(xStream);
             xGraphic = importGraphic(xStream, pExtHeader);
             if (xGraphic.is())
                 mxGraphicMapper->putGraphic(rStreamName, xGraphic);

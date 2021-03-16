@@ -14,6 +14,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seekableinput.hxx>
+#include <comphelper/types.hxx>
 #include <o3tl/safeint.hxx>
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
@@ -290,6 +291,7 @@ struct ZipStreamData
 struct ZipStorageImpl
 {
     explicit ZipStorageImpl(const Reference<container::XNameAccess>& rxContainer);
+    ~ZipStorageImpl();
 
     /** Initialize for access.
       *
@@ -328,6 +330,8 @@ ZipStorageImpl::ZipStorageImpl(const Reference<container::XNameAccess>& rxContai
 {
     assert(mxContainer.is());
 }
+
+ZipStorageImpl::~ZipStorageImpl() { comphelper::disposeComponent(mxContainer); }
 
 void ZipStorageImpl::initialize()
 {

@@ -342,6 +342,7 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
 
         xml::sax::InputSource aParserInput;
         comphelper::LifecycleProxy aNasty;
+        comphelper::DisposeComponentGuard cleanup(aParserInput.aInputStream);
 
         if( !bUseStorage || !xStorage.is() )
         {

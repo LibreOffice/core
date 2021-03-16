@@ -42,6 +42,7 @@
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/types.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <sal/log.hxx>
 
@@ -1066,6 +1067,7 @@ bool EmbeddedObjectContainer::InsertGraphicStream( const css::uno::Reference < c
         uno::Reference < io::XOutputStream > xOutStream;
         uno::Reference < io::XStream > xGraphicStream = xReplacements->openStreamElement( rObjectName,
                 embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+        comphelper::DisposeComponentGuard cleanup(xGraphicStream);
         xOutStream = xGraphicStream->getOutputStream();
         ::comphelper::OStorageHelper::CopyInputToOutput( rStream, xOutStream );
         xOutStream->flush();

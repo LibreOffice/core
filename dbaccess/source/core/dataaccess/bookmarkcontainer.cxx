@@ -57,6 +57,9 @@ void SAL_CALL OBookmarkContainer::release(  ) throw()
 
 OBookmarkContainer::~OBookmarkContainer()
 {
+#ifdef DBG_UTIL
+    m_refCount = -99; // so we do not trigger the ref-counting checking in OWeakObject becauuse we are being clever here
+#endif
 }
 
 // XServiceInfo

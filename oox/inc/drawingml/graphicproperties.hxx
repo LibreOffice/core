@@ -23,7 +23,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/io/XInputStream.hpp>
-
+#include <comphelper/types.hxx>
 #include <drawingml/fillproperties.hxx>
 
 namespace oox {
@@ -39,6 +39,11 @@ struct GraphicProperties
     OUString                m_sMediaPackageURL;     ///< Audio/Video URL.
     bool                    mbIsCustomShape = false;
     css::uno::Reference<css::io::XInputStream> m_xMediaStream; ///< Audio/Video input stream.
+
+    ~GraphicProperties()
+    {
+        comphelper::disposeComponent(m_xMediaStream);
+    }
 
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(

@@ -68,6 +68,14 @@ public:
         mbDisposed( false )
     {
     }
+    ~ImplTestView()
+    {
+#ifdef DBG_UTIL
+        // we are held by both shared_ptr and uno::Reference, which messes
+        // with the debugging logic in cppuhelper/
+        m_refCount = -99;
+#endif
+    }
 
     // XSlideShowView
     virtual uno::Reference< rendering::XSpriteCanvas > SAL_CALL getCanvas(  ) override

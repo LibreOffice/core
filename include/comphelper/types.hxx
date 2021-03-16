@@ -44,12 +44,27 @@ namespace comphelper
     {
         css::uno::Reference<css::lang::XComponent> xComp(_rxComp, css::uno::UNO_QUERY);
         if (xComp.is())
-        {
             xComp->dispose();
-            _rxComp = nullptr;
-        }
+        _rxComp = nullptr;
     }
 
+    template<class T>
+    class DisposeComponentGuard
+    {
+        css::uno::Reference<T> & m_rVariable;
+    public:
+        explicit DisposeComponentGuard( css::uno::Reference<T> & x )
+            : m_rVariable( x )
+        {}
+
+        ~DisposeComponentGuard()
+        {
+            css::uno::Reference<css::lang::XComponent> xComp(m_rVariable, css::uno::UNO_QUERY);
+            if (xComp)
+                xComp->dispose();
+            m_rVariable.clear();
+        }
+    };
 
     /** get a css::awt::FontDescriptor that is fully initialized with
         the XXX_DONTKNOW enum values (which isn't the case if you instantiate it

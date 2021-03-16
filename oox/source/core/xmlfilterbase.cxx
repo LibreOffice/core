@@ -59,6 +59,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
+#include <comphelper/types.hxx>
 
 #include <oox/crypto/DocumentEncryption.hxx>
 #include <tools/urlobj.hxx>
@@ -281,6 +282,7 @@ void XmlFilterBase::importDocumentProperties()
     Reference< XComponent > xModel = getModel();
     Reference< XStorage > xDocumentStorage (
             ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream( OFOPXML_STORAGE_FORMAT_STRING, xInputStream ) );
+    comphelper::DisposeComponentGuard cleanup (xDocumentStorage);
     Reference< XInterface > xTemp = xContext->getServiceManager()->createInstanceWithContext(
             "com.sun.star.document.OOXMLDocumentPropertiesImporter",
             xContext);
@@ -385,6 +387,7 @@ bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHan
             handler to create specialized input streams, e.g. VML streams that
             have to preprocess the raw input data. */
         Reference< XInputStream > xInStrm = rxHandler->openFragmentStream();
+        comphelper::DisposeComponentGuard cleanup (xInStrm);
         /*  tdf#100084 Check again the aFragmentPath route with lowercase file name
             TODO: complete handling of case-insensitive file paths */
         if ( !xInStrm.is() )
@@ -431,6 +434,7 @@ Reference<XDocument> XmlFilterBase::importFragment( const OUString& aFragmentPat
     Reference< XInputStream > xInStrm = openInputStream( aFragmentPath );
     if( !xInStrm.is() )
         return xRet;
+    comphelper::DisposeComponentGuard cleanup(xInStrm);
 
     // binary streams (fragment extension is '.bin') currently not supported
     if (aFragmentPath.endsWith(gaBinSuffix))
@@ -1112,6 +1116,7 @@ void XmlFilterBase::importCustomFragments(css::uno::Reference<css::embed::XStora
     // Save the [Content_Types].xml after parsing.
     uno::Sequence<uno::Sequence<beans::StringPair>> aContentTypeInfo;
     uno::Reference<io::XInputStream> xInputStream = openInputStream("[Content_Types].xml");
+    comphelper::DisposeComponentGuard cleanup(xInputStream);
     if (xInputStream.is())
         aContentTypeInfo = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xInputStream, getComponentContext());
 

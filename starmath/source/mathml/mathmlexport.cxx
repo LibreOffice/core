@@ -42,6 +42,7 @@
 #include <svl/stritem.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/types.hxx>
 #include <unotools/streamwrap.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -293,6 +294,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(const Reference<embed::XStorage>&
         DBG_UNHANDLED_EXCEPTION("starmath", "Can't create output stream in package");
         return false;
     }
+    comphelper::DisposeComponentGuard cleanup(xStream);
 
     uno::Reference<beans::XPropertySet> xSet(xStream, uno::UNO_QUERY);
     xSet->setPropertyValue("MediaType", Any(OUString("text/xml")));
