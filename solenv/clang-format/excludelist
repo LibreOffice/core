@@ -12320,6 +12320,7 @@ sw/qa/extras/globalfilter/globalfilter.cxx
 sw/qa/extras/htmlimport/htmlimport.cxx
 sw/qa/extras/mailmerge/mailmerge.cxx
 sw/qa/extras/odfexport/odfexport.cxx
+sw/qa/extras/odfexport/odfexport2.cxx
 sw/qa/extras/odfimport/odfimport.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport.cxx
 sw/qa/extras/ooxmlexport/ooxmlexport10.cxx
