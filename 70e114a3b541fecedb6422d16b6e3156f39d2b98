@@ -247,6 +247,24 @@
     },
     {
       "key": {
+        "uuid": "de8152d9_5ad5fae0",
+        "filename": "sw/source/core/layout/pagedesc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2021-03-16T15:21:53Z",
+      "side": 1,
+      "message": "Good question. I think the compiler should realize that the if-else above covers all possible cases. In fact it\u0027s strange that it does not shout now.",
+      "parentUuid": "f26c6ba9_d7ceaf8c",
+      "revId": "70e114a3b541fecedb6422d16b6e3156f39d2b98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9ae6507e_405a488e",
         "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
         "patchSetId": 1
