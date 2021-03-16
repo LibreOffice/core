@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "8cf85dae_bc812b8a",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T13:32:52Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/112534/5#message-7d832bcc9c56e5f6cd457ff557e5f8f6ebf3a584",
+      "parentUuid": "c4d85817_5ade4b11",
+      "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6dab4e73_a5d0bd74",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 5
@@ -136,6 +154,24 @@
       "side": 1,
       "message": "Actually the constants have been declared by me arbitrarily as Zxing accepts a range of number from 0 to 8 in their error correction values \u0026 so I gave them some random values \u0026 so please let me know where should I document this.",
       "parentUuid": "b5111395_398728e9",
+      "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0a448cc_f4712214",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-16T13:32:52Z",
+      "side": 1,
+      "message": "Ah - nice; so it would be appropriate to just have a comment up there at line 278, like \"Associate ZXing error correction levels (0-8) to our constants arbitrarily\"",
+      "parentUuid": "2b4ea39b_121389ae",
       "revId": "f49ae38d67e6eba58952e7cf5a66e734fa7be4bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
