@@ -362,7 +362,7 @@ class SFServices(object):
     vbGet, vbLet, vbMethod, vbSet = 2, 4, 1, 8  # CallByName constants
     flgDateRet = 128  # Invoked service method can return a date
     flgArrayArg = 512  # 1st argument can be a 2D array
-    flgArrayRet = 1024  # Invoked service method can return an array
+    flgArrayRet = 1024  # Invoked service method can return a 2D array
     flgUno = 256  # Invoked service method/property can return a UNO object
     # Basic class type
     moduleClass, moduleStandard = 2, 1
@@ -504,6 +504,31 @@ class SFServices(object):
 #                       SFScriptForge CLASS    (alias of ScriptForge Basic library)                                 ###
 # #####################################################################################################################
 class SFScriptForge:
+    # #########################################################################
+    # SF_Array CLASS
+    # #########################################################################
+    class SF_Array(SFServices, metaclass = _Singleton):
+        """
+            Provides a collection of methods for manipulating and transforming arrays of one dimension (vectors)
+            and arrays of two dimensions (matrices). This includes set operations, sorting,
+            importing to and exporting from text files.
+            The Python version of the service provides a single method: ImportFromCSVFile
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'ScriptForge.Array'
+        servicesynonyms = ('array', 'scriptforge.array')
+        serviceproperties = dict()
+        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
+
+        def ImportFromCSVFile(self, filename, delimiter = ',', dateformat = ''):
+            """
+                Difference with the Basic version: dates are returned in their iso format,
+                not as any of the datetime objects.
+                """
+            return self.Execute(self.vbMethod + self.flgArrayRet, 'ImportFromCSVFile', filename, delimiter, dateformat)
+        importFromCSVFile, importfromcsvfile = ImportFromCSVFile, ImportFromCSVFile
+
     # #########################################################################
     # SF_Basic CLASS
     # #########################################################################
@@ -787,7 +812,7 @@ class SFScriptForge:
         def DebugDisplay(self, *args):
             # Arguments are concatenated in a single string similar to what the Python print() function would produce
             self.DebugPrint(*args)
-            param = '\n'.join(list(map(lambda a : a.strip("'") if isinstance(a, str) else repr(a), args)))
+            param = '\n'.join(list(map(lambda a: a.strip("'") if isinstance(a, str) else repr(a), args)))
             bas = CreateScriptService('ScriptForge.Basic')
             return bas.MsgBox(param, bas.MB_OK + bas.MB_ICONINFORMATION, 'DebugDisplay')
         debugDisplay, debugdisplay = DebugDisplay, DebugDisplay
@@ -862,7 +887,7 @@ class SFScriptForge:
         fileexists, fileExists = FileExists, FileExists
 
         def Files(self, foldername, filter = ''):
-            return self.Execute(self.vbMethod + self.flgArrayRet, 'Files', foldername, filter)
+            return self.Execute(self.vbMethod, 'Files', foldername, filter)
 
         def FolderExists(self, foldername):
             return self.Execute(self.vbMethod, 'FolderExists', foldername)
@@ -917,7 +942,7 @@ class SFScriptForge:
             return self.Execute(self.vbMethod, 'PickFolder', defaultfolder, freetext)
 
         def SubFolders(self, foldername, filter = ''):
-            return self.Execute(self.vbMethod + self.flgArrayRet, 'SubFolders', foldername, filter)
+            return self.Execute(self.vbMethod, 'SubFolders', foldername, filter)
 
         def _ConvertFromUrl(self, filename):
             # Alias for same function in FileSystem Basic module
@@ -1168,6 +1193,7 @@ def CreateScriptService(service, *args):
     else:
         serv = ScriptForge.InvokeBasicService('SF_Services', SFServices.vbMethod, 'CreateScriptService', service, *args)
     return serv
+
 
 createScriptService, createscriptservice = CreateScriptService, CreateScriptService
 
