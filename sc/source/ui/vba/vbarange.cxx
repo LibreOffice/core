@@ -1177,6 +1177,13 @@ bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, const 
         formula::FormulaGrammar::AddressConvention eConv = aConv;
         // spaces are illegal ( but the user of course can enter them )
         OUString sAddress = rName.trim();
+        // tdf#134714 - ignore sheet name of the named range
+        ScRange aRange;
+        ScRefFlags nFlags = ScRefFlags::ZERO;
+        OUString aExternDocName, aStartTabName, aEndTabName;
+        sAddress = OUString(aRange.Parse_XL_Header(sAddress.getStr(), pDocSh->GetDocument(),
+                                                   aExternDocName, aStartTabName, aEndTabName,
+                                                   nFlags, false));
         // if a local name ( on the active sheet ) exists this will
         // take precedence over a global with the same name
         if ( !xNameAccess->hasByName( sAddress ) )
@@ -1202,7 +1209,7 @@ bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, const 
             aChar = ';';
         }
 
-        ScRefFlags nFlags = ScRefFlags::ZERO;
+        nFlags = ScRefFlags::ZERO;
         if ( !ScVbaRange::getCellRangesForAddress( nFlags, sAddress, pDocSh, aCellRanges, eConv, aChar ) )
             return false;
 

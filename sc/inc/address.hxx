@@ -587,7 +587,7 @@ public:
             Or NULL if a 3D sheet header could be parsed but
             bOnlyAcceptSingle==true was given.
      */
-    const sal_Unicode* Parse_XL_Header( const sal_Unicode* pString, const ScDocument& rDocument,
+    SC_DLLPUBLIC const sal_Unicode* Parse_XL_Header( const sal_Unicode* pString, const ScDocument& rDocument,
                                         OUString& rExternDocName, OUString& rStartTabName,
                                         OUString& rEndTabName, ScRefFlags& nFlags,
                                         bool bOnlyAcceptSingle,
