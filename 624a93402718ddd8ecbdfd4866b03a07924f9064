@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c242db5_b352d7c5",
+        "filename": "sw/qa/core/data/README",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-03-16T15:19:36Z",
+      "side": 1,
+      "message": "I\u0027m still a bit unclear about the fail directory. How do you know it didn\u0027t crash, but it had some other failure?  What would be the most common examples of failure situations that aren\u0027t a crash? (I would want to add that to the README as an example to help people understand.)\n\nI know that fail is tested, because I put a file that worked for \"pass\" and the unit test gave an error when it was put in \"fail\".",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 4
+      },
+      "revId": "624a93402718ddd8ecbdfd4866b03a07924f9064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5a93c09_f955f5db",
+        "filename": "sw/source/core/text/txttab.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-03-16T15:19:36Z",
+      "side": 1,
+      "message": "note to self: fix up formatting to match clang-format.",
+      "range": {
+        "startLine": 66,
+        "startChar": 6,
+        "endLine": 66,
+        "endChar": 9
+      },
+      "revId": "624a93402718ddd8ecbdfd4866b03a07924f9064",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
