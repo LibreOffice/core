@@ -34,7 +34,7 @@ void SwRefPortion::Paint( const SwTextPaintInfo &rInf ) const
 
 SwLinePortion *SwIsoRefPortion::Compress() { return this; }
 
-SwIsoRefPortion::SwIsoRefPortion() : nViewWidth(0)
+SwIsoRefPortion::SwIsoRefPortion() : m_nViewWidth(0)
 {
     SetLen(TextFrameIndex(1));
     SetWhichPor( PortionType::IsoRef );
@@ -48,12 +48,12 @@ sal_uInt16 SwIsoRefPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
     if( !Width() && rInf.OnWin() && SwViewOption::IsFieldShadings() &&
             !rInf.GetOpt().IsReadonly() && !rInf.GetOpt().IsPagePreview() )
     {
-        if( !nViewWidth )
-            pThis->nViewWidth = rInf.GetTextSize(OUString(' ')).Width();
+        if( !m_nViewWidth )
+            pThis->m_nViewWidth = rInf.GetTextSize(OUString(' ')).Width();
     }
     else
-        pThis->nViewWidth = 0;
-    return nViewWidth;
+        pThis->m_nViewWidth = 0;
+    return m_nViewWidth;
 }
 
 bool SwIsoRefPortion::Format( SwTextFormatInfo &rInf )
