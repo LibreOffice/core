@@ -4,8 +4,7 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
-from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import get_url_for_data_file
 
 #Bug 116474 - Undo/redo: The redo of adding caption to an image isn't working: no image
 

@@ -5,8 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from uitest.framework import UITestCase
-from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, type_text
+from uitest.uihelper.common import type_text
 from com.sun.star.lang import IndexOutOfBoundsException
 
 class insertQrCode(UITestCase):

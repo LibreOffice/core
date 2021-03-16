@@ -5,13 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from uitest.framework import UITestCase
-from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, type_text
-
-import time
-from uitest.debug import sleep
-from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import type_text
 
 class LibreLogoTest(UITestCase):
    LIBRELOGO_PATH = "vnd.sun.star.script:LibreLogo|LibreLogo.py$%s?language=Python&location=share"

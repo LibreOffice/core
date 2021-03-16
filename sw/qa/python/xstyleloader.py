@@ -8,11 +8,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-import os
 import pathlib
 import unittest
-import unohelper
-import uno
 
 from org.libreoffice.unotest import UnoInProcess, makeCopyFromTDOC
 from com.sun.star.beans import PropertyValue

@@ -2,7 +2,6 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-import importlib
 from uitest.uihelper.common import get_state_as_dict
 
 #https://bugs.documentfoundation.org/show_bug.cgi?id=128593

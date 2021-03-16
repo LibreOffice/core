@@ -5,8 +5,7 @@
 #
 
 from uitest.framework import UITestCase
-import time
-from uitest.uihelper.common import get_state_as_dict, type_text
+from uitest.uihelper.common import type_text
 
 class tdf79236(UITestCase):
 

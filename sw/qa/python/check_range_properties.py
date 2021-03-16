@@ -7,13 +7,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-import math
 import unittest
 from org.libreoffice.unotest import UnoInProcess
-from com.sun.star.container import NoSuchElementException
-from com.sun.star.beans import UnknownPropertyException
-from com.sun.star.lang import IndexOutOfBoundsException
-from com.sun.star.lang import IllegalArgumentException
 
 
 class CheckRangeProperties(unittest.TestCase):
