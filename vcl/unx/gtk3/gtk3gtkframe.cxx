@@ -1553,8 +1553,28 @@ void GtkSalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth
     {
         m_bDefaultSize = false;
 
-        maGeometry.nWidth = nWidth;
-        maGeometry.nHeight = nHeight;
+        // tdf#131031 Just setting maGeometry.nWidth/nHeight will delete
+        // the evtl. implicitely existing space at top for the gtk native MenuBar,
+        // will make the Window too big and the StatusBar at the bottom vanish
+        // and thus breaks the fix in tdf#130841.
+        // Unfortunately that MenuBar is not 'officially' supported to get
+        // values from it or I did not find it (Height would be of interest here),
+        // but evtl. reserved space for it is 'hidden' in the difference between
+        // size from get_size and the current setting in
+        // maGeometry.nWidth/nHeight, so it is possible (and
+        // necessary) to 'save' these values and re-apply them.
+        // Note: There is also SalFrameGeometry::n(Top|*)Decoration
+        // which is indeed used (checked in debugger) and I tried to use
+        // it, but the numerical value is not correct for this purpose
+        // (but too big by about 30%)
+        gint curr_w, curr_h;
+        gtk_window_get_size(GTK_WINDOW(m_pWindow), &curr_w, &curr_h);
+
+        // take implicitely the evtl. existing gtk native ManuBar into
+        // account. Also do for horizontal to be complete for
+        // you-never-know futire changes
+        maGeometry.nWidth = nWidth - (curr_w - maGeometry.nWidth);
+        maGeometry.nHeight = nHeight - (curr_h - maGeometry.nHeight);
 
         if( isChild( false ) )
             widget_set_size_request(nWidth, nHeight);
