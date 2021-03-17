@@ -21,6 +21,11 @@
 #include <vcl/cvtgrf.hxx>
 #include <ndole.hxx>
 #include <sal/log.hxx>
+#include <vcl/FilterConfigItem.hxx>
+#include <vcl/wmf.hxx>
+#include <comphelper/propertyvalue.hxx>
+
+using namespace com::sun::star;
 
 namespace
 {
@@ -431,8 +436,10 @@ bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf, SwOLENode& rOLENode)
     SvMemoryStream aGraphicStream;
     if (pGraphic)
     {
-        if (GraphicConverter::Export(aGraphicStream, *pGraphic, ConvertDataFormat::WMF)
-            == ERRCODE_NONE)
+        uno::Sequence<beans::PropertyValue> aFilterData
+            = { comphelper::makePropertyValue("EmbedEMF", false) };
+        FilterConfigItem aConfigItem(&aFilterData);
+        if (ConvertGraphicToWMF(*pGraphic, aGraphicStream, &aConfigItem))
         {
             pPresentationData = static_cast<const sal_uInt8*>(aGraphicStream.GetData());
             nPresentationData = aGraphicStream.TellEnd();
