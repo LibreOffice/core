@@ -76,6 +76,14 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
 	mkdir -p $(IOSRES)/share/fonts
 	cp -R $(INSTDIR)/share/fonts/truetype $(IOSRES)/share/fonts
 	cp -R $(INSTDIR)/share/gallery $(IOSRES)/share
+	mkdir -p $(IOSRES)/share/spell
+	# Install the Swiss German dictionary and use it for Liechtenstein, too
+	if test -d $(INSTDIR)/share/extensions/dict-de; then \
+		cp $(INSTDIR)/share/extensions/dict-de/de_CH_frami.aff $(IOSRES)/share/spell/de_CH.aff; \
+		cp $(INSTDIR)/share/extensions/dict-de/de_CH_frami.dic $(IOSRES)/share/spell/de_CH.dic; \
+		cp $(INSTDIR)/share/extensions/dict-de/de_CH_frami.aff $(IOSRES)/share/spell/de_LI.aff; \
+		cp $(INSTDIR)/share/extensions/dict-de/de_CH_frami.dic $(IOSRES)/share/spell/de_LI.dic; \
+	fi
 	cp -R $(INSTDIR)/share/palette $(IOSRES)/share
 	cp -R $(INSTDIR)/share/fingerprint $(IOSRES)/share
 	cp $(SRCDIR)/ios/welcome.odt $(IOSRES)

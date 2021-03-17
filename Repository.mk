@@ -410,7 +410,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	simplecanvas \
 	slideshow \
 	sot \
-	$(if $(filter-out iOS,$(OS)),spell) \
+	spell \
 	$(if $(DISABLE_GUI),,spl) \
 	storagefd \
 	$(call gb_Helper_optional,SCRIPTING,stringresource) \

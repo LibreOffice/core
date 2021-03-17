@@ -140,12 +140,13 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
                 }
             }
 #ifdef IOS
-            // iOS says it has specifically de_DE, but let's assume it is good enough for the other
-            // variants, too, for now.
+            // iOS says it has specifically de_DE. Let's assume it is good enough for German as
+            // written in Austria, Belgium, and Luxembourg, too. (Not for German in Switzerland and
+            // Liechtenstein. For those you need to bundle the myspell dictionary.)
             else if ([pLangStr isEqualToString:@"de_DE"])
             {
                 const std::vector<NSString*> aDE
-                    { @"AT", @"BE", @"CH", @"DE", @"LI", @"LU" };
+                    { @"AT", @"BE", @"DE", @"LU" };
                 for (auto c: aDE)
                 {
                     pLangStr = [@"de_" stringByAppendingString: c];
