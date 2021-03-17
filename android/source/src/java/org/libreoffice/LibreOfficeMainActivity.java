@@ -11,12 +11,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.database.Cursor;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.OpenableColumns;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
@@ -192,7 +194,13 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                 if (copyFileToTemp() && mTempFile != null) {
                     mInputFile = mTempFile;
                     Log.d(LOGTAG, "SCHEME_CONTENT: getPath(): " + getIntent().getData().getPath());
-                    toolbarTop.setTitle(mInputFile.getName());
+
+                    String displayName = extractDisplayNameFromIntent();
+                    if (displayName.isEmpty()) {
+                        // fall back to using temp file name
+                        displayName = mInputFile.getName();
+                    }
+                    toolbarTop.setTitle(displayName);
                 } else {
                     // TODO: can't open the file
                     Log.e(LOGTAG, "couldn't create temporary file from " + getIntent().getData());
@@ -488,6 +496,28 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                 .setNeutralButton(R.string.no_save_document, dialogClickListener)
                 .show();
 
+    }
+
+    /**
+     * Tries to retrieve display name for data in Intent,
+     * which should be the file name.
+     */
+    private String extractDisplayNameFromIntent() {
+        String displayName = "";
+        // try to retrieve original file name
+        Cursor cursor = null;
+        try {
+            String[] columns = {OpenableColumns.DISPLAY_NAME};
+            cursor = getContentResolver().query(getIntent().getData(), columns, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return displayName;
     }
 
     public List<DocumentPartView> getDocumentPartView() {
