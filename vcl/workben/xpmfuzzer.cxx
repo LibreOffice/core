@@ -8,7 +8,7 @@
  */
 
 #include <tools/stream.hxx>
-#include <../source/filter/ixpm/xpmread.hxx>
+#include <filter/XpmReader.hxx>
 #include "commonfuzzer.hxx"
 
 #include <config_features.h>

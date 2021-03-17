@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <filter/XpmReader.hxx>
+
 #include <vcl/graph.hxx>
 #include <tools/stream.hxx>
 
@@ -24,7 +26,6 @@
 #include <graphic/GraphicReader.hxx>
 
 #include "rgbtable.hxx"
-#include "xpmread.hxx"
 
 #include <cstring>
 #include <array>
