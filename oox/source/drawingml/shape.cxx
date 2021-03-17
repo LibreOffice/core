@@ -852,7 +852,6 @@ Reference< XShape > const & Shape::createAndInsert(
         uno::Sequence< awt::Point > aPointSequence( nNumPoints );
         awt::Point* pPoints = aPointSequence.getArray();
         uno::Reference<lang::XServiceInfo> xModelInfo(rFilterBase.getModel(), uno::UNO_QUERY);
-        bool bIsWriter = xModelInfo->supportsService("com.sun.star.text.TextDocument");
         for( i = 0; i < nNumPoints; ++i )
         {
             const basegfx::B2DPoint aPoint( aPoly.getB2DPoint( i ) );
@@ -860,13 +859,7 @@ Reference< XShape > const & Shape::createAndInsert(
             // tdf#106792 Not needed anymore due to the change in SdrPathObj::NbcResize:
             // tdf#96674: Guard against zero width or height.
 
-            if (bIsWriter && bNoTranslation)
-                // Writer's draw page is in twips, and these points get passed
-                // to core without any unit conversion when Writer
-                // postprocesses only the group shape itself.
-                pPoints[i] = awt::Point(static_cast<sal_Int32>(convertMm100ToTwip(aPoint.getX())), static_cast<sal_Int32>(convertMm100ToTwip(aPoint.getY())));
-            else
-                pPoints[i] = awt::Point(static_cast<sal_Int32>(aPoint.getX()), static_cast<sal_Int32>(aPoint.getY()));
+            pPoints[i] = awt::Point(static_cast<sal_Int32>(aPoint.getX()), static_cast<sal_Int32>(aPoint.getY()));
         }
         uno::Sequence< uno::Sequence< awt::Point > > aPolyPolySequence( 1 );
         aPolyPolySequence.getArray()[ 0 ] = aPointSequence;
