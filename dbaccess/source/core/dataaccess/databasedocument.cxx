@@ -2015,7 +2015,7 @@ Reference< provider::XScriptProvider > SAL_CALL ODatabaseDocument::getScriptProv
 Reference< XNameReplace > SAL_CALL ODatabaseDocument::getEvents(  )
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodUsedDuringInit );
-    return m_pEventContainer.get();
+    return m_pEventContainer;
 }
 
 Reference< XInterface > ODatabaseDocument::getThis() const

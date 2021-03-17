@@ -224,9 +224,7 @@ bool containsOWeakObjectSubclass(const clang::Type* pType0) {
     if (pRecordDecl) {
         // because dbaccess just has to be special...
         loplugin::DeclCheck dc(pRecordDecl);
-        if (dc.Class("DocumentEvents").Namespace("dbaccess")
-                .GlobalNamespace() ||
-            dc.Class("OBookmarkContainer").Namespace("dbaccess")
+        if (dc.Class("OBookmarkContainer").Namespace("dbaccess")
                 .GlobalNamespace())
             return false;
         // TODO not sure about these ones, just avoiding dbaccess in general for now
