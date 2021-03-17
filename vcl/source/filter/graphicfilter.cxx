@@ -45,7 +45,7 @@
 #include <vcl/pdfread.hxx>
 #include "jpeg/jpeg.hxx"
 #include "ixbm/xbmread.hxx"
-#include "ixpm/xpmread.hxx"
+#include <filter/XpmReader.hxx>
 #include <filter/TiffReader.hxx>
 #include <filter/TiffWriter.hxx>
 #include <filter/TgaReader.hxx>
