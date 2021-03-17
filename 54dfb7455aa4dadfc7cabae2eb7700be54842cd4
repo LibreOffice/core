@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "13bdaabc_72eeb7e4",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-03-17T21:24:33Z",
+      "side": 1,
+      "message": "So the thing is output does not only depend on encoding but also the string.\nConsider the encoding \"UTF-8\" where ASCII characters like A,B,C take 1 byte and special characters take 2-4 bytes which is not fixed and it depends on which special character we are talking about as in our example string \"ÉÏº£ÊÐABC\" ,characters other than ABC take 2 bytes/character(that is why we are getting total length \u003d 6*2+3 \u003d 15).Now this value \"2\" is not fixed and can vary also if we change the special character.\n\nFollowing info has been taken from internet and gives us idea how bytes/character varies for different characters in \"UTF-8\".\n\n- The first 128 Unicode code points, U+0000 to U+007F, used for the C0 Controls and Basic Latin characters and which correspond one-to-one to their ASCII-code equivalents, are encoded using \"1 bytes\" in UTF-8.\n\n- The next 1,920 characters, U+0080 to U+07FF (encompassing the remainder of almost all Latin-script alphabets, and also Greek, Cyrillic, Coptic, Armenian, Hebrew, Arabic, Syriac, Tāna and N\u0027Ko), require \"2 bytes\" to encode in UTF-8.\n\n- For U+0800 to U+FFFF, i.e. the remainder of the characters in the Basic Multilingual Plane (BMP, plane 0, U+0000 to U+FFFF), which encompasses the rest of the characters of most of the world\u0027s living languages, UTF-8 needs 3 bytes to encode a character.\n\n- Code points U+010000 to U+10FFFF, which represent characters in the supplementary planes (planes 1-16), require 4 bytes in UTF-8.\n\n\nSo i don\u0027t think there is any point of making various cases of encoding for string like \"ÉÏº£ÊÐABC\".\nI mean tomorrow one can change any character of this string and use a special character which occupies 3 bytes(then length of output will again change) \nAnd our motive is not to make cases for various encoding but to check if it is returning correct output(and correct length of string) which vbFromUnicode is actually doing.\n\nI suggest to use simple ASCII characters in the testing string because in almost every encoding ASCII characters occupy 1 byte per character.\n\nWhats your comment on this ?\nThanks.",
+      "parentUuid": "dbe75de2_aa5acf26",
+      "revId": "54dfb7455aa4dadfc7cabae2eb7700be54842cd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7e9e1484_914809f0",
         "filename": "basic/source/runtime/methods.cxx",
         "patchSetId": 1
