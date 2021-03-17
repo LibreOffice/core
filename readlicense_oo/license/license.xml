@@ -1575,23 +1575,6 @@
         changed. i.e. this code cannot simply be copied and put under another distribution license [including the GNU
         Public License.]</p>
     </div>
-    <div class="OWNCLOUD_ANDROID_LIB">
-        <h2>ownCloud Android Library</h2>
-        <p>The following software may be included in this product: ownCloud Android Library. ownCloud Android Library
-        is available under MIT license.</p>
-        <p>Copyright (C) 2019 ownCloud GmbH. Copyright (C) 2012 Bartek Przybylski</p>
-        <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
-        documentation files (the "Software"), to deal in the Software without restriction, including without limitation
-        the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
-        and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
-        <p>The above copyright notice and this permission notice shall be included in all copies or substantial
-        portions of the Software.</p>
-        <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
-        LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
-        SHALL THE AUTHORS OR COPYRIGHT HOLDERSBE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-        OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-        DEALINGS IN THE SOFTWARE.</p>
-    </div>
     <div class="PDFIUM">
         <h2>PDFium</h2>
         <p>The following software may be included in this product: PDFium. Use of any of this software is governed by

@@ -751,9 +751,6 @@ if test -n "$with_android_ndk"; then
         CXX="$ANDROID_COMPILER_BIN/clang++ $ANDROIDCXXFLAGS"
         CXX_BASE="clang++"
     fi
-
-    # remember to download the ownCloud Android library later
-    BUILD_TYPE="$BUILD_TYPE OWNCLOUD_ANDROID_LIB"
 fi
 AC_SUBST(ANDROID_NDK_HOME)
 AC_SUBST(ANDROID_APP_ABI)
