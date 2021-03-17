@@ -1,0 +1,169 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c14ec3f9_ef6bc8d3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T08:55:02Z",
+      "side": 1,
+      "message": "Please write in imperative; QR code has both first characters uppercase; \"in LO\" is redundant:\n\n  tdf#139778 Switch to ZXing for generating QR code",
+      "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a3966b3_f7850390",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T08:55:02Z",
+      "side": 1,
+      "message": "Maybe it\u0027s better to have\n\n    -I$(call gb_UnpackedTarball_get_dir,zxing/core/src)\\\n\nat https://gerrit.libreoffice.org/c/core/+/112053/5/RepositoryExternal.mk#4307,\nand then use\n\n  #include \u003cBarcodeFormat.h\u003e\n\nhere? That would hopefully also allow us to have\n\n    $(if $(SYSTEM_ZXING),-IZXing,-I$(call gb_UnpackedTarball_get_dir,zxing/core/src))\\\n\nto automatically handle both system library and our unpacked tarball? (or some clever export from configure with the header location)",
+      "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10949033_13e1882c",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T08:55:02Z",
+      "side": 1,
+      "message": "You might want to add a comment above this function, attributing it to the Stack Overflow answer (so giving due credit).",
+      "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a847483e_8ac2d680",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T08:55:02Z",
+      "side": 1,
+      "message": "This may be const; my advise is always  use const qualifier wherever you don\u0027t change things after initialization.",
+      "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a6b9bcd_d9d00453",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T08:55:02Z",
+      "side": 1,
+      "message": "This \u0027append\u0027 should end after \u0027d\u003d\\\"\"\u0027 (by the way, why two spaces before the \u0027d\u0027?). The loop below will use own nested calls to \u0027append\u0027, and the last addition will also use own append.\n\nWe may remove the \u0027\u003cstyle\u003e...\u003c/style\u003e\u0027 part: it\u0027s not needed, since the default value for \u0027fill\u0027 in paths is black.",
+      "range": {
+        "startLine": 272,
+        "startChar": 4,
+        "endLine": 279,
+        "endChar": 43
+      },
+      "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9fe6dc8_c13b7d8c",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T08:55:02Z",
+      "side": 1,
+      "message": "This space before \u0027M\u0027 is redundant.",
+      "range": {
+        "startLine": 285,
+        "startChar": 26,
+        "endLine": 285,
+        "endChar": 27
+      },
+      "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19c31ee9_f70f4728",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T08:55:02Z",
+      "side": 1,
+      "message": "Please have a space between // and the rest.",
+      "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3ca197b_075365e0",
+        "filename": "cui/source/inc/QrCodeGenDialog.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T08:55:02Z",
+      "side": 1,
+      "message": "Here you need to remove the include, and instead have a forward declaration of ZXing::BitMatrix",
+      "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aea52fba_5d22da87",
+        "filename": "cui/source/inc/QrCodeGenDialog.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T08:55:02Z",
+      "side": 1,
+      "message": "Ypu need to pass the matrix by const reference, not by value",
+      "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
