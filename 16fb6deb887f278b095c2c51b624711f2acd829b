@@ -16,6 +16,24 @@
       "revId": "16fb6deb887f278b095c2c51b624711f2acd829b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17d5049a_cf4dffd2",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-17T14:40:11Z",
+      "side": 1,
+      "message": "Did you mean -Wunused-function/shadow/ here ?",
+      "parentUuid": "c36377ad_8c08c944",
+      "revId": "16fb6deb887f278b095c2c51b624711f2acd829b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
