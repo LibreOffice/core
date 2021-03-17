@@ -100,9 +100,7 @@ void SwLinePortion::PrePaint( const SwTextPaintInfo& rInf,
                   1800_deg10 :
                   rInf.GetFont()->GetOrientation( rInf.GetTextFrame()->IsVertical() );
 
-    // pLast == this *only* for the 1st portion in the line so nLastWidth is 0;
-    // allow this too, will paint outside the frame but might look better...
-    if (nLastWidth > nHalfView || pLast == this)
+    if (nLastWidth > nHalfView)
     {
         switch (nDir.get())
         {
