@@ -117,7 +117,7 @@ namespace sw::mark {
 
             typedef std::vector<sw::mark::MarkBase*> container_t;
 
-            virtual void restoreAnnotationMarks() override;
+            virtual void restoreAnnotationMarks(bool bDelete = true) override;
 
         private:
 

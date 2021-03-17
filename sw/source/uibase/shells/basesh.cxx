@@ -1065,6 +1065,12 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             if ( !bAllInText )
                 aViewOption.SetShowChangesInMargin2( FN_SET_TRACKED_INSERTIONS_IN_MARGIN == nSlot );
             rSh.ApplyViewOptions( aViewOption );
+
+            // tdf#140982 restore annotation ranges stored in temporary bookmarks
+            // (only remove temporary bookmarks during file saving to avoid possible
+            // conflict with lazy deletion of the bookmarks of the moved tracked deletions)
+            if ( bAllInText || FN_SET_TRACKED_INSERTIONS_IN_MARGIN == nSlot )
+                rSh.GetDoc()->getIDocumentMarkAccess()->restoreAnnotationMarks(false);
         }
         break;
         case SID_CONTOUR_DLG:
