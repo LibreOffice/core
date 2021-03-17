@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "51360aad_5cb5360e",
+        "filename": "external/zxing/StaticLibrary_zxing.mk",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-17T11:05:05Z",
+      "side": 1,
+      "message": "Just a little doubt that I added zxing/core/src/ in RepositoryExternal.mk \u0026 should I modify this zxing/core/src to zxing/core/src/ too?",
+      "revId": "c0d9ed9b4d40ab0a025f604f4ee11cf8c4b033c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
