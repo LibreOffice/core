@@ -6,6 +6,7 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -56,9 +57,7 @@ class tableProperties(UITestCase):
         belowmf.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
         belowmf.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
         belowmf.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
-        props = {"TEXT": "Left-to-right (LTR)"}
-        actionProps = mkPropertyValues(props)
-        textdirection.executeAction("SELECT", actionProps)
+        select_by_text(textdirection, "Left-to-right (LTR)")
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
         #verify
@@ -103,13 +102,9 @@ class tableProperties(UITestCase):
         headline = xDialog.getChild("headline")
         headline.executeAction("CLICK", tuple())
         textdirection = xDialog.getChild("textorientation")
-        props = {"TEXT": "Vertical (bottom to top)"}
-        actionProps = mkPropertyValues(props)
-        textdirection.executeAction("SELECT", actionProps)
+        select_by_text(textdirection, "Vertical (bottom to top)")
         vertorient = xDialog.getChild("vertorient")
-        props2 = {"TEXT": "Bottom"}
-        actionProps2 = mkPropertyValues(props2)
-        vertorient.executeAction("SELECT", actionProps2)
+        select_by_text(vertorient, "Bottom")
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
         #verify

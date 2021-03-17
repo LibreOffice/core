@@ -7,6 +7,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -27,17 +28,11 @@ class consolidate(UITestCase):
         xbycol = xDialog.getChild("bycol")
         xeddestarea = xDialog.getChild("eddestarea")
 
-        props = {"TEXT": "Sum"}
-        actionProps = mkPropertyValues(props)
-        xfunc.executeAction("SELECT", actionProps)
+        select_by_text(xfunc, "Sum")
 
-        propsA = {"TEXT": "range1"}
-        actionPropsA = mkPropertyValues(propsA)
-        xlbdataarea.executeAction("SELECT", actionPropsA)
+        select_by_text(xlbdataarea, "range1")
         xadd.executeAction("CLICK", tuple())
-        propsB = {"TEXT": "range2"}
-        actionPropsB = mkPropertyValues(propsB)
-        xlbdataarea.executeAction("SELECT", actionPropsB)
+        select_by_text(xlbdataarea, "range2")
         xadd.executeAction("CLICK", tuple())
         propsC = {"TEXT": "range3"}
         actionPropsC = mkPropertyValues(propsC)

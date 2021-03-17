@@ -11,6 +11,7 @@ from libreoffice.calc.document import get_column
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
 #Bug 118638 - subtotal option loses doesn't contain existing format for column
@@ -30,9 +31,7 @@ class Subtotals(UITestCase):
         xTabs = xDialog.getChild("tabcontrol")
         select_pos(xTabs, "0")
         xGroupBy = xDialog.getChild("group_by")
-        props = {"TEXT": "Store Name"}
-        actionProps = mkPropertyValues(props)
-        xGroupBy.executeAction("SELECT", actionProps)
+        select_by_text(xGroupBy, "Store Name")
         xCheckListMenu = xDialog.getChild("grid1")
         xTreeList = xCheckListMenu.getChild("columns")
         xEntry = xTreeList.getChild("1")

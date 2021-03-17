@@ -6,6 +6,7 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 from uitest.uihelper.common import change_measurement_unit
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
@@ -401,7 +402,7 @@ class tdf93506(UITestCase):
     yVarName = xDialog.getChild("entry_Yname")
 
     movingAverage.executeAction("CLICK", tuple())   #set polynomial
-    movingAverageType.executeAction("SELECT", mkPropertyValues({"TEXT": "Averaged Abscissa"}))
+    select_by_text(movingAverageType, "Averaged Abscissa")
     period.executeAction("UP", tuple())
 
     #Click on tab "Line".

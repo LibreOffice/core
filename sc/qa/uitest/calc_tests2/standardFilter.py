@@ -7,6 +7,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -29,16 +30,10 @@ class standardFilter(UITestCase):
         xfield2 = xDialog.getChild("field2")
         xval2 = xDialog.getChild("val2")
 
-        props = {"TEXT": "a"}
-        actionProps = mkPropertyValues(props)
-        xfield1.executeAction("SELECT", actionProps)
+        select_by_text(xfield1, "a")
         xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
-        propsA = {"TEXT": "OR"}
-        actionPropsA = mkPropertyValues(propsA)
-        xconnect2.executeAction("SELECT", actionPropsA)
-        props2 = {"TEXT": "b"}
-        actionProps2 = mkPropertyValues(props2)
-        xfield2.executeAction("SELECT", actionProps2)
+        select_by_text(xconnect2, "OR")
+        select_by_text(xfield2, "b")
         xval2.executeAction("TYPE", mkPropertyValues({"TEXT":"3"}))
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
@@ -86,16 +81,10 @@ class standardFilter(UITestCase):
         xval2 = xDialog.getChild("val2")
         xcopyresult = xDialog.getChild("copyresult")
         xedcopyarea = xDialog.getChild("edcopyarea")
-        props = {"TEXT": "a"}
-        actionProps = mkPropertyValues(props)
-        xfield1.executeAction("SELECT", actionProps)
+        select_by_text(xfield1, "a")
         xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
-        propsA = {"TEXT": "OR"}
-        actionPropsA = mkPropertyValues(propsA)
-        xconnect2.executeAction("SELECT", actionPropsA)
-        props2 = {"TEXT": "b"}
-        actionProps2 = mkPropertyValues(props2)
-        xfield2.executeAction("SELECT", actionProps2)
+        select_by_text(xconnect2, "OR")
+        select_by_text(xfield2, "b")
         xval2.executeAction("TYPE", mkPropertyValues({"TEXT":"3"}))
         xcopyresult.executeAction("CLICK", tuple())
         xedcopyarea.executeAction("TYPE", mkPropertyValues({"TEXT":"F1"}))
@@ -129,16 +118,10 @@ class standardFilter(UITestCase):
         xval2 = xDialog.getChild("val2")
         xcopyresult = xDialog.getChild("copyresult")
         xedcopyarea = xDialog.getChild("edcopyarea")
-        props = {"TEXT": "a"}
-        actionProps = mkPropertyValues(props)
-        xfield1.executeAction("SELECT", actionProps)
+        select_by_text(xfield1, "a")
         xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
-        propsA = {"TEXT": "OR"}
-        actionPropsA = mkPropertyValues(propsA)
-        xconnect2.executeAction("SELECT", actionPropsA)
-        props2 = {"TEXT": "b"}
-        actionProps2 = mkPropertyValues(props2)
-        xfield2.executeAction("SELECT", actionProps2)
+        select_by_text(xconnect2, "OR")
+        select_by_text(xfield2, "b")
         xval2.executeAction("TYPE", mkPropertyValues({"TEXT":"3"}))
         xcopyresult.executeAction("CLICK", tuple())
         xedcopyarea.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet2.$F$1"}))
@@ -177,9 +160,7 @@ class standardFilter(UITestCase):
         xval1 = xDialog.getChild("val1")
         xcase = xDialog.getChild("case")
 
-        props = {"TEXT": "first"}
-        actionProps = mkPropertyValues(props)
-        xfield1.executeAction("SELECT", actionProps)
+        select_by_text(xfield1, "first")
         xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"a1"}))
         xcase.executeAction("CLICK", tuple())
         xOKBtn = xDialog.getChild("ok")
@@ -231,9 +212,7 @@ class standardFilter(UITestCase):
         xval1 = xDialog.getChild("val1")
         xregexp = xDialog.getChild("regexp")
 
-        props = {"TEXT": "first"}
-        actionProps = mkPropertyValues(props)
-        xfield1.executeAction("SELECT", actionProps)
+        select_by_text(xfield1, "first")
         xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"a*"}))
         xregexp.executeAction("CLICK", tuple())
         xOKBtn = xDialog.getChild("ok")
@@ -287,9 +266,7 @@ class standardFilter(UITestCase):
         xval1 = xDialog.getChild("val1")
         xregexp = xDialog.getChild("regexp")
 
-        props = {"TEXT": "first"}
-        actionProps = mkPropertyValues(props)
-        xfield1.executeAction("SELECT", actionProps)
+        select_by_text(xfield1, "first")
         xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"a*"}))
         xregexp.executeAction("CLICK", tuple())
         xOKBtn = xDialog.getChild("ok")
@@ -355,12 +332,8 @@ class standardFilter(UITestCase):
         xval1 = xDialog.getChild("val1")
         xcond1 = xDialog.getChild("cond1")
 
-        props = {"TEXT": "A"}
-        actionProps = mkPropertyValues(props)
-        xfield1.executeAction("SELECT", actionProps)
-        props2 = {"TEXT": "Contains"}
-        actionProps2 = mkPropertyValues(props2)
-        xcond1.executeAction("SELECT", actionProps2)
+        select_by_text(xfield1, "A")
+        select_by_text(xcond1, "Contains")
         xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"cio"}))
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
@@ -424,12 +397,8 @@ class standardFilter(UITestCase):
         xval1 = xDialog.getChild("val1")
         xcond1 = xDialog.getChild("cond1")
 
-        props = {"TEXT": "A"}
-        actionProps = mkPropertyValues(props)
-        xfield1.executeAction("SELECT", actionProps)
-        props2 = {"TEXT": "Does not contain"}
-        actionProps2 = mkPropertyValues(props2)
-        xcond1.executeAction("SELECT", actionProps2)
+        select_by_text(xfield1, "A")
+        select_by_text(xcond1, "Does not contain")
         xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"cio"}))
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
@@ -494,12 +463,8 @@ class standardFilter(UITestCase):
         xval1 = xDialog.getChild("val1")
         xcond1 = xDialog.getChild("cond1")
 
-        props = {"TEXT": "A"}
-        actionProps = mkPropertyValues(props)
-        xfield1.executeAction("SELECT", actionProps)
-        props2 = {"TEXT": "Begins with"}
-        actionProps2 = mkPropertyValues(props2)
-        xcond1.executeAction("SELECT", actionProps2)
+        select_by_text(xfield1, "A")
+        select_by_text(xcond1, "Begins with")
         xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"so"}))
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
@@ -564,12 +529,8 @@ class standardFilter(UITestCase):
         xval1 = xDialog.getChild("val1")
         xcond1 = xDialog.getChild("cond1")
 
-        props = {"TEXT": "A"}
-        actionProps = mkPropertyValues(props)
-        xfield1.executeAction("SELECT", actionProps)
-        props2 = {"TEXT": "Does not begin with"}
-        actionProps2 = mkPropertyValues(props2)
-        xcond1.executeAction("SELECT", actionProps2)
+        select_by_text(xfield1, "A")
+        select_by_text(xcond1, "Does not begin with")
         xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"so"}))
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
@@ -634,12 +595,8 @@ class standardFilter(UITestCase):
         xval1 = xDialog.getChild("val1")
         xcond1 = xDialog.getChild("cond1")
 
-        props = {"TEXT": "A"}
-        actionProps = mkPropertyValues(props)
-        xfield1.executeAction("SELECT", actionProps)
-        props2 = {"TEXT": "Ends with"}
-        actionProps2 = mkPropertyValues(props2)
-        xcond1.executeAction("SELECT", actionProps2)
+        select_by_text(xfield1, "A")
+        select_by_text(xcond1, "Ends with")
         xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"s"}))
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
@@ -704,12 +661,8 @@ class standardFilter(UITestCase):
         xval1 = xDialog.getChild("val1")
         xcond1 = xDialog.getChild("cond1")
 
-        props = {"TEXT": "A"}
-        actionProps = mkPropertyValues(props)
-        xfield1.executeAction("SELECT", actionProps)
-        props2 = {"TEXT": "Does not end with"}
-        actionProps2 = mkPropertyValues(props2)
-        xcond1.executeAction("SELECT", actionProps2)
+        select_by_text(xfield1, "A")
+        select_by_text(xcond1, "Does not end with")
         xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"s"}))
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)

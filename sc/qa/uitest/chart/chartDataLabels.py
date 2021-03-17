@@ -6,6 +6,7 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 from uitest.uihelper.common import change_measurement_unit
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
@@ -59,17 +60,11 @@ class chartDataLabels(UITestCase):
     category.executeAction("CLICK", tuple())
     legend.executeAction("CLICK", tuple())
     wrapText.executeAction("CLICK", tuple())
-    props = {"TEXT": "Comma"}
-    actionProps = mkPropertyValues(props)
-    separator.executeAction("SELECT", actionProps)
+    select_by_text(separator, "Comma")
 
-    props2 = {"TEXT": "Below"}
-    actionProps2 = mkPropertyValues(props2)
-    placement.executeAction("SELECT", actionProps2)
+    select_by_text(placement, "Below")
     degrees.executeAction("UP", tuple())
-    props3 = {"TEXT": "Right-to-left"}
-    actionProps3 = mkPropertyValues(props3)
-    textDirection.executeAction("SELECT", actionProps3)
+    select_by_text(textDirection, "Right-to-left")
 
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)

@@ -12,6 +12,7 @@ import time
 from uitest.debug import sleep
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 from uitest.uihelper.common import change_measurement_unit
 
 class formatParagraph(UITestCase):
@@ -43,9 +44,7 @@ class formatParagraph(UITestCase):
         xAbovePar.executeAction("UP", tuple())
         xBelowPar.executeAction("UP", tuple())
         xChkspace.executeAction("CLICK", tuple())
-        props = {"TEXT": "Double"}
-        actionProps = mkPropertyValues(props)
-        xLineSpacing.executeAction("SELECT", actionProps)
+        select_by_text(xLineSpacing, "Double")
         xActivate.executeAction("CLICK", tuple())
 
         xOK = xDialog.getChild("ok")
@@ -97,17 +96,11 @@ class formatParagraph(UITestCase):
         xLastLine = xDialog.getChild("comboLB_LASTLINE")
         xExpandChk = xDialog.getChild("checkCB_EXPAND")
 
-        props = {"TEXT": "Left-to-right (LTR)"}
-        actionProps = mkPropertyValues(props)
-        xTextDirection.executeAction("SELECT", actionProps)
-        props2 = {"TEXT": "Top"}
-        actionProps2 = mkPropertyValues(props2)
-        xAlignment.executeAction("SELECT", actionProps2)
+        select_by_text(xTextDirection, "Left-to-right (LTR)")
+        select_by_text(xAlignment, "Top")
         xSnapToText.executeAction("CLICK", tuple())
         xJustified.executeAction("CLICK", tuple())
-        props3 = {"TEXT": "Justified"}
-        actionProps3 = mkPropertyValues(props3)
-        xLastLine.executeAction("SELECT", actionProps3)
+        select_by_text(xLastLine, "Justified")
         xExpandChk.executeAction("CLICK", tuple())
 
         xOK = xDialog.getChild("ok")
@@ -166,12 +159,8 @@ class formatParagraph(UITestCase):
         xBegin.executeAction("UP", tuple())
         xMax.executeAction("UP", tuple())
         xIns.executeAction("CLICK", tuple())
-        props = {"TEXT": "Column"}
-        actionProps = mkPropertyValues(props)
-        xType.executeAction("SELECT", actionProps)
-        props2 = {"TEXT": "After"}
-        actionProps2 = mkPropertyValues(props2)
-        xPosition.executeAction("SELECT", actionProps2)
+        select_by_text(xType, "Column")
+        select_by_text(xPosition, "After")
         xspinOrphan.executeAction("UP", tuple())
         xspinWidow.executeAction("UP", tuple())
         xcheckWidow.executeAction("CLICK", tuple())
@@ -274,12 +263,8 @@ class formatParagraph(UITestCase):
         xPara = xDialog.getChild("checkCB_RESTART_PARACOUNT")
         xParaSpin = xDialog.getChild("spinNF_RESTART_PARA")
 
-        props = {"TEXT": "Level 1"}
-        actionProps = mkPropertyValues(props)
-        xOutline.executeAction("SELECT", actionProps)
-        props2 = {"TEXT": "Bullet •"}
-        actionProps2 = mkPropertyValues(props2)
-        xNumbering.executeAction("SELECT", actionProps2)
+        select_by_text(xOutline, "Level 1")
+        select_by_text(xNumbering, "Bullet •")
         xPara.executeAction("CLICK", tuple())
         xParaSpin.executeAction("UP", tuple())
 
@@ -467,9 +452,7 @@ class formatParagraph(UITestCase):
         xLines.executeAction("UP", tuple())
         xSpaceToText.executeAction("UP", tuple())
         xText.executeAction("TYPE", mkPropertyValues({"TEXT":"A"}))
-        props = {"TEXT": "Definition"}
-        actionProps = mkPropertyValues(props)
-        xCharStyle.executeAction("SELECT", actionProps)
+        select_by_text(xCharStyle, "Definition")
         xOK = xDialog.getChild("ok")
         xOK.executeAction("CLICK", tuple())
 
@@ -624,9 +607,7 @@ class formatParagraph(UITestCase):
         xEnd = xDialog.getChild("MTR_TRGR_END_VALUE")
 
         xGradient.executeAction("CLICK", tuple())
-        props = {"TEXT": "Axial"}
-        actionProps = mkPropertyValues(props)
-        xType.executeAction("SELECT", actionProps)
+        select_by_text(xType, "Axial")
         xAngle.executeAction("UP", tuple())
         xBorder.executeAction("UP", tuple())
         xStart.executeAction("UP", tuple())

@@ -10,6 +10,7 @@ from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.calc import enter_text_to_cell
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 
 class tdf126248(UITestCase):
 
@@ -43,7 +44,7 @@ class tdf126248(UITestCase):
         self.assertEqual("true", get_state_as_dict(asianlanguage)['Selected'])
 
         localeSetting = xDialog.getChild("localesetting")
-        localeSetting.executeAction("SELECT", mkPropertyValues({"TEXT": language}))
+        select_by_text(localeSetting, language)
 
         self.assertEqual(language, get_state_as_dict(localeSetting)['SelectEntryText'])
 

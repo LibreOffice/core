@@ -7,6 +7,7 @@
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict, type_text
+from uitest.uihelper.common import select_by_text
 import time
 from uitest.debug import sleep
 #Tools -Sort dialog + tdf81292
@@ -58,9 +59,7 @@ class WriterSort(UITestCase):
         xcharacter = xDialog.getChild("character")
         xseparator = xDialog.getChild("separator")
         xDown.executeAction("CLICK", tuple())
-        props = {"TEXT": "Numerical"}
-        actionProps = mkPropertyValues(props)
-        xtypelb1.executeAction("SELECT", actionProps)
+        select_by_text(xtypelb1, "Numerical")
         xcharacter.executeAction("CLICK", tuple())
         xseparator.executeAction("TYPE", mkPropertyValues({"TEXT":";"}))
         xOK = xDialog.getChild("ok")

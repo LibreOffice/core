@@ -10,6 +10,7 @@ from uitest.debug import sleep
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict, type_text
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 from uitest.uihelper.common import change_measurement_unit
 
 #Outline Numbering is now Chapter Numbering
@@ -38,27 +39,17 @@ class WriterChapterNumbering(UITestCase):
         xatmf = xDialog.getChild("atmf")
         xindentatmf = xDialog.getChild("indentatmf")
         select_pos(xtab, "0") #first tab
-        props = {"TEXT": "Heading"}
-        actionProps = mkPropertyValues(props)
-        xstyle.executeAction("SELECT", actionProps)
-        props2 = {"TEXT": "1, 2, 3, ..."}
-        actionProps2 = mkPropertyValues(props2)
-        xnumbering.executeAction("SELECT", actionProps2)
-        props3 = {"TEXT": "Bullets"}
-        actionProps3 = mkPropertyValues(props3)
-        xcharstyle.executeAction("SELECT", actionProps3)
+        select_by_text(xstyle, "Heading")
+        select_by_text(xnumbering, "1, 2, 3, ...")
+        select_by_text(xcharstyle, "Bullets")
         xprefix.executeAction("TYPE", mkPropertyValues({"TEXT":"A"}))
         xsuffix.executeAction("TYPE", mkPropertyValues({"TEXT":"B"}))
         xstartat.executeAction("UP", tuple())
 
         select_pos(xtab, "1") #second tab Position
         xalignedatmf.executeAction("UP", tuple())
-        props4 = {"TEXT": "Centered"}
-        actionProps4 = mkPropertyValues(props4)
-        xnum2alignlb.executeAction("SELECT", actionProps4)
-        props5 = {"TEXT": "Tab stop"}
-        actionProps5 = mkPropertyValues(props5)
-        xnumfollowedbylb.executeAction("SELECT", actionProps5)
+        select_by_text(xnum2alignlb, "Centered")
+        select_by_text(xnumfollowedbylb, "Tab stop")
         xatmf.executeAction("UP", tuple())
         xindentatmf.executeAction("UP", tuple())
 
