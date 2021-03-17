@@ -89,6 +89,7 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <prewin.h>
 #include <shobjidl.h>
+#include <systools/win32/comtools.hxx>
 #include <postwin.h>
 #endif
 using namespace ::com::sun::star::uno;
@@ -367,20 +368,22 @@ IMPL_LINK_NOARG( OfaMiscTabPage, TwoFigureHdl, weld::SpinButton&, void )
 IMPL_STATIC_LINK_NOARG(OfaMiscTabPage, FileAssocClick, weld::Button&, void)
 {
     const bool bUninit = SUCCEEDED(CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED));
-    IApplicationAssociationRegistrationUI* pIf = nullptr;
-    HRESULT res = CoCreateInstance(CLSID_ApplicationAssociationRegistrationUI, nullptr,
-                                   CLSCTX_INPROC_SERVER, IID_IApplicationAssociationRegistrationUI,
-                                   reinterpret_cast<LPVOID*>(&pIf));
-
-    if (SUCCEEDED(res) && pIf)
+    try
     {
+        auto pIf
+            = sal::systools::COMReference<IApplicationAssociationRegistrationUI>().CoCreateInstance(
+                CLSID_ApplicationAssociationRegistrationUI, nullptr, CLSCTX_INPROC_SERVER);
+
         // LaunchAdvancedAssociationUI only works for applications registered under
         // Software\RegisteredApplications. See scp2/source/ooo/registryitem_ooo.scp
         const OUString expanded = Translate::ExpandVariables("%PRODUCTNAME %PRODUCTVERSION");
         // This will only show "To change your default apps, go to Settings > Apps > Default apps"
         // on Win10; this is expected. At least this will self-document it to users.
         pIf->LaunchAdvancedAssociationUI(o3tl::toW(expanded.getStr()));
-        pIf->Release();
+    }
+    catch (...)
+    {
+        // Just ignore any error here: this is not something we need to make sure to succeed
     }
     if (bUninit)
         CoUninitialize();
