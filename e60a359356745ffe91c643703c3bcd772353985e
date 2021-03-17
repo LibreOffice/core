@@ -16,6 +16,24 @@
       "revId": "e60a359356745ffe91c643703c3bcd772353985e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "124ed0f5_d8e18bda",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 2786,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-03-17T09:21:59Z",
+      "side": 1,
+      "message": "Thanks for the hint. \nIt looks like a set can\u0027t be used with xs:string as node type. So I would need to add an own group for this, which complicates this quite a bit.\nSo I think using a prop is fine in this case.",
+      "parentUuid": "4a4b0838_d832610e",
+      "revId": "e60a359356745ffe91c643703c3bcd772353985e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
