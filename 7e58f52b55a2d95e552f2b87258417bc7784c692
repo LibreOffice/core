@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e54578a9_0be46dfb",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T14:23:28Z",
+      "side": 1,
+      "message": "So this should transform to:\n\n  #if ENABLE_ZXING\n  #include \u003crtl/ustrbuf.hxx\u003e\n  \n  #ifdef __GNUC__\n  #pragma GCC diagnostic push\n  #pragma GCC diagnostic ignored \"-Wunused-function\"\n  #endif\n  \n  #include \u003cBarcodeFormat.h\u003e\n  #include \u003cBitArray.h\u003e\n  #include \u003cBitMatrix.h\u003e\n  #include \u003cByteMatrix.h\u003e\n  #include \u003cMultiFormatWriter.h\u003e\n  #include \u003cTextUtfEncoding.h\u003e\n  #include \u003cZXStrConvWorkaround.h\u003e\n  \n  #ifdef __GNUC__\n  #pragma GCC diagnostic pop\n  #endif\n  \n  #endif // ENABLE_ZXING",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 6
+      },
+      "revId": "7e58f52b55a2d95e552f2b87258417bc7784c692",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
