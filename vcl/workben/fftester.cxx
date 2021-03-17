@@ -57,6 +57,7 @@
 #include <filter/PcdReader.hxx>
 #include <filter/PbmReader.hxx>
 #include <filter/DxfReader.hxx>
+#include <filter/XpmReader.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <tools/stream.hxx>
@@ -64,7 +65,6 @@
 
 #include "../source/filter/igif/gifread.hxx"
 #include "../source/filter/ixbm/xbmread.hxx"
-#include "../source/filter/ixpm/xpmread.hxx"
 #include "../source/filter/jpeg/jpeg.hxx"
 
 using namespace ::com::sun::star::uno;
