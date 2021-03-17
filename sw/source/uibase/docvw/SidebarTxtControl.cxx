@@ -29,6 +29,7 @@
 #include <strings.hrc>
 
 #include <unotools/securityoptions.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -250,14 +251,20 @@ void SidebarTextControl::Paint(vcl::RenderContext& rRenderContext, const tools::
 
     if (mrSidebarWin.GetLayoutStatus() == SwPostItHelper::DELETED)
     {
+        const AntialiasingFlags nFormerAntialiasing( rRenderContext.GetAntialiasing() );
+        const bool bIsAntiAliasing = officecfg::Office::Common::Drawinglayer::AntiAliasing::get();
+        if ( bIsAntiAliasing )
+            rRenderContext.SetAntialiasing(AntialiasingFlags::Enable);
         rRenderContext.SetLineColor(mrSidebarWin.GetChangeColor());
         rRenderContext.DrawLine(rRenderContext.PixelToLogic(aPos),
                                 rRenderContext.PixelToLogic(aPos + Point(aSize.Width(),
-                                                                         aSize.Height())));
+                                                                         aSize.Height() * 0.95)));
         rRenderContext.DrawLine(rRenderContext.PixelToLogic(aPos + Point(aSize.Width(),
                                                                          0)),
                                 rRenderContext.PixelToLogic(aPos + Point(0,
-                                                                         aSize.Height())));
+                                                                         aSize.Height() * 0.95)));
+        if ( bIsAntiAliasing )
+            rRenderContext.SetAntialiasing(nFormerAntialiasing);
     }
 }
 
