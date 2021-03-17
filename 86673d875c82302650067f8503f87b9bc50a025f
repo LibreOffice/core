@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "1ecceebd_4a234ab0",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T13:15:11Z",
+      "side": 1,
+      "message": "One thing I forgot: this function as a whole should be included in the #if ENABLE_ZXING",
+      "parentUuid": "f1534ed8_768af2dc",
+      "range": {
+        "startLine": 266,
+        "startChar": 0,
+        "endLine": 293,
+        "endChar": 1
+      },
+      "revId": "86673d875c82302650067f8503f87b9bc50a025f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4c33730e_9a402da2",
         "filename": "cui/source/inc/QrCodeGenDialog.hxx",
         "patchSetId": 18
