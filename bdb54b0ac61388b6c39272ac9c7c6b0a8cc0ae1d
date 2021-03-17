@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6b974a9a_80c36e7f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-17T09:53:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c14ec3f9_ef6bc8d3",
+      "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a3966b3_f7850390",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 14
@@ -30,6 +48,24 @@
       "writtenOn": "2021-03-17T08:55:02Z",
       "side": 1,
       "message": "Maybe it\u0027s better to have\n\n    -I$(call gb_UnpackedTarball_get_dir,zxing/core/src)\\\n\nat https://gerrit.libreoffice.org/c/core/+/112053/5/RepositoryExternal.mk#4307,\nand then use\n\n  #include \u003cBarcodeFormat.h\u003e\n\nhere? That would hopefully also allow us to have\n\n    $(if $(SYSTEM_ZXING),-IZXing,-I$(call gb_UnpackedTarball_get_dir,zxing/core/src))\\\n\nto automatically handle both system library and our unpacked tarball? (or some clever export from configure with the header location)",
+      "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50771d65_1f7498ef",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-17T09:53:00Z",
+      "side": 1,
+      "message": "I\u0027ll send a patch to it right away then but a little confirmation that I\u0027ve made all the changes in one branch only \u0026 so I think only way to send patch to my previous commit is by cherry-picking it to another branch \u0026 then sending a PR. Would that be correct?",
+      "parentUuid": "2a3966b3_f7850390",
       "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "8a8f0bb3_2213dcf3",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-17T09:53:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10949033_13e1882c",
+      "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a847483e_8ac2d680",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 14
@@ -67,6 +121,24 @@
       "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c878ce7e_15180860",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-17T09:53:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a847483e_8ac2d680",
+      "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -93,6 +165,30 @@
     },
     {
       "key": {
+        "uuid": "c5cb419b_e69c61ff",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-17T09:53:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a6b9bcd_d9d00453",
+      "range": {
+        "startLine": 272,
+        "startChar": 4,
+        "endLine": 279,
+        "endChar": 43
+      },
+      "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d9fe6dc8_c13b7d8c",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 14
@@ -113,6 +209,30 @@
       "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74fa5a92_b4bdc534",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-17T09:53:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9fe6dc8_c13b7d8c",
+      "range": {
+        "startLine": 285,
+        "startChar": 26,
+        "endLine": 285,
+        "endChar": 27
+      },
+      "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -139,6 +259,30 @@
     },
     {
       "key": {
+        "uuid": "3ef46f51_09fcc2f7",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-17T09:53:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8b12278_0854105b",
+      "range": {
+        "startLine": 289,
+        "startChar": 21,
+        "endLine": 289,
+        "endChar": 23
+      },
+      "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "19c31ee9_f70f4728",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 14
@@ -156,6 +300,24 @@
     },
     {
       "key": {
+        "uuid": "d14685d4_d3d7a3dc",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-17T09:53:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19c31ee9_f70f4728",
+      "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "10b3bbdd_1431efdc",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 14
@@ -170,6 +332,24 @@
       "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e788db0_d8adb337",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-17T09:53:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10b3bbdd_1431efdc",
+      "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
