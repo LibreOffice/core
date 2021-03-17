@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e2df073_78c1791c",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T10:46:51Z",
+      "side": 1,
+      "message": "This is still totally unformatted.",
+      "range": {
+        "startLine": 273,
+        "startChar": 4,
+        "endLine": 287,
+        "endChar": 15
+      },
+      "revId": "8594d1558186d66f3d1f2a26550cc5f2dbb7d955",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "690a1f77_4964c051",
+        "filename": "cui/source/inc/QrCodeGenDialog.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T10:46:51Z",
+      "side": 1,
+      "message": "You need to use *const* reference, you do not modify the value.",
+      "revId": "8594d1558186d66f3d1f2a26550cc5f2dbb7d955",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
