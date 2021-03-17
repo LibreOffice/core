@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fbf54dc2_8d07c005",
+        "filename": "basic/qa/cppunit/test_global_as_new.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1003033
+      },
+      "writtenOn": "2021-03-17T13:59:12Z",
+      "side": 1,
+      "message": "I think the comment is technically correct - the basic method is being run during the Method copy constructor, as seen in the stack trace. Maybe that\u0027s just an artifact of me writing an extraneous copy. The real point of the comment, though, was for someone one like me scanning around for \"Where is there a call to operator() or some function call() or some such...\" this comment is essentially \"Here it is, hidden in here.\"\n\n(gdb) p pMeth-\u003emaName\n$16 \u003d \"GetDateAsString\"\n(gdb) bt\n#0  SbModule::Run(SbMethod*) (this\u003d0x55555640fcf0, pMeth\u003d0x5555564d6c20)\n    at /home/john/code/lo/core/basic/source/classes/sbxmod.cxx:1069\n#1  0x00007fffeb43642d in SbModule::Notify(SfxBroadcaster\u0026, SfxHint const\u0026) (this\u003d0x55555640fcf0, rBC\u003d..., rHint\u003d...)\n    at /home/john/code/lo/core/basic/source/classes/sbxmod.cxx:774\n#2  0x00007fffede194e3 in SfxBroadcaster::Broadcast(SfxHint const\u0026) (this\u003d0x555556504b80, rHint\u003d...)\n    at /home/john/code/lo/core/svl/source/notify/SfxBroadcaster.cxx:39\n#3  0x00007fffeb43c5c3 in SbMethod::Broadcast(SfxHintId) (this\u003d0x5555564e7260, nHintId\u003dSfxHintId::BasicDataWanted)\n    at /home/john/code/lo/core/basic/source/classes/sbxmod.cxx:2113\n#4  0x00007fffeb542a01 in SbxValue::SbxValue(SbxValue const\u0026)\n    (this\u003d0x555556505260, __vtt_parm\u003d0x7fffeb6b1d30 \u003cVTT for SbxMethod+16\u003e, r\u003d..., __in_chrg\u003d\u003coptimized out\u003e)\n    at /home/john/code/lo/core/basic/source/sbx/sbxvalue.cxx:65\n#5  0x00007fffeb548970 in SbxVariable::SbxVariable(SbxVariable const\u0026)\n    (this\u003d0x555556505260, __vtt_parm\u003d0x7fffeb6b1d28 \u003cVTT for SbxMethod+8\u003e, r\u003d..., __in_chrg\u003d\u003coptimized out\u003e)\n    at /home/john/code/lo/core/basic/source/sbx/sbxvar.cxx:49\n#6  0x00007fffeb53aad6 in SbxMethod::SbxMethod(SbxMethod const\u0026)\n    (this\u003d0x555556505260, r\u003d..., __in_chrg\u003d\u003coptimized out\u003e, __vtt_parm\u003d\u003coptimized out\u003e)\n    at /home/john/code/lo/core/basic/source/sbx/sbxobj.cxx:840\n#7  0x00007fffeb6de218 in (anonymous namespace)::GlobalAsNewTest::testMaintainsValueAcrossCalls() (this\u003d0x5555562f8d40)\n    at /home/john/code/lo/core/basic/qa/cppunit/test_global_as_new.cxx:64",
+      "parentUuid": "336c1149_a99393b8",
+      "range": {
+        "startLine": 64,
+        "startChar": 65,
+        "endLine": 64,
+        "endChar": 88
+      },
+      "revId": "e7a7f9a004beb44450442a418b60d650cb1902fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2551b1f8_a182cb40",
         "filename": "basic/source/comp/dim.cxx",
         "patchSetId": 10
@@ -89,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "f7e12b0b_2cf146a7",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 2994,
+      "author": {
+        "id": 1003033
+      },
+      "writtenOn": "2021-03-17T13:59:12Z",
+      "side": 1,
+      "message": "You\u0027re right, of course. I was looking at SbxValue::Get and got myself misled. I\u0027ll edit the comment to be more correct. Or possibly remove the comment altogether.",
+      "parentUuid": "2d6b461d_8ff217e7",
+      "revId": "e7a7f9a004beb44450442a418b60d650cb1902fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9fc862d9_fdfd35b8",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 10
@@ -100,6 +142,30 @@
       "writtenOn": "2021-03-17T06:48:20Z",
       "side": 1,
       "message": "How is this relevant here, where you rule away objects above in line 2987?",
+      "range": {
+        "startLine": 2995,
+        "startChar": 11,
+        "endLine": 2995,
+        "endChar": 81
+      },
+      "revId": "e7a7f9a004beb44450442a418b60d650cb1902fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c88ba349_43731749",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 2995,
+      "author": {
+        "id": 1003033
+      },
+      "writtenOn": "2021-03-17T13:59:12Z",
+      "side": 1,
+      "message": "To your point, if I start a comment with \"Curious factoid\" I should just not write that comment.",
+      "parentUuid": "9fc862d9_fdfd35b8",
       "range": {
         "startLine": 2995,
         "startChar": 11,
