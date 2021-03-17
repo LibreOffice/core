@@ -119,6 +119,43 @@ bool TestReqIfRtfReader::WriteObjectData(SvStream& rOLE)
     rOLE.WriteStream(aStream);
     return true;
 }
+
+/// Parser for [MS-OLEDS] 2.2.5 EmbeddedObject, aka OLE1.
+struct OLE1Reader
+{
+    sal_uInt32 m_nNativeDataSize;
+    sal_uInt32 m_nPresentationDataSize;
+
+    OLE1Reader(SvStream& rStream);
+};
+
+OLE1Reader::OLE1Reader(SvStream& rStream)
+{
+    // Skip ObjectHeader, see [MS-OLEDS] 2.2.4.
+    rStream.Seek(0);
+    sal_uInt32 nData;
+    rStream.ReadUInt32(nData); // OLEVersion
+    rStream.ReadUInt32(nData); // FormatID
+    rStream.ReadUInt32(nData); // ClassName
+    rStream.SeekRel(nData);
+    rStream.ReadUInt32(nData); // TopicName
+    rStream.SeekRel(nData);
+    rStream.ReadUInt32(nData); // ItemName
+    rStream.SeekRel(nData);
+
+    rStream.ReadUInt32(m_nNativeDataSize);
+    rStream.SeekRel(m_nNativeDataSize);
+
+    rStream.ReadUInt32(nData); // OLEVersion for presentation data
+    CPPUNIT_ASSERT(rStream.good());
+    rStream.ReadUInt32(nData); // FormatID
+    rStream.ReadUInt32(nData); // ClassName
+    rStream.SeekRel(nData);
+    rStream.ReadUInt32(nData); // Width
+    rStream.ReadUInt32(nData); // Height
+    rStream.ReadUInt32(nData); // PresentationDataSize
+    m_nPresentationDataSize = nData;
+}
 }
 
 class HtmlExportTest : public SwModelTestBase, public HtmlTestTools
@@ -1080,25 +1117,14 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PDF)
     ParseOle1FromRtfUrl(aRtfUrl, aOle1);
 
     // Check the content of the ole1 data.
-    // Skip ObjectHeader, see [MS-OLEDS] 2.2.4.
-    aOle1.Seek(0);
-    sal_uInt32 nData;
-    aOle1.ReadUInt32(nData); // OLEVersion
-    aOle1.ReadUInt32(nData); // FormatID
-    aOle1.ReadUInt32(nData); // ClassName
-    aOle1.SeekRel(nData);
-    aOle1.ReadUInt32(nData); // TopicName
-    aOle1.SeekRel(nData);
-    aOle1.ReadUInt32(nData); // ItemName
-    aOle1.SeekRel(nData);
-    aOle1.ReadUInt32(nData); // NativeDataSize
+    OLE1Reader aOle1Reader(aOle1);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 39405
     // - Actual  : 43008
     // i.e. we did not work with the Ole10Native stream, rather created an OLE1 wrapper around the
     // OLE1-in-OLE2 data, resulting in additional size.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0x99ed), nData);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0x99ed), aOle1Reader.m_nNativeDataSize);
 
     // Now import this back and check the ODT result.
     mxComponent->dispose();
@@ -1285,26 +1311,33 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PresDataNoOle2)
     ParseOle1FromRtfUrl(aRtfUrl, aOle1);
 
     // Check the content of the ole1 data.
-    // Skip ObjectHeader, see [MS-OLEDS] 2.2.4.
-    aOle1.Seek(0);
-    sal_uInt32 nData;
-    aOle1.ReadUInt32(nData); // OLEVersion
-    aOle1.ReadUInt32(nData); // FormatID
-    aOle1.ReadUInt32(nData); // ClassName
-    aOle1.SeekRel(nData);
-    aOle1.ReadUInt32(nData); // TopicName
-    aOle1.SeekRel(nData);
-    aOle1.ReadUInt32(nData); // ItemName
-    aOle1.SeekRel(nData);
-    aOle1.ReadUInt32(nData); // NativeDataSize
-    aOle1.SeekRel(nData);
-
-    aOle1.ReadUInt32(nData); // OLEVersion for presentation data
-
     // Without the accompanying fix in place, this test would have failed as there was no
     // presentation data after the native data in the OLE1 container. The result was not editable in
     // Word.
-    CPPUNIT_ASSERT(aOle1.good());
+    OLE1Reader aOle1Reader(aOle1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PresDataWmfOnly)
+{
+    // Save to reqif-xhtml.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "ole1-pres-data-wmf.odt";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", {});
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    OUString aRtfUrl = GetOlePath();
+    SvMemoryStream aOle1;
+    ParseOle1FromRtfUrl(aRtfUrl, aOle1);
+
+    OLE1Reader aOle1Reader(aOle1);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 135660
+    // - Actual  : 272376
+    // i.e. we wrote some additional EMF data into the WMF output, which broke Word.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(135660), aOle1Reader.m_nPresentationDataSize);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

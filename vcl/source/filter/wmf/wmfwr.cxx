@@ -38,6 +38,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <memory>
 #include <vcl/fontcharmap.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 // MS Windows defines
 
@@ -1690,6 +1691,13 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
         if ( xStatusIndicator.is() )
         {
             xStatusIndicator->start( OUString(), 100 );
+        }
+
+        comphelper::SequenceAsHashMap aMap(pFConfigItem->GetFilterData());
+        auto it = aMap.find("EmbedEMF");
+        if (it != aMap.end())
+        {
+            it->second >>= bEmbedEMF;
         }
     }
     nLastPercent=0;
