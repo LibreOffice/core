@@ -1335,6 +1335,42 @@ void SwRangeRedline::CalcStartEnd( sal_uLong nNdIdx, sal_Int32& rStart, sal_Int3
     }
 }
 
+static void lcl_storeAnnotationMarks(SwDoc& rDoc, const SwPosition* pStt, const SwPosition* pEnd)
+{
+    // tdf#115815 keep original start position of collapsed annotation ranges
+    // as temporary bookmarks (removed after file saving and file loading)
+    IDocumentMarkAccess& rDMA(*rDoc.getIDocumentMarkAccess());
+    for (auto iter = rDMA.getAnnotationMarksBegin();
+          iter != rDMA.getAnnotationMarksEnd(); )
+    {
+        SwPosition const& rStartPos((**iter).GetMarkStart());
+        if ( *pStt <= rStartPos && rStartPos < *pEnd )
+        {
+            OUString sBookmarkName((**iter).GetName() + "____");
+            IDocumentMarkAccess::const_iterator_t pOldMark = rDMA.findBookmark(sBookmarkName);
+            if ( pOldMark == rDMA.getBookmarksEnd() )
+            {
+                // at start of redlines use a 1-character length bookmark range
+                // instead of a 0-character length bookmark position to avoid its losing
+                sal_Int32 nLen = (*pStt == rStartPos) ? 1 : 0;
+                SwPaM aPam( rStartPos.nNode, rStartPos.nContent.GetIndex(),
+                                rStartPos.nNode, rStartPos.nContent.GetIndex() + nLen);
+                ::sw::mark::IMark* pMark = rDMA.makeMark(
+                    aPam,
+                    sBookmarkName,
+                    IDocumentMarkAccess::MarkType::BOOKMARK, sw::mark::InsertMode::New);
+                ::sw::mark::IBookmark* pBookmark = dynamic_cast< ::sw::mark::IBookmark* >(pMark);
+                if (pBookmark)
+                {
+                    pBookmark->SetKeyCode(vcl::KeyCode());
+                    pBookmark->SetShortName(OUString());
+                }
+            }
+        }
+        ++iter;
+    }
+}
+
 void SwRangeRedline::MoveToSection()
 {
     if( !m_pContentSect )
@@ -1378,7 +1414,11 @@ void SwRangeRedline::MoveToSection()
             SwNodeIndex aNdIdx( *pTextNd );
             SwPosition aPos( aNdIdx, SwIndex( pTextNd ));
             if( pCSttNd && pCEndNd )
+            {
+                // tdf#140982 keep annotation ranges in deletions in margin mode
+                lcl_storeAnnotationMarks( rDoc, pStt, pEnd );
                 rDoc.getIDocumentContentOperations().MoveAndJoin( aPam, aPos );
+            }
             else
             {
                 if( pCSttNd && !pCEndNd )
@@ -1445,32 +1485,7 @@ void SwRangeRedline::CopyToSection()
 
         // tdf#115815 keep original start position of collapsed annotation ranges
         // as temporary bookmarks (removed after file saving and file loading)
-        auto & rDMA(*rDoc.getIDocumentMarkAccess());
-        for (auto iter = rDMA.getAnnotationMarksBegin();
-              iter != rDMA.getAnnotationMarksEnd(); )
-        {
-            SwPosition const& rStartPos((**iter).GetMarkStart());
-            if ( *pStt <= rStartPos && rStartPos < *pEnd )
-            {
-                // at start of redlines use a 1-character length bookmark range
-                // instead of a 0-character length bookmark position to avoid its losing
-                sal_Int32 nLen = (*pStt == rStartPos) ? 1 : 0;
-                SwPaM aPam( rStartPos.nNode, rStartPos.nContent.GetIndex(),
-                                rStartPos.nNode, rStartPos.nContent.GetIndex() + nLen);
-                ::sw::mark::IMark* pMark = rDMA.makeMark(
-                    aPam,
-                    (**iter).GetName() + "____",
-                    IDocumentMarkAccess::MarkType::BOOKMARK, sw::mark::InsertMode::New);
-                ::sw::mark::IBookmark* pBookmark = dynamic_cast< ::sw::mark::IBookmark* >(pMark);
-                if (pBookmark)
-                {
-                    pBookmark->SetKeyCode(vcl::KeyCode());
-                    pBookmark->SetShortName(OUString());
-                }
-            }
-            ++iter;
-        }
-
+        lcl_storeAnnotationMarks( rDoc, pStt, pEnd );
         rDoc.getIDocumentContentOperations().CopyRange(*this, aPos, SwCopyFlags::CheckPosInFly);
 
         // Take over the style from the EndNode if needed
