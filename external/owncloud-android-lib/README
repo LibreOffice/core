@@ -1,7 +1,0 @@
-Library required to access ownCloud servers from Android.
-
-Code from https://github.com/jaragunde/owncloud-android-library, release 0.9.4.
-Notice it is a fork from the official repository at
-https://github.com/owncloud/android-library, the test and example projects have
-been removed and the binary jars have been replaced with the sources of the
-required libraries.

@@ -201,7 +201,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,OPENLDAP,OPENLDAP_TARBALL) \
 		$(call fetch_Optional,OPENSSL,OPENSSL_TARBALL) \
 		$(call fetch_Optional,ORCUS,ORCUS_TARBALL) \
-		$(call fetch_Optional,OWNCLOUD_ANDROID_LIB,OWNCLOUD_ANDROID_LIB_TARBALL) \
 		$(call fetch_Optional,PAGEMAKER,PAGEMAKER_TARBALL) \
 		$(call fetch_Optional,PDFIUM,PDFIUM_TARBALL) \
 		$(call fetch_Optional,POPPLER,POPPLER_TARBALL) \
