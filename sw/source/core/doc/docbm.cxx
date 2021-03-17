@@ -1643,7 +1643,7 @@ namespace sw::mark
 
     // restore text ranges of annotations of tracked deletions
     // based on the helper bookmarks (which can survive I/O and hiding redlines)
-    void MarkManager::restoreAnnotationMarks()
+    void MarkManager::restoreAnnotationMarks(bool bDelete)
     {
         for (auto iter = getBookmarksBegin();
               iter != getBookmarksEnd(); )
@@ -1660,9 +1660,14 @@ namespace sw::mark
                     const SwPaM aPam((**iter).GetMarkStart(), (**pMark).GetMarkEnd());
                     repositionMark(*pMark, aPam);
                 }
-                deleteMark(&**iter);
-                // this invalidates iter, have to start over...
-                iter = getBookmarksBegin();
+                if (bDelete)
+                {
+                    deleteMark(&**iter);
+                    // this invalidates iter, have to start over...
+                    iter = getBookmarksBegin();
+                }
+                else
+                    ++iter;
             }
             else
                 ++iter;
