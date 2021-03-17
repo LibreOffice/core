@@ -22,6 +22,30 @@
       "revId": "f5a3d2a688a237b2ffbc1caafa8d953290967b51",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57fe0fb0_8baf8637",
+        "filename": "sw/source/core/layout/pagedesc.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2021-03-17T18:07:23Z",
+      "side": 1,
+      "message": "\u003e ...restashing is forbidden until the previous one is restored.\n\nI like this design, it\u0027s nice and logical!\n\nInsisting on resetting pFormat was probably a bad idea on my part anyways: obj.GetSomething() calls should not normally change the state of \u0027obj\u0027.",
+      "parentUuid": "1c5b4ed8_d4da7e7b",
+      "range": {
+        "startLine": 463,
+        "startChar": 8,
+        "endLine": 463,
+        "endChar": 51
+      },
+      "revId": "f5a3d2a688a237b2ffbc1caafa8d953290967b51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
