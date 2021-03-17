@@ -32,6 +32,15 @@ var abs = Math.abs;
 var now = Date.now;
 
 /**
+ * polyfill for IE11
+ */
+if (!Math.trunc) {
+    Math.trunc = function (v) {
+        return v < 0 ? Math.ceil(v) : Math.floor(v);
+    };
+}
+
+/**
  * set a timeout with a given scope
  * @param {Function} fn
  * @param {Number} timeout
@@ -5393,9 +5402,9 @@ function getTextFieldType ( elem )
 function isTextFieldByClassName ( sClassName )
 {
     return sClassName === aDateTimeClassName || sClassName === aFooterClassName
-        || sClassName === aHeaderClassName || sClassName.startsWith( aSlideNumberClassName )
-        || sClassName.startsWith( aDateClassName ) || sClassName.startsWith( aTimeClassName )
-        || sClassName.startsWith( aSlideNameClassName );
+        || sClassName === aHeaderClassName || sClassName.indexOf( aSlideNumberClassName ) == 0
+        || sClassName.indexOf( aDateClassName ) == 0 || sClassName.indexOf( aTimeClassName ) == 0
+        || sClassName.indexOf( aSlideNameClassName ) == 0;
 }
 
 /** Class MasterPage
@@ -5819,7 +5828,7 @@ MasterPageView.prototype.createElement = function()
         for( ; i < aBackgroundObjectSubGroupIdList.length; ++i )
         {
             sId = aBackgroundObjectSubGroupIdList[i];
-            if( sId.startsWith( aSlideNumberClassName ) )
+            if( sId.indexOf( aSlideNumberClassName ) == 0 )
             {
                 // Slide Number Field
                 // The cloned element is appended directly to the field group element
@@ -5873,9 +5882,9 @@ MasterPageView.prototype.createElement = function()
                                                    aTextFieldHandlerSet, sMasterSlideId );
                 }
             }
-            else if( sId.startsWith( aDateClassName )
-                || sId.startsWith( aTimeClassName )
-                || sId.startsWith( aSlideNameClassName ) )
+            else if( sId.indexOf( aDateClassName ) == 0
+                || sId.indexOf( aTimeClassName ) == 0
+                || sId.indexOf( aSlideNameClassName ) == 0 )
             {
                 this.initTextFieldHandler( sId, aPlaceholderShapeSet,
                                            aTextFieldContentProviderSet, aDefsElement,
