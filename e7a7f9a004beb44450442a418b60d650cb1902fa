@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "5b6d1177_7f241235",
+        "filename": "basic/source/comp/dim.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1003033
+      },
+      "writtenOn": "2021-03-17T13:42:06Z",
+      "side": 1,
+      "message": "I was trying to show what the equivalent the basic code would\u0027ve been had it been written. In basic I might end an if block with\n\nENDIF \u0027 Repeat the if statement it\u0027s ending\n\nI think this comment you point to actually may have been written during the iteration where I was attempting a literal call to IsNull. Perhaps it would\u0027ve made more sense there. I\u0027ll try to be more elaborate here.",
+      "parentUuid": "2551b1f8_a182cb40",
+      "range": {
+        "startLine": 471,
+        "startChar": 50,
+        "endLine": 471,
+        "endChar": 55
+      },
+      "revId": "e7a7f9a004beb44450442a418b60d650cb1902fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2d6b461d_8ff217e7",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 10
