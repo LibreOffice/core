@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf9cf8b8_72a6796e",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-03-17T17:43:20Z",
+      "side": 1,
+      "message": "This highlights \"No List\".. But we need to put a condition like \n\nif(\"No List\" is currently active)\n\nfor it to work properly",
+      "range": {
+        "startLine": 1038,
+        "startChar": 4,
+        "endLine": 1038,
+        "endChar": 34
+      },
+      "revId": "f659fc0948dcd094f17777f39157913818e24bd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
