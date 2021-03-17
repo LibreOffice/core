@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "f9420f0a_4d0f3f73",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T13:30:35Z",
+      "side": 1,
+      "message": "Actually I\u0027d not include the namespace. If later we need more utility functions there, that don\u0027t depend on the flag, we won\u0027t have to move the #ifs.",
+      "parentUuid": "84f17970_8117bb81",
+      "range": {
+        "startLine": 266,
+        "startChar": 0,
+        "endLine": 293,
+        "endChar": 1
+      },
+      "revId": "86673d875c82302650067f8503f87b9bc50a025f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4c33730e_9a402da2",
         "filename": "cui/source/inc/QrCodeGenDialog.hxx",
         "patchSetId": 18
