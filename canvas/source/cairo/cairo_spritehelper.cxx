@@ -26,6 +26,7 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/canvastools.hxx>
 
 #include <cairo.h>
 
@@ -80,7 +81,7 @@ namespace cairocanvas
 #endif
 
         const double fAlpha( getAlpha() );
-        const ::basegfx::B2DHomMatrix aTransform( getTransformation() );
+        ::basegfx::B2DHomMatrix aTransform( getTransformation() );
 
         if( !isActive() || ::basegfx::fTools::equalZero( fAlpha ) )
             return;
@@ -90,36 +91,19 @@ namespace cairocanvas
             return;
 
         basegfx::B2DVector aSize = getSizePixel();
+        ::Size  aOutputSize( vcl::unotools::sizeFromB2DSize( aSize ) );
+        ::Point aOutPos( vcl::unotools::pointFromB2DPoint( rPos ) );
         cairo_save( pCairo.get() );
 
-        double fX, fY;
+        ::basegfx::B2DHomMatrix aSizeTransform, aMoveTransform;
+        aSizeTransform.scale( aOutputSize.Width(), aOutputSize.Height() );
+        aMoveTransform.translate( aOutPos.X(), aOutPos.Y() );
+        aTransform = aMoveTransform * aTransform * aSizeTransform;
 
-        fX = rPos.getX();
-        fY = rPos.getY();
-
-        if( !aTransform.isIdentity() )
-        {
-            cairo_matrix_t aMatrix, aInverseMatrix;
-            cairo_matrix_init( &aMatrix,
-                               aTransform.get( 0, 0 ), aTransform.get( 1, 0 ), aTransform.get( 0, 1 ),
-                               aTransform.get( 1, 1 ), aTransform.get( 0, 2 ), aTransform.get( 1, 2 ) );
-
-            aMatrix.x0 = basegfx::fround( aMatrix.x0 );
-            aMatrix.y0 = basegfx::fround( aMatrix.y0 );
-
-            cairo_matrix_init( &aInverseMatrix, aMatrix.xx, aMatrix.yx, aMatrix.xy, aMatrix.yy, aMatrix.x0, aMatrix.y0 );
-            cairo_matrix_invert( &aInverseMatrix );
-            cairo_matrix_transform_distance( &aInverseMatrix, &fX, &fY );
-
-            cairo_set_matrix( pCairo.get(), &aMatrix );
-        }
-
-        fX = basegfx::fround( fX );
-        fY = basegfx::fround( fY );
-
-        cairo_matrix_t aOrigMatrix;
-        cairo_get_matrix( pCairo.get(), &aOrigMatrix );
-        cairo_translate( pCairo.get(), fX, fY );
+        cairo_matrix_t aResultMatrix;
+        cairo_matrix_init( &aResultMatrix,
+                           aTransform.get( 0, 0 ), aTransform.get( 1, 0 ), aTransform.get( 0, 1 ),
+                           aTransform.get( 1, 1 ), aTransform.get( 0, 2 ), aTransform.get( 1, 2 ) );
 
         if( getClip().is() )
         {
@@ -134,16 +118,17 @@ namespace cairocanvas
                                          rClip->getFillRule() );
         }
 
-        SAL_INFO( "canvas.cairo","aSize " << aSize.getX() << " x " << aSize.getY() << " position: " << fX << "," << fY );
-        cairo_rectangle( pCairo.get(), 0, 0, floor( aSize.getX() ), floor( aSize.getY() ) );
-        cairo_clip( pCairo.get() );
-        cairo_set_matrix( pCairo.get(), &aOrigMatrix );
+        SAL_INFO( "canvas.cairo","aSize " << aSize.getX() << " x " << aSize.getY());
+        //cairo_rectangle( pCairo.get(), aOutPos.X(), aOutPos.Y(), floor( aSize.getX() ), floor( aSize.getY() ) );
+        //cairo_clip( pCairo.get() );
+        cairo_set_matrix( pCairo.get(), &aResultMatrix );
 
         if( isContentFullyOpaque() )
             cairo_set_operator( pCairo.get(), CAIRO_OPERATOR_SOURCE );
         cairo_set_source_surface( pCairo.get(),
                                   mpBufferSurface->getCairoSurface().get(),
-                                  fX, fY );
+                                  aOutPos.X(), aOutPos.Y() );
+
         if( ::rtl::math::approxEqual( fAlpha, 1.0 ) )
             cairo_paint( pCairo.get() );
         else

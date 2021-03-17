@@ -26,6 +26,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <canvas/canvastools.hxx>
+#include <vcl/canvastools.hxx>
 
 #include <cairo.h>
 
@@ -468,8 +469,17 @@ namespace cairocanvas
         for( const auto& rSprite : rSortedUpdateSprites )
         {
             if( rSprite.is() )
-                ::boost::polymorphic_downcast< Sprite* >( rSprite.get() )->redraw(
-                    pCompositingCairo, true );
+            {
+                Sprite* pSprite = ::boost::polymorphic_downcast< Sprite* >( rSprite.get() );
+                // calc relative sprite position in rUpdateArea (which
+                // need not be the whole screen!)
+                const ::basegfx::B2DPoint& rSpriteScreenPos( pSprite->getPosPixel() );
+                const ::basegfx::B2DPoint& rSpriteRenderPos(
+                        rSpriteScreenPos - vcl::unotools::b2DPointFromPoint(aOutputPosition)
+                        );
+
+                pSprite->redraw( pCompositingCairo, rSpriteRenderPos, true );
+            }
         }
 
         // flush to screen

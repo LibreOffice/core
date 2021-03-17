@@ -113,10 +113,10 @@ namespace slideshow::internal
 
             // get relative animation position
             // ===============================
-
-            const double nCurrElapsedTime( maTimer.getElapsedTime() );
+            //const double nCurrElapsedTime( maTimer.getElapsedTime() );
+            static double nCurrElapsedTime = 0.0;
             double nT( nCurrElapsedTime / mnMinSimpleDuration );
-
+            nCurrElapsedTime += 0.02;
 
             // one of the stop criteria reached?
             // =================================
