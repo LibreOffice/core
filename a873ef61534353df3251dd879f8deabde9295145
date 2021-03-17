@@ -22,6 +22,30 @@
       "revId": "a873ef61534353df3251dd879f8deabde9295145",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64976f05_7847c8bd",
+        "filename": "vcl/source/app/salusereventlist.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-03-17T07:52:40Z",
+      "side": 0,
+      "message": "I\u0027ve forgotten the details - I mentioned it on the google breakpad forum and the consensus was that \"yes, that\u0027s a good idea, we haven\u0027t implemented it yet, you\u0027d need some assembly to do it\"\n\nIt is possible that this noexcept trick will do the right thing with breakpad, I haven\u0027t tried it.",
+      "parentUuid": "23842436_5fd6ceb9",
+      "range": {
+        "startLine": 109,
+        "startChar": 14,
+        "endLine": 110,
+        "endChar": 69
+      },
+      "revId": "a873ef61534353df3251dd879f8deabde9295145",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
