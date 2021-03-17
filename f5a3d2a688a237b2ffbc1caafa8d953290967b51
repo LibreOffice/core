@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c5b4ed8_d4da7e7b",
+        "filename": "sw/source/core/layout/pagedesc.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-03-17T16:29:21Z",
+      "side": 1,
+      "message": "@Daniel: Is it necessary? With this, the whole patch needs redesign.\nExactly, now in this patch the program checks the state of the stashed content, if something is stashed, restashing is forbidden until the previous one is restored. If you have to put this line, it does not will work, maybe we will need other members... Whats is your opinion?",
+      "range": {
+        "startLine": 463,
+        "startChar": 8,
+        "endLine": 463,
+        "endChar": 51
+      },
+      "revId": "f5a3d2a688a237b2ffbc1caafa8d953290967b51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
