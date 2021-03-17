@@ -7,6 +7,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from uitest.uihelper.common import change_measurement_unit
+from uitest.uihelper.common import select_by_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class Forms(UITestCase):
@@ -55,7 +56,7 @@ class Forms(UITestCase):
         self.assertEqual("None", get_state_as_dict(xAction)['SelectEntryText'])
         self.assertEqual("false", get_state_as_dict(xURL)['Enabled'])
 
-        xAction.executeAction("SELECT", mkPropertyValues({"TEXT": "Open document/web page"}))
+        select_by_text(xAction, "Open document/web page")
 
         self.assertEqual("Open document/web page", get_state_as_dict(xAction)['SelectEntryText'])
         self.assertEqual("true", get_state_as_dict(xURL)['Enabled'])

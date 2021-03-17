@@ -6,6 +6,7 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -31,9 +32,7 @@ class tdf35020(UITestCase):
         allsheets = xDialog.getChild("allsheets")
         allsheets.executeAction("CLICK", tuple())
         calcsearchin = xDialog.getChild("calcsearchin")
-        props = {"TEXT": "Formulas"}
-        actionProps = mkPropertyValues(props)
-        calcsearchin.executeAction("SELECT", actionProps)
+        select_by_text(calcsearchin, "Formulas")
         replaceall = xDialog.getChild("replaceall")
         replaceall.executeAction("CLICK", tuple())
         xcloseBtn = xDialog.getChild("close")

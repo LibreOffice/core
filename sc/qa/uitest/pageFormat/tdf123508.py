@@ -6,6 +6,7 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -28,9 +29,7 @@ class tdf123508(UITestCase):
     spinEDSCALEPAGEWIDTH = xDialog.getChild("spinED_SCALEPAGEWIDTH")
     spinEDSCALEPAGEHEIGHT = xDialog.getChild("spinED_SCALEPAGEHEIGHT")
     #select "Fit print range(s) to width/height"  from the scale mode drop-down list
-    props = {"TEXT": "Fit print range(s) to width/height"}
-    actionProps = mkPropertyValues(props)
-    scalingMode.executeAction("SELECT", actionProps)
+    select_by_text(scalingMode, "Fit print range(s) to width/height")
     #define a value for the page, e.g.: width   2; height  2
     spinEDSCALEPAGEWIDTH.executeAction("UP", tuple())
     spinEDSCALEPAGEHEIGHT.executeAction("UP", tuple())

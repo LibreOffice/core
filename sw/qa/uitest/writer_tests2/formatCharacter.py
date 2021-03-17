@@ -12,6 +12,7 @@ import time
 from uitest.debug import sleep
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 
 class formatCharacter(UITestCase):
 
@@ -142,13 +143,9 @@ class formatCharacter(UITestCase):
         xName.executeAction("TYPE", mkPropertyValues({"TEXT":"hyperlink"}))
 
         xVisited = xDialog.getChild("visitedlb")
-        props = {"TEXT": "Bullets"}
-        actionProps = mkPropertyValues(props)
-        xVisited.executeAction("SELECT", actionProps)
+        select_by_text(xVisited, "Bullets")
         xUnVisited = xDialog.getChild("unvisitedlb")
-        props = {"TEXT": "Bullets"}
-        actionProps = mkPropertyValues(props)
-        xUnVisited.executeAction("SELECT", actionProps)
+        select_by_text(xUnVisited, "Bullets")
 
         xOK = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOK)

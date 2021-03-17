@@ -7,6 +7,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -36,9 +37,7 @@ class solver(UITestCase):
         xref1edit.executeAction("TYPE", mkPropertyValues({"TEXT":"C2"}))
         xval1edit.executeAction("TYPE", mkPropertyValues({"TEXT":"C4"}))
         xref2edit.executeAction("TYPE", mkPropertyValues({"TEXT":"C4"}))
-        props = {"TEXT": "=>"}
-        actionProps = mkPropertyValues(props)
-        xop2list.executeAction("SELECT", actionProps)
+        select_by_text(xop2list, "=>")
 
         xval2edit.executeAction("TYPE", mkPropertyValues({"TEXT":"0"}))
         xOKBtn = xDialog.getChild("ok")

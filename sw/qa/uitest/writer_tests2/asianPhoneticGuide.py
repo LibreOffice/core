@@ -7,6 +7,7 @@
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.common import select_by_text
 import time
 from uitest.debug import sleep
 from uitest.uihelper.common import select_pos
@@ -29,15 +30,9 @@ class asianPhoneticGuide(UITestCase):
 
         xLeft1ED.executeAction("TYPE", mkPropertyValues({"TEXT":"a"}))
         xRight1ED.executeAction("TYPE", mkPropertyValues({"TEXT":"w"}))
-        props = {"TEXT": "Right"}
-        actionProps = mkPropertyValues(props)
-        xadjustlb.executeAction("SELECT", actionProps)
-        props2 = {"TEXT": "Right"}
-        actionProps2 = mkPropertyValues(props2)
-        xpositionlb.executeAction("SELECT", actionProps2)
-        props3 = {"TEXT": "Quotation"}
-        actionProps3 = mkPropertyValues(props3)
-        xstylelb.executeAction("SELECT", actionProps3)
+        select_by_text(xadjustlb, "Right")
+        select_by_text(xpositionlb, "Right")
+        select_by_text(xstylelb, "Quotation")
 
         xApplyBtn = xDialog.getChild("ok")
         xApplyBtn.executeAction("CLICK", tuple())

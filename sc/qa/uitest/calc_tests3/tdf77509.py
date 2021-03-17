@@ -7,6 +7,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -30,9 +31,7 @@ class tdf77509(UITestCase):
         xbycol = xDialog.getChild("bycol")
         xeddestarea = xDialog.getChild("eddestarea")
 
-        props = {"TEXT": "Sum"}
-        actionProps = mkPropertyValues(props)
-        xfunc.executeAction("SELECT", actionProps)
+        select_by_text(xfunc, "Sum")
         #4. Source data ranges: $Sheet1.$A$1:$B$7
         #5. Click 'Add' so that ranges appear in "Consolidation ranges"
         xeddataarea.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$1:$B$7"}))

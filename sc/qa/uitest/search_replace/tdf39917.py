@@ -7,6 +7,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -33,9 +34,7 @@ class tdf39917(UITestCase):
 
         formulasyntax = xDialogOpt.getChild("formulasyntax")
         #Excel R1C1
-        props = {"TEXT": "Excel R1C1"}
-        actionProps = mkPropertyValues(props)
-        formulasyntax.executeAction("SELECT", actionProps)
+        select_by_text(formulasyntax, "Excel R1C1")
 
         xOKBtn = xDialogOpt.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
@@ -100,9 +99,7 @@ class tdf39917(UITestCase):
 
         formulasyntax = xDialogOpt.getChild("formulasyntax")
         #Excel R1C1
-        props = {"TEXT": "Calc A1"}
-        actionProps = mkPropertyValues(props)
-        formulasyntax.executeAction("SELECT", actionProps)
+        select_by_text(formulasyntax, "Calc A1")
 
         xOKBtn = xDialogOpt.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)

@@ -11,6 +11,7 @@ from libreoffice.calc.document import get_column
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
 #Bug 107267 - During a sub-total calculation or sum, the data set is not computed well.
@@ -31,9 +32,7 @@ class Subtotals(UITestCase):
         select_pos(xTabs, "0")
         # = 1st group = 3. Group by "Person Number", select "shipping time" and use the Max function.
         xGroupBy = xDialog.getChild("group_by")
-        props = {"TEXT": "Person Number"}
-        actionProps = mkPropertyValues(props)
-        xGroupBy.executeAction("SELECT", actionProps)
+        select_by_text(xGroupBy, "Person Number")
         # 4. Tick 'Calculate subtotals for' -> "shipping time" - already selected
 #        xCheckListMenu = xDialog.getChild("grid1")
 #        xTreeList = xCheckListMenu.getChild("columns")
@@ -44,9 +43,7 @@ class Subtotals(UITestCase):
         #= 2nd group =5. Group by "Person Number", select "shipping time" and use the Min function.
         select_pos(xTabs, "1")
         xGroupBy = xDialog.getChild("group_by")
-        props = {"TEXT": "Person Number"}
-        actionProps = mkPropertyValues(props)
-        xGroupBy.executeAction("SELECT", actionProps)
+        select_by_text(xGroupBy, "Person Number")
         # 4. Tick 'Calculate subtotals for' -> "shipping time" - already selected
 #        xCheckListMenu = xDialog.getChild("grid1")
 #        xTreeList = xCheckListMenu.getChild("columns")
@@ -57,9 +54,7 @@ class Subtotals(UITestCase):
         #= 3rd group = Group by "Person Number", select "shipping time" and use the Average function.
         select_pos(xTabs, "2")
         xGroupBy = xDialog.getChild("group_by")
-        props = {"TEXT": "Person Number"}
-        actionProps = mkPropertyValues(props)
-        xGroupBy.executeAction("SELECT", actionProps)
+        select_by_text(xGroupBy, "Person Number")
         # 4. Tick 'Calculate subtotals for' -> "shipping time" - already selected
 #        xCheckListMenu = xDialog.getChild("grid1")
 #        xTreeList = xCheckListMenu.getChild("columns")

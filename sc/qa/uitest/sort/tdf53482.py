@@ -7,6 +7,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -37,9 +38,7 @@ class tdf53482(UITestCase):
         xDown = xDialog.getChild("down")
         xDown.executeAction("CLICK", tuple())
         xSortKey1 = xDialog.getChild("sortlb")
-        props = {"TEXT": "Occupation"}
-        actionProps = mkPropertyValues(props)
-        xSortKey1.executeAction("SELECT", actionProps)
+        select_by_text(xSortKey1, "Occupation")
         #5. Click Ok
         xOK = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOK)

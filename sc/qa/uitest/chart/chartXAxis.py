@@ -6,6 +6,7 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 from uitest.uihelper.common import change_measurement_unit
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
@@ -106,19 +107,13 @@ class chartXAxis(UITestCase):
     outerMinorTick = xDialog.getChild("CB_MINOR_OUTER")
     placeMarks = xDialog.getChild("LB_PLACE_TICKS")
 
-    props = {"TEXT": "Start"}
-    actionProps = mkPropertyValues(props)
-    crossAxis.executeAction("SELECT", actionProps)
-    props2 = {"TEXT": "Outside end"}
-    actionProps2 = mkPropertyValues(props2)
-    placeLabels.executeAction("SELECT", actionProps2)
+    select_by_text(crossAxis, "Start")
+    select_by_text(placeLabels, "Outside end")
     innerMajorTick.executeAction("CLICK", tuple())
     outerMajorTick.executeAction("CLICK", tuple())
     innerMinorTick.executeAction("CLICK", tuple())
     outerMinorTick.executeAction("CLICK", tuple())
-    props3 = {"TEXT": "At axis"}
-    actionProps3 = mkPropertyValues(props3)
-    placeMarks.executeAction("SELECT", actionProps3)
+    select_by_text(placeMarks, "At axis")
 
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
@@ -152,9 +147,7 @@ class chartXAxis(UITestCase):
     self.assertEqual(get_state_as_dict(outerMinorTick)["Selected"], "true")
     self.assertEqual(get_state_as_dict(placeMarks)["SelectEntryText"], "At axis")
     #change tab "positioning".
-    props = {"TEXT": "Value"}
-    actionProps = mkPropertyValues(props)
-    crossAxis.executeAction("SELECT", actionProps)
+    select_by_text(crossAxis, "Value")
     crossAxisValue.executeAction("UP", tuple())  #1
 
     xOKBtn = xDialog.getChild("ok")
@@ -233,9 +226,7 @@ class chartXAxis(UITestCase):
     overlapCB.executeAction("CLICK", tuple())
     breakCB.executeAction("CLICK", tuple())
     stackedCB.executeAction("CLICK", tuple())
-    props = {"TEXT": "Right-to-left"}
-    actionProps = mkPropertyValues(props)
-    textdirLB.executeAction("SELECT", actionProps)
+    select_by_text(textdirLB, "Right-to-left")
 
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
