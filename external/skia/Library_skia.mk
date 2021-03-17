@@ -30,6 +30,8 @@ $(eval $(call gb_Library_add_defs,skia,\
 # This controls whether to build with compiler optimizations, normally yes, --enable-skia=debug
 # allows to build non-optimized. We normally wouldn't debug a 3rd-party library, and Skia
 # performance is relatively important (it may be the drawing engine used in software mode).
+# Some code may be always built with optimizations, even with Skia debug enabled (see
+# $(gb_COMPILEROPTFLAGS) usage).
 ifeq ($(ENABLE_SKIA_DEBUG),)
 $(eval $(call gb_Library_add_cxxflags,skia, \
     $(gb_COMPILEROPTFLAGS) \
@@ -896,8 +898,14 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 endif
 
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/third_party/skcms/skcms \
     UnpackedTarball/skia/third_party/vulkanmemoryallocator/GrVulkanMemoryAllocator \
+))
+
+# Skcms code is used by png writer, which is used by SkiaHelper::dump(). Building
+# this without optimizations would mean having each pixel of saved images be
+# processed by unoptimized code.
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/third_party/skcms/skcms, $(gb_COMPILEROPTFLAGS) \
 ))
 
 # vim: set noet sw=4 ts=4:
