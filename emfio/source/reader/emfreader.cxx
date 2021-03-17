@@ -1131,17 +1131,12 @@ namespace emfio
 
                             mpInputStream->ReadUInt32( nStyle ).ReadInt32( nPenWidth ).ReadInt32( nIgnored );
 
-                            SAL_INFO("emfio", "\t\tIndex: " << nIndex << " nStyle: 0x" << std::hex << nStyle << std::dec << " nPenWidth: " << nPenWidth);
-                            // nStyle = PS_COSMETIC = 0x0 - line with a width of one logical unit and a style that is a solid color
-                            if ( !nStyle )
-                            {
-                                // Width 0 means default width for LineInfo (HairLine) with 1 pixel wide
-                                aLineInfo.SetWidth( 0 );
-                            }
-                            else
-                            {
-                                aLineInfo.SetWidth( nPenWidth );
-                            }
+                            SAL_INFO("emfio", "\t\tIndex: " << nIndex << " Style: 0x" << std::hex << nStyle << std::dec << " PenWidth: " << nPenWidth);
+                            // According to documentation: nStyle = PS_COSMETIC = 0x0 - line with a width of one logical unit and a style that is a solid color
+                            // tdf#140271 Based on observed behaviour the line width is not constant with PS_COSMETIC
+
+                            // Width 0 means default width for LineInfo (HairLine) with 1 pixel wide
+                            aLineInfo.SetWidth( nPenWidth );
 
                             bool bTransparent = false;
                             switch( nStyle & PS_STYLE_MASK )
