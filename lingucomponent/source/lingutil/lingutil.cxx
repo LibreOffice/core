@@ -34,6 +34,7 @@
 #include <unotools/bootstrap.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/pathoptions.hxx>
+#include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 #include <rtl/tencinfo.h>
@@ -58,7 +59,7 @@ OString Win_AddLongPathPrefix( const OString &rPathName )
 }
 #endif //defined(_WIN32)
 
-#ifdef SYSTEM_DICTS
+#if defined SYSTEM_DICTS || defined IOS
 // find old style dictionaries in system directories
 static void GetOldStyleDicsInDir(
     OUString const & aSystemDir, OUString const & aFormatName,
@@ -143,7 +144,7 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
 
     OUString aFormatName;
     OUString aDicExtension;
-#ifdef SYSTEM_DICTS
+#if defined SYSTEM_DICTS || defined IOS
     OUString aSystemDir;
     OUString aSystemPrefix;
     OUString aSystemSuffix;
@@ -155,6 +156,10 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
 #ifdef SYSTEM_DICTS
         aSystemDir      = DICT_SYSTEM_DIR;
         aSystemSuffix   = aDicExtension;
+#elif defined IOS
+        aSystemDir      = "$BRAND_BASE_DIR/share/spell";
+        rtl::Bootstrap::expandMacros(aSystemDir);
+        aSystemSuffix   = ".dic";
 #endif
     }
     else if (strcmp( pDicType, "HYPH" ) == 0)
@@ -181,11 +186,12 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
     if (aFormatName.isEmpty() || aDicExtension.isEmpty())
         return aRes;
 
-#ifdef SYSTEM_DICTS
+#if defined SYSTEM_DICTS || defined IOS
     // set of languages to remember the language where it is already
     // decided to make use of the dictionary.
     std::set< OUString > aDicLangInUse;
 
+#ifndef IOS
     // follow the hunspell tool's example and check DICPATH for preferred dictionaries
     rtl_uString * pSearchPath = nullptr;
     osl_getEnvironment(OUString("DICPATH").pData, &pSearchPath);
@@ -220,6 +226,7 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         }
         while (nIndex != -1);
     }
+#endif
 
     // load system directories last so that DICPATH prevails
     GetOldStyleDicsInDir(aSystemDir, aFormatName, aSystemSuffix, aSystemPrefix,
