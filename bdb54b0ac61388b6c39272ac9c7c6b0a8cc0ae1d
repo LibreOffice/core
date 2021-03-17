@@ -156,6 +156,23 @@
     },
     {
       "key": {
+        "uuid": "10b3bbdd_1431efdc",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T09:17:05Z",
+      "side": 1,
+      "message": "Please do not use pData here. There\u0027s a OUString::getStr() for this.\n\nAlso you could call a std::string ctor taking not only char*, but also length, to speed it up a little:\n\n    std::string QRText(o.getStr(), o.getLength());",
+      "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c3ca197b_075365e0",
         "filename": "cui/source/inc/QrCodeGenDialog.hxx",
         "patchSetId": 14
