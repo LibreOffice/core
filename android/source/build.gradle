@@ -7,9 +7,6 @@ allprojects {
     repositories {
         jcenter()
         google()
-        flatDir {
-            dirs "${liboWorkdir}/UnpackedTarball/owncloud_android_lib/build/outputs/aar"
-        }
     }
 }
 //build-time dependencies - android plugin for gradle
@@ -30,7 +27,6 @@ dependencies {
             "libreoffice.jar",
             "unoloader.jar"
     ])
-    implementation(name:'owncloud_android_lib', ext:'aar')
     implementation 'com.android.support:design:27.1.1' // also pulls-in corresponding support libraries
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
 }

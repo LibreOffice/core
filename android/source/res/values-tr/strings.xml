@@ -75,12 +75,7 @@
     <string name="local_file_system">Yerel dosya sistemi</string>
     <string name="external_sd_file_system">Harici SD</string>
     <string name="otg_file_system">OTG cihazı (deneysel)</string>
-    <string name="owncloud">Uzak sunucu</string>
     <string name="usb_connected_configure">USB bağlantısı yapıldı, cihazınızın ayarlarını yapınız.</string>
-
-    <string name="owncloud_wrong_connection">ownCloud sunucusuna bağlanılamadı. Ayarlarınızı kontrol ediniz.</string>
-    <string name="owncloud_unauthorized">ownCloud sunucusuna giriş yapılamadı. Ayarlarınızı kontrol ediniz.</string>
-    <string name="owncloud_unspecified_error">ownCloud sunucusuna bağlanırken belirtilmemiş bir hata oluştu. Lütfen daha sonra tekrar deneyiniz veya ayarlarınızı kontrol ediniz.</string>
 
     <string name="ext_document_provider_error">Geçersiz dizin. SD kart ayarlarınızı kontrol ediniz.</string>
     <string name="legacy_extsd_missing_error">Geçersiz dizin. SD kartınızı veya SD kart ayarlarınızı kontrol ediniz.</string>
@@ -106,14 +101,10 @@
 
     <!-- Document provider settings -->
     <string name="storage_provider_settings">Depolama sağlayıcısı ayarları</string>
-    <string name="owncloud_settings">ownCloud ayarları</string>
     <string name="physical_storage_settings">Fiziksel depolama ayarları</string>
     <string name="external_sd_path">Harici SD yolu</string>
     <string name="otg_device_path">OTG cihazı yolu</string>
     <string name="otg_warning">Deneysel özellik: OTG cihazı yazılabilir ise kullanın</string>
-    <string name="server_url">Sunucu URL</string>
-    <string name="server_url_and_port">ownCloud sunucusu URL ve port</string>
-    <string name="user_name">Kullanıcı Adı</string>
     <string name="password">Parola</string>
     <string name="action_undo">Geri Al</string>
     <string name="action_redo">Yinele</string>

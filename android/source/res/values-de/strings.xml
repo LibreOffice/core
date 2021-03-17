@@ -75,12 +75,7 @@
     <string name="local_file_system">Lokales Dateisystem</string>
     <string name="external_sd_file_system">Externe SD</string>
     <string name="otg_file_system">OTG-Gerät (experimentell)</string>
-    <string name="owncloud">Entfernter Server</string>
     <string name="usb_connected_configure">USB verbunden, richten Sie Ihr Gerät ein.</string>
-
-    <string name="owncloud_wrong_connection">Verbindung mit dem ownCloud-Server nicht möglich. Prüfen Sie die Einstellungen.</string>
-    <string name="owncloud_unauthorized">Anmeldung am ownCloud-Server nicht möglich. Prüfen Sie die Einstellungen.</string>
-    <string name="owncloud_unspecified_error">Nicht näher spezifizierter Fehler beim Verbindungsaufbau zum ownCloud-Server. Prüfen Sie die Einstellungen und/oder versuchen Sie es später.</string>
 
     <string name="ext_document_provider_error">Ungültige Wurzel-Datei. Prüfen Sie die SD-Karten-Einstellungen.</string>
     <string name="legacy_extsd_missing_error">Ungültige Wurzel-Datei. Prüfen Sie die externe SD-Karte und/oder die Einstellungen</string>
@@ -106,14 +101,10 @@
 
     <!-- Document provider settings -->
     <string name="storage_provider_settings">Speicheranbieter-Einstellungen</string>
-    <string name="owncloud_settings">ownCloud-Einstellungen</string>
     <string name="physical_storage_settings">Einstellungen für physikalischen Speicher</string>
     <string name="external_sd_path">Pfad zur externen SD-Karte</string>
     <string name="otg_device_path">Pfad zum OTG-Gerät</string>
     <string name="otg_warning">Experimentelles Feature: Nur verwenden, wenn OTG-Gerät beschreibbar ist.</string>
-    <string name="server_url">Server-URL</string>
-    <string name="server_url_and_port">URL und Port des ownCloud-Servers.</string>
-    <string name="user_name">Benutzername</string>
     <string name="password">Passwort</string>
     <string name="action_undo">Rückgängig</string>
     <string name="action_redo">Wiederherstellen</string>
