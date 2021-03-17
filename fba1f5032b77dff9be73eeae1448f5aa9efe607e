@@ -34,6 +34,24 @@
       "revId": "fba1f5032b77dff9be73eeae1448f5aa9efe607e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b612b728_2fc48932",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3001,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T14:11:31Z",
+      "side": 1,
+      "message": "You had fixed that since then; and to demonstrate my point to insist on their restoration, please compare the two screenshots:\n\nBefore you fixed that: https://imgur.com/1pOY9N7\nAfter you fixed that: https://imgur.com/zErfngx\n\nPlease see how much cleaner and easier it is now to see what exactly was changed, because it\u0027s easier to the diff to color and correspond unchanged parts.\n\nI do not think that the white lines should stay. But if to be removed, that *must* be a separate re-formatting commit, not part of this functional commit, where the formatting changes only introduces noise, and makes review harder.",
+      "parentUuid": "8440b310_0eda33ad",
+      "revId": "fba1f5032b77dff9be73eeae1448f5aa9efe607e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }

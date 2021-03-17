@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9b78bb73_a6800c00",
+        "filename": "basic/qa/cppunit/test_global_as_new.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T14:11:31Z",
+      "side": 1,
+      "message": "You must be right, and I had to double-check instead of relying on memory. (I still hadn\u0027t checked myself ;-D)",
+      "parentUuid": "fbf54dc2_8d07c005",
+      "range": {
+        "startLine": 64,
+        "startChar": 65,
+        "endLine": 64,
+        "endChar": 88
+      },
+      "revId": "e7a7f9a004beb44450442a418b60d650cb1902fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2551b1f8_a182cb40",
         "filename": "basic/source/comp/dim.cxx",
         "patchSetId": 10
