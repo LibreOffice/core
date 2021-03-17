@@ -699,7 +699,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     ScopedVclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), "RowHeightDialog",
                         nCurHeight, ScGlobal::nStdRowHeight,
-                        eMetric, 4, MAX_ROW_HEIGHT));
+                        eMetric, 2, MAX_ROW_HEIGHT));
 
                     if ( pDlg->Execute() == RET_OK )
                     {
@@ -736,7 +736,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     ScopedVclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), "OptimalRowHeightDialog",
-                        ScGlobal::nLastRowHeightExtra, 0, eMetric, 4, MAX_EXTRA_HEIGHT));
+                        ScGlobal::nLastRowHeightExtra, 0, eMetric, 1, MAX_EXTRA_HEIGHT));
                     if ( pDlg->Execute() == RET_OK )
                     {
                         tools::Long nVal = pDlg->GetInputValue();
@@ -797,7 +797,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     ScopedVclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), "ColWidthDialog", nCurHeight,
-                        STD_COL_WIDTH, eMetric, 4, MAX_COL_WIDTH));
+                        STD_COL_WIDTH, eMetric, 2, MAX_COL_WIDTH));
                     if ( pDlg->Execute() == RET_OK )
                     {
                         tools::Long nVal = pDlg->GetInputValue();
@@ -833,7 +833,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     ScopedVclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), "OptimalColWidthDialog",
-                        ScGlobal::nLastColWidthExtra, STD_EXTRA_WIDTH, eMetric, 4, MAX_EXTRA_WIDTH));
+                        ScGlobal::nLastColWidthExtra, STD_EXTRA_WIDTH, eMetric, 1, MAX_EXTRA_WIDTH));
                     if ( pDlg->Execute() == RET_OK )
                     {
                         tools::Long nVal = pDlg->GetInputValue();
