@@ -343,7 +343,7 @@ class IDocumentMarkAccess
         virtual sw::mark::IMark* getAnnotationMarkFor(const SwPosition& rPosition) const = 0;
         // restore text ranges of annotations of tracked deletions
         // based on the helper bookmarks (which can survive I/O and hiding redlines)
-        virtual void restoreAnnotationMarks() = 0;
+        virtual void restoreAnnotationMarks(bool bDelete = true) = 0;
         /** Finds the first mark that is starting after.
 
             @returns

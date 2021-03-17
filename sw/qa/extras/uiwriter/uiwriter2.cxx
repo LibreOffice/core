@@ -2390,12 +2390,84 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138666)
     CPPUNIT_ASSERT_EQUAL(OUString("Loremm"), getParagraph(1)->getString());
     CPPUNIT_ASSERT_EQUAL(OUString("dolsit"), getParagraph(2)->getString());
 
-    // switch on "Show changes in margin" mode
+    // switch off "Show changes in margin" mode
     dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
 
     // show deletions inline again
     CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum"), getParagraph(1)->getString());
     CPPUNIT_ASSERT_EQUAL(OUString("dolor sit"), getParagraph(2)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf140982)
+{
+    SwDoc* pDoc = createDoc("tdf115815.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    //turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // show deletions inline
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum dolor sit amet..."), getParagraph(1)->getString());
+
+    // switch on "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+
+    // show deletions in margin
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem  amet..."), getParagraph(1)->getString());
+
+    // switch off "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+
+    // show deletions inline again
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum dolor sit amet..."), getParagraph(1)->getString());
+
+    // Save it and load it back.
+    reload("writer8", "tdf115815.odt");
+
+    // Test comment range feature on tracked deletion.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(),
+                                                                 uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+    bool bAnnotationStart = false;
+    bool bBeforeAnnotation = true;
+    OUString sTextBeforeAnnotation;
+    while (xRunEnum->hasMoreElements())
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
+        OUString aType = getProperty<OUString>(xPropertySet, "TextPortionType");
+        // there is no AnnotationEnd with preceding AnnotationStart,
+        // i.e. annotation with lost range
+        CPPUNIT_ASSERT(aType != "AnnotationEnd" || !bAnnotationStart);
+
+        bAnnotationStart = (aType == "Annotation");
+
+        // collect paragraph text before the first annotation
+        if (bBeforeAnnotation)
+        {
+            if (bAnnotationStart)
+                bBeforeAnnotation = false;
+            else if (aType == "Text")
+            {
+                uno::Reference<text::XTextRange> xRun(xPropertySet, uno::UNO_QUERY);
+                sTextBeforeAnnotation += xRun->getString();
+            }
+        }
+    }
+
+    // This was "Lorem ipsum" (collapsed annotation range)
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem "), sTextBeforeAnnotation);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126206)
