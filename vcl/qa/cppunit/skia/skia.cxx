@@ -43,6 +43,7 @@ public:
     void testMatrixQuality();
     void testDelayedScale();
     void testTdf137329();
+    void testTdf140848();
 
     CPPUNIT_TEST_SUITE(SkiaTest);
     CPPUNIT_TEST(testBitmapErase);
@@ -53,6 +54,7 @@ public:
     CPPUNIT_TEST(testMatrixQuality);
     CPPUNIT_TEST(testDelayedScale);
     CPPUNIT_TEST(testTdf137329);
+    CPPUNIT_TEST(testTdf140848);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -393,6 +395,34 @@ void SkiaTest::testTdf137329()
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(9, 9)));
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(0, 9)));
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, device->GetPixel(Point(4, 4)));
+}
+
+void SkiaTest::testTdf140848()
+{
+    if (!SkiaHelper::isVCLSkiaEnabled())
+        return;
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    device->SetOutputSizePixel(Size(1300, 400));
+    device->SetBackground(Wallpaper(COL_BLACK));
+    device->SetAntialiasing(AntialiasingFlags::Enable);
+    device->Erase();
+    device->SetLineColor();
+    device->SetFillColor(COL_WHITE);
+    basegfx::B2DPolygon p1 = { { 952.73121259842514519, 102.4599685039370911 },
+                               { 952.73121259842514519, 66.55445669291347599 },
+                               { 1239.9753070866140661, 66.554456692913390725 },
+                               { 1239.9753070866140661, 138.36548031496062094 },
+                               { 952.73121259842514519, 138.36548031496070621 } };
+    basegfx::B2DPolygon p2 = { { 1168.1642834645670064, 210.17650393700790801 },
+                               { 1168.1642834645670064, 66.554456692913404936 },
+                               { 1239.9753070866140661, 66.554456692913390725 },
+                               { 1239.9753070866142934, 353.79855118110236845 },
+                               { 1168.1642834645670064, 353.79855118110236845 } };
+    device->DrawPolyPolygon(basegfx::B2DPolyPolygon(p1));
+    device->DrawPolyPolygon(basegfx::B2DPolyPolygon(p2));
+    //savePNG("/tmp/tdf140848.png", device);
+    // Rounding errors caused the overlapping part not to be drawn.
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(1200, 100)));
 }
 
 } // namespace

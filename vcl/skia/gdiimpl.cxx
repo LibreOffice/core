@@ -1015,6 +1015,20 @@ bool SkiaSalGraphicsImpl::delayDrawPolyPolygon(const basegfx::B2DPolyPolygon& aP
     return true;
 }
 
+// Tdf#140848 - basegfx::utils::mergeToSinglePolyPolygon() seems to have rounding
+// errors that sometimes cause it to merge incorrectly.
+static void roundPolygonPoints(basegfx::B2DPolyPolygon& polyPolygon)
+{
+    for (basegfx::B2DPolygon& polygon : polyPolygon)
+    {
+        polygon.makeUnique();
+        for (sal_uInt32 i = 0; i < polygon.count(); ++i)
+            polygon.setB2DPoint(i, basegfx::B2DPoint(basegfx::fround(polygon.getB2DPoint(i))));
+        // Control points are saved as vectors relative to points, so hopefully
+        // there's no need to round those.
+    }
+}
+
 void SkiaSalGraphicsImpl::checkPendingDrawing()
 {
     if (mLastPolyPolygonInfo.polygons.size() != 0)
@@ -1026,10 +1040,12 @@ void SkiaSalGraphicsImpl::checkPendingDrawing()
         if (polygons.size() == 1)
             performDrawPolyPolygon(polygons.front(), transparency, true);
         else
-            // TODO: tdf#136222 shows that basegfx::utils::mergeToSinglePolyPolygon() is unreliable
-            // in corner cases, possibly either a bug or rounding errors somewhere.
+        {
+            for (basegfx::B2DPolyPolygon& p : polygons)
+                roundPolygonPoints(p);
             performDrawPolyPolygon(basegfx::utils::mergeToSinglePolyPolygon(polygons), transparency,
                                    true);
+        }
     }
 }
 
