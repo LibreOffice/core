@@ -29,9 +29,7 @@ class tdf96698(UITestCase):
         xallowempty = xDialog.getChild("allowempty")
         xmin = xDialog.getChild("min")
 
-        props = {"TEXT": "Custom"}
-        actionProps = mkPropertyValues(props)
-        xallow.executeAction("SELECT", actionProps)
+        select_by_text(xallow, "Custom")
         xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"ISERROR(FIND(\",\",B2))"}))
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
@@ -57,9 +55,7 @@ class tdf96698(UITestCase):
         xallowempty = xDialog.getChild("allowempty")
         xmin = xDialog.getChild("min")
 
-        props = {"TEXT": "Custom"}
-        actionProps = mkPropertyValues(props)
-        xallow.executeAction("SELECT", actionProps)
+        select_by_text(xallow, "Custom")
         xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"NOT(ISERROR(B3))"}))
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
@@ -85,9 +81,7 @@ class tdf96698(UITestCase):
         xallowempty = xDialog.getChild("allowempty")
         xmin = xDialog.getChild("min")
 
-        props = {"TEXT": "Custom"}
-        actionProps = mkPropertyValues(props)
-        xallow.executeAction("SELECT", actionProps)
+        select_by_text(xallow, "Custom")
         xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"ISERROR(FIND(\",\",A7))"}))
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
@@ -113,9 +107,7 @@ class tdf96698(UITestCase):
         xallowempty = xDialog.getChild("allowempty")
         xmin = xDialog.getChild("min")
 
-        props = {"TEXT": "Custom"}
-        actionProps = mkPropertyValues(props)
-        xallow.executeAction("SELECT", actionProps)
+        select_by_text(xallow, "Custom")
         xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"NOT(ISERROR(A8))"}))
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)

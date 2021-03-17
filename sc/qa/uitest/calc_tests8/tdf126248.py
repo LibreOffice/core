@@ -43,7 +43,7 @@ class tdf126248(UITestCase):
         self.assertEqual("true", get_state_as_dict(asianlanguage)['Selected'])
 
         localeSetting = xDialog.getChild("localesetting")
-        localeSetting.executeAction("SELECT", mkPropertyValues({"TEXT": language}))
+        select_by_text(localeSetting, language)
 
         self.assertEqual(language, get_state_as_dict(localeSetting)['SelectEntryText'])
 

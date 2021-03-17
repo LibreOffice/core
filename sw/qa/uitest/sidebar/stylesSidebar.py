@@ -53,7 +53,7 @@ class StylesSidebar(UITestCase):
         xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "StyleListPanel"}))
 
         xFilter = xWriterEdit.getChild('filter')
-        xFilter.executeAction("SELECT", mkPropertyValues({"TEXT": "Custom Styles"}))
+        select_by_text(xFilter, "Custom Styles")
 
         expectedResults = ["customParagraphStyle", "customCharacterStyle", "customFrameStyle",
                 "customPageStyle", "customNumberingStyle"]

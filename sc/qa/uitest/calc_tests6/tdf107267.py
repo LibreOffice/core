@@ -31,9 +31,7 @@ class Subtotals(UITestCase):
         select_pos(xTabs, "0")
         # = 1st group = 3. Group by "Person Number", select "shipping time" and use the Max function.
         xGroupBy = xDialog.getChild("group_by")
-        props = {"TEXT": "Person Number"}
-        actionProps = mkPropertyValues(props)
-        xGroupBy.executeAction("SELECT", actionProps)
+        select_by_text(xGroupBy, "Person Number")
         # 4. Tick 'Calculate subtotals for' -> "shipping time" - already selected
 #        xCheckListMenu = xDialog.getChild("grid1")
 #        xTreeList = xCheckListMenu.getChild("columns")
@@ -44,9 +42,7 @@ class Subtotals(UITestCase):
         #= 2nd group =5. Group by "Person Number", select "shipping time" and use the Min function.
         select_pos(xTabs, "1")
         xGroupBy = xDialog.getChild("group_by")
-        props = {"TEXT": "Person Number"}
-        actionProps = mkPropertyValues(props)
-        xGroupBy.executeAction("SELECT", actionProps)
+        select_by_text(xGroupBy, "Person Number")
         # 4. Tick 'Calculate subtotals for' -> "shipping time" - already selected
 #        xCheckListMenu = xDialog.getChild("grid1")
 #        xTreeList = xCheckListMenu.getChild("columns")
@@ -57,9 +53,7 @@ class Subtotals(UITestCase):
         #= 3rd group = Group by "Person Number", select "shipping time" and use the Average function.
         select_pos(xTabs, "2")
         xGroupBy = xDialog.getChild("group_by")
-        props = {"TEXT": "Person Number"}
-        actionProps = mkPropertyValues(props)
-        xGroupBy.executeAction("SELECT", actionProps)
+        select_by_text(xGroupBy, "Person Number")
         # 4. Tick 'Calculate subtotals for' -> "shipping time" - already selected
 #        xCheckListMenu = xDialog.getChild("grid1")
 #        xTreeList = xCheckListMenu.getChild("columns")

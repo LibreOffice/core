@@ -38,9 +38,7 @@ class formatCell(UITestCase):
         xlanguagelb = xDialog.getChild("languagelb")
         xformatted = xDialog.getChild("formatted")
         #language
-        props3 = {"TEXT": "English (USA)"}
-        actionProps3 = mkPropertyValues(props3)
-        xlanguagelb.executeAction("SELECT", actionProps3)
+        select_by_text(xlanguagelb, "English (USA)")
         #other properties
         xdecimalsed.executeAction("UP", tuple())
         xleadzerosed.executeAction("UP", tuple())
@@ -213,20 +211,14 @@ class formatCell(UITestCase):
         xcheckHyphActive = xDialog.getChild("checkHyphActive")
         xcomboTextDirBox = xDialog.getChild("comboTextDirBox")
 
-        props = {"TEXT": "Left"}
-        actionProps = mkPropertyValues(props)
-        comboboxHorzAlign.executeAction("SELECT", actionProps)
+        select_by_text(comboboxHorzAlign, "Left")
         xspinIndentFrom.executeAction("UP", tuple())
         indentVal = get_state_as_dict(xspinIndentFrom)["Text"]
-        props2 = {"TEXT": "Top"}
-        actionProps2 = mkPropertyValues(props2)
-        xcomboboxVertAlign.executeAction("SELECT", actionProps2)
+        select_by_text(xcomboboxVertAlign, "Top")
         xcheckVertStack.executeAction("CLICK", tuple())
         xcheckWrapTextAuto.executeAction("CLICK", tuple())
         xcheckHyphActive.executeAction("CLICK", tuple())
-        props3 = {"TEXT": "Left-to-right (LTR)"}
-        actionProps3 = mkPropertyValues(props3)
-        xcomboTextDirBox.executeAction("SELECT", actionProps3)
+        select_by_text(xcomboTextDirBox, "Left-to-right (LTR)")
         xOK = xDialog.getChild("ok")
         xOK.executeAction("CLICK", tuple())
         #Verify- select cell A1
