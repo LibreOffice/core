@@ -29,7 +29,6 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
                        "sfx/ui/developmenttool.ui")
     , mpObjectInspectorWidgets(new ObjectInspectorWidgets(m_xBuilder))
     , mpDocumentModelTreeView(m_xBuilder->weld_tree_view("leftside_treeview_id"))
-    , mpSelectionToggle(m_xBuilder->weld_toggle_button("dom_selection_toggle"))
     , mpDomToolbar(m_xBuilder->weld_toolbar("dom_toolbar"))
     , maDocumentModelTreeHandler(
           mpDocumentModelTreeView,
@@ -38,7 +37,6 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
 {
     mpDocumentModelTreeView->connect_changed(
         LINK(this, DevelopmentToolDockingWindow, DocumentModelTreeViewSelectionHandler));
-    mpSelectionToggle->connect_toggled(LINK(this, DevelopmentToolDockingWindow, SelectionToggled));
     mpDomToolbar->connect_clicked(
         LINK(this, DevelopmentToolDockingWindow, DomToolbarButtonClicked));
 
@@ -58,7 +56,7 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
 IMPL_LINK(DevelopmentToolDockingWindow, DocumentModelTreeViewSelectionHandler, weld::TreeView&,
           rView, void)
 {
-    if (mpSelectionToggle->get_state() == TRISTATE_TRUE)
+    if (mpDomToolbar->get_item_active("dom_current_selection_toggle"))
         return;
 
     OUString sID = rView.get_selected_id();
@@ -78,6 +76,10 @@ IMPL_LINK(DevelopmentToolDockingWindow, DomToolbarButtonClicked, const OString&,
     {
         maDocumentModelTreeHandler.inspectDocument();
     }
+    else if (rSelectionId == "dom_current_selection_toggle")
+    {
+        updateSelection();
+    }
 }
 
 DevelopmentToolDockingWindow::~DevelopmentToolDockingWindow() { disposeOnce(); }
@@ -96,7 +98,6 @@ void DevelopmentToolDockingWindow::dispose()
 
     // dispose welded objects
     mpObjectInspectorWidgets.reset();
-    mpSelectionToggle.reset();
     mpDomToolbar.reset();
     mpDocumentModelTreeView.reset();
 
@@ -105,8 +106,8 @@ void DevelopmentToolDockingWindow::dispose()
 
 void DevelopmentToolDockingWindow::updateSelection()
 {
-    TriState eTriState = mpSelectionToggle->get_state();
-    if (eTriState == TRISTATE_TRUE)
+    bool bActive = mpDomToolbar->get_item_active("dom_current_selection_toggle");
+    if (bActive)
     {
         maObjectInspectorTreeHandler.introspect(mxCurrentSelection);
         maDocumentModelTreeHandler.selectObject(mxCurrentSelection);
@@ -145,12 +146,12 @@ void DevelopmentToolDockingWindow::changeToCurrentSelection()
             if (xInterface.is())
             {
                 maObjectInspectorTreeHandler.introspect(xInterface);
-                mpSelectionToggle->set_state(TRISTATE_TRUE);
+                mpDomToolbar->set_item_active("dom_current_selection_toggle", true);
                 return;
             }
         }
     }
-    mpSelectionToggle->set_state(TRISTATE_FALSE);
+    mpDomToolbar->set_item_active("dom_current_selection_toggle", false);
     maObjectInspectorTreeHandler.introspect(mxRoot);
 }
 
