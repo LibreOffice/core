@@ -7,6 +7,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -29,13 +30,9 @@ class validity(UITestCase):
         xmin = xDialog.getChild("min")
         xmax = xDialog.getChild("max")
 
-        props = {"TEXT": "Whole Numbers"}
-        actionProps = mkPropertyValues(props)
-        xallow.executeAction("SELECT", actionProps)
+        select_by_text(xallow, "Whole Numbers")
         xallowempty.executeAction("CLICK", tuple())
-        propsA = {"TEXT": "valid range"}
-        actionPropsA = mkPropertyValues(propsA)
-        xdata.executeAction("SELECT", actionPropsA)
+        select_by_text(xdata, "valid range")
         xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
         xmax.executeAction("TYPE", mkPropertyValues({"TEXT":"2"}))
         xOKBtn = xDialog.getChild("ok")
@@ -114,9 +111,7 @@ class validity(UITestCase):
         xerroralerttitle = xDialog.getChild("erroralert_title")
         xerrorMsg = xDialog.getChild("errorMsg")
 
-        props = {"TEXT": "Warning"}
-        actionProps = mkPropertyValues(props)
-        xactionCB.executeAction("SELECT", actionProps)
+        select_by_text(xactionCB, "Warning")
         xerroralerttitle.executeAction("TYPE", mkPropertyValues({"TEXT":"Warn"}))
         xerrorMsg.executeAction("TYPE", mkPropertyValues({"TEXT":"Warn2"}))
         xOKBtn = xDialog.getChild("ok")

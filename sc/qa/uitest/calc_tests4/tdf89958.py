@@ -7,6 +7,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -31,12 +32,8 @@ class tdf89958(UITestCase):
         xval1 = xDialog.getChild("val1")
         xcond1 = xDialog.getChild("cond1")
 
-        props = {"TEXT": "Column A"}
-        actionProps = mkPropertyValues(props)
-        xfield1.executeAction("SELECT", actionProps)
-        props2 = {"TEXT": "Does not end with"}
-        actionProps2 = mkPropertyValues(props2)
-        xcond1.executeAction("SELECT", actionProps2)
+        select_by_text(xfield1, "Column A")
+        select_by_text(xcond1, "Does not end with")
         xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"CTORS"}))
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)

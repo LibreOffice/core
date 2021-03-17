@@ -7,6 +7,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, select_pos
 from uitest.uihelper.common import change_measurement_unit
+from uitest.uihelper.common import select_by_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf135590(UITestCase):
@@ -27,7 +28,7 @@ class tdf135590(UITestCase):
         xHeight = xDialog.getChild('height')
         xFormat = xDialog.getChild("format")
 
-        xFormat.executeAction("SELECT", mkPropertyValues({"TEXT": "C6 Envelope"}))
+        select_by_text(xFormat, "C6 Envelope")
 
         self.assertEqual("16.2", get_state_as_dict(xWidth)['Value'])
         self.assertEqual("11.4", get_state_as_dict(xHeight)['Value'])

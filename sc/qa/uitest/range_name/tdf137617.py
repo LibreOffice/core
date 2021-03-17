@@ -8,6 +8,7 @@
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.common import select_by_text
 from uitest.uihelper.calc import enter_text_to_cell
 
 class tdf137617(UITestCase):
@@ -57,10 +58,7 @@ class tdf137617(UITestCase):
         xCalcFormulaEntry.executeAction("SELECT", tuple())
 
         xFormulaSyntax = xDialogOpt.getChild('formulasyntax')
-
-        props = {"TEXT": "Excel R1C1"}
-        actionProps = mkPropertyValues(props)
-        xFormulaSyntax.executeAction("SELECT", actionProps)
+        select_by_text(xFormulaSyntax, "Excel R1C1")
 
         xOKBtn = xDialogOpt.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
@@ -104,10 +102,7 @@ class tdf137617(UITestCase):
         xCalcFormulaEntry.executeAction("SELECT", tuple())
 
         xFormulaSyntax = xDialogOpt.getChild('formulasyntax')
-
-        props = {"TEXT": "Calc A1"}
-        actionProps = mkPropertyValues(props)
-        xFormulaSyntax.executeAction("SELECT", actionProps)
+        select_by_text(xFormulaSyntax, "Calc A1")
 
         xOKBtn = xDialogOpt.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)

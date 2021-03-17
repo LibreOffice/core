@@ -6,6 +6,7 @@
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import select_by_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class StylesSidebar(UITestCase):
@@ -53,7 +54,7 @@ class StylesSidebar(UITestCase):
         xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "StyleListPanel"}))
 
         xFilter = xWriterEdit.getChild('filter')
-        xFilter.executeAction("SELECT", mkPropertyValues({"TEXT": "Custom Styles"}))
+        select_by_text(xFilter, "Custom Styles")
 
         expectedResults = ["customParagraphStyle", "customCharacterStyle", "customFrameStyle",
                 "customPageStyle", "customNumberingStyle"]

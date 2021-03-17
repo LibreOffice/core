@@ -6,6 +6,7 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import select_by_text
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -23,9 +24,7 @@ class tdf124586(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:ChapterNumberingDialog")
         xDialog = self.xUITest.getTopFocusWindow()
         xstyle = xDialog.getChild("style")
-        props = {"TEXT": "MyHeading"}
-        actionProps = mkPropertyValues(props)
-        xstyle.executeAction("SELECT", actionProps)
+        select_by_text(xstyle, "MyHeading")
         xOK = xDialog.getChild("ok")
         xOK.executeAction("CLICK", tuple())
 

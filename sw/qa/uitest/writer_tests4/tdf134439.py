@@ -6,6 +6,7 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+from uitest.uihelper.common import select_by_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf134439(UITestCase):
@@ -32,7 +33,7 @@ class tdf134439(UITestCase):
         xPageStyle = xDialog.getChild("comboPageStyle")
         self.assertEqual("Chap 2", get_state_as_dict(xPageStyle)["SelectEntryText"])
 
-        xPageStyle.executeAction("SELECT", mkPropertyValues({"TEXT": "Chap 3"}))
+        select_by_text(xPageStyle, "Chap 3")
 
         self.assertEqual("Chap 3", get_state_as_dict(xPageStyle)["SelectEntryText"])
 
