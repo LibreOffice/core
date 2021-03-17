@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fe438a7_becb96dc",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T10:02:14Z",
+      "side": 1,
+      "message": "Please format this.",
+      "range": {
+        "startLine": 273,
+        "startChar": 4,
+        "endLine": 288,
+        "endChar": 24
+      },
+      "revId": "f653684bde0543629adcbc284d52ad126dad88fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3966ac8b_86b1e7ca",
+        "filename": "cui/source/inc/QrCodeGenDialog.hxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T10:02:14Z",
+      "side": 1,
+      "message": "But you have not addressed this - and you can\u0027t pass matrix by value.",
+      "revId": "f653684bde0543629adcbc284d52ad126dad88fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
