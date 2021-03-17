@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a75d69b_c0c1ac51",
+        "filename": "sc/source/ui/vba/vbarange.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-03-17T18:01:42Z",
+      "side": 1,
+      "message": "This is wrong. If a sheetname was prefixed that is not the current sheet and it is stripped, the rangename then may be found as a current sheet local name or a global name, but wasn\u0027t meant as neither. Instead, the rangename (stripped off the sheetname) must be looked up from a sheet named sheetname and not be found as global name at all. Apart from that hard-wiring Parse_XL_Header() ignores the AddressConvention aConv passed..\n\nHowever, the code below does not handle sheet-local names at all and prefers global names over local names as it obtains current sheet local names only if a global names was not found (and then does nothing), which is also wrong.",
+      "revId": "2f015a528eb503168988393d9b86153a716ccf5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
