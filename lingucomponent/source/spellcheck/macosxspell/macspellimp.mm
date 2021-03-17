@@ -131,8 +131,9 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
             }
             else if ([pLangStr isEqualToString:@"de"])
             {
+                // Not de_CH and de_LI, though. They need separate dictionaries.
                 const std::vector<NSString*> aDE
-                    { @"AT", @"BE", @"CH", @"DE", @"LI", @"LU" };
+                    { @"AT", @"BE", @"DE", @"LU" };
                 for (auto c: aDE)
                 {
                     pLangStr = [@"de_" stringByAppendingString: c];
