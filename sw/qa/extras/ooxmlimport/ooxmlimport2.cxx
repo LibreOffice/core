@@ -196,6 +196,43 @@ DECLARE_OOXMLIMPORT_TEST(testTdf120547, "tdf120547.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8073), aSizeShape3.Height);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf118693, "tdf118693.docx")
+{
+    uno::Reference<drawing::XShape> xGroupShape = getShape(1);
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xGroup->getCount());
+
+    awt::Point aPosGroup = xGroupShape->getPosition();
+    awt::Size aSizeGroup = xGroupShape->getSize();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10162), aPosGroup.X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(118), aPosGroup.Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6369), aSizeGroup.Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4983), aSizeGroup.Height);
+
+    // Without the fix in place, this test would have failed at many places
+    // as the first shape in the group would have had an incorrect position,
+    // an incorrect width or an incorrect height.
+
+    uno::Reference<drawing::XShape> xShape1(xGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    awt::Point aPosShape1 = xShape1->getPosition();
+    awt::Size aSizeShape1 = xShape1->getSize();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(12863), aPosShape1.X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(146), aPosShape1.Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3669), aSizeShape1.Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4914), aSizeShape1.Height);
+
+    uno::Reference<drawing::XShape> xShape2(xGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    awt::Point aPosShape2 = xShape2->getPosition();
+    awt::Size aSizeShape2 = xShape2->getSize();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10162), aPosShape2.X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(118), aPosShape2.Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4595), aSizeShape2.Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4983), aSizeShape2.Height);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testGroupShapeFontName, "groupshape-fontname.docx")
 {
     // Font names inside a group shape were not imported
