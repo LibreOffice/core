@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f1534ed8_768af2dc",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-17T13:11:14Z",
+      "side": 1,
+      "message": "Oops! My bad ! Actually I wasn\u0027t aware of such plugin \u0026 I\u0027ll see to it now \u0026 sorry for such silly mistakes. Will try to avoid it from the very next time. Thanks! 😊",
+      "parentUuid": "e01c3015_77a744cb",
+      "range": {
+        "startLine": 266,
+        "startChar": 0,
+        "endLine": 293,
+        "endChar": 1
+      },
+      "revId": "86673d875c82302650067f8503f87b9bc50a025f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4c33730e_9a402da2",
         "filename": "cui/source/inc/QrCodeGenDialog.hxx",
         "patchSetId": 18
