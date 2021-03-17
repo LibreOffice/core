@@ -30,9 +30,7 @@ class tdf106099(UITestCase):
             xTabs = dialog.getChild("tabcontrol")
             select_pos(xTabs, "1")          #tab font effects
             underlinelb = dialog.getChild("underlinelb")
-            props = {"TEXT": "Single"}
-            actionProps = mkPropertyValues(props)
-            underlinelb.executeAction("SELECT", actionProps)
+            select_by_text(underlinelb, "Single")
             xOkBtn = dialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOkBtn)
 

@@ -32,7 +32,7 @@ class tdf134439(UITestCase):
         xPageStyle = xDialog.getChild("comboPageStyle")
         self.assertEqual("Chap 2", get_state_as_dict(xPageStyle)["SelectEntryText"])
 
-        xPageStyle.executeAction("SELECT", mkPropertyValues({"TEXT": "Chap 3"}))
+        select_by_text(xPageStyle, "Chap 3")
 
         self.assertEqual("Chap 3", get_state_as_dict(xPageStyle)["SelectEntryText"])
 

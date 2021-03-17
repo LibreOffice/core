@@ -31,12 +31,8 @@ class tdf89958(UITestCase):
         xval1 = xDialog.getChild("val1")
         xcond1 = xDialog.getChild("cond1")
 
-        props = {"TEXT": "Column A"}
-        actionProps = mkPropertyValues(props)
-        xfield1.executeAction("SELECT", actionProps)
-        props2 = {"TEXT": "Does not end with"}
-        actionProps2 = mkPropertyValues(props2)
-        xcond1.executeAction("SELECT", actionProps2)
+        select_by_text(xfield1, "Column A")
+        select_by_text(xcond1, "Does not end with")
         xval1.executeAction("TYPE", mkPropertyValues({"TEXT":"CTORS"}))
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)

@@ -34,9 +34,7 @@ class tdf104117(UITestCase):
         xdecimalplacesspin = xDialog.getChild("decimal-places-spin")
 
         xcellrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$1:$A$2"}))
-        props = {"TEXT": "Uniform Integer"}
-        actionProps = mkPropertyValues(props)
-        xdistributioncombo.executeAction("SELECT", actionProps)
+        select_by_text(xdistributioncombo, "Uniform Integer")
         xparameter2spin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
         xparameter2spin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
         xparameter2spin.executeAction("TYPE", mkPropertyValues({"TEXT":"1000000000000000000000000000000000000000000000"}))

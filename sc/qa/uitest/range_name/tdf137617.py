@@ -57,10 +57,7 @@ class tdf137617(UITestCase):
         xCalcFormulaEntry.executeAction("SELECT", tuple())
 
         xFormulaSyntax = xDialogOpt.getChild('formulasyntax')
-
-        props = {"TEXT": "Excel R1C1"}
-        actionProps = mkPropertyValues(props)
-        xFormulaSyntax.executeAction("SELECT", actionProps)
+        select_by_text(xFormulaSyntax, "Excel R1C1")
 
         xOKBtn = xDialogOpt.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
@@ -104,10 +101,7 @@ class tdf137617(UITestCase):
         xCalcFormulaEntry.executeAction("SELECT", tuple())
 
         xFormulaSyntax = xDialogOpt.getChild('formulasyntax')
-
-        props = {"TEXT": "Calc A1"}
-        actionProps = mkPropertyValues(props)
-        xFormulaSyntax.executeAction("SELECT", actionProps)
+        select_by_text(xFormulaSyntax, "Calc A1")
 
         xOKBtn = xDialogOpt.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)

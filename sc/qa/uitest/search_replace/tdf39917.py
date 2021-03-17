@@ -33,9 +33,7 @@ class tdf39917(UITestCase):
 
         formulasyntax = xDialogOpt.getChild("formulasyntax")
         #Excel R1C1
-        props = {"TEXT": "Excel R1C1"}
-        actionProps = mkPropertyValues(props)
-        formulasyntax.executeAction("SELECT", actionProps)
+        select_by_text(formulasyntax, "Excel R1C1")
 
         xOKBtn = xDialogOpt.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
@@ -100,9 +98,7 @@ class tdf39917(UITestCase):
 
         formulasyntax = xDialogOpt.getChild("formulasyntax")
         #Excel R1C1
-        props = {"TEXT": "Calc A1"}
-        actionProps = mkPropertyValues(props)
-        formulasyntax.executeAction("SELECT", actionProps)
+        select_by_text(formulasyntax, "Calc A1")
 
         xOKBtn = xDialogOpt.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)

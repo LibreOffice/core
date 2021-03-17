@@ -37,9 +37,7 @@ class tdf53482(UITestCase):
         xDown = xDialog.getChild("down")
         xDown.executeAction("CLICK", tuple())
         xSortKey1 = xDialog.getChild("sortlb")
-        props = {"TEXT": "Occupation"}
-        actionProps = mkPropertyValues(props)
-        xSortKey1.executeAction("SELECT", actionProps)
+        select_by_text(xSortKey1, "Occupation")
         #5. Click Ok
         xOK = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOK)

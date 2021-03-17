@@ -401,7 +401,7 @@ class tdf93506(UITestCase):
     yVarName = xDialog.getChild("entry_Yname")
 
     movingAverage.executeAction("CLICK", tuple())   #set polynomial
-    movingAverageType.executeAction("SELECT", mkPropertyValues({"TEXT": "Averaged Abscissa"}))
+    select_by_text(movingAverageType, "Averaged Abscissa")
     period.executeAction("UP", tuple())
 
     #Click on tab "Line".

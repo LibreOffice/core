@@ -35,13 +35,9 @@ class DetectiveCircle(UITestCase):
         xmin = xDialog.getChild("min")
         xmax = xDialog.getChild("max")
 
-        props = {"TEXT": "Whole Numbers"}
-        actionProps = mkPropertyValues(props)
-        xallow.executeAction("SELECT", actionProps)
+        select_by_text(xallow, "Whole Numbers")
         xallowempty.executeAction("CLICK", tuple())
-        propsA = {"TEXT": "equal"}
-        actionPropsA = mkPropertyValues(propsA)
-        xdata.executeAction("SELECT", actionPropsA)
+        select_by_text(xdata, "equal")
         xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"5"}))
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)

@@ -30,9 +30,7 @@ class tdf77509(UITestCase):
         xbycol = xDialog.getChild("bycol")
         xeddestarea = xDialog.getChild("eddestarea")
 
-        props = {"TEXT": "Sum"}
-        actionProps = mkPropertyValues(props)
-        xfunc.executeAction("SELECT", actionProps)
+        select_by_text(xfunc, "Sum")
         #4. Source data ranges: $Sheet1.$A$1:$B$7
         #5. Click 'Add' so that ranges appear in "Consolidation ranges"
         xeddataarea.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$1:$B$7"}))

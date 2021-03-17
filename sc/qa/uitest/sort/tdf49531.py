@@ -40,9 +40,7 @@ class tdf49531(UITestCase):
         select_pos(xTabs, "0")
         xSortKey1 = xDialog.getChild("sortlb")
         xAsc = xDialog.getChild("up")
-        props = {"TEXT": "Column B"}
-        actionProps = mkPropertyValues(props)
-        xSortKey1.executeAction("SELECT", actionProps)
+        select_by_text(xSortKey1, "Column B")
         xAsc.executeAction("CLICK", tuple())
         xOk = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOk)

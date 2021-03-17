@@ -30,9 +30,7 @@ class tdf65686(UITestCase):
         xallowempty = xDialog.getChild("allowempty")
         minlist = xDialog.getChild("minlist")
 
-        props = {"TEXT": "List"}
-        actionProps = mkPropertyValues(props)
-        xallow.executeAction("SELECT", actionProps)
+        select_by_text(xallow, "List")
         minlist.executeAction("TYPE", mkPropertyValues({"TEXT":"Aap"}))
         minlist.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
         minlist.executeAction("TYPE", mkPropertyValues({"TEXT":"Noot"}))

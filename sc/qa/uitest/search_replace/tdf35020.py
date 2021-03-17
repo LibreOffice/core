@@ -31,9 +31,7 @@ class tdf35020(UITestCase):
         allsheets = xDialog.getChild("allsheets")
         allsheets.executeAction("CLICK", tuple())
         calcsearchin = xDialog.getChild("calcsearchin")
-        props = {"TEXT": "Formulas"}
-        actionProps = mkPropertyValues(props)
-        calcsearchin.executeAction("SELECT", actionProps)
+        select_by_text(calcsearchin, "Formulas")
         replaceall = xDialog.getChild("replaceall")
         replaceall.executeAction("CLICK", tuple())
         xcloseBtn = xDialog.getChild("close")

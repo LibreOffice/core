@@ -35,9 +35,7 @@ class tdf53920(UITestCase):
         xallow = xDialog.getChild("allow")
         xmin = xDialog.getChild("min")
 
-        props = {"TEXT": "Cell range"}
-        actionProps = mkPropertyValues(props)
-        xallow.executeAction("SELECT", actionProps)
+        select_by_text(xallow, "Cell range")
         xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$C$1:$C$3"}))
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)

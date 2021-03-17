@@ -44,9 +44,7 @@ class tdf123520(UITestCase):
     #crossAxisValue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"TAB"}))
     #TAB doesn't works- add "a" at the end of textbox
     #workaround - edit another ui item, it should trigger leave of textbox
-    props2 = {"TEXT": "Outside start"}
-    actionProps2 = mkPropertyValues(props2)
-    placeLabels.executeAction("SELECT", actionProps2)
+    select_by_text(placeLabels, "Outside start")
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
 

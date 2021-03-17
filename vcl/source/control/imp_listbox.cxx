@@ -1615,7 +1615,7 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
         rRenderContext.SetTextColor(!IsEnabled() ? rStyleSettings.GetDisableColor() : rStyleSettings.GetHighlightTextColor());
         rRenderContext.SetFillColor(rStyleSettings.GetHighlightColor());
         rRenderContext.SetLineColor();
-        rRenderContext.DrawRect(aRect);
+        rRenderContext.DrawRect(aRect, true, true);
     }
     else
     {
