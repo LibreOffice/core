@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4bcf31d5_540ab8c8",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T12:20:34Z",
+      "side": 1,
+      "message": "By the way, this needs not to be a method of QrCodeGenDialog - it\u0027s just a utility function. Please remove if from QrCodeGenDialog in .hxx, and enclose into an unnamed namespace here to be just a local static function.",
+      "revId": "a9ef85e95e611dccb4aedcae309eca49ff24cfd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8afb961b_c528f84c",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T12:20:34Z",
+      "side": 1,
+      "message": "Thank you for formatting this; just a nitpick - please make this a single space :-)",
+      "range": {
+        "startLine": 277,
+        "startChar": 38,
+        "endLine": 277,
+        "endChar": 40
+      },
+      "revId": "a9ef85e95e611dccb4aedcae309eca49ff24cfd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
