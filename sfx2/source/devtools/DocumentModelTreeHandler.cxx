@@ -64,8 +64,6 @@ protected:
     css::uno::Reference<css::uno::XInterface> mxObject;
 
 public:
-    DocumentModelTreeEntry() = default;
-
     DocumentModelTreeEntry(OUString const& rString,
                            css::uno::Reference<css::uno::XInterface> const& xObject)
         : maString(rString)
@@ -91,6 +89,7 @@ public:
     }
 };
 
+// append an entry to a input TreeView to a parent
 void lclAppendToParentEntry(std::unique_ptr<weld::TreeView>& rTree, weld::TreeIter const& rParent,
                             DocumentModelTreeEntry* pEntry)
 {
@@ -100,6 +99,7 @@ void lclAppendToParentEntry(std::unique_ptr<weld::TreeView>& rTree, weld::TreeIt
                   nullptr);
 }
 
+// append a root entry to a input TreeView
 OUString lclAppend(std::unique_ptr<weld::TreeView>& rTree, DocumentModelTreeEntry* pEntry)
 {
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
@@ -109,6 +109,7 @@ OUString lclAppend(std::unique_ptr<weld::TreeView>& rTree, DocumentModelTreeEntr
     return sId;
 }
 
+/** Entry that represents a object, which implements a XNameAccess */
 class NameAccessTreeEntry : public DocumentModelTreeEntry
 {
 protected:
