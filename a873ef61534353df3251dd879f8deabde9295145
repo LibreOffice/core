@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23842436_5fd6ceb9",
+        "filename": "vcl/source/app/salusereventlist.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T07:49:56Z",
+      "side": 0,
+      "message": "Interesting, if the noexcept possibly already does this? Have you a way to trigger this please?",
+      "range": {
+        "startLine": 109,
+        "startChar": 14,
+        "endLine": 110,
+        "endChar": 69
+      },
+      "revId": "a873ef61534353df3251dd879f8deabde9295145",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
