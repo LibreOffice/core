@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e01c3015_77a744cb",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T13:06:16Z",
+      "side": 1,
+      "message": "and now this is not formatted again.\n\nWhy don\u0027t you have a clang-format plugin installed and active, which would simply not allow you to commit unless you made proper formatting? Is that that pleasant to ger my nitpicks related to that again and again?",
+      "range": {
+        "startLine": 266,
+        "startChar": 0,
+        "endLine": 293,
+        "endChar": 1
+      },
+      "revId": "86673d875c82302650067f8503f87b9bc50a025f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c33730e_9a402da2",
+        "filename": "cui/source/inc/QrCodeGenDialog.hxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T13:06:16Z",
+      "side": 1,
+      "message": "and now you don\u0027t need these three lines.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 6
+      },
+      "revId": "86673d875c82302650067f8503f87b9bc50a025f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
