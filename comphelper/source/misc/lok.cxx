@@ -214,7 +214,7 @@ bool isWhitelistedLanguage(const OUString& lang)
     if (!isActive())
         return true;
 
-#ifdef ANDROID
+#if defined ANDROID || defined IOS
     (void) lang;
     return true;
 #else
