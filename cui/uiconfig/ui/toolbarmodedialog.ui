@@ -106,24 +106,6 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">3</property>
                     <child>
-                      <object class="GtkRadioButton" id="rbButton4">
-                        <property name="label" translatable="yes" context="ToolbarmodeDialog|radiobutton4">Tabbed</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="halign">start</property>
-                        <property name="valign">start</property>
-                        <property name="active">True</property>
-                        <property name="draw-indicator">True</property>
-                        <property name="group">rbButton1</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkRadioButton" id="rbButton1">
                         <property name="label" translatable="yes" context="ToolbarmodeDialog|radiobutton1">Standard Toolbar</property>
                         <property name="visible">True</property>
@@ -133,6 +115,24 @@
                         <property name="valign">start</property>
                         <property name="active">True</property>
                         <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="rbButton2">
+                        <property name="label" translatable="yes" context="ToolbarmodeDialog|radiobutton2">Tabbed</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="halign">start</property>
+                        <property name="valign">start</property>
+                        <property name="active">True</property>
+                        <property name="draw-indicator">True</property>
+                        <property name="group">rbButton1</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -152,8 +152,8 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="rbButton2">
-                        <property name="label" translatable="yes" context="ToolbarmodeDialog|radiobutton2">Single Toolbar</property>
+                      <object class="GtkRadioButton" id="rbButton3">
+                        <property name="label" translatable="yes" context="ToolbarmodeDialog|radiobutton3">Single Toolbar</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -170,8 +170,8 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="rbButton3">
-                        <property name="label" translatable="yes" context="ToolbarmodeDialog|radiobutton3">Sidebar</property>
+                      <object class="GtkRadioButton" id="rbButton4">
+                        <property name="label" translatable="yes" context="ToolbarmodeDialog|radiobutton4">Sidebar</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -206,8 +206,8 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="rbButton7">
-                        <property name="label" translatable="yes" context="ToolbarmodeDialog|radiobutton7">Groupedbar</property>
+                      <object class="GtkRadioButton" id="rbButton6">
+                        <property name="label" translatable="yes" context="ToolbarmodeDialog|radiobutton6">Groupedbar</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -224,8 +224,8 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="rbButton6">
-                        <property name="label" translatable="yes" context="ToolbarmodeDialog|radiobutton6">Groupedbar Compact</property>
+                      <object class="GtkRadioButton" id="rbButton7">
+                        <property name="label" translatable="yes" context="ToolbarmodeDialog|radiobutton7">Groupedbar Compact</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
