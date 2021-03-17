@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "a465f6a0_16415d11",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T09:59:43Z",
+      "side": 1,
+      "message": "(PR is a GitHub terminology; gerrit uses \"change\" term)\n\nI\u0027d suggest this:\n\n  git log -2 # and note the # of your two top (this and the previous, with the library tarball) commit\n  git checkout -B \u003cyourbranchname\u003e origin/master\n  ./g pull -r # it\u0027s a good time to have your tree updated, since you will update both commits anyway; will trigger long rebuilds\n  git cherry-pick \u003c# of your first commit with tarball\u003e\n  ... \u003cedit it here\u003e ...\n  git commit -a --amend\n  git cherry-pick \u003c# of your last commit\u003e\n  ... \u003cedit this one\u003e ...\n  ./logerrit submit master # and now it\u0027s here on gerrit",
+      "parentUuid": "50771d65_1f7498ef",
+      "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "10949033_13e1882c",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 14
