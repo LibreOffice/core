@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "336c1149_a99393b8",
+        "filename": "basic/qa/cppunit/test_global_as_new.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T06:48:20Z",
+      "side": 1,
+      "message": "Well, not: it\u0027s GetOUString() that call it (using SbxValue::Broadcast(SfxHintId::BasicDataWanted)).",
+      "range": {
+        "startLine": 64,
+        "startChar": 65,
+        "endLine": 64,
+        "endChar": 88
+      },
+      "revId": "e7a7f9a004beb44450442a418b60d650cb1902fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2551b1f8_a182cb40",
+        "filename": "basic/source/comp/dim.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T06:48:20Z",
+      "side": 1,
+      "message": "Please have a space before and after \u0027//\u0027.\n\nWhat is this ENDIF about? And the rest (\u0027IF IsNull(YourVariable)\u0027) is also unclear. As a reader, I don\u0027t easily get the idea behind this comment that is expected to help me understand what\u0027s going on here.",
+      "range": {
+        "startLine": 471,
+        "startChar": 50,
+        "endLine": 471,
+        "endChar": 55
+      },
+      "revId": "e7a7f9a004beb44450442a418b60d650cb1902fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d6b461d_8ff217e7",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 2994,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T06:48:20Z",
+      "side": 1,
+      "message": "This seems incorrect: see ImpGetBool in basic/source/sbx/sbxbool.cxx.",
+      "revId": "e7a7f9a004beb44450442a418b60d650cb1902fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fc862d9_fdfd35b8",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 2995,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T06:48:20Z",
+      "side": 1,
+      "message": "How is this relevant here, where you rule away objects above in line 2987?",
+      "range": {
+        "startLine": 2995,
+        "startChar": 11,
+        "endLine": 2995,
+        "endChar": 81
+      },
+      "revId": "e7a7f9a004beb44450442a418b60d650cb1902fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
