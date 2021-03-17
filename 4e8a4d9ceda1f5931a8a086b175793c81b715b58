@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99953672_94a551bf",
+        "filename": "vcl/source/app/salusereventlist.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T07:39:45Z",
+      "side": 1,
+      "message": "I know that you are not a fan of one-liners, and I don\u0027t mean that the one-liner here is \"better\"; just leaving it here, as I just thought this is also a possible syntax:\n\n    [\u0026aEvent, this] () noexcept { ProcessEvent(aEvent); }();",
+      "range": {
+        "startLine": 119,
+        "startChar": 12,
+        "endLine": 120,
+        "endChar": 22
+      },
+      "revId": "4e8a4d9ceda1f5931a8a086b175793c81b715b58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
