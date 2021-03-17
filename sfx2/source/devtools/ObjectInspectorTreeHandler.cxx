@@ -1241,6 +1241,7 @@ void ObjectInspectorTreeHandler::appendMethods(uno::Reference<uno::XInterface> c
     }
 }
 
+// Update the back button state depending if there are objects in the stack
 void ObjectInspectorTreeHandler::updateBackButtonState()
 {
     mpObjectInspectorWidgets->mpToolbar->set_item_sensitive("back", maInspectionStack.size() > 1);

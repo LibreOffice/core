@@ -86,6 +86,7 @@ DevelopmentToolDockingWindow::~DevelopmentToolDockingWindow() { disposeOnce(); }
 
 void DevelopmentToolDockingWindow::dispose()
 {
+    // Stop and remove the listener
     auto* pSelectionChangeHandler
         = dynamic_cast<SelectionChangeHandler*>(mxSelectionListener.get());
     if (pSelectionChangeHandler)
@@ -93,6 +94,7 @@ void DevelopmentToolDockingWindow::dispose()
 
     mxSelectionListener = uno::Reference<view::XSelectionChangeListener>();
 
+    // dispose DOM and object inspector handlers
     maDocumentModelTreeHandler.dispose();
     maObjectInspectorTreeHandler.dispose();
 
