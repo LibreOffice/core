@@ -15,7 +15,7 @@ $(eval $(call gb_Module_add_targets,lingucomponent,\
 	Library_hyphen \
 	$(if $(filter-out iOS,$(OS)),Library_lnth) \
 	$(if $(filter iOS MACOSX,$(OS)),Library_MacOSXSpell) \
-	$(if $(filter-out iOS,$(OS)),Library_spell) \
+	Library_spell \
 	StaticLibrary_ulingu \
 	Library_numbertext \
 ))
