@@ -312,7 +312,7 @@ void Test::TestEnglishMapMode()
 void Test::TestCreatePen()
 {
     // Check import of EMF image with records: RESTOREDC, SAVEDC, MOVETOEX, LINETO, POLYLINE16, EXTTEXTOUTW with DxBuffer
-    // The CREATEPEN record is used with PS_COSMETIC line style, which will be displayed as solid hairline
+    // The CREATEPEN record is used with PS_COSMETIC line style, which sometimes will be displayed as solid hairline
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestCreatePen.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
@@ -321,8 +321,8 @@ void Test::TestCreatePen()
 
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygon", "path", "m0 0h31250v18192h-31250z");
 
-    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke", 3);
-    assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[1]/polygon", "17898,5693 20172,5693");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke", 748);
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[1]/polygon", "27875,16523 27875,1453");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[1]/line", "color", "#008000");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[1]/line", "width", "3");
 
@@ -334,7 +334,7 @@ void Test::TestCreatePen()
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[3]/line", "color", "#ff0000");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonstroke[3]/line", "width", "3");
 
-    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline", 755);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline", 3);
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[10]", "color", "#ff0000");
     assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[10]/polygon", "27925,14180 27875,14180");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[100]", "color", "#008000");
