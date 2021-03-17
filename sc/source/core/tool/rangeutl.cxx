@@ -276,7 +276,9 @@ bool ScRangeUtil::MakeRangeFromName (
             ScRefAddress     aStartPos;
             ScRefAddress     aEndPos;
 
-            pData->GetSymbol( aStrArea );
+            // tdf#138646 - consider the current grammar and address convention of the document
+            pData->GetSymbol(aStrArea,
+                             FormulaGrammar::mergeToGrammar(rDoc.GetGrammar(), rDetails.eConv));
 
             if ( IsAbsArea( aStrArea, rDoc, nTable,
                             nullptr, &aStartPos, &aEndPos, rDetails ) )
