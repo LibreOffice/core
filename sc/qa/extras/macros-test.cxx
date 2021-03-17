@@ -55,6 +55,7 @@ public:
     void testTdf43003();
     void testTdf133887();
     void testTdf133889();
+    void testTdf138646();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     CPPUNIT_TEST(testStarBasic);
@@ -77,6 +78,7 @@ public:
     CPPUNIT_TEST(testTdf43003);
     CPPUNIT_TEST(testTdf133887);
     CPPUNIT_TEST(testTdf133889);
+    CPPUNIT_TEST(testTdf138646);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -975,6 +977,53 @@ void ScMacrosTest::testTdf133889()
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(true);
 }
+
+void ScMacrosTest::testTdf138646()
+{
+    OUString aFileName;
+    createFileURL(u"tdf138646.ods", aFileName);
+    auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+    CPPUNIT_ASSERT_MESSAGE("Failed to load the doc", xComponent.is());
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+
+    // Without the fix in place, changing the grammar from GRAM_NATIVE to either GRAM_NATIVE_XL_A1
+    // or GRAM_NATIVE_XL_R1C1 would cause a Basic exception/error in the following script.
+    pDocSh->GetDocument().SetGrammar(formula::FormulaGrammar::Grammar::GRAM_NATIVE_XL_R1C1);
+
+    const std::vector<std::pair<OUString, OUString>> aTests({
+        { "GlobalNamedCell", "GlobalNamedCell" },
+        { "GlobalNamedCellSheet", "GlobalNamedCell" },
+        { "LocalNamedCell", "LocalNamedCell" },
+        { "LocalNamedCellAccessError", "Exception" }
+    });
+
+    {
+        Any aRet;
+        Sequence<sal_Int16> aOutParamIndex;
+        Sequence<Any> aOutParam;
+        Sequence<uno::Any> aParams;
+
+        for (auto& [sTestName, sExpected] : aTests)
+        {
+            SfxObjectShell::CallXScript(xComponent,
+                                        "vnd.sun.Star.script:Standard.Module1." + sTestName
+                                            + "?language=Basic&location=document",
+                                        aParams, aRet, aOutParamIndex, aOutParam);
+
+            OUString aReturnValue;
+            aRet >>= aReturnValue;
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sTestName.toUtf8().getStr(), sExpected, aReturnValue);
+        }
+    }
+
+    pDocSh->DoClose();
+}
+
 
 ScMacrosTest::ScMacrosTest()
       : UnoApiTest("/sc/qa/extras/testdocuments")
