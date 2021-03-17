@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "331eca89_76ef9db0",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T19:50:29Z",
+      "side": 1,
+      "message": "I\u0027m afraid the comment might be slightly misleading: I guess, it means that with the changed grammar, the following script would cause exception? by the way, which - should it be mentioned Basic exception/error? or am I mistaken?",
+      "range": {
+        "startLine": 999,
+        "startChar": 33,
+        "endLine": 999,
+        "endChar": 63
+      },
+      "revId": "2249c08a7fe2280749d59a9bbe2c07be1f20c070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "faaa5545_b1af5e93",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1002,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T19:50:29Z",
+      "side": 1,
+      "message": "This line is too long - please clang-format it.",
+      "revId": "2249c08a7fe2280749d59a9bbe2c07be1f20c070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
