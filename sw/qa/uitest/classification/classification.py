@@ -52,9 +52,7 @@ class classification(UITestCase):
         intellectualPropertyPartEntry = xDialog.getChild("intellectualPropertyPartEntry")
         intellectualPropertyPartAddButton = xDialog.getChild("intellectualPropertyPartAddButton")
 
-        props = {"TEXT": "Confidential"}
-        actionProps = mkPropertyValues(props)
-        classificationCB.executeAction("SELECT", actionProps)
+        select_by_text(classificationCB, "Confidential")
         #verify International is set too
         self.assertEqual(get_state_as_dict(internationalClassificationCB)["SelectEntryText"], "Confidential")
         #verify textBox Content
@@ -96,9 +94,7 @@ class classification(UITestCase):
         intellectualPropertyPartEntry = xDialog.getChild("intellectualPropertyPartEntry")
         intellectualPropertyPartAddButton = xDialog.getChild("intellectualPropertyPartAddButton")
 
-        props = {"TEXT": "Confidential"}
-        actionProps = mkPropertyValues(props)
-        classificationCB.executeAction("SELECT", actionProps)
+        select_by_text(classificationCB, "Confidential")
         #verify International is set too
         self.assertEqual(get_state_as_dict(internationalClassificationCB)["SelectEntryText"], "Confidential")
         #verify textBox Content  TODO textbox not supported
@@ -128,9 +124,7 @@ class classification(UITestCase):
         intellectualPropertyPartEntry = xDialog.getChild("intellectualPropertyPartEntry")
         intellectualPropertyPartAddButton = xDialog.getChild("intellectualPropertyPartAddButton")
 
-        props = {"TEXT": "Confidential"}
-        actionProps = mkPropertyValues(props)
-        classificationCB.executeAction("SELECT", actionProps)
+        select_by_text(classificationCB, "Confidential")
         #verify International is set too
         self.assertEqual(get_state_as_dict(internationalClassificationCB)["SelectEntryText"], "Confidential")
         #verify textBox Content  TODO  - texbox not supported yet
@@ -163,9 +157,7 @@ class classification(UITestCase):
         #type text AA
         intellectualPropertyPartEntry.executeAction("TYPE", mkPropertyValues({"TEXT":"AA"}))
         intellectualPropertyPartAddButton.executeAction("CLICK", tuple())
-        props = {"TEXT": "Internal Only"}
-        actionProps = mkPropertyValues(props)
-        classificationCB.executeAction("SELECT", actionProps)
+        select_by_text(classificationCB, "Internal Only")
         #verify International is set too
         self.assertEqual(get_state_as_dict(internationalClassificationCB)["SelectEntryText"], "Internal Only")
         #verify textBox Content  TODO  - texbox not supported yet

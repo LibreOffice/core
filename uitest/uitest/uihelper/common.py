@@ -18,6 +18,9 @@ def type_text(ui_object, text):
 def select_pos(ui_object, pos):
     ui_object.executeAction("SELECT", mkPropertyValues({"POS": pos}))
 
+def select_by_text(ui_object, text):
+    ui_object.executeAction("SELECT", mkPropertyValues({"TEXT": text}))
+
 def select_text(ui_object, from_pos, to):
     ui_object.executeAction("SELECT", mkPropertyValues({"FROM": from_pos, "TO": to}))
 

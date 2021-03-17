@@ -55,7 +55,7 @@ class Forms(UITestCase):
         self.assertEqual("None", get_state_as_dict(xAction)['SelectEntryText'])
         self.assertEqual("false", get_state_as_dict(xURL)['Enabled'])
 
-        xAction.executeAction("SELECT", mkPropertyValues({"TEXT": "Open document/web page"}))
+        select_by_text(xAction, "Open document/web page")
 
         self.assertEqual("Open document/web page", get_state_as_dict(xAction)['SelectEntryText'])
         self.assertEqual("true", get_state_as_dict(xURL)['Enabled'])

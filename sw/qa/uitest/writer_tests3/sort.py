@@ -58,9 +58,7 @@ class WriterSort(UITestCase):
         xcharacter = xDialog.getChild("character")
         xseparator = xDialog.getChild("separator")
         xDown.executeAction("CLICK", tuple())
-        props = {"TEXT": "Numerical"}
-        actionProps = mkPropertyValues(props)
-        xtypelb1.executeAction("SELECT", actionProps)
+        select_by_text(xtypelb1, "Numerical")
         xcharacter.executeAction("CLICK", tuple())
         xseparator.executeAction("TYPE", mkPropertyValues({"TEXT":";"}))
         xOK = xDialog.getChild("ok")

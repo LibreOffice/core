@@ -28,9 +28,7 @@ class tdf123508(UITestCase):
     spinEDSCALEPAGEWIDTH = xDialog.getChild("spinED_SCALEPAGEWIDTH")
     spinEDSCALEPAGEHEIGHT = xDialog.getChild("spinED_SCALEPAGEHEIGHT")
     #select "Fit print range(s) to width/height"  from the scale mode drop-down list
-    props = {"TEXT": "Fit print range(s) to width/height"}
-    actionProps = mkPropertyValues(props)
-    scalingMode.executeAction("SELECT", actionProps)
+    select_by_text(scalingMode, "Fit print range(s) to width/height")
     #define a value for the page, e.g.: width   2; height  2
     spinEDSCALEPAGEWIDTH.executeAction("UP", tuple())
     spinEDSCALEPAGEHEIGHT.executeAction("UP", tuple())

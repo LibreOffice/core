@@ -34,9 +34,7 @@ class formatBulletsNumbering(UITestCase):
         xokbtn = xDialog.getChild("ok")
 
         xalignedatmf.executeAction("UP", tuple())
-        props = {"TEXT": "Centered"}
-        actionProps = mkPropertyValues(props)
-        xnum2alignlb.executeAction("SELECT", actionProps)
+        select_by_text(xnum2alignlb, "Centered")
         xatmf.executeAction("UP", tuple())
         xindentatmf.executeAction("UP", tuple())
 
@@ -71,9 +69,7 @@ class formatBulletsNumbering(UITestCase):
         xTabs = xDialog.getChild("tabcontrol")
         select_pos(xTabs, "4")
         xnumfollowedbylb = xDialog.getChild("numfollowedbylb")
-        props = {"TEXT": "Space"}
-        actionProps = mkPropertyValues(props)
-        xnumfollowedbylb.executeAction("SELECT", actionProps)
+        select_by_text(xnumfollowedbylb, "Space")
 
         xokbtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xokbtn)
@@ -106,13 +102,9 @@ class formatBulletsNumbering(UITestCase):
         xsuffix = xDialog.getChild("suffix")
         xallsame = xDialog.getChild("allsame")
 
-        props = {"TEXT": "A, B, C, ..."}
-        actionProps = mkPropertyValues(props)
-        xnumfmtlb.executeAction("SELECT", actionProps)
+        select_by_text(xnumfmtlb, "A, B, C, ...")
         xstartat.executeAction("UP", tuple())
-        props2 = {"TEXT": "Bullets"}
-        actionProps2 = mkPropertyValues(props2)
-        xcharstyle.executeAction("SELECT", actionProps2)
+        select_by_text(xcharstyle, "Bullets")
         xprefix.executeAction("TYPE", mkPropertyValues({"TEXT":"o"}))
         xsuffix.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
         xsuffix.executeAction("TYPE", mkPropertyValues({"TEXT":"a"}))
