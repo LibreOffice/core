@@ -105,9 +105,7 @@ OUString SAL_CALL Content::getImplementationName()
 // virtual
 uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aSNS { "com.sun.star.ucb.CHelpContent" };
-
-    return aSNS;
+    return { "com.sun.star.ucb.CHelpContent" };
 }
 
 // XContent methods.

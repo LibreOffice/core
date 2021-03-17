@@ -331,8 +331,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
     Sequence< OUString > XMLBasicExporter::getSupportedServiceNames(  )
     {
-        Sequence< OUString > aNames { "com.sun.star.document.XMLBasicExporter" };
-        return aNames;
+        return { "com.sun.star.document.XMLBasicExporter" };
     }
 
     // XMLOasisBasicExporter
@@ -355,8 +354,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
     Sequence< OUString > XMLOasisBasicExporter::getSupportedServiceNames(  )
     {
-        Sequence< OUString > aNames { "com.sun.star.document.XMLOasisBasicExporter" };
-        return aNames;
+        return { "com.sun.star.document.XMLOasisBasicExporter" };
     }
 
 }   // namespace xmlscript

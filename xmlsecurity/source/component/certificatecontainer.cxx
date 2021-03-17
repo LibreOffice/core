@@ -138,8 +138,7 @@ CertificateContainer::supportsService( const OUString& ServiceName )
 Sequence< OUString > SAL_CALL
 CertificateContainer::getSupportedServiceNames(  )
 {
-    Sequence< OUString > aRet { "com.sun.star.security.CertificateContainer" };
-    return aRet;
+    return { "com.sun.star.security.CertificateContainer" };
 }
 
 namespace
