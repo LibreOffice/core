@@ -506,7 +506,7 @@ void CuiConfigGroupListBox::InitModule()
 }
 
 void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::script::browse::XBrowseNode >& xRootNode,
-                                           const weld::TreeIter* pParentEntry, bool bCheapChildrenOnDemand)
+                                           const weld::TreeIter* pParentEntry)
 {
     try {
         if ( xRootNode->hasChildNodes() )
@@ -568,7 +568,8 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
                     theChild->acquire();
 
                     bool bChildOnDemand = false;
-                    if ( !bCheapChildrenOnDemand && theChild->hasChildNodes() )
+
+                    if ( theChild->hasChildNodes() )
                     {
                         const Sequence< Reference< browse::XBrowseNode > > grandchildren =
                             theChild->getChildNodes();
@@ -581,14 +582,6 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
                                 break;
                             }
                         }
-                    }
-                    else
-                    {
-                        /* i30923 - Would be nice if there was a better
-                        * way to determine if a basic lib had children
-                        * without having to ask for them (which forces
-                        * the library to be loaded */
-                        bChildOnDemand = true;
                     }
 
                     OUString aImage = GetImage(theChild, m_xContext, bIsRootNode);
@@ -679,7 +672,7 @@ void CuiConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
         {
              //We are only showing scripts not slot APIs so skip
              //Root node and show location nodes
-            FillScriptList(rootNode, nullptr, false);
+            FillScriptList(rootNode, nullptr);
         }
     }
 
@@ -966,7 +959,7 @@ IMPL_LINK(CuiConfigGroupListBox, ExpandingHdl, const weld::TreeIter&, rIter, boo
             {
                 Reference< browse::XBrowseNode > rootNode(
                     static_cast< browse::XBrowseNode* >( pInfo->pObject ) ) ;
-                FillScriptList(rootNode, &rIter, true /* i30923 */ );
+                FillScriptList(rootNode, &rIter);
             }
             break;
         }
