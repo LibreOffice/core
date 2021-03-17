@@ -846,6 +846,8 @@ void SigningTest::testODFEncryptedGPG()
 
 #endif
 
+#endif
+
 SfxObjectShell* SigningTest::assertDocument(const ::CppUnit::SourceLine aSrcLine,
                                             const OUString& rFilterName,
                                             const SignatureState nDocSign,
@@ -1205,8 +1207,6 @@ void SigningTest::testPreserveMacroTemplateSignature10()
     assertDocument(CPPUNIT_SOURCELINE(), "writer8_template", SignatureState::NOSIGNATURES,
                    SignatureState::NOTVALIDATED, OUString());
 }
-
-#endif
 
 void SigningTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 {
