@@ -81,6 +81,7 @@
             <property name="vexpand">True</property>
             <child>
               <object class="GtkScrolledWindow">
+                <property name="width-request">200</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
@@ -125,26 +126,29 @@
                 <property name="border-width">3</property>
                 <property name="spacing">12</property>
                 <child>
-                  <object class="GtkToggleButton" id="dom_selection_toggle">
-                    <property name="label" translatable="yes" context="developmenttool|dom_selection_toggle">Current Selection</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkToolbar" id="dom_toolbar">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="toolbar-style">both-horiz</property>
+                    <property name="show-arrow">False</property>
+                    <child>
+                      <object class="GtkToggleToolButton" id="dom_current_selection_toggle">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="tooltip-text" translatable="yes" context="developmenttool|dom_current_selection_toggle-tooltip">Current Selection In Document</property>
+                        <property name="label" translatable="yes" context="developmenttool|dom_current_selection_toggle">Current Selection</property>
+                        <property name="use-underline">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
                     <child>
                       <object class="GtkToolButton" id="dom_refresh_button">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="tooltip-text" translatable="yes" context="developmenttool|dom_refresh_button-tooltip">Refresh Document Model Tree View</property>
                         <property name="label" translatable="yes" context="developmenttool|dom_refresh_button">Refresh</property>
                         <property name="use-underline">True</property>
                         <property name="icon-name">cmd/lc_reload.png</property>
@@ -193,6 +197,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="toolbar-style">icons</property>
+                    <property name="show-arrow">False</property>
                     <child>
                       <object class="GtkToolButton" id="back">
                         <property name="visible">True</property>
