@@ -234,8 +234,8 @@ void ViewObjectContact::ActionChanged()
             // invalidate current valid range
             GetObjectContact().InvalidatePartOfView(maObjectRange);
 
-            // reset ObjectRange, it needs to be recalculated
-            maObjectRange.reset();
+            // reset gridOffset, it needs to be recalculated
+            resetGridOffset();
         }
 
         // register at OC for lazy invalidate
