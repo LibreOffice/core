@@ -276,7 +276,14 @@ bool ScRangeUtil::MakeRangeFromName (
             ScRefAddress     aStartPos;
             ScRefAddress     aEndPos;
 
-            pData->GetSymbol( aStrArea );
+            // tdf#138646 - consider the current grammar and address convention of the document
+            pData->GetSymbol(aStrArea, rDoc.GetGrammar());
+            if (rDoc.GetAddressConvention() != formula::FormulaGrammar::CONV_OOO)
+            {
+                ScRange aRange(ScAddress(0, 0, nTable));
+                ScRefFlags nRes = aRange.ParseAny(aStrArea, rDoc, rDoc.GetAddressConvention());
+                aStrArea = aRange.Format(rDoc, nRes);
+            }
 
             if ( IsAbsArea( aStrArea, rDoc, nTable,
                             nullptr, &aStartPos, &aEndPos, rDetails ) )
