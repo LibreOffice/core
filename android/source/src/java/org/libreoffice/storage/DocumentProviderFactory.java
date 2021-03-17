@@ -16,7 +16,6 @@ import org.libreoffice.storage.external.ExtsdDocumentsProvider;
 import org.libreoffice.storage.external.OTGDocumentsProvider;
 import org.libreoffice.storage.local.LocalDocumentsDirectoryProvider;
 import org.libreoffice.storage.local.LocalDocumentsProvider;
-import org.libreoffice.storage.owncloud.OwnCloudProvider;
 
 import android.content.Context;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -60,12 +59,10 @@ public final class DocumentProviderFactory {
             instance = new DocumentProviderFactory();
 
             // initialize document providers list
-            instance.providers = new IDocumentProvider[5];
+            instance.providers = new IDocumentProvider[4];
             instance.providers[0] = new LocalDocumentsDirectoryProvider(0);
             instance.providers[1] = new LocalDocumentsProvider(1);
             instance.providers[OTG_PROVIDER_INDEX] = new OTGDocumentsProvider(OTG_PROVIDER_INDEX, context);
-            instance.providers[4] = new OwnCloudProvider(4, context);
-
             instance.providers[EXTSD_PROVIDER_INDEX] = new ExtsdDocumentsProvider(EXTSD_PROVIDER_INDEX, context);
 
             // initialize document provider names list

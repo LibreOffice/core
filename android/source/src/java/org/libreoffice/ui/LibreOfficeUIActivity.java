@@ -277,11 +277,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                         return true;
                     }
 
-                    case R.id.menu_provider_owncloud: {
-                        switchToDocumentProvider(documentProviderFactory.getProvider(4));
-                        return true;
-                    }
-
                     default:
                         return false;
                 }

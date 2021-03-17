@@ -53,8 +53,7 @@ public interface IDocumentProvider {
      * Provides the unique ID for a document provider instance in a program.
      *
      * This ID should be set when the instance is built. It could be used to
-     * tell two instances of the same document provider apart, e. g. two
-     * instances of OwnCloudProvider pointing to different servers.
+     * tell two instances of the same document provider apart.
      *
      * @return Unique ID for a document provider instance.
      */

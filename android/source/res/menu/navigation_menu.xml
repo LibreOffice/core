@@ -19,12 +19,6 @@
         <item android:id="@+id/menu_provider_otg"
             android:title="@string/otg_file_system"
             android:icon="@drawable/ic_usb_black_24dp"/>
-
-        <item android:id="@+id/menu_provider_owncloud"
-            android:title="@string/owncloud"
-            android:icon="@drawable/ic_cloud_black_24dp"/>
-
-
     </group>
 
     <group android:orderInCategory="100">

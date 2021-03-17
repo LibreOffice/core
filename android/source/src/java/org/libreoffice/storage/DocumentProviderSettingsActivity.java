@@ -25,9 +25,6 @@ import android.support.v7.app.AppCompatActivity;
 
 public class DocumentProviderSettingsActivity extends AppCompatActivity {
 
-    public static final String KEY_PREF_OWNCLOUD_SERVER = "pref_server_url";
-    public static final String KEY_PREF_OWNCLOUD_USER_NAME = "pref_user_name";
-    public static final String KEY_PREF_OWNCLOUD_PASSWORD = "pref_password";
     public static final String KEY_PREF_EXTERNAL_SD_PATH_URI = "pref_extsd_path_uri";
     public static final String KEY_PREF_OTG_PATH_URI = "pref_otg_path_uri";
 
