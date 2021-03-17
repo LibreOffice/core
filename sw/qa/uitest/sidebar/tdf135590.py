@@ -27,7 +27,7 @@ class tdf135590(UITestCase):
         xHeight = xDialog.getChild('height')
         xFormat = xDialog.getChild("format")
 
-        xFormat.executeAction("SELECT", mkPropertyValues({"TEXT": "C6 Envelope"}))
+        select_by_text(xFormat, "C6 Envelope")
 
         self.assertEqual("16.2", get_state_as_dict(xWidth)['Value'])
         self.assertEqual("11.4", get_state_as_dict(xHeight)['Value'])

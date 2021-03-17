@@ -36,9 +36,7 @@ class solver(UITestCase):
         xref1edit.executeAction("TYPE", mkPropertyValues({"TEXT":"C2"}))
         xval1edit.executeAction("TYPE", mkPropertyValues({"TEXT":"C4"}))
         xref2edit.executeAction("TYPE", mkPropertyValues({"TEXT":"C4"}))
-        props = {"TEXT": "=>"}
-        actionProps = mkPropertyValues(props)
-        xop2list.executeAction("SELECT", actionProps)
+        select_by_text(xop2list, "=>")
 
         xval2edit.executeAction("TYPE", mkPropertyValues({"TEXT":"0"}))
         xOKBtn = xDialog.getChild("ok")

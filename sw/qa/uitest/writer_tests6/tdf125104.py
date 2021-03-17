@@ -19,9 +19,7 @@ class tdf125104(UITestCase):
 
     def set_combo_layout_format(self, dialog, format):
         comboLayoutFormat = dialog.getChild("comboLayoutFormat")
-        props = {"TEXT": format}
-        actionProps = mkPropertyValues(props)
-        comboLayoutFormat.executeAction("SELECT", actionProps)
+        select_by_text(comboLayoutFormat, format)
         okBtn = dialog.getChild("ok")
         self.ui_test.close_dialog_through_button(okBtn)
 

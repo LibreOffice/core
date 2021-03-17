@@ -30,9 +30,7 @@ class Subtotals(UITestCase):
         xTabs = xDialog.getChild("tabcontrol")
         select_pos(xTabs, "0")
         xGroupBy = xDialog.getChild("group_by")
-        props = {"TEXT": "Store Name"}
-        actionProps = mkPropertyValues(props)
-        xGroupBy.executeAction("SELECT", actionProps)
+        select_by_text(xGroupBy, "Store Name")
         xCheckListMenu = xDialog.getChild("grid1")
         xTreeList = xCheckListMenu.getChild("columns")
         xEntry = xTreeList.getChild("1")

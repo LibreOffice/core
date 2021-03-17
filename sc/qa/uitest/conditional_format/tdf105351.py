@@ -31,14 +31,10 @@ class tdf105351(UITestCase):
         #4. In the conditional formatting window, select the dropdown on the left that says "Automatic"
         #and change it to "Value". In the text field below it enter 0.
         #5. Select the dropdown on the right that says "Automatic" and change it to "Value". In the text field below it enter 10
-        props = {"TEXT": "Value"}
-        actionProps = mkPropertyValues(props)
-        xcolscalemin.executeAction("SELECT", actionProps)
+        select_by_text(xcolscalemin, "Value")
         xedcolscalemin.executeAction("TYPE", mkPropertyValues({"TEXT":"0"}))
 
-        props2 = {"TEXT": "Value"}
-        actionProps2 = mkPropertyValues(props2)
-        xcolscalemax.executeAction("SELECT", actionProps2)
+        select_by_text(xcolscalemax, "Value")
         xedcolscalemax.executeAction("TYPE", mkPropertyValues({"TEXT":"10"}))
 
         xOKBtn = xDialog.getChild("ok")

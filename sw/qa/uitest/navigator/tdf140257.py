@@ -20,9 +20,7 @@ class Tdf140257(UITestCase):
 
     xOutline = xDialog.getChild("comboLB_OUTLINE_LEVEL")
 
-    props = {"TEXT": sText}
-    actionProps = mkPropertyValues(props)
-    xOutline.executeAction("SELECT", actionProps)
+    select_by_text(xOutline, sText)
 
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)

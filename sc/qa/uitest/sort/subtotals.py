@@ -62,9 +62,7 @@ class Subtotals(UITestCase):
         xDialog = self.xUITest.getTopFocusWindow()
         # Select group by: Category
         xGroupBy = xDialog.getChild("group_by")
-        props = {"TEXT": "Category"}
-        actionProps = mkPropertyValues(props)
-        xGroupBy.executeAction("SELECT", actionProps)
+        select_by_text(xGroupBy, "Category")
         # Select calculate subtotals for the months -  selected by default
         # Select tab options
         xTabs = xDialog.getChild("tabcontrol")
@@ -90,9 +88,7 @@ class Subtotals(UITestCase):
         self.ui_test.execute_dialog_through_command(".uno:DataSubTotals")
         xDialog = self.xUITest.getTopFocusWindow()
         xGroupBy = xDialog.getChild("group_by")
-        props = {"TEXT": "- none -"}
-        actionProps = mkPropertyValues(props)
-        xGroupBy.executeAction("SELECT", actionProps)
+        select_by_text(xGroupBy, "- none -")
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
         # 2 invoke sort menu and... crash
@@ -116,9 +112,7 @@ class Subtotals(UITestCase):
         xDialog = self.xUITest.getTopFocusWindow()
         # 3. Group by->Trans date
         xGroupBy = xDialog.getChild("group_by")
-        props = {"TEXT": "Trans Date"}
-        actionProps = mkPropertyValues(props)
-        xGroupBy.executeAction("SELECT", actionProps)
+        select_by_text(xGroupBy, "Trans Date")
         # 4. Tick 'Calculate subtotals for' -> Amount  (grid1)
         xCheckListMenu = xDialog.getChild("grid1")
         xTreeList = xCheckListMenu.getChild("columns")
@@ -132,9 +126,7 @@ class Subtotals(UITestCase):
         xDialog = self.xUITest.getTopFocusWindow()
         # 7. Group by->-none-
         xGroupBy = xDialog.getChild("group_by")
-        props = {"TEXT": "- none -"}
-        actionProps = mkPropertyValues(props)
-        xGroupBy.executeAction("SELECT", actionProps)
+        select_by_text(xGroupBy, "- none -")
         # 8. Untick 'Calculate subtotals for' -> Amount
         xCheckListMenu = xDialog.getChild("grid1")
         xTreeList = xCheckListMenu.getChild("columns")
@@ -148,14 +140,10 @@ class Subtotals(UITestCase):
         xDialog = self.xUITest.getTopFocusWindow()
         # 11. Sort key 1->Post Date.
         sortkey1 = xDialog.getChild("sortlb")
-        props = {"TEXT": "Post Date"}
-        actionProps = mkPropertyValues(props)
-        sortkey1.executeAction("SELECT", actionProps)
+        select_by_text(sortkey1, "Post Date")
         # 12. Sort key 2->-undefined-
         sortkey2 = xDialog.getChild("sortuserlb")
-        props = {"TEXT": "- undefined -"}
-        actionProps = mkPropertyValues(props)
-        sortkey2.executeAction("SELECT", actionProps)
+        select_by_text(sortkey2, "- undefined -")
         # 13. Click OK
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
@@ -175,9 +163,7 @@ class Subtotals(UITestCase):
         xDialog = self.xUITest.getTopFocusWindow()
         # 4. Group by: "- none -"
         xGroupBy = xDialog.getChild("group_by")
-        props = {"TEXT": "- none -"}
-        actionProps = mkPropertyValues(props)
-        xGroupBy.executeAction("SELECT", actionProps)
+        select_by_text(xGroupBy, "- none -")
         # 5. Press "OK" and watch LibreOffice crash.
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
