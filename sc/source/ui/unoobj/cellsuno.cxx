@@ -4725,7 +4725,8 @@ uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByPositio
 uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByName(
                         const OUString& aName )
 {
-    return getCellRangeByName( aName, ScAddress::detailsOOOa1 );
+    // tdf#138646 - consider the document's address convention
+    return getCellRangeByName(aName, GetDocShell()->GetDocument().GetAddressConvention());
 }
 
 uno::Reference<table::XCellRange>  ScCellRangeObj::getCellRangeByName(
@@ -4755,8 +4756,8 @@ uno::Reference<table::XCellRange>  ScCellRangeObj::getCellRangeByName(
         }
         else
         {
-            if ( ScRangeUtil::MakeRangeFromName( aName, rDoc, nTab, aCellRange ) ||
-                 ScRangeUtil::MakeRangeFromName( aName, rDoc, nTab, aCellRange, RUTL_DBASE ) )
+            if ( ScRangeUtil::MakeRangeFromName( aName, rDoc, nTab, aCellRange, RUTL_NAMES, rDetails ) ||
+                 ScRangeUtil::MakeRangeFromName( aName, rDoc, nTab, aCellRange, RUTL_DBASE, rDetails ) )
                 bFound = true;
         }
 
