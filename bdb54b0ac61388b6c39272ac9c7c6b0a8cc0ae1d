@@ -116,6 +116,29 @@
     },
     {
       "key": {
+        "uuid": "b8b12278_0854105b",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T09:11:43Z",
+      "side": 1,
+      "message": "And this last newline is also not required.",
+      "range": {
+        "startLine": 289,
+        "startChar": 21,
+        "endLine": 289,
+        "endChar": 23
+      },
+      "revId": "bdb54b0ac61388b6c39272ac9c7c6b0a8cc0ae1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "19c31ee9_f70f4728",
         "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
         "patchSetId": 14
