@@ -46,6 +46,29 @@
       "revId": "a873ef61534353df3251dd879f8deabde9295145",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d385e686_01a73adf",
+        "filename": "vcl/source/app/salusereventlist.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-17T07:54:31Z",
+      "side": 0,
+      "message": "This was added in https://git.libreoffice.org/core/+/71e6ae827534dee30be14e1dc5afa4dea02b8dfa, with the rationale that\n\n\u003e On iOS, avoid catching exceptions to just immediately exit or abort anyway\n\u003e \n\u003e It is better to let the exception be uncaught and then catch that in\n\u003e the debugger. (Maybe even inspect its backtrace from a crash dump\n\u003e automatically sent from an end-user device.)\n\n... so it seems that the conditional could be removed?",
+      "range": {
+        "startLine": 113,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 11
+      },
+      "revId": "a873ef61534353df3251dd879f8deabde9295145",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
