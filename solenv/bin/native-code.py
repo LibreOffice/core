@@ -281,7 +281,7 @@ core_constructor_list = [
     ("lingucomponent_MacSpellChecker_get_implementation", "#ifdef IOS"),
 # lingucomponent/source/thesaurus/libnth/lnth.component
     ("lingucomponent_Thesaurus_get_implementation", "#ifndef IOS"),
-    ("lingucomponent_SpellChecker_get_implementation", "#ifndef IOS"),
+    "lingucomponent_SpellChecker_get_implementation",
     "lingucomponent_LangGuess_get_implementation",
     "lingucomponent_Hyphenator_get_implementation",
 # package/source/xstor/xstor.component

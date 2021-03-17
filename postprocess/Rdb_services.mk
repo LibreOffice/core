@@ -93,8 +93,8 @@ $(eval $(call gb_Rdb_add_components,services,\
 	hwpfilter/source/hwp \
 	lingucomponent/source/hyphenator/hyphen/hyphen \
 	lingucomponent/source/languageguessing/guesslang \
+	lingucomponent/source/spellcheck/spell/spell \
 	$(if $(filter-out iOS,$(OS)), \
-		lingucomponent/source/spellcheck/spell/spell \
 		lingucomponent/source/thesaurus/libnth/lnth \
 	) \
 	lingucomponent/source/numbertext/numbertext \
