@@ -54,7 +54,7 @@ class SFX2_DLLPUBLIC Panel final
 {
 public:
     Panel(const PanelDescriptor& rPanelDescriptor, weld::Widget* pParentWindow,
-          const bool bIsInitiallyExpanded, Deck* pDeck,
+          const bool bIsInitiallyExpanded, const std::shared_ptr<Deck>& rDeck,
           const std::function<Context()>& rContextAccess,
           const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
@@ -107,7 +107,7 @@ private:
     const std::function<Context()> maContextAccess;
     const css::uno::Reference<css::frame::XFrame>& mxFrame;
     weld::Widget* mpParentWindow;
-    VclPtr<Deck> mxDeck;
+    std::weak_ptr<Deck> mxDeck;
     std::unique_ptr<weld::Container> mxContainer;
     std::unique_ptr<PanelTitleBar> mxTitleBar;
     std::unique_ptr<weld::Container> mxContents;

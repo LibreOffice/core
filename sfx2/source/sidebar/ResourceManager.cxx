@@ -357,10 +357,10 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
     if (!aPanelRootNode.isValid())
         return;
 
-    if (!pDeckDesc->mpDeck) // the deck has not been edited
+    if (!pDeckDesc->mxDeck) // the deck has not been edited
         return;
 
-    SharedPanelContainer rPanels = pDeckDesc->mpDeck->GetPanels();
+    SharedPanelContainer rPanels = pDeckDesc->mxDeck->GetPanels();
 
     bChanged = false;
     for (auto const& panel : rPanels)
@@ -772,10 +772,10 @@ void ResourceManager::UpdateModel(const css::uno::Reference<css::frame::XModel>&
 {
     for (auto const& deck : maDecks)
     {
-        if (!deck->mpDeck)
+        if (!deck->mxDeck)
             continue;
 
-        const SharedPanelContainer& rContainer = deck->mpDeck->GetPanels();
+        const SharedPanelContainer& rContainer = deck->mxDeck->GetPanels();
 
         for (auto const& elem : rContainer)
         {
@@ -792,7 +792,7 @@ void ResourceManager::disposeDecks()
 {
     for (auto const& deck : maDecks)
     {
-        deck->mpDeck.disposeAndClear();
+        deck->mxDeck.reset();
     }
 }
 
