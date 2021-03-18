@@ -288,24 +288,6 @@ ToolbarControllerFactory::ToolbarControllerFactory( const Reference< XComponentC
 {
 }
 
-struct ToolbarControllerFactoryInstance {
-    explicit ToolbarControllerFactoryInstance(
-        css::uno::Reference<css::uno::XComponentContext> const & context):
-        instance(static_cast<cppu::OWeakObject *>(
-                    new ToolbarControllerFactory(context)))
-    {
-    }
-
-    css::uno::Reference<css::uno::XInterface> instance;
-};
-
-struct ToolbarControllerFactorySingleton:
-    public rtl::StaticWithArg<
-        ToolbarControllerFactoryInstance,
-        css::uno::Reference<css::uno::XComponentContext>,
-        ToolbarControllerFactorySingleton>
-{};
-
 class StatusbarControllerFactory :  public UIControllerFactory
 {
 public:
@@ -366,8 +348,7 @@ com_sun_star_comp_framework_ToolBarControllerFactory_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject *>(
-            ToolbarControllerFactorySingleton::get(context).instance.get()));
+    return cppu::acquire(new ToolbarControllerFactory(context));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
