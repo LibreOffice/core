@@ -91,7 +91,8 @@
     <service name="com.sun.star.ui.ModuleUIConfigurationManager"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.ModuleUIConfigurationManagerSupplier"
-      constructor="com_sun_star_comp_framework_ModuleUIConfigurationManagerSupplier_get_implementation">
+      constructor="com_sun_star_comp_framework_ModuleUIConfigurationManagerSupplier_get_implementation"
+      single-instance="true">
     <service name="com.sun.star.ui.ModuleUIConfigurationManagerSupplier"/>
     <singleton name="com.sun.star.ui.theModuleUIConfigurationManagerSupplier"/>
   </implementation>
