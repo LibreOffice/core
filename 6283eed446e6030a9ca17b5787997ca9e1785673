@@ -45,6 +45,30 @@
       "revId": "6283eed446e6030a9ca17b5787997ca9e1785673",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d923e7e0_5dce1107",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-03-18T09:41:04Z",
+      "side": 1,
+      "message": "@Michael Stahl -- will be grateful if you could look at whether changing this string in strings.hrc will make problems for lcl_GetStyleFamilyEntries().  Thanks",
+      "parentUuid": "aad54c93_7ca91b03",
+      "range": {
+        "startLine": 596,
+        "startChar": 8,
+        "endLine": 596,
+        "endChar": 34
+      },
+      "revId": "6283eed446e6030a9ca17b5787997ca9e1785673",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
