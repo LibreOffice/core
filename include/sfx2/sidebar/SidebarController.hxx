@@ -56,6 +56,7 @@ class SfxViewShell;
 
 namespace sfx2::sidebar {
 
+class CloseIndicator;
 class DeckDescriptor;
 class SidebarDockingWindow;
 
@@ -174,16 +175,18 @@ public:
 
     bool hasChartContextCurrently() const;
 
+    void GrabFocusToDocument();
+
     static SidebarController* GetSidebarControllerForView(SfxViewShell* pViewShell);
 
 private:
     SidebarController(SidebarDockingWindow* pParentWindow, const SfxViewFrame* pViewFrame);
 
-    VclPtr<Deck> mpCurrentDeck;
+    std::shared_ptr<Deck> mxCurrentDeck;
     VclPtr<SidebarDockingWindow> mpParentWindow;
     const SfxViewFrame* mpViewFrame;
     css::uno::Reference<css::frame::XFrame> mxFrame;
-    VclPtr<TabBar> mpTabBar;
+    std::unique_ptr<TabBar> mxTabBar;
     Context maCurrentContext;
     Context maRequestedContext;
     css::uno::Reference<css::frame::XController> mxCurrentController;
@@ -223,7 +226,7 @@ private:
         to indicate that when the current mouse drag operation ends, the
         sidebar will only show the tab bar.
     */
-    VclPtr<vcl::Window> mpCloseIndicator;
+    std::unique_ptr<CloseIndicator> mxCloseIndicator;
 
     DECL_LINK(WindowEventHandler, VclWindowEvent&, void);
     /** Make maRequestedContext the current context.
@@ -239,12 +242,12 @@ private:
     void CreatePanels(
         std::u16string_view rDeckId,
         const Context& rContext);
-    std::shared_ptr<Panel> CreatePanel (
+    std::shared_ptr<Panel> CreatePanel(
         std::u16string_view rsPanelId,
         weld::Widget* pParentWindow,
         const bool bIsInitiallyExpanded,
         const Context& rContext,
-        const VclPtr<Deck>& pDeck);
+        const std::shared_ptr<Deck>& rDeck);
 
     void SwitchToDeck (
         const DeckDescriptor& rDeckDescriptor,
@@ -267,6 +270,8 @@ private:
         Return whether the width of the child window can be modified.
     */
     bool CanModifyChildWindowWidth();
+
+    sal_Int32 GetChildWindowWidth();
 
     /** Set the child window container to a new width.
         Return the old width.
