@@ -33,7 +33,7 @@ DeckDescriptor::DeckDescriptor()
       mbIsEnabled(true),
       mnOrderIndex(10000), // Default value as defined in Sidebar.xcs
       mbExperimental(false),
-      mpDeck()
+      mxDeck()
 {
 }
 
@@ -49,7 +49,7 @@ DeckDescriptor::DeckDescriptor (const DeckDescriptor& rOther)
       mbIsEnabled(rOther.mbIsEnabled),
       mnOrderIndex(rOther.mnOrderIndex),
       mbExperimental(rOther.mbExperimental),
-      mpDeck(rOther.mpDeck)
+      mxDeck(rOther.mxDeck)
 {
 }
 

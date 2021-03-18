@@ -65,12 +65,12 @@ public:
     void GrabFocus();
     void GrabFocusPanel();
 
-    void SetDeck(Deck* pDeck);
+    void SetDeck(const std::shared_ptr<Deck>& pDeck);
     void SetPanels(const SharedPanelContainer& rPanels);
     void SetButtons(const std::vector<weld::Widget*>& rButtons);
 
 private:
-    VclPtr<Deck> mxDeck;
+    std::shared_ptr<Deck> mxDeck;
     DeckTitleBar* mpDeckTitleBar;
     SharedPanelContainer maPanels;
     std::vector<weld::Widget*> maButtons;

@@ -174,16 +174,18 @@ public:
 
     bool hasChartContextCurrently() const;
 
+    void GrabFocusToDocument();
+
     static SidebarController* GetSidebarControllerForView(SfxViewShell* pViewShell);
 
 private:
     SidebarController(SidebarDockingWindow* pParentWindow, const SfxViewFrame* pViewFrame);
 
-    VclPtr<Deck> mpCurrentDeck;
+    std::shared_ptr<Deck> mxCurrentDeck;
     VclPtr<SidebarDockingWindow> mpParentWindow;
     const SfxViewFrame* mpViewFrame;
     css::uno::Reference<css::frame::XFrame> mxFrame;
-    VclPtr<TabBar> mpTabBar;
+    std::unique_ptr<TabBar> mxTabBar;
     Context maCurrentContext;
     Context maRequestedContext;
     css::uno::Reference<css::frame::XController> mxCurrentController;
@@ -239,12 +241,12 @@ private:
     void CreatePanels(
         std::u16string_view rDeckId,
         const Context& rContext);
-    std::shared_ptr<Panel> CreatePanel (
+    std::shared_ptr<Panel> CreatePanel(
         std::u16string_view rsPanelId,
         weld::Widget* pParentWindow,
         const bool bIsInitiallyExpanded,
         const Context& rContext,
-        const VclPtr<Deck>& pDeck);
+        const std::shared_ptr<Deck>& rDeck);
 
     void SwitchToDeck (
         const DeckDescriptor& rDeckDescriptor,
