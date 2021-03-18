@@ -62,7 +62,6 @@ public:
         Color_DeckTitleBarBackground,
         Color_PanelBackground,
         Color_PanelTitleBarBackground,
-        Color_TabBarBackground,
 
         Color_Int_,
 
