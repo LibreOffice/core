@@ -2771,6 +2771,128 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
+<<<<<<< HEAD   (0e962f tdf#140968 tdf#140978 XLSX import: fix lost rounded filters)
+=======
+        case SID_SELECT_VISIBLE_ROWS:
+            {
+                ScViewData& rData = GetViewData();
+                ScMarkData& rMark = rData.GetMarkData();
+                ScDocument& rDoc = rData.GetDocument();
+
+                rMark.MarkToMulti();
+
+                ScRange aMultiArea;
+                rMark.GetMultiMarkArea(aMultiArea);
+                SCCOL nStartCol = aMultiArea.aStart.Col();
+                SCROW nStartRow = aMultiArea.aStart.Row();
+                SCCOL nEndCol = aMultiArea.aEnd.Col();
+                SCROW nEndRow = aMultiArea.aEnd.Row();
+
+                bool bChanged = false;
+                for (const SCTAB& nTab : rMark)
+                {
+                    for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
+                    {
+                        SCROW nLastRow = nRow;
+                        if (rDoc.RowHidden(nRow, nTab, nullptr, &nLastRow))
+                        {
+                            rMark.SetMultiMarkArea(
+                                ScRange(nStartCol, nRow, nTab, nEndCol, nLastRow, nTab), false);
+                            bChanged = true;
+                            nRow = nLastRow;
+                        }
+                    }
+                }
+
+                if (bChanged && !rMark.HasAnyMultiMarks())
+                    rMark.ResetMark();
+
+                rMark.MarkToSimple();
+
+                pTabViewShell->SelectionChanged();
+            }
+            break;
+
+        case SID_SELECT_VISIBLE_COLUMNS:
+            {
+                ScViewData& rData = GetViewData();
+                ScMarkData& rMark = rData.GetMarkData();
+                ScDocument& rDoc = rData.GetDocument();
+
+                rMark.MarkToMulti();
+
+                ScRange aMultiArea;
+                rMark.GetMultiMarkArea(aMultiArea);
+                SCCOL nStartCol = aMultiArea.aStart.Col();
+                SCROW nStartRow = aMultiArea.aStart.Row();
+                SCCOL nEndCol = aMultiArea.aEnd.Col();
+                SCROW nEndRow = aMultiArea.aEnd.Row();
+
+                bool bChanged = false;
+                for (const SCTAB& nTab : rMark)
+                {
+                    for (SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol)
+                    {
+                        SCCOL nLastCol = nCol;
+                        if (rDoc.ColHidden(nCol, nTab, nullptr, &nLastCol))
+                        {
+                            rMark.SetMultiMarkArea(
+                                ScRange(nCol, nStartRow, nTab, nLastCol, nEndRow, nTab), false);
+                            bChanged = true;
+                            nCol = nLastCol;
+                        }
+                    }
+                }
+
+                if (bChanged && !rMark.HasAnyMultiMarks())
+                    rMark.ResetMark();
+
+                rMark.MarkToSimple();
+
+                pTabViewShell->SelectionChanged();
+            }
+            break;
+
+        case SID_CURRENT_FORMULA_RANGE:
+            {
+                const SfxInt32Item* param1 = rReq.GetArg<SfxInt32Item>(FN_PARAM_1);
+                SCCOL colStart = param1 ? param1->GetValue() : 0;
+
+                const SfxInt32Item* param2 = rReq.GetArg<SfxInt32Item>(FN_PARAM_2);
+                SCROW rowStart = param2 ? param2->GetValue() : 0;
+
+                const SfxInt32Item* param3 = rReq.GetArg<SfxInt32Item>(FN_PARAM_3);
+                SCCOL colEnd = param3 ? param3->GetValue() : 0;
+
+                const SfxInt32Item* param4 = rReq.GetArg<SfxInt32Item>(FN_PARAM_4);
+                SCROW rowEnd = param4 ? param4->GetValue() : 0;
+
+                const SfxInt32Item* param5 = rReq.GetArg<SfxInt32Item>(FN_PARAM_5);
+                SCROW table = param5 ? param5->GetValue() : 0;
+
+                ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
+
+                if (param3 && param4 && pInputHdl)
+                {
+                    ScViewData& rData = pTabViewShell->GetViewData();
+                    ScTabView* pTabView = rData.GetView();
+
+                    if (param1 && param2)
+                        rData.SetRefStart(colStart, rowStart, table);
+
+                    pTabView->UpdateRef( colEnd, rowEnd, table ); // setup the end & refresh formula
+
+                    ScRange aRef(
+                        colStart, rowStart, rData.GetRefStartZ(),
+                        colEnd, rowEnd, rData.GetRefEndZ() );
+                    SC_MOD()->SetReference( aRef, rData.GetDocument(), &rData.GetMarkData() );
+
+                    pInputHdl->UpdateLokReferenceMarks();
+                }
+            }
+            break;
+
+>>>>>>> CHANGE (3453f2 tdf#36466 sc: update status bar at Select Visible Rows)
         default:
             OSL_FAIL("incorrect slot in ExecuteEdit");
             break;
