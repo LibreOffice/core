@@ -117,6 +117,30 @@
       "revId": "6283eed446e6030a9ca17b5787997ca9e1785673",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f3f4505_d77d8061",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-03-18T17:05:21Z",
+      "side": 1,
+      "message": "Thanks for your helpful detailed assessment Michael.",
+      "parentUuid": "ba1b0c4f_57447a74",
+      "range": {
+        "startLine": 596,
+        "startChar": 8,
+        "endLine": 596,
+        "endChar": 34
+      },
+      "revId": "6283eed446e6030a9ca17b5787997ca9e1785673",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
