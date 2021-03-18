@@ -214,7 +214,7 @@ void Deck::RequestLayout()
         return;
 
     bool bChangeNeeded = false;
-    Size aParentSize = GetParent()->GetSizePixel();
+    Size aParentSize = mxParentWindow->GetSizePixel();
 
     if (mnMinimalHeight > 0 && (mnMinimalHeight != aParentSize.Height() || GetSizePixel().Height() != mnMinimalHeight))
     {
@@ -231,7 +231,7 @@ void Deck::RequestLayout()
 
     if (bChangeNeeded)
     {
-        GetParent()->SetSizePixel(aParentSize);
+        mxParentWindow->SetSizePixel(aParentSize);
         setPosSizePixel(0, 0, aParentSize.Width(), aParentSize.Height());
     }
     else if (aParentSize != GetSizePixel()) //Sync parent & child sizes
