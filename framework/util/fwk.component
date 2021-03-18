@@ -155,7 +155,8 @@
     <service name="com.sun.star.ui.ToolBarFactory"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.UICategoryDescription"
-      constructor="com_sun_star_comp_framework_UICategoryDescription_get_implementation">
+      constructor="com_sun_star_comp_framework_UICategoryDescription_get_implementation"
+      single-instance="true">
     <service name="com.sun.star.ui.UICategoryDescription"/>
     <singleton name="com.sun.star.ui.theUICategoryDescription"/>
   </implementation>
