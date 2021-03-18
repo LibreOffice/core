@@ -51,6 +51,9 @@ public:
     auto& GetSidebarController() const { return mpSidebarController; }
     using SfxDockingWindow::Close;
 
+    weld::Container* GetTabBarParent() const { return mxTabBar.get(); }
+    weld::Container* GetDeckParent() const { return mxDeckParent.get(); }
+
 private:
     // Window overridables
     virtual void GetFocus() override;
@@ -63,6 +66,8 @@ private:
     /// Notify LOKit that we closed and release the LOKNotifier.
     void LOKClose();
 
+    std::unique_ptr<weld::Container> mxTabBar;
+    std::unique_ptr<weld::Container> mxDeckParent;
     ::rtl::Reference<sfx2::sidebar::SidebarController> mpSidebarController;
     bool mbIsReadyToDrag;
     std::unique_ptr<svt::AcceleratorExecute> mpAccel;

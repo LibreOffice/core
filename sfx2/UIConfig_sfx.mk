@@ -62,10 +62,10 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/safemodequerydialog \
 	sfx2/uiconfig/ui/searchdialog \
 	sfx2/uiconfig/ui/securityinfopage \
+	sfx2/uiconfig/ui/sidebar \
 	sfx2/uiconfig/ui/singletabdialog \
 	sfx2/uiconfig/ui/startcenter \
 	sfx2/uiconfig/ui/stylecontextmenu \
-	sfx2/uiconfig/ui/tabbar \
 	sfx2/uiconfig/ui/tabbarcontents \
 	sfx2/uiconfig/ui/tabbutton \
 	sfx2/uiconfig/ui/templatedlg \

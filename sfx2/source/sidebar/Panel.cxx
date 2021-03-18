@@ -23,6 +23,7 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
+#include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <tools/json_writer.hxx>
 
@@ -47,7 +48,7 @@ namespace sfx2::sidebar {
 Panel::Panel(const PanelDescriptor& rPanelDescriptor,
              weld::Widget* pParentWindow,
              const bool bIsInitiallyExpanded,
-             Deck* pDeck,
+             const std::shared_ptr<Deck>& rDeck,
              const std::function<Context()>& rContextAccess,
              const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : mxBuilder(Application::CreateBuilder(pParentWindow, "sfx/ui/panel.ui"))
@@ -62,7 +63,7 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
     , maContextAccess(rContextAccess)
     , mxFrame(rxFrame)
     , mpParentWindow(pParentWindow)
-    , mxDeck(pDeck)
+    , mxDeck(rDeck)
     , mxContainer(mxBuilder->weld_container("Panel"))
     , mxTitleBar(new PanelTitleBar(rPanelDescriptor.msTitle, *mxBuilder, this))
     , mxContents(mxBuilder->weld_container("contents"))
@@ -174,12 +175,18 @@ void Panel::SetUIElement (const Reference<ui::XUIElement>& rxElement)
 
 void Panel::TriggerDeckLayouting()
 {
-    mxDeck->RequestLayout();
+    auto xDeck = mxDeck.lock();
+    if (!xDeck)
+        return;
+    xDeck->RequestLayout();
 }
 
 weld::Window* Panel::GetFrameWeld()
 {
-    return mxDeck->GetFrameWeld();
+    auto xDeck = mxDeck.lock();
+    if (!xDeck)
+        return nullptr;
+    return xDeck->GetDockingWindow()->GetFrameWeld();
 }
 
 void Panel::SetExpanded (const bool bIsExpanded)

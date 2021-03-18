@@ -111,12 +111,20 @@ public:
 };
 
 SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChildWindow& rChildWindow,
-                                           vcl::Window* pParentWindow, WinBits nBits)
-    : SfxDockingWindow(pSfxBindings, &rChildWindow, pParentWindow, nBits)
+                                           vcl::Window* pParentWindow, WinBits /*nBits*/)
+    : SfxDockingWindow(pSfxBindings, &rChildWindow, pParentWindow, "SideBar",
+                       "sfx/ui/sidebar.ui")
+    , mxTabBar(m_xBuilder->weld_container("tabbarparent"))
+    , mxDeckParent(m_xBuilder->weld_container("deckparent"))
     , mpSidebarController()
     , mbIsReadyToDrag(false)
     , mpIdleNotify(new SidebarNotifyIdle(*this))
 {
+    // strip off default 6 border, and use just a left margin of 6
+    setDeferredProperties();
+    set_border_width(0);
+    set_margin_start(6);
+
     // Get the XFrame from the bindings.
     if (pSfxBindings==nullptr || pSfxBindings->GetDispatcher()==nullptr)
     {
@@ -144,6 +152,9 @@ void SidebarDockingWindow::dispose()
     mpSidebarController.clear();
     if (xComponent.is())
         xComponent->dispose();
+
+    mxDeckParent.reset();
+    mxTabBar.reset();
 
     SfxDockingWindow::dispose();
 }

@@ -249,6 +249,7 @@ sal_Int32 PlacePanels (
 
         bool bShowTitlebar = iItem->mbShowTitleBar;
         PanelTitleBar* pTitleBar = rPanel.GetTitleBar();
+        fprintf(stderr, "ShowTitleBar is %d\n", iItem->mbShowTitleBar);
         pTitleBar->Show(bShowTitlebar);
         rPanel.set_vexpand(!bShowTitlebar);
         weld::Container* pContents = rPanel.GetContents();
@@ -314,6 +315,8 @@ void GetRequestedSizes (
     sal_Int32& rMinimalWidth,
     const tools::Rectangle& rContentBox)
 {
+    fprintf(stderr, "GetRequestedSizes\n");
+
     rAvailableHeight = rContentBox.GetHeight();
 
     const sal_Int32 nDeckSeparatorHeight (Theme::GetInteger(Theme::Int_DeckSeparatorHeight));
