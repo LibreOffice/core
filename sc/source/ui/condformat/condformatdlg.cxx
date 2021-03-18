@@ -174,6 +174,8 @@ void ScCondFormatList::RecalcAll()
     if (mbFrozen)
         return;
 
+    int nWheelScroll = SAL_MAX_INT32;
+
     sal_Int32 nIndex = 1;
     for (const auto& item : maEntries)
     {
@@ -181,7 +183,14 @@ void ScCondFormatList::RecalcAll()
             continue;
         item->SetIndex(nIndex);
         item->set_grid_top_attach(nIndex - 1);
+        nWheelScroll = std::min(nWheelScroll, item->get_preferred_height());
         ++nIndex;
+    }
+
+    if (nWheelScroll != SAL_MAX_INT32)
+    {
+        // tdf#118482 set a scroll step of the height of a collapsed entry
+        mxScrollWindow->vadjustment_set_step_increment(nWheelScroll);
     }
 }
 
