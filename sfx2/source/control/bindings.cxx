@@ -989,7 +989,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
             sal_uInt16 nWhich = pSlot->GetWhich(rPool);
             SfxItemSet aSet(rPool, {{nWhich, nWhich}});
             SfxStateFunc aFunc  = pSlot->GetStateFnc();
-            pShell->CallState( aFunc, aSet );
+            aFunc(pShell, aSet);
             const SfxPoolItem *pOldItem;
             SfxItemState eState = aSet.GetItemState(nWhich, true, &pOldItem);
             if ( eState == SfxItemState::DISABLED )

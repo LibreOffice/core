@@ -250,7 +250,7 @@ void SfxDispatcher::Call_Impl(SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
         xImp->pInCallAliveFlag = &bThisDispatcherAlive;
 
         SfxExecFunc pFunc = rSlot.GetExecFnc();
-        rShell.CallExec( pFunc, rReq );
+        (*pFunc)(&rShell, rReq);
 
         // If 'this' is still alive
         if ( bThisDispatcherAlive )
@@ -1655,7 +1655,7 @@ bool SfxDispatcher::FillState_(const SfxSlotServer& rSvr, SfxItemSet& rState,
         else
             pFunc = pSlot->GetStateFnc();
 
-        pSh->CallState( pFunc, rState );
+        (*pFunc)(pSh, rState);
 #ifdef DBG_UTIL
         // To examine the conformity of IDL (SlotMap) and current Items
         if ( rState.Count() )
