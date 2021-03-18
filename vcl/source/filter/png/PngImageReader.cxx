@@ -77,7 +77,7 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
     Size prefSize;
     BitmapScopedWriteAccess pWriteAccess;
     AlphaScopedWriteAccess pWriteAccessAlpha;
-    std::vector<std::vector<png_byte>> aRows;
+    std::vector<png_byte> aRow;
 
     if (setjmp(png_jmpbuf(pPng)))
     {
@@ -199,16 +199,14 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                 if (eFormat == ScanlineFormat::N24BitTcBgr)
                     png_set_bgr(pPng);
 
-                aRows = std::vector<std::vector<png_byte>>(height);
-                for (auto& rRow : aRows)
-                    rRow.resize(aRowSizeBytes, 0);
+                aRow.resize(aRowSizeBytes, 0);
 
                 for (int pass = 0; pass < nNumberOfPasses; pass++)
                 {
                     for (png_uint_32 y = 0; y < height; y++)
                     {
                         Scanline pScanline = pWriteAccess->GetScanline(y);
-                        png_bytep pRow = aRows[y].data();
+                        png_bytep pRow = aRow.data();
                         png_read_row(pPng, pRow, nullptr);
                         size_t iColor = 0;
                         for (size_t i = 0; i < aRowSizeBytes; i += 3)
@@ -244,9 +242,7 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                         png_set_bgr(pPng);
                     }
 
-                    aRows = std::vector<std::vector<png_byte>>(height);
-                    for (auto& rRow : aRows)
-                        rRow.resize(aRowSizeBytes, 0);
+                    aRow.resize(aRowSizeBytes, 0);
 
                     auto const alphaFirst = (eFormat == ScanlineFormat::N32BitTcAbgr
                                              || eFormat == ScanlineFormat::N32BitTcArgb);
@@ -255,7 +251,7 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                         for (png_uint_32 y = 0; y < height; y++)
                         {
                             Scanline pScanline = pWriteAccess->GetScanline(y);
-                            png_bytep pRow = aRows[y].data();
+                            png_bytep pRow = aRow.data();
                             png_read_row(pPng, pRow, nullptr);
                             size_t iColor = 0;
                             for (size_t i = 0; i < aRowSizeBytes; i += 4)
@@ -296,9 +292,7 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
 
                     pWriteAccessAlpha = AlphaScopedWriteAccess(aBitmapAlpha);
 
-                    aRows = std::vector<std::vector<png_byte>>(height);
-                    for (auto& rRow : aRows)
-                        rRow.resize(aRowSizeBytes, 0);
+                    aRow.resize(aRowSizeBytes, 0);
 
                     for (int pass = 0; pass < nNumberOfPasses; pass++)
                     {
@@ -306,7 +300,7 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                         {
                             Scanline pScanline = pWriteAccess->GetScanline(y);
                             Scanline pScanAlpha = pWriteAccessAlpha->GetScanline(y);
-                            png_bytep pRow = aRows[y].data();
+                            png_bytep pRow = aRow.data();
                             png_read_row(pPng, pRow, nullptr);
                             size_t iAlpha = 0;
                             size_t iColor = 0;
@@ -339,16 +333,14 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                     png_destroy_read_struct(&pPng, &pInfo, nullptr);
                     return false;
                 }
-                aRows = std::vector<std::vector<png_byte>>(height);
-                for (auto& rRow : aRows)
-                    rRow.resize(aRowSizeBytes, 0);
+                aRow.resize(aRowSizeBytes, 0);
 
                 for (int pass = 0; pass < nNumberOfPasses; pass++)
                 {
                     for (png_uint_32 y = 0; y < height; y++)
                     {
                         Scanline pScanline = pWriteAccess->GetScanline(y);
-                        png_bytep pRow = aRows[y].data();
+                        png_bytep pRow = aRow.data();
                         png_read_row(pPng, pRow, nullptr);
                         size_t iColor = 0;
                         for (size_t i = 0; i < aRowSizeBytes; ++i)
