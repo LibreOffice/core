@@ -142,6 +142,103 @@ namespace
         GetWinExtMax(rSource.BottomRight(), rPlaceableBound, nMapMode);
     }
 
+    const char *
+    record_type_name(sal_uInt16 nRecType)
+    {
+    #ifndef SAL_LOG_INFO
+        (void) nRecType;
+        return "";
+    #else
+        switch( nRecType )
+        {
+        case W_META_SETBKCOLOR: return "META_SETBKCOLOR";
+        case W_META_SETBKMODE: return "META_SETBKMODE";
+        case W_META_SETMAPMODE: return "META_SETMAPMODE";
+        case W_META_SETROP2: return "META_SETROP2";
+        case W_META_SETRELABS: return "META_SETRELABS";
+        case W_META_SETPOLYFILLMODE: return "META_SETPOLYFILLMODE";
+        case W_META_SETSTRETCHBLTMODE: return "META_SETSTRETCHBLTMODE";
+        case W_META_SETTEXTCHAREXTRA: return "META_SETTEXTCHAREXTRA";
+        case W_META_SETTEXTCOLOR: return "META_SETTEXTCOLOR";
+        case W_META_SETTEXTJUSTIFICATION: return "META_SETTEXTJUSTIFICATION";
+        case W_META_SETWINDOWORG: return "META_SETWINDOWORG";
+        case W_META_SETWINDOWEXT: return "META_SETWINDOWEXT";
+        case W_META_SETVIEWPORTORG: return "META_SETVIEWPORTORG";
+        case W_META_SETVIEWPORTEXT: return "META_SETVIEWPORTEXT";
+        case W_META_OFFSETWINDOWORG: return "META_OFFSETWINDOWORG";
+        case W_META_SCALEWINDOWEXT: return "META_SCALEWINDOWEXT";
+        case W_META_OFFSETVIEWPORTORG: return "META_OFFSETVIEWPORTORG";
+        case W_META_SCALEVIEWPORTEXT: return "META_SCALEVIEWPORTEXT";
+        case W_META_LINETO: return "META_LINETO";
+        case W_META_MOVETO: return "META_MOVETO";
+        case W_META_EXCLUDECLIPRECT: return "META_EXCLUDECLIPRECT";
+        case W_META_INTERSECTCLIPRECT: return "META_INTERSECTCLIPRECT";
+        case W_META_ARC: return "META_ARC";
+        case W_META_ELLIPSE: return "META_ELLIPSE";
+        case W_META_FLOODFILL: return "META_FLOODFILL";
+        case W_META_PIE: return "META_PIE";
+        case W_META_RECTANGLE: return "META_RECTANGLE";
+        case W_META_ROUNDRECT: return "META_ROUNDRECT";
+        case W_META_PATBLT: return "META_PATBLT";
+        case W_META_SAVEDC: return "META_SAVEDC";
+        case W_META_SETPIXEL: return "META_SETPIXEL";
+        case W_META_OFFSETCLIPRGN: return "META_OFFSETCLIPRGN";
+        case W_META_TEXTOUT: return "META_TEXTOUT";
+        case W_META_BITBLT: return "META_BITBLT";
+        case W_META_STRETCHBLT: return "META_STRETCHBLT";
+        case W_META_POLYGON: return "META_POLYGON";
+        case W_META_POLYLINE: return "META_POLYLINE";
+        case W_META_ESCAPE: return "META_ESCAPE";
+        case W_META_RESTOREDC: return "META_RESTOREDC";
+        case W_META_FILLREGION: return "META_FILLREGION";
+        case W_META_FRAMEREGION: return "META_FRAMEREGION";
+        case W_META_INVERTREGION: return "META_INVERTREGION";
+        case W_META_PAINTREGION: return "META_PAINTREGION";
+        case W_META_SELECTCLIPREGION: return "META_SELECTCLIPREGION";
+        case W_META_SELECTOBJECT: return "META_SELECTOBJECT";
+        case W_META_SETTEXTALIGN: return "META_SETTEXTALIGN";
+        case W_META_DRAWTEXT: return "META_DRAWTEXT";
+        case W_META_CHORD: return "META_CHORD";
+        case W_META_SETMAPPERFLAGS: return "META_SETMAPPERFLAGS";
+        case W_META_EXTTEXTOUT: return "META_EXTTEXTOUT";
+        case W_META_SETDIBTODEV: return "META_SETDIBTODEV";
+        case W_META_SELECTPALETTE: return "META_SELECTPALETTE";
+        case W_META_REALIZEPALETTE: return "META_REALIZEPALETTE";
+        case W_META_ANIMATEPALETTE: return "META_ANIMATEPALETTE";
+        case W_META_SETPALENTRIES: return "META_SETPALENTRIES";
+        case W_META_POLYPOLYGON: return "META_POLYPOLYGON";
+        case W_META_RESIZEPALETTE: return "META_RESIZEPALETTE";
+        case W_META_DIBBITBLT: return "META_DIBBITBLT";
+        case W_META_DIBSTRETCHBLT: return "META_DIBSTRETCHBLT";
+        case W_META_DIBCREATEPATTERNBRUSH: return "META_DIBCREATEPATTERNBRUSH";
+        case W_META_STRETCHDIB: return "META_STRETCHDIB";
+        case W_META_EXTFLOODFILL: return "META_EXTFLOODFILL";
+        case W_META_RESETDC: return "META_RESETDC";
+        case W_META_STARTDOC: return "META_STARTDOC";
+        case W_META_STARTPAGE: return "META_STARTPAGE";
+        case W_META_ENDPAGE: return "META_ENDPAGE";
+        case W_META_ABORTDOC: return "META_ABORTDOC";
+        case W_META_ENDDOC: return "META_ENDDOC";
+        case W_META_DELETEOBJECT: return "META_DELETEOBJECT";
+        case W_META_CREATEPALETTE: return "META_CREATEPALETTE";
+        case W_META_CREATEBRUSH: return "META_CREATEBRUSH";
+        case W_META_CREATEPATTERNBRUSH: return "META_CREATEPATTERNBRUSH";
+        case W_META_CREATEPENINDIRECT: return "META_CREATEPENINDIRECT";
+        case W_META_CREATEFONTINDIRECT: return "META_CREATEFONTINDIRECT";
+        case W_META_CREATEBRUSHINDIRECT: return "META_CREATEBRUSHINDIRECT";
+        case W_META_CREATEBITMAPINDIRECT: return "META_CREATEBITMAPINDIRECT";
+        case W_META_CREATEBITMAP: return "META_CREATEBITMAP";
+        case W_META_CREATEREGION: return "META_CREATEREGION";
+        default:
+            // Yes, return a pointer to a static buffer. This is a very
+            // local debugging output function, so no big deal.
+            static char buffer[11];
+            sprintf(buffer, "0x%08" SAL_PRIxUINT32, nRecType);
+            return buffer;
+        }
+    #endif
+    }
+
 }
 
 namespace emfio
@@ -169,7 +266,7 @@ namespace emfio
         aBR.AdjustY( -1 );
         if (aTL.X() > aBR.X() || aTL.Y() > aBR.Y())
         {
-            SAL_WARN("vcl.wmf", "broken rectangle");
+            SAL_WARN("emfio", "broken rectangle");
             return tools::Rectangle::Justify(aTL, aBR);
         }
         return tools::Rectangle( aTL, aBR );
@@ -184,6 +281,7 @@ namespace emfio
 
     void WmfReader::ReadRecordParams( sal_uInt16 nFunc )
     {
+        SAL_INFO("emfio", "\t" << record_type_name(nFunc));
         switch( nFunc )
         {
             case W_META_SETBKCOLOR:
@@ -375,7 +473,7 @@ namespace emfio
                     DrawPolygon(aPoly, false/*bRecordPath*/);
                 }
 
-                SAL_WARN_IF(!bRecordOk, "vcl.wmf", "polygon record has more points than we can handle");
+                SAL_WARN_IF(!bRecordOk, "emfio", "polygon record has more points than we can handle");
 
                 bRecordOk &= mpInputStream->good();
 
@@ -418,7 +516,7 @@ namespace emfio
                         nPoints += pnPoints[a];
                     }
 
-                    SAL_WARN_IF(!bRecordOk, "vcl.wmf", "polypolygon record has more polygons than we can handle");
+                    SAL_WARN_IF(!bRecordOk, "emfio", "polypolygon record has more polygons than we can handle");
 
                     bRecordOk &= mpInputStream->good();
 
@@ -482,7 +580,7 @@ namespace emfio
                     DrawPolyLine( aPoly );
                 }
 
-                SAL_WARN_IF(!bRecordOk, "vcl.wmf", "polyline record has more points than we can handle");
+                SAL_WARN_IF(!bRecordOk, "emfio", "polyline record has more points than we can handle");
 
                 bRecordOk &= mpInputStream->good();
 
@@ -527,7 +625,7 @@ namespace emfio
 
                 if (nRecSize < nNonStringLen)
                 {
-                    SAL_WARN("vcl.wmf", "W_META_TEXTOUT too short");
+                    SAL_WARN("emfio", "W_META_TEXTOUT too short");
                     break;
                 }
 
@@ -537,7 +635,7 @@ namespace emfio
 
                 if (nRecSize - nNonStringLen < nStoredLength)
                 {
-                    SAL_WARN("vcl.wmf", "W_META_TEXTOUT too short, truncating string");
+                    SAL_WARN("emfio", "W_META_TEXTOUT too short, truncating string");
                     nLength = nStoredLength = nRecSize - nNonStringLen;
                 }
 
@@ -560,7 +658,7 @@ namespace emfio
 
                 if (nRecSize < nNonStringLen)
                 {
-                    SAL_WARN("vcl.wmf", "W_META_EXTTEXTOUT too short");
+                    SAL_WARN("emfio", "W_META_EXTTEXTOUT too short");
                     break;
                 }
 
@@ -575,20 +673,20 @@ namespace emfio
 
                     if (nRecSize < nNonStringLen)
                     {
-                        SAL_WARN("vcl.wmf", "W_META_TEXTOUT too short");
+                        SAL_WARN("emfio", "W_META_TEXTOUT too short");
                         break;
                     }
 
                     ReadPoint();
                     ReadPoint();
-                    SAL_WARN("vcl.wmf", "clipping unsupported");
+                    SAL_WARN("emfio", "clipping unsupported");
                 }
 
                 ComplexTextLayoutFlags nTextLayoutMode = ComplexTextLayoutFlags::Default;
                 if ( nOptions & ETO_RTLREADING )
                     nTextLayoutMode = ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft;
                 SetTextLayoutMode( nTextLayoutMode );
-                SAL_WARN_IF( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) != 0, "vcl.wmf", "SJ: ETO_PDY || ETO_GLYPH_INDEX in WMF" );
+                SAL_WARN_IF( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) != 0, "emfio", "SJ: ETO_PDY || ETO_GLYPH_INDEX in WMF" );
 
                 // output only makes sense if the text contains characters
                 if (nLen)
@@ -600,7 +698,7 @@ namespace emfio
                     auto nRemainingSize = std::min(mpInputStream->remainingSize(), nMaxStreamPos - mpInputStream->Tell());
                     if (nRemainingSize < o3tl::make_unsigned(nOriginalBlockLen))
                     {
-                        SAL_WARN("vcl.wmf", "exttextout record claimed more data than the stream can provide");
+                        SAL_WARN("emfio", "exttextout record claimed more data than the stream can provide");
                         nOriginalTextLen = nOriginalBlockLen = nRemainingSize;
                     }
 
@@ -1166,7 +1264,7 @@ namespace emfio
                                     mnEMFSize = nEMFTotalSize;
                                     if (mnEMFSize > mpInputStream->remainingSize())
                                     {
-                                        SAL_WARN("vcl.wmf", "emf size claims to be larger than remaining data");
+                                        SAL_WARN("emfio", "emf size claims to be larger than remaining data");
                                         mpEMFStream.reset();
                                     }
                                     else
@@ -1188,7 +1286,7 @@ namespace emfio
 
                                 if (mpEMFStream && nCurRecSize > mpInputStream->remainingSize())
                                 {
-                                    SAL_WARN("vcl.wmf", "emf record size claims to be larger than remaining data");
+                                    SAL_WARN("emfio", "emf record size claims to be larger than remaining data");
                                     mnEMFRecCount = 0xFFFFFFFF;
                                     mpEMFStream.reset();
                                 }
@@ -1232,7 +1330,15 @@ namespace emfio
             case W_META_ENDPAGE:
             case W_META_ABORTDOC:
             case W_META_ENDDOC:
+            {
+                SAL_WARN("emfio", "TODO: WMF record not implemented: " << record_type_name(nFunc));
+            }
             break;
+
+            default:
+            {
+                SAL_WARN("emfio", "Unknown Meta Action: 0x" << std::hex << nFunc << std::dec);
+            }
         }
 
         // tdf#127471
@@ -1255,7 +1361,7 @@ namespace emfio
 
         bool bPlaceable = nPlaceableMetaKey == 0x9ac6cdd7L;
 
-        SAL_INFO("vcl.wmf", "Placeable: \"" << (bPlaceable ? "yes" : "no") << "\"");
+        SAL_INFO("emfio", "Placeable: \"" << (bPlaceable ? "yes" : "no") << "\"");
 
         if (bPlaceable)
         {
@@ -1299,9 +1405,9 @@ namespace emfio
                     o3tl::convert(mpExternalHeader->yExt, o3tl::Length::mm100, o3tl::Length::px));
                 aPlaceableBound = aExtRect;
 
-                SAL_INFO("vcl.wmf", "External header size "
-                    " t: " << aPlaceableBound.Left() << " l: " << aPlaceableBound.Top()
-                    << " b: " << aPlaceableBound.Right() << " r: " << aPlaceableBound.Bottom());
+                SAL_INFO("emfio", "External header size "
+                    " left: " << aPlaceableBound.Left() << " top: " << aPlaceableBound.Top()
+                    << " right: " << aPlaceableBound.Right() << " bottom: " << aPlaceableBound.Bottom());
 
                 SetMapMode(mpExternalHeader->mapMode);
             }
@@ -1323,9 +1429,9 @@ namespace emfio
                         aPlaceableBound.Right() / fRatio,
                         aPlaceableBound.Bottom() / fRatio);
 
-                    SAL_INFO("vcl.wmf", "Placeable bounds "
-                        " t: " << aPlaceableBound.Left() << " l: " << aPlaceableBound.Top()
-                        << " b: " << aPlaceableBound.Right() << " r: " << aPlaceableBound.Bottom());
+                    SAL_INFO("emfio", "Placeable bounds "
+                        " left: " << aPlaceableBound.Left() << " top: " << aPlaceableBound.Top()
+                        << " right: " << aPlaceableBound.Right() << " bottom: " << aPlaceableBound.Bottom());
                 }
             }
 
@@ -1337,7 +1443,7 @@ namespace emfio
             std::abs( aPlaceableBound.GetWidth() ), std::abs( aPlaceableBound.GetHeight() ) );
         SetWinExt( aWMFSize );
 
-        SAL_INFO("vcl.wmf", "WMF size  w: " << aWMFSize.Width()    << " h: " << aWMFSize.Height());
+        SAL_INFO("emfio", "WMF size  w: " << aWMFSize.Width()    << " h: " << aWMFSize.Height());
 
         Size aDevExt( 10000, 10000 );
         if( ( std::abs( aWMFSize.Width() ) > 1 ) && ( std::abs( aWMFSize.Height() ) > 1 ) )
@@ -1349,7 +1455,7 @@ namespace emfio
         }
         SetDevExt( aDevExt );
 
-        SAL_INFO("vcl.wmf", "Dev size  w: " << aDevExt.Width()    << " h: " << aDevExt.Height());
+        SAL_INFO("emfio", "Dev size  w: " << aDevExt.Width()    << " h: " << aDevExt.Height());
 
         // read the METAHEADER
         sal_uInt32 nMetaKey(0);
@@ -1614,7 +1720,7 @@ namespace emfio
                             }
                         }
 
-                        SAL_WARN_IF(!bRecordOk, "vcl.wmf", "polyline record claimed more points than the stream can provide");
+                        SAL_WARN_IF(!bRecordOk, "emfio", "polyline record claimed more points than the stream can provide");
 
                         if (!bRecordOk)
                         {
@@ -1649,7 +1755,7 @@ namespace emfio
                             }
                         }
 
-                        SAL_WARN_IF(!bRecordOk, "vcl.wmf", "polypolygon record has more polygons than we can handle");
+                        SAL_WARN_IF(!bRecordOk, "emfio", "polypolygon record has more polygons than we can handle");
 
                         bRecordOk = bRecordOk && pStm->good();
 
@@ -1673,7 +1779,7 @@ namespace emfio
                             }
                         }
 
-                        SAL_WARN_IF(!bRecordOk, "vcl.wmf", "polypolygon record claimed more points than the stream can provide");
+                        SAL_WARN_IF(!bRecordOk, "emfio", "polypolygon record claimed more points than the stream can provide");
 
                         bRecordOk &= pStm->good();
 
@@ -1705,7 +1811,7 @@ namespace emfio
                             }
                         }
 
-                        SAL_WARN_IF(!bRecordOk, "vcl.wmf", "polyline record claimed more points than the stream can provide");
+                        SAL_WARN_IF(!bRecordOk, "emfio", "polyline record claimed more points than the stream can provide");
 
                         if (!bRecordOk)
                         {
@@ -1828,23 +1934,23 @@ namespace emfio
         if (aWinExt)
         {
             rPlaceableBound = tools::Rectangle(aWinOrg, *aWinExt);
-            SAL_INFO("vcl.wmf", "Window dimension "
-                       " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
-                    << " b: " << rPlaceableBound.Right() << " r: " << rPlaceableBound.Bottom());
+            SAL_INFO("emfio", "Window dimension "
+                       " left: " << rPlaceableBound.Left()  << " top: " << rPlaceableBound.Top()
+                    << " right: " << rPlaceableBound.Right() << " bottom: " << rPlaceableBound.Bottom());
         }
         else if (aViewportExt)
         {
             rPlaceableBound = tools::Rectangle(aViewportOrg, *aViewportExt);
-            SAL_INFO("vcl.wmf", "Viewport dimension "
-                       " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
-                    << " b: " << rPlaceableBound.Right() << " r: " << rPlaceableBound.Bottom());
+            SAL_INFO("emfio", "Viewport dimension "
+                       " left: " << rPlaceableBound.Left()  << " top: " << rPlaceableBound.Top()
+                    << " right: " << rPlaceableBound.Right() << " bottom: " << rPlaceableBound.Bottom());
         }
         else if (bBoundsDetermined)
         {
             rPlaceableBound = aBound;
-            SAL_INFO("vcl.wmf", "Determined dimension "
-                       " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
-                    << " b: " << rPlaceableBound.Right() << " r: " << rPlaceableBound.Bottom());
+            SAL_INFO("emfio", "Determined dimension "
+                       " left: " << rPlaceableBound.Left()  << " top: " << rPlaceableBound.Top()
+                    << " right: " << rPlaceableBound.Right() << " bottom: " << rPlaceableBound.Bottom());
         }
         else
         {
@@ -1852,9 +1958,9 @@ namespace emfio
             rPlaceableBound.SetTop( 0 );
             rPlaceableBound.SetRight( aMaxWidth );
             rPlaceableBound.SetBottom( aMaxWidth );
-            SAL_INFO("vcl.wmf", "Default dimension "
-                       " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
-                    << " b: " << rPlaceableBound.Right() << " r: " << rPlaceableBound.Bottom());
+            SAL_INFO("emfio", "Default dimension "
+                       " left: " << rPlaceableBound.Left()  << " top: " << rPlaceableBound.Top()
+                    << " right: " << rPlaceableBound.Right() << " bottom: " << rPlaceableBound.Bottom());
         }
     }
 
