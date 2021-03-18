@@ -2493,7 +2493,7 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
                 // Otherwise aInsIdx has been moved during the Undo operation
                 if( pEntry->bJoin )
                 {
-                    SwPaM const& rLastPam =
+                    SwPaM& rLastPam =
                         rContext.GetCursorSupplier().GetCurrentShellCursor();
                     pUndo = PrepareRedline( &rDoc, rBox, *rLastPam.GetPoint(),
                                             pEntry->bJoin, true );
@@ -2608,7 +2608,7 @@ void SwUndoTableCpyTable::AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex
 // rJoin is true if Redo() is calling and the content has already been merged
 
 std::unique_ptr<SwUndo> SwUndoTableCpyTable::PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
-    const SwPosition& rPos, bool& rJoin, bool bRedo )
+    SwPosition& rPos, bool& rJoin, bool bRedo )
 {
     std::unique_ptr<SwUndo> pUndo;
     // b62341295: Redline for copying tables
@@ -2632,6 +2632,10 @@ std::unique_ptr<SwUndo> SwUndoTableCpyTable::PrepareRedline( SwDoc* pDoc, const 
             if( !bRedo && rPos.nNode.GetNode().GetTextNode() )
             {   // Try to merge, if not called by Redo()
                 rJoin = true;
+
+                // Park this somewhere else so nothing points to the to-be-deleted node.
+                rPos.nContent.Assign(pText, 0);
+
                 pText->JoinNext();
             }
         }
