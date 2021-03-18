@@ -25,6 +25,7 @@
 #include <svx/pageitem.hxx>
 #include <svx/svxids.hrc>
 #include <svl/itempool.hxx>
+#include <svl/grabbagitem.hxx>
 #include <sfx2/request.hxx>
 #include <vcl/prntypes.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -207,6 +208,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
                         {SID_ATTR_BORDER_OUTER, SID_ATTR_BORDER_OUTER},
                         {SID_ATTR_BORDER_SHADOW, SID_ATTR_BORDER_SHADOW},
                         {XATTR_FILL_FIRST, XATTR_FILL_LAST},
+                        {SID_ATTR_CHAR_GRABBAG, SID_ATTR_CHAR_GRABBAG},
                         {SID_ATTR_PAGE_COLOR,SID_ATTR_PAGE_FILLSTYLE},
                         {EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR}});
 
@@ -256,7 +258,9 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
     bool bFullSize = mpPage->IsMasterPage() ?
         mpPage->IsBackgroundFullSize() : static_cast<SdPage&>(mpPage->TRG_GetMasterPage()).IsBackgroundFullSize();
 
-    aNewAttr.Put( SfxBoolItem( SID_ATTR_PAGE_EXT2, bFullSize ) );
+    SfxGrabBagItem grabBag(SID_ATTR_CHAR_GRABBAG);
+    grabBag.GetGrabBag()["BackgroundFullSize"] <<= bFullSize;
+    aNewAttr.Put(grabBag);
 
     // Merge ItemSet for dialog
 
@@ -538,12 +542,16 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
         bScaleAll = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
     }
 
-    if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_EXT2), true, &pPoolItem) == SfxItemState::SET )
+    if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_CHAR_GRABBAG, true, &pPoolItem))
     {
-        bFullSize = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
-
-        if(pMasterPage->IsBackgroundFullSize() != bFullSize )
-            bSetPageSizeAndBorder = true;
+        SfxGrabBagItem const*const pGrabBag(static_cast<SfxGrabBagItem const*>(pPoolItem));
+        if (pGrabBag->GetGrabBag().find("BackgroundFullSize")->second >>= bFullSize)
+        {
+            if (pMasterPage->IsBackgroundFullSize() != bFullSize)
+            {
+                bSetPageSizeAndBorder = true;
+            }
+        }
     }
 
     // Paper Bin
