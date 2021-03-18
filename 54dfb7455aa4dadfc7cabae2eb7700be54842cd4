@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "0f3896ac_24e2c729",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-18T08:13:46Z",
+      "side": 1,
+      "message": "Not only that, but also differences between *actual* encodings used out there. E.g., my Russian Windows OS uses CP-1251, and it would be a single-byte encoding incapable of representing that input, so the test would fail. People on Japanese Windows would see something else.\n\nBut the explicitly defined encoding is indeed useful, and we expect that whenever  an explicit encoding is passed, we know either source or destination encoding. So we may have a fixed character strings, and test those with explicit encoding parameters, making sure those are returning expected output.",
+      "parentUuid": "13bdaabc_72eeb7e4",
+      "revId": "54dfb7455aa4dadfc7cabae2eb7700be54842cd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7e9e1484_914809f0",
         "filename": "basic/source/runtime/methods.cxx",
         "patchSetId": 1
