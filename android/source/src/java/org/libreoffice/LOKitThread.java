@@ -448,7 +448,7 @@ class LOKitThread extends Thread {
         boolean editing = LOKitShell.isEditingEnabled();
         float zoomFactor = mViewportMetrics.getZoomFactor();
 
-        if (touchType.equals("LongPress") && editing) {
+        if (touchType.equals("LongPress")) {
             mInvalidationHandler.changeStateTo(InvalidationHandler.OverlayState.TRANSITION);
             mTileProvider.mouseButtonDown(documentCoordinate, 1, zoomFactor);
             mTileProvider.mouseButtonUp(documentCoordinate, 1, zoomFactor);
