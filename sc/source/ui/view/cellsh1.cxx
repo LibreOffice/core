@@ -2803,6 +2803,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     rMark.ResetMark();
 
                 rMark.MarkToSimple();
+
+                pTabViewShell->SelectionChanged();
             }
             break;
 
@@ -2841,6 +2843,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     rMark.ResetMark();
 
                 rMark.MarkToSimple();
+
+                pTabViewShell->SelectionChanged();
             }
             break;
 
