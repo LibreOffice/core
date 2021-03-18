@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73e5bdfa_75b35d9b",
+        "filename": "sw/source/filter/ascii/parasc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-18T07:52:29Z",
+      "side": 0,
+      "message": "Removing this is indeed wrong. Instead of creating a buffer (some memory chunk to hold data), you made pArr to be empty (nullptr).\n\nBesides, I fail to see how this could be related to the code pointer I gave in the bug?",
+      "range": {
+        "startLine": 101,
+        "startChar": 27,
+        "endLine": 101,
+        "endChar": 38
+      },
+      "revId": "de51b1aa540ce1e3532e4a8d3650c82f8d600d17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
