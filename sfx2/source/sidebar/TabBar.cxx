@@ -39,17 +39,16 @@ static int gDefaultWidth;
 
 namespace sfx2::sidebar {
 
-TabBar::TabBar(vcl::Window* pParentWindow,
+TabBar::TabBar(weld::Container* pParent,
                const Reference<frame::XFrame>& rxFrame,
                const std::function<void (const OUString&)>& rDeckActivationFunctor,
                const PopupMenuProvider& rPopupMenuProvider,
-               SidebarController* rParentSidebarController
-              )
-    : InterimItemWindow(pParentWindow, "sfx/ui/tabbar.ui", "TabBar")
-    , mxFrame(rxFrame)
-    , mxAuxBuilder(Application::CreateBuilder(m_xContainer.get(), "sfx/ui/tabbarcontents.ui"))
+               SidebarController* rParentSidebarController)
+    : mxFrame(rxFrame)
+    , mpContainer(pParent)
+    , mxAuxBuilder(Application::CreateBuilder(pParent, "sfx/ui/tabbarcontents.ui"))
     , mxTempToplevel(mxAuxBuilder->weld_container("toplevel"))
-    , mxContents(mxAuxBuilder->weld_widget("TabBarContents"))
+    , mxContents(mxAuxBuilder->weld_container("TabBarContents"))
     , mxMenuButton(mxAuxBuilder->weld_menu_button("menubutton"))
     , mxMainMenu(mxAuxBuilder->weld_menu("mainmenu"))
     , mxSubMenu(mxAuxBuilder->weld_menu("submenu"))
@@ -59,16 +58,12 @@ TabBar::TabBar(vcl::Window* pParentWindow,
     , maPopupMenuProvider(rPopupMenuProvider)
     , pParentSidebarController(rParentSidebarController)
 {
-    InitControlBase(mxMenuButton.get());
+    mxTempToplevel->move(mxContents.get(), mpContainer);
 
-    mxTempToplevel->move(mxContents.get(), m_xContainer.get());
-
-    gDefaultWidth = m_xContainer->get_preferred_size().Width();
+    gDefaultWidth = mpContainer->get_preferred_size().Width();
 
     // we have this widget just so we can measure best width for static TabBar::GetDefaultWidth
     mxMeasureBox->hide();
-
-    SetBackground(Wallpaper(Theme::GetColor(Theme::Color_TabBarBackground)));
 
     mxMenuButton->connect_toggled(LINK(this, TabBar, OnToolboxClicked));
 
@@ -77,21 +72,25 @@ TabBar::TabBar(vcl::Window* pParentWindow,
 #endif
 }
 
-TabBar::~TabBar()
+void TabBar::Hide()
 {
-    disposeOnce();
+    mpContainer->hide();
 }
 
-void TabBar::dispose()
+TabBar::~TabBar()
 {
-    m_xContainer->move(mxContents.get(), mxTempToplevel.get());
+    mpContainer->move(mxContents.get(), mxTempToplevel.get());
     maItems.clear();
     mxMeasureBox.reset();
     mxSubMenu.reset();
     mxMainMenu.reset();
     mxMenuButton.reset();
     mxAuxBuilder.reset();
-    InterimItemWindow::dispose();
+}
+
+void TabBar::GrabFocusToDocument()
+{
+    pParentSidebarController->GrabFocusToDocument();
 }
 
 sal_Int32 TabBar::GetDefaultWidth()
@@ -160,32 +159,11 @@ void TabBar::RemoveDeckHighlight()
         item->mxButton->set_item_active("toggle", false);
 }
 
-void TabBar::DataChanged(const DataChangedEvent& rDataChangedEvent)
-{
-    SetBackground(Theme::GetColor(Theme::Color_TabBarBackground));
-    UpdateButtonIcons();
-
-    InterimItemWindow::DataChanged(rDataChangedEvent);
-}
-
+#if 0
 bool TabBar::EventNotify(NotifyEvent& rEvent)
 {
     MouseNotifyEvent nType = rEvent.GetType();
-    if(MouseNotifyEvent::KEYINPUT == nType)
-    {
-        const vcl::KeyCode& rKeyCode = rEvent.GetKeyEvent()->GetKeyCode();
-        if (!mpAccel)
-        {
-            mpAccel = svt::AcceleratorExecute::createAcceleratorHelper();
-            mpAccel->init(comphelper::getProcessComponentContext(), mxFrame);
-        }
-        const OUString aCommand(mpAccel->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rKeyCode)));
-        if (".uno:Sidebar" == aCommand ||
-                (rKeyCode.IsMod1() && rKeyCode.IsShift() && rKeyCode.GetCode() == KEY_F10))
-            return InterimItemWindow::EventNotify(rEvent);
-        return true;
-    }
-    else if(MouseNotifyEvent::COMMAND == nType)
+    if(MouseNotifyEvent::COMMAND == nType)
     {
         const CommandEvent& rCommandEvent = *rEvent.GetCommandEvent();
         if(rCommandEvent.GetCommand() == CommandEventId::Wheel)
@@ -220,6 +198,7 @@ bool TabBar::EventNotify(NotifyEvent& rEvent)
     }
     return false;
 }
+#endif
 
 void TabBar::CreateTabItem(weld::Toolbar& rItem, const DeckDescriptor& rDeckDescriptor)
 {

@@ -13,6 +13,7 @@
         <property name="can-focus">True</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
+        <property name="hscrollbar-policy">never</property>
         <child>
           <object class="GtkViewport">
             <property name="visible">True</property>

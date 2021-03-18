@@ -38,6 +38,7 @@ SidebarChildWindow::SidebarChildWindow(vcl::Window* pParentWindow, sal_uInt16 nI
                                              | WB_SIZEABLE | WB_3DLOOK);
     SetWindow(pDockWin);
     SetAlignment(SfxChildAlignment::RIGHT);
+    pDockWin->AlignContents(WindowAlign::Left);
 
     pDockWin->SetHelpId(HID_SIDEBAR_WINDOW);
     pDockWin->SetOutputSizePixel(Size(GetDefaultWidth(pDockWin), 450));

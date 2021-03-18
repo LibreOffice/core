@@ -59,7 +59,7 @@ private:
     const OUString mPanelId;
     const OUString mDeckId;
 
-    VclPtr<sfx2::sidebar::Deck> mpDeck;
+    std::weak_ptr<sfx2::sidebar::Deck> mxDeck;
     std::weak_ptr<sfx2::sidebar::Panel> mxPanel;
 
     sal_Int32 GetMaxOrderIndex(sfx2::sidebar::ResourceManager::PanelContextDescriptorContainer aPanels);

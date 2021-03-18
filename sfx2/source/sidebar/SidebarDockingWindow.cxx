@@ -31,6 +31,7 @@
 #include <tools/gen.hxx>
 #include <tools/json_writer.hxx>
 #include <vcl/event.hxx>
+#include <vcl/splitwin.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
@@ -111,8 +112,11 @@ public:
 };
 
 SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChildWindow& rChildWindow,
-                                           vcl::Window* pParentWindow, WinBits nBits)
-    : SfxDockingWindow(pSfxBindings, &rChildWindow, pParentWindow, nBits)
+                                           vcl::Window* pParentWindow, WinBits /*nBits*/)
+    : SfxDockingWindow(pSfxBindings, &rChildWindow, pParentWindow, "SideBar",
+                       "sfx/ui/sidebar.ui")
+    , mxTabBar(m_xBuilder->weld_container("tabbarparent"))
+    , mxDeckParent(m_xBuilder->weld_container("deckparent"))
     , mpSidebarController()
     , mbIsReadyToDrag(false)
     , mpIdleNotify(new SidebarNotifyIdle(*this))
@@ -130,6 +134,27 @@ SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChi
     }
 }
 
+void SidebarDockingWindow::AlignContents(WindowAlign eAlign)
+{
+    setDeferredProperties();
+    // same as SplitWindow::CalcLayoutSizePixel nSplitSize calculation
+    set_border_width(SPLITWIN_SPLITSIZE-2);
+    if (eAlign == WindowAlign::Left)
+    {
+        m_xContainer->reorder_child(mxTabBar.get(), 0);
+        m_xContainer->reorder_child(mxDeckParent.get(), 1);
+        set_margin_end(SPLITWIN_SPLITSIZEEXLN);
+        set_margin_start(0);
+    }
+    else
+    {
+        m_xContainer->reorder_child(mxDeckParent.get(), 0);
+        m_xContainer->reorder_child(mxTabBar.get(), 1);
+        set_margin_end(0);
+        set_margin_start(SPLITWIN_SPLITSIZEEXLN);
+    }
+}
+
 SidebarDockingWindow::~SidebarDockingWindow()
 {
     disposeOnce();
@@ -144,6 +169,9 @@ void SidebarDockingWindow::dispose()
     mpSidebarController.clear();
     if (xComponent.is())
         xComponent->dispose();
+
+    mxDeckParent.reset();
+    mxTabBar.reset();
 
     SfxDockingWindow::dispose();
 }
