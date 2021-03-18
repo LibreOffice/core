@@ -61,7 +61,7 @@ public class LOKitShell {
     }
 
     public static boolean isEditingEnabled() {
-        return LibreOfficeMainActivity.isExperimentalMode();
+        return !LibreOfficeMainActivity.isReadOnlyMode();
     }
 
     // EVENTS
