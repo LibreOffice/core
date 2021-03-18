@@ -28,11 +28,12 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/viewsh.hxx>
 
-#include <vcl/event.hxx>
-#include <comphelper/lok.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
+#include <vcl/scrbar.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/IDialogRenderable.hxx>
+#include <comphelper/lok.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/svborder.hxx>
 #include <tools/json_writer.hxx>
@@ -45,30 +46,28 @@ namespace sfx2::sidebar {
 
 Deck::Deck(const DeckDescriptor& rDeckDescriptor, SidebarDockingWindow* pParentWindow,
            const std::function<void()>& rCloserAction)
-    : InterimItemWindow(pParentWindow, "sfx/ui/deck.ui", "Deck")
+    : mxParentWindow(pParentWindow)
+    , mxBuilder(Application::CreateBuilder(mxParentWindow->GetDeckParent(), "sfx/ui/deck.ui"))
+    , mxContainer(mxBuilder->weld_container("Deck"))
+    , mxTitleBar(new DeckTitleBar(rDeckDescriptor.msTitle, *mxBuilder, rCloserAction))
+    , mxVerticalScrollBar(mxBuilder->weld_scrolled_window("scrolledwindow"))
+    , mxContents(mxBuilder->weld_container("contents"))
     , msId(rDeckDescriptor.msId)
     , mnMinimalWidth(0)
     , mnMinimalHeight(0)
     , maPanels()
-    , mxParentWindow(pParentWindow)
-    , mxTitleBar(new DeckTitleBar(rDeckDescriptor.msTitle, *m_xBuilder, rCloserAction))
-    , mxVerticalScrollBar(m_xBuilder->weld_scrolled_window("scrolledwindow"))
-    , mxContents(m_xBuilder->weld_container("contents"))
 {
-    SetStyle(GetStyle() | WB_DIALOGCONTROL);
+//TODO    SetStyle(GetStyle() | WB_DIALOGCONTROL);
 
-    m_xContainer->set_background(Theme::GetColor(Theme::Color_DeckBackground));
+    mxContainer->set_background(Theme::GetColor(Theme::Color_DeckBackground));
+
+    mxContainer->connect_size_allocate(LINK(this, Deck, DeckSizeAllocHdl));
 
     mxVerticalScrollBar->vadjustment_set_step_increment(10);
     mxVerticalScrollBar->vadjustment_set_page_increment(100);
 }
 
 Deck::~Deck()
-{
-    disposeOnce();
-}
-
-void Deck::dispose()
 {
     SharedPanelContainer aPanels;
     aPanels.swap(maPanels);
@@ -85,8 +84,30 @@ void Deck::dispose()
     mxVerticalScrollBar.reset();
 
     mxParentWindow.clear();
+}
 
-    InterimItemWindow::dispose();
+IMPL_LINK(Deck, DeckSizeAllocHdl, const Size&, rSize, void)
+{
+    fprintf(stderr, "DeckSizeAllocHdl %ld %ld\n", rSize.Width(), rSize.Height());
+
+    maAllocSize = rSize;
+}
+
+Size Deck::GetSizePixel() const
+{
+    Size aPrefSize(mxContainer->get_preferred_size());
+    return Size(std::max(aPrefSize.Width(), maAllocSize.Width()),
+                std::max(aPrefSize.Height(), maAllocSize.Height()));
+}
+
+void Deck::Hide()
+{
+    mxContainer->hide();
+}
+
+void Deck::Show()
+{
+    mxContainer->show();
 }
 
 DeckTitleBar* Deck::GetTitleBar() const
@@ -97,10 +118,11 @@ DeckTitleBar* Deck::GetTitleBar() const
 tools::Rectangle Deck::GetContentArea() const
 {
     const Size aWindowSize (GetSizePixel());
-    const int nBorderSize (Theme::GetInteger(Theme::Int_DeckBorderSize));
+    fprintf(stderr, "size is %ld %ld\n", aWindowSize.Width(), aWindowSize.Height());
     if (aWindowSize.IsEmpty())
         return tools::Rectangle();
 
+    const int nBorderSize (Theme::GetInteger(Theme::Int_DeckBorderSize));
     return tools::Rectangle(
         Theme::GetInteger(Theme::Int_DeckLeftPadding) + nBorderSize,
         Theme::GetInteger(Theme::Int_DeckTopPadding) + nBorderSize,
@@ -108,6 +130,7 @@ tools::Rectangle Deck::GetContentArea() const
         aWindowSize.Height() - 1 - Theme::GetInteger(Theme::Int_DeckBottomPadding) - nBorderSize);
 }
 
+#if 0
 void Deck::DataChanged(const DataChangedEvent&)
 {
     for (auto& rpPanel : maPanels)
@@ -167,6 +190,7 @@ void Deck::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         }
     }
 }
+#endif
 
 /**
  * This container may contain existing panels that are
@@ -201,6 +225,8 @@ void Deck::RequestLayoutInternal()
     mnMinimalWidth = 0;
     mnMinimalHeight = 0;
 
+    fprintf(stderr, "RequestLayoutInternal\n");
+
     DeckLayouter::LayoutDeck(mxParentWindow.get(), GetContentArea(),
                              mnMinimalWidth, mnMinimalHeight, maPanels,
                              *GetTitleBar(), *mxVerticalScrollBar);
@@ -209,6 +235,7 @@ void Deck::RequestLayoutInternal()
 void Deck::RequestLayout()
 {
     RequestLayoutInternal();
+#if 0
 
     if (!comphelper::LibreOfficeKit::isActive())
         return;
@@ -236,6 +263,7 @@ void Deck::RequestLayout()
     }
     else if (aParentSize != GetSizePixel()) //Sync parent & child sizes
         setPosSizePixel(0, 0, aParentSize.Width(), aParentSize.Height());
+#endif
 }
 
 weld::Widget* Deck::GetPanelParentWindow()

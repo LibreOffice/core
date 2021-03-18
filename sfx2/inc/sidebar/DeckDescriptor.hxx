@@ -41,7 +41,7 @@ public:
 
     OUString msNodeName; // some impress deck nodes names are different from their Id
 
-    VclPtr<Deck> mpDeck;
+    std::shared_ptr<Deck> mxDeck;
 
     DeckDescriptor();
     DeckDescriptor(const DeckDescriptor& rOther);

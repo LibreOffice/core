@@ -20,6 +20,7 @@
 #include <sfx2/sidebar/FocusManager.hxx>
 #include <sfx2/sidebar/Deck.hxx>
 #include <sfx2/sidebar/Panel.hxx>
+#include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <sidebar/DeckTitleBar.hxx>
 #include <sidebar/PanelTitleBar.hxx>
 #include <sidebar/TitleBar.hxx>
@@ -91,7 +92,7 @@ void FocusManager::ClearButtons()
     }
 }
 
-void FocusManager::SetDeck(Deck* pDeck)
+void FocusManager::SetDeck(const std::shared_ptr<Deck>& pDeck)
 {
     DeckTitleBar* pDeckTitleBar = pDeck ? pDeck->GetTitleBar() : nullptr;
     if (mpDeckTitleBar != nullptr)
@@ -322,7 +323,7 @@ bool FocusManager::HandleKeyEvent(
                 {
                     if (mxDeck)
                     {
-                        mxDeck->GrabFocusToDocument();
+                        mxDeck->GetDockingWindow()->GrabFocusToDocument();
                         bConsumed = true;
                     }
                     break;

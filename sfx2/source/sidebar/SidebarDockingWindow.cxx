@@ -111,12 +111,21 @@ public:
 };
 
 SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChildWindow& rChildWindow,
-                                           vcl::Window* pParentWindow, WinBits nBits)
-    : SfxDockingWindow(pSfxBindings, &rChildWindow, pParentWindow, nBits)
+                                           vcl::Window* pParentWindow, WinBits /*nBits*/)
+    : SfxDockingWindow(pSfxBindings, &rChildWindow, pParentWindow, "SideBar",
+                       "sfx/ui/sidebar.ui")
+    , mxTabBar(m_xBuilder->weld_container("tabbarparent"))
+    , mxDeckParent(m_xBuilder->weld_container("deckparent"))
     , mpSidebarController()
     , mbIsReadyToDrag(false)
     , mpIdleNotify(new SidebarNotifyIdle(*this))
 {
+#if 0
+    // strip off default 6 border, and use just a left margin of 6
+    setDeferredProperties();
+    set_margin_start(6);
+#endif
+
     // Get the XFrame from the bindings.
     if (pSfxBindings==nullptr || pSfxBindings->GetDispatcher()==nullptr)
     {
@@ -127,6 +136,25 @@ SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChi
     {
         const SfxViewFrame* pViewFrame = pSfxBindings->GetDispatcher()->GetFrame();
         mpSidebarController = sfx2::sidebar::SidebarController::create(this, pViewFrame);
+    }
+}
+
+void SidebarDockingWindow::AlignContents(WindowAlign eAlign)
+{
+    set_border_width(0);
+    if (eAlign == WindowAlign::Left)
+    {
+        m_xContainer->reorder_child(mxTabBar.get(), 0);
+        m_xContainer->reorder_child(mxDeckParent.get(), 1);
+        set_margin_end(8);
+        set_margin_start(0);
+    }
+    else
+    {
+        m_xContainer->reorder_child(mxDeckParent.get(), 0);
+        m_xContainer->reorder_child(mxTabBar.get(), 1);
+        set_margin_end(0);
+        set_margin_start(8);
     }
 }
 
@@ -144,6 +172,9 @@ void SidebarDockingWindow::dispose()
     mpSidebarController.clear();
     if (xComponent.is())
         xComponent->dispose();
+
+    mxDeckParent.reset();
+    mxTabBar.reset();
 
     SfxDockingWindow::dispose();
 }

@@ -34,13 +34,12 @@ class SidebarDockingWindow;
     A deck consists of multiple panels.
     E.g. Properties, Styles, Navigator.
 */
-class Deck final : public InterimItemWindow
+class Deck final
 {
 public:
     Deck(const DeckDescriptor& rDeckDescriptor, SidebarDockingWindow* pParentWindow,
          const std::function<void()>& rCloserAction);
-    virtual ~Deck() override;
-    virtual void dispose() override;
+    ~Deck();
 
     const OUString& GetId() const { return msId; }
 
@@ -60,27 +59,41 @@ public:
     */
     void ShowPanel(const Panel& rPanel);
 
+#if 0
     virtual void DataChanged(const DataChangedEvent& rEvent) override;
 
     virtual void Resize() override;
 
     virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
+#endif
 
     sal_Int32 GetMinimalWidth() const { return mnMinimalWidth; }
+
+    SidebarDockingWindow* GetDockingWindow() const { return mxParentWindow; }
+
+    Size GetSizePixel() const;
+
+    void Hide();
+    void Show();
 
 private:
     void RequestLayoutInternal();
 
 private:
+    VclPtr<SidebarDockingWindow> mxParentWindow;
+    std::unique_ptr<weld::Builder> mxBuilder;
+    std::unique_ptr<weld::Container> mxContainer;
+    std::unique_ptr<DeckTitleBar> mxTitleBar;
+    std::unique_ptr<weld::ScrolledWindow> mxVerticalScrollBar;
+    std::unique_ptr<weld::Container> mxContents;
+
     const OUString msId;
+    Size maAllocSize;
     sal_Int32 mnMinimalWidth;
     sal_Int32 mnMinimalHeight;
     SharedPanelContainer maPanels;
 
-    VclPtr<SidebarDockingWindow> mxParentWindow;
-    std::unique_ptr<DeckTitleBar> mxTitleBar;
-    std::unique_ptr<weld::ScrolledWindow> mxVerticalScrollBar;
-    std::unique_ptr<weld::Container> mxContents;
+    DECL_LINK(DeckSizeAllocHdl, const Size&, void);
 };
 
 } // end of namespace sfx2::sidebar
