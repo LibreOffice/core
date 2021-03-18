@@ -850,7 +850,7 @@ namespace emfio
             bool bFlag = false;
 
             SAL_INFO("emfio", "0x" << std::hex << (nNextPos - nRecSize) <<  "-0x" << nNextPos << " " << record_type_name(nRecType) << " size: "
-                                    <<  std::dec << nRecSize);
+                                    << std::dec << nRecSize);
 
             if( bEnableEMFPlus && nRecType == EMR_COMMENT )
             {
@@ -1978,56 +1978,59 @@ namespace emfio
                     }
                     break;
 
-                    case EMR_MASKBLT :                  SAL_WARN("emfio", "not implemented 'MaskBlt'");                   break;
-                    case EMR_PLGBLT :                   SAL_WARN("emfio", "not implemented 'PlgBlt'");                    break;
-                    case EMR_SETDIBITSTODEVICE :        SAL_WARN("emfio", "not implemented 'SetDIBitsToDevice'");         break;
-                    case EMR_FRAMERGN :                 SAL_WARN("emfio", "not implemented 'FrameRgn'");                  break;
-                    case EMR_INVERTRGN :                SAL_WARN("emfio", "not implemented 'InvertRgn'");                 break;
-                    case EMR_PAINTRGN :                 SAL_WARN("emfio", "not implemented 'PaintRgn'");                  break;
-                    case EMR_FLATTENPATH :              SAL_WARN("emfio", "not implemented 'FlattenPath'");               break;
-                    case EMR_WIDENPATH :                SAL_WARN("emfio", "not implemented 'WidenPath'");                 break;
-                    case EMR_POLYDRAW :                 SAL_WARN("emfio", "not implemented 'Polydraw'");                  break;
-                    case EMR_SETARCDIRECTION :          SAL_WARN("emfio", "not implemented 'SetArcDirection'");           break;
-                    case EMR_SETPALETTEENTRIES :        SAL_WARN("emfio", "not implemented 'SetPaletteEntries'");         break;
-                    case EMR_RESIZEPALETTE :            SAL_WARN("emfio", "not implemented 'ResizePalette'");             break;
-                    case EMR_EXTFLOODFILL :             SAL_WARN("emfio", "not implemented 'ExtFloodFill'");              break;
-                    case EMR_ANGLEARC :                 SAL_WARN("emfio", "not implemented 'AngleArc'");                  break;
-                    case EMR_SETCOLORADJUSTMENT :       SAL_WARN("emfio", "not implemented 'SetColorAdjustment'");        break;
-                    case EMR_POLYDRAW16 :               SAL_WARN("emfio", "not implemented 'PolyDraw16'");                break;
-                    case EMR_POLYTEXTOUTA :             SAL_WARN("emfio", "not implemented 'PolyTextOutA'");              break;
-                    case EMR_POLYTEXTOUTW :             SAL_WARN("emfio", "not implemented 'PolyTextOutW'");              break;
-                    case EMR_CREATECOLORSPACE :         SAL_WARN("emfio", "not implemented 'CreateColorSpace'");          break;
-                    case EMR_SETCOLORSPACE :            SAL_WARN("emfio", "not implemented 'SetColorSpace'");             break;
-                    case EMR_DELETECOLORSPACE :         SAL_WARN("emfio", "not implemented 'DeleteColorSpace'");          break;
-                    case EMR_GLSRECORD :                SAL_WARN("emfio", "not implemented 'GlsRecord'");                 break;
-                    case EMR_GLSBOUNDEDRECORD :         SAL_WARN("emfio", "not implemented 'GlsBoundRecord'");            break;
-                    case EMR_PIXELFORMAT :              SAL_WARN("emfio", "not implemented 'PixelFormat'");               break;
-                    case EMR_DRAWESCAPE :               SAL_WARN("emfio", "not implemented 'DrawEscape'");                break;
-                    case EMR_EXTESCAPE :                SAL_WARN("emfio", "not implemented 'ExtEscape'");                 break;
-                    case EMR_STARTDOC :                 SAL_WARN("emfio", "not implemented 'StartDoc'");                  break;
-                    case EMR_SMALLTEXTOUT :             SAL_WARN("emfio", "not implemented 'SmallTextOut'");              break;
-                    case EMR_FORCEUFIMAPPING :          SAL_WARN("emfio", "not implemented 'ForceUFIMapping'");           break;
-                    case EMR_NAMEDESCAPE :              SAL_WARN("emfio", "not implemented 'NamedEscape'");               break;
-                    case EMR_COLORCORRECTPALETTE :      SAL_WARN("emfio", "not implemented 'ColorCorrectPalette'");       break;
-                    case EMR_SETICMPROFILEA :           SAL_WARN("emfio", "not implemented 'SetICMProfileA'");            break;
-                    case EMR_SETICMPROFILEW :           SAL_WARN("emfio", "not implemented 'SetICMProfileW'");            break;
-                    case EMR_TRANSPARENTBLT :           SAL_WARN("emfio", "not implemented 'TransparenBlt'");             break;
-                    case EMR_TRANSPARENTDIB :           SAL_WARN("emfio", "not implemented 'TransparenDib'");             break;
-                    case EMR_GRADIENTFILL :             SAL_WARN("emfio", "not implemented 'GradientFill'");              break;
-                    case EMR_SETLINKEDUFIS :            SAL_WARN("emfio", "not implemented 'SetLinkedUFIS'");             break;
-
-                    case EMR_SETMAPPERFLAGS :           SAL_WARN("emfio", "not implemented 'SetMapperFlags'");            break;
-                    case EMR_SETICMMODE :               SAL_WARN("emfio", "not implemented 'SetICMMode'");                break;
-                    case EMR_CREATEMONOBRUSH :          SAL_WARN("emfio", "not implemented 'CreateMonoBrush'");           break;
-                    case EMR_SETBRUSHORGEX :            SAL_WARN("emfio", "not implemented 'SetBrushOrgEx'");             break;
-                    case EMR_SETMETARGN :               SAL_WARN("emfio", "not implemented 'SetMetArgn'");                break;
-                    case EMR_SETMITERLIMIT :            SAL_WARN("emfio", "not implemented 'SetMiterLimit'");             break;
-                    case EMR_EXCLUDECLIPRECT :          SAL_WARN("emfio", "not implemented 'ExcludeClipRect'");           break;
-                    case EMR_REALIZEPALETTE :           SAL_WARN("emfio", "not implemented 'RealizePalette'");            break;
-                    case EMR_SELECTPALETTE :            SAL_WARN("emfio", "not implemented 'SelectPalette'");             break;
-                    case EMR_CREATEPALETTE :            SAL_WARN("emfio", "not implemented 'CreatePalette'");             break;
-                    case EMR_ALPHADIBBLEND :            SAL_WARN("emfio", "not implemented 'AlphaDibBlend'");             break;
-                    case EMR_SETTEXTJUSTIFICATION :     SAL_WARN("emfio", "not implemented 'SetTextJustification'");      break;
+                    case EMR_MASKBLT :
+                    case EMR_PLGBLT :
+                    case EMR_SETDIBITSTODEVICE :
+                    case EMR_FRAMERGN :
+                    case EMR_INVERTRGN :
+                    case EMR_PAINTRGN :
+                    case EMR_FLATTENPATH :
+                    case EMR_WIDENPATH :
+                    case EMR_POLYDRAW :
+                    case EMR_SETARCDIRECTION :
+                    case EMR_SETPALETTEENTRIES :
+                    case EMR_RESIZEPALETTE :
+                    case EMR_EXTFLOODFILL :
+                    case EMR_ANGLEARC :
+                    case EMR_SETCOLORADJUSTMENT :
+                    case EMR_POLYDRAW16 :
+                    case EMR_POLYTEXTOUTA :
+                    case EMR_POLYTEXTOUTW :
+                    case EMR_CREATECOLORSPACE :
+                    case EMR_SETCOLORSPACE :
+                    case EMR_DELETECOLORSPACE :
+                    case EMR_GLSRECORD :
+                    case EMR_GLSBOUNDEDRECORD :
+                    case EMR_PIXELFORMAT :
+                    case EMR_DRAWESCAPE :
+                    case EMR_EXTESCAPE :
+                    case EMR_STARTDOC :
+                    case EMR_SMALLTEXTOUT :
+                    case EMR_FORCEUFIMAPPING :
+                    case EMR_NAMEDESCAPE :
+                    case EMR_COLORCORRECTPALETTE :
+                    case EMR_SETICMPROFILEA :
+                    case EMR_SETICMPROFILEW :
+                    case EMR_TRANSPARENTBLT :
+                    case EMR_TRANSPARENTDIB :
+                    case EMR_GRADIENTFILL :
+                    case EMR_SETLINKEDUFIS :
+                    case EMR_SETMAPPERFLAGS :
+                    case EMR_SETICMMODE :
+                    case EMR_CREATEMONOBRUSH :
+                    case EMR_SETBRUSHORGEX :
+                    case EMR_SETMETARGN :
+                    case EMR_SETMITERLIMIT :
+                    case EMR_EXCLUDECLIPRECT :
+                    case EMR_REALIZEPALETTE :
+                    case EMR_SELECTPALETTE :
+                    case EMR_CREATEPALETTE :
+                    case EMR_ALPHADIBBLEND :
+                    case EMR_SETTEXTJUSTIFICATION :
+                    {
+                        SAL_WARN("emfio", "TODO: EMF record not implemented: " << record_type_name(nRecType));
+                    }
+                    break;
 
                     case EMR_COMMENT :
                     case EMR_HEADER :               // has already been read at ReadHeader()
