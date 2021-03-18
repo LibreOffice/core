@@ -93,6 +93,30 @@
       "revId": "6283eed446e6030a9ca17b5787997ca9e1785673",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba1b0c4f_57447a74",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-03-18T15:37:38Z",
+      "side": 1,
+      "message": "err wait, it turns out i misread that and wrote this in a hurry before the ESC meeting 😊\n\nthe m_sName is \"NumberingStyles\" while STR_STYLE_FAMILY_NUMBERING is assigned to m_pResId ... the only user of that is XStyleFamily::getPropertyValue(\"DisplayName\")\n\nthis isn\u0027t used anywhere in LO outside of UI code as far as i can see and i doubt any macro would rely on receiving any particular value from that.\n\nso i take back previous assessment, nothing should break.",
+      "parentUuid": "0c314ac6_ea436f36",
+      "range": {
+        "startLine": 596,
+        "startChar": 8,
+        "endLine": 596,
+        "endChar": 34
+      },
+      "revId": "6283eed446e6030a9ca17b5787997ca9e1785673",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
