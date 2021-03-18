@@ -16,6 +16,24 @@
       "revId": "2f015a528eb503168988393d9b86153a716ccf5b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bef1d5f_b264731f",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4728,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-03-18T08:29:03Z",
+      "side": 0,
+      "message": "I may be mistaken, but the API states \"The format of the range name is dependent of the context of the table\".\n\nThe problem does not arise from the named ranges, but from the addresses behind them, i.e., $Sheet1.$C$3 or Sheet1!$C$3, maybe it is possible to format the address to ScAddress::detailsOOOa1 before getCellRangeByName is called from the macro.",
+      "parentUuid": "add4f2e2_c8aae40b",
+      "revId": "2f015a528eb503168988393d9b86153a716ccf5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
