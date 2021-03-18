@@ -52,7 +52,6 @@ using namespace css::container;
 using namespace css::frame;
 using namespace css::io;
 using namespace css::lang;
-using namespace css::frame;
 using namespace css::sheet;
 using namespace css::text;
 using namespace css::drawing;
