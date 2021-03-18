@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3279f04_061d92b3",
+        "filename": "sfx2/source/control/dispatch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-18T11:53:28Z",
+      "side": 1,
+      "message": "Why the (*...) here? There isn\u0027t in bindings.cxx, so is there a difference?",
+      "range": {
+        "startLine": 253,
+        "startChar": 8,
+        "endLine": 253,
+        "endChar": 16
+      },
+      "revId": "4782fa6e58485df62bd51a696374e8225deddb46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
