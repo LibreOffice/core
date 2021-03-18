@@ -57,10 +57,15 @@ namespace sdr::contact
                     rOwnerPage.GetLeftBorder(), rOwnerPage.GetUpperBorder(),
                     rOwnerPage.GetWidth() - rOwnerPage.GetRightBorder(),
                     rOwnerPage.GetHeight() - rOwnerPage.GetLowerBorder());
-                const basegfx::B2DPolygon aInnerPolgon(basegfx::utils::createPolygonFromRect(aInnerRange));
+                const basegfx::B2DRange aOuterRange(
+                    0, 0, rOwnerPage.GetWidth(), rOwnerPage.GetHeight());
+                // ??? somehow only the master page's bit is used
+                bool const isFullSize(GetMasterPageDescriptor().GetUsedPage().IsBackgroundFullSize());
+                const basegfx::B2DPolygon aFillPolygon(
+                    basegfx::utils::createPolygonFromRect(isFullSize ? aOuterRange : aInnerRange));
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
-                        basegfx::B2DPolyPolygon(aInnerPolgon),
+                        basegfx::B2DPolyPolygon(aFillPolygon),
                         aFill,
                         drawinglayer::attribute::FillGradientAttribute()));
 
