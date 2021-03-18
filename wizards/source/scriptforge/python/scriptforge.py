@@ -538,6 +538,9 @@ class SFScriptForge:
             simulating the exact syntax and behaviour of the identical Basic builtin method.
             Typical example:
                 SF_Basic.MsgBox('This has to be displayed in a message box')
+
+            The signatures of Basic builtin functions are derived from
+                core/basic/source/runtime/stdobj.cxx
             """
         # Mandatory class properties for service registration
         serviceimplementation = 'python'
@@ -551,50 +554,50 @@ class SFScriptForge:
         MB_OK, MB_OKCANCEL, MB_RETRYCANCEL, MB_YESNO, MB_YESNOCANCEL = 0, 1, 5, 4, 3
         IDABORT, IDCANCEL, IDIGNORE, IDNO, IDOK, IDRETRY, IDYES = 3, 2, 5, 7, 1, 4, 6
 
-        def ConvertFromUrl(self, filename):
-            return self.SIMPLEEXEC(self.module + '.PyConvertFromUrl', filename)
+        def ConvertFromUrl(self, url):
+            return self.SIMPLEEXEC(self.module + '.PyConvertFromUrl', url)
         convertFromUrl, convertfromurl = ConvertFromUrl, ConvertFromUrl
 
-        def ConvertToUrl(self, filename):
-            return self.SIMPLEEXEC(self.module + '.PyConvertToUrl', filename)
+        def ConvertToUrl(self, systempath):
+            return self.SIMPLEEXEC(self.module + '.PyConvertToUrl', systempath)
         convertToUrl, converttourl = ConvertToUrl, ConvertToUrl
 
-        def CreateUnoService(self, unoservice):
-            return self.SIMPLEEXEC(self.module + '.PyCreateUnoService', unoservice)
+        def CreateUnoService(self, servicename):
+            return self.SIMPLEEXEC(self.module + '.PyCreateUnoService', servicename)
         createUnoService, createunoservice = CreateUnoService, CreateUnoService
 
-        def DateAdd(self, add, count, datearg):
-            if isinstance(datearg, datetime.datetime):
-                datearg = datearg.isoformat()
-            dateadd = self.SIMPLEEXEC(self.module + '.PyDateAdd', add, count, datearg)
+        def DateAdd(self, interval, number, date):
+            if isinstance(date, datetime.datetime):
+                date = date.isoformat()
+            dateadd = self.SIMPLEEXEC(self.module + '.PyDateAdd', interval, number, date)
             return datetime.datetime.fromisoformat(dateadd)
         dateAdd, dateadd = DateAdd, DateAdd
 
-        def DateDiff(self, add, date1, date2, weekstart = 1, yearstart = 1):
+        def DateDiff(self, interval, date1, date2, firstdayofweek = 1, firstweekofyear = 1):
             if isinstance(date1, datetime.datetime):
                 date1 = date1.isoformat()
             if isinstance(date2, datetime.datetime):
                 date2 = date2.isoformat()
-            return self.SIMPLEEXEC(self.module + '.PyDateDiff', add, date1, date2, weekstart, yearstart)
+            return self.SIMPLEEXEC(self.module + '.PyDateDiff', interval, date1, date2, firstdayofweek, firstweekofyear)
         dateDiff, datediff = DateDiff, DateDiff
 
-        def DatePart(self, add, datearg, weekstart = 1, yearstart = 1):
-            if isinstance(datearg, datetime.datetime):
-                datearg = datearg.isoformat()
-            return self.SIMPLEEXEC(self.module + '.PyDatePart', add, datearg, weekstart, yearstart)
+        def DatePart(self, interval, date, firstdayofweek = 1, firstweekofyear = 1):
+            if isinstance(date, datetime.datetime):
+                date = date.isoformat()
+            return self.SIMPLEEXEC(self.module + '.PyDatePart', interval, date, firstdayofweek, firstweekofyear)
         datePart, datepart = DatePart, DatePart
 
-        def DateValue(self, datearg):
-            if isinstance(datearg, datetime.datetime):
-                datearg = datearg.isoformat()
-            datevalue = self.SIMPLEEXEC(self.module + '.PyDateValue', datearg)
+        def DateValue(self, string):
+            if isinstance(string, datetime.datetime):
+                string = string.isoformat()
+            datevalue = self.SIMPLEEXEC(self.module + '.PyDateValue', string)
             return datetime.datetime.fromisoformat(datevalue)
         dateValue, datevalue = DateValue, DateValue
 
-        def Format(self, value, pattern = ''):
-            if isinstance(value, datetime.datetime):
-                value = value.isoformat()
-            return self.SIMPLEEXEC(self.module + '.PyFormat', value, pattern)
+        def Format(self, expression, format = ''):
+            if isinstance(expression, datetime.datetime):
+                expression = expression.isoformat()
+            return self.SIMPLEEXEC(self.module + '.PyFormat', expression, format)
         format = Format
 
         @staticmethod
@@ -624,14 +627,14 @@ class SFScriptForge:
             def DialogLibraries(cls):
                 return ScriptForge.InvokeSimpleScript(SFScriptForge.SF_Basic.module + '.PyGlobalScope', 'Dialog')
 
-        def InputBox(self, msg, title = '', default = '', xpos = -1, ypos = -1):
-            if xpos < 0 or ypos < 0:
-                return self.SIMPLEEXEC(self.module + '.PyInputBox', msg, title, default)
-            return self.SIMPLEEXEC(self.module + '.PyInputBox', msg, title, default, xpos, ypos)
+        def InputBox(self, prompt, title = '', default = '', xpostwips = -1, ypostwips = -1):
+            if xpostwips < 0 or ypostwips < 0:
+                return self.SIMPLEEXEC(self.module + '.PyInputBox', prompt, title, default)
+            return self.SIMPLEEXEC(self.module + '.PyInputBox', prompt, title, default, xpostwips, ypostwips)
         inputBox, inputbox = InputBox, InputBox
 
-        def MsgBox(self, text, dialogtype = 0, dialogtitle = ''):
-            return self.SIMPLEEXEC(self.module + '.PyMsgBox', text, dialogtype, dialogtitle)
+        def MsgBox(self, prompt, buttons = 0, title = ''):
+            return self.SIMPLEEXEC(self.module + '.PyMsgBox', prompt, buttons, title)
         msgBox, msgbox = MsgBox, MsgBox
 
         @staticmethod
