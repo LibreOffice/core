@@ -185,8 +185,6 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
     {
         if (colorType == PNG_COLOR_TYPE_RGB)
         {
-            size_t aRowSizeBytes = png_get_rowbytes(pPng, pInfo);
-
             aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N24_BPP);
             {
                 pWriteAccess = BitmapScopedWriteAccess(aBitmap);
@@ -199,24 +197,12 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                 if (eFormat == ScanlineFormat::N24BitTcBgr)
                     png_set_bgr(pPng);
 
-                aRows = std::vector<std::vector<png_byte>>(height);
-                for (auto& rRow : aRows)
-                    rRow.resize(aRowSizeBytes, 0);
-
                 for (int pass = 0; pass < nNumberOfPasses; pass++)
                 {
                     for (png_uint_32 y = 0; y < height; y++)
                     {
                         Scanline pScanline = pWriteAccess->GetScanline(y);
-                        png_bytep pRow = aRows[y].data();
-                        png_read_row(pPng, pRow, nullptr);
-                        size_t iColor = 0;
-                        for (size_t i = 0; i < aRowSizeBytes; i += 3)
-                        {
-                            pScanline[iColor++] = pRow[i + 0];
-                            pScanline[iColor++] = pRow[i + 1];
-                            pScanline[iColor++] = pRow[i + 2];
-                        }
+                        png_read_row(pPng, pScanline, nullptr);
                     }
                 }
                 pWriteAccess.reset();
@@ -327,8 +313,6 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
         }
         else if (colorType == PNG_COLOR_TYPE_GRAY)
         {
-            size_t aRowSizeBytes = png_get_rowbytes(pPng, pInfo);
-
             aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N8_BPP,
                              &Bitmap::GetGreyPalette(256));
             aBitmap.Erase(COL_WHITE);
@@ -339,20 +323,13 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                     png_destroy_read_struct(&pPng, &pInfo, nullptr);
                     return false;
                 }
-                aRows = std::vector<std::vector<png_byte>>(height);
-                for (auto& rRow : aRows)
-                    rRow.resize(aRowSizeBytes, 0);
 
                 for (int pass = 0; pass < nNumberOfPasses; pass++)
                 {
                     for (png_uint_32 y = 0; y < height; y++)
                     {
                         Scanline pScanline = pWriteAccess->GetScanline(y);
-                        png_bytep pRow = aRows[y].data();
-                        png_read_row(pPng, pRow, nullptr);
-                        size_t iColor = 0;
-                        for (size_t i = 0; i < aRowSizeBytes; ++i)
-                            pScanline[iColor++] = pRow[i];
+                        png_read_row(pPng, pScanline, nullptr);
                     }
                 }
                 pWriteAccess.reset();
