@@ -324,7 +324,7 @@ TemplateLocalView::getFilteredItems(const std::function<bool (const TemplateItem
 sal_uInt16 TemplateLocalView::createRegion(const OUString &rName)
 {
     sal_uInt16 nRegionId = mpDocTemplates->GetRegionCount();    // Next regionId
-    sal_uInt16 nItemId = getNextItemId();
+    sal_uInt16 nItemId = maRegions.size() + 1;
 
     if (!mpDocTemplates->InsertDir(rName,nRegionId))
         return 0;
