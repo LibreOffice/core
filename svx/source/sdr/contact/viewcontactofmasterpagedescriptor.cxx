@@ -53,14 +53,18 @@ namespace sdr::contact
             {
                 // direct model data is the page size, get and use it
                 const SdrPage& rOwnerPage = GetMasterPageDescriptor().GetOwnerPage();
+                const basegfx::B2DRange aOuterRange(
+                    0, 0, rOwnerPage.GetWidth(), rOwnerPage.GetHeight());
                 const basegfx::B2DRange aInnerRange(
                     rOwnerPage.GetLeftBorder(), rOwnerPage.GetUpperBorder(),
                     rOwnerPage.GetWidth() - rOwnerPage.GetRightBorder(),
                     rOwnerPage.GetHeight() - rOwnerPage.GetLowerBorder());
-                const basegfx::B2DPolygon aInnerPolgon(basegfx::utils::createPolygonFromRect(aInnerRange));
+                // ??? somehow only the master page's bit is used
+                bool const isFullSize(GetMasterPageDescriptor().GetUsedPage().IsBackgroundFullSize());
+                const basegfx::B2DPolygon aFillPolgon(basegfx::utils::createPolygonFromRect(isFullSize ? aOuterRange : aInnerRange));
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
-                        basegfx::B2DPolyPolygon(aInnerPolgon),
+                        basegfx::B2DPolyPolygon(aFillPolgon),
                         aFill,
                         drawinglayer::attribute::FillGradientAttribute()));
 

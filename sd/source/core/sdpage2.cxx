@@ -361,7 +361,6 @@ void SdPage::lateInit(const SdPage& rSrcPage)
     maFileName = rSrcPage.maFileName;
     maBookmarkName = rSrcPage.maBookmarkName;
     mbScaleObjects = rSrcPage.mbScaleObjects;
-    mbBackgroundFullSize = rSrcPage.mbBackgroundFullSize;
     meCharSet = rSrcPage.meCharSet;
     mnPaperBin = rSrcPage.mnPaperBin;
     mpPageLink = nullptr;    // is set when inserting via ConnectLink()
@@ -542,7 +541,7 @@ bool SdPage::Equals(const SdPage& rOtherPage) const
         mbStopSound != rOtherPage.mbStopSound ||
         maBookmarkName != rOtherPage.maBookmarkName ||
         mbScaleObjects != rOtherPage.mbScaleObjects ||
-        mbBackgroundFullSize != rOtherPage.mbBackgroundFullSize ||
+        IsBackgroundFullSize() != rOtherPage.IsBackgroundFullSize() || // ???
         meCharSet != rOtherPage.meCharSet ||
         mnPaperBin != rOtherPage.mnPaperBin ||
         mnTransitionType != rOtherPage.mnTransitionType ||
