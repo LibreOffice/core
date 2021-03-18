@@ -119,7 +119,6 @@ friend class sd::UndoAttrObject;
     OUString    maFileName;               ///< file name.
     OUString    maBookmarkName;           ///< Bookmark name.
     bool    mbScaleObjects;           ///< Objects should be scaled
-    bool    mbBackgroundFullSize;     ///< Background object to represent the whole page.
     rtl_TextEncoding meCharSet;           ///< Text encoding
     sal_uInt16  mnPaperBin;               ///< PaperBin
     SdPageLink* mpPageLink;               ///< Page link (at left sides only)
@@ -274,9 +273,6 @@ public:
                                   bool bSetMasterPage = true,
                                   bool bReverseOrder = false);
     void            EndListenOutlineText();
-
-    void    SetBackgroundFullSize( bool bIn );
-    bool    IsBackgroundFullSize() const { return mbBackgroundFullSize; }
 
     void    SetPaperBin(sal_uInt16 nBin) { mnPaperBin = nBin; }
     sal_uInt16  GetPaperBin() const { return mnPaperBin; }

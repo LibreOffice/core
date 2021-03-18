@@ -114,7 +114,6 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, bool bMasterPage)
 ,   mbLoopSound(false)
 ,   mbStopSound(false)
 ,   mbScaleObjects(true)
-,   mbBackgroundFullSize( false )
 ,   meCharSet(osl_getThreadTextEncoding())
 ,   mnPaperBin(PAPERBIN_PRINTER_SETTINGS)
 ,   mpPageLink(nullptr)
@@ -1792,20 +1791,6 @@ void SdPage::SetLowerBorder(sal_Int32 nBorder)
     if (nBorder != GetLowerBorder() )
     {
         FmFormPage::SetLowerBorder(nBorder);
-    }
-}
-
-/*************************************************************************
-|*
-|* Sets BackgroundFullSize and then calls AdjustBackground
-|*
-\************************************************************************/
-
-void SdPage::SetBackgroundFullSize( bool bIn )
-{
-    if( bIn != mbBackgroundFullSize )
-    {
-        mbBackgroundFullSize = bIn;
     }
 }
 
