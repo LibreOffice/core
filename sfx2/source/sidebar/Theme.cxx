@@ -133,9 +133,6 @@ void Theme::UpdateTheme()
         setPropertyValue(
             maPropertyIdToNameMap[Color_PanelTitleBarBackground],
             Any(sal_Int32(aSecondColor.GetRGBColor())));
-        setPropertyValue(
-            maPropertyIdToNameMap[Color_TabBarBackground],
-            Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
 
         setPropertyValue(
             maPropertyIdToNameMap[Color_Highlight],
@@ -452,9 +449,6 @@ void Theme::SetupPropertyMaps()
     maPropertyNameToIdMap["Color_PanelTitleBarBackground"]=Color_PanelTitleBarBackground;
     maPropertyIdToNameMap[Color_PanelTitleBarBackground]="Color_PanelTitleBarBackground";
 
-    maPropertyNameToIdMap["Color_TabBarBackground"]=Color_TabBarBackground;
-    maPropertyIdToNameMap[Color_TabBarBackground]="Color_TabBarBackground";
-
 
     maPropertyNameToIdMap["Int_DeckBorderSize"]=Int_DeckBorderSize;
     maPropertyIdToNameMap[Int_DeckBorderSize]="Int_DeckBorderSize";
@@ -494,7 +488,6 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
         case Color_DeckTitleBarBackground:
         case Color_PanelBackground:
         case Color_PanelTitleBarBackground:
-        case Color_TabBarBackground:
             return PT_Color;
 
         case Int_DeckBorderSize:

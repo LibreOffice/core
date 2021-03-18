@@ -46,15 +46,15 @@ OUString SAL_CALL  SfxUnoDeck::getTitle()
     SolarMutexGuard aGuard;
 
     SidebarController* pSidebarController = getSidebarController();
-    VclPtr<Deck> pDeck = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId)->mpDeck;
+    auto xDeck = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId)->mxDeck;
 
-    if (!pDeck)
+    if (!xDeck)
     {
         pSidebarController->CreateDeck(mDeckId);
-        pDeck = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId)->mpDeck;
+        xDeck = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId)->mxDeck;
     }
 
-    DeckTitleBar* pTitleBar = pDeck->GetTitleBar();
+    DeckTitleBar* pTitleBar = xDeck->GetTitleBar();
     return pTitleBar->GetTitle();
 }
 
@@ -69,8 +69,8 @@ void SAL_CALL SfxUnoDeck::setTitle( const OUString& newTitle )
 
     if (xDeckDescriptor)
     {
-        Deck* pDeck = xDeckDescriptor->mpDeck;
-        DeckTitleBar* pTitleBar = pDeck->GetTitleBar();
+        auto xDeck = xDeckDescriptor->mxDeck;
+        DeckTitleBar* pTitleBar = xDeck->GetTitleBar();
         pTitleBar->SetTitle(newTitle);
 
         xDeckDescriptor->msTitle = newTitle;

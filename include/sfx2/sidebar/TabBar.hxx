@@ -20,15 +20,13 @@
 
 #include <sfx2/sidebar/ResourceManager.hxx>
 
-#include <vcl/InterimItemWindow.hxx>
+#include <vcl/weld.hxx>
 
 #include <functional>
 
 namespace com::sun::star::frame { class XFrame; }
 
 namespace svt { class AcceleratorExecute; }
-
-namespace weld { class Toolbar; }
 
 namespace sfx2::sidebar {
 
@@ -37,7 +35,7 @@ class SidebarController;
 
 /** The tab bar is the container for the individual tabs.
 */
-class TabBar final : public InterimItemWindow
+class TabBar final
 {
 public:
     /** DeckMenuData has entries for display name, and a flag:
@@ -55,20 +53,20 @@ public:
     typedef ::std::function<void (
             weld::Menu& rMainMenu, weld::Menu& rSubMenu,
             const ::std::vector<DeckMenuData>& rMenuData)> PopupMenuProvider;
-    TabBar (
-        vcl::Window* pParentWindow,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        const ::std::function<void (const OUString& rsDeckId)>& rDeckActivationFunctor,
-        const PopupMenuProvider& rPopupMenuProvider,
-        SidebarController* rParentSidebarController);
+    TabBar(weld::Container* pParent,
+           const css::uno::Reference<css::frame::XFrame>& rxFrame,
+           const ::std::function<void (const OUString& rsDeckId)>& rDeckActivationFunctor,
+           const PopupMenuProvider& rPopupMenuProvider,
+           SidebarController* rParentSidebarController);
 
-    weld::Container* GetContainer() { return m_xContainer.get(); }
+    weld::Container* GetContainer() { return mxContents.get(); }
 
-    virtual ~TabBar() override;
-    virtual void dispose() override;
+    ~TabBar();
 
-    virtual void DataChanged (const DataChangedEvent& rDataChangedEvent) override;
+    void Hide();
+#if 0
     virtual bool EventNotify (NotifyEvent& rEvent) override;
+#endif
 
     static sal_Int32 GetDefaultWidth();
 
@@ -82,18 +80,23 @@ public:
 
     void UpdateFocusManager (FocusManager& rFocusManager);
 
+    void UpdateButtonIcons();
+
     /// Enables/Disables the menu button. Used by LoKit.
     void EnableMenuButton(const bool bEnable);
+
+    void GrabFocusToDocument();
 
 private:
     css::uno::Reference<css::frame::XFrame> mxFrame;
 
+    weld::Container* mpContainer;
     // This unusual auxiliary builder is because without a toplevel GtkWindow
     // gtk will warn on loading a .ui with an accelerator defined, so use a
     // temporary toplevel to suppress that and move the contents after load
     std::unique_ptr<weld::Builder> mxAuxBuilder;
     std::unique_ptr<weld::Container> mxTempToplevel;
-    std::unique_ptr<weld::Widget> mxContents;
+    std::unique_ptr<weld::Container> mxContents;
 
     std::unique_ptr<weld::MenuButton> mxMenuButton;
     std::unique_ptr<weld::Menu> mxMainMenu;
@@ -121,15 +124,11 @@ private:
 
     static void CreateTabItem(weld::Toolbar& rButton, const DeckDescriptor& rDeckDescriptor);
     css::uno::Reference<css::graphic::XGraphic> GetItemImage(const DeckDescriptor& rDeskDescriptor) const;
-    void UpdateButtonIcons();
 
     DECL_LINK(OnToolboxClicked, weld::ToggleButton&, void);
 
     SidebarController* pParentSidebarController;
-    std::unique_ptr<svt::AcceleratorExecute> mpAccel;
-
 };
-
 
 } // end of namespace sfx2::sidebar
 
