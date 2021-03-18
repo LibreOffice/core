@@ -69,6 +69,30 @@
       "revId": "6283eed446e6030a9ca17b5787997ca9e1785673",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c314ac6_ea436f36",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-03-18T15:01:35Z",
+      "side": 1,
+      "message": "sorry for taking so long to look at this...\n\nit looks like SwXStyleFamilies::getByName() will use this string in { return e.m_sName \u003d\u003d Name; }\n\nso you can use something like ThisDocument.getStyleFamilies().getByName(\"Numbering\") but now it will throw NoSuchElementException and has to be getByName(\"List\") ?\n\nthat is an incompatible API change, it could break some macros or extensions.\n\nprobably the array in unostyles.cxx needs to use \"nubmering\" instead of STR_STYLE_FAMILY_NUMBERING now.",
+      "parentUuid": "d923e7e0_5dce1107",
+      "range": {
+        "startLine": 596,
+        "startChar": 8,
+        "endLine": 596,
+        "endChar": 34
+      },
+      "revId": "6283eed446e6030a9ca17b5787997ca9e1785673",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
