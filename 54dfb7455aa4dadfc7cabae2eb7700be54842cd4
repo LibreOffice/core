@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "9b0869e6_18abf41b",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-03-18T19:11:36Z",
+      "side": 1,
+      "message": "You talked about encodings of system(CP-1251 and some other encoding on japanese windows) but the output will not depend on your system encoding rather it will depend on encoding of the application(LO).\n\nAfter reading about encoding standards and its compatibility with LO i found that .ods files are always rendered in \"utf-8\" in ubuntu and \"ascii\" encoding in Windows.\nSo it does not matter whatever system encoding we have ultimately results depend on encoding of the application(which is fixed for Windows and Ubuntu).\n\nCorrect me if i am wrong at any point.\nThanks.",
+      "parentUuid": "0f3896ac_24e2c729",
+      "revId": "54dfb7455aa4dadfc7cabae2eb7700be54842cd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7e9e1484_914809f0",
         "filename": "basic/source/runtime/methods.cxx",
         "patchSetId": 1
