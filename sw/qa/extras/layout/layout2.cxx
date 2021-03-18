@@ -2066,6 +2066,39 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testImageComment)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), aPosition.nContent.GetIndex());
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testScriptField)
+{
+    // Test clicking script field inside table ( tdf#141079 )
+    SwDoc* pDoc = createDoc("tdf141079.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Look up layout position which is the first cell in the table
+    SwRootFrame* pRoot = pWrtShell->GetLayout();
+    CPPUNIT_ASSERT(pRoot->GetLower()->IsPageFrame());
+    SwPageFrame* pPage = static_cast<SwPageFrame*>(pRoot->GetLower());
+    CPPUNIT_ASSERT(pPage->GetLower()->IsBodyFrame());
+    SwBodyFrame* pBody = static_cast<SwBodyFrame*>(pPage->GetLower());
+    CPPUNIT_ASSERT(pBody->GetLower()->IsTextFrame());
+    SwTextFrame* pTextFrame = static_cast<SwTextFrame*>(pBody->GetLower());
+    CPPUNIT_ASSERT(pTextFrame->GetNext()->IsTabFrame());
+    SwFrame* pTable = pTextFrame->GetNext();
+    SwFrame* pRow1 = pTable->GetLower();
+    CPPUNIT_ASSERT(pRow1->GetLower()->IsCellFrame());
+    SwFrame* pCell1 = pRow1->GetLower();
+    CPPUNIT_ASSERT(pCell1->GetLower()->IsTextFrame());
+    SwTextFrame* pCellTextFrame = static_cast<SwTextFrame*>(pCell1->GetLower());
+    const SwRect& rCellRect = pCell1->getFrameArea();
+    Point aPoint = rCellRect.Center();
+    aPoint.setX(aPoint.getX() - rCellRect.Width() / 2);
+
+    // Ask for the doc model pos of this layout point.
+    SwPosition aPosition(*pCellTextFrame->GetTextNodeForFirstText());
+    pCellTextFrame->GetModelPositionForViewPoint(&aPosition, aPoint);
+
+    // Position was 1 without the fix from tdf#141079
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aPosition.nContent.GetIndex());
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testCommentCursorPosition)
 {
     // Load a document that has "aaa" in it, followed by three comments.
