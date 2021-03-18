@@ -46,6 +46,29 @@
       "revId": "93a9cd87e7594fa3d2c24ab72ecdcfb0d6d59c00",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82411c1a_3cb3de2e",
+        "filename": "svx/source/dialog/docrecovery.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-18T11:00:23Z",
+      "side": 1,
+      "message": "Mike, the additional column needs to be taken into account, somehow. See my shared screenshot. Could you please help?",
+      "range": {
+        "startLine": 715,
+        "startChar": 8,
+        "endLine": 715,
+        "endChar": 21
+      },
+      "revId": "93a9cd87e7594fa3d2c24ab72ecdcfb0d6d59c00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
