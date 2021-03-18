@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "644f9d11_4bf7704c",
+        "filename": "vcl/unx/gtk3/gtk3gtkframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1562,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-03-18T15:20:38Z",
+      "side": 1,
+      "message": "it might be that:\nint nMenuBarHeight \u003d m_pSalMenu ? m_pSalMenu-\u003eGetMenuBarHeight() : 0;\ngets the value you want here ?",
+      "revId": "b76a32b8c3a82a47d399793d8ccc04b29e1b3e78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
