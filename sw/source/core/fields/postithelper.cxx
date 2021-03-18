@@ -29,6 +29,7 @@
 #include <txtfrm.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <redline.hxx>
 #include <scriptinfo.hxx>
 #include <calbck.hxx>
@@ -193,7 +194,21 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
                         if( RedlineType::Insert == pRedline->GetType() )
                             aRet = INSERTED;
                         else if( RedlineType::Delete == pRedline->GetType() )
-                            aRet = DELETED;
+                        {
+                            bool bDeleted = pAnnotationMark == nullptr;
+                            if( !bDeleted )
+                            {
+                                IDocumentMarkAccess& rDMA(*pTextNode->GetDoc().getIDocumentMarkAccess());
+                                IDocumentMarkAccess::const_iterator_t pAnnotationBookmark =
+                                    rDMA.findAnnotationBookmark(pAnnotationMark->GetName());
+                                // tdf#140980 only really deleted, if there is no helper bookmark
+                                // in ChangesInMargin mode
+                                if ( pAnnotationBookmark == rDMA.getBookmarksEnd() )
+                                    bDeleted = true;
+                            }
+                            if ( bDeleted )
+                                aRet = DELETED;
+                        }
                         o_rInfo.mRedlineAuthor = pRedline->GetAuthor();
                     }
                 }
