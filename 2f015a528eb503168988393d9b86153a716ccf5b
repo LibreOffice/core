@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "add4f2e2_c8aae40b",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4728,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-03-18T01:34:05Z",
+      "side": 0,
+      "message": "Parsing the cellrange/name string as ScAddress::detailsOOOa1 is part of the stable API and not to be changed.\nSee also offapi/com/sun/star/table/XCellRange.idl\n\nIf functionality is needed that takes the document\u0027s current address convention into account then please introduce another function, which unfortunately involves having to derive the UNO API interface to be able to add some.\n\nHowever, I doubt that is needed here because the sample documents attached to the bug do not even use a different cell address convention string but just range names that should be equally found for all conventions, so the cause probably is something else. I didn\u0027t try though.",
+      "revId": "2f015a528eb503168988393d9b86153a716ccf5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
