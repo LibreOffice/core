@@ -1823,32 +1823,6 @@
         PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION
         WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.</p>
     </div>
-    <div class ="QRCODEGEN">
-    <h2>QR-Code-Generator</h2>
-    <p>The following software may be included in this product: QR Code Generator.</p>
-    <p>The libqrcodegen project code is covered by the MIT license:</p>
-    <blockquote>
-    <p> Copyright © 2019 Project Nayuki. (MIT License) [<a href="https://www.nayuki.io/page/qr-code-generator-library">https://www.nayuki.io/page/qr-code-generator-library</a>]</p>
-
-    <p>Permission is hereby granted, free of charge, to any person obtaining a copy of
-    this software and associated documentation files (the "Software"), to deal in
-    the Software without restriction, including without limitation the rights to
-    use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-    the Software, and to permit persons to whom the Software is furnished to do so,
-    subject to the following conditions:</p>
-
-    <p>*The above copyright notice and this permission notice shall be included in
-    all copies or substantial portions of the Software.</p>
-
-    <p>*The Software is provided "as is", without warranty of any kind, express or
-    implied, including but not limited to the warranties of merchantability,
-    fitness for a particular purpose and noninfringement. In no event shall the
-    authors or copyright holders be liable for any claim, damages or other
-    liability, whether in an action of contract, tort or otherwise, arising from,
-    out of or in connection with the Software or the use or other dealings in the
-    Software.</p>
-    </blockquote>
-    </div>
     <h2>dtoa</h2>
     <p>The following software may be included in this product: dtoa.</p>
     <p>dtoa code is covered by the MIT license:</p>

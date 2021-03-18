@@ -2238,18 +2238,9 @@ AC_ARG_WITH(system-hunspell,
         [Use libhunspell already on system.]),,
     [with_system_hunspell="$with_system_libs"])
 
-libo_FUZZ_ARG_ENABLE(qrcodegen,
-    AS_HELP_STRING([--disable-qrcodegen],
-        [Disable use of qrcodegen external library.]))
-
 libo_FUZZ_ARG_ENABLE(zxing,
     AS_HELP_STRING([--disable-zxing],
        [Disable use of zxing external library.]))
-
-AC_ARG_WITH(system-qrcodegen,
-    AS_HELP_STRING([--with-system-qrcodegen],
-        [Use libqrcodegen already on system.]),,
-    [with_system_qrcodegen="$with_system_libs"])
 
 AC_ARG_WITH(system-zxing,
     AS_HELP_STRING([--with-system-zxing],
@@ -10804,45 +10795,6 @@ AC_SUBST(HUNSPELL_CFLAGS)
 AC_SUBST(HUNSPELL_LIBS)
 
 dnl ===================================================================
-dnl Check for system qrcodegen
-dnl ===================================================================
-AC_MSG_CHECKING([whether to use libqrcodegen])
-if test "$enable_qrcodegen" = "no"; then
-    AC_MSG_RESULT([no])
-    ENABLE_QRCODEGEN=
-    SYSTEM_QRCODEGEN=
-else
-    AC_MSG_RESULT([yes])
-    ENABLE_QRCODEGEN=TRUE
-    AC_MSG_CHECKING([which libqrcodegen to use])
-    if test "$with_system_qrcodegen" = "yes"; then
-        AC_MSG_RESULT([external])
-        SYSTEM_QRCODEGEN=TRUE
-        AC_LANG_PUSH([C++])
-        AC_CHECK_HEADER(qrcodegen/QrCode.hpp, [],
-            [AC_MSG_ERROR(qrcodegen headers not found.)], [#include <stdexcept>])
-        AC_CHECK_LIB([qrcodegencpp], [main], [:],
-            [ AC_MSG_ERROR(qrcodegen C++ library not found.) ], [])
-        QRCODEGEN_LIBS=-lqrcodegencpp
-        AC_LANG_POP([C++])
-        QRCODEGEN_CFLAGS=$(printf '%s' "$QRCODEGEN_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-        FilterLibs "${QRCODEGEN_LIBS}"
-        QRCODEGEN_LIBS="${filteredlibs}"
-    else
-        AC_MSG_RESULT([internal])
-        SYSTEM_QRCODEGEN=
-        BUILD_TYPE="$BUILD_TYPE QRCODEGEN"
-    fi
-    if test "$ENABLE_QRCODEGEN" = TRUE; then
-        AC_DEFINE(ENABLE_QRCODEGEN)
-    fi
-fi
-AC_SUBST(SYSTEM_QRCODEGEN)
-AC_SUBST(ENABLE_QRCODEGEN)
-AC_SUBST(QRCODEGEN_CFLAGS)
-AC_SUBST(QRCODEGEN_LIBS)
-
-dnl ===================================================================
 dnl Check for system zxing
 dnl ===================================================================
 AC_MSG_CHECKING([whether to use zxing])
@@ -14135,7 +14087,6 @@ AC_CONFIG_HEADERS([config_host/config_mpl.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])
 AC_CONFIG_HEADERS([config_host/config_options.h])
 AC_CONFIG_HEADERS([config_host/config_options_calc.h])
-AC_CONFIG_HEADERS([config_host/config_qrcodegen.h])
 AC_CONFIG_HEADERS([config_host/config_zxing.h])
 AC_CONFIG_HEADERS([config_host/config_skia.h])
 AC_CONFIG_HEADERS([config_host/config_typesizes.h])
