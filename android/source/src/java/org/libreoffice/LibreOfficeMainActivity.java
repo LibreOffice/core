@@ -75,6 +75,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
     private static boolean mIsExperimentalMode;
     private static boolean mIsDeveloperMode;
+    private static boolean mbISReadOnlyMode;
 
     private int providerId;
     private URI documentUri;
@@ -118,10 +119,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
     public static boolean isDeveloperMode() {
         return mIsDeveloperMode;
-    }
-
-    public boolean usesTemporaryFile() {
-        return mTempFile != null;
     }
 
     private boolean isKeyboardOpen = false;
@@ -189,10 +186,12 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
             loadNewDocument(newFilePath, newDocumentType);
         }
 
+        mbISReadOnlyMode = !isExperimentalMode();
         if (getIntent().getData() != null) {
             if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
                 if (copyFileToTemp() && mTempFile != null) {
                     mInputFile = mTempFile;
+                    mbISReadOnlyMode = true;
                     Log.d(LOGTAG, "SCHEME_CONTENT: getPath(): " + getIntent().getData().getPath());
 
                     String displayName = extractDisplayNameFromIntent();
@@ -880,6 +879,10 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
     public boolean isSpreadsheet() {
         return mIsSpreadsheet;
+    }
+
+    public static boolean isReadOnlyMode() {
+        return mbISReadOnlyMode;
     }
 
     public static void setDocumentChanged (boolean changed) {
