@@ -261,6 +261,7 @@ class SVXCORE_DLLPUBLIC SdrObject : public SfxListener, public tools::WeakBase
 {
 private:
     friend class                SdrObjListIter;
+    friend class                SdrObjList;
     friend class                SdrVirtObj;
     friend class                SdrRectObj;
 
@@ -306,8 +307,6 @@ public:
     SdrObject* getParentSdrObjectFromSdrObject() const;
 
 private:
-    // only allow SetParentAtSdrObjectFromSdrObjList to call setParentOfSdrObject
-    friend void SetParentAtSdrObjectFromSdrObjList(SdrObject& rSdrObject, SdrObjList* pNew);
     SVX_DLLPRIVATE void setParentOfSdrObject(SdrObjList* pNew);
 
 public:
