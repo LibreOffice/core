@@ -197,11 +197,36 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
                     postspdict.push_back( pLangStr );
                 }
             }
+#ifdef IOS
+            else if ([pLangStr isEqualToString:@"fr_FR"])
+            {
+                const std::vector<NSString*> aFR
+                    { @"BE", @"BF", @"BJ", @"CA", @"CH", @"CI", @"FR", @"LU", @"MC", @"ML",
+                      @"MU", @"NE", @"SN", @"TG" };
+                for (auto c: aFR)
+                {
+                    pLangStr = [@"fr_" stringByAppendingString: c];
+                    postspdict.push_back( pLangStr );
+                }
+            }
+#endif
             else if ([pLangStr isEqualToString:@"it"])
             {
                 postspdict.push_back( @"it_CH" );
                 postspdict.push_back( @"it_IT" );
             }
+#ifdef IOS
+            else if ([pLangStr isEqualToString:@"it_IT"])
+            {
+                const std::vector<NSString*> aIT
+                    { @"CH", @"IT" };
+                for (auto c: aIT)
+                {
+                    pLangStr = [@"it_" stringByAppendingString: c];
+                    postspdict.push_back( pLangStr );
+                }
+            }
+#endif
             else if ([pLangStr isEqualToString:@"ko"])
             {
                 postspdict.push_back( @"ko_KR" );
