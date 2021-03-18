@@ -92,6 +92,8 @@ class SwXMLTableContext : public XMLTextTableContext
     sal_uInt16              m_nHeaderRows;
     sal_uInt32          m_nCurRow;
     sal_uInt32          m_nCurCol;
+    /// Same as m_nCurCol, but not incremented multiple times for table cells with row span.
+    sal_uInt32 m_nNonMergedCurCol;
     sal_Int32           m_nWidth;
 
     // The maximum table width (i.e., maximum value for m_nWidth); must be >= MINLAY and must also
@@ -156,6 +158,10 @@ public:
     inline sal_uInt32 GetColumnCount() const;
 
     bool IsInsertCellPossible() const { return m_nCurCol < GetColumnCount(); }
+
+    /// Determines if it's OK to insert a covered cell, given the total column count.
+    bool IsInsertCoveredCellPossible() const { return m_nNonMergedCurCol < GetColumnCount(); }
+
     bool IsInsertColPossible() const { return m_nCurCol < USHRT_MAX; }
     bool IsInsertRowPossible() const { return m_nCurRow < USHRT_MAX; }
     bool IsValid() const { return m_pTableNode != nullptr; }
@@ -169,6 +175,10 @@ public:
                      bool bHasValue = false,
                      double fValue = 0.0,
                      OUString const*const pStringValue = nullptr);
+
+    /// Sets formatting of an already created covered cell.
+    void InsertCoveredCell(const OUString& rStyleName);
+
     void InsertRow( const OUString& rStyleName,
                     const OUString& rDfltCellStyleName,
                     bool bInHead );
