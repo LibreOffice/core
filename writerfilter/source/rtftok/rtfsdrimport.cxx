@@ -977,9 +977,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                 for (sal_Int32 i = 0; i < rPolygon.getLength(); ++i)
                 {
                     basegfx::B2DPoint aPoint(aPoly.getB2DPoint(i));
-                    rPolygon[i]
-                        = awt::Point(static_cast<sal_Int32>(convertMm100ToTwip(aPoint.getX())),
-                                     static_cast<sal_Int32>(convertMm100ToTwip(aPoint.getY())));
+                    rPolygon[i] = awt::Point(static_cast<sal_Int32>(aPoint.getX()),
+                                             static_cast<sal_Int32>(aPoint.getY()));
                 }
                 xPropertySet->setPropertyValue("PolyPolygon", uno::makeAny(aPolyPolySequence));
             }
