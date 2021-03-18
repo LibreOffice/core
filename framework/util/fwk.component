@@ -175,7 +175,8 @@
     <service name="com.sun.star.util.URLTransformer"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.WindowContentFactoryManager"
-      constructor="com_sun_star_comp_framework_WindowContentFactoryManager_get_implementation">
+      constructor="com_sun_star_comp_framework_WindowContentFactoryManager_get_implementation"
+      single-instance="true">
     <service name="com.sun.star.ui.WindowContentFactoryManager"/>
     <singleton name="com.sun.star.ui.theWindowContentFactoryManager"/>
   </implementation>
