@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6329118d_7ebe0684",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-18T07:00:23Z",
+      "side": 1,
+      "message": "This include seems unused.",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 23
+      },
+      "revId": "1e4bb40c3bb4751ccab8fde1bfa30bca55d862e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9063c5c_9a5479fb",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-18T07:00:23Z",
+      "side": 1,
+      "message": "This include seems unused.",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 32
+      },
+      "revId": "1e4bb40c3bb4751ccab8fde1bfa30bca55d862e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6cf22b9_8db79d0a",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-18T07:00:23Z",
+      "side": 1,
+      "message": "I was thinking that QrCodeGenDialog::GenerateQRCode could possibly be also converted to a standalone utility function (and thus removed from the class interface). That is, of course, a task for a *separate* unrelated change, but that would mean that we will need to move that function *above* QrCodeGenDialog::Apply; and then we would also need to move *this one* up there, too.\n\nSo, since you will have to fix the includes and XML that I pointed to, could you please also move the whole namespace up to the beginning of this file, right above QrCodeGenDialog::QrCodeGenDialog (below those \"using\")? That would allow us to avoid future moves of this utility function, if that becomes necessary.",
+      "revId": "1e4bb40c3bb4751ccab8fde1bfa30bca55d862e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93884819_f37a4e31",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-18T07:00:23Z",
+      "side": 1,
+      "message": "\u0027class\u003d\"black\" \u0027 should be removed, because it\u0027s the reference to (now removed) redundant CSS.",
+      "range": {
+        "startLine": 291,
+        "startChar": 23,
+        "endLine": 291,
+        "endChar": 39
+      },
+      "revId": "1e4bb40c3bb4751ccab8fde1bfa30bca55d862e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
