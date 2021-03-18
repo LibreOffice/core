@@ -4183,50 +4183,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
 ))
 endif
 
-ifneq ($(SYSTEM_QRCODEGEN),)
-
-define gb_LinkTarget__use_qrcodegen
-$(call gb_LinkTarget_set_include,$(1),\
-	-DSYSTEM_QRCODEGEN \
-	$$(INCLUDE) \
-	$(QRCODEGEN_CFLAGS) \
-)
-$(call gb_LinkTarget_add_libs,$(1),$(QRCODEGEN_LIBS))
-
-endef
-
-gb_ExternalProject__use_qrcodegen :=
-
-else # !SYSTEM_QRCODEGEN
-
-ifneq ($(ENABLE_QRCODEGEN),)
-
-define gb_LinkTarget__use_qrcodegen
-$(call gb_LinkTarget_use_unpacked,$(1),qrcodegen)
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,qrcodegen/cpp/)\
-	$$(INCLUDE) \
-)
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	qrcodegen \
-)
-
-endef
-
-define gb_ExternalProject__use_qrcodegen
-$(call gb_ExternalProject_use_static_libraries,$(1),qrcodegen)
-
-endef
-
-else # !ENABLE_QRCODEGEN
-
-define gb_LinkTarget__use_qrcodegen
-endef
-
-endif # ENABLE_QRCODEGEN
-
-endif # SYSTEM_QRCODEGEN
-
 define gb_LinkTarget__use_dtoa
 $(call gb_LinkTarget_use_unpacked,$(1),dtoa)
 $(call gb_LinkTarget_set_include,$(1),\
