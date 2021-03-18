@@ -77,6 +77,7 @@ public:
     void Show() { mxGrid->show(); }
 
     void set_grid_top_attach(int nAttach) { mxBorder->set_grid_top_attach(nAttach); }
+    int get_preferred_height() const { return mxBorder->get_preferred_size().Height(); }
 
     void SetPos(const ScAddress& rPos) { maPos = rPos; };
     bool IsSelected() const { return mbActive;}
