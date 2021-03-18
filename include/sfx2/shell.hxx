@@ -193,11 +193,6 @@ public:
         */
     SfxViewShell*               GetViewShell() const;
 
-    void                        CallExec( SfxExecFunc pFunc, SfxRequest &rReq )
-                                { (*pFunc)(this, rReq); }
-    void                        CallState( SfxStateFunc pFunc, SfxItemSet &rSet )
-                                { (*pFunc)(this, rSet); }
-
     static void                 EmptyExecStub(SfxShell *pShell, SfxRequest &);
     static void                 EmptyStateStub(SfxShell *pShell, SfxItemSet &);
 
