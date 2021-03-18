@@ -60,14 +60,6 @@ using namespace ::com::sun::star;
 
 const sal_Int32 InitialObjectContainerCapacity (64);
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// helper to allow changing parent at SdrObject, but only from SdrObjList
-
-void SetParentAtSdrObjectFromSdrObjList(SdrObject& rSdrObject, SdrObjList* pNew)
-{
-    rSdrObject.setParentOfSdrObject(pNew);
-}
-
 //////////////////////////////////////////////////////////////////////////////
 
 SdrObjList::SdrObjList()
@@ -305,7 +297,7 @@ void SdrObjList::NbcInsertObject(SdrObject* pObj, size_t nPos)
 
     if (nPos<nCount) mbObjOrdNumsDirty=true;
     pObj->SetOrdNum(nPos);
-    SetParentAtSdrObjectFromSdrObjList(*pObj, this);
+    pObj->setParentOfSdrObject(this);
 
     // Inform the parent about change to allow invalidations at
     // evtl. existing parent visualisations
@@ -404,7 +396,7 @@ SdrObject* SdrObjList::NbcRemoveObject(size_t nObjNum)
 
         // tdf#121022 Do first remove from SdrObjList - InsertedStateChange
         // relies now on IsInserted which uses getParentSdrObjListFromSdrObject
-        SetParentAtSdrObjectFromSdrObjList(*pObj, nullptr);
+        pObj->setParentOfSdrObject(nullptr);
 
         // calls UserCall, among other
         pObj->InsertedStateChange();
@@ -451,7 +443,7 @@ SdrObject* SdrObjList::RemoveObject(size_t nObjNum)
 
         // tdf#121022 Do first remove from SdrObjList - InsertedStateChange
         // relies now on IsInserted which uses getParentSdrObjListFromSdrObject
-        SetParentAtSdrObjectFromSdrObjList(*pObj, nullptr);
+        pObj->setParentOfSdrObject(nullptr);
 
         // calls, among other things, the UserCall
         pObj->InsertedStateChange();
@@ -503,7 +495,7 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
         }
 
         // Change parent and replace in SdrObjList
-        SetParentAtSdrObjectFromSdrObjList(*pObj, nullptr);
+        pObj->setParentOfSdrObject(nullptr);
         ReplaceObjectInContainer(*pNewObj,nObjNum);
 
         // tdf#121022 InsertedStateChange uses the parent
@@ -519,7 +511,7 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
         // Setup data at new SdrObject - it already *is* inserted to
         // the SdrObjList due to 'ReplaceObjectInContainer' above
         pNewObj->SetOrdNum(nObjNum);
-        SetParentAtSdrObjectFromSdrObjList(*pNewObj, this);
+        pNewObj->setParentOfSdrObject(this);
 
         // Inform the parent about change to allow invalidations at
         // evtl. existing parent visualisations, but also react on
