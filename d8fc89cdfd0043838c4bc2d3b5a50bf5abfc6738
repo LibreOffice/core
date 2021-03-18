@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0a37076_2bfe9af2",
+        "filename": "sc/source/ui/view/output.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2555,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-18T17:40:00Z",
+      "side": 0,
+      "message": "We need this, if we want to clip correctly for Arabic and other right-to-left languages, i.e. keeping always the beginning of the text.\n\nLikely we need similar logic for the vertical text, too.",
+      "range": {
+        "startLine": 2555,
+        "startChar": 46,
+        "endLine": 2555,
+        "endChar": 58
+      },
+      "revId": "d8fc89cdfd0043838c4bc2d3b5a50bf5abfc6738",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
