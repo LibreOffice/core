@@ -508,7 +508,6 @@ certain functionality.
 @li @c vcl.watchdog
 @li @c vcl.window
 @li @c vcl.win.dtrans
-@li @c vcl.wmf
 
 @section winaccessibility
 
