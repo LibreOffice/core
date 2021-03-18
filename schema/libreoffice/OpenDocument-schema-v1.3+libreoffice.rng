@@ -2303,7 +2303,7 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
-  <!-- TODO: no proposal for loext:margin-gutter="..." -->
+  <!-- https://issues.oasis-open.org/browse/OFFICE-4105 -->
   <rng:define name="style-page-layout-properties-attlist" combine="interleave">
     <rng:optional>
       <rng:attribute name="loext:margin-gutter">
