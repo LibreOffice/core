@@ -33,6 +33,8 @@
 //
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/XMLTextMasterPageContext.hxx>
 
@@ -158,7 +160,7 @@ void PageStyleContext::FillPropertySet(const uno::Reference<beans::XPropertySet 
 }
 
 void PageStyleContext::FillPropertySet_PageStyle(
-        const uno::Reference<beans::XPropertySet> & rPropSet,
+        const uno::Reference<beans::XPropertySet> & xPropSet,
         XMLPropStyleContext *const pDrawingPageStyle)
 {
     // need to filter out old fill definitions when the new ones are used. The new
@@ -229,7 +231,7 @@ void PageStyleContext::FillPropertySet_PageStyle(
         };
 
         // Fill PropertySet, but let it handle special properties not itself
-        xImpPrMap->FillPropertySet(GetProperties(), rPropSet, aContextIDs);
+        xImpPrMap->FillPropertySet(GetProperties(), xPropSet, aContextIDs);
 
         // get property set mapper
         const rtl::Reference< XMLPropertySetMapper >& rMapper = xImpPrMap->getPropertySetMapper();
@@ -273,12 +275,12 @@ void PageStyleContext::FillPropertySet_PageStyle(
 
                             if(!xInfo.is())
                             {
-                                xInfo = rPropSet->getPropertySetInfo();
+                                xInfo = xPropSet->getPropertySetInfo();
                             }
 
                             if(xInfo->hasPropertyByName(rPropertyName))
                             {
-                                rPropSet->setPropertyValue(rPropertyName,Any(sStyleName));
+                                xPropSet->setPropertyValue(rPropertyName,Any(sStyleName));
                             }
                         }
                         catch(css::lang::IllegalArgumentException& e)
@@ -302,7 +304,71 @@ void PageStyleContext::FillPropertySet_PageStyle(
     // pDrawingPageStyle overrides this
     if (pDrawingPageStyle)
     {
-        pDrawingPageStyle->FillPropertySet(rPropSet);
+        pDrawingPageStyle->FillPropertySet(xPropSet);
+    }
+    // horrible heuristic to guess BackgroundFullSize for Writer < 7.0
+    else if (!IsDefaultStyle() // ignore pool default, only fix existing styles
+            && (GetImport().isGeneratorVersionOlderThan(SvXMLImport::AOO_4x, SvXMLImport::LO_7x)
+            // also for AOO 4.x, assume there won't ever be a 4.2
+            || GetImport().getGeneratorVersion() == SvXMLImport::AOO_4x))
+    {
+        bool isFullSize(true); // default is current LO default
+        drawing::FillStyle fillStyle{drawing::FillStyle_NONE};
+        xPropSet->getPropertyValue("FillStyle") >>= fillStyle;
+        if (GetImport().isGeneratorVersionOlderThan(SvXMLImport::AOO_4x, SvXMLImport::LO_63x)
+            // also for AOO 4.x, assume there won't ever be a 4.2
+            || GetImport().getGeneratorVersion() == SvXMLImport::AOO_4x)
+        {
+            // before LO 6.3, always inside the margins (but ignore it if NONE)
+            if (fillStyle != drawing::FillStyle_NONE)
+            {
+                isFullSize = false;
+            }
+        }
+        else
+        {
+            // LO 6.3/6.4: guess depending on fill style/bitmap mode
+            // this should work even if the document doesn't contain fill style
+            // but only old background attributes
+            // (can't use the aContextIDs stuff above because that requires
+            //  re-routing through handleSpecialItem())
+            switch (fillStyle)
+            {
+                case drawing::FillStyle_NONE:
+                    break;
+                case drawing::FillStyle_SOLID:
+                case drawing::FillStyle_GRADIENT:
+                case drawing::FillStyle_HATCH:
+                    isFullSize = true;
+                    break;
+                case drawing::FillStyle_BITMAP:
+                    {
+                        drawing::BitmapMode bitmapMode{};
+                        xPropSet->getPropertyValue("FillBitmapMode") >>= bitmapMode;
+                        switch (bitmapMode)
+                        {
+                            case drawing::BitmapMode_REPEAT:
+                                isFullSize = true;
+                                break;
+                            case drawing::BitmapMode_STRETCH:
+                            case drawing::BitmapMode_NO_REPEAT:
+                                isFullSize = false;
+                                break;
+                            default:
+                                assert(false);
+                        }
+                    }
+                    break;
+                default:
+                    assert(false);
+            }
+        }
+        // set it explicitly if it's not the default
+        if (!isFullSize)
+        {
+            SAL_INFO("xmloff.style", "FillPropertySet_PageStyle: Heuristically resetting BackgroundFullSize");
+            xPropSet->setPropertyValue("BackgroundFullSize", uno::makeAny(isFullSize));
+        }
     }
 
     // old code, replaced by above stuff
@@ -313,7 +379,7 @@ void PageStyleContext::FillPropertySet_PageStyle(
         uno::Any aPageUsage;
         XMLPMPropHdl_PageStyleLayout aPageUsageHdl;
         if (aPageUsageHdl.importXML(sPageUsage, aPageUsage, GetImport().GetMM100UnitConverter()))
-            rPropSet->setPropertyValue("PageStyleLayout", aPageUsage);
+            xPropSet->setPropertyValue("PageStyleLayout", aPageUsage);
     }
 }
 
