@@ -315,24 +315,6 @@ StatusbarControllerFactory::StatusbarControllerFactory( const Reference< XCompon
 {
 }
 
-struct StatusbarControllerFactoryInstance {
-    explicit StatusbarControllerFactoryInstance(
-        css::uno::Reference<css::uno::XComponentContext> const & context):
-        instance(static_cast<cppu::OWeakObject *>(
-                    new StatusbarControllerFactory(context)))
-    {
-    }
-
-    css::uno::Reference<css::uno::XInterface> instance;
-};
-
-struct StatusbarControllerFactorySingleton:
-    public rtl::StaticWithArg<
-        StatusbarControllerFactoryInstance,
-        css::uno::Reference<css::uno::XComponentContext>,
-        StatusbarControllerFactorySingleton>
-{};
-
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -356,8 +338,7 @@ com_sun_star_comp_framework_StatusBarControllerFactory_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject *>(
-            StatusbarControllerFactorySingleton::get(context).instance.get()));
+    return cppu::acquire(new StatusbarControllerFactory(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
