@@ -1308,6 +1308,7 @@ void SdrPage::lateInit(const SdrPage& rSrcPage)
     mnBorderUpper = rSrcPage.mnBorderUpper;
     mnBorderRight = rSrcPage.mnBorderRight;
     mnBorderLower = rSrcPage.mnBorderLower;
+    mbBackgroundFullSize = rSrcPage.mbBackgroundFullSize;
     nPageNum = rSrcPage.nPageNum;
 
     if(rSrcPage.TRG_HasMasterPage())
@@ -1493,6 +1494,20 @@ sal_Int32 SdrPage::GetRightBorder() const
 sal_Int32 SdrPage::GetLowerBorder() const
 {
     return mnBorderLower;
+}
+
+void SdrPage::SetBackgroundFullSize(bool const bIn)
+{
+    if (bIn != mbBackgroundFullSize)
+    {
+        mbBackgroundFullSize = bIn;
+        SetChanged();
+    }
+}
+
+bool SdrPage::IsBackgroundFullSize() const
+{
+    return mbBackgroundFullSize;
 }
 
 // #i68775# React on PageNum changes (from Model in most cases)

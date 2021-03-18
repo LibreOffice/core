@@ -62,9 +62,14 @@ namespace sdr::contact
 
             // used range (retval) is fixed here, it's the MasterPage fill range
             const SdrPage& rOwnerPage = rDescriptor.GetOwnerPage();
-            const basegfx::B2DRange aPageFillRange(
+            const basegfx::B2DRange aInnerRange(
                 rOwnerPage.GetLeftBorder(), rOwnerPage.GetUpperBorder(),
                 rOwnerPage.GetWidth() - rOwnerPage.GetRightBorder(), rOwnerPage.GetHeight() - rOwnerPage.GetLowerBorder());
+            const basegfx::B2DRange aOuterRange(
+                0, 0, rOwnerPage.GetWidth(), rOwnerPage.GetHeight());
+            // ??? somehow only the master page's bit is used
+            bool const isFullSize(rDescriptor.GetUsedPage().IsBackgroundFullSize());
+            basegfx::B2DRange const& rPageFillRange(isFullSize ? aOuterRange : aInnerRange);
 
             // Modify DisplayInfo for MasterPageContent collection; remember original layers and
             // set combined SdrLayerIDSet; set MasterPagePaint flag
@@ -105,15 +110,15 @@ namespace sdr::contact
                 const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
                 const basegfx::B2DRange aSubHierarchyRange(xMasterPageSequence.getB2DRange(rViewInformation2D));
 
-                if(aPageFillRange.isInside(aSubHierarchyRange))
+                if (rPageFillRange.isInside(aSubHierarchyRange))
                 {
                     // completely inside, just render MasterPage content. Add to target
                     xRetval.append(xMasterPageSequence);
                 }
-                else if(aPageFillRange.overlaps(aSubHierarchyRange))
+                else if (rPageFillRange.overlaps(aSubHierarchyRange))
                 {
                     // overlapping, compute common area
-                    basegfx::B2DRange aCommonArea(aPageFillRange);
+                    basegfx::B2DRange aCommonArea(rPageFillRange);
                     aCommonArea.intersect(aSubHierarchyRange);
 
                     // need to create a clip primitive, add clipped list to target

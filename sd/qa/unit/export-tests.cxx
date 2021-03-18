@@ -25,8 +25,11 @@
 #include <unotools/mediadescriptor.hxx>
 #include <rtl/ustring.hxx>
 
+#include <com/sun/star/drawing/BitmapMode.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -82,6 +85,7 @@ public:
     void testRhbz1870501();
     void testTdf128550();
     void testTdf140714();
+    void testMasterPageBackgroundFullSize();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -122,6 +126,7 @@ public:
     CPPUNIT_TEST(testRhbz1870501);
     CPPUNIT_TEST(testTdf128550);
     CPPUNIT_TEST(testTdf140714);
+    CPPUNIT_TEST(testMasterPageBackgroundFullSize);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1365,6 +1370,149 @@ void SdExportTest::testTdf140714()
     CPPUNIT_ASSERT_EQUAL(OUString{"com.sun.star.drawing.CustomShape"}, xShape->getShapeType());
 
     xDocShRef->DoClose();
+}
+
+void SdExportTest::testMasterPageBackgroundFullSize()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/background.odp"), ODP);
+
+    // BackgroundFullSize exists on master pages only
+    // (note: this document can't be created with the UI because UI keeps
+    //  page margins and the flag synchronized across all master pages)
+    uno::Reference<drawing::XMasterPagesSupplier> xMPS(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPages> xMPs(xMPS->getMasterPages());
+    {
+        uno::Reference<beans::XPropertySet> xMP(xMPs->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(!xMP->getPropertyValue("BackgroundFullSize").get<bool>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), xMP->getPropertyValue("BorderTop").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), xMP->getPropertyValue("BorderLeft").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xMP->getPropertyValue("BorderBottom").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xMP->getPropertyValue("BorderRight").get<sal_Int32>());
+        uno::Reference<beans::XPropertySet> xBackgroundProps(
+            xMP->getPropertyValue("Background").get<uno::Reference<beans::XPropertySet>>());
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, xBackgroundProps->getPropertyValue("FillStyle").get<drawing::FillStyle>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x729fcf), xBackgroundProps->getPropertyValue("FillColor").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xBackgroundProps->getPropertyValue("FillTransparence").get<sal_Int16>());
+    }
+    {
+        uno::Reference<beans::XPropertySet> xMP(xMPs->getByIndex(1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xMP->getPropertyValue("BackgroundFullSize").get<bool>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), xMP->getPropertyValue("BorderTop").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), xMP->getPropertyValue("BorderLeft").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xMP->getPropertyValue("BorderBottom").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xMP->getPropertyValue("BorderRight").get<sal_Int32>());
+        uno::Reference<beans::XPropertySet> xBackgroundProps(
+            xMP->getPropertyValue("Background").get<uno::Reference<beans::XPropertySet>>());
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, xBackgroundProps->getPropertyValue("FillStyle").get<drawing::FillStyle>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x729fcf), xBackgroundProps->getPropertyValue("FillColor").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xBackgroundProps->getPropertyValue("FillTransparence").get<sal_Int16>());
+    }
+    {
+        uno::Reference<beans::XPropertySet> xMP(xMPs->getByIndex(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(!xMP->getPropertyValue("BackgroundFullSize").get<bool>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), xMP->getPropertyValue("BorderTop").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), xMP->getPropertyValue("BorderLeft").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xMP->getPropertyValue("BorderBottom").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xMP->getPropertyValue("BorderRight").get<sal_Int32>());
+        uno::Reference<beans::XPropertySet> xBackgroundProps(
+            xMP->getPropertyValue("Background").get<uno::Reference<beans::XPropertySet>>());
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, xBackgroundProps->getPropertyValue("FillStyle").get<drawing::FillStyle>());
+        CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_STRETCH, xBackgroundProps->getPropertyValue("FillBitmapMode").get<drawing::BitmapMode>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xBackgroundProps->getPropertyValue("FillTransparence").get<sal_Int16>());
+    }
+    {
+        uno::Reference<beans::XPropertySet> xMP(xMPs->getByIndex(3), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xMP->getPropertyValue("BackgroundFullSize").get<bool>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), xMP->getPropertyValue("BorderTop").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), xMP->getPropertyValue("BorderLeft").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xMP->getPropertyValue("BorderBottom").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xMP->getPropertyValue("BorderRight").get<sal_Int32>());
+        uno::Reference<beans::XPropertySet> xBackgroundProps(
+            xMP->getPropertyValue("Background").get<uno::Reference<beans::XPropertySet>>());
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, xBackgroundProps->getPropertyValue("FillStyle").get<drawing::FillStyle>());
+        CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_STRETCH, xBackgroundProps->getPropertyValue("FillBitmapMode").get<drawing::BitmapMode>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xBackgroundProps->getPropertyValue("FillTransparence").get<sal_Int16>());
+    }
+
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP, &tempFile);
+
+    xMPS.set(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY);
+    xMPs.set(xMPS->getMasterPages());
+    {
+        uno::Reference<beans::XPropertySet> xMP(xMPs->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(!xMP->getPropertyValue("BackgroundFullSize").get<bool>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), xMP->getPropertyValue("BorderTop").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), xMP->getPropertyValue("BorderLeft").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xMP->getPropertyValue("BorderBottom").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xMP->getPropertyValue("BorderRight").get<sal_Int32>());
+        uno::Reference<beans::XPropertySet> xBackgroundProps(
+            xMP->getPropertyValue("Background").get<uno::Reference<beans::XPropertySet>>());
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, xBackgroundProps->getPropertyValue("FillStyle").get<drawing::FillStyle>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x729fcf), xBackgroundProps->getPropertyValue("FillColor").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xBackgroundProps->getPropertyValue("FillTransparence").get<sal_Int16>());
+    }
+    {
+        uno::Reference<beans::XPropertySet> xMP(xMPs->getByIndex(1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xMP->getPropertyValue("BackgroundFullSize").get<bool>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), xMP->getPropertyValue("BorderTop").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), xMP->getPropertyValue("BorderLeft").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xMP->getPropertyValue("BorderBottom").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xMP->getPropertyValue("BorderRight").get<sal_Int32>());
+        uno::Reference<beans::XPropertySet> xBackgroundProps(
+            xMP->getPropertyValue("Background").get<uno::Reference<beans::XPropertySet>>());
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, xBackgroundProps->getPropertyValue("FillStyle").get<drawing::FillStyle>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x729fcf), xBackgroundProps->getPropertyValue("FillColor").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xBackgroundProps->getPropertyValue("FillTransparence").get<sal_Int16>());
+    }
+    {
+        uno::Reference<beans::XPropertySet> xMP(xMPs->getByIndex(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(!xMP->getPropertyValue("BackgroundFullSize").get<bool>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), xMP->getPropertyValue("BorderTop").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), xMP->getPropertyValue("BorderLeft").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xMP->getPropertyValue("BorderBottom").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xMP->getPropertyValue("BorderRight").get<sal_Int32>());
+        uno::Reference<beans::XPropertySet> xBackgroundProps(
+            xMP->getPropertyValue("Background").get<uno::Reference<beans::XPropertySet>>());
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, xBackgroundProps->getPropertyValue("FillStyle").get<drawing::FillStyle>());
+        CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_STRETCH, xBackgroundProps->getPropertyValue("FillBitmapMode").get<drawing::BitmapMode>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xBackgroundProps->getPropertyValue("FillTransparence").get<sal_Int16>());
+    }
+    {
+        uno::Reference<beans::XPropertySet> xMP(xMPs->getByIndex(3), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xMP->getPropertyValue("BackgroundFullSize").get<bool>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), xMP->getPropertyValue("BorderTop").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), xMP->getPropertyValue("BorderLeft").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xMP->getPropertyValue("BorderBottom").get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xMP->getPropertyValue("BorderRight").get<sal_Int32>());
+        uno::Reference<beans::XPropertySet> xBackgroundProps(
+            xMP->getPropertyValue("Background").get<uno::Reference<beans::XPropertySet>>());
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, xBackgroundProps->getPropertyValue("FillStyle").get<drawing::FillStyle>());
+        CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_STRETCH, xBackgroundProps->getPropertyValue("FillBitmapMode").get<drawing::BitmapMode>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xBackgroundProps->getPropertyValue("FillTransparence").get<sal_Int16>());
+    }
+
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "styles.xml");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Default']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "background-size", "border");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Default_20_3']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "background-size", "full");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Default_20_2']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "background-size", "border");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:family='drawing-page' and @style:name = "
+        "/office:document-styles/office:master-styles/style:master-page[@style:name='Default_20_1']/attribute::draw:style-name"
+        "]/style:drawing-page-properties", "background-size", "full");
+
+    tempFile.EnableKillingFile();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);

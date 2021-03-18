@@ -206,13 +206,17 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfMasterPage::createV
             if(!aFill.isDefault())
             {
                 // direct model data is the page size, get and use it
+                const basegfx::B2DRange aOuterRange(
+                    0, 0, rPage.GetWidth(), rPage.GetHeight());
                 const basegfx::B2DRange aInnerRange(
                     rPage.GetLeftBorder(), rPage.GetUpperBorder(),
                     rPage.GetWidth() - rPage.GetRightBorder(), rPage.GetHeight() - rPage.GetLowerBorder());
-                const basegfx::B2DPolygon aInnerPolgon(basegfx::utils::createPolygonFromRect(aInnerRange));
+                bool const isFullSize(rPage.IsBackgroundFullSize());
+                const basegfx::B2DPolygon aFillPolygon(
+                    basegfx::utils::createPolygonFromRect(isFullSize ? aOuterRange : aInnerRange));
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
-                        basegfx::B2DPolyPolygon(aInnerPolgon),
+                        basegfx::B2DPolyPolygon(aFillPolygon),
                         aFill,
                         drawinglayer::attribute::FillGradientAttribute()));
 
