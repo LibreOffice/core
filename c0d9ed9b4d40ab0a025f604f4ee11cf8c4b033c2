@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "29cf3ca8_c373483a",
+        "filename": "configure.ac",
+        "patchSetId": 6
+      },
+      "lineNbr": 10865,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-03-18T18:52:03Z",
+      "side": 1,
+      "message": "or just look at config.log what exactly goes wrong. Trivialities....\n\nAnyway, I wasn\u0027t able to stand this \"let\u0027s not even try to look what goes wrong\" so I tried myself even when I don\u0027t really time....\n\nFWIW: shrugs. got distracted and tried it anyway\n\nchecking whether to use zxing... yes\nchecking which libzxing to use... external\nchecking for ZXing/MultiFormatWriter.h... yes\nchecking for main in -lZXing... yes\n\nworks here.\n\nconfig.log says:\n\nconfigure:34648: checking whether to use zxing\nconfigure:34656: result: yes\nconfigure:34659: checking which libzxing to use\nconfigure:34662: result: external\nconfigure:34671: checking for ZXing/MultiFormatWriter.h\nconfigure:34671: x86_64-linux-gnu-g++ -c -g -O2 -ffile-prefix-map\u003d/home/rene/LibreOffice/git/master\u003d. -fstack-protector-strong -Wformat -Werror\u003dformat-security -Wdate-time -D_FORTIFY_SOURCE\u003d2 conftest.cpp \u003e\u00265\nconfigure:34671: $? \u003d 0\nconfigure:34671: result: yes\nconfigure:34680: checking for main in -lZXing\nconfigure:34699: x86_64-linux-gnu-g++ -o conftest -g -O2 -ffile-prefix-map\u003d/home/rene/LibreOffice/git/master\u003d. -fstack-protector-strong -Wformat -Werror\u003dformat-security -Wdate-time -D_FORTIFY_SOURCE\u003d2 -Wl,-z,relro conftest.cpp -lZXing   \u003e\u00265\nconfigure:34699: $? \u003d 0\nconfigure:34708: result: yes\n\nAC_CHECK_LIB just tries to link a file using the function specified with the lib specified: https://www.gnu.org/software/autoconf/manual/autoconf-2.67/html_node/Libraries.html",
+      "parentUuid": "da9b263a_97f9a7a1",
+      "range": {
+        "startLine": 10865,
+        "startChar": 22,
+        "endLine": 10865,
+        "endChar": 35
+      },
+      "revId": "c0d9ed9b4d40ab0a025f604f4ee11cf8c4b033c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "51360aad_5cb5360e",
         "filename": "external/zxing/StaticLibrary_zxing.mk",
         "patchSetId": 6
