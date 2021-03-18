@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "da9b263a_97f9a7a1",
+        "filename": "configure.ac",
+        "patchSetId": 6
+      },
+      "lineNbr": 10865,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-18T18:30:46Z",
+      "side": 1,
+      "message": "\u003e checking for main in -lZXing... no\n\nif I had that line in my output, I\u0027d look for \u0027main\u0027 in the code related to the library ... here?\nThen I\u0027d see the \u0027AC_CHECK_LIB\u0027 that seems to be the failing command.\nAnd tried to google for it...",
+      "range": {
+        "startLine": 10865,
+        "startChar": 22,
+        "endLine": 10865,
+        "endChar": 35
+      },
+      "revId": "c0d9ed9b4d40ab0a025f604f4ee11cf8c4b033c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "51360aad_5cb5360e",
         "filename": "external/zxing/StaticLibrary_zxing.mk",
         "patchSetId": 6
