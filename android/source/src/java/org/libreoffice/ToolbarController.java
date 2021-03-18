@@ -246,7 +246,9 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
     }
 
     void setupToolbars() {
-        if (mContext.usesTemporaryFile()) {
+        // show message in case experimental mode is enabled (i.e. editing is supported in general),
+        // but current document  is readonly
+        if (LibreOfficeMainActivity.isExperimentalMode() && LibreOfficeMainActivity.isReadOnlyMode()) {
             disableMenuItem(R.id.action_save, true);
             Toast.makeText(mContext, mContext.getString(R.string.temp_file_saving_disabled), Toast.LENGTH_LONG).show();
         }
