@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "064f759d_4910439e",
+        "filename": "configure.ac",
+        "patchSetId": 6
+      },
+      "lineNbr": 10848,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-18T18:27:53Z",
+      "side": 1,
+      "message": "What reasonable changes should be made here so as to avoid the error : \nchecking whether to use zxing... yes\nchecking which libzxing to use... external\nchecking for ZXing/MultiFormatWriter.h... yes\nchecking for main in -lZXing... no\nconfigure: error: zxing C++ library not found.\nError running configure at /home/homeboy445/DevFolder/OpenSource/LibreOffice/libreoffice/autogen.sh line 316.\nmake: *** [Makefile:55: /home/homeboy445/DevFolder/OpenSource/LibreOffice/libreoffice/config_host.mk] Error 1",
+      "revId": "c0d9ed9b4d40ab0a025f604f4ee11cf8c4b033c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "51360aad_5cb5360e",
         "filename": "external/zxing/StaticLibrary_zxing.mk",
         "patchSetId": 6
