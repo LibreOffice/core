@@ -467,7 +467,7 @@ void Entity::startElement( Event const *pEvent )
             if( xContext.is() )
                 xContext->startFastElement( nElementToken, xAttr );
         }
-        // swap the reference we own in to avoid referencing thrash.
+        // swap the reference we own in to avoid referencing trash.
         maContextStack.top().mxContext = std::move( xContext );
     }
     catch (...)
