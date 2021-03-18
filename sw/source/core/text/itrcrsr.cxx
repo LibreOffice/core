@@ -1538,8 +1538,12 @@ TextFrameIndex SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoin
             {
                 if (pPor->IsPostItsPortion())
                 {
-                    // Offset would be nCurrStart + nLength below, do the same for post-it portions.
-                    nCurrStart += pPor->GetLen();
+                    SwPostItsPortion* pPostItsPortion = dynamic_cast<SwPostItsPortion*>(pPor);
+                    if (!pPostItsPortion->IsScript()) // tdf#141079
+                    {
+                        // Offset would be nCurrStart + nLength below, do the same for post-it portions.
+                        nCurrStart += pPor->GetLen();
+                    }
                 }
                 return nCurrStart;
             }
