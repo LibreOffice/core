@@ -28,14 +28,15 @@ SfxUnoPanel::SfxUnoPanel(const uno::Reference<frame::XFrame>& rFrame, const OUSt
 xFrame(rFrame),
 mPanelId(panelId),
 mDeckId(deckId),
-mpDeck(),
+mxDeck(),
 mxPanel()
 {
     SidebarController* pSidebarController = getSidebarController();
 
     pSidebarController->CreateDeck(mDeckId); // creates deck object is not already
-    mpDeck = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId)->mpDeck;
-    mxPanel = mpDeck->GetPanel(mPanelId);
+    auto xDeck = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId)->mxDeck;
+    mxDeck = xDeck;
+    mxPanel = xDeck->GetPanel(mPanelId);
 }
 
 SidebarController* SfxUnoPanel::getSidebarController()
@@ -99,11 +100,15 @@ void SAL_CALL SfxUnoPanel::expand( const sal_Bool bCollapseOther )
 
     if (bCollapseOther)
     {
-        SharedPanelContainer aPanels = mpDeck->GetPanels();
-        for (auto const& panel : aPanels)
+        auto xDeck = mxDeck.lock();
+        if (xDeck)
         {
-            if (! panel->HasIdPredicate(mPanelId))
-                panel->SetExpanded(false);
+            SharedPanelContainer aPanels = xDeck->GetPanels();
+            for (auto const& panel : aPanels)
+            {
+                if (! panel->HasIdPredicate(mPanelId))
+                    panel->SetExpanded(false);
+            }
         }
     }
 
