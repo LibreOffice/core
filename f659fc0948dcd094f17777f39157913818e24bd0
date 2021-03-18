@@ -22,6 +22,30 @@
       "revId": "f659fc0948dcd094f17777f39157913818e24bd0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c18577f_024e466f",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-03-18T07:22:53Z",
+      "side": 1,
+      "message": "Probably better to do this in the SelectStyle function. There is where all entries in the treebox are unselected when the paragraph does not have a numbering style. Instead of unselecting all entries we would like the \"No List\" entry to be selected when the SfxStyleFamily is the one used by the List styles.",
+      "parentUuid": "cf9cf8b8_72a6796e",
+      "range": {
+        "startLine": 1038,
+        "startChar": 4,
+        "endLine": 1038,
+        "endChar": 34
+      },
+      "revId": "f659fc0948dcd094f17777f39157913818e24bd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
