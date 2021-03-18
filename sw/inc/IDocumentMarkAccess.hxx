@@ -341,8 +341,13 @@ class IDocumentMarkAccess
         virtual sal_Int32 getAnnotationMarksCount() const = 0;
         virtual const_iterator_t findAnnotationMark( const OUString& rName ) const = 0;
         virtual sw::mark::IMark* getAnnotationMarkFor(const SwPosition& rPosition) const = 0;
-        // restore text ranges of annotations of tracked deletions
+        // handle and restore text ranges of annotations of tracked deletions
         // based on the helper bookmarks (which can survive I/O and hiding redlines)
+        virtual ::sw::mark::IMark* makeAnnotationBookmark(const SwPaM& rPaM,
+            const OUString& rProposedName,
+            MarkType eMark, ::sw::mark::InsertMode eMode,
+            SwPosition const* pSepPos = nullptr) = 0;
+        virtual const_iterator_t findAnnotationBookmark( const OUString& rName ) const = 0;
         virtual void restoreAnnotationMarks(bool bDelete = true) = 0;
         /** Finds the first mark that is starting after.
 

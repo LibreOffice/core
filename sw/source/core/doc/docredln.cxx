@@ -1346,8 +1346,8 @@ static void lcl_storeAnnotationMarks(SwDoc& rDoc, const SwPosition* pStt, const 
         SwPosition const& rStartPos((**iter).GetMarkStart());
         if ( *pStt <= rStartPos && rStartPos < *pEnd )
         {
-            OUString sBookmarkName((**iter).GetName() + "____");
-            IDocumentMarkAccess::const_iterator_t pOldMark = rDMA.findBookmark(sBookmarkName);
+            IDocumentMarkAccess::const_iterator_t pOldMark =
+                    rDMA.findAnnotationBookmark((**iter).GetName());
             if ( pOldMark == rDMA.getBookmarksEnd() )
             {
                 // at start of redlines use a 1-character length bookmark range
@@ -1355,9 +1355,9 @@ static void lcl_storeAnnotationMarks(SwDoc& rDoc, const SwPosition* pStt, const 
                 sal_Int32 nLen = (*pStt == rStartPos) ? 1 : 0;
                 SwPaM aPam( rStartPos.nNode, rStartPos.nContent.GetIndex(),
                                 rStartPos.nNode, rStartPos.nContent.GetIndex() + nLen);
-                ::sw::mark::IMark* pMark = rDMA.makeMark(
+                ::sw::mark::IMark* pMark = rDMA.makeAnnotationBookmark(
                     aPam,
-                    sBookmarkName,
+                    (**iter).GetName(),
                     IDocumentMarkAccess::MarkType::BOOKMARK, sw::mark::InsertMode::New);
                 ::sw::mark::IBookmark* pBookmark = dynamic_cast< ::sw::mark::IBookmark* >(pMark);
                 if (pBookmark)

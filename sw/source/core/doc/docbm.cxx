@@ -49,6 +49,8 @@
 #include <libxml/xmlwriter.h>
 #include <comphelper/lok.hxx>
 
+#define S_ANNOTATION_BOOKMARK u"____"
+
 using namespace ::sw::mark;
 
 std::vector<::sw::mark::MarkBase*>::const_iterator const&
@@ -1641,7 +1643,25 @@ namespace sw::mark
             CompareIMarkStartsAfter());
     }
 
-    // restore text ranges of annotations of tracked deletions
+    // create helper bookmark for annotations on tracked deletions
+    ::sw::mark::IMark* MarkManager::makeAnnotationBookmark(const SwPaM& rPaM,
+        const OUString& rName,
+        const IDocumentMarkAccess::MarkType eType,
+        sw::mark::InsertMode const eMode,
+        SwPosition const*const pSepPos)
+    {
+        OUString sAnnotationBookmarkName(rName + S_ANNOTATION_BOOKMARK);
+        return makeMark( rPaM, sAnnotationBookmarkName, eType, eMode, pSepPos);
+    }
+
+    // find helper bookmark of annotations on tracked deletions
+    IDocumentMarkAccess::const_iterator_t MarkManager::findAnnotationBookmark(const OUString& rName) const
+    {
+        OUString sAnnotationBookmarkName(rName + S_ANNOTATION_BOOKMARK);
+        return findBookmark(sAnnotationBookmarkName);
+    }
+
+    // restore text ranges of annotations on tracked deletions
     // based on the helper bookmarks (which can survive I/O and hiding redlines)
     void MarkManager::restoreAnnotationMarks(bool bDelete)
     {
@@ -1651,7 +1671,7 @@ namespace sw::mark
             const OUString & rBookmarkName = (**iter).GetName();
             sal_Int32 nPos;
             if ( rBookmarkName.startsWith("__Annotation__") &&
-                  (nPos = rBookmarkName.indexOf("____")) > -1 )
+                  (nPos = rBookmarkName.indexOf(S_ANNOTATION_BOOKMARK)) > -1 )
             {
                 ::sw::UndoGuard const undoGuard(m_rDoc.GetIDocumentUndoRedo());
                 IDocumentMarkAccess::const_iterator_t pMark = findAnnotationMark(rBookmarkName.copy(0, nPos));
