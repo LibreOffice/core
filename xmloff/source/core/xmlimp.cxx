@@ -195,7 +195,16 @@ public:
                     }
                     else if ('6' == loVersion[0])
                     {
-                        mnGeneratorVersion = SvXMLImport::LO_6x;
+                        if (loVersion.getLength() > 1
+                            && (loVersion[1] == '0' || loVersion[1] == '1'
+                                || loVersion[1] == '2'))
+                        {
+                            mnGeneratorVersion = SvXMLImport::LO_6x; // 6.0/6.1/6.2
+                        }
+                        else
+                        {
+                            mnGeneratorVersion = SvXMLImport::LO_63x; // 6.3/6.4
+                        }
                     }
                     else if ('7' == loVersion[0])
                     {

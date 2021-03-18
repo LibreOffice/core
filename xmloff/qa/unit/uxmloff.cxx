@@ -197,6 +197,9 @@ void Test::testMetaGenerator()
         { "Collabora_Office/5.3.10.27$Linux_X86_64 LibreOffice_project/7a5a5378661e338a44666c08773cc796b8d1c84a", ";531027", SvXMLImport::LO_5x },
         { "LibreOfficeDev/5.4.7.0.0$Linux_X86_64 LibreOffice_project/ba7461fc88c08e75e315f786020a2946e56166c9", ";54700", SvXMLImport::LO_5x },
         { "LibreOfficeDev/6.0.3.0.0$Linux_X86_64 LibreOffice_project/34442b85bfb0c451738b4db023345a7484463321", ";60300", SvXMLImport::LO_6x },
+        { "LibreOffice_powered_by_CIBDev/6.3.9.0.0$Linux_X86_64 LibreOffice_project/c87f331d2900eab70ac3021cbe530926efa6499f", ";63900", SvXMLImport::LO_63x },
+        { "LibreOffice_powered_by_CIBDev/6.4.0.0.0$Linux_X86_64 LibreOffice_project/e29e100174c133d27e953934311d68602c4515b7", ";64000", SvXMLImport::LO_63x },
+        { "LibreOfficeDev/7.0.6.0.0$Linux_X86_64 LibreOffice_project/dfc40e2292c6e19e285c10ed8c8044d9454107d0", ";70600", SvXMLImport::LO_7x },
     };
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(tests); ++i)
