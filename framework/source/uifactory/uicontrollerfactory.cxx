@@ -261,24 +261,6 @@ PopupMenuControllerFactory::PopupMenuControllerFactory( const Reference< XCompon
 {
 }
 
-struct PopupMenuControllerFactoryInstance {
-    explicit PopupMenuControllerFactoryInstance(
-        css::uno::Reference<css::uno::XComponentContext> const & context):
-        instance(static_cast<cppu::OWeakObject *>(
-                    new PopupMenuControllerFactory(context)))
-    {
-    }
-
-    css::uno::Reference<css::uno::XInterface> instance;
-};
-
-struct PopupMenuControllerFactorySingleton:
-    public rtl::StaticWithArg<
-        PopupMenuControllerFactoryInstance,
-        css::uno::Reference<css::uno::XComponentContext>,
-        PopupMenuControllerFactorySingleton>
-{};
-
 class ToolbarControllerFactory :  public UIControllerFactory
 {
 public:
@@ -376,8 +358,7 @@ com_sun_star_comp_framework_PopupMenuControllerFactory_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject *>(
-            PopupMenuControllerFactorySingleton::get(context).instance.get()));
+    return cppu::acquire(new PopupMenuControllerFactory(context));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
