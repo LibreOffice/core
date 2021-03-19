@@ -47,7 +47,6 @@
 
 using namespace css::uno;
 using namespace css::frame;
-using namespace css::text;
 using namespace css::drawing;
 using namespace css::graphic;
 #if ENABLE_QRCODEGEN
@@ -74,7 +73,7 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
         Reference<css::container::XIndexAccess> xSelections(m_xModel->getCurrentSelection(), UNO_QUERY);
         if (xSelections.is())
         {
-            Reference<XTextRange> xSelection(xSelections->getByIndex(0), UNO_QUERY);
+            Reference<css::text::XTextRange> xSelection(xSelections->getByIndex(0), UNO_QUERY);
             if (xSelection.is())
                 m_xEdittext->set_text(xSelection->getString());
         }
@@ -200,19 +199,19 @@ void QrCodeGenDialog::Apply()
     xShape->setSize(aShapeSize);
 
     // Default anchoring
-    xShapeProps->setPropertyValue("AnchorType", Any(TextContentAnchorType_AT_PARAGRAPH));
+    xShapeProps->setPropertyValue("AnchorType", Any(css::text::TextContentAnchorType_AT_PARAGRAPH));
 
     const Reference<css::lang::XServiceInfo> xServiceInfo(m_xModel, UNO_QUERY_THROW);
 
     // Writer
     if (xServiceInfo->supportsService("com.sun.star.text.TextDocument"))
     {
-        Reference<XTextContent> xTextContent(xShape, UNO_QUERY_THROW);
-        Reference<XTextViewCursorSupplier> xViewCursorSupplier(m_xModel->getCurrentController(),
+        Reference<css::text::XTextContent> xTextContent(xShape, UNO_QUERY_THROW);
+        Reference<css::text::XTextViewCursorSupplier> xViewCursorSupplier(m_xModel->getCurrentController(),
                                                                UNO_QUERY_THROW);
-        Reference<XTextViewCursor> xCursor = xViewCursorSupplier->getViewCursor();
+        Reference<css::text::XTextViewCursor> xCursor = xViewCursorSupplier->getViewCursor();
         // use cursor's XText - it might be in table cell, frame, ...
-        Reference<XText> const xText(xCursor->getText());
+        Reference<css::text::XText> const xText(xCursor->getText());
         assert(xText.is());
         xText->insertTextContent(xCursor, xTextContent, true);
         return;
