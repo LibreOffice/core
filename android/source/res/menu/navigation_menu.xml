@@ -19,6 +19,11 @@
         <item android:id="@+id/menu_provider_otg"
             android:title="@string/otg_file_system"
             android:icon="@drawable/ic_usb_black_24dp"/>
+
+        <item android:id="@+id/menu_system_file_dialog"
+            android:title="@string/system_file_selector"
+            android:icon="@drawable/ic_folder_black_24dp" />
+
     </group>
 
     <group android:orderInCategory="100">
