@@ -6368,6 +6368,7 @@ private:
         g_object_ref(m_pNotebook);
         gtk_container_remove(GTK_CONTAINER(pParent), GTK_WIDGET(m_pNotebook));
         gtk_box_pack_start(m_pOverFlowBox, GTK_WIDGET(m_pNotebook), true, true, 0);
+        // coverity[freed_arg : FALSE] - this does not free m_pNotebook , it is reffed by pParent
         g_object_unref(m_pNotebook);
         gtk_widget_show(GTK_WIDGET(m_pOverFlowBox));
     }
