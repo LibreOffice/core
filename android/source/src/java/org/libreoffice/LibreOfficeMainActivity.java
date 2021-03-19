@@ -297,9 +297,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     }
 
     private boolean copyFileToTemp() {
-        ContentResolver contentResolver = getContentResolver();
-        FileChannel inputChannel = null;
-        FileChannel outputChannel = null;
+        final ContentResolver contentResolver = getContentResolver();
         // CSV files need a .csv suffix to be opened in Calc.
         String suffix = null;
         String intentType = getIntent().getType();
@@ -308,26 +306,53 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
             suffix = ".csv";
 
         try {
+            mTempFile = File.createTempFile("LibreOffice", suffix, this.getCacheDir());
+            final FileChannel outputChannel = new FileOutputStream(mTempFile).getChannel();
             try {
-                AssetFileDescriptor assetFD = contentResolver.openAssetFileDescriptor(getIntent().getData(), "r");
-                if (assetFD == null) {
-                    Log.e(LOGTAG, "couldn't create assetfiledescriptor from " + getIntent().getDataString());
-                    return false;
-                }
-                inputChannel = assetFD.createInputStream().getChannel();
-                mTempFile = File.createTempFile("LibreOffice", suffix, this.getCacheDir());
+                // need to run copy operation in a separate thread, since network access is not
+                // allowed from main thread, but that may happen here when underlying
+                // DocumentsProvider (like the NextCloud one) does that
+                class CopyThread extends Thread {
+                    /** Whether copy operation was successful. */
+                    private boolean result = false;
 
-                outputChannel = new FileOutputStream(mTempFile).getChannel();
-                long bytesTransferred = 0;
-                // might not  copy all at once, so make sure everything gets copied...
-                while (bytesTransferred < inputChannel.size()) {
-                    bytesTransferred += outputChannel.transferFrom(inputChannel, bytesTransferred, inputChannel.size());
+                    @Override
+                    public void run() {
+                        result = false;
+                        try {
+                            final AssetFileDescriptor assetFD = contentResolver.openAssetFileDescriptor(getIntent().getData(), "r");
+                            if (assetFD == null) {
+                                Log.e(LOGTAG, "couldn't create assetfiledescriptor from " + getIntent().getDataString());
+                                return;
+                            }
+                            FileChannel inputChannel = assetFD.createInputStream().getChannel();
+                            long bytesTransferred = 0;
+                            // might not  copy all at once, so make sure everything gets copied...
+                            while (bytesTransferred < inputChannel.size()) {
+                                bytesTransferred += outputChannel.transferFrom(inputChannel, bytesTransferred, inputChannel.size());
+                            }
+                            Log.e(LOGTAG, "Success copying " + bytesTransferred + " bytes");
+                            inputChannel.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            return;
+                        }
+                        result = true;
+                    }
+                };
+                CopyThread copyThread = new CopyThread();
+                copyThread.start();
+                try {
+                    // wait for copy operation to finish
+                    // NOTE: might be useful to add some indicator in UI for long copy operations involving network...
+                    copyThread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                Log.e(LOGTAG, "Success copying " + bytesTransferred + " bytes");
-                return true;
+
+                return copyThread.result;
             } finally {
-                if (inputChannel != null) inputChannel.close();
-                if (outputChannel != null) outputChannel.close();
+                outputChannel.close();
             }
         } catch (FileNotFoundException e) {
             return false;
