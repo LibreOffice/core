@@ -46,11 +46,13 @@ public:
     void testArabic();
     void testKashida();
     void testTdf95650(); // Windows-only issue
+    void testCaching();
 
     CPPUNIT_TEST_SUITE(VclComplexTextTest);
     CPPUNIT_TEST(testArabic);
     CPPUNIT_TEST(testKashida);
     CPPUNIT_TEST(testTdf95650);
+    CPPUNIT_TEST(testCaching);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -151,6 +153,59 @@ void VclComplexTextTest::testTdf95650()
     OutputDevice *pOutDev = pWin.get();
     // Check that the following executes without failing assertion
     pOutDev->ImplLayout(aTxt, 9, 1, Point(), 0, nullptr, SalLayoutFlags::BiDiRtl);
+}
+
+static void testCachedGlyphs( const OUString& aText, const OUString& aFontName = OUString())
+{
+    const std::string message = OUString("Font: " + aFontName + ", text: '" + aText + "'").toUtf8().getStr();
+    ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
+    if(!aFontName.isEmpty())
+    {
+        vcl::Font aFont( aFontName, Size(0, 12));
+        pOutputDevice->SetFont( aFont );
+    }
+    // Get the glyphs for the text.
+    std::unique_ptr<SalLayout> pLayout1 = pOutputDevice->ImplLayout(
+        aText, 0, aText.getLength(), Point(0, 0), 0, nullptr, SalLayoutFlags::GlyphItemsOnly);
+    SalLayoutGlyphs aGlyphs1 = pLayout1->GetGlyphs();
+    CPPUNIT_ASSERT_MESSAGE(message, aGlyphs1.IsValid());
+    CPPUNIT_ASSERT_MESSAGE(message, aGlyphs1.Impl(0) != nullptr);
+    // Reuse the cached glyphs to get glyphs again.
+    std::unique_ptr<SalLayout> pLayout2 = pOutputDevice->ImplLayout(
+        aText, 0, aText.getLength(), Point(0, 0), 0, nullptr, SalLayoutFlags::GlyphItemsOnly, nullptr, &aGlyphs1);
+    SalLayoutGlyphs aGlyphs2 = pLayout2->GetGlyphs();
+    CPPUNIT_ASSERT_MESSAGE(message, aGlyphs2.IsValid());
+    // And check it's the same.
+    for( int level = 0; level < MAX_FALLBACK; ++level )
+    {
+        const std::string messageLevel = OString(message.c_str()
+            + OStringLiteral(", level: ") + OString::number(level)).getStr();
+        if( aGlyphs1.Impl(level) == nullptr)
+        {
+            CPPUNIT_ASSERT_MESSAGE(messageLevel, aGlyphs2.Impl(level) == nullptr);
+            continue;
+        }
+        const SalLayoutGlyphsImpl* g1 = aGlyphs1.Impl(level);
+        const SalLayoutGlyphsImpl* g2 = aGlyphs2.Impl(level);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(messageLevel, g1->GetFont().get(), g2->GetFont().get());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(messageLevel, g1->size(), g2->size());
+        for( size_t i = 0; i < g1->size(); ++i )
+        {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(messageLevel, (*g1)[i].glyphId(), (*g2)[i].glyphId());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(messageLevel, (*g1)[i].IsRTLGlyph(), (*g2)[i].IsRTLGlyph());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(messageLevel, (*g1)[i].IsVertical(), (*g2)[i].IsVertical());
+        }
+    }
+}
+
+// Check that caching using SalLayoutGlyphs gives same results as without caching.
+// This should preferably use fonts that come with LO.
+void VclComplexTextTest::testCaching()
+{
+    // Just something basic, no font fallback.
+    testCachedGlyphs( "test", "Dejavu Sans" );
+    // This font does not have latin characters, will need fallback.
+    testCachedGlyphs( "test", "KacstBook" );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclComplexTextTest);
