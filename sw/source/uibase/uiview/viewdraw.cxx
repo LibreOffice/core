@@ -260,6 +260,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_CAPTION:
         case SID_DRAW_CAPTION_VERTICAL:
             pFuncPtr.reset( new ConstRectangle(m_pWrtShell.get(), m_pEditWin, this) );
+            bCreateDirectly = comphelper::LibreOfficeKit::isActive();
             m_nDrawSfxId = nSlotId;
             m_sDrawCustom.clear();
             break;
@@ -341,6 +342,8 @@ void SwView::ExecDraw(SfxRequest& rReq)
         NoRotate();
         if(rReq.GetModifier() == KEY_MOD1 || bCreateDirectly)
         {
+            if (bCreateDirectly)
+                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
             if(SID_OBJECT_SELECT == m_nDrawSfxId )
             {
                 m_pWrtShell->GotoObj(true);

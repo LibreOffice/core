@@ -231,6 +231,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_ELLIPSE:
         case SID_DRAW_MEASURELINE:
             pTabView->SetDrawFuncPtr(new FuConstRectangle(*this, pWin, pView, pDoc, aNewReq));
+            bCreateDirectly = comphelper::LibreOfficeKit::isActive();
             break;
 
         case SID_DRAW_CAPTION:
@@ -332,6 +333,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     }
     else
     {
+        GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
         ScViewData& rViewData = GetViewData();
         aInsertPos = rViewData.getLOKVisibleArea().Center();
         if (comphelper::LibreOfficeKit::isCompatFlagSet(
