@@ -272,7 +272,6 @@ namespace vcl::unotools
                                       vcl::PixelFormat::N24_BPP;
                 auto eAlphaPixelFormat =
                     ( nAlphaDepth <= 1 ) ? vcl::PixelFormat::N1_BPP :
-                    ( nAlphaDepth <= 4 ) ? vcl::PixelFormat::N4_BPP :
                                            vcl::PixelFormat::N8_BPP;
 
                 ::Bitmap aBitmap( aPixelSize,
