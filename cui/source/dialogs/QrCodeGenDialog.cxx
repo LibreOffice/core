@@ -47,7 +47,6 @@
 
 using namespace css::uno;
 using namespace css::frame;
-using namespace css::graphic;
 #if ENABLE_QRCODEGEN
 using namespace qrcodegen;
 #endif
@@ -166,12 +165,12 @@ void QrCodeGenDialog::Apply()
     aSvgStream.WriteOString(OUStringToOString(aSvgImage, RTL_TEXTENCODING_UTF8));
     Reference<css::io::XInputStream> xInputStream(new utl::OSeekableInputStreamWrapper(aSvgStream));
     Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
-    Reference<XGraphicProvider> xProvider = css::graphic::GraphicProvider::create(xContext);
+    Reference<css::graphic::XGraphicProvider> xProvider = css::graphic::GraphicProvider::create(xContext);
 
     Sequence<css::beans::PropertyValue> aMediaProperties(1);
     aMediaProperties[0].Name = "InputStream";
     aMediaProperties[0].Value <<= xInputStream;
-    Reference<XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
+    Reference<css::graphic::XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
 
     bool bIsExistingQRCode = m_xExistingShapeProperties.is();
     Reference<css::beans::XPropertySet> xShapeProps;
