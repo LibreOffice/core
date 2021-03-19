@@ -192,16 +192,21 @@ void LayoutPanels (
     //   size:
     //   Use the unmodified preferred height for all panels.
 
-    LayoutMode eMode (MinimumOrLarger);
+    LayoutMode eMode(MinimumOrLarger);
     if (bShowVerticalScrollBar)
-        eMode = Preferred;
-    else if (nTotalPreferredHeight <= nAvailableHeight)
-        eMode = PreferredOrLarger;
-    else
-        eMode = MinimumOrLarger;
-
-    if (eMode != Preferred)
     {
+        eMode = Preferred;
+
+        const sal_Int32 nContentHeight(nTotalPreferredHeight + nTotalDecorationHeight);
+        SetupVerticalScrollBar(rVerticalScrollBar, nContentHeight, aBox.GetHeight());
+    }
+    else
+    {
+        if (nTotalPreferredHeight <= nAvailableHeight)
+            eMode = PreferredOrLarger;
+        else
+            eMode = MinimumOrLarger;
+
         const sal_Int32 nTotalHeight (eMode==MinimumOrLarger ? nTotalMinimumHeight : nTotalPreferredHeight);
 
         DistributeHeights(
@@ -209,15 +214,6 @@ void LayoutPanels (
             nAvailableHeight-nTotalHeight,
             aBox.GetHeight(),
             eMode==MinimumOrLarger);
-    }
-
-    if (bShowVerticalScrollBar)
-    {
-        const sal_Int32 nContentHeight(
-            eMode==Preferred
-                ? nTotalPreferredHeight + nTotalDecorationHeight
-                : aBox.GetHeight());
-        SetupVerticalScrollBar(rVerticalScrollBar, nContentHeight, aBox.GetHeight());
     }
 
     const sal_Int32 nUsedHeight(PlacePanels(rLayoutItems, eMode));
