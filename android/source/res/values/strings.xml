@@ -95,6 +95,7 @@
     <!-- Feedback messages -->
     <string name="message_saved">Save complete</string>
     <string name="message_saving">Saving the document…</string>
+    <string name="message_saving_failed">Saving the document failed.</string>
     <string name="message_save_incomplete">Save incomplete. Were there any changes?</string>
     <string name="create_new_file_success">"Created new file - "</string>
     <string name="create_new_file_error">Unable to create new file, please check entered file name.</string>
