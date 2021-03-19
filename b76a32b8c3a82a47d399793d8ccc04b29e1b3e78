@@ -52,6 +52,24 @@
       "revId": "b76a32b8c3a82a47d399793d8ccc04b29e1b3e78",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b6243f6_2f1172cc",
+        "filename": "vcl/unx/gtk3/gtk3gtkframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1562,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-03-19T09:41:40Z",
+      "side": 1,
+      "message": "OOps, somehow got the wrong info - indeed, m_pSalMenu-\u003eGetMenuBarHeight() works well. Added new version using this",
+      "parentUuid": "26553c6c_3ae134b8",
+      "revId": "b76a32b8c3a82a47d399793d8ccc04b29e1b3e78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
