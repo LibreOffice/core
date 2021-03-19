@@ -171,6 +171,8 @@ public:
     vcl::Window*    GetWindow() const;
     OutputDevice&   GetOutputDevice() const;
 
+    LanguageType    GetInputLanguage() const;
+
     bool            HasOtherViewWindow( vcl::Window* pWin );
     bool            AddOtherViewWindow( vcl::Window* pWin );
     bool            RemoveOtherViewWindow( vcl::Window* pWin );
