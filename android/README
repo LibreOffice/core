@@ -241,7 +241,7 @@ Using lldb from within Android Studio is more comfortable though and works like 
     - make sure you select the right build variant (strippedUIDebug is what you want)
     - use Run|Edit Configurations to create a new configuration of type "Android Native"
         - on tab "General" pick module "source"
-        - on tab "Native Debugger" add android/source/obj/local/<hostarch> to
+        - on tab "Native Debugger" add android/obj/local/<hostarch> to
           the Symbol directories
         - on the LLDB startup commands tab add
           "command script import /path/to/solenv/lldb/libreoffice/LO.py"
