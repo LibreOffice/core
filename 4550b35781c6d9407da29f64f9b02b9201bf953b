@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ae72542_415bd88f",
+        "filename": "sax/source/fastparser/fastparser.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-03-19T10:01:13Z",
+      "side": 1,
+      "message": "this one is a bit non-obvious but the thing that is (or would be) thrashing is the reference count of the object pointed to by xContext.",
+      "revId": "4550b35781c6d9407da29f64f9b02b9201bf953b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
