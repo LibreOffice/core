@@ -35,6 +35,7 @@
 #include <cppuhelper/weak.hxx>
 #include <rtl/ref.hxx>
 #include <map>
+#include <memory>
 
 namespace com::sun::star {
     namespace embed {
@@ -84,7 +85,7 @@ protected:
 
     rtl::Reference<DocumentHolder> m_xDocHolder;
 
-    ::cppu::OMultiTypeInterfaceContainerHelper* m_pInterfaceContainer;
+    std::unique_ptr<::cppu::OMultiTypeInterfaceContainerHelper> m_pInterfaceContainer;
 
     bool m_bReadOnly;
 

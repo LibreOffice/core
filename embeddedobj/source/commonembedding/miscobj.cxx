@@ -41,8 +41,7 @@ using namespace ::com::sun::star;
 
 OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< uno::XComponentContext >& rxContext,
                                                 const uno::Sequence< beans::NamedValue >& aObjProps )
-: m_pInterfaceContainer( nullptr )
-, m_bReadOnly( false )
+: m_bReadOnly( false )
 , m_bDisposed( false )
 , m_bClosed( false )
 , m_nObjectState( -1 )
@@ -67,8 +66,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject(
         const uno::Sequence< beans::NamedValue >& aObjProps,
         const uno::Sequence< beans::PropertyValue >& aMediaDescr,
         const uno::Sequence< beans::PropertyValue >& aObjectDescr )
-: m_pInterfaceContainer( nullptr )
-, m_bReadOnly( false )
+: m_bReadOnly( false )
 , m_bDisposed( false )
 , m_bClosed( false )
 , m_nObjectState( embed::EmbedStates::LOADED )
@@ -242,17 +240,14 @@ OCommonEmbeddedObject::~OCommonEmbeddedObject()
         return;
 
     osl_atomic_increment(&m_refCount);
-    try {
-        lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
-
-        if ( m_pInterfaceContainer )
-        {
+    if ( m_pInterfaceContainer )
+    {
+        try {
+            lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
             m_pInterfaceContainer->disposeAndClear( aSource );
-
-            delete m_pInterfaceContainer;
-            m_pInterfaceContainer = nullptr;
-        }
-    } catch( const uno::Exception& ) {}
+        } catch( const uno::Exception& ) {}
+        m_pInterfaceContainer.reset();
+    }
 
     try {
         if ( m_xDocHolder.is() )
@@ -429,7 +424,7 @@ void SAL_CALL OCommonEmbeddedObject::addStateChangeListener( const uno::Referenc
         throw lang::DisposedException(); // TODO
 
     if ( !m_pInterfaceContainer )
-        m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
+        m_pInterfaceContainer.reset(new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex ));
 
     m_pInterfaceContainer->addInterface( cppu::UnoType<embed::XStateChangeListener>::get(),
                                                         xListener );
@@ -494,6 +489,7 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
         }
 
         m_pInterfaceContainer->disposeAndClear( aSource );
+        m_pInterfaceContainer.reset();
     }
 
     m_bDisposed = true; // the object is disposed now for outside
@@ -548,7 +544,7 @@ void SAL_CALL OCommonEmbeddedObject::addCloseListener( const uno::Reference< uti
         throw lang::DisposedException(); // TODO
 
     if ( !m_pInterfaceContainer )
-        m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper(m_aMutex);
+        m_pInterfaceContainer.reset(new ::cppu::OMultiTypeInterfaceContainerHelper(m_aMutex));
 
     m_pInterfaceContainer->addInterface( cppu::UnoType<util::XCloseListener>::get(), xListener );
 }
@@ -570,7 +566,7 @@ void SAL_CALL OCommonEmbeddedObject::addEventListener( const uno::Reference< doc
         throw lang::DisposedException(); // TODO
 
     if ( !m_pInterfaceContainer )
-        m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper(m_aMutex);
+        m_pInterfaceContainer.reset(new ::cppu::OMultiTypeInterfaceContainerHelper(m_aMutex));
 
     m_pInterfaceContainer->addInterface( cppu::UnoType<document::XEventListener>::get(), xListener );
 }
