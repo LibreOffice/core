@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50e3b774_1a102c3f",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 4307,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-19T14:26:29Z",
+      "side": 1,
+      "message": "And here you removed the \u0027src\u0027 - why?",
+      "revId": "786f4e0d6d61b47c30c3b70e3fcf7519bbfc6810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54d064be_ede13fc1",
+        "filename": "configure.ac",
+        "patchSetId": 7
+      },
+      "lineNbr": 2246,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-19T14:26:29Z",
+      "side": 1,
+      "message": "Why were these spaces converted to tabs?",
+      "revId": "786f4e0d6d61b47c30c3b70e3fcf7519bbfc6810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b630ecc3_ef5d5c1b",
+        "filename": "configure.ac",
+        "patchSetId": 7
+      },
+      "lineNbr": 10860,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-19T14:26:29Z",
+      "side": 1,
+      "message": "And tabs also here\n\nPlease configure your editor to not insert tabs automatically",
+      "revId": "786f4e0d6d61b47c30c3b70e3fcf7519bbfc6810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
