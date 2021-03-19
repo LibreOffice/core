@@ -184,7 +184,7 @@ public:
 
     // used by display layers
     LogicalFontInstance& GetFont() const
-        { return m_GlyphItems.GetFont(); }
+        { return *m_GlyphItems.GetFont(); }
 
     bool            GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
                                  const PhysicalFontFace** pFallbackFont = nullptr) const override;

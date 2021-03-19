@@ -120,7 +120,7 @@ class SalLayoutGlyphsImpl : public std::vector<GlyphItem>
 
 public:
     SalLayoutGlyphsImpl* clone() const;
-    LogicalFontInstance& GetFont() const { return *m_rFontInstance; }
+    const rtl::Reference<LogicalFontInstance>& GetFont() const { return m_rFontInstance; }
     bool IsValid() const;
     void Invalidate();
 
