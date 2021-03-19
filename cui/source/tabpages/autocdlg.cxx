@@ -802,10 +802,9 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
         }
 
         m_xReplaceTLB->all_foreach([this, &pArray](weld::TreeIter& rIter) {
-            pArray->push_back(DoubleString());
+            pArray->push_back(DoubleString(m_xReplaceTLB->get_text(rIter, 0),
+                                           m_xReplaceTLB->get_text(rIter, 1)));
             DoubleString& rDouble = pArray->back();
-            rDouble.sShort = m_xReplaceTLB->get_text(rIter, 0);
-            rDouble.sLong = m_xReplaceTLB->get_text(rIter, 1);
             rDouble.pUserData = reinterpret_cast<void*>(m_xReplaceTLB->get_id(rIter).toInt64());
             return false;
         });
@@ -961,9 +960,7 @@ void OfaAutocorrReplacePage::NewEntry(const OUString& sShort, const OUString& sL
         }
     }
 
-    DoubleString aNewString;
-    aNewString.sShort = sShort;
-    aNewString.sLong = sLong;
+    DoubleString aNewString(sShort, sLong);
     rNewArray.push_back(aNewString);
     if (bKeepSourceFormatting)
         rNewArray.back().pUserData = &bHasSelectionText;
@@ -991,9 +988,7 @@ void OfaAutocorrReplacePage::DeleteEntry(const OUString& sShort, const OUString&
         }
     }
 
-    DoubleString aDeletedString;
-    aDeletedString.sShort = sShort;
-    aDeletedString.sLong = sLong;
+    DoubleString aDeletedString(sShort, sLong);
     rDeletedArray.push_back(aDeletedString);
 }
 
