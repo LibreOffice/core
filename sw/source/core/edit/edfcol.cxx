@@ -1946,6 +1946,7 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
             std::vector<svx::ClassificationResult> aResults;
             if (!sFieldNames.isEmpty())
             {
+                assert(it != aStatements.end() && "can only be non-empty if it was valid");
                 // Order the fields
                 sal_Int32 nIndex = 0;
                 do
@@ -1955,8 +1956,9 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
                         break;
 
                     const auto it2 = aStatements.find(sCurFieldName);
-                    const OUString sName = (it2 != aStatements.end() ? it->first : sBlank);
-                    const OUString sValue = (it2 != aStatements.end() ? it->second : sBlank);
+                    bool bStatementFound = it2 != aStatements.end();
+                    const OUString sName = bStatementFound ? it->first : sBlank;
+                    const OUString sValue = bStatementFound ? it->second : sBlank;
 
                     if (aKeyCreator.isMarkingTextKey(sName))
                     {
