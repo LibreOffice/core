@@ -62,6 +62,7 @@ DrawController::DrawController (ViewShellBase& rBase) throw()
     : DrawControllerInterfaceBase(&rBase),
       BroadcastHelperOwner(SfxBaseController::m_aMutex),
       OPropertySetHelper(BroadcastHelperOwner::maBroadcastHelper),
+      mpCurrentLayer(nullptr),
       m_aSelectionTypeIdentifier(
         cppu::UnoType<view::XSelectionChangeListener>::get()),
       mpBase(&rBase),
