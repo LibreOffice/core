@@ -25,7 +25,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/window.hxx>
 #include <swmodule.hxx>
 #include <viewopt.hxx>
 #include <wdocsh.hxx>
