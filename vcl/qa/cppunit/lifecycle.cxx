@@ -224,7 +224,7 @@ void LifecycleTest::testFocus()
     xWin->Show();
     xChild->GrabFocus();
     // process asynchronous ToTop
-    Scheduler::ProcessTaskScheduling();
+    Scheduler::ProcessEventsToIdle();
     // FIXME: really awful to test focus issues without showing windows.
     // CPPUNIT_ASSERT(xChild->HasFocus());
 }
