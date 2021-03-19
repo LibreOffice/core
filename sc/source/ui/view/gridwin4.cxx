@@ -1088,10 +1088,10 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                             // So they need to be in the same coordinates/units. This is tied to the mapmode of the gridwin
                             // attached to the EditView, so we have to change its mapmode too (temporarily). We save the
                             // original mapmode and 'output area' and roll them back when we finish painting to rDevice.
-                            vcl::Window* pOtherWin = pOtherEditView->GetWindow();
+                            OutputDevice& rOtherWin = pOtherEditView->GetOutputDevice();
                             const tools::Rectangle aOrigOutputArea(pOtherEditView->GetOutputArea()); // Not in pixels.
-                            const MapMode aOrigMapMode = pOtherWin->GetMapMode();
-                            pOtherWin->SetMapMode(rDevice.GetMapMode());
+                            const MapMode aOrigMapMode = rOtherWin.GetMapMode();
+                            rOtherWin.SetMapMode(rDevice.GetMapMode());
 
                             // Avoid sending wrong cursor/selection messages by the 'other' view, as the output-area is going
                             // to be tweaked temporarily to match the current view's zoom.
@@ -1101,7 +1101,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                             pOtherEditView->Paint(rDevice.PixelToLogic(aEditRect), &rDevice);
 
                             // Rollback the mapmode and 'output area'.
-                            pOtherWin->SetMapMode(aOrigMapMode);
+                            rOtherWin.SetMapMode(aOrigMapMode);
                             pOtherEditView->SetOutputArea(aOrigOutputArea);
                             rDevice.SetMapMode(MapMode(MapUnit::MapPixel));
                         }
