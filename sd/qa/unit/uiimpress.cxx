@@ -128,8 +128,7 @@ sd::slidesorter::SlideSorterViewShell* SdUiImpressTest::getSlideSorterViewShell(
     for (int i = 0; i < 1000; i++)
     {
         // Process all Tasks - slide sorter is created here
-        while (Scheduler::ProcessTaskScheduling())
-            ;
+        Scheduler::ProcessEventsToIdle();
         if ((pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(
                  pViewShell->GetViewShellBase()))
             != nullptr)

@@ -529,7 +529,7 @@ static AquaSalFrame* getMouseContainerFrame()
     if (bWasLiveResize != bIsLiveResize)
     {
         pInstance->mbIsLiveResize = bIsLiveResize;
-        Scheduler::ProcessTaskScheduling();
+        Scheduler::Wakeup();
     }
 
     AquaSalGraphics* pGraphics = mpFrame->mpGraphics;
