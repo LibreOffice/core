@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26eefd1c_37346856",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-19T10:58:09Z",
+      "side": 1,
+      "message": "It would be nice to mention the reason. Yes, tdf# already provides a context, but it wouldn\u0027t hurt to add a line below, like\n\n  It was replaced by ZXing library.",
+      "revId": "309e632fd9931bff84e2263497a6dcd583da09c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
