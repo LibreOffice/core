@@ -1180,6 +1180,16 @@ CPPUNIT_TEST_FIXTURE(Test, testVerticallyMergedCellBorder)
     // right border, even if <table:covered-table-cell table:style-name="..."> explicitly disabled
     // it.
     CPPUNIT_ASSERT(!rA2Set.GetBox().GetRight());
+
+    // Given this document model, when exporting to ODT:
+    save("writer8", maTempFile);
+    mbExported = true;
+
+    // Then make sure the covered cell has a style.
+    xmlDocUniquePtr pXmlSettings = parseExport("content.xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - In <...>, XPath '//table:covered-table-cell' no attribute 'style-name' exist
+    assertXPath(pXmlSettings, "//table:covered-table-cell", "style-name", "Table1.A2");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

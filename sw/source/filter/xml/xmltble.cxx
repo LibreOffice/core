@@ -924,6 +924,17 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
             const sal_Int32 nRowSpan = pBox->getRowSpan();
             if( nRowSpan < 1 )
             {
+                // Export style of covered cell, it includes border information.
+                const SwFrameFormat* pFormat = pBox->GetFrameFormat();
+                if (pFormat)
+                {
+                    const OUString& sName = pFormat->GetName();
+                    if (!sName.isEmpty())
+                    {
+                        AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, EncodeStyleName(sName));
+                    }
+                }
+
                 SvXMLElementExport aElem2( *this, rTableInfo.GetPrefix(),
                                           XML_COVERED_TABLE_CELL, true,
                                           false );
