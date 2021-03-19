@@ -340,7 +340,12 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingInplace()
     if ( comphelper::LibreOfficeKit::isActive() )
     {
         if ( SfxViewShell* pViewShell = m_pClient->GetViewShell() )
-            pViewShell->libreOfficeKitViewCallback( LOK_CALLBACK_GRAPHIC_SELECTION, "INPLACE" );
+        {
+            tools::Rectangle aRect(m_pClient->GetObjArea());
+            aRect = OutputDevice::LogicToLogic(aRect, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+            OString str = aRect.toString() + ", \"INPLACE\"";
+            pViewShell->libreOfficeKitViewCallback( LOK_CALLBACK_GRAPHIC_SELECTION, str.getStr() );
+        }
     }
 
 }
