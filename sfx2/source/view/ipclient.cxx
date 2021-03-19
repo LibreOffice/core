@@ -188,12 +188,6 @@ void SAL_CALL SfxInPlaceClient_Impl::notifyEvent( const document::EventObject& a
 
     if ( m_pClient && aEvent.EventName == "OnVisAreaChanged" && m_nAspect != embed::Aspects::MSOLE_ICON )
     {
-        if ( comphelper::LibreOfficeKit::isActive() )
-        {
-            if ( SfxViewShell* pViewShell = m_pClient->GetViewShell() )
-                pViewShell->libreOfficeKitViewCallback( LOK_CALLBACK_GRAPHIC_SELECTION, "INPLACE" );
-        }
-
         m_pClient->FormatChanged(); // for Writer when format of the object is changed with the area
         m_pClient->ViewChanged();
         m_pClient->Invalidate();
