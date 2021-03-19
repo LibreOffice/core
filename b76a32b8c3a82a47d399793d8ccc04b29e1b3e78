@@ -34,6 +34,24 @@
       "revId": "b76a32b8c3a82a47d399793d8ccc04b29e1b3e78",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26553c6c_3ae134b8",
+        "filename": "vcl/unx/gtk3/gtk3gtkframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1562,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-03-19T09:29:28Z",
+      "side": 1,
+      "message": "Did a quick check, added:\n        int nMenuBarHeightA \u003d curr_w - maGeometry.nWidth;\n        int nMenuBarHeightB \u003d m_pSalMenu ? m_pSalMenu-\u003eGetMenuBarHeight() : 0;\nIt\u0027s not the same - sometimes nMenuBarHeightB \u003d\u003d 1 (?)",
+      "parentUuid": "10f8a8e3_b4bdc135",
+      "revId": "b76a32b8c3a82a47d399793d8ccc04b29e1b3e78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
