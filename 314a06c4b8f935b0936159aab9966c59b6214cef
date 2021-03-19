@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "528e1a01_80658359",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-19T14:35:09Z",
+      "side": 1,
+      "message": "It turns out that the constants are absolutely correct. ZXing has only four levels for QR codes (defined in src/qrcode/QRErrorCorrectionLevel.h), and the conversion between this number and that value happens in QRCodeEccLevel lambda in MultiFormatWriter::encode (src/MultiFormatWriter.cpp).",
+      "revId": "314a06c4b8f935b0936159aab9966c59b6214cef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
