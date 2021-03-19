@@ -46,12 +46,11 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
 using namespace css::uno;
-using namespace css::frame;
 #if ENABLE_QRCODEGEN
 using namespace qrcodegen;
 #endif
 
-QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel,
+QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<css::frame::XModel> xModel,
                                  bool bEditExisting)
     : GenericDialogController(pParent, "cui/ui/qrcodegen.ui", "QrCodeGenDialog")
     , m_xModel(std::move(xModel))
