@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "56209f62_dea2d268",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2825,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-19T19:24:10Z",
+      "side": 0,
+      "message": "I\u0027m sorry, I have just seen your question. We used to skip non text nodes, e.g. content nodes for images and tables, see https://wiki.openoffice.org/wiki/Writer/Core_And_Layout#Some_Notes_about_Nodes for the details.",
+      "parentUuid": "7dae6243_6ba81c7b",
+      "revId": "c89f5fa26a8ec6e36ddd5562a5c3c276f9e4ff80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4df2b39_55a8e84f",
         "filename": "sw/source/core/txtnode/txtedt.cxx",
         "patchSetId": 1
