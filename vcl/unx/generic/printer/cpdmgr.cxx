@@ -43,11 +43,11 @@ void CPDManager::onNameAcquired (GDBusConnection *connection,
                                  gpointer user_data)
 {
     gchar* contents;
-    GDBusNodeInfo *introspection_data;
-
     // Get Interface for introspection
-    g_file_get_contents (FRONTEND_INTERFACE, &contents, nullptr, nullptr);
-    introspection_data = g_dbus_node_info_new_for_xml (contents, nullptr);
+    if (!g_file_get_contents (FRONTEND_INTERFACE, &contents, nullptr, nullptr))
+        return;
+
+    GDBusNodeInfo *introspection_data = g_dbus_node_info_new_for_xml (contents, nullptr);
 
     g_dbus_connection_register_object (connection,
                                        "/org/libreoffice/PrintDialog",
@@ -63,28 +63,29 @@ void CPDManager::onNameAcquired (GDBusConnection *connection,
     std::vector<std::pair<std::string, gchar*>> backends = current->getTempBackends();
     for (auto const& backend : backends)
     {
-        GDBusProxy *proxy;
         // Get Interface for introspection
-        g_file_get_contents (BACKEND_INTERFACE, &contents, nullptr, nullptr);
-        introspection_data = g_dbus_node_info_new_for_xml (contents, nullptr);
-        proxy = g_dbus_proxy_new_sync (connection,
-                                       G_DBUS_PROXY_FLAGS_NONE,
-                                       introspection_data->interfaces[0],
-                                       backend.first.c_str(),
-                                       backend.second,
-                                       "org.openprinting.PrintBackend",
-                                       nullptr,
-                                       nullptr);
-        g_free(backend.second);
-        g_assert (proxy != nullptr);
-        g_dbus_proxy_call(proxy, "ActivateBackend",
-                          nullptr,
-                          G_DBUS_CALL_FLAGS_NONE,
-                          -1, nullptr, nullptr, nullptr);
+        if (g_file_get_contents(BACKEND_INTERFACE, &contents, nullptr, nullptr))
+        {
+            introspection_data = g_dbus_node_info_new_for_xml (contents, nullptr);
+            GDBusProxy *proxy = g_dbus_proxy_new_sync (connection,
+                                           G_DBUS_PROXY_FLAGS_NONE,
+                                           introspection_data->interfaces[0],
+                                           backend.first.c_str(),
+                                           backend.second,
+                                           "org.openprinting.PrintBackend",
+                                           nullptr,
+                                           nullptr);
+            g_assert (proxy != nullptr);
+            g_dbus_proxy_call(proxy, "ActivateBackend",
+                              nullptr,
+                              G_DBUS_CALL_FLAGS_NONE,
+                              -1, nullptr, nullptr, nullptr);
 
-        g_free(contents);
-        g_object_unref(proxy);
-        g_dbus_node_info_unref(introspection_data);
+            g_free(contents);
+            g_object_unref(proxy);
+            g_dbus_node_info_unref(introspection_data);
+        }
+        g_free(backend.second);
     }
 }
 
