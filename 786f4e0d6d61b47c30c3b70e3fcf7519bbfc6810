@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "64c167a2_40d8d9c3",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 4307,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-19T14:42:22Z",
+      "side": 1,
+      "message": "Actually I accidentally reverted my recent patch and that\u0027s why some important details missed I\u0027ll make this \u0026 the above changes right away.",
+      "parentUuid": "50e3b774_1a102c3f",
+      "revId": "786f4e0d6d61b47c30c3b70e3fcf7519bbfc6810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "54d064be_ede13fc1",
         "filename": "configure.ac",
         "patchSetId": 7
