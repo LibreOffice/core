@@ -78,6 +78,10 @@ void BrowseBox::ConstructImpl( BrowserMode nMode )
     nTopRow = 0;
     nCurRow = BROWSER_ENDOFSELECTION;
     nCurColId = 0;
+    nResizeX = 0;
+    nMinResizeX = 0;
+    nDragX = 0;
+    nResizeCol = 0;
     bResizing = false;
     bSelect = false;
     bSelecting = false;
