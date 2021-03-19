@@ -46,9 +46,11 @@ import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.LayerView;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
@@ -191,7 +193,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
             if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
                 if (copyFileToTemp() && mTempFile != null) {
                     mInputFile = mTempFile;
-                    mbISReadOnlyMode = true;
+                    boolean isReadOnlyDoc = (getIntent().getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0;
+                    mbISReadOnlyMode = !isExperimentalMode()  || isReadOnlyDoc;
                     Log.d(LOGTAG, "SCHEME_CONTENT: getPath(): " + getIntent().getData().getPath());
 
                     String displayName = extractDisplayNameFromIntent();
@@ -353,6 +356,61 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         Toast.makeText(this, R.string.message_saving, Toast.LENGTH_SHORT).show();
         // local save
         LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND_NOTIFY, ".uno:Save", true));
+    }
+
+    public void saveFileToOriginalSource() {
+        if (documentUri != null) {
+            // case where file was opened using IDocumentProvider from within LO app
+            saveFilesToCloud();
+        } else {
+            // case where file was passed via Intent
+            if (isReadOnlyMode() || mInputFile == null || getIntent().getData() == null || !getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT))
+                return;
+
+            Uri uri = getIntent().getData();
+            FileInputStream inputStream = null;
+            OutputStream outputStream = null;
+
+            try {
+                inputStream = new FileInputStream(mInputFile);
+                // OutputStream for the actual (original) location
+                outputStream = getContentResolver().openOutputStream(uri);
+
+                byte[] buffer = new byte[4096];
+                int readBytes = inputStream.read(buffer);
+                while (readBytes != -1) {
+                    outputStream.write(buffer, 0, readBytes);
+                    readBytes = inputStream.read(buffer);
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(LibreOfficeMainActivity.this, R.string.message_saved,
+                            Toast.LENGTH_SHORT).show();
+                    }
+                });
+                setDocumentChanged(false);
+            } catch (Exception e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(LibreOfficeMainActivity.this, R.string.message_saving_failed,
+                            Toast.LENGTH_SHORT).show();
+                    }
+                });
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (inputStream != null)
+                        inputStream.close();
+                    if (outputStream != null)
+                        outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public void saveFilesToCloud(){

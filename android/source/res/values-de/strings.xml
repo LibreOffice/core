@@ -96,6 +96,7 @@
     <string name="message_saved">Speichern beendet</string>
     <string name="message_saving">Dokument wird gespeichert…</string>
     <string name="message_save_incomplete">Speichern unvollständig. Gab es Änderungen?</string>
+    <string name="message_saving_failed">Speichern des Dokuments ist fehlgeschlagen.</string>
     <string name="create_new_file_success">"Neue Datei angelegt - "</string>
     <string name="create_new_file_error">Neue Datei konnte nicht angelegt weden, bitte Prüfen Sie den eingegeben Dateinamen.</string>
 

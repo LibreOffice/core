@@ -139,7 +139,7 @@ public class InvalidationHandler implements Document.MessageCallback, Office.Mes
             JSONObject payloadObject = new JSONObject(payload);
             if (payloadObject.getString("commandName").equals(".uno:Save")) {
                 if (payloadObject.getString("success").equals("true")) {
-                    mContext.saveFilesToCloud();
+                    mContext.saveFileToOriginalSource();
                 }
             }else if(payloadObject.getString("commandName").equals(".uno:Name") ||
                     payloadObject.getString("commandName").equals(".uno:RenamePage")){
