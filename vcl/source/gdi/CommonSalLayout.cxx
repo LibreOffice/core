@@ -296,6 +296,9 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphsIm
     {
         // Work with pre-computed glyph items.
         m_GlyphItems = *pGlyphs;
+        for(const GlyphItem& item : m_GlyphItems)
+            if(!item.glyphId())
+                SetNeedFallback(rArgs, item.charPos(), item.IsRTLGlyph());
         // Some flags are set as a side effect of text layout, restore them here.
         rArgs.mnFlags |= pGlyphs->mnFlags;
         return true;
