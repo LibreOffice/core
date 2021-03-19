@@ -135,6 +135,12 @@ struct DoubleString
     OUString  sShort;
     OUString  sLong;
     void*   pUserData; ///< CheckBox -> form. Text Bool -> selection text
+    DoubleString(const OUString& rShort, const OUString& rLong)
+        : sShort(rShort)
+        , sLong(rLong)
+        , pUserData(nullptr)
+    {
+    }
 };
 
 typedef std::vector<DoubleString> DoubleStringArray;
