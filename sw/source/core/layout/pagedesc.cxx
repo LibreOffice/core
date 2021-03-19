@@ -512,32 +512,32 @@ SwPageDesc* SwPageDesc::GetByName(SwDoc& rDoc, std::u16string_view rName)
 
 void SwPageDesc::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwPageDesc"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("m_StyleName"), "%s",
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwPageDesc"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("m_StyleName"), "%s",
                                       BAD_CAST(m_StyleName.toUtf8().getStr()));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("m_pFollow"), "%p", m_pFollow);
-    xmlTextWriterWriteFormatAttribute(
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("m_pFollow"), "%p", m_pFollow);
+    (void)xmlTextWriterWriteFormatAttribute(
         pWriter, BAD_CAST("m_eUse"), "0x%s",
         BAD_CAST(OString::number(static_cast<int>(m_eUse), 16).getStr()));
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("m_Master"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("m_Master"));
     m_Master.dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("m_Left"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("m_Left"));
     m_Left.dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("m_FirstMaster"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("m_FirstMaster"));
     m_FirstMaster.dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("m_FirstLeft"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("m_FirstLeft"));
     m_FirstLeft.dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 SwPageFootnoteInfo::SwPageFootnoteInfo()
@@ -704,14 +704,14 @@ void SwPageDescs::erase( size_type index_ )
 
 void SwPageDescs::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwPageDescs"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwPageDescs"));
 
     for (const auto& pPageDesc : m_PosIndex)
     {
         pPageDesc->dumpAsXml(pWriter);
     }
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

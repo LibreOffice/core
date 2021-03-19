@@ -729,15 +729,15 @@ bool SdrOnOffItem::GetPresentation(SfxItemPresentation ePres,
 
 void SdrOnOffItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SdrOnOffItem"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SdrOnOffItem"));
     if (Which() == SDRATTR_SHADOW)
     {
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOW"));
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOW"));
     }
 
     SfxBoolItem::dumpAsXml(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 SdrYesNoItem* SdrYesNoItem::Clone(SfxItemPool* /*pPool*/) const
@@ -784,16 +784,16 @@ bool SdrPercentItem::GetPresentation(
 
 void SdrPercentItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SdrPercentItem"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SdrPercentItem"));
     if (Which() == SDRATTR_SHADOWTRANSPARENCE)
     {
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"),
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"),
                                     BAD_CAST("SDRATTR_SHADOWTRANSPARENCE"));
     }
 
     SfxUInt16Item::dumpAsXml(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 SdrAngleItem* SdrAngleItem::Clone(SfxItemPool* /*pPool*/) const
@@ -893,31 +893,31 @@ bool SdrMetricItem::GetPresentation(SfxItemPresentation ePres,
 
 void SdrMetricItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SdrMetricItem"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SdrMetricItem"));
     if (Which() == SDRATTR_SHADOWXDIST)
     {
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOWXDIST"));
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOWXDIST"));
     }
     else if (Which() == SDRATTR_SHADOWYDIST)
     {
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOWYDIST"));
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOWYDIST"));
     }
     else if (Which() == SDRATTR_SHADOWSIZEX)
     {
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOWSIZEX"));
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOWSIZEX"));
     }
     else if (Which() == SDRATTR_SHADOWSIZEY)
     {
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOWSIZEY"));
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOWSIZEY"));
     }
     else if (Which() == SDRATTR_SHADOWBLUR)
     {
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOWBLUR"));
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOWBLUR"));
     }
 
     SfxInt32Item::dumpAsXml(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 // items of the legend object
@@ -1110,10 +1110,10 @@ bool SdrTextVertAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberI
 
 void SdrTextVertAdjustItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SdrTextVertAdjustItem"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SdrTextVertAdjustItem"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 SdrTextHorzAdjustItem* SdrTextHorzAdjustItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrTextHorzAdjustItem(*this); }

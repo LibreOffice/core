@@ -124,13 +124,13 @@ bool SfxUndoAction::CanRepeat(SfxRepeatTarget&) const
 
 void SfxUndoAction::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SfxUndoAction"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"), BAD_CAST(typeid(*this).name()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("comment"), BAD_CAST(GetComment().toUtf8().getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("viewShellId"), BAD_CAST(OString::number(static_cast<sal_Int32>(GetViewShellId())).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("dateTime"), BAD_CAST(utl::toISO8601(m_aDateTime.GetUNODateTime()).toUtf8().getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxUndoAction"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"), BAD_CAST(typeid(*this).name()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("comment"), BAD_CAST(GetComment().toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("viewShellId"), BAD_CAST(OString::number(static_cast<sal_Int32>(GetViewShellId())).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("dateTime"), BAD_CAST(utl::toISO8601(m_aDateTime.GetUNODateTime()).toUtf8().getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 std::unique_ptr<SfxUndoAction> SfxUndoArray::Remove(int idx)
@@ -1147,34 +1147,34 @@ void SfxUndoManager::dumpAsXml(xmlTextWriterPtr pWriter) const
         pWriter = xmlNewTextWriterFilename("undo.xml", 0);
         xmlTextWriterSetIndent(pWriter,1);
         xmlTextWriterSetIndentString(pWriter, BAD_CAST("  "));
-        xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
+        (void)xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
         bOwns = true;
     }
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SfxUndoManager"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nUndoActionCount"), BAD_CAST(OString::number(GetUndoActionCount()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nRedoActionCount"), BAD_CAST(OString::number(GetRedoActionCount()).getStr()));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxUndoManager"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nUndoActionCount"), BAD_CAST(OString::number(GetUndoActionCount()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nRedoActionCount"), BAD_CAST(OString::number(GetRedoActionCount()).getStr()));
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("undoActions"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("undoActions"));
     for (size_t i = 0; i < GetUndoActionCount(); ++i)
     {
         const SfxUndoArray* pUndoArray = m_xData->pActUndoArray;
         pUndoArray->maUndoActions[pUndoArray->nCurUndoAction - 1 - i].pAction->dumpAsXml(pWriter);
     }
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("redoActions"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("redoActions"));
     for (size_t i = 0; i < GetRedoActionCount(); ++i)
     {
         const SfxUndoArray* pUndoArray = m_xData->pActUndoArray;
         pUndoArray->maUndoActions[pUndoArray->nCurUndoAction + i].pAction->dumpAsXml(pWriter);
     }
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
     if (bOwns)
     {
-        xmlTextWriterEndDocument(pWriter);
+        (void)xmlTextWriterEndDocument(pWriter);
         xmlFreeTextWriter(pWriter);
     }
 }
@@ -1363,14 +1363,14 @@ bool SfxListUndoAction::Merge( SfxUndoAction *pNextAction )
 
 void SfxListUndoAction::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SfxListUndoAction"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("size"), BAD_CAST(OString::number(maUndoActions.size()).getStr()));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxListUndoAction"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("size"), BAD_CAST(OString::number(maUndoActions.size()).getStr()));
     SfxUndoAction::dumpAsXml(pWriter);
 
     for (size_t i = 0; i < maUndoActions.size(); ++i)
         maUndoActions[i].pAction->dumpAsXml(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 SfxUndoArray::~SfxUndoArray()

@@ -77,15 +77,15 @@ namespace writerfilter
     {
         if (!pWriter)
             return;
-        xmlTextWriterStartDocument( pWriter, nullptr, nullptr, nullptr );
-        xmlTextWriterStartElement( pWriter, BAD_CAST( "root" ) );
+        (void)xmlTextWriterStartDocument( pWriter, nullptr, nullptr, nullptr );
+        (void)xmlTextWriterStartElement( pWriter, BAD_CAST( "root" ) );
     }
 
     void TagLogger::endDocument()
     {
         if (!pWriter)
             return;
-        xmlTextWriterEndDocument( pWriter );
+        (void)xmlTextWriterEndDocument( pWriter );
         xmlFreeTextWriter( pWriter );
         pWriter = nullptr;
     }
@@ -149,7 +149,7 @@ struct TheTagLogger:
         if (!pWriter)
             return;
         xmlChar* xmlName = xmlCharStrdup( name.c_str() );
-        xmlTextWriterStartElement( pWriter, xmlName );
+        (void)xmlTextWriterStartElement( pWriter, xmlName );
         xmlFree( xmlName );
     }
 #endif
@@ -160,7 +160,7 @@ struct TheTagLogger:
             return;
         xmlChar* xmlName = xmlCharStrdup( name.c_str() );
         xmlChar* xmlValue = xmlCharStrdup( value.c_str() );
-        xmlTextWriterWriteAttribute( pWriter, xmlName, xmlValue );
+        (void)xmlTextWriterWriteAttribute( pWriter, xmlName, xmlValue );
 
         xmlFree( xmlValue );
         xmlFree( xmlName );
@@ -177,7 +177,7 @@ struct TheTagLogger:
         if (!pWriter)
             return;
         xmlChar* xmlName = xmlCharStrdup( name.c_str() );
-        xmlTextWriterWriteFormatAttribute( pWriter, xmlName,
+        (void)xmlTextWriterWriteFormatAttribute( pWriter, xmlName,
                "%" SAL_PRIuUINT32, value );
         xmlFree( xmlName );
     }
@@ -194,12 +194,12 @@ struct TheTagLogger:
         xmlChar* xmlName = xmlCharStrdup( name.c_str() );
         if ( aAny >>= nInt )
         {
-            xmlTextWriterWriteFormatAttribute( pWriter, xmlName,
+            (void)xmlTextWriterWriteFormatAttribute( pWriter, xmlName,
                    "%" SAL_PRIdINT32, nInt );
         }
         else if ( aAny >>= nFloat )
         {
-            xmlTextWriterWriteFormatAttribute( pWriter, xmlName,
+            (void)xmlTextWriterWriteFormatAttribute( pWriter, xmlName,
                    "%f", nFloat );
         }
         else if ( aAny >>= aStr )
@@ -214,7 +214,7 @@ struct TheTagLogger:
         if (!pWriter)
             return;
         xmlChar* xmlChars = xmlCharStrdup( rChars.c_str() );
-        xmlTextWriterWriteString( pWriter, xmlChars );
+        (void)xmlTextWriterWriteString( pWriter, xmlChars );
         xmlFree( xmlChars );
     }
 
@@ -227,7 +227,7 @@ struct TheTagLogger:
     {
         if (!pWriter)
             return;
-        xmlTextWriterEndElement( pWriter );
+        (void)xmlTextWriterEndElement( pWriter );
     }
 
 #endif

@@ -166,10 +166,10 @@ bool SwUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 void SwUserField::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwUserField"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nSubType"), BAD_CAST(OString::number(m_nSubType).getStr()));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwUserField"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nSubType"), BAD_CAST(OString::number(m_nSubType).getStr()));
     SwValueField::dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 SwUserFieldType::SwUserFieldType( SwDoc* pDocPtr, const OUString& aNam )
@@ -369,12 +369,12 @@ void SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 void SwUserFieldType::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwUserFieldType"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nValue"), BAD_CAST(OString::number(m_nValue).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aContent"), BAD_CAST(m_aContent.toUtf8().getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aContentLang"), BAD_CAST(m_aContentLang.toUtf8().getStr()));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwUserFieldType"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nValue"), BAD_CAST(OString::number(m_nValue).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aContent"), BAD_CAST(m_aContent.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aContentLang"), BAD_CAST(m_aContentLang.toUtf8().getStr()));
     SwFieldType::dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

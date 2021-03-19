@@ -66,14 +66,14 @@ bool XmlWriter::startDocument(sal_Int32 nIndent, bool bWriteXmlHeader)
         return false;
     xmlTextWriterSetIndent(mpImpl->mpWriter, nIndent);
     if (mpImpl->mbWriteXmlHeader)
-        xmlTextWriterStartDocument(mpImpl->mpWriter, nullptr, "UTF-8", nullptr);
+        (void)xmlTextWriterStartDocument(mpImpl->mpWriter, nullptr, "UTF-8", nullptr);
     return true;
 }
 
 void XmlWriter::endDocument()
 {
     if (mpImpl->mbWriteXmlHeader)
-        xmlTextWriterEndDocument(mpImpl->mpWriter);
+        (void)xmlTextWriterEndDocument(mpImpl->mpWriter);
     xmlFreeTextWriter(mpImpl->mpWriter);
     mpImpl->mpWriter = nullptr;
 }
@@ -89,7 +89,7 @@ void XmlWriter::startElement(const OString& sPrefix, const OString& sName,
     if (!sNamespaceUri.isEmpty())
         xmlNamespaceUri = xmlCharStrdup(sNamespaceUri.getStr());
 
-    xmlTextWriterStartElementNS(mpImpl->mpWriter, xmlPrefix, xmlName, xmlNamespaceUri);
+    (void)xmlTextWriterStartElementNS(mpImpl->mpWriter, xmlPrefix, xmlName, xmlNamespaceUri);
 
     xmlFree(xmlName);
     if (!sPrefix.isEmpty())
@@ -101,11 +101,11 @@ void XmlWriter::startElement(const OString& sPrefix, const OString& sName,
 void XmlWriter::startElement(const OString& sName)
 {
     xmlChar* xmlName = xmlCharStrdup(sName.getStr());
-    xmlTextWriterStartElement(mpImpl->mpWriter, xmlName);
+    (void)xmlTextWriterStartElement(mpImpl->mpWriter, xmlName);
     xmlFree(xmlName);
 }
 
-void XmlWriter::endElement() { xmlTextWriterEndElement(mpImpl->mpWriter); }
+void XmlWriter::endElement() { (void)xmlTextWriterEndElement(mpImpl->mpWriter); }
 
 void XmlWriter::attributeBase64(const OString& rsName, std::vector<sal_uInt8> const& rValueInBytes)
 {
@@ -116,9 +116,9 @@ void XmlWriter::attributeBase64(const OString& rsName, std::vector<sal_uInt8> co
 void XmlWriter::attributeBase64(const OString& rsName, std::vector<char> const& rValueInBytes)
 {
     xmlChar* xmlName = xmlCharStrdup(rsName.getStr());
-    xmlTextWriterStartAttribute(mpImpl->mpWriter, xmlName);
-    xmlTextWriterWriteBase64(mpImpl->mpWriter, rValueInBytes.data(), 0, rValueInBytes.size());
-    xmlTextWriterEndAttribute(mpImpl->mpWriter);
+    (void)xmlTextWriterStartAttribute(mpImpl->mpWriter, xmlName);
+    (void)xmlTextWriterWriteBase64(mpImpl->mpWriter, rValueInBytes.data(), 0, rValueInBytes.size());
+    (void)xmlTextWriterEndAttribute(mpImpl->mpWriter);
     xmlFree(xmlName);
 }
 
@@ -126,7 +126,7 @@ void XmlWriter::attribute(const OString& name, const OString& value)
 {
     xmlChar* xmlName = xmlCharStrdup(name.getStr());
     xmlChar* xmlValue = xmlCharStrdup(value.getStr());
-    xmlTextWriterWriteAttribute(mpImpl->mpWriter, xmlName, xmlValue);
+    (void)xmlTextWriterWriteAttribute(mpImpl->mpWriter, xmlName, xmlValue);
     xmlFree(xmlValue);
     xmlFree(xmlName);
 }
@@ -149,7 +149,7 @@ void XmlWriter::attributeDouble(const OString& name, const double aNumber)
 void XmlWriter::content(const OString& sValue)
 {
     xmlChar* xmlValue = xmlCharStrdup(sValue.getStr());
-    xmlTextWriterWriteString(mpImpl->mpWriter, xmlValue);
+    (void)xmlTextWriterWriteString(mpImpl->mpWriter, xmlValue);
     xmlFree(xmlValue);
 }
 

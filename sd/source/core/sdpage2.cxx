@@ -626,7 +626,7 @@ void SdPage::getGraphicsForPrefetch(std::vector<Graphic*>& graphics) const
 
 void SdPage::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SdPage"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SdPage"));
 
     const char* pPageKind = nullptr;
     switch (mePageKind)
@@ -642,11 +642,11 @@ void SdPage::dumpAsXml(xmlTextWriterPtr pWriter) const
         break;
     }
     if (pPageKind)
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("mePageKind"), BAD_CAST(pPageKind));
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("mePageKind"), BAD_CAST(pPageKind));
 
 
     FmFormPage::dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

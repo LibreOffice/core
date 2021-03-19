@@ -354,7 +354,7 @@ xmlDocUniquePtr SdTiledRenderingTest::parseXmlDump()
     // Create the xml writer.
     m_pXmlBuffer = xmlBufferCreate();
     xmlTextWriterPtr pXmlWriter = xmlNewTextWriterMemory(m_pXmlBuffer, 0);
-    xmlTextWriterStartDocument(pXmlWriter, nullptr, nullptr, nullptr);
+    (void)xmlTextWriterStartDocument(pXmlWriter, nullptr, nullptr, nullptr);
 
     // Create the dump.
     SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
@@ -362,7 +362,7 @@ xmlDocUniquePtr SdTiledRenderingTest::parseXmlDump()
     pImpressDocument->GetDoc()->dumpAsXml(pXmlWriter);
 
     // Delete the xml writer.
-    xmlTextWriterEndDocument(pXmlWriter);
+    (void)xmlTextWriterEndDocument(pXmlWriter);
     xmlFreeTextWriter(pXmlWriter);
 
     return xmlDocUniquePtr(xmlParseMemory(reinterpret_cast<const char*>(xmlBufferContent(m_pXmlBuffer)), xmlBufferLength(m_pXmlBuffer)));

@@ -734,11 +734,11 @@ bool SdrTableObjImpl::isInUse()
 
 void SdrTableObjImpl::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SdrTableObjImpl"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SdrTableObjImpl"));
     if (mpLayouter)
         mpLayouter->dumpAsXml(pWriter);
     mxTable->dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 
@@ -2443,14 +2443,14 @@ void SdrTableObj::uno_unlock()
 
 void SdrTableObj::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SdrTableObj"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SdrTableObj"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
     SdrObject::dumpAsXml(pWriter);
 
     mpImpl->dumpAsXml(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 bool SdrTableObj::createTableEdgesJson(boost::property_tree::ptree & rJsonRoot)

@@ -266,11 +266,11 @@ int SwView::getPart() const
 
 void SwView::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwView"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwView"));
     SfxViewShell::dumpAsXml(pWriter);
     if (m_pWrtShell)
         m_pWrtShell->dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 void SwView::SetRedlineAuthor(const OUString& rAuthor)

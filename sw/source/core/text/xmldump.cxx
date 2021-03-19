@@ -127,22 +127,22 @@ class XmlPortionDumper:public SwPortionHandler
                        sal_Int32 nHeight,
                        sal_Int32 nWidth) override
     {
-        xmlTextWriterStartElement( writer, BAD_CAST( "Text" ) );
-        xmlTextWriterWriteFormatAttribute( writer,
+        (void)xmlTextWriterStartElement( writer, BAD_CAST( "Text" ) );
+        (void)xmlTextWriterWriteFormatAttribute( writer,
                                            BAD_CAST( "nLength" ),
                                            "%i", static_cast<int>(static_cast<sal_Int32>(nLength)) );
-        xmlTextWriterWriteFormatAttribute( writer,
+        (void)xmlTextWriterWriteFormatAttribute( writer,
                                            BAD_CAST( "nType" ),
                                            "%s", getTypeName( nType ) );
         if (nHeight > 0)
-            xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nHeight"), "%i", static_cast<int>(nHeight));
+            (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nHeight"), "%i", static_cast<int>(nHeight));
         if (nWidth > 0)
-            xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nWidth"), "%i", static_cast<int>(nWidth));
+            (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nWidth"), "%i", static_cast<int>(nWidth));
         if (nLength > TextFrameIndex(0))
-            xmlTextWriterWriteAttribute(writer, BAD_CAST("Portion"),
+            (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("Portion"),
                 BAD_CAST(m_rText.copy(sal_Int32(ofs), sal_Int32(nLength)).toUtf8().getStr()));
 
-        xmlTextWriterEndElement( writer );
+        (void)xmlTextWriterEndElement( writer );
         m_aLine += m_rText.subView(sal_Int32(ofs), sal_Int32(nLength));
         ofs += nLength;
     }
@@ -164,45 +164,45 @@ class XmlPortionDumper:public SwPortionHandler
                           sal_Int32 nWidth,
                           const SwFont* pFont ) override
     {
-        xmlTextWriterStartElement( writer, BAD_CAST( "Special" ) );
-        xmlTextWriterWriteFormatAttribute( writer,
+        (void)xmlTextWriterStartElement( writer, BAD_CAST( "Special" ) );
+        (void)xmlTextWriterWriteFormatAttribute( writer,
                                            BAD_CAST( "nLength" ),
                                            "%i", static_cast<int>(static_cast<sal_Int32>(nLength)) );
-        xmlTextWriterWriteFormatAttribute( writer,
+        (void)xmlTextWriterWriteFormatAttribute( writer,
                                            BAD_CAST( "nType" ),
                                            "%s", getTypeName( nType ) );
         OString sText8 = OUStringToOString( rText, RTL_TEXTENCODING_UTF8 );
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "rText" ),
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "rText" ),
                                            "%s", sText8.getStr(  ) );
 
         if (nHeight > 0)
-            xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nHeight"), "%i", static_cast<int>(nHeight));
+            (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nHeight"), "%i", static_cast<int>(nHeight));
 
         if (nWidth > 0)
-            xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nWidth"), "%i", static_cast<int>(nWidth));
+            (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nWidth"), "%i", static_cast<int>(nWidth));
 
         if (pFont)
             pFont->dumpAsXml(writer);
 
-        xmlTextWriterEndElement( writer );
+        (void)xmlTextWriterEndElement( writer );
         m_aLine += rText;
         ofs += nLength;
     }
 
     virtual void LineBreak( sal_Int32 nWidth ) override
     {
-        xmlTextWriterStartElement( writer, BAD_CAST( "LineBreak" ) );
+        (void)xmlTextWriterStartElement( writer, BAD_CAST( "LineBreak" ) );
         if (nWidth > 0)
-            xmlTextWriterWriteFormatAttribute( writer,
+            (void)xmlTextWriterWriteFormatAttribute( writer,
                                                BAD_CAST( "nWidth" ),
                                                "%i", static_cast<int>(nWidth) );
         if (!m_aLine.isEmpty())
         {
-            xmlTextWriterWriteAttribute(writer, BAD_CAST("Line"),
+            (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("Line"),
                                         BAD_CAST(m_aLine.toUtf8().getStr()));
             m_aLine.clear();
         }
-        xmlTextWriterEndElement( writer );
+        (void)xmlTextWriterEndElement( writer );
     }
 
     /**
@@ -211,18 +211,18 @@ class XmlPortionDumper:public SwPortionHandler
       */
     virtual void Skip( TextFrameIndex nLength ) override
     {
-        xmlTextWriterStartElement( writer, BAD_CAST( "Skip" ) );
-        xmlTextWriterWriteFormatAttribute( writer,
+        (void)xmlTextWriterStartElement( writer, BAD_CAST( "Skip" ) );
+        (void)xmlTextWriterWriteFormatAttribute( writer,
                                            BAD_CAST( "nLength" ),
                                            "%i", static_cast<int>(static_cast<sal_Int32>(nLength)) );
-        xmlTextWriterEndElement( writer );
+        (void)xmlTextWriterEndElement( writer );
         ofs += nLength;
     }
 
     virtual void Finish(  ) override
     {
-        xmlTextWriterStartElement( writer, BAD_CAST( "Finish" ) );
-        xmlTextWriterEndElement( writer );
+        (void)xmlTextWriterStartElement( writer, BAD_CAST( "Finish" ) );
+        (void)xmlTextWriterEndElement( writer );
     }
 
 };
@@ -232,13 +232,13 @@ class XmlPortionDumper:public SwPortionHandler
         xmlTextWriterPtr writer = xmlNewTextWriterFilename( "layout.xml", 0 );
         xmlTextWriterSetIndent(writer,1);
         xmlTextWriterSetIndentString(writer, BAD_CAST("  "));
-        xmlTextWriterStartDocument( writer, nullptr, nullptr, nullptr );
+        (void)xmlTextWriterStartDocument( writer, nullptr, nullptr, nullptr );
         return writer;
     }
 
     void lcl_freeWriter( xmlTextWriterPtr writer )
     {
-        xmlTextWriterEndDocument( writer );
+        (void)xmlTextWriterEndDocument( writer );
         xmlFreeTextWriter( writer );
     }
 }
@@ -314,14 +314,14 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
 
     if ( name != nullptr )
     {
-        xmlTextWriterStartElement( writer, reinterpret_cast<const xmlChar *>(name) );
+        (void)xmlTextWriterStartElement( writer, reinterpret_cast<const xmlChar *>(name) );
 
         dumpAsXmlAttributes( writer );
 
         if (IsRootFrame())
         {
             const SwRootFrame* pRootFrame = static_cast<const SwRootFrame*>(this);
-            xmlTextWriterStartElement(writer, BAD_CAST("sfxViewShells"));
+            (void)xmlTextWriterStartElement(writer, BAD_CAST("sfxViewShells"));
             SwView* pView = static_cast<SwView*>(SfxViewShell::GetFirst(true, checkSfxViewShell<SwView>));
             while (pView)
             {
@@ -329,25 +329,25 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
                     pView->dumpAsXml(writer);
                 pView = static_cast<SwView*>(SfxViewShell::GetNext(*pView, true, checkSfxViewShell<SwView>));
             }
-            xmlTextWriterEndElement(writer);
+            (void)xmlTextWriterEndElement(writer);
         }
 
         if (IsPageFrame())
         {
             const SwPageFrame* pPageFrame = static_cast<const SwPageFrame*>(this);
-            xmlTextWriterStartElement(writer, BAD_CAST("page_status"));
-            xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidFlyLayout"), BAD_CAST(OString::boolean(!pPageFrame->IsInvalidFlyLayout()).getStr()));
-            xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidFlyContent"), BAD_CAST(OString::boolean(!pPageFrame->IsInvalidFlyContent()).getStr()));
-            xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidFlyInCnt"), BAD_CAST(OString::boolean(!pPageFrame->IsInvalidFlyInCnt()).getStr()));
-            xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidLayout"), BAD_CAST(OString::boolean(!pPageFrame->IsInvalidLayout()).getStr()));
-            xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidContent"), BAD_CAST(OString::boolean(!pPageFrame->IsInvalidContent()).getStr()));
-            xmlTextWriterEndElement(writer);
-            xmlTextWriterStartElement(writer, BAD_CAST("page_info"));
-            xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("phyNum"), "%d", pPageFrame->GetPhyPageNum());
-            xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("virtNum"), "%d", pPageFrame->GetVirtPageNum());
+            (void)xmlTextWriterStartElement(writer, BAD_CAST("page_status"));
+            (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidFlyLayout"), BAD_CAST(OString::boolean(!pPageFrame->IsInvalidFlyLayout()).getStr()));
+            (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidFlyContent"), BAD_CAST(OString::boolean(!pPageFrame->IsInvalidFlyContent()).getStr()));
+            (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidFlyInCnt"), BAD_CAST(OString::boolean(!pPageFrame->IsInvalidFlyInCnt()).getStr()));
+            (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidLayout"), BAD_CAST(OString::boolean(!pPageFrame->IsInvalidLayout()).getStr()));
+            (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("ValidContent"), BAD_CAST(OString::boolean(!pPageFrame->IsInvalidContent()).getStr()));
+            (void)xmlTextWriterEndElement(writer);
+            (void)xmlTextWriterStartElement(writer, BAD_CAST("page_info"));
+            (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("phyNum"), "%d", pPageFrame->GetPhyPageNum());
+            (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("virtNum"), "%d", pPageFrame->GetVirtPageNum());
             OUString aFormatName = pPageFrame->GetPageDesc()->GetName();
-            xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("pageDesc"), "%s", BAD_CAST(OUStringToOString(aFormatName, RTL_TEXTENCODING_UTF8).getStr()));
-            xmlTextWriterEndElement(writer);
+            (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("pageDesc"), "%s", BAD_CAST(OUStringToOString(aFormatName, RTL_TEXTENCODING_UTF8).getStr()));
+            (void)xmlTextWriterEndElement(writer);
         }
 
         if (IsTextFrame())
@@ -356,42 +356,42 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
             sw::MergedPara const*const pMerged(pTextFrame->GetMergedPara());
             if (pMerged)
             {
-                xmlTextWriterStartElement( writer, BAD_CAST( "merged" ) );
-                xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "paraPropsNodeIndex" ), "%" SAL_PRIuUINTPTR, pMerged->pParaPropsNode->GetIndex() );
+                (void)xmlTextWriterStartElement( writer, BAD_CAST( "merged" ) );
+                (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "paraPropsNodeIndex" ), "%" SAL_PRIuUINTPTR, pMerged->pParaPropsNode->GetIndex() );
                 for (auto const& e : pMerged->extents)
                 {
-                    xmlTextWriterStartElement( writer, BAD_CAST( "extent" ) );
-                    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), "%" SAL_PRIuUINTPTR, e.pNode->GetIndex() );
-                    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "start" ), "%" SAL_PRIdINT32, e.nStart );
-                    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "end" ), "%" SAL_PRIdINT32, e.nEnd );
-                    xmlTextWriterEndElement( writer );
+                    (void)xmlTextWriterStartElement( writer, BAD_CAST( "extent" ) );
+                    (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), "%" SAL_PRIuUINTPTR, e.pNode->GetIndex() );
+                    (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "start" ), "%" SAL_PRIdINT32, e.nStart );
+                    (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "end" ), "%" SAL_PRIdINT32, e.nEnd );
+                    (void)xmlTextWriterEndElement( writer );
                 }
-                xmlTextWriterEndElement( writer );
+                (void)xmlTextWriterEndElement( writer );
             }
         }
 
         if (IsCellFrame())
         {
             SwCellFrame const* pCellFrame(static_cast<SwCellFrame const*>(this));
-            xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "rowspan" ), "%ld", pCellFrame->GetLayoutRowSpan() );
+            (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "rowspan" ), "%ld", pCellFrame->GetLayoutRowSpan() );
         }
 
-        xmlTextWriterStartElement( writer, BAD_CAST( "infos" ) );
+        (void)xmlTextWriterStartElement( writer, BAD_CAST( "infos" ) );
         dumpInfosAsXml( writer );
-        xmlTextWriterEndElement( writer );
+        (void)xmlTextWriterEndElement( writer );
 
         // Dump Anchored objects if any
         const SwSortedObjs* pAnchored = GetDrawObjs();
         if ( pAnchored && pAnchored->size() > 0 )
         {
-            xmlTextWriterStartElement( writer, BAD_CAST( "anchored" ) );
+            (void)xmlTextWriterStartElement( writer, BAD_CAST( "anchored" ) );
 
             for (SwAnchoredObject* pObject : *pAnchored)
             {
                 pObject->dumpAsXml( writer );
             }
 
-            xmlTextWriterEndElement( writer );
+            (void)xmlTextWriterEndElement( writer );
         }
 
         // Dump the children
@@ -405,7 +405,7 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
             }
             OString aText8 =OUStringToOString( aText,
                                                           RTL_TEXTENCODING_UTF8 );
-            xmlTextWriterWriteString( writer,
+            (void)xmlTextWriterWriteString( writer,
                                       reinterpret_cast<const xmlChar *>(aText8.getStr(  )) );
             XmlPortionDumper pdumper( writer, aText );
             pTextFrame->VisitPortions( pdumper );
@@ -415,7 +415,7 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
         {
             dumpChildrenAsXml( writer );
         }
-        xmlTextWriterEndElement( writer );
+        (void)xmlTextWriterEndElement( writer );
     }
 
     if ( bCreateWriter )
@@ -425,18 +425,18 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
 void SwFrame::dumpInfosAsXml( xmlTextWriterPtr writer ) const
 {
     // output the Frame
-    xmlTextWriterStartElement( writer, BAD_CAST( "bounds" ) );
+    (void)xmlTextWriterStartElement( writer, BAD_CAST( "bounds" ) );
     getFrameArea().dumpAsXmlAttributes(writer);
-    xmlTextWriterWriteAttribute(writer, BAD_CAST("mbFixSize"), BAD_CAST(OString::boolean(HasFixSize()).getStr()));
-    xmlTextWriterWriteAttribute(writer, BAD_CAST("mbFrameAreaPositionValid"), BAD_CAST(OString::boolean(isFrameAreaPositionValid()).getStr()));
-    xmlTextWriterWriteAttribute(writer, BAD_CAST("mbFrameAreaSizeValid"), BAD_CAST(OString::boolean(isFrameAreaSizeValid()).getStr()));
-    xmlTextWriterWriteAttribute(writer, BAD_CAST("mbFramePrintAreaValid"), BAD_CAST(OString::boolean(isFramePrintAreaValid()).getStr()));
-    xmlTextWriterEndElement( writer );
+    (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("mbFixSize"), BAD_CAST(OString::boolean(HasFixSize()).getStr()));
+    (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("mbFrameAreaPositionValid"), BAD_CAST(OString::boolean(isFrameAreaPositionValid()).getStr()));
+    (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("mbFrameAreaSizeValid"), BAD_CAST(OString::boolean(isFrameAreaSizeValid()).getStr()));
+    (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("mbFramePrintAreaValid"), BAD_CAST(OString::boolean(isFramePrintAreaValid()).getStr()));
+    (void)xmlTextWriterEndElement( writer );
 
     // output the print area
-    xmlTextWriterStartElement( writer, BAD_CAST( "prtBounds" ) );
+    (void)xmlTextWriterStartElement( writer, BAD_CAST( "prtBounds" ) );
     getFramePrintArea().dumpAsXmlAttributes(writer);
-    xmlTextWriterEndElement( writer );
+    (void)xmlTextWriterEndElement( writer );
 }
 
 // Hack: somehow conversion from "..." to va_list does
@@ -445,37 +445,37 @@ const char* const TMP_FORMAT = "%" SAL_PRIuUINTPTR;
 
 void SwFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
 {
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ptr" ), "%p", this );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "id" ), "%" SAL_PRIuUINT32, GetFrameId() );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "symbol" ), "%s", BAD_CAST( typeid( *this ).name( ) ) );
+    (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ptr" ), "%p", this );
+    (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "id" ), "%" SAL_PRIuUINT32, GetFrameId() );
+    (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "symbol" ), "%s", BAD_CAST( typeid( *this ).name( ) ) );
     if ( GetNext( ) )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "next" ), "%" SAL_PRIuUINT32, GetNext()->GetFrameId() );
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "next" ), "%" SAL_PRIuUINT32, GetNext()->GetFrameId() );
     if ( GetPrev( ) )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "prev" ), "%" SAL_PRIuUINT32, GetPrev()->GetFrameId() );
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "prev" ), "%" SAL_PRIuUINT32, GetPrev()->GetFrameId() );
     if ( GetUpper( ) )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "upper" ), "%" SAL_PRIuUINT32, GetUpper()->GetFrameId() );
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "upper" ), "%" SAL_PRIuUINT32, GetUpper()->GetFrameId() );
     if ( GetLower( ) )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "lower" ), "%" SAL_PRIuUINT32, GetLower()->GetFrameId() );
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "lower" ), "%" SAL_PRIuUINT32, GetLower()->GetFrameId() );
     if (IsFootnoteFrame())
     {
         SwFootnoteFrame const*const pFF(static_cast<SwFootnoteFrame const*>(this));
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("ref"), "%" SAL_PRIuUINT32, pFF->GetRef()->GetFrameId() );
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("ref"), "%" SAL_PRIuUINT32, pFF->GetRef()->GetFrameId() );
         if (pFF->GetMaster())
-            xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("master"), "%" SAL_PRIuUINT32, pFF->GetMaster()->GetFrameId() );
+            (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("master"), "%" SAL_PRIuUINT32, pFF->GetMaster()->GetFrameId() );
         if (pFF->GetFollow())
-            xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("follow"), "%" SAL_PRIuUINT32, pFF->GetFollow()->GetFrameId() );
+            (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("follow"), "%" SAL_PRIuUINT32, pFF->GetFollow()->GetFrameId() );
     }
     if (IsSctFrame())
     {
         SwSectionFrame const*const pFrame(static_cast<SwSectionFrame const*>(this));
         SwSectionNode const*const pNode(pFrame->GetSection() ? pFrame->GetSection()->GetFormat()->GetSectionNode() : nullptr);
-        xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("sectionNodeIndex"), TMP_FORMAT, pNode ? pNode->GetIndex() : -1);
+        (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("sectionNodeIndex"), TMP_FORMAT, pNode ? pNode->GetIndex() : -1);
     }
     if ( IsTextFrame(  ) )
     {
         const SwTextFrame *pTextFrame = static_cast<const SwTextFrame *>(this);
         const SwTextNode *pTextNode = pTextFrame->GetTextNodeFirst();
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), TMP_FORMAT, pTextNode->GetIndex() );
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), TMP_FORMAT, pTextNode->GetIndex() );
 
         OString aMode = "Horizontal";
         if (IsVertLRBT())
@@ -490,14 +490,14 @@ void SwFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
         {
             aMode = "Vertical";
         }
-        xmlTextWriterWriteAttribute(writer, BAD_CAST("WritingMode"), BAD_CAST(aMode.getStr()));
+        (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("WritingMode"), BAD_CAST(aMode.getStr()));
     }
     if (IsHeaderFrame() || IsFooterFrame())
     {
         const SwHeadFootFrame *pHeadFootFrame = static_cast<const SwHeadFootFrame*>(this);
         OUString aFormatName = pHeadFootFrame->GetFormat()->GetName();
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtName" ), "%s", BAD_CAST(OUStringToOString(aFormatName, RTL_TEXTENCODING_UTF8).getStr()));
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtPtr" ), "%p", pHeadFootFrame->GetFormat());
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtName" ), "%s", BAD_CAST(OUStringToOString(aFormatName, RTL_TEXTENCODING_UTF8).getStr()));
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtPtr" ), "%p", pHeadFootFrame->GetFormat());
     }
 }
 
@@ -516,17 +516,17 @@ void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer ) const
     if ( bCreateWriter )
         writer = lcl_createDefaultWriter();
 
-    xmlTextWriterStartElement( writer, BAD_CAST( getElementName() ) );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ptr" ), "%p", this );
+    (void)xmlTextWriterStartElement( writer, BAD_CAST( getElementName() ) );
+    (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ptr" ), "%p", this );
 
-    xmlTextWriterStartElement( writer, BAD_CAST( "bounds" ) );
+    (void)xmlTextWriterStartElement( writer, BAD_CAST( "bounds" ) );
     GetObjBoundRect().dumpAsXmlAttributes(writer);
-    xmlTextWriterEndElement( writer );
+    (void)xmlTextWriterEndElement( writer );
 
     if (const SdrObject* pObject = GetDrawObj())
         pObject->dumpAsXml(writer);
 
-    xmlTextWriterEndElement( writer );
+    (void)xmlTextWriterEndElement( writer );
 
     if ( bCreateWriter )
         lcl_freeWriter( writer );
@@ -534,41 +534,41 @@ void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer ) const
 
 void SwFont::dumpAsXml(xmlTextWriterPtr writer) const
 {
-    xmlTextWriterStartElement(writer, BAD_CAST("SwFont"));
-    xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterStartElement(writer, BAD_CAST("SwFont"));
+    (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", this);
     // do not use Color::AsRGBHexString() as that omits the transparency
-    xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("color"), "%08" SAL_PRIxUINT32, sal_uInt32(GetColor()));
-    xmlTextWriterEndElement(writer);
+    (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("color"), "%08" SAL_PRIxUINT32, sal_uInt32(GetColor()));
+    (void)xmlTextWriterEndElement(writer);
 }
 
 void SwTextFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
 {
     SwFrame::dumpAsXmlAttributes( writer );
     if ( HasFollow() )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrameId() );
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrameId() );
 
     if (m_pPrecede != nullptr)
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwTextFrame*>(m_pPrecede)->GetFrameId() );
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwTextFrame*>(m_pPrecede)->GetFrameId() );
 }
 
 void SwSectionFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
 {
     SwFrame::dumpAsXmlAttributes( writer );
     if ( HasFollow() )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrameId() );
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrameId() );
 
     if (m_pPrecede != nullptr)
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwSectionFrame*>( m_pPrecede )->GetFrameId() );
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwSectionFrame*>( m_pPrecede )->GetFrameId() );
 }
 
 void SwTabFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
 {
     SwFrame::dumpAsXmlAttributes( writer );
     if ( HasFollow() )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrameId() );
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrameId() );
 
     if (m_pPrecede != nullptr)
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwTabFrame*>( m_pPrecede )->GetFrameId() );
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwTabFrame*>( m_pPrecede )->GetFrameId() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -137,8 +137,8 @@ bool SwViewShell::isOutputToWindow() const
 
 void SwViewShell::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwViewShell"));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwViewShell"));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 static void
