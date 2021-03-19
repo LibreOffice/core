@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf5d5b93_fc87a622",
+        "filename": "include/svl/zforlist.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-19T20:11:27Z",
+      "side": 1,
+      "message": "a detailed description of new function could help the understanding a lot",
+      "revId": "257e886cadcacc2b5acf5df0bb1f84491e76708a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
