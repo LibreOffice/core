@@ -151,21 +151,21 @@ void ContentInfo::SetText( const OUString& rStr )
 
 void ContentInfo::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("ContentInfo"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("style"), BAD_CAST(aStyle.toUtf8().getStr()));
-    xmlTextWriterStartElement(pWriter, BAD_CAST("text"));
-    xmlTextWriterWriteString(pWriter, BAD_CAST(GetText().toUtf8().getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ContentInfo"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("style"), BAD_CAST(aStyle.toUtf8().getStr()));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("text"));
+    (void)xmlTextWriterWriteString(pWriter, BAD_CAST(GetText().toUtf8().getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
     aParaAttribs.dumpAsXml(pWriter);
     for (size_t i=0; i<maCharAttribs.size(); ++i)
     {
-        xmlTextWriterStartElement(pWriter, BAD_CAST("attribs"));
-        xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("start"), "%" SAL_PRIdINT32, maCharAttribs[i]->GetStart());
-        xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("end"), "%" SAL_PRIdINT32, maCharAttribs[i]->GetEnd());
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("attribs"));
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("start"), "%" SAL_PRIdINT32, maCharAttribs[i]->GetStart());
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("end"), "%" SAL_PRIdINT32, maCharAttribs[i]->GetEnd());
         maCharAttribs[i]->GetItem()->dumpAsXml(pWriter);
-        xmlTextWriterEndElement(pWriter);
+        (void)xmlTextWriterEndElement(pWriter);
     }
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 const WrongList* ContentInfo::GetWrongList() const
@@ -422,21 +422,21 @@ void EditTextObject::dumpAsXml(xmlTextWriterPtr pWriter) const
         pWriter = xmlNewTextWriterFilename("editTextObject.xml", 0);
         xmlTextWriterSetIndent(pWriter,1);
         xmlTextWriterSetIndentString(pWriter, BAD_CAST("  "));
-        xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
+        (void)xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
         bOwns = true;
     }
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("EditTextObject"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("EditTextObject"));
     sal_Int32 nCount = GetParagraphCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
         mpImpl->aContents[i]->dumpAsXml(pWriter);
     }
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 
     if (bOwns)
     {
-       xmlTextWriterEndDocument(pWriter);
+       (void)xmlTextWriterEndDocument(pWriter);
        xmlFreeTextWriter(pWriter);
     }
 }

@@ -83,11 +83,11 @@ void Paragraph::SetParaIsNumberingRestart( bool bParaIsNumberingRestart )
 
 void Paragraph::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("Paragraph"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("nDepth"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(nDepth));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mnNumberingStartValue"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(mnNumberingStartValue));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mbParaIsNumberingRestart"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(mbParaIsNumberingRestart));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("Paragraph"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("nDepth"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(nDepth));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mnNumberingStartValue"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(mnNumberingStartValue));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mbParaIsNumberingRestart"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(mbParaIsNumberingRestart));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 void ParagraphList::Clear()
@@ -247,10 +247,10 @@ sal_Int32 ParagraphList::GetAbsPos( Paragraph const * pParent ) const
 
 void ParagraphList::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("ParagraphList"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ParagraphList"));
     for (auto const & pParagraph : maEntries)
         pParagraph->dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

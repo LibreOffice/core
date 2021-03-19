@@ -717,12 +717,12 @@ void SvxTabStop::fillDecimal() const
 
 void SvxTabStop::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxTabStop"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nTabPos"),
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxTabStop"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nTabPos"),
                                 BAD_CAST(OString::number(nTabPos).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eAdjustment"),
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eAdjustment"),
                                 BAD_CAST(OString::number(static_cast<int>(eAdjustment)).getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 // class SvxTabStopItem --------------------------------------------------
@@ -984,10 +984,10 @@ void SvxTabStopItem::Insert( const SvxTabStopItem* pTabs )
 
 void SvxTabStopItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxTabStopItem"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxTabStopItem"));
     for (const auto& rTabStop : maTabStops)
         rTabStop.dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 // class SvxFormatSplitItem -------------------------------------------------

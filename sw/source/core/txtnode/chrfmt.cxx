@@ -24,18 +24,19 @@
 
 void SwCharFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwCharFormat"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwCharFormat"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"),
+                                      BAD_CAST(GetName().toUtf8().getStr()));
     GetAttrSet().dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 void SwCharFormats::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwCharFormats"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwCharFormats"));
     for (size_t i = 0; i < size(); ++i)
         GetFormat(i)->dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

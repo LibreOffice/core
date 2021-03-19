@@ -1322,11 +1322,11 @@ void SwUndoDelete::SetTableName(const OUString & rName)
 
 void SwUndoDelete::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwUndoDelete"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwUndoDelete"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     SwUndo::dumpAsXml(pWriter);
     SwUndoSaveContent::dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

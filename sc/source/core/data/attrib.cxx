@@ -115,11 +115,11 @@ ScMergeAttr* ScMergeAttr::Clone( SfxItemPool * ) const
 
 void ScMergeAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("ScMergeAttr"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("col-merge"), BAD_CAST(OString::number(GetColMerge()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("row-merge"), BAD_CAST(OString::number(GetRowMerge()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("merged"), BAD_CAST(OString::boolean(IsMerged()).getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ScMergeAttr"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("col-merge"), BAD_CAST(OString::number(GetColMerge()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("row-merge"), BAD_CAST(OString::number(GetRowMerge()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("merged"), BAD_CAST(OString::boolean(IsMerged()).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /**
@@ -156,15 +156,15 @@ bool ScMergeFlagAttr::HasPivotPopupButton() const
 
 void ScMergeFlagAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("ScMergeFlagAttr"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("overlapped"), BAD_CAST(OString::boolean(IsOverlapped()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("hor_overlapped"), BAD_CAST(OString::boolean(IsHorOverlapped()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("ver_overlapped"), BAD_CAST(OString::boolean(IsVerOverlapped()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("autofilter"), BAD_CAST(OString::boolean(HasAutoFilter()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("scenario"), BAD_CAST(OString::boolean(IsScenario()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("pivot-button"), BAD_CAST(OString::boolean(HasPivotButton()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("pivot-popup-button"), BAD_CAST(OString::boolean(HasPivotPopupButton()).getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ScMergeFlagAttr"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("overlapped"), BAD_CAST(OString::boolean(IsOverlapped()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("hor_overlapped"), BAD_CAST(OString::boolean(IsHorOverlapped()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("ver_overlapped"), BAD_CAST(OString::boolean(IsVerOverlapped()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("autofilter"), BAD_CAST(OString::boolean(HasAutoFilter()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("scenario"), BAD_CAST(OString::boolean(IsScenario()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("pivot-button"), BAD_CAST(OString::boolean(HasPivotButton()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("pivot-popup-button"), BAD_CAST(OString::boolean(HasPivotPopupButton()).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /**
@@ -716,14 +716,14 @@ ScCondFormatItem* ScCondFormatItem::Clone(SfxItemPool*) const
 
 void ScCondFormatItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("ScCondFormatItem"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ScCondFormatItem"));
     for (const auto& nItem : maIndex)
     {
         std::string aStrVal = std::to_string(nItem);
-        xmlTextWriterStartElement(pWriter, BAD_CAST(aStrVal.c_str()));
-        xmlTextWriterEndElement(pWriter);
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST(aStrVal.c_str()));
+        (void)xmlTextWriterEndElement(pWriter);
     }
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 ScRotateValueItem::ScRotateValueItem(Degree100 nAngle)

@@ -1311,30 +1311,30 @@ void TableLayouter::DistributeRows( ::tools::Rectangle& rArea,
 
 void TableLayouter::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("TableLayouter"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("TableLayouter"));
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("columns"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("columns"));
     for (const auto& rColumn : maColumns)
         rColumn.dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("rows"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("rows"));
     for (const auto& rRow : maRows)
         rRow.dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 void TableLayouter::Layout::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("TableLayouter_Layout"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("TableLayouter_Layout"));
 
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("pos"), BAD_CAST(OString::number(mnPos).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("size"), BAD_CAST(OString::number(mnSize).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("minSize"), BAD_CAST(OString::number(mnMinSize).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("pos"), BAD_CAST(OString::number(mnPos).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("size"), BAD_CAST(OString::number(mnSize).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("minSize"), BAD_CAST(OString::number(mnMinSize).getStr()));
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 }

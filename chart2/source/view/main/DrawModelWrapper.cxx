@@ -328,12 +328,12 @@ bool DrawModelWrapper::removeShape( const uno::Reference< drawing::XShape >& xSh
 
 void DrawModelWrapper::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("DrawModelWrapper"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("DrawModelWrapper"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
     SdrModel::dumpAsXml(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 } //namespace chart

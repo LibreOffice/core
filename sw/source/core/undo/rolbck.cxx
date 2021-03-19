@@ -66,12 +66,12 @@ OUString SwHistoryHint::GetDescription() const
 
 void SwHistoryHint::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwHistoryHint"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"), BAD_CAST(typeid(*this).name()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_eWhichId"),
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwHistoryHint"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"), BAD_CAST(typeid(*this).name()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_eWhichId"),
                                 BAD_CAST(OString::number(m_eWhichId).getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 SwHistorySetFormat::SwHistorySetFormat( const SfxPoolItem* pFormatHt, sal_uLong nNd )
@@ -148,8 +148,8 @@ OUString SwHistorySetFormat::GetDescription() const
 
 void SwHistorySetFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwHistorySetFormat"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nNodeIndex"),
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwHistorySetFormat"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nNodeIndex"),
                                 BAD_CAST(OString::number(m_nNodeIndex).getStr()));
     SwHistoryHint::dumpAsXml(pWriter);
 
@@ -158,7 +158,7 @@ void SwHistorySetFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
         m_pAttr->dumpAsXml(pWriter);
     }
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 void SwHistorySetFormat::SetInDoc( SwDoc* pDoc, bool bTmpSet )
@@ -590,7 +590,7 @@ void SwHistoryTextFlyCnt::SetInDoc( SwDoc* pDoc, bool )
 
 void SwHistoryTextFlyCnt::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwHistoryTextFlyCnt"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwHistoryTextFlyCnt"));
     SwHistoryHint::dumpAsXml(pWriter);
 
     if (m_pUndo)
@@ -598,7 +598,7 @@ void SwHistoryTextFlyCnt::dumpAsXml(xmlTextWriterPtr pWriter) const
         m_pUndo->dumpAsXml(pWriter);
     }
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 SwHistoryBookmark::SwHistoryBookmark(
@@ -1291,17 +1291,17 @@ void SwHistory::CopyFormatAttr(
 
 void SwHistory::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwHistory"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwHistory"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("m_SwpHstry"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("m_SwpHstry"));
     for (const auto& pHistory : m_SwpHstry)
     {
         pHistory->dumpAsXml(pWriter);
     }
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 void SwHistory::CopyAttr(

@@ -1750,14 +1750,14 @@ bool SdrObject::Equals(const SdrObject& rOtherObj) const
 
 void SdrObject::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SdrObject"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s", BAD_CAST(typeid(*this).name()));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("name"), "%s", BAD_CAST(GetName().toUtf8().getStr()));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("title"), "%s", BAD_CAST(GetTitle().toUtf8().getStr()));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("description"), "%s", BAD_CAST(GetDescription().toUtf8().getStr()));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("nOrdNum"), "%" SAL_PRIuUINT32, GetOrdNumDirect());
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aOutRect"), BAD_CAST(aOutRect.toString().getStr()));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SdrObject"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s", BAD_CAST(typeid(*this).name()));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("name"), "%s", BAD_CAST(GetName().toUtf8().getStr()));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("title"), "%s", BAD_CAST(GetTitle().toUtf8().getStr()));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("description"), "%s", BAD_CAST(GetDescription().toUtf8().getStr()));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("nOrdNum"), "%" SAL_PRIuUINT32, GetOrdNumDirect());
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aOutRect"), BAD_CAST(aOutRect.toString().getStr()));
 
     if (pGrabBagItem)
     {
@@ -1772,7 +1772,7 @@ void SdrObject::dumpAsXml(xmlTextWriterPtr pWriter) const
     if (const OutlinerParaObject* pOutliner = GetOutlinerParaObject())
         pOutliner->dumpAsXml(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 void SdrObject::SetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> pTextObject)

@@ -331,12 +331,12 @@ std::unique_ptr<XFillBitmapItem> XFillBitmapItem::checkForUniqueItem( SdrModel* 
 
 void XFillBitmapItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("XFillBitmapItem"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XFillBitmapItem"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
 
     NameOrIndex::dumpAsXml(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

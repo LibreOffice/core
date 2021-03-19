@@ -144,7 +144,7 @@ void SwModelTestBase::dumpLayout(const uno::Reference<lang::XComponent>& rCompon
     // create the xml writer
     mpXmlBuffer = xmlBufferCreate();
     xmlTextWriterPtr pXmlWriter = xmlNewTextWriterMemory(mpXmlBuffer, 0);
-    xmlTextWriterStartDocument(pXmlWriter, nullptr, nullptr, nullptr);
+    (void)xmlTextWriterStartDocument(pXmlWriter, nullptr, nullptr, nullptr);
 
     // create the dump
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(rComponent.get());
@@ -154,7 +154,7 @@ void SwModelTestBase::dumpLayout(const uno::Reference<lang::XComponent>& rCompon
     pLayout->dumpAsXml(pXmlWriter);
 
     // delete xml writer
-    xmlTextWriterEndDocument(pXmlWriter);
+    (void)xmlTextWriterEndDocument(pXmlWriter);
     xmlFreeTextWriter(pXmlWriter);
 }
 

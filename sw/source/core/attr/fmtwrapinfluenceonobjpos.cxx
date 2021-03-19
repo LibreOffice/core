@@ -164,11 +164,11 @@ SwTwips SwFormatWrapInfluenceOnObjPos::GetOverlapVertOffset() const { return mnO
 
 void SwFormatWrapInfluenceOnObjPos::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatWrapInfluenceOnObjPos"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nWrapInfluenceOnPosition"), BAD_CAST(OString::number(mnWrapInfluenceOnPosition).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("mbAllowOverlap"), BAD_CAST(OString::boolean(mbAllowOverlap).getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatWrapInfluenceOnObjPos"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nWrapInfluenceOnPosition"), BAD_CAST(OString::number(mnWrapInfluenceOnPosition).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("mbAllowOverlap"), BAD_CAST(OString::boolean(mbAllowOverlap).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

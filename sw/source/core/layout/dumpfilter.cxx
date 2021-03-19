@@ -106,12 +106,12 @@ namespace sw
 
             xmlTextWriterPtr writer = xmlNewTextWriter( outBuffer );
             xmlTextWriterSetIndent(writer, 1);
-            xmlTextWriterStartDocument( writer, nullptr, nullptr, nullptr );
+            (void)xmlTextWriterStartDocument( writer, nullptr, nullptr, nullptr );
 
             // TODO This doesn't export the whole XML file, whereas dumpAsXML() does it nicely
             pLayout->dumpAsXml( writer );
 
-            xmlTextWriterEndDocument( writer );
+            (void)xmlTextWriterEndDocument( writer );
             xmlFreeTextWriter( writer );
 
             bRet = true;

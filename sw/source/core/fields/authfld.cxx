@@ -612,26 +612,26 @@ bool SwAuthorityField::HasURL() const
 
 void SwAuthorityField::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwAuthorityField"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwAuthorityField"));
     SwField::dumpAsXml(pWriter);
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("m_xAuthEntry"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", m_xAuthEntry.get());
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("m_xAuthEntry"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", m_xAuthEntry.get());
     if (m_xAuthEntry.is())
     {
         m_xAuthEntry->dumpAsXml(pWriter);
     }
-    xmlTextWriterEndElement(pWriter);
-    xmlTextWriterStartElement(pWriter, BAD_CAST("m_nTempSequencePos"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+    (void)xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("m_nTempSequencePos"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::number(m_nTempSequencePos).getStr()));
-    xmlTextWriterEndElement(pWriter);
-    xmlTextWriterStartElement(pWriter, BAD_CAST("m_nTempSequencePosRLHidden"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+    (void)xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("m_nTempSequencePosRLHidden"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::number(m_nTempSequencePosRLHidden).getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 const char* const aFieldNames[] =
@@ -671,17 +671,17 @@ const char* const aFieldNames[] =
 
 void SwAuthEntry::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwAuthEntry"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwAuthEntry"));
 
     for (int i = 0; i < AUTH_FIELD_END; ++i)
     {
-        xmlTextWriterStartElement(pWriter, BAD_CAST("m_aAuthField"));
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("key"), BAD_CAST(aFieldNames[i]));
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(m_aAuthFields[i].toUtf8().getStr()));
-        xmlTextWriterEndElement(pWriter);
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("m_aAuthField"));
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("key"), BAD_CAST(aFieldNames[i]));
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(m_aAuthFields[i].toUtf8().getStr()));
+        (void)xmlTextWriterEndElement(pWriter);
     }
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 bool    SwAuthorityField::QueryValue( Any& rAny, sal_uInt16 /*nWhichId*/ ) const

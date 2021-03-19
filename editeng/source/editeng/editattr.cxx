@@ -65,13 +65,13 @@ void EditCharAttrib::SetFont( SvxFont&, OutputDevice* )
 
 void EditCharAttrib::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("EditCharAttrib"));
-    xmlTextWriterWriteFormatAttribute(
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("EditCharAttrib"));
+    (void)xmlTextWriterWriteFormatAttribute(
     pWriter, BAD_CAST("nStart"), "%" SAL_PRIdINT32, nStart);
-    xmlTextWriterWriteFormatAttribute(
+    (void)xmlTextWriterWriteFormatAttribute(
     pWriter, BAD_CAST("nEnd"), "%" SAL_PRIdINT32, nEnd);
     pItem->dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 

@@ -1936,11 +1936,11 @@ void SwDoc::dumpAsXml(xmlTextWriterPtr pWriter) const
         pWriter = xmlNewTextWriterFilename("nodes.xml", 0);
         xmlTextWriterSetIndent(pWriter,1);
         xmlTextWriterSetIndentString(pWriter, BAD_CAST("  "));
-        xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
+        (void)xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
         bOwns = true;
     }
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwDoc"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwDoc"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
     m_pNodes->dumpAsXml(pWriter);
     m_PageDescs.dumpAsXml(pWriter);
@@ -1961,27 +1961,27 @@ void SwDoc::dumpAsXml(xmlTextWriterPtr pWriter) const
     if (const SdrModel* pModel = getIDocumentDrawModelAccess().GetDrawModel())
         pModel->dumpAsXml(pWriter);
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("mbModified"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(getIDocumentState().IsModified()).getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbModified"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(getIDocumentState().IsModified()).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
     if (bOwns)
     {
-        xmlTextWriterEndDocument(pWriter);
+        (void)xmlTextWriterEndDocument(pWriter);
         xmlFreeTextWriter(pWriter);
     }
 }
 
 void SwDBData::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwDBData"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwDBData"));
 
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("sDataSource"), BAD_CAST(sDataSource.toUtf8().getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("sCommand"), BAD_CAST(sCommand.toUtf8().getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nCommandType"), BAD_CAST(OString::number(nCommandType).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("sDataSource"), BAD_CAST(sDataSource.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("sCommand"), BAD_CAST(sCommand.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nCommandType"), BAD_CAST(OString::number(nCommandType).getStr()));
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 std::set<Color> SwDoc::GetDocColors()

@@ -1686,14 +1686,14 @@ void SAL_CALL Cell::disposing( const EventObject& /*Source*/ )
 
 void Cell::dumpAsXml(xmlTextWriterPtr pWriter, sal_Int32 nRow, sal_Int32 nCol) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("Cell"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("row"), "%" SAL_PRIdINT32, nRow);
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("col"), "%" SAL_PRIdINT32, nCol);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("Cell"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("row"), "%" SAL_PRIdINT32, nRow);
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("col"), "%" SAL_PRIdINT32, nCol);
     SdrText::dumpAsXml(pWriter);
     //SvxUnoTextBase::dumpAsXml(pWriter);
     //mpPropSet->dumpAsXml(pWriter);
     mpProperties->dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 }

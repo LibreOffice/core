@@ -187,9 +187,9 @@ bool SwUndoInserts::IsCreateUndoForNewFly(SwFormatAnchor const& rAnchor,
 
 void SwUndoInserts::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwUndoInserts"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s",
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwUndoInserts"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s",
                                       BAD_CAST(typeid(*this).name()));
 
     SwUndo::dumpAsXml(pWriter);
@@ -197,25 +197,25 @@ void SwUndoInserts::dumpAsXml(xmlTextWriterPtr pWriter) const
 
     if (m_pFrameFormats)
     {
-        xmlTextWriterStartElement(pWriter, BAD_CAST("m_pFrameFormats"));
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("m_pFrameFormats"));
         for (const auto& pFormat : *m_pFrameFormats)
         {
             pFormat->dumpAsXml(pWriter);
         }
-        xmlTextWriterEndElement(pWriter);
+        (void)xmlTextWriterEndElement(pWriter);
     }
 
     if (!m_FlyUndos.empty())
     {
-        xmlTextWriterStartElement(pWriter, BAD_CAST("m_FlyUndos"));
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("m_FlyUndos"));
         for (const auto& pFly : m_FlyUndos)
         {
             pFly->dumpAsXml(pWriter);
         }
-        xmlTextWriterEndElement(pWriter);
+        (void)xmlTextWriterEndElement(pWriter);
     }
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 SwUndoInserts::~SwUndoInserts()

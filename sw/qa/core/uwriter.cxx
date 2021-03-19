@@ -1185,9 +1185,9 @@ void SwDocTest::randomTest()
 
         xmlTextWriterPtr writer;
         writer = xmlNewTextWriterFilename( aBuffer.makeStringAndClear().getStr(), 0 );
-        xmlTextWriterStartDocument( writer, NULL, NULL, NULL );
+        (void)xmlTextWriterStartDocument( writer, NULL, NULL, NULL );
         m_pDoc->dumpAsXml(writer);
-        xmlTextWriterEndDocument( writer );
+        (void)xmlTextWriterEndDocument( writer );
         xmlFreeTextWriter( writer );
 #endif
     }

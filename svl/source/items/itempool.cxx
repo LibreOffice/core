@@ -937,11 +937,11 @@ sal_uInt16 SfxItemPool::GetTrueSlotId( sal_uInt16 nWhich ) const
 
 void SfxItemPool::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SfxItemPool"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxItemPool"));
     for (auto const & rArray : pImpl->maPoolItemArrays)
         for (auto const & rItem : rArray)
             rItem->dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

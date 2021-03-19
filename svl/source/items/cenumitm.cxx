@@ -107,10 +107,10 @@ bool SfxBoolItem::GetPresentation(SfxItemPresentation,
 
 void SfxBoolItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SfxBoolItem"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(GetValueTextByVal(m_bValue).toUtf8().getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxBoolItem"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(GetValueTextByVal(m_bValue).toUtf8().getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 // virtual

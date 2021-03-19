@@ -603,23 +603,23 @@ bool SvxLRSpaceItem::HasMetrics() const
 
 void SvxLRSpaceItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxLRSpaceItem"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nFirstLineOffset"), BAD_CAST(OString::number(nFirstLineOffset).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nTxtLeft"), BAD_CAST(OString::number(nTxtLeft).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLeftMargin"), BAD_CAST(OString::number(nLeftMargin).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nRightMargin"), BAD_CAST(OString::number(nRightMargin).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nGutterMargin"),
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxLRSpaceItem"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nFirstLineOffset"), BAD_CAST(OString::number(nFirstLineOffset).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nTxtLeft"), BAD_CAST(OString::number(nTxtLeft).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLeftMargin"), BAD_CAST(OString::number(nLeftMargin).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nRightMargin"), BAD_CAST(OString::number(nRightMargin).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nGutterMargin"),
                                 BAD_CAST(OString::number(m_nGutterMargin).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nRightGutterMargin"),
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nRightGutterMargin"),
                                 BAD_CAST(OString::number(m_nRightGutterMargin).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nPropFirstLineOffset"), BAD_CAST(OString::number(nPropFirstLineOffset).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nPropLeftMargin"), BAD_CAST(OString::number(nPropLeftMargin).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nPropRightMargin"), BAD_CAST(OString::number(nPropRightMargin).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bAutoFirst"), BAD_CAST(OString::number(int(bAutoFirst)).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bExplicitZeroMarginValRight"), BAD_CAST(OString::number(int(bExplicitZeroMarginValRight)).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bExplicitZeroMarginValLeft"), BAD_CAST(OString::number(int(bExplicitZeroMarginValLeft)).getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nPropFirstLineOffset"), BAD_CAST(OString::number(nPropFirstLineOffset).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nPropLeftMargin"), BAD_CAST(OString::number(nPropLeftMargin).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nPropRightMargin"), BAD_CAST(OString::number(nPropRightMargin).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bAutoFirst"), BAD_CAST(OString::number(int(bAutoFirst)).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bExplicitZeroMarginValRight"), BAD_CAST(OString::number(int(bExplicitZeroMarginValRight)).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bExplicitZeroMarginValLeft"), BAD_CAST(OString::number(int(bExplicitZeroMarginValLeft)).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 
@@ -857,14 +857,14 @@ bool SvxULSpaceItem::HasMetrics() const
 
 void SvxULSpaceItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxULSpaceItem"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nUpper"), BAD_CAST(OString::number(nUpper).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLower"), BAD_CAST(OString::number(nLower).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bContext"), BAD_CAST(OString::boolean(bContext).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nPropUpper"), BAD_CAST(OString::number(nPropUpper).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nPropLower"), BAD_CAST(OString::number(nPropLower).getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxULSpaceItem"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nUpper"), BAD_CAST(OString::number(nUpper).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLower"), BAD_CAST(OString::number(nLower).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bContext"), BAD_CAST(OString::boolean(bContext).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nPropUpper"), BAD_CAST(OString::number(nPropUpper).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nPropLower"), BAD_CAST(OString::number(nPropLower).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 boost::property_tree::ptree SvxULSpaceItem::dumpAsJSON() const
@@ -1013,12 +1013,12 @@ bool SvxProtectItem::GetPresentation
 
 void SvxProtectItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxProtectItem"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("content"), BAD_CAST(OString::boolean(bCntnt).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("size"), BAD_CAST(OString::boolean(bSize).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("position"), BAD_CAST(OString::boolean(bPos).getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxProtectItem"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("content"), BAD_CAST(OString::boolean(bCntnt).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("size"), BAD_CAST(OString::boolean(bSize).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("position"), BAD_CAST(OString::boolean(bPos).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 
@@ -1270,13 +1270,13 @@ void SvxShadowItem::SetEnumValue( sal_uInt16 nVal )
 
 void SvxShadowItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxShadowItem"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aShadowColor"), BAD_CAST(aShadowColor.AsRGBHexString().toUtf8().getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nWidth"), BAD_CAST(OString::number(nWidth).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eLocation"), BAD_CAST(OString::number(static_cast<int>(eLocation)).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(EditResId(RID_SVXITEMS_SHADOW[static_cast<int>(eLocation)]).toUtf8().getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxShadowItem"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aShadowColor"), BAD_CAST(aShadowColor.AsRGBHexString().toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nWidth"), BAD_CAST(OString::number(nWidth).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eLocation"), BAD_CAST(OString::number(static_cast<int>(eLocation)).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(EditResId(RID_SVXITEMS_SHADOW[static_cast<int>(eLocation)]).toUtf8().getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 // class SvxBoxItem ------------------------------------------------------
@@ -2664,11 +2664,11 @@ bool SvxFormatKeepItem::GetPresentation
 
 void SvxFormatKeepItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxFormatKeepItem"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxFormatKeepItem"));
 
     SfxBoolItem::dumpAsXml(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 SvxLineItem::SvxLineItem( const sal_uInt16 nId ) :
@@ -3337,15 +3337,15 @@ void SvxBrushItem::ApplyGraphicTransparency_Impl()
 
 void SvxBrushItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxBrushItem"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("color"), BAD_CAST(aColor.AsRGBHexString().toUtf8().getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("shadingValue"), BAD_CAST(OString::number(nShadingValue).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("link"), BAD_CAST(maStrLink.toUtf8().getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("filter"), BAD_CAST(maStrFilter.toUtf8().getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("graphicPos"), BAD_CAST(OString::number(eGraphicPos).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("loadAgain"), BAD_CAST(OString::boolean(bLoadAgain).getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxBrushItem"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("color"), BAD_CAST(aColor.AsRGBHexString().toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("shadingValue"), BAD_CAST(OString::number(nShadingValue).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("link"), BAD_CAST(maStrLink.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("filter"), BAD_CAST(maStrFilter.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("graphicPos"), BAD_CAST(OString::number(eGraphicPos).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("loadAgain"), BAD_CAST(OString::boolean(bLoadAgain).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 
@@ -3469,13 +3469,13 @@ bool SvxFrameDirectionItem::QueryValue( css::uno::Any& rVal,
 
 void SvxFrameDirectionItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxFrameDirectionItem"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nWhich"),
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxFrameDirectionItem"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nWhich"),
                                 BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(
+    (void)xmlTextWriterWriteAttribute(
         pWriter, BAD_CAST("m_nValue"),
         BAD_CAST(OString::number(static_cast<sal_Int16>(GetValue())).getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

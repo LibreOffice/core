@@ -93,9 +93,9 @@ void ScGridWindow::dumpCellProperties()
     xmlTextWriterSetIndent(writer,1);
     xmlTextWriterSetIndentString(writer, BAD_CAST("    "));
 
-    xmlTextWriterStartDocument( writer, nullptr, nullptr, nullptr );
+    (void)xmlTextWriterStartDocument( writer, nullptr, nullptr, nullptr );
 
-    xmlTextWriterStartElement(writer, BAD_CAST("selection"));
+    (void)xmlTextWriterStartElement(writer, BAD_CAST("selection"));
 
     for (size_t i = 0, n = aList.size(); i < n; ++i)
     {
@@ -106,21 +106,21 @@ void ScGridWindow::dumpCellProperties()
             for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
             {
                 const ScPatternAttr* pPatternAttr = rDoc.GetPattern(nCol, nRow, nTab);
-                xmlTextWriterStartElement(writer, BAD_CAST("cell"));
-                xmlTextWriterWriteAttribute(writer, BAD_CAST("column"), BAD_CAST(OString::number(nCol).getStr()));
-                xmlTextWriterWriteAttribute(writer, BAD_CAST("row"), BAD_CAST(OString::number(nRow).getStr()));
-                xmlTextWriterWriteAttribute(writer, BAD_CAST("tab"), BAD_CAST(OString::number(nTab).getStr()));
+                (void)xmlTextWriterStartElement(writer, BAD_CAST("cell"));
+                (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("column"), BAD_CAST(OString::number(nCol).getStr()));
+                (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("row"), BAD_CAST(OString::number(nRow).getStr()));
+                (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("tab"), BAD_CAST(OString::number(nTab).getStr()));
 
                 pPatternAttr->GetItemSet().dumpAsXml(writer);
 
-                xmlTextWriterEndElement(writer);
+                (void)xmlTextWriterEndElement(writer);
             }
         }
     }
 
-    xmlTextWriterEndElement(writer);
+    (void)xmlTextWriterEndElement(writer);
 
-    xmlTextWriterEndDocument( writer );
+    (void)xmlTextWriterEndDocument( writer );
     xmlFreeTextWriter (writer);
 }
 

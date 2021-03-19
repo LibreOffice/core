@@ -89,12 +89,12 @@ bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 
 void SvxB3DVectorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SvxB3DVectorItem"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("x"), BAD_CAST(OString::number(aVal.getX()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("y"), BAD_CAST(OString::number(aVal.getY()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("z"), BAD_CAST(OString::number(aVal.getZ()).getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxB3DVectorItem"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("x"), BAD_CAST(OString::number(aVal.getX()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("y"), BAD_CAST(OString::number(aVal.getY()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("z"), BAD_CAST(OString::number(aVal.getZ()).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

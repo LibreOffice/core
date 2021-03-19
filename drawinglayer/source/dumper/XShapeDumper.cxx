@@ -202,19 +202,19 @@ void dumpFillStyleAsAttribute(drawing::FillStyle eFillStyle, xmlTextWriterPtr xm
     switch(eFillStyle)
     {
         case drawing::FillStyle_NONE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillStyle"), "%s", "NONE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillStyle"), "%s", "NONE");
             break;
         case drawing::FillStyle_SOLID:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillStyle"), "%s", "SOLID");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillStyle"), "%s", "SOLID");
             break;
         case drawing::FillStyle_GRADIENT:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillStyle"), "%s", "GRADIENT");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillStyle"), "%s", "GRADIENT");
             break;
         case drawing::FillStyle_HATCH:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillStyle"), "%s", "HATCH");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillStyle"), "%s", "HATCH");
             break;
         case drawing::FillStyle_BITMAP:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillStyle"), "%s", "BITMAP");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillStyle"), "%s", "BITMAP");
             break;
         default:
             break;
@@ -223,17 +223,17 @@ void dumpFillStyleAsAttribute(drawing::FillStyle eFillStyle, xmlTextWriterPtr xm
 
 void dumpFillColorAsAttribute(sal_Int32 aColor, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillColor"), "%06x", static_cast<unsigned int>(aColor));
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillColor"), "%06x", static_cast<unsigned int>(aColor));
 }
 
 void dumpFillTransparenceAsAttribute(sal_Int32 aTransparence, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillTransparence"), "%" SAL_PRIdINT32, aTransparence);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillTransparence"), "%" SAL_PRIdINT32, aTransparence);
 }
 
 void dumpFillTransparenceGradientNameAsAttribute(std::u16string_view sTranspGradName, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillTransparenceGradientName"), "%s",
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillTransparenceGradientName"), "%s",
         OUStringToOString(sTranspGradName, RTL_TEXTENCODING_UTF8).getStr());
 }
 
@@ -243,118 +243,118 @@ void dumpGradientProperty(const awt::Gradient& rGradient, xmlTextWriterPtr xmlWr
     switch (rGradient.Style)   //enum GradientStyle
     {
         case awt::GradientStyle_LINEAR:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "LINEAR");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "LINEAR");
             break;
         case awt::GradientStyle_AXIAL:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "AXIAL");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "AXIAL");
             break;
         case awt::GradientStyle_RADIAL:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "RADIAL");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "RADIAL");
             break;
         case awt::GradientStyle_ELLIPTICAL:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "ELLIPTICAL");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "ELLIPTICAL");
             break;
         case awt::GradientStyle_SQUARE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "SQUARE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "SQUARE");
             break;
         case awt::GradientStyle_RECT:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "RECT");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "RECT");
             break;
         default:
             break;
     }
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("startColor"), "%06x", static_cast<unsigned int>(rGradient.StartColor));
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("endColor"), "%06x", static_cast<unsigned int>(rGradient.EndColor));
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("angle"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rGradient.Angle));
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("border"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rGradient.Border));
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("xOffset"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rGradient.XOffset));
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("yOffset"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rGradient.YOffset));
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("startIntensity"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rGradient.StartIntensity));
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("endIntensity"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rGradient.EndIntensity));
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("stepCount"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rGradient.StepCount));
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("startColor"), "%06x", static_cast<unsigned int>(rGradient.StartColor));
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("endColor"), "%06x", static_cast<unsigned int>(rGradient.EndColor));
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("angle"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rGradient.Angle));
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("border"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rGradient.Border));
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("xOffset"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rGradient.XOffset));
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("yOffset"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rGradient.YOffset));
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("startIntensity"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rGradient.StartIntensity));
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("endIntensity"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rGradient.EndIntensity));
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("stepCount"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rGradient.StepCount));
 }
 
 void dumpFillTransparenceGradientAsElement(const awt::Gradient& rTranspGrad, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FillTransparenceGradient" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FillTransparenceGradient" ));
     dumpGradientProperty(rTranspGrad, xmlWriter);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void dumpFillGradientNameAsAttribute(std::u16string_view sGradName, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillGradientName"), "%s",
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillGradientName"), "%s",
         OUStringToOString(sGradName, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void dumpFillGradientAsElement(const awt::Gradient& rGradient, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FillGradient" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FillGradient" ));
     dumpGradientProperty(rGradient, xmlWriter);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void dumpFillHatchAsElement(const drawing::Hatch& rHatch, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FillHatch" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FillHatch" ));
     switch (rHatch.Style)
     {
         case drawing::HatchStyle_SINGLE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "SINGLE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "SINGLE");
             break;
         case drawing::HatchStyle_DOUBLE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "DOUBLE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "DOUBLE");
             break;
         case drawing::HatchStyle_TRIPLE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "TRIPLE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "TRIPLE");
             break;
         default:
             break;
     }
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("color"), "%06x", static_cast<unsigned int>(rHatch.Color));
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("distance"), "%" SAL_PRIdINT32, rHatch.Distance);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("angle"), "%" SAL_PRIdINT32, rHatch.Angle);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("color"), "%06x", static_cast<unsigned int>(rHatch.Color));
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("distance"), "%" SAL_PRIdINT32, rHatch.Distance);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("angle"), "%" SAL_PRIdINT32, rHatch.Angle);
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void dumpFillBackgroundAsAttribute(bool bBackground, xmlTextWriterPtr xmlWriter)
 {
     if(bBackground)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBackground"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBackground"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBackground"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBackground"), "%s", "false");
 }
 
 void dumpFillBitmapAsElement(const uno::Reference<awt::XBitmap>& xBitmap, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FillBitmap" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FillBitmap" ));
     if (xBitmap.is())
     {
         awt::Size const aSize = xBitmap->getSize();
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("width"), "%" SAL_PRIdINT32, aSize.Width);
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("height"), "%" SAL_PRIdINT32, aSize.Height);
+        (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("width"), "%" SAL_PRIdINT32, aSize.Width);
+        (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("height"), "%" SAL_PRIdINT32, aSize.Height);
     }
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void dumpFillBitmapPositionOffsetXAsAttribute(sal_Int32 aBitmapPositionOffsetX, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillBitmapPositionOffsetX"), "%" SAL_PRIdINT32, aBitmapPositionOffsetX);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillBitmapPositionOffsetX"), "%" SAL_PRIdINT32, aBitmapPositionOffsetX);
 }
 
 void dumpFillBitmapPositionOffsetYAsAttribute(sal_Int32 aBitmapPositionOffsetY, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillBitmapPositionOffsetY"), "%" SAL_PRIdINT32, aBitmapPositionOffsetY);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillBitmapPositionOffsetY"), "%" SAL_PRIdINT32, aBitmapPositionOffsetY);
 }
 
 void dumpFillBitmapOffsetXAsAttribute(sal_Int32 aBitmapOffsetX, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillBitmapOffsetX"), "%" SAL_PRIdINT32, aBitmapOffsetX);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillBitmapOffsetX"), "%" SAL_PRIdINT32, aBitmapOffsetX);
 }
 
 void dumpFillBitmapOffsetYAsAttribute(sal_Int32 aBitmapOffsetY, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillBitmapOffsetY"), "%" SAL_PRIdINT32, aBitmapOffsetY);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillBitmapOffsetY"), "%" SAL_PRIdINT32, aBitmapOffsetY);
 }
 
 void dumpFillBitmapRectanglePointAsAttribute(drawing::RectanglePoint eBitmapRectanglePoint, xmlTextWriterPtr xmlWriter)
@@ -362,31 +362,31 @@ void dumpFillBitmapRectanglePointAsAttribute(drawing::RectanglePoint eBitmapRect
     switch(eBitmapRectanglePoint)
     {
         case drawing::RectanglePoint_LEFT_TOP:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "LEFT_TOP");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "LEFT_TOP");
             break;
         case drawing::RectanglePoint_MIDDLE_TOP:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "MIDDLE_TOP");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "MIDDLE_TOP");
             break;
         case drawing::RectanglePoint_RIGHT_TOP:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "RIGHT_TOP");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "RIGHT_TOP");
             break;
         case drawing::RectanglePoint_LEFT_MIDDLE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "LEFT_MIDDLE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "LEFT_MIDDLE");
             break;
         case drawing::RectanglePoint_MIDDLE_MIDDLE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "MIDDLE_MIDDLE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "MIDDLE_MIDDLE");
             break;
         case drawing::RectanglePoint_RIGHT_MIDDLE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "RIGHT_MIDDLE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "RIGHT_MIDDLE");
             break;
         case drawing::RectanglePoint_LEFT_BOTTOM:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "LEFT_BOTTOM");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "LEFT_BOTTOM");
             break;
         case drawing::RectanglePoint_MIDDLE_BOTTOM:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "MIDDLE_BOTTOM");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "MIDDLE_BOTTOM");
             break;
         case drawing::RectanglePoint_RIGHT_BOTTOM:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "RIGHT_BOTTOM");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapRectanglePoint"), "%s", "RIGHT_BOTTOM");
             break;
         default:
             break;
@@ -396,19 +396,19 @@ void dumpFillBitmapRectanglePointAsAttribute(drawing::RectanglePoint eBitmapRect
 void dumpFillBitmapLogicalSizeAsAttribute(bool bBitmapLogicalSize, xmlTextWriterPtr xmlWriter)
 {
     if(bBitmapLogicalSize)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapLogicalSize"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapLogicalSize"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapLogicalSize"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapLogicalSize"), "%s", "false");
 }
 
 void dumpFillBitmapSizeXAsAttribute(sal_Int32 aBitmapSizeX, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillBitmapSizeX"), "%" SAL_PRIdINT32, aBitmapSizeX);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillBitmapSizeX"), "%" SAL_PRIdINT32, aBitmapSizeX);
 }
 
 void dumpFillBitmapSizeYAsAttribute(sal_Int32 aBitmapSizeY, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillBitmapSizeY"), "%" SAL_PRIdINT32, aBitmapSizeY);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillBitmapSizeY"), "%" SAL_PRIdINT32, aBitmapSizeY);
 }
 
 void dumpFillBitmapModeAsAttribute(drawing::BitmapMode eBitmapMode, xmlTextWriterPtr xmlWriter)
@@ -416,13 +416,13 @@ void dumpFillBitmapModeAsAttribute(drawing::BitmapMode eBitmapMode, xmlTextWrite
     switch(eBitmapMode)
     {
         case drawing::BitmapMode_REPEAT:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapMode"), "%s", "REPEAT");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapMode"), "%s", "REPEAT");
             break;
         case drawing::BitmapMode_STRETCH:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapMode"), "%s", "STRETCH");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapMode"), "%s", "STRETCH");
             break;
         case drawing::BitmapMode_NO_REPEAT:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapMode"), "%s", "NO_REPEAT");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapMode"), "%s", "NO_REPEAT");
             break;
         default:
             break;
@@ -432,17 +432,17 @@ void dumpFillBitmapModeAsAttribute(drawing::BitmapMode eBitmapMode, xmlTextWrite
 void dumpFillBitmapStretchAsAttribute(bool bBitmapStretch, xmlTextWriterPtr xmlWriter)
 {
     if(bBitmapStretch)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapStretch"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapStretch"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapStretch"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapStretch"), "%s", "false");
 }
 
 void dumpFillBitmapTileAsAttribute(bool bBitmapTile, xmlTextWriterPtr xmlWriter)
 {
     if(bBitmapTile)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapTile"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapTile"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapTile"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBitmapTile"), "%s", "false");
 }
 
 
@@ -454,13 +454,13 @@ void dumpLineStyleAsAttribute(drawing::LineStyle eLineStyle, xmlTextWriterPtr xm
     switch(eLineStyle)
     {
         case drawing::LineStyle_NONE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineStyle"), "%s", "NONE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineStyle"), "%s", "NONE");
             break;
         case drawing::LineStyle_SOLID:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineStyle"), "%s", "SOLID");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineStyle"), "%s", "SOLID");
             break;
         case drawing::LineStyle_DASH:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineStyle"), "%s", "DASH");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineStyle"), "%s", "DASH");
             break;
         default:
             break;
@@ -469,51 +469,51 @@ void dumpLineStyleAsAttribute(drawing::LineStyle eLineStyle, xmlTextWriterPtr xm
 
 void dumpLineDashAsElement(const drawing::LineDash& rLineDash, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "LineDash" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "LineDash" ));
     switch (rLineDash.Style)
     {
         case drawing::DashStyle_RECT:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "RECT");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "RECT");
             break;
         case drawing::DashStyle_ROUND:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "ROUND");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "ROUND");
             break;
         case drawing::DashStyle_RECTRELATIVE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "RECTRELATIVE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "RECTRELATIVE");
             break;
         case drawing::DashStyle_ROUNDRELATIVE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "ROUNDRELATIVE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "ROUNDRELATIVE");
             break;
         default:
             break;
     }
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dots"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rLineDash.Dots));
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dotLen"), "%" SAL_PRIdINT32, rLineDash.DotLen);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dashes"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rLineDash.Dashes));
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dashLen"), "%" SAL_PRIdINT32, rLineDash.DashLen);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("distance"), "%" SAL_PRIdINT32, rLineDash.Distance);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dots"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rLineDash.Dots));
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dotLen"), "%" SAL_PRIdINT32, rLineDash.DotLen);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dashes"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(rLineDash.Dashes));
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dashLen"), "%" SAL_PRIdINT32, rLineDash.DashLen);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("distance"), "%" SAL_PRIdINT32, rLineDash.Distance);
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void dumpLineDashNameAsAttribute(std::u16string_view sLineDashName, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineDashName"), "%s",
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineDashName"), "%s",
         OUStringToOString(sLineDashName, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void dumpLineColorAsAttribute(sal_Int32 aLineColor, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineColor"), "%06x", static_cast<unsigned int>(aLineColor));
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineColor"), "%06x", static_cast<unsigned int>(aLineColor));
 }
 
 void dumpLineTransparenceAsAttribute(sal_Int32 aLineTransparence, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineTransparence"), "%" SAL_PRIdINT32, aLineTransparence);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineTransparence"), "%" SAL_PRIdINT32, aLineTransparence);
 }
 
 void dumpLineWidthAsAttribute(sal_Int32 aLineWidth, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineWidth"), "%" SAL_PRIdINT32, aLineWidth);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineWidth"), "%" SAL_PRIdINT32, aLineWidth);
 }
 
 void dumpLineJointAsAttribute(drawing::LineJoint eLineJoint, xmlTextWriterPtr xmlWriter)
@@ -521,19 +521,19 @@ void dumpLineJointAsAttribute(drawing::LineJoint eLineJoint, xmlTextWriterPtr xm
     switch(eLineJoint)
     {
         case drawing::LineJoint_NONE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "NONE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "NONE");
             break;
         case drawing::LineJoint_MIDDLE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "MIDDLE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "MIDDLE");
             break;
         case drawing::LineJoint_BEVEL:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "BEVEL");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "BEVEL");
             break;
         case drawing::LineJoint_MITER:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "MITER");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "MITER");
             break;
         case drawing::LineJoint_ROUND:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "ROUND");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineJoint"), "%s", "ROUND");
             break;
         default:
             break;
@@ -542,13 +542,13 @@ void dumpLineJointAsAttribute(drawing::LineJoint eLineJoint, xmlTextWriterPtr xm
 
 void dumpLineStartNameAsAttribute(std::u16string_view sLineStartName, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineStartName"), "%s",
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineStartName"), "%s",
     OUStringToOString(sLineStartName, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void dumpLineEndNameAsAttribute(std::u16string_view sLineEndName, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineEndName"), "%s",
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineEndName"), "%s",
     OUStringToOString(sLineEndName, RTL_TEXTENCODING_UTF8).getStr());
 }
 
@@ -559,42 +559,42 @@ void dumpPolyPolygonBezierCoords(const drawing::PolyPolygonBezierCoords& rPolyPo
 
 void dumpLineStartAsElement(const drawing::PolyPolygonBezierCoords& rLineStart, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "LineStart" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "LineStart" ));
     dumpPolyPolygonBezierCoords(rLineStart, xmlWriter);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void dumpLineEndAsElement(const drawing::PolyPolygonBezierCoords& rLineEnd, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "LineEnd" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "LineEnd" ));
     dumpPolyPolygonBezierCoords(rLineEnd, xmlWriter);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void dumpLineStartCenterAsAttribute(bool bLineStartCenter, xmlTextWriterPtr xmlWriter)
 {
     if(bLineStartCenter)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineStartCenter"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineStartCenter"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineStartCenter"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineStartCenter"), "%s", "false");
 }
 
 void dumpLineStartWidthAsAttribute(sal_Int32 aLineStartWidth, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineStartWidth"), "%" SAL_PRIdINT32, aLineStartWidth);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineStartWidth"), "%" SAL_PRIdINT32, aLineStartWidth);
 }
 
 void dumpLineEndCenterAsAttribute(bool bLineEndCenter, xmlTextWriterPtr xmlWriter)
 {
     if(bLineEndCenter)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineEndCenter"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineEndCenter"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineEndCenter"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lineEndCenter"), "%s", "false");
 }
 
 void dumpLineEndWidthAsAttribute(sal_Int32 aLineEndWidth, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineEndWidth"), "%" SAL_PRIdINT32, aLineEndWidth);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineEndWidth"), "%" SAL_PRIdINT32, aLineEndWidth);
 }
 
 
@@ -606,31 +606,31 @@ void dumpPolygonKindAsAttribute(drawing::PolygonKind ePolygonKind, xmlTextWriter
     switch(ePolygonKind)
     {
         case drawing::PolygonKind_LINE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "LINE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "LINE");
             break;
         case drawing::PolygonKind_POLY:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "POLY");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "POLY");
             break;
         case drawing::PolygonKind_PLIN:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PLIN");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PLIN");
             break;
         case drawing::PolygonKind_PATHLINE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PATHLINE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PATHLINE");
             break;
         case drawing::PolygonKind_PATHFILL:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PATHFILL");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PATHFILL");
             break;
         case drawing::PolygonKind_FREELINE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "FREELINE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "FREELINE");
             break;
         case drawing::PolygonKind_FREEFILL:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "FREEFILL");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "FREEFILL");
             break;
         case drawing::PolygonKind_PATHPOLY:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PATHPOLY");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PATHPOLY");
             break;
         case drawing::PolygonKind_PATHPLIN:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PATHPLIN");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonKind"), "%s", "PATHPLIN");
             break;
         default:
             break;
@@ -652,64 +652,64 @@ void dumpPointSequenceSequence(const drawing::PointSequenceSequence& aPointSeque
         if(pFlags)
             flagsSequence = (*pFlags)[i];
 
-        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "pointSequence" ));
+        (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "pointSequence" ));
 
         for(sal_Int32 j = 0; j < nPoints; ++j)
         {
-            xmlTextWriterStartElement(xmlWriter, BAD_CAST( "point" ));
-            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, pointSequence[j].X);
-            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionY"), "%" SAL_PRIdINT32, pointSequence[j].Y);
+            (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "point" ));
+            (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, pointSequence[j].X);
+            (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionY"), "%" SAL_PRIdINT32, pointSequence[j].Y);
 
             if(pFlags)
             {
                 switch(flagsSequence[j])
                 {
                     case drawing::PolygonFlags_NORMAL:
-                        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonFlags"), "%s", "NORMAL");
+                        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonFlags"), "%s", "NORMAL");
                         break;
                     case drawing::PolygonFlags_SMOOTH:
-                        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonFlags"), "%s", "SMOOTH");
+                        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonFlags"), "%s", "SMOOTH");
                         break;
                     case drawing::PolygonFlags_CONTROL:
-                        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonFlags"), "%s", "CONTROL");
+                        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonFlags"), "%s", "CONTROL");
                         break;
                     case drawing::PolygonFlags_SYMMETRIC:
-                        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonFlags"), "%s", "SYMMETRIC");
+                        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonFlags"), "%s", "SYMMETRIC");
                         break;
                     default:
                         break;
                 }
             }
 
-            xmlTextWriterEndElement( xmlWriter );
+            (void)xmlTextWriterEndElement( xmlWriter );
         }
-        xmlTextWriterEndElement( xmlWriter );
+        (void)xmlTextWriterEndElement( xmlWriter );
     }
 }
 
 void dumpPolyPolygonAsElement(const drawing::PointSequenceSequence& rPolyPolygon, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PolyPolygon" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PolyPolygon" ));
     dumpPointSequenceSequence(rPolyPolygon, nullptr, xmlWriter);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void dumpGeometryAsElement(const drawing::PointSequenceSequence& aGeometry, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Geometry" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Geometry" ));
     dumpPointSequenceSequence(aGeometry, nullptr, xmlWriter);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 // CharacterProperties.idl
 void dumpCharHeightAsAttribute(float fHeight, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fontHeight"), "%f", fHeight );
+    (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fontHeight"), "%f", fHeight );
 }
 
 void dumpCharColorAsAttribute(sal_Int32 aColor, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fontColor"), "%06x", static_cast<unsigned int>(aColor));
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fontColor"), "%06x", static_cast<unsigned int>(aColor));
 }
 
 
@@ -719,33 +719,33 @@ void dumpCharColorAsAttribute(sal_Int32 aColor, xmlTextWriterPtr xmlWriter)
 void dumpIsNumberingAsAttribute(bool bIsNumbering, xmlTextWriterPtr xmlWriter)
 {
     if(bIsNumbering)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("isNumbering"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("isNumbering"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("isNumbering"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("isNumbering"), "%s", "false");
 }
 
 void dumpTextAutoGrowHeightAsAttribute(bool bTextAutoGrowHeight, xmlTextWriterPtr xmlWriter)
 {
     if(bTextAutoGrowHeight)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowHeight"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowHeight"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowHeight"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowHeight"), "%s", "false");
 }
 
 void dumpTextAutoGrowWidthAsAttribute(bool bTextAutoGrowWidth, xmlTextWriterPtr xmlWriter)
 {
     if(bTextAutoGrowWidth)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowWidth"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowWidth"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowWidth"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAutoGrowWidth"), "%s", "false");
 }
 
 void dumpTextContourFrameAsAttribute(bool bTextContourFrame, xmlTextWriterPtr xmlWriter)
 {
     if(bTextContourFrame)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textContourFrame"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textContourFrame"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textContourFrame"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textContourFrame"), "%s", "false");
 }
 
 void dumpTextFitToSizeAsAttribute(drawing::TextFitToSizeType eTextFitToSize, xmlTextWriterPtr xmlWriter)
@@ -753,16 +753,16 @@ void dumpTextFitToSizeAsAttribute(drawing::TextFitToSizeType eTextFitToSize, xml
     switch(eTextFitToSize)
     {
         case drawing::TextFitToSizeType_NONE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textFitToSize"), "%s", "NONE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textFitToSize"), "%s", "NONE");
             break;
         case drawing::TextFitToSizeType_PROPORTIONAL:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textFitToSize"), "%s", "PROPORTIONAL");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textFitToSize"), "%s", "PROPORTIONAL");
             break;
         case drawing::TextFitToSizeType_ALLLINES:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textFitToSize"), "%s", "ALLLINES");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textFitToSize"), "%s", "ALLLINES");
             break;
         case drawing::TextFitToSizeType_AUTOFIT:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textFitToSize"), "%s", "AUTOFIT");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textFitToSize"), "%s", "AUTOFIT");
             break;
         default:
             break;
@@ -774,16 +774,16 @@ void dumpTextHorizontalAdjustAsAttribute(drawing::TextHorizontalAdjust eTextHori
     switch(eTextHorizontalAdjust)
     {
         case drawing::TextHorizontalAdjust_LEFT:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textHorizontalAdjust"), "%s", "LEFT");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textHorizontalAdjust"), "%s", "LEFT");
             break;
         case drawing::TextHorizontalAdjust_CENTER:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textHorizontalAdjust"), "%s", "CENTER");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textHorizontalAdjust"), "%s", "CENTER");
             break;
         case drawing::TextHorizontalAdjust_RIGHT:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textHorizontalAdjust"), "%s", "RIGHT");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textHorizontalAdjust"), "%s", "RIGHT");
             break;
         case drawing::TextHorizontalAdjust_BLOCK:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textHorizontalAdjust"), "%s", "BLOCK");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textHorizontalAdjust"), "%s", "BLOCK");
             break;
         default:
             break;
@@ -795,16 +795,16 @@ void dumpTextVerticalAdjustAsAttribute(drawing::TextVerticalAdjust eTextVertical
     switch(eTextVerticalAdjust)
     {
         case drawing::TextVerticalAdjust_TOP:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textVerticalAdjust"), "%s", "TOP");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textVerticalAdjust"), "%s", "TOP");
             break;
         case drawing::TextVerticalAdjust_CENTER:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textVerticalAdjust"), "%s", "CENTER");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textVerticalAdjust"), "%s", "CENTER");
             break;
         case drawing::TextVerticalAdjust_BOTTOM:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textVerticalAdjust"), "%s", "BOTTOM");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textVerticalAdjust"), "%s", "BOTTOM");
             break;
         case drawing::TextVerticalAdjust_BLOCK:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textVerticalAdjust"), "%s", "BLOCK");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textVerticalAdjust"), "%s", "BLOCK");
             break;
         default:
             break;
@@ -813,57 +813,57 @@ void dumpTextVerticalAdjustAsAttribute(drawing::TextVerticalAdjust eTextVertical
 
 void dumpTextLeftDistanceAsAttribute(sal_Int32 aTextLeftDistance, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textLeftDistance"), "%" SAL_PRIdINT32, aTextLeftDistance);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textLeftDistance"), "%" SAL_PRIdINT32, aTextLeftDistance);
 }
 
 void dumpTextRightDistanceAsAttribute(sal_Int32 aTextRightDistance, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textRightDistance"), "%" SAL_PRIdINT32, aTextRightDistance);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textRightDistance"), "%" SAL_PRIdINT32, aTextRightDistance);
 }
 
 void dumpTextUpperDistanceAsAttribute(sal_Int32 aTextUpperDistance, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textUpperDistance"), "%" SAL_PRIdINT32, aTextUpperDistance);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textUpperDistance"), "%" SAL_PRIdINT32, aTextUpperDistance);
 }
 
 void dumpTextLowerDistanceAsAttribute(sal_Int32 aTextLowerDistance, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textLowerDistance"), "%" SAL_PRIdINT32, aTextLowerDistance);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textLowerDistance"), "%" SAL_PRIdINT32, aTextLowerDistance);
 }
 
 void dumpTextMaximumFrameHeightAsAttribute(sal_Int32 aTextMaximumFrameHeight, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMaximumFrameHeight"), "%" SAL_PRIdINT32, aTextMaximumFrameHeight);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMaximumFrameHeight"), "%" SAL_PRIdINT32, aTextMaximumFrameHeight);
 }
 
 void dumpTextMaximumFrameWidthAsAttribute(sal_Int32 aTextMaximumFrameWidth, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMaximumFrameWidth"), "%" SAL_PRIdINT32, aTextMaximumFrameWidth);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMaximumFrameWidth"), "%" SAL_PRIdINT32, aTextMaximumFrameWidth);
 }
 
 void dumpTextMinimumFrameHeightAsAttribute(sal_Int32 aTextMinimumFrameHeight, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMinimumFrameHeight"), "%" SAL_PRIdINT32, aTextMinimumFrameHeight);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMinimumFrameHeight"), "%" SAL_PRIdINT32, aTextMinimumFrameHeight);
 }
 
 void dumpTextMinimumFrameWidthAsAttribute(sal_Int32 aTextMinimumFrameWidth, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMinimumFrameWidth"), "%" SAL_PRIdINT32, aTextMinimumFrameWidth);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textMinimumFrameWidth"), "%" SAL_PRIdINT32, aTextMinimumFrameWidth);
 }
 
 void dumpTextAnimationAmountAsAttribute(sal_Int32 aTextAnimationAmount, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textAnimationAmount"), "%" SAL_PRIdINT32, aTextAnimationAmount);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textAnimationAmount"), "%" SAL_PRIdINT32, aTextAnimationAmount);
 }
 
 void dumpTextAnimationCountAsAttribute(sal_Int32 aTextAnimationCount, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textAnimationCount"), "%" SAL_PRIdINT32, aTextAnimationCount);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textAnimationCount"), "%" SAL_PRIdINT32, aTextAnimationCount);
 }
 
 void dumpTextAnimationDelayAsAttribute(sal_Int32 aTextAnimationDelay, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textAnimationDelay"), "%" SAL_PRIdINT32, aTextAnimationDelay);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("textAnimationDelay"), "%" SAL_PRIdINT32, aTextAnimationDelay);
 }
 
 void dumpTextAnimationDirectionAsAttribute(drawing::TextAnimationDirection eTextAnimationDirection, xmlTextWriterPtr xmlWriter)
@@ -871,16 +871,16 @@ void dumpTextAnimationDirectionAsAttribute(drawing::TextAnimationDirection eText
     switch(eTextAnimationDirection)
     {
         case drawing::TextAnimationDirection_LEFT:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationDirection"), "%s", "LEFT");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationDirection"), "%s", "LEFT");
             break;
         case drawing::TextAnimationDirection_RIGHT:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationDirection"), "%s", "RIGHT");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationDirection"), "%s", "RIGHT");
             break;
         case drawing::TextAnimationDirection_UP:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationDirection"), "%s", "UP");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationDirection"), "%s", "UP");
             break;
         case drawing::TextAnimationDirection_DOWN:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationDirection"), "%s", "DOWN");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationDirection"), "%s", "DOWN");
             break;
         default:
             break;
@@ -892,19 +892,19 @@ void dumpTextAnimationKindAsAttribute(drawing::TextAnimationKind eTextAnimationK
     switch(eTextAnimationKind)
     {
         case drawing::TextAnimationKind_NONE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "NONE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "NONE");
             break;
         case drawing::TextAnimationKind_BLINK:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "BLINK");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "BLINK");
             break;
         case drawing::TextAnimationKind_SCROLL:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "SCROLL");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "SCROLL");
             break;
         case drawing::TextAnimationKind_ALTERNATE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "ALTERNATE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "ALTERNATE");
             break;
         case drawing::TextAnimationKind_SLIDE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "SLIDE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationKind"), "%s", "SLIDE");
             break;
         default:
             break;
@@ -914,17 +914,17 @@ void dumpTextAnimationKindAsAttribute(drawing::TextAnimationKind eTextAnimationK
 void dumpTextAnimationStartInsideAsAttribute(bool bTextAnimationStartInside, xmlTextWriterPtr xmlWriter)
 {
     if(bTextAnimationStartInside)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStartInside"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStartInside"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStartInside"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStartInside"), "%s", "false");
 }
 
 void dumpTextAnimationStopInsideAsAttribute(bool bTextAnimationStopInside, xmlTextWriterPtr xmlWriter)
 {
     if(bTextAnimationStopInside)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStopInside"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStopInside"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStopInside"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textAnimationStopInside"), "%s", "false");
 }
 
 void dumpTextWritingModeAsAttribute(text::WritingMode eTextWritingMode, xmlTextWriterPtr xmlWriter)
@@ -932,13 +932,13 @@ void dumpTextWritingModeAsAttribute(text::WritingMode eTextWritingMode, xmlTextW
     switch(eTextWritingMode)
     {
         case text::WritingMode_LR_TB:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textWritingMode"), "%s", "LR_TB");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textWritingMode"), "%s", "LR_TB");
             break;
         case text::WritingMode_RL_TB:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textWritingMode"), "%s", "RL_TB");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textWritingMode"), "%s", "RL_TB");
             break;
         case text::WritingMode_TB_RL:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textWritingMode"), "%s", "TB_RL");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textWritingMode"), "%s", "TB_RL");
             break;
         default:
             break;
@@ -952,29 +952,29 @@ void dumpTextWritingModeAsAttribute(text::WritingMode eTextWritingMode, xmlTextW
 void dumpShadowAsAttribute(bool bShadow, xmlTextWriterPtr xmlWriter)
 {
     if(bShadow)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadow"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadow"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadow"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadow"), "%s", "false");
 }
 
 void dumpShadowColorAsAttribute(sal_Int32 aShadowColor, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowColor"), "%06x", static_cast<unsigned int>(aShadowColor));
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowColor"), "%06x", static_cast<unsigned int>(aShadowColor));
 }
 
 void dumpShadowTransparenceAsAttribute(sal_Int32 aShadowTransparence, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowTransparence"), "%" SAL_PRIdINT32, aShadowTransparence);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowTransparence"), "%" SAL_PRIdINT32, aShadowTransparence);
 }
 
 void dumpShadowXDistanceAsAttribute(sal_Int32 aShadowXDistance, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowXDistance"), "%" SAL_PRIdINT32, aShadowXDistance);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowXDistance"), "%" SAL_PRIdINT32, aShadowXDistance);
 }
 
 void dumpShadowYDistanceAsAttribute(sal_Int32 aShadowYDistance, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowYDistance"), "%" SAL_PRIdINT32, aShadowYDistance);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("shadowYDistance"), "%" SAL_PRIdINT32, aShadowYDistance);
 }
 
 
@@ -983,49 +983,49 @@ void dumpShadowYDistanceAsAttribute(sal_Int32 aShadowYDistance, xmlTextWriterPtr
 
 void dumpZOrderAsAttribute(sal_Int32 aZOrder, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("zOrder"), "%" SAL_PRIdINT32, aZOrder);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("zOrder"), "%" SAL_PRIdINT32, aZOrder);
 }
 
 void dumpLayerIDAsAttribute(sal_Int32 aLayerID, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("layerID"), "%" SAL_PRIdINT32, aLayerID);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("layerID"), "%" SAL_PRIdINT32, aLayerID);
 }
 
 void dumpLayerNameAsAttribute(std::u16string_view sLayerName, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("layerName"), "%s",
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("layerName"), "%s",
         OUStringToOString(sLayerName, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void dumpVisibleAsAttribute(bool bVisible, xmlTextWriterPtr xmlWriter)
 {
     if(bVisible)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("visible"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("visible"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("visible"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("visible"), "%s", "false");
 }
 
 void dumpPrintableAsAttribute(bool bPrintable, xmlTextWriterPtr xmlWriter)
 {
     if(bPrintable)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("printable"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("printable"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("printable"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("printable"), "%s", "false");
 }
 
 void dumpMoveProtectAsAttribute(bool bMoveProtect, xmlTextWriterPtr xmlWriter)
 {
     if(bMoveProtect)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("moveProtect"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("moveProtect"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("moveProtect"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("moveProtect"), "%s", "false");
 }
 
 void dumpNameAsAttribute(std::u16string_view sName, xmlTextWriterPtr xmlWriter)
 {
     if(!sName.empty() && !m_bNameDumped)
     {
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s", OUStringToOString(sName, RTL_TEXTENCODING_UTF8).getStr());
+        (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s", OUStringToOString(sName, RTL_TEXTENCODING_UTF8).getStr());
         m_bNameDumped = true;
     }
 }
@@ -1033,55 +1033,55 @@ void dumpNameAsAttribute(std::u16string_view sName, xmlTextWriterPtr xmlWriter)
 void dumpSizeProtectAsAttribute(bool bSizeProtect, xmlTextWriterPtr xmlWriter)
 {
     if(bSizeProtect)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("sizeProtect"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("sizeProtect"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("sizeProtect"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("sizeProtect"), "%s", "false");
 }
 
 void dumpHomogenMatrixLine3(const drawing::HomogenMatrixLine3& rHomogenMatrixLine3, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column1"), "%f", rHomogenMatrixLine3.Column1);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column2"), "%f", rHomogenMatrixLine3.Column2);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column3"), "%f", rHomogenMatrixLine3.Column3);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column1"), "%f", rHomogenMatrixLine3.Column1);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column2"), "%f", rHomogenMatrixLine3.Column2);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column3"), "%f", rHomogenMatrixLine3.Column3);
 }
 
 void dumpTransformationAsElement(const drawing::HomogenMatrix3& rTransformation, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Transformation" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Transformation" ));
     {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Line1" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Line1" ));
     dumpHomogenMatrixLine3(rTransformation.Line1, xmlWriter);
-    xmlTextWriterEndElement( xmlWriter );
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Line2" ));
+    (void)xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Line2" ));
     dumpHomogenMatrixLine3(rTransformation.Line2, xmlWriter);
-    xmlTextWriterEndElement( xmlWriter );
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Line3" ));
+    (void)xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Line3" ));
     dumpHomogenMatrixLine3(rTransformation.Line3, xmlWriter);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
     }
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void dumpNavigationOrderAsAttribute(sal_Int32 aNavigationOrder, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("navigationOrder"), "%" SAL_PRIdINT32, aNavigationOrder);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("navigationOrder"), "%" SAL_PRIdINT32, aNavigationOrder);
 }
 
 void dumpHyperlinkAsAttribute(std::u16string_view sHyperlink, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("hyperlink"), "%s",
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("hyperlink"), "%s",
         OUStringToOString(sHyperlink, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void dumpInteropGrabBagAsElement(const uno::Sequence< beans::PropertyValue>& aInteropGrabBag, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "InteropGrabBag" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "InteropGrabBag" ));
 
     sal_Int32 nLength = aInteropGrabBag.getLength();
     for (sal_Int32 i = 0; i < nLength; ++i)
         dumpPropertyValueAsElement(aInteropGrabBag[i], xmlWriter);
 
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 
@@ -1090,19 +1090,19 @@ void dumpInteropGrabBagAsElement(const uno::Sequence< beans::PropertyValue>& aIn
 
 void dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionY"), "%" SAL_PRIdINT32, rPoint.Y);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, rPoint.X);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionY"), "%" SAL_PRIdINT32, rPoint.Y);
 }
 
 void dumpSizeAsAttribute(const awt::Size& rSize, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("sizeX"), "%" SAL_PRIdINT32, rSize.Width);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("sizeY"), "%" SAL_PRIdINT32, rSize.Height);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("sizeX"), "%" SAL_PRIdINT32, rSize.Width);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("sizeY"), "%" SAL_PRIdINT32, rSize.Height);
 }
 
 void dumpShapeDescriptorAsAttribute( const uno::Reference< drawing::XShapeDescriptor >& xDescr, xmlTextWriterPtr xmlWriter )
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%s",
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%s",
         OUStringToOString(xDescr->getShapeType(), RTL_TEXTENCODING_UTF8).getStr());
 }
 
@@ -1112,22 +1112,22 @@ void dumpShapeDescriptorAsAttribute( const uno::Reference< drawing::XShapeDescri
 
 void dumpCustomShapeEngineAsAttribute(std::u16string_view sCustomShapeEngine, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("customShapeEngine"), "%s",
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("customShapeEngine"), "%s",
         OUStringToOString(sCustomShapeEngine, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void dumpCustomShapeDataAsAttribute(
     std::u16string_view sCustomShapeData, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("customShapeData"), "%s",
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("customShapeData"), "%s",
         OUStringToOString(sCustomShapeData, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void dumpPropertyValueAsElement(const beans::PropertyValue& rPropertyValue, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PropertyValue" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PropertyValue" ));
 
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
             OUStringToOString(rPropertyValue.Name, RTL_TEXTENCODING_UTF8).getStr());
 
     uno::Any aAny = rPropertyValue.Value;
@@ -1142,20 +1142,20 @@ void dumpPropertyValueAsElement(const beans::PropertyValue& rPropertyValue, xmlT
     uno::Sequence< beans::PropertyValue > aPropSeq;
     if(aAny >>= sValue)
     {
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
+        (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
                 OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
     }
     else if(aAny >>= nValue)
     {
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%" SAL_PRIdINT32, nValue);
+        (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%" SAL_PRIdINT32, nValue);
     }
     else if(aAny >>= fValue)
     {
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%f", fValue);
+        (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%f", fValue);
     }
     else if(aAny >>= bValue)
     {
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s", (bValue? "true": "false"));
+        (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s", (bValue? "true": "false"));
     }
     else if(rPropertyValue.Name == "ViewBox" && (aAny >>= aRectangleValue))
     {
@@ -1179,13 +1179,13 @@ void dumpPropertyValueAsElement(const beans::PropertyValue& rPropertyValue, xmlT
     }
     else if(aAny >>= aPropSeq)
     {
-        xmlTextWriterStartElement(xmlWriter, BAD_CAST( OUStringToOString(rPropertyValue.Name, RTL_TEXTENCODING_UTF8).getStr() ));
+        (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( OUStringToOString(rPropertyValue.Name, RTL_TEXTENCODING_UTF8).getStr() ));
 
         sal_Int32 i = 0, nCount = aPropSeq.getLength();
         for ( ; i < nCount; i++ )
             dumpPropertyValueAsElement(aPropSeq[ i ], xmlWriter);
 
-        xmlTextWriterEndElement(xmlWriter);
+        (void)xmlTextWriterEndElement(xmlWriter);
     }
 
     // TODO: Add here dumping of XDocument for future OOX Smart-Art
@@ -1193,39 +1193,39 @@ void dumpPropertyValueAsElement(const beans::PropertyValue& rPropertyValue, xmlT
 
     // TODO more, if necessary
 
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("handle"), "%" SAL_PRIdINT32, rPropertyValue.Handle);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("handle"), "%" SAL_PRIdINT32, rPropertyValue.Handle);
 
     switch(rPropertyValue.State)
     {
         case beans::PropertyState_DIRECT_VALUE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DIRECT_VALUE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DIRECT_VALUE");
             break;
         case beans::PropertyState_DEFAULT_VALUE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DEFAULT_VALUE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DEFAULT_VALUE");
             break;
         case beans::PropertyState_AMBIGUOUS_VALUE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "AMBIGUOUS_VALUE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "AMBIGUOUS_VALUE");
             break;
         default:
             break;
     }
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void dumpCustomShapeGeometryAsElement(const uno::Sequence< beans::PropertyValue>& aCustomShapeGeometry, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "CustomShapeGeometry" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "CustomShapeGeometry" ));
 
     sal_Int32 nLength = aCustomShapeGeometry.getLength();
     for (sal_Int32 i = 0; i < nLength; ++i)
         dumpPropertyValueAsElement(aCustomShapeGeometry[i], xmlWriter);
 
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void dumpCustomShapeReplacementURLAsAttribute(std::u16string_view sCustomShapeReplacementURL, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("customShapeReplacementURL"), "%s",
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("customShapeReplacementURL"), "%s",
         OUStringToOString(sCustomShapeReplacementURL, RTL_TEXTENCODING_UTF8).getStr());
 }
 
@@ -1816,7 +1816,7 @@ void dumpCustomShapeService(const uno::Reference< beans::XPropertySet >& xPropSe
 
 void dumpXShape(const uno::Reference< drawing::XShape >& xShape, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties)
 {
-    xmlTextWriterStartElement( xmlWriter, BAD_CAST( "XShape" ) );
+    (void)xmlTextWriterStartElement( xmlWriter, BAD_CAST( "XShape" ) );
     uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY_THROW);
     OUString aName;
     m_bNameDumped = false;
@@ -1836,7 +1836,7 @@ void dumpXShape(const uno::Reference< drawing::XShape >& xShape, xmlTextWriterPt
         uno::Any aAny = xPropSet->getPropertyValue("Name");
         if ((aAny >>= aName) && !aName.isEmpty())
         {
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("name"), "%s", OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("name"), "%s", OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
             m_bNameDumped = true;
         }
     }
@@ -1848,7 +1848,7 @@ void dumpXShape(const uno::Reference< drawing::XShape >& xShape, xmlTextWriterPt
         uno::Reference< text::XText > xText(xShape, uno::UNO_QUERY_THROW);
         OUString aText = xText->getString();
         if(!aText.isEmpty())
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("text"), "%s", OUStringToOString(aText, RTL_TEXTENCODING_UTF8).getStr());
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("text"), "%s", OUStringToOString(aText, RTL_TEXTENCODING_UTF8).getStr());
     }
     if(xServiceInfo->supportsService("com.sun.star.drawing.TextProperties"))
         dumpTextPropertiesService(xPropSet, xmlWriter);
@@ -1917,18 +1917,18 @@ void dumpXShape(const uno::Reference< drawing::XShape >& xShape, xmlTextWriterPt
         sal_Int32 nServices = aServiceNames.getLength();
         for (sal_Int32 i = 0; i < nServices; ++i)
         {
-            xmlTextWriterStartElement(xmlWriter, BAD_CAST( "ServiceName" ));
-            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST( "name" ), "%s", OUStringToOString(aServiceNames[i], RTL_TEXTENCODING_UTF8).getStr());
-            xmlTextWriterEndElement( xmlWriter );
+            (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "ServiceName" ));
+            (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST( "name" ), "%s", OUStringToOString(aServiceNames[i], RTL_TEXTENCODING_UTF8).getStr());
+            (void)xmlTextWriterEndElement( xmlWriter );
         }
     #endif
 
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void dumpXShapes( const uno::Reference< drawing::XShapes >& xShapes, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties )
 {
-    xmlTextWriterStartElement( xmlWriter, BAD_CAST( "XShapes" ) );
+    (void)xmlTextWriterStartElement( xmlWriter, BAD_CAST( "XShapes" ) );
     uno::Reference< container::XIndexAccess > xIA( xShapes, uno::UNO_QUERY_THROW);
     sal_Int32 nLength = xIA->getCount();
     for (sal_Int32 i = 0; i < nLength; ++i)
@@ -1937,7 +1937,7 @@ void dumpXShapes( const uno::Reference< drawing::XShapes >& xShapes, xmlTextWrit
         dumpXShape( xShape, xmlWriter, bDumpInteropProperties );
     }
 
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 } //end of namespace
 
@@ -1948,7 +1948,7 @@ OUString XShapeDumper::dump(const uno::Reference<drawing::XShapes>& xPageShapes,
     xmlTextWriterPtr xmlWriter = xmlNewTextWriter( xmlOutBuffer );
     xmlTextWriterSetIndent( xmlWriter, 1 );
 
-    xmlTextWriterStartDocument( xmlWriter, nullptr, nullptr, nullptr );
+    (void)xmlTextWriterStartDocument( xmlWriter, nullptr, nullptr, nullptr );
 
     try
     {
@@ -1959,7 +1959,7 @@ OUString XShapeDumper::dump(const uno::Reference<drawing::XShapes>& xPageShapes,
         std::cout << "Exception caught in XShapeDumper: " << e.Message << std::endl;
     }
 
-    xmlTextWriterEndDocument( xmlWriter );
+    (void)xmlTextWriterEndDocument( xmlWriter );
     xmlFreeTextWriter( xmlWriter );
 
     return OUString::fromUtf8(aString.makeStringAndClear());
@@ -1972,7 +1972,7 @@ OUString XShapeDumper::dump(const uno::Reference<drawing::XShape>& xPageShapes, 
     xmlTextWriterPtr xmlWriter = xmlNewTextWriter( xmlOutBuffer );
     xmlTextWriterSetIndent( xmlWriter, 1 );
 
-    xmlTextWriterStartDocument( xmlWriter, nullptr, nullptr, nullptr );
+    (void)xmlTextWriterStartDocument( xmlWriter, nullptr, nullptr, nullptr );
 
     try
     {
@@ -1983,7 +1983,7 @@ OUString XShapeDumper::dump(const uno::Reference<drawing::XShape>& xPageShapes, 
         std::cout << "Exception caught in XShapeDumper: " << e.Message << std::endl;
     }
 
-    xmlTextWriterEndDocument( xmlWriter );
+    (void)xmlTextWriterEndDocument( xmlWriter );
     xmlFreeTextWriter( xmlWriter );
 
     return OUString::fromUtf8(aString.makeStringAndClear());

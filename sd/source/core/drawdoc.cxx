@@ -1185,11 +1185,11 @@ void SdDrawDocument::dumpAsXml(xmlTextWriterPtr pWriter) const
         pWriter = xmlNewTextWriterFilename("model.xml", 0);
         xmlTextWriterSetIndent(pWriter,1);
         xmlTextWriterSetIndentString(pWriter, BAD_CAST("  "));
-        xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
+        (void)xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
         bOwns = true;
     }
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SdDrawDocument"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SdDrawDocument"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
     if (mpOutliner)
         mpOutliner->dumpAsXml(pWriter);
@@ -1197,10 +1197,10 @@ void SdDrawDocument::dumpAsXml(xmlTextWriterPtr pWriter) const
     if (GetUndoManager())
         GetUndoManager()->dumpAsXml(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
     if (bOwns)
     {
-        xmlTextWriterEndDocument(pWriter);
+        (void)xmlTextWriterEndDocument(pWriter);
         xmlFreeTextWriter(pWriter);
     }
 }

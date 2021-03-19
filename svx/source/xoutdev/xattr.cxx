@@ -247,12 +247,12 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
 
 void NameOrIndex::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("NameOrIndex"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("isIndex"), BAD_CAST(OString::boolean(IsIndex()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(nPalIndex).getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("NameOrIndex"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("isIndex"), BAD_CAST(OString::boolean(IsIndex()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(nPalIndex).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 SfxPoolItem* XColorItem::CreateDefault() { return new XColorItem; }
@@ -316,17 +316,17 @@ bool XColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 
 void XColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("XColorItem"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XColorItem"));
     if (Which() == SDRATTR_SHADOWCOLOR)
     {
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOWCOLOR"));
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOWCOLOR"));
     }
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aColor"),
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aColor"),
                                 BAD_CAST(aColor.AsRGBHexString().toUtf8().getStr()));
 
     NameOrIndex::dumpAsXml(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 // --- line attributes ---
@@ -1816,16 +1816,16 @@ bool XFillStyleItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*
 
 void XFillStyleItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("XFillStyleItem"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(static_cast<sal_Int16>(GetValue())).getStr()));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XFillStyleItem"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(static_cast<sal_Int16>(GetValue())).getStr()));
 
     OUString aPresentation;
     IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
     GetPresentation(SfxItemPresentation::Nameless, MapUnit::Map100thMM, MapUnit::Map100thMM, aPresentation, aIntlWrapper);
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(aPresentation.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(aPresentation.toUtf8().getStr()));
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 boost::property_tree::ptree XFillStyleItem::dumpAsJSON() const
@@ -1911,10 +1911,10 @@ bool XFillColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*
 
 void XFillColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("XFillColorItem"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(GetColorValue().AsRGBHexString().toUtf8().getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XFillColorItem"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(GetColorValue().AsRGBHexString().toUtf8().getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 boost::property_tree::ptree XFillColorItem::dumpAsJSON() const

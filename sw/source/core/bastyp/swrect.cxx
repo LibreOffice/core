@@ -220,12 +220,12 @@ void SwRect::SetLowerLeftCorner(  const Point& rNew )
 
 void SwRect::dumpAsXmlAttributes(xmlTextWriterPtr writer) const
 {
-    xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("left"), "%li", Left());
-    xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("top"), "%li", Top());
-    xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("width"), "%li", Width());
-    xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("height"), "%li", Height());
-    xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("bottom"), "%li", Bottom());
-    xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("right"), "%li", Right());
+    (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("left"), "%li", Left());
+    (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("top"), "%li", Top());
+    (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("width"), "%li", Width());
+    (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("height"), "%li", Height());
+    (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("bottom"), "%li", Bottom());
+    (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("right"), "%li", Right());
 }
 
 #ifdef DBG_UTIL

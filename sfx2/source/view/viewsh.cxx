@@ -1575,10 +1575,10 @@ void SfxViewShell::NotifyOtherView(OutlinerViewShell* pOther, int nType, const O
 
 void SfxViewShell::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SfxViewShell"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("id"), BAD_CAST(OString::number(static_cast<sal_Int32>(GetViewShellId())).getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxViewShell"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("id"), BAD_CAST(OString::number(static_cast<sal_Int32>(GetViewShellId())).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 bool SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )

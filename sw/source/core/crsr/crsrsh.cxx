@@ -3648,16 +3648,16 @@ OUString SwCursorShell::GetCursorDescr() const
 
 void SwCursorShell::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwCursorShell"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwCursorShell"));
 
     SwViewShell::dumpAsXml(pWriter);
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("m_pCurrentCursor"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("m_pCurrentCursor"));
     for (const SwPaM& rPaM : m_pCurrentCursor->GetRingContainer())
         rPaM.dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 static void lcl_FillRecognizerData( std::vector< OUString >& rSmartTagTypes,

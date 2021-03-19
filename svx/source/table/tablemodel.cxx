@@ -1113,13 +1113,13 @@ void TableModel::updateColumns()
 
 void TableModel::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("TableModel"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("TableModel"));
     for (sal_Int32 nRow = 0; nRow < getRowCountImpl(); ++nRow)
         for (sal_Int32 nCol = 0; nCol < getColumnCountImpl(); ++nCol)
         {
             maRows[nRow]->maCells[nCol]->dumpAsXml(pWriter, nRow, nCol);
         }
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 }

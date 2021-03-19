@@ -232,12 +232,12 @@ void OutlinerParaObject::SetStyleSheets(sal_uInt16 nLevel, const OUString& rNewN
 
 void OutlinerParaObject::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("OutlinerParaObject"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("OutlinerParaObject"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     mpImpl->mpEditTextObject->dumpAsXml(pWriter);
     for (ParagraphData const & p : mpImpl->maParagraphDataVector)
         Paragraph(p).dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
