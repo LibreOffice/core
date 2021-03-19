@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef20cb03_4fd55110",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-19T07:31:52Z",
+      "side": 1,
+      "message": "Please do not write the title of the bug here. The commit message must start with a short 1-line 70-char summary of what the commit does (in imperative mood), not what the problem was.\n\nE.g., something like this:\n\n  tdf#122406: only restart when ...\n\nAnd don\u0027t hesitate to explain further (if you feel it\u0027s reasonable) in following lines.",
+      "range": {
+        "startLine": 7,
+        "startChar": 12,
+        "endLine": 7,
+        "endChar": 79
+      },
+      "revId": "e43a82a93165c02d49d938a64e2374026f0f298b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
