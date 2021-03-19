@@ -683,47 +683,66 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
     if (!maAny.hasValue())
         return;
 
-    const auto xNameAccess = uno::Reference<container::XNameAccess>(maAny, uno::UNO_QUERY);
-    if (xNameAccess.is())
+    try
     {
-        const uno::Sequence<OUString> aNames = xNameAccess->getElementNames();
-        for (OUString const& rName : aNames)
+        const auto xNameAccess = uno::Reference<container::XNameAccess>(maAny, uno::UNO_QUERY);
+        if (xNameAccess.is())
         {
-            uno::Any aAny = xNameAccess->getByName(rName);
-            auto* pObjectInspectorNode = createNodeObjectForAny(
-                u"@" + rName, aAny, SfxResId(STR_PROPERTY_TYPE_IS_NAMED_CONTAINER));
-            lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
-        }
-    }
-
-    const auto xIndexAccess = uno::Reference<container::XIndexAccess>(maAny, uno::UNO_QUERY);
-    if (xIndexAccess.is())
-    {
-        for (sal_Int32 nIndex = 0; nIndex < xIndexAccess->getCount(); ++nIndex)
-        {
-            uno::Any aAny = xIndexAccess->getByIndex(nIndex);
-            auto* pObjectInspectorNode
-                = createNodeObjectForAny(u"@" + OUString::number(nIndex), aAny,
-                                         SfxResId(STR_PROPERTY_TYPE_IS_INDEX_CONTAINER));
-            lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
-        }
-    }
-
-    const auto xEnumAccess = uno::Reference<container::XEnumerationAccess>(maAny, uno::UNO_QUERY);
-    if (xEnumAccess.is())
-    {
-        uno::Reference<container::XEnumeration> xEnumeration = xEnumAccess->createEnumeration();
-        if (xEnumeration.is())
-        {
-            for (sal_Int32 nIndex = 0; xEnumeration->hasMoreElements(); nIndex++)
+            const uno::Sequence<OUString> aNames = xNameAccess->getElementNames();
+            for (OUString const& rName : aNames)
             {
-                uno::Any aAny = xEnumeration->nextElement();
-                auto* pObjectInspectorNode
-                    = createNodeObjectForAny(u"@" + OUString::number(nIndex), aAny,
-                                             SfxResId(STR_PROPERTY_TYPE_IS_ENUMERATION));
+                uno::Any aAny = xNameAccess->getByName(rName);
+                auto* pObjectInspectorNode = createNodeObjectForAny(
+                    u"@" + rName, aAny, SfxResId(STR_PROPERTY_TYPE_IS_NAMED_CONTAINER));
                 lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
             }
         }
+    }
+    catch (...)
+    {
+    }
+
+    try
+    {
+        const auto xIndexAccess = uno::Reference<container::XIndexAccess>(maAny, uno::UNO_QUERY);
+        if (xIndexAccess.is())
+        {
+            for (sal_Int32 nIndex = 0; nIndex < xIndexAccess->getCount(); ++nIndex)
+            {
+                uno::Any aAny = xIndexAccess->getByIndex(nIndex);
+                auto* pObjectInspectorNode
+                    = createNodeObjectForAny(u"@" + OUString::number(nIndex), aAny,
+                                             SfxResId(STR_PROPERTY_TYPE_IS_INDEX_CONTAINER));
+                lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
+            }
+        }
+    }
+    catch (...)
+    {
+    }
+
+    try
+    {
+        const auto xEnumAccess
+            = uno::Reference<container::XEnumerationAccess>(maAny, uno::UNO_QUERY);
+        if (xEnumAccess.is())
+        {
+            uno::Reference<container::XEnumeration> xEnumeration = xEnumAccess->createEnumeration();
+            if (xEnumeration.is())
+            {
+                for (sal_Int32 nIndex = 0; xEnumeration->hasMoreElements(); nIndex++)
+                {
+                    uno::Any aAny = xEnumeration->nextElement();
+                    auto* pObjectInspectorNode
+                        = createNodeObjectForAny(u"@" + OUString::number(nIndex), aAny,
+                                                 SfxResId(STR_PROPERTY_TYPE_IS_ENUMERATION));
+                    lclAppendNodeToParent(pTree, pParent, pObjectInspectorNode);
+                }
+            }
+        }
+    }
+    catch (...)
+    {
     }
 
     auto xInvocationFactory = css::script::Invocation::create(mxContext);
@@ -736,10 +755,20 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
     if (!xInvocation.is())
         return;
 
-    const auto xInvocationAccess = xInvocation->getIntrospection();
+    auto const& xInvocationAccess = xInvocation->getIntrospection();
+    if (!xInvocationAccess.is())
+        return;
 
-    const auto aInvocationInfoSequence = xInvocation->getInfo();
-    for (auto const& aInvocationInfo : aInvocationInfoSequence)
+    uno::Sequence<script::InvocationInfo> aInvocationInfoSequence;
+    try
+    {
+        aInvocationInfoSequence = xInvocation->getInfo();
+    }
+    catch (...)
+    {
+    }
+
+    for (auto const& aInvocationInfo : std::as_const(aInvocationInfoSequence))
     {
         if (aInvocationInfo.eMemberType == script::MemberType_PROPERTY)
         {
