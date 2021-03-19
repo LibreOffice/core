@@ -3137,6 +3137,7 @@ public:
             gtk_widget_destroy(m_pMouseEventBox);
 
             gtk_container_add(GTK_CONTAINER(pParent), m_pWidget);
+            // coverity[freed_arg : FALSE] - this does not free m_pWidget, it is reffed by pParent
             g_object_unref(m_pWidget);
         }
 
