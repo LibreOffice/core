@@ -78,8 +78,7 @@ StylePoolChangeListener::StylePoolChangeListener(StylesPreviewWindow_Base* pPrev
 {
     SfxObjectShell* pDocShell = SfxObjectShell::Current();
 
-    if (pDocShell)
-        m_pStyleSheetPool = pDocShell->GetStyleSheetPool();
+    m_pStyleSheetPool = pDocShell ? pDocShell->GetStyleSheetPool() : nullptr;
 
     if (m_pStyleSheetPool)
     {
