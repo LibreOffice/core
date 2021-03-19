@@ -1092,7 +1092,7 @@ void Outliner::InvalidateBullet(sal_Int32 nPara)
         aRect.SetBottom( aPos.Y() );
         aRect.AdjustBottom(nLineHeight );
 
-        pView->GetWindow()->Invalidate( aRect );
+        pView->pEditView->InvalidateWindow(aRect);
     }
 }
 
