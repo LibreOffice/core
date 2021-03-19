@@ -90,6 +90,30 @@
     },
     {
       "key": {
+        "uuid": "80d2f2c8_23ff6326",
+        "filename": "configure.ac",
+        "patchSetId": 6
+      },
+      "lineNbr": 10865,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-19T07:47:43Z",
+      "side": 1,
+      "message": "... but generally I don\u0027t insist on my PoV; if that works (i.e., if it\u0027s considered enough that a library with stated name links, and we don\u0027t think it\u0027s necessary to check that it contains required functions), then please ignore me. It\u0027s only strange that it failed for OP; and indeed, as Rene points out, you need to check the actual error output.",
+      "parentUuid": "a2eefcfb_ae8288fc",
+      "range": {
+        "startLine": 10865,
+        "startChar": 22,
+        "endLine": 10865,
+        "endChar": 35
+      },
+      "revId": "c0d9ed9b4d40ab0a025f604f4ee11cf8c4b033c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "51360aad_5cb5360e",
         "filename": "external/zxing/StaticLibrary_zxing.mk",
         "patchSetId": 6
