@@ -91,7 +91,7 @@ void SdScaleControl::Command(const CommandEvent& rCEvt)
         if (i > 11)
             nX = 1;
         else
-            nX = aTable[12 - i % 12];
+            nX = aTable[(12 - i) % 12];
         if (i > 11)
             nY = aTable[i % 12];
         else
