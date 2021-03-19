@@ -40,7 +40,7 @@
 // is unlikely ever be a better choice than WeakImplHelper, so all their
 // existing uses are probably confused and should use WeakImplHelper instead.
 //
-// Replacements for WeakAggImplHelperN and AggImplInheritanceHelper1 have
+// Replacements for WeakAggImplHelperN and AggImplInheritanceHelperN have
 // deliberately been left out, as the underlying aggregation mechanism is known
 // broken in general and should not be used.
 
