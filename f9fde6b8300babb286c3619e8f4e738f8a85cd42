@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "66a2b5bf_9f71f0b1",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2830,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-19T10:29:44Z",
+      "side": 1,
+      "message": "aNodeIdx or aIdx (as below)\n\nUsing plural for an index is a little bit misleading.",
+      "range": {
+        "startLine": 2830,
+        "startChar": 16,
+        "endLine": 2830,
+        "endChar": 22
+      },
+      "revId": "f9fde6b8300babb286c3619e8f4e738f8a85cd42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2780e9bc_7eeac8ba",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2833,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-19T10:29:44Z",
+      "side": 1,
+      "message": "nice optimization! There is a - likely better - function to check empty nodes:\n\nGetText().isEmpty()",
+      "range": {
+        "startLine": 2833,
+        "startChar": 45,
+        "endLine": 2833,
+        "endChar": 98
+      },
+      "revId": "f9fde6b8300babb286c3619e8f4e738f8a85cd42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab0bf183_77277823",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2844,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-19T10:29:44Z",
+      "side": 1,
+      "message": "Instead of this separated branch, it\u0027s better to use it in the estimation:\n\n(nAffectedChars - nSttCnt)/6 \u003e nMaxRedlines",
+      "revId": "f9fde6b8300babb286c3619e8f4e738f8a85cd42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85de3afc_8fa6f929",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2848,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-19T10:29:44Z",
+      "side": 1,
+      "message": "Instead of this separated branch, it\u0027s better to use it at the beginning:\n\nsal_uLong nAffectedChars \u003d nEndCnt;",
+      "revId": "f9fde6b8300babb286c3619e8f4e738f8a85cd42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "010bf6f7_26368397",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2863,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-19T10:29:44Z",
+      "side": 1,
+      "message": "unnecessary, because bAllowRedline is already true",
+      "revId": "f9fde6b8300babb286c3619e8f4e738f8a85cd42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16206bbf_14418932",
+        "filename": "sw/source/core/txtnode/txtedt.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1911,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-19T10:29:44Z",
+      "side": 1,
+      "message": "You can move this test to the caller, calling it once instead of n times for n nodes",
+      "range": {
+        "startLine": 1911,
+        "startChar": 42,
+        "endLine": 1911,
+        "endChar": 94
+      },
+      "revId": "f9fde6b8300babb286c3619e8f4e738f8a85cd42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
