@@ -1378,7 +1378,7 @@ void SidebarController::UpdateDeckOpenState()
 
     mbIsDeckOpen = *mbIsDeckRequestedOpen;
     if (*mbIsDeckOpen && mpCurrentDeck)
-        mpCurrentDeck->Show(*mbIsDeckOpen);
+        mpCurrentDeck->Show();
     NotifyResize();
 }
 
