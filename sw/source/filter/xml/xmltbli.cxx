@@ -127,6 +127,7 @@ public:
     sal_uInt32 GetRowSpan() const { return nRowSpan; }
     void SetRowSpan( sal_uInt32 nSet ) { nRowSpan = nSet; }
     sal_uInt32 GetColSpan() const { return nColSpan; }
+    void SetStyleName(const OUString& rStyleName) { aStyleName = rStyleName; }
     const OUString& GetStyleName() const { return aStyleName; }
     const OUString& GetFormula() const { return sFormula; }
     double GetValue() const { return dValue; }
@@ -333,6 +334,36 @@ public:
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 };
 
+/// Handles <table:covered-table-cell>.
+class SwXMLCoveredTableCellContext : public SvXMLImportContext
+{
+public:
+    SwXMLCoveredTableCellContext(SwXMLImport& rImport,
+                                 const Reference<xml::sax::XFastAttributeList>& xAttrList,
+                                 SwXMLTableContext& rTable);
+};
+
+SwXMLCoveredTableCellContext::SwXMLCoveredTableCellContext(
+    SwXMLImport& rImport, const Reference<xml::sax::XFastAttributeList>& xAttrList,
+    SwXMLTableContext& rTable)
+    : SvXMLImportContext(rImport)
+{
+    OUString aStyleName;
+    for (auto& rIter : sax_fastparser::castToFastAttributeList(xAttrList))
+    {
+        switch (rIter.getToken())
+        {
+            case XML_ELEMENT(TABLE, XML_STYLE_NAME):
+                aStyleName = rIter.toString();
+                break;
+        }
+    }
+
+    if (!aStyleName.isEmpty())
+    {
+        rTable.InsertCoveredCell(aStyleName);
+    }
+}
 }
 
 SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
@@ -831,7 +862,16 @@ css::uno::Reference<css::xml::sax::XFastContextHandler> SwXMLTableRowContext_Imp
     }
     else if( nElement == XML_ELEMENT(TABLE, XML_COVERED_TABLE_CELL) ||
              nElement == XML_ELEMENT(LO_EXT, XML_COVERED_TABLE_CELL) )
-        pContext = new SvXMLImportContext( GetImport() );
+    {
+        if (GetTable()->IsValid() && GetTable()->IsInsertCoveredCellPossible())
+        {
+            pContext = new SwXMLCoveredTableCellContext(GetSwImport(), xAttrList, *GetTable());
+        }
+        else
+        {
+            pContext = new SvXMLImportContext(GetImport());
+        }
+    }
     else
         SAL_WARN("sw", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
 
@@ -1101,6 +1141,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     m_nHeaderRows( 0 ),
     m_nCurRow( 0 ),
     m_nCurCol( 0 ),
+    m_nNonMergedCurCol( 0 ),
     m_nWidth( 0 )
 {
     OUString aName;
@@ -1236,6 +1277,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     m_nHeaderRows( 0 ),
     m_nCurRow( 0 ),
     m_nCurCol( 0 ),
+    m_nNonMergedCurCol( 0 ),
     m_nWidth( 0 )
 {
 }
@@ -1459,8 +1501,21 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
 
     // Set current col to the next (free) column
     m_nCurCol = nColsReq;
+    m_nNonMergedCurCol = nColsReq;
     while( m_nCurCol<GetColumnCount() && GetCell(m_nCurRow,m_nCurCol)->IsUsed() )
         m_nCurCol++;
+}
+
+void SwXMLTableContext::InsertCoveredCell(const OUString& rStyleName)
+{
+    SwXMLTableCell_Impl* pCell = GetCell(m_nCurRow, m_nNonMergedCurCol);
+    ++m_nNonMergedCurCol;
+    if (!pCell)
+    {
+        return;
+    }
+
+    pCell->SetStyleName(rStyleName);
 }
 
 void SwXMLTableContext::InsertRow( const OUString& rStyleName,
@@ -1493,6 +1548,7 @@ void SwXMLTableContext::InsertRow( const OUString& rStyleName,
 
     // We start at the first column ...
     m_nCurCol=0;
+    m_nNonMergedCurCol = 0;
 
     // ... but this cell may be occupied already.
     while( m_nCurCol<GetColumnCount() && GetCell(m_nCurRow,m_nCurCol)->IsUsed() )
