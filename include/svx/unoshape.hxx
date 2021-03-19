@@ -794,11 +794,7 @@ public:
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-typedef ::cppu::WeakAggImplHelper1<
-    css::drawing::XEnhancedCustomShapeDefaulter
-    > SvxShape_UnoImplHelper1;
-
-class SVXCORE_DLLPUBLIC SvxCustomShape final : public SvxShapeText, public SvxShape_UnoImplHelper1
+class SVXCORE_DLLPUBLIC SvxCustomShape final : public SvxShapeText, public css::drawing::XEnhancedCustomShapeDefaulter
 {
 protected:
     using SvxUnoTextRangeBase::setPropertyValue;
