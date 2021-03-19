@@ -106,7 +106,7 @@ static sal_Int64 ImpStringToCurrency( const OUString &rStr )
     OUStringBuffer sNormalisedNumString( sTmp.getLength() +  nFractDigit );
 
     if ( *p == '-'  || *p == '+' )
-        sNormalisedNumString.append( *p );
+        sNormalisedNumString.append( *p++ );
 
     while ( *p >= '0' && *p <= '9' )
     {
