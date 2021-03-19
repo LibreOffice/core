@@ -47,7 +47,6 @@
 
 using namespace css::uno;
 using namespace css::frame;
-using namespace css::lang;
 using namespace css::sheet;
 using namespace css::text;
 using namespace css::drawing;
@@ -204,7 +203,7 @@ void QrCodeGenDialog::Apply()
     // Default anchoring
     xShapeProps->setPropertyValue("AnchorType", Any(TextContentAnchorType_AT_PARAGRAPH));
 
-    const Reference<XServiceInfo> xServiceInfo(m_xModel, UNO_QUERY_THROW);
+    const Reference<css::lang::XServiceInfo> xServiceInfo(m_xModel, UNO_QUERY_THROW);
 
     // Writer
     if (xServiceInfo->supportsService("com.sun.star.text.TextDocument"))
