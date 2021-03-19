@@ -45,10 +45,13 @@ public:
 
     static void       ImplDeInitScheduler();
 
-    /// Process one pending Timer with highest priority
-    static void       CallbackTaskScheduling();
-    /// Process one pending task ahead of time with highest priority.
-    static bool       ProcessTaskScheduling();
+    /**
+     * System timer callback function, which processes one LO task
+     *
+     * Will restart the system timer, so it will process further tasks at the right time.
+     **/
+    static void CallbackTaskScheduling();
+
     /**
      * Process all events until none is pending
      *
