@@ -347,7 +347,7 @@ public:
     /// Virtual methods from ContentNode.
     virtual SwContentFrame *MakeFrame( SwFrame* ) override;
     SwTextNode * SplitContentNode(const SwPosition &,
-            std::function<void (SwTextNode *, sw::mark::RestoreMode)> const* pContentIndexRestore);
+            std::function<void (SwTextNode *, sw::mark::RestoreMode, bool AtStart)> const* pContentIndexRestore);
     virtual SwContentNode *JoinNext() override;
     void JoinPrev();
 
