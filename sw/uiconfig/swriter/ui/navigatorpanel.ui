@@ -250,6 +250,7 @@
                 <property name="hexpand">True</property>
                 <property name="orientation">vertical</property>
                 <child>
+                  <!-- n-columns=4 n-rows=1 -->
                   <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -258,6 +259,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="toolbar_style">icons</property>
+                        <property name="show-arrow">False</property>
                         <child>
                           <object class="GtkToggleToolButton" id="contenttoggle">
                             <property name="visible">True</property>
@@ -287,6 +289,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="toolbar_style">icons</property>
+                        <property name="show-arrow">False</property>
                         <child>
                           <object class="GtkToolItem" id=".uno:NavElement">
                             <property name="visible">True</property>
@@ -331,6 +334,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="toolbar_style">icons</property>
+                        <property name="show-arrow">False</property>
                         <child>
                           <object class="GtkToolButton" id=".uno:ScrollToPrevious">
                             <property name="visible">True</property>
@@ -363,6 +367,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="toolbar_style">icons</property>
+                        <property name="show-arrow">False</property>
                         <child>
                           <object class="GtkToolItem" id="contentedit">
                             <property name="visible">True</property>
