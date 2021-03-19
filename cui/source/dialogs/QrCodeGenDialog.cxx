@@ -46,7 +46,6 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
 using namespace css::uno;
-using namespace css::container;
 using namespace css::frame;
 using namespace css::io;
 using namespace css::lang;
@@ -75,7 +74,7 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
     if (!bEditExisting)
     {
         // TODO: This only works in Writer doc. Should also work in shapes
-        Reference<XIndexAccess> xSelections(m_xModel->getCurrentSelection(), UNO_QUERY);
+        Reference<css::container::XIndexAccess> xSelections(m_xModel->getCurrentSelection(), UNO_QUERY);
         if (xSelections.is())
         {
             Reference<XTextRange> xSelection(xSelections->getByIndex(0), UNO_QUERY);
