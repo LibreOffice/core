@@ -218,6 +218,7 @@ public:
     sal_uInt32 GetRowSpan() const { return nRowSpan; }
     void SetRowSpan( sal_uInt32 nSet ) { nRowSpan = nSet; }
     sal_uInt32 GetColSpan() const { return nColSpan; }
+    void SetStyleName(const OUString& rStyleName) { aStyleName = rStyleName; }
     const OUString& GetStyleName() const { return aStyleName; }
     const OUString& GetFormula() const { return sFormula; }
     double GetValue() const { return dValue; }
@@ -435,6 +436,47 @@ public:
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 };
+
+/// Handles <table:covered-table-cell>.
+class SwXMLCoveredTableCellContext : public SvXMLImportContext
+{
+public:
+    SwXMLCoveredTableCellContext(SwXMLImport& rImport,
+                                 const Reference<xml::sax::XAttributeList>& xAttrList,
+                                 SwXMLTableContext& rTable);
+};
+
+SwXMLCoveredTableCellContext::SwXMLCoveredTableCellContext(
+    SwXMLImport& rImport, const Reference<xml::sax::XAttributeList>& xAttrList,
+    SwXMLTableContext& rTable)
+    : SvXMLImportContext(rImport)
+{
+    OUString aStyleName;
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+
+        OUString aLocalName;
+        const sal_uInt16 nPrefix =
+            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                                                            &aLocalName );
+        const OUString& rValue = xAttrList->getValueByIndex( i );
+        const SvXMLTokenMap& rTokenMap =
+            rImport.GetTableCellAttrTokenMap();
+        switch( rTokenMap.Get( nPrefix, aLocalName ) )
+        {
+            case XML_TOK_TABLE_STYLE_NAME:
+                aStyleName = rValue;
+                break;
+        }
+    }
+
+    if (!aStyleName.isEmpty())
+    {
+        rTable.InsertCoveredCell(aStyleName);
+    }
+}
 
 SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -966,8 +1008,17 @@ SvXMLImportContextRef SwXMLTableRowContext_Impl::CreateChildContext(
                                                            GetTable() );
         }
         else if( IsXMLToken( rLocalName, XML_COVERED_TABLE_CELL ) )
-            pContext = new SvXMLImportContext( GetImport(), nPrefix,
-                                               rLocalName );
+        {
+            if (GetTable()->IsValid() && GetTable()->IsInsertCoveredCellPossible())
+            {
+                pContext = new SwXMLCoveredTableCellContext(GetSwImport(), xAttrList, *GetTable());
+            }
+            else
+            {
+                pContext = new SvXMLImportContext( GetImport(), nPrefix,
+                                                   rLocalName );
+            }
+        }
     }
 
     if( !pContext )
@@ -1262,6 +1313,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     m_nHeaderRows( 0 ),
     m_nCurRow( 0 ),
     m_nCurCol( 0 ),
+    m_nNonMergedCurCol( 0 ),
     m_nWidth( 0 )
 {
     OUString aName;
@@ -1402,6 +1454,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     m_nHeaderRows( 0 ),
     m_nCurRow( 0 ),
     m_nCurCol( 0 ),
+    m_nNonMergedCurCol( 0 ),
     m_nWidth( 0 )
 {
 }
@@ -1634,8 +1687,21 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
 
     // Set current col to the next (free) column
     m_nCurCol = nColsReq;
+    m_nNonMergedCurCol = nColsReq;
     while( m_nCurCol<GetColumnCount() && GetCell(m_nCurRow,m_nCurCol)->IsUsed() )
         m_nCurCol++;
+}
+
+void SwXMLTableContext::InsertCoveredCell(const OUString& rStyleName)
+{
+    SwXMLTableCell_Impl* pCell = GetCell(m_nCurRow, m_nNonMergedCurCol);
+    ++m_nNonMergedCurCol;
+    if (!pCell)
+    {
+        return;
+    }
+
+    pCell->SetStyleName(rStyleName);
 }
 
 void SwXMLTableContext::InsertRow( const OUString& rStyleName,
@@ -1669,6 +1735,7 @@ void SwXMLTableContext::InsertRow( const OUString& rStyleName,
 
     // We start at the first column ...
     m_nCurCol=0;
+    m_nNonMergedCurCol = 0;
 
     // ... but this cell may be occupied already.
     while( m_nCurCol<GetColumnCount() && GetCell(m_nCurRow,m_nCurCol)->IsUsed() )
