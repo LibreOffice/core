@@ -128,6 +128,24 @@
       "revId": "c0d9ed9b4d40ab0a025f604f4ee11cf8c4b033c2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d90c1f5_18ea57d5",
+        "filename": "external/zxing/StaticLibrary_zxing.mk",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-19T09:31:38Z",
+      "side": 1,
+      "message": "Also, please look forward to this as well!",
+      "parentUuid": "51360aad_5cb5360e",
+      "revId": "c0d9ed9b4d40ab0a025f604f4ee11cf8c4b033c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
