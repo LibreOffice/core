@@ -1074,8 +1074,8 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                 if (pTextNd->GetText()[nChPos] == cCh)
                 {
                     aCntPos.nContent = nChPos;
-                    std::function<void (SwTextNode *, sw::mark::RestoreMode)> restoreFunc(
-                        [&](SwTextNode *const pNewNode, sw::mark::RestoreMode const eMode)
+                    std::function<void (SwTextNode *, sw::mark::RestoreMode, bool)> restoreFunc(
+                        [&](SwTextNode *const pNewNode, sw::mark::RestoreMode const eMode, bool)
                         {
                             if (!pContentStore->Empty())
                             {
