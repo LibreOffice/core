@@ -190,6 +190,7 @@ task copyAssets(type: Copy) {
     into('config') {
         from "${liboInstdir}/share/config"
         include '**/pagebreakmenu.ui', '**/annotationmenu.ui', '**/headerfootermenu.ui',
+                '**/inforeadonlydialog.ui',
                 '**/tabviewbar.ui'
     }
 }
