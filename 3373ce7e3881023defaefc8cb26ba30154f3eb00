@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d61a5e63_42f5809f",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2186,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-19T14:52:34Z",
+      "side": 1,
+      "message": "I believe, it\u0027s more readable with an else and a comment:\n\n                            // tdf#36383 skip consecutive rows hidden by AutoFilter\n                            if ( rDoc.RowFiltered(nRow, nTab, nullptr, \u0026nLastRow) )\n                                nRow \u003d nLastRow;\n                            else\n                                rDoc.ShowRow(nRow, nTab, true);",
+      "revId": "3373ce7e3881023defaefc8cb26ba30154f3eb00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8f11a9e_ef7103ac",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2209,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-19T14:52:34Z",
+      "side": 1,
+      "message": "as above",
+      "revId": "3373ce7e3881023defaefc8cb26ba30154f3eb00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
