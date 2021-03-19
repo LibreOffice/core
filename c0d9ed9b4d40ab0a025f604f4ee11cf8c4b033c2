@@ -146,6 +146,24 @@
       "revId": "c0d9ed9b4d40ab0a025f604f4ee11cf8c4b033c2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4af85571_d87d7200",
+        "filename": "external/zxing/StaticLibrary_zxing.mk",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-19T09:35:14Z",
+      "side": 1,
+      "message": "I suppose that this is not strictly necessary, but being consistent never hurts, so please make these two includes consistent.",
+      "parentUuid": "6d90c1f5_18ea57d5",
+      "revId": "c0d9ed9b4d40ab0a025f604f4ee11cf8c4b033c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
