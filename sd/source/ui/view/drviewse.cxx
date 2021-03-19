@@ -605,6 +605,10 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     if(!(HasCurrentFunction() && ((rReq.GetModifier() & KEY_MOD1) || bCreateDirectly)))
         return;
 
+    // disable interactive drawing for LOK
+    if (bCreateDirectly)
+            GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
+
     // get SdOptions
     SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
     sal_uInt32 nDefaultObjectSizeWidth(pOptions->GetDefaultObjectSizeWidth());
