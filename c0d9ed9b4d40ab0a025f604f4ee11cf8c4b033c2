@@ -66,6 +66,30 @@
     },
     {
       "key": {
+        "uuid": "a2eefcfb_ae8288fc",
+        "filename": "configure.ac",
+        "patchSetId": 6
+      },
+      "lineNbr": 10865,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-19T04:20:27Z",
+      "side": 1,
+      "message": "Well, then AC_CHECK_LIB is just inappropriate, and something like AC_LINK_IFELSE plus AC_LANG_PROGRAM are needed.",
+      "parentUuid": "29cf3ca8_c373483a",
+      "range": {
+        "startLine": 10865,
+        "startChar": 22,
+        "endLine": 10865,
+        "endChar": 35
+      },
+      "revId": "c0d9ed9b4d40ab0a025f604f4ee11cf8c4b033c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "51360aad_5cb5360e",
         "filename": "external/zxing/StaticLibrary_zxing.mk",
         "patchSetId": 6
