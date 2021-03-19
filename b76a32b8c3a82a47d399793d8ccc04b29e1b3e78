@@ -16,6 +16,24 @@
       "revId": "b76a32b8c3a82a47d399793d8ccc04b29e1b3e78",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10f8a8e3_b4bdc135",
+        "filename": "vcl/unx/gtk3/gtk3gtkframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1562,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-03-19T09:02:52Z",
+      "side": 1,
+      "message": "Yes, might be - problem is that I see no \u0027official Hint/Info\u0027 that it is \u0027there\u0027 and has to be taken into account. As long as this native thing exists implicitly it might be better to deal with \u0027some diff between gtk and internal\u0027 hor \u0026\u0026 ver to get all these (evtl. there will be more native things?) covered (?).\nSomething like \u0027NativeTransform/ImplementationDetailOffset\u0027 that officially covers that distance, maybe (transform due to not only having offset like here, but maybe scale and offset on all sides?).\nI am not deeply involved in gtk impl stuff and thus have no overview/plan on what the ideal state would be. I think for getting this work - for now - using the implicit diff as I do now should be fine. Then - someone more involved here - should think about adding official support for these implicit stuff?\nBTW: Seems as if the same mechanism should/will be needed in ::GetClientSize and evtl. other places - the bugdoc at tdf#130841 still does create size reductions with this fix.\n\nSo I would say: Can we use current change to fix the main error and have someone who knows this area do more?",
+      "parentUuid": "644f9d11_4bf7704c",
+      "revId": "b76a32b8c3a82a47d399793d8ccc04b29e1b3e78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
