@@ -26,7 +26,7 @@
 // Dialog buttons
 #define STR_STANDARD_LABEL                      NC_("STR_STANDARD_LABEL", "Reset to ~Parent")
 #define STR_STANDARD_TOOLTIP                    NC_("STR_STANDARD_TOOLTIP", "Values on this tab specified in “Contains” in Organizer are removed.")
-#define STR_STANDARD_EXTENDEDTIP                NC_("STR_STANDARD_EXTENDEDTIP", "")
+#define STR_STANDARD_EXTENDEDTIP                NC_("STR_STANDARD_EXTENDEDTIP", "Reset the values of this page to the values of the parent style. Values on this tab specified in “Contains” in Organizer are removed.")
 #define STR_RESET_LABEL                         NC_("STR_RESET_LABEL", "Reset")
 #define STR_RESET_TOOLTIP                       NC_("STR_RESET_TOOLTIP", "Unsaved modifications to this tab are reverted.")
 #define STR_RESET_EXTENDEDTIP                   NC_("STR_RESET_EXTENDEDTIP", "Revert any changes made on the current tab to the settings that were present when this dialog was opened, or after the last use of “Apply”.")
