@@ -2892,15 +2892,15 @@ OUString ChartView::dump()
 
 void ChartView::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("ChartView"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ChartView"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
     if (m_pDrawModelWrapper)
     {
         m_pDrawModelWrapper->dumpAsXml(pWriter);
     }
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 void ChartView::setViewDirty()

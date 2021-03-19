@@ -542,25 +542,25 @@ void SwUndoDrawDelete::AddObj( SwDrawFrameFormat* pFormat,
 
 void SwUndoDrawDelete::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwUndoDrawDelete"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwUndoDrawDelete"));
 
     for (size_t i = 0; i < m_pMarkList->GetMarkCount(); ++i)
     {
         SwUndoGroupObjImpl& rObj = m_pObjArray[i];
-        xmlTextWriterStartElement(pWriter, BAD_CAST("SwUndoGroupObjImpl"));
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"),
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwUndoGroupObjImpl"));
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"),
                                     BAD_CAST(OString::number(i).getStr()));
 
         if (rObj.pFormat)
         {
-            xmlTextWriterStartElement(pWriter, BAD_CAST("pFormat"));
+            (void)xmlTextWriterStartElement(pWriter, BAD_CAST("pFormat"));
             rObj.pFormat->dumpAsXml(pWriter);
-            xmlTextWriterEndElement(pWriter);
+            (void)xmlTextWriterEndElement(pWriter);
         }
-        xmlTextWriterEndElement(pWriter);
+        (void)xmlTextWriterEndElement(pWriter);
     }
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

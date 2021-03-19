@@ -1766,18 +1766,18 @@ void MarkManager::dumpAsXml(xmlTextWriterPtr pWriter) const
         {"annotationmarks", &m_vAnnotationMarks}
     };
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("MarkManager"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("MarkManager"));
     for (const auto & rContainer : aContainers)
     {
         if (!rContainer.pContainer->empty())
         {
-            xmlTextWriterStartElement(pWriter, BAD_CAST(rContainer.pName));
+            (void)xmlTextWriterStartElement(pWriter, BAD_CAST(rContainer.pName));
             for (auto it = rContainer.pContainer->begin(); it != rContainer.pContainer->end(); ++it)
                 (*it)->dumpAsXml(pWriter);
-            xmlTextWriterEndElement(pWriter);
+            (void)xmlTextWriterEndElement(pWriter);
         }
     }
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 } // namespace ::sw::mark

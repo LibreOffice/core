@@ -655,14 +655,14 @@ bool UndoManager::Redo()
 
 void UndoManager::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swUndoManager"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("swUndoManager"));
     SdrUndoManager::dumpAsXml(pWriter);
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("m_xUndoNodes"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("m_xUndoNodes"));
     m_xUndoNodes->dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 void UndoManager::EmptyActionsChanged()

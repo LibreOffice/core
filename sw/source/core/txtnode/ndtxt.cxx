@@ -5168,44 +5168,44 @@ sal_uInt16 SwTextNode::ResetAllAttr()
 
 void SwTextNode::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwTextNode"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(GetIndex()).getStr()));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTextNode"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(GetIndex()).getStr()));
 
     OUString sText = GetText();
     for (int i = 0; i < 32; ++i)
         sText = sText.replace(i, '*');
-    xmlTextWriterStartElement(pWriter, BAD_CAST("m_Text"));
-    xmlTextWriterWriteString(pWriter, BAD_CAST(sText.toUtf8().getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("m_Text"));
+    (void)xmlTextWriterWriteString(pWriter, BAD_CAST(sText.toUtf8().getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 
     if (GetFormatColl())
     {
-        xmlTextWriterStartElement(pWriter, BAD_CAST("SwTextFormatColl"));
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetFormatColl()->GetName().toUtf8().getStr()));
-        xmlTextWriterEndElement(pWriter);
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTextFormatColl"));
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetFormatColl()->GetName().toUtf8().getStr()));
+        (void)xmlTextWriterEndElement(pWriter);
     }
 
     if (HasSwAttrSet())
     {
-        xmlTextWriterStartElement(pWriter, BAD_CAST("SwAttrSet"));
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwAttrSet"));
         GetSwAttrSet().dumpAsXml(pWriter);
-        xmlTextWriterEndElement(pWriter);
+        (void)xmlTextWriterEndElement(pWriter);
     }
 
     if (HasHints())
     {
-        xmlTextWriterStartElement(pWriter, BAD_CAST("SwpHints"));
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwpHints"));
         const SwpHints& rHints = GetSwpHints();
         for (size_t i = 0; i < rHints.Count(); ++i)
             rHints.Get(i)->dumpAsXml(pWriter);
-        xmlTextWriterEndElement(pWriter);
+        (void)xmlTextWriterEndElement(pWriter);
     }
 
     if (GetNumRule())
         GetNumRule()->dumpAsXml(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 sal_uInt32 SwTextNode::GetRsid( sal_Int32 nStt, sal_Int32 nEnd ) const

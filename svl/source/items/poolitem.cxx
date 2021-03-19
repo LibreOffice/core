@@ -539,17 +539,18 @@ bool SfxPoolItem::GetPresentation(
 
 void SfxPoolItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SfxPoolItem"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"),
-                                BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("typeName"), BAD_CAST(typeid(*this).name()));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxPoolItem"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"),
+                                      BAD_CAST(OString::number(Which()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("typeName"),
+                                      BAD_CAST(typeid(*this).name()));
     OUString rText;
     IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
     if (GetPresentation(SfxItemPresentation::Complete, MapUnit::Map100thMM, MapUnit::Map100thMM,
                         rText, aIntlWrapper))
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"),
-                                    BAD_CAST(rText.toUtf8().getStr()));
-    xmlTextWriterEndElement(pWriter);
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"),
+                                          BAD_CAST(rText.toUtf8().getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 boost::property_tree::ptree SfxPoolItem::dumpAsJSON() const
@@ -591,10 +592,10 @@ bool SfxVoidItem::GetPresentation(SfxItemPresentation /*ePresentation*/, MapUnit
 
 void SfxVoidItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SfxVoidItem"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"),
-                                BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxVoidItem"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"),
+                                      BAD_CAST(OString::number(Which()).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 SfxVoidItem* SfxVoidItem::Clone(SfxItemPool*) const { return new SfxVoidItem(*this); }

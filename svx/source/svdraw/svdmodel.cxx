@@ -1912,8 +1912,8 @@ void SdrModel::SetSdrUndoFactory( SdrUndoFactory* pUndoFactory )
 
 void SdrModel::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SdrModel"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SdrModel"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
     sal_uInt16 nPageCount = GetPageCount();
     for (sal_uInt16 i = 0; i < nPageCount; ++i)
@@ -1922,7 +1922,7 @@ void SdrModel::dumpAsXml(xmlTextWriterPtr pWriter) const
             pPage->dumpAsXml(pWriter);
     }
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 namespace

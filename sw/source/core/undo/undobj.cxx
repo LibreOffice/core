@@ -706,15 +706,15 @@ SwUndoSaveContent::~SwUndoSaveContent() COVERITY_NOEXCEPT_FALSE
 
 void SwUndoSaveContent::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwUndoSaveContent"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwUndoSaveContent"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
     if (m_pHistory)
     {
         m_pHistory->dumpAsXml(pWriter);
     }
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 // This is needed when deleting content. For REDO all contents will be moved

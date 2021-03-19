@@ -1789,11 +1789,11 @@ void ContentNode::DestroyWrongList()
 
 void ContentNode::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("ContentNode"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("maString"), BAD_CAST(maString.toUtf8().getStr()));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ContentNode"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("maString"), BAD_CAST(maString.toUtf8().getStr()));
     aContentAttribs.dumpAsXml(pWriter);
     aCharAttribList.dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 
@@ -1864,10 +1864,10 @@ bool ContentAttribs::HasItem( sal_uInt16 nWhich ) const
 
 void ContentAttribs::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("ContentAttribs"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("style"), "%s", pStyle->GetName().toUtf8().getStr());
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ContentAttribs"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("style"), "%s", pStyle->GetName().toUtf8().getStr());
     aAttribSet.dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 
@@ -2696,20 +2696,20 @@ void EditDoc::dumpAsXml(xmlTextWriterPtr pWriter) const
         pWriter = xmlNewTextWriterFilename("editdoc.xml", 0);
         xmlTextWriterSetIndent(pWriter,1);
         xmlTextWriterSetIndentString(pWriter, BAD_CAST("  "));
-        xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
+        (void)xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
         bOwns = true;
     }
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("EditDoc"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("EditDoc"));
     for (auto const & i : maContents)
     {
         i->dumpAsXml(pWriter);
     }
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 
     if (bOwns)
     {
-       xmlTextWriterEndDocument(pWriter);
+       (void)xmlTextWriterEndDocument(pWriter);
        xmlFreeTextWriter(pWriter);
     }
 }
@@ -3011,11 +3011,11 @@ void CharAttribList::DbgCheckAttribs(CharAttribList const& rAttribs)
 
 void CharAttribList::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("CharAttribList"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("CharAttribList"));
     for (auto const & i : aAttribs) {
         i->dumpAsXml(pWriter);
     }
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 EditEngineItemPool::EditEngineItemPool()

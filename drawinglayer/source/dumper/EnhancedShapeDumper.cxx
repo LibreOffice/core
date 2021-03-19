@@ -160,109 +160,109 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(const uno::Ref
 void EnhancedShapeDumper::dumpExtrusionAsAttribute(bool bExtrusion)
 {
     if(bExtrusion)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusion"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusion"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusion"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusion"), "%s", "false");
 }
 
 void EnhancedShapeDumper::dumpBrightnessAsAttribute(double aBrightness)
 {
-    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("brightness"), "%f", aBrightness);
+    (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("brightness"), "%f", aBrightness);
 }
 
 void EnhancedShapeDumper::dumpEnhancedCustomShapeParameterPair(
     const drawing::EnhancedCustomShapeParameterPair& aParameterPair)
 {
     {
-        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "First" ));
+        (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "First" ));
         dumpEnhancedCustomShapeParameter(aParameterPair.First);
-        xmlTextWriterEndElement( xmlWriter );
+        (void)xmlTextWriterEndElement( xmlWriter );
     }
     {
-        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Second" ));
+        (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Second" ));
         dumpEnhancedCustomShapeParameter(aParameterPair.Second);
-        xmlTextWriterEndElement( xmlWriter );
+        (void)xmlTextWriterEndElement( xmlWriter );
     }
 }
 
 void EnhancedShapeDumper::dumpDepthAsElement(const drawing::EnhancedCustomShapeParameterPair& aDepth)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Depth" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Depth" ));
     dumpEnhancedCustomShapeParameterPair(aDepth);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpDiffusionAsAttribute(double aDiffusion)
 {
-    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("diffusion"), "%f", aDiffusion);
+    (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("diffusion"), "%f", aDiffusion);
 }
 
 void EnhancedShapeDumper::dumpNumberOfLineSegmentsAsAttribute(sal_Int32 aNumberOfLineSegments)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("numberOfLineSegments"), "%" SAL_PRIdINT32, aNumberOfLineSegments);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("numberOfLineSegments"), "%" SAL_PRIdINT32, aNumberOfLineSegments);
 }
 
 void EnhancedShapeDumper::dumpLightFaceAsAttribute(bool bLightFace)
 {
     if(bLightFace)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lightFace"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lightFace"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lightFace"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("lightFace"), "%s", "false");
 }
 
 void EnhancedShapeDumper::dumpFirstLightHarshAsAttribute(bool bFirstLightHarsh)
 {
     if(bFirstLightHarsh)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("firstLightHarsh"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("firstLightHarsh"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("firstLightHarsh"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("firstLightHarsh"), "%s", "false");
 }
 
 void EnhancedShapeDumper::dumpSecondLightHarshAsAttribute(bool bSecondLightHarsh)
 {
     if(bSecondLightHarsh)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("secondLightHarsh"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("secondLightHarsh"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("secondLightHarsh"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("secondLightHarsh"), "%s", "false");
 }
 
 void EnhancedShapeDumper::dumpFirstLightLevelAsAttribute(double aFirstLightLevel)
 {
-    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("firstLightLevel"), "%f", aFirstLightLevel);
+    (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("firstLightLevel"), "%f", aFirstLightLevel);
 }
 
 void EnhancedShapeDumper::dumpSecondLightLevelAsAttribute(double aSecondLightLevel)
 {
-    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("secondLightLevel"), "%f", aSecondLightLevel);
+    (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("secondLightLevel"), "%f", aSecondLightLevel);
 }
 
 void EnhancedShapeDumper::dumpDirection3D(drawing::Direction3D aDirection3D)
 {
-    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("directionX"), "%f", aDirection3D.DirectionX);
-    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("directionY"), "%f", aDirection3D.DirectionY);
-    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("directionZ"), "%f", aDirection3D.DirectionZ);
+    (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("directionX"), "%f", aDirection3D.DirectionX);
+    (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("directionY"), "%f", aDirection3D.DirectionY);
+    (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("directionZ"), "%f", aDirection3D.DirectionZ);
 }
 
 void EnhancedShapeDumper::dumpFirstLightDirectionAsElement(drawing::Direction3D aFirstLightDirection)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FirstLightDirection" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FirstLightDirection" ));
     dumpDirection3D(aFirstLightDirection);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpSecondLightDirectionAsElement(drawing::Direction3D aSecondLightDirection)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "SecondLightDirection" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "SecondLightDirection" ));
     dumpDirection3D(aSecondLightDirection);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpMetalAsAttribute(bool bMetal)
 {
     if(bMetal)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("metal"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("metal"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("metal"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("metal"), "%s", "false");
 }
 
 void EnhancedShapeDumper::dumpShadeModeAsAttribute(drawing::ShadeMode eShadeMode)
@@ -270,16 +270,16 @@ void EnhancedShapeDumper::dumpShadeModeAsAttribute(drawing::ShadeMode eShadeMode
     switch(eShadeMode)
     {
         case drawing::ShadeMode_FLAT:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadeMode"), "%s", "FLAT");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadeMode"), "%s", "FLAT");
             break;
         case drawing::ShadeMode_PHONG:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadeMode"), "%s", "PHONG");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadeMode"), "%s", "PHONG");
             break;
         case drawing::ShadeMode_SMOOTH:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadeMode"), "%s", "SMOOTH");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadeMode"), "%s", "SMOOTH");
             break;
         case drawing::ShadeMode_DRAFT:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadeMode"), "%s", "DRAFT");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shadeMode"), "%s", "DRAFT");
             break;
         default:
             break;
@@ -288,33 +288,33 @@ void EnhancedShapeDumper::dumpShadeModeAsAttribute(drawing::ShadeMode eShadeMode
 
 void EnhancedShapeDumper::dumpRotateAngleAsElement(const drawing::EnhancedCustomShapeParameterPair& aRotateAngle)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RotateAngle" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RotateAngle" ));
     dumpEnhancedCustomShapeParameterPair(aRotateAngle);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpRotationCenterAsElement(drawing::Direction3D aRotationCenter)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RotationCenter" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RotationCenter" ));
     dumpDirection3D(aRotationCenter);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpShininessAsAttribute(double aShininess)
 {
-    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shininess"), "%f", aShininess);
+    (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("shininess"), "%f", aShininess);
 }
 
 void EnhancedShapeDumper::dumpSkewAsElement(const drawing::EnhancedCustomShapeParameterPair& aSkew)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Skew" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Skew" ));
     dumpEnhancedCustomShapeParameterPair(aSkew);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpSpecularityAsAttribute(double aSpecularity)
 {
-    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("specularity"), "%f", aSpecularity);
+    (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("specularity"), "%f", aSpecularity);
 }
 
 void EnhancedShapeDumper::dumpProjectionModeAsAttribute(drawing::ProjectionMode eProjectionMode)
@@ -322,10 +322,10 @@ void EnhancedShapeDumper::dumpProjectionModeAsAttribute(drawing::ProjectionMode 
     switch(eProjectionMode)
     {
         case drawing::ProjectionMode_PARALLEL:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("projectionMode"), "%s", "PARALLEL");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("projectionMode"), "%s", "PARALLEL");
             break;
         case drawing::ProjectionMode_PERSPECTIVE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("projectionMode"), "%s", "PERSPECTIVE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("projectionMode"), "%s", "PERSPECTIVE");
             break;
         default:
             break;
@@ -334,26 +334,26 @@ void EnhancedShapeDumper::dumpProjectionModeAsAttribute(drawing::ProjectionMode 
 
 void EnhancedShapeDumper::dumpViewPointAsElement(drawing::Position3D aViewPoint)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "ViewPoint" ));
-    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("positionX"), "%f", aViewPoint.PositionX);
-    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("positionY"), "%f", aViewPoint.PositionY);
-    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("positionZ"), "%f", aViewPoint.PositionZ);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "ViewPoint" ));
+    (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("positionX"), "%f", aViewPoint.PositionX);
+    (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("positionY"), "%f", aViewPoint.PositionY);
+    (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("positionZ"), "%f", aViewPoint.PositionZ);
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpOriginAsElement(const drawing::EnhancedCustomShapeParameterPair& aOrigin)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Origin" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Origin" ));
     dumpEnhancedCustomShapeParameterPair(aOrigin);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpExtrusionColorAsAttribute(bool bExtrusionColor)
 {
     if(bExtrusionColor)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusionColor"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusionColor"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusionColor"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusionColor"), "%s", "false");
 }
 
 
@@ -431,48 +431,48 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeGeometryService(const uno::Refe
 }
 void EnhancedShapeDumper::dumpTypeAsAttribute(std::u16string_view sType)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%s",
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%s",
         OUStringToOString(sType, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void EnhancedShapeDumper::dumpViewBoxAsElement(awt::Rectangle aViewBox)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "ViewBox" ));
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("x"), "%" SAL_PRIdINT32, aViewBox.X);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("y"), "%" SAL_PRIdINT32, aViewBox.Y);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("width"), "%" SAL_PRIdINT32, aViewBox.Width);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("height"), "%" SAL_PRIdINT32, aViewBox.Height);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "ViewBox" ));
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("x"), "%" SAL_PRIdINT32, aViewBox.X);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("y"), "%" SAL_PRIdINT32, aViewBox.Y);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("width"), "%" SAL_PRIdINT32, aViewBox.Width);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("height"), "%" SAL_PRIdINT32, aViewBox.Height);
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpMirroredXAsAttribute(bool bMirroredX)
 {
     if(bMirroredX)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredX"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredX"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredX"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredX"), "%s", "false");
 }
 
 void EnhancedShapeDumper::dumpMirroredYAsAttribute(bool bMirroredY)
 {
     if(bMirroredY)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredY"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredY"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredY"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredY"), "%s", "false");
 }
 
 void EnhancedShapeDumper::dumpTextRotateAngleAsAttribute(double aTextRotateAngle)
 {
-    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textRotateAngle"), "%f", aTextRotateAngle);
+    (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textRotateAngle"), "%f", aTextRotateAngle);
 }
 
 void EnhancedShapeDumper::dumpAdjustmentValuesAsElement(const uno::Sequence< drawing::EnhancedCustomShapeAdjustmentValue>& aAdjustmentValues)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "AdjustmentValues" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "AdjustmentValues" ));
     sal_Int32 nLength = aAdjustmentValues.getLength();
     for (sal_Int32 i = 0; i < nLength; ++i)
     {
-        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeAdjustmentValue" ));
+        (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeAdjustmentValue" ));
         uno::Any aAny = aAdjustmentValues[i].Value;
         OUString sValue;
         float fValue;
@@ -480,116 +480,116 @@ void EnhancedShapeDumper::dumpAdjustmentValuesAsElement(const uno::Sequence< dra
         bool bValue;
         if(aAny >>= sValue)
         {
-            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
+            (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
                 OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
         }
         else if(aAny >>= nValue)
         {
-            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%" SAL_PRIdINT32, nValue);
+            (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%" SAL_PRIdINT32, nValue);
         }
         else if(aAny >>= fValue)
         {
-            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%f", fValue);
+            (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%f", fValue);
         }
         else if(aAny >>= bValue)
         {
-            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s", (bValue? "true": "false"));
+            (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s", (bValue? "true": "false"));
         }
 
         switch(aAdjustmentValues[i].State)
         {
             case beans::PropertyState_DIRECT_VALUE:
-                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DIRECT_VALUE");
+                (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DIRECT_VALUE");
                 break;
             case beans::PropertyState_DEFAULT_VALUE:
-                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DEFAULT_VALUE");
+                (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DEFAULT_VALUE");
                 break;
             case beans::PropertyState_AMBIGUOUS_VALUE:
-                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "AMBIGUOUS_VALUE");
+                (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "AMBIGUOUS_VALUE");
                 break;
             default:
                 break;
         }
-        xmlTextWriterEndElement( xmlWriter );
+        (void)xmlTextWriterEndElement( xmlWriter );
     }
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpPropertyValueAsElement(const beans::PropertyValue& aPropertyValue)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PropertyValue" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PropertyValue" ));
 
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
         OUStringToOString(aPropertyValue.Name, RTL_TEXTENCODING_UTF8).getStr());
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("handle"), "%" SAL_PRIdINT32, aPropertyValue.Handle);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("handle"), "%" SAL_PRIdINT32, aPropertyValue.Handle);
 
     uno::Any aAny = aPropertyValue.Value;
     OUString sValue;
     if(aAny >>= sValue)
     {
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
+        (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
             OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
     }
     switch(aPropertyValue.State)
     {
         case beans::PropertyState_DIRECT_VALUE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DIRECT_VALUE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DIRECT_VALUE");
             break;
         case beans::PropertyState_DEFAULT_VALUE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DEFAULT_VALUE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DEFAULT_VALUE");
             break;
         case beans::PropertyState_AMBIGUOUS_VALUE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "AMBIGUOUS_VALUE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "AMBIGUOUS_VALUE");
             break;
         default:
             break;
     }
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpExtrusionAsElement(const uno::Sequence< beans::PropertyValue >& aExtrusion)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Extrusion" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Extrusion" ));
     sal_Int32 nLength = aExtrusion.getLength();
     for (sal_Int32 i = 0; i < nLength; ++i)
     {
         dumpPropertyValueAsElement(aExtrusion[i]);
     }
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpPathAsElement(const uno::Sequence< beans::PropertyValue >& aPath)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Path" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Path" ));
     sal_Int32 nLength = aPath.getLength();
     for (sal_Int32 i = 0; i < nLength; ++i)
     {
         dumpPropertyValueAsElement(aPath[i]);
     }
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpTextPathAsElement(const uno::Sequence< beans::PropertyValue >& aTextPath)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "TextPath" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "TextPath" ));
     sal_Int32 nLength = aTextPath.getLength();
     for (sal_Int32 i = 0; i < nLength; ++i)
     {
         dumpPropertyValueAsElement(aTextPath[i]);
     }
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpEquationsAsElement(const uno::Sequence< OUString >& aEquations)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Equations" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Equations" ));
     sal_Int32 nLength = aEquations.getLength();
     for (sal_Int32 i = 0; i < nLength; ++i)
     {
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
+        (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
             OUStringToOString(aEquations[i], RTL_TEXTENCODING_UTF8).getStr());
     }
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 // PropertyValues specifies a sequence of PropertyValue instances.
@@ -597,20 +597,20 @@ void EnhancedShapeDumper::dumpEquationsAsElement(const uno::Sequence< OUString >
 // Welcome to Sequenception again.
 void EnhancedShapeDumper::dumpHandlesAsElement(const uno::Sequence< beans::PropertyValues >& aHandles)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Handles" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Handles" ));
     sal_Int32 nSequenceLength = aHandles.getLength();
     for (sal_Int32 i = 0; i < nSequenceLength; ++i)
     {
-        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PropertyValues" ));
+        (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PropertyValues" ));
         uno::Sequence< beans::PropertyValue > propertyValueSequence = aHandles[i];
         sal_Int32 nLength = propertyValueSequence.getLength();
         for (sal_Int32 j = 0; j < nLength; ++j)
         {
             dumpPropertyValueAsElement(propertyValueSequence[j]);
         }
-        xmlTextWriterEndElement( xmlWriter );
+        (void)xmlTextWriterEndElement( xmlWriter );
     }
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 
@@ -714,43 +714,43 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeHandleService(const uno::Refere
 void EnhancedShapeDumper::dumpSwitchedAsAttribute(bool bSwitched)
 {
     if(bSwitched)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("switched"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("switched"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("switched"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("switched"), "%s", "false");
 }
 
 void EnhancedShapeDumper::dumpPositionAsElement(const drawing::EnhancedCustomShapeParameterPair& aPosition)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Position" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Position" ));
     dumpEnhancedCustomShapeParameterPair(aPosition);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpPolarAsElement(const drawing::EnhancedCustomShapeParameterPair& aPolar)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Polar" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Polar" ));
     dumpEnhancedCustomShapeParameterPair(aPolar);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpRefXAsAttribute(sal_Int32 aRefX)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("refX"), "%" SAL_PRIdINT32, aRefX);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("refX"), "%" SAL_PRIdINT32, aRefX);
 }
 
 void EnhancedShapeDumper::dumpRefYAsAttribute(sal_Int32 aRefY)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("refY"), "%" SAL_PRIdINT32, aRefY);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("refY"), "%" SAL_PRIdINT32, aRefY);
 }
 
 void EnhancedShapeDumper::dumpRefAngleAsAttribute(sal_Int32 aRefAngle)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("refAngle"), "%" SAL_PRIdINT32, aRefAngle);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("refAngle"), "%" SAL_PRIdINT32, aRefAngle);
 }
 
 void EnhancedShapeDumper::dumpRefRAsAttribute(sal_Int32 aRefR)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("refR"), "%" SAL_PRIdINT32, aRefR);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("refR"), "%" SAL_PRIdINT32, aRefR);
 }
 
 void EnhancedShapeDumper::dumpEnhancedCustomShapeParameter(
@@ -763,65 +763,65 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeParameter(
     bool bValue;
     if(aAny >>= sValue)
     {
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
+        (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
             OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
     }
     else if(aAny >>= nValue)
     {
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%" SAL_PRIdINT32, nValue);
+        (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%" SAL_PRIdINT32, nValue);
     }
     else if(aAny >>= fValue)
     {
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%f", fValue);
+        (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%f", fValue);
     }
     else if(aAny >>= bValue)
     {
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s", (bValue? "true": "false"));
+        (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s", (bValue? "true": "false"));
     }
     sal_Int32 aType = aParameter.Type;
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%" SAL_PRIdINT32, aType);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%" SAL_PRIdINT32, aType);
 }
 
 void EnhancedShapeDumper::dumpRangeXMinimumAsElement(const drawing::EnhancedCustomShapeParameter& aRangeXMinimum)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RangeXMinimum" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RangeXMinimum" ));
     dumpEnhancedCustomShapeParameter(aRangeXMinimum);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpRangeXMaximumAsElement(const drawing::EnhancedCustomShapeParameter& aRangeXMaximum)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RangeXMaximum" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RangeXMaximum" ));
     dumpEnhancedCustomShapeParameter(aRangeXMaximum);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpRangeYMinimumAsElement(const drawing::EnhancedCustomShapeParameter& aRangeYMinimum)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RangeYMinimum" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RangeYMinimum" ));
     dumpEnhancedCustomShapeParameter(aRangeYMinimum);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpRangeYMaximumAsElement(const drawing::EnhancedCustomShapeParameter& aRangeYMaximum)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RangeYMaximum" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RangeYMaximum" ));
     dumpEnhancedCustomShapeParameter(aRangeYMaximum);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpRadiusRangeMinimumAsElement(const drawing::EnhancedCustomShapeParameter& aRadiusRangeMinimum)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RadiusRangeMinimum" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RadiusRangeMinimum" ));
     dumpEnhancedCustomShapeParameter(aRadiusRangeMinimum);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpRadiusRangeMaximumAsElement(const drawing::EnhancedCustomShapeParameter& aRadiusRangeMaximum)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RadiusRangeMaximum" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "RadiusRangeMaximum" ));
     dumpEnhancedCustomShapeParameter(aRadiusRangeMaximum);
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 
@@ -906,129 +906,129 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapePathService(const uno::Referenc
 
 void EnhancedShapeDumper::dumpCoordinatesAsElement(const uno::Sequence< drawing::EnhancedCustomShapeParameterPair >& aCoordinates)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Coordinates" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Coordinates" ));
     sal_Int32 nLength = aCoordinates.getLength();
     for (sal_Int32 i = 0; i < nLength; ++i)
     {
-        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeParameterPair" ));
+        (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeParameterPair" ));
         dumpEnhancedCustomShapeParameterPair(aCoordinates[i]);
-        xmlTextWriterEndElement( xmlWriter );
+        (void)xmlTextWriterEndElement( xmlWriter );
     }
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpSegmentsAsElement(const uno::Sequence< drawing::EnhancedCustomShapeSegment >& aSegments)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Segments" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Segments" ));
     sal_Int32 nLength = aSegments.getLength();
     for (sal_Int32 i = 0; i < nLength; ++i)
     {
-        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeSegment" ));
+        (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeSegment" ));
         sal_Int32 aCommand = aSegments[i].Command;
         sal_Int32 aCount = aSegments[i].Count;
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("command"), "%" SAL_PRIdINT32, aCommand);
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("count"), "%" SAL_PRIdINT32, aCount);
-        xmlTextWriterEndElement( xmlWriter );
+        (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("command"), "%" SAL_PRIdINT32, aCommand);
+        (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("count"), "%" SAL_PRIdINT32, aCount);
+        (void)xmlTextWriterEndElement( xmlWriter );
     }
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpStretchXAsAttribute(sal_Int32 aStretchX)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("stretchX"), "%" SAL_PRIdINT32, aStretchX);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("stretchX"), "%" SAL_PRIdINT32, aStretchX);
 }
 
 void EnhancedShapeDumper::dumpStretchYAsAttribute(sal_Int32 aStretchY)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("stretchY"), "%" SAL_PRIdINT32, aStretchY);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("stretchY"), "%" SAL_PRIdINT32, aStretchY);
 }
 
 void EnhancedShapeDumper::dumpTextFramesAsElement(const uno::Sequence< drawing::EnhancedCustomShapeTextFrame >& aTextFrames)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "TextFrames" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "TextFrames" ));
     sal_Int32 nLength = aTextFrames.getLength();
     for (sal_Int32 i = 0; i < nLength; ++i)
     {
-        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeTextFrame" ));
+        (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeTextFrame" ));
         {
-        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "TopLeft" ));
+        (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "TopLeft" ));
         dumpEnhancedCustomShapeParameterPair(aTextFrames[i].TopLeft);
-        xmlTextWriterEndElement( xmlWriter );
+        (void)xmlTextWriterEndElement( xmlWriter );
 
-        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "BottomRight" ));
+        (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "BottomRight" ));
         dumpEnhancedCustomShapeParameterPair(aTextFrames[i].BottomRight);
-        xmlTextWriterEndElement( xmlWriter );
+        (void)xmlTextWriterEndElement( xmlWriter );
         }
-        xmlTextWriterEndElement( xmlWriter );
+        (void)xmlTextWriterEndElement( xmlWriter );
     }
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpGluePointsAsElement(const uno::Sequence< drawing::EnhancedCustomShapeParameterPair >& aGluePoints)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "GluePoints" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "GluePoints" ));
     sal_Int32 nLength = aGluePoints.getLength();
     for (sal_Int32 i = 0; i < nLength; ++i)
     {
-        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeParameterPair" ));
+        (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeParameterPair" ));
         dumpEnhancedCustomShapeParameterPair(aGluePoints[i]);
-        xmlTextWriterEndElement( xmlWriter );
+        (void)xmlTextWriterEndElement( xmlWriter );
     }
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpGluePointLeavingDirectionsAsElement(const uno::Sequence< double >& aGluePointLeavingDirections)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "GluePointLeavingDirections" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "GluePointLeavingDirections" ));
     sal_Int32 nLength = aGluePointLeavingDirections.getLength();
     for (sal_Int32 i = 0; i < nLength; ++i)
     {
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("value"), "%f", aGluePointLeavingDirections[i]);
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("value"), "%f", aGluePointLeavingDirections[i]);
     }
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 void EnhancedShapeDumper::dumpGluePointTypeAsAttribute(sal_Int32 aGluePointType)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("gluePointType"), "%" SAL_PRIdINT32, aGluePointType);
+    (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("gluePointType"), "%" SAL_PRIdINT32, aGluePointType);
 }
 
 void EnhancedShapeDumper::dumpExtrusionAllowedAsAttribute(bool bExtrusionAllowed)
 {
     if(bExtrusionAllowed)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusionAllowed"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusionAllowed"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusionAllowed"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusionAllowed"), "%s", "false");
 }
 
 void EnhancedShapeDumper::dumpConcentricGradientFillAllowedAsAttribute(bool bConcentricGradientFillAllowed)
 {
     if(bConcentricGradientFillAllowed)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("concentricGradientFillAllowed"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("concentricGradientFillAllowed"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("concentricGradientFillAllowed"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("concentricGradientFillAllowed"), "%s", "false");
 }
 
 void EnhancedShapeDumper::dumpTextPathAllowedAsAttribute(bool bTextPathAllowed)
 {
     if(bTextPathAllowed)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPathAllowed"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPathAllowed"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPathAllowed"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPathAllowed"), "%s", "false");
 }
 
 void EnhancedShapeDumper::dumpSubViewSizeAsElement(const uno::Sequence< awt::Size >& aSubViewSize)
 {
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "SubViewSize" ));
+    (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "SubViewSize" ));
     sal_Int32 nLength = aSubViewSize.getLength();
     for (sal_Int32 i = 0; i < nLength; ++i)
     {
-        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Size" ));
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("width"), "%" SAL_PRIdINT32, aSubViewSize[i].Width);
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("height"), "%" SAL_PRIdINT32, aSubViewSize[i].Height);
-        xmlTextWriterEndElement( xmlWriter );
+        (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Size" ));
+        (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("width"), "%" SAL_PRIdINT32, aSubViewSize[i].Width);
+        (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("height"), "%" SAL_PRIdINT32, aSubViewSize[i].Height);
+        (void)xmlTextWriterEndElement( xmlWriter );
     }
-    xmlTextWriterEndElement( xmlWriter );
+    (void)xmlTextWriterEndElement( xmlWriter );
 }
 
 
@@ -1060,9 +1060,9 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeTextPathService(const uno::Refe
 void EnhancedShapeDumper::dumpTextPathAsAttribute(bool bTextPath)
 {
     if(bTextPath)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPath"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPath"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPath"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPath"), "%s", "false");
 }
 
 void EnhancedShapeDumper::dumpTextPathModeAsAttribute(drawing::EnhancedCustomShapeTextPathMode eTextPathMode)
@@ -1070,13 +1070,13 @@ void EnhancedShapeDumper::dumpTextPathModeAsAttribute(drawing::EnhancedCustomSha
     switch(eTextPathMode)
     {
         case drawing::EnhancedCustomShapeTextPathMode_NORMAL:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPathMode"), "%s", "NORMAL");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPathMode"), "%s", "NORMAL");
             break;
         case drawing::EnhancedCustomShapeTextPathMode_PATH:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPathMode"), "%s", "PATH");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPathMode"), "%s", "PATH");
             break;
         case drawing::EnhancedCustomShapeTextPathMode_SHAPE:
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPathMode"), "%s", "SHAPE");
+            (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPathMode"), "%s", "SHAPE");
             break;
         default:
             break;
@@ -1086,9 +1086,9 @@ void EnhancedShapeDumper::dumpTextPathModeAsAttribute(drawing::EnhancedCustomSha
 void EnhancedShapeDumper::dumpScaleXAsAttribute(bool bScaleX)
 {
     if(bScaleX)
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("scaleX"), "%s", "true");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("scaleX"), "%s", "true");
     else
-        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("scaleX"), "%s", "false");
+        (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("scaleX"), "%s", "false");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

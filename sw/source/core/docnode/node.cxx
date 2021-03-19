@@ -898,11 +898,11 @@ void SwNode::dumpAsXml(xmlTextWriterPtr pWriter) const
         break;
     default: break;
     }
-    xmlTextWriterStartElement(pWriter, BAD_CAST(pName));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST(pName));
 
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(OString::number(static_cast<sal_uInt8>(GetNodeType())).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(GetIndex()).getStr()));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(OString::number(static_cast<sal_uInt8>(GetNodeType())).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(GetIndex()).getStr()));
 
     switch (GetNodeType())
     {
@@ -912,28 +912,28 @@ void SwNode::dumpAsXml(xmlTextWriterPtr pWriter) const
             const tools::PolyPolygon* pContour = pNoTextNode->HasContour();
             if (pContour)
             {
-                xmlTextWriterStartElement(pWriter, BAD_CAST("pContour"));
+                (void)xmlTextWriterStartElement(pWriter, BAD_CAST("pContour"));
                 for (sal_uInt16 i = 0; i < pContour->Count(); ++i)
                 {
-                    xmlTextWriterStartElement(pWriter, BAD_CAST("polygon"));
-                    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"),
+                    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("polygon"));
+                    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"),
                                                 BAD_CAST(OString::number(i).getStr()));
                     const tools::Polygon& rPolygon = pContour->GetObject(i);
                     for (sal_uInt16 j = 0; j < rPolygon.GetSize(); ++j)
                     {
-                        xmlTextWriterStartElement(pWriter, BAD_CAST("point"));
-                        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"),
+                        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("point"));
+                        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"),
                                                     BAD_CAST(OString::number(j).getStr()));
                         const Point& rPoint = rPolygon.GetPoint(j);
-                        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("x"),
+                        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("x"),
                                                     BAD_CAST(OString::number(rPoint.X()).getStr()));
-                        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("y"),
+                        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("y"),
                                                     BAD_CAST(OString::number(rPoint.Y()).getStr()));
-                        xmlTextWriterEndElement(pWriter);
+                        (void)xmlTextWriterEndElement(pWriter);
                     }
-                    xmlTextWriterEndElement(pWriter);
+                    (void)xmlTextWriterEndElement(pWriter);
                 }
-                xmlTextWriterEndElement(pWriter);
+                (void)xmlTextWriterEndElement(pWriter);
             }
         }
         break;
@@ -941,9 +941,9 @@ void SwNode::dumpAsXml(xmlTextWriterPtr pWriter) const
             break;
     }
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
     if (GetNodeType() == SwNodeType::End)
-        xmlTextWriterEndElement(pWriter); // end start node
+        (void)xmlTextWriterEndElement(pWriter); // end start node
 }
 
 SwStartNode::SwStartNode( const SwNodeIndex &rWhere, const SwNodeType nNdType,
@@ -1020,28 +1020,28 @@ void SwStartNode::dumpAsXml(xmlTextWriterPtr pWriter) const
         break;
     }
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST(pName));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(OString::number(static_cast<sal_uInt8>(GetNodeType())).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(GetIndex()).getStr()));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST(pName));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(OString::number(static_cast<sal_uInt8>(GetNodeType())).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(GetIndex()).getStr()));
 
     if (IsTableNode())
     {
-        xmlTextWriterStartElement(pWriter, BAD_CAST("attrset"));
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("attrset"));
         GetTableNode()->GetTable().GetFrameFormat()->GetAttrSet().dumpAsXml(pWriter);
-        xmlTextWriterEndElement(pWriter);
+        (void)xmlTextWriterEndElement(pWriter);
     }
     else if (GetStartNodeType() == SwTableBoxStartNode)
     {
         if (SwTableBox* pBox = GetTableBox())
-            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("rowspan"), BAD_CAST(OString::number(pBox->getRowSpan()).getStr()));
-        xmlTextWriterStartElement(pWriter, BAD_CAST("attrset"));
+            (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("rowspan"), BAD_CAST(OString::number(pBox->getRowSpan()).getStr()));
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("attrset"));
         if (SwTableBox* pBox = GetTableBox())
             pBox->GetFrameFormat()->GetAttrSet().dumpAsXml(pWriter);
-        xmlTextWriterEndElement(pWriter);
+        (void)xmlTextWriterEndElement(pWriter);
     }
 
-    // xmlTextWriterEndElement(pWriter); - it is a start node, so don't end, will make xml better nested
+    // (void)xmlTextWriterEndElement(pWriter); - it is a start node, so don't end, will make xml better nested
 }
 
 

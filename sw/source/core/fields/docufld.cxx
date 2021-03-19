@@ -1931,18 +1931,18 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 void SwPostItField::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwPostItField"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwPostItField"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
 
     SwField::dumpAsXml(pWriter);
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("mpText"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", mpText.get());
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mpText"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", mpText.get());
     if (mpText)
         mpText->dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 // extended user information field type

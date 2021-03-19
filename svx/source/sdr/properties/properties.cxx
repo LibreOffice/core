@@ -155,8 +155,8 @@ namespace sdr::properties
 
         void BaseProperties::dumpAsXml(xmlTextWriterPtr pWriter) const
         {
-            xmlTextWriterStartElement(pWriter, BAD_CAST("BaseProperties"));
-            xmlTextWriterEndElement(pWriter);
+            (void)xmlTextWriterStartElement(pWriter, BAD_CAST("BaseProperties"));
+            (void)xmlTextWriterEndElement(pWriter);
         }
 
         void CleanupFillProperties( SfxItemSet& rItemSet )

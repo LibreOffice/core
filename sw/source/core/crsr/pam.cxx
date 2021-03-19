@@ -185,10 +185,10 @@ SwDoc& SwPosition::GetDoc() const
 
 void SwPosition::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwPosition"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nNode"), BAD_CAST(OString::number(nNode.GetIndex()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nContent"), BAD_CAST(OString::number(nContent.GetIndex()).getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwPosition"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nNode"), BAD_CAST(OString::number(nNode.GetIndex()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nContent"), BAD_CAST(OString::number(nContent.GetIndex()).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 std::ostream &operator <<(std::ostream& s, const SwPosition& position)
@@ -1150,20 +1150,20 @@ void SwPaM::InvalidatePaM()
 
 void SwPaM::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwPaM"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwPaM"));
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("point"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("point"));
     GetPoint()->dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 
     if (HasMark())
     {
-        xmlTextWriterStartElement(pWriter, BAD_CAST("mark"));
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mark"));
         GetMark()->dumpAsXml(pWriter);
-        xmlTextWriterEndElement(pWriter);
+        (void)xmlTextWriterEndElement(pWriter);
     }
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 std::ostream &operator <<(std::ostream& s, const SwPaM& pam)

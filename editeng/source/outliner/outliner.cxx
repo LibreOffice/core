@@ -2167,17 +2167,17 @@ void Outliner::dumpAsXml(xmlTextWriterPtr pWriter) const
         pWriter = xmlNewTextWriterFilename("outliner.xml", 0);
         xmlTextWriterSetIndent(pWriter,1);
         xmlTextWriterSetIndentString(pWriter, BAD_CAST("  "));
-        xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
+        (void)xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
         bOwns = true;
     }
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("Outliner"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("Outliner"));
     pParaList->dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 
     if (bOwns)
     {
-       xmlTextWriterEndDocument(pWriter);
+       (void)xmlTextWriterEndDocument(pWriter);
        xmlFreeTextWriter(pWriter);
     }
 }

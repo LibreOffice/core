@@ -1025,18 +1025,18 @@ bool SwSectionFormat::supportsFullDrawingLayerFillAttributeSet() const
 
 void SwSectionFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwSectionFormat"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwSectionFormat"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
     GetAttrSet().dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 void SwSectionFormats::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwSectionFormats"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwSectionFormats"));
     for (size_t i = 0; i < size(); ++i)
         GetFormat(i)->dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 // Method to break section links inside a linked section

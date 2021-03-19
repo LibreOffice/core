@@ -138,9 +138,9 @@ SfxStyleSheet* SdrText::GetStyleSheet() const
 
 void SdrText::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SdrText"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SdrText"));
     mpOutlinerParaObject->dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

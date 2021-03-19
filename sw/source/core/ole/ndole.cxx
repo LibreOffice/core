@@ -292,14 +292,14 @@ bool SwOLENode::RestorePersistentData()
 
 void SwOLENode::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwOLENode"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"),
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwOLENode"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"),
                                 BAD_CAST(OString::number(GetIndex()).getStr()));
 
     GetOLEObj().dumpAsXml(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /**
@@ -1135,11 +1135,11 @@ void SwOLEObj::resetBufferedData()
 
 void SwOLEObj::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwOLEObj"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwOLEObj"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("m_xOLERef"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"),
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("m_xOLERef"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"),
                                 BAD_CAST(typeid(*m_xOLERef.GetObject()).name()));
 
     uno::Reference<embed::XEmbeddedObject> xIP = m_xOLERef.GetObject();
@@ -1149,9 +1149,9 @@ void SwOLEObj::dumpAsXml(xmlTextWriterPtr pWriter) const
         pComponent->dumpAsXml(pWriter);
     }
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 SwOLELRUCache::SwOLELRUCache()
