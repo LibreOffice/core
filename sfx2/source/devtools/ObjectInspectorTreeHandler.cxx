@@ -91,8 +91,7 @@ OUString convertBasicValueToString(const uno::Any& aValue,
     if (!aValue.hasValue())
         return SfxResId(STR_ANY_VALUE_NULL);
 
-    uno::Type aValType = aValue.getValueType();
-    uno::TypeClass eType = aValType.getTypeClass();
+    uno::TypeClass eType = aValue.getValueTypeClass();
 
     switch (eType)
     {
@@ -229,15 +228,15 @@ OUString convertAnyToString(const uno::Any& aValue,
                 aRetStr = SfxResId(STR_ANY_VALUE_NULL);
             else
             {
-                OUString aString = getInterfaceName(xInterface, xContext);
-                if (!aString.isEmpty())
-                    aRetStr = "{" + aString + "} ";
-
                 OUString aImplementationClass = getInterfaceImplementationClass(xInterface);
                 if (aImplementationClass.isEmpty())
                     aImplementationClass = SfxResId(STR_CLASS_UNKNOWN);
                 aRetStr
-                    += SfxResId(STR_PROPERTY_VALUE_OBJECT).replaceFirst("%1", aImplementationClass);
+                    = SfxResId(STR_PROPERTY_VALUE_OBJECT).replaceFirst("%1", aImplementationClass);
+
+                OUString aString = getInterfaceName(xInterface, xContext);
+                if (!aString.isEmpty())
+                    aRetStr += " {" + aString + "}";
             }
             break;
         }
@@ -266,36 +265,24 @@ OUString convertAnyToShortenedString(const uno::Any& aValue,
 
     uno::TypeClass eType = aValue.getValueTypeClass();
 
+    constexpr const sal_Int32 constMaxStringLength = 60;
+
     switch (eType)
     {
         case uno::TypeClass_INTERFACE:
         {
-            uno::Reference<uno::XInterface> xInterface(aValue, uno::UNO_QUERY);
-            if (!xInterface.is())
-                aRetStr = SfxResId(STR_ANY_VALUE_NULL);
-            else
-            {
-                OUString aString = getInterfaceName(xInterface, xContext);
-                if (!aString.isEmpty())
-                    aRetStr = "{" + aString + "} ";
+            aRetStr = convertAnyToString(aValue, xContext);
 
-                OUString aImplementationClass = getInterfaceImplementationClass(xInterface);
-                if (aImplementationClass.isEmpty())
-                    aImplementationClass = SfxResId(STR_CLASS_UNKNOWN);
-                aRetStr
-                    += SfxResId(STR_PROPERTY_VALUE_OBJECT).replaceFirst("%1", aImplementationClass);
-
-                if (aRetStr.getLength() > 43)
-                    aRetStr = OUString::Concat(aRetStr.subView(0, 40)) + u"...";
-            }
+            if (aRetStr.getLength() > constMaxStringLength + 3)
+                aRetStr = OUString::Concat(aRetStr.subView(0, constMaxStringLength)) + u"...";
             break;
         }
         case uno::TypeClass_STRING:
         {
-            OUString aStringValue = u"\"" + aValue.get<OUString>() + u"\"";
-            if (aStringValue.getLength() > 44)
-                aStringValue = OUString::Concat(aStringValue.subView(0, 40)) + u"\"...";
-            aRetStr = aStringValue;
+            OUString aString = convertAnyToString(aValue, xContext);
+            if (aString.getLength() > constMaxStringLength + 4)
+                aString = OUString::Concat(aString.subView(0, constMaxStringLength)) + u"\"...";
+            aRetStr = aString.replaceAll("\n", " ");
             break;
         }
         default:
