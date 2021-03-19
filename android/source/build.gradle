@@ -185,7 +185,10 @@ task copyAssets(type: Copy) {
     // include required .ui files
     into('config') {
         from "${liboInstdir}/share/config"
-        include '**/annotation.ui', '**/hfmenubutton.ui', '**/pbmenubutton.ui',
+        include '**/annotation.ui',
+                '**/hfmenubutton.ui',
+                '**/inforeadonlydialog.ui',
+                '**/pbmenubutton.ui',
                 '**/tabbuttons.ui', '**/tabviewbar.ui'
     }
 }
