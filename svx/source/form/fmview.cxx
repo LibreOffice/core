@@ -499,24 +499,26 @@ bool FmFormView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
     // tdf#139804 Allow selecting form controls with Alt-<Mnemonic>
     if (rKeyCode.IsMod2() && rKeyCode.GetCode())
     {
-        FmFormPage* pCurPage = GetCurPage();
-        for (size_t a = 0; a < pCurPage->GetObjCount(); ++a)
+        if (FmFormPage* pCurPage = GetCurPage())
         {
-            SdrObject* pObj = pCurPage->GetObj(a);
-            FmFormObj* pFormObject = FmFormObj::GetFormObject(pObj);
-            if (!pFormObject)
-                continue;
-
-            Reference<awt::XControl> xControl = pFormObject->GetUnoControl(*this, *pWin);
-            if (!xControl.is())
-                continue;
-            const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
-            VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xControl->getPeer());
-            if (rI18nHelper.MatchMnemonic(pWindow->GetText(), rKEvt.GetCharCode()))
+            for (size_t a = 0; a < pCurPage->GetObjCount(); ++a)
             {
-                pWindow->GrabFocus();
-                bDone = true;
-                break;
+                SdrObject* pObj = pCurPage->GetObj(a);
+                FmFormObj* pFormObject = FmFormObj::GetFormObject(pObj);
+                if (!pFormObject)
+                    continue;
+
+                Reference<awt::XControl> xControl = pFormObject->GetUnoControl(*this, *pWin);
+                if (!xControl.is())
+                    continue;
+                const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
+                VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xControl->getPeer());
+                if (rI18nHelper.MatchMnemonic(pWindow->GetText(), rKEvt.GetCharCode()))
+                {
+                    pWindow->GrabFocus();
+                    bDone = true;
+                    break;
+                }
             }
         }
     }
