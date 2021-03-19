@@ -19,8 +19,6 @@
 
 #include <string.h>
 
-#include <vcl/window.hxx>
-
 #include <wrtsh.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
@@ -67,11 +65,7 @@ namespace SwLangHelper
 
         // get keyboard language
         OUString aKeyboardLang;
-        LanguageType nLang = LANGUAGE_DONTKNOW;
-
-        vcl::Window* pWin = rEditView.GetWindow();
-        if(pWin)
-            nLang = pWin->GetInputLanguage();
+        LanguageType nLang = rEditView.GetInputLanguage();
         if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
             aKeyboardLang = SvtLanguageTable::GetLanguageString( nLang );
 

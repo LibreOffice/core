@@ -351,6 +351,14 @@ OutputDevice& EditView::GetOutputDevice() const
     return pImpEditView->GetOutputDevice();
 }
 
+LanguageType EditView::GetInputLanguage() const
+{
+    // it might make sense to add this to getEditViewCallbacks
+    if (const vcl::Window* pWindow = GetWindow())
+        return pWindow->GetInputLanguage();
+    return LANGUAGE_DONTKNOW;
+}
+
 bool EditView::HasOtherViewWindow( vcl::Window* pWin )
 {
     OutWindowSet& rOutWindowSet = pImpEditView->aOutWindowSet;
