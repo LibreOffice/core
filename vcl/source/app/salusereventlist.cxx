@@ -108,7 +108,7 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
             * Because otherwise the exception is caught somewhere totally unrelated.
             * TODO Ideally we could capture a proper backtrace and feed this into breakpad,
             *   which is do-able, but requires writing some assembly.
-            * See also Scheduler::ProcessTaskScheduling
+            * See also Scheduler::CallbackTaskScheduling
             */
 #ifdef IOS
             ProcessEvent( aEvent );

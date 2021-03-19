@@ -260,12 +260,6 @@ void Scheduler::ImplStartTimer(sal_uInt64 nMS, bool bForce, sal_uInt64 nTime)
     }
 }
 
-void Scheduler::CallbackTaskScheduling()
-{
-    // this function is for the saltimer callback
-    Scheduler::ProcessTaskScheduling();
-}
-
 static bool g_bDeterministicMode = false;
 
 void Scheduler::SetDeterministicMode(bool bDeterministic)
@@ -333,7 +327,7 @@ static ImplSchedulerData* DropSchedulerData(
     return pSchedulerDataNext;
 }
 
-bool Scheduler::ProcessTaskScheduling()
+void Scheduler::CallbackTaskScheduling()
 {
     ImplSVData *pSVData = ImplGetSVData();
     ImplSchedulerContext &rSchedCtx = pSVData->maSchedCtx;
@@ -342,7 +336,7 @@ bool Scheduler::ProcessTaskScheduling()
 
     SchedulerGuard aSchedulerGuard;
     if ( !rSchedCtx.mbActive || InfiniteTimeoutMs == rSchedCtx.mnTimerPeriod )
-        return false;
+        return;
 
     sal_uInt64 nTime = tools::Time::GetSystemTicks();
     // Allow for decimals, so subtract in the compare (needed at least on iOS)
@@ -350,7 +344,7 @@ bool Scheduler::ProcessTaskScheduling()
     {
         int nSleep = rSchedCtx.mnTimerStart + rSchedCtx.mnTimerPeriod - nTime;
         UpdateSystemTimer(rSchedCtx, nSleep, true, nTime);
-        return false;
+        return;
     }
 
     ImplSchedulerData* pSchedulerData = nullptr;
@@ -531,8 +525,6 @@ bool Scheduler::ProcessTaskScheduling()
             UpdateSystemTimer( rSchedCtx, nMinPeriod, false, nTime );
         }
     }
-
-    return !!pMostUrgent;
 }
 
 void Scheduler::Wakeup()

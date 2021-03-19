@@ -37,7 +37,6 @@ public:
     void testParentedWidgets();
     void testChildDispose();
     void testPostDispose();
-    void testFocus();
     void testLeakage();
     void testToolkit();
 
@@ -49,7 +48,6 @@ public:
     CPPUNIT_TEST(testParentedWidgets);
     CPPUNIT_TEST(testChildDispose);
     CPPUNIT_TEST(testPostDispose);
-    CPPUNIT_TEST(testFocus);
     CPPUNIT_TEST(testLeakage);
     CPPUNIT_TEST(testToolkit);
     CPPUNIT_TEST_SUITE_END();
@@ -186,47 +184,6 @@ void LifecycleTest::testPostDispose()
     CPPUNIT_ASSERT(!xWin->IsInputEnabled());
     CPPUNIT_ASSERT(!xWin->GetChild(0));
     CPPUNIT_ASSERT(!xWin->GetWindow(GetWindowType::Parent));
-}
-
-namespace {
-
-class FocusCrashPostDispose : public TabControl
-{
-public:
-    explicit FocusCrashPostDispose(vcl::Window *pParent) :
-        TabControl(pParent, 0)
-    {
-    }
-    virtual bool PreNotify( NotifyEvent& ) override
-    {
-        return false;
-    }
-    virtual bool EventNotify( NotifyEvent& ) override
-    {
-        return false;
-    }
-    virtual void GetFocus() override
-    {
-        CPPUNIT_FAIL("get focus");
-    }
-    virtual void LoseFocus() override
-    {
-        CPPUNIT_FAIL("this should never be called");
-    }
-};
-
-}
-
-void LifecycleTest::testFocus()
-{
-    ScopedVclPtrInstance<WorkWindow> xWin(nullptr, WB_APP|WB_STDWORK);
-    ScopedVclPtrInstance< FocusCrashPostDispose > xChild(xWin);
-    xWin->Show();
-    xChild->GrabFocus();
-    // process asynchronous ToTop
-    Scheduler::ProcessTaskScheduling();
-    // FIXME: really awful to test focus issues without showing windows.
-    // CPPUNIT_ASSERT(xChild->HasFocus());
 }
 
 namespace {
