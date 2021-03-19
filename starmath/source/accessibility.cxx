@@ -807,7 +807,7 @@ bool SmViewForwarder::IsValid() const
 Point SmViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
 {
     EditView *pEditView = rEditAcc.GetEditView();
-    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
+    OutputDevice* pOutDev = pEditView ? &pEditView->GetOutputDevice() : nullptr;
 
     if( pOutDev )
     {
@@ -824,7 +824,7 @@ Point SmViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMod
 Point SmViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const
 {
     EditView *pEditView = rEditAcc.GetEditView();
-    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
+    OutputDevice* pOutDev = pEditView ? &pEditView->GetOutputDevice() : nullptr;
 
     if( pOutDev )
     {
@@ -1387,7 +1387,7 @@ bool SmEditViewForwarder::IsValid() const
 Point SmEditViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
 {
     EditView *pEditView = rEditAcc.GetEditView();
-    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
+    OutputDevice* pOutDev = pEditView ? &pEditView->GetOutputDevice() : nullptr;
 
     if( pOutDev )
     {
@@ -1404,7 +1404,7 @@ Point SmEditViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMa
 Point SmEditViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const
 {
     EditView *pEditView = rEditAcc.GetEditView();
-    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
+    OutputDevice* pOutDev = pEditView ? &pEditView->GetOutputDevice() : nullptr;
 
     if( pOutDev )
     {

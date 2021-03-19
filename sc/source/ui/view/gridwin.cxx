@@ -2434,7 +2434,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
             const SvxFieldItem* pFld;
             if ( comphelper::LibreOfficeKit::isActive() )
             {
-                Point aLogicClick = pEditView->GetWindow()->PixelToLogic( aPos );
+                Point aLogicClick = pEditView->GetOutputDevice().PixelToLogic(aPos);
                 pFld = pEditView->GetField( aLogicClick );
             }
             else
