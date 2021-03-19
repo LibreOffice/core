@@ -47,7 +47,6 @@
 
 using namespace css::uno;
 using namespace css::frame;
-using namespace css::io;
 using namespace css::lang;
 using namespace css::sheet;
 using namespace css::text;
@@ -169,7 +168,7 @@ void QrCodeGenDialog::Apply()
     // Insert/Update graphic
     SvMemoryStream aSvgStream(4096, 4096);
     aSvgStream.WriteOString(OUStringToOString(aSvgImage, RTL_TEXTENCODING_UTF8));
-    Reference<XInputStream> xInputStream(new utl::OSeekableInputStreamWrapper(aSvgStream));
+    Reference<css::io::XInputStream> xInputStream(new utl::OSeekableInputStreamWrapper(aSvgStream));
     Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
     Reference<XGraphicProvider> xProvider = css::graphic::GraphicProvider::create(xContext);
 
