@@ -1582,11 +1582,6 @@ uno::Any SAL_CALL SvxCustomShape::queryAggregation( const uno::Type & rType )
     return aReturn;
 }
 
-uno::Sequence< uno::Type > SAL_CALL SvxCustomShape::getTypes()
-{
-    return SvxShapeText::getTypes();
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SvxCustomShape::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();

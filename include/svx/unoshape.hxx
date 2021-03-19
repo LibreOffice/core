@@ -794,11 +794,7 @@ public:
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-typedef ::cppu::WeakAggImplHelper1<
-    css::drawing::XEnhancedCustomShapeDefaulter
-    > SvxShape_UnoImplHelper1;
-
-class SVXCORE_DLLPUBLIC SvxCustomShape final : public SvxShapeText, public SvxShape_UnoImplHelper1
+class SVXCORE_DLLPUBLIC SvxCustomShape final : public SvxShapeText, public css::drawing::XEnhancedCustomShapeDefaulter
 {
 protected:
     using SvxUnoTextRangeBase::setPropertyValue;
@@ -827,7 +823,6 @@ public:
     void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     //XEnhancedCustomShapeDefaulter
