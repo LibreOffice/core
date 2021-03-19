@@ -104,6 +104,26 @@
                     android:background="@color/background_normal"
                     android:orientation="vertical" />
 
+                <!--Icon and text to open system file picker via Intent -->
+                <LinearLayout
+                    android:id="@+id/system_file_picker_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/colorButtonNormal"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+                    <TextView
+                        android:id="@+id/open_file_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@drawable/ic_folder_grey_144dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/select_file_to_open"
+                        android:textSize="24dp" />
+                </LinearLayout>
+
             </LinearLayout>
 
         </android.support.v4.widget.NestedScrollView>

@@ -12,6 +12,7 @@ package org.libreoffice.ui;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -127,8 +128,50 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     public static final String NEW_CALC_STRING_KEY = "private:factory/scalc";
     public static final String NEW_DRAW_STRING_KEY = "private:factory/sdraw";
 
+    // keep this in sync with 'AndroidManifext.xml'
+    private static final String[] SUPPORTED_MIME_TYPES = {
+            "application/vnd.oasis.opendocument.text",
+            "application/vnd.oasis.opendocument.graphics",
+            "application/vnd.oasis.opendocument.presentation",
+            "application/vnd.oasis.opendocument.spreadsheet",
+            "application/vnd.oasis.opendocument.text-flat-xml",
+            "application/vnd.oasis.opendocument.graphics-flat-xml",
+            "application/vnd.oasis.opendocument.presentation-flat-xml",
+            "application/vnd.oasis.opendocument.spreadsheet-flat-xml",
+            "application/vnd.oasis.opendocument.text-template",
+            "application/vnd.oasis.opendocument.spreadsheet-template",
+            "application/vnd.oasis.opendocument.graphics-template",
+            "application/vnd.oasis.opendocument.presentation-template",
+            "application/rtf",
+            "text/rtf",
+            "application/msword",
+            "application/vnd.ms-powerpoint",
+            "application/vnd.ms-excel",
+            "application/vnd.visio",
+            "application/vnd.visio.xml",
+            "application/x-mspublisher",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.template",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.template",
+            "application/vnd.openxmlformats-officedocument.presentationml.template",
+            "text/csv",
+            "text/comma-separated-values",
+            "application/vnd.ms-works",
+            "application/vnd.apple.keynote",
+            "application/x-abiword",
+            "application/x-pagemaker",
+            "image/x-emf",
+            "image/x-svm",
+            "image/x-wmf",
+            "image/svg+xml",
+    };
+
     public static final int GRID_VIEW = 0;
     public static final int LIST_VIEW = 1;
+
+    private static final int REQUEST_CODE_OPEN_FILECHOOSER = 12345;
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationDrawer;
@@ -151,6 +194,8 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     private LinearLayout writerLayout;
     private LinearLayout impressLayout;
     private LinearLayout calcLayout;
+    private LinearLayout systemFilePickerLayout;
+    private TextView openFileView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -207,6 +252,8 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         impressLayout = findViewById(R.id.impressLayout);
         calcLayout = findViewById(R.id.calcLayout);
         drawLayout = findViewById(R.id.drawLayout);
+        openFileView = findViewById(R.id.open_file_view);
+        openFileView.setOnClickListener(this);
 
         recentRecyclerView = findViewById(R.id.list_recent);
 
@@ -228,6 +275,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         recentRecyclerView.setAdapter(new RecentFilesAdapter(this, recentFiles));
 
         fileRecyclerView = findViewById(R.id.file_recycler_view);
+        systemFilePickerLayout = findViewById(R.id.system_file_picker_layout);
         //This should be tested because it possibly disables view recycling
         fileRecyclerView.setNestedScrollingEnabled(false);
         openDirectory(currentDirectory);
@@ -277,6 +325,11 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                         return true;
                     }
 
+                    case R.id.menu_system_file_dialog: {
+                        switchToSystemFileDialogLayout();
+                        return true;
+                    }
+
                     default:
                         return false;
                 }
@@ -306,6 +359,9 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         drawerToggle.setDrawerIndicatorEnabled(true);
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
+
+        // initially show layout with item to open system file picker
+        switchToSystemFileDialogLayout();
     }
 
     private void expandFabMenu() {
@@ -418,7 +474,43 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         return viewMode == LIST_VIEW;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_OPEN_FILECHOOSER && resultCode == RESULT_OK) {
+            final Uri fileUri = data.getData();
+
+            // "forward" to LibreOfficeMainActivity to open the file
+            Intent intent = new Intent(Intent.ACTION_VIEW, fileUri);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            String packageName = getApplicationContext().getPackageName();
+            ComponentName componentName = new ComponentName(packageName,
+                    LibreOfficeMainActivity.class.getName());
+            intent.setComponent(componentName);
+            startActivity(intent);
+        }
+    }
+
+    private void showSystemFilePickerAndOpenFile() {
+        Intent intent = new Intent();
+        try {
+            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+        } catch (ActivityNotFoundException exception) {
+            // Intent.ACTION_OPEN_DOCUMENT added in API level 19, but minSdkVersion is currently 16
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+        }
+
+        intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, SUPPORTED_MIME_TYPES);;
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, REQUEST_CODE_OPEN_FILECHOOSER);
+        }
+    }
+
+
     private void switchToDocumentProvider(IDocumentProvider provider) {
+        fileRecyclerView.setVisibility(View.VISIBLE);
+        systemFilePickerLayout.setVisibility(View.GONE);
 
         new AsyncTask<IDocumentProvider, Void, Void>() {
             @Override
@@ -465,6 +557,13 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                 refreshView();
             }
         }.execute(provider);
+    }
+
+    private void switchToSystemFileDialogLayout() {
+        fileRecyclerView.setVisibility(View.GONE);
+        findViewById(R.id.text_directory_path).setVisibility(View.GONE);
+        systemFilePickerLayout.setVisibility(View.VISIBLE);
+        refreshView();
     }
 
     public void openDirectory(IFile dir) {
@@ -1064,6 +1163,9 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                 } else {
                     expandFabMenu();
                 }
+                break;
+            case R.id.open_file_view:
+                showSystemFilePickerAndOpenFile();
                 break;
             case R.id.newWriterFAB:
                 createNewFileInputDialog(getString(R.string.default_document_name) + FileUtilities.DEFAULT_WRITER_EXTENSION, NEW_WRITER_STRING_KEY);

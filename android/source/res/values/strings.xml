@@ -22,6 +22,9 @@
     <string name="new_drawing">New Drawing</string>
     <string name="default_document_name">untitled</string>
 
+    <string name="system_file_selector">System File Dialog</string>
+    <string name="select_file_to_open">Select file to open</string>
+
     <string name="browser_app_name">LibreOffice Browser</string>
     <string name="menu_search">Search</string>
     <string name="list_view">List</string>

@@ -56,6 +56,7 @@ public class FileUtilities {
     private static final Map<String, String> extensionToMimeTypeMap = new HashMap<String, String>();
     static {
         // Please keep this in sync with AndroidManifest.xml
+        // and 'SUPPORTED_MIME_TYPES' in LibreOfficeUIActivity.java
 
         // ODF
         mExtnMap.put(".odt", DOC);
