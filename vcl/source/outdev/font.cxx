@@ -1267,11 +1267,15 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
     // try if fallback fonts support the missing code units
     for( int nFallbackLevel = 1; nFallbackLevel < MAX_FALLBACK; ++nFallbackLevel )
     {
+        rtl::Reference<LogicalFontInstance> pFallbackFont;
+        if(pGlyphs != nullptr && pGlyphs->Impl(nFallbackLevel) != nullptr)
+            pFallbackFont = pGlyphs->Impl(nFallbackLevel)->GetFont();
         // find a font family suited for glyph fallback
         // GetGlyphFallbackFont() needs a valid FontInstance
         // if the system-specific glyph fallback is active
-        rtl::Reference<LogicalFontInstance> pFallbackFont = mxFontCache->GetGlyphFallbackFont( mxFontCollection.get(),
-            aFontSelData, mpFontInstance.get(), nFallbackLevel, aMissingCodes );
+        if( !pFallbackFont )
+            pFallbackFont = mxFontCache->GetGlyphFallbackFont( mxFontCollection.get(),
+                aFontSelData, mpFontInstance.get(), nFallbackLevel, aMissingCodes );
         if( !pFallbackFont )
             break;
 
