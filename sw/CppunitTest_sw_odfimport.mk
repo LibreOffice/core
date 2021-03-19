@@ -19,11 +19,13 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_odfimport, \
 
 $(eval $(call gb_CppunitTest_use_libraries,sw_odfimport, \
     comphelper \
+    editeng \
     cppu \
     cppuhelper \
     sal \
 	svt \
 	sfx \
+	svl \
 	sw \
 	swqahelper \
     test \

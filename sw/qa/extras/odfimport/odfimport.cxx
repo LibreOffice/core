@@ -43,6 +43,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 
 #include <comphelper/propertysequence.hxx>
+#include <editeng/boxitem.hxx>
 
 #include <IDocumentSettingAccess.hxx>
 #include <wrtsh.hxx>
@@ -54,6 +55,7 @@
 #include <hintids.hxx>
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
+#include <frmatr.hxx>
 
 typedef std::map<OUString, css::uno::Sequence< css::table::BorderLine> > AllBordersMap;
 typedef std::pair<OUString, css::uno::Sequence< css::table::BorderLine> > StringSequencePair;
@@ -1156,6 +1158,28 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteFirstParaDirectFormat)
     uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(style::ParagraphAdjust_CENTER),
                          getProperty<sal_Int16>(xParagraph, "ParaAdjust"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testVerticallyMergedCellBorder)
+{
+    // Given a document with two cells, vertically merged, when loading the document:
+    SwDoc* pDoc = createSwDoc(mpTestDocumentPath, "vmerge-cell-border.odt");
+
+    // Then make sure that the first cell has a right border while the second has no right border:
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Down(/*bSelect=*/false, /*nCount=*/1);
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(/*bBlock=*/false);
+    SwStartNode* pA1 = pShellCursor->Start()->nNode.GetNode().StartOfSectionNode();
+    const SwAttrSet& rA1Set = pA1->GetTableBox()->GetFrameFormat()->GetAttrSet();
+    CPPUNIT_ASSERT(rA1Set.GetBox().GetRight());
+    SwNodeIndex aA2(*pA1->EndOfSectionNode(), 1);
+    const SwAttrSet& rA2Set = aA2.GetNode().GetTableBox()->GetFrameFormat()->GetAttrSet();
+
+    // Without the accompanying fix in place, this test would have failed, as the A2 cell also had a
+    // right border, even if <table:covered-table-cell table:style-name="..."> explicitly disabled
+    // it.
+    CPPUNIT_ASSERT(!rA2Set.GetBox().GetRight());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
