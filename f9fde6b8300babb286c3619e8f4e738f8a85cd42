@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "82a32abc_3e5a33d5",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2831,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-19T10:49:27Z",
+      "side": 1,
+      "message": "++aIdx, because for not primitive types, \"pre-increment or pre-decrement operators are usually more efficient in contexts where the returned value is not used, because a temporary copy of the object is constructed during post-increment and post-decrement\" (https://en.cppreference.com/w/cpp/language/operator_incdec)\n\nAs a general rule, follow the syntax/policy of the existing code (except if it is obviously bad. In that case, we must fix that, too :).",
+      "range": {
+        "startLine": 2831,
+        "startChar": 40,
+        "endLine": 2831,
+        "endChar": 48
+      },
+      "revId": "f9fde6b8300babb286c3619e8f4e738f8a85cd42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2780e9bc_7eeac8ba",
         "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
         "patchSetId": 8
