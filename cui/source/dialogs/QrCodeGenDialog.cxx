@@ -45,7 +45,6 @@
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
-using namespace css;
 using namespace css::uno;
 using namespace css::beans;
 using namespace css::container;
@@ -87,7 +86,7 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
         return;
     }
 
-    Reference<container::XIndexAccess> xIndexAccess(m_xModel->getCurrentSelection(),
+    Reference<css::container::XIndexAccess> xIndexAccess(m_xModel->getCurrentSelection(),
                                                     UNO_QUERY_THROW);
     Reference<XPropertySet> xProps(xIndexAccess->getByIndex(0), UNO_QUERY_THROW);
 
@@ -186,7 +185,7 @@ void QrCodeGenDialog::Apply()
     if (bIsExistingQRCode)
         xShapeProps = m_xExistingShapeProperties;
     else
-        xShapeProps.set(Reference<lang::XMultiServiceFactory>(m_xModel, UNO_QUERY_THROW)
+        xShapeProps.set(Reference<css::lang::XMultiServiceFactory>(m_xModel, UNO_QUERY_THROW)
                             ->createInstance("com.sun.star.drawing.GraphicObjectShape"),
                         UNO_QUERY);
 
@@ -200,7 +199,7 @@ void QrCodeGenDialog::Apply()
 
     // Default size
     Reference<XShape> xShape(xShapeProps, UNO_QUERY);
-    awt::Size aShapeSize;
+    css::awt::Size aShapeSize;
     aShapeSize.Height = 4000;
     aShapeSize.Width = 4000;
     xShape->setSize(aShapeSize);
@@ -228,7 +227,7 @@ void QrCodeGenDialog::Apply()
     else if (xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
     {
         Reference<XPropertySet> xSheetCell(m_xModel->getCurrentSelection(), UNO_QUERY_THROW);
-        awt::Point aCellPosition;
+        css::awt::Point aCellPosition;
         xSheetCell->getPropertyValue("Position") >>= aCellPosition;
         xShape->setPosition(aCellPosition);
 
@@ -257,7 +256,7 @@ void QrCodeGenDialog::Apply()
     else
     {
         //Not implemented for math,base and other apps.
-        throw uno::RuntimeException("Not implemented");
+        throw css::uno::RuntimeException("Not implemented");
     }
 #endif
 }
