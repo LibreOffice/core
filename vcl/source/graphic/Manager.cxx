@@ -60,6 +60,7 @@ Manager& Manager::get()
 Manager::Manager()
     : mnAllowedIdleTime(10)
     , mbSwapEnabled(true)
+    , mbReducingGraphicMemory(false)
     , mnMemoryLimit(300000000)
     , mnUsedSize(0)
     , maSwapOutTimer("graphic::Manager maSwapOutTimer")
@@ -117,6 +118,11 @@ void Manager::reduceGraphicMemory()
 
     std::scoped_lock<std::recursive_mutex> aGuard(maMutex);
 
+    // avoid recursive reduceGraphicMemory on reexport of tdf118346-1.odg to odg
+    if (mbReducingGraphicMemory)
+        return;
+    mbReducingGraphicMemory = true;
+
     loopGraphicsAndSwapOut();
 
     sal_Int64 calculatedSize = 0;
@@ -132,6 +138,8 @@ void Manager::reduceGraphicMemory()
     {
         mnUsedSize = calculatedSize;
     }
+
+    mbReducingGraphicMemory = false;
 }
 
 sal_Int64 Manager::getGraphicSizeBytes(const ImpGraphic* pImpGraphic)

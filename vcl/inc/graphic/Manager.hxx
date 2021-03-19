@@ -35,6 +35,7 @@ private:
     o3tl::sorted_vector<ImpGraphic*> m_pImpGraphicList;
     std::chrono::seconds mnAllowedIdleTime;
     bool mbSwapEnabled;
+    bool mbReducingGraphicMemory;
     sal_Int64 mnMemoryLimit;
     sal_Int64 mnUsedSize;
     Timer maSwapOutTimer;
