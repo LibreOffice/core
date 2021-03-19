@@ -263,7 +263,10 @@ ScAccessibleSpreadsheet::ScAccessibleSpreadsheet(
 ScAccessibleSpreadsheet::ScAccessibleSpreadsheet(
         ScAccessibleSpreadsheet& rParent, const ScRange& rRange ) :
     ScAccessibleTableBase( rParent.mpAccDoc, rParent.mpDoc, rRange),
-    mbIsSpreadsheet( false )
+    mbIsSpreadsheet( false ),
+    m_bFormulaMode( false ),
+    m_bFormulaLastMode( false ),
+    m_nMinX(0),m_nMaxX(0),m_nMinY(0),m_nMaxY(0)
 {
     ConstructScAccessibleSpreadsheet( rParent.mpAccDoc, rParent.mpViewShell, rParent.mnTab, rParent.meSplitPos );
 }
