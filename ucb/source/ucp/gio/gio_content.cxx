@@ -790,6 +790,8 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
             else
                 mpInfo = pNewInfo;
 
+            pNewInfo = nullptr;
+
             if (mpFile) //Discard and refetch
             {
                 g_object_unref(mpFile);
@@ -800,6 +802,9 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
         aChanges.realloc( nChanged );
         notifyPropertiesChange( aChanges );
     }
+
+    if (pNewInfo)
+        g_object_unref(pNewInfo);
 
     return aRet;
 }
