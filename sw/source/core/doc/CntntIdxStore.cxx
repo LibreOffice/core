@@ -148,7 +148,7 @@ namespace
             SaveUnoCursors(rDoc, nNode, nContent);
             SaveShellCursors(rDoc, nNode, nContent);
         }
-        virtual void Restore(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false, RestoreMode eMode = RestoreMode::All) override
+        virtual void Restore(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false, bool bAtStart = false, RestoreMode eMode = RestoreMode::All) override
         {
             SwContentNode* pCNd = rDoc.GetNodes()[ nNode ]->GetContentNode();
             updater_t aUpdater = OffsetUpdater(pCNd, nOffset);
@@ -161,7 +161,7 @@ namespace
             }
             if (eMode & RestoreMode::Flys)
             {
-                RestoreFlys(rDoc, aUpdater, bAuto);
+                RestoreFlys(rDoc, aUpdater, bAuto, bAtStart);
             }
         }
         virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen, RestoreMode eMode = RestoreMode::All) override
@@ -178,7 +178,7 @@ namespace
             }
             if (eMode & RestoreMode::Flys)
             {
-                RestoreFlys(rDoc, aUpdater, false);
+                RestoreFlys(rDoc, aUpdater, false, false);
             }
         }
 
@@ -188,7 +188,7 @@ namespace
             void SaveRedlines(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nContent);
             void RestoreRedlines(SwDoc& rDoc, updater_t const & rUpdater);
             void SaveFlys(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nContent, bool bSaveFlySplit);
-            void RestoreFlys(SwDoc& rDoc, updater_t const & rUpdater, bool bAuto);
+            void RestoreFlys(SwDoc& rDoc, updater_t const & rUpdater, bool bAuto, bool bAtStart);
             void SaveUnoCursors(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nContent);
             void RestoreUnoCursors(updater_t const & rUpdater);
             void SaveShellCursors(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nContent);
@@ -369,7 +369,7 @@ void ContentIdxStoreImpl::SaveFlys(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nCont
     }
 }
 
-void ContentIdxStoreImpl::RestoreFlys(SwDoc& rDoc, updater_t const & rUpdater, bool bAuto)
+void ContentIdxStoreImpl::RestoreFlys(SwDoc& rDoc, updater_t const & rUpdater, bool bAuto, bool bAtStart)
 {
     SwFrameFormats* pSpz = rDoc.GetSpzFrameFormats();
     for (const MarkEntry& aEntry : m_aFlyEntries)
@@ -380,6 +380,8 @@ void ContentIdxStoreImpl::RestoreFlys(SwDoc& rDoc, updater_t const & rUpdater, b
             const SwFormatAnchor& rFlyAnchor = pFrameFormat->GetAnchor();
             if( rFlyAnchor.GetContentAnchor() )
             {
+                if(bAtStart && RndStdIds::FLY_AT_PARA == rFlyAnchor.GetAnchorId())
+                    continue;
                 SwFormatAnchor aNew( rFlyAnchor );
                 SwPosition aNewPos( *rFlyAnchor.GetContentAnchor() );
                 rUpdater(aNewPos, aEntry.m_nContent);

@@ -410,7 +410,7 @@ void MoveMergedFlysAndFootnotes(std::vector<SwTextFrame*> const& rFrames,
 } // namespace
 
 SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
-        std::function<void (SwTextNode *, sw::mark::RestoreMode)> const*const pContentIndexRestore)
+        std::function<void (SwTextNode *, sw::mark::RestoreMode, bool AtStart)> const*const pContentIndexRestore)
 {
     bool isHide(false);
     SwNode::Merge const eOldMergeFlag(GetRedlineMergeFlag());
@@ -523,7 +523,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
 
         if (pContentIndexRestore)
         {   // call before making frames and before RegisterToNode
-            (*pContentIndexRestore)(pNode, sw::mark::RestoreMode::NonFlys);
+            (*pContentIndexRestore)(pNode, sw::mark::RestoreMode::NonFlys, false);
         }
         if (eOldMergeFlag != SwNode::Merge::None)
         {   // clear before making frames and before RegisterToNode
@@ -560,7 +560,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
         lcl_ChangeFootnoteRef( *this );
         if (pContentIndexRestore)
         {   // call after making frames; listeners will take care of adding to the right frame
-            (*pContentIndexRestore)(pNode, sw::mark::RestoreMode::Flys);
+            (*pContentIndexRestore)(pNode, sw::mark::RestoreMode::Flys, false);
         }
         if (eOldMergeFlag != SwNode::Merge::None)
         {
@@ -623,7 +623,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
 
         if (pContentIndexRestore)
         {   // call before making frames and before RegisterToNode
-            (*pContentIndexRestore)(pNode, sw::mark::RestoreMode::NonFlys);
+            (*pContentIndexRestore)(pNode, sw::mark::RestoreMode::NonFlys, false);
         }
 
         std::vector<SwTextFrame*> frames;
@@ -690,7 +690,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
 
         if (pContentIndexRestore)
         {   // call after making frames; listeners will take care of adding to the right frame
-            (*pContentIndexRestore)(pNode, sw::mark::RestoreMode::Flys);
+            (*pContentIndexRestore)(pNode, sw::mark::RestoreMode::Flys, nSplitPos == 0);
         }
 
         if (bRecreateThis)
