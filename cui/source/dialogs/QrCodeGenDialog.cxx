@@ -47,7 +47,6 @@
 
 using namespace css::uno;
 using namespace css::frame;
-using namespace css::sheet;
 using namespace css::text;
 using namespace css::drawing;
 using namespace css::graphic;
@@ -227,8 +226,8 @@ void QrCodeGenDialog::Apply()
         xSheetCell->getPropertyValue("Position") >>= aCellPosition;
         xShape->setPosition(aCellPosition);
 
-        Reference<XSpreadsheetView> xView(m_xModel->getCurrentController(), UNO_QUERY_THROW);
-        Reference<XSpreadsheet> xSheet(xView->getActiveSheet(), UNO_SET_THROW);
+        Reference<css::sheet::XSpreadsheetView> xView(m_xModel->getCurrentController(), UNO_QUERY_THROW);
+        Reference<css::sheet::XSpreadsheet> xSheet(xView->getActiveSheet(), UNO_SET_THROW);
         Reference<XDrawPageSupplier> xDrawPageSupplier(xSheet, UNO_QUERY_THROW);
         Reference<XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
         Reference<XShapes> xShapes(xDrawPage, UNO_QUERY_THROW);
