@@ -1882,6 +1882,7 @@ namespace
 
         gtk_container_add(GTK_CONTAINER(pReplacement), pWidget);
 
+        // coverity[freed_arg : FALSE] - this does not free pWidget, it is reffed by pReplacement
         g_object_unref(pWidget);
     }
 
