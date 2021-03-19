@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "68d241a9_3ba02515",
+        "filename": "basic/qa/basic_coverage/test_ccur_method.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-03-19T15:01:36Z",
+      "side": 1,
+      "message": "The test looks fine, but you have to remove these whitespaces at the beginning of the line. Same as on line 19.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 4
+      },
+      "revId": "4d745df6bd2740bc4ee266911979f8a675ca1da0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
