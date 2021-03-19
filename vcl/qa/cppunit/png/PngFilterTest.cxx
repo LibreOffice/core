@@ -97,8 +97,14 @@ void PngFilterTest::testPng()
             }
         }
     }
-    for (const OUString& aFileName :
-         { OUString("color-rect-8bit-RGB.png"), OUString("color-rect-4bit-pal.png") })
+
+    OUString aFilenames[] = {
+        OUString("color-rect-8bit-RGB.png"),
+        OUString("color-rect-8bit-RGB-interlaced.png"),
+        OUString("color-rect-4bit-pal.png"),
+    };
+
+    for (const OUString& aFileName : aFilenames)
     {
         SvFileStream aFileStream(getFullUrl(aFileName), StreamMode::READ);
 
