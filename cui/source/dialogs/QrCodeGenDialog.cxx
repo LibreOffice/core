@@ -47,7 +47,6 @@
 
 using namespace css::uno;
 using namespace css::frame;
-using namespace css::drawing;
 using namespace css::graphic;
 #if ENABLE_QRCODEGEN
 using namespace qrcodegen;
@@ -192,7 +191,7 @@ void QrCodeGenDialog::Apply()
         return;
 
     // Default size
-    Reference<XShape> xShape(xShapeProps, UNO_QUERY);
+    Reference<css::drawing::XShape> xShape(xShapeProps, UNO_QUERY);
     css::awt::Size aShapeSize;
     aShapeSize.Height = 4000;
     aShapeSize.Width = 4000;
@@ -227,9 +226,9 @@ void QrCodeGenDialog::Apply()
 
         Reference<css::sheet::XSpreadsheetView> xView(m_xModel->getCurrentController(), UNO_QUERY_THROW);
         Reference<css::sheet::XSpreadsheet> xSheet(xView->getActiveSheet(), UNO_SET_THROW);
-        Reference<XDrawPageSupplier> xDrawPageSupplier(xSheet, UNO_QUERY_THROW);
-        Reference<XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
-        Reference<XShapes> xShapes(xDrawPage, UNO_QUERY_THROW);
+        Reference<css::drawing::XDrawPageSupplier> xDrawPageSupplier(xSheet, UNO_QUERY_THROW);
+        Reference<css::drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+        Reference<css::drawing::XShapes> xShapes(xDrawPage, UNO_QUERY_THROW);
 
         xShapes->add(xShape);
         return;
@@ -239,9 +238,9 @@ void QrCodeGenDialog::Apply()
     else if (xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument")
              || xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument"))
     {
-        Reference<XDrawView> xView(m_xModel->getCurrentController(), UNO_QUERY_THROW);
-        Reference<XDrawPage> xPage(xView->getCurrentPage(), UNO_SET_THROW);
-        Reference<XShapes> xShapes(xPage, UNO_QUERY_THROW);
+        Reference<css::drawing::XDrawView> xView(m_xModel->getCurrentController(), UNO_QUERY_THROW);
+        Reference<css::drawing::XDrawPage> xPage(xView->getCurrentPage(), UNO_SET_THROW);
+        Reference<css::drawing::XShapes> xShapes(xPage, UNO_QUERY_THROW);
 
         xShapes->add(xShape);
         return;
