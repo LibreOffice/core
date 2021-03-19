@@ -7,10 +7,16 @@
 '
 
 Function doUnitTest as Integer
+
+    doUnitTest = 0
+
     ' CCUR
-    If (CCur("100") <> 100) Then
-        doUnitTest = 0
-    Else
-        doUnitTest = 1
-    End If
+    if (CCur("100") <> 100) Then Exit Function
+    ' tdf#141050 - passing a number with + sign
+    if (CCur("+100") <> 100) Then Exit Function
+    ' tdf#141050 - passing a number with - sign
+    if (CCur("-100") <> -100) Then Exit Function
+
+    doUnitTest = 1
+
 End Function
