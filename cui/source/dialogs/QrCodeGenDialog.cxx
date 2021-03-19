@@ -46,7 +46,6 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
 using namespace css::uno;
-using namespace css::beans;
 using namespace css::container;
 using namespace css::frame;
 using namespace css::io;
@@ -88,7 +87,7 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
 
     Reference<css::container::XIndexAccess> xIndexAccess(m_xModel->getCurrentSelection(),
                                                     UNO_QUERY_THROW);
-    Reference<XPropertySet> xProps(xIndexAccess->getByIndex(0), UNO_QUERY_THROW);
+    Reference<css::beans::XPropertySet> xProps(xIndexAccess->getByIndex(0), UNO_QUERY_THROW);
 
     // Read properties from selected QR Code
     css::drawing::QRCode aQRCode;
@@ -175,13 +174,13 @@ void QrCodeGenDialog::Apply()
     Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
     Reference<XGraphicProvider> xProvider = css::graphic::GraphicProvider::create(xContext);
 
-    Sequence<PropertyValue> aMediaProperties(1);
+    Sequence<css::beans::PropertyValue> aMediaProperties(1);
     aMediaProperties[0].Name = "InputStream";
     aMediaProperties[0].Value <<= xInputStream;
     Reference<XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
 
     bool bIsExistingQRCode = m_xExistingShapeProperties.is();
-    Reference<XPropertySet> xShapeProps;
+    Reference<css::beans::XPropertySet> xShapeProps;
     if (bIsExistingQRCode)
         xShapeProps = m_xExistingShapeProperties;
     else
@@ -226,7 +225,7 @@ void QrCodeGenDialog::Apply()
     // Calc
     else if (xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
     {
-        Reference<XPropertySet> xSheetCell(m_xModel->getCurrentSelection(), UNO_QUERY_THROW);
+        Reference<css::beans::XPropertySet> xSheetCell(m_xModel->getCurrentSelection(), UNO_QUERY_THROW);
         css::awt::Point aCellPosition;
         xSheetCell->getPropertyValue("Position") >>= aCellPosition;
         xShape->setPosition(aCellPosition);
