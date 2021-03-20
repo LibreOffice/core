@@ -187,7 +187,7 @@ public:
     bool  CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr );
 
     // remove the DDE-Link format promise
-    void RemoveDDELinkFormat( const vcl::Window& rWin );
+    void RemoveDDELinkFormat(vcl::Window& rWin);
 
     // paste - methods and helper methods for the paste
     static bool IsPaste( const SwWrtShell&, const TransferableDataHelper& );
