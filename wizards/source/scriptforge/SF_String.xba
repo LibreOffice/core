@@ -1071,6 +1071,82 @@ Catch:
 End Function	&apos;	ScriptForge.SF_String.IsHexDigit
 
 REM -----------------------------------------------------------------------------
+Public Function IsIBAN(Optional ByVal InputStr As Variant) As Boolean
+&apos;&apos;&apos;	Returns True if the input string is a valid International Bank Account Number
+&apos;&apos;&apos;	Read https://en.wikipedia.org/wiki/International_Bank_Account_Number
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		InputStr: the input string
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True if the string contains a valid IBAN number. The comparison is not case-sensitive
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		SF_String.IsIBAN(&quot;BR15 0000 0000 0000 1093 2840 814 P2&quot;) returns True
+
+Dim bIBAN As Boolean			&apos;	Return value
+Dim sIBAN As String				&apos;	Transformed input string
+Dim sChar As String				&apos;	A single character
+Dim sLetter As String			&apos;	Integer representation of letters
+Dim iIndex As Integer			&apos;	Index in IBAN string
+Dim sLong As String				&apos;	String representation of a Long
+Dim iModulo97 As Integer		&apos;	Remainder of division by 97
+Dim i As Integer
+Const cstThisSub = &quot;String.IsIBAN&quot;
+Const cstSubArgs = &quot;InputStr&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bIBAN = False
+
+Check:
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(InputStr, &quot;InputStr&quot;, V_STRING) Then GoTo Finally
+	End If
+
+Try:
+	sIBAN = &quot;&quot;
+	&apos;	1.	Remove spaces. Check that the total IBAN length is correct as per the country. If not, the IBAN is invalid
+	&apos;		NOT DONE: Country specific
+	sIBAN = Replace(InputStr, &quot; &quot;, &quot;&quot;)
+	If Len(sIBAN) &lt; 5 Or Len(sIBAN) &gt; 34 Then GoTo Finally
+	
+	&apos;	2.	Move the four initial characters to the end of the string. String is case-insensitive
+	sIBAN = UCase(Mid(sIBAN, 5) &amp; Left(sIBAN, 4))
+
+	&apos;	3.	Replace each letter in the string with two digits, thereby expanding the string, where A = 10, B = 11, ..., Z = 35
+	iIndex = 1
+	Do While iIndex &lt; Len(sIBAN)
+		sChar = Mid(sIBAN, iIndex, 1)
+		If sChar &gt;= &quot;A&quot; And sChar &lt;= &quot;Z&quot; Then
+			sLetter = CStr(Asc(sChar) - Asc(&quot;A&quot;) + 10)
+			sIBAN = Left(sIBAN, iIndex - 1) &amp; sLetter &amp; Mid(sIBAN, iIndex + 1)
+			iIndex = iIndex + 2
+		ElseIf sChar &lt; &quot;0&quot; Or sChar &gt; &quot;9&quot; Then		&apos;	Remove any non-alphanumeric character
+			GoTo Finally
+		Else
+			iIndex = iIndex + 1
+		End If
+	Loop
+
+	&apos;	4.	Interpret the string as a decimal integer and compute the remainder of that number on division by 97
+	&apos;		Computation is done in chunks of 9 digits
+	iIndex = 3
+	sLong = Left(sIBAN, 2)
+	Do While iIndex &lt;= Len(sIBAN)
+		sLong = sLong &amp; Mid(sIBAN, iIndex, 7)
+		iModulo97 = CLng(sLong) Mod 97
+		iIndex = iIndex + Len(sLong) - 2
+		sLong = Right(&quot;0&quot; &amp; CStr(iModulo97), 2)		&apos;	Force leading zero
+	Loop
+
+	bIBAN = ( iModulo97 = 1 )
+
+Finally:
+	IsIBAN = bIBAN
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_String.IsIBAN
+
+REM -----------------------------------------------------------------------------
 Public Function IsIPv4(Optional ByRef InputStr As Variant) As Boolean
 &apos;&apos;&apos;	Return True if the string is a valid IPv4 address
 &apos;&apos;&apos;	Args:
