@@ -31,6 +31,8 @@ class SwEndNoteOptionPage : public SfxTabPage
     OUString aNumDoc;
     OUString aNumPage;
     OUString aNumChapter;
+    OUString m_sCharAnchor;
+    OUString m_sCharText;
     SwWrtShell *pSh;
     bool    bPosDoc;
     bool    bEndNote;
@@ -59,6 +61,8 @@ class SwEndNoteOptionPage : public SfxTabPage
     DECL_LINK(PosPageHdl, weld::Button&, void);
     DECL_LINK(PosChapterHdl, weld::Button&, void);
     DECL_LINK(NumCountHdl, weld::ComboBox&, void);
+    DECL_LINK(CharAnchorHdl, weld::ComboBox&, void);
+    DECL_LINK(CharTextHdl, weld::ComboBox&, void);
 
 public:
     SwEndNoteOptionPage(weld::Container* pPage, weld::DialogController* pController, bool bEndNote, const SfxItemSet &rSet);

@@ -20,6 +20,7 @@
 #include <svl/style.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
+#include <doc.hxx>
 #include <docsh.hxx>
 #include <docfnote.hxx>
 #include "impfnote.hxx"
@@ -41,7 +42,6 @@ SwFootNoteOptionDlg::SwFootNoteOptionDlg(weld::Window *pParent, SwWrtShell &rS)
     RemoveResetButton();
 
     GetOKButton().connect_clicked(LINK(this, SwFootNoteOptionDlg, OkHdl));
-
     AddTabPage("footnotes", SwFootNoteOptionPage::Create, nullptr);
     AddTabPage("endnotes",  SwEndNoteOptionPage::Create, nullptr);
 }
@@ -100,7 +100,8 @@ SwEndNoteOptionPage::SwEndNoteOptionPage(weld::Container* pPage, weld::DialogCon
         m_xPosPageBox->connect_clicked(LINK(this, SwEndNoteOptionPage, PosPageHdl));
         m_xPosChapterBox->connect_clicked(LINK(this, SwEndNoteOptionPage, PosChapterHdl));
     }
-
+    m_xFootnoteCharAnchorTemplBox->connect_changed(LINK(this, SwEndNoteOptionPage, CharAnchorHdl));
+    m_xFootnoteCharTextTemplBox->connect_changed(LINK(this, SwEndNoteOptionPage, CharTextHdl));
 }
 
 SwEndNoteOptionPage::~SwEndNoteOptionPage()
@@ -154,10 +155,12 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
 
     const SwCharFormat* pCharFormat = pInf->GetCharFormat(
                         *pSh->GetView().GetDocShell()->GetDoc());
+    m_sCharText = pCharFormat->GetName();
     m_xFootnoteCharTextTemplBox->set_active_text(pCharFormat->GetName());
     m_xFootnoteCharTextTemplBox->save_value();
 
     pCharFormat = pInf->GetAnchorCharFormat( *pSh->GetDoc() );
+    m_sCharAnchor = pCharFormat->GetName();
     m_xFootnoteCharAnchorTemplBox->set_active_text( pCharFormat->GetName() );
     m_xFootnoteCharAnchorTemplBox->save_value();
 
@@ -255,6 +258,27 @@ void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
 
     ::FillCharStyleListBox(*m_xFootnoteCharAnchorTemplBox,
                         pSh->GetView().GetDocShell(), true);
+    // Writer expects (but doesn't enforce) a unique style for each of these four situations.
+    // Find in-use styles and remove them from these initialized lists to avoid unexpected results.
+    // Ignored edge case: on a brand new document, there are no CharFormats defined
+    const SwDoc* pDoc = pSh->GetDoc();
+    if (!pDoc)
+        return;
+    const sal_uInt16 nThisAnchorId = bEndNote ? RES_POOLCHR_ENDNOTE_ANCHOR : RES_POOLCHR_FOOTNOTE_ANCHOR;
+    const sal_uInt16 nThisTextId = bEndNote ? RES_POOLCHR_ENDNOTE : RES_POOLCHR_FOOTNOTE;
+    for (const auto& pDocFormat : *pDoc->GetCharFormats())
+    {
+        if (pDocFormat->GetPoolFormatId() == RES_POOLCHR_ENDNOTE_ANCHOR
+            || pDocFormat->GetPoolFormatId() == RES_POOLCHR_FOOTNOTE_ANCHOR
+            || pDocFormat->GetPoolFormatId() == RES_POOLCHR_ENDNOTE
+            || pDocFormat->GetPoolFormatId() == RES_POOLCHR_FOOTNOTE)
+        {
+            if (pDocFormat->GetPoolFormatId() != nThisAnchorId )
+                m_xFootnoteCharAnchorTemplBox->remove_text(pDocFormat->GetName());
+            if (pDocFormat->GetPoolFormatId() != nThisTextId )
+                m_xFootnoteCharTextTemplBox->remove_text(pDocFormat->GetName());
+        }
+    }
 }
 
 // Handler behind the button to collect the footnote at the page. In this case
@@ -299,6 +323,30 @@ IMPL_LINK_NOARG(SwEndNoteOptionPage, PosChapterHdl, weld::Button&, void)
     m_xPageTemplBox->set_sensitive(true);
 }
 
+IMPL_LINK_NOARG(SwEndNoteOptionPage, CharAnchorHdl, weld::ComboBox&, void)
+{
+    // Writer expects (but doesn't enforce) a unique style for each of these four situations.
+    // Unfortunately, we can't manipulate the other tab, so this isn't perfect, but at least for this set we can prevent a collision.
+
+    // Now that the previously used style is available again: add it back to the other list, and remove this one.
+    m_xFootnoteCharTextTemplBox->freeze();
+    ::InsertStringSorted(OUString::number(bEndNote ? RES_POOLCHR_ENDNOTE_ANCHOR : RES_POOLCHR_FOOTNOTE_ANCHOR), m_sCharAnchor, *m_xFootnoteCharTextTemplBox, 0);
+
+    m_sCharAnchor = m_xFootnoteCharAnchorTemplBox->get_active_text();
+    m_xFootnoteCharTextTemplBox->remove_text(m_sCharAnchor);
+    m_xFootnoteCharTextTemplBox->thaw();
+}
+
+IMPL_LINK_NOARG(SwEndNoteOptionPage, CharTextHdl, weld::ComboBox&, void)
+{
+    m_xFootnoteCharAnchorTemplBox->freeze();
+    ::InsertStringSorted(OUString::number(bEndNote ? RES_POOLCHR_ENDNOTE : RES_POOLCHR_FOOTNOTE), m_sCharText, *m_xFootnoteCharAnchorTemplBox, 0);
+
+    m_sCharText = m_xFootnoteCharTextTemplBox->get_active_text();
+    m_xFootnoteCharAnchorTemplBox->remove_text(m_sCharText);
+    m_xFootnoteCharAnchorTemplBox->thaw();
+}
+
 static SwCharFormat* lcl_GetCharFormat( SwWrtShell* pSh, const OUString& rCharFormatName )
 {
     SwCharFormat* pFormat = nullptr;
@@ -333,10 +381,9 @@ bool SwEndNoteOptionPage::FillItemSet( SfxItemSet * )
     pInf->SetPrefix(m_xPrefixED->get_text().replaceAll("\\t", "\t"));
     pInf->SetSuffix(m_xSuffixED->get_text().replaceAll("\\t", "\t"));
 
-    pInf->SetCharFormat( lcl_GetCharFormat( pSh,
-                        m_xFootnoteCharTextTemplBox->get_active_text() ) );
-    pInf->SetAnchorCharFormat( lcl_GetCharFormat( pSh,
-                        m_xFootnoteCharAnchorTemplBox->get_active_text() ) );
+    // get_active_text is unreliable when entries are removed from the combobox - so use cached value
+    pInf->SetCharFormat(lcl_GetCharFormat(pSh, m_sCharText));
+    pInf->SetAnchorCharFormat(lcl_GetCharFormat(pSh, m_sCharAnchor));
 
     // paragraph template
     int nPos = m_xParaTemplBox->get_active();
