@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b927a343_574dc81f",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-03-20T23:23:32Z",
+      "side": 1,
+      "message": "\u0027No List\u0027 isn\u0027t a style but a way to remove list styles so we don\u0027t need to do this.",
+      "revId": "1824fbaffb035822821d48a7dd7ed38f8738da2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d43dfb1_e1d79867",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-03-20T23:23:32Z",
+      "side": 1,
+      "message": "well... Since rStr will be empty when a paragraph has no numbering style, how about simply checking if the style family is SfxStyleFamily::Pseudo. If it is then select the first entry in the treebox which should always be \u0027No List\u0027 for eFam \u003d\u003d SfxStyleFamily::Pseudo. For all other style families that get to this point unselect_all().",
+      "revId": "1824fbaffb035822821d48a7dd7ed38f8738da2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
