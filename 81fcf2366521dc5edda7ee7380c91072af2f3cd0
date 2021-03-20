@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67cf6eb1_84c6edf2",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 26
+      },
+      "lineNbr": 3222,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-20T01:36:50Z",
+      "side": 1,
+      "message": "This could reset the state before a current thread times out, and in the meantime another thread could be created, then both threads would think they are running.  Instead, we need to change this to a count of running threads, and then exit in the worker thread when count \u003e1.",
+      "range": {
+        "startLine": 3222,
+        "startChar": 8,
+        "endLine": 3222,
+        "endChar": 55
+      },
+      "revId": "81fcf2366521dc5edda7ee7380c91072af2f3cd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
