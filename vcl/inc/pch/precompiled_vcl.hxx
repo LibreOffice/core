@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:22:46 using:
+ Generated on 2021-03-20 10:40:33 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -176,7 +176,6 @@
 #include <comphelper/string.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
-#include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
@@ -302,6 +301,7 @@
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/glyphitem.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -351,6 +351,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <window.h>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:12:58 using:
+ Generated on 2021-03-20 10:37:46 using:
  ./bin/update_pch cui cui --cutoff=8 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -104,6 +104,7 @@
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationBitmap.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/bitmap/BitmapTypes.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builderpage.hxx>
 #include <vcl/cairo.hxx>

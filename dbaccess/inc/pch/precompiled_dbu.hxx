@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:13:16 using:
+ Generated on 2021-03-20 10:37:51 using:
  ./bin/update_pch dbaccess dbu --cutoff=12 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -108,7 +108,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
@@ -214,7 +213,7 @@
 #include <IClipBoardTest.hxx>
 #include <QEnumTypes.hxx>
 #include <TableConnectionData.hxx>
-#include <TableWindowData.hxx>
+#include <TableFieldDescription.hxx>
 #include <TypeInfo.hxx>
 #include <UITools.hxx>
 #include <browserids.hxx>

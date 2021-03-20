@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-13 10:18:49 using:
+ Generated on 2021-03-20 10:39:33 using:
  ./bin/update_pch sw msword --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -119,6 +119,7 @@
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationBitmap.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/bitmap/BitmapTypes.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
@@ -245,13 +246,13 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
@@ -360,8 +361,7 @@
 #include <o3tl/underlyingenumvalue.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <ooo/vba/XHelperInterface.hpp>
-#include <ooo/vba/word/XListFormat.hpp>
-#include <ooo/vba/word/XListTemplate.hpp>
+#include <ooo/vba/word/XParagraphFormat.hpp>
 #include <oox/dllapi.h>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/export/utils.hxx>
