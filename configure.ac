@@ -10812,6 +10812,7 @@ else
         AC_LANG_PUSH([C++])
         AC_CHECK_HEADER(ZXing/MultiFormatWriter.h, [],
             [AC_MSG_ERROR(zxing headers not found.)], [#include <stdexcept>])
+        ZXING_CFLAGS=-I/usr/include/ZXing
         AC_CHECK_LIB([ZXing], [main], [ZXING_LIBS=-lZXing],
             [ AC_CHECK_LIB([ZXingCore], [main], [ZXING_LIBS=-lZXingCore],
             [ AC_MSG_ERROR(zxing C++ library not found.) ])], [])
