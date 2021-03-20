@@ -21,6 +21,7 @@
 #include <inettbc.hxx>
 
 #include <com/sun/star/uno/Any.h>
+#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -28,7 +29,6 @@
 #include <unotools/historyoptions.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>
 
@@ -203,16 +203,17 @@ IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, OpenHdl, weld::ComboBox&, bool)
 
     Reference< XDesktop2 > xDesktop = Desktop::create( m_xContext );
     Reference< XFrame > xFrame = xDesktop->getActiveFrame();
-    if ( xFrame.is() )
-    {
-        VclPtr<vcl::Window> pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
-        if ( pWin )
-        {
-            pWin->GrabFocus();
-            pWin->ToTop( ToTopFlags::RestoreWhenMin );
-        }
-    }
+    if (!xFrame.is())
+        return true;
 
+    auto xWin = xFrame->getContainerWindow();
+    if (!xWin)
+        return true;
+    xWin->setFocus();
+    Reference<css::awt::XTopWindow> xTop(xWin, UNO_QUERY);
+    if (!xTop)
+        return true;
+    xTop->toFront();
     return true;
 }
 
