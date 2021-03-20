@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-13 10:17:50 using:
+ Generated on 2021-03-20 10:37:43 using:
  ./bin/update_pch cppcanvas cppcanvas --cutoff=11 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -29,7 +29,6 @@
 #include <cstdlib>
 #include <float.h>
 #include <functional>
-#include <initializer_list>
 #include <iomanip>
 #include <limits.h>
 #include <limits>
@@ -73,6 +72,7 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <vcl/bitmap.hxx>
+#include <vcl/bitmap/BitmapTypes.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
@@ -134,6 +134,7 @@
 #include <uno/sequence2.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <cppcanvas/canvas.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
