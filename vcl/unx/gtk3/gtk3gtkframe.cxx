@@ -1554,7 +1554,7 @@ void GtkSalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth
         m_bDefaultSize = false;
 
         // tdf#131031 Just setting maGeometry.nWidth/nHeight will delete
-        // the evtl. implicitely existing space at top for the gtk native MenuBar,
+        // the evtl. implicitly existing space at top for the gtk native MenuBar,
         // will make the Window too big and the StatusBar at the bottom vanish
         // and thus breaks the fix in tdf#130841.
         const int nImplicitMenuBarHeight(m_pSalMenu ? m_pSalMenu->GetMenuBarHeight() : 0);

@@ -103,7 +103,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf140182_extraPagebreak, "tdf140182_extraPagebreak
     // that is handled so to break only 1 page that result only 2 pages.
     // Because of the table, a hack (m_bDummyParaAddedForTableInSection) is set for the entire section,
     // that canceled the page break + section break special case handling, resulting 3 pages.
-    // The accompanying fix eliminates this cancelation.
+    // The accompanying fix eliminates this cancellation.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
