@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f708058d_67d85aad",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-20T11:07:04Z",
+      "side": 1,
+      "message": "This is the correct change!\n\nHowever, to my taste, this looks worse than something like these *two* clean lines:\n\n    auto writer \u003d ZXing::MultiFormatWriter(format).setMargin(aQRBorder).setEccLevel(bqrEcc);\n    writer.setEncoding(ZXing::CharacterSet::UTF8);",
+      "range": {
+        "startLine": 339,
+        "startChar": 4,
+        "endLine": 341,
+        "endChar": 39
+      },
+      "revId": "13062c1f91aa3ad4e2a79e0709fe3859f0a9fa73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
