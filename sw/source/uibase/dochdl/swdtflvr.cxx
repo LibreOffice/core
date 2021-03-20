@@ -376,10 +376,10 @@ const Graphic* SwTransferable::FindOLEReplacementGraphic() const
     return nullptr;
 }
 
-void SwTransferable::RemoveDDELinkFormat( const vcl::Window& rWin )
+void SwTransferable::RemoveDDELinkFormat(vcl::Window& rWin)
 {
     RemoveFormat( SotClipboardFormatId::LINK );
-    CopyToClipboard( const_cast<vcl::Window*>(&rWin) );
+    CopyToClipboard(&rWin);
 }
 
 namespace
