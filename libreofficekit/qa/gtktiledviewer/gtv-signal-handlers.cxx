@@ -38,8 +38,8 @@ void btn_clicked(GtkWidget* pButton, gpointer)
         GtvHelpers::userPromptDialog(GTK_WINDOW(window), "Insert Comment", aEntries);
 
         boost::property_tree::ptree aTree;
-        aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "type", nullptr), '/'), "string");
-        aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "value", nullptr), '/'), aEntries["Text"]);
+        aTree.put(boost::property_tree::ptree::path_type("Text/type", '/'), "string");
+        aTree.put(boost::property_tree::ptree::path_type("Text/value", '/'), aEntries["Text"]);
 
         std::stringstream aStream;
         boost::property_tree::write_json(aStream, aTree);
@@ -191,8 +191,12 @@ static void iterateUnoParams(GtkWidget* pWidget, gpointer userdata)
         unoParam[i] = gtk_entry_get_text(GTK_ENTRY(pIt->data));
     }
 
-    pTree->put(boost::property_tree::ptree::path_type(g_strconcat(unoParam[1], "/", "type", nullptr), '/'), unoParam[0]);
-    pTree->put(boost::property_tree::ptree::path_type(g_strconcat(unoParam[1], "/", "value", nullptr), '/'), unoParam[2]);
+    gchar* pPath = g_strconcat(unoParam[1], "/", "type", nullptr);
+    pTree->put(boost::property_tree::ptree::path_type(pPath, '/'), unoParam[0]);
+    g_free(pPath);
+    pPath = g_strconcat(unoParam[1], "/", "value", nullptr);
+    pTree->put(boost::property_tree::ptree::path_type(pPath, '/'), unoParam[2]);
+    g_free(pPath);
 }
 
 void recentUnoChanged( GtkWidget* pSelector, gpointer /* pItem */ )
@@ -256,11 +260,9 @@ void unoCommandDebugger(GtkWidget* pButton, gpointer /* pItem */)
     gtk_widget_show_all(pUnoCmdDialog);
 
     gint res = gtk_dialog_run (GTK_DIALOG(pUnoCmdDialog));
-    switch (res)
+    if (res == GTK_RESPONSE_OK)
     {
-    case GTK_RESPONSE_OK:
-    {
-        const gchar* sUnoCmd = g_strconcat(".uno:", gtk_entry_get_text(GTK_ENTRY(pUnoCmdEntry)), nullptr);
+        gchar* sUnoCmd = g_strconcat(".uno:", gtk_entry_get_text(GTK_ENTRY(pUnoCmdEntry)), nullptr);
 
         boost::property_tree::ptree aTree;
         gtk_container_foreach(GTK_CONTAINER(pUnoParamAreaBox), iterateUnoParams, &aTree);
@@ -273,8 +275,8 @@ void unoCommandDebugger(GtkWidget* pButton, gpointer /* pItem */)
 
         lok_doc_view_post_command(LOK_DOC_VIEW(window->lokdocview), sUnoCmd, (aArguments.empty() ? nullptr : aArguments.c_str()), false);
         addToRecentUnoCommands(window, sUnoCmd, aArguments);
-    }
-        break;
+
+        g_free(sUnoCmd);
     }
 
     gtk_widget_destroy(pUnoCmdDialog);
@@ -649,11 +651,11 @@ void editButtonClicked(GtkWidget* pWidget, gpointer userdata)
     gchar *commentId = static_cast<gchar*>(g_object_get_data(G_OBJECT(userdata), "id"));
 
     boost::property_tree::ptree aTree;
-    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "type", nullptr), '/'), "string");
-    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "value", nullptr), '/'), std::string(commentId));
+    aTree.put(boost::property_tree::ptree::path_type("Id/type", '/'), "string");
+    aTree.put(boost::property_tree::ptree::path_type("Id/value", '/'), std::string(commentId));
 
-    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "type", nullptr), '/'), "string");
-    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "value", nullptr), '/'), aEntries["Text"]);
+    aTree.put(boost::property_tree::ptree::path_type("Text/type", '/'), "string");
+    aTree.put(boost::property_tree::ptree::path_type("Text/value", '/'), aEntries["Text"]);
 
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
@@ -673,11 +675,11 @@ void replyButtonClicked(GtkWidget* pWidget, gpointer userdata)
     gchar *commentId = static_cast<gchar*>(g_object_get_data(G_OBJECT(userdata), "id"));
 
     boost::property_tree::ptree aTree;
-    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "type", nullptr), '/'), "string");
-    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "value", nullptr), '/'), std::string(commentId));
+    aTree.put(boost::property_tree::ptree::path_type("Id/type", '/'), "string");
+    aTree.put(boost::property_tree::ptree::path_type("Id/value", '/'), std::string(commentId));
 
-    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "type", nullptr), '/'), "string");
-    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "value", nullptr), '/'), aEntries["Text"]);
+    aTree.put(boost::property_tree::ptree::path_type("Text/type", '/'), "string");
+    aTree.put(boost::property_tree::ptree::path_type("Text/value", '/'), aEntries["Text"]);
 
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
@@ -697,8 +699,8 @@ void deleteCommentButtonClicked(GtkWidget* pWidget, gpointer userdata)
     gchar *commentid = static_cast<gchar*>(g_object_get_data(G_OBJECT(userdata), "id"));
 
     boost::property_tree::ptree aTree;
-    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "type", nullptr), '/'), "string");
-    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "value", nullptr), '/'), std::string(commentid));
+    aTree.put(boost::property_tree::ptree::path_type("Id/type", '/'), "string");
+    aTree.put(boost::property_tree::ptree::path_type("Id/value", '/'), std::string(commentid));
 
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
