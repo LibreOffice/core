@@ -991,19 +991,28 @@ payloadToRectangle (LOKDocView* pDocView, const char* pPayload)
     aRet.width = aRet.height = aRet.x = aRet.y = 0;
 
     if (!*ppCoordinate)
+    {
+        g_strfreev(ppCoordinates);
         return aRet;
+    }
     aRet.x = atoi(*ppCoordinate);
     if (aRet.x < 0)
         aRet.x = 0;
     ++ppCoordinate;
     if (!*ppCoordinate)
+    {
+        g_strfreev(ppCoordinates);
         return aRet;
+    }
     aRet.y = atoi(*ppCoordinate);
     if (aRet.y < 0)
         aRet.y = 0;
     ++ppCoordinate;
     if (!*ppCoordinate)
+    {
+        g_strfreev(ppCoordinates);
         return aRet;
+    }
     long l = atol(*ppCoordinate);
     if (l > std::numeric_limits<int>::max())
         aRet.width = std::numeric_limits<int>::max();
@@ -1013,7 +1022,10 @@ payloadToRectangle (LOKDocView* pDocView, const char* pPayload)
         aRet.width = priv->m_nDocumentWidthTwips - aRet.x;
     ++ppCoordinate;
     if (!*ppCoordinate)
+    {
+        g_strfreev(ppCoordinates);
         return aRet;
+    }
     l = atol(*ppCoordinate);
     if (l > std::numeric_limits<int>::max())
         aRet.height = std::numeric_limits<int>::max();
@@ -1021,8 +1033,8 @@ payloadToRectangle (LOKDocView* pDocView, const char* pPayload)
         aRet.height = l;
     if (aRet.y + aRet.height > priv->m_nDocumentHeightTwips)
         aRet.height = priv->m_nDocumentHeightTwips - aRet.y;
-    g_strfreev(ppCoordinates);
 
+    g_strfreev(ppCoordinates);
     return aRet;
 }
 
