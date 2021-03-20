@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-13 10:18:25 using:
+ Generated on 2021-03-20 10:38:40 using:
  ./bin/update_pch sc sc --cutoff=12 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -116,6 +116,7 @@
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationBitmap.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/bitmap/BitmapTypes.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/commandevent.hxx>
@@ -209,9 +210,6 @@
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
-#include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/drawing/DashStyle.hpp>
 #include <com/sun/star/drawing/HatchStyle.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
@@ -338,13 +336,6 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <o3tl/unit_conversion.hxx>
-#include <oox/core/filterbase.hxx>
-#include <oox/core/relations.hxx>
-#include <oox/core/xmlfilterbase.hxx>
-#include <oox/dllapi.h>
-#include <oox/helper/binarystreambase.hxx>
-#include <oox/helper/refmap.hxx>
-#include <oox/helper/storagebase.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/thread.hxx>
@@ -562,10 +553,12 @@
 #include <rangelst.hxx>
 #include <rangenam.hxx>
 #include <rangeutl.hxx>
+#include <refdata.hxx>
 #include <reffact.hxx>
 #include <refundo.hxx>
 #include <refupdat.hxx>
 #include <refupdatecontext.hxx>
+#include <root.hxx>
 #include <rowheightcontext.hxx>
 #include <scabstdlg.hxx>
 #include <scdllapi.h>
