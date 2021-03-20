@@ -22,6 +22,30 @@
       "revId": "4d745df6bd2740bc4ee266911979f8a675ca1da0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "760d4189_1db1f10b",
+        "filename": "basic/qa/basic_coverage/test_ccur_method.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1003155
+      },
+      "writtenOn": "2021-03-20T08:31:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68d241a9_3ba02515",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 4
+      },
+      "revId": "4d745df6bd2740bc4ee266911979f8a675ca1da0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
