@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-13 10:19:13 using:
+ Generated on 2021-03-20 10:40:16 using:
  ./bin/update_pch sw swui --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -102,6 +102,7 @@
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationBitmap.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/bitmap/BitmapTypes.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builderpage.hxx>
 #include <vcl/cairo.hxx>
@@ -182,13 +183,15 @@
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
@@ -260,7 +263,9 @@
 #include <com/sun/star/script/XStarBasicAccess.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/PositionLayoutDir.hpp>
@@ -268,12 +273,7 @@
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
-#include <com/sun/star/text/XRelativeTextContentInsert.hpp>
-#include <com/sun/star/text/XRelativeTextContentRemove.hpp>
-#include <com/sun/star/text/XTextAppendAndConvert.hpp>
-#include <com/sun/star/text/XTextCopy.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/text/XTextRangeCompare.hpp>
+#include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
@@ -380,11 +380,10 @@
 #include <o3tl/underlyingenumvalue.hxx>
 #include <officecfg/Office/Writer.hxx>
 #include <ooo/vba/XHelperInterface.hpp>
-#include <ooo/vba/word/XListFormat.hpp>
-#include <ooo/vba/word/XListTemplate.hpp>
-#include <ooo/vba/word/XSection.hpp>
+#include <ooo/vba/word/XParagraphFormat.hpp>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
+#include <sfx2/Metadatable.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/chalign.hxx>
@@ -418,7 +417,6 @@
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
-#include <svl/listener.hxx>
 #include <svl/lstner.hxx>
 #include <svl/macitem.hxx>
 #include <svl/nfkeytab.hxx>
@@ -445,6 +443,7 @@
 #include <svx/autoformathelper.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/colorwindow.hxx>
+#include <svx/ctredlin.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/flagsdef.hxx>
 #include <svx/framelinkarray.hxx>
@@ -570,6 +569,7 @@
 #include <optload.hxx>
 #include <outline.hxx>
 #include <pagedesc.hxx>
+#include <pam.hxx>
 #include <pardlg.hxx>
 #include <poolfmt.hxx>
 #include <reffld.hxx>
@@ -600,7 +600,6 @@
 #include <uitool.hxx>
 #include <undobj.hxx>
 #include <unobaseclass.hxx>
-#include <unotext.hxx>
 #include <unotools.hxx>
 #include <usrpref.hxx>
 #include <view.hxx>

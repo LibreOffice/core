@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-13 10:19:19 using:
+ Generated on 2021-03-20 10:40:27 using:
  ./bin/update_pch sw vbaswobj --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -94,6 +94,7 @@
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/bitmap/BitmapTypes.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
@@ -153,7 +154,9 @@
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -175,8 +178,11 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/rdf/XMetadatable.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
@@ -185,8 +191,8 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
+#include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
@@ -249,9 +255,8 @@
 #include <o3tl/underlyingenumvalue.hxx>
 #include <ooo/vba/XCollection.hpp>
 #include <ooo/vba/XHelperInterface.hpp>
-#include <ooo/vba/word/XListFormat.hpp>
-#include <ooo/vba/word/XListTemplate.hpp>
-#include <ooo/vba/word/XSection.hpp>
+#include <ooo/vba/word/XParagraphFormat.hpp>
+#include <sfx2/Metadatable.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/shell.hxx>
 #include <sot/formats.hxx>
