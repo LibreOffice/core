@@ -67,7 +67,6 @@
 
 #include <unotools/moduleoptions.hxx>
 #include <svtools/helpopt.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <rtl/bootstrap.hxx>
 
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -252,26 +251,6 @@ namespace
         return xFrame;
     }
 
-    vcl::Window* getFrameWindow(const Reference<XFrame>& rFrame)
-    {
-        if (rFrame.is())
-        {
-            try
-            {
-                Reference< awt::XWindow > xContainerWindow(rFrame->getContainerWindow(), UNO_SET_THROW);
-                VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xContainerWindow);
-                return pWindow;
-            }
-            catch (const Exception&)
-            {
-                DBG_UNHANDLED_EXCEPTION("sfx.appl");
-            }
-        }
-
-        SAL_WARN( "sfx.appl", "no parent for dialogs" );
-        return nullptr;
-    }
-
     class LicenseDialog : public weld::GenericDialogController
     {
     public:
@@ -312,11 +291,6 @@ namespace
     };
 }
 
-vcl::Window* SfxRequest::GetFrameWindow() const
-{
-    return getFrameWindow(GetRequestFrame(*this));
-}
-
 weld::Window* SfxRequest::GetFrameWeld() const
 {
     const SfxItemSet* pIntArgs = GetInternalArgs_Impl();
@@ -330,8 +304,13 @@ weld::Window* SfxRequest::GetFrameWeld() const
         return Application::GetFrameWeld(xWindow);
     }
 
-    vcl::Window* pWin = GetFrameWindow();
-    return pWin ? pWin->GetFrameWeld() : nullptr;
+    Reference<XFrame> xFrame(GetRequestFrame(*this));
+    if (!xFrame)
+    {
+        SAL_WARN("sfx.appl", "no parent for dialogs");
+        return nullptr;
+    }
+    return Application::GetFrameWeld(xFrame->getContainerWindow());
 }
 
 void SfxApplication::MiscExec_Impl( SfxRequest& rReq )

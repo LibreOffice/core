@@ -38,7 +38,6 @@ enum class SfxCallMode : sal_uInt16;
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::frame { class XDispatchRecorder; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
-namespace vcl { class Window; }
 namespace weld { class Window; }
 
 class SFX2_DLLPUBLIC SfxRequest final : public SfxHint
@@ -115,7 +114,6 @@ public:
 
     /** Return the window that should be used as the parent for any dialogs this request creates
     */
-    vcl::Window* GetFrameWindow() const;
     weld::Window* GetFrameWeld() const;
 private:
     const SfxRequest&   operator=(const SfxRequest &) = delete;
