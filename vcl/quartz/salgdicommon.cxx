@@ -127,21 +127,6 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
     }
 }
 
-static void AddPolyPolygonToPath( CGMutablePathRef xPath,
-                                  const basegfx::B2DPolyPolygon& rPolyPoly,
-                                  bool bPixelSnap, bool bLineDraw )
-{
-    // short circuit if there is nothing to do
-    if( rPolyPoly.count() == 0 )
-    {
-        return;
-    }
-    for(auto const& rPolygon : rPolyPoly)
-    {
-        AddPolygonToPath( xPath, rPolygon, true, bPixelSnap, bLineDraw );
-    }
-}
-
 bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
                                         const PhysicalFontFace* pFontData,
                                         const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
@@ -1439,30 +1424,21 @@ bool AquaSalGraphics::setClipRegion( const vcl::Region& i_rClip )
     mxClipPath = CGPathCreateMutable();
 
     // set current path, either as polypolgon or sequence of rectangles
-    if(i_rClip.HasPolyPolygonOrB2DPolyPolygon())
-    {
-        const basegfx::B2DPolyPolygon aClip(i_rClip.GetAsB2DPolyPolygon());
+    RectangleVector aRectangles;
+    i_rClip.GetRegionRectangles(aRectangles);
 
-        AddPolyPolygonToPath( mxClipPath, aClip, !getAntiAlias(), false );
-    }
-    else
+    for(const auto& rRect : aRectangles)
     {
-        RectangleVector aRectangles;
-        i_rClip.GetRegionRectangles(aRectangles);
+        const tools::Long nW(rRect.Right() - rRect.Left() + 1); // uses +1 logic in original
 
-        for(const auto& rRect : aRectangles)
+        if(nW)
         {
-            const tools::Long nW(rRect.Right() - rRect.Left() + 1); // uses +1 logic in original
+            const tools::Long nH(rRect.Bottom() - rRect.Top() + 1); // uses +1 logic in original
 
-            if(nW)
+            if(nH)
             {
-                const tools::Long nH(rRect.Bottom() - rRect.Top() + 1); // uses +1 logic in original
-
-                if(nH)
-                {
-                    const CGRect aRect = CGRectMake( rRect.Left(), rRect.Top(), nW, nH);
-                    CGPathAddRect( mxClipPath, nullptr, aRect );
-                }
+                const CGRect aRect = CGRectMake( rRect.Left(), rRect.Top(), nW, nH);
+                CGPathAddRect( mxClipPath, nullptr, aRect );
             }
         }
     }
