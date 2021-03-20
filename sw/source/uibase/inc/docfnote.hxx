@@ -33,6 +33,7 @@ class SwFootNoteOptionDlg : public SfxTabDialogController
 
 public:
     SwFootNoteOptionDlg(weld::Window* pParent, SwWrtShell& rSh);
+    void UpdateCharStyleList(bool bEndnote, const OUString sAdd, const OUString sDel);
 };
 
 #endif
