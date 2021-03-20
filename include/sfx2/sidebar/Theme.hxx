@@ -25,7 +25,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <tools/gen.hxx>
-#include <vcl/wall.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
