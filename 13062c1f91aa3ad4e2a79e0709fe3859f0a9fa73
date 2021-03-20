@@ -22,6 +22,30 @@
       "revId": "13062c1f91aa3ad4e2a79e0709fe3859f0a9fa73",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecb31f0e_3524295a",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-03-20T11:08:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f708058d_67d85aad",
+      "range": {
+        "startLine": 339,
+        "startChar": 4,
+        "endLine": 341,
+        "endChar": 39
+      },
+      "revId": "13062c1f91aa3ad4e2a79e0709fe3859f0a9fa73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
