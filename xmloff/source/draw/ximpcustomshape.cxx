@@ -1286,6 +1286,15 @@ void XMLEnhancedCustomShapeContext::endFastElement(sal_Int32 )
         }
     }
 
+    //tdf#141127 Add ODF default values. Otherwise defaults from MS Office binary format are used.
+    if (!maExtrusion.empty())
+    {
+        auto it = std::find_if(maExtrusion.begin(), maExtrusion.end(), 
+            [](css::beans::PropertyValue& rProp){return EASGet(rProp.Name) == EAS_Skew;} );
+        if (it == maExtrusion.end())
+            GetEnhancedParameterPair(maExtrusion, "50 45", EAS_Skew);
+    }
+
     SdXMLCustomShapePropertyMerge( mrCustomShapeGeometry, maExtrusion, EASGet( EAS_Extrusion ) );
     SdXMLCustomShapePropertyMerge( mrCustomShapeGeometry, maPath,      EASGet( EAS_Path ) );
     SdXMLCustomShapePropertyMerge( mrCustomShapeGeometry, maTextPath,  EASGet( EAS_TextPath ) );
