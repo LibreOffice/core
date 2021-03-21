@@ -6135,8 +6135,8 @@ public:
         gtk_container_remove(GTK_CONTAINER(m_pScrolledWindow), pViewport);
 
         gtk_container_add(GTK_CONTAINER(m_pScrolledWindow), m_pOrigViewport);
-        g_object_unref(m_pOrigViewport);
         // coverity[freed_arg : FALSE] - this does not free m_pOrigViewport, it is reffed by m_pScrolledWindow
+        g_object_unref(m_pOrigViewport);
         gtk_container_add(GTK_CONTAINER(m_pOrigViewport), pChild);
         g_object_unref(pChild);
         gtk_widget_destroy(pViewport);
