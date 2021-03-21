@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e347891_85467a71",
+        "filename": "sfx2/source/devtools/DevToolsStrings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-03-21T11:28:57Z",
+      "side": 1,
+      "message": "Since the other strings are in singular, should this one be in plural?",
+      "revId": "5b84eae0c10aa33bb8ef3a9a0d1336bcc9e9163c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
