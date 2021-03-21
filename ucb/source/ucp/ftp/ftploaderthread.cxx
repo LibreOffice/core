@@ -45,7 +45,7 @@ extern "C" {
     {
         // Otherwise response for QUIT will be sent to already destroyed
         // MemoryContainer via non-dummy memory_write function.
-        curl_easy_setopt(static_cast<CURL*>(pData),
+        (void)curl_easy_setopt(static_cast<CURL*>(pData),
                          CURLOPT_HEADERFUNCTION,
                          memory_write_dummy);
         curl_easy_cleanup(static_cast<CURL*>(pData));
