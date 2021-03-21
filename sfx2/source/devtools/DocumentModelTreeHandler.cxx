@@ -658,13 +658,9 @@ public:
 /** Represents a list of (Calc) sheet */
 class SheetsEntry : public DocumentModelTreeEntry
 {
-private:
-    uno::Reference<container::XIndexAccess> mxIndexAccess;
-
 public:
     SheetsEntry(OUString const& rString, css::uno::Reference<css::uno::XInterface> const& xObject)
         : DocumentModelTreeEntry(rString, xObject)
-        , mxIndexAccess(xObject, uno::UNO_QUERY)
     {
     }
 
@@ -678,18 +674,20 @@ public:
 
     bool shouldShowExpander() override
     {
-        return mxIndexAccess.is() && mxIndexAccess->getCount() > 0;
+        uno::Reference<container::XIndexAccess> xIndexAccess(getMainObject(), uno::UNO_QUERY);
+        return xIndexAccess.is() && xIndexAccess->getCount() > 0;
     }
 
     void fill(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
               weld::TreeIter const& rParent) override
     {
-        if (!mxIndexAccess.is())
+        uno::Reference<container::XIndexAccess> xIndexAccesss(getMainObject(), uno::UNO_QUERY);
+        if (!xIndexAccesss.is())
             return;
 
-        for (sal_Int32 i = 0; i < mxIndexAccess->getCount(); ++i)
+        for (sal_Int32 i = 0; i < xIndexAccesss->getCount(); ++i)
         {
-            uno::Reference<sheet::XSpreadsheet> xSheet(mxIndexAccess->getByIndex(i),
+            uno::Reference<sheet::XSpreadsheet> xSheet(xIndexAccesss->getByIndex(i),
                                                        uno::UNO_QUERY);
             OUString aString = lclGetNamed(xSheet);
             if (aString.isEmpty())
