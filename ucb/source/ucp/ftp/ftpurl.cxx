@@ -371,10 +371,10 @@ namespace ftp {
 
 #define SET_CONTROL_CONTAINER \
     MemoryContainer control;                                      \
-    curl_easy_setopt(curl,                                        \
+    (void)curl_easy_setopt(curl,                                  \
                      CURLOPT_HEADERFUNCTION,                      \
                      memory_write);                               \
-    curl_easy_setopt(curl,                                        \
+    (void)curl_easy_setopt(curl,                                  \
                      CURLOPT_WRITEHEADER,                         \
                      &control)
 
@@ -384,7 +384,7 @@ static void setCurlUrl(CURL* curl, OUString const & url)
     OString urlParAscii(url.getStr(),
                              url.getLength(),
                              RTL_TEXTENCODING_UTF8);
-    curl_easy_setopt(curl,
+    (void)curl_easy_setopt(curl,
                      CURLOPT_URL,
                      urlParAscii.getStr());
 };
@@ -403,10 +403,10 @@ oslFileHandle FTPURL::open()
     oslFileHandle res( nullptr );
     if ( osl_createTempFile( nullptr, &res, nullptr ) == osl_File_E_None )
     {
-        curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,file_write);
-        curl_easy_setopt(curl,CURLOPT_WRITEDATA,res);
+        (void)curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,file_write);
+        (void)curl_easy_setopt(curl,CURLOPT_WRITEDATA,res);
 
-        curl_easy_setopt(curl,CURLOPT_POSTQUOTE,0);
+        (void)curl_easy_setopt(curl,CURLOPT_POSTQUOTE,0);
         CURLcode err = curl_easy_perform(curl);
 
         if(err == CURLE_OK)
@@ -433,14 +433,14 @@ std::vector<FTPDirentry> FTPURL::list(
     CURL *curl = m_pFCP->handle();
 
     SET_CONTROL_CONTAINER;
-    curl_easy_setopt(curl,CURLOPT_NOBODY,false);
+    (void)curl_easy_setopt(curl,CURLOPT_NOBODY,false);
     MemoryContainer data;
-    curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,memory_write);
-    curl_easy_setopt(curl,CURLOPT_WRITEDATA,&data);
+    (void)curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,memory_write);
+    (void)curl_easy_setopt(curl,CURLOPT_WRITEDATA,&data);
 
     OUString url(ident(true,true));
     setCurlUrl(curl, url);
-    curl_easy_setopt(curl,CURLOPT_POSTQUOTE,0);
+    (void)curl_easy_setopt(curl,CURLOPT_POSTQUOTE,0);
 
     CURLcode err = curl_easy_perform(curl);
     if(err != CURLE_OK)
@@ -517,11 +517,11 @@ OUString FTPURL::net_title() const
     CURL *curl = m_pFCP->handle();
 
     SET_CONTROL_CONTAINER;
-    curl_easy_setopt(curl,CURLOPT_NOBODY,true);       // no data => no transfer
+    (void)curl_easy_setopt(curl,CURLOPT_NOBODY,true);       // no data => no transfer
     struct curl_slist *slist = nullptr;
     // post request
     slist = curl_slist_append(slist,"PWD");
-    curl_easy_setopt(curl,CURLOPT_POSTQUOTE,slist);
+    (void)curl_easy_setopt(curl,CURLOPT_POSTQUOTE,slist);
 
     bool try_more(true);
     CURLcode err;
@@ -649,18 +649,18 @@ void FTPURL::insert(bool replaceExisting,void* stream) const
     CURL *curl = m_pFCP->handle();
 
     SET_CONTROL_CONTAINER;
-    curl_easy_setopt(curl,CURLOPT_NOBODY,false);    // no data => no transfer
-    curl_easy_setopt(curl,CURLOPT_POSTQUOTE,0);
-    curl_easy_setopt(curl,CURLOPT_QUOTE,0);
-    curl_easy_setopt(curl,CURLOPT_READFUNCTION,memory_read);
-    curl_easy_setopt(curl,CURLOPT_READDATA,stream);
-    curl_easy_setopt(curl, CURLOPT_UPLOAD,1);
+    (void)curl_easy_setopt(curl,CURLOPT_NOBODY,false);    // no data => no transfer
+    (void)curl_easy_setopt(curl,CURLOPT_POSTQUOTE,0);
+    (void)curl_easy_setopt(curl,CURLOPT_QUOTE,0);
+    (void)curl_easy_setopt(curl,CURLOPT_READFUNCTION,memory_read);
+    (void)curl_easy_setopt(curl,CURLOPT_READDATA,stream);
+    (void)curl_easy_setopt(curl, CURLOPT_UPLOAD,1);
 
     OUString url(ident(false,true));
     setCurlUrl(curl, url);
 
     CURLcode err = curl_easy_perform(curl);
-    curl_easy_setopt(curl, CURLOPT_UPLOAD,false);
+    (void)curl_easy_setopt(curl, CURLOPT_UPLOAD,false);
 
     if(err != CURLE_OK)
         throw curl_exception(err);
@@ -698,11 +698,11 @@ void FTPURL::mkdir(bool ReplaceExisting) const
 
     CURL *curl = m_pFCP->handle();
     SET_CONTROL_CONTAINER;
-    curl_easy_setopt(curl,CURLOPT_NOBODY,true);       // no data => no transfer
-    curl_easy_setopt(curl,CURLOPT_QUOTE,0);
+    (void)curl_easy_setopt(curl,CURLOPT_NOBODY,true);       // no data => no transfer
+    (void)curl_easy_setopt(curl,CURLOPT_QUOTE,0);
 
     // post request
-    curl_easy_setopt(curl,CURLOPT_POSTQUOTE,slist);
+    (void)curl_easy_setopt(curl,CURLOPT_POSTQUOTE,slist);
 
     OUString url(parent(true));
     if(!url.endsWith("/"))
@@ -735,11 +735,11 @@ OUString FTPURL::ren(const OUString& NewTitle)
     struct curl_slist *slist = nullptr;
     slist = curl_slist_append(slist,renamefrom.getStr());
     slist = curl_slist_append(slist,renameto.getStr());
-    curl_easy_setopt(curl,CURLOPT_POSTQUOTE,slist);
+    (void)curl_easy_setopt(curl,CURLOPT_POSTQUOTE,slist);
 
     SET_CONTROL_CONTAINER;
-    curl_easy_setopt(curl,CURLOPT_NOBODY,true);       // no data => no transfer
-    curl_easy_setopt(curl,CURLOPT_QUOTE,0);
+    (void)curl_easy_setopt(curl,CURLOPT_NOBODY,true);       // no data => no transfer
+    (void)curl_easy_setopt(curl,CURLOPT_QUOTE,0);
 
     OUString url(parent(true));
     if(!url.endsWith("/"))
@@ -785,11 +785,11 @@ void FTPURL::del() const
     CURL *curl = m_pFCP->handle();
     struct curl_slist *slist = nullptr;
     slist = curl_slist_append(slist,dele.getStr());
-    curl_easy_setopt(curl,CURLOPT_POSTQUOTE,slist);
+    (void)curl_easy_setopt(curl,CURLOPT_POSTQUOTE,slist);
 
     SET_CONTROL_CONTAINER;
-    curl_easy_setopt(curl,CURLOPT_NOBODY,true);       // no data => no transfer
-    curl_easy_setopt(curl,CURLOPT_QUOTE,0);
+    (void)curl_easy_setopt(curl,CURLOPT_NOBODY,true);       // no data => no transfer
+    (void)curl_easy_setopt(curl,CURLOPT_QUOTE,0);
 
     OUString url(parent(true));
     if(!url.endsWith("/"))
