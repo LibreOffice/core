@@ -21,7 +21,6 @@
 #include <sfx2/linkmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/window.hxx>
 #include <unotools/charclass.hxx>
 #include <osl/diagnose.h>
 
