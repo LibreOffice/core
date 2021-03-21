@@ -55,7 +55,6 @@ class StarBASIC;
 class SfxWorkWindow;
 class SfxFilterMatcher;
 class SfxModule;
-namespace vcl { class Window; }
 struct SfxChildWinFactory;
 struct SfxStbCtrlFactory;
 struct SfxTbxCtrlFactory;
@@ -134,7 +133,7 @@ public:
     * @param pArgs Takes ownership
     */
     ErrCode                     LoadTemplate( SfxObjectShellLock& xDoc, const OUString& rFileName, std::unique_ptr<SfxItemSet> pArgs );
-    vcl::Window*                GetTopWindow() const;
+    weld::Window*               GetTopWindow() const;
 
     // members
     SfxFilterMatcher&           GetFilterMatcher();

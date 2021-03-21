@@ -92,8 +92,8 @@ IMPL_LINK_NOARG(URITools, onOpenURI, Timer*, void)
                 "unexpected IllegalArgumentException: " + e.Message);
         }
         SolarMutexGuard g;
-        vcl::Window *pWindow = SfxGetpApp()->GetTopWindow();
-        std::unique_ptr<weld::MessageDialog> eb(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+        weld::Window *pWindow = SfxGetpApp()->GetTopWindow();
+        std::unique_ptr<weld::MessageDialog> eb(Application::CreateMessageDialog(pWindow,
                                                                  VclMessageType::Warning, VclButtonsType::Ok,
                                                                  SfxResId(STR_NO_ABS_URI_REF)));
         eb->set_primary_text(eb->get_primary_text().replaceFirst("$(ARG1)", msURI));
@@ -103,8 +103,8 @@ IMPL_LINK_NOARG(URITools, onOpenURI, Timer*, void)
             throw;
         }
         SolarMutexGuard g;
-        vcl::Window *pWindow = SfxGetpApp()->GetTopWindow();
-        std::unique_ptr<weld::MessageDialog> eb(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+        weld::Window *pWindow = SfxGetpApp()->GetTopWindow();
+        std::unique_ptr<weld::MessageDialog> eb(Application::CreateMessageDialog(pWindow,
                                                                  VclMessageType::Warning, VclButtonsType::Ok,
                                                                  SfxResId(STR_NO_WEBBROWSER_FOUND)));
         eb->set_primary_text(

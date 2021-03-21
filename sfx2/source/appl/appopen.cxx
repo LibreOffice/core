@@ -452,7 +452,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     if ( !pTemplNameItem && !pTemplFileNameItem )
     {
         bool bNewWin = false;
-        vcl::Window* pTopWin = GetTopWindow();
+        weld::Window* pTopWin = GetTopWindow();
 
         SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
         Reference<XModel> xModel;
@@ -476,10 +476,12 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
             }
         }
 
-        if ( bNewWin && pTopWin )
+        if (bNewWin && pTopWin)
+        {
             // after the destruction of the dialogue its parent comes to top,
             // but we want that the new document is on top
-            pTopWin->ToTop();
+            pTopWin->present();
+        }
 
         return;
     }
@@ -648,8 +650,8 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         if ( pDenyListItem )
             pDenyListItem->GetStringList( aDenyList );
 
-        vcl::Window* pTopWindow = GetTopWindow();
-        ErrCode nErr = sfx2::FileOpenDialog_Impl(pTopWindow ? pTopWindow->GetFrameWeld() : nullptr,
+        weld::Window* pTopWindow = GetTopWindow();
+        ErrCode nErr = sfx2::FileOpenDialog_Impl(pTopWindow,
                 nDialogType,
                 eDialogFlags, aURLList,
                 aFilter, pSet, &aPath, nDialog, sStandardDir, aDenyList);
@@ -833,9 +835,9 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             if ( eMode == SvtExtendedSecurityOptions::OPEN_NEVER && aINetProtocol != INetProtocol::VndSunStarHelp )
             {
                 SolarMutexGuard aGuard;
-                vcl::Window *pWindow = SfxGetpApp()->GetTopWindow();
+                weld::Window *pWindow = SfxGetpApp()->GetTopWindow();
 
-                std::unique_ptr<weld::MessageDialog> xSecurityWarningBox(Application::CreateMessageDialog(pWindow ? pWindow->GetFrameWeld() : nullptr,
+                std::unique_ptr<weld::MessageDialog> xSecurityWarningBox(Application::CreateMessageDialog(pWindow,
                                                                          VclMessageType::Warning, VclButtonsType::Ok, SfxResId(STR_SECURITY_WARNING_NO_HYPERLINKS)));
                 xSecurityWarningBox->set_title(SfxResId(RID_SECURITY_WARNING_TITLE));
                 xSecurityWarningBox->run();

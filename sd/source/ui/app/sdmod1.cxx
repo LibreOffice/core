@@ -477,11 +477,10 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest const & rReq )
             }
         }
 
-        if(bStartWithTemplate)
+        if (bStartWithTemplate)
         {
             //Launch TemplateSelectionDialog
-            vcl::Window* pTopLevel = SfxGetpApp()->GetTopWindow();
-            SfxTemplateSelectionDlg aTemplDlg(pTopLevel ? pTopLevel->GetFrameWeld() : nullptr);
+            SfxTemplateSelectionDlg aTemplDlg(SfxGetpApp()->GetTopWindow());
             aTemplDlg.run();
 
             //check to disable the dialog

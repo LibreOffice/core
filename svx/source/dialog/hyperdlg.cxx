@@ -22,12 +22,9 @@
 #include <sfx2/app.hxx>
 #include <sfx2/sfxsids.hrc>
 
-
 //#                                                                      #
 //# Childwindow-Wrapper-Class                                            #
 //#                                                                      #
-
-
 SFX_IMPL_CHILDWINDOW_WITHID(SvxHlinkDlgWrapper, SID_HYPERLINK_DIALOG)
 
 SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
@@ -45,12 +42,12 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
 
     if ( !pInfo->aSize.IsEmpty() )
     {
-        vcl::Window* pTopWindow = SfxGetpApp()->GetTopWindow();
+        weld::Window* pTopWindow = SfxGetpApp()->GetTopWindow();
         if (pTopWindow)
         {
             weld::Dialog* pDialog = GetController()->getDialog();
 
-            Size aParentSize( pTopWindow->GetSizePixel() );
+            Size aParentSize(pTopWindow->get_size());
             Size aDlgSize(pDialog->get_size());
 
             if( aParentSize.Width() < pInfo->aPos.X() )
