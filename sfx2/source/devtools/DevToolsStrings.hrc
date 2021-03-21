@@ -17,7 +17,7 @@
 #define STR_PAGE NC_("STR_PAGE", "Page %1")
 #define STR_SLIDE NC_("STR_SLIDE", "Slide %1")
 #define STR_MASTER_SLIDE NC_("STR_MASTER_SLIDE", "Master Slide %1")
-#define STR_SHEETS NC_("STR_SHEETS", "Sheets %1")
+#define STR_SHEET NC_("STR_SHEET", "Sheet %1")
 
 #define STR_SHAPES_ENTRY NC_("STR_SHAPES_NODE", "Shapes")
 #define STR_CHARTS_ENTRY NC_("STR_CHARTS_ENTRY", "Charts")
