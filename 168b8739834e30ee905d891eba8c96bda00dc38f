@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "15d04104_84ab7dd9",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1003033
+      },
+      "writtenOn": "2021-03-21T20:39:49Z",
+      "side": 1,
+      "message": "I\u0027m guessing the assumption is that the document will take more than 1ms to load and this will be effectively queued up on the loop immediately after that. I have to wonder if there isn\u0027t a more elegant way to suggest something like idle time processing.",
+      "revId": "168b8739834e30ee905d891eba8c96bda00dc38f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db924f61_c8b327dd",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1003033
+      },
+      "writtenOn": "2021-03-21T20:39:49Z",
+      "side": 1,
+      "message": "I like the commentary.\n\nI do notice that this is a very small incremental increase in the number of lines inside a function that is already rather large. Maybe you feel your little snippet here doesn\u0027t deserve its own named function. Maybe we should consider decomposing the function a little more? Maybe that could be a separate ticket.",
+      "revId": "168b8739834e30ee905d891eba8c96bda00dc38f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "460e3ad5_fd6556de",
+        "filename": "sc/source/ui/view/tabview5.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1003033
+      },
+      "writtenOn": "2021-03-21T20:39:49Z",
+      "side": 1,
+      "message": "Why is 4 such a special number that you would mention it here? And you\u0027re not using i in any sort of arithmetic. If the intention is, as I suspect, simply to call initiatePageBreaks on each non-null element in pGridWin, I think you could communicate that better (and in a less error-prone way) with either std::for_each or a range-based for like:\n\nfor ( auto\u0026 pgw : pGridWin )\n{\n    if ( pgw )\n    {\n        pgw-\u003einitiatePageBreaks();\n    }\n}",
+      "revId": "168b8739834e30ee905d891eba8c96bda00dc38f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
