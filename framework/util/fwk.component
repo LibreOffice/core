@@ -144,7 +144,8 @@
     <service name="com.sun.star.task.StatusIndicatorFactory"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.TaskCreator"
-      constructor="com_sun_star_comp_framework_TaskCreator_get_implementation">
+      constructor="com_sun_star_comp_framework_TaskCreator_get_implementation"
+      single-instance="true">
     <service name="com.sun.star.frame.TaskCreator"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.ToolBarControllerFactory"
