@@ -336,21 +336,6 @@ OUString ModuleManager::implts_identify(const css::uno::Reference< css::uno::XIn
     return OUString();
 }
 
-struct Instance {
-    explicit Instance(
-        css::uno::Reference<css::uno::XComponentContext> const & context):
-        instance(static_cast<cppu::OWeakObject *>(new ModuleManager(context)))
-    {
-    }
-
-    css::uno::Reference<css::uno::XInterface> instance;
-};
-
-struct Singleton:
-    public rtl::StaticWithArg<
-        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
-{};
-
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -358,8 +343,7 @@ com_sun_star_comp_framework_ModuleManager_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject *>(
-                Singleton::get(context).instance.get()));
+    return cppu::acquire(new ModuleManager(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
