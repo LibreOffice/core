@@ -96,7 +96,7 @@ namespace connectivity::file
             // initialize the column index map (mapping select columns to table columns)
             void createColumnMapping();
             // searches the statement for sort criteria
-            void anylizeSQL();
+            void analyzeSQL();
             void setOrderbyColumn( connectivity::OSQLParseNode const * pColumnRef,
                                    connectivity::OSQLParseNode const * pAscendingDescending);
 

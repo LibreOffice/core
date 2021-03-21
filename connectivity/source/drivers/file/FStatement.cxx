@@ -302,9 +302,9 @@ Any SAL_CALL OStatement::queryInterface( const Type & rType )
     return aRet.hasValue() ? aRet : OStatement_BASE2::queryInterface( rType);
 }
 
-void OStatement_Base::anylizeSQL()
+void OStatement_Base::analyzeSQL()
 {
-    OSL_ENSURE(m_pSQLAnalyzer,"OResultSet::anylizeSQL: Analyzer isn't set!");
+    OSL_ENSURE(m_pSQLAnalyzer,"OResultSet::analyzeSQL: Analyzer isn't set!");
     // start analysing the statement
     m_pSQLAnalyzer->setOrigColumns(m_xColNames);
     m_pSQLAnalyzer->start(m_pParseTree);
@@ -428,7 +428,7 @@ void OStatement_Base::construct(const OUString& sql)
 
     m_pSQLAnalyzer.reset( new OSQLAnalyzer(m_pConnection.get()) );
 
-    anylizeSQL();
+    analyzeSQL();
 }
 
 void OStatement_Base::createColumnMapping()
