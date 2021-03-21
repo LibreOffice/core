@@ -141,7 +141,7 @@ OString GenerateQRCode(const OUString& aQRText, tools::Long aQRECC, int aQRBorde
     (void)aQRText;
     (void)aQRECC;
     (void)aQRBorder;
-    return OUString();
+    return OString();
 #endif
 }
 }
