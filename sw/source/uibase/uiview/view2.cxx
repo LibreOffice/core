@@ -2666,7 +2666,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
     {
         // call documents and template dialog
         SfxApplication* pSfxApp = SfxGetpApp();
-        vcl::Window* pTopWin = pSfxApp->GetTopWindow();
+        weld::Window* pTopWin = pSfxApp->GetTopWindow();
 
         SfxTemplateManagerDlg aDocTemplDlg(GetFrameWeld());
         int nRet = aDocTemplDlg.run();
@@ -2681,10 +2681,12 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             }
         }
 
-        if ( bNewWin )
+        if (bNewWin)
+        {
             // after the destruction of the dialogue its parent comes to top,
             // but we want that the new document is on top
-            pTopWin->ToTop();
+            pTopWin->present();
+        }
     }
 #endif
 }

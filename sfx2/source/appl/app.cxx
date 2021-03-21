@@ -328,10 +328,15 @@ void SfxApplication::ReleaseIndex(sal_uInt16 i)
 }
 
 
-vcl::Window* SfxApplication::GetTopWindow() const
+weld::Window* SfxApplication::GetTopWindow() const
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( SfxViewFrame::Current() );
-    return pWork ? pWork->GetWindow() : nullptr;
+    if (!pWork)
+        return nullptr;
+    vcl::Window* pWindow = pWork->GetWindow();
+    if (!pWindow)
+        return nullptr;
+    return pWindow->GetFrameWeld();
 }
 
 SfxTbxCtrlFactArr_Impl&     SfxApplication::GetTbxCtrlFactories_Impl() const

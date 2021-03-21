@@ -490,8 +490,8 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
             if ( eResult == SfxMailModel::SEND_MAIL_ERROR )
             {
-                vcl::Window* pWin = SfxGetpApp()->GetTopWindow();
-                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                weld::Window* pWin = SfxGetpApp()->GetTopWindow();
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin,
                                                                          VclMessageType::Info, VclButtonsType::Ok,
                                                                          SfxResId(STR_ERROR_SEND_MAIL)));
                 xBox->run();
@@ -513,8 +513,8 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             SfxMailModel::SendMailResult eResult = aModel.SaveAndSend( xFrame );
             if( eResult == SfxMailModel::SEND_MAIL_ERROR )
             {
-                vcl::Window* pWin = SfxGetpApp()->GetTopWindow();
-                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                weld::Window* pWin = SfxGetpApp()->GetTopWindow();
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin,
                                                                          VclMessageType::Info, VclButtonsType::Ok,
                                                                          SfxResId(STR_ERROR_SEND_MAIL)));
                 xBox->run();
