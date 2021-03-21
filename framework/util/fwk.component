@@ -63,7 +63,8 @@
     <service name="com.sun.star.ui.ImageManager"/>
   </implementation>
   <implementation name="com.sun.star.comp.framework.JobExecutor"
-      constructor="com_sun_star_comp_framework_JobExecutor_get_implementation">
+      constructor="com_sun_star_comp_framework_JobExecutor_get_implementation"
+      single-instance="true">
     <service name="com.sun.star.task.JobExecutor"/>
     <singleton name="com.sun.star.task.theJobExecutor"/>
   </implementation>
