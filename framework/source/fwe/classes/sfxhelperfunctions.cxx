@@ -146,10 +146,11 @@ bool IsDockingWindowVisible( const css::uno::Reference< css::frame::XFrame >& rF
 
 using namespace ::com::sun::star;
 uno::Reference<ui::XContextChangeEventListener> GetFirstListenerWith(
+    css::uno::Reference<css::uno::XComponentContext> const & xComponentContext,
     uno::Reference<uno::XInterface> const& xEventFocus,
     std::function<bool (uno::Reference<ui::XContextChangeEventListener> const&)> const& rPredicate)
 {
-    return GetFirstListenerWith_Impl(xEventFocus, rPredicate);
+    return GetFirstListenerWith_Impl(xComponentContext, xEventFocus, rPredicate);
 }
 
 }

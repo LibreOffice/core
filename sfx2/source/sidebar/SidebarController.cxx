@@ -185,7 +185,9 @@ SidebarController* SidebarController::GetSidebarControllerForFrame (
         return nullptr;
     }
     uno::Reference<ui::XContextChangeEventListener> const xListener(
-        framework::GetFirstListenerWith(xController,
+        framework::GetFirstListenerWith(
+            ::comphelper::getProcessComponentContext(),
+            xController,
             [] (uno::Reference<uno::XInterface> const& xRef)
             { return nullptr != dynamic_cast<SidebarController*>(xRef.get()); }
         ));
