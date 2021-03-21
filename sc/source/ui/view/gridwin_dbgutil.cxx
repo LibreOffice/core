@@ -91,7 +91,7 @@ void ScGridWindow::dumpCellProperties()
 
     xmlTextWriterPtr writer = xmlNewTextWriterFilename( "dump.xml", 0 );
     xmlTextWriterSetIndent(writer,1);
-    xmlTextWriterSetIndentString(writer, BAD_CAST("    "));
+    (void)xmlTextWriterSetIndentString(writer, BAD_CAST("    "));
 
     (void)xmlTextWriterStartDocument( writer, nullptr, nullptr, nullptr );
 

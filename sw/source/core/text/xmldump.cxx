@@ -231,7 +231,7 @@ class XmlPortionDumper:public SwPortionHandler
     {
         xmlTextWriterPtr writer = xmlNewTextWriterFilename( "layout.xml", 0 );
         xmlTextWriterSetIndent(writer,1);
-        xmlTextWriterSetIndentString(writer, BAD_CAST("  "));
+        (void)xmlTextWriterSetIndentString(writer, BAD_CAST("  "));
         (void)xmlTextWriterStartDocument( writer, nullptr, nullptr, nullptr );
         return writer;
     }
