@@ -22,6 +22,53 @@
       "revId": "954893486c6058f8d7344e6fa433c04ed0062fa9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d76887d_3af7a2ca",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 883,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-03-21T22:01:51Z",
+      "side": 1,
+      "message": "please see comment below",
+      "parentUuid": "c7c14729_a2d39cce",
+      "range": {
+        "startLine": 883,
+        "startChar": 24,
+        "endLine": 883,
+        "endChar": 67
+      },
+      "revId": "954893486c6058f8d7344e6fa433c04ed0062fa9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf66fcfe_d461f20b",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-03-21T22:01:51Z",
+      "side": 1,
+      "message": "Lucky the first entry in the Pseudo style family will always be \u0027No List\u0027 or this while loop would never end. I think you wanted  mxTreeBox-\u003eiter_next(*xEntry) here.\n\nBut we don\u0027t need to search for the \u0027No List\u0027 entry as it will always be the first entry in the list. This patch makes it to be that way! \n\nAlso, user creation of a List Style with the name \u0027No List\u0027 isn\u0027t allow since the name is already in the List Styles.",
+      "range": {
+        "startLine": 890,
+        "startChar": 28,
+        "endLine": 890,
+        "endChar": 63
+      },
+      "revId": "954893486c6058f8d7344e6fa433c04ed0062fa9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
