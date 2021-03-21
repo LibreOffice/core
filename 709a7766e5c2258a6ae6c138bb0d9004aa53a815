@@ -16,6 +16,24 @@
       "revId": "709a7766e5c2258a6ae6c138bb0d9004aa53a815",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2e5630c_c435ea87",
+        "filename": "sc/source/core/tool/rangeutl.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-03-21T17:43:56Z",
+      "side": 1,
+      "message": "The problem was the following: I create a named range using the CALC A1 convention ($Sheet1.$A$1), then accessing it via a macro getCellRangeByName works, because of https://opengrok.libreoffice.org/xref/core/sc/source/ui/unoobj/cellsuno.cxx?r\u003d4adfd750\u0026mo\u003d223250\u0026fi\u003d4728#4728, but when I change the address convention to EXCEL A1 or EXCEL R1C1 the GetSymbol function does no return aStrArea, because it has formula::FormulaGrammar::GRAM_DEFAULT. \n\nHowever, if I add the Grammar of the document, the aStrArea gets constructed, but IsAbsArea does not find the Range, for instance Sheet1!R1C2 for the EXCEL R1C1, because in rDetails contains CALC A1 rather than EXCEL R1C1.\n\nSo when I add the Grammar of rDetails to pData-\u003eGetSymbol(), it does not even construct the aStrArea in the case of EXCEL A1 and EXCEL R1C1, since the API (https://opengrok.libreoffice.org/xref/core/sc/source/ui/unoobj/cellsuno.cxx?r\u003d4adfd750\u0026mo\u003d223250\u0026fi\u003d4728#4728) always delievers CALC A1.",
+      "parentUuid": "3ddd76e3_186f239d",
+      "revId": "709a7766e5c2258a6ae6c138bb0d9004aa53a815",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
