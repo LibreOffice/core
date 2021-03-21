@@ -744,10 +744,7 @@ void ImpEditEngine::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& 
     for (const auto & i : rAttrs)
     {
         const EditCharAttrib& rAttr = *i;
-        EECharAttrib aEEAttr;
-        aEEAttr.pAttr = rAttr.GetItem();
-        aEEAttr.nStart = rAttr.GetStart();
-        aEEAttr.nEnd = rAttr.GetEnd();
+        EECharAttrib aEEAttr(rAttr.GetStart(), rAttr.GetEnd(), rAttr.GetItem());
         rLst.push_back(aEEAttr);
     }
 }
