@@ -225,37 +225,37 @@ static bool curl_run(std::u16string_view rURL, OutData& out, const OString& aPro
         out.curl = pCURL;
 
         OString aURL(OUStringToOString(rURL, RTL_TEXTENCODING_UTF8));
-        curl_easy_setopt(pCURL, CURLOPT_URL, aURL.getStr());
+        (void)curl_easy_setopt(pCURL, CURLOPT_URL, aURL.getStr());
 
         // abort on http errors
-        curl_easy_setopt(pCURL, CURLOPT_FAILONERROR, 1);
+        (void)curl_easy_setopt(pCURL, CURLOPT_FAILONERROR, 1);
 
         // enable redirection
-        curl_easy_setopt(pCURL, CURLOPT_FOLLOWLOCATION, 1);
+        (void)curl_easy_setopt(pCURL, CURLOPT_FOLLOWLOCATION, 1);
         // only allow redirect to http:// and https://
-        curl_easy_setopt(pCURL, CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
+        (void)curl_easy_setopt(pCURL, CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
 
         // write function
-        curl_easy_setopt(pCURL, CURLOPT_WRITEDATA, &out);
-        curl_easy_setopt(pCURL, CURLOPT_WRITEFUNCTION, &write_function);
+        (void)curl_easy_setopt(pCURL, CURLOPT_WRITEDATA, &out);
+        (void)curl_easy_setopt(pCURL, CURLOPT_WRITEFUNCTION, &write_function);
 
         // progress handler - Condition::check unfortunately is not defined const
-        curl_easy_setopt(pCURL, CURLOPT_NOPROGRESS, 0);
-        curl_easy_setopt(pCURL, CURLOPT_PROGRESSFUNCTION, &progress_callback);
-        curl_easy_setopt(pCURL, CURLOPT_PROGRESSDATA, &out);
+        (void)curl_easy_setopt(pCURL, CURLOPT_NOPROGRESS, 0);
+        (void)curl_easy_setopt(pCURL, CURLOPT_PROGRESSFUNCTION, &progress_callback);
+        (void)curl_easy_setopt(pCURL, CURLOPT_PROGRESSDATA, &out);
 
         // proxy
-        curl_easy_setopt(pCURL, CURLOPT_PROXY, aProxyHost.getStr());
-        curl_easy_setopt(pCURL, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
+        (void)curl_easy_setopt(pCURL, CURLOPT_PROXY, aProxyHost.getStr());
+        (void)curl_easy_setopt(pCURL, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
         if( -1 != nProxyPort )
-            curl_easy_setopt(pCURL, CURLOPT_PROXYPORT, nProxyPort);
+            (void)curl_easy_setopt(pCURL, CURLOPT_PROXYPORT, nProxyPort);
 
         if( out.Offset > 0 )
         {
             // curl_off_t offset = nOffset; libcurl seems to be compiled with large
             // file support (and we not) ..
             sal_Int64 offset = static_cast<sal_Int64>(out.Offset);
-            curl_easy_setopt(pCURL, CURLOPT_RESUME_FROM_LARGE, offset);
+            (void)curl_easy_setopt(pCURL, CURLOPT_RESUME_FROM_LARGE, offset);
         }
 
         CURLcode cc = curl_easy_perform(pCURL);
