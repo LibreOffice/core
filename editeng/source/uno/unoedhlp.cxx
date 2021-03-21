@@ -100,9 +100,7 @@ void SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nE
         {
             if (nIndex2 < aTempCharAttribs[nAttr].nStart)
             {
-                EECharAttrib aEEAttr;
-                aEEAttr.nStart = nIndex2;
-                aEEAttr.nEnd = aTempCharAttribs[nAttr].nStart;
+                EECharAttrib aEEAttr(nIndex2, aTempCharAttribs[nAttr].nStart);
                 aCharAttribs.insert(aCharAttribs.begin() + nAttr, aEEAttr);
             }
             nIndex2 = aTempCharAttribs[nAttr].nEnd;
@@ -110,9 +108,7 @@ void SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nE
         }
         if ( nIndex2 != nParaLen )
         {
-            EECharAttrib aEEAttr;
-            aEEAttr.nStart = nIndex2;
-            aEEAttr.nEnd = nParaLen;
+            EECharAttrib aEEAttr(nIndex2, nParaLen);
             aCharAttribs.push_back(aEEAttr);
         }
     }

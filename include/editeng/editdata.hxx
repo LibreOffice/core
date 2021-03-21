@@ -274,6 +274,12 @@ struct EECharAttrib
 
     sal_Int32           nStart;
     sal_Int32           nEnd;
+    EECharAttrib(sal_Int32 nSt, sal_Int32 nE, const SfxPoolItem* pA = nullptr)
+        : pAttr(pA)
+        , nStart(nSt)
+        , nEnd(nE)
+    {
+    }
 };
 
 struct MoveParagraphsInfo
