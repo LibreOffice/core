@@ -1366,32 +1366,6 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         }
     }
 
-    if (rSh.GetViewOptions()->IsShowOutlineContentVisibilityButton())
-    {
-        // not allowed if outline content visibility is false
-        sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
-        if ((rSh.IsSttPara() && (nKey == KEY_BACKSPACE || nKey == KEY_LEFT))
-                || (rSh.IsEndOfPara() && (nKey == KEY_DELETE || nKey == KEY_RETURN || nKey == KEY_RIGHT)))
-        {
-            SwContentNode* pContentNode = rSh.GetCurrentShellCursor().GetContentNode();
-            SwOutlineNodes::size_type nPos;
-            if (rSh.GetDoc()->GetNodes().GetOutLineNds().Seek_Entry(pContentNode, &nPos))
-            {
-                bool bOutlineContentVisibleAttr = true;
-                pContentNode->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
-                if (!bOutlineContentVisibleAttr)
-                    return; // outline content visibility is false
-                if (rSh.IsSttPara() && (nKey == KEY_BACKSPACE || nKey == KEY_LEFT) && (nPos-1 != SwOutlineNodes::npos))
-                {
-                    bOutlineContentVisibleAttr = true;
-                    rSh.GetDoc()->GetNodes().GetOutLineNds()[nPos-1]->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
-                    if (!bOutlineContentVisibleAttr)
-                        return; // previous outline node has content visibility false
-                }
-            }
-        }
-    }
-
     if( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE &&
         m_pApplyTempl && m_pApplyTempl->m_pFormatClipboard )
     {
