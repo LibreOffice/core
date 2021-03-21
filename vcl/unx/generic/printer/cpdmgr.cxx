@@ -109,24 +109,24 @@ void CPDManager::printerAdded (GDBusConnection *connection,
     proxy = current->getProxy(sender_name);
     if (proxy == nullptr) {
         gchar* contents;
-        GDBusNodeInfo *introspection_data;
 
         // Get Interface for introspection
-        g_file_get_contents ("/usr/share/dbus-1/interfaces/org.openprinting.Backend.xml", &contents, nullptr, nullptr);
-        introspection_data = g_dbus_node_info_new_for_xml (contents, nullptr);
-        proxy = g_dbus_proxy_new_sync (connection,
-                                       G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
-                                       introspection_data->interfaces[0],
-                                       sender_name,
-                                       object_path,
-                                       interface_name,
-                                       nullptr,
-                                       nullptr);
+        if (g_file_get_contents ("/usr/share/dbus-1/interfaces/org.openprinting.Backend.xml", &contents, nullptr, nullptr)) {
+            GDBusNodeInfo *introspection_data = g_dbus_node_info_new_for_xml (contents, nullptr);
+            proxy = g_dbus_proxy_new_sync (connection,
+                                           G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+                                           introspection_data->interfaces[0],
+                                           sender_name,
+                                           object_path,
+                                           interface_name,
+                                           nullptr,
+                                           nullptr);
 
-        g_free(contents);
-        g_dbus_node_info_unref(introspection_data);
-        std::pair<std::string, GDBusProxy *> new_backend (sender_name, proxy);
-        current->addBackend(new_backend);
+            g_free(contents);
+            g_dbus_node_info_unref(introspection_data);
+            std::pair<std::string, GDBusProxy *> new_backend (sender_name, proxy);
+            current->addBackend(new_backend);
+        }
     }
     CPDPrinter *pDest = static_cast<CPDPrinter *>(malloc(sizeof(CPDPrinter)));
     pDest->backend = proxy;
