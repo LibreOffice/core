@@ -1798,7 +1798,10 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
         }
 
         if ( !Move( fnMove, fnGo ) )
+        {
+            RestoreSavePos();
             break;
+        }
 
         if (pFrame)
         {
