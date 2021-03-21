@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c7c14729_a2d39cce",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 883,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-03-21T16:25:57Z",
+      "side": 1,
+      "message": "Hii\n\nI have put this line for double checking that no other entry gets selected by default.. \n\nPlease let me know your thoughts on it :)",
+      "range": {
+        "startLine": 883,
+        "startChar": 24,
+        "endLine": 883,
+        "endChar": 67
+      },
+      "revId": "954893486c6058f8d7344e6fa433c04ed0062fa9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
