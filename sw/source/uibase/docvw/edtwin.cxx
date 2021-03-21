@@ -1368,25 +1368,42 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 
     if (rSh.GetViewOptions()->IsShowOutlineContentVisibilityButton())
     {
-        // not allowed if outline content visibility is false
+        // check for keys that are not allowed if outline content visibility is false
+        // left/right key movement at start/end of paragraph when outline content is not
+        // visible cause an assert in debug builds
+        // see: txtfrm.cxx TextFrameIndex SwTextFrame::MapModelToView
+        // allow these as they seem to do no harm here
         sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
-        if ((rSh.IsSttPara() && (nKey == KEY_BACKSPACE || nKey == KEY_LEFT))
-                || (rSh.IsEndOfPara() && (nKey == KEY_DELETE || nKey == KEY_RETURN || nKey == KEY_RIGHT)))
+        if ((rSh.IsSttPara() && (nKey == KEY_BACKSPACE /*|| nKey == KEY_LEFT*/))
+                || (rSh.IsEndOfPara() && (nKey == KEY_DELETE || nKey == KEY_RETURN /*|| nKey == KEY_RIGHT*/)))
         {
-            SwContentNode* pContentNode = rSh.GetCurrentShellCursor().GetContentNode();
+            const SwNodes& rNodes = rSh.GetDoc()->GetNodes();
             SwOutlineNodes::size_type nPos;
-            if (rSh.GetDoc()->GetNodes().GetOutLineNds().Seek_Entry(pContentNode, &nPos))
+            bool bOutlineContentVisibleAttr = true;
+            SwContentNode* pContentNode = rSh.GetCurrentShellCursor().GetContentNode();
+            if (rNodes.GetOutLineNds().Seek_Entry(pContentNode, &nPos))
             {
-                bool bOutlineContentVisibleAttr = true;
+                // assure outline content visibility at current cursor
                 pContentNode->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
                 if (!bOutlineContentVisibleAttr)
-                    return; // outline content visibility is false
-                if (rSh.IsSttPara() && (nKey == KEY_BACKSPACE || nKey == KEY_LEFT) && (nPos-1 != SwOutlineNodes::npos))
+                    return; // above key conditions not allowed when outline content visibility is false
+            }
+            if (rSh.IsSttPara() && nKey == KEY_BACKSPACE)
+            {
+                // assure content visibility when at start of paragraph by checking that
+                // the previous content node has a layout frame
+                if (!rNodes[pContentNode->GetIndex()-1]->GetContentNode()->getLayoutFrame(nullptr))
+                    return; // backspace not allowed - previous node has no layout frame
+            }
+            if (rSh.IsEndPara() && nKey == KEY_DELETE)
+            {
+                // when at end of paragraph and next content node is an outline node
+                // assure outline content visibility before allowing delete
+                if (rNodes.GetOutLineNds().Seek_Entry(rNodes[pContentNode->GetIndex()+1]->GetContentNode(), &nPos))
                 {
-                    bOutlineContentVisibleAttr = true;
-                    rSh.GetDoc()->GetNodes().GetOutLineNds()[nPos-1]->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+                    rNodes.GetOutLineNds()[nPos]->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
                     if (!bOutlineContentVisibleAttr)
-                        return; // previous outline node has content visibility false
+                        return; // delete not allowed - next node is an outline node with content visibility false
                 }
             }
         }
