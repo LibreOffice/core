@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "740fbcaa_c2e8dffe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-21T11:49:41Z",
+      "side": 1,
+      "message": "Just  an advise for future: \u0027562d7767f9874edee6edad6aac2fbbd1ce438cbf\u0027 gets linkified in the Web UI, while \u0027562d7767f987\u0027 does not. Better use full id.",
+      "range": {
+        "startLine": 9,
+        "startChar": 13,
+        "endLine": 9,
+        "endChar": 25
+      },
+      "revId": "407f6c757af01ea71eb8a86b41c27d12573f51e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa167be3_9b8241ec",
+        "filename": "cui/source/dialogs/QrCodeGenDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-21T11:49:41Z",
+      "side": 1,
+      "message": "To avoid such mistakes like I did in commit 562d7767f9874edee6edad6aac2fbbd1ce438cbf, we could just\n\n    return {};",
+      "revId": "407f6c757af01ea71eb8a86b41c27d12573f51e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
