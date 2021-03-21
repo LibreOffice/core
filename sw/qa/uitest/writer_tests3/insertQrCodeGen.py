@@ -35,7 +35,7 @@ class insertQrCode(UITestCase):
         # Get elements in the Dialog Box
         xURL = xDialog.getChild("edit_text")
         xECC_Low = xDialog.getChild("button_low") #How radio button input is written in text.
-        xBorder = xDialog.getChild("edit_border")
+        xBorder = xDialog.getChild("edit_margin")
 
         type_text(xURL, "www.libreoffice.org") #set the QR code
         xECC_Low.executeAction("CLICK", tuple())
@@ -61,7 +61,7 @@ class insertQrCode(UITestCase):
 
         xURL = xDialog.getChild("edit_text")
         xECC_Low = xDialog.getChild("button_low")
-        xBorder = xDialog.getChild("edit_border")
+        xBorder = xDialog.getChild("edit_margin")
 
         type_text(xURL, "www.libreoffice.org") #set the QR code
         xECC_Low.executeAction("CLICK", tuple())

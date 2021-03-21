@@ -155,7 +155,7 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
               m_xBuilder->weld_radio_button("button_medium"),
               m_xBuilder->weld_radio_button("button_quartile"),
               m_xBuilder->weld_radio_button("button_high") }
-    , m_xSpinBorder(m_xBuilder->weld_spin_button("edit_border"))
+    , m_xSpinBorder(m_xBuilder->weld_spin_button("edit_margin"))
 #if ENABLE_ZXING
     , mpParent(pParent)
 #endif
