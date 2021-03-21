@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ddd76e3_186f239d",
+        "filename": "sc/source/core/tool/rangeutl.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-03-21T16:58:51Z",
+      "side": 1,
+      "message": "Can you please explain what *exactly* did not work before and what you are trying to accomplish here?\nIt looks like the resulting aStrArea now is always in CalcA1 notation, which is wrong because in the following IsAbsArea() it may not match the passed ScAddress::Details const \u0026 rDetails.\n\nRather the pData-\u003eGetSymbol() call should take rDetails into account.",
+      "revId": "709a7766e5c2258a6ae6c138bb0d9004aa53a815",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
