@@ -1334,15 +1334,12 @@ sal_uInt8 TransColToIco( const Color& rCol )
     case sal_uInt32(COL_AUTO):          nCol = 0;   break;
 
     default:
-        static const Color aColArr[ 16 ] = {
+        static const BitmapPalette aBmpPal {
             COL_BLACK,      COL_LIGHTBLUE,  COL_LIGHTCYAN,  COL_LIGHTGREEN,
             COL_LIGHTMAGENTA,COL_LIGHTRED,  COL_YELLOW,     COL_WHITE,
             COL_BLUE,       COL_CYAN,       COL_GREEN,      COL_MAGENTA,
             COL_RED,        COL_BROWN,      COL_GRAY,       COL_LIGHTGRAY
         };
-        BitmapPalette aBmpPal(16);
-        for( sal_uInt16 i = 0; i < 16; ++i )
-            aBmpPal[i] = aColArr[ i ];
 
         nCol = static_cast< sal_uInt8 >(GetBestIndex(aBmpPal, rCol) + 1);
         break;
