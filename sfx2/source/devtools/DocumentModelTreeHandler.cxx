@@ -693,7 +693,7 @@ public:
                                                        uno::UNO_QUERY);
             OUString aString = lclGetNamed(xSheet);
             if (aString.isEmpty())
-                aString = SfxResId(STR_SHEETS).replaceFirst("%1", OUString::number(i + 1));
+                aString = SfxResId(STR_SHEET).replaceFirst("%1", OUString::number(i + 1));
             auto pEntry = std::make_unique<SheetEntry>(aString, xSheet);
             lclAppendToParentEntry(pDocumentModelTree, rParent, pEntry.release());
         }
