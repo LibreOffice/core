@@ -299,7 +299,10 @@ void OutputDevice::SetRasterOp( RasterOp eRasterOp )
         mbInitLineColor = mbInitFillColor = true;
 
         if( mpGraphics || AcquireGraphics() )
+        {
+            assert(mpGraphics);
             mpGraphics->SetXORMode( (RasterOp::Invert == meRasterOp) || (RasterOp::Xor == meRasterOp), RasterOp::Invert == meRasterOp );
+        }
     }
 
     if( mpAlphaVDev )

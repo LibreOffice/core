@@ -219,6 +219,7 @@ SystemGraphicsData OutputDevice::GetSystemGfxData() const
 {
     if (!mpGraphics && !AcquireGraphics())
         return SystemGraphicsData();
+    assert(mpGraphics);
 
     return mpGraphics->GetGraphicsData();
 }
@@ -229,6 +230,7 @@ bool OutputDevice::SupportsCairo() const
 {
     if (!mpGraphics && !AcquireGraphics())
         return false;
+    assert(mpGraphics);
 
     return mpGraphics->SupportsCairo();
 }
@@ -237,6 +239,7 @@ cairo::SurfaceSharedPtr OutputDevice::CreateSurface(const cairo::CairoSurfaceSha
 {
     if (!mpGraphics && !AcquireGraphics())
         return cairo::SurfaceSharedPtr();
+    assert(mpGraphics);
     return mpGraphics->CreateSurface(rSurface);
 }
 
@@ -244,6 +247,7 @@ cairo::SurfaceSharedPtr OutputDevice::CreateSurface(int x, int y, int width, int
 {
     if (!mpGraphics && !AcquireGraphics())
         return cairo::SurfaceSharedPtr();
+    assert(mpGraphics);
     return mpGraphics->CreateSurface(*this, x, y, width, height);
 }
 
@@ -251,6 +255,7 @@ cairo::SurfaceSharedPtr OutputDevice::CreateBitmapSurface(const BitmapSystemData
 {
     if (!mpGraphics && !AcquireGraphics())
         return cairo::SurfaceSharedPtr();
+    assert(mpGraphics);
     return mpGraphics->CreateBitmapSurface(*this, rData, rSize);
 }
 
@@ -258,6 +263,7 @@ css::uno::Any OutputDevice::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSur
 {
     if (!mpGraphics && !AcquireGraphics())
         return css::uno::Any();
+    assert(mpGraphics);
     return mpGraphics->GetNativeSurfaceHandle(rSurface, rSize);
 }
 
@@ -304,6 +310,7 @@ sal_uInt16 OutputDevice::GetBitCount() const
     // we need a graphics instance
     if ( !mpGraphics && !AcquireGraphics() )
         return 0;
+    assert(mpGraphics);
 
     return mpGraphics->GetBitCount();
 }
@@ -336,6 +343,7 @@ bool OutputDevice::SupportsOperation( OutDevSupportType eType ) const
 {
     if( !mpGraphics && !AcquireGraphics() )
         return false;
+    assert(mpGraphics);
     const bool bHasSupport = mpGraphics->supportsOperation( eType );
     return bHasSupport;
 }
@@ -365,6 +373,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
 
     if ( !mpGraphics && !AcquireGraphics() )
         return;
+    assert(mpGraphics);
 
     if ( mbInitClipRegion )
         InitClipRegion();
@@ -426,6 +435,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
 
     if ( !mpGraphics && !AcquireGraphics() )
         return;
+    assert(mpGraphics);
 
     if ( mbInitClipRegion )
         InitClipRegion();
@@ -472,6 +482,7 @@ void OutputDevice::CopyArea( const Point& rDestPt,
 
     if ( !mpGraphics && !AcquireGraphics() )
         return;
+    assert(mpGraphics);
 
     if ( mbInitClipRegion )
         InitClipRegion();
@@ -526,6 +537,7 @@ void OutputDevice::drawOutDevDirect(const OutputDevice& rSrcDev, SalTwoRect& rPo
 
     if (!mpGraphics && !AcquireGraphics())
         return;
+    assert(mpGraphics);
 
     // #102532# Offset only has to be pseudo window offset
 
@@ -669,6 +681,7 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
         {
             if( !mpGraphics && !AcquireGraphics() )
                 return bDrawn;
+            assert(mpGraphics);
 
             if( mbInitClipRegion )
                 InitClipRegion();
