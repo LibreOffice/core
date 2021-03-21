@@ -22,6 +22,30 @@
       "revId": "a6fd757dfac5b69a9204ad3bf266a0b672ad4c99",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87a6d43b_f1733443",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-03-21T13:35:44Z",
+      "side": 1,
+      "message": "OK, I changed the commit message",
+      "parentUuid": "f126389c_240453b4",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 34
+      },
+      "revId": "a6fd757dfac5b69a9204ad3bf266a0b672ad4c99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
