@@ -202,9 +202,9 @@ namespace
                               const ::Color& rMaskColor )
     {
         const ::Color aWhite( COL_WHITE );
-        BitmapPalette aBiLevelPalette(2);
-        aBiLevelPalette[0] = aWhite;
-        aBiLevelPalette[1] = rMaskColor;
+        BitmapPalette aBiLevelPalette{
+            aWhite, rMaskColor
+        };
 
         Bitmap aMask( rBitmap.CreateMask( aWhite ));
         Bitmap aSolid( rBitmap.GetSizePixel(),

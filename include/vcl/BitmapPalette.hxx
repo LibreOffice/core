@@ -57,6 +57,10 @@ public:
     {
     }
 
+    BitmapPalette(std::initializer_list<BitmapColor> aBitmapColor) : maBitmapColor(aBitmapColor)
+    {
+    }
+
     BitmapPalette(sal_uInt16 nCount)
         : maBitmapColor(nCount)
     {
