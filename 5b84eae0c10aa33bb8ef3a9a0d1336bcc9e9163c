@@ -16,6 +16,24 @@
       "revId": "5b84eae0c10aa33bb8ef3a9a0d1336bcc9e9163c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d97753d_0801c757",
+        "filename": "sfx2/source/devtools/DevToolsStrings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-03-21T11:54:11Z",
+      "side": 1,
+      "message": "Ah.. you\u0027re correct. It should be singular. I fixed it with: https://gerrit.libreoffice.org/c/core/+/112835",
+      "parentUuid": "8e347891_85467a71",
+      "revId": "5b84eae0c10aa33bb8ef3a9a0d1336bcc9e9163c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
