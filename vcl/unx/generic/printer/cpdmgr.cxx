@@ -259,9 +259,11 @@ CPDManager* CPDManager::tryLoadCPD()
                 gchar* contents;
                 std::stringstream filepath;
                 filepath << BACKEND_DIR << '/' << filename;
-                g_file_get_contents(filepath.str().c_str(), &contents, nullptr, nullptr);
-                std::pair<std::string, gchar*> new_tbackend (filename, contents);
-                pManager->addTempBackend(new_tbackend);
+                if (g_file_get_contents(filepath.str().c_str(), &contents, nullptr, nullptr))
+                {
+                    std::pair<std::string, gchar*> new_tbackend (filename, contents);
+                    pManager->addTempBackend(new_tbackend);
+                }
             }
             g_dir_close(dir);
         }
