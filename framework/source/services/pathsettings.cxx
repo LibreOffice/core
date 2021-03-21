@@ -40,6 +40,7 @@
 
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ref.hxx>
 #include <sal/log.hxx>
 
 #include <cppuhelper/basemutex.hxx>
@@ -1409,25 +1410,6 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew()
     return xCfg;
 }
 
-struct Instance {
-    explicit Instance(
-        css::uno::Reference<css::uno::XComponentContext> const & context):
-        instance(
-            static_cast<cppu::OWeakObject *>(new PathSettings(context)))
-    {
-        // fill cache
-        static_cast<PathSettings *>(static_cast<cppu::OWeakObject *>
-                (instance.get()))->impl_readAll();
-    }
-
-    css::uno::Reference<css::uno::XInterface> instance;
-};
-
-struct Singleton:
-    public rtl::StaticWithArg<
-        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
-{};
-
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -1435,8 +1417,11 @@ com_sun_star_comp_framework_PathSettings_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject *>(
-                Singleton::get(context).instance.get()));
+    rtl::Reference<PathSettings> xPathSettings = new PathSettings(context);
+    // fill cache
+    xPathSettings->impl_readAll();
+
+    return cppu::acquire(xPathSettings.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
