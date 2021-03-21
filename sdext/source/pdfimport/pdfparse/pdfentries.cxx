@@ -727,6 +727,7 @@ static void unzipToBuffer( char* pBegin, unsigned int nLen,
     z_stream aZStr;
     aZStr.next_in       = reinterpret_cast<Bytef *>(pBegin);
     aZStr.avail_in      = nLen;
+    aZStr.total_out = aZStr.total_in = 0;
     aZStr.zalloc        = nullptr;
     aZStr.zfree         = nullptr;
     aZStr.opaque        = nullptr;
