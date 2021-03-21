@@ -137,6 +137,7 @@ bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart nPar
 
     if ( !mpGraphics && !AcquireGraphics() )
         return false;
+    assert(mpGraphics);
 
     return mpGraphics->IsNativeControlSupported(nType, nPart);
 }
@@ -152,6 +153,7 @@ bool OutputDevice::HitTestNativeScrollbar(
 
     if ( !mpGraphics && !AcquireGraphics() )
         return false;
+    assert(mpGraphics);
 
     Point aWinOffs( mnOutOffX, mnOutOffY );
     tools::Rectangle screenRegion( rControlRegion );
@@ -265,6 +267,7 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
     // make sure the current clip region is initialized correctly
     if ( !mpGraphics && !AcquireGraphics() )
         return false;
+    assert(mpGraphics);
 
     if ( mbInitClipRegion )
         InitClipRegion();
@@ -299,6 +302,7 @@ bool OutputDevice::GetNativeControlRegion(  ControlType nType,
 
     if ( !mpGraphics && !AcquireGraphics() )
         return false;
+    assert(mpGraphics);
 
     // Convert the coordinates from relative to Window-absolute, so we draw
     // in the correct place in platform code

@@ -946,6 +946,7 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
     // we need a graphics
     if( !mpGraphics && !AcquireGraphics() )
         return;
+    assert(mpGraphics);
 
     if ( mbInitClipRegion )
         InitClipRegion();

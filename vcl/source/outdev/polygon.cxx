@@ -47,7 +47,8 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 
     // we need a graphics
     if ( !mpGraphics && !AcquireGraphics() )
-            return;
+        return;
+    assert(mpGraphics);
 
     if ( mbInitClipRegion )
         InitClipRegion();
@@ -167,6 +168,7 @@ void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
     // we need a graphics
     if ( !mpGraphics && !AcquireGraphics() )
         return;
+    assert(mpGraphics);
 
     if ( mbInitClipRegion )
         InitClipRegion();
@@ -275,6 +277,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
     // we need a graphics
     if( !mpGraphics && !AcquireGraphics() )
         return;
+    assert(mpGraphics);
 
     if( mbInitClipRegion )
         InitClipRegion();

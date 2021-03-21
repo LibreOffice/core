@@ -141,6 +141,7 @@ bool OutputDevice::AddTempDevFont( const OUString& rFileURL, const OUString& rFo
 
     if( !mpGraphics && !AcquireGraphics() )
         return false;
+    assert(mpGraphics);
 
     bool bRC = mpGraphics->AddTempDevFont( mxFontCollection.get(), rFileURL, rFontName );
     if( !bRC )
@@ -489,7 +490,7 @@ void OutputDevice::RefreshFontData( const bool bNewFontLists )
 void OutputDevice::ImplRefreshFontData( const bool bNewFontLists )
 {
     if (bNewFontLists && AcquireGraphics())
-            mpGraphics->GetDevFontList( mxFontCollection.get() );
+        mpGraphics->GetDevFontList( mxFontCollection.get() );
 }
 
 void OutputDevice::ImplUpdateFontData()
@@ -864,6 +865,7 @@ void OutputDevice::ImplInitFontList() const
 
     if( !(mpGraphics || AcquireGraphics()) )
         return;
+    assert(mpGraphics);
 
     SAL_INFO( "vcl.gdi", "OutputDevice::ImplInitFontList()" );
     mpGraphics->GetDevFontList(mxFontCollection.get());
@@ -895,6 +897,7 @@ bool OutputDevice::InitFont() const
     else if (!mbInitFont)
         return true;
 
+    assert(mpGraphics);
     mpGraphics->SetFont(mpFontInstance.get(), 0);
     mbInitFont = false;
     return true;
@@ -929,6 +932,7 @@ bool OutputDevice::ImplNewFont() const
         SAL_WARN("vcl.gdi", "OutputDevice::ImplNewFont(): no Graphics, no Font");
         return false;
     }
+    assert(mpGraphics);
 
     ImplInitFontList();
 

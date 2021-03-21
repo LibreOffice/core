@@ -52,6 +52,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
 
     if( !mpGraphics && !AcquireGraphics() )
         return;
+    assert(mpGraphics);
 
     if ( mbInitClipRegion )
         InitClipRegion();
@@ -97,6 +98,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 
     if ( !mpGraphics && !AcquireGraphics() )
         return;
+    assert(mpGraphics);
 
     if ( mbInitClipRegion )
         InitClipRegion();

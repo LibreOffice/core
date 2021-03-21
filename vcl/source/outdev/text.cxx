@@ -932,6 +932,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
         return;
     if( !mpGraphics && !AcquireGraphics() )
         return;
+    assert(mpGraphics);
     if( mbInitClipRegion )
         InitClipRegion();
     if( mbOutputClipped )
@@ -1727,6 +1728,7 @@ void OutputDevice::AddTextRectActions( const tools::Rectangle& rRect,
     // we need a graphics
     if( !mpGraphics && !AcquireGraphics() )
         return;
+    assert(mpGraphics);
     if( mbInitClipRegion )
         InitClipRegion();
 
@@ -1770,6 +1772,7 @@ void OutputDevice::DrawText( const tools::Rectangle& rRect, const OUString& rOri
     // we need a graphics
     if( !mpGraphics && !AcquireGraphics() )
         return;
+    assert(mpGraphics);
     if( mbInitClipRegion )
         InitClipRegion();
     if( mbOutputClipped && !bDecomposeTextRectAction )
@@ -2073,6 +2076,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
     // we need a graphics
     if( !mpGraphics && !AcquireGraphics() )
         return;
+    assert(mpGraphics);
     if( mbInitClipRegion )
         InitClipRegion();
     if ( mbOutputClipped )
