@@ -1744,32 +1744,15 @@ bool Desktop::impl_closeFrames(bool bAllowUI)
 
 }   // namespace framework
 
-namespace {
-
-rtl::Reference<framework::Desktop> createDesktop(
-    css::uno::Reference<css::uno::XComponentContext> const & context)
-{
-    SolarMutexGuard g; // tdf#114025 init with SolarMutex to avoid deadlock
-    rtl::Reference<framework::Desktop> desktop(new framework::Desktop(context));
-    desktop->constructorInit();
-    return desktop;
-}
-
-}
-
-const rtl::Reference<framework::Desktop> & framework::getDesktop(
-    css::uno::Reference<css::uno::XComponentContext> const & context)
-{
-    static auto const instance = createDesktop(context);
-    return instance;
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_Desktop_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(framework::getDesktop(context).get());
+    SolarMutexGuard g; // tdf#114025 init with SolarMutex to avoid deadlock
+    rtl::Reference<framework::Desktop> desktop(new framework::Desktop(context));
+    desktop->constructorInit();
+    return cppu::acquire(desktop.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
