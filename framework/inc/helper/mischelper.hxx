@@ -246,10 +246,12 @@ class WeakDocumentEventListener final : public ::cppu::WeakImplHelper<css::docum
 
 css::uno::Reference<css::ui::XContextChangeEventListener>
 GetFirstListenerWith_Impl(
+    css::uno::Reference<css::uno::XComponentContext> const & xComponentContext,
     css::uno::Reference<css::uno::XInterface> const& xEventFocus,
     std::function<bool (css::uno::Reference<css::ui::XContextChangeEventListener> const&)> const& rPredicate);
 
 extern auto (*g_pGetMultiplexerListener)(
+    css::uno::Reference<css::uno::XComponentContext> const & xComponentContext,
     css::uno::Reference<css::uno::XInterface> const&,
     std::function<bool (css::uno::Reference<css::ui::XContextChangeEventListener> const&)> const&)
     -> css::uno::Reference<css::ui::XContextChangeEventListener>;

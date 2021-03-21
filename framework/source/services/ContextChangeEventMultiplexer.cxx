@@ -23,11 +23,13 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
+#include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <rtl/ref.hxx>
 
 #include <algorithm>
 #include <map>
@@ -324,34 +326,21 @@ void SAL_CALL ContextChangeEventMultiplexer::disposing ( const css::lang::EventO
     maListeners.erase(iDescriptor);
 }
 
-struct Instance {
-    explicit Instance():
-        instance(static_cast<cppu::OWeakObject *>(
-                    new ContextChangeEventMultiplexer()))
-    {
-    }
-
-    css::uno::Reference<css::uno::XInterface> instance;
-};
-
-struct Singleton:
-    public rtl::Static<Instance, Singleton>
-{};
-
 }
 
 namespace framework {
 
 // right now we assume there's one matching listener
 static uno::Reference<ui::XContextChangeEventListener> GetFirstListenerWith_ImplImpl(
+    css::uno::Reference<css::uno::XComponentContext> const & xComponentContext,
     uno::Reference<uno::XInterface> const& xEventFocus,
     std::function<bool (uno::Reference<ui::XContextChangeEventListener> const&)> const& rPredicate)
 {
     assert(xEventFocus.is()); // in current usage it's a bug if the XController is null here
     uno::Reference<ui::XContextChangeEventListener> xRet;
 
-    ContextChangeEventMultiplexer *const pMultiplexer(
-        dynamic_cast<ContextChangeEventMultiplexer *>(Singleton::get().instance.get()));
+    rtl::Reference<ContextChangeEventMultiplexer> pMultiplexer =
+        dynamic_cast<ContextChangeEventMultiplexer *>(ui::ContextChangeEventMultiplexer::get(xComponentContext).get());
     assert(pMultiplexer);
 
     ContextChangeEventMultiplexer::FocusDescriptor const*const pFocusDescriptor(
@@ -389,8 +378,7 @@ org_apache_openoffice_comp_framework_ContextChangeEventMultiplexer_get_implement
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(static_cast<cppu::OWeakObject *>(
-                Singleton::get().instance.get()));
+    return cppu::acquire(new ContextChangeEventMultiplexer());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
