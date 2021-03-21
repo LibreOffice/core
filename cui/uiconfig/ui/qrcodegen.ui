@@ -2,7 +2,7 @@
 <!-- Generated with glade 3.36.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkAdjustment" id="border_value">
+  <object class="GtkAdjustment" id="margin_value">
     <property name="upper">75</property>
     <property name="value">1</property>
     <property name="step_increment">1</property>
@@ -129,7 +129,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes" context="qrcodegen|label_text" comments="Text to be stored in the QR">URL/Text :</property>
+                        <property name="label" translatable="yes" context="qrcodegen|label_text" comments="Text to be stored in the QR">URL/Text:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">edit_text</property>
                         <property name="xalign">0</property>
@@ -140,13 +140,13 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="label_border">
+                      <object class="GtkLabel" id="label_margin">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes" context="qrcodegen|label_border" comments="Set Border around QR">Border :</property>
+                        <property name="label" translatable="yes" context="qrcodegen|label_margin" comments="Set Margin around QR">Margin:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">edit_border</property>
+                        <property name="mnemonic_widget">edit_margin</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
@@ -187,17 +187,17 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="edit_border">
+                      <object class="GtkSpinButton" id="edit_margin">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
-                        <property name="adjustment">border_value</property>
+                        <property name="adjustment">margin_value</property>
                         <property name="snap_to_ticks">True</property>
                         <property name="numeric">True</property>
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
-                          <object class="AtkObject" id="edit_border-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="edit border">The width in dots of the border surrounding the QR code.</property>
+                          <object class="AtkObject" id="edit_margin-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="edit margin">The margin surrounding the QR code.</property>
                           </object>
                         </child>
                       </object>
