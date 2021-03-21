@@ -125,6 +125,7 @@ void OutputDevice::DrawTransparent(
     // we need a graphics
     if( !mpGraphics && !AcquireGraphics() )
         return;
+    assert(mpGraphics);
 
     if( mbInitClipRegion )
         InitClipRegion();
@@ -580,6 +581,7 @@ void OutputDevice::DrawTransparent( const tools::PolyPolygon& rPolyPoly,
     // get the device graphics as drawing target
     if( !mpGraphics && !AcquireGraphics() )
         return;
+    assert(mpGraphics);
 
     // try hard to draw it directly, because the emulation layers are slower
     bDrawn = DrawTransparentNatively( rPolyPoly, nTransparencePercent );

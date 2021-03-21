@@ -87,6 +87,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
 
     if( !mpGraphics && !AcquireGraphics() )
         return;
+    assert(mpGraphics);
 
     if( mbInitClipRegion )
         InitClipRegion();
