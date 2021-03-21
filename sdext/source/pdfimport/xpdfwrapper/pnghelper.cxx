@@ -82,6 +82,7 @@ sal_uInt32 PngHelper::deflateBuffer( const Output_t* i_pBuf, size_t i_nLen, Outp
     aStream.zalloc  = Z_NULL;
     aStream.zfree   = Z_NULL;
     aStream.opaque  = Z_NULL;
+    aStream.total_out = aStream.total_in = 0;
     if (Z_OK != deflateInit(&aStream, Z_BEST_COMPRESSION))
         return 0;
     aStream.avail_in = uInt(i_nLen);
