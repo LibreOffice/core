@@ -32,6 +32,8 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/rdf/XMetadatable.hpp>
+#include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 
 #include <unotextrange.hxx>
 #include <comphelper/string.hxx>
@@ -40,6 +42,7 @@
 #include <vcl/settings.hxx>
 #include <inspectorproperties.hrc>
 #include <strings.hrc>
+#include <rdfhelper.hxx>
 
 namespace sw::sidebar
 {
@@ -211,6 +214,7 @@ static OUString PropertyNametoRID(const OUString& rName)
         { "ListAutoFormat", RID_LIST_AUTO_FORMAT },
         { "ListId", RID_LIST_ID },
         { "ListLabelString", RID_LIST_LABEL_STRING },
+        { "MetadataReference", RID_METADATA_REFERENCE },
         { "NestedTextContent", RID_NESTED_TEXT_CONTENT },
         { "NumberingIsNumber", RID_NUMBERING_IS_NUMBER },
         { "NumberingLevel", RID_NUMBERING_LEVEL },
@@ -353,6 +357,57 @@ static svx::sidebar::TreeNode LocaleToTreeNode(const OUString& rName, const css:
     return aCurNode;
 }
 
+// Collect text of the current level of the annotated text
+// ranges (InContentMetadata) and metadata fields (MetadataField)
+static OUString NestedTextContentToText(const css::uno::Any& rVal)
+{
+    uno::Reference<container::XEnumerationAccess> xMeta;
+    if (rVal >>= xMeta)
+    {
+        uno::Reference<container::XEnumeration> xMetaPortions = xMeta->createEnumeration();
+
+        OUStringBuffer aBuf;
+        while (xMetaPortions->hasMoreElements())
+        {
+            uno::Reference<css::text::XTextRange> xRng(xMetaPortions->nextElement(),
+                                                       uno::UNO_QUERY);
+            aBuf.append(xRng->getString());
+        }
+        return aBuf.makeStringAndClear();
+    }
+
+    return OUString();
+}
+
+// List metadata associated to the paragraph or character range
+static void MetadataToTreeNode(const css::uno::Reference<css::uno::XInterface>& rSource,
+                               svx::sidebar::TreeNode& rNode)
+{
+    uno::Reference<rdf::XMetadatable> xMeta(rSource, uno::UNO_QUERY_THROW);
+    // don't add tree node "Metadata Reference", if there is no xml:id
+    if (xMeta.is() && !xMeta->getMetadataReference().Second.isEmpty())
+    {
+        svx::sidebar::TreeNode aCurNode;
+        aCurNode.sNodeName = PropertyNametoRID("MetadataReference");
+        aCurNode.NodeType = svx::sidebar::TreeNode::ComplexProperty;
+
+        // list associated (predicate, object) pairs of the actual subject
+        // under the tree node "Metadata Reference"
+        SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
+        uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(pDocSh->GetBaseModel(),
+                                                                             uno::UNO_QUERY);
+        const uno::Reference<rdf::XRepository>& xRepo = xDocumentMetadataAccess->getRDFRepository();
+        const css::uno::Reference<css::rdf::XResource> xSubject(rSource, uno::UNO_QUERY);
+        std::map<OUString, OUString> xStatements
+            = SwRDFHelper::getStatements(pDocSh->GetBaseModel(), xRepo->getGraphNames(), xSubject);
+        for (const auto& pair : xStatements)
+            aCurNode.children.push_back(
+                SimplePropToTreeNode(pair.first, uno::makeAny(pair.second)));
+
+        rNode.children.push_back(aCurNode);
+    }
+}
+
 static svx::sidebar::TreeNode
 PropertyToTreeNode(const css::beans::Property& rProperty,
                    const uno::Reference<beans::XPropertySet>& xPropertiesSet, const bool rIsGrey)
@@ -410,6 +465,17 @@ static void InsertValues(const css::uno::Reference<css::uno::XInterface>& rSourc
             svx::sidebar::TreeNode aCurNode
                 = PropertyToTreeNode(rProperty, xPropertiesSet, rIsDefined[rPropName]);
             rIsDefined[rPropName] = true;
+
+            // process NestedTextContent and show associated metadata
+            // under the tree node "Metadata Reference", if they exist
+            if (rPropName == "NestedTextContent")
+            {
+                uno::Reference<container::XEnumerationAccess> xMeta;
+                if (aCurNode.aValue >>= xMeta)
+                    MetadataToTreeNode(xMeta, rNode);
+                aCurNode.aValue <<= NestedTextContentToText(aCurNode.aValue);
+            }
+
             rNode.children.push_back(aCurNode);
         }
     }
@@ -491,7 +557,11 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     uno::Reference<text::XTextRange> xThisParagraphRange(xParaEnum->nextElement(), uno::UNO_QUERY);
     if (xThisParagraphRange.is())
+    {
+        // Collect metadata of the current paragraph
+        MetadataToTreeNode(xThisParagraphRange, aParaDFNode);
         InsertValues(xThisParagraphRange, aIsDefined, aParaDFNode, false, aHiddenProperties);
+    }
 
     xStyleFamily.set(xStyleFamilies->getByName("ParagraphStyles"), uno::UNO_QUERY_THROW);
 

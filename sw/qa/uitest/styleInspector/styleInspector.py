@@ -129,4 +129,62 @@ class styleNavigator(UITestCase):
         self.xUITest.executeCommand(".uno:Sidebar")
         self.ui_test.close_doc()
 
+    def test_metadata(self):
+        self.ui_test.load_file(get_url_for_data_file("metadata.odt"))
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+
+        self.xUITest.executeCommand(".uno:Sidebar")
+        xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "InspectorTextPanel"}))
+
+        xListBox = xWriterEdit.getChild('listbox_fonts')
+
+        # The cursor is on text without metadata
+        self.assertEqual(1, len(xListBox.getChild('0').getChildren()))
+        self.assertEqual("Default Paragraph Style", get_state_as_dict(xListBox.getChild('0').getChild('0'))['Text'])
+        self.assertEqual(136, len(xListBox.getChild('0').getChild('0').getChildren()))
+        self.assertEqual(0, len(xListBox.getChild('1').getChildren()))
+        self.assertEqual(0, len(xListBox.getChild('2').getChildren()))
+        self.assertEqual(0, len(xListBox.getChild('3').getChildren()))
+
+        self.xUITest.executeCommand(".uno:GoDown")
+
+        # The cursor is on text with paragraph metadata showed under direct paragraph formatting
+        self.assertEqual(1, len(xListBox.getChild('0').getChildren()))
+        self.assertEqual("Default Paragraph Style", get_state_as_dict(xListBox.getChild('0').getChild('0'))['Text'])
+        self.assertEqual(136, len(xListBox.getChild('0').getChild('0').getChildren()))
+
+        xParDirFormatting = xListBox.getChild('1')
+        self.assertEqual(1, len(xParDirFormatting.getChildren()))
+        self.assertEqual("Metadata Reference", get_state_as_dict(xParDirFormatting.getChild('0'))['Text'])
+
+        xMetadata = xParDirFormatting.getChild('0')
+        self.assertEqual(3, len(xMetadata.getChildren()))
+        self.assertEqual("http://www.w3.org/1999/02/22-rdf-syntax-ns#type\tParagraph", get_state_as_dict(xMetadata.getChild('0'))['Text'])
+        self.assertEqual("http://www.w3.org/2000/01/rdf-schema#comment\tAbout this paragraph...", get_state_as_dict(xMetadata.getChild('1'))['Text'])
+        self.assertEqual("http://www.w3.org/2000/01/rdf-schema#label\tAnnotated paragraph", get_state_as_dict(xMetadata.getChild('2'))['Text'])
+
+        self.xUITest.executeCommand(".uno:GoDown")
+        # FIXME jump over the control character (not visible in getString(), but it affects
+        # cursor position and avabiality of NestedTextContent)
+        self.xUITest.executeCommand(".uno:GoRight")
+
+        # The cursor is on text with annotated text range
+        xDirFormatting = xListBox.getChild('3')
+        self.assertEqual(2, len(xDirFormatting.getChildren()))
+        self.assertEqual("Metadata Reference", get_state_as_dict(xDirFormatting.getChild('0'))['Text'])
+        self.assertEqual("Nested Text Content\tAnnotated text range", get_state_as_dict(xDirFormatting.getChild('1'))['Text'])
+
+        xMetadata = xDirFormatting.getChild('0')
+        self.assertEqual(3, len(xMetadata.getChildren()))
+        self.assertEqual("http://www.w3.org/1999/02/22-rdf-syntax-ns#type\tText span", get_state_as_dict(xMetadata.getChild('0'))['Text'])
+        self.assertEqual("http://www.w3.org/2000/01/rdf-schema#comment\tComment...", get_state_as_dict(xMetadata.getChild('1'))['Text'])
+        self.assertEqual("http://www.w3.org/2000/01/rdf-schema#label\tAnnotated paragraph portion", get_state_as_dict(xMetadata.getChild('2'))['Text'])
+
+        self.assertEqual(0, len(xListBox.getChild('1').getChildren()))
+        self.assertEqual(0, len(xListBox.getChild('2').getChildren()))
+
+        self.xUITest.executeCommand(".uno:Sidebar")
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
