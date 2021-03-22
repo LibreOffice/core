@@ -1871,6 +1871,7 @@ namespace
         gtk_widget_set_halign(pReplacement, gtk_widget_get_halign(pWidget));
         gtk_widget_set_valign(pReplacement, gtk_widget_get_valign(pWidget));
 
+        // coverity[freed_arg : FALSE] - this does not free pWidget, it is reffed by pReplacement
         g_object_unref(pWidget);
     }
 
@@ -1880,6 +1881,7 @@ namespace
 
         replaceWidget(pWidget, pReplacement);
 
+        // coverity[pass_freed_arg : FALSE] - pWidget is not freed here due to initial g_object_ref
         gtk_container_add(GTK_CONTAINER(pReplacement), pWidget);
 
         // coverity[freed_arg : FALSE] - this does not free pWidget, it is reffed by pReplacement
@@ -6262,6 +6264,7 @@ private:
         std::swap(m_nStartTabCount, m_nEndTabCount);
         split_notebooks();
 
+        // coverity[pass_freed_arg : FALSE] - m_pNotebook is not freed here
         gtk_notebook_set_current_page(m_pNotebook, nNewPage);
 
         enable_notify_events();
@@ -6389,6 +6392,7 @@ private:
              make_overflow_boxes();
 
         // don't scroll the tabs anymore
+        // coverity[pass_freed_arg : FALSE] - m_pNotebook is not freed here
         gtk_notebook_set_scrollable(m_pNotebook, false);
 
         gtk_widget_freeze_child_notify(GTK_WIDGET(m_pNotebook));
