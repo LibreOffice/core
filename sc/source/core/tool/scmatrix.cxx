@@ -3353,7 +3353,8 @@ public:
         maOp(aOp),
         mpErrorInterpreter(pErrorInterpreter),
         maString(rString),
-        mfVal(fVal)
+        mfVal(fVal),
+        maCOp()
     {
         if (mpErrorInterpreter)
         {
