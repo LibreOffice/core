@@ -69,6 +69,24 @@
       "revId": "03ce1e85428d4a273910bf7ca758ce050e95720c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e66df27_d31c6d61",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 3395,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-22T12:48:30Z",
+      "side": 1,
+      "message": "I wondered the same as Michael now about these RTL_ARCH and PLATFORMID choices.  (PLATFORMID is used in the UNO SDK and in UNO extensions, see e.g., \u003chttps://gerrit.libreoffice.org/c/core/+/112889\u003e \"Make PLATFORMID\u003dmacosx_aarch64 match RTL_ARCH\u003dAARCH64\".)\n\nI would suggest to harmonize on \"aarch64\", changing these two values here before any official initial Windows ARM64 release.",
+      "parentUuid": "b5bcb524_811224de",
+      "revId": "03ce1e85428d4a273910bf7ca758ce050e95720c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
