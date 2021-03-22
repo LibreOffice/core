@@ -727,8 +727,10 @@ Reference< XShape > const & Shape::createAndInsert(
     }
     // Use custom shape instead of GraphicObjectShape if the image is cropped to
     // shape. Except rectangle, which does not require further cropping
-    bool bIsCroppedGraphic = (aServiceName == "com.sun.star.drawing.GraphicObjectShape" && mpCustomShapePropertiesPtr->getShapePresetType() >= 0
-            && mpCustomShapePropertiesPtr->getShapePresetType() != XML_Rect && mpCustomShapePropertiesPtr->getShapePresetType() != XML_rect);
+    bool bIsCroppedGraphic = (aServiceName == "com.sun.star.drawing.GraphicObjectShape" &&
+                              (mpCustomShapePropertiesPtr->getShapePresetType() >= 0 || mpCustomShapePropertiesPtr->getPath2DList().size() > 0) &&
+                              mpCustomShapePropertiesPtr->getShapePresetType() != XML_Rect &&
+                              mpCustomShapePropertiesPtr->getShapePresetType() != XML_rect);
     bool bIsCustomShape = ( aServiceName == "com.sun.star.drawing.CustomShape" ||
                             aServiceName == "com.sun.star.drawing.ConnectorShape" ||
                             bIsCroppedGraphic);
