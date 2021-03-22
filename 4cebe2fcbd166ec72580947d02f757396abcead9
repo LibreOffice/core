@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53a43bc1_641f7ae3",
+        "filename": "include/svl/zforlist.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-22T08:42:07Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 552,
+        "startChar": 65,
+        "endLine": 552,
+        "endChar": 70
+      },
+      "revId": "4cebe2fcbd166ec72580947d02f757396abcead9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fce8274_e8f84693",
+        "filename": "include/svl/zforlist.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-22T08:42:07Z",
+      "side": 1,
+      "message": "It seems, this is the same, as IsNumberFormat(). Is it not possible to reuse that, with a different/extra eInputOptions?\n\nOtherwise it\u0027s better to use a similar approach to handle the input better:\n\nbool IsTimeFormat()",
+      "range": {
+        "startLine": 553,
+        "startChar": 4,
+        "endLine": 553,
+        "endChar": 34
+      },
+      "revId": "4cebe2fcbd166ec72580947d02f757396abcead9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
