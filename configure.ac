@@ -3601,11 +3601,11 @@ cygwin*|wsl*)
         WIN_OTHER_ARCH="x64"
         ;;
     aarch64)
-        CPUNAME=ARM64
-        RTL_ARCH=arm64
-        PLATFORMID=windows_arm64
+        CPUNAME=AARCH64
+        RTL_ARCH=AARCH64
+        PLATFORMID=windows_aarch64
         WINDOWS_X64=1
-        SCPDEFS="$SCPDEFS -DWINDOWS_ARM64"
+        SCPDEFS="$SCPDEFS -DWINDOWS_AARCH64"
         WIN_HOST_ARCH="arm64"
         WIN_HOST_BITS=64
         with_ucrt_dir=no
@@ -11713,7 +11713,7 @@ LO_CLANG_CXXFLAGS_INTRINSICS_AVX512=
 LO_CLANG_CXXFLAGS_INTRINSICS_F16C=
 LO_CLANG_CXXFLAGS_INTRINSICS_FMA=
 
-if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE -a ! \( "$_os" = "WINNT" -a "$CPUNAME" = "ARM64" \); then
+if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE -a ! \( "$_os" = "WINNT" -a "$CPUNAME" = "AARCH64" \); then
     if test -n "$LO_CLANG_CC" -a -n "$LO_CLANG_CXX"; then
         AC_MSG_CHECKING([for Clang])
         AC_MSG_RESULT([$LO_CLANG_CC / $LO_CLANG_CXX])

@@ -28,12 +28,12 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 			OPT_CODE_SIZE=0) \
 		OS_TARGET=WIN95 \
 		$(if $(filter X86_64,$(CPUNAME)),USE_64=1) \
-		$(if $(filter ARM64,$(CPUNAME)),USE_64=1) \
+		$(if $(filter AARCH64,$(CPUNAME)),USE_64=1 CPU_ARCH=aarch64) \
 		LIB="$(ILIB)" \
 		XCFLAGS="$(SOLARINC)" \
 		$(if $(CROSS_COMPILING),\
 			CROSS_COMPILE=1 \
-			$(if $(filter ARM64,$(CPUNAME)),CPU_ARCH=aarch64) \
+			$(if $(filter AARCH64,$(CPUNAME)),CPU_ARCH=aarch64) \
 			NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)") \
 		$(MAKE) nss_build_all RC="rc.exe $(SOLARINC)" \
 			NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py' \

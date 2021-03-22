@@ -13,7 +13,7 @@ $(eval $(call gb_Library_set_warnings_disabled,skia))
 
 $(eval $(call gb_Library_use_unpacked,skia,skia))
 
-ifneq ($(OS)_$(CPUNAME),WNT_ARM64)
+ifneq ($(OS)_$(CPUNAME),WNT_AARCH64)
 $(eval $(call gb_Library_use_clang,skia))
 $(eval $(call gb_Library_set_clang_precompiled_header,skia,external/skia/inc/pch/precompiled_skia))
 else

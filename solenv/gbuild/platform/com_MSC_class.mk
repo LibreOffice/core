@@ -134,7 +134,7 @@ fi
 endef
 
 # AsmObject class
-ifeq ($(CPUNAME),ARM64)
+ifeq ($(CPUNAME),AARCH64)
 gb_AsmObject_get_source = $(1)/$(2).S
 
 # Code needs a preprocessor step .S -> .asm -> .o
@@ -148,7 +148,7 @@ $(call gb_Helper_abbreviate_dirs,\
     echo "$(1) : $(3)" > $(4)
 endef
 
-else # !ARM64
+else # !AARCH64
 gb_AsmObject_get_source = $(1)/$(2).asm
 
 define gb_AsmObject__command
@@ -205,7 +205,7 @@ cat $${RESPONSEFILE} | sed 's/ /\n/g' | grep -v '^$$' > $${RESPONSEFILE}.1 && \
 mv $${RESPONSEFILE}.1 $${RESPONSEFILE} &&
 endef
 
-MSC_SUBSYSTEM_VERSION=$(COMMA)$(if $(filter ARM64,$(CPUNAME)),6.02,6.01)
+MSC_SUBSYSTEM_VERSION=$(COMMA)$(if $(filter AARCH64,$(CPUNAME)),6.02,6.01)
 
 # the sort on the libraries is used to filter out duplicates to keep commandline
 # length in check - otherwise the dupes easily hit the limit when linking mergedlib

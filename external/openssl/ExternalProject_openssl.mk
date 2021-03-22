@@ -44,7 +44,7 @@ OPENSSL_PLATFORM := \
         $(if $(filter WNT,$(OS)),\
           $(if $(filter INTEL,$(CPUNAME)),VC-WIN32)\
           $(if $(filter X86_64,$(CPUNAME)),VC-WIN64A)\
-          $(if $(filter ARM64,$(CPUNAME)),VC-WIN64-ARM)\
+          $(if $(filter AARCH64,$(CPUNAME)),VC-WIN64-ARM)\
         ,\
           $(if $(filter MACOSX,$(OS)),\
             $(if $(filter X86_64,$(CPUNAME)),darwin64-x86_64-cc)\
