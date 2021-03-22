@@ -52,7 +52,8 @@
     <service name="com.sun.star.embed.InstanceLocker"/>
   </implementation>
   <implementation name="com.sun.star.comp.task.OfficeRestartManager"
-      constructor="com_sun_star_comp_task_OfficeRestartManager">
+      constructor="com_sun_star_comp_task_OfficeRestartManager"
+      single-instance="true">
     <service name="com.sun.star.comp.task.OfficeRestartManager"/>
     <singleton name="com.sun.star.task.OfficeRestartManager"/>
   </implementation>
