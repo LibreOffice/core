@@ -64,6 +64,9 @@ class WikiProtocolSocketFactory extends SSLSocketFactory
                         }
                     }
 
+                    if (m_aOrgTrustManager == null)
+                        throw new RuntimeException("No access to the default trust manager!");
+
                     return m_aOrgTrustManager;
                 }
 
