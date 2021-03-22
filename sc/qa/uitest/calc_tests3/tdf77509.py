@@ -24,6 +24,7 @@ class tdf77509(UITestCase):
         #3. Tab: Data > Consolidate
         self.ui_test.execute_modeless_dialog_through_command(".uno:DataConsolidate")
         xDialog = self.xUITest.getTopFocusWindow()
+
         xfunc = xDialog.getChild("func")
         xeddataarea = xDialog.getChild("eddataarea")
         xadd = xDialog.getChild("add")
@@ -36,22 +37,42 @@ class tdf77509(UITestCase):
         #5. Click 'Add' so that ranges appear in "Consolidation ranges"
         xeddataarea.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$1:$B$7"}))
         xadd.executeAction("CLICK", tuple())
+
+        xConsAreas = xDialog.getChild("consareas")
+        self.assertEqual(1, len(xConsAreas.getChildren()))
+        self.assertEqual("$Sheet1.$A$1:$B$7", get_state_as_dict(xConsAreas.getChild("0"))['Text'])
+
         #6. Click 'Options' > check 'Row labels' > click OK
         xbyrow.executeAction("CLICK", tuple())
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
         #verify
-        self.assertEqual(get_cell_by_position(document, 0, 3, 0).getString(), "A 1")
-        self.assertEqual(get_cell_by_position(document, 0, 3, 1).getString(), "AB 1")
-        self.assertEqual(get_cell_by_position(document, 0, 3, 2).getString(), "AB 12")
-        self.assertEqual(get_cell_by_position(document, 0, 3, 3).getString(), "AB 123")
-        self.assertEqual(get_cell_by_position(document, 0, 3, 4).getString(), "ABC 1")
+        self.assertEqual("A 1", get_cell_by_position(document, 0, 3, 0).getString())
+        self.assertEqual("AB 1", get_cell_by_position(document, 0, 3, 1).getString())
+        self.assertEqual("AB 12", get_cell_by_position(document, 0, 3, 2).getString())
+        self.assertEqual("AB 123", get_cell_by_position(document, 0, 3, 3).getString())
+        self.assertEqual("ABC 1", get_cell_by_position(document, 0, 3, 4).getString())
 
-        self.assertEqual(get_cell_by_position(document, 0, 4, 0).getValue(), 1)
-        self.assertEqual(get_cell_by_position(document, 0, 4, 1).getValue(), 2)
-        self.assertEqual(get_cell_by_position(document, 0, 4, 2).getValue(), 2)
-        self.assertEqual(get_cell_by_position(document, 0, 4, 3).getValue(), 1)
-        self.assertEqual(get_cell_by_position(document, 0, 4, 4).getValue(), 1)
+        self.assertEqual(1, get_cell_by_position(document, 0, 4, 0).getValue())
+        self.assertEqual(2, get_cell_by_position(document, 0, 4, 1).getValue())
+        self.assertEqual(2, get_cell_by_position(document, 0, 4, 2).getValue())
+        self.assertEqual(1, get_cell_by_position(document, 0, 4, 3).getValue())
+        self.assertEqual(1, get_cell_by_position(document, 0, 4, 4).getValue())
+
+        self.xUITest.executeCommand(".uno:Undo")
+
+        self.assertEqual("", get_cell_by_position(document, 0, 3, 0).getString())
+        self.assertEqual("", get_cell_by_position(document, 0, 3, 1).getString())
+        self.assertEqual("", get_cell_by_position(document, 0, 3, 2).getString())
+        self.assertEqual("", get_cell_by_position(document, 0, 3, 3).getString())
+        self.assertEqual("", get_cell_by_position(document, 0, 3, 4).getString())
+
+        self.assertEqual(0, get_cell_by_position(document, 0, 4, 0).getValue())
+        self.assertEqual(0, get_cell_by_position(document, 0, 4, 1).getValue())
+        self.assertEqual(0, get_cell_by_position(document, 0, 4, 2).getValue())
+        self.assertEqual(0, get_cell_by_position(document, 0, 4, 3).getValue())
+        self.assertEqual(0, get_cell_by_position(document, 0, 4, 4).getValue())
+
         self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
