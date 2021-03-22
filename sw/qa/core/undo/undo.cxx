@@ -84,6 +84,25 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTextboxCutUndo)
     CPPUNIT_ASSERT_EQUAL(pIndex1->GetIndex(), pIndex2->GetIndex());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTableCopyRedline)
+{
+    // Given a document with two table cells and redlining enabled:
+    load(DATA_DIRECTORY, "table-copy-redline.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+
+    // When doing select-all, copy, paste and undo:
+    pWrtShell->SelAll();
+    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
+    pTransfer->Copy();
+    TransferableDataHelper aHelper(pTransfer);
+    SwTransferable::Paste(*pWrtShell, aHelper);
+
+    // Without the accompanying fix in place, this test would have crashed.
+    pWrtShell->Undo();
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
