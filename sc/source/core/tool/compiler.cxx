@@ -2025,8 +2025,7 @@ void ScCompiler::SetRefConvention( const ScCompiler::Convention *pConvP )
 {
     pConv = pConvP;
     meGrammar = FormulaGrammar::mergeToGrammar( meGrammar, pConv->meConv);
-    OSL_ENSURE( FormulaGrammar::isSupported( meGrammar),
-            "ScCompiler::SetRefConvention: unsupported grammar resulting");
+    assert( FormulaGrammar::isSupported( meGrammar));
 }
 
 void ScCompiler::SetError(FormulaError nError)
