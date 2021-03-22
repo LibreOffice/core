@@ -367,24 +367,6 @@ uno_Interface * IdlReflectionServiceImpl::mapToUno(
 }
 
 
-namespace {
-
-struct Instance {
-    explicit Instance(
-        css::uno::Reference<css::uno::XComponentContext> const & context):
-        instance(new stoc_corefl::IdlReflectionServiceImpl(context))
-    {}
-
-    rtl::Reference<cppu::OWeakObject> instance;
-};
-
-struct Singleton:
-    public rtl::StaticWithArg<
-        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
-{};
-
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_stoc_CoreReflection_get_implementation(
     css::uno::XComponentContext * context,
@@ -392,7 +374,7 @@ com_sun_star_comp_stoc_CoreReflection_get_implementation(
 {
     SAL_WARN_IF(
         arguments.hasElements(), "stoc", "unexpected singleton arguments");
-    return cppu::acquire(Singleton::get(context).instance.get());
+    return cppu::acquire(new stoc_corefl::IdlReflectionServiceImpl(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
