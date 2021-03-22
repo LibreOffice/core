@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "325deab0_d8665711",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 877,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-03-22T20:49:37Z",
+      "side": 1,
+      "message": "This while loop block behaves as an if condition block.\n\nWhat is the use of getting the next entry with bEntry \u003d mxTreeBox-\u003eiter_next(*xEntry)? It is outside the loop block.\n\nThere is no need to loop. The \u0027No List\u0027 entry will always be the first entry. You are using get_iter_first to get the first entry. Checking that it succeeds and then doing the scroll_to_row and select seems like it will work to select the \u0027No List\u0027 entry when an empty rStr is passed, meaning the paragraph has no list style.",
+      "revId": "9275f0bd22c0d2652412536e28b5075138279067",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
