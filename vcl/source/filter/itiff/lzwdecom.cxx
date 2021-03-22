@@ -24,6 +24,7 @@
 
 LZWDecompressor::LZWDecompressor()
     : pIStream(nullptr)
+    , aTable{{}}
     , nTableSize(0)
     , bEOIFound(false)
     , bInvert(false)
@@ -36,9 +37,9 @@ LZWDecompressor::LZWDecompressor()
 {
     for (sal_uInt16 i=0; i<MAX_TABLE_SIZE; i++)
     {
-        pTable[i].nPrevCode=0;
-        pTable[i].nDataCount=1;
-        pTable[i].nData=static_cast<sal_uInt8>(i);
+        aTable[i].nPrevCode=0;
+        aTable[i].nDataCount=1;
+        aTable[i].nData=static_cast<sal_uInt8>(i);
     }
 }
 
@@ -156,7 +157,7 @@ void LZWDecompressor::AddToTable(sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData
     }
 
     unsigned char aSeenIndexes[MAX_TABLE_SIZE] = {0};
-    while (pTable[nCodeFirstData].nDataCount>1)
+    while (aTable[nCodeFirstData].nDataCount>1)
     {
         if (aSeenIndexes[nCodeFirstData])
         {
@@ -165,12 +166,12 @@ void LZWDecompressor::AddToTable(sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData
             return;
         }
         aSeenIndexes[nCodeFirstData] = 1;
-        nCodeFirstData=pTable[nCodeFirstData].nPrevCode;
+        nCodeFirstData=aTable[nCodeFirstData].nPrevCode;
     }
 
-    pTable[nTableSize].nPrevCode=nPrevCode;
-    pTable[nTableSize].nDataCount=pTable[nPrevCode].nDataCount+1;
-    pTable[nTableSize].nData=pTable[nCodeFirstData].nData;
+    aTable[nTableSize].nPrevCode=nPrevCode;
+    aTable[nTableSize].nDataCount=aTable[nPrevCode].nDataCount+1;
+    aTable[nTableSize].nData=aTable[nCodeFirstData].nData;
 
     nTableSize++;
 }
@@ -204,12 +205,12 @@ void LZWDecompressor::DecompressSome()
 
     nOldCode=nCode;
 
-    nOutBufDataLen=pTable[nCode].nDataCount;
+    nOutBufDataLen=aTable[nCode].nDataCount;
     pOutBufData=pOutBuf.data()+nOutBufDataLen;
     for (i=0; i<nOutBufDataLen; i++)
     {
-        *(--pOutBufData)=pTable[nCode].nData;
-        nCode=pTable[nCode].nPrevCode;
+        *(--pOutBufData)=aTable[nCode].nData;
+        nCode=aTable[nCode].nPrevCode;
     }
 }
 

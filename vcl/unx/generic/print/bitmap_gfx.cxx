@@ -299,7 +299,7 @@ private:
     };
 
     std::array<LZWCTreeNode, 4096>
-                    mpTable;    // LZW compression data
+                    maTable;    // LZW compression data
     LZWCTreeNode*   mpPrefix;   // the compression is as same as the TIFF compression
     static constexpr sal_uInt16 gnDataSize = 8;
     static constexpr sal_uInt16 gnClearCode = 1 << gnDataSize;
@@ -323,6 +323,7 @@ public:
 
 LZWEncoder::LZWEncoder(osl::File* pOutputFile) :
         Ascii85Encoder (pOutputFile),
+        maTable{{}},
         mpPrefix(nullptr),
         mnTableSize(gnEOICode + 1),
         mnCodeSize(gnDataSize + 1),
@@ -331,10 +332,10 @@ LZWEncoder::LZWEncoder(osl::File* pOutputFile) :
 {
     for (sal_uInt32 i = 0; i < 4096; i++)
     {
-        mpTable[i].mpBrother    = nullptr;
-        mpTable[i].mpFirstChild = nullptr;
-        mpTable[i].mnCode       = i;
-        mpTable[i].mnValue      = static_cast<sal_uInt8>(mpTable[i].mnCode);
+        maTable[i].mpBrother    = nullptr;
+        maTable[i].mpFirstChild = nullptr;
+        maTable[i].mnCode       = i;
+        maTable[i].mnValue      = static_cast<sal_uInt8>(maTable[i].mnCode);
     }
 
     WriteBits( gnClearCode, mnCodeSize );
@@ -372,7 +373,7 @@ LZWEncoder::EncodeByte (sal_uInt8 nByte )
 
     if (!mpPrefix)
     {
-        mpPrefix = mpTable.data() + nByte;
+        mpPrefix = maTable.data() + nByte;
     }
     else
     {
@@ -396,7 +397,7 @@ LZWEncoder::EncodeByte (sal_uInt8 nByte )
                 WriteBits (gnClearCode, mnCodeSize);
 
                 for (i = 0; i < gnClearCode; i++)
-                    mpTable[i].mpFirstChild = nullptr;
+                    maTable[i].mpFirstChild = nullptr;
 
                 mnCodeSize = gnDataSize + 1;
                 mnTableSize = gnEOICode + 1;
@@ -406,14 +407,14 @@ LZWEncoder::EncodeByte (sal_uInt8 nByte )
                 if(mnTableSize == static_cast<sal_uInt16>((1 << mnCodeSize) - 1))
                     mnCodeSize++;
 
-                p = mpTable.data() + (mnTableSize++);
+                p = maTable.data() + (mnTableSize++);
                 p->mpBrother = mpPrefix->mpFirstChild;
                 mpPrefix->mpFirstChild = p;
                 p->mnValue = nV;
                 p->mpFirstChild = nullptr;
             }
 
-            mpPrefix = mpTable.data() + nV;
+            mpPrefix = maTable.data() + nV;
         }
     }
 }
