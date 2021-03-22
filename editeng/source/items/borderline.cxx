@@ -459,7 +459,7 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderLineStyle nStyle, sal_uInt16 nOut
             // fdo#38542: not a known double, default to something custom...
             SetBorderLineStyle(nStyle);
             m_nWidth = nOut + nIn + nDist;
-            if (nOut + nIn + nDist)
+            if (m_nWidth)
             {
                 m_aWidthImpl = BorderWidthImpl(
                     BorderWidthImplFlags::CHANGE_LINE1 | BorderWidthImplFlags::CHANGE_LINE2 | BorderWidthImplFlags::CHANGE_DIST,
