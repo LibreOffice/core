@@ -56,6 +56,8 @@ class SW_DLLPUBLIC SwMailMergeConfigItem
     bool m_bAddressInserted;
     bool m_bGreetingInserted;
     sal_Int32 m_nGreetingMoves;
+    sal_uInt32 m_nBegin;
+    sal_uInt32 m_nEnd;
     std::set<sal_Int32> m_aExcludedRecords;
     css::uno::Reference<css::view::XSelectionChangeListener> m_xDBChangedListener;
 
@@ -105,7 +107,8 @@ public:
     sal_Int32 GetResultSetPosition()const;
     bool IsResultSetFirstLast(bool& bIsFirst, bool& bIsLast);
 
-    bool IsRecordExcluded(sal_Int32 nRecord) const;
+    bool IsRecordIncluded(sal_uInt32 nRecord) const;
+    bool IsRecordExcluded(sal_uInt32 nRecord) const;
     void ExcludeRecord(sal_Int32 nRecord, bool bExclude);
     css::uno::Sequence< css::uno::Any> GetSelection() const;
 
@@ -215,6 +218,9 @@ public:
         { return m_bGreetingInserted; }
     void SetGreetingInserted()
         { m_bGreetingInserted = true; }
+
+    void SetBeginEnd(sal_uInt32 nBegin, sal_uInt32 nEnd)
+        { m_nBegin = nBegin; m_nEnd = nEnd; }
 
     // counts the moves in the layout page
     void MoveGreeting( sal_Int32 nMove) { m_nGreetingMoves += nMove;}
