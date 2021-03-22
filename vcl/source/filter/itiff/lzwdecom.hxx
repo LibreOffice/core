@@ -53,7 +53,7 @@ private:
 
     SvStream* pIStream;
 
-    std::array<LZWTableEntry, MAX_TABLE_SIZE> pTable;
+    std::array<LZWTableEntry, MAX_TABLE_SIZE> aTable;
     sal_uInt16 nTableSize;
 
     bool bEOIFound, bInvert, bFirst;
