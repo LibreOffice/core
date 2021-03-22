@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c77becb_5ba0ad6c",
+        "filename": "vcl/source/filter/png/PngImageReader.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-03-22T21:18:59Z",
+      "side": 0,
+      "message": "You cannot move this lower, see the comment.",
+      "range": {
+        "startLine": 80,
+        "startChar": 4,
+        "endLine": 80,
+        "endChar": 45
+      },
+      "revId": "1815cf37c46894f158c50c28e43d24f0c7d10d84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
