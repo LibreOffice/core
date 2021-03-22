@@ -835,7 +835,7 @@ OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
     sal_uInt16 nCharsLeft = nChars;
     sal_uInt16 nReadSize;
 
-    while( IsValid() && (nCharsLeft > 0) )
+    while (IsValid() && nCharsLeft)
     {
         if( b16Bit )
         {
