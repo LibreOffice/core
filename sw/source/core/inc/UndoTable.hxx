@@ -289,6 +289,7 @@ public:
 
     bool IsEmpty() const;
     bool InsertRow( SwTable& rTable, const SwSelBoxes& rBoxes, sal_uInt16 nCnt );
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 class SwUndoCpyTable : public SwUndo
