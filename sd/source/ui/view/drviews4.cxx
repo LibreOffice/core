@@ -57,11 +57,32 @@
 #include <drawview.hxx>
 #include <svx/bmpmask.hxx>
 #include <LayerTabBar.hxx>
+#include <ViewShellBase.hxx>
 
 #include <svx/svditer.hxx>
 
 #include <navigatr.hxx>
 #include <memory>
+
+namespace {
+    void EndTextEditOnPage(sal_uInt16 nPageId)
+    {
+        SfxViewShell* pShell = SfxViewShell::GetFirst();
+        while (pShell)
+        {
+            ::sd::ViewShellBase* pBase = dynamic_cast<::sd::ViewShellBase*>(pShell);
+            if (pBase)
+            {
+                ::sd::ViewShell* pViewSh = pBase->GetMainViewShell().get();
+                ::sd::DrawViewShell* pDrawSh = dynamic_cast<::sd::DrawViewShell*>(pViewSh);
+                if (pDrawSh && pDrawSh->GetDrawView() && pDrawSh->getCurrentPage()->getPageId() == nPageId)
+                    pDrawSh->GetDrawView()->SdrEndTextEdit();
+            }
+
+            pShell = SfxViewShell::GetNext(*pShell);
+        }
+    }
+}
 
 namespace sd {
 
@@ -90,6 +111,7 @@ void DrawViewShell::DeleteActualPage()
             sal_uInt16 nPageIndex = maTabControl->GetPagePos(pPage->getPageId());
             if(IsSelected(nPageIndex))
             {
+                EndTextEditOnPage(pPage->getPageId());
                 Reference< XDrawPage > xPage( xPages->getByIndex( nPageIndex ), UNO_QUERY_THROW );
                 pagesToDelete.push_back(xPage);
             }
