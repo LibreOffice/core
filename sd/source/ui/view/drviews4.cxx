@@ -59,6 +59,7 @@
 #include <svx/bmpmask.hxx>
 #include <LayerTabBar.hxx>
 
+#include <SlideSorterViewShell.hxx>
 #include <svx/svditer.hxx>
 
 #include <navigatr.hxx>
@@ -88,9 +89,15 @@ void DrawViewShell::DeleteActualPage()
         for (sal_uInt16 i = 0; i < nPageCount; i++)
         {
             pPage = GetDoc()->GetSdPage(i, mePageKind);
-            if(pPage->IsSelected())
+            sal_uInt16 nPageIndex = maTabControl->GetPagePos(pPage->getPageId());
+
+            slidesorter::SlideSorterViewShell* pVShell
+                = slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
+            bool bUseSlideSorter = pVShell != nullptr;
+
+            if((bUseSlideSorter && IsSelected(nPageIndex)) || (!bUseSlideSorter && pPage->IsSelected()))
             {
-                Reference< XDrawPage > xPage( xPages->getByIndex( maTabControl->GetPagePos(pPage->getPageId()) ), UNO_QUERY_THROW );
+                Reference< XDrawPage > xPage( xPages->getByIndex( nPageIndex ), UNO_QUERY_THROW );
                 pagesToDelete.push_back(xPage);
             }
         }
