@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c4e028e8_4f2f0e79",
+        "filename": "sc/source/ui/cctrl/tbzoomsliderctrl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-22T13:14:16Z",
+      "side": 1,
+      "message": "This needs to be a translatable resource id, search for ScResId(). Preferably something like \"Scale: %SCALE\" and you replace this variable so the value position is variable too.",
+      "range": {
+        "startLine": 404,
+        "startChar": 13,
+        "endLine": 404,
+        "endChar": 18
+      },
+      "revId": "4a72de906c4902bee1418e8b23e1e56238c723b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "345089c8_cd2302ed",
+        "filename": "sc/source/ui/cctrl/tbzoomsliderctrl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-03-22T13:14:16Z",
+      "side": 1,
+      "message": "Draws distorted on kf5 with dark background and is invisible on gen with bright background (run the application with SAL_USE_VCLPLUGIN\u003dgen to test).",
+      "range": {
+        "startLine": 405,
+        "startChar": 11,
+        "endLine": 405,
+        "endChar": 19
+      },
+      "revId": "4a72de906c4902bee1418e8b23e1e56238c723b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
