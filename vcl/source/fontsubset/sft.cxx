@@ -2039,7 +2039,7 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
         info->weight = GetUInt16(table, OS2_usWeightClass_offset);
         info->width  = GetUInt16(table, OS2_usWidthClass_offset);
 
-        if (table_size >= OS2_V0_length) {
+        if (table_size >= OS2_V0_length && UPEm != 0) {
             info->typoAscender = XUnits(UPEm,GetInt16(table, OS2_typoAscender_offset));
             info->typoDescender = XUnits(UPEm, GetInt16(table, OS2_typoDescender_offset));
             info->typoLineGap = XUnits(UPEm, GetInt16(table, OS2_typoLineGap_offset));
