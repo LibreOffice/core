@@ -34,6 +34,24 @@
       "revId": "8140558d6a7ed9c5a63d57e27371ac8f0bb87068",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "928c9538_21c2a170",
+        "filename": "vcl/source/control/button.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-03-22T14:56:05Z",
+      "side": 1,
+      "message": "But this code runs on every paint - so if code has called SetQuickHelpText() with something !\u003d the button text, it gets cleared to button text. I don\u0027t think that is expected here.",
+      "parentUuid": "69c0241c_c8b72b03",
+      "revId": "8140558d6a7ed9c5a63d57e27371ac8f0bb87068",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
