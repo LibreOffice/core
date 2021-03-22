@@ -638,9 +638,9 @@ bool Runtime::pyIterUnpack( PyObject *const pObj, Any &a ) const
     return true;
 }
 
-Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) const
+Any Runtime::pyObject2Any(const PyRef & source, enum ConversionMode mode) const
 {
-    if( ! impl->cargo->valid )
+    if (!impl || !impl->cargo->valid)
     {
         throw RuntimeException("pyuno runtime must be initialized before calling any2PyObject" );
     }
