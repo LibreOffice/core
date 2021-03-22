@@ -58,7 +58,8 @@
     <singleton name="com.sun.star.task.OfficeRestartManager"/>
   </implementation>
   <implementation name="com.sun.star.comp.util.OfficeInstallationDirectories"
-      constructor="com_sun_star_comp_util_OfficeInstallationDirectories">
+      constructor="com_sun_star_comp_util_OfficeInstallationDirectories"
+      single-instance="true">
     <service name="com.sun.star.util.OfficeInstallationDirectories"/>
     <singleton name="com.sun.star.util.theOfficeInstallationDirectories"/>
   </implementation>
