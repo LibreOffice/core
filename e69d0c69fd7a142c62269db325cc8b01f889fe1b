@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "54adb0f5_495bee01",
+        "filename": "sw/qa/extras/layout/layout2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2094,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-03-22T11:53:52Z",
+      "side": 1,
+      "message": "@Miklos/Michael: Can you help me what exactly I should test here?\nHow can I see if my patch has any effect?",
+      "range": {
+        "startLine": 2094,
+        "startChar": 4,
+        "endLine": 2094,
+        "endChar": 83
+      },
+      "revId": "e69d0c69fd7a142c62269db325cc8b01f889fe1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
