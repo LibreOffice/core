@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <libxml/xmlwriter.h>
+
 #include <UndoTable.hxx>
 #include <UndoRedline.hxx>
 #include <UndoDelete.hxx>
@@ -88,6 +90,8 @@ struct UndoTableCpyTable_Entry
     bool bJoin; // For redlining only
 
     explicit UndoTableCpyTable_Entry( const SwTableBox& rBox );
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 namespace {
@@ -2295,6 +2299,42 @@ UndoTableCpyTable_Entry::UndoTableCpyTable_Entry( const SwTableBox& rBox )
 {
 }
 
+void UndoTableCpyTable_Entry::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("UndoTableCpyTable_Entry"));
+
+    xmlTextWriterStartElement(pWriter, BAD_CAST("nBoxIdx"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::number(nBoxIdx).getStr()));
+    xmlTextWriterEndElement(pWriter);
+
+    xmlTextWriterStartElement(pWriter, BAD_CAST("nOffset"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::number(nOffset).getStr()));
+    xmlTextWriterEndElement(pWriter);
+
+    if (pBoxNumAttr)
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("pBoxNumAttr"));
+        pBoxNumAttr->dumpAsXml(pWriter);
+        xmlTextWriterEndElement(pWriter);
+    }
+
+    if (pUndo)
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("pUndo"));
+        pUndo->dumpAsXml(pWriter);
+        xmlTextWriterEndElement(pWriter);
+    }
+
+    xmlTextWriterStartElement(pWriter, BAD_CAST("bJoin"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(bJoin).getStr()));
+    xmlTextWriterEndElement(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
+}
+
 SwUndoTableCpyTable::SwUndoTableCpyTable(const SwDoc& rDoc)
     : SwUndo( SwUndoId::TBLCPYTBL, &rDoc )
 {
@@ -2700,6 +2740,23 @@ bool SwUndoTableCpyTable::InsertRow( SwTable& rTable, const SwSelBoxes& rBoxes,
         m_pInsRowUndo.reset();
     }
     return bRet;
+}
+
+void SwUndoTableCpyTable::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("SwUndoTableCpyTable"));
+
+    for (const auto& pEntry : m_vArr)
+    {
+        pEntry->dumpAsXml(pWriter);
+    }
+
+    if (m_pInsRowUndo)
+    {
+        m_pInsRowUndo->dumpAsXml(pWriter);
+    }
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 bool SwUndoTableCpyTable::IsEmpty() const
