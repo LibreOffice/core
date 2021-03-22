@@ -338,8 +338,9 @@ OUString SfxHelp_Impl::GetHelpText( const OUString& aCommandURL, const OUString&
     return SfxContentHelper::GetActiveHelpString( aHelpURL.makeStringAndClear() );
 }
 
-SfxHelp::SfxHelp() :
-    bIsDebug( false )
+SfxHelp::SfxHelp()
+    : bIsDebug(false)
+    , bLaunchingHelp(false)
 {
     // read the environment variable "HELP_DEBUG"
     // if it's set, you will see debug output on active help
@@ -691,12 +692,22 @@ void SfxHelp::SearchKeyword( const OUString& rKeyword )
 
 bool SfxHelp::Start( const OUString& rURL, const vcl::Window* pWindow )
 {
-    return Start_Impl( rURL, pWindow, OUString() );
+    if (bLaunchingHelp)
+        return true;
+    bLaunchingHelp = true;
+    bool bRet = Start_Impl( rURL, pWindow, OUString() );
+    bLaunchingHelp = false;
+    return bRet;
 }
 
 bool SfxHelp::Start(const OUString& rURL, weld::Widget* pWidget)
 {
-    return Start_Impl(rURL, pWidget, OUString());
+    if (bLaunchingHelp)
+        return true;
+    bLaunchingHelp = true;
+    bool bRet = Start_Impl(rURL, pWidget, OUString());
+    bLaunchingHelp = false;
+    return bRet;
 }
 
 /// Redirect the vnd.sun.star.help:// urls to http://help.libreoffice.org
