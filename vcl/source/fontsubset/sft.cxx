@@ -1967,7 +1967,7 @@ std::unique_ptr<sal_uInt16[]> GetTTSimpleGlyphMetrics(AbstractTrueTypeFont const
             nAdvOffset = 4 * (n - 1);
         }
 
-        if( nAdvOffset >= nTableSize)
+        if (nAdvOffset >= nTableSize || UPEm == 0)
             res[i] = 0; /* better than a crash for buggy fonts */
         else
             res[i] = static_cast<sal_uInt16>(
