@@ -7008,9 +7008,21 @@ std::unique_ptr<weld::SizeGroup> SalInstanceBuilder::create_size_group()
 
 OString SalInstanceBuilder::get_current_page_help_id() const
 {
-    TabControl* pCtrl = m_xBuilder->get<TabControl>("tabcontrol");
-    TabPage* pTabPage = pCtrl ? pCtrl->GetTabPage(pCtrl->GetCurPageId()) : nullptr;
-    vcl::Window* pTabChild = pTabPage ? pTabPage->GetWindow(GetWindowType::FirstChild) : nullptr;
+    vcl::Window* pCtrl = m_xBuilder->get("tabcontrol");
+    if (!pCtrl)
+        return OString();
+    VclPtr<vcl::Window> xTabPage;
+    if (pCtrl->GetType() == WindowType::TABCONTROL)
+    {
+        TabControl* pTabCtrl = static_cast<TabControl*>(pCtrl);
+        xTabPage = pTabCtrl->GetTabPage(pTabCtrl->GetCurPageId());
+    }
+    else if (pCtrl->GetType() == WindowType::VERTICALTABCONTROL)
+    {
+        VerticalTabControl* pTabCtrl = static_cast<VerticalTabControl*>(pCtrl);
+        xTabPage = pTabCtrl->GetPage(pTabCtrl->GetCurPageId());
+    }
+    vcl::Window* pTabChild = xTabPage ? xTabPage->GetWindow(GetWindowType::FirstChild) : nullptr;
     pTabChild = pTabChild ? pTabChild->GetWindow(GetWindowType::FirstChild) : nullptr;
     if (pTabChild)
         return pTabChild->GetHelpId();
