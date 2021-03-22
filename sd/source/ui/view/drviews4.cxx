@@ -87,9 +87,10 @@ void DrawViewShell::DeleteActualPage()
         for (sal_uInt16 i = 0; i < nPageCount; i++)
         {
             pPage = GetDoc()->GetSdPage(i, mePageKind);
-            if(pPage->IsSelected())
+            sal_uInt16 nPageIndex = maTabControl->GetPagePos(pPage->getPageId());
+            if(IsSelected(nPageIndex))
             {
-                Reference< XDrawPage > xPage( xPages->getByIndex( maTabControl->GetPagePos(pPage->getPageId()) ), UNO_QUERY_THROW );
+                Reference< XDrawPage > xPage( xPages->getByIndex( nPageIndex ), UNO_QUERY_THROW );
                 pagesToDelete.push_back(xPage);
             }
         }
