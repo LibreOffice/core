@@ -2352,9 +2352,9 @@ bool SalDisplay::XIfEventWithTimeout( XEvent* o_pEvent, XPointer i_pPredicateDat
     return bRet;
 }
 
-SalVisual::SalVisual():
-    eRGBMode_(SalRGB::RGB), nRedShift_(0), nGreenShift_(0), nBlueShift_(0), nRedBits_(0), nGreenBits_(0),
-    nBlueBits_(0)
+SalVisual::SalVisual()
+    : eRGBMode_(SalRGB::RGB), nRedShift_(0), nGreenShift_(0), nBlueShift_(0)
+    , nRedBits_(0), nGreenBits_(0), nBlueBits_(0)
 {
     visual = nullptr;
 }
@@ -2363,7 +2363,12 @@ SalVisual::SalVisual( const XVisualInfo* pXVI )
 {
     *static_cast<XVisualInfo*>(this) = *pXVI;
     if( GetClass() != TrueColor )
+    {
+        eRGBMode_ = SalRGB::RGB;
+        nRedShift_ = nGreenShift_ = nBlueShift_;
+        nRedBits_ = nGreenBits_ = nBlueBits_;
         return;
+    }
 
     nRedShift_      = sal_Shift( red_mask );
     nGreenShift_    = sal_Shift( green_mask );
