@@ -91,9 +91,12 @@ public class CfgParser
         try
         {
             FileInputStream propFile = new FileInputStream(name);
-            prop.load(propFile);
-            System.out.println("Parsing properties from " + name);
-            propFile.close();
+            try {
+                prop.load(propFile);
+                System.out.println("Parsing properties from " + name);
+            } finally {
+                propFile.close();
+            }
         }
         catch (Exception e)
         {
@@ -105,7 +108,11 @@ public class CfgParser
                     System.out.println("Parsing properties from " + name);
                     java.net.URLConnection connection = url.openConnection();
                     java.io.InputStream in = connection.getInputStream();
-                    prop.load(in);
+                    try {
+                        prop.load(in);
+                    } finally {
+                        in.close();
+                    }
                 }
             }
             catch (Exception ex)
