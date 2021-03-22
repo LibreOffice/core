@@ -4169,6 +4169,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
 
             const size_t nMinStringLen = bUnicode ? sizeof(sal_uInt16) : sizeof(sal_uInt8);
             const size_t nMinRecordSize = nExtraLen + nMinStringLen;
+            assert(nMinRecordSize != 0 && "impossible to be zero");
             const size_t nMaxPossibleStrings = rStrm.remainingSize() / nMinRecordSize;
             if (nStrings > nMaxPossibleStrings)
             {
