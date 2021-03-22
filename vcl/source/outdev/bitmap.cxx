@@ -1460,8 +1460,9 @@ bool OutputDevice::HasFastDrawTransformedBitmap() const
     if( ImplIsRecordLayout() )
         return false;
 
-    if ( !mpGraphics && !AcquireGraphics() )
+    if (!mpGraphics && !AcquireGraphics())
         return false;
+    assert(mpGraphics);
 
     return mpGraphics->HasFastDrawTransformedBitmap();
 }
