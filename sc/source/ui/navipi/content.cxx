@@ -336,7 +336,13 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl, weld::TreeView&, bool)
         switch( nType )
         {
             case ScContentId::TABLE:
+            {
+                // tdf#133159 store current config before changing sheet
+                // plausible that this should be done for all cases, but this
+                // is the known case that needs it
+                StoreNavigatorSettings();
                 pParentWindow->SetCurrentTableStr( aText );
+            }
             break;
 
             case ScContentId::RANGENAME:
@@ -1631,8 +1637,14 @@ void ScContentTree::ApplyNavigatorSettings(bool bRestorePos, int nScrollPos)
     }
 }
 
-void ScContentTree::StoreNavigatorSettings() const
+void ScContentTree::StoreNavigatorSettings()
 {
+    if (m_nAsyncMouseReleaseId)
+    {
+        Application::RemoveUserEvent(m_nAsyncMouseReleaseId);
+        m_nAsyncMouseReleaseId = nullptr;
+    }
+
     ScNavigatorSettings* pSettings = ScNavigatorDlg::GetNavigatorSettings();
     if( !pSettings )
         return;
