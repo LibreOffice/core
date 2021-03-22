@@ -788,7 +788,7 @@ std::unique_ptr<sdr::overlay::OverlayObject> SdrHdl::CreateOverlayObject(
     // support bigger sizes
     bool bForceBiggerSize(false);
 
-    if(pHdlList->GetHdlSize() > 3)
+    if (pHdlList && pHdlList->GetHdlSize() > 3)
     {
         switch(eKindOfMarker)
         {
