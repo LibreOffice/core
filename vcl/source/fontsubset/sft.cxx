@@ -1160,6 +1160,8 @@ void CloseTTFont(TrueTypeFont* ttf) { delete ttf; }
 
 sal_uInt32 AbstractTrueTypeFont::glyphOffset(sal_uInt32 glyphID) const
 {
+    if (m_aGlyphOffsets.empty()) // the O_CFF and Bitmap cases
+        return 0;
     return m_aGlyphOffsets[glyphID];
 }
 
@@ -1200,13 +1202,11 @@ SFErrCodes AbstractTrueTypeFont::indexGlyphData()
             m_nGlyphs = k;
 
         m_aGlyphOffsets.clear();
-        m_aGlyphOffsets.resize(m_nGlyphs + 1, 0);
         /* TODO: implement to get subsetting */
     }
     else {
         // Bitmap font, accept for now.
         m_aGlyphOffsets.clear();
-        m_aGlyphOffsets.resize(m_nGlyphs + 1, 0);
         /* TODO: implement to get subsetting */
     }
 
