@@ -8028,18 +8028,16 @@ if test "$ENABLE_JAVA" != ""; then
             if test -n "$regvalue"; then
                 ver=$regvalue
                 reg_get_value "$WIN_HOST_BITS" "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/JDK/$ver/JavaHome"
-                reg_jdk_home=$regvalue
+                with_jdk_home=$regvalue
             fi
-
-            if test -f "$reg_jdk_home/lib/jvm.lib" -a -f "$reg_jdk_home/bin/java.exe"; then
-                with_jdk_home="$reg_jdk_home"
-                howfound="found automatically"
-            else
-                AC_MSG_ERROR([No JDK found, pass the --with-jdk-home option pointing to a $WIN_HOST_BITS-bit JDK >= 9])
-            fi
+            howfound="found automatically"
         else
-            test "$build_os" = "cygwin" && with_jdk_home=`win_short_path_for_make "$with_jdk_home"`
+            with_jdk_home=`win_short_path_for_make "$with_jdk_home"`
             howfound="you passed"
+        fi
+
+        if ! test -f "$with_jdk_home/lib/jvm.lib" -a -f "$with_jdk_home/bin/java.exe"; then
+            AC_MSG_ERROR([No JDK found, pass the --with-jdk-home option (or fix the path) pointing to a $WIN_HOST_BITS-bit JDK >= 9])
         fi
     fi
 
