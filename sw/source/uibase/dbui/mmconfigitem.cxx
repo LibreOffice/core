@@ -688,6 +688,8 @@ SwMailMergeConfigItem::SwMailMergeConfigItem() :
     m_bAddressInserted(false),
     m_bGreetingInserted(false),
     m_nGreetingMoves(0),
+    m_nBegin(0),
+    m_nEnd(0),
     m_pSourceView(nullptr),
     m_pTargetView(nullptr)
 {
@@ -982,7 +984,10 @@ sal_Int32 SwMailMergeConfigItem::GetResultSetPosition() const
     return m_pImpl->m_nResultSetCursorPos;
 }
 
-bool SwMailMergeConfigItem::IsRecordExcluded(sal_Int32 nRecord) const
+bool SwMailMergeConfigItem::IsRecordIncluded(sal_uInt32 nRecord) const
+    { return nRecord > m_nBegin && nRecord <= m_nEnd; }
+
+bool SwMailMergeConfigItem::IsRecordExcluded(sal_uInt32 nRecord) const
     { return m_aExcludedRecords.find(nRecord) != m_aExcludedRecords.end(); }
 
 void SwMailMergeConfigItem::ExcludeRecord(sal_Int32 nRecord, bool bExclude)
@@ -1000,12 +1005,11 @@ uno::Sequence<uno::Any> SwMailMergeConfigItem::GetSelection() const
     if(!m_pImpl->m_xResultSet.is())
         return {};
     m_pImpl->m_xResultSet->last();
-    sal_Int32 nResultSetSize = m_pImpl->m_xResultSet->getRow()+1;
+    sal_uInt32 nResultSetSize = m_pImpl->m_xResultSet->getRow()+1;
     std::vector<uno::Any> vResult;
-    vResult.reserve(nResultSetSize);
-    for(sal_Int32 nIdx=1; nIdx<nResultSetSize;++nIdx)
-        if(!IsRecordExcluded(nIdx))
-            vResult.push_back(uno::makeAny<sal_Int32>(nIdx));
+    for(sal_uInt32 nIdx=1; nIdx<nResultSetSize;++nIdx)
+        if( !IsRecordExcluded(nIdx) && IsRecordIncluded(nIdx) )
+            vResult.push_back(uno::makeAny<sal_uInt32>(nIdx));
     return comphelper::containerToSequence(vResult);
 }
 

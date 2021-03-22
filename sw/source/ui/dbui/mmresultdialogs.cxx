@@ -528,6 +528,15 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
     SwView* pView = ::GetActiveView();
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
     assert(xConfigItem);
+
+    sal_uInt32 nBegin = static_cast<sal_Int32>(m_xFromNF->get_value() - 1);
+    sal_uInt32 nEnd = static_cast<sal_Int32>(m_xToNF->get_value());
+    sal_uInt32 nMax = static_cast<sal_Int32>(m_xToNF->get_max());
+    if (nEnd > nMax)
+        nEnd = nMax;
+
+    xConfigItem->SetBeginEnd(nBegin, nEnd);
+
     if (!xConfigItem->GetTargetView())
         SwDBManager::PerformMailMerge(pView);
 
@@ -571,18 +580,6 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
     }
     else
     {
-        const sal_uInt32 nDocumentCount = xConfigItem->GetMergedDocumentCount();
-        sal_uInt32 nBegin = 0;
-        sal_uInt32 nEnd = nDocumentCount;
-
-        if (!m_xSaveIndividualRB->get_active())
-        {
-            nBegin  = static_cast< sal_Int32 >(m_xFromNF->get_value() - 1);
-            nEnd    = static_cast< sal_Int32 >(m_xToNF->get_value());
-            if(nEnd > nDocumentCount)
-                nEnd = nDocumentCount;
-        }
-
         OUString sTargetTempURL = URIHelper::SmartRel2Abs(
             INetURLObject(), utl::TempFile::CreateTempName(),
             URIHelper::GetMaybeFileHdl());
@@ -626,7 +623,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
             xSaveMonitor.reset();
         });
 
-        for(sal_uInt32 nDoc = nBegin; nDoc < nEnd && !m_bCancelSaving; ++nDoc)
+        for(sal_uInt32 nDoc = 0; nDoc < nEnd - nBegin && !m_bCancelSaving; ++nDoc)
         {
             INetURLObject aURL(sPath);
             OUString sExtension = aURL.getExtension();
@@ -635,7 +632,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
                 sExtension = pSfxFlt->GetWildcard().getGlob().getToken(1, '.');
                 sPath += "." + sExtension;
             }
-            OUString sStat = SwResId(STR_STATSTR_LETTER) + " " + OUString::number( nDoc );
+            OUString sStat = SwResId(STR_STATSTR_LETTER) + " " + OUString::number(nBegin + nDoc);
             xSaveMonitor->m_xPrintInfo->set_label(sStat);
 
             //now extract a document from the target document
@@ -663,7 +660,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
             pTargetView->GetWrtShell().EndAction();
             //then save it
             OUString sOutPath = aURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
-            OUString sCounter = "_" + OUString::number(nDoc + 1);
+            OUString sCounter = "_" + OUString::number(nBegin + nDoc + 1);
             sOutPath = sOutPath.replaceAt( sOutPath.getLength() - sExtension.getLength() - 1, 0, sCounter);
 
             while(true)
@@ -752,23 +749,20 @@ IMPL_LINK_NOARG(SwMMResultPrintDialog, PrintHdl_Impl, weld::Button&, void)
     SwView* pView = ::GetActiveView();
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
     assert(xConfigItem);
+
+    sal_uInt32 nBegin = static_cast<sal_Int32>(m_xFromNF->get_value() - 1);
+    sal_uInt32 nEnd = static_cast<sal_Int32>(m_xToNF->get_value());
+    sal_uInt32 nMax = static_cast<sal_Int32>(m_xToNF->get_max());
+    if (nEnd > nMax)
+        nEnd = nMax;
+
+    xConfigItem->SetBeginEnd(nBegin, nEnd);
+
     if(!xConfigItem->GetTargetView())
         SwDBManager::PerformMailMerge(pView);
 
     SwView* pTargetView = xConfigItem->GetTargetView();
     assert(pTargetView);
-
-    const sal_uInt32 nDocumentCount = xConfigItem->GetMergedDocumentCount();
-    sal_uInt32 nBegin = 0;
-    sal_uInt32 nEnd = nDocumentCount;
-
-    if (!m_xPrintAllRB->get_active())
-    {
-        nBegin  = m_xFromNF->get_value() - 1;
-        nEnd    = m_xToNF->get_value();
-        if(nEnd > nDocumentCount)
-            nEnd = nDocumentCount;
-    }
 
     // If we skip autoinserted blanks, then the page numbers used in the print range string
     // refer to the non-blank pages as they appear in the document (see tdf#89708).
@@ -851,6 +845,15 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
     SwView* pView = ::GetActiveView();
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
     assert(xConfigItem);
+
+    sal_uInt32 nBegin = static_cast<sal_Int32>(m_xFromNF->get_value() - 1);
+    sal_uInt32 nEnd = static_cast<sal_Int32>(m_xToNF->get_value());
+    sal_uInt32 nMax = static_cast<sal_Int32>(m_xToNF->get_max());
+    if (nEnd > nMax)
+        nEnd = nMax;
+
+    xConfigItem->SetBeginEnd(nBegin, nEnd);
+
     if (!xConfigItem->GetTargetView())
         SwDBManager::PerformMailMerge(pView);
 
@@ -882,16 +885,6 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
         lcl_UpdateEmailSettingsFromGlobalConfig(*xConfigItem);
     }
     //add the documents
-    const sal_uInt32 nDocumentCount = xConfigItem->GetMergedDocumentCount();
-    sal_uInt32 nBegin = 0;
-    sal_uInt32 nEnd = nDocumentCount;
-    if (!m_xSendAllRB->get_active())
-    {
-        nBegin  = static_cast< sal_Int32 >(m_xFromNF->get_value() - 1);
-        nEnd    = static_cast< sal_Int32 >(m_xToNF->get_value());
-        if(nEnd > nDocumentCount)
-            nEnd = nDocumentCount;
-    }
     bool bAsBody = false;
     rtl_TextEncoding eEncoding = ::osl_getThreadTextEncoding();
     SfxFilterContainer* pFilterContainer = SwDocShell::Factory().GetFilterContainer();
