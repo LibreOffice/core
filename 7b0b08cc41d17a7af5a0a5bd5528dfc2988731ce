@@ -1,0 +1,147 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ef09682_30522d3f",
+        "filename": "sw/source/core/doc/CntntIdxStore.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-22T07:49:04Z",
+      "side": 1,
+      "message": "This line is not formatted according to our clang-format rules",
+      "revId": "7b0b08cc41d17a7af5a0a5bd5528dfc2988731ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1431d4fd_760e07f3",
+        "filename": "sw/source/core/doc/CntntIdxStore.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-22T07:49:04Z",
+      "side": 1,
+      "message": "This line is not formatted according to our clang-format rules",
+      "revId": "7b0b08cc41d17a7af5a0a5bd5528dfc2988731ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a1e6ef9_5566d746",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2276,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-22T07:49:04Z",
+      "side": 1,
+      "message": "Why do you use \u0027const\u0027 here?",
+      "range": {
+        "startLine": 2276,
+        "startChar": 75,
+        "endLine": 2276,
+        "endChar": 80
+      },
+      "revId": "7b0b08cc41d17a7af5a0a5bd5528dfc2988731ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "157d9722_745ef8f7",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3185,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-22T07:49:04Z",
+      "side": 1,
+      "message": "This line is not formatted according to our clang-format rules",
+      "revId": "7b0b08cc41d17a7af5a0a5bd5528dfc2988731ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "359b39c5_bb54a598",
+        "filename": "sw/source/core/docnode/ndtbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-22T07:49:04Z",
+      "side": 1,
+      "message": "This line is not formatted according to our clang-format rules.\nWhy do you use \u0027const\u0027 here?",
+      "range": {
+        "startLine": 1078,
+        "startChar": 96,
+        "endLine": 1078,
+        "endChar": 101
+      },
+      "revId": "7b0b08cc41d17a7af5a0a5bd5528dfc2988731ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c548c15_5c6a2823",
+        "filename": "sw/source/core/txtnode/ndtxt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-22T07:49:04Z",
+      "side": 1,
+      "message": "Please use explicit comparison to 0, not conversion to bool. Writing \u0027if (n \u003d\u003d 0)\u0027 is better than \u0027if (!n)\u0027. Zero is not some \"invalid\" or \"absent\" or \"false\" value, we just happen to handle it specially.",
+      "range": {
+        "startLine": 693,
+        "startChar": 72,
+        "endLine": 693,
+        "endChar": 82
+      },
+      "revId": "7b0b08cc41d17a7af5a0a5bd5528dfc2988731ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ace998ce_805c820d",
+        "filename": "sw/source/core/undo/untbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-22T07:49:04Z",
+      "side": 1,
+      "message": "Why do you use \u0027const\u0027 here?",
+      "range": {
+        "startLine": 572,
+        "startChar": 88,
+        "endLine": 572,
+        "endChar": 93
+      },
+      "revId": "7b0b08cc41d17a7af5a0a5bd5528dfc2988731ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
