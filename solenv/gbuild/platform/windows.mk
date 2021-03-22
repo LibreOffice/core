@@ -47,7 +47,7 @@ gb_MSBUILD_CONFIG := $(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)
 gb_MSBUILD_PLATFORM := $(strip \
 	$(if $(filter INTEL,$(CPUNAME)),Win32) \
 	$(if $(filter X86_64,$(CPUNAME)),x64) \
-	$(if $(filter ARM64,$(CPUNAME)),ARM64) \
+	$(if $(filter AARCH64,$(CPUNAME)),ARM64) \
 	)
 gb_MSBUILD_CONFIG_AND_PLATFORM := \
 	/p:Configuration=$(gb_MSBUILD_CONFIG) \

@@ -28,7 +28,7 @@ odk_PLATFORM := $(if $(filter WNT,$(OS)),windows,\
 $(call gb_CustomTarget_get_workdir,odk/check)/checkbin : \
 		$(SRCDIR)/odk/util/check.pl \
 		$(if $(DOXYGEN),$(call gb_GeneratedPackage_get_target,odk_doxygen)) \
-		$(foreach exe,$(if $(filter WNT,$(OS)),$(if $(filter-out ARM64,$(CPUNAME)),climaker)) cppumaker \
+		$(foreach exe,$(if $(filter WNT,$(OS)),$(if $(filter-out AARCH64,$(CPUNAME)),climaker)) cppumaker \
 				idlc javamaker $(if $(SYSTEM_UCPP),,ucpp) uno-skeletonmaker unoapploader unoidl-check,\
 			$(call gb_Executable_get_target,$(exe))) \
 		$(if $(filter WNT,$(OS)),$(call gb_Package_get_target,odk_cli)) \

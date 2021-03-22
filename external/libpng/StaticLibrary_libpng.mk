@@ -33,7 +33,7 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,libpng,\
 	UnpackedTarball/libpng/pngwrite \
 	UnpackedTarball/libpng/pngwtran \
 	UnpackedTarball/libpng/pngwutil \
-	$(if $(filter ARM AARCH64 ARM64,$(CPUNAME)),\
+	$(if $(filter ARM AARCH64,$(CPUNAME)),\
 	    UnpackedTarball/libpng/arm/arm_init \
 	    UnpackedTarball/libpng/arm/filter_neon_intrinsics \
 	    UnpackedTarball/libpng/arm/palette_neon_intrinsics \
@@ -49,7 +49,7 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,libpng,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_defs,libpng,\
-	$(if $(filter ARM AARCH64 ARM64,$(CPUNAME)), -DPNG_ARM_NEON) \
+	$(if $(filter ARM AARCH64,$(CPUNAME)), -DPNG_ARM_NEON) \
 	$(if $(filter POWERPC POWERPC64,$(CPUNAME)), -DPNG_POWERPC_VSX ) \
 	$(if $(filter INTEL X86_64,$(CPUNAME)), -DPNG_INTEL_SSE_OPT) \
 ))
