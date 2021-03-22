@@ -1114,20 +1114,18 @@ bool withinBounds(sal_uInt32 tdoffset, sal_uInt32 moreoffset, sal_uInt32 len, sa
 }
 
 AbstractTrueTypeFont::AbstractTrueTypeFont(const char* pFileName, const FontCharMapRef xCharMap)
-    : m_pFileName(nullptr)
-    , m_nGlyphs(0xFFFFFFFF)
+    : m_nGlyphs(0xFFFFFFFF)
     , m_nHorzMetrics(0)
     , m_nVertMetrics(0)
     , m_nUnitsPerEm(0)
     , m_xCharMap(xCharMap)
 {
     if (pFileName)
-        m_pFileName = strdup(pFileName);
+        m_pFileName.reset(strdup(pFileName));
 }
 
 AbstractTrueTypeFont::~AbstractTrueTypeFont()
 {
-    free(m_pFileName);
 }
 
 TrueTypeFont::TrueTypeFont(const char* pFileName, const FontCharMapRef xCharMap)
