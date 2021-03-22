@@ -1471,29 +1471,13 @@ void JavaVirtualMachine::handleJniException(JNIEnv * environment) {
 }
 
 
-static osl::Mutex m_aMutex;
-static rtl::Reference< JavaVirtualMachine > m_xSingleton;
-
-
-void JavaVirtualMachine::dispose() {
-    JavaVirtualMachine_Impl::dispose();
-    osl::MutexGuard aGuard(m_aMutex);
-    m_xSingleton.clear();
-}
+void JavaVirtualMachine::dispose() {}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 stoc_JavaVM_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    // Only one single instance of this service is ever constructed, and is
-    // available until the component context used to create this instance is
-    // disposed.  Afterwards, this function throws a DisposedException (as do
-    // all relevant methods on the single service instance).
-    osl::MutexGuard aGuard(m_aMutex);
-    if (!m_xSingleton.is())
-        m_xSingleton.set(new JavaVirtualMachine(context));
-    m_xSingleton->acquire();
-    return static_cast<cppu::OWeakObject*>(m_xSingleton.get());
+    return static_cast<cppu::OWeakObject*>(new JavaVirtualMachine(context));
 }
 
 
