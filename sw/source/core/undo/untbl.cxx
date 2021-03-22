@@ -2360,7 +2360,15 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
         if( !pTableNd )
             pTableNd = pSNd->FindTableNode();
 
-        SwTableBox& rBox = *pTableNd->GetTable().GetTableBox( nSttPos );
+        SwTableBox* pBox = pTableNd->GetTable().GetTableBox( nSttPos );
+        if (!pBox)
+        {
+            SAL_WARN("sw.core",
+                     "SwUndoTableCpyTable::UndoImpl: invalid start node index for table box");
+            continue;
+        }
+
+        SwTableBox& rBox = *pBox;
 
         SwNodeIndex aInsIdx( *rBox.GetSttNd(), 1 );
         rDoc.GetNodes().MakeTextNode( aInsIdx, rDoc.GetDfltTextFormatColl() );
