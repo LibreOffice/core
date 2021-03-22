@@ -80,4 +80,19 @@ class HyperlinkDialog(UITestCase):
 
         self.ui_test.close_doc()
 
+    def test_tdf141166(self):
+
+        self.ui_test.create_doc_in_start_center("writer")
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+
+        self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog")
+        xDialog  = self.xUITest.getTopFocusWindow()
+        xHelp = xDialog.getChild("help")
+
+        # Without the fix in place, this test would have crashed here
+        self.ui_test.execute_blocking_action(xHelp.executeAction,
+                args=("TYPE", mkPropertyValues({"KEYCODE": "CTRL+h"})), dialog_element="cancel")
+
+        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
