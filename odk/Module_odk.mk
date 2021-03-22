@@ -33,7 +33,7 @@ $(eval $(call gb_Module_add_targets,odk,\
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,odk,\
-	$(if $(filter-out ARM64,$(CPUNAME)),Package_cli) \
+	$(if $(filter-out AARCH64,$(CPUNAME)),Package_cli) \
 	CustomTarget_config_win \
 	Package_config_win \
 ))

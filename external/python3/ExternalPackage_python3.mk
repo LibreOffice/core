@@ -14,7 +14,7 @@ $(eval $(call gb_ExternalPackage_use_external_project,python3,python3))
 ifeq ($(OS),WNT)
 ifeq ($(CPUNAME),X86_64)
 python_arch_subdir=amd64/
-else ifeq ($(CPUNAME),ARM64)
+else ifeq ($(CPUNAME),AARCH64)
 python_arch_subdir=arm64/
 else
 python_arch_subdir=win32/

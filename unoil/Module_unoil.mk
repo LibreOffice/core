@@ -17,7 +17,7 @@ $(eval $(call gb_Module_add_targets,unoil,\
 endif
 
 ifeq ($(COM),MSC)
-ifneq ($(CPUNAME),ARM64)
+ifneq ($(CPUNAME),AARCH64)
 $(eval $(call gb_Module_add_targets,unoil,\
     CliUnoApi_oootypes \
 ))

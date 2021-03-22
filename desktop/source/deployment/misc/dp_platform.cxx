@@ -77,6 +77,8 @@ namespace
             ret = checkOSandCPU(u"Windows", u"x86");
         else if (token == u"windows_x86_64")
             ret = checkOSandCPU(u"Windows", u"X86_64");
+        else if (token == u"windows_aarch64")
+            ret = checkOSandCPU(u"Windows", u"AARCH64");
         else if (token == u"solaris_sparc")
             ret = checkOSandCPU(u"Solaris", u"SPARC");
         else if (token == u"solaris_sparc64")

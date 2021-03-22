@@ -20,7 +20,7 @@ $(eval $(call gb_ExternalProject_register_targets,libffi,\
 libffi_WIN_PLATFORM := $(strip \
     $(if $(filter INTEL,$(CPUNAME)),32) \
     $(if $(filter X86_64,$(CPUNAME)),64) \
-    $(if $(filter ARM64,$(CPUNAME)),arm64) \
+    $(if $(filter AARCH64,$(CPUNAME)),arm64) \
     )
 
 $(call gb_ExternalProject_get_state_target,libffi,build):
