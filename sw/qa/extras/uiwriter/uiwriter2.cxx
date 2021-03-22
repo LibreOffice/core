@@ -2265,6 +2265,57 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testJoinParaChangesInMargin)
     CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf140757)
+{
+    load(DATA_DIRECTORY, "tdf54819.fodt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // switch on "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+
+    SwWrtShell* const pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+
+    // turn on red-lining and show changes
+    SwDoc* pDoc = pWrtShell->GetDoc();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert
+                                                      | RedlineFlags::ShowDelete);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // delete a character in the first paragraph, and another character in the second one
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    pWrtShell->Down(/*bSelect=*/false);
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString("orem ipsum"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("olor sit amet."), getParagraph(2)->getString());
+
+    // accept all changes
+    IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
+    rIDRA.AcceptAllRedline(/*bAccept=*/true);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("orem ipsum"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("olor sit amet."), getParagraph(2)->getString());
+
+    // This crashed
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    // Check result of Undo
+    rIDRA.AcceptAllRedline(/*bAccept=*/false);
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("dolor sit amet."), getParagraph(2)->getString());
+
+    // switch off "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139127)
 {
     load(DATA_DIRECTORY, "tdf139127.fodt");
