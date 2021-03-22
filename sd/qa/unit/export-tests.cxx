@@ -72,6 +72,7 @@ public:
     void testTdf123557();
     void testTdf113822();
     void testTdf126761();
+    void testTdf140714();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -105,6 +106,7 @@ public:
     CPPUNIT_TEST(testTdf123557);
     CPPUNIT_TEST(testTdf113822);
     CPPUNIT_TEST(testTdf126761);
+    CPPUNIT_TEST(testTdf140714);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1209,6 +1211,20 @@ void SdExportTest::testTdf126761()
     sal_uInt32 nCharUnderline;
     xPropSet->getPropertyValue( "CharUnderline" ) >>= nCharUnderline;
     CPPUNIT_ASSERT_EQUAL( sal_uInt32(1), nCharUnderline );
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testTdf140714()
+{
+    //Without the fix in place, shape will be imported as GraphicObjectShape instead of CustomShape.
+
+    auto xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf140714.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    uno::Reference<drawing::XShape> xShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString{"com.sun.star.drawing.CustomShape"}, xShape->getShapeType());
 
     xDocShRef->DoClose();
 }
