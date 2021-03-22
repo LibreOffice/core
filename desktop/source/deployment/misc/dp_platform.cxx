@@ -85,6 +85,8 @@ namespace
             ret = checkOSandCPU(u"Solaris", u"x86");
         else if (token == u"aix_powerpc")
             ret = checkOSandCPU(u"AIX", u"PowerPC");
+        else if (token == u"macosx_aarch64")
+            ret = checkOSandCPU(u"MacOSX", u"AARCH64");
         else if (token == u"macosx_x86_64")
             ret = checkOSandCPU(u"MacOSX", u"X86_64");
         else if (token == u"linux_x86")
