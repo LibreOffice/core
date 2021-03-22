@@ -783,30 +783,36 @@ public class Helper
                 connPost.connect();
 
                 OutputStreamWriter post = new OutputStreamWriter(connPost.getOutputStream(), "UTF-8");
-                post.write("wpName=");
-                post.write(URLEncoder.encode(sWikiUser, "UTF-8"));
-                post.write("&wpRemember=1");
-                post.write("&wpPassword=");
-                post.write(URLEncoder.encode(sWikiPass, "UTF-8"));
+                try
+                {
+                    post.write("wpName=");
+                    post.write(URLEncoder.encode(sWikiUser, "UTF-8"));
+                    post.write("&wpRemember=1");
+                    post.write("&wpPassword=");
+                    post.write(URLEncoder.encode(sWikiPass, "UTF-8"));
 
-                if (sLoginToken.length() > 0) {
-                    post.write("&wpLoginToken=");
-                    post.write(URLEncoder.encode(sLoginToken, "UTF-8"));
+                    if (sLoginToken.length() > 0) {
+                        post.write("&wpLoginToken=");
+                       post.write(URLEncoder.encode(sLoginToken, "UTF-8"));
+                    }
+
+                    String[][] pArgs = GetSpecialArgs( xContext, aMainURL.getHost() );
+                    if ( pArgs != null )
+                        for ( int nArgInd = 0; nArgInd < pArgs.length; nArgInd++ )
+                            if ( pArgs[nArgInd].length == 2 && pArgs[nArgInd][0] != null && pArgs[nArgInd][1] != null )
+                            {
+                                post.write("&");
+                                post.write(URLEncoder.encode(pArgs[nArgInd][0], "UTF-8"));
+                                post.write("=");
+                               post.write(URLEncoder.encode(pArgs[nArgInd][0], "UTF-8"));
+                           }
+
+                    post.flush();
                 }
-
-                String[][] pArgs = GetSpecialArgs( xContext, aMainURL.getHost() );
-                if ( pArgs != null )
-                    for ( int nArgInd = 0; nArgInd < pArgs.length; nArgInd++ )
-                        if ( pArgs[nArgInd].length == 2 && pArgs[nArgInd][0] != null && pArgs[nArgInd][1] != null )
-                        {
-                            post.write("&");
-                            post.write(URLEncoder.encode(pArgs[nArgInd][0], "UTF-8"));
-                            post.write("=");
-                            post.write(URLEncoder.encode(pArgs[nArgInd][0], "UTF-8"));
-                        }
-
-                post.flush();
-                post.close();
+                finally
+                {
+                    post.close();
+                }
 
                 nResultCode = connPost.getResponseCode();
 
