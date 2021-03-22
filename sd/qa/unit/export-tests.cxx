@@ -81,6 +81,7 @@ public:
     void testShadowBlur();
     void testRhbz1870501();
     void testTdf128550();
+    void testTdf140714();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -120,6 +121,7 @@ public:
     CPPUNIT_TEST(testShadowBlur);
     CPPUNIT_TEST(testRhbz1870501);
     CPPUNIT_TEST(testTdf128550);
+    CPPUNIT_TEST(testTdf140714);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1349,6 +1351,20 @@ void SdExportTest::testTdf128550()
     assertXPath( pXmlDoc, "//anim:iterate[@anim:sub-item='text']", 4);
     xDocShRef->DoClose();
 
+}
+
+void SdExportTest::testTdf140714()
+{
+    //Without the fix in place, shape will be imported as GraphicObjectShape instead of CustomShape.
+
+    auto xDocShRef = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf140714.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    uno::Reference<drawing::XShape> xShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString{"com.sun.star.drawing.CustomShape"}, xShape->getShapeType());
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
