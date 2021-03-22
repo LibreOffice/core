@@ -647,14 +647,18 @@ void SdTransferable::DragFinished( sal_Int8 nDropAction )
 
 void SdTransferable::ObjectReleased()
 {
-    if( this == SD_MOD()->pTransferClip )
-        SD_MOD()->pTransferClip = nullptr;
+    SdModule *pModule = SD_MOD();
+    if (!pModule)
+        return;
 
-    if( this == SD_MOD()->pTransferDrag )
-        SD_MOD()->pTransferDrag = nullptr;
+    if( this == pModule->pTransferClip )
+        pModule->pTransferClip = nullptr;
 
-    if( this == SD_MOD()->pTransferSelection )
-        SD_MOD()->pTransferSelection = nullptr;
+    if( this == pModule->pTransferDrag )
+        pModule->pTransferDrag = nullptr;
+
+    if( this == pModule->pTransferSelection )
+        pModule->pTransferSelection = nullptr;
 }
 
 void SdTransferable::SetObjectDescriptor( std::unique_ptr<TransferableObjectDescriptor> pObjDesc )
