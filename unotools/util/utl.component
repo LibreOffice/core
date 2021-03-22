@@ -24,7 +24,8 @@
     <service name="com.sun.star.io.TempFile"/>
   </implementation>
   <implementation name="com.sun.star.comp.unotools.misc.ServiceDocumenter"
-    constructor="unotools_ServiceDocument_get_implementation">
+    constructor="unotools_ServiceDocument_get_implementation"
+    single-instance="true">
     <singleton name="com.sun.star.util.theServiceDocumenter"/>
   </implementation>
 </component>
