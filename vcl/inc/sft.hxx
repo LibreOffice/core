@@ -722,10 +722,10 @@ class VCL_DLLPUBLIC AbstractTrueTypeFont
 {
     char* m_pFileName;
     sal_uInt32 m_nGlyphs;
-    sal_uInt32* m_pGlyphOffsets;
     sal_uInt32 m_nHorzMetrics;
     sal_uInt32 m_nVertMetrics; /* if not 0 => font has vertical metrics information */
     sal_uInt32 m_nUnitsPerEm;
+    std::vector<sal_uInt32> m_aGlyphOffsets;
     FontCharMapRef m_xCharMap;
 
 protected:
@@ -737,7 +737,7 @@ public:
 
     const char* fileName() const { return m_pFileName; }
     sal_uInt32 glyphCount() const { return m_nGlyphs; }
-    sal_uInt32 glyphOffset(sal_uInt32 glyphID) const { return m_pGlyphOffsets[glyphID]; }
+    sal_uInt32 glyphOffset(sal_uInt32 glyphID) const;
     sal_uInt32 horzMetricCount() const { return m_nHorzMetrics; }
     sal_uInt32 vertMetricCount() const { return m_nVertMetrics; }
     sal_uInt32 unitsPerEm() const { return m_nUnitsPerEm; }
