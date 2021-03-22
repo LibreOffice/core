@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1dcff681_7e603986",
+        "filename": "cui/uiconfig/ui/qrcodegen.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-03-22T08:52:57Z",
+      "side": 1,
+      "message": "While you are making UI changes...remove the space between Margin and : \n(and same thing with \"URL/Text\" on line 132), in accordance with:\nhttps://wiki.documentfoundation.org/Design/Guidelines/PropertyDialog#Text\n\nAlso, note:  Extended tooltips in the dialog are provided by:  \u003cproperty name\u003d\"AtkObject::accessible-description\"...\nMight be worthwhile to check that the descriptions are still accurate for each label.",
+      "range": {
+        "startLine": 147,
+        "startChar": 137,
+        "endLine": 147,
+        "endChar": 139
+      },
+      "revId": "0ad0923934c9d97c3af3530d39b3e51c5ed8170a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
