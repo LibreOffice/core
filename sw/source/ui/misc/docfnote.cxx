@@ -91,9 +91,9 @@ SwEndNoteOptionPage::SwEndNoteOptionPage(weld::Container* pPage, weld::DialogCon
         bEN ? OString("EndnotePage") : OString("FootnotePage"),
         &rSet)
     , m_rParent(static_cast<SwFootNoteOptionDlg&>(*pController))
-    , pSh(nullptr)
-    , bPosDoc(false)
-    , bEndNote(bEN)
+    , m_pSh(nullptr)
+    , m_bPosDoc(false)
+    , m_bEndNote(bEN)
     , m_xNumViewBox(new SwNumberingTypeListBox(m_xBuilder->weld_combo_box("numberinglb")))
     , m_xOffsetLbl(m_xBuilder->weld_label("offset"))
     , m_xOffsetField(m_xBuilder->weld_spin_button("offsetnf"))
@@ -113,12 +113,12 @@ SwEndNoteOptionPage::SwEndNoteOptionPage(weld::Container* pPage, weld::DialogCon
     , m_xContFromEdit(m_xBuilder->weld_entry("contfromed"))
 {
     m_xNumViewBox->Reload(SwInsertNumTypes::Extended);
-    if (!bEndNote)
+    if (!m_bEndNote)
     {
         m_xNumCountBox->connect_changed(LINK(this, SwEndNoteOptionPage, NumCountHdl));
-        aNumDoc = m_xNumCountBox->get_text(FTNNUM_DOC);
-        aNumPage = m_xNumCountBox->get_text(FTNNUM_PAGE);
-        aNumChapter = m_xNumCountBox->get_text(FTNNUM_CHAPTER);
+        m_aNumDoc = m_xNumCountBox->get_text(FTNNUM_DOC);
+        m_aNumPage = m_xNumCountBox->get_text(FTNNUM_PAGE);
+        m_aNumChapter = m_xNumCountBox->get_text(FTNNUM_CHAPTER);
         m_xPosPageBox->connect_clicked(LINK(this, SwEndNoteOptionPage, PosPageHdl));
         m_xPosChapterBox->connect_clicked(LINK(this, SwEndNoteOptionPage, PosChapterHdl));
     }
@@ -132,20 +132,20 @@ SwEndNoteOptionPage::~SwEndNoteOptionPage()
 
 void SwEndNoteOptionPage::Reset( const SfxItemSet* )
 {
-    std::unique_ptr<SwEndNoteInfo> pInf(bEndNote ? new SwEndNoteInfo( pSh->GetEndNoteInfo() )
-                                          : new SwFootnoteInfo( pSh->GetFootnoteInfo() ));
+    std::unique_ptr<SwEndNoteInfo> pInf(m_bEndNote ? new SwEndNoteInfo(m_pSh->GetEndNoteInfo())
+                                                   : new SwFootnoteInfo(m_pSh->GetFootnoteInfo()));
     SfxObjectShell * pDocSh = SfxObjectShell::Current();
 
     if (dynamic_cast<SwWebDocShell*>( pDocSh) )
         m_xStylesContainer->hide();
 
-    if ( bEndNote )
+    if (m_bEndNote)
     {
-        bPosDoc = true;
+        m_bPosDoc = true;
     }
     else
     {
-        const SwFootnoteInfo &rInf = pSh->GetFootnoteInfo();
+        const SwFootnoteInfo& rInf = m_pSh->GetFootnoteInfo();
         // set position (page, chapter)
         if ( rInf.m_ePos == FTNPOS_PAGE )
         {
@@ -156,9 +156,9 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
         else
         {
             m_xPosChapterBox->set_active(true);
-            m_xNumCountBox->remove_text(aNumPage);
-            m_xNumCountBox->remove_text(aNumChapter);
-            bPosDoc = true;
+            m_xNumCountBox->remove_text(m_aNumPage);
+            m_xNumCountBox->remove_text(m_aNumChapter);
+            m_bPosDoc = true;
         }
             // reference tests
         m_xContEdit->set_text(rInf.m_aQuoVadis);
@@ -175,20 +175,19 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
     m_xPrefixED->set_text(pInf->GetPrefix().replaceAll("\t", "\\t")); // fdo#65666
     m_xSuffixED->set_text(pInf->GetSuffix().replaceAll("\t", "\\t"));
 
-    const SwCharFormat* pCharFormat = pInf->GetCharFormat(
-                        *pSh->GetView().GetDocShell()->GetDoc());
+    const SwCharFormat* pCharFormat = pInf->GetCharFormat(*m_pSh->GetDoc());
     m_sCharText = pCharFormat->GetName();
     m_xFootnoteCharTextTemplBox->set_active_text(pCharFormat->GetName());
     m_xFootnoteCharTextTemplBox->save_value();
 
-    pCharFormat = pInf->GetAnchorCharFormat( *pSh->GetDoc() );
+    pCharFormat = pInf->GetAnchorCharFormat(*m_pSh->GetDoc());
     m_sCharAnchor = pCharFormat->GetName();
     m_xFootnoteCharAnchorTemplBox->set_active_text( pCharFormat->GetName() );
     m_xFootnoteCharAnchorTemplBox->save_value();
 
         // styles   special regions
         // paragraph
-    SfxStyleSheetBasePool* pStyleSheetPool = pSh->GetView().GetDocShell()->GetStyleSheetPool();
+    SfxStyleSheetBasePool* pStyleSheetPool = m_pSh->GetView().GetDocShell()->GetStyleSheetPool();
     SfxStyleSheetBase *pStyle = pStyleSheetPool->First(SfxStyleFamily::Para, SfxStyleSearchBits::SwExtra);
     while(pStyle)
     {
@@ -198,7 +197,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
     m_xParaTemplBox->make_sorted();
 
     OUString sStr;
-    SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(bEndNote ? RES_POOLCOLL_ENDNOTE
+    SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(m_bEndNote ? RES_POOLCOLL_ENDNOTE
                            : RES_POOLCOLL_FOOTNOTE), sStr );
     if (m_xParaTemplBox->find_text(sStr) == -1)
         m_xParaTemplBox->append_text(sStr);
@@ -223,16 +222,16 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
     for (sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
         m_xPageTemplBox->append_text(SwStyleNameMapper::GetUIName(i, OUString()));
 
-    const size_t nCount = pSh->GetPageDescCnt();
+    const size_t nCount = m_pSh->GetPageDescCnt();
     for(size_t i = 0; i < nCount; ++i)
     {
-        const SwPageDesc &rPageDesc = pSh->GetPageDesc(i);
+        const SwPageDesc& rPageDesc = m_pSh->GetPageDesc(i);
         if (m_xPageTemplBox->find_text(rPageDesc.GetName()) == -1)
             m_xPageTemplBox->append_text(rPageDesc.GetName());
     }
     m_xPageTemplBox->make_sorted();
 
-    m_xPageTemplBox->set_active_text(pInf->GetPageDesc(*pSh->GetDoc())->GetName());
+    m_xPageTemplBox->set_active_text(pInf->GetPageDesc(*m_pSh->GetDoc())->GetName());
 }
 
 std::unique_ptr<SfxTabPage> SwEndNoteOptionPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet )
@@ -248,13 +247,13 @@ void SwEndNoteOptionPage::SelectNumbering(SwFootnoteNum const eNum)
     switch(eNum)
     {
         case FTNNUM_DOC:
-            sSelect = aNumDoc;
+            sSelect = m_aNumDoc;
         break;
         case FTNNUM_PAGE:
-            sSelect = aNumPage;
+            sSelect = m_aNumPage;
         break;
         case FTNNUM_CHAPTER:
-            sSelect = aNumChapter;
+            sSelect = m_aNumChapter;
         break;
         default:
             assert(false);
@@ -266,29 +265,26 @@ void SwEndNoteOptionPage::SelectNumbering(SwFootnoteNum const eNum)
 SwFootnoteNum SwEndNoteOptionPage::GetNumbering() const
 {
     const int nPos = m_xNumCountBox->get_active();
-    return static_cast<SwFootnoteNum>(bPosDoc ? nPos + 2 : nPos);
+    return static_cast<SwFootnoteNum>(m_bPosDoc ? nPos + 2 : nPos);
 }
 
 void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
 {
-    pSh = &rShell;
+    m_pSh = &rShell;
     // collect character templates
     m_xFootnoteCharTextTemplBox->clear();
     m_xFootnoteCharAnchorTemplBox->clear();
-    ::FillCharStyleListBox(*m_xFootnoteCharTextTemplBox,
-                        pSh->GetView().GetDocShell(), true);
+    ::FillCharStyleListBox(*m_xFootnoteCharTextTemplBox, m_pSh->GetView().GetDocShell(), true);
+    ::FillCharStyleListBox(*m_xFootnoteCharAnchorTemplBox, m_pSh->GetView().GetDocShell(), true);
 
-    ::FillCharStyleListBox(*m_xFootnoteCharAnchorTemplBox,
-                        pSh->GetView().GetDocShell(), true);
-
-    const SwDoc* pDoc = pSh->GetDoc();
+    const SwDoc* pDoc = m_pSh->GetDoc();
     if (!pDoc)
         return;
 
     // Writer expects (but doesn't enforce) a unique style for each of these four situations.
     // Find in-use styles in cache and remove them from these initialized lists to avoid unexpected results.
-    const sal_uInt16 nThisAnchorId = bEndNote ? RES_POOLCHR_ENDNOTE_ANCHOR : RES_POOLCHR_FOOTNOTE_ANCHOR;
-    const sal_uInt16 nThisTextId = bEndNote ? RES_POOLCHR_ENDNOTE : RES_POOLCHR_FOOTNOTE;
+    const sal_uInt16 nThisAnchorId = m_bEndNote ? RES_POOLCHR_ENDNOTE_ANCHOR : RES_POOLCHR_FOOTNOTE_ANCHOR;
+    const sal_uInt16 nThisTextId = m_bEndNote ? RES_POOLCHR_ENDNOTE : RES_POOLCHR_FOOTNOTE;
     for (const auto& pDocFormat : *pDoc->GetCharFormats())
     {
         if (pDocFormat->GetPoolFormatId() == RES_POOLCHR_ENDNOTE_ANCHOR
@@ -339,11 +335,11 @@ void SwEndNoteOptionPage::UpdateCharStyleList(bool bEndNoteId, const OUString sA
 IMPL_LINK_NOARG(SwEndNoteOptionPage, PosPageHdl, weld::Button&, void)
 {
     const SwFootnoteNum eNum = GetNumbering();
-    bPosDoc = false;
-    if (m_xNumCountBox->find_text(aNumPage) == -1)
+    m_bPosDoc = false;
+    if (m_xNumCountBox->find_text(m_aNumPage) == -1)
     {
-        m_xNumCountBox->insert_text(FTNNUM_PAGE, aNumPage);
-        m_xNumCountBox->insert_text(FTNNUM_CHAPTER, aNumChapter);
+        m_xNumCountBox->insert_text(FTNNUM_PAGE, m_aNumPage);
+        m_xNumCountBox->insert_text(FTNNUM_CHAPTER, m_aNumChapter);
         SelectNumbering(eNum);
     }
     m_xPageTemplLbl->set_sensitive(false);
@@ -366,12 +362,12 @@ IMPL_LINK_NOARG(SwEndNoteOptionPage, NumCountHdl, weld::ComboBox&, void)
 // the document. In this case no pagewise numbering can be used.
 IMPL_LINK_NOARG(SwEndNoteOptionPage, PosChapterHdl, weld::Button&, void)
 {
-    if ( !bPosDoc )
+    if (!m_bPosDoc)
         SelectNumbering(FTNNUM_DOC);
 
-    bPosDoc = true;
-    m_xNumCountBox->remove_text(aNumPage);
-    m_xNumCountBox->remove_text(aNumChapter);
+    m_bPosDoc = true;
+    m_xNumCountBox->remove_text(m_aNumPage);
+    m_xNumCountBox->remove_text(m_aNumChapter);
     m_xPageTemplLbl->set_sensitive(true);
     m_xPageTemplBox->set_sensitive(true);
 }
@@ -380,17 +376,17 @@ IMPL_LINK_NOARG(SwEndNoteOptionPage, CharAnchorHdl, weld::ComboBox&, void)
 {
     // Writer expects (but doesn't enforce) a unique style for each of these four situations.
     // Now that the previously used style is available again: add it back to the other list, and remove this one.
-    UpdateCharStyleList(bEndNote, m_sCharAnchor, m_xFootnoteCharAnchorTemplBox->get_active_text(), /*oAnchor=*/false);
+    UpdateCharStyleList(m_bEndNote, m_sCharAnchor, m_xFootnoteCharAnchorTemplBox->get_active_text(), /*oAnchor=*/false);
     // Also update the other tab.
-    m_rParent.UpdateCharStyleList(!bEndNote, m_sCharAnchor, m_xFootnoteCharAnchorTemplBox->get_active_text());
+    m_rParent.UpdateCharStyleList(!m_bEndNote, m_sCharAnchor, m_xFootnoteCharAnchorTemplBox->get_active_text());
 
     m_sCharAnchor = m_xFootnoteCharAnchorTemplBox->get_active_text();
 }
 
 IMPL_LINK_NOARG(SwEndNoteOptionPage, CharTextHdl, weld::ComboBox&, void)
 {
-    UpdateCharStyleList(bEndNote, m_sCharText, m_xFootnoteCharTextTemplBox->get_active_text(), /*oAnchor=*/true);
-    m_rParent.UpdateCharStyleList(!bEndNote, m_sCharText, m_xFootnoteCharTextTemplBox->get_active_text());
+    UpdateCharStyleList(m_bEndNote, m_sCharText, m_xFootnoteCharTextTemplBox->get_active_text(), /*oAnchor=*/true);
+    m_rParent.UpdateCharStyleList(!m_bEndNote, m_sCharText, m_xFootnoteCharTextTemplBox->get_active_text());
 
     m_sCharText = m_xFootnoteCharTextTemplBox->get_active_text();
 }
@@ -422,16 +418,16 @@ static SwCharFormat* lcl_GetCharFormat( SwWrtShell* pSh, const OUString& rCharFo
 
 bool SwEndNoteOptionPage::FillItemSet( SfxItemSet * )
 {
-    std::unique_ptr<SwEndNoteInfo> pInf(bEndNote ? new SwEndNoteInfo() : new SwFootnoteInfo());
+    std::unique_ptr<SwEndNoteInfo> pInf(m_bEndNote ? new SwEndNoteInfo() : new SwFootnoteInfo());
 
     pInf->m_nFootnoteOffset = m_xOffsetField->get_value() - 1;
     pInf->m_aFormat.SetNumberingType(m_xNumViewBox->GetSelectedNumberingType() );
     pInf->SetPrefix(m_xPrefixED->get_text().replaceAll("\\t", "\t"));
     pInf->SetSuffix(m_xSuffixED->get_text().replaceAll("\\t", "\t"));
 
-    pInf->SetCharFormat( lcl_GetCharFormat( pSh,
+    pInf->SetCharFormat(lcl_GetCharFormat(m_pSh,
                         m_xFootnoteCharTextTemplBox->get_active_text() ) );
-    pInf->SetAnchorCharFormat( lcl_GetCharFormat( pSh,
+    pInf->SetAnchorCharFormat(lcl_GetCharFormat(m_pSh,
                         m_xFootnoteCharAnchorTemplBox->get_active_text() ) );
 
     // paragraph template
@@ -439,19 +435,19 @@ bool SwEndNoteOptionPage::FillItemSet( SfxItemSet * )
     if (nPos != -1)
     {
         const OUString aFormatName( m_xParaTemplBox->get_active_text() );
-        SwTextFormatColl *pColl = pSh->GetParaStyle(aFormatName, SwWrtShell::GETSTYLE_CREATEANY);
+        SwTextFormatColl* pColl = m_pSh->GetParaStyle(aFormatName, SwWrtShell::GETSTYLE_CREATEANY);
         OSL_ENSURE(pColl, "paragraph style not found");
         pInf->SetFootnoteTextColl(*pColl);
     }
 
     // page template
-    pInf->ChgPageDesc( pSh->FindPageDescByName(
+    pInf->ChgPageDesc(m_pSh->FindPageDescByName(
                                 m_xPageTemplBox->get_active_text(), true ) );
 
-    if ( bEndNote )
+    if (m_bEndNote)
     {
-        if ( !(*pInf == pSh->GetEndNoteInfo()) )
-            pSh->SetEndNoteInfo( *pInf );
+        if (!(*pInf == m_pSh->GetEndNoteInfo()))
+            m_pSh->SetEndNoteInfo(*pInf);
     }
     else
     {
@@ -460,8 +456,8 @@ bool SwEndNoteOptionPage::FillItemSet( SfxItemSet * )
         pI->m_eNum = GetNumbering();
         pI->m_aQuoVadis = m_xContEdit->get_text();
         pI->m_aErgoSum = m_xContFromEdit->get_text();
-        if ( !(*pI == pSh->GetFootnoteInfo()) )
-            pSh->SetFootnoteInfo( *pI );
+        if (!(*pI == m_pSh->GetFootnoteInfo()))
+            m_pSh->SetFootnoteInfo(*pI);
     }
     return true;
 }
