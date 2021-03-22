@@ -1533,6 +1533,7 @@ IMPL_LINK(FmFilterNavigator, PopupMenuHdl, const CommandEvent&, rEvt, bool)
             {
                 OUString aErrorMsg;
                 OUString aText = "IS NULL";
+                assert(pFilterItem && "if item is null this menu entry was removed and unavailable");
                 m_pModel->ValidateText(pFilterItem, aText, aErrorMsg);
                 m_pModel->SetTextForItem(pFilterItem, aText);
             }
@@ -1541,6 +1542,7 @@ IMPL_LINK(FmFilterNavigator, PopupMenuHdl, const CommandEvent&, rEvt, bool)
                 OUString aErrorMsg;
                 OUString aText = "IS NOT NULL";
 
+                assert(pFilterItem && "if item is null this menu entry was removed and unavailable");
                 m_pModel->ValidateText(pFilterItem, aText, aErrorMsg);
                 m_pModel->SetTextForItem(pFilterItem, aText);
             }
