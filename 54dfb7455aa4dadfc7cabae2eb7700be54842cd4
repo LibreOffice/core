@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "dfeb9218_cabfc8f9",
+        "filename": "basic/qa/vba_tests/strconv.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-22T06:56:36Z",
+      "side": 1,
+      "message": "\u003e You talked about encodings of system(CP-1251 and some other encoding on japanese windows) but the output will not depend on your system encoding rather it will depend on encoding of the application(LO).\n\nStrConv converts between Unicode and \"local encoding\" (byte string). While it\u0027s correct that LibreOffice has its own locale potentially independent from system\u0027s, LibreOffice uses system locale *by default*, and that means that you need to take that into account. Note that that is *not* \"encoding of application\" - whatever that might mean.\n\nIt\u0027s *your* task to make sure StrConv uses the correct encoding for its work. When doing its \u0027vbUnicode\u0027/\u0027vbFromUnicode\u0027, it needs to get the proper source/target encoding; it\u0027s trivial when it is passed explicitly through its third LCID argument, but when it\u0027s missing, it must be taken from LO locale, and thus potentially from system. It must not use osl_getThreadTextEncoding, as it does now.\n\n\u003e .ods files are always rendered in \"utf-8\" in ubuntu and \"ascii\" encoding in Windows.\n\nThis is very strange and incorrect statement (I wonder what might be the source of the misconception). Inside ODF files, all XMLs are UTF-8-encoded, regardless of the system. And that has nothing to do with our problem here. And again - what is \"encoding of the application\"? There\u0027s nothing like that. LibreOffice (or any other application) may use any encoding at any place; we have a weird mix of osl_getThreadTextEncoding vs app-configured locales...",
+      "parentUuid": "9b0869e6_18abf41b",
+      "revId": "54dfb7455aa4dadfc7cabae2eb7700be54842cd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7e9e1484_914809f0",
         "filename": "basic/source/runtime/methods.cxx",
         "patchSetId": 1
