@@ -495,6 +495,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         {
             // void -> interface (null)
             void * null_ref = nullptr;
+            // coverity[var_deref_model : FALSE] - null_ref will not be derefed in this case
             aRet.setValue( &null_ref, aDestType );
             break;
         }
