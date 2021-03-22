@@ -154,7 +154,11 @@ void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
             currentStart.nNode.GetNode().IsTableNode()
                 ? static_cast<SwStartNode*>(currentStart.nNode.GetNode().GetTableNode())
                 : static_cast<SwStartNode*>(currentStart.nNode.GetNode().GetSectionNode()));
-        assert(pTableOrSectionNode); // known pathology
+        if ( !pTableOrSectionNode )
+        {
+            SAL_WARN("sw.core", "UpdateFramesForAddDeleteRedline:: known pathology (or ChangesInRedline mode)");
+            return;
+        }
         for (sal_uLong j = pTableOrSectionNode->GetIndex(); j <= pTableOrSectionNode->EndOfSectionIndex(); ++j)
         {
             pTableOrSectionNode->GetNodes()[j]->SetRedlineMergeFlag(SwNode::Merge::Hidden);
