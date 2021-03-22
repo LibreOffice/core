@@ -32,7 +32,8 @@
     <service name="com.sun.star.logging.FileHandler"/>
   </implementation>
   <implementation name="com.sun.star.comp.extensions.LoggerPool"
-      constructor="com_sun_star_comp_extensions_LoggerPool">
+      constructor="com_sun_star_comp_extensions_LoggerPool"
+      single-instance="true">
     <singleton name="com.sun.star.logging.LoggerPool"/>
   </implementation>
   <implementation name="com.sun.star.comp.extensions.PlainTextFormatter"
