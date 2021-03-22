@@ -2301,38 +2301,38 @@ UndoTableCpyTable_Entry::UndoTableCpyTable_Entry( const SwTableBox& rBox )
 
 void UndoTableCpyTable_Entry::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("UndoTableCpyTable_Entry"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("UndoTableCpyTable_Entry"));
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("nBoxIdx"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("nBoxIdx"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::number(nBoxIdx).getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("nOffset"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("nOffset"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::number(nOffset).getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 
     if (pBoxNumAttr)
     {
-        xmlTextWriterStartElement(pWriter, BAD_CAST("pBoxNumAttr"));
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("pBoxNumAttr"));
         pBoxNumAttr->dumpAsXml(pWriter);
-        xmlTextWriterEndElement(pWriter);
+        (void)xmlTextWriterEndElement(pWriter);
     }
 
     if (pUndo)
     {
-        xmlTextWriterStartElement(pWriter, BAD_CAST("pUndo"));
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("pUndo"));
         pUndo->dumpAsXml(pWriter);
-        xmlTextWriterEndElement(pWriter);
+        (void)xmlTextWriterEndElement(pWriter);
     }
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("bJoin"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("bJoin"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(bJoin).getStr()));
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 SwUndoTableCpyTable::SwUndoTableCpyTable(const SwDoc& rDoc)
@@ -2744,7 +2744,7 @@ bool SwUndoTableCpyTable::InsertRow( SwTable& rTable, const SwSelBoxes& rBoxes,
 
 void SwUndoTableCpyTable::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    xmlTextWriterStartElement(pWriter, BAD_CAST("SwUndoTableCpyTable"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwUndoTableCpyTable"));
 
     for (const auto& pEntry : m_vArr)
     {
@@ -2756,7 +2756,7 @@ void SwUndoTableCpyTable::dumpAsXml(xmlTextWriterPtr pWriter) const
         m_pInsRowUndo->dumpAsXml(pWriter);
     }
 
-    xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 bool SwUndoTableCpyTable::IsEmpty() const
