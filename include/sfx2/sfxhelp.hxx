@@ -28,6 +28,7 @@
 class SFX2_DLLPUBLIC SfxHelp final : public Help
 {
     bool            bIsDebug;
+    bool            bLaunchingHelp; // tdf#140539 don't allow help to be re-launched during help launch
 
 private:
     SAL_DLLPRIVATE static bool Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUString& rKeyword);
