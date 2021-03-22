@@ -59,6 +59,17 @@ static const SfxItemPropertyMapEntry* lcl_GetFormulaParserMap()
     return aFormulaParserMap_Impl;
 }
 
+const formula::FormulaGrammar::AddressConvention aConvMap[] = {
+    formula::FormulaGrammar::CONV_OOO,        // <- AddressConvention::OOO
+    formula::FormulaGrammar::CONV_XL_A1,      // <- AddressConvention::XL_A1
+    formula::FormulaGrammar::CONV_XL_R1C1,    // <- AddressConvention::XL_R1C1
+    formula::FormulaGrammar::CONV_XL_OOX,     // <- AddressConvention::XL_OOX
+    formula::FormulaGrammar::CONV_LOTUS_A1    // <- AddressConvention::LOTUS_A1
+};
+// sal_Int16 because of comparison of integer expressions below.
+constexpr sal_Int16 nConvMapCount = SAL_N_ELEMENTS(aConvMap);
+
+
 SC_SIMPLE_SERVICE_INFO( ScFormulaParserObj, "ScFormulaParserObj", SC_SERVICENAME_FORMULAPARS )
 
 ScFormulaParserObj::ScFormulaParserObj(ScDocShell* pDocSh) :
@@ -89,14 +100,9 @@ void ScFormulaParserObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 void ScFormulaParserObj::SetCompilerFlags( ScCompiler& rCompiler ) const
 {
-    static const formula::FormulaGrammar::AddressConvention aConvMap[] = {
-        formula::FormulaGrammar::CONV_OOO,        // <- AddressConvention::OOO
-        formula::FormulaGrammar::CONV_XL_A1,      // <- AddressConvention::XL_A1
-        formula::FormulaGrammar::CONV_XL_R1C1,    // <- AddressConvention::XL_R1C1
-        formula::FormulaGrammar::CONV_XL_OOX,     // <- AddressConvention::XL_OOX
-        formula::FormulaGrammar::CONV_LOTUS_A1    // <- AddressConvention::LOTUS_A1
-    };
-    static const sal_Int16 nConvMapCount = SAL_N_ELEMENTS(aConvMap);
+    formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_UNSPECIFIED;
+    if (mnConv >= 0 && mnConv < nConvMapCount)
+        eConv = aConvMap[mnConv];
 
     // If mxOpCodeMap is not empty it overrides mbEnglish, and vice versa. We
     // don't need to initialize things twice.
@@ -104,16 +110,12 @@ void ScFormulaParserObj::SetCompilerFlags( ScCompiler& rCompiler ) const
         rCompiler.SetFormulaLanguage( mxOpCodeMap );
     else
     {
-        sal_Int32 nFormulaLanguage = mbEnglish ?
-            sheet::FormulaLanguage::ENGLISH :
-            sheet::FormulaLanguage::NATIVE;
+        const sal_Int32 nFormulaLanguage = (eConv == formula::FormulaGrammar::CONV_XL_OOX ?
+                sheet::FormulaLanguage::OOXML :
+                (mbEnglish ? sheet::FormulaLanguage::ENGLISH : sheet::FormulaLanguage::NATIVE));
         ScCompiler::OpCodeMapPtr xMap = rCompiler.GetOpCodeMap( nFormulaLanguage);
         rCompiler.SetFormulaLanguage( xMap);
     }
-
-    formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_UNSPECIFIED;
-    if (mnConv >= 0 && mnConv < nConvMapCount)
-        eConv = aConvMap[mnConv];
 
     rCompiler.SetRefConvention( eConv );
     rCompiler.EnableJumpCommandReorder(!mbCompileFAP);
@@ -206,6 +208,20 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
     else if ( aPropertyName == SC_UNO_FORMULACONVENTION )
     {
         aValue >>= mnConv;
+
+        bool bOldEnglish = mbEnglish;
+        if (mnConv >= 0 && mnConv < nConvMapCount
+                && aConvMap[mnConv] == formula::FormulaGrammar::CONV_XL_OOX)
+            mbEnglish = true;
+
+        // Same as for SC_UNO_COMPILEENGLISH, though an OpCodeMap should not
+        // had been set for CONV_XL_OOX.
+        if (mxOpCodeMap && mbEnglish != bOldEnglish)
+        {
+            ScDocument& rDoc = mpDocShell->GetDocument();
+            ScCompiler aCompiler( rDoc, ScAddress(), rDoc.GetGrammar());
+            mxOpCodeMap = formula::FormulaCompiler::CreateOpCodeMap( maOpCodeMapping, mbEnglish);
+        }
     }
     else if ( aPropertyName == SC_UNO_IGNORELEADING )
     {
