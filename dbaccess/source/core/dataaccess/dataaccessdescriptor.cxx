@@ -236,18 +236,6 @@ namespace
         return new DataAccessDescriptor();
     }
 
-struct Instance {
-    explicit Instance():
-        instance(new DataAccessDescriptorFactory())
-    {}
-
-    rtl::Reference<cppu::OWeakObject> instance;
-};
-
-struct Singleton:
-    public rtl::Static<Instance, Singleton>
-{};
-
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
@@ -255,7 +243,7 @@ com_sun_star_comp_dba_DataAccessDescriptorFactory(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(Singleton::get().instance.get());
+    return cppu::acquire(new DataAccessDescriptorFactory());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
