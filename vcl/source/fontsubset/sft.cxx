@@ -1116,7 +1116,6 @@ bool withinBounds(sal_uInt32 tdoffset, sal_uInt32 moreoffset, sal_uInt32 len, sa
 AbstractTrueTypeFont::AbstractTrueTypeFont(const char* pFileName, const FontCharMapRef xCharMap)
     : m_pFileName(nullptr)
     , m_nGlyphs(0xFFFFFFFF)
-    , m_pGlyphOffsets(nullptr)
     , m_nHorzMetrics(0)
     , m_nVertMetrics(0)
     , m_nUnitsPerEm(0)
@@ -1129,7 +1128,6 @@ AbstractTrueTypeFont::AbstractTrueTypeFont(const char* pFileName, const FontChar
 AbstractTrueTypeFont::~AbstractTrueTypeFont()
 {
     free(m_pFileName);
-    free(m_pGlyphOffsets);
 }
 
 TrueTypeFont::TrueTypeFont(const char* pFileName, const FontCharMapRef xCharMap)
@@ -1160,6 +1158,11 @@ TrueTypeFont::~TrueTypeFont()
 
 void CloseTTFont(TrueTypeFont* ttf) { delete ttf; }
 
+sal_uInt32 AbstractTrueTypeFont::glyphOffset(sal_uInt32 glyphID) const
+{
+    return m_aGlyphOffsets[glyphID];
+}
+
 SFErrCodes AbstractTrueTypeFont::indexGlyphData()
 {
     if (!(hasTable(O_maxp) && hasTable(O_head) && hasTable(O_name) && hasTable(O_cmap)))
@@ -1185,12 +1188,10 @@ SFErrCodes AbstractTrueTypeFont::indexGlyphData()
         if (k < static_cast<int>(m_nGlyphs))       /* Hack for broken Chinese fonts */
             m_nGlyphs = k;
 
-        free(m_pGlyphOffsets);
-        m_pGlyphOffsets = static_cast<sal_uInt32 *>(calloc(m_nGlyphs + 1, sizeof(sal_uInt32)));
-        assert(m_pGlyphOffsets != nullptr);
-
+        m_aGlyphOffsets.clear();
+        m_aGlyphOffsets.reserve(m_nGlyphs + 1);
         for (int i = 0; i <= static_cast<int>(m_nGlyphs); ++i)
-            m_pGlyphOffsets[i] = indexfmt ? GetUInt32(table, i << 2) : static_cast<sal_uInt32>(GetUInt16(table, i << 1)) << 1;
+            m_aGlyphOffsets.push_back(indexfmt ? GetUInt32(table, i << 2) : static_cast<sal_uInt32>(GetUInt16(table, i << 1)) << 1);
     }
     else if (this->table(O_CFF, table_size)) /* PS-OpenType */
     {
@@ -1198,17 +1199,15 @@ SFErrCodes AbstractTrueTypeFont::indexGlyphData()
         if (k < static_cast<int>(m_nGlyphs))
             m_nGlyphs = k;
 
-        free(m_pGlyphOffsets);
-        m_pGlyphOffsets = static_cast<sal_uInt32 *>(calloc(m_nGlyphs + 1, sizeof(sal_uInt32)));
+        m_aGlyphOffsets.clear();
+        m_aGlyphOffsets.resize(m_nGlyphs + 1, 0);
         /* TODO: implement to get subsetting */
-        assert(m_pGlyphOffsets != nullptr);
     }
     else {
         // Bitmap font, accept for now.
-        free(m_pGlyphOffsets);
-        m_pGlyphOffsets = static_cast<sal_uInt32 *>(calloc(m_nGlyphs + 1, sizeof(sal_uInt32)));
+        m_aGlyphOffsets.clear();
+        m_aGlyphOffsets.resize(m_nGlyphs + 1, 0);
         /* TODO: implement to get subsetting */
-        assert(m_pGlyphOffsets != nullptr);
     }
 
     table = this->table(O_hhea, table_size);
