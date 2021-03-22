@@ -205,23 +205,29 @@ public class WikiArticle
             connPost.connect();
 
             OutputStreamWriter post = new OutputStreamWriter(connPost.getOutputStream(), "UTF-8");
-            post.write("wpTextbox1=");
-            post.write(URLEncoder.encode(sWikiCode, "UTF-8"));
-            post.write("&wpSummary=");
-            post.write(URLEncoder.encode(sWikiComment, "UTF-8"));
-            post.write("&wpSection=");
-            post.write("&wpEdittime=");
-            post.write(URLEncoder.encode(m_sEditTime, "UTF-8"));
-            post.write("&wpSave=Save%20page");
-            post.write("&wpEditToken=");
-            post.write(URLEncoder.encode(m_sEditToken, "UTF-8"));
+            try
+            {
+                post.write("wpTextbox1=");
+                post.write(URLEncoder.encode(sWikiCode, "UTF-8"));
+                post.write("&wpSummary=");
+                post.write(URLEncoder.encode(sWikiComment, "UTF-8"));
+                post.write("&wpSection=");
+                post.write("&wpEdittime=");
+                post.write(URLEncoder.encode(m_sEditTime, "UTF-8"));
+                post.write("&wpSave=Save%20page");
+                post.write("&wpEditToken=");
+                post.write(URLEncoder.encode(m_sEditToken, "UTF-8"));
 
-            if (bMinorEdit) {
-                post.write("&wpMinoredit=1");
+                if (bMinorEdit) {
+                    post.write("&wpMinoredit=1");
+                }
+
+                post.flush();
             }
-
-            post.flush();
-            post.close();
+            finally
+            {
+                post.close();
+            }
 
             int nResultCode = connPost.getResponseCode();
             if ( nResultCode < 400 )
