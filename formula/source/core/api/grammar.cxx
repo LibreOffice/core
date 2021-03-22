@@ -19,6 +19,7 @@
 
 #include <formula/grammar.hxx>
 #include <tools/debug.hxx>
+#include <cassert>
 
 namespace formula {
 
@@ -78,7 +79,7 @@ FormulaGrammar::Grammar FormulaGrammar::mergeToGrammar( const Grammar eGrammar, 
             extractFormulaLanguage( eGrammar) |
             ((eConv + kConventionOffset) << kConventionShift));
     eGram = setEnglishBit( eGram, bEnglish);
-    DBG_ASSERT( isSupported( eGram), "CompilerGrammarMap::mergeToGrammar: unsupported grammar");
+    assert( isSupported( eGram));
     return eGram;
 }
 
