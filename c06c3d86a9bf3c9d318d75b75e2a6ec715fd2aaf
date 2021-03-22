@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e42eee6d_74ec8f2d",
+        "filename": "sw/source/ui/chrdlg/drpcps.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-03-22T10:41:34Z",
+      "side": 1,
+      "message": "I assume that you don\u0027t have to check for nullptr doc shell here, since this was in master for a while already.",
+      "revId": "c06c3d86a9bf3c9d318d75b75e2a6ec715fd2aaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
