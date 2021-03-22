@@ -173,6 +173,7 @@
 #define RID_LIST_AUTO_FORMAT                                NC_("RID_ATTRIBUTE_NAMES_MAP", "List Auto Format")
 #define RID_LIST_ID                                         NC_("RID_ATTRIBUTE_NAMES_MAP", "List Id")
 #define RID_LIST_LABEL_STRING                               NC_("RID_ATTRIBUTE_NAMES_MAP", "List Label String")
+#define RID_METADATA_REFERENCE                              NC_("RID_ATTRIBUTE_NAMES_MAP", "Metadata Reference")
 #define RID_NESTED_TEXT_CONTENT                             NC_("RID_ATTRIBUTE_NAMES_MAP", "Nested Text Content")
 #define RID_NUMBERING_IS_NUMBER                             NC_("RID_ATTRIBUTE_NAMES_MAP", "Numbering is Number")
 #define RID_NUMBERING_LEVEL                                 NC_("RID_ATTRIBUTE_NAMES_MAP", "Numbering Level")
