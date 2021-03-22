@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d309a4de_1c72dee2",
+        "filename": "cppu/source/threadpool/threadpool.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-22T08:55:39Z",
+      "side": 1,
+      "message": "here and elsewhere: there is no real need for cargo-culting that \"::\" prefix here any further",
+      "range": {
+        "startLine": 107,
+        "startChar": 8,
+        "endLine": 107,
+        "endChar": 10
+      },
+      "revId": "de0f42273caeac5ae5668e638a278ad2c5b02c75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08f4a3b6_227ae41b",
+        "filename": "cppu/source/threadpool/threadpool.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-22T08:55:39Z",
+      "side": 1,
+      "message": "why add a random empty line here?",
+      "revId": "de0f42273caeac5ae5668e638a278ad2c5b02c75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
