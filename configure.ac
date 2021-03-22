@@ -4638,7 +4638,7 @@ darwin*|macos*)
         else
             CPUNAME=AARCH64
             RTL_ARCH=AARCH64
-            PLATFORMID=macosx_arm64
+            PLATFORMID=macosx_aarch64
         fi
         ;;
     x86_64)
