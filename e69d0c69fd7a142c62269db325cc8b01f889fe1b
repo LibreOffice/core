@@ -22,6 +22,30 @@
       "revId": "e69d0c69fd7a142c62269db325cc8b01f889fe1b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de90a628_7aec4461",
+        "filename": "sw/qa/extras/layout/layout2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2094,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-03-22T12:02:28Z",
+      "side": 1,
+      "message": "aPoint is an x,y coordinate in twips. aPosition is a paragraph index and a character index inside that paragraph. Hopefully there is an x,y twip position where we used to pick the wrong doc model pos and now we pick the right doc model pos (you modify GetModelPositionForViewPoint() so it should return different results before/after your change). Can you assert that?",
+      "parentUuid": "54adb0f5_495bee01",
+      "range": {
+        "startLine": 2094,
+        "startChar": 4,
+        "endLine": 2094,
+        "endChar": 83
+      },
+      "revId": "e69d0c69fd7a142c62269db325cc8b01f889fe1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
