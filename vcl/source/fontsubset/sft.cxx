@@ -925,9 +925,9 @@ static void GetNames(TrueTypeFont *t)
     }
     if ( ! t->psname )
     {
-        if (t->fileName())
+        if (!t->fileName().empty())
         {
-            const char* pReverse = t->fileName() + strlen(t->fileName());
+            const char* pReverse = t->fileName().data() + t->fileName().length();
             /* take only last token of filename */
             while (pReverse != t->fileName() && *pReverse != '/') pReverse--;
             if(*pReverse == '/') pReverse++;
@@ -1034,7 +1034,7 @@ SFErrCodes OpenTTFontFile(const char* fname, sal_uInt32 facenum, TrueTypeFont** 
     if( ! *ttf )
         return SFErrCodes::Memory;
 
-    if( ! (*ttf)->fileName() )
+    if( (*ttf)->fileName().empty() )
     {
         ret = SFErrCodes::Memory;
         goto cleanup;
@@ -1121,7 +1121,7 @@ AbstractTrueTypeFont::AbstractTrueTypeFont(const char* pFileName, const FontChar
     , m_xCharMap(xCharMap)
 {
     if (pFileName)
-        m_pFileName.reset(strdup(pFileName));
+        m_sFileName = pFileName;
 }
 
 AbstractTrueTypeFont::~AbstractTrueTypeFont()
@@ -1144,7 +1144,7 @@ TrueTypeFont::TrueTypeFont(const char* pFileName, const FontCharMapRef xCharMap)
 TrueTypeFont::~TrueTypeFont()
 {
 #if !defined(_WIN32)
-    if (fileName())
+    if (!fileName().empty())
         munmap(ptr, fsize);
 #endif
     free(psname);
@@ -1897,7 +1897,7 @@ SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
 
     fprintf(outf, "%%!PS-TrueTypeFont-%d.%d-%d.%d\n", static_cast<int>(ver), static_cast<int>(ver & 0xFF), static_cast<int>(rev>>16), static_cast<int>(rev & 0xFFFF));
     fprintf(outf, "%%%%Creator: %s %s %s\n", modname, modver, modextra);
-    fprintf(outf, "%%- Font subset generated from a source font file: '%s'\n", ttf->fileName());
+    fprintf(outf, "%%- Font subset generated from a source font file: '%s'\n", ttf->fileName().data());
     fprintf(outf, "%%- Original font name: %s\n", ttf->psname);
     fprintf(outf, "%%- Original font family: %s\n", ttf->family);
     fprintf(outf, "%%- Original font sub-family: %s\n", ttf->subfamily);
