@@ -70,6 +70,24 @@
       "revId": "e6efc0e309a1a715febec1e830efb1d06e3831de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "babb8b7e_aada8975",
+        "filename": "sw/qa/uitest/writer_tests3/hyperlinkdialog.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-23T13:25:45Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/112993\u003e \"Skip a problematic UITest for --with-help\u003dhtml/online\"",
+      "parentUuid": "3063c68c_048a49a2",
+      "revId": "e6efc0e309a1a715febec1e830efb1d06e3831de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
