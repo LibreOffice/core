@@ -508,6 +508,7 @@ private:
     OUString                        m_sCurrentParaStyleName; //highly inaccurate. Overwritten by "overlapping" paragraphs like comments, flys.
     OUString                        m_sDefaultParaStyleName; //caches the ConvertedStyleName of the default paragraph style
     bool                            m_bInStyleSheetImport; //in import of fonts, styles, lists or lfos
+    bool                            m_bInNumberingImport; //in import of numbering (i.e. numbering.xml)
     bool                            m_bInAnyTableImport; //in import of fonts, styles, lists or lfos
     enum class HeaderFooterImportState
     {
@@ -761,6 +762,8 @@ public:
     css::uno::Any GetAnyProperty(PropertyIds eId, const PropertyMapPtr& rContext);
     void        SetStyleSheetImport( bool bSet ) { m_bInStyleSheetImport = bSet;}
     bool        IsStyleSheetImport()const { return m_bInStyleSheetImport;}
+    void        SetNumberingImport( bool bSet ) { m_bInNumberingImport = bSet;}
+    bool        IsNumberingImport() const { return m_bInNumberingImport;}
     void        SetAnyTableImport( bool bSet ) { m_bInAnyTableImport = bSet;}
     bool        IsAnyTableImport()const { return m_bInAnyTableImport;}
     bool        IsInShape()const { return m_aAnchoredStack.size() > 0;}
