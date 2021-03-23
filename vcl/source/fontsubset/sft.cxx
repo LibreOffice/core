@@ -1121,7 +1121,10 @@ AbstractTrueTypeFont::AbstractTrueTypeFont(const char* pFileName, const FontChar
     , m_xCharMap(xCharMap)
 {
     if (pFileName)
-        m_pFileName.reset(strdup(pFileName));
+    {
+        m_pFileName.reset(new char[strlen(pFileName)+1]);
+        memcpy(m_pFileName.get(), pFileName, strlen(pFileName) + 1);
+    }
 }
 
 AbstractTrueTypeFont::~AbstractTrueTypeFont()
