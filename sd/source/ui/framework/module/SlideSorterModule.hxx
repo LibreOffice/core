@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_MODULE_SLIDESORTERMODULE_HXX
-#define INCLUDED_SD_SOURCE_UI_FRAMEWORK_MODULE_SLIDESORTERMODULE_HXX
+#pragma once
 
 #include <MutexOwner.hxx>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
@@ -96,7 +95,5 @@ private:
 };
 
 } // end of namespace sd::framework
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

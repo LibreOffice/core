@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_FILEDLG_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_FILEDLG_HXX
+#pragma once
 
 #include <vcl/errcode.hxx>
 #include <vcl/weld.hxx>
@@ -54,7 +53,5 @@ public:
     // WIP, please don't remove, dear Clang plugins
     bool IsInsertAsLinkSelected() const;
 };
-
-#endif // INCLUDED_SD_SOURCE_UI_INC_FILEDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_SDATTR_HXX
-#define INCLUDED_SD_INC_SDATTR_HXX
+#pragma once
 
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
@@ -57,7 +56,5 @@ inline SfxBoolItem makeSdAttrLayerLocked(bool bValue = false)
 }
 
 inline SfxBoolItem makeSdAttrLayerThisPage() { return SfxBoolItem(ATTR_LAYER_THISPAGE, false); }
-
-#endif // INCLUDED_SD_INC_SDATTR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

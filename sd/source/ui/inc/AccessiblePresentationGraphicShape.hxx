@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_ACCESSIBLEPRESENTATIONGRAPHICSHAPE_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_ACCESSIBLEPRESENTATIONGRAPHICSHAPE_HXX
+#pragma once
 
 #include <svx/AccessibleGraphicShape.hxx>
 
@@ -57,7 +56,5 @@ public:
 };
 
 } // end of namespace accessibility
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

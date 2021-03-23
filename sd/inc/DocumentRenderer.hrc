@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_DOCUMENTRENDERER_HRC
-#define INCLUDED_SD_INC_DOCUMENTRENDERER_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -90,7 +89,5 @@ const char* STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE[] =
     NC_("STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE", "~Pages:"),
     NC_("STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE", "~Selection")
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

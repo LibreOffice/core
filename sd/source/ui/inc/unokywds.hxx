@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_UNOKYWDS_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_UNOKYWDS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -111,6 +110,5 @@ inline constexpr OUStringLiteral sUNO_View_VisibleAreaWidth = u"VisibleAreaWidth
 inline constexpr OUStringLiteral sUNO_View_VisibleAreaHeight = u"VisibleAreaHeight";
 
 inline const char sUNO_View_ZoomOnPage[] = "ZoomOnPage";
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

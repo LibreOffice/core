@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_APP_HRC
-#define INCLUDED_SD_INC_APP_HRC
+#pragma once
 
 #include <svl/solar.hrc>
 
@@ -466,6 +465,5 @@
 #define SID_PRESENTATION_MINIMIZER          (SID_SD_START+450)
 #define SID_REGENERATE_DIAGRAM              (SID_SD_START+451)
 #define SID_EDIT_DIAGRAM                    (SID_SD_START+452)
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

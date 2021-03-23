@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_SDATTR_HRC
-#define INCLUDED_SD_INC_SDATTR_HRC
+#pragma once
 
 #include <svl/solar.hrc>
 
@@ -118,7 +117,5 @@
 #define ATTR_NUMBER_NEWSTART            ATTR_PARANUMBERING_START
 #define ATTR_NUMBER_NEWSTART_AT         ATTR_PARANUMBERING_START + 1
 #define ATTR_PARANUMBERING_END          ATTR_NUMBER_NEWSTART_AT
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

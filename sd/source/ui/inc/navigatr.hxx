@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_NAVIGATR_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_NAVIGATR_HXX
+#pragma once
 
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
@@ -197,7 +196,5 @@ protected:
 private:
     SdNavigatorWin* pNavigatorWin;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

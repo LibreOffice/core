@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_PRESENTER_PRESENTERTEXTVIEW_HXX
-#define INCLUDED_SD_SOURCE_UI_PRESENTER_PRESENTERTEXTVIEW_HXX
+#pragma once
 
 #include <tools/PropertySet.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -68,7 +67,5 @@ private:
 };
 
 } // end of namespace ::sd::presenter
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

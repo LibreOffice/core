@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_DRAWDOCSHELL_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_DRAWDOCSHELL_HXX
+#pragma once
 
 #include <o3tl/span.hxx>
 #include <sfx2/docfac.hxx>
@@ -230,7 +229,5 @@ typedef ::tools::SvRef<DrawDocShell> DrawDocShellRef;
 #endif
 
 } // end of namespace sd
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
