@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da8080a2_8b31de8a",
+        "filename": "vcl/source/fontsubset/sft.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1126,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-23T10:20:46Z",
+      "side": 1,
+      "message": "two strlen...\n\nMaybe just use std::string?",
+      "range": {
+        "startLine": 1126,
+        "startChar": 45,
+        "endLine": 1126,
+        "endChar": 51
+      },
+      "revId": "a520292a6c6524965bcb9ab596435f1387938805",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
