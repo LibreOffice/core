@@ -465,13 +465,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135216_evenOddFooter, "tdf135216_evenOddFooter.o
     getParagraph(2, "2");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf136929_framesOfParagraph, "tdf136929_framesOfParagraph.odt")
-{
-    // Before this fix, the image was placed in the footer instead of in the text body - messing everything up.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 5, getPages() );
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Header2 text", OUString("* | *"), parseDump("/root/page[4]/footer/txt"));
-}
-
 DECLARE_OOXMLEXPORT_TEST(testTdf136589_paraHadField, "tdf136589_paraHadField.docx")
 {
     // The section break should not add an additional CR - which equals an empty page two.
