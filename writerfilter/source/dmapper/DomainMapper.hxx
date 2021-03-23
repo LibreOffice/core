@@ -114,6 +114,7 @@ public:
     bool IsInTable() const;
     void SetDocDefaultsImport(bool bSet);
     bool IsStyleSheetImport() const;
+    bool IsNumberingImport() const;
     bool IsInShape() const;
 
     void hasControls( const bool bSet ) { mbHasControls = bSet; }

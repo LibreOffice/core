@@ -1809,7 +1809,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         // The spec says 0 is the same as the lack of the value, so don't parse that.
         if ( nIntValue )
         {
-            if ( !IsStyleSheetImport() )
+            if (!IsStyleSheetImport() && !IsNumberingImport())
                 m_pImpl->deferCharacterProperty( nSprmId, uno::makeAny( nIntValue ));
             else if (!m_pImpl->IsDocDefaultsImport())
             {
@@ -3702,10 +3702,11 @@ void DomainMapper::lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t 
         break;
     case NS_ooxml::LN_NUMBERING:
         {
-
+            m_pImpl->SetNumberingImport(true);
             //the same for list tables
             ref->resolve( *m_pImpl->GetListTable() );
             m_pImpl->GetListTable( )->CreateNumberingRules( );
+            m_pImpl->SetNumberingImport(false);
         }
         break;
     case NS_ooxml::LN_THEMETABLE:
@@ -4036,6 +4037,11 @@ void DomainMapper::SetDocDefaultsImport(bool bSet)
 bool DomainMapper::IsStyleSheetImport() const
 {
     return m_pImpl->IsStyleSheetImport();
+}
+
+bool DomainMapper::IsNumberingImport() const
+{
+    return m_pImpl->IsNumberingImport();
 }
 
 void DomainMapper::enableInteropGrabBag(const OUString& aName)

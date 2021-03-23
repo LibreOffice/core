@@ -109,6 +109,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138771, "tdf138771.docx")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf125936_numberingSuperscript, "tdf125936_numberingSuperscript.docx")
+{
+    // Without the fix, the first character run was superscripted.
+    CPPUNIT_ASSERT_EQUAL( sal_Int16(0), getProperty<sal_Int16>(getRun(getParagraph(1), 1, "A-570-108"), "CharEscapement") );
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf134619_numberingProps, "tdf134619_numberingProps.doc")
 {
     // Get the third paragraph's numbering style's 1st level's bullet size
