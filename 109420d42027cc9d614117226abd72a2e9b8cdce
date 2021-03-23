@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce58ea90_831594ca",
+        "filename": "vcl/source/fontsubset/sft.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-23T08:11:13Z",
+      "side": 1,
+      "message": "Is it safe to delete[] what strdup returns?",
+      "range": {
+        "startLine": 1124,
+        "startChar": 26,
+        "endLine": 1124,
+        "endChar": 32
+      },
+      "revId": "109420d42027cc9d614117226abd72a2e9b8cdce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
