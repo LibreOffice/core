@@ -188,6 +188,9 @@ public:
         depending on month/year) */
     bool            IsValidDate() const;
 
+    // Returns true, if the date is the end of the month, false otherwise.
+    bool            IsEndOfMonth() const;
+
     /** Normalize date, invalid day or month values are adapted such that they
         carry over to the next month or/and year, for example 1999-02-32
         becomes 1999-03-04, 1999-13-01 becomes 2000-01-01, 1999-13-42 becomes
@@ -239,6 +242,8 @@ public:
     static sal_Int32 DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear );
     /// Semantically identical to IsValidDate() member method.
     static bool IsValidDate( sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear );
+    /// Semantically identical to IsEndOfMonth() member method.
+    static bool IsEndOfMonth(sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear);
     /// Semantically identical to Normalize() member method.
     static bool Normalize( sal_uInt16 & rDay, sal_uInt16 & rMonth, sal_Int16 & rYear );
 

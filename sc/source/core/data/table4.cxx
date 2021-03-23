@@ -535,7 +535,12 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     tools::Long nDDiff = aDate2.GetDay()   - static_cast<tools::Long>(aDate1.GetDay());
                     tools::Long nMDiff = aDate2.GetMonth() - static_cast<tools::Long>(aDate1.GetMonth());
                     tools::Long nYDiff = aDate2.GetYear()  - static_cast<tools::Long>(aDate1.GetYear());
-                    if ( nDDiff )
+                    if (nMDiff && aDate1.IsEndOfMonth() && aDate2.IsEndOfMonth())
+                    {
+                        eType = FILL_END_OF_MONTH;
+                        nCmpInc = nMDiff + 12 * nYDiff;
+                    }
+                    else if (nDDiff)
                     {
                         eType = FILL_DAY;
                         nCmpInc = aDate2 - aDate1;
@@ -566,7 +571,8 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 nDDiff = aDate2.GetDay()   - static_cast<tools::Long>(aDate1.GetDay());
                                 nMDiff = aDate2.GetMonth() - static_cast<tools::Long>(aDate1.GetMonth());
                                 nYDiff = aDate2.GetYear()  - static_cast<tools::Long>(aDate1.GetYear());
-                                if (nDDiff || ( nMDiff + 12 * nYDiff != nCmpInc ))
+                                if ((nDDiff && !aDate1.IsEndOfMonth() && !aDate2.IsEndOfMonth())
+                                    || (nMDiff + 12 * nYDiff != nCmpInc))
                                     bVal = false;
                             }
                             aDate1 = aDate2;
@@ -578,7 +584,8 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     }
                     if (bVal)
                     {
-                        if ( eType == FILL_MONTH && ( nCmpInc % 12 == 0 ) )
+                        if ((eType == FILL_MONTH || eType == FILL_END_OF_MONTH)
+                            && (nCmpInc % 12 == 0))
                         {
                             eType = FILL_YEAR;
                             nCmpInc /= 12;
@@ -1514,6 +1521,7 @@ void ScTable::IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillD
             }
             break;
         case FILL_MONTH:
+        case FILL_END_OF_MONTH:
             {
                 if ( nDayOfMonth == 0 )
                     nDayOfMonth = aDate.GetDay();       // init
@@ -1549,7 +1557,14 @@ void ScTable::IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillD
                 {
                     aDate.SetMonth(static_cast<sal_uInt16>(nMonth));
                     aDate.SetYear(static_cast<sal_uInt16>(nYear));
-                    aDate.SetDay( std::min( Date::GetDaysInMonth( nMonth, nYear), nDayOfMonth ) );
+                    if (eCmd == FILL_END_OF_MONTH)
+                    {
+                        aDate.SetDay(Date::GetDaysInMonth(nMonth, nYear));
+                    }
+                    else
+                    {
+                        aDate.SetDay(std::min(Date::GetDaysInMonth(nMonth, nYear), nDayOfMonth));
+                    }
                 }
             }
             break;
