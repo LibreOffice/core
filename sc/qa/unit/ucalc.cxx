@@ -4831,6 +4831,105 @@ void Test::testAutoFill()
         CPPUNIT_ASSERT_EQUAL(aExpected, aFormula);
     }
 
+    // Clear column A for a new test.
+    clearRange(m_pDoc, ScRange(0,0,0,0,MAXROW,0));
+    m_pDoc->SetRowHidden(0, MAXROW, 0, false); // Show all rows.
+
+    m_pDoc->SetString( 0, 100, 0, "2012-10-31" );
+    m_pDoc->SetString( 0, 101, 0, "2012-10-31" );
+    m_pDoc->Fill( 0, 100, 0, 101, nullptr, aMarkData, 3, FILL_TO_BOTTOM, FILL_AUTO );
+
+    // tdf#89754, Without the fix in place, this test would have failed with
+    // - Expected: 2012-10-31
+    // - Actual  : 2012-11-01
+    CPPUNIT_ASSERT_EQUAL( OUString("2012-10-31"), m_pDoc->GetString( 0, 102, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("2012-10-31"), m_pDoc->GetString( 0, 103, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("2012-10-31"), m_pDoc->GetString( 0, 104, 0 ) );
+
+    // Clear column A for a new test.
+    clearRange(m_pDoc, ScRange(0, 0, 0, 0, MAXROW, 0));
+    m_pDoc->SetRowHidden(0, MAXROW, 0, false); // Show all rows.
+
+    m_pDoc->SetString(0, 100, 0, "2019-10-31");
+    m_pDoc->SetString(0, 101, 0, "2019-11-30");
+    m_pDoc->SetString(0, 102, 0, "2019-12-31");
+    m_pDoc->Fill(0, 100, 0, 102, nullptr, aMarkData, 3, FILL_TO_BOTTOM, FILL_AUTO);
+
+    // tdf#58745, Without the fix in place, this test would have failed with
+    // - Expected: 2020-01-31
+    // - Actual  : 2019-01-11
+    CPPUNIT_ASSERT_EQUAL(OUString("2020-01-31"), m_pDoc->GetString(0, 103, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("2020-02-29"), m_pDoc->GetString(0, 104, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("2020-03-31"), m_pDoc->GetString(0, 105, 0));
+
+    // Clear column A for a new test.
+    clearRange(m_pDoc, ScRange(0,0,0,0,MAXROW,0));
+    m_pDoc->SetRowHidden(0, MAXROW, 0, false); // Show all rows.
+
+    m_pDoc->SetString( 0, 50, 0, "1.0" );
+    m_pDoc->SetString( 0, 51, 0, "1.1" );
+    m_pDoc->SetString( 0, 52, 0, "1.2" );
+    m_pDoc->SetString( 0, 53, 0, "1.3" );
+    m_pDoc->Fill( 0, 50, 0, 53, nullptr, aMarkData, 3, FILL_TO_BOTTOM, FILL_AUTO );
+
+    CPPUNIT_ASSERT_EQUAL( OUString("1.4"), m_pDoc->GetString( 0, 54, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("1.5"), m_pDoc->GetString( 0, 55, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("1.6"), m_pDoc->GetString( 0, 56, 0 ) );
+
+    m_pDoc->SetString( 0, 60, 0, "4.0" );
+    m_pDoc->SetString( 0, 61, 0, "4.1" );
+    m_pDoc->SetString( 0, 62, 0, "4.2" );
+    m_pDoc->SetString( 0, 63, 0, "4.3" );
+    m_pDoc->Fill( 0, 60, 0, 63, nullptr, aMarkData, 3, FILL_TO_BOTTOM, FILL_AUTO );
+
+    // tdf#37424: Without the fix in place, this test would have failed with
+    // - Expected: 4.4
+    // - Actual  : 5
+    CPPUNIT_ASSERT_EQUAL( OUString("4.4"), m_pDoc->GetString( 0, 64, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("4.5"), m_pDoc->GetString( 0, 65, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("4.6"), m_pDoc->GetString( 0, 66, 0 ) );
+
+    // Clear column A for a new test.
+    clearRange(m_pDoc, ScRange(0,0,0,0,MAXROW,0));
+    m_pDoc->SetRowHidden(0, MAXROW, 0, false); // Show all rows.
+
+    m_pDoc->SetString( 0, 70, 0, "001-001-001" );
+    m_pDoc->Fill( 0, 70, 0, 70, nullptr, aMarkData, 3, FILL_TO_BOTTOM, FILL_AUTO );
+
+    // tdf#105268: Without the fix in place, this test would have failed with
+    // - Expected: 001-001-002
+    // - Actual  : 001-001000
+    CPPUNIT_ASSERT_EQUAL( OUString("001-001-002"), m_pDoc->GetString( 0, 71, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("001-001-003"), m_pDoc->GetString( 0, 72, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("001-001-004"), m_pDoc->GetString( 0, 73, 0 ) );
+
+    // Clear column A for a new test.
+    clearRange(m_pDoc, ScRange(0,0,0,0,MAXROW,0));
+    m_pDoc->SetRowHidden(0, MAXROW, 0, false); // Show all rows.
+
+    m_pDoc->SetString( 0, 80, 0, "1%" );
+    m_pDoc->Fill( 0, 80, 0, 80, nullptr, aMarkData, 3, FILL_TO_BOTTOM, FILL_AUTO );
+
+    // tdf#89998: Without the fix in place, this test would have failed with
+    // - Expected: 2.00%
+    // - Actual  : 101.00%
+    CPPUNIT_ASSERT_EQUAL( OUString("2.00%"), m_pDoc->GetString( 0, 81, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("3.00%"), m_pDoc->GetString( 0, 82, 0 ) );
+    CPPUNIT_ASSERT_EQUAL( OUString("4.00%"), m_pDoc->GetString( 0, 83, 0 ) );
+
+    // Clear column A for a new test.
+    clearRange(m_pDoc, ScRange(0,0,0,0,MAXROW,0));
+    m_pDoc->SetRowHidden(0, MAXROW, 0, false); // Show all rows.
+
+    m_pDoc->SetString( 0, 0, 0, "1" );
+    m_pDoc->SetString( 0, 1, 0, "1.1" );
+    m_pDoc->Fill( 0, 0, 0, 1, nullptr, aMarkData, 60, FILL_TO_BOTTOM, FILL_AUTO );
+
+    // tdf#129606: Without the fix in place, this test would have failed with
+    // - Expected: 6
+    // - Actual  : 6.00000000000001
+    CPPUNIT_ASSERT_EQUAL( OUString("6"), m_pDoc->GetString( 0, 50, 0 ) );
+
     m_pDoc->DeleteTab(0);
 }
 
