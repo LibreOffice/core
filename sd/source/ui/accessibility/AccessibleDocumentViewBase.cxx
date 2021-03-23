@@ -66,7 +66,6 @@ AccessibleDocumentViewBase::AccessibleDocumentViewBase (
                              pViewShell->GetDoc()->GetDocumentType() == DocumentType::Impress ?
                                      AccessibleRole::DOCUMENT_PRESENTATION :
                                      AccessibleRole::DOCUMENT),
-      mpWindow (pSdWindow),
       mxController (rxController),
       maViewForwarder (
         static_cast<SdrPaintView*>(pViewShell->GetView()),
@@ -88,17 +87,10 @@ AccessibleDocumentViewBase::AccessibleDocumentViewBase (
     mpViewShell = pViewShell;
 }
 
-void AccessibleDocumentViewBase::ReleaseWindow()
-{
-    SolarMutexGuard g;
-    mpWindow.reset();
-}
-
 AccessibleDocumentViewBase::~AccessibleDocumentViewBase()
 {
     // At this place we should be disposed.  You may want to add a
     // corresponding assertion into the destructor of a derived class.
-    ReleaseWindow(); // this should already be done by impl_dispose
 }
 
 void AccessibleDocumentViewBase::Init()
@@ -488,8 +480,6 @@ void AccessibleDocumentViewBase::impl_dispose()
     mxController = nullptr;
 
     maShapeTreeInfo.SetDocumentWindow (nullptr);
-
-    ReleaseWindow(); // tdf#135364 - ensure the window is released by dispose
 }
 
 //=====  XEventListener  ======================================================
