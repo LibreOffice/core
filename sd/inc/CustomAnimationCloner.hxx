@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_CUSTOMANIMATIONCLONER_HXX
-#define INCLUDED_SD_INC_CUSTOMANIMATIONCLONER_HXX
+#pragma once
 
 #include <com/sun/star/animations/XAnimationNode.hpp>
 
@@ -30,7 +29,5 @@ css::uno::Reference<css::animations::XAnimationNode>
 Clone(const css::uno::Reference<css::animations::XAnimationNode>& xSourceNode,
       const SdPage* pSource = nullptr, const SdPage* pTarget = nullptr);
 }
-
-#endif // INCLUDED_SD_INC_CUSTOMANIMATIONCLONER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

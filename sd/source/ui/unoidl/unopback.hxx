@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SD_SOURCE_UI_UNOIDL_UNOPBACK_HXX
-#define INCLUDED_SD_SOURCE_UI_UNOIDL_UNOPBACK_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -84,7 +83,5 @@ public:
     virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) override;
     virtual css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

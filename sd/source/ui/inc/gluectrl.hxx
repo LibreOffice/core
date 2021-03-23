@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_GLUECTRL_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_GLUECTRL_HXX
+#pragma once
 
 #include <vcl/InterimItemWindow.hxx>
 #include <sfx2/tbxctrl.hxx>
@@ -65,7 +64,5 @@ public:
 
     SdTbxCtlGlueEscDir(sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rTbx);
 };
-
-#endif // INCLUDED_SD_SOURCE_UI_INC_GLUECTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

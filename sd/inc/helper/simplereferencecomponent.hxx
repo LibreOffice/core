@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_HELPER_SIMPLEREFERENCECOMPONENT_HXX
-#define INCLUDED_SD_INC_HELPER_SIMPLEREFERENCECOMPONENT_HXX
+#pragma once
 
 #include <osl/interlck.h>
 
@@ -60,7 +59,5 @@ private:
     bool mbDisposed;
 };
 }
-
-#endif // _SALHELPER_SimpleReferenceComponent_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

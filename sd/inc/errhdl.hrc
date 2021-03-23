@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_ERRHDL_HRC
-#define INCLUDED_SD_INC_ERRHDL_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -36,7 +35,5 @@ const ErrMsgCode RID_SD_ERRHDL[] =
       WARN_FORMAT_FILE_ROWCOL },
     { nullptr, ERRCODE_NONE }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

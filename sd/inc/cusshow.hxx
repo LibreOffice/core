@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_CUSSHOW_HXX
-#define INCLUDED_SD_INC_CUSSHOW_HXX
+#pragma once
 
 #include <vector>
 #include <cppuhelper/weakref.hxx>
@@ -62,7 +61,5 @@ public:
 
     css::uno::Reference<css::uno::XInterface> getUnoCustomShow();
 };
-
-#endif // INCLUDED_SD_INC_CUSSHOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

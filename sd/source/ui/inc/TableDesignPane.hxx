@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_TABLE_TABLEDESIGNPANE_HXX
-#define INCLUDED_SD_SOURCE_UI_TABLE_TABLEDESIGNPANE_HXX
+#pragma once
 
 #include <svtools/valueset.hxx>
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
@@ -115,7 +114,5 @@ public:
 };
 
 }
-
-#endif // _SD_TABLEFORMATPANE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

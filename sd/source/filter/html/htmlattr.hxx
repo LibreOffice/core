@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_FILTER_HTML_HTMLATTR_HXX
-#define INCLUDED_SD_SOURCE_FILTER_HTML_HTMLATTR_HXX
+#pragma once
 
 #include <vcl/customweld.hxx>
 #include <tools/color.hxx>
@@ -37,7 +36,5 @@ public:
     void    SetColors( Color const & aBack, Color const & aText, Color const & aLink,
                        Color const & aVLink, Color const & aALink );
 };
-
-#endif // INCLUDED_SD_SOURCE_FILTER_HTML_HTMLATTR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

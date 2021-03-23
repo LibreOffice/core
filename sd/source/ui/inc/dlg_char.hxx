@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_DLG_CHAR_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_DLG_CHAR_HXX
+#pragma once
 
 #include <sfx2/tabdlg.hxx>
 
@@ -38,7 +37,5 @@ private:
 public:
     SdCharDlg(weld::Window* pParent, const SfxItemSet* pAttr, const SfxObjectShell* pDocShell);
 };
-
-#endif // INCLUDED_SD_SOURCE_UI_INC_DLG_CHAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
