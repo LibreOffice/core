@@ -134,6 +134,7 @@ DefaultState
 DefaultText
 DefaultValue
 DeletedLegendEntries
+Depth
 DiagonalBLTR
 DiagonalTLBR
 DialogLibraries
@@ -161,6 +162,7 @@ ExternalDocLinks
 ExternalLinks
 ExtrapolateBackward
 ExtrapolateForward
+Extrusion
 FileFormat
 FillBackground
 FillBitmapMode
@@ -349,6 +351,7 @@ Offset
 OpCodeMap
 Opaque
 Orientation
+Origin
 OutputPosition
 OverlapSequence
 Overlay
@@ -396,6 +399,7 @@ PrivateStream
 PrivateTempFileURL
 ProgressValueMax
 ProgressValueMin
+ProjectionMode
 Protected
 RadiusRangeMaximum
 RadiusRangeMinimum
@@ -488,6 +492,7 @@ Size100thMM
 SizePixel
 SizeProtect
 SizeType
+Skew
 SkipDuplicates
 SortInfo
 Sound
@@ -578,6 +583,7 @@ VerticalAlign
 VerticalSplitMode
 VerticalSplitPositionTwips
 ViewBox
+ViewPoint
 Visible
 VisibleFlag
 VisibleSize

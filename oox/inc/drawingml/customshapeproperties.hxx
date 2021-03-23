@@ -23,9 +23,13 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
+
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
+#include <com/sun/star/drawing/Position3D.hpp>
+#include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+
 #include <oox/helper/helper.hxx>
 #include <oox/helper/propertymap.hxx>
 #include <oox/token/tokens.hxx>
@@ -91,6 +95,20 @@ struct Path2D
     Path2D() : w( 0 ), h( 0 ), fill( XML_norm ), stroke( true ), extrusionOk( true ) {};
 };
 
+struct Extrusion
+{
+    bool mbExtrusion;
+    css::drawing::ProjectionMode meProjectionMode;
+    css::drawing::EnhancedCustomShapeParameterPair maRotateAngle;
+    css::drawing::EnhancedCustomShapeParameterPair maOrigin;
+    css::drawing::EnhancedCustomShapeParameterPair maSkew;
+    css::drawing::Position3D maViewPoint;
+    css::drawing::EnhancedCustomShapeParameterPair maDepth;
+    Extrusion() :
+        mbExtrusion(false),
+        meProjectionMode(css::drawing::ProjectionMode_PARALLEL)
+        {};
+};
 
 class CustomShapeProperties final
 {
@@ -114,6 +132,7 @@ public:
     OptValue< GeomRect >&               getTextRect(){ return maTextRect; };
     std::vector< Path2D >&              getPath2DList(){ return maPath2DList; };
     std::vector< css::drawing::EnhancedCustomShapeSegment >& getSegments(){ return maSegments; };
+    OptValue< Extrusion>&               getExtrusion(){return maExtrusion;};
     void                                setMirroredX( bool bMirroredX ) { mbMirroredX = bMirroredX; };
     void                                setMirroredY( bool bMirroredY ) { mbMirroredY = bMirroredY; };
     void                                setTextRotateAngle( sal_Int32 nAngle ) { mnTextRotateAngle = nAngle; };
@@ -141,6 +160,9 @@ private:
     bool                            mbMirroredY;
     sal_Int32                       mnTextRotateAngle;
     sal_Int32                       mnTextCameraZRotateAngle;
+    OptValue< Extrusion >           maExtrusion;
+
+    void impl_setExtrusionProperties(PropertyMap& rPropertyMap);
 
     typedef std::unordered_map< sal_Int32, PropertyMap > PresetDataMap;
 

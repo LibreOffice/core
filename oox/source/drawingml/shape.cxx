@@ -41,6 +41,7 @@
 #include <oox/vml/vmlshape.hxx>
 #include <oox/vml/vmlshapecontainer.hxx>
 #include <oox/core/xmlfilterbase.hxx>
+#include <oox/helper/extrusionpresets.hxx>
 #include <oox/helper/graphichelper.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/helper/modelobjecthelper.hxx>
@@ -73,6 +74,8 @@
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -1057,8 +1060,8 @@ Reference< XShape > const & Shape::createAndInsert(
         // applying properties
         aShapeProps.assignUsed( getShapeProperties() );
         aShapeProps.assignUsed( maDefaultShapeProperties );
-        if(mnRotation != 0 && bIsCustomShape)
-            aShapeProps.setProperty( PROP_RotateAngle, sal_Int32( NormAngle36000( Degree100(mnRotation / -600) ) ));
+//        if(mnRotation != 0 && bIsCustomShape)
+//            aShapeProps.setProperty( PROP_RotateAngle, sal_Int32( NormAngle36000( Degree100(mnRotation / -600) ) ));
         if( bIsEmbMedia ||
             bIsCustomShape ||
             aServiceName == "com.sun.star.drawing.GraphicObjectShape" ||
@@ -1245,7 +1248,7 @@ Reference< XShape > const & Shape::createAndInsert(
                     aShapeProps.setProperty(PROP_ShadowFormat, aFormat);
                 }
 
-            }
+            } // end TextFrame
             else if (mbTextBox)
             {
                 aShapeProps.setProperty(PROP_TextBox, true);
@@ -1377,7 +1380,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 putPropertyToGrabBag("EffectProperties", uno::Any(comphelper::containerToSequence(aEffects)));
             }
 
-            // add 3D effects if any
+            // add 3D effects to grabBag if any
             Sequence< PropertyValue > aCamera3DEffects = get3DProperties().getCameraAttributes();
             Sequence< PropertyValue > aLightRig3DEffects = get3DProperties().getLightRigAttributes();
             Sequence< PropertyValue > aShape3DEffects = get3DProperties().getShape3DAttributes( rGraphicHelper, nFillPhClr );
@@ -1391,6 +1394,105 @@ Reference< XShape > const & Shape::createAndInsert(
                 });
                 putPropertyToGrabBag( "3DEffectProperties", Any( a3DEffectsGrabBag ) );
             }
+
+            // Convert 3D effects to extrusion and/or shape rotation
+            Degree100 nAPIRotateAngle;
+            if (aCamera3DEffects.hasElements())
+            {
+                // Get camera preset values
+                OUString sCameraPresetType("orthographicFront");
+                comphelper::SequenceAsHashMap aCamera3DEffectsMap(aCamera3DEffects);
+                aCamera3DEffectsMap.getValue("prst") >>= sCameraPresetType;
+                CameraMapper aCameraMapper;
+                const sal_uInt16 nCameraPrstIndex(aCameraMapper.getPrstIndex(sCameraPresetType));
+                Extrusion aExtrusion;
+                aCameraMapper.addCameraPrstSettingsToExtrusion(aExtrusion, nCameraPrstIndex);
+                double fShapeRotDeg = aCameraMapper.getRotationZDegFromPrst(nCameraPrstIndex) ;
+
+                // MS Office applies shape rotation after 3D-scene rotation, ODF before
+                // MS Office has 3D-scene revolution and shape rotation as distinct values, ODF has
+                // only shape rotation.
+                // Rotation angles from a "rot" element overwrite angles from preset.
+                // In all these cases, the rotation angles from preset cannot be used and have to
+                // be replaced in aExtrusion and a new shape rotation has to be determined.
+                bool bHasShapeRotation = mnRotation != 0;
+                // All three angles are mandatory in the rot element. So the existance of one of them
+                // already indicates, that the element exists.
+                drawing::EnhancedCustomShapeParameterPair aSceneRotDeg;
+                bool bHas3DRotElement = get3DProperties().maCameraRotation.mnRevolution.has();
+                if (bHasShapeRotation || bHas3DRotElement)
+                {
+                    // Calculate actual OOX rotation angles
+                    oox::drawingml::RotationProperties aOOXRot;
+                    if (bHas3DRotElement)
+                    {
+                        aOOXRot = get3DProperties().maCameraRotation;
+                    }
+                    else
+                        aCameraMapper.getRotationAngleOOXFromPrst(aOOXRot, nCameraPrstIndex);
+                    // add shape rotation, thereby change sign as needed in 3D
+                    if (bHasShapeRotation)
+                        aOOXRot.mnRevolution = aOOXRot.mnRevolution.get(0) - mnRotation;
+                    // calculate corresponding LO deg angles
+                    aCameraMapper.calculateRotationAngleLODegFromAngleOOX(aSceneRotDeg, fShapeRotDeg, aOOXRot);
+                    aExtrusion.maRotateAngle = aSceneRotDeg;
+                }
+
+                // ToDo: Update ViewPoint from fov if needed.
+
+                // Get extrusion height
+                sal_Int32 nExtrusionH = get3DProperties().mnExtrusionH.get(0) / 360; //EMU->Hmm
+                aExtrusion.maDepth.First.Value <<= nExtrusionH;
+                aExtrusion.maDepth.First.Type <<= css::drawing::EnhancedCustomShapeParameterType::NORMAL;
+                aExtrusion.maDepth.Second.Value <<= 0.0; // LO can only use 0.0.
+                aExtrusion.maDepth.Second.Type <<= css::drawing::EnhancedCustomShapeParameterType::NORMAL;
+
+                // ToDo: Set Material
+
+                // ToDo: Set Lighting as far as possible.
+
+                // If there is no real 3D scene it is better not to switch to extrusion
+                // because fill and stroke are more compatible without extrusion.
+                bool bNoExtrusion = aSceneRotDeg.First.Value == 0.0 && aSceneRotDeg.First.Value == 0.0
+                                    && (sCameraPresetType == "orthographicFront"
+                                        || sCameraPresetType == "legacyObliqueFront"
+                                        || (sCameraPresetType == "legacyPerspectiveFront"&& nExtrusionH == 0)
+                                        || (sCameraPresetType == "perspectiveFront" && nExtrusionH == 0));
+                aExtrusion.mbExtrusion = !bNoExtrusion;
+
+                // only custom shapes have extrusion
+                if (bIsCustomShape)
+                    getCustomShapeProperties()->getExtrusion() = aExtrusion;
+
+                // ToDo: Erase those properties from GrabBag, which has been imported to LO properties
+
+                // Correct rotation angle of the shape
+                sal_Int32 nTemp = static_cast<sal_Int32>(round(fmod(fShapeRotDeg, 360) * 100));
+                nAPIRotateAngle = NormAngle36000(Degree100(nTemp));
+
+                // ToDo: Correct Tranformationmatrix
+            } // end if (aCamera3DEffects.hasElements())
+            else
+            {
+                if (bIsCustomShape)
+                {
+                    if (mbFlipH != mbFlipV)
+                        nAPIRotateAngle = NormAngle36000(Degree100(mnRotation / 600));
+                    else
+                        nAPIRotateAngle = NormAngle36000(Degree100(-mnRotation / 600));
+                }
+                else
+                    if (mbFlipV)
+                        nAPIRotateAngle = NormAngle36000(Degree100(-mnRotation / 600 + 18000));
+                    else
+                        nAPIRotateAngle = NormAngle36000(Degree100(-mnRotation / 600));
+            }
+            PropertySet aPropertySet(mxShape);
+            aPropertySet.setAnyProperty(PROP_RotateAngle, makeAny(sal_Int32(nAPIRotateAngle.get())));
+            aPropertySet.setAnyProperty(PROP_HoriOrientPosition, makeAny(maPosition.X));
+            aPropertySet.setAnyProperty(PROP_VertOrientPosition, makeAny(maPosition.Y));
+
+            // ToDo: Clarify relationship between mnRotation, maPosition and property "Transformation".
 
             if( bIsCustomShape && getTextBody())
             {
@@ -1493,12 +1595,12 @@ Reference< XShape > const & Shape::createAndInsert(
         }
         else if( getTextBody() )
             getTextBody()->getTextProperties().pushVertSimulation();
-
+/*
         // tdf#133037: a bit hackish: force Shape to rotate in the opposite direction the camera would rotate
         const sal_Int32 nCameraRotation = get3DProperties().maCameraRotation.mnRevolution.get(0);
-
+*/
         PropertySet aPropertySet(mxShape);
-        if ( !bUseRotationTransform && (mnRotation != 0 || nCameraRotation != 0) )
+/*        if ( !bUseRotationTransform && (mnRotation != 0 || nCameraRotation != 0) )
         {
             // use the same logic for rotation from VML exporter (SimpleShape::implConvertAndInsert at vmlshape.cxx)
             Degree100 nAngle = NormAngle36000( Degree100((mnRotation - nCameraRotation) / -600) );
@@ -1506,7 +1608,7 @@ Reference< XShape > const & Shape::createAndInsert(
             aPropertySet.setAnyProperty( PROP_HoriOrientPosition, makeAny( maPosition.X ) );
             aPropertySet.setAnyProperty( PROP_VertOrientPosition, makeAny( maPosition.Y ) );
         }
-
+*/
         // in some cases, we don't have any text body.
         if( getTextBody() && ( !bDoNotInsertEmptyTextBody || !mpTextBody->isEmpty() ) )
         {
