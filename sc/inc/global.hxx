@@ -346,6 +346,7 @@ enum FillDateCmd
         FILL_DAY,
         FILL_WEEKDAY,
         FILL_MONTH,
+        FILL_END_OF_MONTH,
         FILL_YEAR
     };
 
