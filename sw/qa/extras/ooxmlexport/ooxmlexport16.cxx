@@ -138,6 +138,13 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf135773_numberingShading, "tdf135774_n
     assertXPath(pXmlStyles, "/w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:rPr/w:shd", "fill", "ED4C05");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf141173_missingFrames, "tdf141173_missingFrames.rtf")
+{
+    // Without the fix in place, almost all of the text and textboxes were missing.
+    // Without the fix, there were only 2 shapes (mostly unseen).
+    CPPUNIT_ASSERT_EQUAL(13, getShapes());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf139580, "tdf139580.odt")
 {
     // Without the fix in place, this test would have crashed at export time
