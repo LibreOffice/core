@@ -968,6 +968,8 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, SfxView
                 boost::property_tree::ptree poly;
                 boost::property_tree::ptree custom;
                 boost::property_tree::ptree nodes;
+                basegfx::B2DVector aGridOffset(0.0, 0.0);
+                bool gridOffsetSet = getPossibleGridOffsetForSdrObject(aGridOffset, mpMarkedObj, mpMarkedPV);
                 const bool convertMapMode = mpMarkedPV->GetView().GetFirstOutputDevice()->GetMapMode().GetMapUnit() == MapUnit::Map100thMM;
                 for (size_t i = 0; i < maHdlList.GetHdlCount(); i++)
                 {
@@ -979,9 +981,21 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, SfxView
                     child.put("kind", kind);
                     child.put("pointer", static_cast<sal_Int32>(pHdl->GetPointer()));
                     Point pHdlPos = pHdl->GetPos();
-                    pHdlPos.Move(addLogicOffset.getX(), addLogicOffset.getY());
+                    // Coordinate maybe affected by GridOffset, so we may need to
+                    // adapt to Model-coordinates here
+                    basegfx::B2DVector mGridOffset(0.0, 0.0);
+                    if(gridOffsetSet && getPossibleGridOffsetForPosition(
+                        mGridOffset,
+                        basegfx::B2DPoint(pHdlPos.X(), pHdlPos.Y()),
+                        GetSdrPageView()))
+                    {
+                        pHdlPos.AdjustX(basegfx::fround(-mGridOffset.getX()+aGridOffset.getX()));
+                        pHdlPos.AdjustY(basegfx::fround(-mGridOffset.getY()+aGridOffset.getY()));
+                    }
                     if (convertMapMode)
                         pHdlPos = OutputDevice::LogicToLogic(pHdlPos, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+
+                    pHdlPos.Move(addLogicOffset.getX(), addLogicOffset.getY());
                     point.put("x", pHdlPos.getX());
                     point.put("y", pHdlPos.getY());
                     child.add_child("point", point);
