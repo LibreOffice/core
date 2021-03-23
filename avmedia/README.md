@@ -1,4 +1,4 @@
-Audio/Video media implementation.
+# Audio/Video media implementation
 
 Provides per-platform implementations of multimedia functionality.
 Currently no stream API is provided, only a URI based one, so
@@ -9,7 +9,7 @@ of the graphical media playback control that appears in the toolbar /
 mediaobject bar when media is selected under the .uno:AVMediaToolBox
 item.
 
-== avmedia/gstreamer ==
+## avmedia/gstreamer
 
 The avmedia component is implementation of manager service defined in
 offapi/com/sun/star/media/. Radek has added implementation based on
@@ -23,3 +23,4 @@ In the beginning the media files were not embedded, Thorsten added
 support for that later.
 
 FUTURE work: it might be worthwhile to revamp the avmedia UI
+

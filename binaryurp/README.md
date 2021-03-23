@@ -1,6 +1,6 @@
-UNO Remote Protocol (URP). A binary protocol. 
+# UNO Remote Protocol (URP)
 
-UNO provides a protocol called the UNO Remote Protocol (URP) that provides
+UNO provides a binary protocol called the UNO Remote Protocol (URP) that provides
 a bridge between UNO environments. This bridge allows processes and objects
 to send method calls and to receive return values. UNO objects in different 
 environments are connected by way of this interprocess bridge. The underlying 

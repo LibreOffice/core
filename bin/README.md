@@ -1,3 +1,5 @@
+# Run script for auxilary executables
+
 Tools and scripts mostly not used during the build
 
 This direction has a number of key pieces (?) that are used during the

@@ -1,25 +1,22 @@
-LibreOffice Android
-*******************
+# LibreOffice Android
 
-Bootstrap
-*********
+## Bootstrap
 
 Contains common code for all projects on Android to bootstrap LibreOffice. In
 addition it is a home to LibreOfficeKit (LOK - see libreofficekit/README) JNI
 classes.
 
-stuff in source directory
-*************************
+## Stuff in source directory
 
 LibreOffice Android application - the code is based on Fennec (Firefox for Android).
 It uses OpenGL ES 2 for rendering of the document tiles which are gathered from
 LibreOffice using LOK. The application contains the LibreOffice core in one shared
 library: liblo-native-code.so, which is bundled together with the application.
 
-Architecture and Threading
-**************************
+## Architecture and Threading
 
 The application implements editing support using 4 threads:
+
 1. The Android UI thread, we can't perform anything here that would take a considerable
    amount of time.
 2. An OpenGL thread which contains the OpenGL context and is responsible for drawing
@@ -33,22 +30,19 @@ The application implements editing support using 4 threads:
    LibreOffice itself runs. It receives calls from LOKitThread, and may emit callback
    events as necessary.
 
-LOKitThread
-***********
+## LOKitThread
 
 LOKitThread (org.libreoffice.LOKitThread) communicates with LO via JNI (this can
 be done only for one thread) and processes events (defined in org.libreoffice.LOEvent)
 triggered from UI.
 
-Application Overview
-********************
+## Application Overview
 
 LibreOfficeMainActivity (org.libreoffice.LibreOfficeMainActivity) is the entry point
 of the application - everything starts up and tears down from here (onCreate, onResume,
 onPause, onStart, onStop, onDestroy).
 
-Document view
--------------
+### Document view
 
 From here on one of the most interesting pieces are the classes around document view,
 which includes listening to touch events, recalculating the viewport, tiled handling
@@ -60,8 +54,7 @@ Viewport - the viewport is the currently visible part of the document. It is def
 Layers - document view is rendered using many layers. Such layers are: document
          background, scroll handles, and also the document tiles.
 
-Document view classes
----------------------
+### Document view classes
 
 - LayerView (org.mozilla.gecko.gfx.LayerView) is the document view of the application.
   It uses the SurfaceView (android.view.SurfaceView) as the main surface to draw on
@@ -80,8 +73,7 @@ Document view classes
   class. It listens to draw requests and viewport changes from PanZoomController
   (see "Touch events").
 
-Touch events, scrolling and zooming
------------------------------------
+### Touch events, scrolling and zooming
 
 The main class that handles the touch event, scrolling and zooming is JavaPanZoomController
 org.mozilla.gecko.gfx.JavaPanZoomController (implementation of PanZoomController interface).
@@ -89,8 +81,7 @@ When the user performs a touch action, the document view needs to change, which 
 viewport changes. JavaPanZoomController changes the viewport and signals the change through
 PanZoomTarget (org.mozilla.gecko.gfx.PanZoomTarget).
 
-TiledRendering
---------------
+### TiledRendering
 
 Tiled rendering is a technique that splits the document to bitmaps of same size (typically
 256x256) which are fetched on demand.
@@ -110,8 +101,7 @@ view of the document, and FixedZoomTileLayer (org.mozilla.gecko.gfx.FixedZoomTil
 which just renders the tiles at a fixed zoom level. This is then used as a background
 low resolution layer.
 
-Tile invalidation
------------------
+### Tile invalidation
 
 Tile can change in LibreOffice when user changes the content (adds, removes text or changes
 the properties). In this case, an invalidation rectangle is signaled from LibreOffice, which
@@ -119,10 +109,10 @@ includes a rectangle that needs to be invalidated. In this case LOKitThread gets
 via callback, and rechecks all tiles if they need to be invalidated. For more details see
 LOKitThread#tileInvalidation).
 
-Editing
-*******
+## Editing
 
 For editing there are 2 coarse tasks that the LibreOffice app must do:
+
 1. send input events to LibreOffice core (keyboard, touch and mouse)
 2. listen to messages (provided via callback) from LibreOffice core and react accordingly
 
@@ -139,8 +129,7 @@ however there are other parts too - depending on the need.
 InvalidationHandler (org.libreoffice.InvalidationHandler) is the class that is responsible
 to process messages from LibreOffice core and to track the state.
 
-Overlay
-*******
+## Overlay
 
 Overlay elements like cursor and selections aren't drawn by the LO core, instead the core
 only provides data (cursor position, selection rectangles) and the app needs to draw them.
@@ -149,20 +138,18 @@ DocumentOverlay (org.libreoffice.overlay.DocumentOverlay) and DocumentOverlayVie
 the document, where selections and the cursor is drawn.
 
 
-Icons
-*****
+## Icons
 
 App uses material design icons available at [1].
 
 
 [1] - https://www.google.com/design/icons/
 
-Emulator and debugging notes
-****************************
+## Emulator and debugging notes
 
 For instructions on how to build for Android, see README.cross.
 
-* Getting something running
+### Getting something running
 
 Attach your device, so 'adb devices' shows it. Then run:
 
@@ -173,7 +160,7 @@ Attach your device, so 'adb devices' shows it. Then run:
 and if all goes well, you should have some nice debug output to enjoy when you
 start the app.
 
-* Using the emulator
+### Using the emulator
 
 Create an AVD in the android UI, don't even try to get the data partition size
 right in the GUI, that is doomed to producing an AVD that doesn't work.
@@ -196,8 +183,7 @@ space on your emulator's or device's /data volume. You can do:
 
         adb shell stop; adb shell start
 
-Debugging
----------
+## Debugging
 
 First of all, you need to configure the build with --enable-debug or
 --enable-dbgutil.  You may want to provide --enable-symbols to limit debuginfo,
@@ -208,7 +194,7 @@ Building with all symbols is also possible but the linking is currently
 slow (around 10 to 15 minutes) and you need lots of memory (around 16GB + some
 swap).
 
-* Using ndk-gdb
+### Using ndk-gdb
 
 Direct support for using ndk-gdb has been removed from the build system. It is
 recommended that you give the lldb debugger a try that has the benefit of being
@@ -231,7 +217,7 @@ rtl::OString, you need:
         (gdb) python sys.path.insert(0, "/master/solenv/gdb")
         (gdb) source /master/instdir/program/libuno_sal.so.3-gdb.py
 
-* Using Android Studio (and thus lldb)
+### Using Android Studio (and thus lldb)
 
 Note that lldb might not yield the same results as ndk-gdb. If you suspect a
 problem with lldb, you can try to manually use ndk-gdb as described above.
@@ -254,7 +240,7 @@ can switch to the lldb tab and add your breakpoints. However making use of the
 editor just using File|Open .. to open the desired file in Android Studio and
 then toggling the breakpoint by clicking on the margin is more comfortable.
 
-* Debugging the Java part
+### Debugging the Java part
 
 Open android/source/build.gradle in Android studio via File|New → Import
 Project and you can use Android Studio's debugging interface.
@@ -262,24 +248,24 @@ Just make sure you pick the correct build variant (strippedUIDebug)
 
 The alternative is to use the jdb command-line debugger. Steps to use it:
 
-1) Find out the JDWP ID of a debuggable application:
+1. Find out the JDWP ID of a debuggable application:
 
         adb jdwp
 
-From the list of currently active JDWP processes, the last number is the just
+    From the list of currently active JDWP processes, the last number is the just
 started debuggable application.
 
-2) Forward the remote JDWP port/process ID to a local port:
+2. Forward the remote JDWP port/process ID to a local port:
 
         adb forward tcp:7777 jdwp:31739
 
-3) Connect to the running application:
+3. Connect to the running application:
 
         jdb -sourcepath src/java/ -attach localhost:7777
 
 Assuming that you're already in the LOAndroid3 directory in your shell.
 
-* Debugging the missing services
+### Debugging the missing services
 
 Android library only include essential services that are compiled for
 LibreOffice in order to reduce the size of the apk. When developing,
@@ -301,13 +287,13 @@ Which services are combined in the android lib is determined by
 
     solenv/bin/native-code.py
 
-* Common Errors / Gotchas
+### Common Errors / Gotchas
 
 lo_dlneeds: Could not read ELF header of /data/data/org.libreoffice...libfoo.so
         This (most likely) means that the install quietly failed, and that
 the file is truncated; check it out with adb shell ls -l /data/data/...
 
-* Startup details
+### Startup details
 
 All Android apps are basically Java programs. They run "in" a Dalvik
 (or on Android 5 or newer - ART) virtual machine. Yes, you can also
@@ -324,3 +310,4 @@ Anyway, our current "experimental" apps are not based on NativeActivity.
 They have normal Java code for the activity, and just call out to a single,
 app-specific native library (called liblo-native-code.so) to do all the
 heavy lifting.
+

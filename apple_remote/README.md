@@ -1,3 +1,5 @@
+# Apple Remote Control support for Mac
+
 Library to interact with the Apple Remote Control on Mac
 
 This is an early version of Martin Kahr's Remote Control Wrapper
@@ -10,3 +12,4 @@ found. Version control of this just starts with the monolithic commit
 of the appleremote01 CWS. Some technical detail can be found in the
 OOo wiki:
 http://wiki.openoffice.org/wiki/Mac_OS_X_Porting_-_Apple_Remote_implementation
+
