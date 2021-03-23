@@ -451,7 +451,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
                  * Don't initialize a
                  *      Global X as New SomeObjectType
                  * if it has already been initialized.
-                 * This approach relies on JUMPT evaluating Object->NULL as being 'false'
+                 * This approach relies on JUMP evaluating Object->NULL as being 'false'
                  * But the effect of this code is similar to inserting
                  *  If IsNull(YourGlobal)
                  *      Set YourGlobal = ' new obj
