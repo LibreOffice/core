@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4007e635_b4be6722",
+        "filename": "xmloff/qa/unit/text.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1003033
+      },
+      "writtenOn": "2021-03-23T20:55:19Z",
+      "side": 0,
+      "message": "I have more experience with Boost.Test and gtest than CPPUnit, so perhaps this doesn\u0027t apply. But I have to wonder... will someone see some sort of warning or diagnostic about this test not having any assertions?",
+      "revId": "3d008f3bcd19a74cff0781cbd9a3d173892553cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
