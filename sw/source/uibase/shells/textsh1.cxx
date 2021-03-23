@@ -99,6 +99,7 @@
 #include <xmloff/odffields.hxx>
 #include <bookmrk.hxx>
 #include <linguistic/misc.hxx>
+#include <authfld.hxx>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
@@ -1351,6 +1352,21 @@ void SwTextShell::Execute(SfxRequest &rReq)
             else
                 rWrtSh.ClickToINetAttr(rINetFormat);
         }
+        else
+        {
+            SwField* pField = rWrtSh.GetCurField();
+            if (pField && pField->GetTyp()->Which() == SwFieldIds::TableOfAuthorities)
+            {
+                const auto& rAuthorityField = *static_cast<const SwAuthorityField*>(pField);
+                if (rAuthorityField.HasURL())
+                {
+                    // Bibliography entry with URL also provides a hyperlink.
+                    const OUString& rURL
+                        = rAuthorityField.GetAuthEntry()->GetAuthorField(AUTH_FIELD_URL);
+                    ::LoadURL(rWrtSh, rURL, LoadUrlFlags::NewView, /*rTargetFrameName=*/OUString());
+                }
+            }
+        }
     }
     break;
     case SID_OPEN_XML_FILTERSETTINGS:
@@ -1984,7 +2000,17 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                                 svl::Items<RES_TXTATR_INETFMT,
                                 RES_TXTATR_INETFMT>{});
                 rSh.GetCurAttr(aSet);
-                if(SfxItemState::SET > aSet.GetItemState( RES_TXTATR_INETFMT, false ))
+
+                bool bAuthorityFieldURL = false;
+                SwField* pField = rSh.GetCurField();
+                if (pField && pField->GetTyp()->Which() == SwFieldIds::TableOfAuthorities)
+                {
+                    // Bibliography entry with URL also provides a hyperlink.
+                    const auto& rAuthorityField = *static_cast<const SwAuthorityField*>(pField);
+                    bAuthorityFieldURL = rAuthorityField.HasURL();
+                }
+                if (SfxItemState::SET > aSet.GetItemState(RES_TXTATR_INETFMT, false)
+                    && !bAuthorityFieldURL)
                     rSet.DisableItem(nWhich);
             }
             break;
