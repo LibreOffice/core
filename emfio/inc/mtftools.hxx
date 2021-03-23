@@ -363,6 +363,26 @@ namespace emfio
         }
     };
 
+
+    struct WinMtfPalette final : GDIObj
+    {
+        Color               aPaletteColor;
+
+        WinMtfPalette()
+            : aPaletteColor(COL_BLACK)
+        {}
+
+        WinMtfPalette(const Color& rColor)
+            : aPaletteColor(rColor)
+        {}
+
+        bool operator==(const WinMtfPalette& rPalette) const
+        {
+            return aPaletteColor == rPalette.aPaletteColor;
+        }
+    };
+
+
     struct WinMtfLineStyle final : GDIObj
     {
         Color       aLineColor;

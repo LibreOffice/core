@@ -490,8 +490,8 @@ namespace emfio
         mpInputStream->ReadUInt32( nColor );
         Color aColor(static_cast<sal_uInt8>(nColor), static_cast<sal_uInt8>(nColor >> 8), static_cast<sal_uInt8>(nColor >> 16));
 
-        SAL_INFO("emfio", "\t\tColor: " << aColor);
-
+        SAL_INFO("emfio", "\t\tColor: " << aColor << " " << std::showbase <<std::hex << nColor << std::dec);
+        SAL_INFO("emfio", " Red: " << aColor.GetRed() << " Green:" << aColor.GetGreen()  << " B:" << aColor.GetBlue() );
         return aColor;
     };
 
@@ -869,12 +869,18 @@ namespace emfio
                 {
                     maFillStyle = *brush;
                     mbFillStyleSelected = true;
+                    SAL_INFO("emfio", "\t\tBrush Object, Index: " << nIndex << ", Color: " << maFillStyle.aFillColor);
                 }
                 else if (const auto font = dynamic_cast<WinMtfFontStyle*>(
                              pGDIObj))
                 {
                     maFont = font->aFont;
+                    SAL_INFO("emfio", "\t\tFont Object, Index: " << nIndex << ", Font: " << maFont.GetFamilyName() << " " << maFont.GetStyleName());
                 }
+            }
+            else
+            {
+                SAL_WARN("emfio", "Warning: Unable to find Object with index:" << nIndex);
             }
         }
     }
@@ -968,6 +974,8 @@ namespace emfio
             ImplResizeObjectArry( mvGDIObj.size() + 16 );
 
         mvGDIObj[ nIndex ] = std::move(pObject);
+
+        SAL_INFO("emfio", "\t\t  Created at index: " << nIndex);
     }
 
     void MtfTools::CreateObjectIndexed( sal_uInt32 nIndex, std::unique_ptr<GDIObj> pObject )
@@ -1019,6 +1027,7 @@ namespace emfio
             if ( nIndex < mvGDIObj.size() )
             {
                 mvGDIObj[ nIndex ].reset();
+                SAL_INFO("emfio", "\t\tDeleting Object, Index: " << nIndex);
             }
         }
     }
@@ -1429,6 +1438,8 @@ namespace emfio
             UpdateLineStyle();
             mpGDIMetaFile->AddAction( new MetaEllipseAction( ImplMap( rRect ) ) );
         }
+
+        SAL_INFO("emfio", "\t\tend " << ", Color: " << maFillStyle.aFillColor << " " << maLineStyle.aLineColor);
     }
 
     void MtfTools::DrawArc( const tools::Rectangle& rRect, const Point& rStart, const Point& rEnd, bool bTo )
