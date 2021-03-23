@@ -1187,6 +1187,7 @@ void SdTiledRenderingTest::testCursorVisibility_MultiView()
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       centerX, centerY,
                                       2, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
 
     SfxLokHelper::setView(nView1);
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
