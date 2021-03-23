@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3cb696a_af7894bc",
+        "filename": "sc/source/ui/unoobj/datauno.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-23T12:56:59Z",
+      "side": 0,
+      "message": "else if (aItem.meType \u003d\u003d ScQueryEntry::ByValue)",
+      "revId": "3eac1691aae5d788269c538fbf609e625fac0c84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

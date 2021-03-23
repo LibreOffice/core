@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3051f1a6_c73b5286",
+        "filename": "include/svl/zforlist.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-23T12:56:59Z",
+      "side": 1,
+      "message": "How bFiltering will modify the format? Could you comment it in the code, please?",
+      "range": {
+        "startLine": 565,
+        "startChar": 76,
+        "endLine": 565,
+        "endChar": 86
+      },
+      "revId": "8fdfe5207f0cb9b02cc911568ecb1cf28f0395f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7741db71_2c5fba62",
+        "filename": "sc/inc/cellform.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-23T12:56:59Z",
+      "side": 1,
+      "message": "Could you comment bFiltering in the source code, please?",
+      "range": {
+        "startLine": 48,
+        "startChar": 38,
+        "endLine": 48,
+        "endChar": 47
+      },
+      "revId": "8fdfe5207f0cb9b02cc911568ecb1cf28f0395f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc6039aa_becbf1a8",
+        "filename": "sc/inc/column.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-23T12:56:59Z",
+      "side": 1,
+      "message": "Is this true? This member variable is not only for filtered columns imported via UNO?",
+      "range": {
+        "startLine": 138,
+        "startChar": 25,
+        "endLine": 138,
+        "endChar": 44
+      },
+      "revId": "8fdfe5207f0cb9b02cc911568ecb1cf28f0395f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5e3cf21_6990b7e3",
+        "filename": "sc/inc/column.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-23T12:56:59Z",
+      "side": 1,
+      "message": "IsFiltered() or HasFiltering()",
+      "range": {
+        "startLine": 187,
+        "startChar": 12,
+        "endLine": 187,
+        "endChar": 13
+      },
+      "revId": "8fdfe5207f0cb9b02cc911568ecb1cf28f0395f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e7a20c6_ee9d82ac",
+        "filename": "sc/source/ui/unoobj/datauno.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-23T12:56:59Z",
+      "side": 1,
+      "message": "if (bNumber)\n{\n    OUString aStr;",
+      "range": {
+        "startLine": 1134,
+        "startChar": 20,
+        "endLine": 1134,
+        "endChar": 34
+      },
+      "revId": "8fdfe5207f0cb9b02cc911568ecb1cf28f0395f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6591963a_5a6aaf11",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-23T12:56:59Z",
+      "side": 1,
+      "message": "// keep format (which format?) for filtered (imported via UNO, i.e. XLSX?) data?",
+      "range": {
+        "startLine": 1634,
+        "startChar": 21,
+        "endLine": 1634,
+        "endChar": 42
+      },
+      "revId": "8fdfe5207f0cb9b02cc911568ecb1cf28f0395f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
