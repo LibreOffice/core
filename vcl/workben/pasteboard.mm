@@ -20,10 +20,13 @@
 static void usage()
 {
     std::cout << "Usage: pasteboard\n"
-                 "        --List the types on the pasteboard and in each pasteboard item.\n"
+                 "          List the types on the pasteboard and in each pasteboard item.\n"
+                 "       pasteboard -a\n"
+                 "          Output the data for all types to stdout. Note: output will\n"
+                 "          in many cases be binary. The different types are separated by a textual header.\n"
                  "       pasteboard -t type\n"
-                 "        --Output the data for the type in question to stdout. Note: output will "
-                 "in many cases be binary.\n";
+                 "          Output the data for the type in question to stdout. Note: output will\n"
+                 "          in many cases be binary.\n";
 }
 
 int main(int argc, char** argv)
@@ -32,16 +35,19 @@ int main(int argc, char** argv)
 
     int ch;
 
-    while ((ch = getopt(argc, argv, "t:")) != -1)
+    while ((ch = getopt(argc, argv, "at:")) != -1)
     {
         switch (ch)
         {
+            case 'a':
+                requestedType = @"*";
+                break;
             case 't':
                 requestedType = [NSString stringWithUTF8String:optarg];
                 break;
             case '?':
                 usage();
-                break;
+                return 0;
         }
     }
 
@@ -55,6 +61,22 @@ int main(int argc, char** argv)
     }
 
     NSPasteboard* pb = [NSPasteboard generalPasteboard];
+
+    if ([requestedType isEqualToString:@"*"])
+    {
+        NSArray<NSPasteboardType>* types = [pb types];
+        for (unsigned i = 0; i < [types count]; i++)
+        {
+            NSData* data = [pb dataForType:types[i]];
+            std::cout << i << ": " << [types[i] UTF8String] << ": " << std::to_string([data length]) << " bytes:\n";
+            if (data != nil)
+            {
+                std::cout.write((const char*)[data bytes], [data length]);
+                std::cout << "\n";
+            }
+        }
+        return 0;
+    }
 
     if ([requestedType length] > 0)
     {
