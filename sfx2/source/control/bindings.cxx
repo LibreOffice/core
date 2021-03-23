@@ -48,9 +48,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/msgpool.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/lokhelper.hxx>
-#include <comphelper/lok.hxx>
 
 #include <cstddef>
 #include <memory>
@@ -1237,26 +1234,6 @@ bool SfxBindings::NextJob_Impl(Timer const * pTimer)
     }
 
     SfxApplication *pSfxApp = SfxGetpApp();
-
-    // Switch to the right view for state update.
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        if( pDispatcher )
-        {
-            SfxViewFrame* pFrame = pDispatcher->GetFrame();
-            if (pFrame)
-            {
-                vcl::Window* pFrameWin = pFrame->GetWindow().GetFrameWindow();
-                if (pFrameWin && pFrameWin->GetLOKNotifier()) {
-                    const SfxViewShell* pView = dynamic_cast<const SfxViewShell*>(pFrameWin->GetLOKNotifier());
-                    if (pView)
-                    {
-                        SfxLokHelper::setView(pView->GetViewShellId().get());
-                    }
-                }
-            }
-        }
-    }
 
     if( pDispatcher )
         pDispatcher->Update_Impl();
