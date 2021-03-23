@@ -775,9 +775,26 @@ namespace emfio
 
             case W_META_SELECTOBJECT:
             {
+                /*
+                The META_SELECTOBJECT record specifies a graphics object for the playback device context. The new
+                object replaces the previous object of the same type, unless if the previous object is a palette object.
+                If the previous object is a palette object, then the META_SELECTPALETTE record MUST be used
+                instead of the META_SELECTOBJECT record, because the META_SELECTOBJECT record does not
+                support replacing the palette object type.
+                */
                 sal_Int16   nObjIndex = 0;
                 mpInputStream->ReadInt16( nObjIndex );
                 SelectObject( nObjIndex );
+            }
+            break;
+
+            case W_META_SELECTPALETTE:
+            {
+                sal_uInt16   nPaletteIndex = 0;
+                mpInputStream->ReadUInt16( nPaletteIndex );
+                //SelectObject( nPaletteIndex );
+                SAL_INFO("emfio", "\t\t  Index: " << nPaletteIndex);
+
             }
             break;
 
@@ -951,7 +968,25 @@ namespace emfio
 
             case W_META_CREATEPALETTE:
             {
-                CreateObject();
+                sal_uInt16 nStart = 0;
+                sal_uInt16 nNumberOfEntries = 0;
+
+                sal_uInt32 nPalleteEntry;
+                mpInputStream->ReadUInt16( nStart );
+                mpInputStream->ReadUInt16( nNumberOfEntries );
+
+                SAL_INFO("emfio", "\t\t Start 0x" << std::hex << nStart << std::dec << ", Number of entries: " << nNumberOfEntries);
+                Color nColor;
+                for (sal_uInt16 i = 0; i < nNumberOfEntries; ++i)
+                {
+                    //KOLOR: rED GREEN BLUE RESERVED
+                    //PALETTEENTRY: Values, Blue, Green, Red
+                    mpInputStream->ReadUInt32( nPalleteEntry );
+                    SAL_INFO("emfio", "\t\t " << i << ". Palette entry: " << std::setw(10) << std::showbase <<std::hex << nPalleteEntry << std::dec );
+                    nColor = Color(static_cast<sal_uInt32>(nPalleteEntry));
+
+                }
+                //CreateObject(std::make_unique<WinMtfPalette>( nColor ));
             }
             break;
 
@@ -1046,9 +1081,13 @@ namespace emfio
 
             case W_META_CREATEBRUSHINDIRECT:
             {
-                sal_uInt16  nStyle = 0;
+                sal_uInt16 nStyle;
+                sal_uInt16 nBrushHatch;
                 mpInputStream->ReadUInt16( nStyle );
-                CreateObject(std::make_unique<WinMtfFillStyle>( ReadColor(), ( nStyle == BS_HOLLOW ) ));
+                Color nColor = ReadColor();
+                mpInputStream->ReadUInt16( nBrushHatch );
+                SAL_INFO("emfio", "\t\t Style: " << nStyle << ", Color: " << nColor << ", BrushHatch: " << nBrushHatch);
+                CreateObject(std::make_unique<WinMtfFillStyle>( nColor, ( nStyle == BS_HOLLOW ) ));
             }
             break;
 
@@ -1318,7 +1357,6 @@ namespace emfio
             case W_META_DRAWTEXT:
             case W_META_SETMAPPERFLAGS:
             case W_META_SETDIBTODEV:
-            case W_META_SELECTPALETTE:
             case W_META_REALIZEPALETTE:
             case W_META_ANIMATEPALETTE:
             case W_META_SETPALENTRIES:
