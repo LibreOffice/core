@@ -4963,6 +4963,22 @@ void Test::testAutoFill()
     CPPUNIT_ASSERT_EQUAL( OUString("2012-10-31"), m_pDoc->GetString( 0, 104, 0 ) );
 
     // Clear column A for a new test.
+    clearRange(m_pDoc, ScRange(0, 0, 0, 0, MAXROW, 0));
+    m_pDoc->SetRowHidden(0, MAXROW, 0, false); // Show all rows.
+
+    m_pDoc->SetString(0, 100, 0, "2019-10-31");
+    m_pDoc->SetString(0, 101, 0, "2019-11-30");
+    m_pDoc->SetString(0, 102, 0, "2019-12-31");
+    m_pDoc->Fill(0, 100, 0, 102, nullptr, aMarkData, 3, FILL_TO_BOTTOM, FILL_AUTO);
+
+    // tdf#58745, Without the fix in place, this test would have failed with
+    // - Expected: 2020-01-31
+    // - Actual  : 2019-01-11
+    CPPUNIT_ASSERT_EQUAL(OUString("2020-01-31"), m_pDoc->GetString(0, 103, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("2020-02-29"), m_pDoc->GetString(0, 104, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("2020-03-31"), m_pDoc->GetString(0, 105, 0));
+
+    // Clear column A for a new test.
     clearRange(m_pDoc, ScRange(0,0,0,0,MAXROW,0));
     m_pDoc->SetRowHidden(0, MAXROW, 0, false); // Show all rows.
 
