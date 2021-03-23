@@ -855,7 +855,7 @@ private:
     // This paragraph must end with page break
     bool m_bPageBreakAfter = false;
 
-    std::stack< std::vector<ww8::Frame> > m_aFramesOfParagraph;
+    std::vector<ww8::Frame> m_aFramesOfParagraph;
     o3tl::sorted_vector<const SwFrameFormat*> m_aFloatingTablesOfParagraph;
     sal_Int32 m_nTextFrameLevel;
 
