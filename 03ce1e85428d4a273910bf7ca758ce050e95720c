@@ -87,6 +87,24 @@
       "revId": "03ce1e85428d4a273910bf7ca758ce050e95720c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bc91a1c_707e7adc",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 3395,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-23T12:54:14Z",
+      "side": 1,
+      "message": "seen addressed with \u003chttps://gerrit.libreoffice.org/c/core/+/112973\u003e \"Rename LO Windows arm64 ID to aarch64\"",
+      "parentUuid": "3e66df27_d31c6d61",
+      "revId": "03ce1e85428d4a273910bf7ca758ce050e95720c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
