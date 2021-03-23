@@ -693,7 +693,20 @@ void PushButton::ImplDrawPushButtonFrame(vcl::RenderContext& rRenderContext,
         AllSettings aSettings = rRenderContext.GetSettings();
         AllSettings aOldSettings = aSettings;
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        aStyleSettings.Set3DColors(GetControlBackground());
+        if (nStyle & DrawButtonFlags::Highlight)
+        {
+            // with the custom background, native highlight do nothing, so code bellow mimic
+            // native highlight by changing luminance
+            Color controlBackgroundColorHighlighted = GetControlBackground();
+            sal_uInt8 colorLuminance = controlBackgroundColorHighlighted.GetLuminance();
+            if (colorLuminance < 205)
+                controlBackgroundColorHighlighted.IncreaseLuminance(50);
+            else
+                controlBackgroundColorHighlighted.DecreaseLuminance(50);
+            aStyleSettings.Set3DColors(controlBackgroundColorHighlighted);
+        }
+        else
+            aStyleSettings.Set3DColors(GetControlBackground());
         aSettings.SetStyleSettings(aStyleSettings);
 
         // Call OutputDevice::SetSettings() explicitly, as rRenderContext may
@@ -769,11 +782,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, DrawFlags nDrawFl
     if (nDrawFlags & DrawFlags::Mono)
         aColor = COL_BLACK;
 
-    // Custom foreground color is reasonable on stock controls only. Stock controls are used if a custom background has been set
-    // (and thus no native controls are able to be used) or no native controls are available.
-
-    else if (IsControlForeground()
-             && (IsControlBackground() || !IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Entire)))
+    else if (IsControlForeground())
         aColor = GetControlForeground();
 
     // Button types with possibly different text coloring are flat buttons and regular buttons. Regular buttons may be action
