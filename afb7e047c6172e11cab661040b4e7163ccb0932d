@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "77cb394a_eda1c3f5",
+        "filename": "sw/inc/shellio.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-23T11:25:42Z",
+      "side": 1,
+      "message": "Why do you need the define then?",
+      "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54cc4cf0_a7ffee2b",
+        "filename": "sw/source/filter/ascii/parasc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-23T11:25:42Z",
+      "side": 1,
+      "message": "Please do not change formatting of lines that you do not modify functionally. Please revert the change on this line.",
+      "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85d4ff1a_c24bdea6",
+        "filename": "sw/source/filter/ascii/parasc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-23T11:25:42Z",
+      "side": 1,
+      "message": "Please describe what does this line now do?",
+      "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
