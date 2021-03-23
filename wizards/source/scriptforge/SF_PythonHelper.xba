@@ -558,6 +558,7 @@ Const cstNoArgs = &quot;+++NOARGS+++&quot;, cstSymEmpty = &quot;+++EMPTY+++&quot
 &apos;	Determines the CallType
 Const vbGet = 2, vbLet = 4, vbMethod = 1, vbSet = 8
 &apos;	Protocol flags
+Const cstDateArg = 64		&apos;	May contain a date argument
 Const cstDateRet = 128		&apos;	Return value can be a date
 Const cstArgArray = 512		&apos;	1st argument can be a 2D array
 Const cstRetArray = 1024	&apos;	Return value can be an array
@@ -589,9 +590,9 @@ Check:
 					vArg = Null
 				ElseIf vArg = cstSymMissing Then
 					Exit For	&apos;	Next arguments must be missing also
-				Else
+				ElseIf ( CallType And cstDateArg ) = cstDateArg Then		&apos;	Arguments might be dates
 					vArg = SF_Utils._CStrToDate(vArg)
-					If vArg &lt; 0 Then vArg = Args(i)	&apos;Conversion of iso format failed =&gt; forget
+					If vArg &lt; 0 Then vArg = Args(i)	&apos;	Conversion of iso format failed =&gt; reset
 				End If
 			End If
 			iNbArgs = iNbArgs + 1
