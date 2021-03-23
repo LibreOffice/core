@@ -238,6 +238,8 @@ private:
     virtual void
         implSelect( sal_Int32 nAccessibleChildIndex, bool bSelect ) override;
 
+    void ReleaseWindow();
+
 protected:
     /// The core window that is made accessible.
     VclPtr< ::sd::Window> mpWindow;
