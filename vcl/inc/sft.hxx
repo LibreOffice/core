@@ -720,7 +720,7 @@ constexpr int NUM_TAGS = 17;
 
 class VCL_DLLPUBLIC AbstractTrueTypeFont
 {
-    std::unique_ptr<char[]> m_pFileName;
+    std::string m_sFileName;
     sal_uInt32 m_nGlyphs;
     sal_uInt32 m_nHorzMetrics;
     sal_uInt32 m_nVertMetrics; /* if not 0 => font has vertical metrics information */
@@ -735,7 +735,7 @@ public:
     AbstractTrueTypeFont(const char* fileName = nullptr, const FontCharMapRef xCharMap = nullptr);
     virtual ~AbstractTrueTypeFont();
 
-    const char* fileName() const { return m_pFileName.get(); }
+    std::string const & fileName() const { return m_sFileName; }
     sal_uInt32 glyphCount() const { return m_nGlyphs; }
     sal_uInt32 glyphOffset(sal_uInt32 glyphID) const;
     sal_uInt32 horzMetricCount() const { return m_nHorzMetrics; }
