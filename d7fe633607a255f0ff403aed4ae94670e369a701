@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "02d82791_4827fea6",
+        "filename": "sw/source/ui/misc/docfnote.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-03-23T11:32:01Z",
+      "side": 1,
+      "message": "This surprised me - since I am not deleting the selected entry. Yet get_active_text always turns into OUString() when deleting or adding to the list, even if frozen.",
+      "range": {
+        "startLine": 313,
+        "startChar": 11,
+        "endLine": 313,
+        "endChar": 50
+      },
+      "revId": "d7fe633607a255f0ff403aed4ae94670e369a701",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
