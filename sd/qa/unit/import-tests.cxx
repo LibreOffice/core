@@ -1618,21 +1618,23 @@ void SdImportTest::testTdf113163()
     BitmapEx aBMPEx = aPNGReader.read();
 
     // make sure the bitmap is not empty and correct size (PNG export->import was successful)
-    CPPUNIT_ASSERT_EQUAL(Size(100, 100), aBMPEx.GetSizePixel());
+    Size aSize = aBMPEx.GetSizePixel();
+    CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
     Bitmap aBMP = aBMPEx.GetBitmap();
     {
         Bitmap::ScopedReadAccess pReadAccess(aBMP);
-        int nNonBlackCount = 0;
-        for (tools::Long nY = 1; nY < 99; ++nY)
+        for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
         {
-            for (tools::Long nX = 1; nX < 99; ++nX)
+            for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
             {
-                const Color aColor = pReadAccess->GetColor(nY, nX);
-                if ((aColor.GetRed() != 0x00) || (aColor.GetGreen() != 0x00) || (aColor.GetBlue() != 0x00))
-                    ++nNonBlackCount;
+                // Check all pixels in the image are black
+                // Without the fix in place, this test would have failed with
+                // - Expected: 0
+                // - Actual  : 16777215
+                const Color aColor = pReadAccess->GetColor(nX, nY);
+                CPPUNIT_ASSERT_EQUAL(COL_BLACK, aColor);
             }
         }
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Tdf113163: EMF image is not transparent", 0, nNonBlackCount);
     }
     xDocShRef->DoClose();
 }
