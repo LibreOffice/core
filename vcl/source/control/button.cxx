@@ -807,6 +807,8 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, DrawFlags nDrawFl
                 aColor = rStyleSettings.GetDefaultButtonPressedRolloverTextColor();
             else if (nButtonFlags & DrawButtonFlags::Highlight)
                 aColor = rStyleSettings.GetDefaultButtonRolloverTextColor();
+            else if (IsControlForeground())
+                aColor = GetControlForeground();
             else
                 aColor = rStyleSettings.GetDefaultButtonTextColor();
         else
@@ -814,6 +816,8 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, DrawFlags nDrawFl
                 aColor = rStyleSettings.GetButtonPressedRolloverTextColor();
             else if (nButtonFlags & DrawButtonFlags::Highlight)
                 aColor = rStyleSettings.GetButtonRolloverTextColor();
+            else if (IsControlForeground())
+                aColor = GetControlForeground();
             else
                 aColor = rStyleSettings.GetButtonTextColor();
 
