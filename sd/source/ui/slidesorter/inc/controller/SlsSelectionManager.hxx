@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSSELECTIONMANAGER_HXX
-#define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSSELECTIONMANAGER_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <tools/link.hxx>
@@ -136,7 +135,5 @@ private:
 };
 
 } // end of namespace ::sd::slidesorter::controller
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

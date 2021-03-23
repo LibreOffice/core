@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_RANDOMNODE_HXX
-#define INCLUDED_SD_INC_RANDOMNODE_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -32,7 +31,5 @@ namespace sd
 SD_DLLPUBLIC css::uno::Reference<css::uno::XInterface>
 RandomAnimationNode_createInstance(sal_Int16 nPresetClass);
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

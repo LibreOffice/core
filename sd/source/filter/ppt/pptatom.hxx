@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_FILTER_PPT_PPTATOM_HXX
-#define INCLUDED_SD_SOURCE_FILTER_PPT_PPTATOM_HXX
+#pragma once
 
 #include <filter/msfilter/dffrecordheader.hxx>
 
@@ -103,7 +102,5 @@ inline sal_uInt16 Atom::getInstance() const { return maRecordHeader.nRecInstance
 inline sal_uInt32 Atom::getLength() const { return maRecordHeader.nRecLen; }
 
 } // namespace ppt
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

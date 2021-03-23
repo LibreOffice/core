@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SD_INC_PAGEFORMATPANEL_HRC
-#define INCLUDED_SD_INC_PAGEFORMATPANEL_HRC
+#pragma once
 
 #include <utility>
 
@@ -48,7 +47,5 @@ const std::pair<const char*, int> RID_PAGEFORMATPANEL_MARGINS_CM[] =
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

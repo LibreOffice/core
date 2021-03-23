@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_CUSTOMANIMATIONPRESET_HXX
-#define INCLUDED_SD_INC_CUSTOMANIMATIONPRESET_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -139,7 +138,5 @@ void implImportLabels( const css::uno::Reference< css::lang::XMultiServiceFactor
 
 }
 
-
-#endif // _SD_CUSTOMANIMATIONEFFECTS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

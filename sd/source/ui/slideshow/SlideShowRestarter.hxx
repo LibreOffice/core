@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_SLIDESHOW_SLIDESHOWRESTARTER_HXX
-#define INCLUDED_SD_SOURCE_UI_SLIDESHOW_SLIDESHOWRESTARTER_HXX
+#pragma once
 
 #include <rtl/ref.hxx>
 #include <tools/link.hxx>
@@ -85,7 +84,5 @@ private:
 };
 
 } // end of namespace sd
-
-#endif // INCLUDED_SD_SOURCE_UI_SLIDESHOW_SLIDESHOWRESTARTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

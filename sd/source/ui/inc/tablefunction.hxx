@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_TABLEFUNCTION_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_TABLEFUNCTION_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -29,7 +28,5 @@ namespace sd
 {
 void CreateTableFromRTF(SvStream& rStream, SdDrawDocument* pModel);
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,12 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SD_INC_SDCOMMANDS_H
-#define INCLUDED_SD_INC_SDCOMMANDS_H
+#pragma once
 
 #define CMD_SID_HANDOUT_MASTER_MODE                 ".uno:HandoutMode"
 #define CMD_SID_NOTES_MODE                          ".uno:NotesMode"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

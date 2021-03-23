@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_ANIMATIONS_HXX
-#define INCLUDED_SD_INC_ANIMATIONS_HXX
+#pragma once
 
 #include "sddllapi.h"
 
@@ -47,7 +46,5 @@ struct AfterEffectNode
 SD_DLLPUBLIC void stl_process_after_effect_node_func(AfterEffectNode const & rNode);
 
 } // namespace sd;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
