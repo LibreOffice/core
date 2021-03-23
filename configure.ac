@@ -1184,8 +1184,8 @@ if test "$enable_compiler_plugins" = debug; then
 fi
 
 libo_FUZZ_ARG_ENABLE(ooenv,
-    AS_HELP_STRING([--disable-ooenv],
-        [Disable ooenv for the instdir installation.]))
+    AS_HELP_STRING([--enable-ooenv],
+        [Enable ooenv for the instdir installation.]))
 
 libo_FUZZ_ARG_ENABLE(libnumbertext,
     AS_HELP_STRING([--disable-libnumbertext],
@@ -4652,6 +4652,13 @@ AC_SUBST(ASSERT_ALWAYS_ABORT)
 # ===================================================================
 if test $_os != "WINNT" -a $_os != "Darwin"; then
     AC_MSG_CHECKING([whether to use ooenv for the instdir installation])
+    if test -z "$enable_ooenv"; then
+        if test -n "$ENABLE_DEBUG$ENABLE_DBGUTIL"; then
+            enable_ooenv=yes
+        else
+            enable_ooenv=no
+        fi
+    fi
     if test "$enable_ooenv" = "no"; then
         AC_MSG_RESULT([no])
     else
