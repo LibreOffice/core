@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_CLOB_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_CLOB_HXX
+#pragma once
 
 #include "Blob.hxx"
 
@@ -62,5 +61,4 @@ namespace connectivity::firebird
 
 }
 
-#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_CLOB_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
