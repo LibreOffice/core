@@ -583,7 +583,7 @@
                     <property name="margin-top">6</property>
                     <child>
                       <object class="GtkCheckButton" id="outlinecontentvisibilitybutton">
-                        <property name="label" translatable="yes" context="viewoptionspage|outlinecontentvisibilitybutton">_Show outline content visibility button</property>
+                        <property name="label" translatable="yes" context="viewoptionspage|outlinecontentvisibilitybutton">_Show outline-folding buttons</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -616,7 +616,7 @@
                   <object class="GtkLabel" id="outlinelabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="viewoptionspage|outlinelabel">Outline mode</property>
+                    <property name="label" translatable="yes" context="viewoptionspage|outlinelabel">Outline Folding</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
