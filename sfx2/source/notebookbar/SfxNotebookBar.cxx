@@ -348,8 +348,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             //   * in LOK: Paste Special feature was incorrectly initialized
             // Skip first request so Notebookbar will be initialized after document was loaded
             static std::map<const void*, bool> bSkippedFirstInit;
-            if (comphelper::LibreOfficeKit::isActive() && eApp == vcl::EnumContext::Application::Writer
-                && bSkippedFirstInit.find(pViewShell) == bSkippedFirstInit.end())
+            if (comphelper::LibreOfficeKit::isActive() && bSkippedFirstInit.find(pViewShell) == bSkippedFirstInit.end())
             {
                 bSkippedFirstInit[pViewShell] = true;
                 return false;
