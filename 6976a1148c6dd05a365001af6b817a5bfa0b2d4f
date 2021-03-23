@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e7cde691_92017480",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1858,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-03-23T09:58:23Z",
+      "side": 1,
+      "message": "This may be nitpicking, but it\u0027s a better style to use the bitmap width rather a hardcoded value. Demonstrated by the fact that you made an off-by-one error :).",
+      "range": {
+        "startLine": 1858,
+        "startChar": 34,
+        "endLine": 1858,
+        "endChar": 37
+      },
+      "revId": "6976a1148c6dd05a365001af6b817a5bfa0b2d4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3d5cc5d_3d83e512",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1865,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-03-23T09:58:23Z",
+      "side": 1,
+      "message": "If the intention is to ensure all pixels are white, then all this can by simply written as \u0027CPPUNIT_ASSERT_EQUAL( COL_WHITE, aBitmap.GetPixelColor(nX, nY));\u0027, which is both shorter and clearer.",
+      "range": {
+        "startLine": 1865,
+        "startChar": 32,
+        "endLine": 1865,
+        "endChar": 33
+      },
+      "revId": "6976a1148c6dd05a365001af6b817a5bfa0b2d4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
