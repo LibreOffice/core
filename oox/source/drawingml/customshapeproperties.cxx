@@ -149,6 +149,21 @@ void CustomShapeProperties::pushToPropSet(
         aPropertyMap.setProperty( PROP_MirroredY, mbMirroredY );
         aPropertyMap.setProperty( PROP_TextPreRotateAngle, mnTextRotateAngle );
         aPropertyMap.setProperty( PROP_TextCameraZRotateAngle, mnTextCameraZRotateAngle );
+        if (maExtrusion.has())
+        {
+            // Collect Extrusion properties
+            PropertyMap aExtrusionPropMap;
+            aExtrusionPropMap.setProperty(PROP_Extrusion, maExtrusion.get().mbExtrusion);
+            aExtrusionPropMap.setProperty(PROP_ProjectionMode, maExtrusion.get().meProjectionMode);
+            aExtrusionPropMap.setProperty(PROP_RotateAngle, maExtrusion.get().maRotateAngle);
+            aExtrusionPropMap.setProperty(PROP_Origin, maExtrusion.get().maOrigin);
+            aExtrusionPropMap.setProperty(PROP_Skew, maExtrusion.get().maSkew);
+            aExtrusionPropMap.setProperty(PROP_ViewPoint, maExtrusion.get().maViewPoint);
+            aExtrusionPropMap.setProperty(PROP_Depth, maExtrusion.get().maDepth);
+            // Bundle them in property "Extrusion"
+            Sequence< PropertyValue > aExtrusionSequence = aExtrusionPropMap.makePropertyValueSequence();
+            aPropertyMap.setProperty( PROP_Extrusion, aExtrusionSequence);
+        }
         Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
         aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
 
@@ -386,6 +401,23 @@ void CustomShapeProperties::pushToPropSet(
             aHandles[ i ] = aHandle.makePropertyValueSequence();
         }
         aPropertyMap.setProperty( PROP_Handles, aHandles);
+
+        //Extrusion
+        if ( maExtrusion.has() )
+        {
+            // Collect Extrusion properties
+            PropertyMap aExtrusionPropMap;
+            aExtrusionPropMap.setProperty(PROP_Extrusion, maExtrusion.get().mbExtrusion);
+            aExtrusionPropMap.setProperty(PROP_ProjectionMode, maExtrusion.get().meProjectionMode);
+            aExtrusionPropMap.setProperty(PROP_RotateAngle, maExtrusion.get().maRotateAngle);
+            aExtrusionPropMap.setProperty(PROP_Origin, maExtrusion.get().maOrigin);
+            aExtrusionPropMap.setProperty(PROP_Skew, maExtrusion.get().maSkew);
+            aExtrusionPropMap.setProperty(PROP_ViewPoint, maExtrusion.get().maViewPoint);
+            aExtrusionPropMap.setProperty(PROP_Depth, maExtrusion.get().maDepth);
+            // Bundle them in property "Extrusion"
+            Sequence< PropertyValue > aExtrusionSequence = aExtrusionPropMap.makePropertyValueSequence();
+            aPropertyMap.setProperty( PROP_Extrusion, aExtrusionSequence);
+        }
 
 #ifdef DEBUG
         // Note that the script oox/source/drawingml/customshapes/generatePresetsData.pl looks
