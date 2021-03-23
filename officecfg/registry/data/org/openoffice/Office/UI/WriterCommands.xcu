@@ -399,10 +399,10 @@
       </node>
       <node oor:name=".uno:ShowOutlineContentVisibilityButton" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Show outline content visibility button</value>
+          <value xml:lang="en-US">Show outline-folding buttons</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Show outline content visibility button</value>
+          <value xml:lang="en-US">Shows a button next to headings and subheadings to help with outline folding. Even without the button, you can do outline folding with the Navigator.</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3800,7 +3800,7 @@
       </node>
       <node oor:name=".uno:ToggleOutlineContentVisibility" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Toggle Outline Content Visibility</value>
+          <value xml:lang="en-US">Toggle Outline Folding</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Fold or unfold outline content in document</value>
