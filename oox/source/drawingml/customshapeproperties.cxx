@@ -149,6 +149,7 @@ void CustomShapeProperties::pushToPropSet(
         aPropertyMap.setProperty( PROP_MirroredY, mbMirroredY );
         aPropertyMap.setProperty( PROP_TextPreRotateAngle, mnTextRotateAngle );
         aPropertyMap.setProperty( PROP_TextCameraZRotateAngle, mnTextCameraZRotateAngle );
+        impl_setExtrusionProperties(aPropertyMap);
         Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
         aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
 
@@ -387,6 +388,9 @@ void CustomShapeProperties::pushToPropSet(
         }
         aPropertyMap.setProperty( PROP_Handles, aHandles);
 
+        //Extrusion
+        impl_setExtrusionProperties(aPropertyMap);
+
 #ifdef DEBUG
         // Note that the script oox/source/drawingml/customshapes/generatePresetsData.pl looks
         // for these ==cscode== and ==csdata== markers, so don't "clean up" these SAL_INFOs.
@@ -402,6 +406,25 @@ void CustomShapeProperties::pushToPropSet(
         PropertySet aPropSet( xPropSet );
         aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
     }
+}
+
+void CustomShapeProperties::impl_setExtrusionProperties(PropertyMap& rPropertyMap)
+{
+    if (!maExtrusion.has())
+        return;
+    // Collect Extrusion properties
+    PropertyMap aExtrusionPropMap;
+    aExtrusionPropMap.setProperty(PROP_Extrusion, maExtrusion.get().mbExtrusion);
+    aExtrusionPropMap.setProperty(PROP_ProjectionMode, maExtrusion.get().meProjectionMode);
+    aExtrusionPropMap.setProperty(PROP_RotateAngle, maExtrusion.get().maRotateAngle);
+    aExtrusionPropMap.setProperty(PROP_Origin, maExtrusion.get().maOrigin);
+    aExtrusionPropMap.setProperty(PROP_Skew, maExtrusion.get().maSkew);
+    aExtrusionPropMap.setProperty(PROP_ViewPoint, maExtrusion.get().maViewPoint);
+    aExtrusionPropMap.setProperty(PROP_Depth, maExtrusion.get().maDepth);
+    // Bundle them in property "Extrusion"
+    Sequence< PropertyValue > aExtrusionSequence = aExtrusionPropMap.makePropertyValueSequence();
+    rPropertyMap.setProperty( PROP_Extrusion, aExtrusionSequence);
+    return;
 }
 
 }
