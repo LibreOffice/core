@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_USER_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_USER_HXX
+#pragma once
 
 #include <sdbcx/VUser.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -43,8 +42,5 @@ namespace connectivity::firebird
         };
 
 } // namespace connectivity::firebird
-
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_FIREBIRD_USER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

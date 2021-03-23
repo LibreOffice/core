@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_TEXT_PORTOX_HXX
-#define INCLUDED_SW_SOURCE_CORE_TEXT_PORTOX_HXX
+#pragma once
 
 #include "portxt.hxx"
 
@@ -43,7 +42,5 @@ public:
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion(SwPortionHandler& rPH) const override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
