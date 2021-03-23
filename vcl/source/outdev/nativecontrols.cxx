@@ -163,9 +163,9 @@ bool OutputDevice::HitTestNativeScrollbar(
         rIsInside, *this );
 }
 
-static std::shared_ptr< ImplControlValue > TransformControlValue( const ImplControlValue& rVal, const OutputDevice& rDev )
+static std::unique_ptr< ImplControlValue > TransformControlValue( const ImplControlValue& rVal, const OutputDevice& rDev )
 {
-    std::shared_ptr< ImplControlValue > aResult;
+    std::unique_ptr< ImplControlValue > aResult;
     switch( rVal.getType() )
     {
     case ControlType::Slider:
@@ -235,7 +235,7 @@ static std::shared_ptr< ImplControlValue > TransformControlValue( const ImplCont
         }
         break;
     case ControlType::Generic:
-            aResult = std::make_shared<ImplControlValue>( rVal );
+            aResult = std::make_unique<ImplControlValue>( rVal );
             break;
     case ControlType::MenuPopup:
         {
@@ -281,7 +281,7 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
 
     // Convert the coordinates from relative to Window-absolute, so we draw
     // in the correct place in platform code
-    std::shared_ptr< ImplControlValue > aScreenCtrlValue( TransformControlValue( aValue, *this ) );
+    std::unique_ptr< ImplControlValue > aScreenCtrlValue( TransformControlValue( aValue, *this ) );
     tools::Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
     bool bRet = mpGraphics->DrawNativeControl(nType, nPart, screenRegion, nState, *aScreenCtrlValue, aCaption, *this, rBackgroundColor);
@@ -306,7 +306,7 @@ bool OutputDevice::GetNativeControlRegion(  ControlType nType,
 
     // Convert the coordinates from relative to Window-absolute, so we draw
     // in the correct place in platform code
-    std::shared_ptr< ImplControlValue > aScreenCtrlValue( TransformControlValue( aValue, *this ) );
+    std::unique_ptr< ImplControlValue > aScreenCtrlValue( TransformControlValue( aValue, *this ) );
     tools::Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
     bool bRet = mpGraphics->GetNativeControlRegion(nType, nPart, screenRegion, nState, *aScreenCtrlValue,
