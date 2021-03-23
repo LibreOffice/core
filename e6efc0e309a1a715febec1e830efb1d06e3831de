@@ -34,6 +34,24 @@
       "revId": "e6efc0e309a1a715febec1e830efb1d06e3831de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "453d0d79_f782a583",
+        "filename": "sw/qa/uitest/writer_tests3/hyperlinkdialog.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-03-23T12:54:55Z",
+      "side": 1,
+      "message": "meh, I didn\u0027t think of it.\nI\u0027m wondering, would it make sense to check for the environment variable \u0027ENABLE_HTMLHELP\u0027, and if it exists, don\u0027t execute the test?",
+      "parentUuid": "b37fa8ea_3bc5396b",
+      "revId": "e6efc0e309a1a715febec1e830efb1d06e3831de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
