@@ -360,6 +360,7 @@ class SFServices(object):
         """
     # Python-Basic protocol constants and flags
     vbGet, vbLet, vbMethod, vbSet = 2, 4, 1, 8  # CallByName constants
+    flgDateArg = 64  # Invoked service method may contain a date argument
     flgDateRet = 128  # Invoked service method can return a date
     flgArrayArg = 512  # 1st argument can be a 2D array
     flgArrayRet = 1024  # Invoked service method can return a 2D array
@@ -764,7 +765,7 @@ class SFScriptForge:
             result = []
             for pv in iter(propertyvalues):
                 key = pv.Name
-                if key not in self:
+                if overwrite is True or key not in self:
                     item = pv.Value
                     if 'com.sun.star.util.DateTime' in repr(type(item)):
                         item = datetime.datetime(item.Year, item.Month, item.Day,
@@ -1055,6 +1056,67 @@ class SFScriptForge:
         def Processor(self):
             return self.SIMPLEEXEC(self.py, 'Processor')
         processor = Processor
+
+    # #########################################################################
+    # SF_String CLASS
+    # #########################################################################
+    class SF_String(SFServices, metaclass = _Singleton):
+        """
+            Focus on string manipulation, regular expressions, encodings and hashing algorithms.
+            The methods implemented in Basic that are redundant with Python builtin functions
+            are not duplicated
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'ScriptForge.String'
+        servicesynonyms = ('string', 'scriptforge.string')
+        serviceproperties = dict()
+        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
+
+        def HashStr(self, inputstr, algorithm):
+            py = ScriptForge.pythonhelpermodule + '$' + '_SF_String__HashStr'
+            return self.SIMPLEEXEC(py, inputstr, algorithm.lower())
+        hashStr, hashstr = HashStr, HashStr
+
+        def IsADate(self, inputstr, dateformat = 'YYYY-MM-DD'):
+            return self.Execute(self.vbMethod, 'IsADate', inputstr, dateformat)
+        isADate, isadate = IsADate, IsADate
+
+        def IsEmail(self, inputstr):
+            return self.Execute(self.vbMethod, 'IsEmail', inputstr)
+        isEmail, isemail = IsEmail, IsEmail
+
+        def IsFileName(self, inputstr, osname = ScriptForge.cstSymEmpty):
+            return self.Execute(self.vbMethod, 'IsFileName', inputstr, osname)
+        isFileName, isfilename = IsFileName, IsFileName
+
+        def IsIBAN(self, inputstr):
+            return self.Execute(self.vbMethod, 'IsIBAN', inputstr)
+        isIBAN, isiban = IsIBAN, IsIBAN
+
+        def IsIPv4(self, inputstr):
+            return self.Execute(self.vbMethod, 'IsIPv4', inputstr)
+        isIPv4, isipv4 = IsIPv4, IsIPv4
+
+        def IsLike(self, inputstr, pattern, casesensitive = False):
+            return self.Execute(self.vbMethod, 'IsLike', inputstr, pattern, casesensitive)
+        isLike, islike = IsLike, IsLike
+
+        def IsSheetName(self, inputstr):
+            return self.Execute(self.vbMethod, 'IsSheetName', inputstr)
+        isSheetName, issheetname = IsSheetName, IsSheetName
+
+        def IsUrl(self, inputstr):
+            return self.Execute(self.vbMethod, 'IsUrl', inputstr)
+        isUrl, isurl = IsUrl, IsUrl
+
+        def SplitNotQuoted(self, inputstr, delimiter = ' ', occurrences = 0, quotechar = '"'):
+            return self.Execute(self.vbMethod, 'SplitNotQuoted', inputstr, delimiter, occurrences, quotechar)
+        splitNotQuoted, splitnotquoted = SplitNotQuoted, SplitNotQuoted
+
+        def Wrap(self, inputstr, width = 70, tabsize = 8):
+            return self.Execute(self.vbMethod, 'Wrap', inputstr, width, tabsize)
+        wrap = Wrap
 
     # #########################################################################
     # SF_TextStream CLASS
