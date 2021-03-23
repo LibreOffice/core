@@ -452,6 +452,17 @@ bool Date::IsValidDate( sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear )
     return true;
 }
 
+bool Date::IsEndOfMonth() const
+{
+    return IsEndOfMonth(GetDay(), GetMonth(), GetYear());
+}
+
+//static
+bool Date::IsEndOfMonth(sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear)
+{
+    return IsValidDate(nDay, nMonth, nYear) && ImplDaysInMonth(nMonth, nYear) == nDay;
+}
+
 void Date::Normalize()
 {
     sal_uInt16 nDay   = GetDay();
