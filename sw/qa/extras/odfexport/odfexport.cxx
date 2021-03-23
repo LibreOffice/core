@@ -10,7 +10,6 @@
 #include <algorithm>
 #include <memory>
 #include <swmodeltestbase.hxx>
-#include <config_features.h>
 
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
@@ -50,6 +49,7 @@
 #include <unotools/streamwrap.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
 
 #include <docufld.hxx> // for SwHiddenTextField::ParseIfFieldDefinition() method call
 #include <unoprnms.hxx>
@@ -1899,9 +1899,14 @@ DECLARE_ODFEXPORT_TEST(testCellUserDefineAttr, "userdefattr-tablecell.odt")
     getUserDefineAttribute(uno::makeAny(xCellC1), "proName", "v3");
 }
 
-#if HAVE_FEATURE_PDFIUM
 DECLARE_ODFEXPORT_TEST(testEmbeddedPdf, "embedded-pdf.odt")
 {
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+    {
+        return;
+    }
+
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<drawing::XShape> xShape = getShape(1);
@@ -1933,7 +1938,6 @@ DECLARE_ODFEXPORT_TEST(testEmbeddedPdf, "embedded-pdf.odt")
         CPPUNIT_ASSERT(bHasBitmap);
     }
 }
-#endif
 
 DECLARE_ODFEXPORT_TEST(testTableStyles1, "table_styles_1.odt")
 {

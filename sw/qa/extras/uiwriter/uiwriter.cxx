@@ -55,6 +55,7 @@
 #include <svl/itemiter.hxx>
 #include <svx/svxids.hrc>
 #include <unotools/localfilehelper.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
 
 #include <editeng/eeitem.hxx>
 #include <editeng/scripttypeitem.hxx>
@@ -400,9 +401,7 @@ public:
     void testRedlineAutoCorrect();
     void testRedlineAutoCorrect2();
     void testEmojiAutoCorrect();
-#if HAVE_FEATURE_PDFIUM
     void testInsertPdf();
-#endif
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -633,9 +632,7 @@ public:
     CPPUNIT_TEST(testRedlineAutoCorrect);
     CPPUNIT_TEST(testRedlineAutoCorrect2);
     CPPUNIT_TEST(testEmojiAutoCorrect);
-#if HAVE_FEATURE_PDFIUM
     CPPUNIT_TEST(testInsertPdf);
-#endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -8079,9 +8076,14 @@ void SwUiWriterTest::testInsertLongDateFormat()
     CPPUNIT_ASSERT(xField->getString().indexOf(" ") > -1);
 }
 
-#if HAVE_FEATURE_PDFIUM
 void SwUiWriterTest::testInsertPdf()
 {
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+    {
+        return;
+    }
+
     createDoc();
     SwXTextDocument *pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -8109,7 +8111,6 @@ void SwUiWriterTest::testInsertPdf()
     // Assert that the graphic is a PDF
     CPPUNIT_ASSERT_EQUAL(OUString("application/pdf"), getProperty<OUString>(xGraphic, "MimeType"));
 }
-#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
 CPPUNIT_PLUGIN_IMPLEMENT();
