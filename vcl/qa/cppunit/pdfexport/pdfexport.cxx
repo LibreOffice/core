@@ -1813,6 +1813,61 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf121615)
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, aBitmap.GetPixelColor(199, 299));
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf141171)
+{
+    vcl::filter::PDFDocument aDocument;
+    load(u"tdf141171.odt", aDocument);
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    // Get access to the only image on the only page.
+    vcl::filter::PDFObjectElement* pResources = aPages[0]->LookupObject("Resources");
+    CPPUNIT_ASSERT(pResources);
+    auto pXObjects
+        = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pResources->Lookup("XObject"));
+    CPPUNIT_ASSERT(pXObjects);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pXObjects->GetItems().size());
+    vcl::filter::PDFObjectElement* pXObject
+        = pXObjects->LookupObject(pXObjects->GetItems().begin()->first);
+    CPPUNIT_ASSERT(pXObject);
+    vcl::filter::PDFStreamElement* pStream = pXObject->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream& rObjectStream = pStream->GetMemory();
+
+    // Load the embedded image.
+    rObjectStream.Seek(0);
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic;
+    sal_uInt16 format;
+    ErrCode bResult = rFilter.ImportGraphic(aGraphic, OUString("import"), rObjectStream,
+                                            GRFILTER_FORMAT_DONTKNOW, &format);
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
+
+    // The image should be grayscale 8bit JPEG.
+    sal_uInt16 jpegFormat = rFilter.GetImportFormatNumberForShortName(JPG_SHORTNAME);
+    CPPUNIT_ASSERT(jpegFormat != GRFILTER_FORMAT_NOTFOUND);
+    CPPUNIT_ASSERT_EQUAL(jpegFormat, format);
+    BitmapEx aBitmap = aGraphic.GetBitmapEx();
+    Size aSize = aBitmap.GetSizePixel();
+    CPPUNIT_ASSERT_EQUAL(tools::Long(878), aSize.Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(127), aSize.Height());
+    CPPUNIT_ASSERT_EQUAL(8, int(aBitmap.GetBitCount()));
+
+    for (tools::Long nX = 0; nX < aSize.Width(); ++nX)
+    {
+        for (tools::Long nY = 0; nY < aSize.Height(); ++nY)
+        {
+            // Check all pixels in the image are white
+            // Without the fix in place, this test would have failed with
+            // - Expected: Color: R:255 G:255 B:255 A:0
+            // - Actual  : Color: R:0 G:0 B:0 A:0
+            CPPUNIT_ASSERT_EQUAL(COL_WHITE, aBitmap.GetPixelColor(nX, nY));
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf129085)
 {
     vcl::filter::PDFDocument aDocument;
