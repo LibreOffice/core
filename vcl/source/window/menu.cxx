@@ -1303,7 +1303,7 @@ css::uno::Reference<css::accessibility::XAccessible> Menu::GetAccessible()
     // Since PopupMenu are sometimes shared by different instances of MenuBar, the mxAccessible member gets
     // overwritten and may contain a disposed object when the initial menubar gets set again. So use the
     // mxAccessible member only for sub menus.
-    if ( pStartedFrom )
+    if (pStartedFrom && pStartedFrom != this)
     {
         for ( sal_uInt16 i = 0, nCount = pStartedFrom->GetItemCount(); i < nCount; ++i )
         {
