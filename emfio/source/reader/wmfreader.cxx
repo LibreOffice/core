@@ -781,6 +781,15 @@ namespace emfio
             }
             break;
 
+            case W_META_SELECTPALETTE:
+            {
+                sal_uInt16   nPaletteIndex = 0;
+                mpInputStream->ReadUInt16( nPaletteIndex );
+                SelectObject( nPaletteIndex );
+                SAL_INFO("emfio", "\t\t  Index: " << nPaletteIndex);
+            }
+            break;
+
             case W_META_SETTEXTALIGN:
             {
                 sal_uInt16  nAlign = 0;
@@ -951,7 +960,23 @@ namespace emfio
 
             case W_META_CREATEPALETTE:
             {
-                CreateObject();
+                sal_uInt16 nStart = 0;
+                sal_uInt16 nNumberOfEntries = 0;
+                mpInputStream->ReadUInt16( nStart );
+                mpInputStream->ReadUInt16( nNumberOfEntries );
+
+                SAL_INFO("emfio", "\t\t Start 0x" << std::hex << nStart << std::dec << ", Number of entries: " << nNumberOfEntries);
+                Color nColor;
+                sal_uInt32 nPalleteEntry;
+                for (sal_uInt16 i = 0; i < nNumberOfEntries; ++i)
+                {
+                    //KOLOR: rED GREEN BLUE RESERVED
+                    //PALETTEENTRY: Values, Blue, Green, Red
+                    mpInputStream->ReadUInt32( nPalleteEntry );
+                    SAL_INFO("emfio", "\t\t " << i << ". Palette entry: " << std::setw(10) << std::showbase <<std::hex << nPalleteEntry << std::dec );
+                    nColor = Color(static_cast<sal_uInt32>(nPalleteEntry));
+                }
+                CreateObject(std::make_unique<WinMtfPalette>( nColor ));
             }
             break;
 
@@ -1046,7 +1071,7 @@ namespace emfio
 
             case W_META_CREATEBRUSHINDIRECT:
             {
-                sal_uInt16  nStyle = 0;
+                sal_uInt16 nStyle = 0;
                 mpInputStream->ReadUInt16( nStyle );
                 CreateObject(std::make_unique<WinMtfFillStyle>( ReadColor(), ( nStyle == BS_HOLLOW ) ));
             }
@@ -1318,7 +1343,6 @@ namespace emfio
             case W_META_DRAWTEXT:
             case W_META_SETMAPPERFLAGS:
             case W_META_SETDIBTODEV:
-            case W_META_SELECTPALETTE:
             case W_META_REALIZEPALETTE:
             case W_META_ANIMATEPALETTE:
             case W_META_SETPALENTRIES:
