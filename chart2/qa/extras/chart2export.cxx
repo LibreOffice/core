@@ -129,6 +129,7 @@ public:
     void testTitleCharacterPropertiesXLSX();
     void testPlotVisOnlyXLSX();
     void testBarChartVaryColorsXLSX();
+    void testTdf96161();
     void testMultipleAxisXLSX();
     void testSecondaryAxisXLSX();
     void testSetSeriesToSecondaryAxisXLSX();
@@ -279,6 +280,7 @@ public:
     CPPUNIT_TEST(testTitleCharacterPropertiesXLSX);
     CPPUNIT_TEST(testPlotVisOnlyXLSX);
     CPPUNIT_TEST(testBarChartVaryColorsXLSX);
+    CPPUNIT_TEST(testTdf96161);
     CPPUNIT_TEST(testMultipleAxisXLSX);
     CPPUNIT_TEST(testSecondaryAxisXLSX);
     CPPUNIT_TEST(testSetSeriesToSecondaryAxisXLSX);
@@ -2080,6 +2082,15 @@ void Chart2ExportTest::testBarChartVaryColorsXLSX()
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:varyColors", "val", "0");
+}
+
+void Chart2ExportTest::testTdf96161()
+{
+    load(u"/chart2/qa/extras/data/ods/", "tdf96161.ods");
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:varyColors", "val", "0");
 }
 
 void Chart2ExportTest::testMultipleAxisXLSX()
