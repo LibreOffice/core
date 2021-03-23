@@ -60,7 +60,7 @@ jdiv_round_up (long a, long b)
  * arrays are always written in normal scan order (top to bottom) because
  * the virtual array manager expects this.  The source arrays will be scanned
  * in the corresponding order, which means multiple passes through the source
- * arrays for most of the transforms.  That could result in much trashing
+ * arrays for most of the transforms.  That could result in much thrashing
  * if the image is larger than main memory.
  *
  * If cropping or trimming is involved, the destination arrays may be smaller
