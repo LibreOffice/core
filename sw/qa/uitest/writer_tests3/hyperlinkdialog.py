@@ -8,6 +8,7 @@
 #
 
 from uitest.framework import UITestCase
+import os
 import time
 from uitest.uihelper.common import get_state_as_dict, type_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -81,6 +82,12 @@ class HyperlinkDialog(UITestCase):
         self.ui_test.close_doc()
 
     def test_tdf141166(self):
+        # Skip this test for --with-help=html and --with-help=online, as that would fail with a
+        # DialogNotExecutedException("did not execute a dialog for a blocking action") thrown from
+        # the below execute_blocking_action call (and would leave behind the relevant HTML page
+        # opened in the user's default browser):
+        if os.getenv('ENABLE_HTMLHELP') == 'TRUE':
+            return
 
         self.ui_test.create_doc_in_start_center("writer")
         xWriterDoc = self.xUITest.getTopFocusWindow()
