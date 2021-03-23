@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "04dbcddc_0647e259",
+        "filename": "sw/qa/uitest/writer_tests3/hyperlinkdialog.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-23T12:42:54Z",
+      "side": 1,
+      "message": "At least with --with-help\u003dhtml, running this test now opens that help page in the user\u0027s default browser (and leaves it open).  I feel that\u0027s too noisy for what `make check` should be allowed to do.",
+      "revId": "e6efc0e309a1a715febec1e830efb1d06e3831de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
