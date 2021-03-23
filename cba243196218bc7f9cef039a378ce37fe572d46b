@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2a3043f_dfbcf295",
+        "filename": "sw/qa/core/undo/undo.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-03-23T08:36:57Z",
+      "side": 1,
+      "message": "I don\u0027t think this will work, this branch has no ctor that can take pTransfer without an explicit .get() on it. Let me fix.",
+      "revId": "cba243196218bc7f9cef039a378ce37fe572d46b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
