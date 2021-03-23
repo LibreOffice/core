@@ -11,6 +11,8 @@
 
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <com/sun/star/text/BibliographyDataType.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -21,6 +23,7 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <IDocumentContentOperations.hxx>
 #include <cmdid.h>
@@ -128,6 +131,43 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testOleSavePreviewUpdate)
     // replacements were not generated, even after UpdateAll.
     CPPUNIT_ASSERT(xNameAccess->hasByName("ObjectReplacements/Object 1"));
     CPPUNIT_ASSERT(xNameAccess->hasByName("ObjectReplacements/Object 2"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testBibliographyUrlContextMenu)
+{
+    // Given a document with a bibliography field:
+    SwDoc* pDoc = createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xField(
+        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aFields = {
+        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue("Identifier", OUString("AT")),
+        comphelper::makePropertyValue("Author", OUString("Author")),
+        comphelper::makePropertyValue("Title", OUString("Title")),
+        comphelper::makePropertyValue("URL", OUString("http://www.example.com/test.pdf#page=1")),
+    };
+    xField->setPropertyValue("Fields", uno::makeAny(aFields));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
+
+    // When selecting the field and opening the context menu:
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    SfxDispatcher* pDispatcher = pDocShell->GetViewShell()->GetViewFrame()->GetDispatcher();
+    css::uno::Any aState;
+    SfxItemState eState = pDispatcher->QueryState(SID_OPEN_HYPERLINK, aState);
+
+    // Then the "open hyperlink" menu item should be visible:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 32 (SfxItemState::DEFAULT)
+    // - Actual  : 1 (SfxItemState::DISABLED)
+    // i.e. the menu item was not visible for biblio entry fields with an URL.
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, eState);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
