@@ -16,6 +16,24 @@
       "revId": "e6efc0e309a1a715febec1e830efb1d06e3831de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b37fa8ea_3bc5396b",
+        "filename": "sw/qa/uitest/writer_tests3/hyperlinkdialog.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-23T12:47:31Z",
+      "side": 1,
+      "message": "also, the test fails for me (again, --with-help\u003dhtml) with\n\n  ERROR: test_tdf141166 (hyperlinkdialog.HyperlinkDialog)\n  ----------------------------------------------------------------------\n  Traceback (most recent call last):\n    File \"/data/sbergman/lo-clang2/core/sw/qa/uitest/writer_tests3/hyperlinkdialog.py\", line 94, in test_tdf141166\n      self.ui_test.execute_blocking_action(xHelp.executeAction,\n    File \"/data/sbergman/lo-clang2/core/uitest/uitest/test.py\", line 234, in execute_blocking_action\n      raise DialogNotExecutedException(\"did not execute a dialog for a blocking action\")\n  uitest.test.DialogNotExecutedException: Dialog not executed for: did not execute a dialog for a blocking action",
+      "parentUuid": "04dbcddc_0647e259",
+      "revId": "e6efc0e309a1a715febec1e830efb1d06e3831de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
