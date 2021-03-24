@@ -79,6 +79,7 @@
 #include <frmtool.hxx>
 #include <strings.hrc>
 #include <frameformats.hxx>
+#include <authfld.hxx>
 
 #include <tools/globname.hxx>
 #include <svx/svdobj.hxx>
@@ -1923,6 +1924,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             mrSh.SwCursorShell::ClearMark();
         }
 
+        ExportAuthorityEntryLinks();
+
         // FOOTNOTES
 
         const size_t nFootnoteCount = pDoc->GetFootnoteIdxs().size();
@@ -2160,6 +2163,65 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
     mrSh.LockView( bOldLockView );
     mrSh.SwCursorShell::Pop(SwCursorShell::PopMode::DeleteCurrent);
     mrOut.Pop();
+}
+
+void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
+{
+    auto pPDFExtOutDevData = dynamic_cast<vcl::PDFExtOutDevData*>(mrOut.GetExtOutDevData());
+    if (!pPDFExtOutDevData)
+    {
+        return;
+    }
+
+    std::vector<SwFormatField*> aFields;
+    SwFieldType* pType = mrSh.GetFieldType(SwFieldIds::TableOfAuthorities, OUString());
+    if (!pType)
+    {
+        return;
+    }
+
+    pType->GatherFields(aFields);
+    const auto pPageFrame = static_cast<const SwPageFrame*>(mrSh.GetLayout()->Lower());
+    for (const auto pFormatField : aFields)
+    {
+        if (!pFormatField->GetTextField() || !pFormatField->IsFieldInDoc())
+        {
+            continue;
+        }
+
+        const auto& rAuthorityField
+            = *static_cast<const SwAuthorityField*>(pFormatField->GetField());
+        if (!rAuthorityField.HasURL())
+        {
+            continue;
+        }
+
+        const OUString& rURL = rAuthorityField.GetAuthEntry()->GetAuthorField(AUTH_FIELD_URL);
+        const SwTextNode& rTextNode = pFormatField->GetTextField()->GetTextNode();
+        if (!lcl_TryMoveToNonHiddenField(mrSh, rTextNode, *pFormatField))
+        {
+            continue;
+        }
+
+        // Select the field.
+        mrSh.SwCursorShell::SetMark();
+        mrSh.SwCursorShell::Right(1, CRSR_SKIP_CHARS);
+
+        // Create the links.
+        for (const auto& rLinkRect : *mrSh.SwCursorShell::GetCursor_())
+        {
+            for (const auto& rLinkPageNum : CalcOutputPageNums(rLinkRect))
+            {
+                tools::Rectangle aRect(SwRectToPDFRect(pPageFrame, rLinkRect.SVRect()));
+                sal_Int32 nLinkId = pPDFExtOutDevData->CreateLink(aRect, rLinkPageNum);
+                IdMapEntry aLinkEntry(rLinkRect, nLinkId);
+                s_aLinkIdMap.push_back(aLinkEntry);
+                pPDFExtOutDevData->SetLinkURL(nLinkId, rURL);
+            }
+        }
+
+        mrSh.SwCursorShell::ClearMark();
+    }
 }
 
 // Returns the page number in the output pdf on which the given rect is located.

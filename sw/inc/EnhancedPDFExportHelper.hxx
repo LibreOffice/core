@@ -219,6 +219,10 @@ class SwEnhancedPDFExportHelper
     static LanguageType s_eLanguageDefault;
 
     void EnhancedPDFExport();
+
+    /// Exports bibliography entry links.
+    void ExportAuthorityEntryLinks();
+
     sal_Int32 CalcOutputPageNum( const SwRect& rRect ) const;
     std::vector< sal_Int32 > CalcOutputPageNums( const SwRect& rRect ) const;
 
