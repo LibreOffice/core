@@ -494,9 +494,12 @@ CBenTOCReader::GetCode()
             return BEN_READ_PAST_END_OF_TOC;
 
         if (Code == BEN_END_OF_BUFFER)
+        {
+            assert(cBlockSize && "cBlockSize of 0 should have already caused BenErr_UnknownBentoFormatVersion in CBenTOCReader::ReadLabel");
             // Advance to next block
             cCurr = cBlockSize * ((cCurr + (cBlockSize - 1)) /
               cBlockSize);
+        }
     }
     while (Code == BEN_NOOP || Code == BEN_END_OF_BUFFER);
     return Code;
