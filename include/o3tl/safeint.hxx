@@ -7,11 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_O3TL_SAFEINT_HXX
-#define INCLUDED_O3TL_SAFEINT_HXX
+#pragma once
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <cassert>
 #include <limits>
 #include <type_traits>
@@ -239,8 +239,20 @@ make_unsigned(T value)
 // tools like -fsanitize=implicit-conversion should still be able to detect truncation:
 template<typename T1, typename T2> constexpr T1 narrowing(T2 value) { return value; }
 
+// std::min wrapped to inform coverity that the result is now sanitized
+#if defined(__COVERITY__)
+extern "C" void __coverity_tainted_data_sanitize__(void *);
+#endif
+
+template<typename T> inline T sanitizing_min(T a, T b)
+{
+    T ret = std::min(a, b);
+#if defined(__COVERITY__)
+    __coverity_tainted_data_sanitize__(&ret);
+#endif
+    return ret;
 }
 
-#endif
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
