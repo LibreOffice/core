@@ -74,9 +74,7 @@ NSString* OUStringToNSString(const OUString& ustring)
     return [NSString stringWithCString:utf8Str.getStr() encoding:NSUTF8StringEncoding];
 }
 
-NSString* PBTYPE_PLAINTEXT = (__bridge NSString*)kUTTypePlainText;
-// Nope. See commented-out use below.
-// NSString* PBTYPE_UTF8PLAINTEXT = (__bridge NSString*)kUTTypeUTF8PlainText;
+NSString* PBTYPE_UTF8PLAINTEXT = (__bridge NSString*)kUTTypeUTF8PlainText;
 NSString* PBTYPE_RTF = (__bridge NSString*)kUTTypeRTF;
 NSString* PBTYPE_PNG = (__bridge NSString*)kUTTypePNG;
 NSString* PBTYPE_JPEG = (__bridge NSString*)kUTTypeJPEG;
@@ -118,9 +116,7 @@ struct FlavorMap
 // lcl_TestFormat() in sc/source/ui/view/cellsh.cxx.
 
 static const FlavorMap flavorMap[]
-    = { { PBTYPE_PLAINTEXT, "text/plain;charset=utf-16", "Unicode Text (UTF-16)", true },
-        // Nope. The LO code does not understand text/plain in UTF-8. Which is a shame.
-        // PBTYPE_UTF8PLAINTEXT, "text/plain;charset=utf-8", "Unicode Text (UTF-8)", false },
+    = { { PBTYPE_UTF8PLAINTEXT, "text/plain;charset=utf-16", "Unicode Text (UTF-16)", true },
         { PBTYPE_RTF, "text/rtf", "Rich Text Format", false },
         { PBTYPE_PNG, "image/png", "Portable Network Graphics", false },
         { PBTYPE_JPEG, "image/jpeg", "JPEG", false },
@@ -183,27 +179,27 @@ DataProviderBaseImpl::~DataProviderBaseImpl()
     }
 }
 
-class UniDataProvider : public DataProviderBaseImpl
+class Utf8DataProvider : public DataProviderBaseImpl
 {
 public:
-    UniDataProvider(const Any& data);
-    UniDataProvider(NSData* data);
+    Utf8DataProvider(const Any& data);
+    Utf8DataProvider(NSData* data);
 
     NSData* getSystemData() override;
     Any getOOoData() override;
 };
 
-UniDataProvider::UniDataProvider(const Any& data)
+Utf8DataProvider::Utf8DataProvider(const Any& data)
     : DataProviderBaseImpl(data)
 {
 }
 
-UniDataProvider::UniDataProvider(NSData* data)
+Utf8DataProvider::Utf8DataProvider(NSData* data)
     : DataProviderBaseImpl(data)
 {
 }
 
-NSData* UniDataProvider::getSystemData()
+NSData* Utf8DataProvider::getSystemData()
 {
     OUString ustr;
     mData >>= ustr;
@@ -214,7 +210,7 @@ NSData* UniDataProvider::getSystemData()
     return [NSData dataWithBytes:strUtf8.getStr() length:strUtf8.getLength()];
 }
 
-Any UniDataProvider::getOOoData()
+Any Utf8DataProvider::getOOoData()
 {
     Any oOOData;
 
@@ -464,7 +460,7 @@ DataFlavorMapper::getDataProvider(const NSString* systemFlavor,
         else // Must be OUString type
         {
             SAL_WARN_IF(!isOUStringType(data.getValueType()), "vcl", "must be OUString type");
-            dp = DataProviderPtr_t(new UniDataProvider(data));
+            dp = DataProviderPtr_t(new Utf8DataProvider(data));
         }
     }
     catch (const UnsupportedFlavorException& e)
@@ -483,9 +479,12 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider(const NSString* systemFlavor
 {
     DataProviderPtr_t dp;
 
-    if ([systemFlavor caseInsensitiveCompare:PBTYPE_PLAINTEXT] == NSOrderedSame)
+    if (systemData == nil)
+        return dp;
+
+    if ([systemFlavor caseInsensitiveCompare:PBTYPE_UTF8PLAINTEXT] == NSOrderedSame)
     {
-        dp = DataProviderPtr_t(new UniDataProvider(systemData));
+        dp = DataProviderPtr_t(new Utf8DataProvider(systemData));
     }
     else if ([systemFlavor caseInsensitiveCompare:PBTYPE_HTML] == NSOrderedSame)
     {
