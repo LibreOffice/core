@@ -2009,6 +2009,8 @@ bool GetTTGlobalFontHeadInfo(const AbstractTrueTypeFont *ttf, int& xMin, int& yM
         return false;
 
     const int UPEm = ttf->unitsPerEm();
+    if (UPEm == 0)
+        return false;
     xMin = XUnits(UPEm, GetInt16(table, HEAD_xMin_offset));
     yMin = XUnits(UPEm, GetInt16(table, HEAD_yMin_offset));
     xMax = XUnits(UPEm, GetInt16(table, HEAD_xMax_offset));
