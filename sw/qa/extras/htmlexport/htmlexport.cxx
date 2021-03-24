@@ -740,6 +740,39 @@ DECLARE_HTMLEXPORT_TEST(testReqIfTable2, "reqif-table2.odt")
     CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:td>") != -1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIfTableHeight)
+{
+    // Given a document with a table in it, with an explicit row height:
+    loadURL("private:factory/swriter", nullptr);
+    uno::Sequence<beans::PropertyValue> aTableProperties = {
+        comphelper::makePropertyValue("Rows", static_cast<sal_Int32>(1)),
+        comphelper::makePropertyValue("Columns", static_cast<sal_Int32>(1)),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertTable", aTableProperties);
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xRow(xTable->getRows()->getByIndex(0), uno::UNO_QUERY);
+    xRow->setPropertyValue("Height", uno::makeAny(static_cast<sal_Int32>(1000)));
+
+    // When exporting to reqif-xhtml:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    // Then make sure that the explicit cell height is omitted from the output:
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
+    // Without the accompanying fix in place, this test would have failed, explicit height was
+    // written, which is not valid reqif-xhtml.
+    assertXPathNoAttribute(pDoc, "//reqif-xhtml:td", "height");
+}
+
 DECLARE_HTMLEXPORT_TEST(testXHTMLUseCSS, "xhtml-css.odt")
 {
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
