@@ -33,7 +33,7 @@ core_factory_list = [
     ("libi18nsearchlo.a", "i18nsearch_component_getFactory"),
     ("libinvocadaptlo.a", "invocadapt_component_getFactory"),
     ("liblnglo.a", "lng_component_getFactory"),
-    ("liblnthlo.a", "lnth_component_getFactory", "#ifndef IOS"),
+    ("liblnthlo.a", "lnth_component_getFactory"),
     ("liblocalebe1lo.a", "localebe1_component_getFactory"),
     ("libpackage2.a", "package2_component_getFactory"),
     ("libsmlo.a", "sm_component_getFactory"),

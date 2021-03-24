@@ -180,6 +180,11 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         aSystemDir      = THES_SYSTEM_DIR;
         aSystemPrefix   = "th_";
         aSystemSuffix   = "_v2.dat";
+#elif defined IOS
+        aSystemDir      = "$BRAND_BASE_DIR/share/thes";
+        rtl::Bootstrap::expandMacros(aSystemDir);
+        aSystemPrefix   = "th_";
+        aSystemSuffix   = "_v2.dat";
 #endif
     }
 
