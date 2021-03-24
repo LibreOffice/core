@@ -1439,14 +1439,9 @@ ShapeExport& PowerPointShapeExport::WritePageShape(const Reference< XShape >& xS
 bool PowerPointShapeExport::WritePlaceholder(const Reference< XShape >& xShape, PlaceholderType ePlaceholder, bool bMaster)
 {
     SAL_INFO("sd.eppt", "WritePlaceholder " << bMaster << " " << ShapeExport::NonEmptyText(xShape));
-    if (bMaster && ShapeExport::NonEmptyText(xShape))
-    {
-        WritePlaceholderShape(xShape, ePlaceholder);
-
-        return true;
-    }
-
-    return false;
+    // tdf111903: keep empty placeholders on pptx export: If statement not needed.
+    WritePlaceholderShape(xShape, ePlaceholder);
+    return true;
 }
 
 ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShape >& xShape, PlaceholderType ePlaceholder)

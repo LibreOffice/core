@@ -165,6 +165,8 @@ public:
     void testTdf100348_convert_Fontwork2TextWarp();
     void testTdf1225573_FontWorkScaleX();
     void testTdf99497_keepAppearanceOfCircleKind();
+    void testTdf111903();
+
     /// SmartArt animated elements
     void testTdf104792();
     void testTdf90627();
@@ -330,6 +332,7 @@ public:
     CPPUNIT_TEST(testShapeShadowBlurEffect);
     CPPUNIT_TEST(testTdf119223);
     CPPUNIT_TEST(testTdf128213ShapeRot);
+    CPPUNIT_TEST(testTdf111903);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3100,6 +3103,21 @@ void SdOOXMLExportTest2::testTdf128213ShapeRot()
     assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr/a:scene3d/a:camera/a:rot", "rev", "5400000");
 }
 
+void SdOOXMLExportTest2::testTdf111903()
+{
+    auto xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf111903.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDocRels = parseExport(tempFile, "ppt/slides/slide1.xml");
+
+    // Without the fix in place there will not be any placeholder, only an empty shape,
+    // so it will fail
+    assertXPath(pXmlDocRels, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:nvSpPr/p:nvPr/p:ph", "type",
+        "subTitle");
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
 

@@ -377,7 +377,8 @@ void SdOOXMLExportTest1::testFdo71961()
 
     // Export to .pptx changes all text frames to custom shape objects, which obey TextWordWrap property
     // (which is false for text frames otherwise and is ignored). Check that frames that should wrap still do.
-    SdrObjCustomShape *pTxtObj = dynamic_cast<SdrObjCustomShape *>( pPage->GetObj( 1 ));
+
+    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 1 ));
     CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
     CPPUNIT_ASSERT_EQUAL( OUString( "Text to be always wrapped" ), pTxtObj->GetOutlinerParaObject()->GetTextObject().GetText(0));
     CPPUNIT_ASSERT_EQUAL( true, pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP).GetValue());
