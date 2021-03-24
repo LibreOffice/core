@@ -2062,7 +2062,7 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
     GetTTGlobalFontHeadInfo(ttf, info->xMin, info->yMin, info->xMax, info->yMax, info->macStyle);
 
     table  = ttf->table(O_hhea, table_size);
-    if (table_size >= 10)
+    if (table_size >= 10 && UPEm != 0)
     {
         info->ascender  = XUnits(UPEm, GetInt16(table, HHEA_ascender_offset));
         info->descender = XUnits(UPEm, GetInt16(table, HHEA_descender_offset));
