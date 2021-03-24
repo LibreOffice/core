@@ -34,6 +34,9 @@
 #include <IMark.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <unotools/mediadescriptor.hxx>
+#include <svx/xoutbmp.hxx>
+#include <../../../svx/source/xoutdev/_xoutbmp.cxx>
+
 
 class Test : public SwModelTestBase
 {
@@ -64,6 +67,7 @@ public:
     void testDropDownFormField();
     void testDateFormField();
     void testDateFormFieldCharacterFormatting();
+    void tdf60684();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testEmbeddedGraphicRoundtrip);
@@ -87,6 +91,7 @@ public:
     CPPUNIT_TEST(testDropDownFormField);
     CPPUNIT_TEST(testDateFormField);
     CPPUNIT_TEST(testDateFormFieldCharacterFormatting);
+    CPPUNIT_TEST(tdf60684);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1785,6 +1790,30 @@ void Test::testDateFormFieldCharacterFormatting()
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), awt::FontWeight::NORMAL, getProperty<float>(getRun(getParagraph(1), 4), "CharWeight"));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(0xff0000), getProperty<sal_Int32>(getRun(getParagraph(1), 4), "CharColor"));
     }
+}
+
+void Test::tdf60684()
+{
+    if (mxComponent.is())
+        mxComponent->dispose();
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/extras/globalfilter/data/tdf60684.odt"), "com.sun.star.text.TextDocument");
+    uno::Reference<drawing::XShape> xImage = lcl_getShape(mxComponent, true);
+    uno::Reference< beans::XPropertySet > XPropSet( xImage, uno::UNO_QUERY );
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    uno::Reference<graphic::XGraphic> xGraphic;
+    XPropSet->getPropertyValue("Graphic") >>= xGraphic;
+    uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+    XOutFlags const eFlags = XOutFlags::DontExpandFilename | XOutFlags::DontAddExtension | XOutFlags::UseNativeIfPossible;
+    OUString aTempURL = aTempFile.GetURL();
+    XOutBitmap::WriteGraphic(xGraphic, aTempURL, "png", eFlags);
+    SvStream* pStream = aTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT(pStream->TellEnd() > 4);
+    sal_uInt8 sFirstBytes[4];
+    pStream->ReadBytes(sFirstBytes, 4);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>('P'), sFirstBytes[1]);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>('N'), sFirstBytes[2]);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>('G'), sFirstBytes[3]);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
