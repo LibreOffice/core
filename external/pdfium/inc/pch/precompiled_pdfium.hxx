@@ -20,6 +20,7 @@
  ./bin/update_pch_bisect ./external/pdfium/inc/pch/precompiled_pdfium.hxx "make external/pdfium.build" --find-conflicts
 */
 
+#include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <agg_curves.h>
 #include <agg_math.h>
@@ -288,8 +289,9 @@
 #include <core/fxcrt/css/cfx_cssdata.h>
 #include <core/fxcrt/css/cfx_cssdeclaration.h>
 #include <core/fxcrt/css/cfx_cssenumvalue.h>
-#include <core/fxcrt/css/cfx_cssexttextbuf.h>
+#include <core/fxcrt/css/cfx_cssinputtextbuf.h>
 #include <core/fxcrt/css/cfx_cssnumbervalue.h>
+#include <core/fxcrt/css/cfx_cssoutputtextbuf.h>
 #include <core/fxcrt/css/cfx_csspropertyholder.h>
 #include <core/fxcrt/css/cfx_cssrulecollection.h>
 #include <core/fxcrt/css/cfx_cssselector.h>
@@ -298,7 +300,6 @@
 #include <core/fxcrt/css/cfx_cssstyleselector.h>
 #include <core/fxcrt/css/cfx_cssstylesheet.h>
 #include <core/fxcrt/css/cfx_csssyntaxparser.h>
-#include <core/fxcrt/css/cfx_csstextbuf.h>
 #include <core/fxcrt/css/cfx_cssvalue.h>
 #include <core/fxcrt/css/cfx_cssvaluelist.h>
 #include <core/fxcrt/css/cfx_cssvaluelistparser.h>
