@@ -419,11 +419,10 @@ void SidebarController::NotifyResize()
         return;
     }
 
-    vcl::Window* pParentWindow = mpTabBar->GetParent();
     const sal_Int32 nTabBarDefaultWidth = TabBar::GetDefaultWidth() * mpTabBar->GetDPIScaleFactor();
 
-    const sal_Int32 nWidth (pParentWindow->GetSizePixel().Width());
-    const sal_Int32 nHeight (pParentWindow->GetSizePixel().Height());
+    const sal_Int32 nWidth(mpParentWindow->GetSizePixel().Width());
+    const sal_Int32 nHeight(mpParentWindow->GetSizePixel().Height());
 
     mbIsDeckOpen = (nWidth > nTabBarDefaultWidth);
 
