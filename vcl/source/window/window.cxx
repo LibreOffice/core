@@ -1729,7 +1729,7 @@ void Window::ImplNewInputContext()
 {
     ImplSVData* pSVData = ImplGetSVData();
     vcl::Window* pFocusWin = pSVData->mpWinData->mpFocusWin;
-    if ( !pFocusWin || pFocusWin->IsDisposed() )
+    if ( !pFocusWin || !pFocusWin->mpWindowImpl || pFocusWin->IsDisposed() )
         return;
 
     // Is InputContext changed?
