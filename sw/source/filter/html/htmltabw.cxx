@@ -380,6 +380,12 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
         sOut.append("\"");
     }
 
+    if (rWrt.mbReqIF)
+    {
+        // ReqIF implies strict XHTML: no height for <td>.
+        nHeight = 0;
+    }
+
     if( nHeight )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height)
