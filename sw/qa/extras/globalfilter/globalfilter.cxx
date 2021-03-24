@@ -34,6 +34,8 @@
 #include <IMark.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <unotools/mediadescriptor.hxx>
+#include <svx/xoutbmp.hxx>
+
 
 class Test : public SwModelTestBase
 {
@@ -1786,6 +1788,7 @@ void Test::testDateFormFieldCharacterFormatting()
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(0xff0000), getProperty<sal_Int32>(getRun(getParagraph(1), 4), "CharColor"));
     }
 }
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 

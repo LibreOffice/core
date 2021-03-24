@@ -591,7 +591,6 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     , mxSbJpgCompression(m_xBuilder->weld_scale("compressionjpgsb"))
     , mxNfJpgCompression(m_xBuilder->weld_spin_button("compressionjpgnf"))
     , mxMode(m_xBuilder->weld_widget("mode"))
-    , mxCbInterlaced(m_xBuilder->weld_check_button("interlacedcb"))
     , mxBMPCompression(m_xBuilder->weld_widget("bmpcompression"))
     , mxCbRLEEncoding(m_xBuilder->weld_check_button("rlecb"))
     , mxDrawingObjects(m_xBuilder->weld_widget("drawingobjects"))
@@ -679,7 +678,7 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
 
     mxLbColorDepth->connect_changed( LINK( this, ExportDialog, SelectListBoxHdl ) );
 
-    mxCbInterlaced->connect_toggled( LINK( this, ExportDialog, UpdateHdl ) );
+    // mxCbInterlaced->connect_toggled( LINK( this, ExportDialog, UpdateHdl ) );
 
     mxCbSaveTransparency->connect_toggled( LINK( this, ExportDialog, UpdateHdl ) );
 
@@ -784,8 +783,8 @@ void ExportDialog::createFilterOptions()
             mpNfCompression->set_value(nCompression);
 
             // Interlaced
-            mxMode->show();
-            mxCbInterlaced->set_active(mpFilterOptionsItem->ReadInt32("Interlaced", 0) != 0);
+            // mxMode->show();
+            // mxCbInterlaced->set_active(mpFilterOptionsItem->ReadInt32("Interlaced", 0) != 0);
 
             // Transparency
             mxDrawingObjects->show();
