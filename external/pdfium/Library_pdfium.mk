@@ -387,7 +387,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcrt/css/cfx_csscustomproperty \
     UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssdeclaration \
     UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssenumvalue \
-    UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssexttextbuf \
     UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssnumbervalue \
     UnpackedTarball/pdfium/core/fxcrt/css/cfx_csspropertyholder \
     UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssrulecollection \
@@ -397,10 +396,11 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssstyleselector \
     UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssstylesheet \
     UnpackedTarball/pdfium/core/fxcrt/css/cfx_csssyntaxparser \
-    UnpackedTarball/pdfium/core/fxcrt/css/cfx_csstextbuf \
     UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssvalue \
     UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssvaluelist \
     UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssvaluelistparser \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssinputtextbuf \
+    UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssoutputtextbuf \
     UnpackedTarball/pdfium/core/fxcrt/cfx_datetime \
     UnpackedTarball/pdfium/core/fxcrt/bytestring \
     UnpackedTarball/pdfium/core/fxcrt/cfx_binarybuf \

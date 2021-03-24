@@ -1,8 +1,8 @@
 --- core/fxcrt/string_data_template.cpp
 +++ core/fxcrt/string_data_template.cpp
-@@ -82,7 +82,8 @@ void StringDataTemplate<CharType>::CopyContentsAt(size_t offset,
-   ASSERT(nLen >= 0);
-   ASSERT(offset + nLen <= m_nAllocLength);
+@@ -83,7 +83,8 @@ void StringDataTemplate<CharType>::CopyContentsAt(size_t offset,
+   DCHECK(nLen >= 0);
+   DCHECK(offset + nLen <= m_nAllocLength);
  
 -  memcpy(m_String + offset, pStr, nLen * sizeof(CharType));
 +  if (nLen != 0)
