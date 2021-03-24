@@ -328,13 +328,11 @@ static void setNegativeBridge( const OUString & rBridgeName )
 
 static uno_ext_getMappingFunc selectMapFunc( const OUString & rBridgeName )
 {
-#if 0
     if (rBridgeName.equalsAscii( CPPU_CURRENT_LANGUAGE_BINDING_NAME "_uno" ))
         return CPPU_ENV_uno_ext_getMapping;
 #if HAVE_FEATURE_JAVA
     if (rBridgeName.equalsAscii( "java" "_uno" ))
         return java_uno_ext_getMapping;
-#endif
 #endif
 
 #if 0
