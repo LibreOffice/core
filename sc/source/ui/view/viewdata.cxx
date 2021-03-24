@@ -4031,7 +4031,12 @@ void ScViewData::AddPixelsWhile( tools::Long & rScrY, tools::Long nEndPixels, SC
         if (nHeightEndRow > nEndRow)
             nHeightEndRow = nEndRow;
         if (!nHeight)
-            nRow = nHeightEndRow + 1;
+        {
+            if (ValidTab(nTabNo) && nTabNo <= pDoc->GetMaxTableNumber())
+                nRow = nHeightEndRow + 1;
+            else
+                break;
+        }
         else
         {
             SCROW nRows = nHeightEndRow - nRow + 1;
