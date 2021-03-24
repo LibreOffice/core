@@ -8928,6 +8928,18 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
 
         if (rULSpace.GetContext())
             m_pSerializer->singleElementNS(XML_w, XML_contextualSpacing);
+        else
+        {
+            // Write out Contextual Spacing = false if it would have inherited a true.
+            const SvxULSpaceItem* pInherited = nullptr;
+            if (auto pNd = dynamic_cast<const SwContentNode*>(m_rExport.m_pOutFormatNode)) //paragraph
+                pInherited = &static_cast<SwTextFormatColl&>(pNd->GetAnyFormatColl()).GetAttrSet().GetULSpace();
+            else if (m_rExport.m_bStyDef && m_rExport.m_pCurrentStyle && m_rExport.m_pCurrentStyle->DerivedFrom()) //style
+                pInherited = &m_rExport.m_pCurrentStyle->DerivedFrom()->GetULSpace();
+
+            if (pInherited && pInherited->GetContext())
+                m_pSerializer->singleElementNS(XML_w, XML_contextualSpacing, FSNS(XML_w, XML_val), "false");
+        }
     }
 }
 

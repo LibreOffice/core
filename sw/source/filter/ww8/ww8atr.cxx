@@ -4157,7 +4157,17 @@ void WW8AttributeOutput::FormatULSpace( const SvxULSpaceItem& rUL )
         m_rWW8Export.InsUInt16( NS_sprm::PDyaAfter::val );
         m_rWW8Export.InsUInt16( rUL.GetLower() );
         // sprmPFContextualSpacing
-        if (rUL.GetContext())
+
+        // Write out Contextual Spacing = false if it would have inherited a true.
+        const SvxULSpaceItem* pInherited = nullptr;
+        if (!rUL.GetContext())
+        {
+            if (auto pNd = dynamic_cast<const SwContentNode*>(m_rWW8Export.m_pOutFormatNode)) //paragraph
+                pInherited = &static_cast<SwTextFormatColl&>(pNd->GetAnyFormatColl()).GetAttrSet().GetULSpace();
+            else if (m_rWW8Export.m_bStyDef && m_rWW8Export.m_pCurrentStyle && m_rWW8Export.m_pCurrentStyle->DerivedFrom()) //style
+                pInherited = &m_rWW8Export.m_pCurrentStyle->DerivedFrom()->GetULSpace();
+        }
+        if (rUL.GetContext() || (pInherited && pInherited->GetContext()))
         {
             m_rWW8Export.InsUInt16(NS_sprm::PFContextualSpacing::val);
             m_rWW8Export.pO->push_back( static_cast<sal_uInt8>(rUL.GetContext()) );
