@@ -304,14 +304,6 @@ void GalleryBrowser1::ImplExecute(std::string_view rIdent)
     }
 }
 
-weld::Widget* GalleryBrowser1::GetInitialFocusWidget()
-{
-    if (mxNewTheme->get_sensitive())
-        return mxNewTheme.get();
-    else
-        return mxThemes.get();
-}
-
 void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const GalleryHint& rGalleryHint = static_cast<const GalleryHint&>(rHint);

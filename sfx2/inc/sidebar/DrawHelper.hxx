@@ -30,8 +30,6 @@ namespace sfx2::sidebar {
 class DrawHelper
 {
 public:
-    static void DrawBorder(vcl::RenderContext& rRenderContext, const tools::Rectangle& rBox, const SvBorder& rBorderSize,
-                           const Color& rHorizontalColor, const Color& rVerticalColor);
     static void DrawHorizontalLine(vcl::RenderContext& rRenderContext, const sal_Int32 nLeft, const sal_Int32 nRight,
                                    const sal_Int32 nY, const sal_Int32 nHeight, const Color& rColor);
     static void DrawVerticalLine(vcl::RenderContext& rRenderContext, const sal_Int32 nTop, const sal_Int32 nBottom,

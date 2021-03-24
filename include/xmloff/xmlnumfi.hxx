@@ -190,7 +190,6 @@ public:
 
     bool HasLongDoW() const                     { return bHasLongDoW; }
     void SetHasLongDoW(bool bSet)               { bHasLongDoW = bSet; }
-    bool HasEra() const                         { return bHasEra; }
 
     void UpdateCalendar( const OUString& rNewCalendar );
     ImplicitCalendar GetImplicitCalendarState() const { return eImplicitCalendar; }

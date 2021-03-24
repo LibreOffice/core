@@ -23,25 +23,6 @@
 
 namespace sfx2::sidebar {
 
-void DrawHelper::DrawBorder(vcl::RenderContext& rRenderContext, const tools::Rectangle& rBox, const SvBorder& rBorderSize,
-                            const Color& rHorizontalColor, const Color& rVerticalColor)
-{
-    // Draw top line.
-    DrawHorizontalLine(rRenderContext, rBox.Left(), rBox.Right(),
-                       rBox.Top(), rBorderSize.Top(), rHorizontalColor);
-
-    // Draw bottom line.
-    DrawHorizontalLine(rRenderContext, rBox.Left() + rBorderSize.Left(), rBox.Right(),
-                       rBox.Bottom() - rBorderSize.Bottom() + 1, rBorderSize.Bottom(),
-                       rHorizontalColor);
-    // Draw left line.
-    DrawVerticalLine(rRenderContext, rBox.Top() + rBorderSize.Top(), rBox.Bottom(),
-                     rBox.Left(), rBorderSize.Left(), rVerticalColor);
-    // Draw right line.
-    DrawVerticalLine(rRenderContext, rBox.Top() + rBorderSize.Top(), rBox.Bottom() - rBorderSize.Bottom(),
-                     rBox.Right() - rBorderSize.Right() + 1, rBorderSize.Right(), rVerticalColor);
-}
-
 void DrawHelper::DrawHorizontalLine(vcl::RenderContext& rRenderContext, const sal_Int32 nLeft, const sal_Int32 nRight,
                                     const sal_Int32 nY, const sal_Int32 nHeight, const Color& rColor)
 {

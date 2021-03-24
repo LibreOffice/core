@@ -86,7 +86,6 @@ public:
 
     void                    SelectTheme( sal_uInt16 nThemePos ) { mxThemes->select( nThemePos ); SelectThemeHdl( *mxThemes ); }
     OUString                GetSelectedTheme() const { return mxThemes->get_selected_text(); }
-    weld::Widget*           GetInitialFocusWidget();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

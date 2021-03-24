@@ -113,7 +113,6 @@ struct ImplStyleData
     Color                           maHelpColor;
     Color                           maHelpTextColor;
     Color                           maHighlightColor;
-    Color                           maHighlightLinkColor;
     Color                           maHighlightTextColor;
     Color                           maLabelTextColor;
     Color                           maLightBorderColor;
@@ -534,7 +533,6 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maHelpColor( rData.maHelpColor ),
     maHelpTextColor( rData.maHelpTextColor ),
     maHighlightColor( rData.maHighlightColor ),
-    maHighlightLinkColor( rData.maHighlightLinkColor ),
     maHighlightTextColor( rData.maHighlightTextColor ),
     maLabelTextColor( rData.maLabelTextColor ),
     maLightBorderColor( rData.maLightBorderColor ),
@@ -712,7 +710,6 @@ void ImplStyleData::SetStandardStyles()
     maLinkColor                 = COL_BLUE;
     maVisitedLinkColor          = Color( 0x00, 0x00, 0xCC );
     maToolTextColor             = COL_BLACK;
-    maHighlightLinkColor        = COL_LIGHTBLUE;
     maFontColor                 = COL_BLACK;
     maAlternatingRowColor       = Color( 0xEE, 0xEE, 0xEE );
 
@@ -1500,12 +1497,6 @@ const Color&
 StyleSettings::GetToolTextColor() const
 {
     return mxData->maToolTextColor;
-}
-
-const Color&
-StyleSettings::GetHighlightLinkColor() const
-{
-    return mxData->maHighlightLinkColor;
 }
 
 void
@@ -2472,7 +2463,6 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->maLinkColor               == rSet.mxData->maLinkColor)                &&
          (mxData->maVisitedLinkColor        == rSet.mxData->maVisitedLinkColor)         &&
          (mxData->maToolTextColor           == rSet.mxData->maToolTextColor)            &&
-         (mxData->maHighlightLinkColor      == rSet.mxData->maHighlightLinkColor)       &&
          (mxData->maAppFont                 == rSet.mxData->maAppFont)                  &&
          (mxData->maHelpFont                == rSet.mxData->maHelpFont)                 &&
          (mxData->maTitleFont               == rSet.mxData->maTitleFont)                &&

@@ -65,11 +65,6 @@ IMPL_LINK(DevelopmentToolDockingWindow, DocumentModelTreeViewSelectionHandler, w
         maObjectInspectorTreeHandler.introspect(xObject);
 }
 
-IMPL_LINK_NOARG(DevelopmentToolDockingWindow, SelectionToggled, weld::ToggleButton&, void)
-{
-    updateSelection();
-}
-
 IMPL_LINK(DevelopmentToolDockingWindow, DomToolbarButtonClicked, const OString&, rSelectionId, void)
 {
     if (rSelectionId == "dom_refresh_button")
