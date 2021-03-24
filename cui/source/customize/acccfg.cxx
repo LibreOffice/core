@@ -502,6 +502,7 @@ const sal_uInt16 KEYCODE_ARRAY[] = { KEY_F1,
                                      KEY_MOD1 | KEY_MOD2 | KEY_POINT,
                                      KEY_MOD1 | KEY_MOD2 | KEY_COMMA,
                                      KEY_MOD1 | KEY_MOD2 | KEY_TILDE,
+                                     KEY_MOD1 | KEY_MOD2 | KEY_EQUAL,
 
                                      KEY_MOD1 | KEY_MOD2 | KEY_F1,
                                      KEY_MOD1 | KEY_MOD2 | KEY_F2,
