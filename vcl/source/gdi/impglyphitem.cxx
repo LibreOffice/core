@@ -106,10 +106,4 @@ bool SalLayoutGlyphsImpl::IsValid() const
     return true;
 }
 
-void SalLayoutGlyphsImpl::Invalidate()
-{
-    m_rFontInstance.clear();
-    clear();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

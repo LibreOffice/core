@@ -68,8 +68,6 @@ public:
 
     sal_Int32 GetMinimalWidth() const { return mnMinimalWidth; }
 
-    SidebarDockingWindow* GetDockingWindow() const { return mxParentWindow; }
-
 private:
     void RequestLayoutInternal();
 

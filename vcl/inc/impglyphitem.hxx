@@ -122,7 +122,6 @@ public:
     SalLayoutGlyphsImpl* clone() const;
     const rtl::Reference<LogicalFontInstance>& GetFont() const { return m_rFontInstance; }
     bool IsValid() const;
-    void Invalidate();
 
 private:
     rtl::Reference<LogicalFontInstance> m_rFontInstance;

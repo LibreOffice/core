@@ -77,15 +77,6 @@ sal_Int32 Theme::GetInteger (const ThemeItem eItem)
     return rTheme.maIntegers[nIndex];
 }
 
-bool Theme::GetBoolean (const ThemeItem eItem)
-{
-    const PropertyType eType (GetPropertyType(eItem));
-    OSL_ASSERT(eType==PT_Boolean);
-    const sal_Int32 nIndex (GetIndex(eItem, eType));
-    const Theme& rTheme (GetCurrentTheme());
-    return rTheme.maBooleans[nIndex];
-}
-
 bool Theme::IsHighContrastMode()
 {
     const Theme& rTheme (GetCurrentTheme());

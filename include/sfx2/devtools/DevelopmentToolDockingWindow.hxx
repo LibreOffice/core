@@ -52,7 +52,6 @@ private:
     ObjectInspectorTreeHandler maObjectInspectorTreeHandler;
 
     DECL_LINK(DocumentModelTreeViewSelectionHandler, weld::TreeView&, void);
-    DECL_LINK(SelectionToggled, weld::ToggleButton&, void);
     DECL_LINK(DomToolbarButtonClicked, const OString&, void);
 
     void updateSelection();
@@ -66,9 +65,6 @@ public:
     void dispose() override;
 
     void ToggleFloatingMode() override;
-
-    // Inspect the input object in the object inspector
-    void introspect(css::uno::Reference<css::uno::XInterface> const& xInterface);
 
     // Signals that the selected object in the document changes
     void selectionChanged(css::uno::Reference<css::uno::XInterface> const& xInterface);

@@ -400,8 +400,6 @@ public:
     void                            SetVisitedLinkColor( const Color& rColor );
     const Color&                    GetVisitedLinkColor() const;
 
-    const Color&                    GetHighlightLinkColor() const;
-
     void                            SetMonoColor( const Color& rColor );
     const Color&                    GetMonoColor() const;
 
