@@ -759,6 +759,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="en-US">.uno:FillDown</value>
           </prop>
         </node>
+        <node oor:name="EQUAL_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:InsertObjectStarMath</value>
+          </prop>
+        </node>
         <node oor:name="END" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -1647,6 +1653,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:CenterPara</value>
             <value xml:lang="es">.uno:SelectAll</value>
+          </prop>
+        </node>
+        <node oor:name="EQUAL_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:InsertMath</value>
           </prop>
         </node>
         <node oor:name="F11" oor:op="replace">
@@ -2805,6 +2817,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:PreviousAnnotation</value>
+          </prop>
+        </node>
+        <node oor:name="EQUAL_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:InsertMath</value>
           </prop>
         </node>
         <node oor:name="1_MOD1" oor:op="replace">
@@ -6009,6 +6027,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:CenterPara</value>
             <value xml:lang="es">.uno:SelectAll</value>
+          </prop>
+        </node>
+        <node oor:name="EQUAL_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:InsertObjectStarMath</value>
           </prop>
         </node>
         <node oor:name="F10_MOD1" oor:op="replace">
