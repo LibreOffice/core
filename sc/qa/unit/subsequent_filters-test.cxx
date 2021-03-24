@@ -162,6 +162,7 @@ public:
     void testCondFormatThemeColor2XLSX(); // negative bar color and axis color
     void testCondFormatThemeColor3XLSX(); // theme index 2 and 3 are switched
     void testComplexIconSetsXLSX();
+    void testTdf101104();
     void testTdf64401();
     void testCondFormatParentXLSX();
     void testColorScaleNumWithRefXLSX();
@@ -376,6 +377,7 @@ public:
     CPPUNIT_TEST(testCondFormatThemeColor2XLSX);
     CPPUNIT_TEST(testCondFormatThemeColor3XLSX);
     CPPUNIT_TEST(testComplexIconSetsXLSX);
+    CPPUNIT_TEST(testTdf101104);
     CPPUNIT_TEST(testTdf64401);
     CPPUNIT_TEST(testCondFormatParentXLSX);
     CPPUNIT_TEST(testColorScaleNumWithRefXLSX);
@@ -2802,6 +2804,37 @@ void ScFiltersTest::testComplexIconSetsXLSX()
     testCustomIconSetsXLSX_Impl(rDoc, 3, 1, IconSet_4RedToBlack, 3);
     testCustomIconSetsXLSX_Impl(rDoc, 3, 2, IconSet_3TrafficLights1, 1);
     testCustomIconSetsXLSX_Impl(rDoc, 3, 3, IconSet_3Arrows, 2);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf101104()
+{
+    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc(u"tdf101104.", FORMAT_ODS);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf101104.ods", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT_EQUAL(size_t(2), rDoc.GetCondFormList(0)->size());
+
+    ScConditionalFormat* pFormat = rDoc.GetCondFormat(1, 1, 0);
+    CPPUNIT_ASSERT(pFormat);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pFormat->size());
+    const ScFormatEntry* pEntry = pFormat->GetEntry(0);
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::Iconset, pEntry->GetType());
+    const ScIconSetFormat* pIconSet = static_cast<const ScIconSetFormat*>(pEntry);
+
+    for(size_t i = 1; i < 10; ++i)
+    {
+        std::unique_ptr<ScIconSetInfo> pInfo(pIconSet->GetIconSetInfo(ScAddress(1, i, 0)));
+
+        // Without the fix in place, this test would have failed here
+        CPPUNIT_ASSERT(pInfo);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pInfo->nIconIndex);
+        CPPUNIT_ASSERT_EQUAL(IconSet_3Arrows, pInfo->eIconSetType);
+
+    }
 
     xDocSh->DoClose();
 }
