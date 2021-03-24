@@ -806,7 +806,6 @@ ScInputHandler::ScInputHandler()
     if (comphelper::LibreOfficeKit::isActive())
     {
         ScInputHandler::bOptLoaded = true;            // Evaluate App options
-        ScInputHandler::bAutoComplete = true;         // Is set in KeyInput
     }
 }
 
