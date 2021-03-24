@@ -18,11 +18,11 @@ vcl/inc/salinst.hxx:200
     void SalInstance::releaseMainThread()
 vcl/inc/salobj.hxx:49
     void SalObject::Enable(_Bool,)
-writerfilter/source/ooxml/OOXMLFactory.hxx:66
+writerfilter/source/ooxml/OOXMLFactory.hxx:65
     void writerfilter::ooxml::OOXMLFactory_ns::startAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
-writerfilter/source/ooxml/OOXMLFactory.hxx:67
+writerfilter/source/ooxml/OOXMLFactory.hxx:66
     void writerfilter::ooxml::OOXMLFactory_ns::charactersAction(class writerfilter::ooxml::OOXMLFastContextHandler *,const class rtl::OUString &,)
-writerfilter/source/ooxml/OOXMLFactory.hxx:68
+writerfilter/source/ooxml/OOXMLFactory.hxx:67
     void writerfilter::ooxml::OOXMLFactory_ns::endAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
-writerfilter/source/ooxml/OOXMLFactory.hxx:69
+writerfilter/source/ooxml/OOXMLFactory.hxx:68
     void writerfilter::ooxml::OOXMLFactory_ns::attributeAction(class writerfilter::ooxml::OOXMLFastContextHandler *,int,const class tools::SvRef<class writerfilter::ooxml::OOXMLValue> &,)
