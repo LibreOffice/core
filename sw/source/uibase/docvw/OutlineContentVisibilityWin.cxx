@@ -148,18 +148,23 @@ void SwOutlineContentVisibilityWin::Set()
         sQuickHelp += " (" + SwResId(STR_OUTLINE_CONTENT_TOGGLE_VISIBILITY_EXT) + ")";
     SetQuickHelpText(sQuickHelp);
 
-    // Set the position of the window
+    // set window size and position
+    // use the preferred width of the window and the height of the frame
     SwRect aFrameAreaRect = GetFrame()->getFrameArea();
-    aFrameAreaRect.AddTop(GetFrame()->GetTopMargin());
-    SwRect aCharRect;
-    GetFrame()->GetCharRect(aCharRect, SwPosition(*pTextNode));
-    Point aPxPt(GetEditWin()->GetOutDev()->LogicToPixel(
-        Point(aCharRect.Right(), aFrameAreaRect.Center().getY())));
+    Size aFrameSize(GetEditWin()->GetOutDev()->LogicToPixel(aFrameAreaRect.Size_()));
+    SetSizePixel(Size(GetSizePixel().getWidth(), aFrameSize.getHeight()));
+    // position at top left of frame for LTR, top right for RTL
+    Point aPxPt;
     if (GetFrame()->IsRightToLeft())
+    {
+        aPxPt = GetEditWin()->GetOutDev()->LogicToPixel(aFrameAreaRect.TopRight());
         aPxPt.AdjustX(5);
+    }
     else
+    {
+        aPxPt = GetEditWin()->GetOutDev()->LogicToPixel(aFrameAreaRect.TopLeft());
         aPxPt.AdjustX(-(GetSizePixel().getWidth() + 5));
-    aPxPt.AdjustY(-GetSizePixel().getHeight() / 2);
+    }
     SetPosPixel(aPxPt);
 }
 
