@@ -73,10 +73,11 @@ void OP_Integer(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     SCCOL nCol(static_cast<SCCOL>(nTmpCol));
     SCROW nRow(static_cast<SCROW>(nTmpRow));
 
-    if (rContext.rDoc.ValidColRow(nCol, nRow))
+    ScAddress aAddr(nCol, nRow, 0);
+    if (rContext.rDoc.ValidAddress(aAddr))
     {
         rContext.rDoc.EnsureTable(0);
-        rContext.rDoc.SetValue(ScAddress(nCol, nRow, 0), static_cast<double>(nValue));
+        rContext.rDoc.SetValue(aAddr, static_cast<double>(nValue));
 
         // 0 digits in fractional part!
         SetFormat(rContext, nCol, nRow, 0, nFormat, 0);
@@ -92,11 +93,12 @@ void OP_Number(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     SCCOL nCol(static_cast<SCCOL>(nTmpCol));
     SCROW nRow(static_cast<SCROW>(nTmpRow));
 
-    if (rContext.rDoc.ValidColRow(nCol, nRow))
+    ScAddress aAddr(nCol, nRow, 0);
+    if (rContext.rDoc.ValidAddress(aAddr))
     {
         fValue = ::rtl::math::round( fValue, 15 );
         rContext.rDoc.EnsureTable(0);
-        rContext.rDoc.SetValue(ScAddress(nCol, nRow, 0), fValue);
+        rContext.rDoc.SetValue(aAddr, fValue);
 
         SetFormat(rContext, nCol, nRow, 0, nFormat, nFractionalFloat);
     }
@@ -379,11 +381,12 @@ void OP_Number123(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     SCCOL nCol(static_cast<SCCOL>(nTmpCol));
     SCROW nRow(static_cast<SCROW>(nTmpRow));
 
-    if (rContext.rDoc.ValidColRow(nCol, nRow) && nTab <= rContext.rDoc.GetMaxTableNumber())
+    ScAddress aAddr(nCol, nRow, nTab);
+    if (rContext.rDoc.ValidAddress(aAddr) && nTab <= rContext.rDoc.GetMaxTableNumber())
     {
         double fValue = Snum32ToDouble( nValue );
         rContext.rDoc.EnsureTable(nTab);
-        rContext.rDoc.SetValue(ScAddress(nCol,nRow,nTab), fValue);
+        rContext.rDoc.SetValue(aAddr, fValue);
     }
 }
 
@@ -399,7 +402,7 @@ void OP_Formula123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 
     std::unique_ptr<ScTokenArray> pResult;
     sal_Int32 nBytesLeft = (n > 12) ? n - 12 : 0;
-    ScAddress aAddress( nCol, nRow, nTab );
+    ScAddress aAddress(nCol, nRow, nTab);
 
     svl::SharedStringPool& rSPool = rContext.rDoc.GetSharedStringPool();
     LotusToSc aConv(rContext, r, rSPool, rContext.eCharset, true);
@@ -408,12 +411,12 @@ void OP_Formula123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     if (!aConv.good())
         return;
 
-    if (rContext.rDoc.ValidColRow(nCol, nRow) && nTab <= rContext.rDoc.GetMaxTableNumber())
+    if (rContext.rDoc.ValidAddress(aAddress) && nTab <= rContext.rDoc.GetMaxTableNumber())
     {
         ScFormulaCell* pCell = new ScFormulaCell(rContext.rDoc, aAddress, std::move(pResult));
         pCell->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
         rContext.rDoc.EnsureTable(nTab);
-        rContext.rDoc.SetFormulaCell(ScAddress(nCol,nRow,nTab), pCell);
+        rContext.rDoc.SetFormulaCell(aAddress, pCell);
     }
 }
 
@@ -427,10 +430,11 @@ void OP_IEEENumber123(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     SCCOL nCol(static_cast<SCCOL>(nTmpCol));
     SCROW nRow(static_cast<SCROW>(nTmpRow));
 
-    if (rContext.rDoc.ValidColRow(nCol, nRow) && nTab <= rContext.rDoc.GetMaxTableNumber())
+    ScAddress aAddr(nCol, nRow, nTab);
+    if (rContext.rDoc.ValidAddress(aAddr) && nTab <= rContext.rDoc.GetMaxTableNumber())
     {
         rContext.rDoc.EnsureTable(nTab);
-        rContext.rDoc.SetValue(ScAddress(nCol,nRow,nTab), dValue);
+        rContext.rDoc.SetValue(aAddr, dValue);
     }
 }
 
