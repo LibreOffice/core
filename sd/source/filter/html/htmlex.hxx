@@ -40,6 +40,7 @@ namespace tools { class Rectangle; }
 #define PUB_LOWRES_WIDTH    640
 #define PUB_MEDRES_WIDTH    800
 #define PUB_HIGHRES_WIDTH   1024
+#define PUB_FHDRES_WIDTH    1920
 
 #define PUB_THUMBNAIL_WIDTH  256
 #define PUB_THUMBNAIL_HEIGHT 192
