@@ -2437,6 +2437,22 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf124770)
     assertXPath(pXmlDoc, "/root/page/body/txt[1]/LineBreak", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTextWrappingInHeader)
+{
+    SwDoc* pDoc = createDoc("tdf104254.docx");
+
+    std::shared_ptr<GDIMetaFile> xMetaFile = pDoc->GetDocShell()->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Make sure the header image does not block any of the header text.
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3547
+    // - Actual  : 2009
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/textarray[1]", "x", "3547");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testContinuousEndnotesInsertPageAtStart)
 {
     // Create a new document with CONTINUOUS_ENDNOTES enabled.
