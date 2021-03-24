@@ -377,7 +377,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	localebe1 \
 	log \
 	lng \
-	$(if $(filter-out iOS,$(OS)),lnth) \
+	lnth \
 	$(if $(filter $(OS),MACOSX),macbe1) \
 	$(if $(MERGELIBS),merged) \
 	migrationoo2 \
