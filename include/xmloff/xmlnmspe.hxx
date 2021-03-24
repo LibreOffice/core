@@ -138,6 +138,13 @@ XML_NAMESPACE( XML_NAMESPACE_FIELD,           100U )
 XML_NAMESPACE( XML_NAMESPACE_CSS3TEXT,        103U )  // CSS Text Level 3
 XML_NAMESPACE( XML_NAMESPACE_FORMX,           101U )  // form interop extensions
 
+// OOo extension digital signatures, used in ODF 1.1
+const sal_uInt16 XML_NAMESPACE_DSIG_OOO =        200;
+// ODF 1.2 digital signature namespaces
+const sal_uInt16 XML_NAMESPACE_DSIG =            201;
+const sal_uInt16 XML_NAMESPACE_DS =              202;
+const sal_uInt16 XML_NAMESPACE_XADES132 =        203;
+const sal_uInt16 XML_NAMESPACE_XADES141 =        204;
 
 #endif // INCLUDED_XMLOFF_XMLNMSPE_HXX
 
