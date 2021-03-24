@@ -605,11 +605,11 @@ namespace emfio
         void                SetTextAlign(sal_uInt32 nAlign);
 
         void                CreateObject(std::unique_ptr<GDIObj> pObject);
-        void                CreateObjectIndexed(sal_Int32 nIndex, std::unique_ptr<GDIObj> pObject);
+        void                CreateObjectIndexed(sal_uInt32 nIndex, std::unique_ptr<GDIObj> pObject);
         void                CreateObject();
 
-        void                DeleteObject(sal_Int32 nIndex);
-        void                SelectObject(sal_Int32 nIndex);
+        void                DeleteObject(sal_uInt32 nIndex);
+        void                SelectObject(sal_uInt32 nIndex);
         rtl_TextEncoding    GetCharSet() const { return maFont.GetCharSet(); };
         const vcl::Font&    GetFont() const { return maFont; }
         void                SetTextLayoutMode(ComplexTextLayoutFlags nLayoutMode);

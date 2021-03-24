@@ -775,8 +775,8 @@ namespace emfio
 
             case W_META_SELECTOBJECT:
             {
-                sal_Int16   nObjIndex = 0;
-                mpInputStream->ReadInt16( nObjIndex );
+                sal_uInt16   nObjIndex = 0;
+                mpInputStream->ReadUInt16( nObjIndex );
                 SelectObject( nObjIndex );
             }
             break;
@@ -943,8 +943,8 @@ namespace emfio
 
             case W_META_DELETEOBJECT:
             {
-                sal_Int16 nIndex = 0;
-                mpInputStream->ReadInt16( nIndex );
+                sal_uInt16 nIndex = 0;
+                mpInputStream->ReadUInt16( nIndex );
                 DeleteObject( nIndex );
             }
             break;
