@@ -76,13 +76,17 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
 	mkdir -p $(IOSRES)/share/fonts
 	cp -R $(INSTDIR)/share/fonts/truetype $(IOSRES)/share/fonts
 	cp -R $(INSTDIR)/share/gallery $(IOSRES)/share
-	mkdir -p $(IOSRES)/share/spell
-	# Install the Swiss German dictionary and use it for Liechtenstein, too
+	mkdir -p $(IOSRES)/share/spell $(IOSRES)/share/thes
+	# Install the Swiss German dictionary and use it for Liechtenstein, too.
+	# Install also thesauruses.
 	if test -d $(INSTDIR)/share/extensions/dict-de; then \
-		cp $(INSTDIR)/share/extensions/dict-de/de_CH_frami.aff $(IOSRES)/share/spell/de_CH.aff; \
-		cp $(INSTDIR)/share/extensions/dict-de/de_CH_frami.dic $(IOSRES)/share/spell/de_CH.dic; \
-		cp $(INSTDIR)/share/extensions/dict-de/de_CH_frami.aff $(IOSRES)/share/spell/de_LI.aff; \
-		cp $(INSTDIR)/share/extensions/dict-de/de_CH_frami.dic $(IOSRES)/share/spell/de_LI.dic; \
+		cp $(INSTDIR)/share/extensions/dict-de/de_CH_frami.aff $(IOSRES)/share/thes/de_CH.aff; \
+		cp $(INSTDIR)/share/extensions/dict-de/de_CH_frami.dic $(IOSRES)/share/thes/de_CH.dic; \
+		cp $(INSTDIR)/share/extensions/dict-de/de_CH_frami.aff $(IOSRES)/share/thes/de_LI.aff; \
+		cp $(INSTDIR)/share/extensions/dict-de/de_CH_frami.dic $(IOSRES)/share/thes/de_LI.dic; \
+		cp $(INSTDIR)/share/extensions/*/th_*_v2.* $(IOSRES)/share/thes; \
+		cp $(INSTDIR)/share/extensions/dict-en/th_en_US_v2.dat $(IOSRES)/share/thes/th_en_GB_v2.dat; \
+		cp $(INSTDIR)/share/extensions/dict-en/th_en_US_v2.idx $(IOSRES)/share/thes/th_en_GB_v2.idx; \
 	fi
 	cp -R $(INSTDIR)/share/palette $(IOSRES)/share
 	cp -R $(INSTDIR)/share/fingerprint $(IOSRES)/share
