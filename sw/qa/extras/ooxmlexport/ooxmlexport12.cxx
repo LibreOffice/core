@@ -974,6 +974,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf138899, "tdf138899.docx")
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
     // This was 6, not removed empty temporary paragraph at the end of the section
     assertXPath(pXmlDocument, "/w:document/w:body/w:p", 5);
+
+    //tdf#134385: Paragraph property to "add space between paragraphs of the same style" was lost
+    assertXPath(pXmlDocument, "//w:p[1]/w:pPr/w:contextualSpacing", "val", "false");
 }
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf122563, "tdf122563.docx")
