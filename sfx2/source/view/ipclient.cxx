@@ -308,7 +308,8 @@ void SAL_CALL SfxInPlaceClient_Impl::visibilityChanged( sal_Bool bVisible )
         throw uno::RuntimeException();
 
     m_pClient->GetViewShell()->OutplaceActivated( bVisible );
-    m_pClient->Invalidate();
+    if (m_pClient) // it can change in the above code
+        m_pClient->Invalidate();
 }
 
 
