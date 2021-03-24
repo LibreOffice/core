@@ -108,6 +108,7 @@ private:
     std::unique_ptr<weld::RadioButton> m_xPage3_Resolution_1;
     std::unique_ptr<weld::RadioButton> m_xPage3_Resolution_2;
     std::unique_ptr<weld::RadioButton> m_xPage3_Resolution_3;
+    std::unique_ptr<weld::RadioButton> m_xPage3_Resolution_4;
     std::unique_ptr<weld::Label> m_xPage3_Title3;
     std::unique_ptr<weld::CheckButton> m_xPage3_SldSound;
     std::unique_ptr<weld::CheckButton> m_xPage3_HiddenSlides;

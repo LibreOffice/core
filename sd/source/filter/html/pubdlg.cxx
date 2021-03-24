@@ -429,6 +429,7 @@ SdPublishingDlg::SdPublishingDlg(weld::Window* pWindow, DocumentType eDocType)
     m_xPage3_Resolution_1->connect_clicked(LINK(this,SdPublishingDlg, ResolutionHdl ));
     m_xPage3_Resolution_2->connect_clicked(LINK(this,SdPublishingDlg, ResolutionHdl ));
     m_xPage3_Resolution_3->connect_clicked(LINK(this,SdPublishingDlg, ResolutionHdl ));
+    m_xPage3_Resolution_4->connect_clicked(LINK(this, SdPublishingDlg, ResolutionHdl));
 
     m_xPage2_ChgDefault->connect_clicked(LINK(this,SdPublishingDlg, SlideChgHdl));
     m_xPage2_ChgAuto->connect_clicked(LINK(this,SdPublishingDlg, SlideChgHdl));
@@ -564,6 +565,7 @@ void SdPublishingDlg::CreatePages()
     m_xPage3_Resolution_1 = m_xBuilder->weld_radio_button("resolution1Radiobutton");
     m_xPage3_Resolution_2 = m_xBuilder->weld_radio_button("resolution2Radiobutton");
     m_xPage3_Resolution_3 = m_xBuilder->weld_radio_button("resolution3Radiobutton");
+    m_xPage3_Resolution_4 = m_xBuilder->weld_radio_button("resolution4Radiobutton");
     m_xPage3_Title3 = m_xBuilder->weld_label("effectsLabel");
     m_xPage3_SldSound = m_xBuilder->weld_check_button("sldSoundCheckbutton");
     m_xPage3_HiddenSlides = m_xBuilder->weld_check_button("hiddenSlidesCheckbutton");
@@ -578,6 +580,7 @@ void SdPublishingDlg::CreatePages()
     aAssistentFunc.InsertControl(3, m_xPage3_Resolution_1.get());
     aAssistentFunc.InsertControl(3, m_xPage3_Resolution_2.get());
     aAssistentFunc.InsertControl(3, m_xPage3_Resolution_3.get());
+    aAssistentFunc.InsertControl(3, m_xPage3_Resolution_4.get());
     aAssistentFunc.InsertControl(3, m_xPage3_Title3.get());
     aAssistentFunc.InsertControl(3, m_xPage3_SldSound.get());
     aAssistentFunc.InsertControl(3, m_xPage3_HiddenSlides.get());
@@ -725,11 +728,13 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     // Page 3
 
     aValue.Name = "Width";
-    sal_Int32 nTmpWidth = 640;
+    sal_Int32 nTmpWidth = PUB_LOWRES_WIDTH;
     if( m_xPage3_Resolution_2->get_active() )
-        nTmpWidth = 800;
+        nTmpWidth = PUB_MEDRES_WIDTH;
     else if( m_xPage3_Resolution_3->get_active() )
-        nTmpWidth = 1024;
+        nTmpWidth = PUB_HIGHRES_WIDTH;
+    else if (m_xPage3_Resolution_4->get_active())
+        nTmpWidth = PUB_FHDRES_WIDTH;
 
     aValue.Value <<= nTmpWidth;
     aProps.push_back( aValue );
@@ -946,6 +951,7 @@ IMPL_LINK( SdPublishingDlg, ResolutionHdl, weld::Button&, rButton, void )
     m_xPage3_Resolution_1->set_sensitive(&rButton == m_xPage3_Resolution_1.get());
     m_xPage3_Resolution_2->set_sensitive(&rButton == m_xPage3_Resolution_2.get());
     m_xPage3_Resolution_3->set_sensitive(&rButton == m_xPage3_Resolution_3.get());
+    m_xPage3_Resolution_4->set_sensitive(&rButton == m_xPage3_Resolution_4.get());
 }
 
 // Clickhandler for the ValueSet with the bitmap-buttons
@@ -1296,6 +1302,7 @@ void SdPublishingDlg::SetDesign( SdPublishingDesign const * pDesign )
     m_xPage3_Resolution_1->set_sensitive(pDesign->m_nResolution == PUB_LOWRES_WIDTH);
     m_xPage3_Resolution_2->set_sensitive(pDesign->m_nResolution == PUB_MEDRES_WIDTH);
     m_xPage3_Resolution_3->set_sensitive(pDesign->m_nResolution == PUB_HIGHRES_WIDTH);
+    m_xPage3_Resolution_4->set_sensitive(pDesign->m_nResolution == PUB_FHDRES_WIDTH);
 
     m_xPage3_SldSound->set_sensitive( pDesign->m_bSlideSound );
     m_xPage3_HiddenSlides->set_sensitive( pDesign->m_bHiddenSlides );
@@ -1357,8 +1364,14 @@ void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
 
     pDesign->m_aCompression = m_xPage3_Quality->get_active_text();
 
-    pDesign->m_nResolution = m_xPage3_Resolution_1->get_active()?PUB_LOWRES_WIDTH:
-                            (m_xPage3_Resolution_2->get_active()?PUB_MEDRES_WIDTH:PUB_HIGHRES_WIDTH);
+    if (m_xPage3_Resolution_1->get_active())
+        pDesign->m_nResolution = PUB_LOWRES_WIDTH;
+    else if (m_xPage3_Resolution_2->get_active())
+        pDesign->m_nResolution = PUB_MEDRES_WIDTH;
+    else if (m_xPage3_Resolution_3->get_active())
+        pDesign->m_nResolution = PUB_HIGHRES_WIDTH;
+    else
+        pDesign->m_nResolution = PUB_FHDRES_WIDTH;
 
     pDesign->m_bSlideSound = m_xPage3_SldSound->get_active();
     pDesign->m_bHiddenSlides = m_xPage3_HiddenSlides->get_active();
