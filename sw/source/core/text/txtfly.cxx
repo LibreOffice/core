@@ -843,7 +843,8 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
     const bool bAllowCompatWrap = m_pCurrFrame->IsInTab() && (bFooterHeader || m_pCurrFrame->IsInFootnote());
     const bool bWrapAllowed = ( pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) ||
                                     bAllowCompatWrap ||
-                                    (!m_pCurrFrame->IsInFootnote() && !bFooterHeader));
+                                    (!m_pCurrFrame->IsInFootnote() && !bFooterHeader) ||
+                                    bFooterHeader );
 
     m_bOn = false;
 
@@ -885,12 +886,14 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
             // #i20505# Do not consider oversized objects
             SwAnchoredObject* pAnchoredObj = (*pSorted)[ i ];
             assert(pAnchoredObj);
+            const SwFormatSurround &rFlyFormat = pAnchoredObj->GetFrameFormat().GetSurround();
             if ( !pAnchoredObj ||
                  !rIDDMA.IsVisibleLayerId( pAnchoredObj->GetDrawObj()->GetLayer() ) ||
                  !pAnchoredObj->ConsiderForTextWrap() ||
                  ( mbIgnoreObjsInHeaderFooter && !bFooterHeader &&
                    pAnchoredObj->GetAnchorFrame()->FindFooterOrHeader() ) ||
-                 ( bAllowCompatWrap && !pAnchoredObj->GetFrameFormat().GetFollowTextFlow().GetValue() )
+                 ( bAllowCompatWrap && !pAnchoredObj->GetFrameFormat().GetFollowTextFlow().GetValue() ) ||
+                 ( bFooterHeader && com::sun::star::text::WrapTextMode_NONE == rFlyFormat.GetSurround() )
                )
             {
                 continue;
@@ -928,7 +931,6 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
                     mpAnchoredObjList->insert( aInsPosIter, pAnchoredObj );
                 }
 
-                const SwFormatSurround &rFlyFormat = pAnchoredObj->GetFrameFormat().GetSurround();
                 // #i68520#
                 if ( rFlyFormat.IsAnchorOnly() &&
                      pAnchoredObj->GetAnchorFrame() == GetMaster() )
