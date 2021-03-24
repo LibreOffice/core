@@ -305,20 +305,14 @@ void SAL_CALL SidebarController::disposing()
             aDeck.disposeAndClear();
     }
 
-    uno::Reference<css::frame::XController> xController = mxFrame->getController();
-    if (!xController.is())
-        xController = mxCurrentController;
-
-    mxFrame->removeFrameActionListener(this);
-    unregisterSidebarForFrame(this, xController);
+    maContextChangeUpdate.CancelRequest();
 
     if (mxReadOnlyModeDispatch.is())
         mxReadOnlyModeDispatch->removeStatusListener(this, Tools::GetURL(gsReadOnlyCommandName));
-    if (mpSplitWindow != nullptr)
-    {
-        mpSplitWindow->RemoveEventListener(LINK(this, SidebarController, WindowEventHandler));
-        mpSplitWindow = nullptr;
-    }
+
+    Theme::GetPropertySet()->removePropertyChangeListener(
+        "",
+        static_cast<css::beans::XPropertyChangeListener*>(this));
 
     if (mpParentWindow != nullptr)
     {
@@ -326,11 +320,19 @@ void SAL_CALL SidebarController::disposing()
         mpParentWindow = nullptr;
     }
 
-    Theme::GetPropertySet()->removePropertyChangeListener(
-        "",
-        static_cast<css::beans::XPropertyChangeListener*>(this));
+    if (mpSplitWindow != nullptr)
+    {
+        mpSplitWindow->RemoveEventListener(LINK(this, SidebarController, WindowEventHandler));
+        mpSplitWindow = nullptr;
+    }
 
-    maContextChangeUpdate.CancelRequest();
+    mxFrame->removeFrameActionListener(this);
+
+    uno::Reference<css::frame::XController> xController = mxFrame->getController();
+    if (!xController.is())
+        xController = mxCurrentController;
+
+    unregisterSidebarForFrame(this, xController);
 }
 
 void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent)
