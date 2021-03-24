@@ -41,6 +41,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpagewindow.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace sdr;
 
@@ -225,10 +226,12 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
 
         // Coordinate maybe affected by GridOffset, so we may need to
         // adapt to Model-coordinates here
-        if(getPossibleGridOffsetForPosition(
+        if((comphelper::LibreOfficeKit::isActive() && mpMarkedObj
+            && getPossibleGridOffsetForSdrObject(aGridOffset, GetMarkedObjectByIndex(0), GetSdrPageView()))
+            || (getPossibleGridOffsetForPosition(
             aGridOffset,
             basegfx::B2DPoint(aPnt.X(), aPnt.Y()),
-            GetSdrPageView()))
+            GetSdrPageView())))
         {
             aPnt.AdjustX(basegfx::fround(-aGridOffset.getX()));
             aPnt.AdjustY(basegfx::fround(-aGridOffset.getY()));
@@ -526,10 +529,12 @@ void SdrDragView::MovDragObj(const Point& rPnt)
 
         // Coordinate maybe affected by GridOffset, so we may need to
         // adapt to Model-coordinates here
-        if(getPossibleGridOffsetForPosition(
+        if((comphelper::LibreOfficeKit::isActive() && mpMarkedObj
+            && getPossibleGridOffsetForSdrObject(aGridOffset, GetMarkedObjectByIndex(0), GetSdrPageView()))
+            || (getPossibleGridOffsetForPosition(
             aGridOffset,
             basegfx::B2DPoint(aPnt.X(), aPnt.Y()),
-            GetSdrPageView()))
+            GetSdrPageView())))
         {
             aPnt.AdjustX(basegfx::fround(-aGridOffset.getX()));
             aPnt.AdjustY(basegfx::fround(-aGridOffset.getY()));
