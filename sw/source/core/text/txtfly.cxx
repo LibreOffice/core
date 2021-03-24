@@ -843,7 +843,7 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
     const bool bAllowCompatWrap = m_pCurrFrame->IsInTab() && (bFooterHeader || m_pCurrFrame->IsInFootnote());
     const bool bWrapAllowed = ( pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) ||
                                     bAllowCompatWrap ||
-                                    (!m_pCurrFrame->IsInFootnote() && !bFooterHeader));
+                                    !m_pCurrFrame->IsInFootnote() );
 
     m_bOn = false;
 
