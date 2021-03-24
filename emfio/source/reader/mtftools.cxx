@@ -782,10 +782,11 @@ namespace emfio
         return rPolyPolygon;
     }
 
-    void MtfTools::SelectObject( sal_Int32 nIndex )
+    void MtfTools::SelectObject( sal_uInt32 nIndex )
     {
         if ( nIndex & ENHMETA_STOCK_OBJECT )
         {
+            SAL_INFO ( "emfio", "\t\t ENHMETA_STOCK_OBJECT, StockObject Enumeration: 0x" << std::hex  << nIndex );
             sal_uInt16 nStockId = static_cast<sal_uInt8>(nIndex);
             switch( nStockId )
             {
@@ -802,9 +803,14 @@ namespace emfio
                 }
                 break;
                 case GRAY_BRUSH :
-                case DKGRAY_BRUSH :
                 {
                     maFillStyle = WinMtfFillStyle( COL_GRAY );
+                    mbFillStyleSelected = true;
+                }
+                break;
+                case DKGRAY_BRUSH :
+                {
+                    maFillStyle = WinMtfFillStyle( COL_GRAY7 );
                     mbFillStyleSelected = true;
                 }
                 break;
@@ -845,13 +851,19 @@ namespace emfio
 
             GDIObj *pGDIObj = nullptr;
 
-            if ( o3tl::make_unsigned(nIndex) < mvGDIObj.size() )
+            if ( nIndex < mvGDIObj.size() )
                 pGDIObj = mvGDIObj[ nIndex ].get();
 
             if ( pGDIObj )
             {
+
+                SAL_INFO ( "emfio", "\t\t Index: " << nIndex );
                 if (const auto pen = dynamic_cast<WinMtfLineStyle*>(pGDIObj))
+                {
                     maLineStyle = *pen;
+                    SAL_INFO ( "emfio", "\t Line Style, Color: 0x" << std::hex << maLineStyle.aLineColor
+                                        << ", Weight: " << maLineStyle.aLineInfo.GetWidth() );
+                }
                 else if (const auto brush = dynamic_cast<WinMtfFillStyle*>(
                              pGDIObj))
                 {
@@ -958,7 +970,7 @@ namespace emfio
         mvGDIObj[ nIndex ] = std::move(pObject);
     }
 
-    void MtfTools::CreateObjectIndexed( sal_Int32 nIndex, std::unique_ptr<GDIObj> pObject )
+    void MtfTools::CreateObjectIndexed( sal_uInt32 nIndex, std::unique_ptr<GDIObj> pObject )
     {
         if ( ( nIndex & ENHMETA_STOCK_OBJECT ) != 0 )
             return;
@@ -989,7 +1001,7 @@ namespace emfio
                 }
             }
         }
-        if ( o3tl::make_unsigned(nIndex) >= mvGDIObj.size() )
+        if ( nIndex >= mvGDIObj.size() )
             ImplResizeObjectArry( nIndex + 16 );
 
         mvGDIObj[ nIndex ] = std::move(pObject);
@@ -1000,11 +1012,11 @@ namespace emfio
         CreateObject(std::make_unique<GDIObj>());
     }
 
-    void MtfTools::DeleteObject( sal_Int32 nIndex )
+    void MtfTools::DeleteObject( sal_uInt32 nIndex )
     {
         if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
         {
-            if ( o3tl::make_unsigned(nIndex) < mvGDIObj.size() )
+            if ( nIndex < mvGDIObj.size() )
             {
                 mvGDIObj[ nIndex ].reset();
             }
