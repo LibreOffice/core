@@ -33,7 +33,12 @@ const OUString& SalGetDesktopEnvironment()
     return aEnv;
 }
 
-SalInstance* CreateSalInstance() { return create_SalInstance(); }
+SalInstance* CreateSalInstance()
+{
+    SalInstance* pInst = create_SalInstance();
+    pInst->AcquireYieldMutex();
+    return pInst;
+}
 
 void DestroySalInstance(SalInstance* pInst)
 {

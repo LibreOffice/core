@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
+#include <osl/thread.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
@@ -62,7 +63,14 @@ OUString cppu::getUnoIniUri() {
     // clean here is hardish.
     OUString uri("file:///assets/program");
 #else
+
     OUString uri(get_this_libpath());
+    static const char* uno_home = getenv("UNO_HOME");
+    if (!uno_home)
+        uri = get_this_libpath();
+    else
+        uri = OStringToOUString(uno_home, osl_getThreadTextEncoding());
+
 #ifdef MACOSX
     // We keep both the LO and URE dylibs directly in "Frameworks"
     // (that is, LIBO_LIB_FOLDER) and rc files in "Resources"

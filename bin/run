@@ -64,7 +64,7 @@ else
 
     export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}"${dir}"/instdir/program
     SEARCH_PATH="${LD_LIBRARY_PATH}"
-
+    export UNO_HOME="file://${dir}/instdir/program"
 fi
 
 # echo "setting URE_BOOTSTRAP to: ${URE_BOOTSTRAP}"

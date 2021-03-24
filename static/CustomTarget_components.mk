@@ -19,6 +19,6 @@ $(static_WORKDIR)/component_maps.cxx: \
 	    $(SRCDIR)/solenv/bin/native-code.py \
 	    | $(static_WORKDIR)/.dir
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$@),$(true),GEN,2)
-	$(call gb_Helper_abbreviate_dirs,$(call gb_ExternalExecutable_get_command,python) $< -g core -g writer) > $@
+	$(call gb_Helper_abbreviate_dirs,$(call gb_ExternalExecutable_get_command,python) $< -g core -g writer -g desktop) > $@
 
 # vim: set noet sw=4:
