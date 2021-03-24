@@ -40,10 +40,14 @@
 #include <com/sun/star/accessibility/XAccessibleImage.hpp>
 #include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
+#include <vcl/syschild.hxx>
+#include <vcl/sysdata.hxx>
+#include <vcl/toolkit/unowrap.hxx>
 
 #include "atkwrapper.hxx"
 #include "atkregistry.hxx"
@@ -407,6 +411,10 @@ static gint
 wrapper_get_n_children( AtkObject *atk_obj )
 {
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
+
+    if (obj->mpSysObjChild)
+        return 1;
+
     gint n = 0;
 
     if( obj->mpContext.is() )
@@ -429,6 +437,13 @@ wrapper_ref_child( AtkObject *atk_obj,
                    gint       i )
 {
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
+
+    if (obj->mpSysObjChild)
+    {
+        g_object_ref(obj->mpSysObjChild);
+        return obj->mpSysObjChild;
+    }
+
     AtkObject* child = nullptr;
 
     // see comments above atk_object_wrapper_remove_child
@@ -872,6 +887,19 @@ atk_object_wrapper_new( const css::uno::Reference< css::accessibility::XAccessib
             {
                 OString aId = OUStringToOString( xContext2->getAccessibleId(), RTL_TEXTENCODING_UTF8);
                 (*func)(atk_obj, aId.getStr());
+            }
+        }
+
+        // tdf#141197 if we have a sysobj child then include that in the hierarchy
+        if (UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper())
+        {
+            css::uno::Reference<css::awt::XWindow> xAWTWindow(rxAccessible, css::uno::UNO_QUERY);
+            VclPtr<vcl::Window> xWindow = pWrapper->GetWindow(xAWTWindow);
+            if (xWindow && xWindow->GetType() == WindowType::SYSTEMCHILDWINDOW)
+            {
+                const SystemEnvData* pEnvData = static_cast<SystemChildWindow*>(xWindow.get())->GetSystemData();
+                if (GtkWidget *pSysObj = pEnvData ? static_cast<GtkWidget*>(pEnvData->pWidget) : nullptr)
+                    pWrap->mpSysObjChild = gtk_widget_get_accessible(pSysObj);
             }
         }
 

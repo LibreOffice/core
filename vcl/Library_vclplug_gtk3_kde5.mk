@@ -41,6 +41,7 @@ $(eval $(call gb_Library_add_cxxflags,vclplug_gtk3_kde5,\
 
 $(eval $(call gb_Library_add_defs,vclplug_gtk3_kde5,\
     -DVCLPLUG_GTK_IMPLEMENTATION -DVCLPLUG_GTK3_KDE5_IMPLEMENTATION \
+    -DVCL_INTERNALS \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,vclplug_gtk3_kde5,\
