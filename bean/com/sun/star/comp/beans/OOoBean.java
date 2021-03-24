@@ -1405,7 +1405,10 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
             iConnection.addEventListener( this );
 
             // listen on a terminating OOo
-            getOOoDesktop().addTerminateListener( this );
+            try {
+                getOOoDesktop().addTerminateListener( this );
+            }
+            catch ( Throwable aExc ) {}
 
             // start this thread as a daemon
             setDaemon( true );
