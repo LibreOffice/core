@@ -21,6 +21,7 @@
 #include <rtl/process.h>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <systools/win32/retry_if_failed.hxx>
 
 #include "DOTransferable.hxx"
 #include "../misc/ImplHelper.hxx"
@@ -313,7 +314,8 @@ sal_Bool SAL_CALL CDOTransferable::isDataFlavorSupported( const DataFlavor& aFla
 void CDOTransferable::initFlavorList( )
 {
     sal::systools::COMReference<IEnumFORMATETC> pEnumFormatEtc;
-    HRESULT hr = m_rDataObject->EnumFormatEtc( DATADIR_GET, &pEnumFormatEtc );
+    HRESULT hr = sal::systools::RetryIfFailed(
+        10, 100, [&]() { return m_rDataObject->EnumFormatEtc(DATADIR_GET, &pEnumFormatEtc); });
     if ( SUCCEEDED( hr ) )
     {
         pEnumFormatEtc->Reset( );
