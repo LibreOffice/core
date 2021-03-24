@@ -68,6 +68,8 @@
 #include <stlsheet.hxx>
 #include <stlpool.hxx>
 #include <cellvalue.hxx>
+#include <columnspanset.hxx>
+#include <dbdata.hxx>
 
 #include <svl/stritem.hxx>
 #include <editeng/eeitem.hxx>
@@ -341,9 +343,12 @@ private:
     void                convertColumns( OutlineLevelVec& orColLevels, const ValueRange& rColRange, const ColumnModel& rModel );
 
     /** Converts row properties for all rows in the sheet. */
-    void                convertRows();
+    void                convertRows(const std::vector<sc::ColRowSpan>& rSpans);
     /** Converts row properties. */
-    void                convertRows( OutlineLevelVec& orRowLevels, const ValueRange& rRowRange, const RowModel& rModel, double fDefHeight = -1.0 );
+    void                convertRows(OutlineLevelVec& orRowLevels, const ValueRange& rRowRange,
+                                    const RowModel& rModel,
+                                    const std::vector<sc::ColRowSpan>& rSpans,
+                                    double fDefHeight = -1.0);
 
     /** Converts outline grouping for the passed column or row. */
     void                convertOutlines( OutlineLevelVec& orLevels, sal_Int32 nColRow, sal_Int32 nLevel, bool bCollapsed, bool bRows );
@@ -947,7 +952,37 @@ void WorksheetGlobals::finalizeWorksheetImport()
 
     lclUpdateProgressBar( mxFinalProgress, 0.5 );
     convertColumns();
-    convertRows();
+
+    // tdf#99913 rows hidden by filter need extra flag
+    ScDocument& rDoc = getScDocument();
+    std::vector<sc::ColRowSpan> aSpans;
+    SCTAB nTab = getSheetIndex();
+    ScDBData* pDBData = rDoc.GetAnonymousDBData(nTab);
+    if (pDBData && pDBData->HasAutoFilter())
+    {
+        ScRange aRange;
+        pDBData->GetArea(aRange);
+        SCCOLROW nStartRow = static_cast<SCCOLROW>(aRange.aStart.Row());
+        SCCOLROW nEndRow = static_cast<SCCOLROW>(aRange.aEnd.Row());
+        aSpans.push_back(sc::ColRowSpan(nStartRow, nEndRow));
+    }
+    ScDBCollection* pDocColl = rDoc.GetDBCollection();
+    if (!pDocColl->empty())
+    {
+        ScDBCollection::NamedDBs& rDBs = pDocColl->getNamedDBs();
+        for (const auto& rxDB : rDBs)
+        {
+            if (rxDB->GetTab() == nTab && rxDB->HasAutoFilter())
+            {
+                ScRange aRange;
+                rxDB->GetArea(aRange);
+                SCCOLROW nStartRow = static_cast<SCCOLROW>(aRange.aStart.Row());
+                SCCOLROW nEndRow = static_cast<SCCOLROW>(aRange.aEnd.Row());
+                aSpans.push_back(sc::ColRowSpan(nStartRow, nEndRow));
+            }
+        }
+    }
+    convertRows(aSpans);
     lclUpdateProgressBar( mxFinalProgress, 1.0 );
 }
 
@@ -1201,7 +1236,7 @@ void WorksheetGlobals::convertColumns( OutlineLevelVec& orColLevels,
     convertOutlines( orColLevels, rColRange.mnFirst, rModel.mnLevel, rModel.mbCollapsed, false );
 }
 
-void WorksheetGlobals::convertRows()
+void WorksheetGlobals::convertRows(const std::vector<sc::ColRowSpan>& rSpans)
 {
     sal_Int32 nNextRow = 0;
     sal_Int32 nMaxRow = mrMaxApiPos.Row();
@@ -1214,21 +1249,23 @@ void WorksheetGlobals::convertRows()
         ValueRange aRowRange( ::std::max( rowModel.first, nNextRow ), ::std::min( rowModel.second.second, nMaxRow ) );
         // process gap between two row models, use default row model
         if( nNextRow < aRowRange.mnFirst )
-            convertRows( aRowLevels, ValueRange( nNextRow, aRowRange.mnFirst - 1 ), maDefRowModel );
+            convertRows(aRowLevels, ValueRange(nNextRow, aRowRange.mnFirst - 1), maDefRowModel,
+                        rSpans);
         // process the row model
-        convertRows( aRowLevels, aRowRange, rowModel.second.first, maDefRowModel.mfHeight );
+        convertRows(aRowLevels, aRowRange, rowModel.second.first, rSpans, maDefRowModel.mfHeight);
         // cache next row to be processed
         nNextRow = aRowRange.mnLast + 1;
     }
 
     // remaining default rows to end of sheet
-    convertRows( aRowLevels, ValueRange( nNextRow, nMaxRow ), maDefRowModel );
+    convertRows(aRowLevels, ValueRange(nNextRow, nMaxRow), maDefRowModel, rSpans);
     // close remaining row outlines spanning to end of sheet
     convertOutlines( aRowLevels, nMaxRow + 1, 0, false, true );
 }
 
-void WorksheetGlobals::convertRows( OutlineLevelVec& orRowLevels,
-        const ValueRange& rRowRange, const RowModel& rModel, double fDefHeight )
+void WorksheetGlobals::convertRows(OutlineLevelVec& orRowLevels, const ValueRange& rRowRange,
+                                   const RowModel& rModel,
+                                   const std::vector<sc::ColRowSpan>& rSpans, double fDefHeight)
 {
     // row height: convert points to row height in 1/100 mm
     double fHeight = (rModel.mfHeight >= 0.0) ? rModel.mfHeight : fDefHeight;
@@ -1251,6 +1288,16 @@ void WorksheetGlobals::convertRows( OutlineLevelVec& orRowLevels,
     {
         ScDocument& rDoc = getScDocument();
         rDoc.SetRowHidden( nStartRow, nEndRow, nTab, true );
+        for (const auto& rSpan : rSpans)
+        {
+            // tdf#99913 rows hidden by filter need extra flag
+            if (rSpan.mnStart <= nStartRow && nStartRow <= rSpan.mnEnd)
+            {
+                SCROW nLast = ::std::min(nEndRow, rSpan.mnEnd);
+                rDoc.SetRowFiltered(nStartRow, nLast, nTab, true);
+                break;
+            }
+        }
     }
 
     // outline settings for this row range

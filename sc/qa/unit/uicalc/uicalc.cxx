@@ -1387,6 +1387,15 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf116215)
     CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A2:B2)"), aFormula);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf99913)
+{
+    ScModelObj* pModelObj = createDoc("tdf99913.xlsx");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    CPPUNIT_ASSERT(pDoc->RowFiltered(2, 0));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
