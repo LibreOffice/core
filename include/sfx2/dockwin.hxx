@@ -41,7 +41,7 @@ class SFX2_DLLPUBLIC SfxDockingWindow : public ResizableDockingWindow
 {
 protected:
     std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Container> m_xContainer;
+    std::unique_ptr<weld::Box> m_xContainer;
 
 private:
     tools::Rectangle               aInnerRect;

@@ -771,7 +771,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     , pMgr(pCW)
 {
     m_xBuilder.reset(Application::CreateInterimBuilder(m_xBox, rUIXMLDescription, true));
-    m_xContainer = m_xBuilder->weld_container(rID);
+    m_xContainer = m_xBuilder->weld_box(rID);
 
     pImpl.reset(new SfxDockingWindow_Impl(this));
 }
