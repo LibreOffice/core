@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "7f083f07_61db71fd",
+        "filename": "sw/inc/shellio.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-24T15:54:33Z",
+      "side": 1,
+      "message": "\u003e As this variable might be used in some other files\n\nWhere exactly?",
+      "parentUuid": "e1f650de_5f339e27",
+      "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "54cc4cf0_a7ffee2b",
         "filename": "sw/source/filter/ascii/parasc.cxx",
         "patchSetId": 1
@@ -86,6 +104,24 @@
       "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "73162d2d_25be9168",
+        "filename": "sw/source/filter/ascii/parasc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-24T15:54:33Z",
+      "side": 1,
+      "message": "I don\u0027t get that: which pointer you mean? But for starter, have you tested your change on a file?",
+      "parentUuid": "4852bfa5_8ff08e6b",
+      "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
