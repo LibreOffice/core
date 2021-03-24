@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e1f650de_5f339e27",
+        "filename": "sw/inc/shellio.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2021-03-24T15:22:10Z",
+      "side": 1,
+      "message": "As this variable might be used in some other files, so instaed of removing it from those relatable files, I defined it to zero which reduces modification.",
+      "parentUuid": "77cb394a_eda1c3f5",
+      "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "54cc4cf0_a7ffee2b",
         "filename": "sw/source/filter/ascii/parasc.cxx",
         "patchSetId": 1
@@ -50,6 +68,24 @@
       "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4852bfa5_8ff08e6b",
+        "filename": "sw/source/filter/ascii/parasc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2021-03-24T15:22:10Z",
+      "side": 1,
+      "message": "Instead of splitting the para 100 char before the arbitrary limit, it now compare with MAX_ASCII_PARA which is defined to zero. So that, pointer will point to new line without considering the arbitrary limit.",
+      "parentUuid": "85d4ff1a_c24bdea6",
+      "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
