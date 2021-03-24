@@ -225,10 +225,12 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
 
         // Coordinate maybe affected by GridOffset, so we may need to
         // adapt to Model-coordinates here
-        if(getPossibleGridOffsetForPosition(
+        if((mpMarkedObj &&
+            getPossibleGridOffsetForSdrObject(aGridOffset, mpMarkedObj, mpMarkedPV))
+            || (getPossibleGridOffsetForPosition(
             aGridOffset,
             basegfx::B2DPoint(aPnt.X(), aPnt.Y()),
-            GetSdrPageView()))
+            GetSdrPageView())))
         {
             aPnt.AdjustX(basegfx::fround(-aGridOffset.getX()));
             aPnt.AdjustY(basegfx::fround(-aGridOffset.getY()));
@@ -526,10 +528,12 @@ void SdrDragView::MovDragObj(const Point& rPnt)
 
         // Coordinate maybe affected by GridOffset, so we may need to
         // adapt to Model-coordinates here
-        if(getPossibleGridOffsetForPosition(
+        if((mpMarkedObj &&
+            getPossibleGridOffsetForSdrObject(aGridOffset, mpMarkedObj, mpMarkedPV))
+            || (getPossibleGridOffsetForPosition(
             aGridOffset,
             basegfx::B2DPoint(aPnt.X(), aPnt.Y()),
-            GetSdrPageView()))
+            GetSdrPageView())))
         {
             aPnt.AdjustX(basegfx::fround(-aGridOffset.getX()));
             aPnt.AdjustY(basegfx::fround(-aGridOffset.getY()));
