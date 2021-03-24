@@ -806,7 +806,6 @@ ScInputHandler::ScInputHandler()
     if (comphelper::LibreOfficeKit::isActive())
     {
         ScInputHandler::bOptLoaded = true;            // Evaluate App options
-        ScInputHandler::bAutoComplete = true;         // Is set in KeyInput
     }
 }
 
@@ -2680,7 +2679,9 @@ void ScInputHandler::UpdateFormulaMode()
             if (pInputWin)
                 pInputWin->SetFormulaMode(true);
 
-            if ( bAutoComplete )
+            // in LOK, we always need to perform the GetFormulaData() call so
+            // that the formula insertion works
+            if (bAutoComplete || comphelper::LibreOfficeKit::isActive())
                 GetFormulaData();
 
             UpdateParenthesis();
