@@ -560,6 +560,13 @@ DECLARE_ODFIMPORT_TEST(testFdo56272, "fdo56272.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(422), xShape->getPosition().Y); // Was -2371
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf128737, "tdf128737.odt")
+{
+    // Without the fix in place, this test would have crashed
+    CPPUNIT_ASSERT_EQUAL(4, getPages());
+    CPPUNIT_ASSERT_EQUAL(8, getShapes());
+}
+
 DECLARE_ODFIMPORT_TEST(testCalcFootnoteContent, "ooo32780-1.odt")
 {
     //this was a CalcFootnoteContent crash
