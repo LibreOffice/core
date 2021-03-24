@@ -173,6 +173,12 @@ void ImportLotus::Errcell()
 
     Read( aA );
 
+    if (!rD.ValidAddress(aA))
+    {
+        SAL_WARN("sc.filter", "invalid address");
+        return;
+    }
+
     ScSetStringParam aParam;
     aParam.setTextInput();
     rD.EnsureTable(aA.Tab());
@@ -184,6 +190,12 @@ void ImportLotus::Nacell()
     ScAddress   aA;
 
     Read( aA );
+
+    if (!rD.ValidAddress(aA))
+    {
+        SAL_WARN("sc.filter", "invalid address");
+        return;
+    }
 
     ScSetStringParam aParam;
     aParam.setTextInput();
@@ -201,6 +213,12 @@ void ImportLotus::Labelcell()
     Read( cAlign );
     Read( aLabel );
 
+    if (!rD.ValidAddress(aA))
+    {
+        SAL_WARN("sc.filter", "invalid address");
+        return;
+    }
+
     ScSetStringParam aParam;
     aParam.setTextInput();
     rD.EnsureTable(aA.Tab());
@@ -215,6 +233,12 @@ void ImportLotus::Numbercell()
     Read( aAddr );
     Read( fVal );
 
+    if (!rD.ValidAddress(aAddr))
+    {
+        SAL_WARN("sc.filter", "invalid address");
+        return;
+    }
+
     rD.EnsureTable(aAddr.Tab());
     rD.SetValue(aAddr, fVal);
 }
@@ -226,6 +250,12 @@ void ImportLotus::Smallnumcell()
 
     Read( aAddr );
     Read( nVal );
+
+    if (!rD.ValidAddress(aAddr))
+    {
+        SAL_WARN("sc.filter", "invalid address");
+        return;
+    }
 
     rD.EnsureTable(aAddr.Tab());
     rD.SetValue(aAddr, SnumToDouble(nVal));
@@ -250,6 +280,12 @@ void ImportLotus::Formulacell( sal_uInt16 n )
     aConv.Convert( pErg, nRest );
     if (!aConv.good())
         return;
+
+    if (!rD.ValidAddress(aAddr))
+    {
+        SAL_WARN("sc.filter", "invalid address");
+        return;
+    }
 
     ScFormulaCell* pCell = pErg ? new ScFormulaCell(rD, aAddr, std::move(pErg)) : new ScFormulaCell(rD, aAddr);
     pCell->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
