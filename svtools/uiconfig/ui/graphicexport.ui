@@ -493,6 +493,28 @@
               </packing>
             </child>
             <child>
+              <object class="GtkFrame" id="moude">
+                <property name="can_focus">False</property>
+                <property name="label_xalign">0</property>
+                <property name="shadow_type">none</property>
+                <child type="label">
+                  <object class="GtkLabel" id="label12t">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes" context="graphicexport|label12t">Mode</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">5</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkFrame" id="mode">
                 <property name="can_focus">False</property>
                 <property name="label_xalign">0</property>
