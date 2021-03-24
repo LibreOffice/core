@@ -74,7 +74,7 @@ public:
     virtual ~DocumentModelTreeEntry() {}
 
     /// the node string shown in the tree view
-    virtual OUString& getString() { return maString; }
+    OUString& getString() { return maString; }
 
     /// should show the expander for the tree view node
     virtual bool shouldShowExpander() { return false; }

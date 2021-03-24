@@ -95,7 +95,7 @@ protected:
     friend class VclBuilder;
     friend class SalInstanceBuilder;
     void set_action_area(VclButtonBox* pBox);
-    virtual void set_content_area(VclBox* pBox);
+    void set_content_area(VclBox* pBox);
 
 public:
     explicit        Dialog( vcl::Window* pParent, WinBits nStyle = WB_STDDIALOG, InitFlag eFlag = InitFlag::Default );
