@@ -2365,8 +2365,8 @@ SalVisual::SalVisual( const XVisualInfo* pXVI )
     if( GetClass() != TrueColor )
     {
         eRGBMode_ = SalRGB::RGB;
-        nRedShift_ = nGreenShift_ = nBlueShift_;
-        nRedBits_ = nGreenBits_ = nBlueBits_;
+        nRedShift_ = nGreenShift_ = nBlueShift_ = 0;
+        nRedBits_ = nGreenBits_ = nBlueBits_ = 0;
         return;
     }
 
