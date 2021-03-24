@@ -199,7 +199,7 @@ const tools::Rectangle& SdrObjGroup::GetCurrentBoundRect() const
     // <aOutRect> has to contain the bounding rectangle
     if(0 != GetObjCount())
     {
-        const_cast< SdrObjGroup* >(this)->aOutRect = GetAllObjBoundRect();
+        aOutRect = GetAllObjBoundRect();
     }
 
     return aOutRect;
