@@ -80,6 +80,7 @@ gb_CppunitTest_CPPTESTCOMMAND := $(call gb_Executable_get_target_for_build,cppun
 else
 gb_CppunitTest_RUNTIMEDEPS :=
 gb_CppunitTest_CPPTESTCOMMAND :=
+#gb_CppunitTest_CPPTESTCOMMAND := strace -o trace.log
 endif
 
 # i18npool dlopens localedata_* libraries.

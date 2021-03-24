@@ -735,6 +735,13 @@ writer_constructor_list = [
     "com_sun_star_comp_Writer_EPUBExportFilter_get_implementation",
     ]
 
+desktop_factory_list = [
+    ]
+
+desktop_constructor_list = [
+    "com_sun_star_comp_deployment_ExtensionManager_get_implementation",
+    ]
+
 factory_map = {
     'core' : core_factory_list,
     'edit' : edit_factory_list,
@@ -742,6 +749,7 @@ factory_map = {
     'calc' : calc_factory_list,
     'draw' : draw_factory_list,
     'writer' : writer_factory_list,
+    'desktop' : desktop_factory_list,
     }
 
 constructor_map = {
@@ -751,6 +759,7 @@ constructor_map = {
     'calc' : calc_constructor_list,
     'draw' : draw_constructor_list,
     'writer' : writer_constructor_list,
+    'desktop' : desktop_constructor_list,
     }
 
 custom_widgets = [
