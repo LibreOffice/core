@@ -1093,6 +1093,24 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf130614)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf112735)
+{
+    ScModelObj* pModelObj = createDoc("tdf112735.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("(empty)"), pDoc->GetString(ScAddress(1, 0, 0)));
+
+    goToCell("B3");
+
+    dispatchCommand(mxComponent, ".uno:RecalcPivotTable", {});
+
+    // Without the fix in place, this test would haved failed with
+    // - Expected: (empty)
+    // - Actual  :
+    CPPUNIT_ASSERT_EQUAL(OUString("(empty)"), pDoc->GetString(ScAddress(1, 0, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133342)
 {
     ScModelObj* pModelObj = createDoc("tdf133342.ods");
