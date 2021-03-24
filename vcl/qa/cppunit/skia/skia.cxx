@@ -44,6 +44,7 @@ public:
     void testDelayedScale();
     void testTdf137329();
     void testTdf140848();
+    void testTdf132367();
 
     CPPUNIT_TEST_SUITE(SkiaTest);
     CPPUNIT_TEST(testBitmapErase);
@@ -55,6 +56,7 @@ public:
     CPPUNIT_TEST(testDelayedScale);
     CPPUNIT_TEST(testTdf137329);
     CPPUNIT_TEST(testTdf140848);
+    CPPUNIT_TEST(testTdf132367);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -423,6 +425,27 @@ void SkiaTest::testTdf140848()
     //savePNG("/tmp/tdf140848.png", device);
     // Rounding errors caused the overlapping part not to be drawn.
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(1200, 100)));
+}
+
+void SkiaTest::testTdf132367()
+{
+    if (!SkiaHelper::isVCLSkiaEnabled())
+        return;
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    device->SetOutputSizePixel(Size(2, 2));
+    device->SetBackground(Wallpaper(COL_BLACK));
+    device->Erase();
+    device->DrawPixel(Point(1, 1), COL_WHITE);
+    // This will make the bitmap store data in SkImage.
+    Bitmap bitmap = device->GetBitmap(Point(0, 0), Size(2, 2));
+    // Scaling will only set up delayed scaling of the SkImage.
+    bitmap.Scale(Size(4, 4), BmpScaleFlag::NearestNeighbor);
+    // Now it will need to be converted to pixel buffer, check it's converted properly
+    // from the SkImage.
+    BitmapReadAccess access(bitmap);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(4), access.Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(4), access.Height());
+    CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_WHITE), access.GetColor(3, 3));
 }
 
 } // namespace
