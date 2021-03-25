@@ -242,7 +242,7 @@ namespace connectivity
                 OUString sMessage;
                 try
                 {
-                    const OUString sProperties(  "properties"  );
+                    static const OUStringLiteral sProperties(  u"properties"  );
                     if ( !bIsNewDatabase && xStorage->isStreamElement(sProperties) )
                     {
                         Reference<XStream > xStream = xStorage->openStreamElement(sProperties,ElementModes::READ);

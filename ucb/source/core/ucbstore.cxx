@@ -1746,9 +1746,9 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                     {
                         Sequence< PropertyValue > aValues( nCount );
 
-                        const OUString aHandleName("/Handle");
-                        const OUString aValueName("/Value");
-                        const OUString aStateName("/State");
+                        static const OUStringLiteral aHandleName(u"/Handle");
+                        static const OUStringLiteral aValueName(u"/Value");
+                        static const OUStringLiteral aStateName(u"/State");
 
                         for ( sal_Int32 n = 0; n < nCount; ++n )
                         {
@@ -2087,9 +2087,9 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
 
                         if ( xHierNameAccess.is() )
                         {
-                            const OUString aHandleName("/Handle");
-                            const OUString aValueName("/Value");
-                            const OUString aAttrName("/Attributes");
+                            static const OUStringLiteral aHandleName(u"/Handle");
+                            static const OUStringLiteral aValueName(u"/Value");
+                            static const OUStringLiteral aAttrName(u"/Attributes");
 
                             Property* pProps = pPropSeq->getArray();
 

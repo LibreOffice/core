@@ -3972,12 +3972,11 @@ void OReportController::createDefaultControl(const uno::Sequence< beans::Propert
     if ( !xSection.is() )
         return;
 
-    const OUString sKeyModifier("KeyModifier");
     const beans::PropertyValue* pIter = _aArgs.getConstArray();
     const beans::PropertyValue* pEnd  = pIter + _aArgs.getLength();
     const beans::PropertyValue* pKeyModifier = ::std::find_if(pIter, pEnd,
-        [&sKeyModifier] (const beans::PropertyValue& x) -> bool {
-            return x.Name == sKeyModifier;
+        [] (const beans::PropertyValue& x) -> bool {
+            return x.Name == "KeyModifier";
         });
     sal_Int16 nKeyModifier = 0;
     if ( pKeyModifier == pEnd || ((pKeyModifier->Value >>= nKeyModifier) && nKeyModifier == KEY_MOD1) )
@@ -4002,7 +4001,7 @@ void OReportController::checkChartEnabled()
             ::utl::OConfigurationTreeRoot::createWithComponentContext( m_xContext, "/org.openoffice.Office.ReportDesign" ) );
 
         bool bChartEnabled = false;
-        const OUString sPropertyName( "UserData/Chart" );
+        static const OUStringLiteral sPropertyName( u"UserData/Chart" );
         if ( aConfiguration.hasByHierarchicalName(sPropertyName) )
             aConfiguration.getNodeValue( sPropertyName ) >>= bChartEnabled;
         m_bChartEnabled = bChartEnabled;

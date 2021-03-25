@@ -118,8 +118,8 @@ void RecentlyUsedMasterPages::LoadPersistentValues()
         if ( ! xSet.is())
             return;
 
-        const OUString sURLMemberName("URL");
-        const OUString sNameMemberName("Name");
+        static const OUStringLiteral sURLMemberName(u"URL");
+        static const OUStringLiteral sNameMemberName(u"Name");
         OUString sURL;
         OUString sName;
 
@@ -186,8 +186,8 @@ void RecentlyUsedMasterPages::SavePersistentValues()
             xSet->removeByName (rKey);
 
         // Fill it with the URLs of this object.
-        const OUString sURLMemberName("URL");
-        const OUString sNameMemberName("Name");
+        static const OUStringLiteral sURLMemberName(u"URL");
+        static const OUStringLiteral sNameMemberName(u"Name");
         Any aValue;
         Reference<lang::XSingleServiceFactory> xChildFactory (
             xSet, UNO_QUERY);

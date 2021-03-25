@@ -251,7 +251,7 @@ void DataStream::MakeToolbarVisible()
     if (!xLayoutManager.is())
         return;
 
-    const OUString sResourceURL( "private:resource/toolbar/datastreams" );
+    static const OUStringLiteral sResourceURL( u"private:resource/toolbar/datastreams" );
     css::uno::Reference< css::ui::XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
     if (!xUIElement.is())
     {

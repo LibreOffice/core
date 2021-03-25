@@ -235,7 +235,7 @@ namespace
             if ( xProviderProps.is() )
             {
                 Reference< XPropertySetInfo > xPropInfo = xProviderProps->getPropertySetInfo();
-                const OUString sHomeDirPropertyName( "HomeDirectory" );
+                static const OUStringLiteral sHomeDirPropertyName( u"HomeDirectory" );
                 if ( !xPropInfo.is() || xPropInfo->hasPropertyByName( sHomeDirPropertyName ) )
                 {
                     OUString sHomeDirectory;

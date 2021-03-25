@@ -71,7 +71,7 @@ namespace rptui
 
         // Okay, let's start with replacing all $$ in our pattern with the actual field data source
         OUString sMatchExpression( m_sPattern );
-        const OUString sFieldDataPattern( "$$" );
+        static const OUStringLiteral sFieldDataPattern( u"$$" );
         sal_Int32 nIndex( sMatchExpression.indexOf( sFieldDataPattern ) );
         while ( nIndex != -1 )
         {
@@ -79,8 +79,8 @@ namespace rptui
             nIndex = sMatchExpression.indexOf( sFieldDataPattern, nIndex + _rFieldDataSource.getLength() );
         }
 
-        const OUString sLHSPattern( "$1" );
-        const OUString sRHSPattern( "$2" );
+        static const OUStringLiteral sLHSPattern( u"$1" );
+        static const OUStringLiteral sRHSPattern( u"$2" );
         sal_Int32 nLHSIndex( sMatchExpression.indexOf( sLHSPattern ) );
         sal_Int32 nRHSIndex( sMatchExpression.indexOf( sRHSPattern ) );
 

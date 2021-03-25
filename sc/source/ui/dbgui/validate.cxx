@@ -315,7 +315,7 @@ void lclGetFormulaFromStringList( OUString& rFmlaStr, const OUString& rStringLis
     @return  true = Conversion successful. */
 bool lclGetStringListFromFormula( OUString& rStringList, const OUString& rFmlaStr, sal_Unicode cFmlaSep )
 {
-    const OUString aQuotes( "\"\"" );
+    static const OUStringLiteral aQuotes( u"\"\"" );
 
     rStringList.clear();
     bool bIsStringList = !rFmlaStr.isEmpty();

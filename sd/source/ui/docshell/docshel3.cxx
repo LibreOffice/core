@@ -297,9 +297,9 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                     // setting the new language...
                     if (!aNewLangTxt.isEmpty())
                     {
-                        const OUString aSelectionLangPrefix("Current_");
-                        const OUString aParagraphLangPrefix("Paragraph_");
-                        const OUString aDocumentLangPrefix("Default_");
+                        static const OUStringLiteral aSelectionLangPrefix(u"Current_");
+                        static const OUStringLiteral aParagraphLangPrefix(u"Paragraph_");
+                        static const OUStringLiteral aDocumentLangPrefix(u"Default_");
 
                         bool bSelection = false;
                         bool bParagraph = false;
@@ -406,7 +406,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
             if (pItem2)
                 sApplyText = pItem2->GetValue();
 
-            const OUString sSpellingRule("Spelling_");
+            static const OUStringLiteral sSpellingRule(u"Spelling_");
             sal_Int32 nPos = 0;
             if(-1 != (nPos = sApplyText.indexOf( sSpellingRule )))
             {

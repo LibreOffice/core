@@ -169,7 +169,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
         nSizeCount++;
 
     sal_uInt16 nPos = 0;
-    const OUString aFontHeightCommand( ".uno:FontHeight?FontHeight.Height:float=" );
+    static const OUStringLiteral aFontHeightCommand( u".uno:FontHeight?FontHeight.Height:float=" );
 
     // first insert font size names (for simplified/traditional chinese)
     float           fPoint;

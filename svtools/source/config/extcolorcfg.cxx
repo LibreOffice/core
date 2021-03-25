@@ -306,7 +306,7 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
 
 void ExtendedColorConfig_Impl::FillComponentColors(const uno::Sequence < OUString >& _rComponents,const TDisplayNames& _rDisplayNames)
 {
-    const OUString sColorEntries("/Entries");
+    static const OUStringLiteral sColorEntries(u"/Entries");
     for(OUString const & component : _rComponents)
     {
         OUString sComponentName = component.copy(component.lastIndexOf('/')+1);
@@ -317,7 +317,7 @@ void ExtendedColorConfig_Impl::FillComponentColors(const uno::Sequence < OUStrin
             uno::Sequence < OUString > aColorNames = GetPropertyNames(sEntry);
             uno::Sequence < OUString > aDefaultColorNames = aColorNames;
 
-            const OUString sColor("/Color");
+            static const OUStringLiteral sColor(u"/Color");
             lcl_addString(aColorNames,sColor);
             lcl_addString(aDefaultColorNames,u"/DefaultColor");
             uno::Sequence< uno::Any > aColors = GetProperties( aColorNames );
@@ -383,11 +383,11 @@ void ExtendedColorConfig_Impl::ImplCommit()
 {
     if ( m_sLoadedScheme.isEmpty() )
         return;
-    const OUString sColorEntries("Entries");
-    const OUString sColor("/Color");
+    static const OUStringLiteral sColorEntries(u"Entries");
+    static const OUStringLiteral sColor(u"/Color");
     OUString sBase = "ExtendedColorScheme/ColorSchemes/"
                    + m_sLoadedScheme;
-    const OUString s_sSep("/");
+    static const OUStringLiteral s_sSep(u"/");
 
     for (auto const& configValue : m_aConfigValues)
     {

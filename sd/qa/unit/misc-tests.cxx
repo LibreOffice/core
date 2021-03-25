@@ -862,7 +862,7 @@ void SdMiscTest::testTdf129898LayerDrawnInSlideshow()
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
 
     // Verify model
-    const OUString sName = "DrawnInSlideshow";
+    static const OUStringLiteral sName = u"DrawnInSlideshow";
     SdrLayerAdmin& rLayerAdmin = xDocShRef->GetDoc()->GetLayerAdmin();
     SdrLayer* pLayer = rLayerAdmin.GetLayer(sName);
     CPPUNIT_ASSERT_MESSAGE("No layer DrawnInSlideshow", pLayer);

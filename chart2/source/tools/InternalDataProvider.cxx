@@ -1227,7 +1227,7 @@ OUString SAL_CALL InternalDataProvider::convertRangeFromXML( const OUString& aXM
         return "";
     }
 
-    const OUString aPivotTableID("PT@");
+    static const OUStringLiteral aPivotTableID(u"PT@");
     if (aXMLRange.startsWith(aPivotTableID))
         return aXMLRange.copy(aPivotTableID.getLength());
 

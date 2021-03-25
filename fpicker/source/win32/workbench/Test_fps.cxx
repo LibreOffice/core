@@ -78,7 +78,7 @@ void TestFilterManager( Reference< XFilePicker > xFilePicker );
 
 Reference< XMultiServiceFactory >   g_xFactory;
 
-const OUString BMP_EXTENSION( "bmp" );
+static const OUStringLiteral BMP_EXTENSION( u"bmp" );
 
 
 // a test client

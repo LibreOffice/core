@@ -934,7 +934,7 @@ OUString AddonsOptions_Impl::GeneratePrefixURL()
 
 void AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContainer& aContainer )
 {
-    const OUString aMenuMergeRootName( "AddonUI/OfficeMenuBarMerging/" );
+    static const OUStringLiteral aMenuMergeRootName( u"AddonUI/OfficeMenuBarMerging/" );
 
     Sequence< OUString > aAddonMergeNodesSeq = GetNodeNames( aMenuMergeRootName );
 
@@ -1011,7 +1011,7 @@ void AddonsOptions_Impl::ReadMergeMenuData( std::u16string_view aMergeAddonInstr
 
 void AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstructions& rCachedToolbarMergingInstructions )
 {
-    const OUString aToolbarMergeRootName( "AddonUI/OfficeToolbarMerging/" );
+    static const OUStringLiteral aToolbarMergeRootName( u"AddonUI/OfficeToolbarMerging/" );
 
     Sequence< OUString > aAddonMergeNodesSeq = GetNodeNames( aToolbarMergeRootName );
     sal_uInt32           nCount = aAddonMergeNodesSeq.getLength();
@@ -1088,7 +1088,7 @@ bool AddonsOptions_Impl::ReadMergeToolbarData( std::u16string_view aMergeAddonIn
 void AddonsOptions_Impl::ReadNotebookBarMergeInstructions(
     NotebookBarMergingInstructions& rCachedNotebookBarMergingInstructions)
 {
-    const OUString aNotebookBarMergeRootName("AddonUI/OfficeNotebookBarMerging/");
+    static const OUStringLiteral aNotebookBarMergeRootName(u"AddonUI/OfficeNotebookBarMerging/");
 
     Sequence<OUString> aAddonMergeNodesSeq = GetNodeNames(aNotebookBarMergeRootName);
     sal_uInt32 nCount = aAddonMergeNodesSeq.getLength();
@@ -1169,7 +1169,7 @@ bool AddonsOptions_Impl::ReadMergeNotebookBarData(
 
 void AddonsOptions_Impl::ReadStatusbarMergeInstructions( MergeStatusbarInstructionContainer& aContainer )
 {
-    const OUString aStatusbarMergeRootName( "AddonUI/OfficeStatusbarMerging/" );
+    static const OUStringLiteral aStatusbarMergeRootName( u"AddonUI/OfficeStatusbarMerging/" );
 
     Sequence< OUString > aAddonMergeNodesSeq = GetNodeNames( aStatusbarMergeRootName );
     sal_uInt32  nCount = aAddonMergeNodesSeq.getLength();

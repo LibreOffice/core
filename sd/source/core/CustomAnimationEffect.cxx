@@ -306,7 +306,7 @@ sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_In
             Reference< XEnumerationAccess > xEA( xShape, UNO_QUERY_THROW );
             Reference< XEnumeration > xEnumeration( xEA->createEnumeration(), UNO_SET_THROW );
             css::lang::Locale aLocale;
-            const OUString aStrLocaleName( "CharLocale" );
+            static const OUStringLiteral aStrLocaleName( u"CharLocale" );
             Reference< XTextRange > xParagraph;
 
             sal_Int32 nPara = 0;

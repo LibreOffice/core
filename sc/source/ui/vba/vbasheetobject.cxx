@@ -323,12 +323,11 @@ OUString SAL_CALL ScVbaControlObjectBase::getOnAction()
     const uno::Sequence< script::ScriptEventDescriptor > aEvents = xEventMgr->getScriptEvents( nIndex );
     if( aEvents.hasElements() )
     {
-        const OUString aScriptType = "Script";
         const script::ScriptEventDescriptor* pEvent = std::find_if(aEvents.begin(), aEvents.end(),
-            [&aScriptType](const script::ScriptEventDescriptor& rEvent) {
+            [](const script::ScriptEventDescriptor& rEvent) {
                 return (rEvent.ListenerType == gaListenerType)
                     && (rEvent.EventMethod == gaEventMethod)
-                    && (rEvent.ScriptType == aScriptType);
+                    && (rEvent.ScriptType == "Script");
             });
         if (pEvent != aEvents.end())
             return extractMacroName( pEvent->ScriptCode );

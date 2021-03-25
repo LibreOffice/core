@@ -53,12 +53,12 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
     if( nCount == 0 )
         return;
 
-    const OUString strName( "Name" );
-    const OUString strTitle( "Title" );
-    const OUString strDescription( "Description" );
-    const OUString strIsVisible( "IsVisible");
-    const OUString strIsPrintable( "IsPrintable");
-    const OUString strIsLocked( "IsLocked" );
+    static const OUStringLiteral strName( u"Name" );
+    static const OUStringLiteral strTitle( u"Title" );
+    static const OUStringLiteral strDescription( u"Description" );
+    static const OUStringLiteral strIsVisible( u"IsVisible");
+    static const OUStringLiteral strIsPrintable( u"IsPrintable");
+    static const OUStringLiteral strIsLocked( u"IsLocked" );
 
     OUString sTmp;
 

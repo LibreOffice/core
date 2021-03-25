@@ -1170,9 +1170,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
             if ( !aLangText.isEmpty() )
             {
                 LanguageType eLang, eLatin, eCjk, eCtl;
-                const OUString aSelectionLangPrefix("Current_");
-                const OUString aParagraphLangPrefix("Paragraph_");
-                const OUString aDocLangPrefix("Default_");
+                static const OUStringLiteral aSelectionLangPrefix(u"Current_");
+                static const OUStringLiteral aParagraphLangPrefix(u"Paragraph_");
+                static const OUStringLiteral aDocLangPrefix(u"Default_");
 
                 bool bSelection = false;
                 bool bParagraph = false;
@@ -1320,7 +1320,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             if (pItem2)
                 sApplyText = pItem2->GetValue();
 
-            const OUString sSpellingRule("Spelling_");
+            static const OUStringLiteral sSpellingRule(u"Spelling_");
             sal_Int32 nPos = 0;
             if(-1 != (nPos = sApplyText.indexOf( sSpellingRule )))
             {

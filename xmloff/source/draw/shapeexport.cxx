@@ -2345,7 +2345,7 @@ namespace
 
 OUString getNameFromStreamURL(OUString const & rURL)
 {
-    const OUString sPackageURL("vnd.sun.star.Package:");
+    static const OUStringLiteral sPackageURL(u"vnd.sun.star.Package:");
 
     OUString sResult;
 
@@ -3017,7 +3017,7 @@ void XMLShapeExport::ImpExportPageShape(
 
     // export page number used for this page
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
-    const OUString aPageNumberStr("PageNumber");
+    static const OUStringLiteral aPageNumberStr(u"PageNumber");
     if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(aPageNumberStr))
     {
         sal_Int32 nPageNumber = 0;
@@ -3338,14 +3338,14 @@ void XMLShapeExport::ImpExportMediaShape(
     const OUString aFalseStr(  "false"  ), aTrueStr(  "true"  );
 
     bool bLoop = false;
-    const OUString aLoopStr(  "Loop"  );
+    static const OUStringLiteral aLoopStr(  u"Loop"  );
     xPropSet->getPropertyValue( aLoopStr ) >>= bLoop;
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aLoopStr );
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bLoop ? aTrueStr : aFalseStr );
     delete new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
 
     bool bMute = false;
-    const OUString aMuteStr(  "Mute"  );
+    static const OUStringLiteral aMuteStr(  u"Mute"  );
     xPropSet->getPropertyValue( aMuteStr ) >>= bMute;
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aMuteStr );
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bMute ? aTrueStr : aFalseStr );
@@ -3709,9 +3709,9 @@ void XMLShapeExport::export3DLamps( const css::uno::Reference< css::beans::XProp
     OUString aStr;
     OUStringBuffer sStringBuffer;
 
-    const OUString aColorPropName("D3DSceneLightColor");
-    const OUString aDirectionPropName("D3DSceneLightDirection");
-    const OUString aLightOnPropName("D3DSceneLightOn");
+    static const OUStringLiteral aColorPropName(u"D3DSceneLightColor");
+    static const OUStringLiteral aDirectionPropName(u"D3DSceneLightDirection");
+    static const OUStringLiteral aLightOnPropName(u"D3DSceneLightOn");
 
     ::basegfx::B3DVector aLightDirection;
     drawing::Direction3D aLightDir;
@@ -4163,7 +4163,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
     // geometry
-    const OUString sCustomShapeGeometry( "CustomShapeGeometry" );
+    static const OUStringLiteral sCustomShapeGeometry( u"CustomShapeGeometry" );
     if ( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( sCustomShapeGeometry ) )
     {
         uno::Any aGeoPropSet( xPropSet->getPropertyValue( sCustomShapeGeometry ) );

@@ -456,42 +456,42 @@ XMLTextImportHelper::XMLTextImportHelper(
     {
         Reference< XNameAccess > xFamilies(xFamiliesSupp->getStyleFamilies());
 
-        const OUString aParaStyles("ParagraphStyles");
+        static const OUStringLiteral aParaStyles(u"ParagraphStyles");
         if( xFamilies->hasByName( aParaStyles ) )
         {
             m_xImpl->m_xParaStyles.set(xFamilies->getByName(aParaStyles),
                 UNO_QUERY);
         }
 
-        const OUString aCharStyles("CharacterStyles");
+        static const OUStringLiteral aCharStyles(u"CharacterStyles");
         if( xFamilies->hasByName( aCharStyles ) )
         {
             m_xImpl->m_xTextStyles.set(xFamilies->getByName(aCharStyles),
                 UNO_QUERY);
         }
 
-        const OUString aNumStyles("NumberingStyles");
+        static const OUStringLiteral aNumStyles(u"NumberingStyles");
         if( xFamilies->hasByName( aNumStyles ) )
         {
             m_xImpl->m_xNumStyles.set(xFamilies->getByName(aNumStyles),
                 UNO_QUERY);
         }
 
-        const OUString aFrameStyles("FrameStyles");
+        static const OUStringLiteral aFrameStyles(u"FrameStyles");
         if( xFamilies->hasByName( aFrameStyles ) )
         {
             m_xImpl->m_xFrameStyles.set(xFamilies->getByName(aFrameStyles),
                 UNO_QUERY);
         }
 
-        const OUString aPageStyles("PageStyles");
+        static const OUStringLiteral aPageStyles(u"PageStyles");
         if( xFamilies->hasByName( aPageStyles ) )
         {
             m_xImpl->m_xPageStyles.set(xFamilies->getByName(aPageStyles),
                 UNO_QUERY);
         }
 
-        const OUString aCellStyles("CellStyles");
+        static const OUStringLiteral aCellStyles(u"CellStyles");
         if( xFamilies->hasByName( aCellStyles ) )
         {
             m_xImpl->m_xCellStyles.set(xFamilies->getByName(aCellStyles),

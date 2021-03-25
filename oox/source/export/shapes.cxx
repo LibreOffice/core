@@ -635,7 +635,7 @@ static void lcl_AnalyzeHandles( const uno::Sequence<beans::PropertyValues> & rHa
 {
     for ( const Sequence< PropertyValue >& rPropSeq : rHandles )
     {
-        const OUString sPosition( "Position"  );
+        static const OUStringLiteral sPosition( u"Position"  );
         bool bPosition = false;
         EnhancedCustomShapeParameterPair aPosition;
         for ( const PropertyValue& rPropVal: rPropSeq )

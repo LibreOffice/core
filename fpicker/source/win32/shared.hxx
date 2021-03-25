@@ -21,9 +21,9 @@
 
 #include <rtl/ustring.hxx>
 
-const OUString BACKSLASH("\\");
-const OUString FILTER_SEPARATOR("------------------------------------------");
-const OUString ALL_FILES_WILDCARD("*.*");
+static const OUStringLiteral BACKSLASH(u"\\");
+static const OUStringLiteral FILTER_SEPARATOR(u"------------------------------------------");
+static const OUStringLiteral ALL_FILES_WILDCARD(u"*.*");
 const bool ALLOW_DUPLICATES = true;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

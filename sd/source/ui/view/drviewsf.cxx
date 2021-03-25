@@ -120,13 +120,13 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                         uno::Reference< beans::XPropertySetInfo > xPropInfo( xPropSet->getPropertySetInfo(), uno::UNO_SET_THROW );
 
                         form::FormButtonType eButtonType = form::FormButtonType_URL;
-                        const OUString sButtonType( "ButtonType" );
+                        static const OUStringLiteral sButtonType( u"ButtonType" );
                         if(xPropInfo->hasPropertyByName( sButtonType ) && (xPropSet->getPropertyValue( sButtonType ) >>= eButtonType ) )
                         {
                             OUString aString;
 
                             // Label
-                            const OUString sLabel( "Label" );
+                            static const OUStringLiteral sLabel( u"Label" );
                             if(xPropInfo->hasPropertyByName(sLabel))
                             {
                                 if( xPropSet->getPropertyValue(sLabel) >>= aString )
@@ -134,7 +134,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                             }
 
                             // URL
-                            const OUString sTargetURL( "TargetURL" );
+                            static const OUStringLiteral sTargetURL( u"TargetURL" );
                             if(xPropInfo->hasPropertyByName(sTargetURL))
                             {
                                 if( xPropSet->getPropertyValue(sTargetURL) >>= aString )
@@ -142,7 +142,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                             }
 
                             // Target
-                            const OUString sTargetFrame( "TargetFrame" );
+                            static const OUStringLiteral sTargetFrame( u"TargetFrame" );
                             if(xPropInfo->hasPropertyByName(sTargetFrame) )
                             {
                                 if( xPropSet->getPropertyValue(sTargetFrame) >>= aString )

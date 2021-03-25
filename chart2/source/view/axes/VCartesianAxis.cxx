@@ -97,7 +97,7 @@ static void lcl_ResizeTextShapeToFitAvailableSpace( Reference< drawing::XShape >
     if( !nAvgCharWidth )
         return;
 
-    const OUString sDots = "...";
+    static const OUStringLiteral sDots = u"...";
     const sal_Int32 nCharsToRemove = ( nTextSize - nMaxLabelsSize ) / nAvgCharWidth + 1;
     sal_Int32 nNewLen = rLabel.getLength() - nCharsToRemove - sDots.getLength();
     // Prevent from showing only dots

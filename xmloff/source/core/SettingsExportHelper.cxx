@@ -286,16 +286,16 @@ void XMLSettingsExportHelper::exportSymbolDescriptors(
 {
     uno::Reference< container::XIndexContainer > xBox = document::IndexedPropertyValues::create(m_rContext.GetComponentContext());
 
-    const OUString sName     ( "Name" );
-    const OUString sExportName ( "ExportName" );
-    const OUString sSymbolSet ( "SymbolSet" );
-    const OUString sCharacter ( "Character" );
-    const OUString sFontName ( "FontName" );
-    const OUString sCharSet  ( "CharSet" );
-    const OUString sFamily   ( "Family" );
-    const OUString sPitch    ( "Pitch" );
-    const OUString sWeight   ( "Weight" );
-    const OUString sItalic   ( "Italic" );
+    static const OUStringLiteral sName     ( u"Name" );
+    static const OUStringLiteral sExportName ( u"ExportName" );
+    static const OUStringLiteral sSymbolSet ( u"SymbolSet" );
+    static const OUStringLiteral sCharacter ( u"Character" );
+    static const OUStringLiteral sFontName ( u"FontName" );
+    static const OUStringLiteral sCharSet  ( u"CharSet" );
+    static const OUStringLiteral sFamily   ( u"Family" );
+    static const OUStringLiteral sPitch    ( u"Pitch" );
+    static const OUStringLiteral sWeight   ( u"Weight" );
+    static const OUStringLiteral sItalic   ( u"Italic" );
 
     sal_Int32 nCount = rProps.getLength();
     const formula::SymbolDescriptor *pDescriptor = rProps.getConstArray();
@@ -426,11 +426,11 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
      * xmloff/source/core/DocumentSettingsContext.cxx
      * XMLConfigItemMapIndexedContext::EndElement() */
 
-    const OUString sLanguage  ( "Language" );
-    const OUString sCountry   ( "Country" );
-    const OUString sVariant   ( "Variant" );
-    const OUString sBeginLine ( "BeginLine" );
-    const OUString sEndLine   ( "EndLine" );
+    static const OUStringLiteral sLanguage  ( u"Language" );
+    static const OUStringLiteral sCountry   ( u"Country" );
+    static const OUStringLiteral sVariant   ( u"Variant" );
+    static const OUStringLiteral sBeginLine ( u"BeginLine" );
+    static const OUStringLiteral sEndLine   ( u"EndLine" );
 
     sal_Int32 nPos = 0;
     for( const auto& rLocale : aLocales )

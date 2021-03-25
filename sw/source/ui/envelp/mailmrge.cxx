@@ -315,7 +315,7 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
                                 + OUString::number(static_cast<sal_Int32>(SfxFilterFlags::NOTINFILEDLG))
                                 + ":default_first");
         uno::Reference< container::XEnumeration > xList = xQuery->createSubSetEnumerationByQuery(sCommand);
-        const OUString sName("Name");
+        static const OUStringLiteral sName(u"Name");
         sal_Int32 nODT = -1;
         while(xList->hasMoreElements()) {
             comphelper::SequenceAsHashMap aFilter(xList->nextElement());

@@ -63,7 +63,7 @@ OUString applicationDirPath()
 OUString findPickerExecutable()
 {
     const auto path = applicationDirPath();
-    const OUString app("lo_kde5filepicker");
+    static const OUStringLiteral app(u"lo_kde5filepicker");
     OUString ret;
     osl_searchFileURL(app.pData, path.pData, &ret.pData);
     if (ret.isEmpty())

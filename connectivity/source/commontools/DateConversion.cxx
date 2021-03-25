@@ -84,7 +84,7 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal,
                         OUString aTemp;
                         _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aTemp;
                         sal_Int32 nIndex = sal_Int32(-2);
-                        const OUString sQuot("\'");
+                        static const OUStringLiteral sQuot(u"\'");
                         do
                         {
                             nIndex += 2;

@@ -1312,7 +1312,7 @@ static std::vector<svx::ClassificationResult> lcl_CollectParagraphClassification
         uno::Reference<text::XTextRange> xTextRange(xField, uno::UNO_QUERY);
         const OUString aName = rdfNamePair.first;
         const OUString aValue = rdfNamePair.second;
-        const OUString sBlank("");
+        static const OUStringLiteral sBlank(u"");
         if (aKeyCreator.isMarkingTextKey(aName))
         {
             aResult.push_back({ svx::ClassificationType::TEXT, aValue, sBlank, sBlank });

@@ -146,7 +146,7 @@ void lcl_setXMLRangePropertyAtDataSequence(
 {
     try
     {
-        const OUString aXMLRangePropName( "CachedXMLRange");
+        static const OUStringLiteral aXMLRangePropName( u"CachedXMLRange");
         Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY_THROW );
         Reference< beans::XPropertySetInfo > xInfo( xProp->getPropertySetInfo());
         if( xInfo.is() && xInfo->hasPropertyByName( aXMLRangePropName ))

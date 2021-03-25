@@ -1088,7 +1088,7 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
             uno::Reference<beans::XPropertySetInfo> xPropertyInfo(
                 xModelProperties.is() ? xModelProperties->getPropertySetInfo()
                                       : uno::Reference<beans::XPropertySetInfo>());
-            const OUString sPrintablePropertyName("Printable");
+            static const OUStringLiteral sPrintablePropertyName(u"Printable");
 
             if (xPropertyInfo.is() && xPropertyInfo->hasPropertyByName(sPrintablePropertyName))
             {
