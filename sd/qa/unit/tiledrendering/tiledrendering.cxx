@@ -114,6 +114,7 @@ public:
     void testCommentChangeImpress();
     void testCommentChangeDraw();
     void testMultiViewInsertDeletePage();
+    void testMultiViewInsertDeletePage2();
     void testDisableUndoRepair();
     void testDocumentRepair();
     void testLanguageStatus();
@@ -167,6 +168,7 @@ public:
     CPPUNIT_TEST(testCommentChangeImpress);
     CPPUNIT_TEST(testCommentChangeDraw);
     CPPUNIT_TEST(testMultiViewInsertDeletePage);
+    CPPUNIT_TEST(testMultiViewInsertDeletePage2);
     CPPUNIT_TEST(testDisableUndoRepair);
     CPPUNIT_TEST(testDocumentRepair);
     CPPUNIT_TEST(testLanguageStatus);
@@ -1951,6 +1953,72 @@ void SdTiledRenderingTest::testMultiViewInsertDeletePage()
     // See if current slide number changed in 2nd view too
     SfxLokHelper::setView(nView2);
     CPPUNIT_ASSERT_EQUAL(4, pXImpressDocument->getPart());
+}
+
+void SdTiledRenderingTest::testMultiViewInsertDeletePage2()
+{
+    // Load the document.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    ViewCallback aView1;
+    int nView1 = SfxLokHelper::getView();
+    uno::Sequence<beans::PropertyValue> aArgs;
+    SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
+
+    // Create second view
+    SfxLokHelper::createView();
+    pXImpressDocument->initializeForTiledRendering(aArgs);
+    ViewCallback aView2;
+    int nView2 = SfxLokHelper::getView();
+
+    // the document has 8 slides
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), pDoc->GetSdPageCount(PageKind::Standard));
+
+    // Switch to 5th page in 2nd view
+    pXImpressDocument->setPart(4);
+
+    // Begin text edit on the only object on the slide.
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject1 = pActualPage->GetObj(0);
+    CPPUNIT_ASSERT(pObject1 != nullptr);
+    CPPUNIT_ASSERT_EQUAL(OBJ_TITLETEXT, pObject1->GetObjIdentifier());
+    SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject1);
+
+    // Double-click outside the text to enter edit mode.
+    const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
+    const auto cornerX = convertMm100ToTwip(aRect.getX() + (aRect.getWidth() / 4));
+    const auto cornerY = convertMm100ToTwip(aRect.getY() + (aRect.getHeight() / 4));
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      cornerX, cornerY,
+                                      2, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      cornerX, cornerY,
+                                      2, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // We must be in text editing mode and have cursor visible.
+    CPPUNIT_ASSERT(pViewShell->GetView()->IsTextEdit());
+
+    // Insert slide in 1st view
+    SfxLokHelper::setView(nView1);
+    comphelper::dispatchCommand(".uno:InsertPage", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // See if the current slide number changed in 2nd view too
+    SfxLokHelper::setView(nView2);
+    CPPUNIT_ASSERT_EQUAL(5, pXImpressDocument->getPart());
+
+    // Delete the page in 1st view now
+    SfxLokHelper::setView(nView1);
+    comphelper::dispatchCommand(".uno:DeletePage", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // See if current slide number changed in 2nd view too
+    SfxLokHelper::setView(nView2);
+    CPPUNIT_ASSERT_EQUAL(4, pXImpressDocument->getPart());
+
+    // We must be still in text editing mode and have cursor visible.
+    CPPUNIT_ASSERT(pViewShell->GetView()->IsTextEdit());
 }
 
 void SdTiledRenderingTest::testDisableUndoRepair()
