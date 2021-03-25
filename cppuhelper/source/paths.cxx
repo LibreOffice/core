@@ -20,6 +20,7 @@
 #include <config_folders.h>
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <cassert>
 
@@ -85,7 +86,9 @@ OUString cppu::getUnoIniUri() {
     }
 #endif
 #endif
-    return uri + "/" SAL_CONFIGFILE("uno");
+    uri += "/" SAL_CONFIGFILE("uno");
+    SAL_INFO("cppuhelper", "expected uno config: " << uri);
+    return uri;
 }
 
 bool cppu::nextDirectoryItem(osl::Directory & directory, OUString * url) {
