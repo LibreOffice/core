@@ -856,10 +856,17 @@ Reference< XShape > const & Shape::createAndInsert(
         uno::Reference<lang::XServiceInfo> xModelInfo(rFilterBase.getModel(), uno::UNO_QUERY);
         for( i = 0; i < nNumPoints; ++i )
         {
-            const basegfx::B2DPoint aPoint( aPoly.getB2DPoint( i ) );
+            basegfx::B2DPoint aPoint( aPoly.getB2DPoint( i ) );
 
-            // tdf#106792 Not needed anymore due to the change in SdrPathObj::NbcResize:
-            // tdf#96674: Guard against zero width or height.
+            // Guard against zero width or height.
+            if (i)
+            {
+                const basegfx::B2DPoint& rPreviousPoint = aPoly.getB2DPoint(i - 1);
+                if (aPoint.getX() - rPreviousPoint.getX() == 0)
+                    aPoint.setX(aPoint.getX() + 1);
+                if (aPoint.getY() - rPreviousPoint.getY() == 0)
+                    aPoint.setY(aPoint.getY() + 1);
+            }
 
             pPoints[i] = awt::Point(static_cast<sal_Int32>(aPoint.getX()), static_cast<sal_Int32>(aPoint.getY()));
         }
