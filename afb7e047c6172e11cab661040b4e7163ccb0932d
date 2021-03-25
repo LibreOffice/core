@@ -194,6 +194,24 @@
       "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0296cca8_6e0bb663",
+        "filename": "sw/source/filter/ascii/parasc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2021-03-25T08:05:39Z",
+      "side": 1,
+      "message": "My point behind this change was to remove the arbitrary limit as you have mentioned that writer is able to handle long paragraphs! So I removed the limit. But may I ask that what are you exactly expecting to be corrected here?",
+      "parentUuid": "902508bc_81403796",
+      "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
