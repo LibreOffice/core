@@ -90,6 +90,7 @@
 #include <tipofthedaydlg.hxx>
 #include <toolbarmodedlg.hxx>
 #include <DiagramDialog.hxx>
+#include <fileextcheckdlg.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -1698,5 +1699,15 @@ AbstractDialogFactory_Impl::CreateDiagramDialog(weld::Window* pParent, std::shar
     return VclPtr<AbstractDiagramDialog_Impl>::Create(
         std::make_unique<DiagramDialog>(pParent, pDiagramData));
 }
+
+#ifdef _WIN32
+VclPtr<VclAbstractDialog>
+AbstractDialogFactory_Impl::CreateFileExtCheckDialog(weld::Window* pParent, const OUString& sTitle,
+                                                     const OUString& sMsg)
+{
+    return VclPtr<CuiAbstractController_Impl>::Create(
+        std::make_unique<FileExtCheckDialog>(pParent, sTitle, sMsg));
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

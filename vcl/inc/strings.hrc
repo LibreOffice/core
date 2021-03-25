@@ -135,6 +135,9 @@
 
 #define STR_SEPARATOR                                NC_("STR_SEPARATOR", "Separator")
 
+#define STR_FILEEXT_NONDEFAULT_ASK_TITLE             NC_("STR_FILEEXT_NONDEFAULT_ASK_TITLE", "Default file formats not registered")
+#define STR_FILEEXT_NONDEFAULT_ASK_MSG               NC_("STR_FILEEXT_NONDEFAULT_ASK_MSG", "The following file formats are not registered to be opened by default in %PRODUCTNAME:\n$1\nSelect OK if you want to change default file format registrations.")
+
 #define KEY_VERSION_CHECK                            NC_("KEY_VERSION_CHECK", "Warning: Not all of the imported EPS graphics could be saved at level1\nas some are at a higher level!")
 
 #endif // INCLUDED_VCL_INC_STRINGS_HRC
