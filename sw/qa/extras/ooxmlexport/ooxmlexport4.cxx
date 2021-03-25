@@ -683,8 +683,8 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf38778, "tdf38778_properties_in_run_fo
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
-    const OUString psz("20");
-    const OUString pszCs("20");
+    static const OUStringLiteral psz(u"20");
+    static const OUStringLiteral pszCs(u"20");
 
     // w:fldCharType="begin"
     assertXPath(pXmlDoc,        "/w:document/w:body/w:p[1]/w:r[3]/w:rPr/w:sz",   "val", psz);

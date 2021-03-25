@@ -288,7 +288,7 @@ IMPL_LINK(FindTextFieldControl, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
             aValue >>= xLayoutManager;
             if (xLayoutManager.is())
             {
-                const OUString sResourceURL( "private:resource/toolbar/findbar" );
+                static const OUStringLiteral sResourceURL( u"private:resource/toolbar/findbar" );
                 xLayoutManager->hideElement( sResourceURL );
                 xLayoutManager->destroyElement( sResourceURL );
             }
@@ -1268,7 +1268,7 @@ void SAL_CALL ExitSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ )
         aValue >>= xLayoutManager;
         if (xLayoutManager.is())
         {
-            const OUString sResourceURL( "private:resource/toolbar/findbar" );
+            static const OUStringLiteral sResourceURL( u"private:resource/toolbar/findbar" );
             xLayoutManager->hideElement( sResourceURL );
             xLayoutManager->destroyElement( sResourceURL );
         }
@@ -1538,7 +1538,7 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
     if (!xLayoutManager.is())
         return;
 
-    const OUString sResourceURL( "private:resource/toolbar/findbar" );
+    static const OUStringLiteral sResourceURL( u"private:resource/toolbar/findbar" );
     css::uno::Reference< css::ui::XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
     if (!xUIElement.is())
     {

@@ -90,7 +90,7 @@ sal_Int32 lcl_getBuildIDFromGenerator( const OUString& rGenerator )
 {
     //returns -1 if nothing found
     sal_Int32 nBuildId = -1;
-    const OUString sBuildCompare(  "$Build-"  );
+    static const OUStringLiteral sBuildCompare(  u"$Build-"  );
     sal_Int32 nBegin = rGenerator.indexOf( sBuildCompare );
     if( nBegin >= 0 )
     {
@@ -630,7 +630,7 @@ void setXMLRangePropertyAtDataSequence(
         return;
     try
     {
-        const OUString aXMLRangePropName(  "CachedXMLRange" );
+        static const OUStringLiteral aXMLRangePropName(  u"CachedXMLRange" );
         Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY_THROW );
         Reference< beans::XPropertySetInfo > xInfo( xProp->getPropertySetInfo());
         if( xInfo.is() && xInfo->hasPropertyByName( aXMLRangePropName ))
@@ -652,7 +652,7 @@ bool getXMLRangePropertyFromDataSequence(
     {
         try
         {
-            const OUString aXMLRangePropName(  "CachedXMLRange" );
+            static const OUStringLiteral aXMLRangePropName(  u"CachedXMLRange" );
             Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY_THROW );
             Reference< beans::XPropertySetInfo > xInfo( xProp->getPropertySetInfo());
             bResult =
@@ -838,7 +838,7 @@ Reference< chart2::data::XDataProvider > getDataProviderFromParent( const Refere
         Reference< lang::XMultiServiceFactory > xFact( xChild->getParent(), uno::UNO_QUERY );
         if( xFact.is() )
         {
-            const OUString aDataProviderServiceName( "com.sun.star.chart2.data.DataProvider");
+            static const OUStringLiteral aDataProviderServiceName( u"com.sun.star.chart2.data.DataProvider");
             const uno::Sequence< OUString > aServiceNames( xFact->getAvailableServiceNames());
             const OUString * pBegin = aServiceNames.getConstArray();
             const OUString * pEnd = pBegin + aServiceNames.getLength();

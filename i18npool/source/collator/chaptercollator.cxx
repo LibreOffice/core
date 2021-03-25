@@ -61,7 +61,7 @@ ChapterCollator::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int
     if( ans != 0 )
         return ans;
 
-    const OUString aAddAllowed("?");
+    static const OUStringLiteral aAddAllowed(u"?");
     ParseResult res1, res2;
     // since parseAnyToken does not take length as parameter, we have to copy
     // it to a temp. string.

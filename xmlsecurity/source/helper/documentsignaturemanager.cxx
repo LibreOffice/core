@@ -172,9 +172,9 @@ bool DocumentSignatureManager::isXML(const OUString& rURI)
 
     bool bIsXML = false;
     bool bPropsAvailable = false;
-    const OUString sPropFullPath("FullPath");
-    const OUString sPropMediaType("MediaType");
-    const OUString sPropDigest("Digest");
+    static const OUStringLiteral sPropFullPath(u"FullPath");
+    static const OUStringLiteral sPropMediaType(u"MediaType");
+    static const OUStringLiteral sPropDigest(u"Digest");
 
     if (readManifest())
     {

@@ -607,9 +607,9 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
             aGeomPropSeq );
 
     // Reset old properties
-    const OUString sTextPath( "TextPath" );
-    const OUString sAdjustmentValues( "AdjustmentValues" );
-    const OUString sPresetTextWarp( "PresetTextWarp" );
+    static const OUStringLiteral sTextPath( u"TextPath" );
+    static const OUStringLiteral sAdjustmentValues( u"AdjustmentValues" );
+    static const OUStringLiteral sPresetTextWarp( u"PresetTextWarp" );
 
     lcl_resetPropertyValue( aGeomPropVec, "CoordinateSize" );
     lcl_resetPropertyValue( aGeomPropVec, "Equations" );
@@ -1169,7 +1169,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 if(mnRotation)
                 {
                     uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
-                    const OUString aGrabBagPropName = "FrameInteropGrabBag";
+                    static const OUStringLiteral aGrabBagPropName = u"FrameInteropGrabBag";
                     uno::Sequence<beans::PropertyValue> aGrabBag;
                     xPropertySet->getPropertyValue(aGrabBagPropName) >>= aGrabBag;
                     beans::PropertyValue aPair;

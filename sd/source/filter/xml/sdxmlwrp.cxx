@@ -673,7 +673,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     {
         try
         {
-            const OUString aName("~clear~" );
+            static const OUStringLiteral aName(u"~clear~" );
             uno::Reference< container::XNameContainer > xGradient( xModelFactory->createInstance( "com.sun.star.drawing.GradientTable" ), uno::UNO_QUERY );
             if( xGradient.is() )
                 xGradient->removeByName( aName );
@@ -711,7 +711,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
         if( xModelSet.is() )
         {
             uno::Reference< beans::XPropertySetInfo > xModelSetInfo( xModelSet->getPropertySetInfo() );
-            const OUString sPropName( "BuildId" );
+            static const OUStringLiteral sPropName( u"BuildId" );
 
             OUString sBuildId;
             xInfoSet->getPropertyValue(sPropName) >>= sBuildId;

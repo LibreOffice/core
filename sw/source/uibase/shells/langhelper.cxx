@@ -121,9 +121,9 @@ namespace SwLangHelper
             // setting the new language...
             if (!aNewLangText.isEmpty())
             {
-                const OUString aSelectionLangPrefix("Current_");
-                const OUString aParagraphLangPrefix("Paragraph_");
-                const OUString aDocumentLangPrefix("Default_");
+                static const OUStringLiteral aSelectionLangPrefix(u"Current_");
+                static const OUStringLiteral aParagraphLangPrefix(u"Paragraph_");
+                static const OUStringLiteral aDocumentLangPrefix(u"Default_");
 
                 sal_Int32 nPos = 0;
                 bool bForSelection = true;

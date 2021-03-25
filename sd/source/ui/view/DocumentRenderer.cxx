@@ -980,7 +980,7 @@ namespace {
             SdPage& rHandoutPage (*rDocument.GetSdPage(0, PageKind::Handout));
 
             Reference< css::beans::XPropertySet > xHandoutPage( rHandoutPage.getUnoPage(), UNO_QUERY );
-            const OUString sPageNumber( "Number" );
+            static const OUStringLiteral sPageNumber( u"Number" );
 
             // Collect the page objects of the handout master.
             std::vector<SdrPageObj*> aHandoutPageObjects;

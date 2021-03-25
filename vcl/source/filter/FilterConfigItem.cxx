@@ -378,11 +378,10 @@ void FilterConfigItem::WriteInt32( const OUString& rKey, sal_Int32 nNewValue )
 Reference< XStatusIndicator > FilterConfigItem::GetStatusIndicator() const
 {
     Reference< XStatusIndicator > xStatusIndicator;
-    const OUString sStatusIndicator( "StatusIndicator" );
 
     auto pPropVal = std::find_if(aFilterData.begin(), aFilterData.end(),
-        [&sStatusIndicator](const css::beans::PropertyValue& rPropVal) {
-            return rPropVal.Name == sStatusIndicator; });
+        [](const css::beans::PropertyValue& rPropVal) {
+            return rPropVal.Name == "StatusIndicator"; });
     if (pPropVal != aFilterData.end())
     {
         pPropVal->Value >>= xStatusIndicator;

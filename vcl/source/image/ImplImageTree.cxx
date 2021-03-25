@@ -562,7 +562,7 @@ bool ImplImageTree::findImage(std::vector<OUString> const & rPaths, ImageRequest
 
 void ImplImageTree::loadImageLinks()
 {
-    const OUString aLinkFilename("links.txt");
+    static const OUStringLiteral aLinkFilename(u"links.txt");
 
     if (!checkPathAccess())
         return;

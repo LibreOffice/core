@@ -1076,7 +1076,7 @@ SfxObjectShell* SigningTest::assertDocument(const ::CppUnit::SourceLine aSrcLine
 CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
 {
     const OUString aURL(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf42316_odt12.ott");
-    const OUString sLoadMessage = "loading failed: " + aURL;
+    static const OUStringLiteral sLoadMessage = u"loading failed: " + aURL;
 
     // load the template as-is to validate signatures
     mxComponent = loadFromDesktop(
@@ -1174,7 +1174,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
 CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
 {
     const OUString aURL(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf42316.ott");
-    const OUString sLoadMessage = "loading failed: " + aURL;
+    static const OUStringLiteral sLoadMessage = u"loading failed: " + aURL;
 
     // load the template as-is to validate signatures
     mxComponent = loadFromDesktop(
@@ -1268,7 +1268,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
     pBatch->commit();
 
     const OUString aURL(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf42316.ott");
-    const OUString sLoadMessage = "loading failed: " + aURL;
+    static const OUStringLiteral sLoadMessage = u"loading failed: " + aURL;
 
     // load the template as-is to validate signatures
     mxComponent = loadFromDesktop(

@@ -554,7 +554,7 @@ void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryIt
         nCoordWidthG  = std::abs( aViewBox.Width );
         nCoordHeightG = std::abs( aViewBox.Height);
     }
-    const OUString sPath( "Path" );
+    static const OUStringLiteral sPath( u"Path" );
 
 
     // Path/Coordinates

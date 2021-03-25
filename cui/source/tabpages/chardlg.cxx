@@ -2993,7 +2993,7 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
 
 void SvxCharPositionPage::FillUserData()
 {
-    const OUString cTok( ";" );
+    static const OUStringLiteral cTok( u";" );
 
     OUString sUser = OUString::number( m_nSuperEsc )  + cTok +
                      OUString::number( m_nSubEsc )    + cTok +

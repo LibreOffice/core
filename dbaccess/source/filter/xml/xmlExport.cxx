@@ -560,7 +560,7 @@ void ODBExport::exportConnectionData()
                         Reference< XPropertySetInfo > xSettingsInfo( xDataSourceSettings->getPropertySetInfo(), UNO_SET_THROW );
 
 
-                        const OUString sPropertyName = "LocalSocket";
+                        static const OUStringLiteral sPropertyName = u"LocalSocket";
                         if ( xSettingsInfo->hasPropertyByName( sPropertyName ) )
                         {
                             OUString sPropertyValue;

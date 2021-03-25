@@ -26,7 +26,7 @@ void DatabaseRange::testMoveCells()
 {
     uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
-    const OUString propName("MoveCells");
+    static const OUStringLiteral propName(u"MoveCells");
 
     bool bMoveCells = true;
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bMoveCells);
@@ -43,7 +43,7 @@ void DatabaseRange::testKeepFormats()
 {
     uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
-    const OUString propName("KeepFormats");
+    static const OUStringLiteral propName(u"KeepFormats");
 
     bool bKeepFormats = true;
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bKeepFormats);
@@ -60,7 +60,7 @@ void DatabaseRange::testStripData()
 {
     uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
-    const OUString propName("StripData");
+    static const OUStringLiteral propName(u"StripData");
 
     bool bStripData = true;
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bStripData);
@@ -77,7 +77,7 @@ void DatabaseRange::testAutoFilter()
 {
     uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
-    const OUString propName("AutoFilter");
+    static const OUStringLiteral propName(u"AutoFilter");
 
     bool bAutoFilter = true;
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bAutoFilter);
@@ -94,7 +94,7 @@ void DatabaseRange::testUseFilterCriteriaSource()
 {
     uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
-    const OUString propName("UseFilterCriteriaSource");
+    static const OUStringLiteral propName(u"UseFilterCriteriaSource");
 
     bool bUseFilterCriteriaSource = true;
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bUseFilterCriteriaSource);
@@ -113,7 +113,7 @@ void DatabaseRange::testFilterCriteriaSource()
 {
     uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
-    const OUString propName("FilterCriteriaSource");
+    static const OUStringLiteral propName(u"FilterCriteriaSource");
 
     table::CellRangeAddress cellRangeAddress;
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= cellRangeAddress);
@@ -132,7 +132,7 @@ void DatabaseRange::testRefreshPeriod()
 {
     uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
-    const OUString propName("RefreshPeriod");
+    static const OUStringLiteral propName(u"RefreshPeriod");
 
     sal_Int32 aRefreshPeriod = 1;
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= aRefreshPeriod);
@@ -151,7 +151,7 @@ void DatabaseRange::testFromSelection()
 {
     uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
-    const OUString propName("FromSelection");
+    static const OUStringLiteral propName(u"FromSelection");
 
     bool bFromSelection = true;
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bFromSelection);
@@ -168,7 +168,7 @@ void DatabaseRange::testTokenIndex()
 {
     uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
-    const OUString propName("TokenIndex");
+    static const OUStringLiteral propName(u"TokenIndex");
 
     sal_Int32 aTokenIndex = 0;
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= aTokenIndex);
@@ -185,7 +185,7 @@ void DatabaseRange::testTotalsRow()
 {
     uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
-    const OUString propName("TotalsRow");
+    static const OUStringLiteral propName(u"TotalsRow");
 
     bool bTotalsRow = true;
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bTotalsRow);
@@ -202,7 +202,7 @@ void DatabaseRange::testContainsHeader()
 {
     uno::Reference<beans::XPropertySet> xDatabaseRange(init("DataArea"), UNO_QUERY_THROW);
 
-    const OUString propName("ContainsHeader");
+    static const OUStringLiteral propName(u"ContainsHeader");
 
     bool bContainsHeader = false;
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bContainsHeader);

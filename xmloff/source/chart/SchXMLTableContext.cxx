@@ -104,7 +104,7 @@ void lcl_fillRangeMapping(
     sal_Int32 nColOffset = ( rTable.bHasHeaderColumn ? 1 : 0 );
 
     const OUString lcl_aCategoriesRange(aCategoriesRange);
-    const OUString lcl_aLabelPrefix("label ");
+    static const OUStringLiteral lcl_aLabelPrefix(u"label ");
 
     // Fill range mapping
     const size_t nTableRowCount( rTable.aData.size());

@@ -242,7 +242,7 @@ bool SdGRFFilter::Export()
                     beans::PropertyValues aArgs;
                     TransformItems( SID_SAVEASDOC, *pSet, aArgs );
 
-                    const OUString sFilterName( "FilterName" );
+                    static const OUStringLiteral sFilterName( u"FilterName" );
                     OUString sShortName( rGraphicFilter.GetExportFormatShortName( nFilter ) );
 
                     bool    bFilterNameFound = false;

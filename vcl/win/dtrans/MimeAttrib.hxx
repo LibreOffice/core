@@ -21,11 +21,11 @@
 
 #include <rtl/ustring.hxx>
 
-const OUString TEXTPLAIN_PARAM_CHARSET("charset");
+static const OUStringLiteral TEXTPLAIN_PARAM_CHARSET(u"charset");
 
-const OUString PRE_WINDOWS_CODEPAGE("windows");
-const OUString PRE_OEM_CODEPAGE("cp");
-const OUString CHARSET_UTF16("utf-16");
-const OUString CHARSET_UNICODE("unicode");
+static const OUStringLiteral PRE_WINDOWS_CODEPAGE(u"windows");
+static const OUStringLiteral PRE_OEM_CODEPAGE(u"cp");
+static const OUStringLiteral CHARSET_UTF16(u"utf-16");
+static const OUStringLiteral CHARSET_UNICODE(u"unicode");
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

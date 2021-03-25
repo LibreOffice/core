@@ -1573,7 +1573,7 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
     if ( !xTextFieldsSupp.is() )
         return;
 
-    const OUString sFieldMaster_Bibliography("com.sun.star.text.FieldMaster.Bibliography");
+    static const OUStringLiteral sFieldMaster_Bibliography(u"com.sun.star.text.FieldMaster.Bibliography");
 
     // get bibliography field master
     Reference<XNameAccess> xMasters =

@@ -1616,7 +1616,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf108806, "tdf108806.docx")
 DECLARE_OOXMLIMPORT_TEST(testTdf87533_bidi, "tdf87533_bidi.docx")
 {
     // "w:bidi" (specified inside Default paragraph properties) should not be ignored
-    const OUString writingMode = "WritingMode"; //getPropertyName(PROP_WRITING_MODE);
+    static const OUStringLiteral writingMode = u"WritingMode"; //getPropertyName(PROP_WRITING_MODE);
 
     // check: "Default Style" master-style has RTL
     {

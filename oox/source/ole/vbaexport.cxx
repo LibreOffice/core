@@ -764,7 +764,7 @@ void exportDirStream(SvStream& rStrm, const css::uno::Reference<css::container::
     aDirStream.WriteUInt32(0x00000000); // reserved
 
 #if VBA_EXPORT_DEBUG
-    const OUString aDirFileName("/tmp/vba_dir_out.bin");
+    static const OUStringLiteral aDirFileName(u"/tmp/vba_dir_out.bin");
     SvFileStream aDirStreamDebug(aDirFileName, StreamMode::READWRITE);
     aDirStream.Seek(0);
     aDirStreamDebug.WriteStream(aDirStream);

@@ -263,7 +263,7 @@ bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelpe
                 if ( pCust )
                 {
                     // currently only support built-in menu
-                    const OUString sMenuBar( "private:resource/menubar/menubar" );
+                    static const OUStringLiteral sMenuBar( u"private:resource/menubar/menubar" );
 
                     // Get menu name
                     SwTBC* pTBC = pWrapper->GetTBCAtOffset( rTBDelta.TBCStreamOffset() );

@@ -246,10 +246,10 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
             OUString aStyle;
             OUString aFamily;
 
-            const OUString sOutline( "outline1" );
-            const OUString sTitle( "title" );
-            const OUString sStandard( "standard" );
-            const OUString sSubtitle( "subtitle" );
+            static const OUStringLiteral sOutline( u"outline1" );
+            static const OUStringLiteral sTitle( u"title" );
+            static const OUStringLiteral sStandard( u"standard" );
+            static const OUStringLiteral sSubtitle( u"subtitle" );
 
             for( int i = 0; i < 4; i++ )    // todo: aggregation of bodystyle (subtitle)
             {

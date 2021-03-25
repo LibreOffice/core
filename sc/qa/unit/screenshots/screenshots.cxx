@@ -132,7 +132,7 @@ VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
 {
     VclPtr<VclAbstractDialog> pReturnDialog;
     ////FIXME: translatable string here
-    const OUString aDefaultSheetName("Sheet1");
+    static const OUStringLiteral aDefaultSheetName(u"Sheet1");
 
     switch ( nID )
     {

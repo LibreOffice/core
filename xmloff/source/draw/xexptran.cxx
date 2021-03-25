@@ -357,12 +357,12 @@ void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConver
     const OUString aStr = msString;
     const sal_Int32 nLen(aStr.getLength());
 
-    const OUString aString_rotate( "rotate" );
-    const OUString aString_scale( "scale" );
-    const OUString aString_translate( "translate" );
-    const OUString aString_skewX( "skewX" );
-    const OUString aString_skewY( "skewY" );
-    const OUString aString_matrix( "matrix" );
+    static const OUStringLiteral aString_rotate( u"rotate" );
+    static const OUStringLiteral aString_scale( u"scale" );
+    static const OUStringLiteral aString_translate( u"translate" );
+    static const OUStringLiteral aString_skewX( u"skewX" );
+    static const OUStringLiteral aString_skewY( u"skewY" );
+    static const OUStringLiteral aString_matrix( u"matrix" );
 
     sal_Int32 nPos(0);
 
@@ -764,12 +764,12 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
     const OUString aStr = msString;
     const sal_Int32 nLen(aStr.getLength());
 
-    const OUString aString_rotatex( "rotatex" );
-    const OUString aString_rotatey( "rotatey" );
-    const OUString aString_rotatez( "rotatez" );
-    const OUString aString_scale( "scale" );
-    const OUString aString_translate( "translate" );
-    const OUString aString_matrix( "matrix" );
+    static const OUStringLiteral aString_rotatex( u"rotatex" );
+    static const OUStringLiteral aString_rotatey( u"rotatey" );
+    static const OUStringLiteral aString_rotatez( u"rotatez" );
+    static const OUStringLiteral aString_scale( u"scale" );
+    static const OUStringLiteral aString_translate( u"translate" );
+    static const OUStringLiteral aString_matrix( u"matrix" );
 
     sal_Int32 nPos(0);
 
