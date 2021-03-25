@@ -6954,7 +6954,7 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
 
     OSL_ENSURE(m_cstd <= nMaxPossibleRecords,
         "allegedly more styles that available data");
-    m_cstd = std::min(m_cstd, nMaxPossibleRecords);
+    m_cstd = o3tl::sanitizing_min(m_cstd, nMaxPossibleRecords);
 }
 
 // Read1STDFixed() reads a style. If the style is completely existent,
