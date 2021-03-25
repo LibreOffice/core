@@ -34,6 +34,24 @@
       "revId": "709a7766e5c2258a6ae6c138bb0d9004aa53a815",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a52e8f19_b6006c5e",
+        "filename": "sc/source/core/tool/rangeutl.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-03-25T22:59:08Z",
+      "side": 1,
+      "message": "The last paragraph (adding rDetails does not construct aStrArea) doesn\u0027t make sense to me. Anyway, this is what I meant with\n\u003e the pData-\u003eGetSymbol() call should take rDetails into account\n\n  pData-\u003eGetSymbol( aStrArea, FormulaGrammar::mergeToGrammar( rDoc.GetGrammar(), rDetails));\n\nDoes that not work?",
+      "parentUuid": "e2e5630c_c435ea87",
+      "revId": "709a7766e5c2258a6ae6c138bb0d9004aa53a815",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
