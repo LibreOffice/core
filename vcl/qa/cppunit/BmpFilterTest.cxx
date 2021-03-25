@@ -36,6 +36,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_RGB_888)
     auto aBitmap = aGraphic.GetBitmapEx();
     CPPUNIT_ASSERT_EQUAL(tools::Long(10), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(10), aBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aBitmap.getPixelFormat());
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aBitmap.GetPixelColor(0, 0));
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aBitmap.GetPixelColor(9, 9));
     CPPUNIT_ASSERT_EQUAL(Color(0x72, 0xd1, 0xc8), aBitmap.GetPixelColor(1, 1));
@@ -50,6 +51,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_RGB_565)
     auto aBitmap = aGraphic.GetBitmapEx();
     CPPUNIT_ASSERT_EQUAL(tools::Long(10), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(10), aBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aBitmap.getPixelFormat());
 
     // White is not completely white
     //CPPUNIT_ASSERT_EQUAL(Color(0xf8, 0xfc, 0xf8), aBitmap.GetPixelColor(0, 0));
@@ -82,6 +84,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_Paint_24_RGB_888)
     auto aBitmap = aGraphic.GetBitmapEx();
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aBitmap.getPixelFormat());
 
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, aBitmap.GetPixelColor(0, 0));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aBitmap.GetPixelColor(2, 0));
@@ -97,6 +100,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_Index_1BPP)
     auto aBitmap = aGraphic.GetBitmapEx();
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N1_BPP, aBitmap.getPixelFormat());
 
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, aBitmap.GetPixelColor(0, 0));
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, aBitmap.GetPixelColor(0, 2));
@@ -112,6 +116,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_Index_4BPP)
     auto aBitmap = aGraphic.GetBitmapEx();
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N4_BPP, aBitmap.getPixelFormat());
 
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, aBitmap.GetPixelColor(0, 0));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aBitmap.GetPixelColor(2, 0));
@@ -127,6 +132,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_Index_8BPP)
     auto aBitmap = aGraphic.GetBitmapEx();
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
 
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, aBitmap.GetPixelColor(0, 0));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aBitmap.GetPixelColor(2, 0));
@@ -142,6 +148,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_Index_8BPP_RLE)
     auto aBitmap = aGraphic.GetBitmapEx();
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
 
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, aBitmap.GetPixelColor(0, 0));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aBitmap.GetPixelColor(2, 0));
@@ -157,6 +164,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_V4)
     auto aBitmap = aGraphic.GetBitmapEx();
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
 
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, aBitmap.GetPixelColor(0, 0));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aBitmap.GetPixelColor(2, 0));
@@ -172,6 +180,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_V3)
     auto aBitmap = aGraphic.GetBitmapEx();
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
 
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, aBitmap.GetPixelColor(0, 0));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aBitmap.GetPixelColor(2, 0));
@@ -187,6 +196,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_V2)
     auto aBitmap = aGraphic.GetBitmapEx();
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
 
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, aBitmap.GetPixelColor(0, 0));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aBitmap.GetPixelColor(2, 0));
