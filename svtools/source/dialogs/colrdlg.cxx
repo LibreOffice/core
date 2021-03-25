@@ -58,7 +58,7 @@ short SvColorDialog::Execute(weld::Window* pParent)
     short ret = 0;
     try
     {
-        const OUString sColor( "Color" );
+        static const OUStringLiteral sColor( u"Color" );
         Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
         Reference<css::awt::XWindow> xParent;

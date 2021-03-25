@@ -570,7 +570,7 @@ void DomainMapper_Impl::RemoveLastParagraph( )
                     (sizeof(SAL_NEWLINE_STRING)-1 == 2 && xCursor->getString() == "\n"))
             {
                 uno::Reference<beans::XPropertySet> xDocProps(GetTextDocument(), uno::UNO_QUERY);
-                const OUString aRecordChanges("RecordChanges");
+                static const OUStringLiteral aRecordChanges(u"RecordChanges");
                 uno::Any aPreviousValue(xDocProps->getPropertyValue(aRecordChanges));
 
                 // disable redlining for this operation, otherwise we might

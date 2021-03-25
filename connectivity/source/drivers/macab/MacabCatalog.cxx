@@ -80,7 +80,7 @@ void MacabCatalog::refreshUsers()
 
 const OUString& MacabCatalog::getDot()
 {
-    static const OUString sDot = ".";
+    static const OUStringLiteral sDot = u".";
     return sDot;
 }
 

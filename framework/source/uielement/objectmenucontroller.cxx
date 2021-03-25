@@ -93,7 +93,7 @@ void ObjectMenuController::fillPopupMenu( const Sequence< css::embed::VerbDescri
     if ( !pVCLPopupMenu )
         return;
 
-    const OUString aVerbCommand( ".uno:ObjectMenue?VerbID:short=" );
+    static const OUStringLiteral aVerbCommand( u".uno:ObjectMenue?VerbID:short=" );
     for ( sal_Int32 i = 0; i < rVerbCommandSeq.getLength(); i++ )
     {
         const css::embed::VerbDescriptor& rVerb = pVerbCommandArray[i];

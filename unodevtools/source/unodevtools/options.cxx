@@ -31,7 +31,7 @@ namespace unodevtools {
 bool readOption( OUString * pValue, const char * pOpt,
                      sal_uInt32 * pnIndex, const OUString & aArg)
 {
-    const OUString dash = "-";
+    static const OUStringLiteral dash = u"-";
     if(aArg.indexOf(dash) != 0)
         return false;
 

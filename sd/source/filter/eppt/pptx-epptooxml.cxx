@@ -1773,7 +1773,7 @@ bool PowerPointExport::WriteColorSchemes(const FSHelperPtr& pFS, const OUString&
         {
             uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
 
-            const OUString aGrabBagPropName = "InteropGrabBag";
+            static const OUStringLiteral aGrabBagPropName = u"InteropGrabBag";
             if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(aGrabBagPropName))
             {
                 comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(aGrabBagPropName));

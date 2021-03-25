@@ -357,7 +357,7 @@ void SAL_CALL RecentFilesMenuController::dispatch(
     if ( nQueryPart <= 0 )
         return;
 
-    const OUString aEntryArgStr( "entry=" );
+    static const OUStringLiteral aEntryArgStr( u"entry=" );
     sal_Int32 nEntryArg = aURL.Complete.indexOf( aEntryArgStr, nQueryPart );
     sal_Int32 nEntryPos = nEntryArg + aEntryArgStr.getLength();
     if (( nEntryArg <= 0 ) || ( nEntryPos >= aURL.Complete.getLength() ))

@@ -266,10 +266,10 @@ OUString FilterBase::getAbsoluteUrl( const OUString& rUrl ) const
 {
     // handle some special cases before calling ::rtl::Uri::convertRelToAbs()
 
-    const OUString aFileSchema = "file:";
-    const OUString aFilePrefix = "file:///";
+    static const OUStringLiteral aFileSchema = u"file:";
+    static const OUStringLiteral aFilePrefix = u"file:///";
     const sal_Int32 nFilePrefixLen = aFilePrefix.getLength();
-    const OUString aUncPrefix = "//";
+    static const OUStringLiteral aUncPrefix = u"//";
 
     /*  (1) convert all backslashes to slashes, and check that passed URL is
         not empty. */

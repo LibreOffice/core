@@ -1510,7 +1510,7 @@ void globalTransfer_(
                     0,
                     rContext.xEnv );
 
-        const OUString cmdName("flush");
+        static const OUStringLiteral cmdName(u"flush");
         if((aAny >>= xci) && xci->hasCommandByName(cmdName))
             xcp->execute(
                 ucb::Command(

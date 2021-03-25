@@ -512,9 +512,9 @@ void ScMacrosTest::testTdf131562()
 void ScMacrosTest::testPasswordProtectedUnicodeString()
 {
     const OUString sCorrectString(u"English Русский 中文");
-    const OUString sMacroURL(
-        "vnd.sun.Star.script:Protected.Module1.TestUnicodeString?language=Basic&location=document");
-    const OUString sLibName("Protected");
+    static const OUStringLiteral sMacroURL(
+        u"vnd.sun.Star.script:Protected.Module1.TestUnicodeString?language=Basic&location=document");
+    static const OUStringLiteral sLibName(u"Protected");
 
     OUString aFileName;
     createFileURL(u"tdf57113.ods", aFileName);
@@ -571,9 +571,9 @@ void ScMacrosTest::testPasswordProtectedUnicodeString()
 
 void ScMacrosTest::testPasswordProtectedArrayInUserType()
 {
-    const OUString sMacroURL(
-        "vnd.sun.Star.script:Protected.Module1.TestMyType?language=Basic&location=document");
-    const OUString sLibName("Protected");
+    static const OUStringLiteral sMacroURL(
+        u"vnd.sun.Star.script:Protected.Module1.TestMyType?language=Basic&location=document");
+    static const OUStringLiteral sLibName(u"Protected");
 
     OUString aFileName;
     createFileURL(u"ProtectedArrayInCustomType.ods", aFileName);

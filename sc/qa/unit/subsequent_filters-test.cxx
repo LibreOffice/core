@@ -1882,7 +1882,7 @@ void ScFiltersTest::testBrokenQuotesCSV()
 
 void ScFiltersTest::testCellValueXLSX()
 {
-    const OUString aFileNameBase("cell-value.");
+    static const OUStringLiteral aFileNameBase(u"cell-value.");
     OUString aFileExtension(getFileFormats()[FORMAT_XLSX].pName, strlen(getFileFormats()[FORMAT_XLSX].pName), RTL_TEXTENCODING_UTF8 );
     OUString aFilterName(getFileFormats()[FORMAT_XLSX].pFilterName, strlen(getFileFormats()[FORMAT_XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFileName;

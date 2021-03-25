@@ -111,11 +111,11 @@ void SAL_CALL DataProviderHandler::inspect(const uno::Reference< uno::XInterface
     try
     {
         uno::Reference< container::XNameContainer > xNameCont(Component,uno::UNO_QUERY);
-        const OUString sFormComponent("FormComponent");
+        static const OUStringLiteral sFormComponent(u"FormComponent");
         if ( xNameCont->hasByName(sFormComponent) )
         {
             uno::Reference<beans::XPropertySet> xProp(xNameCont->getByName(sFormComponent),uno::UNO_QUERY);
-            const OUString sModel("Model");
+            static const OUStringLiteral sModel(u"Model");
             if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(sModel) )
             {
                 m_xChartModel.set(xProp->getPropertyValue(sModel),uno::UNO_QUERY);

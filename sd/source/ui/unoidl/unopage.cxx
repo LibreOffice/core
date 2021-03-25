@@ -405,7 +405,7 @@ SdrObject * SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShap
         return nullptr;
 
     OUString aType( xShape->getShapeType() );
-    const OUString aPrefix( "com.sun.star.presentation." );
+    static const OUStringLiteral aPrefix( u"com.sun.star.presentation." );
     if( !aType.startsWith( aPrefix ) )
     {
         SdrObject* pObj = SvxFmDrawPage::CreateSdrObject_( xShape );

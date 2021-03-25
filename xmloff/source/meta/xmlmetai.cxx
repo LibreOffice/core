@@ -245,8 +245,8 @@ void SvXMLMetaDocumentContext::setBuildId(OUString const& i_rBuildId, const uno:
             {
                 OUStringBuffer sBuffer(
                     i_rBuildId.subView( nBegin+1, nEnd-nBegin-1 ) );
-                const OUString sBuildCompare(
-                     "$Build-"  );
+                static const OUStringLiteral sBuildCompare(
+                     u"$Build-"  );
                 nBegin = i_rBuildId.indexOf( sBuildCompare, nEnd );
                 if ( nBegin != -1 )
                 {
@@ -305,7 +305,7 @@ void SvXMLMetaDocumentContext::setBuildId(OUString const& i_rBuildId, const uno:
     {
         if( xImportInfo.is() )
         {
-            const OUString aPropName("BuildId");
+            static const OUStringLiteral aPropName(u"BuildId");
             uno::Reference< beans::XPropertySetInfo > xSetInfo(
                 xImportInfo->getPropertySetInfo());
             if( xSetInfo.is() && xSetInfo->hasPropertyByName( aPropName ) )

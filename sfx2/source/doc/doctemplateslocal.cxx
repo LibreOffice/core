@@ -58,8 +58,8 @@ void DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::Reference<
 
     xWriterHandler->setOutputStream( xOutStream );
 
-    const OUString aCDATAString( "CDATA" );
-    const OUString aWhiteSpace( " " );
+    static const OUStringLiteral aCDATAString( u"CDATA" );
+    static const OUStringLiteral aWhiteSpace( u" " );
 
     // write the namespace
     rtl::Reference<::comphelper::AttributeList> pRootAttrList = new ::comphelper::AttributeList;

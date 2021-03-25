@@ -1769,7 +1769,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     GtkCssProvider* pBgCssProvider = nullptr;
     if (rBackgroundColor != COL_AUTO)
     {
-        const OUString sColorCss = "* { background-color: #" + rBackgroundColor.AsRGBHexString() + "; }";
+        static const OUStringLiteral sColorCss = u"* { background-color: #" + rBackgroundColor.AsRGBHexString() + "; }";
         const OString aResult = OUStringToOString(sColorCss, RTL_TEXTENCODING_UTF8);
         pBgCssProvider =  gtk_css_provider_new();
         gtk_css_provider_load_from_data(pBgCssProvider, aResult.getStr(), aResult.getLength(), nullptr);

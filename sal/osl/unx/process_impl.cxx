@@ -239,7 +239,7 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
                 /* see @ osl_getExecutableFile(). */
                 if (rtl_ustr_indexOfChar (rtl_uString_getStr(ppArgs[0]), '/') == -1)
                 {
-                    const OUString PATH ("PATH");
+                    static const OUStringLiteral PATH (u"PATH");
 
                     rtl_uString * pSearchPath = nullptr;
                     osl_getEnvironment (PATH.pData, &pSearchPath);

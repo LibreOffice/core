@@ -2242,10 +2242,9 @@ static double getAdjustmentValue( const uno::Reference<beans::XPropertySet>& xSe
         = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(
             aGeomPropSeq );
 
-    const OUString sName = "AdjustmentValues";
     auto aIterator = std::find_if(
         aGeomPropVec.begin(), aGeomPropVec.end(),
-        [sName]( const beans::PropertyValue& rValue ) { return rValue.Name == sName; } );
+        []( const beans::PropertyValue& rValue ) { return rValue.Name == "AdjustmentValues"; } );
 
     if (aIterator != aGeomPropVec.end())
     {
@@ -2269,19 +2268,17 @@ static bool getScaleXValue(const uno::Reference<beans::XPropertySet>& xSet)
         = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(
             aGeomPropSeq);
 
-    const OUString sName = "TextPath";
     auto aIterator = std::find_if(
         aGeomPropVec.begin(), aGeomPropVec.end(),
-        [sName](const beans::PropertyValue& rValue) { return rValue.Name == sName; });
+        [](const beans::PropertyValue& rValue) { return rValue.Name == "TextPath"; });
 
     if (aIterator != aGeomPropVec.end())
     {
         uno::Sequence<beans::PropertyValue> aTextPathProperties;
         aIterator->Value >>= aTextPathProperties;
-        const OUString sScaleX = "ScaleX";
         auto aIterator2 = std::find_if(
             aTextPathProperties.begin(), aTextPathProperties.end(),
-            [sScaleX](const beans::PropertyValue& rValue) { return rValue.Name == sScaleX; });
+            [](const beans::PropertyValue& rValue) { return rValue.Name == "ScaleX"; });
 
         if (aIterator2 != aTextPathProperties.end())
         {

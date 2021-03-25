@@ -712,10 +712,10 @@ void LngSvcMgr::UpdateAll()
 
 void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
 {
-    const OUString aSpellCheckerList( "ServiceManager/SpellCheckerList" );
-    const OUString aGrammarCheckerList( "ServiceManager/GrammarCheckerList" );
-    const OUString aHyphenatorList( "ServiceManager/HyphenatorList" );
-    const OUString aThesaurusList( "ServiceManager/ThesaurusList" );
+    static const OUStringLiteral aSpellCheckerList( u"ServiceManager/SpellCheckerList" );
+    static const OUStringLiteral aGrammarCheckerList( u"ServiceManager/GrammarCheckerList" );
+    static const OUStringLiteral aHyphenatorList( u"ServiceManager/HyphenatorList" );
+    static const OUStringLiteral aThesaurusList( u"ServiceManager/ThesaurusList" );
 
     const uno::Sequence< OUString > aSpellCheckerListEntries( GetNodeNames( aSpellCheckerList ) );
     const uno::Sequence< OUString > aGrammarCheckerListEntries( GetNodeNames( aGrammarCheckerList ) );

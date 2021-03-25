@@ -394,7 +394,7 @@ static SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, 
 
         // build a connection with its current settings (4. data source name, or 5. URL)
 
-        const OUString sUserProp( "User" );
+        static const OUStringLiteral sUserProp( u"User" );
         OUString sDataSourceName;
         xRowSetProps->getPropertyValue("DataSourceName") >>= sDataSourceName;
         OUString sURL;

@@ -601,7 +601,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                             {
                                 const SfxPoolItem& aCustomShape =  static_cast<SdrObjCustomShape*>(pO)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
                                 SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(aCustomShape) );
-                                const OUString sPath( "Path" );
+                                static const OUStringLiteral sPath( u"Path" );
                                 sal_Int16 nGluePointType = EnhancedCustomShapeGluePointType::SEGMENTS;
                                 css::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sPath, "GluePointType" );
                                 if ( pAny )
@@ -723,7 +723,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                             sal_Int32 nX = 0, nY = 0;
                                             if ( ( rPara.First.Value >>= nX ) && ( rPara.Second.Value >>= nY ) )
                                             {
-                                                const OUString sGluePoints( "GluePoints" );
+                                                static const OUStringLiteral sGluePoints( u"GluePoints" );
                                                 css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > aGluePoints;
                                                 pAny = aGeometryItem.GetPropertyValueByName( sPath, sGluePoints );
                                                 if ( pAny )
@@ -2762,7 +2762,7 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
 
     const css::uno::Any* pAny;
     SdrCustomShapeGeometryItem aGeometryItem(rSet.Get( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
-    const OUString sTextRotateAngle( "TextRotateAngle" );
+    static const OUStringLiteral sTextRotateAngle( u"TextRotateAngle" );
     pAny = aGeometryItem.GetPropertyValueByName( sTextRotateAngle );
     double fExtraTextRotateAngle = 0.0;
     if ( pAny )
@@ -4506,9 +4506,9 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     // applies only if importing arcs from MS Office.
                     if ( aObjData.eShapeType == mso_sptArc )
                     {
-                        const OUString sAdjustmentValues( "AdjustmentValues" );
-                        const OUString sViewBox( "ViewBox" );
-                        const OUString sPath( "Path" );
+                        static const OUStringLiteral sAdjustmentValues( u"AdjustmentValues" );
+                        static const OUStringLiteral sViewBox( u"ViewBox" );
+                        static const OUStringLiteral sPath( u"Path" );
                         SdrCustomShapeGeometryItem aGeometryItem( static_cast<SdrObjCustomShape*>(pRet)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
                         PropertyValue aPropVal;
 

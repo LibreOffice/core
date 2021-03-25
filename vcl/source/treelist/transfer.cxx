@@ -171,14 +171,14 @@ static void ImplSetParameterString( TransferableObjectDescriptor& rObjDesc, cons
 
         if( xMimeType.is() )
         {
-            const OUString aClassNameString( "classname" );
-            const OUString aTypeNameString( "typename" );
-            const OUString aDisplayNameString( "displayname" );
-            const OUString aViewAspectString( "viewaspect" );
-            const OUString aWidthString( "width" );
-            const OUString aHeightString( "height" );
-            const OUString aPosXString( "posx" );
-            const OUString aPosYString( "posy" );
+            static const OUStringLiteral aClassNameString( u"classname" );
+            static const OUStringLiteral aTypeNameString( u"typename" );
+            static const OUStringLiteral aDisplayNameString( u"displayname" );
+            static const OUStringLiteral aViewAspectString( u"viewaspect" );
+            static const OUStringLiteral aWidthString( u"width" );
+            static const OUStringLiteral aHeightString( u"height" );
+            static const OUStringLiteral aPosXString( u"posx" );
+            static const OUStringLiteral aPosYString( u"posy" );
 
             if( xMimeType->hasParameter( aClassNameString ) )
             {
@@ -1226,7 +1226,7 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
         Reference< XComponentContext >          xContext( ::comphelper::getProcessComponentContext() );
         Reference< XMimeContentTypeFactory >    xMimeFact = MimeContentTypeFactory::create( xContext );
         DataFlavorEx                            aFlavorEx;
-        const OUString                   aCharsetStr( "charset" );
+        static const OUStringLiteral                   aCharsetStr( u"charset" );
 
 
         for (auto const& rFlavor : rDataFlavorSeq)
@@ -2216,7 +2216,7 @@ bool TransferableDataHelper::IsEqual( const css::datatransfer::DataFlavor& rInte
                 if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( "text/plain" ) )
                 {
                     // special handling for text/plain media types
-                    const OUString aCharsetString( "charset" );
+                    static const OUStringLiteral aCharsetString( u"charset" );
 
                     if( !xRequestType2->hasParameter( aCharsetString ) ||
                         xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( "utf-16" ) ||
@@ -2228,7 +2228,7 @@ bool TransferableDataHelper::IsEqual( const css::datatransfer::DataFlavor& rInte
                 else if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( "application/x-openoffice" ) )
                 {
                     // special handling for application/x-openoffice media types
-                    const OUString aFormatString( "windows_formatname" );
+                    static const OUStringLiteral aFormatString( u"windows_formatname" );
 
                     if( xRequestType1->hasParameter( aFormatString ) &&
                         xRequestType2->hasParameter( aFormatString ) &&

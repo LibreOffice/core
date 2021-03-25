@@ -22,7 +22,7 @@ void CellAreaLink::testUrl()
 {
     uno::Reference<beans::XPropertySet> xCellAreaLink(init(), uno::UNO_QUERY_THROW);
 
-    const OUString propName("Url");
+    static const OUStringLiteral propName(u"Url");
 
     OUString aUrl;
     CPPUNIT_ASSERT(xCellAreaLink->getPropertyValue(propName) >>= aUrl);
@@ -39,7 +39,7 @@ void CellAreaLink::testFilter()
 {
     uno::Reference<beans::XPropertySet> xCellAreaLink(init(), uno::UNO_QUERY_THROW);
 
-    const OUString propName("Filter");
+    static const OUStringLiteral propName(u"Filter");
 
     OUString aFilter;
     CPPUNIT_ASSERT(xCellAreaLink->getPropertyValue(propName) >>= aFilter);
@@ -56,7 +56,7 @@ void CellAreaLink::testFilterOptions()
 {
     uno::Reference<beans::XPropertySet> xCellAreaLink(init(), uno::UNO_QUERY_THROW);
 
-    const OUString propName("FilterOptions");
+    static const OUStringLiteral propName(u"FilterOptions");
 
     OUString aFilterOptions;
     CPPUNIT_ASSERT(xCellAreaLink->getPropertyValue(propName) >>= aFilterOptions);
@@ -75,7 +75,7 @@ void CellAreaLink::testRefreshDelay()
 {
     uno::Reference<beans::XPropertySet> xCellAreaLink(init(), uno::UNO_QUERY_THROW);
 
-    const OUString propName("RefreshDelay");
+    static const OUStringLiteral propName(u"RefreshDelay");
 
     sal_Int32 aRefreshDelay = 0;
     CPPUNIT_ASSERT(xCellAreaLink->getPropertyValue(propName) >>= aRefreshDelay);
@@ -94,7 +94,7 @@ void CellAreaLink::testRefreshPeriod()
 {
     uno::Reference<beans::XPropertySet> xCellAreaLink(init(), uno::UNO_QUERY_THROW);
 
-    const OUString propName("RefreshPeriod");
+    static const OUStringLiteral propName(u"RefreshPeriod");
 
     sal_Int32 aRefreshPeriod = 0;
     CPPUNIT_ASSERT(xCellAreaLink->getPropertyValue(propName) >>= aRefreshPeriod);

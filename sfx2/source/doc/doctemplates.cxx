@@ -543,8 +543,8 @@ void SfxDocTplService_Impl::getDirList()
     maTemplateDirs = Sequence< OUString >( nCount );
 
     uno::Reference< util::XMacroExpander > xExpander = util::theMacroExpander::get(mxContext);
-    const OUString aPrefix(
-        "vnd.sun.star.expand:"  );
+    static const OUStringLiteral aPrefix(
+        u"vnd.sun.star.expand:"  );
 
     sal_Int32 nIdx{ 0 };
     for (auto& rTemplateDir : maTemplateDirs)
@@ -1950,7 +1950,7 @@ bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
         Content aResultContent;
         if ( Content::create( aNewTemplateTargetURL, xEnv, comphelper::getProcessComponentContext(), aResultContent ) )
         {
-            const OUString aPropertyName( "IsReadOnly" );
+            static const OUStringLiteral aPropertyName( u"IsReadOnly" );
             uno::Any aProperty;
             bool bReadOnly = false;
             if ( getProperty( aResultContent, aPropertyName, aProperty ) && ( aProperty >>= bReadOnly ) && bReadOnly )

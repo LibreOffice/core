@@ -801,7 +801,7 @@ void SmEditWindow::SelPrevMark()
     sal_Int32 nPara = eSelection.nStartPara;
     sal_Int32 nMax = eSelection.nStartPos;
     OUString aText(pEditEngine->GetText(nPara));
-    const OUString aMark("<?>");
+    static const OUStringLiteral aMark(u"<?>");
     sal_Int32 nPos;
 
     while ( (nPos = aText.lastIndexOf(aMark, nMax)) < 0 )

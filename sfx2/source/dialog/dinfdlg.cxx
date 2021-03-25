@@ -150,7 +150,7 @@ OUString ConvertDateTime_Impl( const OUString& rName,
 {
      Date aD(uDT);
      tools::Time aT(uDT);
-     const OUString aDelim( ", " );
+     static const OUStringLiteral aDelim( u", " );
      OUString aStr = rWrapper.getDate( aD )
                    + aDelim
                    + rWrapper.getTime( aT );

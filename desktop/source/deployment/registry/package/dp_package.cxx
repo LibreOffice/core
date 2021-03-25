@@ -1059,9 +1059,9 @@ void BackendImpl::PackageImpl::exportTo(
         manifest.reserve( bundle.getLength() );
         sal_Int32 baseURLlen = m_url_expanded.getLength();
         Reference<deployment::XPackage> const *pbundle = bundle.getConstArray();
-        const OUString strMediaType( "MediaType" );
-        const OUString strFullPath( "FullPath" );
-        const OUString strIsFolder( "IsFolder" );
+        static const OUStringLiteral strMediaType( u"MediaType" );
+        static const OUStringLiteral strFullPath( u"FullPath" );
+        static const OUStringLiteral strIsFolder( u"IsFolder" );
         for ( sal_Int32 pos = bundle.getLength(); pos--; )
         {
             Reference<deployment::XPackage> const & xPackage = pbundle[ pos ];

@@ -27,7 +27,7 @@ void XArrayFormulaRange::testGetSetArrayFormula()
 {
     uno::Reference<sheet::XArrayFormulaRange> xAFR(init(), UNO_QUERY_THROW);
 
-    const OUString sFormula("=1 + 2 * 5");
+    static const OUStringLiteral sFormula(u"=1 + 2 * 5");
 
     xAFR->setArrayFormula(sFormula);
     uno::Reference<sheet::XCellRangeAddressable> xCRA(xAFR, UNO_QUERY_THROW);
