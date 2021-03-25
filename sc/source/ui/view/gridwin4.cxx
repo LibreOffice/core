@@ -831,8 +831,14 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     aOutputData.DrawDocumentBackground();
 
-    if (bGridFirst && (bGrid || bPage) && !bNoBackgroundAndGrid)
-        aOutputData.DrawGrid(*pContentDev, bGrid, bPage);
+    if (bGridFirst && (bGrid || bPage))
+    {
+        // Draw lines in background color cover over lok client grid lines in merged cell areas if bNoBackgroundAndGrid is set.
+        if (bNoBackgroundAndGrid)
+            aOutputData.DrawGrid(*pContentDev, false /* bGrid */, false /* bPage */, true /* bMergeCover */);
+        else
+            aOutputData.DrawGrid(*pContentDev, bGrid, bPage);
+    }
 
     aOutputData.DrawBackground(*pContentDev);
 
