@@ -230,6 +230,24 @@
       "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4a72445_395c44f5",
+        "filename": "sw/source/filter/ascii/parasc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-25T08:12:57Z",
+      "side": 1,
+      "message": "This is an easy hack. This means that the problem is clearly described in the bug; there is some discussion about the reason of the problem; and there is a code pointer. These elements are meant to avoid being lost in this huge codebase before even getting close to the problematic files. And all those parts are present in tdf#70423.\n\nBut then the easy hacker\u0027s work starts. The easy hacker\u0027s task is not to find the file and do the indicated change: easy hacker is not a script, and the description is not \"please find line X and replace it with line Y\". The task is to find the place, and starting from that, using the bug description, try to reproduce the problem, and understand how the code makes it happen; then try to *invent* the way to change it correctly.\n\nYou simply do not do your homework, and now you ask me to do it for you. This is not doing to happen.",
+      "parentUuid": "0296cca8_6e0bb663",
+      "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
