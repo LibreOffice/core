@@ -176,9 +176,14 @@ OUString SwResId(const char* pId, int nCardinality)
 uno::Reference< scanner::XScannerManager2 > const &
 SwModule::GetScannerManager()
 {
-    if (!m_xScannerManager.is())
+    static bool bTestScannerManager = true;
+    if (bTestScannerManager && !m_xScannerManager.is())
     {
-        m_xScannerManager = scanner::ScannerManager::create( comphelper::getProcessComponentContext() );
+        try {
+            m_xScannerManager = scanner::ScannerManager::create( comphelper::getProcessComponentContext() );
+        }
+        catch (...) {}
+        bTestScannerManager = false;
     }
     return m_xScannerManager;
 }
