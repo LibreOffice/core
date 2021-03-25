@@ -1,0 +1,55 @@
+# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+from libreoffice.uno.propertyvalue import mkPropertyValues
+
+from uitest.framework import UITestCase
+from uitest.uihelper.common import get_state_as_dict
+from uitest.debug import sleep
+
+class tdf138556( UITestCase ):
+
+    def test_stock_chart13_insert_series( self ):
+        #Start LibreOffice Writer
+        xDocument = self.ui_test.create_doc_in_start_center( "writer" )
+        xMainTop = self.xUITest.getTopFocusWindow()
+
+        #Insert Chart
+        self.xUITest.executeCommand( ".uno:InsertObjectChart" )
+        xChartMainTop = self.xUITest.getTopFocusWindow()
+        xChartMain = xChartMainTop.getChild( "chart_window" )
+        xChart = xChartMain.getChild( "CID/Page=" )
+
+        #Change Chart Type to Stock 1
+        #TODO: test other subtypes
+        self.ui_test.execute_dialog_through_action( xChart, "COMMAND",
+            mkPropertyValues({ "COMMAND" : "DiagramType" }))
+        xDialog = self.xUITest.getTopFocusWindow()
+        xChartType = xDialog.getChild( "charttype" )
+        xStockType = xChartType.getChild( "8" )
+        xStockType.executeAction( "SELECT", tuple())
+        xOKBtn = xDialog.getChild( "ok" )
+        self.ui_test.close_dialog_through_button( xOKBtn )
+
+        #Insert Data Series
+        self.ui_test.execute_dialog_through_action( xChart, "COMMAND",
+            mkPropertyValues({ "COMMAND" : "DiagramData" }))
+        xDialog = self.xUITest.getTopFocusWindow()
+        xToolbar = xDialog.getChild( "toolbar" )
+        xToolbar.executeAction( "CLICK", mkPropertyValues({ "POS" : "1" }))
+        xOKBtn = xDialog.getChild( "close" )
+        self.ui_test.close_dialog_through_button( xOKBtn )
+
+        #Check Number of Sequences
+        xDocument = self.ui_test.get_component()
+        nSequences = len( xDocument.FirstDiagram.
+            CoordinateSystems[0].ChartTypes[0].DataSeries[0].DataSequences )
+        self.assertEqual( nSequences, 3 )
+
+        self.ui_test.close_doc()
