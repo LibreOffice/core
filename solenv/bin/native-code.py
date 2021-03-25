@@ -60,6 +60,7 @@ core_factory_list = [
     ("libvcllo.a", "vcl_component_getFactory"),
     ("libspelllo.a", "spell_component_getFactory"),
     ("libpdffilterlo.a", "pdffilter_component_getFactory"),
+    ("libpdfimportlo.a", "pdfimport_component_getFactory"),
     ("libsvgiolo.a", "svgio_component_getFactory"),
     ("libsvtlo.a", "svt_component_getFactory"),
     ("libctllo.a", "ctl_component_getFactory"),
