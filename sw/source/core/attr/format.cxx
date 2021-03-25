@@ -33,6 +33,7 @@
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/xdef.hxx>
 #include <swcache.hxx>
+#include <GetMetricVal.hxx>
 
 using namespace com::sun::star;
 
@@ -688,6 +689,20 @@ void SwFormat::DelDiffs( const SfxItemSet& rSet )
     bool bRet = 0 != m_aSet.Intersect_BC( rSet, &aOld, &aNew );
     if( bRet )
         sw::ClientNotifyAttrChg(*this, m_aSet, aOld, aNew);
+}
+
+void SwFormat::SetPageFormatToDefault()
+{
+
+    SvxLRSpaceItem aLR(RES_LR_SPACE);
+    sal_Int32 nSize = GetMetricVal(CM_1) * 2;
+    aLR.SetLeft(nSize);
+    aLR.SetRight(nSize);
+    SvxULSpaceItem aUL(RES_UL_SPACE);
+    aUL.SetUpper(static_cast<sal_uInt16>(nSize));
+    aUL.SetLower(static_cast<sal_uInt16>(nSize));
+    SetFormatAttr(aLR);
+    SetFormatAttr(aUL);
 }
 
 /** SwFormat::IsBackgroundTransparent
