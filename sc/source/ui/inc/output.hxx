@@ -290,6 +290,7 @@ private:
     // in the svx tooling to render the borders. Moved to private section
     // and the single call to end of constructor to be sure this always happens
     void    SetCellRotations();
+    void    DrawGridMergeLines(vcl::RenderContext& rRenderContext, bool bGrid, bool bPage, bool bMergeCover);
 
 public:
 
@@ -334,6 +335,7 @@ public:
 
     void    SetSnapPixel();
 
+    void    ClearMergedCellAreaGrid(vcl::RenderContext& rRenderContext);
     void    DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool bPage);
     void    DrawStrings( bool bPixelToLogic = false );
 
