@@ -248,6 +248,24 @@
       "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91db5231_fdbaeac0",
+        "filename": "sw/source/filter/ascii/parasc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2021-03-25T08:18:18Z",
+      "side": 1,
+      "message": "I\u0027m not asking you to do it for me! Anyways, I\u0027ve got your point and will work from the very start on it. Thanking you.",
+      "parentUuid": "e4a72445_395c44f5",
+      "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
