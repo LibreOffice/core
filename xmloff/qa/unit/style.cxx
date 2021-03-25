@@ -61,10 +61,7 @@ void XmloffStyleTest::tearDown()
 
 void XmloffStyleTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 {
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("office"),
-                       BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:office:1.0"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("style"),
-                       BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:style:1.0"));
+    XmlTestTools::registerODFNamespaces(pXmlXpathCtx);
 }
 
 void XmloffStyleTest::load(std::u16string_view rFileName)

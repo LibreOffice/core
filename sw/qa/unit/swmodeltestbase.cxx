@@ -750,76 +750,7 @@ void SwModelTestBase::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w10"),
                        BAD_CAST("urn:schemas-microsoft-com:office:word"));
     // odt
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("office"),
-                       BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:office:1.0"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("style"),
-                       BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:style:1.0"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("text"),
-                       BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:text:1.0"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("table"),
-                       BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:table:1.0"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("draw"),
-                       BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("fo"),
-                       BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("config"),
-                       BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:config:1.0"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("xlink"), BAD_CAST("http://www.w3.org/1999/xlink"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("dc"), BAD_CAST("http://purl.org/dc/elements/1.1/"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("meta"),
-                       BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:meta:1.0"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("number"),
-                       BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("svg"),
-                       BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("chart"),
-                       BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:chart:1.0"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("dr3d"),
-                       BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("math"),
-                       BAD_CAST("http://www.w3.org/1998/Math/MathML"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("form"),
-                       BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:form:1.0"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("script"),
-                       BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:script:1.0"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("ooo"),
-                       BAD_CAST("http://openoffice.org/2004/office"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("ooow"),
-                       BAD_CAST("http://openoffice.org/2004/writer"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("oooc"), BAD_CAST("http://openoffice.org/2004/calc"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("dom"),
-                       BAD_CAST("http://www.w3.org/2001/xml-events"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("xforms"), BAD_CAST("http://www.w3.org/2002/xforms"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("xsd"), BAD_CAST("http://www.w3.org/2001/XMLSchema"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("xsi"),
-                       BAD_CAST("http://www.w3.org/2001/XMLSchema-instance"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("rpt"),
-                       BAD_CAST("http://openoffice.org/2005/report"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("of"),
-                       BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:of:1.2"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("xhtml"), BAD_CAST("http://www.w3.org/1999/xhtml"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("grddl"),
-                       BAD_CAST("http://www.w3.org/2003/g/data-view#"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("officeooo"),
-                       BAD_CAST("http://openoffice.org/2009/office"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("tableooo"),
-                       BAD_CAST("http://openoffice.org/2009/table"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("drawooo"),
-                       BAD_CAST("http://openoffice.org/2010/draw"));
-    xmlXPathRegisterNs(
-        pXmlXpathCtx, BAD_CAST("calcext"),
-        BAD_CAST("urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0"));
-    xmlXPathRegisterNs(
-        pXmlXpathCtx, BAD_CAST("loext"),
-        BAD_CAST("urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0"));
-    xmlXPathRegisterNs(
-        pXmlXpathCtx, BAD_CAST("field"),
-        BAD_CAST("urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0"));
-    xmlXPathRegisterNs(
-        pXmlXpathCtx, BAD_CAST("formx"),
-        BAD_CAST("urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("css3t"),
-                       BAD_CAST("http://www.w3.org/TR/css3-text/"));
+    XmlTestTools::registerODFNamespaces(pXmlXpathCtx);
     // reqif-xhtml
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("reqif-xhtml"),
                        BAD_CAST("http://www.w3.org/1999/xhtml"));
