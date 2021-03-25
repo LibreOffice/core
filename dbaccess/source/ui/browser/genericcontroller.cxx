@@ -458,11 +458,6 @@ bool OGenericUnoController::isFeatureSupported( sal_Int32 _nId )
 
 void OGenericUnoController::InvalidateFeature_Impl()
 {
-#ifdef DBG_UTIL
-    static sal_Int32 s_nRecursions = 0;
-    ++s_nRecursions;
-#endif
-
     bool bEmpty = true;
     FeatureListener aNextFeature;
     {
@@ -505,10 +500,6 @@ void OGenericUnoController::InvalidateFeature_Impl()
         if (!bEmpty)
             aNextFeature = m_aFeaturesToInvalidate.front();
     }
-
-#ifdef DBG_UTIL
-    --s_nRecursions;
-#endif
 }
 
 void OGenericUnoController::ImplInvalidateFeature( sal_Int32 _nId, const Reference< XStatusListener >& _xListener, bool _bForceBroadcast )

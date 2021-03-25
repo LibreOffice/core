@@ -51,7 +51,6 @@ namespace xmloff
     class OElementNameMap : public OControlElement
     {
         typedef std::map<OUString, ElementType> MapString2Element;
-        static MapString2Element    s_sElementTranslations;
         static std::map<sal_Int32, ElementType>    s_sElementTranslations2;
 
         OElementNameMap() = delete;

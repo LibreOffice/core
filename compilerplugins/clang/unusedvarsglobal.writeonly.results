@@ -1,38 +1,18 @@
-basctl/source/basicide/localizationmgr.cxx:52
-    rtl::OUStringLiteral aSemi
-chart2/source/controller/itemsetwrapper/SchWhichPairs.hxx:149
-    sal_uInt16 [7] nAreaWhichPairs
-chart2/source/controller/itemsetwrapper/SchWhichPairs.hxx:157
-    sal_uInt16 [7] nTextWhichPairs
-chart2/source/controller/itemsetwrapper/SchWhichPairs.hxx:164
-    sal_uInt16 [7] nTextOrientWhichPairs
-chart2/source/controller/itemsetwrapper/SchWhichPairs.hxx:199
-    sal_uInt16 [5] nFillPropertyWhichPairs
-chart2/source/controller/itemsetwrapper/SchWhichPairs.hxx:214
-    sal_uInt16 [9] nChartStyleWhichPairs
-chart2/source/view/inc/ViewDefines.hxx:30
+basctl/source/basicide/localizationmgr.cxx:56
+    rtl::OUStringLiteral<2> aSemi
+chart2/source/view/inc/ViewDefines.hxx:29
     double ZDIRECTION
-chart2/source/view/main/ChartView.cxx:2437
-    char * envChartDummyFactory
 connectivity/source/drivers/hsqldb/HDriver.cxx:345
     Reference<class com::sun::star::frame::XTerminateListener> s_xTerminateListener
 connectivity/source/drivers/mysqlc/mysqlc_databasemetadata.cxx:38
     std::string wild
-cppuhelper/source/servicemanager.cxx:1977
+cppuhelper/source/servicemanager.cxx:2024
     std::vector<css::uno::Mapping> maMaps
-cui/source/inc/cuitabarea.hxx:491
-    sal_uInt16 [] pBitmapRanges
-dbaccess/source/ui/browser/genericcontroller.cxx:465
+dbaccess/source/ui/browser/genericcontroller.cxx:462
     sal_Int32 s_nRecursions
-dbaccess/source/ui/inc/TokenWriter.hxx:142
-    sal_Int16 [7] nDefaultFontSize
-dbaccess/source/ui/inc/TokenWriter.hxx:144
-    sal_Int16 [7] nFontSize
-desktop/source/app/langselect.cxx:50
-    rtl::OUString foundLocale
 hwpfilter/source/grammar.cxx:399
     int yynerrs
-hwpfilter/source/hbox.h:67
+hwpfilter/source/hbox.h:66
     int boxCount
 hwpfilter/source/ksc5601.h:184
     hchar [4888] ksc5601_2uni_page4a
@@ -48,57 +28,61 @@ i18npool/inc/calendar_hijri.hxx:62
     sal_Int32 [] LeapYear
 idlc/source/idlccompile.cxx:51
     int yydebug
-include/svx/def3d.hxx:26
-    double EPSILON
-include/svx/xoutbmp.hxx:57
-    GraphicFilter * pGrfFilter
 include/vcl/animate/Animation.hxx:96
     sal_uLong mnAnimCount
+include/xmloff/xmlimp.hxx:531
+    rtl::OUStringLiteral<1> aDefaultNamespace
 libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.cxx:31
     gpointer gtv_comments_sidebar_parent_class
 libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:61
     gpointer gtv_lok_dialog_parent_class
-lotuswordpro/inc/lwptools.hxx:76
-    double INCHT_PER_CM
 sal/osl/unx/system.cxx:164
     void *[3] dummy
 sal/qa/osl/condition/osl_Condition_Const.h:41
     rtl::OUString aTestCon
 sal/qa/osl/condition/osl_Condition_Const.h:43
     char [17] pTestString
-sal/qa/osl/file/osl_File_Const.h:60
+sal/qa/osl/file/osl_File_Const.h:63
     char [11] pBuffer_Number
-sal/qa/osl/file/osl_File_Const.h:61
+sal/qa/osl/file/osl_File_Const.h:64
     char [1] pBuffer_Blank
-sal/qa/osl/file/osl_File_Const.h:126
+sal/qa/osl/file/osl_File_Const.h:129
     rtl::OUString aCanURL2
-sal/qa/osl/file/osl_File_Const.h:128
+sal/qa/osl/file/osl_File_Const.h:131
     rtl::OUString aCanURL3
-sal/qa/osl/file/osl_File_Const.h:141
+sal/qa/osl/file/osl_File_Const.h:132
+    rtl::OUString aCanURL4
+sal/qa/osl/file/osl_File_Const.h:139
+    rtl::OUString aTmpName7
+sal/qa/osl/file/osl_File_Const.h:144
     rtl::OUString aRelURL1
-sal/qa/osl/file/osl_File_Const.h:142
+sal/qa/osl/file/osl_File_Const.h:145
     rtl::OUString aRelURL2
-sal/qa/osl/file/osl_File_Const.h:143
+sal/qa/osl/file/osl_File_Const.h:146
     rtl::OUString aRelURL3
-sal/qa/osl/file/osl_File_Const.h:157
+sal/qa/osl/file/osl_File_Const.h:148
+    rtl::OUString aRelURL5
+sal/qa/osl/file/osl_File_Const.h:149
+    rtl::OUString aLnkURL1
+sal/qa/osl/file/osl_File_Const.h:160
     rtl::OUString aSysPathLnk
-sal/qa/osl/file/osl_File_Const.h:158
+sal/qa/osl/file/osl_File_Const.h:161
     rtl::OUString aFifoSys
-sal/qa/osl/file/osl_File_Const.h:165
+sal/qa/osl/file/osl_File_Const.h:168
     rtl::OUString aTypeURL1
-sal/qa/osl/file/osl_File_Const.h:166
+sal/qa/osl/file/osl_File_Const.h:169
     rtl::OUString aTypeURL2
-sal/qa/osl/file/osl_File_Const.h:167
+sal/qa/osl/file/osl_File_Const.h:170
     rtl::OUString aTypeURL3
-sal/qa/osl/file/osl_File_Const.h:182
-    rtl::OUString aVolURL2
-sal/qa/osl/file/osl_File_Const.h:184
-    rtl::OUString aVolURL3
 sal/qa/osl/file/osl_File_Const.h:185
-    rtl::OUString aVolURL4
-sal/qa/osl/file/osl_File_Const.h:186
-    rtl::OUString aVolURL5
+    rtl::OUString aVolURL2
 sal/qa/osl/file/osl_File_Const.h:187
+    rtl::OUString aVolURL3
+sal/qa/osl/file/osl_File_Const.h:188
+    rtl::OUString aVolURL4
+sal/qa/osl/file/osl_File_Const.h:189
+    rtl::OUString aVolURL5
+sal/qa/osl/file/osl_File_Const.h:190
     rtl::OUString aVolURL6
 sal/qa/osl/security/osl_Security_Const.h:48
     char [17] pTestString
@@ -157,236 +141,40 @@ sal/qa/OStringBuffer/rtl_String_Const.h:450
 sal/qa/OStringBuffer/rtl_String_Const.h:454
     sal_Int32 [12] expValStrLastNormal
 sal/qa/rtl/strings/test_oustring_stringliterals.cxx:47
-    rtlunittest::OUStringLiteral dummy
-sc/inc/global.hxx:514
-    std::unique_ptr<SvxBrushItem> xEmbeddedBrushItem
-sc/source/core/data/drwlayer.cxx:80
+    rtlunittest::OUStringLiteral<6> dummy
+sc/source/core/data/drwlayer.cxx:86
     E3dObjFactory * pF3d
-sc/source/core/opencl/opinlinefun_finacial.cxx:43
-    std::string GetPMTDecl
-sc/source/core/opencl/opinlinefun_finacial.cxx:46
-    std::string GetPMT
-sc/source/core/opencl/opinlinefun_finacial.cxx:309
-    std::string ScaDate2Decl
-sc/source/core/opencl/opinlinefun_finacial.cxx:313
-    std::string ScaDate2
-sc/source/filter/inc/imp_op.hxx:88
-    double fExcToTwips
-sc/source/filter/inc/xlstream.hxx:33
-    ErrCode EXC_ENCR_ERROR_WRONG_PASS
-sc/source/ui/inc/content.hxx:63
-    _Bool bIsInDrag
-sc/source/ui/inc/viewfunc.hxx:376
-    _Bool bPasteIsDrop
-sd/source/ui/inc/framework/FrameworkHelper.hxx:64
-    rtl::OUString msSidebarPaneURL
-sd/source/ui/inc/framework/FrameworkHelper.hxx:83
-    rtl::OUString msAllMasterPagesTaskPanelURL
-sd/source/ui/inc/framework/FrameworkHelper.hxx:84
-    rtl::OUString msRecentMasterPagesTaskPanelURL
-sd/source/ui/inc/framework/FrameworkHelper.hxx:85
-    rtl::OUString msUsedMasterPagesTaskPanelURL
-sd/source/ui/inc/framework/FrameworkHelper.hxx:86
-    rtl::OUString msLayoutTaskPanelURL
-sd/source/ui/inc/framework/FrameworkHelper.hxx:87
-    rtl::OUString msTableDesignPanelURL
-sd/source/ui/inc/framework/FrameworkHelper.hxx:88
-    rtl::OUString msCustomAnimationTaskPanelURL
-sd/source/ui/inc/framework/FrameworkHelper.hxx:89
-    rtl::OUString msSlideTransitionTaskPanelURL
-sd/source/ui/inc/framework/FrameworkHelper.hxx:101
-    rtl::OUStringLiteral msModuleControllerService
-sd/source/ui/inc/framework/FrameworkHelper.hxx:102
-    rtl::OUStringLiteral msConfigurationControllerService
-sd/source/ui/inc/unokywds.hxx:26
-    char [6] sUNO_PseudoSheet_Title
-sd/source/ui/inc/unokywds.hxx:27
-    char [9] sUNO_PseudoSheet_SubTitle
-sd/source/ui/inc/unokywds.hxx:29
-    char [18] sUNO_PseudoSheet_Background_Objects
-sd/source/ui/inc/unokywds.hxx:30
-    char [6] sUNO_PseudoSheet_Notes
-sd/source/ui/inc/unokywds.hxx:31
-    char [9] sUNO_PseudoSheet_Outline1
-sd/source/ui/inc/unokywds.hxx:32
-    char [9] sUNO_PseudoSheet_Outline2
-sd/source/ui/inc/unokywds.hxx:33
-    char [9] sUNO_PseudoSheet_Outline3
-sd/source/ui/inc/unokywds.hxx:34
-    char [9] sUNO_PseudoSheet_Outline4
-sd/source/ui/inc/unokywds.hxx:35
-    char [9] sUNO_PseudoSheet_Outline5
-sd/source/ui/inc/unokywds.hxx:36
-    char [9] sUNO_PseudoSheet_Outline6
-sd/source/ui/inc/unokywds.hxx:37
-    char [9] sUNO_PseudoSheet_Outline7
-sd/source/ui/inc/unokywds.hxx:38
-    char [9] sUNO_PseudoSheet_Outline8
-sd/source/ui/inc/unokywds.hxx:39
-    char [9] sUNO_PseudoSheet_Outline9
-sd/source/ui/inc/unokywds.hxx:49
-    char [6] sUNO_shape_style
-sd/source/ui/inc/unokywds.hxx:50
-    char [10] sUNO_shape_layername
-sd/source/ui/inc/unokywds.hxx:51
-    char [7] sUNO_shape_zorder
-sd/source/ui/inc/unokywds.hxx:54
-    char [31] sUNO_Service_StyleFamily
-sd/source/ui/inc/unokywds.hxx:55
-    char [33] sUNO_Service_StyleFamilies
-sd/source/ui/inc/unokywds.hxx:56
-    char [25] sUNO_Service_Style
-sd/source/ui/inc/unokywds.hxx:58
-    char [36] sUNO_Service_LineProperties
-sd/source/ui/inc/unokywds.hxx:59
-    char [39] sUNO_Service_ParagraphProperties
-sd/source/ui/inc/unokywds.hxx:60
-    char [39] sUNO_Service_CharacterProperties
-sd/source/ui/inc/unokywds.hxx:61
-    char [26] sUNO_Service_Text
-sd/source/ui/inc/unokywds.hxx:62
-    char [36] sUNO_Service_TextProperties
-sd/source/ui/inc/unokywds.hxx:63
-    char [38] sUNO_Service_ShadowProperties
-sd/source/ui/inc/unokywds.hxx:64
-    char [41] sUNO_Service_ConnectorProperties
-sd/source/ui/inc/unokywds.hxx:65
-    char [39] sUNO_Service_MeasureProperties
-sd/source/ui/inc/unokywds.hxx:67
-    char [40] sUNO_Service_GraphicObjectShape
-sd/source/ui/inc/unokywds.hxx:74
-    char [11] sUNO_Prop_Background
-sd/source/ui/inc/unokywds.hxx:78
-    char [7] sUNO_Prop_Aspect
-sd/source/ui/inc/unokywds.hxx:100
-    char [12] sUNO_View_IsQuickEdit
-sd/source/ui/inc/unokywds.hxx:103
-    char [15] sUNO_View_IsDragWithCopy
-sd/source/ui/inc/unokywds.hxx:105
-    char [9] sUNO_View_DrawMode
-sd/source/ui/inc/unokywds.hxx:106
-    char [16] sUNO_View_PreviewDrawMode
-sd/source/ui/inc/unokywds.hxx:107
-    char [24] sUNO_View_IsShowPreviewInPageMode
-sd/source/ui/inc/unokywds.hxx:108
-    char [30] sUNO_View_IsShowPreviewInMasterPageMode
-sd/source/ui/inc/unokywds.hxx:109
-    char [28] sUNO_View_SetShowPreviewInOutlineMode
-sd/source/ui/inc/unokywds.hxx:114
-    char [8] sUNO_View_VisArea
-sd/source/ui/inc/unokywds.hxx:123
-    char [19] sUNO_View_IsSnapLinesVisible
-sd/source/ui/inc/unokywds.hxx:124
-    char [14] sUNO_View_IsDragStripes
-sd/source/ui/inc/unokywds.hxx:127
-    char [23] sUNO_View_IsMarkedHitMovesAlways
-sd/source/ui/inc/unokywds.hxx:130
-    char [12] sUNO_View_IsLineDraft
-sd/source/ui/inc/unokywds.hxx:131
-    char [12] sUNO_View_IsFillDraft
-sd/source/ui/inc/unokywds.hxx:132
-    char [12] sUNO_View_IsTextDraft
-sd/source/ui/inc/unokywds.hxx:133
-    char [12] sUNO_View_IsGrafDraft
-sdext/source/presenter/PresenterHelper.hxx:34
-    rtl::OUString msCenterPaneURL
-sdext/source/presenter/PresenterHelper.hxx:38
-    rtl::OUString msPresenterScreenURL
-sdext/source/presenter/PresenterHelper.hxx:39
-    rtl::OUString msSlideSorterURL
-sdext/source/presenter/PresenterPaneFactory.hxx:57
-    rtl::OUStringLiteral msHelpPaneURL
-sdext/source/presenter/PresenterPaneFactory.hxx:58
-    rtl::OUStringLiteral msOverlayPaneURL
+sd/source/ui/inc/framework/FrameworkHelper.hxx:80
+    rtl::OUStringLiteral<28> msTaskPanelURLPrefix
 sfx2/source/appl/appdata.cxx:48
     BasicDLL * pBasic
-sfx2/source/appl/shutdownicon.hxx:107
+sfx2/source/appl/shutdownicon.hxx:108
     _Bool bModalMode
 soltools/cpp/cpp.h:246
     Nlist * kwdefined
-svl/source/items/style.cxx:61
+starmath/inc/mathml/mathmlMo.hxx:106
+    std::vector<moOperatorData> moOperatorDataDictionary
+starmath/inc/mathml/starmathdatabase.hxx:189
+    Color COL_SM_DIV_BLACK
+starmath/inc/mathml/starmathdatabase.hxx:190
+    Color COL_SM_DIV_BLUE
+svl/source/items/style.cxx:59
     (anonymous namespace)::DbgStyleSheetReferences aDbgStyleSheetReferences
-svtools/source/config/printoptions.cxx:60
-    SvtPrintOptions_Impl * pPrinterOptionsDataContainer
-svtools/source/config/printoptions.cxx:61
-    SvtPrintOptions_Impl * pPrintFileOptionsDataContainer
 sw/source/core/inc/swfont.hxx:989
     SvStatistics g_SvStat
-sw/source/filter/html/css1kywd.hxx:27
-    char *const sCSS1_import
-sw/source/filter/html/css1kywd.hxx:31
-    char *const sCSS1_important
-sw/source/filter/html/css1kywd.hxx:42
-    char *const sCSS1_rgb
-sw/source/filter/html/css1kywd.hxx:50
-    char *const sCSS1_UNIT_em
-sw/source/filter/html/css1kywd.hxx:51
-    char *const sCSS1_UNIT_ex
-sw/source/filter/html/css1kywd.hxx:89
-    char *const sCSS1_PV_lighter
-sw/source/filter/html/css1kywd.hxx:90
-    char *const sCSS1_PV_bolder
-sw/source/filter/html/css1kywd.hxx:94
-    char *const sCSS1_PV_xx_small
-sw/source/filter/html/css1kywd.hxx:95
-    char *const sCSS1_PV_x_small
-sw/source/filter/html/css1kywd.hxx:96
-    char *const sCSS1_PV_small
-sw/source/filter/html/css1kywd.hxx:97
-    char *const sCSS1_PV_medium
-sw/source/filter/html/css1kywd.hxx:98
-    char *const sCSS1_PV_large
-sw/source/filter/html/css1kywd.hxx:99
-    char *const sCSS1_PV_x_large
-sw/source/filter/html/css1kywd.hxx:100
-    char *const sCSS1_PV_xx_large
-sw/source/filter/html/css1kywd.hxx:102
-    char *const sCSS1_PV_larger
-sw/source/filter/html/css1kywd.hxx:103
-    char *const sCSS1_PV_smaller
-sw/source/filter/html/css1kywd.hxx:117
-    char *const sCSS1_PV_repeat_x
-sw/source/filter/html/css1kywd.hxx:118
-    char *const sCSS1_PV_repeat_y
-sw/source/filter/html/css1kywd.hxx:181
-    char *const sCSS1_PV_thin
-sw/source/filter/html/css1kywd.hxx:183
-    char *const sCSS1_PV_thick
-sw/source/filter/html/css1kywd.hxx:209
-    char *const sCSS1_PV_relative
-sw/source/filter/html/css1kywd.hxx:210
-    char *const sCSS1_PV_static
-sw/source/filter/html/css1kywd.hxx:237
-    char *const sCSS1_class_abs_pos
-sw/source/filter/ww8/ww8par6.cxx:1069
+sw/source/filter/ww8/ww8par6.cxx:1083
     sal_uInt16 [2] nLef
-sw/source/filter/ww8/ww8par6.cxx:1070
+sw/source/filter/ww8/ww8par6.cxx:1084
     sal_uInt16 [2] nRig
-sw/source/filter/ww8/ww8par6.cxx:1121
+sw/source/filter/ww8/ww8par6.cxx:1135
     sal_uInt16 [2] nTop
-sw/source/filter/ww8/ww8par6.cxx:1122
+sw/source/filter/ww8/ww8par6.cxx:1136
     sal_uInt16 [2] nBot
-sw/source/filter/ww8/ww8scan.hxx:50
-    char [8] aTextBox
-vcl/inc/unx/gtk/gtkgdi.hxx:166
-    GtkStyleContext * mpSpinEntryStyle
 vcl/qa/cppunit/timer.cxx:54
     (anonymous namespace)::WatchDog * aWatchDog
-vcl/unx/gtk3/a11y/gtk3atkutil.cxx:508
+vcl/source/filter/FilterConfigCache.hxx:49
+    char *[] InternalVectorFilterNameList
+vcl/unx/gtk3/a11y/gtk3atkutil.cxx:447
     (anonymous namespace)::WindowList g_aWindowList
-xmloff/source/chart/XMLSymbolImageContext.cxx:46
-    SvXMLTokenMapEntry [5] aSymbolImageAttrTokenMap
-xmloff/source/draw/sdpropls.hxx:40
-    XMLPropertyMapEntry [] aXMLSDPresPageProps_onlyHeadersFooter
-xmloff/source/style/DashStyle.cxx:58
-    SvXMLTokenMapEntry [9] aDashStyleAttrTokenMap
-xmloff/source/style/XMLBackgroundImageContext.cxx:174
-    SvXMLTokenMap aTokenMap
-xmloff/source/style/xmlstyle.cxx:62
-    SvXMLTokenMapEntry [16] aStyleStylesElemTokenMap
-xmloff/source/style/xmltabi.cxx:84
-    SvXMLTokenMap aTokenMap
-xmloff/source/text/txtdropi.cxx:65
-    SvXMLTokenMap aTokenMap
-xmloff/source/text/txtimp.cxx:414
-    SvXMLTokenMapEntry [9] aTextMasterPageElemTokenMap
+xmloff/source/draw/sdpropls.cxx:365
+    XMLPropertyMapEntry [5] aXMLSDPresPageProps_onlyHeadersFooter

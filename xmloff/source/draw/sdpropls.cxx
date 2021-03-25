@@ -362,16 +362,6 @@ const XMLPropertyMapEntry aXMLSDPresPageProps[] =
     MAP_END()
 };
 
-const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[] =
-{
-    DPMAP( "IsHeaderVisible",               XML_NAMESPACE_PRESENTATION, XML_DISPLAY_HEADER,         XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_HEADER_VISIBLE ),
-    DPMAP( "IsFooterVisible",               XML_NAMESPACE_PRESENTATION, XML_DISPLAY_FOOTER,         XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_FOOTER_VISIBLE ),
-    DPMAP( "IsPageNumberVisible",           XML_NAMESPACE_PRESENTATION, XML_DISPLAY_PAGE_NUMBER,    XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_PAGE_NUMBER_VISIBLE ),
-    DPMAP( "IsDateTimeVisible",             XML_NAMESPACE_PRESENTATION, XML_DISPLAY_DATE_TIME,      XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_DATE_TIME_VISIBLE ),
-
-    MAP_END()
-};
-
 /** contains the attribute to property mapping for a drawing layer table
     WARNING: if attributes are added, SdXMLTableShapeContext::processAttribute needs to be updated!
 */

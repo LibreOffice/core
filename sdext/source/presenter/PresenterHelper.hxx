@@ -30,7 +30,6 @@ namespace sdext::presenter
 */
 namespace PresenterHelper
 {
-extern const OUString msCenterPaneURL;
 extern const OUString msFullScreenPaneURL;
 
 /** Return the slide show controller of a running presentation that has

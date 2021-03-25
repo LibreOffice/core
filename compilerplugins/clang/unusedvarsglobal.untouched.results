@@ -1,38 +1,44 @@
-canvas/workben/canvasdemo.cxx:672
+canvas/workben/canvasdemo.cxx:669
     (anonymous namespace)::DemoApp aApp
-connectivity/source/drivers/evoab2/EApi.h:52
-    gconstpointer (*)(EContact *, EContactField) e_contact_get_const
 cppu/source/uno/check.cxx:315
     (anonymous namespace)::BinaryCompatible_Impl aTest
-framework/source/services/ContextChangeEventMultiplexer.cxx:381
+framework/source/services/ContextChangeEventMultiplexer.cxx:370
     framework::(anonymous namespace)::Hook g_hook
 hwpfilter/source/nodes.h:92
     int count
-pyuno/source/loader/pyuno_loader.cxx:240
-    pyuno_loader::(anonymous namespace)::PythonInit s_Init
 pyuno/source/module/pyuno_gc.cxx:45
     pyuno::(anonymous namespace)::StaticDestructorGuard guard
 sal/osl/all/utility.cxx:45
     osl::(anonymous namespace)::OGlobalTimer aGlobalTimer
-sal/qa/osl/file/osl_File.cxx:5199
+sal/qa/osl/file/osl_File.cxx:4970
     (anonymous namespace)::GlobalObject theGlobalObject
 sal/rtl/cmdargs.cxx:46
     (anonymous namespace)::ArgHolder argHolder
+sal/rtl/strtmpl.hxx:1258
+    IMPL_RTL_STRINGDATA data
+sc/source/ui/inc/inscodlg.hxx:88
+    _Bool bPreviousAllCheck
+sdext/source/presenter/PresenterHelper.hxx:33
+    rtl::OUString msCenterPaneURL
 soltools/cpp/cpp.h:239
     int Lflag
 soltools/mkdepend/parse.c:40
     symhash * maininclist
 soltools/mkdepend/pr.c:34
     int width
+starmath/inc/ElementsDockingWindow.hxx:81
+    std::tuple<const char *, const SmElementDescr *, size_t> [0] m_a6Categories
 svx/source/gengal/gengal.cxx:323
     (anonymous namespace)::GalApp aGalApp
-vcl/backendtest/VisualBackendTest.cxx:745
+vcl/backendtest/VisualBackendTest.cxx:799
     (anonymous namespace)::VisualBackendTestApp aApplication
 vcl/source/uipreviewer/previewer.cxx:113
     (anonymous namespace)::UIPreviewApp aApp
-vcl/workben/icontest.cxx:216
+vcl/workben/icontest.cxx:214
     (anonymous namespace)::IconTestApp aApp
 vcl/workben/mtfdemo.cxx:162
     (anonymous namespace)::DemoMtfApp aApp
-vcl/workben/vcldemo.cxx:2445
+vcl/workben/vcldemo.cxx:2258
     (anonymous namespace)::DemoApp aApp
+xmloff/source/forms/elementimport.hxx:54
+    xmloff::OElementNameMap::MapString2Element s_sElementTranslations
