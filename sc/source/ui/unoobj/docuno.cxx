@@ -565,7 +565,7 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
                                          nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 }
 
-void ScModelObj::setPart( int nPart )
+void ScModelObj::setPart( int nPart, bool /*bAllowChangeFocus*/ )
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
     ScTabView* pTabView = pViewData->GetView();

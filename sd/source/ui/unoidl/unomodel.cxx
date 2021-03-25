@@ -2282,13 +2282,13 @@ OUString SdXImpressDocument::getPartInfo(int nPart)
     return aPartInfo;
 }
 
-void SdXImpressDocument::setPart( int nPart )
+void SdXImpressDocument::setPart( int nPart, bool bAllowChangeFocus )
 {
     DrawViewShell* pViewSh = GetViewShell();
     if (!pViewSh)
         return;
 
-    pViewSh->SwitchPage( nPart );
+    pViewSh->SwitchPage( nPart, bAllowChangeFocus );
 }
 
 int SdXImpressDocument::getParts()
