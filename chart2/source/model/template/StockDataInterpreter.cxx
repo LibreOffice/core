@@ -18,6 +18,7 @@
  */
 
 #include "StockDataInterpreter.hxx"
+#include "StockChartTypeTemplate.hxx"
 #include <DataSeries.hxx>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <tools/diagnose_ex.h>
@@ -312,6 +313,23 @@ InterpretedData SAL_CALL StockDataInterpreter::reinterpretDataSeries(
 {
     // prerequisite: StockDataInterpreter::isDataCompatible() returned true
     return aInterpretedData;
+}
+
+uno::Any SAL_CALL StockDataInterpreter::getChartTypeSpecificData(
+    const OUString& sKey )
+{
+    if( sKey == "stock variant" )
+    {
+        StockChartTypeTemplate::StockVariant eStockVariant( GetStockVariant());
+        std::map< StockChartTypeTemplate::StockVariant, sal_Int32 > aTranslation {
+            { StockChartTypeTemplate::StockVariant::NONE, 0 },
+            { StockChartTypeTemplate::StockVariant::Open, 1 },
+            { StockChartTypeTemplate::StockVariant::Volume, 2 },
+            { StockChartTypeTemplate::StockVariant::VolumeOpen, 3 }
+        };
+        return uno::Any( aTranslation[eStockVariant] );
+    }
+    return uno::Any();
 }
 
 } // namespace chart
