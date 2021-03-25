@@ -232,7 +232,7 @@ public:
                             long nTileWidth,
                             long nTileHeight ) override;
     virtual Size getDocumentSize() override;
-    virtual void setPart(   int nPart ) override;
+    virtual void setPart(   int nPart, bool bAllowChangeFocus = true ) override;
     virtual int  getPart() override;
     virtual int  getParts() override;
     virtual OUString getPartName( int nPart ) override;

@@ -2981,7 +2981,7 @@ static int doc_getPart (LibreOfficeKitDocument* pThis)
     return pDoc->getPart();
 }
 
-static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
+static void doc_setPartImpl(LibreOfficeKitDocument* pThis, int nPart, bool bAllowChangeFocus = true)
 {
     comphelper::ProfileZone aZone("doc_setPart");
 
@@ -2995,7 +2995,12 @@ static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
         return;
     }
 
-    pDoc->setPart( nPart );
+    pDoc->setPart( nPart, bAllowChangeFocus );
+}
+
+static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart)
+{
+    doc_setPartImpl(pThis, nPart, true);
 }
 
 static char* doc_getPartInfo(LibreOfficeKitDocument* pThis, int nPart)
@@ -3310,7 +3315,7 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
             nOrigPart = doc_getPart(pThis);
             if (nPart != nOrigPart)
             {
-                doc_setPart(pThis, nPart);
+                doc_setPartImpl(pThis, nPart, false);
             }
         }
 
@@ -3318,7 +3323,7 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
 
         if (!isText && nPart != nOrigPart)
         {
-            doc_setPart(pThis, nOrigPart);
+            doc_setPartImpl(pThis, nOrigPart, false);
         }
         if (!isText && nViewId != nOrigViewId)
         {

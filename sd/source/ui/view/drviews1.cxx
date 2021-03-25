@@ -651,6 +651,7 @@ void DrawViewShell::ResetActualPage()
         return;
 
     sal_uInt16 nCurrentPageId = maTabControl->GetCurPageId();
+    sal_uInt16 nNewPageId = nCurrentPageId;
     sal_uInt16 nCurrentPageNum = maTabControl->GetPagePos(nCurrentPageId);
     sal_uInt16 nPageCount   = (meEditMode == EditMode::Page)?GetDoc()->GetSdPageCount(mePageKind):GetDoc()->GetMasterSdPageCount(mePageKind);
 
@@ -677,7 +678,8 @@ void DrawViewShell::ResetActualPage()
                 GetDoc()->SetSelected(pPage, false);
         }
 
-        maTabControl->SetCurPageId(maTabControl->GetPageId(nCurrentPageNum));
+        nNewPageId = maTabControl->GetPageId(nCurrentPageNum);
+        maTabControl->SetCurPageId(nNewPageId);
     }
     else // EditMode::MasterPage
     {
@@ -697,12 +699,16 @@ void DrawViewShell::ResetActualPage()
                 nCurrentPageNum = i;
         }
 
-        maTabControl->SetCurPageId(maTabControl->GetPageId(nCurrentPageNum));
+        nNewPageId = maTabControl->GetPageId(nCurrentPageNum);
+        maTabControl->SetCurPageId(nNewPageId);
         SwitchPage(nCurrentPageNum);
     }
 
-    GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHPAGE,
-                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+    if (nNewPageId != nCurrentPageId)
+        GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHPAGE,
+                    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+    else
+        SwitchPage(nCurrentPageNum, false);
 }
 
 /**
@@ -817,8 +823,11 @@ bool DrawViewShell::IsVisible(sal_uInt16 nPage)
 /**
  * Switch to desired page.
  * nSelectPage refers to the current EditMode
+ * bAllowChangeFocus set to false when slide is inserted before current page
+ *                   and we need to only update the current page number,
+ *                   do not disturb editing in that case
  */
-bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
+bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus)
 {
     /** Under some circumstances there are nested calls to SwitchPage() and
         may crash the application (activation of form controls when the
@@ -922,7 +931,8 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             }
         }
 
-        mpDrawView->SdrEndTextEdit();
+        if (bAllowChangeFocus)
+            mpDrawView->SdrEndTextEdit();
 
         mpActualPage = nullptr;
 

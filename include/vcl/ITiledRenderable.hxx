@@ -72,8 +72,10 @@ public:
     /**
      * Set the document "part", i.e. slide for a slideshow, and
      * tab for a spreadsheet.
+     * bool bAllowChangeFocus - used to not disturb other users while editing when
+     *                          setPart is used for tile rendering only
      */
-    virtual void setPart( int ) {}
+    virtual void setPart( int /*nPart*/, bool /*bAllowChangeFocus*/ = true ) {}
 
     /**
      * Get the number of parts -- see setPart for further details.
