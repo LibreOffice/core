@@ -1429,6 +1429,19 @@ DECLARE_OOXMLIMPORT_TEST(testTdf96674, "tdf96674.docx")
     CPPUNIT_ASSERT(aActualSize.Height > 0);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf122717, "tdf122717.docx")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    CPPUNIT_ASSERT(xShape.is());
+    awt::Size aActualSize(xShape->getSize());
+    // Without the fix in place, this test would have failed with
+    // - Expected: 2
+    // - Actual  : 8160
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aActualSize.Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8160), aActualSize.Height);
+
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf98882, "tdf98882.docx")
 {
     sal_Int32 nFlyHeight = parseDump("//fly/infos/bounds", "height").toInt32();
