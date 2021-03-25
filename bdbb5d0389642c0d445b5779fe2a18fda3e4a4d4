@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c5810293_59f475df",
+        "filename": "include/svl/zforlist.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-25T12:20:51Z",
+      "side": 0,
+      "message": "the given format index. If the bFiltering is true, then\n        rOutString will be the real cell string (e.g. a number\n        rounded by the cell format, which rounded value is used\n        in the filtering condition now), instead of the EditFormat\n        string (e.g a not rounded value, which is visible during editing). */",
+      "revId": "bdbb5d0389642c0d445b5779fe2a18fda3e4a4d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
