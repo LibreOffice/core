@@ -288,6 +288,54 @@ void ScOutputData::SetSyntaxMode( bool bNewMode )
 
 void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool bPage)
 {
+    DrawGridMergeLines(rRenderContext, bGrid, bPage, false /* bMergeCover */);
+}
+
+void ScOutputData::ClearMergedCellAreaGrid(vcl::RenderContext& rRenderContext)
+{
+    DrawGridMergeLines(rRenderContext, false, false, true /* bMergeCover */);
+}
+
+namespace {
+    class ScMergedAreas {
+        struct ScMergedAreaBackground
+        {
+            ScRange aArea;
+            Color aBGColor;
+
+            ScMergedAreaBackground(const ScRange& rRange, const Color& rColor):
+                aArea(rRange),
+                aBGColor(rColor)
+            {}
+        };
+
+        std::vector<ScMergedAreaBackground> aAreas;
+
+        public:
+
+        void add(const ScRange& rRange, const Color& aBackgroundColor)
+        {
+            aAreas.emplace_back(rRange, aBackgroundColor);
+        }
+
+        bool getBackgroundColor(const ScAddress& rAddr, Color& rBGColor) const
+        {
+            for (size_t nIdx = 0; nIdx < aAreas.size(); ++nIdx)
+            {
+                const ScMergedAreaBackground& rItem = aAreas[nIdx];
+                if (rItem.aArea.In(rAddr)) // is address in the range?
+                {
+                    rBGColor = rItem.aBGColor;
+                    return true;
+                }
+            }
+            return false;
+        }
+    };
+}
+
+void ScOutputData::DrawGridMergeLines(vcl::RenderContext& rRenderContext, bool bGrid, bool bPage, bool bMergeCover)
+{
     SCCOL nX;
     SCROW nY;
     long nPosX;
@@ -323,11 +371,13 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
     // break all the drawing by one change.
     // So until that happens, we need to special case.
     bool bWorksInPixels = bMetaFile;
+    const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+    Color aSheetBGColor = rColorCfg.GetColorValue(::svtools::DOCCOLOR).nColor;
+    ScMergedAreas aMergedAreas;
 
     if ( eType == OUTTYPE_WINDOW )
     {
         bWorksInPixels = true;
-        const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
         aPageColor = rColorCfg.GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
         aManualColor = rColorCfg.GetColorValue(svtools::CALCPAGEBREAKMANUAL).nColor;
     }
@@ -335,6 +385,40 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
     {
         aPageColor = aGridColor;
         aManualColor = aGridColor;
+    }
+
+    if (bMergeCover)
+    {
+        // Find all merge areas intersecting the view and their background color.
+        // For this we need to find the top left cell of each merge area.
+        // Maximum number of horizontal tiles (in terms of columns) to find merge area top left.
+        constexpr SCCOL MAXTILECOLRANGE = 3;
+        // Maximum number of vertical tiles (in terms of rows) to find merge area top left.
+        constexpr SCCOL MAXTILEROWRANGE = 3;
+
+        SCROW nRow1 = pRowInfo[1].nRowNo;
+        SCROW nRow2 = pRowInfo[nArrCount - 2].nRowNo;
+
+        for (SCROW nRow = std::max(0, nRow1 - (MAXTILEROWRANGE - 1) * (nRow2 - nRow1));
+            nRow <= nRow2; ++nRow)
+        {
+            for (SCCOL nCol = std::max(0, nX1 - (MAXTILECOLRANGE - 1) * (nX2 - nX1));
+                nCol <= nX2;)
+            {
+                const ScPatternAttr* pPattern = mpDoc->GetPattern(nCol, nRow, nTab);
+                const ScMergeAttr* pMerge = &pPattern->GetItem(ATTR_MERGE);
+
+                SCCOL nMergeCols = pMerge->GetColMerge();
+                SCROW nMergeRows = pMerge->GetRowMerge();
+                if (nMergeCols > 1 || nMergeRows > 1)
+                {
+                    ScRange aRange(nCol, nRow, nTab, nCol + nMergeCols - 1, nRow + nMergeRows - 1, nTab);
+                    aMergedAreas.add(aRange, pPattern->GetItem(ATTR_BACKGROUND).GetColor());
+                    nCol += nMergeCols;
+                }
+                ++nCol;
+            }
+        }
     }
 
     long nOneX = 1;
@@ -349,7 +433,11 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
     long nLayoutSign = bLayoutRTL ? -1 : 1;
     long nSignedOneX = nOneX * nLayoutSign;
 
-    rRenderContext.SetLineColor(aGridColor);
+    if (bGrid)
+        rRenderContext.SetLineColor(aGridColor);
+    else if (bMergeCover)
+        rRenderContext.SetLineColor(aSheetBGColor);
+
     ScGridMerger aGrid(&rRenderContext, nOneX, nOneY);
 
     // vertical lines
@@ -391,9 +479,14 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                                                         aPageColor );
                         bDashed = true;
                     }
-                    else
+                    else if (bGrid)
                     {
                         rRenderContext.SetLineColor( aGridColor );
+                        bDashed = false;
+                    }
+                    else if (bMergeCover)
+                    {
+                        rRenderContext.SetLineColor(aSheetBGColor);
                         bDashed = false;
                     }
 
@@ -401,7 +494,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                 }
             }
 
-            bool bDraw = bGrid || nBreakOld != ScBreakType::NONE; // simple grid only if set that way
+            bool bDraw = bGrid || nBreakOld != ScBreakType::NONE || bMergeCover; // simple grid only if set that way
 
             sal_uInt16 nWidthXplus2 = pRowInfo[0].pCellInfo[nXplus2].nWidth;
             bSingle = false; //! get into Fillinfo !!!!!
@@ -451,14 +544,21 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                             }
                         }
 
-                        if (pThisRowInfo->bChanged && !bHOver)
+                        if (pThisRowInfo->bChanged && !bHOver && bGrid)
                         {
                             aGrid.AddVerLine(bWorksInPixels, nPosX-nSignedOneX, nPosY, nNextY-nOneY, bDashed);
+                        }
+                        if (bHOver && bMergeCover)
+                        {
+                            Color aMergedCellBG = aSheetBGColor;
+                            if (aMergedAreas.getBackgroundColor(ScAddress(nXplus1, pThisRowInfo->nRowNo, nTab), aMergedCellBG) &&
+                                aMergedCellBG.IsRGBEqual(aSheetBGColor))
+                                aGrid.AddVerLine(bWorksInPixels, nPosX-nSignedOneX, nPosY, nNextY-nOneY, bDashed);
                         }
                         nPosY = nNextY;
                     }
                 }
-                else
+                else if (bGrid)
                 {
                     aGrid.AddVerLine(bWorksInPixels, nPosX-nSignedOneX, nScrY, nScrY+nScrH-nOneY, bDashed);
                 }
@@ -508,9 +608,14 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                                                         aPageColor );
                         bDashed = true;
                     }
-                    else
+                    else if (bGrid)
                     {
                         rRenderContext.SetLineColor( aGridColor );
+                        bDashed = false;
+                    }
+                    else if (bMergeCover)
+                    {
+                        rRenderContext.SetLineColor(aSheetBGColor);
                         bDashed = false;
                     }
 
@@ -518,7 +623,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                 }
             }
 
-            bool bDraw = bGrid || nBreakOld != ScBreakType::NONE;    // simple grid only if set so
+            bool bDraw = bGrid || nBreakOld != ScBreakType::NONE || bMergeCover;    // simple grid only if set so
 
             bool bNextYisNextRow = (pRowInfo[nArrYplus1].nRowNo == nYplus1);
             bSingle = !bNextYisNextRow;             // Hidden
@@ -556,15 +661,23 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                                             ->IsVerOverlapped();
                                     //! nVisY from Array ??
                             }
-                            if (!bVOver)
+
+                            if (!bVOver && bGrid)
                             {
                                 aGrid.AddHorLine(bWorksInPixels, nPosX, nNextX-nSignedOneX, nPosY-nOneY, bDashed);
+                            }
+                            if (bVOver && bMergeCover)
+                            {
+                                Color aMergedCellBG = aSheetBGColor;
+                                if (aMergedAreas.getBackgroundColor(ScAddress(i, nYplus1 - 1, nTab), aMergedCellBG) &&
+                                    aMergedCellBG.IsRGBEqual(aSheetBGColor))
+                                    aGrid.AddHorLine(bWorksInPixels, nPosX, nNextX-nSignedOneX, nPosY-nOneY, bDashed);
                             }
                         }
                         nPosX = nNextX;
                     }
                 }
-                else
+                else if (bGrid)
                 {
                     aGrid.AddHorLine(bWorksInPixels, nScrX, nScrX+nScrW-nOneX, nPosY-nOneY, bDashed);
                 }
