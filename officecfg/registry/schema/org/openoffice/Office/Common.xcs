@@ -5665,6 +5665,13 @@
           </info>
           <value>-1</value>
       </prop>
+      <prop oor:name="PerformFileExtCheck" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options - General -->
+        <info>
+          <desc>Determines whether the default file extension check is performed on startup.</desc>
+        </info>
+        <value>false</value>
+      </prop>
       <prop oor:name="UseOpenCL" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Determines whether OpenCL can be used, when available, to speed up

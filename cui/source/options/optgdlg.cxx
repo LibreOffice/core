@@ -86,11 +86,7 @@
 #include <svtools/imgdef.hxx>
 
 #if defined(_WIN32)
-#include <o3tl/char16_t2wchar_t.hxx>
-#include <prewin.h>
-#include <shobjidl.h>
-#include <systools/win32/comtools.hxx>
-#include <postwin.h>
+#include <vcl/fileregistration.hxx>
 #endif
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -177,6 +173,7 @@ OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* p
 #endif
 #if defined(_WIN32)
     , m_xFileAssocFrame(m_xBuilder->weld_widget("fileassoc"))
+    , m_xPerformFileExtCheck(m_xBuilder->weld_check_button("cbPerformFileExtCheck"))
     , m_xFileAssocBtn(m_xBuilder->weld_button("assocfiles"))
 #endif
 {
@@ -288,6 +285,15 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
     }
 #endif
 
+#if defined(_WIN32)
+    if (m_xPerformFileExtCheck->get_state_changed_from_saved())
+    {
+        officecfg::Office::Common::Misc::PerformFileExtCheck::set(
+            m_xPerformFileExtCheck->get_active(), batch);
+        bModified = true;
+    }
+#endif
+
     batch->commit();
 
     if( m_xQuickLaunchCB->get_state_changed_from_saved())
@@ -347,6 +353,12 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     }
 
     m_xQuickLaunchCB->save_state();
+
+#if defined(_WIN32)
+    m_xPerformFileExtCheck->set_active(
+        officecfg::Office::Common::Misc::PerformFileExtCheck::get());
+    m_xPerformFileExtCheck->save_state();
+#endif
 }
 
 IMPL_LINK_NOARG( OfaMiscTabPage, TwoFigureHdl, weld::SpinButton&, void )
@@ -367,26 +379,7 @@ IMPL_LINK_NOARG( OfaMiscTabPage, TwoFigureHdl, weld::SpinButton&, void )
 #if defined(_WIN32)
 IMPL_STATIC_LINK_NOARG(OfaMiscTabPage, FileAssocClick, weld::Button&, void)
 {
-    const bool bUninit = SUCCEEDED(CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED));
-    try
-    {
-        auto pIf
-            = sal::systools::COMReference<IApplicationAssociationRegistrationUI>().CoCreateInstance(
-                CLSID_ApplicationAssociationRegistrationUI, nullptr, CLSCTX_INPROC_SERVER);
-
-        // LaunchAdvancedAssociationUI only works for applications registered under
-        // Software\RegisteredApplications. See scp2/source/ooo/registryitem_ooo.scp
-        const OUString expanded = Translate::ExpandVariables("%PRODUCTNAME %PRODUCTVERSION");
-        // This will only show "To change your default apps, go to Settings > Apps > Default apps"
-        // on Win10; this is expected. At least this will self-document it to users.
-        pIf->LaunchAdvancedAssociationUI(o3tl::toW(expanded.getStr()));
-    }
-    catch (...)
-    {
-        // Just ignore any error here: this is not something we need to make sure to succeed
-    }
-    if (bUninit)
-        CoUninitialize();
+    vcl::fileregistration::LaunchRegistrationUI();
 }
 #endif
 
