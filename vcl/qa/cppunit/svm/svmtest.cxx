@@ -985,7 +985,7 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
         "5e01ddcc",
         "4df0e464",
         "4322ee3a",
-        "794c92a9",
+        "3c80d829", // 4-bit color bitmap - same as 8-bit color bitmap
         "3c80d829",
         "71efc447",
     });
