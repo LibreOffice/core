@@ -34,8 +34,6 @@ BitmapEx BitmapSimpleColorQuantizationFilter::execute(BitmapEx const& aBitmapEx)
 
         if (nColorCount <= 2)
             ePixelFormat = vcl::PixelFormat::N1_BPP;
-        else if (nColorCount <= 16)
-            ePixelFormat = vcl::PixelFormat::N4_BPP;
         else
             ePixelFormat = vcl::PixelFormat::N8_BPP;
 
