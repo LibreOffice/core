@@ -1771,12 +1771,11 @@ Color GDIMetaFile::ImplColMonoFnc( const Color&, const void* pColParam )
 BitmapEx GDIMetaFile::ImplBmpMonoFnc( const BitmapEx& rBmpEx, const void* pBmpParam )
 {
     BitmapPalette aPal( 3 );
-
     aPal[ 0 ] = COL_BLACK;
     aPal[ 1 ] = COL_WHITE;
     aPal[ 2 ] = static_cast<const ImplBmpMonoParam*>(pBmpParam)->aColor;
 
-    Bitmap aBmp(rBmpEx.GetSizePixel(), vcl::PixelFormat::N4_BPP, &aPal);
+    Bitmap aBmp(rBmpEx.GetSizePixel(), vcl::PixelFormat::N8_BPP, &aPal);
     aBmp.Erase( static_cast<const ImplBmpMonoParam*>(pBmpParam)->aColor );
 
     if( rBmpEx.IsAlpha() )
