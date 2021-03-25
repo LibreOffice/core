@@ -76,9 +76,6 @@ public:
     static constexpr OUStringLiteral msToolBarURLPrefix = u"private:resource/toolbar/";
     static const OUString msViewTabBarURL;
 
-    // URLs of task panels.
-    static constexpr OUStringLiteral msTaskPanelURLPrefix = u"private:resource/toolpanel/";
-
     // Names of frequently used events.
     static constexpr OUStringLiteral msResourceActivationRequestEvent
         = u"ResourceActivationRequested";

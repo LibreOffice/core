@@ -48,13 +48,6 @@ const char* FilterConfigCache::FilterConfigCacheEntry::InternalPixelFilterNameLi
     nullptr
 };
 
-const char* FilterConfigCache::FilterConfigCacheEntry::InternalVectorFilterNameList[] =
-{
-    IMP_SVMETAFILE, IMP_WMF, IMP_EMF, IMP_SVG, IMP_PDF,
-    EXP_SVMETAFILE, EXP_WMF, EXP_EMF, EXP_SVG, EXP_PDF,
-    IMP_EPS, EXP_EPS, nullptr
-};
-
 void FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUString& rUserDataEntry )
 {
     bIsPixelFormat = false;

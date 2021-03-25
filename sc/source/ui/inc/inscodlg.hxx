@@ -85,7 +85,6 @@ private:
 
     std::unique_ptr<weld::CheckButton>     mxImmediately;
 
-    static bool         bPreviousAllCheck;
     static InsertDeleteFlags nPreviousChecks;
     static InsertContentsFlags nPreviousChecks2;
     static ScPasteFunc  nPreviousFormulaChecks;

@@ -46,7 +46,6 @@ class FilterConfigCache
         OUString        GetShortName( );
 
         static const char* InternalPixelFilterNameList[];
-        static const char* InternalVectorFilterNameList[];
     };
 
 

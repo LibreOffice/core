@@ -89,7 +89,6 @@ namespace xmloff
     }
 
     //= OElementNameMap
-    OElementNameMap::MapString2Element  OElementNameMap::s_sElementTranslations;
     std::map<sal_Int32, OControlElement::ElementType>  OElementNameMap::s_sElementTranslations2;
 
     const OControlElement::ElementType& operator ++(OControlElement::ElementType& _e)
