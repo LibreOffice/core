@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e12ead2_1f3a5a2f",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-03-25T06:45:34Z",
+      "side": 1,
+      "message": "The code that has been removed from this block is required to select the entry in the treebox that matches the not empty style name (const OUString\u0026 rStr) passed to this SelectStyle function.",
+      "revId": "d18f29fc7708cd603761fa11e55d335f4637f75e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3e76ae9_1433639e",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-03-25T06:45:34Z",
+      "side": 1,
+      "message": "The style name passed to the function is empty if program execution gets to this line. \n\nAn empty style name when eFam \u003d\u003d SfxStyleFamily::Pseudo means there is no SwNumRule at the current cursor position.\n\n\u0027No List\u0027 is always the first entry in the mxTreeBox for SfxStyleFamily::Pseudo (List Styles).\n\nThe \u0027if (eFam \u003d\u003d SfxStryleFamily::Pseudo)\u0027 block below needs to be changed to select the first entry in the tree box which will always be \u0027No List\u0027.\n\nThe \u0027else\u0027 can be combined with the \u0027if\u0027 here like:\n\n else if (eFam \u003d\u003d SfxStyleFamily::Pseudo)\n {\n      select first entry\n }\n else\n      mxTreeBox-\u003eunselect_all();",
+      "revId": "d18f29fc7708cd603761fa11e55d335f4637f75e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
