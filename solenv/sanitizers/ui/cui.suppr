@@ -117,6 +117,7 @@ cui/uiconfig/ui/iconchangedialog.ui://GtkLabel[@id='label1'] orphan-label
 cui/uiconfig/ui/iconselectordialog.ui://GtkLabel[@id='noteLabel'] orphan-label
 cui/uiconfig/ui/tipofthedaydialog.ui://GtkLabel[@id='lbTitle'] orphan-label
 cui/uiconfig/ui/tipofthedaydialog.ui://GtkLabel[@id='lbText'] orphan-label
+cui/uiconfig/ui/fileextcheckdialog.ui://GtkLabel[@id='lbText'] orphan-label
 cui/uiconfig/ui/insertfloatingframe.ui://GtkLabel[@id='label6'] orphan-label
 cui/uiconfig/ui/insertfloatingframe.ui://GtkLabel[@id='label7'] orphan-label
 cui/uiconfig/ui/insertfloatingframe.ui://GtkLabel[@id='widthlabel'] orphan-label

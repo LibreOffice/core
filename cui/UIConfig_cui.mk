@@ -9,6 +9,12 @@
 
 $(eval $(call gb_UIConfig_UIConfig,cui))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_UIConfig_add_uifiles,cui,\
+	cui/uiconfig/ui/fileextcheckdialog \
+))
+endif
+
 $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/aboutdialog \
 	cui/uiconfig/ui/aboutconfigdialog\
