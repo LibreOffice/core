@@ -122,6 +122,7 @@
 #include <vcl/window.hxx>
 #include "langselect.hxx"
 #include <salhelper/thread.hxx>
+#include <vcl/fileregistration.hxx>
 
 #if defined MACOSX
 #include <errno.h>
@@ -1893,6 +1894,14 @@ IMPL_LINK_NOARG(Desktop, OpenClients_Impl, void*, void)
     CloseSplashScreen();
     CheckFirstRun( );
 #ifdef _WIN32
+    bool bIsUITest = false; //uitest.uicheck fails when the dialog is open
+    for (sal_uInt16 i = 0; i < Application::GetCommandLineParamCount(); i++)
+    {
+        if (Application::GetCommandLineParam(i) == "--nologo")
+            bIsUITest = true;
+    }
+    if (!Application::IsHeadlessModeEnabled() && !bIsUITest)
+        vcl::fileregistration::CheckFileExtRegistration();
     // Registers a COM class factory of the service manager with the windows operating system.
     Reference< XMultiServiceFactory > xSMgr=  comphelper::getProcessServiceFactory();
     xSMgr->createInstance("com.sun.star.bridge.OleApplicationRegistration");

@@ -66,6 +66,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/dbregisterpage \
 	cui/uiconfig/ui/effectspage \
 	cui/uiconfig/ui/eventsconfigpage \
+	cui/uiconfig/ui/fileextcheckdialog \
 	cui/uiconfig/ui/formatcellsdialog \
 	cui/uiconfig/ui/fontfeaturesdialog \
 	cui/uiconfig/ui/galleryapplyprogress \

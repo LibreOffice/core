@@ -945,6 +945,10 @@ public:
     virtual VclPtr<AbstractDiagramDialog> CreateDiagramDialog(
         weld::Window* pParent,
         std::shared_ptr<DiagramDataInterface> pDiagramData) override;
+
+    virtual VclPtr<VclAbstractDialog> CreateFileExtCheckDialog(weld::Window* pParent,
+                                                               const OUString& sTitle,
+                                                               const OUString& sMsg) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
