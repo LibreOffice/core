@@ -1405,10 +1405,9 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
             iConnection.addEventListener( this );
 
             // listen on a terminating OOo
-            try {
-                getOOoDesktop().addTerminateListener( this );
-            }
-            catch ( Throwable aExc ) {}
+            com.sun.star.frame.XDesktop xDesktop = getOOoDesktop();
+            if (xDesktop != null)
+                xDesktop.addTerminateListener( this );
 
             // start this thread as a daemon
             setDaemon( true );
@@ -1425,7 +1424,9 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
 
             // do not listen on a terminating OOo anymore
             try {
-                getOOoDesktop().removeTerminateListener( this );
+                com.sun.star.frame.XDesktop xDesktop = getOOoDesktop();
+                if (xDesktop != null)
+                    xDesktop.removeTerminateListener( this );
             }
             catch ( Throwable aExc ) {}
 
