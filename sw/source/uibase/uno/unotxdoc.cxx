@@ -3145,7 +3145,7 @@ Size SwXTextDocument::getDocumentSize()
                 aDocSize.Height() + 2 * DOCUMENTBORDER);
 }
 
-void SwXTextDocument::setPart(int nPart)
+void SwXTextDocument::setPart(int nPart, bool /*bAllowChangeFocus*/)
 {
     SolarMutexGuard aGuard;
 
