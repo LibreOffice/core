@@ -85,7 +85,10 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,cui,\
     advapi32 \
     shlwapi \
-    ole32 \
+))
+
+$(eval $(call gb_Library_add_exception_objects,cui,\
+    cui/source/dialogs/fileextcheckdlg \
 ))
 endif
 
