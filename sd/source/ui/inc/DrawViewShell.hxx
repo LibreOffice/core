@@ -243,7 +243,7 @@ public:
 
     void            ResetActualPage();
     void            ResetActualLayer();
-    bool            SwitchPage(sal_uInt16 nPage);
+    bool            SwitchPage(sal_uInt16 nPage, bool bAllowChangeFocus = true);
     bool            IsSwitchPageAllowed() const;
 
     /**
