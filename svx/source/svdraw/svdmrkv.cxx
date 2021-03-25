@@ -692,6 +692,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
     tools::Rectangle aSelection(rRect);
     bool bIsChart = false;
     Point addLogicOffset(0, 0);
+    bool convertMapMode = false;
     if (!rRect.IsEmpty())
     {
         sal_uInt32 nTotalPaintWindows = this->PaintWindowCount();
@@ -721,7 +722,10 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             if (OutputDevice* pOutputDevice = mpMarkedPV->GetView().GetFirstOutputDevice())
             {
                 if (pOutputDevice->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
+                {
                     aSelection = OutputDevice::LogicToLogic(aSelection, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                    convertMapMode = true;
+                }
             }
         }
 
@@ -756,6 +760,26 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             aExtraInfo.append(OString::number(reinterpret_cast<sal_IntPtr>(pO)));
             aExtraInfo.append("\",\"type\":");
             aExtraInfo.append(OString::number(pO->GetObjIdentifier()));
+
+            // In core, the gridOffset is calculated based on the LogicRect's TopLeft coordinate
+            // In online, we have the SnapRect and we calculate it based on its TopLeft coordinate
+            // SnapRect's TopLeft and LogicRect's TopLeft match unless there is rotation
+            // but the rotation is not applied to the LogicRect. Therefore,
+            // what we calculate in online does not match with the core in case of the rotation.
+            // Here we can send the correct gridOffset in the selection callback, this way
+            // whether the shape is rotated or not, we will always have the correct gridOffset
+            // Note that the gridOffset is calculated from the first selected obj
+            basegfx::B2DVector aGridOffset(0.0, 0.0);
+            if(getPossibleGridOffsetForSdrObject(aGridOffset, GetMarkedObjectByIndex(0), GetSdrPageView()))
+            {
+                Point p(aGridOffset.getX(), aGridOffset.getY());
+                if (convertMapMode)
+                    p = OutputDevice::LogicToLogic(p, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                aExtraInfo.append(",\"gridOffsetX\":");
+                aExtraInfo.append(OString::number(p.getX()));
+                aExtraInfo.append(",\"gridOffsetY\":");
+                aExtraInfo.append(OString::number(p.getY()));
+            }
 
             if (bWriterGraphic)
             {
@@ -893,7 +917,6 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                 boost::property_tree::ptree poly;
                 boost::property_tree::ptree custom;
                 boost::property_tree::ptree nodes;
-                const bool convertMapMode = mpMarkedPV->GetView().GetFirstOutputDevice()->GetMapMode().GetMapUnit() == MapUnit::Map100thMM;
                 for (size_t i = 0; i < maHdlList.GetHdlCount(); i++)
                 {
                     SdrHdl *pHdl = maHdlList.GetHdl(i);
