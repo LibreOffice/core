@@ -775,7 +775,7 @@ endif
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/opengl/win/WinDeviceInfo \
-    vcl/source/app/salplug \
+    $(if $(DISABLE_DYNLOADING),vcl/wasm/salplug,vcl/source/app/salplug) \
     vcl/win/app/fileregistration \
 ))
 
