@@ -311,7 +311,7 @@ public:
     virtual Size getDocumentSize() override;
 
     /// @see vcl::ITiledRenderable::setPart().
-    virtual void setPart(int nPart) override;
+    virtual void setPart(int nPart, bool bAllowChangeFocus = true) override;
 
     /// @see vcl::ITiledRenderable::getPart().
     virtual int getPart() override;
