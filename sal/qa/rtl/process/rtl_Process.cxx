@@ -69,9 +69,9 @@ public:
     void getAppCommandArg_001()
     {
 #if defined(_WIN32)
-        const OUString EXECUTABLE_NAME("child_process.exe");
+        static const OUStringLiteral EXECUTABLE_NAME(u"child_process.exe");
 #else
-        const OUString EXECUTABLE_NAME("child_process");
+        static const OUStringLiteral EXECUTABLE_NAME(u"child_process");
 #endif
         OUString suCWD = getModulePath();
         // OUString suCWD2 = getExecutableDirectory();
@@ -194,9 +194,9 @@ public:
     void getGlobalProcessId_002()
     {
 #if defined(_WIN32)
-        const OUString EXEC_NAME("child_process_id.exe");
+        static const OUStringLiteral EXEC_NAME(u"child_process_id.exe");
 #else
-        const OUString EXEC_NAME("child_process_id");
+        static const OUStringLiteral EXEC_NAME(u"child_process_id");
 #endif
         sal_uInt8 pTargetUUID1[16];
         rtl_getGlobalProcessId( pTargetUUID1 );

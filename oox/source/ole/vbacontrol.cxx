@@ -800,7 +800,7 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
 
     // scan for the line 'Begin {GUID} <FormName>'
     TextInputStream aFrameTextStrm( mxContext, aInStrm, eTextEnc );
-    const OUString aBegin = "Begin";
+    static const OUStringLiteral aBegin = u"Begin";
     OUString aLine;
     bool bBeginFound = false;
     while( !bBeginFound && !aFrameTextStrm.isEof() )

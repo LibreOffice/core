@@ -24,7 +24,7 @@ void DataPilotItem::testProperties()
 {
     uno::Reference<beans::XPropertySet> xItem(init(), UNO_QUERY_THROW);
 
-    const OUString propNameIS("IsHidden");
+    static const OUStringLiteral propNameIS(u"IsHidden");
 
     bool bIsHidden = true;
     CPPUNIT_ASSERT(xItem->getPropertyValue(propNameIS) >>= bIsHidden);
@@ -36,7 +36,7 @@ void DataPilotItem::testProperties()
     CPPUNIT_ASSERT(xItem->getPropertyValue(propNameIS) >>= bIsHidden);
     CPPUNIT_ASSERT_MESSAGE("Value of IsHidden wasn't changed", !bIsHidden);
 
-    const OUString propNameSD("ShowDetail");
+    static const OUStringLiteral propNameSD(u"ShowDetail");
 
     bool bShowDetail = false;
     CPPUNIT_ASSERT(xItem->getPropertyValue(propNameSD) >>= bShowDetail);

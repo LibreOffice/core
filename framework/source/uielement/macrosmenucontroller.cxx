@@ -126,9 +126,9 @@ void SAL_CALL MacrosMenuController::statusChanged( const FeatureStateEvent& )
 
 void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 startItemId )
 {
-    const OUString aCmdBase(".uno:ScriptOrganizer?ScriptOrganizer.Language:string=");
-    const OUString ellipsis( "..." );
-    const OUString providerKey("com.sun.star.script.provider.ScriptProviderFor");
+    static const OUStringLiteral aCmdBase(u".uno:ScriptOrganizer?ScriptOrganizer.Language:string=");
+    static const OUStringLiteral ellipsis( u"..." );
+    static const OUStringLiteral providerKey(u"com.sun.star.script.provider.ScriptProviderFor");
     sal_uInt16 itemId = startItemId;
     Reference< XContentEnumerationAccess > xEnumAccess( m_xContext->getServiceManager(), UNO_QUERY_THROW );
     Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( "com.sun.star.script.provider.LanguageScriptProvider" );

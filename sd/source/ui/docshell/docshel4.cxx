@@ -698,10 +698,10 @@ void DrawDocShell::GotoBookmark(const OUString& rBookmark)
     sal_uInt16 nPageNumber = SDRPAGE_NOTFOUND;
     SdrObject* pObj = nullptr;
 
-    const OUString sInteraction( "action?" );
+    static const OUStringLiteral sInteraction( u"action?" );
     if ( rBookmark.match( sInteraction ) )
     {
-        const OUString sJump( "jump=" );
+        static const OUStringLiteral sJump( u"jump=" );
         if ( rBookmark.match( sJump, sInteraction.getLength() ) )
         {
             OUString aDestination( rBookmark.copy( sInteraction.getLength() + sJump.getLength() ) );

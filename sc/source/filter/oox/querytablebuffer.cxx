@@ -246,7 +246,7 @@ void QueryTable::finalizeImport()
         PropertySet aDocProps( getDocument() );
         Reference< XAreaLinks > xAreaLinks( aDocProps.getAnyProperty( PROP_AreaLinks ), UNO_QUERY_THROW );
         CellAddress aDestPos( aDestRange.aStart.Tab(), aDestRange.aStart.Col(), aDestRange.aStart.Row() );
-        const OUString aFilterName = "calc_HTML_WebQuery";
+        static const OUStringLiteral aFilterName = u"calc_HTML_WebQuery";
         xAreaLinks->insertAtPosition( aDestPos, aFileUrl, aTables, aFilterName, /*aFilterOptions*/"" );
         // set refresh interval (convert minutes to seconds)
         sal_Int32 nRefreshPeriod = xConnection->getModel().mnInterval * 60;

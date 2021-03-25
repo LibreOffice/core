@@ -78,7 +78,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
         // ppaction://macro?name=MACRO_NAME
         // ppaction://program
 
-        const OUString sPPAction( "ppaction://" );
+        static const OUStringLiteral sPPAction( u"ppaction://" );
         if ( aAction.matchIgnoreAsciiCase( sPPAction ) )
         {
             OUString aPPAct( aAction.copy( sPPAction.getLength() ) );
@@ -87,7 +87,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
 
             if ( aPPAction.match( "hlinkshowjump" ) )
             {
-                const OUString sJump( "jump=" );
+                static const OUStringLiteral sJump( u"jump=" );
                 if ( aPPAct.match( sJump, nIndex + 1 ) )
                 {
                     OUString aDestination( aPPAct.copy( nIndex + 1 + sJump.getLength() ) );

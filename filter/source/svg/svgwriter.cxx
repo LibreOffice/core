@@ -1152,8 +1152,8 @@ bool SVGTextWriter::nextTextPortion()
                     Reference < XTextField > xTextField( xRangePropSet->getPropertyValue( "TextField" ), UNO_QUERY );
                     if( xTextField.is() )
                     {
-                        const OUString sServicePrefix("com.sun.star.text.textfield.");
-                        const OUString sPresentationServicePrefix("com.sun.star.presentation.TextField.");
+                        static const OUStringLiteral sServicePrefix(u"com.sun.star.text.textfield.");
+                        static const OUStringLiteral sPresentationServicePrefix(u"com.sun.star.presentation.TextField.");
 
                         Reference< XServiceInfo > xService( xTextField, UNO_QUERY );
                         const Sequence< OUString > aServices = xService->getSupportedServiceNames();
@@ -1870,8 +1870,8 @@ tools::PolyPolygon& SVGActionWriter::ImplMap( const tools::PolyPolygon& rPolyPol
 OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bool bLine )
 {
     OUStringBuffer   aPathData;
-    const OUString   aBlank( " " );
-    const OUString   aComma( "," );
+    static const OUStringLiteral   aBlank( u" " );
+    static const OUStringLiteral   aComma( u"," );
     Point                      aPolyPoint;
 
     for( tools::Long i = 0, nCount = rPolyPoly.Count(); i < nCount; i++ )

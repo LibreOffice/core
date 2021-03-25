@@ -2013,7 +2013,7 @@ void SwDocTest::test64kPageDescs()
     CPPUNIT_ASSERT_EQUAL( OUString("Page65535"), rDesc.GetName() );
 
     SwPageDesc aDesc( rDesc );
-    const OUString aChanged("Changed01");
+    static const OUStringLiteral aChanged(u"Changed01");
     aDesc.SetName( aChanged );
     m_pDoc->ChgPageDesc( nPageDescCount, aDesc );
 

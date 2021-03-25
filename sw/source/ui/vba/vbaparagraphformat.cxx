@@ -182,7 +182,7 @@ sal_Int32 SAL_CALL SwVbaParagraphFormat::getOutlineLevel()
 {
     sal_Int32 nLevel = word::WdOutlineLevel::wdOutlineLevelBodyText;
     OUString aHeading;
-    const OUString HEADING = "Heading";
+    static const OUStringLiteral HEADING = u"Heading";
     mxParaProps->getPropertyValue("ParaStyleName") >>= aHeading;
     if( aHeading.startsWith( HEADING ) )
     {

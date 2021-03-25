@@ -305,7 +305,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
             uno::Reference<io::XOutputStream> xOut( new utl::OOutputStreamWrapper( rStream ) );
 
 /* testcode
-            const OUString aURL( "file:///e:/test.xml" );
+            static const OUStringLiteral aURL( u"file:///e:/test.xml" );
             SvFileStream aStream(aURL, StreamMode::WRITE | StreamMode::TRUNC);
             xOut = new utl::OOutputStreamWrapper(aStream);
 */

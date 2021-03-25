@@ -105,7 +105,7 @@ void FontMenuController::fillPopupMenu( const Sequence< OUString >& rFontNameSeq
     }
     sort(aVector.begin(), aVector.end(), lcl_I18nCompareString );
 
-    const OUString aFontNameCommandPrefix( ".uno:CharFontName?CharFontName.FamilyName:string=" );
+    static const OUStringLiteral aFontNameCommandPrefix( u".uno:CharFontName?CharFontName.FamilyName:string=" );
     const sal_Int16 nCount = static_cast<sal_Int16>(aVector.size());
     for ( sal_Int16 i = 0; i < nCount; i++ )
     {

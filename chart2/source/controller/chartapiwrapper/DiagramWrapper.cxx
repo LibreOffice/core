@@ -468,7 +468,7 @@ sal_Int32 lcl_getNewAPIIndexForOldAPIIndex(
 
 OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
 {
-    const OUString aPrefix("com.sun.star.chart2.template.");
+    static const OUStringLiteral aPrefix(u"com.sun.star.chart2.template.");
 
     if( rTemplateServiceName.match( aPrefix ))
     {

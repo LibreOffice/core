@@ -432,9 +432,9 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
             OSL_VERIFY( aFilterModeSetting >>= nFilterMode );
         }
 
-        const OUString sAll( "%"  );
-        const OUString sView( "VIEW"  );
-        const OUString sTable( "TABLE"  );
+        static const OUStringLiteral sAll( u"%"  );
+        static const OUStringLiteral sView( u"VIEW"  );
+        static const OUStringLiteral sTable( u"TABLE"  );
 
         switch ( nFilterMode )
         {

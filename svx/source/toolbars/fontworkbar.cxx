@@ -302,19 +302,19 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
 
 static void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const OUString& rCustomShape )
 {
-    const OUString sType( "Type" );
+    static const OUStringLiteral sType( u"Type" );
 
     css::beans::PropertyValue aPropVal;
     aPropVal.Name = sType;
     aPropVal.Value <<= rCustomShape;
     rGeometryItem.SetPropertyValue( aPropVal );
 
-    const OUString sAdjustmentValues( "AdjustmentValues" );
-    const OUString sCoordinateOrigin( "CoordinateOrigin" );
-    const OUString sCoordinateSize( "CoordinateSize" );
-    const OUString sEquations( "Equations" );
-    const OUString sHandles( "Handles" );
-    const OUString sPath( "Path" );
+    static const OUStringLiteral sAdjustmentValues( u"AdjustmentValues" );
+    static const OUStringLiteral sCoordinateOrigin( u"CoordinateOrigin" );
+    static const OUStringLiteral sCoordinateSize( u"CoordinateSize" );
+    static const OUStringLiteral sEquations( u"Equations" );
+    static const OUStringLiteral sHandles( u"Handles" );
+    static const OUStringLiteral sPath( u"Path" );
     rGeometryItem.ClearPropertyValue( sAdjustmentValues );
     rGeometryItem.ClearPropertyValue( sCoordinateOrigin );
     rGeometryItem.ClearPropertyValue( sCoordinateSize );

@@ -379,8 +379,8 @@ void BoundFrames::Fill(const filter_t& rFilter)
     const Reference< XEnumeration > xEnum = m_xEnumAccess->createEnumeration();
     if(!xEnum.is())
         return;
-    const OUString our_sAnchorType("AnchorType");
-    const OUString our_sAnchorFrame("AnchorFrame");
+    static const OUStringLiteral our_sAnchorType(u"AnchorType");
+    static const OUStringLiteral our_sAnchorFrame(u"AnchorFrame");
     while(xEnum->hasMoreElements())
     {
         Reference<XPropertySet> xPropSet(xEnum->nextElement(), UNO_QUERY);

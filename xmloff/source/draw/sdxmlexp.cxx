@@ -1373,7 +1373,7 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
 
         OUString aStrText;
 
-        const OUString aStrHeaderTextProp( "HeaderText" );
+        static const OUStringLiteral aStrHeaderTextProp( u"HeaderText" );
         if( xInfo->hasPropertyByName( aStrHeaderTextProp ) )
         {
             xSet->getPropertyValue( aStrHeaderTextProp  ) >>= aStrText;
@@ -1381,7 +1381,7 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
                 aSettings.maStrHeaderDeclName = findOrAppendImpl( maHeaderDeclsVector, aStrText, gpStrHeaderTextPrefix );
         }
 
-        const OUString aStrFooterTextProp( "FooterText" );
+        static const OUStringLiteral aStrFooterTextProp( u"FooterText" );
         if( xInfo->hasPropertyByName( aStrFooterTextProp ) )
         {
             xSet->getPropertyValue( aStrFooterTextProp ) >>= aStrText;
@@ -1389,7 +1389,7 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
                 aSettings.maStrFooterDeclName = findOrAppendImpl( maFooterDeclsVector, aStrText, gpStrFooterTextPrefix );
         }
 
-        const OUString aStrDateTimeTextProp( "DateTimeText" );
+        static const OUStringLiteral aStrDateTimeTextProp( u"DateTimeText" );
         if( xInfo->hasPropertyByName( aStrDateTimeTextProp ) )
         {
             bool bFixed = false;
@@ -1507,7 +1507,7 @@ OUString SdXMLExport::ImpCreatePresPageStyleName( const Reference<XDrawPage>& xD
             // which itself is a property of the pages property set
             // we now merge these two propertysets if possible to simulate
             // a single propertyset with all draw page properties
-            const OUString aBackground("Background");
+            static const OUStringLiteral aBackground(u"Background");
             Reference< beans::XPropertySet > xPropSet2;
             Reference< beans::XPropertySetInfo > xInfo( xPropSet1->getPropertySetInfo() );
             if( xInfo.is() && xInfo->hasPropertyByName( aBackground ) )

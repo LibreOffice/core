@@ -480,7 +480,7 @@ namespace dbaccess
         StorageXMLOutputStream aDesignOutput( m_rContext, i_rObjectStorage, sSettingsStreamName );
         SettingsExportContext aSettingsExportContext( m_rContext, aDesignOutput );
 
-        const OUString sWhitespace( " " );
+        static const OUStringLiteral sWhitespace( u" " );
 
         aDesignOutput.startElement( "office:settings" );
         aDesignOutput.ignorableWhitespace( sWhitespace );

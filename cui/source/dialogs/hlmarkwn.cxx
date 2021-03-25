@@ -291,9 +291,9 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
     const sal_Int32 nLinks = aNames.getLength();
     const OUString* pNames = aNames.getConstArray();
 
-    const OUString aProp_LinkDisplayName( "LinkDisplayName" );
-    const OUString aProp_LinkTarget( "com.sun.star.document.LinkTarget" );
-    const OUString aProp_LinkDisplayBitmap( "LinkDisplayBitmap" );
+    static const OUStringLiteral aProp_LinkDisplayName( u"LinkDisplayName" );
+    static const OUStringLiteral aProp_LinkTarget( u"com.sun.star.document.LinkTarget" );
+    static const OUStringLiteral aProp_LinkDisplayBitmap( u"LinkDisplayBitmap" );
     for( sal_Int32 i = 0; i < nLinks; i++ )
     {
         uno::Any aAny;

@@ -350,12 +350,11 @@ void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< bea
         pDrawViewWrapper->SetCreateMode();
     }
 
-    const OUString sKeyModifier( "KeyModifier" );
     const beans::PropertyValue* pIter = rArgs.getConstArray();
     const beans::PropertyValue* pEnd  = pIter + rArgs.getLength();
     const beans::PropertyValue* pKeyModifier = std::find_if(pIter, pEnd,
-                                                    [&sKeyModifier](const beans::PropertyValue& lhs)
-                                                    {return lhs.Name == sKeyModifier;} );
+                                                    [](const beans::PropertyValue& lhs)
+                                                    {return lhs.Name == "KeyModifier";} );
     sal_Int16 nKeyModifier = 0;
     if ( !(pKeyModifier != pEnd && ( pKeyModifier->Value >>= nKeyModifier ) && nKeyModifier == KEY_MOD1) )
         return;

@@ -419,7 +419,7 @@ awt::Size lcl_placeLegendEntries(
                     try
                     {
                         OUString aLabelString = rEntries[0].aLabel[0]->getString();
-                        const OUString sDots = "...";
+                        static const OUStringLiteral sDots = u"...";
                         ShapeFactory* pShapeFactory = ShapeFactory::getOrCreateShapeFactory(xShapeFactory);
                         for (sal_Int32 nNewLen = aLabelString.getLength() - sDots.getLength(); nNewLen > 0; nNewLen--)
                         {

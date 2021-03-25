@@ -108,7 +108,7 @@ static void ResolveTextFields( XmlFilterBase const & rFilter )
     const Reference< frame::XModel >& xModel( rFilter.getModel() );
     for (auto const& textField : rTextFields)
     {
-        const OUString sURL = "URL";
+        static const OUStringLiteral sURL = u"URL";
         Reference< drawing::XDrawPagesSupplier > xDPS( xModel, uno::UNO_QUERY_THROW );
         Reference< drawing::XDrawPages > xDrawPages( xDPS->getDrawPages(), uno::UNO_SET_THROW );
 
@@ -120,8 +120,8 @@ static void ResolveTextFields( XmlFilterBase const & rFilter )
             OUString aURL;
             if ( xPropSet->getPropertyValue( sURL ) >>= aURL )
             {
-                const OUString sSlide = "#Slide ";
-                const OUString sNotes = "#Notes ";
+                static const OUStringLiteral sSlide = u"#Slide ";
+                static const OUStringLiteral sNotes = u"#Notes ";
                 bool bNotes = false;
                 sal_Int32 nPageNumber = 0;
                 if ( aURL.match( sSlide ) )
@@ -171,7 +171,7 @@ void PresentationFragmentHandler::saveThemeToGrabBag(const oox::drawingml::Theme
         {
             uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
 
-            const OUString aGrabBagPropName = "InteropGrabBag";
+            static const OUStringLiteral aGrabBagPropName = u"InteropGrabBag";
             if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(aGrabBagPropName))
             {
                 // get existing grab bag

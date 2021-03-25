@@ -994,7 +994,7 @@ void XclImpWebQuery::ReadWqtables( XclImpStream& rStrm )
     OUString aTables( rStrm.ReadUniString() );
 
     const sal_Unicode cSep = ';';
-    const OUString aQuotedPairs( "\"\"" );
+    static const OUStringLiteral aQuotedPairs( u"\"\"" );
     maTables.clear();
     for ( sal_Int32 nStringIx {aTables.isEmpty() ? -1 : 0}; nStringIx>=0; )
     {

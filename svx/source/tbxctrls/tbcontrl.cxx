@@ -3752,7 +3752,7 @@ void SvxCurrencyToolBoxControl::GetCurrencySymbols( std::vector<OUString>& rList
     CollatorWrapper aCollator( ::comphelper::getProcessComponentContext() );
     aCollator.loadDefaultCollator( Application::GetSettings().GetLanguageTag().getLocale(), 0 );
 
-    const OUString aTwoSpace("  ");
+    static const OUStringLiteral aTwoSpace(u"  ");
 
     for( sal_uInt16 i = 1; i < nCount; ++i )
     {

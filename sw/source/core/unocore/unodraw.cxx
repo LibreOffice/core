@@ -2540,7 +2540,7 @@ void SwXShape::AdjustPositionProperties( const awt::Point& rPosition )
     if ( eTextAnchorType != text::TextContentAnchorType_AS_CHARACTER )
     {
         // determine current x-position
-        const OUString aHoriPosPropStr("HoriOrientPosition");
+        static const OUStringLiteral aHoriPosPropStr(u"HoriOrientPosition");
         uno::Any aHoriPos( getPropertyValue( aHoriPosPropStr ) );
         sal_Int32 dCurrX = 0;
         aHoriPos >>= dCurrX;
@@ -2549,7 +2549,7 @@ void SwXShape::AdjustPositionProperties( const awt::Point& rPosition )
         {
             // adjust x-position orientation to text::HoriOrientation::NONE, if needed
             // Note: has to be done before setting x-position attribute
-            const OUString aHoriOrientPropStr("HoriOrient");
+            static const OUStringLiteral aHoriOrientPropStr(u"HoriOrient");
             uno::Any aHoriOrient( getPropertyValue( aHoriOrientPropStr ) );
             sal_Int16 eHoriOrient;
             if (aHoriOrient >>= eHoriOrient) // may be void
@@ -2570,7 +2570,7 @@ void SwXShape::AdjustPositionProperties( const awt::Point& rPosition )
     // handle y-position
     {
         // determine current y-position
-        const OUString aVertPosPropStr("VertOrientPosition");
+        static const OUStringLiteral aVertPosPropStr(u"VertOrientPosition");
         uno::Any aVertPos( getPropertyValue( aVertPosPropStr ) );
         sal_Int32 dCurrY = 0;
         aVertPos >>= dCurrY;
@@ -2579,7 +2579,7 @@ void SwXShape::AdjustPositionProperties( const awt::Point& rPosition )
         {
             // adjust y-position orientation to text::VertOrientation::NONE, if needed
             // Note: has to be done before setting y-position attribute
-            const OUString aVertOrientPropStr("VertOrient");
+            static const OUStringLiteral aVertOrientPropStr(u"VertOrient");
             uno::Any aVertOrient( getPropertyValue( aVertOrientPropStr ) );
             sal_Int16 eVertOrient;
             if (aVertOrient >>= eVertOrient) // may be void

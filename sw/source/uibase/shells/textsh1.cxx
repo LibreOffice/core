@@ -438,9 +438,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 // setting the new language...
                 if (!aNewLangText.isEmpty())
                 {
-                    const OUString aSelectionLangPrefix("Current_");
-                    const OUString aParagraphLangPrefix("Paragraph_");
-                    const OUString aDocumentLangPrefix("Default_");
+                    static const OUStringLiteral aSelectionLangPrefix(u"Current_");
+                    static const OUStringLiteral aParagraphLangPrefix(u"Paragraph_");
+                    static const OUStringLiteral aDocumentLangPrefix(u"Default_");
 
                     SfxItemSet aCoreSet( GetPool(),
                             svl::Items<RES_CHRATR_LANGUAGE,        RES_CHRATR_LANGUAGE,
@@ -1518,8 +1518,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
         if (pItem2)
             sApplyText = pItem2->GetValue();
 
-        const OUString sSpellingRule("Spelling_");
-        const OUString sGrammarRule("Grammar_");
+        static const OUStringLiteral sSpellingRule(u"Spelling_");
+        static const OUStringLiteral sGrammarRule(u"Grammar_");
 
         bool bGrammar = false;
         sal_Int32 nPos = 0;
@@ -1860,8 +1860,8 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
                 OUString aStyleName;
                 std::vector<OUString> aList;
-                const OUString sPhysical("IsPhysical");
-                const OUString sDisplay("DisplayName");
+                static const OUStringLiteral sPhysical(u"IsPhysical");
+                static const OUStringLiteral sDisplay(u"DisplayName");
                 const OUString sHeaderOn(nWhich == FN_INSERT_PAGEHEADER ? OUString("HeaderIsOn") : OUString("FooterIsOn"));
 
                 uno::Reference< XStyleFamiliesSupplier > xSupplier(GetView().GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
