@@ -52,6 +52,7 @@ private:
 #if defined(_WIN32)
     std::unique_ptr<weld::Widget> m_xFileAssocFrame;
     std::unique_ptr<weld::Button> m_xFileAssocBtn;
+    std::unique_ptr<weld::CheckButton> m_xPerformFileExtCheck;
 #endif
 
     DECL_LINK(TwoFigureHdl, weld::SpinButton&, void);
