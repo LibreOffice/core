@@ -1227,6 +1227,8 @@ void SVGFilter::implGenerateMetaData()
         {
             const Reference< css::drawing::XDrawPage > & xDrawPage = mSelectedPages[i];
             Reference< css::drawing::XMasterPageTarget > xMasterPageTarget( xDrawPage, UNO_QUERY );
+            if (!xMasterPageTarget.is())
+                    continue;
             Reference< css::drawing::XDrawPage > xMasterPage = xMasterPageTarget->getMasterPage();
             OUString aSlideId(aId + "_" + OUString::number( i ));
 
