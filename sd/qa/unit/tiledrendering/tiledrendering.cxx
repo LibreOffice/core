@@ -113,6 +113,7 @@ public:
     void testCommentChangeImpress();
     void testCommentChangeDraw();
     void testMultiViewInsertDeletePage();
+    void testMultiViewInsertDeletePage2();
     void testDisableUndoRepair();
     void testDocumentRepair();
     void testLanguageStatus();
@@ -165,6 +166,7 @@ public:
     CPPUNIT_TEST(testCommentChangeImpress);
     CPPUNIT_TEST(testCommentChangeDraw);
     CPPUNIT_TEST(testMultiViewInsertDeletePage);
+    CPPUNIT_TEST(testMultiViewInsertDeletePage2);
     CPPUNIT_TEST(testDisableUndoRepair);
     CPPUNIT_TEST(testDocumentRepair);
     CPPUNIT_TEST(testLanguageStatus);
@@ -1883,6 +1885,46 @@ void SdTiledRenderingTest::testCommentChangeDraw()
 }
 
 void SdTiledRenderingTest::testMultiViewInsertDeletePage()
+{
+    // Load the document.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    ViewCallback aView1;
+    int nView1 = SfxLokHelper::getView();
+    uno::Sequence<beans::PropertyValue> aArgs;
+    SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
+
+    // Create second view
+    SfxLokHelper::createView();
+    pXImpressDocument->initializeForTiledRendering(aArgs);
+    ViewCallback aView2;
+    int nView2 = SfxLokHelper::getView();
+
+    // the document has 8 slides
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), pDoc->GetSdPageCount(PageKind::Standard));
+
+    // Switch to 5th page in 2nd view
+    pXImpressDocument->setPart(4);
+
+    // Insert slide in 1st view
+    SfxLokHelper::setView(nView1);
+    comphelper::dispatchCommand(".uno:InsertPage", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // See if the current slide number changed in 2nd view too
+    SfxLokHelper::setView(nView2);
+    CPPUNIT_ASSERT_EQUAL(5, pXImpressDocument->getPart());
+
+    // Delete the page in 1st view now
+    SfxLokHelper::setView(nView1);
+    comphelper::dispatchCommand(".uno:DeletePage", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // See if current slide number changed in 2nd view too
+    SfxLokHelper::setView(nView2);
+    CPPUNIT_ASSERT_EQUAL(4, pXImpressDocument->getPart());
+}
+
+void SdTiledRenderingTest::testMultiViewInsertDeletePage2()
 {
     // Load the document.
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
