@@ -380,6 +380,7 @@ public:
     void testAutofilter();
     void testAutoFilterTimeValue();
     void testAdvancedFilter();
+    void testTdf98642();
     void testCopyPaste();
     void testCopyPasteAsLink();
     void testCopyPasteTranspose();
@@ -746,6 +747,7 @@ public:
     CPPUNIT_TEST(testAutofilter);
     CPPUNIT_TEST(testAutoFilterTimeValue);
     CPPUNIT_TEST(testAdvancedFilter);
+    CPPUNIT_TEST(testTdf98642);
     CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testCopyPasteAsLink);
     CPPUNIT_TEST(testCopyPasteTranspose);
