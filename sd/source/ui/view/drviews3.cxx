@@ -106,6 +106,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
     // End text edit mode for some requests.
     sal_uInt16 nSlot = rReq.GetSlot();
+    bool bAllowFocusChange = true;
     switch (nSlot)
     {
         case SID_OUTPUT_QUALITY_COLOR:
@@ -114,6 +115,15 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_OUTPUT_QUALITY_CONTRAST:
             // Do nothing.
             break;
+        case SID_SWITCHPAGE:
+            if (rReq.GetArgs() && rReq.GetArgs()->Count () == 1)
+            {
+                const SfxBoolItem* pAllowFocusChange = rReq.GetArg<SfxBoolItem>(SID_SWITCHPAGE);
+                bAllowFocusChange = pAllowFocusChange->GetValue();
+                if (!bAllowFocusChange)
+                    break;
+            }
+            BOOST_FALLTHROUGH;
         default:
             if ( mpDrawView->IsTextEdit() )
             {
@@ -137,7 +147,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 const SfxItemSet *pArgs = rReq.GetArgs ();
                 sal_uInt16 nSelectedPage = 0;
 
-                if (! pArgs)
+                if (! pArgs || pArgs->Count () == 1)
                 {
                     nSelectedPage = maTabControl->GetCurPagePos();
                 }
@@ -183,7 +193,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 if( GetDocSh() && (GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED))
                     GetDocSh()->SetModified();
 
-                SwitchPage(nSelectedPage);
+                SwitchPage(nSelectedPage, bAllowFocusChange);
 
                 if(HasCurrentFunction(SID_BEZIER_EDIT))
                     GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);

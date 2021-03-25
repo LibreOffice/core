@@ -70,6 +70,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
+#include <svl/intitem.hxx>
 
 using namespace com::sun::star;
 
@@ -704,11 +705,11 @@ void DrawViewShell::ResetActualPage()
         SwitchPage(nCurrentPageNum);
     }
 
-    if (nNewPageId != nCurrentPageId)
-        GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHPAGE,
-                    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
-    else
-        SwitchPage(nCurrentPageNum, false);
+    bool bAllowChangeFocus = nNewPageId != nCurrentPageId;
+    SfxBoolItem aI(SID_SWITCHPAGE, bAllowChangeFocus);
+    GetViewFrame()->GetDispatcher()->ExecuteList(SID_SWITCHPAGE,
+                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                { &aI });
 }
 
 /**
