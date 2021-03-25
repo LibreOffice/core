@@ -487,7 +487,7 @@ struct ScAddressHashFunctor
     }
 };
 
-inline bool ValidAddress( const ScAddress& rAddress, SCCOL nMaxCol = MAXCOL, SCROW nMaxRow = MAXROW )
+[[nodiscard]] inline bool ValidAddress( const ScAddress& rAddress, SCCOL nMaxCol = MAXCOL, SCROW nMaxRow = MAXROW )
 {
     return ValidCol(rAddress.Col(), nMaxCol) && ValidRow(rAddress.Row(), nMaxRow) && ValidTab(rAddress.Tab());
 }
@@ -789,7 +789,7 @@ inline size_t ScRange::hashStartColumn() const
 #endif
 }
 
-inline bool ValidRange( const ScRange& rRange, SCCOL nMaxCol = MAXCOL, SCROW nMaxRow = MAXROW )
+[[nodiscard]] inline bool ValidRange( const ScRange& rRange, SCCOL nMaxCol = MAXCOL, SCROW nMaxRow = MAXROW )
 {
     return ValidAddress(rRange.aStart, nMaxCol, nMaxRow) && ValidAddress(rRange.aEnd, nMaxCol, nMaxRow);
 }
