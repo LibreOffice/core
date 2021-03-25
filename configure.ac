@@ -5172,7 +5172,7 @@ if test "$enable_gui" = "no"; then
     fi
     USING_X11=
     DISABLE_GUI=TRUE
-    AC_DEFINE(HAVE_FEATURE_UI,0)
+#    AC_DEFINE(HAVE_FEATURE_UI,0)
     test_cairo=yes
 fi
 AC_SUBST(DISABLE_GUI)

@@ -284,8 +284,8 @@ $(eval $(call gb_Rdb_add_components,services,\
 		shell/source/unix/exec/syssh \
 	) \
 	$(if $(filter-out MACOSX WNT,$(OS)), \
-		$(if $(DISABLE_GUI),, \
 			shell/source/backends/desktopbe/desktopbe1 \
+		$(if $(DISABLE_GUI),, \
 			vcl/vcl.unx \
 		) \
 	) \
