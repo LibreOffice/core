@@ -15,6 +15,7 @@
 #include <svx/svdobj.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
@@ -138,6 +139,17 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf135773_numberingShading, "tdf135774_n
     // Before the fix, the imported shading was converted into a red highlight.
     xmlDocUniquePtr pXmlStyles = parseExport("word/numbering.xml");
     assertXPath(pXmlStyles, "/w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:rPr/w:shd", "fill", "ED4C05");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf140336_paraNoneShading, "tdf140336_paraNoneShading.odt")
+{
+    // Before the fix, the background from a style was exported to dis-inheriting paragraphs/styles.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(COL_AUTO), getProperty<sal_uInt32>(getParagraph(1), "ParaBackColor"));
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("CanclledBackground"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xStyle, "FillStyle"));
+
+    // sanity check: backgroundColor paragraph style has a golden color(FF7F50), which para2 inherits
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(16744272), getProperty<sal_uInt32>(getParagraph(2), "ParaBackColor"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf141173_missingFrames, "tdf141173_missingFrames.rtf")

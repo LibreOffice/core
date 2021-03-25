@@ -352,7 +352,7 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
         ExportPoolItemsToCHP(aItems, nScript, nullptr);
     if ( bPapFormat )
     {
-        AttrOutput().MaybeOutputBrushItem(rSet);
+        const bool bAlreadyOutputBrushItem = AttrOutput().MaybeOutputBrushItem(rSet);
 
         for ( const auto& rItem : aItems )
         {
@@ -365,12 +365,25 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
         }
 
         // Has to be called after RES_PARATR_GRABBAG is processed.
-        const XFillStyleItem* pXFillStyleItem(rSet.GetItem<XFillStyleItem>(XATTR_FILLSTYLE));
-        if (pXFillStyleItem && pXFillStyleItem->GetValue() == drawing::FillStyle_SOLID && !rSet.HasItem(RES_BACKGROUND))
+        const XFillStyleItem* pFill(rSet.GetItem<XFillStyleItem>(XATTR_FILLSTYLE, false));
+        if (!bAlreadyOutputBrushItem && pFill
+            && (pFill->GetValue() == drawing::FillStyle_SOLID || pFill->GetValue() == drawing::FillStyle_NONE)
+            && !rSet.GetItem(RES_BACKGROUND, false))
         {
+            const bool bFillStyleNone = pFill->GetValue() == drawing::FillStyle_NONE;
+            // No need to write out a NONE background if it can't inherit something else, or if it already inherits a NONE.
+            std::unique_ptr<SvxBrushItem> pInherited;
+            if (bFillStyleNone)
+            {
+                if ( auto pNd = dynamic_cast<const SwContentNode*>(m_pOutFormatNode)) //paragraph
+                    pInherited = getSvxBrushItemFromSourceSet(static_cast<SwTextFormatColl&>(pNd->GetAnyFormatColl()).GetAttrSet(), RES_BACKGROUND);
+                else if (m_bStyDef && m_pCurrentStyle && m_pCurrentStyle->DerivedFrom()) //style
+                    pInherited = getSvxBrushItemFromSourceSet(m_pCurrentStyle->DerivedFrom()->GetAttrSet(), RES_BACKGROUND);
+            }
             // Construct an SvxBrushItem, as expected by the exporters.
             std::unique_ptr<SvxBrushItem> aBrush(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
-            AttrOutput().OutputItem(*aBrush);
+            if (!bFillStyleNone || (pInherited && *pInherited != *aBrush))
+                AttrOutput().OutputItem(*aBrush);
         }
 #if 0
         else
