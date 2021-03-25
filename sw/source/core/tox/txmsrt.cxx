@@ -18,6 +18,7 @@
  */
 
 #include <unotools/charclass.hxx>
+#include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 #include <txtfld.hxx>
@@ -83,7 +84,7 @@ void SwTOXInternational::Init()
     if ( m_nOptions & SwTOIOptions::CaseSensitive )
         m_pIndexWrapper->LoadAlgorithm( aLcl, m_sSortAlgorithm, 0 );
     else
-        m_pIndexWrapper->LoadAlgorithm( aLcl, m_sSortAlgorithm, SW_COLLATOR_IGNORES );
+        m_pIndexWrapper->LoadAlgorithm( aLcl, m_sSortAlgorithm, css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE );
 
     m_pCharClass.reset( new CharClass( LanguageTag( aLcl )) );
 

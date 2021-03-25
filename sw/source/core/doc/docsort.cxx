@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <osl/diagnose.h>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -150,7 +151,7 @@ int SwSortElement::keycompare(const SwSortElement& rCmp, sal_uInt16 nKey) const
                 pLastAlgorithm = new OUString( pSrtKey->sSortType );
             pSortCollator->loadCollatorAlgorithm( *pLastAlgorithm,
                     *pLocale,
-                    pOptions->bIgnoreCase ? SW_COLLATOR_IGNORES : 0 );
+                    pOptions->bIgnoreCase ? css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE : 0 );
         }
 
         nCmp = pSortCollator->compareString(

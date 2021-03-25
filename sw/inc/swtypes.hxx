@@ -22,7 +22,6 @@
 
 #include <limits.h>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/i18n/CollatorOptions.hpp>
 #include "swdllapi.h"
 #include <o3tl/typed_flags_set.hxx>
 #include <i18nlangtag/lang.h>
@@ -176,17 +175,6 @@ constexpr bool SW_ISPRINTABLE(sal_Unicode c) { return c >= ' ' && 127 != c; }
 SW_DLLPUBLIC CharClass& GetAppCharClass();
 SW_DLLPUBLIC LanguageType GetAppLanguage();
 SW_DLLPUBLIC const LanguageTag& GetAppLanguageTag();
-
-#if 0
-// I18N doesn't get this right, can't specify more than one to ignore
-#define SW_COLLATOR_IGNORES ( \
-    css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE | \
-    css::i18n::CollatorOptions::CollatorOptions_IGNORE_KANA | \
-    css::i18n::CollatorOptions::CollatorOptions_IGNORE_WIDTH )
-#else
-#define SW_COLLATOR_IGNORES ( \
-    css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE )
-#endif
 
 SW_DLLPUBLIC CollatorWrapper& GetAppCollator();
 CollatorWrapper& GetAppCaseCollator();

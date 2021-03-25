@@ -34,9 +34,6 @@ excludelist:
     sw/inc/swmodule.hxx:
     # Needed for macro #define
     - sfx2/app.hxx
-    sw/inc/swtypes.hxx:
-    # Needed for macro #define
-    - com/sun/star/i18n/CollatorOptions.hpp
     sw/inc/IDocumentLinksAdministration.hxx:
     - sal/types.h
     sw/inc/pagedesc.hxx:

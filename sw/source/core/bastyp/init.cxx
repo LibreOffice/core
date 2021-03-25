@@ -132,6 +132,7 @@
 #include <vcl/settings.hxx>
 #include <salhelper/singletonref.hxx>
 #include <viscrs.hxx>
+#include <com/sun/star/i18n/CollatorOptions.hpp>
 
 using namespace ::com::sun::star;
 
@@ -744,7 +745,7 @@ CollatorWrapper& GetAppCollator()
         const lang::Locale& rLcl = g_pBreakIt->GetLocale( GetAppLanguage() );
 
         pCollator = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
-        pCollator->loadDefaultCollator( rLcl, SW_COLLATOR_IGNORES );
+        pCollator->loadDefaultCollator( rLcl, css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE );
     }
     return *pCollator;
 }
