@@ -6589,10 +6589,9 @@ void ScInterpreter::ScLookup()
     SCSIZE nLenMajor = 0;   // length of major direction
     bool bVertical = true;  // whether to lookup vertically or horizontally
 
-    // The third parameter, result array, for double, string and single reference.
+    // The third parameter, result array, double, string and reference.
     double fResVal = 0.0;
     svl::SharedString aResStr;
-    ScAddress aResAdr;
     StackVar eResArrayType = svUnknown;
 
     if (nParamCount == 3)
@@ -6613,6 +6612,11 @@ void ScInterpreter::ScLookup()
                     return;
                 }
             }
+            break;
+            case svSingleRef:
+                PopSingleRef( nResCol1, nResRow1, nResTab);
+                nResCol2 = nResCol1;
+                nResRow2 = nResRow1;
             break;
             case svMatrix:
             case svExternalSingleRef:
@@ -6639,9 +6643,6 @@ void ScInterpreter::ScLookup()
             break;
             case svString:
                 aResStr = GetString();
-            break;
-            case svSingleRef:
-                PopSingleRef( aResAdr );
             break;
             default:
                 PushIllegalParameter();
@@ -6788,13 +6789,12 @@ void ScInterpreter::ScLookup()
                     PushString( aResStr );
                     break;
                 case svDoubleRef:
-                    aResAdr.Set( nResCol1, nResRow1, nResTab);
-                    [[fallthrough]];
                 case svSingleRef:
-                    PushCellResultToken( true, aResAdr, nullptr, nullptr);
+                    PushCellResultToken( true, ScAddress( nResCol1, nResRow1, nResTab), nullptr, nullptr);
                     break;
                 default:
-                    OSL_FAIL( "ScInterpreter::ScLookup: unhandled eResArrayType, single value data");
+                    assert(!"ScInterpreter::ScLookup: unhandled eResArrayType, single value data");
+                    PushIllegalParameter();
             }
         }
         else
@@ -6811,7 +6811,8 @@ void ScInterpreter::ScLookup()
                     PushCellResultToken( true, aDataAdr, nullptr, nullptr);
                     break;
                 default:
-                    OSL_FAIL( "ScInterpreter::ScLookup: unhandled eDataArrayType, single value data");
+                    assert(!"ScInterpreter::ScLookup: unhandled eDataArrayType, single value data");
+                    PushIllegalParameter();
             }
         }
         return;
@@ -7002,33 +7003,69 @@ void ScInterpreter::ScLookup()
         }
         else if (nParamCount == 3)
         {
-            // result array is cell range.
-            ScAddress aAdr;
-            aAdr.SetTab(nResTab);
-            bool bResVertical = (nResRow2 - nResRow1) > 0;
-            if (bResVertical)
+            /* TODO: the entire switch is a copy of the cell range search
+             * result, factor out. */
+            switch (eResArrayType)
             {
-                SCROW nTempRow = static_cast<SCROW>(nResRow1 + nDelta);
-                if (nTempRow > mrDoc.MaxRow())
+                case svDoubleRef:
+                case svSingleRef:
                 {
-                    PushDouble(0);
-                    return;
+                    // Use the result array vector.  Note that the result array is assumed
+                    // to be a vector (i.e. 1-dimensional array).
+
+                    ScAddress aAdr;
+                    aAdr.SetTab(nResTab);
+                    bool bResVertical = (nResRow2 - nResRow1) > 0;
+                    if (bResVertical)
+                    {
+                        SCROW nTempRow = static_cast<SCROW>(nResRow1 + nDelta);
+                        if (nTempRow > mrDoc.MaxRow())
+                        {
+                            PushDouble(0);
+                            return;
+                        }
+                        aAdr.SetCol(nResCol1);
+                        aAdr.SetRow(nTempRow);
+                    }
+                    else
+                    {
+                        SCCOL nTempCol = static_cast<SCCOL>(nResCol1 + nDelta);
+                        if (nTempCol > mrDoc.MaxCol())
+                        {
+                            PushDouble(0);
+                            return;
+                        }
+                        aAdr.SetCol(nTempCol);
+                        aAdr.SetRow(nResRow1);
+                    }
+                    PushCellResultToken( true, aAdr, nullptr, nullptr);
                 }
-                aAdr.SetCol(nResCol1);
-                aAdr.SetRow(nTempRow);
-            }
-            else
-            {
-                SCCOL nTempCol = static_cast<SCCOL>(nResCol1 + nDelta);
-                if (nTempCol > mrDoc.MaxCol())
+                break;
+                case svDouble:
+                case svString:
                 {
-                    PushDouble(0);
-                    return;
+                    if (nDelta != 0)
+                        PushNA();
+                    else
+                    {
+                        switch (eResArrayType)
+                        {
+                            case svDouble:
+                                PushDouble( fResVal );
+                            break;
+                            case svString:
+                                PushString( aResStr );
+                            break;
+                            default:
+                                ;   // nothing
+                        }
+                    }
                 }
-                aAdr.SetCol(nTempCol);
-                aAdr.SetRow(nResRow1);
+                break;
+                default:
+                    assert(!"ScInterpreter::ScLookup: unhandled eResArrayType, array search");
+                    PushIllegalParameter();
             }
-            PushCellResultToken(true, aAdr, nullptr, nullptr);
         }
         else
         {
@@ -7094,9 +7131,12 @@ void ScInterpreter::ScLookup()
     }
     else if (nParamCount == 3)
     {
+        /* TODO: the entire switch is a copy of the array search result, factor
+         * out. */
         switch (eResArrayType)
         {
             case svDoubleRef:
+            case svSingleRef:
             {
                 // Use the result array vector.  Note that the result array is assumed
                 // to be a vector (i.e. 1-dimensional array).
@@ -7131,7 +7171,6 @@ void ScInterpreter::ScLookup()
             break;
             case svDouble:
             case svString:
-            case svSingleRef:
             {
                 if (nDelta != 0)
                     PushNA();
@@ -7145,9 +7184,6 @@ void ScInterpreter::ScLookup()
                         case svString:
                             PushString( aResStr );
                             break;
-                        case svSingleRef:
-                            PushCellResultToken( true, aResAdr, nullptr, nullptr);
-                            break;
                         default:
                             ;   // nothing
                     }
@@ -7155,7 +7191,8 @@ void ScInterpreter::ScLookup()
             }
             break;
             default:
-                OSL_FAIL( "ScInterpreter::ScLookup: unhandled eResArrayType, range search");
+                assert(!"ScInterpreter::ScLookup: unhandled eResArrayType, range search");
+                PushIllegalParameter();
         }
     }
     else
