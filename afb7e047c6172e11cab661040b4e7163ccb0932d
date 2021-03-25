@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "5c98324e_7b49b05b",
+        "filename": "sw/inc/shellio.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-25T07:55:13Z",
+      "side": 1,
+      "message": "\u003e yet I\u0027m assuming that there might be some files which tend to use this variable\n\nPlease do not assume. If you assumed that, then you needed to check how your change here would affect those unknown places. Have you did that? Or otherwise, how can you be sure that 0 will not crash those?",
+      "parentUuid": "ed980503_c8dde717",
+      "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "54cc4cf0_a7ffee2b",
         "filename": "sw/source/filter/ascii/parasc.cxx",
         "patchSetId": 1
@@ -155,6 +173,24 @@
       "side": 1,
       "message": "I don\u0027t have Linux OS in my system(So,can\u0027t able to test!). I\u0027ve tried to solve the bug in windows and in it, it builds without any error after making the changes.",
       "parentUuid": "73162d2d_25be9168",
+      "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "902508bc_81403796",
+        "filename": "sw/source/filter/ascii/parasc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-25T07:55:13Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t have Linux OS in my system(So,can\u0027t able to test!).\n\nBut the bug is reported *on Windows*, where one reads a text file with Linux line endings.\nAnd by the way, the problem is reproducible on any platform - if you read my comment 9 there, you will see that one of the problems is insertion of breaks (not present in original text file) based on buffer size - and you of course can check that, regardless of your OS.\n\n\u003e it builds without any error after making the changes\n\n... but the change itself, while syntactically correct, does not make sense to me. That\u0027s why I asked you to describe, what does it achieve - and how will it work, step by step.",
+      "parentUuid": "0ba95392_e5687c7a",
       "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
