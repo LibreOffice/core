@@ -1,0 +1,135 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ed861d3_f973301c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-25T06:48:49Z",
+      "side": 1,
+      "message": "The lines should be no longer than 100 ch (better around 70-80 ch).",
+      "revId": "22bdc52ece254001e8edb138235f282f4f455743",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2186ffc8_a069595b",
+        "filename": "cui/source/dialogs/fileextcheckdlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-25T06:48:49Z",
+      "side": 1,
+      "message": "Does it actually derive from Apache-licensed stuff? Sorry if this was already asked.",
+      "range": {
+        "startLine": 9,
+        "startChar": 3,
+        "endLine": 18,
+        "endChar": 3
+      },
+      "revId": "22bdc52ece254001e8edb138235f282f4f455743",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89295ad9_3b594463",
+        "filename": "cui/source/inc/fileextcheckdlg.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-25T06:48:49Z",
+      "side": 1,
+      "message": "Same question about license",
+      "revId": "22bdc52ece254001e8edb138235f282f4f455743",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0afefb8a_cfaec8b8",
+        "filename": "cui/uiconfig/ui/fileextcheckdialog.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-25T06:48:49Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "22bdc52ece254001e8edb138235f282f4f455743",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19f3da43_bf3b9e99",
+        "filename": "desktop/source/app/app.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1897,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-25T06:48:49Z",
+      "side": 1,
+      "message": "Please have a space between // and the text.\nIt might be better to initialize with \u0027Application::IsHeadlessModeEnabled()\u0027, and modify the loop below to also check if bIsUITest is false.\n\nActually the name \u0027bIsUITest\u0027 is not telling me what is being tested. The resulting check (i.e., \u0027if (!Application::IsHeadlessModeEnabled() \u0026\u0026 !bIsUITest)\u0027) is confusing (one has to re-read several times to realize what it means). It\u0027s better to have something like \u0027bDontShowDialogs\u0027 or \u0027bAvoidFileExtCheck\u0027.",
+      "revId": "22bdc52ece254001e8edb138235f282f4f455743",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "295c6a34_e0faa316",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-25T06:48:49Z",
+      "side": 1,
+      "message": "Please make this conditional, if undefined or current value is less than.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 76
+      },
+      "revId": "22bdc52ece254001e8edb138235f282f4f455743",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2f6a683_802b3ab5",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-25T06:48:49Z",
+      "side": 1,
+      "message": "Please keep the includes sorted. We may have several groups of includes; by convention, the very *first* should be sal/config.h; and then there may be (in any order) standard includes (\u003cvector\u003e, \u003cmemory\u003e); our library includes (\u003cvcl/foo.hxx\u003e, \u003csal/bar.hxx\u003e); local module includes (\"baz.hxx\"); UNO includes (\u003ccom/sun/star/abc/Def.hxx\u003e). In every such group, unless really unavoidable, the entries should be sorted.",
+      "revId": "22bdc52ece254001e8edb138235f282f4f455743",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
