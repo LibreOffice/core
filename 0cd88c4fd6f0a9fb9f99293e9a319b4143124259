@@ -16,6 +16,24 @@
       "revId": "0cd88c4fd6f0a9fb9f99293e9a319b4143124259",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59271584_45090746",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2021-03-25T16:18:07Z",
+      "side": 0,
+      "message": "I just tested the feature with two different images in the body and a third image in the header, and it seems to work fine. No regressions have been detected by the unit test system either, so it\u0027s looking good so far.",
+      "parentUuid": "0d0b5043_f8010090",
+      "revId": "0cd88c4fd6f0a9fb9f99293e9a319b4143124259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
