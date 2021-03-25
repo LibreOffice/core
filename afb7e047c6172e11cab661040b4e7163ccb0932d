@@ -212,6 +212,24 @@
       "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9592ac4_78b5b5ef",
+        "filename": "sw/source/filter/ascii/parasc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2021-03-25T08:07:58Z",
+      "side": 1,
+      "message": "As this is my first contribution to open source, it will be better if you guide me and poin out my mistakes so that I can fix them.",
+      "parentUuid": "0296cca8_6e0bb663",
+      "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
