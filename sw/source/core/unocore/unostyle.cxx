@@ -2687,15 +2687,7 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault()
         SwPageDesc& rPageDesc = m_pDoc->GetPageDesc(nPgDscPos);
         rPageDesc.ResetAllMasterAttr();
 
-        SvxLRSpaceItem aLR(RES_LR_SPACE);
-        sal_Int32 nSize = GetMetricVal(CM_1) * 2;
-        aLR.SetLeft(nSize);
-        aLR.SetLeft(nSize);
-        SvxULSpaceItem aUL(RES_UL_SPACE);
-        aUL.SetUpper(static_cast<sal_uInt16>(nSize));
-        aUL.SetLower(static_cast<sal_uInt16>(nSize));
-        pPageFormat->SetFormatAttr(aLR);
-        pPageFormat->SetFormatAttr(aUL);
+        pPageFormat->SetPageFormatToDefault();
         SwPageDesc* pStdPgDsc = m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD);
         std::shared_ptr<SwFormatFrameSize> aFrameSz(std::make_shared<SwFormatFrameSize>(SwFrameSize::Fixed));
 
