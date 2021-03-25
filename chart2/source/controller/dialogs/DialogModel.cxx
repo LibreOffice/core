@@ -261,6 +261,26 @@ void lcl_SetSequenceRole(
         xProp->setPropertyValue( "Role" , uno::Any( rRole ));
 }
 
+Sequence< OUString > lcl_CopyExcludingValuesFirst(
+    Sequence< OUString > const & i_aInput )
+{
+    Sequence< OUString > aOutput( i_aInput.getLength());
+    int nSourceIndex, nDestIndex;
+    for( nSourceIndex = nDestIndex = 0; nSourceIndex < i_aInput.getLength(); nSourceIndex++ )
+    {
+        if( i_aInput[nSourceIndex] == "values-first" )
+        {
+            aOutput.realloc( aOutput.getLength() - 1 );
+        }
+        else
+        {
+            aOutput[nDestIndex] = i_aInput[nSourceIndex];
+            nDestIndex++;
+        }
+    }
+    return aOutput;
+}
+
 Reference< XDataSeries > lcl_CreateNewSeries(
     const Reference< uno::XComponentContext > & xContext,
     const Reference< XChartType > & xChartType,
@@ -309,8 +329,29 @@ Reference< XDataSeries > lcl_CreateNewSeries(
             std::vector< Reference< data::XLabeledDataSequence > > aNewSequences;
             const OUString aRoleOfSeqForSeriesLabel = xChartType->getRoleOfSequenceForSeriesLabel();
             const OUString aLabel(::chart::SchResId(STR_DATA_UNNAMED_SERIES));
-            const Sequence< OUString > aRoles( xChartType->getSupportedMandatoryRoles());
-            const Sequence< OUString > aOptRoles( xChartType->getSupportedOptionalRoles());
+            Sequence< OUString > aPossibleRoles( xChartType->getSupportedMandatoryRoles());
+            Sequence< OUString > aPossibleOptRoles( xChartType->getSupportedOptionalRoles());
+
+            //special handling for candlestick type
+            if( xTemplate.is())
+            {
+                Reference< XDataInterpreter > xInterpreter( xTemplate->getDataInterpreter());
+                if( xInterpreter.is())
+                {
+                    sal_Int32 nStockVariant;
+                    if( xInterpreter->getChartTypeSpecificData("stock variant") >>= nStockVariant )
+                    {
+                        if( nStockVariant == 0 || nStockVariant == 2) {
+                            //delete "values-first" role
+                            aPossibleRoles = lcl_CopyExcludingValuesFirst(aPossibleRoles);
+                            aPossibleOptRoles = lcl_CopyExcludingValuesFirst(aPossibleOptRoles);
+                        }
+                    }
+                }
+            }
+
+            const Sequence< OUString > aRoles( aPossibleRoles );
+            const Sequence< OUString > aOptRoles( aPossibleOptRoles );
 
             for(OUString const & role : aRoles)
             {

@@ -68,6 +68,8 @@ protected:
         const css::chart2::InterpretedData& aInterpretedData ) override;
     virtual css::uno::Reference< css::chart2::data::XDataSource > SAL_CALL mergeInterpretedData(
         const css::chart2::InterpretedData& aInterpretedData ) override;
+    virtual css::uno::Any SAL_CALL getChartTypeSpecificData(
+        const OUString& sKey ) override;
 };
 
 } // namespace chart

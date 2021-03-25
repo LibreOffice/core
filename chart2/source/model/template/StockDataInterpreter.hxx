@@ -42,6 +42,8 @@ protected:
         const css::chart2::InterpretedData& aInterpretedData ) override;
     virtual css::chart2::InterpretedData SAL_CALL reinterpretDataSeries(
         const css::chart2::InterpretedData& aInterpretedData ) override;
+    virtual css::uno::Any SAL_CALL getChartTypeSpecificData(
+        const OUString& sKey ) override;
 
 private:
     StockChartTypeTemplate::StockVariant m_eStockVariant;
