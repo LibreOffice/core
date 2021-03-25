@@ -298,6 +298,12 @@ Reference< data::XDataSource > SAL_CALL DataInterpreter::mergeInterpretedData(
     return DataSourceHelper::createDataSource( comphelper::containerToSequence( aResultVec ) );
 }
 
+uno::Any SAL_CALL DataInterpreter::getChartTypeSpecificData(
+    const OUString& sKey )
+{
+    return uno::Any();
+}
+
 // convenience methods
 
 OUString DataInterpreter::GetRole( const Reference< data::XDataSequence > & xSeq )

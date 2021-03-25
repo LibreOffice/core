@@ -313,12 +313,14 @@ Reference< XDataSeries > lcl_CreateNewSeries(
             const Sequence< OUString > aRoles( xChartType->getSupportedMandatoryRoles());
             const Sequence< OUString > aOptRoles( xChartType->getSupportedOptionalRoles());
 
-            if( xChartType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
+            //special handling for candlestick type
+            if( xChartType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK && xTemplate.is())
             {
-                if( xTemplate.is())
+                Reference< XDataInterpreter > xInterpreter( xTemplate->getDataInterpreter());
+                if( xInterpreter.is())
                 {
-                    Reference< XDataInterpreter > xInterpreter( xTemplate->getDataInterpreter());
-                    if( xInterpreter.is())
+                    int nStockVariant;
+                    if( xInterpreter->getChartTypeSpecificData("stock variant") >>= nStockVariant )
                     {
                     }
                 }
