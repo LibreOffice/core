@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d0b5043_f8010090",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-25T13:48:18Z",
+      "side": 0,
+      "message": "Is it sure? RelId depends on the content, i.e. body text, header, footer, so mixing them seems to be a bad idea. Have you checked it with a document with multiple images in the text body (more images there than in the header)?",
+      "revId": "0cd88c4fd6f0a9fb9f99293e9a319b4143124259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
