@@ -24,7 +24,6 @@
 #include <svx/svdtypes.hxx>
 #include <tools/ref.hxx>
 #include <sal/types.h>
-#include <com/sun/star/i18n/CollatorOptions.hpp>
 #include "scdllapi.h"
 #include <rtl/ustring.hxx>
 #include <tools/long.hxx>
@@ -45,8 +44,6 @@ struct ScCalcConfig;
 enum class SvtScriptType;
 enum class FormulaError : sal_uInt16;
 enum class SvNumFormatType : sal_Int16;
-
-#define SC_COLLATOR_IGNORES css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE
 
 //  Calc has lots of names...
 //  Clipboard names are in so3/soapp.hxx now

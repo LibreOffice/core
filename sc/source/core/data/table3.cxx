@@ -26,6 +26,7 @@
 #include <unotools/collatorwrapper.hxx>
 #include <stdlib.h>
 #include <unotools/transliterationwrapper.hxx>
+#include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/i18n/KParseTokens.hpp>
 #include <com/sun/star/i18n/KParseType.hpp>
 #include <sal/log.hxx>
@@ -620,7 +621,7 @@ void ScTable::InitSortCollator( const ScSortParam& rPar )
         if ( !pSortCollator || IsSortCollatorGlobal() )
             pSortCollator = new CollatorWrapper( comphelper::getProcessComponentContext() );
         pSortCollator->loadCollatorAlgorithm( rPar.aCollatorAlgorithm,
-            rPar.aCollatorLocale, (rPar.bCaseSens ? 0 : SC_COLLATOR_IGNORES) );
+            rPar.aCollatorLocale, (rPar.bCaseSens ? 0 : css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE) );
     }
     else
     {   // SYSTEM

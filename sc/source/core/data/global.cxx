@@ -42,6 +42,7 @@
 #include <unotools/securityoptions.hxx>
 #include <osl/diagnose.h>
 
+#include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <i18nlangtag/mslangid.hxx>
 #include <comphelper/doublecheckedinit.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1031,7 +1032,7 @@ CollatorWrapper*        ScGlobal::GetCollator()
         []()
         {
             CollatorWrapper* p = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
-            p->loadDefaultCollator( *GetLocale(), SC_COLLATOR_IGNORES );
+            p->loadDefaultCollator( *GetLocale(), css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE );
             return p;
         });
 }

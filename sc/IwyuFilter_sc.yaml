@@ -202,8 +202,6 @@ excludelist:
     sc/inc/global.hxx:
     # base class has to be a complete type
     - tools/ref.hxx
-    # Needed for macro #define
-    - com/sun/star/i18n/CollatorOptions.hpp
     sc/inc/linkuno.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
