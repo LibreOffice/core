@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "ed980503_c8dde717",
+        "filename": "sw/inc/shellio.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2021-03-25T07:48:37Z",
+      "side": 1,
+      "message": "I\u0027m not confirmed yet I\u0027m assuming that there might be some files which tend to use this variable. So, I\u0027d defined it to zero. Also, in your comment in the bug, you have suggested to \"remove the arbitrary limit\" and I implemented the same following your code pointer.",
+      "parentUuid": "7f083f07_61db71fd",
+      "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "54cc4cf0_a7ffee2b",
         "filename": "sw/source/filter/ascii/parasc.cxx",
         "patchSetId": 1
@@ -119,6 +137,24 @@
       "side": 1,
       "message": "I don\u0027t get that: which pointer you mean? But for starter, have you tested your change on a file?",
       "parentUuid": "4852bfa5_8ff08e6b",
+      "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ba95392_e5687c7a",
+        "filename": "sw/source/filter/ascii/parasc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2021-03-25T07:48:37Z",
+      "side": 1,
+      "message": "I don\u0027t have Linux OS in my system(So,can\u0027t able to test!). I\u0027ve tried to solve the bug in windows and in it, it builds without any error after making the changes.",
+      "parentUuid": "73162d2d_25be9168",
       "revId": "afb7e047c6172e11cab661040b4e7163ccb0932d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
