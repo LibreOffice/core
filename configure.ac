@@ -3709,7 +3709,7 @@ fi
 
 if test "$_os" = "iOS" -o "$build_cpu" != "$host_cpu" -o -n "$DISABLE_DYNLOADING"; then
     # To allow building Windows multi-arch releases without cross-tooling
-    if test -z "$WIN_MULTI_ARCH" -a -z "$WIN_OTHER_ARCH"; then
+    if test -z "$WIN_MULTI_ARCH" -a -z "$WIN_OTHER_ARCH" -o -n "$DISABLE_DYNLOADING"; then
         cross_compiling="yes"
     fi
 fi
@@ -5554,9 +5554,15 @@ if test "$USING_X11" != TRUE; then
     test_dbus=no
     build_gstreamer_1_0=no
     test_kf5=no
-    test_qt5=yes
     test_gtk3_kde5=no
-    enable_cairo_canvas=yes
+    if test "$DISABLE_DYNLOADING" = "TRUE" -a "$OS" != "WNT"; then
+        enable_cairo_canvas=yes
+        test_qt5=yes
+        enable_qt5=yes
+    else
+        enable_cairo_canvas=no
+        test_qt5=no
+    fi
 fi
 
 if test "$OS" = "EMSCRIPTEN"; then
@@ -9435,7 +9441,11 @@ no|disable)
         # Python is required to build LibreOffice. In theory we could separate the build-time Python
         # requirement from the choice whether to include Python stuff in the installer, but why
         # bother?
-        AC_MSG_ERROR([Python is required at build time.])
+        if test "$cross_compiling" = yes; then
+            enable_python=system
+        else
+            AC_MSG_ERROR([Python is required at build time.])
+        fi
     fi
     enable_python=no
     AC_MSG_RESULT([none])
