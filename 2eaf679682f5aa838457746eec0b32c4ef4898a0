@@ -22,6 +22,30 @@
       "revId": "2eaf679682f5aa838457746eec0b32c4ef4898a0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "447f9a5f_99ef5416",
+        "filename": "vcl/win/app/fileextcheck.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-25T05:57:16Z",
+      "side": 1,
+      "message": "Changed the checks to a #define at the top of the file.",
+      "parentUuid": "0b84a1c5_3e40bdff",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 33
+      },
+      "revId": "2eaf679682f5aa838457746eec0b32c4ef4898a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
