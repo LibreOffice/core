@@ -86,6 +86,24 @@ interface XDataInterpreter  : ::com::sun::star::uno::XInterface
         the result of this method should be <code>xSource</code>.</p>
      */
     com::sun::star::chart2::data::XDataSource mergeInterpretedData( [in] InterpretedData aInterpretedData );
+
+    /** Get chart information that is specific to a particular chart
+        type, by key.
+
+        @param sKey
+            name of the piece of data to retrieve.
+
+        <p>Supported key strings:</p>
+        <ul>
+            <li><tt>"stock variant"</tt>: stock chart variant,
+            with 0 = neither Open Values nor volume, 1 = Open Values,
+            2 = volume, 3 = both. Valid for candlestick charts.</li>
+        </ul>
+
+        @return
+            The value requested, or nothing if not present.
+    */
+    any getChartTypeSpecificData([in] string sKey );
 };
 
 } ; // chart2
