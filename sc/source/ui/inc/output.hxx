@@ -336,7 +336,7 @@ public:
 
     void    SetSnapPixel();
 
-    void    DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool bPage);
+    void    DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool bPage, bool bMergeCover = false);
     void    DrawStrings( bool bPixelToLogic = false );
 
     /// Draw all strings, or provide Rectangle where the text (defined by rAddress) would be drawn.
