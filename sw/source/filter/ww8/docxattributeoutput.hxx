@@ -1031,7 +1031,7 @@ public:
     virtual css::uno::Reference<css::text::XTextFrame> GetUnoTextFrame(
         css::uno::Reference<css::drawing::XShape> xShape) override;
     virtual oox::drawingml::DrawingML& GetDrawingML() override;
-    virtual void MaybeOutputBrushItem(SfxItemSet const&) override;
+    virtual bool MaybeOutputBrushItem(SfxItemSet const&) override;
 
     void BulletDefinition(int nId, const Graphic& rGraphic, Size aSize) override;
 

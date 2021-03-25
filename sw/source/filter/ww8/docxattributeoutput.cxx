@@ -6308,14 +6308,14 @@ oox::drawingml::DrawingML& DocxAttributeOutput::GetDrawingML()
     return m_rDrawingML;
 }
 
-void DocxAttributeOutput::MaybeOutputBrushItem(SfxItemSet const& rSet)
+bool DocxAttributeOutput::MaybeOutputBrushItem(SfxItemSet const& rSet)
 {
     const XFillStyleItem* pXFillStyleItem(rSet.GetItem<XFillStyleItem>(XATTR_FILLSTYLE));
 
     if ((pXFillStyleItem && pXFillStyleItem->GetValue() != drawing::FillStyle_NONE)
         || !m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
-        return;
+        return false;
     }
 
     // sw text frames are opaque by default, even with fill none!
@@ -6327,6 +6327,7 @@ void DocxAttributeOutput::MaybeOutputBrushItem(SfxItemSet const& rSet)
     pClone->Put(aSolid);
     std::unique_ptr<SvxBrushItem> const pBrush(getSvxBrushItemFromSourceSet(*pClone, RES_BACKGROUND));
     FormatBackground(*pBrush);
+    return true;
 }
 
 namespace {
