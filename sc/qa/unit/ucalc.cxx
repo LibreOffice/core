@@ -3399,6 +3399,38 @@ void Test::testAdvancedFilter()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testTdf98642()
+{
+    m_pDoc->InsertTab(0, "Sheet1");
+    m_pDoc->SetString(0, 0, 0, "test");
+
+    ScRangeData* pName1 = new ScRangeData( *m_pDoc, "name1", "$Sheet1.$A$1");
+    ScRangeData* pName2 = new ScRangeData( *m_pDoc, "name2", "$Sheet1.$A$1");
+
+    std::unique_ptr<ScRangeName> pGlobalRangeName(new ScRangeName());
+    pGlobalRangeName->insert(pName1);
+    pGlobalRangeName->insert(pName2);
+    m_pDoc->SetRangeName(std::move(pGlobalRangeName));
+
+    m_pDoc->SetString(1, 0, 0, "=name1");
+    m_pDoc->SetString(1, 1, 0, "=name2");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), m_pDoc->GetString(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), m_pDoc->GetString(1, 1, 0));
+
+    OUString aFormula;
+    m_pDoc->GetFormula(1,0,0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=name1"), aFormula);
+    m_pDoc->GetFormula(1,1,0, aFormula);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: =name2
+    // - Actual  : =name1
+    CPPUNIT_ASSERT_EQUAL(OUString("=name2"), aFormula);
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testCopyPaste()
 {
     m_pDoc->InsertTab(0, "Sheet1");
