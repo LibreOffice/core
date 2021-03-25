@@ -13,6 +13,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -38,6 +39,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <svx/xflclit.hxx>
+#include <vcl/scheduler.hxx>
 
 using namespace ::com::sun::star;
 
@@ -51,6 +53,8 @@ protected:
 public:
     virtual void setUp() override;
     virtual void tearDown() override;
+
+    void checkCurrentPageNumber(sal_uInt16 nNum);
 };
 
 void SdUiImpressTest::setUp()
@@ -67,6 +71,18 @@ void SdUiImpressTest::tearDown()
         mxComponent->dispose();
 
     test::BootstrapFixture::tearDown();
+}
+
+void SdUiImpressTest::checkCurrentPageNumber(sal_uInt16 nNum)
+{
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawView> xDrawView(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xDrawView->getCurrentPage(), uno::UNO_SET_THROW);
+    uno::Reference<beans::XPropertySet> xPropertySet(xPage, uno::UNO_QUERY);
+
+    sal_uInt16 nPageNumber;
+    xPropertySet->getPropertyValue("Number") >>= nPageNumber;
+    CPPUNIT_ASSERT_EQUAL(nNum, nPageNumber);
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf111522)
@@ -200,6 +216,43 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf128651)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Redo changes width", nUndoWidth, nRedoWidth);
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127481)
+{
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pActualPage->GetObjCount());
+
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Rows", uno::makeAny(sal_Int32(1)) }, { "Columns", uno::makeAny(sal_Int32(1)) } }));
+
+    dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
+
+    dispatchCommand(mxComponent, ".uno:DuplicatePage", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    checkCurrentPageNumber(2);
+
+    pActualPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
+
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pActualPage->GetObj(2));
+    CPPUNIT_ASSERT(pTableObject);
+
+    //without the fix, it would crash here
+    pViewShell->GetView()->SdrBeginTextEdit(pTableObject);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
+}
+
 namespace
 {
 void dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand,
@@ -282,12 +335,13 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSpellOnlineParameter)
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     bool bSet = pImpressDocument->GetDoc()->GetOnlineSpell();
 
-    uno::Sequence<beans::PropertyValue> params(comphelper::InitPropertySequence({{"Enable", uno::makeAny(!bSet)}}));
+    uno::Sequence<beans::PropertyValue> params(
+        comphelper::InitPropertySequence({ { "Enable", uno::makeAny(!bSet) } }));
     dispatchCommand(mxComponent, ".uno:SpellOnline", params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pImpressDocument->GetDoc()->GetOnlineSpell());
 
     // set the same state as now and we don't expect any change (no-toggle)
-    params = comphelper::InitPropertySequence({{"Enable", uno::makeAny(!bSet)}});
+    params = comphelper::InitPropertySequence({ { "Enable", uno::makeAny(!bSet) } });
     dispatchCommand(mxComponent, ".uno:SpellOnline", params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pImpressDocument->GetDoc()->GetOnlineSpell());
 }
