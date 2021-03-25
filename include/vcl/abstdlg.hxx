@@ -180,6 +180,12 @@ public:
     virtual VclPtr<AbstractDiagramDialog> CreateDiagramDialog(
         weld::Window* pParent,
         std::shared_ptr<DiagramDataInterface> pDiagramData) = 0;
+
+#ifdef _WIN32
+    virtual VclPtr<VclAbstractDialog>
+    CreateFileExtCheckDialog(weld::Window* _pParent, const OUString& sTitle, const OUString& sMsg)
+        = 0;
+#endif
 };
 
 #endif
