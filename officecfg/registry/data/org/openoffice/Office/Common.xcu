@@ -467,6 +467,9 @@
     <prop oor:name="FindReplaceRememberedSearches">
      <value>10</value>
     </prop>
+    <prop oor:name="PerformFileExtCheck">
+      <value install:module="wnt">true</value>
+    </prop>
   </node>
   <node oor:name="Save">
     <node oor:name="ODF">

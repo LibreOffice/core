@@ -15,6 +15,7 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="row_spacing">12</property>
+    <property name="vexpand">True</property>
     <child>
       <object class="GtkFrame" id="frame1">
         <property name="visible">True</property>
@@ -451,6 +452,20 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="cbPerformFileExtCheck">
+                <property name="label" translatable="yes" context="optgeneralpage|FileExtCheckCheckbox">Perform check for default file associations on start-up</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="active">True</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
               </packing>
             </child>
           </object>

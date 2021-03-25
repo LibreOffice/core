@@ -131,6 +131,7 @@
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include <vcl/fileregistration.hxx>
 #endif
 
 #if defined(_WIN32)
@@ -1893,6 +1894,15 @@ IMPL_LINK_NOARG(Desktop, OpenClients_Impl, void*, void)
     CloseSplashScreen();
     CheckFirstRun( );
 #ifdef _WIN32
+    bool bDontShowDialogs
+        = Application::IsHeadlessModeEnabled(); // uitest.uicheck fails when the dialog is open
+    for (sal_uInt16 i = 0; !bDontShowDialogs && i < Application::GetCommandLineParamCount(); i++)
+    {
+        if (Application::GetCommandLineParam(i) == "--nologo")
+            bDontShowDialogs = true;
+    }
+    if (!bDontShowDialogs)
+        vcl::fileregistration::CheckFileExtRegistration(SfxGetpApp()->GetTopWindow());
     // Registers a COM class factory of the service manager with the windows operating system.
     Reference< XMultiServiceFactory > xSMgr=  comphelper::getProcessServiceFactory();
     xSMgr->createInstance("com.sun.star.bridge.OleApplicationRegistration");
