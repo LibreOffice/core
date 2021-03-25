@@ -139,7 +139,6 @@ struct DIBV5Header : public DIBInfoHeader
 vcl::PixelFormat convertToBPP(sal_uInt16 nCount)
 {
     return (nCount <= 1) ? vcl::PixelFormat::N1_BPP :
-           (nCount <= 4) ? vcl::PixelFormat::N4_BPP :
            (nCount <= 8) ? vcl::PixelFormat::N8_BPP :
                            vcl::PixelFormat::N24_BPP;
 }
@@ -1283,7 +1282,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
         // formats != *_TC_*). Note that this very problem might cause
         // trouble at other places - the introduction of 32 bit RGBA
         // bitmaps is relatively recent.
-        // #i59239# discretize bitcount for aligned width to 1,4,8,24
+        // #i59239# discretize bitcount for aligned width to 1,8,24
         // (other cases are not written below)
         const auto ePixelFormat(pAccAlpha ? vcl::PixelFormat::N32_BPP : convertToBPP(rAcc.GetBitCount()));
         const sal_uLong nAlignedWidth(AlignedWidth4Bytes(rAcc.Width() * sal_Int32(ePixelFormat)));
@@ -1347,35 +1346,6 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
                             cTmp |= rAcc.GetIndexFromData( pScanline, nX ) << --nShift;
                         }
 
-                        *pTmp = cTmp;
-                        rOStm.WriteBytes(aBuf.data(), nAlignedWidth);
-                    }
-                }
-                break;
-
-                case vcl::PixelFormat::N4_BPP:
-                {
-                    //valgrind, zero out the trailing unused alignment bytes
-                    size_t nUnusedBytes = nAlignedWidth - ((nWidth+1) / 2);
-                    memset(aBuf.data() + nAlignedWidth - nUnusedBytes, 0, nUnusedBytes);
-
-                    for( tools::Long nY = nHeight - 1; nY >= 0; nY-- )
-                    {
-                        sal_uInt8* pTmp = aBuf.data();
-                        sal_uInt8 cTmp = 0;
-                        Scanline pScanline = rAcc.GetScanline( nY );
-
-                        for( tools::Long nX = 0, nShift = 2; nX < nWidth; nX++ )
-                        {
-                            if( !nShift )
-                            {
-                                nShift = 2;
-                                *pTmp++ = cTmp;
-                                cTmp = 0;
-                            }
-
-                            cTmp |= rAcc.GetIndexFromData( pScanline, nX ) << ( --nShift << 2 );
-                        }
                         *pTmp = cTmp;
                         rOStm.WriteBytes(aBuf.data(), nAlignedWidth);
                     }
@@ -1473,17 +1443,15 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess c
         // problem might cause trouble at other places - the
         // introduction of 32 bit RGBA bitmaps is relatively
         // recent.
-        // #i59239# discretize bitcount to 1,4,8,24 (other cases
+        // #i59239# discretize bitcount to 1,8,24 (other cases
         // are not written below)
         const auto ePixelFormat(pAccAlpha ? vcl::PixelFormat::N32_BPP : convertToBPP(rAcc.GetBitCount()));
         aHeader.nBitCount = sal_uInt16(ePixelFormat);
         aHeader.nSizeImage = rAcc.Height() * AlignedWidth4Bytes(rAcc.Width() * aHeader.nBitCount);
 
-        if(bCompressed)
+        if (bCompressed)
         {
-            if (ePixelFormat == vcl::PixelFormat::N4_BPP)
-                nCompression = RLE_4;
-            else if (ePixelFormat == vcl::PixelFormat::N8_BPP)
+            if (ePixelFormat == vcl::PixelFormat::N8_BPP)
                 nCompression = RLE_8;
         }
     }
