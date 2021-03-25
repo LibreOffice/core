@@ -352,7 +352,7 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
         ExportPoolItemsToCHP(aItems, nScript, nullptr);
     if ( bPapFormat )
     {
-        AttrOutput().MaybeOutputBrushItem(rSet);
+        const bool bAlreadyOutputBrushItem = AttrOutput().MaybeOutputBrushItem(rSet);
 
         for ( const auto& rItem : aItems )
         {
@@ -365,12 +365,21 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
         }
 
         // Has to be called after RES_PARATR_GRABBAG is processed.
-        const XFillStyleItem* pXFillStyleItem(rSet.GetItem<XFillStyleItem>(XATTR_FILLSTYLE));
-        if (pXFillStyleItem && pXFillStyleItem->GetValue() == drawing::FillStyle_SOLID && !rSet.HasItem(RES_BACKGROUND))
+        const XFillStyleItem* pFill(rSet.GetItem<XFillStyleItem>(XATTR_FILLSTYLE, false));
+        // bAlreadyBrushItem for the benefit of make CppunitTest_sw_ooxmlexport6  CPPUNIT_TEST_NAME=testVMLData
+        if (!bAlreadyOutputBrushItem && pFill
+            && (pFill->GetValue() == drawing::FillStyle_SOLID || pFill->GetValue() == drawing::FillStyle_NONE)
+            && !rSet.GetItem(RES_BACKGROUND, false))
         {
             // Construct an SvxBrushItem, as expected by the exporters.
             std::unique_ptr<SvxBrushItem> aBrush(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
-            AttrOutput().OutputItem(*aBrush);
+            // for the benefit of make CppunitTest_sw_ooxmlexport7  CPPUNIT_TEST_NAME=test77219
+            // for the benefit of make CppunitTest_sw_ooxmlexport6  CPPUNIT_TEST_NAME=testExtentValue
+            // It seems that SdrExporter().getTextFrameSyntax() doesn't flush it's attributes (or something like that.)
+            // So the next TextFrame might duplicate the opacity setting. Well, opacity (without a RES_BACKGROUND) can only
+            // come if there is a FILLTRANSPARENCE. So avoid that asserting situation (even though I don't think that is technically correct)
+            if (pFill->GetValue() != drawing::FillStyle_NONE || !rSet.HasItem(XATTR_FILLTRANSPARENCE))
+                AttrOutput().OutputItem(*aBrush);
         }
 #if 0
         else
