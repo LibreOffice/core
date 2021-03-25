@@ -373,6 +373,8 @@ void SvxSearchDialog::ChildWinDispose()
 SvxSearchDialog::~SvxSearchDialog()
 {
     m_aPresentIdle.Stop();
+    pSearchItem.reset();
+    pImpl.reset();
 }
 
 void SvxSearchDialog::Construct_Impl()
@@ -598,7 +600,6 @@ bool SvxSearchDialog::IsOtherOptionsExpanded() const
 void SvxSearchDialog::Activate()
 {
     // apply possible transliteration changes of the SvxSearchItem member
-    DBG_ASSERT( pSearchItem, "SearchItem missing" );
     if (pSearchItem)
     {
         m_xMatchCaseCB->set_active( pSearchItem->GetExact() );

@@ -118,7 +118,7 @@ IMPL_LINK_NOARG(SfxDialogController, FocusChangeHdl, weld::Container&, void)
 
 void SfxModelessDialogController::Activate()
 {
-    if (!m_xImpl)
+    if (!m_xImpl || !m_xImpl->pMgr)
         return;
     m_pBindings->SetActiveFrame(m_xImpl->pMgr->GetFrame());
     m_xImpl->pMgr->Activate_Impl();
