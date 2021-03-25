@@ -197,10 +197,8 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                     auto ePixelFormat = vcl::PixelFormat::INVALID;
                     if ( mnColors > 256 )
                         ePixelFormat = vcl::PixelFormat::N24_BPP;
-                    else if ( mnColors > 16 )
-                        ePixelFormat = vcl::PixelFormat::N8_BPP;
                     else if ( mnColors > 2 )
-                        ePixelFormat = vcl::PixelFormat::N4_BPP;
+                        ePixelFormat = vcl::PixelFormat::N8_BPP;
                     else
                         ePixelFormat = vcl::PixelFormat::N1_BPP;
 
