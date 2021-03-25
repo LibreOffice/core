@@ -28,6 +28,7 @@
 #include <ChartTypeHelper.hxx>
 #include <ThreeDHelper.hxx>
 #include <ChartModel.hxx>
+#include <servicenames_charttypes.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
@@ -311,6 +312,17 @@ Reference< XDataSeries > lcl_CreateNewSeries(
             const OUString aLabel(::chart::SchResId(STR_DATA_UNNAMED_SERIES));
             const Sequence< OUString > aRoles( xChartType->getSupportedMandatoryRoles());
             const Sequence< OUString > aOptRoles( xChartType->getSupportedOptionalRoles());
+
+            if( xChartType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
+            {
+                if( xTemplate.is())
+                {
+                    Reference< XDataInterpreter > xInterpreter( xTemplate->getDataInterpreter());
+                    if( xInterpreter.is())
+                    {
+                    }
+                }
+            }
 
             for(OUString const & role : aRoles)
             {
