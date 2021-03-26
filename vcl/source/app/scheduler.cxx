@@ -504,6 +504,7 @@ bool Scheduler::ProcessTaskScheduling()
         assert(pSchedulerData == pMostUrgent);
         rSchedCtx.mpSchedulerStack = pSchedulerData->mpNext;
 
+        // coverity[check_after_deref : FALSE] - pMostUrgent->mpTask is initially pMostUrgent->mpTask, but Task::Invoke can clear it
         const bool bTaskAlive = pMostUrgent->mpTask && pMostUrgent->mpTask->IsActive();
         if (!bTaskAlive)
         {
