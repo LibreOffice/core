@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae13d932_b74ba4f6",
+        "filename": "sw/inc/swtypes.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-03-26T07:43:09Z",
+      "side": 0,
+      "message": "would be nice to preserve this comment at the call-site(s).\nSomething like \n\n\"This should be be CollatorOptions_IGNORE_CASE | CollatorOptions_IGNORE_KANA | CollatorOptions_IGNORE_WIDTH, but I18N doesn\u0027t get this right, can\u0027t specify more than one to ignore\"",
+      "revId": "d72a3fd20428538e95af4173fb3b4f6a34e71054",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
