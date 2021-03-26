@@ -186,6 +186,12 @@ public:
     bool IsUndoEnabled() const;
 
     /**
+     * Checks if this or other views have an active text edit, in which case object undos are not
+     * created.
+     */
+    bool CanDoSdrUndo() const;
+
+    /**
      * Checks if this or other views have an active text edit, if true, end them.
      */
     void EndTextEditAllViews() const;
