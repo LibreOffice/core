@@ -3980,7 +3980,10 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             XFastAttributeListRef xAttributeList(pAttributeList);
             m_pSerializer->singleElementNS(XML_w, XML_tblLook, xAttributeList);
         }
-        else if (rGrabBagElement.first == "TablePosition" )
+        else if (rGrabBagElement.first == "TablePosition" &&
+                        // skip empty table position (tables in footnotes converted to
+                        // floating tables temporarily, don't export this)
+                        rGrabBagElement.second != uno::Any() )
         {
             FastAttributeList *attrListTablePos = FastSerializerHelper::createAttrList( );
             const uno::Sequence<beans::PropertyValue> aTablePosition = rGrabBagElement.second.get<uno::Sequence<beans::PropertyValue> >();

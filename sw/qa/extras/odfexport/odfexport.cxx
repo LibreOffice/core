@@ -232,6 +232,57 @@ DECLARE_ODFEXPORT_TEST(testTdf130314, "tdf130314.docx")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+<<<<<<< HEAD   (ce443d tdf#119292 sc layout: fix overlapping wrapped cell texts)
+=======
+DECLARE_ODFEXPORT_EXPORTONLY_TEST(testTdf133487, "MadeByLO7.odt")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    // shape in background has lowest index
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p[2]/draw:custom-shape", "z-index", "0");
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name = /office:document-content/office:body/office:text/text:p[2]/draw:custom-shape[@draw:z-index = '0']/attribute::draw:style-name]/style:graphic-properties", "run-through", "background");
+    // shape in foreground, previously index 1
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p[1]/draw:custom-shape", "z-index", "2");
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name = /office:document-content/office:body/office:text/text:p[1]/draw:custom-shape[@draw:z-index = '2']/attribute::draw:style-name]/style:graphic-properties", "run-through", "foreground");
+    // shape in foreground, previously index 0
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p[3]/draw:custom-shape", "z-index", "1");
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name = /office:document-content/office:body/office:text/text:p[3]/draw:custom-shape[@draw:z-index = '1']/attribute::draw:style-name]/style:graphic-properties", "run-through", "foreground");
+}
+
+DECLARE_ODFEXPORT_TEST(testTdf139126, "tdf139126.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTables = xSupplier->getTextTables();
+    uno::Reference<text::XTextTable> xTable(xTables->getByName("Table1"), uno::UNO_QUERY);
+
+    uno::Reference<text::XTextRange> xD2(xTable->getCellByName("D2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("4.0"), xD2->getString());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: ** Expression is faulty **
+    // - Actual  : 17976931348623200...
+    uno::Reference<text::XTextRange> xE2(xTable->getCellByName("E2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("** Expression is faulty **"), xE2->getString());
+}
+
+DECLARE_ODFEXPORT_TEST(testTdf125877, "tdf95806.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+
+    // This was 0 (lost table during ODT export in footnotes)
+    // Note: fix also tdf#95806: painting table layout is correct
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    // floating table: there is a frame now
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+}
+
+>>>>>>> CHANGE (e11c51 tdf#95806 tdf#125877 tdf#141172 DOCX: fix tables in footnote)
 DECLARE_ODFEXPORT_TEST(testTdf103567, "tdf103567.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
