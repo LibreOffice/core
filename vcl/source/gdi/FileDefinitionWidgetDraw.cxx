@@ -475,7 +475,7 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                     SvFileStream aFileStream(rWidgetDraw.msSource, StreamMode::READ);
 
                     vcl::bitmap::loadFromSvg(aFileStream, "", aBitmap, nScaleFactor);
-                    if (!!aBitmap)
+                    if (!aBitmap.IsEmpty())
                     {
                         rCacheImages.insert(std::make_pair(rCacheKey, aBitmap));
                     }
@@ -489,7 +489,7 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                 tools::Long nImageHeight = aBitmap.GetSizePixel().Height();
                 SalTwoRect aTR(0, 0, nImageWidth, nImageHeight, nX, nY, nImageWidth / nScaleFactor,
                                nImageHeight / nScaleFactor);
-                if (!!aBitmap)
+                if (!aBitmap.IsEmpty())
                 {
                     const std::shared_ptr<SalBitmap> pSalBitmap
                         = aBitmap.GetBitmap().ImplGetSalBitmap();

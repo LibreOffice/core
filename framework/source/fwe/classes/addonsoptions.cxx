@@ -612,29 +612,29 @@ BitmapEx AddonsOptions_Impl::GetImageFromURL( const OUString& aURL, bool bBig, b
         OneImageEntry& rSizeEntry = pIter->second.aSizeEntry[nIdx];
         OneImageEntry& rOtherEntry = pIter->second.aSizeEntry[nOtherIdx];
         // actually read the image ...
-        if (!rSizeEntry.aImage)
+        if (rSizeEntry.aImage.IsEmpty())
             rSizeEntry.aImage = ReadImageFromURL(rSizeEntry.aURL);
 
-        if (!rSizeEntry.aImage)
+        if (rSizeEntry.aImage.IsEmpty())
         { // try the other size and scale it
             aImage = ScaleImage(ReadImageFromURL(rOtherEntry.aURL), bBig);
             rSizeEntry.aImage = aImage;
-            if (!rSizeEntry.aImage)
+            if (rSizeEntry.aImage.IsEmpty())
                 SAL_WARN("fwk", "failed to load addons image " << aURL);
         }
 
         // FIXME: bNoScale is not terribly meaningful or useful
 
-        if (!aImage && bNoScale)
+        if (aImage.IsEmpty() && bNoScale)
             aImage = rSizeEntry.aImage;
 
-        if (!aImage && !!rSizeEntry.aScaled)
+        if (aImage.IsEmpty() && !rSizeEntry.aScaled.IsEmpty())
             aImage = rSizeEntry.aScaled;
 
         else // scale to the correct size for the theme / toolbox
         {
             aImage = rSizeEntry.aImage;
-            if (!aImage) // use and scale the other if one size is missing
+            if (aImage.IsEmpty()) // use and scale the other if one size is missing
                 aImage = rOtherEntry.aImage;
 
             aImage = ScaleImage(aImage, bBig);

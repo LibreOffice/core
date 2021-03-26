@@ -316,7 +316,7 @@ namespace cairocanvas
         uno::Reference<rendering::XIntegerReadOnlyBitmap> xIntBmp(xBitmap,
                                                                   uno::UNO_QUERY_THROW);
         ::BitmapEx aBmpEx = vcl::unotools::bitmapExFromXBitmap(xIntBmp);
-        if( !!aBmpEx )
+        if( !aBmpEx.IsEmpty() )
             return aBmpEx;
 
         // TODO(F1): extract pixel from XBitmap interface

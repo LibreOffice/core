@@ -440,7 +440,7 @@ namespace dxcanvas::tools
                 return false;
 
             ::BitmapEx aBmpEx = vcl::unotools::bitmapExFromXBitmap( xIntBmp );
-            if( !aBmpEx )
+            if( aBmpEx.IsEmpty() )
                 return false;
 
             return drawVCLBitmapEx( rGraphics, aBmpEx );

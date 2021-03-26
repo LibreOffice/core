@@ -218,7 +218,7 @@ WallpaperStyle Wallpaper::GetStyle() const
 
 void Wallpaper::SetBitmap( const BitmapEx& rBitmap )
 {
-    if ( !rBitmap )
+    if ( rBitmap.IsEmpty() )
     {
         if ( mpImplWallpaper->mpBitmap )
         {

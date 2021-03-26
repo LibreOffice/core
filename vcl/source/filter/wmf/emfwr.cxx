@@ -801,7 +801,7 @@ void EMFWriter::ImplWritePath( const tools::PolyPolygon& rPolyPoly, bool bClosed
 void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
                                     const Size& rSz, sal_uInt32 nROP )
 {
-    if( !rBmp )
+    if( rBmp.IsEmpty() )
         return;
 
     SvMemoryStream  aMemStm( 65535, 65535 );
@@ -1291,7 +1291,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 Bitmap                  aBmp( pA->GetBitmapEx().GetBitmap() );
                 Bitmap                  aMsk( pA->GetBitmapEx().GetMask() );
 
-                if( !!aMsk )
+                if( !aMsk.IsEmpty() )
                 {
                     aBmp.Replace( aMsk, COL_WHITE );
                     aMsk.Invert();
@@ -1309,7 +1309,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 Bitmap                      aBmp( pA->GetBitmapEx().GetBitmap() );
                 Bitmap                      aMsk( pA->GetBitmapEx().GetMask() );
 
-                if( !!aMsk )
+                if( !aMsk.IsEmpty() )
                 {
                     aBmp.Replace( aMsk, COL_WHITE );
                     aMsk.Invert();
@@ -1329,7 +1329,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 Bitmap                          aBmp( aBmpEx.GetBitmap() );
                 Bitmap                          aMsk( aBmpEx.GetMask() );
 
-                if( !!aMsk )
+                if( !aMsk.IsEmpty() )
                 {
                     aBmp.Replace( aMsk, COL_WHITE );
                     aMsk.Invert();

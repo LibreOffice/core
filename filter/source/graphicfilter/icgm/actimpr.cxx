@@ -553,7 +553,7 @@ void CGMImpressOutAct::DrawEllipticalArc( FloatPoint const & rCenter, FloatPoint
 
 void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
 {
-    if ( !pBmpDesc->mbStatus || !pBmpDesc->mxBitmap )
+    if ( !pBmpDesc->mbStatus || pBmpDesc->mxBitmap.IsEmpty() )
         return;
 
     FloatPoint aOrigin = pBmpDesc->mnOrigin;

@@ -8368,7 +8368,7 @@ void PDFWriterImpl::writeJPG( JPGEmit& rObject )
     rObject.m_pStream->Seek( STREAM_SEEK_TO_BEGIN );
 
     sal_Int32 nMaskObject = 0;
-    if( !!rObject.m_aMask )
+    if( !rObject.m_aMask.IsEmpty() )
     {
         if( rObject.m_aMask.GetBitCount() == 1 ||
             ( rObject.m_aMask.GetBitCount() == 8 && m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4 && !m_bIsPDF_A1 )
@@ -9020,7 +9020,7 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
         // load stream to bitmap and draw the bitmap instead
         Graphic aGraphic;
         GraphicConverter::Import( rDCTData, aGraphic, ConvertDataFormat::JPG );
-        if( !!rMask && rMask.GetSizePixel() == aGraphic.GetSizePixel() )
+        if( !rMask.IsEmpty() && rMask.GetSizePixel() == aGraphic.GetSizePixel() )
         {
             Bitmap aBmp( aGraphic.GetBitmapEx().GetBitmap() );
             BitmapEx aBmpEx( aBmp, rMask );
@@ -9054,7 +9054,7 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
         rEmit.m_aID         = aID;
         rEmit.m_pStream = std::move( pStream );
         rEmit.m_bTrueColor  = bIsTrueColor;
-        if( !! rMask && rMask.GetSizePixel() == rSizePixel )
+        if( !rMask.IsEmpty() && rMask.GetSizePixel() == rSizePixel )
             rEmit.m_aMask   = rMask;
         createEmbeddedFile(rGraphic, rEmit.m_aReferenceXObject, rEmit.m_nObject);
 

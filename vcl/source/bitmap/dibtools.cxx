@@ -1746,7 +1746,7 @@ bool ReadDIBBitmapEx(
 
                         if(bRetval)
                         {
-                            if(!!aMask)
+                            if(!aMask.IsEmpty())
                             {
                                 // do we have an alpha mask?
                                 if((8 == aMask.GetBitCount()) && aMask.HasGreyPalette8Bit())

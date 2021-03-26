@@ -89,7 +89,7 @@ namespace drawinglayer::texture
                 mpReadTransparence = Bitmap::ScopedReadAccess(maTransparence);
             }
 
-            if (maBitmap)
+            if (!maBitmap.IsEmpty())
                 mpReadBitmap = Bitmap::ScopedReadAccess(maBitmap);
             SAL_WARN_IF(!mpReadBitmap, "drawinglayer", "GeoTexSvxBitmapEx: Got no read access to Bitmap");
             if (mpReadBitmap)

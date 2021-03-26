@@ -4595,7 +4595,7 @@ static LRESULT ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
 
         //Size bmpSize = aBitmap.GetSizePixel();
         Size bmpSize(16, 16);
-        if( pSalMenuItem->maBitmap )
+        if( !pSalMenuItem->maBitmap.IsEmpty() )
         {
             Bitmap aBitmap( pSalMenuItem->maBitmap );
 

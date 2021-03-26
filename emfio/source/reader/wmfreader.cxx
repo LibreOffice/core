@@ -918,7 +918,7 @@ namespace emfio
                 mpInputStream->ReadUInt16( nFunction ).ReadUInt16( nFunction );
 
                 ReadDIB(aBmp, *mpInputStream, false);
-                if ( !!aBmp )
+                if ( !aBmp.IsEmpty() )
                 {
                     Bitmap::ScopedReadAccess pBmp(aBmp);
                     for ( tools::Long y = 0; y < pBmp->Height(); y++ )
