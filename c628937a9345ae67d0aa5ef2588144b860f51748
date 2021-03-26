@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bfb9dcbe_728ae022",
+        "filename": "cui/source/dialogs/fileextcheckdlg.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-26T05:39:01Z",
+      "side": 1,
+      "message": "Please note the \"by convention, the very *first* should be sal/config.h\". Please add it always as the first include in every file (i.e., when you create the file; I don\u0027t mean adding it to existing files that miss it - for those, we usually add it only when we happen to add something in front of all includes, to not add noise to commits).",
+      "revId": "c628937a9345ae67d0aa5ef2588144b860f51748",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a73c0b67_2073e2bb",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-26T05:39:01Z",
+      "side": 1,
+      "message": "Please split the includes into groups.\n\nThe block should look like this:\n\n  #endif\n  \n  #include \u003csal/config.h\u003e\n  \n  #include \u003co3tl/char16_t2wchar_t.hxx\u003e\n  #include \u003csystools/win32/comtools.hxx\u003e\n  #include \u003cvcl/abstdlg.hxx\u003e\n  #include \u003cvcl/fileregistration.hxx\u003e\n  \n  #include \u003cstrings.hrc\u003e\n  \n  #include \u003cprewin.h\u003e\n  #include \u003cShobjidl.h\u003e\n  #include \u003cversionhelpers.h\u003e\n  #include \u003cpostwin.h\u003e\n  \n  #include \u003cstring\u003e\n\nNote the first include separated from the rest; then a group of our library headers; then module-local includes; then a group of system headers (enclosed in prewin.h .. postwin.h); then a group of (a single) standard header. The group order is not important, but the includes inside groups are sorted.",
+      "revId": "c628937a9345ae67d0aa5ef2588144b860f51748",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac3720f6_ff7578cc",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-26T05:39:01Z",
+      "side": 1,
+      "message": "This is unneeded complexity.\n\nFor the number of values, you don\u0027t need them: your wanted value is the *default* one (with empty name), not the one named \"LibreOffice N\".\n\nFor the length, you have several choices.\n* You could reasonably assume a buffer of MAX_PATH. But of course, with long paths became reality with Win10, it could sometime become a problem. Still, you use the MAX_PATH when you get the module name, so...\n* You could get this module name first, and then create a buffer of the size returned by that. That\u0027s also an overkill, since you need a heap allocation.\n* My preferred would be use our LONG_MAX_PATH. Having two 64K byte buffers (for reg value and for module name) is fine; in a function that is known to not run when we are near stack overflow (and is known to not call stack-hungry functions itself) it is the easiest and best option.",
+      "revId": "c628937a9345ae67d0aa5ef2588144b860f51748",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbb415a8_a054caf0",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-26T05:39:01Z",
+      "side": 1,
+      "message": "Use of a string class, with a string read, a memory allocation and deallocation - just to use its find()? I suppose it\u0027s better and cleaner to just use wcsncmp (you know the length of the path in registry from RegGetValueW that you would likely use).",
+      "revId": "c628937a9345ae67d0aa5ef2588144b860f51748",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0bc8037_9809ff81",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-26T05:39:01Z",
+      "side": 1,
+      "message": "This would skip CoUninitialize. So you likely want to use our comphelper::ScopeGuard to make sure to always call it, and not care about different exit paths.",
+      "revId": "c628937a9345ae67d0aa5ef2588144b860f51748",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
