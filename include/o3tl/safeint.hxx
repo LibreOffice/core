@@ -241,7 +241,7 @@ template<typename T1, typename T2> constexpr T1 narrowing(T2 value) { return val
 
 // inform coverity that the returned value is now deemed sanitized
 // coverity[ -taint_source ]
-template<typename T> [[nodiscard]] inline T deem_sanitized(T a)
+template<typename T> [[nodiscard]] constexpr T deem_sanitized(T a)
 {
     return a;
 }
