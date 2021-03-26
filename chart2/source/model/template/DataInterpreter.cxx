@@ -299,7 +299,7 @@ Reference< data::XDataSource > SAL_CALL DataInterpreter::mergeInterpretedData(
 }
 
 uno::Any SAL_CALL DataInterpreter::getChartTypeSpecificData(
-    const OUString& sKey )
+    const OUString & )
 {
     return uno::Any();
 }
