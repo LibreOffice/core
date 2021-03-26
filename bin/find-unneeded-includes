@@ -215,15 +215,13 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName):
 def run_tool(task_queue, failed_files):
     while True:
         invocation, moduleRules = task_queue.get()
-        if not len(failed_files):
-            print("[IWYU] " + invocation.split(' ')[-1])
-            p = subprocess.Popen(invocation, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            retcode = processIWYUOutput(p.communicate()[0].decode('utf-8').splitlines(), moduleRules, invocation.split(' ')[-1])
-            if retcode == -1:
-                print("ERROR: A file is probably not self contained, check this commands output:\n" + invocation)
-            elif retcode > 0:
-                print("ERROR: The following command found unused includes:\n" + invocation)
-                failed_files.append(invocation)
+        print("[IWYU] " + invocation.split(' ')[-1])
+        p = subprocess.Popen(invocation, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        retcode = processIWYUOutput(p.communicate()[0].decode('utf-8').splitlines(), moduleRules, invocation.split(' ')[-1])
+        if retcode == -1:
+            print("ERROR: A file is probably not self contained, check this commands output:\n" + invocation)
+        elif retcode > 0:
+            print("ERROR: The following command found unused includes:\n" + invocation)
         task_queue.task_done()
 
 
