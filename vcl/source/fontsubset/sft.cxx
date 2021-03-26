@@ -279,17 +279,15 @@ static void HexFmtDispose(HexFmt *_this)
 
 static void HexFmtBlockWrite(HexFmt *_this, const void *ptr, sal_uInt32 size)
 {
-    sal_uInt8 Ch;
-    sal_uInt32 i;
-
     if (_this->total + size > 65534) {
         HexFmtFlush(_this);
         HexFmtCloseString(_this);
         _this->total = 0;
         HexFmtOpenString(_this);
     }
-    for (i=0; i<size; i++) {
-        Ch = static_cast<sal_uInt8 const *>(ptr)[i];
+
+    for (sal_uInt32 i = 0; i < size; ++i) {
+        sal_uInt8 Ch = static_cast<sal_uInt8 const *>(ptr)[i];
         _this->buffer[_this->bufpos++] = toHex(Ch >> 4);
         _this->buffer[_this->bufpos++] = toHex(Ch & 0xF);
         if (_this->bufpos == HFORMAT_LINELEN) {
