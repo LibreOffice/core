@@ -216,6 +216,10 @@ Check:
 Try:
 	&apos;	Execute function
 	Set oCalc = SF_Utils._GetUNOService(&quot;FunctionAccess&quot;)
+	&apos;	Intercept calls from Python when no arguments. Example NOW()
+	If UBound(pvArgs) = 0 Then
+		If IsEmpty(pvArgs(0)) Then pvArgs = Array()
+	End If
 	On Local Error GoTo CatchCall
 	vReturn = oCalc.callFunction(UCase(CalcFunction), pvArgs())
 
