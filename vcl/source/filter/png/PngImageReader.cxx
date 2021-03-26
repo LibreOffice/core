@@ -36,9 +36,14 @@ void lclReadStream(png_structp pPng, png_bytep pOutBytes, png_size_t nBytesToRea
 
     if (nBytesRead != nBytesToRead)
     {
-        // Make sure to not reuse old data (could cause infinite loop).
-        memset(pOutBytes + nBytesRead, 0, nBytesToRead - nBytesRead);
-        png_warning(pPng, "Error reading");
+        if (!nBytesRead)
+            png_error(pPng, "Error reading");
+        else
+        {
+            // Make sure to not reuse old data (could cause infinite loop).
+            memset(pOutBytes + nBytesRead, 0, nBytesToRead - nBytesRead);
+            png_warning(pPng, "Short read");
+        }
     }
 }
 
