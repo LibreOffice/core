@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e0ee57b6_ae58f3c2",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-03-26T18:23:14Z",
+      "side": 1,
+      "message": "I will add the removed code back..",
+      "parentUuid": "8e12ead2_1f3a5a2f",
+      "revId": "d18f29fc7708cd603761fa11e55d335f4637f75e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d3e76ae9_1433639e",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 19
@@ -30,6 +48,24 @@
       "writtenOn": "2021-03-25T06:45:34Z",
       "side": 1,
       "message": "The style name passed to the function is empty if program execution gets to this line. \n\nAn empty style name when eFam \u003d\u003d SfxStyleFamily::Pseudo means there is no SwNumRule at the current cursor position.\n\n\u0027No List\u0027 is always the first entry in the mxTreeBox for SfxStyleFamily::Pseudo (List Styles).\n\nThe \u0027if (eFam \u003d\u003d SfxStryleFamily::Pseudo)\u0027 block below needs to be changed to select the first entry in the tree box which will always be \u0027No List\u0027.\n\nThe \u0027else\u0027 can be combined with the \u0027if\u0027 here like:\n\n else if (eFam \u003d\u003d SfxStyleFamily::Pseudo)\n {\n      select first entry\n }\n else\n      mxTreeBox-\u003eunselect_all();",
+      "revId": "d18f29fc7708cd603761fa11e55d335f4637f75e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e9e88ad_a0312e1a",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-03-26T18:23:14Z",
+      "side": 1,
+      "message": "I will combine it like this:\n\nelse if (eFam \u003d\u003d SfxStyleFamily::Pseudo )\n{\nstd::unique_ptr\u003cweld::TreeIter\u003e xEntry \u003d mxTreeBox-\u003emake_iterator();\nmxTreeBox-\u003eget_iter_first(*xEntry);\nmxTreeBox-\u003escroll_to_row(*xEntry);\nmxTreeBox-\u003eselect(*xEntry);\n}\nelse{\nmxTreeBox-\u003eunselect_all();\n}\n\nCould you please confirm if I am going in the right direction?",
+      "parentUuid": "d3e76ae9_1433639e",
       "revId": "d18f29fc7708cd603761fa11e55d335f4637f75e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
