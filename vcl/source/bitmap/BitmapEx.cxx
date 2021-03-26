@@ -659,49 +659,49 @@ BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx const & aBitmap, const tools::Long 
 
 sal_uInt8 BitmapEx::GetAlpha(sal_Int32 nX, sal_Int32 nY) const
 {
+    if(maBitmap.IsEmpty())
+        return 0;
+
+    if (nX < 0 || nX >= GetSizePixel().Width() || nY < 0 || nY >= GetSizePixel().Height())
+        return 0;
+
+    if (maBitmap.GetBitCount() == 32)
+        return GetPixelColor(nX, nY).GetAlpha();
+
     sal_uInt8 nAlpha(0);
-
-    if(!maBitmap.IsEmpty())
+    switch(meTransparent)
     {
-        if (nX >= 0 && nX < GetSizePixel().Width() && nY >= 0 && nY < GetSizePixel().Height())
+        case TransparentType::NONE:
         {
-            if (maBitmap.GetBitCount() == 32)
-                return GetPixelColor(nX, nY).GetAlpha();
-            switch(meTransparent)
+            // Not transparent, ergo all covered
+            nAlpha = 255;
+            break;
+        }
+        case TransparentType::Bitmap:
+        {
+            if(!maMask.IsEmpty())
             {
-                case TransparentType::NONE:
+                Bitmap aTestBitmap(maMask);
+                Bitmap::ScopedReadAccess pRead(aTestBitmap);
+
+                if(pRead)
                 {
-                    // Not transparent, ergo all covered
-                    nAlpha = 255;
-                    break;
-                }
-                case TransparentType::Bitmap:
-                {
-                    if(!maMask.IsEmpty())
+                    const BitmapColor aBitmapColor(pRead->GetPixel(nY, nX));
+
+                    if(mbAlpha)
                     {
-                        Bitmap aTestBitmap(maMask);
-                        Bitmap::ScopedReadAccess pRead(aTestBitmap);
-
-                        if(pRead)
+                        nAlpha = 255 - aBitmapColor.GetIndex();
+                    }
+                    else
+                    {
+                        if(0x00 == aBitmapColor.GetIndex())
                         {
-                            const BitmapColor aBitmapColor(pRead->GetPixel(nY, nX));
-
-                            if(mbAlpha)
-                            {
-                                nAlpha = 255 - aBitmapColor.GetIndex();
-                            }
-                            else
-                            {
-                                if(0x00 == aBitmapColor.GetIndex())
-                                {
-                                    nAlpha = 255;
-                                }
-                            }
+                            nAlpha = 255;
                         }
                     }
-                    break;
                 }
             }
+            break;
         }
     }
 
