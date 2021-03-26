@@ -4607,7 +4607,7 @@ bool ScFormulaCell::InterpretFormulaGroup(SCROW nStartOffset, SCROW nEndOffset)
         return false;
     }
 
-    // Use SC_TEST_CALCULATION=opencl/threads to force calculation e.g. for unittests
+    // Use SC_FORCE_CALCULATION=opencl/threads to force calculation e.g. for unittests
     static ForceCalculationType forceType = ScCalcConfig::getForceCalculationType();
     if (forceType == ForceCalculationCore
         || ( GetWeight() < ScInterpreter::GetGlobalConfig().mnOpenCLMinimumFormulaGroupSize
