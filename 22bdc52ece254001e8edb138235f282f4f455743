@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "941ffa7c_5949d3dd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-26T01:15:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ed861d3_f973301c",
+      "revId": "22bdc52ece254001e8edb138235f282f4f455743",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2186ffc8_a069595b",
         "filename": "cui/source/dialogs/fileextcheckdlg.cxx",
         "patchSetId": 6
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "3be1e860_cf8d0eaf",
+        "filename": "cui/source/dialogs/fileextcheckdlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-26T01:15:42Z",
+      "side": 1,
+      "message": "This is based on the code from core\\cui\\source\\dialogs\\tipofthedaydlg.cxx, so I used the header rule \"if that module has an MPLv2 on ALv2 header\".",
+      "parentUuid": "2186ffc8_a069595b",
+      "range": {
+        "startLine": 9,
+        "startChar": 3,
+        "endLine": 18,
+        "endChar": 3
+      },
+      "revId": "22bdc52ece254001e8edb138235f282f4f455743",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "89295ad9_3b594463",
         "filename": "cui/source/inc/fileextcheckdlg.hxx",
         "patchSetId": 6
@@ -56,6 +98,24 @@
       "revId": "22bdc52ece254001e8edb138235f282f4f455743",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbd39440_a8537333",
+        "filename": "cui/source/inc/fileextcheckdlg.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-26T01:15:42Z",
+      "side": 1,
+      "message": "This is based on the code from core\\cui\\source\\inc\\tipofthedaydlg.hxx, so I used the header rule \"if that module has an MPLv2 on ALv2 header\".",
+      "parentUuid": "89295ad9_3b594463",
+      "revId": "22bdc52ece254001e8edb138235f282f4f455743",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "cf77cda5_7a18d892",
+        "filename": "cui/uiconfig/ui/fileextcheckdialog.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-26T01:15:42Z",
+      "side": 1,
+      "message": "This is based on core\\cui\\uiconfig\\ui\\tipofthedaydialog.ui, but that file doesn\u0027t have a header, so I\u0027ve changed this to MPLv2.",
+      "parentUuid": "0afefb8a_cfaec8b8",
+      "revId": "22bdc52ece254001e8edb138235f282f4f455743",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "19f3da43_bf3b9e99",
         "filename": "desktop/source/app/app.cxx",
         "patchSetId": 6
@@ -90,6 +168,24 @@
       "revId": "22bdc52ece254001e8edb138235f282f4f455743",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3825a0a4_9e6edd2e",
+        "filename": "desktop/source/app/app.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1897,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-26T01:15:42Z",
+      "side": 1,
+      "message": "This check was taken from SfxViewFrame::Notify, but I\u0027ve changed it here.",
+      "parentUuid": "19f3da43_bf3b9e99",
+      "revId": "22bdc52ece254001e8edb138235f282f4f455743",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -116,6 +212,30 @@
     },
     {
       "key": {
+        "uuid": "5bfee4b6_0a615637",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-26T01:15:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "295c6a34_e0faa316",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 76
+      },
+      "revId": "22bdc52ece254001e8edb138235f282f4f455743",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e2f6a683_802b3ab5",
         "filename": "vcl/win/app/fileregistration.cxx",
         "patchSetId": 6
@@ -130,6 +250,24 @@
       "revId": "22bdc52ece254001e8edb138235f282f4f455743",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da8c7085_996f01ba",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-26T01:15:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2f6a683_802b3ab5",
+      "revId": "22bdc52ece254001e8edb138235f282f4f455743",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
