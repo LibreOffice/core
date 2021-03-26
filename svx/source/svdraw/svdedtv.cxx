@@ -998,11 +998,8 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInser
     if (!pObj->IsInserted()) {
         rPV.GetObjList()->InsertObject(pObj, SAL_MAX_SIZE);
     }
-    if( IsUndoEnabled())
-    {
-        EndTextEditAllViews();
+    if( IsUndoEnabled() && CanDoSdrUndo())
         AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
-    }
 
     css::uno::Reference<lang::XServiceInfo> xServices(GetModel()->getUnoModel(),
                                                       css::uno::UNO_QUERY);
@@ -1064,6 +1061,22 @@ void SdrEditView::ReplaceObjectAtView(SdrObject* pOldObj, SdrPageView& rPV, SdrO
 bool SdrEditView::IsUndoEnabled() const
 {
     return mpModel->IsUndoEnabled();
+}
+
+bool SdrEditView::CanDoSdrUndo() const
+{
+    size_t nViews = mpModel->GetListenerCount();
+    for (size_t nView = 0; nView < nViews; ++nView)
+    {
+        SdrEditView* pView = dynamic_cast<SdrEditView*>(mpModel->GetListener(nView));
+        if (!pView)
+            continue;
+
+        if (pView->IsTextEdit())
+            return false;
+    }
+
+    return true;
 }
 
 void SdrEditView::EndTextEditAllViews() const
