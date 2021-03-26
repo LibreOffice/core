@@ -32,6 +32,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -339,9 +340,43 @@ void lcl_adjustBorderDistance(TableInfo& rInfo, const table::BorderLine2& rLeftB
     rInfo.nRightBorderDistance = nActualR;
 }
 
+void lcl_fillEmptyFrameProperties(std::vector<beans::PropertyValue>& rFrameProperties)
+{
+    // fill empty frame properties to create an invisible frame around the table:
+    // hide frame borders and zero inner and outer frame margins
+    beans::PropertyValue aValue;
+    aValue.Name = getPropertyName( PROP_ANCHOR_TYPE );
+    aValue.Value <<= text::TextContentAnchorType_AS_CHARACTER;
+    rFrameProperties.push_back(aValue);
+
+    table::BorderLine2 aEmptyBorder;
+    static const std::vector<std::u16string_view> aBorderNames
+        = { u"TopBorder", u"LeftBorder", u"BottomBorder", u"RightBorder" };
+    for (size_t i = 0; i < aBorderNames.size(); ++i)
+    {
+        beans::PropertyValue aBorderValue;
+        aBorderValue.Name = aBorderNames[i];
+        aBorderValue.Value <<= aEmptyBorder;
+        rFrameProperties.push_back(aBorderValue);
+    }
+    static const std::vector<std::u16string_view> aMarginNames
+        = { u"TopBorderDistance", u"LeftBorderDistance",
+            u"BottomBorderDistance", u"RightBorderDistance",
+            u"TopMargin", u"LeftMargin", u"BottomMargin", u"RightMargin" };
+    for (size_t i = 0; i < aMarginNames.size(); ++i)
+    {
+        beans::PropertyValue aMarginValue;
+        aMarginValue.Name = aMarginNames[i];
+        aMarginValue.Value <<= sal_Int32(10);
+        rFrameProperties.push_back(aMarginValue);
+    }
 }
 
-TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo & rInfo, std::vector<beans::PropertyValue>& rFrameProperties)
+}
+
+TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo & rInfo,
+                std::vector<beans::PropertyValue>& rFrameProperties,
+                bool bConvertToFloatingInFootnote)
 {
     // will receive the table style if any
     TableStyleSheetEntry* pTableStyle = nullptr;
@@ -393,6 +428,11 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             aGrabBagTS[9].Value <<= pTablePositions->getVertAnchor();
 
             aGrabBag["TablePosition"] <<= aGrabBagTS;
+        }
+        else if (bConvertToFloatingInFootnote)
+        {
+            // define empty "TablePosition" to avoid export temporary floating
+            aGrabBag["TablePosition"] = uno::Any();
         }
 
         std::optional<PropertyMap::Property> aTableStyleVal = m_aTableProperties->getProperty(META_PROP_TABLE_STYLE_NAME);
@@ -1375,7 +1415,15 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
             (m_rDMapper_Impl.getTableManager().getCurrentTablePosition());
     TableInfo aTableInfo;
     aTableInfo.nNestLevel = nestedTableLevel;
-    aTableInfo.pTableStyle = endTableGetTableStyle(aTableInfo, aFrameProperties);
+
+    // non-floating tables need floating in footnotes and endnotes, because
+    // Writer core cannot handle (i.e. save in ODT, copy, edit etc.) them otherwise
+    bool bConvertToFloating = aFrameProperties.empty() &&
+            nestedTableLevel <= 1 &&
+            m_rDMapper_Impl.IsInFootOrEndnote();
+    bool bFloating = !aFrameProperties.empty() || bConvertToFloating;
+
+    aTableInfo.pTableStyle = endTableGetTableStyle(aTableInfo, aFrameProperties, bConvertToFloating);
     //  expands to uno::Sequence< Sequence< beans::PropertyValues > >
 
     std::vector<HorizontallyMergedCell> aMerges;
@@ -1392,7 +1440,8 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
         uno::Reference<text::XTextRange> xStart;
         uno::Reference<text::XTextRange> xEnd;
 
-        bool bFloating = !aFrameProperties.empty();
+        if ( bConvertToFloating )
+            lcl_fillEmptyFrameProperties(aFrameProperties);
 
         // OOXML table style may contain paragraph properties, apply these on cell paragraphs
         if ( m_aTableRanges[0].hasElements() && m_aTableRanges[0][0].hasElements() )
@@ -1585,7 +1634,11 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
             sal_Int32 nTableWidthType = text::SizeType::FIX;
             m_aTableProperties->getValue(TablePropertyMap::TABLE_WIDTH_TYPE, nTableWidthType);
             if (m_rDMapper_Impl.GetSectionContext() && nestedTableLevel <= 1 && !m_rDMapper_Impl.IsInHeaderFooter())
-                m_rDMapper_Impl.m_aPendingFloatingTables.emplace_back(xStart, xEnd, comphelper::containerToSequence(aFrameProperties), nTableWidth, nTableWidthType);
+            {
+                m_rDMapper_Impl.m_aPendingFloatingTables.emplace_back(xStart, xEnd,
+                                comphelper::containerToSequence(aFrameProperties),
+                                nTableWidth, nTableWidthType, bConvertToFloating);
+            }
             else
             {
                 // m_xText points to the body text, get the current xText from m_rDMapper_Impl, in case e.g. we would be in a header.
