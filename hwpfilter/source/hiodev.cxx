@@ -337,7 +337,7 @@ size_t HMemIODev::readBlock(void *p, size_t size)
 {
     if (state())
         return 0;
-    if (length < pos + size)
+    if (size > length - pos)
         size = length - pos;
     memcpy(p, ptr + pos, size);
     pos += size;
@@ -346,7 +346,7 @@ size_t HMemIODev::readBlock(void *p, size_t size)
 
 size_t HMemIODev::skipBlock(size_t size)
 {
-    if (state() || length < pos + size)
+    if (state() || size > length - pos)
         return 0;
     pos += size;
     return size;
