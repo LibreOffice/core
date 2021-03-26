@@ -338,7 +338,7 @@ Reference< XDataSeries > lcl_CreateNewSeries(
                 Reference< XDataInterpreter > xInterpreter( xTemplate->getDataInterpreter());
                 if( xInterpreter.is())
                 {
-                    int nStockVariant;
+                    sal_Int32 nStockVariant;
                     if( xInterpreter->getChartTypeSpecificData("stock variant") >>= nStockVariant )
                     {
                         if( nStockVariant == 0 || nStockVariant == 2) {

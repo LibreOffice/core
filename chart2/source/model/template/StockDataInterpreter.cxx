@@ -321,7 +321,7 @@ uno::Any SAL_CALL StockDataInterpreter::getChartTypeSpecificData(
     if( sKey == "stock variant" )
     {
         StockChartTypeTemplate::StockVariant eStockVariant( GetStockVariant());
-        std::map< StockChartTypeTemplate::StockVariant, int > aTranslation {
+        std::map< StockChartTypeTemplate::StockVariant, sal_Int32 > aTranslation {
             { StockChartTypeTemplate::StockVariant::NONE, 0 },
             { StockChartTypeTemplate::StockVariant::Open, 1 },
             { StockChartTypeTemplate::StockVariant::Volume, 2 },
