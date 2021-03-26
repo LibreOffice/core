@@ -104,7 +104,7 @@ class ScriptForge(object, metaclass = _Singleton):
     Version = '7.2'  # Actual version number
     #
     # Basic dispatcher for Python scripts
-    basicdispatcher = 'ScriptForge.SF_PythonHelper._PythonDispatcher'
+    basicdispatcher = '@application:ScriptForge.SF_PythonHelper._PythonDispatcher'
     # Python helper functions module
     pythonhelpermodule = 'ScriptForgeHelper.py'
     #
@@ -187,27 +187,45 @@ class ScriptForge(object, metaclass = _Singleton):
         """
             Create a UNO object corresponding with the given Python or Basic script
             The execution is done with the invoke() method applied on the created object
-            Implicit scope: Extensions and documents are excluded. Either
+            Implicit scope: Either
                 "application"            a shared library                               (BASIC)
                 "share"                  a library of LibreOffice Macros                (PYTHON)
             :param script: Either
-                    [library.]module.method - Must not be a class module or method
-                    [directory/]module.py$method
-            :return: the script object as a com.sun.star.script.provider.XScript UNO object
+                    [@][scope:][library.]module.method - Must not be a class module or method
+                        [@] means that the targeted method accepts ParamArray arguments (Basic only)
+                    [scope:][directory/]module.py$method - Must be a method defined at module level
+            :return: the value returned by the invoked script, or an error if the script was not found
             """
-        #    Compute the URI specification described in
-        #    https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification
+
+        # The frequently called PythonDispatcher in the ScriptForge Basic library is buffered to privilege performance
         if cls.servicesdispatcher is not None and script == ScriptForge.basicdispatcher:
             xscript = cls.servicesdispatcher
+            fullscript = script
+            paramarray = True
+        #    Build the URI specification described in
+        #    https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification
         elif len(script) > 0:
+            # Check ParamArray arguments
+            paramarray = False
+            if script[0] == '@':
+                script = script[1:]
+                paramarray = True
+            scope = ''
+            if ':' in script:
+                scope, script = script.split(':')
             if '.py$' in script.lower():  # Python
-                uri = 'vnd.sun.star.script:' + script + '?language=Python&location=share'
+                if len(scope) == 0:
+                    scope = 'share'     # Default for Python
+                uri = 'vnd.sun.star.script:' + script + '?language=Python&location=' + scope
             else:  # Basic
+                if len(scope) == 0:
+                    scope = 'application'     # Default for Basic
                 lib = ''
                 if len(script.split('.')) < 3:
-                    lib = cls.library + '.'
-                uri = 'vnd.sun.star.script:' + lib + script + '?language=Basic&location=application'
+                    lib = cls.library + '.'     # Default library = ScriptForge
+                uri = 'vnd.sun.star.script:' + lib + script + '?language=Basic&location=' + scope
             # Get the script object
+            fullscript = ('@' if paramarray else '') + scope + ':' + script
             try:
                 xscript = cls.scriptprovider.getScript(uri)
             except Exception:
@@ -215,15 +233,18 @@ class ScriptForge(object, metaclass = _Singleton):
                                  + ' could not be located in your LibreOffice installation')
         else:  # Should not happen
             return None
+
+        # At 1st execution of the common Basic dispatcher, buffer xscript
+        if fullscript == ScriptForge.basicdispatcher and cls.servicesdispatcher is None:
+            cls.servicesdispatcher = xscript
+
         # Execute the script with the given arguments
         # Packaging for script provider depends on presence of ParamArray arguments in the called Basic script
-        if script == ScriptForge.basicdispatcher:
-            # At 1st execution, buffer xscript
-            if cls.servicesdispatcher is None:
-                cls.servicesdispatcher = xscript
+        if paramarray:
             scriptreturn = xscript.invoke(args[0], (), ())
         else:
             scriptreturn = xscript.invoke(args, (), ())
+
         #
         return scriptreturn[0]  # Updatable arguments passed by reference are ignored
 
@@ -1056,6 +1077,93 @@ class SFScriptForge:
         def Processor(self):
             return self.SIMPLEEXEC(self.py, 'Processor')
         processor = Processor
+
+    # #########################################################################
+    # SF_Session CLASS
+    # #########################################################################
+    class SF_Session(SFServices, metaclass = _Singleton):
+        """
+            The Session service gathers various general-purpose methods about:
+            - UNO introspection
+            - the invocation of external scripts or programs
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'ScriptForge.Session'
+        servicesynonyms = ('session', 'scriptforge.session')
+        serviceproperties = dict()
+        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
+
+        # Class constants                       Where to find an invoked library ?
+        SCRIPTISEMBEDDED = 'document'           # in the document
+        SCRIPTISAPPLICATION = 'application'     # in any shared library (Basic)
+        SCRIPTISPERSONAL = 'user'               # in My Macros (Python)
+        SCRIPTISPERSOXT = 'user:uno_packages'   # in an extension installed for the current user (Python)
+        SCRIPTISSHARED = 'share'                # in LibreOffice macros (Python)
+        SCRIPTISSHAROXT = 'share:uno_packages'  # in an extension installed for all users (Python)
+        SCRIPTISOXT = 'uno_packages'            # in an extension but the installation parameters are unknown (Python)
+
+        def ExecuteBasicScript(self, scope = '', script = '', *args):
+            if scope is None or scope == '':
+                scope = self.SCRIPTISAPPLICATION
+            if len(args) == 0:
+                args = (scope,) + (script,) + (None,)
+            else:
+                args = (scope,) + (script,) + args
+            # ExecuteBasicScript method has a ParamArray parameter in Basic
+            return self.SIMPLEEXEC('@SF_Session.ExecuteBasicScript', args)
+        executeBasicScript, executebasicscript = ExecuteBasicScript, ExecuteBasicScript
+
+        def ExecuteCalcFunction(self, calcfunction, *args):
+            if len(args) == 0:
+                # Arguments of Calc functions are strings or numbers. None == Empty is a good alias for no argument
+                args = (calcfunction,) + (None,)
+            else:
+                args = (calcfunction,) + args
+            # ExecuteCalcFunction method has a ParamArray parameter in Basic
+            return self.SIMPLEEXEC('@SF_Session.ExecuteCalcFunction', args)
+        executeCalcFunction, executecalcfunction = ExecuteCalcFunction, ExecuteCalcFunction
+
+        def ExecutePythonScript(self, scope = '', script = '', *args):
+            return self.SIMPLEEXEC(scope + ':' + script, *args)
+        executePythonScript, executepythonscript = ExecutePythonScript, ExecutePythonScript
+
+        def HasUnoMethod(self, unoobject, methodname):
+            return self.Execute(self.vbMethod, 'HasUnoMethod', unoobject, methodname)
+        hasUnoMethod, hasunomethod = HasUnoMethod, HasUnoMethod
+
+        def HasUnoProperty(self, unoobject, propertyname):
+            return self.Execute(self.vbMethod, 'HasUnoProperty', unoobject, propertyname)
+        hasUnoProperty, hasunoproperty = HasUnoProperty, HasUnoProperty
+
+        def OpenURLInBrowser(self, url):
+            py = ScriptForge.pythonhelpermodule + '$' + '_SF_Session__OpenURLInBrowser'
+            return self.SIMPLEEXEC(py, url)
+        openURLInBrowser, openurlinbrowser = OpenURLInBrowser, OpenURLInBrowser
+
+        def RunApplication(self, command, parameters):
+            return self.Execute(self.vbMethod, 'RunApplication', command, parameters)
+        runApplication, runapplication = RunApplication, RunApplication
+
+        def SendMail(self, recipient, cc = '', bcc = '', subject = '', body = '', filenames = '', editmessage = True):
+            return self.Execute(self.vbMethod, 'SendMail', recipient, cc, bcc, subject, body, filenames, editmessage)
+        sendMail, sendmail = SendMail, SendMail
+
+        def UnoObjectType(self, unoobject):
+            return self.Execute(self.vbMethod, 'UnoObjectType', unoobject)
+        unoObjectType, unoobjecttype = UnoObjectType, UnoObjectType
+
+        def UnoMethods(self, unoobject):
+            return self.Execute(self.vbMethod, 'UnoMethods', unoobject)
+        unoMethods, unomethods = UnoMethods, UnoMethods
+
+        def UnoProperties(self, unoobject):
+            return self.Execute(self.vbMethod, 'UnoProperties', unoobject)
+        unoProperties, unoproperties = UnoProperties, UnoProperties
+
+        def WebService(self, uri):
+            return self.Execute(self.vbMethod, 'WebService', uri)
+        webService, webservice = WebService, WebService
 
     # #########################################################################
     # SF_String CLASS
