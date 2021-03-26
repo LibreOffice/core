@@ -70,7 +70,9 @@ class DomainMapperTableHandler final : public virtual SvRefBase
     /// Did we have a foot or endnote in this table?
     bool m_bHadFootOrEndnote;
 
-    TableStyleSheetEntry * endTableGetTableStyle(TableInfo & rInfo, std::vector<css::beans::PropertyValue>& rFrameProperties);
+    TableStyleSheetEntry * endTableGetTableStyle(TableInfo & rInfo,
+                    std::vector<css::beans::PropertyValue>& rFrameProperties,
+                    bool bConvertToFloating);
     CellPropertyValuesSeq_t endTableGetCellProperties(TableInfo & rInfo, std::vector<HorizontallyMergedCell>& rMerges);
     css::uno::Sequence<css::beans::PropertyValues> endTableGetRowProperties();
 

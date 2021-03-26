@@ -395,16 +395,19 @@ struct FloatingTableInfo
     sal_Int32 m_nTableWidthType;
     /// Break type of the section that contains this table.
     sal_Int32 m_nBreakType = -1;
+    /// Tables in footnotes and endnotes are always floating
+    bool m_bConvertToFloatingInFootnote = false;
 
     FloatingTableInfo(css::uno::Reference<css::text::XTextRange> const& xStart,
             css::uno::Reference<css::text::XTextRange> const& xEnd,
             const css::uno::Sequence<css::beans::PropertyValue>& aFrameProperties,
-            sal_Int32 nTableWidth, sal_Int32 nTableWidthType)
+            sal_Int32 nTableWidth, sal_Int32 nTableWidthType, bool bConvertToFloatingInFootnote)
         : m_xStart(xStart),
         m_xEnd(xEnd),
         m_aFrameProperties(aFrameProperties),
         m_nTableWidth(nTableWidth),
-        m_nTableWidthType(nTableWidthType)
+        m_nTableWidthType(nTableWidthType),
+        m_bConvertToFloatingInFootnote(bConvertToFloatingInFootnote)
     {
     }
     css::uno::Any getPropertyValue(std::u16string_view propertyName);
