@@ -1680,7 +1680,7 @@ void MetaBmpExAction::Scale( double fScaleX, double fScaleY )
 
 void MetaBmpExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    if( !!maBmpEx.GetBitmap() )
+    if( maBmpEx.GetBitmap() )
     {
         MetaAction::Write(rOStm, pData);
         VersionCompatWrite aCompat(rOStm, 1);
@@ -1738,7 +1738,7 @@ void MetaBmpExScaleAction::Scale( double fScaleX, double fScaleY )
 
 void MetaBmpExScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    if( !!maBmpEx.GetBitmap() )
+    if( maBmpEx.GetBitmap() )
     {
         MetaAction::Write(rOStm, pData);
         VersionCompatWrite aCompat(rOStm, 1);
@@ -1801,7 +1801,7 @@ void MetaBmpExScalePartAction::Scale( double fScaleX, double fScaleY )
 
 void MetaBmpExScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    if( !!maBmpEx.GetBitmap() )
+    if( maBmpEx.GetBitmap() )
     {
         MetaAction::Write(rOStm, pData);
         VersionCompatWrite aCompat(rOStm, 1);
