@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5f84699_59c63711",
+        "filename": "include/vcl/bitmap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-26T09:27:14Z",
+      "side": 1,
+      "message": "Personally I would just put it right here, and used IsEmpty to make it clear that boolean is about being empty:\n\n    inline                  operator bool() const { return !IsEmpty(); }\n\nIt feels more telling to me :-D",
+      "revId": "a2e6678d0d7f0b4060e5a0495de38abb589180a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
