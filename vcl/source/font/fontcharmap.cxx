@@ -112,6 +112,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     int nSubTables = GetUShort( pCmap + 2 );
     if( (nSubTables <= 0) || (nLength < (24 + 8*nSubTables)) )
         return false;
+    nSubTables = o3tl::deem_sanitized(nSubTables);
 
     const unsigned char* pEndValidArea = pCmap + nLength;
 
