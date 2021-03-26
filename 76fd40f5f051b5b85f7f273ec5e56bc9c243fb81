@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88aebc0d_09d682bf",
+        "filename": "vcl/osx/salinst.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-26T18:37:39Z",
+      "side": 1,
+      "message": "This double check of the same seems redundant. And it is repeated below again for pSalBmp.",
+      "revId": "76fd40f5f051b5b85f7f273ec5e56bc9c243fb81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
