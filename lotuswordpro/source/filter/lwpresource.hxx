@@ -56,10 +56,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPRESOURCE_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPRESOURCE_HXX
 
-#define IMPLEMENTATION_NAME "com.ibm.ILWPImportFilter"
-
 const char STR_WORDPRO[] = "Wordpro";
-const char STR_IMPLEMENTATION_NAME[] = IMPLEMENTATION_NAME;
+const char STR_IMPLEMENTATION_NAME[] = "com.ibm.ILWPImportFilter";
 const char STR_SERVICE_NAME[] = "com.sun.star.document.ImportFilter";
 const char STR_WRITER_IMPORTER_NAME[] = "com.sun.star.comp.Writer.XMLImporter";
 

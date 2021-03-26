@@ -34,9 +34,6 @@
 
 #include "connector.hxx"
 
-#define IMPLEMENTATION_NAME "com.sun.star.comp.io.Connector"
-#define SERVICE_NAME "com.sun.star.connection.Connector"
-
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
@@ -154,7 +151,7 @@ Reference< XConnection > SAL_CALL OConnector::connect( const OUString& sConnecti
 
 OUString OConnector::getImplementationName()
 {
-    return IMPLEMENTATION_NAME;
+    return "com.sun.star.comp.io.Connector";
 }
 
 sal_Bool OConnector::supportsService(const OUString& ServiceName)
@@ -164,7 +161,7 @@ sal_Bool OConnector::supportsService(const OUString& ServiceName)
 
 Sequence< OUString > OConnector::getSupportedServiceNames()
 {
-    return { SERVICE_NAME };
+    return { "com.sun.star.connection.Connector" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

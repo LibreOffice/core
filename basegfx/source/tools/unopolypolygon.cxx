@@ -424,11 +424,9 @@ namespace basegfx::unotools
         return aSubsetPoly;
     }
 
-#define IMPLEMENTATION_NAME "gfx::internal::UnoPolyPolygon"
-#define SERVICE_NAME "com.sun.star.rendering.PolyPolygon2D"
     OUString SAL_CALL UnoPolyPolygon::getImplementationName()
     {
-        return IMPLEMENTATION_NAME;
+        return "gfx::internal::UnoPolyPolygon";
     }
 
     sal_Bool SAL_CALL UnoPolyPolygon::supportsService( const OUString& ServiceName )
@@ -438,7 +436,7 @@ namespace basegfx::unotools
 
     uno::Sequence< OUString > SAL_CALL UnoPolyPolygon::getSupportedServiceNames()
     {
-        return { SERVICE_NAME };
+        return { "com.sun.star.rendering.PolyPolygon2D" };
     }
 
     B2DPolyPolygon UnoPolyPolygon::getPolyPolygon() const

@@ -35,9 +35,6 @@
 #include <memory>
 #include <string_view>
 
-#define IMPLEMENTATION_NAME "com.sun.star.comp.io.Acceptor"
-#define SERVICE_NAME "com.sun.star.connection.Acceptor"
-
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
@@ -234,7 +231,7 @@ void SAL_CALL OAcceptor::stopAccepting(  )
 
 OUString OAcceptor::getImplementationName()
 {
-    return IMPLEMENTATION_NAME;
+    return "com.sun.star.comp.io.Acceptor";
 }
 
 sal_Bool OAcceptor::supportsService(const OUString& ServiceName)
@@ -244,7 +241,7 @@ sal_Bool OAcceptor::supportsService(const OUString& ServiceName)
 
 Sequence< OUString > OAcceptor::getSupportedServiceNames()
 {
-    return { SERVICE_NAME };
+    return { "com.sun.star.connection.Acceptor" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

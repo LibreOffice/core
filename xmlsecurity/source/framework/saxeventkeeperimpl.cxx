@@ -30,8 +30,6 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 
-#define IMPLEMENTATION_NAME "com.sun.star.xml.security.framework.SAXEventKeeperImpl"
-
 SAXEventKeeperImpl::SAXEventKeeperImpl( )
     :m_pCurrentBufferNode(nullptr),
      m_nNextElementMarkId(1),
@@ -1128,7 +1126,7 @@ void SAL_CALL SAXEventKeeperImpl::initialize( const css::uno::Sequence< css::uno
 
 OUString SAXEventKeeperImpl_getImplementationName ()
 {
-    return IMPLEMENTATION_NAME;
+    return "com.sun.star.xml.security.framework.SAXEventKeeperImpl";
 }
 
 css::uno::Sequence< OUString > SAXEventKeeperImpl_getSupportedServiceNames(  )

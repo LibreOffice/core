@@ -31,9 +31,6 @@
 
 namespace com::sun::star::uno { class XComponentContext; }
 
-#define IMPLEMENTATION_NAME "com.sun.star.comp.io.TextOutputStream"
-#define SERVICE_NAME "com.sun.star.io.TextOutputStream"
-
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
@@ -217,7 +214,7 @@ Reference< XOutputStream > OTextOutputStream::getOutputStream()
 
 OUString OTextOutputStream::getImplementationName()
 {
-    return IMPLEMENTATION_NAME;
+    return "com.sun.star.comp.io.TextOutputStream";
 }
 
 sal_Bool OTextOutputStream::supportsService(const OUString& ServiceName)
@@ -227,7 +224,7 @@ sal_Bool OTextOutputStream::supportsService(const OUString& ServiceName)
 
 Sequence< OUString > OTextOutputStream::getSupportedServiceNames()
 {
-    return { SERVICE_NAME };
+    return { "com.sun.star.io.TextOutputStream" };
 }
 
 

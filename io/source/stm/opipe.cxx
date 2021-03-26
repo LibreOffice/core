@@ -46,9 +46,6 @@ using namespace ::com::sun::star::lang;
 
 namespace com::sun::star::uno { class XComponentContext; }
 
-// Implementation and service names
-#define IMPLEMENTATION_NAME "com.sun.star.comp.io.stm.Pipe"
-
 namespace io_stm{
 
 namespace {
@@ -333,7 +330,7 @@ Reference < XConnectable > OPipeImpl::getPredecessor()
 // XServiceInfo
 OUString OPipeImpl::getImplementationName()
 {
-    return IMPLEMENTATION_NAME;
+    return "com.sun.star.comp.io.stm.Pipe";
 }
 
 // XServiceInfo
