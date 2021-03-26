@@ -69,6 +69,24 @@
       "revId": "d18f29fc7708cd603761fa11e55d335f4637f75e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c592f937_b08a3b9c",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-03-26T22:58:26Z",
+      "side": 1,
+      "message": "Yes, I think you are going in the right direction. May want to check the boolean value returned by get_iter_first before doing scroll_to_row and select. It should never return false but no harm in making certain it doesn\u0027t. If not, Coverity scan will flag it as an unchecked return, which can be quieted by casting the return to (void). https://stackoverflow.com/questions/689677/why-cast-unused-return-values-to-void",
+      "parentUuid": "8e9e88ad_a0312e1a",
+      "revId": "d18f29fc7708cd603761fa11e55d335f4637f75e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
