@@ -206,6 +206,7 @@ public:
     void testFuncLEN();
     void testFuncLOOKUP();
     void testFuncLOOKUParrayWithError();
+    void testTdf116216();
     void testFuncVLOOKUP();
     void testFuncMATCH();
     void testFuncCELL();
@@ -654,6 +655,7 @@ public:
     CPPUNIT_TEST(testFuncLEN);
     CPPUNIT_TEST(testFuncLOOKUP);
     CPPUNIT_TEST(testFuncLOOKUParrayWithError);
+    CPPUNIT_TEST(testTdf116216);
     CPPUNIT_TEST(testFuncVLOOKUP);
     CPPUNIT_TEST(testFuncMATCH);
     CPPUNIT_TEST(testFuncCELL);
