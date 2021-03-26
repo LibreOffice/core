@@ -259,22 +259,22 @@ IMPL_LINK( SwInsTableDlg, ModifyRowCol, weld::Entry&, rEdit, void )
     {
         m_xWarning->set_visible(false);
     }
-    if (&rEdit != m_xColSpinButton.get())
-    {
-        if(!nRow)
-            nRow = 1;
+    if (&rEdit == m_xColSpinButton.get())
+        return;
 
-        // adjust depending NF for repeated rows
-        sal_Int64 nMax = ( nRow == 1 )? 1 : nRow - 1 ;
-        sal_Int64 nActVal = m_xRepeatHeaderNF->get_value();
+    if(!nRow)
+        nRow = 1;
 
-        m_xRepeatHeaderNF->set_max( nMax );
+    // adjust depending NF for repeated rows
+    sal_Int64 nMax = ( nRow == 1 )? 1 : nRow - 1 ;
+    sal_Int64 nActVal = m_xRepeatHeaderNF->get_value();
 
-        if( nActVal > nMax )
-            m_xRepeatHeaderNF->set_value( nMax );
-        else if( nActVal < nEnteredValRepeatHeaderNF )
-            m_xRepeatHeaderNF->set_value(std::min(nEnteredValRepeatHeaderNF, nMax));
-    }
+    m_xRepeatHeaderNF->set_max( nMax );
+
+    if( nActVal > nMax )
+        m_xRepeatHeaderNF->set_value( nMax );
+    else if( nActVal < nEnteredValRepeatHeaderNF )
+        m_xRepeatHeaderNF->set_value(std::min(nEnteredValRepeatHeaderNF, nMax));
 }
 
 IMPL_LINK_NOARG(SwInsTableDlg, CheckBoxHdl, weld::ToggleButton&, void)

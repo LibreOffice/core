@@ -2538,20 +2538,20 @@ void SwContentFrame::UpdateAttr_( const SfxPoolItem* pOld, const SfxPoolItem* pN
         default:
             bClear = false;
     }
-    if ( bClear )
+    if ( !bClear )
+        return;
+
+    if ( pOldSet || pNewSet )
     {
-        if ( pOldSet || pNewSet )
-        {
-            if ( pOldSet )
-                pOldSet->ClearItem( nWhich );
-            if ( pNewSet )
-                pNewSet->ClearItem( nWhich );
-        }
-        else
-        {
-            SwModify aMod;
-            SwFrame::SwClientNotify(aMod, sw::LegacyModifyHint(pOld, pNew));
-        }
+        if ( pOldSet )
+            pOldSet->ClearItem( nWhich );
+        if ( pNewSet )
+            pNewSet->ClearItem( nWhich );
+    }
+    else
+    {
+        SwModify aMod;
+        SwFrame::SwClientNotify(aMod, sw::LegacyModifyHint(pOld, pNew));
     }
 }
 

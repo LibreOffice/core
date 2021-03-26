@@ -304,24 +304,24 @@ void BibGeneralPage::SaveChanges()
     Reference< XForm > xForm = pDatMan->getForm();
     Reference< beans::XPropertySet > xProps( xForm, UNO_QUERY );
     Reference< sdbc::XResultSetUpdate > xResUpd( xProps, UNO_QUERY );
-    if (xResUpd.is() )
-    {
-        Any aModified = xProps->getPropertyValue( "IsModified" );
-        bool bFlag = false;
-        if ( ( aModified >>= bFlag ) && bFlag )
-        {
+    if (!xResUpd.is() )
+        return;
 
-            try
-            {
-                Any aNew = xProps->getPropertyValue( "IsNew" );
-                aNew >>= bFlag;
-                if ( bFlag )
-                    xResUpd->insertRow();
-                else
-                    xResUpd->updateRow();
-            }
-            catch( const uno::Exception&) {}
+    Any aModified = xProps->getPropertyValue( "IsModified" );
+    bool bFlag = false;
+    if ( ( aModified >>= bFlag ) && bFlag )
+    {
+
+        try
+        {
+            Any aNew = xProps->getPropertyValue( "IsNew" );
+            aNew >>= bFlag;
+            if ( bFlag )
+                xResUpd->insertRow();
+            else
+                xResUpd->updateRow();
         }
+        catch( const uno::Exception&) {}
     }
 }
 

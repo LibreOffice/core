@@ -88,19 +88,19 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(weld::Window* pParent, uno::Seque
     {
         xFrame.clear();
     }
-    if (xFrame.is())
-    {
-        m_xFrameListener.set(new DBTablePreviewFrame(xFrame));
-        xFrame->addEventListener(m_xFrameListener);
+    if (!xFrame.is())
+        return;
 
-        util::URL aURL;
-        aURL.Complete = ".component:DB/DataSourceBrowser";
-        uno::Reference<frame::XDispatch> xD = xFrame->queryDispatch(aURL, "", 0x0C);
-        if (xD.is())
-        {
-            xD->dispatch(aURL, rValues);
-            m_xBeamerWIN->show();
-        }
+    m_xFrameListener.set(new DBTablePreviewFrame(xFrame));
+    xFrame->addEventListener(m_xFrameListener);
+
+    util::URL aURL;
+    aURL.Complete = ".component:DB/DataSourceBrowser";
+    uno::Reference<frame::XDispatch> xD = xFrame->queryDispatch(aURL, "", 0x0C);
+    if (xD.is())
+    {
+        xD->dispatch(aURL, rValues);
+        m_xBeamerWIN->show();
     }
 }
 

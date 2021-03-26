@@ -152,19 +152,19 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
 void SdFieldPopup::Execute(weld::Window* pParent, const tools::Rectangle& rRect)
 {
     OString sIdent = m_xPopup->popup_at_rect(pParent, rRect);
-    if (!sIdent.isEmpty())
+    if (sIdent.isEmpty())
+        return;
+
+    if (sIdent == "1" || sIdent == "2")
     {
-        if (sIdent == "1" || sIdent == "2")
-        {
-            m_xPopup->set_active("1", sIdent == "1");
-            m_xPopup->set_active("2", sIdent == "2");
-        }
-        else
-        {
-            int nCount = m_xPopup->n_children();
-            for (int i = 3; i < nCount; i++)
-                m_xPopup->set_active(OString::number(i), sIdent == OString::number(i));
-        }
+        m_xPopup->set_active("1", sIdent == "1");
+        m_xPopup->set_active("2", sIdent == "2");
+    }
+    else
+    {
+        int nCount = m_xPopup->n_children();
+        for (int i = 3; i < nCount; i++)
+            m_xPopup->set_active(OString::number(i), sIdent == OString::number(i));
     }
 }
 

@@ -83,26 +83,26 @@ void SdScaleControl::Command(const CommandEvent& rCEvt)
     ::tools::Rectangle aRect(rCEvt.GetMousePosPixel(), Size(1, 1));
     weld::Window* pParent = weld::GetPopupParent(GetStatusBar(), aRect);
     OString sResult = xPopup->popup_at_rect(pParent, aRect);
-    if (!sResult.isEmpty())
-    {
-        sal_Int32 i = sResult.toUInt32();
-        sal_Int32 nX;
-        sal_Int32 nY;
-        if (i > 11)
-            nX = 1;
-        else
-            nX = aTable[(12 - i) % 12];
-        if (i > 11)
-            nY = aTable[i % 12];
-        else
-            nY = 1;
-        pDoc->SetUIScale(Fraction(nX, nY));
+    if (sResult.isEmpty())
+        return;
 
-        SfxBindings& pBindings = pViewFrame->GetBindings();
-        pBindings.Invalidate(SID_SCALE); //update statusbar
-        pBindings.Invalidate(SID_ATTR_METRIC); //update sidebar
-        pViewShellBase->UpdateBorder(true); // update ruler
-    }
+    sal_Int32 i = sResult.toUInt32();
+    sal_Int32 nX;
+    sal_Int32 nY;
+    if (i > 11)
+        nX = 1;
+    else
+        nX = aTable[(12 - i) % 12];
+    if (i > 11)
+        nY = aTable[i % 12];
+    else
+        nY = 1;
+    pDoc->SetUIScale(Fraction(nX, nY));
+
+    SfxBindings& pBindings = pViewFrame->GetBindings();
+    pBindings.Invalidate(SID_SCALE); //update statusbar
+    pBindings.Invalidate(SID_ATTR_METRIC); //update sidebar
+    pViewShellBase->UpdateBorder(true); // update ruler
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

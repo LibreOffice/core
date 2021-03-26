@@ -116,22 +116,22 @@ void DeckLayouter::LayoutDeck (
         return;
     tools::Rectangle aBox(PlaceDeckTitle(pDockingWindow, rDeckTitleBar, rContentArea));
 
-    if ( ! rPanels.empty())
-    {
-        // Prepare the layout item container.
-        ::std::vector<LayoutItem> aLayoutItems;
-        aLayoutItems.reserve(rPanels.size());
-        for (auto& rPanel : rPanels)
-            aLayoutItems.emplace_back(rPanel);
+    if (  rPanels.empty())
+        return;
 
-        LayoutPanels(
-            aBox,
-            rMinimalWidth,
-            rMinimalHeight,
-            aLayoutItems,
-            rVerticalScrollBar,
-            false);
-    }
+    // Prepare the layout item container.
+    ::std::vector<LayoutItem> aLayoutItems;
+    aLayoutItems.reserve(rPanels.size());
+    for (auto& rPanel : rPanels)
+        aLayoutItems.emplace_back(rPanel);
+
+    LayoutPanels(
+        aBox,
+        rMinimalWidth,
+        rMinimalHeight,
+        aLayoutItems,
+        rVerticalScrollBar,
+        false);
 }
 
 namespace {

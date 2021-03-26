@@ -746,22 +746,22 @@ IMPL_LINK(OfaTreeOptionsDialog, ApplyHdl_Impl, weld::Button&, rButton, void)
         SelectHdl_Impl();
     }
 
-    if (bNeedsRestart)
+    if (!bNeedsRestart)
+        return;
+
+    SolarMutexGuard aGuard;
+    weld::Window* pParent;
+    if (!bOkPressed)
+        pParent = m_xDialog.get();
+    else
     {
-        SolarMutexGuard aGuard;
-        weld::Window* pParent;
-        if (!bOkPressed)
-            pParent = m_xDialog.get();
-        else
-        {
-            m_xDialog->hide();
-            pParent = m_pParent;
-        }
-        bool bRestart = ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
-                                                        pParent, eRestartReason);
-        if (bRestart && !bOkPressed)
-            m_xDialog->response(RET_OK);
+        m_xDialog->hide();
+        pParent = m_pParent;
     }
+    bool bRestart = ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
+                                                    pParent, eRestartReason);
+    if (bRestart && !bOkPressed)
+        m_xDialog->response(RET_OK);
 }
 
 void OfaTreeOptionsDialog::ApplyItemSets()

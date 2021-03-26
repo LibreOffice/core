@@ -40,29 +40,26 @@ namespace unocontrols {
     /* First get all interfaces from container with right type.*/                                                                   \
     OInterfaceContainerHelper* pContainer = m_aListenerHolder.getContainer( cppu::UnoType<INTERFACE>::get() );  \
     /* Do the follow only, if elements in container exist.*/                                                                        \
-    if( pContainer != nullptr )                                                                                                        \
-    {                                                                                                                               \
-        OInterfaceIteratorHelper aIterator( *pContainer );                                                                          \
-        EVENTTYP aLocalEvent = EVENT;                                                                                               \
-        /* Remark: The control is the event source not the peer.*/                                                                  \
-        /*         We must change the source of the event.      */                                                                  \
-        aLocalEvent.Source = m_xControl;                                                                                           \
-        /* Is the control not destroyed? */                                                                                         \
-        if( aLocalEvent.Source.is() )                                                                                               \
-        {                                                                                                                           \
-            if( aIterator.hasMoreElements() )                                                                                       \
-            {                                                                                                                       \
-                INTERFACE * pListener = static_cast<INTERFACE *>(aIterator.next());                                                 \
-                try                                                                                                                 \
-                {                                                                                                                   \
-                    pListener->METHOD( aLocalEvent );                                                                               \
-                }                                                                                                                   \
-                catch(const RuntimeException& )                                                                                     \
-                {                                                                                                                   \
-                    /* Ignore all system exceptions from the listener! */                                                           \
-                }                                                                                                                   \
-            }                                                                                                                       \
-        }                                                                                                                           \
+    if( !pContainer )                                                                                                        \
+        return;                                                                                                                               \
+    OInterfaceIteratorHelper aIterator( *pContainer );                                                                          \
+    EVENTTYP aLocalEvent = EVENT;                                                                                               \
+    /* Remark: The control is the event source not the peer.*/                                                                  \
+    /*         We must change the source of the event.      */                                                                  \
+    aLocalEvent.Source = m_xControl;                                                                                           \
+    /* Is the control not destroyed? */                                                                                         \
+    if( !aLocalEvent.Source )                                                                                               \
+        return;                                                                                                                           \
+    if( !aIterator.hasMoreElements() )                                                                                       \
+        return;                                                                                                             \
+    INTERFACE * pListener = static_cast<INTERFACE *>(aIterator.next());                                                 \
+    try                                                                                                                 \
+    {                                                                                                                   \
+        pListener->METHOD( aLocalEvent );                                                                               \
+    }                                                                                                                   \
+    catch(const RuntimeException& )                                                                                     \
+    {                                                                                                                   \
+        /* Ignore all system exceptions from the listener! */                                                           \
     }
 
 //  construct/destruct

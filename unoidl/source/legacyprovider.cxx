@@ -96,18 +96,19 @@ Cursor::Cursor(
     RegistryKey const & key):
     manager_(manager), ucr_(ucr), key_(key), index_(0)
 {
-    if (ucr_.isValid()) {
-        prefix_ = key_.getName();
-        if (!prefix_.endsWith("/")) {
-            prefix_ += "/";
-        }
-        RegError e = key_.getKeyNames("", names_);
-        if (e != RegError::NO_ERROR) {
-            throw FileFormatException(
-                key_.getRegistryName(),
-                ("legacy format: cannot get sub-key names of " + key_.getName()
-                 + ": " + OUString::number(static_cast<int>(e))));
-        }
+    if (!ucr_.isValid())
+        return;
+
+    prefix_ = key_.getName();
+    if (!prefix_.endsWith("/")) {
+        prefix_ += "/";
+    }
+    RegError e = key_.getKeyNames("", names_);
+    if (e != RegError::NO_ERROR) {
+        throw FileFormatException(
+            key_.getRegistryName(),
+            ("legacy format: cannot get sub-key names of " + key_.getName()
+             + ": " + OUString::number(static_cast<int>(e))));
     }
 }
 

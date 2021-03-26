@@ -7543,18 +7543,18 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
     if ( !sIss.isEmpty() )
         m_pSerializer->singleElementNS(XML_w, XML_vertAlign, FSNS(XML_w, XML_val), sIss);
 
-    if (sIss.isEmpty() || sIss.match("baseline"))
-    {
-        const SvxFontHeightItem& rItem = m_rExport.GetItem(RES_CHRATR_FONTSIZE);
-        float fHeight = rItem.GetHeight();
-        OString sPos = OString::number( round(( fHeight * nEsc ) / 1000) );
-        m_pSerializer->singleElementNS(XML_w, XML_position, FSNS(XML_w, XML_val), sPos);
+    if (!(sIss.isEmpty() || sIss.match("baseline")))
+        return;
 
-        if( ( 100 != nProp || sIss.match( "baseline" ) ) && !m_rExport.m_bFontSizeWritten )
-        {
-            OString sSize = OString::number( round(( fHeight * nProp ) / 1000) );
-            m_pSerializer->singleElementNS(XML_w, XML_sz, FSNS(XML_w, XML_val), sSize);
-        }
+    const SvxFontHeightItem& rItem = m_rExport.GetItem(RES_CHRATR_FONTSIZE);
+    float fHeight = rItem.GetHeight();
+    OString sPos = OString::number( round(( fHeight * nEsc ) / 1000) );
+    m_pSerializer->singleElementNS(XML_w, XML_position, FSNS(XML_w, XML_val), sPos);
+
+    if( ( 100 != nProp || sIss.match( "baseline" ) ) && !m_rExport.m_bFontSizeWritten )
+    {
+        OString sSize = OString::number( round(( fHeight * nProp ) / 1000) );
+        m_pSerializer->singleElementNS(XML_w, XML_sz, FSNS(XML_w, XML_val), sSize);
     }
 }
 

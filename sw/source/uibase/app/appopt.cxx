@@ -426,23 +426,23 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     ApplyUsrPref( aViewOpt, pAppView, bTextDialog? SvViewOpt::DestText : SvViewOpt::DestWeb);
 
     // must be done after ApplyUsrPref
-    if (SfxItemState::SET == rSet.GetItemState(FN_PARAM_ELEM, false))
+    if (SfxItemState::SET != rSet.GetItemState(FN_PARAM_ELEM, false))
+        return;
+
+    if (!GetActiveWrtShell()->GetViewOptions()->IsShowOutlineContentVisibilityButton())
     {
-        if (!GetActiveWrtShell()->GetViewOptions()->IsShowOutlineContentVisibilityButton())
-        {
-            // outline mode is no longer active
-            // set outline content visible attribute to false for nodes in the array
-            for (SwNode* pNd : aFoldedOutlineNdsArray)
-                pNd->GetTextNode()->SetAttrOutlineContentVisible(false);
-        }
-        else if (bShow)
-        {
-            // outline mode remained active
-            // sub level treatment might have changed
-            // ToggleOutlineContentVisibility only knows sub level treatment after ApplyUserPref
-            for (SwNode* pNd : aFoldedOutlineNdsArray)
-                GetActiveWrtShell()->ToggleOutlineContentVisibility(pNd, true);
-        }
+        // outline mode is no longer active
+        // set outline content visible attribute to false for nodes in the array
+        for (SwNode* pNd : aFoldedOutlineNdsArray)
+            pNd->GetTextNode()->SetAttrOutlineContentVisible(false);
+    }
+    else if (bShow)
+    {
+        // outline mode remained active
+        // sub level treatment might have changed
+        // ToggleOutlineContentVisibility only knows sub level treatment after ApplyUserPref
+        for (SwNode* pNd : aFoldedOutlineNdsArray)
+            GetActiveWrtShell()->ToggleOutlineContentVisibility(pNd, true);
     }
 }
 

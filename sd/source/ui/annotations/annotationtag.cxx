@@ -616,43 +616,43 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent&, rEvent, void)
         if( !pWindow )
             return;
 
-        if( pWindow == mpListenWindow )
+        if( pWindow != mpListenWindow )
+            return;
+
+        switch( rEvent.GetId() )
         {
-            switch( rEvent.GetId() )
+        case VclEventId::WindowMouseButtonUp:
             {
-            case VclEventId::WindowMouseButtonUp:
-                {
-                    // if we stop pressing the button without a mouse move we open the popup
-                    mpListenWindow->RemoveEventListener( LINK(this, AnnotationTag, WindowEventHandler));
-                    mpListenWindow = nullptr;
-                    if( !mpAnnotationWindow )
-                        OpenPopup(false);
-                }
-                break;
-            case VclEventId::WindowMouseMove:
-                {
-                    // if we move the mouse after a button down we want to start dragging
-                    mpListenWindow->RemoveEventListener( LINK(this, AnnotationTag, WindowEventHandler));
-                    mpListenWindow = nullptr;
-
-                    SdrHdl* pHdl = mrView.PickHandle(maMouseDownPos);
-                    if( pHdl )
-                    {
-                        mrView.BrkAction();
-                        const sal_uInt16 nDrgLog = static_cast<sal_uInt16>(pWindow->PixelToLogic(Size(DRGPIX,0)).Width());
-
-                        rtl::Reference< AnnotationTag > xTag( this );
-
-                        SdrDragMethod* pDragMethod = new AnnotationDragMove( mrView, xTag );
-                        mrView.BegDragObj(maMouseDownPos, nullptr, pHdl, nDrgLog, pDragMethod );
-                    }
-                }
-                break;
-            case VclEventId::ObjectDying:
+                // if we stop pressing the button without a mouse move we open the popup
+                mpListenWindow->RemoveEventListener( LINK(this, AnnotationTag, WindowEventHandler));
                 mpListenWindow = nullptr;
-                break;
-            default: break;
+                if( !mpAnnotationWindow )
+                    OpenPopup(false);
             }
+            break;
+        case VclEventId::WindowMouseMove:
+            {
+                // if we move the mouse after a button down we want to start dragging
+                mpListenWindow->RemoveEventListener( LINK(this, AnnotationTag, WindowEventHandler));
+                mpListenWindow = nullptr;
+
+                SdrHdl* pHdl = mrView.PickHandle(maMouseDownPos);
+                if( pHdl )
+                {
+                    mrView.BrkAction();
+                    const sal_uInt16 nDrgLog = static_cast<sal_uInt16>(pWindow->PixelToLogic(Size(DRGPIX,0)).Width());
+
+                    rtl::Reference< AnnotationTag > xTag( this );
+
+                    SdrDragMethod* pDragMethod = new AnnotationDragMove( mrView, xTag );
+                    mrView.BegDragObj(maMouseDownPos, nullptr, pHdl, nDrgLog, pDragMethod );
+                }
+            }
+            break;
+        case VclEventId::ObjectDying:
+            mpListenWindow = nullptr;
+            break;
+        default: break;
         }
 }
 

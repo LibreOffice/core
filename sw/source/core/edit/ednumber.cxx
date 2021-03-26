@@ -405,23 +405,23 @@ public:
     MakeAllOutlineContentTemporarilyVisibile(SwWrtShell* pShell)
         : pWrtShell(pShell)
     {
-        if (pWrtShell && pWrtShell->GetViewOptions() && pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+        if (!(pWrtShell && pWrtShell->GetViewOptions() && pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton()))
+            return;
+
+        // make all outlines content visible and store outline nodes having
+        // content visible attribute value false
+        SwOutlineNodes rOutlineNds = pWrtShell->GetNodes().GetOutLineNds();
+        for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNds.size(); ++nPos)
         {
-            // make all outlines content visible and store outline nodes having
-            // content visible attribute value false
-            SwOutlineNodes rOutlineNds = pWrtShell->GetNodes().GetOutLineNds();
-            for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNds.size(); ++nPos)
+            SwNode* pNd = rOutlineNds[nPos];
+            if (pNd->IsTextNode()) // should always be true
             {
-                SwNode* pNd = rOutlineNds[nPos];
-                if (pNd->IsTextNode()) // should always be true
+                bool bOutlineContentVisibleAttr = true;
+                pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+                if (!bOutlineContentVisibleAttr)
                 {
-                    bool bOutlineContentVisibleAttr = true;
-                    pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
-                    if (!bOutlineContentVisibleAttr)
-                    {
-                        aOutlineNdsArray.push_back(pNd);
-                        pWrtShell->ToggleOutlineContentVisibility(nPos);
-                    }
+                    aOutlineNdsArray.push_back(pNd);
+                    pWrtShell->ToggleOutlineContentVisibility(nPos);
                 }
             }
         }

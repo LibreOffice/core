@@ -995,34 +995,34 @@ void ScInputBarGroup::DecrementVerticalSize()
 
 void ScInputWindow::MenuHdl(std::string_view command)
 {
-    if (!command.empty())
-    {
-        bool bSubTotal = false;
-        bool bRangeFinder = false;
-        OpCode eCode = ocSum;
-        if ( command ==  "sum" )
-        {
-            eCode = ocSum;
-        }
-        else if ( command == "average" )
-        {
-            eCode = ocAverage;
-        }
-        else if ( command == "max" )
-        {
-            eCode = ocMax;
-        }
-        else if ( command == "min" )
-        {
-            eCode = ocMin;
-        }
-        else if ( command == "count" )
-        {
-            eCode = ocCount;
-        }
+    if (command.empty())
+        return;
 
-        AutoSum( bRangeFinder, bSubTotal, eCode );
+    bool bSubTotal = false;
+    bool bRangeFinder = false;
+    OpCode eCode = ocSum;
+    if ( command ==  "sum" )
+    {
+        eCode = ocSum;
     }
+    else if ( command == "average" )
+    {
+        eCode = ocAverage;
+    }
+    else if ( command == "max" )
+    {
+        eCode = ocMax;
+    }
+    else if ( command == "min" )
+    {
+        eCode = ocMin;
+    }
+    else if ( command == "count" )
+    {
+        eCode = ocCount;
+    }
+
+    AutoSum( bRangeFinder, bSubTotal, eCode );
 }
 
 IMPL_LINK_NOARG(ScInputWindow, DropdownClickHdl, ToolBox *, void)
@@ -1340,31 +1340,31 @@ int ScTextWnd::GetEditEngTxtHeight() const
 
 void ScTextWnd::SetScrollBarRange()
 {
-    if (m_xEditView)
-    {
-        OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
-        Size aOutputSize = rDevice.GetOutputSize();
+    if (!m_xEditView)
+        return;
 
-        int nUpper = GetEditEngTxtHeight();
-        int nCurrentDocPos = m_xEditView->GetVisArea().Top();
-        int nStepIncrement = GetTextHeight();
-        int nPageIncrement = aOutputSize.Height();
-        int nPageSize = aOutputSize.Height();
+    OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
+    Size aOutputSize = rDevice.GetOutputSize();
 
-        /* limit the page size to below nUpper because gtk's gtk_scrolled_window_start_deceleration has
-           effectively...
+    int nUpper = GetEditEngTxtHeight();
+    int nCurrentDocPos = m_xEditView->GetVisArea().Top();
+    int nStepIncrement = GetTextHeight();
+    int nPageIncrement = aOutputSize.Height();
+    int nPageSize = aOutputSize.Height();
 
-           lower = gtk_adjustment_get_lower
-           upper = gtk_adjustment_get_upper - gtk_adjustment_get_page_size
+    /* limit the page size to below nUpper because gtk's gtk_scrolled_window_start_deceleration has
+       effectively...
 
-           and requires that upper > lower or the deceleration animation never ends
-        */
-        nPageSize = std::min(nPageSize, nUpper);
+       lower = gtk_adjustment_get_lower
+       upper = gtk_adjustment_get_upper - gtk_adjustment_get_page_size
 
-        weld::ScrolledWindow& rVBar = mrGroupBar.GetScrollWin();
-        rVBar.vadjustment_configure(nCurrentDocPos, 0, nUpper,
-                                    nStepIncrement, nPageIncrement, nPageSize);
-    }
+       and requires that upper > lower or the deceleration animation never ends
+    */
+    nPageSize = std::min(nPageSize, nUpper);
+
+    weld::ScrolledWindow& rVBar = mrGroupBar.GetScrollWin();
+    rVBar.vadjustment_configure(nCurrentDocPos, 0, nUpper,
+                                nStepIncrement, nPageIncrement, nPageSize);
 }
 
 void ScTextWnd::DoScroll()

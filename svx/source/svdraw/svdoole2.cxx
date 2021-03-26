@@ -726,28 +726,28 @@ SdrOle2Obj::SdrOle2Obj(SdrModel& rSdrModel, SdrOle2Obj const & rSource)
         mpImpl->mxGraphic.reset(new Graphic(*rSource.mpImpl->mxGraphic));
     }
 
-    if( !IsEmptyPresObj() )
-    {
-        ::comphelper::IEmbeddedHelper* pDestPers(getSdrModelFromSdrObject().GetPersist());
-        ::comphelper::IEmbeddedHelper* pSrcPers(rSource.getSdrModelFromSdrObject().GetPersist());
-        if( pDestPers && pSrcPers )
-        {
-            DBG_ASSERT( !mpImpl->mxObjRef.is(), "Object already existing!" );
-            comphelper::EmbeddedObjectContainer& rContainer = pSrcPers->getEmbeddedObjectContainer();
-            uno::Reference < embed::XEmbeddedObject > xObj = rContainer.GetEmbeddedObject( mpImpl->aPersistName );
-            if ( xObj.is() )
-            {
-                OUString aTmp;
-                mpImpl->mxObjRef.Assign( pDestPers->getEmbeddedObjectContainer().CopyAndGetEmbeddedObject(
-                    rContainer, xObj, aTmp, pSrcPers->getDocumentBaseURL(), pDestPers->getDocumentBaseURL()), rSource.GetAspect());
-                mpImpl->mbTypeAsked = false;
-                mpImpl->aPersistName = aTmp;
-                CheckFileLink_Impl();
-            }
+    if( IsEmptyPresObj() )
+        return;
 
-            Connect();
-        }
+    ::comphelper::IEmbeddedHelper* pDestPers(getSdrModelFromSdrObject().GetPersist());
+    ::comphelper::IEmbeddedHelper* pSrcPers(rSource.getSdrModelFromSdrObject().GetPersist());
+    if( !(pDestPers && pSrcPers) )
+        return;
+
+    DBG_ASSERT( !mpImpl->mxObjRef.is(), "Object already existing!" );
+    comphelper::EmbeddedObjectContainer& rContainer = pSrcPers->getEmbeddedObjectContainer();
+    uno::Reference < embed::XEmbeddedObject > xObj = rContainer.GetEmbeddedObject( mpImpl->aPersistName );
+    if ( xObj.is() )
+    {
+        OUString aTmp;
+        mpImpl->mxObjRef.Assign( pDestPers->getEmbeddedObjectContainer().CopyAndGetEmbeddedObject(
+            rContainer, xObj, aTmp, pSrcPers->getDocumentBaseURL(), pDestPers->getDocumentBaseURL()), rSource.GetAspect());
+        mpImpl->mbTypeAsked = false;
+        mpImpl->aPersistName = aTmp;
+        CheckFileLink_Impl();
     }
+
+    Connect();
 }
 
 SdrOle2Obj::SdrOle2Obj(

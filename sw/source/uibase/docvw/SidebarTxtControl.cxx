@@ -206,25 +206,25 @@ void SidebarTextControl::DrawForPage(OutputDevice* pDev, const Point& rPt)
         pOutlinerView->GetOutliner()->Draw(pDev, tools::Rectangle(rPt, aSize));
     }
 
-    if ( mrSidebarWin.GetLayoutStatus()==SwPostItHelper::DELETED )
-    {
-        pDev->Push(PushFlags::LINECOLOR);
+    if ( mrSidebarWin.GetLayoutStatus()!=SwPostItHelper::DELETED )
+        return;
 
-        pDev->SetLineColor(mrSidebarWin.GetChangeColor());
-        Point aBottomRight(rPt);
-        aBottomRight.Move(aSize);
-        pDev->DrawLine(rPt,  aBottomRight);
+    pDev->Push(PushFlags::LINECOLOR);
 
-        Point aTopRight(rPt);
-        aTopRight.Move(Size(aSize.Width(), 0));
+    pDev->SetLineColor(mrSidebarWin.GetChangeColor());
+    Point aBottomRight(rPt);
+    aBottomRight.Move(aSize);
+    pDev->DrawLine(rPt,  aBottomRight);
 
-        Point aBottomLeft(rPt);
-        aBottomLeft.Move(Size(0, aSize.Height()));
+    Point aTopRight(rPt);
+    aTopRight.Move(Size(aSize.Width(), 0));
 
-        pDev->DrawLine(aTopRight, aBottomLeft);
+    Point aBottomLeft(rPt);
+    aBottomLeft.Move(Size(0, aSize.Height()));
 
-        pDev->Pop();
-    }
+    pDev->DrawLine(aTopRight, aBottomLeft);
+
+    pDev->Pop();
 }
 
 void SidebarTextControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)

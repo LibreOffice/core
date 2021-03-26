@@ -600,23 +600,23 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
         return;
 
     OutlinerView* pOLV = pView->GetTextEditOutlinerView();
-    if (pOLV)
-    {
-        if ( pMousePixel )
-        {
-            MouseEvent aEditEvt( *pMousePixel, 1, MouseEventModifiers::SYNTHETIC, MOUSE_LEFT, 0 );
-            pOLV->MouseButtonDown(aEditEvt);
-            pOLV->MouseButtonUp(aEditEvt);
-        }
-        else if ( bCursorToEnd )
-        {
-            ESelection aNewSelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
-            pOLV->SetSelection(aNewSelection);
-        }
+    if (!pOLV)
+        return;
 
-        if ( pInitialKey )
-            pOLV->PostKeyEvent( *pInitialKey );
+    if ( pMousePixel )
+    {
+        MouseEvent aEditEvt( *pMousePixel, 1, MouseEventModifiers::SYNTHETIC, MOUSE_LEFT, 0 );
+        pOLV->MouseButtonDown(aEditEvt);
+        pOLV->MouseButtonUp(aEditEvt);
     }
+    else if ( bCursorToEnd )
+    {
+        ESelection aNewSelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
+        pOLV->SetSelection(aNewSelection);
+    }
+
+    if ( pInitialKey )
+        pOLV->PostKeyEvent( *pInitialKey );
 }
 
 // Create default drawing objects via keyboard

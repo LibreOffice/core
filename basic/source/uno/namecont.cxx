@@ -2616,25 +2616,24 @@ void SAL_CALL SfxLibraryContainer::initialize( const Sequence< Any >& _rArgument
 {
     LibraryContainerMethodGuard aGuard( *this );
     sal_Int32 nArgCount = _rArguments.getLength();
-    if ( nArgCount == 1 )
-    {
-        OUString sInitialDocumentURL;
-        Reference< XStorageBasedDocument > xDocument;
-        if ( _rArguments[0] >>= sInitialDocumentURL )
-        {
-            init( sInitialDocumentURL, nullptr );
-            return;
-        }
-
-        if ( _rArguments[0] >>= xDocument )
-        {
-            initializeFromDocument( xDocument );
-            return;
-        }
-        throw IllegalArgumentException("arg1 unknown type", static_cast<cppu::OWeakObject*>(this), 1);
-    }
-    else
+    if ( nArgCount != 1 )
         throw IllegalArgumentException("too many args", static_cast<cppu::OWeakObject*>(this), -1);
+
+    OUString sInitialDocumentURL;
+    Reference< XStorageBasedDocument > xDocument;
+    if ( _rArguments[0] >>= sInitialDocumentURL )
+    {
+        init( sInitialDocumentURL, nullptr );
+        return;
+    }
+
+    if ( _rArguments[0] >>= xDocument )
+    {
+        initializeFromDocument( xDocument );
+        return;
+    }
+    throw IllegalArgumentException("arg1 unknown type", static_cast<cppu::OWeakObject*>(this), 1);
+
 }
 
 void SfxLibraryContainer::initializeFromDocument( const Reference< XStorageBasedDocument >& _rxDocument )

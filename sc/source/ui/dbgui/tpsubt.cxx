@@ -590,19 +590,19 @@ IMPL_LINK(ScTpSubTotalOptions, CheckHdl, weld::Button&, rBox, void)
 
 IMPL_LINK(ScTpSubTotalGroup, CheckBoxHdl, weld::Button&, rBox, void)
 {
-    if (&rBox == mxLbSelectAllColumns.get())
-    {
-        bool bChecked = mxLbSelectAllColumns->get_active();
+    if (&rBox != mxLbSelectAllColumns.get())
+        return;
 
-        mxLbColumns->all_foreach([&](const weld::TreeIter& rEntry) {
-            if ( bChecked )
-                mxLbColumns->set_toggle(rEntry, TRISTATE_TRUE);
-            else
-                mxLbColumns->set_toggle(rEntry, TRISTATE_FALSE);
+    bool bChecked = mxLbSelectAllColumns->get_active();
 
-            return false;
-        });
-    }
+    mxLbColumns->all_foreach([&](const weld::TreeIter& rEntry) {
+        if ( bChecked )
+            mxLbColumns->set_toggle(rEntry, TRISTATE_TRUE);
+        else
+            mxLbColumns->set_toggle(rEntry, TRISTATE_FALSE);
+
+        return false;
+    });
 }
 
 ScTpSubTotalGroup1::~ScTpSubTotalGroup1()

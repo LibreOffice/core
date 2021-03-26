@@ -278,21 +278,21 @@ namespace slideshow::internal
                 virtual void end() override { end_(); }
                 void end_()
                 {
-                    if( mbAnimationStarted )
-                    {
-                        mbAnimationStarted = false;
+                    if( !mbAnimationStarted )
+                        return;
 
-                        if( !(mnFlags & AnimationFactory::FLAG_NO_SPRITE) )
-                            mpShapeManager->leaveAnimationMode( mpShape );
+                    mbAnimationStarted = false;
 
-                        if( mpShape->isContentChanged() )
-                            mpShapeManager->notifyShapeUpdate( mpShape );
+                    if( !(mnFlags & AnimationFactory::FLAG_NO_SPRITE) )
+                        mpShapeManager->leaveAnimationMode( mpShape );
 
-                        // if there is a physics animation going on report the animation ending
-                        // and zero out the velocity of the shape
-                        if( mpBox2DWorld->isInitialized() )
-                            mpBox2DWorld->queueLinearVelocityUpdate( mpShape->getXShape(), {0,0});
-                    }
+                    if( mpShape->isContentChanged() )
+                        mpShapeManager->notifyShapeUpdate( mpShape );
+
+                    // if there is a physics animation going on report the animation ending
+                    // and zero out the velocity of the shape
+                    if( mpBox2DWorld->isInitialized() )
+                        mpBox2DWorld->queueLinearVelocityUpdate( mpShape->getXShape(), {0,0});
                 }
 
                 // NumberAnimation interface
@@ -441,25 +441,25 @@ namespace slideshow::internal
                         mpBox2DWorld->setHasWorldStepper(false);
                     }
 
-                    if( mbAnimationStarted )
-                    {
-                        mbAnimationStarted = false;
+                    if( !mbAnimationStarted )
+                        return;
 
-                        if( !(mnFlags & AnimationFactory::FLAG_NO_SPRITE) )
-                            mpShapeManager->leaveAnimationMode( mpShape );
+                    mbAnimationStarted = false;
 
-                        if( mpShape->isContentChanged() )
-                            mpShapeManager->notifyShapeUpdate( mpShape );
+                    if( !(mnFlags & AnimationFactory::FLAG_NO_SPRITE) )
+                        mpShapeManager->leaveAnimationMode( mpShape );
 
-                        mpBox2DWorld->alertPhysicsAnimationEnd(mpShape);
-                        // if this was the only physics animation effect going on
-                        // all box2d bodies were destroyed on alertPhysicsAnimationEnd
-                        // except the one owned by the animation.
-                        // Try to destroy the remaining body - if it is unique
-                        // (it being unique means all physics animation effects have ended
-                        // since otherwise mpBox2DWorld would own a copy of the shared_ptr )
-                        mpBox2DBody.reset();
-                    }
+                    if( mpShape->isContentChanged() )
+                        mpShapeManager->notifyShapeUpdate( mpShape );
+
+                    mpBox2DWorld->alertPhysicsAnimationEnd(mpShape);
+                    // if this was the only physics animation effect going on
+                    // all box2d bodies were destroyed on alertPhysicsAnimationEnd
+                    // except the one owned by the animation.
+                    // Try to destroy the remaining body - if it is unique
+                    // (it being unique means all physics animation effects have ended
+                    // since otherwise mpBox2DWorld would own a copy of the shared_ptr )
+                    mpBox2DBody.reset();
 
                 }
 

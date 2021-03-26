@@ -241,7 +241,10 @@ void QueryTable::finalizeImport()
 
     // find tables mode: entire document, all tables, or specific tables
     OUString aTables = pWebPr->mbHtmlTables ? lclBuildWebQueryTables( pWebPr->maTables ) : "HTML_all";
-    if( !aTables.isEmpty() ) try
+    if( aTables.isEmpty() )
+        return;
+
+    try
     {
         PropertySet aDocProps( getDocument() );
         Reference< XAreaLinks > xAreaLinks( aDocProps.getAnyProperty( PROP_AreaLinks ), UNO_QUERY_THROW );

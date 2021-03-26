@@ -153,16 +153,15 @@ Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues(const Sequence< OU
         bUnknown = nullptr == pEntries[n];
     }
 
-    if( !bUnknown )
-    {
-        pEntries[nCount] = nullptr;
-        Sequence< Any > aValues(nCount);
-        aValues.realloc(nCount);
-        _getPropertyValues( pEntries.get(), aValues.getArray() );
-        return aValues;
-    }
-    else
+    if( bUnknown )
         throw RuntimeException( *pNames, static_cast< XPropertySet* >( this ) );
+
+    pEntries[nCount] = nullptr;
+    Sequence< Any > aValues(nCount);
+    aValues.realloc(nCount);
+    _getPropertyValues( pEntries.get(), aValues.getArray() );
+    return aValues;
+
 }
 
 void SAL_CALL PropertySetHelper::addPropertiesChangeListener( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
