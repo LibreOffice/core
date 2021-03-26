@@ -28,7 +28,6 @@
 #include <ChartTypeHelper.hxx>
 #include <ThreeDHelper.hxx>
 #include <ChartModel.hxx>
-#include <servicenames_charttypes.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
@@ -334,7 +333,7 @@ Reference< XDataSeries > lcl_CreateNewSeries(
             Sequence< OUString > aPossibleOptRoles( xChartType->getSupportedOptionalRoles());
 
             //special handling for candlestick type
-            if( xChartType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK && xTemplate.is())
+            if( xTemplate.is())
             {
                 Reference< XDataInterpreter > xInterpreter( xTemplate->getDataInterpreter());
                 if( xInterpreter.is())
