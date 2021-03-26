@@ -104,7 +104,7 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
             Pop();
             return;
         }
-        else if( !!aBmp )
+        else if( !aBmp.IsEmpty() )
         {
             if ( mnDrawMode & DrawModeFlags::GrayBitmap )
                 aBmp.Convert( BmpConversion::N8BitGreys );
@@ -348,7 +348,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                     aBmpEx = BitmapEx( aColorBmp, aBmpEx.GetMask() );
                 }
             }
-            else if( !!aBmpEx )
+            else if( !aBmpEx.IsEmpty() )
             {
                 if ( mnDrawMode & DrawModeFlags::GrayBitmap )
                     aBmpEx.Convert( BmpConversion::N8BitGreys );
@@ -515,7 +515,7 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
     {
         DrawDeviceAlphaBitmap(rBitmapEx.GetBitmap(), rBitmapEx.GetAlpha(), rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel);
     }
-    else if (!!rBitmapEx)
+    else if (!rBitmapEx.IsEmpty())
     {
         SalTwoRect aPosAry(rSrcPtPixel.X(), rSrcPtPixel.Y(), rSrcSizePixel.Width(), rSrcSizePixel.Height(),
                            ImplLogicXToDevicePixel(rDestPt.X()), ImplLogicYToDevicePixel(rDestPt.Y()),

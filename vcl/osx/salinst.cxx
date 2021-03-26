@@ -901,7 +901,7 @@ CGImageRef CreateCGImage( const Image& rImage )
     BitmapEx aBmpEx( rImage.GetBitmapEx() );
     Bitmap aBmp( aBmpEx.GetBitmap() );
 
-    if( ! aBmp || ! aBmp.ImplGetSalBitmap() )
+    if( aBmp.IsEmpty() || ! aBmp.ImplGetSalBitmap() )
         return nullptr;
 
     // simple case, no transparency

@@ -416,7 +416,7 @@ void CGMBitmap::ImplInsert( CGMBitmapDescriptor const & rSource, CGMBitmapDescri
 std::unique_ptr<CGMBitmap> CGMBitmap::GetNext()
 {
     std::unique_ptr<CGMBitmap> xCGMTempBitmap;
-    if (!!pCGMBitmapDescriptor->mxBitmap && pCGMBitmapDescriptor->mbStatus)
+    if (!pCGMBitmapDescriptor->mxBitmap.IsEmpty() && pCGMBitmapDescriptor->mbStatus)
     {
         xCGMTempBitmap.reset(new CGMBitmap(*mpCGM));
         if ( ( static_cast<tools::Long>(xCGMTempBitmap->pCGMBitmapDescriptor->mnOrientation) == static_cast<tools::Long>(pCGMBitmapDescriptor->mnOrientation) ) &&

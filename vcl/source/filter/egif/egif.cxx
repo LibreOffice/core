@@ -247,7 +247,7 @@ bool GIFWriter::CreateAccess( const BitmapEx& rBmpEx )
         aAccBmp = rBmpEx.GetBitmap();
         bTransparent = false;
 
-        if( !!aMask )
+        if( !aMask.IsEmpty() )
         {
             if( aAccBmp.Convert( BmpConversion::N8BitTrans ) )
             {

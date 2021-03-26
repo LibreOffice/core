@@ -238,7 +238,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     rSalLayout.DrawText( *pVDev->mpGraphics );
 
     Bitmap aBmp = pVDev->GetBitmap( Point(), aBoundRect.GetSize() );
-    if ( !aBmp || !aBmp.Rotate( mpFontInstance->mnOwnOrientation, COL_WHITE ) )
+    if ( aBmp.IsEmpty() || !aBmp.Rotate( mpFontInstance->mnOwnOrientation, COL_WHITE ) )
         return false;
 
     // calculate rotation offset

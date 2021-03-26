@@ -432,7 +432,7 @@ bool Bitmap::Rotate(Degree10 nAngle10, const Color& rFillColor)
             pReadAcc.reset();
         }
 
-        bRet = !!aRotatedBmp;
+        bRet = !aRotatedBmp.IsEmpty();
         if (bRet)
             ReassignWithSize(aRotatedBmp);
     }

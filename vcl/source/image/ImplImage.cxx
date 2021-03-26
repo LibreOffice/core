@@ -96,7 +96,7 @@ Size ImplImage::getSizePixel()
     {
         if (loadStockAtScale(1.0, maBitmapEx))
         {
-            assert(!maDisabledBitmapEx);
+            assert(maDisabledBitmapEx.IsEmpty());
             assert(maBitmapChecksum == 0);
             maSizePixel = maBitmapEx.GetSizePixel();
             aRet = maSizePixel;

@@ -683,7 +683,7 @@ FixedBitmap::FixedBitmap( vcl::Window* pParent, WinBits nStyle ) :
 void FixedBitmap::ImplDraw( OutputDevice* pDev, const Point& rPos, const Size& rSize )
 {
     // do we have a Bitmap?
-    if ( !!maBitmap )
+    if ( !maBitmap.IsEmpty() )
     {
         if ( GetStyle() & WB_SCALE )
             pDev->DrawBitmapEx( rPos, rSize, maBitmap );

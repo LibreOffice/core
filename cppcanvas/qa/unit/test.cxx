@@ -56,7 +56,7 @@ void CanvasTest::testComposite()
         xBitmapCanvas->clear();
         CPPUNIT_ASSERT( aBitmapEx.Create( xBitmapCanvas, aSize ) );
         CPPUNIT_ASSERT( aBitmapEx.IsAlpha() );
-        CPPUNIT_ASSERT( aBitmapEx.GetAlpha() );
+        CPPUNIT_ASSERT( !aBitmapEx.GetAlpha().IsEmpty() );
     }
 
     {

@@ -78,7 +78,7 @@ namespace svt::table
         StyleSettings const & i_style, bool const i_sortAscending )
     {
         BitmapEx& rBitmap(i_sortAscending ? m_sortAscending : m_sortDescending);
-        if (!rBitmap || (i_headerHeight != m_lastHeaderHeight) || (i_style.GetActiveColor() != m_lastArrowColor))
+        if (rBitmap.IsEmpty() || (i_headerHeight != m_lastHeaderHeight) || (i_style.GetActiveColor() != m_lastArrowColor))
         {
             tools::Long const nSortIndicatorWidth = 2 * i_headerHeight / 3;
             tools::Long const nSortIndicatorHeight = 2 * nSortIndicatorWidth / 3;

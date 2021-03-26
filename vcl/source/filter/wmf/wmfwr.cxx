@@ -1247,7 +1247,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 Bitmap                  aBmp( pA->GetBitmapEx().GetBitmap() );
                 Bitmap                  aMsk( pA->GetBitmapEx().GetMask() );
 
-                if( !!aMsk )
+                if( !aMsk.IsEmpty() )
                 {
                     aBmp.Replace( aMsk, COL_WHITE );
                     aMsk.Invert();
@@ -1265,7 +1265,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 Bitmap                      aBmp( pA->GetBitmapEx().GetBitmap() );
                 Bitmap                      aMsk( pA->GetBitmapEx().GetMask() );
 
-                if( !!aMsk )
+                if( !aMsk.IsEmpty() )
                 {
                     aBmp.Replace( aMsk, COL_WHITE );
                     aMsk.Invert();
@@ -1285,7 +1285,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 Bitmap                          aBmp( aBmpEx.GetBitmap() );
                 Bitmap                          aMsk( aBmpEx.GetMask() );
 
-                if( !!aMsk )
+                if( !aMsk.IsEmpty() )
                 {
                     aBmp.Replace( aMsk, COL_WHITE );
                     aMsk.Invert();
