@@ -1062,7 +1062,7 @@ bool XclImpStream::EnsureRawReadSize( sal_uInt16 nBytes )
 
 sal_uInt16 XclImpStream::GetMaxRawReadSize( std::size_t nBytes ) const
 {
-    return static_cast< sal_uInt16 >( ::std::min< std::size_t >( nBytes, mnRawRecLeft ) );
+    return static_cast<sal_uInt16>(o3tl::sanitizing_min<std::size_t>(nBytes, mnRawRecLeft));
 }
 
 sal_uInt16 XclImpStream::ReadRawData( void* pData, sal_uInt16 nBytes )
