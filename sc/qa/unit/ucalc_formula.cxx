@@ -5538,6 +5538,36 @@ void Test::testFuncLOOKUParrayWithError()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testTdf116216()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, "Test1");
+    m_pDoc->InsertTab(1, "Test2");
+
+    std::vector<std::vector<const char*>> aData = {
+        { "k1", "value1"},
+        { "k2", "value2"},
+        { "k3", "value3"}
+    };
+
+    insertRangeData(m_pDoc, ScAddress(0,1,1), aData); // A2:B4
+    m_pDoc->SetString(4,0,1, "k2");                   // E1
+
+    m_pDoc->SetString(4,1,1, "=LOOKUP(1;1/(A$2:A$4=E$1);1)");
+    m_pDoc->SetString(4,2,1, "=LOOKUP(E1;A$2:A$4;B2:B4)");
+    m_pDoc->SetString(4,3,1, "=LOOKUP(1;1/(A$2:A$4=E$1);B2:B4)");
+
+    // Without the fix in place, this test would haved failed with
+    // - Expected: #N/A
+    // - Actual  :
+    CPPUNIT_ASSERT_EQUAL(OUString("#N/A"), m_pDoc->GetString(4,1,1));
+    CPPUNIT_ASSERT_EQUAL(OUString("value2"), m_pDoc->GetString(4,2,1));
+    CPPUNIT_ASSERT_EQUAL(OUString("value2"), m_pDoc->GetString(4,3,1));
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFuncVLOOKUP()
 {
     // VLOOKUP
