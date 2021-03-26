@@ -759,6 +759,7 @@
 #define STR_AUTH_TYPE_CUSTOM3                   NC_("STR_AUTH_TYPE_CUSTOM3", "User-defined3")
 #define STR_AUTH_TYPE_CUSTOM4                   NC_("STR_AUTH_TYPE_CUSTOM4", "User-defined4")
 #define STR_AUTH_TYPE_CUSTOM5                   NC_("STR_AUTH_TYPE_CUSTOM5", "User-defined5")
+#define STR_AUTH_TYPE_LOCAL_FILE                NC_("STR_AUTH_TYPE_LOCAL_FILE", "Local file")
 #define STR_AUTH_FIELD_IDENTIFIER               NC_("STR_AUTH_FIELD_IDENTIFIER", "Short name")
 #define STR_AUTH_FIELD_AUTHORITY_TYPE           NC_("STR_AUTH_FIELD_AUTHORITY_TYPE", "Type")
 #define STR_AUTH_FIELD_ADDRESS                  NC_("STR_AUTH_FIELD_ADDRESS", "Address")
