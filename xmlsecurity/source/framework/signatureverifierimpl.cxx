@@ -26,8 +26,6 @@
 #include <rtl/ref.hxx>
 
 
-#define IMPLEMENTATION_NAME "com.sun.star.xml.security.framework.SignatureVerifierImpl"
-
 SignatureVerifierImpl::SignatureVerifierImpl()
   : SignatureVerifierImpl_Base()
 {
@@ -106,7 +104,7 @@ void SAL_CALL SignatureVerifierImpl::initialize(
 
 OUString SignatureVerifierImpl_getImplementationName ()
 {
-    return IMPLEMENTATION_NAME;
+    return "com.sun.star.xml.security.framework.SignatureVerifierImpl";
 }
 
 css::uno::Sequence< OUString > SignatureVerifierImpl_getSupportedServiceNames(  )

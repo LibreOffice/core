@@ -44,8 +44,6 @@ using namespace ::com::sun::star::test;
 // streams
 
 #include "testfactreg.hxx"
-#define IMPLEMENTATION_NAME "test.com.sun.star.comp.extensions.stm.Pipe"
-#define SERVICE_NAME        "test.com.sun.star.io.Pipe"
 
 
 class WriteToStreamThread :
@@ -409,12 +407,12 @@ Sequence<OUString> OPipeTest_getSupportedServiceNames() throw()
 
 OUString     OPipeTest_getServiceName() throw()
 {
-    return OUString( SERVICE_NAME );
+    return OUString( "test.com.sun.star.io.Pipe" );
 }
 
 OUString    OPipeTest_getImplementationName() throw()
 {
-    return OUString( IMPLEMENTATION_NAME );
+    return OUString( "test.com.sun.star.comp.extensions.stm.Pipe" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

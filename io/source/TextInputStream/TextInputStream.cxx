@@ -36,9 +36,6 @@
 
 namespace com::sun::star::uno { class XComponentContext; }
 
-#define IMPLEMENTATION_NAME "com.sun.star.comp.io.TextInputStream"
-#define SERVICE_NAME "com.sun.star.io.TextInputStream"
-
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
@@ -378,7 +375,7 @@ Reference< XInputStream > OTextInputStream::getInputStream()
 
 OUString OTextInputStream::getImplementationName()
 {
-    return IMPLEMENTATION_NAME;
+    return "com.sun.star.comp.io.TextInputStream";
 }
 
 sal_Bool OTextInputStream::supportsService(const OUString& ServiceName)
@@ -388,7 +385,7 @@ sal_Bool OTextInputStream::supportsService(const OUString& ServiceName)
 
 Sequence< OUString > OTextInputStream::getSupportedServiceNames()
 {
-    return { SERVICE_NAME };
+    return { "com.sun.star.io.TextInputStream" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

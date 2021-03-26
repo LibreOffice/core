@@ -29,8 +29,6 @@ namespace com::sun::star::xml::wrapper { class XXMLElementWrapper; }
 
 using namespace com::sun::star::uno;
 
-#define IMPLEMENTATION_NAME "com.sun.star.xml.security.framework.SignatureCreatorImpl"
-
 SignatureCreatorImpl::SignatureCreatorImpl()
     : SignatureCreatorImpl_Base(), m_nIdOfBlocker(-1)
 {
@@ -150,7 +148,7 @@ void SAL_CALL SignatureCreatorImpl::initialize( const css::uno::Sequence< css::u
 
 OUString SignatureCreatorImpl_getImplementationName ()
 {
-    return IMPLEMENTATION_NAME;
+    return "com.sun.star.xml.security.framework.SignatureCreatorImpl";
 }
 
 css::uno::Sequence< OUString > SignatureCreatorImpl_getSupportedServiceNames(  )
