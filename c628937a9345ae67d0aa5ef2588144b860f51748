@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "92c660da_6b96e9a1",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-26T05:43:55Z",
+      "side": 1,
+      "message": "A mistake here: I put systools/win32/comtools.hxx into our library group - but it should be inside prewin.h...postwin.h actually. It itself includes system headers, and should be guarded by those.",
+      "parentUuid": "a73c0b67_2073e2bb",
+      "revId": "c628937a9345ae67d0aa5ef2588144b860f51748",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ac3720f6_ff7578cc",
         "filename": "vcl/win/app/fileregistration.cxx",
         "patchSetId": 9
