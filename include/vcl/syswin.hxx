@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SYSWIN_HXX
-#define INCLUDED_VCL_SYSWIN_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/idle.hxx>
@@ -37,26 +36,27 @@ class TaskPaneList;
 class VclBuilder;
 struct NotebookBarAddonsItem;
 
-#define ICON_LO_DEFAULT                 1
-#define ICON_TEXT_DOCUMENT              2
-#define ICON_SPREADSHEET_DOCUMENT       4
-#define ICON_DRAWING_DOCUMENT           6
-#define ICON_PRESENTATION_DOCUMENT      8
-#define ICON_TEMPLATE                   11
-#define ICON_DATABASE_DOCUMENT          12
-#define ICON_MATH_DOCUMENT              13
-#define ICON_MACROLIBRARY               1
+#define ICON_LO_DEFAULT 1
+#define ICON_TEXT_DOCUMENT 2
+#define ICON_SPREADSHEET_DOCUMENT 4
+#define ICON_DRAWING_DOCUMENT 6
+#define ICON_PRESENTATION_DOCUMENT 8
+#define ICON_TEMPLATE 11
+#define ICON_DATABASE_DOCUMENT 12
+#define ICON_MATH_DOCUMENT 13
+#define ICON_MACROLIBRARY 1
 
 enum class MenuBarMode
 {
-    Normal, Hide
+    Normal,
+    Hide
 };
 
 enum class TitleButton
 {
-    Docking        = 1,
-    Hide           = 2,
-    Menu           = 4,
+    Docking = 1,
+    Hide = 2,
+    Menu = 4,
 };
 
 //helper baseclass to ease retro fitting dialogs/tabpages that load a resource
@@ -77,9 +77,9 @@ enum class TitleButton
 class VCL_DLLPUBLIC VclBuilderContainer
 {
 public:
-                    VclBuilderContainer();
-    virtual         ~VclBuilderContainer();
-    void            disposeBuilder();
+    VclBuilderContainer();
+    virtual ~VclBuilderContainer();
+    void disposeBuilder();
 
     void setDeferredProperties();
 
@@ -90,38 +90,40 @@ protected:
     friend class ::ScreenshotTest;
 };
 
-class VCL_DLLPUBLIC SystemWindow
-    : public vcl::Window
-    , public VclBuilderContainer
+class VCL_DLLPUBLIC SystemWindow : public vcl::Window, public VclBuilderContainer
 {
     friend class WorkWindow;
     class ImplData;
 
 private:
     VclPtr<MenuBar> mpMenuBar;
-    Size            maMinOutSize;
-    bool            mbDockBtn;
-    bool            mbHideBtn;
-    bool            mbSysChild;
-    bool            mbIsCalculatingInitialLayoutSize;
-    bool            mbPaintComplete;
-    MenuBarMode     mnMenuBarMode;
-    sal_uInt16      mnIcon;
+    Size maMinOutSize;
+    bool mbDockBtn;
+    bool mbHideBtn;
+    bool mbSysChild;
+    bool mbIsCalculatingInitialLayoutSize;
+    bool mbPaintComplete;
+    MenuBarMode mnMenuBarMode;
+    sal_uInt16 mnIcon;
     std::unique_ptr<ImplData> mpImplData;
-    Idle            maLayoutIdle;
-    OUString        maNotebookBarUIFile;
+    Idle maLayoutIdle;
+    OUString maNotebookBarUIFile;
+
 protected:
-    bool            mbIsDeferredInit;
+    bool mbIsDeferredInit;
     VclPtr<vcl::Window> mpDialogParent;
+
 public:
     using Window::ImplIsInTaskPaneList;
-    SAL_DLLPRIVATE bool ImplIsInTaskPaneList( vcl::Window* pWin );
+    SAL_DLLPRIVATE bool ImplIsInTaskPaneList(vcl::Window* pWin);
     SAL_DLLPRIVATE bool isDeferredInit() const { return mbIsDeferredInit; }
 
 private:
-    SAL_DLLPRIVATE void ImplMoveToScreen( tools::Long& io_rX, tools::Long& io_rY, tools::Long i_nWidth, tools::Long i_nHeight, vcl::Window const * i_pConfigureWin );
-    SAL_DLLPRIVATE void setPosSizeOnContainee(Size aSize, Window &rBox);
-    DECL_DLLPRIVATE_LINK( ImplHandleLayoutTimerHdl, Timer*, void );
+    SAL_DLLPRIVATE void ImplMoveToScreen(tools::Long& io_rX, tools::Long& io_rY,
+                                         tools::Long i_nWidth, tools::Long i_nHeight,
+                                         vcl::Window const* i_pConfigureWin);
+    SAL_DLLPRIVATE void setPosSizeOnContainee(Size aSize, Window& rBox);
+    DECL_DLLPRIVATE_LINK(ImplHandleLayoutTimerHdl, Timer*, void);
 
     // try to extract content and return as Bitmap. To do that reliably, a Yield-loop
     // like in Execute() has to be executed and it is necessary to detect when the
@@ -137,68 +139,70 @@ private:
 protected:
     // Single argument ctors shall be explicit.
     explicit SystemWindow(WindowType nType);
-    void loadUI(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
+    void loadUI(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+                const css::uno::Reference<css::frame::XFrame>& rFrame
+                = css::uno::Reference<css::frame::XFrame>());
 
-    void     SetWindowStateData( const WindowStateData& rData );
+    void SetWindowStateData(const WindowStateData& rData);
 
-    virtual void settingOptimalLayoutSize(Window *pBox);
+    virtual void settingOptimalLayoutSize(Window* pBox);
 
     SAL_DLLPRIVATE void DoInitialLayout();
 
-    SAL_DLLPRIVATE void SetIdleDebugName( const char *pDebugName );
+    SAL_DLLPRIVATE void SetIdleDebugName(const char* pDebugName);
 
 public:
-    virtual         ~SystemWindow() override;
-    virtual void    dispose() override;
+    virtual ~SystemWindow() override;
+    virtual void dispose() override;
 
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool EventNotify(NotifyEvent& rNEvt) override;
+    virtual bool PreNotify(NotifyEvent& rNEvt) override;
 
-    virtual bool    Close();
-    virtual void    TitleButtonClick( TitleButton nButton );
-    virtual void    Resizing( Size& rSize );
-    virtual void    Resize() override;
-    virtual Size    GetOptimalSize() const override;
-    virtual void    queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
-    bool            isLayoutEnabled() const;
-    void            setOptimalLayoutSize();
-    bool            isCalculatingInitialLayoutSize() const { return mbIsCalculatingInitialLayoutSize; }
+    virtual bool Close();
+    virtual void TitleButtonClick(TitleButton nButton);
+    virtual void Resizing(Size& rSize);
+    virtual void Resize() override;
+    virtual Size GetOptimalSize() const override;
+    virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
+    bool isLayoutEnabled() const;
+    void setOptimalLayoutSize();
+    bool isCalculatingInitialLayoutSize() const { return mbIsCalculatingInitialLayoutSize; }
 
-    void            SetIcon( sal_uInt16 nIcon );
-    sal_uInt16          GetIcon() const { return mnIcon; }
+    void SetIcon(sal_uInt16 nIcon);
+    sal_uInt16 GetIcon() const { return mnIcon; }
     // for systems like MacOSX which can display the URL a document is loaded from
     // separately from the window title
-    void            SetRepresentedURL( const OUString& );
+    void SetRepresentedURL(const OUString&);
 
-    void            ShowTitleButton( TitleButton nButton, bool bVisible );
-    bool            IsTitleButtonVisible( TitleButton nButton ) const;
+    void ShowTitleButton(TitleButton nButton, bool bVisible);
+    bool IsTitleButtonVisible(TitleButton nButton) const;
 
-    void            SetMinOutputSizePixel( const Size& rSize );
-    const Size&     GetMinOutputSizePixel() const { return maMinOutSize; }
-    void            SetMaxOutputSizePixel( const Size& rSize );
-    const Size&     GetMaxOutputSizePixel() const;
+    void SetMinOutputSizePixel(const Size& rSize);
+    const Size& GetMinOutputSizePixel() const { return maMinOutSize; }
+    void SetMaxOutputSizePixel(const Size& rSize);
+    const Size& GetMaxOutputSizePixel() const;
 
-    void            SetWindowState(const OString& rStr);
-    OString         GetWindowState(WindowStateMask nMask = WindowStateMask::All) const;
+    void SetWindowState(const OString& rStr);
+    OString GetWindowState(WindowStateMask nMask = WindowStateMask::All) const;
 
-    void            SetMenuBar(MenuBar* pMenuBar);
-    MenuBar*        GetMenuBar() const { return mpMenuBar; }
-    void            SetMenuBarMode( MenuBarMode nMode );
-    void            CollectMenuBarMnemonics(MnemonicGenerator& rMnemonicGenerator) const;
-    int             GetMenuBarHeight() const;
+    void SetMenuBar(MenuBar* pMenuBar);
+    MenuBar* GetMenuBar() const { return mpMenuBar; }
+    void SetMenuBarMode(MenuBarMode nMode);
+    void CollectMenuBarMnemonics(MnemonicGenerator& rMnemonicGenerator) const;
+    int GetMenuBarHeight() const;
 
     void SetNotebookBar(const OUString& rUIXMLDescription,
                         const css::uno::Reference<css::frame::XFrame>& rFrame,
                         const NotebookBarAddonsItem& aNotebookBarAddonsItem,
                         bool bReloadNotebookbar = false);
 
-    void            CloseNotebookBar();
-    VclPtr<NotebookBar> const & GetNotebookBar() const;
+    void CloseNotebookBar();
+    VclPtr<NotebookBar> const& GetNotebookBar() const;
 
-    TaskPaneList*   GetTaskPaneList();
-    void            GetWindowStateData( WindowStateData& rData ) const;
+    TaskPaneList* GetTaskPaneList();
+    void GetWindowStateData(WindowStateData& rData) const;
 
-    virtual void     SetText( const OUString& rStr ) override;
+    virtual void SetText(const OUString& rStr) override;
     virtual OUString GetText() const override;
 
     /**
@@ -219,7 +223,7 @@ public:
 
     @see SystemWindow::SetScreenNumber
     */
-    unsigned int    GetScreenNumber() const;
+    unsigned int GetScreenNumber() const;
     /**
     Move the Window to a new screen. The same rules for
     positioning apply as in <code>SystemWindow::GetScreenNumber</code>
@@ -231,28 +235,26 @@ public:
 
     @see GetScreenNumber
     */
-    void            SetScreenNumber( unsigned int nNewScreen );
+    void SetScreenNumber(unsigned int nNewScreen);
 
-    void            SetApplicationID( const OUString &rApplicationID );
+    void SetApplicationID(const OUString& rApplicationID);
 
-    bool            UpdatePositionData();
+    bool UpdatePositionData();
 
-    void SetCloseHdl(const Link<SystemWindow&,void>& rLink);
-    const Link<SystemWindow&,void>& GetCloseHdl() const;
+    void SetCloseHdl(const Link<SystemWindow&, void>& rLink);
+    const Link<SystemWindow&, void>& GetCloseHdl() const;
 
     SAL_DLLPRIVATE bool hasPendingLayout() const { return maLayoutIdle.IsActive(); }
 
-    virtual        void    doDeferredInit(WinBits nBits);
+    virtual void doDeferredInit(WinBits nBits);
 
     // Screenshot interface
     VclPtr<VirtualDevice> createScreenshot();
 };
 
-inline void SystemWindow::SetIdleDebugName( const char *pDebugName )
+inline void SystemWindow::SetIdleDebugName(const char* pDebugName)
 {
-    maLayoutIdle.SetDebugName( pDebugName );
+    maLayoutIdle.SetDebugName(pDebugName);
 }
-
-#endif // INCLUDED_VCL_SYSWIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
