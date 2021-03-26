@@ -232,6 +232,23 @@ DECLARE_ODFEXPORT_TEST(testTdf130314, "tdf130314.docx")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf125877, "tdf95806.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+
+    // This was 0 (lost table during ODT export in footnotes)
+    // Note: fix also tdf#95806: painting table layout is correct
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    // floating table: there is a frame now
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+}
+
 DECLARE_ODFEXPORT_TEST(testTdf103567, "tdf103567.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());

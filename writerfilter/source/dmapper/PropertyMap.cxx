@@ -1111,6 +1111,9 @@ void SectionPropertyMap::HandleMarginsHeaderFooter( bool bFirstPage, DomainMappe
 
 bool SectionPropertyMap::FloatingTableConversion( const DomainMapper_Impl& rDM_Impl, FloatingTableInfo& rInfo )
 {
+    // always convert non-floating tables to floating ones in footnotes and endnotes
+    if ( rInfo.m_bConvertToFloatingInFootnote )
+        return true;
     // This is OOXML version of the code deciding if the table needs to be
     // in a floating frame.
     // For ww8 code, see SwWW8ImplReader::FloatingTableConversion in
@@ -1361,13 +1364,20 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 
     // Text area width is known at the end of a section: decide if tables should be converted or not.
     std::vector<FloatingTableInfo>& rPendingFloatingTables = rDM_Impl.m_aPendingFloatingTables;
-    uno::Reference<text::XTextAppendAndConvert> xBodyText( rDM_Impl.GetBodyText(), uno::UNO_QUERY );
     for ( FloatingTableInfo & rInfo : rPendingFloatingTables )
     {
         rInfo.m_nBreakType = m_nBreakType;
         if ( FloatingTableConversion( rDM_Impl, rInfo ) )
         {
+<<<<<<< HEAD   (ce443d tdf#119292 sc layout: fix overlapping wrapped cell texts)
             std::vector<css::uno::Any> aFramedRedlines = rDM_Impl.aFramedRedlines;
+=======
+            uno::Reference<text::XTextAppendAndConvert> xBodyText(
+                            rInfo.m_bConvertToFloatingInFootnote
+                                ? rInfo.m_xStart->getText()
+                                : rDM_Impl.GetBodyText(), uno::UNO_QUERY );
+            std::deque<css::uno::Any> aFramedRedlines = rDM_Impl.m_aStoredRedlines[StoredRedlines::FRAME];
+>>>>>>> CHANGE (e11c51 tdf#95806 tdf#125877 tdf#141172 DOCX: fix tables in footnote)
             try
             {
                 // convert redline ranges to cursor movement and character length
