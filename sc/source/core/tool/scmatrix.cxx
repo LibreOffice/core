@@ -3309,7 +3309,7 @@ struct COp {};
 template <typename T>
 struct COp<T, svl::SharedString>
 {
-    const svl::SharedString& operator()(char, T /*aOp*/, double /*a*/, double /*b*/, const svl::SharedString& rString) const
+    const svl::SharedString& operator()(T /*aOp*/, double /*a*/, double /*b*/, const svl::SharedString& rString) const
     {
         return rString;
     }
@@ -3318,7 +3318,7 @@ struct COp<T, svl::SharedString>
 template <typename T>
 struct COp<T, double>
 {
-    double operator()(char, T aOp, double a, double b, const svl::SharedString& /*rString*/) const
+    double operator()(T aOp, double a, double b, const svl::SharedString& /*rString*/) const
     {
         return aOp( a, b);
     }
@@ -3353,8 +3353,7 @@ public:
         maOp(aOp),
         mpErrorInterpreter(pErrorInterpreter),
         maString(rString),
-        mfVal(fVal),
-        maCOp()
+        mfVal(fVal)
     {
         if (mpErrorInterpreter)
         {
@@ -3381,7 +3380,7 @@ public:
 
     TEmptyRes operator()(char) const
     {
-        return maCOp({}, maOp, 0, mfVal, maString);
+        return maCOp(maOp, 0, mfVal, maString);
     }
 
     static bool useFunctionForEmpty()
