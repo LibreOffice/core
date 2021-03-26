@@ -135,7 +135,7 @@ void SdVectorizeDlg::Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf )
     Fraction    aScale;
     Bitmap      aTmp( GetPreparedBitmap( rBmp, aScale ) );
 
-    if( !!aTmp )
+    if( !aTmp.IsEmpty() )
     {
         const Link<::tools::Long,void> aPrgsHdl( LINK( this, SdVectorizeDlg, ProgressHdl ) );
         aTmp.Vectorize( rMtf, static_cast<sal_uInt8>(m_xMtReduce->get_value(FieldUnit::NONE)), &aPrgsHdl );

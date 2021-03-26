@@ -558,7 +558,7 @@ SvStream& WriteAnimation(SvStream& rOStm, const Animation& rAnimation)
 
         // If no BitmapEx was set we write the first Bitmap of
         // the Animation
-        if (!rAnimation.GetBitmapEx().GetBitmap())
+        if (rAnimation.GetBitmapEx().GetBitmap().IsEmpty())
             WriteDIBBitmapEx(rAnimation.Get(0).maBitmapEx, rOStm);
         else
             WriteDIBBitmapEx(rAnimation.GetBitmapEx(), rOStm);

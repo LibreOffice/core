@@ -92,7 +92,7 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
     {
         BitmapEx aThumb;
 
-        if (GalleryExplorer::GetSdrObj(nThemeId, nModelPos, pModel, &aThumb) && !!aThumb)
+        if (GalleryExplorer::GetSdrObj(nThemeId, nModelPos, pModel, &aThumb) && !aThumb.IsEmpty())
         {
             VclPtr< VirtualDevice > pVDev = VclPtr<VirtualDevice>::Create();
             const Point aNull(0, 0);

@@ -57,7 +57,7 @@ void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
     aSize.AdjustWidth( -(2*nPixelWidth + 4*nPixel) );
     aSize.AdjustHeight( -(2*nPixelWidth + 4*nPixel) );
 
-    if( !aSize.IsEmpty() && pBitmapEx && !!*pBitmapEx )
+    if( !aSize.IsEmpty() && pBitmapEx && !pBitmapEx->IsEmpty() )
     {
         Size aBitmapSize( pOutDev->PixelToLogic( pBitmapEx->GetSizePixel() ) );
 

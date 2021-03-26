@@ -50,7 +50,7 @@ void DrawViewShell::ScannerEvent()
             {
                 const BitmapEx aScanBmp( VCLUnoHelper::GetBitmap( xBitmap ) );
 
-                if( !!aScanBmp )
+                if( !aScanBmp.IsEmpty() )
                 {
                     const SolarMutexGuard aGuard;
                     SdrPage*            pPage = mpDrawView->GetSdrPageView()->GetPage();

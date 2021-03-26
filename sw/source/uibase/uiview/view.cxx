@@ -1737,7 +1737,7 @@ void SwView::ScannerEventHdl()
             {
                 const BitmapEx aScanBmp( VCLUnoHelper::GetBitmap( xBitmap ) );
 
-                if( !!aScanBmp )
+                if( !aScanBmp.IsEmpty() )
                 {
                     Graphic aGrf(aScanBmp);
                     m_pWrtShell->Insert( OUString(), OUString(), aGrf );

@@ -454,7 +454,7 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked) const
             }
         }
 
-        if( !aBmp )
+        if( aBmp.IsEmpty() )
         {
             // choose conversion directly using primitives to bitmap to avoid
             // rendering errors with tiled bitmap fills (these will be tiled in a
