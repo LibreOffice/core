@@ -1296,6 +1296,13 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, weld::Button&, rButton, void)
     m_xAuthorFI->set_label(m_sFields[AUTH_FIELD_AUTHOR]);
     m_xTitleFI->set_label(m_sFields[AUTH_FIELD_TITLE]);
     m_xActionBT->set_sensitive(true);
+
+    if (!bNewEntry)
+    {
+        // When in edit mode, automatically apply the changed entry to update the field in the doc
+        // model.
+        InsertHdl(*m_xActionBT);
+    }
 }
 
 IMPL_LINK_NOARG(SwAuthorMarkPane, ChangeSourceHdl, weld::ToggleButton&, void)
