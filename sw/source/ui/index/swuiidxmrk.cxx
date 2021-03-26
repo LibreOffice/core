@@ -47,6 +47,7 @@
 #include <fldbas.hxx>
 #include <strings.hrc>
 #include <svl/cjkoptions.hxx>
+#include <comphelper/fileurl.hxx>
 #include <ndtxt.hxx>
 #include <SwRewriter.hxx>
 
@@ -1530,11 +1531,28 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
             else
                 m_aOrigContainers.back()->move(m_xTypeListBox.get(), m_xRight.get());
 
-            for (int j = 0; j < AUTH_TYPE_END; j++)
-                m_xTypeListBox->append_text(SwAuthorityFieldType::GetAuthTypeName(static_cast<ToxAuthorityType>(j)));
+            for (int j = 0; j <= AUTH_TYPE_END; j++)
+            {
+                if (j < AUTH_TYPE_END)
+                {
+                    m_xTypeListBox->append_text(
+                        SwAuthorityFieldType::GetAuthTypeName(static_cast<ToxAuthorityType>(j)));
+                }
+                else
+                {
+                    // UI-only type: local file.
+                    m_xTypeListBox->append_text(SwResId(STR_AUTH_TYPE_LOCAL_FILE));
+                }
+            }
             if(!pFields[aCurInfo.nToxField].isEmpty())
             {
-                m_xTypeListBox->set_active(pFields[aCurInfo.nToxField].toInt32());
+                int nPos = pFields[aCurInfo.nToxField].toInt32();
+                if (nPos == AUTH_TYPE_WWW && comphelper::isFileUrl(pFields[AUTH_FIELD_URL]))
+                {
+                    // Map file URL to local file.
+                    nPos = AUTH_TYPE_END;
+                }
+                m_xTypeListBox->set_active(nPos);
             }
             m_xTypeListBox->set_grid_left_attach(1);
             m_xTypeListBox->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
@@ -1612,7 +1630,13 @@ OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) cons
     if( AUTH_FIELD_AUTHORITY_TYPE == eField )
     {
         OSL_ENSURE(m_xTypeListBox, "No ListBox");
-        return OUString::number(m_xTypeListBox->get_active());
+        int nActive = m_xTypeListBox->get_active();
+        if (nActive == AUTH_TYPE_END)
+        {
+            // Map local file to file URL.
+            nActive = AUTH_TYPE_WWW;
+        }
+        return OUString::number(nActive);
     }
 
     if( AUTH_FIELD_IDENTIFIER == eField && !m_bNewEntryMode)
