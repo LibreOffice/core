@@ -34,6 +34,23 @@
       "revId": "0cd88c4fd6f0a9fb9f99293e9a319b4143124259",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4c0a05f_42165fb8",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-26T09:22:23Z",
+      "side": 0,
+      "message": "It\u0027s better to remove the removed code. Git keeps the history.",
+      "revId": "0cd88c4fd6f0a9fb9f99293e9a319b4143124259",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }

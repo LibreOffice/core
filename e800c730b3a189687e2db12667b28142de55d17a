@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f47dbef8_ff53c679",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport16.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-26T09:22:23Z",
+      "side": 1,
+      "message": "It\u0027s not, if the first import doesn\u0027t fail, as in this case.",
+      "revId": "e800c730b3a189687e2db12667b28142de55d17a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aef0e6fd_76861fbc",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-26T09:22:23Z",
+      "side": 1,
+      "message": "The same.",
+      "range": {
+        "startLine": 830,
+        "startChar": 5,
+        "endLine": 830,
+        "endChar": 41
+      },
+      "revId": "e800c730b3a189687e2db12667b28142de55d17a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
