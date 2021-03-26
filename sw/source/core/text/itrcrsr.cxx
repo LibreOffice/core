@@ -1558,9 +1558,9 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
             if ( pPor->IsPostItsPortion() || pPor->IsBreakPortion() ||
                  pPor->InToxRefGrp() )
             {
-                if (pPor->IsPostItsPortion())
+                SwPostItsPortion* pPostItsPortion = pPor->IsPostItsPortion() ? dynamic_cast<SwPostItsPortion*>(pPor) : nullptr;
+                if (pPostItsPortion)
                 {
-                    SwPostItsPortion* pPostItsPortion = dynamic_cast<SwPostItsPortion*>(pPor);
                     if (!pPostItsPortion->IsScript()) // tdf#141079
                     {
                         // Offset would be nCurrStart + nLength below, do the same for post-it portions.
