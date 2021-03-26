@@ -4027,10 +4027,11 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
 
 void SwContentTree::DeleteOutlineSelections()
 {
-    m_pActiveShell->StartAction();
-    m_pActiveShell->EnterAddMode();
     auto nChapters(0);
 
+    m_pActiveShell->StartAction();
+
+    m_pActiveShell->EnterAddMode();
     m_xTreeView->selected_foreach([this, &nChapters](weld::TreeIter& rEntry){
         ++nChapters;
         if (m_xTreeView->iter_has_child(rEntry) &&
@@ -4038,20 +4039,21 @@ void SwContentTree::DeleteOutlineSelections()
         {
             nChapters += m_xTreeView->iter_n_children(rEntry);
         }
-        m_pActiveShell->SttSelect();
         SwOutlineNodes::size_type nActPos = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(rEntry).toInt64())->GetOutlinePos();
+        m_pActiveShell->SttSelect();
         m_pActiveShell->MakeOutlineSel(nActPos, nActPos, !m_xTreeView->get_row_expanded(rEntry), false); // select children if not expanded
+        m_pActiveShell->Right(CRSR_SKIP_CHARS, true, 1, false);
         m_pActiveShell->EndSelect();
         return false;
     });
     m_pActiveShell->LeaveAddMode();
+
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, SwResId(STR_CHAPTERS, nChapters));
     m_pActiveShell->StartUndo(SwUndoId::DELETE, &aRewriter);
-    m_pActiveShell->SetTextFormatColl(nullptr);
     m_pActiveShell->Delete();
-    m_pActiveShell->ClearMark();
     m_pActiveShell->EndUndo();
+
     m_pActiveShell->EndAction();
 }
 
