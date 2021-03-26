@@ -4513,7 +4513,7 @@ static LRESULT ImplMeasureItem( HWND hWnd, WPARAM wParam, LPARAM lParam )
 
         // image
         Size bmpSize( 16, 16 );
-        //if( !!pSalMenuItem->maBitmap )
+        //if( pSalMenuItem->maBitmap )
         //    bmpSize = pSalMenuItem->maBitmap.GetSizePixel();
 
         // checkmark
@@ -4595,7 +4595,7 @@ static LRESULT ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
 
         //Size bmpSize = aBitmap.GetSizePixel();
         Size bmpSize(16, 16);
-        if( !!pSalMenuItem->maBitmap )
+        if( pSalMenuItem->maBitmap )
         {
             Bitmap aBitmap( pSalMenuItem->maBitmap );
 

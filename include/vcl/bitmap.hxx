@@ -124,6 +124,7 @@ public:
     inline bool             operator!() const;
     bool                    operator==( const Bitmap& rBitmap ) const;
     bool                    operator!=( const Bitmap& rBitmap ) const { return !operator==(rBitmap); }
+    inline                  operator bool() const;
 
     inline bool             IsEmpty() const;
     void                    SetEmpty();
@@ -549,6 +550,11 @@ private:
     Size maPrefSize;
 
 };
+
+inline Bitmap::operator bool() const
+{
+    return mxSalBmp != nullptr;
+}
 
 inline bool Bitmap::operator!() const
 {
