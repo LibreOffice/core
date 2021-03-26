@@ -694,23 +694,23 @@ void SmXMLContext_Helper::ApplyAttrs()
         }
         // If not known, not implemented yet. Giving up.
     }
-    if (!sFontFamily.isEmpty())
-    {
-        if (sFontFamily.equalsIgnoreAsciiCase(GetXMLToken(XML_FIXED)))
-            aToken.eType = TFIXED;
-        else if (sFontFamily.equalsIgnoreAsciiCase("sans"))
-            aToken.eType = TSANS;
-        else if (sFontFamily.equalsIgnoreAsciiCase("serif"))
-            aToken.eType = TSERIF;
-        else //Just give up, we need to extend our font mechanism to be
-            //more general
-            return;
+    if (sFontFamily.isEmpty())
+        return;
 
-        aToken.aText = sFontFamily;
-        std::unique_ptr<SmFontNode> pFontNode(new SmFontNode(aToken));
-        pFontNode->SetSubNodes(nullptr, popOrZero(rNodeStack));
-        rNodeStack.push_front(std::move(pFontNode));
-    }
+    if (sFontFamily.equalsIgnoreAsciiCase(GetXMLToken(XML_FIXED)))
+        aToken.eType = TFIXED;
+    else if (sFontFamily.equalsIgnoreAsciiCase("sans"))
+        aToken.eType = TSANS;
+    else if (sFontFamily.equalsIgnoreAsciiCase("serif"))
+        aToken.eType = TSERIF;
+    else //Just give up, we need to extend our font mechanism to be
+        //more general
+        return;
+
+    aToken.aText = sFontFamily;
+    std::unique_ptr<SmFontNode> pFontNode(new SmFontNode(aToken));
+    pFontNode->SetSubNodes(nullptr, popOrZero(rNodeStack));
+    rNodeStack.push_front(std::move(pFontNode));
 }
 
 namespace

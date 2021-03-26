@@ -639,20 +639,20 @@ static void CleanupEmptyFootnoteFrame(SwFrame* pLowerFrame)
     // but now we have to clean up empty footnote frames to prevent crashes.
     // Note: check it at this level, not lower: both container and footnote
     // can be deleted at the same time!
-    if (pLowerFrame->IsFootnoteContFrame())
+    if (!pLowerFrame->IsFootnoteContFrame())
+        return;
+
+    for (SwFrame * pFootnote = pLowerFrame->GetLower(); pFootnote; )
     {
-        for (SwFrame * pFootnote = pLowerFrame->GetLower(); pFootnote; )
+        assert(pFootnote->IsFootnoteFrame());
+        SwFrame *const pNextNote = pFootnote->GetNext();
+        if (!pFootnote->IsDeleteForbidden() && !pFootnote->GetLower() && !pFootnote->IsColLocked() &&
+            !static_cast<SwFootnoteFrame*>(pFootnote)->IsBackMoveLocked())
         {
-            assert(pFootnote->IsFootnoteFrame());
-            SwFrame *const pNextNote = pFootnote->GetNext();
-            if (!pFootnote->IsDeleteForbidden() && !pFootnote->GetLower() && !pFootnote->IsColLocked() &&
-                !static_cast<SwFootnoteFrame*>(pFootnote)->IsBackMoveLocked())
-            {
-                pFootnote->Cut();
-                SwFrame::DestroyFrame(pFootnote);
-            }
-            pFootnote = pNextNote;
+            pFootnote->Cut();
+            SwFrame::DestroyFrame(pFootnote);
         }
+        pFootnote = pNextNote;
     }
 }
 

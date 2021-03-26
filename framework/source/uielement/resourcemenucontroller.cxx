@@ -228,18 +228,18 @@ void ResourceMenuController::updatePopupMenu()
     framework::MenuBarManager::FillMenu( m_nNewMenuId, comphelper::getUnoTunnelImplementation<VCLXMenu>( m_xPopupMenu )->GetMenu(), m_aModuleName, m_xMenuContainer, m_xDispatchProvider );
 
     // For context menus, add object verbs.
-    if ( m_bContextMenu )
+    if ( !m_bContextMenu )
+        return;
+
+    css::util::URL aObjectMenuURL;
+    aObjectMenuURL.Complete = ".uno:ObjectMenue";
+    m_xURLTransformer->parseStrict( aObjectMenuURL );
+    css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( m_xFrame, css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XDispatch > xDispatch( xDispatchProvider->queryDispatch( aObjectMenuURL, OUString(), 0 ) );
+    if ( xDispatch.is() )
     {
-        css::util::URL aObjectMenuURL;
-        aObjectMenuURL.Complete = ".uno:ObjectMenue";
-        m_xURLTransformer->parseStrict( aObjectMenuURL );
-        css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( m_xFrame, css::uno::UNO_QUERY );
-        css::uno::Reference< css::frame::XDispatch > xDispatch( xDispatchProvider->queryDispatch( aObjectMenuURL, OUString(), 0 ) );
-        if ( xDispatch.is() )
-        {
-            xDispatch->addStatusListener( this, aObjectMenuURL );
-            xDispatch->removeStatusListener( this, aObjectMenuURL );
-        }
+        xDispatch->addStatusListener( this, aObjectMenuURL );
+        xDispatch->removeStatusListener( this, aObjectMenuURL );
     }
 }
 
@@ -503,29 +503,28 @@ void WindowListMenuController::itemActivated( const css::awt::MenuEvent& rEvent 
 
 void WindowListMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
 {
-    if ( rEvent.MenuId >= START_ITEMID_WINDOWLIST &&
-         rEvent.MenuId <= END_ITEMID_WINDOWLIST )
+    if ( rEvent.MenuId < START_ITEMID_WINDOWLIST || rEvent.MenuId > END_ITEMID_WINDOWLIST )
+        return;
+
+    // window list menu item selected
+    css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
+
+    sal_uInt16 nTaskId = START_ITEMID_WINDOWLIST;
+    css::uno::Reference< css::container::XIndexAccess > xList = xDesktop->getFrames();
+    sal_Int32 nCount = xList->getCount();
+    for ( sal_Int32 i=0; i<nCount; ++i )
     {
-        // window list menu item selected
-        css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
-
-        sal_uInt16 nTaskId = START_ITEMID_WINDOWLIST;
-        css::uno::Reference< css::container::XIndexAccess > xList = xDesktop->getFrames();
-        sal_Int32 nCount = xList->getCount();
-        for ( sal_Int32 i=0; i<nCount; ++i )
+        css::uno::Reference< css::frame::XFrame > xFrame;
+        xList->getByIndex(i) >>= xFrame;
+        if ( xFrame.is() && nTaskId == rEvent.MenuId )
         {
-            css::uno::Reference< css::frame::XFrame > xFrame;
-            xList->getByIndex(i) >>= xFrame;
-            if ( xFrame.is() && nTaskId == rEvent.MenuId )
-            {
-                VclPtr<vcl::Window> pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
-                pWin->GrabFocus();
-                pWin->ToTop( ToTopFlags::RestoreWhenMin );
-                break;
-            }
-
-            nTaskId++;
+            VclPtr<vcl::Window> pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+            pWin->GrabFocus();
+            pWin->ToTop( ToTopFlags::RestoreWhenMin );
+            break;
         }
+
+        nTaskId++;
     }
 }
 

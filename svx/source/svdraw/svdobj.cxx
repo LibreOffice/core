@@ -1788,24 +1788,24 @@ void SdrObject::SetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> pTextO
         SendUserCall(SdrUserCallType::Resize,aBoundRect0);
     }
 
-    if (getSdrModelFromSdrObject().IsUndoEnabled())
+    if (!getSdrModelFromSdrObject().IsUndoEnabled())
+        return;
+
+    // Don't do this during import.
+    SdrObject* pTopGroupObj = nullptr;
+    if (getParentSdrObjectFromSdrObject())
     {
-        // Don't do this during import.
-        SdrObject* pTopGroupObj = nullptr;
-        if (getParentSdrObjectFromSdrObject())
+        pTopGroupObj = getParentSdrObjectFromSdrObject();
+        while (pTopGroupObj->getParentSdrObjectFromSdrObject())
         {
-            pTopGroupObj = getParentSdrObjectFromSdrObject();
-            while (pTopGroupObj->getParentSdrObjectFromSdrObject())
-            {
-                pTopGroupObj = pTopGroupObj->getParentSdrObjectFromSdrObject();
-            }
+            pTopGroupObj = pTopGroupObj->getParentSdrObjectFromSdrObject();
         }
-        if (pTopGroupObj)
-        {
-            // A shape was modified, which is in a group shape. Empty the group shape's grab-bag,
-            // which potentially contains the old text of the shapes in case of diagrams.
-            pTopGroupObj->SetGrabBagItem(uno::makeAny(uno::Sequence<beans::PropertyValue>()));
-        }
+    }
+    if (pTopGroupObj)
+    {
+        // A shape was modified, which is in a group shape. Empty the group shape's grab-bag,
+        // which potentially contains the old text of the shapes in case of diagrams.
+        pTopGroupObj->SetGrabBagItem(uno::makeAny(uno::Sequence<beans::PropertyValue>()));
     }
 }
 

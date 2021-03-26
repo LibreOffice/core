@@ -744,24 +744,23 @@ public:
 
         // If outline level stands for heading level...
         const int currentLevel = pTextNode->GetAttrOutlineLevel();
-        if (currentLevel)
+        if (!currentLevel)
+            return;
+
+        // ... and if is bigger than previous by more than 1, warn.
+        if (currentLevel - m_prevLevel > 1)
         {
-            // ... and if is bigger than previous by more than 1, warn.
-            if (currentLevel - m_prevLevel > 1)
-            {
-                // Preparing and posting a warning.
-                OUString resultString = SwResId(STR_HEADING_ORDER);
-                resultString
-                    = resultString.replaceAll("%LEVEL_CURRENT%", OUString::number(currentLevel));
-                resultString
-                    = resultString.replaceAll("%LEVEL_PREV%", OUString::number(m_prevLevel));
+            // Preparing and posting a warning.
+            OUString resultString = SwResId(STR_HEADING_ORDER);
+            resultString
+                = resultString.replaceAll("%LEVEL_CURRENT%", OUString::number(currentLevel));
+            resultString = resultString.replaceAll("%LEVEL_PREV%", OUString::number(m_prevLevel));
 
-                lclAddIssue(m_rIssueCollection, resultString);
-            }
-
-            // Updating previous level.
-            m_prevLevel = currentLevel;
+            lclAddIssue(m_rIssueCollection, resultString);
         }
+
+        // Updating previous level.
+        m_prevLevel = currentLevel;
     }
 
 private:

@@ -712,17 +712,17 @@ void CompositeAlg::layoutShapeChildren(AlgAtom& rAlg, const ShapePtr& rShape,
     }
 
     // See if all vertical space is used or we have to center the content.
-    if (nVertMin >= 0 && nVertMin <= nVertMax && nVertMax <= rParent[XML_h])
+    if (!(nVertMin >= 0 && nVertMin <= nVertMax && nVertMax <= rParent[XML_h]))
+        return;
+
+    sal_Int32 nDiff = rParent[XML_h] - (nVertMax - nVertMin);
+    if (nDiff > 0)
     {
-        sal_Int32 nDiff = rParent[XML_h] - (nVertMax - nVertMin);
-        if (nDiff > 0)
+        for (auto& aCurrShape : rShape->getChildren())
         {
-            for (auto& aCurrShape : rShape->getChildren())
-            {
-                awt::Point aPosition = aCurrShape->getPosition();
-                aPosition.Y += nDiff / 2;
-                aCurrShape->setPosition(aPosition);
-            }
+            awt::Point aPosition = aCurrShape->getPosition();
+            aPosition.Y += nDiff / 2;
+            aCurrShape->setPosition(aPosition);
         }
     }
 }

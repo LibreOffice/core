@@ -850,22 +850,22 @@ void SAL_CALL NavElementToolBoxControl::statusChanged( const frame::FeatureState
         return;
 
     SolarMutexGuard aSolarMutexGuard;
-    if ( rEvent.FeatureURL.Path == "NavElement" )
-    {
-        if ( rEvent.IsEnabled )
-        {
-            m_pBox->set_sensitive(true);
-            m_pBox->UpdateBox();
-        }
-        else
-            m_pBox->set_sensitive(true);
+    if ( rEvent.FeatureURL.Path != "NavElement" )
+        return;
 
-        SwView* pView = GetActiveView();
-        if (pView && pView->GetViewFrame())
-        {
-            pView->GetViewFrame()->GetBindings().Invalidate(FN_SCROLL_NEXT);
-            pView->GetViewFrame()->GetBindings().Invalidate(FN_SCROLL_PREV);
-        }
+    if ( rEvent.IsEnabled )
+    {
+        m_pBox->set_sensitive(true);
+        m_pBox->UpdateBox();
+    }
+    else
+        m_pBox->set_sensitive(true);
+
+    SwView* pView = GetActiveView();
+    if (pView && pView->GetViewFrame())
+    {
+        pView->GetViewFrame()->GetBindings().Invalidate(FN_SCROLL_NEXT);
+        pView->GetViewFrame()->GetBindings().Invalidate(FN_SCROLL_PREV);
     }
 }
 

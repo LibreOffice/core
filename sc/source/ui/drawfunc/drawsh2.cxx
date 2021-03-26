@@ -311,69 +311,69 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
 
 static void setupFillColorForChart(SfxViewShell* pShell, SfxItemSet& rSet)
 {
-    if (pShell)
+    if (!pShell)
+        return;
+
+    SfxInPlaceClient* pIPClient = pShell->GetIPClient();
+    if (!pIPClient)
+        return;
+
+    const css::uno::Reference<::css::embed::XEmbeddedObject>& xEmbObj = pIPClient->GetObject();
+    if( !xEmbObj.is() )
+        return;
+
+    ::css::uno::Reference<::css::chart2::XChartDocument> xChart( xEmbObj->getComponent(), uno::UNO_QUERY );
+    if( !xChart.is() )
+        return;
+
+    css::uno::Reference<css::beans::XPropertySet> xPropSet = xChart->getPageBackground();
+    if (!xPropSet.is())
+        return;
+
+    css::uno::Reference<css::beans::XPropertySetInfo> xInfo(xPropSet->getPropertySetInfo());
+    if (!xInfo.is())
+        return;
+
+    if (xInfo->hasPropertyByName("FillColor"))
     {
-        SfxInPlaceClient* pIPClient = pShell->GetIPClient();
-        if (pIPClient)
-        {
-            const css::uno::Reference<::css::embed::XEmbeddedObject>& xEmbObj = pIPClient->GetObject();
-            if( xEmbObj.is() )
-            {
-                ::css::uno::Reference<::css::chart2::XChartDocument> xChart( xEmbObj->getComponent(), uno::UNO_QUERY );
-                if( xChart.is() )
-                {
-                    css::uno::Reference<css::beans::XPropertySet> xPropSet = xChart->getPageBackground();
-                    if (xPropSet.is())
-                    {
-                        css::uno::Reference<css::beans::XPropertySetInfo> xInfo(xPropSet->getPropertySetInfo());
-                        if (xInfo.is())
-                        {
-                            if (xInfo->hasPropertyByName("FillColor"))
-                            {
-                                sal_uInt32 nFillColor = 0;
-                                xPropSet->getPropertyValue("FillColor") >>= nFillColor;
+        sal_uInt32 nFillColor = 0;
+        xPropSet->getPropertyValue("FillColor") >>= nFillColor;
 
-                                XFillColorItem aFillColorItem("", Color(ColorTransparency, nFillColor));
-                                rSet.Put(aFillColorItem);
+        XFillColorItem aFillColorItem("", Color(ColorTransparency, nFillColor));
+        rSet.Put(aFillColorItem);
 
-                                if (comphelper::LibreOfficeKit::isActive())
-                                    pShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                                            (".uno:FillColor=" + std::to_string(nFillColor)).c_str());
-                            }
+        if (comphelper::LibreOfficeKit::isActive())
+            pShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                    (".uno:FillColor=" + std::to_string(nFillColor)).c_str());
+    }
 
-                            if (comphelper::LibreOfficeKit::isActive() && xInfo->hasPropertyByName("FillGradientName"))
-                            {
-                                OUString aGradientName;
-                                xPropSet->getPropertyValue("FillGradientName") >>= aGradientName;
+    if (!(comphelper::LibreOfficeKit::isActive() && xInfo->hasPropertyByName("FillGradientName")))
+        return;
 
-                                ::css::uno::Reference< ::css::frame::XController > xChartController = xChart->getCurrentController();
-                                if( xChartController.is() )
-                                {
-                                    css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xChartController->getModel(), css::uno::UNO_QUERY);
+    OUString aGradientName;
+    xPropSet->getPropertyValue("FillGradientName") >>= aGradientName;
 
-                                    if (xFact.is())
-                                    {
-                                        css::uno::Reference<css::container::XNameAccess> xNameAccess(
-                                            xFact->createInstance("com.sun.star.drawing.GradientTable"), css::uno::UNO_QUERY);
+    ::css::uno::Reference< ::css::frame::XController > xChartController = xChart->getCurrentController();
+    if( !xChartController.is() )
+        return;
 
-                                        if (xNameAccess.is() && xNameAccess->hasByName(aGradientName))
-                                        {
-                                            css::uno::Any aAny = xNameAccess->getByName(aGradientName);
+    css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xChartController->getModel(), css::uno::UNO_QUERY);
 
-                                            XFillGradientItem aItem;
-                                            aItem.SetName(aGradientName);
-                                            aItem.PutValue(aAny, MID_FILLGRADIENT);
+    if (!xFact.is())
+        return;
 
-                                            rSet.Put(aItem);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    css::uno::Reference<css::container::XNameAccess> xNameAccess(
+        xFact->createInstance("com.sun.star.drawing.GradientTable"), css::uno::UNO_QUERY);
+
+    if (xNameAccess.is() && xNameAccess->hasByName(aGradientName))
+    {
+        css::uno::Any aAny = xNameAccess->getByName(aGradientName);
+
+        XFillGradientItem aItem;
+        aItem.SetName(aGradientName);
+        aItem.PutValue(aAny, MID_FILLGRADIENT);
+
+        rSet.Put(aItem);
     }
 }
 

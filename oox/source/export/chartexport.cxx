@@ -984,104 +984,104 @@ void ChartExport::exportExternalData( const Reference< css::chart::XChartDocumen
 void ChartExport::exportAdditionalShapes( const Reference< css::chart::XChartDocument >& xChartDoc )
 {
     Reference< beans::XPropertySet > xDocPropSet(xChartDoc, uno::UNO_QUERY);
-    if (xDocPropSet.is())
+    if (!xDocPropSet.is())
+        return;
+
+    css::uno::Reference< css::drawing::XShapes > mxAdditionalShapes;
+    // get a sequence of non-chart shapes
+    try
     {
-        css::uno::Reference< css::drawing::XShapes > mxAdditionalShapes;
-        // get a sequence of non-chart shapes
-        try
+        Any aShapesAny = xDocPropSet->getPropertyValue("AdditionalShapes");
+        if( (aShapesAny >>= mxAdditionalShapes) && mxAdditionalShapes.is() )
         {
-            Any aShapesAny = xDocPropSet->getPropertyValue("AdditionalShapes");
-            if( (aShapesAny >>= mxAdditionalShapes) && mxAdditionalShapes.is() )
+            OUString sId;
+            const char* sFullPath = nullptr;
+            const char* sRelativePath = nullptr;
+            sal_Int32 nDrawing = getNewDrawingUniqueId();
+
+            switch (GetDocumentType())
             {
-                OUString sId;
-                const char* sFullPath = nullptr;
-                const char* sRelativePath = nullptr;
-                sal_Int32 nDrawing = getNewDrawingUniqueId();
-
-                switch (GetDocumentType())
+                case DOCUMENT_DOCX:
                 {
-                    case DOCUMENT_DOCX:
-                    {
-                        sFullPath = "word/drawings/drawing";
-                        sRelativePath = "../drawings/drawing";
-                        break;
-                    }
-                    case DOCUMENT_PPTX:
-                    {
-                        sFullPath = "ppt/drawings/drawing";
-                        sRelativePath = "../drawings/drawing";
-                        break;
-                    }
-                    case DOCUMENT_XLSX:
-                    {
-                        sFullPath = "xl/drawings/drawing";
-                        sRelativePath = "../drawings/drawing";
-                        break;
-                    }
-                    default:
-                    {
-                        sFullPath = "drawings/drawing";
-                        sRelativePath = "drawings/drawing";
-                        break;
-                    }
+                    sFullPath = "word/drawings/drawing";
+                    sRelativePath = "../drawings/drawing";
+                    break;
                 }
-                OUString sFullStream = OUStringBuffer()
-                    .appendAscii(sFullPath)
-                    .append(nDrawing)
-                    .append(".xml")
-                    .makeStringAndClear();
-                OUString sRelativeStream = OUStringBuffer()
-                    .appendAscii(sRelativePath)
-                    .append(nDrawing)
-                    .append(".xml")
-                    .makeStringAndClear();
-
-                sax_fastparser::FSHelperPtr pDrawing = CreateOutputStream(
-                    sFullStream,
-                    sRelativeStream,
-                    GetFS()->getOutputStream(),
-                    "application/vnd.openxmlformats-officedocument.drawingml.chartshapes+xml",
-                    OUStringToOString(oox::getRelationship(Relationship::CHARTUSERSHAPES), RTL_TEXTENCODING_UTF8).getStr(),
-                    &sId);
-
-                GetFS()->singleElementNS(XML_c, XML_userShapes, FSNS(XML_r, XML_id), sId);
-
-                XmlFilterBase* pFB = GetFB();
-                pDrawing->startElement(FSNS(XML_c, XML_userShapes),
-                    FSNS(XML_xmlns, XML_cdr), pFB->getNamespaceURL(OOX_NS(dmlChartDr)),
-                    FSNS(XML_xmlns, XML_a), pFB->getNamespaceURL(OOX_NS(dml)),
-                    FSNS(XML_xmlns, XML_c), pFB->getNamespaceURL(OOX_NS(dmlChart)));
-
-                const sal_Int32 nShapeCount(mxAdditionalShapes->getCount());
-                for (sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++)
+                case DOCUMENT_PPTX:
                 {
-                    Reference< drawing::XShape > xShape;
-                    mxAdditionalShapes->getByIndex(nShapeId) >>= xShape;
-                    SAL_WARN_IF(!xShape.is(), "xmloff.chart", "Shape without an XShape?");
-                    if (!xShape.is())
-                        continue;
-
-                    // TODO: absSizeAnchor: we import both (absSizeAnchor and relSizeAnchor), but there is no essential difference between them.
-                    pDrawing->startElement(FSNS(XML_cdr, XML_relSizeAnchor));
-                    uno::Reference< beans::XPropertySet > xShapeProperties(xShape, uno::UNO_QUERY);
-                    if( xShapeProperties.is() )
-                    {
-                        Reference<embed::XVisualObject> xVisObject(mxChartModel, uno::UNO_QUERY);
-                        awt::Size aPageSize = xVisObject->getVisualAreaSize(embed::Aspects::MSOLE_CONTENT);
-                        WriteFromTo( xShape, aPageSize, pDrawing );
-
-                        ShapeExport aExport(XML_cdr, pDrawing, nullptr, GetFB(), GetDocumentType());
-                        aExport.WriteShape(xShape);
-                    }
-                    pDrawing->endElement(FSNS(XML_cdr, XML_relSizeAnchor));
+                    sFullPath = "ppt/drawings/drawing";
+                    sRelativePath = "../drawings/drawing";
+                    break;
                 }
-                pDrawing->endElement(FSNS(XML_c, XML_userShapes));
+                case DOCUMENT_XLSX:
+                {
+                    sFullPath = "xl/drawings/drawing";
+                    sRelativePath = "../drawings/drawing";
+                    break;
+                }
+                default:
+                {
+                    sFullPath = "drawings/drawing";
+                    sRelativePath = "drawings/drawing";
+                    break;
+                }
             }
+            OUString sFullStream = OUStringBuffer()
+                .appendAscii(sFullPath)
+                .append(nDrawing)
+                .append(".xml")
+                .makeStringAndClear();
+            OUString sRelativeStream = OUStringBuffer()
+                .appendAscii(sRelativePath)
+                .append(nDrawing)
+                .append(".xml")
+                .makeStringAndClear();
+
+            sax_fastparser::FSHelperPtr pDrawing = CreateOutputStream(
+                sFullStream,
+                sRelativeStream,
+                GetFS()->getOutputStream(),
+                "application/vnd.openxmlformats-officedocument.drawingml.chartshapes+xml",
+                OUStringToOString(oox::getRelationship(Relationship::CHARTUSERSHAPES), RTL_TEXTENCODING_UTF8).getStr(),
+                &sId);
+
+            GetFS()->singleElementNS(XML_c, XML_userShapes, FSNS(XML_r, XML_id), sId);
+
+            XmlFilterBase* pFB = GetFB();
+            pDrawing->startElement(FSNS(XML_c, XML_userShapes),
+                FSNS(XML_xmlns, XML_cdr), pFB->getNamespaceURL(OOX_NS(dmlChartDr)),
+                FSNS(XML_xmlns, XML_a), pFB->getNamespaceURL(OOX_NS(dml)),
+                FSNS(XML_xmlns, XML_c), pFB->getNamespaceURL(OOX_NS(dmlChart)));
+
+            const sal_Int32 nShapeCount(mxAdditionalShapes->getCount());
+            for (sal_Int32 nShapeId = 0; nShapeId < nShapeCount; nShapeId++)
+            {
+                Reference< drawing::XShape > xShape;
+                mxAdditionalShapes->getByIndex(nShapeId) >>= xShape;
+                SAL_WARN_IF(!xShape.is(), "xmloff.chart", "Shape without an XShape?");
+                if (!xShape.is())
+                    continue;
+
+                // TODO: absSizeAnchor: we import both (absSizeAnchor and relSizeAnchor), but there is no essential difference between them.
+                pDrawing->startElement(FSNS(XML_cdr, XML_relSizeAnchor));
+                uno::Reference< beans::XPropertySet > xShapeProperties(xShape, uno::UNO_QUERY);
+                if( xShapeProperties.is() )
+                {
+                    Reference<embed::XVisualObject> xVisObject(mxChartModel, uno::UNO_QUERY);
+                    awt::Size aPageSize = xVisObject->getVisualAreaSize(embed::Aspects::MSOLE_CONTENT);
+                    WriteFromTo( xShape, aPageSize, pDrawing );
+
+                    ShapeExport aExport(XML_cdr, pDrawing, nullptr, GetFB(), GetDocumentType());
+                    aExport.WriteShape(xShape);
+                }
+                pDrawing->endElement(FSNS(XML_cdr, XML_relSizeAnchor));
+            }
+            pDrawing->endElement(FSNS(XML_c, XML_userShapes));
         }
-        catch (const uno::Exception&)
-        {
-            TOOLS_INFO_EXCEPTION("xmloff.chart", "AdditionalShapes not found");
-        }
+    }
+    catch (const uno::Exception&)
+    {
+        TOOLS_INFO_EXCEPTION("xmloff.chart", "AdditionalShapes not found");
     }
 }
 

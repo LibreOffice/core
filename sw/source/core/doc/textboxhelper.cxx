@@ -168,21 +168,21 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
     // TODO: Text dialog attr setting to frame
 
     // Check if the shape had text before and move it to the new textframe
-    if (bCopyText && !sCopyableText.isEmpty())
+    if (!bCopyText || sCopyableText.isEmpty())
+        return;
+
+    auto pSdrShape = pShape->FindRealSdrObject();
+    if (pSdrShape)
     {
-        auto pSdrShape = pShape->FindRealSdrObject();
-        if (pSdrShape)
-        {
-            auto pSourceText = dynamic_cast<SdrTextObj*>(pSdrShape);
-            uno::Reference<text::XTextRange> xDestText(xRealTextFrame, uno::UNO_QUERY);
+        auto pSourceText = dynamic_cast<SdrTextObj*>(pSdrShape);
+        uno::Reference<text::XTextRange> xDestText(xRealTextFrame, uno::UNO_QUERY);
 
-            xDestText->setString(sCopyableText);
+        xDestText->setString(sCopyableText);
 
-            if (pSourceText)
-                pSourceText->SetText(OUString());
+        if (pSourceText)
+            pSourceText->SetText(OUString());
 
-            pShape->GetDoc()->getIDocumentState().SetModified();
-        }
+        pShape->GetDoc()->getIDocumentState().SetModified();
     }
 }
 

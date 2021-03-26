@@ -1087,39 +1087,39 @@ IMPL_LINK(ObjectInspectorTreeHandler, NotebookEnterPage, const OString&, rPageId
     mpObjectInspectorWidgets->mpTextView->hide();
 
     uno::Any aAny = maInspectionStack.back();
-    if (aAny.hasValue())
+    if (!aAny.hasValue())
+        return;
+
+    uno::Reference<uno::XInterface> xInterface(aAny, uno::UNO_QUERY);
+    if (rPageId == "object_inspector_interfaces_tab")
     {
-        uno::Reference<uno::XInterface> xInterface(aAny, uno::UNO_QUERY);
-        if (rPageId == "object_inspector_interfaces_tab")
-        {
-            mpObjectInspectorWidgets->mpInterfacesTreeView->freeze();
-            clearAll(mpObjectInspectorWidgets->mpInterfacesTreeView);
-            appendInterfaces(xInterface);
-            mpObjectInspectorWidgets->mpInterfacesTreeView->thaw();
-        }
-        else if (rPageId == "object_inspector_services_tab")
-        {
-            mpObjectInspectorWidgets->mpServicesTreeView->freeze();
-            clearAll(mpObjectInspectorWidgets->mpServicesTreeView);
-            appendServices(xInterface);
-            mpObjectInspectorWidgets->mpServicesTreeView->thaw();
-        }
-        else if (rPageId == "object_inspector_properties_tab")
-        {
-            mbPanedResetSize = true;
-            mpObjectInspectorWidgets->mpPropertiesTreeView->freeze();
-            clearAll(mpObjectInspectorWidgets->mpPropertiesTreeView);
-            appendProperties(xInterface);
-            mpObjectInspectorWidgets->mpPropertiesTreeView->thaw();
-            mpObjectInspectorWidgets->mpTextView->show();
-        }
-        else if (rPageId == "object_inspector_methods_tab")
-        {
-            mpObjectInspectorWidgets->mpMethodsTreeView->freeze();
-            clearAll(mpObjectInspectorWidgets->mpMethodsTreeView);
-            appendMethods(xInterface);
-            mpObjectInspectorWidgets->mpMethodsTreeView->thaw();
-        }
+        mpObjectInspectorWidgets->mpInterfacesTreeView->freeze();
+        clearAll(mpObjectInspectorWidgets->mpInterfacesTreeView);
+        appendInterfaces(xInterface);
+        mpObjectInspectorWidgets->mpInterfacesTreeView->thaw();
+    }
+    else if (rPageId == "object_inspector_services_tab")
+    {
+        mpObjectInspectorWidgets->mpServicesTreeView->freeze();
+        clearAll(mpObjectInspectorWidgets->mpServicesTreeView);
+        appendServices(xInterface);
+        mpObjectInspectorWidgets->mpServicesTreeView->thaw();
+    }
+    else if (rPageId == "object_inspector_properties_tab")
+    {
+        mbPanedResetSize = true;
+        mpObjectInspectorWidgets->mpPropertiesTreeView->freeze();
+        clearAll(mpObjectInspectorWidgets->mpPropertiesTreeView);
+        appendProperties(xInterface);
+        mpObjectInspectorWidgets->mpPropertiesTreeView->thaw();
+        mpObjectInspectorWidgets->mpTextView->show();
+    }
+    else if (rPageId == "object_inspector_methods_tab")
+    {
+        mpObjectInspectorWidgets->mpMethodsTreeView->freeze();
+        clearAll(mpObjectInspectorWidgets->mpMethodsTreeView);
+        appendMethods(xInterface);
+        mpObjectInspectorWidgets->mpMethodsTreeView->thaw();
     }
 }
 

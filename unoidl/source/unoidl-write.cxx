@@ -419,28 +419,29 @@ void mapCursor(
     rtl::Reference< unoidl::MapCursor > const & cursor,
     std::map< OUString, Item > & map)
 {
-    if (cursor.is()) {
-        for (;;) {
-            OUString name;
-            rtl::Reference< unoidl::Entity > ent(cursor->getNext(&name));
-            if (!ent.is()) {
-                break;
-            }
-            std::pair< std::map< OUString, Item >::iterator, bool > i(
-                map.insert(std::make_pair(name, Item(ent))));
-            if (!i.second) {
-                std::cout << "Duplicate name \"" << name << '"' << std::endl;
-                std::exit(EXIT_FAILURE);
-            }
-            if (i.first->second.entity->getSort()
-                == unoidl::Entity::SORT_MODULE)
-            {
-                mapCursor(
-                    rtl::Reference< unoidl::ModuleEntity >(
-                        static_cast< unoidl::ModuleEntity * >(
-                            i.first->second.entity.get()))->createCursor(),
-                    i.first->second.module);
-            }
+    if (!cursor.is())
+        return;
+
+    for (;;) {
+        OUString name;
+        rtl::Reference< unoidl::Entity > ent(cursor->getNext(&name));
+        if (!ent.is()) {
+            break;
+        }
+        std::pair< std::map< OUString, Item >::iterator, bool > i(
+            map.insert(std::make_pair(name, Item(ent))));
+        if (!i.second) {
+            std::cout << "Duplicate name \"" << name << '"' << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+        if (i.first->second.entity->getSort()
+            == unoidl::Entity::SORT_MODULE)
+        {
+            mapCursor(
+                rtl::Reference< unoidl::ModuleEntity >(
+                    static_cast< unoidl::ModuleEntity * >(
+                        i.first->second.entity.get()))->createCursor(),
+                i.first->second.module);
         }
     }
 }

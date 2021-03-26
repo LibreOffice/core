@@ -563,21 +563,21 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl, SvxPresetListBox*, void)
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/querydeletebitmapdialog.ui"));
     std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("AskDelBitmapDialog"));
 
-    if (xQueryBox->run() == RET_YES)
-    {
-        sal_uInt16 nNextId = m_xBitmapLB->GetItemId(nPos + 1);
-        if (!nNextId)
-            nNextId = m_xBitmapLB->GetItemId(nPos - 1);
+    if (xQueryBox->run() != RET_YES)
+        return;
 
-        m_pBitmapList->Remove( static_cast<sal_uInt16>(nPos) );
-        m_xBitmapLB->RemoveItem( nId );
+    sal_uInt16 nNextId = m_xBitmapLB->GetItemId(nPos + 1);
+    if (!nNextId)
+        nNextId = m_xBitmapLB->GetItemId(nPos - 1);
 
-        m_xBitmapLB->SelectItem(nNextId);
+    m_pBitmapList->Remove( static_cast<sal_uInt16>(nPos) );
+    m_xBitmapLB->RemoveItem( nId );
 
-        m_aCtlBitmapPreview.Invalidate();
-        ModifyBitmapHdl(m_xBitmapLB.get());
-        *m_pnBitmapListState |= ChangeType::MODIFIED;
-    }
+    m_xBitmapLB->SelectItem(nNextId);
+
+    m_aCtlBitmapPreview.Invalidate();
+    ModifyBitmapHdl(m_xBitmapLB.get());
+    *m_pnBitmapListState |= ChangeType::MODIFIED;
 }
 
 IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapSizeHdl, weld::MetricSpinButton&, void )

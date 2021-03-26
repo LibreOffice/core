@@ -932,8 +932,10 @@ namespace
             SAL_INFO("svtools", "RESERVED3");
         if (rIn[vcl::UnicodeCoverage::RESERVED4])
             SAL_INFO("svtools", "RESERVED4");
-        if (rIn[vcl::UnicodeCoverage::RESERVED5])
-            SAL_INFO("svtools", "RESERVED5");
+        if (!(rIn[vcl::UnicodeCoverage::RESERVED5]))
+            return;
+
+        SAL_INFO("svtools", "RESERVED5");
     }
 
     void lcl_dump_codepage_coverage(const std::optional<std::bitset<vcl::CodePageCoverage::MAX_CP_ENUM>> &roIn)
@@ -1009,8 +1011,10 @@ namespace
             SAL_INFO("svtools", "CP780");
         if (rIn[vcl::CodePageCoverage::CP850])
             SAL_INFO("svtools", "CP850");
-        if (rIn[vcl::CodePageCoverage::CP437])
-            SAL_INFO("svtools", "CP437");
+        if (!(rIn[vcl::CodePageCoverage::CP437]))
+            return;
+
+        SAL_INFO("svtools", "CP437");
     }
 #endif
 

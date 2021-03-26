@@ -1197,22 +1197,22 @@ void SwSectionNode::DelFrames(SwRootFrame const*const /*FIXME TODO*/, bool const
     // If the Area is within a Fly or TableBox, we can only hide it if
     // there is more Content which has Frames.
     // Or else the Fly/TableBox Frame does not have a Lower!
-    if (!bForce)
+    if (bForce)
+        return;
+
+    SwNodeIndex aIdx( *this );
+    if( !SwNodes::GoPrevSection( &aIdx, true, false ) ||
+        !CheckNodesRange( *this, aIdx, true ) ||
+        // #i21457#
+        !lcl_IsInSameTableBox( rNds, *this, true ))
     {
-        SwNodeIndex aIdx( *this );
-        if( !SwNodes::GoPrevSection( &aIdx, true, false ) ||
-            !CheckNodesRange( *this, aIdx, true ) ||
+        aIdx = *EndOfSectionNode();
+        if( !rNds.GoNextSection( &aIdx, true, false ) ||
+            !CheckNodesRange( *EndOfSectionNode(), aIdx, true ) ||
             // #i21457#
-            !lcl_IsInSameTableBox( rNds, *this, true ))
+            !lcl_IsInSameTableBox( rNds, *EndOfSectionNode(), false ))
         {
-            aIdx = *EndOfSectionNode();
-            if( !rNds.GoNextSection( &aIdx, true, false ) ||
-                !CheckNodesRange( *EndOfSectionNode(), aIdx, true ) ||
-                // #i21457#
-                !lcl_IsInSameTableBox( rNds, *EndOfSectionNode(), false ))
-            {
-                m_pSection->m_Data.SetHiddenFlag(false);
-            }
+            m_pSection->m_Data.SetHiddenFlag(false);
         }
     }
 }

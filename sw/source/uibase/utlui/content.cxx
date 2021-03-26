@@ -3165,34 +3165,34 @@ void SwContentTree::HideTree()
 static void lcl_SelectByContentTypeAndName(SwContentTree* pThis, weld::TreeView& rContentTree,
                                            std::u16string_view rContentTypeName, std::u16string_view rName)
 {
-    if (!rName.empty())
+    if (rName.empty())
+        return;
+
+    // find content type entry
+    std::unique_ptr<weld::TreeIter> xIter(rContentTree.make_iterator());
+    bool bFoundEntry = rContentTree.get_iter_first(*xIter);
+    while (bFoundEntry && rContentTypeName != rContentTree.get_text(*xIter))
+        bFoundEntry = rContentTree.iter_next_sibling(*xIter);
+    // find content type content entry and select it
+    if (bFoundEntry)
     {
-        // find content type entry
-        std::unique_ptr<weld::TreeIter> xIter(rContentTree.make_iterator());
-        bool bFoundEntry = rContentTree.get_iter_first(*xIter);
-        while (bFoundEntry && rContentTypeName != rContentTree.get_text(*xIter))
-            bFoundEntry = rContentTree.iter_next_sibling(*xIter);
-        // find content type content entry and select it
-        if (bFoundEntry)
+        rContentTree.expand_row(*xIter); // assure content type entry is expanded
+        while (rContentTree.iter_next(*xIter) && lcl_IsContent(*xIter, rContentTree))
         {
-            rContentTree.expand_row(*xIter); // assure content type entry is expanded
-            while (rContentTree.iter_next(*xIter) && lcl_IsContent(*xIter, rContentTree))
+            if (rName == rContentTree.get_text(*xIter))
             {
-                if (rName == rContentTree.get_text(*xIter))
+                // get first selected for comparison
+                std::unique_ptr<weld::TreeIter> xFirstSelected(rContentTree.make_iterator());
+                if (!rContentTree.get_selected(xFirstSelected.get()))
+                    xFirstSelected.reset();
+                if (rContentTree.count_selected_rows() != 1 ||
+                        rContentTree.iter_compare(*xIter, *xFirstSelected) != 0)
                 {
-                    // get first selected for comparison
-                    std::unique_ptr<weld::TreeIter> xFirstSelected(rContentTree.make_iterator());
-                    if (!rContentTree.get_selected(xFirstSelected.get()))
-                        xFirstSelected.reset();
-                    if (rContentTree.count_selected_rows() != 1 ||
-                            rContentTree.iter_compare(*xIter, *xFirstSelected) != 0)
-                    {
-                        // unselect all entries and make passed entry visible and selected
-                        rContentTree.set_cursor(*xIter);
-                        pThis->Select();
-                    }
-                    break;
+                    // unselect all entries and make passed entry visible and selected
+                    rContentTree.set_cursor(*xIter);
+                    pThis->Select();
                 }
+                break;
             }
         }
     }
@@ -3405,41 +3405,41 @@ void SwContentTree::SelectOutlinesWithSelection()
         }
     } while (pCursor && pCursor != pFirstCursor);
 
-    if (!aOutlinePositions.empty())
+    if (aOutlinePositions.empty())
+        return;
+
+    // remove duplicates before selecting
+    aOutlinePositions.erase(std::unique(aOutlinePositions.begin(), aOutlinePositions.end()),
+                            aOutlinePositions.end());
+
+    m_xTreeView->unselect_all();
+
+    for (auto nOutlinePosition : aOutlinePositions)
     {
-        // remove duplicates before selecting
-        aOutlinePositions.erase(std::unique(aOutlinePositions.begin(), aOutlinePositions.end()),
-                                aOutlinePositions.end());
-
-        m_xTreeView->unselect_all();
-
-        for (auto nOutlinePosition : aOutlinePositions)
-        {
-            m_xTreeView->all_foreach([this, nOutlinePosition](const weld::TreeIter& rEntry){
-                if (lcl_IsContent(rEntry, *m_xTreeView) &&
-                        reinterpret_cast<SwContent*>(
-                        m_xTreeView->get_id(rEntry).toInt64())->GetParent()->GetType() ==
-                        ContentTypeId::OUTLINE)
+        m_xTreeView->all_foreach([this, nOutlinePosition](const weld::TreeIter& rEntry){
+            if (lcl_IsContent(rEntry, *m_xTreeView) &&
+                    reinterpret_cast<SwContent*>(
+                    m_xTreeView->get_id(rEntry).toInt64())->GetParent()->GetType() ==
+                    ContentTypeId::OUTLINE)
+            {
+                if (reinterpret_cast<SwOutlineContent*>(
+                        m_xTreeView->get_id(rEntry).toInt64())->GetOutlinePos() ==
+                        nOutlinePosition)
                 {
-                    if (reinterpret_cast<SwOutlineContent*>(
-                            m_xTreeView->get_id(rEntry).toInt64())->GetOutlinePos() ==
-                            nOutlinePosition)
-                    {
-                        std::unique_ptr<weld::TreeIter> xParent =
-                                m_xTreeView->make_iterator(&rEntry);
-                        if (m_xTreeView->iter_parent(*xParent) &&
-                                !m_xTreeView->get_row_expanded(*xParent))
-                            m_xTreeView->expand_row(*xParent);
-                        m_xTreeView->select(rEntry);
-                        return true;
-                    }
+                    std::unique_ptr<weld::TreeIter> xParent =
+                            m_xTreeView->make_iterator(&rEntry);
+                    if (m_xTreeView->iter_parent(*xParent) &&
+                            !m_xTreeView->get_row_expanded(*xParent))
+                        m_xTreeView->expand_row(*xParent);
+                    m_xTreeView->select(rEntry);
+                    return true;
                 }
-                return false;
-            });
-        }
-
-        Select();
+            }
+            return false;
+        });
     }
+
+    Select();
 }
 
 void SwContentTree::MoveOutline(SwOutlineNodes::size_type nTargetPos)

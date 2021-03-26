@@ -725,63 +725,63 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
     aDescProps.setProperty( PROP_UseRegularExpressions, bUseRegExp );
 
     // sort
-    if (!maSortConditions.empty())
+    if (maSortConditions.empty())
+        return;
+
+    const SortConditionVector::value_type& xSortConditionPointer = *maSortConditions.begin();
+    const SortCondition& rSorConditionLoaded = *xSortConditionPointer;
+
+    ScSortParam aParam;
+    aParam.bUserDef = false;
+    aParam.nUserIndex = 0;
+    aParam.bByRow = false;
+
+    ScUserList* pUserList = ScGlobal::GetUserList();
+    if (!rSorConditionLoaded.maSortCustomList.isEmpty())
     {
-        const SortConditionVector::value_type& xSortConditionPointer = *maSortConditions.begin();
-        const SortCondition& rSorConditionLoaded = *xSortConditionPointer;
-
-        ScSortParam aParam;
-        aParam.bUserDef = false;
-        aParam.nUserIndex = 0;
-        aParam.bByRow = false;
-
-        ScUserList* pUserList = ScGlobal::GetUserList();
-        if (!rSorConditionLoaded.maSortCustomList.isEmpty())
+        for (size_t i=0; pUserList && i < pUserList->size(); i++)
         {
-            for (size_t i=0; pUserList && i < pUserList->size(); i++)
+            const OUString aEntry((*pUserList)[i].GetString());
+            if (aEntry.equalsIgnoreAsciiCase(rSorConditionLoaded.maSortCustomList))
             {
-                const OUString aEntry((*pUserList)[i].GetString());
-                if (aEntry.equalsIgnoreAsciiCase(rSorConditionLoaded.maSortCustomList))
-                {
-                    aParam.bUserDef = true;
-                    aParam.nUserIndex = i;
-                    break;
-                }
+                aParam.bUserDef = true;
+                aParam.nUserIndex = i;
+                break;
             }
         }
+    }
 
-        if (!aParam.bUserDef)
+    if (!aParam.bUserDef)
+    {
+        pUserList->push_back(new ScUserListData(rSorConditionLoaded.maSortCustomList));
+        aParam.bUserDef = true;
+        aParam.nUserIndex = pUserList->size()-1;
+    }
+
+    // set sort parameter if we have detected it
+    if (aParam.bUserDef)
+    {
+        SCCOLROW nStartPos = aParam.bByRow ? maRange.aStart.Col() : maRange.aStart.Row();
+        if (rSorConditionLoaded.mbDescending)
         {
-            pUserList->push_back(new ScUserListData(rSorConditionLoaded.maSortCustomList));
-            aParam.bUserDef = true;
-            aParam.nUserIndex = pUserList->size()-1;
+            // descending sort - need to enable 1st SortParam slot
+            assert(aParam.GetSortKeyCount() == DEFSORT);
+
+            aParam.maKeyState[0].bDoSort = true;
+            aParam.maKeyState[0].bAscending = false;
+            aParam.maKeyState[0].nField += nStartPos;
         }
 
-        // set sort parameter if we have detected it
-        if (aParam.bUserDef)
-        {
-            SCCOLROW nStartPos = aParam.bByRow ? maRange.aStart.Col() : maRange.aStart.Row();
-            if (rSorConditionLoaded.mbDescending)
-            {
-                // descending sort - need to enable 1st SortParam slot
-                assert(aParam.GetSortKeyCount() == DEFSORT);
+        ScDocument& rDoc = getScDocument();
+        ScDBData* pDBData = rDoc.GetDBAtArea(
+            nSheet,
+            maRange.aStart.Col(), maRange.aStart.Row(),
+            maRange.aEnd.Col(), maRange.aEnd.Row());
 
-                aParam.maKeyState[0].bDoSort = true;
-                aParam.maKeyState[0].bAscending = false;
-                aParam.maKeyState[0].nField += nStartPos;
-            }
-
-            ScDocument& rDoc = getScDocument();
-            ScDBData* pDBData = rDoc.GetDBAtArea(
-                nSheet,
-                maRange.aStart.Col(), maRange.aStart.Row(),
-                maRange.aEnd.Col(), maRange.aEnd.Row());
-
-            if (pDBData)
-                pDBData->SetSortParam(aParam);
-            else
-                OSL_FAIL("AutoFilter::finalizeImport(): cannot find matching DBData");
-        }
+        if (pDBData)
+            pDBData->SetSortParam(aParam);
+        else
+            OSL_FAIL("AutoFilter::finalizeImport(): cannot find matching DBData");
     }
 }
 

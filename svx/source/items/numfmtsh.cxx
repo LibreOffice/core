@@ -192,21 +192,21 @@ void SvxNumberFormatShell::LanguageChanged(LanguageType eLangType, short& rFmtSe
 void SvxNumberFormatShell::FormatChanged(sal_uInt16 nFmtLbPos, OUString& rPreviewStr,
                                          const Color*& rpFontColor)
 {
-    if (static_cast<size_t>(nFmtLbPos) < aCurEntryList.size())
-    {
-        nCurFormatKey = aCurEntryList[nFmtLbPos];
+    if (static_cast<size_t>(nFmtLbPos) >= aCurEntryList.size())
+        return;
 
-        if (nCurFormatKey != NUMBERFORMAT_ENTRY_NOT_FOUND)
+    nCurFormatKey = aCurEntryList[nFmtLbPos];
+
+    if (nCurFormatKey != NUMBERFORMAT_ENTRY_NOT_FOUND)
+    {
+        GetPreviewString_Impl(rPreviewStr, rpFontColor);
+    }
+    else if (nCurCategory == SvNumFormatType::CURRENCY)
+    {
+        if (static_cast<size_t>(nFmtLbPos) < aCurrencyFormatList.size())
         {
-            GetPreviewString_Impl(rPreviewStr, rpFontColor);
-        }
-        else if (nCurCategory == SvNumFormatType::CURRENCY)
-        {
-            if (static_cast<size_t>(nFmtLbPos) < aCurrencyFormatList.size())
-            {
-                MakePrevStringFromVal(aCurrencyFormatList[nFmtLbPos], rPreviewStr, rpFontColor,
-                                      nValNum);
-            }
+            MakePrevStringFromVal(aCurrencyFormatList[nFmtLbPos], rPreviewStr, rpFontColor,
+                                  nValNum);
         }
     }
 }

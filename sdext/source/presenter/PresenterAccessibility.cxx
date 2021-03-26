@@ -1105,18 +1105,17 @@ void PresenterAccessible::AccessibleObject::UpdateState(
     const bool bValue)
 {
     const sal_uInt32 nStateMask (AccessibleStateSet::GetStateMask(nState));
-    if (((mnStateSet & nStateMask)!=0) != bValue)
+    if (((mnStateSet & nStateMask) != 0) == bValue)
+        return;
+    if (bValue)
     {
-        if (bValue)
-        {
-            mnStateSet |= nStateMask;
-            FireAccessibleEvent(AccessibleEventId::STATE_CHANGED, Any(), Any(nState));
-        }
-        else
-        {
-            mnStateSet &= ~nStateMask;
-            FireAccessibleEvent(AccessibleEventId::STATE_CHANGED, Any(nState), Any());
-        }
+        mnStateSet |= nStateMask;
+        FireAccessibleEvent(AccessibleEventId::STATE_CHANGED, Any(), Any(nState));
+    }
+    else
+    {
+        mnStateSet &= ~nStateMask;
+        FireAccessibleEvent(AccessibleEventId::STATE_CHANGED, Any(nState), Any());
     }
 }
 

@@ -356,97 +356,97 @@ namespace emfio
         maCurrentMetaFontAction.clear();
         maAlternativeFontScales.clear();
 
-        if(rNewMetaFontAction.is())
+        if(!rNewMetaFontAction.is())
+            return;
+
+        // check 1st criteria for FontScale active. We usually write this,
+        // so this will already sort out most situations
+        const vcl::Font& rCandidate(rNewMetaFontAction->GetFont());
+
+        if(0 != rCandidate.GetAverageFontWidth())
         {
-            // check 1st criteria for FontScale active. We usually write this,
-            // so this will already sort out most situations
-            const vcl::Font& rCandidate(rNewMetaFontAction->GetFont());
+            const tools::Long nUnscaledAverageFontWidth(rCandidate.GetOrCalculateAverageFontWidth());
 
-            if(0 != rCandidate.GetAverageFontWidth())
+            // check 2nd (system-dependent) criteria for FontScale
+            if(nUnscaledAverageFontWidth != rCandidate.GetFontHeight())
             {
-                const tools::Long nUnscaledAverageFontWidth(rCandidate.GetOrCalculateAverageFontWidth());
-
-                // check 2nd (system-dependent) criteria for FontScale
-                if(nUnscaledAverageFontWidth != rCandidate.GetFontHeight())
-                {
-                    // FontScale is active, remember and use as current
-                    maCurrentMetaFontAction = rNewMetaFontAction;
-                }
+                // FontScale is active, remember and use as current
+                maCurrentMetaFontAction = rNewMetaFontAction;
             }
         }
     }
 
     void ScaledFontDetectCorrectHelper::evaluateAlternativeFontScale(OUString const & rText, tools::Long nImportedTextLength)
     {
-        if(maCurrentMetaFontAction.is())
+        if(!maCurrentMetaFontAction.is())
+            return;
+
+        SolarMutexGuard aGuard; // VirtualDevice is not thread-safe
+        ScopedVclPtrInstance< VirtualDevice > pTempVirtualDevice;
+
+        // calculate measured TextLength
+        const vcl::Font& rFontCandidate(maCurrentMetaFontAction->GetFont());
+        pTempVirtualDevice->SetFont(rFontCandidate);
+        tools::Long nMeasuredTextLength(pTempVirtualDevice->GetTextWidth(rText));
+        // on failure, use original length
+        if (!nMeasuredTextLength)
+            nMeasuredTextLength = nImportedTextLength;
+
+        // compare expected and imported TextLengths
+        if (nImportedTextLength != nMeasuredTextLength)
         {
-            SolarMutexGuard aGuard; // VirtualDevice is not thread-safe
-            ScopedVclPtrInstance< VirtualDevice > pTempVirtualDevice;
+            const double fFactorText(static_cast<double>(nImportedTextLength) / static_cast<double>(nMeasuredTextLength));
+            const double fFactorTextPercent(fabs(1.0 - fFactorText) * 100.0);
 
-            // calculate measured TextLength
-            const vcl::Font& rFontCandidate(maCurrentMetaFontAction->GetFont());
-            pTempVirtualDevice->SetFont(rFontCandidate);
-            tools::Long nMeasuredTextLength(pTempVirtualDevice->GetTextWidth(rText));
-            // on failure, use original length
-            if (!nMeasuredTextLength)
-                nMeasuredTextLength = nImportedTextLength;
-
-            // compare expected and imported TextLengths
-            if (nImportedTextLength != nMeasuredTextLength)
-            {
-                const double fFactorText(static_cast<double>(nImportedTextLength) / static_cast<double>(nMeasuredTextLength));
-                const double fFactorTextPercent(fabs(1.0 - fFactorText) * 100.0);
-
-                // if we assume that loaded file was written on old linux, we have to
-                // back-convert the scale value depending on which system we run
+            // if we assume that loaded file was written on old linux, we have to
+            // back-convert the scale value depending on which system we run
 #ifdef _WIN32
-                // When running on Windows the value was not adapted at font import (see WinMtfFontStyle
-                // constructor), so it is still NormedFontScaling and we need to convert to Windows-style
-                // scaling
+            // When running on Windows the value was not adapted at font import (see WinMtfFontStyle
+            // constructor), so it is still NormedFontScaling and we need to convert to Windows-style
+            // scaling
 #else
-                // When running on unx (non-Windows) the value was already adapted at font import (see WinMtfFontStyle
-                // constructor). It was wrongly assumed to be Windows-style FontScaling, so we need to revert that
-                // to get back to the needed unx-style FontScale
+            // When running on unx (non-Windows) the value was already adapted at font import (see WinMtfFontStyle
+            // constructor). It was wrongly assumed to be Windows-style FontScaling, so we need to revert that
+            // to get back to the needed unx-style FontScale
 #endif
-                // Interestingly this leads to the *same* correction, so no need to make this
-                // system-dependent (!)
-                const tools::Long nUnscaledAverageFontWidth(rFontCandidate.GetOrCalculateAverageFontWidth());
-                const tools::Long nScaledAverageFontWidth(rFontCandidate.GetAverageFontWidth());
-                const double fScaleFactor(static_cast<double>(nUnscaledAverageFontWidth) / static_cast<double>(rFontCandidate.GetFontHeight()));
-                const double fCorrectedAverageFontWidth(static_cast<double>(nScaledAverageFontWidth) * fScaleFactor);
-                tools::Long nCorrectedTextLength(0);
+            // Interestingly this leads to the *same* correction, so no need to make this
+            // system-dependent (!)
+            const tools::Long nUnscaledAverageFontWidth(rFontCandidate.GetOrCalculateAverageFontWidth());
+            const tools::Long nScaledAverageFontWidth(rFontCandidate.GetAverageFontWidth());
+            const double fScaleFactor(static_cast<double>(nUnscaledAverageFontWidth) / static_cast<double>(rFontCandidate.GetFontHeight()));
+            const double fCorrectedAverageFontWidth(static_cast<double>(nScaledAverageFontWidth) * fScaleFactor);
+            tools::Long nCorrectedTextLength(0);
 
-                { // do in own scope, only need nUnscaledAverageFontWidth
-                    vcl::Font rFontCandidate2(rFontCandidate);
-                    rFontCandidate2.SetAverageFontWidth(static_cast<tools::Long>(fCorrectedAverageFontWidth));
-                    pTempVirtualDevice->SetFont(rFontCandidate2);
-                    nCorrectedTextLength = pTempVirtualDevice->GetTextWidth(rText);
-                    // on failure, use original length
-                    if (!nCorrectedTextLength)
-                        nCorrectedTextLength = nImportedTextLength;
-                }
+            { // do in own scope, only need nUnscaledAverageFontWidth
+                vcl::Font rFontCandidate2(rFontCandidate);
+                rFontCandidate2.SetAverageFontWidth(static_cast<tools::Long>(fCorrectedAverageFontWidth));
+                pTempVirtualDevice->SetFont(rFontCandidate2);
+                nCorrectedTextLength = pTempVirtualDevice->GetTextWidth(rText);
+                // on failure, use original length
+                if (!nCorrectedTextLength)
+                    nCorrectedTextLength = nImportedTextLength;
+            }
 
-                const double fFactorCorrectedText(static_cast<double>(nImportedTextLength) / static_cast<double>(nCorrectedTextLength));
-                const double fFactorCorrectedTextPercent(fabs(1.0 - fFactorCorrectedText) * 100.0);
+            const double fFactorCorrectedText(static_cast<double>(nImportedTextLength) / static_cast<double>(nCorrectedTextLength));
+            const double fFactorCorrectedTextPercent(fabs(1.0 - fFactorCorrectedText) * 100.0);
 
-                // If FactorCorrectedText fits better than FactorText this is probably
-                // an import of an old EMF/WMF written by LibreOffice on a non-Windows (unx) system
-                // and should be corrected.
-                // Usually in tested cases this lies inside 5% of range, so detecting this just using
-                //  fFactorTextPercent inside 5% -> no old file
-                //  fFactorCorrectedTextPercent inside 5% -> is old file
-                // works not too bad, but there are some strange not so often used fonts where that
-                // values do deviate, so better just compare if old corrected would fit better than
-                // the uncorrected case, that is usually safe.
-                if(fFactorCorrectedTextPercent < fFactorTextPercent)
-                {
-                    maAlternativeFontScales.push_back(fCorrectedAverageFontWidth);
-                }
-                else
-                {
-                    // also push, but negative to remember non-fitting case
-                    maAlternativeFontScales.push_back(-fCorrectedAverageFontWidth);
-                }
+            // If FactorCorrectedText fits better than FactorText this is probably
+            // an import of an old EMF/WMF written by LibreOffice on a non-Windows (unx) system
+            // and should be corrected.
+            // Usually in tested cases this lies inside 5% of range, so detecting this just using
+            //  fFactorTextPercent inside 5% -> no old file
+            //  fFactorCorrectedTextPercent inside 5% -> is old file
+            // works not too bad, but there are some strange not so often used fonts where that
+            // values do deviate, so better just compare if old corrected would fit better than
+            // the uncorrected case, that is usually safe.
+            if(fFactorCorrectedTextPercent < fFactorTextPercent)
+            {
+                maAlternativeFontScales.push_back(fCorrectedAverageFontWidth);
+            }
+            else
+            {
+                // also push, but negative to remember non-fitting case
+                maAlternativeFontScales.push_back(-fCorrectedAverageFontWidth);
             }
         }
     }

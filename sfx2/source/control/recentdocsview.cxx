@@ -356,39 +356,39 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
 {
     ThumbnailView::Paint(rRenderContext, aRect);
 
-    if (mItemList.empty())
+    if (!mItemList.empty())
+        return;
+
+    if (maWelcomeImage.IsEmpty())
     {
-        if (maWelcomeImage.IsEmpty())
-        {
-            const tools::Long aWidth(aRect.GetWidth() > aRect.getHeight() ? aRect.GetHeight()/2 : aRect.GetWidth()/2);
-            maWelcomeImage = SfxApplication::GetApplicationLogo(aWidth);
-        }
-
-        // No recent files to be shown yet. Show a welcome screen.
-        rRenderContext.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
-        SetMessageFont(rRenderContext);
-        rRenderContext.SetTextColor(maTextColor);
-
-        tools::Long nTextHeight = rRenderContext.GetTextHeight();
-
-        const Size& rImgSize = maWelcomeImage.GetSizePixel();
-        const Size& rSize = GetOutputSizePixel();
-
-        const int nX = (rSize.Width() - rImgSize.Width())/2;
-        int nY = (rSize.Height() - 3 * nTextHeight - rImgSize.Height())/2;
-        Point aImgPoint(nX, nY);
-        rRenderContext.DrawBitmapEx(aImgPoint, rImgSize, maWelcomeImage);
-
-        nY = nY + rImgSize.Height();
-        rRenderContext.DrawText(tools::Rectangle(0, nY + 1 * nTextHeight, rSize.Width(), nY + nTextHeight),
-                                maWelcomeLine1,
-                                DrawTextFlags::Center);
-        rRenderContext.DrawText(tools::Rectangle(0, nY + 2 * nTextHeight, rSize.Width(), rSize.Height()),
-                                maWelcomeLine2,
-                                DrawTextFlags::MultiLine | DrawTextFlags::WordBreak | DrawTextFlags::Center);
-
-        rRenderContext.Pop();
+        const tools::Long aWidth(aRect.GetWidth() > aRect.getHeight() ? aRect.GetHeight()/2 : aRect.GetWidth()/2);
+        maWelcomeImage = SfxApplication::GetApplicationLogo(aWidth);
     }
+
+    // No recent files to be shown yet. Show a welcome screen.
+    rRenderContext.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
+    SetMessageFont(rRenderContext);
+    rRenderContext.SetTextColor(maTextColor);
+
+    tools::Long nTextHeight = rRenderContext.GetTextHeight();
+
+    const Size& rImgSize = maWelcomeImage.GetSizePixel();
+    const Size& rSize = GetOutputSizePixel();
+
+    const int nX = (rSize.Width() - rImgSize.Width())/2;
+    int nY = (rSize.Height() - 3 * nTextHeight - rImgSize.Height())/2;
+    Point aImgPoint(nX, nY);
+    rRenderContext.DrawBitmapEx(aImgPoint, rImgSize, maWelcomeImage);
+
+    nY = nY + rImgSize.Height();
+    rRenderContext.DrawText(tools::Rectangle(0, nY + 1 * nTextHeight, rSize.Width(), nY + nTextHeight),
+                            maWelcomeLine1,
+                            DrawTextFlags::Center);
+    rRenderContext.DrawText(tools::Rectangle(0, nY + 2 * nTextHeight, rSize.Width(), rSize.Height()),
+                            maWelcomeLine2,
+                            DrawTextFlags::MultiLine | DrawTextFlags::WordBreak | DrawTextFlags::Center);
+
+    rRenderContext.Pop();
 }
 
 void RecentDocsView::LoseFocus()

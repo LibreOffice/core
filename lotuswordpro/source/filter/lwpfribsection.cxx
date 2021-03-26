@@ -423,18 +423,18 @@ void LwpMasterPage::ParseSection(LwpFrib* pFrib)
 void LwpMasterPage::RegisterFillerPageStyle()
 {
     LwpLayout::UseWhenType eUserType = m_pLayout->GetUseWhenType();
-    if (eUserType == LwpLayout::StartOnOddPage || eUserType == LwpLayout::StartOnEvenPage)
+    if (eUserType != LwpLayout::StartOnOddPage && eUserType != LwpLayout::StartOnEvenPage)
+        return;
+
+    if (m_pLayout->HasFillerPageText(m_pPara->GetFoundry()))
     {
-        if (m_pLayout->HasFillerPageText(m_pPara->GetFoundry()))
-        {
-            std::unique_ptr<XFParaStyle> pPagebreakStyle(new XFParaStyle);
-            *pPagebreakStyle = *(m_pPara->GetXFParaStyle());
-            pPagebreakStyle->SetStyleName("");
-            pPagebreakStyle->SetBreaks(enumXFBreakAftPage);
-            XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-            m_FillerPageStyleName
-                = pXFStyleManager->AddStyle(std::move(pPagebreakStyle)).m_pStyle->GetStyleName();
-        }
+        std::unique_ptr<XFParaStyle> pPagebreakStyle(new XFParaStyle);
+        *pPagebreakStyle = *(m_pPara->GetXFParaStyle());
+        pPagebreakStyle->SetStyleName("");
+        pPagebreakStyle->SetBreaks(enumXFBreakAftPage);
+        XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
+        m_FillerPageStyleName
+            = pXFStyleManager->AddStyle(std::move(pPagebreakStyle)).m_pStyle->GetStyleName();
     }
 }
 

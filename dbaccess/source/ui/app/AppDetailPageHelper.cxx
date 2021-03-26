@@ -580,19 +580,19 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
         m_aLists[_eType] = createSimpleTree(sHelpId, _eType);
     }
 
-    if ( m_aLists[_eType] )
-    {
-        weld::TreeView& rTreeView = m_aLists[_eType]->GetWidget();
-        if (!rTreeView.n_children() && _xContainer.is())
-        {
-            rTreeView.make_unsorted();
-            fillNames( _xContainer, _eType, sImageId, nullptr );
-            rTreeView.make_sorted();
+    if ( !m_aLists[_eType] )
+        return;
 
-            rTreeView.unselect_all();
-        }
-        setDetailPage(*m_aLists[_eType]);
+    weld::TreeView& rTreeView = m_aLists[_eType]->GetWidget();
+    if (!rTreeView.n_children() && _xContainer.is())
+    {
+        rTreeView.make_unsorted();
+        fillNames( _xContainer, _eType, sImageId, nullptr );
+        rTreeView.make_sorted();
+
+        rTreeView.unselect_all();
     }
+    setDetailPage(*m_aLists[_eType]);
 }
 
 void OAppDetailPageHelper::setDetailPage(DBTreeViewBase& rTreeView)

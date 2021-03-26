@@ -1395,17 +1395,18 @@ void ScCheckListMenuControl::launch(const tools::Rectangle& rRect)
 void ScCheckListMenuControl::NotifyCloseLOK()
 {
     VclPtr<vcl::Window> aNotifierWindow = mxFrame->GetParentWithLOKNotifier();
-    if (aNotifierWindow) {
-        const vcl::ILibreOfficeKitNotifier* pNotifier = aNotifierWindow->GetLOKNotifier();
-        if (pNotifier)
-        {
-            tools::JsonWriter aJsonWriter;
-            aJsonWriter.put("jsontype", "autofilter");
-            aJsonWriter.put("action", "close");
+    if (!aNotifierWindow)
+        return;
 
-            const std::string message = aJsonWriter.extractAsStdString();
-            pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
-        }
+    const vcl::ILibreOfficeKitNotifier* pNotifier = aNotifierWindow->GetLOKNotifier();
+    if (pNotifier)
+    {
+        tools::JsonWriter aJsonWriter;
+        aJsonWriter.put("jsontype", "autofilter");
+        aJsonWriter.put("action", "close");
+
+        const std::string message = aJsonWriter.extractAsStdString();
+        pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
     }
 }
 
