@@ -1498,7 +1498,7 @@ void MetaBmpAction::Scale( double fScaleX, double fScaleY )
 
 void MetaBmpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    if( !!maBmp )
+    if( !maBmp.IsEmpty() )
     {
         MetaAction::Write(rOStm, pData);
         VersionCompatWrite aCompat(rOStm, 1);
@@ -1556,7 +1556,7 @@ void MetaBmpScaleAction::Scale( double fScaleX, double fScaleY )
 
 void MetaBmpScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    if( !!maBmp )
+    if( !maBmp.IsEmpty() )
     {
         MetaAction::Write(rOStm, pData);
         VersionCompatWrite aCompat(rOStm, 1);
@@ -1620,7 +1620,7 @@ void MetaBmpScalePartAction::Scale( double fScaleX, double fScaleY )
 
 void MetaBmpScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    if( !!maBmp )
+    if( !maBmp.IsEmpty() )
     {
         MetaAction::Write(rOStm, pData);
         VersionCompatWrite aCompat(rOStm, 1);
@@ -1680,7 +1680,7 @@ void MetaBmpExAction::Scale( double fScaleX, double fScaleY )
 
 void MetaBmpExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    if( maBmpEx.GetBitmap() )
+    if( !maBmpEx.GetBitmap().IsEmpty() )
     {
         MetaAction::Write(rOStm, pData);
         VersionCompatWrite aCompat(rOStm, 1);
@@ -1738,7 +1738,7 @@ void MetaBmpExScaleAction::Scale( double fScaleX, double fScaleY )
 
 void MetaBmpExScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    if( maBmpEx.GetBitmap() )
+    if( !maBmpEx.GetBitmap().IsEmpty() )
     {
         MetaAction::Write(rOStm, pData);
         VersionCompatWrite aCompat(rOStm, 1);
@@ -1801,7 +1801,7 @@ void MetaBmpExScalePartAction::Scale( double fScaleX, double fScaleY )
 
 void MetaBmpExScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    if( maBmpEx.GetBitmap() )
+    if( !maBmpEx.GetBitmap().IsEmpty() )
     {
         MetaAction::Write(rOStm, pData);
         VersionCompatWrite aCompat(rOStm, 1);
@@ -1863,7 +1863,7 @@ void MetaMaskAction::Scale( double fScaleX, double fScaleY )
 
 void MetaMaskAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    if( !!maBmp )
+    if( !maBmp.IsEmpty() )
     {
         MetaAction::Write(rOStm, pData);
         VersionCompatWrite aCompat(rOStm, 1);
@@ -1923,7 +1923,7 @@ void MetaMaskScaleAction::Scale( double fScaleX, double fScaleY )
 
 void MetaMaskScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    if( !!maBmp )
+    if( !maBmp.IsEmpty() )
     {
         MetaAction::Write(rOStm, pData);
         VersionCompatWrite aCompat(rOStm, 1);
@@ -1988,7 +1988,7 @@ void MetaMaskScalePartAction::Scale( double fScaleX, double fScaleY )
 
 void MetaMaskScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    if( !!maBmp )
+    if( !maBmp.IsEmpty() )
     {
         MetaAction::Write(rOStm, pData);
         VersionCompatWrite aCompat(rOStm, 1);

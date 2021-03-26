@@ -629,7 +629,7 @@ Bitmap ImpGraphic::getBitmap(const GraphicConversionParameters& rParameters) con
         aRetBmp = maBitmapEx.GetBitmap();
     }
 
-    if( !!aRetBmp )
+    if( !aRetBmp.IsEmpty() )
     {
         aRetBmp.SetPrefMapMode(getPrefMapMode());
         aRetBmp.SetPrefSize(getPrefSize());
@@ -733,7 +733,7 @@ const GDIMetaFile& ImpGraphic::getGDIMetaFile() const
         // survive copying (change this if not wanted)
         ImpGraphic* pThat = const_cast< ImpGraphic* >(this);
 
-        if(maVectorGraphicData && !maBitmapEx)
+        if(maVectorGraphicData && maBitmapEx.IsEmpty())
         {
             // use maBitmapEx as local buffer for rendered svg
             pThat->maBitmapEx = getVectorGraphicReplacement();
@@ -1012,7 +1012,7 @@ void ImpGraphic::draw(OutputDevice* pOutDev, const Point& rDestPt) const
     {
         case GraphicType::Bitmap:
         {
-            if (maVectorGraphicData && !maBitmapEx)
+            if (maVectorGraphicData && maBitmapEx.IsEmpty())
             {
                 // use maBitmapEx as local buffer for rendered svg
                 const_cast<ImpGraphic*>(this)->maBitmapEx = getVectorGraphicReplacement();

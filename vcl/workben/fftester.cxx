@@ -156,7 +156,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         {
             SvFileStream aFileStream(out, StreamMode::READ);
             vcl::PngImageReader aReader(aFileStream);
-            ret = static_cast<int>(!!aReader.read());
+            ret = static_cast<int>(!aReader.read().IsEmpty());
         }
         else if (strcmp(argv[2], "bmp") == 0)
         {

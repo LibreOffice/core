@@ -553,7 +553,7 @@ void ORoadmap::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&
     Control::Paint(rRenderContext, _rRect);
 
     // draw the bitmap
-    if (!!m_pImpl->getPicture())
+    if (!m_pImpl->getPicture().IsEmpty())
     {
         Size aBitmapSize = m_pImpl->getPicture().GetSizePixel();
         Size aMySize(GetOutputSizePixel());

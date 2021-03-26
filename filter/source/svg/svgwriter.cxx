@@ -2840,7 +2840,7 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
                                     const Point& rSrcPt, const Size& rSrcSz,
                                     const css::uno::Reference<css::drawing::XShape>* pShape )
 {
-    if( !rBmpEx )
+    if( rBmpEx.IsEmpty() )
         return;
     if( mpEmbeddedBitmapsMap && !mpEmbeddedBitmapsMap->empty())
     {
@@ -2886,7 +2886,7 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
     if( aSrcRect != aBmpRect )
         aBmpEx.Crop( aSrcRect );
 
-    if( !aBmpEx )
+    if( aBmpEx.IsEmpty() )
         return;
 
     SvMemoryStream aOStm( 65535, 65535 );

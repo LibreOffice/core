@@ -562,7 +562,7 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj, bool bScale)
                     pObj->SetLayer(aOldLayer);
                     pObj->SetMergedItemSet(aOldItemSet);
 
-                    if(!!aBitmapEx)
+                    if(!aBitmapEx.IsEmpty())
                     {
                         // aNewRange is inside of aOldRange and defines which part of aBitmapEx is used
                         const double fScaleX(aBitmapEx.GetSizePixel().Width() / (aOldRange.getWidth() ? aOldRange.getWidth() : 1.0));

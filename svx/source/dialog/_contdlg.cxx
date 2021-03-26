@@ -636,7 +636,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
             if( aGraphic.IsTransparent() )
                 aMask.CombineSimple( aGraphic.GetBitmapEx().GetMask(), BmpCombine::Or );
 
-            if( !!aMask )
+            if( !aMask.IsEmpty() )
             {
                 std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(&m_rDialog, "svx/ui/querynewcontourdialog.ui"));
                 std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog("QueryNewContourDialog"));
