@@ -605,9 +605,7 @@ weld::Window* GetPopupParent(vcl::Window& rOutWin, tools::Rectangle& rRect)
     rRect.SetPos(rOutWin.OutputToScreenPixel(rRect.TopLeft()));
     rRect = FloatingWindow::ImplConvertToAbsPos(&rOutWin, rRect);
 
-    vcl::Window* pWin = &rOutWin;
-    while (!pWin->IsTopWindow())
-        pWin = pWin->GetParent();
+    vcl::Window* pWin = rOutWin.GetFrameWindow();
 
     rRect = FloatingWindow::ImplConvertToRelPos(pWin, rRect);
     rRect.SetPos(pWin->ScreenToOutputPixel(rRect.TopLeft()));
