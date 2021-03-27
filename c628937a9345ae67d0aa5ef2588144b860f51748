@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "fe18c269_06b0b82e",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-27T08:40:33Z",
+      "side": 1,
+      "message": "\u003e I couldn\u0027t find a LONG_MAX_PATH, but I found a MAX_LONG_PATH in /core/sal/osl/w32/file_url.hxx\n\nYes :-) sorry for the confusion - I was typing from memory :-)\n\nAnd yes, this is the correct value (32 Ki wide chars, 64 KiB memory) - see https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation",
+      "parentUuid": "5a416279_7d4be8ba",
+      "revId": "c628937a9345ae67d0aa5ef2588144b860f51748",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cbb415a8_a054caf0",
         "filename": "vcl/win/app/fileregistration.cxx",
         "patchSetId": 9
