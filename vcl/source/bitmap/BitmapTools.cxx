@@ -1008,7 +1008,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
 
             if(8 == aBitmap.GetSizePixel().Width() && 8 == aBitmap.GetSizePixel().Height())
             {
-                if(2 == aBitmap.GetColorCount())
+                if (aBitmap.getPixelFormat() == vcl::PixelFormat::N1_BPP)
                 {
                     BitmapReadAccess* pRead = aBitmap.AcquireReadAccess();
 
@@ -1080,7 +1080,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
 bool convertBitmap32To24Plus8(BitmapEx const & rInput, BitmapEx & rResult)
 {
     Bitmap aBitmap(rInput.GetBitmap());
-    if (aBitmap.GetBitCount() != 32)
+    if (aBitmap.getPixelFormat() != vcl::PixelFormat::N32_BPP)
         return false;
 
     Size aSize = aBitmap.GetSizePixel();

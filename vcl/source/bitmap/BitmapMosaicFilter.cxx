@@ -26,7 +26,7 @@ BitmapEx BitmapMosaicFilter::execute(BitmapEx const& rBitmapEx) const
         BitmapReadAccess* pReadAcc;
         BitmapWriteAccess* pWriteAcc;
 
-        if (aBitmap.GetBitCount() > 8)
+        if (sal_uInt16(aBitmap.getPixelFormat()) > 8)
         {
             pReadAcc = pWriteAcc = aBitmap.AcquireWriteAccess();
         }

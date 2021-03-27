@@ -30,6 +30,11 @@ constexpr bool isPalettePixelFormat(PixelFormat ePixelFormat)
     return sal_uInt16(ePixelFormat) <= 8;
 }
 
+constexpr sal_Int64 numberOfColors(PixelFormat ePixelFormat)
+{
+    return sal_Int64(1) << sal_Int64(ePixelFormat);
+}
+
 constexpr PixelFormat bitDepthToPixelFormat(sal_uInt16 nBitDepth)
 {
     switch (nBitDepth)

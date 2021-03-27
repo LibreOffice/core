@@ -197,11 +197,11 @@ void SkiaTest::testInterpretAs8Bit()
     bitmap.Erase(Color(33, 33, 33));
     SkiaSalBitmap* skiaBitmap = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
     CPPUNIT_ASSERT(skiaBitmap->unittestHasEraseColor());
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), bitmap.GetBitCount());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, bitmap.getPixelFormat());
     bitmap.Convert(BmpConversion::N8BitNoConversion);
     skiaBitmap = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
     CPPUNIT_ASSERT(skiaBitmap->unittestHasEraseColor());
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), bitmap.GetBitCount());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, bitmap.getPixelFormat());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(33), BitmapReadAccess(bitmap).GetPixelIndex(0, 0));
 
     // Test with image.
@@ -212,11 +212,11 @@ void SkiaTest::testInterpretAs8Bit()
     skiaBitmap->GetSkImage();
     CPPUNIT_ASSERT(!skiaBitmap->unittestHasEraseColor());
     CPPUNIT_ASSERT(skiaBitmap->unittestHasImage());
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), bitmap.GetBitCount());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, bitmap.getPixelFormat());
     bitmap.Convert(BmpConversion::N8BitNoConversion);
     skiaBitmap = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
     CPPUNIT_ASSERT(skiaBitmap->unittestHasImage());
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), bitmap.GetBitCount());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, bitmap.getPixelFormat());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(34), BitmapReadAccess(bitmap).GetPixelIndex(0, 0));
 }
 
@@ -236,7 +236,7 @@ void SkiaTest::testAlphaBlendWith()
     alpha.BlendWith(bitmap);
     skiaAlpha = dynamic_cast<SkiaSalBitmap*>(alpha.ImplGetSalBitmap().get());
     CPPUNIT_ASSERT(skiaAlpha->unittestHasEraseColor());
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), alpha.GetBitCount());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, alpha.getPixelFormat());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(112),
                          AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
 
@@ -256,7 +256,7 @@ void SkiaTest::testAlphaBlendWith()
     alpha.BlendWith(bitmap);
     skiaAlpha = dynamic_cast<SkiaSalBitmap*>(alpha.ImplGetSalBitmap().get());
     CPPUNIT_ASSERT(skiaAlpha->unittestHasImage());
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), alpha.GetBitCount());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, alpha.getPixelFormat());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(112),
                          AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
 
@@ -273,7 +273,7 @@ void SkiaTest::testAlphaBlendWith()
     alpha.BlendWith(bitmap);
     skiaAlpha = dynamic_cast<SkiaSalBitmap*>(alpha.ImplGetSalBitmap().get());
     CPPUNIT_ASSERT(skiaAlpha->unittestHasImage());
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), alpha.GetBitCount());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, alpha.getPixelFormat());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(112),
                          AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
 }

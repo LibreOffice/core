@@ -36,7 +36,7 @@ CPPUNIT_TEST_FIXTURE(XpmFilterTest, testXPM_8bit)
     auto aBitmap = aGraphic.GetBitmapEx();
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), aBitmap.GetBitCount());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, aBitmap.GetPixelColor(0, 0));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aBitmap.GetPixelColor(2, 0));
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, aBitmap.GetPixelColor(0, 2));
@@ -51,7 +51,7 @@ CPPUNIT_TEST_FIXTURE(XpmFilterTest, testXPM_4bit)
     auto aBitmap = aGraphic.GetBitmapEx();
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), aBitmap.GetBitCount());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, aBitmap.GetPixelColor(0, 0));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aBitmap.GetPixelColor(2, 0));
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, aBitmap.GetPixelColor(0, 2));
@@ -66,7 +66,7 @@ CPPUNIT_TEST_FIXTURE(XpmFilterTest, testXPM_1bit)
     auto aBitmap = aGraphic.GetBitmapEx();
     CPPUNIT_ASSERT_EQUAL(tools::Long(10), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(10), aBitmap.GetSizePixel().Height());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), aBitmap.GetBitCount());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N1_BPP, aBitmap.getPixelFormat());
     CPPUNIT_ASSERT_EQUAL(Color(0xffffff), aBitmap.GetPixelColor(0, 0));
     CPPUNIT_ASSERT_EQUAL(Color(0x72d1c8), aBitmap.GetPixelColor(1, 1));
     CPPUNIT_ASSERT_EQUAL(Color(0x72d1c8), aBitmap.GetPixelColor(8, 8));

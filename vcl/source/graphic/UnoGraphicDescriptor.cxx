@@ -370,7 +370,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
                 if( mpGraphic )
                 {
                     if( mpGraphic->GetType() == GraphicType::Bitmap )
-                        nBitsPerPixel = mpGraphic->GetBitmapEx().GetBitmap().GetBitCount();
+                        nBitsPerPixel = sal_uInt16(mpGraphic->GetBitmapEx().GetBitmap().getPixelFormat());
                 }
                 else
                     nBitsPerPixel = mnBitsPerPixel;

@@ -394,7 +394,7 @@ XclExpImgData::XclExpImgData( const Graphic& rGraphic, sal_uInt16 nRecId ) :
 void XclExpImgData::Save( XclExpStream& rStrm )
 {
     Bitmap aBmp = maGraphic.GetBitmapEx().GetBitmap();
-    if( aBmp.GetBitCount() != 24 )
+    if (aBmp.getPixelFormat() != vcl::PixelFormat::N24_BPP)
         aBmp.Convert( BmpConversion::N24Bit );
 
     Bitmap::ScopedReadAccess pAccess(aBmp);

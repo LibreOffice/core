@@ -203,7 +203,7 @@ void BitmapScaleTest::testScale2()
     const bool bExportBitmap(false);
 
     Bitmap aBitmap24Bit(Size(4096, 4096), vcl::PixelFormat::N24_BPP);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), aBitmap24Bit.GetBitCount());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aBitmap24Bit.getPixelFormat());
     Color aBitmapColor = COL_YELLOW;
     {
         BitmapScopedWriteAccess aWriteAccess(aBitmap24Bit);
@@ -274,7 +274,7 @@ void BitmapScaleTest::testScaleSymmetry()
     const bool bExportBitmap(false);
 
     Bitmap aBitmap24Bit(Size(10, 10), vcl::PixelFormat::N24_BPP);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), aBitmap24Bit.GetBitCount());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aBitmap24Bit.getPixelFormat());
 
     {
         BitmapScopedWriteAccess aWriteAccess(aBitmap24Bit);
