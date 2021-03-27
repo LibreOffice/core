@@ -394,6 +394,13 @@ void OStatement_Base::construct(const OUString& sql)
         case OSQLStatementType::Unknown:
             m_pConnection->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,*this);
             break;
+        case OSQLStatementType::Select:
+            if(SQL_ISRULE(m_aSQLIterator.getParseTree(), union_statement))
+            {
+                m_pConnection->throwGenericSQLException(STR_QUERY_TOO_COMPLEX, *this);
+            }
+            assert(SQL_ISRULE(m_aSQLIterator.getParseTree(), select_statement));
+            break;
         default:
             break;
     }
