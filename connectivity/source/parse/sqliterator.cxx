@@ -1826,12 +1826,29 @@ const OSQLParseNode* OSQLParseTreeIterator::getOrderTree() const
 
     // Analyse parse tree (depending on statement type)
     // and set pointer to ORDER clause:
+
+    assert(SQL_ISRULE(m_pParseTree, select_statement) || SQL_ISRULE(m_pParseTree, union_statement));
+
+    auto pParseTree = m_pParseTree;
+    if(SQL_ISRULE(m_pParseTree, union_statement))
+    {
+        assert(m_pParseTree->count() == 4);
+        pParseTree = pParseTree->getChild(3);
+        // since UNION is left-associative (at least in our grammar),
+        // possibly the left-hand (m_pParseTree->getChild(0)) is a union_statement,
+        // but the right hand cannot.
+        assert(SQL_ISRULE(pParseTree, select_statement));
+    }
+
     OSQLParseNode * pOrderClause = nullptr;
-    OSL_ENSURE(m_pParseTree->count() >= 4,"ParseTreeIterator: error in parse tree!");
-    OSQLParseNode * pTableExp = m_pParseTree->getChild(3);
-    OSL_ENSURE(pTableExp != nullptr,"OSQLParseTreeIterator: error in parse tree!");
-    OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp),"OSQLParseTreeIterator: error in parse tree!");
-    OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
+    OSL_ENSURE(pParseTree->count() == 4, "OSQLParseTreeIterator::getOrderTree: expected a SELECT, and a SELECT must have exactly four children");
+    OSQLParseNode * pTableExp = pParseTree->getChild(3);
+    OSL_ENSURE(pTableExp != nullptr, "OSQLParseTreeIterator::getOrderTree: got NULL table_exp");
+    OSL_ENSURE(SQL_ISRULE(pTableExp, table_exp), "OSQLParseTreeIterator::getOrderTree: expected table_exp but got something else");
+    OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator::getOrderTree: table_exp doesn't have the expected number of children");
+    // tdf#141115 upgrade the above to an assert;
+    // this cannot go well if there are too few children
+    assert(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT);
 
     pOrderClause = pTableExp->getChild(ORDER_BY_CHILD_POS);
     // If it is an order_by, it must not be empty
