@@ -16,6 +16,24 @@
       "revId": "f4367cfd6978ae2fa896652175956bdbedd3c4bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdfacb6e_eb85b898",
+        "filename": "connectivity/source/parse/sqliterator.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1849,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-03-27T14:13:20Z",
+      "side": 1,
+      "message": "I duplicated the OSL_ENSURE (which I kept because it gives feedback on stderr on what is wrong) with an assert on the same condition.",
+      "parentUuid": "f956f98b_f777850c",
+      "revId": "f4367cfd6978ae2fa896652175956bdbedd3c4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
