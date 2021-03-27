@@ -62,6 +62,30 @@
       "revId": "29fd09cb719fefa459acabc37a0f1ccc6648a93f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c23857e_97664117",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-27T09:15:23Z",
+      "side": 1,
+      "message": "A gotcha here could be if the two strings are not canonical. GetModuleFileNameW will return the same type of path used for process launch (e.g., starting with \\\\?\\); registry value could have possibly relative components like \\..\\, \\.\\, and even \\\\...\n\nShould we use our own GetCaseCorrectPathName, or at least GetFullPathNameW WinAPI, before comparison?",
+      "parentUuid": "a9eceead_a487944c",
+      "range": {
+        "startLine": 94,
+        "startChar": 59,
+        "endLine": 94,
+        "endChar": 60
+      },
+      "revId": "29fd09cb719fefa459acabc37a0f1ccc6648a93f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
