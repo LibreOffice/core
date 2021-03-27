@@ -645,6 +645,12 @@ SvxNumRule::SvxNumRule( SvStream &rStream )
     rStream.ReadUInt16( nTmp16 ); // NUM_ITEM_VERSION
     rStream.ReadUInt16( nLevelCount );
 
+    if (nLevelCount > SVX_MAX_NUM)
+    {
+        SAL_WARN("editeng", "nLevelCount: " << nLevelCount << " greater than max of: " << SVX_MAX_NUM);
+        nLevelCount = SVX_MAX_NUM;
+    }
+
     // first nFeatureFlags of old Versions
     rStream.ReadUInt16( nTmp16 ); nFeatureFlags = static_cast<SvxNumRuleFlags>(nTmp16);
     rStream.ReadUInt16( nTmp16 ); bContinuousNumbering = nTmp16;
