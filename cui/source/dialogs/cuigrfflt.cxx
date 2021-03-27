@@ -361,7 +361,7 @@ GraphicFilterPoster::GraphicFilterPoster(weld::Window* pParent, const Graphic& r
     : GraphicFilterDialog(pParent, "cui/ui/posterdialog.ui", "PosterDialog", rGraphic)
     , mxNumPoster(m_xBuilder->weld_spin_button("value"))
 {
-    mxNumPoster->set_range(2, rGraphic.GetBitmapEx().GetBitCount());
+    mxNumPoster->set_range(2, vcl::pixelFormatBitCount(rGraphic.GetBitmapEx().getPixelFormat()));
     mxNumPoster->set_value(nPosterCount);
     mxNumPoster->connect_value_changed(LINK(this, GraphicFilterPoster, EditModifyHdl));
 }

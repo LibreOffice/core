@@ -1804,7 +1804,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf121615)
     BitmapEx aBitmap = aGraphic.GetBitmapEx();
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(300), aBitmap.GetSizePixel().Height());
-    CPPUNIT_ASSERT_EQUAL(8, int(aBitmap.GetBitCount()));
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
     // tdf#121615 was caused by broken handling of data width with 8bit color,
     // so the test image has some black in the bottomright corner, check it's there
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aBitmap.GetPixelColor(0, 0));
@@ -1853,7 +1853,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf141171)
     Size aSize = aBitmap.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(tools::Long(878), aSize.Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(127), aSize.Height());
-    CPPUNIT_ASSERT_EQUAL(8, int(aBitmap.GetBitCount()));
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
 
     for (tools::Long nX = 0; nX < aSize.Width(); ++nX)
     {
@@ -1908,7 +1908,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf129085)
     BitmapEx aBitmap = aGraphic.GetBitmapEx();
     CPPUNIT_ASSERT_EQUAL(tools::Long(884), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(925), aBitmap.GetSizePixel().Height());
-    CPPUNIT_ASSERT_EQUAL(24, int(aBitmap.GetBitCount()));
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aBitmap.getPixelFormat());
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTocLink)

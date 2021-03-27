@@ -18,7 +18,8 @@ BitmapEx BitmapPopArtFilter::execute(BitmapEx const& rBitmapEx) const
 {
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 
-    bool bRet = (aBitmap.GetBitCount() <= 8) || aBitmap.Convert(BmpConversion::N8BitColors);
+    bool bRet = isPalettePixelFormat(aBitmap.getPixelFormat())
+                || aBitmap.Convert(BmpConversion::N8BitColors);
 
     if (bRet)
     {
