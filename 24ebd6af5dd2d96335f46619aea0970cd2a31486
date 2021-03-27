@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe9686e9_ac099520",
+        "filename": "cui/source/dialogs/cuigrfflt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-03-27T06:45:36Z",
+      "side": 1,
+      "message": "seeing stuff like this makes me thing we should keep the cast inside the GetBitCount method?",
+      "revId": "24ebd6af5dd2d96335f46619aea0970cd2a31486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
