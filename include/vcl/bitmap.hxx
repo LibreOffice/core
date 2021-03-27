@@ -134,8 +134,6 @@ public:
     Size                    GetSizePixel() const;
 
     vcl::PixelFormat getPixelFormat() const;
-    sal_uInt16              GetBitCount() const;
-    inline sal_Int64        GetColorCount() const;
     inline sal_uLong        GetSizeBytes() const;
     bool                    HasGreyPalette8Bit() const;
     bool                    HasGreyPaletteAny() const;
@@ -544,7 +542,6 @@ private:
     std::shared_ptr<SalBitmap> mxSalBmp;
     MapMode maPrefMapMode;
     Size maPrefSize;
-
 };
 
 inline bool Bitmap::IsEmpty() const
@@ -572,15 +569,12 @@ inline void Bitmap::SetPrefSize( const Size& rSize )
     maPrefSize = rSize;
 }
 
-inline sal_Int64 Bitmap::GetColorCount() const
-{
-    return sal_Int64(1) << sal_Int64(GetBitCount());
-}
-
 inline sal_uLong Bitmap::GetSizeBytes() const
 {
-    const Size aSizePix( GetSizePixel() );
-    return( ( static_cast<sal_uLong>(aSizePix.Width()) * aSizePix.Height() * GetBitCount() ) >> 3 );
+    const auto aSizePixel = GetSizePixel();
+    const auto aPixelByteCount = vcl::pixelFormatBitCount(getPixelFormat()) / 8;
+    sal_uLong aSizeInBytes = aSizePixel.Width() * aSizePixel.Height() * aPixelByteCount;
+    return aSizeInBytes;
 }
 
 #endif // INCLUDED_VCL_BITMAP_HXX

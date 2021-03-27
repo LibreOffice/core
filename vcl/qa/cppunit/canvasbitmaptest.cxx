@@ -723,8 +723,8 @@ void CanvasBitmapTest::runTest()
                             !aBmp.IsTransparent());
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap does not have size (10,10)",
                             Size(10,10), aBmp.GetSizePixel());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap does not have bitcount of 8",
-                            static_cast<sal_uInt16>(8),  aBmp.GetBitCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap does not have the expected pixel format",
+                            vcl::PixelFormat::N8_BPP,  aBmp.getPixelFormat());
     {
         Bitmap aBitmap = aBmp.GetBitmap();
         BitmapReadAccess* pBmpAcc   = aBitmap.AcquireReadAccess();
@@ -751,8 +751,8 @@ void CanvasBitmapTest::runTest()
                             aBmp.IsAlpha());
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap does not have size (10,10)",
                             Size(10,10), aBmp.GetSizePixel());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap has bitcount of 24",
-                            static_cast<sal_uInt16>(24), aBmp.GetBitCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap does not have the expected pixel format",
+                            vcl::PixelFormat::N24_BPP,  aBmp.getPixelFormat());
     {
         Bitmap aBitmap = aBmp.GetBitmap();
         BitmapReadAccess* pBmpAcc   = aBitmap.AcquireReadAccess();
