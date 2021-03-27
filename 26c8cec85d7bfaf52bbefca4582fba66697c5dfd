@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00504145_4b77d811",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 2063,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-03-27T19:24:35Z",
+      "side": 1,
+      "message": "Best to check if pItem is good before using it, like done in the if statement above.",
+      "range": {
+        "startLine": 2063,
+        "startChar": 8,
+        "endLine": 2063,
+        "endChar": 13
+      },
+      "revId": "26c8cec85d7bfaf52bbefca4582fba66697c5dfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ebb982d_5f6abffa",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 2074,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-03-27T19:24:35Z",
+      "side": 1,
+      "message": "Couldn\u0027t the selected entry name simply be used here instead of finding the selected entry in the style sheet pool and then getting the name from the SfxStyleSheetBase object?",
+      "range": {
+        "startLine": 2074,
+        "startChar": 12,
+        "endLine": 2074,
+        "endChar": 29
+      },
+      "revId": "26c8cec85d7bfaf52bbefca4582fba66697c5dfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
