@@ -415,6 +415,7 @@ cmd/32/fa/alphalowliststyle.png cmd/32/ar/alphalowliststyle.png
 cmd/32/fa/bulletliststyle.png cmd/32/ar/defaultbullet.png
 cmd/32/fa/bulletsandnumberingdialog.png cmd/32/ar/bulletsandnumberingdialog.png
 cmd/32/fa/chapternumberingdialog.png cmd/32/ar/chapternumberingdialog.png
+cmd/32/fa/continuenumbering.png cmd/32/ar/continuenumbering.png
 cmd/32/fa/defaultbullet.png cmd/32/ar/defaultbullet.png
 cmd/32/fa/defaultnumbering.png cmd/32/ar/defaultnumbering.png
 cmd/32/fa/deleterecord.png cmd/32/ar/deleterecord.png
@@ -447,6 +448,7 @@ cmd/32/he/alphalowliststyle.png cmd/32/ar/alphalowliststyle.png
 cmd/32/he/bulletliststyle.png cmd/32/ar/defaultbullet.png
 cmd/32/he/bulletsandnumberingdialog.png cmd/32/ar/bulletsandnumberingdialog.png
 cmd/32/he/chapternumberingdialog.png cmd/32/ar/chapternumberingdialog.png
+cmd/32/he/continuenumbering.png cmd/32/ar/continuenumbering.png
 cmd/32/he/defaultbullet.png cmd/32/ar/defaultbullet.png
 cmd/32/he/defaultnumbering.png cmd/32/ar/defaultnumbering.png
 cmd/32/he/deleterecord.png cmd/32/ar/deleterecord.png
@@ -534,6 +536,7 @@ cmd/32/ur/alphalowliststyle.png cmd/32/ar/alphalowliststyle.png
 cmd/32/ur/bulletliststyle.png cmd/32/ar/defaultbullet.png
 cmd/32/ur/bulletsandnumberingdialog.png cmd/32/ar/bulletsandnumberingdialog.png
 cmd/32/ur/chapternumberingdialog.png cmd/32/ar/chapternumberingdialog.png
+cmd/32/ur/continuenumbering.png cmd/32/ar/continuenumbering.png
 cmd/32/ur/defaultbullet.png cmd/32/ar/defaultbullet.png
 cmd/32/ur/defaultnumbering.png cmd/32/ar/defaultnumbering.png
 cmd/32/ur/deleterecord.png cmd/32/ar/deleterecord.png
@@ -608,6 +611,7 @@ cmd/fa/lc_alphalowliststyle.png cmd/ar/lc_alphalowliststyle.png
 cmd/fa/lc_bulletliststyle.png cmd/ar/lc_defaultbullet.png
 cmd/fa/lc_bulletsandnumberingdialog.png cmd/ar/lc_bulletsandnumberingdialog.png
 cmd/fa/lc_chapternumberingdialog.png cmd/ar/lc_chapternumberingdialog.png
+cmd/fa/lc_continuenumbering.png cmd/ar/lc_continuenumbering.png
 cmd/fa/lc_defaultbullet.png cmd/ar/lc_defaultbullet.png
 cmd/fa/lc_defaultnumbering.png cmd/ar/lc_defaultnumbering.png
 cmd/fa/lc_deleterecord.png cmd/ar/lc_deleterecord.png
@@ -632,6 +636,7 @@ cmd/fa/sc_alphalowliststyle.png cmd/ar/sc_alphalowliststyle.png
 cmd/fa/sc_bulletliststyle.png cmd/ar/sc_defaultbullet.png
 cmd/fa/sc_bulletsandnumberingdialog.png cmd/ar/sc_bulletsandnumberingdialog.png
 cmd/fa/sc_chapternumberingdialog.png cmd/ar/sc_chapternumberingdialog.png
+cmd/fa/sc_continuenumbering.png cmd/ar/sc_continuenumbering.png
 cmd/fa/sc_defaultbullet.png cmd/ar/sc_defaultbullet.png
 cmd/fa/sc_defaultnumbering.png cmd/ar/sc_defaultnumbering.png
 cmd/fa/sc_deleterecord.png cmd/ar/sc_deleterecord.png
@@ -672,6 +677,7 @@ cmd/he/lc_alphalowliststyle.png cmd/ar/lc_alphalowliststyle.png
 cmd/he/lc_bulletliststyle.png cmd/ar/lc_defaultbullet.png
 cmd/he/lc_bulletsandnumberingdialog.png cmd/ar/lc_bulletsandnumberingdialog.png
 cmd/he/lc_chapternumberingdialog.png cmd/ar/lc_chapternumberingdialog.png
+cmd/he/lc_continuenumbering.png cmd/ar/lc_continuenumbering.png
 cmd/he/lc_defaultbullet.png cmd/ar/lc_defaultbullet.png
 cmd/he/lc_defaultnumbering.png cmd/ar/lc_defaultnumbering.png
 cmd/he/lc_deleterecord.png cmd/ar/lc_deleterecord.png
@@ -696,6 +702,7 @@ cmd/he/sc_alphalowliststyle.png cmd/ar/sc_alphalowliststyle.png
 cmd/he/sc_bulletliststyle.png cmd/ar/sc_defaultbullet.png
 cmd/he/sc_bulletsandnumberingdialog.png cmd/ar/sc_bulletsandnumberingdialog.png
 cmd/he/sc_chapternumberingdialog.png cmd/ar/sc_chapternumberingdialog.png
+cmd/he/sc_continuenumbering.png cmd/ar/sc_continuenumbering.png
 cmd/he/sc_defaultbullet.png cmd/ar/sc_defaultbullet.png
 cmd/he/sc_defaultnumbering.png cmd/ar/sc_defaultnumbering.png
 cmd/he/sc_deleterecord.png cmd/ar/sc_deleterecord.png
@@ -846,6 +853,7 @@ cmd/ur/lc_alphalowliststyle.png cmd/ar/lc_alphalowliststyle.png
 cmd/ur/lc_bulletliststyle.png cmd/ar/lc_defaultbullet.png
 cmd/ur/lc_bulletsandnumberingdialog.png cmd/ar/lc_bulletsandnumberingdialog.png
 cmd/ur/lc_chapternumberingdialog.png cmd/ar/lc_chapternumberingdialog.png
+cmd/ur/lc_continuenumbering.png cmd/ar/lc_continuenumbering.png
 cmd/ur/lc_defaultbullet.png cmd/ar/lc_defaultbullet.png
 cmd/ur/lc_defaultnumbering.png cmd/ar/lc_defaultnumbering.png
 cmd/ur/lc_deleterecord.png cmd/ar/lc_deleterecord.png
@@ -870,6 +878,7 @@ cmd/ur/sc_alphalowliststyle.png cmd/ar/sc_alphalowliststyle.png
 cmd/ur/sc_bulletliststyle.png cmd/ar/sc_defaultbullet.png
 cmd/ur/sc_bulletsandnumberingdialog.png cmd/ar/sc_bulletsandnumberingdialog.png
 cmd/ur/sc_chapternumberingdialog.png cmd/ar/sc_chapternumberingdialog.png
+cmd/ur/sc_continuenumbering.png cmd/ar/sc_continuenumbering.png
 cmd/ur/sc_defaultbullet.png cmd/ar/sc_defaultbullet.png
 cmd/ur/sc_defaultnumbering.png cmd/ar/sc_defaultnumbering.png
 cmd/ur/sc_deleterecord.png cmd/ar/sc_deleterecord.png
