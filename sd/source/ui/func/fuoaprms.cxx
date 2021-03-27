@@ -437,11 +437,11 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             aSet.Put(SfxBoolItem(ATTR_ACTION_SOUNDON, false));
 
         if (nSecondPlayFullSet == ATTR_SET)
-            aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, bSecondPlayFull));
+            aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFUL, bSecondPlayFull));
         else if (nSecondPlayFullSet == ATTR_MIXED)
-            aSet.InvalidateItem(ATTR_ACTION_PLAYFULL);
+            aSet.InvalidateItem(ATTR_ACTION_PLAYFUL);
         else
-            aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, false));
+            aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFUL, false));
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         ScopedVclPtr<SfxAbstractDialog> pDlg( pFact->CreatSdActionDialog(mpViewShell->GetFrameWeld(), &aSet, mpView) );
@@ -583,9 +583,9 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     else
         nSecondSoundOnSet = ATTR_MISSING;
 
-    if (pArgs->GetItemState(ATTR_ACTION_PLAYFULL) == SfxItemState::SET)
+    if (pArgs->GetItemState(ATTR_ACTION_PLAYFUL) == SfxItemState::SET)
     {
-        bSecondPlayFull = static_cast<const SfxBoolItem&>(pArgs->Get(ATTR_ACTION_PLAYFULL)).GetValue();
+        bSecondPlayFull = static_cast<const SfxBoolItem&>(pArgs->Get(ATTR_ACTION_PLAYFUL)).GetValue();
         nSecondPlayFullSet = ATTR_SET;
     }
     else

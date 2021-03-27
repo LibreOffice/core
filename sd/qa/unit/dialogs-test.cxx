@@ -512,7 +512,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             aSet.Put(SfxUInt16Item(ATTR_ACTION_EFFECT, sal_uInt16(presentation::AnimationEffect_NONE)));
             aSet.InvalidateItem(ATTR_ACTION_EFFECTSPEED);
             aSet.Put(SfxBoolItem(ATTR_ACTION_SOUNDON, false));
-            aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, false));
+            aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFUL, false));
             pRetval = getSdAbstractDialogFactory()->CreatSdActionDialog(
                 getViewShell()->GetFrameWeld(),
                 &aSet,
