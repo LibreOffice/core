@@ -888,7 +888,7 @@ bool Bitmap::Replace(const Color& rSearchColor, const Color& rReplaceColor, sal_
 
     // Bitmaps with 1 bit color depth can cause problems if they have other entries than black/white
     // in their palette
-    if (GetBitCount() == 1)
+    if (getPixelFormat() == vcl::PixelFormat::N1_BPP)
         Convert(BmpConversion::N8BitColors);
 
     BitmapScopedWriteAccess pAcc(*this);
@@ -951,7 +951,7 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, si
 {
     // Bitmaps with 1 bit color depth can cause problems if they have other entries than black/white
     // in their palette
-    if (GetBitCount() == 1)
+    if (getPixelFormat() == vcl::PixelFormat::N1_BPP)
         Convert(BmpConversion::N8BitColors);
 
     BitmapScopedWriteAccess pAcc(*this);
@@ -1124,7 +1124,7 @@ bool Bitmap::Blend(const AlphaMask& rAlpha, const Color& rBackgroundColor)
 {
     // Convert to a truecolor bitmap, if we're a paletted one. There's room for tradeoff decision here,
     // maybe later for an overload (or a flag)
-    if (GetBitCount() <= 8)
+    if (vcl::isPalettePixelFormat(getPixelFormat()))
         Convert(BmpConversion::N24Bit);
 
     AlphaMask::ScopedReadAccess pAlphaAcc(const_cast<AlphaMask&>(rAlpha));

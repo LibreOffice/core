@@ -147,13 +147,13 @@ void BitmapRenderTest::testDrawAlphaBitmapEx()
     auto pBackendCapabilities = ImplGetSVData()->mpDefInst->GetBackendCapabilities();
     if (pBackendCapabilities->mbSupportsBitmap32)
     {
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(32), aBitmapEx.GetBitmap().GetBitCount());
+        CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N32_BPP, aBitmapEx.GetBitmap().getPixelFormat());
     }
     else
     {
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(24), aBitmapEx.GetBitmap().GetBitCount());
+        CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aBitmapEx.GetBitmap().getPixelFormat());
         CPPUNIT_ASSERT_EQUAL(true, aBitmapEx.IsAlpha());
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), aBitmapEx.GetAlpha().GetBitCount());
+        CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmapEx.GetAlpha().getPixelFormat());
     }
 
     // Check the bitmap has pixels we expect

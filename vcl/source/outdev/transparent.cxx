@@ -418,7 +418,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                         const tools::Long nB = aFillCol.GetBlue();
                         tools::Long nX, nY;
 
-                        if( aPaint.GetBitCount() <= 8 )
+                        if (vcl::isPalettePixelFormat(aPaint.getPixelFormat()))
                         {
                             const BitmapPalette& rPal = pW->GetPalette();
                             const sal_uInt16 nCount = rPal.GetEntryCount();

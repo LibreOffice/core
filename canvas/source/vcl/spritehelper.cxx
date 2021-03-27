@@ -147,7 +147,7 @@ namespace vclcanvas
 
                 // bitmasks are much faster than alphamasks on some platforms
                 // so convert to bitmask if useful
-                bool convertTo1Bpp = aMask.GetBitCount() != 1;
+                bool convertTo1Bpp = aMask.getPixelFormat() != vcl::PixelFormat::N1_BPP;
 #ifdef MACOSX
                 convertTo1Bpp = false;
 #endif
@@ -166,7 +166,7 @@ namespace vclcanvas
                 // Note: since we retrieved aBmp and aMask
                 // directly from an OutDev, it's already a
                 // 'display bitmap' on windows.
-                if( aMask.GetBitCount() == 1 )
+                if (aMask.getPixelFormat() == vcl::PixelFormat::N1_BPP)
                     maContent = BitmapEx( aBmp.GetBitmap(), aMask.GetBitmap() );
                 else
                     maContent = BitmapEx( aBmp.GetBitmap(), AlphaMask( aMask.GetBitmap()) );

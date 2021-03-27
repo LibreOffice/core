@@ -49,7 +49,7 @@ BitmapInfoAccess::BitmapInfoAccess(Bitmap& rBitmap, BitmapAccessMode nMode)
     if (!mpBuffer)
     {
         std::shared_ptr<SalBitmap> xNewImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
-        if (xNewImpBmp->Create(*xImpBmp, rBitmap.GetBitCount()))
+        if (xNewImpBmp->Create(*xImpBmp, vcl::pixelFormatBitCount(rBitmap.getPixelFormat())))
         {
             xImpBmp = xNewImpBmp;
             rBitmap.ImplSetSalBitmap(xImpBmp);

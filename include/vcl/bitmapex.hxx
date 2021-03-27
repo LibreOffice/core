@@ -89,11 +89,6 @@ public:
     const MapMode&      GetPrefMapMode() const { return maBitmap.GetPrefMapMode(); }
     void                SetPrefMapMode( const MapMode& rPrefMapMode ) { maBitmap.SetPrefMapMode( rPrefMapMode ); }
 
-    sal_uInt16          GetBitCount() const
-    {
-        return maBitmap.GetBitCount();
-    }
-
     vcl::PixelFormat getPixelFormat() const
     {
         return maBitmap.getPixelFormat();

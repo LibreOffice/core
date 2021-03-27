@@ -1748,7 +1748,7 @@ bool ReadDIBBitmapEx(
                             if(!aMask.IsEmpty())
                             {
                                 // do we have an alpha mask?
-                                if((8 == aMask.GetBitCount()) && aMask.HasGreyPalette8Bit())
+                                if (aMask.getPixelFormat() == vcl::PixelFormat::N8_BPP && aMask.HasGreyPalette8Bit())
                                 {
                                     AlphaMask aAlpha;
 
