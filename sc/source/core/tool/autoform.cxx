@@ -868,6 +868,16 @@ void ScAutoFormat::Load()
                 sal_uInt16 nCnt = 0;
                 rStream.ReadUInt16( nCnt );
                 bRet = (rStream.GetError() == ERRCODE_NONE);
+
+                // there has to at least be a sal_uInt16 header
+                const size_t nMaxRecords = rStream.remainingSize() / sizeof(sal_uInt16);
+                if (nCnt > nMaxRecords)
+                {
+                    SAL_WARN("sc", "Parsing error: " << nMaxRecords <<
+                             " max possible entries, but " << nCnt << " claimed, truncating");
+                    nCnt = nMaxRecords;
+                }
+
                 for (sal_uInt16 i=0; bRet && (i < nCnt); i++)
                 {
                     std::unique_ptr<ScAutoFormatData> pData(new ScAutoFormatData());
