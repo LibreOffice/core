@@ -1185,35 +1185,30 @@ cmd/32/browsebackward.png cmd/32/prevrecord.png
 cmd/32/navigateback.png cmd/32/prevrecord.png
 cmd/32/pageup.png cmd/32/prevrecord.png
 cmd/32/previouspage.png cmd/32/prevrecord.png
-cmd/32/previoustrackedchange.png cmd/32/prevrecord.png
 
 cmd/lc_browsebackward.png cmd/lc_prevrecord.png
 cmd/lc_navigateback.png cmd/lc_prevrecord.png
 cmd/lc_pageup.png cmd/lc_prevrecord.png
 cmd/lc_previouspage.png cmd/lc_prevrecord.png
-cmd/lc_previoustrackedchange.png cmd/lc_prevrecord.png
 
 cmd/sc_browsebackward.png cmd/sc_prevrecord.png
 cmd/sc_navigateback.png cmd/sc_prevrecord.png
 cmd/sc_pageup.png cmd/sc_prevrecord.png
 cmd/sc_previouspage.png cmd/sc_prevrecord.png
-cmd/sc_previoustrackedchange.png cmd/sc_prevrecord.png
 
 # >
 cmd/32/navigateforward.png cmd/32/nextrecord.png
 cmd/32/nextpage.png cmd/32/nextrecord.png
-cmd/32/nexttrackedchange.png cmd/32/nextrecord.png
 cmd/32/pagedown.png cmd/32/nextrecord.png
 
 cmd/lc_navigateforward.png cmd/lc_nextrecord.png
 cmd/lc_nextpage.png cmd/lc_nextrecord.png
-cmd/lc_nexttrackedchange.png cmd/lc_nextrecord.png
 cmd/lc_pagedown.png cmd/lc_nextrecord.png
 
 cmd/sc_navigateforward.png cmd/sc_nextrecord.png
 cmd/sc_nextpage.png cmd/sc_nextrecord.png
-cmd/sc_nexttrackedchange.png cmd/sc_nextrecord.png
 cmd/sc_pagedown.png cmd/sc_nextrecord.png
+
 # >|
 cmd/32/gotoendofdoc.png cmd/32/lastrecord.png
 cmd/32/lastpage.png cmd/32/lastrecord.png
