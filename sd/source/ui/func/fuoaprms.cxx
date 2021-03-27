@@ -399,11 +399,11 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             aSet.InvalidateItem(ATTR_ANIMATION_SOUNDFILE);
 
         if (nPlayFullSet == ATTR_SET)
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_PLAYFULL, bPlayFull));
+            aSet.Put(SfxBoolItem(ATTR_ANIMATION_PLAYFUL, bPlayFull));
         else if (nPlayFullSet == ATTR_MIXED)
-            aSet.InvalidateItem(ATTR_ANIMATION_PLAYFULL);
+            aSet.InvalidateItem(ATTR_ANIMATION_PLAYFUL);
         else
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_PLAYFULL, false));
+            aSet.Put(SfxBoolItem(ATTR_ANIMATION_PLAYFUL, false));
 
         if (nClickActionSet == ATTR_SET)
             aSet.Put(SfxUInt16Item(ATTR_ACTION, static_cast<sal_uInt16>(eClickAction)));
@@ -531,9 +531,9 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     else
         nFadeColorSet = ATTR_MISSING;
 
-    if (pArgs->GetItemState(ATTR_ANIMATION_PLAYFULL) == SfxItemState::SET)
+    if (pArgs->GetItemState(ATTR_ANIMATION_PLAYFUL) == SfxItemState::SET)
     {
-        bPlayFull = static_cast<const SfxBoolItem&>(pArgs->Get(ATTR_ANIMATION_PLAYFULL)).GetValue();
+        bPlayFull = static_cast<const SfxBoolItem&>(pArgs->Get(ATTR_ANIMATION_PLAYFUL)).GetValue();
         nPlayFullSet = ATTR_SET;
     }
     else
