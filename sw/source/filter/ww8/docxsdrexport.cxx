@@ -1656,17 +1656,18 @@ void DocxSdrExport::writeVMLTextFrame(ww8::Frame const* pParentFrame, bool bText
         if (m_pImpl->getFlyFillAttrList().is())
         {
             rtl::Reference<FastAttributeList> xFlyFillAttrList(m_pImpl->getFlyFillAttrList());
-            m_pImpl->getFlyFillAttrList().clear();
             pFS->singleElementNS(XML_v, XML_fill, xFlyFillAttrList);
         }
         if (m_pImpl->getDashLineStyleAttr().is())
         {
             rtl::Reference<FastAttributeList> xDashLineStyleAttr(m_pImpl->getDashLineStyleAttr());
-            m_pImpl->getDashLineStyleAttr().clear();
             pFS->singleElementNS(XML_v, XML_stroke, xDashLineStyleAttr);
         }
         pFS->startElementNS(XML_v, XML_textbox, xTextboxAttrList);
     }
+    m_pImpl->getFlyFillAttrList().clear();
+    m_pImpl->getDashLineStyleAttr().clear();
+
     pFS->startElementNS(XML_w, XML_txbxContent);
     {
         ::comphelper::FlagRestorationGuard const g(m_pImpl->m_bFlyFrameGraphic, true);
