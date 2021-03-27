@@ -421,6 +421,19 @@ OUString convertWallpaperStyleToString(WallpaperStyle eWallpaperStyle)
     return OUString();
 }
 
+OUString convertPixelFormatToString(vcl::PixelFormat ePixelFormat)
+{
+    switch (ePixelFormat)
+    {
+        case vcl::PixelFormat::INVALID: return "INVALID";
+        case vcl::PixelFormat::N1_BPP: return "1BPP";
+        case vcl::PixelFormat::N8_BPP: return "8BPP";
+        case vcl::PixelFormat::N24_BPP: return "24BPP";
+        case vcl::PixelFormat::N32_BPP: return "32BPP";
+    }
+    return OUString();
+}
+
 OUString hex32(sal_uInt32 nNumber)
 {
     std::stringstream ss;
@@ -990,7 +1003,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                     BitmapEx const & rBitmapEx = rWallpaper.GetBitmap();
                     rWriter.attribute("crc", hex32(rBitmapEx.GetChecksum()));
                     rWriter.attribute("transparenttype", convertBitmapExTransparentType(rBitmapEx.GetTransparentType()));
-                    rWriter.attribute("bitcount", hex32(rBitmapEx.GetBitmap().GetBitCount()));
+                    rWriter.attribute("pixelformat", convertPixelFormatToString(rBitmapEx.GetBitmap().getPixelFormat()));
                     rWriter.attribute("width", hex32(rBitmapEx.GetSizePixel().Width()));
                     rWriter.attribute("height", hex32(rBitmapEx.GetSizePixel().Height()));
                     rWriter.endElement();

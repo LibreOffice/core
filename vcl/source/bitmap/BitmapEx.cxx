@@ -127,7 +127,8 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
 {
     // Ensure a mask is exactly one bit deep,
     // alternatively also allow 8bpp masks.
-    if( !maMask.IsEmpty() && maMask.GetBitCount() != 1 && !(maMask.GetBitCount() == 8 && maMask.HasGreyPalette8Bit()))
+    if (!maMask.IsEmpty() && maMask.getPixelFormat() != vcl::PixelFormat::N1_BPP
+                && !(maMask.getPixelFormat() == vcl::PixelFormat::N8_BPP && maMask.HasGreyPalette8Bit()))
     {
         SAL_WARN( "vcl", "BitmapEx: forced mask to monochrome");
         BitmapEx aMaskEx(maMask);
@@ -665,7 +666,7 @@ sal_uInt8 BitmapEx::GetAlpha(sal_Int32 nX, sal_Int32 nY) const
     if (nX < 0 || nX >= GetSizePixel().Width() || nY < 0 || nY >= GetSizePixel().Height())
         return 0;
 
-    if (maBitmap.GetBitCount() == 32)
+    if (maBitmap.getPixelFormat() == vcl::PixelFormat::N32_BPP)
         return GetPixelColor(nX, nY).GetAlpha();
 
     sal_uInt8 nAlpha(0);
@@ -722,7 +723,7 @@ Color BitmapEx::GetPixelColor(sal_Int32 nX, sal_Int32 nY) const
         AlphaMask::ScopedReadAccess pAlphaReadAccess(aAlpha);
         aColor.SetAlpha(255 - pAlphaReadAccess->GetPixel(nY, nX).GetIndex());
     }
-    else if (maBitmap.GetBitCount() != 32)
+    else if (maBitmap.getPixelFormat() != vcl::PixelFormat::N32_BPP)
     {
         aColor.SetAlpha(255);
     }
@@ -992,7 +993,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
             if(IsTransparent())
             {
                 // clear bitmap with dest color
-                if(aChangedBitmap.GetBitCount() <= 8)
+                if (vcl::isPalettePixelFormat(aChangedBitmap.getPixelFormat()))
                 {
                     // For e.g. 8bit Bitmaps, the nearest color to the given erase color is
                     // determined and used -> this may be different from what is wanted here.

@@ -166,7 +166,7 @@ namespace dxcanvas::tools
                                   "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
                                   "Unable to acquire read access to bitmap" );
 
-                if( rBmpEx.IsAlpha() || rBmpEx.GetMask().GetBitCount() == 8 )
+                if (rBmpEx.IsAlpha() || rBmpEx.GetMask().getPixelFormat() == vcl::PixelFormat::N8_BPP)
                 {
                     Bitmap aAlpha( rBmpEx.IsAlpha() ? rBmpEx.GetAlpha().GetBitmap() : rBmpEx.GetMask());
 
