@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d99a6b89_5d9fb560",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-03-27T16:45:13Z",
+      "side": 1,
+      "message": "This part is the key to fixing the bug report itself - only look for NON-INHERITED xfill. Otherwise inherited background is being DUPLICATED here.\nThis can easily be seen in the unit test. Before the fix, on the first round-trip, turning off the colour in BackgroundColor paragraph style, the middle paragraph retained the background because it now had direct formatting. The other two paragraphs were \"fine\" because they were still inheriting (because they had a NONE fill which was ignored, so now they were just inheriting.)  On the second round-trip, all paragraphs and also the CancelledBackground all had direct formatting.",
+      "range": {
+        "startLine": 368,
+        "startChar": 80,
+        "endLine": 368,
+        "endChar": 87
+      },
+      "revId": "ed8fee23e5de49b1471af5bab265447a6cac3c0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3fbc2bc_cc853989",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-03-27T16:45:13Z",
+      "side": 1,
+      "message": "This situation has special significance for the get{,DML}TextFrameSyntax(), so the rest of the patch is avoiding those situations - but trying to do it in a generic/intelligent way. An earlier iteration just looked for the existence of FILLTRANSPARENCE.\n\nBut I think I understand it now, and address that in a follow-up patch.",
+      "range": {
+        "startLine": 374,
+        "startChar": 23,
+        "endLine": 374,
+        "endChar": 37
+      },
+      "revId": "ed8fee23e5de49b1471af5bab265447a6cac3c0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
