@@ -249,10 +249,18 @@ IMPL_LINK(SwOutlineContentVisibilityWin, MouseMoveHdl, const MouseEvent&, rMEvt,
 {
     if (rMEvt.IsLeaveWindow())
     {
-        // MouseMove event may not be seen by edit window
-        // hide collapse button and grab focus to document
         if (GetSymbol() != ButtonSymbol::SHOW)
-            Hide();
+        {
+            // MouseMove event may not be seen by the edit window for example when move is to
+            // a show button or when move is outside of the edit window.
+            // Only hide when mouse leave results in leaving the frame.
+            tools::Rectangle aFrameAreaPxRect
+                = GetEditWin()->LogicToPixel(GetFrame()->getFrameArea().SVRect());
+            auto nY = GetPosPixel().getY() + rMEvt.GetPosPixel().getY();
+            if (nY <= 0 || nY <= aFrameAreaPxRect.Top() || nY >= aFrameAreaPxRect.Bottom()
+                || nY >= GetEditWin()->GetSizePixel().Height())
+                Hide();
+        }
         GrabFocusToDocument();
     }
     else if (rMEvt.IsEnterWindow())
