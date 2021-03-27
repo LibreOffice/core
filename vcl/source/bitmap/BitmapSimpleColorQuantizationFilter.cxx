@@ -21,7 +21,7 @@ BitmapEx BitmapSimpleColorQuantizationFilter::execute(BitmapEx const& aBitmapEx)
 
     bool bRet = false;
 
-    if (aBitmap.GetColorCount() <= sal_Int64(mnNewColorCount))
+    if (vcl::numberOfColors(aBitmap.getPixelFormat()) <= sal_Int64(mnNewColorCount))
     {
         bRet = true;
     }
