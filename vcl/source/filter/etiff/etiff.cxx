@@ -183,7 +183,7 @@ bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem const * pF
             mpAcc = aBmp.AcquireReadAccess();
             if ( mpAcc )
             {
-                mnBitsPerPixel = aBmp.GetBitCount();
+                mnBitsPerPixel = vcl::pixelFormatBitCount(aBmp.getPixelFormat());
 
                 // export code below only handles four discrete cases
                 mnBitsPerPixel =

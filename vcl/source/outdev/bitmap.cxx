@@ -496,7 +496,7 @@ BitmapEx OutputDevice::GetBitmapEx( const Point& rSrcPt, const Size& rSize ) con
         Bitmap aAlphaBitmap( mpAlphaVDev->GetBitmap( rSrcPt, rSize ) );
 
         // ensure 8 bit alpha
-        if( aAlphaBitmap.GetBitCount() > 8 )
+        if (aAlphaBitmap.getPixelFormat() > vcl::PixelFormat::N8_BPP)
             aAlphaBitmap.Convert( BmpConversion::N8BitNoConversion );
 
         return BitmapEx(GetBitmap( rSrcPt, rSize ), AlphaMask( aAlphaBitmap ) );

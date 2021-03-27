@@ -112,7 +112,7 @@ PNGWriterImpl::PNGWriterImpl(const BitmapEx& rBitmapEx,
 
     BitmapEx aBitmapEx;
 
-    if (rBitmapEx.GetBitmap().GetBitCount() == 32)
+    if (rBitmapEx.GetBitmap().getPixelFormat() == vcl::PixelFormat::N32_BPP)
     {
         if (!vcl::bitmap::convertBitmap32To24Plus8(rBitmapEx, aBitmapEx))
             return;
@@ -142,7 +142,7 @@ PNGWriterImpl::PNGWriterImpl(const BitmapEx& rBitmapEx,
             }
         }
     }
-    mnBitsPerPixel = static_cast<sal_uInt8>(aBmp.GetBitCount());
+    mnBitsPerPixel = sal_uInt8(vcl::pixelFormatBitCount(aBmp.getPixelFormat()));
 
     if (aBitmapEx.IsTransparent())
     {

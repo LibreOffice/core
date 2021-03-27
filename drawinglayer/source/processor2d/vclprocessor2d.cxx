@@ -470,7 +470,7 @@ void VclProcessor2D::RenderFillGraphicPrimitive2D(
                             // if color depth is below 24bit, expand before scaling for better quality.
                             // This is even needed for low colors, else the scale will produce
                             // a bitmap in gray or Black/White (!)
-                            if (aBitmapEx.GetBitCount() < 24)
+                            if (isPalettePixelFormat(aBitmapEx.getPixelFormat()))
                             {
                                 aBitmapEx.Convert(BmpConversion::N24Bit);
                             }

@@ -370,7 +370,10 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
                 if( mpGraphic )
                 {
                     if( mpGraphic->GetType() == GraphicType::Bitmap )
-                        nBitsPerPixel = mpGraphic->GetBitmapEx().GetBitmap().GetBitCount();
+                    {
+                        auto ePixelFormat = mpGraphic->GetBitmapEx().GetBitmap().getPixelFormat();
+                        nBitsPerPixel = vcl::pixelFormatBitCount(ePixelFormat);
+                    }
                 }
                 else
                     nBitsPerPixel = mnBitsPerPixel;

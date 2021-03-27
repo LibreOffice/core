@@ -748,10 +748,10 @@ css::uno::Sequence<sal_Int8> x11::convertBitmapDepth(
         StreamMode::READ);
     Bitmap bm;
     ReadDIB(bm, in, true);
-    if (bm.GetBitCount() == 24 && depth <= 8) {
+    if (bm.getPixelFormat() == vcl::PixelFormat::N24_BPP && depth <= 8) {
         bm.Dither();
     }
-    if (bm.GetBitCount() != depth) {
+    if (vcl::pixelFormatBitCount(bm.getPixelFormat()) != depth) {
         switch (depth) {
         case 1:
             bm.Convert(BmpConversion::N1BitThreshold);

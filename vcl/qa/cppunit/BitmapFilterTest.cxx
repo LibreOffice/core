@@ -80,7 +80,7 @@ void BitmapFilterTest::testBlurCorrectness()
     Bitmap aBitmap24Bit(aSize, vcl::PixelFormat::N24_BPP);
 
     ScanlineFormat scanlineFormat = ScanlineFormat::NONE;
-    sal_uInt16 nBPP = aBitmap24Bit.GetBitCount();
+    auto ePixelFormat = aBitmap24Bit.getPixelFormat();
 
     {
         tools::Long aMargin1 = 1;
@@ -124,7 +124,7 @@ void BitmapFilterTest::testBlurCorrectness()
     CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(41), aBitmap24Bit.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(31), aBitmap24Bit.GetSizePixel().Height());
 
-    CPPUNIT_ASSERT_EQUAL(nBPP, aBitmap24Bit.GetBitCount());
+    CPPUNIT_ASSERT_EQUAL(ePixelFormat, aBitmap24Bit.getPixelFormat());
 
     // Check that the bitmap is horizontally and vertically symmetrical
     CPPUNIT_ASSERT(BitmapSymmetryCheck::check(aBitmap24Bit));

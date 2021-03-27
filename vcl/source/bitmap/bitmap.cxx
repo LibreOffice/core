@@ -322,42 +322,25 @@ Size Bitmap::GetSizePixel() const
 
 vcl::PixelFormat Bitmap::getPixelFormat() const
 {
-    switch (GetBitCount())
-    {
-        case 1: return vcl::PixelFormat::N1_BPP;
-        case 4: assert(false); break;
-        case 8: return vcl::PixelFormat::N8_BPP;
-        case 24: return vcl::PixelFormat::N24_BPP;
-        case 32: return vcl::PixelFormat::N32_BPP;
-        default:
-            break;
-    }
-    return vcl::PixelFormat::INVALID;
-}
-
-sal_uInt16 Bitmap::GetBitCount() const
-{
     if (!mxSalBmp)
-        return 0;
+        return vcl::PixelFormat::INVALID;
 
     sal_uInt16 nBitCount = mxSalBmp->GetBitCount();
     if (nBitCount <= 1)
-        return 1;
-    if (nBitCount <= 4)
-        return 4;
+        return vcl::PixelFormat::N1_BPP;
     if (nBitCount <= 8)
-        return 8;
+        return vcl::PixelFormat::N8_BPP;
     if (nBitCount <= 24)
-        return 24;
+        return vcl::PixelFormat::N24_BPP;
     if (nBitCount <= 32)
-        return 32;
-    return 0;
+        return vcl::PixelFormat::N32_BPP;
+
+    return vcl::PixelFormat::INVALID;
 }
 
 bool Bitmap::HasGreyPaletteAny() const
 {
-    const sal_uInt16    nBitCount = GetBitCount();
-    bool            bRet = nBitCount == 1;
+    bool bRet = getPixelFormat() == vcl::PixelFormat::N1_BPP;
 
     ScopedInfoAccess pIAcc(const_cast<Bitmap&>(*this));
 
@@ -397,7 +380,7 @@ BitmapChecksum Bitmap::GetChecksum() const
             // so, we need to update the imp bitmap for this bitmap instance
             // as we do in BitmapInfoAccess::ImplCreate
             std::shared_ptr<SalBitmap> xNewImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
-            if (xNewImpBmp->Create(*mxSalBmp, GetBitCount()))
+            if (xNewImpBmp->Create(*mxSalBmp, vcl::pixelFormatBitCount(getPixelFormat())))
             {
                 Bitmap* pThis = const_cast<Bitmap*>(this);
                 pThis->mxSalBmp = xNewImpBmp;
@@ -551,8 +534,8 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
             Bitmap*         pSrc = const_cast<Bitmap*>(pBmpSrc);
             const Size      aCopySizePix( pSrc->GetSizePixel() );
             tools::Rectangle       aRectSrc( rRectSrc );
-            const sal_uInt16    nSrcBitCount = pBmpSrc->GetBitCount();
-            const sal_uInt16    nDstBitCount = GetBitCount();
+            const sal_uInt16 nSrcBitCount = vcl::pixelFormatBitCount(pBmpSrc->getPixelFormat());
+            const sal_uInt16 nDstBitCount = vcl::pixelFormatBitCount(getPixelFormat());
 
             if( nSrcBitCount > nDstBitCount )
             {
@@ -983,7 +966,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
         }
     }
 
-    const sal_uInt16 nBitCount = GetBitCount ();
+    const sal_uInt16 nBitCount = vcl::pixelFormatBitCount(getPixelFormat());
     bool bRet = false;
 
     switch( eConversion )
@@ -1168,7 +1151,7 @@ bool Bitmap::ImplMakeGreyscales()
 
 bool Bitmap::ImplConvertUp(vcl::PixelFormat ePixelFormat, Color const * pExtColor)
 {
-    SAL_WARN_IF(sal_Int32(ePixelFormat) <= GetBitCount(), "vcl", "New BitCount must be greater!" );
+    SAL_WARN_IF(ePixelFormat <= getPixelFormat(), "vcl", "New pixel format must be greater!" );
 
     Bitmap::ScopedReadAccess pReadAcc(*this);
     bool bRet = false;
@@ -1188,9 +1171,9 @@ bool Bitmap::ImplConvertUp(vcl::PixelFormat ePixelFormat, Color const * pExtColo
             {
                 const BitmapPalette& rOldPalette = pReadAcc->GetPalette();
                 const sal_uInt16 nOldCount = rOldPalette.GetEntryCount();
-                assert(nOldCount <= (1 << GetBitCount()));
-                sal_Int16 nNewBitCount = sal_Int16(ePixelFormat);
-                aPalette.SetEntryCount(1 << nNewBitCount);
+                assert(nOldCount <= (1 << vcl::pixelFormatBitCount(getPixelFormat())));
+
+                aPalette.SetEntryCount(1 << vcl::pixelFormatBitCount(ePixelFormat));
 
                 for (sal_uInt16 i = 0; i < nOldCount; i++)
                     aPalette[i] = rOldPalette[i];
@@ -1257,7 +1240,7 @@ bool Bitmap::ImplConvertUp(vcl::PixelFormat ePixelFormat, Color const * pExtColo
 
 bool Bitmap::ImplConvertDown(vcl::PixelFormat ePixelFormat, Color const * pExtColor)
 {
-    SAL_WARN_IF(sal_Int32(ePixelFormat) > GetBitCount(), "vcl", "New BitCount must be lower ( or equal when pExtColor is set )!");
+    SAL_WARN_IF(ePixelFormat > getPixelFormat(), "vcl", "New pixelformat must be lower ( or equal when pExtColor is set )!");
 
     Bitmap::ScopedReadAccess pReadAcc(*this);
     bool bRet = false;
@@ -1397,7 +1380,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
         return true;
     }
 
-    const sal_uInt16 nStartCount(GetBitCount());
+    const auto eStartPixelFormat = getPixelFormat();
 
     if (mxSalBmp && mxSalBmp->ScalingSupported())
     {
@@ -1426,7 +1409,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
     // just use the fast scale rather than attempting to count unique colors in
     // the other converters and pass all the info down through
     // Bitmap::MakeMonochrome
-    if (nStartCount == 1)
+    if (eStartPixelFormat == vcl::PixelFormat::N1_BPP)
         nScaleFlag = BmpScaleFlag::Fast;
 
     BitmapEx aBmpEx(*this);
@@ -1470,7 +1453,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
     if (bRetval)
         *this = aBmpEx.GetBitmap();
 
-    OSL_ENSURE(!bRetval || nStartCount == GetBitCount(), "Bitmap::Scale has changed the ColorDepth, this should *not* happen (!)");
+    OSL_ENSURE(!bRetval || eStartPixelFormat == getPixelFormat(), "Bitmap::Scale has changed the ColorDepth, this should *not* happen (!)");
     return bRetval;
 }
 
@@ -1503,22 +1486,17 @@ bool Bitmap::HasFastScale()
 void Bitmap::AdaptBitCount(Bitmap& rNew) const
 {
     // aNew is the result of some operation; adapt it's BitCount to the original (this)
-    if(GetBitCount() == rNew.GetBitCount())
+    if (getPixelFormat() == rNew.getPixelFormat())
         return;
 
-    switch(GetBitCount())
+    switch (getPixelFormat())
     {
-        case 1:
+        case vcl::PixelFormat::N1_BPP:
         {
             rNew.Convert(BmpConversion::N1BitThreshold);
             break;
         }
-        case 4:
-        {
-            assert(false);
-            break;
-        }
-        case 8:
+        case vcl::PixelFormat::N8_BPP:
         {
             if(HasGreyPaletteAny())
             {
@@ -1530,19 +1508,19 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
             }
             break;
         }
-        case 24:
+        case vcl::PixelFormat::N24_BPP:
         {
             rNew.Convert(BmpConversion::N24Bit);
             break;
         }
-        case 32:
+        case vcl::PixelFormat::N32_BPP:
         {
             rNew.Convert(BmpConversion::N32Bit);
             break;
         }
-        default:
+        case vcl::PixelFormat::INVALID:
         {
-            SAL_WARN("vcl", "BitDepth adaptation failed, from " << rNew.GetBitCount() << " to " << GetBitCount());
+            SAL_WARN("vcl", "Can't adapt the pixelformat as it is invalid.");
             break;
         }
     }

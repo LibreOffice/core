@@ -89,9 +89,8 @@ void BitmapTest::testCreation()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<tools::Long>(0), aSize.Height());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pref size", Size(), aBmp.GetPrefSize());
         CPPUNIT_ASSERT_MESSAGE("Not empty", aBmp.IsEmpty());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(0),
-                                     aBmp.GetBitCount());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", sal_Int64(1), aBmp.GetColorCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pixel format", vcl::PixelFormat::INVALID,
+                                     aBmp.getPixelFormat());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(0),
                                      aBmp.GetSizeBytes());
     }
@@ -103,9 +102,8 @@ void BitmapTest::testCreation()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<tools::Long>(10), aSize.Height());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pref size", Size(), aBmp.GetPrefSize());
         CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(1),
-                                     aBmp.GetBitCount());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", sal_Int64(2), aBmp.GetColorCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pixel format", vcl::PixelFormat::N1_BPP,
+                                     aBmp.getPixelFormat());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(12),
                                      aBmp.GetSizeBytes());
     }
@@ -117,9 +115,8 @@ void BitmapTest::testCreation()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<tools::Long>(10), aSize.Height());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pref size", Size(), aBmp.GetPrefSize());
         CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(8),
-                                     aBmp.GetBitCount());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", sal_Int64(256), aBmp.GetColorCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pixel format", vcl::PixelFormat::N8_BPP,
+                                     aBmp.getPixelFormat());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(100),
                                      aBmp.GetSizeBytes());
     }
@@ -131,10 +128,8 @@ void BitmapTest::testCreation()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<tools::Long>(10), aSize.Height());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pref size", Size(), aBmp.GetPrefSize());
         CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(24),
-                                     aBmp.GetBitCount());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", sal_Int64(16777216),
-                                     aBmp.GetColorCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pixel format", vcl::PixelFormat::N24_BPP,
+                                     aBmp.getPixelFormat());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", static_cast<sal_uLong>(300),
                                      aBmp.GetSizeBytes());
     }
@@ -150,10 +145,8 @@ void BitmapTest::testCreation()
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<tools::Long>(10), aSize.Height());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pref size", Size(), aBmp.GetPrefSize());
         CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", sal_uInt16(32), aBmp.GetBitCount());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong color count", sal_Int64(4294967296ull),
-                                     aBmp.GetColorCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pixel format", vcl::PixelFormat::N32_BPP,
+                                     aBmp.getPixelFormat());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong byte size", sal_uLong(400), aBmp.GetSizeBytes());
     }
 }
@@ -292,7 +285,7 @@ void BitmapTest::testConvert()
 
     aBitmap.Erase(COL_LIGHTGRAYBLUE);
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), aBitmap.GetBitCount());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
     {
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), pReadAccess->GetBitCount());
@@ -312,7 +305,7 @@ void BitmapTest::testConvert()
 
     aBitmap.Convert(BmpConversion::N24Bit);
 
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(24), aBitmap.GetBitCount());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aBitmap.getPixelFormat());
     {
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
         // 24 bit Bitmap on SVP backend can now use 24bit RGB everywhere.
