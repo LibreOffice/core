@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f956f98b_f777850c",
+        "filename": "connectivity/source/parse/sqliterator.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1849,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-03-27T11:50:04Z",
+      "side": 1,
+      "message": "did you mean to make the above an assert?",
+      "revId": "f4367cfd6978ae2fa896652175956bdbedd3c4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
