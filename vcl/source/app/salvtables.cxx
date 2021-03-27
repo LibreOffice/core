@@ -7145,10 +7145,11 @@ weld::Window* SalFrame::GetFrameWeld() const
     if (!m_xFrameWeld)
     {
         vcl::Window* pWindow = GetWindow();
-        pWindow = pWindow ? pWindow->ImplGetWindow() : nullptr;
-        assert(!pWindow || (pWindow->IsSystemWindow() || pWindow->IsDockingWindow()));
         if (pWindow)
+        {
+            assert(pWindow == pWindow->GetFrameWindow());
             m_xFrameWeld.reset(new SalInstanceWindow(pWindow, nullptr, false));
+        }
     }
     return m_xFrameWeld.get();
 }
