@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d6c9cd7_d96c371d",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-27T08:30:21Z",
+      "side": 1,
+      "message": "Possibly cleaner is to just use two \u0027return\u0027 statements - where it\u0027s found, return true, and in the end, return false, instead of using this variable :-)\n\nBut it\u0027s just my preference; feel free to ignore this one.",
+      "revId": "29fd09cb719fefa459acabc37a0f1ccc6648a93f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cda84a6_af4016f0",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-27T08:30:21Z",
+      "side": 1,
+      "message": "This is a standard syntax for WinAPI documentation, but we do not use C-style casts in the codebase. So please turn it into\n\n  static_cast\u003cPVOID\u003e(szRegPath)",
+      "range": {
+        "startLine": 87,
+        "startChar": 27,
+        "endLine": 87,
+        "endChar": 34
+      },
+      "revId": "29fd09cb719fefa459acabc37a0f1ccc6648a93f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9eceead_a487944c",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-27T08:30:21Z",
+      "side": 1,
+      "message": "Please be consistent. Use sizeof(WCHAR) :-)\n\nAnd why the \"- 2\" to the resulting *character* count?",
+      "range": {
+        "startLine": 94,
+        "startChar": 59,
+        "endLine": 94,
+        "endChar": 60
+      },
+      "revId": "29fd09cb719fefa459acabc37a0f1ccc6648a93f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
