@@ -24,6 +24,7 @@
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <sal/log.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/colrdlg.hxx>
 #include <tools/debug.hxx>
@@ -1444,8 +1445,17 @@ void SdPublishingDlg::Load()
 
     SdIOCompat aIO(*pStream, StreamMode::READ);
 
-    sal_uInt16 nDesigns;
-    pStream->ReadUInt16( nDesigns );
+    sal_uInt16 nDesigns(0);
+    pStream->ReadUInt16(nDesigns);
+
+    // there has to at least be a sal_uInt16 header in each design
+    const size_t nMaxRecords = pStream->remainingSize() / sizeof(sal_uInt16);
+    if (nDesigns > nMaxRecords)
+    {
+        SAL_WARN("sd", "Parsing error: " << nMaxRecords <<
+                 " max possible entries, but " << nDesigns << " claimed, truncating");
+        nDesigns = nMaxRecords;
+    }
 
     for( sal_uInt16 nIndex = 0;
          pStream->GetError() == ERRCODE_NONE && nIndex < nDesigns;
