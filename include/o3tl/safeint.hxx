@@ -239,17 +239,11 @@ make_unsigned(T value)
 // tools like -fsanitize=implicit-conversion should still be able to detect truncation:
 template<typename T1, typename T2> constexpr T1 narrowing(T2 value) { return value; }
 
-// inform coverity that the returned value is now deemed sanitized
-// coverity[ -taint_source ]
-template<typename T> [[nodiscard]] constexpr T deem_sanitized(T a)
-{
-    return a;
-}
-
 // std::min wrapped to inform coverity that the result is now deemed sanitized
+// coverity[ -taint_source ]
 template<typename T> [[nodiscard]] inline T sanitizing_min(T a, T b)
 {
-    return o3tl::deem_sanitized(std::min(a, b));
+    return std::min(a, b);
 }
 
 }
