@@ -245,9 +245,15 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                     {
                         for (png_uint_32 y = 0; y < height; y++)
                         {
-                            Scanline pScanline = pWriteAccess->GetScanline(y);
                             png_bytep pRow = aRows[y].data();
                             png_read_row(pPng, pRow, nullptr);
+
+                            const bool bLastPass = pass == nNumberOfPasses - 1;
+                            if (!bLastPass)
+                                continue;
+
+                            Scanline pScanline = pWriteAccess->GetScanline(y);
+
                             size_t iColor = 0;
                             for (size_t i = 0; i < aRowSizeBytes; i += 4)
                             {
@@ -295,10 +301,16 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                     {
                         for (png_uint_32 y = 0; y < height; y++)
                         {
-                            Scanline pScanline = pWriteAccess->GetScanline(y);
-                            Scanline pScanAlpha = pWriteAccessAlpha->GetScanline(y);
                             png_bytep pRow = aRows[y].data();
                             png_read_row(pPng, pRow, nullptr);
+
+                            const bool bLastPass = pass == nNumberOfPasses - 1;
+                            if (!bLastPass)
+                                continue;
+
+                            Scanline pScanline = pWriteAccess->GetScanline(y);
+                            Scanline pScanAlpha = pWriteAccessAlpha->GetScanline(y);
+
                             size_t iAlpha = 0;
                             size_t iColor = 0;
                             for (size_t i = 0; i < aRowSizeBytes; i += 4)
