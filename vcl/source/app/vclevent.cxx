@@ -35,9 +35,8 @@ void VclEventListeners::Call( VclSimpleEvent& rEvent ) const
     if (VclWindowEvent* pWindowEvent = dynamic_cast<VclWindowEvent*>(&rEvent))
     {
         VclPtr<vcl::Window> xWin(pWindowEvent->GetWindow());
-        // see tdf#142549 before changing IsDisposed() to isDisposed(), maybe !xWin->mpWindowImpl
-        // or special case VclEventId::ObjectDying ?
-        while ( aIter != aEnd && (!xWin || !xWin->IsDisposed()) )
+        // checking mpWindowImpl to see if disposal is complete yet
+        while ( aIter != aEnd && (!xWin || xWin->mpWindowImpl) )
         {
             Link<VclSimpleEvent&,void> &rLink = *aIter;
             // check this hasn't been removed in some re-enterancy scenario fdo#47368

@@ -60,6 +60,7 @@ class VCLXWindow;
 class VclWindowEvent;
 class AllSettings;
 class InputContext;
+class VclEventListeners;
 enum class ImplPaintFlags;
 enum class VclEventId;
 enum class PointerStyle;
@@ -472,6 +473,7 @@ class VCL_DLLPUBLIC Window : public virtual VclReferenceBase
     friend class ::ImplBorderWindow;
     friend class ::PaintHelper;
     friend class ::LifecycleTest;
+    friend class ::VclEventListeners;
 
     // TODO: improve missing functionality
     // only required because of SetFloatingMode()
@@ -796,7 +798,6 @@ public:
     bool                                IsMenuFloatingWindow() const;
     bool                                IsToolbarFloatingWindow() const;
     bool                                IsTopWindow() const;
-    bool                                IsDisposed() const;
     SystemWindow*                       GetSystemWindow() const;
 
     /// Can the widget derived from this Window do the double-buffering via RenderContext properly?
