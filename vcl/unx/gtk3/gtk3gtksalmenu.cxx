@@ -1362,7 +1362,7 @@ void GtkSalMenu::Activate(const gchar* pCommand)
     MenuAndId aMenuAndId = decode_command(pCommand);
     GtkSalMenu* pSalMenu = aMenuAndId.first;
     Menu* pVclMenu = pSalMenu->GetMenu();
-    if (pVclMenu->isDisposed())
+    if (pVclMenu->IsDisposed())
         return;
     GtkSalMenu* pTopLevel = pSalMenu->GetTopLevel();
     Menu* pVclSubMenu = pVclMenu->GetPopupMenu(aMenuAndId.second);
@@ -1379,7 +1379,7 @@ void GtkSalMenu::Deactivate(const gchar* pCommand)
     MenuAndId aMenuAndId = decode_command(pCommand);
     GtkSalMenu* pSalMenu = aMenuAndId.first;
     Menu* pVclMenu = pSalMenu->GetMenu();
-    if (pVclMenu->isDisposed())
+    if (pVclMenu->IsDisposed())
         return;
     GtkSalMenu* pTopLevel = pSalMenu->GetTopLevel();
     Menu* pVclSubMenu = pVclMenu->GetPopupMenu(aMenuAndId.second);

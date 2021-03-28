@@ -106,7 +106,7 @@ public:
         assert(m_rInnerRef.get() == nullptr || vclmain::isAlive());
         // We can be one of the intermediate counts, but if we are the last
         // VclPtr keeping this object alive, then something forgot to call dispose().
-        assert((!m_rInnerRef.get() || m_rInnerRef->isDisposed() || m_rInnerRef->getRefCount() > 1)
+        assert((!m_rInnerRef.get() || m_rInnerRef->IsDisposed() || m_rInnerRef->getRefCount() > 1)
                 && "someone forgot to call dispose()");
     }
     VclPtr(VclPtr const &) = default;

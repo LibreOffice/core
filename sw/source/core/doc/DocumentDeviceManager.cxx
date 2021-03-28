@@ -66,7 +66,7 @@ SfxPrinter* DocumentDeviceManager::getPrinter(/*[in]*/ bool bCreate ) const
 
 void DocumentDeviceManager::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDeleteOld,/*[in]*/ bool bCallPrtDataChanged )
 {
-    assert ( !pP || !pP->isDisposed() );
+    assert ( !pP || !pP->IsDisposed() );
     if ( pP != mpPrt )
     {
         if ( bDeleteOld )
@@ -101,14 +101,14 @@ VirtualDevice* DocumentDeviceManager::getVirtualDevice(/*[in]*/ bool bCreate ) c
     else
         pRet = &CreateVirtualDevice_();
 
-    assert ( !pRet || !pRet->isDisposed() );
+    assert ( !pRet || !pRet->IsDisposed() );
 
     return pRet;
 }
 
 void DocumentDeviceManager::setVirtualDevice(/*[in]*/ VirtualDevice* pVd )
 {
-    assert ( !pVd->isDisposed() );
+    assert ( !pVd->IsDisposed() );
 
     if ( mpVirDev.get() != pVd )
     {
@@ -137,7 +137,7 @@ OutputDevice* DocumentDeviceManager::getReferenceDevice(/*[in]*/ bool bCreate ) 
         pRet = getVirtualDevice( bCreate );
     }
 
-    assert ( !pRet || !pRet->isDisposed() );
+    assert ( !pRet || !pRet->IsDisposed() );
 
     return pRet;
 }

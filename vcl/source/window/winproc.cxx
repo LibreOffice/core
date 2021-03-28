@@ -1297,7 +1297,7 @@ static bool ImplCallWheelCommand( const VclPtr<vcl::Window>& pWindow, const Poin
 
 static bool acceptableWheelScrollTarget(const vcl::Window *pMouseWindow)
 {
-    return (pMouseWindow && !pMouseWindow->isDisposed() && pMouseWindow->IsInputEnabled() && !pMouseWindow->IsInModalMode());
+    return (pMouseWindow && !pMouseWindow->IsDisposed() && pMouseWindow->IsInputEnabled() && !pMouseWindow->IsInModalMode());
 }
 
 //If the last event at the same absolute screen position was handled by a

@@ -182,7 +182,7 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
         // outputdevice it was based on has been disposed,
         // drop it and create a new one instead as reusing
         // such devices is unsafe under at least Gtk2
-        if (maDeviceTemplates[pRetval]->isDisposed())
+        if (maDeviceTemplates[pRetval]->IsDisposed())
         {
             maDeviceTemplates.erase(pRetval);
             pRetval.disposeAndClear();

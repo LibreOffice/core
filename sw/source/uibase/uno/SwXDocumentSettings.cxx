@@ -422,7 +422,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                 if ( pPrinter->GetName() != sPrinterName )
                 {
                     VclPtrInstance<SfxPrinter> pNewPrinter( pPrinter->GetOptions().Clone(), sPrinterName );
-                    assert (! pNewPrinter->isDisposed() );
+                    assert (! pNewPrinter->IsDisposed() );
                     if( pNewPrinter->IsKnown() )
                     {
                         // set printer only once; in _postSetValues
@@ -459,7 +459,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                 };
                 auto pItemSet = std::make_unique<SfxItemSet>( mpDoc->GetAttrPool(), nRange );
                 VclPtr<SfxPrinter> pPrinter = SfxPrinter::Create ( aStream, std::move(pItemSet) );
-                assert (! pPrinter->isDisposed() );
+                assert (! pPrinter->IsDisposed() );
                 // set printer only once; in _postSetValues
                 mpPrinter.disposeAndClear();
                 mpPrinter = pPrinter;

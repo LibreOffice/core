@@ -140,11 +140,6 @@ namespace
 }
 #endif
 
-bool Window::IsDisposed() const
-{
-    return !mpWindowImpl;
-}
-
 void Window::dispose()
 {
     assert( mpWindowImpl );
