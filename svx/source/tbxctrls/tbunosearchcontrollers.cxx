@@ -264,7 +264,7 @@ void FindTextFieldControl::SetTextToSelected_Impl()
 
 IMPL_LINK(FindTextFieldControl, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
 {
-    if (isDisposed())
+    if (IsDisposed())
         return true;
 
     bool bRet = false;
@@ -328,7 +328,7 @@ void FindTextFieldControl::ActivateFind(bool bShift)
 
 IMPL_LINK_NOARG(FindTextFieldControl, ActivateHdl, weld::ComboBox&, bool)
 {
-    if (isDisposed())
+    if (IsDisposed())
         return true;
 
     ActivateFind(false);

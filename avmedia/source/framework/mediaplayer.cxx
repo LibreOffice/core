@@ -95,7 +95,7 @@ void MediaFloater::ToggleFloatingMode()
 
     SfxDockingWindow::ToggleFloatingMode();
 
-    if (isDisposed())
+    if (IsDisposed())
         return;
 
     mpMediaWindow.reset( new MediaWindow( this, true ) );

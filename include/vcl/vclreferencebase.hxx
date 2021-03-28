@@ -22,11 +22,14 @@
 #include <vcl/dllapi.h>
 #include <osl/interlck.h>
 
+class VclBuilder;
+
 class VCL_DLLPUBLIC VclReferenceBase
 {
     mutable oslInterlockedCount mnRefCnt;
 
     template<typename T> friend class VclPtr;
+    friend class ::VclBuilder; // needed by ::delete_by_window(vcl::Window *pWindow)
 
 public:
     void acquire() const
@@ -54,15 +57,16 @@ private:
 
 protected:
                                 VclReferenceBase();
-protected:
     virtual                     ~VclReferenceBase();
 
-protected:
+    // This is only supposed to be called from disposeOnce
     virtual void                dispose();
 
 public:
+    // This is normally supposed to be called from VclPtr::disposeAndClear
     void                        disposeOnce();
-    bool                        isDisposed() const { return mbDisposed; }
+
+    bool                        IsDisposed() const { return mbDisposed; }
 
 };
 #endif

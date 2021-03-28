@@ -2331,7 +2331,7 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( tools::Long nWidth )
         return false;
     if ( mpTabCtrlData->maItemList.empty() )
         return false;
-    if (!m_pOpenMenu || m_pOpenMenu->isDisposed())
+    if (!m_pOpenMenu || m_pOpenMenu->IsDisposed())
         return false;
 
     const tools::Long nHamburgerWidth = m_pOpenMenu->GetSizePixel().Width();

@@ -398,7 +398,7 @@ void SAL_CALL SidebarController::requestLayout()
     SolarMutexGuard aSolarMutexGuard;
 
     sal_Int32 nMinimalWidth = 0;
-    if (mpCurrentDeck && !mpCurrentDeck->isDisposed())
+    if (mpCurrentDeck && !mpCurrentDeck->IsDisposed())
     {
         mpCurrentDeck->RequestLayout();
         nMinimalWidth = mpCurrentDeck->GetMinimalWidth();
@@ -438,7 +438,7 @@ void SidebarController::NotifyResize()
     mbIsDeckRequestedOpen = bIsDeckVisible;
     UpdateCloseIndicator(!bIsDeckVisible);
 
-    if (mpCurrentDeck && !mpCurrentDeck->isDisposed())
+    if (mpCurrentDeck && !mpCurrentDeck->IsDisposed())
     {
         SfxSplitWindow* pSplitWindow = GetSplitWindow();
         WindowAlign eAlign = pSplitWindow ? pSplitWindow->GetAlign() : WindowAlign::Right;
@@ -490,7 +490,7 @@ void SidebarController::NotifyResize()
 
     // Determine if the closer of the deck can be shown.
     sal_Int32 nMinimalWidth = 0;
-    if (mpCurrentDeck && !mpCurrentDeck->isDisposed())
+    if (mpCurrentDeck && !mpCurrentDeck->IsDisposed())
     {
         DeckTitleBar* pTitleBar = mpCurrentDeck->GetTitleBar();
         if (pTitleBar && pTitleBar->GetVisible())

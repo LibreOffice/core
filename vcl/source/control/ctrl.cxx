@@ -397,7 +397,7 @@ OutputDevice* Control::GetReferenceDevice() const
     // inside Control::SetReferenceDevice and Control::GetReferenceDevice().
     // Control::GetReferenceDevice() will now reset mpReferenceDevice if it is already
     // disposed. This way all usages will do a kind of 'test-and-get' call.
-    if(nullptr != mpControlData->mpReferenceDevice && mpControlData->mpReferenceDevice->isDisposed())
+    if(nullptr != mpControlData->mpReferenceDevice && mpControlData->mpReferenceDevice->IsDisposed())
     {
         const_cast<Control*>(this)->SetReferenceDevice(nullptr);
     }

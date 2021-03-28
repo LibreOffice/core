@@ -47,7 +47,7 @@ VCLXAccessibleTabControl::VCLXAccessibleTabControl( VCLXWindow* pVCLXWindow )
     m_pTabControl = GetAs<TabControl>();
     if (!m_pTabControl)
         return;
-    if (m_pTabControl->isDisposed())
+    if (m_pTabControl->IsDisposed())
     {
         m_pTabControl.clear();
         return;

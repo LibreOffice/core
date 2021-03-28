@@ -511,7 +511,7 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
         if (!ImplGetSVData()->mpWinData->mbNoSaveFocus)
         {
             VclPtr<vcl::Window> xTempFocusId;
-            if (m_xSaveFocusId && !m_xSaveFocusId->isDisposed())
+            if (m_xSaveFocusId && !m_xSaveFocusId->IsDisposed())
                 xTempFocusId = m_xSaveFocusId;
             m_xSaveFocusId = nullptr;
 
