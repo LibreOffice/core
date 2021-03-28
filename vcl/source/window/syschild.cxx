@@ -43,12 +43,12 @@ static void ImplSysChildProc( SystemChildWindow* pInst, SalObjEvent nEvent )
             pWindow->ImplGetFrameData()->mbSysObjFocus = true;
             pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = true;
             pWindow->ToTop( ToTopFlags::NoGrabFocus );
-            if( pWindow->IsDisposed() )
+            if( pWindow->isDisposed() )
                 break;
             pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = false;
             pWindow->ImplGetFrameData()->mbInSysObjFocusHdl = true;
             pWindow->GrabFocus();
-            if( pWindow->IsDisposed() )
+            if( pWindow->isDisposed() )
                 break;
             pWindow->ImplGetFrameData()->mbInSysObjFocusHdl = false;
             break;
@@ -56,7 +56,7 @@ static void ImplSysChildProc( SystemChildWindow* pInst, SalObjEvent nEvent )
         case SalObjEvent::LoseFocus:
             // trigger a LoseFocus which matches the status
             // of the window with matching Activate-Status
-            if (pWindow->IsDisposed())
+            if (pWindow->isDisposed())
                 break;
             pWindow->ImplGetFrameData()->mbSysObjFocus = false;
             if ( !pWindow->ImplGetFrameData()->mnFocusId )
@@ -72,10 +72,10 @@ static void ImplSysChildProc( SystemChildWindow* pInst, SalObjEvent nEvent )
                 pWindow->ToTop( ToTopFlags::NoGrabFocus );
             else
                 pWindow->ToTop();
-            if( pWindow->IsDisposed() )
+            if( pWindow->isDisposed() )
                 break;
             pWindow->GrabFocus();
-            if( pWindow->IsDisposed() )
+            if( pWindow->isDisposed() )
                 break;
             pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = false;
             break;

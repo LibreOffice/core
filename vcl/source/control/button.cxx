@@ -1576,7 +1576,7 @@ void PushButton::SetPressed( bool bPressed )
 void PushButton::EndSelection()
 {
     EndTracking( TrackingEventFlags::Cancel );
-    if ( !IsDisposed() &&
+    if ( !isDisposed() &&
          GetButtonState() & DrawButtonFlags::Pressed )
     {
         GetButtonState() &= ~DrawButtonFlags::Pressed;
@@ -2230,7 +2230,7 @@ void RadioButton::ImplUncheckAllOther()
         if ( pWindow->IsChecked() )
         {
             pWindow->SetState( false );
-            if ( pWindow->IsDisposed() )
+            if ( pWindow->isDisposed() )
                 return;
         }
 
@@ -2248,18 +2248,18 @@ void RadioButton::ImplCallClick( bool bGrabFocus, GetFocusFlags nFocusFlags )
     VclPtr<vcl::Window> xWindow = this;
     if ( mbRadioCheck )
         ImplUncheckAllOther();
-    if ( xWindow->IsDisposed() )
+    if ( xWindow->isDisposed() )
         return;
     if ( bGrabFocus )
         ImplGrabFocus( nFocusFlags );
-    if ( xWindow->IsDisposed() )
+    if ( xWindow->isDisposed() )
         return;
     if ( mbStateChanged )
         Toggle();
-    if ( xWindow->IsDisposed() )
+    if ( xWindow->isDisposed() )
         return;
     Click();
-    if ( xWindow->IsDisposed() )
+    if ( xWindow->isDisposed() )
         return;
     mbStateChanged = false;
 }
@@ -2653,11 +2653,11 @@ void RadioButton::Check( bool bCheck )
     mbChecked = bCheck;
     VclPtr<vcl::Window> xWindow = this;
     CompatStateChanged( StateChangedType::State );
-    if ( xWindow->IsDisposed() )
+    if ( xWindow->isDisposed() )
         return;
     if ( bCheck && mbRadioCheck )
         ImplUncheckAllOther();
-    if ( xWindow->IsDisposed() )
+    if ( xWindow->isDisposed() )
         return;
     Toggle();
 }
@@ -3090,7 +3090,7 @@ void CheckBox::ImplCheck()
     VclPtr<vcl::Window> xWindow = this;
     Invalidate();
     Toggle();
-    if ( xWindow->IsDisposed() )
+    if ( xWindow->isDisposed() )
         return;
     Click();
 }

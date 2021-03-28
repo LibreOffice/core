@@ -751,7 +751,7 @@ DbGridControl::~DbGridControl()
 
 void DbGridControl::dispose()
 {
-    if (!IsDisposed())
+    if (!isDisposed())
     {
         RemoveColumns();
 

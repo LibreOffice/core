@@ -176,14 +176,14 @@ void FileControl::Resize()
 
 void FileControl::GetFocus()
 {
-    if (!maEdit || maEdit->IsDisposed())
+    if (!maEdit || maEdit->isDisposed())
         return;
     maEdit->GrabFocus();
 }
 
 void FileControl::SetEditModifyHdl( const Link<Edit&,void>& rLink )
 {
-    if (!maEdit || maEdit->IsDisposed())
+    if (!maEdit || maEdit->isDisposed())
         return;
     maEdit->SetModifyHdl(rLink);
 }
