@@ -9,21 +9,26 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
+#include <test/xmltesttools.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
 using namespace ::com::sun::star;
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/xmloff/qa/unit/data/";
 
 /// Covers xmloff/source/draw/ fixes.
-class XmloffDrawTest : public test::BootstrapFixture, public unotest::MacrosTest
+class XmloffDrawTest : public test::BootstrapFixture,
+                       public unotest::MacrosTest,
+                       public XmlTestTools
 {
 private:
     uno::Reference<lang::XComponent> mxComponent;
@@ -31,6 +36,7 @@ private:
 public:
     void setUp() override;
     void tearDown() override;
+    void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
 };
 
@@ -47,6 +53,11 @@ void XmloffDrawTest::tearDown()
         mxComponent->dispose();
 
     test::BootstrapFixture::tearDown();
+}
+
+void XmloffDrawTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
+{
+    XmlTestTools::registerODFNamespaces(pXmlXpathCtx);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextBoxLoss)
@@ -73,6 +84,31 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextBoxLoss)
     // Without the accompanying fix in place, this test would have failed, as the shape only had
     // editeng text, losing the image part of the shape text.
     CPPUNIT_ASSERT(bTextBox);
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf141301_Extrusion_Angle)
+{
+    // Load a document that has a custom shape with extrusion direction as set by LO as its default.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf141301_Extrusion_Skew.odg";
+    getComponent() = loadFromDesktop(aURL, "com.sun.star.comp.drawing.DrawingDocument");
+
+    // Prepare use of XPath
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("draw8");
+    xStorable->storeAsURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(mxComponentContext, aTempFile.GetURL());
+    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("content.xml"),
+                                                  uno::UNO_QUERY);
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+
+    // Without fix draw:extrusion-skew="50 -135" was not written to file although "50 -135" is not
+    // default in ODF, but only default inside LO.
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry", "extrusion-skew", "50 -135");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
