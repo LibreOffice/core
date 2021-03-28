@@ -138,7 +138,7 @@ SwAnnotationWin::~SwAnnotationWin()
 
 void SwAnnotationWin::dispose()
 {
-    if (IsDisposed())
+    if (isDisposed())
         return;
 
     mrMgr.DisconnectSidebarWinFromFrame( *(mrSidebarItem.maLayoutInfo.mpAnchorFrame),
