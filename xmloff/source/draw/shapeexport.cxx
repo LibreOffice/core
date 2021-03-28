@@ -4227,6 +4227,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                         uno::Sequence< beans::PropertyValue > aExtrusionPropSeq;
                         if ( rGeoProp.Value >>= aExtrusionPropSeq )
                         {
+                            bool bSkewValuesProvided = false;
                             for ( const beans::PropertyValue& rProp : std::as_const(aExtrusionPropSeq) )
                             {
                                 switch( EASGet( rProp.Name ) )
@@ -4458,6 +4459,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                         css::drawing::EnhancedCustomShapeParameterPair aSkewParaPair;
                                         if ( rProp.Value >>= aSkewParaPair )
                                         {
+                                            bSkewValuesProvided = true;
                                             ExportParameter( aStrBuffer, aSkewParaPair.First );
                                             ExportParameter( aStrBuffer, aSkewParaPair.Second );
                                             aStr = aStrBuffer.makeStringAndClear();
@@ -4526,6 +4528,12 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                     default:
                                         break;
                                 }
+                            }
+                            // tdf#141301: no specific skew values provided
+                            if (!bSkewValuesProvided)
+                            {
+                                // so we need to export default values explicitely
+                                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_SKEW, "50 -135");
                             }
                         }
                     }
