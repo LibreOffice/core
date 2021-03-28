@@ -267,7 +267,7 @@ bool SystemWindow::Close()
 {
     VclPtr<vcl::Window> xWindow = this;
     CallEventListeners( VclEventId::WindowClose );
-    if ( xWindow->IsDisposed() )
+    if ( xWindow->isDisposed() )
         return false;
 
     if ( mpWindowImpl->mxWindowPeer.is() && IsCreatedWithToolkit() )

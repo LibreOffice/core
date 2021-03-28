@@ -342,7 +342,7 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
     }
 
     // call Get- and LoseFocus
-    if ( pOldFocusWindow && ! pOldFocusWindow->IsDisposed() )
+    if ( pOldFocusWindow && ! pOldFocusWindow->isDisposed() )
     {
         NotifyEvent aNEvt( MouseNotifyEvent::LOSEFOCUS, pOldFocusWindow );
         if ( !ImplCallPreNotify( aNEvt ) )
@@ -369,15 +369,15 @@ void Window::ImplGrabFocus( GetFocusFlags nFlags )
             // notify the new focus window so it can restore the inner focus
             // eg, toolboxes can select their recent active item
             if( pOldFocusWindow &&
-                ! pOldFocusWindow->IsDisposed() &&
+                ! pOldFocusWindow->isDisposed() &&
                 ( pOldFocusWindow->GetDialogControlFlags() & DialogControlFlags::FloatWinPopupModeEndCancel ) )
                 mpWindowImpl->mnGetFocusFlags |= GetFocusFlags::FloatWinPopupModeEndCancel;
             NotifyEvent aNEvt( MouseNotifyEvent::GETFOCUS, this );
-            if ( !ImplCallPreNotify( aNEvt ) && !xWindow->IsDisposed() )
+            if ( !ImplCallPreNotify( aNEvt ) && !xWindow->isDisposed() )
                 CompatGetFocus();
-            if( !xWindow->IsDisposed() )
-                ImplCallActivateListeners( (pOldFocusWindow && ! pOldFocusWindow->IsDisposed()) ? pOldFocusWindow : nullptr );
-            if( !xWindow->IsDisposed() )
+            if( !xWindow->isDisposed() )
+                ImplCallActivateListeners( (pOldFocusWindow && ! pOldFocusWindow->isDisposed()) ? pOldFocusWindow : nullptr );
+            if( !xWindow->isDisposed() )
             {
                 mpWindowImpl->mnGetFocusFlags = GetFocusFlags::NONE;
                 mpWindowImpl->mbInFocusHdl = false;

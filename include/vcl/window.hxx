@@ -817,7 +817,6 @@ public:
     bool                                IsMenuFloatingWindow() const;
     bool                                IsToolbarFloatingWindow() const;
     bool                                IsTopWindow() const;
-    bool                                IsDisposed() const;
     SystemWindow*                       GetSystemWindow() const;
 
     /// Can the widget derived from this Window do the double-buffering via RenderContext properly?

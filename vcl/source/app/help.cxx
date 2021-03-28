@@ -368,7 +368,7 @@ void HelpTextWindow::ImplShow()
 {
     VclPtr<HelpTextWindow> xWindow( this );
     Show( true, ShowFlags::NoActivate );
-    if( !xWindow->IsDisposed() )
+    if( !xWindow->isDisposed() )
         PaintImmediately();
 }
 

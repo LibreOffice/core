@@ -1468,7 +1468,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                         if ( !sMessage.isEmpty() )
                         {
                             auto pInfoBar = pFrame->AppendInfoBar("signature", "", sMessage, aInfobarType);
-                            if (pInfoBar == nullptr || pInfoBar->IsDisposed())
+                            if (pInfoBar == nullptr || pInfoBar->isDisposed())
                                 return;
                             weld::Button& rBtn = pInfoBar->addButton();
                             rBtn.set_label(SfxResId(STR_SIGNATURE_SHOW));

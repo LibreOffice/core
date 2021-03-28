@@ -1326,7 +1326,7 @@ void Window::PaintImmediately()
         if (comphelper::LibreOfficeKit::isActive() && pUpdateWindow->GetParentDialog())
             pUpdateWindow->LogicInvalidate(nullptr);
 
-        if (xWindow->IsDisposed())
+        if (xWindow->isDisposed())
            return;
 
         bFlush = true;

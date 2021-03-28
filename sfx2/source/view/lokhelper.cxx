@@ -613,7 +613,7 @@ namespace
     void LOKPostAsyncEvent(void* pEv, void*)
     {
         LOKAsyncEventData* pLOKEv = static_cast<LOKAsyncEventData*>(pEv);
-        if (pLOKEv->mpWindow->IsDisposed())
+        if (pLOKEv->mpWindow->isDisposed())
             return;
 
         int nView = SfxLokHelper::getView(nullptr);
@@ -682,7 +682,7 @@ namespace
 
     void postEventAsync(LOKAsyncEventData *pEvent)
     {
-        if (!pEvent->mpWindow || pEvent->mpWindow->IsDisposed())
+        if (!pEvent->mpWindow || pEvent->mpWindow->isDisposed())
         {
             SAL_WARN("vcl", "Async event post - but no valid window as destination " << pEvent->mpWindow.get());
             delete pEvent;

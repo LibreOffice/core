@@ -140,17 +140,12 @@ namespace
 }
 #endif
 
-bool Window::IsDisposed() const
-{
-    return !mpWindowImpl;
-}
-
 void Window::dispose()
 {
     assert( mpWindowImpl );
     assert( !mpWindowImpl->mbInDispose ); // should only be called from disposeOnce()
     assert( (!mpWindowImpl->mpParent ||
-            !mpWindowImpl->mpParent->IsDisposed()) &&
+             mpWindowImpl->mpParent->mpWindowImpl) &&
             "vcl::Window child should have its parent disposed first" );
 
     // remove Key and Mouse events issued by Application::PostKey/MouseEvent
@@ -1729,7 +1724,7 @@ void Window::ImplNewInputContext()
 {
     ImplSVData* pSVData = ImplGetSVData();
     vcl::Window* pFocusWin = pSVData->mpWinData->mpFocusWin;
-    if ( !pFocusWin || !pFocusWin->mpWindowImpl || pFocusWin->IsDisposed() )
+    if ( !pFocusWin || !pFocusWin->mpWindowImpl || pFocusWin->isDisposed() )
         return;
 
     // Is InputContext changed?
@@ -1837,7 +1832,7 @@ void Window::GetFocus()
     {
         VclPtr<vcl::Window> xWindow(this);
         mpWindowImpl->mpLastFocusWindow->GrabFocus();
-        if( xWindow->IsDisposed() )
+        if( xWindow->isDisposed() )
             return;
     }
 
@@ -2179,7 +2174,7 @@ vcl::Font Window::GetPointFont(vcl::RenderContext const & rRenderContext) const
 
 void Window::Show(bool bVisible, ShowFlags nFlags)
 {
-    if ( IsDisposed() || mpWindowImpl->mbVisible == bVisible )
+    if ( isDisposed() || mpWindowImpl->mbVisible == bVisible )
         return;
 
     VclPtr<vcl::Window> xWindow(this);
@@ -2190,7 +2185,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
     if ( !bVisible )
     {
         ImplHideAllOverlaps();
-        if( xWindow->IsDisposed() )
+        if( xWindow->isDisposed() )
             return;
 
         if ( mpWindowImpl->mpBorderWindow )
@@ -2216,7 +2211,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
 
             vcl::Region aInvRegion = mpWindowImpl->maWinClipRegion;
 
-            if( xWindow->IsDisposed() )
+            if( xWindow->isDisposed() )
                 return;
 
             bRealVisibilityChanged = mpWindowImpl->mbReallyVisible;
@@ -2352,7 +2347,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
                 bool bNoActivate(nFlags & (ShowFlags::NoActivate|ShowFlags::NoFocusChange));
                 mpWindowImpl->mpFrame->Show( true, bNoActivate );
             }
-            if( xWindow->IsDisposed() )
+            if( xWindow->isDisposed() )
                 return;
 
             // Query the correct size of the window, if we are waiting for
@@ -2370,13 +2365,13 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
                 mpWindowImpl->mpFrameData->mpBuffer->SetOutputSizePixel(GetOutputSizePixel());
         }
 
-        if( xWindow->IsDisposed() )
+        if( xWindow->isDisposed() )
             return;
 
         ImplShowAllOverlaps();
     }
 
-    if( xWindow->IsDisposed() )
+    if( xWindow->isDisposed() )
         return;
 
     // the SHOW/HIDE events also serve as indicators to send child creation/destroy events to the access bridge
@@ -2386,7 +2381,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
     // now only notify with a NULL data pointer, for all other clients except the access bridge.
     if ( !bRealVisibilityChanged )
         CallEventListeners( mpWindowImpl->mbVisible ? VclEventId::WindowShow : VclEventId::WindowHide );
-    if( xWindow->IsDisposed() )
+    if( xWindow->isDisposed() )
         return;
 
 }
@@ -2405,7 +2400,7 @@ Size Window::GetSizePixel() const
         VclPtr<vcl::Window> xWindow( const_cast<Window*>(this) );
         mpWindowImpl->mpFrameData->maResizeIdle.Stop();
         mpWindowImpl->mpFrameData->maResizeIdle.Invoke( nullptr );
-        if( xWindow->IsDisposed() )
+        if( xWindow->isDisposed() )
             return Size(0,0);
     }
 
@@ -2424,7 +2419,7 @@ void Window::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
 
 void Window::Enable( bool bEnable, bool bChild )
 {
-    if ( IsDisposed() )
+    if ( isDisposed() )
         return;
 
     if ( !bEnable )
@@ -3379,7 +3374,7 @@ void Window::ImplCallDeactivateListeners( vcl::Window *pNew )
     {
         VclPtr<vcl::Window> xWindow(this);
         CallEventListeners( VclEventId::WindowDeactivate, pNew );
-        if( xWindow->IsDisposed() )
+        if( xWindow->isDisposed() )
             return;
 
         // #100759#, avoid walking the wrong frame's hierarchy
@@ -3397,7 +3392,7 @@ void Window::ImplCallActivateListeners( vcl::Window *pOld )
 
     VclPtr<vcl::Window> xWindow(this);
     CallEventListeners( VclEventId::WindowActivate, pOld );
-    if( xWindow->IsDisposed() )
+    if( xWindow->isDisposed() )
         return;
 
     if ( ImplGetParent() )

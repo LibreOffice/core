@@ -217,17 +217,17 @@ static bool ImplCallCommand( const VclPtr<vcl::Window>& pChild, CommandEventId n
     CommandEvent    aCEvt( aPos, nEvt, bMouse, pData );
     NotifyEvent     aNCmdEvt( MouseNotifyEvent::COMMAND, pChild, &aCEvt );
     bool bPreNotify = ImplCallPreNotify( aNCmdEvt );
-    if ( pChild->IsDisposed() )
+    if ( pChild->isDisposed() )
         return false;
     if ( !bPreNotify )
     {
         pChild->ImplGetWindowImpl()->mbCommand = false;
         pChild->Command( aCEvt );
 
-        if( pChild->IsDisposed() )
+        if( pChild->isDisposed() )
             return false;
         pChild->ImplNotifyKeyMouseCommandEventListeners( aNCmdEvt );
-        if ( pChild->IsDisposed() )
+        if ( pChild->isDisposed() )
             return false;
         if ( pChild->ImplGetWindowImpl()->mbCommand )
             return true;
@@ -254,7 +254,7 @@ static void ContextMenuEventLink( void* pCEvent, void* )
 {
     ContextMenuEvent* pEv = static_cast<ContextMenuEvent*>(pCEvent);
 
-    if( ! pEv->pWindow->IsDisposed() )
+    if( ! pEv->pWindow->isDisposed() )
     {
         ImplCallCommand( pEv->pWindow, CommandEventId::ContextMenu, nullptr, true, &pEv->aChildPos );
     }
@@ -314,7 +314,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
         {
             ImplDestroyHelpWindow( true );
 
-            if ( xWindow->IsDisposed() )
+            if ( xWindow->isDisposed() )
                 return true; // xWindow is dead now - avoid crash! (#122045#)
         }
     }
@@ -525,16 +525,16 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
                 if ( !ImplCallPreNotify( aNLeaveEvt ) )
                 {
                     pMouseMoveWin->MouseMove( aMLeaveEvt );
-                    if( !pMouseMoveWin->IsDisposed() )
+                    if( !pMouseMoveWin->isDisposed() )
                         aNLeaveEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNLeaveEvt );
                 }
 
                 pWinFrameData->mpMouseMoveWin = nullptr;
                 pWinFrameData->mbInMouseMove = false;
 
-                if ( pChild && pChild->IsDisposed() )
+                if ( pChild && pChild->isDisposed() )
                     pChild = nullptr;
-                if ( pMouseMoveWin->IsDisposed() )
+                if ( pMouseMoveWin->isDisposed() )
                     return true;
             }
 
@@ -612,7 +612,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
     {
         if ( ImplHandleMouseFloatMode( pChild, aMousePos, nCode, nSVEvent, bMouseLeave ) )
         {
-            if ( !pChild->IsDisposed() )
+            if ( !pChild->isDisposed() )
             {
                 pChild->ImplGetFrameData()->mbStartDragCalled = true;
             }
@@ -639,11 +639,11 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
             !(pChild->ImplGetFrameWindow()->GetStyle()
               & WB_OWNERDRAWDECORATION)) // ownerdrawdecorated windows must never grab focus
             pChild->ToTop();
-        if ( pChild->IsDisposed() )
+        if ( pChild->isDisposed() )
             return true;
     }
 
-    if ( ImplCallPreNotify( aNEvt ) || pChild->IsDisposed() )
+    if ( ImplCallPreNotify( aNEvt ) || pChild->isDisposed() )
         bRet = true;
     else
     {
@@ -654,7 +654,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
             {
                 TrackingEvent aTEvt( aMEvt );
                 pChild->Tracking( aTEvt );
-                if ( !pChild->IsDisposed() )
+                if ( !pChild->isDisposed() )
                 {
                     // When ScrollRepeat, we restart the timer
                     if (pSVData->mpWinData->mpTrackTimer
@@ -666,7 +666,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
             }
             else
             {
-                if( pChild->IsDisposed() )
+                if( pChild->isDisposed() )
                     bCallHelpRequest = false;
                 else
                 {
@@ -705,11 +705,11 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
 
         assert(aNEvt.GetWindow() == pChild);
 
-        if (!pChild->IsDisposed())
+        if (!pChild->isDisposed())
             pChild->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
     }
 
-    if (pChild->IsDisposed())
+    if (pChild->isDisposed())
         return true;
 
     if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
@@ -980,7 +980,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
     bool bKeyPreNotify = ImplCallPreNotify( aNotifyEvt );
     bool bRet = true;
 
-    if ( !bKeyPreNotify && !pChild->IsDisposed() )
+    if ( !bKeyPreNotify && !pChild->isDisposed() )
     {
         if ( nSVEvent == MouseNotifyEvent::KEYINPUT )
         {
@@ -993,11 +993,11 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
             pChild->ImplGetWindowImpl()->mbKeyUp = false;
             pChild->KeyUp( aKeyEvt );
         }
-        if( !pChild->IsDisposed() )
+        if( !pChild->isDisposed() )
             aNotifyEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNotifyEvt );
     }
 
-    if ( pChild->IsDisposed() )
+    if ( pChild->isDisposed() )
         return true;
 
     if ( nSVEvent == MouseNotifyEvent::KEYINPUT )
@@ -1082,7 +1082,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
         // call handler
         NotifyEvent aNEvt( nSVEvent, pChild, &aKeyEvt );
         bool bPreNotify = ImplCallPreNotify( aNEvt );
-        if ( pChild->IsDisposed() )
+        if ( pChild->isDisposed() )
             return true;
 
         if ( !bPreNotify )
@@ -1098,9 +1098,9 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
                 pChild->KeyUp( aKeyEvt );
             }
 
-            if( !pChild->IsDisposed() )
+            if( !pChild->isDisposed() )
                 aNEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
-            if ( pChild->IsDisposed() )
+            if ( pChild->isDisposed() )
                 return true;
         }
 
@@ -1281,13 +1281,13 @@ static bool ImplCallWheelCommand( const VclPtr<vcl::Window>& pWindow, const Poin
     CommandEvent        aCEvt( aCmdMousePos, CommandEventId::Wheel, true, pWheelData );
     NotifyEvent         aNCmdEvt( MouseNotifyEvent::COMMAND, pWindow, &aCEvt );
     bool bPreNotify = ImplCallPreNotify( aNCmdEvt );
-    if ( pWindow->IsDisposed() )
+    if ( pWindow->isDisposed() )
         return false;
     if ( !bPreNotify )
     {
         pWindow->ImplGetWindowImpl()->mbCommand = false;
         pWindow->Command( aCEvt );
-        if ( pWindow->IsDisposed() )
+        if ( pWindow->isDisposed() )
             return false;
         if ( pWindow->ImplGetWindowImpl()->mbCommand )
             return true;
@@ -1343,7 +1343,7 @@ bool HandleGestureEventBase::Setup()
         m_pSVData->mpWinData->mpAutoScrollWin->EndAutoScroll();
     if (ImplGetSVHelpData().mpHelpWin)
         ImplDestroyHelpWindow( true );
-    return !m_pWindow->IsDisposed();
+    return !m_pWindow->isDisposed();
 }
 
 vcl::Window* HandleGestureEventBase::FindTarget()
@@ -1917,7 +1917,7 @@ static void DelayedCloseEventLink( void* pCEvent, void* )
 {
     DelayedCloseEvent* pEv = static_cast<DelayedCloseEvent*>(pCEvent);
 
-    if( ! pEv->pWindow->IsDisposed() )
+    if( ! pEv->pWindow->isDisposed() )
     {
         // dispatch to correct window type
         if( pEv->pWindow->IsSystemWindow() )

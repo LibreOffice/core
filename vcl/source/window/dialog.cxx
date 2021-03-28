@@ -846,7 +846,7 @@ bool Dialog::Close()
 {
     VclPtr<vcl::Window> xWindow = this;
     CallEventListeners( VclEventId::WindowClose );
-    if ( xWindow->IsDisposed() )
+    if ( xWindow->isDisposed() )
         return false;
 
     if ( mpWindowImpl->mxWindowPeer.is() && IsCreatedWithToolkit() && !IsInExecute() )
@@ -866,7 +866,7 @@ bool Dialog::Close()
     if (pCustomCancelButton)
     {
         pCustomCancelButton->Click();
-        if (xWindow->IsDisposed())
+        if (xWindow->isDisposed())
             return true;
         mbInClose = false;
         return false;
@@ -886,7 +886,7 @@ bool Dialog::Close()
             else
                 bRet = false;
         }
-        if ( xWindow->IsDisposed() )
+        if ( xWindow->isDisposed() )
             return true;
         return bRet;
     }
@@ -1055,14 +1055,14 @@ short Dialog::Execute()
 
     // Yield util EndDialog is called or dialog gets destroyed
     // (the latter should not happen, but better safe than sorry
-    while ( !xWindow->IsDisposed() && mbInExecute && !Application::IsQuit() )
+    while ( !xWindow->isDisposed() && mbInExecute && !Application::IsQuit() )
         Application::Yield();
 
     ImplEndExecuteModal();
 #ifdef DBG_UTIL
-    assert (!mpDialogParent || !mpDialogParent->IsDisposed());
+    assert (!mpDialogParent || !mpDialogParent->isDisposed());
 #endif
-    if ( !xWindow->IsDisposed() )
+    if ( !xWindow->isDisposed() )
         xWindow.clear();
     else
     {
@@ -1108,7 +1108,7 @@ void Dialog::RemoveFromDlgList()
 
 void Dialog::EndDialog( tools::Long nResult )
 {
-    if (!mbInExecute || IsDisposed())
+    if (!mbInExecute || isDisposed())
         return;
 
     const bool bModal = GetType() != WindowType::MODELESSDIALOG;
@@ -1652,7 +1652,7 @@ void TopLevelWindowLocker::decBusy()
     // unlock locked toplevel windows from being closed now busy is over
     for (auto& a : m_xImpl->m_aBusyStack.top())
     {
-        if (a->IsDisposed())
+        if (a->isDisposed())
             continue;
         a->DecModalCount();
         a->ImplGetFrame()->NotifyModalHierarchy(false);

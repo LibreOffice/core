@@ -2023,7 +2023,7 @@ void Edit::Command( const CommandEvent& rCEvt )
         else if (sCommand == "specialchar" && pImplFncGetSpecialChars)
         {
             OUString aChars = pImplFncGetSpecialChars(GetFrameWeld(), GetFont());
-            if (!IsDisposed()) // destroyed while the insert special character dialog was still open
+            if (!isDisposed()) // destroyed while the insert special character dialog was still open
             {
                 SetSelection( aSaveSel );
                 if (!aChars.isEmpty())

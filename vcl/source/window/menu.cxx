@@ -2891,7 +2891,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
     Activate();
     bInCallback = false;
 
-    if ( pW->IsDisposed() )
+    if ( pW->isDisposed() )
         return 0;   // Error
 
     if ( bCanceled || bKilled )
@@ -3051,7 +3051,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
     if ( bRealExecute )
     {
         pWin->Execute();
-        if (pWin->IsDisposed())
+        if (pWin->isDisposed())
             return 0;
 
         xFocusId = pWin->GetFocusId();

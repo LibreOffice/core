@@ -2986,7 +2986,7 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
                         // prevent from being destroyed in the select handler
                         VclPtr<vcl::Window> xWindow = this;
                         Select();
-                        if ( xWindow->IsDisposed() )
+                        if ( xWindow->isDisposed() )
                             return true;
                     }
                 }
@@ -3394,7 +3394,7 @@ void ToolBox::Tracking( const TrackingEvent& rTEvt )
     else
         ImplHandleMouseMove( rTEvt.GetMouseEvent(), rTEvt.IsTrackingRepeat() );
 
-    if ( xWindow->IsDisposed() )
+    if ( xWindow->isDisposed() )
         // toolbox was deleted
         return;
     DockingWindow::Tracking( rTEvt );
@@ -4229,7 +4229,7 @@ bool ToolBox::ImplActivateItem( vcl::KeyCode aKeyCode )
             // #107776# we might be destroyed in the selecthandler
             VclPtr<vcl::Window> xWindow = this;
             Select();
-            if ( xWindow->IsDisposed() )
+            if ( xWindow->isDisposed() )
                 return bRet;
 
             Deactivate();
@@ -4471,7 +4471,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         }
     }
 
-    if ( xWindow->IsDisposed() )
+    if ( xWindow->isDisposed() )
         return;
 
     // #107251# move focus away if this toolbox was disabled during keyinput
@@ -4794,7 +4794,7 @@ void ToolBox::ImplShowFocus()
     if( mnHighItemId && HasFocus() )
     {
         ImplToolItem* pItem = ImplGetItem( mnHighItemId );
-        if (pItem && pItem->mpWindow && !pItem->mpWindow->IsDisposed())
+        if (pItem && pItem->mpWindow && !pItem->mpWindow->isDisposed())
         {
             vcl::Window *pWin = pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow ? pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow.get() : pItem->mpWindow.get();
             pWin->ImplGetWindowImpl()->mbDrawSelectionBackground = true;

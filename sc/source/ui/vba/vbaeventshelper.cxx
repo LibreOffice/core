@@ -491,7 +491,7 @@ IMPL_LINK( ScVbaEventListener, processWindowResizeEvent, void*, p, void )
         This is handled via the disposing() function which removes the window
         pointer from the member maControllers. Thus, checking whether
         maControllers contains pWindow ensures that the window is still alive. */
-    if( !mbDisposed && pWindow && !pWindow->IsDisposed() && (maControllers.count(pWindow) > 0) )
+    if( !mbDisposed && pWindow && !pWindow->isDisposed() && (maControllers.count(pWindow) > 0) )
     {
         // do not fire event unless all mouse buttons have been released
         vcl::Window::PointerState aPointerState = pWindow->GetPointerState();

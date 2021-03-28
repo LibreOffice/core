@@ -294,9 +294,9 @@ void LifecycleTest::testToolkit()
     // test UNO dispose
     css::uno::Reference<css::lang::XComponent> xWinComponent = xWindow;
     CPPUNIT_ASSERT(xWinComponent.is());
-    CPPUNIT_ASSERT(!pVclWin->getRef()->IsDisposed());
+    CPPUNIT_ASSERT(!pVclWin->getRef()->isDisposed());
     xWinComponent->dispose();
-    CPPUNIT_ASSERT(pVclWin->getRef()->IsDisposed());
+    CPPUNIT_ASSERT(pVclWin->getRef()->isDisposed());
 
     // test UNO cleanup
     xWinComponent.clear();

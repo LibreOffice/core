@@ -5798,7 +5798,7 @@ bool SalInstanceTextView::has_focus() const { return m_xTextView->HasChildPathFo
 
 SalInstanceTextView::~SalInstanceTextView()
 {
-    if (!m_xTextView->IsDisposed())
+    if (!m_xTextView->isDisposed())
     {
         if (m_aCursorPositionHdl.IsSet())
             m_xTextView->RemoveEventListener(LINK(this, SalInstanceTextView, CursorListener));
