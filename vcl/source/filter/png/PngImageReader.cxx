@@ -235,6 +235,10 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                         png_set_bgr(pPng);
                     }
 
+                    aRows = std::vector<std::vector<png_byte>>(height);
+                    for (auto& rRow : aRows)
+                        rRow.resize(aRowSizeBytes, 0);
+
                     auto const alphaFirst = (eFormat == ScanlineFormat::N32BitTcAbgr
                                              || eFormat == ScanlineFormat::N32BitTcArgb);
                     for (int pass = 0; pass < nNumberOfPasses; pass++)
@@ -242,22 +246,19 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx, bool bUseBitmap32)
                         for (png_uint_32 y = 0; y < height; y++)
                         {
                             Scanline pScanline = pWriteAccess->GetScanline(y);
-                            png_read_row(pPng, pScanline, nullptr);
+                            png_bytep pRow = aRows[y].data();
+                            png_read_row(pPng, pRow, nullptr);
                             size_t iColor = 0;
                             for (size_t i = 0; i < aRowSizeBytes; i += 4)
                             {
-                                sal_uInt8 alpha = pScanline[i + 3];
-                                sal_uInt8 byte1 = vcl::bitmap::premultiply(pScanline[i + 0], alpha);
-                                sal_uInt8 byte2 = vcl::bitmap::premultiply(pScanline[i + 1], alpha);
-                                sal_uInt8 byte3 = vcl::bitmap::premultiply(pScanline[i + 2], alpha);
-
+                                sal_Int8 alpha = pRow[i + 3];
                                 if (alphaFirst)
                                 {
                                     pScanline[iColor++] = alpha;
                                 }
-                                pScanline[iColor++] = byte1;
-                                pScanline[iColor++] = byte2;
-                                pScanline[iColor++] = byte3;
+                                pScanline[iColor++] = vcl::bitmap::premultiply(pRow[i + 0], alpha);
+                                pScanline[iColor++] = vcl::bitmap::premultiply(pRow[i + 1], alpha);
+                                pScanline[iColor++] = vcl::bitmap::premultiply(pRow[i + 2], alpha);
                                 if (!alphaFirst)
                                 {
                                     pScanline[iColor++] = alpha;
