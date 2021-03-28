@@ -96,11 +96,21 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
     }
     if (comphelper::LibreOfficeKit::isActive())
     {
+        bool entireColumnOrRowSelected = false;
+        if (pOwnClip)
+        {
+            ScClipParam clipParam = pOwnClip->GetDocument()->GetClipParam();
+            if (clipParam.maRanges.size() > 0)
+            {
+                if (clipParam.maRanges[0].aEnd.Col() == 1023 || clipParam.maRanges[0].aEnd.Row() == 1048575)
+                    entireColumnOrRowSelected = true;
+            }
+        }
         const SfxBoolItem* pItem = static_cast<const SfxBoolItem*>(pThisDoc->GetAttr(nThisCol, nThisRow, nThisTab, ATTR_LINEBREAK));
-        if (pItem->GetValue())
+        if (pItem->GetValue() || entireColumnOrRowSelected)
         {
             ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
-                pTabViewShell, false /* bColumns */, true /* bRows */, true /* bSizes*/,
+                pTabViewShell, true /* bColumns */, true /* bRows */, true /* bSizes*/,
                 true /* bHidden */, true /* bFiltered */, true /* bGroups */, nThisTab);
         }
     }
