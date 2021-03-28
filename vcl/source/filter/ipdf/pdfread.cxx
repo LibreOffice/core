@@ -128,11 +128,31 @@ BinaryDataContainer createBinaryDataContainer(SvStream& rStream)
 
 namespace vcl
 {
+<<<<<<< HEAD   (e8944e cid#1473839 Untrusted loop bound)
 size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& rBitmaps,
+=======
+/// Get the default PDF rendering resolution in DPI.
+static double getDefaultPdfResolutionDpi()
+{
+    // If an overriding default is set, use it.
+    const char* envar = ::getenv("PDFIMPORT_RESOLUTION_DPI");
+    if (envar)
+    {
+        const double dpi = atof(envar);
+        if (dpi > 0)
+            return dpi;
+    }
+
+    // Fallback to a sensible default.
+    return 96.;
+}
+
+size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBitmaps,
+>>>>>>> CHANGE (dfc0ba vcl: allow for overriding the default PDF rendering resoluti)
                         const size_t nFirstPage, int nPages, const basegfx::B2DTuple* pSizeHint)
 {
 #if HAVE_FEATURE_PDFIUM
-    const double fResolutionDPI = 96;
+    static const double fResolutionDPI = getDefaultPdfResolutionDpi();
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
 
     // Load the buffer using pdfium.
