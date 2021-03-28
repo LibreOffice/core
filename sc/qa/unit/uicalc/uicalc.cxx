@@ -1105,7 +1105,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf112735)
 
     dispatchCommand(mxComponent, ".uno:RecalcPivotTable", {});
 
-    // Without the fix in place, this test would haved failed with
+    // Without the fix in place, this test would have failed with
     // - Expected: (empty)
     // - Actual  :
     CPPUNIT_ASSERT_EQUAL(OUString("(empty)"), pDoc->GetString(ScAddress(1, 0, 0)));
