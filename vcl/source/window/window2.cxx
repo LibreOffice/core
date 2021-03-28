@@ -354,7 +354,7 @@ VclPtr<vcl::Window> Window::SaveFocus()
 
 void Window::EndSaveFocus(const VclPtr<vcl::Window>& xFocusWin)
 {
-    if (xFocusWin && !xFocusWin->IsDisposed())
+    if (xFocusWin && !xFocusWin->isDisposed())
     {
         xFocusWin->GrabFocus();
     }
@@ -1324,7 +1324,7 @@ static bool HasParentDockingWindow(const vcl::Window* pWindow)
 
 void Window::queue_resize(StateChangedType eReason)
 {
-    if (IsDisposed())
+    if (isDisposed())
         return;
 
     bool bSomeoneCares = queue_ungrouped_resize(this);

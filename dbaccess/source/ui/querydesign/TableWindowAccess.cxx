@@ -90,7 +90,7 @@ namespace dbaui
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         Reference< XAccessible > aRet;
-        if (m_pTable && !m_pTable->IsDisposed())
+        if (m_pTable && !m_pTable->isDisposed())
         {
             switch(i)
             {
@@ -149,7 +149,7 @@ namespace dbaui
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
         Reference< XAccessible > aRet;
-        if(m_pTable && !m_pTable->IsDisposed())
+        if(m_pTable && !m_pTable->isDisposed())
         {
             Point aPoint(_aPoint.X,_aPoint.Y);
             tools::Rectangle aRect(m_pTable->GetDesktopRectPixel());
