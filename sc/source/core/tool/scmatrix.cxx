@@ -3297,35 +3297,6 @@ namespace matop {
 
 namespace {
 
-/**
- * COp struct is used in MatOp class to provide (through template specialization)
- * different actions for empty entries in a matrix.
- */
-template <typename T, typename S>
-struct COp {};
-
-}
-
-template <typename T>
-struct COp<T, svl::SharedString>
-{
-    const svl::SharedString& operator()(T /*aOp*/, double /*a*/, double /*b*/, const svl::SharedString& rString) const
-    {
-        return rString;
-    }
-};
-
-template <typename T>
-struct COp<T, double>
-{
-    double operator()(T aOp, double a, double b, const svl::SharedString& /*rString*/) const
-    {
-        return aOp( a, b);
-    }
-};
-
-namespace {
-
 /** A template for operations where operands are supposed to be numeric.
     A non-numeric (string) operand leads to the configured conversion to number
     method being called if in interpreter context and a FormulaError::NoValue DoubleError
@@ -3341,7 +3312,6 @@ private:
     ScInterpreter* mpErrorInterpreter;
     svl::SharedString maString;
     double mfVal;
-    COp<TOp, double> maCOp;
 
 public:
     typedef double number_value_type;
@@ -3376,9 +3346,10 @@ public:
         return maOp( convertStringToValue( mpErrorInterpreter, rStr.getString()), mfVal);
     }
 
+    /// the action for empty entries in a matrix
     double operator()(char) const
     {
-        return maCOp(maOp, 0, mfVal, maString);
+        return maOp(0, mfVal);
     }
 
     static bool useFunctionForEmpty()
