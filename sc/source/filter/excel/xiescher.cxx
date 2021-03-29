@@ -957,9 +957,8 @@ void XclImpDrawObjBase::ImplReadObj8( XclImpStream& rStrm )
     if( !((rStrm.GetNextRecId() == EXC_ID3_IMGDATA) && rStrm.StartNextRecord()) )
         return;
 
-    sal_uInt32 nDataSize;
     rStrm.Ignore( 4 );
-    nDataSize = rStrm.ReaduInt32();
+    sal_uInt32 nDataSize = rStrm.ReaduInt32();
     nDataSize -= rStrm.GetRecLeft();
     // skip following CONTINUE records until IMGDATA ends
     while( (nDataSize > 0) && (rStrm.GetNextRecId() == EXC_ID_CONT) && rStrm.StartNextRecord() )
