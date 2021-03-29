@@ -1,1 +1,4 @@
-External projects bundled with LibreOffice.
+# External projects
+
+External projects bundled with LibreOffice
+

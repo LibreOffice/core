@@ -1,1 +1,4 @@
-As offuh but for Java UNO: Maps IDL into java classes definitions. 
+# Java UNO IDL code generator
+
+Maps IDL into java classes definitions.
+
