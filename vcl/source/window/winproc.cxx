@@ -1898,8 +1898,10 @@ static void ImplHandleLoseFocus( vcl::Window* pWindow )
 
     // Make sure that no menu is visible when a toplevel window loses focus.
     VclPtr<FloatingWindow> pFirstFloat = pSVData->mpWinData->mpFirstFloat;
-    if (pFirstFloat && !pWindow->GetParent())
+    if (pFirstFloat && pFirstFloat->IsMenuFloatingWindow() && !pWindow->GetParent())
+    {
         pFirstFloat->EndPopupMode(FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll);
+    }
 }
 
 namespace {
