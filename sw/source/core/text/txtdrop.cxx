@@ -696,12 +696,12 @@ void SwTextPainter::PaintDropPortion()
 
 class SwDropCapCache
 {
-    const void* aFontCacheId[ DROP_CACHE_SIZE ] = {};
-    OUString aText[ DROP_CACHE_SIZE ];
-    sal_uInt16 aFactor[ DROP_CACHE_SIZE ];
-    sal_uInt16 aWishedHeight[ DROP_CACHE_SIZE ] = {};
-    short aDescent[ DROP_CACHE_SIZE ];
-    sal_uInt16 nIndex = 0;
+    const void* m_aFontCacheId[ DROP_CACHE_SIZE ] = {};
+    OUString m_aText[ DROP_CACHE_SIZE ];
+    sal_uInt16 m_aFactor[ DROP_CACHE_SIZE ];
+    sal_uInt16 m_aWishedHeight[ DROP_CACHE_SIZE ] = {};
+    short m_aDescent[ DROP_CACHE_SIZE ];
+    sal_uInt16 m_nIndex = 0;
 public:
     SwDropCapCache() = default;
     void CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf );
@@ -736,8 +736,8 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
         nTmpIdx = 0;
 
         while( nTmpIdx < DROP_CACHE_SIZE &&
-            ( aText[ nTmpIdx ] != aStr || aFontCacheId[ nTmpIdx ] != nFntCacheId ||
-            aWishedHeight[ nTmpIdx ] != pDrop->GetDropHeight() ) )
+            ( m_aText[ nTmpIdx ] != aStr || m_aFontCacheId[ nTmpIdx ] != nFntCacheId ||
+            m_aWishedHeight[ nTmpIdx ] != pDrop->GetDropHeight() ) )
             ++nTmpIdx;
     }
 
@@ -747,9 +747,9 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
     //    consists of more than one part
     if( nTmpIdx >= DROP_CACHE_SIZE || ! bUseCache )
     {
-        ++nIndex;
-        nIndex %= DROP_CACHE_SIZE;
-        nTmpIdx = nIndex;
+        ++m_nIndex;
+        m_nIndex %= DROP_CACHE_SIZE;
+        nTmpIdx = m_nIndex;
 
         tools::Long nWishedHeight = pDrop->GetDropHeight();
         tools::Long nAscent = 0;
@@ -771,11 +771,11 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
         if ( bUseCache )
         {
             // save keys for cache
-            aFontCacheId[ nTmpIdx ] = nFntCacheId;
-            aText[ nTmpIdx ] = aStr;
-            aWishedHeight[ nTmpIdx ] = sal_uInt16(nWishedHeight);
+            m_aFontCacheId[ nTmpIdx ] = nFntCacheId;
+            m_aText[ nTmpIdx ] = aStr;
+            m_aWishedHeight[ nTmpIdx ] = sal_uInt16(nWishedHeight);
             // save initial scaling factor
-            aFactor[ nTmpIdx ] = static_cast<sal_uInt16>(nFactor);
+            m_aFactor[ nTmpIdx ] = static_cast<sal_uInt16>(nFactor);
         }
 
         bool bGrow = (pDrop->GetLen() != TextFrameIndex(0));
@@ -925,7 +925,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
                 else
                 {
                     if ( bUseCache )
-                        aFactor[ nTmpIdx ] = static_cast<sal_uInt16>(nFactor);
+                        m_aFactor[ nTmpIdx ] = static_cast<sal_uInt16>(nFactor);
                     nMin = nFactor;
                 }
 
@@ -949,7 +949,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
         }
 
         if ( bUseCache )
-            aDescent[ nTmpIdx ] = -short( nDescent );
+            m_aDescent[ nTmpIdx ] = -short( nDescent );
     }
 
     pCurrPart = pDrop->GetPart();
@@ -957,8 +957,8 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
     // did made any new calculations or did we use the cache?
     if ( -1 == nFactor )
     {
-        nFactor = aFactor[ nTmpIdx ];
-        nDescent = aDescent[ nTmpIdx ];
+        nFactor = m_aFactor[ nTmpIdx ];
+        nDescent = m_aDescent[ nTmpIdx ];
     }
     else
         nDescent = -nDescent;

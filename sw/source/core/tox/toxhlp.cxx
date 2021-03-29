@@ -29,7 +29,7 @@ IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
     try {
-        xIES = i18n::IndexEntrySupplier::create(xContext);
+        m_xIES = i18n::IndexEntrySupplier::create(xContext);
     }
     catch (const uno::Exception&)
     {
@@ -47,7 +47,7 @@ OUString IndexEntrySupplierWrapper::GetIndexKey( const OUString& rText,
 {
     OUString sRet;
     try {
-        sRet = xIES->getIndexKey( rText, rTextReading, rLocale );
+        sRet = m_xIES->getIndexKey( rText, rTextReading, rLocale );
     }
     catch (const uno::Exception&)
     {
@@ -60,7 +60,7 @@ OUString IndexEntrySupplierWrapper::GetFollowingText( bool bMorePages ) const
 {
     OUString sRet;
     try {
-        sRet = xIES->getIndexFollowPageWord( bMorePages, aLcl );
+        sRet = m_xIES->getIndexFollowPageWord( bMorePages, m_aLcl );
     }
     catch (const uno::Exception&)
     {
@@ -74,7 +74,7 @@ css::uno::Sequence< OUString > IndexEntrySupplierWrapper::GetAlgorithmList( cons
     uno::Sequence< OUString > sRet;
 
     try {
-        sRet = xIES->getAlgorithmList( rLcl );
+        sRet = m_xIES->getAlgorithmList( rLcl );
     }
     catch (const uno::Exception&)
     {
@@ -89,7 +89,7 @@ bool IndexEntrySupplierWrapper::LoadAlgorithm(
 {
     bool bRet = false;
     try {
-        bRet = xIES->loadAlgorithm( rLcl, sSortAlgorithm, nOptions );
+        bRet = m_xIES->loadAlgorithm( rLcl, sSortAlgorithm, nOptions );
     }
     catch (const uno::Exception&)
     {
@@ -106,7 +106,7 @@ sal_Int16 IndexEntrySupplierWrapper::CompareIndexEntry(
 {
     sal_Int16 nRet = 0;
     try {
-        nRet = xIES->compareIndexEntry( rText1, rTextReading1, rLocale1,
+        nRet = m_xIES->compareIndexEntry( rText1, rTextReading1, rLocale1,
                                         rText2, rTextReading2, rLocale2 );
     }
     catch (const uno::Exception&)
