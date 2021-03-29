@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "c16d6a32_10667929",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-29T15:53:42Z",
+      "side": 1,
+      "message": "Please use imperative mood, and state the intention of the change, like\n\n  tdf#98749: Move initialization of page defaults to writer core",
+      "range": {
+        "startLine": 7,
+        "startChar": 10,
+        "endLine": 7,
+        "endChar": 54
+      },
+      "revId": "6f0262d6eb7eff8175f435e0cc2f5db61162a82d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3e69494f_e1e47792",
         "filename": "sw/source/core/attr/format.cxx",
         "patchSetId": 1
