@@ -249,3 +249,7 @@ configure_file(input: 'config_dconf.h.meson',
 configure_file(input: 'config_skia.h.meson',
   output: 'config_skia.h',
   configuration: cdata)
+
+configure_file(input: 'config_libnumbertext.h.meson',
+  output: 'config_libnumbertext.h',
+  configuration: cdata)
