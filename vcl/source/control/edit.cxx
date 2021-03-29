@@ -2131,31 +2131,21 @@ void Edit::Command( const CommandEvent& rCEvt )
         if (mpIMEInfos && mpIMEInfos->nLen > 0)
         {
             OUString aText = ImplGetText();
-            tools::Long   nDXBuffer[256];
-            std::unique_ptr<tools::Long[]> pDXBuffer;
-            tools::Long*  pDX = nDXBuffer;
+            std::vector<tools::Long> aDX(2*(aText.getLength()+1));
 
-            if( !aText.isEmpty() )
-            {
-                if( o3tl::make_unsigned(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
-                {
-                    pDXBuffer.reset(new tools::Long[2*(aText.getLength()+1)]);
-                    pDX = pDXBuffer.get();
-                }
+            GetCaretPositions( aText, aDX.data(), 0, aText.getLength() );
 
-                GetCaretPositions( aText, pDX, 0, aText.getLength() );
-            }
             tools::Long    nTH = GetTextHeight();
             Point   aPos( mnXOffset, ImplGetTextYPosition() );
 
-            std::unique_ptr<tools::Rectangle[]> aRects(new tools::Rectangle[ mpIMEInfos->nLen ]);
+            std::vector<tools::Rectangle> aRects(mpIMEInfos->nLen);
             for ( int nIndex = 0; nIndex < mpIMEInfos->nLen; ++nIndex )
             {
                 tools::Rectangle aRect( aPos, Size( 10, nTH ) );
-                aRect.SetLeft( pDX[2*(nIndex+mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraXOffset() );
+                aRect.SetLeft( aDX[2*(nIndex+mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraXOffset() );
                 aRects[ nIndex ] = aRect;
             }
-            SetCompositionCharRect( aRects.get(), mpIMEInfos->nLen );
+            SetCompositionCharRect(aRects.data(), mpIMEInfos->nLen);
         }
     }
     else
