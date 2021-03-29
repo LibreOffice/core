@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "455f4c7a_0db4ce90",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2691,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-29T16:38:54Z",
+      "side": 0,
+      "message": "Note that this is the only place in this file using this function - so you likely need to remove the corresponding include.",
+      "range": {
+        "startLine": 2691,
+        "startChar": 26,
+        "endLine": 2691,
+        "endChar": 38
+      },
+      "revId": "e8017041a17a489e56ad4a888c2c2a52225d612b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
