@@ -16,6 +16,24 @@
       "revId": "c363c7e4eaa5e6063067d4a962ac077b8569b01a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9d88633_3d1a2f43",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4865,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-03-29T19:55:16Z",
+      "side": 1,
+      "message": "yep, my bad. I thought it would make life easier for future backports... Nevermind. I\u0027ve submitted a new patch",
+      "parentUuid": "1dbb7e18_8cb8a059",
+      "revId": "c363c7e4eaa5e6063067d4a962ac077b8569b01a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
