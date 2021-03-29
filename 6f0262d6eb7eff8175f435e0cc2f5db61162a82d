@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e69494f_e1e47792",
+        "filename": "sw/source/core/attr/format.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-29T15:51:23Z",
+      "side": 1,
+      "message": "This is copied verbatim, and keeps the double setting of left, without setting right ... is it expected?",
+      "range": {
+        "startLine": 699,
+        "startChar": 4,
+        "endLine": 700,
+        "endChar": 23
+      },
+      "revId": "6f0262d6eb7eff8175f435e0cc2f5db61162a82d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
