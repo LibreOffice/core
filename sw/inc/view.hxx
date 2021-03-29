@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_VIEW_HXX
 
 #include <vcl/timer.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include <editeng/svxenum.hxx>
@@ -542,6 +543,8 @@ public:
     // form control has been activated
     DECL_LINK( FormControlActivated, LinkParamNone*, void );
 
+    DECL_LINK( ExchangeDatabaseHandler, weld::Button&, void);
+
     // edit links
     void            EditLinkDlg();
     void            AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId = nullptr);
@@ -610,6 +613,10 @@ public:
     void SetMailMergeConfigItem(std::shared_ptr<SwMailMergeConfigItem> const & rConfigItem);
     std::shared_ptr<SwMailMergeConfigItem> const & GetMailMergeConfigItem() const;
     std::shared_ptr<SwMailMergeConfigItem> EnsureMailMergeConfigItem(const SfxItemSet* pArgs = nullptr);
+
+    OUString GetDataSourceName() const;
+    static bool IsDataSourceAvailable(const OUString sDataSourceName);
+    void AppendDataSourceInfobar();
 
     void ExecFormatPaintbrush(SfxRequest const &);
     void StateFormatPaintbrush(SfxItemSet &);
