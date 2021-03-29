@@ -140,8 +140,9 @@ void TemplateLocalView::Populate()
 void TemplateLocalView::reload()
 {
     mpDocTemplates->Update();
-
+    OUString sCurRegionName = getRegionItemName(mnCurRegionId);
     Populate();
+    mnCurRegionId = getRegionId(sCurRegionName);
 
     // Check if we are currently browsing a region or root folder
     if (mnCurRegionId)
