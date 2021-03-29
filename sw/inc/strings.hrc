@@ -1402,6 +1402,9 @@
 #define STR_AUTOMARK_NO                         NC_("createautomarkdialog|no", "No")
 
 #define STR_WRAP_PANEL_CUSTOM_STR               NC_("sidebarwrap|customlabel", "Custom")
+#define STR_DATASOURCE_NOT_AVAILABLE            NC_("STR_DATASOURCE_NOT_AVAILABLE", "Data source is not available. Mail merge wizard will not work properly.")
+#define STR_EXCHANGE_DATABASE                   NC_("STR_EXCHANGE_DATABASE", "Exchange Database")
+
 
 #endif
 
