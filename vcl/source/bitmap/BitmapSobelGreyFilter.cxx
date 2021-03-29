@@ -22,7 +22,7 @@ BitmapEx BitmapSobelGreyFilter::execute(BitmapEx const& rBitmapEx) const
 {
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 
-    bool bRet = aBitmap.ImplMakeGreyscales(256);
+    bool bRet = aBitmap.ImplMakeGreyscales();
 
     if (bRet)
     {
