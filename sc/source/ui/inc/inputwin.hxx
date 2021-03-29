@@ -290,6 +290,8 @@ public:
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    PixelInvalidate(const tools::Rectangle* pRectangle) override;
+    virtual void    setPosSizePixel( long nX, long nY, long nWidth, long nHeight,
+                                     PosSizeFlags nFlags = PosSizeFlags::All ) override;
     virtual void    SetSizePixel( const Size& rNewSize ) override;
     virtual void    Resize() override;
     virtual void    Select() override;
