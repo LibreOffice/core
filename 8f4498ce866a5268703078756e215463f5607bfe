@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3467643_323e5001",
+        "filename": "include/vcl/bitmapex.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-03-29T11:54:00Z",
+      "side": 1,
+      "message": "If this is still needed, it should not be kept here, it belongs to the code that reads those SVM files.",
+      "revId": "8f4498ce866a5268703078756e215463f5607bfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "732ea1fe_bbb78c97",
+        "filename": "include/vcl/bitmapex.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-03-29T11:54:00Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be better to make this AlphaMask instead of Bitmap?",
+      "revId": "8f4498ce866a5268703078756e215463f5607bfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fb7ee3a_9849d50b",
+        "filename": "svx/source/dialog/_bmpmask.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-03-29T11:54:00Z",
+      "side": 1,
+      "message": "A possible replacement for this might be AlphaMask::BlendWith(), but I\u0027m just guessing from looking at the code.",
+      "revId": "8f4498ce866a5268703078756e215463f5607bfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a203b5d7_f4890a43",
+        "filename": "vcl/source/bitmap/BitmapEx.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-03-29T11:54:00Z",
+      "side": 1,
+      "message": "This whole function looks odd. It should probably be just a simple return (especially if maAlphaMask would be AlphaMask, as said elsewhere).",
+      "revId": "8f4498ce866a5268703078756e215463f5607bfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d821eeb0_04927245",
+        "filename": "vcl/source/bitmap/BitmapEx.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-03-29T11:54:00Z",
+      "side": 1,
+      "message": "And making maAlphaMask would also mean that all code like this could avoid the explicit spelling out of the bpp.",
+      "revId": "8f4498ce866a5268703078756e215463f5607bfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaa8ba85_5cbb79a3",
+        "filename": "vcl/source/graphic/UnoGraphic.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-03-29T11:54:00Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this return the alpha channel?",
+      "revId": "8f4498ce866a5268703078756e215463f5607bfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36be6d53_7f97d123",
+        "filename": "vcl/source/outdev/bitmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-03-29T11:54:00Z",
+      "side": 1,
+      "message": "I\u0027d keep this as it is, for now. I expect the proper handling of this would be removing the whole drawmode_black concept.",
+      "revId": "8f4498ce866a5268703078756e215463f5607bfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d89e4585_f393dddb",
+        "filename": "vcl/source/outdev/bitmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1009,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-03-29T11:54:00Z",
+      "side": 1,
+      "message": "Why would you comment this out? It seems correct to me, and it doesn\u0027t actually have anything to do with the mask in BitmapEx.",
+      "revId": "8f4498ce866a5268703078756e215463f5607bfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
