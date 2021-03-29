@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 import polib
 import binascii
@@ -22,17 +22,17 @@ for o, a in myopts:
         ofile = a
 
 with open(ofile, "a") as output:
-    input = check_output(["xgettext", "--add-comments", "--no-wrap", ifile, "-o", "-"])
+    input = check_output(["xgettext", "--add-comments", "--no-wrap", ifile, "-o", "-"], encoding="UTF-8")
     po = polib.pofile(input)
     if len(po) != 0:
-        print >> output, ""
+        print("", file=output)
         for entry in po:
             # skip 'stock' entries like "cancel", "help", "ok", etc
             # l10ntools/source/localize.cxx will insert one entry for each stock per .po
             if entry.msgctxt == "stock":
                 continue
             keyid = entry.msgctxt + '|' + entry.msgid
-            print >> output, '#. ' + polib.genKeyId(keyid)
+            print('#. ' + polib.genKeyId(keyid), file=output)
             for i, occurrence in enumerate(entry.occurrences):
                 entry.occurrences[i] = os.path.relpath(occurrence[0], os.environ['SRCDIR']), occurrence[1]
-            print >> output, entry
+            print(entry, file=output)
