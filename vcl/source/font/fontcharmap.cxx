@@ -110,7 +110,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
         return false;
 
     int nSubTables = GetUShort( pCmap + 2 );
-    if( (nSubTables <= 0) || (nLength < (24 + 8*nSubTables)) )
+    if( (nSubTables <= 0) || (nSubTables > (nLength - 24) / 8) )
         return false;
 
     const unsigned char* pEndValidArea = pCmap + nLength;
