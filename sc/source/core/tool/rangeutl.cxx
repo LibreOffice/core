@@ -239,6 +239,9 @@ bool ScRangeUtil::MakeRangeFromName (
     ScAddress::Details const & rDetails )
 {
     bool bResult = false;
+    if (rName.isEmpty())
+        return bResult;
+
     SCTAB nTab = 0;
     SCCOL nColStart = 0;
     SCCOL nColEnd = 0;
@@ -247,22 +250,27 @@ bool ScRangeUtil::MakeRangeFromName (
 
     if( eScope==RUTL_NAMES )
     {
-        //first handle ui names like local1 (Sheet1), which point to a local range name
         OUString aName(rName);
-        sal_Int32 nEndPos = aName.lastIndexOf(')');
-        sal_Int32 nStartPos = aName.lastIndexOf(" (");
         SCTAB nTable = nCurTab;
-        if (nEndPos != -1 && nStartPos != -1)
+
+        // First handle UI names like "local1 (Sheet1)", which point to a local
+        // range name.
+        const sal_Int32 nEndPos = aName.getLength() - 1;
+        if (rName[nEndPos] == ')')
         {
-            OUString aSheetName = aName.copy(nStartPos+2, nEndPos-nStartPos-2);
-            if (rDoc.GetTable(aSheetName, nTable))
+            const sal_Int32 nStartPos = aName.indexOf(" (");
+            if (nStartPos != -1)
             {
-                aName = aName.copy(0, nStartPos);
+                OUString aSheetName = aName.copy(nStartPos+2, nEndPos-nStartPos-2);
+                if (rDoc.GetTable(aSheetName, nTable))
+                {
+                    aName = aName.copy(0, nStartPos);
+                }
+                else
+                    nTable = nCurTab;
             }
-            else
-                nTable = nCurTab;
         }
-        //then check for local range names
+        // Then check for local range names.
         ScRangeName* pRangeNames = rDoc.GetRangeName( nTable );
         ScRangeData* pData = nullptr;
         aName = ScGlobal::getCharClassPtr()->uppercase(aName);
