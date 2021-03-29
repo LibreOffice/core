@@ -142,6 +142,7 @@ static void lcl_DescSetAttr( const SwFrameFormat &rSource, SwFrameFormat &rDest,
         RES_FRAMEDIR,                   RES_FRAMEDIR,                   // [114
         RES_HEADER_FOOTER_EAT_SPACING,  RES_HEADER_FOOTER_EAT_SPACING,  // [115
         RES_BACKGROUND_FULL_SIZE,       RES_BACKGROUND_FULL_SIZE,       // [131
+        RES_RTL_GUTTER,                 RES_RTL_GUTTER,                 // [132
         RES_UNKNOWNATR_CONTAINER,       RES_UNKNOWNATR_CONTAINER,       // [143
 
         // take over DrawingLayer FillStyles
@@ -186,6 +187,7 @@ static void lcl_DescSetAttr( const SwFrameFormat &rSource, SwFrameFormat &rDest,
                     case RES_COL:
                     case RES_PAPER_BIN:
                     case RES_BACKGROUND_FULL_SIZE:
+                    case RES_RTL_GUTTER:
                         bExecuteId = false;
                         break;
                     default:
