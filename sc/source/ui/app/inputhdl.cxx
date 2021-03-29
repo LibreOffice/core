@@ -4103,13 +4103,14 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                 if ( pInputWin || comphelper::LibreOfficeKit::isActive())                        // Named range input
                 {
                     OUString aPosStr;
+                    bool bSheetLocal = false;
                     const ScAddress::Details aAddrDetails( rDoc, aCursorPos );
 
                     // Is the range a name?
                     //! Find by Timer?
                     if ( pActiveViewSh )
                         pActiveViewSh->GetViewData().GetDocument().
-                            GetRangeAtBlock( ScRange( rSPos, rEPos ), &aPosStr );
+                            GetRangeAtBlock( ScRange( rSPos, rEPos ), &aPosStr, &bSheetLocal);
 
                     if ( aPosStr.isEmpty() )           // Not a name -> format
                     {
@@ -4124,6 +4125,12 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                         }
                         else
                             aPosStr = aCursorPos.Format(ScRefFlags::VALID | nFlags, &rDoc, aAddrDetails);
+                    }
+                    else if (bSheetLocal)
+                    {
+                        OUString aName;
+                        if (rDoc.GetName( rSPos.Tab(), aName))
+                            aPosStr = ScPosWnd::createLocalRangeName( aPosStr, aName);
                     }
 
                     if (pInputWin)
