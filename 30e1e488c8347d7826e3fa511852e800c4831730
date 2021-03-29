@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a03cc6e_3ab7f46f",
+        "filename": "svtools/uiconfig/ui/graphicexport.ui",
+        "patchSetId": 12
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-03-29T11:07:03Z",
+      "side": 1,
+      "message": "this is not related",
+      "revId": "30e1e488c8347d7826e3fa511852e800c4831730",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85a988c5_b93399dd",
+        "filename": "sw/qa/extras/globalfilter/globalfilter.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-03-29T11:07:03Z",
+      "side": 1,
+      "message": "you don\u0027\u0027t need this anymore",
+      "revId": "30e1e488c8347d7826e3fa511852e800c4831730",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
