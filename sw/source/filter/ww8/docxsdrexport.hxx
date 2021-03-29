@@ -73,7 +73,6 @@ public:
     void setFlyWrapAttrList(rtl::Reference<sax_fastparser::FastAttributeList> const & pAttrList);
     /// Attributes of <wps:bodyPr>, used during DML export of text frames.
     sax_fastparser::FastAttributeList* getBodyPrAttrList();
-    rtl::Reference<sax_fastparser::FastAttributeList>& getDashLineStyle();
 
     void startDMLAnchorInline(const SwFrameFormat* pFrameFormat, const Size& rSize);
     void endDMLAnchorInline(const SwFrameFormat* pFrameFormat);
