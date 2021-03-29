@@ -3335,7 +3335,7 @@ namespace {
     XXX: semantically TEmptyRes and types other than number_value_type are
     unused, but this template could serve as a basis for future enhancements.
  */
-template<typename TOp, typename TEmptyRes=double, typename TRet=double>
+template<typename TOp, typename TEmptyRes=double>
 struct MatOp
 {
 private:
@@ -3346,7 +3346,7 @@ private:
     COp<TOp, TEmptyRes> maCOp;
 
 public:
-    typedef TRet number_value_type;
+    typedef double number_value_type;
 
     MatOp( TOp aOp, ScInterpreter* pErrorInterpreter,
             double fVal = 0.0, const svl::SharedString& rString = svl::SharedString() ):
@@ -3363,12 +3363,12 @@ public:
         }
     }
 
-    TRet operator()(double fVal) const
+    double operator()(double fVal) const
     {
         return maOp(fVal, mfVal);
     }
 
-    TRet operator()(bool bVal) const
+    double operator()(bool bVal) const
     {
         return maOp(static_cast<double>(bVal), mfVal);
     }
