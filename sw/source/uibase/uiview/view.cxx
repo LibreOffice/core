@@ -38,6 +38,8 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/event.hxx>
+#include <sfx2/infobar.hxx>
 #include <svx/ruler.hxx>
 #include <svx/srchdlg.hxx>
 #include <editeng/protitem.hxx>
@@ -75,6 +77,7 @@
 #include <gloshdl.hxx>
 #include <usrpref.hxx>
 #include <srcview.hxx>
+#include <strings.hrc>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
@@ -98,6 +101,10 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/scanner/ScannerContext.hpp>
 #include <com/sun/star/scanner/XScannerManager2.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/sdb/XDatabaseContext.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
+#include <com/sun/star/sdbc/XDataSource.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -125,6 +132,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::scanner;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
 
 #define SWVIEWFLAGS SfxViewShellFlags::HAS_PRINTOPTIONS
 
@@ -221,6 +230,11 @@ IMPL_LINK_NOARG(SwView, FormControlActivated, LinkParamNone*, void)
 
         AttrChangedNotify(nullptr);
     }
+}
+
+IMPL_LINK_NOARG(SwView, ExchangeDatabaseHandler, weld::Button&, void)
+{
+    GetDispatcher().Execute(FN_CHANGE_DBFIELD);
 }
 
 namespace
@@ -1645,7 +1659,25 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
     else
     {
+        if (auto pSfxEventHint = dynamic_cast<const SfxEventHint*>(&rHint))
+        {
+            switch( pSfxEventHint->GetEventId() )
+            {
+                case SfxEventHintId::CreateDoc:
+                case SfxEventHintId::OpenDoc:
+                {
+                    OUString sDataSourceName = GetDataSourceName();
+                    if ( !sDataSourceName.isEmpty() && !IsDataSourceAvailable(sDataSourceName))
+                        AppendDataSourceInfobar();
+                }
+                break;
+                default:
+                    break;
+            }
+        }
+
         SfxHintId nId = rHint.GetId();
+
         switch ( nId )
         {
             // sub shells will be destroyed by the
@@ -1726,7 +1758,6 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     GetViewFrame()->GetBindings().Invalidate(aSlotRedLine);
                 }
                 break;
-
             default: break;
         }
     }
@@ -1887,6 +1918,38 @@ tools::Rectangle SwView::getLOKVisibleArea() const
         return pVwSh->getLOKVisibleArea();
     else
         return tools::Rectangle();
+}
+
+OUString SwView::GetDataSourceName() const
+{
+    uno::Reference<lang::XMultiServiceFactory> xFactory(GetDocShell()->GetModel(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSettings(
+        xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+    OUString sDataSourceName = "";
+    xSettings->getPropertyValue("CurrentDatabaseDataSource") >>= sDataSourceName;
+
+    return sDataSourceName;
+}
+
+bool SwView::IsDataSourceAvailable(const OUString sDataSourceName)
+{
+    uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    Reference< XDatabaseContext> xDatabaseContext = DatabaseContext::create(xContext);
+
+    return xDatabaseContext->hasByName(sDataSourceName);
+}
+
+void SwView::AppendDataSourceInfobar()
+{
+    auto pInfoBar = GetViewFrame()->AppendInfoBar("datasource", "",
+                                  SwResId(STR_DATASOURCE_NOT_AVAILABLE),
+                                  InfobarType::WARNING);
+    if (!pInfoBar)
+        return;
+
+    weld::Button& rBtn = pInfoBar->addButton();
+    rBtn.set_label(SwResId(STR_EXCHANGE_DATABASE));
+    rBtn.connect_clicked(LINK(this, SwView, ExchangeDatabaseHandler));
 }
 
 namespace sw {
