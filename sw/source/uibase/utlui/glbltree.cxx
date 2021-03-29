@@ -610,7 +610,7 @@ void SwGlobalTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
         pCont = nullptr;
         bUpdateHard = true;
     }
-    else if (rSelectedPopupEntry == "edit")
+    else if (rSelectedPopupEntry == "editcontent")
     {
         OSL_ENSURE(pCont, "edit without entry ? " );
         if (pCont)
