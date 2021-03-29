@@ -42,7 +42,7 @@
 
 namespace
 {
-constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/uiwriter/data3/";
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/uiwriter/data/";
 } // namespace
 
 /// Third set of tests asserting the behavior of Writer user interface shells.
