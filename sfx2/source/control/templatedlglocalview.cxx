@@ -69,8 +69,9 @@ void TemplateDlgLocalView::showRegion(std::u16string_view rName)
 void TemplateDlgLocalView::reload()
 {
     mpDocTemplates->Update();
-
+    OUString sCurRegionName = getRegionItemName(mnCurRegionId);
     Populate();
+    mnCurRegionId = getRegionId(sCurRegionName);
 
     // Check if we are currently browsing a region or root folder
     if (mnCurRegionId)
