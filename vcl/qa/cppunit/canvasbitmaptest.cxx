@@ -253,11 +253,11 @@ private:
     uno::Sequence<sal_Int8>        maComponentTags;
     uno::Sequence<sal_Int32>       maComponentBitCounts;
     rendering::IntegerBitmapLayout maLayout;
-    const sal_Int32                mnBitsPerPixel;
+    static constexpr sal_Int32     mnBitsPerPixel = 32;
 
     // XBitmap
     virtual geometry::IntegerSize2D SAL_CALL getSize() override { return maSize; }
-    virtual sal_Bool SAL_CALL hasAlpha(  ) override { return mnBitsPerPixel != 8; }
+    virtual sal_Bool SAL_CALL hasAlpha(  ) override { return true; }
     virtual uno::Reference< rendering::XBitmap > SAL_CALL getScaledBitmap( const geometry::RealSize2D&,
                                                                            sal_Bool ) override { return this; }
 
@@ -282,25 +282,14 @@ private:
         bitmapLayout.ScanLineBytes =
         bitmapLayout.ScanLineStride= nScanlineLen;
 
-        if( mnBitsPerPixel == 8 )
+        for( sal_Int32 y=0; y<nHeight; ++y )
         {
-            for( sal_Int32 y=0; y<nHeight; ++y )
+            for( sal_Int32 x=0; x<nWidth; ++x )
             {
-                for( sal_Int32 x=0; x<nWidth; ++x )
-                    pOut[ y*nScanlineLen + x ] = sal_Int8(x);
-            }
-        }
-        else
-        {
-            for( sal_Int32 y=0; y<nHeight; ++y )
-            {
-                for( sal_Int32 x=0; x<nWidth; ++x )
-                {
-                    pOut[ y*nScanlineLen + 4*x     ] = sal_Int8(rect.X1);
-                    pOut[ y*nScanlineLen + 4*x + 1 ] = sal_Int8(rect.Y2);
-                    pOut[ y*nScanlineLen + 4*x + 2 ] = sal_Int8(x);
-                    pOut[ y*nScanlineLen + 4*x + 3 ] = sal_Int8(rect.Y1);
-                }
+                pOut[ y*nScanlineLen + 4*x     ] = sal_Int8(rect.X1);
+                pOut[ y*nScanlineLen + 4*x + 1 ] = sal_Int8(rect.Y2);
+                pOut[ y*nScanlineLen + 4*x + 2 ] = sal_Int8(x);
+                pOut[ y*nScanlineLen + 4*x + 3 ] = sal_Int8(rect.Y1);
             }
         }
 
@@ -311,6 +300,7 @@ private:
                                                            const geometry::IntegerPoint2D&  ) override
     {
         CPPUNIT_ASSERT_MESSAGE("getPixel: method not implemented", false);
+        (void) this;
         return uno::Sequence< sal_Int8 >();
     }
 
@@ -318,8 +308,7 @@ private:
     uno::Reference< rendering::XBitmapPalette > getPalette(  )
     {
         uno::Reference< XBitmapPalette > aRet;
-        if( mnBitsPerPixel == 8 )
-            aRet.set(this);
+        (void) this;
         return aRet;
     }
 
@@ -504,7 +493,7 @@ private:
     virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToARGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) override
     {
         const std::size_t  nLen( deviceColor.getLength() );
-        const sal_Int32 nBytesPerPixel(mnBitsPerPixel == 8 ? 1 : 4);
+        static constexpr sal_Int32 nBytesPerPixel = 4;
         CPPUNIT_ASSERT_EQUAL_MESSAGE("number of channels no multiple of pixel element count",
                                0, static_cast<int>(nLen%nBytesPerPixel));
 
@@ -538,7 +527,7 @@ private:
         const uno::Sequence< ::sal_Int8 >& deviceColor) override
     {
         const std::size_t  nLen( deviceColor.getLength() );
-        const sal_Int32 nBytesPerPixel(mnBitsPerPixel == 8 ? 1 : 4);
+        static constexpr sal_Int32 nBytesPerPixel = 4;
         CPPUNIT_ASSERT_EQUAL_MESSAGE("number of channels no multiple of pixel element count",
                                0, static_cast<int>(nLen%nBytesPerPixel));
 
@@ -589,37 +578,25 @@ private:
     }
 
 public:
-    TestBitmap( const geometry::IntegerSize2D& rSize, bool bPalette ) :
+    TestBitmap( const geometry::IntegerSize2D& rSize) :
         maSize(rSize),
         maComponentTags(),
         maComponentBitCounts(),
-        maLayout(),
-        mnBitsPerPixel( bPalette ? 8 : 32 )
+        maLayout()
     {
-        if( bPalette )
-        {
-            maComponentTags.realloc(1);
-            maComponentTags[0] = rendering::ColorComponentTag::INDEX;
+        maComponentTags.realloc(4);
+        sal_Int8* pTags = maComponentTags.getArray();
+        pTags[0]        = rendering::ColorComponentTag::RGB_BLUE;
+        pTags[1]        = rendering::ColorComponentTag::RGB_GREEN;
+        pTags[2]        = rendering::ColorComponentTag::RGB_RED;
+        pTags[3]        = rendering::ColorComponentTag::ALPHA;
 
-            maComponentBitCounts.realloc(1);
-            maComponentBitCounts[0] = 8;
-        }
-        else
-        {
-            maComponentTags.realloc(4);
-            sal_Int8* pTags = maComponentTags.getArray();
-            pTags[0]        = rendering::ColorComponentTag::RGB_BLUE;
-            pTags[1]        = rendering::ColorComponentTag::RGB_GREEN;
-            pTags[2]        = rendering::ColorComponentTag::RGB_RED;
-            pTags[3]        = rendering::ColorComponentTag::ALPHA;
-
-            maComponentBitCounts.realloc(4);
-            sal_Int32* pCounts = maComponentBitCounts.getArray();
-            pCounts[0]         = 8;
-            pCounts[1]         = 8;
-            pCounts[2]         = 8;
-            pCounts[3]         = 8;
-        }
+        maComponentBitCounts.realloc(4);
+        sal_Int32* pCounts = maComponentBitCounts.getArray();
+        pCounts[0]         = 8;
+        pCounts[1]         = 8;
+        pCounts[2]         = 8;
+        pCounts[3]         = 8;
 
         maLayout.ScanLines      = 0;
         maLayout.ScanLineBytes  = 0;
@@ -716,35 +693,9 @@ void CanvasBitmapTest::runTest()
     // Testing XBitmap import
 
     uno::Reference< rendering::XIntegerReadOnlyBitmap > xTestBmp(
-        new TestBitmap( geometry::IntegerSize2D(10,10), true ));
+        new TestBitmap( geometry::IntegerSize2D(10,10) ));
 
     BitmapEx aBmp = vcl::unotools::bitmapExFromXBitmap(xTestBmp);
-    CPPUNIT_ASSERT_MESSAGE( "Palette bitmap is alpha",
-                            !aBmp.IsAlpha());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap does not have size (10,10)",
-                            Size(10,10), aBmp.GetSizePixel());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap does not have the expected pixel format",
-                            vcl::PixelFormat::N8_BPP,  aBmp.getPixelFormat());
-    {
-        Bitmap aBitmap = aBmp.GetBitmap();
-        BitmapReadAccess* pBmpAcc   = aBitmap.AcquireReadAccess();
-
-        CPPUNIT_ASSERT_MESSAGE( "Bitmap has invalid BitmapReadAccess",
-                                pBmpAcc );
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("(0,0) incorrect content",
-                               BitmapColor(0), pBmpAcc->GetPixel(0,0));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("(2,2) incorrect content",
-                               BitmapColor(2), pBmpAcc->GetPixel(2,2));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("(9,2) incorrect content",
-                               BitmapColor(9), pBmpAcc->GetPixel(2,9));
-
-        Bitmap::ReleaseAccess(pBmpAcc);
-    }
-
-    xTestBmp.set( new TestBitmap( geometry::IntegerSize2D(10,10), false ));
-
-    aBmp = vcl::unotools::bitmapExFromXBitmap(xTestBmp);
     CPPUNIT_ASSERT_MESSAGE( "Palette bitmap has no alpha",
                             aBmp.IsAlpha());
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap does not have size (10,10)",
