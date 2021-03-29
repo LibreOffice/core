@@ -26,6 +26,7 @@
 #include <frmatr.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <svl/grabbagitem.hxx>
@@ -33,7 +34,6 @@
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/xdef.hxx>
 #include <swcache.hxx>
-#include <GetMetricVal.hxx>
 
 using namespace com::sun::star;
 
@@ -695,7 +695,7 @@ void SwFormat::SetPageFormatToDefault()
 {
 
     SvxLRSpaceItem aLR(RES_LR_SPACE);
-    sal_Int32 nSize = GetMetricVal(CM_1) * 2;
+    const sal_Int32 nSize = o3tl::convert(2, o3tl::Length::cm, o3tl::Length::twip);
     aLR.SetLeft(nSize);
     aLR.SetRight(nSize);
     SvxULSpaceItem aUL(RES_UL_SPACE);

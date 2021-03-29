@@ -30,7 +30,6 @@
 #include <charfmt.hxx>
 #include <fmtsrnd.hxx>
 #include <docary.hxx>
-#include <GetMetricVal.hxx>
 #include <pagedesc.hxx>
 #include <frmfmt.hxx>
 #include <fmtline.hxx>
@@ -58,6 +57,7 @@
 #include <editeng/charrotateitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/scriptspaceitem.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <sal/log.hxx>
@@ -96,7 +96,7 @@ namespace
     const sal_uInt16 PT_24  = 24 * 20;      // 24 pt
     const sal_uInt16 PT_28  = 28 * 20;      // 28 pt
 
-    #define HTML_PARSPACE   GetMetricVal( CM_05 )
+    const sal_uInt16 HTML_PARSPACE = o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip);
 
     const sal_uInt16 aHeadlineSizes[ 2 * MAXLEVEL ] = {
         // we do everything percentual now:
@@ -227,7 +227,7 @@ namespace
                             bool bHeader, bool bTab )
     {
         SvxLRSpaceItem aLR( RES_LR_SPACE );
-        sal_uInt16 nLeft = nFact ? GetMetricVal( CM_05 ) * nFact : 0;
+        sal_uInt16 nLeft = o3tl::convert(5 * nFact, o3tl::Length::mm, o3tl::Length::twip);
         aLR.SetTextLeft( nLeft );
 
         rSet.Put( aLR );
@@ -706,15 +706,15 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_TEXT_IDENT:           // Text body indentation
             {
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR.SetTextFirstLineOffset( GetMetricVal( CM_05 ));
+                aLR.SetTextFirstLineOffset(o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip));
                 aSet.Put( aLR );
             }
             break;
         case RES_POOLCOLL_TEXT_NEGIDENT:        // Text body neg. indentation
             {
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR.SetTextFirstLineOffset( -static_cast<short>(GetMetricVal( CM_05 )));
-                aLR.SetTextLeft( GetMetricVal( CM_1 ));
+                aLR.SetTextFirstLineOffset(-o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip));
+                aLR.SetTextLeft(o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip));
                 SvxTabStopItem aTStops(RES_PARATR_TABSTOP);
                 aTStops.Insert( SvxTabStop( 0 ));
 
@@ -725,7 +725,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_TEXT_MOVE:            // Text body move
             {
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR.SetTextLeft( GetMetricVal( CM_05 ));
+                aLR.SetTextLeft(o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip));
                 aSet.Put( aLR );
             }
             break;
@@ -733,9 +733,9 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_CONFRONTATION:    // Text body confrontation
             {
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR.SetTextFirstLineOffset( - short( GetMetricVal( CM_1 ) * 4 +
-                                                  GetMetricVal( CM_05)) );
-                aLR.SetTextLeft( GetMetricVal( CM_1 ) * 5 );
+                aLR.SetTextFirstLineOffset(
+                    -o3tl::convert(45, o3tl::Length::mm, o3tl::Length::twip));
+                aLR.SetTextLeft(o3tl::convert(5, o3tl::Length::cm, o3tl::Length::twip));
                 SvxTabStopItem aTStops( RES_PARATR_TABSTOP );
                 aTStops.Insert( SvxTabStop( 0 ));
 
@@ -746,7 +746,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_MARGINAL:         // Text body marginal
             {
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR.SetTextLeft( GetMetricVal( CM_1 ) * 4 );
+                aLR.SetTextLeft(o3tl::convert(4, o3tl::Length::cm, o3tl::Length::twip));
                 aSet.Put( aLR );
             }
             break;
@@ -938,8 +938,8 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_ENDNOTE:              // paragraph style Endnote
             {
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR.SetTextFirstLineOffset( -static_cast<short>( GetMetricVal( CM_05 ) + GetMetricVal( CM_01 ) ) );
-                aLR.SetTextLeft( GetMetricVal( CM_05 ) + GetMetricVal( CM_01 ) );
+                aLR.SetTextFirstLineOffset(-o3tl::convert(6, o3tl::Length::mm, o3tl::Length::twip));
+                aLR.SetTextLeft(o3tl::convert(6, o3tl::Length::mm, o3tl::Length::twip));
                 SetAllScriptItem( aSet, SvxFontHeightItem( PT_10, 100, RES_CHRATR_FONTSIZE ) );
                 aSet.Put( aLR );
                 SwFormatLineNumber aLN;
@@ -1345,8 +1345,8 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_HTML_BLOCKQUOTE:
             {
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
-                aLR.SetLeft( GetMetricVal( CM_1 ));
-                aLR.SetRight( GetMetricVal( CM_1 ));
+                aLR.SetLeft(o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip));
+                aLR.SetRight(o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip));
                 aSet.Put( aLR );
                 std::unique_ptr<SvxULSpaceItem> aUL(pNewColl->GetULSpace().Clone());
                 aUL->SetLower( HTML_PARSPACE );
@@ -1397,7 +1397,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             {
                 std::unique_ptr<SvxLRSpaceItem> aLR(pNewColl->GetLRSpace().Clone());
                 // We indent by 1 cm. The IDs are always 2 away from each other!
-                aLR->SetLeft( GetMetricVal( CM_1 ));
+                aLR->SetLeft(o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip));
                 aSet.Put(std::move(aLR));
             }
             break;
@@ -1663,7 +1663,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
             aSet.Put( SwFormatSurround( css::text::WrapTextMode_PARALLEL ));
             // Set the default width to 3.5 cm, use the minimum value for the height
             aSet.Put( SwFormatFrameSize( SwFrameSize::Minimum,
-                    GetMetricVal( CM_1 ) * 3 + GetMetricVal( CM_05 ),
+                    o3tl::convert(35, o3tl::Length::mm, o3tl::Length::twip),
                     MM50 ));
         }
         break;
@@ -1748,7 +1748,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
 
     SvxLRSpaceItem aLR( RES_LR_SPACE );
     {
-        aLR.SetLeft( GetMetricVal( CM_1 ) * 2 );
+        aLR.SetLeft(o3tl::convert(2, o3tl::Length::cm, o3tl::Length::twip));
         aLR.SetRight( aLR.GetLeft() );
     }
     SvxULSpaceItem aUL( RES_UL_SPACE );
@@ -1823,7 +1823,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
     case RES_POOLPAGE_HTML:         // "HTML"
         {
             lcl_PutStdPageSizeIntoItemSet( m_rDoc, aSet );
-            aLR.SetRight( GetMetricVal( CM_1 ));
+            aLR.SetRight(o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip));
             aUL.SetUpper( static_cast<sal_uInt16>(aLR.GetRight()) );
             aUL.SetLower( static_cast<sal_uInt16>(aLR.GetRight()) );
             aSet.Put( aLR );
@@ -2188,8 +2188,8 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             aFormat.SetCharFormat( pBullCFormat );
             aFormat.SetBulletFont(  &numfunc::GetDefBulletFont() );
             aFormat.SetBulletChar( cBulletChar );
-            sal_Int16 nOffs = GetMetricVal( CM_01 ) * 4,
-                   nOffs2 = GetMetricVal( CM_1 ) * 2;
+            sal_Int16 nOffs = o3tl::convert(4, o3tl::Length::mm, o3tl::Length::twip),
+                      nOffs2 = o3tl::convert(2, o3tl::Length::cm, o3tl::Length::twip);
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -2323,7 +2323,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             aFormat.SetIncludeUpperLevels( 1 );
             aFormat.SetBulletFont(  &numfunc::GetDefBulletFont() );
 
-            sal_uInt16 nOffs = GetMetricVal( CM_01 ) * 4;
+            sal_uInt16 nOffs = o3tl::convert(4, o3tl::Length::mm, o3tl::Length::twip);
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
