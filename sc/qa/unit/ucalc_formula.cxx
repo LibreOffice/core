@@ -5538,7 +5538,7 @@ void Test::testFuncLOOKUParrayWithError()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testTdf116216()
+void Test::testTdf141146()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
     m_pDoc->InsertTab(0, "Test1");
