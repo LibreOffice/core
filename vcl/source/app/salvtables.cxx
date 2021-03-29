@@ -227,9 +227,15 @@ void SalInstanceWidget::set_background(const Color& rColor)
 {
     m_xWidget->SetControlBackground(rColor);
     m_xWidget->SetBackground(m_xWidget->GetControlBackground());
-    // turn off WB_CLIPCHILDREN otherwise the bg won't extend "under"
-    // transparent children of the widget
-    m_xWidget->SetStyle(m_xWidget->GetStyle() & ~WB_CLIPCHILDREN);
+    if (m_xWidget->GetStyle() & WB_CLIPCHILDREN)
+    {
+        // turn off WB_CLIPCHILDREN otherwise the bg won't extend "under"
+        // transparent children of the widget
+        m_xWidget->SetStyle(m_xWidget->GetStyle() & ~WB_CLIPCHILDREN);
+        // and toggle mbClipChildren on instead
+        WindowImpl* pImpl = m_xWidget->ImplGetWindowImpl();
+        pImpl->mbClipChildren = true;
+    }
 }
 
 SalInstanceWidget::SalInstanceWidget(vcl::Window* pWidget, SalInstanceBuilder* pBuilder,
