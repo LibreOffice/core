@@ -48,7 +48,6 @@
 #include <fmtftn.hxx>
 #include <txtftn.hxx>
 #include <fldbas.hxx>
-#include <GetMetricVal.hxx>
 #include <strings.hrc>
 #include <hints.hxx>
 #include <SwUndoPageDesc.hxx>
@@ -57,6 +56,8 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <svx/swframetypes.hxx>
+#include <o3tl/unit_conversion.hxx>
+
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 using namespace com::sun::star;
@@ -88,8 +89,8 @@ static void lcl_DefaultPageFormat( sal_uInt16 nPoolFormatId,
     sal_Int32 nMinTop, nMinBottom, nMinLeft, nMinRight;
     if( RES_POOLPAGE_HTML == nPoolFormatId )
     {
-        nMinRight = nMinTop = nMinBottom = GetMetricVal( CM_1 );
-        nMinLeft = nMinRight * 2;
+        nMinRight = nMinTop = nMinBottom = o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip);
+        nMinLeft = o3tl::convert(2, o3tl::Length::cm, o3tl::Length::twip);
     }
     else if (!utl::ConfigManager::IsFuzzing() && MeasurementSystem::Metric == SvtSysLocale().GetLocaleData().getMeasurementSystemEnum() )
     {
