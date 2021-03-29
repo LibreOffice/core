@@ -923,8 +923,7 @@ void ImportExcel::Cellmerging()
     XclImpAddressConverter& rAddrConv = GetAddressConverter();
     SCTAB nScTab = GetCurrScTab();
 
-    sal_uInt16 nCount;
-    nCount = maStrm.ReaduInt16();
+    sal_uInt16 nCount = maStrm.ReaduInt16();
     for( sal_uInt16 nIdx = 0; (nIdx < nCount) && (maStrm.GetRecLeft() >= 8); ++nIdx )
     {
         XclRange aXclRange;

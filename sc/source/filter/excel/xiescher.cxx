@@ -4241,9 +4241,8 @@ void XclImpSheetDrawing::OnObjectInserted( const XclImpDrawObjBase& rDrawObj )
 void XclImpSheetDrawing::ReadNote3( XclImpStream& rStrm )
 {
     XclAddress aXclPos;
-    sal_uInt16 nTotalLen;
     rStrm >> aXclPos;
-    nTotalLen = rStrm.ReaduInt16();
+    sal_uInt16 nTotalLen = rStrm.ReaduInt16();
 
     ScAddress aScNotePos( ScAddress::UNINITIALIZED );
     if( !GetAddressConverter().ConvertAddress( aScNotePos, aXclPos, maScUsedArea.aStart.Tab(), true ) )
