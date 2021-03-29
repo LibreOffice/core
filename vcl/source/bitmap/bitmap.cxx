@@ -92,8 +92,7 @@ Bitmap::Bitmap( const Size& rSizePixel, vcl::PixelFormat ePixelFormat, const Bit
                 aPal[ 0 ] = COL_BLACK;
                 aPal[ 1 ] = COL_WHITE;
             }
-            else if (ePixelFormat == vcl::PixelFormat::N4_BPP ||
-                     ePixelFormat == vcl::PixelFormat::N8_BPP)
+            else if (ePixelFormat == vcl::PixelFormat::N8_BPP)
             {
                 aPal.SetEntryCount(1 << sal_uInt16(ePixelFormat));
                 aPal[ 0 ] = COL_BLACK;
@@ -326,7 +325,7 @@ vcl::PixelFormat Bitmap::getPixelFormat() const
     switch (GetBitCount())
     {
         case 1: return vcl::PixelFormat::N1_BPP;
-        case 4: return vcl::PixelFormat::N4_BPP;
+        case 4: assert(false); break;
         case 8: return vcl::PixelFormat::N8_BPP;
         case 24: return vcl::PixelFormat::N24_BPP;
         case 32: return vcl::PixelFormat::N32_BPP;
@@ -568,8 +567,7 @@ bool Bitmap::CopyPixel( const tools::Rectangle& rRectDst,
                 }
                 else if (nSrcBitCount == 4)
                 {
-                    Convert( BmpConversion::N4BitColors );
-                    nNextIndex = 2;
+                    assert(false);
                 }
 
                 if( nNextIndex )
@@ -998,24 +996,9 @@ bool Bitmap::Convert( BmpConversion eConversion )
         }
         break;
 
-        case BmpConversion::N4BitGreys:
-            bRet = ImplMakeGreyscales( 16 );
-        break;
-
-        case BmpConversion::N4BitColors:
-        {
-            if( nBitCount < 4 )
-                bRet = ImplConvertUp(vcl::PixelFormat::N4_BPP);
-            else if( nBitCount > 4 )
-                bRet = ImplConvertDown(vcl::PixelFormat::N4_BPP);
-            else
-                bRet = true;
-        }
-        break;
-
         case BmpConversion::N8BitGreys:
         case BmpConversion::N8BitNoConversion:
-            bRet = ImplMakeGreyscales( 256 );
+            bRet = ImplMakeGreyscales();
         break;
 
         case BmpConversion::N8BitColors:
@@ -1066,17 +1049,15 @@ bool Bitmap::Convert( BmpConversion eConversion )
     return bRet;
 }
 
-bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
+bool Bitmap::ImplMakeGreyscales()
 {
-    SAL_WARN_IF( nGreys != 16 && nGreys != 256, "vcl", "Only 16 or 256 greyscales are supported!" );
-
     ScopedReadAccess pReadAcc(*this);
     bool bRet = false;
 
     if( pReadAcc )
     {
-        const BitmapPalette& rPal = GetGreyPalette( nGreys );
-        sal_uLong nShift = ( ( nGreys == 16 ) ? 4UL : 0UL );
+        const BitmapPalette& rPal = GetGreyPalette(256);
+        sal_uLong nShift = 0;
         bool bPalDiffers = !pReadAcc->HasPalette() || ( rPal.GetEntryCount() != pReadAcc->GetPaletteEntryCount() );
 
         if( !bPalDiffers )
@@ -1084,8 +1065,7 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
 
         if( bPalDiffers )
         {
-            auto ePixelFormat = nGreys == 16 ? vcl::PixelFormat::N4_BPP
-                                             : vcl::PixelFormat::N8_BPP;
+            const auto ePixelFormat = vcl::PixelFormat::N8_BPP;
             Bitmap aNewBmp(GetSizePixel(), ePixelFormat, &rPal );
             BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
@@ -1535,14 +1515,7 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
         }
         case 4:
         {
-            if(HasGreyPaletteAny())
-            {
-                rNew.Convert(BmpConversion::N4BitGreys);
-            }
-            else
-            {
-                rNew.Convert(BmpConversion::N4BitColors);
-            }
+            assert(false);
             break;
         }
         case 8:
