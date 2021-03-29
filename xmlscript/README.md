@@ -1,4 +1,4 @@
-XML dialogs.
+# XML Dialogs
 
 This code is used to (de)serialize basic dialogs to XML for storage
 inside documents. While the XML -appears- to have some hierarchical

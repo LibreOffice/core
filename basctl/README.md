@@ -1,1 +1,3 @@
-Controls and dialogs for Basic. Contains the Basic IDE.
+# BASIC IDE Controls and Dialogs
+
+Controls and dialogs for BASIC. Contains the BASIC IDE.

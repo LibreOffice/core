@@ -1,4 +1,4 @@
-Helper tools for external UNO component developers
+# Helper Tools for External UNO Component Developers
 
 This module contains some tools for people writing UNO components. In
 particular it will auto-generate skeletons for implementing UNO

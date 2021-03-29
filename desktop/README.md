@@ -1,28 +1,28 @@
-What used to be the desktop in StarOffice 5 - now the binary.
+# LibreOffice Binary
+
+Code for the LibreOffice main binary (`soffice`) resides here. The `soffice_main`
+function for the `soffice` binary can be found here.
 
 
-Stable Interface
-================
+## Stable Interface
 
 Some of the artifacts built here are part of a LibreOffice installation set's
 stable interface, which (programmatic) clients can depend on.  Among them are:
 
-soffice
-=======
+### soffice
 
-In the "program" directory ("program/" on Linux and Windows, "Contents/MacOS/"
+In the `program` directory (`program/` on Linux and Windows, `Contents/MacOS/`
 on macOS).
 
-unoinfo
-=======
+### unoinfo
 
-In the "program" directory ("program/" on Linux and Windows, "Contents/MacOS/"
+In the `program` directory (`program/` on Linux and Windows, `Contents/MacOS/`
 on macOS).
 
-When called with a sole argument of "c++", it prints to stdout an absolute
+When called with a sole argument of `c++`, it prints to stdout an absolute
 pathname denoting the directory where the public URE libraries are found.
 
-When called with a sole argument of "java", it prints to stdout a marker
+When called with a sole argument of `java`, it prints to stdout a marker
 character (either an ASCII '0' or '1') followed by a sequence of zero or more
 absolute pathnames denoting jars or directories that need to be included in a
 class loader's search locations.
@@ -33,4 +33,9 @@ other by NUL bytes.
 
 If the marker character is '1' (on Windows), the pathnames are encoded as
 UTF-16-LE two-byte code units, and any two pathnames in the sequence are
-separated from each other by two-byte NUL code units.
+separated from each other by two-byte `NUL` code units.
+
+## Other Binaries
+
+### oosplash
+Splash screen for the LibreOffice `soffice` binary.

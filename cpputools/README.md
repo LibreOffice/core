@@ -1,1 +1,3 @@
-Old way of doing component registration. Nowadays replaced by another stand-alone UI and tools called UNO package. 
+# Old Way of Doing Component Registration
+
+Nowadays replaced by another stand-alone UI and tools called UNO package.

@@ -1,5 +1,4 @@
-LibreOfficeKit
-**************
+# LibreOfficeKit
 
 LibreOfficeKit can be used for accessing LibreOffice functionality
 through C/C++, without any need to use UNO.
@@ -7,8 +6,7 @@ through C/C++, without any need to use UNO.
 For now it only offers document conversion (in addition to an experimental
 tiled rendering API).
 
-Integrating LOK into other software
------------------------------------
+## Integrating LOK Into Other Software
 
 LOK functionality can be accessed by including LibreOfficeKit.h[xx] in your
 program.
@@ -23,11 +21,10 @@ functionality as in LibreOfficeKit.h.)
 An example program can be seen on:
 https://gitlab.com/ojwb/lloconv
 
-Tiled Rendering
----------------
+## Tiled Rendering
 
 To use LOK Tiled Rendering you will need the following before the LOK includes:
-#define LOK_USE_UNSTABLE_API
+    #define LOK_USE_UNSTABLE_API
 
 (This must be define before ANY LOK header, i.e. including the Init header.)
 
@@ -36,8 +33,7 @@ colorspace (further alternatives could feasibly be implemented as needed).
 Scanlines are ordered top-down (whereas LibreOffice will internally default
 to bottom-up).
 
-Tiled Editing
--------------
+## Tiled Editing
 
 On top of the tiled rendering API, a set of new methods have been added to the
 lok::Document class to allow basic editing, too. Communication between the LOK
@@ -46,14 +42,14 @@ by calling the above mentioned methods. The most important methods for the
 client -> LibreOffice communication are:
 
 - initializeForRendering(), expected to be called right after
-  lok::Office::documentLoad() returned a lok::Document*.
-- postKeyEvent(), expected to be called when the user provides input on the
+  `lok::Office::documentLoad()` returned a `lok::Document*`.
+- `postKeyEvent()`, expected to be called when the user provides input on the
   (soft-)keyboard.
-- postMouseEvent(), expected to be called when the user generated a touch or
+- `postMouseEvent()`, expected to be called when the user generated a touch or
   mouse event.
 
 In general, all coordinates are always in absolute twips (20th of a point, or:
-1" = 1440 twips). See lok::Document in LibreOfficeKit.hxx for a full list of
+1" = 1440 twips). See `lok::Document` in `LibreOfficeKit.hxx` for a full list of
 methods and their documentation.
 
 The other way around (LibreOffice -> LOK client) is implemented using a
@@ -64,11 +60,11 @@ LibreOfficeKitCallbackType enumeration in LibreOfficeKitEnums.h, the callback
 function signature itself is provided by the LibreOfficeKitCallback typedef in
 LibreOfficeKitTypes.h. The most important callback types:
 
-- LOK_CALLBACK_INVALIDATE_TILES: drop all tiles cached on client-side that
+- `LOK_CALLBACK_INVALIDATE_TILES`: drop all tiles cached on client-side that
   intersect with the provided rectangle
-- LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR: need to set the position and/or the
+- `LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR`: need to set the position and/or the
   size of the cursor
-- LOK_CALLBACK_TEXT_SELECTION: need to adjust the selection overlay provided
+- `LOK_CALLBACK_TEXT_SELECTION`: need to adjust the selection overlay provided
   by the client as the set of rectangles describing the selection overlay
   changed
 
@@ -90,7 +86,7 @@ To run gtktiledviewer:
 
     bin/run gtktiledviewer --lo-path=$PWD/instdir/program path/to/test.odt
 
-To receive all incoming events from core use G_MESSAGES_DEBUG=all
+To receive all incoming events from core use `G_MESSAGES_DEBUG=all`
 
     G_MESSAGES_DEBUG=all bin/run gtktiledviewer --lo-path=$PWD/instdir/program ../test.odt
 
@@ -100,10 +96,9 @@ To debug with gdb:
 
 before bin/run, this will run gtktiledviewer in the debugger instead.
 
-LibreOfficeKitGtk
-*****************
+## LibreOfficeKitGtk
 
-Currently consists of only a very basic GTK+ document viewer widget.
+Currently consists of only a very basic GTK document viewer widget.
 
-The widget uses g_info() instead of SAL_INFO(), use the 'G_MESSAGES_DEBUG=all'
+The widget uses `g_info()` instead of `SAL_INFO()`, use the `G_MESSAGES_DEBUG=all`
 environment variable to display those messages.

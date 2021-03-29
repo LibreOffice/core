@@ -1,1 +1,3 @@
-As offuh but for Java UNO: Maps IDL into java classes definitions. 
+# Java UNO IDL Code Generator
+
+Maps IDL into java classes definitions. This is for `offapi`, while `ridljar` is for `udkapi`.

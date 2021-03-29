@@ -1,1 +1,3 @@
-Cares for accessibility.
+# Accessibility Support for LibreOffice
+
+Provides accessible components for LibreOffice

@@ -1,4 +1,7 @@
-WordPerfect and other filters, wrappers for a set of similar libraries
+# Import / Export Filters for WordPerfect and Other Formats
+
+Contains import / export filters for WordPerfect and other formats, wrappers
+for a set of similar libraries.
 
 This collection of filters is here in this folder in addition to the
 WordPerfect filter that gave the module its (humorous) name "writerperfect"

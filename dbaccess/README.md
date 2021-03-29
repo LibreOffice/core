@@ -1,3 +1,5 @@
-Database access tools, for "base" database application
+# Database Access Tools for LibreOffice Base DB Apps
 
-Builds on top of drivers in [[connectivity]].
+Database access tools, for `base` database application
+
+Builds on top of drivers in `connectivity`.

@@ -1,39 +1,39 @@
-Support for UNOIDL registry formats
+# Support for UNOIDL Registry Formats
 
-Library_unoidl contains the unoidl::Manager and unoidl::Provider implementations
+`Library_unoidl` contains the `unoidl::Manager` and `unoidl::Provider` implementations
 for the following registry formats:
 
-* The new UNOIDL binary types.rdb format.
-* The old legacy binary types.rdb format (based on modules [[store]] and
-  [[registry]]).
-* A source-file format, reading (multiple) UNOIDL entity definitions directly
-  from a single .idl source file.
-* A source-tree format, reading UNOIDL entity definitions directly from a tree
-  of .idl source files rooted at a given directory.  (Where an entity named
-  foo.bar.Baz is expected in a file named foo/bar/Baz.idl within that tree.)
+* The new `UNOIDL` binary `types.rdb` format.
+* The old legacy binary `types.rdb` format (based on modules "store" and
+  "registry").
+* A source-file format, reading (multiple) `UNOIDL` entity definitions directly
+  from a single `.idl` source file.
+* A source-tree format, reading `UNOIDL` entity definitions directly from a tree
+  of `.idl` source files rooted at a given directory.  (Where an entity named
+  `foo.bar.Baz` is expected in a file named `foo/bar/Baz.idl` within that tree.)
 
-(While .idl files still contain #include directives for legacy idlc, the source-
-based formats ignore any preprocessing directives starting with "#" in the .idl
-files.)  unoidl::Manager::addProvider transparently detects the registry format
+(While `.idl` files still contain `#include` directives for legacy idlc, the source-
+based formats ignore any preprocessing directives starting with `#` in the `.idl`
+files.)  `unoidl::Manager::addProvider` transparently detects the registry format
 for a given URI and instantiates the corresponding provider implementation.
 
-Executable_unoidl-write is a helper tool to convert from any of the registry
-formats to the UNOIDL format.  It is used at build-time to compile UNOIDL format
-.rdb files (that are used at build-time only, or included in installation sets
-in URE or program/types/ or as part of bundled extensions that are created
-during the build and not merely included as pre-built .oxt files) from source
-.idl files.  (The SDK still uses idlc and generates legacy format .rdb files for
+`Executable_unoidl-write` is a helper tool to convert from any of the registry
+formats to the `UNOIDL` format.  It is used at build-time to compile `UNOIDL` format
+`.rdb` files (that are used at build-time only, or included in installation sets
+in `URE` or `program/types/` or as part of bundled extensions that are created
+during the build and not merely included as pre-built `.oxt` files) from source
+`.idl` files.  (The SDK still uses idlc and generates legacy format `.rdb` files for
 now.)
 
-Executable_unoidl-read is a helper tool to convert from any of the registry
+`Executable_unoidl-read` is a helper tool to convert from any of the registry
 formats to the source-file format.  It can be used manually after a LibreOffice
-version update to create new reference registries for Executable_unoidl-check.
+version update to create new reference registries for `Executable_unoidl-check`.
 
-Executable_unoidl-check is a helper tool to check that one registry is
+`Executable_unoidl-check` is a helper tool to check that one registry is
 backwards-compatible with another registry.  It is used at build-time to detect
 inadvertent breakage of the udkapi and offapi APIs.
 
-== Specification of the new UNOIDL types.rdb format ==
+## Specification of the New UNOIDL types.rdb Format
 
 The format uses byte-oriented, platform-independent, binary files.  Larger
 quantities are stored LSB first, without alignment requirements.  Offsets are
@@ -46,238 +46,238 @@ entities (e.g., both for an interface type definition and for a direct method of
 an interface type definition; the idea is that it can be added for direct parts
 that forma a "many-to-one" relationship; there is a tradeoff between generality
 of concept and size of representation, esp. for the C++ representation types in
-namespace unoidl) and consist of arbitrary sequences of name/value strings.
+namespace `unoidl`) and consist of arbitrary sequences of name/value strings.
 Each name/value string is encoded as a single UTF-8 string containing a name (an
-arbitrary sequence of Unicode code points not containing U+003D EQUALS SIGN),
-optionally followed by U+003D EQUALS SIGN and a value (an arbitrary sequence of
+arbitrary sequence of Unicode code points not containing `U+003D EQUALS SIGN`),
+optionally followed by `U+003D EQUALS SIGN` and a value (an arbitrary sequence of
 Unicode code points).  The only annotation name currently in use is "deprecated"
 (without a value).
 
 The following definitions are used throughout:
 
-* UInt16: 2-byte value, LSB first
-* UInt32: 4-byte value, LSB first
-* UInt64: 8-byte value, LSB first
-* Offset: UInt32 value, counting bytes from start of file
-* NUL-Name: zero or more non-NUL US-ASCII bytes followed by a NUL byte
-* Len-String: UInt32 number of characters, with 0x80000000 bit 0, followed by
-   that many US-ASCII (for UNOIDL related names) resp. UTF-8 (for annotations)
+* `UInt16`: 2-byte value, LSB first
+* `UInt32`: 4-byte value, LSB first
+* `UInt64`: 8-byte value, LSB first
+* Offset: `UInt32` value, counting bytes from start of file
+* `NUL`-Name: zero or more non-`NUL` US-ASCII bytes followed by a `NUL` byte
+* Len-String: UInt32 number of characters, with `0x80000000` bit 0, followed by
+   that many US-ASCII (for `UNOIDL` related names) resp. UTF-8 (for annotations)
    bytes
-* Idx-String: either an Offset (with 0x80000000 bit 1) of a Len-String, or a
+* Idx-String: either an Offset (with `0x80000000` bit 1) of a Len-String, or a
    Len-String
-* Annotations: UInt32 number N of annotations followed by N * Idx-String
-* Entry: Offset of NUL-Name followed by Offset of payload
+* Annotations: `UInt32` number `N` of annotations followed by `N * Idx-String`
+* Entry: Offset of `NUL`-Name followed by Offset of payload
 * Map: zero or more Entries
 
 The file starts with an 8 byte header, followed by information about the root
-map (unoidl-write generates files in a single depth-first pass, so the root map
+map (`unoidl-write` generates files in a single depth-first pass, so the root map
 itself is at the end of the file):
 
-* 7 byte magic header "UNOIDL\xFF"
+* 7 byte magic header `UNOIDL\xFF`
 * version byte 0
 * Offset of root Map
-* UInt32 number of entries of root Map
+* `UInt32` number of entries of root Map
 ...
 
 Files generated by unoidl-write follow that by a
 
-  "\0** Created by LibreOffice " LIBO_VERSION_DOTTED " unoidl-write **\0"
+    "\0** Created by LibreOffice " LIBO_VERSION_DOTTED " unoidl-write **\0"
 
-banner (cf. config_host/config_version.h.in), as a debugging aid.  (Old versions
-used "reg2unoidl" instead of "unoidl-write" in that banner.)
+banner (cf. `config_host/config_version.h.in`), as a debugging aid.  (Old versions
+used `reg2unoidl` instead of `unoidl-write` in that banner.)
 
 Layout of per-entry payload in the root or a module Map:
 
 * kind byte:
 
-** 0: module
-*** followed by:
-**** UInt32 number N1 of entries of Map
-**** N1 * Entry
+    * 0: module
+        * followed by:
+            * `UInt32` number `N1` of entries of Map
+            * `N1 * Entry`
 
-** otherwise:
-*** 0x80 bit: 1 if published
-*** 0x40 bit: 1 if annotated
-*** 0x20 bit: flag (may only be 1 for certain kinds, see below)
-*** remaining bits:
+    * otherwise:
+        * `0x80` bit: 1 if published
+        * `0x40` bit: 1 if annotated
+        * `0x20` bit: flag (may only be 1 for certain kinds, see below)
+        * remaining bits:
 
-**** 1: enum type
-***** followed by:
-****** UInt32 number N1 of members
-****** N1 * tuple of:
-******* Idx-String
-******* UInt32
-******* if annotated: Annotations
+            * 1: enum type
+                * followed by:
+                    * `UInt32` number N1 of members
+                    * `N1 * tuple` of:
+                        * `Idx-String`
+                        * `UInt32`
+                        * if annotated: Annotations
 
-**** 2: plain struct type (with base if flag is 1)
-***** followed by:
-****** if "with base": Idx-String
-****** UInt32 number N1 of direct members
-****** N1 * tuple of:
-******* Idx-String name
-******* Idx-String type
-******* if annotated: Annotations
+            * 2: plain struct type (with base if flag is 1)
+                * followed by:
+                    * if "with base": `Idx-String`
+                    * `UInt32` number `N1` of direct members
+                    * `N1 * tuple` of:
+                        * `Idx-String` name
+                        * `Idx-String` type
+                        * if annotated: Annotations
 
-**** 3: polymorphic struct type template
-***** followed by:
-****** UInt32 number N1 of type parameters
-****** N1 * Idx-String
-****** UInt32 number N2 of members
-****** N2 * tuple of:
-******* kind byte: 0x01 bit is 1 if parameterized type
-******* Idx-String name
-******* Idx-String type
-******* if annotated: Annotations
+            * 3: polymorphic struct type template
+                * followed by:
+                    * `UInt32` number `N1` of type parameters
+                    * `N1 * Idx-String`
+                    * `UInt32` number `N2` of members
+                    * `N2 * tuple` of:
+                        * kind byte: `0x01` bit is 1 if parameterized type
+                        * `Idx-String` name
+                        * `Idx-String` type
+                        * if annotated: Annotations
 
-**** 4: exception type (with base if flag is 1)
-***** followed by:
-****** if "with base": Idx-String
-****** UInt32 number N1 of direct members
-****** N1 * tuple of:
-******* Idx-String name
-******* Idx-String type
-******* if annotated: Annotations
+            * 4: exception type (with base if flag is 1)
+                * followed by:
+                    * if "with base": `Idx-String`
+                    * `UInt32` number `N1` of direct members
+                    * `N1 * tuple` of:
+                        * `Idx-String` name
+                        * `Idx-String` type
+                        * if annotated: Annotations
 
-**** 5: interface type
-***** followed by:
-****** UInt32 number N1 of direct mandatory bases
-****** N1 * tuple of:
-******* Idx-String
-******* if annotated: Annotations
-****** UInt32 number N2 of direct optional bases
-****** N2 * tuple of:
-******* Idx-String
-******* if annotated: Annotations
-****** UInt32 number N3 of direct attributes
-****** N3 * tuple of:
-******* kind byte:
-******** 0x02 bit: 1 if read-only
-******** 0x01 bit: 1 if bound
-******* Idx-String name
-******* Idx-String type
-******* UInt32 number N4 of get exceptions
-******* N4 * Idx-String
-******* UInt32 number N5 of set exceptions
-******* N5 * Idx-String
-******* if annotated: Annotations
-****** UInt32 number N6 of direct methods
-****** N6 * tuple of:
-******* Idx-String name
-******* Idx-String return type
-******* UInt32 number N7 of parameters
-******* N7 * tuple of:
-******** direction byte: 0 for in, 1 for out, 2 for in-out
-******** Idx-String name
-******** Idx-String type
-******* UInt32 number N8 of exceptions
-******* N8 * Idx-String
-******* if annotated: Annotations
+            * 5: interface type
+                * followed by:
+                    * `UInt32` number `N1` of direct mandatory bases
+                    * `N1 * tuple` of:
+                        * `Idx-String`
+                        * if annotated: Annotations
+                    * `UInt32` number `N2` of direct optional bases
+                    * `N2 * tuple` of:
+                        * `Idx-String`
+                        * if annotated: Annotations
+                    * `UInt32` number `N3` of direct attributes
+                    * `N3 * tuple` of:
+                        * kind byte:
+                            * `0x02` bit: 1 if read-only
+                            * `0x01` bit: 1 if bound
+                        * `Idx-String` name
+                        * `Idx-String` type
+                        * `UInt32` number `N4` of get exceptions
+                        * `N4 * Idx-String`
+                        * `UInt32` number `N5` of set exceptions
+                        * `N5 * Idx-String`
+                        * if annotated: Annotations
+                    * `UInt32` number `N6` of direct methods
+                    * `N6 * tuple` of:
+                        * `Idx-String` name
+                        * `Idx-String` return type
+                        * `UInt32` number `N7` of parameters
+                        * `N7 * tuple` of:
+                            * direction byte: 0 for in, 1 for out, 2 for in-out
+                            * `Idx-String` name
+                            * `Idx-String` type
+                        * `UInt32` number `N8` of exceptions
+                        * N8 * Idx-String
+                        * if annotated: Annotations
 
-**** 6: typedef
-***** followed by:
-****** Idx-String
+            * 6: typedef
+                * followed by:
+                    * `Idx-String`
 
-**** 7: constant group
-***** followed by:
-****** UInt32 number N1 of entries of Map
-****** N1 * Entry
+            * 7: constant group
+                * followed by:
+                    * `UInt32` number `N1` of entries of Map
+                    * `N1 * Entry`
 
-**** 8: single-interface--based service (with default constructor if flag is 1)
-***** followed by:
-****** Idx-String
-****** if not "with default constructor":
-******* UInt32 number N1 of constructors
-******* N1 * tuple of:
-******** Idx-String
-******** UInt32 number N2 of parameters
-******** N2 * tuple of
-********* kind byte: 0x04 bit is 1 if rest parameter
-********* Idx-String name
-********* Idx-String type
-******** UInt32 number N3 of exceptions
-******** N3 * Idx-String
-******** if annotated: Annotations
+            * 8: single-interface--based service (with default constructor if flag is 1)
+                * followed by:
+                    * `Idx-String`
+                    * if not "with default constructor":
+                        * `UInt32` number `N1` of constructors
+                        * `N1 * tuple` of:
+                            * `Idx-String`
+                            * `UInt32` number `N2` of parameters
+                            * `N2 * tuple` of
+                                * kind byte: `0x04` bit is 1 if rest parameter
+                                * `Idx-String` name
+                                * `Idx-String` type
+                            * `UInt32` number `N3` of exceptions
+                            * `N3 * Idx-String`
+                            * if annotated: Annotations
 
-**** 9: accumulation-based service
-***** followed by:
-****** UInt32 number N1 of direct mandatory base services
-****** N1 * tuple of:
-******* Idx-String
-******* if annotated: Annotations
-****** UInt32 number N2 of direct optional base services
-****** N2 * tuple of:
-******* Idx-String
-******* if annotated: Annotations
-****** UInt32 number N3 of direct mandatory base interfaces
-****** N3 * tuple of:
-******* Idx-String
-******* if annotated: Annotations
-****** UInt32 number N4 of direct optional base interfaces
-****** N4 * tuple of:
-******* Idx-String
-******* if annotated: Annotations
-****** UInt32 number N5 of direct properties
-****** N5 * tuple of:
-******* UInt16 kind:
-******** 0x0100 bit: 1 if optional
-******** 0x0080 bit: 1 if removable
-******** 0x0040 bit: 1 if maybedefault
-******** 0x0020 bit: 1 if maybeambiguous
-******** 0x0010 bit: 1 if readonly
-******** 0x0008 bit: 1 if transient
-******** 0x0004 bit: 1 if constrained
-******** 0x0002 bit: 1 if bound
-******** 0x0001 bit: 1 if maybevoid
-******* Idx-String name
-******* Idx-String type
-******* if annotated: Annotations
+            * 9: accumulation-based service
+                * followed by:
+                    * `UInt32` number `N1` of direct mandatory base services
+                    * `N1 * tuple` of:
+                        * `Idx-String`
+                        * if annotated: Annotations
+                    * `UInt32` number `N2` of direct optional base services
+                    * `N2 * tuple` of:
+                        * `Idx-String`
+                        * if annotated: Annotations
+                    * `UInt32` number `N3` of direct mandatory base interfaces
+                    * `N3 * tuple` of:
+                        * `Idx-String`
+                        * if annotated: Annotations
+                    * `UInt32` number `N4` of direct optional base interfaces
+                    * `N4 * tuple` of:
+                        * `Idx-String`
+                        * if annotated: Annotations
+                    * `UInt32` number `N5` of direct properties
+                    * `N5 * tuple` of:
+                        * `UInt16` kind:
+                            * `0x0100` bit: 1 if optional
+                            * `0x0080` bit: 1 if removable
+                            * `0x0040` bit: 1 if maybedefault
+                            * `0x0020` bit: 1 if maybeambiguous
+                            * `0x0010` bit: 1 if readonly
+                            * `0x0008` bit: 1 if transient
+                            * `0x0004` bit: 1 if constrained
+                            * `0x0002` bit: 1 if bound
+                            * `0x0001` bit: 1 if maybevoid
+                            * `Idx-String` name
+                            * `Idx-String` type
+                            * if annotated: Annotations
 
-**** 10: interface-based singleton
-***** followed by:
-****** Idx-String
+            * 10: interface-based singleton
+                * followed by:
+                * `Idx-String`
 
-**** 11: service-based singleton
-***** followed by:
-****** Idx-String
+            * 11: service-based singleton
+                * followed by:
+                    * `Idx-String`
 
-*** if annotated, followed by: Annotations
+        * if annotated, followed by: Annotations
 
 Layout of per-entry payload in a constant group Map:
 
 * kind byte:
-** 0x80 bit: 1 if annotated
-** remaining bits:
+    * `0x80` bit: 1 if annotated
+    * remaining bits:
 
-*** 0: BOOLEAN
-**** followed by value byte, 0 represents false, 1 represents true
+        * 0: `BOOLEAN`
+            * followed by value byte, 0 represents false, 1 represents true
 
-*** 1: BYTE
-**** followed by value byte, representing values with two's complement
+        * 1: `BYTE`
+            * followed by value byte, representing values with two's complement
 
-*** 2: SHORT
-**** followed by UInt16 value, representing values with two's complement
+        * 2: `SHORT`
+            * followed by `UInt16` value, representing values with two's complement
 
-*** 3: UNSIGNED SHORT
-**** followed by UInt16 value
+        * 3: `UNSIGNED SHORT`
+            * followed by `UInt16` value
 
-*** 4: LONG
-**** followed by UInt32 value, representing values with two's complement
+        * 4: `LONG`
+            * followed by `UInt32` value, representing values with two's complement
 
-*** 5: UNSIGNED LONG
-**** followed by UInt32 value
+        * 5: `UNSIGNED LONG`
+            * followed by `UInt32` value
 
-*** 6: HYPER
-**** followed by UInt64 value, representing values with two's complement
+        * 6: `HYPER`
+            * followed by `UInt64` value, representing values with two's complement
 
-*** 7: UNSIGNED HYPER
-**** followed by UInt64 value
+        * 7: `UNSIGNED HYPER`
+            * followed by `UInt64` value
 
-*** 8: FLOAT
-**** followed by 4-byte value, representing values in ISO 60599 binary32 format,
+        * 8: `FLOAT`
+            * followed by 4-byte value, representing values in ISO 60599 binary32 format,
       LSB first
 
-*** 9: DOUBLE
-**** followed by 8-byte value, representing values in ISO 60599 binary64 format,
+        * 9: `DOUBLE`
+            * followed by 8-byte value, representing values in ISO 60599 binary64 format,
       LSB first
 
 * if annotated, followed by: Annotations

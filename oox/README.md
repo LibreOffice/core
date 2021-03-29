@@ -1,15 +1,16 @@
+# Office Open XML (ooxml) Support
+
 Support for Office Open XML, the office XML-format designed by Microsoft.
 
-
-== DrawingML Custom shapes and presets ==
+## DrawingML Custom shapes and presets
 
 Custom shapes are part of DrawingML and are different to binary ppt
 and VML in older formats.
-The import happens in oox/source/drawingml, where they are
+The import happens in `oox/source/drawingml`, where they are
 imported as LO's enhanced custom shape's. see
-offapi/com/sun/star/drawing/CustomShape.idl and
-offapi/com/sun/star/drawing/EnhancedCustomShape*.idl
-Check CustomShapeProperties::pushToPropSet() and see
+`offapi/com/sun/star/drawing/CustomShape.idl` and
+`offapi/com/sun/star/drawing/EnhancedCustomShape*.idl`
+Check `CustomShapeProperties::pushToPropSet()` and see
 how custom shape properties are converted.
 
 Preset shapes are custom shapes whose guides and handles
@@ -120,8 +121,8 @@ example of drawingml custom shape (equal to star5 preset):
    </pathLst>
 
 we needed to extend our custom shapes for missing features and so 5
-new segment commands were added. G command for arcto drawingml record
-and H I J K commands for darken, darkenless, lighten, lightenless
+new segment commands were added. `G` command for arcto drawingml record
+and `H` `I` `J` `K` commands for darken, darkenless, lighten, lightenless
 records. the commands are save into ODF in special namespace drawooo,
 which is extension not yet in the standard. Thorsten suggested to put
 it in such a namespace and keep original (incomplete) geometry for
@@ -132,14 +133,14 @@ needed.
 In order to convert preset shapes to LO's enhanced custom shape,
 we need to load shape definition of preset shapes. The procedure
 to convert the definition from OOXML spec for LO is documented
-( also a script ) in oox/source/drawingml/customshapes/README.
-The scripts in oox/source/drawingml/customshapes/ also generate pptx
+(also a script) in `oox/source/drawingml/customshapes/README.md`.
+The scripts in `oox/source/drawingml/customshapes/` also generate pptx
 files for single presets and also for all presets
-cshape-all.pptx. The cshape-all.pptx file is then loaded into Impress
+`cshape-all.pptx`. The cshape-all.pptx file is then loaded into Impress
 build with debug enabled in oox and the command line output contains
-information. The generated definition is oox-drawingml-cs-presets.
+information. The generated definition is `oox-drawingml-cs-presets`.
 
-Check CustomShapeProperties::initializePresetDataMap() to see how
+Check `CustomShapeProperties::initializePresetDataMap()` to see how
 generated presets data are loaded into LO.
 While importing presets, we prefix the name with "ooxml-" so
 that we can detect it on export as save it again as preset.
@@ -151,12 +152,12 @@ problem with these pptx as they cannot be imported into powerpoint,
 but that can be fixed quickly. when fixed, we can use it to
 test powerpoint odp export and see how complete it is regarding
 custom shapes. OpenXML SDK tools might help when fixing
-cshape-all.pptx
-http://www.microsoft.com/en-us/download/details.aspx?id=30425
+`cshape-all.pptx`
+<http://www.microsoft.com/en-us/download/details.aspx?id=30425>
 
-== Export ==
+## Export
 Here is how LO's enhanced custom shapes are exported:
-* Shape name is ooxml-* - they are imported from ooxml, export as is.
+* Shape name is `ooxml-*` - they are imported from ooxml, export as is.
 * Denylist - ODF presets that has OOXML equivalent.
   We convert adjustment values case by case. Microsoft Office
   is rather strict about adjustment values, either none of them
@@ -166,20 +167,19 @@ Here is how LO's enhanced custom shapes are exported:
   so that default values suitable for the odf one need to be
   provided.
 * Allowlist - ODF presets that has OOXML equivalent but looks a bit
-different, export them as PolyPolygon.
+different, export them as `PolyPolygon`.
 
-Check Andras Timar's presentation[1] and ShapeExport::WriteCustomShape()
+Check Andras Timar's presentation[1] and `ShapeExport::WriteCustomShape()`
 for further detail.
 
-FUTURE WORK: because we have to make sure that all the roundtrips
+## Future Works
+Because we have to make sure that all the roundtrips
 like PPTX --> ODP --> PPTX work correctly and doesn't lose data.
 the only problematic part is probably saving custom shapes (ie. not
 presets) to PPTX. that part of code predates work on custom shapes
 and is unable to export general custom shapes yet. It will need a bit
-of work as LO has more complex equations than DrawingML. other parts
+of work as LO has more complex equations than `DrawingML`. other parts
 should work OK, PPTX --> ODP should work and don't lose any
 data. presets should already survive PPTX --> ODP --> PPTX roundtrip
 
-[1]https://archive.fosdem.org/2016/schedule/event/drawingml/attachments/
-slides/1184/export/events/attachments/drawingml/slides/1184/
-andras_timar_fosdem_2016.pdf
+[1] <https://archive.fosdem.org/2016/schedule/event/drawingml/attachments/slides/1184/export/events/attachments/drawingml/slides/1184/andras_timar_fosdem_2016.pdf>
