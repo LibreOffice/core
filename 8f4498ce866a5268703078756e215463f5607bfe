@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2b56d520_365941f4",
+        "filename": "include/vcl/bitmapex.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-03-29T12:21:55Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "f3467643_323e5001",
+      "revId": "8f4498ce866a5268703078756e215463f5607bfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "732ea1fe_bbb78c97",
         "filename": "include/vcl/bitmapex.hxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2021-03-29T11:54:00Z",
       "side": 1,
       "message": "Wouldn\u0027t it be better to make this AlphaMask instead of Bitmap?",
+      "revId": "8f4498ce866a5268703078756e215463f5607bfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e8d3edf_c12e4ac1",
+        "filename": "include/vcl/bitmapex.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-03-29T12:21:55Z",
+      "side": 1,
+      "message": "Yes, but that introduced a bunch more noise into the patch, that I was keen to avoid, so I\u0027ll do that in a followup patch.",
+      "parentUuid": "732ea1fe_bbb78c97",
       "revId": "8f4498ce866a5268703078756e215463f5607bfe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "f2da34c3_c052d7cb",
+        "filename": "svx/source/dialog/_bmpmask.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-03-29T12:21:55Z",
+      "side": 1,
+      "message": "thanks, forgot about that",
+      "parentUuid": "3fb7ee3a_9849d50b",
+      "revId": "8f4498ce866a5268703078756e215463f5607bfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a203b5d7_f4890a43",
         "filename": "vcl/source/bitmap/BitmapEx.cxx",
         "patchSetId": 2
@@ -67,6 +121,24 @@
       "revId": "8f4498ce866a5268703078756e215463f5607bfe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5edb856d_2ba52464",
+        "filename": "vcl/source/bitmap/BitmapEx.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-03-29T12:21:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a203b5d7_f4890a43",
+      "revId": "8f4498ce866a5268703078756e215463f5607bfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -104,6 +176,24 @@
     },
     {
       "key": {
+        "uuid": "2bf442ff_1ffb066b",
+        "filename": "vcl/source/graphic/UnoGraphic.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-03-29T12:21:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eaa8ba85_5cbb79a3",
+      "revId": "8f4498ce866a5268703078756e215463f5607bfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "36be6d53_7f97d123",
         "filename": "vcl/source/outdev/bitmap.cxx",
         "patchSetId": 2
@@ -121,6 +211,24 @@
     },
     {
       "key": {
+        "uuid": "7a300134_21b5c6ed",
+        "filename": "vcl/source/outdev/bitmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-03-29T12:21:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36be6d53_7f97d123",
+      "revId": "8f4498ce866a5268703078756e215463f5607bfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d89e4585_f393dddb",
         "filename": "vcl/source/outdev/bitmap.cxx",
         "patchSetId": 2
@@ -135,6 +243,24 @@
       "revId": "8f4498ce866a5268703078756e215463f5607bfe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b64915e9_75083367",
+        "filename": "vcl/source/outdev/bitmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1009,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-03-29T12:21:55Z",
+      "side": 1,
+      "message": "Done, I just wasn\u0027t sure in the beginning what was happening here",
+      "parentUuid": "d89e4585_f393dddb",
+      "revId": "8f4498ce866a5268703078756e215463f5607bfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
