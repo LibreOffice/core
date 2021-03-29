@@ -1858,7 +1858,7 @@ def wrap(text, width=70, **kwargs):
 # }}}
 
 def genKeyId(inkey):
-    crc = binascii.crc32(bytes(inkey)) & 0xffffffff
+    crc = binascii.crc32(bytes(inkey, encoding="UTF-8")) & 0xffffffff
     # Use simple ASCII characters, exclude I, l, 1 and O, 0 to avoid confusing IDs
     symbols = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
     outkey = ""
