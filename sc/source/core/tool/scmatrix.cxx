@@ -3332,10 +3332,8 @@ namespace {
     if conversion was not possible, else to an unconditional FormulaError::NoValue
     DoubleError.
     An empty operand evaluates to 0.
-    XXX: semantically TEmptyRes and types other than number_value_type are
-    unused, but this template could serve as a basis for future enhancements.
  */
-template<typename TOp, typename TEmptyRes=double>
+template<typename TOp>
 struct MatOp
 {
 private:
@@ -3343,7 +3341,7 @@ private:
     ScInterpreter* mpErrorInterpreter;
     svl::SharedString maString;
     double mfVal;
-    COp<TOp, TEmptyRes> maCOp;
+    COp<TOp, double> maCOp;
 
 public:
     typedef double number_value_type;
@@ -3378,7 +3376,7 @@ public:
         return maOp( convertStringToValue( mpErrorInterpreter, rStr.getString()), mfVal);
     }
 
-    TEmptyRes operator()(char) const
+    double operator()(char) const
     {
         return maCOp(maOp, 0, mfVal, maString);
     }
@@ -3396,14 +3394,14 @@ public:
 void ScMatrix::NotOp( const ScMatrix& rMat)
 {
     auto not_ = [](double a, double){return double(a == 0.0);};
-    matop::MatOp<decltype(not_), double> aOp(not_, pImpl->GetErrorInterpreter());
+    matop::MatOp<decltype(not_)> aOp(not_, pImpl->GetErrorInterpreter());
     pImpl->ApplyOperation(aOp, *rMat.pImpl);
 }
 
 void ScMatrix::NegOp( const ScMatrix& rMat)
 {
     auto neg_ = [](double a, double){return -a;};
-    matop::MatOp<decltype(neg_), double> aOp(neg_, pImpl->GetErrorInterpreter());
+    matop::MatOp<decltype(neg_)> aOp(neg_, pImpl->GetErrorInterpreter());
     pImpl->ApplyOperation(aOp, *rMat.pImpl);
 }
 
