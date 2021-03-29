@@ -2185,13 +2185,10 @@ void ScPosWnd::SetPos( const OUString& rPosStr )
     }
 }
 
-namespace {
-
-OUString createLocalRangeName(std::u16string_view rName, std::u16string_view rTableName)
+// static
+OUString ScPosWnd::createLocalRangeName(std::u16string_view rName, std::u16string_view rTableName)
 {
     return OUString::Concat(rName) + " (" + rTableName + ")";
-}
-
 }
 
 void ScPosWnd::FillRangeNames()
