@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 import polib
 import binascii
@@ -22,17 +22,18 @@ for o, a in myopts:
         ofile = a
 
 with open(ofile, "a") as output:
-    xgettext = Popen(["xgettext", "-C", "--add-comments", "--keyword=NC_:1c,2", "--keyword=NNC_:1c,2,3", "--from-code=UTF-8", "--no-wrap", ifile, "-o", "-"], stdout=PIPE)
+    xgettext = Popen(["xgettext", "-C", "--add-comments", "--keyword=NC_:1c,2", "--keyword=NNC_:1c,2,3", "--from-code=UTF-8", "--no-wrap", ifile, "-o", "-"], stdout=PIPE, encoding="UTF-8")
     # while overall format is c++, all of the strings use custom placeholders and don't follow c-format
     # esp. plain percent sign never is escaped explicitly
-    input = check_output(['sed', '-e', '/^#, c-format$/d'], stdin=xgettext.stdout)
+    input = check_output(['sed', '-e', '/^#, c-format$/d'], stdin=xgettext.stdout, encoding="UTF-8")
     xgettext.wait()
+    xgettext.stdout.close()
     po = polib.pofile(input)
     if len(po) != 0:
-        print >> output, ""
+        print("", file=output)
         for entry in po:
             keyid = entry.msgctxt + '|' + entry.msgid
-            print >> output, '#. ' + polib.genKeyId(keyid)
+            print('#. ' + polib.genKeyId(keyid), file=output)
             for i, occurrence in enumerate(entry.occurrences):
                 entry.occurrences[i] = os.path.relpath(occurrence[0], os.environ['SRCDIR']), occurrence[1]
-            print >> output, entry
+            print(entry, file=output)
