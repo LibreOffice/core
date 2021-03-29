@@ -636,7 +636,6 @@ void CanvasBitmapTest::runTest()
     static vcl::PixelFormat ePixelFormatArray[] =
     {
         vcl::PixelFormat::N1_BPP,
-        vcl::PixelFormat::N4_BPP,
         vcl::PixelFormat::N8_BPP,
         vcl::PixelFormat::N24_BPP
     };
