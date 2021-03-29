@@ -22,6 +22,30 @@
       "revId": "e8017041a17a489e56ad4a888c2c2a52225d612b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2dd8cfc_3910a501",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2691,
+      "author": {
+        "id": 1003158
+      },
+      "writtenOn": "2021-03-29T16:55:53Z",
+      "side": 0,
+      "message": "Removed it",
+      "parentUuid": "455f4c7a_0db4ce90",
+      "range": {
+        "startLine": 2691,
+        "startChar": 26,
+        "endLine": 2691,
+        "endChar": 38
+      },
+      "revId": "e8017041a17a489e56ad4a888c2c2a52225d612b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
