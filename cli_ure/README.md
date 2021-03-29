@@ -1,5 +1,8 @@
-Common Lang Infrastructure Uno Runtime Environment - support assemblies and tools for the MS .Net (and Mono) UNO binding.
+# Common Language Infrastructure (CLI) UNO runtime environment
 
-See also:
-[git:cli_ure/source/readme.txt]
+Support assemblies and tools for the Microsoft .NET UNO binding.
+
+## See also
+[git:cli\_ure/readme.txt]
+
 

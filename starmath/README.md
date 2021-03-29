@@ -1,4 +1,6 @@
-Formula editor code for writer ([[sw]]).
+# Formula editor code for LibreOffice Writer
 
 Good overview from the original developer:
-http://www.mail-archive.com/dev@sw.openoffice.org/msg00200.html
+
+<http://www.mail-archive.com/dev@sw.openoffice.org/msg00200.html>
+
