@@ -81,6 +81,12 @@ bool ScCTB::Read( SvStream &rS )
     SAL_INFO("sc.filter", "stream pos " << rS.Tell());
     nOffSet = rS.Tell();
     tb.Read( rS );
+
+    const size_t nMinRecordSize = 20; // TBVisualData reads 20 bytes
+    const size_t nMaxPossibleRecords = rS.remainingSize() / nMinRecordSize;
+    if (nViews > nMaxPossibleRecords)
+        return false;
+
     for ( sal_uInt16 index = 0; index < nViews; ++index )
     {
         TBVisualData aVisData;
