@@ -1084,14 +1084,14 @@ void SvmTest::testBitmapExs()
         pVirtualDev->DrawBitmapEx(Point(0, 6), BitmapEx(aBitmap, COL_WHITE));
     }
 
-    // DrawBitmapEx - 4-bit
+    // DrawBitmapEx - used to be 4-bit
     {
         Bitmap aBitmap(Size(2, 2), vcl::PixelFormat::N24_BPP);
         {
             BitmapScopedWriteAccess pAccess(aBitmap);
             pAccess->Erase(COL_MAGENTA);
         }
-        aBitmap.Convert(BmpConversion::N4BitColors);
+        aBitmap.Convert(BmpConversion::N8BitColors);
         pVirtualDev->DrawBitmapEx(Point(2, 6), BitmapEx(aBitmap, COL_WHITE));
     }
 

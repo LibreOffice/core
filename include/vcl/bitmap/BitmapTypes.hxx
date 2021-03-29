@@ -17,7 +17,6 @@ enum class PixelFormat
 {
     INVALID = 0,
     N1_BPP = 1,
-    N4_BPP = 4,
     N8_BPP = 8,
     N24_BPP = 24,
     N32_BPP = 32
@@ -37,7 +36,8 @@ constexpr PixelFormat bitDepthToPixelFormat(sal_uInt16 nBitDepth)
         case 1:
             return PixelFormat::N1_BPP;
         case 4:
-            return PixelFormat::N4_BPP;
+            assert(false);
+            break;
         case 8:
             return PixelFormat::N8_BPP;
         case 24:
