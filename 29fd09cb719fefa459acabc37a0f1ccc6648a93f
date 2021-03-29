@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "abbb03c5_ad067f4d",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 10
+      },
+      "lineNbr": 5673,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-03-29T07:48:52Z",
+      "side": 1,
+      "message": "If this check shall be done \"On Windows only\", it might be better to have this prop value default to false, and only set it to true for install:module\u003d\"wnt\" (cf. officecfg/registry/data/org/openoffice/Office/Common.xcu for similar such cases).",
+      "revId": "29fd09cb719fefa459acabc37a0f1ccc6648a93f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6d6c9cd7_d96c371d",
         "filename": "vcl/win/app/fileregistration.cxx",
         "patchSetId": 10
