@@ -476,6 +476,19 @@ void ScInputWindow::SetSizePixel( const Size& rNewSize )
     ToolBox::SetSizePixel(rNewSize);
 }
 
+void ScInputWindow::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags)
+{
+    ToolBox::setPosSizePixel(nX, nY, nWidth, nHeight, nFlags);
+    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+    {
+        std::vector<vcl::LOKPayloadItem> aItems;
+        aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
+        aItems.emplace_back("size", GetSizePixel().toString());
+        aItems.emplace_back("lines", OString::number(mxTextWindow->GetNumLines()));
+        pNotifier->notifyWindow(GetLOKWindowId(), "size_changed", aItems);
+    }
+}
+
 void ScInputWindow::Resize()
 {
     ToolBox::Resize();
