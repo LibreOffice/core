@@ -1361,6 +1361,34 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134021)
     CPPUNIT_ASSERT_EQUAL(12, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf136778)
+{
+    load(DATA_DIRECTORY, "tdf136778.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    dispatchCommand(mxComponent, ".uno:JumpToNextTable", {});
+
+    dispatchCommand(mxComponent, ".uno:DeleteTable", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    // Without the fix in place, it would have crashed here
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf123285)
 {
     load(DATA_DIRECTORY, "tdf123285.odt");
