@@ -42,7 +42,7 @@ namespace com::sun::star::accessibility {
     class XAccessible;
 }
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) UnoWrapperBase
+class VCL_DLLPUBLIC UnoWrapperBase
 {
 public:
     virtual void                Destroy() = 0;
