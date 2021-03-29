@@ -724,7 +724,7 @@ void CanvasBitmapTest::runTest()
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap does not have size (10,10)",
                             Size(10,10), aBmp.GetSizePixel());
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap does not have the expected pixel format",
-                            vcl::PixelFormat::N8_BPP,  aBmp.getPixelFormat());
+                            vcl::PixelFormat::N24_BPP,  aBmp.getPixelFormat());
     {
         Bitmap aBitmap = aBmp.GetBitmap();
         BitmapReadAccess* pBmpAcc   = aBitmap.AcquireReadAccess();
