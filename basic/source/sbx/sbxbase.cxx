@@ -180,8 +180,8 @@ SbxObject* SbxBase::CreateObject( const OUString& rClass )
 
 SbxBase* SbxBase::Load( SvStream& rStrm )
 {
-    sal_uInt16 nSbxId, nFlagsTmp, nVer;
-    sal_uInt32 nCreator, nSize;
+    sal_uInt16 nSbxId(0), nFlagsTmp(0), nVer(0);
+    sal_uInt32 nCreator(0), nSize(0);
     rStrm.ReadUInt32( nCreator ).ReadUInt16( nSbxId ).ReadUInt16( nFlagsTmp ).ReadUInt16( nVer );
     SbxFlagBits nFlags = static_cast<SbxFlagBits>(nFlagsTmp);
 
@@ -297,7 +297,7 @@ void SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     rStrm.ReadUInt32( nHelpId ).ReadUInt16( nParam );
     while( nParam-- )
     {
-        sal_uInt16 nType, nFlagsTmp;
+        sal_uInt16 nType(0), nFlagsTmp(0);
         sal_uInt32 nUserData = 0;
         OUString aName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm,
             RTL_TEXTENCODING_ASCII_US);
