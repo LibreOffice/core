@@ -77,6 +77,7 @@ void OP_Integer(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     if (rContext.rDoc.ValidAddress(aAddr))
     {
         rContext.rDoc.EnsureTable(0);
+        // coverity[tainted_data : FALSE] - ValidAddress has sanitized aAddr
         rContext.rDoc.SetValue(aAddr, static_cast<double>(nValue));
 
         // 0 digits in fractional part!
@@ -98,6 +99,7 @@ void OP_Number(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     {
         fValue = ::rtl::math::round( fValue, 15 );
         rContext.rDoc.EnsureTable(0);
+        // coverity[tainted_data : FALSE] - ValidAddress has sanitized aAddr
         rContext.rDoc.SetValue(aAddr, fValue);
 
         SetFormat(rContext, nCol, nRow, 0, nFormat, nFractionalFloat);
@@ -386,6 +388,7 @@ void OP_Number123(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     {
         double fValue = Snum32ToDouble( nValue );
         rContext.rDoc.EnsureTable(nTab);
+        // coverity[tainted_data : FALSE] - ValidAddress has sanitized aAddr
         rContext.rDoc.SetValue(aAddr, fValue);
     }
 }
@@ -434,6 +437,7 @@ void OP_IEEENumber123(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     if (rContext.rDoc.ValidAddress(aAddr) && nTab <= rContext.rDoc.GetMaxTableNumber())
     {
         rContext.rDoc.EnsureTable(nTab);
+        // coverity[tainted_data : FALSE] - ValidAddress has sanitized aAddr
         rContext.rDoc.SetValue(aAddr, dValue);
     }
 }
