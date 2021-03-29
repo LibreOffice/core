@@ -114,7 +114,8 @@ class CreateRangeNameTest(UITestCase):
 
         # tdf#67007: Without the fix in place, this test would have failed with
         # AssertionError: 'localRangeName' != 'A1'
-        self.assertEqual('localRangeName', get_state_as_dict(xPosWindow)['Text'])
+        # Additionally, newly check a sheet-local scoped name has " (sheetname)" appended.
+        self.assertEqual('localRangeName (Sheet1)', get_state_as_dict(xPosWindow)['Text'])
 
         gridwin = calcDoc.getChild("grid_window")
         enter_text_to_cell(gridwin, "A1", "1")

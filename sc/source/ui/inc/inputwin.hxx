@@ -177,6 +177,8 @@ public:
     void            SetPos( const OUString& rPosStr );        // Displayed Text
     void            SetFormulaMode( bool bSet );
 
+    static OUString createLocalRangeName(std::u16string_view rName, std::u16string_view rTableName);
+
 private:
     DECL_LINK(OnAsyncGetFocus, void*, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
