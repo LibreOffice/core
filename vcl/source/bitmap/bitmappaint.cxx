@@ -933,7 +933,7 @@ bool Bitmap::Replace(const Color& rSearchColor, const Color& rReplaceColor, sal_
     // Bitmaps with 1 bit color depth can cause problems if they have other entries than black/white
     // in their palette
     if (GetBitCount() == 1)
-        Convert(BmpConversion::N4BitColors);
+        Convert(BmpConversion::N8BitColors);
 
     BitmapScopedWriteAccess pAcc(*this);
     bool bRet = false;
@@ -996,7 +996,7 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, si
     // Bitmaps with 1 bit color depth can cause problems if they have other entries than black/white
     // in their palette
     if (GetBitCount() == 1)
-        Convert(BmpConversion::N4BitColors);
+        Convert(BmpConversion::N8BitColors);
 
     BitmapScopedWriteAccess pAcc(*this);
     bool bRet = false;

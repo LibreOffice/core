@@ -72,8 +72,6 @@ enum class BmpConversion
 {
     NNONE,
     N1BitThreshold,
-    N4BitGreys,
-    N4BitColors,
     N8BitGreys,
     N8BitColors,
     N24Bit,
@@ -526,7 +524,7 @@ public:
     const std::shared_ptr<SalBitmap>& ImplGetSalBitmap() const { return mxSalBmp; }
     SAL_DLLPRIVATE void     ImplSetSalBitmap( const std::shared_ptr<SalBitmap>& xImpBmp );
 
-    SAL_DLLPRIVATE bool     ImplMakeGreyscales( sal_uInt16 nGreyscales );
+    SAL_DLLPRIVATE bool     ImplMakeGreyscales();
 
 public:
 

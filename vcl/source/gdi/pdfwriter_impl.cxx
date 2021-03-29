@@ -9126,12 +9126,9 @@ const BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx& i_rBitmap, co
     BitmapEx aBitmap( i_rBitmap );
     if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )
     {
-        BmpConversion eConv = BmpConversion::N8BitGreys;
         int nDepth = aBitmap.GetBitmap().GetBitCount();
-        if( nDepth <= 4 )
-            eConv = BmpConversion::N4BitGreys;
         if( nDepth > 1 )
-            aBitmap.Convert( eConv );
+            aBitmap.Convert( BmpConversion::N8BitGreys );
     }
     BitmapID aID;
     aID.m_aPixelSize        = aBitmap.GetSizePixel();
