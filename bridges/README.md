@@ -1,4 +1,6 @@
-Bridges from various C++ ABIs, Java JNI, MS .Net to UNO and back.
+# UNO Bridges
 
-Also implementation of the UNO Remote Protocol. And in ooo-build a bridge from Mono to UNO and back.
+Bridges from various C++ ABIs, Java JNI, MS .NET to UNO and back. A bridge for .NET is in
+`cli_ure`.
 
+Also implementation of the UNO Remote Protocol.

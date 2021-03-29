@@ -1,6 +1,8 @@
+# Drawing API
+
 Drawing API that can specify what to draw via a kind of display list.
 
-Example of the DrawingLayer use is eg. in svx/source/xoutdev/xtabhtch.cxx:121.
+Example of the DrawingLayer use is eg. in `svx/source/xoutdev/xtabhtch.cxx:121`.
 A stripped down version with extended comments:
 
      // Create a hatch primitive (here a rectangle that will be filled with
@@ -39,7 +41,7 @@ A stripped down version with extended comments:
      // it in the widget.
      aRetval = aVirtualDevice.GetBitmap(Point(0, 0), aVirtualDevice.GetOutputSizePixel());
 
-== DrawingLayer glossary ==
+## DrawingLayer Glossary
 
 Primitives - classes that represent what should be drawn.  It holds the data
 what to draw, but does not contain any kind of the rendering.  Some of the
@@ -49,31 +51,31 @@ primitives.
 
 Decomposition - a way how to break down the more complicated primitives into
 the basic primitives, and represent them via them; this logically makes the
-plain Primitive2DSequence display list a hierarchy.
-Eg. PolygonMarkerPrimitive2D can be decomposed to 2 hairlines
-PolyPolygonHairlinePrimitive2D's, each with different color.
+plain `Primitive2DSequence` display list a hierarchy.
+Eg. `PolygonMarkerPrimitive2D` can be decomposed to 2 hairlines
+`PolyPolygonHairlinePrimitive2D`'s, each with different color.
 
 Processor - a class that goes through the hierarchy of the Primitives, and
-renders it some way.  Various processors, like VclPixelProcessor2D (renders to
-the screen), VclMetafileProcessor2D (renders to the VCL metafile, eg. for
+renders it some way.  Various processors, like `VclPixelProcessor2D` (renders to
+the screen), `VclMetafileProcessor2D` (renders to the VCL metafile, eg. for
 printing), etc.
 
-== How to Implement a new Primitive ("something new to draw") ==
+## How to Implement a New Primitive ("Something New to Draw")
 
-* Create an ancestor of BasePrimitive2D
+* Create an ancestor of `BasePrimitive2D`
   (or of its ancestor if it fits the purpose better)
 
-  * Assign it an ID [in drawinglayer_primitivetypes2d.hxx]
+  * Assign it an ID [in `drawinglayer_primitivetypes2d.hxx`]
 
   * Implement its decomposition
-    [virtual Primitive2DSequence create2DDecomposition(...)]
+    [`virtual Primitive2DSequence create2DDecomposition(...)`]
 
 * Extend the (various) processor(s)
   If you need more than relying on just the decomposition
 
-== Where is DrawingLayer used ==
+## Where is DrawingLayer Used
 
-* SdrObject(s) (rectangles, Circles, predefined shapes etc.)
+* `SdrObject`(s) (rectangles, Circles, predefined shapes etc.)
 
 * Selections
 

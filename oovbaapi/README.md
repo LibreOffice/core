@@ -1,5 +1,8 @@
-Module for OpenOffice - VisualBasic interoperability.
+# Visual Basic Interoperability
 
-See also:
-[http://wiki.openoffice.org/wiki/VBA]
-[http://wiki.openoffice.org/wiki/Oovbaapi]
+Visual Basic interoperability module for LibreOffice
+
+## See also
+
+- <http://wiki.openoffice.org/wiki/VBA>
+- <http://wiki.openoffice.org/wiki/Oovbaapi>

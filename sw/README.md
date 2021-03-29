@@ -1,10 +1,10 @@
-Writer application code.
+# Writer Application Code
 
 Exact history was lost before Sept. 18th, 2000, but old source code
 comments show that Writer core dates back until at least November
 1990.
 
-== Module contents ==
+## Module Contents
  * inc: headers available to all source files inside the module
  * qa: unit, slow and subsequent tests
  * sdi
@@ -12,7 +12,7 @@ comments show that Writer core dates back until at least November
  * uiconfig: user interface configuration
  * util: UNO passive registration config
 
-== Source contents ==
+## Source Contents
  * core: Writer core (document model, layout, UNO API implementation)
  * filter: Writer internal filters
    * ascii: plain text filter
@@ -27,19 +27,19 @@ comments show that Writer core dates back until at least November
  * uibase: user interface (those parts that are linked into sw & always loaded)
  * ui: user interface (optional parts that are loaded on demand (swui))
 
-== Core ==
+## Core
 
 There is a good overview documentation of basic architecture of Writer core
 in the OOo wiki:
 
-http://wiki.openoffice.org/wiki/Writer/Core_And_Layout
-http://wiki.openoffice.org/wiki/Writer/Text_Formatting
+- http://wiki.openoffice.org/wiki/Writer/Core_And_Layout
+- http://wiki.openoffice.org/wiki/Writer/Text_Formatting
 
 Writer specific WhichIds are defined in sw/inc/hintids.hxx.
 
 The details below are mainly about details missing from the Wiki pages.
 
-=== SwDoc ===
+### SwDoc
 
 The central class for a document is SwDoc, which represents a document.
 
@@ -50,7 +50,7 @@ SwDoc::getIDocument*() methods to retrieve the managers.
 However there are still too many members and methods in this class,
 many of which could be moved to some Manager or other...
 
-=== SwNodes ===
+### SwNodes
 
 Basically a (fancy) array of SwNode pointers.  There are special subclasses of
 SwNode (SwStartNode and SwEndNode) which are used to encode a nested tree
@@ -67,7 +67,7 @@ The SwNodes contains the following top-level sections:
 4. Deleted Change Tracking content
 5. Body content
 
-=== Undo ===
+### Undo
 
 The Undo/Redo information is stored in a sw::UndoManager member of SwDoc,
 which implements the IDocumentUndoRedo interface.
@@ -79,7 +79,7 @@ Undo/Redo step.
 There are also ListActions which internally contain several individual SwUndo
 actions; these are created by the StartUndo/EndUndo wrapper methods.
 
-=== Text Attributes ===
+### Text Attributes
 
 The sub-structure of paragraphs is stored in the SwpHintsArray member
 SwTextNode::m_pSwpHints.  There is a base class SwTextAttr with numerous
@@ -106,7 +106,7 @@ There are several sub-categories of SwTextAttr:
   These all have a corresponding dummy character in the paragraph text, which
   is a placeholder for the "expansion" of the attribute, e.g. field content.
 
-=== Fields ===
+### Fields
 
 There are multiple model classes involved for fields:
 
@@ -140,7 +140,7 @@ There are multiple model classes involved for fields:
   Its life-cycle is determined by UNO clients outside of sw; it will get
   disposed when the SwFormatField dies.
 
-=== Lists ===
+### Lists
 
 - SwNumFormat (subclass of SvxNumFormat) determines the formatting of a single
   numbering level.
@@ -197,9 +197,9 @@ There are multiple model classes involved for fields:
 
 Note that there is no UNO service to represent a list.
 
-=== Layout ===
+### Layout
 
-The layout is a tree of SwFrame subclasses, the following relationships are
+The layout is a tree of `SwFrame` subclasses, the following relationships are
 possible between frames:
 
 - You can visit the tree by following the upper, lower, next and previous pointers.

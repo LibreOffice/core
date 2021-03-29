@@ -1,1 +1,3 @@
-Spellcheck, hyphenator, thesaurus, etc.
+# Lingustics Components
+
+`lingucomponent` contains spellcheck, hyphenator, thesaurus, etc.

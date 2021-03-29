@@ -1,3 +1,5 @@
+# OpenCL Support
+
 OpenCL-related code that is not specific to any particular
 functionality OpenCL is used for. (Like formula group calculation in
 Calc.)

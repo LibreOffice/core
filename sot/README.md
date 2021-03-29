@@ -1,1 +1,3 @@
-Compound file storage tools code.
+# Compound File Storage Tools Code
+
+`sot` contains compound file storage tools code.

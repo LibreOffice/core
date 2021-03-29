@@ -1,68 +1,70 @@
+# Scripting Framework
+
 This module provides the source code for the Scripting Framework.
 
 For more information on the Scripting Framework, see the project web page:
-[https://framework.openoffice.org/scripting/]
+<https://framework.openoffice.org/scripting/>
 
 This module uses astyle to keep consistent java coding style. Please run
 
-./Format_java_code.sh
+    ./Format_java_code.sh
 
 before committing.
 
-== Source Code Structure ==
+## Source Code Structure
 
 The following directories contain the source code currently used
 by the Scripting Framework:
 
-- source/provider
+- `source/provider`
 
-C++ source for the implementations of the com.sun.star.script.provider.*
-and com.sun.star.script.browse.* UNO types. These types are used for
+C++ source for the implementations of the `com.sun.star.script.provider.*`
+and `com.sun.star.script.browse.*` UNO types. These types are used for
 browsing and executing scripts.
 
-- source/protocolhandler
+- `source/protocolhandler`
 
-C++ for a ProtocolHandler implementation that handles vnd.sun.star.script
+C++ for a `ProtocolHandler` implementation that handles `vnd.sun.star.script`
 URIs and dispatches them for execution to the Scripting Framework.
 
-- source/basprov
+- `source/basprov`
 
-C++ implementation of the LanguageScriptProvider UNO service for Basic
+C++ implementation of the `LanguageScriptProvider` UNO service for Basic
 
-- source/dlgprov
+- `source/dlgprov`
 
-C++ implementation of the DialogProvider UNO service used for loading
+C++ implementation of the `DialogProvider` UNO service used for loading
 UNO dialogs from various languages
 
-- source/pyprov
+- `source/pyprov`
 
-LanguageScriptProvider for Python
+`LanguageScriptProvider` for Python
 
-- java/com/sun/star/script/framework/provider
+- `java/com/sun/star/script/framework/provider`
 
 Implementation of an abstract base class ScriptProvider which provides
-core methods for implementing Java based LanguageScriptProvider implementations
+core methods for implementing Java based `LanguageScriptProvider` implementations
 
-- java/com/sun/star/script/framework/provider/*
+- `java/com/sun/star/script/framework/provider/*`
 
-BeanShell, JavaScript and Java LanguageScriptProvider implementations
+`BeanShell`, JavaScript and Java `LanguageScriptProvider` implementations
 
-- java/com/sun/star/script/framework/browse/*
+- `java/com/sun/star/script/framework/browse/*`
 
-BrowseNode implementations for the Java based LanguageScriptProviders
+`BrowseNode` implementations for the Java based `LanguageScriptProviders`
 
-- java/com/sun/star/script/framework/io
-- java/com/sun/star/script/framework/container
+- `java/com/sun/star/script/framework/io`
+- `java/com/sun/star/script/framework/container`
 
 Classes for performing script IO
 
-- examples
+- `examples`
 
 Example scripts in BeanShell, JavaScript, Java and Python
 
 
-== Deprecated Code ==
+## Deprecated Code
 
-- java/org/openoffice/*
+- `java/org/openoffice/*`
 
 Support for developing scripts in IDEs such as NetBeans.

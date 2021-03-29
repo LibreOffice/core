@@ -1,1 +1,3 @@
-Reading and writing ZIPs.
+# ZIP Support
+
+Reading and writing ZIP files.
