@@ -1253,9 +1253,9 @@ namespace {
 
 class SwFootnoteSave
 {
-    SwTextSizeInfo *pInf;
-    SwFont       *pFnt;
-    std::unique_ptr<SwFont> pOld;
+    SwTextSizeInfo* m_pInf;
+    SwFont* m_pFnt;
+    std::unique_ptr<SwFont> m_pOld;
 
     SwFootnoteSave(const SwFootnoteSave&) = delete;
     SwFootnoteSave& operator=(const SwFootnoteSave&) = delete;
@@ -1270,32 +1270,31 @@ public:
 
 }
 
-SwFootnoteSave::SwFootnoteSave( const SwTextSizeInfo &rInf,
-                      const SwTextFootnote* pTextFootnote,
-                      const bool bApplyGivenScriptType,
-                      const SwFontScript nGivenScriptType )
-    : pInf( &const_cast<SwTextSizeInfo&>(rInf) )
-    , pFnt( nullptr )
+SwFootnoteSave::SwFootnoteSave(const SwTextSizeInfo& rInf, const SwTextFootnote* pTextFootnote,
+                               const bool bApplyGivenScriptType,
+                               const SwFontScript nGivenScriptType)
+    : m_pInf(&const_cast<SwTextSizeInfo&>(rInf))
+    , m_pFnt(nullptr)
 {
     if( pTextFootnote && rInf.GetTextFrame() )
     {
-        pFnt = const_cast<SwTextSizeInfo&>(rInf).GetFont();
-        pOld.reset( new SwFont( *pFnt ) );
-        pOld->GetTox() = pFnt->GetTox();
-        pFnt->GetTox() = 0;
+        m_pFnt = const_cast<SwTextSizeInfo&>(rInf).GetFont();
+        m_pOld.reset(new SwFont(*m_pFnt));
+        m_pOld->GetTox() = m_pFnt->GetTox();
+        m_pFnt->GetTox() = 0;
         SwFormatFootnote& rFootnote = const_cast<SwFormatFootnote&>(pTextFootnote->GetFootnote());
         const SwDoc *const pDoc = &rInf.GetTextFrame()->GetDoc();
 
         // #i98418#
         if ( bApplyGivenScriptType )
         {
-            pFnt->SetActual( nGivenScriptType );
+            m_pFnt->SetActual(nGivenScriptType);
         }
         else
         {
             // examine text and set script
             OUString aTmpStr(rFootnote.GetViewNumStr(*pDoc, rInf.GetTextFrame()->getRootFrame()));
-            pFnt->SetActual( SwScriptInfo::WhichFont(0, aTmpStr) );
+            m_pFnt->SetActual(SwScriptInfo::WhichFont(0, aTmpStr));
         }
 
         const SwEndNoteInfo* pInfo;
@@ -1304,43 +1303,41 @@ SwFootnoteSave::SwFootnoteSave( const SwTextSizeInfo &rInf,
         else
             pInfo = &pDoc->GetFootnoteInfo();
         const SwAttrSet& rSet = pInfo->GetAnchorCharFormat(const_cast<SwDoc&>(*pDoc))->GetAttrSet();
-        pFnt->SetDiffFnt( &rSet, &pDoc->getIDocumentSettingAccess() );
+        m_pFnt->SetDiffFnt(&rSet, &pDoc->getIDocumentSettingAccess());
 
         // we reduce footnote size, if we are inside a double line portion
-        if ( ! pOld->GetEscapement() && 50 == pOld->GetPropr() )
+        if (!m_pOld->GetEscapement() && 50 == m_pOld->GetPropr())
         {
-            Size aSize = pFnt->GetSize( pFnt->GetActual() );
-            pFnt->SetSize( Size( aSize.Width() / 2,
-                                 aSize.Height() / 2 ),
-                           pFnt->GetActual() );
+            Size aSize = m_pFnt->GetSize(m_pFnt->GetActual());
+            m_pFnt->SetSize(Size(aSize.Width() / 2, aSize.Height() / 2), m_pFnt->GetActual());
         }
 
         // set the correct rotation at the footnote font
         const SfxPoolItem* pItem;
         if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_ROTATE,
             true, &pItem ))
-            pFnt->SetVertical( static_cast<const SvxCharRotateItem*>(pItem)->GetValue(),
-                                rInf.GetTextFrame()->IsVertical() );
+            m_pFnt->SetVertical(static_cast<const SvxCharRotateItem*>(pItem)->GetValue(),
+                                rInf.GetTextFrame()->IsVertical());
 
-        pFnt->ChgPhysFnt( pInf->GetVsh(), *pInf->GetOut() );
+        m_pFnt->ChgPhysFnt(m_pInf->GetVsh(), *m_pInf->GetOut());
 
         if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_BACKGROUND,
             true, &pItem ))
-            pFnt->SetBackColor( static_cast<const SvxBrushItem*>(pItem)->GetColor() );
+            m_pFnt->SetBackColor(static_cast<const SvxBrushItem*>(pItem)->GetColor());
     }
     else
-        pFnt = nullptr;
+        m_pFnt = nullptr;
 }
 
 SwFootnoteSave::~SwFootnoteSave() COVERITY_NOEXCEPT_FALSE
 {
-    if( pFnt )
+    if (m_pFnt)
     {
         // Put back SwFont
-        *pFnt = *pOld;
-        pFnt->GetTox() = pOld->GetTox();
-        pFnt->ChgPhysFnt( pInf->GetVsh(), *pInf->GetOut() );
-        pOld.reset();
+        *m_pFnt = *m_pOld;
+        m_pFnt->GetTox() = m_pOld->GetTox();
+        m_pFnt->ChgPhysFnt(m_pInf->GetVsh(), *m_pInf->GetOut());
+        m_pOld.reset();
     }
 }
 

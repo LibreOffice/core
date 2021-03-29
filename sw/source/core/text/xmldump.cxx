@@ -32,88 +32,141 @@ namespace {
 class XmlPortionDumper:public SwPortionHandler
 {
   private:
-    xmlTextWriterPtr writer;
-    TextFrameIndex ofs;
-    const OUString& m_rText;
-    OUString m_aLine;
+      xmlTextWriterPtr m_Writer;
+      TextFrameIndex m_Ofs;
+      const OUString& m_rText;
+      OUString m_aLine;
 
-    static const char* getTypeName( PortionType nType )
-    {
-        switch ( nType )
-        {
-            case PortionType::NONE: return "PortionType::NONE";
-            case PortionType::FlyCnt: return "PortionType::FlyCnt";
+      static const char* getTypeName(PortionType nType)
+      {
+          switch (nType)
+          {
+              case PortionType::NONE:
+                  return "PortionType::NONE";
+              case PortionType::FlyCnt:
+                  return "PortionType::FlyCnt";
 
-            case PortionType::Hole: return "PortionType::Hole";
-            case PortionType::TempEnd: return "PortionType::TempEnd";
-            case PortionType::Break: return "PortionType::Break";
-            case PortionType::Kern: return "PortionType::Kern";
-            case PortionType::Arrow: return "PortionType::Arrow";
-            case PortionType::Multi: return "PortionType::Multi";
-            case PortionType::HiddenText: return "PortionType::HiddenText";
-            case PortionType::ControlChar: return "PortionType::ControlChar";
-            case PortionType::Bookmark: return "PortionType::Bookmark";
+              case PortionType::Hole:
+                  return "PortionType::Hole";
+              case PortionType::TempEnd:
+                  return "PortionType::TempEnd";
+              case PortionType::Break:
+                  return "PortionType::Break";
+              case PortionType::Kern:
+                  return "PortionType::Kern";
+              case PortionType::Arrow:
+                  return "PortionType::Arrow";
+              case PortionType::Multi:
+                  return "PortionType::Multi";
+              case PortionType::HiddenText:
+                  return "PortionType::HiddenText";
+              case PortionType::ControlChar:
+                  return "PortionType::ControlChar";
+              case PortionType::Bookmark:
+                  return "PortionType::Bookmark";
 
-            case PortionType::Text: return "PortionType::Text";
-            case PortionType::Lay: return "PortionType::Lay";
-            case PortionType::Para: return "PortionType::Para";
-            case PortionType::Hanging: return "PortionType::Hanging";
+              case PortionType::Text:
+                  return "PortionType::Text";
+              case PortionType::Lay:
+                  return "PortionType::Lay";
+              case PortionType::Para:
+                  return "PortionType::Para";
+              case PortionType::Hanging:
+                  return "PortionType::Hanging";
 
-            case PortionType::Drop: return "PortionType::Drop";
-            case PortionType::Tox: return "PortionType::Tox";
-            case PortionType::IsoTox: return "PortionType::IsoTox";
-            case PortionType::Ref: return "PortionType::Ref";
-            case PortionType::IsoRef: return "PortionType::IsoRef";
-            case PortionType::Meta: return "PortionType::Meta";
-            case PortionType::FieldMark: return "PortionType::FieldMark";
-            case PortionType::FieldFormCheckbox: return "PortionType::FieldFormCheckbox";
-            case PortionType::InputField: return "PortionType::InputField";
+              case PortionType::Drop:
+                  return "PortionType::Drop";
+              case PortionType::Tox:
+                  return "PortionType::Tox";
+              case PortionType::IsoTox:
+                  return "PortionType::IsoTox";
+              case PortionType::Ref:
+                  return "PortionType::Ref";
+              case PortionType::IsoRef:
+                  return "PortionType::IsoRef";
+              case PortionType::Meta:
+                  return "PortionType::Meta";
+              case PortionType::FieldMark:
+                  return "PortionType::FieldMark";
+              case PortionType::FieldFormCheckbox:
+                  return "PortionType::FieldFormCheckbox";
+              case PortionType::InputField:
+                  return "PortionType::InputField";
 
-            case PortionType::Expand: return "PortionType::Expand";
-            case PortionType::Blank: return "PortionType::Blank";
-            case PortionType::PostIts: return "PortionType::PostIts";
+              case PortionType::Expand:
+                  return "PortionType::Expand";
+              case PortionType::Blank:
+                  return "PortionType::Blank";
+              case PortionType::PostIts:
+                  return "PortionType::PostIts";
 
-            case PortionType::Hyphen: return "PortionType::Hyphen";
-            case PortionType::HyphenStr: return "PortionType::HyphenStr";
-            case PortionType::SoftHyphen: return "PortionType::SoftHyphen";
-            case PortionType::SoftHyphenStr: return "PortionType::SoftHyphenStr";
-            case PortionType::SoftHyphenComp: return "PortionType::SoftHyphenComp";
+              case PortionType::Hyphen:
+                  return "PortionType::Hyphen";
+              case PortionType::HyphenStr:
+                  return "PortionType::HyphenStr";
+              case PortionType::SoftHyphen:
+                  return "PortionType::SoftHyphen";
+              case PortionType::SoftHyphenStr:
+                  return "PortionType::SoftHyphenStr";
+              case PortionType::SoftHyphenComp:
+                  return "PortionType::SoftHyphenComp";
 
-            case PortionType::Field: return "PortionType::Field";
-            case PortionType::Hidden: return "PortionType::Hidden";
-            case PortionType::QuoVadis: return "PortionType::QuoVadis";
-            case PortionType::ErgoSum: return "PortionType::ErgoSum";
-            case PortionType::Combined: return "PortionType::Combined";
-            case PortionType::Footnote: return "PortionType::Footnote";
+              case PortionType::Field:
+                  return "PortionType::Field";
+              case PortionType::Hidden:
+                  return "PortionType::Hidden";
+              case PortionType::QuoVadis:
+                  return "PortionType::QuoVadis";
+              case PortionType::ErgoSum:
+                  return "PortionType::ErgoSum";
+              case PortionType::Combined:
+                  return "PortionType::Combined";
+              case PortionType::Footnote:
+                  return "PortionType::Footnote";
 
-            case PortionType::FootnoteNum: return "PortionType::FootnoteNum";
-            case PortionType::Number: return "PortionType::Number";
-            case PortionType::Bullet: return "PortionType::Bullet";
-            case PortionType::GrfNum: return "PortionType::GrfNum";
+              case PortionType::FootnoteNum:
+                  return "PortionType::FootnoteNum";
+              case PortionType::Number:
+                  return "PortionType::Number";
+              case PortionType::Bullet:
+                  return "PortionType::Bullet";
+              case PortionType::GrfNum:
+                  return "PortionType::GrfNum";
 
-            case PortionType::Glue: return "PortionType::Glue";
+              case PortionType::Glue:
+                  return "PortionType::Glue";
 
-            case PortionType::Margin: return "PortionType::Margin";
+              case PortionType::Margin:
+                  return "PortionType::Margin";
 
-            case PortionType::Fix: return "PortionType::Fix";
-            case PortionType::Fly: return "PortionType::Fly";
+              case PortionType::Fix:
+                  return "PortionType::Fix";
+              case PortionType::Fly:
+                  return "PortionType::Fly";
 
-            case PortionType::Table: return "PortionType::Table";
+              case PortionType::Table:
+                  return "PortionType::Table";
 
-            case PortionType::TabRight: return "PortionType::TabRight";
-            case PortionType::TabCenter: return "PortionType::TabCenter";
-            case PortionType::TabDecimal: return "PortionType::TabDecimal";
+              case PortionType::TabRight:
+                  return "PortionType::TabRight";
+              case PortionType::TabCenter:
+                  return "PortionType::TabCenter";
+              case PortionType::TabDecimal:
+                  return "PortionType::TabDecimal";
 
-            case PortionType::TabLeft: return "PortionType::TabLeft";
-            default:
-                return "Unknown";
-        }
+              case PortionType::TabLeft:
+                  return "PortionType::TabLeft";
+              default:
+                  return "Unknown";
+          }
     }
 
   public:
-
-    explicit XmlPortionDumper( xmlTextWriterPtr some_writer, const OUString& rText ):writer( some_writer ), ofs( 0 ), m_rText(rText)
-    {
+      explicit XmlPortionDumper(xmlTextWriterPtr some_writer, const OUString& rText)
+          : m_Writer(some_writer)
+          , m_Ofs(0)
+          , m_rText(rText)
+      {
     }
 
     /**
@@ -127,24 +180,25 @@ class XmlPortionDumper:public SwPortionHandler
                        sal_Int32 nHeight,
                        sal_Int32 nWidth) override
     {
-        (void)xmlTextWriterStartElement( writer, BAD_CAST( "Text" ) );
-        (void)xmlTextWriterWriteFormatAttribute( writer,
-                                           BAD_CAST( "nLength" ),
-                                           "%i", static_cast<int>(static_cast<sal_Int32>(nLength)) );
-        (void)xmlTextWriterWriteFormatAttribute( writer,
-                                           BAD_CAST( "nType" ),
-                                           "%s", getTypeName( nType ) );
+        (void)xmlTextWriterStartElement(m_Writer, BAD_CAST("Text"));
+        (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nLength"), "%i",
+                                                static_cast<int>(static_cast<sal_Int32>(nLength)));
+        (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nType"), "%s",
+                                                getTypeName(nType));
         if (nHeight > 0)
-            (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nHeight"), "%i", static_cast<int>(nHeight));
+            (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nHeight"), "%i",
+                                                    static_cast<int>(nHeight));
         if (nWidth > 0)
-            (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nWidth"), "%i", static_cast<int>(nWidth));
+            (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nWidth"), "%i",
+                                                    static_cast<int>(nWidth));
         if (nLength > TextFrameIndex(0))
-            (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("Portion"),
-                BAD_CAST(m_rText.copy(sal_Int32(ofs), sal_Int32(nLength)).toUtf8().getStr()));
+            (void)xmlTextWriterWriteAttribute(
+                m_Writer, BAD_CAST("Portion"),
+                BAD_CAST(m_rText.copy(sal_Int32(m_Ofs), sal_Int32(nLength)).toUtf8().getStr()));
 
-        (void)xmlTextWriterEndElement( writer );
-        m_aLine += m_rText.subView(sal_Int32(ofs), sal_Int32(nLength));
-        ofs += nLength;
+        (void)xmlTextWriterEndElement(m_Writer);
+        m_aLine += m_rText.subView(sal_Int32(m_Ofs), sal_Int32(nLength));
+        m_Ofs += nLength;
     }
 
     /**
@@ -164,45 +218,43 @@ class XmlPortionDumper:public SwPortionHandler
                           sal_Int32 nWidth,
                           const SwFont* pFont ) override
     {
-        (void)xmlTextWriterStartElement( writer, BAD_CAST( "Special" ) );
-        (void)xmlTextWriterWriteFormatAttribute( writer,
-                                           BAD_CAST( "nLength" ),
-                                           "%i", static_cast<int>(static_cast<sal_Int32>(nLength)) );
-        (void)xmlTextWriterWriteFormatAttribute( writer,
-                                           BAD_CAST( "nType" ),
-                                           "%s", getTypeName( nType ) );
+        (void)xmlTextWriterStartElement(m_Writer, BAD_CAST("Special"));
+        (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nLength"), "%i",
+                                                static_cast<int>(static_cast<sal_Int32>(nLength)));
+        (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nType"), "%s",
+                                                getTypeName(nType));
         OString sText8 = OUStringToOString( rText, RTL_TEXTENCODING_UTF8 );
-        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "rText" ),
-                                           "%s", sText8.getStr(  ) );
+        (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("rText"), "%s", sText8.getStr());
 
         if (nHeight > 0)
-            (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nHeight"), "%i", static_cast<int>(nHeight));
+            (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nHeight"), "%i",
+                                                    static_cast<int>(nHeight));
 
         if (nWidth > 0)
-            (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nWidth"), "%i", static_cast<int>(nWidth));
+            (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nWidth"), "%i",
+                                                    static_cast<int>(nWidth));
 
         if (pFont)
-            pFont->dumpAsXml(writer);
+            pFont->dumpAsXml(m_Writer);
 
-        (void)xmlTextWriterEndElement( writer );
+        (void)xmlTextWriterEndElement(m_Writer);
         m_aLine += rText;
-        ofs += nLength;
+        m_Ofs += nLength;
     }
 
     virtual void LineBreak( sal_Int32 nWidth ) override
     {
-        (void)xmlTextWriterStartElement( writer, BAD_CAST( "LineBreak" ) );
+        (void)xmlTextWriterStartElement(m_Writer, BAD_CAST("LineBreak"));
         if (nWidth > 0)
-            (void)xmlTextWriterWriteFormatAttribute( writer,
-                                               BAD_CAST( "nWidth" ),
-                                               "%i", static_cast<int>(nWidth) );
+            (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nWidth"), "%i",
+                                                    static_cast<int>(nWidth));
         if (!m_aLine.isEmpty())
         {
-            (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("Line"),
-                                        BAD_CAST(m_aLine.toUtf8().getStr()));
+            (void)xmlTextWriterWriteAttribute(m_Writer, BAD_CAST("Line"),
+                                              BAD_CAST(m_aLine.toUtf8().getStr()));
             m_aLine.clear();
         }
-        (void)xmlTextWriterEndElement( writer );
+        (void)xmlTextWriterEndElement(m_Writer);
     }
 
     /**
@@ -211,18 +263,17 @@ class XmlPortionDumper:public SwPortionHandler
       */
     virtual void Skip( TextFrameIndex nLength ) override
     {
-        (void)xmlTextWriterStartElement( writer, BAD_CAST( "Skip" ) );
-        (void)xmlTextWriterWriteFormatAttribute( writer,
-                                           BAD_CAST( "nLength" ),
-                                           "%i", static_cast<int>(static_cast<sal_Int32>(nLength)) );
-        (void)xmlTextWriterEndElement( writer );
-        ofs += nLength;
+        (void)xmlTextWriterStartElement(m_Writer, BAD_CAST("Skip"));
+        (void)xmlTextWriterWriteFormatAttribute(m_Writer, BAD_CAST("nLength"), "%i",
+                                                static_cast<int>(static_cast<sal_Int32>(nLength)));
+        (void)xmlTextWriterEndElement(m_Writer);
+        m_Ofs += nLength;
     }
 
     virtual void Finish(  ) override
     {
-        (void)xmlTextWriterStartElement( writer, BAD_CAST( "Finish" ) );
-        (void)xmlTextWriterEndElement( writer );
+        (void)xmlTextWriterStartElement(m_Writer, BAD_CAST("Finish"));
+        (void)xmlTextWriterEndElement(m_Writer);
     }
 
 };

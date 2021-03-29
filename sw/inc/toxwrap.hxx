@@ -30,14 +30,14 @@ namespace com::sun::star::i18n { class XExtendedIndexEntrySupplier; }
 
 class SW_DLLPUBLIC IndexEntrySupplierWrapper
 {
-    css::lang::Locale aLcl;
-    css::uno::Reference < css::i18n::XExtendedIndexEntrySupplier > xIES;
+    css::lang::Locale m_aLcl;
+    css::uno::Reference < css::i18n::XExtendedIndexEntrySupplier > m_xIES;
 
 public:
     IndexEntrySupplierWrapper();
     ~IndexEntrySupplierWrapper();
 
-    void SetLocale( const css::lang::Locale& rLocale ) { aLcl = rLocale; }
+    void SetLocale( const css::lang::Locale& rLocale ) { m_aLcl = rLocale; }
 
     OUString GetIndexKey( const OUString& rText, const OUString& rTextReading,
                         const css::lang::Locale& rLocale ) const;
