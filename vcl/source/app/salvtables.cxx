@@ -226,7 +226,8 @@ void SalInstanceWidget::ensure_mouse_listener()
 void SalInstanceWidget::set_background(const Color& rColor)
 {
     m_xWidget->SetControlBackground(rColor);
-    m_xWidget->SetBackground(m_xWidget->GetControlBackground());
+    m_xWidget->SetBackground(rColor);
+    //    m_xWidget->SetPaintTransparent(false);
     // turn off WB_CLIPCHILDREN otherwise the bg won't extend "under"
     // transparent children of the widget
     m_xWidget->SetStyle(m_xWidget->GetStyle() & ~WB_CLIPCHILDREN);
