@@ -149,7 +149,6 @@ private:
     rtl::Reference<sax_fastparser::FastAttributeList> m_pFlyFillAttrList;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pFlyWrapAttrList;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pBodyPrAttrList;
-    rtl::Reference<sax_fastparser::FastAttributeList> m_pDashLineStyleAttr;
     bool m_bDMLAndVMLDrawingOpen;
     /// List of TextBoxes in this document: they are exported as part of their shape, never alone.
     /// Preserved rotation for TextFrames.
@@ -265,11 +264,6 @@ public:
 
     sax_fastparser::FastAttributeList* getBodyPrAttrList() const { return m_pBodyPrAttrList.get(); }
 
-    rtl::Reference<sax_fastparser::FastAttributeList>& getDashLineStyleAttr()
-    {
-        return m_pDashLineStyleAttr;
-    }
-
     bool getFlyFrameGraphic() const { return m_bFlyFrameGraphic; }
 
     oox::drawingml::DrawingML* getDrawingML() const { return m_pDrawingML; }
@@ -339,11 +333,6 @@ rtl::Reference<sax_fastparser::FastAttributeList>& DocxSdrExport::getFlyFillAttr
 sax_fastparser::FastAttributeList* DocxSdrExport::getBodyPrAttrList()
 {
     return m_pImpl->getBodyPrAttrList();
-}
-
-rtl::Reference<sax_fastparser::FastAttributeList>& DocxSdrExport::getDashLineStyle()
-{
-    return m_pImpl->getDashLineStyleAttr();
 }
 
 void DocxSdrExport::setFlyWrapAttrList(
@@ -1653,15 +1642,9 @@ void DocxSdrExport::writeVMLTextFrame(ww8::Frame const* pParentFrame, bool bText
             rtl::Reference<FastAttributeList> xFlyFillAttrList(m_pImpl->getFlyFillAttrList());
             pFS->singleElementNS(XML_v, XML_fill, xFlyFillAttrList);
         }
-        if (m_pImpl->getDashLineStyleAttr().is())
-        {
-            rtl::Reference<FastAttributeList> xDashLineStyleAttr(m_pImpl->getDashLineStyleAttr());
-            pFS->singleElementNS(XML_v, XML_stroke, xDashLineStyleAttr);
-        }
         pFS->startElementNS(XML_v, XML_textbox, xTextboxAttrList);
     }
     m_pImpl->getFlyFillAttrList().clear();
-    m_pImpl->getDashLineStyleAttr().clear();
 
     pFS->startElementNS(XML_w, XML_txbxContent);
     {

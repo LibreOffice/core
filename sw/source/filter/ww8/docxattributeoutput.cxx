@@ -9381,9 +9381,6 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
                     AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), 2,
                             XML_strokecolor, sColor.getStr(),
                             XML_strokeweight, sWidth.getStr() );
-                    if( SvxBorderLineStyle::DASHED == pTop->GetBorderLineStyle() ) // Line Style is Dash type
-                        AddToAttrList( m_rExport.SdrExporter().getDashLineStyle(),
-                            XML_dashstyle, "dash" );
                 }
                 else
                     m_rExport.SdrExporter().writeBoxItemLine(rBox);
