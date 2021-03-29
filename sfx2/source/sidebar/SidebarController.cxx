@@ -233,7 +233,8 @@ void SidebarController::disposeDecks()
                                                        (hide + "=false").c_str());
         }
 
-        mpParentWindow->ReleaseLOKNotifier();
+        if (mpParentWindow)
+            mpParentWindow->ReleaseLOKNotifier();
     }
 
     mpCurrentDeck.clear();
