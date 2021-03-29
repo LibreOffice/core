@@ -36,8 +36,8 @@ TitleBar::TitleBar(weld::Builder& rBuilder, Theme::ThemeItem eThemeItem)
 void TitleBar::SetBackground()
 {
     Color aColor(Theme::GetColor(meThemeItem));
-    mxTitlebar->set_background(aColor);
-    mxToolBox->set_background(aColor);
+    mxTitlebar->set_background(COL_RED);
+    mxToolBox->set_background(COL_GREEN);
 }
 
 void TitleBar::DataChanged()

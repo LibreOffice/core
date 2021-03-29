@@ -120,6 +120,7 @@ SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChi
     , mbIsReadyToDrag(false)
     , mpIdleNotify(new SidebarNotifyIdle(*this))
 {
+    m_xContainer->set_background(COL_YELLOW);
 #if 0
     // strip off default 6 border, and use just a left margin of 6
     setDeferredProperties();

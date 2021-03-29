@@ -1578,39 +1578,18 @@ void Window::Erase(vcl::RenderContext& rRenderContext)
     if (!IsDeviceOutputNecessary() || ImplIsRecordLayout())
         return;
 
-    bool bNativeOK = false;
+    if (GetHelpId() == "sfx/ui/deck/titlebar")
+        fprintf(stderr, "erase ok\n");
 
-    ControlPart aCtrlPart = ImplGetWindowImpl()->mnNativeBackground;
-
-    if (aCtrlPart == ControlPart::Entire && IsControlBackground())
-    {
-        // nothing to do here; background is drawn in corresponding drawNativeControl implementation
-        bNativeOK = true;
-    }
-    else if (aCtrlPart != ControlPart::NONE && ! IsControlBackground())
-    {
-        tools::Rectangle aCtrlRegion(Point(), GetOutputSizePixel());
-        ControlState nState = ControlState::NONE;
-
-        if (IsEnabled())
-            nState |= ControlState::ENABLED;
-
-        bNativeOK = rRenderContext.DrawNativeControl(ControlType::WindowBackground, aCtrlPart, aCtrlRegion,
-                                                     nState, ImplControlValue(), OUString());
-    }
-
-    if (mbBackground && !bNativeOK)
     {
         RasterOp eRasterOp = GetRasterOp();
         if (eRasterOp != RasterOp::OverPaint)
             SetRasterOp(RasterOp::OverPaint);
-        rRenderContext.DrawWallpaper(0, 0, mnOutWidth, mnOutHeight, maBackground);
+        fprintf(stderr, "erasing %p %s with %s\n", this, GetHelpId().getStr(), maBackground.GetColor().AsRGBHexString().toUtf8().getStr());
+        rRenderContext.DrawWallpaper(0, 0, mnOutWidth, mnOutHeight, maBackground.GetColor());
         if (eRasterOp != RasterOp::OverPaint)
             rRenderContext.SetRasterOp(eRasterOp);
     }
-
-    if (mpAlphaVDev)
-        mpAlphaVDev->Erase();
 }
 
 void Window::ImplScroll( const tools::Rectangle& rRect,
