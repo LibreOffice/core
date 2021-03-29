@@ -182,6 +182,7 @@ void ImportLotus::Errcell()
     ScSetStringParam aParam;
     aParam.setTextInput();
     rD.EnsureTable(aA.Tab());
+    // coverity[tainted_data : FALSE] - ValidAddress has sanitized aA
     rD.SetString(aA, "#ERR!", &aParam);
 }
 
@@ -200,6 +201,7 @@ void ImportLotus::Nacell()
     ScSetStringParam aParam;
     aParam.setTextInput();
     rD.EnsureTable(aA.Tab());
+    // coverity[tainted_data : FALSE] - ValidAddress has sanitized aA
     rD.SetString(aA, "#NA!", &aParam);
 }
 
@@ -222,6 +224,7 @@ void ImportLotus::Labelcell()
     ScSetStringParam aParam;
     aParam.setTextInput();
     rD.EnsureTable(aA.Tab());
+    // coverity[tainted_data : FALSE] - ValidAddress has sanitized aA
     rD.SetString(aA, aLabel, &aParam);
 }
 
@@ -240,6 +243,7 @@ void ImportLotus::Numbercell()
     }
 
     rD.EnsureTable(aAddr.Tab());
+    // coverity[tainted_data : FALSE] - ValidAddress has sanitized aAddr
     rD.SetValue(aAddr, fVal);
 }
 
@@ -258,6 +262,7 @@ void ImportLotus::Smallnumcell()
     }
 
     rD.EnsureTable(aAddr.Tab());
+    // coverity[tainted_data : FALSE] - ValidAddress has sanitized aAddr
     rD.SetValue(aAddr, SnumToDouble(nVal));
 }
 
@@ -290,6 +295,7 @@ void ImportLotus::Formulacell( sal_uInt16 n )
     ScFormulaCell* pCell = pErg ? new ScFormulaCell(rD, aAddr, std::move(pErg)) : new ScFormulaCell(rD, aAddr);
     pCell->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
     rD.EnsureTable(aAddr.Tab());
+    // coverity[tainted_data : FALSE] - ValidAddress has sanitized aAddr
     rD.SetFormulaCell(aAddr, pCell);
 }
 
