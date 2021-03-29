@@ -3016,23 +3016,20 @@ public:
         if (rItem.meType != ScQueryEntry::ByString && rItem.meType != ScQueryEntry::ByDate)
             return;
 
-        if (rItem.mbFormattedValue)
-            return;
-
         sal_uInt32 nIndex = 0;
         bool bNumber = mrDoc.GetFormatTable()->
             IsNumberFormat(rItem.maString.getString(), nIndex, rItem.mfVal);
 
-        // Advanced Filter creates only ByString queries that need to be
-        // converted to ByValue if appropriate. rItem.mfVal now holds the value
-        // if bNumber==true.
-
         if (rItem.meType == ScQueryEntry::ByString)
         {
-            bool bDateFormat = false;
-            if (bNumber && CanOptimizeQueryStringToNumber( mrDoc.GetFormatTable(), nIndex, bDateFormat ))
-                rItem.meType = ScQueryEntry::ByValue;
-            if (!bDateFormat)
+            if (const SvNumberformat* pEntry = mrDoc.GetFormatTable()->GetEntry(nIndex))
+            {
+                if (pEntry->GetType() != SvNumFormatType::DATE && pEntry->GetType() != SvNumFormatType::DATETIME)
+                {
+                    return;
+                }
+            }
+            else
                 return;
         }
 

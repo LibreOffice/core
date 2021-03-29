@@ -339,4 +339,19 @@ class AutofilterTest(UITestCase):
         xOkBtn.executeAction("CLICK", tuple())
 
         self.ui_test.close_doc()
+
+    def test_tdf140968(self):
+        doc = self.ui_test.load_file(get_url_for_data_file("tdf140968.ods"))
+
+        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+
+        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+        xFloatWindow = self.xUITest.getFloatWindow()
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+        xTreeList = xCheckListMenu.getChild("check_list_box")
+        self.assertEqual(4, len(xTreeList.getChildren()))
+        xOkBtn = xFloatWindow.getChild("cancel")
+        xOkBtn.executeAction("CLICK", tuple())
+
+        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

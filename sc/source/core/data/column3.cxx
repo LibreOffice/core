@@ -2481,7 +2481,9 @@ class FilterEntriesHandler
             pFormatter->GetInputLineString(fVal, nIndex, aStr);
         }
         // maybe extend ScTypedStrData enum is also an option here
-        mrFilterEntries.push_back(ScTypedStrData(aStr, fVal, ScTypedStrData::Value,bDate));
+        // use ScTypedStrData::Standard format for formatted and filtered cell values to avoid duplicates in the filter lists
+        bool bFormFilterValue = mrColumn.HasFiltering() && nFormat;
+        mrFilterEntries.push_back(ScTypedStrData(aStr, fVal, bFormFilterValue ? ScTypedStrData::Standard : ScTypedStrData::Value,bDate));
     }
 
 public:

@@ -1131,7 +1131,6 @@ void fillQueryParam(
                 if (aItem.meType == ScQueryEntry::ByString)
                 {
                     sal_uInt32 nIndex = 0;
-                    aItem.mbFormattedValue = true;
                     bool bNumber = pDoc->GetFormatTable()->IsNumberFormat(rVal.StringValue, nIndex, aItem.mfVal);
                     if (bNumber)
                     {
