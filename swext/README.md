@@ -1,1 +1,4 @@
-Writer extensions (currently only MediaWiki Extension).
+# Writer extensions
+
+Currently only contains MediaWiki extension.
+

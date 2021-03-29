@@ -1,4 +1,4 @@
-## Contains ODF import and export filter logic.
+# ODF import and export filter logic
 
 The main library "xo" contains the basic ODF import/export filter
 implementation for most applications.  The document is accessed
@@ -37,7 +37,7 @@ consumed by the ODF import filter.
 There is some stuff in the "dtd" directory which is most likely related
 to the OpenOffice.org XML format but is possibly outdated and obsolete.
 
-### Add new XML tokens
+## Add new XML tokens
 
 When adding a new XML token, you need to add its entry in the following three
 files:

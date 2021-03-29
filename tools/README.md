@@ -1,3 +1,5 @@
+# Old tools (deprecated)
+
 Predates sal - string functions, url manipulation, stream stuff,
 polygons, etc.
 
@@ -7,3 +9,4 @@ April 1991.
 
 This directory will be removed in the near future (see fdo#39445 or
 fdo#63154).
+

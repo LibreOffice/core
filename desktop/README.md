@@ -1,22 +1,25 @@
-What used to be the desktop in StarOffice 5 - now the binary.
+# LibreOffice binary
+
+Code for the LibreOffice main binary (soffice) resides here. The `soffice_main`
+function for the sofficce binary can be found here.
 
 
-Stable Interface
-================
+## Stable Interface
 
 Some of the artifacts built here are part of a LibreOffice installation set's
 stable interface, which (programmatic) clients can depend on.  Among them are:
 
-soffice
-=======
+### soffice
 
 In the "program" directory ("program/" on Linux and Windows, "Contents/MacOS/"
 on macOS).
 
-unoinfo
-=======
+### oosplash
+Splash screen for the LibreOffice soffice binary.
 
-In the "program" directory ("program/" on Linux and Windows, "Contents/MacOS/"
+### unoinfo
+
+In the `program` directory (`program/` on Linux and Windows, `Contents/MacOS/`
 on macOS).
 
 When called with a sole argument of "c++", it prints to stdout an absolute
@@ -34,3 +37,4 @@ other by NUL bytes.
 If the marker character is '1' (on Windows), the pathnames are encoded as
 UTF-16-LE two-byte code units, and any two pathnames in the sequence are
 separated from each other by two-byte NUL code units.
+

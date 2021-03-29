@@ -1,3 +1,5 @@
+# System abstraction layer (SAL)
+
 System abstraction layer; rtl, osl and sal
 
 rtl:
@@ -7,3 +9,4 @@ osl:
 platform specific stuff, threads, dynamic loading, process, ipc, etc
 
 Exports only C API and some inline-methods (only C++ API).
+
