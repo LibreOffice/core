@@ -119,6 +119,7 @@ public:
 
     void testDocumentLayout();
     void testSmoketest();
+    void testTdf131269();
     void testN759180();
     void testN778859();
     void testMasterPageStyleParent();
@@ -236,6 +237,7 @@ public:
 
     CPPUNIT_TEST(testDocumentLayout);
     CPPUNIT_TEST(testSmoketest);
+    CPPUNIT_TEST(testTdf131269);
     CPPUNIT_TEST(testN759180);
     CPPUNIT_TEST(testN778859);
     CPPUNIT_TEST(testMasterPageStyleParent);
@@ -443,6 +445,21 @@ void SdImportTest::testSmoketest()
     CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
     CPPUNIT_ASSERT_MESSAGE( "changed", !pDoc->IsChanged() );
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf131269()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf131269.ppt"), PPT);
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 115
+    // - Actual  : 3
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(115), pDoc->GetPageCount());
 
     xDocShRef->DoClose();
 }
