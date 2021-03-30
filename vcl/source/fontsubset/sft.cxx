@@ -1803,11 +1803,29 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
         else
         {
             sal_uInt8 *glyf = pRecordStart;
+            sal_uInt8 *eof = pRecordStart + nMaxLenPossible;
             for (sal_uInt32 j = 0; j < go->nGlyphs - 1; j++)
             {
-                sal_uInt32 o = go->offs[j];
-                sal_uInt32 l = go->offs[j + 1] - o;
-                HexFmtBlockWrite(h, glyf + o, l);
+                sal_uInt32 nStartOffset = go->offs[j];
+                sal_uInt8 *pSubRecordStart = glyf + nStartOffset;
+                if (pSubRecordStart > eof)
+                {
+                    SAL_WARN( "vcl.fonts", "DumpSfnts start glyf claims offset of "
+                        << pSubRecordStart - sfntP << " but max possible is " << eof - sfntP);
+                    break;
+                }
+
+                sal_uInt32 nEndOffset = go->offs[j + 1];
+                sal_uInt8 *pSubRecordEnd = glyf + nEndOffset;
+                if (pSubRecordEnd > eof)
+                {
+                    SAL_WARN( "vcl.fonts", "DumpSfnts end glyf offset of "
+                        << pSubRecordEnd - sfntP << " but max possible is " << eof - sfntP);
+                    break;
+                }
+
+                sal_uInt32 l = nEndOffset - nStartOffset;
+                HexFmtBlockWrite(h, pSubRecordStart, l);
             }
         }
         HexFmtBlockWrite(h, pad, (4 - (len & 3)) & 3);
