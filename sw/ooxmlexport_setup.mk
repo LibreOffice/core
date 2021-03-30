@@ -69,6 +69,8 @@ $(eval $(call gb_CppunitTest_use_configuration,sw_ooxmlexport$(1)))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,sw_ooxmlexport$(1),\
     modules/swriter \
+    sfx \
+    svt \
 ))
 
 $(eval $(call gb_CppunitTest_use_packages,sw_ooxmlexport$(1),\
