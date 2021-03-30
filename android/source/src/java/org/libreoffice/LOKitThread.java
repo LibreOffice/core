@@ -265,7 +265,7 @@ class LOKitThread extends Thread {
             refresh();
             LOKitShell.hideProgressSpinner(mContext);
 
-            mTileProvider.saveDocumentAs(filePath, false);
+            mTileProvider.saveDocumentAs(filePath, true);
         } else {
             closeDocument();
         }
