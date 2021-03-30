@@ -606,6 +606,8 @@ enum class VbaFormatType
     Null
 };
 
+#if HAVE_FEATURE_SCRIPTING
+
 struct VbaFormatInfo
 {
     VbaFormatType meType;
@@ -614,7 +616,6 @@ struct VbaFormatInfo
     const char* mpOOoFormat;     // if meType = VbaFormatType::UserDefined
 };
 
-#if HAVE_FEATURE_SCRIPTING
 const VbaFormatInfo pFormatInfoTable[] =
 {
     { VbaFormatType::Offset,      std::u16string_view(u"Long Date"),   NF_DATE_SYSTEM_LONG,    nullptr },

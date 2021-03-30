@@ -747,7 +747,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
 StarBASIC* SfxObjectShell::GetBasic() const
 {
 #if !HAVE_FEATURE_SCRIPTING
-    return NULL;
+    return nullptr;
 #else
     BasicManager * pMan = GetBasicManager();
     return pMan ? pMan->GetLib(0) : nullptr;

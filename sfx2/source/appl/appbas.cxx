@@ -62,7 +62,7 @@ void SfxApplication::SaveBasicAndDialogContainer() const
 BasicManager* SfxApplication::GetBasicManager()
 {
 #if !HAVE_FEATURE_SCRIPTING
-    return 0;
+    return nullptr;
 #else
     if (utl::ConfigManager::IsFuzzing())
         return nullptr;
@@ -73,7 +73,7 @@ BasicManager* SfxApplication::GetBasicManager()
 XLibraryContainer * SfxApplication::GetDialogContainer()
 {
 #if !HAVE_FEATURE_SCRIPTING
-    return NULL;
+    return nullptr;
 #else
     if (utl::ConfigManager::IsFuzzing())
         return nullptr;
@@ -87,7 +87,7 @@ XLibraryContainer * SfxApplication::GetDialogContainer()
 XLibraryContainer * SfxApplication::GetBasicContainer()
 {
 #if !HAVE_FEATURE_SCRIPTING
-    return NULL;
+    return nullptr;
 #else
     if (utl::ConfigManager::IsFuzzing())
         return nullptr;
@@ -100,7 +100,7 @@ XLibraryContainer * SfxApplication::GetBasicContainer()
 StarBASIC* SfxApplication::GetBasic()
 {
 #if !HAVE_FEATURE_SCRIPTING
-    return 0;
+    return nullptr;
 #else
     if (utl::ConfigManager::IsFuzzing())
         return nullptr;
