@@ -95,6 +95,8 @@ public:
 
     void testDrawRectWithRectangle()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestRect aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
@@ -106,6 +108,8 @@ public:
 
     void testDrawRectWithPixel()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestPixel aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
@@ -117,6 +121,8 @@ public:
 
     void testDrawRectWithLine()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
@@ -128,6 +134,8 @@ public:
 
     void testDrawRectWithPolygon()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
@@ -138,6 +146,8 @@ public:
 
     void testDrawRectWithPolyLine()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestPolyLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
@@ -148,6 +158,8 @@ public:
 
     void testDrawRectWithPolyLineB2D()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
@@ -158,6 +170,8 @@ public:
 
     void testDrawRectWithPolyPolygon()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
@@ -168,6 +182,8 @@ public:
 
     void testDrawRectWithPolyPolygonB2D()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
@@ -178,6 +194,8 @@ public:
 
     void testDrawRectAAWithRectangle()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestRect aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
@@ -188,6 +206,8 @@ public:
 
     void testDrawRectAAWithPixel()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestPixel aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
@@ -198,6 +218,8 @@ public:
 
     void testDrawRectAAWithLine()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
@@ -208,6 +230,8 @@ public:
 
     void testDrawRectAAWithPolygon()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
@@ -218,6 +242,8 @@ public:
 
     void testDrawRectAAWithPolyLine()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestPolyLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
@@ -228,6 +254,8 @@ public:
 
     void testDrawRectAAWithPolyLineB2D()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
@@ -238,6 +266,8 @@ public:
 
     void testDrawRectAAWithPolyPolygon()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
@@ -248,6 +278,8 @@ public:
 
     void testDrawRectAAWithPolyPolygonB2D()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
@@ -258,6 +290,8 @@ public:
 
     void testDrawFilledRectWithRectangle()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestRect aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
@@ -273,6 +307,8 @@ public:
 
     void testDrawFilledRectWithPolygon()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
@@ -288,6 +324,8 @@ public:
 
     void testDrawFilledRectWithPolyPolygon()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
@@ -303,6 +341,8 @@ public:
 
     void testDrawFilledRectWithPolyPolygon2D()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
         auto eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
@@ -388,6 +428,8 @@ public:
 
     void testDrawBezierWithPolylineB2D()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupBezier();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
@@ -398,6 +440,8 @@ public:
 
     void testDrawBezierAAWithPolylineB2D()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupAABezier();
         auto eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
@@ -408,6 +452,8 @@ public:
 
     void testDrawBitmap()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawBitmap();
         exportImage("08-01_bitmap_test.png", aBitmap);
@@ -418,6 +464,8 @@ public:
 
     void testDrawTransformedBitmap()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap();
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap);
@@ -428,6 +476,8 @@ public:
 
     void testDrawBitmapExWithAlpha()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha();
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkBitmapExWithAlpha(aBitmap);
@@ -438,6 +488,8 @@ public:
 
     void testDrawMask()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawMask();
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkMask(aBitmap);
@@ -448,6 +500,8 @@ public:
 
     void testDrawBlend()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend();
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmapEx);
@@ -458,6 +512,8 @@ public:
 
     void testDrawXor()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupXOR();
         auto eResult = vcl::test::OutputDeviceTestAnotherOutDev::checkXOR(aBitmap);
@@ -466,8 +522,53 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
+<<<<<<< HEAD   (24d64d [cp] remove black text, because it looks bad with dark theme)
+=======
+    void testDrawTransformedBitmapExAlpha()
+    {
+// TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
+#ifndef MACOSX
+        if (isWindowsRDP())
+            return;
+        ScopedVclPtrInstance<VirtualDevice> device;
+        device->SetOutputSizePixel(Size(16, 16));
+        device->SetBackground(Wallpaper(COL_WHITE));
+        device->Erase();
+        Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N24_BPP);
+        {
+            // Fill the top left quarter with black.
+            BitmapScopedWriteAccess pWriteAccess(aBitmap);
+            pWriteAccess->Erase(COL_WHITE);
+            for (int i = 0; i < 8; ++i)
+                for (int j = 0; j < 8; ++j)
+                    pWriteAccess->SetPixel(j, i, COL_BLACK);
+        }
+        BitmapEx aBitmapEx(aBitmap);
+        basegfx::B2DHomMatrix aMatrix;
+        // Draw with no transformation, only alpha change.
+        aMatrix.scale(16, 16);
+        device->DrawTransformedBitmapEx(aMatrix, aBitmapEx, 0.5);
+        BitmapEx result = device->GetBitmapEx(Point(0, 0), Size(16, 16));
+        CPPUNIT_ASSERT_EQUAL(Color(0x80, 0x80, 0x80), result.GetPixelColor(0, 0));
+        CPPUNIT_ASSERT_EQUAL(COL_WHITE, result.GetPixelColor(15, 15));
+        // Draw rotated and move to the bottom-left corner.
+        device->Erase();
+        aMatrix.identity();
+        aMatrix.scale(16, 16);
+        aMatrix.rotate(M_PI / 2);
+        aMatrix.translate(8, 8);
+        device->DrawTransformedBitmapEx(aMatrix, aBitmapEx, 0.5);
+        result = device->GetBitmap(Point(0, 0), Size(16, 16));
+        CPPUNIT_ASSERT_EQUAL(COL_WHITE, result.GetPixelColor(0, 0));
+        CPPUNIT_ASSERT_EQUAL(Color(0x80, 0x80, 0x80), result.GetPixelColor(0, 15));
+#endif
+    }
+
+>>>>>>> CHANGE (9c6142 Exclude some tests in Windows RDP session)
     void testClipRectangle()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestClip aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupClipRectangle();
         auto eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
@@ -478,6 +579,8 @@ public:
 
     void testClipPolygon()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestClip aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupClipPolygon();
         auto eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
@@ -488,6 +591,8 @@ public:
 
     void testClipPolyPolygon()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestClip aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupClipPolyPolygon();
         auto eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
@@ -498,6 +603,8 @@ public:
 
     void testClipB2DPolyPolygon()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestClip aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupClipB2DPolyPolygon();
         auto eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
@@ -508,6 +615,8 @@ public:
 
     void testDrawOutDev()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawOutDev();
         auto eResult = vcl::test::OutputDeviceTestAnotherOutDev::checkDrawOutDev(aBitmap);
@@ -518,6 +627,8 @@ public:
 
     void testDashedLine()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDashedLine();
         auto eResult = vcl::test::OutputDeviceTestLine::checkDashedLine(aBitmap);
@@ -528,6 +639,8 @@ public:
 
     void testErase()
     {
+        if (isWindowsRDP())
+            return;
         {
             // Create normal virtual device (no alpha).
             ScopedVclPtr<VirtualDevice> device
@@ -593,6 +706,8 @@ public:
 
     void testLinearGradient()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestGradient aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupLinearGradient();
         auto eResult = vcl::test::OutputDeviceTestGradient::checkLinearGradient(aBitmap);
@@ -603,6 +718,8 @@ public:
 
     void testLinearGradientAngled()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestGradient aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupLinearGradientAngled();
         auto eResult = vcl::test::OutputDeviceTestGradient::checkLinearGradientAngled(aBitmap);
@@ -623,6 +740,8 @@ public:
 
     void testLinearGradientIntensity()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestGradient aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupLinearGradientIntensity();
         auto eResult = vcl::test::OutputDeviceTestGradient::checkLinearGradientIntensity(aBitmap);
@@ -633,6 +752,8 @@ public:
 
     void testLinearGradientSteps()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestGradient aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupLinearGradientSteps();
         auto eResult = vcl::test::OutputDeviceTestGradient::checkLinearGradientSteps(aBitmap);
@@ -643,6 +764,8 @@ public:
 
     void testAxialGradient()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestGradient aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupAxialGradient();
         auto eResult = vcl::test::OutputDeviceTestGradient::checkAxialGradient(aBitmap);
@@ -653,6 +776,8 @@ public:
 
     void testRadialGradient()
     {
+        if (isWindowsRDP())
+            return;
         vcl::test::OutputDeviceTestGradient aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRadialGradient();
         auto eResult = vcl::test::OutputDeviceTestGradient::checkRadialGradient(aBitmap);
@@ -676,6 +801,8 @@ public:
     {
 // TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
 #ifndef MACOSX
+        if (isWindowsRDP())
+            return;
         // Create virtual device with alpha.
         ScopedVclPtr<VirtualDevice> device
             = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
@@ -822,6 +949,13 @@ public:
 
     void testTdf136171()
     {
+<<<<<<< HEAD   (24d64d [cp] remove black text, because it looks bad with dark theme)
+=======
+// TODO: Following unit tests are not executed for macOS unless bitmap scaling is implemented
+#ifndef MACOSX
+        if (isWindowsRDP())
+            return;
+>>>>>>> CHANGE (9c6142 Exclude some tests in Windows RDP session)
         // Create virtual device with alpha.
         ScopedVclPtr<VirtualDevice> device
             = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
