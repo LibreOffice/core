@@ -111,14 +111,15 @@ bool ScCTB::Read( SvStream &rS )
             SAL_WARN("sc.filter", "ScCTB::Read more entries claimed than stream could contain");
             return false;
         }
+
+        for ( sal_Int16 index = 0; index < nIndexes; ++index )
+        {
+            ScTBC aTBC;
+            aTBC.Read( rS );
+            rTBC.push_back( aTBC );
+        }
     }
 
-    for ( sal_Int16 index = 0; index < nIndexes; ++index )
-    {
-        ScTBC aTBC;
-        aTBC.Read( rS );
-        rTBC.push_back( aTBC );
-    }
     return true;
 }
 
