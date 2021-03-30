@@ -797,8 +797,10 @@ void XclImpStream::Ignore( std::size_t nBytes )
 {
     // implementation similar to Read(), but without really reading anything
     std::size_t nBytesLeft = nBytes;
-    while( mbValid && (nBytesLeft > 0) )
+    while (mbValid)
     {
+        if (!nBytesLeft)
+            break;
         sal_uInt16 nReadSize = GetMaxRawReadSize( nBytesLeft );
         mbValid = checkSeek(mrStrm, mrStrm.Tell() + nReadSize);
         mnRawRecLeft = mnRawRecLeft - nReadSize;
