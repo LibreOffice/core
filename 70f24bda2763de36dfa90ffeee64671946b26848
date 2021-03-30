@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ea3a379_70ab4f4a",
+        "filename": "sc/source/ui/unoobj/nameuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-03-30T09:22:20Z",
+      "side": 1,
+      "message": "It is strange that the error message does not get translated, but shows some weird c++ bridge error. Do I miss something?",
+      "revId": "70f24bda2763de36dfa90ffeee64671946b26848",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
