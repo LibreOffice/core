@@ -355,7 +355,7 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     {
         m_xRbMax->set_active(true);
         OUString aCursorStr;
-        if ( !mrDoc.GetRangeAtBlock( ScRange(rCursorPos), &aCursorStr ) )
+        if ( !mrDoc.GetRangeAtBlock( ScRange(rCursorPos), aCursorStr ) )
             aCursorStr = rCursorPos.Format(ScRefFlags::ADDR_ABS, nullptr, mrDoc.GetAddressConvention());
         m_xEdObjectiveCell->SetRefString( aCursorStr );
         if ( bImplHasElements )
@@ -465,7 +465,7 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
         aNewRef.aEnd = aAdr;
 
     OUString aName;
-    if ( rDocP.GetRangeAtBlock( aNewRef, &aName ) )            // named range: show name
+    if ( rDocP.GetRangeAtBlock( aNewRef, aName ) )            // named range: show name
         aStr = aName;
     else                                                        // format cell/range reference
     {

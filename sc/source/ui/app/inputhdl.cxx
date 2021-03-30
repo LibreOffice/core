@@ -4110,7 +4110,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                     //! Find by Timer?
                     if ( pActiveViewSh )
                         pActiveViewSh->GetViewData().GetDocument().
-                            GetRangeAtBlock( ScRange( rSPos, rEPos ), &aPosStr, &bSheetLocal);
+                            GetRangeAtBlock( ScRange( rSPos, rEPos ), aPosStr, &bSheetLocal);
 
                     if ( aPosStr.isEmpty() )           // Not a name -> format
                     {

@@ -234,7 +234,7 @@ bool ScDocument::InsertNewRangeName( SCTAB nTab, const OUString& rName, const Sc
     return pLocalNames->insert(pName);
 }
 
-const ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, OUString* pName, bool* pSheetLocal ) const
+const ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, OUString& rName, bool* pSheetLocal ) const
 {
     const ScRangeData* pData = nullptr;
     if (rBlock.aStart.Tab() == rBlock.aEnd.Tab())
@@ -245,8 +245,7 @@ const ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, OUString*
             pData = pLocalNames->findByRange( rBlock );
             if (pData)
             {
-                if (pName)
-                    *pName = pData->GetName();
+                rName = pData->GetName();
                 if (pSheetLocal)
                     *pSheetLocal = true;
                 return pData;
@@ -258,8 +257,7 @@ const ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, OUString*
         pData = pRangeName->findByRange( rBlock );
         if (pData)
         {
-            if (pName)
-                *pName = pData->GetName();
+            rName = pData->GetName();
             if (pSheetLocal)
                 *pSheetLocal = false;
         }
