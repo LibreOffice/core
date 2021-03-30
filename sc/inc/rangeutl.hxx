@@ -32,7 +32,14 @@ class ScArea;
 class ScDocument;
 class ScRangeList;
 
-enum RutlNameScope { RUTL_NONE=0, RUTL_NAMES, RUTL_DBASE };
+enum RutlNameScope
+{
+    RUTL_NONE = 0,
+    RUTL_NAMES,
+    RUTL_NAMES_LOCAL,
+    RUTL_NAMES_GLOBAL,
+    RUTL_DBASE
+};
 
 class SC_DLLPUBLIC ScRangeUtil
 {

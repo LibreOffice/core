@@ -248,35 +248,43 @@ bool ScRangeUtil::MakeRangeFromName (
     SCROW nRowStart = 0;
     SCROW nRowEnd = 0;
 
-    if( eScope==RUTL_NAMES )
+    if (eScope == RUTL_NAMES || eScope == RUTL_NAMES_LOCAL || eScope == RUTL_NAMES_GLOBAL)
     {
         OUString aName(rName);
         SCTAB nTable = nCurTab;
 
-        // First handle UI names like "local1 (Sheet1)", which point to a local
-        // range name.
-        const sal_Int32 nEndPos = aName.getLength() - 1;
-        if (rName[nEndPos] == ')')
+        if (eScope != RUTL_NAMES_GLOBAL)
         {
-            const sal_Int32 nStartPos = aName.indexOf(" (");
-            if (nStartPos != -1)
+            // First handle UI names like "local1 (Sheet1)", which point to a
+            // local range name.
+            const sal_Int32 nEndPos = aName.getLength() - 1;
+            if (rName[nEndPos] == ')')
             {
-                OUString aSheetName = aName.copy(nStartPos+2, nEndPos-nStartPos-2);
-                if (rDoc.GetTable(aSheetName, nTable))
+                const sal_Int32 nStartPos = aName.indexOf(" (");
+                if (nStartPos != -1)
                 {
-                    aName = aName.copy(0, nStartPos);
+                    OUString aSheetName = aName.copy(nStartPos+2, nEndPos-nStartPos-2);
+                    if (rDoc.GetTable(aSheetName, nTable))
+                    {
+                        aName = aName.copy(0, nStartPos);
+                        eScope = RUTL_NAMES_LOCAL;
+                    }
+                    else
+                        nTable = nCurTab;
                 }
-                else
-                    nTable = nCurTab;
             }
         }
-        // Then check for local range names.
-        ScRangeName* pRangeNames = rDoc.GetRangeName( nTable );
-        ScRangeData* pData = nullptr;
+
         aName = ScGlobal::getCharClassPtr()->uppercase(aName);
-        if ( pRangeNames )
-            pData = pRangeNames->findByUpperName(aName);
-        if (!pData)
+        ScRangeData* pData = nullptr;
+        if (eScope != RUTL_NAMES_GLOBAL)
+        {
+            // Check for local range names.
+            ScRangeName* pRangeNames = rDoc.GetRangeName( nTable );
+            if ( pRangeNames )
+                pData = pRangeNames->findByUpperName(aName);
+        }
+        if (!pData && eScope != RUTL_NAMES_LOCAL)
             pData = rDoc.GetRangeName()->findByUpperName(aName);
         if (pData)
         {

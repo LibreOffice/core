@@ -101,7 +101,8 @@ enum ScNameInputType
 {
     SC_NAME_INPUT_CELL,
     SC_NAME_INPUT_RANGE,
-    SC_NAME_INPUT_NAMEDRANGE,
+    SC_NAME_INPUT_NAMEDRANGE_LOCAL,
+    SC_NAME_INPUT_NAMEDRANGE_GLOBAL,
     SC_NAME_INPUT_DATABASE,
     SC_NAME_INPUT_ROW,
     SC_NAME_INPUT_SHEET,
@@ -2323,14 +2324,23 @@ static ScNameInputType lcl_GetInputType( const OUString& rText )
         SCTAB nNameTab;
         sal_Int32 nNumeric;
 
+        // From the context we know that when testing for a range name
+        // sheet-local scope names have " (sheetname)" appended and global
+        // names don't and can't contain ')', so we can force one or the other.
+        const RutlNameScope eNameScope =
+            ((!rText.isEmpty() && rText[rText.getLength()-1] == ')') ? RUTL_NAMES_LOCAL : RUTL_NAMES_GLOBAL);
+
         if (rText == ScResId(STR_MANAGE_NAMES))
             eRet = SC_MANAGE_NAMES;
         else if ( aRange.Parse( rText, rDoc, eConv ) & ScRefFlags::VALID )
             eRet = SC_NAME_INPUT_RANGE;
         else if ( aAddress.Parse( rText, rDoc, eConv ) & ScRefFlags::VALID )
             eRet = SC_NAME_INPUT_CELL;
-        else if ( ScRangeUtil::MakeRangeFromName( rText, rDoc, nTab, aRange, RUTL_NAMES, eConv ) )
-            eRet = SC_NAME_INPUT_NAMEDRANGE;
+        else if ( ScRangeUtil::MakeRangeFromName( rText, rDoc, nTab, aRange, eNameScope, eConv ) )
+        {
+            eRet = ((eNameScope == RUTL_NAMES_LOCAL) ? SC_NAME_INPUT_NAMEDRANGE_LOCAL :
+                    SC_NAME_INPUT_NAMEDRANGE_GLOBAL);
+        }
         else if ( ScRangeUtil::MakeRangeFromName( rText, rDoc, nTab, aRange, RUTL_DBASE, eConv ) )
             eRet = SC_NAME_INPUT_DATABASE;
         else if ( comphelper::string::isdigitAsciiString( rText ) &&
@@ -2375,7 +2385,8 @@ IMPL_LINK_NOARG(ScPosWnd, ModifyHdl, weld::ComboBox&, void)
             pStrId = STR_NAME_INPUT_CELL;
             break;
         case SC_NAME_INPUT_RANGE:
-        case SC_NAME_INPUT_NAMEDRANGE:
+        case SC_NAME_INPUT_NAMEDRANGE_LOCAL:
+        case SC_NAME_INPUT_NAMEDRANGE_GLOBAL:
             pStrId = STR_NAME_INPUT_RANGE;      // named range or range reference
             break;
         case SC_NAME_INPUT_DATABASE:
@@ -2483,6 +2494,7 @@ void ScPosWnd::DoEnter()
                 }
                 else
                 {
+                    bool bForceGlobalName = false;
                     // for all selection types, execute the SID_CURRENTCELL slot.
                     if (eType == SC_NAME_INPUT_CELL || eType == SC_NAME_INPUT_RANGE)
                     {
@@ -2492,13 +2504,19 @@ void ScPosWnd::DoEnter()
                         aRange.ParseAny(aText, rDoc, rDoc.GetAddressConvention());
                         aText = aRange.Format(rDoc, ScRefFlags::RANGE_ABS_3D, ::formula::FormulaGrammar::CONV_OOO);
                     }
+                    else if (eType == SC_NAME_INPUT_NAMEDRANGE_GLOBAL)
+                    {
+                        bForceGlobalName = true;
+                    }
 
                     SfxStringItem aPosItem( SID_CURRENTCELL, aText );
                     SfxBoolItem aUnmarkItem( FN_PARAM_1, true );        // remove existing selection
+                    // FN_PARAM_2 reserved for AlignToCursor
+                    SfxBoolItem aForceGlobalName( FN_PARAM_3, bForceGlobalName );
 
                     pViewSh->GetViewData().GetDispatcher().ExecuteList( SID_CURRENTCELL,
                                         SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
-                                        { &aPosItem, &aUnmarkItem });
+                                        { &aPosItem, &aUnmarkItem, &aForceGlobalName });
                 }
             }
         }
