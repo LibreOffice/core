@@ -1392,6 +1392,10 @@ namespace svxform
 
     void DataNavigatorWindow::dispose()
     {
+        Reference< XFrameActionListener > xListener(
+            static_cast< XFrameActionListener* >( m_xDataListener.get() ), UNO_QUERY );
+        m_xFrame->removeFrameActionListener( xListener );
+
         SvtViewOptions aViewOpt( EViewType::TabDialog, CFGNAME_DATANAVIGATOR );
         aViewOpt.SetPageID(m_pTabCtrl->GetPageName(m_pTabCtrl->GetCurPageId()));
         aViewOpt.SetUserItem(CFGNAME_SHOWDETAILS, Any(m_bShowDetails));
@@ -1405,9 +1409,6 @@ namespace svxform
             m_aPageList[i].disposeAndClear();
         m_aPageList.clear();
 
-        Reference< XFrameActionListener > xListener(
-            static_cast< XFrameActionListener* >( m_xDataListener.get() ), UNO_QUERY );
-        m_xFrame->removeFrameActionListener( xListener );
         RemoveBroadcaster();
         m_xDataListener.clear();
         disposeBuilder();
