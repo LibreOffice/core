@@ -9,6 +9,7 @@
 
 from uitest.framework import UITestCase
 import os
+import re
 import time
 from uitest.uihelper.common import get_state_as_dict, type_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -87,6 +88,13 @@ class HyperlinkDialog(UITestCase):
         # the below execute_blocking_action call (and would leave behind the relevant HTML page
         # opened in the user's default browser):
         if os.getenv('ENABLE_HTMLHELP') == 'TRUE':
+            return
+        # Skip this test for --with-help, as that would fail with a
+        # "uno.com.sun.star.uno.RuntimeException: Could not find child with id: cancel" thrown from
+        # the below execute_blocking_action call, as it would open the "LibreOffice Help" window
+        # instead of the apparently expected "LibreOffice Help Not Installed" dialog that has a
+        # "Cancel" button:
+        if re.compile(r'-DWITH_HELP\b').search(os.getenv('SCPDEFS')):
             return
 
         self.ui_test.create_doc_in_start_center("writer")
