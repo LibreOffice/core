@@ -64,7 +64,7 @@ friend class BibFrameCtrl_Impl;
     rtl::Reference<BibFrameCtrl_Impl>                         mxImpl;
     BibStatusDispatchArr        aStatusListeners;
     css::uno::Reference< css::awt::XWindow >                  xWindow;
-    css::uno::Reference< css::frame::XFrame >                 xFrame;
+    css::uno::Reference< css::frame::XFrame >                 m_xFrame;
     bool                        bDisposing;
     rtl::Reference<BibDataManager>                            m_xDatMan;
     VclPtr<vcl::Window> m_xLastQueriedFocusWin;

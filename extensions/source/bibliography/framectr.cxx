@@ -180,8 +180,8 @@ css::uno::Sequence< OUString > SAL_CALL BibFrameController_Impl::getSupportedSer
 
 void BibFrameController_Impl::attachFrame( const uno::Reference< XFrame > & xArg )
 {
-    xFrame = xArg;
-    xFrame->addFrameActionListener( mxImpl );
+    m_xFrame = xArg;
+    m_xFrame->addFrameActionListener( mxImpl );
 }
 
 sal_Bool BibFrameController_Impl::attachModel( const uno::Reference< XModel > & /*xModel*/ )
@@ -209,7 +209,7 @@ void BibFrameController_Impl::restoreViewData( const uno::Any& /*Value*/ )
 
 uno::Reference< XFrame >  BibFrameController_Impl::getFrame()
 {
-    return xFrame;
+    return m_xFrame;
 }
 
 uno::Reference< XModel >  BibFrameController_Impl::getModel()
@@ -221,6 +221,11 @@ void BibFrameController_Impl::dispose()
 {
     bDisposing = true;
     lang::EventObject aObject;
+    uno::Reference< XFrame > xFrame = getFrame();
+
+    if (xFrame.is())
+        xFrame->removeFrameActionListener( mxImpl );
+
     aObject.Source = static_cast<XController*>(this);
     mxImpl->aLC.disposeAndClear(aObject);
     m_xDatMan.clear();
@@ -592,7 +597,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
 }
 IMPL_LINK_NOARG( BibFrameController_Impl, DisposeHdl, void*, void )
 {
-    xFrame->dispose();
+    m_xFrame->dispose();
 };
 
 void BibFrameController_Impl::addStatusListener(
