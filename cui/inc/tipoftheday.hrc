@@ -41,7 +41,7 @@
  * image:
    * leave the image string empty for the default tipoftheday.png
    * place new images at extra/source/tipoftheday and do not forget to add the files to vcl/Package_tipoftheday.mk
-   * do not exceed 100x120px too much - images do not get scaled
+   * images are scaled to 150x150px; const ThumbSize() in tipoftheday.cxx
 */
 
 const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
