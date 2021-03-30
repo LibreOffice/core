@@ -128,19 +128,15 @@ template <int N> constexpr auto prepareMDArray(const m_and_d (&mdBase)[N])
     std::array<std::array<sal_Int64, N>, N> a{};
     for (int i = 0; i < N; ++i)
     {
-        for (int j = 0; j <= i; ++j)
+        a[i][i] = 1;
+        for (int j = 0; j < i; ++j)
         {
-            if (i == j)
-                a[i][j] = 1;
-            else
-            {
-                assert(mdBase[i].m < SAL_MAX_INT64 / mdBase[j].d);
-                assert(mdBase[i].d < SAL_MAX_INT64 / mdBase[j].m);
-                const sal_Int64 m = mdBase[i].m * mdBase[j].d, d = mdBase[i].d * mdBase[j].m;
-                const sal_Int64 g = std::gcd(m, d);
-                a[i][j] = m / g;
-                a[j][i] = d / g;
-            }
+            assert(mdBase[i].m < SAL_MAX_INT64 / mdBase[j].d);
+            assert(mdBase[i].d < SAL_MAX_INT64 / mdBase[j].m);
+            const sal_Int64 m = mdBase[i].m * mdBase[j].d, d = mdBase[i].d * mdBase[j].m;
+            const sal_Int64 g = std::gcd(m, d);
+            a[i][j] = m / g;
+            a[j][i] = d / g;
         }
     }
     return a;
