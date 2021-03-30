@@ -7949,8 +7949,8 @@ private:
 
             gdk_event_free(pKeyEvent);
         }
-#else
         else
+#endif
         {
             guint nButton;
             guint32 nTime;
@@ -7972,7 +7972,6 @@ private:
 
             gtk_menu_popup(m_pMenu, nullptr, nullptr, nullptr, nullptr, nButton, nTime);
         }
-#endif
 
         if (g_main_loop_is_running(pLoop))
         {
