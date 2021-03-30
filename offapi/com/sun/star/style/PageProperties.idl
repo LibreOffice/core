@@ -501,6 +501,12 @@ published service PageProperties
      */
     [optional, property] boolean BackgroundFullSize;
 
+    /** specifies that the page gutter shall be placed on the right side of the page.
+
+        @since LibreOffice 7.2
+     */
+    [optional, property] boolean RtlGutter;
+
 };
 
 }; }; }; };
