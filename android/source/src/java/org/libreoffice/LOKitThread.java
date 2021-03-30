@@ -265,15 +265,7 @@ class LOKitThread extends Thread {
             refresh();
             LOKitShell.hideProgressSpinner(mContext);
 
-            if (fileType.matches(LibreOfficeUIActivity.NEW_WRITER_STRING_KEY))
-                mTileProvider.saveDocumentAs(filePath, "odt");
-            else if (fileType.matches(LibreOfficeUIActivity.NEW_CALC_STRING_KEY))
-                mTileProvider.saveDocumentAs(filePath, "ods");
-            else if (fileType.matches(LibreOfficeUIActivity.NEW_IMPRESS_STRING_KEY))
-                mTileProvider.saveDocumentAs(filePath, "odp");
-            else
-                mTileProvider.saveDocumentAs(filePath, "odg");
-
+            mTileProvider.saveDocumentAs(filePath);
         } else {
             closeDocument();
         }

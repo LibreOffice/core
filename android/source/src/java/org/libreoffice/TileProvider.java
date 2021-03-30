@@ -22,9 +22,15 @@ import org.mozilla.gecko.gfx.IntSize;
 public interface TileProvider {
 
     /**
-     * Save the current document.
+     * Save the current document under the given path.
      */
     void saveDocumentAs(String filePath, String format);
+
+    /**
+     * Saves the current document under the given path,
+     * using the default file format.
+     */
+    void saveDocumentAs(String filePath);
 
     /**
      * Returns the page width in pixels.
