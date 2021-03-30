@@ -134,6 +134,9 @@ constexpr sal_uInt16 XML_NAMESPACE_DSIG =            201;
 constexpr sal_uInt16 XML_NAMESPACE_DS =              202;
 constexpr sal_uInt16 XML_NAMESPACE_XADES132 =        203;
 constexpr sal_uInt16 XML_NAMESPACE_XADES141 =        204;
+// OOXML digital signature extension namespaces, also based on xmldsig-core
+constexpr sal_uInt16 XML_NAMESPACE_MDSSI =           205;
+constexpr sal_uInt16 XML_NAMESPACE_MSODIGSIG =       206;
 #endif // INCLUDED_XMLOFF_XMLNMSPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
