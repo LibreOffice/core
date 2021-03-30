@@ -76,6 +76,9 @@ constexpr sal_uInt16 XML_NAMESPACE_DSIG =            39;
 constexpr sal_uInt16 XML_NAMESPACE_DS =              40;
 constexpr sal_uInt16 XML_NAMESPACE_XADES132 =        41;
 constexpr sal_uInt16 XML_NAMESPACE_XADES141 =        42;
+// OOXML digital signature extension namespaces, also based on xmldsig-core
+constexpr sal_uInt16 XML_NAMESPACE_MDSSI =           43;
+constexpr sal_uInt16 XML_NAMESPACE_MSODIGSIG =       44;
 
 // namespaces for ODF extended formats
 constexpr sal_uInt16 XML_NAMESPACE_EXT_BASE   = 50;
