@@ -6806,19 +6806,21 @@ void DocxAttributeOutput::SectionBiDi( bool bBiDi )
         m_pSerializer->singleElementNS(XML_w, XML_bidi);
 }
 
-static OString impl_NumberingType( sal_uInt16 nNumberingType )
+// Converting Numbering Format Code to string
+static OString lcl_ConvertNumberingType(sal_Int16 nNumberingType, const SfxItemSet* pOutSet, OString& rFormat, const OString& sDefault = "" )
 {
-    OString aType;
+    OString aType = sDefault;
 
     switch ( nNumberingType )
     {
         case SVX_NUM_CHARS_UPPER_LETTER:
         case SVX_NUM_CHARS_UPPER_LETTER_N:  aType = "upperLetter"; break;
+
         case SVX_NUM_CHARS_LOWER_LETTER:
         case SVX_NUM_CHARS_LOWER_LETTER_N:  aType = "lowerLetter"; break;
+
         case SVX_NUM_ROMAN_UPPER:           aType = "upperRoman";  break;
         case SVX_NUM_ROMAN_LOWER:           aType = "lowerRoman";  break;
-
         case SVX_NUM_ARABIC:                aType = "decimal";     break;
 
         case SVX_NUM_BITMAP:
@@ -6826,33 +6828,7 @@ static OString impl_NumberingType( sal_uInt16 nNumberingType )
 
         case style::NumberingType::CHARS_HEBREW: aType = "hebrew2"; break;
         case style::NumberingType::NUMBER_HEBREW: aType = "hebrew1"; break;
-
-        default:                            aType = "none";        break;
-    }
-
-    return aType;
-}
-
-// Converting Level Numbering Format Code to string
-static OString impl_LevelNFC(sal_uInt16 nNumberingType, const SfxItemSet* pOutSet, OString& rFormat)
-{
-    OString aType;
-
-    switch ( nNumberingType )
-    {
-        case style::NumberingType::CHARS_UPPER_LETTER:
-        case style::NumberingType::CHARS_UPPER_LETTER_N:
-        case style::NumberingType::CHARS_LOWER_LETTER:
-        case style::NumberingType::CHARS_LOWER_LETTER_N:
-        case style::NumberingType::ROMAN_UPPER:
-        case style::NumberingType::ROMAN_LOWER:
-        case style::NumberingType::ARABIC:
-        case style::NumberingType::BITMAP:
-        case style::NumberingType::CHAR_SPECIAL:
-        case style::NumberingType::CHARS_HEBREW:
-        case style::NumberingType::NUMBER_HEBREW:
-        case style::NumberingType::NUMBER_NONE:
-            return impl_NumberingType( nNumberingType );
+        case style::NumberingType::NUMBER_NONE: aType = "none"; break;
         case style::NumberingType::FULLWIDTH_ARABIC: aType="decimalFullWidth"; break;
         case style::NumberingType::TIAN_GAN_ZH: aType="ideographTraditional"; break;
         case style::NumberingType::DI_ZI_ZH: aType="ideographZodiac"; break;
@@ -6880,6 +6856,7 @@ static OString impl_LevelNFC(sal_uInt16 nNumberingType, const SfxItemSet* pOutSe
         case style::NumberingType::NUMBER_UPPER_KO: aType="koreanLegal"; break;
         case style::NumberingType::CIRCLE_NUMBER: aType="decimalEnclosedCircle"; break;
         case style::NumberingType::CHARS_ARABIC: aType="arabicAlpha"; break;
+        case style::NumberingType::CHARS_ARABIC_ABJAD: aType="arabicAbjad"; break;
         case style::NumberingType::CHARS_THAI: aType="thaiLetters"; break;
         case style::NumberingType::CHARS_PERSIAN: aType="hindiVowels"; break;
         case style::NumberingType::TEXT_NUMBER: aType="ordinal"; break;
@@ -6900,7 +6877,7 @@ static OString impl_LevelNFC(sal_uInt16 nNumberingType, const SfxItemSet* pOutSe
             rFormat = "00001, 00002, 00003, ...";
             break;
 /*
-        Fallback the rest to decimal.
+        Fallback the rest to the suggested default.
         case style::NumberingType::NATIVE_NUMBERING:
         case style::NumberingType::HANGUL_CIRCLED_JAMO_KO:
         case style::NumberingType::HANGUL_CIRCLED_SYLLABLE_KO:
@@ -6926,8 +6903,7 @@ static OString impl_LevelNFC(sal_uInt16 nNumberingType, const SfxItemSet* pOutSe
         case style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_SR:
         case style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_SR:
 */
-        default:
-            aType = "decimal";        break;
+        default: break;
     }
     return aType;
 }
@@ -6944,8 +6920,9 @@ void DocxAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, const ::std
        pAttr->add( FSNS( XML_w, XML_start ), OString::number( *oPageRestartNumber ) );
 
     // nNumType corresponds to w:fmt. See WW8Export::GetNumId() for more precisions
-    OString aFormat( impl_NumberingType( nNumType ) );
-    if ( !aFormat.isEmpty() )
+    OString aCustomFormat;
+    OString aFormat(lcl_ConvertNumberingType(nNumType, nullptr, aCustomFormat));
+    if (!aFormat.isEmpty() && aCustomFormat.isEmpty())
         pAttr->add( FSNS( XML_w, XML_fmt ), aFormat.getStr() );
 
     m_pSerializer->singleElementNS( XML_w, XML_pgNumType, pAttr );
@@ -7313,9 +7290,8 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
     }
     // format
     OString aCustomFormat;
-    OString aFormat(impl_LevelNFC(nNumberingType, pOutSet, aCustomFormat));
+    OString aFormat(lcl_ConvertNumberingType(nNumberingType, pOutSet, aCustomFormat, "decimal"));
 
-    if ( !aFormat.isEmpty() )
     {
         if (aCustomFormat.isEmpty())
         {
@@ -8367,44 +8343,9 @@ void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr 
     const SwEndNoteInfo& info, int listtag )
 {
     fs->startElementNS(XML_w, tag);
-    const char* fmt = nullptr;
-    switch( info.m_aFormat.GetNumberingType())
-    {
-        case SVX_NUM_CHARS_UPPER_LETTER_N: // fall through, map to upper letters
-        case SVX_NUM_CHARS_UPPER_LETTER:
-            fmt = "upperLetter";
-            break;
-        case SVX_NUM_CHARS_LOWER_LETTER_N: // fall through, map to lower letters
-        case SVX_NUM_CHARS_LOWER_LETTER:
-            fmt = "lowerLetter";
-            break;
-        case SVX_NUM_ROMAN_UPPER:
-            fmt = "upperRoman";
-            break;
-        case SVX_NUM_ROMAN_LOWER:
-            fmt = "lowerRoman";
-            break;
-        case SVX_NUM_ARABIC:
-            fmt = "decimal";
-            break;
-        case SVX_NUM_NUMBER_NONE:
-            fmt = "none";
-            break;
-        case SVX_NUM_CHAR_SPECIAL:
-            fmt = "bullet";
-            break;
-        case SVX_NUM_SYMBOL_CHICAGO:
-            fmt = "chicago";
-            break;
-        case SVX_NUM_ARABIC_ZERO:
-            fmt = "decimalZero";
-            break;
-        case SVX_NUM_PAGEDESC:
-        case SVX_NUM_BITMAP:
-        default:
-            break; // no format
-    }
-    if( fmt != nullptr )
+    OString aCustomFormat;
+    OString fmt = lcl_ConvertNumberingType(info.m_aFormat.GetNumberingType(), nullptr, aCustomFormat);
+    if (!fmt.isEmpty() && aCustomFormat.isEmpty())
         fs->singleElementNS(XML_w, XML_numFmt, FSNS(XML_w, XML_val), fmt);
     if( info.m_nFootnoteOffset != 0 )
         fs->singleElementNS( XML_w, XML_numStart, FSNS( XML_w, XML_val ),
@@ -8417,9 +8358,9 @@ void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr 
         {
             case FTNNUM_PAGE:       fmt = "eachPage"; break;
             case FTNNUM_CHAPTER:    fmt = "eachSect"; break;
-            default:                fmt = nullptr;    break;
+            default:                fmt.clear();      break;
         }
-        if( fmt != nullptr )
+        if (!fmt.isEmpty())
             fs->singleElementNS(XML_w, XML_numRestart, FSNS(XML_w, XML_val), fmt);
     }
 

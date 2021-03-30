@@ -16,6 +16,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
@@ -78,6 +79,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf141231_arabicHebrewNumbering, "tdf141231_arabicH
     // The page's numbering type: instead of Hebrew, this was default style::NumberingType::ARABIC (4).
     auto nActual = getProperty<sal_Int16>(getStyles("PageStyles")->getByName("Standard"), "NumberingType");
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_HEBREW, nActual);
+
+    // The footnote numbering type: instead of arabicAbjad, this was the default style::NumberingType::ARABIC.
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFootnoteSettings = xFootnotesSupplier->getFootnoteSettings();
+    nActual = getProperty<sal_Int16>(xFootnotesSupplier->getFootnoteSettings(), "NumberingType");
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::CHARS_ARABIC_ABJAD, nActual);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testGutterLeft, "gutter-left.docx")
