@@ -45,7 +45,7 @@ void Window::InitClipRegion()
         aRegion = *(mpWindowImpl->mpPaintRegion);
     else
     {
-        aRegion = *(ImplGetWinChildClipRegion());
+        aRegion = ImplGetWinChildClipRegion();
         // only this region is in frame coordinates, so re-mirror it
         // the mpWindowImpl->mpPaintRegion above is already correct (see ImplCallPaint()) !
         if( ImplIsAntiparallel() )
@@ -96,7 +96,7 @@ void Window::ExpandPaintClipRegion( const vcl::Region& rRegion )
     vcl::Region aPixRegion = LogicToPixel( rRegion );
     vcl::Region aDevPixRegion = ImplPixelToDevicePixel( aPixRegion );
 
-    vcl::Region aWinChildRegion = *ImplGetWinChildClipRegion();
+    vcl::Region aWinChildRegion = ImplGetWinChildClipRegion();
     // only this region is in frame coordinates, so re-mirror it
     if( ImplIsAntiparallel() )
     {
@@ -286,18 +286,16 @@ void Window::ImplInitWinChildClipRegion()
     mpWindowImpl->mbInitChildRegion = false;
 }
 
-Region* Window::ImplGetWinChildClipRegion()
+Region& Window::ImplGetWinChildClipRegion()
 {
     if ( mpWindowImpl->mbInitWinClipRegion )
         ImplInitWinClipRegion();
     if ( mpWindowImpl->mbInitChildRegion )
         ImplInitWinChildClipRegion();
     if ( mpWindowImpl->mpChildClipRegion )
-        return mpWindowImpl->mpChildClipRegion.get();
-    else
-        return &mpWindowImpl->maWinClipRegion;
+        return *mpWindowImpl->mpChildClipRegion;
+    return mpWindowImpl->maWinClipRegion;
 }
-
 
 bool Window::ImplSysObjClip( const vcl::Region* pOldRegion )
 {
@@ -309,18 +307,18 @@ bool Window::ImplSysObjClip( const vcl::Region* pOldRegion )
 
         if ( bVisibleState )
         {
-            vcl::Region* pWinChildClipRegion = ImplGetWinChildClipRegion();
+            vcl::Region& rWinChildClipRegion = ImplGetWinChildClipRegion();
 
-            if ( !pWinChildClipRegion->IsEmpty() )
+            if (!rWinChildClipRegion.IsEmpty())
             {
                 if ( pOldRegion )
                 {
-                    vcl::Region aNewRegion = *pWinChildClipRegion;
-                    pWinChildClipRegion->Intersect( *pOldRegion );
-                    bUpdate = aNewRegion == *pWinChildClipRegion;
+                    vcl::Region aNewRegion = rWinChildClipRegion;
+                    rWinChildClipRegion.Intersect(*pOldRegion);
+                    bUpdate = aNewRegion == rWinChildClipRegion;
                 }
 
-                vcl::Region      aRegion = *pWinChildClipRegion;
+                vcl::Region      aRegion = rWinChildClipRegion;
                 vcl::Region      aWinRectRegion( GetOutputRectPixel() );
 
                 if ( aRegion == aWinRectRegion )
