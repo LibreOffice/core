@@ -21,6 +21,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/RubyAdjust.hpp>
 
@@ -49,7 +50,7 @@ namespace writerfilter::dmapper::ConversionHelper{
     SAL_DLLPUBLIC_EXPORT sal_uInt32 convertTwipToMM100Unsigned(sal_Int32 _t);
     sal_Int16 convertTableJustification( sal_Int32 nIntValue );
     css::text::RubyAdjust convertRubyAlign( sal_Int32 nIntValue );
-    sal_Int16 ConvertNumberingType(sal_Int32 nFmt);
+    sal_Int16 ConvertNumberingType(const sal_Int32 nFmt, const sal_Int16 nDefault = css::style::NumberingType::ARABIC);
     sal_Int16 ConvertCustomNumberFormat(std::u16string_view rFormat);
 
     css::util::DateTime ConvertDateStringToDateTime(const OUString& rDateTime);
