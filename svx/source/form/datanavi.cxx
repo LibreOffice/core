@@ -1307,6 +1307,10 @@ namespace svxform
 
     DataNavigatorWindow::~DataNavigatorWindow()
     {
+        Reference< XFrameActionListener > xListener(
+            static_cast< XFrameActionListener* >( m_xDataListener.get() ), UNO_QUERY );
+        m_xFrame->removeFrameActionListener( xListener );
+
         SvtViewOptions aViewOpt( EViewType::TabDialog, CFGNAME_DATANAVIGATOR );
         aViewOpt.SetPageID(m_xTabCtrl->get_current_page_ident());
         aViewOpt.SetUserItem(CFGNAME_SHOWDETAILS, Any(m_bShowDetails));
@@ -1320,9 +1324,6 @@ namespace svxform
             m_aPageList[i].reset();
         m_aPageList.clear();
 
-        Reference< XFrameActionListener > xListener(
-            static_cast< XFrameActionListener* >( m_xDataListener.get() ), UNO_QUERY );
-        m_xFrame->removeFrameActionListener( xListener );
         RemoveBroadcaster();
         m_xDataListener.clear();
     }
