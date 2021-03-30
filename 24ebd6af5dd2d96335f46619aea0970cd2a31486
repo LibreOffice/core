@@ -16,6 +16,24 @@
       "revId": "24ebd6af5dd2d96335f46619aea0970cd2a31486",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4be3a3f6_08c1d15b",
+        "filename": "cui/source/dialogs/cuigrfflt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-03-30T11:58:04Z",
+      "side": 1,
+      "message": "In this case I think this is a bad condition for the range anyway as the Bitmap should always be converted to 24bit and is limited only by that.\n\nBut yes there are other cases where we need to cast now, which is not looking nice. I don\u0027t want GetBitCount on the Bitmap anymore, but a function for PixelFormat that checks this would be OK.\n\nIn general I think most of those will go away in the future as not many cases will be left - 8, 24, 32, but there is no need to know the bitcount - just handle the different cases.",
+      "parentUuid": "fe9686e9_ac099520",
+      "revId": "24ebd6af5dd2d96335f46619aea0970cd2a31486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
