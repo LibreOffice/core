@@ -73,6 +73,7 @@ enum class SfxHintId {
     ScDbAreasChanged,
     ScAreasChanged,
     ScTablesChanged,
+    ScTablesRenamed,
     ScDrawChanged,
     ScDocNameChanged,
     ScAreaLinksChanged,
@@ -164,6 +165,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
     case SfxHintId::ScDbAreasChanged: return stream << "ScDbAreasChanged";
     case SfxHintId::ScAreasChanged: return stream << "ScAreasChanged";
     case SfxHintId::ScTablesChanged: return stream << "ScTablesChanged";
+    case SfxHintId::ScTablesRenamed: return stream << "ScTablesRenamed";
     case SfxHintId::ScDrawChanged: return stream << "ScDrawChanged";
     case SfxHintId::ScDocNameChanged: return stream << "ScDocNameChanged";
     case SfxHintId::ScAreaLinksChanged: return stream << "ScAreaLinksChanged";
