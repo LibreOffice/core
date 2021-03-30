@@ -356,6 +356,21 @@ class LOKitTileProvider implements TileProvider {
         LOKitShell.hideProgressSpinner(mContext);
     }
 
+    @Override
+    public void saveDocumentAs(final String filePath) {
+        final int docType = mDocument.getDocumentType();
+        if (docType == Document.DOCTYPE_TEXT)
+            saveDocumentAs(filePath, "odt");
+        else if (docType == Document.DOCTYPE_SPREADSHEET)
+            saveDocumentAs(filePath, "ods");
+        else if (docType == Document.DOCTYPE_PRESENTATION)
+            saveDocumentAs(filePath, "odp");
+        else if (docType == Document.DOCTYPE_DRAWING)
+            saveDocumentAs(filePath, "odg");
+        else
+            Log.w(LOGTAG, "Cannot determine file format from document. Not saving.");
+    }
+
     public void exportToPDF(boolean print){
         String dir = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Documents";
         File docDir = new File(dir);
