@@ -61,6 +61,7 @@ BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize )
 {
     if( rBitmapEx.IsEmpty() || aSize.IsEmpty() )
         return;
+    assert(!(aSrc == Point(0,0) && aSize == rBitmapEx.GetSizePixel()));
 
     maBitmap = Bitmap(aSize, rBitmapEx.maBitmap.getPixelFormat());
     SetSizePixel(aSize);
