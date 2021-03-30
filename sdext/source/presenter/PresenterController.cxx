@@ -204,12 +204,6 @@ void PresenterController::disposing()
     if (mxConfigurationController.is())
         mxConfigurationController->removeConfigurationChangeListener(this);
 
-    Reference<XComponent> xWindowManagerComponent (
-        static_cast<XWeak*>(mpWindowManager.get()), UNO_QUERY);
-    mpWindowManager = nullptr;
-    if (xWindowManagerComponent.is())
-        xWindowManagerComponent->dispose();
-
     if (mxController.is())
     {
         Reference<frame::XFrame> xFrame (mxController->getFrame());
@@ -217,6 +211,12 @@ void PresenterController::disposing()
             xFrame->removeFrameActionListener(this);
         mxController = nullptr;
     }
+
+    Reference<XComponent> xWindowManagerComponent (
+        static_cast<XWeak*>(mpWindowManager.get()), UNO_QUERY);
+    mpWindowManager = nullptr;
+    if (xWindowManagerComponent.is())
+        xWindowManagerComponent->dispose();
 
     mxComponentContext = nullptr;
     mxConfigurationController = nullptr;
