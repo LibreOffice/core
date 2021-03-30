@@ -221,6 +221,11 @@ void BibFrameController_Impl::dispose()
 {
     m_bDisposing = true;
     lang::EventObject aObject;
+    uno::Reference< XFrame > xFrame = getFrame();
+
+    if (xFrame.is())
+        xFrame->removeFrameActionListener( m_xImpl );
+
     aObject.Source = static_cast<XController*>(this);
     m_xImpl->aLC.disposeAndClear(aObject);
     m_xDatMan.clear();
