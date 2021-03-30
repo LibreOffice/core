@@ -83,6 +83,32 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129382)
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135662)
+{
+    load(DATA_DIRECTORY, "tdf135662.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->Cut();
+
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    TransferableDataHelper aHelper(xTransfer);
+    SwTransferable::Paste(*pWrtShell, aHelper);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 2
+    // - Actual  : 1
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134227)
 {
     load(DATA_DIRECTORY, "tdf134227.docx");
