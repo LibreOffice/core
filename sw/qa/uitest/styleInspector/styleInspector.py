@@ -166,7 +166,7 @@ class styleNavigator(UITestCase):
 
         self.xUITest.executeCommand(".uno:GoDown")
         # FIXME jump over the control character (not visible in getString(), but it affects
-        # cursor position and avabiality of NestedTextContent)
+        # cursor position and availability of NestedTextContent)
         self.xUITest.executeCommand(".uno:GoRight")
 
         # The cursor is on text with annotated text range
