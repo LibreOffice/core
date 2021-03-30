@@ -693,16 +693,9 @@ void SwFormat::DelDiffs( const SfxItemSet& rSet )
 
 void SwFormat::SetPageFormatToDefault()
 {
-
-    SvxLRSpaceItem aLR(RES_LR_SPACE);
     const sal_Int32 nSize = o3tl::convert(2, o3tl::Length::cm, o3tl::Length::twip);
-    aLR.SetLeft(nSize);
-    aLR.SetRight(nSize);
-    SvxULSpaceItem aUL(RES_UL_SPACE);
-    aUL.SetUpper(static_cast<sal_uInt16>(nSize));
-    aUL.SetLower(static_cast<sal_uInt16>(nSize));
-    SetFormatAttr(aLR);
-    SetFormatAttr(aUL);
+    SetFormatAttr(SvxLRSpaceItem(nSize, nSize, nSize, 0, RES_LR_SPACE));
+    SetFormatAttr(SvxULSpaceItem(nSize, nSize, RES_UL_SPACE));
 }
 
 /** SwFormat::IsBackgroundTransparent
