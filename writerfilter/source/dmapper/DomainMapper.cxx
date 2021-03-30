@@ -1074,29 +1074,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_PageNumber_fmt:
             if (pSectionContext)
             {
-                switch (nIntValue)
-                {
-                case NS_ooxml::LN_Value_ST_NumberFormat_decimal:
-                    // 1, 2, ...
-                    pSectionContext->SetPageNumberType(style::NumberingType::ARABIC);
-                break;
-                case NS_ooxml::LN_Value_ST_NumberFormat_upperLetter:
-                    // A, B, ...
-                    pSectionContext->SetPageNumberType(style::NumberingType::CHARS_UPPER_LETTER_N);
-                break;
-                case NS_ooxml::LN_Value_ST_NumberFormat_lowerLetter:
-                    // a, b, ...
-                    pSectionContext->SetPageNumberType(style::NumberingType::CHARS_LOWER_LETTER_N);
-                break;
-                case NS_ooxml::LN_Value_ST_NumberFormat_upperRoman:
-                    // I, II, ...
-                    pSectionContext->SetPageNumberType(style::NumberingType::ROMAN_UPPER);
-                break;
-                case NS_ooxml::LN_Value_ST_NumberFormat_lowerRoman:
-                    // i, ii, ...
-                    pSectionContext->SetPageNumberType(style::NumberingType::ROMAN_LOWER);
-                break;
-                }
+                sal_Int16 nNumberType = ConversionHelper::ConvertNumberingType(nIntValue, -1);
+                if (nNumberType != -1)
+                    pSectionContext->SetPageNumberType(nNumberType);
             }
         break;
         case NS_ooxml::LN_CT_FtnEdn_type:

@@ -475,7 +475,8 @@ sal_Int16 convertTableJustification( sal_Int32 nIntValue )
     return nOrient;
 }
 
-sal_Int16 ConvertNumberingType(sal_Int32 nFmt)
+// Return the suggested default if the given format has no known conversion
+sal_Int16 ConvertNumberingType(const sal_Int32 nFmt, const sal_Int16 nDefault)
 {
     sal_Int16 nRet;
     switch(nFmt)
@@ -594,7 +595,7 @@ sal_Int16 ConvertNumberingType(sal_Int32 nFmt)
         case NS_ooxml::LN_Value_ST_NumberFormat_decimalZero:
             nRet = style::NumberingType::ARABIC_ZERO;
             break;
-        default: nRet = style::NumberingType::ARABIC;
+        default: nRet = nDefault;
     }
 /*  TODO: Lots of additional values are available - some are supported in the I18 framework
     NS_ooxml::LN_Value_ST_NumberFormat_hex = 91685;

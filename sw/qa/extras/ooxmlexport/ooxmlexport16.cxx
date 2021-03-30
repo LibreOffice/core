@@ -73,6 +73,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138892_noNumbering, "tdf138892_noNumbering.docx"
     CPPUNIT_ASSERT_MESSAGE("Para3: <blank line>", getProperty<OUString>(getParagraph(3), "NumberingStyleName").isEmpty());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf141231_arabicHebrewNumbering, "tdf141231_arabicHebrewNumbering.docx")
+{
+    // The page's numbering type: instead of Hebrew, this was default style::NumberingType::ARABIC (4).
+    auto nActual = getProperty<sal_Int16>(getStyles("PageStyles")->getByName("Standard"), "NumberingType");
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_HEBREW, nActual);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testGutterLeft, "gutter-left.docx")
 {
     uno::Reference<beans::XPropertySet> xPageStyle;
