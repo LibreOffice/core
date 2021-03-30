@@ -43,7 +43,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 //size of preview
-const Size ThumbSize(100, 120);
+const Size ThumbSize(150, 150);
 
 TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/tipofthedaydialog.ui", "TipOfTheDayDialog")
