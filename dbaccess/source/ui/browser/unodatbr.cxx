@@ -248,6 +248,11 @@ void SAL_CALL SbaTableQueryBrowser::disposing()
     // remove ourself as status listener
     implRemoveStatusListeners();
 
+    // check out from all the objects we are listening
+    // the frame
+    if (m_xCurrentFrameParent.is())
+        m_xCurrentFrameParent->removeFrameActionListener(static_cast<css::frame::XFrameActionListener*>(this));
+
     // remove the container listener from the database context
     try
     {
@@ -259,10 +264,6 @@ void SAL_CALL SbaTableQueryBrowser::disposing()
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
-    // check out from all the objects we are listening
-    // the frame
-    if (m_xCurrentFrameParent.is())
-        m_xCurrentFrameParent->removeFrameActionListener(static_cast<css::frame::XFrameActionListener*>(this));
     SbaXDataBrowserController::disposing();
 }
 

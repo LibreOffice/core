@@ -134,6 +134,10 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
 
 void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject&)
 {
+    css::uno::Reference< css::frame::XFrame > xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
+    if (xFrame.is())
+        xFrame->removeFrameActionListener(this);
+
     // nothing todo here - because we hold the frame as weak reference only
 }
 
