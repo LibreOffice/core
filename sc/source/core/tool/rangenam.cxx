@@ -467,15 +467,15 @@ ScRangeData::IsNameValidType ScRangeData::IsNameValid( const OUString& rName, co
      * ScfTools::ConvertToScDefinedName needs to be changed too. */
     char const a('.');
     if (rName.indexOf(a) != -1)
-        return NAME_INVALID_BAD_STRING;
+        return IsNameValidType::NAME_INVALID_BAD_STRING;
     sal_Int32 nPos = 0;
     sal_Int32 nLen = rName.getLength();
     if ( !nLen || !ScCompiler::IsCharFlagAllConventions( rName, nPos++, ScCharFlags::CharName ) )
-        return NAME_INVALID_BAD_STRING;
+        return IsNameValidType::NAME_INVALID_BAD_STRING;
     while ( nPos < nLen )
     {
         if ( !ScCompiler::IsCharFlagAllConventions( rName, nPos++, ScCharFlags::Name ) )
-            return NAME_INVALID_BAD_STRING;
+            return IsNameValidType::NAME_INVALID_BAD_STRING;
     }
     ScAddress aAddr;
     ScRange aRange;
@@ -487,10 +487,10 @@ ScRangeData::IsNameValidType ScRangeData::IsNameValid( const OUString& rName, co
         if (aRange.Parse(rName, rDoc, details) != ScRefFlags::ZERO ||
              aAddr.Parse(rName, rDoc, details) != ScRefFlags::ZERO )
         {
-            return NAME_INVALID_CELL_REF;
+            return IsNameValidType::NAME_INVALID_CELL_REF;
         }
     }
-    return NAME_VALID;
+    return IsNameValidType::NAME_VALID;
 }
 
 FormulaError ScRangeData::GetErrCode() const

@@ -402,7 +402,8 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl, weld::Button&, void)
     if ( aNewName.isEmpty() || aNewArea.isEmpty() )
         return;
 
-    if ( ScRangeData::IsNameValid( aNewName, rDoc ) == ScRangeData::NAME_VALID && aNewName != STR_DB_LOCAL_NONAME )
+    if (ScRangeData::IsNameValid(aNewName, rDoc) == ScRangeData::IsNameValidType::NAME_VALID
+        && aNewName != STR_DB_LOCAL_NONAME)
     {
         //  because editing can be done now, parsing is needed first
         ScRange aTmpRange;
