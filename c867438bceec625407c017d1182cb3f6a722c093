@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6b00f3b_892762b0",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport10.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-30T09:29:25Z",
+      "side": 1,
+      "message": "The first one is hidden and it has",
+      "range": {
+        "startLine": 691,
+        "startChar": 75,
+        "endLine": 691,
+        "endChar": 79
+      },
+      "revId": "c867438bceec625407c017d1182cb3f6a722c093",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71be4ac6_31796b95",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport10.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-30T09:29:25Z",
+      "side": 1,
+      "message": "empty",
+      "range": {
+        "startLine": 705,
+        "startChar": 44,
+        "endLine": 705,
+        "endChar": 48
+      },
+      "revId": "c867438bceec625407c017d1182cb3f6a722c093",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e736b20_d362cf6b",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-30T09:29:25Z",
+      "side": 1,
+      "message": "We can modify the test instead of skipping it:\n\n/*\n     * Another problem tested with this document is the loading of the shapes\n     * anchored to a hidden header or footer\n     */\n    CPPUNIT_ASSERT_EQUAL(1, getShapes());",
+      "revId": "c867438bceec625407c017d1182cb3f6a722c093",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8039456e_349e033f",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 5061,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-30T09:29:25Z",
+      "side": 1,
+      "message": "have",
+      "range": {
+        "startLine": 5061,
+        "startChar": 44,
+        "endLine": 5061,
+        "endChar": 52
+      },
+      "revId": "c867438bceec625407c017d1182cb3f6a722c093",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f0d7b52_823059ae",
+        "filename": "sw/qa/uitest/writer_tests7/tdf141158.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-30T09:29:25Z",
+      "side": 1,
+      "message": "it was \"Right Header\" (lost hidden left header)",
+      "range": {
+        "startLine": 41,
+        "startChar": 10,
+        "endLine": 41,
+        "endChar": 1
+      },
+      "revId": "c867438bceec625407c017d1182cb3f6a722c093",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d07049e_d7dd00ad",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 3314,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-30T09:29:25Z",
+      "side": 1,
+      "message": "for later use",
+      "range": {
+        "startLine": 3314,
+        "startChar": 34,
+        "endLine": 3314,
+        "endChar": 47
+      },
+      "revId": "c867438bceec625407c017d1182cb3f6a722c093",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1186c17_2a5fad0e",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 2592,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-03-30T09:29:25Z",
+      "side": 1,
+      "message": "Add the content of the headers/footers to the doc",
+      "range": {
+        "startLine": 2592,
+        "startChar": 15,
+        "endLine": 2592,
+        "endChar": 63
+      },
+      "revId": "c867438bceec625407c017d1182cb3f6a722c093",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
