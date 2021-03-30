@@ -70,6 +70,13 @@ void XNamedRanges::testAddNewByName()
     xNamedRanges->addNewByName(aName5, "D5", aBaseAddress, nType);
     CPPUNIT_ASSERT_MESSAGE("Failed to create Namedrange Type ROW_HEADER",
                            xNamedRanges->hasByName(aName5));
+
+    // tdf#119457 - check for a valid range name
+    OUString aName6("type_INVALID_BAD_STRING.+:");
+    CPPUNIT_ASSERT_THROW(xNamedRanges->addNewByName(aName6, "D6", aBaseAddress, 0),
+                         uno::RuntimeException);
+    CPPUNIT_ASSERT_MESSAGE("Created Namedrange with invalid name",
+                           !xNamedRanges->hasByName(aName6));
 }
 
 void XNamedRanges::testAddNewFromTitles()

@@ -138,14 +138,15 @@ bool ScNameDefDlg::IsNameValid()
         m_xFtInfo->set_label(maStrInfoDefault);
         return false;
     }
-    else if ((eType = ScRangeData::IsNameValid( aName, mrDoc )) != ScRangeData::NAME_VALID)
+    else if ((eType = ScRangeData::IsNameValid(aName, mrDoc))
+             != ScRangeData::IsNameValidType::NAME_VALID)
     {
         m_xFtInfo->set_label_type(weld::LabelType::Error);
-        if (eType == ScRangeData::NAME_INVALID_BAD_STRING)
+        if (eType == ScRangeData::IsNameValidType::NAME_INVALID_BAD_STRING)
         {
             m_xFtInfo->set_label(maErrInvalidNameStr);
         }
-        else if (eType == ScRangeData::NAME_INVALID_CELL_REF)
+        else if (eType == ScRangeData::IsNameValidType::NAME_INVALID_CELL_REF)
         {
             m_xFtInfo->set_label(maErrInvalidNameCellRefStr);
         }

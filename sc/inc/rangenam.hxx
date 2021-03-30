@@ -58,7 +58,7 @@ public:
         AbsPos     = 0x0080
     };
 
-    enum IsNameValidType
+    enum class IsNameValidType
     {
         NAME_VALID,
         NAME_INVALID_CELL_REF,

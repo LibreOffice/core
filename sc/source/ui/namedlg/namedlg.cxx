@@ -248,7 +248,7 @@ bool ScNameDlg::IsNameValid()
 
     ScRangeName* pRangeName = GetRangeName( aScope );
 
-    if (ScRangeData::IsNameValid( aName, mrDoc ) != ScRangeData::NAME_VALID)
+    if (ScRangeData::IsNameValid(aName, mrDoc) != ScRangeData::IsNameValidType::NAME_VALID)
     {
         m_xFtInfo->set_label_type(weld::LabelType::Error);
         m_xFtInfo->set_label(maErrInvalidNameStr);
