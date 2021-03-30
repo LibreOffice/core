@@ -14,6 +14,10 @@
 
 #include <cppuhelper/implbase.hxx>
 
+#include <xmloff/namespacemap.hxx>
+
+#include <stack>
+
 class XSecController;
 class XMLSignatureHelper;
 
@@ -24,37 +28,61 @@ class OOXMLSecParser: public cppu::WeakImplHelper
     css::lang::XInitialization
     >
 {
+public:
+    class Context;
+private:
+    class UnknownContext;
+    class ReferencedContextImpl;
+    class DsX509CertificateContext;
+    class DsX509SerialNumberContext;
+    class DsX509IssuerNameContext;
+    class DsX509IssuerSerialContext;
+    class DsX509DataContext;
+    class DsKeyInfoContext;
+    class DsSignatureValueContext;
+    class DsDigestValueContext;
+    class DsDigestMethodContext;
+    class DsTransformContext;
+    class DsTransformsContext;
+    class DsReferenceContext;
+    class DsSignatureMethodContext;
+    class DsSignedInfoContext;
+    class XadesEncapsulatedX509CertificateContext;
+    class XadesCertificateValuesContext;
+    class XadesUnsignedSignaturePropertiesContext;
+    class XadesUnsignedPropertiesContext;
+    class XadesCertDigestContext;
+    class XadesCertContext;
+    class XadesSigningCertificateContext;
+    class XadesSigningTimeContext;
+    class XadesSignedSignaturePropertiesContext;
+    class XadesSignedPropertiesContext;
+    class XadesQualifyingPropertiesContext;
+    class MdssiValueContext;
+    class MdssiSignatureTimeContext;
+    class MsodigsigSetupIDContext;
+    class MsodigsigSignatureCommentsContext;
+    class MsodigsigSignatureInfoV1Context;
+    class DsSignaturePropertyContext;
+    class DsSignaturePropertiesContext;
+    class DsManifestContext;
+    class DsObjectContext;
+    class DsSignatureContext;
+    class DsigSignaturesContext;
+
+    std::stack<std::unique_ptr<Context>> m_ContextStack;
+    std::unique_ptr<SvXMLNamespaceMap> m_pNamespaceMap;
+
     XSecController* m_pXSecController;
     css::uno::Reference<css::xml::sax::XDocumentHandler> m_xNextHandler;
-
-    bool m_bInDigestValue;
-    OUString m_aDigestValue;
-    bool m_bInSignatureValue;
-    OUString m_aSignatureValue;
-    bool m_bInX509Certificate;
-    OUString m_aX509Certificate;
-    bool m_bInMdssiValue;
-    OUString m_aMdssiValue;
-    bool m_bInSignatureComments;
-    OUString m_aSignatureComments;
-    bool m_bInX509IssuerName;
-    OUString m_aX509IssuerName;
-    bool m_bInX509SerialNumber;
-    OUString m_aX509SerialNumber;
-    bool m_bInCertDigest;
-    OUString m_aCertDigest;
-    bool m_bInValidSignatureImage;
-    OUString m_aValidSignatureImage;
-    bool m_bInInvalidSignatureImage;
-    OUString m_aInvalidSignatureImage;
-    bool m_bInSignatureLineId;
-    OUString m_aSignatureLineId;
 
     /// Last seen <Reference URI="...">.
     OUString m_aReferenceURI;
     /// Already called addStreamReference() for this reference.
     bool m_bReferenceUnresolved;
     XMLSignatureHelper& m_rXMLSignatureHelper;
+
+    OUString HandleIdAttr(css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs);
 
 public:
     explicit OOXMLSecParser(XMLSignatureHelper& rXMLSignatureHelper, XSecController* pXSecController);
