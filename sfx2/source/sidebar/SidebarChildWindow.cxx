@@ -54,7 +54,7 @@ SidebarChildWindow::SidebarChildWindow(vcl::Window* pParentWindow, sal_uInt16 nI
         if (!comphelper::LibreOfficeKit::isActive())
         {
             pDockWin->SetSizePixel(
-                Size(TabBar::GetDefaultWidth() * GetWindow()->GetDPIScaleFactor(),
+                Size(TabBar::GetDefaultWidth(),
                      pDockWin->GetSizePixel().Height()));
         }
     }
@@ -66,7 +66,7 @@ SidebarChildWindow::SidebarChildWindow(vcl::Window* pParentWindow, sal_uInt16 nI
         // Undock sidebar in LOK to allow for resizing freely
         // (i.e. when the client window is resized) and collapse
         // it so the client can open it on demand.
-        pDockWin->SetFloatingSize(Size(pDockWin->GetSizePixel().Width() * GetWindow()->GetDPIScaleFactor(),
+        pDockWin->SetFloatingSize(Size(pDockWin->GetSizePixel().Width(),
                                        pDockWin->GetSizePixel().Height()));
         pDockWin->SetFloatingMode(true);
     }
@@ -84,7 +84,7 @@ sal_Int32 SidebarChildWindow::GetDefaultWidth(vcl::Window const* pWindow)
         const static sal_Int32 nMaxPropertyPageWidth(146);
 
         return pWindow->LogicToPixel(Point(nMaxPropertyPageWidth,1), MapMode(MapUnit::MapAppFont)).X()
-            + TabBar::GetDefaultWidth() * pWindow->GetDPIScaleFactor();
+            + TabBar::GetDefaultWidth();
     }
     else
         return 0;
