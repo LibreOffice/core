@@ -128,6 +128,9 @@ void SAL_CALL TagWindowAsModified::disposing(const css::lang::EventObject& aEven
     SolarMutexGuard g;
 
     css::uno::Reference< css::frame::XFrame > xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
+    if (xFrame.is())
+        xFrame->addFrameActionListener(this);
+
     if (
         (xFrame.is ()           ) &&
         (aEvent.Source == xFrame)
