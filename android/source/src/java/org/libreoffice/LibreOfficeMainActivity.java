@@ -365,7 +365,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
      * Save a new document
      * */
     public void saveAs(){
-        LOKitShell.sendSaveAsEvent(mInputFile.getPath(), FileUtilities.getExtension(mInputFile.getPath()).substring(1));
+        LOKitShell.sendSaveCopyAsEvent(mInputFile.getPath(), FileUtilities.getExtension(mInputFile.getPath()).substring(1));
     }
 
     /**
@@ -1057,7 +1057,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
             if (mTempSlideShowFile.exists() && !isDocumentChanged) {
                 startPresentation("file://" + tempPath);
             } else {
-                LOKitShell.sendSaveAsEvent(tempPath, "svg");
+                LOKitShell.sendSaveCopyAsEvent(tempPath, "svg");
             }
         }
     }

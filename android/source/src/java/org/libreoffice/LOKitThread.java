@@ -265,7 +265,7 @@ class LOKitThread extends Thread {
             refresh();
             LOKitShell.hideProgressSpinner(mContext);
 
-            mTileProvider.saveDocumentAs(filePath);
+            mTileProvider.saveDocumentAs(filePath, false);
         } else {
             closeDocument();
         }
@@ -274,11 +274,11 @@ class LOKitThread extends Thread {
     /**
      * Save the currently loaded document.
      */
-    private void saveDocumentAs(String filePath, String fileType) {
+    private void saveDocumentAs(String filePath, String fileType, boolean bTakeOwnership) {
        if (mTileProvider == null) {
            Log.e(LOGTAG, "Error in saving, Tile Provider instance is null");
        } else {
-           mTileProvider.saveDocumentAs(filePath, fileType);
+           mTileProvider.saveDocumentAs(filePath, fileType, bTakeOwnership);
        }
     }
 
@@ -305,7 +305,10 @@ class LOKitThread extends Thread {
                 loadNewDocument(event.filePath, event.fileType);
                 break;
             case LOEvent.SAVE_AS:
-                saveDocumentAs(event.filePath, event.fileType);
+                saveDocumentAs(event.filePath, event.fileType, true);
+                break;
+            case LOEvent.SAVE_COPY_AS:
+                saveDocumentAs(event.filePath, event.fileType, false);
                 break;
             case LOEvent.RESUME:
                 resumeDocument(event.mString, event.mPartIndex);
