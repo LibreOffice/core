@@ -17,7 +17,6 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libcdr))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libcdr, \
     external/libcdr/libcdr-visibility-win.patch \
-    external/libcdr/libcdr-no-icu-boolean.patch.1 \
     external/libcdr/ax_gcc_func_attribute.m4.patch \
 ))
 
