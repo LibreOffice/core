@@ -59,7 +59,7 @@ BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize )
     : meTransparent(TransparentType::NONE)
     , mbAlpha(false)
 {
-    if( rBitmapEx.IsEmpty() )
+    if( rBitmapEx.IsEmpty() || aSize.IsEmpty() )
         return;
 
     maBitmap = Bitmap(aSize, rBitmapEx.maBitmap.getPixelFormat());
