@@ -2309,11 +2309,14 @@ OUString SdXImpressDocument::getPartInfo(int nPart)
     OUString aPartInfo;
     const bool bIsVisible = pViewSh->IsVisible(nPart);
     const bool bIsSelected = pViewSh->IsSelected(nPart);
+    const sal_Int16 nMasterPageCount= pViewSh->GetDoc()->GetMasterSdPageCount(pViewSh->GetPageKind());
 
     aPartInfo += "{ \"visible\": \"";
     aPartInfo += OUString::number(static_cast<unsigned int>(bIsVisible));
     aPartInfo += "\", \"selected\": \"";
     aPartInfo += OUString::number(static_cast<unsigned int>(bIsSelected));
+    aPartInfo += "\", \"masterPageCount\": \"";
+    aPartInfo += OUString::number(nMasterPageCount);
     aPartInfo += "\" }";
     return aPartInfo;
 }
