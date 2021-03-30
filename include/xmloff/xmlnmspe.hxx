@@ -145,6 +145,9 @@ const sal_uInt16 XML_NAMESPACE_DSIG =            201;
 const sal_uInt16 XML_NAMESPACE_DS =              202;
 const sal_uInt16 XML_NAMESPACE_XADES132 =        203;
 const sal_uInt16 XML_NAMESPACE_XADES141 =        204;
+// OOXML digital signature extension namespaces, also based on xmldsig-core
+const sal_uInt16 XML_NAMESPACE_MDSSI =           205;
+const sal_uInt16 XML_NAMESPACE_MSODIGSIG =       206;
 
 #endif // INCLUDED_XMLOFF_XMLNMSPE_HXX
 
