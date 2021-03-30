@@ -570,6 +570,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetPageStylePropertyMa
         // This entry is for adding that properties to style import/export
         FILL_PROPERTIES_SW
         { u"BackgroundFullSize", RES_BACKGROUND_FULL_SIZE,     cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
+        { u"RtlGutter", RES_RTL_GUTTER, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
 
         // Added DrawingLayer FillStyle Properties for Header. These need an own unique name,
         // but reuse the same WhichIDs as the regular fill. The implementation will decide to which

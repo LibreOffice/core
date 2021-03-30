@@ -82,6 +82,20 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, flyAtParaAnchor)
     xText->insertTextContent(xAnchor, xFieldmark, false);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testRtlGutter)
+{
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
+                                                   uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Unknown property: RtlGutter
+    auto bRtlGutter = getProperty<bool>(xPageStyle, "RtlGutter");
+    CPPUNIT_ASSERT(!bRtlGutter);
+    xPageStyle->setPropertyValue("RtlGutter", uno::makeAny(true));
+    bRtlGutter = getProperty<bool>(xPageStyle, "RtlGutter");
+    CPPUNIT_ASSERT(bRtlGutter);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
