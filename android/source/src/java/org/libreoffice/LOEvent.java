@@ -42,6 +42,7 @@ public class LOEvent implements Comparable<LOEvent> {
     public static final int REFRESH = 21;
     public static final int PAGE_SIZE_CHANGED = 22;
     public static final int UNO_COMMAND_NOTIFY = 23;
+    public static final int SAVE_COPY_AS = 24;
 
 
     public final int mType;

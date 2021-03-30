@@ -42,7 +42,7 @@ class LOKitTileProvider implements TileProvider {
     private static int TILE_SIZE = 256;
     private final float mTileWidth;
     private final float mTileHeight;
-    private final String mInputFile;
+    private String mInputFile;
     private Office mOffice;
     private Document mDocument;
     private boolean mIsReady = false;
@@ -298,11 +298,16 @@ class LOKitTileProvider implements TileProvider {
 
 
     @Override
-    public void saveDocumentAs(final String filePath, String format) {
+    public void saveDocumentAs(final String filePath, String format, boolean takeOwnership) {
+        String options = "";
+        if (takeOwnership) {
+            options = "TakeOwnership";
+        }
+
         final String newFilePath = "file://" + filePath;
         Log.d("saveFilePathURL", newFilePath);
         LOKitShell.showProgressSpinner(mContext);
-        mDocument.saveAs(newFilePath, format, "");
+        mDocument.saveAs(newFilePath, format, options);
         if (!mOffice.getError().isEmpty()){
             Log.e("Save Error", mOffice.getError());
             if (format.equals("svg")) {
@@ -344,6 +349,7 @@ class LOKitTileProvider implements TileProvider {
                     }
                 });
             } else {
+                mInputFile = filePath;
                 LOKitShell.getMainHandler().post(new Runnable() {
                     @Override
                     public void run() {
@@ -357,16 +363,16 @@ class LOKitTileProvider implements TileProvider {
     }
 
     @Override
-    public void saveDocumentAs(final String filePath) {
+    public void saveDocumentAs(final String filePath, boolean takeOwnership) {
         final int docType = mDocument.getDocumentType();
         if (docType == Document.DOCTYPE_TEXT)
-            saveDocumentAs(filePath, "odt");
+            saveDocumentAs(filePath, "odt", takeOwnership);
         else if (docType == Document.DOCTYPE_SPREADSHEET)
-            saveDocumentAs(filePath, "ods");
+            saveDocumentAs(filePath, "ods", takeOwnership);
         else if (docType == Document.DOCTYPE_PRESENTATION)
-            saveDocumentAs(filePath, "odp");
+            saveDocumentAs(filePath, "odp", takeOwnership);
         else if (docType == Document.DOCTYPE_DRAWING)
-            saveDocumentAs(filePath, "odg");
+            saveDocumentAs(filePath, "odg", takeOwnership);
         else
             Log.w(LOGTAG, "Cannot determine file format from document. Not saving.");
     }
@@ -385,7 +391,7 @@ class LOKitTileProvider implements TileProvider {
             mDocument.saveAs("file://"+cacheFile,"pdf","");
             printDocument(cacheFile);
         }else{
-            saveDocumentAs(dir+"/"+file,"pdf");
+            saveDocumentAs(dir+"/"+file,"pdf", false);
         }
     }
 
@@ -435,7 +441,7 @@ class LOKitTileProvider implements TileProvider {
             File input = new File(mInputFile);
             final String cacheFile = cacheDir + "/lo_cached_" + input.getName();
             String path = input.getAbsolutePath();
-            saveDocumentAs(path, format);
+            saveDocumentAs(path, format, true);
             (new File(cacheFile)).delete();
         }else{
             mContext.saveDocument();

@@ -23,14 +23,22 @@ public interface TileProvider {
 
     /**
      * Save the current document under the given path.
+     * @param takeOwnership Whether to take ownership of the new file,
+     *                      i.e. whether the current document is changed to the
+     *                      newly saved document (takeOwnership = true),
+     *                      as compared to just saving a copy of the current document
+     *                      or exporting to a different file format.
+     *                      Must be 'false' when using this method for export to e.g. PNG or PDF.
      */
-    void saveDocumentAs(String filePath, String format);
+    void saveDocumentAs(String filePath, String format, boolean takeOwnership);
 
     /**
      * Saves the current document under the given path,
      * using the default file format.
+     * @param takeOwnership (s. documentation for
+     *                      'saveDocumentAs(String filePath, String format, boolean takeOwnership)')
      */
-    void saveDocumentAs(String filePath);
+    void saveDocumentAs(String filePath, boolean takeOwnership);
 
     /**
      * Returns the page width in pixels.

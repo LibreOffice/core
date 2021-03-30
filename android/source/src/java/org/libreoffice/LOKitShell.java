@@ -119,6 +119,10 @@ public class LOKitShell {
         LOKitShell.sendEvent(new LOEvent(filePath, fileFormat, LOEvent.SAVE_AS));
     }
 
+    public static void sendSaveCopyAsEvent(String filePath, String fileFormat) {
+        LOKitShell.sendEvent(new LOEvent(filePath, fileFormat, LOEvent.SAVE_COPY_AS));
+    }
+
     public static void sendResumeEvent(String inputFile, int partIndex) {
         LOKitShell.sendEvent(new LOEvent(LOEvent.RESUME, inputFile, partIndex));
     }
