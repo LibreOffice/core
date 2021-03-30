@@ -219,10 +219,10 @@
                     "dest-filename": "external/tarballs/libabw-0.1.3.tar.xz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libcdr-0.1.6.tar.xz",
-                    "sha256": "01cd00b04a030977e544433c2d127c997205332cd9b8e35ec0ee17110da7f861",
+                    "url": "https://dev-www.libreoffice.org/src/libcdr-0.1.7.tar.xz",
+                    "sha256": "5666249d613466b9aa1e987ea4109c04365866e9277d80f6cd9663e86b8ecdd4",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libcdr-0.1.6.tar.xz"
+                    "dest-filename": "external/tarballs/libcdr-0.1.7.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libcmis-0.5.2.tar.xz",
