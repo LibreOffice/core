@@ -558,6 +558,9 @@ sal_Int16 ConvertNumberingType(const sal_Int32 nFmt, const sal_Int16 nDefault)
         case NS_ooxml::LN_Value_ST_NumberFormat_arabicAlpha:
             nRet = style::NumberingType::CHARS_ARABIC;
             break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_arabicAbjad:
+            nRet = style::NumberingType::CHARS_ARABIC_ABJAD;
+            break;
         case NS_ooxml::LN_Value_ST_NumberFormat_hindiVowels:
             nRet = style::NumberingType::CHARS_NEPALI;
             break;
@@ -611,7 +614,6 @@ sal_Int16 ConvertNumberingType(const sal_Int32 nFmt, const sal_Int16 nDefault)
     NS_ooxml::LN_Value_ST_NumberFormat_koreanLegal = 91719;
     NS_ooxml::LN_Value_ST_NumberFormat_vietnameseCounting = 91721;
     NS_ooxml::LN_Value_ST_NumberFormat_numberInDash = 91725;
-    NS_ooxml::LN_Value_ST_NumberFormat_arabicAbjad:
     NS_ooxml::LN_Value_ST_NumberFormat_hindiConsonants = 91731;
     NS_ooxml::LN_Value_ST_NumberFormat_hindiNumbers = 91732;
     NS_ooxml::LN_Value_ST_NumberFormat_hindiCounting = 91733;
