@@ -8,7 +8,6 @@
  */
 
 #include "../sdmodeltestbase.hxx"
-#include <config_features.h>
 
 #include "CallbackRecorder.hxx"
 
@@ -28,6 +27,7 @@
 
 #include <sdpage.hxx>
 #include <svx/svdograf.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 
@@ -161,7 +161,6 @@ void lcl_replace(const OUString& rKey, const OUString& rReplace, bool bAll = fal
     Scheduler::ProcessEventsToIdle();
 }
 
-#if HAVE_FEATURE_PDFIUM
 SdrObject* lclGetSelectedObject(sd::ViewShell* pViewShell)
 {
     SdrView* pSdrView = pViewShell->GetView();
@@ -170,7 +169,6 @@ SdrObject* lclGetSelectedObject(sd::ViewShell* pViewShell)
     SdrObject* pObject = rMarkList.GetMark(0)->GetMarkedSdrObj();
     return pObject;
 }
-#endif
 
 } // end anonymous namespace
 
@@ -285,7 +283,12 @@ void LOKitSearchTest::testDontSearchInMasterPages()
 
 void LOKitSearchTest::testSearchInPDFNonExisting()
 {
-#if HAVE_FEATURE_PDFIUM
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+    {
+        return;
+    }
+
     SdXImpressDocument* pXImpressDocument = createDoc("PDFSearch.pdf");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
@@ -308,12 +311,16 @@ void LOKitSearchTest::testSearchInPDFNonExisting()
     lcl_search("NonExisting");
 
     CPPUNIT_ASSERT_EQUAL(false, mpCallbackRecorder->m_bFound);
-#endif
 }
 
 void LOKitSearchTest::testSearchInPDF()
 {
-#if HAVE_FEATURE_PDFIUM
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+    {
+        return;
+    }
+
     SdXImpressDocument* pXImpressDocument = createDoc("PDFSearch.pdf");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
@@ -356,12 +363,16 @@ void LOKitSearchTest::testSearchInPDF()
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(3763, 1331), Size(1433, 484)),
                          mpCallbackRecorder->m_aSelection[0]);
-#endif
 }
 
 void LOKitSearchTest::testSearchInPDFOnePDFObject()
 {
-#if HAVE_FEATURE_PDFIUM
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+    {
+        return;
+    }
+
     SdXImpressDocument* pXImpressDocument = createDoc("OnePDFObject.odg");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
@@ -392,12 +403,16 @@ void LOKitSearchTest::testSearchInPDFOnePDFObject()
 
     CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
     CPPUNIT_ASSERT_EQUAL(2, mpCallbackRecorder->m_nSearchResultCount);
-#endif
 }
 
 void LOKitSearchTest::testSearchInPDFInMultiplePages()
 {
-#if HAVE_FEATURE_PDFIUM
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+    {
+        return;
+    }
+
     SdXImpressDocument* pXImpressDocument = createDoc("PDFSearch.pdf");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
@@ -483,12 +498,16 @@ void LOKitSearchTest::testSearchInPDFInMultiplePages()
     CPPUNIT_ASSERT_EQUAL(0, mpCallbackRecorder->m_aSearchResultPart[0]);
     CPPUNIT_ASSERT_EQUAL(OString("9463, 3382, 1099, 499"),
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
-#endif
 }
 
 void LOKitSearchTest::testSearchInPDFInMultiplePagesBackwards()
 {
-#if HAVE_FEATURE_PDFIUM
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+    {
+        return;
+    }
+
     SdXImpressDocument* pXImpressDocument = createDoc("PDFSearch.pdf");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
@@ -582,14 +601,18 @@ void LOKitSearchTest::testSearchInPDFInMultiplePagesBackwards()
     CPPUNIT_ASSERT_EQUAL(0, mpCallbackRecorder->m_aSearchResultPart[0]);
     CPPUNIT_ASSERT_EQUAL(OString("5592, 5038, 1100, 499"),
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
-#endif
 }
 
 // Test searching in document with mixed objects.
 // We have 2 objects: 1. Text Object, 2. Graphic Object with PDF
 void LOKitSearchTest::testSearchIn2MixedObjects()
 {
-#if HAVE_FEATURE_PDFIUM
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+    {
+        return;
+    }
+
     SdXImpressDocument* pXImpressDocument = createDoc("MixedTest1.odg");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
@@ -669,13 +692,17 @@ void LOKitSearchTest::testSearchIn2MixedObjects()
 
     CPPUNIT_ASSERT_EQUAL(OString("3546, 3174, 738, 402"),
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
-#endif
 }
 
 // Test searching in document with mixed objects. We have 6 objects.
 void LOKitSearchTest::testSearchIn6MixedObjects()
 {
-#if HAVE_FEATURE_PDFIUM
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+    {
+        return;
+    }
+
     SdXImpressDocument* pXImpressDocument = createDoc("MixedTest2.odg");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
@@ -832,7 +859,6 @@ void LOKitSearchTest::testSearchIn6MixedObjects()
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
     CPPUNIT_ASSERT_EQUAL(pPage->GetObj(0), lclGetSelectedObject(pViewShell));
-#endif
 }
 namespace
 {

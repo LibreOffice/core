@@ -40,7 +40,7 @@
 
 
 #include <svx/svdotable.hxx>
-#include <config_features.h>
+#include <vcl/filter/PDFiumLibrary.hxx>
 
 using namespace css;
 using namespace css::animations;
@@ -823,7 +823,12 @@ void SdExportTest::testTdf62176()
 
 void SdExportTest::testEmbeddedPdf()
 {
-#if HAVE_FEATURE_PDFIUM
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+    {
+        return;
+    }
+
     sd::DrawDocShellRef xShell = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/embedded-pdf.odp"), ODP);
     xShell = saveAndReload( xShell.get(), ODP );
     uno::Reference<drawing::XDrawPage> xPage = getPage(0, xShell);
@@ -832,7 +837,6 @@ void SdExportTest::testEmbeddedPdf()
     xShape->getPropertyValue("ReplacementGraphic") >>= xGraphic;
     CPPUNIT_ASSERT(xGraphic.is());
     xShell->DoClose();
-#endif
 }
 
 void SdExportTest::testEmbeddedText()
