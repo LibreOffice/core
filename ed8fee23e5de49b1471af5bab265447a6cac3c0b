@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b3700760_5725ce94",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-03-30T10:50:33Z",
+      "side": 1,
+      "message": "Makes sense to me.",
+      "parentUuid": "d99a6b89_5d9fb560",
+      "range": {
+        "startLine": 368,
+        "startChar": 80,
+        "endLine": 368,
+        "endChar": 87
+      },
+      "revId": "ed8fee23e5de49b1471af5bab265447a6cac3c0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b3fbc2bc_cc853989",
         "filename": "sw/source/filter/ww8/ww8atr.cxx",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "ed8fee23e5de49b1471af5bab265447a6cac3c0b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1900097_ae018eb8",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-03-30T10:50:33Z",
+      "side": 1,
+      "message": "Yes, my understanding is that fill style is the key, it decides if the fill is solid, gradient, etc. And in parallel to that, all of these can be semi-transparent, controlled by fill transparence.",
+      "parentUuid": "b3fbc2bc_cc853989",
+      "range": {
+        "startLine": 374,
+        "startChar": 23,
+        "endLine": 374,
+        "endChar": 37
+      },
+      "revId": "ed8fee23e5de49b1471af5bab265447a6cac3c0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
