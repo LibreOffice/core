@@ -126,6 +126,8 @@ void BitmapRenderTest::testDrawAlphaBitmapEx()
 {
 // TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
 #ifndef MACOSX
+    if (isWindowsRDP())
+        return;
     ScopedVclPtrInstance<VirtualDevice> pVDev;
     pVDev->SetOutputSizePixel(Size(8, 8));
     pVDev->SetBackground(Wallpaper(COL_WHITE));
