@@ -432,6 +432,7 @@ void ScUndoRenameTab::DoChange( SCTAB nTabP, const OUString& rName ) const
     rDoc.RenameTab( nTabP, rName );
 
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );    // Navigator
+    SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesRenamed ) );    // Name Box
 
     pDocShell->PostPaintGridAll();
     pDocShell->PostPaintExtras();
