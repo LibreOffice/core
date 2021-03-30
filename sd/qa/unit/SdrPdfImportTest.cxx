@@ -10,18 +10,8 @@
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 
-#include <config_features.h>
-
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/propertysequence.hxx>
-
-#if HAVE_FEATURE_PDFIUM
-// Prevent workdir/UnpackedTarball/pdfium/public/fpdfview.h from including windows.h in a way that
-// it will define e.g. Yield as a macro:
-#include <prewin.h>
-#include <postwin.h>
-#include <fpdfview.h>
-#endif
 
 #include <unotools/tempfile.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -71,7 +61,13 @@ void SdrPdfImportTest::tearDown()
 // convert the PDF content into objects/shapes.
 CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportSimpleText)
 {
-#if HAVE_FEATURE_PDFIUM && !defined(_WIN32)
+#if !defined(_WIN32)
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+    {
+        return;
+    }
+
     // We need to enable PDFium import (and make sure to disable after the test)
     bool bResetEnvVar = false;
     if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
@@ -136,13 +132,18 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportSimpleText)
     const EditTextObject& aEdit = pOutlinerParagraphObject->GetTextObject();
     OUString sText = aEdit.GetText(0);
     CPPUNIT_ASSERT_EQUAL(OUString("This is PDF!"), sText);
-
-#endif // HAVE_FEATURE_PDFIUM
+#endif
 }
 
 CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
 {
-#if HAVE_FEATURE_PDFIUM && !defined(_WIN32)
+#if !defined(_WIN32)
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+    {
+        return;
+    }
+
     // We need to enable PDFium import (and make sure to disable after the test)
     bool bResetEnvVar = false;
     if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
@@ -295,7 +296,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
         CPPUNIT_ASSERT_EQUAL(false, bool(aDateTime.IsUTC));
     }
 
-#endif // HAVE_FEATURE_PDFIUM
+#endif
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

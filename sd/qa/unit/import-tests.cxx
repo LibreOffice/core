@@ -9,7 +9,6 @@
 
 #include <sal/config.h>
 
-#include <config_features.h>
 #include <config_poppler.h>
 #include <memory>
 #include <ostream>
@@ -96,6 +95,7 @@
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/dibtools.hxx>
 #include <svx/svdograf.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
 
 using namespace ::com::sun::star;
 
@@ -154,9 +154,7 @@ public:
     void testBnc862510_6();
     void testBnc862510_7();
 #if ENABLE_PDFIMPORT
-#if HAVE_FEATURE_PDFIUM
     void testPDFImportShared();
-#endif
 #if defined(IMPORT_PDF_ELEMENTS)
     void testPDFImport();
     void testPDFImportSkipImages();
@@ -273,9 +271,7 @@ public:
     CPPUNIT_TEST(testBnc862510_6);
     CPPUNIT_TEST(testBnc862510_7);
 #if ENABLE_PDFIMPORT
-#if HAVE_FEATURE_PDFIUM
     CPPUNIT_TEST(testPDFImportShared);
-#endif
 #if defined(IMPORT_PDF_ELEMENTS)
     CPPUNIT_TEST(testPDFImport);
     CPPUNIT_TEST(testPDFImportSkipImages);
@@ -1398,9 +1394,14 @@ void SdImportTest::testBnc862510_7()
 // import+break and then check the results. But that isn't straight-forward and
 // currently await volunteering time to implement.
 
-#if HAVE_FEATURE_PDFIUM
 void SdImportTest::testPDFImportShared()
 {
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+    {
+        return;
+    }
+
     comphelper::LibreOfficeKit::setActive();
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pdf/multipage.pdf"), PDF);
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
@@ -1459,7 +1460,6 @@ void SdImportTest::testPDFImportShared()
     xDocShRef->DoClose();
     comphelper::LibreOfficeKit::setActive(false);
 }
-#endif
 
 #if defined(IMPORT_PDF_ELEMENTS)
 
