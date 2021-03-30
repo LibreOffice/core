@@ -179,17 +179,16 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         // create TextCursorLayer
         mDocumentOverlay = new DocumentOverlay(this, layerView);
 
-        // New document type string is not null, meaning we want to open a new document
+        mbISReadOnlyMode = !isExperimentalMode();
+
         if (getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY) != null) {
+            // New document type string is not null, meaning we want to open a new document
             String newDocumentType = getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY);
             String newFilePath = getIntent().getStringExtra(LibreOfficeUIActivity.NEW_FILE_PATH_KEY);
 
             // Load the new document
             loadNewDocument(newFilePath, newDocumentType);
-        }
-
-        mbISReadOnlyMode = !isExperimentalMode();
-        if (getIntent().getData() != null) {
+        } else if (getIntent().getData() != null) {
             if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
                 if (copyFileToTemp() && mTempFile != null) {
                     mInputFile = mTempFile;
@@ -218,9 +217,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                         "org.libreoffice.document_uri");
             }
         } else {
-            if (!isNewDocument) {
-                mInputFile = new File(DEFAULT_DOC_PATH);
-            }
+            mInputFile = new File(DEFAULT_DOC_PATH);
         }
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -362,13 +359,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     }
 
     /**
-     * Save a new document
-     * */
-    public void saveAs(){
-        LOKitShell.sendSaveCopyAsEvent(mInputFile.getPath(), FileUtilities.getExtension(mInputFile.getPath()).substring(1));
-    }
-
-    /**
      * Save the document and invoke save on document provider to upload the file
      * to the cloud if necessary.
      */
@@ -387,6 +377,17 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         if (documentUri != null) {
             // case where file was opened using IDocumentProvider from within LO app
             saveFilesToCloud();
+        } else if (isNewDocument) {
+            // nothing to do for actual save, the actual (local) file is already handled
+            // by LOKitTileProvider
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(LibreOfficeMainActivity.this, R.string.message_saved,
+                        Toast.LENGTH_SHORT).show();
+                }
+            });
+            setDocumentChanged(false);
         } else {
             // case where file was passed via Intent
             if (isReadOnlyMode() || mInputFile == null || getIntent().getData() == null || !getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT))
@@ -551,11 +552,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
             public void onClick(DialogInterface dialog, int which) {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
-                        if (isNewDocument) {
-                            saveAs();
-                        } else {
-                            mTileProvider.saveDocument();
-                        }
+                        mTileProvider.saveDocument();
                         isDocumentChanged=false;
                         onBackPressed();
                         break;
