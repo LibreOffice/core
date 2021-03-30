@@ -242,6 +242,10 @@ void SAL_CALL TitleHelper::disposing(const css::lang::EventObject& aEvent)
     if ( ! xOwner.is ())
         return;
 
+    css::uno::Reference< css::frame::XFrame > xFrame(xOwner, css::uno::UNO_QUERY);
+    if (xFrame.is())
+        xFrame->removeFrameActionListener(this);
+
     if (xOwner != aEvent.Source)
         return;
 

@@ -317,6 +317,9 @@ void ResourceMenuController::disposing( const css::lang::EventObject& rEvent )
     {
         if ( m_xMenuBarManager.is() )
         {
+            if (m_xFrame.is())
+                m_xFrame->removeFrameActionListener( m_xMenuBarManager );
+
             m_xMenuBarManager->dispose();
             m_xMenuBarManager.clear();
         }
@@ -340,6 +343,9 @@ void ResourceMenuController::disposing()
     m_xDispatchProvider.clear();
     if ( m_xMenuBarManager.is() )
     {
+        if (m_xFrame.is())
+            m_xFrame->removeFrameActionListener( m_xMenuBarManager );
+
         m_xMenuBarManager->dispose();
         m_xMenuBarManager.clear();
     }
