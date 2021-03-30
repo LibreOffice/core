@@ -313,6 +313,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if (pReqArgs->GetItemState(FN_PARAM_2, true, &pItem) == SfxItemState::SET)
                     bAlignToCursor = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
+                bool bForceGlobalName = false;
+                if (pReqArgs->GetItemState(FN_PARAM_3, true, &pItem) == SfxItemState::SET)
+                    bForceGlobalName = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+
                 if ( nSlot == SID_JUMPTOMARK )
                 {
                     //  URL has to be decoded for escaped characters (%20)
@@ -369,8 +373,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 // Is it a named area (first named ranges then database ranges)?
                 else
                 {
+                    const RutlNameScope eScope = (bForceGlobalName ? RUTL_NAMES_GLOBAL : RUTL_NAMES);
                     formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
-                    if( ScRangeUtil::MakeRangeFromName( aAddress, rDoc, nTab, aScRange, RUTL_NAMES, eConv ) ||
+                    if( ScRangeUtil::MakeRangeFromName( aAddress, rDoc, nTab, aScRange, eScope, eConv ) ||
                         ScRangeUtil::MakeRangeFromName( aAddress, rDoc, nTab, aScRange, RUTL_DBASE, eConv ) )
                     {
                         nResult |= ScRefFlags::VALID;
