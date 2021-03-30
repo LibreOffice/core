@@ -45,6 +45,8 @@ using ::com::sun::star::uno::Any;
 #include <unonames.hxx>
 
 #include <scui_def.hxx>
+#include <globstr.hrc>
+#include <scresid.hxx>
 
 static const SfxItemPropertyMapEntry* lcl_GetNamedRangeMap()
 {
@@ -488,21 +490,34 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const OUString& aName,
     {
         ScDocument& rDoc = pDocShell->GetDocument();
         ScRangeName* pNames = GetRangeName_Impl();
-        if (pNames && !pNames->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aName)))
+        // tdf#119457 - check for a valid range name and cell reference
+        switch (ScRangeData::IsNameValid(aName, rDoc))
         {
-            std::unique_ptr<ScRangeName> pNewRanges(new ScRangeName( *pNames ));
-            // GRAM_API for API compatibility.
-            ScRangeData* pNew = new ScRangeData( rDoc, aName, aContent,
-                                                aPos, nNewType,formula::FormulaGrammar::GRAM_API );
-            if ( pNewRanges->insert(pNew) )
-            {
-                pDocShell->GetDocFunc().SetNewRangeNames(std::move(pNewRanges), mbModifyAndBroadcast, GetTab_Impl());
-                bDone = true;
-            }
-            else
-            {
-                pNew = nullptr;
-            }
+            case ScRangeData::NAME_INVALID_CELL_REF:
+                throw new uno::RuntimeException(
+                    "Invalid name. Reference to a cell, or a range of cells not allowed.");
+                break;
+            case ScRangeData::NAME_INVALID_BAD_STRING:
+                throw new uno::RuntimeException(
+                    "Invalid name. Start with a letter, use only letters, numbers and underscore.");
+                break;
+            default:
+                if (pNames && !pNames->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aName)))
+                {
+                    std::unique_ptr<ScRangeName> pNewRanges(new ScRangeName( *pNames ));
+                    // GRAM_API for API compatibility.
+                    ScRangeData* pNew = new ScRangeData( rDoc, aName, aContent,
+                                                        aPos, nNewType,formula::FormulaGrammar::GRAM_API );
+                    if ( pNewRanges->insert(pNew) )
+                    {
+                        pDocShell->GetDocFunc().SetNewRangeNames(std::move(pNewRanges), mbModifyAndBroadcast, GetTab_Impl());
+                        bDone = true;
+                    }
+                    else
+                    {
+                        pNew = nullptr;
+                    }
+                }
         }
     }
 
