@@ -349,7 +349,9 @@ class LOKitTileProvider implements TileProvider {
                     }
                 });
             } else {
-                mInputFile = filePath;
+                if (takeOwnership) {
+                    mInputFile = filePath;
+                }
                 LOKitShell.getMainHandler().post(new Runnable() {
                     @Override
                     public void run() {
