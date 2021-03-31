@@ -86,7 +86,7 @@ void VclComplexTextTest::testArabic()
     CPPUNIT_ASSERT_EQUAL(tools::Long(14), pOutDev->GetTextHeight());
 
     // exact bounding rectangle, not essentially the same as text width/height
-    tools::Rectangle aBoundRect, aTestRect( 0, 1, 71, 15 );
+    tools::Rectangle aBoundRect, aTestRect(isWindowsRDP() ? 1 : 0, 1, 71, 15);
     pOutDev->GetTextBoundRect(aBoundRect, aOneTwoThree);
     CPPUNIT_ASSERT_EQUAL(aTestRect, aBoundRect);
 
