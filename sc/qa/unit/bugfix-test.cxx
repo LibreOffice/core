@@ -60,6 +60,7 @@ public:
     void testTdf129789();
     void testTdf130725();
     void testTdf104502_hiddenColsCountedInPageCount();
+    void testTdf131096();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testTdf137576_Measureline);
@@ -83,6 +84,7 @@ public:
     CPPUNIT_TEST(testTdf129789);
     CPPUNIT_TEST(testTdf130725);
     CPPUNIT_TEST(testTdf104502_hiddenColsCountedInPageCount);
+    CPPUNIT_TEST(testTdf131096);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -738,6 +740,13 @@ void ScFiltersTest::testTdf104502_hiddenColsCountedInPageCount()
     CPPUNIT_ASSERT_EQUAL(SCROW(55), nEndRow);
 
     xShell->DoClose();
+}
+
+void ScFiltersTest::testTdf131096()
+{
+    // TODO: declare, initialize ScSimpleFormulaCalculator obj and invoke ScSimpleFormulaCalculator::GetErrCode()
+    // FIXME: can't declare ScSimpleFormulaCalculator object here
+    //std::unique_ptr<ScSimpleFormulaCalculator> pScFormulaDlg = std::make_unique<ScSimpleFormulaCalculator>();
 }
 
 ScFiltersTest::ScFiltersTest()
