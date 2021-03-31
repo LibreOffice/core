@@ -2735,13 +2735,15 @@ void MetaMapModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
     VersionCompatWrite aCompat(rOStm, 1);
-    WriteMapMode( rOStm, maMapMode );
+    TypeSerializer aSerializer(rOStm);
+    aSerializer.writeMapMode(maMapMode);
 }
 
 void MetaMapModeAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     VersionCompatRead aCompat(rIStm);
-    ReadMapMode( rIStm, maMapMode );
+    TypeSerializer aSerializer(rIStm);
+    aSerializer.readMapMode(maMapMode);
 }
 
 MetaFontAction::MetaFontAction() :
