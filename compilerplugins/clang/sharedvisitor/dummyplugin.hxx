@@ -9,8 +9,7 @@
  *
  */
 
-#ifndef DUMMYPLUGIN_H
-#define DUMMYPLUGIN_H
+#pragma once
 
 #include "config_clang.h"
 
@@ -76,7 +75,5 @@ public:
 };
 
 } // namespace
-
-#endif // DUMMYPLUGIN_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
