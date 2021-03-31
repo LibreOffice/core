@@ -115,7 +115,7 @@ class ImplEESdrWriter
     std::unique_ptr<EscherSolverContainer> mpSolverContainer;
 
     void                ImplInitPageValues();
-    void                ImplWritePage( EscherSolverContainer& rSolver );
+    void                ImplWritePage( EscherSolverContainer& rSolver, bool ooxmlExport );
     sal_uInt32          ImplWriteShape( ImplEESdrObject& rObj,
                             EscherSolverContainer& rSolver,
                             const bool bOOxmlExport = false );  // returns ShapeID
@@ -135,7 +135,7 @@ public:
     EscherExHostAppData* ImplGetHostData() { return mpHostAppData; }
     bool                ImplInitPage( const SdrPage& rPage );
     bool                ImplInitUnoShapes( const css::uno::Reference< css::drawing::XShapes >& rxShapes );
-    void                ImplWriteCurrentPage();
+    void                ImplWriteCurrentPage( bool ooxmlExport );
     sal_uInt32          ImplWriteTheShape( ImplEESdrObject& rObj, bool ooxmlExport );
     void                ImplExitPage();
 };
