@@ -187,6 +187,30 @@
       "revId": "29fd09cb719fefa459acabc37a0f1ccc6648a93f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f5f3b24b_481d46c9",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-31T07:31:32Z",
+      "side": 1,
+      "message": "\u003e -2 was to account for the null terminating byte\n\n.. and it was wrong, since you subtracted two *characters*, not two bytes - you did that *after* you divided by 2.\n\n\u003e but I removed the wcsnicmp  to do a std::wstring substring check because the process name could be prefixed with \"\\\\?\\\"\n\nPlease do not use a string class just to use its \"find\". You have wcsstr for that.",
+      "parentUuid": "e79ee3b0_6ce16070",
+      "range": {
+        "startLine": 94,
+        "startChar": 59,
+        "endLine": 94,
+        "endChar": 60
+      },
+      "revId": "29fd09cb719fefa459acabc37a0f1ccc6648a93f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

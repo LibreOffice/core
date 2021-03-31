@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cdc91698_71bd09f2",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-31T07:31:32Z",
+      "side": 1,
+      "message": "Please flatten this nesting of ifs: you may just return false at every failure, and continue on the same level.",
+      "revId": "30d1983944d43bc7b4b1d50520a4ea0702ad3f3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
