@@ -64,6 +64,7 @@
 #include <editeng/keepitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/opaqitem.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <svx/svdouno.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <sfx2/sfxbasemodel.hxx>
@@ -3195,9 +3196,11 @@ void RtfAttributeOutput::FormatLRSpace(const SvxLRSpaceItem& rLRSpace)
     {
         // Wrap: top and bottom spacing, convert from twips to EMUs.
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "dxWrapDistLeft", OString::number(rLRSpace.GetLeft() * 635)));
+            "dxWrapDistLeft", OString::number(o3tl::convert(rLRSpace.GetLeft(), o3tl::Length::twip,
+                                                            o3tl::Length::emu))));
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "dxWrapDistRight", OString::number(rLRSpace.GetRight() * 635)));
+            "dxWrapDistRight", OString::number(o3tl::convert(
+                                   rLRSpace.GetRight(), o3tl::Length::twip, o3tl::Length::emu))));
     }
 }
 
@@ -3287,9 +3290,11 @@ void RtfAttributeOutput::FormatULSpace(const SvxULSpaceItem& rULSpace)
     {
         // Wrap: top and bottom spacing, convert from twips to EMUs.
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "dyWrapDistTop", OString::number(rULSpace.GetUpper() * 635)));
+            "dyWrapDistTop", OString::number(o3tl::convert(rULSpace.GetUpper(), o3tl::Length::twip,
+                                                           o3tl::Length::emu))));
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "dyWrapDistBottom", OString::number(rULSpace.GetLower() * 635)));
+            "dyWrapDistBottom", OString::number(o3tl::convert(
+                                    rULSpace.GetLower(), o3tl::Length::twip, o3tl::Length::emu))));
     }
 }
 
@@ -3531,13 +3536,17 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
     {
         // Borders: spacing to contents, convert from twips to EMUs.
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "dxTextLeft", OString::number(rBox.GetDistance(SvxBoxItemLine::LEFT) * 635)));
+            "dxTextLeft", OString::number(o3tl::convert(rBox.GetDistance(SvxBoxItemLine::LEFT),
+                                                        o3tl::Length::twip, o3tl::Length::emu))));
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "dyTextTop", OString::number(rBox.GetDistance(SvxBoxItemLine::TOP) * 635)));
+            "dyTextTop", OString::number(o3tl::convert(rBox.GetDistance(SvxBoxItemLine::TOP),
+                                                       o3tl::Length::twip, o3tl::Length::emu))));
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "dxTextRight", OString::number(rBox.GetDistance(SvxBoxItemLine::RIGHT) * 635)));
+            "dxTextRight", OString::number(o3tl::convert(rBox.GetDistance(SvxBoxItemLine::RIGHT),
+                                                         o3tl::Length::twip, o3tl::Length::emu))));
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-            "dyTextBottom", OString::number(rBox.GetDistance(SvxBoxItemLine::BOTTOM) * 635)));
+            "dyTextBottom", OString::number(o3tl::convert(rBox.GetDistance(SvxBoxItemLine::BOTTOM),
+                                                          o3tl::Length::twip, o3tl::Length::emu))));
 
         const editeng::SvxBorderLine* pLeft = rBox.GetLine(SvxBoxItemLine::LEFT);
         const editeng::SvxBorderLine* pRight = rBox.GetLine(SvxBoxItemLine::RIGHT);
@@ -3555,7 +3564,7 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
             {
                 double const fConverted(editeng::ConvertBorderWidthToWord(
                     pTop->GetBorderLineStyle(), pTop->GetWidth()));
-                sal_Int32 nWidth = fConverted * 635; // Twips -> EMUs
+                sal_Int32 nWidth = o3tl::convert(fConverted, o3tl::Length::twip, o3tl::Length::emu);
                 m_aFlyProperties.push_back(
                     std::make_pair<OString, OString>("lineWidth", OString::number(nWidth)));
             }
