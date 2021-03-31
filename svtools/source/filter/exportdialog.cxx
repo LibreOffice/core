@@ -600,6 +600,8 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     , mxRbBinary(m_xBuilder->weld_radio_button("binarycb"))
     , mxRbText(m_xBuilder->weld_radio_button("textcb"))
     , mxEPSGrid(m_xBuilder->weld_widget("epsgrid"))
+    , mxModifyDimension(m_xBuilder->weld_radio_button("modifydimensionscb"))
+    , mxModifyResolution(m_xBuilder->weld_radio_button("modifyresolutioncb"))
     , mxCbEPSPreviewTIFF(m_xBuilder->weld_check_button("tiffpreviewcb"))
     , mxCbEPSPreviewEPSI(m_xBuilder->weld_check_button("epsipreviewcb"))
     , mxRbEPSLevel1(m_xBuilder->weld_radio_button("level1rb"))
@@ -682,6 +684,9 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     mxCbInterlaced->connect_toggled( LINK( this, ExportDialog, UpdateHdl ) );
 
     mxCbSaveTransparency->connect_toggled( LINK( this, ExportDialog, UpdateHdl ) );
+
+    mxModifyDimension->connect_toggled( LINK( this, ExportDialog, UpdateLock ) );
+    mxModifyResolution->connect_toggled( LINK( this, ExportDialog, UpdateLock ) );
 
     mxCbEPSPreviewTIFF->connect_toggled( LINK( this, ExportDialog, UpdateHdl ) );
     mxCbEPSPreviewEPSI->connect_toggled( LINK( this, ExportDialog, UpdateHdl ) );
@@ -991,6 +996,24 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdl, weld::ToggleButton&, void)
 {
     updateControls();
 }
+
+IMPL_LINK_NOARG(ExportDialog, UpdateLock, weld::ToggleButton&, void)
+{
+    if (mxModifyResolution->get_active())
+    {
+        mxMfSizeY->set_sensitive(false);
+        mxMfSizeX->set_sensitive(false);
+        mxNfResolution->set_sensitive(true);
+    }
+    else
+    {
+        mxMfSizeY->set_sensitive(true);
+        mxMfSizeX->set_sensitive(true);
+        mxNfResolution->set_sensitive(false);
+    }
+    updateControls();
+}
+
 
 IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeX, weld::SpinButton&, void)
 {
