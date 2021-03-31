@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d3e932f1_2748bb01",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-31T08:35:37Z",
+      "side": 1,
+      "message": "https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getlongpathnamew:\n\n\u003e lpszLongPath\n\u003e ... You can use the same buffer you used for the lpszShortPath parameter.\n\nso you could omit the two additional buffers here :-) but this is not a blocker IMO.",
+      "range": {
+        "startLine": 99,
+        "startChar": 9,
+        "endLine": 99,
+        "endChar": 25
+      },
+      "revId": "4650a144ce994b191d245f105bac31c20df03c25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ef5ab54_745ec1a8",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-31T08:35:37Z",
+      "side": 1,
+      "message": "Here you use two string classes: std::wstring, and OUString below. You could have one \u0027OUString aNonDefaults\u0027, and simplify this. (I generally try to avoid mixing string classes, and try to use our O(U)String wherever possible)",
+      "revId": "4650a144ce994b191d245f105bac31c20df03c25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
