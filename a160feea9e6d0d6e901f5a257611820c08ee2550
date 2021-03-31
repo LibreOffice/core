@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c2e0ff8_c9517410",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-03-31T00:11:53Z",
+      "side": 1,
+      "message": ".uno:NewGlobalDoc    is the URI that will give the link to the help page.",
+      "range": {
+        "startLine": 240,
+        "startChar": 192,
+        "endLine": 240,
+        "endChar": 195
+      },
+      "revId": "a160feea9e6d0d6e901f5a257611820c08ee2550",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7888cb8_a441d8f5",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2021-03-31T00:11:53Z",
+      "side": 1,
+      "message": "suggest to delete this phrase -- partly because the phrase is not grammatically correct, and partly because the dialog also offers separation by paragraph style.",
+      "range": {
+        "startLine": 240,
+        "startChar": 138,
+        "endLine": 240,
+        "endChar": 187
+      },
+      "revId": "a160feea9e6d0d6e901f5a257611820c08ee2550",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
