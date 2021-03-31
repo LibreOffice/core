@@ -60,6 +60,13 @@ void SAL_CALL OOXMLSecParser::startElement(const OUString& rName, const uno::Ref
         if (!aId.isEmpty())
             m_pXSecController->setId(aId);
     }
+    else if (rName == "SignatureMethod")
+    {
+        OUString ouAlgorithm = xAttribs->getValueByName("Algorithm");
+        if (ouAlgorithm == ALGO_ECDSASHA1 || ouAlgorithm == ALGO_ECDSASHA256
+            || ouAlgorithm == ALGO_ECDSASHA512)
+            m_pXSecController->setSignatureMethod(svl::crypto::SignatureMethodAlgorithm::ECDSA);
+    }
     else if (rName == "Reference")
     {
         OUString aURI = xAttribs->getValueByName("URI");
