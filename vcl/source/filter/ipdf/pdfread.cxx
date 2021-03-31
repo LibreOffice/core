@@ -9,11 +9,7 @@
 
 #include <vcl/pdfread.hxx>
 
-#include <config_features.h>
-
-#if HAVE_FEATURE_PDFIUM
 #include <tools/UnitConversion.hxx>
-#endif
 
 #include <vcl/graph.hxx>
 #include <bitmap/BitmapWriteAccess.hxx>
@@ -27,8 +23,6 @@ using namespace com::sun::star;
 
 namespace
 {
-#if HAVE_FEATURE_PDFIUM
-
 /// Convert to inch, then assume 96 DPI.
 inline double pointToPixel(const double fPoint, const double fResolutionDPI)
 {
@@ -96,14 +90,6 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream)
 
     return rOutStream.good();
 }
-#else
-bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream)
-{
-    rInStream.Seek(STREAM_SEEK_TO_BEGIN);
-    rOutStream.WriteStream(rInStream, STREAM_SEEK_TO_END);
-    return rOutStream.good();
-}
-#endif // HAVE_FEATURE_PDFIUM
 
 BinaryDataContainer createBinaryDataContainer(SvStream& rStream)
 {
@@ -131,9 +117,12 @@ namespace vcl
 size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& rBitmaps,
                         const size_t nFirstPage, int nPages, const basegfx::B2DTuple* pSizeHint)
 {
-#if HAVE_FEATURE_PDFIUM
     const double fResolutionDPI = 96;
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+    {
+        return 0;
+    }
 
     // Load the buffer using pdfium.
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = pPdfium->openDocument(pBuffer, nSize);
@@ -217,15 +206,6 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
     }
 
     return rBitmaps.size();
-#else
-    (void)pBuffer;
-    (void)nSize;
-    (void)rBitmaps;
-    (void)nFirstPage;
-    (void)nPages;
-    (void)pSizeHint;
-    return 0;
-#endif // HAVE_FEATURE_PDFIUM
 }
 
 bool importPdfVectorGraphicData(SvStream& rStream,
@@ -253,7 +233,6 @@ bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
     return true;
 }
 
-#if HAVE_FEATURE_PDFIUM
 namespace
 {
 basegfx::B2DPoint convertFromPDFInternalToHMM(basegfx::B2DSize const& rInputPoint,
@@ -431,11 +410,9 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
 }
 
 } // end anonymous namespace
-#endif
 
 size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rGraphics)
 {
-#if HAVE_FEATURE_PDFIUM
     std::unique_ptr<SvStream> xStream(
         ::utl::UcbStreamHelper::CreateStream(rURL, StreamMode::READ | StreamMode::SHARE_DENYNONE));
 
@@ -448,6 +425,10 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rG
     auto pGfxLink = std::make_shared<GfxLink>(aDataContainer, GfxLinkType::NativePdf);
 
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+    {
+        return 0;
+    }
 
     // Load the buffer using pdfium.
     auto pPdfDocument = pPdfium->openDocument(pGfxLink->GetData(), pGfxLink->GetDataSize());
@@ -487,11 +468,6 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rG
     }
 
     return rGraphics.size();
-#else
-    (void)rURL;
-    (void)rGraphics;
-    return 0;
-#endif // HAVE_FEATURE_PDFIUM
 }
 }
 
