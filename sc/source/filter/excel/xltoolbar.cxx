@@ -100,19 +100,20 @@ bool ScCTB::Read( SvStream &rS )
     }
     rS.ReadUInt32( ectbid );
 
-    sal_Int16 nIndexes = tb.getcCL();
-
-    if (nIndexes > 0)
+    sal_Int16 nCL = tb.getcCL();
+    if (nCL > 0)
     {
+        auto nIndexes = o3tl::make_unsigned(nCL);
+
         const size_t nMinRecordSize = 11; // ScTBC's TBCHeader reads min 11 bytes
         const size_t nMaxPossibleRecords = rS.remainingSize() / nMinRecordSize;
-        if (o3tl::make_unsigned(nIndexes) > nMaxPossibleRecords)
+        if (nIndexes > nMaxPossibleRecords)
         {
             SAL_WARN("sc.filter", "ScCTB::Read more entries claimed than stream could contain");
             return false;
         }
 
-        for ( sal_Int16 index = 0; index < nIndexes; ++index )
+        for (decltype(nIndexes) index = 0; index < nIndexes; ++index)
         {
             ScTBC aTBC;
             aTBC.Read( rS );

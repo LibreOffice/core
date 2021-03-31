@@ -531,20 +531,22 @@ SbxVariable* SbxDimArray::Get( SbxArray* pPar )
 
 bool SbxDimArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
-    short nDimension(0);
-    rStrm.ReadInt16( nDimension );
+    short nTmp(0);
+    rStrm.ReadInt16(nTmp);
 
-    if (nDimension > 0)
+    if (nTmp > 0)
     {
+        auto nDimension = o3tl::make_unsigned(nTmp);
+
         const size_t nMinRecordSize = 4;
         const size_t nMaxPossibleRecords = rStrm.remainingSize() / nMinRecordSize;
-        if (o3tl::make_unsigned(nDimension) > nMaxPossibleRecords)
+        if (nDimension > nMaxPossibleRecords)
         {
             SAL_WARN("basic", "SbxDimArray::LoadData more entries claimed than stream could contain");
             return false;
         }
 
-        for (short i = 0; i < nDimension && rStrm.GetError() == ERRCODE_NONE; ++i)
+        for (decltype(nDimension) i = 0; i < nDimension && rStrm.GetError() == ERRCODE_NONE; ++i)
         {
             sal_Int16 lb(0), ub(0);
             rStrm.ReadInt16( lb ).ReadInt16( ub );
