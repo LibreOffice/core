@@ -135,6 +135,8 @@ private:
     std::unique_ptr<weld::RadioButton> mxRbEPSColorFormat2;
     std::unique_ptr<weld::RadioButton> mxRbEPSCompressionLZW;
     std::unique_ptr<weld::RadioButton> mxRbEPSCompressionNone;
+    std::unique_ptr<weld::RadioButton> mxModifyResolution;
+    std::unique_ptr<weld::RadioButton> mxModifyDimension;
 
     std::unique_ptr<weld::Widget> mxInfo;
     std::unique_ptr<weld::Label> mxFtEstimatedSize;
