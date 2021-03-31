@@ -708,6 +708,23 @@ DECLARE_WW8EXPORT_TEST(testPresetDash, "tdf127166_prstDash_Word97.doc")
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
+{
+    auto verify = [this]() {
+        uno::Reference<beans::XPropertySet> xStandard(
+            getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(getProperty<bool>(xStandard, "RtlGutter"));
+    };
+
+    // Given a document with RTL gutter, when loading it:
+    load(mpTestDocumentPath, "rtl-gutter.doc");
+    // Then make sure the section's gutter is still RTL:
+    // Without the accompanying fix in place, this test would have failed as the SPRM was missing.
+    verify();
+    reload(mpFilter, "rtl-gutter.doc");
+    verify();
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf120394, "tdf120394.doc")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
