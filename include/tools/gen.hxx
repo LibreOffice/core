@@ -41,8 +41,8 @@ enum TriState { TRISTATE_FALSE, TRISTATE_TRUE, TRISTATE_INDET };
 class SAL_WARN_UNUSED Pair
 {
 public:
-                        Pair() : nA(0), nB(0) {}
-                        Pair( tools::Long _nA, tools::Long _nB ) : nA(_nA), nB(_nB) {}
+    constexpr Pair() : nA(0), nB(0) {}
+    constexpr Pair( tools::Long _nA, tools::Long _nB ) : nA(_nA), nB(_nB) {}
 
     tools::Long                A() const { return nA; }
     tools::Long                B() const { return nB; }
@@ -73,11 +73,11 @@ class Size;
 class SAL_WARN_UNUSED UNLESS_MERGELIBS(SAL_DLLPUBLIC_EXPORT) Point final : protected Pair
 {
 public:
-                        Point() {}
-                        Point( tools::Long nX, tools::Long nY ) : Pair( nX, nY ) {}
+    constexpr Point() {}
+    constexpr Point( tools::Long nX, tools::Long nY ) : Pair( nX, nY ) {}
 
-    tools::Long                X() const { return nA; }
-    tools::Long                Y() const { return nB; }
+    constexpr tools::Long      X() const { return nA; }
+    constexpr tools::Long      Y() const { return nB; }
 
     void                Move( tools::Long nHorzMove, tools::Long nVertMove );
     void                Move( Size const & s );
@@ -97,8 +97,8 @@ public:
     friend inline Point operator*( const Point &rVal1, const tools::Long nVal2 );
     friend inline Point operator/( const Point &rVal1, const tools::Long nVal2 );
 
-    tools::Long                getX() const { return X(); }
-    tools::Long                getY() const { return Y(); }
+    constexpr tools::Long      getX() const { return X(); }
+    constexpr tools::Long      getY() const { return Y(); }
     void                setX(tools::Long nX)  { nA = nX; }
     void                setY(tools::Long nY)  { nB = nY; }
 
@@ -184,17 +184,17 @@ inline std::basic_ostream<charT, traits> & operator <<(
 class SAL_WARN_UNUSED Size final : protected Pair
 {
 public:
-                    Size() {}
-                    Size( tools::Long nWidth, tools::Long nHeight ) : Pair( nWidth, nHeight ) {}
+    constexpr Size() {}
+    constexpr Size( tools::Long nWidth, tools::Long nHeight ) : Pair( nWidth, nHeight ) {}
 
-    tools::Long            Width() const  { return nA; }
-    tools::Long            Height() const { return nB; }
+    constexpr tools::Long  Width() const  { return nA; }
+    constexpr tools::Long  Height() const { return nB; }
 
     tools::Long            AdjustWidth( tools::Long n ) { nA += n; return nA; }
     tools::Long            AdjustHeight( tools::Long n ) { nB += n; return nB; }
 
-    tools::Long            getWidth() const { return Width(); }
-    tools::Long            getHeight() const { return Height(); }
+    constexpr tools::Long  getWidth() const { return Width(); }
+    constexpr tools::Long  getHeight() const { return Height(); }
     void            setWidth(tools::Long nWidth)  { nA = nWidth; }
     void            setHeight(tools::Long nHeight)  { nB = nHeight; }
 
@@ -242,8 +242,8 @@ inline void Point::Move( Size const & s )
 class SAL_WARN_UNUSED Range final : protected Pair
 {
 public:
-                    Range() {}
-                    Range( tools::Long nMin, tools::Long nMax ) : Pair( nMin, nMax ) {}
+    constexpr Range() {}
+    constexpr Range( tools::Long nMin, tools::Long nMax ) : Pair( nMin, nMax ) {}
 
     tools::Long            Min() const { return nA; }
     tools::Long            Max() const { return nB; }
@@ -380,13 +380,13 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Rectangle final
 {
     static constexpr short RECT_EMPTY = -32767;
 public:
-                        Rectangle();
-                        Rectangle( const Point& rLT, const Point& rRB );
-                        Rectangle( tools::Long nLeft, tools::Long nTop,
-                                   tools::Long nRight, tools::Long nBottom );
+    constexpr Rectangle();
+    constexpr Rectangle( const Point& rLT, const Point& rRB );
+    constexpr Rectangle( tools::Long nLeft, tools::Long nTop,
+                         tools::Long nRight, tools::Long nBottom );
     /// Constructs an empty Rectangle, with top/left at the specified params
-                        Rectangle( tools::Long nLeft, tools::Long nTop );
-                        Rectangle( const Point& rLT, const Size& rSize );
+    constexpr Rectangle( tools::Long nLeft, tools::Long nTop );
+    constexpr Rectangle( const Point& rLT, const Size& rSize );
 
     static Rectangle    Justify( const Point& rLT, const Point& rRB );
 
@@ -490,43 +490,41 @@ private:
 };
 }
 
-inline tools::Rectangle::Rectangle()
-{
-    nLeft = nTop = 0;
-    nRight = nBottom = RECT_EMPTY;
-}
+constexpr inline tools::Rectangle::Rectangle()
+    : nLeft( 0 )
+    , nTop( 0 )
+    , nRight( RECT_EMPTY )
+    , nBottom( RECT_EMPTY )
+{}
 
-inline tools::Rectangle::Rectangle( const Point& rLT, const Point& rRB )
-{
-    nLeft   = rLT.X();
-    nTop    = rLT.Y();
-    nRight  = rRB.X();
-    nBottom = rRB.Y();
-}
+constexpr inline tools::Rectangle::Rectangle( const Point& rLT, const Point& rRB )
+    : nLeft( rLT.X())
+    , nTop( rLT.Y())
+    , nRight( rRB.X())
+    , nBottom( rRB.Y())
+{}
 
-inline tools::Rectangle::Rectangle( tools::Long _nLeft,  tools::Long _nTop,
+constexpr inline tools::Rectangle::Rectangle( tools::Long _nLeft,  tools::Long _nTop,
                              tools::Long _nRight, tools::Long _nBottom )
-{
-    nLeft   = _nLeft;
-    nTop    = _nTop;
-    nRight  = _nRight;
-    nBottom = _nBottom;
-}
+    : nLeft( _nLeft )
+    , nTop( _nTop )
+    , nRight( _nRight )
+    , nBottom( _nBottom )
+{}
 
-inline tools::Rectangle::Rectangle( tools::Long _nLeft,  tools::Long _nTop )
-{
-    nLeft   = _nLeft;
-    nTop    = _nTop;
-    nRight = nBottom = RECT_EMPTY;
-}
+constexpr inline tools::Rectangle::Rectangle( tools::Long _nLeft,  tools::Long _nTop )
+    : nLeft( _nLeft )
+    , nTop( _nTop )
+    , nRight( RECT_EMPTY )
+    , nBottom( RECT_EMPTY )
+{}
 
-inline tools::Rectangle::Rectangle( const Point& rLT, const Size& rSize )
-{
-    nLeft   = rLT.X();
-    nTop    = rLT.Y();
-    nRight  = rSize.Width()  ? nLeft+(rSize.Width()-1) : RECT_EMPTY;
-    nBottom = rSize.Height() ? nTop+(rSize.Height()-1) : RECT_EMPTY;
-}
+constexpr inline tools::Rectangle::Rectangle( const Point& rLT, const Size& rSize )
+    : nLeft( rLT.X())
+    , nTop( rLT.Y())
+    , nRight( rSize.Width()  ? nLeft+(rSize.Width()-1) : RECT_EMPTY )
+    , nBottom( rSize.Height() ? nTop+(rSize.Height()-1) : RECT_EMPTY )
+{}
 
 inline bool tools::Rectangle::IsEmpty() const
 {
