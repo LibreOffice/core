@@ -168,8 +168,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         layerView.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if(keyEvent.getKeyCode() != KeyEvent.KEYCODE_BACK){
-                    isDocumentChanged=true;
+                if(!isReadOnlyMode() && keyEvent.getKeyCode() != KeyEvent.KEYCODE_BACK){
+                    setDocumentChanged(true);
                 }
                 return false;
             }
