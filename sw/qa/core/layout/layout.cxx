@@ -357,6 +357,31 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMirrorMargin)
     CPPUNIT_ASSERT_EQUAL(nGutterTwips, nOldRight - nNewRight);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testRtlGutterMargin)
+{
+    // Given a document with a right margin:
+    SwDoc* pDoc = createSwDoc();
+    uno::Reference<beans::XPropertySet> xStandard(getStyles("PageStyles")->getByName("Standard"),
+                                                  uno::UNO_QUERY);
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwFrame* pPage = pLayout->GetLower();
+    tools::Long nOldRight = pPage->getFramePrintArea().Right();
+
+    // When setting enable RTL gutter mode and setting a gutter margin:
+    xStandard->setPropertyValue("RtlGutter", uno::makeAny(true));
+    sal_Int32 nGutterMm100 = 2000;
+    xStandard->setPropertyValue("GutterMargin", uno::makeAny(nGutterMm100));
+
+    // Then make sure the new right edge of the print area is decreased:
+    tools::Long nNewRight = pPage->getFramePrintArea().Right();
+    tools::Long nGutterTwips = convertMm100ToTwip(nGutterMm100);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1134
+    // - Actual  : 0
+    // i.e. the gutter was missing on the right side.
+    CPPUNIT_ASSERT_EQUAL(nGutterTwips, nOldRight - nNewRight);
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMarginPageBorder)
 {
 // FIXME this is 3369 on macOS -- calculate this number dynamically?
