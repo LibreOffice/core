@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "430a9889_66919de8",
+        "filename": "vcl/source/bitmap/bitmappaint.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-03-31T16:43:23Z",
+      "side": 1,
+      "message": "I don\u0027t get this part of the change - it says \"if we already have an image then perform this optimised thing and return, otherwise if we don\u0027t have an image then  ..... do something which is very similar\" ?\n\nWhy not just unconditionally do the optimised thing?",
+      "revId": "d1fcc9053f98cc4afb52498b40a836884bb5ec6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
