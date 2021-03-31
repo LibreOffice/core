@@ -668,7 +668,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             && (!alignV || strcmp(alignV, "top") == 0))
         {
             alignV = nullptr;
-            nPosYEMU = 635;
+            nPosYEMU = TwipsToEMU(1);
         }
 
         if (alignV != nullptr)

@@ -20,6 +20,9 @@
 #ifndef INCLUDED_OOX_EXPORT_UTILS_HXX
 #define INCLUDED_OOX_EXPORT_UTILS_HXX
 
+#include <sal/config.h>
+
+#include <o3tl/unit_conversion.hxx>
 #include <rtl/string.hxx>
 #include <sal/types.h>
 
@@ -52,12 +55,12 @@ static constexpr const char* ToPsz10(bool b)
 
 static constexpr sal_Int64 PPTtoEMU( sal_Int32 nPPT )
 {
-    return static_cast<sal_Int64>( static_cast<double>(nPPT) * 1587.5 );
+    return o3tl::convert(nPPT, o3tl::Length::master, o3tl::Length::emu);
 }
 
 static constexpr sal_Int64 TwipsToEMU( sal_Int32 nTwips )
 {
-    return sal_Int64( nTwips ) * 635;
+    return o3tl::convert(nTwips, o3tl::Length::twip, o3tl::Length::emu);
 }
 
 template <typename T>

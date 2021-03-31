@@ -1986,12 +1986,13 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
             {
                 const SvxShadowItem* pSI = static_cast<const SvxShadowItem*>(pShadItem);
 
-                constexpr sal_uInt16 nCstScale = 635;        // unit scale between AOO and MS Word
                 constexpr sal_uInt32 nShadowType = 131074;   // shadow type of ms word. need to set the default value.
 
                 Color  nColor = pSI->GetColor();
-                sal_Int32 nOffX = pSI->GetWidth() * nCstScale;
-                sal_Int32 nOffY = pSI->GetWidth() * nCstScale;
+                sal_Int32 nOffX
+                    = o3tl::convert(pSI->GetWidth(), o3tl::Length::twip, o3tl::Length::emu);
+                sal_Int32 nOffY
+                    = o3tl::convert(pSI->GetWidth(), o3tl::Length::twip, o3tl::Length::emu);
 
                 SvxShadowLocation eLocation = pSI->GetLocation();
                 if( (eLocation!=SvxShadowLocation::NONE) && (pSI->GetWidth()!=0) )

@@ -127,6 +127,7 @@
 #include <basic/basmgr.hxx>
 
 #include "ww8toolbar.hxx"
+#include <o3tl/unit_conversion.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
 
@@ -1003,14 +1004,15 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             pImpRec->aTextId.nSequence = static_cast<sal_uInt16>(nTextId);
         }
 
-        pImpRec->nDxWrapDistLeft = GetPropertyValue(
-                                    DFF_Prop_dxWrapDistLeft, 114935 ) / 635;
-        pImpRec->nDyWrapDistTop = GetPropertyValue(
-                                    DFF_Prop_dyWrapDistTop, 0 ) / 635;
-        pImpRec->nDxWrapDistRight = GetPropertyValue(
-                                    DFF_Prop_dxWrapDistRight, 114935 ) / 635;
-        pImpRec->nDyWrapDistBottom = GetPropertyValue(
-                                    DFF_Prop_dyWrapDistBottom, 0 ) / 635;
+        pImpRec->nDxWrapDistLeft = o3tl::convert(GetPropertyValue(DFF_Prop_dxWrapDistLeft, 114935),
+                                                 o3tl::Length::emu, o3tl::Length::twip);
+        pImpRec->nDyWrapDistTop = o3tl::convert(GetPropertyValue(DFF_Prop_dyWrapDistTop, 0),
+                                                o3tl::Length::emu, o3tl::Length::twip);
+        pImpRec->nDxWrapDistRight
+            = o3tl::convert(GetPropertyValue(DFF_Prop_dxWrapDistRight, 114935), o3tl::Length::emu,
+                            o3tl::Length::twip);
+        pImpRec->nDyWrapDistBottom = o3tl::convert(GetPropertyValue(DFF_Prop_dyWrapDistBottom, 0),
+                                                   o3tl::Length::emu, o3tl::Length::twip);
         // 16.16 fraction times total image width or height, as appropriate.
 
         if (SeekToContent(DFF_Prop_pWrapPolygonVertices, rSt))
