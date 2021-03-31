@@ -1796,7 +1796,7 @@ void XclExpObjectManager::StartSheet()
 rtl::Reference< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( const SdrPage* pSdrPage )
 {
     if( pSdrPage )
-        mxEscherEx->AddSdrPage( *pSdrPage );
+        mxEscherEx->AddSdrPage( *pSdrPage, GetOutput() != EXC_OUTPUT_BINARY );
     // the first dummy object may still be open
     OSL_ENSURE( mxEscherEx->GetGroupLevel() <= 1, "XclExpObjectManager::ProcessDrawing - still groups open?" );
     while( mxEscherEx->GetGroupLevel() )
@@ -1808,7 +1808,7 @@ rtl::Reference< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( const Sd
 rtl::Reference< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( const Reference< XShapes >& rxShapes )
 {
     if( rxShapes.is() )
-        mxEscherEx->AddUnoShapes( rxShapes );
+        mxEscherEx->AddUnoShapes( rxShapes, GetOutput() != EXC_OUTPUT_BINARY );
     // the first dummy object may still be open
     OSL_ENSURE( mxEscherEx->GetGroupLevel() <= 1, "XclExpObjectManager::ProcessDrawing - still groups open?" );
     while( mxEscherEx->GetGroupLevel() )

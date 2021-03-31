@@ -421,8 +421,8 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         {
             const Reference< XPropertySet > xPropSet = rObj.mXPropSet;
             const Reference<XPropertySetInfo> xPropInfo = xPropSet.is() ? xPropSet->getPropertySetInfo() : Reference<XPropertySetInfo>();
-            // This code is expected to be called only for DOCX format.
-            if (xPropInfo.is())
+            // This code is expected to be called only for DOCX/XLSX formats.
+            if (xPropInfo.is() && bOOxmlExport)
             {
                 bool bInline = false;
                 if (xPropInfo->hasPropertyByName("AnchorType"))
@@ -834,7 +834,7 @@ void ImplEESdrWriter::ImplInitPageValues()
 }
 
 void ImplEESdrWriter::ImplWritePage(
-            EscherSolverContainer& rSolverContainer )
+            EscherSolverContainer& rSolverContainer, bool ooxmlExport )
 {
     ImplInitPageValues();
 
@@ -845,7 +845,7 @@ void ImplEESdrWriter::ImplWritePage(
                                     mXShapes->getByIndex( n )) );
         if( aObj.IsValid() )
         {
-            ImplWriteShape( aObj, rSolverContainer, true );
+            ImplWriteShape( aObj, rSolverContainer, ooxmlExport );
         }
     }
 }
@@ -924,10 +924,10 @@ void ImplEESdrWriter::ImplFlushSolverContainer()
     }
 }
 
-void ImplEESdrWriter::ImplWriteCurrentPage()
+void ImplEESdrWriter::ImplWriteCurrentPage(bool ooxmlExport)
 {
     assert(mpSolverContainer && "ImplEESdrWriter::ImplWriteCurrentPage: no SolverContainer");
-    ImplWritePage( *mpSolverContainer );
+    ImplWritePage( *mpSolverContainer, ooxmlExport );
     ImplExitPage();
 }
 
@@ -937,16 +937,16 @@ sal_uInt32 ImplEESdrWriter::ImplWriteTheShape( ImplEESdrObject& rObj , bool ooxm
     return ImplWriteShape( rObj, *mpSolverContainer, ooxmlExport );
 }
 
-void EscherEx::AddSdrPage( const SdrPage& rPage )
+void EscherEx::AddSdrPage( const SdrPage& rPage, bool ooxmlExport )
 {
     if ( mpImplEESdrWriter->ImplInitPage( rPage ) )
-        mpImplEESdrWriter->ImplWriteCurrentPage();
+        mpImplEESdrWriter->ImplWriteCurrentPage(ooxmlExport);
 }
 
-void EscherEx::AddUnoShapes( const Reference< XShapes >& rxShapes )
+void EscherEx::AddUnoShapes( const Reference< XShapes >& rxShapes, bool ooxmlExport )
 {
     if ( mpImplEESdrWriter->ImplInitUnoShapes( rxShapes ) )
-        mpImplEESdrWriter->ImplWriteCurrentPage();
+        mpImplEESdrWriter->ImplWriteCurrentPage(ooxmlExport);
 }
 
 sal_uInt32 EscherEx::AddSdrObject( const SdrObject& rObj, bool ooxmlExport )
