@@ -100,8 +100,6 @@
     <string name="message_saving">Saving the document…</string>
     <string name="message_saving_failed">Saving the document failed.</string>
     <string name="message_save_incomplete">Save incomplete. Were there any changes?</string>
-    <string name="create_new_file_success">"Created new file - "</string>
-    <string name="create_new_file_error">Unable to create new file, please check entered file name.</string>
 
     <!-- Document provider settings -->
     <string name="storage_provider_settings">Storage provider settings</string>
@@ -127,10 +125,6 @@
     <string name="save_document">SAVE</string>
     <string name="action_cancel">Cancel</string>
     <string name="no_save_document">NO</string>
-
-    <!-- Create New Document Dialog Strings -->
-    <string name="create_new_document_title">Enter file name</string>
-    <string name="action_create">CREATE</string>
 
     <!-- Presentation Mode Strings -->
     <string name="action_presentation">Slide show</string>
@@ -223,8 +217,10 @@
     <string name="display_language">Display Language</string>
     <string name="display_language_summary">Set the default display language</string>
     <string name="unable_to_export_pdf">Unable to export to pdf</string>
+    <string name="unable_to_save">Unable to save file</string>
     <string name="pdf_exported_at">Exported to PDF at</string>
     <string name="printing_not_supported">Your device does not support printing</string>
+    <string name="creating_new_files_not_supported">Creating new files not supported on this device, requires Android SDK version >= 19.</string>
     <string name="error">Error</string>
     <string name="enter_part_name">Enter a part name</string>
     <string name="bmp_null">Bmp is null!</string>

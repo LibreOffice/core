@@ -58,6 +58,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Main activity of the LibreOffice App. It is started in the UI thread.
@@ -127,7 +128,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private boolean isSearchToolbarOpen = false;
     private static boolean isDocumentChanged = false;
     private boolean isUNOCommandsToolbarOpen = false;
-    public boolean isNewDocument = false;
+    private boolean isNewDocument = false;
     private long lastModified = 0;
 
     @Override
@@ -180,31 +181,35 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
         mbISReadOnlyMode = !isExperimentalMode();
 
-        if (getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY) != null) {
-            // New document type string is not null, meaning we want to open a new document
-            String newDocumentType = getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY);
-            String newFilePath = getIntent().getStringExtra(LibreOfficeUIActivity.NEW_FILE_PATH_KEY);
-
-            // Load the new document
-            loadNewDocument(newFilePath, newDocumentType);
-        } else if (getIntent().getData() != null) {
+        if (getIntent().getData() != null) {
             if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
-                if (copyFileToTemp() && mTempFile != null) {
+                final boolean isReadOnlyDoc;
+                if (getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY) != null) {
+                    // New document type string is not null, meaning we want to open a new document
+                    String newDocumentType = getIntent().getStringExtra(LibreOfficeUIActivity.NEW_DOC_TYPE_KEY);
+                    // create a temporary local file, will be copied to the actual URI when saving
+                    loadNewDocument(newDocumentType);
                     mInputFile = mTempFile;
-                    boolean isReadOnlyDoc = (getIntent().getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0;
-                    mbISReadOnlyMode = !isExperimentalMode()  || isReadOnlyDoc;
-                    Log.d(LOGTAG, "SCHEME_CONTENT: getPath(): " + getIntent().getData().getPath());
-
-                    String displayName = extractDisplayNameFromIntent();
-                    if (displayName.isEmpty()) {
-                        // fall back to using temp file name
-                        displayName = mInputFile.getName();
-                    }
-                    toolbarTop.setTitle(displayName);
+                    isReadOnlyDoc = false;
+                } else if (copyFileToTemp() && mTempFile != null) {
+                    mInputFile = mTempFile;
+                    isReadOnlyDoc = (getIntent().getFlags() & Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0;
                 } else {
                     // TODO: can't open the file
                     Log.e(LOGTAG, "couldn't create temporary file from " + getIntent().getData());
+                    return;
                 }
+
+                mbISReadOnlyMode = !isExperimentalMode()  || isReadOnlyDoc;
+                Log.d(LOGTAG, "SCHEME_CONTENT: getPath(): " + getIntent().getData().getPath());
+
+                String displayName = extractDisplayNameFromIntent();
+                if (displayName.isEmpty()) {
+                    // fall back to using temp file name
+                    displayName = mInputFile.getName();
+                }
+                toolbarTop.setTitle(displayName);
+
             } else if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_FILE)) {
                 mInputFile = new File(getIntent().getData().getPath());
                 Log.d(LOGTAG, "SCHEME_FILE: getPath(): " + getIntent().getData().getPath());
@@ -280,12 +285,12 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         }
     }
 
-    // Loads a new Document
-    private void loadNewDocument(String newFilePath, String newDocumentType) {
-        mInputFile = new File(newFilePath);
-        LOKitShell.sendNewDocumentLoadEvent(newFilePath, newDocumentType);
+    // Loads a new Document and saves it to a temporary file
+    private void loadNewDocument(String newDocumentType) {
+        String tempFileName = "LibreOffice_" + UUID.randomUUID().toString();
+        mTempFile = new File(this.getCacheDir(), tempFileName);
+        LOKitShell.sendNewDocumentLoadEvent(mTempFile.getPath(), newDocumentType);
         isNewDocument = true;
-        toolbarTop.setTitle(mInputFile.getName());
     }
 
     public RectF getCurrentCursorPosition() {
@@ -376,19 +381,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         if (documentUri != null) {
             // case where file was opened using IDocumentProvider from within LO app
             saveFilesToCloud();
-        } else if (isNewDocument) {
-            // nothing to do for actual save, the actual (local) file is already handled
-            // by LOKitTileProvider
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(LibreOfficeMainActivity.this, R.string.message_saved,
-                        Toast.LENGTH_SHORT).show();
-                }
-            });
-            setDocumentChanged(false);
         } else {
-            // case where file was passed via Intent
+            // case where file URI was passed via Intent
             if (isReadOnlyMode() || mInputFile == null || getIntent().getData() == null || !getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT))
                 return;
 
@@ -1034,13 +1028,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
             return false;
         }
     }
-
-    // This method is used in LOKitTileProvider.java to show status of new file creation.
-    public void showSaveStatusMessage(boolean error) {
-        if (!error)
-            Snackbar.make(mDrawerLayout, getString(R.string.create_new_file_success) + mInputFile.getName(), Snackbar.LENGTH_LONG).show();
-        else
-            Snackbar.make(mDrawerLayout, getString(R.string.create_new_file_error) + mInputFile.getName(), Snackbar.LENGTH_LONG).show();    }
 
     public void showCustomStatusMessage(String message){
         Snackbar.make(mDrawerLayout, message, Snackbar.LENGTH_LONG).show();
