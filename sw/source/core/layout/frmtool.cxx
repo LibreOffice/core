@@ -2271,9 +2271,11 @@ tools::Long SwBorderAttrs::CalcRight( const SwFrame* pCaller ) const
             DocumentSettingId::GUTTER_AT_TOP);
         if (!bGutterAtTop)
         {
+            bool bRtlGutter = pPageFrame->GetAttrSet()->GetItem<SfxBoolItem>(RES_RTL_GUTTER)->GetValue();
+            tools::Long nGutterMargin = bRtlGutter ? m_rLR->GetGutterMargin() : m_rLR->GetRightGutterMargin();
             // Decrease the print area: the right space is the sum of right and right gutter
             // margins.
-            nRight += m_rLR->GetRightGutterMargin();
+            nRight += nGutterMargin;
         }
     }
 
@@ -2349,8 +2351,10 @@ tools::Long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
             DocumentSettingId::GUTTER_AT_TOP);
         if (!bGutterAtTop)
         {
+            bool bRtlGutter = pPageFrame->GetAttrSet()->GetItem<SfxBoolItem>(RES_RTL_GUTTER)->GetValue();
+            tools::Long nGutterMargin = bRtlGutter ? m_rLR->GetRightGutterMargin() : m_rLR->GetGutterMargin();
             // Decrease the print area: the left space is the sum of left and gutter margins.
-            nLeft += m_rLR->GetGutterMargin();
+            nLeft += nGutterMargin;
         }
     }
 
