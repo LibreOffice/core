@@ -142,7 +142,16 @@ void SwMailMergeWizard::enterState( WizardState _nState )
     switch(_nState)
     {
         case MM_DOCUMENTSELECTPAGE:
+        {
             bEnablePrev = false; // the first page
+
+            OUString sDataSourceName = GetSwView()->GetDataSourceName();
+            if(!sDataSourceName.isEmpty() &&
+               !SwView::IsDataSourceAvailable(sDataSourceName))
+            {
+                bEnableNext = false;
+            }
+        }
         break;
         case MM_ADDRESSBLOCKPAGE  :
             bEnableNext = m_xConfigItem->GetResultSet().is();

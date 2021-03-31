@@ -49,6 +49,7 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(weld::Container* pPage, SwMai
     , m_xBrowseDocPB(m_xBuilder->weld_button("browsedoc"))
     , m_xBrowseTemplatePB(m_xBuilder->weld_button("browsetemplate"))
     , m_xRecentDocLB(m_xBuilder->weld_combo_box("recentdoclb"))
+    , m_xDataSourceWarningFT(m_xBuilder->weld_label("datasourcewarning"))
 {
     m_xCurrentDocRB->set_active(true);
     DocSelectHdl(*m_xNewDocRB);
@@ -84,9 +85,21 @@ SwMailMergeDocSelectPage::~SwMailMergeDocSelectPage()
 IMPL_LINK_NOARG(SwMailMergeDocSelectPage, DocSelectHdl, weld::ToggleButton&, void)
 {
     m_xRecentDocLB->set_sensitive(m_xRecentDocRB->get_active());
-
     m_pWizard->UpdateRoadmap();
-    m_pWizard->enableButtons(WizardButtonFlags::NEXT, m_pWizard->isStateEnabled(MM_OUTPUTTYPETPAGE));
+    OUString sDataSourceName = m_pWizard->GetSwView()->GetDataSourceName();
+
+    if(m_xCurrentDocRB->get_active() &&
+       !sDataSourceName.isEmpty() &&
+       !SwView::IsDataSourceAvailable(sDataSourceName))
+    {
+        m_xDataSourceWarningFT->show();
+        m_pWizard->enableButtons(WizardButtonFlags::NEXT, false);
+    }
+    else
+    {
+        m_xDataSourceWarningFT->hide();
+        m_pWizard->enableButtons(WizardButtonFlags::NEXT, m_pWizard->isStateEnabled(MM_OUTPUTTYPETPAGE));
+    }
 }
 
 IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, weld::Button&, rButton, void)
