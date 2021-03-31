@@ -24,6 +24,7 @@
 #include <comphelper/hash.hxx>
 #include <tools/vcompat.hxx>
 #include <comphelper/fileformat.h>
+#include <tools/fract.hxx>
 
 #include <vcl/TypeSerializer.hxx>
 
@@ -67,6 +68,7 @@ private:
     void testGraphic_Bitmap_NoGfxLink();
     void testGraphic_Animation();
     void testGraphic_GDIMetaFile();
+    void testMapMode();
 
     CPPUNIT_TEST_SUITE(TypeSerializerTest);
     CPPUNIT_TEST(testGradient);
@@ -74,6 +76,7 @@ private:
     CPPUNIT_TEST(testGraphic_Bitmap_NoGfxLink);
     CPPUNIT_TEST(testGraphic_Animation);
     CPPUNIT_TEST(testGraphic_GDIMetaFile);
+    CPPUNIT_TEST(testMapMode);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -342,6 +345,42 @@ void TypeSerializerTest::testGraphic_GDIMetaFile()
             aSerializer.readGraphic(aNewGraphic);
         }
         CPPUNIT_ASSERT_EQUAL(GraphicType::GdiMetafile, aNewGraphic.GetType());
+    }
+}
+
+void TypeSerializerTest::testMapMode()
+{
+    { // "simple" case - only map unit is set, IsSimple = true
+        MapMode aMapMode(MapUnit::Map100thMM);
+
+        SvMemoryStream aStream;
+        TypeSerializer aSerializer(aStream);
+        aSerializer.writeMapMode(aMapMode);
+        aStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+        MapMode aReadMapMode;
+        aSerializer.readMapMode(aReadMapMode);
+        CPPUNIT_ASSERT_EQUAL(MapUnit::Map100thMM, aReadMapMode.GetMapUnit());
+        CPPUNIT_ASSERT_EQUAL(true, aReadMapMode.IsSimple());
+    }
+    { // "complex" case - map unit, origin and scale are set, IsSimple = false
+        MapMode aMapMode(MapUnit::MapTwip, Point(5, 10), Fraction(1, 2), Fraction(2, 3));
+
+        SvMemoryStream aStream;
+        TypeSerializer aSerializer(aStream);
+        aSerializer.writeMapMode(aMapMode);
+        aStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+        MapMode aReadMapMode;
+        aSerializer.readMapMode(aReadMapMode);
+        CPPUNIT_ASSERT_EQUAL(MapUnit::MapTwip, aReadMapMode.GetMapUnit());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(5), aReadMapMode.GetOrigin().X());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(10), aReadMapMode.GetOrigin().Y());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aReadMapMode.GetScaleX().GetNumerator());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aReadMapMode.GetScaleX().GetDenominator());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aReadMapMode.GetScaleY().GetNumerator());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aReadMapMode.GetScaleY().GetDenominator());
+        CPPUNIT_ASSERT_EQUAL(false, aReadMapMode.IsSimple());
     }
 }
 

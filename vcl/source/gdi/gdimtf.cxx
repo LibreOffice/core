@@ -2667,8 +2667,8 @@ SvStream& ReadGDIMetaFile(SvStream& rIStm, GDIMetaFile& rGDIMetaFile, ImplMetaRe
             std::unique_ptr<VersionCompatRead> pCompat(new VersionCompatRead(rIStm));
 
             rIStm.ReadUInt32( nStmCompressMode );
-            ReadMapMode( rIStm, rGDIMetaFile.m_aPrefMapMode );
             TypeSerializer aSerializer(rIStm);
+            aSerializer.readMapMode(rGDIMetaFile.m_aPrefMapMode);
             aSerializer.readSize(rGDIMetaFile.m_aPrefSize);
             rIStm.ReadUInt32( nCount );
 
@@ -2752,8 +2752,8 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
         VersionCompatWrite aCompat(rOStm, 1);
 
         rOStm.WriteUInt32(static_cast<sal_uInt32>(nStmCompressMode));
-        WriteMapMode(rOStm, m_aPrefMapMode);
         TypeSerializer aSerializer(rOStm);
+        aSerializer.writeMapMode(m_aPrefMapMode);
         aSerializer.writeSize(m_aPrefSize);
         rOStm.WriteUInt32(GetActionSize());
     } // VersionCompatWrite dtor writes stuff into the header
