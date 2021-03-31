@@ -133,38 +133,6 @@ bool MapMode::IsDefault() const
     return mpImplMapMode.same_object(theGlobalDefault::get());
 }
 
-SvStream& ReadMapMode( SvStream& rIStm, MapMode& rMapMode )
-{
-    VersionCompatRead aCompat(rIStm);
-    sal_uInt16    nTmp16;
-
-    TypeSerializer aSerializer(rIStm);
-
-    rIStm.ReadUInt16( nTmp16 ); rMapMode.mpImplMapMode->meUnit = static_cast<MapUnit>(nTmp16);
-    aSerializer.readPoint(rMapMode.mpImplMapMode->maOrigin);
-    ReadFraction( rIStm, rMapMode.mpImplMapMode->maScaleX );
-    ReadFraction( rIStm, rMapMode.mpImplMapMode->maScaleY );
-    rIStm.ReadCharAsBool( rMapMode.mpImplMapMode->mbSimple );
-
-    return rIStm;
-}
-
-SvStream& WriteMapMode( SvStream& rOStm, const MapMode& rMapMode )
-{
-    VersionCompatWrite aCompat(rOStm, 1);
-
-    TypeSerializer aSerializer(rOStm);
-
-    rOStm.WriteUInt16( static_cast<sal_uInt16>(rMapMode.mpImplMapMode->meUnit) );
-    aSerializer.writePoint(rMapMode.mpImplMapMode->maOrigin);
-    WriteFraction( rOStm, rMapMode.mpImplMapMode->maScaleX );
-    WriteFraction( rOStm, rMapMode.mpImplMapMode->maScaleY );
-    rOStm.WriteBool( rMapMode.mpImplMapMode->mbSimple );
-
-    return rOStm;
-}
-
-
 MapUnit MapMode::GetMapUnit() const { return mpImplMapMode->meUnit; }
 
 const Point& MapMode::GetOrigin() const { return mpImplMapMode->maOrigin; }

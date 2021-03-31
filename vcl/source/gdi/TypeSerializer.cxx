@@ -19,6 +19,7 @@
 
 #include <vcl/TypeSerializer.hxx>
 #include <tools/vcompat.hxx>
+#include <tools/fract.hxx>
 #include <sal/log.hxx>
 #include <comphelper/fileformat.h>
 #include <vcl/gdimtf.hxx>
@@ -109,7 +110,7 @@ void TypeSerializer::readGfxLink(GfxLink& rGfxLink)
         if (aCompat.GetVersion() >= 2)
         {
             readSize(aSize);
-            ReadMapMode(mrStream, aMapMode);
+            readMapMode(aMapMode);
             bMapAndSizeValid = true;
         }
     }
@@ -146,7 +147,7 @@ void TypeSerializer::writeGfxLink(const GfxLink& rGfxLink)
 
         // Version 2
         writeSize(rGfxLink.GetPrefSize());
-        WriteMapMode(mrStream, rGfxLink.GetPrefMapMode());
+        writeMapMode(rGfxLink.GetPrefMapMode());
     }
 
     if (rGfxLink.GetDataSize())
@@ -413,6 +414,39 @@ void TypeSerializer::writeGraphic(const Graphic& rGraphic)
         }
         mrStream.SetEndian(nOldFormat);
     }
+}
+
+void TypeSerializer::readMapMode(MapMode& rMapMode)
+{
+    VersionCompatRead aCompat(mrStream);
+    sal_uInt16 nTmp16;
+    Point aOrigin;
+    Fraction aScaleX;
+    Fraction aScaleY;
+    bool bSimple;
+
+    mrStream.ReadUInt16(nTmp16);
+    MapUnit eUnit = static_cast<MapUnit>(nTmp16);
+    readPoint(aOrigin);
+    ReadFraction(mrStream, aScaleX);
+    ReadFraction(mrStream, aScaleY);
+    mrStream.ReadCharAsBool(bSimple);
+
+    if (bSimple)
+        rMapMode = MapMode(eUnit);
+    else
+        rMapMode = MapMode(eUnit, aOrigin, aScaleX, aScaleY);
+}
+
+void TypeSerializer::writeMapMode(MapMode const& rMapMode)
+{
+    VersionCompatWrite aCompat(mrStream, 1);
+
+    mrStream.WriteUInt16(sal_uInt16(rMapMode.GetMapUnit()));
+    writePoint(rMapMode.GetOrigin());
+    WriteFraction(mrStream, rMapMode.GetScaleX());
+    WriteFraction(mrStream, rMapMode.GetScaleY());
+    mrStream.WriteBool(rMapMode.IsSimple());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

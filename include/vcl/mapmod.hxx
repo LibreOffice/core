@@ -59,20 +59,20 @@ public:
     MapMode&        operator=( MapMode&& rMapMode );
     bool            operator==( const MapMode& rMapMode ) const;
     bool            operator!=( const MapMode& rMapMode ) const
-                        { return !(MapMode::operator==( rMapMode )); }
+    {
+        return !(MapMode::operator==( rMapMode ));
+    }
     bool            IsDefault() const;
-
-    friend SvStream& ReadMapMode( SvStream& rIStm, MapMode& rMapMode );
-    friend SvStream& WriteMapMode( SvStream& rOStm, const MapMode& rMapMode );
 
     // tdf#117984 needs to be thread-safe due to being used e.g. in Bitmaps
     // vcl::ScopedBitmapAccess in parallelized 3D renderer
     typedef o3tl::cow_wrapper< ImplMapMode, o3tl::ThreadSafeRefCountingPolicy > ImplType;
 
+    // If only the map unit is set.
+    bool IsSimple() const;
+
 private:
     ImplType        mpImplMapMode;
-
-    SAL_DLLPRIVATE bool IsSimple() const;
 };
 
 template<typename charT, typename traits>

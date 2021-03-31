@@ -1062,10 +1062,9 @@ bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, bool bExtendedInfo )
                 if( bExtendedInfo )
                 {
                     MapMode aMapMode;
-
                     rStm.SeekRel( 0x06 );
-                    ReadMapMode( rStm, aMapMode );
                     TypeSerializer aSerializer(rStm);
+                    aSerializer.readMapMode(aMapMode);
                     aSerializer.readSize(aLogSize);
                     aLogSize = OutputDevice::LogicToLogic( aLogSize, aMapMode, MapMode( MapUnit::Map100thMM ) );
                 }

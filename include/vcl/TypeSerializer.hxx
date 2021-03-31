@@ -50,6 +50,9 @@ public:
 
     void readGraphic(Graphic& rGraphic);
     void writeGraphic(const Graphic& rGraphic);
+
+    void readMapMode(MapMode& rMapMode);
+    void writeMapMode(MapMode const& rMapMode);
 };
 
 #endif
