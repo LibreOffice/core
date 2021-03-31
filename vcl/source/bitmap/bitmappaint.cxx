@@ -478,51 +478,7 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor, sal_uInt8 nTol) const
             const BitmapColor aTest(pReadAcc->GetBestMatchingColor(rTransColor));
 
             if (pWriteAcc->GetBitCount() == 1
-                && (pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitMsnPal
-                    || pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitLsnPal))
-            {
-                // optimized for 4Bit-MSN/LSN source palette
-                const sal_uInt8 cTest = aTest.GetIndex();
-                const tools::Long nShiftInit
-                    = ((pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitMsnPal) ? 4 : 0);
-
-                if (pWriteAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal
-                    && aWhite.GetIndex() == 1)
-                {
-                    // optimized for 1Bit-MSB destination palette
-                    for (tools::Long nY = 0; nY < nHeight; ++nY)
-                    {
-                        Scanline pSrc = pReadAcc->GetScanline(nY);
-                        Scanline pDst = pWriteAcc->GetScanline(nY);
-                        for (tools::Long nX = 0, nShift = nShiftInit; nX < nWidth;
-                             nX++, nShift ^= 4)
-                        {
-                            if (cTest == ((pSrc[nX >> 1] >> nShift) & 0x0f))
-                                pDst[nX >> 3] |= 1 << (7 - (nX & 7));
-                            else
-                                pDst[nX >> 3] &= ~(1 << (7 - (nX & 7)));
-                        }
-                    }
-                }
-                else
-                {
-                    for (tools::Long nY = 0; nY < nHeight; ++nY)
-                    {
-                        Scanline pSrc = pReadAcc->GetScanline(nY);
-                        Scanline pDst = pWriteAcc->GetScanline(nY);
-                        for (tools::Long nX = 0, nShift = nShiftInit; nX < nWidth;
-                             nX++, nShift ^= 4)
-                        {
-                            if (cTest == ((pSrc[nX >> 1] >> nShift) & 0x0f))
-                                pWriteAcc->SetPixelOnData(pDst, nX, aWhite);
-                            else
-                                pWriteAcc->SetPixelOnData(pDst, nX, aBlack);
-                        }
-                    }
-                }
-            }
-            else if (pWriteAcc->GetBitCount() == 1
-                     && pReadAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal)
+                && pReadAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal)
             {
                 // optimized for 8Bit source palette
                 const sal_uInt8 cTest = aTest.GetIndex();

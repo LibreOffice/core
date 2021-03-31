@@ -63,14 +63,6 @@ void SalBitmap::updateChecksum() const
                     extraBitsMask = mask1Bit[ extraBitsCount ];
                     break;
                 }
-                case ScanlineFormat::N4BitMsnPal:
-                    assert(extraBitsCount == 4);
-                    extraBitsMask = 0xf0;
-                    break;
-                case ScanlineFormat::N4BitLsnPal:
-                    assert(extraBitsCount == 4);
-                    extraBitsMask = 0x0f;
-                    break;
                 default:
                     break;
             }

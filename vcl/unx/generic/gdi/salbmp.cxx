@@ -151,9 +151,9 @@ std::unique_ptr<BitmapBuffer> X11SalBitmap::ImplCreateDIB(
     switch( nBitCount )
     {
         case 1: pDIB->mnFormat |= ScanlineFormat::N1BitMsbPal; break;
-        case 4: pDIB->mnFormat |= ScanlineFormat::N4BitMsnPal; break;
         case 8: pDIB->mnFormat |= ScanlineFormat::N8BitPal; break;
         case 24: pDIB->mnFormat |= ScanlineFormat::N24BitTcBgr; break;
+        case 4: assert(false); break;
         default:
             SAL_WARN("vcl.gdi", "32-bit images not supported, converting to 24-bit");
             nBitCount = 24;
@@ -250,15 +250,6 @@ std::unique_ptr<BitmapBuffer> X11SalBitmap::ImplCreateDIB(
                     aSrcBuf.mnFormat |= ( LSBFirst == pImage->bitmap_bit_order
                                             ? ScanlineFormat::N1BitLsbPal
                                             : ScanlineFormat::N1BitMsbPal
-                                        );
-                }
-                break;
-
-                case 4:
-                {
-                    aSrcBuf.mnFormat |= ( LSBFirst == pImage->bitmap_bit_order
-                                            ? ScanlineFormat::N4BitLsnPal
-                                            : ScanlineFormat::N4BitMsnPal
                                         );
                 }
                 break;
@@ -397,13 +388,6 @@ XImage* X11SalBitmap::ImplCreateXImage(
                     nDstFormat |=   ( LSBFirst == pImage->bitmap_bit_order
                                         ? ScanlineFormat::N1BitLsbPal
                                         : ScanlineFormat::N1BitMsbPal
-                                    );
-                break;
-
-                case 4:
-                    nDstFormat |=   ( LSBFirst == pImage->bitmap_bit_order
-                                        ? ScanlineFormat::N4BitLsnPal
-                                        : ScanlineFormat::N4BitMsnPal
                                     );
                 break;
 

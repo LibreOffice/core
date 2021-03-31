@@ -64,10 +64,6 @@ FncGetPixel BitmapReadAccess::GetPixelFunction(ScanlineFormat nFormat)
             return GetPixelForN1BitMsbPal;
         case ScanlineFormat::N1BitLsbPal:
             return GetPixelForN1BitLsbPal;
-        case ScanlineFormat::N4BitMsnPal:
-            return GetPixelForN4BitMsnPal;
-        case ScanlineFormat::N4BitLsnPal:
-            return GetPixelForN4BitLsnPal;
         case ScanlineFormat::N8BitPal:
             return GetPixelForN8BitPal;
         case ScanlineFormat::N24BitTcBgr:
@@ -110,10 +106,6 @@ FncSetPixel BitmapReadAccess::SetPixelFunction(ScanlineFormat nFormat)
             return SetPixelForN1BitMsbPal;
         case ScanlineFormat::N1BitLsbPal:
             return SetPixelForN1BitLsbPal;
-        case ScanlineFormat::N4BitMsnPal:
-            return SetPixelForN4BitMsnPal;
-        case ScanlineFormat::N4BitLsnPal:
-            return SetPixelForN4BitLsnPal;
         case ScanlineFormat::N8BitPal:
             return SetPixelForN8BitPal;
         case ScanlineFormat::N24BitTcBgr:
@@ -290,52 +282,6 @@ void BitmapReadAccess::SetPixelForN1BitLsbPal(const Scanline pScanline, tools::L
         rByte |= 1 << (nX & 7);
     else
         rByte &= ~(1 << (nX & 7));
-}
-
-BitmapColor BitmapReadAccess::GetPixelForN4BitMsnPal(ConstScanline pScanline, tools::Long nX,
-                                                     const ColorMask&)
-{
-    return BitmapColor((pScanline[nX >> 1] >> (nX & 1 ? 0 : 4)) & 0x0f);
-}
-
-void BitmapReadAccess::SetPixelForN4BitMsnPal(const Scanline pScanline, tools::Long nX,
-                                              const BitmapColor& rBitmapColor, const ColorMask&)
-{
-    sal_uInt8& rByte = pScanline[nX >> 1];
-
-    if (nX & 1)
-    {
-        rByte &= 0xf0;
-        rByte |= (rBitmapColor.GetIndex() & 0x0f);
-    }
-    else
-    {
-        rByte &= 0x0f;
-        rByte |= (rBitmapColor.GetIndex() << 4);
-    }
-}
-
-BitmapColor BitmapReadAccess::GetPixelForN4BitLsnPal(ConstScanline pScanline, tools::Long nX,
-                                                     const ColorMask&)
-{
-    return BitmapColor((pScanline[nX >> 1] >> (nX & 1 ? 4 : 0)) & 0x0f);
-}
-
-void BitmapReadAccess::SetPixelForN4BitLsnPal(const Scanline pScanline, tools::Long nX,
-                                              const BitmapColor& rBitmapColor, const ColorMask&)
-{
-    sal_uInt8& rByte = pScanline[nX >> 1];
-
-    if (nX & 1)
-    {
-        rByte &= 0x0f;
-        rByte |= (rBitmapColor.GetIndex() << 4);
-    }
-    else
-    {
-        rByte &= 0xf0;
-        rByte |= (rBitmapColor.GetIndex() & 0x0f);
-    }
 }
 
 BitmapColor BitmapReadAccess::GetPixelForN8BitPal(ConstScanline pScanline, tools::Long nX,
