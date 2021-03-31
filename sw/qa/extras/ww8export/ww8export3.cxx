@@ -579,6 +579,14 @@ DECLARE_WW8EXPORT_TEST(testTdf129522_removeShadowStyle, "tdf129522_removeShadowS
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf81705_outlineLevel, "tdf81705_outlineLevel.doc")
+{
+    // direct formatting resets outline level to body text (0)
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Paragraph C", sal_uInt16(0), getProperty<sal_uInt16>(getParagraph(3), "OutlineLevel"));
+    // myStyle sets outline level to 1.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Paragraph D", sal_uInt16(1), getProperty<sal_uInt16>(getParagraph(4), "OutlineLevel"));
+}
+
 DECLARE_WW8EXPORT_TEST(testBtlrCell, "btlr-cell.doc")
 {
     // Without the accompanying fix in place, this test would have failed, as

@@ -620,6 +620,7 @@ protected:
     virtual void CharGrabBag( const SfxGrabBagItem& ) = 0;
 
     /// Sfx item RES_PARATR_OUTLINELEVEL
+    void ParaOutlineLevelBase( const SfxUInt16Item& rItem );
     virtual void ParaOutlineLevel( const SfxUInt16Item& ) = 0;
 
     /// Write the expanded field

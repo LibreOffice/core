@@ -758,9 +758,8 @@ void WW8AttributeOutput::OutlineNumbering(sal_uInt8 nLvl)
     if ( nLvl >= WW8ListManager::nMaxLevel )
         nLvl = WW8ListManager::nMaxLevel-1;
 
-    // write sprmPOutLvl sprmPIlvl and sprmPIlfo
-    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::POutLvl::val );
-    m_rWW8Export.pO->push_back( nLvl );
+    // write sprmPIlvl and sprmPIlfo
+    // (sprmPOutLvl now handled by ParaOutlineLevel)
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::PIlvl::val );
     m_rWW8Export.pO->push_back( nLvl );
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::PIlfo::val );
@@ -3593,6 +3592,23 @@ void WW8AttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
     m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), aZeroArr, aZeroArr+3);
 }
 
+void AttributeOutputBase::ParaOutlineLevelBase( const SfxUInt16Item& rItem )
+{
+    sal_uInt16 nOutLvl = rItem.GetValue();
+
+    // Do not write out default level (Body Text) if there is no inheritance, or if the level matches the inherited value
+    const SfxUInt16Item* pInherited = nullptr;
+    if (auto pNd = dynamic_cast<const SwContentNode*>(GetExport().m_pOutFormatNode)) //paragraph
+        pInherited = static_cast<SwTextFormatColl&>(pNd->GetAnyFormatColl()).GetAttrSet().GetItem<SfxUInt16Item>(RES_PARATR_OUTLINELEVEL);
+    else if (GetExport().m_bStyDef && GetExport().m_pCurrentStyle && GetExport().m_pCurrentStyle->DerivedFrom()) //style
+        pInherited = GetExport().m_pCurrentStyle->DerivedFrom()->GetAttrSet().GetItem<SfxUInt16Item>(RES_PARATR_OUTLINELEVEL);
+    if ((pInherited && pInherited->GetValue() == nOutLvl)
+        || (!pInherited && !nOutLvl))
+        return;
+
+    ParaOutlineLevel(rItem);
+}
+
 void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
 {
     const SwTextNode* pTextNd = nullptr;
@@ -4952,8 +4968,13 @@ void WW8AttributeOutput::CharGrabBag(const SfxGrabBagItem& /*rItem*/)
 {
 }
 
-void WW8AttributeOutput::ParaOutlineLevel(const SfxUInt16Item& /*rItem*/)
+void WW8AttributeOutput::ParaOutlineLevel(const SfxUInt16Item& rItem)
 {
+    sal_uInt16 nOutLvl = std::min(rItem.GetValue(), sal_uInt16(WW8ListManager::nMaxLevel));
+    // Outline Level: in LO Body Text = 0, in MS Body Text = 9
+    nOutLvl = nOutLvl ? nOutLvl - 1 : 9;
+    m_rWW8Export.InsUInt16( NS_sprm::POutLvl::val );
+    m_rWW8Export.pO->push_back( nOutLvl );
 }
 
 // "Separate paragraphs"
@@ -5510,7 +5531,7 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             ParaGrabBag(static_cast<const SfxGrabBagItem&>(rHt));
             break;
         case RES_PARATR_OUTLINELEVEL:
-            ParaOutlineLevel(static_cast<const SfxUInt16Item&>(rHt));
+            ParaOutlineLevelBase(static_cast<const SfxUInt16Item&>(rHt));
             break;
         case RES_CHRATR_GRABBAG:
             CharGrabBag(static_cast<const SfxGrabBagItem&>(rHt));

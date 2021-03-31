@@ -6515,20 +6515,6 @@ void DocxAttributeOutput::EndStyleProperties( bool bParProp )
     }
 }
 
-namespace
-{
-
-void lcl_OutlineLevel(sax_fastparser::FSHelperPtr const & pSerializer, sal_uInt16 nLevel)
-{
-    if (nLevel >= WW8ListManager::nMaxLevel)
-        nLevel = WW8ListManager::nMaxLevel - 1;
-
-    pSerializer->singleElementNS(XML_w, XML_outlineLvl,
-            FSNS(XML_w, XML_val), OString::number(nLevel));
-}
-
-}
-
 void DocxAttributeOutput::OutlineNumbering(sal_uInt8 const /*nLvl*/)
 {
     // Handled by ParaOutlineLevel() instead.
@@ -6536,8 +6522,10 @@ void DocxAttributeOutput::OutlineNumbering(sal_uInt8 const /*nLvl*/)
 
 void DocxAttributeOutput::ParaOutlineLevel(const SfxUInt16Item& rItem)
 {
-    if (rItem.GetValue() > 0)
-        lcl_OutlineLevel(m_pSerializer, rItem.GetValue() - 1);
+    sal_uInt16 nOutLvl = std::min(rItem.GetValue(), sal_uInt16(WW8ListManager::nMaxLevel));
+    // Outline Level: in LO Body Text = 0, in MS Body Text = 9
+    nOutLvl = nOutLvl ? nOutLvl - 1 : 9;
+    m_pSerializer->singleElementNS(XML_w, XML_outlineLvl, FSNS(XML_w, XML_val), OString::number(nOutLvl));
 }
 
 void DocxAttributeOutput::PageBreakBefore( bool bBreak )
