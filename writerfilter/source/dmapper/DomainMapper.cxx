@@ -1599,6 +1599,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             pSectionContext->Insert(PROP_WRITING_MODE, uno::makeAny(writingMode));
         }
         break;
+    case NS_ooxml::LN_EG_SectPrContents_rtlGutter:
+        if (pSectionContext != nullptr)
+        {
+            bool bRtlGutter = nIntValue != 0;
+            pSectionContext->Insert(PROP_RTL_GUTTER, uno::makeAny(bRtlGutter));
+        }
+        break;
     case NS_ooxml::LN_EG_RPrBase_highlight:
         {
             // MS Word completely ignores character highlighting in character styles.

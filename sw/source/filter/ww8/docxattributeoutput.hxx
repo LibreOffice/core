@@ -681,6 +681,8 @@ protected:
 
     virtual void WriteBookmarkInActParagraph( const OUString& rName, sal_Int32 nFirstRunPos, sal_Int32 nLastRunPos ) override;
 
+    void SectionRtlGutter( const SfxBoolItem& rRtlGutter) override;
+
     /// Reference to the export, where to get the data from
     DocxExport &m_rExport;
 

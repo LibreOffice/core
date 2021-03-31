@@ -640,6 +640,9 @@ protected:
     ww8::GridColsPtr GetGridCols( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner );
     ww8::WidthsPtr   GetColumnWidths( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner );
 
+    /// RES_RTL_GUTTER
+    virtual void SectionRtlGutter(const SfxBoolItem& /*rRtlGutter*/) {}
+
 public:
     AttributeOutputBase(const OUString& sBaseURL)
         : m_sBaseURL(sBaseURL)

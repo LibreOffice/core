@@ -197,6 +197,24 @@ CPPUNIT_TEST_FIXTURE(Test, testEffectExtentLineWidth)
     verify();
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
+{
+    // Given a document with RTL gutter:
+    load(mpTestDocumentPath, "rtl-gutter.docx");
+    uno::Reference<beans::XPropertySet> xStandard(getStyles("PageStyles")->getByName("Standard"),
+            uno::UNO_QUERY);
+    CPPUNIT_ASSERT(getProperty<bool>(xStandard, "RtlGutter"));
+
+    // When saving back to DOCX:
+    reload(mpFilter, "rtl-gutter.docx");
+
+    // Then make sure the section's gutter is still RTL:
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // Without the accompanying fix in place, this test would have failed as the XML element was
+    // missing.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:rtlGutter", 1);
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf140572_docDefault_superscript, "tdf140572_docDefault_superscript.docx")
 {
     // A round-trip was crashing.
