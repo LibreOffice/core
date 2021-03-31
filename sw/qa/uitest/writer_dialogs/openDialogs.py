@@ -37,7 +37,8 @@ dialogs = [
     # {"command": ".uno:InsertBreak", "closeButton": "cancel"},
         # tested in uitest/writer_tests/insertBreakDialog.py
     {"command": ".uno:InsertObject", "closeButton": "cancel"},
-    {"command": ".uno:InsertSection", "closeButton": "cancel"},
+    # {"command": ".uno:InsertSection", "closeButton": "cancel"},
+        # tested in sw/qa/uitest/writer_tests7/tdf140863.py
     {"command": ".uno:InsertFrame", "closeButton": "cancel"},
     {"command": ".uno:InsertObjectFloatingFrame", "closeButton": "cancel"},
     {"command": ".uno:FontworkGalleryFloater", "closeButton": "cancel"},
