@@ -799,6 +799,7 @@ public:
     sal_uInt32 nPgLeft;
     sal_uInt32 nPgRight;
     sal_uInt32 nPgGutter;
+    bool m_bRtlGutter = false;
 
     css::drawing::TextVerticalAdjust mnVerticalAdjustment;
     sal_uInt8 mnBorders;

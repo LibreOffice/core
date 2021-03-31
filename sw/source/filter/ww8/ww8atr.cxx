@@ -4105,6 +4105,18 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
     }
 }
 
+void WW8AttributeOutput::SectionRtlGutter(const SfxBoolItem& rRtlGutter)
+{
+    if (!rRtlGutter.GetValue())
+    {
+        return;
+    }
+
+    // sprmSFRTLGutter
+    m_rWW8Export.InsUInt16(NS_sprm::SFRTLGutter::val);
+    m_rWW8Export.pO->push_back(1);
+}
+
 void WW8AttributeOutput::FormatULSpace( const SvxULSpaceItem& rUL )
 {
     // Flys are still missing ( see RTF )

@@ -486,8 +486,7 @@ void wwSectionManager::SetLeftRight(wwSection &rSection)
     */
     if (rSection.maSep.fRTLGutter)
     {
-        nWWRi += nWWGu;
-        nWWGu = 0;
+        rSection.m_bRtlGutter = true;
     }
 
     // Left / Right
@@ -529,6 +528,9 @@ void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrameFormat &rFormat,
     SvxLRSpaceItem aLR(rSection.GetPageLeft(), rSection.GetPageRight(), 0, 0, RES_LR_SPACE);
     aLR.SetGutterMargin(rSection.nPgGutter);
     rFormat.SetFormatAttr(aLR);
+
+    SfxBoolItem aRtlGutter(RES_RTL_GUTTER, rSection.m_bRtlGutter);
+    rFormat.SetFormatAttr(aRtlGutter);
 
     if (!bIgnoreCols)
         SetCols(rFormat, rSection, rSection.GetTextAreaWidth());
@@ -1096,7 +1098,8 @@ void wwSectionManager::CreateSep(const tools::Long nTextPos)
 
     aNewSection.maSep.dzaGutter = ReadUSprm( pSep, pIds[5], 0);
 
-    aNewSection.maSep.fRTLGutter = static_cast< sal_uInt8 >(eVer >= ww::eWW8 ? ReadUSprm( pSep, NS_sprm::SFRTLGutter::val, 0 ) : 0);
+    aNewSection.maSep.fRTLGutter = static_cast<sal_uInt8>(
+        eVer >= ww::eWW8 ? ReadBSprm(pSep, NS_sprm::SFRTLGutter::val, 0) : 0);
 
     // Page Number Restarts - sprmSFPgnRestart
     aNewSection.maSep.fPgnRestart = ReadBSprm(pSep, pIds[6], 0);
