@@ -1158,8 +1158,8 @@ public:
 
                 // ...Sdr... implemented in eschesdo.cxx
 
-    void    AddSdrPage( const SdrPage& rPage );
-    void    AddUnoShapes( const css::uno::Reference< css::drawing::XShapes >& rxShapes );
+    void    AddSdrPage( const SdrPage& rPage, bool ooxmlExport = false );
+    void    AddUnoShapes( const css::uno::Reference< css::drawing::XShapes >& rxShapes, bool ooxmlExport = false );
 
                 /// returns the ShapeID
     sal_uInt32  AddSdrObject( const SdrObject& rObj, bool ooxmlExport = false );
