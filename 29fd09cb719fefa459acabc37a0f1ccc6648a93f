@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "118108e9_c25da074",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 10
+      },
+      "lineNbr": 5673,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-31T07:25:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "abbb03c5_ad067f4d",
+      "revId": "29fd09cb719fefa459acabc37a0f1ccc6648a93f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6d6c9cd7_d96c371d",
         "filename": "vcl/win/app/fileregistration.cxx",
         "patchSetId": 10
@@ -33,6 +51,24 @@
       "revId": "29fd09cb719fefa459acabc37a0f1ccc6648a93f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c680ab5_8ff47a06",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-31T07:25:03Z",
+      "side": 1,
+      "message": "Agree, adds to readability so you don\u0027t have to worry about changes to the variable.",
+      "parentUuid": "6d6c9cd7_d96c371d",
+      "revId": "29fd09cb719fefa459acabc37a0f1ccc6648a93f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -56,6 +92,30 @@
       "revId": "29fd09cb719fefa459acabc37a0f1ccc6648a93f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b016d88f_ada2737a",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-31T07:25:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9cda84a6_af4016f0",
+      "range": {
+        "startLine": 87,
+        "startChar": 27,
+        "endLine": 87,
+        "endChar": 34
+      },
+      "revId": "29fd09cb719fefa459acabc37a0f1ccc6648a93f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -103,6 +163,30 @@
       "revId": "29fd09cb719fefa459acabc37a0f1ccc6648a93f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e79ee3b0_6ce16070",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-31T07:25:03Z",
+      "side": 1,
+      "message": "Good point, I shouldn\u0027t have hardcoded 2 (-2 was to account for the null terminating byte), but I removed the wcsnicmp  to do a std::wstring substring check because the process name could be prefixed with \"\\\\?\\\".  Also added GetLongPathNameW in case the process path or registry path contain short-path names (e.g. PROGRA~1).  GetFullPathNameW is added for process name because I could invoke CreateProcess with a \".\" or \"..\" in the path name, but it shouldn\u0027t be needed for registry name because I wasn\u0027t able to install LO with a \".\" or \"..\" in the install path.  UNC paths should also be handled fine; the only reason they wouldn\u0027t is if the process was invoked with the prefix \"\\\\?\\UNC\\\u003cservername\u003e\\\" or the user is mixing machine name and IP addresses.  I tested GetCaseCorrectPathName with a \"\\\\?\\UNC\\\u003cservername\u003e\\\" prefix and it doesn\u0027t change into any other form.  If we wanted to handle UNC cases any differently, we would probably want to use the WinAPI NetShareGetInfo to convert share names (or IP addresses) to local file system paths, and I\u0027m not sure we want to be doing all that in case the user is using their own machine as a share.",
+      "parentUuid": "a9eceead_a487944c",
+      "range": {
+        "startLine": 94,
+        "startChar": 59,
+        "endLine": 94,
+        "endChar": 60
+      },
+      "revId": "29fd09cb719fefa459acabc37a0f1ccc6648a93f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
