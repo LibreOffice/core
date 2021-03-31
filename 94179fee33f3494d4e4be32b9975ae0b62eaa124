@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6dc92265_2636a4b2",
+        "filename": "test/source/sheet/xnamedranges.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-03-31T11:05:49Z",
+      "side": 1,
+      "message": "Here I am not sure how to test an invalid cell reference, since it checks only the named range. Is this test and the corresponding check in nameuno.cxx even necessary or could you imagine a named range where I can provoke the error?",
+      "revId": "94179fee33f3494d4e4be32b9975ae0b62eaa124",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
