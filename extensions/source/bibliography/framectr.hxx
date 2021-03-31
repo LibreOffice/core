@@ -61,13 +61,13 @@ class BibFrameController_Impl : public cppu::WeakImplHelper <
 >
 {
 friend class BibFrameCtrl_Impl;
-    rtl::Reference<BibFrameCtrl_Impl>                         mxImpl;
-    BibStatusDispatchArr        aStatusListeners;
-    css::uno::Reference< css::awt::XWindow >                  xWindow;
-    css::uno::Reference< css::frame::XFrame >                 xFrame;
-    bool                        bDisposing;
+    rtl::Reference<BibFrameCtrl_Impl>                         m_xImpl;
+    BibStatusDispatchArr                                      m_aStatusListeners;
+    css::uno::Reference< css::awt::XWindow >                  m_xWindow;
+    css::uno::Reference< css::frame::XFrame >                 m_xFrame;
+    bool                                                      m_bDisposing;
     rtl::Reference<BibDataManager>                            m_xDatMan;
-    VclPtr<vcl::Window> m_xLastQueriedFocusWin;
+    VclPtr<vcl::Window>                                       m_xLastQueriedFocusWin;
 
     DECL_LINK( DisposeHdl, void*, void );
 
