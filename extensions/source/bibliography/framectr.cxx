@@ -149,17 +149,17 @@ void BibFrameCtrl_Impl::disposing( const lang::EventObject& /*Source*/ )
 
 BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWindow > & xComponent,
                                                 BibDataManager* pDataManager)
-    :xWindow( xComponent )
+    :m_xWindow( xComponent )
     ,m_xDatMan( pDataManager )
 {
-    bDisposing=false;
-    mxImpl = new BibFrameCtrl_Impl;
-    mxImpl->pController = this;
+    m_bDisposing = false;
+    m_xImpl = new BibFrameCtrl_Impl;
+    m_xImpl->pController = this;
 }
 
 BibFrameController_Impl::~BibFrameController_Impl()
 {
-    mxImpl->pController = nullptr;
+    m_xImpl->pController = nullptr;
     m_xDatMan.clear();
 }
 
@@ -183,8 +183,8 @@ css::uno::Sequence< OUString > SAL_CALL BibFrameController_Impl::getSupportedSer
 
 void BibFrameController_Impl::attachFrame( const uno::Reference< XFrame > & xArg )
 {
-    xFrame = xArg;
-    xFrame->addFrameActionListener( mxImpl.get() );
+    m_xFrame = xArg;
+    m_xFrame->addFrameActionListener( m_xImpl.get() );
 }
 
 sal_Bool BibFrameController_Impl::attachModel( const uno::Reference< XModel > & /*xModel*/ )
@@ -195,9 +195,9 @@ sal_Bool BibFrameController_Impl::attachModel( const uno::Reference< XModel > & 
 sal_Bool BibFrameController_Impl::suspend( sal_Bool bSuspend )
 {
     if ( bSuspend )
-        getFrame()->removeFrameActionListener( mxImpl.get() );
+        getFrame()->removeFrameActionListener( m_xImpl.get() );
     else
-        getFrame()->addFrameActionListener( mxImpl.get() );
+        getFrame()->addFrameActionListener( m_xImpl.get() );
     return true;
 }
 
@@ -212,7 +212,7 @@ void BibFrameController_Impl::restoreViewData( const uno::Any& /*Value*/ )
 
 uno::Reference< XFrame >  BibFrameController_Impl::getFrame()
 {
-    return xFrame;
+    return m_xFrame;
 }
 
 uno::Reference< XModel >  BibFrameController_Impl::getModel()
@@ -222,27 +222,27 @@ uno::Reference< XModel >  BibFrameController_Impl::getModel()
 
 void BibFrameController_Impl::dispose()
 {
-    bDisposing = true;
+    m_bDisposing = true;
     lang::EventObject aObject;
     aObject.Source = static_cast<XController*>(this);
-    mxImpl->aLC.disposeAndClear(aObject);
+    m_xImpl->aLC.disposeAndClear(aObject);
     m_xDatMan.clear();
-    aStatusListeners.clear();
- }
+    m_aStatusListeners.clear();
+}
 
 void BibFrameController_Impl::addEventListener( const uno::Reference< lang::XEventListener > & aListener )
 {
-    mxImpl->aLC.addInterface( cppu::UnoType<lang::XEventListener>::get(), aListener );
+    m_xImpl->aLC.addInterface( cppu::UnoType<lang::XEventListener>::get(), aListener );
 }
 
 void BibFrameController_Impl::removeEventListener( const uno::Reference< lang::XEventListener > & aListener )
 {
-    mxImpl->aLC.removeInterface( cppu::UnoType<lang::XEventListener>::get(), aListener );
+    m_xImpl->aLC.removeInterface( cppu::UnoType<lang::XEventListener>::get(), aListener );
 }
 
 uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( const util::URL& aURL, const OUString& /*aTarget*/, sal_Int32 /*nSearchFlags*/ )
 {
-    if ( !bDisposing )
+    if ( !m_bDisposing )
     {
         const CmdToInfoCache& rCmdCache = GetCommandToInfoCache();
         CmdToInfoCache::const_iterator pIter = rCmdCache.find( aURL.Complete );
@@ -368,10 +368,10 @@ static vcl::Window* lcl_GetFocusChild( vcl::Window const * pParent )
 //class XDispatch
 void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequence< beans::PropertyValue >& aArgs)
 {
-    if ( !bDisposing )
+    if ( !m_bDisposing )
     {
         ::SolarMutexGuard aGuard;
-        weld::Window* pParent = Application::GetFrameWeld(xWindow);
+        weld::Window* pParent = Application::GetFrameWeld(m_xWindow);
         weld::WaitObject aWaitObject(pParent);
 
         OUString aCommand( _rURL.Path);
@@ -404,10 +404,10 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         }
         else if(aCommand == "Bib/autoFilter")
         {
-            sal_uInt16 nCount = aStatusListeners.size();
+            sal_uInt16 nCount = m_aStatusListeners.size();
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
-                BibStatusDispatch *pObj = aStatusListeners[n].get();
+                BibStatusDispatch *pObj = m_aStatusListeners[n].get();
                 if ( pObj->aURL.Path == "Bib/removeFilter" )
                 {
                     FeatureStateEvent  aEvent;
@@ -440,7 +440,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
 
                 // create the dialog object
                 uno::Reference< ui::dialogs::XExecutableDialog > xDialog = sdb::FilterDialog::createWithQuery(xContext, m_xDatMan->getParser(),
-                           Reference<sdbc::XRowSet>(m_xDatMan->getForm(), uno::UNO_QUERY_THROW), xWindow);
+                           Reference<sdbc::XRowSet>(m_xDatMan->getForm(), uno::UNO_QUERY_THROW), m_xWindow);
                 // execute it
                 if ( xDialog->execute( ) )
                 {
@@ -455,10 +455,10 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                 OSL_FAIL( "BibFrameController_Impl::dispatch: caught an exception!" );
             }
 
-            sal_uInt16 nCount = aStatusListeners.size();
+            sal_uInt16 nCount = m_aStatusListeners.size();
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
-                BibStatusDispatch *pObj = aStatusListeners[n].get();
+                BibStatusDispatch *pObj = m_aStatusListeners[n].get();
                 if ( pObj->aURL.Path == "Bib/removeFilter" && m_xDatMan->getParser().is())
                 {
                     FeatureStateEvent  aEvent;
@@ -518,7 +518,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                     bLeft = xCursor->isLast() && nCount > 1;
                     bRight= !xCursor->isLast();
                     // ask for confirmation
-                    Reference< frame::XController > xCtrl = mxImpl->pController;
+                    Reference< frame::XController > xCtrl = m_xImpl->pController;
                     Reference< form::XConfirmDeleteListener >  xConfirm(m_xDatMan->GetFormController(),UNO_QUERY);
                     if (xConfirm.is())
                     {
@@ -563,7 +563,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         }
         else if(aCommand == "Cut")
         {
-            vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+            vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( m_xWindow ) );
             if(pChild)
             {
                 KeyEvent aEvent( 0, KeyFuncType::CUT );
@@ -572,7 +572,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         }
         else if(aCommand == "Copy")
         {
-            vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+            vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( m_xWindow ) );
             if(pChild)
             {
                 KeyEvent aEvent( 0, KeyFuncType::COPY );
@@ -581,7 +581,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         }
         else if(aCommand == "Paste")
         {
-            vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+            vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( m_xWindow ) );
             if(pChild)
             {
                 KeyEvent aEvent( 0, KeyFuncType::PASTE );
@@ -592,7 +592,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
 }
 IMPL_LINK_NOARG( BibFrameController_Impl, DisposeHdl, void*, void )
 {
-    xFrame->dispose();
+    m_xFrame->dispose();
 };
 
 void BibFrameController_Impl::addStatusListener(
@@ -601,7 +601,7 @@ void BibFrameController_Impl::addStatusListener(
 {
     BibConfig* pConfig = BibModul::GetConfig();
     // create a new Reference and insert into listener array
-    aStatusListeners.push_back( std::make_unique<BibStatusDispatch>( aURL, aListener ) );
+    m_aStatusListeners.push_back( std::make_unique<BibStatusDispatch>( aURL, aListener ) );
 
     // send first status synchronously
     FeatureStateEvent aEvent;
@@ -652,14 +652,14 @@ void BibFrameController_Impl::addStatusListener(
     }
     else if(aURL.Path == "Cut")
     {
-        vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+        vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( m_xWindow ) );
         Edit* pEdit = dynamic_cast<Edit*>( pChild );
         if( pEdit )
             aEvent.IsEnabled  = !pEdit->IsReadOnly() && pEdit->GetSelection().Len();
     }
     if(aURL.Path == "Copy")
     {
-        vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+        vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( m_xWindow ) );
         Edit* pEdit = dynamic_cast<Edit*>( pChild );
         if( pEdit )
             aEvent.IsEnabled  = pEdit->GetSelection().Len() > 0;
@@ -667,7 +667,7 @@ void BibFrameController_Impl::addStatusListener(
     else if(aURL.Path == "Paste" )
     {
         aEvent.IsEnabled  = false;
-        vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+        vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( m_xWindow ) );
         if(pChild)
         {
             uno::Reference< datatransfer::clipboard::XClipboard > xClip = pChild->GetClipboard();
@@ -726,17 +726,17 @@ void BibFrameController_Impl::removeStatusListener(
 {
     // search listener array for given listener
     // for checking equality always "cast" to XInterface
-    if ( !bDisposing )
+    if ( !m_bDisposing )
     {
-        sal_uInt16 nCount = aStatusListeners.size();
+        sal_uInt16 nCount = m_aStatusListeners.size();
         for ( sal_uInt16 n=0; n<nCount; n++ )
         {
-            BibStatusDispatch *pObj = aStatusListeners[n].get();
+            BibStatusDispatch *pObj = m_aStatusListeners[n].get();
             bool bFlag=pObj->xListener.is();
             if (!bFlag || (pObj->xListener == aObject &&
                 ( aURL.Complete.isEmpty() || pObj->aURL.Path == aURL.Path  )))
             {
-                aStatusListeners.erase( aStatusListeners.begin() + n );
+                m_aStatusListeners.erase( m_aStatusListeners.begin() + n );
                 break;
             }
         }
@@ -748,14 +748,14 @@ void BibFrameController_Impl::RemoveFilter()
     OUString aQuery;
     m_xDatMan->startQueryWith(aQuery);
 
-    sal_uInt16 nCount = aStatusListeners.size();
+    sal_uInt16 nCount = m_aStatusListeners.size();
 
     bool bRemoveFilter=false;
     bool bQueryText=false;
 
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
-        BibStatusDispatch *pObj = aStatusListeners[n].get();
+        BibStatusDispatch *pObj = m_aStatusListeners[n].get();
         if ( pObj->aURL.Path == "Bib/removeFilter" )
         {
             FeatureStateEvent  aEvent;
@@ -810,13 +810,13 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
     }
 
 
-    sal_uInt16 nCount = aStatusListeners.size();
+    sal_uInt16 nCount = m_aStatusListeners.size();
 
     bool bMenuFilter=false;
     bool bQueryText=false;
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
-        BibStatusDispatch *pObj = aStatusListeners[n].get();
+        BibStatusDispatch *pObj = m_aStatusListeners[n].get();
         if (pObj->aURL.Path == "Bib/MenuFilter")
         {
             FeatureStateEvent  aEvent;
