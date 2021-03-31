@@ -281,30 +281,30 @@ RTFError RTFTokenizer::dispatchKeyword(OString const& rKeyword, bool bParam, int
     RTFSymbol const& rSymbol = findIt->second;
     switch (rSymbol.GetControlType())
     {
-        case CONTROL_FLAG:
+        case RTFControlType::FLAG:
             // flags ignore any parameter by definition
             ret = m_rImport.dispatchFlag(rSymbol.GetIndex());
             if (ret != RTFError::OK)
                 return ret;
             break;
-        case CONTROL_DESTINATION:
+        case RTFControlType::DESTINATION:
             // same for destinations
             ret = m_rImport.dispatchDestination(rSymbol.GetIndex());
             if (ret != RTFError::OK)
                 return ret;
             break;
-        case CONTROL_SYMBOL:
+        case RTFControlType::SYMBOL:
             // and symbols
             ret = m_rImport.dispatchSymbol(rSymbol.GetIndex());
             if (ret != RTFError::OK)
                 return ret;
             break;
-        case CONTROL_TOGGLE:
+        case RTFControlType::TOGGLE:
             ret = m_rImport.dispatchToggle(rSymbol.GetIndex(), bParam, nParam);
             if (ret != RTFError::OK)
                 return ret;
             break;
-        case CONTROL_VALUE:
+        case RTFControlType::VALUE:
             if (!bParam)
                 nParam = rSymbol.GetDefValue();
             ret = m_rImport.dispatchValue(rSymbol.GetIndex(), nParam);

@@ -40,7 +40,7 @@ RTFError RTFLookahead::dispatchDestination(RTFKeyword /*nKeyword*/) { return RTF
 
 RTFError RTFLookahead::dispatchFlag(RTFKeyword nKeyword)
 {
-    if (nKeyword == RTF_INTBL)
+    if (nKeyword == RTFKeyword::INTBL)
         m_bHasTable = true;
     return RTFError::OK;
 }
@@ -54,7 +54,7 @@ RTFError RTFLookahead::dispatchToggle(RTFKeyword /*nKeyword*/, bool /*bParam*/, 
 
 RTFError RTFLookahead::dispatchValue(RTFKeyword nKeyword, int nParam)
 {
-    if (nKeyword == RTF_COLS && nParam >= 2)
+    if (nKeyword == RTFKeyword::COLS && nParam >= 2)
         m_bHasColumns = true;
     return RTFError::OK;
 }
