@@ -921,11 +921,11 @@ sal_Int32 ZipFile::readCEN()
 
             aMemGrabber.skipBytes ( 2 );
             aEntry.nVersion = aMemGrabber.ReadInt16();
+            aEntry.nFlag = aMemGrabber.ReadInt16();
 
-            if ( ( aEntry.nVersion & 1 ) == 1 )
+            if ( ( aEntry.nFlag & 1 ) == 1 )
                 throw ZipException("Invalid CEN header (encrypted entry)" );
 
-            aEntry.nFlag = aMemGrabber.ReadInt16();
             aEntry.nMethod = aMemGrabber.ReadInt16();
 
             if ( aEntry.nMethod != STORED && aEntry.nMethod != DEFLATED)
@@ -1025,9 +1025,10 @@ void ZipFile::recover()
                     MemoryByteGrabber aMemGrabber(aTmpBuffer);
 
                     aEntry.nVersion = aMemGrabber.ReadInt16();
-                    if ( ( aEntry.nVersion & 1 ) != 1 )
+                    aEntry.nFlag = aMemGrabber.ReadInt16();
+
+                    if ( ( aEntry.nFlag & 1 ) != 1 )
                     {
-                        aEntry.nFlag = aMemGrabber.ReadInt16();
                         aEntry.nMethod = aMemGrabber.ReadInt16();
 
                         if ( aEntry.nMethod == STORED || aEntry.nMethod == DEFLATED )
