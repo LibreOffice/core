@@ -79,6 +79,8 @@
 #define CTF_PM_MARGINBOTTOM             (XML_PM_CTF_START + 0x001C)
 #define CTF_PM_MARGINLEFT               (XML_PM_CTF_START + 0x001D)
 #define CTF_PM_MARGINRIGHT              (XML_PM_CTF_START + 0x001E)
+#define CTF_PM_WRITINGMODE              (XML_PM_CTF_START + 0x001F)
+#define CTF_PM_RTLGUTTER                (XML_PM_CTF_START + 0x0020)
 
 #define CTF_PM_PAGEUSAGE                (XML_PM_CTF_START + 0x0031)
 #define CTF_PM_GRAPHICPOSITION          (XML_PM_CTF_START + 0x0032)

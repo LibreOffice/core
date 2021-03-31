@@ -19,6 +19,8 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 
 #include <comphelper/propertysequence.hxx>
 #include <unotools/tempfile.hxx>
@@ -130,6 +132,28 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFontSorting)
         ++nIndex;
     }
     xmlXPathFreeObject(pXPath);
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRtlGutter)
+{
+    // Given a document with a gutter margin and an RTL writing mode:
+    // When loading that document from ODF:
+    load(u"rtl-gutter.fodt");
+
+    // Then make sure the page style's RtlGutter property is true.
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(getComponent(),
+                                                                         uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies
+        = xStyleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"),
+                                                        uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStandard(xStyleFamily->getByName("Standard"),
+                                                  uno::UNO_QUERY);
+    bool bRtlGutter{};
+    xStandard->getPropertyValue("RtlGutter") >>= bRtlGutter;
+    // Without the accompanying fix in place, this test would have failed as
+    // <style:page-layout-properties>'s style:writing-mode="..." did not affect RtlGutter.
+    CPPUNIT_ASSERT(bRtlGutter);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
