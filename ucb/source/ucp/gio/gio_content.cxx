@@ -712,7 +712,7 @@ css::uno::Sequence< css::uno::Any > Content::setPropertyValues(
                 continue;
             }
 
-            if ( aNewTitle.getLength() <= 0 )
+            if ( aNewTitle.isEmpty() )
             {
                 aRet[ n ] <<= css::lang::IllegalArgumentException
                     ( "Empty title not allowed!",

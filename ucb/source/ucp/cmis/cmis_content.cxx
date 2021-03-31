@@ -1472,7 +1472,7 @@ namespace cmis
                     continue;
                 }
 
-                if ( aNewTitle.getLength() <= 0 )
+                if ( aNewTitle.isEmpty() )
                 {
                     aRet[ n ] <<= lang::IllegalArgumentException
                         ( "Empty title not allowed!",
