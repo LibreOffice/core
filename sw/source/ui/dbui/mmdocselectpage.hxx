@@ -39,6 +39,7 @@ class SwMailMergeDocSelectPage : public vcl::OWizardPage
     std::unique_ptr<weld::Button> m_xBrowseDocPB;
     std::unique_ptr<weld::Button> m_xBrowseTemplatePB;
     std::unique_ptr<weld::ComboBox> m_xRecentDocLB;
+    std::unique_ptr<weld::Label> m_xDataSourceWarningFT;
 
     DECL_LINK(DocSelectHdl, weld::ToggleButton&, void);
     DECL_LINK(FileSelectHdl, weld::Button&, void);
