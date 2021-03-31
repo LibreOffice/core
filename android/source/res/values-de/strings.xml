@@ -100,8 +100,6 @@
     <string name="message_saving">Dokument wird gespeichert…</string>
     <string name="message_save_incomplete">Speichern unvollständig. Gab es Änderungen?</string>
     <string name="message_saving_failed">Speichern des Dokuments ist fehlgeschlagen.</string>
-    <string name="create_new_file_success">"Neue Datei angelegt - "</string>
-    <string name="create_new_file_error">Neue Datei konnte nicht angelegt weden, bitte Prüfen Sie den eingegeben Dateinamen.</string>
 
     <!-- Document provider settings -->
     <string name="storage_provider_settings">Speicheranbieter-Einstellungen</string>
@@ -127,10 +125,6 @@
     <string name="save_document">SPEICHERN</string>
     <string name="action_cancel">Abbrechen</string>
     <string name="no_save_document">NEIN</string>
-
-    <!-- Create New Document Dialog Strings -->
-    <string name="create_new_document_title">Dateiname eingeben</string>
-    <string name="action_create">ANLEGEN</string>
 
     <!-- Presentation Mode Strings -->
     <string name="action_presentation">Präsentation</string>
@@ -223,8 +217,10 @@
     <string name="display_language">Anzeigesprache</string>
     <string name="display_language_summary">Wählen Sie die Standard-Anzeigesprache</string>
     <string name="unable_to_export_pdf">PDF-Export nicht möglich</string>
+    <string name="unable_to_save">Speichern nicht möglich</string>
     <string name="pdf_exported_at">PDF exportiert nach</string>
     <string name="printing_not_supported">Ihr Gerät unterstützt Drucken nicht</string>
+    <string name="creating_new_files_not_supported">Erstellen neuer Dokumente auf diesem Gerät nicht verfügbar, benötigt Android-SDK-Version >= 19.</string>
     <string name="error">Fehler</string>
     <string name="enter_part_name">Name für Abschnitt eingeben</string>
     <string name="bmp_null">Bmp ist null!</string>
