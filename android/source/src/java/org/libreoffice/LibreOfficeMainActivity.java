@@ -93,7 +93,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private DocumentOverlay mDocumentOverlay;
     private File mTempFile = null;
     private File mTempSlideShowFile = null;
-    private String newDocumentType = null;
     public boolean firstStart = true;
 
     BottomSheetBehavior bottomToolbarSheetBehavior;
