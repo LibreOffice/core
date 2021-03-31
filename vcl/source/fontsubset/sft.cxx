@@ -1824,7 +1824,7 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
                     break;
                 }
 
-                sal_uInt32 l = nEndOffset - nStartOffset;
+                sal_uInt32 l = pSubRecordEnd - pSubRecordStart;
                 HexFmtBlockWrite(h, pSubRecordStart, l);
             }
         }
