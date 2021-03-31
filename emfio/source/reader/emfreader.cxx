@@ -333,38 +333,42 @@ bool ImplReadRegion( tools::PolyPolygon& rPolyPoly, SvStream& rStream, sal_uInt3
     if (nLen == 0)
         return false;
 
-    sal_uInt32 nHdSize, nType, nCount, nRgnSize, i;
+    sal_uInt32 nHdSize, nType, nCountRects, nRgnSize, i;
     rStream.ReadUInt32(nHdSize);
     rStream.ReadUInt32(nType);
-    rStream.ReadUInt32(nCount);
+    rStream.ReadUInt32(nCountRects);
     rStream.ReadUInt32(nRgnSize);
 
-    if (!rStream.good() || nCount == 0 || nType != RDH_RECTANGLES)
+    if (!rStream.good() || nCountRects == 0 || nType != RDH_RECTANGLES)
         return false;
 
     sal_uInt32 nSize;
-    if (o3tl::checked_multiply<sal_uInt32>(nCount, 16, nSize))
+    if (o3tl::checked_multiply<sal_uInt32>(nCountRects, 16, nSize))
         return false;
     if (o3tl::checked_add<sal_uInt32>(nSize, nHdSize - 16, nSize))
         return false;
     if (nLen < nSize)
         return false;
 
-    sal_Int32 nx1, ny1, nx2, ny2;
-    for (i = 0; i < nCount; i++)
+    sal_Int32 nLeft, nTop, nRight, nBottom;
+
+    //bounds of the region
+    rStream.ReadInt32(nLeft);
+    rStream.ReadInt32(nTop);
+    rStream.ReadInt32(nRight);
+    rStream.ReadInt32(nBottom);
+    SAL_INFO("emfio", "\t\tLeft: " << nLeft << ", top: " << nTop << ", right: " << nRight << ", bottom: " << nBottom);
+
+    for (i = 0; i < nCountRects; i++)
     {
-        rStream.ReadInt32(nx1);
-        rStream.ReadInt32(ny1);
-        rStream.ReadInt32(nx2);
-        rStream.ReadInt32(ny2);
+        rStream.ReadInt32(nLeft);
+        rStream.ReadInt32(nTop);
+        rStream.ReadInt32(nRight);
+        rStream.ReadInt32(nBottom);
 
-        tools::Rectangle aRectangle(Point(nx1, ny1), Point(nx2, ny2));
-
-        tools::Polygon aPolygon(aRectangle);
-        tools::PolyPolygon aPolyPolyOr1(aPolygon);
-        tools::PolyPolygon aPolyPolyOr2(rPolyPoly);
-        rPolyPoly.GetUnion(aPolyPolyOr1, aPolyPolyOr2);
-        rPolyPoly = aPolyPolyOr2;
+        SAL_INFO("emfio", "\t\tLeft: " << nLeft << ", top: " << nTop << ", right: " << nRight << ", bottom: " << nBottom);
+        tools::PolyPolygon aPolyPolyOr1(tools::Polygon(tools::Rectangle(nLeft, nTop, nRight, nBottom)));
+        rPolyPoly.GetUnion(aPolyPolyOr1, rPolyPoly);
     }
     return true;
 }
@@ -1915,10 +1919,10 @@ namespace emfio
 
                     case EMR_FILLRGN :
                     {
-                        sal_uInt32 nLen;
+                        sal_uInt32 nRgnDataSize;
                         tools::PolyPolygon aPolyPoly;
-                        mpInputStream->SeekRel( 0x10 );
-                        mpInputStream->ReadUInt32( nLen ).ReadUInt32( nIndex );
+                        mpInputStream->SeekRel( 0x10 );  // RectL bounds
+                        mpInputStream->ReadUInt32( nRgnDataSize ).ReadUInt32( nIndex );
 
                         if ( ImplReadRegion( aPolyPoly, *mpInputStream, nRecSize ) )
                         {
