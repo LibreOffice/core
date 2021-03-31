@@ -40,7 +40,6 @@ import org.libreoffice.overlay.CalcHeadersController;
 import org.libreoffice.overlay.DocumentOverlay;
 import org.libreoffice.storage.DocumentProviderFactory;
 import org.libreoffice.storage.IFile;
-import org.libreoffice.ui.FileUtilities;
 import org.libreoffice.ui.LibreOfficeUIActivity;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.LayerView;
