@@ -22,11 +22,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import java.lang.reflect.Method;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 
@@ -91,99 +93,10 @@ public class XMLParserFactory {
         }
 
         public void write(Document doc, OutputStream out) throws IOException {
-
-            Class<?> clazz = doc.getClass();
-            String name = clazz.getName();
-
-            // depending on the class of the Document object use introspection
-            // to invoke the appropriate methods for writing the XML
-            // this code is based on the code used by the NetBeans
-            // class XMLUtilImpl in the openide module
             try {
-                if (name.equals("com.sun.xml.tree.XmlDocument") ||
-                    name.equals("org.apache.crimson.tree.XmlDocument")) {
-
-                    // these DOM implementations are self writing
-                    Method write;
-
-                    write = clazz.getDeclaredMethod("write",
-                                                    new Class[] {OutputStream.class});
-
-                    write.invoke(doc, new Object[] {out});
-                } else {
-                    // try xerces serialize package using introspection
-                    ClassLoader cl = this.getClass().getClassLoader();
-
-                    Class<?> serializerClass = null;
-                    Class<?> formatterClass = null;
-
-                    try {
-
-                        serializerClass =
-                            Class.forName("org.apache.xml.serialize.XMLSerializer",
-                                          true, cl);
-
-                        formatterClass =
-                            Class.forName("org.apache.xml.serialize.OutputFormat",
-                                          true, cl);
-
-                    } catch (ClassNotFoundException cnfe) {
-                        String prefix = "com.sun.org.apache.xml.internal.";
-
-                        serializerClass =
-                            Class.forName(prefix +  "serialize.XMLSerializer",
-                                          true, cl);
-
-                        formatterClass =
-                            Class.forName(prefix + "serialize.OutputFormat",
-                                          true, cl);
-                    }
-
-                    Object serializerObject = serializerClass.newInstance();
-                    Object formatterObject = formatterClass.newInstance();
-
-                    // improve output readability using the OutputFormat class
-                    Method method =
-                        formatterClass.getMethod("setMethod",
-                                                 new Class[] {String.class});
-
-                    method.invoke(formatterObject, new Object[] {"xml"});
-
-                    method = formatterClass.getMethod("setIndenting",
-                                                      new Class[] {Boolean.TYPE});
-
-                    method.invoke(formatterObject, new Object[] {Boolean.TRUE});
-
-                    // now set up an instance of XMLSerializer with our
-                    // OutputStream and serialize our Document
-                    method = serializerClass.getMethod("setOutputByteStream",
-                                                       new Class[] {OutputStream.class});
-
-                    method.invoke(serializerObject, new Object[] {out});
-
-                    method = serializerClass.getMethod("setOutputFormat",
-                                                       new Class[] {formatterClass});
-
-                    method.invoke(serializerObject, new Object[] {formatterObject});
-
-                    method = serializerClass.getMethod("asDOMSerializer", new Class[0]);
-
-                    Object impl = method.invoke(serializerObject, new Object[0]);
-
-                    method = impl.getClass().getMethod("serialize",
-                                                       new Class[] {Document.class});
-
-                    method.invoke(impl, new Object[] {doc});
-                }
-            } catch (NoSuchMethodException ex1) {
-                IOException ex2 = new IOException();
-                ex2.initCause(ex1);
-                throw ex2;
-            } catch (ClassNotFoundException ex1) {
-                IOException ex2 = new IOException();
-                ex2.initCause(ex1);
-                throw ex2;
-            } catch (Exception ex1) {
+                TransformerFactory.newInstance().newTransformer().transform(
+                    new DOMSource(doc), new StreamResult(out));
+            } catch (TransformerException ex1) {
                 IOException ex2 = new IOException();
                 ex2.initCause(ex1);
                 throw ex2;
