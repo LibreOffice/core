@@ -127,6 +127,8 @@ private:
     std::unique_ptr<weld::RadioButton> mxRbText;
 
     std::unique_ptr<weld::Widget> mxEPSGrid;
+    std::unique_ptr<weld::RadioButton> mxModifyDimension;
+    std::unique_ptr<weld::RadioButton> mxModifyResolution;
     std::unique_ptr<weld::CheckButton> mxCbEPSPreviewTIFF;
     std::unique_ptr<weld::CheckButton> mxCbEPSPreviewEPSI;
     std::unique_ptr<weld::RadioButton> mxRbEPSLevel1;
@@ -136,12 +138,14 @@ private:
     std::unique_ptr<weld::RadioButton> mxRbEPSCompressionLZW;
     std::unique_ptr<weld::RadioButton> mxRbEPSCompressionNone;
 
+
     std::unique_ptr<weld::Widget> mxInfo;
     std::unique_ptr<weld::Label> mxFtEstimatedSize;
 
     std::unique_ptr<weld::Button> mxBtnOK;
 
     DECL_LINK(UpdateHdl, weld::ToggleButton&, void);
+    DECL_LINK(UpdateLock, weld::ToggleButton&, void);
     DECL_LINK(SelectListBoxHdl, weld::ComboBox&, void);
     DECL_LINK(SelectHdl, weld::SpinButton&, void);
     DECL_LINK(UpdateHdlMtfSizeX, weld::SpinButton&, void);
