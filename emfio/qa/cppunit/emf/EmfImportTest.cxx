@@ -41,6 +41,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void TestDrawStringTransparent();
     void TestDrawLine();
     void TestLinearGradient();
+    void TestFillRegion();
 
     Primitive2DSequence parseEmf(const OUString& aSource);
 
@@ -51,6 +52,7 @@ public:
     CPPUNIT_TEST(TestDrawStringTransparent);
     CPPUNIT_TEST(TestDrawLine);
     CPPUNIT_TEST(TestLinearGradient);
+    CPPUNIT_TEST(TestFillRegion);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -188,6 +190,28 @@ void Test::TestLinearGradient()
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/svglineargradient[2]", "endy", "-1");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/svglineargradient[2]", "opacity", "1");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/svglineargradient[2]/polypolygon", "path", "m7615.75822989746 0.216110019646294h7615.75822989746v7610.21611001965h-7615.75822989746z");
+}
+
+void Test::TestFillRegion()
+{
+    // Check import of EMF image with records: CREATEBRUSHINDIRECT, FILLRGN. The SETICMMODE is also used.
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestFillRegion.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::tools::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygon", "path", "m0 0h3943v3939h-3943z");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygoncolor", 1);
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygoncolor[1]/polypolygon",
+                "path", "m1323 0h1323v1322h1323v1322h-1323v1322h-1323v-1322h-1323v-1322h1323z");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polypolygoncolor[1]", "color", "#ff0000");
+
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline", 1);
+    assertXPathContent(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[1]/polygon",
+                       "1323,0 2646,0 2646,1322 3969,1322 3969,2644 2646,2644 2646,3966 1323,3966 1323,2644 0,2644 0,1322 1323,1322");
+    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/polygonhairline[1]", "color", "#000000");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
