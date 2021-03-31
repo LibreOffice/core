@@ -35,6 +35,7 @@
 #include <XMLBitmapLogicalSizePropertyHandler.hxx>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <XMLBitmapRepeatOffsetPropertyHandler.hxx>
+#include <XMLRtlGutterPropertyHandler.hxx>
 
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;
@@ -149,6 +150,9 @@ const XMLPropertyHandler* XMLPageMasterPropHdlFactory::GetPropertyHandler( sal_I
             case XML_SW_TYPE_BITMAPREPOFFSETX:
             case XML_SW_TYPE_BITMAPREPOFFSETY:
                 pHdl = new XMLBitmapRepeatOffsetPropertyHandler(XML_SW_TYPE_BITMAPREPOFFSETX == nType);
+                break;
+            case XML_SW_TYPE_RTLGUTTER:
+                pHdl = new XMLRtlGutterPropertyHandler();
                 break;
 
             default:
