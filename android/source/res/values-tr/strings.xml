@@ -14,7 +14,6 @@
     <string name="about_license">Lisansı Görüntüle</string>
     <string name="about_notice">Bildiriyi Görüntüle</string>
     <string name="about_moreinfo">Daha Fazla Bilgi</string>
-    <string name="back_again_to_quit">Çıkış için geri tuşuna tekrar basınız.</string>
 
     <string name="new_textdocument">Yeni Kelime İşlemci</string>
     <string name="new_presentation">Yeni Sunum</string>
