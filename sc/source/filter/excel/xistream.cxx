@@ -746,19 +746,21 @@ std::size_t XclImpStream::Read( void* pData, std::size_t nBytes )
 std::size_t XclImpStream::CopyToStream( SvStream& rOutStrm, std::size_t nBytes )
 {
     std::size_t nRet = 0;
-    if( mbValid && (nBytes > 0) )
+    if (mbValid && nBytes)
     {
         const std::size_t nMaxBuffer = 4096;
-        std::unique_ptr<sal_uInt8[]> pnBuffer(new sal_uInt8[ ::std::min( nBytes, nMaxBuffer ) ]);
+        std::vector<sal_uInt8> aBuffer(o3tl::sanitizing_min(nBytes, nMaxBuffer));
         std::size_t nBytesLeft = nBytes;
 
-        while( mbValid && (nBytesLeft > 0) )
+        while (mbValid)
         {
-            std::size_t nReadSize = ::std::min( nBytesLeft, nMaxBuffer );
-            nRet += Read( pnBuffer.get(), nReadSize );
+            if (!nBytesLeft)
+                break;
+            std::size_t nReadSize = o3tl::sanitizing_min(nBytesLeft, nMaxBuffer);
+            nRet += Read(aBuffer.data(), nReadSize);
             // writing more bytes than read results in invalid memory access
             SAL_WARN_IF(nRet != nReadSize, "sc", "read less bytes than requested");
-            rOutStrm.WriteBytes(pnBuffer.get(), nReadSize);
+            rOutStrm.WriteBytes(aBuffer.data(), nReadSize);
             nBytesLeft -= nReadSize;
         }
     }
