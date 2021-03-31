@@ -236,10 +236,6 @@ BitmapBuffer* Qt5Bitmap::AcquireBuffer(BitmapAccessMode /*nMode*/)
             pBuffer->mnFormat = ScanlineFormat::N1BitMsbPal | ScanlineFormat::TopDown;
             pBuffer->maPalette = m_aPalette;
             break;
-        case 4:
-            pBuffer->mnFormat = ScanlineFormat::N4BitMsnPal | ScanlineFormat::TopDown;
-            pBuffer->maPalette = m_aPalette;
-            break;
         case 8:
             pBuffer->mnFormat = ScanlineFormat::N8BitPal | ScanlineFormat::TopDown;
             pBuffer->maPalette = m_aPalette;

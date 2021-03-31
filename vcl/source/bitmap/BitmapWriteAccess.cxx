@@ -91,12 +91,6 @@ void BitmapWriteAccess::CopyScanline(tools::Long nY, ConstScanline aSrcScanline,
             case ScanlineFormat::N1BitLsbPal:
                 pFncGetPixel = GetPixelForN1BitLsbPal;
                 break;
-            case ScanlineFormat::N4BitMsnPal:
-                pFncGetPixel = GetPixelForN4BitMsnPal;
-                break;
-            case ScanlineFormat::N4BitLsnPal:
-                pFncGetPixel = GetPixelForN4BitLsnPal;
-                break;
             case ScanlineFormat::N8BitPal:
                 pFncGetPixel = GetPixelForN8BitPal;
                 break;

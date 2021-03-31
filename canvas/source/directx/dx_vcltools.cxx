@@ -176,7 +176,6 @@ namespace dxcanvas::tools
                     // one of the following formats:
 
                     //    ScanlineFormat::N1BitMsbPal
-                    //    ScanlineFormat::N4BitMsnPal
                     //    ScanlineFormat::N8BitPal
                     //    ScanlineFormat::N24BitTcBgr
                     //    ScanlineFormat::N32BitTcMask
@@ -240,7 +239,6 @@ namespace dxcanvas::tools
                             // to hand-formulate the following
                             // formats, too.
                             case ScanlineFormat::N1BitMsbPal:
-                            case ScanlineFormat::N4BitMsnPal:
                             case ScanlineFormat::N32BitTcMask:
                             {
                                 Scanline pAScan = pAlphaReadAccess->GetScanline( y );
@@ -261,7 +259,6 @@ namespace dxcanvas::tools
                             break;
 
                             case ScanlineFormat::N1BitLsbPal:
-                            case ScanlineFormat::N4BitLsnPal:
                             case ScanlineFormat::N24BitTcRgb:
                             case ScanlineFormat::N32BitTcAbgr:
                             case ScanlineFormat::N32BitTcArgb:
@@ -285,7 +282,6 @@ namespace dxcanvas::tools
                     // one of the following formats:
 
                     //    ScanlineFormat::N1BitMsbPal
-                    //    ScanlineFormat::N4BitMsnPal
                     //    ScanlineFormat::N8BitPal
                     //    ScanlineFormat::N24BitTcBgr
                     //    ScanlineFormat::N32BitTcMask
@@ -371,7 +367,6 @@ namespace dxcanvas::tools
                             // to hand-formulate the following
                             // formats, too.
                             case ScanlineFormat::N1BitMsbPal:
-                            case ScanlineFormat::N4BitMsnPal:
                             case ScanlineFormat::N32BitTcMask:
                             {
                                 Scanline pMScan = pMaskReadAccess->GetScanline( y );
@@ -395,7 +390,6 @@ namespace dxcanvas::tools
                             break;
 
                             case ScanlineFormat::N1BitLsbPal:
-                            case ScanlineFormat::N4BitLsnPal:
                             case ScanlineFormat::N24BitTcRgb:
                             case ScanlineFormat::N32BitTcAbgr:
                             case ScanlineFormat::N32BitTcArgb:
