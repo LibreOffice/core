@@ -221,6 +221,7 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/style/XMLBackgroundImageExport \
     xmloff/source/style/XMLBitmapLogicalSizePropertyHandler \
     xmloff/source/style/XMLBitmapRepeatOffsetPropertyHandler \
+    xmloff/source/style/XMLRtlGutterPropertyHandler \
     xmloff/source/style/XMLClipPropertyHandler \
     xmloff/source/style/XMLConstantsPropertyHandler \
     xmloff/source/style/XMLElementPropertyContext \
