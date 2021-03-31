@@ -465,7 +465,7 @@ dnl ===================================================================
 dnl Product version
 dnl ===================================================================
 AC_MSG_CHECKING([for product version])
-PRODUCTVERSION="$LIBO_VERSION_MAJOR.$LIBO_VERSION_PATCH"
+PRODUCTVERSION="$LIBO_VERSION_MAJOR"
 AC_MSG_RESULT([$PRODUCTVERSION])
 AC_SUBST(PRODUCTVERSION)
 
