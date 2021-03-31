@@ -9,8 +9,7 @@
  *
  */
 
-#ifndef PLUGIN_H
-#define PLUGIN_H
+#pragma once
 
 #include <clang/AST/ASTContext.h>
 #include <clang/AST/RecursiveASTVisitor.h>
@@ -311,7 +310,5 @@ bool isSmartPointerType(const Expr*);
 const Decl* getFunctionDeclContext(ASTContext& context, const Stmt* stmt);
 
 } // namespace
-
-#endif // COMPILEPLUGIN_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
