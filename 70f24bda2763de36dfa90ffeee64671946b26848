@@ -16,6 +16,24 @@
       "revId": "70f24bda2763de36dfa90ffeee64671946b26848",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddc9e0ad_0975f0cc",
+        "filename": "sc/source/ui/unoobj/nameuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-31T04:24:43Z",
+      "side": 1,
+      "message": "We should not pass localized strings to the thrown exceptions. Some places rely on the strings be ASCII (iirc).\n\nIf you need to show something localized, the localized string must be formed in the place where the exception is caught, and its type/contents is checked...",
+      "parentUuid": "7ea3a379_70ab4f4a",
+      "revId": "70f24bda2763de36dfa90ffeee64671946b26848",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
