@@ -210,6 +210,17 @@ public:
     Pair &          toPair() { return *this; }
 
     using Pair::toString;
+
+    Size&              operator += ( const Size& rSize );
+    Size&              operator -= ( const Size& rSize );
+    Size&              operator *= ( const tools::Long nVal );
+    Size&              operator /= ( const tools::Long nVal );
+
+    friend inline Size operator+( const Size &rVal1, const Size &rVal2 );
+    friend inline Size operator-( const Size &rVal1, const Size &rVal2 );
+    friend inline Size operator*( const Size &rVal1, const tools::Long nVal2 );
+    friend inline Size operator/( const Size &rVal1, const tools::Long nVal2 );
+
 };
 
 inline bool operator ==(Size const & s1, Size const & s2)
@@ -221,6 +232,55 @@ inline bool operator !=(Size const & s1, Size const & s2)
 {
     return !(s1 == s2);
 }
+
+inline Size& Size::operator += ( const Size& rSize )
+{
+    nA += rSize.nA;
+    nB += rSize.nB;
+    return *this;
+}
+
+inline Size& Size::operator -= ( const Size& rSize )
+{
+    nA -= rSize.nA;
+    nB -= rSize.nB;
+    return *this;
+}
+
+inline Size& Size::operator *= ( const tools::Long nVal )
+{
+    nA *= nVal;
+    nB *= nVal;
+    return *this;
+}
+
+inline Size& Size::operator /= ( const tools::Long nVal )
+{
+    nA /= nVal;
+    nB /= nVal;
+    return *this;
+}
+
+inline Size operator+( const Size &rVal1, const Size &rVal2 )
+{
+    return Size( rVal1.nA+rVal2.nA, rVal1.nB+rVal2.nB );
+}
+
+inline Size operator-( const Size &rVal1, const Size &rVal2 )
+{
+    return Size( rVal1.nA-rVal2.nA, rVal1.nB-rVal2.nB );
+}
+
+inline Size operator*( const Size &rVal1, const tools::Long nVal2 )
+{
+    return Size( rVal1.nA*nVal2, rVal1.nB*nVal2 );
+}
+
+inline Size operator/( const Size &rVal1, const tools::Long nVal2 )
+{
+    return Size( rVal1.nA/nVal2, rVal1.nB/nVal2 );
+}
+
 
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
