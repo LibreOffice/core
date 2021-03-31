@@ -655,7 +655,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
                 sExtension = pSfxFlt->GetWildcard().getGlob().getToken(1, '.');
                 sPath += "." + sExtension;
             }
-            OUString sStat = SwResId(STR_STATSTR_LETTER) + " " + OUString::number(nBegin + nDoc);
+            OUString sStat = SwResId(STR_STATSTR_LETTER) + " " + OUString::number(nDoc + 1);
             xSaveMonitor->m_xPrintInfo->set_label(sStat);
 
             //now extract a document from the target document
@@ -683,7 +683,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
             pTargetView->GetWrtShell().EndAction();
             //then save it
             OUString sOutPath = aURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
-            OUString sCounter = "_" + OUString::number(nBegin + nDoc + 1);
+            OUString sCounter = "_" + OUString::number(nDoc + 1);
             sOutPath = sOutPath.replaceAt( sOutPath.getLength() - sExtension.getLength() - 1, 0, sCounter);
 
             while(true)
