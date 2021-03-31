@@ -211,6 +211,30 @@
       "revId": "29fd09cb719fefa459acabc37a0f1ccc6648a93f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0ac80688_cec68911",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-03-31T08:20:56Z",
+      "side": 1,
+      "message": "\u003e .. and it was wrong\n\nYes, you\u0027re right -- I just quickly looked at some values and forgot do simple math.\n\n\u003e You have wcsstr for that\n\nChanged",
+      "parentUuid": "f5f3b24b_481d46c9",
+      "range": {
+        "startLine": 94,
+        "startChar": 59,
+        "endLine": 94,
+        "endChar": 60
+      },
+      "revId": "29fd09cb719fefa459acabc37a0f1ccc6648a93f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
