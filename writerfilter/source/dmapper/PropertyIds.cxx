@@ -360,6 +360,9 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_GUTTER_MARGIN:
             sName = "GutterMargin";
             break;
+        case PROP_RTL_GUTTER:
+            sName = "RtlGutter";
+            break;
     }
     assert(sName.getLength()>0);
     return sName;

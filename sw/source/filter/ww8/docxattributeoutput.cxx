@@ -6715,6 +6715,16 @@ void DocxAttributeOutput::SectionFormProtection( bool bProtected )
         m_pSerializer->singleElementNS(XML_w, XML_formProt, FSNS(XML_w, XML_val), "false");
 }
 
+void DocxAttributeOutput::SectionRtlGutter(const SfxBoolItem& rRtlGutter)
+{
+    if (!rRtlGutter.GetValue())
+    {
+        return;
+    }
+
+    m_pSerializer->singleElementNS(XML_w, XML_rtlGutter);
+}
+
 void DocxAttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLineNumberInfo& rLnNumInfo )
 {
     rtl::Reference<FastAttributeList> pAttr = FastSerializerHelper::createAttrList();

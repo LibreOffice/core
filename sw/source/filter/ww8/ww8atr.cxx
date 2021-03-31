@@ -5503,6 +5503,9 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
         case RES_CHRATR_GRABBAG:
             CharGrabBag(static_cast<const SfxGrabBagItem&>(rHt));
             break;
+        case RES_RTL_GUTTER:
+            SectionRtlGutter(static_cast<const SfxBoolItem&>(rHt));
+            break;
 
         default:
             SAL_INFO("sw.ww8", "Unhandled SfxPoolItem with id " << rHt.Which() );
