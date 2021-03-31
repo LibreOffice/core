@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01ce2fee_c7ebc75a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-31T07:17:19Z",
+      "side": 1,
+      "message": "FTR: Rich Text Format (RTF) Specification, Version 1.9.1\n\n\u003e In this document, a control word that takes a numeric parameter N is written with the N, as shown here for \\binN, unless the control word appears with an explicit value. The only exceptions to this are “toggle” control words like \\b (bold toggle), which have only two states. When such a control word has no parameter or has a nonzero parameter, the control word turns the property on. When such a control word has a parameter of 0, the control word turns the property off. For example, \\b turns on bold and \\b0 turns off bold. In the definitions of these toggle control words, the control word names are followed by an asterisk.\n\nI suspect that \\contextualspace is a usual toggle, which should have the \\contextualspace0 form to disable.",
+      "revId": "5c90f3d28de6262bb730bad106d4652e458054df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
