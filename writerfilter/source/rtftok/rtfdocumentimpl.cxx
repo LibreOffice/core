@@ -294,7 +294,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     , m_bFormField(false)
     , m_bMathNor(false)
     , m_bIgnoreNextContSectBreak(false)
-    , m_nResetBreakOnSectBreak(RTF_invalid)
+    , m_nResetBreakOnSectBreak(RTFKeyword::invalid)
     , m_bNeedSect(false) // done by checkFirstRun
     , m_bWasInFrame(false)
     , m_bHadPicture(false)
@@ -560,12 +560,12 @@ void RTFDocumentImpl::checkNeedPap()
               && m_aStates.top().getParagraphSprms().find(NS_ooxml::LN_CT_PPrBase_pageBreakBefore);
         if (hasBreakBeforeFrame)
         {
-            dispatchSymbol(RTF_PAR);
+            dispatchSymbol(RTFKeyword::PAR);
             m_bNeedPap = false;
         }
         Mapper().props(pParagraphProperties);
         if (hasBreakBeforeFrame)
-            dispatchSymbol(RTF_PAR);
+            dispatchSymbol(RTFKeyword::PAR);
 
         if (m_aStates.top().getFrame().hasProperties())
         {
@@ -653,12 +653,12 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
     // unless this is the end of the doc, we had nothing since the last section break and this is not a continuous one.
     // Also, when pasting, it's fine to not have any paragraph inside the document at all.
     if (m_bNeedPar && (!bFinal || m_bNeedSect || bContinuous) && !isSubstream() && m_bIsNewDoc)
-        dispatchSymbol(RTF_PAR);
+        dispatchSymbol(RTFKeyword::PAR);
     // It's allowed to not have a non-table paragraph at the end of an RTF doc, add it now if required.
     if (m_bNeedFinalPar && bFinal)
     {
-        dispatchFlag(RTF_PARD);
-        dispatchSymbol(RTF_PAR);
+        dispatchFlag(RTFKeyword::PARD);
+        dispatchSymbol(RTFKeyword::PAR);
         m_bNeedSect = bNeedSect;
     }
     while (!m_nHeaderFooterPositions.empty())
@@ -963,7 +963,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         xPropertySet->setPropertyValue("Graphic", uno::Any(xGraphic));
 
     // check if the picture is in an OLE object and if the \objdata element is used
-    // (see RTF_OBJECT in RTFDocumentImpl::dispatchDestination)
+    // (see RTFKeyword::OBJECT in RTFDocumentImpl::dispatchDestination)
     if (m_bObject)
     {
         // Set the object size
@@ -1249,7 +1249,7 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
                 && m_aStates.top().getDestination() != Destination::LEVELTEXT)
             {
                 checkUnicode(/*bUnicode =*/false, /*bHex =*/true);
-                dispatchSymbol(RTF_PAR);
+                dispatchSymbol(RTFKeyword::PAR);
             }
             else
             {
@@ -1758,49 +1758,49 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
     // Underline toggles.
     switch (nKeyword)
     {
-        case RTF_UL:
+        case RTFKeyword::UL:
             nSprm = NS_ooxml::LN_Value_ST_Underline_single;
             break;
-        case RTF_ULDASH:
+        case RTFKeyword::ULDASH:
             nSprm = NS_ooxml::LN_Value_ST_Underline_dash;
             break;
-        case RTF_ULDASHD:
+        case RTFKeyword::ULDASHD:
             nSprm = NS_ooxml::LN_Value_ST_Underline_dotDash;
             break;
-        case RTF_ULDASHDD:
+        case RTFKeyword::ULDASHDD:
             nSprm = NS_ooxml::LN_Value_ST_Underline_dotDotDash;
             break;
-        case RTF_ULDB:
+        case RTFKeyword::ULDB:
             nSprm = NS_ooxml::LN_Value_ST_Underline_double;
             break;
-        case RTF_ULHWAVE:
+        case RTFKeyword::ULHWAVE:
             nSprm = NS_ooxml::LN_Value_ST_Underline_wavyHeavy;
             break;
-        case RTF_ULLDASH:
+        case RTFKeyword::ULLDASH:
             nSprm = NS_ooxml::LN_Value_ST_Underline_dashLong;
             break;
-        case RTF_ULTH:
+        case RTFKeyword::ULTH:
             nSprm = NS_ooxml::LN_Value_ST_Underline_thick;
             break;
-        case RTF_ULTHD:
+        case RTFKeyword::ULTHD:
             nSprm = NS_ooxml::LN_Value_ST_Underline_dottedHeavy;
             break;
-        case RTF_ULTHDASH:
+        case RTFKeyword::ULTHDASH:
             nSprm = NS_ooxml::LN_Value_ST_Underline_dashedHeavy;
             break;
-        case RTF_ULTHDASHD:
+        case RTFKeyword::ULTHDASHD:
             nSprm = NS_ooxml::LN_Value_ST_Underline_dashDotHeavy;
             break;
-        case RTF_ULTHDASHDD:
+        case RTFKeyword::ULTHDASHDD:
             nSprm = NS_ooxml::LN_Value_ST_Underline_dashDotDotHeavy;
             break;
-        case RTF_ULTHLDASH:
+        case RTFKeyword::ULTHLDASH:
             nSprm = NS_ooxml::LN_Value_ST_Underline_dashLongHeavy;
             break;
-        case RTF_ULULDBWAVE:
+        case RTFKeyword::ULULDBWAVE:
             nSprm = NS_ooxml::LN_Value_ST_Underline_wavyDouble;
             break;
-        case RTF_ULWAVE:
+        case RTFKeyword::ULWAVE:
             nSprm = NS_ooxml::LN_Value_ST_Underline_wave;
             break;
         default:
@@ -1817,19 +1817,19 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
     // Accent characters (over dot / over comma).
     switch (nKeyword)
     {
-        case RTF_ACCNONE:
+        case RTFKeyword::ACCNONE:
             nSprm = NS_ooxml::LN_Value_ST_Em_none;
             break;
-        case RTF_ACCDOT:
+        case RTFKeyword::ACCDOT:
             nSprm = NS_ooxml::LN_Value_ST_Em_dot;
             break;
-        case RTF_ACCCOMMA:
+        case RTFKeyword::ACCCOMMA:
             nSprm = NS_ooxml::LN_Value_ST_Em_comma;
             break;
-        case RTF_ACCCIRCLE:
+        case RTFKeyword::ACCCIRCLE:
             nSprm = NS_ooxml::LN_Value_ST_Em_circle;
             break;
-        case RTF_ACCUNDERDOT:
+        case RTFKeyword::ACCUNDERDOT:
             nSprm = NS_ooxml::LN_Value_ST_Em_underDot;
             break;
         default:
@@ -1845,8 +1845,8 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
     // Trivial character sprms.
     switch (nKeyword)
     {
-        case RTF_B:
-        case RTF_AB:
+        case RTFKeyword::B:
+        case RTFKeyword::AB:
             switch (m_aStates.top().getRunType())
             {
                 case RTFParserState::RunType::HICH:
@@ -1864,8 +1864,8 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
                     break;
             }
             break;
-        case RTF_I:
-        case RTF_AI:
+        case RTFKeyword::I:
+        case RTFKeyword::AI:
             switch (m_aStates.top().getRunType())
             {
                 case RTFParserState::RunType::HICH:
@@ -1883,28 +1883,28 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
                     break;
             }
             break;
-        case RTF_OUTL:
+        case RTFKeyword::OUTL:
             nSprm = NS_ooxml::LN_EG_RPrBase_outline;
             break;
-        case RTF_SHAD:
+        case RTFKeyword::SHAD:
             nSprm = NS_ooxml::LN_EG_RPrBase_shadow;
             break;
-        case RTF_V:
+        case RTFKeyword::V:
             nSprm = NS_ooxml::LN_EG_RPrBase_vanish;
             break;
-        case RTF_STRIKE:
+        case RTFKeyword::STRIKE:
             nSprm = NS_ooxml::LN_EG_RPrBase_strike;
             break;
-        case RTF_STRIKED:
+        case RTFKeyword::STRIKED:
             nSprm = NS_ooxml::LN_EG_RPrBase_dstrike;
             break;
-        case RTF_SCAPS:
+        case RTFKeyword::SCAPS:
             nSprm = NS_ooxml::LN_EG_RPrBase_smallCaps;
             break;
-        case RTF_IMPR:
+        case RTFKeyword::IMPR:
             nSprm = NS_ooxml::LN_EG_RPrBase_imprint;
             break;
-        case RTF_CAPS:
+        case RTFKeyword::CAPS:
             nSprm = NS_ooxml::LN_EG_RPrBase_caps;
             break;
         default:
@@ -1918,33 +1918,34 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
 
     switch (nKeyword)
     {
-        case RTF_ASPALPHA:
+        case RTFKeyword::ASPALPHA:
             m_aStates.top().getParagraphSprms().set(NS_ooxml::LN_CT_PPrBase_autoSpaceDE,
                                                     pBoolValue);
             break;
-        case RTF_DELETED:
-        case RTF_REVISED:
+        case RTFKeyword::DELETED:
+        case RTFKeyword::REVISED:
         {
-            auto pValue = new RTFValue(nKeyword == RTF_DELETED ? oox::XML_del : oox::XML_ins);
+            auto pValue
+                = new RTFValue(nKeyword == RTFKeyword::DELETED ? oox::XML_del : oox::XML_ins);
             putNestedAttribute(m_aStates.top().getCharacterSprms(), NS_ooxml::LN_trackchange,
                                NS_ooxml::LN_token, pValue);
         }
         break;
-        case RTF_SBAUTO:
+        case RTFKeyword::SBAUTO:
             putNestedAttribute(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_spacing,
                                NS_ooxml::LN_CT_Spacing_beforeAutospacing, pBoolValue);
             break;
-        case RTF_SAAUTO:
+        case RTFKeyword::SAAUTO:
             putNestedAttribute(m_aStates.top().getParagraphSprms(), NS_ooxml::LN_CT_PPrBase_spacing,
                                NS_ooxml::LN_CT_Spacing_afterAutospacing, pBoolValue);
             break;
-        case RTF_FACINGP:
+        case RTFKeyword::FACINGP:
             m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_evenAndOddHeaders, pBoolValue);
             break;
-        case RTF_HYPHAUTO:
+        case RTFKeyword::HYPHAUTO:
             m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_autoHyphenation, pBoolValue);
             break;
-        case RTF_HYPHPAR:
+        case RTFKeyword::HYPHPAR:
             m_aStates.top().getParagraphSprms().set(NS_ooxml::LN_CT_PPrBase_suppressAutoHyphens,
                                                     new RTFValue(int(bParam && nParam == 0)));
             break;
@@ -2229,9 +2230,9 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
             {
                 // Read the picture into m_aStates.top().aDestinationText.
                 pushState();
-                dispatchDestination(RTF_PICT);
+                dispatchDestination(RTFKeyword::PICT);
                 if (m_aPicturePath.endsWith(".png"))
-                    dispatchFlag(RTF_PNGBLIP);
+                    dispatchFlag(RTFKeyword::PNGBLIP);
                 OUString aFileURL = m_rMediaDescriptor.getUnpackedValueOrDefault(
                     utl::MediaDescriptor::PROP_URL(), OUString());
                 OUString aPictureURL;
@@ -2650,7 +2651,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
             {
                 // if the object is in a special container we will use the \result
                 // element instead of the \objdata
-                // (see RTF_OBJECT in RTFDocumentImpl::dispatchDestination)
+                // (see RTFKeyword::OBJECT in RTFDocumentImpl::dispatchDestination)
                 break;
             }
 
@@ -3477,7 +3478,7 @@ RTFError RTFDocumentImpl::popState()
             case NS_ooxml::LN_footerl:
             case NS_ooxml::LN_footerr:
             case NS_ooxml::LN_footerf:
-                dispatchSymbol(RTF_PAR);
+                dispatchSymbol(RTFKeyword::PAR);
                 break;
         }
     }
@@ -3506,7 +3507,7 @@ RTFError RTFDocumentImpl::popState()
         // not in case of other substreams, like headers.
         if (m_bNeedCr && m_nStreamType != NS_ooxml::LN_footnote
             && m_nStreamType != NS_ooxml::LN_endnote && m_bIsNewDoc)
-            dispatchSymbol(RTF_PAR);
+            dispatchSymbol(RTFKeyword::PAR);
         if (m_bNeedSect) // may be set by dispatchSymbol above!
             sectBreak(true);
     }
@@ -3527,11 +3528,11 @@ RTFError RTFDocumentImpl::popState()
 
     if (!m_aStates.empty() && m_aStates.top().getTableRowWidthAfter() > 0
         && aState.getTableRowWidthAfter() == 0)
-        // An RTF_ROW in the inner group already parsed nTableRowWidthAfter,
+        // An RTFKeyword::ROW in the inner group already parsed nTableRowWidthAfter,
         // don't do it again in the outer state later.
         m_aStates.top().setTableRowWidthAfter(0);
 
-    if (m_nResetBreakOnSectBreak != RTF_invalid && !m_aStates.empty())
+    if (m_nResetBreakOnSectBreak != RTFKeyword::invalid && !m_aStates.empty())
     {
         // Section break type created for \page still has an effect in the
         // outer state as well.

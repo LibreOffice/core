@@ -42,7 +42,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
     checkUnicode(/*bUnicode =*/true, /*bHex =*/true);
     RTFSkipDestination aSkip(*this);
     // special case \upr: ignore everything except nested \ud
-    if (Destination::UPR == m_aStates.top().getDestination() && RTF_UD != nKeyword)
+    if (Destination::UPR == m_aStates.top().getDestination() && RTFKeyword::UD != nKeyword)
     {
         m_aStates.top().setDestination(Destination::SKIP);
         aSkip.setParsed(false);
@@ -50,21 +50,21 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
     else
         switch (nKeyword)
         {
-            case RTF_RTF:
+            case RTFKeyword::RTF:
                 break;
-            case RTF_FONTTBL:
+            case RTFKeyword::FONTTBL:
                 m_aStates.top().setDestination(Destination::FONTTABLE);
                 break;
-            case RTF_COLORTBL:
+            case RTFKeyword::COLORTBL:
                 m_aStates.top().setDestination(Destination::COLORTABLE);
                 break;
-            case RTF_STYLESHEET:
+            case RTFKeyword::STYLESHEET:
                 m_aStates.top().setDestination(Destination::STYLESHEET);
                 break;
-            case RTF_FIELD:
+            case RTFKeyword::FIELD:
                 m_aStates.top().setDestination(Destination::FIELD);
                 break;
-            case RTF_FLDINST:
+            case RTFKeyword::FLDINST:
             {
                 // Look for the field type
                 sal_uInt64 const nPos = Strm().Tell();
@@ -116,74 +116,74 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 m_aStates.top().setDestination(Destination::FIELDINSTRUCTION);
             }
             break;
-            case RTF_FLDRSLT:
+            case RTFKeyword::FLDRSLT:
                 m_aStates.top().setDestination(Destination::FIELDRESULT);
                 break;
-            case RTF_LISTTABLE:
+            case RTFKeyword::LISTTABLE:
                 m_aStates.top().setDestination(Destination::LISTTABLE);
                 break;
-            case RTF_LISTPICTURE:
+            case RTFKeyword::LISTPICTURE:
                 m_aStates.top().setDestination(Destination::LISTPICTURE);
                 m_aStates.top().setInListpicture(true);
                 break;
-            case RTF_LIST:
+            case RTFKeyword::LIST:
                 m_aStates.top().setDestination(Destination::LISTENTRY);
                 break;
-            case RTF_LISTNAME:
+            case RTFKeyword::LISTNAME:
                 m_aStates.top().setDestination(Destination::LISTNAME);
                 break;
-            case RTF_LFOLEVEL:
+            case RTFKeyword::LFOLEVEL:
                 m_aStates.top().setDestination(Destination::LFOLEVEL);
                 m_aStates.top().getTableSprms().clear();
                 break;
-            case RTF_LISTOVERRIDETABLE:
+            case RTFKeyword::LISTOVERRIDETABLE:
                 m_aStates.top().setDestination(Destination::LISTOVERRIDETABLE);
                 break;
-            case RTF_LISTOVERRIDE:
+            case RTFKeyword::LISTOVERRIDE:
                 m_aStates.top().setDestination(Destination::LISTOVERRIDEENTRY);
                 break;
-            case RTF_LISTLEVEL:
+            case RTFKeyword::LISTLEVEL:
                 m_aStates.top().setDestination(Destination::LISTLEVEL);
                 ++m_nListLevel;
                 break;
-            case RTF_LEVELTEXT:
+            case RTFKeyword::LEVELTEXT:
                 m_aStates.top().setDestination(Destination::LEVELTEXT);
                 break;
-            case RTF_LEVELNUMBERS:
+            case RTFKeyword::LEVELNUMBERS:
                 m_aStates.top().setDestination(Destination::LEVELNUMBERS);
                 break;
-            case RTF_SHPPICT:
+            case RTFKeyword::SHPPICT:
                 resetFrame();
                 m_aStates.top().setDestination(Destination::SHPPICT);
                 break;
-            case RTF_PICT:
+            case RTFKeyword::PICT:
                 if (m_aStates.top().getDestination() != Destination::SHAPEPROPERTYVALUE)
                     m_aStates.top().setDestination(Destination::PICT); // as character
                 else
                     m_aStates.top().setDestination(
                         Destination::SHAPEPROPERTYVALUEPICT); // anchored inside a shape
                 break;
-            case RTF_PICPROP:
+            case RTFKeyword::PICPROP:
                 m_aStates.top().setDestination(Destination::PICPROP);
                 break;
-            case RTF_SP:
+            case RTFKeyword::SP:
                 m_aStates.top().setDestination(Destination::SHAPEPROPERTY);
                 break;
-            case RTF_SN:
+            case RTFKeyword::SN:
                 m_aStates.top().setDestination(Destination::SHAPEPROPERTYNAME);
                 break;
-            case RTF_SV:
+            case RTFKeyword::SV:
                 m_aStates.top().setDestination(Destination::SHAPEPROPERTYVALUE);
                 break;
-            case RTF_SHP:
+            case RTFKeyword::SHP:
                 m_bNeedCrOrig = m_bNeedCr;
                 m_aStates.top().setDestination(Destination::SHAPE);
                 m_aStates.top().setInShape(true);
                 break;
-            case RTF_SHPINST:
+            case RTFKeyword::SHPINST:
                 m_aStates.top().setDestination(Destination::SHAPEINSTRUCTION);
                 break;
-            case RTF_NESTTABLEPROPS:
+            case RTFKeyword::NESTTABLEPROPS:
                 // do not set any properties of outer table at nested table!
                 m_aStates.top().getTableCellSprms() = m_aDefaultState.getTableCellSprms();
                 m_aStates.top().getTableCellAttributes() = m_aDefaultState.getTableCellAttributes();
@@ -192,54 +192,54 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 m_nNestedCells = 0;
                 m_aStates.top().setDestination(Destination::NESTEDTABLEPROPERTIES);
                 break;
-            case RTF_HEADER:
-            case RTF_FOOTER:
-            case RTF_HEADERL:
-            case RTF_HEADERR:
-            case RTF_HEADERF:
-            case RTF_FOOTERL:
-            case RTF_FOOTERR:
-            case RTF_FOOTERF:
+            case RTFKeyword::HEADER:
+            case RTFKeyword::FOOTER:
+            case RTFKeyword::HEADERL:
+            case RTFKeyword::HEADERR:
+            case RTFKeyword::HEADERF:
+            case RTFKeyword::FOOTERL:
+            case RTFKeyword::FOOTERR:
+            case RTFKeyword::FOOTERF:
                 if (!m_pSuperstream)
                 {
                     Id nId = 0;
                     std::size_t nPos = m_nGroupStartPos - 1;
                     switch (nKeyword)
                     {
-                        case RTF_HEADER:
+                        case RTFKeyword::HEADER:
                             if (!m_hasRHeader)
                             {
                                 nId = NS_ooxml::LN_headerr;
                                 m_hasRHeader = true;
                             }
                             break;
-                        case RTF_FOOTER:
+                        case RTFKeyword::FOOTER:
                             if (!m_hasRFooter)
                             {
                                 nId = NS_ooxml::LN_footerr;
                                 m_hasRFooter = true;
                             }
                             break;
-                        case RTF_HEADERL:
+                        case RTFKeyword::HEADERL:
                             nId = NS_ooxml::LN_headerl;
                             break;
-                        case RTF_HEADERR:
+                        case RTFKeyword::HEADERR:
                             nId = NS_ooxml::LN_headerr;
                             break;
-                        case RTF_HEADERF:
+                        case RTFKeyword::HEADERF:
                             if (!m_hasFHeader)
                             {
                                 nId = NS_ooxml::LN_headerf;
                                 m_hasFHeader = true;
                             }
                             break;
-                        case RTF_FOOTERL:
+                        case RTFKeyword::FOOTERL:
                             nId = NS_ooxml::LN_footerl;
                             break;
-                        case RTF_FOOTERR:
+                        case RTFKeyword::FOOTERR:
                             nId = NS_ooxml::LN_footerr;
                             break;
-                        case RTF_FOOTERF:
+                        case RTFKeyword::FOOTERF:
                             if (!m_hasFFooter)
                             {
                                 nId = NS_ooxml::LN_footerf;
@@ -256,7 +256,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     m_aStates.top().setDestination(Destination::SKIP);
                 }
                 break;
-            case RTF_FOOTNOTE:
+            case RTFKeyword::FOOTNOTE:
                 checkFirstRun();
                 if (!m_pSuperstream)
                 {
@@ -316,23 +316,23 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     m_aStates.top().setDestination(Destination::SKIP);
                 }
                 break;
-            case RTF_BKMKSTART:
+            case RTFKeyword::BKMKSTART:
                 m_aStates.top().setDestination(Destination::BOOKMARKSTART);
                 break;
-            case RTF_BKMKEND:
+            case RTFKeyword::BKMKEND:
                 m_aStates.top().setDestination(Destination::BOOKMARKEND);
                 break;
-            case RTF_XE:
+            case RTFKeyword::XE:
                 m_aStates.top().setDestination(Destination::INDEXENTRY);
                 break;
-            case RTF_TC:
-            case RTF_TCN:
+            case RTFKeyword::TC:
+            case RTFKeyword::TCN:
                 m_aStates.top().setDestination(Destination::TOCENTRY);
                 break;
-            case RTF_REVTBL:
+            case RTFKeyword::REVTBL:
                 m_aStates.top().setDestination(Destination::REVISIONTABLE);
                 break;
-            case RTF_ANNOTATION:
+            case RTFKeyword::ANNOTATION:
                 if (!m_pSuperstream)
                 {
                     if (!m_aStates.top().getCurrentBuffer())
@@ -372,8 +372,8 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     }
                 }
                 break;
-            case RTF_SHPTXT:
-            case RTF_DPTXBXTEXT:
+            case RTFKeyword::SHPTXT:
+            case RTFKeyword::DPTXBXTEXT:
             {
                 bool bPictureFrame = false;
                 for (const auto& rProperty : m_aStates.top().getShape().getProperties())
@@ -394,9 +394,9 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 {
                     m_aStates.top().setDestination(Destination::SHAPETEXT);
                     checkFirstRun();
-                    dispatchFlag(RTF_PARD);
+                    dispatchFlag(RTFKeyword::PARD);
                     m_bNeedPap = true;
-                    if (nKeyword == RTF_SHPTXT)
+                    if (nKeyword == RTFKeyword::SHPTXT)
                     {
                         if (!m_aStates.top().getCurrentBuffer())
                             m_pSdrImport->resolve(m_aStates.top().getShape(), false,
@@ -411,47 +411,47 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 }
             }
             break;
-            case RTF_FORMFIELD:
+            case RTFKeyword::FORMFIELD:
                 if (m_aStates.top().getDestination() == Destination::FIELDINSTRUCTION)
                     m_aStates.top().setDestination(Destination::FORMFIELD);
                 break;
-            case RTF_FFNAME:
+            case RTFKeyword::FFNAME:
                 m_aStates.top().setDestination(Destination::FORMFIELDNAME);
                 break;
-            case RTF_FFL:
+            case RTFKeyword::FFL:
                 m_aStates.top().setDestination(Destination::FORMFIELDLIST);
                 break;
-            case RTF_DATAFIELD:
+            case RTFKeyword::DATAFIELD:
                 m_aStates.top().setDestination(Destination::DATAFIELD);
                 break;
-            case RTF_INFO:
+            case RTFKeyword::INFO:
                 m_aStates.top().setDestination(Destination::INFO);
                 break;
-            case RTF_CREATIM:
+            case RTFKeyword::CREATIM:
                 m_aStates.top().setDestination(Destination::CREATIONTIME);
                 break;
-            case RTF_REVTIM:
+            case RTFKeyword::REVTIM:
                 m_aStates.top().setDestination(Destination::REVISIONTIME);
                 break;
-            case RTF_PRINTIM:
+            case RTFKeyword::PRINTIM:
                 m_aStates.top().setDestination(Destination::PRINTTIME);
                 break;
-            case RTF_AUTHOR:
+            case RTFKeyword::AUTHOR:
                 m_aStates.top().setDestination(Destination::AUTHOR);
                 break;
-            case RTF_KEYWORDS:
+            case RTFKeyword::KEYWORDS:
                 m_aStates.top().setDestination(Destination::KEYWORDS);
                 break;
-            case RTF_OPERATOR:
+            case RTFKeyword::OPERATOR:
                 m_aStates.top().setDestination(Destination::OPERATOR);
                 break;
-            case RTF_COMPANY:
+            case RTFKeyword::COMPANY:
                 m_aStates.top().setDestination(Destination::COMPANY);
                 break;
-            case RTF_COMMENT:
+            case RTFKeyword::COMMENT:
                 m_aStates.top().setDestination(Destination::COMMENT);
                 break;
-            case RTF_OBJECT:
+            case RTFKeyword::OBJECT:
             {
                 // beginning of an OLE Object
                 m_aStates.top().setDestination(Destination::OBJECT);
@@ -461,18 +461,18 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 {
                     // the object is in a table or another container.
                     // Don't try to treat it as an OLE object (fdo#53594).
-                    // Use the \result (RTF_RESULT) element of the object instead,
+                    // Use the \result (RTFKeyword::RESULT) element of the object instead,
                     // the result element contain picture representing the OLE Object.
                     m_bObject = true;
                 }
             }
             break;
-            case RTF_OBJDATA:
+            case RTFKeyword::OBJDATA:
                 // check if the object is in a special container (e.g. a table)
                 if (m_aStates.top().getCurrentBuffer())
                 {
                     // the object is in a table or another container.
-                    // Use the \result (RTF_RESULT) element of the object instead,
+                    // Use the \result (RTFKeyword::RESULT) element of the object instead,
                     // of the \objdata.
                     m_aStates.top().setDestination(Destination::SKIP);
                 }
@@ -481,129 +481,129 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     m_aStates.top().setDestination(Destination::OBJDATA);
                 }
                 break;
-            case RTF_OBJCLASS:
+            case RTFKeyword::OBJCLASS:
                 m_aStates.top().setDestination(Destination::OBJCLASS);
                 break;
-            case RTF_RESULT:
+            case RTFKeyword::RESULT:
                 m_aStates.top().setDestination(Destination::RESULT);
                 break;
-            case RTF_ATNDATE:
+            case RTFKeyword::ATNDATE:
                 m_aStates.top().setDestination(Destination::ANNOTATIONDATE);
                 break;
-            case RTF_ATNAUTHOR:
+            case RTFKeyword::ATNAUTHOR:
                 m_aStates.top().setDestination(Destination::ANNOTATIONAUTHOR);
                 break;
-            case RTF_ATNREF:
+            case RTFKeyword::ATNREF:
                 m_aStates.top().setDestination(Destination::ANNOTATIONREFERENCE);
                 break;
-            case RTF_FALT:
+            case RTFKeyword::FALT:
                 m_aStates.top().setDestination(Destination::FALT);
                 break;
-            case RTF_FLYMAINCNT:
+            case RTFKeyword::FLYMAINCNT:
                 m_aStates.top().setDestination(Destination::FLYMAINCONTENT);
                 break;
-            case RTF_LISTTEXT:
+            case RTFKeyword::LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
-            case RTF_NONESTTABLES:
+            case RTFKeyword::NONESTTABLES:
                 // This destination should be ignored by readers that support nested tables.
                 m_aStates.top().setDestination(Destination::SKIP);
                 break;
-            case RTF_DO:
+            case RTFKeyword::DO:
                 m_aStates.top().setDestination(Destination::DRAWINGOBJECT);
                 break;
-            case RTF_PN:
+            case RTFKeyword::PN:
                 m_aStates.top().setDestination(Destination::PARAGRAPHNUMBERING);
                 break;
-            case RTF_PNTEXT:
+            case RTFKeyword::PNTEXT:
                 // This destination should be ignored by readers that support paragraph numbering.
                 m_aStates.top().setDestination(Destination::SKIP);
                 break;
-            case RTF_PNTXTA:
+            case RTFKeyword::PNTXTA:
                 m_aStates.top().setDestination(Destination::PARAGRAPHNUMBERING_TEXTAFTER);
                 break;
-            case RTF_PNTXTB:
+            case RTFKeyword::PNTXTB:
                 m_aStates.top().setDestination(Destination::PARAGRAPHNUMBERING_TEXTBEFORE);
                 break;
-            case RTF_TITLE:
+            case RTFKeyword::TITLE:
                 m_aStates.top().setDestination(Destination::TITLE);
                 break;
-            case RTF_SUBJECT:
+            case RTFKeyword::SUBJECT:
                 m_aStates.top().setDestination(Destination::SUBJECT);
                 break;
-            case RTF_DOCCOMM:
+            case RTFKeyword::DOCCOMM:
                 m_aStates.top().setDestination(Destination::DOCCOMM);
                 break;
-            case RTF_ATRFSTART:
+            case RTFKeyword::ATRFSTART:
                 m_aStates.top().setDestination(Destination::ANNOTATIONREFERENCESTART);
                 break;
-            case RTF_ATRFEND:
+            case RTFKeyword::ATRFEND:
                 m_aStates.top().setDestination(Destination::ANNOTATIONREFERENCEEND);
                 break;
-            case RTF_ATNID:
+            case RTFKeyword::ATNID:
                 m_aStates.top().setDestination(Destination::ATNID);
                 break;
-            case RTF_MMATH:
-            case RTF_MOMATHPARA:
-                // Nothing to do here (just enter the destination) till RTF_MMATHPR is implemented.
+            case RTFKeyword::MMATH:
+            case RTFKeyword::MOMATHPARA:
+                // Nothing to do here (just enter the destination) till RTFKeyword::MMATHPR is implemented.
                 break;
-            case RTF_MR:
+            case RTFKeyword::MR:
                 m_aStates.top().setDestination(Destination::MR);
                 break;
-            case RTF_MCHR:
+            case RTFKeyword::MCHR:
                 m_aStates.top().setDestination(Destination::MCHR);
                 break;
-            case RTF_MPOS:
+            case RTFKeyword::MPOS:
                 m_aStates.top().setDestination(Destination::MPOS);
                 break;
-            case RTF_MVERTJC:
+            case RTFKeyword::MVERTJC:
                 m_aStates.top().setDestination(Destination::MVERTJC);
                 break;
-            case RTF_MSTRIKEH:
+            case RTFKeyword::MSTRIKEH:
                 m_aStates.top().setDestination(Destination::MSTRIKEH);
                 break;
-            case RTF_MDEGHIDE:
+            case RTFKeyword::MDEGHIDE:
                 m_aStates.top().setDestination(Destination::MDEGHIDE);
                 break;
-            case RTF_MTYPE:
+            case RTFKeyword::MTYPE:
                 m_aStates.top().setDestination(Destination::MTYPE);
                 break;
-            case RTF_MGROW:
+            case RTFKeyword::MGROW:
                 m_aStates.top().setDestination(Destination::MGROW);
                 break;
-            case RTF_MHIDETOP:
-            case RTF_MHIDEBOT:
-            case RTF_MHIDELEFT:
-            case RTF_MHIDERIGHT:
+            case RTFKeyword::MHIDETOP:
+            case RTFKeyword::MHIDEBOT:
+            case RTFKeyword::MHIDELEFT:
+            case RTFKeyword::MHIDERIGHT:
                 // SmOoxmlImport::handleBorderBox will ignore these anyway, so silently ignore for now.
                 m_aStates.top().setDestination(Destination::SKIP);
                 break;
-            case RTF_MSUBHIDE:
+            case RTFKeyword::MSUBHIDE:
                 m_aStates.top().setDestination(Destination::MSUBHIDE);
                 break;
-            case RTF_MSUPHIDE:
+            case RTFKeyword::MSUPHIDE:
                 m_aStates.top().setDestination(Destination::MSUPHIDE);
                 break;
-            case RTF_MBEGCHR:
+            case RTFKeyword::MBEGCHR:
                 m_aStates.top().setDestination(Destination::MBEGCHR);
                 break;
-            case RTF_MSEPCHR:
+            case RTFKeyword::MSEPCHR:
                 m_aStates.top().setDestination(Destination::MSEPCHR);
                 break;
-            case RTF_MENDCHR:
+            case RTFKeyword::MENDCHR:
                 m_aStates.top().setDestination(Destination::MENDCHR);
                 break;
-            case RTF_UPR:
+            case RTFKeyword::UPR:
                 m_aStates.top().setDestination(Destination::UPR);
                 break;
-            case RTF_UD:
+            case RTFKeyword::UD:
                 // Anything inside \ud is just normal Unicode content.
                 m_aStates.top().setDestination(Destination::NORMAL);
                 break;
-            case RTF_BACKGROUND:
+            case RTFKeyword::BACKGROUND:
                 m_aStates.top().setDestination(Destination::BACKGROUND);
                 m_aStates.top().setInBackground(true);
                 break;
-            case RTF_SHPGRP:
+            case RTFKeyword::SHPGRP:
             {
                 RTFLookahead aLookahead(Strm(), m_pTokenizer->getGroupStart());
                 if (!aLookahead.hasTable())
@@ -629,26 +629,26 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 m_aStates.top().setInShapeGroup(true);
             }
             break;
-            case RTF_FTNSEP:
+            case RTFKeyword::FTNSEP:
                 m_aStates.top().setDestination(Destination::FOOTNOTESEPARATOR);
                 m_aStates.top().getCharacterAttributes().set(
                     NS_ooxml::LN_CT_FtnEdn_type,
                     new RTFValue(NS_ooxml::LN_Value_doc_ST_FtnEdn_separator));
                 break;
-            case RTF_USERPROPS:
+            case RTFKeyword::USERPROPS:
                 // Container of all user-defined properties.
                 m_aStates.top().setDestination(Destination::USERPROPS);
                 if (m_xDocumentProperties.is())
                     // Create a custom document properties to be able to process them later all at once.
                     m_xDocumentProperties = document::DocumentProperties::create(m_xContext);
                 break;
-            case RTF_PROPNAME:
+            case RTFKeyword::PROPNAME:
                 m_aStates.top().setDestination(Destination::PROPNAME);
                 break;
-            case RTF_STATICVAL:
+            case RTFKeyword::STATICVAL:
                 m_aStates.top().setDestination(Destination::STATICVAL);
                 break;
-            case RTF_GENERATOR:
+            case RTFKeyword::GENERATOR:
                 m_aStates.top().setDestination(Destination::GENERATOR);
                 break;
             default:

@@ -26,13 +26,13 @@ namespace writerfilter::rtftok
 RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 {
     setNeedSect(true);
-    if (nKeyword != RTF_HEXCHAR)
+    if (nKeyword != RTFKeyword::HEXCHAR)
         checkUnicode(/*bUnicode =*/true, /*bHex =*/true);
     else
         checkUnicode(/*bUnicode =*/true, /*bHex =*/false);
     RTFSkipDestination aSkip(*this);
 
-    if (RTF_LINE == nKeyword)
+    if (RTFKeyword::LINE == nKeyword)
     {
         // very special handling since text() will eat lone '\n'
         singleChar('\n');
@@ -42,37 +42,37 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     sal_uInt8 cCh = 0;
     switch (nKeyword)
     {
-        case RTF_TAB:
+        case RTFKeyword::TAB:
             cCh = '\t';
             break;
-        case RTF_BACKSLASH:
+        case RTFKeyword::BACKSLASH:
             cCh = '\\';
             break;
-        case RTF_LBRACE:
+        case RTFKeyword::LBRACE:
             cCh = '{';
             break;
-        case RTF_RBRACE:
+        case RTFKeyword::RBRACE:
             cCh = '}';
             break;
-        case RTF_EMDASH:
+        case RTFKeyword::EMDASH:
             cCh = 151;
             break;
-        case RTF_ENDASH:
+        case RTFKeyword::ENDASH:
             cCh = 150;
             break;
-        case RTF_BULLET:
+        case RTFKeyword::BULLET:
             cCh = 149;
             break;
-        case RTF_LQUOTE:
+        case RTFKeyword::LQUOTE:
             cCh = 145;
             break;
-        case RTF_RQUOTE:
+        case RTFKeyword::RQUOTE:
             cCh = 146;
             break;
-        case RTF_LDBLQUOTE:
+        case RTFKeyword::LDBLQUOTE:
             cCh = 147;
             break;
-        case RTF_RDBLQUOTE:
+        case RTFKeyword::RDBLQUOTE:
             cCh = 148;
             break;
         default:
@@ -87,14 +87,14 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 
     switch (nKeyword)
     {
-        case RTF_IGNORE:
+        case RTFKeyword::IGNORE:
         {
             m_bSkipUnknown = true;
             aSkip.setReset(false);
             return RTFError::OK;
         }
         break;
-        case RTF_PAR:
+        case RTFKeyword::PAR:
         {
             if (m_aStates.top().getDestination() == Destination::FOOTNOTESEPARATOR)
                 break; // just ignore it - only thing we read in here is CHFTNSEP
@@ -131,7 +131,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             m_bNeedFinalPar = false;
         }
         break;
-        case RTF_SECT:
+        case RTFKeyword::SECT:
         {
             m_bHadSect = true;
             if (m_bIgnoreNextContSectBreak)
@@ -139,41 +139,41 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             else
             {
                 sectBreak();
-                if (m_nResetBreakOnSectBreak != RTF_invalid)
+                if (m_nResetBreakOnSectBreak != RTFKeyword::invalid)
                 {
                     // this should run on _second_ \sect after \page
                     dispatchSymbol(m_nResetBreakOnSectBreak); // lazy reset
-                    m_nResetBreakOnSectBreak = RTF_invalid;
+                    m_nResetBreakOnSectBreak = RTFKeyword::invalid;
                     m_bNeedSect = false; // dispatchSymbol set it
                 }
             }
         }
         break;
-        case RTF_NOBREAK:
+        case RTFKeyword::NOBREAK:
         {
             OUString aStr(SVT_HARD_SPACE);
             text(aStr);
         }
         break;
-        case RTF_NOBRKHYPH:
+        case RTFKeyword::NOBRKHYPH:
         {
             OUString aStr(SVT_HARD_HYPHEN);
             text(aStr);
         }
         break;
-        case RTF_OPTHYPH:
+        case RTFKeyword::OPTHYPH:
         {
             OUString aStr(SVT_SOFT_HYPHEN);
             text(aStr);
         }
         break;
-        case RTF_HEXCHAR:
+        case RTFKeyword::HEXCHAR:
             m_aStates.top().setInternalState(RTFInternalState::HEX);
             break;
-        case RTF_CELL:
-        case RTF_NESTCELL:
+        case RTFKeyword::CELL:
+        case RTFKeyword::NESTCELL:
         {
-            if (nKeyword == RTF_CELL)
+            if (nKeyword == RTFKeyword::CELL)
                 m_bAfterCellBeforeRow = true;
 
             checkFirstRun();
@@ -193,7 +193,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             m_bNeedPap = true;
         }
         break;
-        case RTF_NESTROW:
+        case RTFKeyword::NESTROW:
         {
             tools::SvRef<TableRowBuffer> const pBuffer(
                 new TableRowBuffer(m_aTableBufferStack.back(), m_aNestedTableCellsSprms,
@@ -227,7 +227,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             m_bNeedPap = true;
         }
         break;
-        case RTF_ROW:
+        case RTFKeyword::ROW:
         {
             m_bAfterCellBeforeRow = false;
             if (m_aStates.top().getTableRowWidthAfter() > 0)
@@ -237,7 +237,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 auto pXValue = new RTFValue(m_aStates.top().getTableRowWidthAfter());
                 m_aStates.top().getTableRowSprms().set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,
                                                        RTFOverwrite::NO_APPEND);
-                dispatchSymbol(RTF_CELL);
+                dispatchSymbol(RTFKeyword::CELL);
 
                 // Adjust total width, which is done in the \cellx handler for normal cells.
                 m_nTopLevelCurrentCellX += m_aStates.top().getTableRowWidthAfter();
@@ -323,7 +323,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 resetTableRowProperties();
         }
         break;
-        case RTF_COLUMN:
+        case RTFKeyword::COLUMN:
         {
             bool bColumns = false; // If we have multiple columns
             RTFValue::Pointer_t pCols
@@ -343,17 +343,17 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 Mapper().endCharacterGroup();
             }
             else
-                dispatchSymbol(RTF_PAGE);
+                dispatchSymbol(RTFKeyword::PAGE);
         }
         break;
-        case RTF_CHFTN:
+        case RTFKeyword::CHFTN:
         {
             if (m_aStates.top().getCurrentBuffer() == &m_aSuperBuffer)
                 // Stop buffering, there will be no custom mark for this footnote or endnote.
                 m_aStates.top().setCurrentBuffer(nullptr);
             break;
         }
-        case RTF_PAGE:
+        case RTFKeyword::PAGE:
         {
             // Ignore page breaks inside tables.
             if (m_aStates.top().getCurrentBuffer() == &m_aTableBufferStack.back())
@@ -368,23 +368,23 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             if (((pBreak
                   && pBreak->getInt()
                          == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous))
-                 || m_nResetBreakOnSectBreak == RTF_SBKNONE)
+                 || m_nResetBreakOnSectBreak == RTFKeyword::SBKNONE)
                 && !(pTitlePg && pTitlePg->getInt()))
             {
                 if (m_bWasInFrame)
                 {
-                    dispatchSymbol(RTF_PAR);
+                    dispatchSymbol(RTFKeyword::PAR);
                     m_bWasInFrame = false;
                 }
                 sectBreak();
                 // note: this will not affect the following section break
                 // but the one just pushed
-                dispatchFlag(RTF_SBKPAGE);
+                dispatchFlag(RTFKeyword::SBKPAGE);
                 if (m_bNeedPar)
-                    dispatchSymbol(RTF_PAR);
+                    dispatchSymbol(RTFKeyword::PAR);
                 m_bIgnoreNextContSectBreak = true;
-                // arrange to clean up the synthetic RTF_SBKPAGE
-                m_nResetBreakOnSectBreak = RTF_SBKNONE;
+                // arrange to clean up the synthetic RTFKeyword::SBKPAGE
+                m_nResetBreakOnSectBreak = RTFKeyword::SBKNONE;
             }
             else
             {
@@ -401,7 +401,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             }
         }
         break;
-        case RTF_CHPGN:
+        case RTFKeyword::CHPGN:
         {
             OUString aStr("PAGE");
             singleChar(cFieldStart);
@@ -410,7 +410,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             singleChar(cFieldEnd);
         }
         break;
-        case RTF_CHFTNSEP:
+        case RTFKeyword::CHFTNSEP:
         {
             static const sal_Unicode uFtnEdnSep = 0x3;
             Mapper().utext(reinterpret_cast<const sal_uInt8*>(&uFtnEdnSep), 1);
