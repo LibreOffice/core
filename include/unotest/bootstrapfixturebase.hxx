@@ -66,7 +66,7 @@ public:
   virtual void setUp() override;
   virtual void tearDown() override;
 
-  bool isWindowsRDP() const;
+  static bool isWindowsRDP();
 };
 
 }

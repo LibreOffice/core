@@ -36,10 +36,10 @@ void test::BootstrapFixtureBase::setUp()
 
 void test::BootstrapFixtureBase::tearDown() { StarBASIC::DetachAllDocBasicItems(); }
 
-bool test::BootstrapFixtureBase::isWindowsRDP() const
+bool test::BootstrapFixtureBase::isWindowsRDP()
 {
 #if defined _WIN32
-    return GetSystemMetrics(SM_REMOTESESSION);
+    return GetSystemMetrics(SM_REMOTESESSION) != 0;
 #else
     return false;
 #endif
