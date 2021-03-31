@@ -87,7 +87,7 @@ bool TextBody::isEmpty() const
     if ( aRuns.size() > 1 )
         return false;
 
-    return aRuns[0]->getText().getLength() <= 0;
+    return aRuns[0]->getText().isEmpty();
 }
 
 OUString TextBody::toString() const
