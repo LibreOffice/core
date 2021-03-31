@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "71607cd2_41541c6e",
+        "filename": "sc/source/ui/view/output.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-03-31T14:53:20Z",
+      "side": 1,
+      "message": "So - reading this again; surely we just want the inverse of all the aGrid.AddVerLine and AddHorLine that we would render into the range ? Isn\u0027t this all in the ScOuputData already ? perhaps it\u0027s similar to GetMergeOrigin ? not sure, but ... new loops like that scare me ;-) what information is missing that we need to collect more before rendering \u003d)",
+      "revId": "c5b7a6b78541be8f160145a551ba1062c294f56f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
