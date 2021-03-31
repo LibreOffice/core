@@ -34,6 +34,24 @@
       "revId": "5c90f3d28de6262bb730bad106d4652e458054df",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01cb6dd2_0a994fa2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-03-31T08:56:01Z",
+      "side": 1,
+      "message": "Oh fun - thanks Miklos for explanation, and sorry for the noise :-)",
+      "parentUuid": "6f557ce6_daee75dc",
+      "revId": "5c90f3d28de6262bb730bad106d4652e458054df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
