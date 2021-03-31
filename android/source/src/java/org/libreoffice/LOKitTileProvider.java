@@ -295,8 +295,6 @@ class LOKitTileProvider implements TileProvider {
         }
     }
 
-
-
     @Override
     public void saveDocumentAs(final String filePath, String format, boolean takeOwnership) {
         String options = "";
@@ -327,7 +325,7 @@ class LOKitTileProvider implements TileProvider {
                     @Override
                     public void run() {
                         // There was some error
-                        mContext.showSaveStatusMessage(true);
+                        mContext.showCustomStatusMessage(mContext.getString(R.string.unable_to_save));
                     }
                 });
             }
@@ -348,17 +346,8 @@ class LOKitTileProvider implements TileProvider {
                         mContext.showCustomStatusMessage(mContext.getString(R.string.pdf_exported_at)+filePath);
                     }
                 });
-            } else {
-                if (takeOwnership) {
-                    mInputFile = filePath;
-                }
-                LOKitShell.getMainHandler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        // There was no error
-                        mContext.showSaveStatusMessage(false);
-                    }
-                });
+            } else if (takeOwnership) {
+                mInputFile = filePath;
             }
         }
         LOKitShell.hideProgressSpinner(mContext);

@@ -96,8 +96,6 @@
     <string name="message_saved">Kaydetme tamamlandı.</string>
     <string name="message_saving">Belge kaydediliyor…</string>
     <string name="message_save_incomplete">Kayıt tamamlanmadı. Değişiklik yapıldı mı?</string>
-    <string name="create_new_file_success">"Yeni dosya oluşturuldu - "</string>
-    <string name="create_new_file_error">Yeni dosya oluşturma başarısız. Lütfen dosya ismini kontrol ediniz.</string>
 
     <!-- Document provider settings -->
     <string name="storage_provider_settings">Depolama sağlayıcısı ayarları</string>
@@ -123,10 +121,6 @@
     <string name="save_document">Kaydet</string>
     <string name="action_cancel">İptal</string>
     <string name="no_save_document">Hayır</string>
-
-    <!-- Create New Document Dialog Strings -->
-    <string name="create_new_document_title">Dosya ismi girin</string>
-    <string name="action_create">OLUŞTUR</string>
 
     <!-- Presentation Mode Strings -->
     <string name="action_presentation">Slayt Gösterisi</string>
