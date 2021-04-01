@@ -128,6 +128,14 @@ void CommonInitialize(int *argc, char ***argv)
     psp::PrintFontManager::get();
     //get the printer info
     Printer::GetPrinterQueues();
+
+    //https://github.com/google/oss-fuzz/issues/1449
+    //https://github.com/google/oss-fuzz/issues/5441
+    //release the solarmutex so a fork can acquire it which should
+    //allow these fuzzers to work without AFL_DRIVER_DONT_DEFER set
+    //removing the confusion of #5441 and the need for AFL_DRIVER_DONT_DEFER
+    //in .options files
+    Application::ReleaseSolarMutex();
 }
 
 void TypicalFuzzerInitialize(int *argc, char ***argv)
