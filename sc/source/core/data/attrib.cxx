@@ -367,6 +367,16 @@ void ScProtectionAttr::SetHidePrint( bool bHPrint)
     bHidePrint = bHPrint;
 }
 
+void ScProtectionAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ScProtectionAttr"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("protection"), BAD_CAST(OString::boolean(GetProtection()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("hide-formula"), BAD_CAST(OString::boolean(GetHideFormula()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("hide-cell"), BAD_CAST(OString::boolean(GetHideCell()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("hide-print"), BAD_CAST(OString::boolean(GetHidePrint()).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 /**
  * ScPageHFItem - Dates from the Head and Foot lines
  */
@@ -483,6 +493,14 @@ void ScPageHFItem::SetCenterArea( const EditTextObject& rNew )
 void ScPageHFItem::SetRightArea( const EditTextObject& rNew )
 {
     pRightArea = rNew.Clone();
+}
+void ScPageHFItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ScPageHFItem"));
+    GetLeftArea()->dumpAsXml(pWriter);
+    GetCenterArea()->dumpAsXml(pWriter);
+    GetRightArea()->dumpAsXml(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /**
@@ -656,6 +674,13 @@ bool ScPageScaleToItem::PutValue( const uno::Any& rAny, sal_uInt8 nMemberId )
             OSL_FAIL( "ScPageScaleToItem::PutValue - unknown member ID" );
     }
     return bRet;
+}
+void ScPageScaleToItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ScPageScaleToItem"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("width"), BAD_CAST(OString::number(GetWidth()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("height"), BAD_CAST(OString::number(GetHeight()).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 ScCondFormatItem::ScCondFormatItem():
