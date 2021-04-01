@@ -753,18 +753,9 @@ sal_uInt8 WW8Export::GetNumId( sal_uInt16 eNumType )
     return nRet;
 }
 
-void WW8AttributeOutput::OutlineNumbering(sal_uInt8 nLvl)
+void WW8AttributeOutput::OutlineNumbering(sal_uInt8 /*nLvl*/)
 {
-    if ( nLvl >= WW8ListManager::nMaxLevel )
-        nLvl = WW8ListManager::nMaxLevel-1;
-
-    // write sprmPIlvl and sprmPIlfo
-    // (sprmPOutLvl now handled by ParaOutlineLevel)
-    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::PIlvl::val );
-    m_rWW8Export.pO->push_back( nLvl );
-    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::PIlfo::val );
-    SwWW8Writer::InsUInt16( *m_rWW8Export.pO,
-        1 + m_rWW8Export.GetNumberingId(*m_rWW8Export.m_rDoc.GetOutlineNumRule()) );
+    // Handled by ParaOutlineLevel and ParaNumRule
 }
 
 // #i77805#
