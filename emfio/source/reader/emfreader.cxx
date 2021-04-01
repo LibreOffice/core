@@ -1934,6 +1934,18 @@ namespace emfio
                     }
                     break;
 
+                    case EMR_PAINTRGN :
+                    {
+                        sal_uInt32 nRgnDataSize;
+                        tools::PolyPolygon aPolyPoly;
+                        mpInputStream->SeekRel( 0x10 ); // Skipping RectL bounds
+                        mpInputStream->ReadUInt32( nRgnDataSize );
+
+                        if ( ImplReadRegion( aPolyPoly, *mpInputStream, nRecSize ) )
+                            DrawPolyPolygon( aPolyPoly );
+                    }
+                    break;
+
                     case EMR_CREATEDIBPATTERNBRUSHPT :
                     {
                         sal_uInt32  nStart = mpInputStream->Tell() - 8;
@@ -1987,7 +1999,6 @@ namespace emfio
                     case EMR_SETDIBITSTODEVICE :
                     case EMR_FRAMERGN :
                     case EMR_INVERTRGN :
-                    case EMR_PAINTRGN :
                     case EMR_FLATTENPATH :
                     case EMR_WIDENPATH :
                     case EMR_POLYDRAW :
