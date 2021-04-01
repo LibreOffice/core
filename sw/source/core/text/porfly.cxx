@@ -363,6 +363,7 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
             if (!aPos->nNode.GetNode().FindFooterStartNode())
             {
                 aVert.SetVertOrient(css::text::VertOrientation::NONE);
+                aVert.SetRelationOrient(css::text::RelOrientation::FRAME);
                 sal_Int32 const nTop = aTextRectangle.getY() - rFrame.getFrameArea().Top()
                                        - rFrame.getFramePrintArea().Top();
                 aVert.SetPos(nTop);

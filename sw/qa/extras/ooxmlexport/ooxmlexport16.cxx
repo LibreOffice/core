@@ -27,6 +27,8 @@
 #include <comphelper/propertysequence.hxx>
 #include <editeng/escapementitem.hxx>
 #include <unotools/fltrcfg.hxx>
+#include <textboxhelper.hxx>
+#include <unoprnms.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
 
@@ -306,6 +308,21 @@ DECLARE_OOXMLEXPORT_TEST(testTdf133473_shadowSize, "tdf133473.docx")
     // I.e. Shadow size will be smaller than actual.
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(200000), nSize1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf141550, "tdf141550.docx")
+{
+    uno::Reference<drawing::XShape> xShape(getShape(1));
+    uno::Reference<text::XTextFrame> xFrame = SwTextBoxHelper::getUnoTextFrame(xShape);
+
+    CPPUNIT_ASSERT(xShape);
+    CPPUNIT_ASSERT(xFrame);
+
+    const sal_uInt16 nShapeRelOri = getProperty<sal_uInt16>(xShape, UNO_NAME_HORI_ORIENT_RELATION);
+    const sal_uInt16 nFrameRelOri = getProperty<sal_uInt16>(xFrame, UNO_NAME_HORI_ORIENT_RELATION);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Textbox fallen apart!", nShapeRelOri, nFrameRelOri);
+    // Without the fix in place it fails with difference.
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf140137, "tdf140137.docx")
