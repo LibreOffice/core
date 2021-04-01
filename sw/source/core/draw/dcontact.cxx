@@ -1355,7 +1355,8 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                 aSyncSet.Put(SwFormatVertOrient(aObjRect.Top() - rPageFrame->getFrameArea().Top(),
                                                 text::VertOrientation::NONE,
                                                 text::RelOrientation::PAGE_FRAME));
-                aSyncSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, pAnchoredDrawObj->GetPageFrame()->GetPhyPageNum()));
+                aSyncSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, rObj.getSdrPageFromSdrObject()->GetPageNum()));
+                    //pAnchoredDrawObj->GetPageFrame()->GetPhyPageNum()));
 
                 SwTextBoxHelper::syncFlyFrameAttr(*GetFormat(), aSyncSet);
 
