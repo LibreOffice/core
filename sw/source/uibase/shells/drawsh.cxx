@@ -32,7 +32,6 @@
 #include <textboxhelper.hxx>
 #include <wview.hxx>
 #include <swmodule.hxx>
-#include <svx/fontworkbar.hxx>
 
 #include <svx/svdoashp.hxx>
 #include <svx/xfillit0.hxx>
