@@ -237,6 +237,10 @@ void SAL_CALL SlideSorterModule::disposing()
 {
     if (mxConfigurationController.is())
     {
+        uno::Reference<lang::XComponent> const xComponent(mxConfigurationController, UNO_QUERY);
+        if (xComponent.is())
+            xComponent->removeEventListener(this);
+
         mxConfigurationController->removeConfigurationChangeListener(this);
         mxConfigurationController = nullptr;
     }
