@@ -587,6 +587,12 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_ShadowDirection, "tdf142361ShadowDirect
                 "rotWithShape", "0");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testThemeOrange, "themeOrange.docx")
+{
+    // Assert that the theme color of the 1st paragraph is "accent1"
+    //CPPUNIT_ASSERT_EQUAL(getProperty<sal_Int16>(getParagraph(1), "CharColorTheme"), static_cast<sal_Int16>(4));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
