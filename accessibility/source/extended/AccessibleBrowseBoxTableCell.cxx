@@ -329,6 +329,10 @@ namespace accessibility
     {
             if ( _rSource.Source == mxParent )
             {
+                Reference< XComponent > xComponent(mxParent, UNO_QUERY);
+                if (xComponent.is())
+                    xComponent->removeEventListener(static_cast< XEventListener *>(this));
+
                     dispose();
             }
     }

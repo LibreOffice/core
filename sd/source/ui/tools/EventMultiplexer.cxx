@@ -434,6 +434,10 @@ void SAL_CALL EventMultiplexer::Implementation::disposing (
     if (xConfigurationController.is()
         && rEventObject.Source == xConfigurationController)
     {
+        Reference<XComponent> xComponent (xConfigurationController, UNO_QUERY);
+        if (xComponent.is())
+            xComponent->removeEventListener(static_cast<beans::XPropertyChangeListener*>(this));
+
         mxConfigurationControllerWeak.clear();
     }
 }

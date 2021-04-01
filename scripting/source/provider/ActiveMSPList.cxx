@@ -259,7 +259,13 @@ void SAL_CALL ActiveMSPList::disposing( const css::lang::EventObject& Source )
             ::osl::MutexGuard guard( m_mutex );
             ScriptComponent_map::iterator pos = m_mScriptComponents.find( xNormalized );
             if ( pos != m_mScriptComponents.end() )
+            {
+                Reference< lang::XComponent > xBroadcaster(Source.Source, UNO_QUERY);
+                if (xBroadcaster.is())
+                    xBroadcaster->removeEventListener(this);
+
                 m_mScriptComponents.erase( pos );
+            }
         }
     }
     catch ( const Exception& )

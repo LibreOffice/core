@@ -301,6 +301,12 @@ void SAL_CALL SlideSorterModule::disposing (
         && rEvent.Source == mxConfigurationController)
     {
         SaveResourceState();
+
+        uno::Reference<lang::XComponent> const xComponent(
+            mxConfigurationController, UNO_QUERY);
+        if (xComponent.is())
+            xComponent->removeEventListener(this);
+
         // Without the configuration controller this class can do nothing.
         mxConfigurationController = nullptr;
         dispose();
