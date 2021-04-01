@@ -23,7 +23,7 @@
 #include <strings.hrc>
 #include <svdata.hxx>
 
-#include <map>
+#include <utility>
 
 #include <prewin.h>
 #include <Shobjidl.h>
@@ -155,11 +155,11 @@ void CheckFileExtRegistration(weld::Window* pDialogParent)
         if (bUninit)
             CoUninitialize();
     });
-    sal::systools::COMReference<IApplicationAssociationRegistration> pAAR = nullptr;
+    sal::systools::COMReference<IApplicationAssociationRegistration> pAAR;
     try
     {
-        pAAR = sal::systools::COMReference<IApplicationAssociationRegistration>().CoCreateInstance(
-            CLSID_ApplicationAssociationRegistration, nullptr, CLSCTX_INPROC_SERVER);
+        pAAR.CoCreateInstance(CLSID_ApplicationAssociationRegistration, nullptr,
+                              CLSCTX_INPROC_SERVER);
     }
     catch (...)
     {
@@ -167,30 +167,22 @@ void CheckFileExtRegistration(weld::Window* pDialogParent)
         return;
     }
 
-    std::map<OUString, OUString> formats = {
-        { ".odp", "LibreOffice.ImpressDocument.1" },
-        { ".odt", "LibreOffice.WriterDocument.1" },
-        { ".ods", "LibreOffice.CalcDocument.1" },
+    static const std::pair<LPCWSTR, LPCWSTR> formats[] = {
+        { L".odp", L"LibreOffice.ImpressDocument.1" },
+        { L".odt", L"LibreOffice.WriterDocument.1" },
+        { L".ods", L"LibreOffice.CalcDocument.1" },
     };
     OUString aNonDefaults;
-    bool isNotDefault = false;
 
-    for (std::map<OUString, OUString>::iterator it = formats.begin(); it != formats.end(); it++)
+    for (const auto & [ szExt, szProgId ] : formats)
     {
-        if (IsPathDefaultForClass(pAAR, o3tl::toW(it->first.getStr()),
-                                  o3tl::toW(it->second.getStr()))
-            == S_FALSE)
-        {
-            isNotDefault = true;
-            aNonDefaults += it->first;
-            aNonDefaults += "\n";
-        }
+        if (IsPathDefaultForClass(pAAR, szExt, szProgId) == S_FALSE)
+            aNonDefaults += OUString::Concat(o3tl::toU(szExt)) + "\n";
     }
 
-    if (isNotDefault)
+    if (!aNonDefaults.isEmpty())
     {
-        OUString aMsg(VclResId(STR_FILEEXT_NONDEFAULT_ASK_MSG));
-        aMsg = aMsg.replaceFirst("$1", aNonDefaults);
+        OUString aMsg(VclResId(STR_FILEEXT_NONDEFAULT_ASK_MSG).replaceFirst("$1", aNonDefaults));
 
         VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
         ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateFileExtCheckDialog(
