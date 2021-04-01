@@ -63,6 +63,9 @@ public:
     virtual void setUp() override;
 
     void validate(const OUString& rURL, ValidationFormat) const;
+
+    // Allows to exclude tests dependent on color depth of the default virtual device
+    static sal_uInt16 getDefaultDeviceBitCount();
 };
 }
 

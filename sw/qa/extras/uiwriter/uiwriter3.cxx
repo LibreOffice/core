@@ -2622,7 +2622,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135661)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133477)
 {
-    if (isWindowsRDP())
+    if (getDefaultDeviceBitCount() < 24)
         return;
     load(DATA_DIRECTORY, "tdf133477.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
