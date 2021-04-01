@@ -69,6 +69,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/xflbmsli.hxx>
 #include <editeng/editstat.hxx>
+#include <osl/diagnose.h>
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <sdr/attribute/sdreffectstextattribute.hxx>

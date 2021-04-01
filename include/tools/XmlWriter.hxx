@@ -11,7 +11,7 @@
 #define INCLUDED_TOOLS_XMLWRITER_HXX
 
 #include <tools/toolsdllapi.h>
-#include <rtl/ustring.hxx>
+#include <rtl/string.hxx>
 #include <memory>
 #include <string_view>
 #include <vector>

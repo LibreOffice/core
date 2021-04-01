@@ -43,6 +43,7 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <sfx2/docfile.hxx>
 #include <editeng/outlobj.hxx>
+#include <osl/diagnose.h>
 
 #include <editeng/frmdiritem.hxx>
 

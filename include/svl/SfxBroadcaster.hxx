@@ -20,7 +20,6 @@
 #define INCLUDED_SVL_BRDCST_HXX
 
 #include <svl/svldllapi.h>
-#include <memory>
 #include <vector>
 
 class SfxListener;

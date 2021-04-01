@@ -22,6 +22,7 @@
 #define INCLUDED_BASIC_SBXDEF_HXX
 
 #include <o3tl/typed_flags_set.hxx>
+#include <sal/types.h>
 
 enum class SbxClassType {         // SBX-class-IDs (order is important!)
     DontCare = 1,  // don't care (search, not 0 due to StarBASIC)

@@ -25,7 +25,6 @@
 #include <string_view>
 
 #include <sfx2/dllapi.h>
-#include <rtl/ustring.hxx>
 
 namespace com::sun::star::beans { struct StringPair; }
 namespace com::sun::star::uno { template <typename > class Reference; }

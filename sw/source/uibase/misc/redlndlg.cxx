@@ -45,6 +45,7 @@
 
 #include <vector>
 #include <svx/svxdlg.hxx>
+#include <osl/diagnose.h>
 #include <bitmaps.hlst>
 
 #include <docsh.hxx>

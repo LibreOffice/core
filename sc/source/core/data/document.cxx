@@ -32,6 +32,7 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <tools/urlobj.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>

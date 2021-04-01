@@ -25,6 +25,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/unolingu.hxx>
 #include <selectionstate.hxx>
+#include <osl/diagnose.h>
 
 #include <spelleng.hxx>
 #include <tabvwsh.hxx>

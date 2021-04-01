@@ -37,6 +37,7 @@
 #include <svl/slstitm.hxx>
 #include <svl/intitem.hxx>
 #include <comphelper/lok.hxx>
+#include <osl/diagnose.h>
 
 static bool bLastRelative = false;
 

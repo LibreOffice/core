@@ -65,6 +65,7 @@
 #include <txtfly.hxx>
 #include <ndindex.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <osl/diagnose.h>
 
 #include <wrtsh.hxx>
 #include <view.hxx>

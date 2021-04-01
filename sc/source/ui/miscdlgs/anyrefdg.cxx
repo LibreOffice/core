@@ -24,6 +24,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <osl/diagnose.h>
 
 #include <anyrefdg.hxx>
 #include <sc.hrc>

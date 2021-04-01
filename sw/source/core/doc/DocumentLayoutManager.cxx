@@ -41,6 +41,7 @@
 #include <frameformats.hxx>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <svx/svdobj.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 

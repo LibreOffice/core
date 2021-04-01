@@ -40,6 +40,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>

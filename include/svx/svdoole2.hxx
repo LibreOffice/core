@@ -23,7 +23,7 @@
 #include <memory>
 #include <svx/svdorect.hxx>
 #include <svx/svxdllapi.h>
-#include <sfx2/linkmgr.hxx>
+#include <sfx2/lnkbase.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 
@@ -37,6 +37,7 @@ namespace embed { class XEmbeddedObject; }
 
 namespace frame { class XModel; }
 
+namespace io { class XInputStream; }
 }
 
 namespace svt { class EmbeddedObjectRef; }

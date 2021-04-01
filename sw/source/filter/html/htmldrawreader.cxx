@@ -38,6 +38,7 @@
 #include <svl/itemiter.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
+#include <osl/diagnose.h>
 
 #include <charatr.hxx>
 #include <drawdoc.hxx>

@@ -31,6 +31,7 @@
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <IAnyRefDialog.hxx>
 #include <tabview.hxx>

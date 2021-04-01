@@ -29,6 +29,7 @@
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/svapp.hxx>
+#include <osl/diagnose.h>
 
 #include <tabvwsh.hxx>
 #include <document.hxx>

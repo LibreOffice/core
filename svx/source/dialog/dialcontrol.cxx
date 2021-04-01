@@ -18,6 +18,7 @@
  */
 
 #include <svx/dialcontrol.hxx>
+#include <svx/svdtrans.hxx>
 #include <cmath>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>

@@ -35,6 +35,7 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <svx/svxids.hrc>
 #include <svtools/unitconv.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star::text;
 

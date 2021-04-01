@@ -15,7 +15,6 @@
 #include <com/sun/star/util/DateTime.hpp>
 
 #include <vcl/dllapi.h>
-#include <rtl/instance.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/point/b2dpoint.hxx>

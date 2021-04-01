@@ -22,6 +22,7 @@
 #include <svl/stritem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/brushitem.hxx>
+#include <osl/diagnose.h>
 #include <numrule.hxx>
 
 #include <cmdid.h>

@@ -19,6 +19,7 @@
 
 #include <controller/SlsAnimator.hxx>
 #include <view/SlideSorterView.hxx>
+#include <osl/diagnose.h>
 
 namespace sd::slidesorter::controller {
 

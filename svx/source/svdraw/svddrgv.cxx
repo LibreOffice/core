@@ -35,6 +35,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpagewindow.hxx>
+#include <osl/diagnose.h>
 
 using namespace sdr;
 

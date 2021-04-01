@@ -28,6 +28,7 @@
 #include "MasterPageDescriptor.hxx"
 #include <EventMultiplexer.hxx>
 #include <DrawDocShell.hxx>
+#include <osl/diagnose.h>
 
 #include <helpids.h>
 

@@ -28,7 +28,6 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/font.hxx>
 #include <vcl/region.hxx>
-#include <vcl/vclptr.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/poly.hxx>

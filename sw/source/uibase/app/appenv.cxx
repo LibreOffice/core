@@ -30,6 +30,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/pbinitem.hxx>
 #include <editeng/paperinf.hxx>
+#include <osl/diagnose.h>
 #include <fmthdft.hxx>
 #include <swwait.hxx>
 #include <swmodule.hxx>

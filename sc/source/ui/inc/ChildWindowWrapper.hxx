@@ -13,6 +13,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/childwin.hxx>
+#include <osl/diagnose.h>
 
 #include "tabvwsh.hxx"
 

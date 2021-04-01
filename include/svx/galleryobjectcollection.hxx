@@ -21,8 +21,7 @@
 
 #include <svx/svxdllapi.h>
 #include <svx/galmisc.hxx>
-#include <svx/galleryobjectxmlstorage.hxx>
-#include <svx/galleryobjectbinarystorage.hxx>
+#include <svx/galleryobjectstorage.hxx>
 
 #include <vcl/bitmapex.hxx>
 #include <tools/urlobj.hxx>

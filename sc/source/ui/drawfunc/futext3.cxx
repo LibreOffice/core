@@ -20,6 +20,7 @@
 #include <svx/svdocapt.hxx>
 #include <svx/svdundo.hxx>
 #include <vcl/cursor.hxx>
+#include <osl/diagnose.h>
 
 #include <global.hxx>
 #include <drwlayer.hxx>

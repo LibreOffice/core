@@ -20,6 +20,7 @@
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
+#include <osl/diagnose.h>
 
 #include <dbfunc.hxx>
 #include <drwlayer.hxx>

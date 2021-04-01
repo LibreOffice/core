@@ -21,6 +21,7 @@
 #include <svx/svdpagv.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/svdview.hxx>
+#include <osl/diagnose.h>
 #include <drawdoc.hxx>
 #include "sdrhhcwrap.hxx"
 #include <docsh.hxx>

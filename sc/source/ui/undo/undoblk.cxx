@@ -22,6 +22,7 @@
 #include <editeng/boxitem.hxx>
 #include <sfx2/app.hxx>
 #include <comphelper/lok.hxx>
+#include <osl/diagnose.h>
 
 #include <undoblk.hxx>
 #include <undoutil.hxx>

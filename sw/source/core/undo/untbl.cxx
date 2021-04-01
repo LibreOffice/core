@@ -61,6 +61,7 @@
 #include <unochart.hxx>
 #include <calbck.hxx>
 #include <frameformats.hxx>
+#include <osl/diagnose.h>
 
 #include <memory>
 #include <utility>

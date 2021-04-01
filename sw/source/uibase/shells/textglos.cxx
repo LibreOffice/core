@@ -20,6 +20,7 @@
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
+#include <osl/diagnose.h>
 
 #include <view.hxx>
 #include <cmdid.h>

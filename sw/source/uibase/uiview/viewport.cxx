@@ -39,6 +39,7 @@
 #include <comphelper/lok.hxx>
 #include <vcl/weld.hxx>
 #include <tools/svborder.hxx>
+#include <osl/diagnose.h>
 
 #include "viewfunc.hxx"
 

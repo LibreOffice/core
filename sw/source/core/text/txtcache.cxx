@@ -22,6 +22,7 @@
 #include "porlay.hxx"
 
 #include <sfx2/viewsh.hxx>
+#include <osl/diagnose.h>
 #include <view.hxx>
 
 SwTextLine::SwTextLine( SwTextFrame const *pFrame, std::unique_ptr<SwParaPortion> pNew ) :

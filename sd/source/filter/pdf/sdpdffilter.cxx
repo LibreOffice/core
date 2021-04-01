@@ -21,6 +21,7 @@
 
 #include <sfx2/docfile.hxx>
 #include <svx/svdograf.hxx>
+#include <o3tl/safeint.hxx>
 
 #include <sdpage.hxx>
 #include <drawdoc.hxx>

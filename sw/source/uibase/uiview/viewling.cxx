@@ -38,6 +38,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/svxerr.hxx>
 #include <svx/svxdlg.hxx>
+#include <osl/diagnose.h>
 #include <swwait.hxx>
 #include <uitool.hxx>
 #include <view.hxx>

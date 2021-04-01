@@ -34,6 +34,7 @@
 #include <svtools/htmlkywd.hxx>
 #include <svl/urihelper.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <dcontact.hxx>
 #include <fmtornt.hxx>

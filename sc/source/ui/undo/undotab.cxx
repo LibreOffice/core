@@ -21,6 +21,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/hint.hxx>
+#include <osl/diagnose.h>
 
 #include <undotab.hxx>
 #include <document.hxx>

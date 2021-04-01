@@ -29,6 +29,7 @@
 #include <xmloff/MarkerStyle.hxx>
 #include <xmloff/DashStyle.hxx>
 #include <xmloff/xmlnamespace.hxx>
+#include <xmloff/xmltkmap.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
 
 using namespace ::com::sun::star;

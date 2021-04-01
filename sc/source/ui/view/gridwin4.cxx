@@ -30,6 +30,7 @@
 #include <vcl/cursor.hxx>
 #include <vcl/settings.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <osl/diagnose.h>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>

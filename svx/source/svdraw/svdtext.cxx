@@ -23,6 +23,7 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdmodel.hxx>
 #include <svl/itemset.hxx>
+#include <osl/diagnose.h>
 #include <libxml/xmlwriter.h>
 #include <memory>
 

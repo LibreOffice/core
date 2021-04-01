@@ -35,6 +35,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <svx/svdobj.hxx>
+#include <osl/diagnose.h>
 #include <environmentofanchoredobject.hxx>
 #include <frmatr.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>

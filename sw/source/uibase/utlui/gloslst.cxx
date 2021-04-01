@@ -21,6 +21,7 @@
 #include <svl/fstathelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/transliterationwrapper.hxx>
+#include <osl/diagnose.h>
 #include <swtypes.hxx>
 #include <swmodule.hxx>
 #include <shellio.hxx>

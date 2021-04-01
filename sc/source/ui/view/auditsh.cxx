@@ -22,6 +22,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <vcl/EnumContext.hxx>
+#include <osl/diagnose.h>
 
 #include <auditsh.hxx>
 #include <tabvwsh.hxx>

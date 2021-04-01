@@ -32,6 +32,8 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/jobset.hxx>
 
+#include <memory>
+
 namespace com::sun::star::awt { class XPrinter; }
 namespace vcl { class OldStylePrintAdaptor; }
 class Printer;

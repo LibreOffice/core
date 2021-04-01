@@ -59,6 +59,7 @@
 #include <calbck.hxx>
 #include <DocumentSettingManager.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <frmatr.hxx>
 #include <frmtool.hxx>
 #include <ndtxt.hxx>
