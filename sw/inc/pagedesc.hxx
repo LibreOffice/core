@@ -226,7 +226,7 @@ public:
     /// Checks if the pagedescriptor has a stashed format according to the parameters or not.
     bool HasStashedFormat(bool bHeader, bool bLeft, bool bFirst);
 
-    /// Gives the feature of removing the stashed format by hand if it is neccessarry.
+    /// Gives the feature of removing the stashed format by hand if it is necessary.
     void RemoveStashedFormat(bool bHeader, bool bLeft, bool bFirst);
 
     /// Same as WriteUseOn(), but the >= HeaderShare part of the bitfield is not modified.
