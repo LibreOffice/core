@@ -76,10 +76,6 @@ private:
     XSecController* m_pXSecController;
     css::uno::Reference<css::xml::sax::XDocumentHandler> m_xNextHandler;
 
-    /// Last seen <Reference URI="...">.
-    OUString m_aReferenceURI;
-    /// Already called addStreamReference() for this reference.
-    bool m_bReferenceUnresolved;
     XMLSignatureHelper& m_rXMLSignatureHelper;
 
     OUString HandleIdAttr(css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs);
