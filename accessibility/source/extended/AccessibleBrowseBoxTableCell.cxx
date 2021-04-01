@@ -335,7 +335,7 @@ namespace accessibility
     {
             if ( _rSource.Source == mxParent )
             {
-                    dispose();
+                dispose();
             }
     }
 

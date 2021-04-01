@@ -57,6 +57,9 @@ void SAL_CALL PresenterCurrentSlideObserver::disposing()
         mxSlideShowController->removeSlideShowListener(static_cast<XSlideShowListener*>(this));
         mxSlideShowController = nullptr;
     }
+
+    if (mpPresenterController.is())
+        mpPresenterController->removeEventListener(this);
 }
 
 //----- XSlideShowListener ----------------------------------------------------
