@@ -20,6 +20,9 @@
 #include "shlxtmsi.hxx"
 #include <strsafe.h>
 #include <systools/win32/uwinapi.h>
+#ifdef DEBUG
+#include <sal/macros.h>
+#endif
 
 #ifdef DEBUG
 inline void OutputDebugStringFormatW( PCWSTR pFormat, ... )
