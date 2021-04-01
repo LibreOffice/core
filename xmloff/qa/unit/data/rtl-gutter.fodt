@@ -2,7 +2,7 @@
 <office:document xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:mimetype="application/vnd.oasis.opendocument.text">
   <office:automatic-styles>
     <style:page-layout style:name="pm1">
-      <style:page-layout-properties fo:page-width="21.0cm" fo:page-height="29.7cm" fo:margin-top="2.54cm" fo:margin-bottom="2.54cm" fo:margin-left="2.54cm" fo:margin-right="2.54cm" style:writing-mode="rl-tb" loext:margin-gutter="2.54cm"/>
+      <style:page-layout-properties fo:page-width="21.0cm" fo:page-height="29.7cm" fo:margin-top="2.54cm" fo:margin-bottom="2.54cm" fo:margin-left="2.54cm" fo:margin-right="5.08cm" style:writing-mode="rl-tb" loext:margin-gutter="2.54cm"/>
     </style:page-layout>
   </office:automatic-styles>
   <office:master-styles>
