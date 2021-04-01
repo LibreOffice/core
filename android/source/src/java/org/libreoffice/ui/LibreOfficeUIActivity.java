@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
+import android.database.Cursor;
 import android.graphics.drawable.Icon;
 import android.hardware.usb.UsbManager;
 import android.net.Uri;
@@ -28,6 +29,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -263,15 +265,12 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
         Set<String> recentFileStrings = prefs.getStringSet(RECENT_DOCUMENTS_KEY, new HashSet<String>());
 
-        final ArrayList<IFile> recentFiles = new ArrayList<IFile>();
+        final List<RecentFile> recentFiles = new ArrayList();
         for (String recentFileString : recentFileStrings) {
-            try {
-                if(documentProvider != null)
-                    recentFiles.add(documentProvider.createFromUri(this, new URI(recentFileString)));
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            } catch (RuntimeException e){
-                e.printStackTrace();
+            Uri uri = Uri.parse(recentFileString);
+            String filename = FileUtilities.retrieveDisplayNameForDocumentUri(getContentResolver(), uri);
+            if (!filename.isEmpty()) {
+                recentFiles.add(new RecentFile(uri, filename));
             }
         }
 
@@ -615,7 +614,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     }
 
     public void open(final IFile document) {
-        addDocumentToRecents(document);
         new AsyncTask<IFile, Void, File>() {
             @Override
             protected File doInBackground(IFile... document) {
@@ -659,10 +657,13 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         }.execute(document);
     }
 
-    private void openDocument(final Uri documentUri) {
+    public void openDocument(final Uri documentUri) {
         // "forward" to LibreOfficeMainActivity to open the file
         Intent intent = new Intent(Intent.ACTION_VIEW, documentUri);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+        addDocumentToRecents(documentUri);
+
         String packageName = getApplicationContext().getPackageName();
         ComponentName componentName = new ComponentName(packageName,
             LibreOfficeMainActivity.class.getName());
@@ -1082,8 +1083,20 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         return (int) (dp * scale + 0.5f);
     }
 
-    private void addDocumentToRecents(IFile iFile) {
-        String newRecent = iFile.getUri().toString();
+    private void addDocumentToRecents(Uri fileUri) {
+        if (Build.VERSION.SDK_INT < 19) {
+            // ContentResolver#takePersistableUriPermission only available from SDK level 19 on
+            Log.i(LOGTAG, "Recently used files not supported, requires SDK version >= 19.");
+            // drop potential entries
+            prefs.edit().putStringSet(RECENT_DOCUMENTS_KEY, new HashSet<String>()).apply();
+            return;
+        }
+
+        // preserve permissions across device reboots,
+        // s. https://developer.android.com/training/data-storage/shared/documents-files#persist-permissions
+        getContentResolver().takePersistableUriPermission(fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+        String newRecent = fileUri.toString();
         Set<String> recentsSet = prefs.getStringSet(RECENT_DOCUMENTS_KEY, new HashSet<String>());
 
         //create array to work with
@@ -1111,7 +1124,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
         prefs.edit().putStringSet(RECENT_DOCUMENTS_KEY, recentsSet).apply();
 
-
         //update app shortcuts (7.0 and above)
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
             ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
@@ -1120,11 +1132,16 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             shortcutManager.removeAllDynamicShortcuts();
 
             ArrayList<ShortcutInfo> shortcuts = new ArrayList<ShortcutInfo>();
-            for (String pathString : recentsArrayList) {
+            for (String recentDoc : recentsArrayList) {
+                Uri docUri = Uri.parse(recentDoc);
+                String filename = FileUtilities.retrieveDisplayNameForDocumentUri(getContentResolver(), docUri);
+                if (filename.isEmpty()) {
+                    continue;
+                }
 
                 //find the appropriate drawable
                 int drawable = 0;
-                switch (FileUtilities.getType(pathString)) {
+                switch (FileUtilities.getType(filename)) {
                     case FileUtilities.DOC:
                         drawable = R.drawable.writer;
                         break;
@@ -1139,12 +1156,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                         break;
                 }
 
-                File file = new File(pathString);
-
-                //for some reason, getName uses %20 instead of space
-                String filename = file.getName().replace("%20", " ");
-
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromFile(file));
+                Intent intent = new Intent(Intent.ACTION_VIEW, docUri);
                 String packageName = this.getApplicationContext().getPackageName();
                 ComponentName componentName = new ComponentName(packageName, LibreOfficeMainActivity.class.getName());
                 intent.setComponent(componentName);
