@@ -16,6 +16,24 @@
       "revId": "d1fcc9053f98cc4afb52498b40a836884bb5ec6f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2bd86fc_ef90a6da",
+        "filename": "vcl/source/bitmap/bitmappaint.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-04-01T09:01:31Z",
+      "side": 1,
+      "message": "I\u0027m not sure if I get the question. What happens here is that SkiaSalBitmap has an optimized Erase() that just sets an \u0027erased\u0027 flag (plus the color). So there is no pixel buffer, and some drawing operations can be simplified or even optimized away. It cannot be done unconditionally because no other VCL backend has this functionality.",
+      "parentUuid": "430a9889_66919de8",
+      "revId": "d1fcc9053f98cc4afb52498b40a836884bb5ec6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
