@@ -18,16 +18,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.libreoffice.R;
-import org.libreoffice.storage.IFile;
 
 import java.util.List;
 
 class RecentFilesAdapter extends RecyclerView.Adapter<RecentFilesAdapter.ViewHolder> {
 
     private LibreOfficeUIActivity mActivity;
-    private List<IFile> recentFiles;
+    private List<RecentFile> recentFiles;
 
-    RecentFilesAdapter(LibreOfficeUIActivity activity, List<IFile> recentFiles) {
+    RecentFilesAdapter(LibreOfficeUIActivity activity, List<RecentFile> recentFiles) {
         this.mActivity = activity;
         this.recentFiles = recentFiles;
     }
@@ -41,17 +40,16 @@ class RecentFilesAdapter extends RecyclerView.Adapter<RecentFilesAdapter.ViewHol
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final IFile iFile = recentFiles.get(position);
+        final RecentFile entry = recentFiles.get(position);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mActivity.open(iFile);
+                mActivity.openDocument(entry.getUri());
             }
         });
 
-        String filename = iFile.getName();
-
+        final String filename = entry.getDisplayName();
         holder.textView.setText(filename);
 
         int compoundDrawableInt = 0;
