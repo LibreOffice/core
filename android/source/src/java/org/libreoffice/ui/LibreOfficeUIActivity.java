@@ -467,15 +467,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_OPEN_FILECHOOSER && resultCode == RESULT_OK) {
             final Uri fileUri = data.getData();
-
-            // "forward" to LibreOfficeMainActivity to open the file
-            Intent intent = new Intent(Intent.ACTION_VIEW, fileUri);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            String packageName = getApplicationContext().getPackageName();
-            ComponentName componentName = new ComponentName(packageName,
-                    LibreOfficeMainActivity.class.getName());
-            intent.setComponent(componentName);
-            startActivity(intent);
+            openDocument(fileUri);
         } else if (requestCode == REQUEST_CODE_CREATE_NEW_DOCUMENT) {
             // "forward" to LibreOfficeMainActivity to create + open the file
             final Uri fileUri = data.getData();
@@ -665,6 +657,17 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                 }
             }
         }.execute(document);
+    }
+
+    private void openDocument(final Uri documentUri) {
+        // "forward" to LibreOfficeMainActivity to open the file
+        Intent intent = new Intent(Intent.ACTION_VIEW, documentUri);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        String packageName = getApplicationContext().getPackageName();
+        ComponentName componentName = new ComponentName(packageName,
+            LibreOfficeMainActivity.class.getName());
+        intent.setComponent(componentName);
+        startActivity(intent);
     }
 
     private void createNewFileDialog() {
