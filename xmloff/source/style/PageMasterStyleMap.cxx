@@ -156,7 +156,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     PLMAP( "FootnoteLineTextDistance", XML_NAMESPACE_STYLE,    XML__EMPTY,     XML_TYPE_MEASURE|MID_FLAG_SPECIAL_ITEM,    CTF_PM_FTN_LINE_DISTANCE ),
     PLMAP( "FootnoteLineWeight",        XML_NAMESPACE_STYLE,    XML_FOOTNOTE_SEP,    XML_TYPE_MEASURE16|MID_FLAG_ELEMENT_ITEM,    CTF_PM_FTN_LINE_WEIGHT ),
     PLMAP( "FootnoteLineStyle",     XML_NAMESPACE_STYLE,    XML_EMPTY,  XML_TYPE_STRING|MID_FLAG_ELEMENT_ITEM,  CTF_PM_FTN_LINE_STYLE ),
-    PLMAP_EXT("GutterMargin", XML_NAMESPACE_LO_EXT, XML_MARGIN_GUTTER, XML_TYPE_MEASURE, 0),
+    PLMAP_EXT("GutterMargin", XML_NAMESPACE_LO_EXT, XML_MARGIN_GUTTER, XML_TYPE_MEASURE, CTF_PM_MARGINGUTTER),
 
     //////////////////////////////////////////////////////////////////////////
     //Index 92: Section for 'header-style' own section, all members *have* to use CTF_PM_HEADERFLAG in the context entry (the 5th one)

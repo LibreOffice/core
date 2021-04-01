@@ -23,6 +23,10 @@
 #include <xmloff/maptype.hxx>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <memory>
@@ -124,6 +128,8 @@ void PageMasterImportPropertyMapper::finished(std::vector< XMLPropertyState >& r
     XMLPropertyState* pAllFooterMarginProperty = nullptr;
     XMLPropertyState* pFooterMargins[4] = { nullptr, nullptr, nullptr, nullptr };
     std::unique_ptr<XMLPropertyState> pNewFooterMargins[4];
+    XMLPropertyState* pMarginGutter = nullptr;
+    XMLPropertyState* pRtlGutter = nullptr;
 
     for (auto& rProp : rProperties)
     {
@@ -192,6 +198,12 @@ void PageMasterImportPropertyMapper::finished(std::vector< XMLPropertyState >& r
                       pMargins[XML_LINE_LEFT] = property; break;
                 case CTF_PM_MARGINRIGHT :
                       pMargins[XML_LINE_RIGHT] = property; break;
+                case CTF_PM_MARGINGUTTER:
+                    pMarginGutter = property;
+                    break;
+                case CTF_PM_RTLGUTTER:
+                    pRtlGutter = property;
+                    break;
                 case CTF_PM_HEADERMARGINALL   :
                       pAllHeaderMarginProperty = property; break;
                 case CTF_PM_HEADERMARGINTOP   :
@@ -432,6 +444,69 @@ void PageMasterImportPropertyMapper::finished(std::vector< XMLPropertyState >& r
     {
         rProperties.push_back(*xFooterDynamic);
         xFooterDynamic.reset();
+    }
+
+    if (pMarginGutter)
+    {
+        sal_Int32 nGutterMargin{};
+        pMarginGutter->maValue >>= nGutterMargin;
+
+        bool bGutterAtTop{};
+        uno::Reference<lang::XServiceInfo> xSI(GetImport().GetModel(), uno::UNO_QUERY);
+        if (xSI.is() && xSI->supportsService("com.sun.star.text.TextDocument"))
+        {
+            uno::Reference<lang::XMultiServiceFactory> xFac(GetImport().GetModel(), uno::UNO_QUERY);
+            if (xFac.is())
+            {
+                uno::Reference<beans::XPropertySet> xProps(
+                    xFac->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+                if (xProps.is())
+                {
+                    xProps->getPropertyValue("GutterAtTop") >>= bGutterAtTop;
+                }
+            }
+        }
+        if (bGutterAtTop)
+        {
+            if (nGutterMargin && pMargins[XML_LINE_TOP])
+            {
+                // Decrease top margin to not include gutter.
+                sal_Int32 nTopMargin{};
+                pMargins[XML_LINE_TOP]->maValue >>= nTopMargin;
+                nTopMargin -= nGutterMargin;
+                pMargins[XML_LINE_TOP]->maValue <<= nTopMargin;
+            }
+        }
+        else
+        {
+            bool bRtlGutter{};
+            if (nGutterMargin && pRtlGutter)
+            {
+                pRtlGutter->maValue >>= bRtlGutter;
+            }
+            if (bRtlGutter)
+            {
+                if (nGutterMargin && pMargins[XML_LINE_RIGHT])
+                {
+                    // Decrease right margin to not include gutter.
+                    sal_Int32 nRightMargin{};
+                    pMargins[XML_LINE_RIGHT]->maValue >>= nRightMargin;
+                    nRightMargin -= nGutterMargin;
+                    pMargins[XML_LINE_RIGHT]->maValue <<= nRightMargin;
+                }
+            }
+            else
+            {
+                if (nGutterMargin && pMargins[XML_LINE_LEFT])
+                {
+                    // Decrease left margin to not include gutter.
+                    sal_Int32 nLeftMargin{};
+                    pMargins[XML_LINE_LEFT]->maValue >>= nLeftMargin;
+                    nLeftMargin -= nGutterMargin;
+                    pMargins[XML_LINE_LEFT]->maValue <<= nLeftMargin;
+                }
+            }
+        }
     }
 }
 

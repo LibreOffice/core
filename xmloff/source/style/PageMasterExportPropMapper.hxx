@@ -29,6 +29,7 @@ class XMLPageMasterExportPropMapper : public SvXMLExportPropertyMapper
     XMLBackgroundImageExport aBackgroundImageExport;
     XMLTextColumnsExport aTextColumnsExport;
     XMLFootnoteSeparatorExport aFootnoteSeparatorExport;
+    bool m_bGutterAtTop = false;
 
     virtual void        ContextFilter(
                             bool bEnableFoFontFamily,
@@ -58,6 +59,8 @@ public:
                             const ::std::vector< XMLPropertyState >* pProperties,
                             sal_uInt32 nIdx
                             ) const override;
+
+    void SetGutterAtTop(bool bGutterAtTop) { m_bGutterAtTop = bGutterAtTop; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

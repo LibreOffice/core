@@ -87,6 +87,13 @@ struct XMLPropertyStateBuffer
     XMLPropertyState*       pPMPaddingLeft;
     XMLPropertyState*       pPMPaddingRight;
 
+    XMLPropertyState*       pPMMarginGutter;
+    XMLPropertyState*       pPMMarginLeft;
+    XMLPropertyState*       pPMRtlGutter;
+    XMLPropertyState*       pPMMarginRight;
+    bool                    m_bGutterAtTop;
+    XMLPropertyState*       pPMMarginTop;
+
                             XMLPropertyStateBuffer();
     void                    ContextFilter( ::std::vector< XMLPropertyState >& rPropState );
 };
@@ -112,12 +119,66 @@ XMLPropertyStateBuffer::XMLPropertyStateBuffer()
         pPMPaddingTop( nullptr ),
         pPMPaddingBottom( nullptr ),
         pPMPaddingLeft( nullptr ),
-        pPMPaddingRight( nullptr )
+        pPMPaddingRight( nullptr ),
+
+        pPMMarginGutter( nullptr ),
+        pPMMarginLeft( nullptr ),
+        pPMRtlGutter( nullptr ),
+        pPMMarginRight( nullptr ),
+        m_bGutterAtTop( false ),
+        pPMMarginTop( nullptr )
 {
 }
 
 void XMLPropertyStateBuffer::ContextFilter( ::std::vector< XMLPropertyState >& )
 {
+    if (pPMMarginGutter)
+    {
+        sal_Int32 nGutterMargin{};
+        pPMMarginGutter->maValue >>= nGutterMargin;
+        if (m_bGutterAtTop)
+        {
+            if (nGutterMargin && pPMMarginTop)
+            {
+                // Increase top margin to include gutter.
+                sal_Int32 nTopMargin{};
+                pPMMarginTop->maValue >>= nTopMargin;
+                nTopMargin += nGutterMargin;
+                pPMMarginTop->maValue <<= nTopMargin;
+            }
+        }
+        else
+        {
+            bool bRtlGutter{};
+            if (nGutterMargin && pPMRtlGutter)
+            {
+                pPMRtlGutter->maValue >>= bRtlGutter;
+            }
+            if (bRtlGutter)
+            {
+                if (nGutterMargin && pPMMarginRight)
+                {
+                    // Increase right margin to include gutter.
+                    sal_Int32 nRightMargin{};
+                    pPMMarginRight->maValue >>= nRightMargin;
+                    nRightMargin += nGutterMargin;
+                    pPMMarginRight->maValue <<= nRightMargin;
+                }
+            }
+            else
+            {
+                if (nGutterMargin && pPMMarginLeft)
+                {
+                    // Increase left margin to include gutter.
+                    sal_Int32 nLeftMargin{};
+                    pPMMarginLeft->maValue >>= nLeftMargin;
+                    nLeftMargin += nGutterMargin;
+                    pPMMarginLeft->maValue <<= nLeftMargin;
+                }
+            }
+        }
+    }
+
     if (pPMMarginAll)
     {
         lcl_RemoveState(pPMMarginAll); // #i117696# do not write fo:margin
@@ -299,6 +360,11 @@ void XMLPageMasterExportPropMapper::ContextFilter(
         const Reference< XPropertySet >& rPropSet ) const
 {
     XMLPropertyStateBuffer  aPageBuffer;
+    if (m_bGutterAtTop)
+    {
+        aPageBuffer.m_bGutterAtTop = true;
+    }
+
     XMLPropertyStateBuffer  aHeaderBuffer;
     XMLPropertyStateBuffer  aFooterBuffer;
 
@@ -383,6 +449,21 @@ void XMLPageMasterExportPropMapper::ContextFilter(
             case CTF_PM_PADDINGBOTTOM:      pBuffer->pPMPaddingBottom       = pProp;    break;
             case CTF_PM_PADDINGLEFT:        pBuffer->pPMPaddingLeft         = pProp;    break;
             case CTF_PM_PADDINGRIGHT:       pBuffer->pPMPaddingRight        = pProp;    break;
+            case CTF_PM_MARGINGUTTER:
+                pBuffer->pPMMarginGutter = pProp;
+                break;
+            case CTF_PM_MARGINLEFT:
+                pBuffer->pPMMarginLeft = pProp;
+                break;
+            case CTF_PM_RTLGUTTER:
+                pBuffer->pPMRtlGutter = pProp;
+                break;
+            case CTF_PM_MARGINRIGHT:
+                pBuffer->pPMMarginRight = pProp;
+                break;
+            case CTF_PM_MARGINTOP:
+                pBuffer->pPMMarginTop = pProp;
+                break;
         }
 
         switch( nContextId )
