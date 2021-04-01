@@ -16,6 +16,24 @@
       "revId": "0a893a15b02a3662e3c68776be09534c9f955e4f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92d01e42_6200b973",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 9
+      },
+      "lineNbr": 2786,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-04-01T08:33:58Z",
+      "side": 1,
+      "message": "I tried that, but test failed accessing the property (see last jenkins failures in clang-dbgutil build). I couldn\u0027t figure out what was wrong, and it worked this way.",
+      "parentUuid": "0e09d7ea_816916de",
+      "revId": "0a893a15b02a3662e3c68776be09534c9f955e4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
