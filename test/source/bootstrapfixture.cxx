@@ -252,6 +252,7 @@ sal_uInt16 test::BootstrapFixture::getDefaultDeviceBitCount()
 {
     ScopedVclPtr<VirtualDevice> device
         = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    CPPUNIT_ASSERT_GREATEREQUAL(sal_uInt16(50), device->GetBitCount());
     return device->GetBitCount();
 }
 
