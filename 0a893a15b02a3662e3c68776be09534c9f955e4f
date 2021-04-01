@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e09d7ea_816916de",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 9
+      },
+      "lineNbr": 2786,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-01T08:19:56Z",
+      "side": 1,
+      "message": "like other props here, this prop would probably also benefit from being oor:nillable\u003d\"false\" (and have an empty default \u003cvalue\u003e); that makes it easier for code accessing the prop, not having to care about a potential nil value",
+      "revId": "0a893a15b02a3662e3c68776be09534c9f955e4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
