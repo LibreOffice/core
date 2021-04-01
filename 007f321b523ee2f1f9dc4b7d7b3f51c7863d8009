@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "51ae032d_0ac5c5bb",
+        "filename": "include/oox/helper/extrusionpresets.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-01T09:52:54Z",
+      "side": 1,
+      "message": "This struct seems only used inside extrusionpresets.cxx?\nI\u0027d suggest to convert all OUStrings in it into std::u16string_view, which would allow to make its ctors constexpr; and then just have a static const array in that .CXX, not as a class member?",
+      "revId": "007f321b523ee2f1f9dc4b7d7b3f51c7863d8009",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
