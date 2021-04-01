@@ -22,11 +22,13 @@
 #include <memory>
 
 #include <formula/tokenarray.hxx>
+#include <formula/errorcodes.hxx>
 #include <svl/listener.hxx>
 
 #include "types.hxx"
 #include "interpretercontext.hxx"
 #include "document.hxx"
+#include "docoptio.hxx"
 #include "formulalogger.hxx"
 #include "formularesult.hxx"
 
@@ -436,15 +438,25 @@ public:
         return (rDocument.GetAutoCalc() || (cMatrixFlag != ScMatrixMode::NONE));
     }
 
-    bool MaybeInterpret()
+    void MaybeInterpret()
     {
         if (NeedsInterpret())
         {
-            assert(!rDocument.IsThreadedGroupCalcInProgress());
-            Interpret();
-            return true;
+            if (bRunning && !rDocument.GetDocOptions().IsIter() && rDocument.IsThreadedGroupCalcInProgress())
+            {
+                // This is actually copied from Interpret()'s if(bRunning)
+                // block that once caught this circular reference but now is
+                // prepended with various threaded group calc things which the
+                // assert() below is supposed to fail on when entering again.
+                // Nevertheless, we need some state here the caller can obtain.
+                aResult.SetResultError( FormulaError::CircularReference );
+            }
+            else
+            {
+                assert(!rDocument.IsThreadedGroupCalcInProgress());
+                Interpret();
+            }
         }
-        return false;
     }
 
     /**
