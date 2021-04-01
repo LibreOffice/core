@@ -44,6 +44,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -125,7 +126,9 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     public static final String EXPLORER_VIEW_TYPE_KEY = "EXPLORER_VIEW_TYPE";
     public static final String EXPLORER_PREFS_KEY = "EXPLORER_PREFS";
     public static final String SORT_MODE_KEY = "SORT_MODE";
-    private static final String RECENT_DOCUMENTS_KEY = "RECENT_DOCUMENTS";
+    private static final String RECENT_DOCUMENTS_KEY = "RECENT_DOCUMENT_URIS";
+    // delimiter used for storing multiple URIs in a string
+    private static final String RECENT_DOCUMENTS_DELIMITER = " ";
     private static final String ENABLE_SHOW_HIDDEN_FILES_KEY = "ENABLE_SHOW_HIDDEN_FILES";
     private static final String DISPLAY_LANGUAGE = "DISPLAY_LANGUAGE";
 
@@ -263,7 +266,8 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
         recentRecyclerView = findViewById(R.id.list_recent);
 
-        Set<String> recentFileStrings = prefs.getStringSet(RECENT_DOCUMENTS_KEY, new HashSet<String>());
+        String recentPref = prefs.getString(RECENT_DOCUMENTS_KEY, "");
+        List<String> recentFileStrings = Arrays.asList(recentPref.split(RECENT_DOCUMENTS_DELIMITER));
 
         final List<RecentFile> recentFiles = new ArrayList();
         for (String recentFileString : recentFileStrings) {
@@ -1088,7 +1092,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             // ContentResolver#takePersistableUriPermission only available from SDK level 19 on
             Log.i(LOGTAG, "Recently used files not supported, requires SDK version >= 19.");
             // drop potential entries
-            prefs.edit().putStringSet(RECENT_DOCUMENTS_KEY, new HashSet<String>()).apply();
+            prefs.edit().putString(RECENT_DOCUMENTS_KEY, "").apply();
             return;
         }
 
@@ -1097,17 +1101,13 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         getContentResolver().takePersistableUriPermission(fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
         String newRecent = fileUri.toString();
-        Set<String> recentsSet = prefs.getStringSet(RECENT_DOCUMENTS_KEY, new HashSet<String>());
+        List<String> recentsList = new ArrayList(Arrays.asList(prefs.getString(RECENT_DOCUMENTS_KEY, "").split(RECENT_DOCUMENTS_DELIMITER)));
 
-        //create array to work with
-        ArrayList<String> recentsArrayList = new ArrayList<String>(recentsSet);
+        // remove string if present, so that it doesn't appear multiple times
+        recentsList.remove(newRecent);
 
-        //remove string if present, so that it doesn't appear multiple times
-        recentsSet.remove(newRecent);
-
-        //put the new value in the first place
-        recentsArrayList.add(0, newRecent);
-
+        // put the new value in the first place
+        recentsList.add(0, newRecent);
 
         /*
          * 4 because the number of recommended items in App Shortcuts is 4, and also
@@ -1115,14 +1115,13 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
          */
         final int RECENTS_SIZE = 4;
 
-        while (recentsArrayList.size() > RECENTS_SIZE) {
-            recentsArrayList.remove(RECENTS_SIZE);
+        while (recentsList.size() > RECENTS_SIZE) {
+            recentsList.remove(RECENTS_SIZE);
         }
 
-        //switch to Set, so that it could be inserted into prefs
-        recentsSet = new HashSet<String>(recentsArrayList);
-
-        prefs.edit().putStringSet(RECENT_DOCUMENTS_KEY, recentsSet).apply();
+        // serialize to String that can be set for pref
+        String value = TextUtils.join(RECENT_DOCUMENTS_DELIMITER, recentsList);
+        prefs.edit().putString(RECENT_DOCUMENTS_KEY, value).apply();
 
         //update app shortcuts (7.0 and above)
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
@@ -1132,7 +1131,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             shortcutManager.removeAllDynamicShortcuts();
 
             ArrayList<ShortcutInfo> shortcuts = new ArrayList<ShortcutInfo>();
-            for (String recentDoc : recentsArrayList) {
+            for (String recentDoc : recentsList) {
                 Uri docUri = Uri.parse(recentDoc);
                 String filename = FileUtilities.retrieveDisplayNameForDocumentUri(getContentResolver(), docUri);
                 if (filename.isEmpty()) {
