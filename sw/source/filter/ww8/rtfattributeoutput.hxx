@@ -458,6 +458,8 @@ protected:
     bool DropdownField(const SwField* pField) override;
     bool PlaceholderField(const SwField* pField) override;
 
+    void SectionRtlGutter(const SfxBoolItem& rRtlGutter) override;
+
 private:
     /// Reference to the export, where to get the data from
     RtfExport& m_rExport;
