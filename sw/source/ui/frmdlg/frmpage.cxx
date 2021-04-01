@@ -59,6 +59,7 @@
 #include <fmtfollowtextflow.hxx>
 #include <svx/sdtaitm.hxx>
 #include <sal/macros.h>
+#include <osl/diagnose.h>
 
 #include <strings.hrc>
 #include <svx/strings.hrc>

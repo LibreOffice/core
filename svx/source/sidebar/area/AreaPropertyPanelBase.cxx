@@ -26,6 +26,7 @@
 #include <svx/xfltrit.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/xtable.hxx>
+#include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/opengrf.hxx>
 #include <sfx2/weldutils.hxx>
 #include <tools/urlobj.hxx>

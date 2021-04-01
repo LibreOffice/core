@@ -24,7 +24,6 @@
 #include <vcl/customweld.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svxdllapi.h>
-#include <svx/svdtrans.hxx>
 
 class Edit;
 

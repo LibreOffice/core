@@ -22,6 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/charclass.hxx>
+#include <osl/diagnose.h>
 
 #include <dbfunc.hxx>
 #include <docsh.hxx>

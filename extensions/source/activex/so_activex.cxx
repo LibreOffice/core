@@ -50,6 +50,7 @@
 #include "SOActiveX.h"
 
 #include <comphelper\documentconstants.hxx>
+#include <sal/types.h>
 #include <exception>
 
 CComModule _Module;

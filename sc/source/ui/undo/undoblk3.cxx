@@ -29,6 +29,7 @@
 #include <vcl/virdev.hxx>
 #include <sfx2/app.hxx>
 #include <svx/svdundo.hxx>
+#include <osl/diagnose.h>
 
 #include <undoblk.hxx>
 #include <globstr.hrc>

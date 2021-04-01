@@ -27,6 +27,7 @@
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <salhelper/simplereferenceobject.hxx>
 #include <xmloff/xmlictxt.hxx>
+#include <sax/fastattribs.hxx>
 
 #include <basegfx/vector/b3dvector.hxx>
 #include <vector>

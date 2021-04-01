@@ -69,6 +69,7 @@
 #include <rtl/ustring.hxx>
 #include <sfx2/viewsh.hxx>
 #include <comphelper/lok.hxx>
+#include <osl/diagnose.h>
 
 // EditView
 

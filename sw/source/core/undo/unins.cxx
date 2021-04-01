@@ -23,6 +23,7 @@
 #include <unotools/charclass.hxx>
 #include <editeng/keepitem.hxx>
 #include <svx/svdobj.hxx>
+#include <osl/diagnose.h>
 
 #include <fmtcntnt.hxx>
 #include <frmfmt.hxx>

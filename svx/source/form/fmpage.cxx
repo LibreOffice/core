@@ -30,6 +30,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
 #include <vcl/window.hxx>
+#include <osl/diagnose.h>
 
 
 #include <fmprop.hxx>

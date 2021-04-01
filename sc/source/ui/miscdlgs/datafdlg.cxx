@@ -15,6 +15,7 @@
 #include <tabvwsh.hxx>
 
 #include <vcl/svapp.hxx>
+#include <osl/diagnose.h>
 
 ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell* pTabViewShellOri)
     : GenericDialogController(pParent, "modules/scalc/ui/dataform.ui", "DataFormDialog")

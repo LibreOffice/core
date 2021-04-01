@@ -43,6 +43,7 @@
 #include <svx/svxids.hrc>
 #include <cuitabarea.hxx>
 #include <svtools/unitconv.hxx>
+#include <osl/diagnose.h>
 
 #define XOUT_WIDTH    150
 

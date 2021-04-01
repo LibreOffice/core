@@ -12,6 +12,7 @@
 
 #include <sfx2/devtools/ObjectInspectorTreeHandler.hxx>
 #include <sfx2/sfxresid.hxx>
+#include <vcl/svapp.hxx>
 #include "DevToolsStrings.hrc"
 
 #include <com/sun/star/beans/theIntrospection.hpp>

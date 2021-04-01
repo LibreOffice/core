@@ -11,7 +11,6 @@
 #pragma once
 
 #include <rtl/string.hxx>
-#include <rtl/ustring.hxx>
 #include <string_view>
 #include <vector>
 #include <svtools/svtdllapi.h>

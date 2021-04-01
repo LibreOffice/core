@@ -21,7 +21,6 @@
 
 #include <rtl/ustring.hxx>
 #include <svtools/svtdllapi.h>
-#include <tools/gen.hxx>
 #include <vcl/vclenum.hxx>
 
 enum class SvImageId {

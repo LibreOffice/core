@@ -62,6 +62,7 @@
 #include <sortparam.hxx>
 
 #include <comphelper/lok.hxx>
+#include <osl/diagnose.h>
 
 #include <memory>
 #include <string_view>

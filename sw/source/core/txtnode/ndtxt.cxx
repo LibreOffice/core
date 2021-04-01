@@ -27,6 +27,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/rsiditem.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <anchoredobject.hxx>
 #include <txtfld.hxx>
 #include <txtinet.hxx>

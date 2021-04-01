@@ -63,6 +63,7 @@
 #include <editeng/editview.hxx>
 #include <vcl/unohelp2.hxx>
 #include <editeng/hyphenzoneitem.hxx>
+#include <osl/diagnose.h>
 
 #include <cmdid.h>
 #include <doc.hxx>

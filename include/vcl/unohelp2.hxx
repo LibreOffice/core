@@ -25,9 +25,6 @@
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/dllapi.h>
-#include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <boost/property_tree/json_parser.hpp>
 #include <vcl/IDialogRenderable.hxx>
 
 namespace com::sun::star::datatransfer::clipboard {

@@ -39,6 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
+#include <osl/diagnose.h>
 
 #include <viewfunc.hxx>
 #include <vcl/uitest/logger.hxx>

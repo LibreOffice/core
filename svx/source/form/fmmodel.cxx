@@ -27,6 +27,7 @@
 #include <svx/fmpage.hxx>
 
 #include <sfx2/objsh.hxx>
+#include <osl/diagnose.h>
 
 #include <optional>
 

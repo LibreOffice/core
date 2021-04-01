@@ -24,6 +24,7 @@
 #include <tools/stream.hxx>
 #include <svx/unoapi.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <CustomAnimationPreset.hxx>
 #include <com/sun/star/presentation/TextAnimationType.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>

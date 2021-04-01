@@ -12,7 +12,10 @@
 
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
+#include <vcl/WeldedTabbedNotebookbar.hxx>
+
 #include <map>
+#include <memory>
 #include <string_view>
 
 namespace com::sun::star::frame

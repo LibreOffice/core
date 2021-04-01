@@ -10,14 +10,9 @@
 #ifndef INCLUDED_VCL_OPENGL_OPENGLCONTEXT_HXX
 #define INCLUDED_VCL_OPENGL_OPENGLCONTEXT_HXX
 
-#include <epoxy/gl.h>
-
 #include <vcl/dllapi.h>
 #include <vcl/syschild.hxx>
 #include <rtl/ref.hxx>
-
-#include <memory>
-#include <unordered_map>
 
 /// Holds the information of our new child window
 struct VCL_DLLPUBLIC GLWindow

@@ -27,6 +27,7 @@
 #include <editeng/shaditem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/opaqitem.hxx>
+#include <osl/diagnose.h>
 #include <svx/svdouno.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <swmodule.hxx>

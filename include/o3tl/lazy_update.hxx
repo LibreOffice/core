@@ -20,8 +20,6 @@
 #ifndef INCLUDED_O3TL_LAZY_UPDATE_HXX
 #define INCLUDED_O3TL_LAZY_UPDATE_HXX
 
-#include <utility>
-
 namespace o3tl
 {
     /** Update output object lazily

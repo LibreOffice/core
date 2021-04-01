@@ -20,7 +20,6 @@
 #ifndef INCLUDED_TOOLKIT_AWT_VCLXWINDOWS_HXX
 #define INCLUDED_TOOLKIT_AWT_VCLXWINDOWS_HXX
 
-#include <config_options.h>
 #include <toolkit/dllapi.h>
 
 #include <com/sun/star/awt/XTextComponent.hpp>

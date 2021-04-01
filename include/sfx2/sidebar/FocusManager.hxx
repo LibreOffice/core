@@ -20,7 +20,6 @@
 
 #include <sfx2/sidebar/Panel.hxx>
 #include <tools/link.hxx>
-#include <vcl/vclevent.hxx>
 #include <vcl/keycod.hxx>
 
 namespace weld {

@@ -52,6 +52,7 @@
 
 #include <swselectionlist.hxx>
 #include <comphelper/lok.hxx>
+#include <osl/diagnose.h>
 
 namespace {
     bool lcl_GetModelPositionForViewPoint_Objects( const SwPageFrame* pPageFrame, bool bSearchBackground,

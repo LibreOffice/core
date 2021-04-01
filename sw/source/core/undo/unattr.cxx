@@ -25,6 +25,7 @@
 #include <svl/itemiter.hxx>
 #include <editeng/tstpitem.hxx>
 #include <svx/svdobj.hxx>
+#include <osl/diagnose.h>
 #include <hintids.hxx>
 #include <fmtflcnt.hxx>
 #include <txtftn.hxx>

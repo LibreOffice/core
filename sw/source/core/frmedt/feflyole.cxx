@@ -20,6 +20,7 @@
 
 #include <sfx2/ipclient.hxx>
 #include <sfx2/viewsh.hxx>
+#include <osl/diagnose.h>
 
 #include <fesh.hxx>
 #include <cntfrm.hxx>

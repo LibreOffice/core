@@ -51,6 +51,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <comphelper/string.hxx>
+#include <osl/diagnose.h>
 #include <paintfrm.hxx>
 #include <PostItMgr.hxx>
 #include <SwGrammarMarkUp.hxx>

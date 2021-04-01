@@ -23,7 +23,6 @@
 #include <svx/svxdllapi.h>
 #include <vcl/customweld.hxx>
 #include <vcl/outdev.hxx>
-#include <memory>
 
 class SfxItemSet;
 class SdrEdgeObj;

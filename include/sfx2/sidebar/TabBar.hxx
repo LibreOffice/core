@@ -18,8 +18,6 @@
  */
 #pragma once
 
-#include <config_options.h>
-#include <sfx2//dllapi.h>
 #include <sfx2/sidebar/ResourceManager.hxx>
 
 #include <vcl/InterimItemWindow.hxx>

@@ -51,6 +51,7 @@
 #include <rptui_slotid.hrc>
 
 #include <vcl/commandevent.hxx>
+#include <o3tl/safeint.hxx>
 
 #include <svl/itempool.hxx>
 #include <svtools/extcolorcfg.hxx>

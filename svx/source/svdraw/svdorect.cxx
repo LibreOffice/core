@@ -31,6 +31,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <osl/diagnose.h>
 
 using namespace com::sun::star;
 

@@ -34,6 +34,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <libxml/xmlwriter.h>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/container/XChild.hpp>
 

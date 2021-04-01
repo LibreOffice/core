@@ -25,6 +25,7 @@
 #include <svl/eitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
+#include <osl/diagnose.h>
 
 #include <view.hxx>
 #include <wrtsh.hxx>

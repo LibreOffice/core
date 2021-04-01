@@ -23,6 +23,7 @@
 #include <sfx2/sfxhelp.hxx>
 #include <vcl/help.hxx>
 #include <svx/svdview.hxx>
+#include <osl/diagnose.h>
 #include <fmturl.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>

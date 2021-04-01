@@ -18,6 +18,7 @@
  */
 
 #include <svx/svdobj.hxx>
+#include <osl/diagnose.h>
 #include <shapelist.hxx>
 
 #include <algorithm>

@@ -44,6 +44,7 @@
 #include <oox/token/tokens.hxx>
 #include <oox/vml/vmlshape.hxx>
 #include <oox/vml/vmlshapecontainer.hxx>
+#include <osl/diagnose.h>
 #include <formulaparser.hxx>
 #include <stylesbuffer.hxx>
 #include <themebuffer.hxx>

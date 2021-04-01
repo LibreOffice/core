@@ -78,6 +78,7 @@
 #include <o3tl/safeint.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <xmloff/odffields.hxx>
+#include <osl/diagnose.h>
 
 #include <algorithm>
 

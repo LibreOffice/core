@@ -19,6 +19,7 @@
 
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
+#include <osl/diagnose.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

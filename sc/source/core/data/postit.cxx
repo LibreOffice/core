@@ -28,6 +28,7 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <osl/diagnose.h>
 
 #include <scitems.hxx>
 #include <svx/xfillit0.hxx>

@@ -44,6 +44,7 @@
 #include <editeng/editobj.hxx>
 #include <svl/sharedstring.hxx>
 #include <unotools/collatorwrapper.hxx>
+#include <osl/diagnose.h>
 
 #include <algorithm>
 #include <vector>

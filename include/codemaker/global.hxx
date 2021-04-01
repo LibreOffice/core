@@ -20,9 +20,7 @@
 #ifndef INCLUDED_CODEMAKER_GLOBAL_HXX
 #define INCLUDED_CODEMAKER_GLOBAL_HXX
 
-#include <list>
 #include <vector>
-#include <set>
 #include <string_view>
 
 #include <osl/file.hxx>

@@ -56,6 +56,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <set>
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_openoffice_comp_dbu_OTableDesign_get_implementation(

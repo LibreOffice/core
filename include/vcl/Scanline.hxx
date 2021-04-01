@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_SCANLINE_HXX
 
 #include <o3tl/typed_flags_set.hxx>
+#include <sal/types.h>
 
 typedef sal_uInt8*        Scanline;
 typedef const sal_uInt8*  ConstScanline;

@@ -31,6 +31,7 @@
 #include <fldbas.hxx>
 #include <dbmgr.hxx>
 #include <svx/dataaccessdescriptor.hxx>
+#include <osl/diagnose.h>
 
 #include <vcl/svapp.hxx>
 

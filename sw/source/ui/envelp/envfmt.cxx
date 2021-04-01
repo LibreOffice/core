@@ -23,6 +23,7 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svtools/unitconv.hxx>
+#include <osl/diagnose.h>
 
 #include <cmdid.h>
 #include <wrtsh.hxx>

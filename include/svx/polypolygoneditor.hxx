@@ -25,7 +25,6 @@
 #include <svx/ipolypolygoneditorcontroller.hxx>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <set>
 #include <o3tl/sorted_vector.hxx>
 
 namespace sdr

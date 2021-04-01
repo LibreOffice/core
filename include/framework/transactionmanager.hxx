@@ -19,10 +19,8 @@
 
 #pragma once
 
-#include <config_options.h>
 #include <osl/mutex.hxx>
 
-#include "fwkdllapi.h"
 #include "gate.hxx"
 
 namespace framework{

@@ -31,7 +31,6 @@
 #include <rtl/ref.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <o3tl/sorted_vector.hxx>
-#include <set>
 
 namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::beans { class XPropertySet; }

@@ -27,12 +27,10 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/datetime.hxx>
-#include <unotools/datetime.hxx>
 #include <vcl/bitmapex.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svx/galmisc.hxx>
 #include <memory>
-#include <vector>
 
 namespace weld { class ComboBox; }
 

@@ -50,6 +50,7 @@
 #include <spellcheckcontext.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <osl/diagnose.h>
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>

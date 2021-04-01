@@ -24,6 +24,7 @@
 #include <editeng/shaditem.hxx>
 #include <editeng/brushitem.hxx>
 #include <svx/framelink.hxx>
+#include <osl/diagnose.h>
 
 #include <fillinfo.hxx>
 #include <document.hxx>

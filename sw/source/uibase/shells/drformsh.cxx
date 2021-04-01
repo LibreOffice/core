@@ -31,6 +31,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <sfx2/htmlmode.hxx>
 #include <tools/urlobj.hxx>
+#include <osl/diagnose.h>
 
 #include <viewopt.hxx>
 #include <wrtsh.hxx>

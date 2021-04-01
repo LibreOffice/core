@@ -21,6 +21,7 @@
 #include <OutlinerIteratorImpl.hxx>
 #include <svx/svditer.hxx>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <Outliner.hxx>
 
 #include <drawdoc.hxx>

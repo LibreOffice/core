@@ -21,7 +21,8 @@
 
 #include <sfx2/dllapi.h>
 #include <sfx2/viewfrm.hxx>
-#include <rtl/ustring.hxx>
+
+#include <string_view>
 
 namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::uno { template <typename > class Reference; }

@@ -30,6 +30,7 @@
 #include <sot/filelist.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <osl/diagnose.h>
 
 #include <sfx2/docinsert.hxx>
 #include <sfx2/filedlghelper.hxx>

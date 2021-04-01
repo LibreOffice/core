@@ -42,6 +42,7 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <tools/UnitConversion.hxx>
+#include <osl/diagnose.h>
 
 #include <drawview.hxx>
 #include <global.hxx>
