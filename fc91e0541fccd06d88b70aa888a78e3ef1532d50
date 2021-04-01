@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c512c5a_5159908d",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2021-04-01T10:10:08Z",
+      "side": 1,
+      "message": "Warning message",
+      "range": {
+        "startLine": 1405,
+        "startChar": 85,
+        "endLine": 1405,
+        "endChar": 156
+      },
+      "revId": "fc91e0541fccd06d88b70aa888a78e3ef1532d50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
