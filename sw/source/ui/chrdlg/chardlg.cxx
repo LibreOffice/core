@@ -27,6 +27,7 @@
 #include <sfx2/htmlmode.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/macitem.hxx>
+#include <osl/diagnose.h>
 
 #include <cmdid.h>
 #include <swtypes.hxx>

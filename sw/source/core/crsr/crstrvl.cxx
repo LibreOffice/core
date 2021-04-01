@@ -26,6 +26,7 @@
 #include <editeng/adjustitem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <svx/svdobj.hxx>
+#include <osl/diagnose.h>
 #include <crsrsh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>

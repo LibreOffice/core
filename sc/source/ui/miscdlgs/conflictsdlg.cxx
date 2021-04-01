@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
+#include <osl/diagnose.h>
 
 #include <conflictsdlg.hxx>
 #include <strings.hrc>

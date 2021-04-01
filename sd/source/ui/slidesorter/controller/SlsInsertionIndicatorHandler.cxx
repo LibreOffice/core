@@ -25,6 +25,7 @@
 #include <model/SlideSorterModel.hxx>
 #include <model/SlsPageEnumerationProvider.hxx>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
+#include <osl/diagnose.h>
 
 #include <SlideSorter.hxx>
 

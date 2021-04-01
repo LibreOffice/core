@@ -27,6 +27,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <tools/urlobj.hxx>
+#include <osl/diagnose.h>
 #include <swtypes.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>

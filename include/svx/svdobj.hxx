@@ -35,8 +35,6 @@
 #include <tools/link.hxx>
 #include <tools/weakbase.h>
 #include <tools/gen.hxx>
-#include <osl/diagnose.h>
-#include <typeinfo>
 
 #include <unordered_set>
 

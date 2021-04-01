@@ -10,6 +10,9 @@
 
 #pragma once
 
+#include <sal/types.h>
+#include <cassert>
+
 namespace vcl
 {
 /** Pixel format of the bitmap in bits per pixel */

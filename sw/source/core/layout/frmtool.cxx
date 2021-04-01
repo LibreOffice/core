@@ -25,6 +25,7 @@
 #include <editeng/lspcitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <drawdoc.hxx>
 #include <fmtornt.hxx>

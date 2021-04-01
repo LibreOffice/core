@@ -57,6 +57,7 @@
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 #include <vcl/settings.hxx>
+#include <osl/diagnose.h>
 
 #include <map>
 

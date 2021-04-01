@@ -58,6 +58,7 @@
 #include <formula/funcvarargs.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <osl/diagnose.h>
 
 #include <attrib.hxx>
 #include <inputwin.hxx>

@@ -20,6 +20,7 @@
 #include <sfx2/app.hxx>
 #include <svx/svdundo.hxx>
 #include <unotools/charclass.hxx>
+#include <osl/diagnose.h>
 
 #include <undodat.hxx>
 #include <undoutil.hxx>

@@ -20,6 +20,7 @@
 #include <drwlayer.hxx>
 #include <compressedarray.hxx>
 
+#include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
 

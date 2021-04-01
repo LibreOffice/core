@@ -29,6 +29,7 @@
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+#include <osl/diagnose.h>
 
 namespace chart
 {

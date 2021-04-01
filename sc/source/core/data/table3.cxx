@@ -29,6 +29,7 @@
 #include <com/sun/star/i18n/KParseTokens.hpp>
 #include <com/sun/star/i18n/KParseType.hpp>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <refdata.hxx>
 #include <table.hxx>

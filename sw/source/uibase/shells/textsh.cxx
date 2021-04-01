@@ -44,6 +44,7 @@
 #include <svtools/htmlcfg.hxx>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <osl/diagnose.h>
 
 #include <comphelper/classids.hxx>
 #include <editeng/acorrcfg.hxx>

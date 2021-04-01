@@ -26,6 +26,7 @@
 #include <tools/urlobj.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <drawview.hxx>
 #include <global.hxx>

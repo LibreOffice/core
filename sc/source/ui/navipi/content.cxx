@@ -29,6 +29,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
+#include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>

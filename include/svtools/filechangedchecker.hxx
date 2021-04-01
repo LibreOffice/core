@@ -14,7 +14,7 @@
 
 #include <osl/time.h>
 #include <rtl/ustring.hxx>
-#include <vcl/idle.hxx>
+#include <vcl/timer.hxx>
 
 #include <functional>
 

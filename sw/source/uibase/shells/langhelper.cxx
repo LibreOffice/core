@@ -40,6 +40,7 @@
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
 #include <svx/svxids.hrc>
+#include <osl/diagnose.h>
 
 #include <ndtxt.hxx>
 #include <pam.hxx>

@@ -24,6 +24,8 @@
 #include <webservicelink.hxx>
 #include <strings.hrc>
 #include <scresid.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <sfx2/linksrc.hxx>
 #include <o3tl/deleter.hxx>
 #include <svx/svdoole2.hxx>
 #include <vcl/svapp.hxx>

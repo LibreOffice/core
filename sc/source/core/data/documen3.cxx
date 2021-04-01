@@ -28,6 +28,7 @@
 #include <sfx2/viewsh.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/thread.hxx>
+#include <osl/diagnose.h>
 #include <document.hxx>
 #include <attrib.hxx>
 #include <table.hxx>

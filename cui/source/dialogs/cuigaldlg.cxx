@@ -51,6 +51,7 @@
 #include <strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
+#include <osl/diagnose.h>
 
 using namespace ::ucbhelper;
 using namespace ::cppu;

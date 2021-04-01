@@ -35,6 +35,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/xfillit0.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 

@@ -25,6 +25,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <osl/diagnose.h>
 #include <viewopt.hxx>
 #include <chldwrap.hxx>
 #include <docsh.hxx>

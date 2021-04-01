@@ -24,6 +24,7 @@
 #include <sot/formats.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/commandevent.hxx>
+#include <osl/diagnose.h>
 
 #include <sfx2/viewfrm.hxx>
 #include <fmturl.hxx>

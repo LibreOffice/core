@@ -44,6 +44,7 @@
 #include <svl/urihelper.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svx/drawitem.hxx>
+#include <osl/diagnose.h>
 #include <View.hxx>
 #include <sdresid.hxx>
 #include <tpaction.hxx>

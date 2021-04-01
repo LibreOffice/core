@@ -29,6 +29,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <osl/diagnose.h>
 
 std::unique_ptr<SfxTabPage> SwDocStatPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet)
 {

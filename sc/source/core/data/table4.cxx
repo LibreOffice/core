@@ -27,6 +27,7 @@
 #include <vcl/keycodes.hxx>
 #include <rtl/math.hxx>
 #include <unotools/charclass.hxx>
+#include <osl/diagnose.h>
 
 #include <attrib.hxx>
 #include <patattr.hxx>

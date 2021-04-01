@@ -38,6 +38,7 @@
 
 #include <strings.hrc>
 #include <vcl/svapp.hxx>
+#include <osl/diagnose.h>
 
 #include <editeng/acorrcfg.hxx>
 #include <sfx2/event.hxx>

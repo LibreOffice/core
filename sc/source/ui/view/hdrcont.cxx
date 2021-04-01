@@ -22,6 +22,7 @@
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <svtools/colorcfg.hxx>
+#include <osl/diagnose.h>
 
 #include <tabvwsh.hxx>
 #include <hdrcont.hxx>

@@ -35,6 +35,7 @@
 #include <svx/svdograf.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
+#include <osl/diagnose.h>
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtornt.hxx>

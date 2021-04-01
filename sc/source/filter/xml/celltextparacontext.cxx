@@ -13,6 +13,7 @@
 
 #include <comphelper/string.hxx>
 #include <xmloff/xmlnamespace.hxx>
+#include <xmloff/xmltkmap.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;

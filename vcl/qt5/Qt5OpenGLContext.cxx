@@ -19,6 +19,8 @@
 
 #include <Qt5OpenGLContext.hxx>
 
+#include <epoxy/gl.h>
+
 #include <vcl/sysdata.hxx>
 #include <opengl/zone.hxx>
 #include <sal/log.hxx>

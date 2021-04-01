@@ -13,7 +13,6 @@
 #include <basegfx/basegfxdllapi.h>
 #include <memory>
 #include <map>
-#include <set>
 
 namespace basegfx
 {

@@ -39,6 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
+#include <osl/diagnose.h>
 
 #include <docsh.hxx>
 #include "docshimp.hxx"

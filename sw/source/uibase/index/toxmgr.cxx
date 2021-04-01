@@ -24,6 +24,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <swundo.hxx>
+#include <osl/diagnose.h>
 
 // handle indexes with TOXMgr
 SwTOXMgr::SwTOXMgr(SwWrtShell* pShell):

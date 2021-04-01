@@ -51,6 +51,7 @@
 #include <vcl/graph.hxx>
 #include <svx/svxids.hrc>
 #include <svx/dstribut_enum.hxx>
+#include <osl/diagnose.h>
 
 using namespace com::sun::star;
 

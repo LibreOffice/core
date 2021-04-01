@@ -24,6 +24,7 @@
 #include <sal/log.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
+#include <osl/diagnose.h>
 #include <svtools/unoimap.hxx>
 #include <vcl/imap.hxx>
 #include <vcl/imapobj.hxx>

@@ -42,6 +42,7 @@
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <comphelper/processfactory.hxx>
+#include <osl/diagnose.h>
 
 #include <charatr.hxx>
 #include <viewopt.hxx>

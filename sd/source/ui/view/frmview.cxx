@@ -26,6 +26,7 @@
 #include <unokywds.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <osl/diagnose.h>
 
 #include <vector>
 #include <ViewShell.hxx>

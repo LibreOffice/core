@@ -44,6 +44,7 @@
 #include <svl/itempool.hxx>
 #include <svl/urlbmk.hxx>
 #include <tools/urlobj.hxx>
+#include <osl/diagnose.h>
 
 #include <drwtrans.hxx>
 #include <docsh.hxx>

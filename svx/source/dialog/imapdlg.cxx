@@ -44,6 +44,7 @@
 #include <svx/svdopath.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <osl/diagnose.h>
 #include "dlgunit.hxx"
 #include <memory>
 

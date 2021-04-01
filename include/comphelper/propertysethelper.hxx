@@ -25,7 +25,6 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ref.hxx>
-#include <memory>
 
 namespace comphelper
 {

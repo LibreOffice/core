@@ -21,6 +21,7 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <svx/drawitem.hxx>
+#include <osl/diagnose.h>
 #include <doc.hxx>
 #include <drawdoc.hxx>
 #include <dpage.hxx>

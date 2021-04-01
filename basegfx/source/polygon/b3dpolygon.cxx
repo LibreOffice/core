@@ -25,6 +25,7 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <cassert>
+#include <memory>
 #include <vector>
 #include <algorithm>
 

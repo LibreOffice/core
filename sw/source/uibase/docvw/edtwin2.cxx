@@ -18,6 +18,7 @@
  */
 
 #include <doc.hxx>
+#include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <vcl/help.hxx>
 #include <tools/urlobj.hxx>

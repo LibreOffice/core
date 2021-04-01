@@ -25,8 +25,6 @@
 #include <svx/svxdllapi.h>
 #include <editeng/borderline.hxx>
 
-#include <memory>
-
 namespace svx::frame {
 
 

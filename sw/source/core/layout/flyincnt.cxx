@@ -26,6 +26,7 @@
 #include <dflyobj.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <osl/diagnose.h>
 
 SwFlyInContentFrame::SwFlyInContentFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch ) :
     SwFlyFrame( pFormat, pSib, pAnch )

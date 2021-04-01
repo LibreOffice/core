@@ -42,6 +42,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/svdoutl.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <osl/diagnose.h>
 
 #include <view.hxx>
 #include <wrtsh.hxx>

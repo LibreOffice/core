@@ -11,6 +11,7 @@
 #include "xmlcondformat.hxx"
 #include "xmlimprt.hxx"
 #include <xmloff/xmlnamespace.hxx>
+#include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <sal/log.hxx>
 

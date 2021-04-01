@@ -24,6 +24,7 @@
 #include <svx/svdouno.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

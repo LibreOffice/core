@@ -21,6 +21,7 @@
 #include <svl/itemiter.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdmark.hxx>
+#include <osl/diagnose.h>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <dcontact.hxx>

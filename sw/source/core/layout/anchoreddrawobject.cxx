@@ -35,6 +35,7 @@
 #include <textboxhelper.hxx>
 #include <unomid.h>
 #include <svx/svdoashp.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 

@@ -22,7 +22,6 @@
 #define INCLUDED_SVX_FONTWORKGALLERY_HXX
 
 #include <svx/svxdllapi.h>
-#include <svtools/valueset.hxx>
 #include <vcl/weld.hxx>
 #include <vector>
 

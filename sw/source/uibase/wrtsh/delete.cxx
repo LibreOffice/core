@@ -32,6 +32,7 @@
 #include <i18nutil/unicode.hxx>
 #include <o3tl/temporary.hxx>
 #include <rtl/character.hxx>
+#include <osl/diagnose.h>
 #include <doc.hxx>
 
 inline void SwWrtShell::OpenMark()

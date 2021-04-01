@@ -28,6 +28,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <osl/diagnose.h>
 #include <hhcwrp.hxx>
 #include "sdrhhcwrap.hxx"
 #include <doc.hxx>

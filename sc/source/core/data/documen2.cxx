@@ -35,6 +35,7 @@
 #include <basic/basmgr.hxx>
 #include <comphelper/threadpool.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <scmod.hxx>
 #include <document.hxx>

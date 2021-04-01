@@ -29,6 +29,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfilt.hxx>
+#include <osl/diagnose.h>
 
 #include <svx/svxdlg.hxx>
 #include <editeng/acorrcfg.hxx>

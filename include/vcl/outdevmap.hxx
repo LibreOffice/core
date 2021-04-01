@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_OUTDEVMAP_HXX
 #define INCLUDED_VCL_OUTDEVMAP_HXX
 
+#include <tools/long.hxx>
+
 struct ImplMapRes
 {
     tools::Long                mnMapOfsX;          // Offset in X direction

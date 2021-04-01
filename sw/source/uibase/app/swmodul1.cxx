@@ -38,6 +38,7 @@
 #include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>
 #include <svl/cjkoptions.hxx>
+#include <osl/diagnose.h>
 #include <swmodule.hxx>
 #include <swtypes.hxx>
 #include <usrpref.hxx>
