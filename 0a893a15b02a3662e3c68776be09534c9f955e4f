@@ -34,6 +34,24 @@
       "revId": "0a893a15b02a3662e3c68776be09534c9f955e4f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b25737ec_e12cecf6",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 9
+      },
+      "lineNbr": 2786,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-01T09:39:23Z",
+      "side": 1,
+      "message": "The failure of JunitTest_sfx2_complex in \u003chttps://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/82771/\u003e etc.?  That was most likely because the empyt \u003cvalue/\u003e element was erroneously nested within \u003cinfo\u003e rather than within its surrounding \u003cprop\u003e.\n\nHowever, thinking about it more, it is probably useful to have nil mean \"all document event URLs are allowed\" and an empty list mean \"no document event URLs are allowed\".  That also matches the current implementation in SfxEvents_Impl::isScriptURLAllowed (sfx2/source/notify/eventsupplier.cxx).  But it does not match the below \"When this list is empty, all document URLs are allowed.\" comment, which should then be fixed.",
+      "parentUuid": "92d01e42_6200b973",
+      "revId": "0a893a15b02a3662e3c68776be09534c9f955e4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
