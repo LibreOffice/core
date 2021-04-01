@@ -536,6 +536,7 @@ void SwFrame::UpdateAttrFrame( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             [[fallthrough]];
         case RES_LR_SPACE:
         case RES_UL_SPACE:
+        case RES_RTL_GUTTER:
             rInvFlags |= 0x0B;
             break;
 

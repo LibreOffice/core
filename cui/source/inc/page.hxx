@@ -125,6 +125,7 @@ private:
     std::unique_ptr<weld::ComboBox> m_xRegisterLB;
     std::unique_ptr<weld::Label> m_xGutterPositionFT;
     std::unique_ptr<weld::ComboBox> m_xGutterPositionLB;
+    std::unique_ptr<weld::CheckButton> m_xRtlGutterCB;
     std::unique_ptr<weld::CheckButton> m_xBackgroundFullSizeCB;
     std::unique_ptr<weld::Label> m_xInsideLbl;
     std::unique_ptr<weld::Label> m_xOutsideLbl;
