@@ -878,7 +878,7 @@ void SidebarController::SwitchToDeck (
 
 #ifdef DEBUG
     // Show the context name in the deck title bar.
-    VclPtr<DeckTitleBar> pDebugTitleBar = mpCurrentDeck->GetTitleBar();
+    DeckTitleBar* pDebugTitleBar = mpCurrentDeck->GetTitleBar();
     if (pDebugTitleBar)
         pDebugTitleBar->SetTitle(rDeckDescriptor.msTitle + " (" + maCurrentContext.msContext + ")");
 #endif
