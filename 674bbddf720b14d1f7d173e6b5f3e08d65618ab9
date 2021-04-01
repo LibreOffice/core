@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "887d4379_a79567c3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-01T07:30:34Z",
+      "side": 1,
+      "message": "Likely because the code was just added shortly before in https://gerrit.libreoffice.org/c/core/+/111673 :-)",
+      "revId": "674bbddf720b14d1f7d173e6b5f3e08d65618ab9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
