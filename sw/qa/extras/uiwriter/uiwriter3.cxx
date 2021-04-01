@@ -1039,6 +1039,36 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, TestAsCharTextBox)
     // Without the fix in place the two texboxes has been fallen apart, and  asserts will broken.
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140975)
+{
+    // Load the bugdoc
+    load(DATA_DIRECTORY, "tdf140975.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // Set the Anchor of the shape to As_Char
+    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:SetAnchorToChar", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Get the layout of the textbox
+    auto pExportDump = parseLayoutDump();
+    CPPUNIT_ASSERT(pExportDump);
+
+    const sal_Int32 nShpTop
+        = getXPath(pExportDump, "/root/page/body/txt[4]/anchored/SwAnchoredDrawObject/bounds",
+                   "top")
+              .toInt32();
+    const sal_Int32 nFrmTop
+        = getXPath(pExportDump, "/root/page/body/txt[4]/anchored/fly/infos/bounds", "top")
+              .toInt32();
+
+    // Without the fix in place, the frame has less value for Top than
+    // the shape. This means the frame is outside from the shape.
+    CPPUNIT_ASSERT_GREATER(nShpTop, nFrmTop);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636)
 {
     load(DATA_DIRECTORY, "tdf76636.doc");
