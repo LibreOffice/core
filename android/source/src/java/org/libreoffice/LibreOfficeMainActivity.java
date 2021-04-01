@@ -40,6 +40,7 @@ import org.libreoffice.overlay.CalcHeadersController;
 import org.libreoffice.overlay.DocumentOverlay;
 import org.libreoffice.storage.DocumentProviderFactory;
 import org.libreoffice.storage.IFile;
+import org.libreoffice.ui.FileUtilities;
 import org.libreoffice.ui.LibreOfficeUIActivity;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.LayerView;
@@ -202,7 +203,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                 mbISReadOnlyMode = !isExperimentalMode()  || isReadOnlyDoc;
                 Log.d(LOGTAG, "SCHEME_CONTENT: getPath(): " + getIntent().getData().getPath());
 
-                String displayName = extractDisplayNameFromIntent();
+                String displayName = FileUtilities.retrieveDisplayNameForDocumentUri(getContentResolver(), getIntent().getData());
                 if (displayName.isEmpty()) {
                     // fall back to using temp file name
                     displayName = mInputFile.getName();
@@ -567,28 +568,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                 .setNeutralButton(R.string.no_save_document, dialogClickListener)
                 .show();
 
-    }
-
-    /**
-     * Tries to retrieve display name for data in Intent,
-     * which should be the file name.
-     */
-    private String extractDisplayNameFromIntent() {
-        String displayName = "";
-        // try to retrieve original file name
-        Cursor cursor = null;
-        try {
-            String[] columns = {OpenableColumns.DISPLAY_NAME};
-            cursor = getContentResolver().query(getIntent().getData(), columns, null, null);
-            if (cursor != null && cursor.moveToFirst()) {
-                displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-        return displayName;
     }
 
     public List<DocumentPartView> getDocumentPartView() {
