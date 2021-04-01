@@ -66,6 +66,8 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream)
     {
         // Downconvert to PDF-1.6.
         auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+        if (!pPdfium)
+            return false;
 
         // Read input into a buffer.
         SvMemoryStream aInBuffer;
