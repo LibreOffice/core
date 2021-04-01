@@ -13,10 +13,6 @@
 #include <comphelper/processfactory.hxx>
 #include <basic/sbstar.hxx>
 
-#if defined _WIN32
-#include <systools/win32/uwinapi.h>
-#endif
-
 using namespace ::com::sun::star;
 
 // NB. this constructor is called before any tests are run, once for each
@@ -35,14 +31,5 @@ void test::BootstrapFixtureBase::setUp()
 }
 
 void test::BootstrapFixtureBase::tearDown() { StarBASIC::DetachAllDocBasicItems(); }
-
-bool test::BootstrapFixtureBase::isWindowsRDP()
-{
-#if defined _WIN32
-    return GetSystemMetrics(SM_REMOTESESSION) != 0;
-#else
-    return false;
-#endif
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -94,7 +94,7 @@ public:
 
     void testDrawRectWithRectangle()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestRect aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
@@ -107,7 +107,7 @@ public:
 
     void testDrawRectWithPixel()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestPixel aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
@@ -120,7 +120,7 @@ public:
 
     void testDrawRectWithLine()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
@@ -133,7 +133,7 @@ public:
 
     void testDrawRectWithPolygon()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
@@ -145,7 +145,7 @@ public:
 
     void testDrawRectWithPolyLine()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestPolyLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
@@ -157,7 +157,7 @@ public:
 
     void testDrawRectWithPolyLineB2D()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
@@ -169,7 +169,7 @@ public:
 
     void testDrawRectWithPolyPolygon()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
@@ -181,7 +181,7 @@ public:
 
     void testDrawRectWithPolyPolygonB2D()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
@@ -193,7 +193,7 @@ public:
 
     void testDrawRectAAWithRectangle()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestRect aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
@@ -205,7 +205,7 @@ public:
 
     void testDrawRectAAWithPixel()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestPixel aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
@@ -217,7 +217,7 @@ public:
 
     void testDrawRectAAWithLine()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
@@ -229,7 +229,7 @@ public:
 
     void testDrawRectAAWithPolygon()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
@@ -241,7 +241,7 @@ public:
 
     void testDrawRectAAWithPolyLine()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestPolyLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
@@ -253,7 +253,7 @@ public:
 
     void testDrawRectAAWithPolyLineB2D()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
@@ -265,7 +265,7 @@ public:
 
     void testDrawRectAAWithPolyPolygon()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
@@ -277,7 +277,7 @@ public:
 
     void testDrawRectAAWithPolyPolygonB2D()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(true);
@@ -289,7 +289,7 @@ public:
 
     void testDrawFilledRectWithRectangle()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestRect aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
@@ -306,7 +306,7 @@ public:
 
     void testDrawFilledRectWithPolygon()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
@@ -323,7 +323,7 @@ public:
 
     void testDrawFilledRectWithPolyPolygon()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
@@ -340,7 +340,7 @@ public:
 
     void testDrawFilledRectWithPolyPolygon2D()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
@@ -427,7 +427,7 @@ public:
 
     void testDrawBezierWithPolylineB2D()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupBezier();
@@ -439,7 +439,7 @@ public:
 
     void testDrawBezierAAWithPolylineB2D()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupAABezier();
@@ -451,7 +451,7 @@ public:
 
     void testDrawBitmap()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawBitmap();
@@ -463,7 +463,7 @@ public:
 
     void testDrawTransformedBitmap()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap();
@@ -475,7 +475,7 @@ public:
 
     void testDrawBitmapExWithAlpha()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha();
@@ -487,7 +487,7 @@ public:
 
     void testDrawMask()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawMask();
@@ -499,7 +499,7 @@ public:
 
     void testDrawBlend()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
         BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend();
@@ -511,7 +511,7 @@ public:
 
     void testDrawXor()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupXOR();
@@ -525,7 +525,7 @@ public:
     {
 // TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
 #ifndef MACOSX
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         ScopedVclPtrInstance<VirtualDevice> device;
         device->SetOutputSizePixel(Size(16, 16));
@@ -563,7 +563,7 @@ public:
 
     void testClipRectangle()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestClip aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupClipRectangle();
@@ -575,7 +575,7 @@ public:
 
     void testClipPolygon()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestClip aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupClipPolygon();
@@ -587,7 +587,7 @@ public:
 
     void testClipPolyPolygon()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestClip aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupClipPolyPolygon();
@@ -599,7 +599,7 @@ public:
 
     void testClipB2DPolyPolygon()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestClip aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupClipB2DPolyPolygon();
@@ -611,7 +611,7 @@ public:
 
     void testDrawOutDev()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDrawOutDev();
@@ -623,7 +623,7 @@ public:
 
     void testDashedLine()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupDashedLine();
@@ -635,7 +635,7 @@ public:
 
     void testErase()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         {
             // Create normal virtual device (no alpha).
@@ -702,7 +702,7 @@ public:
 
     void testLinearGradient()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestGradient aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupLinearGradient();
@@ -714,7 +714,7 @@ public:
 
     void testLinearGradientAngled()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestGradient aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupLinearGradientAngled();
@@ -736,7 +736,7 @@ public:
 
     void testLinearGradientIntensity()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestGradient aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupLinearGradientIntensity();
@@ -748,7 +748,7 @@ public:
 
     void testLinearGradientSteps()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestGradient aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupLinearGradientSteps();
@@ -760,7 +760,7 @@ public:
 
     void testAxialGradient()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestGradient aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupAxialGradient();
@@ -772,7 +772,7 @@ public:
 
     void testRadialGradient()
     {
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestGradient aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRadialGradient();
@@ -797,7 +797,7 @@ public:
     {
 // TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
 #ifndef MACOSX
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         // Create virtual device with alpha.
         ScopedVclPtr<VirtualDevice> device
@@ -851,6 +851,8 @@ public:
     {
 // TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
 #ifndef MACOSX
+        if (getDefaultDeviceBitCount() < 24)
+            return;
         // Normal virtual device.
         ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
         // Virtual device with alpha.
@@ -947,7 +949,7 @@ public:
     {
 // TODO: Following unit tests are not executed for macOS unless bitmap scaling is implemented
 #ifndef MACOSX
-        if (isWindowsRDP())
+        if (getDefaultDeviceBitCount() < 24)
             return;
         // Create virtual device with alpha.
         ScopedVclPtr<VirtualDevice> device

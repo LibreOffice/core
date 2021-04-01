@@ -25,7 +25,9 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <unotools/tempfile.hxx>
+#include <vcl/salgtype.hxx>
 #include <vcl/scheduler.hxx>
+#include <vcl/virdev.hxx>
 
 #include <memory>
 #include <cstring>
@@ -244,6 +246,13 @@ bool test::BootstrapFixture::IsDefaultDPI()
 {
     return (Application::GetDefaultDevice()->GetDPIX() == 96
             && Application::GetDefaultDevice()->GetDPIY() == 96);
+}
+
+sal_uInt16 test::BootstrapFixture::getDefaultDeviceBitCount()
+{
+    ScopedVclPtr<VirtualDevice> device
+        = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    return device->GetBitCount();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
