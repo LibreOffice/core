@@ -248,9 +248,7 @@ namespace pcr
         bool bSuccess = rValue >>= sURL;
         if (bSuccess && GraphicObject::isGraphicObjectUniqueIdURL(sURL))
             sURL = pControlWindow->GetPlaceHolder();
-        // tdf#140239 leave current cursor valid if the contents won't change
-        if (sURL != pControlWindow->GetURL())
-            pControlWindow->set_entry_text(sURL);
+        pControlWindow->set_entry_text(sURL);
     }
 
     Any SAL_CALL OFileUrlControl::getValue()
@@ -264,6 +262,11 @@ namespace pcr
     Type SAL_CALL OFileUrlControl::getValueType()
     {
         return ::cppu::UnoType<OUString>::get();
+    }
+
+    IMPL_LINK_NOARG(OFileUrlControl, URLModifiedHdl, weld::ComboBox&, void)
+    {
+        editChanged();
     }
 
 } // namespace pcr
