@@ -2223,6 +2223,7 @@ void SAL_CALL SwChartDataSequence::disposing( const lang::EventObject& rSource )
         throw lang::DisposedException();
     if (rSource.Source == static_cast<cppu::OWeakObject*>(m_xDataProvider.get()))
     {
+        m_xDataProvider->removeEventListener(static_cast< lang::XEventListener*>(this));
         m_xDataProvider.clear();
     }
 }

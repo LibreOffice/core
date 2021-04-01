@@ -135,11 +135,26 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
 {
     osl::MutexGuard g(m_mutex);
     if (aEvent.Source == m_xModuleManager)
+    {
+        css::uno::Reference< css::lang::XComponent > xComponent(m_xModuleManager, css::uno::UNO_QUERY);
+        if (xComponent.is())
+            xComponent->removeEventListener(static_cast< css::lang::XEventListener* >(this));
+
         m_xModuleManager.clear();
+    }
     else if (aEvent.Source == m_xDesktop)
+    {
+        m_xDesktop->removeEventListener(static_cast< css::lang::XEventListener* >(this));
         m_xDesktop.clear();
+    }
     else if (aEvent.Source == m_xConfig)
+    {
+        css::uno::Reference< css::lang::XComponent > xComponent(m_xConfig, css::uno::UNO_QUERY);
+        if (xComponent.is())
+            xComponent->removeEventListener(static_cast< css::lang::XEventListener* >(this));
+
         m_xConfig.clear();
+    }
 }
 
 OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
