@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d15ea42f_706128fa",
+        "filename": "sw/uiconfig/swriter/ui/mmselectpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2021-04-01T12:28:52Z",
+      "side": 1,
+      "message": "Warning message",
+      "range": {
+        "startLine": 189,
+        "startChar": 112,
+        "endLine": 189,
+        "endChar": 165
+      },
+      "revId": "87290c2620ee3ef0cc79578abe71920f980e7b4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
