@@ -189,7 +189,11 @@ void SAL_CALL OConnectionPool::disposing( const css::lang::EventObject& Source )
     }
     else
     {
-    m_xDriverNode.clear();
+        Reference< XComponent >  xComponent(m_xDriverNode, UNO_QUERY);
+        if (xComponent.is())
+            xComponent->removeEventListener(this);
+
+        m_xDriverNode.clear();
     }
 }
 
