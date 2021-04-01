@@ -1859,6 +1859,18 @@ namespace emfio
                     }
                     break;
 
+                    case EMR_PAINTRGN :
+                    {
+                        sal_uInt32 nRgnDataSize;
+                        tools::PolyPolygon aPolyPoly;
+                        mpInputStream->SeekRel( 0x10 ); // Skipping RectL bounds
+                        mpInputStream->ReadUInt32( nRgnDataSize );
+
+                        if ( ImplReadRegion( aPolyPoly, *mpInputStream, nRecSize ) )
+                            DrawPolyPolygon( aPolyPoly );
+                    }
+                    break;
+
                     case EMR_CREATEDIBPATTERNBRUSHPT :
                     {
                         sal_uInt32  nStart = mpInputStream->Tell() - 8;
@@ -1912,7 +1924,6 @@ namespace emfio
                     case EMR_SETDIBITSTODEVICE :        SAL_WARN("emfio", "not implemented 'SetDIBitsToDevice'");         break;
                     case EMR_FRAMERGN :                 SAL_WARN("emfio", "not implemented 'FrameRgn'");                  break;
                     case EMR_INVERTRGN :                SAL_WARN("emfio", "not implemented 'InvertRgn'");                 break;
-                    case EMR_PAINTRGN :                 SAL_WARN("emfio", "not implemented 'PaintRgn'");                  break;
                     case EMR_FLATTENPATH :              SAL_WARN("emfio", "not implemented 'FlattenPath'");               break;
                     case EMR_WIDENPATH :                SAL_WARN("emfio", "not implemented 'WidenPath'");                 break;
                     case EMR_POLYDRAW :                 SAL_WARN("emfio", "not implemented 'Polydraw'");                  break;
