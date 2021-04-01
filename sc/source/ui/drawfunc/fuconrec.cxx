@@ -34,6 +34,7 @@
 #include <svx/xlnstit.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svdomeas.hxx>
+#include <osl/diagnose.h>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>

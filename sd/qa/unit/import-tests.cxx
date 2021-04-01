@@ -91,6 +91,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/graphicmimetype.hxx>
 #include <comphelper/lok.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/dibtools.hxx>

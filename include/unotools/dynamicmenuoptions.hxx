@@ -21,8 +21,8 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/uno/Sequence.h>
 #include <unotools/options.hxx>
+#include <rtl/ustring.hxx>
 #include <memory>
 
 namespace com::sun::star::beans { struct PropertyValue; }

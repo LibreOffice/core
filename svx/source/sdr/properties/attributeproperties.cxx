@@ -36,6 +36,7 @@
 #include <svx/xflhtit.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
+#include <osl/diagnose.h>
 
 namespace sdr::properties
 {

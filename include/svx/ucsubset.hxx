@@ -22,6 +22,7 @@
 
 #include <svx/svxdllapi.h>
 
+#include <vcl/vclenum.hxx>
 #include <vcl/metric.hxx>
 
 #include <vector>

@@ -24,6 +24,7 @@
 #include <svx/numinf.hxx>
 #include <svx/flagsdef.hxx>
 #include <svl/itemset.hxx>
+#include <osl/diagnose.h>
 #include <docsh.hxx>
 #include <swtypes.hxx>
 #include <swmodule.hxx>

@@ -59,6 +59,7 @@
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <boost/property_tree/json_parser.hpp>
+#include <osl/diagnose.h>
 
 #include <IDocumentSettingAccess.hxx>
 

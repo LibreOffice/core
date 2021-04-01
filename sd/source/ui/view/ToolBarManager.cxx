@@ -41,6 +41,7 @@
 #include <tools/debug.hxx>
 #include <tools/link.hxx>
 #include <vcl/svapp.hxx>
+#include <osl/diagnose.h>
 
 #include <map>
 #include <utility>

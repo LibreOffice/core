@@ -56,6 +56,7 @@
 #include <cmdid.h>
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>

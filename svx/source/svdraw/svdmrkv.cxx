@@ -24,6 +24,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdotable.hxx>
 
+#include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>
 #include <svx/svdoole2.hxx>

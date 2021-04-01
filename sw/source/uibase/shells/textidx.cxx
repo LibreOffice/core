@@ -22,6 +22,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/eitem.hxx>
 #include <editeng/sizeitem.hxx>
+#include <osl/diagnose.h>
 #include <fmtfsize.hxx>
 #include <fldbas.hxx>
 #include <uiitems.hxx>

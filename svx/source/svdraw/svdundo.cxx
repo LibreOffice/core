@@ -42,6 +42,7 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svx/svdoashp.hxx>
+#include <osl/diagnose.h>
 
 
 // iterates over all views and unmarks this SdrObject if it is marked

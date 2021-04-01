@@ -34,6 +34,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/unomodel.hxx>
 #include <svx/svdview.hxx>
+#include <osl/diagnose.h>
 
 constexpr sal_uInt32 CHARTTRANSFER_OBJECTTYPE_DRAWMODEL = 1;
 

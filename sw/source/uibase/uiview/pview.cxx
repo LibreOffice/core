@@ -37,6 +37,7 @@
 #include <svx/svdview.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <tools/svborder.hxx>
+#include <osl/diagnose.h>
 
 #include <globdoc.hxx>
 #include <wdocsh.hxx>

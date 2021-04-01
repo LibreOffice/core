@@ -26,6 +26,7 @@
 #include <tools/helpers.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
+#include <osl/diagnose.h>
 
 #include <optsitem.hxx>
 #include <FrameView.hxx>

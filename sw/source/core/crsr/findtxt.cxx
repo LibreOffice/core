@@ -28,6 +28,7 @@
 #include <svl/srchitem.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <editeng/outliner.hxx>
+#include <osl/diagnose.h>
 
 #include <wrtsh.hxx>
 #include <txatritr.hxx>

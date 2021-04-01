@@ -33,6 +33,7 @@
 #include <svx/svdoole2.hxx>
 #include <tools/UnitConversion.hxx>
 #include <editeng/formatbreakitem.hxx>
+#include <osl/diagnose.h>
 #include <ndtxt.hxx>
 #include <ndnotxt.hxx>
 #include <fmtcntnt.hxx>

@@ -29,6 +29,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <osl/diagnose.h>
 
 #include <spelldialog.hxx>
 #include <tabvwsh.hxx>

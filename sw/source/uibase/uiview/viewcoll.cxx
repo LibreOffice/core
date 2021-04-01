@@ -23,6 +23,7 @@
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
+#include <osl/diagnose.h>
 
 #include <view.hxx>
 #include <wrtsh.hxx>

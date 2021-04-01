@@ -30,6 +30,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <comphelper/types.hxx>
+#include <osl/diagnose.h>
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtornt.hxx>

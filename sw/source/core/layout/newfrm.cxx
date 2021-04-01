@@ -21,6 +21,7 @@
 
 #include <o3tl/safeint.hxx>
 #include <svx/svdpage.hxx>
+#include <osl/diagnose.h>
 #include <drawdoc.hxx>
 #include <fmtpdsc.hxx>
 #include <swtable.hxx>

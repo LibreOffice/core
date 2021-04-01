@@ -15,7 +15,6 @@
 #include <string_view>
 
 #include <i18nlangtag/i18nlangtagdllapi.h>
-#include <rtl/ustring.hxx>
 #include <unicode/locid.h>
 
 class LanguageTag;

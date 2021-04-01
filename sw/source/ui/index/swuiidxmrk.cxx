@@ -35,6 +35,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/itemset.hxx>
 #include <editeng/langitem.hxx>
+#include <osl/diagnose.h>
 #include <swtypes.hxx>
 #include <toxmgr.hxx>
 #include <txttxmrk.hxx>

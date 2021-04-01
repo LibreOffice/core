@@ -47,6 +47,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <memory>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 using namespace sdr;
 

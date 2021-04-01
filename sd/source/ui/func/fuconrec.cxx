@@ -60,6 +60,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/signaturelinehelper.hxx>
+#include <osl/diagnose.h>
 
 #include <sdresid.hxx>
 #include <View.hxx>

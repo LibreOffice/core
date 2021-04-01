@@ -37,6 +37,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <textboxhelper.hxx>
 #include <fmtsrnd.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 using namespace objectpositioning;

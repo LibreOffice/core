@@ -20,6 +20,7 @@
 
 #include <svx/svdmrkv.hxx>
 #include <svx/svdpagv.hxx>
+#include <osl/diagnose.h>
 
 
 // Point Selection

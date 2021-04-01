@@ -24,7 +24,6 @@
 #include <rtl/ustring.hxx>
 
 #include <vector>
-#include <set>
 #include <o3tl/sorted_vector.hxx>
 
 #define SFX_ENDOFSELECTION      (-1)

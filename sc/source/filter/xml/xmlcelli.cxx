@@ -91,6 +91,7 @@
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <i18nlangtag/lang.h>
 

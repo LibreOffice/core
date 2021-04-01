@@ -11,7 +11,6 @@
 #include <sal/config.h>
 #include <sal/types.h>
 #include <tools/long.hxx>
-#include <o3tl/safeint.hxx>
 #include <cassert>
 #include <type_traits>
 

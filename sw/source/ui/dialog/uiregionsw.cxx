@@ -34,6 +34,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svtools/htmlcfg.hxx>
+#include <osl/diagnose.h>
 
 #include <uitool.hxx>
 #include <IMark.hxx>

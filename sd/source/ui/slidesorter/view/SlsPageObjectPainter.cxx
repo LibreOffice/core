@@ -31,6 +31,7 @@
 #include <sdpage.hxx>
 #include <vcl/virdev.hxx>
 #include <CustomAnimationEffect.hxx>
+#include <osl/diagnose.h>
 #include <memory>
 
 using namespace ::drawinglayer::primitive2d;

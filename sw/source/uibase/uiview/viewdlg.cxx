@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/request.hxx>
+#include <osl/diagnose.h>
 
 #include <view.hxx>
 #include <wrtsh.hxx>

@@ -28,6 +28,7 @@
 #include <model/SlsPageEnumerationProvider.hxx>
 #include <model/SlideSorterModel.hxx>
 #include <view/SlideSorterView.hxx>
+#include <osl/diagnose.h>
 
 #include <sdpage.hxx>
 #include <tools/debug.hxx>

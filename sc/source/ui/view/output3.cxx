@@ -25,6 +25,7 @@
 #include <svx/svdview.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <osl/diagnose.h>
 
 #include <output.hxx>
 #include <drwlayer.hxx>

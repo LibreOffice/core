@@ -41,6 +41,7 @@
 #include <view/SlideSorterView.hxx>
 #include <view/SlsLayouter.hxx>
 #include <framework/FrameworkHelper.hxx>
+#include <osl/diagnose.h>
 #include <Window.hxx>
 #include <sdpage.hxx>
 #include <drawdoc.hxx>

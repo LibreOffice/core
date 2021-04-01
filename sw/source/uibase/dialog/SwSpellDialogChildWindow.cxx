@@ -32,6 +32,7 @@
 #include <svx/svdview.hxx>
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
+#include <osl/diagnose.h>
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>

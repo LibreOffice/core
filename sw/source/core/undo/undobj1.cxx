@@ -21,6 +21,7 @@
 
 #include <svl/itemiter.hxx>
 #include <svx/svdundo.hxx>
+#include <osl/diagnose.h>
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <fmtflcnt.hxx>

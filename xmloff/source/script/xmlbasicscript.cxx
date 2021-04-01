@@ -23,6 +23,7 @@
 #include <sal/log.hxx>
 #include <xmlscript/xmlns.h>
 #include <xmloff/xmlnamespace.hxx>
+#include <xmloff/xmltkmap.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>

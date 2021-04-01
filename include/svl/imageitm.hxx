@@ -22,7 +22,6 @@
 
 #include <svl/svldllapi.h>
 #include <svl/intitem.hxx>
-#include <memory>
 #include <tools/degree.hxx>
 
 struct SfxImageItem_Impl;

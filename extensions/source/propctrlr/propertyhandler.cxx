@@ -34,6 +34,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <rtl/ref.hxx>
 
 #include <algorithm>
 

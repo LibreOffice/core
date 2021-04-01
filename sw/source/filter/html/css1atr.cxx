@@ -94,6 +94,7 @@
 #include <o3tl/unit_conversion.hxx>
 
 #include <rtl/strbuf.hxx>
+#include <osl/diagnose.h>
 
 using namespace css;
 using editeng::SvxBorderLine;

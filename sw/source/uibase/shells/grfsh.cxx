@@ -38,6 +38,7 @@
 #include <svx/compressgraphicdialog.hxx>
 #include <svx/tbxcolor.hxx>
 #include <svx/sdangitm.hxx>
+#include <osl/diagnose.h>
 #include <drawdoc.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>

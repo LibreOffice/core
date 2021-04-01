@@ -24,6 +24,7 @@
 #include <svl/whiter.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
+#include <osl/diagnose.h>
 
 
 namespace sdr::properties

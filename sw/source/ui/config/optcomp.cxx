@@ -34,6 +34,7 @@
 #include <svtools/restartdialog.hxx>
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Compatibility.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 

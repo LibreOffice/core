@@ -85,6 +85,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
+#include <osl/diagnose.h>
 
 #include <PostItMgr.hxx>
 #include <FrameControlsManager.hxx>

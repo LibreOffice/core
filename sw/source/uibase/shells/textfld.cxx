@@ -34,6 +34,7 @@
 #include <svx/postattr.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/svxdlg.hxx>
+#include <osl/diagnose.h>
 #include <fmtinfmt.hxx>
 #include <fldwrap.hxx>
 #include <redline.hxx>

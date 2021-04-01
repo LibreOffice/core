@@ -91,6 +91,7 @@
 #include <sal/log.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <osl/diagnose.h>
 
 #include <algorithm>
 #include <memory>

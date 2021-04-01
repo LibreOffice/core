@@ -26,6 +26,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svtools/ruler.hxx>
+#include <osl/diagnose.h>
 #include <swwait.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>

@@ -84,6 +84,7 @@
 #include <svl/itempool.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/editview.hxx>
+#include <osl/diagnose.h>
 
 #include <svl/languageoptions.hxx>
 

@@ -23,7 +23,6 @@
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <vector>
-#include <set>
 #include <basegfx/basegfxdllapi.h>
 #include <o3tl/sorted_vector.hxx>
 

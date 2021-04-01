@@ -37,6 +37,7 @@
 #include <svl/zformat.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>

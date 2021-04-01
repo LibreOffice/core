@@ -23,7 +23,6 @@
 #include <memory>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
 #include <cppuhelper/implbase.hxx>

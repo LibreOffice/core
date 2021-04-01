@@ -53,6 +53,7 @@
 #include <vcl/settings.hxx>
 #include <tools/globname.hxx>
 #include <tools/UnitConversion.hxx>
+#include <osl/diagnose.h>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

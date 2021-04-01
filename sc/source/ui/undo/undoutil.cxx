@@ -26,6 +26,7 @@
 #include <globalnames.hxx>
 #include <global.hxx>
 #include <markdata.hxx>
+#include <osl/diagnose.h>
 
 void ScUndoUtil::MarkSimpleBlock( const ScDocShell* pDocShell,
                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,

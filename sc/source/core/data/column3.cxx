@@ -55,6 +55,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svl/sharedstringpool.hxx>
+#include <osl/diagnose.h>
 
 #include <cstdio>
 #include <refdata.hxx>

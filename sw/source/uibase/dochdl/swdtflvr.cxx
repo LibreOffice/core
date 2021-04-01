@@ -130,6 +130,7 @@
 #include <sfx2/classificationhelper.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <comphelper/classids.hxx>
+#include <osl/diagnose.h>
 
 #include <memory>
 

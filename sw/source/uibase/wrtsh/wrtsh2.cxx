@@ -27,6 +27,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sot/exchange.hxx>
+#include <osl/diagnose.h>
 #include <fmtinfmt.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>

@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <config_options.h>
 #include <svtools/svtdllapi.h>
 
 #include <memory>

@@ -20,6 +20,7 @@
 #include <memory>
 #include <tools/urlobj.hxx>
 #include <svl/urihelper.hxx>
+#include <osl/diagnose.h>
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <poolfmt.hxx>

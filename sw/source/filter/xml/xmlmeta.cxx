@@ -22,6 +22,7 @@
 #include <osl/diagnose.h>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
+#include <xmloff/xmltkmap.hxx>
 #include <o3tl/safeint.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <docstat.hxx>

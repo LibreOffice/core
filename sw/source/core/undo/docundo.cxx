@@ -39,6 +39,7 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 

@@ -34,6 +34,7 @@
 #include <calbck.hxx>
 #include <dcontact.hxx>
 #include <textboxhelper.hxx>
+#include <osl/diagnose.h>
 
 SwFormatFlyCnt::SwFormatFlyCnt( SwFrameFormat *pFrameFormat )
     : SfxPoolItem( RES_TXTATR_FLYCNT ),

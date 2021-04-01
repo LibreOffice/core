@@ -31,6 +31,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/charclass.hxx>
+#include <osl/diagnose.h>
 
 #include <comphelper/string.hxx>
 #include <o3tl/safeint.hxx>

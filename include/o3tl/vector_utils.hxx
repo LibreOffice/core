@@ -10,6 +10,8 @@
 
 #pragma once
 
+#include <algorithm>
+#include <unordered_set>
 #include <vector>
 
 namespace o3tl
