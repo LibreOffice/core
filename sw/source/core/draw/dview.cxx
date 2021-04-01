@@ -25,6 +25,7 @@
 #include <svx/sdrundomanager.hxx>
 #include <tools/globname.hxx>
 #include <editeng/outliner.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 

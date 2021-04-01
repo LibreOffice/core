@@ -45,6 +45,7 @@
 #include <svx/sdtagitm.hxx>
 #include <svx/sxcecitm.hxx>
 #include <svl/whiter.hxx>
+#include <osl/diagnose.h>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

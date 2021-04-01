@@ -26,6 +26,7 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <unotools/charclass.hxx>
 #include <comphelper/lok.hxx>
+#include <osl/diagnose.h>
 
 #include <dbdocfun.hxx>
 #include <dbdata.hxx>

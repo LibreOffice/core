@@ -27,6 +27,7 @@
 #include <sfx2/dispatch.hxx>
 #include <tools/globname.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <unotools/localedatawrapper.hxx>
 #include <fmtfsize.hxx>
 #include <fmthdft.hxx>

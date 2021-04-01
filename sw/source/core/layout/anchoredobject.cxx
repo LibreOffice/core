@@ -30,6 +30,7 @@
 #include <sortedobjs.hxx>
 #include <pagefrm.hxx>
 #include <layouter.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 

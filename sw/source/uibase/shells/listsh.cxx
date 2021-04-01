@@ -24,6 +24,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
+#include <osl/diagnose.h>
 
 #include <numrule.hxx>
 #include <wrtsh.hxx>

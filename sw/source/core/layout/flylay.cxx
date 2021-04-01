@@ -47,6 +47,7 @@
 #include <ndindex.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 

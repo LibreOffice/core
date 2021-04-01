@@ -56,7 +56,6 @@
 
 #include <comphelper/servicehelper.hxx>
 
-#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase12.hxx>
 
 class SfxItemSet;

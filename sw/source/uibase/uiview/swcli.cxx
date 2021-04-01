@@ -26,6 +26,7 @@
 #include <edtwin.hxx>
 #include <swcli.hxx>
 #include <svtools/embedhlp.hxx>
+#include <osl/diagnose.h>
 
 #include <toolkit/helper/vclunohelper.hxx>
 

@@ -25,6 +25,7 @@
 #include <svl/macitem.hxx>
 #include <unotools/charclass.hxx>
 #include <sfx2/event.hxx>
+#include <osl/diagnose.h>
 #include <cmdid.h>
 #include <view.hxx>
 #include <basesh.hxx>

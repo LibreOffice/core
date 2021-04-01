@@ -46,6 +46,7 @@
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>
+#include <osl/diagnose.h>
 #include <docsh.hxx>
 #include <fmtanchr.hxx>
 #include <viewsh.hxx>

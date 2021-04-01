@@ -20,7 +20,6 @@
 
 #include <memory>
 #include <vcl/weld.hxx>
-#include <rtl/ustring.hxx>
 #include <svtools/svtdllapi.h>
 
 namespace svtools

@@ -70,6 +70,7 @@
 #include <svx/svdogrp.hxx>
 #include <vcl/dibtools.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 namespace
 {

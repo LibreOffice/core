@@ -49,6 +49,7 @@
 #include <map>
 #include <memory>
 #include <cppuhelper/implbase.hxx>
+#include <osl/diagnose.h>
 
 GalleryBrowserMode GalleryBrowser2::meInitMode = GALLERYBROWSERMODE_ICON;
 

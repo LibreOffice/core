@@ -40,6 +40,9 @@ excludelist:
     include/rtl/math.hxx:
     # TODO MSVC does not compile basegfx/numeric/ftools.hxx when this is replaced
     - math.h
+    include/android/compatibility.hxx:
+    # TODO check whether actually needed, just silence this for now
+    - math.h
     include/sfx2/toolbarids.hxx:
     # needed for enum definition
     - sal/types.h
@@ -198,6 +201,9 @@ excludelist:
     include/comphelper/servicehelper.hxx:
     # Needed for macro
     - rtl/instance.hxx
+    include/comphelper/stl_types.hxx:
+    # Needed for std::equal
+    - algorithm
     include/comphelper/unique_disposing_ptr.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
@@ -211,11 +217,22 @@ excludelist:
     include/basegfx/numeric/ftools.hxx:
     # MSVC does not compile when this is removed
     - math.h
+    - cmath
     include/basegfx/utils/unopolypolygon.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/rendering/XBezierPolyPolygon2D.hpp
     - com/sun/star/rendering/XLinePolyPolygon2D.hpp
+    include/o3tl/deleter.hxx:
+    # Needed for __COVERITY__
+    - com/sun/star/uno/Exception.hpp
+    - sal/log.hxx
+    include/o3tl/lru_map.hxx:
+    # Needed for std::min
+    - algorithm
+    include/o3tl/make_shared.hxx:
+    # Needed for __COVERITY__
+    - o3tl/deleter.hxx
     include/sot/exchange.hxx:
     # Used in a macro #define
     - com/sun/star/datatransfer/dnd/DNDConstants.hpp
@@ -232,6 +249,9 @@ excludelist:
     - rtl/ustring.hxx
     include/tools/fldunit.hxx:
     # Needed for enum type
+    - sal/types.h
+    include/tools/long.hxx:
+    # Needed on _WIN64
     - sal/types.h
     include/tools/svlibrary.h:
     # Used behind #ifndef

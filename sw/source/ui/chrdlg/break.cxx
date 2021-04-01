@@ -18,6 +18,7 @@
  */
 
 #include <vcl/svapp.hxx>
+#include <osl/diagnose.h>
 
 #include <uitool.hxx>
 #include <swtypes.hxx>

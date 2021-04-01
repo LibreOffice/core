@@ -26,7 +26,6 @@
 #include <rtl/ref.hxx>
 #include <tools/wintypes.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
 
 namespace com::sun::star {

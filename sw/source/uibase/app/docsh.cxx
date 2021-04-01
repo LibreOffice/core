@@ -40,6 +40,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/classids.hxx>
 #include <basic/sbmod.hxx>
+#include <osl/diagnose.h>
 #include <node.hxx>
 #include <swwait.hxx>
 #include <printdata.hxx>

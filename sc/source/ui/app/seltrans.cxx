@@ -25,6 +25,7 @@
 #include <sfx2/docfile.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdouno.hxx>
+#include <osl/diagnose.h>
 
 #include <seltrans.hxx>
 #include <transobj.hxx>

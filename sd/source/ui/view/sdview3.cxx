@@ -45,6 +45,7 @@
 #include <svx/svxids.hrc>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/embedhlp.hxx>
+#include <osl/diagnose.h>
 #include <DrawDocShell.hxx>
 #include <fupoor.hxx>
 #include <tablefunction.hxx>

@@ -25,6 +25,7 @@
 #include <editeng/langitem.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <osl/thread.h>
+#include <osl/diagnose.h>
 #include <svl/asiancfg.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdograf.hxx>

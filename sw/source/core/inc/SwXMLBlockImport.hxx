@@ -21,6 +21,7 @@
 
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
+#include <xmloff/xmltkmap.hxx>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <sax/fastattribs.hxx>
 

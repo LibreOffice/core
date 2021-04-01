@@ -23,7 +23,6 @@
 #include <vcl/imap.hxx>
 #include <svl/hint.hxx>
 #include <vcl/transfer.hxx>
-#include <vcl/salctype.hxx>
 #include <svx/svdobj.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <svx/svxdllapi.h>

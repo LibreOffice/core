@@ -57,6 +57,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #include <svx/svdotext.hxx>
 #include <editeng/outlobj.hxx>

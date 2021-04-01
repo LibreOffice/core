@@ -22,6 +22,7 @@
 
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <sal/types.h>
 
 class SdrObject;
 class SwFrameFormat;

@@ -33,6 +33,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <svl/languageoptions.hxx>
+#include <osl/diagnose.h>
 
 #include <editeng/eeitem.hxx>
 #include <editeng/postitem.hxx>

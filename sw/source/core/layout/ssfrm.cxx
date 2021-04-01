@@ -35,6 +35,7 @@
 #include <hints.hxx>
 #include <frmtool.hxx>
 #include <ndtxt.hxx>
+#include <osl/diagnose.h>
 
     // No inline cause we need the function pointers
 tools::Long SwFrame::GetTopMargin() const

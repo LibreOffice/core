@@ -23,6 +23,8 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <svx/framelink.hxx>
 
+#include <memory>
+
 // predefines
 
 namespace drawinglayer::primitive2d

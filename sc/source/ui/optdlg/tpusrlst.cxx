@@ -23,6 +23,7 @@
 #include <tools/lineend.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <osl/diagnose.h>
 
 #include <global.hxx>
 #include <document.hxx>

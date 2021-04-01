@@ -19,10 +19,10 @@
 
 #pragma once
 
-#include <rtl/ustring.hxx>
 #include <tools/degree.hxx>
-#include <sal/types.h>
 #include <vcl/dllapi.h>
+
+#include <string_view>
 
 class Graphic;
 

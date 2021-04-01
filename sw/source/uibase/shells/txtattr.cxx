@@ -36,6 +36,7 @@
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/cmapitem.hxx>
+#include <osl/diagnose.h>
 #include <paratr.hxx>
 
 #include <fmtinfmt.hxx>

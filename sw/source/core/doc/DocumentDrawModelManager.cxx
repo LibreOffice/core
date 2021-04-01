@@ -45,6 +45,7 @@
 #include <svl/srchitem.hxx>
 #include <unotools/configmgr.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 class SdrOutliner;
 

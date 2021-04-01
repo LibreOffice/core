@@ -10,10 +10,8 @@
 
 #pragma once
 
-#include <sfx2/dllapi.h>
 #include <vcl/weld.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/svapp.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XInterface.hpp>

@@ -46,6 +46,7 @@
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <editeng/itemtype.hxx>
+#include <osl/diagnose.h>
 
 #include <fmtornt.hxx>
 #include <fmtlsplt.hxx>

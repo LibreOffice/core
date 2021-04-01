@@ -18,6 +18,7 @@
  */
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/xmlnamespace.hxx>
+#include <xmloff/xmltkmap.hxx>
 #include "xmlReportElementBase.hxx"
 #include "xmlfilter.hxx"
 #include "xmlControlProperty.hxx"

@@ -32,6 +32,7 @@
 #include <sfx2/ipclient.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <osl/diagnose.h>
 
 #include <document.hxx>
 #include <viewfunc.hxx>

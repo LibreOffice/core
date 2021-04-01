@@ -19,11 +19,9 @@
 #ifndef INCLUDED_XMLOFF_SCHXMLIMPORTHELPER_HXX
 #define INCLUDED_XMLOFF_SCHXMLIMPORTHELPER_HXX
 
-#include <memory>
-
+#include <com/sun/star/uno/Reference.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <xmloff/families.hxx>
-#include <xmloff/xmltkmap.hxx>
 
 namespace com::sun::star::chart { class XChartDocument; }
 namespace com::sun::star::beans { class XPropertySet; }

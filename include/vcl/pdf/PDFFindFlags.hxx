@@ -11,6 +11,7 @@
 #pragma once
 
 #include <o3tl/typed_flags_set.hxx>
+#include <sal/types.h>
 
 namespace vcl::pdf
 {

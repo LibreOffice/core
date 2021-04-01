@@ -26,7 +26,6 @@
 #include <type_traits>
 
 #include <o3tl/underlyingenumvalue.hxx>
-#include <sal/types.h>
 
 namespace o3tl {
 

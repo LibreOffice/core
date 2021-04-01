@@ -23,7 +23,6 @@
 
 #include <string_view>
 
-#include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
 
 namespace weld

@@ -26,6 +26,7 @@
 #include <Window.hxx>
 #include <vcl/vclevent.hxx>
 #include <svx/fmshell.hxx>
+#include <osl/diagnose.h>
 
 namespace sd {
 

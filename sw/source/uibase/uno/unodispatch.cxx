@@ -26,6 +26,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <osl/diagnose.h>
 #include <unodispatch.hxx>
 #include <view.hxx>
 #include <cmdid.h>

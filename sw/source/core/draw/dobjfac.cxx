@@ -19,6 +19,7 @@
 
 #include <dobjfac.hxx>
 #include <dflyobj.hxx>
+#include <osl/diagnose.h>
 
 SwObjectFactory aSwObjectFactory;
 

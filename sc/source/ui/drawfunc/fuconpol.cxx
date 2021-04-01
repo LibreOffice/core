@@ -24,6 +24,7 @@
 // Create default drawing objects via keyboard
 #include <svx/svdopath.hxx>
 #include <svx/svxids.hrc>
+#include <osl/diagnose.h>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 

@@ -20,10 +20,8 @@
 #pragma once
 
 #include <tools/urlobj.hxx>
-#include <svx/svxdllapi.h>
 #include <svx/galtheme.hxx>
 #include <svx/gallerybinaryengine.hxx>
-#include <svx/gallerystoragelocations.hxx>
 #include <svx/gallerybinarystoragelocations.hxx>
 #include <svx/galleryfilestorageentry.hxx>
 

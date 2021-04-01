@@ -31,6 +31,7 @@
 #include <svl/whiter.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
+#include <osl/diagnose.h>
 
 #include <rtl/strbuf.hxx>
 

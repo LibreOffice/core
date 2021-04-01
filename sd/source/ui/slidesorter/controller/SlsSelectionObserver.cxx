@@ -24,6 +24,7 @@
 #include <controller/SlsPageSelector.hxx>
 #include <controller/SlsFocusManager.hxx>
 #include <sdpage.hxx>
+#include <osl/diagnose.h>
 
 namespace sd::slidesorter::controller
 {

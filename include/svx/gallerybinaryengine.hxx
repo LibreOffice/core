@@ -22,14 +22,13 @@
 #include <svx/galmisc.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/fmmodel.hxx>
-#include <svx/gallerystoragelocations.hxx>
 #include <svx/gallerybinarystoragelocations.hxx>
 #include <svx/galleryfilestorage.hxx>
 #include <tools/urlobj.hxx>
 #include <sot/storage.hxx>
+#include <vcl/salctype.hxx>
 
 #include <tools/datetime.hxx>
-#include <unotools/datetime.hxx>
 
 #include <memory>
 

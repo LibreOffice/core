@@ -20,6 +20,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
+#include <osl/diagnose.h>
 
 #include <swmodule.hxx>
 #include <wrtsh.hxx>

@@ -35,6 +35,7 @@
 #include <svl/intitem.hxx>
 #include <svl/flagitem.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <osl/diagnose.h>
 
 #include <modcfg.hxx>
 #include <edtwin.hxx>

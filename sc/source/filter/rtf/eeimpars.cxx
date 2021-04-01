@@ -34,6 +34,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/string.hxx>
+#include <osl/diagnose.h>
 
 #include <eeimport.hxx>
 #include <global.hxx>

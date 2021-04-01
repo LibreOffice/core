@@ -45,6 +45,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/strings.hrc>
+#include <osl/diagnose.h>
 
 #define XOUT_WIDTH    150
 

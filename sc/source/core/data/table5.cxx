@@ -40,6 +40,8 @@
 
 #include <com/sun/star/sheet/TablePageBreakData.hpp>
 
+#include <osl/diagnose.h>
+
 #include <algorithm>
 #include <limits>
 

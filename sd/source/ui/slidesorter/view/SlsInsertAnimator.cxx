@@ -25,6 +25,7 @@
 #include <model/SlideSorterModel.hxx>
 #include <SlideSorter.hxx>
 #include <Window.hxx>
+#include <osl/diagnose.h>
 
 #include <memory>
 #include <set>

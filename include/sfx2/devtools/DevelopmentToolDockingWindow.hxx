@@ -12,7 +12,6 @@
 
 #include <sfx2/dllapi.h>
 #include <sfx2/dockwin.hxx>
-#include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 
 #include <sfx2/devtools/ObjectInspectorWidgets.hxx>
@@ -23,9 +22,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/frame/XController.hpp>
-
-#include <unordered_map>
 
 /** Development tool main docking window
  *

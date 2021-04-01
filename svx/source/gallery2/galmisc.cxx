@@ -40,6 +40,7 @@
 #include <svx/strings.hrc>
 #include <svx/galtheme.hxx>
 #include <svx/galmisc.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/awt/XProgressMonitor.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>

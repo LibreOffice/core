@@ -32,6 +32,7 @@
 #include <svx/scene3d.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svx/svdoedge.hxx>
+#include <osl/diagnose.h>
 
 #include <cassert>
 

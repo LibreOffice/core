@@ -27,6 +27,7 @@
 #include <sdresid.hxx>
 #include <strings.hrc>
 
+#include <osl/diagnose.h>
 #include <vcl/settings.hxx>
 #include <vcl/help.hxx>
 

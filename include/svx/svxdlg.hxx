@@ -24,7 +24,6 @@
 #include <svx/zoom_def.hxx>
 #include <editeng/edtdlg.hxx>
 
-#include <svx/dstribut_enum.hxx>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <svx/svxdllapi.h>

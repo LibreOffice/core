@@ -30,7 +30,6 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <o3tl/safeint.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <oox/dllapi.h>
 #include <oox/helper/helper.hxx>

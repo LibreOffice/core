@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <comphelper/string.hxx>
+#include <osl/diagnose.h>
 #include <o3tl/safeint.hxx>
 #include <o3tl/temporary.hxx>
 #include <tools/solar.h>

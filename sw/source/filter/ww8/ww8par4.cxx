@@ -33,6 +33,7 @@
 #include "sprmids.hxx"
 #include <svx/unoapi.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <sot/exchange.hxx>
 #include <fmtanchr.hxx>

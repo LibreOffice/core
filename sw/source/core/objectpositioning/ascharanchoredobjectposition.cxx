@@ -27,6 +27,7 @@
 #include <frmatr.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
+#include <osl/diagnose.h>
 #include <fmtornt.hxx>
 
 

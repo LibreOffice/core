@@ -29,6 +29,7 @@
 #include <svx/xdef.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
+#include <osl/diagnose.h>
 #include <fmtclds.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>

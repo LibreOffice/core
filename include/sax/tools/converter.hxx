@@ -27,7 +27,6 @@
 #include <sax/saxdllapi.h>
 
 #include <sal/types.h>
-#include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <tools/color.hxx>

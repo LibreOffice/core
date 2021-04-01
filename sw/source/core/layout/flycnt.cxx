@@ -18,6 +18,7 @@
  */
 
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <svx/swframetypes.hxx>
 #include <pagefrm.hxx>
 #include <txtfrm.hxx>

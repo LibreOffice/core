@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/request.hxx>
+#include <osl/diagnose.h>
 
 #include <cellsh.hxx>
 #include <tabvwsh.hxx>

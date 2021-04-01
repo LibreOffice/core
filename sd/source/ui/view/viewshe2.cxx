@@ -38,6 +38,7 @@
 #include <svtools/sfxecode.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/classids.hxx>
+#include <osl/diagnose.h>
 
 #include <strings.hrc>
 #include <app.hrc>

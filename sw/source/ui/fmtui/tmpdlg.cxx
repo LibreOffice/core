@@ -22,6 +22,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svx/hdft.hxx>
 #include <editeng/flstitem.hxx>
+#include <osl/diagnose.h>
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <svtools/htmlcfg.hxx>

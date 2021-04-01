@@ -29,6 +29,7 @@
 #include <svx/svxids.hrc>
 #include <svx/fmshell.hxx>
 #include <vcl/vclevent.hxx>
+#include <osl/diagnose.h>
 
 #include <iterator>
 #include <list>

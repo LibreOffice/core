@@ -49,6 +49,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/lnkbase.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <tools/debug.hxx>
 #include <tools/globname.hxx>
 #include <tools/diagnose_ex.h>

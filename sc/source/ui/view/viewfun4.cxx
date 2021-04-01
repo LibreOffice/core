@@ -44,6 +44,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <avmedia/mediawindow.hxx>
+#include <osl/diagnose.h>
 
 #include <comphelper/storagehelper.hxx>
 

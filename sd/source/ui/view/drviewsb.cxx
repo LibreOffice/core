@@ -22,6 +22,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/svxdlg.hxx>
+#include <osl/diagnose.h>
 
 #include <app.hrc>
 

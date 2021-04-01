@@ -40,6 +40,7 @@
 #include <svx/galtheme.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/galleryobjectcollection.hxx>
+#include <svx/galleryobjectbinarystorage.hxx>
 #include <galobj.hxx>
 #include <svx/gallery1.hxx>
 #include "gallerydrawmodel.hxx"

@@ -41,6 +41,7 @@
 #include <Window.hxx>
 
 #include <comphelper/lok.hxx>
+#include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>

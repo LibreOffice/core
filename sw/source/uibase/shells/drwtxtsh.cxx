@@ -48,6 +48,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <osl/diagnose.h>
 #include <swtypes.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>

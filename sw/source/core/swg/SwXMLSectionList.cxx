@@ -20,6 +20,7 @@
 #include <SwXMLSectionList.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlnamespace.hxx>
+#include <xmloff/xmltkmap.hxx>
 #include <vector>
 
 using namespace ::com::sun::star;

@@ -132,6 +132,7 @@
 #include <vcl/GraphicNativeMetadata.hxx>
 #include <vcl/settings.hxx>
 #include <i18nutil/searchopt.hxx>
+#include <osl/diagnose.h>
 #include <paratr.hxx>
 #include <rootfrm.hxx>
 #include <frameformats.hxx>

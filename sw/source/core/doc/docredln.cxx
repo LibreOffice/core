@@ -20,6 +20,7 @@
 #include <libxml/xmlwriter.h>
 #include <boost/property_tree/json_parser.hpp>
 
+#include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <tools/datetimeutils.hxx>
 #include <hintids.hxx>

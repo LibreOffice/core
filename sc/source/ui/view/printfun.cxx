@@ -41,6 +41,7 @@
 #include <tools/multisel.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
+#include <osl/diagnose.h>
 
 #include <editutil.hxx>
 #include <docsh.hxx>

@@ -27,6 +27,7 @@
 #include <svx/srchdlg.hxx>
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <osl/diagnose.h>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>

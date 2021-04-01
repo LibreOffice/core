@@ -10,8 +10,10 @@
 
 #pragma once
 
+#include <vcl/dllapi.h>
 #include <tools/color.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 
 namespace vcl::pdf
 {

@@ -28,6 +28,7 @@
 #include <pam.hxx>
 #include <svx/svdobj.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 

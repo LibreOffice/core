@@ -20,6 +20,7 @@
 #include <comphelper/lok.hxx>
 #include <ndole.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <svl/itemiter.hxx>
 #include <fmtfsize.hxx>
 #include <fmthdft.hxx>

@@ -27,6 +27,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <osl/diagnose.h>
 
 #include <svx/svxids.hrc>
 #include <svx/svdpagv.hxx>

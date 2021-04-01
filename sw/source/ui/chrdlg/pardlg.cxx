@@ -37,6 +37,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>
+#include <osl/diagnose.h>
 
 SwParaDlg::SwParaDlg(weld::Window *pParent,
                     SwView& rVw,

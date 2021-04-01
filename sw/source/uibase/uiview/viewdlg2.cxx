@@ -21,6 +21,7 @@
 #include <sfx2/objface.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdview.hxx>
+#include <osl/diagnose.h>
 #include <fldmgr.hxx>
 #include <expfld.hxx>
 #include <modcfg.hxx>

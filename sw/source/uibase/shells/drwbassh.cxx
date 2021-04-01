@@ -27,6 +27,7 @@
 #include <svl/whiter.hxx>
 #include <svx/swframevalidation.hxx>
 #include <svx/anchorid.hxx>
+#include <osl/diagnose.h>
 #include <drawdoc.hxx>
 #include <uitool.hxx>
 #include <fmtornt.hxx>

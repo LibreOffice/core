@@ -34,6 +34,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <officecfg/Office/Common.hxx>
+#include <osl/diagnose.h>
 
 using namespace com::sun::star;
 

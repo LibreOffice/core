@@ -49,6 +49,7 @@
 #include <UndoTable.hxx>
 #include <o3tl/enumrange.hxx>
 #include <o3tl/safeint.hxx>
+#include <osl/diagnose.h>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;

@@ -28,6 +28,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
+#include <osl/diagnose.h>
 
 #include <editeng/measfld.hxx>
 #include <editeng/editstat.hxx>

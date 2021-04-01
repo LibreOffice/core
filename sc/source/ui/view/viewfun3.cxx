@@ -32,6 +32,7 @@
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <vcl/TypeSerializer.hxx>
+#include <osl/diagnose.h>
 
 #include <attrib.hxx>
 #include <patattr.hxx>

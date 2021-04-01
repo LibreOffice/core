@@ -21,6 +21,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdmark.hxx>
+#include <osl/diagnose.h>
 
 SdrObjListIter::SdrObjListIter(const SdrObjList* pObjList, SdrIterMode eMode, bool bReverse)
 :   maObjList(),

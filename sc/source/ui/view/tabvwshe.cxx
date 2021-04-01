@@ -20,6 +20,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/lok.hxx>
 #include <editeng/eeitem.hxx>
+#include <osl/diagnose.h>
 
 #include <editeng/editview.hxx>
 #include <editeng/flditem.hxx>

@@ -47,6 +47,7 @@
 #include <vcl/svapp.hxx>
 #include <xmlscript/xml_helper.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
+#include <osl/diagnose.h>
 
 namespace basctl
 {

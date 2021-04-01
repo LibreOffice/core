@@ -18,6 +18,7 @@
  */
 
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <document.hxx>
 #include <brdcst.hxx>

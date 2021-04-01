@@ -34,6 +34,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <basegfx/range/b2irectangle.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 

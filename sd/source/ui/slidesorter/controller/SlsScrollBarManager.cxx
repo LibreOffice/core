@@ -29,6 +29,7 @@
 #include <view/SlsLayouter.hxx>
 #include <Window.hxx>
 #include <sdpage.hxx>
+#include <osl/diagnose.h>
 
 #include <vcl/scrbar.hxx>
 

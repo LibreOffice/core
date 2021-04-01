@@ -73,6 +73,7 @@
 #include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <osl/diagnose.h>
 
 using namespace com::sun::star;
 

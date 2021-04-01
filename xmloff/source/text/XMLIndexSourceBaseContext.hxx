@@ -22,6 +22,7 @@
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <rtl/ustring.hxx>
+#include <sax/fastattribs.hxx>
 
 
 namespace com::sun::star {

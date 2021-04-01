@@ -22,6 +22,7 @@
 #include <formula/token.hxx>
 #include <sal/log.hxx>
 #include <unotools/configmgr.hxx>
+#include <osl/diagnose.h>
 
 #include <document.hxx>
 #include <table.hxx>

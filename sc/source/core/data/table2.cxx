@@ -59,6 +59,7 @@
 #include <editeng/editobj.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <osl/diagnose.h>
 #include <svl/poolcach.hxx>
 #include <unotools/charclass.hxx>
 #include <math.h>

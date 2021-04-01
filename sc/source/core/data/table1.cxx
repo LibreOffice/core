@@ -23,6 +23,7 @@
 #include <o3tl/unit_conversion.hxx>
 #include <unotools/textsearch.hxx>
 #include <unotools/charclass.hxx>
+#include <osl/diagnose.h>
 
 #include <patattr.hxx>
 #include <table.hxx>

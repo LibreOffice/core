@@ -25,6 +25,7 @@
 #include <svx/svdocirc.hxx>
 #include <svx/svxids.hrc>
 #include <svx/sxciaitm.hxx>
+#include <osl/diagnose.h>
 
 FuConstArc::FuConstArc(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                        SdrModel* pDoc, const SfxRequest& rReq)

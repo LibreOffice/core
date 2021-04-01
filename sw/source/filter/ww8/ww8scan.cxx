@@ -31,6 +31,7 @@
 #include <rtl/tencinfo.h>
 #include <sal/macros.h>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 #include <swerror.h>
 

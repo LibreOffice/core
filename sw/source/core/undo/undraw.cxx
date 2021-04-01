@@ -24,6 +24,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/svdview.hxx>
+#include <osl/diagnose.h>
 
 #include <hintids.hxx>
 #include <fmtanchr.hxx>

@@ -24,7 +24,6 @@
 #include <string_view>
 
 #include <unotools/unotoolsdllapi.h>
-#include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 
 class SvtOptionsDlgOptions_Impl;

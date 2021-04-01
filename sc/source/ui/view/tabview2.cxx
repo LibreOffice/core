@@ -21,6 +21,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/bindings.hxx>
+#include <osl/diagnose.h>
 
 #include <attrib.hxx>
 #include <pagedata.hxx>

@@ -33,6 +33,7 @@
 #include <tabfrm.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <ndtxt.hxx>
+#include <osl/diagnose.h>
 
 size_t SwFEShell::GetPageDescCnt() const
 {

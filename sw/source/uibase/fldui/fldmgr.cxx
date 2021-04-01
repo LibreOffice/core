@@ -34,6 +34,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <tools/resary.hxx>
+#include <osl/diagnose.h>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/app.hxx>

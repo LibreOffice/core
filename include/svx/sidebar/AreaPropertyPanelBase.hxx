@@ -32,7 +32,6 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <svl/intitem.hxx>
 #include <svx/svxdllapi.h>
-#include <sfx2/sidebar/Panel.hxx>
 
 class ToolbarUnoDispatcher;
 class XFillFloatTransparenceItem;
