@@ -11,6 +11,9 @@
 
 #include <sal/config.h>
 
+#include <vcl/dllapi.h>
+#include <vcl/weld.hxx>
+
 namespace vcl::fileregistration
 {
 VCL_DLLPUBLIC void LaunchRegistrationUI();

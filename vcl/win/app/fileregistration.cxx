@@ -15,10 +15,15 @@
 
 #include <comphelper/scopeguard.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/abstdlg.hxx>
 #include <vcl/fileregistration.hxx>
 
 #include <strings.hrc>
+#include <svdata.hxx>
+
+#include <map>
 
 #include <prewin.h>
 #include <Shobjidl.h>
