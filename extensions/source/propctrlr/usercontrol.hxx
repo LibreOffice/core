@@ -118,6 +118,8 @@ namespace pcr
     typedef CommonBehaviourControl<css::inspection::XPropertyControl, SvtURLBox> OFileUrlControl_Base;
     class OFileUrlControl : public OFileUrlControl_Base
     {
+    private:
+        DECL_LINK(URLModifiedHdl, weld::ComboBox&, void);
     public:
         OFileUrlControl(std::unique_ptr<SvtURLBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
@@ -129,7 +131,10 @@ namespace pcr
         virtual void SetModifyHandler() override
         {
             OFileUrlControl_Base::SetModifyHandler();
-            getTypedControlWindow()->connect_changed(LINK(this, CommonBehaviourControlHelper, ModifiedHdl));
+            SvtURLBox* pControlWindow = getTypedControlWindow();
+            // tdf#140239 and tdf#141084 don't notify that the control has changed content until focus-out
+            pControlWindow->connect_focus_out(LINK(this, CommonBehaviourControlHelper, LoseFocusHdl));
+            pControlWindow->connect_changed(LINK(this, OFileUrlControl, URLModifiedHdl));
         }
 
         virtual weld::Widget* getWidget() override { return getTypedControlWindow()->getWidget(); }
