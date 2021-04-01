@@ -282,6 +282,10 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
         {
             rMaster.SetFormatAttr(SfxBoolItem(RES_BACKGROUND_FULL_SIZE, bValue));
         }
+        if (pGrabBag->GetGrabBag().find("RtlGutter")->second >>= bValue)
+        {
+            rMaster.SetFormatAttr(SfxBoolItem(RES_RTL_GUTTER, bValue));
+        }
     }
 
     // Transfer all general frame attributes
@@ -593,6 +597,8 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     }
     oGrabBag->GetGrabBag()["BackgroundFullSize"] <<=
         rMaster.GetAttrSet().GetItem<SfxBoolItem>(RES_BACKGROUND_FULL_SIZE)->GetValue();
+    oGrabBag->GetGrabBag()["RtlGutter"] <<=
+        rMaster.GetAttrSet().GetItem<SfxBoolItem>(RES_RTL_GUTTER)->GetValue();
     rSet.Put(*oGrabBag);
 }
 
