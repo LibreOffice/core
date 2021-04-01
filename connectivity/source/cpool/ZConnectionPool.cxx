@@ -189,7 +189,7 @@ void SAL_CALL OConnectionPool::disposing( const css::lang::EventObject& Source )
     }
     else
     {
-    m_xDriverNode.clear();
+        m_xDriverNode.clear();
     }
 }
 
