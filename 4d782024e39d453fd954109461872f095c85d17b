@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa9724e6_5b0f4d6a",
+        "filename": "package/source/zipapi/ZipFile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-04-01T09:15:23Z",
+      "side": 1,
+      "message": "this is another instance of the bug",
+      "range": {
+        "startLine": 1028,
+        "startChar": 20,
+        "endLine": 1028,
+        "endChar": 55
+      },
+      "revId": "4d782024e39d453fd954109461872f095c85d17b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
