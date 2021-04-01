@@ -5557,7 +5557,7 @@ void Test::testTdf141146()
     m_pDoc->SetString(4,2,1, "=LOOKUP(E1;A$2:A$4;B2:B4)");
     m_pDoc->SetString(4,3,1, "=LOOKUP(1;1/(A$2:A$4=E$1);B2:B4)");
 
-    // Without the fix in place, this test would haved failed with
+    // Without the fix in place, this test would have failed with
     // - Expected: #N/A
     // - Actual  :
     CPPUNIT_ASSERT_EQUAL(OUString("#N/A"), m_pDoc->GetString(4,1,1));
