@@ -125,18 +125,16 @@ public:
 
     void drawColorLine()
     {
-        if (mbCustomColored && mbSelected)
-        {
-            mrRenderContext.SetFillColor(maCustomColor);
-            mrRenderContext.SetLineColor(maCustomColor);
-            mrRenderContext.DrawRect(maLineRect);
-        }
-        else if (mbSelected)
-        {
-            mrRenderContext.SetFillColor(mrStyleSettings.GetDarkShadowColor());
-            mrRenderContext.SetLineColor(mrStyleSettings.GetDarkShadowColor());
-            mrRenderContext.DrawRect(maLineRect);
-        }
+        if (!mbSelected)
+            return;
+
+        // tdf#141396: the color must be different from the rest of the selected tab
+        Color aLineColor = (mbCustomColored && maCustomColor != maSelectedColor)
+                               ? maCustomColor
+                               : mrStyleSettings.GetDarkShadowColor();
+        mrRenderContext.SetFillColor(aLineColor);
+        mrRenderContext.SetLineColor(aLineColor);
+        mrRenderContext.DrawRect(maLineRect);
     }
 
     void drawTab()
