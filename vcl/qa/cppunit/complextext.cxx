@@ -86,9 +86,12 @@ void VclComplexTextTest::testArabic()
     CPPUNIT_ASSERT_EQUAL(tools::Long(14), pOutDev->GetTextHeight());
 
     // exact bounding rectangle, not essentially the same as text width/height
-    tools::Rectangle aBoundRect, aTestRect(isWindowsRDP() ? 1 : 0, 1, 71, 15);
+    tools::Rectangle aBoundRect;
     pOutDev->GetTextBoundRect(aBoundRect, aOneTwoThree);
-    CPPUNIT_ASSERT_EQUAL(aTestRect, aBoundRect);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0, aBoundRect.getX(), 1); // This sometimes equals to 1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1, aBoundRect.getY(), 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(71, aBoundRect.getWidth(), 1); // This sometimes equals to 70
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(15, aBoundRect.getHeight(), 1);
 
 #if 0
     // FIXME: This seems to be wishful thinking, GetTextRect() does not take
