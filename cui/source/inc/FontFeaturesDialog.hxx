@@ -55,7 +55,8 @@ private:
     void initialize();
     OUString createFontNameWithFeatures();
 
-    void fillGrid(std::vector<vcl::font::Feature> const& rFontFeatures);
+    // returns the max height of a row
+    int fillGrid(std::vector<vcl::font::Feature> const& rFontFeatures);
 
     DECL_LINK(ComboBoxSelectedHdl, weld::ComboBox&, void);
     DECL_LINK(CheckBoxToggledHdl, weld::ToggleButton&, void);
