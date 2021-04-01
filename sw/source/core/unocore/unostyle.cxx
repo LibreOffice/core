@@ -2978,7 +2978,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                             SetStyleProperty(*pEntry, *pPropSet, rValues[nProp], aBaseImpl);
                         }
 
-                        // reset paret at ItemSet from SetItem
+                        // reset parent at ItemSet from SetItem
                         rSetSet.SetParent(nullptr);
 
                         // set the new SvxSetItem at the real target and delete it
@@ -3311,7 +3311,7 @@ void SwXPageStyle::setPropertyValue(const OUString& rPropertyName, const uno::An
         for (size_t i = 0; i < GetDoc()->GetPageDescCnt(); i++)
         {
             auto pPageDesc = &GetDoc()->GetPageDesc(i);
-            // If we have the right page descriptor stash the neccessary formats in import time.
+            // If we have the right page descriptor stash the necessary formats in import time.
             if (pPageDesc->GetName() == GetStyleName())
             {
                 auto pLeftHeader = pPageDesc->GetLeft().GetHeader().GetHeaderFormat();
