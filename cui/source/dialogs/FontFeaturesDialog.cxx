@@ -73,18 +73,26 @@ void FontFeaturesDialog::initialize()
         rFilteredFontFeatures.push_back(rFontFeature);
     }
 
-    fillGrid(rFilteredFontFeatures);
+    int nRowHeight = fillGrid(rFilteredFontFeatures);
 
     m_xContentWindow->set_size_request(
         -1, std::min(std::max(m_xContentWindow->get_preferred_size().Height(),
                               m_xContentGrid->get_preferred_size().Height()),
                      static_cast<tools::Long>(300L)));
 
+    if (nRowHeight)
+    {
+        // tdf#141333 use row height + the 6 px spacing of contentGrid
+        m_xContentWindow->vadjustment_set_step_increment(nRowHeight + 6);
+    }
+
     updateFontPreview();
 }
 
-void FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFeatures)
+int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFeatures)
 {
+    int nRowHeight(0);
+
     vcl::font::FeatureParser aParser(m_sFontName);
     auto aExistingFeatures = aParser.getFeaturesMap();
 
@@ -140,8 +148,13 @@ void FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFe
             aCurrentItem.m_xCheck->show();
         }
 
+        nRowHeight
+            = std::max<int>(nRowHeight, aCurrentItem.m_xContainer->get_preferred_size().Height());
+
         i++;
     }
+
+    return nRowHeight;
 }
 
 void FontFeaturesDialog::updateFontPreview()
