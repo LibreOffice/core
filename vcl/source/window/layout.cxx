@@ -1905,31 +1905,36 @@ void VclScrolledWindow::doSetAllocation(const Size &rAllocation, bool bRetryOnFa
 
     tools::Long nAvailHeight = rAllocation.Height() - 2 * m_nBorderWidth;
     tools::Long nAvailWidth = rAllocation.Width() - 2 * m_nBorderWidth;
-    // vert. ScrollBar
-    if (GetStyle() & WB_AUTOVSCROLL)
-    {
-        m_pVScroll->Show(nAvailHeight < aChildReq.Height());
-    }
-    else if (m_pVScroll->IsVisible() != bool(GetStyle() & WB_VSCROLL))
-        m_pVScroll->Show((GetStyle() & WB_VSCROLL) != 0);
 
-    if (m_pVScroll->IsVisible())
+    // vert. ScrollBar
+    bool bShowVScroll;
+    if (GetStyle() & WB_AUTOVSCROLL)
+        bShowVScroll = nAvailHeight < aChildReq.Height();
+    else
+        bShowVScroll = (GetStyle() & WB_VSCROLL) != 0;
+
+    if (bShowVScroll)
         nAvailWidth -= getLayoutRequisition(*m_pVScroll).Width();
 
     // horz. ScrollBar
+    bool bShowHScroll;
     if (GetStyle() & WB_AUTOHSCROLL)
     {
-        bool bShowHScroll = nAvailWidth < aChildReq.Width();
-        m_pHScroll->Show(bShowHScroll);
+        bShowHScroll = nAvailWidth < aChildReq.Width();
 
         if (bShowHScroll)
             nAvailHeight -= getLayoutRequisition(*m_pHScroll).Height();
 
         if (GetStyle() & WB_AUTOVSCROLL)
-            m_pVScroll->Show(nAvailHeight < aChildReq.Height());
+            bShowVScroll = nAvailHeight < aChildReq.Height();
     }
-    else if (m_pHScroll->IsVisible() != bool(GetStyle() & WB_HSCROLL))
-        m_pHScroll->Show((GetStyle() & WB_HSCROLL) != 0);
+    else
+        bShowHScroll = (GetStyle() & WB_HSCROLL) != 0;
+
+    if (m_pHScroll->IsVisible() != bShowHScroll)
+        m_pHScroll->Show(bShowHScroll);
+    if (m_pVScroll->IsVisible() != bShowVScroll)
+        m_pVScroll->Show(bShowVScroll);
 
     Size aInnerSize(rAllocation);
     aInnerSize.AdjustWidth(-2 * m_nBorderWidth);
