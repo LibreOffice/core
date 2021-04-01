@@ -1,4 +1,2 @@
 [libfuzzer]
 max_len = 98304
-[env]
-AFL_DRIVER_DONT_DEFER=1
