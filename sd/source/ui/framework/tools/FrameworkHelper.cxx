@@ -924,6 +924,9 @@ LifetimeController::~LifetimeController()
 
 void LifetimeController::disposing()
 {
+    Reference<XComponent> xComponent = mrBase.GetController();
+    if (xComponent.is())
+        xComponent->removeEventListener(this);
 }
 
 void SAL_CALL LifetimeController::disposing (const lang::EventObject&)

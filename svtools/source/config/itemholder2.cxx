@@ -70,6 +70,13 @@ ItemHolder2::ItemHolder2()
 
 ItemHolder2::~ItemHolder2()
 {
+    css::uno::Reference<css::uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    css::uno::Reference<css::lang::XComponent> xCfg(css::configuration::theDefaultProvider::get(xContext ),
+        css::uno::UNO_QUERY);
+
+    if (xCfg.is())
+        xCfg->removeEventListener(static_cast< css::lang::XEventListener*>(this));
+
     impl_releaseAllItems();
 }
 
