@@ -12,7 +12,11 @@
 #include <sal/config.h>
 
 #include <vcl/dllapi.h>
-#include <vcl/weld.hxx>
+
+namespace weld
+{
+class Window;
+}
 
 namespace vcl::fileregistration
 {
