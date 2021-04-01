@@ -276,6 +276,10 @@ void SAL_CALL SfxStatusIndicator::reset()
 void SAL_CALL SfxStatusIndicator::disposing( const lang::EventObject& /*Source*/ )
 {
     SolarMutexGuard aGuard;
+
+    if (xOwner.is())
+        xOwner->removeEventListener(this);
+
     xOwner = nullptr;
     xProgress.clear();
 }

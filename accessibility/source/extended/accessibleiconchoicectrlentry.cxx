@@ -85,6 +85,10 @@ namespace accessibility
     {
         if ( _rSource.Source == m_xParent )
         {
+            Reference< XComponent > xComp(m_xParent, UNO_QUERY);
+            if (xComp.is())
+                xComp->removeEventListener(this);
+
             dispose();
             OSL_ENSURE( !m_xParent.is() && ( m_pIconCtrl == nullptr ), "" );
         }
