@@ -19,6 +19,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Comparator;
+
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -273,6 +278,28 @@ public class FileUtilities {
 
     static String getThumbnailName(File file) {
         return "." + file.getName().split("[.]")[0] + ".png" ;
+    }
+
+    /**
+     * Tries to retrieve the display (which should be the document name)
+     * for the given URI using the given resolver.
+     */
+    public static String retrieveDisplayNameForDocumentUri(ContentResolver resolver, Uri docUri) {
+        String displayName = "";
+        // try to retrieve original file name
+        Cursor cursor = null;
+        try {
+            String[] columns = {OpenableColumns.DISPLAY_NAME};
+            cursor = resolver.query(docUri, columns, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return displayName;
     }
 }
 
