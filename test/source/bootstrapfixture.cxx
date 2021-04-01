@@ -24,7 +24,9 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <unotools/tempfile.hxx>
+#include <vcl/salgtype.hxx>
 #include <vcl/scheduler.hxx>
+#include <vcl/virdev.hxx>
 
 #include <memory>
 #include <cstring>
@@ -235,6 +237,13 @@ IMPL_STATIC_LINK(
         test::BootstrapFixture, ImplInitFilterHdl, ConvertData&, rData, bool)
 {
     return GraphicFilter::GetGraphicFilter().GetFilterCallback().Call( rData );
+}
+
+sal_uInt16 test::BootstrapFixture::getDefaultDeviceBitCount()
+{
+    ScopedVclPtr<VirtualDevice> device
+        = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    return device->GetBitCount();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
