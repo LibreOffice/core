@@ -87,22 +87,22 @@
       <FormatCode>0,00%</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
-      <FormatCode>#.##0 [$BF-813];-#.##0 [$BF-813]</FormatCode>
+      <FormatCode>[$BF-813] #.##0;[$BF-813] -#.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-      <FormatCode>#.##0,00 [$BF-813];-#.##0,00 [$BF-813]</FormatCode>
+      <FormatCode>[$BF-813] #.##0,00;[$BF-813] -#.##0,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
-      <FormatCode>#.##0 [$BF-813];[RED]-#.##0 [$BF-813]</FormatCode>
+      <FormatCode>[$BF-813] #.##0;[RED][$BF-813] -#.##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY" formatindex="15">
-      <FormatCode>#.##0,00 [$BF-813];[RED]-#.##0,00 [$BF-813]</FormatCode>
+      <FormatCode>[$BF-813] #.##0,00;[RED][$BF-813] -#.##0,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
-      <FormatCode>#.##0,00 CCC</FormatCode>
+      <FormatCode>CCC #.##0,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
-      <FormatCode>#.##0,-- [$BF-813];[RED]-#.##0,-- [$BF-813]</FormatCode>
+      <FormatCode>[$BF-813] #.##0,--;[RED][$BF-813] -#.##0,--</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>D/MM/JJ</FormatCode>
