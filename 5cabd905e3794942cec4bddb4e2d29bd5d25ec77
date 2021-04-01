@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8bf92c64_8cabab44",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-04-01T12:44:05Z",
+      "side": 1,
+      "message": "I DO think this is happening now. But it seems like the ilvl and numId have for a long time been duplicated. So I have a followup patch that removes the whole OutlineNumbering() for DOC, just like it is for DOCX.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 46
+      },
+      "revId": "5cabd905e3794942cec4bddb4e2d29bd5d25ec77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
