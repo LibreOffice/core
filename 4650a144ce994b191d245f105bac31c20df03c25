@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "90df13eb_77568e6b",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-04-01T02:05:24Z",
+      "side": 1,
+      "message": "Done, overlooked that documentation.",
+      "parentUuid": "d3e932f1_2748bb01",
+      "range": {
+        "startLine": 99,
+        "startChar": 9,
+        "endLine": 99,
+        "endChar": 25
+      },
+      "revId": "4650a144ce994b191d245f105bac31c20df03c25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0ef5ab54_745ec1a8",
         "filename": "vcl/win/app/fileregistration.cxx",
         "patchSetId": 13
@@ -39,6 +63,24 @@
       "revId": "4650a144ce994b191d245f105bac31c20df03c25",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04d62689_b0589553",
+        "filename": "vcl/win/app/fileregistration.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1003042
+      },
+      "writtenOn": "2021-04-01T02:05:24Z",
+      "side": 1,
+      "message": "Converted uses of \u003cstring\u003e to OUString.  Thanks for the tip.",
+      "parentUuid": "0ef5ab54_745ec1a8",
+      "revId": "4650a144ce994b191d245f105bac31c20df03c25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
