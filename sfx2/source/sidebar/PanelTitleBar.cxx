@@ -46,9 +46,6 @@ PanelTitleBar::PanelTitleBar(const OUString& rsTitle,
 
     UpdateExpandedState();
 
-#ifdef DEBUG
-    SetText(OUString("PanelTitleBar"));
-#endif
 }
 
 void PanelTitleBar::SetTitle(const OUString& rsTitle)
