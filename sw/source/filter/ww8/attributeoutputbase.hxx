@@ -641,7 +641,7 @@ protected:
     ww8::WidthsPtr   GetColumnWidths( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner );
 
     /// RES_RTL_GUTTER
-    virtual void SectionRtlGutter(const SfxBoolItem& /*rRtlGutter*/) {}
+    virtual void SectionRtlGutter(const SfxBoolItem& rRtlGutter) = 0;
 
 public:
     AttributeOutputBase(const OUString& sBaseURL)

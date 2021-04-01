@@ -4368,4 +4368,14 @@ void RtfAttributeOutput::BulletDefinition(int /*nId*/, const Graphic& rGraphic, 
     m_rExport.Strm().WriteCharPtr("}}"); // pict, shppict
 }
 
+void RtfAttributeOutput::SectionRtlGutter(const SfxBoolItem& rRtlGutter)
+{
+    if (!rRtlGutter.GetValue())
+    {
+        return;
+    }
+
+    m_rExport.Strm().WriteCharPtr(LO_STRING_SVTOOLS_RTF_RTLGUTTER);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

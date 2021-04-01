@@ -404,6 +404,23 @@ DECLARE_RTFEXPORT_TEST(testTdf128428_dntblnsbdb, "tdf128428_dntblnsbdb.rtf")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
+{
+    auto verify = [this]() {
+        uno::Reference<beans::XPropertySet> xStandard(
+            getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(getProperty<bool>(xStandard, "RtlGutter"));
+    };
+
+    // Given a document with RTL gutter, when loading it:
+    load(mpTestDocumentPath, "rtl-gutter.rtf");
+    // Then make sure the section's gutter is still RTL:
+    // Without the accompanying fix in place, this test would have failed as \rtlgutter was missing.
+    verify();
+    reload(mpFilter, "rtl-gutter.rtf");
+    verify();
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

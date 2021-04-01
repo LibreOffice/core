@@ -1228,6 +1228,12 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTFKeyword::GUTTERPRL:
             m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_gutterAtTop, new RTFValue(1));
             break;
+        case RTFKeyword::RTLGUTTER:
+        {
+            m_aStates.top().getSectionSprms().set(NS_ooxml::LN_EG_SectPrContents_rtlGutter,
+                                                  new RTFValue(1));
+        }
+        break;
         default:
         {
             SAL_INFO("writerfilter", "TODO handle flag '" << keywordToString(nKeyword) << "'");
