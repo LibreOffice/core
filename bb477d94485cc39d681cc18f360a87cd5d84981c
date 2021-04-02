@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43d45ada_489049b3",
+        "filename": "sc/source/ui/view/cliputil.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2021-04-02T17:36:08Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be MAXTILEDROW instead of MAXROWCOUNT?",
+      "range": {
+        "startLine": 105,
+        "startChar": 110,
+        "endLine": 105,
+        "endChar": 121
+      },
+      "revId": "bb477d94485cc39d681cc18f360a87cd5d84981c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
