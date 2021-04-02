@@ -723,12 +723,7 @@ private:
             Help::ShowQuickHelp(this, aHelpArea, sHelpTip, eHelpWinStyle);
         }
     }
-    virtual FactoryFunction GetUITestFactory() const override
-    {
-        if (m_pFactoryFunction)
-            return m_pFactoryFunction;
-        return Control::GetUITestFactory();
-    }
+    virtual FactoryFunction GetUITestFactory() const override;
 
 public:
     VclDrawingArea(vcl::Window *pParent, WinBits nStyle)

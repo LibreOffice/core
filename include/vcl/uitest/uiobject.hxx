@@ -29,6 +29,7 @@
 class Edit;
 class SpinButton;
 class SpinField;
+class VclDrawingArea;
 class MetricField;
 
 typedef std::map<const OUString, OUString> StringMap;
@@ -493,6 +494,17 @@ private:
     VclPtr<SvTreeListBox> mxTreeList;
 
     SvTreeListEntry* const mpEntry;
+};
+
+class UITEST_DLLPUBLIC DrawingAreaUIObject : public WindowUIObject
+{
+private:
+    VclPtr<VclDrawingArea> mxDrawingArea;
+public:
+    DrawingAreaUIObject(const VclPtr<VclDrawingArea>& rDrawingArea);
+    virtual ~DrawingAreaUIObject() override;
+    virtual void execute(const OUString& rAction, const StringMap& rParameters) override;
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 };
 
 #endif
