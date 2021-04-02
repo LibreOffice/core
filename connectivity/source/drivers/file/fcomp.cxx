@@ -533,8 +533,6 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode const * pPredicateNo
 
 bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
 {
-    static bool bResult;
-
     if (!(rCodeList[0]))
         return true;        // no Predicate
 
@@ -553,7 +551,7 @@ bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
     DBG_ASSERT(m_aStack.empty(), "Stack error");
     DBG_ASSERT(pOperand, "Stack error");
 
-    bResult = pOperand->isValid();
+    const bool bResult = pOperand->isValid();
     if (typeid(OOperandResult) == typeid(*pOperand))
         delete pOperand;
     return bResult;

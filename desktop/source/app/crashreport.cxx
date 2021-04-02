@@ -200,15 +200,7 @@ void CrashReporter::updateMinidumpLocation()
 
 bool CrashReporter::crashReportInfoExists()
 {
-    static bool first = true;
-    static bool InfoExist = false;
-
-    if (first)
-    {
-        first = false;
-        InfoExist = crashreport::readConfig(CrashReporter::getIniFileName(), nullptr);
-    }
-
+    static const bool InfoExist = crashreport::readConfig(CrashReporter::getIniFileName(), nullptr);
     return InfoExist;
 }
 

@@ -77,12 +77,10 @@ DrawModelWrapper::DrawModelWrapper()
 
     //this factory needs to be created before first use of 3D scenes once upon an office runtime
     //@todo in future this should be done by drawing engine itself on demand
-    static bool b3dFactoryInitialized = false;
-    if(!b3dFactoryInitialized)
-    {
+    static const bool b3dFactoryInitialized = [] {
         E3dObjFactory aObjFactory;
-        b3dFactoryInitialized = true;
-    }
+        return true;
+    }();
 
     //Hyphenation and spellchecking
     SdrOutliner& rOutliner = GetDrawOutliner();
