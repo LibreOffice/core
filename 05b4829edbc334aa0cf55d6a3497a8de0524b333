@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53ae9d4c_7f38b262",
+        "filename": "emfio/source/reader/emfreader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-04-02T19:29:51Z",
+      "side": 1,
+      "message": "The nSize calculated here was the (then believed) min size of the rest of the record to be valid. So 16 bytes per nCount iteration. In the new case it looks like the min size should now be 16 bytes per nCountRects iteration *plus* 16 bytes for the left/top/right/bottom bounds ?",
+      "revId": "05b4829edbc334aa0cf55d6a3497a8de0524b333",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
