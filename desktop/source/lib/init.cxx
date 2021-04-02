@@ -3809,6 +3809,17 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
                     aMap["VALUE"] = aMap["data"];
                     pUIWindow->execute(sValue, aMap);
                 }
+                else if (sAction == "click" && aMap["type"] == "drawingarea")
+                {
+                    int separatorPos = aMap["data"].indexOf(';');
+                    if (separatorPos > 0)
+                    {
+                        // x;y
+                        aMap["POSX"] = aMap["data"].copy(0, separatorPos);
+                        aMap["POSY"] = aMap["data"].copy(separatorPos + 1);
+                    }
+                    pUIWindow->execute(sClickAction, aMap);
+                }
                 else
                     pUIWindow->execute(sClickAction, aMap);
             }
