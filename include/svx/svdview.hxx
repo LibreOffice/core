@@ -243,7 +243,7 @@ public:
         const sal_Char* pDebugName) const;
 
     // Interactive Move Action programmaticaly
-    bool MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint);
+    bool MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint, const sal_Int32 aObjectOrdNum = -1);
 };
 
 // First of all the app creates a SdrModel.

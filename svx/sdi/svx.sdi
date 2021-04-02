@@ -12279,7 +12279,7 @@ SfxVoidItem SpellCheckApplySuggestion SID_SPELLCHECK_APPLY_SUGGESTION
 ]
 
 SfxVoidItem MoveShapeHandle SID_MOVE_SHAPE_HANDLE
-(SfxUInt32Item HandleNum FN_PARAM_1 SfxUInt32Item NewPosX FN_PARAM_2 SfxUInt32Item NewPosY FN_PARAM_3)
+(SfxUInt32Item HandleNum FN_PARAM_1 SfxUInt32Item NewPosX FN_PARAM_2 SfxUInt32Item NewPosY FN_PARAM_3 SfxInt32Item OrdNum FN_PARAM_4)
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,
