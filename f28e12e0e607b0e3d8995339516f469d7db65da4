@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "298994b7_353adc36",
+        "filename": "sc/source/ui/namedlg/namedefdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-04-02T11:34:34Z",
+      "side": 1,
+      "message": "Unfortunately, atm we have no error message.",
+      "revId": "f28e12e0e607b0e3d8995339516f469d7db65da4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
