@@ -694,37 +694,51 @@ bool SdrMarkView::dumpGluePointsToJSON(boost::property_tree::ptree& rTree)
         if (rOutDev->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
             bConvertUnit = true;
         const SdrObjList* pOL = mpMarkedPV->GetObjList();
+        if (!pOL)
+            return false;
         const size_t nObjCount = pOL->GetObjCount();
         boost::property_tree::ptree elements;
         for (size_t nObjNum = 0; nObjNum < nObjCount; ++nObjNum)
         {
-            const SdrObject* pObj = pOL->GetObj(nObjNum);
+            SdrObject* pObj = pOL->GetObj(nObjNum);
+            if (!pObj)
+                continue;
+            if (pObj == GetMarkedObjectByIndex(0))
+                continue;
             const SdrGluePointList* pGPL = pObj->GetGluePointList();
-            if (pGPL != nullptr && pGPL->GetCount())
+            bool VertexObject = !(pGPL && pGPL->GetCount());
+            const size_t count = !VertexObject ? pGPL->GetCount() : 4;
+            boost::property_tree::ptree object;
+            boost::property_tree::ptree points;
+            for (size_t i = 0; i < count; ++i)
             {
-                boost::property_tree::ptree object;
-                boost::property_tree::ptree points;
-                for (size_t i = 0; i < pGPL->GetCount(); ++i)
-                {
-                    boost::property_tree::ptree node;
-                    boost::property_tree::ptree point;
-                    const SdrGluePoint& rGP = (*pGPL)[i];
-                    // coordinates are relative to the OBJ snap rect
-                    Point rPoint = pObj->GetSnapRect().TopLeft();
-                    rPoint.Move(rGP.GetPos().getX(), rGP.GetPos().getY());
-                    if (bConvertUnit)
-                        rPoint = OutputDevice::LogicToLogic(rPoint, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
-                    point.put("x", rPoint.getX());
-                    point.put("y", rPoint.getY());
-                    node.put("glueId", rGP.GetId());
-                    node.add_child("point", point);
-                    points.push_back(std::make_pair("", node));
-                }
-                object.put("id", reinterpret_cast<sal_IntPtr>(pObj));
-                object.add_child("gluepoints", points);
-                elements.push_back(std::make_pair("", object));
-                result = true;
+                boost::property_tree::ptree node;
+                boost::property_tree::ptree point;
+                const SdrGluePoint& rGP = !VertexObject ? (*pGPL)[i] : pObj->GetVertexGluePoint(i);
+                Point rPoint = rGP.GetAbsolutePos(*pObj);
+                if (bConvertUnit)
+                    rPoint = OutputDevice::LogicToLogic(rPoint, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                point.put("x", rPoint.getX());
+                point.put("y", rPoint.getY());
+                node.add_child("point", point);
+                points.push_back(std::make_pair("", node));
             }
+            basegfx::B2DVector aGridOffset(0.0, 0.0);
+            Point objLogicRectTopLeft = pObj->GetLogicRect().TopLeft();
+            if(getPossibleGridOffsetForPosition(aGridOffset, basegfx::B2DPoint(objLogicRectTopLeft.X(), objLogicRectTopLeft.Y()), GetSdrPageView()))
+            {
+                Point p(aGridOffset.getX(), aGridOffset.getY());
+                if (bConvertUnit)
+                    p = OutputDevice::LogicToLogic(p, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                boost::property_tree::ptree gridOffset;
+                gridOffset.put("x", p.getX());
+                gridOffset.put("y", p.getY());
+                object.add_child("gridoffset", gridOffset);
+            }
+            object.put("ordnum", pObj->GetOrdNum());
+            object.add_child("gluepoints", points);
+            elements.push_back(std::make_pair("", object));
+            result = true;
         }
         rTree.add_child("shapes", elements);
     }
