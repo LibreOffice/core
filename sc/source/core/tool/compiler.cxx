@@ -2621,7 +2621,14 @@ Label_MaskStateMachine:
                                 if (eState != ssSkipReference)
                                 {
                                     *pSym++ = c;
-                                    *pSym++ = *pSrc++;
+
+                                    if( pSym == &cSymbol[ MAXSTRLEN ] )
+                                    {
+                                        SetError( FormulaError::StringOverflow);
+                                        eState = ssStop;
+                                    }
+                                    else
+                                        *pSym++ = *pSrc++;
                                 }
                                 bAddToSymbol = false;
                             }
