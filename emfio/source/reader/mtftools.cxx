@@ -1188,31 +1188,16 @@ namespace emfio
         mbComplexClip = rClipPoly.count() > 1
             || !basegfx::utils::isRectangle(rClipPoly);
 
-        static bool bEnableComplexClipViaRegion = getenv("SAL_WMF_COMPLEXCLIP_VIA_REGION") != nullptr;
-
-        if (bEnableComplexClipViaRegion)
+        // This makes cases like tdf#45820 work in reasonable time.
+        if (mbComplexClip)
         {
-            //this makes cases like tdf#45820 work in reasonable time, and I feel in theory should
-            //be just fine. In practice I see the output is different so needs work before its the
-            //default, but for file fuzzing it should be good enough
-            if (mbComplexClip)
-            {
-                mpGDIMetaFile->AddAction(
-                    new MetaISectRegionClipRegionAction(
-                        vcl::Region(rClipPoly)));
-                mbComplexClip = false;
-            }
-            else
-            {
-                mpGDIMetaFile->AddAction(
-                    new MetaISectRectClipRegionAction(
-                        vcl::unotools::rectangleFromB2DRectangle(
-                            rClipPoly.getB2DRange())));
-            }
+            mpGDIMetaFile->AddAction(
+                new MetaISectRegionClipRegionAction(
+                    vcl::Region(rClipPoly)));
+            mbComplexClip = false;
         }
         else
         {
-            //normal case
             mpGDIMetaFile->AddAction(
                 new MetaISectRectClipRegionAction(
                     vcl::unotools::rectangleFromB2DRectangle(
