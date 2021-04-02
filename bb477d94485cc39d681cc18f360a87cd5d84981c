@@ -22,6 +22,30 @@
       "revId": "bb477d94485cc39d681cc18f360a87cd5d84981c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fac0d4a_f38f37dc",
+        "filename": "sc/source/ui/view/cliputil.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1002314
+      },
+      "writtenOn": "2021-04-02T18:16:45Z",
+      "side": 1,
+      "message": "I think MAXROWCOUNT because when user selects all rows, on the core side, selected row count is more than tiled row count. It is equal to a value like ~1,500,000.",
+      "parentUuid": "43d45ada_489049b3",
+      "range": {
+        "startLine": 105,
+        "startChar": 110,
+        "endLine": 105,
+        "endChar": 121
+      },
+      "revId": "bb477d94485cc39d681cc18f360a87cd5d84981c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
