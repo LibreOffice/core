@@ -17,6 +17,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/messagedialog.hxx>
+#include <vcl/uitest/uiobject.hxx>
 #include <window.h>
 #include <boost/multi_array.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -2719,6 +2720,13 @@ bool isLayoutEnabled(const vcl::Window *pWindow)
     //Child is a container => we're layout enabled
     const vcl::Window *pChild = pWindow ? pWindow->GetWindow(GetWindowType::FirstChild) : nullptr;
     return pChild && isContainerWindow(*pChild) && !pChild->GetWindow(GetWindowType::Next);
+}
+
+FactoryFunction VclDrawingArea::GetUITestFactory() const
+{
+    if (m_pFactoryFunction)
+        return m_pFactoryFunction;
+    return DrawingAreaUIObject::create;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
