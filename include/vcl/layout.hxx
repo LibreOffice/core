@@ -707,12 +707,7 @@ private:
         }
     }
     virtual void StartDrag(sal_Int8 nAction, const Point& rPosPixel) override;
-    virtual FactoryFunction GetUITestFactory() const override
-    {
-        if (m_pFactoryFunction)
-            return m_pFactoryFunction;
-        return Control::GetUITestFactory();
-    }
+    virtual FactoryFunction GetUITestFactory() const override;
 
 public:
     VclDrawingArea(vcl::Window *pParent, WinBits nStyle)

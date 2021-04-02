@@ -1735,6 +1735,45 @@ DrawingAreaUIObject::~DrawingAreaUIObject()
 {
 }
 
+void DrawingAreaUIObject::execute(const OUString& rAction, const StringMap& rParameters)
+{
+    if (rAction == "CLICK")
+    {
+        // POSX and POSY are percentage of width/height dimensions
+        if (rParameters.find("POSX") != rParameters.end() &&
+            rParameters.find("POSY") != rParameters.end())
+        {
+            auto aPosX = rParameters.find("POSX");
+            auto aPosY = rParameters.find("POSY");
+
+            OString sPosX2 = OUStringToOString(aPosX->second, RTL_TEXTENCODING_ASCII_US);
+            OString sPoxY2 = OUStringToOString(aPosY->second, RTL_TEXTENCODING_ASCII_US);
+
+            if (!sPosX2.isEmpty() && !sPoxY2.isEmpty())
+            {
+                double fPosX = std::atof(sPosX2.getStr());
+                double fPosY = std::atof(sPoxY2.getStr());
+
+                fPosX = fPosX * mxDrawingArea->GetOutputWidthPixel();
+                fPosY = fPosY * mxDrawingArea->GetOutputHeightPixel();
+
+                MouseEvent aEvent(Point(fPosX, fPosY), 1, MouseEventModifiers::NONE, MOUSE_LEFT, 0);
+                mxDrawingArea->MouseButtonDown(aEvent);
+                mxDrawingArea->MouseButtonUp(aEvent);
+            }
+        }
+    }
+    else
+        WindowUIObject::execute(rAction, rParameters);
+}
+
+std::unique_ptr<UIObject> DrawingAreaUIObject::create(vcl::Window* pWindow)
+{
+    VclDrawingArea* pVclDrawingArea = dynamic_cast<VclDrawingArea*>(pWindow);
+    assert(pVclDrawingArea);
+    return std::unique_ptr<UIObject>(new DrawingAreaUIObject(pVclDrawingArea));
+}
+
 IconViewUIObject::IconViewUIObject(const VclPtr<SvTreeListBox>& xIconView):
     TreeListUIObject(xIconView)
 {
