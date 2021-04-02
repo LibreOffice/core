@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "c794996e_a3d210a4",
+        "filename": "include/oox/helper/extrusionpresets.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-04-02T14:25:44Z",
+      "side": 1,
+      "message": "Issue I\u0027m poking at above is that the array size is specified literally both here and in several methods in extrusionpresets.cxx, so if the size of the array ever changes, you have to know/remember to change it in all those places, rather than in just one place. If a std::array was used, you could just call the size() method and then you wouldn\u0027t even need the constant.",
+      "parentUuid": "5474d589_2db7b672",
+      "revId": "007f321b523ee2f1f9dc4b7d7b3f51c7863d8009",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7a66bd9c_57977241",
         "filename": "oox/source/drawingml/shape.cxx",
         "patchSetId": 1
