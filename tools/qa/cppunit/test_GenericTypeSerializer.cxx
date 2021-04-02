@@ -87,10 +87,53 @@ public:
         }
     }
 
+    void testRoundtripFraction()
+    {
+        {
+            Fraction aFraction(2, 5);
+            CPPUNIT_ASSERT_EQUAL(true, aFraction.IsValid());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aFraction.GetNumerator());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aFraction.GetDenominator());
+
+            SvMemoryStream aStream;
+            aStream.Seek(STREAM_SEEK_TO_BEGIN);
+            GenericTypeSerializer aSerializer(aStream);
+            aSerializer.writeFraction(aFraction);
+
+            aStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+            Fraction aReadFraction(1, 2);
+            aSerializer.readFraction(aReadFraction);
+            CPPUNIT_ASSERT_EQUAL(true, aReadFraction.IsValid());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aReadFraction.GetNumerator());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aReadFraction.GetDenominator());
+        }
+        {
+            Fraction aFraction(1, 0);
+            CPPUNIT_ASSERT_EQUAL(false, aFraction.IsValid());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aFraction.GetNumerator());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aFraction.GetDenominator());
+
+            SvMemoryStream aStream;
+            aStream.Seek(STREAM_SEEK_TO_BEGIN);
+            GenericTypeSerializer aSerializer(aStream);
+            aSerializer.writeFraction(aFraction);
+
+            aStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+            Fraction aReadFraction(1, 2);
+            aSerializer.readFraction(aReadFraction);
+            CPPUNIT_ASSERT_EQUAL(false, aReadFraction.IsValid());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aReadFraction.GetNumerator());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aReadFraction.GetDenominator());
+        }
+    }
+
     CPPUNIT_TEST_SUITE(GenericTypeSerializerTest);
     CPPUNIT_TEST(testRoundtripPoint);
     CPPUNIT_TEST(testRoundtripSize);
     CPPUNIT_TEST(testRoundtripRectangle);
+    CPPUNIT_TEST(testRoundtripFraction);
     CPPUNIT_TEST_SUITE_END();
 };
 

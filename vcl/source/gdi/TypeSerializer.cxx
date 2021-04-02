@@ -428,8 +428,8 @@ void TypeSerializer::readMapMode(MapMode& rMapMode)
     mrStream.ReadUInt16(nTmp16);
     MapUnit eUnit = static_cast<MapUnit>(nTmp16);
     readPoint(aOrigin);
-    ReadFraction(mrStream, aScaleX);
-    ReadFraction(mrStream, aScaleY);
+    readFraction(aScaleX);
+    readFraction(aScaleY);
     mrStream.ReadCharAsBool(bSimple);
 
     if (bSimple)
@@ -444,8 +444,8 @@ void TypeSerializer::writeMapMode(MapMode const& rMapMode)
 
     mrStream.WriteUInt16(sal_uInt16(rMapMode.GetMapUnit()));
     writePoint(rMapMode.GetOrigin());
-    WriteFraction(mrStream, rMapMode.GetScaleX());
-    WriteFraction(mrStream, rMapMode.GetScaleY());
+    writeFraction(rMapMode.GetScaleX());
+    writeFraction(rMapMode.GetScaleY());
     mrStream.WriteBool(rMapMode.IsSimple());
 }
 
