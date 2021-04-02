@@ -133,17 +133,12 @@ void SbiStream::MapError()
 // #89378 New semantic: Don't just ask for UNO but for UCB
 bool hasUno()
 {
-    static bool bNeedInit = true;
-    static bool bRetVal = true;
-
-    if( bNeedInit )
-    {
-        bNeedInit = false;
+    static const bool bRetVal = [] {
         Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
         if( !xContext.is() )
         {
             // No service manager at all
-            bRetVal = false;
+            return false;
         }
         else
         {
@@ -152,10 +147,11 @@ bool hasUno()
             if ( !( xManager->queryContentProvider( "file:///" ).is() ) )
             {
                 // No UCB
-                bRetVal = false;
+                return false;
             }
         }
-    }
+        return true;
+    }();
     return bRetVal;
 }
 

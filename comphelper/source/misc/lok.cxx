@@ -214,10 +214,8 @@ bool isAllowlistedLanguage(const OUString& lang)
     (void) lang;
     return true;
 #else
-    static bool bInitialized = false;
-    static std::vector<OUString> aAllowlist;
-    if (!bInitialized)
-    {
+    static const std::vector<OUString> aAllowlist = [] {
+        std::vector<OUString> aList;
         // coverity[tainted_data] - we trust the contents of this variable
         const char* pAllowlist = getenv("LOK_ALLOWLIST_LANGUAGES");
         if (pAllowlist)
@@ -231,16 +229,16 @@ bool isAllowlistedLanguage(const OUString& lang)
                     continue;
 
                 std::cerr << s << " ";
-                aAllowlist.emplace_back(OStringToOUString(s.c_str(), RTL_TEXTENCODING_UTF8));
+                aList.emplace_back(OStringToOUString(s.c_str(), RTL_TEXTENCODING_UTF8));
             }
             std::cerr << std::endl;
         }
 
-        if (aAllowlist.empty())
+        if (aList.empty())
             std::cerr << "No language allowlisted, turning off the language support." << std::endl;
 
-        bInitialized = true;
-    }
+        return aList;
+    }();
 
     if (aAllowlist.empty())
         return false;
