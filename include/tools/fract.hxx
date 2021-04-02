@@ -33,7 +33,6 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Fraction final
     sal_Int32       mnNumerator = 0;
     sal_Int32       mnDenominator = 1;
     bool            mbValid = true;
-
 public:
                     Fraction() = default;
                     Fraction( const Fraction & rFrac ) = default;
@@ -85,8 +84,12 @@ public:
     TOOLS_DLLPUBLIC friend bool operator<=( const Fraction& rVal1, const Fraction& rVal2 );
     TOOLS_DLLPUBLIC friend bool operator>=( const Fraction& rVal1, const Fraction& rVal2 );
 
-    TOOLS_DLLPUBLIC friend SvStream& ReadFraction( SvStream& rIStream, Fraction & rFract );
-    TOOLS_DLLPUBLIC friend SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract );
+    static Fraction createInvalid()
+    {
+        Fraction aFraction;
+        aFraction.mbValid = false;
+        return aFraction;
+    }
 };
 
 TOOLS_DLLPUBLIC Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 );
