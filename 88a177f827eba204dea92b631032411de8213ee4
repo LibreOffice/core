@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ce8c671_5f5b8f31",
+        "filename": "drawinglayer/source/processor2d/vclprocessor2d.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-02T06:08:01Z",
+      "side": 1,
+      "message": "Just curious if it\u0027s intentional that this condition will now not be true for 16-bit formats - or do we not have those in Bitmap(Ex)? (I hope so...)",
+      "revId": "88a177f827eba204dea92b631032411de8213ee4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc3d9c01_985a3562",
+        "filename": "include/vcl/bitmap.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-02T06:08:01Z",
+      "side": 1,
+      "message": "Unrelated to the change:\n\nJust a note that this truncates (and always was that way), so the actual requirement could be possibly 1 byte more?",
+      "revId": "88a177f827eba204dea92b631032411de8213ee4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
