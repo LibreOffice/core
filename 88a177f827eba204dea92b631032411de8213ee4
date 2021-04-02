@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "78b8ebea_08e81375",
+        "filename": "drawinglayer/source/processor2d/vclprocessor2d.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-04-02T07:05:03Z",
+      "side": 1,
+      "message": "We don\u0027t have 16-bit Bitmaps anymore.",
+      "parentUuid": "4ce8c671_5f5b8f31",
+      "revId": "88a177f827eba204dea92b631032411de8213ee4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dc3d9c01_985a3562",
         "filename": "include/vcl/bitmap.hxx",
         "patchSetId": 7
@@ -30,6 +48,24 @@
       "writtenOn": "2021-04-02T06:08:01Z",
       "side": 1,
       "message": "Unrelated to the change:\n\nJust a note that this truncates (and always was that way), so the actual requirement could be possibly 1 byte more?",
+      "revId": "88a177f827eba204dea92b631032411de8213ee4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac4486cb_a8f3eb64",
+        "filename": "include/vcl/bitmap.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-04-02T07:05:03Z",
+      "side": 1,
+      "message": "It would truncate only for 1-bit bitmaps, which we will get rid of. We don\u0027t have 4-bit bitmaps anymore and others are safe, because they are multiples of 8bit.\n\nI hope we don\u0027t use this for anything like buffer allocation... but with bitmap formats there are other restrictions too, like some require scanlines to be 32-bit aligned.",
+      "parentUuid": "dc3d9c01_985a3562",
       "revId": "88a177f827eba204dea92b631032411de8213ee4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
