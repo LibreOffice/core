@@ -612,10 +612,10 @@ endef
 # /opt/lo/bin/ccache /cygdrive/c/PROGRA~2/MICROS~2.0/VC/bin/cl.exe
 
 gb_AUTOCONF_WRAPPERS = \
-	REAL_CC="$(shell cygpath -w $(filter-out -%,$(CC)))" \
+	REAL_CC="$(shell cygpath -w $(filter-out -%,$(UNCACHED_CC)))" \
 	REAL_CC_FLAGS="$(filter -%,$(CC))" \
 	CC="$(call gb_Executable_get_target_for_build,gcc-wrapper)" \
-	REAL_CXX="$(shell cygpath -w $(filter-out -%,$(CXX)))" \
+	REAL_CXX="$(shell cygpath -w $(filter-out -%,$(UNCACHED_CXX)))" \
 	REAL_CXX_FLAGS="$(filter -%,$(CXX))" \
 	CXX="$(call gb_Executable_get_target_for_build,g++-wrapper)" \
     LD="$(shell cygpath -w $(COMPATH)/bin/link.exe) -nologo"

@@ -2939,11 +2939,28 @@ dnl ===================================================================
 dnl  Checks if ccache is available
 dnl ===================================================================
 CCACHE_DEPEND_MODE=
-if test "$_os" = "WINNT"; then
-    # on windows/VC build do not use ccache
+if test "$enable_ccache" = "no"; then
     CCACHE=""
-elif test "$enable_ccache" = "no"; then
-    CCACHE=""
+elif test "$_os" = "WINNT"; then
+    # on windows/VC build do not use ccache - but perhaps sccache is around?
+    case "%$CC%$CXX%" in
+    # If $CC and/or $CXX already contain "sccache" (possibly suffixed with some version number etc),
+    # assume that's good then
+    *%sccache[[-_' ']]*|*/sccache[[-_' ']]*)
+        AC_MSG_NOTICE([sccache seems to be included in a pre-defined CC and/or CXX])
+        CCACHE_DEPEND_MODE=1
+        ;;
+    *)
+        # for sharing code below, reuse CCACHE env var
+        AC_PATH_PROG([CCACHE],[sccache],[not found])
+        if test "$CCACHE" = "not found"; then
+            CCACHE=""
+        else
+            CCACHE=`win_short_path_for_make "$CCACHE"`
+            CCACHE_DEPEND_MODE=1
+        fi
+        ;;
+    esac
 elif test -n "$enable_ccache" -o \( "$enable_ccache" = "" -a "$enable_icecream" != "yes" \); then
     case "%$CC%$CXX%" in
     # If $CC and/or $CXX already contain "ccache" (possibly suffixed with some version number etc),
@@ -2984,7 +3001,8 @@ if test "$enable_ccache" = "nodepend"; then
 fi
 AC_SUBST(CCACHE_DEPEND_MODE)
 
-if test "$CCACHE" != ""; then
+# skip on windows - sccache defaults are good enough
+if test "$CCACHE" != "" -a "$_os" != "WINNT"; then
     ccache_size_msg=$([ccache -s | tail -n 1 | sed 's/^[^0-9]*//' | sed -e 's/\.[0-9]*//'])
     ccache_size=$(echo "$ccache_size_msg" | grep "G" | sed -e 's/G.*$//')
     if test "$ccache_size" = ""; then
@@ -4141,6 +4159,7 @@ AC_SUBST(SHOWINCLUDES_PREFIX)
 #
 # prefix C with ccache if needed
 #
+UNCACHED_CC="$CC"
 if test "$CCACHE" != ""; then
     AC_MSG_CHECKING([whether $CC_BASE is already ccached])
 
@@ -4151,7 +4170,7 @@ if test "$CCACHE" != ""; then
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
                       [use_ccache=yes], [use_ccache=no])
     CFLAGS=$save_CFLAGS
-    if test $use_ccache = yes; then
+    if test $use_ccache = yes -a "${CCACHE/*sccache*/}" != ""; then
         AC_MSG_RESULT([yes])
     else
         CC="$CCACHE $CC"
@@ -6584,6 +6603,7 @@ AC_SUBST(BOOST_CXXFLAGS)
 #
 # prefx CXX with ccache if needed
 #
+UNCACHED_CXX="$CXX"
 if test "$CCACHE" != ""; then
     AC_MSG_CHECKING([whether $CXX_BASE is already ccached])
     AC_LANG_PUSH([C++])
@@ -6592,7 +6612,7 @@ if test "$CCACHE" != ""; then
     dnl an empty program will do, we're checking the compiler flags
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
                       [use_ccache=yes], [use_ccache=no])
-    if test $use_ccache = yes; then
+    if test $use_ccache = yes -a "${CCACHE/*sccache*/}" != ""; then
         AC_MSG_RESULT([yes])
     else
         CXX="$CCACHE $CXX"
@@ -8020,6 +8040,7 @@ AC_SUBST(UCRT_REDISTDIR)
 AC_SUBST(MSVC_DLL_PATH)
 AC_SUBST(MSVC_DLLS)
 AC_SUBST(MSM_PATH)
+
 
 dnl ===================================================================
 dnl Checks for Java
@@ -11966,6 +11987,8 @@ fi
 #
 # prefix LO_CLANG_CC/LO_CLANG_CXX with ccache if needed
 #
+UNCACHED_CLANG_CC="$LO_CLANG_CC"
+UNCACHED_CLANG_CXX="$LO_CLANG_CXX"
 if test "$CCACHE" != "" -a -n "$LO_CLANG_CC" -a -n "$LO_CLANG_CXX"; then
     AC_MSG_CHECKING([whether $LO_CLANG_CC is already ccached])
     AC_LANG_PUSH([C])
@@ -11978,7 +12001,7 @@ if test "$CCACHE" != "" -a -n "$LO_CLANG_CC" -a -n "$LO_CLANG_CXX"; then
                       [use_ccache=yes], [use_ccache=no])
     CFLAGS=$save_CFLAGS
     CC=$save_CC
-    if test $use_ccache = yes; then
+    if test $use_ccache = yes -a "${CCACHE/*sccache*/}" != ""; then
         AC_MSG_RESULT([yes])
     else
         LO_CLANG_CC="$CCACHE $LO_CLANG_CC"
@@ -11995,7 +12018,7 @@ if test "$CCACHE" != "" -a -n "$LO_CLANG_CC" -a -n "$LO_CLANG_CXX"; then
     dnl an empty program will do, we're checking the compiler flags
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
                       [use_ccache=yes], [use_ccache=no])
-    if test $use_ccache = yes; then
+    if test $use_ccache = yes -a "${CCACHE/*sccache*/}" != ""; then
         AC_MSG_RESULT([yes])
     else
         LO_CLANG_CXX="$CCACHE $LO_CLANG_CXX"
@@ -12006,8 +12029,12 @@ if test "$CCACHE" != "" -a -n "$LO_CLANG_CC" -a -n "$LO_CLANG_CXX"; then
     AC_LANG_POP([C++])
 fi
 
+AC_SUBST(UNCACHED_CC)
+AC_SUBST(UNCACHED_CXX)
 AC_SUBST(LO_CLANG_CC)
 AC_SUBST(LO_CLANG_CXX)
+AC_SUBST(UNCACHED_CLANG_CC)
+AC_SUBST(UNCACHED_CLANG_CXX)
 AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_SSE2)
 AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_SSSE3)
 AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_SSE41)
