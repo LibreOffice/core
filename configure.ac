@@ -12481,7 +12481,7 @@ then
         AC_MSG_ERROR([Qt5 libraries not found.  Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
     fi
 
-    QT5_CFLAGS="-I$qt5_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT -DQT_NO_VERSION_TAGGING"
+    QT5_CFLAGS="-I$qt5_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT -DQT_NO_VERSION_TAGGING -DQT_DISABLE_DEPRECATED_BEFORE=0x050F00"
     QT5_CFLAGS=$(printf '%s' "$QT5_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     QT5_LIBS="-L$qt5_libdir -lQt5Core -lQt5Gui -lQt5Widgets -lQt5Network"
 

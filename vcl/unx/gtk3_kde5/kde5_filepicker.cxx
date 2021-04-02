@@ -230,9 +230,7 @@ void KDE5FilePicker::initialize(bool saveDialog)
 
     if (saveDialog)
     {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        _dialog->setConfirmOverwrite(true);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        _dialog->setOption(QFileDialog::DontConfirmOverwrite, false);
         _dialog->setFileMode(QFileDialog::AnyFile);
     }
 }

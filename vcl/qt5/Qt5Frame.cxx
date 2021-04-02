@@ -476,26 +476,20 @@ Size Qt5Frame::CalcDefaultSize()
     if (!m_bFullScreen)
     {
         const QScreen* pScreen = screen();
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         aSize = bestmaxFrameSizeForScreenSize(
-            toSize(pScreen ? pScreen->size() : QApplication::desktop()->screenGeometry(0).size()));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+            toSize(pScreen ? pScreen->size() : QGuiApplication::screens()[0]->geometry().size()));
     }
     else
     {
         if (!m_bFullScreenSpanAll)
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             aSize = toSize(
-                QApplication::desktop()->screenGeometry(maGeometry.nDisplayScreenNumber).size());
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+                QGuiApplication::screens()[maGeometry.nDisplayScreenNumber]->geometry().size());
         }
         else
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            int nLeftScreen = QApplication::desktop()->screenNumber(QPoint(0, 0));
-            SAL_WNODEPRECATED_DECLARATIONS_POP
-            aSize = toSize(QApplication::screens()[nLeftScreen]->availableVirtualGeometry().size());
+            QScreen* screen = QGuiApplication::screenAt(QPoint(0, 0));
+            aSize = toSize(screen->availableVirtualGeometry().size());
         }
     }
 
@@ -1212,22 +1206,20 @@ void Qt5Frame::SetScreenNumber(unsigned int nScreen)
 
         if (!m_bFullScreenSpanAll)
         {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            screenGeo = QApplication::desktop()->screenGeometry(nScreen);
-            SAL_WNODEPRECATED_DECLARATIONS_POP
+            screenGeo = QGuiApplication::screens()[nScreen]->geometry();
             pWindow->setScreen(QApplication::screens()[nScreen]);
         }
         else // special case: fullscreen over all available screens
         {
             assert(m_bFullScreen);
-            // left-most screen
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            int nLeftScreen = QApplication::desktop()->screenNumber(QPoint(0, 0));
-            SAL_WNODEPRECATED_DECLARATIONS_POP
             // entire virtual desktop
-            screenGeo = QApplication::screens()[nLeftScreen]->availableVirtualGeometry();
-            pWindow->setScreen(QApplication::screens()[nLeftScreen]);
+            QScreen* screen = QGuiApplication::screenAt(QPoint(0, 0));
+            screenGeo = screen->availableVirtualGeometry();
+            pWindow->setScreen(screen);
             pWindow->setGeometry(screenGeo);
+            int nLeftScreen = 0;
+            for (; screens[nLeftScreen] != screen; ++nLeftScreen)
+                ;
             nScreen = nLeftScreen;
         }
 
