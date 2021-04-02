@@ -1909,7 +1909,7 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
             DisconnectFromNode(bDragA);
 
             // look for new connection
-            ImpFindConnector(aPointNow, *rDragStat.GetPageView(), *pDraggedOne, pOriginalEdge);
+            ImpFindConnector(aPointNow, *rDragStat.GetPageView(), *pDraggedOne, pOriginalEdge, nullptr, &rDragStat);
 
             if(pDraggedOne->pObj)
             {
@@ -2130,7 +2130,7 @@ PointerStyle SdrEdgeObj::GetCreatePointer() const
     return PointerStyle::DrawConnect;
 }
 
-bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrObjConnection& rCon, const SdrEdgeObj* pThis, OutputDevice* pOut)
+bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrObjConnection& rCon, const SdrEdgeObj* pThis, OutputDevice* pOut, SdrDragStat* pDragStat)
 {
     rCon.ResetVars();
     if (pOut==nullptr) pOut=rPV.GetView().GetFirstOutputDevice();
@@ -2153,11 +2153,29 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
     size_t no=pOL->GetObjCount();
     bool bFnd = false;
     SdrObjConnection aTestCon;
+    bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
+    bool bHasRequestedOrdNum = false;
+    sal_uInt32 requestedOrdNum = -1;
+
+    if (bTiledRendering && pDragStat)
+    {
+        auto& glueOptions = pDragStat->GetGlueOptions();
+        if (glueOptions.objectOrdNum != -1)
+        {
+            requestedOrdNum = static_cast<sal_uInt32>(glueOptions.objectOrdNum);
+            bHasRequestedOrdNum = true;
+        }
+    }
 
     while (no>0 && !bFnd) {
         // issue: group objects on different layers return LayerID=0!
         no--;
         SdrObject* pObj=pOL->GetObj(no);
+        if (bHasRequestedOrdNum)
+        {
+            if (pObj->GetOrdNumDirect() != requestedOrdNum)
+                continue;
+        }
         if (rVisLayer.IsSet(pObj->GetLayer()) && pObj->IsVisible() &&      // only visible objects
             (pThis==nullptr || pObj!=static_cast<SdrObject const *>(pThis))) // don't connect it to itself
         {
