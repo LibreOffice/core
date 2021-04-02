@@ -223,7 +223,7 @@ private:
 
 SubToolbarControl::SubToolbarControl(css::uno::Reference< css::frame::XFrame > xFrame,
                                      weld::Widget* pParent)
-: WeldToolbarPopup(xFrame, pParent, "modules/StartModule/ui/subtoolbar.ui", "subtoolbar")
+: WeldToolbarPopup(xFrame, pParent, "svt/ui/subtoolbar.ui", "subtoolbar")
 , m_xTargetContainer(m_xBuilder->weld_container("container"))
 {
 }

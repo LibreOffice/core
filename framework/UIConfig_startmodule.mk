@@ -13,9 +13,4 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/StartModule,\
 	framework/uiconfig/startmodule/menubar/menubar \
 ))
 
-$(eval $(call gb_UIConfig_add_uifiles,modules/StartModule,\
-	framework/uiconfig/startmodule/ui/managedtoolbar \
-	framework/uiconfig/startmodule/ui/subtoolbar \
-))
-
 # vim: set noet sw=4 ts=4:

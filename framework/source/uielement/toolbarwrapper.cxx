@@ -154,7 +154,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
         }
         else if (weld::TransportAsXWindow* pTunnel = dynamic_cast<weld::TransportAsXWindow*>(xParentWindow.get()))
         {
-            m_xBuilder.reset(Application::CreateBuilder(pTunnel->getWidget(), "modules/StartModule/ui/managedtoolbar.ui"));
+            m_xBuilder.reset(Application::CreateBuilder(pTunnel->getWidget(), "svt/ui/managedtoolbar.ui"));
             m_xTopLevel = m_xBuilder->weld_container("toolbarcontainer");
             m_xWeldedToolbar = m_xBuilder->weld_toolbar("managedtoolbar");
             if ( m_xWeldedToolbar )

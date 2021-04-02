@@ -26,11 +26,13 @@ $(eval $(call gb_UIConfig_add_uifiles,svt,\
 	svtools/uiconfig/ui/javadisableddialog \
 	svtools/uiconfig/ui/listcontrol \
 	svtools/uiconfig/ui/linewindow \
+	svtools/uiconfig/ui/managedtoolbar \
 	svtools/uiconfig/ui/placeedit \
 	svtools/uiconfig/ui/printersetupdialog \
 	svtools/uiconfig/ui/querydeletedialog \
 	svtools/uiconfig/ui/restartdialog \
 	svtools/uiconfig/ui/spinfieldcontrol \
+	svtools/uiconfig/ui/subtoolbar \
 	svtools/uiconfig/ui/tabbuttons \
 	svtools/uiconfig/ui/tabbuttonsmirrored \
 	svtools/uiconfig/ui/tabbaredit \
