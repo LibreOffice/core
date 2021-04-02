@@ -1407,7 +1407,7 @@ bool SdrView::BegMark(const Point& rPnt, bool bAddMark, bool bUnmark)
     }
 }
 
-bool SdrView::MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint)
+bool SdrView::MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint, const sal_Int32 aObjectOrdNum)
 {
     if (GetHdlList().IsMoveOutside())
         return false;
@@ -1419,7 +1419,7 @@ bool SdrView::MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint
     if (pHdl == nullptr)
         return false;
 
-    const SdrDragStat& rDragStat = GetDragStat();
+    SdrDragStat& rDragStat = const_cast<SdrDragStat&>(GetDragStat());
     // start dragging
     BegDragObj(pHdl->GetPos(), nullptr, pHdl, 0);
     if (!IsDragObj())
@@ -1430,15 +1430,22 @@ bool SdrView::MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint
 
     // switch snapping off
     if(!bWasNoSnap)
-        const_cast<SdrDragStat&>(rDragStat).SetNoSnap();
+        rDragStat.SetNoSnap();
     if(bWasSnapEnabled)
         SetSnapEnabled(false);
 
-    MovAction(aEndPoint);
+    if (aObjectOrdNum != -1)
+    {
+        rDragStat.GetGlueOptions().objectOrdNum = aObjectOrdNum;
+    }
+    MovDragObj(aEndPoint);
     EndDragObj();
 
+    // Clear Glue Options
+    rDragStat.GetGlueOptions().objectOrdNum = -1;
+
     if (!bWasNoSnap)
-        const_cast<SdrDragStat&>(rDragStat).SetNoSnap(bWasNoSnap);
+       rDragStat.SetNoSnap(bWasNoSnap);
     if (bWasSnapEnabled)
         SetSnapEnabled(bWasSnapEnabled);
 
