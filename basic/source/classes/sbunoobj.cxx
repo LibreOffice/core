@@ -233,22 +233,18 @@ static Reference< XTypeConverter > const & getTypeConverter_Impl()
 // #111851 factory function to create an OLE object
 SbUnoObject* createOLEObject_Impl( const OUString& aType )
 {
-    static Reference< XMultiServiceFactory > xOLEFactory;
-    static bool bNeedsInit = true;
-
-    if( bNeedsInit )
-    {
-        bNeedsInit = false;
-
+    static const Reference<XMultiServiceFactory> xOLEFactory = [] {
+        Reference<XMultiServiceFactory> xFactory;
         Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
         if( xContext.is() )
         {
             Reference<XMultiComponentFactory> xSMgr = xContext->getServiceManager();
-            xOLEFactory.set(
+            xFactory.set(
                 xSMgr->createInstanceWithContext( "com.sun.star.bridge.OleObjectFactory", xContext ),
                 UNO_QUERY );
         }
-    }
+        return xFactory;
+    }();
 
     SbUnoObject* pUnoObj = nullptr;
     if( xOLEFactory.is() )

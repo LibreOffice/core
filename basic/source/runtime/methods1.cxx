@@ -71,23 +71,16 @@ static Reference< XCalendar4 > const & getLocaleCalendar()
 {
     static Reference< XCalendar4 > xCalendar = LocaleCalendar2::create(getProcessComponentContext());
     static css::lang::Locale aLastLocale;
-    static bool bNeedsInit = true;
+    static bool bNeedsReload = true;
 
     css::lang::Locale aLocale = Application::GetSettings().GetLanguageTag().getLocale();
-    bool bNeedsReload = false;
-    if( bNeedsInit )
-    {
-        bNeedsInit = false;
-        bNeedsReload = true;
-    }
-    else if( aLocale.Language != aLastLocale.Language ||
+    bNeedsReload = bNeedsReload ||
+           ( aLocale.Language != aLastLocale.Language ||
              aLocale.Country  != aLastLocale.Country ||
-             aLocale.Variant  != aLastLocale.Variant )
-    {
-        bNeedsReload = true;
-    }
+             aLocale.Variant  != aLastLocale.Variant );
     if( bNeedsReload )
     {
+        bNeedsReload = false;
         aLastLocale = aLocale;
         xCalendar->loadDefaultCalendar( aLocale );
     }

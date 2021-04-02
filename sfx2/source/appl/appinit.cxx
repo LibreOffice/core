@@ -147,30 +147,28 @@ extern "C" bool GetSpecialCharsForEdit(weld::Widget* i_pParent, const vcl::Font&
 
 static OUString SfxGetSpecialCharsForEdit(weld::Widget* pParent, const vcl::Font& rFont)
 {
-    static bool bDetermineFunction = false;
-    static PFunc_getSpecialCharsForEdit pfunc_getSpecialCharsForEdit = nullptr;
-
-    SolarMutexGuard aGuard;
-    if ( !bDetermineFunction )
-    {
-        bDetermineFunction = true;
-
+    static const PFunc_getSpecialCharsForEdit pfunc_getSpecialCharsForEdit = [] {
+        PFunc_getSpecialCharsForEdit pfunc = nullptr;
 #ifndef DISABLE_DYNLOADING
         osl::Module aMod;
         aMod.loadRelative(&thisModule, SVLIBRARY("cui"));
 
         // get symbol
-        pfunc_getSpecialCharsForEdit = reinterpret_cast<PFunc_getSpecialCharsForEdit>(aMod.getFunctionSymbol("GetSpecialCharsForEdit"));
-        DBG_ASSERT( pfunc_getSpecialCharsForEdit, "GetSpecialCharsForEdit() not found!" );
+        pfunc = reinterpret_cast<PFunc_getSpecialCharsForEdit>(aMod.getFunctionSymbol("GetSpecialCharsForEdit"));
+        DBG_ASSERT( pfunc, "GetSpecialCharsForEdit() not found!" );
         aMod.release();
 #else
-        pfunc_getSpecialCharsForEdit = GetSpecialCharsForEdit;
+        pfunc = GetSpecialCharsForEdit;
 #endif
-    }
+        return pfunc;
+    }();
 
     OUString aRet;
     if ( pfunc_getSpecialCharsForEdit )
+    {
+        SolarMutexGuard aGuard;
         (*pfunc_getSpecialCharsForEdit)( pParent, rFont, aRet );
+    }
     return aRet;
 }
 

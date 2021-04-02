@@ -46,20 +46,17 @@ DlgEdFactory::~DlgEdFactory() COVERITY_NOEXCEPT_FALSE
 
 IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
 {
-    static bool bNeedsInit = true;
-    static uno::Reference< lang::XMultiServiceFactory > xDialogSFact;
-
-    if( bNeedsInit )
-    {
+    static const uno::Reference<lang::XMultiServiceFactory> xDialogSFact = [] {
+        uno::Reference<lang::XMultiServiceFactory> xFact;
         uno::Reference< uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
         uno::Reference< container::XNameContainer > xC( xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.awt.UnoControlDialogModel", xContext ), uno::UNO_QUERY );
         if( xC.is() )
         {
             uno::Reference< lang::XMultiServiceFactory > xModFact( xC, uno::UNO_QUERY );
-            xDialogSFact = xModFact;
+            xFact = xModFact;
         }
-        bNeedsInit = false;
-    }
+        return xFact;
+    }();
 
     SdrObject* pNewObj = nullptr;
     if( (aParams.nInventor == SdrInventor::BasicDialog) &&

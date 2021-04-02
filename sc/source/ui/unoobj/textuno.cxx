@@ -51,18 +51,16 @@ using namespace com::sun::star;
 
 static const SvxItemPropertySet * lcl_GetHdFtPropertySet()
 {
-    static SfxItemPropertyMapEntry aHdFtPropertyMap_Impl[] =
-    {
-        SVX_UNOEDIT_CHAR_PROPERTIES,
-        SVX_UNOEDIT_FONT_PROPERTIES,
-        SVX_UNOEDIT_PARA_PROPERTIES,
-        SVX_UNOEDIT_NUMBERING_PROPERTIE,    // for completeness of service ParagraphProperties
-        { u"", 0, css::uno::Type(), 0, 0 }
-    };
-    static bool bTwipsSet = false;
+    static const SvxItemPropertySet aHdFtPropertySet_Impl = [] {
+        SfxItemPropertyMapEntry aHdFtPropertyMap_Impl[] =
+        {
+            SVX_UNOEDIT_CHAR_PROPERTIES,
+            SVX_UNOEDIT_FONT_PROPERTIES,
+            SVX_UNOEDIT_PARA_PROPERTIES,
+            SVX_UNOEDIT_NUMBERING_PROPERTIE,    // for completeness of service ParagraphProperties
+            { u"", 0, css::uno::Type(), 0, 0 }
+        };
 
-    if (!bTwipsSet)
-    {
         //  modify PropertyMap to include CONVERT_TWIPS flag for font height
         //  (headers/footers are in twips)
 
@@ -79,9 +77,9 @@ static const SvxItemPropertySet * lcl_GetHdFtPropertySet()
 
             ++pEntry;
         }
-        bTwipsSet = true;
-    }
-    static SvxItemPropertySet aHdFtPropertySet_Impl( aHdFtPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
+
+        return SvxItemPropertySet(aHdFtPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool());
+    }();
     return &aHdFtPropertySet_Impl;
 }
 
