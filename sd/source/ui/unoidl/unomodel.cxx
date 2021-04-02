@@ -2264,6 +2264,8 @@ void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate)
     // Duplicating is currently unsupported.
     if (!bDuplicate)
         mpDoc->MovePages(nPosition);
+    else
+        mpDoc->CopyPages(nPosition);
 }
 
 OUString SdXImpressDocument::getPartInfo(int nPart)

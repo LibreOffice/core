@@ -398,6 +398,7 @@ public:
     SAL_DLLPRIVATE void                SetSelected(SdPage* pPage, bool bSelect);
     SAL_DLLPRIVATE void                UnselectAllPages();
     SAL_DLLPRIVATE bool                MovePages(sal_uInt16 nTargetPage);
+    SAL_DLLPRIVATE bool                CopyPages(sal_uInt16 nTargetPage);
 
     SdPage*GetMasterSdPage(sal_uInt16 nPgNum, PageKind ePgKind);
     sal_uInt16 GetMasterSdPageCount(PageKind ePgKind) const;

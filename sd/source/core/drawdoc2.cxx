@@ -836,6 +836,89 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
     return bSomethingHappened;
 }
 
+
+bool SdDrawDocument::CopyPages(sal_uInt16 nTargetPage)
+{
+    SdPage* pPage              = nullptr;
+    sal_uInt16  nPage;
+    sal_uInt16  nNoOfPages         = GetSdPageCount(PageKind::Standard);
+    bool    bSomethingHappened = false;
+
+    const bool bUndo = IsUndoEnabled();
+
+    // List of selected pages
+    std::vector<SdPage*> aPageList;
+    for (nPage = 0; nPage < nNoOfPages; nPage++)
+    {
+        pPage = GetSdPage(nPage, PageKind::Standard);
+
+        if (pPage->IsSelected()) {
+            aPageList.push_back(pPage);
+        }
+    }
+
+    // If necessary, look backwards, until we find a page that wasn't selected
+    nPage = nTargetPage;
+
+    if (nPage != sal_uInt16(-1))
+    {
+        pPage = GetSdPage(nPage, PageKind::Standard);
+        while (nPage > 0 && pPage->IsSelected())
+        {
+            nPage--;
+            pPage = GetSdPage(nPage, PageKind::Standard);
+        }
+
+        if (pPage->IsSelected())
+        {
+            nPage = sal_uInt16(-1);
+        }
+    }
+
+    // Insert before the first page
+    if (nPage == sal_uInt16(-1))
+    {
+        std::vector<SdPage*>::reverse_iterator iter;
+        for (const auto& rpPage : aPageList)
+        {
+            nPage = rpPage->GetPageNum();
+            if (nPage != 0)
+            {
+                SdrModel::CopyPages(nPage, nPage, 1, bUndo, false);
+                bSomethingHappened = true;
+            }
+        }
+    }
+    // Insert after <nPage>
+    else
+    {
+
+        for (const auto& rpPage : aPageList)
+        {
+            nPage = rpPage->GetPageNum();
+            if (nPage > nTargetPage)
+            {
+                nTargetPage += 2;        // Insert _after_ the page
+
+                if (nPage != nTargetPage)
+                {
+
+                    SdrModel::CopyPages(nPage, nPage, nTargetPage, bUndo, false);
+                    bSomethingHappened = true;
+                }
+            }
+            else if (nPage != nTargetPage)
+            {
+                SdrModel::CopyPages(2, 2, 3, bUndo, false);
+                bSomethingHappened = true;
+            }
+            nTargetPage = rpPage->GetPageNum();
+        }
+    }
+
+    return bSomethingHappened;
+}
+
 // Return number of links in sfx2::LinkManager
 sal_uLong SdDrawDocument::GetLinkCount() const
 {
