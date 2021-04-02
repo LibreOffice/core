@@ -23,6 +23,7 @@
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
+#include <tools/fract.hxx>
 
 namespace tools
 {
@@ -47,6 +48,9 @@ public:
 
     void readRectangle(Rectangle& rRectangle);
     void writeRectangle(const Rectangle& rRectangle);
+
+    void readFraction(Fraction& rFraction);
+    void writeFraction(Fraction const& rFraction);
 };
 
 } // end namespace tools

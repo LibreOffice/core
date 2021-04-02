@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/config.h>
-
 #include <tools/GenericTypeSerializer.hxx>
+#include <sal/config.h>
+#include <sal/log.hxx>
 #include <vector>
 
 namespace tools
@@ -178,6 +178,32 @@ void GenericTypeSerializer::writeRectangle(const Rectangle& rRectangle)
         mrStream.WriteInt32(rRectangle.Top());
         mrStream.WriteInt32(rRectangle.Right());
         mrStream.WriteInt32(rRectangle.Bottom());
+    }
+}
+
+void GenericTypeSerializer::readFraction(Fraction& rFraction)
+{
+    sal_Int32 nNumerator(0);
+    sal_Int32 nDenominator(0);
+
+    mrStream.ReadInt32(nNumerator);
+    mrStream.ReadInt32(nDenominator);
+
+    rFraction = Fraction(nNumerator, nDenominator);
+}
+
+void GenericTypeSerializer::writeFraction(Fraction const& rFraction)
+{
+    if (!rFraction.IsValid())
+    {
+        SAL_WARN("tools.fraction", "'writeFraction()' write an invalid fraction");
+        mrStream.WriteInt32(0);
+        mrStream.WriteInt32(0);
+    }
+    else
+    {
+        mrStream.WriteInt32(rFraction.GetNumerator());
+        mrStream.WriteInt32(rFraction.GetDenominator());
     }
 }
 

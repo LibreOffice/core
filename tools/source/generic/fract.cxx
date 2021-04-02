@@ -370,39 +370,6 @@ bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
     return toRational(rVal1.mnNumerator, rVal1.mnDenominator) > toRational(rVal2.mnNumerator, rVal2.mnDenominator);
 }
 
-SvStream& ReadFraction( SvStream& rIStream, Fraction & rFract )
-{
-    sal_Int32 num(0), den(0);
-    rIStream.ReadInt32( num );
-    rIStream.ReadInt32( den );
-    if ( den <= 0 )
-    {
-        SAL_WARN( "tools.fraction", "'ReadFraction()' read an invalid fraction" );
-        rFract.mbValid = false;
-    }
-    else
-    {
-        rFract.mnNumerator = num;
-        rFract.mnDenominator = den;
-        rFract.mbValid = true;
-    }
-    return rIStream;
-}
-
-SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract )
-{
-    if ( !rFract.mbValid )
-    {
-        SAL_WARN( "tools.fraction", "'WriteFraction()' write an invalid fraction" );
-        rOStream.WriteInt32( 0 );
-        rOStream.WriteInt32( -1 );
-    } else {
-        rOStream.WriteInt32( rFract.mnNumerator );
-        rOStream.WriteInt32( rFract.mnDenominator );
-    }
-    return rOStream;
-}
-
 // If dVal > LONG_MAX or dVal < LONG_MIN, the rational throws a boost::bad_rational.
 // Otherwise, dVal and denominator are multiplied by 8, until one of them
 // is larger than (LONG_MAX / 8).
