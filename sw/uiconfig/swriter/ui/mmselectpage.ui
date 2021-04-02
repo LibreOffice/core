@@ -188,9 +188,6 @@
                 <property name="halign">start</property>
                 <property name="margin-start">18</property>
                 <property name="label" translatable="yes" context="mmselectpage|extended_tip|datasourcewarning">Data source of the current document is not registered. Please exchange database.</property>
-                <attributes>
-                  <attribute name="foreground" value="#cccc00000000"/>
-                </attributes>
               </object>
               <packing>
                 <property name="left_attach">0</property>

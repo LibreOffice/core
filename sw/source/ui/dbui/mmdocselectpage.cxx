@@ -52,6 +52,7 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(weld::Container* pPage, SwMai
     , m_xDataSourceWarningFT(m_xBuilder->weld_label("datasourcewarning"))
     , m_xExchangeDatabasePB(m_xBuilder->weld_button("exchangedatabase"))
 {
+    m_xDataSourceWarningFT->set_label_type(weld::LabelType::Warning);
     m_xCurrentDocRB->set_active(true);
     DocSelectHdl(*m_xNewDocRB);
 
