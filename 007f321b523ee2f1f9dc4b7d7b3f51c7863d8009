@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "5474d589_2db7b672",
+        "filename": "include/oox/helper/extrusionpresets.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-02T05:58:50Z",
+      "side": 1,
+      "message": "Using a C-style array, without any constants for its size, is just fine with modern C++. Having something like\n\n    struct Foo { ... };\n    static const Foo sFooArray[] \u003d { {...}, ... };\n    ...\n    for (const auto\u0026 r : sFooArray)\n    {\n       ...\n    }\n\nallows you to iterate over the standard C-style array elements easily, without ever knowing its size. No need to introduce complexity of std::array in this case.",
+      "parentUuid": "4570e7d4_572f0ce7",
+      "revId": "007f321b523ee2f1f9dc4b7d7b3f51c7863d8009",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7a66bd9c_57977241",
         "filename": "oox/source/drawingml/shape.cxx",
         "patchSetId": 1
