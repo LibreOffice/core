@@ -311,6 +311,15 @@ void Primitive2dXmlDump::decomposeAndWrite(
             }
             break;
 
+            case PRIMITIVE2D_ID_GROUPPRIMITIVE2D:
+            {
+                const GroupPrimitive2D& rGroupPrimitive2D = dynamic_cast<const GroupPrimitive2D&>(*pBasePrimitive);
+                rWriter.startElement("group");
+                decomposeAndWrite(rGroupPrimitive2D.getChildren(), rWriter);
+                rWriter.endElement();
+            }
+            break;
+
             case PRIMITIVE2D_ID_MASKPRIMITIVE2D:
             {
                 const MaskPrimitive2D& rMaskPrimitive2D = dynamic_cast<const MaskPrimitive2D&>(*pBasePrimitive);
