@@ -29,6 +29,7 @@
 #include <window.h>
 #include <boost/multi_array.hpp>
 #include <vcl/toolkit/vclmedit.hxx>
+#include <vcl/uitest/uiobject.hxx>
 #include <sal/log.hxx>
 #include <tools/json_writer.hxx>
 
@@ -3003,6 +3004,13 @@ void VclDrawingArea::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         rJsonWriter.put("image", aBuffer.makeStringAndClear());
     }
     rJsonWriter.put("text", GetQuickHelpText());
+}
+
+FactoryFunction VclDrawingArea::GetUITestFactory() const
+{
+    if (m_pFactoryFunction)
+        return m_pFactoryFunction;
+    return DrawingAreaUIObject::create;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

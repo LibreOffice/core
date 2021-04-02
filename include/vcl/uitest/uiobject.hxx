@@ -555,6 +555,8 @@ protected:
 public:
     DrawingAreaUIObject(const VclPtr<vcl::Window>& rDrawingArea);
     virtual ~DrawingAreaUIObject() override;
+    virtual void execute(const OUString& rAction, const StringMap& rParameters) override;
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 };
 
 #endif
