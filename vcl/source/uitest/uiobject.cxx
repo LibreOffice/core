@@ -785,6 +785,7 @@ StringMap EditUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
     aMap["MaxTextLength"] = OUString::number(mxEdit->GetMaxTextLen());
+    aMap["QuickHelpText"] = mxEdit->GetQuickHelpText();
     aMap["SelectedText"] = mxEdit->GetSelected();
     aMap["Text"] = mxEdit->GetText();
 

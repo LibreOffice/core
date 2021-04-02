@@ -120,6 +120,9 @@ bool ScNameDefDlg::IsNameValid()
     OUString aScope = m_xLbScope->get_active_text();
     OUString aName = m_xEdName->get_text();
 
+    bool bIsNameValid = true;
+    OUString aHelpText = maStrInfoDefault;
+
     ScRangeName* pRangeName = nullptr;
     if(aScope == maGlobalNameStr)
     {
@@ -131,46 +134,39 @@ bool ScNameDefDlg::IsNameValid()
     }
 
     ScRangeData::IsNameValidType eType;
-    m_xFtInfo->set_label_type(weld::LabelType::Normal);
     if ( aName.isEmpty() )
     {
-        m_xBtnAdd->set_sensitive(false);
-        m_xFtInfo->set_label(maStrInfoDefault);
-        return false;
+        bIsNameValid = false;
     }
     else if ((eType = ScRangeData::IsNameValid(aName, mrDoc))
              != ScRangeData::IsNameValidType::NAME_VALID)
     {
-        m_xFtInfo->set_label_type(weld::LabelType::Error);
         if (eType == ScRangeData::IsNameValidType::NAME_INVALID_BAD_STRING)
         {
-            m_xFtInfo->set_label(maErrInvalidNameStr);
+            aHelpText = maErrInvalidNameStr;
         }
         else if (eType == ScRangeData::IsNameValidType::NAME_INVALID_CELL_REF)
         {
-            m_xFtInfo->set_label(maErrInvalidNameCellRefStr);
+            aHelpText = maErrInvalidNameCellRefStr;
         }
-        m_xBtnAdd->set_sensitive(false);
-        return false;
+        bIsNameValid = false;
     }
     else if (pRangeName->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(aName)))
     {
-        m_xFtInfo->set_label_type(weld::LabelType::Error);
-        m_xFtInfo->set_label(maErrNameInUse);
-        m_xBtnAdd->set_sensitive(false);
-        return false;
+        aHelpText = maErrNameInUse;
+        bIsNameValid = false;
     }
 
     if (!IsFormulaValid())
     {
-        m_xFtInfo->set_label_type(weld::LabelType::Error);
-        m_xBtnAdd->set_sensitive(false);
-        return false;
+        bIsNameValid = false;
     }
 
-    m_xFtInfo->set_label(maStrInfoDefault);
-    m_xBtnAdd->set_sensitive(true);
-    return true;
+    m_xEdName->set_tooltip_text(aHelpText);
+    m_xEdName->set_message_type(bIsNameValid || aName.isEmpty() ? weld::EntryMessageType::Normal
+                                                                : weld::EntryMessageType::Error);
+    m_xBtnAdd->set_sensitive(bIsNameValid);
+    return bIsNameValid;
 }
 
 void ScNameDefDlg::AddPushed()
