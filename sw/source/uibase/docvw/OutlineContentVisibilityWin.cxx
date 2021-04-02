@@ -49,9 +49,6 @@ SwOutlineContentVisibilityWin::SwOutlineContentVisibilityWin(SwEditWin* pEditWin
     m_xShowBtn->connect_mouse_press(LINK(this, SwOutlineContentVisibilityWin, MousePressHdl));
     m_xHideBtn->connect_mouse_press(LINK(this, SwOutlineContentVisibilityWin, MousePressHdl));
 
-    m_xShowBtn->connect_key_press(LINK(this, SwOutlineContentVisibilityWin, KeyInputHdl));
-    m_xHideBtn->connect_key_press(LINK(this, SwOutlineContentVisibilityWin, KeyInputHdl));
-
     m_aDelayTimer.SetTimeout(25);
     m_aDelayTimer.SetInvokeHandler(LINK(this, SwOutlineContentVisibilityWin, DelayAppearHandler));
 }
@@ -87,8 +84,6 @@ void SwOutlineContentVisibilityWin::SetSymbol(ButtonSymbol eStyle)
     bool bShow = eStyle == ButtonSymbol::SHOW;
     bool bHide = eStyle == ButtonSymbol::HIDE;
 
-    bool bControlHasFocus = ControlHasFocus();
-
     // disable mouse move for the hidden button so we don't get mouse
     // leave events we don't care about when we swap buttons
     m_xShowBtn->connect_mouse_move(Link<const MouseEvent&, bool>());
@@ -104,11 +99,7 @@ void SwOutlineContentVisibilityWin::SetSymbol(ButtonSymbol eStyle)
         pButton = m_xHideBtn.get();
     InitControlBase(pButton);
     if (pButton)
-    {
         pButton->connect_mouse_move(LINK(this, SwOutlineContentVisibilityWin, MouseMoveHdl));
-        if (bControlHasFocus)
-            pButton->grab_focus();
-    }
 }
 
 void SwOutlineContentVisibilityWin::Set()
@@ -194,9 +185,6 @@ void SwOutlineContentVisibilityWin::ToggleOutlineContentVisibility(const bool bS
     if (GetEditWin()->GetView().IsDrawMode())
         GetEditWin()->GetView().LeaveDrawCreate();
     rSh.EnterStdMode();
-    // set cursor position here so Navigator tracks outline
-    // when doc changed broadcast message is sent in toggle function
-    rSh.GotoOutline(m_nOutlinePos);
     if (rSh.GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
         rSh.ToggleOutlineContentVisibility(m_nOutlinePos);
     else if (bSubs)
@@ -216,40 +204,16 @@ void SwOutlineContentVisibilityWin::ToggleOutlineContentVisibility(const bool bS
     }
     else
         rSh.ToggleOutlineContentVisibility(m_nOutlinePos);
-    if (!m_bDestroyed)
-    {
-        SetSymbol(rSh.IsOutlineContentVisible(m_nOutlinePos) ? ButtonSymbol::HIDE
-                                                             : ButtonSymbol::SHOW);
-    }
+    // set cursor position to the toggled outline node
+    rSh.GotoOutline(m_nOutlinePos);
     rSh.LockView(false);
-}
-
-IMPL_LINK(SwOutlineContentVisibilityWin, KeyInputHdl, const KeyEvent&, rKEvt, bool)
-{
-    bool bConsumed = false;
-
-    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
-    if (!aKeyCode.GetModifier()
-        && (aKeyCode.GetCode() == KEY_RETURN || aKeyCode.GetCode() == KEY_SPACE))
-    {
-        ToggleOutlineContentVisibility(aKeyCode.GetCode() == KEY_RETURN);
-        bConsumed = true;
-    }
-    else if (aKeyCode.GetCode() == KEY_ESCAPE)
-    {
-        Hide();
-        GrabFocusToDocument();
-        bConsumed = true;
-    }
-
-    return bConsumed;
 }
 
 IMPL_LINK(SwOutlineContentVisibilityWin, MouseMoveHdl, const MouseEvent&, rMEvt, bool)
 {
     if (rMEvt.IsLeaveWindow())
     {
-        if (GetSymbol() != ButtonSymbol::SHOW)
+        if (GetSymbol() == ButtonSymbol::HIDE)
         {
             // MouseMove event may not be seen by the edit window for example when move is to
             // a show button or when move is outside of the edit window.
@@ -261,7 +225,6 @@ IMPL_LINK(SwOutlineContentVisibilityWin, MouseMoveHdl, const MouseEvent&, rMEvt,
                 || nY >= GetEditWin()->GetSizePixel().Height())
                 Hide();
         }
-        GrabFocusToDocument();
     }
     else if (rMEvt.IsEnterWindow())
     {
@@ -269,16 +232,25 @@ IMPL_LINK(SwOutlineContentVisibilityWin, MouseMoveHdl, const MouseEvent&, rMEvt,
             m_aDelayTimer.Stop();
         // bring button to top and grab focus
         SetZOrder(this, ZOrderFlags::First);
-        if (!ControlHasFocus())
-            GrabFocus();
     }
-    GetEditWin()->SetSavedOutlineFrame(const_cast<SwFrame*>(GetFrame()));
     return false;
 }
 
 IMPL_LINK(SwOutlineContentVisibilityWin, MousePressHdl, const MouseEvent&, rMEvt, bool)
 {
+    Hide();
+    // Crash occurs if control does not have focus when toggling from hidden to shown.
+    // Seems to happen due to the control being disposed in the toggle process.
+    // Does NOT crash in debugger with GrabFocus and GrabFocusToDocument commented out.
+    // DOES crash in debugger on GrabFocusToDocument when GrabFocus is commented out.
+    // Until light is shed on why this happens, prevent crash by doing the following:
+    //  1) grab focus to the control
+    //  2) toggle content visibility
+    //  3) grab focus to the document
+    if (!ControlHasFocus())
+        GrabFocus();
     ToggleOutlineContentVisibility(rMEvt.IsRight());
+    GrabFocusToDocument();
     return false;
 }
 
@@ -292,10 +264,7 @@ IMPL_LINK_NOARG(SwOutlineContentVisibilityWin, DelayAppearHandler, Timer*, void)
         return;
     }
     if (GetEditWin()->GetSavedOutlineFrame() == GetFrame())
-    {
         Show();
-        //GrabFocus(); commented out for tdf#140567
-    }
     m_aDelayTimer.Stop();
 }
 

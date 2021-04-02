@@ -55,7 +55,6 @@ private:
     DECL_LINK(DelayAppearHandler, Timer*, void);
     DECL_LINK(MousePressHdl, const MouseEvent&, bool);
     DECL_LINK(MouseMoveHdl, const MouseEvent&, bool);
-    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
