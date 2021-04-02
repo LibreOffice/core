@@ -32,6 +32,7 @@
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <drawinglayer/processor2d/textlayoutdevice.hxx>
 
 #include <drawinglayer/converters.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -118,7 +119,8 @@ namespace drawinglayer::unorenderer
                     }
 
                     const geometry::ViewInformation2D aViewInformation2D(aViewInformationSequence);
-                    primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+                    auto pTextLayouter = std::make_shared<drawinglayer::processor2d::TextLayouterDevice>();
+                    primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D, pTextLayouter);
                     const sal_uInt32 nDiscreteWidth(basegfx::fround(o3tl::convert(fWidth, eRangeUnit, o3tl::Length::in) * DPI_X));
                     const sal_uInt32 nDiscreteHeight(basegfx::fround(o3tl::convert(fHeight, eRangeUnit, o3tl::Length::in) * DPI_Y));
 

@@ -23,6 +23,8 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <rtl/ustring.hxx>
 
+#include <basegfx/text/ITextLayouter.hxx>
+
 namespace drawinglayer::attribute
 {
 class ImpFontAttribute;
@@ -35,7 +37,7 @@ namespace drawinglayer::attribute
     This attribute class is able to hold all parameters needed/used
     to completely define the parametrisation of a text portion.
  */
-class DRAWINGLAYER_DLLPUBLIC FontAttribute
+class DRAWINGLAYER_DLLPUBLIC FontAttribute : public gfx::IFontAttribute
 {
 public:
     typedef o3tl::cow_wrapper<ImpFontAttribute> ImplType;
@@ -50,26 +52,26 @@ public:
                   bool bMonospaced = false, bool bOutline = false, bool bRTL = false,
                   bool bBiDiStrong = false);
     FontAttribute();
-    FontAttribute(const FontAttribute&);
-    FontAttribute(FontAttribute&&);
-    FontAttribute& operator=(const FontAttribute&);
-    FontAttribute& operator=(FontAttribute&&);
-    ~FontAttribute();
+    FontAttribute(const FontAttribute& rOther);
+    FontAttribute(FontAttribute&& rOther) noexcept;
+    FontAttribute& operator=(const FontAttribute& rOther);
+    FontAttribute& operator=(FontAttribute&& rOther) noexcept;
+    virtual ~FontAttribute();
 
     // compare operator
     bool operator==(const FontAttribute& rCandidate) const;
 
     /// data read access
-    const OUString& getFamilyName() const;
-    const OUString& getStyleName() const;
-    sal_uInt16 getWeight() const;
-    bool getSymbol() const;
-    bool getVertical() const;
-    bool getItalic() const;
-    bool getOutline() const;
-    bool getRTL() const;
-    bool getBiDiStrong() const;
-    bool getMonospaced() const;
+    const OUString& getFamilyName() const override;
+    const OUString& getStyleName() const override;
+    sal_uInt16 getWeight() const override;
+    bool getSymbol() const override;
+    bool getVertical() const override;
+    bool getItalic() const override;
+    bool getOutline() const override;
+    bool getRTL() const override;
+    bool getBiDiStrong() const override;
+    bool getMonospaced() const override;
 };
 } // end of namespace drawinglayer::attribute
 

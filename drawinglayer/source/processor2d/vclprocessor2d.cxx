@@ -907,7 +907,8 @@ void VclProcessor2D::RenderTransformPrimitive2D(
         getViewInformation2D().getViewTransformation(), getViewInformation2D().getViewport(),
         getViewInformation2D().getVisualizedPage(), getViewInformation2D().getViewTime(),
         getViewInformation2D().getExtendedInformationSequence());
-    primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+    primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D,
+                                                        maVisitingParameters.getTextLayouter());
     updateVisitingParameters(aVisitingParameters);
 
     // process content
@@ -931,7 +932,8 @@ void VclProcessor2D::RenderPagePreviewPrimitive2D(
         getViewInformation2D().getViewTransformation(), getViewInformation2D().getViewport(),
         rPagePreviewCandidate.getXDrawPage(), getViewInformation2D().getViewTime(),
         getViewInformation2D().getExtendedInformationSequence());
-    primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+    primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D,
+                                                        maVisitingParameters.getTextLayouter());
     updateVisitingParameters(aVisitingParameters);
 
     // process decomposed content

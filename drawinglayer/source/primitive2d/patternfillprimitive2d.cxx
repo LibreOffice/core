@@ -107,7 +107,7 @@ namespace drawinglayer::primitive2d
                 const primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
 
                 const geometry::ViewInformation2D aViewInformation2D;
-                primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+                primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D, rParameters.getTextLayouter());
 
                 const BitmapEx aBitmapEx(
                     convertToBitmapEx(

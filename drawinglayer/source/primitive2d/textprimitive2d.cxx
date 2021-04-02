@@ -111,9 +111,10 @@ void TextSimplePortionPrimitive2D::getTextOutlinesAndTransformation(
     const basegfx::B2DVector aFontScale(getCorrectedScaleAndFontScale(aScale));
 
     // prepare textlayoutdevice
-    drawinglayer::processor2d::TextLayouterDevice aTextLayouter;
-    aTextLayouter.setFontAttribute(getFontAttribute(), aFontScale.getX(), aFontScale.getY(),
-                                   getLocale());
+    std::unique_ptr<gfx::ITextLayouter> pTextLayouter
+        = std::make_unique<drawinglayer::processor2d::TextLayouterDevice>();
+    pTextLayouter->setFontAttribute(getFontAttribute(), aFontScale.getX(), aFontScale.getY(),
+                                    getLocale());
 
     // When getting outlines from stretched text (aScale.getX() != 1.0) it
     // is necessary to inverse-scale the DXArray (if used) to not get the
@@ -129,14 +130,14 @@ void TextSimplePortionPrimitive2D::getTextOutlinesAndTransformation(
         }
 
         // get the text outlines
-        aTextLayouter.getTextOutlines(rTarget, getText(), getTextPosition(), getTextLength(),
-                                      aScaledDXArray);
+        pTextLayouter->getTextOutlines(rTarget, getText(), getTextPosition(), getTextLength(),
+                                       aScaledDXArray);
     }
     else
     {
         // get the text outlines
-        aTextLayouter.getTextOutlines(rTarget, getText(), getTextPosition(), getTextLength(),
-                                      getDXArray());
+        pTextLayouter->getTextOutlines(rTarget, getText(), getTextPosition(), getTextLength(),
+                                       getDXArray());
     }
 
     // create primitives for the outlines

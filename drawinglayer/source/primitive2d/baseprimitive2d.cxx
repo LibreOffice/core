@@ -23,7 +23,10 @@
 #include <drawinglayer/primitive2d/Tools.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/utils/canvastools.hxx>
+#include <basegfx/text/UnoTextLayouter.hxx>
 #include <comphelper/sequence.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <com/sun/star/graphic/XTextLayouter.hpp>
 
 using namespace css;
 
@@ -85,12 +88,39 @@ void BasePrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& /*rVis
 {
 }
 
+namespace
+{
+std::shared_ptr<gfx::ITextLayouter>
+getTextLayouter(const uno::Sequence<beans::PropertyValue>& rProperties)
+{
+    std::shared_ptr<gfx::ITextLayouter> pTextLayouter;
+
+    if (!rProperties.hasElements())
+        return pTextLayouter;
+
+    for (const beans::PropertyValue& rProperty : rProperties)
+    {
+        if (rProperty.Name == "TextLayouter")
+        {
+            uno::Reference<graphic::XTextLayouter> xTextLayouter;
+            rProperty.Value >>= xTextLayouter;
+            if (xTextLayouter.is())
+                pTextLayouter = gfx::getTextLayouterFromUno(xTextLayouter);
+            return pTextLayouter;
+        }
+    }
+    return pTextLayouter;
+}
+
+} // end anonymous namespace
+
 css::uno::Sequence<::css::uno::Reference<::css::graphic::XPrimitive2D>> SAL_CALL
 BasePrimitive2D::getDecomposition(const uno::Sequence<beans::PropertyValue>& rViewParameters)
 {
     Primitive2DContainer aContainer;
     geometry::ViewInformation2D aViewInformation2D(rViewParameters);
-    VisitingParameters aParameters(aViewInformation2D);
+    std::shared_ptr<gfx::ITextLayouter> pTextLayouter = getTextLayouter(rViewParameters);
+    VisitingParameters aParameters(aViewInformation2D, pTextLayouter);
     get2DDecomposition(aContainer, aParameters);
     return comphelper::containerToSequence(aContainer);
 }
@@ -99,7 +129,8 @@ css::geometry::RealRectangle2D SAL_CALL
 BasePrimitive2D::getRange(const uno::Sequence<beans::PropertyValue>& rViewParameters)
 {
     geometry::ViewInformation2D aViewInformation2D(rViewParameters);
-    VisitingParameters aParameters(aViewInformation2D);
+    std::shared_ptr<gfx::ITextLayouter> pTextLayouter = getTextLayouter(rViewParameters);
+    VisitingParameters aParameters(aViewInformation2D, pTextLayouter);
     return basegfx::unotools::rectangle2DFromB2DRectangle(getB2DRange(aParameters));
 }
 

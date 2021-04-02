@@ -25,6 +25,7 @@
 #include <vector>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/svapp.hxx>
+#include <basegfx/text/ITextLayouter.hxx>
 
 // predefines
 class VirtualDevice;
@@ -58,7 +59,7 @@ namespace drawinglayer::processor2d
     When in the future FontHandling may move to an own library independent
     from VCL, primitives will be prepared.
  */
-class DRAWINGLAYER_DLLPUBLIC TextLayouterDevice
+class DRAWINGLAYER_DLLPUBLIC TextLayouterDevice : public gfx::ITextLayouter
 {
     /// internally used VirtualDevice
     SolarMutexGuard maSolarGuard;
@@ -71,6 +72,10 @@ public:
 
     /// tooling methods
     void setFont(const vcl::Font& rFont);
+
+    void setFontAttribute(const gfx::IFontAttribute& rFontAttribute, double fFontScaleX,
+                          double fFontScaleY, const css::lang::Locale& rLocale) override;
+
     void setFontAttribute(const attribute::FontAttribute& rFontAttribute, double fFontScaleX,
                           double fFontScaleY, const css::lang::Locale& rLocale);
 
@@ -84,7 +89,7 @@ public:
     double getTextWidth(const OUString& rText, sal_uInt32 nIndex, sal_uInt32 nLength) const;
 
     void getTextOutlines(basegfx::B2DPolyPolygonVector&, const OUString& rText, sal_uInt32 nIndex,
-                         sal_uInt32 nLength, const ::std::vector<double>& rDXArray) const;
+                         sal_uInt32 nLength, const ::std::vector<double>& rDXArray) const override;
 
     basegfx::B2DRange getTextBoundRect(const OUString& rText, sal_uInt32 nIndex,
                                        sal_uInt32 nLength) const;
@@ -111,7 +116,7 @@ public:
             fFontScaleY == fFontScaleX
          */
 vcl::Font DRAWINGLAYER_DLLPUBLIC getVclFontFromFontAttribute(
-    const attribute::FontAttribute& rFontAttribute, double fFontScaleX, double fFontScaleY,
+    const gfx::IFontAttribute& rFontAttribute, double fFontScaleX, double fFontScaleY,
     double fFontRotation, const css::lang::Locale& rLocale);
 
 /** Generate FontAttribute DataSet derived from the given VCL-Font.

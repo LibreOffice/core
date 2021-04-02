@@ -164,6 +164,14 @@ TextLayouterDevice::~TextLayouterDevice() COVERITY_NOEXCEPT_FALSE { releaseGloba
 
 void TextLayouterDevice::setFont(const vcl::Font& rFont) { mrDevice.SetFont(rFont); }
 
+void TextLayouterDevice::setFontAttribute(const gfx::IFontAttribute& rFontAttribute,
+                                          double fFontScaleX, double fFontScaleY,
+                                          const css::lang::Locale& rLocale)
+{
+    auto rFontA = dynamic_cast<attribute::FontAttribute const&>(rFontAttribute);
+    setFontAttribute(rFontA, fFontScaleX, fFontScaleY, rLocale);
+}
+
 void TextLayouterDevice::setFontAttribute(const attribute::FontAttribute& rFontAttribute,
                                           double fFontScaleX, double fFontScaleY,
                                           const css::lang::Locale& rLocale)
@@ -342,8 +350,8 @@ std::vector<double> TextLayouterDevice::getCaretPositions(const OUString& rText,
 
 // helper methods for vcl font handling
 
-vcl::Font getVclFontFromFontAttribute(const attribute::FontAttribute& rFontAttribute,
-                                      double fFontScaleX, double fFontScaleY, double fFontRotation,
+vcl::Font getVclFontFromFontAttribute(const gfx::IFontAttribute& rFontAttribute, double fFontScaleX,
+                                      double fFontScaleY, double fFontRotation,
                                       const css::lang::Locale& rLocale)
 {
     // detect FontScaling

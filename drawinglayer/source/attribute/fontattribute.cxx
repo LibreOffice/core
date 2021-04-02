@@ -112,15 +112,31 @@ FontAttribute::FontAttribute()
 {
 }
 
-FontAttribute::FontAttribute(const FontAttribute&) = default;
+FontAttribute::FontAttribute(const FontAttribute& rOther)
+    : mpFontAttribute(rOther.mpFontAttribute)
+{
+}
 
-FontAttribute::FontAttribute(FontAttribute&&) = default;
+FontAttribute::FontAttribute(FontAttribute&& rOther) noexcept
+    : mpFontAttribute(std::move(rOther.mpFontAttribute))
+{
+}
 
-FontAttribute::~FontAttribute() = default;
+FontAttribute::~FontAttribute() {}
 
-FontAttribute& FontAttribute::operator=(const FontAttribute&) = default;
+FontAttribute& FontAttribute::operator=(const FontAttribute& rOther)
+{
+    mpFontAttribute = rOther.mpFontAttribute;
 
-FontAttribute& FontAttribute::operator=(FontAttribute&&) = default;
+    return *this;
+}
+
+FontAttribute& FontAttribute::operator=(FontAttribute&& rOther) noexcept
+{
+    mpFontAttribute = std::move(rOther.mpFontAttribute);
+
+    return *this;
+}
 
 bool FontAttribute::operator==(const FontAttribute& rCandidate) const
 {

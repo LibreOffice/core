@@ -94,7 +94,7 @@ namespace drawinglayer::processor2d
                         getViewInformation2D().getViewTime(),
                         getViewInformation2D().getExtendedInformationSequence());
 
-                    primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D);
+                    primitive2d::VisitingParameters aVisitingParameters(aViewInformation2D, maVisitingParameters.getTextLayouter());
                     updateVisitingParameters(aVisitingParameters);
 
                     // process content

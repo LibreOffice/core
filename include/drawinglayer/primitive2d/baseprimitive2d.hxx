@@ -30,6 +30,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
+#include <basegfx/text/ITextLayouter.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
 
@@ -39,10 +40,13 @@ class DRAWINGLAYERCORE_DLLPUBLIC VisitingParameters
 {
 private:
     geometry::ViewInformation2D maViewInformation;
+    std::shared_ptr<gfx::ITextLayouter> mpTextLayouter;
 
 public:
-    explicit VisitingParameters(const geometry::ViewInformation2D& rViewInformation)
+    explicit VisitingParameters(geometry::ViewInformation2D const& rViewInformation,
+                                std::shared_ptr<gfx::ITextLayouter> const& pTextLayouter)
         : maViewInformation(rViewInformation)
+        , mpTextLayouter(pTextLayouter)
     {
     }
 
@@ -54,6 +58,8 @@ public:
     }
 
     const geometry::ViewInformation2D& getViewInformation() const { return maViewInformation; }
+
+    const std::shared_ptr<gfx::ITextLayouter>& getTextLayouter() const { return mpTextLayouter; }
 };
 
 typedef cppu::WeakComponentImplHelper<css::graphic::XPrimitive2D, css::util::XAccounting>

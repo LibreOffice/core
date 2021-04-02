@@ -24,7 +24,7 @@
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-
+#include <basegfx/text/ITextLayouter.hxx>
 
 namespace drawinglayer::processor2d
     {
