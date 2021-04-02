@@ -79,6 +79,16 @@ class SVXCORE_DLLPUBLIC SdrDragStat final
 
     sal_Int32 GetPrevPos() const { return mvPnts.size()-(mvPnts.size()>1 ? 2 : 1); }
 
+    // This is passed all the way through to ApplySpecialDrag of the Edge Object
+    // For LOK, we cannot really specify which glue point to select by default
+    // It selects the nearest glue points after DragEnd event.
+    // When multiple objects are on top of each other or somehow their glue points
+    // collide, the glue point is selected from the lowest order numbered object
+    // We can pass the ord number information inside the draginfo and choose the correct shape
+    struct {
+        sal_Int32 objectOrdNum = -1;
+    } mGlueOptions;
+
 public:
     SdrDragStat()                                    { Reset(); }
     ~SdrDragStat();
@@ -158,6 +168,8 @@ public:
 
     // Also considering 1stPointAsCenter
     void         TakeCreateRect(tools::Rectangle& rRect) const;
+
+    auto&        GetGlueOptions() { return mGlueOptions; }
 };
 
 #endif // INCLUDED_SVX_SVDDRAG_HXX
