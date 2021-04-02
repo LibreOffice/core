@@ -39,16 +39,18 @@ class InvalidNames(UITestCase):
                 select_all(xEdit)
                 type_text(xEdit, name)
 
-                new_text = get_state_as_dict(xLabel)["Text"]
-                self.assertNotEqual(success_text, new_text)
+                # tdf#132869 - Without the fix in place, this test would have failed with
+                # - Expected: "Invalid name. Start with a letter, use only letters, numbers and underscore."
+                # - Actual  : ""
+                self.assertNotEqual(success_text, get_state_as_dict(xEdit)["QuickHelpText"])
                 self.assertEqual(get_state_as_dict(xAddBtn)["Enabled"], "false")
 
 
         select_all(xEdit)
         type_text(xEdit, "valid_name")
 
-        new_text = get_state_as_dict(xLabel)["Text"]
-        self.assertEqual(success_text, new_text)
+        self.assertEqual(success_text, get_state_as_dict(xLabel)["Text"])
+        self.assertEqual(success_text, get_state_as_dict(xEdit)["QuickHelpText"])
         self.assertEqual(get_state_as_dict(xAddBtn)["Enabled"], "true")
 
         self.ui_test.close_dialog_through_button(xAddBtn)
