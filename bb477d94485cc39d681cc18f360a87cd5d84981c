@@ -46,6 +46,30 @@
       "revId": "bb477d94485cc39d681cc18f360a87cd5d84981c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "790e637a_abe7bf1d",
+        "filename": "sc/source/ui/view/cliputil.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2021-04-02T19:14:03Z",
+      "side": 1,
+      "message": "I see, thanks for clarifying!",
+      "parentUuid": "5fac0d4a_f38f37dc",
+      "range": {
+        "startLine": 105,
+        "startChar": 110,
+        "endLine": 105,
+        "endChar": 121
+      },
+      "revId": "bb477d94485cc39d681cc18f360a87cd5d84981c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
