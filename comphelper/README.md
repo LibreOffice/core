@@ -1,4 +1,5 @@
-Helper functionality for implementing UNO components
+# Helpers for implementing UNO components
 
-...anything not generic/mature enough to end up in URE's stable interface at
-cppuhelper etc.
+Here goes anything not generic/mature enough to end up in URE's stable interface
+at cppuhelper etc.
+

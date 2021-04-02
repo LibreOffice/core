@@ -64,11 +64,11 @@ For more information see the build instructions for your platform in the
 
 ## The important bits of code
 
-Each module should have a `README` file inside it which has some
+Each module should have a `README.md` file inside it which has some
 degree of documentation for that module; patches are most welcome to
 improve those. We have those turned into a web page here:
 
-https://docs.libreoffice.org/
+<https://docs.libreoffice.org/>
 
 However, there are two hundred modules, many of them of only
 peripheral interest for a specialist audience. So - where is the
@@ -77,30 +77,30 @@ the most important ones:
 
 Module    | Description
 ----------|-------------------------------------------------
-sal/      | this provides a simple System Abstraction Layer
-tools/    | this provides basic internal types: 'Rectangle', 'Color' etc.
-vcl/      | this is the widget toolkit library and one rendering abstraction
-framework | UNO framework, responsible for building toolbars, menus, status bars, and the chrome around the document using widgets from VCL, and XML descriptions from */uiconfig/* files
-sfx2/     | legacy core framework used by Writer/Calc/Draw: document model / load/save / signals for actions etc.
-svx/      | drawing model related helper code, including much of Draw/Impress
+[sal/](sal)             | this provides a simple System Abstraction Layer
+[tools/](tools)         | this provides basic internal types: `Rectangle`, `Color` etc.
+[vcl/](vcl)             | this is the widget toolkit library and one rendering abstraction
+[framework/](framework) | UNO framework, responsible for building toolbars, menus, status bars, and the chrome around the document using widgets from VCL, and XML descriptions from `/uiconfig/` files
+[sfx2/](sfx2)           | legacy core framework used by Writer/Calc/Draw: document model / load/save / signals for actions etc.
+[svx/](svx)             | drawing model related helper code, including much of Draw/Impress
 
 Then applications
 
 Module    | Description
 ----------|-------------------------------------------------
-desktop/  | this is where the 'main' for the application lives, init / bootstrap. the name dates back to an ancient StarOffice that also drew a desktop
-sw/       | Writer
-sc/       | Calc
-sd/       | Draw / Impress
+[desktop/](desktop)  | this is where the `main()` for the application lives, init / bootstrap. the name dates back to an ancient StarOffice that also drew a desktop
+[sw/](sw/)           | Writer
+[sc/](sc/)           | Calc
+[sd/](sd/)           | Draw / Impress
 
 There are several other libraries that are helpful from a graphical perspective:
 
 Module    | Description
 ----------|-------------------------------------------------
-basegfx/  | algorithms and data-types for graphics as used in the canvas
-canvas/   | new (UNO) canvas rendering model with various backends
-cppcanvas/ | C++ helper classes for using the UNO canvas
-drawinglayer/ | View code to render drawable objects and break them down into primitives we can render more easily.
+[basegfx/](basegfx)  | algorithms and data-types for graphics as used in the canvas
+[canvas/](canvas)   | new (UNO) canvas rendering model with various backends
+[cppcanvas/](cppcanvas) | C++ helper classes for using the UNO canvas
+[drawinglayer/](drawinglayer) | View code to render drawable objects and break them down into primitives we can render more easily.
 
 ## Rules for #include directives (C/C++)
 
@@ -112,13 +112,14 @@ mail [Re: C[++]: Normalizing include syntax ("" vs
 The UNO API include files should consistently use double quotes, for the
 benefit of external users of this API.
 
-loplugin:includeform (compilerplugins/clang/includeform.cxx) enforces these rules.
+`loplugin:includeform (compilerplugins/clang/includeform.cxx)` enforces these rules.
 
 
 ## Finding out more
 
-Beyond this, you can read the `README` files, send us patches, ask
+Beyond this, you can read the `README.md` files, send us patches, ask
 on the mailing list libreoffice@lists.freedesktop.org (no subscription
 required) or poke people on IRC `#libreoffice-dev` on irc.freenode.net -
 we're a friendly and generally helpful mob. We know the code can be
 hard to get into at first, and so there are no silly questions.
+

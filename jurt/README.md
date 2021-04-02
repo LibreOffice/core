@@ -1,2 +1,4 @@
-JURT means Java Uno Runtime and implements most of Java UNO.
+# Java UNO runtime (jurt)
+
+JURT means Java UNO Runtime and implements most of Java UNO.
 
