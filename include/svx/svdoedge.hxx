@@ -177,7 +177,7 @@ protected:
     XPolygon ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, const tools::Rectangle& rBoundRect1, const tools::Rectangle& rBewareRect1,
         const Point& rPt2, tools::Long nAngle2, const tools::Rectangle& rBoundRect2, const tools::Rectangle& rBewareRect2,
         sal_uIntPtr* pnQuality, SdrEdgeInfoRec* pInfo) const;
-    static bool ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrObjConnection& rCon, const SdrEdgeObj* pThis, OutputDevice* pOut=nullptr);
+    static bool ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrObjConnection& rCon, const SdrEdgeObj* pThis, OutputDevice* pOut=nullptr, SdrDragStat* pDragStat = nullptr);
     static SdrEscapeDirection ImpCalcEscAngle(SdrObject const * pObj, const Point& aPt2);
     void ImpSetTailPoint(bool bTail1, const Point& rPt);
     void ImpUndirtyEdgeTrack();  // potential recalculation of the connection track

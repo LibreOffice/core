@@ -242,7 +242,8 @@ public:
         SdrPageWindow& rPageWindow,
         const char* pDebugName) const;
 
-    bool MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint);
+    // Interactive Move Action programmaticaly
+    bool MoveShapeHandle(const sal_uInt32 handleNum, const Point& aEndPoint, const sal_Int32 aObjectOrdNum = -1);
 };
 
 // First of all the app creates a SdrModel.
