@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ba4c3fe_730bdae0",
+        "filename": "oox/source/drawingml/customshapeproperties.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-04-02T18:34:29Z",
+      "side": 1,
+      "message": "Lines 152-166 and 406-420 look identical. I suggest moving at least the contents of the if block into a local function.",
+      "revId": "38188a1f6f60ebbb2ac13eacf382555551b28074",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea495ab4_7eb0dd40",
+        "filename": "oox/source/helper/extrusionpresets.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-04-02T18:34:29Z",
+      "side": 1,
+      "message": "Thanks :-)",
+      "revId": "38188a1f6f60ebbb2ac13eacf382555551b28074",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
