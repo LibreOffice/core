@@ -34,6 +34,40 @@
       "revId": "007f321b523ee2f1f9dc4b7d7b3f51c7863d8009",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4570e7d4_572f0ce7",
+        "filename": "include/oox/helper/extrusionpresets.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-04-02T01:57:45Z",
+      "side": 1,
+      "message": "I noticed that the size of this array is used in loop bounds checking in some of the other methods. I suggest making it a named constant rather than a literal. Also, I\u0027m curious why you chose a classical array vs a std::array or a map keyed on preset name, or some other structure.",
+      "revId": "007f321b523ee2f1f9dc4b7d7b3f51c7863d8009",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a66bd9c_57977241",
+        "filename": "oox/source/drawingml/shape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1407,
+      "author": {
+        "id": 1002281
+      },
+      "writtenOn": "2021-04-02T01:57:45Z",
+      "side": 1,
+      "message": "This method is already pretty long as it is. I suggest trying to move as much new code as possible into new methods.",
+      "revId": "007f321b523ee2f1f9dc4b7d7b3f51c7863d8009",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
