@@ -1133,6 +1133,7 @@ public:
                                                     GDIMetaFile&     rMtf );
 
     void                        SetTextColor( const Color& rColor );
+    virtual void                SetSystemTextColor(DrawFlags nFlags);
     const Color&                GetTextColor() const { return maTextColor; }
 
     void                        SetTextFillColor();
