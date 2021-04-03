@@ -44,7 +44,7 @@ class PrinterColor
 {
 public:
 
-    enum    ColorSpace { eInvalid, eRGB };
+    enum class ColorSpace { eInvalid, eRGB };
 
 private:
 
@@ -59,24 +59,24 @@ public:
         : mnRed(0)
         , mnGreen(0)
         , mnBlue(0)
-        , meColorspace(eInvalid)
+        , meColorspace(ColorSpace::eInvalid)
     {}
     PrinterColor (sal_uInt16 nRed, sal_uInt16 nGreen,
                   sal_uInt16 nBlue) :
             mnRed   (nRed),
             mnGreen (nGreen),
             mnBlue  (nBlue),
-            meColorspace (eRGB)
+            meColorspace (ColorSpace::eRGB)
     {}
     PrinterColor (sal_uInt32 nRGB) :
             mnRed   ((nRGB & 0x00ff0000) >> 16),
             mnGreen ((nRGB & 0x0000ff00) >>  8),
             mnBlue  ((nRGB & 0x000000ff)      ),
-            meColorspace (eRGB)
+            meColorspace (ColorSpace::eRGB)
     {}
 
     bool        Is () const
-    { return meColorspace != eInvalid; }
+    { return meColorspace != ColorSpace::eInvalid; }
 
     sal_uInt16      GetRed () const
     { return mnRed; }
@@ -96,7 +96,7 @@ public:
 
     PrinterColor&   operator= (sal_uInt32 nRGB)
     {
-        meColorspace = eRGB;
+        meColorspace = ColorSpace::eRGB;
         mnBlue  = (nRGB & 0x000000ff);
         mnGreen = (nRGB & 0x0000ff00) >>  8;
         mnRed   = (nRGB & 0x00ff0000) >> 16;
