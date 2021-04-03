@@ -572,6 +572,7 @@ vcl_headless_freetype_code=\
     vcl/unx/generic/print/glyphset \
     vcl/unx/generic/print/printerjob \
     vcl/unx/generic/print/psputil \
+    vcl/unx/generic/print/GenPspGfxBackend \
     vcl/unx/generic/print/genpspgraphics \
     vcl/unx/generic/print/genprnpsp \
     vcl/unx/generic/print/prtsetup \
