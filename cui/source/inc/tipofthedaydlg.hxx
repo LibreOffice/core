@@ -21,10 +21,13 @@
 #include <vcl/weld.hxx>
 #include "cuigrfflt.hxx"
 
+class VclWindowEvent;
+
 class TipOfTheDayDialog : public weld::GenericDialogController
 {
 private:
     CuiGraphicPreviewWindow m_aPreview;
+    weld::Window* m_pParent;
 
     std::unique_ptr<weld::Label> m_pText;
     std::unique_ptr<weld::CheckButton> m_pShowTip;
@@ -41,6 +44,8 @@ private:
 public:
     TipOfTheDayDialog(weld::Window* pWindow);
     virtual ~TipOfTheDayDialog() override;
+
+    DECL_LINK(Terminated, VclWindowEvent&, void);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
