@@ -113,7 +113,7 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster)
     rPoolDefaults[XATTR_LINETRANSPARENCE   -XATTR_START] = new XLineTransparenceItem;
     rPoolDefaults[XATTR_LINEJOINT            -XATTR_START] = new XLineJointItem;
     rPoolDefaults[XATTR_LINECAP            -XATTR_START] = new XLineCapItem;
-    rPoolDefaults[XATTR_FILLSTYLE                -XATTR_START] = new XFillStyleItem;
+    rPoolDefaults[XATTR_FILLSTYLE                -XATTR_START] = new XFillStyleItem();
     rPoolDefaults[XATTR_FILLCOLOR                -XATTR_START] = new XFillColorItem   (aNullStr,aNullFillCol);
     rPoolDefaults[XATTR_FILLGRADIENT         -XATTR_START] = new XFillGradientItem(XGradient(COL_BLACK, COL_WHITE));
     rPoolDefaults[XATTR_FILLHATCH                -XATTR_START] = new XFillHatchItem   (aNullHatch);
