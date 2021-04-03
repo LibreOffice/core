@@ -419,11 +419,11 @@ void TypeSerializer::writeGraphic(const Graphic& rGraphic)
 void TypeSerializer::readMapMode(MapMode& rMapMode)
 {
     VersionCompatRead aCompat(mrStream);
-    sal_uInt16 nTmp16;
+    sal_uInt16 nTmp16(0);
     Point aOrigin;
     Fraction aScaleX;
     Fraction aScaleY;
-    bool bSimple;
+    bool bSimple(true);
 
     mrStream.ReadUInt16(nTmp16);
     MapUnit eUnit = static_cast<MapUnit>(nTmp16);
