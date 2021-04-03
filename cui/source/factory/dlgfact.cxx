@@ -1686,6 +1686,11 @@ AbstractDialogFactory_Impl::CreateTipOfTheDayDialog(weld::Window* pParent)
         std::make_unique<TipOfTheDayDialog>(pParent));
 }
 
+bool CuiAbstractController_Impl::StartExecuteAsync(AsyncContext& rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 VclPtr<VclAbstractDialog>
 AbstractDialogFactory_Impl::CreateToolbarmodeDialog(weld::Window* pParent)
 {

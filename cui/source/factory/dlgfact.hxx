@@ -112,13 +112,14 @@ bool Class::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) \
 
 class CuiAbstractController_Impl : public VclAbstractDialog
 {
-    std::unique_ptr<weld::DialogController> m_xDlg;
+    std::shared_ptr<weld::DialogController> m_xDlg;
 public:
-    explicit CuiAbstractController_Impl(std::unique_ptr<weld::DialogController> p)
+    explicit CuiAbstractController_Impl(std::shared_ptr<weld::DialogController> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext& rCtx) override;
 };
 
 class CuiAbstractSingleTabController_Impl : public SfxAbstractDialog
