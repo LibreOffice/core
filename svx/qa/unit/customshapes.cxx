@@ -940,24 +940,6 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf136176)
         }
     }
 }
-
-CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf141127WrongSkewDefault)
-{
-    // Load a document that has a shape in extrusion mode, but no draw:extrusion-skew attribute.
-    // Error was, that the shape uses the MS Office binary defaults and so the extruded side faces
-    // were not left/bottom, but top/right.
-    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf141127_defaultSkewAngle.odp";
-    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.presentation.PresentationDocument");
-    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
-    uno::Reference<drawing::XShape> xShape(getShape(0));
-    SdrObjCustomShape& rSdrCustomShape(
-        static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
-
-    // Check left/bottom of bound rect. Without fix it would be left=15994, bottom=6999.
-    tools::Rectangle aBoundRect(rSdrCustomShape.GetCurrentBoundRect());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(15371), aBoundRect.Left());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(7622), aBoundRect.Bottom());
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
