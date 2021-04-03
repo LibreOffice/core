@@ -609,8 +609,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_TIPOFTHEDAY:
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateTipOfTheDayDialog(rReq.GetFrameWeld()));
-            pDlg->Execute();
+            VclPtr<VclAbstractDialog> pDlg(pFact->CreateTipOfTheDayDialog(rReq.GetFrameWeld()));
+            pDlg->StartExecuteAsync(nullptr);
             bDone = true;
             break;
         }

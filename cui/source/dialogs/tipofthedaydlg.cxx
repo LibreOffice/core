@@ -38,6 +38,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -52,11 +53,21 @@ TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     , m_pNext(m_xBuilder->weld_button("btnNext"))
     , m_pLink(m_xBuilder->weld_link_button("btnLink"))
     , m_pPreview(new weld::CustomWeld(*m_xBuilder, "imPreview", m_aPreview))
+    , m_pNew(m_xBuilder->weld_button("btnNew"))
+    , m_pParent(pParent)
 {
     m_pShowTip->set_active(officecfg::Office::Common::Misc::ShowTipOfTheDay::get());
     m_pNext->connect_clicked(LINK(this, TipOfTheDayDialog, OnNextClick));
     m_nCurrentTip = officecfg::Office::Common::Misc::LastTipOfTheDayID::get();
     m_pPreview->set_size_request(ThumbSize.Width(), ThumbSize.Height());
+    m_pNew->connect_clicked(LINK(this, TipOfTheDayDialog, OnNewClick));
+
+    css::uno::Reference<css::awt::XWindow> xWindow = pParent->GetXWindow();
+    VclPtr<vcl::Window> xVclWin(VCLUnoHelper::GetWindow(xWindow));
+    if (xVclWin != nullptr)
+    {
+        xVclWin->AddEventListener(LINK(this, TipOfTheDayDialog, Terminated));
+    }
 
     const auto t0 = std::chrono::system_clock::now().time_since_epoch();
     m_nDay = std::chrono::duration_cast<std::chrono::hours>(t0).count() / 24;
@@ -64,6 +75,12 @@ TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
         m_nCurrentTip++;
 
     UpdateTip();
+}
+
+IMPL_LINK(TipOfTheDayDialog, Terminated, VclWindowEvent&, rEvent, void)
+{
+    if (rEvent.GetId() == VclEventId::ObjectDying)
+        TipOfTheDayDialog::response(RET_OK);
 }
 
 TipOfTheDayDialog::~TipOfTheDayDialog()
@@ -208,6 +225,13 @@ IMPL_LINK_NOARG(TipOfTheDayDialog, OnNextClick, weld::Button&, void)
 {
     m_nCurrentTip++; //zeroed at updatetip when out of range
     UpdateTip();
+}
+
+IMPL_LINK_NOARG(TipOfTheDayDialog, OnNewClick, weld::Button&, void)
+{
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+    VclPtr<VclAbstractDialog> pDlg(pFact->CreateTipOfTheDayDialog(m_pParent));
+    pDlg->StartExecuteAsync(nullptr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
