@@ -7,7 +7,7 @@
     <property name="border-width">6</property>
     <property name="title" translatable="yes" context="TipOfTheDayDialog|Name">Tip of the day</property>
     <property name="resizable">False</property>
-    <property name="modal">True</property>
+    <property name="modal">False</property>
     <property name="window-position">center-on-parent</property>
     <property name="type-hint">dialog</property>
     <child internal-child="vbox">
@@ -39,6 +39,20 @@
               </packing>
             </child>
             <child>
+              <object class="GtkButton" id="btnNew">
+                <property name="label" translatable="yes" context="TipOfTheDayDialog|New_Button">New _Tip Window</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="btnNext">
                 <property name="label" translatable="yes" context="TipOfTheDayDialog|Next_Button">_Next Tip</property>
                 <property name="visible">True</property>
@@ -49,7 +63,7 @@
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -67,7 +81,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </object>
