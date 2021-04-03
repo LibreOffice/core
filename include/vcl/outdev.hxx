@@ -30,6 +30,7 @@
 #include <vcl/cairo.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/flags/DrawFlags.hxx>
 #include <vcl/font.hxx>
 #include <vcl/region.hxx>
 #include <vcl/mapmod.hxx>
@@ -1133,6 +1134,7 @@ public:
                                                     GDIMetaFile&     rMtf );
 
     void                        SetTextColor( const Color& rColor );
+    virtual void                SetSystemTextColor(DrawFlags nFlags);
     const Color&                GetTextColor() const { return maTextColor; }
 
     void                        SetTextFillColor();
