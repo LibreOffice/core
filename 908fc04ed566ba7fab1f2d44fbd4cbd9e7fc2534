@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a078c64_756729c1",
+        "filename": "emfio/source/reader/emfreader.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-04-03T19:06:26Z",
+      "side": 1,
+      "message": "On a second look at these tests here I think they were already bogus before this change so I say go ahead with this change and I propose a follow up of https://gerrit.libreoffice.org/c/core/+/113560",
+      "revId": "908fc04ed566ba7fab1f2d44fbd4cbd9e7fc2534",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
