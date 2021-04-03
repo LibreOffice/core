@@ -34,6 +34,7 @@
 "ChartArea";"com::sun::star::drawing::FillProperties";"FillBitmapSizeY"
 "ChartArea";"com::sun::star::drawing::FillProperties";"FillBitmapMode"
 "ChartArea";"com::sun::star::drawing::FillProperties";"FillBackground"
+"ChartArea";"com::sun::star::drawing::FillProperties";"FillStyle_NONE"
 "ChartArea";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "ChartArea";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "ChartArea";"com::sun::star::beans::XPropertySet";"getPropertyValue()"

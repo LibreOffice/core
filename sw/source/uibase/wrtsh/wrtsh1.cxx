@@ -1863,6 +1863,8 @@ void SwWrtShell::ChangeHeaderOrFooter(
                         const_cast<SwFrameFormat*>(rMaster.GetHeader().GetHeaderFormat()) :
                         const_cast<SwFrameFormat*>(rMaster.GetFooter().GetFooterFormat());
                     pFormat->SetFormatAttr( aUL );
+                    XFillStyleItem aFill(drawing::FillStyle_NONE);
+                    pFormat->SetFormatAttr(aFill);
                 }
             }
             if( bChgd )
