@@ -212,6 +212,7 @@ protected:
     vcl::Region                 ClipToDeviceBounds(vcl::Region aRegion) const override;
 
 public:
+    void                        SetSystemTextColor(DrawFlags, bool = false) override;
     void                        DrawGradientEx( OutputDevice* pOut, const tools::Rectangle& rRect,
                                     const Gradient& rGradient );
     virtual Bitmap              GetBitmap( const Point& rSrcPt, const Size& rSize ) const override;
