@@ -330,36 +330,36 @@ SvStream& operator>>(SvStream& rInStream, BLENDFUNCTION& rBlendFun)
 
 bool ImplReadRegion( tools::PolyPolygon& rPolyPoly, SvStream& rStream, sal_uInt32 nLen )
 {
-    if (nLen == 0)
+    if (nLen < 32) // 32 bytes - Size of RegionDataHeader
         return false;
 
-    sal_uInt32 nHdSize, nType, nCountRects, nRgnSize, i;
+    sal_uInt32 nHdSize, nType, nCountRects, nRgnSize;
     rStream.ReadUInt32(nHdSize);
     rStream.ReadUInt32(nType);
     rStream.ReadUInt32(nCountRects);
     rStream.ReadUInt32(nRgnSize);
 
-    if (!rStream.good() || nCountRects == 0 || nType != RDH_RECTANGLES)
-        return false;
-
-    sal_uInt32 nSize;
-    if (o3tl::checked_multiply<sal_uInt32>(nCountRects, 16, nSize))
-        return false;
-    if (o3tl::checked_add<sal_uInt32>(nSize, nHdSize - 16, nSize))
-        return false;
-    if (nLen < nSize)
-        return false;
-
     sal_Int32 nLeft, nTop, nRight, nBottom;
-
     //bounds of the region
     rStream.ReadInt32(nLeft);
     rStream.ReadInt32(nTop);
     rStream.ReadInt32(nRight);
     rStream.ReadInt32(nBottom);
+
+    if (!rStream.good() || nCountRects == 0 || nType != RDH_RECTANGLES)
+        return false;
+
     SAL_INFO("emfio", "\t\tLeft: " << nLeft << ", top: " << nTop << ", right: " << nRight << ", bottom: " << nBottom);
 
-    for (i = 0; i < nCountRects; i++)
+    nLen -= 32;
+
+    sal_uInt32 nSize;
+    if (o3tl::checked_multiply<sal_uInt32>(nCountRects, 16, nSize))
+        return false;
+    if (nLen < nSize)
+        return false;
+
+    for (sal_uInt32 i = 0; i < nCountRects; ++i)
     {
         rStream.ReadInt32(nLeft);
         rStream.ReadInt32(nTop);
@@ -1432,24 +1432,30 @@ namespace emfio
 
                     case EMR_EXTSELECTCLIPRGN :
                     {
-                        sal_Int32 nClippingMode(0), cbRgnData(0);
-                        mpInputStream->ReadInt32(cbRgnData);
-                        mpInputStream->ReadInt32(nClippingMode);
-
-                        // This record's region data should be ignored if mode
-                        // is RGN_COPY - see EMF spec section 2.3.2.2
-                        if (nClippingMode == RGN_COPY)
-                        {
-                            SetDefaultClipPath();
-                        }
+                        sal_uInt32 nRemainingRecSize = nRecSize - 8;
+                        if (nRemainingRecSize < 8)
+                            bStatus = false;
                         else
                         {
-                            tools::PolyPolygon aPolyPoly;
-                            if (cbRgnData)
-                                ImplReadRegion(aPolyPoly, *mpInputStream, nRecSize);
-                            SetClipPath(aPolyPoly, nClippingMode, false);
-                        }
+                            sal_Int32 nClippingMode(0), cbRgnData(0);
+                            mpInputStream->ReadInt32(cbRgnData);
+                            mpInputStream->ReadInt32(nClippingMode);
+                            nRemainingRecSize -= 8;
 
+                            // This record's region data should be ignored if mode
+                            // is RGN_COPY - see EMF spec section 2.3.2.2
+                            if (nClippingMode == RGN_COPY)
+                            {
+                                SetDefaultClipPath();
+                            }
+                            else
+                            {
+                                tools::PolyPolygon aPolyPoly;
+                                if (cbRgnData)
+                                    ImplReadRegion(aPolyPoly, *mpInputStream, nRemainingRecSize);
+                                SetClipPath(aPolyPoly, nClippingMode, false);
+                            }
+                        }
                     }
                     break;
 
@@ -1919,30 +1925,44 @@ namespace emfio
 
                     case EMR_FILLRGN :
                     {
-                        sal_uInt32 nRgnDataSize;
-                        tools::PolyPolygon aPolyPoly;
-                        mpInputStream->SeekRel( 0x10 );  // RectL bounds
-                        mpInputStream->ReadUInt32( nRgnDataSize ).ReadUInt32( nIndex );
-
-                        if ( ImplReadRegion( aPolyPoly, *mpInputStream, nRecSize ) )
+                        sal_uInt32 nRemainingRecSize = nRecSize - 8;
+                        if (nRemainingRecSize < 24)
+                            bStatus = false;
+                        else
                         {
-                            Push();
-                            SelectObject( nIndex );
-                            DrawPolyPolygon( aPolyPoly );
-                            Pop();
+                            sal_uInt32 nRgnDataSize;
+                            tools::PolyPolygon aPolyPoly;
+                            mpInputStream->SeekRel(16);  // RectL bounds
+                            mpInputStream->ReadUInt32( nRgnDataSize ).ReadUInt32( nIndex );
+                            nRemainingRecSize -= 24;
+
+                            if (ImplReadRegion(aPolyPoly, *mpInputStream, nRemainingRecSize))
+                            {
+                                Push();
+                                SelectObject( nIndex );
+                                DrawPolyPolygon( aPolyPoly );
+                                Pop();
+                            }
                         }
                     }
                     break;
 
                     case EMR_PAINTRGN :
                     {
-                        sal_uInt32 nRgnDataSize;
-                        tools::PolyPolygon aPolyPoly;
-                        mpInputStream->SeekRel( 0x10 ); // Skipping RectL bounds
-                        mpInputStream->ReadUInt32( nRgnDataSize );
+                        sal_uInt32 nRemainingRecSize = nRecSize - 8;
+                        if (nRemainingRecSize < 20)
+                            bStatus = false;
+                        else
+                        {
+                            sal_uInt32 nRgnDataSize;
+                            tools::PolyPolygon aPolyPoly;
+                            mpInputStream->SeekRel(16); // Skipping RectL bounds
+                            mpInputStream->ReadUInt32( nRgnDataSize );
+                            nRemainingRecSize -= 20;
 
-                        if ( ImplReadRegion( aPolyPoly, *mpInputStream, nRecSize ) )
-                            DrawPolyPolygon( aPolyPoly );
+                            if (ImplReadRegion(aPolyPoly, *mpInputStream, nRemainingRecSize))
+                                DrawPolyPolygon( aPolyPoly );
+                        }
                     }
                     break;
 
