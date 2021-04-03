@@ -27,6 +27,8 @@
 #include <salgdi.hxx>
 #include <sallayout.hxx>
 
+#include <unx/GenPspGfxBackend.hxx>
+
 class PhysicalFontFace;
 class PhysicalFontCollection;
 
@@ -39,6 +41,8 @@ class ImplFontMetricData;
 
 class VCL_DLLPUBLIC GenPspGraphics final : public SalGraphics
 {
+    std::unique_ptr<GenPspGfxBackend> m_pBackend;
+
     psp::JobData*           m_pJobData;
     psp::PrinterGfx*        m_pPrinterGfx;
 
@@ -65,7 +69,11 @@ public:
                                            const psp::FastPrintFontInfo& );
 
     // override all pure virtual methods
-    virtual SalGraphicsImpl*GetImpl() const override { return nullptr; };
+    virtual SalGraphicsImpl* GetImpl() const override
+    {
+        return m_pBackend.get();
+    }
+
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
     virtual sal_uInt16      GetBitCount() const override;
     virtual tools::Long            GetGraphicsWidth() const override;
@@ -148,7 +156,6 @@ public:
                                                    const sal_uInt32* pPoints,
                                                    const Point* const* pPtAry,
                                                    const PolyFlags* const* pFlgAry ) override;
-    virtual bool            drawGradient( const tools::PolyPolygon&, const Gradient& ) override { return false; };
 
     virtual void            copyArea( tools::Long nDestX,
                                       tools::Long nDestY,
@@ -194,6 +201,9 @@ public:
     virtual bool            hasFastDrawTransformedBitmap() const override;
     virtual bool            drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
                                            sal_uInt8 nTransparency ) override;
+
+    virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) override;
+    virtual bool implDrawGradient(basegfx::B2DPolyPolygon const& rPolyPolygon, SalGradient const& rGradient) override;
 
     virtual SystemGraphicsData GetGraphicsData() const override;
 

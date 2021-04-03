@@ -30,7 +30,6 @@
 #include <sys/stat.h>
 
 #include <i18nlangtag/mslangid.hxx>
-#include <vcl/BitmapReadAccess.hxx>
 #include <jobdata.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -49,157 +48,23 @@
 #include <impfontmetricdata.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <PhysicalFontFace.hxx>
-#include <salbmp.hxx>
 #include <sallayout.hxx>
 
 using namespace psp;
 
-// ----- Implementation of PrinterBmp by means of SalBitmap/BitmapBuffer ---------------
-
-namespace {
-
-class SalPrinterBmp : public psp::PrinterBmp
-{
-private:
-    BitmapBuffer*       mpBmpBuffer;
-
-    FncGetPixel         mpFncGetPixel;
-    Scanline            mpScanAccess;
-    sal_PtrDiff         mnScanOffset;
-
-public:
-    explicit            SalPrinterBmp (BitmapBuffer* pBitmap);
-
-    virtual sal_uInt32  GetPaletteColor (sal_uInt32 nIdx) const override;
-    virtual sal_uInt32  GetPaletteEntryCount () const override;
-    virtual sal_uInt32  GetPixelRGB  (sal_uInt32 nRow, sal_uInt32 nColumn) const override;
-    virtual sal_uInt8   GetPixelGray (sal_uInt32 nRow, sal_uInt32 nColumn) const override;
-    virtual sal_uInt8   GetPixelIdx  (sal_uInt32 nRow, sal_uInt32 nColumn) const override;
-    virtual sal_uInt32  GetDepth () const override;
-};
-
-}
-
-SalPrinterBmp::SalPrinterBmp (BitmapBuffer* pBuffer)
-    : mpBmpBuffer(pBuffer)
-{
-    assert(mpBmpBuffer && "SalPrinterBmp::SalPrinterBmp () can't acquire Bitmap");
-
-    // calibrate scanline buffer
-    if( mpBmpBuffer->mnFormat & ScanlineFormat::TopDown )
-    {
-        mpScanAccess = mpBmpBuffer->mpBits;
-        mnScanOffset = mpBmpBuffer->mnScanlineSize;
-    }
-    else
-    {
-        mpScanAccess = mpBmpBuffer->mpBits
-                       + (mpBmpBuffer->mnHeight - 1) * mpBmpBuffer->mnScanlineSize;
-        mnScanOffset = - mpBmpBuffer->mnScanlineSize;
-    }
-
-    // request read access to the pixels
-    mpFncGetPixel = BitmapReadAccess::GetPixelFunction( mpBmpBuffer->mnFormat );
-}
-
-sal_uInt32
-SalPrinterBmp::GetDepth () const
-{
-    sal_uInt32 nDepth;
-
-    switch (mpBmpBuffer->mnBitCount)
-    {
-        case 1:
-            nDepth = 1;
-            break;
-
-        case 4:
-        case 8:
-            nDepth = 8;
-            break;
-
-        case 24:
-        case 32:
-            nDepth = 24;
-            break;
-
-        default:
-            nDepth = 1;
-            assert(false && "Error: unsupported bitmap depth in SalPrinterBmp::GetDepth()");
-            break;
-    }
-
-    return nDepth;
-}
-
-sal_uInt32
-SalPrinterBmp::GetPaletteEntryCount () const
-{
-    return mpBmpBuffer->maPalette.GetEntryCount ();
-}
-
-sal_uInt32
-SalPrinterBmp::GetPaletteColor(sal_uInt32 nIdx) const
-{
-    BitmapColor aColor(mpBmpBuffer->maPalette[nIdx]);
-
-    return ((aColor.GetBlue())        & 0x000000ff)
-         | ((aColor.GetGreen() <<  8) & 0x0000ff00)
-         | ((aColor.GetRed()   << 16) & 0x00ff0000);
-}
-
-sal_uInt32
-SalPrinterBmp::GetPixelRGB (sal_uInt32 nRow, sal_uInt32 nColumn) const
-{
-    Scanline pScan = mpScanAccess + nRow * mnScanOffset;
-    BitmapColor aColor = mpFncGetPixel (pScan, nColumn, mpBmpBuffer->maColorMask);
-
-    if (!!mpBmpBuffer->maPalette)
-        GetPaletteColor(aColor.GetIndex());
-
-    return ((aColor.GetBlue())        & 0x000000ff)
-         | ((aColor.GetGreen() <<  8) & 0x0000ff00)
-         | ((aColor.GetRed()   << 16) & 0x00ff0000);
-}
-
-sal_uInt8
-SalPrinterBmp::GetPixelGray (sal_uInt32 nRow, sal_uInt32 nColumn) const
-{
-    Scanline pScan = mpScanAccess + nRow * mnScanOffset;
-    BitmapColor aColor = mpFncGetPixel (pScan, nColumn, mpBmpBuffer->maColorMask);
-
-    if (!!mpBmpBuffer->maPalette)
-        aColor = mpBmpBuffer->maPalette[aColor.GetIndex()];
-
-    return (  aColor.GetBlue()  *  28UL
-            + aColor.GetGreen() * 151UL
-            + aColor.GetRed()   *  77UL ) >> 8;
-
-}
-
-sal_uInt8
-SalPrinterBmp::GetPixelIdx (sal_uInt32 nRow, sal_uInt32 nColumn) const
-{
-    Scanline pScan = mpScanAccess + nRow * mnScanOffset;
-    BitmapColor aColor = mpFncGetPixel (pScan, nColumn, mpBmpBuffer->maColorMask);
-
-    if (!!mpBmpBuffer->maPalette)
-        return aColor.GetIndex();
-    else
-        return 0;
-}
-
 /*******************************************************
- * GenPspGraphics                                         *
+ * GenPspGraphics
  *******************************************************/
+
 GenPspGraphics::GenPspGraphics()
-    : m_pJobData( nullptr ),
-      m_pPrinterGfx( nullptr )
+    : m_pJobData( nullptr )
+    , m_pPrinterGfx( nullptr )
 {
 }
 
 void GenPspGraphics::Init(psp::JobData* pJob, psp::PrinterGfx* pGfx)
 {
+    m_pBackend = std::make_unique<GenPspGfxBackend>(pGfx);
     m_pJobData = pJob;
     m_pPrinterGfx = pGfx;
     SetLayout( SalLayoutFlags::NONE );
@@ -223,166 +88,126 @@ void GenPspGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY )
 
 sal_uInt16 GenPspGraphics::GetBitCount() const
 {
-    return m_pPrinterGfx->GetBitCount();
+    return m_pBackend->GetBitCount();
 }
 
 tools::Long GenPspGraphics::GetGraphicsWidth() const
 {
-    return 0;
+    return m_pBackend->GetGraphicsWidth();
 }
 
 void GenPspGraphics::ResetClipRegion()
 {
-    m_pPrinterGfx->ResetClipRegion();
+    m_pBackend->ResetClipRegion();
 }
 
 bool GenPspGraphics::setClipRegion( const vcl::Region& i_rClip )
 {
-    // TODO: support polygonal clipregions here
-    RectangleVector aRectangles;
-    i_rClip.GetRegionRectangles(aRectangles);
-    m_pPrinterGfx->BeginSetClipRegion();
-
-    for (auto const& rectangle : aRectangles)
-    {
-        const tools::Long nW(rectangle.GetWidth());
-
-        if(nW)
-        {
-            const tools::Long nH(rectangle.GetHeight());
-
-            if(nH)
-            {
-                m_pPrinterGfx->UnionClipRegion(
-                    rectangle.Left(),
-                    rectangle.Top(),
-                    nW,
-                    nH);
-            }
-        }
-    }
-
-    m_pPrinterGfx->EndSetClipRegion();
-
-    return true;
+    return m_pBackend->setClipRegion(i_rClip);
 }
 
 void GenPspGraphics::SetLineColor()
 {
-    m_pPrinterGfx->SetLineColor ();
+    m_pBackend->SetLineColor();
 }
 
 void GenPspGraphics::SetLineColor( Color nColor )
 {
-    psp::PrinterColor aColor (nColor.GetRed(),
-                              nColor.GetGreen(),
-                              nColor.GetBlue());
-    m_pPrinterGfx->SetLineColor (aColor);
+    m_pBackend->SetLineColor(nColor);
 }
 
 void GenPspGraphics::SetFillColor()
 {
-    m_pPrinterGfx->SetFillColor ();
+    m_pBackend->SetFillColor();
 }
 
 void GenPspGraphics::SetFillColor( Color nColor )
 {
-    psp::PrinterColor aColor (nColor.GetRed(),
-                              nColor.GetGreen(),
-                              nColor.GetBlue());
-    m_pPrinterGfx->SetFillColor (aColor);
+    m_pBackend->SetFillColor (nColor);
 }
 
-void GenPspGraphics::SetROPLineColor( SalROPColor )
+void GenPspGraphics::SetROPLineColor(SalROPColor aColor)
 {
-    SAL_WARN( "vcl", "Error: PrinterGfx::SetROPLineColor() not implemented" );
+    m_pBackend->SetROPLineColor(aColor);
 }
 
-void GenPspGraphics::SetROPFillColor( SalROPColor )
+void GenPspGraphics::SetROPFillColor( SalROPColor aColor)
 {
-    SAL_WARN( "vcl", "Error: PrinterGfx::SetROPFillColor() not implemented" );
+    m_pBackend->SetROPFillColor(aColor);
 }
 
-void GenPspGraphics::SetXORMode( bool bSet, bool )
+void GenPspGraphics::SetXORMode(bool bSet, bool bInvertOnly)
 {
-    SAL_WARN_IF( bSet, "vcl", "Error: PrinterGfx::SetXORMode() not implemented" );
+    m_pBackend->SetXORMode(bSet, bInvertOnly);
 }
 
 void GenPspGraphics::drawPixel( tools::Long nX, tools::Long nY )
 {
-    m_pPrinterGfx->DrawPixel (Point(nX, nY));
+    m_pBackend->drawPixel(nX, nY);
 }
 
 void GenPspGraphics::drawPixel( tools::Long nX, tools::Long nY, Color nColor )
 {
-    psp::PrinterColor aColor (nColor.GetRed(),
-                              nColor.GetGreen(),
-                              nColor.GetBlue());
-    m_pPrinterGfx->DrawPixel (Point(nX, nY), aColor);
+    m_pBackend->drawPixel(nX, nY, nColor);
 }
 
 void GenPspGraphics::drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 )
 {
-    m_pPrinterGfx->DrawLine (Point(nX1, nY1), Point(nX2, nY2));
+    m_pBackend->drawLine(nX1, nY1, nX2, nY2);
 }
 
 void GenPspGraphics::drawRect( tools::Long nX, tools::Long nY, tools::Long nDX, tools::Long nDY )
 {
-    m_pPrinterGfx->DrawRect (tools::Rectangle(Point(nX, nY), Size(nDX, nDY)));
+    m_pBackend->drawRect(nX, nY, nDX, nDY);
 }
 
 void GenPspGraphics::drawPolyLine( sal_uInt32 nPoints, const Point *pPtAry )
 {
-    m_pPrinterGfx->DrawPolyLine (nPoints, pPtAry);
+    m_pBackend->drawPolyLine(nPoints, pPtAry);
 }
 
 void GenPspGraphics::drawPolygon( sal_uInt32 nPoints, const Point* pPtAry )
 {
-    // Point must be equal to Point! see include/vcl/salgtype.hxx
-    m_pPrinterGfx->DrawPolygon (nPoints, pPtAry);
+    m_pBackend->drawPolygon(nPoints, pPtAry);
 }
 
 void GenPspGraphics::drawPolyPolygon( sal_uInt32           nPoly,
                                    const sal_uInt32   *pPoints,
                                    const Point*  *pPtAry )
 {
-    m_pPrinterGfx->DrawPolyPolygon (nPoly, pPoints, pPtAry);
+    m_pBackend->drawPolyPolygon (nPoly, pPoints, pPtAry);
 }
 
 bool GenPspGraphics::drawPolyPolygon(
-    const basegfx::B2DHomMatrix& /*rObjectToDevice*/,
-    const basegfx::B2DPolyPolygon&,
-    double /*fTransparency*/)
+    const basegfx::B2DHomMatrix& rObjectToDevice,
+    const basegfx::B2DPolyPolygon& rPolyPolygon,
+    double fTransparency)
 {
-        // TODO: implement and advertise OutDevSupportType::B2DDraw support
-        return false;
+    return m_pBackend->drawPolyPolygon(rObjectToDevice, rPolyPolygon, fTransparency);
 }
 
 bool GenPspGraphics::drawPolyLine(
-    const basegfx::B2DHomMatrix& /* rObjectToDevice */,
-    const basegfx::B2DPolygon&,
-    double /*fTransparency*/,
-    double /*fLineWidth*/,
-    const std::vector< double >* /*pStroke*/, // MM01
-    basegfx::B2DLineJoin /*eJoin*/,
-    css::drawing::LineCap /*eLineCap*/,
-    double /*fMiterMinimumAngle*/,
-    bool /* bPixelSnapHairline */)
+    const basegfx::B2DHomMatrix& rObjectToDevice,
+    const basegfx::B2DPolygon& rPolygon,
+    double fTransparency,
+    double fLineWidth,
+    const std::vector< double >* pStroke, // MM01
+    basegfx::B2DLineJoin eJoin,
+    css::drawing::LineCap eLineCap,
+    double fMiterMinimumAngle,
+    bool bPixelSnapHairline)
 {
-    // TODO: a PS printer can draw B2DPolyLines almost directly
-    return false;
+    return m_pBackend->drawPolyLine(rObjectToDevice, rPolygon, fTransparency, fLineWidth, pStroke, eJoin, eLineCap, fMiterMinimumAngle, bPixelSnapHairline);
 }
 
 bool GenPspGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry )
 {
-    m_pPrinterGfx->DrawPolyLineBezier (nPoints, pPtAry, pFlgAry);
-    return true;
+    return m_pBackend->drawPolyLineBezier(nPoints, pPtAry, pFlgAry);
 }
 
 bool GenPspGraphics::drawPolygonBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry )
 {
-    m_pPrinterGfx->DrawPolygonBezier (nPoints, pPtAry, pFlgAry);
-    return true;
+    return m_pBackend->drawPolygonBezier(nPoints, pPtAry, pFlgAry);
 }
 
 bool GenPspGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly,
@@ -390,78 +215,62 @@ bool GenPspGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly,
                                              const Point* const* pPtAry,
                                              const PolyFlags* const* pFlgAry )
 {
-    // Point must be equal to Point! see include/vcl/salgtype.hxx
-    m_pPrinterGfx->DrawPolyPolygonBezier (nPoly, pPoints, pPtAry, pFlgAry);
-    return true;
+    return m_pBackend->drawPolyPolygonBezier(nPoly, pPoints, pPtAry, pFlgAry);
 }
 
-void GenPspGraphics::invert( sal_uInt32,
-                          const Point*,
-                          SalInvert )
+void GenPspGraphics::invert(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
+                                    SalInvert nFlags)
 {
-    SAL_WARN( "vcl", "Error: PrinterGfx::Invert() not implemented" );
+   m_pBackend->invert(nX, nY, nWidth, nHeight, nFlags);
 }
 
-bool GenPspGraphics::drawEPS( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, void* pPtr, sal_uInt32 nSize )
+void GenPspGraphics::invert(sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags)
 {
-    return m_pPrinterGfx->DrawEPS( tools::Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ), pPtr, nSize );
+   m_pBackend->invert(nPoints, pPtAry, nFlags);
 }
 
-void GenPspGraphics::copyBits( const SalTwoRect&,
-                            SalGraphics* )
+bool GenPspGraphics::drawEPS(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                               tools::Long nHeight, void* pPtr, sal_uInt32 nSize)
 {
-    OSL_FAIL( "Error: PrinterGfx::CopyBits() not implemented" );
+    return m_pBackend->drawEPS(nX, nY, nWidth, nHeight, pPtr, nSize);
 }
 
-void GenPspGraphics::copyArea ( tools::Long,tools::Long,tools::Long,tools::Long,tools::Long,tools::Long,bool )
+void GenPspGraphics::copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics)
 {
-    OSL_FAIL( "Error: PrinterGfx::CopyArea() not implemented" );
+    m_pBackend->copyBits(rPosAry, pSrcGraphics);
 }
 
-void GenPspGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap )
+void GenPspGraphics::copyArea (tools::Long nDestX, tools::Long nDestY, tools::Long nSrcX,
+                                tools::Long nSrcY, tools::Long nSrcWidth, tools::Long nSrcHeight,
+                                bool bWindowInvalidate)
 {
-    tools::Rectangle aSrc (Point(rPosAry.mnSrcX, rPosAry.mnSrcY),
-                    Size(rPosAry.mnSrcWidth, rPosAry.mnSrcHeight));
-    tools::Rectangle aDst (Point(rPosAry.mnDestX, rPosAry.mnDestY),
-                    Size(rPosAry.mnDestWidth, rPosAry.mnDestHeight));
-
-    BitmapBuffer* pBuffer= const_cast<SalBitmap&>(rSalBitmap).AcquireBuffer(BitmapAccessMode::Read);
-
-    SalPrinterBmp aBmp (pBuffer);
-    m_pPrinterGfx->DrawBitmap (aDst, aSrc, aBmp);
-
-    const_cast<SalBitmap&>(rSalBitmap).ReleaseBuffer (pBuffer, BitmapAccessMode::Read);
+    m_pBackend->copyArea(nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, bWindowInvalidate);
 }
 
-void GenPspGraphics::drawBitmap( const SalTwoRect&,
-                              const SalBitmap&,
-                              const SalBitmap& )
+void GenPspGraphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
 {
-    OSL_FAIL("Error: no PrinterGfx::DrawBitmap() for transparent bitmap");
+    m_pBackend->drawBitmap(rPosAry, rSalBitmap);
 }
 
-void GenPspGraphics::drawMask( const SalTwoRect&,
-                            const SalBitmap &,
-                            Color )
+void GenPspGraphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap, const SalBitmap& rMaskBitmap)
 {
-    OSL_FAIL("Error: PrinterGfx::DrawMask() not implemented");
+
+    m_pBackend->drawBitmap(rPosAry, rSalBitmap, rMaskBitmap);
 }
 
-std::shared_ptr<SalBitmap> GenPspGraphics::getBitmap( tools::Long, tools::Long, tools::Long, tools::Long )
+void GenPspGraphics::drawMask(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap, Color nMaskColor)
 {
-    SAL_INFO("vcl", "Warning: PrinterGfx::GetBitmap() not implemented");
-    return nullptr;
+    m_pBackend->drawMask(rPosAry, rSalBitmap, nMaskColor);
 }
 
-Color GenPspGraphics::getPixel( tools::Long, tools::Long )
+std::shared_ptr<SalBitmap> GenPspGraphics::getBitmap(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight)
 {
-    OSL_FAIL("Warning: PrinterGfx::GetPixel() not implemented");
-    return 0;
+    return m_pBackend->getBitmap(nX, nY, nWidth, nHeight);
 }
 
-void GenPspGraphics::invert(tools::Long,tools::Long,tools::Long,tools::Long,SalInvert)
+Color GenPspGraphics::getPixel(tools::Long nX, tools::Long nY)
 {
-    OSL_FAIL("Warning: PrinterGfx::Invert() not implemented");
+    return m_pBackend->getPixel(nX, nY);
 }
 
 namespace {
@@ -812,43 +621,57 @@ void GenPspGraphics::AnnounceFonts( PhysicalFontCollection* pFontCollection, con
     pFontCollection->Add( pFD.get() );
 }
 
-bool GenPspGraphics::blendBitmap( const SalTwoRect&, const SalBitmap& )
+bool GenPspGraphics::blendBitmap(const SalTwoRect& rPosAry, const SalBitmap& rBitmap)
 {
-    return false;
+    return m_pBackend->blendBitmap(rPosAry, rBitmap);
 }
 
-bool GenPspGraphics::blendAlphaBitmap( const SalTwoRect&, const SalBitmap&, const SalBitmap&, const SalBitmap& )
+bool GenPspGraphics::blendAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap,
+                                      const SalBitmap& rMaskBitmap, const SalBitmap& rAlphaBitmap)
 {
-    return false;
+    return m_pBackend->blendAlphaBitmap(rPosAry, rSourceBitmap, rMaskBitmap, rAlphaBitmap);
 }
 
-bool GenPspGraphics::drawAlphaBitmap( const SalTwoRect&,
-                                   const SalBitmap&,
-                                   const SalBitmap& )
+bool GenPspGraphics::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap,
+                                     const SalBitmap& rAlphaBitmap)
 {
-    return false;
+    return m_pBackend->drawAlphaBitmap(rPosAry, rSourceBitmap, rAlphaBitmap);
 }
 
-bool GenPspGraphics::drawTransformedBitmap(
-    const basegfx::B2DPoint&,
-    const basegfx::B2DPoint&,
-    const basegfx::B2DPoint&,
-    const SalBitmap&,
-    const SalBitmap*,
-    double)
+bool GenPspGraphics::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
+                                             const basegfx::B2DPoint& rX,
+                                             const basegfx::B2DPoint& rY,
+                                             const SalBitmap& rSourceBitmap,
+                                             const SalBitmap* pAlphaBitmap, double fAlpha)
 {
-    // here direct support for transformed bitmaps can be implemented
-    return false;
+    return m_pBackend->drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap, fAlpha);
 }
 
 bool GenPspGraphics::hasFastDrawTransformedBitmap() const
 {
-    return false;
+    return m_pBackend->hasFastDrawTransformedBitmap();
 }
 
-bool GenPspGraphics::drawAlphaRect( tools::Long, tools::Long, tools::Long, tools::Long, sal_uInt8 )
+bool GenPspGraphics::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                   tools::Long nHeight, sal_uInt8 nTransparency)
 {
-    return false;
+    return m_pBackend->drawAlphaRect(nX, nY, nWidth, nHeight, nTransparency);
+}
+
+bool GenPspGraphics::drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient)
+{
+    return m_pBackend->drawGradient(rPolygon, rGradient);
+}
+
+bool GenPspGraphics::implDrawGradient(basegfx::B2DPolyPolygon const& rPolyPolygon,
+                                        SalGradient const& rGradient)
+{
+    return m_pBackend->implDrawGradient(rPolyPolygon, rGradient);
+}
+
+bool GenPspGraphics::supportsOperation(OutDevSupportType eType) const
+{
+    return m_pBackend->supportsOperation(eType);
 }
 
 SystemGraphicsData GenPspGraphics::GetGraphicsData() const
@@ -884,11 +707,6 @@ css::uno::Any GenPspGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& /*
 }
 
 #endif // ENABLE_CAIRO_CANVAS
-
-bool GenPspGraphics::supportsOperation( OutDevSupportType ) const
-{
-    return false;
-}
 
 void GenPspGraphics::DoFreeEmbedFontData( const void* pData, tools::Long nLen )
 {
