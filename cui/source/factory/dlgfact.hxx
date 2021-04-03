@@ -121,6 +121,19 @@ public:
     virtual short Execute() override;
 };
 
+class CuiAbstractTipController_Impl : public VclAbstractDialog
+{
+    std::shared_ptr<weld::DialogController> m_xDlg;
+
+public:
+    explicit CuiAbstractTipController_Impl(std::shared_ptr<weld::DialogController> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext& rCtx) override;
+};
+
 class CuiAbstractSingleTabController_Impl : public SfxAbstractDialog
 {
     std::unique_ptr<SfxSingleTabDialogController> m_xDlg;

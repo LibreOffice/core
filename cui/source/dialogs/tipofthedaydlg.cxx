@@ -25,6 +25,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
+#include <vcl/window.hxx>
 
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -38,6 +39,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -47,6 +49,7 @@ const Size ThumbSize(150, 150);
 
 TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/tipofthedaydialog.ui", "TipOfTheDayDialog")
+    , m_pParent(pParent)
     , m_pText(m_xBuilder->weld_label("lbText"))
     , m_pShowTip(m_xBuilder->weld_check_button("cbShowTip"))
     , m_pNext(m_xBuilder->weld_button("btnNext"))
@@ -58,12 +61,29 @@ TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     m_nCurrentTip = officecfg::Office::Common::Misc::LastTipOfTheDayID::get();
     m_pPreview->set_size_request(ThumbSize.Width(), ThumbSize.Height());
 
+    if (pParent != nullptr)
+    {
+        css::uno::Reference<css::awt::XWindow> xWindow = pParent->GetXWindow();
+        if (xWindow.is())
+        {
+            VclPtr<vcl::Window> xVclWin(VCLUnoHelper::GetWindow(xWindow));
+            if (xVclWin != nullptr)
+                xVclWin->AddEventListener(LINK(this, TipOfTheDayDialog, Terminated));
+        }
+    }
+
     const auto t0 = std::chrono::system_clock::now().time_since_epoch();
     m_nDay = std::chrono::duration_cast<std::chrono::hours>(t0).count() / 24;
     if (m_nDay > officecfg::Office::Common::Misc::LastTipOfTheDayShown::get())
         m_nCurrentTip++;
 
     UpdateTip();
+}
+
+IMPL_LINK(TipOfTheDayDialog, Terminated, VclWindowEvent&, rEvent, void)
+{
+    if (rEvent.GetId() == VclEventId::ObjectDying)
+        TipOfTheDayDialog::response(RET_OK);
 }
 
 TipOfTheDayDialog::~TipOfTheDayDialog()
@@ -74,6 +94,17 @@ TipOfTheDayDialog::~TipOfTheDayDialog()
     officecfg::Office::Common::Misc::LastTipOfTheDayID::set(m_nCurrentTip, xChanges);
     officecfg::Office::Common::Misc::ShowTipOfTheDay::set(m_pShowTip->get_active(), xChanges);
     xChanges->commit();
+
+    if (m_pParent != nullptr)
+    {
+        css::uno::Reference<css::awt::XWindow> xWindow = m_pParent->GetXWindow();
+        if (xWindow.is())
+        {
+            VclPtr<vcl::Window> xVclWin(VCLUnoHelper::GetWindow(xWindow));
+            if (xVclWin != nullptr)
+                xVclWin->RemoveEventListener(LINK(this, TipOfTheDayDialog, Terminated));
+        }
+    }
 }
 
 static bool file_exists(const OUString& fileName)
