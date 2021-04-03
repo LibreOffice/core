@@ -106,6 +106,16 @@ short CuiAbstractController_Impl::Execute()
     return m_xDlg->run();
 }
 
+short CuiAbstractTipController_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
+bool CuiAbstractTipController_Impl::StartExecuteAsync(AsyncContext& rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short CuiAbstractSingleTabController_Impl::Execute()
 {
     return m_xDlg->run();
@@ -1682,8 +1692,8 @@ AbstractDialogFactory_Impl::CreateAboutDialog(weld::Window* pParent)
 VclPtr<VclAbstractDialog>
 AbstractDialogFactory_Impl::CreateTipOfTheDayDialog(weld::Window* pParent)
 {
-    return VclPtr<CuiAbstractController_Impl>::Create(
-        std::make_unique<TipOfTheDayDialog>(pParent));
+    return VclPtr<CuiAbstractTipController_Impl>::Create(
+        std::make_shared<TipOfTheDayDialog>(pParent));
 }
 
 VclPtr<VclAbstractDialog>
