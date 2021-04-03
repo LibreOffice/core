@@ -2443,4 +2443,24 @@ bool OutputDevice::GetTextOutline( tools::PolyPolygon& rPolyPoly, const OUString
     return true;
 }
 
+void OutputDevice::SetSystemTextColor(DrawFlags nFlags)
+{
+    if (nFlags & DrawFlags::Mono)
+    {
+        SetTextColor(COL_BLACK);
+    }
+    else
+    {
+        if (!IsEnabled())
+        {
+            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+            SetTextColor(rStyleSettings.GetDisableColor());
+        }
+        else
+        {
+            SetTextColor(GetTextColor());
+        }
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
