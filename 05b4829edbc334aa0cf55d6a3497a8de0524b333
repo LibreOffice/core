@@ -16,6 +16,24 @@
       "revId": "05b4829edbc334aa0cf55d6a3497a8de0524b333",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "499ede6d_bcffaabe",
+        "filename": "emfio/source/reader/emfreader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2021-04-03T12:40:30Z",
+      "side": 1,
+      "message": "Yes, definitely it is true.\nI didn\u0027t investigate this part of code.\n\nI took information about regions from Microsoft page:\nhttps://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-emf/e66601f2-9b5c-4619-8476-ddb7b087551b\n\nBased on documentation:\nhttps://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-emf/5ca68a15-1811-45b6-a51b-5e40d1055ccc\n\"CountRects (4 bytes): An unsigned integer that specifies the number of rectangles in this region.\n\nDo you think it will be ok if I will move this check after reading bounds of the region?",
+      "parentUuid": "53ae9d4c_7f38b262",
+      "revId": "05b4829edbc334aa0cf55d6a3497a8de0524b333",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
