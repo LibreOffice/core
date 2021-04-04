@@ -33,6 +33,23 @@
       "revId": "87d0600064c4bf8cb7bdc976e8e733e7c021e4b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13d7e3b8_47297e59",
+        "filename": "basic/source/comp/exprnode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-04T21:19:42Z",
+      "side": 1,
+      "message": "I believe that the added code fits better here, above this line. It would not remove the \"if outside of bounds, then bErr \u003d true\" in case of SbxMAXLNG + 0.5 :-)",
+      "revId": "87d0600064c4bf8cb7bdc976e8e733e7c021e4b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
