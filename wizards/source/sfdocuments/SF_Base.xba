@@ -399,6 +399,8 @@ Public Function Methods() As Variant
 					, &quot;FormDocuments&quot; _
 					, &quot;Forms&quot; _
 					, &quot;GetDatabase&quot; _
+					, &quot;IsLoaded&quot; _
+					, &quot;OpenFormDocument&quot; _
 					, &quot;RunCommand&quot; _
 					, &quot;Save&quot; _
 					, &quot;SaveAs&quot; _

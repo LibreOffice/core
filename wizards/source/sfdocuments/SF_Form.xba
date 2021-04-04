@@ -15,7 +15,7 @@ Option Explicit
 &apos;&apos;&apos;	SF_Form
 &apos;&apos;&apos;	=======
 &apos;&apos;&apos;		Management of forms defined in LibreOffice documents. Supported types are Base, Calc and Writer documents.
-&apos;&apos;&apos;		For Base documents, it includes the management of subforms
+&apos;&apos;&apos;		It includes the management of subforms
 &apos;&apos;&apos;		Each instance of the current class represents a single form or a single subform
 &apos;&apos;&apos;
 &apos;&apos;&apos;		A form may optionally be (understand &quot;is often&quot;) linked to a data source manageable with the SFDatabases.Database service
@@ -916,7 +916,7 @@ REM ----------------------------------------------------------------------------
 Public Function MovePrevious(Optional ByVal Offset As Variant) As Boolean
 &apos;&apos;&apos;	The cursor is (re)positioned on the previous row
 &apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		Offset: The number of records to go forward (default = 1)
+&apos;&apos;&apos;		Offset: The number of records to go backward (default = 1)
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		True if cursor move is successful
 &apos;&apos;&apos;	Example:
@@ -1070,7 +1070,7 @@ Public Function Subforms(Optional ByVal Subform As Variant) As Variant
 &apos;&apos;&apos;		An instance of the SF_Form class if Subform exists
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;			Dim myForm As Object, myList As Variant, mySubform As Object
-&apos;&apos;&apos;				myList = oForm.Subforms()
+&apos;&apos;&apos;				myList = myForm.Subforms()
 &apos;&apos;&apos;				Set mySubform = myForm.Subforms(&quot;mySubform&quot;)
 
 Dim oSubform As Object				&apos;	The new Form class instance

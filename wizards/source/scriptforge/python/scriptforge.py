@@ -299,12 +299,13 @@ class ScriptForge(object, metaclass = _Singleton):
             else:
                 # Create the new class instance of the right subclass of SFServices()
                 servname = returntuple[cstService]
+                if servname not in cls.serviceslist:
+                    # When service not found
+                    raise RuntimeError("The service '" + servname + "' is not available in Python. Execution stops.")
                 subcls = cls.serviceslist[servname]
                 if subcls is not None:
                     return subcls(returntuple[cstValue], returntuple[cstType], returntuple[cstClass],
                                   returntuple[cstName])
-                # When service not found
-                raise RuntimeError("The service '" + servname + "' is not available in Python. Execution stops.")
         elif returntuple[cstVarType] >= ScriptForge.V_ARRAY:
             pass
         elif returntuple[cstVarType] == ScriptForge.V_DATE:
@@ -386,6 +387,7 @@ class SFServices(object):
     flgArrayArg = 512  # 1st argument can be a 2D array
     flgArrayRet = 1024  # Invoked service method can return a 2D array
     flgUno = 256  # Invoked service method/property can return a UNO object
+    flgObject = 2048  # 1st argument may be a Basic object
     # Basic class type
     moduleClass, moduleStandard = 2, 1
     #
@@ -501,12 +503,18 @@ class SFServices(object):
         if len(methodname) > 0:
             return self.EXEC(self.objectreference, flags, methodname, *args)
 
-    def GetProperty(self, propertyname):
+    def GetProperty(self, propertyname, arg = None):
         """
             Get the given property from the Basic world
             """
         if self.serviceimplementation == 'basic':
-            return self.EXEC(self.objectreference, self.vbGet, propertyname)
+            # Conventionally properties starting with X (and only them) may return a UNO object
+            calltype = self.vbGet + (self.flgUno if propertyname[0] == 'X' else 0)
+            if arg is None:
+                return self.EXEC(self.objectreference, calltype, propertyname)
+            else:   # There are a few cases (Calc ...) where GetProperty accepts an argument
+                return self.EXEC(self.objectreference, calltype, propertyname, arg)
+        return None
     getProperty, getproperty = GetProperty, GetProperty
 
     def Properties(self):
@@ -526,6 +534,8 @@ class SFServices(object):
 #                       SFScriptForge CLASS    (alias of ScriptForge Basic library)                                 ###
 # #####################################################################################################################
 class SFScriptForge:
+    pass
+
     # #########################################################################
     # SF_Array CLASS
     # #########################################################################
@@ -1020,7 +1030,7 @@ class SFScriptForge:
         # Mandatory class properties for service registration
         serviceimplementation = 'basic'
         servicename = 'ScriptForge.Platform'
-        servicesynonyms = ()
+        servicesynonyms = ('platform', 'scriptforge.platform')
         serviceproperties = dict(Architecture = False, ComputerName = False, CPUCount = False, CurrentUser = False,
                                  Locale = False, Machine = False, OfficeVersion = False, OSName = False,
                                  OSPlatform = False, OSRelease = False, OSVersion = False, Processor = False)
@@ -1312,8 +1322,382 @@ class SFScriptForge:
             return self.Execute(self.vbMethod, 'Terminate')
         terminate = Terminate
 
+    # #########################################################################
+    # SF_UI CLASS
+    # #########################################################################
+    class SF_UI(SFServices, metaclass = _Singleton):
+        """
+            Singleton class for the identification and the manipulation of the
+            different windows composing the whole LibreOffice application:
+                - Windows selection
+                - Windows moving and resizing
+                - Statusbar settings
+                - Creation of new windows
+                - Access to the underlying "documents"
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'ScriptForge.UI'
+        servicesynonyms = ('ui', 'scriptforge.ui')
+        serviceproperties = dict(ActiveWindow = False)
+        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
 
-# ##############################################False#######################################################################
+        # Class constants
+        MACROEXECALWAYS, MAROEXECNEVER, MACROEXECNORMAL = 2, 1, 0
+        BASEDOCUMENT, CALCDOCUMENT, DRAWDOCUMENT, IMPRESSDOCUMENT, MATHDOCUMENT, WRITERDOCUMENT = \
+            'Base', 'Calc', 'Draw', 'Impress', 'Math', 'Writer'
+
+        @property
+        def ActiveWindow(self):
+            return self.Execute(self.vbMethod, 'ActiveWindow')
+        activeWindow, activewindow = ActiveWindow, ActiveWindow
+
+        def Activate(self, windowname = ''):
+            return self.Execute(self.vbMethod, 'Activate', windowname)
+        activate = Activate
+
+        def CreateBaseDocument(self, filename, embeddeddatabase = 'HSQLDB', registrationname = ''):
+            return self.Execute(self.vbMethod, 'CreateBaseDocument', filename, embeddeddatabase, registrationname)
+        createBaseDocument, createbasedocument = CreateBaseDocument, CreateBaseDocument
+
+        def CreateDocument(self, documenttype = '', templatefile = '', hidden = False):
+            return self.Execute(self.vbMethod, 'CreateDocument', documenttype, templatefile, hidden)
+        createDocument, createdocument = CreateDocument, CreateDocument
+
+        def Documents(self):
+            return self.Execute(self.vbMethod, 'Documents')
+        documents = Documents
+
+        def GetDocument(self, windowname = ''):
+            return self.Execute(self.vbMethod, 'GetDocument', windowname)
+        getDocument, getdocument = GetDocument, GetDocument
+
+        def Maximize(self, windowname = ''):
+            return self.Execute(self.vbMethod, 'Maximize', windowname)
+        maximize = Maximize
+
+        def Minimize(self, windowname = ''):
+            return self.Execute(self.vbMethod, 'Minimize', windowname)
+        minimize = Minimize
+
+        def OpenBaseDocument(self, filename = '', registrationname = '', macroexecution = MACROEXECNORMAL):
+            return self.Execute(self.vbMethod, 'OpenBaseDocument', filename, registrationname, macroexecution)
+        openBaseDocument, openbasedocument = OpenBaseDocument, OpenBaseDocument
+
+        def OpenDocument(self, filename, password = '', readonly = False, hidden = False,
+                         macroexecution = MACROEXECNORMAL, filtername = '', filteroptions = ''):
+            return self.Execute(self.vbMethod, 'OpenDocument', filename, password, readonly, hidden,
+                                macroexecution, filtername, filteroptions)
+        openDocument, opendocument = OpenDocument, OpenDocument
+
+        def Resize(self, left = -1, top = -1, width = -1, height = -1):
+            return self.Execute(self.vbMethod, 'Resize', left, top, width, height)
+        resize = Resize
+
+        def SetStatusbar(self, text = '', percentage = -1):
+            return self.Execute(self.vbMethod, 'SetStatusbar', text, percentage)
+        setStatusbar, setstatusbar = SetStatusbar, SetStatusbar
+
+        # ShowProgressBar - not supported in Python
+
+        def WindowExists(self, windowname):
+            return self.Execute(self.vbMethod, 'WindowExists', windowname)
+        windowExists, windowexists = WindowExists, WindowExists
+
+
+# #####################################################################################################################
+#                       SFDocuments CLASS    (alias of SFDocuments Basic library)                                   ###
+# #####################################################################################################################
+class SFDocuments:
+    """
+        The SFDocuments class gathers a number of classes, methods and properties making easy
+        managing and manipulating LibreOffice documents
+        """
+    pass
+
+    # #########################################################################
+    # SF_Document CLASS
+    # #########################################################################
+    class SF_Document(SFServices):
+        """
+            The methods and properties are generic for all types of documents: they are combined in the
+            current SF_Document class
+                - saving, closing documents
+                - accessing their standard or custom properties
+            Specific properties and methods are implemented in the concerned subclass(es) SF_Calc, SF_Base, ...
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'SFDocuments.Document'
+        servicesynonyms = ('document', 'sfdocuments.document')
+        serviceproperties = dict(Description = True, DocumentType = False, IsBase = False, IsCalc = False,
+                                 IsDraw = False, IsImpress = False, IsMath = False, IsWriter = False,
+                                 Keywords = True, Readonly = False, Subject = True, Title = True,
+                                 XComponent = False)
+        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
+        # Force for each property to get its value from Basic - due to intense interactivity with user
+        forceGetProperty = True
+
+        @property
+        def XComponent(self):
+            return self.Execute(self.vbGet + self.flgUno, 'XComponent')
+        xComponent, xcomponent = XComponent, XComponent
+
+        def Activate(self):
+            return self.Execute(self.vbMethod, 'Activate')
+        activate = Activate
+
+        def CloseDocument(self, saveask = True):
+            return self.Execute(self.vbMethod, 'CloseDocument', saveask)
+        closeDocument, closedocument = CloseDocument, CloseDocument
+
+        def Forms(self, form = ''):
+            return self.Execute(self.vbMethod + self.flgArrayRet, 'Forms', form)
+        forms = Forms
+
+        def RunCommand(self, command):
+            return self.Execute(self.vbMethod, 'RunCommand', command)
+        runCommand, runcommand = RunCommand, RunCommand
+
+        def Save(self):
+            return self.Execute(self.vbMethod, 'Save')
+        save = Save
+
+        def SaveAs(self, filename, overwrite = False, password = '', filtername = '', filteroptions = ''):
+            return self.Execute(self.vbMethod, 'SaveAs', filename, overwrite, password, filtername, filteroptions)
+        saveAs, saveas = SaveAs, SaveAs
+
+        def SaveCopyAs(self, filename, overwrite = False, password = '', filtername = '', filteroptions = ''):
+            return self.Execute(self.vbMethod, 'SaveCopyAs', filename, overwrite, password, filtername, filteroptions)
+        saveCopyAs, savecopyas = SaveCopyAs, SaveCopyAs
+
+    # #########################################################################
+    # SF_Base CLASS
+    # #########################################################################
+    class SF_Base(SF_Document, SFServices):
+        """
+            The SF_Base module is provided mainly to block parent properties that are NOT applicable to Base documents
+            In addition, it provides methods to identify form documents and access their internal forms
+            (read more elsewhere (the "SFDocuments.Form" service) about this subject)
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'SFDocuments.Base'
+        servicesynonyms = ()
+        serviceproperties = dict(DocumentType = False, IsBase = False, IsCalc = False,
+                                 IsDraw = False, IsImpress = False, IsMath = False, IsWriter = False,
+                                 XComponent = False)
+        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
+
+    # #########################################################################
+    # SF_Calc CLASS
+    # #########################################################################
+    class SF_Calc(SF_Document, SFServices):
+        """
+            The SF_Calc module is focused on :
+                - management (copy, insert, move, ...) of sheets within a Calc document
+                - exchange of data between Basic data structures and Calc ranges of values
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'SFDocuments.Calc'
+        servicesynonyms = ('calc', 'sfdocuments.calc')
+        serviceproperties = dict(CurrentSelection = True, Sheets = False,
+                                 Description = True, DocumentType = False, IsBase = False, IsCalc = False,
+                                 IsDraw = False, IsImpress = False, IsMath = False, IsWriter = False,
+                                 Keywords = True, Readonly = False, Subject = True, Title = True,
+                                 XComponent = False)
+        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
+        # Force for each property to get its value from Basic - due to intense interactivity with user
+        forceGetProperty = True
+
+        # Next functions are implemented in Basic as read-only properties with 1 argument
+        def Height(self, rangename):
+            return self.GetProperty('Height', rangename)
+        height = Height
+
+        def LastCell(self, sheetname):
+            return self.GetProperty('LastCell', sheetname)
+        lastCell, lastcell = LastCell, LastCell
+
+        def LastColumn(self, sheetname):
+            return self.GetProperty('LastColumn', sheetname)
+        lastColumn, lastcolumn = LastColumn, LastColumn
+
+        def LastRow(self, sheetname):
+            return self.GetProperty('LastRow', sheetname)
+        lastRow, lastrow = LastRow, LastRow
+
+        def Range(self, rangename):
+            return self.GetProperty('Range', rangename)
+        range = Range
+
+        def Sheet(self, sheetname):
+            return self.GetProperty('Sheet', sheetname)
+        sheet = Sheet
+
+        def Width(self, rangename):
+            return self.GetProperty('Width', rangename)
+        width = Width
+
+        def XCellRange(self, rangename):
+            return self.Execute(self.vbGet + self.flgUno, 'XCellRange', rangename)
+        xCellRange, xcellrange = XCellRange, XCellRange
+
+        def XSpreadsheet(self, sheetname):
+            return self.Execute(self.vbGet + self.flgUno, 'XSpreadsheet', sheetname)
+        xSpreadsheet, xspreadsheet = XSpreadsheet, XSpreadsheet
+
+        # Usual methods
+        def Activate(self, sheetname = ''):
+            return self.Execute(self.vbMethod, 'Activate', sheetname)
+        activate = Activate
+
+        def ClearAll(self, range):
+            return self.Execute(self.vbMethod, 'ClearAll', range)
+        clearAll, clearall = ClearAll, ClearAll
+
+        def ClearFormats(self, range):
+            return self.Execute(self.vbMethod, 'ClearFormats', range)
+        clearFormats, clearformats = ClearFormats, ClearFormats
+
+        def ClearValues(self, range):
+            return self.Execute(self.vbMethod, 'ClearValues', range)
+        clearValues, clearvalues = ClearValues, ClearValues
+
+        def CopySheet(self, sheetname, newname, beforesheet = 32768):
+            sheet = (sheetname.objectreference if isinstance(sheetname, SFDocuments.SF_CalcReference) else sheetname)
+            return self.Execute(self.vbMethod + self.flgObject, 'CopySheet', sheet, newname, beforesheet)
+        copySheet, copysheet = CopySheet, CopySheet
+
+        def CopySheetFromFile(self, filename, sheetname, newname, beforesheet = 32768):
+            sheet = (sheetname.objectreference if isinstance(sheetname, SFDocuments.SF_CalcReference) else sheetname)
+            return self.Execute(self.vbMethod + self.flgObject, 'CopySheetFromFile',
+                                filename, sheet, newname, beforesheet)
+        copySheetFromFile, copysheetfromfile = CopySheetFromFile, CopySheetFromFile
+
+        def CopyToCell(self, sourcerange, destinationcell):
+            range = (sourcerange.objectreference if isinstance(sourcerange, SFDocuments.SF_CalcReference)
+                     else sourcerange)
+            return self.Execute(self.vbMethod + self.flgObject, 'CopyToCell', range, destinationcell)
+        copyToCell, copytocell = CopyToCell, CopyToCell
+
+        def CopyToRange(self, sourcerange, destinationrange):
+            range = (sourcerange.objectreference if isinstance(sourcerange, SFDocuments.SF_CalcReference)
+                     else sourcerange)
+            return self.Execute(self.vbMethod + self.flgObject, 'CopyToRange', range, destinationrange)
+        copyToRange, copytorange = CopyToRange, CopyToRange
+
+        def DAvg(self, range):
+            return self.Execute(self.vbMethod, 'DAvg', range)
+        dAvg, davg = DAvg, DAvg
+
+        def DCount(self, range):
+            return self.Execute(self.vbMethod, 'DCount', range)
+        dCount, dcount = DCount, DCount
+
+        def DMax(self, range):
+            return self.Execute(self.vbMethod, 'DMax', range)
+        dMax, dmax = DMax, DMax
+
+        def DMin(self, range):
+            return self.Execute(self.vbMethod, 'DMin', range)
+        dMin, dmin = DMin, DMin
+
+        def DSum(self, range):
+            return self.Execute(self.vbMethod, 'DSum', range)
+        dSum, dsum = DSum, DSum
+
+        def Forms(self, sheetname, form = ''):
+            return self.Execute(self.vbMethod + self.flgArrayRet, 'Forms', sheetname, form)
+        forms = Forms
+
+        def GetColumnName(self, columnnumber):
+            return self.Execute(self.vbMethod, 'GetColumnName', columnnumber)
+        getColumnName, getcolumnname = GetColumnName, GetColumnName
+
+        def GetFormula(self, range):
+            return self.Execute(self.vbMethod + self.flgArrayRet, 'GetFormula', range)
+        getFormula, getformula = GetFormula, GetFormula
+
+        def GetValue(self, range):
+            return self.Execute(self.vbMethod + self.flgArrayRet, 'GetValue', range)
+        getValue, getvalue = GetValue, GetValue
+
+        def ImportFromCSVFile(self, filename, destinationcell, filteroptions = ScriptForge.cstSymEmpty):
+            return self.Execute(self.vbMethod, 'ImportFromCSVFile', filename, destinationcell, filteroptions)
+        importFromCSVFile, importfromcsvfile = ImportFromCSVFile, ImportFromCSVFile
+
+        def ImportFromDatabase(self, filename = '', registrationname = '', destinationcell = '', sqlcommand = '',
+                               directsql = False):
+            return self.Execute(self.vbMethod, 'ImportFromDatabase', filename, registrationname,
+                                destinationcell, sqlcommand, directsql)
+        importFromDatabase, importfromdatabase = ImportFromDatabase, ImportFromDatabase
+
+        def InsertSheet(self, sheetname, beforesheet = 32768):
+            return self.Execute(self.vbMethod, 'InsertSheet', sheetname, beforesheet)
+        insertSheet, insertsheet = InsertSheet, InsertSheet
+
+        def MoveRange(self, source, destination):
+            return self.Execute(self.vbMethod, 'MoveRange', source, destination)
+        moveRange, moverange = MoveRange, MoveRange
+
+        def MoveSheet(self, sheetname, beforesheet = 32768):
+            return self.Execute(self.vbMethod, 'MoveSheet', sheetname, beforesheet)
+        moveSheet, movesheet = MoveSheet, MoveSheet
+
+        def Offset(self, range, rows = 0, columns = 0, height = ScriptForge.cstSymEmpty,
+                   width = ScriptForge.cstSymEmpty):
+            return self.Execute(self.vbMethod, 'Offset', range, rows, columns, height, width)
+        offset = Offset
+
+        def RemoveSheet(self, sheetname):
+            return self.Execute(self.vbMethod, 'RemoveSheet', sheetname)
+        removeSheet, removesheet = RemoveSheet, RemoveSheet
+
+        def RenameSheet(self, sheetname, newname):
+            return self.Execute(self.vbMethod, 'RenameSheet', sheetname, newname)
+        renameSheet, renamesheet = RenameSheet, RenameSheet
+
+        def SetArray(self, targetcell, value):
+            return self.Execute(self.vbMethod + self.flgArrayArg, 'SetArray', targetcell, value)
+        setArray, setarray = SetArray, SetArray
+
+        def SetCellStyle(self, targetrange, style):
+            return self.Execute(self.vbMethod, 'SetCellStyle', targetrange, style)
+        setCellStyle, setcellstyle = SetCellStyle, SetCellStyle
+
+        def SetFormula(self, targetrange, formula):
+            return self.Execute(self.vbMethod + self.flgArrayArg, 'SetFormula', targetrange, formula)
+        setFormula, setformula = SetFormula, SetFormula
+
+        def SetValue(self, targetrange, value):
+            return self.Execute(self.vbMethod + self.flgArrayArg, 'SetValue', targetrange, value)
+        setValue, setvalue = SetValue, SetValue
+
+        def SortRange(self, range, sortkeys, sortorder = 'ASC', destinationcell = ScriptForge.cstSymEmpty,
+                      containsheader = False, casesensitive = False, sortcolumns = False):
+            return self.Execute(self.vbMethod, 'SortRange', range, sortkeys, sortorder, destinationcell,
+                                containsheader, casesensitive, sortcolumns)
+        sortRange, sortrange = SortRange, SortRange
+
+    # #########################################################################
+    # SF_CalcReference CLASS
+    # #########################################################################
+    class SF_CalcReference(SFServices):
+        """
+            The SF_CalcReference class has as unique role to hold sheet and range references.
+            They are implemented in Basic as Type ... End Type data structures
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'SFDocuments.CalcReference'
+        servicesynonyms = ()
+        serviceproperties = dict()
+        propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
+
+
+# ##############################################False##################################################################
 #                           CreateScriptService()                                                                   ###
 # #####################################################################################################################
 def CreateScriptService(service, *args):

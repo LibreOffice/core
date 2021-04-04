@@ -66,8 +66,8 @@ Public Sub RegisterScriptServices() As Variant
 
 	With GlobalScope.ScriptForge.SF_Services
 		.RegisterService(&quot;Document&quot;,			&quot;SFDocuments.SF_Register._NewDocument&quot;)		&apos;	Reference to the function initializing the service
-		.RegisterService(&quot;Calc&quot;,				&quot;SFDocuments.SF_Register._NewDocument&quot;)		&apos;	Same references, distinction is made inside the function
-		.RegisterService(&quot;Base&quot;,				&quot;SFDocuments.SF_Register._NewDocument&quot;)		&apos;	Same references, distinction is made inside the function
+		.RegisterService(&quot;Calc&quot;,				&quot;SFDocuments.SF_Register._NewDocument&quot;)		&apos;	Same reference, distinction is made inside the function
+		.RegisterService(&quot;Base&quot;,				&quot;SFDocuments.SF_Register._NewDocument&quot;)		&apos;	Same reference, distinction is made inside the function
 		.RegisterEventManager(&quot;DocumentEvent&quot;,	&quot;SFDocuments.SF_Register._EventManager&quot;)	&apos;	Reference to the events manager
 		.RegisterEventManager(&quot;FormEvent&quot;,		&quot;SFDocuments.SF_Register._FormEventManager&quot;)&apos;	Reference to the form and controls events manager
 	End With

@@ -547,7 +547,7 @@ End Property	&apos;	SFDocuments.SF_FormControl.OnUpdated (let)
 
 REM -----------------------------------------------------------------------------
 Property Get Parent() As Object
-&apos;&apos;&apos;	Return the Parent dialog object of the actual control
+&apos;&apos;&apos;	Return the Parent form or [table]control object of the actual control
 	Parent = _PropertyGet(&quot;Parent&quot;, Nothing)
 End Property	&apos;	SFDocuments.SF_FormControl.Parent
 
@@ -860,9 +860,9 @@ Public Function SetFocus() As Boolean
 &apos;&apos;&apos;		True if focusing is successful
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		Dim oDoc As Object, oForm As Object, oControl As Object
-&apos;&apos;&apos;			Set oDoc = Set oDoc = CreateScriptService(&quot;SFDocuments.Document&quot;, ThisComponent)
+&apos;&apos;&apos;			Set oDoc = CreateScriptService(&quot;SFDocuments.Document&quot;, ThisComponent)
 &apos;&apos;&apos;			Set oForm = oDoc.Forms(0)
-&apos;&apos;&apos;			Set oControl = oDlg.Controls(&quot;thisControl&quot;)
+&apos;&apos;&apos;			Set oControl = oForm.Controls(&quot;thisControl&quot;)
 &apos;&apos;&apos;			oControl.SetFocus()
 
 Dim bSetFocus As Boolean		&apos;	Return value
