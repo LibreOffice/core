@@ -27,6 +27,8 @@
 
 #include <basic/sberrors.hxx>
 
+#include <rtl/math.hxx>
+
 SbiExprNode::SbiExprNode( std::unique_ptr<SbiExprNode> l, SbiToken t, std::unique_ptr<SbiExprNode> r ) :
     pLeft(std::move(l)),
     pRight(std::move(r)),
@@ -294,6 +296,12 @@ void SbiExprNode::FoldConstantsBinaryNode(SbiParser* pParser)
     {
         double nl = pLeft->nVal;
         double nr = pRight->nVal;
+        // tdf#141201 - round MOD literals to Integer values
+        if (eTok == MOD)
+        {
+            nl = rtl::math::round(nl);
+            nr = rtl::math::round(nr);
+        }
         tools::Long ll = 0, lr = 0;
         tools::Long llMod = 0, lrMod = 0;
         if( ( eTok >= AND && eTok <= IMP )
