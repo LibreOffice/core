@@ -716,7 +716,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
     ::Color aColor;
     unsigned int nAlpha = 255;
 
-    vcl::bitmap::lookup_table premultiply_table = vcl::bitmap::get_premultiply_table();
+    const vcl::bitmap::lookup_table& premultiply_table = vcl::bitmap::get_premultiply_table();
     for( nY = 0; nY < nHeight; nY++ )
     {
         ::Scanline pReadScan;
@@ -1035,47 +1035,38 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
         return bRet;
     }
 
-    sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a)
+    static constexpr sal_uInt8 unpremultiplyImpl(sal_uInt8 c, sal_uInt8 a)
     {
         return (a == 0) ? 0 : (c * 255 + a / 2) / a;
     }
 
-    sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a)
+    static constexpr sal_uInt8 premultiplyImpl(sal_uInt8 c, sal_uInt8 a)
     {
         return (c * a + 127) / 255;
     }
 
-    lookup_table get_unpremultiply_table()
-    {
-        static bool inited;
-        static sal_uInt8 unpremultiply_table[256][256];
+    sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a) { return unpremultiplyImpl(c, a); }
+    sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a) { return premultiplyImpl(c, a); }
 
-        if (!inited)
-        {
-            for (int a = 0; a < 256; ++a)
-                for (int c = 0; c < 256; ++c)
-                    unpremultiply_table[a][c] = unpremultiply(c, a);
-            inited = true;
-        }
+    static constexpr auto unpremultiply_table = []() constexpr {
+        lookup_table table{};
+        for (int a = 0; a < 256; ++a)
+            for (int c = 0; c < 256; ++c)
+                table[a][c] = unpremultiplyImpl(c, a);
+        return table;
+    }();
 
-        return unpremultiply_table;
-    }
+    static constexpr auto premultiply_table = []() constexpr {
+        lookup_table table{};
+        for (int a = 0; a < 256; ++a)
+            for (int c = 0; c < 256; ++c)
+                table[a][c] = premultiplyImpl(c, a);
+        return table;
+    }();
 
-    lookup_table get_premultiply_table()
-    {
-        static bool inited;
-        static sal_uInt8 premultiply_table[256][256];
+    const lookup_table& get_unpremultiply_table() { return unpremultiply_table; }
 
-        if (!inited)
-        {
-            for (int a = 0; a < 256; ++a)
-                for (int c = 0; c < 256; ++c)
-                    premultiply_table[a][c] = premultiply(c, a);
-            inited = true;
-        }
-
-        return premultiply_table;
-    }
+    const lookup_table& get_premultiply_table() { return premultiply_table; }
 
 bool convertBitmap32To24Plus8(BitmapEx const & rInput, BitmapEx & rResult)
 {
