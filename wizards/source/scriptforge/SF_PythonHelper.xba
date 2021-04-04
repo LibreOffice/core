@@ -544,6 +544,7 @@ Dim vArgs() As Variant				&apos;	Alias for Args()
 Dim sScript As String				&apos;	Argument of ExecuteBasicScript()
 Dim vParams As Variant				&apos;	Array of arguments to pass to a ParamArray
 Dim sObjectType As String			&apos;	Alias of object.ObjectType
+Dim sServiceName As String			&apos;	Alias of BasicObject.ServiceName
 Dim bBasicClass As Boolean			&apos;	True when BasicObject is a class
 Dim sLibrary As String				&apos;	Library where the object belongs to
 Dim bUno As Boolean					&apos;	Return value is a UNO object
@@ -560,9 +561,10 @@ Const vbGet = 2, vbLet = 4, vbMethod = 1, vbSet = 8
 &apos;	Protocol flags
 Const cstDateArg = 64		&apos;	May contain a date argument
 Const cstDateRet = 128		&apos;	Return value can be a date
-Const cstArgArray = 512		&apos;	1st argument can be a 2D array
+Const cstArgArray = 512		&apos;	Any argument can be a 2D array
 Const cstRetArray = 1024	&apos;	Return value can be an array
 Const cstUno = 256			&apos;	Return value can be a UNO object
+Const cstObject = 2048		&apos;	1st argument is a Basic object when numeric
 &apos;	Object nature in returned array
 Const objMODULE = 1, objCLASS = 2, objUNO = 3
 
@@ -576,13 +578,21 @@ Check:
 	&apos;	Reinterpret arguments one by one into vArgs, examine iso-dates and conventional NoArgs/Empty/Null values
 	iNbArgs = -1
 	vArgs = Array()
+
 	If UBound(Args) &gt;= 0 Then
 		For i = 0 To UBound(Args)
 			vArg = Args(i)
+			&apos;	Are there arguments ?
 			If i = 0 And VarType(vArg) = V_STRING Then
 				If vArg = cstNoArgs Then Exit For
 			End If
-			If VarType(vArg) = V_STRING Then
+			&apos;	Is 1st argument a reference to a Basic object ?
+			If i = 0 And (( CallType And cstObject ) = cstObject) And SF_Utils._VarTypeExt(vArg) = V_NUMERIC Then
+				If vArg &lt; 0 Or Not IsArray(_SF_.PythonStorage) Then GoTo Catch
+				If vArg &gt; UBound(_SF_.PythonStorage) Then GoTo Catch
+				vArg = _SF_.PythonStorage(vArg)
+			&apos;	Is argument a symbolic constant for Null, Empty, ... , or a date?
+			ElseIf VarType(vArg) = V_STRING Then
 				If Len(vArg) = 0 Then
 				ElseIf vArg = cstSymEmpty Then
 					vArg = Empty
@@ -649,24 +659,25 @@ Try:
 			If BasicObject &gt; UBound(_SF_.PythonStorage) Then GoTo Catch
 			vBasicObject = _SF_.PythonStorage(BasicObject)
 			sObjectType = vBasicObject.ObjectType
+			sServiceName = vBasicObject.ServiceName
 			&apos;	Basic modules have type = &quot;SF_*&quot;
 			bBasicClass = ( Left(sObjectType, 3) &lt;&gt; &quot;SF_&quot; )
-			sLibrary = Split(vBasicObject.ServiceName, &quot;.&quot;)(0)
+			sLibrary = Split(sServiceName, &quot;.&quot;)(0)
 			
 			&apos;	Methods in standard modules returning a date are hardcoded as exceptions
 			If Not bBasicClass And ((CallType And vbMethod) = vbMethod) And ((CallType And cstDateRet) = cstDateRet) Then
-				Select Case sLibrary
-					Case &quot;ScriptForge&quot;
-						If sObjectType = &quot;SF_FileSystem&quot; And Script = &quot;GetFileModified&quot; Then vReturn = SF_FileSystem.GetFileModified(vArgs(0))
+				Select Case sServiceName
+					Case &quot;ScriptForge.FileSystem&quot;
+						If Script = &quot;GetFileModified&quot; Then vReturn = SF_FileSystem.GetFileModified(vArgs(0))
 				End Select
 
 			&apos;	Methods in usual modules using a 2D array or returning arrays are hardcoded as exceptions
 			ElseIf Not bBasicClass And _
 						(((CallType And vbMethod) + (CallType And cstArgArray)) = vbMethod + cstArgArray Or _
 				   		((CallType And vbMethod) + (CallType And cstRetArray)) = vbMethod + cstRetArray) Then
-				Select Case sLibrary
-					Case &quot;ScriptForge&quot;
-						If sObjectType = &quot;SF_Array&quot; And Script = &quot;ImportFromCSVFile&quot; Then vReturn = SF_Array.ImportFromCSVFile(vArgs(0), vArgs(1), vArgs(2))
+				Select Case sServiceName
+					Case &quot;ScriptForge.Array&quot;
+						If Script = &quot;ImportFromCSVFile&quot; Then vReturn = SF_Array.ImportFromCSVFile(vArgs(0), vArgs(1), vArgs(2))
 				End Select
 
 			&apos;	Methods in usual modules are called by ExecuteBasicScript() except if they use a ParamArray
@@ -688,17 +699,26 @@ Try:
 				_SF_.StackLevel = 0
 			
 			&apos;	Properties in any service are got and set with obj.GetProperty/SetProperty(...)
-			ElseIf (CallType And vbGet) = vbGet Then
-				&apos;	vReturn = sess.ExecuteBasicScript(, sLibrary &amp; &quot;.&quot; &amp; sObjectType &amp; &quot;.GetProperty&quot;, Script)
-				vReturn = vBasicObject.GetProperty(Script)
+			ElseIf (CallType And vbGet) = vbGet Then	&apos;	In some cases (Calc ...) GetProperty may have an argument
+				If UBound(vArgs) &lt; 0 Then vReturn = vBasicObject.GetProperty(Script) Else vReturn = vBasicObject.GetProperty(Script, vArgs(0))
 			ElseIf (CallType And vbLet) = vbLet Then
-				&apos;	vReturn = sess.ExecuteBasicScript(, sLibrary &amp; &quot;.&quot; &amp; sObjectType &amp; &quot;.SetProperty&quot;, Script, vArgs(0))
 				vReturn = vBasicObject.SetProperty(Script, vArgs(0))
 			
 			&apos;	Methods in class modules using a 2D array or returning arrays are hardcoded as exceptions
 			ElseIf ((CallType And vbMethod) + (CallType And cstArgArray)) = vbMethod + cstArgArray Or _
 				   ((CallType And vbMethod) + (CallType And cstRetArray)) = vbMethod + cstRetArray Then
-				Select Case sLibrary
+				Select Case sServiceName
+					Case &quot;SFDocuments.Document&quot;
+						If Script = &quot;Forms&quot; Then vReturn = vBasicObject.Forms(vArgs(0))
+					Case &quot;SFDocuments.Calc&quot;
+						Select Case Script
+							Case &quot;Forms&quot;		:	vReturn = vBasicObject.Forms(vArgs(0), vArgs(1))
+							Case &quot;GetFormula&quot;	:	vReturn = vBasicObject.GetFormula(vArgs(0))
+							Case &quot;GetValue&quot;		:	vReturn = vBasicObject.GetValue(vArgs(0))
+							Case &quot;SetArray&quot;		:	vReturn = vBasicObject.SetArray(vArgs(0), vArgs(1))
+							Case &quot;SetFormula&quot;	:	vReturn = vBasicObject.SetFormula(vArgs(0), vArgs(1))
+							Case &quot;SetValue&quot;		:	vReturn = vBasicObject.SetValue(vArgs(0), vArgs(1))
+						End Select
 				End Select
 			
 			&apos;	Methods in class modules are invoked with CallByName
@@ -749,7 +769,7 @@ Try:
 		vReturnArray(1) = VarType(vReturn)
 		vReturnArray(2) = iDims
 	ElseIf VarType(vReturn) = V_OBJECT And Not IsNull(vReturn) Then
-		&apos;	Uno or not Uno ?BuildPath
+		&apos;	Uno or not Uno ?
 		bUno = False
 		If (CallType And cstUno) = cstUno Then		&apos;	UNO considered only when pre-announced in CallType
 			If Len(sess.UnoObjectType(vReturn)) &gt; 0 Then bUno = True
@@ -766,7 +786,10 @@ Try:
 		If Not bUno Then
 			vReturnArray(3) = vReturn.ObjectType
 			vReturnArray(4) = vReturn.ServiceName
-			If SF_Array.Contains(vReturn.Properties(), &quot;Name&quot;, SortOrder := &quot;ASC&quot;) Then vReturnArray(5) = vReturn.Name Else vReturnArray(5) = &quot;&quot;
+			vReturnArray(5) = &quot;&quot;
+			If vReturn.ObjectType &lt;&gt; &quot;SF_CalcReference&quot; Then	&apos;	Calc references are implemented as a Type ... End Type data structure
+				If SF_Array.Contains(vReturn.Properties(), &quot;Name&quot;, SortOrder := &quot;ASC&quot;) Then vReturnArray(5) = vReturn.Name
+			End If
 		End If
 	Else	&apos;	Scalar or Nothing
 		ReDim vReturnArray(0 To 1)

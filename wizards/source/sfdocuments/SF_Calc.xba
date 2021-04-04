@@ -95,6 +95,7 @@ Private _Component				As Object		&apos;	com.sun.star.lang.XComponent
 
 Type _Address
 	ObjectType					As String		&apos;	Must be &quot;SF_CalcReference&quot;
+	ServiceName					As String		&apos;	Must be &quot;SFDocuments.CalcReference&quot;
 	RawAddress					As String
 	Component					As Object		&apos;	com.sun.star.lang.XComponent
 	SheetName					As String
@@ -115,6 +116,8 @@ Private Const MAXCOLS			= 2^10					&apos;	Max number of columns in a sheet
 Private Const MAXROWS			= 2^20					&apos;	Max number of rows in a sheet
 
 Private Const CALCREFERENCE		= &quot;SF_CalcReference&quot;	&apos;	Object type of _Address
+Private Const SERVICEREFERENCE	= &quot;SFDocuments.CalcReference&quot;
+														&apos;	Service name of _Address (used in Python)
 
 Private Const ISCALCFORM		= 2						&apos;	Form is stored in a Calc document
 
@@ -526,7 +529,7 @@ Public Function CopySheetFromFile(Optional ByVal FileName As Variant _
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FileName: Identifies the file to open. It must follow the SF_FileSystem.FileNaming notation
 &apos;&apos;&apos;			The file must not be protected with a password
-&apos;&apos;&apos;		SheetName: The name of the sheet to copy or its reference
+&apos;&apos;&apos;		SheetName: The name of the sheet to copy
 &apos;&apos;&apos;		NewName: Must not exist
 &apos;&apos;&apos;		BeforeSheet: The name (string) or index (numeric, starting from 1) of the sheet before which to insert
 &apos;&apos;&apos;	Returns:
@@ -597,7 +600,7 @@ Public Function CopyToCell(Optional ByVal SourceRange As Variant _
 &apos;&apos;&apos;		SourceRange: the source range as a string if it belongs to the same document
 &apos;&apos;&apos;			or as a reference if it belongs to another open Calc document
 &apos;&apos;&apos;		DestinationCell: the destination of the copied range of cells, as a string
-&apos;&apos;&apos;			If given as range, the destination will be reduced to its top-left cell
+&apos;&apos;&apos;			If given as a range of cells, the destination will be reduced to its top-left cell
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A string representing the modified range of cells
 &apos;&apos;&apos;		The modified area depends only on the size of the source area
@@ -789,7 +792,7 @@ Public Function DCount(Optional ByVal Range As Variant) As Long
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Range : the range as a string where to get the values from
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		The number of numeric values a Long
+&apos;&apos;&apos;		The number of numeric values as a Long
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		Val = oDoc.DCount(&quot;~.A1:A1000&quot;)
 
@@ -859,6 +862,7 @@ Public Function Forms(Optional ByVal SheetName As Variant _
 &apos;&apos;&apos;		- the list of the Forms contained in the given sheet
 &apos;&apos;&apos;		- a SFDocuments.Form object based on its name or its index
 &apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		SheetName: the name of the sheet containing the requested form or forms
 &apos;&apos;&apos;		Form: a form stored in the document given by its name or its index
 &apos;&apos;&apos;			When absent, the list of available forms is returned
 &apos;&apos;&apos;			To get the first (unique ?) form stored in the form document, set Form = 0
@@ -1035,8 +1039,10 @@ Try:
 	&apos;	Superclass or subclass property ?
 	If ScriptForge.SF_Array.Contains([_Super].Properties(), PropertyName) Then
 		GetProperty = [_Super].GetProperty(PropertyName)
-	Else
+	ElseIf Len(ObjectName) = 0 Then
 		GetProperty = _PropertyGet(PropertyName)
+	Else
+		GetProperty = _PropertyGet(PropertyName, ObjectName)
 	End If
 
 Finally:
@@ -1177,7 +1183,7 @@ Public Sub ImportFromDatabase(Optional ByVal FileName As Variant _
 &apos;&apos;&apos;		RegistrationName: the name of a registered database
 &apos;&apos;&apos;			It is ignored if FileName &lt;&gt; &quot;&quot;
 &apos;&apos;&apos;		DestinationCell: the destination of the copied range of cells, as a string
-&apos;&apos;&apos;			If given as range, the destination will be reduced to its top-left cell
+&apos;&apos;&apos;			If given as a range of cells, the destination will be reduced to its top-left cell
 &apos;&apos;&apos;		SQLCommand: either a table or query name (without square brackets)
 &apos;&apos;&apos;			or a full SQL commands where table and fieldnames are preferably surrounded with square brackets
 &apos;&apos;&apos;	Returns:
@@ -1375,6 +1381,7 @@ Public Function MoveRange(Optional ByVal Source As Variant _
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Source: the source range of cells as a string
 &apos;&apos;&apos;		Destination: the destination of the moved range of cells, as a string
+&apos;&apos;&apos;			If given as a range of cells, the destination will be reduced to its top-left cell
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A string representing the modified range of cells
 &apos;&apos;&apos;		The modified area depends only on the size of the source area
@@ -1556,7 +1563,7 @@ Public Function Properties() As Variant
 					, &quot;Height&quot; _
 					, &quot;IsBase&quot; _
 					, &quot;IsCalc&quot; _
-					, &quot;IsDraw &quot; _
+					, &quot;IsDraw&quot; _
 					, &quot;IsImpress&quot; _
 					, &quot;IsMath&quot; _
 					, &quot;IsWriter&quot; _
@@ -1958,7 +1965,7 @@ Public Function SortRange(Optional ByVal Range As Variant _
 &apos;&apos;&apos;		DestinationCell: the destination of the sorted range of cells, as a string
 &apos;&apos;&apos;			If given as range, the destination will be reduced to its top-left cell
 &apos;&apos;&apos;			By default, Range is overwritten with its sorted content
-&apos;&apos;&apos;		ContainsHeader: when True, the first row/column is not sorted
+&apos;&apos;&apos;		ContainsHeader: when True, the first row/column is not sorted. Default = False
 &apos;&apos;&apos;		CaseSensitive: only for string comparisons, default = False
 &apos;&apos;&apos;		SortColumns: when True, the columns are sorted from left to right
 &apos;&apos;&apos;			Default = False: rows are sorted from top to bottom.
@@ -1979,7 +1986,7 @@ Dim vSortFields As Variant			&apos;	Array of com.sun.star.table.TableSortField
 Dim sOrder As String				&apos;	Item in SortOrder
 Dim i As Long
 Const cstThisSub = &quot;SFDocuments.Calc.SortRange&quot;
-Const cstSubArgs = &quot;Range, SortKeys, [TargetRange=&quot;&quot;&quot;&quot;], [SortOrder=&quot;&quot;ASC&quot;&quot;], [ContainsHeader=False], [CaseSensitive=False], [SortColumns=False]&quot;
+Const cstSubArgs = &quot;Range, SortKeys, [TargetRange=&quot;&quot;&quot;&quot;], [SortOrder=&quot;&quot;ASC&quot;&quot;], [DestinationCell=&quot;&quot;&quot;&quot;], [ContainsHeader=False], [CaseSensitive=False], [SortColumns=False]&quot;
 
 	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 	sSort = &quot;&quot;
@@ -2294,6 +2301,7 @@ Private Function _ConvertToDataArray(ByRef pvArray As Variant _
 								) As Variant
 &apos;&apos;&apos;	Create a 2-dimensions nested array (compatible with the ranges .DataArray property)
 &apos;&apos;&apos;	from a scalar, a 1D array or a 2D array
+&apos;&apos;&apos;	Input may be a 1D array of arrays, typically when call issued by a Python script
 &apos;&apos;&apos;	Array items are converted to (possibly empty) strings or doubles
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		pvArray: the input scalar or array. If array, must be 1 or 2D otherwise it is ignored.
@@ -2313,13 +2321,14 @@ Dim vDataArray() As Variant			&apos;	Return value
 Dim vVector() As Variant			&apos;	A temporary 1D array
 Dim vItem As Variant				&apos;	A single input item
 Dim iDims As Integer				&apos;	Number of dimensions of the input argument
-Dim lMin1 As Long					&apos;	Lower bound of input array
-Dim lMax1 As Long					&apos;	Upper bound
-Dim lMin2 As Long					&apos;	Lower bound
-Dim lMax2 As Long					&apos;	Upper bound
+Dim lMin1 As Long					&apos;	Lower bound (1) of input array
+Dim lMax1 As Long					&apos;	Upper bound (1)
+Dim lMin2 As Long					&apos;	Lower bound (2)
+Dim lMax2 As Long					&apos;	Upper bound (2)
 Dim lRows As Long					&apos;	Upper bound of vDataArray
 Dim lCols As Long					&apos;	Upper bound of vVector
 Dim bHorizontal As Boolean			&apos;	Horizontal vector
+Dim bDataArray As Boolean			&apos;	Input array is already an array of arrays
 Dim i As Long
 Dim j As Long
 
@@ -2339,11 +2348,18 @@ Try:
 	Select Case iDims
 		Case -1													&apos;	Scalar value
 		Case 1
-			bHorizontal = ( plRows = 0 And plColumns &gt; 0)
-			If Not bHorizontal Then
-				lMin1 = LBound(pvArray)	:	lMax1 = UBound(pvArray)
+			bHorizontal = ( plRows = 0 And plColumns &gt; 0 )
+			bDataArray = IsArray(pvArray(0))
+			If Not bDataArray Then
+				If Not bHorizontal Then
+					lMin1 = LBound(pvArray)	:	lMax1 = UBound(pvArray)
+				Else
+					lMin2 = LBound(pvArray)	:	lMax2 = UBound(pvArray)
+				End If
 			Else
-				lMin2 = LBound(pvArray)	:	lMax2 = UBound(pvArray)
+				iDims = 2
+				lMin1 = LBound(pvArray)	:	lMax1 = UBound(pvArray)
+				lMin2 = LBound(pvArray(0))	:	lMax2 = UBound(pvArray(0))
 			End If
 		Case 2
 			lMin1 = LBound(pvArray, 1)	:	lMax1 = UBound(pvArray, 1)
@@ -2385,7 +2401,11 @@ Try:
 							vItem = _ConvertToCellValue(pvArray(i + lMin1))
 						End If
 					Case 2
-						vItem = _ConvertToCellValue(pvArray(i + lMin1, j + lMin2))
+						If bDataArray Then
+							vItem = _ConvertToCellValue(pvArray(i + lMin1)(j + lMin2))
+						Else
+							vItem = _ConvertToCellValue(pvArray(i + lMin1, j + lMin2))
+						End If
 				End Select
 				vVector(j) = vItem
 			End If
@@ -2581,6 +2601,7 @@ Try:
 	Set oOffset = New _Address
 	With oOffset
 		.ObjectType = CALCREFERENCE
+		.ServiceName = SERVICEREFERENCE
 		.RawAddress = oNewRange.AbsoluteName
 		.Component = _Component
 		.XSpreadsheet = oNewRange.Spreadsheet
@@ -2631,6 +2652,7 @@ Dim oSelect As Object				&apos;	Current selection
 		.SheetName = &quot;&quot;			:	.RangeName = &quot;&quot;
 
 		.ObjectType = CALCREFERENCE
+		.ServiceName = SERVICEREFERENCE
 		.RawAddress = psAddress
 		Set .XSpreadSheet = Nothing	:	Set .XCellRange = Nothing
 		
