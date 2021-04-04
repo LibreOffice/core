@@ -26,10 +26,10 @@ namespace com::sun::star::geometry { struct IntegerRectangle2D; }
 
 namespace vcl::bitmap {
 
-typedef sal_uInt8 (*lookup_table)[256];
+typedef std::array<std::array<sal_uInt8, 256>, 256> lookup_table;
 
-lookup_table VCL_DLLPUBLIC get_premultiply_table();
-lookup_table VCL_DLLPUBLIC get_unpremultiply_table();
+VCL_DLLPUBLIC lookup_table const & get_premultiply_table();
+VCL_DLLPUBLIC lookup_table const & get_unpremultiply_table();
 
 sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a);
 sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a);
