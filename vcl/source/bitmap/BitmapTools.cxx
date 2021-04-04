@@ -716,7 +716,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
     ::Color aColor;
     unsigned int nAlpha = 255;
 
-    vcl::bitmap::lookup_table premultiply_table = vcl::bitmap::get_premultiply_table();
+    const vcl::bitmap::lookup_table& premultiply_table = vcl::bitmap::get_premultiply_table();
     for( nY = 0; nY < nHeight; nY++ )
     {
         ::Scanline pReadScan;
@@ -1037,42 +1037,36 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
 
     sal_uInt8 unpremultiply(sal_uInt8 c, sal_uInt8 a)
     {
-        return (a == 0) ? 0 : (c * 255 + a / 2) / a;
+        return get_unpremultiply_table()[c][a];
     }
 
     sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a)
     {
-        return (c * a + 127) / 255;
+        return get_premultiply_table()[c][a];
     }
 
-    lookup_table get_unpremultiply_table()
+    const lookup_table& get_unpremultiply_table()
     {
-        static bool inited;
-        static sal_uInt8 unpremultiply_table[256][256];
-
-        if (!inited)
-        {
+        static constexpr auto unpremultiply_table = []() constexpr {
+            lookup_table table{};
             for (int a = 0; a < 256; ++a)
                 for (int c = 0; c < 256; ++c)
-                    unpremultiply_table[a][c] = unpremultiply(c, a);
-            inited = true;
-        }
+                    table[a][c] = (a == 0) ? 0 : (c * 255 + a / 2) / a;
+            return table;
+        }();
 
         return unpremultiply_table;
     }
 
-    lookup_table get_premultiply_table()
+    const lookup_table& get_premultiply_table()
     {
-        static bool inited;
-        static sal_uInt8 premultiply_table[256][256];
-
-        if (!inited)
-        {
+        static constexpr auto premultiply_table = []() constexpr {
+            lookup_table table{};
             for (int a = 0; a < 256; ++a)
                 for (int c = 0; c < 256; ++c)
-                    premultiply_table[a][c] = premultiply(c, a);
-            inited = true;
-        }
+                    table[a][c] = (c * a + 127) / 255;
+            return table;
+        }();
 
         return premultiply_table;
     }
