@@ -27,6 +27,8 @@
 
 #include <basic/sberrors.hxx>
 
+#include <rtl/math.hxx>
+
 SbiExprNode::SbiExprNode( std::unique_ptr<SbiExprNode> l, SbiToken t, std::unique_ptr<SbiExprNode> r ) :
     pLeft(std::move(l)),
     pRight(std::move(r)),
@@ -294,8 +296,13 @@ void SbiExprNode::FoldConstantsBinaryNode(SbiParser* pParser)
     {
         double nl = pLeft->nVal;
         double nr = pRight->nVal;
+        // tdf#141201 - round MOD literals to Integer values
+        if (eTok == MOD)
+        {
+            nl = rtl::math::round(nl);
+            nr = rtl::math::round(nr);
+        }
         tools::Long ll = 0, lr = 0;
-        tools::Long llMod = 0, lrMod = 0;
         if( ( eTok >= AND && eTok <= IMP )
            || eTok == IDIV || eTok == MOD )
         {
@@ -322,8 +329,6 @@ void SbiExprNode::FoldConstantsBinaryNode(SbiParser* pParser)
                 nr = SbxMINLNG;
             }
             ll = static_cast<tools::Long>(nl); lr = static_cast<tools::Long>(nr);
-            llMod = static_cast<tools::Long>(nl);
-            lrMod = static_cast<tools::Long>(nr);
             if( bErr )
             {
                 pParser->Error( ERRCODE_BASIC_MATH_OVERFLOW );
@@ -388,7 +393,7 @@ void SbiExprNode::FoldConstantsBinaryNode(SbiParser* pParser)
                 {
                     pParser->Error( ERRCODE_BASIC_ZERODIV ); nVal = HUGE_VAL;
                     bError = true;
-                } else nVal = llMod - lrMod * (llMod/lrMod);
+                } else nVal = ll - lr * (ll/lr);
                 eType = SbxLONG; break;
             case AND:
                 nVal = static_cast<double>( ll & lr ); eType = SbxLONG; break;
