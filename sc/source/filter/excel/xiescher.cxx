@@ -2717,8 +2717,12 @@ void XclImpListBoxObj::ReadFullLbsData( XclImpStream& rStrm, std::size_t nRecLef
     ReadLbsData( rStrm );
     OSL_ENSURE( (rStrm.GetRecPos() == nRecEnd) || (rStrm.GetRecPos() + mnEntryCount == nRecEnd),
         "XclImpListBoxObj::ReadFullLbsData - invalid size of OBJLBSDATA record" );
-    while( rStrm.IsValid() && (rStrm.GetRecPos() < nRecEnd) )
+    while (rStrm.IsValid())
+    {
+        if (rStrm.GetRecPos() >= nRecEnd)
+            break;
         maSelection.push_back( rStrm.ReaduInt8() );
+    }
 }
 
 void XclImpListBoxObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 /*nMacroSize*/ )
