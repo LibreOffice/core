@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4e3de7a_d77f0eed",
+        "filename": "basic/qa/basic_coverage/test_mod_operator.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-04T19:00:32Z",
+      "side": 1,
+      "message": "A nitpick: please remove the trailing whitespace (three red parts)",
+      "revId": "87d0600064c4bf8cb7bdc976e8e733e7c021e4b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e249069_a02ec53e",
+        "filename": "basic/qa/basic_coverage/test_mod_operator.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-04T19:00:32Z",
+      "side": 1,
+      "message": "This makes sure that right-hand operand is rounded; yet it\u0027s not assured for left-hand operand. You could change 16.4 into 15.6, or add a third test.",
+      "revId": "87d0600064c4bf8cb7bdc976e8e733e7c021e4b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
