@@ -583,7 +583,7 @@
       </node>
       <node oor:name=".uno:InsertReferenceField" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Cross-reference...</value>
+          <value xml:lang="en-US">Cross-~reference...</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Insert Cross-reference</value>
