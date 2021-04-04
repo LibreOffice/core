@@ -1144,6 +1144,8 @@ private:
     bool m_bSaveFirstParagraphInCell;
     /// Current paragraph had at least one inline object in it.
     bool m_bParaWithInlineObject;
+    /// SAXException was seen so document will be abandoned
+    bool m_bSaxError;
 };
 
 } //namespace writerfilter::dmapper

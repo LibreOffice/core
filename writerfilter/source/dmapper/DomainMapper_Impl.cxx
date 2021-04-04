@@ -20,6 +20,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <ooxml/resourceids.hxx>
 #include "DomainMapper_Impl.hxx"
 #include "ConversionHelper.hxx"
@@ -354,7 +355,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bParaAutoBefore(false),
         m_bFirstParagraphInCell(true),
         m_bSaveFirstParagraphInCell(false),
-        m_bParaWithInlineObject(false)
+        m_bParaWithInlineObject(false),
+        m_bSaxError(false)
 
 {
     m_aBaseUrl = rMediaDesc.getUnpackedValueOrDefault(
@@ -2973,23 +2975,26 @@ void DomainMapper_Impl::PopFootOrEndnote()
                 xFootnotes->getByIndex(1) >>= xFootnoteFirst;
             else
                 xEndnotes->getByIndex(1) >>= xFootnoteFirst;
-            uno::Reference< text::XText > xSrc( xFootnoteFirst, uno::UNO_QUERY_THROW );
-            uno::Reference< text::XText > xDest( xFootnoteLast, uno::UNO_QUERY_THROW );
-            uno::Reference< text::XTextCopy > xTxt, xTxt2;
-            xTxt.set(  xSrc, uno::UNO_QUERY_THROW );
-            xTxt2.set( xDest, uno::UNO_QUERY_THROW );
-            xTxt2->copyText( xTxt );
+            if (!m_bSaxError)
+            {
+                uno::Reference< text::XText > xSrc( xFootnoteFirst, uno::UNO_QUERY_THROW );
+                uno::Reference< text::XText > xDest( xFootnoteLast, uno::UNO_QUERY_THROW );
+                uno::Reference< text::XTextCopy > xTxt, xTxt2;
+                xTxt.set(  xSrc, uno::UNO_QUERY_THROW );
+                xTxt2.set( xDest, uno::UNO_QUERY_THROW );
+                xTxt2->copyText( xTxt );
 
-            // copy its redlines
-            std::vector<sal_Int32> redPos, redLen;
-            sal_Int32 redIdx;
-            enum StoredRedlines eType = IsInFootnote() ? StoredRedlines::FOOTNOTE : StoredRedlines::ENDNOTE;
-            lcl_CopyRedlines(xSrc, m_aStoredRedlines[eType], redPos, redLen, redIdx);
-            lcl_PasteRedlines(xDest, m_aStoredRedlines[eType], redPos, redLen, redIdx);
+                // copy its redlines
+                std::vector<sal_Int32> redPos, redLen;
+                sal_Int32 redIdx;
+                enum StoredRedlines eType = IsInFootnote() ? StoredRedlines::FOOTNOTE : StoredRedlines::ENDNOTE;
+                lcl_CopyRedlines(xSrc, m_aStoredRedlines[eType], redPos, redLen, redIdx);
+                lcl_PasteRedlines(xDest, m_aStoredRedlines[eType], redPos, redLen, redIdx);
 
-            // remove processed redlines
-            for( size_t i = 0; redIdx > -1 && i <= sal::static_int_cast<size_t>(redIdx) + 2; i++)
-                m_aStoredRedlines[eType].pop_front();
+                // remove processed redlines
+                for( size_t i = 0; redIdx > -1 && i <= sal::static_int_cast<size_t>(redIdx) + 2; i++)
+                    m_aStoredRedlines[eType].pop_front();
+            }
 
             // remove temporary footnote
             xFootnoteFirst->getAnchor()->setString("");
@@ -7640,7 +7645,16 @@ void DomainMapper_Impl::substream(Id rName,
         PushAnnotation();
     break;
     }
-    ref->resolve(m_rDMapper);
+
+    try
+    {
+        ref->resolve(m_rDMapper);
+    }
+    catch (xml::sax::SAXException const&)
+    {
+        m_bSaxError = true;
+        throw;
+    }
 
     switch( rName )
     {
