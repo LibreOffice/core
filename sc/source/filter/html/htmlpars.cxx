@@ -61,6 +61,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <numeric>
 #include <utility>
 
 using ::editeng::SvxBorderLine;
@@ -880,31 +881,6 @@ IMPL_LINK( ScHTMLLayoutParser, HTMLImportHdl, HtmlImportInfo&, rInfo, void )
     }
 }
 
-// Greatest common divisor (Euclid)
-// Special case: 0 and something gives 1
-static SCROW lcl_GGT( SCROW a, SCROW b )
-{
-    if ( !a || !b )
-        return 1;
-    do
-    {
-        if ( a > b )
-            a -= SCROW(a / b) * b;
-        else
-            b -= SCROW(b / a) * a;
-    } while ( a && b );
-    return ((a != 0) ? a : b);
-}
-
-// Lowest common multiple: a * b / GCD(a,b)
-static SCROW lcl_KGV( SCROW a, SCROW b )
-{
-    if ( a > b )    // Make overflow even less likely
-        return (a / lcl_GGT(a,b)) * b;
-    else
-        return (b / lcl_GGT(a,b)) * a;
-}
-
 void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
 {
     if ( bInCell )
@@ -1158,7 +1134,7 @@ void ScHTMLLayoutParser::TableOff( const HtmlImportInfo* pInfo )
                 SCROW nRowsPerRow2; // Inner table
                 if ( nRowSpan > 1 )
                 {   // LCM to which we can map the inner and outer rows
-                    nRowKGV = lcl_KGV( nRowSpan, nRows );
+                    nRowKGV = std::lcm( nRowSpan, nRows );
                     nRowsPerRow1 = nRowKGV / nRowSpan;
                     nRowsPerRow2 = nRowKGV / nRows;
                 }
