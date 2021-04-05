@@ -1945,14 +1945,21 @@ std::shared_ptr<SalBitmap> X11SalGraphicsImpl::getBitmap( tools::Long nX, tools:
 
     std::shared_ptr<X11SalBitmap> pSalBitmap = std::make_shared<X11SalBitmap>();
     sal_uInt16 nBitCount = GetBitCount();
+    vcl::PixelFormat ePixelFormat = vcl::bitDepthToPixelFormat(nBitCount);
 
     if( &mrParent.GetDisplay()->GetColormap( mrParent.m_nXScreen ) != &mrParent.GetColormap() )
+    {
+        ePixelFormat = vcl::PixelFormat::N1_BPP;
         nBitCount = 1;
+    }
+
+    if (nBitCount > 8)
+        ePixelFormat = vcl::PixelFormat::N24_BPP;
 
     if( ! bFakeWindowBG )
         pSalBitmap->ImplCreateFromDrawable( mrParent.GetDrawable(), mrParent.m_nXScreen, nBitCount, nX, nY, nDX, nDY );
     else
-        pSalBitmap->Create( Size( nDX, nDY ), (nBitCount > 8) ? 24 : nBitCount, BitmapPalette( nBitCount > 8 ? nBitCount : 0 ) );
+        pSalBitmap->Create( Size( nDX, nDY ), ePixelFormat, BitmapPalette( nBitCount > 8 ? nBitCount : 0 ) );
 
     return pSalBitmap;
 }

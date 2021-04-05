@@ -48,12 +48,6 @@ const unsigned long k32BitRedColorMask   = 0x00ff0000;
 const unsigned long k32BitGreenColorMask = 0x0000ff00;
 const unsigned long k32BitBlueColorMask  = 0x000000ff;
 
-static bool isValidBitCount( sal_uInt16 nBitCount )
-{
-    return (nBitCount == 1) || (nBitCount == 4) || (nBitCount == 8) ||
-        (nBitCount == 24) || (nBitCount == 32);
-}
-
 QuartzSalBitmap::QuartzSalBitmap()
   : mxCachedImage( nullptr )
   , mnBits(0)
@@ -68,13 +62,13 @@ QuartzSalBitmap::~QuartzSalBitmap()
     doDestroy();
 }
 
-bool QuartzSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapPalette& rBitmapPalette )
+bool QuartzSalBitmap::Create( const Size& rSize, vcl::PixelFormat ePixelFormat, const BitmapPalette& rBitmapPalette )
 {
-    if( !isValidBitCount( nBits ) )
+    if (ePixelFormat == vcl::PixelFormat::INVALID)
         return false;
 
     maPalette = rBitmapPalette;
-    mnBits = nBits;
+    mnBits = vcl::pixelFormatBitCount(ePixelFormat);
     mnWidth = rSize.Width();
     mnHeight = rSize.Height();
     return AllocateUserData();
@@ -82,21 +76,28 @@ bool QuartzSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapP
 
 bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp )
 {
-    return Create( rSalBmp, rSalBmp.GetBitCount() );
+    vcl::PixelFormat ePixelFormat = vcl::bitDepthToPixelFormat(rSalBmp.GetBitCount());
+    return Create( rSalBmp, ePixelFormat);
 }
 
 bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics )
 {
-    return Create( rSalBmp, pGraphics ? pGraphics->GetBitCount() : rSalBmp.GetBitCount() );
+    vcl::PixelFormat ePixelFormat = vcl::PixelFormat::INVALID;
+    if (pGraphics)
+        ePixelFormat = vcl::bitDepthToPixelFormat(pGraphics->GetBitCount());
+    else
+        ePixelFormat = vcl::bitDepthToPixelFormat(rSalBmp.GetBitCount());
+
+    return Create( rSalBmp, ePixelFormat);
 }
 
-bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount )
+bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, vcl::PixelFormat eNewPixelFormat )
 {
     const QuartzSalBitmap& rSourceBitmap = static_cast<const QuartzSalBitmap&>(rSalBmp);
 
-    if (isValidBitCount(nNewBitCount) && rSourceBitmap.m_pUserBuffer)
+    if (eNewPixelFormat != vcl::PixelFormat::INVALID && rSourceBitmap.m_pUserBuffer)
     {
-        mnBits = nNewBitCount;
+        mnBits = vcl::pixelFormatBitCount(eNewPixelFormat);
         mnWidth = rSourceBitmap.mnWidth;
         mnHeight = rSourceBitmap.mnHeight;
         maPalette = rSourceBitmap.maPalette;

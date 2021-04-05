@@ -119,17 +119,9 @@ namespace
 
 std::unique_ptr<BitmapBuffer> X11SalBitmap::ImplCreateDIB(
     const Size& rSize,
-    sal_uInt16 nBitCount,
+    vcl::PixelFormat ePixelFormat,
     const BitmapPalette& rPal)
 {
-    DBG_ASSERT(
-           nBitCount ==  1
-        || nBitCount ==  4
-        || nBitCount ==  8
-        || nBitCount == 24
-        , "Unsupported BitCount!"
-    );
-
     std::unique_ptr<BitmapBuffer> pDIB;
 
     if( !rSize.Width() || !rSize.Height() )
@@ -144,27 +136,35 @@ std::unique_ptr<BitmapBuffer> X11SalBitmap::ImplCreateDIB(
         return nullptr;
     }
 
-    const sal_uInt16 nColors = ( nBitCount <= 8 ) ? ( 1 << nBitCount ) : 0;
-
     pDIB->mnFormat = ScanlineFormat::NONE;
 
-    switch( nBitCount )
+    switch(ePixelFormat)
     {
-        case 1: pDIB->mnFormat |= ScanlineFormat::N1BitMsbPal; break;
-        case 8: pDIB->mnFormat |= ScanlineFormat::N8BitPal; break;
-        case 24: pDIB->mnFormat |= ScanlineFormat::N24BitTcBgr; break;
-        case 4: assert(false); break;
+        case vcl::PixelFormat::N1_BPP:
+            pDIB->mnFormat |= ScanlineFormat::N1BitMsbPal;
+            break;
+        case vcl::PixelFormat::N8_BPP:
+            pDIB->mnFormat |= ScanlineFormat::N8BitPal;
+            break;
+        case vcl::PixelFormat::N24_BPP:
+            pDIB->mnFormat |= ScanlineFormat::N24BitTcBgr;
+            break;
+        case vcl::PixelFormat::N32_BPP:
         default:
             SAL_WARN("vcl.gdi", "32-bit images not supported, converting to 24-bit");
-            nBitCount = 24;
+            ePixelFormat = vcl::PixelFormat::N24_BPP;
             pDIB->mnFormat |= ScanlineFormat::N24BitTcBgr;
         break;
     }
 
+    sal_uInt16 nColors = 0;
+    if (ePixelFormat <= vcl::PixelFormat::N8_BPP)
+        nColors = vcl::numberOfColors(ePixelFormat);
+
     pDIB->mnWidth = rSize.Width();
     pDIB->mnHeight = rSize.Height();
     tools::Long nScanlineBase;
-    bool bFail = o3tl::checked_multiply<tools::Long>(pDIB->mnWidth, nBitCount, nScanlineBase);
+    bool bFail = o3tl::checked_multiply<tools::Long>(pDIB->mnWidth, vcl::pixelFormatBitCount(ePixelFormat), nScanlineBase);
     if (bFail)
     {
         SAL_WARN("vcl.gdi", "checked multiply failed");
@@ -176,7 +176,7 @@ std::unique_ptr<BitmapBuffer> X11SalBitmap::ImplCreateDIB(
         SAL_WARN("vcl.gdi", "scanline calculation wraparound");
         return nullptr;
     }
-    pDIB->mnBitCount = nBitCount;
+    pDIB->mnBitCount = vcl::pixelFormatBitCount(ePixelFormat);
 
     if( nColors )
     {
@@ -616,10 +616,10 @@ void X11SalBitmap::ImplDraw(
         mpDDB->ImplDraw( aDrawable, rTwoRect, rGC );
 }
 
-bool X11SalBitmap::Create( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal )
+bool X11SalBitmap::Create( const Size& rSize, vcl::PixelFormat ePixelFormat, const BitmapPalette& rPal )
 {
     Destroy();
-    mpDIB = ImplCreateDIB( rSize, nBitCount, rPal );
+    mpDIB = ImplCreateDIB( rSize, ePixelFormat, rPal );
 
     return( mpDIB != nullptr );
 }
@@ -670,7 +670,7 @@ bool X11SalBitmap::Create( const SalBitmap&, SalGraphics* )
     return false;
 }
 
-bool X11SalBitmap::Create( const SalBitmap&, sal_uInt16 )
+bool X11SalBitmap::Create(const SalBitmap&, vcl::PixelFormat /*eNewPixelFormat*/)
 {
     return false;
 }
