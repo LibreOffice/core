@@ -50,8 +50,10 @@ namespace unoidl) and consist of arbitrary sequences of name/value strings.
 Each name/value string is encoded as a single UTF-8 string containing a name (an
 arbitrary sequence of Unicode code points not containing U+003D EQUALS SIGN),
 optionally followed by U+003D EQUALS SIGN and a value (an arbitrary sequence of
-Unicode code points).  The only annotation name currently in use is "deprecated"
-(without a value).
+Unicode code points).  The annotation names currently in use are:
+
+* deprecated (without a value)
+* alias (the value is another (superseded) name for the method)
 
 The following definitions are used throughout:
 

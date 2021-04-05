@@ -47,6 +47,7 @@
     unoidl::detail::SourceProviderExpr expr;
     unoidl::detail::SourceProviderType * type;
     std::vector<unoidl::detail::SourceProviderType> * types;
+    std::vector<OUString> * aliases;
 }
 
 /* TODO: %destructor { delete $$; } <sval> <excns> <type> <types> */
@@ -940,6 +941,7 @@ std::vector<OUString> annotations(bool deprecated) {
   xorExpr
 %type<type> type
 %type<types> typeArguments
+%type<aliases> aliases_opt alias_list
 
 %initial-action { yylloc = 1; }
 
@@ -1797,7 +1799,8 @@ attributeAccessDecl:
 ;
 
 interfaceMethod:
-  deprecated_opt type identifier
+  deprecated_opt type identifier aliases_opt
+
   {
       unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
       unoidl::detail::SourceProviderType t(*$2);
@@ -1816,23 +1819,59 @@ interfaceMethod:
       if (!pad->addDirectMember(@3, yyscanner, data, id)) {
           YYERROR;
       }
+      auto ann = annotations($1);
+      if ($4 != nullptr) {
+          ann.insert(ann.end(), $4->begin(), $4->end());
+          delete $4;
+      }
       pad->directMethods.emplace_back(
           id, t.getName(),
           std::vector<unoidl::InterfaceTypeEntity::Method::Parameter>(),
-          std::vector<OUString>(), annotations($1));
+          std::vector<OUString>(), ann);
   }
   '(' methodParams_opt ')' exceptionSpec_opt ';'
   {
-      if ($8 != nullptr) {
+      if ($9 != nullptr) {
           unoidl::detail::SourceProviderScannerData * data
               = yyget_extra(yyscanner);
           rtl::Reference<unoidl::detail::SourceProviderInterfaceTypeEntityPad>
               pad(getCurrentPad<unoidl::detail::SourceProviderInterfaceTypeEntityPad>(
                   data));
           assert(!pad->directMethods.empty());
-          pad->directMethods.back().exceptions = *$8;
-          delete $8;
+          pad->directMethods.back().exceptions = *$9;
+          delete $9;
       }
+  }
+;
+
+aliases_opt:
+  identifier alias_list
+  {
+      OUString id(convertName($1));
+      if (id != "alias") {
+          error(
+                @1, yyscanner, "expected alias list");
+          YYERROR;
+      }
+      $$ = $2;
+  }
+| /* empty */
+  {
+      $$ = nullptr;
+  }
+;
+
+alias_list:
+  alias_list ',' identifier
+  {
+      OUString id(convertName($3));
+      $1->push_back("alias=" + id);
+  }
+| identifier
+  {
+      OUString id(convertName($1));
+      $$ = new std::vector<OUString>;
+      $$->push_back("alias=" + id);
   }
 ;
 
