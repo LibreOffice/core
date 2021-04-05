@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "4b169e9c_c185d552",
+        "filename": "basic/source/comp/exprnode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-05T07:52:26Z",
+      "side": 1,
+      "message": "Agreed: Excel\u0027s VBA works for that case (and throws overflow for SbxMAXLNG + 0.5) Please use your strategy.",
+      "parentUuid": "d99efe73_e4152ffe",
+      "revId": "87d0600064c4bf8cb7bdc976e8e733e7c021e4b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b51ef140_b9abaceb",
         "filename": "basic/source/comp/exprnode.cxx",
         "patchSetId": 1
@@ -154,6 +172,24 @@
       "side": 1,
       "message": "Imho, we should drop the llMod and lrMod vars.",
       "parentUuid": "29d6de60_3cae0ca2",
+      "revId": "87d0600064c4bf8cb7bdc976e8e733e7c021e4b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fb62a8e_1b3ce68a",
+        "filename": "basic/source/comp/exprnode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-05T07:52:26Z",
+      "side": 1,
+      "message": "Yes, if we round above, then just drop them.",
+      "parentUuid": "a5ee4ae2_fdda148a",
       "revId": "87d0600064c4bf8cb7bdc976e8e733e7c021e4b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
