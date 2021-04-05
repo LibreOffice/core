@@ -50,6 +50,23 @@
       "revId": "87d0600064c4bf8cb7bdc976e8e733e7c021e4b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b51ef140_b9abaceb",
+        "filename": "basic/source/comp/exprnode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-04-05T06:24:58Z",
+      "side": 1,
+      "message": "Oh! In fact, MOD only uses llMod and lrMod, and it even should not use the other values (I mean lr: it should check lrMod instead); the two (llMod and lrMod) are not used elsewhere, so it\u0027s *here* where it all may be performed.",
+      "revId": "87d0600064c4bf8cb7bdc976e8e733e7c021e4b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
