@@ -150,6 +150,8 @@ SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld:
 
 SvxHpLinkDlg::~SvxHpLinkDlg()
 {
+    mbGrabFocus = false; // don't do any grab if tear-down moves focus around during destruction
+
     // delete config item, so the base class (SfxModelessDialogController) can not load it on the next start
     SvtViewOptions aViewOpt( EViewType::TabDialog, OUString::number(SID_HYPERLINK_DIALOG) );
     aViewOpt.Delete();
