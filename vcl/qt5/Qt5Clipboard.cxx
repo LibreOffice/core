@@ -29,7 +29,6 @@ Qt5Clipboard::Qt5Clipboard(const OUString& aModeString, const QClipboard::Mode a
                                     XServiceInfo>(m_aMutex)
     , m_aClipboardName(aModeString)
     , m_aClipboardMode(aMode)
-    , m_bOwnClipboardChange(false)
     , m_bDoClear(false)
 {
     assert(isSupported(m_aClipboardMode));
@@ -71,11 +70,7 @@ void Qt5Clipboard::flushClipboard()
 
         QMimeData* pMimeCopy = nullptr;
         if (pQt5MimeData && pQt5MimeData->deepCopy(&pMimeCopy))
-        {
-            m_bOwnClipboardChange = true;
             pClipboard->setMimeData(pMimeCopy, m_aClipboardMode);
-            m_bOwnClipboardChange = false;
-        }
     });
 }
 
@@ -124,39 +119,12 @@ void Qt5Clipboard::setContents(
 
     m_bDoClear = !m_aContents.is();
     if (!m_bDoClear)
-    {
-        m_bOwnClipboardChange = true;
         QApplication::clipboard()->setMimeData(new Qt5MimeData(m_aContents), m_aClipboardMode);
-        m_bOwnClipboardChange = false;
-    }
     else
     {
         assert(!m_aOwner.is());
         Q_EMIT clearClipboard();
-    }
-
-    aGuard.clear();
-
-    // we have to notify only an owner change, since handleChanged can't
-    // access the previous owner anymore and can just handle lost ownership.
-    if (xOldOwner.is() && xOldOwner != xClipboardOwner)
-        xOldOwner->lostOwnership(this, xOldContents);
-}
-
-void Qt5Clipboard::handleChanged(QClipboard::Mode aMode)
-{
-    if (aMode != m_aClipboardMode)
         return;
-
-    osl::ClearableMutexGuard aGuard(m_aMutex);
-
-    css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> xOldOwner(m_aOwner);
-    css::uno::Reference<css::datatransfer::XTransferable> xOldContents(m_aContents);
-    // ownership change from LO POV is handled in setContents
-    if (!m_bOwnClipboardChange)
-    {
-        m_aContents.clear();
-        m_aOwner.clear();
     }
 
     std::vector<css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> aListeners(
@@ -166,7 +134,33 @@ void Qt5Clipboard::handleChanged(QClipboard::Mode aMode)
 
     aGuard.clear();
 
-    if (!m_bOwnClipboardChange && xOldOwner.is())
+    if (xOldOwner.is() && xOldOwner != xClipboardOwner)
+        xOldOwner->lostOwnership(this, xOldContents);
+    for (auto const& listener : aListeners)
+        listener->changedContents(aEv);
+}
+
+void Qt5Clipboard::handleChanged(QClipboard::Mode aMode)
+{
+    if (aMode != m_aClipboardMode || isOwner(aMode))
+        return;
+
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+
+    css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> xOldOwner(m_aOwner);
+    css::uno::Reference<css::datatransfer::XTransferable> xOldContents(m_aContents);
+
+    m_aContents.clear();
+    m_aOwner.clear();
+
+    std::vector<css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> aListeners(
+        m_aListeners);
+    css::datatransfer::clipboard::ClipboardEvent aEv;
+    aEv.Contents = getContents();
+
+    aGuard.clear();
+
+    if (xOldOwner.is())
         xOldOwner->lostOwnership(this, xOldContents);
     for (auto const& listener : aListeners)
         listener->changedContents(aEv);

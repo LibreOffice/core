@@ -38,9 +38,6 @@ class Qt5Clipboard final
     osl::Mutex m_aMutex;
     const OUString m_aClipboardName;
     const QClipboard::Mode m_aClipboardMode;
-    // has to be set, if LO changes the QClipboard itself, so it won't instantly lose
-    // ownership by it's self-triggered QClipboard::changed handler
-    bool m_bOwnClipboardChange;
     // true, if LO really wants to give up clipboard ownership
     bool m_bDoClear;
 
