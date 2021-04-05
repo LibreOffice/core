@@ -32,6 +32,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <o3tl/deleter.hxx>
@@ -2162,6 +2163,11 @@ bool SwTransferable::PasteFileContent( TransferableDataHelper& rData,
         rSh.SetChgLnk( Link<LinkParamNone*,void>() );
 
         const SwPosition& rInsPos = *rSh.GetCursor()->Start();
+
+        // Reader might need to know if we are pasting into an existing document, or initializing
+        // a new document; e.g. initializing document setting could be skipped when pasting.
+        css::uno::ContextLayer layer(comphelper::NewFlagContext("InPasteFromClipboard"));
+
         SwReader aReader(*pStream, OUString(), OUString(), *rSh.GetCursor());
         rSh.SaveTableBoxContent( &rInsPos );
 
