@@ -37,6 +37,7 @@
 #include <bitmap/bmpfast.hxx>
 #include <quartz/salbmp.h>
 #include <quartz/utils.h>
+#include <bitmap/ScanlineTools.hxx>
 
 #ifdef MACOSX
 #include <osx/saldata.hxx>
@@ -253,226 +254,6 @@ bool QuartzSalBitmap::AllocateUserData()
     return bool(m_pUserBuffer);
 }
 
-namespace {
-
-class ImplPixelFormat
-{
-public:
-    static std::unique_ptr<ImplPixelFormat> GetFormat( sal_uInt16 nBits, const BitmapPalette& rPalette );
-
-    virtual void StartLine( sal_uInt8* pLine ) = 0;
-    virtual void SkipPixel( sal_uInt32 nPixel ) = 0;
-    virtual Color ReadPixel() = 0;
-    virtual void WritePixel( Color nColor ) = 0;
-    virtual ~ImplPixelFormat() { }
-};
-
-class ImplPixelFormat32 : public ImplPixelFormat
-// currently ARGB-format for 32bit depth
-{
-    sal_uInt8* pData;
-public:
-    virtual void StartLine( sal_uInt8* pLine ) override { pData = pLine; }
-    virtual void SkipPixel( sal_uInt32 nPixel ) override
-    {
-        pData += nPixel << 2;
-    }
-    virtual Color ReadPixel() override
-    {
-        const Color c( pData[1], pData[2], pData[3] );
-        pData += 4;
-        return c;
-    }
-    virtual void WritePixel( Color nColor ) override
-    {
-        *pData++ = 0;
-        *pData++ = nColor.GetRed();
-        *pData++ = nColor.GetGreen();
-        *pData++ = nColor.GetBlue();
-    }
-};
-
-class ImplPixelFormat24 : public ImplPixelFormat
-// currently BGR-format for 24bit depth
-{
-    sal_uInt8* pData;
-public:
-    virtual void StartLine( sal_uInt8* pLine ) override { pData = pLine; }
-    virtual void SkipPixel( sal_uInt32 nPixel ) override
-    {
-        pData += (nPixel << 1) + nPixel;
-    }
-    virtual Color ReadPixel() override
-    {
-        const Color c( pData[2], pData[1], pData[0] );
-        pData += 3;
-        return c;
-    }
-    virtual void WritePixel( Color nColor ) override
-    {
-        *pData++ = nColor.GetBlue();
-        *pData++ = nColor.GetGreen();
-        *pData++ = nColor.GetRed();
-    }
-};
-
-class ImplPixelFormat8 : public ImplPixelFormat
-{
-private:
-    sal_uInt8* pData;
-    const BitmapPalette& mrPalette;
-    const sal_uInt16 mnPaletteCount;
-
-public:
-    explicit ImplPixelFormat8( const BitmapPalette& rPalette )
-        : pData(nullptr)
-        , mrPalette(rPalette)
-        , mnPaletteCount(rPalette.GetEntryCount())
-        {
-        }
-    virtual void StartLine( sal_uInt8* pLine ) override { pData = pLine; }
-    virtual void SkipPixel( sal_uInt32 nPixel ) override
-        {
-            pData += nPixel;
-        }
-    virtual Color ReadPixel() override
-        {
-            const sal_uInt8 nIndex(*pData++);
-
-            // Caution(!) rPalette.GetEntryCount() may be != (depth^^2)-1 (!)
-            if(nIndex < mnPaletteCount)
-                return mrPalette[nIndex];
-            else
-                return COL_BLACK;
-        }
-    virtual void WritePixel( Color nColor ) override
-        {
-            *pData++ = static_cast< sal_uInt8 >( mrPalette.GetBestIndex( nColor ) );
-        }
-};
-
-class ImplPixelFormat4 : public ImplPixelFormat
-{
-private:
-    sal_uInt8* pData;
-    const BitmapPalette& mrPalette;
-    const sal_uInt16 mnPaletteCount;
-    sal_uInt32 mnX;
-    sal_uInt32 mnShift;
-
-public:
-    explicit ImplPixelFormat4( const BitmapPalette& rPalette )
-        : pData(nullptr)
-        , mrPalette(rPalette)
-        , mnPaletteCount(rPalette.GetEntryCount())
-        , mnX(0)
-        , mnShift(0)
-        {
-        }
-    virtual void SkipPixel( sal_uInt32 nPixel ) override
-        {
-            mnX += nPixel;
-            if( nPixel & 1 )
-            {
-                mnShift ^= 4;
-            }
-        }
-    virtual void StartLine( sal_uInt8* pLine ) override
-        {
-            pData = pLine;
-            mnX = 0;
-            mnShift = 4;
-        }
-    virtual Color ReadPixel() override
-        {
-            // Caution(!) rPalette.GetEntryCount() may be != (depth^^2)-1 (!)
-            const sal_uInt8 nIndex(( pData[mnX >> 1] >> mnShift) & 0x0f);
-            mnX++;
-            mnShift ^= 4;
-
-            if(nIndex < mnPaletteCount)
-                return mrPalette[nIndex];
-            else
-                return COL_BLACK;
-        }
-    virtual void WritePixel( Color nColor ) override
-        {
-            pData[mnX>>1] &= (0xf0 >> mnShift);
-            pData[mnX>>1] |= (static_cast< sal_uInt8 >( mrPalette.GetBestIndex( nColor ) ) & 0x0f);
-            mnX++;
-            mnShift ^= 4;
-        }
-};
-
-class ImplPixelFormat1 : public ImplPixelFormat
-{
-private:
-    sal_uInt8* pData;
-    const BitmapPalette& mrPalette;
-    const sal_uInt16 mnPaletteCount;
-    sal_uInt32 mnX;
-
-public:
-    explicit ImplPixelFormat1( const BitmapPalette& rPalette )
-        : pData(nullptr)
-        , mrPalette(rPalette)
-        , mnPaletteCount(rPalette.GetEntryCount())
-        , mnX(0)
-        {
-        }
-    virtual void SkipPixel( sal_uInt32 nPixel ) override
-        {
-            mnX += nPixel;
-        }
-    virtual void StartLine( sal_uInt8* pLine ) override
-        {
-            pData = pLine;
-            mnX = 0;
-        }
-    virtual Color ReadPixel() override
-        {
-            // Caution(!) rPalette.GetEntryCount() may be != (depth^^2)-1 (!)
-            const sal_uInt8 nIndex( (pData[mnX >> 3 ] >> ( 7 - ( mnX & 7 ) )) & 1);
-            mnX++;
-
-            if(nIndex < mnPaletteCount)
-                return mrPalette[nIndex];
-            else
-                return COL_BLACK;
-        }
-    virtual void WritePixel( Color nColor ) override
-        {
-            if( mrPalette.GetBestIndex( nColor ) & 1 )
-            {
-                pData[ mnX >> 3 ] |= 1 << ( 7 - ( mnX & 7 ) );
-            }
-            else
-            {
-                pData[ mnX >> 3 ] &= ~( 1 << ( 7 - ( mnX & 7 ) ) );
-            }
-            mnX++;
-        }
-};
-
-std::unique_ptr<ImplPixelFormat> ImplPixelFormat::GetFormat( sal_uInt16 nBits, const BitmapPalette& rPalette )
-{
-    switch( nBits )
-    {
-    case 1: return std::make_unique<ImplPixelFormat1>( rPalette );
-    case 4: return std::make_unique<ImplPixelFormat4>( rPalette );
-    case 8: return std::make_unique<ImplPixelFormat8>( rPalette );
-    case 24: return std::make_unique<ImplPixelFormat24>();
-    case 32: return std::make_unique<ImplPixelFormat32>();
-    default:
-        assert(false);
-        return nullptr;
-    }
-
-    return nullptr;
-}
-
-} // namespace
-
 void QuartzSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
                                          sal_uInt16 nDestBits, sal_uInt32 nDestBytesPerRow,
                                          const BitmapPalette& rDestPalette, sal_uInt8* pDestData,
@@ -516,21 +297,21 @@ void QuartzSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
     {
         // TODO: this implementation is for clarity, not for speed
 
-        std::unique_ptr<ImplPixelFormat> pD = ImplPixelFormat::GetFormat( nDestBits, rDestPalette );
-        std::unique_ptr<ImplPixelFormat> pS = ImplPixelFormat::GetFormat( nSrcBits, rSrcPalette );
+        auto pTarget = vcl::bitmap::getScanlineTransformer(nDestBits, rDestPalette);
+        auto pSource = vcl::bitmap::getScanlineTransformer(nSrcBits, rSrcPalette);
 
-        if( pD && pS )
+        if (pTarget && pSource)
         {
             sal_uInt32 nY = nHeight;
             while( nY-- )
             {
-                pD->StartLine( pDestData );
-                pS->StartLine( pSrcData );
+                pTarget->startLine(pDestData);
+                pSource->startLine(pSrcData);
 
                 sal_uInt32 nX = nWidth;
                 while( nX-- )
                 {
-                    pD->WritePixel( pS->ReadPixel() );
+                    pTarget->writePixel(pSource->readPixel());
                 }
                 pSrcData += nSrcBytesPerRow;
                 pDestData += nDestBytesPerRow;
@@ -796,7 +577,7 @@ CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth,
         std::unique_ptr<sal_uInt32[]> pMaskBuffer(new (std::nothrow) sal_uInt32[ nHeight * nDestBytesPerRow / 4] );
         sal_uInt32* pDest = pMaskBuffer.get();
 
-        std::unique_ptr<ImplPixelFormat> pSourcePixels = ImplPixelFormat::GetFormat( mnBits, maPalette );
+        auto pSourcePixels = vcl::bitmap::getScanlineTransformer(mnBits, maPalette);
 
         if( pMaskBuffer && pSourcePixels )
         {
@@ -814,12 +595,12 @@ CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth,
             int y = nHeight;
             while( y-- )
             {
-                pSourcePixels->StartLine( pSource );
-                pSourcePixels->SkipPixel(nX); // Skip on x axis to nX
+                pSourcePixels->startLine( pSource );
+                pSourcePixels->skipPixel(nX); // Skip on x axis to nX
                 sal_uInt32 x = nWidth;
                 while( x-- )
                 {
-                    *pDest++ = ( pSourcePixels->ReadPixel() == 0 ) ? nColor : 0;
+                    *pDest++ = (pSourcePixels->readPixel() == 0) ? nColor : 0;
                 }
                 pSource += mnBytesPerRow;
             }
