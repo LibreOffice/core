@@ -92,7 +92,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         setenv("JPEGMEM", "768M", 1);
         setenv("SC_MAX_MATRIX_ELEMENTS", "60000000", 1);
         setenv("SC_NO_THREADED_CALCULATION", "1", 1);
-        setenv("SAL_WMF_COMPLEXCLIP_VIA_REGION", "1", 1);
         setenv("SAL_DISABLE_PRINTERLIST", "1", 1);
         setenv("SAL_DISABLE_DEFAULTPRINTER", "1", 1);
         setenv("SAL_NO_FONT_LOOKUP", "1", 1);
