@@ -139,6 +139,24 @@
       "revId": "87d0600064c4bf8cb7bdc976e8e733e7c021e4b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5ee4ae2_fdda148a",
+        "filename": "basic/source/comp/exprnode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-04-05T07:38:55Z",
+      "side": 1,
+      "message": "Imho, we should drop the llMod and lrMod vars.",
+      "parentUuid": "29d6de60_3cae0ca2",
+      "revId": "87d0600064c4bf8cb7bdc976e8e733e7c021e4b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
