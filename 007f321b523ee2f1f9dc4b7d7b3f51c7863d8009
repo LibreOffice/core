@@ -104,6 +104,24 @@
       "revId": "007f321b523ee2f1f9dc4b7d7b3f51c7863d8009",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92bba2e2_5891e242",
+        "filename": "oox/source/drawingml/shape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1407,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-04-05T08:47:27Z",
+      "side": 1,
+      "message": "In principle, you are right. But I\u0027m not so far. Group objects are not handled properly yet. I would like to have a correct solution there first. Afterwards, it can then be optimized.",
+      "parentUuid": "7a66bd9c_57977241",
+      "revId": "007f321b523ee2f1f9dc4b7d7b3f51c7863d8009",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
