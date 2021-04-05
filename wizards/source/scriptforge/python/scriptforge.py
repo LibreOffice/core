@@ -1343,7 +1343,7 @@ class SFScriptForge:
         propertysynonyms = SFServices._getAttributeSynonyms(serviceproperties)
 
         # Class constants
-        MACROEXECALWAYS, MAROEXECNEVER, MACROEXECNORMAL = 2, 1, 0
+        MACROEXECALWAYS, MACROEXECNEVER, MACROEXECNORMAL = 2, 1, 0
         BASEDOCUMENT, CALCDOCUMENT, DRAWDOCUMENT, IMPRESSDOCUMENT, MATHDOCUMENT, WRITERDOCUMENT = \
             'Base', 'Calc', 'Draw', 'Impress', 'Math', 'Writer'
 
