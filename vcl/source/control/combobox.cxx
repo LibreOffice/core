@@ -245,7 +245,7 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     if (m_pImpl->m_pFloatWin)
         m_pImpl->m_pFloatWin->SetImplListBox( m_pImpl->m_pImplLB );
     else
-        m_pImpl->m_pImplLB->GetMainWindow()->AllowGrabFocus( true );
+        GetMainWindow()->AllowGrabFocus( true );
 
     ImplCalcEditHeight();
 
@@ -610,7 +610,7 @@ void ComboBox::FillLayoutData() const
     mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
     AppendLayoutData( *m_pImpl->m_pSubEdit );
     m_pImpl->m_pSubEdit->SetLayoutDataParent( this );
-    ImplListBoxWindow* rMainWindow = m_pImpl->m_pImplLB->GetMainWindow();
+    ImplListBoxWindow* rMainWindow = GetMainWindow();
     if (m_pImpl->m_pFloatWin)
     {
         // dropdown mode
@@ -676,7 +676,7 @@ void ComboBox::StateChanged( StateChangedType nType )
     else if ( nType == StateChangedType::Style )
     {
         SetStyle( ImplInitStyle( GetStyle() ) );
-        m_pImpl->m_pImplLB->GetMainWindow()->EnableSort( ( GetStyle() & WB_SORT ) != 0 );
+        GetMainWindow()->EnableSort( ( GetStyle() & WB_SORT ) != 0 );
     }
     else if( nType == StateChangedType::Mirroring )
     {
@@ -794,7 +794,7 @@ bool ComboBox::EventNotify( NotifyEvent& rNEvt )
         }
     }
     else if ((rNEvt.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN)
-            && (rNEvt.GetWindow() == m_pImpl->m_pImplLB->GetMainWindow()))
+            && (rNEvt.GetWindow() == GetMainWindow()))
     {
         m_pImpl->m_pSubEdit->GrabFocus();
     }
@@ -1136,7 +1136,7 @@ void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines
     tools::Long nCharWidth = GetTextWidth(OUString(u'x'));
     if ( !IsDropDownBox() )
     {
-        Size aOutSz = m_pImpl->m_pImplLB->GetMainWindow()->GetOutputSizePixel();
+        Size aOutSz = GetMainWindow()->GetOutputSizePixel();
         rnCols = (nCharWidth > 0) ? static_cast<sal_uInt16>(aOutSz.Width()/nCharWidth) : 1;
         rnLines = static_cast<sal_uInt16>(aOutSz.Height()/GetDropDownEntryHeight());
     }
@@ -1150,11 +1150,11 @@ void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines
 
 void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
 {
-    m_pImpl->m_pImplLB->GetMainWindow()->ApplySettings(*pDev);
+    GetMainWindow()->ApplySettings(*pDev);
 
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = GetSizePixel();
-    vcl::Font aFont = m_pImpl->m_pImplLB->GetMainWindow()->GetDrawPixelFont( pDev );
+    vcl::Font aFont = GetMainWindow()->GetDrawPixelFont( pDev );
 
     pDev->Push();
     pDev->SetMapMode();
@@ -1263,23 +1263,23 @@ void ComboBox::SetUserDrawHdl(const Link<UserDrawEvent*, void>& rLink)
 
 void ComboBox::SetUserItemSize( const Size& rSz )
 {
-    m_pImpl->m_pImplLB->GetMainWindow()->SetUserItemSize( rSz );
+    GetMainWindow()->SetUserItemSize( rSz );
 }
 
 void ComboBox::EnableUserDraw( bool bUserDraw )
 {
-    m_pImpl->m_pImplLB->GetMainWindow()->EnableUserDraw( bUserDraw );
+    GetMainWindow()->EnableUserDraw( bUserDraw );
 }
 
 bool ComboBox::IsUserDrawEnabled() const
 {
-    return m_pImpl->m_pImplLB->GetMainWindow()->IsUserDrawEnabled();
+    return GetMainWindow()->IsUserDrawEnabled();
 }
 
 void ComboBox::DrawEntry(const UserDrawEvent& rEvt)
 {
-    SAL_WARN_IF(rEvt.GetWindow() != m_pImpl->m_pImplLB->GetMainWindow(), "vcl", "DrawEntry?!");
-    m_pImpl->m_pImplLB->GetMainWindow()->DrawEntry(*rEvt.GetRenderContext(), rEvt.GetItemId(), /*bDrawImage*/false, /*bDrawText*/false);
+    SAL_WARN_IF(rEvt.GetWindow() != GetMainWindow(), "vcl", "DrawEntry?!");
+    GetMainWindow()->DrawEntry(*rEvt.GetRenderContext(), rEvt.GetItemId(), /*bDrawImage*/false, /*bDrawText*/false);
 }
 
 void ComboBox::AddSeparator( sal_Int32 n )
@@ -1390,8 +1390,8 @@ void ComboBox::SetNoSelection()
 
 tools::Rectangle ComboBox::GetBoundingRectangle( sal_Int32 nItem ) const
 {
-    tools::Rectangle aRect = m_pImpl->m_pImplLB->GetMainWindow()->GetBoundingRectangle( nItem );
-    tools::Rectangle aOffset = m_pImpl->m_pImplLB->GetMainWindow()->GetWindowExtentsRelative( static_cast<vcl::Window*>(const_cast<ComboBox *>(this)) );
+    tools::Rectangle aRect = GetMainWindow()->GetBoundingRectangle( nItem );
+    tools::Rectangle aOffset = GetMainWindow()->GetWindowExtentsRelative( static_cast<vcl::Window*>(const_cast<ComboBox *>(this)) );
     aRect.Move( aOffset.Left(), aOffset.Top() );
     return aRect;
 }
@@ -1406,6 +1406,11 @@ void ComboBox::SetBorderStyle( WindowBorderStyle nBorderStyle )
     }
 }
 
+ImplListBoxWindow* ComboBox::GetMainWindow() const
+{
+    return m_pImpl->m_pImplLB->GetMainWindow();
+}
+
 tools::Long ComboBox::GetIndexForPoint( const Point& rPoint, sal_Int32& rPos ) const
 {
     if( !HasLayoutData() )
@@ -1417,7 +1422,7 @@ tools::Long ComboBox::GetIndexForPoint( const Point& rPoint, sal_Int32& rPos ) c
     {
         // point must be either in main list window
         // or in impl window (dropdown case)
-        ImplListBoxWindow* rMain = m_pImpl->m_pImplLB->GetMainWindow();
+        ImplListBoxWindow* rMain = GetMainWindow();
 
         // convert coordinates to ImplListBoxWindow pixel coordinate space
         Point aConvPoint = LogicToPixel( rPoint );
