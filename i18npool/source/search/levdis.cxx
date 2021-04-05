@@ -56,6 +56,7 @@
 */
 
 #include <algorithm>
+#include <numeric>
 
 #include "levdis.hxx"
 
@@ -119,7 +120,7 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
             nP = 0;     // a '?' could be any character.
         else
             // Minimum of replacement and deletion+insertion weighting
-            nP = Min3( nRepP0, nRepP0, nDelR0 + nInsQ0 );
+            nP = std::min({ nRepP0, nRepP0, nDelR0 + nInsQ0 });
         npDistance[0] = nInsQ0;     // start with simple insert
         npDistance[1] = nInsQ0;
         npDistance[2] = nInsQ0;
@@ -150,7 +151,7 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
                 }
             }
         }
-        nSPMin = Min3( npDistance[0], npDistance[1], npDistance[2] );
+        nSPMin = std::min({ npDistance[0], npDistance[1], npDistance[2] });
     }
 
     // calculate distance matrix
@@ -203,7 +204,7 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
             // WLD( X(i), Y(j) ) = min( WLD( X(i-1), Y(j-1) ) + p(i,j) ,
             //                          WLD( X(i)  , Y(j-1) ) + q      ,
             //                          WLD( X(i-1), Y(j)   ) + r      )
-            npDistance[i] = Min3( d1 + nPij, d2 + nQ, npDistance[i-1] + nR );
+            npDistance[i] = std::min({ d1 + nPij, d2 + nQ, npDistance[i-1] + nR });
             if ( npDistance[i] < nSPMin )
                 nSPMin = npDistance[i];
             if ( bSplitCount )
@@ -263,78 +264,33 @@ void WLevDistance::CalcLPQR( int nX, int nY, int nZ, bool bRelaxed )
     if ( nX < 0 ) nX = 0;       // only positive values
     if ( nY < 0 ) nY = 0;
     if ( nZ < 0 ) nZ = 0;
-    if (0 == Min3( nX, nY, nZ ))                // at least one 0
+    if (0 == std::min({ nX, nY, nZ })) // at least one 0
     {
         int nMid, nMax;
-        nMax = Max3( nX, nY, nZ );              // either 0 for three 0s or Max
+        nMax = std::max({ nX, nY, nZ }); // either 0 for three 0s or Max
         if ( 0 == (nMid = Mid3( nX, nY, nZ )) ) // even two 0
             nLimit = nMax;                      // either 0 or the only one >0
         else                                    // one is 0
-            nLimit = LCM( nMid, nMax );
+            nLimit = std::lcm( nMid, nMax );
     }
     else                                        // all three of them are not 0
-        nLimit = LCM( LCM( nX, nY ), nZ );
+        nLimit = std::lcm(std::lcm(nX, nY), nZ);
     nRepP0 = ( nX ? nLimit / nX : nLimit + 1 );
     nInsQ0 = ( nY ? nLimit / nY : nLimit + 1 );
     nDelR0 = ( nZ ? nLimit / nZ : nLimit + 1 );
     bSplitCount = bRelaxed;
 }
 
-// greatest common divisor according to Euklid (chaindivision)
-// special case: 0 plus anything produces 1
-int WLevDistance::GCD( int a, int b )
-{
-    if ( !a || !b )
-        return 1;
-    if ( a < 0 ) a = -a;
-    if ( b < 0 ) b = -b;
-    do
-    {
-        if ( a > b )
-            a -= int(a / b) * b;
-        else
-            b -= int(b / a) * a;
-    } while ( a && b );
-    return( a ? a : b);
-}
-
-// least common multiple : a * b / GCD(a,b)
-int WLevDistance::LCM( int a, int b )
-{
-    if ( a > b )    // decrease overflow chance
-        return( (a / GCD(a,b)) * b );
-    else
-        return( (b / GCD(a,b)) * a );
-}
-
-// Minimum of three values
-inline int WLevDistance::Min3( int x, int y, int z )
-{
-    if ( x < y )
-        return std::min(x, z);
-    else
-        return std::min(y, z);
-}
-
 // The value in the middle
 int WLevDistance::Mid3( int x, int y, int z )
 {
-    int min = Min3(x,y,z);
+    int min = std::min({ x, y, z });
     if ( x == min )
         return std::min(y, z);
     else if ( y == min )
         return std::min(x, z);
     else        // z == min
         return std::min(x, y);
-}
-
-// Maximum of three values
-int WLevDistance::Max3( int x, int y, int z )
-{
-    if ( x > y )
-        return std::max(x, z);
-    else
-        return std::max(y, z);
 }
 
 // initialize data from CTOR
