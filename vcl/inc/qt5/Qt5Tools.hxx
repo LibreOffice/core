@@ -29,6 +29,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
+#include <vcl/bitmap/BitmapTypes.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
@@ -99,17 +100,17 @@ inline QList<int> toQList(const css::uno::Sequence<sal_Int32>& aSequence)
 
 constexpr QImage::Format Qt5_DefaultFormat32 = QImage::Format_ARGB32;
 
-inline QImage::Format getBitFormat(sal_uInt16 nBitCount)
+inline QImage::Format getBitFormat(vcl::PixelFormat ePixelFormat)
 {
-    switch (nBitCount)
+    switch (ePixelFormat)
     {
-        case 1:
+        case vcl::PixelFormat::N1_BPP:
             return QImage::Format_Mono;
-        case 8:
+        case vcl::PixelFormat::N8_BPP:
             return QImage::Format_Indexed8;
-        case 24:
+        case vcl::PixelFormat::N24_BPP:
             return QImage::Format_RGB888;
-        case 32:
+        case vcl::PixelFormat::N32_BPP:
             return Qt5_DefaultFormat32;
         default:
             std::abort();

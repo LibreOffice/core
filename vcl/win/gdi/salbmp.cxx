@@ -243,7 +243,7 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap()
     {
         // we need DIB for success with AcquireBuffer, create a replacement WinSalBitmap
         pExtraWinSalRGB.reset(new WinSalBitmap());
-        pExtraWinSalRGB->Create(*pSalRGB, pSalRGB->GetBitCount());
+        pExtraWinSalRGB->Create(*pSalRGB, vcl::bitDepthToPixelFormat(pSalRGB->GetBitCount()));
         pSalRGB = pExtraWinSalRGB.get();
     }
 
@@ -325,7 +325,7 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap(const Win
     {
         // we need DIB for success with AcquireBuffer, create a replacement WinSalBitmap
         pExtraWinSalRGB.reset(new WinSalBitmap());
-        pExtraWinSalRGB->Create(*pSalRGB, pSalRGB->GetBitCount());
+        pExtraWinSalRGB->Create(*pSalRGB, vcl::bitDepthToPixelFormat(pSalRGB->GetBitCount()));
         pSalRGB = pExtraWinSalRGB.get();
     }
 
@@ -352,7 +352,7 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap(const Win
     {
         // we need DIB for success with AcquireBuffer, create a replacement WinSalBitmap
         pExtraWinSalA.reset(new WinSalBitmap());
-        pExtraWinSalA->Create(*pSalA, pSalA->GetBitCount());
+        pExtraWinSalA->Create(*pSalA, vcl::bitDepthToPixelFormat(pSalA->GetBitCount()));
         pSalA = pExtraWinSalA.get();
     }
 
@@ -508,16 +508,16 @@ bool WinSalBitmap::Create( HANDLE hBitmap, bool bDIB, bool bCopyHandle )
     return bRet;
 }
 
-bool WinSalBitmap::Create( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal )
+bool WinSalBitmap::Create(const Size& rSize, vcl::PixelFormat ePixelFormat, const BitmapPalette& rPal)
 {
     bool bRet = false;
 
-    mhDIB = ImplCreateDIB( rSize, nBitCount, rPal );
+    mhDIB = ImplCreateDIB(rSize, ePixelFormat, rPal);
 
     if( mhDIB )
     {
         maSize = rSize;
-        mnBitCount = nBitCount;
+        mnBitCount = vcl::pixelFormatBitCount(ePixelFormat);
         bRet = true;
     }
 
@@ -594,7 +594,7 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics* pSGraphics )
     return bRet;
 }
 
-bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, sal_uInt16 nNewBitCount )
+bool WinSalBitmap::Create(const SalBitmap& rSSalBmp, vcl::PixelFormat eNewPixelFormat)
 {
     bool bRet = false;
 
@@ -602,7 +602,7 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, sal_uInt16 nNewBitCount )
 
     if( rSalBmp.mhDDB )
     {
-        mhDIB = ImplCreateDIB( rSalBmp.maSize, nNewBitCount, BitmapPalette() );
+        mhDIB = ImplCreateDIB( rSalBmp.maSize, eNewPixelFormat, BitmapPalette() );
 
         if( mhDIB )
         {
@@ -624,7 +624,7 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, sal_uInt16 nNewBitCount )
             {
                 GlobalUnlock( mhDIB );
                 maSize = rSalBmp.maSize;
-                mnBitCount = nNewBitCount;
+                mnBitCount = vcl::pixelFormatBitCount(eNewPixelFormat);
                 bRet = true;
             }
             else
@@ -690,24 +690,27 @@ sal_uInt16 WinSalBitmap::ImplGetDIBColorCount( HGLOBAL hDIB )
     return nColors;
 }
 
-HGLOBAL WinSalBitmap::ImplCreateDIB( const Size& rSize, sal_uInt16 nBits, const BitmapPalette& rPal )
+HGLOBAL WinSalBitmap::ImplCreateDIB(const Size& rSize, vcl::PixelFormat ePixelFormat, const BitmapPalette& rPal)
 {
-    SAL_WARN_IF( nBits != 1 && nBits != 4 && nBits != 8 && nBits != 24, "vcl", "Unsupported BitCount!" );
-
     HGLOBAL hDIB = nullptr;
 
     if( rSize.IsEmpty() )
         return hDIB;
 
+    const auto nBits = vcl::pixelFormatBitCount(ePixelFormat);
+
     // calculate bitmap size in Bytes
-    const sal_uLong nAlignedWidth4Bytes = AlignedWidth4Bytes( nBits * rSize.Width() );
+    const sal_uLong nAlignedWidth4Bytes = AlignedWidth4Bytes(nBits * rSize.Width());
     const sal_uLong nImageSize = nAlignedWidth4Bytes * rSize.Height();
     bool bOverflow = (nImageSize / nAlignedWidth4Bytes) != static_cast<sal_uLong>(rSize.Height());
     if( bOverflow )
         return hDIB;
 
     // allocate bitmap memory including header and palette
-    const sal_uInt16 nColors = (nBits <= 8) ? (1 << nBits) : 0;
+    sal_uInt16 nColors = 0;
+    if (ePixelFormat <= vcl::PixelFormat::N8_BPP)
+        nColors = vcl::numberOfColors(ePixelFormat);
+
     const sal_uLong nHeaderSize = sizeof( BITMAPINFOHEADER ) + nColors * sizeof( RGBQUAD );
     bOverflow = (nHeaderSize + nImageSize) < nImageSize;
     if( bOverflow )
@@ -801,7 +804,7 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
         if( ( pBIH->biCompression == BI_RLE4 ) || ( pBIH->biCompression == BI_RLE8 ) )
         {
             Size    aSizePix( pBIH->biWidth, pBIH->biHeight );
-            HGLOBAL hNewDIB = ImplCreateDIB( aSizePix, pBIH->biBitCount, BitmapPalette() );
+            HGLOBAL hNewDIB = ImplCreateDIB(aSizePix, vcl::bitDepthToPixelFormat(pBIH->biBitCount), BitmapPalette());
 
             if( hNewDIB )
             {

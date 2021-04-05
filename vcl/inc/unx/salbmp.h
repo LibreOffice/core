@@ -41,7 +41,7 @@ private:
     static std::unique_ptr<BitmapBuffer>
                                 ImplCreateDIB(
                                     const Size& rSize,
-                                    sal_uInt16 nBitCount,
+                                    vcl::PixelFormat ePixelFormat,
                                     const BitmapPalette& rPal
                                 );
 
@@ -114,7 +114,7 @@ public:
     // override pure virtual methods
     virtual bool                Create(
                                     const Size& rSize,
-                                    sal_uInt16 nBitCount,
+                                    vcl::PixelFormat ePixelFormat,
                                     const BitmapPalette& rPal
                                 ) override;
 
@@ -126,7 +126,7 @@ public:
 
     virtual bool                Create(
                                     const SalBitmap& rSalBmp,
-                                    sal_uInt16 nNewBitCount
+                                    vcl::PixelFormat ePixelFormat
                                 ) override;
 
     virtual bool                Create(
