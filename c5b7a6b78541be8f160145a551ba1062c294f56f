@@ -16,6 +16,24 @@
       "revId": "c5b7a6b78541be8f160145a551ba1062c294f56f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28d8e8da_8ac09844",
+        "filename": "sc/source/ui/view/output.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2021-04-05T05:29:59Z",
+      "side": 1,
+      "message": "To draw the cover lines we need to know what is the background color of the merge area. But the background color of a merge area is only available on the top left cell of that merge area. The tile area where we paint need not have the top left cell of the merge area, so that is why we need to extend the search to find the top left cell. This information is not needed for painting normal grid lines.\n\nBut now I\u0027ve another idea now to paint the cover lines always using sheet background color *before* we paint the background, so that we don\u0027t need to know the bgcolor of the merge area, hence we can avoid the search for it. I\u0027ll test and upload that patch soon.",
+      "parentUuid": "71607cd2_41541c6e",
+      "revId": "c5b7a6b78541be8f160145a551ba1062c294f56f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
