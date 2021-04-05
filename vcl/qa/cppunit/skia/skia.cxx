@@ -283,7 +283,7 @@ void SkiaTest::testBitmapCopyOnWrite()
     if (!SkiaHelper::isVCLSkiaEnabled())
         return;
     SkiaSalBitmap bitmap;
-    CPPUNIT_ASSERT(bitmap.Create(Size(10, 10), 24, BitmapPalette()));
+    CPPUNIT_ASSERT(bitmap.Create(Size(10, 10), vcl::PixelFormat::N24_BPP, BitmapPalette()));
     bitmap.GetSkImage();
     bitmap.GetAlphaSkImage();
     CPPUNIT_ASSERT(bitmap.unittestHasBuffer());
