@@ -147,11 +147,7 @@ class WLevDistance
     bool            bSplitCount;    ///< if TRUE, Rep/Ins/Del are counted separately
 
     void InitData( const sal_Unicode* cPattern );
-    static inline int Min3( int x, int y, int z ); ///< minimum value of 3 values
     static int Mid3( int x, int y, int z );        ///< middle value of 3 values
-    static int Max3( int x, int y, int z );        ///< maximum value of 3 values
-    static int GCD( int a, int b );                ///< Greatest Common Divisor
-    static int LCM( int a, int b );                ///< Least Common Multiple
 
 public:
 
