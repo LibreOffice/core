@@ -500,6 +500,10 @@ void SdrGrafObj::ReleaseGraphicLink()
     aFileName.clear();
     aReferer.clear();
     aFilterName.clear();
+
+    auto aGraphic = mpGraphicObject->GetGraphic();
+    aGraphic.setOriginURL("");
+    SetGraphic(aGraphic);
 }
 
 bool SdrGrafObj::IsLinkedGraphic() const
