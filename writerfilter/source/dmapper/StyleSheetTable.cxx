@@ -806,6 +806,7 @@ void StyleSheetTable::lcl_entry(writerfilter::Reference<Properties>::Pointer_t r
     m_pImpl->m_pCurrentEntry = pNewEntry;
     m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pCurrentEntry->pProperties );
     ref->resolve(*this);
+    m_pImpl->m_rDMapper.processDeferredCharacterProperties();
     //append it to the table
     m_pImpl->m_rDMapper.PopStyleSheetProperties();
     if( !m_pImpl->m_rDMapper.IsOOXMLImport() || !m_pImpl->m_pCurrentEntry->sStyleName.isEmpty())

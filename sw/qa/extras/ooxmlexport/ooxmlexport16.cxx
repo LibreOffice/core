@@ -16,6 +16,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
@@ -64,6 +65,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf136059, "tdf136059.odt")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Contour has not been exported!", true,
         getProperty<bool>(getShape(1), "SurroundContour"));
     // With the fix this shall pass, see tdf136059.
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf118214_noSpellChecking, "tdf118214_noSpellChecking.docx")
+{
+    // Prior to the fix, the language was "en", not LANGUAGE_NONE, and most words were indicated as misspelled.
+    auto aLocale = getProperty<css::lang::Locale>(getStyles("ParagraphStyles")->getByName("Standard"), "CharLocale");
+    CPPUNIT_ASSERT_EQUAL(OUString("zxx"), aLocale.Language);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf138892_noNumbering, "tdf138892_noNumbering.docx")

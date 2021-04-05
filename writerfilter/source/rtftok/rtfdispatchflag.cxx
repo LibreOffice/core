@@ -817,6 +817,12 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().getCharacterSprms().erase(NS_ooxml::LN_EG_RPrBase_vertAlign);
         }
         break;
+        case RTFKeyword::NOPROOF:
+        {
+            auto pValue = new RTFValue(1);
+            m_aStates.top().getCharacterSprms().set(NS_ooxml::LN_EG_RPrBase_noProof, pValue);
+        }
+        break;
         case RTFKeyword::LINEPPAGE:
         case RTFKeyword::LINECONT:
         {

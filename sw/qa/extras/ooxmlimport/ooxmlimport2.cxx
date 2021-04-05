@@ -397,7 +397,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf124754, "tdf124754.docx")
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs(textbox));
 
     uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, textbox);
-    uno::Reference<text::XTextRange> xText = getRun(xParagraph, 2);
+    uno::Reference<text::XTextRange> xText = getRun(xParagraph, 3, "https://www.libreoffice.org/");
 
     // Ensure that hyperlink text color is not black
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Hyperlink color should be not black!", sal_Int32(353217),

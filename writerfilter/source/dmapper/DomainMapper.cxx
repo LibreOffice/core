@@ -2322,7 +2322,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         }
     }
     break;
-    case NS_ooxml::LN_EG_RPrBase_noProof: // no grammar and spell checking, unsupported
+    case NS_ooxml::LN_EG_RPrBase_noProof: // no grammar and spell checking
+        m_pImpl->deferCharacterProperty( nSprmId, uno::makeAny( nIntValue ));
     break;
     case NS_ooxml::LN_anchor_anchor: // at_character drawing
     case NS_ooxml::LN_inline_inline: // as_character drawing
@@ -2962,9 +2963,14 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     }
 }
 
+void DomainMapper::processDeferredCharacterProperties()
+{
+    m_pImpl->processDeferredCharacterProperties();
+}
+
 void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32, uno::Any >& deferredCharacterProperties )
 {
-    assert( m_pImpl->GetTopContextType() == CONTEXT_CHARACTER );
+    assert(m_pImpl->GetTopContextType() == CONTEXT_CHARACTER || m_pImpl->GetTopContextType() == CONTEXT_STYLESHEET);
     PropertyMapPtr rContext = m_pImpl->GetTopContext();
     for( const auto& rProp : deferredCharacterProperties )
     {
@@ -2997,6 +3003,17 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
 
             rContext->Insert(PROP_CHAR_ESCAPEMENT,         uno::makeAny( sal_Int16(nEscapement) ) );
             rContext->Insert(PROP_CHAR_ESCAPEMENT_HEIGHT,  uno::makeAny( nProp ) );
+        }
+        break;
+        case NS_ooxml::LN_EG_RPrBase_noProof:
+        {
+            if (nIntValue)
+            {
+                lang::Locale aLocale("zxx","",""); // LANGUAGE_NONE
+                rContext->Insert(PROP_CHAR_LOCALE, uno::makeAny(aLocale));
+                rContext->Insert(PROP_CHAR_LOCALE_ASIAN, uno::makeAny(aLocale));
+                rContext->Insert(PROP_CHAR_LOCALE_COMPLEX, uno::makeAny(aLocale));
+            }
         }
         break;
         default:
