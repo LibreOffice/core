@@ -22,6 +22,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <filter/msfilter/util.hxx>
 #include <filter/msfilter/rtfutil.hxx>
+#include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/string.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/globname.hxx>
@@ -266,7 +267,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     , m_pMapperStream(nullptr)
     , m_aDefaultState(this)
     , m_bSkipUnknown(false)
-    , m_bFirstRun(true)
+    , m_bFirstRun(!comphelper::IsContextFlagActive("InPasteFromClipboard"))
     , m_bFirstRunException(false)
     , m_bNeedPap(true)
     , m_bNeedCr(false)
