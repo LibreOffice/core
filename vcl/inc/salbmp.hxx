@@ -25,6 +25,7 @@
 #include <vcl/checksum.hxx>
 #include <vcl/BitmapAccessMode.hxx>
 #include <vcl/BitmapBuffer.hxx>
+#include <vcl/bitmap/BitmapTypes.hxx>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 
 struct BitmapBuffer;
@@ -53,13 +54,13 @@ public:
     virtual                 ~SalBitmap();
 
     virtual bool            Create( const Size& rSize,
-                                    sal_uInt16 nBitCount,
+                                    vcl::PixelFormat ePixelFormat,
                                     const BitmapPalette& rPal ) = 0;
     virtual bool            Create( const SalBitmap& rSalBmp ) = 0;
     virtual bool            Create( const SalBitmap& rSalBmp,
                                     SalGraphics* pGraphics ) = 0;
     virtual bool            Create( const SalBitmap& rSalBmp,
-                                    sal_uInt16 nNewBitCount ) = 0;
+                                    vcl::PixelFormat eNewPixelFormat) = 0;
     virtual bool            Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
                                     Size& rSize,
                                     bool bMask = false ) = 0;

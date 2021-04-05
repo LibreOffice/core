@@ -52,7 +52,7 @@ public:
 
     std::shared_ptr< Gdiplus::Bitmap > ImplGetGdiPlusBitmap(const WinSalBitmap* pAlphaSource = nullptr) const;
 
-    static HGLOBAL      ImplCreateDIB( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal );
+    static HGLOBAL      ImplCreateDIB( const Size& rSize, vcl::PixelFormat ePixelFormat, const BitmapPalette& rPal );
     static HANDLE       ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB );
     static sal_uInt16   ImplGetDIBColorCount( HGLOBAL hDIB );
     static void         ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
@@ -66,10 +66,10 @@ public:
 public:
 
     bool                        Create( HANDLE hBitmap, bool bDIB, bool bCopyHandle );
-    virtual bool                Create( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal ) override;
+    virtual bool                Create( const Size& rSize, vcl::PixelFormat ePixelFormat, const BitmapPalette& rPal ) override;
     virtual bool                Create( const SalBitmap& rSalBmpImpl ) override;
     virtual bool                Create( const SalBitmap& rSalBmpImpl, SalGraphics* pGraphics ) override;
-    virtual bool                Create( const SalBitmap& rSalBmpImpl, sal_uInt16 nNewBitCount ) override;
+    virtual bool                Create( const SalBitmap& rSalBmpImpl, vcl::PixelFormat eNewPixelFormat ) override;
     virtual bool                Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
                                            Size& rSize,
                                            bool bMask = false ) override;

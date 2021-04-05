@@ -132,7 +132,7 @@ Bitmap::Bitmap( const Size& rSizePixel, vcl::PixelFormat ePixelFormat, const Bit
     }
 
     mxSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
-    mxSalBmp->Create( rSizePixel, sal_uInt16(ePixelFormat), pRealPal ? *pRealPal : aPal );
+    mxSalBmp->Create(rSizePixel, ePixelFormat, pRealPal ? *pRealPal : aPal);
 }
 
 #ifdef DBG_UTIL
@@ -380,7 +380,7 @@ BitmapChecksum Bitmap::GetChecksum() const
             // so, we need to update the imp bitmap for this bitmap instance
             // as we do in BitmapInfoAccess::ImplCreate
             std::shared_ptr<SalBitmap> xNewImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
-            if (xNewImpBmp->Create(*mxSalBmp, vcl::pixelFormatBitCount(getPixelFormat())))
+            if (xNewImpBmp->Create(*mxSalBmp, getPixelFormat()))
             {
                 Bitmap* pThis = const_cast<Bitmap*>(this);
                 pThis->mxSalBmp = xNewImpBmp;

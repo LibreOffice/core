@@ -56,12 +56,6 @@ SkiaSalBitmap::SkiaSalBitmap() {}
 
 SkiaSalBitmap::~SkiaSalBitmap() {}
 
-static bool isValidBitCount(sal_uInt16 nBitCount)
-{
-    return (nBitCount == 1) || (nBitCount == 4) || (nBitCount == 8) || (nBitCount == 24)
-           || (nBitCount == 32);
-}
-
 SkiaSalBitmap::SkiaSalBitmap(const sk_sp<SkImage>& image)
 {
     ResetAllData();
@@ -77,14 +71,15 @@ SkiaSalBitmap::SkiaSalBitmap(const sk_sp<SkImage>& image)
     SAL_INFO("vcl.skia.trace", "bitmapfromimage(" << this << ")");
 }
 
-bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal)
+bool SkiaSalBitmap::Create(const Size& rSize, vcl::PixelFormat ePixelFormat,
+                           const BitmapPalette& rPal)
 {
     assert(mAnyAccessCount == 0);
     ResetAllData();
-    if (!isValidBitCount(nBitCount))
+    if (ePixelFormat == vcl::PixelFormat::INVALID)
         return false;
     mPalette = rPal;
-    mBitCount = nBitCount;
+    mBitCount = vcl::pixelFormatBitCount(ePixelFormat);
     mSize = rSize;
     ResetPendingScaling();
     if (!ComputeScanlineSize())
@@ -142,15 +137,21 @@ void SkiaSalBitmap::CreateBitmapData()
 
 bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp)
 {
-    return Create(rSalBmp, rSalBmp.GetBitCount());
+    return Create(rSalBmp, vcl::bitDepthToPixelFormat(rSalBmp.GetBitCount()));
 }
 
 bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, SalGraphics* pGraphics)
 {
-    return Create(rSalBmp, pGraphics ? pGraphics->GetBitCount() : rSalBmp.GetBitCount());
+    auto ePixelFormat = vcl::PixelFormat::INVALID;
+    if (pGraphics)
+        ePixelFormat = vcl::bitDepthToPixelFormat(pGraphics->GetBitCount());
+    else
+        ePixelFormat = vcl::bitDepthToPixelFormat(rSalBmp.GetBitCount());
+
+    return Create(rSalBmp, ePixelFormat);
 }
 
-bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
+bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, vcl::PixelFormat eNewPixelFormat)
 {
     assert(mAnyAccessCount == 0);
     const SkiaSalBitmap& src = static_cast<const SkiaSalBitmap&>(rSalBmp);
@@ -165,7 +166,7 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
     mScaleQuality = src.mScaleQuality;
     mEraseColorSet = src.mEraseColorSet;
     mEraseColor = src.mEraseColor;
-    if (nNewBitCount != src.GetBitCount())
+    if (vcl::pixelFormatBitCount(eNewPixelFormat) != src.GetBitCount())
     {
         // This appears to be unused(?). Implement this just in case, but be lazy
         // about it and rely on EnsureBitmapData() doing the conversion from mImage

@@ -48,18 +48,9 @@ SvpSalBitmap::~SvpSalBitmap()
 
 static std::unique_ptr<BitmapBuffer> ImplCreateDIB(
     const Size& rSize,
-    sal_uInt16 nBitCount,
+    vcl::PixelFormat ePixelFormat,
     const BitmapPalette& rPal)
 {
-    assert(
-          (nBitCount ==  0
-        || nBitCount ==  1
-        || nBitCount ==  4
-        || nBitCount ==  8
-        || nBitCount == 24
-        || nBitCount == 32)
-        && "Unsupported BitCount!");
-
     if (!rSize.Width() || !rSize.Height())
         return nullptr;
 
@@ -74,32 +65,35 @@ static std::unique_ptr<BitmapBuffer> ImplCreateDIB(
         return nullptr;
     }
 
-    const sal_uInt16 nColors = ( nBitCount <= 8 ) ? ( 1 << nBitCount ) : 0;
-
-    switch (nBitCount)
+    switch (ePixelFormat)
     {
-        case 1:
+        case vcl::PixelFormat::N1_BPP:
             pDIB->mnFormat = ScanlineFormat::N1BitLsbPal;
             break;
-        case 8:
+        case vcl::PixelFormat::N8_BPP:
             pDIB->mnFormat = ScanlineFormat::N8BitPal;
             break;
-        case 24:
+        case vcl::PixelFormat::N24_BPP:
             pDIB->mnFormat = SVP_24BIT_FORMAT;
             break;
-        case 32:
+        case vcl::PixelFormat::N32_BPP:
             pDIB->mnFormat = SVP_CAIRO_FORMAT;
             break;
-        default:
+        case vcl::PixelFormat::INVALID:
             assert(false);
             pDIB->mnFormat = SVP_CAIRO_FORMAT;
+            break;
     }
+
+    sal_uInt16 nColors = 0;
+    if (ePixelFormat <= vcl::PixelFormat::N8_BPP)
+        nColors = vcl::numberOfColors(ePixelFormat);
 
     pDIB->mnFormat |= ScanlineFormat::TopDown;
     pDIB->mnWidth = rSize.Width();
     pDIB->mnHeight = rSize.Height();
     tools::Long nScanlineBase;
-    bool bFail = o3tl::checked_multiply<tools::Long>(pDIB->mnWidth, nBitCount, nScanlineBase);
+    bool bFail = o3tl::checked_multiply<tools::Long>(pDIB->mnWidth, vcl::pixelFormatBitCount(ePixelFormat), nScanlineBase);
     if (bFail)
     {
         SAL_WARN("vcl.gdi", "checked multiply failed");
@@ -111,9 +105,9 @@ static std::unique_ptr<BitmapBuffer> ImplCreateDIB(
         SAL_WARN("vcl.gdi", "scanline calculation wraparound");
         return nullptr;
     }
-    pDIB->mnBitCount = nBitCount;
+    pDIB->mnBitCount = vcl::pixelFormatBitCount(ePixelFormat);
 
-    if( nColors )
+    if (nColors)
     {
         pDIB->maPalette = rPal;
         pDIB->maPalette.SetEntryCount( nColors );
@@ -155,10 +149,10 @@ void SvpSalBitmap::Create(std::unique_ptr<BitmapBuffer> pBuf)
     mpDIB = std::move(pBuf);
 }
 
-bool SvpSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal)
+bool SvpSalBitmap::Create(const Size& rSize, vcl::PixelFormat ePixelFormat, const BitmapPalette& rPal)
 {
     Destroy();
-    mpDIB = ImplCreateDIB( rSize, nBitCount, rPal );
+    mpDIB = ImplCreateDIB(rSize, ePixelFormat, rPal);
     return mpDIB != nullptr;
 }
 
@@ -201,8 +195,8 @@ bool SvpSalBitmap::Create( const SalBitmap& /*rSalBmp*/,
     return false;
 }
 
-bool SvpSalBitmap::Create( const SalBitmap& /*rSalBmp*/,
-                           sal_uInt16 /*nNewBitCount*/ )
+bool SvpSalBitmap::Create(const SalBitmap& /*rSalBmp*/,
+                          vcl::PixelFormat /*eNewPixelFormat*/)
 {
     return false;
 }
