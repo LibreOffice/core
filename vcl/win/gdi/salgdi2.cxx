@@ -113,7 +113,7 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
 
     BitmapBuffer* pRead = rSalBitmap.AcquireBuffer(BitmapAccessMode::Read);
 
-    rWinSalBitmap.Create(rSalBitmap.GetSize(), rSalBitmap.GetBitCount(), aBitmapPalette);
+    rWinSalBitmap.Create(rSalBitmap.GetSize(), vcl::bitDepthToPixelFormat(rSalBitmap.GetBitCount()), aBitmapPalette);
     BitmapBuffer* pWrite = rWinSalBitmap.AcquireBuffer(BitmapAccessMode::Write);
 
     sal_uInt8* pSource(pRead->mpBits);

@@ -2261,14 +2261,20 @@ std::shared_ptr<SalBitmap> SvpSalGraphics::getBitmap( tools::Long nX, tools::Lon
 {
     std::shared_ptr<SvpSalBitmap> pBitmap = std::make_shared<SvpSalBitmap>();
     BitmapPalette aPal;
+    vcl::PixelFormat ePixelFormat = vcl::PixelFormat::INVALID;
     if (GetBitCount() == 1)
     {
+        ePixelFormat = vcl::PixelFormat::N1_BPP;
         aPal.SetEntryCount(2);
         aPal[0] = COL_BLACK;
         aPal[1] = COL_WHITE;
     }
+    else
+    {
+        ePixelFormat = vcl::PixelFormat::N32_BPP;
+    }
 
-    if (!pBitmap->Create(Size(nWidth, nHeight), GetBitCount(), aPal))
+    if (!pBitmap->Create(Size(nWidth, nHeight), ePixelFormat, aPal))
     {
         SAL_WARN("vcl.gdi", "SvpSalGraphics::getBitmap, cannot create bitmap");
         return nullptr;

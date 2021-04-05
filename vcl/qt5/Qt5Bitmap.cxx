@@ -33,23 +33,22 @@ Qt5Bitmap::Qt5Bitmap() {}
 
 Qt5Bitmap::Qt5Bitmap(const QImage& rImage) { m_pImage.reset(new QImage(rImage)); }
 
-bool Qt5Bitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal)
+bool Qt5Bitmap::Create(const Size& rSize, vcl::PixelFormat ePixelFormat, const BitmapPalette& rPal)
 {
-    assert(
-        (nBitCount == 1 || nBitCount == 4 || nBitCount == 8 || nBitCount == 24 || nBitCount == 32)
-        && "Unsupported BitCount!");
+    if (ePixelFormat == vcl::PixelFormat::INVALID)
+        return false;
 
-    if (nBitCount == 1)
+    if (ePixelFormat == vcl::PixelFormat::N1_BPP)
         assert(2 >= rPal.GetEntryCount());
-    if (nBitCount == 8)
+    if (ePixelFormat == vcl::PixelFormat::N8_BPP)
         assert(256 >= rPal.GetEntryCount());
 
-    m_pImage.reset(new QImage(toQSize(rSize), getBitFormat(nBitCount)));
+    m_pImage.reset(new QImage(toQSize(rSize), getBitFormat(ePixelFormat)));
     m_pImage->fill(Qt::transparent);
     m_aPalette = rPal;
 
     auto count = rPal.GetEntryCount();
-    if (nBitCount != 4 && count && m_pImage)
+    if (count && m_pImage)
     {
         QVector<QRgb> aColorTable(count);
         for (unsigned i = 0; i < count; ++i)
@@ -76,13 +75,12 @@ bool Qt5Bitmap::Create(const SalBitmap& rSalBmp, SalGraphics* pSalGraphics)
     return true;
 }
 
-bool Qt5Bitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
+bool Qt5Bitmap::Create(const SalBitmap& rSalBmp, vcl::PixelFormat eNewPixelFormat)
 {
-    assert((nNewBitCount == 1 || nNewBitCount == 8 || nNewBitCount == 24 || nNewBitCount == 32)
-           && "Unsupported BitCount!");
-
+    if (eNewPixelFormat == vcl::PixelFormat::INVALID)
+        return false;
     const Qt5Bitmap* pBitmap = static_cast<const Qt5Bitmap*>(&rSalBmp);
-    m_pImage.reset(new QImage(pBitmap->m_pImage->convertToFormat(getBitFormat(nNewBitCount))));
+    m_pImage.reset(new QImage(pBitmap->m_pImage->convertToFormat(getBitFormat(eNewPixelFormat))));
     return true;
 }
 
