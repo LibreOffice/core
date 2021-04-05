@@ -150,6 +150,15 @@ void Qt5Clipboard::handleChanged(QClipboard::Mode aMode)
 
     osl::ClearableMutexGuard aGuard(m_aMutex);
 
+    // QtWayland will send a second change notification (seemingly without any
+    // trigger). And any C'n'P operation in the Qt file picker emits a signal,
+    // with LO still holding the clipboard ownership, but internally having lost
+    // it. So ignore any signal, which still delivers the internal Qt5MimeData
+    // as the clipboard content and is no "advertised" change.
+    if (!m_bOwnClipboardChange && isOwner(aMode)
+        && dynamic_cast<const Qt5MimeData*>(QApplication::clipboard()->mimeData(aMode)))
+        return;
+
     css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> xOldOwner(m_aOwner);
     css::uno::Reference<css::datatransfer::XTransferable> xOldContents(m_aContents);
     // ownership change from LO POV is handled in setContents
