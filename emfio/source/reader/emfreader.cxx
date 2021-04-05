@@ -24,6 +24,7 @@
 #include <o3tl/safeint.hxx>
 #include <tools/stream.hxx>
 #include <memory>
+#include <unotools/configmgr.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/pdfread.hxx>
 #include <rtl/bootstrap.hxx>
@@ -359,6 +360,8 @@ bool ImplReadRegion( tools::PolyPolygon& rPolyPoly, SvStream& rStream, sal_uInt3
     if (nLen < nSize)
         return false;
 
+    bool bIsFuzzing = utl::ConfigManager::IsFuzzing();
+
     for (sal_uInt32 i = 0; i < nCountRects; ++i)
     {
         rStream.ReadInt32(nLeft);
@@ -367,6 +370,10 @@ bool ImplReadRegion( tools::PolyPolygon& rPolyPoly, SvStream& rStream, sal_uInt3
         rStream.ReadInt32(nBottom);
 
         SAL_INFO("emfio", "\t\tLeft: " << nLeft << ", top: " << nTop << ", right: " << nRight << ", bottom: " << nBottom);
+
+        if (bIsFuzzing && i) // GetUnion is super slow, when fuzzing skip after first rect
+            continue;
+
         tools::PolyPolygon aPolyPolyOr1(tools::Polygon(tools::Rectangle(nLeft, nTop, nRight, nBottom)));
         rPolyPoly.GetUnion(aPolyPolyOr1, rPolyPoly);
     }
