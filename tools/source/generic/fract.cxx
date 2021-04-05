@@ -26,13 +26,8 @@
 
 #include <algorithm>
 #include <cmath>
+#include <numeric>
 
-#include <boost/version.hpp>
-#if BOOST_VERSION >= 106700
-#include <boost/integer/common_factor_rt.hpp>
-#else
-#include <boost/math/common_factor_rt.hpp>
-#endif
 #include <boost/rational.hpp>
 
 #ifdef _MSC_VER
@@ -172,13 +167,8 @@ namespace
         T den = r.denominator();
 
         // Avoid overflow and preserve normalization
-#if BOOST_VERSION >= 106700
-        T gcd1 = boost::integer::gcd(i.numerator(), den);
-        T gcd2 = boost::integer::gcd(num, i.denominator());
-#else
-        T gcd1 = boost::math::gcd(i.numerator(), den);
-        T gcd2 = boost::math::gcd(num, i.denominator());
-#endif
+        T gcd1 = std::gcd(i.numerator(), den);
+        T gcd2 = std::gcd(num, i.denominator());
 
         bool fail = false;
         fail |= o3tl::checked_multiply(i.numerator() / gcd1, num / gcd2, num);
