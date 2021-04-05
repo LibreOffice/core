@@ -23,11 +23,12 @@
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/layout.hxx>
-#include "messagedialog.hxx"
 #include <vcl/toolkit/svtabbx.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include "iconview.hxx"
+#include "listbox.hxx"
+#include "messagedialog.hxx"
 
 class SalInstanceBuilder : public weld::Builder
 {
@@ -811,8 +812,9 @@ public:
 
         if (m_xMenuButton && m_xMenuButton->IsVisible() && m_sMenuButtonRow == sId)
         {
-            if (m_xMenuButton->GetParent() != pEvent->GetWindow())
-                m_xMenuButton->SetParent(pEvent->GetWindow());
+            vcl::Window* pEventWindow = m_xComboBox->GetMainWindow();
+            if (m_xMenuButton->GetParent() != pEventWindow)
+                m_xMenuButton->SetParent(pEventWindow);
             int nButtonWidth = get_menu_button_width();
             m_xMenuButton->SetSizePixel(Size(nButtonWidth, rRect.GetHeight()));
             m_xMenuButton->SetPosPixel(Point(rRect.GetWidth() - nButtonWidth, rRect.getY()));

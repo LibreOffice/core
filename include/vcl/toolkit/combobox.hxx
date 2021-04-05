@@ -31,6 +31,7 @@
 #define COMBOBOX_ENTRY_NOTFOUND     (SAL_MAX_INT32)
 #define COMBOBOX_MAX_ENTRIES        (SAL_MAX_INT32 - 1)
 
+class ImplListBoxWindow;
 class UserDrawEvent;
 
 /// A widget used to choose from a list of items and which has an entry.
@@ -182,6 +183,9 @@ public:
     void SetWidthInChars(sal_Int32 nWidthInChars);
 
     tools::Long GetDropDownEntryHeight() const;
+
+    // the drop down window container
+    ImplListBoxWindow* GetMainWindow() const;
 
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 
