@@ -499,8 +499,7 @@ void ScDocShell::CheckConfigOptions()
         ScTabViewShell* pViewShell = GetBestViewShell();
         if (pViewShell)
         {
-            vcl::Window* pParent = pViewShell->GetFrameWin();
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr,
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pViewShell->GetFrameWeld(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
                                                           ScResId(STR_OPTIONS_WARN_SEPARATORS)));
             xInfoBox->run();
