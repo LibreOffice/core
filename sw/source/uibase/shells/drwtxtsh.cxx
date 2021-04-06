@@ -270,11 +270,12 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest const &rReq)
     switch(rReq.GetSlot())
     {
     case SID_THESAURUS:
-        pOutlinerView->StartThesaurus();
+        pOutlinerView->StartThesaurus(rReq.GetFrameWeld());
         break;
 
     case SID_HANGUL_HANJA_CONVERSION:
-        pOutlinerView->StartTextConversion(LANGUAGE_KOREAN, LANGUAGE_KOREAN, nullptr,
+        pOutlinerView->StartTextConversion(rReq.GetFrameWeld(),
+                LANGUAGE_KOREAN, LANGUAGE_KOREAN, nullptr,
                 i18n::TextConversionOption::CHARACTER_BY_CHARACTER, true, false);
         break;
 
@@ -335,7 +336,7 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest const &rReq)
 
                 vcl::Font aTargetFont = OutputDevice::GetDefaultFont(DefaultFontType::CJK_TEXT, nTargetLang, GetDefaultFontFlags::OnlyOne);
 
-                pOutlinerView->StartTextConversion(nSourceLang, nTargetLang, &aTargetFont, nOptions, false, false);
+                pOutlinerView->StartTextConversion(rReq.GetFrameWeld(), nSourceLang, nTargetLang, &aTargetFont, nOptions, false, false);
             }
 
             Reference<lang::XComponent> xComponent(xDialog, UNO_QUERY);

@@ -48,7 +48,7 @@ private:
     friend class SvxHyphenWordDialog;
     friend struct SvxHyphenWordDialog_Impl;
 
-    weld::Window* pWin;
+    weld::Widget* pWin;
     std::unique_ptr<weld::WaitObject> xWait;
     css::uno::Reference<
         css::uno::XInterface >             xLast;  // result of last spelling/hyphenation attempt
@@ -70,9 +70,9 @@ private:
     void operator =(SvxSpellWrapper const &) = delete;
 
 public:
-    SvxSpellWrapper( weld::Window* pWn,
+    SvxSpellWrapper( weld::Widget* pWn,
                      const bool bStart, const bool bIsAllRight );
-    SvxSpellWrapper( weld::Window* pWn,
+    SvxSpellWrapper( weld::Widget* pWn,
                      css::uno::Reference< css::linguistic2::XHyphenator > const &xHyphenator,
                      const bool bStart, const bool bOther );
 

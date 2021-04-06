@@ -55,6 +55,7 @@ class SvStream;
 class SvxSearchItem;
 class SvxFieldItem;
 namespace vcl { class Window; }
+namespace weld { class Widget; }
 class KeyEvent;
 class MouseEvent;
 class CommandEvent;
@@ -278,12 +279,12 @@ public:
     PointerStyle    GetPointer( const Point& rPosPixel );
     bool            Command(const CommandEvent& rCEvt);
 
-    void            StartSpeller();
-    EESpellState    StartThesaurus();
+    void            StartSpeller(weld::Widget* pDialogParent);
+    EESpellState    StartThesaurus(weld::Widget* pDialogParent);
     sal_Int32       StartSearchAndReplace( const SvxSearchItem& rSearchItem );
 
     // for text conversion
-    void            StartTextConversion( LanguageType nSrcLang, LanguageType nDestLang, const vcl::Font *pDestFont, sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc );
+    void            StartTextConversion(weld::Widget* pDialogParent, LanguageType nSrcLang, LanguageType nDestLang, const vcl::Font *pDestFont, sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc);
 
     void            TransliterateText( TransliterationFlags nTransliterationMode );
 

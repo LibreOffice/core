@@ -837,29 +837,28 @@ void EditView::CompleteAutoCorrect( vcl::Window const * pFrameWin )
     }
 }
 
-EESpellState EditView::StartSpeller( bool bMultipleDoc )
+EESpellState EditView::StartSpeller(weld::Widget* pDialogParent, bool bMultipleDoc)
 {
     if ( !pImpEditView->pEditEngine->pImpEditEngine->GetSpeller().is() )
         return EESpellState::NoSpeller;
 
-    return pImpEditView->pEditEngine->pImpEditEngine->Spell( this, bMultipleDoc );
+    return pImpEditView->pEditEngine->pImpEditEngine->Spell(this, pDialogParent, bMultipleDoc);
 }
 
-EESpellState EditView::StartThesaurus()
+EESpellState EditView::StartThesaurus(weld::Widget* pDialogParent)
 {
     if ( !pImpEditView->pEditEngine->pImpEditEngine->GetSpeller().is() )
         return EESpellState::NoSpeller;
 
-    return pImpEditView->pEditEngine->pImpEditEngine->StartThesaurus( this );
+    return pImpEditView->pEditEngine->pImpEditEngine->StartThesaurus(this, pDialogParent);
 }
 
-void EditView::StartTextConversion(
+void EditView::StartTextConversion(weld::Widget* pDialogParent,
         LanguageType nSrcLang, LanguageType nDestLang, const vcl::Font *pDestFont,
         sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc )
 {
-    pImpEditView->pEditEngine->pImpEditEngine->Convert( this, nSrcLang, nDestLang, pDestFont, nOptions, bIsInteractive, bMultipleDoc );
+    pImpEditView->pEditEngine->pImpEditEngine->Convert(this, pDialogParent, nSrcLang, nDestLang, pDestFont, nOptions, bIsInteractive, bMultipleDoc);
 }
-
 
 sal_Int32 EditView::StartSearchAndReplace( const SvxSearchItem& rSearchItem )
 {

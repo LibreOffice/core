@@ -287,12 +287,12 @@ public:
 
     void            CompleteAutoCorrect( vcl::Window const * pFrameWin = nullptr );
 
-    EESpellState    StartSpeller( bool bMultipleDoc = false );
-    EESpellState    StartThesaurus();
+    EESpellState    StartSpeller(weld::Widget* pDialogParent, bool bMultipleDoc = false);
+    EESpellState    StartThesaurus(weld::Widget* pDialogParent);
     sal_Int32       StartSearchAndReplace( const SvxSearchItem& rSearchItem );
 
     // for text conversion
-    void            StartTextConversion( LanguageType nSrcLang, LanguageType nDestLang, const vcl::Font *pDestFont, sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc );
+    void            StartTextConversion(weld::Widget* pDialogParent, LanguageType nSrcLang, LanguageType nDestLang, const vcl::Font *pDestFont, sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc);
 
     void            TransliterateText( TransliterationFlags nTransliterationMode );
 

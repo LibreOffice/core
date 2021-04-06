@@ -1264,12 +1264,12 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
         }
         case SID_THESAURUS:
         {
-            pOLV->StartThesaurus();
+            pOLV->StartThesaurus(rReq.GetFrameWeld());
             break;
         }
         case SID_HANGUL_HANJA_CONVERSION:
-            pOLV->StartTextConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, nullptr,
-                    i18n::TextConversionOption::CHARACTER_BY_CHARACTER, true, false );
+            pOLV->StartTextConversion(rReq.GetFrameWeld(), LANGUAGE_KOREAN, LANGUAGE_KOREAN, nullptr,
+                    i18n::TextConversionOption::CHARACTER_BY_CHARACTER, true, false);
             break;
 
         case SID_CHINESE_CONVERSION:
@@ -1328,7 +1328,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
                                 vcl::Font aTargetFont = OutputDevice::GetDefaultFont( DefaultFontType::CJK_TEXT,
                                             nTargetLang, GetDefaultFontFlags::OnlyOne );
 
-                                pOLV->StartTextConversion( nSourceLang, nTargetLang, &aTargetFont, nOptions, false, false );
+                                pOLV->StartTextConversion(rReq.GetFrameWeld(), nSourceLang, nTargetLang, &aTargetFont, nOptions, false, false);
                             }
                         }
                         Reference< lang::XComponent > xComponent( xDialog, UNO_QUERY );

@@ -349,10 +349,9 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 
         case SID_THESAURUS:
             {
-                pOutView->StartThesaurus();
+                pOutView->StartThesaurus(rReq.GetFrameWeld());
             }
             break;
-
     }
 }
 

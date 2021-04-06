@@ -1781,6 +1781,7 @@ void SdOutliner::StartConversion( LanguageType nSourceLanguage,  LanguageType nT
     if (pOutlinerView != nullptr)
     {
         pOutlinerView->StartTextConversion(
+            GetMessageBoxParent(),
             nSourceLanguage,
             nTargetLanguage,
             pTargetFont,

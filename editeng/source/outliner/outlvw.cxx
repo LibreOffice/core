@@ -1223,17 +1223,17 @@ OUString OutlinerView::GetSelected() const
     return pEditView->GetSelected();
 }
 
-void OutlinerView::StartSpeller()
+void OutlinerView::StartSpeller(weld::Widget* pDialogParent)
 {
-    pEditView->StartSpeller();
+    pEditView->StartSpeller(pDialogParent);
 }
 
-EESpellState OutlinerView::StartThesaurus()
+EESpellState OutlinerView::StartThesaurus(weld::Widget* pDialogParent)
 {
-    return pEditView->StartThesaurus();
+    return pEditView->StartThesaurus(pDialogParent);
 }
 
-void OutlinerView::StartTextConversion(
+void OutlinerView::StartTextConversion(weld::Widget* pDialogParent,
     LanguageType nSrcLang, LanguageType nDestLang, const vcl::Font *pDestFont,
     sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc )
 {
@@ -1243,7 +1243,7 @@ void OutlinerView::StartTextConversion(
         (LANGUAGE_CHINESE_TRADITIONAL == nSrcLang && LANGUAGE_CHINESE_SIMPLIFIED  == nDestLang)
        )
     {
-        pEditView->StartTextConversion( nSrcLang, nDestLang, pDestFont, nOptions, bIsInteractive, bMultipleDoc );
+        pEditView->StartTextConversion(pDialogParent, nSrcLang, nDestLang, pDestFont, nOptions, bIsInteractive, bMultipleDoc);
     }
     else
     {

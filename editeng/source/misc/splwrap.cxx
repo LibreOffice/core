@@ -132,7 +132,7 @@ SvxSpellWrapper::~SvxSpellWrapper()
  *
  --------------------------------------------------------------------*/
 
-SvxSpellWrapper::SvxSpellWrapper( weld::Window* pWn,
+SvxSpellWrapper::SvxSpellWrapper( weld::Widget* pWn,
     const bool bStart, const bool bIsAllRight ) :
 
     pWin        ( pWn ),
@@ -149,7 +149,7 @@ SvxSpellWrapper::SvxSpellWrapper( weld::Window* pWn,
 }
 
 
-SvxSpellWrapper::SvxSpellWrapper( weld::Window* pWn,
+SvxSpellWrapper::SvxSpellWrapper( weld::Widget* pWn,
         Reference< XHyphenator > const &xHyphenator,
         const bool bStart, const bool bOther ) :
     pWin        ( pWn ),
