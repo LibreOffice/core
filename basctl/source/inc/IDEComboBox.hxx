@@ -140,14 +140,6 @@ protected:
     /// Called for setting language when user selects a language in ComboBox
     virtual void Select() override;
 
-    /*!
-     * Handle keystrokes and mouse
-     *
-     * @param rNEvt represents mouse event
-     * @return a bool value: true if was handled, and false if there was nothing handled
-     */
-    //TODO    virtual bool PreNotify(NotifyEvent& rNEvt) override;
-
 private:
     static void ReleaseFocus();
 
@@ -165,6 +157,12 @@ private:
     /// Fill up the combobox
     virtual void FillBox() override;
 
+    /*!
+     * Handle keystrokes
+     *
+     * @param rKEvt represents key event
+     * @return a bool value: true if was handled, and false if there was nothing handled
+     */
     virtual bool HandleKeyInput(const KeyEvent& rKEvt) override;
 
     DECL_LINK(FocusInHdl, weld::Widget&, void);
@@ -244,15 +242,13 @@ protected:
     /// Called for setting language when user selects a language in ComboBox
     virtual void Select() override;
 
-    virtual bool HandleKeyInput(const KeyEvent& rKEvt) override;
-
     /*!
-     * Handle keystrokes and mouse
+     * Handle keystrokes
      *
-     * @param rNEvt represents mouse event
+     * @param rKEvt represents key event
      * @return a bool value: true if was handled, and false if there was nothing handled
      */
-    //TODO    virtual bool PreNotify(NotifyEvent& rNEvt) override;
+    virtual bool HandleKeyInput(const KeyEvent& rKEvt) override;
 
 private:
     /// Delete all languages from ComboBox
