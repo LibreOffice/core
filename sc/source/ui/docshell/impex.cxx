@@ -238,8 +238,7 @@ bool ScImportExport::StartPaste()
         ScEditableTester aTester( rDoc, aRange );
         if ( !aTester.IsEditable() )
         {
-            vcl::Window* pWin = Application::GetDefDialogParent();
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(ScDocShell::GetActiveDialogParent(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
                                                           ScResId(aTester.GetMessageId())));
             xInfoBox->run();
