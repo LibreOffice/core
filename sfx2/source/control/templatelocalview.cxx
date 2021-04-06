@@ -30,6 +30,7 @@
 #include <com/sun/star/util/thePathSettings.hpp>
 #include <unotools/ucbhelper.hxx>
 #include <sfxurlrelocator.hxx>
+#include <../doc/doctemplateslocal.hxx>
 
 using namespace ::com::sun::star;
 
@@ -943,4 +944,27 @@ bool TemplateLocalView::IsInternalTemplate(const OUString& rPath)
     return false;
 }
 
+bool TemplateLocalView::IsBuiltInCategory(const OUString& rRegionName)
+{
+    bool isBuiltInCategory = false;
+    auto aGroupNames = DocTemplLocaleHelper::GetBuiltInGroupNames();
+    isBuiltInCategory = std::find(aGroupNames.begin(), aGroupNames.end(),
+                                  rRegionName) != aGroupNames.end();
+    if(isBuiltInCategory)
+        return true;
+    //check if it contains any internal template
+    for(const auto& rItem : maRegions)
+    {
+        if(rItem->maTitle == rRegionName)
+        {
+            for(const auto& rTemplateItem : rItem->maTemplates)
+            {
+                if(IsInternalTemplate(rTemplateItem.aPath))
+                    return true;
+            }
+            break;
+        }
+    }
+    return false;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

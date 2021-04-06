@@ -1215,6 +1215,10 @@ void SfxTemplateManagerDlg::OnCategoryDelete()
 {
     SfxTemplateCategoryDialog aDlg(m_xDialog.get());
     aDlg.SetCategoryLBEntries(mxLocalView->getFolderNames());
+    aDlg.SetAllowBuiltInCategories(false);
+    aDlg.SetCheckBuiltInCategory([&](OUString sRegionName){
+        return mxLocalView->IsBuiltInCategory(sRegionName);
+    });
     aDlg.HideNewCategoryOption();
     aDlg.set_title(MnemonicGenerator::EraseAllMnemonicChars(SfxResId(STR_CATEGORY_DELETE)));
     aDlg.SetSelectLabelText(SfxResId(STR_CATEGORY_SELECT));
@@ -1368,6 +1372,7 @@ SfxTemplateCategoryDialog::SfxTemplateCategoryDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "sfx/ui/templatecategorydlg.ui", "TemplatesCategoryDialog")
     , msSelectedCategory(OUString())
     , mbIsNewCategory(false)
+    , mnAllowBuiltInCategories(true)
     , mxLBCategory(m_xBuilder->weld_tree_view("categorylb"))
     , mxSelectLabel(m_xBuilder->weld_label("select_label"))
     , mxNewCategoryEdit(m_xBuilder->weld_entry("category_entry"))
@@ -1405,7 +1410,13 @@ IMPL_LINK_NOARG(SfxTemplateCategoryDialog, NewCategoryEditHdl, weld::Entry&, voi
 
 IMPL_LINK_NOARG(SfxTemplateCategoryDialog, SelectCategoryHdl, weld::TreeView&, void)
 {
-    if (mxLBCategory->get_selected_index() == 0)
+    bool isBuiltInCategory = false;
+    if(!mnAllowBuiltInCategories)
+    {
+        if(mCheckBuiltInCategory)
+            isBuiltInCategory = mCheckBuiltInCategory(mxLBCategory->get_selected_text());
+    }
+    if (mxLBCategory->get_selected_index() == 0 || isBuiltInCategory)
     {
         msSelectedCategory = OUString();
         mxOKButton->set_sensitive(false);

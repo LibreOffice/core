@@ -159,6 +159,8 @@ class SfxTemplateCategoryDialog final : public weld::GenericDialogController
 private:
     OUString msSelectedCategory;
     bool mbIsNewCategory;
+    bool mnAllowBuiltInCategories;
+    std::function<bool(OUString)> mCheckBuiltInCategory;
 
     std::unique_ptr<weld::TreeView> mxLBCategory;
     std::unique_ptr<weld::Label> mxSelectLabel;
@@ -179,6 +181,16 @@ public:
     void SetSelectLabelText(OUString const& sText) const { mxSelectLabel->set_label(sText); };
 
     bool IsNewCategoryCreated() const { return mbIsNewCategory; }
+
+    void SetAllowBuiltInCategories(bool aAllowBuiltInCategories)
+    {
+        mnAllowBuiltInCategories = aAllowBuiltInCategories;
+    }
+
+    void SetCheckBuiltInCategory(std::function<bool(OUString)> aFunc)
+    {
+        mCheckBuiltInCategory = aFunc;
+    }
 
 public:
     explicit SfxTemplateCategoryDialog(weld::Window* pParent);
