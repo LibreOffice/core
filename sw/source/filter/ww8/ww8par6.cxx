@@ -672,7 +672,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrameFormat &rFormat,
                 // #i48832# - set correct spacing between header and body.
                 const sal_Int32 nHdLowerSpace( std::abs(rSection.maSep.dyaTop) - rData.nSwUp - rData.nSwHLo );
                 pHdFormat->SetFormatAttr(SwFormatFrameSize(SwFrameSize::Fixed, 0, rData.nSwHLo + nHdLowerSpace));
-                aHdUL.SetLower( static_cast< sal_uInt16 >(nHdLowerSpace) );
+                aHdUL.SetLower(static_cast<sal_uInt16>(std::max(sal_Int32(0), nHdLowerSpace)));
                 pHdFormat->SetFormatAttr(SwHeaderAndFooterEatSpacingItem(
                     RES_HEADER_FOOTER_EAT_SPACING, false));
             }
@@ -697,9 +697,9 @@ void wwSectionManager::SetPageULSpaceItems(SwFrameFormat &rFormat,
             else
             {
                 // #i48832# - set correct spacing between footer and body.
-                const SwTwips nFtUpperSpace( std::abs(rSection.maSep.dyaBottom) - rData.nSwLo - rData.nSwFUp );
+                const sal_Int32 nFtUpperSpace( std::abs(rSection.maSep.dyaBottom) - rData.nSwLo - rData.nSwFUp );
                 pFtFormat->SetFormatAttr(SwFormatFrameSize(SwFrameSize::Fixed, 0, rData.nSwFUp + nFtUpperSpace));
-                aFtUL.SetUpper( static_cast< sal_uInt16 >(nFtUpperSpace) );
+                aFtUL.SetUpper(static_cast<sal_uInt16>(std::max(sal_Int32(0), nFtUpperSpace)));
                 pFtFormat->SetFormatAttr(SwHeaderAndFooterEatSpacingItem(
                     RES_HEADER_FOOTER_EAT_SPACING, false));
             }
