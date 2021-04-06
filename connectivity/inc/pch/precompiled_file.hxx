@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:12:24 using:
+ Generated on 2021-04-06 09:16:04 using:
  ./bin/update_pch connectivity file --cutoff=2 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -37,6 +37,7 @@
 #include <new>
 #include <optional>
 #include <ostream>
+#include <safeint.h>
 #include <set>
 #include <stddef.h>
 #include <string.h>

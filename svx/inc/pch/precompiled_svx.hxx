@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:18:45 using:
+ Generated on 2021-04-06 09:18:52 using:
  ./bin/update_pch svx svx --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -297,6 +297,7 @@
 #include <sfx2/module.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/shell.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <sfx2/stbitem.hxx>
 #include <sfx2/tabdlg.hxx>
