@@ -721,7 +721,7 @@ bool SwView::ExecDrwTextSpellPopup(const Point& rPt)
     {
         bRet = true;
         Link<SpellCallbackInfo&,void> aLink = LINK(this, SwView, OnlineSpellCallback);
-        pOLV->ExecuteSpellPopup( aPos,&aLink );
+        pOLV->ExecuteSpellPopup(aPos, aLink);
     }
     return bRet;
 }

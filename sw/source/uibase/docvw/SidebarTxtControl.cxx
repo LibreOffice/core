@@ -418,7 +418,7 @@ bool SidebarTextControl::Command( const CommandEvent& rCEvt )
              pEditView->IsWrongSpelledWordAtPos( rCEvt.GetMousePosPixel(), true ))
         {
             Link<SpellCallbackInfo&,void> aLink = LINK(this, SidebarTextControl, OnlineSpellCallback);
-            pEditView->ExecuteSpellPopup(rCEvt.GetMousePosPixel(),&aLink);
+            pEditView->ExecuteSpellPopup(rCEvt.GetMousePosPixel(), aLink);
         }
         else
         {

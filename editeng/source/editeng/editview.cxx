@@ -958,7 +958,7 @@ static void LOKSendSpellPopupMenu(const weld::Menu& rMenu, LanguageType nGuessLa
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_MENU, aStream.str().c_str());
 }
 
-void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void> const * pCallBack )
+void EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbackInfo&,void> &rCallBack)
 {
     OutputDevice& rDevice = pImpEditView->GetOutputDevice();
     Point aPos(rDevice.PixelToLogic(rPosPixel));
@@ -1165,11 +1165,8 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
     if (sId == "ignore")
     {
         OUString aWord = pImpEditView->SpellIgnoreWord();
-        if ( pCallBack )
-        {
-            SpellCallbackInfo aInf( SpellCallbackCommand::IGNOREWORD, aWord );
-            pCallBack->Call( aInf );
-        }
+        SpellCallbackInfo aInf( SpellCallbackCommand::IGNOREWORD, aWord );
+        rCallBack.Call(aInf);
         SetSelection( aOldSel );
     }
     else if (sId == "wordlanguage" || sId == "paralanguage")
@@ -1194,35 +1191,19 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
         SetAttribs( aAttrs );
         pImpEditView->pEditEngine->pImpEditEngine->StartOnlineSpellTimer();
 
-        if ( pCallBack )
-        {
-            SpellCallbackInfo aInf( (sId == "wordlanguage") ? SpellCallbackCommand::WORDLANGUAGE : SpellCallbackCommand::PARALANGUAGE );
-            pCallBack->Call( aInf );
-        }
+        SpellCallbackInfo aInf((sId == "wordlanguage") ? SpellCallbackCommand::WORDLANGUAGE : SpellCallbackCommand::PARALANGUAGE);
+        rCallBack.Call(aInf);
         SetSelection( aOldSel );
     }
     else if (sId == "check")
     {
-        if ( !pCallBack )
-        {
-            // Set Cursor before word...
-            EditPaM aCursor = pImpEditView->GetEditSelection().Min();
-            pImpEditView->DrawSelectionXOR();
-            pImpEditView->SetEditSelection( EditSelection( aCursor, aCursor ) );
-            pImpEditView->DrawSelectionXOR();
-            // Crashes when no SfxApp
-            pImpEditView->pEditEngine->pImpEditEngine->Spell( this, false );
-        }
-        else
-        {
-            SpellCallbackInfo aInf( SpellCallbackCommand::STARTSPELLDLG, OUString() );
-            pCallBack->Call( aInf );
-        }
+        SpellCallbackInfo aInf( SpellCallbackCommand::STARTSPELLDLG, OUString() );
+        rCallBack.Call(aInf);
     }
-    else if (sId == "autocorrectdlg" && pCallBack)
+    else if (sId == "autocorrectdlg")
     {
         SpellCallbackInfo aInf( SpellCallbackCommand::AUTOCORRECT_OPTIONS, OUString() );
-        pCallBack->Call( aInf );
+        rCallBack.Call(aInf);
     }
     else if ( sId.toInt32() >= MN_DICTSTART || sId == "add")
     {
@@ -1249,11 +1230,8 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
         aPaM.GetNode()->GetWrongList()->ResetInvalidRange(0, aPaM.GetNode()->Len());
         pImpEditView->pEditEngine->pImpEditEngine->StartOnlineSpellTimer();
 
-        if ( pCallBack )
-        {
-            SpellCallbackInfo aInf( SpellCallbackCommand::ADDTODICTIONARY, aSelected );
-            pCallBack->Call( aInf );
-        }
+        SpellCallbackInfo aInf( SpellCallbackCommand::ADDTODICTIONARY, aSelected );
+        rCallBack.Call(aInf);
         SetSelection( aOldSel );
     }
     else if ( sId.toInt32() >= MN_AUTOSTART )
