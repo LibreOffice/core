@@ -50,6 +50,11 @@ public:
     explicit CastToVoid(loplugin::InstantiationData const & data):
         FilteringPlugin(data) {}
 
+    // The easiest way to make TraverseLambdaExpr visit the lambda's body as part of the implicit
+    // lambda class declaration, instead of outside of that context, in which case, for any return
+    // statements in the lambda body, VisitReturnStmt would not see the expected returnTypes_.top():
+    bool shouldVisitImplicitCode() const { return true; }
+
     bool TraverseCStyleCastExpr(CStyleCastExpr * expr) {
         auto const dre = checkCast(expr);
         if (dre != nullptr) {
@@ -288,6 +293,9 @@ public:
     }
 
     bool VisitVarDecl(VarDecl const * decl) {
+        if (!decl->getLocation().isValid()) { // due to shouldVisitImplicitCode
+            return true;
+        }
         if (ignoreLocation(decl)) {
             return true;
         }
