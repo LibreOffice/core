@@ -59,31 +59,13 @@
                 android:showDividers="middle">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:id="@+id/header_recents"
-                    android:text="@string/title_recents"
-                    android:gravity="center_vertical"
-                    android:textSize="14sp"
-                    android:padding="16dp"
-                    android:textStyle="bold" />
-
-                <!--Recent files-->
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/list_recent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
                     android:id="@+id/header_browser"
-                    android:text="@string/title_browser"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
                     android:gravity="center_vertical"
-                    android:textSize="14sp"
                     android:padding="16dp"
+                    android:text="@string/title_browser"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <!--Icon and text to open system file picker via Intent -->
@@ -105,6 +87,24 @@
                         android:text="@string/select_file_to_open"
                         android:textSize="24dp" />
                 </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:id="@+id/header_recents"
+                    android:text="@string/title_recents"
+                    android:gravity="center_vertical"
+                    android:textSize="14sp"
+                    android:padding="16dp"
+                    android:textStyle="bold" />
+
+                <!--Recent files-->
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/list_recent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
 
             </LinearLayout>
 
