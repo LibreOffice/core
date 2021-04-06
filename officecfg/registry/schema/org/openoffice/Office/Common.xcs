@@ -2795,7 +2795,7 @@
               * vnd.sun.star.script:YourScript.*location=share
               * .*location=application.*
 
-            When this list is empty, all document event URLs are allowed.
+            When this property is not set, all document event URLs are allowed.
             </desc>
           </info>
         </prop>
