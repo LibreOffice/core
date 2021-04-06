@@ -218,9 +218,6 @@ inline HelpEvent::HelpEvent( const Point& rMousePos, HelpEventMode nHelpMode ) :
 class VCL_DLLPUBLIC UserDrawEvent
 {
 private:
-    /// Window that owns the user draw.
-    VclPtr<vcl::Window> mpWindow;
-
     /// RenderContext to which we should draw - can be a VirtualDevice or anything.
     VclPtr<vcl::RenderContext> mpRenderContext;
 
@@ -229,17 +226,15 @@ private:
     bool                mbSelected;
 
 public:
-    UserDrawEvent(vcl::Window* pWindow, vcl::RenderContext* pRenderContext,
+    UserDrawEvent(vcl::RenderContext* pRenderContext,
                   const tools::Rectangle& rOutRect, sal_uInt16 nId, bool bSelected = false)
-        : mpWindow(pWindow)
-        , mpRenderContext(pRenderContext)
+        : mpRenderContext(pRenderContext)
         , maOutRect( rOutRect )
         , mnItemId(nId)
         , mbSelected(bSelected)
     {
     }
 
-    vcl::Window*        GetWindow() const { return mpWindow; }
     vcl::RenderContext* GetRenderContext() const { return mpRenderContext; }
     const tools::Rectangle&    GetRect() const { return maOutRect; }
     sal_uInt16          GetItemId() const { return mnItemId; }
