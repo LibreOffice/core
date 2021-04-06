@@ -158,6 +158,9 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
     if ( !m_aRecentFilesItems.empty() )
     {
         const sal_uInt32 nCount = m_aRecentFilesItems.size();
+        StyleSettings aIconSettings;
+        bool bIsIconsAllowed = aIconSettings.GetUseImagesInMenus();
+
         for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
 
@@ -185,9 +188,6 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             INetURLObject   aURL( m_aRecentFilesItems[i] );
             OUString aTipHelpText( aURL.getFSysPath( FSysStyle::Detect ) );
 
-            StyleSettings aIconSettings;
-            bool aIsIconsAllowed = aIconSettings.GetUseImagesInMenus();
-
             if ( aURL.GetProtocol() == INetProtocol::File )
             {
                 // Do handle file URL differently: don't show the protocol, just the file name
@@ -203,7 +203,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 
             pVCLPopupMenu->InsertItem( sal_uInt16( i+1 ), aMenuShortCut.makeStringAndClear() );
 
-            if ( aIsIconsAllowed ) {
+            if ( bIsIconsAllowed ) {
                 Image aThumbnail = SvFileInformationManager::GetImage(aURL);
                 pVCLPopupMenu->SetItemImage(sal_uInt16 ( i+1 ), aThumbnail);
             }
