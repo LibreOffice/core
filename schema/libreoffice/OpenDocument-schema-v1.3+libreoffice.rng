@@ -1579,6 +1579,138 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       </rng:choice>
     </rng:define>
 
+    <rng:define name="style-graphic-fill-properties-attlist">
+      <rng:interleave>
+        <rng:optional>
+          <rng:attribute name="draw:fill">
+            <rng:choice>
+              <rng:value>none</rng:value>
+              <rng:value>solid</rng:value>
+              <rng:value>bitmap</rng:value>
+              <rng:value>gradient</rng:value>
+              <rng:value>hatch</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fill-color">
+            <rng:ref name="color"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:secondary-fill-color">
+            <rng:ref name="color"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fill-gradient-name">
+            <rng:ref name="styleNameRef"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:gradient-step-count">
+            <rng:ref name="nonNegativeInteger"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fill-hatch-name">
+            <rng:ref name="styleNameRef"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fill-hatch-solid">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fill-image-name">
+            <rng:ref name="styleNameRef"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="style:repeat">
+            <rng:choice>
+              <rng:value>no-repeat</rng:value>
+              <rng:value>repeat</rng:value>
+              <rng:value>stretch</rng:value>
+    <!-- OFFICE-4106 7a5d79f2297a43d0a854e304b0792164272edfe0 in xmloff/source/forms/formenums.cxx -->
+              <rng:value>scale</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fill-image-width">
+            <rng:choice>
+              <rng:ref name="length"/>
+              <rng:ref name="percent"/>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fill-image-height">
+            <rng:choice>
+              <rng:ref name="length"/>
+              <rng:ref name="percent"/>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fill-image-ref-point-x">
+            <rng:ref name="percent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fill-image-ref-point-y">
+            <rng:ref name="percent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:fill-image-ref-point">
+            <rng:choice>
+              <rng:value>top-left</rng:value>
+              <rng:value>top</rng:value>
+              <rng:value>top-right</rng:value>
+              <rng:value>left</rng:value>
+              <rng:value>center</rng:value>
+              <rng:value>right</rng:value>
+              <rng:value>bottom-left</rng:value>
+              <rng:value>bottom</rng:value>
+              <rng:value>bottom-right</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:tile-repeat-offset">
+            <rng:list>
+              <rng:ref name="zeroToHundredPercent"/>
+              <rng:choice>
+                <rng:value>horizontal</rng:value>
+                <rng:value>vertical</rng:value>
+              </rng:choice>
+            </rng:list>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:opacity">
+            <rng:ref name="zeroToHundredPercent"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="draw:opacity-name">
+            <rng:ref name="styleNameRef"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="svg:fill-rule">
+            <rng:choice>
+              <rng:value>nonzero</rng:value>
+              <rng:value>evenodd</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+      </rng:interleave>
+    </rng:define>
+
   </rng:include>
 
     <!-- TODO no proposal -->
@@ -2273,6 +2405,20 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
   <!-- TODO no proposal; see 7a5d79f2297a43d0a854e304b0792164272edfe0 -->
   <!-- FIXME this is almost certainly incomplete: need to figure out which elements can have this and which named pattern can be extended with it to get exactly these elements -->
   <rng:define name="form-checkbox-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="form:input-required">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+  <rng:define name="form-image-frame-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="form:input-required">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+  <rng:define name="form-listbox-attlist" combine="interleave">
     <rng:optional>
       <rng:attribute name="form:input-required">
         <rng:ref name="boolean"/>

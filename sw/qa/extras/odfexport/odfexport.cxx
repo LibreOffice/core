@@ -246,6 +246,18 @@ DECLARE_ODFEXPORT_EXPORTONLY_TEST(testTdf133487, "MadeByLO7.odt")
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name = /office:document-content/office:body/office:text/text:p[3]/draw:custom-shape[@draw:z-index = '1']/attribute::draw:style-name]/style:graphic-properties", "run-through", "foreground");
 }
 
+DECLARE_ODFEXPORT_EXPORTONLY_TEST(testTdf141467, "Formcontrol needs high z-index.odt")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    // shape in foreground has lowest index
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p[2]/draw:custom-shape", "z-index", "0");
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name = /office:document-content/office:body/office:text/text:p[2]/draw:custom-shape[@draw:z-index = '0']/attribute::draw:style-name]/style:graphic-properties", "run-through", "foreground");
+    // form control, previously index 0
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p[2]/draw:control", "z-index", "1");
+    // no run-through on form's style
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name = /office:document-content/office:body/office:text/text:p[2]/draw:control[@draw:z-index = '1']/attribute::draw:style-name]/style:graphic-properties/attribute::run-through", 0);
+}
+
 DECLARE_ODFEXPORT_TEST(testTdf139126, "tdf139126.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());

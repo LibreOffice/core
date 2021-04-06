@@ -302,7 +302,7 @@ namespace xmloff {
 
 XMLOFF_DLLPUBLIC void FixZOrder(
     css::uno::Reference<css::drawing::XShapes> const& xShapes,
-    std::function<bool(css::uno::Reference<css::beans::XPropertySet> const&)> const& rIsInBackground);
+    std::function<unsigned int (css::uno::Reference<css::beans::XPropertySet> const&)> const& rGetLayer);
 
 } // namespace xmloff
 

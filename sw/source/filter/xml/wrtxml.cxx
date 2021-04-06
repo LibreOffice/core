@@ -58,6 +58,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <swerror.h>
 #include "wrtxml.hxx"
+#include "zorder.hxx"
 #include <strings.hrc>
 
 #include <comphelper/documentconstants.hxx>
@@ -186,11 +187,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     uno::Reference<lang::XComponent> const xModelComp(m_pDoc->GetDocShell()->GetModel());
     uno::Reference<drawing::XDrawPageSupplier> const xDPS(xModelComp, uno::UNO_QUERY);
     assert(xDPS.is());
-    xmloff::FixZOrder(xDPS->getDrawPage(),
-        [](uno::Reference<beans::XPropertySet> const& xShape)
-        {
-            return !*o3tl::doAccess<bool>(xShape->getPropertyValue("Opaque"));
-        });
+    xmloff::FixZOrder(xDPS->getDrawPage(), sw::GetZOrderLayer(m_pDoc->getIDocumentDrawModelAccess()));
 
     // save show redline mode ...
     RedlineFlags const nOrigRedlineFlags = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags();

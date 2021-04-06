@@ -985,7 +985,7 @@ void XMLShapeExport::exportShapes( const uno::Reference < drawing::XShapes >& xS
 namespace xmloff {
 
 void FixZOrder(uno::Reference<drawing::XShapes> const& xShapes,
-    std::function<bool(uno::Reference<beans::XPropertySet> const&)> const& rIsInBackground)
+    std::function<unsigned int (uno::Reference<beans::XPropertySet> const&)> const& rGetLayer)
 {
     uno::Reference<drawing::XShapes3> const xShapes3(xShapes, uno::UNO_QUERY);
     assert(xShapes3.is());
@@ -993,29 +993,52 @@ void FixZOrder(uno::Reference<drawing::XShapes> const& xShapes,
     {
         return; // only SvxDrawPage implements this
     }
-    std::vector<sal_Int32> background;
-    std::vector<sal_Int32> foreground;
+    struct Layer { std::vector<sal_Int32> shapes; sal_Int32 nMin = SAL_MAX_INT32; sal_Int32 nMax = 0; };
+    std::vector<Layer> layers;
     // shapes are sorted by ZOrder
     sal_Int32 const nCount(xShapes->getCount());
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
         uno::Reference<beans::XPropertySet> const xShape(xShapes->getByIndex(i), uno::UNO_QUERY);
-        if (rIsInBackground(xShape))
+        unsigned int const nLayer(rGetLayer(xShape));
+        if (layers.size() <= nLayer)
         {
-            background.emplace_back(i);
+            layers.resize(nLayer + 1);
         }
-        else
+        layers[nLayer].shapes.emplace_back(i);
+        if (i < layers[nLayer].nMin)
         {
-            foreground.emplace_back(i);
+            layers[nLayer].nMin = i;
+        }
+        if (layers[nLayer].nMax < i)
+        {
+            layers[nLayer].nMax = i;
         }
     }
-    if (background.empty() || foreground.empty())
+    layers.erase(std::remove_if(layers.begin(), layers.end(),
+                    [](Layer const& rLayer) { return rLayer.shapes.empty(); }),
+        layers.end());
+    bool isSorted(true);
+    for (size_t i = 1; i < layers.size(); ++i)
+    {
+        assert(layers[i].nMin != layers[i-1].nMax); // unique!
+        if (layers[i].nMin < layers[i-1].nMax)
+        {
+            isSorted = false;
+            break;
+        }
+    }
+    if (isSorted)
     {
         return; // nothing to do
     }
     uno::Sequence<sal_Int32> aNewOrder(nCount);
-    std::copy(background.begin(), background.end(), aNewOrder.begin());
-    std::copy(foreground.begin(), foreground.end(), aNewOrder.begin() + background.size());
+    auto iterInsert(aNewOrder.begin());
+    for (auto const& rLayer : layers)
+    {
+        assert(rLayer.nMin <= rLayer.nMax); // empty layers have been removed
+        iterInsert = std::copy(rLayer.shapes.begin(), rLayer.shapes.end(), iterInsert);
+    }
     try
     {
         xShapes3->sort(aNewOrder);
