@@ -86,14 +86,10 @@ sal_uInt16 SvUnoAttributeContainer::getIndexByName(const OUString& aName ) const
     return USHRT_MAX;
 }
 
-namespace
-{
-    class theSvUnoAttributeContainerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvUnoAttributeContainerUnoTunnelId> {};
-}
-
 const css::uno::Sequence< sal_Int8 > & SvUnoAttributeContainer::getUnoTunnelId() throw()
 {
-    return theSvUnoAttributeContainerUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSvUnoAttributeContainerUnoTunnelId;
+    return theSvUnoAttributeContainerUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SvUnoAttributeContainer::getSomething( const css::uno::Sequence< sal_Int8 >& rId )

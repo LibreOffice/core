@@ -911,14 +911,10 @@ SfxStyleSheetBasePool::StoreStyleSheet(const rtl::Reference< SfxStyleSheetBase >
     pImpl->mxIndexedStyleSheets->AddStyleSheet(xStyle);
 }
 
-namespace
-{
-    class theSfxUnoStyleSheetIdentifier : public rtl::Static< UnoTunnelIdInit, theSfxUnoStyleSheetIdentifier > {};
-}
-
 const css::uno::Sequence< ::sal_Int8 >& SfxUnoStyleSheet::getUnoTunnelId()
 {
-    return theSfxUnoStyleSheetIdentifier::get().getSeq();
+    static const UnoTunnelIdInit theSfxUnoStyleSheetIdentifier;
+    return theSfxUnoStyleSheetIdentifier.getSeq();
 }
 
 void

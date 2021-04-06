@@ -274,14 +274,10 @@ sal_Bool SAL_CALL ViewTabBar::isAnchorOnly()
 
 //----- XUnoTunnel ------------------------------------------------------------
 
-namespace
-{
-    class theViewTabBarUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theViewTabBarUnoTunnelId > {};
-}
-
 const Sequence<sal_Int8>& ViewTabBar::getUnoTunnelId()
 {
-    return theViewTabBarUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theViewTabBarUnoTunnelId;
+    return theViewTabBarUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL ViewTabBar::getSomething (const Sequence<sal_Int8>& rId)

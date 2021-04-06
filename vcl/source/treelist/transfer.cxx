@@ -1035,14 +1035,10 @@ void TransferableHelper::ClearPrimarySelection()
         xSelection->setContents( nullptr, nullptr );
 }
 
-namespace
-{
-    class theTransferableHelperUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theTransferableHelperUnoTunnelId > {};
-}
-
 const Sequence< sal_Int8 >& TransferableHelper::getUnoTunnelId()
 {
-    return theTransferableHelperUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theTransferableHelperUnoTunnelId;
+    return theTransferableHelperUnoTunnelId.getSeq();
 }
 
 namespace {

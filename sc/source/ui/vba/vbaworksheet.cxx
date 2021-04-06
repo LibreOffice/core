@@ -170,14 +170,10 @@ ScVbaWorksheet::~ScVbaWorksheet()
 {
 }
 
-namespace
-{
-    class theScVbaWorksheetUnoTunnelId  : public rtl::Static< UnoTunnelIdInit, theScVbaWorksheetUnoTunnelId > {};
-}
-
 const uno::Sequence<sal_Int8>& ScVbaWorksheet::getUnoTunnelId()
 {
-    return theScVbaWorksheetUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theScVbaWorksheetUnoTunnelId;
+    return theScVbaWorksheetUnoTunnelId.getSeq();
 }
 
 uno::Reference< ov::excel::XWorksheet >

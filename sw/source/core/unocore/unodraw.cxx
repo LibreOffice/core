@@ -847,14 +847,10 @@ void SwXDrawPage::InvalidateSwDoc()
     m_pDoc = nullptr;
 }
 
-namespace
-{
-    class theSwXShapeUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXShapeUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SwXShape::getUnoTunnelId()
 {
-    return theSwXShapeUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXShapeUnoTunnelId;
+    return theSwXShapeUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXShape::getSomething( const uno::Sequence< sal_Int8 >& rId )

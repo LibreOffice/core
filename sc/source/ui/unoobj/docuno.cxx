@@ -3086,14 +3086,10 @@ sal_Int64 SAL_CALL ScModelObj::getSomething(
     return 0;
 }
 
-namespace
-{
-    class theScModelObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScModelObjUnoTunnelId> {};
-}
-
 const uno::Sequence<sal_Int8>& ScModelObj::getUnoTunnelId()
 {
-    return theScModelObjUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theScModelObjUnoTunnelId;
+    return theScModelObjUnoTunnelId.getSeq();
 }
 
 // XChangesNotifier

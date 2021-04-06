@@ -734,14 +734,10 @@ void ScDrawTransferObj::InitDocShell()
     pDocSh->UpdateOle(aViewData, true);
 }
 
-namespace
-{
-    class theScDrawTransferObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScDrawTransferObjUnoTunnelId > {};
-}
-
 const css::uno::Sequence< sal_Int8 >& ScDrawTransferObj::getUnoTunnelId()
 {
-    return theScDrawTransferObjUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theScDrawTransferObjUnoTunnelId;
+    return theScDrawTransferObjUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL ScDrawTransferObj::getSomething( const css::uno::Sequence< sal_Int8 >& rId )

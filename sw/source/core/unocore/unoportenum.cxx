@@ -198,7 +198,6 @@ namespace
         }
     }
 
-    class theSwXTextPortionEnumerationUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextPortionEnumerationUnoTunnelId > {};
     struct SwAnnotationStartPortion_Impl
     {
 
@@ -281,7 +280,8 @@ namespace
 
 const uno::Sequence< sal_Int8 > & SwXTextPortionEnumeration::getUnoTunnelId()
 {
-    return theSwXTextPortionEnumerationUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXTextPortionEnumerationUnoTunnelId;
+    return theSwXTextPortionEnumerationUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXTextPortionEnumeration::getSomething(

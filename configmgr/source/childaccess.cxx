@@ -55,14 +55,10 @@
 
 namespace configmgr {
 
-namespace
-{
-    class theChildAccessUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theChildAccessUnoTunnelId > {};
-}
-
 css::uno::Sequence< sal_Int8 > const & ChildAccess::getTunnelId()
 {
-    return theChildAccessUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theChildAccessUnoTunnelId;
+    return theChildAccessUnoTunnelId.getSeq();
 }
 
 ChildAccess::ChildAccess(

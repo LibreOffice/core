@@ -897,14 +897,10 @@ void SwXTextRange::DeleteAndInsert(
     m_pImpl->m_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
 }
 
-namespace
-{
-    class theSwXTextRangeUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextRangeUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SwXTextRange::getUnoTunnelId()
 {
-    return theSwXTextRangeUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXTextRangeUnoTunnelId;
+    return theSwXTextRangeUnoTunnelId.getSeq();
 }
 
 // XUnoTunnel
@@ -1609,13 +1605,11 @@ void SwXTextRangesImpl::MakeRanges()
 rtl::Reference<SwXTextRanges> SwXTextRanges::Create(SwPaM *const pPaM)
     { return new SwXTextRangesImpl(pPaM); }
 
-namespace
-{
-    class theSwXTextRangesUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextRangesUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SwXTextRanges::getUnoTunnelId()
-    { return theSwXTextRangesUnoTunnelId::get().getSeq(); }
+{
+    static const UnoTunnelIdInit theSwXTextRangesUnoTunnelId;
+    return theSwXTextRangesUnoTunnelId.getSeq();
+}
 
 sal_Int64 SAL_CALL
 SwXTextRangesImpl::getSomething(const uno::Sequence< sal_Int8 >& rId)

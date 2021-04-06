@@ -1871,14 +1871,10 @@ SwChartDataSequence::~SwChartDataSequence()
 {
 }
 
-namespace
-{
-    class theSwChartDataSequenceUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwChartDataSequenceUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SwChartDataSequence::getUnoTunnelId()
 {
-    return theSwChartDataSequenceUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwChartDataSequenceUnoTunnelId;
+    return theSwChartDataSequenceUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwChartDataSequence::getSomething( const uno::Sequence< sal_Int8 > &rId )

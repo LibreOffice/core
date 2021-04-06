@@ -211,14 +211,10 @@ sal_Bool SAL_CALL ViewShellWrapper::relocateToAnchor (
 
 //----- XUnoTunnel ------------------------------------------------------------
 
-namespace
-{
-    class theViewShellWrapperUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theViewShellWrapperUnoTunnelId> {};
-}
-
 const Sequence<sal_Int8>& ViewShellWrapper::getUnoTunnelId()
 {
-    return theViewShellWrapperUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theViewShellWrapperUnoTunnelId;
+    return theViewShellWrapperUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL ViewShellWrapper::getSomething (const Sequence<sal_Int8>& rId)

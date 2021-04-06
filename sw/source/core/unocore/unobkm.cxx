@@ -196,14 +196,10 @@ uno::Reference<text::XTextContent> SwXBookmark::CreateXBookmark(
     return nullptr;
 }
 
-namespace
-{
-    class theSwXBookmarkUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXBookmarkUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SwXBookmark::getUnoTunnelId()
 {
-    return theSwXBookmarkUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXBookmarkUnoTunnelId;
+    return theSwXBookmarkUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXBookmark::getSomething( const uno::Sequence< sal_Int8 >& rId )

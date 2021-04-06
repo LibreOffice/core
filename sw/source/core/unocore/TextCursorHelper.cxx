@@ -22,14 +22,10 @@
 
 using namespace ::com::sun::star;
 
-namespace
-{
-    class theOTextCursorHelperUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theOTextCursorHelperUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & OTextCursorHelper::getUnoTunnelId()
 {
-    return theOTextCursorHelperUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theOTextCursorHelperUnoTunnelId;
+    return theOTextCursorHelperUnoTunnelId.getSeq();
 }
 
 //XUnoTunnel

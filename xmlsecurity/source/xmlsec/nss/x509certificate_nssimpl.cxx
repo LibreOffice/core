@@ -352,13 +352,9 @@ sal_Int64 SAL_CALL X509Certificate_NssImpl::getSomething( const Sequence< sal_In
 
 /* XUnoTunnel extension */
 
-namespace
-{
-    class theX509Certificate_NssImplUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theX509Certificate_NssImplUnoTunnelId > {};
-}
-
 const Sequence< sal_Int8>& X509Certificate_NssImpl::getUnoTunnelId() {
-    return theX509Certificate_NssImplUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theX509Certificate_NssImplUnoTunnelId;
+    return theX509Certificate_NssImplUnoTunnelId.getSeq();
 }
 
 static OUString getAlgorithmDescription(SECAlgorithmID const *aid)

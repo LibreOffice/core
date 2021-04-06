@@ -149,14 +149,10 @@ void SwXDispatchProviderInterceptor::disposing( const lang::EventObject& )
     m_xIntercepted = nullptr;
 }
 
-namespace
-{
-    class theSwXDispatchProviderInterceptorUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXDispatchProviderInterceptorUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SwXDispatchProviderInterceptor::getUnoTunnelId()
 {
-    return theSwXDispatchProviderInterceptorUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXDispatchProviderInterceptorUnoTunnelId;
+    return theSwXDispatchProviderInterceptorUnoTunnelId.getSeq();
 }
 
 sal_Int64 SwXDispatchProviderInterceptor::getSomething(

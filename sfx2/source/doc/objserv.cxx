@@ -33,7 +33,6 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/drawing/XDrawView.hpp>
 
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
@@ -2064,14 +2063,10 @@ void SfxObjectShell::SignScriptingContent(weld::Window* pDialogParent)
     AfterSigning(bSignSuccess, true);
 }
 
-namespace
-{
-    class theSfxObjectShellUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSfxObjectShellUnoTunnelId > {};
-}
-
 const uno::Sequence<sal_Int8>& SfxObjectShell::getUnoTunnelId()
 {
-    return theSfxObjectShellUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSfxObjectShellUnoTunnelId;
+    return theSfxObjectShellUnoTunnelId.getSeq();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

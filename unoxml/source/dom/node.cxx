@@ -48,11 +48,6 @@ using namespace css::xml::dom;
 using namespace css::xml::dom::events;
 using namespace css::xml::sax;
 
-namespace
-{
-    class theCNodeUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theCNodeUnoTunnelId > {};
-}
-
 namespace DOM
 {
     void pushContext(Context& io_rContext)
@@ -169,7 +164,8 @@ namespace DOM
 
     const css::uno::Sequence< sal_Int8 > & CNode::getUnoTunnelId() throw()
     {
-        return theCNodeUnoTunnelId::get().getSeq();
+        static const UnoTunnelIdInit theCNodeUnoTunnelId;
+        return theCNodeUnoTunnelId.getSeq();
     }
 
     CDocument & CNode::GetOwnerDocument()

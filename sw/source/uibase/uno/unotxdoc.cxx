@@ -268,14 +268,10 @@ public:
 
 };
 
-namespace
-{
-    class theSwXTextDocumentUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextDocumentUnoTunnelId > {};
-}
-
 const Sequence< sal_Int8 > & SwXTextDocument::getUnoTunnelId()
 {
-    return theSwXTextDocumentUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXTextDocumentUnoTunnelId;
+    return theSwXTextDocumentUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rId )

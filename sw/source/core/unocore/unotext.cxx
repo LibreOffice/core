@@ -1196,12 +1196,12 @@ SwXText::removeVetoableChangeListener(
 
 namespace
 {
-    class theSwXTextUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextUnoTunnelId > {};
 }
 
 const uno::Sequence< sal_Int8 > & SwXText::getUnoTunnelId()
 {
-    return theSwXTextUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXTextUnoTunnelId;
+    return theSwXTextUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL

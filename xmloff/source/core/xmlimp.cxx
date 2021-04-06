@@ -465,14 +465,10 @@ bool SvXMLImport::addEmbeddedFont(const css::uno::Reference< css::io::XInputStre
     return mxEmbeddedFontHelper->addEmbeddedFont(stream, fontName, extra, key, eot);
 }
 
-namespace
-{
-    class theSvXMLImportUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvXMLImportUnoTunnelId> {};
-}
-
 const css::uno::Sequence<sal_Int8>& SvXMLImport::getUnoTunnelId() throw()
 {
-    return theSvXMLImportUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSvXMLImportUnoTunnelId;
+    return theSvXMLImportUnoTunnelId.getSeq();
 }
 
 // XUnoTunnel

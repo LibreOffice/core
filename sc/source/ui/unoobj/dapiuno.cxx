@@ -987,14 +987,10 @@ sal_Int64 SAL_CALL ScDataPilotDescriptorBase::getSomething(
     return 0;
 }
 
-namespace
-{
-    class theScDataPilotDescriptorBaseUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScDataPilotDescriptorBaseUnoTunnelId> {};
-}
-
 const Sequence<sal_Int8>& ScDataPilotDescriptorBase::getUnoTunnelId()
 {
-    return theScDataPilotDescriptorBaseUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theScDataPilotDescriptorBaseUnoTunnelId;
+    return theScDataPilotDescriptorBaseUnoTunnelId.getSeq();
 }
 
 ScDataPilotTableObj::ScDataPilotTableObj(ScDocShell* pDocSh, SCTAB nT, const OUString& rN) :

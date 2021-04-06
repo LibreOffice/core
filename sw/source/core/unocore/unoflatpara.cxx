@@ -312,15 +312,11 @@ css::uno::Sequence< ::sal_Int32 > SAL_CALL SwXFlatParagraph::getLanguagePortions
     return css::uno::Sequence< ::sal_Int32>();
 }
 
-namespace
-{
-    class theSwXFlatParagraphUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXFlatParagraphUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 >&
 SwXFlatParagraph::getUnoTunnelId()
 {
-    return theSwXFlatParagraphUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXFlatParagraphUnoTunnelId;
+    return theSwXFlatParagraphUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL

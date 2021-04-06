@@ -353,14 +353,10 @@ uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  )
             cppu::UnoType<XRenderable>::get() });
 }
 
-namespace
-{
-    class theSmModelUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSmModelUnoTunnelId> {};
-}
-
 const uno::Sequence< sal_Int8 > & SmModel::getUnoTunnelId()
 {
-    return theSmModelUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSmModelUnoTunnelId;
+    return theSmModelUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SmModel::getSomething( const uno::Sequence< sal_Int8 >& rId )

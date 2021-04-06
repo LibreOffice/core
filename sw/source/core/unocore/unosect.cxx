@@ -228,14 +228,10 @@ SwXTextSection::~SwXTextSection()
 {
 }
 
-namespace
-{
-    class theSwXTextSectionUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextSectionUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SwXTextSection::getUnoTunnelId()
 {
-    return theSwXTextSectionUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXTextSectionUnoTunnelId;
+    return theSwXTextSectionUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL

@@ -204,14 +204,10 @@ uno::Sequence< OUString > SwXAutoTextContainer::getSupportedServiceNames()
     return { "com.sun.star.text.AutoTextContainer" };
 }
 
-namespace
-{
-    class theSwXAutoTextGroupUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXAutoTextGroupUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SwXAutoTextGroup::getUnoTunnelId()
 {
-    return theSwXAutoTextGroupUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXAutoTextGroupUnoTunnelId;
+    return theSwXAutoTextGroupUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXAutoTextGroup::getSomething( const uno::Sequence< sal_Int8 >& rId )
@@ -668,14 +664,10 @@ uno::Sequence< OUString > SwXAutoTextGroup::getSupportedServiceNames()
     return aRet;
 }
 
-namespace
-{
-    class theSwXAutoTextEntryUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXAutoTextEntryUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SwXAutoTextEntry::getUnoTunnelId()
 {
-    return theSwXAutoTextEntryUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXAutoTextEntryUnoTunnelId;
+    return theSwXAutoTextEntryUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXAutoTextEntry::getSomething( const uno::Sequence< sal_Int8 >& rId )

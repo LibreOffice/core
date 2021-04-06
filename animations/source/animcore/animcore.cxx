@@ -2101,14 +2101,10 @@ void SAL_CALL AnimationNode::removeChangesListener( const Reference< XChangesLis
     }
 }
 
-namespace
-{
-    class theAnimationNodeUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theAnimationNodeUnoTunnelId > {};
-}
-
 const css::uno::Sequence< sal_Int8 > & AnimationNode::getUnoTunnelId()
 {
-    return theAnimationNodeUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theAnimationNodeUnoTunnelId;
+    return theAnimationNodeUnoTunnelId.getSeq();
 }
 
 

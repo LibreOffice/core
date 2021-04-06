@@ -134,14 +134,10 @@ Reference< XIndexAccess > ItemContainer::deepCopyContainer( const Reference< XIn
     return xReturn;
 }
 
-namespace
-{
-    class theItemContainerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theItemContainerUnoTunnelId > {};
-}
-
 const Sequence< sal_Int8 >& ItemContainer::getUnoTunnelId() throw()
 {
-    return theItemContainerUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theItemContainerUnoTunnelId;
+    return theItemContainerUnoTunnelId.getSeq();
 }
 
 // XElementAccess

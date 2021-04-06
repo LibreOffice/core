@@ -450,12 +450,12 @@ SwXTextSearch::~SwXTextSearch()
 
 namespace
 {
-    class theSwXTextSearchUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextSearchUnoTunnelId > {};
 }
 
 const uno::Sequence< sal_Int8 > & SwXTextSearch::getUnoTunnelId()
 {
-    return theSwXTextSearchUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXTextSearchUnoTunnelId;
+    return theSwXTextSearchUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXTextSearch::getSomething( const uno::Sequence< sal_Int8 >& rId )

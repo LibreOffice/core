@@ -332,15 +332,11 @@ void SAL_CALL SdXImpressDocument::release() throw ( )
     SfxBaseModel::release();
 }
 
-namespace
-{
-    class theSdXImpressDocumentUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSdXImpressDocumentUnoTunnelId> {};
-}
-
 // XUnoTunnel
 const css::uno::Sequence< sal_Int8 > & SdXImpressDocument::getUnoTunnelId() throw()
 {
-    return theSdXImpressDocumentUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSdXImpressDocumentUnoTunnelId;
+    return theSdXImpressDocumentUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SdXImpressDocument::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )

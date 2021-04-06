@@ -4435,14 +4435,10 @@ sal_Int64 SAL_CALL FmXFilterCell::getSomething( const Sequence< sal_Int8 >& _rId
     return nReturn;
 }
 
-namespace
-{
-    class theFmXFilterCellUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theFmXFilterCellUnoTunnelId > {};
-}
-
 const Sequence<sal_Int8>& FmXFilterCell::getUnoTunnelId()
 {
-    return theFmXFilterCellUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theFmXFilterCellUnoTunnelId;
+    return theFmXFilterCellUnoTunnelId.getSeq();
 }
 
 

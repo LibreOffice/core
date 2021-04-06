@@ -1944,14 +1944,10 @@ void OOo2OasisTransformer::Initialize(
     }
 }
 
-namespace
-{
-    class theOOo2OasisTransformerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theOOo2OasisTransformerUnoTunnelId> {};
-}
-
 const css::uno::Sequence<sal_Int8>& OOo2OasisTransformer::getUnoTunnelId() throw()
 {
-    return theOOo2OasisTransformerUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theOOo2OasisTransformerUnoTunnelId;
+    return theOOo2OasisTransformerUnoTunnelId.getSeq();
 }
 
 // XUnoTunnel

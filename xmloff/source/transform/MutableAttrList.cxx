@@ -57,14 +57,10 @@ XMLMutableAttributeList::~XMLMutableAttributeList()
     m_xAttrList = nullptr;
 }
 
-namespace
-{
-    class theXMLMutableAttributeListUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theXMLMutableAttributeListUnoTunnelId> {};
-}
-
 const css::uno::Sequence<sal_Int8>& XMLMutableAttributeList::getUnoTunnelId() throw()
 {
-    return theXMLMutableAttributeListUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theXMLMutableAttributeListUnoTunnelId;
+    return theXMLMutableAttributeListUnoTunnelId.getSeq();
 }
 
 // XUnoTunnel

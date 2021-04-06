@@ -863,14 +863,10 @@ SwXTextCursor::getSupportedServiceNames()
     };
 }
 
-namespace
-{
-    class theSwXTextCursorUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextCursorUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SwXTextCursor::getUnoTunnelId()
 {
-    return theSwXTextCursorUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXTextCursorUnoTunnelId;
+    return theSwXTextCursorUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL

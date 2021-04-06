@@ -126,14 +126,10 @@ sal_Int64 SAL_CALL SdPageObjsTLV::SdPageObjsTransferable::getSomething( const cs
     return nRet;
 }
 
-namespace
-{
-    class theSdPageObjsTLBUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSdPageObjsTLBUnoTunnelId > {};
-}
-
 const css::uno::Sequence<sal_Int8>& SdPageObjsTLV::SdPageObjsTransferable::getUnoTunnelId()
 {
-    return theSdPageObjsTLBUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSdPageObjsTLBUnoTunnelId;
+    return theSdPageObjsTLBUnoTunnelId.getSeq();
 }
 
 SdPageObjsTLV::SdPageObjsTransferable* SdPageObjsTLV::SdPageObjsTransferable::getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData )

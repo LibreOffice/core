@@ -406,16 +406,10 @@ SmXMLImport::SmXMLImport(const css::uno::Reference<css::uno::XComponentContext>&
 {
 }
 
-namespace
-{
-class theSmXMLImportUnoTunnelId : public rtl::Static<UnoTunnelIdInit, theSmXMLImportUnoTunnelId>
-{
-};
-}
-
 const uno::Sequence<sal_Int8>& SmXMLImport::getUnoTunnelId() throw()
 {
-    return theSmXMLImportUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSmXMLImportUnoTunnelId;
+    return theSmXMLImportUnoTunnelId.getSeq();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*

@@ -459,14 +459,10 @@ protected:
     virtual void Notify(const SfxHint& rHint) override;
 };
 
-namespace
-{
-    class theSwXFieldMasterUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXFieldMasterUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SwXFieldMaster::getUnoTunnelId()
 {
-    return theSwXFieldMasterUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXFieldMasterUnoTunnelId;
+    return theSwXFieldMasterUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL
@@ -1175,14 +1171,10 @@ public:
     virtual void Notify(const SfxHint&) override;
 };
 
-namespace
-{
-    class theSwXTextFieldUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextFieldUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SwXTextField::getUnoTunnelId()
 {
-    return theSwXTextFieldUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXTextFieldUnoTunnelId;
+    return theSwXTextFieldUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL

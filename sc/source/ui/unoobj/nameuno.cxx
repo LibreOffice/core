@@ -433,14 +433,10 @@ sal_Int64 SAL_CALL ScNamedRangeObj::getSomething(
     return 0;
 }
 
-namespace
-{
-    class theScNamedRangeObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScNamedRangeObjUnoTunnelId> {};
-}
-
 const uno::Sequence<sal_Int8>& ScNamedRangeObj::getUnoTunnelId()
 {
-    return theScNamedRangeObjUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theScNamedRangeObjUnoTunnelId;
+    return theScNamedRangeObjUnoTunnelId.getSeq();
 }
 
 ScNamedRangesObj::ScNamedRangesObj(ScDocShell* pDocSh) :

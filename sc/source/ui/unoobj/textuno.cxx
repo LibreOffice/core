@@ -142,14 +142,10 @@ sal_Int64 SAL_CALL ScHeaderFooterContentObj::getSomething(
     return 0;
 }
 
-namespace
-{
-    class theScHeaderFooterContentObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScHeaderFooterContentObjUnoTunnelId> {};
-}
-
 const uno::Sequence<sal_Int8>& ScHeaderFooterContentObj::getUnoTunnelId()
 {
-    return theScHeaderFooterContentObjUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theScHeaderFooterContentObjUnoTunnelId;
+    return theScHeaderFooterContentObjUnoTunnelId.getSeq();
 }
 
 rtl::Reference<ScHeaderFooterContentObj> ScHeaderFooterContentObj::getImplementation(

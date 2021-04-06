@@ -1159,14 +1159,10 @@ public:
     Impl() : m_EventListeners(m_Mutex) { }
 };
 
-namespace
-{
-    class theSwXFrameUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXFrameUnoTunnelId > {};
-}
-
 const ::uno::Sequence< sal_Int8 > & SwXFrame::getUnoTunnelId()
 {
-    return theSwXFrameUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXFrameUnoTunnelId;
+    return theSwXFrameUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXFrame::getSomething( const ::uno::Sequence< sal_Int8 >& rId )

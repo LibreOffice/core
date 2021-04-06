@@ -103,11 +103,11 @@ sal_Int64 SAL_CALL SecurityEnvironmentGpg::getSomething( const Sequence< sal_Int
 
 namespace
 {
-    class theSecurityEnvironmentUnoTunnelId  : public rtl::Static< UnoTunnelIdInit, theSecurityEnvironmentUnoTunnelId > {};
 }
 
 const Sequence< sal_Int8>& SecurityEnvironmentGpg::getUnoTunnelId() {
-    return theSecurityEnvironmentUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSecurityEnvironmentUnoTunnelId;
+    return theSecurityEnvironmentUnoTunnelId.getSeq();
 }
 
 OUString SecurityEnvironmentGpg::getSecurityEnvironmentInformation()

@@ -423,14 +423,10 @@ SwXDocumentIndex::CreateXDocumentIndex(
     return xIndex;
 }
 
-namespace
-{
-    class theSwXDocumentIndexUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXDocumentIndexUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SwXDocumentIndex::getUnoTunnelId()
 {
-    return theSwXDocumentIndexUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXDocumentIndexUnoTunnelId;
+    return theSwXDocumentIndexUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL
@@ -1654,12 +1650,12 @@ SwXDocumentIndexMark::CreateXDocumentIndexMark(
 
 namespace
 {
-    class theSwXDocumentIndexMarkUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXDocumentIndexMarkUnoTunnelId > {};
 }
 
 const uno::Sequence< sal_Int8 > & SwXDocumentIndexMark::getUnoTunnelId()
 {
-    return theSwXDocumentIndexMarkUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXDocumentIndexMarkUnoTunnelId;
+    return theSwXDocumentIndexMarkUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL

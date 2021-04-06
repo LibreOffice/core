@@ -557,14 +557,10 @@ Reference<XModuleController> SAL_CALL
 
 //===== XUnoTunnel ============================================================
 
-namespace
-{
-    class theDrawControllerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theDrawControllerUnoTunnelId> {};
-}
-
 const Sequence<sal_Int8>& DrawController::getUnoTunnelId()
 {
-    return theDrawControllerUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theDrawControllerUnoTunnelId;
+    return theDrawControllerUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL DrawController::getSomething (const Sequence<sal_Int8>& rId)

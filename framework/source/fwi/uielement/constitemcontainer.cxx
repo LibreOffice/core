@@ -169,14 +169,10 @@ sal_Int64 ConstItemContainer::getSomething( const css::uno::Sequence< sal_Int8 >
     return 0;
 }
 
-namespace
-{
-    class theConstItemContainerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theConstItemContainerUnoTunnelId > {};
-}
-
 const Sequence< sal_Int8 >& ConstItemContainer::getUnoTunnelId() throw()
 {
-    return theConstItemContainerUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theConstItemContainerUnoTunnelId;
+    return theConstItemContainerUnoTunnelId.getSeq();
 }
 
 // XElementAccess
