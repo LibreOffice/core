@@ -371,7 +371,7 @@ void RTFDocumentImpl::resolveSubstream(std::size_t nPos, Id nId, OUString const&
 
 void RTFDocumentImpl::outputSettingsTable()
 {
-    // tdf#136740: do not change trarget document settings when pasting
+    // tdf#136740: do not change target document settings when pasting
     if (!m_bIsNewDoc)
         return;
     writerfilter::Reference<Properties>::Pointer_t pProp
