@@ -40,6 +40,9 @@ static void rational_ReduceInaccurate(boost::rational<sal_Int32>& rRational, uns
 
 static boost::rational<sal_Int32> toRational(sal_Int32 n, sal_Int32 d)
 {
+    // https://github.com/boostorg/boost/issues/335 when these are std::numeric_limits<sal_Int32>::min
+    if (n == d)
+        return 1;
     return boost::rational<sal_Int32>(n, d);
 }
 
@@ -108,10 +111,6 @@ Fraction::operator double() const
         SAL_WARN( "tools.fraction", "'double()' on invalid fraction" );
         return 0.0;
     }
-
-    // https://github.com/boostorg/boost/issues/335 when these are std::numeric_limits<sal_Int32>::min
-    if (mnNumerator == mnDenominator)
-        return 1.0;
 
     return boost::rational_cast<double>(toRational(mnNumerator, mnDenominator));
 }
