@@ -86,24 +86,6 @@
                     android:padding="16dp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:padding="7dp"
-                    android:id="@+id/text_directory_path"
-                    android:background="@color/background_normal"
-                    />
-
-
-                <!--Document browser-->
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/file_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/background_normal"
-                    android:orientation="vertical" />
-
                 <!--Icon and text to open system file picker via Intent -->
                 <LinearLayout
                     android:id="@+id/system_file_picker_layout"
@@ -129,14 +111,6 @@
         </android.support.v4.widget.NestedScrollView>
 
         <!-- The navigation drawer -->
-        <android.support.design.widget.NavigationView
-            android:id="@+id/navigation_drawer"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:background="@color/background_normal"
-            app:menu="@menu/navigation_menu"
-            android:theme="@style/LibreOfficeTheme.NavigationView" />
 
     </android.support.v4.widget.DrawerLayout>
 
@@ -145,7 +119,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:visibility="invisible"
         app:backgroundTint="@color/background_normal"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"

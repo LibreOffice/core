@@ -23,62 +23,20 @@
 
     <string name="browser_app_name">LibreOffice Tarayıcı</string>
     <string name="menu_search">Ara</string>
-    <string name="list_view">Liste</string>
-    <string name="grid_view">Grid</string>
-    <string name="filter">Şununla filtrele:</string>
     <string name="search_not_found">Söz dizimi bulunamadı.</string>
-    <string name="sort">Şununla sırala:</string>
-    <string name="sort_smallest">Küçükten büyüğe</string>
-    <string name="sort_largest">Büyükten küçüğe</string>
-    <string name="sort_az">A-Z</string>
-    <string name="sort_za">Z-A</string>
-    <string name="sort_oldest">Eskiden yeniye</string>
-    <string name="sort_newest">Yeniden eskiye</string>
-    <string name="menu_sort_size">Boyuta Göre Sırala</string>
-    <string name="menu_sort_az">Alfabetik Sırala</string>
-    <string name="menu_sort_modified">Tarihe Göre Sırala</string>
     <string name="menu_preferences">Seçenekler</string>
     <string name="file_icon_desc">dosya_simgesi</string>
     <string name="title_recents">Son açılan dosyalar</string>
     <string name="title_browser">Tüm dosyalar</string>
-    <!-- Pref keys as resources ; Not currently used -->
-    <string name="EXPLORER_VIEW_TYPE_KEY">EXPLORER_VIEW_TYPE</string>
-    <string name="CURRENT_DIRECTORY_KEY">CURRENT_DIRECTORY</string>
-    <string name="pref_category_explorer">Dosya Gezgini Ayarları</string>
     <string name="pref_category_general">Genel</string>
     <string name="pref_experimental_editing">Deneysel Mod</string>
     <string name="pref_experimental_editing_summary">Deneysel düzenleme modunu etkinleştirin. Kullanım riski size aittir.</string>
-    <string name="pref_show_hidden_files">Gizli Dosyalar ve Dizinler</string>
-    <string name="pref_show_hidden_files_summary">Gizli dosyalar ve dizinleri göstermeyi etkinleştir.</string>
     <string name="pref_developer_mode">Geliştirici Modu</string>
     <string name="pref_developer_mode_summary">Geliştirici modunu etkinleştirerek UNO komutları gönderin. Kullanım riski size aittir.</string>
 
     <string name="action_about">Hakkında</string>
     <string name="action_parts">Bölümler</string>
     <string name="action_settings">Ayarlar</string>
-    <string name="open">Aç</string>
-    <string name="share">Paylaş</string>
-    <string name="share_via">Şununla paylaş</string>
-
-    <!-- Document browser filters -->
-    <string name="filter_everything">Hepsi</string>
-    <string name="filter_documents">Kelime İşlemci</string>
-    <string name="filter_spreadsheets">Hesap Tablosu</string>
-    <string name="filter_presentations">Sunum</string>
-    <string name="filter_drawings">Çizimler</string>
-
-    <!-- Document provider names -->
-    <string name="document_locations">Belge dizinleri</string>
-    <string name="close_document_locations">Belge dizinlerini kapat</string>
-    <string name="local_documents">Belgeler</string>
-    <string name="local_file_system">Yerel dosya sistemi</string>
-    <string name="external_sd_file_system">Harici SD</string>
-    <string name="otg_file_system">OTG cihazı (deneysel)</string>
-    <string name="usb_connected_configure">USB bağlantısı yapıldı, cihazınızın ayarlarını yapınız.</string>
-
-    <string name="ext_document_provider_error">Geçersiz dizin. SD kart ayarlarınızı kontrol ediniz.</string>
-    <string name="legacy_extsd_missing_error">Geçersiz dizin. SD kartınızı veya SD kart ayarlarınızı kontrol ediniz.</string>
-    <string name="otg_missing_error">Geçersiz dizin. OTG cihazınızı veya OTG cihazı ayarlarınızı kontrol ediniz.</string>
 
     <!-- Edit action names -->
     <string name="action_bold">Kalın</string>
@@ -96,12 +54,6 @@
     <string name="message_saving">Belge kaydediliyor…</string>
     <string name="message_save_incomplete">Kayıt tamamlanmadı. Değişiklik yapıldı mı?</string>
 
-    <!-- Document provider settings -->
-    <string name="storage_provider_settings">Depolama sağlayıcısı ayarları</string>
-    <string name="physical_storage_settings">Fiziksel depolama ayarları</string>
-    <string name="external_sd_path">Harici SD yolu</string>
-    <string name="otg_device_path">OTG cihazı yolu</string>
-    <string name="otg_warning">Deneysel özellik: OTG cihazı yazılabilir ise kullanın</string>
     <string name="password">Parola</string>
     <string name="action_undo">Geri Al</string>
     <string name="action_redo">Yinele</string>
@@ -203,12 +155,6 @@
     <string name="alert_cancel">İptal</string>
     <string name="unable_to_go_further">Daha fazla ilerlenemiyor.</string>
     <string name="current_uno_command">Şuan ki UNO komutu</string>
-    <string name="pref_sort_summary">Dosyaların nasıl sıralanacağını seçiniz. A-Z, Z-A ya da boyuta göre.</string>
-    <string name="pref_viewmode_summary">Dosyaları grid veya liste şeklinde görüntüle.</string>
-    <string name="pref_file_explorer_title">Dosya Gezgini</string>
-    <string name="pref_sort_title">Dosya Sıralaması</string>
-    <string name="pref_filter_title">Varsayılan Dosya Filtrelemesi</string>
-    <string name="pref_filter_summary">Varsayılan dosya filtrelemesini seç</string>
     <string name="display_language">Uygulama Dili</string>
     <string name="display_language_summary">Varsayılan dili değiştir</string>
     <string name="unable_to_export_pdf">Pdf dışa aktarılamıyor.</string>

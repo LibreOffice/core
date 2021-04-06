@@ -1,6 +1,5 @@
 package org.libreoffice;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -11,14 +10,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
-import android.database.Cursor;
 import android.graphics.RectF;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.OpenableColumns;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
@@ -38,8 +34,6 @@ import android.widget.Toast;
 
 import org.libreoffice.overlay.CalcHeadersController;
 import org.libreoffice.overlay.DocumentOverlay;
-import org.libreoffice.storage.DocumentProviderFactory;
-import org.libreoffice.storage.IFile;
 import org.libreoffice.ui.FileUtilities;
 import org.libreoffice.ui.LibreOfficeUIActivity;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
@@ -51,7 +45,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
@@ -79,9 +72,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private static boolean mIsExperimentalMode;
     private static boolean mIsDeveloperMode;
     private static boolean mbISReadOnlyMode;
-
-    private int providerId;
-    private URI documentUri;
 
     private DrawerLayout mDrawerLayout;
     Toolbar toolbarTop;
@@ -129,7 +119,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private static boolean isDocumentChanged = false;
     private boolean isUNOCommandsToolbarOpen = false;
     private boolean isNewDocument = false;
-    private long lastModified = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -212,13 +201,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
             } else if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_FILE)) {
                 mInputFile = new File(getIntent().getData().getPath());
+                mbISReadOnlyMode = true;
                 Log.d(LOGTAG, "SCHEME_FILE: getPath(): " + getIntent().getData().getPath());
                 toolbarTop.setTitle(mInputFile.getName());
-                // Gather data to rebuild IFile object later
-                providerId = getIntent().getIntExtra(
-                        "org.libreoffice.document_provider_id", 0);
-                documentUri = (URI) getIntent().getSerializableExtra(
-                        "org.libreoffice.document_uri");
             }
         } else {
             mInputFile = new File(DEFAULT_DOC_PATH);
@@ -233,8 +218,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
             mDrawerList.setAdapter(mDocumentPartViewListAdapter);
             mDrawerList.setOnItemClickListener(new DocumentPartClickListener());
         }
-
-        lastModified = mInputFile.lastModified();
 
         mToolbarController.setupToolbars();
 
@@ -363,14 +346,12 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     }
 
     /**
-     * Save the document and invoke save on document provider to upload the file
-     * to the cloud if necessary.
+     * Save the document.
      */
     public void saveDocument() {
         if (!mInputFile.exists()) {
             // Needed for handling null in case new document is not created.
             mInputFile = new File(DEFAULT_DOC_PATH);
-            lastModified = mInputFile.lastModified();
         }
         Toast.makeText(this, R.string.message_saving, Toast.LENGTH_SHORT).show();
         // local save
@@ -378,98 +359,51 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     }
 
     public void saveFileToOriginalSource() {
-        if (documentUri != null) {
-            // case where file was opened using IDocumentProvider from within LO app
-            saveFilesToCloud();
-        } else {
-            // case where file URI was passed via Intent
-            if (isReadOnlyMode() || mInputFile == null || getIntent().getData() == null || !getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT))
-                return;
+        if (isReadOnlyMode() || mInputFile == null || getIntent().getData() == null || !getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT))
+            return;
 
-            Uri uri = getIntent().getData();
-            FileInputStream inputStream = null;
-            OutputStream outputStream = null;
+        Uri uri = getIntent().getData();
+        FileInputStream inputStream = null;
+        OutputStream outputStream = null;
 
-            try {
-                inputStream = new FileInputStream(mInputFile);
-                // OutputStream for the actual (original) location
-                outputStream = getContentResolver().openOutputStream(uri);
+        try {
+            inputStream = new FileInputStream(mInputFile);
+            // OutputStream for the actual (original) location
+            outputStream = getContentResolver().openOutputStream(uri);
 
-                byte[] buffer = new byte[4096];
-                int readBytes = inputStream.read(buffer);
-                while (readBytes != -1) {
-                    outputStream.write(buffer, 0, readBytes);
-                    readBytes = inputStream.read(buffer);
-                }
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(LibreOfficeMainActivity.this, R.string.message_saved,
-                            Toast.LENGTH_SHORT).show();
-                    }
-                });
-                setDocumentChanged(false);
-            } catch (Exception e) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(LibreOfficeMainActivity.this, R.string.message_saving_failed,
-                            Toast.LENGTH_SHORT).show();
-                    }
-                });
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (inputStream != null)
-                        inputStream.close();
-                    if (outputStream != null)
-                        outputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    public void saveFilesToCloud(){
-        final Activity activity = LibreOfficeMainActivity.this;
-        final AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-                    // rebuild the IFile object from the data passed in the Intent
-                    IFile mStorageFile = DocumentProviderFactory.getInstance()
-                            .getProvider(providerId).createFromUri(LibreOfficeMainActivity.this, documentUri);
-                    // call document provider save operation
-                    mStorageFile.saveDocument(mInputFile);
-                }
-                catch (final RuntimeException e) {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(activity, e.getMessage(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    Log.e(LOGTAG, e.getMessage(), e.getCause());
-                }
-                return null;
+            byte[] buffer = new byte[4096];
+            int readBytes = inputStream.read(buffer);
+            while (readBytes != -1) {
+                outputStream.write(buffer, 0, readBytes);
+                readBytes = inputStream.read(buffer);
             }
 
-            @Override
-            protected void onPostExecute(Void param) {
-                Toast.makeText(activity, R.string.message_saved,
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(LibreOfficeMainActivity.this, R.string.message_saved,
                         Toast.LENGTH_SHORT).show();
-                setDocumentChanged(false);
+                }
+            });
+            setDocumentChanged(false);
+        } catch (Exception e) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(LibreOfficeMainActivity.this, R.string.message_saving_failed,
+                        Toast.LENGTH_SHORT).show();
+                }
+            });
+            e.printStackTrace();
+        } finally {
+            try {
+                if (inputStream != null)
+                    inputStream.close();
+                if (outputStream != null)
+                    outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        };
-
-        if (lastModified < mInputFile.lastModified()) {
-            task.execute();
-            lastModified = mInputFile.lastModified();
-        } else {
-            Toast.makeText(activity, R.string.message_save_incomplete, Toast.LENGTH_LONG).show();
         }
     }
 
