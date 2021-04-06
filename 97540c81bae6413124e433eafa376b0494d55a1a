@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff27c294_2650a4ad",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-04-06T14:50:58Z",
+      "side": 1,
+      "message": "* Why drop this paragraph again from patch set 3 when it keeps using GL_RED instead of the original GL_RGBA?\n\n* Typo \"shring\" -\u003e \"shrink\".",
+      "revId": "97540c81bae6413124e433eafa376b0494d55a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
