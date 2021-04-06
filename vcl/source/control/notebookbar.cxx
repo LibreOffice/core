@@ -72,11 +72,7 @@ NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rU
     if ( doesCustomizedUIExist )
         sUIDir = getCustomizedUIRootDir();
 
-    bool bIsWelded = comphelper::LibreOfficeKit::isActive()
-                    && (rUIXMLDescription == "modules/swriter/ui/notebookbar.ui"
-                    || rUIXMLDescription == "modules/scalc/ui/notebookbar.ui"
-                    || rUIXMLDescription == "modules/simpress/ui/notebookbar.ui"
-                    || rUIXMLDescription == "modules/sdraw/ui/notebookbar.ui");
+    bool bIsWelded = comphelper::LibreOfficeKit::isActive();
     if (bIsWelded)
     {
         m_bIsWelded = true;

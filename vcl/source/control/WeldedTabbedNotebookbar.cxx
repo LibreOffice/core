@@ -18,8 +18,6 @@ WeldedTabbedNotebookbar::WeldedTabbedNotebookbar(
           pContainerWindow, AllSettings::GetUIRootDir(), rUIFilePath, rFrame, nWindowId))
 {
     m_xContainer = m_xBuilder->weld_container("NotebookBar");
-    m_xNotebook = m_xBuilder->weld_notebook("ContextContainer");
-    m_xNotebook->set_current_page("HomeLabel");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
