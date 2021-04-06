@@ -70,11 +70,7 @@ struct UnoRc : public rtl::StaticWithInit<
     }
 };
 
-struct OfficePipeId : public rtl::StaticWithInit<OUString, OfficePipeId> {
-    OUString operator () ();
-};
-
-OUString OfficePipeId::operator () ()
+OUString generateOfficePipeId()
 {
     OUString userPath;
     ::utl::Bootstrap::PathStatus aLocateResult =
@@ -113,7 +109,9 @@ OUString OfficePipeId::operator () ()
 
 bool existsOfficePipe()
 {
-    OUString const & pipeId = OfficePipeId::get();
+    static OUString OfficePipeId = generateOfficePipeId();
+
+    OUString const & pipeId = OfficePipeId;
     if (pipeId.isEmpty())
         return false;
     ::osl::Security sec;

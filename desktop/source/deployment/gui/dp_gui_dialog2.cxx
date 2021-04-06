@@ -79,19 +79,6 @@ namespace dp_gui {
 #define SHARED_PACKAGE_MANAGER  "shared"
 #define BUNDLED_PACKAGE_MANAGER "bundled"
 
-namespace {
-
-struct StrAllFiles : public rtl::StaticWithInit< OUString, StrAllFiles >
-{
-    OUString operator () () {
-        const SolarMutexGuard guard;
-        std::locale loc = Translate::Create("fps");
-        return Translate::get(STR_FILTERNAME_ALL, loc);
-    }
-};
-
-}
-
 // ExtBoxWithBtns_Impl
 class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
 {
@@ -662,8 +649,15 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
         }
     }
 
+    static const OUString StrAllFiles = []()
+        {
+            const SolarMutexGuard guard;
+            std::locale loc = Translate::Create("fps");
+            return Translate::get(STR_FILTERNAME_ALL, loc);
+        }();
+
     // All files at top:
-    xFilePicker->appendFilter( StrAllFiles::get(), "*.*" );
+    xFilePicker->appendFilter( StrAllFiles, "*.*" );
     xFilePicker->appendFilter( DpResId(RID_STR_ALL_SUPPORTED), supportedFilters.makeStringAndClear() );
     // then supported ones:
     for (auto const& elem : title2filter)

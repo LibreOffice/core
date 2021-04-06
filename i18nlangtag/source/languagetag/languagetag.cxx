@@ -51,7 +51,6 @@ struct myLtError
 
 // "statics" to be returned as const reference to an empty locale and string.
 struct theEmptyLocale : public rtl::Static< lang::Locale, theEmptyLocale > {};
-struct theEmptyBcp47 : public rtl::Static< OUString, theEmptyBcp47 > {};
 }
 
 typedef std::unordered_set< OUString > KnownTagSet;
@@ -1561,8 +1560,10 @@ const OUString & LanguageTagImpl::getBcp47() const
 
 const OUString & LanguageTag::getBcp47( bool bResolveSystem ) const
 {
+    static const OUString theEmptyBcp47 = u"";
+
     if (!bResolveSystem && mbSystemLocale)
-        return theEmptyBcp47::get();
+        return theEmptyBcp47;
     if (!mbInitializedBcp47)
         syncVarsFromImpl();
     if (!mbInitializedBcp47)
