@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-20 10:38:05 using:
+ Generated on 2021-04-06 09:16:45 using:
  ./bin/update_pch reportdesign rptui --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -43,6 +43,7 @@
 #include <new>
 #include <optional>
 #include <ostream>
+#include <safeint.h>
 #include <set>
 #include <sstream>
 #include <stddef.h>
