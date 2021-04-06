@@ -77,14 +77,10 @@ void ValueItemAcc::ParentDestroyed()
     mpParent = nullptr;
 }
 
-namespace
-{
-    class theValueItemAccUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theValueItemAccUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 >& ValueItemAcc::getUnoTunnelId()
 {
-    return theValueItemAccUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theValueItemAccUnoTunnelId;
+    return theValueItemAccUnoTunnelId.getSeq();
 }
 
 
@@ -466,14 +462,10 @@ void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue
     }
 }
 
-namespace
-{
-    class theValueSetAccUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theValueSetAccUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 >& ValueSetAcc::getUnoTunnelId()
 {
-    return theValueSetAccUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theValueSetAccUnoTunnelId;
+    return theValueSetAccUnoTunnelId.getSeq();
 }
 
 

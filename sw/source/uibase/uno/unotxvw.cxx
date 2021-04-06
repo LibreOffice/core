@@ -1691,14 +1691,10 @@ Sequence< OUString > SwXTextViewCursor::getSupportedServiceNames()
              "com.sun.star.style.ParagraphPropertiesComplex" };
 }
 
-namespace
-{
-    class theSwXTextViewCursorUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextViewCursorUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SwXTextViewCursor::getUnoTunnelId()
 {
-    return theSwXTextViewCursorUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXTextViewCursorUnoTunnelId;
+    return theSwXTextViewCursorUnoTunnelId.getSeq();
 }
 
 //XUnoTunnel

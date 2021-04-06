@@ -307,14 +307,10 @@ uno::Any SAL_CALL SvxShape::queryAggregation( const uno::Type& rType )
     return SvxShape_UnoImplHelper::queryAggregation(rType);
 }
 
-namespace
-{
-    class theSvxShapeUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvxShapeUnoTunnelId > {};
-}
-
 const css::uno::Sequence< sal_Int8 > & SvxShape::getUnoTunnelId() throw()
 {
-    return theSvxShapeUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSvxShapeUnoTunnelId;
+    return theSvxShapeUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SvxShape::getSomething( const css::uno::Sequence< sal_Int8 >& rId )

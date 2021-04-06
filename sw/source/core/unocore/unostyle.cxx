@@ -1205,12 +1205,12 @@ static SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum(SfxStyleFamily eFamily)
 
 namespace
 {
-    class theSwXStyleUnoTunnelId : public rtl::Static<UnoTunnelIdInit, theSwXStyleUnoTunnelId> {};
 }
 
 const uno::Sequence<sal_Int8>& SwXStyle::getUnoTunnelId()
 {
-    return theSwXStyleUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXStyleUnoTunnelId;
+    return theSwXStyleUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXStyle::getSomething(const uno::Sequence<sal_Int8>& rId)

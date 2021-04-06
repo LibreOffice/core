@@ -2161,14 +2161,10 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextBase::getSupportedServiceNames_Stat
         std::initializer_list<std::u16string_view>{ u"com.sun.star.text.Text" });
 }
 
-namespace
-{
-    class theSvxUnoTextBaseUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextBaseUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SvxUnoTextBase::getUnoTunnelId() throw()
 {
-    return theSvxUnoTextBaseUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSvxUnoTextBaseUnoTunnelId;
+    return theSvxUnoTextBaseUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SvxUnoTextBase::getSomething( const uno::Sequence< sal_Int8 >& rId )
@@ -2239,14 +2235,10 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxUnoText::getImplementationId(  )
     return css::uno::Sequence<sal_Int8>();
 }
 
-namespace
-{
-    class theSvxUnoTextUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SvxUnoText::getUnoTunnelId() throw()
 {
-    return theSvxUnoTextUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSvxUnoTextUnoTunnelId;
+    return theSvxUnoTextUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SvxUnoText::getSomething( const uno::Sequence< sal_Int8 >& rId )

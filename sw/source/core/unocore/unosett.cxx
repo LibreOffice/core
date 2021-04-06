@@ -1021,12 +1021,12 @@ bool SwXNumberingRules::isInvalidStyle(std::u16string_view rName)
 
 namespace
 {
-    class theSwXNumberingRulesUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXNumberingRulesUnoTunnelId > {};
 }
 
 const uno::Sequence< sal_Int8 > & SwXNumberingRules::getUnoTunnelId()
 {
-    return theSwXNumberingRulesUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXNumberingRulesUnoTunnelId;
+    return theSwXNumberingRulesUnoTunnelId.getSeq();
 }
 
 // return implementation specific data
@@ -2429,12 +2429,12 @@ void SwXTextColumns::removeVetoableChangeListener(
 
 namespace
 {
-    class theSwXTextColumnsUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextColumnsUnoTunnelId > {};
 }
 
 const uno::Sequence< sal_Int8 > & SwXTextColumns::getUnoTunnelId()
 {
-    return theSwXTextColumnsUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXTextColumnsUnoTunnelId;
+    return theSwXTextColumnsUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXTextColumns::getSomething( const uno::Sequence< sal_Int8 >& rId )

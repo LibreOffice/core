@@ -106,14 +106,10 @@ sal_Int32 getColumnTypeByModelName(const OUString& aModelName)
     return nTypeId;
 }
 
-namespace
-{
-    class theOGridColumnImplementationId : public rtl::Static< UnoTunnelIdInit, theOGridColumnImplementationId > {};
-}
-
 const Sequence<sal_Int8>& OGridColumn::getUnoTunnelId()
 {
-    return theOGridColumnImplementationId::get().getSeq();
+    static const UnoTunnelIdInit theOGridColumnImplementationId;
+    return theOGridColumnImplementationId.getSeq();
 }
 
 

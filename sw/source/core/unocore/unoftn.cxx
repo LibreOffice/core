@@ -166,14 +166,10 @@ SwXFootnote::CreateXFootnote(SwDoc & rDoc, SwFormatFootnote *const pFootnoteForm
     return xNote;
 }
 
-namespace
-{
-    class theSwXFootnoteUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXFootnoteUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SwXFootnote::getUnoTunnelId()
 {
-    return theSwXFootnoteUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXFootnoteUnoTunnelId;
+    return theSwXFootnoteUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL

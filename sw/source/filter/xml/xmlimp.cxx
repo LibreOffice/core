@@ -359,14 +359,10 @@ void SwXMLImport::setStyleInsertMode( SfxStyleFamily nFamilies,
     m_bLoadDoc = false;
 }
 
-namespace
-{
-    class theSwXMLImportUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXMLImportUnoTunnelId > {};
-}
-
 const Sequence< sal_Int8 > & SwXMLImport::getUnoTunnelId() throw()
 {
-    return theSwXMLImportUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXMLImportUnoTunnelId;
+    return theSwXMLImportUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXMLImport::getSomething( const Sequence< sal_Int8 >& rId )

@@ -321,14 +321,10 @@ static const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKin
     return pRet;
 }
 
-namespace
-{
-    class theSdGenericDrawPageUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSdGenericDrawPageUnoTunnelId> {};
-}
-
 const css::uno::Sequence< sal_Int8 > & SdGenericDrawPage::getUnoTunnelId() throw()
 {
-    return theSdGenericDrawPageUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSdGenericDrawPageUnoTunnelId;
+    return theSdGenericDrawPageUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SdGenericDrawPage::getSomething( const css::uno::Sequence< sal_Int8 >& rId )

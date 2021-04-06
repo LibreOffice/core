@@ -478,14 +478,10 @@ void SwXMLExport::ExportContent_()
     GetTextParagraphExport()->exportText( xText, m_bShowProgress );
 }
 
-namespace
-{
-    class theSwXMLExportUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXMLExportUnoTunnelId > {};
-}
-
 const Sequence< sal_Int8 > & SwXMLExport::getUnoTunnelId() throw()
 {
-    return theSwXMLExportUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXMLExportUnoTunnelId;
+    return theSwXMLExportUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXMLExport::getSomething( const Sequence< sal_Int8 >& rId )

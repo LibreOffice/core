@@ -329,16 +329,10 @@ sal_Int64 SAL_CALL SmXMLExport::getSomething(const uno::Sequence<sal_Int8>& rId)
     return SvXMLExport::getSomething(rId);
 }
 
-namespace
-{
-class theSmXMLExportUnoTunnelId : public rtl::Static<UnoTunnelIdInit, theSmXMLExportUnoTunnelId>
-{
-};
-}
-
 const uno::Sequence<sal_Int8>& SmXMLExport::getUnoTunnelId() throw()
 {
-    return theSmXMLExportUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSmXMLExportUnoTunnelId;
+    return theSmXMLExportUnoTunnelId.getSeq();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*

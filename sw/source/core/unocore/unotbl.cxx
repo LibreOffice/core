@@ -752,14 +752,10 @@ SwXCell::~SwXCell()
     EndListeningAll();
 }
 
-namespace
-{
-    class theSwXCellUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXCellUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SwXCell::getUnoTunnelId()
 {
-    return theSwXCellUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXCellUnoTunnelId;
+    return theSwXCellUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXCell::getSomething( const uno::Sequence< sal_Int8 >& rId )
@@ -1975,13 +1971,11 @@ public:
 
 };
 
-namespace
-{
-    class theSwXTextTableUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextTableUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SwXTextTable::getUnoTunnelId()
-    { return theSwXTextTableUnoTunnelId::get().getSeq(); }
+{
+    static const UnoTunnelIdInit theSwXTextTableUnoTunnelId;
+    return theSwXTextTableUnoTunnelId.getSeq();
+}
 
 sal_Int64 SAL_CALL SwXTextTable::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
@@ -3182,12 +3176,12 @@ public:
 
 namespace
 {
-    class theSwXCellRangeUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXCellRangeUnoTunnelId > {};
 }
 
 const uno::Sequence< sal_Int8 > & SwXCellRange::getUnoTunnelId()
 {
-    return theSwXCellRangeUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXCellRangeUnoTunnelId;
+    return theSwXCellRangeUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SwXCellRange::getSomething( const uno::Sequence< sal_Int8 >& rId )

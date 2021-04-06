@@ -116,8 +116,6 @@ using ::com::sun::star::uno::Any;
 
 namespace {
 
-class theExplicitValueProviderUnoTunnelId  : public rtl::Static<UnoTunnelIdInit, theExplicitValueProviderUnoTunnelId> {};
-
 typedef std::pair< sal_Int32, sal_Int32 > tFullAxisIndex; //first index is the dimension, second index is the axis index that indicates whether this is a main or secondary axis
 typedef std::map< VCoordinateSystem*, tFullAxisIndex > tCoordinateSystemMap;
 
@@ -1034,7 +1032,8 @@ struct CreateShapeParam2D
 
 const uno::Sequence<sal_Int8>& ExplicitValueProvider::getUnoTunnelId()
 {
-    return theExplicitValueProviderUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theExplicitValueProviderUnoTunnelId;
+    return theExplicitValueProviderUnoTunnelId.getSeq();
 }
 
 ChartView::ChartView(

@@ -772,14 +772,10 @@ uno::Reference< container::XEnumeration >  SwXTextPortion::createContentEnumerat
     return SwXParaFrameEnumeration::Create(rUnoCursor, PARAFRAME_PORTION_CHAR, m_pFrameFormat);
 }
 
-namespace
-{
-    class theSwXTextPortionUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextPortionUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SwXTextPortion::getUnoTunnelId()
 {
-    return theSwXTextPortionUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXTextPortionUnoTunnelId;
+    return theSwXTextPortionUnoTunnelId.getSeq();
 }
 
 sal_Int64 SwXTextPortion::getSomething( const uno::Sequence< sal_Int8 >& rId )

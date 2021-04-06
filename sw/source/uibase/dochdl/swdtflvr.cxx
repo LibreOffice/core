@@ -4197,14 +4197,10 @@ void SwTransferable::ClearSelection( SwWrtShell& rSh,
     }
 }
 
-namespace
-{
-    class theSwTransferableUnoTunnelId : public rtl::Static< UnoTunnelIdInit, SwTransferable > {};
-}
-
 const Sequence< sal_Int8 >& SwTransferable::getUnoTunnelId()
 {
-    return theSwTransferableUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwTransferableUnoTunnelId;
+    return theSwTransferableUnoTunnelId.getSeq();
 }
 
 sal_Int64 SwTransferable::getSomething( const Sequence< sal_Int8 >& rId )

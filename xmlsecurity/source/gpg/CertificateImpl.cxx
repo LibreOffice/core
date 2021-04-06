@@ -205,13 +205,9 @@ sal_Int64 SAL_CALL CertificateImpl::getSomething(const Sequence< sal_Int8 >& aId
 
 /* XUnoTunnel extension */
 
-namespace
-{
-    class CertificateImplUnoTunnelId : public rtl::Static< UnoTunnelIdInit, CertificateImplUnoTunnelId > {};
-}
-
 const Sequence< sal_Int8>& CertificateImpl::getUnoTunnelId() {
-    return CertificateImplUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theCertificateImplUnoTunnelId;
+    return theCertificateImplUnoTunnelId.getSeq();
 }
 
 void CertificateImpl::setCertificate(GpgME::Context* ctx, const GpgME::Key& key)

@@ -162,13 +162,9 @@ sal_Int64 SAL_CALL SecurityEnvironment_NssImpl::getSomething( const Sequence< sa
 
 /* XUnoTunnel extension */
 
-namespace
-{
-    class theSecurityEnvironment_NssImplUnoTunnelId  : public rtl::Static< UnoTunnelIdInit, theSecurityEnvironment_NssImplUnoTunnelId > {};
-}
-
 const Sequence< sal_Int8>& SecurityEnvironment_NssImpl::getUnoTunnelId() {
-    return theSecurityEnvironment_NssImplUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSecurityEnvironment_NssImplUnoTunnelId;
+    return theSecurityEnvironment_NssImplUnoTunnelId.getSeq();
 }
 
 OUString SecurityEnvironment_NssImpl::getSecurityEnvironmentInformation()

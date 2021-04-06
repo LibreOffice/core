@@ -422,14 +422,11 @@ css::uno::Any UnoControlModel::queryAggregation( const css::uno::Type & rType )
 }
 
 // css::lang::XUnoTunnel
-namespace
-{
-    class theUnoControlModelUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theUnoControlModelUnoTunnelId> {};
-}
 
 const css::uno::Sequence< sal_Int8 >& UnoControlModel::getUnoTunnelId() throw()
 {
-    return theUnoControlModelUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theUnoControlModelUnoTunnelId;
+    return theUnoControlModelUnoTunnelId.getSeq();
 }
 
 sal_Int64 UnoControlModel::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )

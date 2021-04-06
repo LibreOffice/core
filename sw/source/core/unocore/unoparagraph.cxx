@@ -285,14 +285,10 @@ bool SwXParagraph::SelectPaM(SwPaM & rPaM)
     return true;
 }
 
-namespace
-{
-    class theSwXParagraphUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXParagraphUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SwXParagraph::getUnoTunnelId()
 {
-    return theSwXParagraphUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXParagraphUnoTunnelId;
+    return theSwXParagraphUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL

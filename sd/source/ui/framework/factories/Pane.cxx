@@ -138,14 +138,10 @@ sal_Bool SAL_CALL Pane::isAnchorOnly()
 
 //----- XUnoTunnel ------------------------------------------------------------
 
-namespace
-{
-    class thePaneUnoTunnelId : public rtl::Static< UnoTunnelIdInit, thePaneUnoTunnelId > {};
-}
-
 const Sequence<sal_Int8>& Pane::getUnoTunnelId()
 {
-    return thePaneUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit thePaneUnoTunnelId;
+    return thePaneUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL Pane::getSomething (const Sequence<sal_Int8>& rId)

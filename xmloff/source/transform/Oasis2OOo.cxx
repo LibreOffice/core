@@ -1943,14 +1943,10 @@ Oasis2OOoTransformer::~Oasis2OOoTransformer() throw()
     XMLEventOASISTransformerContext::FlushEventMap( m_pFormEventMap );
 }
 
-namespace
-{
-    class theOasis2OOoTransformerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theOasis2OOoTransformerUnoTunnelId> {};
-}
-
 const css::uno::Sequence<sal_Int8>& Oasis2OOoTransformer::getUnoTunnelId() throw()
 {
-    return theOasis2OOoTransformerUnoTunnelId::get().getSeq();
+    static const class UnoTunnelIdInit theOasis2OOoTransformerUnoTunnelId;
+    return theOasis2OOoTransformerUnoTunnelId.getSeq();
 }
 
 // XUnoTunnel

@@ -1925,14 +1925,10 @@ void SdrModel::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-namespace
-{
-    class theSdrModelUnoTunnelImplementationId : public rtl::Static< UnoTunnelIdInit, theSdrModelUnoTunnelImplementationId > {};
-}
-
 const css::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelId()
 {
-    return theSdrModelUnoTunnelImplementationId::get().getSeq();
+    static const UnoTunnelIdInit theSdrModelUnoTunnelImplementationId;
+    return theSdrModelUnoTunnelImplementationId.getSeq();
 }
 
 

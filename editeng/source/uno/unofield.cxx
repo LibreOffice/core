@@ -229,14 +229,10 @@ static tools::Time setTime( util::DateTime const & rDate )
 
 
 
-namespace
-{
-    class theSvxUnoTextFieldUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextFieldUnoTunnelId> {};
-}
-
 const css::uno::Sequence< sal_Int8 > & SvxUnoTextField::getUnoTunnelId() throw()
 {
-    return theSvxUnoTextFieldUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSvxUnoTextFieldUnoTunnelId;
+    return theSvxUnoTextFieldUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL SvxUnoTextField::getSomething( const css::uno::Sequence< sal_Int8 >& rId )

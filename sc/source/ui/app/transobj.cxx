@@ -906,14 +906,10 @@ void ScTransferObj::StripRefs( ScDocument& rDoc,
     }
 }
 
-namespace
-{
-    class theScTransferUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theScTransferUnoTunnelId> {};
-}
-
 const css::uno::Sequence< sal_Int8 >& ScTransferObj::getUnoTunnelId()
 {
-    return theScTransferUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theScTransferUnoTunnelId;
+    return theScTransferUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL ScTransferObj::getSomething( const css::uno::Sequence< sal_Int8 >& rId )

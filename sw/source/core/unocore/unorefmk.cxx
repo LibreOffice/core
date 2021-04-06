@@ -149,14 +149,10 @@ SwXReferenceMark::CreateXReferenceMark(
     return xMark;
 }
 
-namespace
-{
-    class theSwXReferenceMarkUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXReferenceMarkUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SwXReferenceMark::getUnoTunnelId()
 {
-    return theSwXReferenceMarkUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXReferenceMarkUnoTunnelId;
+    return theSwXReferenceMarkUnoTunnelId.getSeq();
 }
 
 sal_Int64 SAL_CALL
@@ -844,14 +840,10 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
     return bForceExpandHints;
 }
 
-namespace
-{
-    class theSwXMetaUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXMetaUnoTunnelId > {};
-}
-
 const uno::Sequence< sal_Int8 > & SwXMeta::getUnoTunnelId()
 {
-    return theSwXMetaUnoTunnelId::get().getSeq();
+    static const UnoTunnelIdInit theSwXMetaUnoTunnelId;
+    return theSwXMetaUnoTunnelId.getSeq();
 }
 
 // XUnoTunnel
